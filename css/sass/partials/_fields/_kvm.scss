@@ -1,0 +1,39 @@
+.kvm-field-wrapper label {
+    cursor: move;
+    width: 60px;
+    display: block;
+    float: left;
+    line-height: 25px;
+}
+
+.kvm-single-field {
+    
+}
+
+.kvm_wrapper {
+    margin: 4px 0;
+    cursor: move;
+    overflow: hidden;
+    padding: 8px 0 8px 35px;
+    border: 1px dashed #ccc;
+    background: url('move.png') no-repeat 6px 14px;
+}
+
+.clone-reference-empty {
+    display: none;
+}
+
+.kvm_add_item{
+    padding: 5px 10px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
+    text-align: center;
+
+    &:hover{
+        background: $lightblue;
+        color: white;
+    }
+}

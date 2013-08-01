@@ -1,0 +1,38 @@
+.proxy-step-wrapper {
+    width: 500px;
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+    padding: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.proxy-toggle {
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.proxy-section {
+    padding: 7px 4px;
+    opacity: .8;
+    margin: 2px 0;
+    box-shadow: 1px 1px 1px #fff;
+    background: #f9f9f9;
+   
+}
+
+.proxy-section.loading {
+     background: url('ajax-loader.gif') no-repeat 350px 12px #f9f9f9;
+}
+
+.proxy-section:hover {
+    opacity: 1;
+}
+
+.holder label {
+    display: block;
+    float: left;
+    width: 140px;
+    line-height: 32px;
+}

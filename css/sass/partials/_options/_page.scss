@@ -1,0 +1,75 @@
+.kb_page_wrap{
+
+	padding: 20px;
+	min-width: 400px;
+	max-width: 1100px;
+	background: #fff;
+	border: 1px solid #ccc;
+	margin-top: 20px;
+
+}
+
+.os-wrapper{ 
+
+	.kb_page_wrap{
+		max-width: none;
+		margin-top: 0px;
+		padding: 0;
+		border: none;
+	}
+
+	.kb_block{
+		padding: 0;
+	}
+
+	.area-holder{
+		border: none;
+		box-shadow: none;
+	}
+}
+
+
+
+/*
+Overlay Override
+*/
+body.on-site-editing{
+	padding-top: 0;
+}
+
+.kb-overlay{
+
+	background: #fff !important;
+
+	.kb_page_wrap{
+		padding: 0px;
+		margin-top: 0;
+	}
+
+	.area-holder{
+		border: none;
+	}
+
+}
+
+.kb-area-overlay{
+	background: #fff !important;
+	padding-top: 0;
+
+	.kb_page_wrap{
+		padding: 20px 20px;
+		margin-top: 0;
+	}
+
+	.area-holder{
+		border: none;
+	}
+}
+
+.block-template-wrapper.kb_page_wrap {
+
+	.kb_fieldtabs ul.ui-tabs-nav{
+		margin-left: 0;
+	}
+
+}

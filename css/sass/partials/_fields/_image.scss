@@ -1,0 +1,37 @@
+.kb-remove-single-image {
+	padding: 8px 0;
+	}
+
+.kb-field-image-frame {
+	height: 150px;
+    min-width: 150px; 
+	}
+    
+    .kb-field-image-frame img {
+       max-height: 100%;
+  	}
+
+  .kb-field-image-frame {
+    height: 150px;
+    min-width: 150px;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    float: left;
+    margin-right: 15px;
+    -webkit-transition:all 1s linear;
+    background: url('assets/image-bg.jpg');
+}
+
+.kb-field-image-frame img {
+    max-height: 100%;
+}
+
+.kb-field-image-controls {
+    padding:15px;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    top: 25px;
+}

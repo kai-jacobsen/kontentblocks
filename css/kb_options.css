@@ -1,0 +1,220 @@
+.checkboxlabel {
+    width: 240px;
+    float: left;
+}
+
+.kb_checkbox_option input[type="checkbox"] {
+    width: 30px;
+}
+
+.kb_checkbox_option {
+    padding: 3px 0;
+    padding-left: 10px;
+
+    -webkit-transition: background .3s linear;
+    -moz-transition: background .3s linear;
+    -o-transition: background .3s linear;
+    -ms-transition: background .3s linear;
+    transition: background .3s linear;
+}
+
+
+/* Block Tabs */
+#block-tabs {
+    background: #fafafa;
+    overflow: hidden;
+    margin-top: 0px;
+}
+
+.block-nav {
+    float: left;
+    width: 200px;
+    padding-top: 40px;
+}
+
+.block-nav li {
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #fff;
+    margin: 0;
+    padding: 3px 4px;
+}
+
+.block-nav li a {
+    padding: 6px 0;
+    padding-left: 10px;
+    text-decoration: none;
+    display: block;
+
+    -webkit-transition: background .3s linear;
+    -moz-transition: background .3s linear;
+    -o-transition: background .3s linear;
+    -ms-transition: background .3s linear;
+    transition: background .3s linear;
+}
+
+.block-nav li a:hover {
+    background: #fff;
+}
+
+.block-nav li.ui-state-active {
+    background: #fff;
+}
+
+.tabs-content {
+    float: left;
+    width: 510px;
+    padding: 20px;
+    background: #fefefe;
+}
+
+.tabs-content .form-field {
+    border-top: 1px solid #fff;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.tabs-content .form-field .description {
+    color: #999;
+    padding-top: 12px;
+}
+
+.kb_radio_option {
+    overflow: hidden;
+}
+
+.kb_radio_option label {
+    float: left;
+    width: 100px;
+}
+
+.kb_radio_option .radio-item {
+    float: left;
+    width: 100px;
+}
+
+.kb_radio_option .radio-item label {
+    display: inline;
+    margin-right: 8px;
+    width: auto;
+}
+
+.kb_radio_option input[type=radio] {
+    width: 20px;
+}
+
+.kb_options_wrapper {
+    border: 1px solid #EEE;
+    margin-top: 20px;
+
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+
+    -webkit-border-image: initial;
+    -moz-border-image: initial;
+    border-image: initial;
+    width: 750px;
+    background: #f1f1f;
+}
+
+.kb_options_header {
+    overflow: hidden;
+    padding: 20px;
+    background: #eee;
+}
+
+.kb_options_header .button-primary {
+    float: right;
+    margin-top: 15px;
+}
+
+.kb_options_header h2 {
+    margin: 0;
+    margin: 0;
+    float: left;
+    top: 5px;
+    margin-top: 15px;
+    text-shadow: 1px 1px 1px #fff;
+}
+
+
+/* New Stuff */
+
+.kb_area_edit_form table{
+    border-spacing: 2px;
+	width: 90%;
+	
+}
+
+.kb_area_edit_form tr {
+    background: #f9f9f9;
+    margin-bottom: 0px;
+}
+
+.kb_area_edit_form tr:hover {
+	background: #f2f2f2;
+}
+
+.kb_area_edit_form td{
+    padding: 3px 6px;
+    margin-bottom: 3px;
+}
+
+.kb_area_edit_form td.cb {
+	width: 30px;
+}
+
+.kb_area_edit_form td.description {
+	font-style: italic;
+	
+}
+
+.kb_options_section {
+    padding: 30px 0;
+	
+    border-bottom: 1px dashed #ccc;
+}
+
+.kb_options_section h2 {
+    font-size: 1.2em;
+	
+    font-style: italic;
+}
+
+.kb_page_wrap {
+	max-width: 95%;
+	margin: 0 auto;
+}
+
+.kb_area_buttons {
+    padding: 10px;
+	
+}
+
+/* Blocks Table */
+th#active {
+	width: 55px;
+}
+
+img.block_status {
+    position: relative;
+	
+    top: 4px;
+}
+
+td.active {
+	text-align: center;
+}
+
+tr.disabled {
+	background: #ffebe8;
+}
+
+tr.dynamic {
+	background: #f5e5c3;
+}
+
+tr.dynamic span {
+	font-style: italic;
+	font-size: 11px;
+}

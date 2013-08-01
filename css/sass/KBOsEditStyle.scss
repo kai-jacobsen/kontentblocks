@@ -1,0 +1,103 @@
+@import "compass/css3";
+@import "partials/_base";
+.os-edit-wrapper {
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index:108;
+	padding: 5px 0px 10px 12px;
+	display: none;
+	background: transparent;
+
+}
+
+body.onsite-editing {
+
+.os-edit-container > .os-edit-wrapper {
+	display: block;
+	opacity: 1;
+}
+
+.os-edit-container {
+    position: relative;
+}
+
+.os-edit-wrapper a {
+	line-height: 16px;
+	background: #ccc;
+	display: block;
+	margin: 2px 0px;
+	float: left;
+	font-size: 12px;
+	padding-left: 20px;
+	color: #000;
+	opacity: 1;
+	text-decoration: none;
+	@include transition(opacity .3s);
+}
+
+.os-edit-wrapper a:hover {
+    opacity: 1;
+    color: #333;
+}
+
+
+a.os-edit-block {
+	line-height: 24px;
+	float: right;
+	cursor: pointer;
+}
+
+a.os-edit-block span {
+	display: block;
+	height: 24px;
+	width: 24px;
+
+	background: url('pencil.png') $lightblue no-repeat 6px 6px;
+	float: right;
+	margin-left: 10px;
+
+}
+
+.master a.os-edit-block span{
+	background-color: $orange;
+}
+
+a.os-description {
+	background: url('info.png') no-repeat;
+	display: none;
+}
+
+.hide {
+    display: none;
+}
+
+
+#onsite-modal{
+	padding: 0;
+
+	iframe html{
+		height: auto;
+	}
+}
+
+}
+
+
+#wp-toolbar{
+	.os-edit {
+		background: $lightblue;
+
+		&.os-edit-off{
+
+			background: none !important;
+			
+
+			a {
+				color: #999;
+
+		}
+
+	}
+	}
+}

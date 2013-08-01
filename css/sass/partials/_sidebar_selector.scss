@@ -1,0 +1,53 @@
+.area_sidebars{
+
+	padding: 10px;
+	background: #fff;
+	@include box-shadow(0 1px 3px #ccc);
+	border: 1px solid #ccc;
+
+	.context-header{
+
+		h2{
+			margin-top: 0;
+			padding-top: 0;
+		}
+	}
+
+	.connect {
+
+		li {
+		    background: lighten($lightblue, 25%);
+		    color: #fff;
+		    padding: 5px;
+		    border: 1px solid #000;
+		    -webkit-transition: background 1s linear;
+
+		    &.dynamic-area-active {
+	  			background: $lightblue;
+
+	  			&:hover span {
+	    			display: inline;
+				}
+
+				span {
+	    			float: right;
+	    			color: lighten($lightblue, 10%);
+
+	    			a{
+	    				color: #fff;
+	    				cursor: pointer;
+	    			}
+				}
+			}
+
+		}
+	}  
+	    
+	#existing-areas li {
+		opacity: .7;
+
+		span {
+			display: none;
+		}
+	}
+}

@@ -1,0 +1,111 @@
+
+.one-column-menu, .two-column-menu{
+	width: 720px;
+}
+
+.reveal-modal{
+	background: #fff;
+	padding: 0px;
+	border: 1px solid #aaaaaa;
+}
+
+.modal-inner {
+	background-color: #fcfcfc;
+
+	.blocks-modal-header{
+		padding: 10px;
+		padding-left: 20px;
+		background: #002e3e;
+
+		h2 {
+			@include text-shadow(1px 1px 1px #000);
+			color: #eeeeee;
+			font-size: 14px;
+			font-style: italic;
+			margin-bottom: 0;
+			padding-bottom: 3px;
+		}
+
+		p{
+			color: #ccc;
+			padding-top: 0;
+			margin-top: 0;
+		}
+	}
+
+}
+
+.blocks-menu {
+	background: transparent;
+	overflow: hidden;
+	margin-bottom: 0;
+	padding-bottom: 0;
+	overflow: auto;
+	max-height: 420px;
+	padding: 10px;
+	margin-left: -20px;
+
+	li {
+		overflow: hidden;
+		float: left;
+		height: 85px;
+		border-bottom: 3px solid transparent;
+		width: 220px;
+		color: #333;
+		margin-left: 20px;
+		margin-bottom: 20px;
+	}
+
+	li:hover{
+		border-bottom: 3px solid blue;
+		cursor: pointer;
+	}
+
+	li:first-child{
+		border-left: none;
+	}
+
+	li:last-child{
+		border-right: none;
+	}
+
+	li .block-icon{
+	    float: left;
+	    width: 30px;
+	    height: 30px;
+	    margin-right: 10px;
+	}
+
+	li .block-icon img {
+		width: 40px;
+		height: 40px;
+	}
+
+	li .block-info{
+		margin-left: 35px;
+
+	    h3{
+	    	padding-top: 6px;
+	    	margin-top: 0;
+	    	margin-bottom: 5px;
+	    	font-style: italic;
+	    	@include text-shadow(1px 1px 1px #fff);
+	    	font-size: 14px;
+	    }
+
+	    p.description{
+	    	font-weight: normal;
+	    	font-style: normal;
+	    	font-size: 12px;
+	    	padding-left: 5px;
+	    }
+	}
+
+	li span.action{
+		visibility: hidden;
+	}
+
+	li:hover span.action{
+		visibility: visible;
+	}
+}
