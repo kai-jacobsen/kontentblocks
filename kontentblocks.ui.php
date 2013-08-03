@@ -8,6 +8,10 @@ Class KB_Meta_Box
 	 */
 	private $_post_type = '';
 
+    /**
+     * Id of current post
+     */
+    public $post_id;
 	/**
 	 * Stores the current page template, if available
 	 * @var string
@@ -148,8 +152,9 @@ Class KB_Meta_Box
 	 * Add main Metabox to specified post types / page templates
 	 * 
 	 */
-	function _add_ui()
+	function _add_ui($post_type, $post)
 	{
+        $this->post_id = $post->ID;
 		add_action('edit_form_after_editor', array($this, 'ui'), 10);
 	}
 	
@@ -163,8 +168,6 @@ Class KB_Meta_Box
 	 */
 	function ui()
 	{
-        global $post;
-        $this->post_id = $post->ID;
         
 		echo "<div class='clearfix' id='kontentblocks_stage'>";
 		
