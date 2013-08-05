@@ -122,6 +122,7 @@ Class Kontentblocks
 		require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
         require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         require_once dirname( __FILE__ ) . '/kontentblocks.class.twig.php';
+        require_once dirname( __FILE__ ) . '/kontentblocks.class.post-meta.php';
         require_once dirname( __FILE__ ) . '/kontentblocks.class.template.php';
 		require_once dirname( __FILE__ ) . '/kontentblocks.class.module.php';
 		require_once dirname( __FILE__ ) . '/kontentblocks.class.field.php';
