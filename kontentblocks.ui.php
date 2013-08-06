@@ -243,10 +243,12 @@ Class KB_Meta_Box
             return;
         }
 
-        if ( $post_object->post_type == 'revision' ) {
+        if ( $post_object->post_type == 'revision' && !isset($_POST['wp-preview']) ) {
             return;
         }
 
+
+        
         $real_post_id = isset( $_POST[ 'post_ID' ] ) ? $_POST[ 'post_ID' ] : NULL;
 
         $this->_postmeta = $this->_get_post_custom( $real_post_id );
@@ -254,8 +256,11 @@ Class KB_Meta_Box
         // calls the save function for every block
         $kb_blocks = (!empty( $this->_postmeta[ 'kb_kontentblocks' ] )) ? $this->_postmeta[ 'kb_kontentblocks' ] : '';
 
-        $Meta = new KB_Post_Meta( $real_post_id );
-        $Meta->backup( 'Before regular update' );
+        // Backup data, not for Previews
+        if (!isset($_POST['wp_preview'])){
+            $Meta = new KB_Post_Meta( $real_post_id );
+            $Meta->backup( 'Before regular update' );
+        }
 
         if ( !empty( $kb_blocks ) ) {
             foreach ( $kb_blocks as $block ) {
@@ -301,10 +306,10 @@ Class KB_Meta_Box
 
                 // store new data in post meta
                 if ( $new && $new != $old ) {
-                    // if this is a preview, save temporary data for previews
-                    if ( $_POST[ 'wp-preview' ] ) {
+                    if ( $_POST[ 'wp-preview' ]  === 'dopreview') {
                         update_post_meta( $real_post_id, '_preview_' . $block[ 'instance_id' ], $new );
                     }
+                    // if this is a preview, save temporary data for previews
                     // save real data
                     else {
                         update_post_meta( $real_post_id, '_' . $block[ 'instance_id' ], $new );

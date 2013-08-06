@@ -33,6 +33,14 @@ class KB_Post_Meta
 
     }
 
+    // -----------------------------------
+    // Backups
+    // -----------------------------------
+    
+    /**
+     * Get the array of backup packages
+     * @return mixed array() | false
+     */
     public function get_backups()
     {
         if ( !empty( $this->meta[ '_kb_backup' ] ) ) {
@@ -44,6 +52,11 @@ class KB_Post_Meta
 
     }
 
+    /**
+     * Get Backup and update post meta
+     * @param string $timestamp
+     * @return boolean
+     */
     public function restoreBackup( $timestamp )
     {
         $backup = $this->_get_backup_bucket( $timestamp );
@@ -53,14 +66,22 @@ class KB_Post_Meta
             $this->_self_update();
             return true;
         }
+        return false;
     }
 
+    /**
+     * Makes sure the object stays in line with actual meta data
+     * Should be called after any meta data modification
+     */
     private function _self_update()
     {
         $this->_get_post_custom();
-
     }
 
+    /**
+     * Setup a package containing all Module-related data
+     * @return self
+     */
     public function pack()
     {
         $this->package = array(
@@ -68,14 +89,22 @@ class KB_Post_Meta
             'modules' => $this->modules
         );
         return $this;
-
     }
 
+    /**
+     * Saves the main index array to postmeta
+     * @param array $index
+     * @return type
+     */
     public function saveIndex( $index )
     {
         return update_post_meta( $this->post_id, 'kb_kontentblocks', $index );
     }
     
+    /**
+     * Saves the module data arrays to postmeta
+     * @param array $modules
+     */
     public function saveModules($modules){
      
         foreach((array)$modules as $id => $module){
@@ -83,6 +112,10 @@ class KB_Post_Meta
         }
     }
 
+    /**
+     * Caution! Deletes all Module related data from postmeta
+     * @return self
+     */
     public function delete()
     {
 
@@ -97,6 +130,12 @@ class KB_Post_Meta
 
     }
 
+    /**
+     * Stores the current set of module related data into the backup collection
+     * An additionell log message may be provided
+     * @param string $logmsg
+     * @return self
+     */
     public function backup( $logmsg = '' )
     {
         if ( !$this->package ) {
@@ -116,6 +155,7 @@ class KB_Post_Meta
 
     }
 
+    
     private function _get_backup_data()
     {
         if ( !empty( $this->meta[ '_kb_backup' ] ) ) {
@@ -127,6 +167,12 @@ class KB_Post_Meta
 
     }
 
+    
+    /**
+     * Gets all postmeta for current post.
+     * Setup the Object.
+     * @return self
+     */
     private function _get_post_custom()
     {
         $this->meta = array_map( array( $this, 'maybe_unserialize_recursive' ), get_post_custom( $this->post_id ) );
@@ -141,22 +187,29 @@ class KB_Post_Meta
 
     }
 
+    /**
+     * Normalizes module meta data
+     * @param array $meta
+     * @return array
+     */
     private function _setup_module_data( $meta )
     {
-
         foreach ( $this->index as $id => $data ) {
             $collection[ '_' . $id ] = (!empty($meta[ '_' . $id ])) ? $meta[ '_' . $id ] : '';
         }
         return $collection;
-
     }
 
+    /**
+     * Helper function get_post_custom
+     */
     private function maybe_unserialize_recursive( $input )
     {
         return maybe_unserialize( $input[ 0 ] );
 
     }
 
+    
     private function _get_backup_bucket( $timestamp )
     {
         if ( $this->get_backups() ) {
@@ -172,6 +225,18 @@ class KB_Post_Meta
             return false;
         }
 
+    }
+    
+    public function saveModule($id, $data){
+        return update_post_meta($this->post_id, '_' . $id, $data);
+    }
+    
+    public function getIndex(){
+        return $this->index;
+    }
+    
+    public function getModules(){
+        return $this->modules;
     }
 
 }

@@ -8,6 +8,7 @@
             this.selectContainer = this._selectContainer();
             this.selectMenuEl = this._createSelectMenu();
             this.loadButton = this._loadButton();
+            this.deleteButton = this._deleteButton();
             this.createContainer = this._createContainer();
             this.createInput = this._createInput();
             this.createButton = this._createButton();
@@ -64,6 +65,30 @@
             });
 
         },
+        delete: function() {
+            var that = this;
+            var value = this.selectMenuEl.val();
+            
+            if (_.isEmpty(value)){
+                KB.notice('Please chose a template to delete', 'error');
+                return false;
+            }
+            
+            KB.ajax(
+                    {
+                        action: 'delete_layout_template',
+                        data: {
+                            areaConfig: this.areaConfig,
+                            name: value
+                        }
+                    },
+            function(response)
+            {
+                that.update();
+                KB.notice('Saved', 'success');
+            });
+
+        },
         renderSelectMenu: function(data) {
             var that = this;
             that.selectMenuEl.empty();
@@ -113,6 +138,15 @@
             button.on('click', function(e) {
                 e.preventDefault();
                 that.load();
+            })
+            return button;
+        },
+        _deleteButton: function() {
+            var that = this;
+            var button = $("<a class='delete-js'>delete</a>").appendTo(this.selectContainer);
+            button.on('click', function(e) {
+                e.preventDefault();
+                that.delete();
             })
             return button;
         },

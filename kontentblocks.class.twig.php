@@ -47,8 +47,9 @@ class KBTwig
 
     public static function setPath( $path )
     {
+        
+        // TODO: test path and create directory if necessary
         self::$loader->addPath( $path );
-
     }
 
     public static function resetPath()

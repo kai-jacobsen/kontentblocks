@@ -130,9 +130,10 @@ class KBRender_Area
         $this->prepare_area();
 
     }
-    
+
     public function __destruct()
     {
+        
     }
 
     /**
@@ -722,7 +723,10 @@ class KBRender_Area
 
         foreach ( ( array ) $modules as $instance ) {
 
-            if (
+            if ( isset( $_GET[ 'preview' ] ) && $_GET[ 'preview' ] == 'true' ) {
+                $collection[ ] = $instance;
+            }
+            elseif (
                 $instance->active == false OR $instance->draft == 'true' OR $instance->settings[ 'disabled' ] == true
             ) {
 
@@ -948,7 +952,7 @@ class KBRender_Area
             'context' => $this->context,
             'subcontext' => $this->subcontext,
             'area_template' => ($this->area_template) ? $this->area_template[ 'id' ] : false
-        ) );
+            ) );
 
     }
 

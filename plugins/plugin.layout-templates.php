@@ -11,6 +11,7 @@ class Layout_Templates
         add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
         add_action( 'wp_ajax_get_layout_templates', array( $this, 'get_templates' ) );
         add_action( 'wp_ajax_set_layout_template', array( $this, 'set_template' ) );
+        add_action( 'wp_ajax_delete_layout_template', array($this, 'delete_template'));
         add_action( 'init', array( $this, 'observe_query' ) );
 
     }
@@ -81,6 +82,25 @@ class Layout_Templates
         }
 
     }
+    public function delete_template()
+    {
+
+
+        $data    = $_REQUEST[ 'data' ];
+        $post_id = $_REQUEST[ 'post_id' ];
+        $config  = (!empty( $data[ 'areaConfig' ] )) ? $data[ 'areaConfig' ] : wp_send_json_error();
+        $name    = (!empty( $data[ 'name' ] )) ? $data[ 'name' ] : wp_send_json_error();
+
+        if ( isset( $config ) ) {
+            if ( $this->_delete_template( $config, $name, $post_id ) ) {
+                wp_send_json_success();
+            }
+            else {
+                wp_send_json_error('failed');
+            }
+        }
+
+    }
 
     private function _save_template( $config, $name, $post_id )
     {
@@ -97,6 +117,21 @@ class Layout_Templates
             $templates[ $config ] = $bucket;
             update_option( 'kb_layout_templates', $templates );
             wp_send_json_success();
+        }
+
+    }
+    
+    private function _delete_template( $config, $id, $post_id )
+    {
+        $templates = get_option( 'kb_layout_templates' );
+        $bucket    = (!empty( $templates[ $config ] )) ? $templates[ $config ] : array( );
+        
+        if ( isset( $bucket[ $id ] ) ) {
+            unset($bucket[ $id ]);
+
+            $templates[ $config ] = $bucket;
+            return update_option( 'kb_layout_templates', $templates );
+            
         }
 
     }

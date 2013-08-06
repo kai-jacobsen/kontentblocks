@@ -164,6 +164,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
 	    // Listen for changes on kb_field inputs
 	    $(kbMetaBox).on('change', '.kb_field input, .kb_field select, .kb_field textarea', function(e) {
 		$notice = $(this).closest('.kb_inner').find('.block-notice');
+        $(window).trigger('input:change');
 		$($notice).fadeIn(750);
 	    });
 
