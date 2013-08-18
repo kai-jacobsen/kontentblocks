@@ -475,7 +475,7 @@ Class Kontentblocks
 	{
 		$paths = array(KB_TEMPLATE_PATH);
 		$paths = apply_filters('kb_add_template_path', $paths);
-		
+		$paths = apply_filters('kb_add_module_path', $paths);
 		foreach($paths as $path)
 		{
 
@@ -486,6 +486,7 @@ Class Kontentblocks
 				foreach($dirs as $subdir)
 				{
 					$files = glob( $subdir . '/*.php');
+                    
 					foreach ( $files as $template )
 					{
                         if ( strpos( basename(   $template), '__' ) === false)
@@ -692,7 +693,6 @@ Class Kontentblocks
             return false;
         
         $Renderer = new KBRender_Area($this,$post_id, $args, $context, $subcontext);
-        
         $output = $Renderer->render($echo);
         return $output;
         

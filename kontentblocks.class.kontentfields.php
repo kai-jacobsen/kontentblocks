@@ -425,18 +425,18 @@ Class Kontentfields
         $this->instance          = $this->fields[ $field[ 'field' ] ];
         if ( !$this->instance )
             return;
+        
+        $this->instance->key = $field['key'];
         $this->instance->blockid = $this->blockid;
-        $this->instance->data    = $this->data;
-
+        $this->instance->data    = (!empty($this->data[$field['key']])) ? $this->data[$field['key']] : '';
+        $this->instance->settings = $field['args'];
+        
         if ( $this->parent ) {
             if ( $this->parent->area_context )
                 $this->instance->area_context = $this->parent->area_context;
 
-
             $this->instance->page_template = (!empty( $this->parent->page_template )) ? $this->parent->page_template : null;
         }
-
-
 
         do_action( 'kb_before_field', $field );
         do_action( "kb_before_{$field[ 'field' ]}" );

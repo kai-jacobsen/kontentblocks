@@ -29,7 +29,7 @@ class KBTwig
 
     }
 
-    private static function getDefaultPath()
+    public static function getDefaultPath()
     {
         return apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
 
@@ -47,8 +47,10 @@ class KBTwig
 
     public static function setPath( $path )
     {
+        $paths = array();
+        $paths[] = $path;
+        $paths[] = self::getDefaultPath();
         
-        // TODO: test path and create directory if necessary
         self::$loader->addPath( $path );
     }
 

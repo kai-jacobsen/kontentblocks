@@ -621,5 +621,3 @@ class KBArea
     }
 
 }
-
-?>

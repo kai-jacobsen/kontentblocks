@@ -62,9 +62,9 @@ h2.kb-title {
 }
 /* line 38, sass/partials/_block_style.scss */
 .kb_block.kb-open .block-head {
-  -webkit-box-shadow: 1px 5px 8px #666666;
-  -moz-box-shadow: 1px 5px 8px #666666;
-  box-shadow: 1px 5px 8px #666666;
+  -webkit-box-shadow: 1px 1px 1px white;
+  -moz-box-shadow: 1px 1px 1px white;
+  box-shadow: 1px 1px 1px white;
 }
 
 /* line 43, sass/partials/_block_style.scss */
@@ -100,8 +100,8 @@ h2.kb-title {
 .kb_inner {
   padding: 0px;
   overflow: hidden;
-  background: #f9f9f9;
-  margin-left: 36px;
+  background: #fff;
+  margin-left: 1px;
   border: 1px solid #e6e6e6;
 }
 
@@ -114,17 +114,16 @@ h2.kb-title {
 .kb_block_title {
   padding: 8px;
   background: #fafafa;
-  margin-bottom: 15px;
 }
 
-/* line 90, sass/partials/_block_style.scss */
+/* line 89, sass/partials/_block_style.scss */
 .kb_block_title .description {
   padding: 0;
   margin: 0;
   padding: 6px 20px;
 }
 
-/* line 96, sass/partials/_block_style.scss */
+/* line 95, sass/partials/_block_style.scss */
 .kb_toggle_box {
   line-height: 30px;
   margin-right: 8px;
@@ -134,32 +133,32 @@ h2.kb-title {
   cursor: pointer;
 }
 
-/* line 105, sass/partials/_block_style.scss */
+/* line 104, sass/partials/_block_style.scss */
 .kb_shortcode_display {
   padding: 10px 0;
 }
 
-/* line 109, sass/partials/_block_style.scss */
+/* line 108, sass/partials/_block_style.scss */
 .kb-toggle-editor {
   float: right;
 }
 
-/* line 113, sass/partials/_block_style.scss */
+/* line 112, sass/partials/_block_style.scss */
 .kb_block_area {
   width: 200px;
 }
 
-/* line 117, sass/partials/_block_style.scss */
+/* line 116, sass/partials/_block_style.scss */
 .chzn-container {
   margin-right: 15px;
 }
 
-/* line 121, sass/partials/_block_style.scss */
+/* line 120, sass/partials/_block_style.scss */
 .prop-wrapper {
   clear: both;
 }
 
-/* line 125, sass/partials/_block_style.scss */
+/* line 124, sass/partials/_block_style.scss */
 h5.kb_properties_title {
   font-size: 14px;
   font-style: italic;
@@ -169,7 +168,7 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 134, sass/partials/_block_style.scss */
+/* line 133, sass/partials/_block_style.scss */
 .kb_properties {
   background: #fff;
   padding: 10px;
@@ -179,26 +178,28 @@ h5.kb_properties_title {
   clear: both;
 }
 
-/* line 144, sass/partials/_block_style.scss */
+/* line 143, sass/partials/_block_style.scss */
 .edit input {
   width: 180px !important;
   margin-left: -3px;
   margin-top: 5px;
-  background: #f2f2f2;
+  background: #f9f9f9;
   font-size: 12px;
+  border: 0;
+  box-shadow: none;
 }
 
-/* line 152, sass/partials/_block_style.scss */
+/* line 153, sass/partials/_block_style.scss */
 .edit input:focus, .edit input:hover {
   background: #fff;
 }
 
-/* line 156, sass/partials/_block_style.scss */
+/* line 157, sass/partials/_block_style.scss */
 .chzn-container {
   margin-bottom: 15px;
 }
 
-/* line 160, sass/partials/_block_style.scss */
+/* line 161, sass/partials/_block_style.scss */
 .block-head {
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
@@ -213,12 +214,12 @@ h5.kb_properties_title {
   word-wrap: break-word;
   /*cursor: move;*/
   /*z-index: 3;*/
-  background-color: #F1F1F1;
+  background-color: #F9f9f9;
   font-family: "Helvetica Neue", Helvetica, Arial,sans-serif;
   position: relative;
 }
 
-/* line 179, sass/partials/_block_style.scss */
+/* line 180, sass/partials/_block_style.scss */
 .kb-toggle {
   background: url(icons/toggle.png) no-repeat #0074a2;
   background-position: 12px 16px;
@@ -229,7 +230,7 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 191, sass/partials/_block_style.scss */
+/* line 192, sass/partials/_block_style.scss */
 .kb-ajax-status {
   background: url(assets/ajax-loader.gif) no-repeat;
   width: 16px;
@@ -241,7 +242,7 @@ h5.kb_properties_title {
   margin-right: 35px;
 }
 
-/* line 202, sass/partials/_block_style.scss */
+/* line 203, sass/partials/_block_style.scss */
 .kb-disabled-icon {
   background: url(assets/disabled.png) no-repeat;
   width: 16px;
@@ -253,7 +254,7 @@ h5.kb_properties_title {
   background-position: 7px;
 }
 
-/* line 213, sass/partials/_block_style.scss */
+/* line 214, sass/partials/_block_style.scss */
 .kb-lock {
   width: 16px;
   height: 16px;
@@ -266,19 +267,19 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 225, sass/partials/_block_style.scss */
+/* line 226, sass/partials/_block_style.scss */
 .kb-lock.unlocked {
   background-image: url(assets/lock-open.png);
   background-repeat: no-repeat;
 }
 
-/* line 229, sass/partials/_block_style.scss */
+/* line 230, sass/partials/_block_style.scss */
 .kb-lock.locked {
   background-image: url(assets/lock-closed.gif);
   background-repeat: no-repeat;
 }
 
-/* line 234, sass/partials/_block_style.scss */
+/* line 235, sass/partials/_block_style.scss */
 .kb-ajax-status-dark {
   background: url(assets/ajax-loader-dark.gif) no-repeat;
   width: 16px;
@@ -289,7 +290,7 @@ h5.kb_properties_title {
   display: none;
 }
 
-/* line 244, sass/partials/_block_style.scss */
+/* line 245, sass/partials/_block_style.scss */
 .kb-name {
   float: left;
   border-left: 1px solid #fff;
@@ -298,7 +299,7 @@ h5.kb_properties_title {
   font-weight: bold;
 }
 
-/* line 252, sass/partials/_block_style.scss */
+/* line 253, sass/partials/_block_style.scss */
 .kb-sub-name {
   float: left;
   width: auto;
@@ -307,12 +308,12 @@ h5.kb_properties_title {
 }
 
 /* Helper */
-/* line 260, sass/partials/_block_style.scss */
+/* line 261, sass/partials/_block_style.scss */
 .wp-dialog {
   z-index: 101;
 }
 
-/* line 264, sass/partials/_block_style.scss */
+/* line 265, sass/partials/_block_style.scss */
 .ui-widget-overlay {
   width: 10000px !important;
   height: 10000px !important;
@@ -320,7 +321,7 @@ h5.kb_properties_title {
   z-index: 19;
 }
 
-/* line 271, sass/partials/_block_style.scss */
+/* line 272, sass/partials/_block_style.scss */
 .kb-inactive-indicator {
   width: 30px;
   height: 30px;
@@ -331,7 +332,7 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 281, sass/partials/_block_style.scss */
+/* line 282, sass/partials/_block_style.scss */
 .kb_inactive .kb-inactive-indicator {
   display: block;
 }
@@ -1069,10 +1070,7 @@ p.no-blocks {
 /* line 1, sass/partials/_area_styles.scss */
 .context-header {
   padding: 10px 10px 10px 10px;
-  background: #f9f9f9;
-  border-left: 3px solid #0074a2;
   margin-bottom: 0px;
-  border-bottom: 1px solid #ccc;
 }
 /* line 8, sass/partials/_area_styles.scss */
 .context-header.orange {
@@ -1126,7 +1124,7 @@ p.no-blocks {
   color: #222;
 }
 
-/* line 79, sass/partials/_area_styles.scss */
+/* line 76, sass/partials/_area_styles.scss */
 .area_description p {
   padding: 0 0 0 16px;
   margin: 0;
@@ -1135,7 +1133,7 @@ p.no-blocks {
 }
 
 /* Area Settings */
-/* line 88, sass/partials/_area_styles.scss */
+/* line 85, sass/partials/_area_styles.scss */
 .kb_area_settings {
   display: block;
   float: left;
@@ -1146,7 +1144,7 @@ p.no-blocks {
   cursor: pointer;
 }
 
-/* line 97, sass/partials/_area_styles.scss */
+/* line 94, sass/partials/_area_styles.scss */
 .area_settings_list {
   position: absolute;
   width: 220px;
@@ -1166,7 +1164,7 @@ p.no-blocks {
   left: 25px;
 }
 
-/* line 115, sass/partials/_area_styles.scss */
+/* line 112, sass/partials/_area_styles.scss */
 .area_setting {
   background: #2d3138 !important;
   border-top: 1px solid #3e444f;
@@ -1175,7 +1173,7 @@ p.no-blocks {
   margin: 0;
 }
 
-/* line 122, sass/partials/_area_styles.scss */
+/* line 119, sass/partials/_area_styles.scss */
 .area_setting .description {
   font-size: 11px;
   padding: 5px;
@@ -1183,12 +1181,12 @@ p.no-blocks {
   line-height: 100%;
 }
 
-/* line 130, sass/partials/_area_styles.scss */
+/* line 127, sass/partials/_area_styles.scss */
 .area_setting.class label {
   padding-left: 10px;
 }
 
-/* line 134, sass/partials/_area_styles.scss */
+/* line 131, sass/partials/_area_styles.scss */
 .area_setting.custom-css textarea {
   width: 100%;
   background: #3e444f;
@@ -1197,24 +1195,24 @@ p.no-blocks {
   color: #ccc;
 }
 
-/* line 142, sass/partials/_area_styles.scss */
+/* line 139, sass/partials/_area_styles.scss */
 .area_setting.custom-css textarea:focus {
   background: #fff;
   color: #000;
 }
 
-/* line 146, sass/partials/_area_styles.scss */
+/* line 143, sass/partials/_area_styles.scss */
 .area_setting.classselect select {
   width: 100%;
 }
 
-/* line 150, sass/partials/_area_styles.scss */
+/* line 147, sass/partials/_area_styles.scss */
 .kb_area_templates {
   position: relative;
   cursor: pointer;
 }
 
-/* line 156, sass/partials/_area_styles.scss */
+/* line 153, sass/partials/_area_styles.scss */
 .area_template {
   background: #d2d2d2;
   border-top: 1px solid #f9f9f9;
@@ -1224,26 +1222,25 @@ p.no-blocks {
 }
 
 /* new design */
-/* line 168, sass/partials/_area_styles.scss */
+/* line 165, sass/partials/_area_styles.scss */
 .area-wrap {
   margin: 0;
   padding: 10px;
   background: #fff;
-  border: 1px solid #eaeaea;
   border-bottom: 1px solid #bbb;
   border-top: 1px solid #fefefe;
 }
-/* line 179, sass/partials/_area_styles.scss */
+/* line 176, sass/partials/_area_styles.scss */
 .area-wrap .prime-actions {
   display: none !important;
 }
 
-/* line 184, sass/partials/_area_styles.scss */
+/* line 181, sass/partials/_area_styles.scss */
 .area-wrap:first-child {
   padding-top: 0;
 }
 
-/* line 191, sass/partials/_area_styles.scss */
+/* line 188, sass/partials/_area_styles.scss */
 .kb-area .add-modules a {
   display: block;
   color: #ccc;
@@ -1259,14 +1256,14 @@ p.no-blocks {
   transition: all 0.3s linear;
   margin-top: 8px;
 }
-/* line 203, sass/partials/_area_styles.scss */
+/* line 200, sass/partials/_area_styles.scss */
 .kb-area .add-modules a:hover {
   color: #999;
   border-color: #999;
   background-color: #f2f2f2;
 }
 
-/* line 216, sass/partials/_area_styles.scss */
+/* line 213, sass/partials/_area_styles.scss */
 .area-normal.has-sidebar {
   float: left;
   width: 58%;
@@ -1275,7 +1272,7 @@ p.no-blocks {
   min-width: 550px;
 }
 
-/* line 224, sass/partials/_area_styles.scss */
+/* line 221, sass/partials/_area_styles.scss */
 .area-normal.has-sidebar {
   -webkit-transition: width .3s linear;
   left: 0;
@@ -1283,7 +1280,7 @@ p.no-blocks {
   min-width: 550px;
 }
 
-/* line 231, sass/partials/_area_styles.scss */
+/* line 228, sass/partials/_area_styles.scss */
 .area-side {
   float: right;
   width: 36%;
@@ -1292,21 +1289,22 @@ p.no-blocks {
   z-index: 888;
 }
 
-/* line 240, sass/partials/_area_styles.scss */
+/* line 237, sass/partials/_area_styles.scss */
 .area-bottom {
   clear: both;
 }
 
-/* line 243, sass/partials/_area_styles.scss */
+/* line 240, sass/partials/_area_styles.scss */
 .area-holder, .context-area {
   margin-bottom: 20px;
   padding: 0px;
   background: #fff;
   box-shadow: 0px 1px 1px #fff;
   border: 1px solid #ccc;
+  border-bottom: none;
 }
 
-/* line 257, sass/partials/_area_styles.scss */
+/* line 255, sass/partials/_area_styles.scss */
 .block_limit {
   font-size: 10px;
   display: block;
@@ -1314,7 +1312,7 @@ p.no-blocks {
   color: #ccc;
 }
 
-/* line 264, sass/partials/_area_styles.scss */
+/* line 262, sass/partials/_area_styles.scss */
 .kb-selectbox {
   border: 1px solid #eaeaea;
   border-top: none;
@@ -1323,7 +1321,7 @@ p.no-blocks {
   background: #fff;
   /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
 }
-/* line 271, sass/partials/_area_styles.scss */
+/* line 269, sass/partials/_area_styles.scss */
 .kb-selectbox select {
   padding: 3px;
   margin: 0;
@@ -1341,16 +1339,16 @@ p.no-blocks {
   font-size: 12px;
 }
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  /* line 291, sass/partials/_area_styles.scss */
+  /* line 289, sass/partials/_area_styles.scss */
   .kb-selectbox select {
     padding-right: 18px;
   }
 }
-/* line 294, sass/partials/_area_styles.scss */
+/* line 292, sass/partials/_area_styles.scss */
 .kb-selectbox label {
   position: relative;
 }
-/* line 295, sass/partials/_area_styles.scss */
+/* line 293, sass/partials/_area_styles.scss */
 .kb-selectbox label:after {
   content: '<>';
   font: 11px "Consolas", monospace;
@@ -1366,7 +1364,7 @@ p.no-blocks {
   position: absolute;
   pointer-events: none;
 }
-/* line 309, sass/partials/_area_styles.scss */
+/* line 307, sass/partials/_area_styles.scss */
 .kb-selectbox label:before {
   content: '';
   background: #f8f8f8;
@@ -1375,17 +1373,17 @@ p.no-blocks {
   display: block;
 }
 
-/* line 318, sass/partials/_area_styles.scss */
+/* line 316, sass/partials/_area_styles.scss */
 .reframe-select-parent {
   float: left;
   margin-right: -1px;
 }
 
-/* line 325, sass/partials/_area_styles.scss */
+/* line 323, sass/partials/_area_styles.scss */
 .reframe-select-template {
   float: left;
 }
-/* line 328, sass/partials/_area_styles.scss */
+/* line 326, sass/partials/_area_styles.scss */
 .reframe-select-template label {
   margin-right: 10px;
 }
@@ -2191,14 +2189,13 @@ li.gallery-item textarea:focus {
 }
 
 /* -------------------
-	Fields 
+    Fields 
 ----------------------*/
 /* line 1, sass/partials/_kontentfields_new.scss */
 .kb_field {
-  background-color: #F2f2f2;
+  background-color: #fff;
   padding: 20px 20px 25px 20px;
-  border-bottom: 1px solid #999;
-  border-top: 1px solid #fff;
+  border-bottom: 1px solid #ccc;
   /* Shared */
   /* Special Cases*/
 }
@@ -2206,27 +2203,29 @@ li.gallery-item textarea:focus {
 .kb_field.checkbox {
   background: transparent;
 }
-/* line 12, sass/partials/_kontentfields_new.scss */
+/* line 10, sass/partials/_kontentfields_new.scss */
 .kb_field:last-child {
   border-bottom: 0px;
 }
-/* line 18, sass/partials/_kontentfields_new.scss */
+/* line 16, sass/partials/_kontentfields_new.scss */
 .kb_field label.heading {
   display: block;
   margin-bottom: 8px;
-  border-left: 18px solid #33b5e5;
+  border-left: 5px solid #33b5e5;
   padding-left: 9px;
-  margin-left: -28px;
+  margin-left: -20px;
   font-style: italic;
+  font-weight: 700;
   font-size: 13px;
   color: #333333;
   text-shadow: 1px 1px 0px #fff;
 }
-/* line 30, sass/partials/_kontentfields_new.scss */
+/* line 29, sass/partials/_kontentfields_new.scss */
 .kb_field input[type=text] {
   height: 30px;
   line-height: 22px;
   border: 1px solid #aaaaaa;
+  font-size: 14px;
 }
 /* line 35, sass/partials/_kontentfields_new.scss */
 .kb_field input[type=text]:focus {
@@ -2270,57 +2269,82 @@ Field Tabs
 .kb_fieldtabs ul.ui-tabs-nav {
   margin-bottom: 0px;
   margin-left: -8px;
+  border-bottom: 2px solid #f9f9f9;
+  border-top: 2px solid #f9f9f9;
 }
-/* line 82, sass/partials/_kontentfields_new.scss */
+/* line 84, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li {
   padding: 8px 0px 5px 0px;
-  background: #e0e0e0;
+  background: #fff;
   float: left;
-  border-bottom: 3px solid #ccc;
+  border-bottom: 2px solid #f9f9f9;
   margin-bottom: 0;
+  position: relative;
+  top: 2px;
 }
-/* line 89, sass/partials/_kontentfields_new.scss */
+/* line 94, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a {
   padding: 2px 22px;
   text-decoration: none;
+  color: #999;
+  top: 2px;
 }
-/* line 93, sass/partials/_kontentfields_new.scss */
+/* line 99, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a:focus, .kb_fieldtabs ul.ui-tabs-nav li a:active {
   border: none;
   outline: none;
 }
-/* line 101, sass/partials/_kontentfields_new.scss */
+/* line 104, sass/partials/_kontentfields_new.scss */
+.kb_fieldtabs ul.ui-tabs-nav li a:hover {
+  color: #666;
+}
+/* line 111, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li:hover {
-  border-bottom: 3px solid #0074a2;
+  border-bottom: 2px solid #0074a2;
 }
-/* line 105, sass/partials/_kontentfields_new.scss */
+/* line 115, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active {
-  background-color: #0074a2;
-  border-bottom: 3px solid #0074a2;
+  background-color: #fff;
+  border-bottom: 2px solid #0074a2;
 }
-/* line 109, sass/partials/_kontentfields_new.scss */
+/* line 119, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active a {
-  color: #f9f9f9;
+  color: #333;
+  font-weight: 700;
 }
-/* line 116, sass/partials/_kontentfields_new.scss */
+/* line 127, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs .ui-widget-content {
   padding: 0px;
 }
 
+/* line 132, sass/partials/_kontentfields_new.scss */
+.field-wrapper {
+  margin-bottom: 10px;
+}
+/* line 136, sass/partials/_kontentfields_new.scss */
+.field-wrapper label {
+  width: 120px;
+  display: inline-block;
+}
+/* line 141, sass/partials/_kontentfields_new.scss */
+.field-wrapper input[type=text] {
+  margin-left: 0px;
+}
+
 /* groups */
-/* line 122, sass/partials/_kontentfields_new.scss */
+/* line 150, sass/partials/_kontentfields_new.scss */
 .kb_group_header {
   padding: 20px;
   background-color: #0074a2;
 }
-/* line 126, sass/partials/_kontentfields_new.scss */
+/* line 154, sass/partials/_kontentfields_new.scss */
 .kb_group_header h2 {
   margin: 0 !important;
   padding: 0 !important;
   color: #fff !important;
   text-shadow: 1px 1px 1px #999999;
 }
-/* line 133, sass/partials/_kontentfields_new.scss */
+/* line 161, sass/partials/_kontentfields_new.scss */
 .kb_group_header p.description {
   color: #f2f2f2;
   padding: 0;
@@ -2328,11 +2352,11 @@ Field Tabs
 }
 
 /* Onsite Styles slightly different */
-/* line 142, sass/partials/_kontentfields_new.scss */
+/* line 170, sass/partials/_kontentfields_new.scss */
 body.on-site-editing {
   padding-top: 0px;
 }
-/* line 147, sass/partials/_kontentfields_new.scss */
+/* line 175, sass/partials/_kontentfields_new.scss */
 body.on-site-editing .kb_field label.heading {
   display: block;
   margin-bottom: 8px;
@@ -2344,17 +2368,17 @@ body.on-site-editing .kb_field label.heading {
   color: #333333;
   text-shadow: 1px 1px 0px white;
 }
-/* line 162, sass/partials/_kontentfields_new.scss */
+/* line 190, sass/partials/_kontentfields_new.scss */
 body.on-site-editing .kb_fieldtabs ul.ui-tabs-nav {
   margin-left: 0;
   background: #e0e0e0;
 }
-/* line 167, sass/partials/_kontentfields_new.scss */
+/* line 195, sass/partials/_kontentfields_new.scss */
 body.on-site-editing .kb_fieldtabs .ui-widget-content {
   border: none;
   border-top: none;
 }
-/* line 173, sass/partials/_kontentfields_new.scss */
+/* line 201, sass/partials/_kontentfields_new.scss */
 body.on-site-editing .os-header {
   background: #333;
   padding: 4px;
@@ -2368,7 +2392,7 @@ body.on-site-editing .os-header {
   bottom: 0;
   font-size: 12px;
 }
-/* line 186, sass/partials/_kontentfields_new.scss */
+/* line 214, sass/partials/_kontentfields_new.scss */
 body.on-site-editing .os-header .os-update {
   background: #f2f2f2;
   border: 1px solid #ccc;
@@ -2376,7 +2400,7 @@ body.on-site-editing .os-header .os-update {
   cursor: pointer;
   font-size: 12px;
 }
-/* line 193, sass/partials/_kontentfields_new.scss */
+/* line 221, sass/partials/_kontentfields_new.scss */
 body.on-site-editing .os-header .os-update:hover {
   background-color: #0074a2;
   color: #fff;
@@ -2981,37 +3005,38 @@ div.kb-drag-drop-inside p {
   margin-left: -7px;
   font-weight: bold;
   background: #fff;
+  margin-bottom: 0;
 }
 
-/* line 344, sass/kontentblocks.scss */
+/* line 346, sass/kontentblocks.scss */
 .kb_loading {
   opacity: .4;
 }
 
-/* line 348, sass/kontentblocks.scss */
+/* line 350, sass/kontentblocks.scss */
 input[type="checkbox"][checked] {
   opacity: .8;
 }
 
-/* line 352, sass/kontentblocks.scss */
+/* line 354, sass/kontentblocks.scss */
 .kb_block_options {
   padding: 10px;
   margin-top: 20px;
 }
 
-/* line 357, sass/kontentblocks.scss */
+/* line 359, sass/kontentblocks.scss */
 .kb_block_options .kb_field {
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
 
-/* line 363, sass/kontentblocks.scss */
+/* line 365, sass/kontentblocks.scss */
 .kb_block {
   -webkit-transition: box-shadow .3s linear;
 }
 
-/* line 368, sass/kontentblocks.scss */
+/* line 370, sass/kontentblocks.scss */
 .area-side .kb-open {
   width: 150%;
   margin-left: -56%;
@@ -3019,19 +3044,19 @@ input[type="checkbox"][checked] {
   z-index: 4500;
 }
 
-/* line 376, sass/kontentblocks.scss */
+/* line 378, sass/kontentblocks.scss */
 .tooltip {
   display: none;
   opacity: 0;
   -webkit-transition: opacity .5s linear;
 }
 
-/* line 382, sass/kontentblocks.scss */
+/* line 384, sass/kontentblocks.scss */
 .area_template {
   position: relative;
 }
 
-/* line 386, sass/kontentblocks.scss */
+/* line 388, sass/kontentblocks.scss */
 .area_template:hover .tooltip {
   display: block;
   opacity: 0;
@@ -3041,7 +3066,7 @@ input[type="checkbox"][checked] {
   opacity: 1;
 }
 
-/* line 395, sass/kontentblocks.scss */
+/* line 397, sass/kontentblocks.scss */
 .area_template img.tpl-mini {
   float: left;
   margin-right: 8px;
@@ -4464,14 +4489,14 @@ button.ui-button::-moz-focus-inner {
  * http://docs.jquery.com/UI/Tabs#theming
  */
 /* context */
-/* line 417, sass/kontentblocks.scss */
+/* line 419, sass/kontentblocks.scss */
 .kb_area_list_item {
   background: none;
   border: none;
   padding: 5px 10px;
 }
 
-/* line 424, sass/kontentblocks.scss */
+/* line 426, sass/kontentblocks.scss */
 .maximize-side {
   position: absolute;
   width: 75%;
@@ -4481,7 +4506,7 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 433, sass/kontentblocks.scss */
+/* line 435, sass/kontentblocks.scss */
 .maximize-normal {
   position: absolute;
   width: 75%;
@@ -4491,30 +4516,30 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 442, sass/kontentblocks.scss */
+/* line 444, sass/kontentblocks.scss */
 #kontentblocks_stage {
   position: relative;
 }
 
-/* line 447, sass/kontentblocks.scss */
+/* line 449, sass/kontentblocks.scss */
 .active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {
   font-family: sans-serif;
   font-style: italic;
   margin: 0;
 }
 
-/* line 454, sass/kontentblocks.scss */
+/* line 456, sass/kontentblocks.scss */
 .area_sidebars li {
   cursor: move;
 }
 
-/* line 460, sass/kontentblocks.scss */
+/* line 462, sass/kontentblocks.scss */
 .page-template-wrapper.context-area {
   min-height: 0px;
   overflow: hidden;
 }
 
-/* line 465, sass/kontentblocks.scss */
+/* line 467, sass/kontentblocks.scss */
 .kb_thickbox h2 {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
@@ -4522,23 +4547,23 @@ button.ui-button::-moz-focus-inner {
   margin: 20px 0 0 0;
 }
 
-/* line 472, sass/kontentblocks.scss */
+/* line 474, sass/kontentblocks.scss */
 .kb_thickbox .context-header {
   margin-bottom: 20px;
 }
 
-/* line 476, sass/kontentblocks.scss */
+/* line 478, sass/kontentblocks.scss */
 #TB_window {
   z-index: 6000 !important;
 }
 
-/* line 483, sass/kontentblocks.scss */
+/* line 485, sass/kontentblocks.scss */
 textarea.quicktags {
   width: 100%;
 }
 
 /* Redirect */
-/* line 493, sass/kontentblocks.scss */
+/* line 495, sass/kontentblocks.scss */
 .redirect-wrapper input[type=radio] {
   float: left;
   width: 16px;
@@ -4547,39 +4572,39 @@ textarea.quicktags {
   margin-right: 16px;
 }
 
-/* line 503, sass/kontentblocks.scss */
+/* line 505, sass/kontentblocks.scss */
 .wp-editor-area {
   /*height: 500px;*/
 }
 
-/* line 507, sass/kontentblocks.scss */
+/* line 509, sass/kontentblocks.scss */
 #context_normal {
   /* min-height: 600px;
   _height: 600px;*/
 }
 
-/* line 512, sass/kontentblocks.scss */
+/* line 514, sass/kontentblocks.scss */
 .quicktags textarea {
   background: #fff;
 }
 
 /* Responsive Admin Layout */
 @media screen and (max-width: 1299px) {
-  /* line 522, sass/kontentblocks.scss */
+  /* line 524, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 100%;
   }
 
-  /* line 528, sass/kontentblocks.scss */
+  /* line 530, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: left;
     width: 100%;
   }
 
-  /* line 533, sass/kontentblocks.scss */
+  /* line 535, sass/kontentblocks.scss */
   .area-side .kb-open {
     width: auto;
     margin-left: 0;
@@ -4588,21 +4613,21 @@ textarea.quicktags {
   }
 }
 @media screen and (min-width: 1300px) {
-  /* line 544, sass/kontentblocks.scss */
+  /* line 546, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 60%;
   }
 
-  /* line 550, sass/kontentblocks.scss */
+  /* line 552, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: right;
     width: 38%;
   }
 
-  /* line 555, sass/kontentblocks.scss */
+  /* line 557, sass/kontentblocks.scss */
   .area-side .kb-open {
     width: 750px;
     margin-left: 0;
@@ -4612,29 +4637,29 @@ textarea.quicktags {
     margin-left: -400px;
   }
 }
-/* line 566, sass/kontentblocks.scss */
+/* line 568, sass/kontentblocks.scss */
 .clear {
   clear: both;
 }
 
-/* line 570, sass/kontentblocks.scss */
+/* line 572, sass/kontentblocks.scss */
 .mceIframeContainer iframe {
   /*height: 150px !important;*/
 }
 
-/* line 574, sass/kontentblocks.scss */
+/* line 576, sass/kontentblocks.scss */
 .kb_field textarea {
   width: 100%;
   height: 80px;
 }
 
 /* Field Image Gallery */
-/* line 582, sass/kontentblocks.scss */
+/* line 584, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper {
   overflow: hidden;
 }
 
-/* line 586, sass/kontentblocks.scss */
+/* line 588, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li {
   float: left;
   margin-right: 12px;
@@ -4643,25 +4668,25 @@ textarea.quicktags {
   position: relative;
 }
 
-/* line 594, sass/kontentblocks.scss */
+/* line 596, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.selected {
   border: 3px solid blue;
 }
 
-/* line 598, sass/kontentblocks.scss */
+/* line 600, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li img {
   width: 107px;
   height: 107px;
 }
 
-/* line 604, sass/kontentblocks.scss */
+/* line 606, sass/kontentblocks.scss */
 .kb-field-gallery-info {
   min-height: 100px;
   background: #ccc;
   margin: 20px 0;
 }
 
-/* line 610, sass/kontentblocks.scss */
+/* line 612, sass/kontentblocks.scss */
 .kb-field-gallery-image-delete {
   display: none;
   position: absolute;
@@ -4673,7 +4698,7 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 621, sass/kontentblocks.scss */
+/* line 623, sass/kontentblocks.scss */
 .kb-field-gallery-image-info {
   display: none;
   position: absolute;
@@ -4685,24 +4710,24 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 632, sass/kontentblocks.scss */
+/* line 634, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li:hover > span, .kb-field-gallery-wrapper li.todelete > span.delete {
   display: block;
 }
 
-/* line 636, sass/kontentblocks.scss */
+/* line 638, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.todelete {
   opacity: .5;
 }
 
-/* line 643, sass/kontentblocks.scss */
+/* line 645, sass/kontentblocks.scss */
 .custom.kb_area_list_item {
   background: none;
   border: none;
   padding: 0;
 }
 
-/* line 650, sass/kontentblocks.scss */
+/* line 652, sass/kontentblocks.scss */
 .custom .kb_field {
   background-color: #fff !important;
 }

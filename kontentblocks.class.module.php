@@ -113,6 +113,7 @@ class KB_Block
      * @var string
      */
     var $post_type = '';
+    public $path;
 
     /**
      * II. Constructor
@@ -144,6 +145,9 @@ class KB_Block
         //connect this block to areas
         $this->connect( $block_settings );
 
+        $reflector = new ReflectionClass( get_class( $this ) );
+        $this->path        = dirname($reflector->getFileName());
+
     }
 
     /* -----------------------------------------------------
@@ -158,7 +162,7 @@ class KB_Block
      * gets called by ui display callback
      *  
      */
-    function options()
+    public function options( $data )
     {
         
     }
@@ -168,7 +172,7 @@ class KB_Block
      * Method to save whatever form fields are in the options() method
      * Gets called by the meta box save callback
      */
-    public function save()
+    public function save($a, $b, $c)
     {
         
     }
@@ -178,7 +182,7 @@ class KB_Block
      * Frontend display method.
      * Has no default output yet, and must be overwritten 
      */
-    public function block()
+    public function block($data)
     {
         
     }
@@ -320,12 +324,12 @@ class KB_Block
         else {
             $description       = (!empty( $this->settings[ 'description' ] )) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->settings[ 'description' ] : '';
             $l18n_block_title  = __( 'Modul Bezeichnung', 'kontentblocks' );
-            $l18n_draft_status = ( $this->draft == 'true' ) ? '<p class="kb_draft">' . __( 'This Kontentblock is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
+            $l18n_draft_status = ( $this->draft == 'true' ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
 
             $out .= "<div class='kb_block_title'>";
 
             if ( !empty( $description ) )
-                $out .= "<p class='description'>{$description}</p>";
+               // $out .= "<p class='description'>{$description}</p>";
 
             $out .= "		<div class='block-notice hide'>
 							<p>Es wurden Veränderungen vorgenommen. <input type='submit' class='button-primary' value='Aktualisieren' /></p>
@@ -444,11 +448,11 @@ class KB_Block
         global $Kontentblocks;
         $areas = $Kontentblocks->areas;
 
-        if ( !empty($args['connect']) && $args[ 'connect' ] === 'any' ) {
-            
+        if ( !empty( $args[ 'connect' ] ) && $args[ 'connect' ] === 'any' ) {
+
             foreach ( $areas as $area_id => $area ) {
                 if ( !in_array( get_class( $this ), $area[ 'available_blocks' ] ) ) {
-                    $Kontentblocks->areas[$area_id]['available_blocks'][] = get_class( $this );
+                    $Kontentblocks->areas[ $area_id ][ 'available_blocks' ][ ] = get_class( $this );
                 }
             }
         }
@@ -681,12 +685,21 @@ class KB_Block
 
     public function get_image_object( $id, $width = 150, $height = 150, $crop = true )
     {
-        if ( !isset( $id ) )
+        if ( empty( $id ) )
             return false;
 
         return new KB_Image_Object( $id, $width, $height, $crop );
 
     }
+
+//    public function get_link_object( $href )
+//    {
+//        if ( empty( $href ) )
+//            return false;
+//
+//        return new KB_Link_Object( $href );
+//
+//    }
 
 }
 

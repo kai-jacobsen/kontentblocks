@@ -101,8 +101,9 @@ class KB_Image_Object
      */
     protected $sizeAttributes = false;
 
-    public function __construct( $id, $width = 150, $height = 150, $crop = true )
+    public function __construct( $id, $width = 150, $height = null, $crop = true )
     {
+        
 
         // Assign to properties
         $this->id     = $id;

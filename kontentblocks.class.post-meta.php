@@ -238,5 +238,18 @@ class KB_Post_Meta
     public function getModules(){
         return $this->modules;
     }
+    
+    public function hasModules($area)
+    {
+        if (!empty($this->index)){
+            foreach($this->index as $module){
+                if($module['area'] === $area && $module['draft'] !== 'true' && $module['status'] !== 'kb_inactive'){
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 
 }

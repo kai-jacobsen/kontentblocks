@@ -1,6 +1,5 @@
 <?php
 
-
 class ModuleTemplate
 {
 
@@ -18,7 +17,7 @@ class ModuleTemplate
 
         $this->module  = $module;
         $this->data    = $this->_setupData( $module->new_instance, $addData );
-        $this->tplFile = ($tpl !== false) ? $tpl : get_class( $module );
+        $this->tplFile = ($tpl !== false) ? $tpl : get_class( $module ) . '.twig';
 
         $this->engine = KBTwig::getInstance();
 
@@ -26,6 +25,19 @@ class ModuleTemplate
 
     public function render( $echo = false )
     {
+        if ( !empty( $this->module->path ) ) {
+            if ( is_file( trailingslashit( $this->module->path ) . $this->tplFile ) ) {
+                $this->setPath( $this->module->path );
+            }
+        }
+
+        elseif ( !is_file( trailingslashit( KBTwig::getDefaultPath()) . $this->tplFile ) ) {
+            echo "<script>console.log('template {$this->tplFile} missing');</script>";
+            return false;
+        }
+
+
+
         if ( $echo ) {
             $this->engine->display( $this->tplFile, $this->data );
         }
@@ -74,6 +86,7 @@ class ModuleTemplate
         }
 
         return $data;
+
     }
 
 }

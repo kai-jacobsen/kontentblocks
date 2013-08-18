@@ -34,7 +34,7 @@ class Proxy extends KB_Block {
 		add_filter('kb_modify_data_src_proxy', array($this, 'change_post_id'));
 	}
 	
-	function options($data) {
+	public function options($data) {
 		
 		$defaults = array(
 			'post_type' => null,
@@ -93,13 +93,13 @@ class Proxy extends KB_Block {
 	}
 	
 	
-	function block($data) {
+	public function block($data) {
 		return false;
 	}
 	
 	
 	
-	function save($old, $id, $data) {
+	public function save($old, $id, $data) {
 		
 		return $data;	
 	}

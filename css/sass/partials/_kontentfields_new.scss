@@ -1,67 +1,67 @@
 .kb_field{
 
-	&.checkbox{
-		background: transparent;
-	}
+    &.checkbox{
+        background: transparent;
+    }
 
-	background-color: #F2f2f2;
-	padding: 20px 20px 25px 20px;
-	border-bottom: 1px solid #999;
-	border-top: 1px solid #fff;
+    background-color: #fff;
+    padding: 20px 20px 25px 20px;
+    border-bottom: 1px solid #ccc;
+    &:last-child{
+        border-bottom: 0px;
+    }
 
-	&:last-child{
-		border-bottom: 0px;
-	}
+    /* Shared */
 
-	/* Shared */
+    label.heading{
+        display: block;
+        margin-bottom: 8px;
+        border-left: 5px solid #33b5e5;
+        padding-left: 9px;
+        margin-left: -20px;
+        font-style: italic;
+        font-weight: 700;
+        font-size: 13px;
+        color: #333333;
+        text-shadow: 1px 1px 0px #fff;
+    }
 
-	label.heading{
-		display: block;
-		margin-bottom: 8px;
-		border-left: 18px solid #33b5e5;
-		padding-left: 9px;
-		margin-left: -28px;
-		font-style: italic;
-		font-size: 13px;
-		color: #333333;
-		text-shadow: 1px 1px 0px #fff;
-	}
+    input[type=text]{
+        height: 30px;
+        line-height: 22px;
+        border: 1px solid #aaaaaa;
+        font-size:14px;
 
-	input[type=text]{
-		height: 30px;
-		line-height: 22px;
-		border: 1px solid #aaaaaa;
+        &:focus{
+            @include box-shadow(1px 1px 8px $lightblue);
+        }
 
-		&:focus{
-			@include box-shadow(1px 1px 8px $lightblue);
-		}
+        &.large{
+            width: 100%;
+        }
+    }
 
-		&.large{
-			width: 100%;
-		}
-	}
+    input[type=checkbox]{
+        margin-right: 3px;
+        line-height: 150%;
+    }
 
-	input[type=checkbox]{
-		margin-right: 3px;
-		line-height: 150%;
-	}
+    select{
+        min-width: 200px;
+    }
 
-	select{
-		min-width: 200px;
-	}
+    textarea:focus{
+        @include box-shadow(1px 1px 8px $lightblue);
+    }
 
-	textarea:focus{
-		@include box-shadow(1px 1px 8px $lightblue);
-	}
+    p.description{
+        font-size: 11px;
+    }
 
-	p.description{
-		font-size: 11px;
-	}
+    /* Special Cases*/
 
-	/* Special Cases*/
-
-	&.radio{
-	}
+    &.radio{
+    }
 }
 
 
@@ -71,131 +71,159 @@ Field Tabs
 
 .kb_fieldtabs{
 
-	position: relative; 
-	zoom: 1; 
+    position: relative; 
+    zoom: 1; 
 
 
-	ul.ui-tabs-nav{
-		margin-bottom: 0px;
-		margin-left: -8px;
+    ul.ui-tabs-nav{
+        margin-bottom: 0px;
+        margin-left: -8px;
+        border-bottom: 2px solid #f9f9f9;
+        border-top: 2px solid #f9f9f9;
 
-		li{
-			padding: 8px 0px 5px 0px;
-			background: #e0e0e0;
-			float: left;
-			border-bottom: 3px solid #ccc;
-			margin-bottom: 0;
+        li{
+            padding: 8px 0px 5px 0px;
+            background: #fff;
+            float: left;
+            border-bottom: 2px solid #f9f9f9;
+            margin-bottom: 0;
+            position: relative;
+            top:2px;
+            
 
-			a{
-				padding: 2px 22px;
-				text-decoration: none;
+            a{
+                padding: 2px 22px;
+                text-decoration: none;
+                color:#999;
+                top:2px;
+                &:focus, &:active{
+                    border: none;
+                    outline: none;
+                }
 
-				&:focus, &:active{
-				border: none;
-				outline: none;
-			}
-			}
+                &:hover{
+                    color: #666;
+                }
+            }
 
 
 
-			&:hover{
-				border-bottom: 3px solid $lightblue;
-			}
+            &:hover{
+                border-bottom: 2px solid $lightblue;
+            }
 
-			&.ui-tabs-active{
-				background-color: $lightblue;
-				border-bottom: 3px solid $lightblue;
+            &.ui-tabs-active{
+                background-color: #fff;
+                border-bottom: 2px solid $lightblue;
 
-				a{
-					color: #f9f9f9;
-				}
-			}
-		}
-	}
+                a{
+                    color: #333;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
 
-	.ui-widget-content{
-		padding:0px;
-	}
+    .ui-widget-content{
+        padding:0px;
+    }
 }
+
+.field-wrapper{
+
+    margin-bottom: 10px;
+    
+    label{
+        width: 120px;
+        display: inline-block;
+    }
+    
+    input[type=text]{
+        margin-left:0px;
+       
+    }
+
+}
+
 
 /* groups */
 .kb_group_header{
-	padding: 20px;
-	background-color: $lightblue;
+    padding: 20px;
+    background-color: $lightblue;
 
-	h2{
-		margin: 0 !important;
-		padding: 0 !important;
-		color: #fff !important;
-		@include text-shadow(1px 1px 1px #999);
-	}
+    h2{
+        margin: 0 !important;
+        padding: 0 !important;
+        color: #fff !important;
+        @include text-shadow(1px 1px 1px #999);
+    }
 
-	p.description {
-		color: #f2f2f2;
-		padding: 0;
-		margin: 0;
-	}
+    p.description {
+        color: #f2f2f2;
+        padding: 0;
+        margin: 0;
+    }
 }
 
 
 /* Onsite Styles slightly different */
 body.on-site-editing{
-	padding-top: 0px;
+    padding-top: 0px;
 
-	.kb_field{
+    .kb_field{
 
-		label.heading {
-		display: block;
-		margin-bottom: 8px;
-		border-left: 12px solid #33b5e5;
-		padding-left: 9px;
-		margin-left: -20px;
-		font-style: italic;
-		font-size: 13px;
-		color: #333333;
-		text-shadow: 1px 1px 0px white;
-		}
-	} 
+        label.heading {
+            display: block;
+            margin-bottom: 8px;
+            border-left: 12px solid #33b5e5;
+            padding-left: 9px;
+            margin-left: -20px;
+            font-style: italic;
+            font-size: 13px;
+            color: #333333;
+            text-shadow: 1px 1px 0px white;
+        }
+    } 
 
-	.kb_fieldtabs{
+    .kb_fieldtabs{
 
-		ul.ui-tabs-nav{
-			margin-left: 0;
-			background: #e0e0e0;
-		}
+        ul.ui-tabs-nav{
+            margin-left: 0;
+            background: #e0e0e0;
+        }
 
-		.ui-widget-content{
-			border: none;
-			border-top: none;
-		}
-	} 
+        .ui-widget-content{
+            border: none;
+            border-top: none;
+        }
+    } 
 
-	.os-header{
-		background: #333;
-		padding: 4px;
-		position: fixed;
-		width: 100%;
-		margin-left: 0px;
-		margin-top: -20px;
-		z-index: 9999;
-		box-shadow: 1px -1px 1px #000;
-		border-top: 1px solid #777;
-		bottom: 0;
-		font-size: 12px;
+    .os-header{
+        background: #333;
+        padding: 4px;
+        position: fixed;
+        width: 100%;
+        margin-left: 0px;
+        margin-top: -20px;
+        z-index: 9999;
+        box-shadow: 1px -1px 1px #000;
+        border-top: 1px solid #777;
+        bottom: 0;
+        font-size: 12px;
 
-		.os-update{
-			background: #f2f2f2;
-			border: 1px solid #ccc;
-			padding: 4px 10px;
-			cursor: pointer;
-			font-size: 12px;
+        .os-update{
+            background: #f2f2f2;
+            border: 1px solid #ccc;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 12px;
 
-			&:hover{
-				background-color: $lightblue;
-				color: #fff;
-			}
-		}
-	}
+            &:hover{
+                background-color: $lightblue;
+                color: #fff;
+            }
+        }
+    }
 }
 
 @import "partials/_fields/_plupload";
@@ -203,3 +231,4 @@ body.on-site-editing{
 @import "partials/_fields/_kvm";
 @import "partials/_fields/_radioImages";
 @import "partials/_fields/_image";
+@import "partials/_fields/_advancedLink";
