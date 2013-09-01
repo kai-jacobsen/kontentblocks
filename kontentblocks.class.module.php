@@ -253,8 +253,6 @@ class KB_Block
             $data = get_option( $this->instance_id, array( ) );
         }
 
-
-
         // if disabled don't output, just show disabled message
         if ( $this->settings[ 'disabled' ] ) {
             echo "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
@@ -263,7 +261,7 @@ class KB_Block
             // output the form fields for this block
             $this->options( $data );
         }
-
+                    
         echo $this->footer();
 
         echo $this->_close_inner();
@@ -432,8 +430,7 @@ class KB_Block
     public function footer()
     {
         do_action( "block_footer_{$this->id}" );
-        do_action( 'block_footer' );
-
+        do_action( 'block_footer', $this );
     }
 
     /**

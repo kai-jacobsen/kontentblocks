@@ -727,9 +727,8 @@ class KBRender_Area
                 $collection[ ] = $instance;
             }
             elseif (
-                $instance->active == false OR $instance->draft == 'true' OR $instance->settings[ 'disabled' ] == true
+                $instance->active == false OR $instance->draft == 'true' OR $instance->settings[ 'disabled' ] == true OR !apply_filters('kb_collect', $instance)
             ) {
-
                 continue;
             }
             else {

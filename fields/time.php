@@ -5,10 +5,6 @@ kb_register_field( 'time', 'KB_Time' );
 Class KB_Time extends KB_Field
 {
 
-	function __construct()
-	{
-		
-	}
 
 	static function admin_print_styles()
 	{

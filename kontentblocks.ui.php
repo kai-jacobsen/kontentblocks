@@ -289,6 +289,7 @@ Class KB_Meta_Box
                 // special block specific data
                 $block = self::_individual_block_data( $block, $data );
 
+                $block  = apply_filters('save_module_data', $block, $data);    
 
                 $updateblocks[ $block[ 'instance_id' ] ] = $block;
 

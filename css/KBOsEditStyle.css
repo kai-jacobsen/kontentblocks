@@ -27,32 +27,33 @@ body.onsite-editing .os-edit-container {
 /* line 25, sass/KBOsEditStyle.scss */
 body.onsite-editing .os-edit-wrapper a {
   line-height: 16px;
-  background: #ccc;
+  background: transparent;
   display: block;
   margin: 2px 0px;
   float: left;
   font-size: 12px;
-  padding-left: 20px;
+  padding-left: 0px;
   color: #000;
   opacity: 1;
+  text-indent: -9999px;
   text-decoration: none;
   -webkit-transition: opacity 0.3s;
   -moz-transition: opacity 0.3s;
   -o-transition: opacity 0.3s;
   transition: opacity 0.3s;
 }
-/* line 39, sass/KBOsEditStyle.scss */
+/* line 40, sass/KBOsEditStyle.scss */
 body.onsite-editing .os-edit-wrapper a:hover {
   opacity: 1;
   color: #333;
 }
-/* line 45, sass/KBOsEditStyle.scss */
+/* line 46, sass/KBOsEditStyle.scss */
 body.onsite-editing a.os-edit-block {
   line-height: 24px;
   float: right;
   cursor: pointer;
 }
-/* line 51, sass/KBOsEditStyle.scss */
+/* line 52, sass/KBOsEditStyle.scss */
 body.onsite-editing a.os-edit-block span {
   display: block;
   height: 24px;
@@ -61,37 +62,38 @@ body.onsite-editing a.os-edit-block span {
   float: right;
   margin-left: 10px;
 }
-/* line 62, sass/KBOsEditStyle.scss */
+/* line 63, sass/KBOsEditStyle.scss */
 body.onsite-editing .master a.os-edit-block span {
   background-color: #d54e21;
 }
-/* line 66, sass/KBOsEditStyle.scss */
+/* line 67, sass/KBOsEditStyle.scss */
 body.onsite-editing a.os-description {
   background: url("info.png") no-repeat;
   display: none;
 }
-/* line 71, sass/KBOsEditStyle.scss */
+/* line 72, sass/KBOsEditStyle.scss */
 body.onsite-editing .hide {
   display: none;
 }
-/* line 76, sass/KBOsEditStyle.scss */
+/* line 77, sass/KBOsEditStyle.scss */
 body.onsite-editing #onsite-modal {
   padding: 0;
+  z-index: 9999;
 }
-/* line 79, sass/KBOsEditStyle.scss */
+/* line 81, sass/KBOsEditStyle.scss */
 body.onsite-editing #onsite-modal iframe html {
   height: auto;
 }
 
-/* line 88, sass/KBOsEditStyle.scss */
+/* line 90, sass/KBOsEditStyle.scss */
 #wp-toolbar .os-edit {
   background: #0074a2;
 }
-/* line 91, sass/KBOsEditStyle.scss */
+/* line 93, sass/KBOsEditStyle.scss */
 #wp-toolbar .os-edit.os-edit-off {
   background: none !important;
 }
-/* line 96, sass/KBOsEditStyle.scss */
+/* line 98, sass/KBOsEditStyle.scss */
 #wp-toolbar .os-edit.os-edit-off a {
   color: #999;
 }
