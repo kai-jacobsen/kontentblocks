@@ -1,5 +1,6 @@
 <?php
 namespace Kontentblocks\Admin\Sidebars;
+use Kontentblocks\Admin\Area;
 
 global $Kontentblocks, $Kontentbox, $current_screen;
 
@@ -56,7 +57,7 @@ echo $html;
 		echo '<div id="kontentblocks_stage">';
 		echo "<div class='dynamic_area_list'>";
 				
-				$area_instance = new \KBArea($area);
+				$area_instance = new Area($area);
 				$area_instance->_do_area_header();
 				$area_instance->blocks = $blocks;
 				$area_instance->do_area_blocks();

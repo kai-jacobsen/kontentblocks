@@ -1,5 +1,8 @@
 <?php
 
+namespace Kontentblocks;
+use Kontentblocks\Admin\EditScreen, Kontentblocks\Fields\Kontentfields,
+ Kontentblocks\Frontend\AreaRender;
 /*
   Plugin Name:Kontentblocks.
   Plugin URI: http://kontentblocks.de
@@ -87,10 +90,8 @@ Class Kontentblocks
 
         /* Define some path constants to make things a bit easier */
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . 'modules/' );
-        define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'modules/' );
-        define( 'KB_CACHE', false );
-        define( 'KB_CACHE_INTERVAL', 60 * 60 );
+        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/core-modules/' );
+        define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/core-modules/' );
 
         // additional cap feature, only used on demand and not properly tested yet
         define( 'KONTENTLOCK', false );
@@ -98,12 +99,9 @@ Class Kontentblocks
         /* Include all necessary files on admin area */
         if ( is_admin() ) {
             include_once dirname( __FILE__ ) . '/kontentblocks.options.php';
-            include_once dirname( __FILE__ ) . '/kontentblocks.ui.php';
             include_once dirname( __FILE__ ) . '/kontentblocks.ajax.php';
-            include_once dirname( __FILE__ ) . '/kontentblocks.helper.php';
-            include_once dirname( __FILE__ ) . '/kontentblocks.helper.new.php';
-            include_once dirname( __FILE__ ) . '/kontentblocks.class.area.php';
-            include_once dirname( __FILE__ ) . '/kontentblocks.class.area.menu.php';
+            include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
+            include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
             include_once dirname( __FILE__ ) . '/includes/kontentblocks.sidebar-area-selector.php';
 
 
@@ -117,22 +115,15 @@ Class Kontentblocks
 
             add_action( 'init', array( $this, 'remove_editor_support' ) );
             add_filter( 'get_media_item_args', array( $this, 'readd_submit_button' ), 99, 1 );
+            
         }
         // Files used used on front and backend
-        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
+        include_once dirname( __FILE__ ) . '/Autoloader.php';
         require_once dirname( __FILE__ ) . '/vendor/autoload.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.twig.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.post-meta.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.template.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.module.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.field.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.area.render.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.module.render.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.class.kontentfields.php';
+        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
         require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
         // add theme support
         add_theme_support( 'kontentblocks' );
-
 
         // Activation Setup
         register_activation_hook( __FILE__, array( $this, '_kontentblocks_activation' ) );
@@ -203,7 +194,7 @@ Class Kontentblocks
     {
         if ( is_admin() ) {
             global $Kontentbox;
-            $Kontentbox = new KB_Meta_Box( $this );
+            $Kontentbox = new EditScreen( $this );
         }
 
     }
@@ -453,7 +444,7 @@ Class Kontentblocks
      */
     public function _load_plugins()
     {
-        
+
         $paths   = array( kb_get_plugin_path() );
         $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
         $paths   = apply_filters( 'kb_add_plugin_path', $paths );
@@ -480,7 +471,6 @@ Class Kontentblocks
 
     public function register_block( $classname )
     {
-
         if ( !class_exists( $classname ) )
             return;
 
@@ -589,9 +579,6 @@ Class Kontentblocks
         // merge defaults with provided args
         $area = wp_parse_args( $args, $defaults );
 
-        // options only gets updated if area does not exist yet
-        $needs_update = false;
-
         $registered_areas = $this->areas;
 
         if ( empty( $registered_areas[ $area[ 'id' ] ] ) ) {
@@ -611,297 +598,20 @@ Class Kontentblocks
     public function render_area( $post_id, $area = null, $context = null, $subcontext = null, $args = null, $echo = true )
     {
 
-        if ( !isset( $area ) )
+        if ( !isset( $area ) ) {
             return false;
+        }
 
 
         $args = $this->get_area( $area );
 
-        if ( !$args )
+        if ( !$args ) {
             return false;
+        }
 
         $Renderer = new KBRender_Area( $this, $post_id, $args, $context, $subcontext );
         $output   = $Renderer->render( $echo );
         return $output;
-
-    }
-
-    /**
-     * Does the actual frontend output work
-     * Calls 'block' method on each Blockclass
-     *
-     * @global object Kontentblocks
-     * @param string post_id
-     * @param string area
-     */
-    function render_blocks( $post_id = NULL, $area = 'kontentblocks', $context = null, $subcontext = null )
-    {
-
-        $time_start    = microtime();
-        $area_template = null;
-
-        $areas     = $this->get_areas();
-        $area_args = $areas[ $area ];
-
-        $this->post_id = $post_id;
-
-
-        if ( isset( $area_args[ 'dynamic' ] ) && $area_args[ 'dynamic' ] == true )
-            $this->set_post_context( false );
-
-
-        $pre_element_id = null;
-
-        $cached = false;
-        if ( !isset( $areas[ $area ] ) )
-            return;
-
-        // get references to blocks used
-        $blocks = self::get_blocks( $post_id, $area, $this->post_context );
-
-
-
-        // no blocks, return
-        if ( empty( $blocks ) )
-            return;
-
-        // get area settings
-        $saved_area_settings = get_post_meta( $post_id, 'kb_area_settings', true );
-
-        // now we go crazy...if custom is set, we create an area template on the fly
-        if ( isset( $saved_area_settings[ $area ][ 'custom' ] ) )
-            $area_template = $this->_virtual_template( $saved_area_settings[ $area ][ 'custom' ] );
-
-
-        //$last_item_setting = ( !empty( $saved_area_settings[$area]['lastitem'] )) ? (int) $saved_area_settings[$area]['lastitem'] : null ;
-        // get the saved settings for this area in use
-        $this_area_settings = (!empty( $saved_area_settings[ $area ] ) ) ? $saved_area_settings[ $area ] : null;
-
-        // get 'options' for area
-        $area_options = $area_args;
-
-        // filter blocks for this area, return instances
-        $collection = $this->setup_blocks( $blocks, $area );
-
-        // get information about current page
-        $page_template = get_post_meta( $post_id, '_wp_page_template', true );
-        $post_type     = get_post_type( $post_id );
-
-        // area template
-
-        if ( !isset( $area_template ) )
-            $area_template = $this->get_area_template( $collection, $this_area_settings, $area_options );
-
-
-        if ( null !== $area_template and $area_template[ 'id' ] != 'default' ) {
-            if ( !empty( $area_template ) ) {
-
-                $area_template_classes = $this->get_area_template_classes( $area_template );
-
-                $area_template_columns = $this->get_area_template_columns( $area_template );
-
-                // overrides other last-item settings if tpl has one set
-                $area_last_item = $area_template[ 'last-item' ];
-                if ( !empty( $area_last_item ) ) {
-                    $last_item_setting = $area_last_item;
-                }
-            }
-        }
-
-
-        if ( !empty( $collection ) ) {
-
-            $tmp    = $tmpcol = null;
-
-            $output = '';
-
-            $element_count = count( $collection );
-
-
-            // do area before
-            $output .= self::do_area_before( $area, $area_options, $this_area_settings, $area_template, $context, $subcontext );
-
-            // counter for the .last-item functionality
-            $i = 1;
-            foreach ( $collection as $instance ) {
-
-
-
-
-                // collect block output seperatly and merge it at the end of this loop iteration
-                $block = null;
-
-                // custom classes | repeater if block before was the same type
-                // TODO: Deprecate / concept causes difficulties 
-                $element_id         = $instance->id;
-                if ( $element_id == $pre_element_id )
-                    $instance->repeater = true;
-
-                // if this block gets wrapped ( area templates ) collect all wrapper classes here
-                $wrapperclasses = array();
-
-                // set column property if available
-                if ( !empty( $area_template_columns ) ) {
-                    $tmpcol            = array_shift( $area_template_columns );
-                    $instance->columns = $tmpcol;
-                }
-
-                if ( !empty( $area_template ) )
-                    $instance->area_template = $area_template[ 'id' ];
-
-                // shorthand instance settings
-                $settings = $instance->settings;
-
-                // get data
-                $data = self::get_data( $post_id, $instance, $this->post_context );
-
-                // store data inside class for internal use
-                $instance->post_id       = $post_id;
-                $instance->new_instance  = $data;
-                $instance->page_template = $page_template;
-                $instance->post_type     = $post_type;
-                // set context
-                $instance->context       = $context;
-                $instance->subcontext    = $subcontext;
-                $instance->new_instance  = $data;
-                // call setup method for this instance
-
-                if ( method_exists( $instance, 'setup' ) )
-                    $instance->setup( $instance );
-
-
-                // add wrapper classes as set by area-templates
-                if ( !empty( $area_template_classes ) ) {
-                    $tmp = array_shift( $area_template_classes );
-
-                    $wrapperclasses[] = $tmp;
-                }
-
-
-                if ( isset( $last_item_setting ) ) {
-                    if ( $i % ($last_item_setting) == 0 ) {
-                        $wrapperclasses[] = 'last-item';
-                    }
-                }
-
-                // if blocks gets wrapped by area template
-                if ( !empty( $wrapperclasses ) ) {
-                    $block .= self::do_block_before( $wrapperclasses );
-                }
-
-                // if this blocks uses a wrapper (default behavour), print before markup
-                if ( $settings[ 'wrapper' ] ) {
-                    // Do widget title if in side context
-                    // TODO: experimental
-
-                    /* if ( $last_item_setting && $last_item_setting != 0 && $i % $last_item_setting == 0 )
-                      {
-
-                      $classestoadd[] = 'last-item';
-                      } */
-
-                    //$classestoadd[] = "{$instance->instance_id}";
-                    $classestoadd[] = $this->get_element_class( $i, $element_count );
-                    $classestoadd[] = ($element_id == $pre_element_id) ? ' repeater' : null;
-
-                    // add On Site Editor container 
-                    if ( is_user_logged_in() )
-                        $classestoadd[] = 'os-edit-container';
-
-                    // add classes to markup
-                    if ( !empty( $classestoadd ) ) {
-                        $block .= sprintf( stripslashes( $settings[ 'before_block' ] ), $instance->instance_id, implode( ' ', $classestoadd ) );
-                    }
-                    else {
-                        $block .= sprintf( stripslashes( $settings[ 'before_block' ] ), NULL );
-                    }
-                }
-                // if wrapper is set to false we need a container anyway for os-edit capability
-                elseif ( is_user_logged_in() && !$settings[ 'wrapper' ] ) {
-                    $block .= "<div class='os-edit-container'>";
-                }
-
-
-
-                // call the actual display method
-                if ( KB_CACHE === true )
-                    $cached = get_transient( $instance->instance_id );
-                else
-                    $cached = false;
-
-                if ( !isset( $cached ) || (false == $cached) || (false == $instance->settings[ 'cacheable' ]) || (KB_CACHE === false) ) {
-
-                    $html = $instance->block( $data );
-
-
-
-                    if ( false === $html )
-                        continue;
-
-                    if ( is_object( $html ) ) {
-
-                        if ( method_exists( $html, 'block' ) ) {
-
-                            $html = $html->block( $html->external_data );
-                        }
-                        else {
-                            $html = '';
-                        }
-                    }
-
-                    set_transient( $instance->instance_id, $html, 3600 );
-                    $block .= $html;
-                }
-                else {
-                    $block .= $cached;
-                }
-
-
-                if ( method_exists( $instance, 'after' ) )
-                    $instance->after( $instance );
-
-
-                if ( is_user_logged_in() && current_user_can( 'edit_kontentblocks' ) ) {
-                    $block .= $instance->print_edit_link( $this->post_id );
-                }
-
-                // if block uses wrapper, print after markup
-                if ( $instance->settings[ 'wrapper' ] ) {
-                    $block .= stripslashes( $settings[ 'after_block' ] );
-                }
-                elseif ( is_user_logged_in() && !$settings[ 'wrapper' ] ) {
-                    // close os-edit-container if block doesnt use a wrapper
-                    $block .= "</div>";
-                }
-                if ( !empty( $wrapperclasses ) ) {
-                    $block .= self::do_block_after( $wrapperclasses );
-                }
-
-
-                $i++;
-                if ( isset( $area_template_classes ) )
-                    array_push( $area_template_classes, $tmp );
-
-                if ( isset( $area_template_columns ) )
-                    array_push( $area_template_columns, $tmpcol );
-
-                // reset to avoid adding up of classes
-                $classestoadd = array();
-
-                $pre_element_id = $instance->id;
-
-
-                // merge to complete output
-                $output .= $block;
-            }// endforeach
-            // close the area
-            $output .= self::do_area_after( $area_options );
-
-            $time_end = microtime();
-
-            //$output .= $time_end - $time_start;
-            echo $output;
-        }
 
     }
 
@@ -964,45 +674,6 @@ Class Kontentblocks
             }
         }
         return $areablocks;
-
-    }
-
-    /**
-     * Do area before
-     * @param type $area_options
-     * @param type $this_area_settings
-     * @return type 
-     */
-    private static function do_area_before( $area, $area_options, $this_area_settings, $area_template, $context, $subcontext )
-    {
-        $output                        = '';
-        $before_string                 = stripslashes( $area_options[ 'before_area' ] );
-        $this_area_settings[ 'classes' ] = null;
-        //free additional classes
-        if ( !empty( $this_area_settings[ 'free-classes' ] ) ) {
-            $this_area_settings[ 'classes' ] = explode( ' ', $this_area_settings[ 'free-classes' ] );
-        }
-
-        if ( !empty( $area_template[ 'area-class' ] ) ) {
-            $this_area_settings[ 'classes' ][] = $area_template[ 'area-class' ];
-        }
-
-        $this_area_settings[ 'classes' ][] = $context;
-        $this_area_settings[ 'classes' ][] = $subcontext;
-
-        // if there are settings we use them
-        if ( !empty( $this_area_settings ) ) {
-            $classes = implode( ' ', $this_area_settings[ 'classes' ] );
-
-            // insert additional classes to the output
-            $output .= sprintf( $before_string, $area, $classes );
-        }
-        else {
-            // no additional settings
-            $output .= sprintf( $before_string, $area, NULL );
-        }
-
-        return $output;
 
     }
 
@@ -1090,30 +761,6 @@ Class Kontentblocks
      */
 
     /**
-     *
-     * 
-     * @param array $args 
-     */
-    public function register_area_settings( $args )
-    {
-        $defaults = array(
-            'area_id' => '',
-            'id' => '',
-            'type' => '',
-            'label' => '',
-            'default' => '',
-            'description' => ''
-        );
-
-        $new_settings = wp_parse_args( $args, $defaults );
-
-        if ( !empty( $new_settings[ 'area_id' ] ) ) {
-            $this->area_settings[ $new_settings[ 'area_id' ] ][] = $new_settings;
-        }
-
-    }
-
-    /**
      * register area template 
      */
     public function register_area_template( $args )
@@ -1133,20 +780,6 @@ Class Kontentblocks
         if ( !empty( $settings[ 'id' ] ) ) {
             $this->area_templates[ $settings[ 'id' ] ] = $settings;
         }
-
-    }
-
-    /**
-     * Do after area
-     * @param type $area_options
-     * @return type 
-     */
-    public static function do_area_after( $area_options )
-    {
-        $output = '';
-        $output .= stripslashes( $area_options[ 'after_area' ] );
-
-        return $output;
 
     }
 
@@ -1265,67 +898,6 @@ Class Kontentblocks
         }
 
         return $settings;
-
-    }
-
-    /*
-     * Checks for layouts and classes, returns an indexed array of classes
-     */
-
-    public function get_area_template_classes( $area_template )
-    {
-
-        $classes = array();
-
-        if ( empty( $area_template[ 'layout' ] ) or !is_array( $area_template[ 'layout' ] ) )
-            return $classes;
-
-        foreach ( $area_template[ 'layout' ] as $col ) {
-            if ( !empty( $col[ 'classes' ] ) )
-                $classes[] = $col[ 'classes' ];
-        }
-
-        return $classes;
-
-    }
-
-    /*
-     * Checks for layouts and columns, returns an indexed array of columns
-     */
-
-    public function get_area_template_columns( $area_template )
-    {
-        $columns = array();
-
-        if ( empty( $area_template[ 'layout' ] ) or !is_array( $area_template[ 'layout' ] ) )
-            return $columns;
-
-        foreach ( $area_template[ 'layout' ] as $col ) {
-            if ( !empty( $col[ 'columns' ] ) ) {
-                $columns[] = $col[ 'columns' ];
-            }
-            else {
-                $columns[] = null;
-            }
-        }
-
-        return $columns;
-
-    }
-
-    public static function do_block_before( $wrapperclasses )
-    {
-
-        $before = '<div class="%s">';
-        $output = sprintf( $before, implode( ' ', $wrapperclasses ) );
-
-        return $output;
-
-    }
-
-    public static function do_block_after()
-    {
-        return '</div>';
 
     }
 
@@ -1469,96 +1041,6 @@ Class Kontentblocks
 
     }
 
-    /**
-     * Translate integers and special chars to class names
-     * 
-     * @var string $classes
-     */
-    public function _translate_col( $col )
-    {
-        $classes = '';
-
-        $test = explode( '.', $col );
-
-        if ( !empty( $test ) )
-            return $this->_translate_col_new( $col );
-
-        foreach ( str_split( $col ) as $char ) {
-
-            switch ( $char ) {
-                case '1';
-                    $classes .= 'full';
-                    break;
-
-                case '2';
-                    $classes .= 'half';
-                    break;
-
-                case '3';
-                    $classes .= 'third';
-                    break;
-
-                case '4';
-                    $classes .= 'fourth';
-                    break;
-
-                case '-':
-                    $classes .= ' last-item';
-                    break;
-
-                case 'c';
-                    $classes .= " clear";
-                    break;
-            }
-        }
-        return $classes;
-
-    }
-
-    /**
-     * Translate integers and special chars to class names
-     * 
-     * @var string $classes
-     */
-    public function _translate_col_new( $col )
-    {
-        $classes = '';
-
-
-        foreach ( explode( '.', $col ) as $chunk ) {
-
-            switch ( $chunk ) {
-
-
-                case '1';
-                    $classes .= 'full';
-                    break;
-
-                case '2';
-                    $classes .= 'half';
-                    break;
-
-                case '3';
-                    $classes .= 'third';
-                    break;
-
-                case '4';
-                    $classes .= 'fourth';
-                    break;
-
-                case '-':
-                    $classes .= ' last-item';
-                    break;
-
-                case 'c';
-                    $classes .= " clear";
-                    break;
-            }
-        }
-        return $classes;
-
-    }
-
 }
 
 // end Kontentblocks
@@ -1568,4 +1050,17 @@ Class Kontentblocks
 
 global $Kontentblocks;
 $Kontentblocks = new Kontentblocks();
-?>
+
+global $Kontentfields, $K;
+add_action( 'init', 'Kontentblocks\init_Kontentfields', 15 );
+
+function init_Kontentfields()
+{
+    global $Kontentfields;
+    $Kontentfields = new Kontentfields;
+    $Kontentfields->init();
+    // load field files...
+    foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
+        require_once $file;
+    }
+}

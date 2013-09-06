@@ -1,5 +1,7 @@
 <?php
 
+use Kontentblocks\Utils\MetaData;
+
 if ( !defined( 'ABSPATH' ) ) {
     die( 'Direct access not permitted.' );
 }
@@ -174,13 +176,11 @@ function kb_get_plugin_path()
 /*
  * Has modules
  */
-
 function has_modules( $area_id, $post_id = null )
 {
     global $post;
     $post_id = (null === $post_id) ? $post->ID : $post_id;
 
-    $Meta = new KB_Post_Meta( $post_id );
+    $Meta = new MetaData( $post_id );
     return $Meta->hasModules( $area_id );
-
 }

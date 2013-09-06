@@ -170,7 +170,7 @@ function update_area_contents()
 					update_option ('kb_dynamic_areas', $dynamic_areas);
                     
 					
-					$tosave[$area_id] = \KBArea::save_custom_area_settings($area_id);
+					$tosave[$area_id] = Area::save_custom_area_settings($area_id);
 					update_option('kb_dynamic_areas_settings', $tosave);	
 			}
 			
