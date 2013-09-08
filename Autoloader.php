@@ -15,6 +15,5 @@ function autoloadKontenblocks($cls)
 
     $path = dirname( __FILE__)  . 
         str_replace('\\', DIRECTORY_SEPARATOR, $cls) . '.php';
-    echo $path;
     require_once($path);
 }

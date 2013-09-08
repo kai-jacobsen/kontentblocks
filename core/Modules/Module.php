@@ -1,5 +1,6 @@
 <?php
 namespace Kontentblocks\Modules;
+use Kontentblocks\Utils\ImageObject;
 /*
  * Structure
  * 
@@ -680,12 +681,12 @@ class Module
 
     }
 
-    public function get_image_object( $id, $width = 150, $height = 150, $crop = true )
+    public function getImageObject( $id, $width = 150, $height = 150, $crop = true )
     {
         if ( empty( $id ) )
             return false;
 
-        return new KB_Image_Object( $id, $width, $height, $crop );
+        return new ImageObject( $id, $width, $height, $crop );
 
     }
 

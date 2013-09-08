@@ -43,12 +43,12 @@
         save: function() {
             var that = this;
             var value = this.createInput.val();
-            
-            if (_.isEmpty(value)){
+
+            if (_.isEmpty(value)) {
                 KB.notice('Please enter a Name for the template', 'error');
                 return false;
             }
-            
+
             KB.ajax(
                     {
                         action: 'set_layout_template',
@@ -68,12 +68,12 @@
         delete: function() {
             var that = this;
             var value = this.selectMenuEl.val();
-            
-            if (_.isEmpty(value)){
+
+            if (_.isEmpty(value)) {
                 KB.notice('Please chose a template to delete', 'error');
                 return false;
             }
-            
+
             KB.ajax(
                     {
                         action: 'delete_layout_template',

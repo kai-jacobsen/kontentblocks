@@ -1,7 +1,7 @@
 <?php
 
 namespace Kontentblocks\Admin;
-
+use Kontentblocks\Kontentblocks, Kontentblocks\Utils\MetaData;
 Class EditScreen
 {
 
@@ -53,10 +53,9 @@ Class EditScreen
      * Add the main metabox to all given post types in the kb_register_kontentblocks function call
      * 
      */
-    function __construct( $manager )
+    function __construct( )
     {
-        $this->manager = $manager;
-
+        $this->manager = Kontentblocks::getInstance();
         $this->init();
 
 
@@ -90,12 +89,11 @@ Class EditScreen
 
     function init()
     {
-        global $pagenow, $post;
+        global $pagenow;
 
-        if ( $pagenow == 'nav-menus.php' )
+        if ( $pagenow == 'nav-menus.php' ) {
             return;
-
-
+        }
 
         add_action( 'add_meta_boxes', array( $this, '_prepare_post_data' ), 10 );
         add_action( 'add_meta_boxes', array( $this, '_add_ui' ), 20, 2 );
@@ -113,6 +111,8 @@ Class EditScreen
     {
         global $post;
 
+        
+        
         $this->_postmeta = $this->_get_post_custom( $post->ID );
 
         // current post blocks
@@ -260,7 +260,7 @@ Class EditScreen
 
         // Backup data, not for Previews
         if (!isset($_POST['wp_preview'])){
-            $Meta = new KB_Post_Meta( $real_post_id );
+            $Meta = new MetaData( $real_post_id );
             $Meta->backup( 'Before regular update' );
         }
 

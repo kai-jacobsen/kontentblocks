@@ -1,0 +1,129 @@
+<?php
+
+namespace Kontentblocks\Hooks;
+use Kontentblocks\Kontentblocks;
+class Enqueues
+{
+
+    protected $strings;
+    protected $DI;
+
+    public function __construct(  )
+    {
+        $this->strings = $this->_defaultStrings();
+        $this->Caps      = Kontentblocks::getInstance()->Capabilities;
+
+
+        // enqueue styles and scripts where needed
+        add_action( 'admin_print_styles-post.php', array( $this, 'enqueue' ), 30 );
+        add_action( 'admin_print_styles-post-new.php', array( $this, 'enqueue' ), 30 );
+        add_action( 'admin_print_styles-toplevel_page_kontentblocks-sidebars', array( $this, 'enqueue' ), 30 );
+        add_action( 'admin_print_styles-toplevel_page_kontentblocks-templates', array( $this, 'enqueue' ), 30 );
+        add_action( 'admin_print_styles-toplevel_page_kontentblocks-areas', array( $this, 'enqueue' ), 30 );
+        add_action( 'admin_print_styles-toplevel_page_dynamic_areas', array( $this, 'enqueue' ), 30 );
+
+    }
+
+    /**
+     * Enqueue all styles and scripts
+     * Array for localization strings used by JS actions
+     * TODO: complete l18n strings, develop nameing scheme
+     */
+    function enqueue()
+    {
+        global $is_IE;
+
+        // enqueue scripts
+        if ( is_admin() ) {
+
+            // Main Stylesheet
+            wp_enqueue_style( 'kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css' );
+
+            // Plugins - Chosen, Noty, Sortable Touch
+            wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . 'js/kb_plugins.js' );
+
+            // Main Kontentblocks script file
+            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . 'js/kontentblocks.js', array( 'jquery-ui-core',
+                'jquery-ui-sortable',
+                'jquery-ui-tabs',
+                'jquery-ui-mouse' ) );
+
+
+            // add Kontentblocks l18n strings
+            $localize = $this->_localize();
+            wp_localize_script( 'kontentblocks-base', 'kontentblocks', $localize );
+        }
+
+        if ( $is_IE ) {
+            wp_enqueue_script( 'respond', KB_PLUGIN_URL . 'js/respond.min.js', null, true, true );
+            wp_enqueue_style( 'ie8css', KB_PLUGIN_URL . 'css/ie8css.css' );
+        }
+
+        do_action( 'kb_enqueue_files' );
+
+    }
+
+    private function _localize()
+    {
+        //Caps for the current user as global js object
+
+        $current_user = wp_get_current_user();
+        $roles        = $current_user->roles;
+
+        // get caps from options
+        $option = get_option( 'kontentblocks_capabilities' );
+
+        // if, for some reason, caps not set, fallback to defaults
+        $setup_caps = (!empty( $option )) ? $option : $this->Caps->getCaps();
+
+        // prepare cap collection for current user
+        $caps = array();
+        if ( is_array( $roles ) ) {
+            foreach ( $roles as $role ) {
+                if ( !empty( $setup_caps[ $role ] ) ) {
+                    foreach ( $setup_caps[ $role ] as $cap ) {
+                        $caps[] = $cap;
+                    }
+                }
+            }
+        }
+
+        // Setup the global js object base
+        return array
+            (
+            'l18n' => $this->_defaultStrings(),
+            'caps' => $caps
+        );
+
+    }
+
+    private function _defaultStrings()
+    {
+        // Translation String pushed to the dom as global js object
+        return array(
+            // security messages
+            'sec_no_permission' => __( 'You don\'t have the right permission for this action', 'kontentblocks' ),
+            'sec_nonce_failed' => __( 'Nonce is not set, Request stopped', 'kontentblocks' ),
+            // area messages
+            'area_create_full' => __( 'The limit for this Area has been reached. You first have to delete one block to add a new one', 'kontentblocks' ),
+            'area_sort_full' => __( 'Delete one block in order to add a new one', 'kontentblocks' ),
+            'area_block_not_allowed' => __( 'This Block is not allowed in this area', 'kontentblocks' ),
+            //block messages
+            'block_delete' => __( 'This will delete the Block permanently. Are you sure?', 'kontentblocks' ),
+            'block_resorting' => __( 'Blocks have been resorted', 'kontentblocks' ),
+            'block_deleted_and_data' => __( 'Block and meta data has been sucessfully deleted', 'kontentblocks' ),
+            'block_deleted' => __( 'Block has been sucessfully deleted. There was no saved data to remove.', 'kontentblocks' ),
+            'block_delete_error' => __( 'Oh oh, an error. This shouldn\'t happen', 'kontentblocks' ),
+            'block_deactivated' => __( 'Block has been deactivated.', 'kontentblocks' ),
+            'block_reactivated' => __( 'Block is active again.', 'kontentblocks' ),
+            'block_locked' => __( 'Block has been locked', 'kontentblocks' ),
+            'block_unlocked' => __( 'Block has been unlocked', 'kontentblocks' ),
+            'block_disabled_delete' => __( 'This Block is disabled and cannot be deleted.', 'kontentblocks' ),
+            'block_disabled_status' => __( 'Block is disabled, status cannot be changed', 'kontentblocks' ),
+            'block_duplicate' => __( 'If you have unsaved changes, please update first. Duplicate Module?', 'kontentblocks' ),
+            'block_duplicate_success' => __( 'Successfully duplicated.', 'kontentblocks' )
+        );
+
+    }
+
+}

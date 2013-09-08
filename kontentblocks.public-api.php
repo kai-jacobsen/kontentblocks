@@ -169,7 +169,7 @@ function kb_is_dev_mode()
 
 function kb_get_plugin_path()
 {
-    return trailingslashit( plugin_dir_path( __FILE__ ) ) . 'plugins/';
+    return trailingslashit( plugin_dir_path( __FILE__ ) ) . 'core/Extensions/';
 
 }
 

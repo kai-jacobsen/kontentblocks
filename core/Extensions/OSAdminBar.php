@@ -1,10 +1,8 @@
 <?php
 
-use Kontentblocks\AdminBar;
-
-
-if (  is_user_logged_in() && !(is_admin()))
-	add_action( 'admin_bar_menu', 'toolbar_os_control', 999 );
+if ( is_user_logged_in() && !(is_admin()) && current_user_can( 'manage_kontentblocks') ) {
+    add_action( 'admin_bar_menu', 'toolbar_os_control', 999 );
+}
 
 function toolbar_os_control( $wp_admin_bar ) {
   $args = array(

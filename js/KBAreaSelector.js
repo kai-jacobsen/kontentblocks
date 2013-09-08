@@ -50,7 +50,6 @@ jQuery(document).ready(function($) {
 	e.preventDefault();
 	target = $(this).attr('data-url');
 	height = $(window).height();
-	console.log(target);
 	$('#da-frame').attr('src', target).attr('height', height - 200);
 
 	$("#da-modal").reveal({animation: 'fade'});

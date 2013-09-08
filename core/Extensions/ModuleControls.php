@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Plugins;
+namespace Kontentblocks\Extensions;
 
 class Module_Admin_Actions
 {

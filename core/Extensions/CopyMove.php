@@ -1,4 +1,5 @@
 <?php
+namespace Kontentblocks\Extensions;
 
 class KB_CopyMove
 {

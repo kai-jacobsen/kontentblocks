@@ -1,5 +1,5 @@
 <?php
-
+namespace Kontentblocks\TemplateEngine;
 class ModuleTemplate
 {
 
@@ -19,7 +19,7 @@ class ModuleTemplate
         $this->data    = $this->_setupData( $module->new_instance, $addData );
         $this->tplFile = ($tpl !== false) ? $tpl : get_class( $module ) . '.twig';
 
-        $this->engine = KBTwig::getInstance();
+        $this->engine = Twig::getInstance();
 
     }
 
@@ -31,7 +31,7 @@ class ModuleTemplate
             }
         }
 
-        elseif ( !is_file( trailingslashit( KBTwig::getDefaultPath()) . $this->tplFile ) ) {
+        elseif ( !is_file( trailingslashit( Twig::getDefaultPath()) . $this->tplFile ) ) {
             echo "<script>console.log('template {$this->tplFile} missing');</script>";
             return false;
         }
@@ -50,13 +50,13 @@ class ModuleTemplate
     public function setPath( $path )
     {
 
-        KBTwig::setPath( $path );
+        Twig::setPath( $path );
 
     }
 
     public function __destruct()
     {
-        KBTwig::resetPath();
+        Twig::resetPath();
 
     }
 
@@ -77,7 +77,7 @@ class ModuleTemplate
             $data = $modData;
         }
 
-        // make sure we have a key value pair, if not 
+        // make sure there is a key value pair, if not 
         // make 'data' the default key
         if ( !is_array( $data ) ) {
             $data = array(

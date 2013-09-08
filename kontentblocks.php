@@ -1,8 +1,14 @@
 <?php
 
 namespace Kontentblocks;
-use Kontentblocks\Admin\EditScreen, Kontentblocks\Fields\Kontentfields,
- Kontentblocks\Frontend\AreaRender;
+
+use Kontentblocks\Admin\EditScreen,
+    Kontentblocks\Fields\Kontentfields,
+    Kontentblocks\Frontend\AreaRender,
+    Kontentblocks\Hooks\Enqueues,
+    Kontentblocks\Hooks\Capabilities,
+    Kontentblocks\Utils\ModuleDirectory;
+
 /*
   Plugin Name:Kontentblocks.
   Plugin URI: http://kontentblocks.de
@@ -10,17 +16,16 @@ use Kontentblocks\Admin\EditScreen, Kontentblocks\Fields\Kontentfields,
   Version: 0.7
   Author: Kai Jacobsen
   Author URI: http://kontentblocks.de
+  Text Domain: Kontentblocks
+  Domain Path: /language
   License: Split License / GPL3
  */
-
-if ( !defined( 'ABSPATH' ) ) {
-    die( 'Direct access not permitted.' );
-}
 
 Class Kontentblocks
 {
 
     public $dev_mode = true;
+    static $instance;
 
     /**
      * Stores created areas
@@ -83,15 +88,38 @@ Class Kontentblocks
      * Setup constants and include necessary files
      * 
      */
+    public $Capabilities;
+    protected $Enqueues;
+    public $ModuleDirectory;
+
+    public static function getInstance()
+    {
+        if ( null == self::$instance ) {
+            self::$instance = new self;
+        }
+
+        return self::$instance;
+
+    }
 
     function __construct()
     {
+        
+    }
 
+    public function init()
+    {
 
         /* Define some path constants to make things a bit easier */
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/core-modules/' );
         define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/core-modules/' );
+
+        // Files used used on front and backend
+        include_once dirname( __FILE__ ) . '/Autoloader.php';
+        require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
+        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
 
         // additional cap feature, only used on demand and not properly tested yet
         define( 'KONTENTLOCK', false );
@@ -100,43 +128,18 @@ Class Kontentblocks
         if ( is_admin() ) {
             include_once dirname( __FILE__ ) . '/kontentblocks.options.php';
             include_once dirname( __FILE__ ) . '/kontentblocks.ajax.php';
+            include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
             include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
             include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
             include_once dirname( __FILE__ ) . '/includes/kontentblocks.sidebar-area-selector.php';
 
-
-            // enqueue styles and scripts where needed
-            add_action( 'admin_print_styles-post.php', array( $this, 'enqueue_files' ), 30 );
-            add_action( 'admin_print_styles-post-new.php', array( $this, 'enqueue_files' ), 30 );
-            add_action( 'admin_print_styles-toplevel_page_kontentblocks-sidebars', array( $this, 'enqueue_files' ), 30 );
-            add_action( 'admin_print_styles-toplevel_page_kontentblocks-templates', array( $this, 'enqueue_files' ), 30 );
-            add_action( 'admin_print_styles-toplevel_page_kontentblocks-areas', array( $this, 'enqueue_files' ), 30 );
-            add_action( 'admin_print_styles-toplevel_page_dynamic_areas', array( $this, 'enqueue_files' ), 30 );
-
-            add_action( 'init', array( $this, 'remove_editor_support' ) );
-            add_filter( 'get_media_item_args', array( $this, 'readd_submit_button' ), 99, 1 );
-            
+            $this->Capabilities = new Capabilities();
+            $this->Enqueues     = new Enqueues();
+            $this->UI           = new EditScreen();
         }
-        // Files used used on front and backend
-        include_once dirname( __FILE__ ) . '/Autoloader.php';
-        require_once dirname( __FILE__ ) . '/vendor/autoload.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
-        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
-        // add theme support
-        add_theme_support( 'kontentblocks' );
 
-        // Activation Setup
-        register_activation_hook( __FILE__, array( $this, '_kontentblocks_activation' ) );
-
-        if ( is_admin() ) {
-            // load textdomain
-            add_action( 'init', array( $this, 'kb_l18n' ) );
-        }
         // setup vars
         add_action( 'init', array( $this, '_set_block_templates' ), 850 );
-
-        // Add Caps to new blogs on a MU installation
-        add_action( 'wpmu_new_blog', array( $this, '_add_caps_to_new_blog' ), 99, 5 );
 
         // Frontend On-Site Editing
         add_action( 'init', array( $this, '_on_site_editing_setup' ) );
@@ -146,203 +149,6 @@ Class Kontentblocks
 
         // Load Plugins
         add_action( 'init', array( $this, '_load_plugins' ), 9 );
-
-        // new ui
-        add_action( 'init', array( $this, '_add_ui' ), 99 );
-
-        // Setup Capability array to work with
-        $this->caps = array
-            (
-            'administrator' => array
-                (
-                'admin_kontentblocks', // can do everything
-                'manage_kontentblocks', // can do all block related actions
-                'edit_kontentblocks', // edit and save contents
-                'lock_kontentblocks', // can lock blocks,
-                'delete_kontentblocks', // delete single blocks
-                'create_kontentblocks', // create new blocks
-                'deactivate_kontentblocks', // set a block inactive/active
-                'sort_kontentblocks' // sort blocks
-            ),
-            'editor' => array
-                (
-                'manage_kontentblocks',
-                'edit_kontentblocks',
-                'deactivate_kontentblocks',
-                'sort_kontentblocks',
-                'lock_kontentblocks',
-                'create_kontentblocks',
-                'delete_kontentblocks'
-            ),
-            'contributor' => array
-                (
-                'sort_kontentblocks',
-                'create_kontentblocks',
-                'delete_kontentblocks'
-            ),
-            'author' => array
-                (
-                'sort_kontentblocks',
-                'create_kontentblocks',
-                'delete_kontentblocks'
-            )
-        );
-
-    }
-
-    function _add_ui()
-    {
-        if ( is_admin() ) {
-            global $Kontentbox;
-            $Kontentbox = new EditScreen( $this );
-        }
-
-    }
-
-    /*
-     * Remove Editor from built-in Post Types, Kontentblocks will handle this instead.
-     * above action will remove submit button from media upload as well
-     * uses @filter get_media_item_args to readd the submit button
-     */
-
-    function remove_editor_support()
-    {
-        // hidden for pages by default
-        if ( apply_filters( 'kb_remove_editor_page', true ) )
-            remove_post_type_support( 'page', 'editor' );
-
-
-
-        // visible for posts by default
-        if ( apply_filters( 'kb_remove_editor_post', false ) )
-            remove_post_type_support( 'post', 'editor' );
-
-    }
-
-    // re-adds the submit button to the media upload 
-    function readd_submit_button( $args )
-    {
-        $args[ 'send' ] = true;
-        return $args;
-
-    }
-
-    /**
-     * Enqueue all styles and scripts
-     * Array for localization strings used by JS actions
-     * TODO: complete l18n strings, develop nameing scheme
-     */
-    function enqueue_files()
-    {
-        global $Kontentblocks, $is_IE;
-
-        // Translation String pushed to the dom as global js object
-        $kb_l18n_strings = array(
-            // security messages
-            'sec_no_permission' => __( 'You don\'t have the right permission for this action', 'kontentblocks' ),
-            'sec_nonce_failed' => __( 'Nonce is not set, Request stopped', 'kontentblocks' ),
-            // area messages
-            'area_create_full' => __( 'The limit for this Area has been reached. You first have to delete one block to add a new one', 'kontentblocks' ),
-            'area_sort_full' => __( 'Delete one block in order to add a new one', 'kontentblocks' ),
-            'area_block_not_allowed' => __( 'This Block is not allowed in this area', 'kontentblocks' ),
-            //block messages
-            'block_delete' => __( 'This will delete the Block permanently. Are you sure?', 'kontentblocks' ),
-            'block_resorting' => __( 'Blocks have been resorted', 'kontentblocks' ),
-            'block_deleted_and_data' => __( 'Block and meta data has been sucessfully deleted', 'kontentblocks' ),
-            'block_deleted' => __( 'Block has been sucessfully deleted. There was no saved data to remove.', 'kontentblocks' ),
-            'block_delete_error' => __( 'Oh oh, an error. This shouldn\'t happen', 'kontentblocks' ),
-            'block_deactivated' => __( 'Block has been deactivated.', 'kontentblocks' ),
-            'block_reactivated' => __( 'Block is active again.', 'kontentblocks' ),
-            'block_locked' => __( 'Block has been locked', 'kontentblocks' ),
-            'block_unlocked' => __( 'Block has been unlocked', 'kontentblocks' ),
-            'block_disabled_delete' => __( 'This Block is disabled and cannot be deleted.', 'kontentblocks' ),
-            'block_disabled_status' => __( 'Block is disabled, status cannot be changed', 'kontentblocks' ),
-            'block_duplicate' => __( 'If you have unsaved changes, please update first. Duplicate Module?', 'kontentblocks' ),
-            'block_duplicate_success' => __( 'Successfully duplicated.', 'kontentblocks' )
-        );
-
-        //Caps for the current user as global js object
-
-        $current_user = wp_get_current_user();
-        $roles        = $current_user->roles;
-
-        // get caps from options
-        $option = get_option( 'kontentblocks_capabilities' );
-
-        // if, for some reason, caps not set, fallback to defaults
-        $setup_caps = (!empty( $option )) ? $option : $Kontentblocks->caps;
-
-        // prepare cap collection for current user
-        $caps = array();
-        if ( is_array( $roles ) ) {
-            foreach ( $roles as $role ) {
-                if ( !empty( $setup_caps[ $role ] ) ) {
-                    foreach ( $setup_caps[ $role ] as $cap ) {
-                        $caps[] = $cap;
-                    }
-                }
-            }
-        }
-
-        // Setup the global js object base
-        $object = array
-            (
-            'l18n' => $kb_l18n_strings,
-            'caps' => $caps
-        );
-
-        // enqueue scripts
-        if ( is_admin() ) {
-
-            // Main Stylesheet
-            wp_enqueue_style( 'kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css' );
-
-            // Stylesheet for JQuery Chosen
-            wp_enqueue_style( 'chosen_styles', KB_PLUGIN_URL . 'css/chosen.css' );
-
-            // Plugins - Chosen, Noty, Sortable Touch
-            wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . 'js/kb_plugins.js' );
-
-            // Main Kontentblocks script file
-            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . 'js/kontentblocks.js', array( 'jquery-ui-core',
-                'jquery-ui-sortable',
-                'jquery-ui-tabs',
-                'jquery-ui-mouse' ) );
-
-
-            // add Kontentblocks l18n strings
-            wp_localize_script( 'kontentblocks-base', 'kontentblocks', $object );
-        }
-
-        if ( $is_IE ) {
-            wp_enqueue_script( 'respond', KB_PLUGIN_URL . 'js/respond.min.js', null, true, true );
-
-            wp_enqueue_style( 'ie8css', KB_PLUGIN_URL . 'css/ie8css.css' );
-        }
-
-        do_action( 'kb_enqueue_files' );
-
-    }
-
-    /*
-     * When a new multisite site gets generated, make sure caps are set
-     */
-
-    function _add_caps_to_new_blog( $blog_id )
-    {
-        switch_to_blog( $blog_id );
-        $this->_setup_capabilities();
-        restore_current_blog();
-
-    }
-
-    /**
-     * Activation Wrapper 
-     */
-    public function _kontentblocks_activation()
-    {
-        // setup capabilities
-        $this->_setup_capabilities();
 
     }
 
@@ -355,47 +161,6 @@ Class Kontentblocks
     public function set_post_context( $bool )
     {
         $this->post_context = $bool;
-
-    }
-
-    /**
-     * Add capabilities to roles
-     * 
-     * This is a one-time action and happens on plugin activation
-     * Caps can be edited on the corresponding plugin menu page
-     * 
-     * @return void
-     */
-    public function _setup_capabilities()
-    {
-        $kbcaps  = $this->caps;
-        $options = get_option( 'kontentblocks_capabilities' );
-
-        if ( empty( $options ) )
-            update_option( 'kontentblocks_capabilities', $kbcaps );
-
-        $caps = ( empty( $options )) ? $kbcaps : $options;
-
-        foreach ( $caps as $role => $set ) {
-            $object = get_role( $role );
-            foreach ( $set as $cap ) {
-                $object->add_cap( $cap );
-            }
-            $object = NULL;
-        }
-
-    }
-
-    /*
-     * Kontentblocks Plugin Textdomain
-     * Setup textdomain
-     * 
-     * @return void
-     */
-
-    public function kb_l18n()
-    {
-        load_plugin_textdomain( 'kontentblocks', false, dirname( plugin_basename( __FILE__ ) ) . '/language/' );
 
     }
 
@@ -471,15 +236,21 @@ Class Kontentblocks
 
     public function register_block( $classname )
     {
-        if ( !class_exists( $classname ) )
-            return;
 
-        if ( is_admin() ) {
-            $this->blocks[ $classname ] = new $classname;
+        $this->ModuleDirectory = new ModuleDirectory();
+
+        if ( !class_exists( $classname ) ) {
+            return false;
         }
-        else {
-            $this->blocks[ $classname ] = $classname;
-        }
+
+        $this->ModuleDirectory->add($classname);
+//        
+//        if ( is_admin() ) {
+//            $this->blocks[ $classname ] = new $classname;
+//        }
+//        else {
+//            $this->blocks[ $classname ] = $classname;
+//        }
 
     }
 
@@ -609,7 +380,7 @@ Class Kontentblocks
             return false;
         }
 
-        $Renderer = new KBRender_Area( $this, $post_id, $args, $context, $subcontext );
+        $Renderer = new AreaRender( $this, $post_id, $args, $context, $subcontext );
         $output   = $Renderer->render( $echo );
         return $output;
 
@@ -1049,7 +820,8 @@ Class Kontentblocks
 
 
 global $Kontentblocks;
-$Kontentblocks = new Kontentblocks();
+$Kontentblocks = Kontentblocks::getInstance();
+$Kontentblocks->init();
 
 global $Kontentfields, $K;
 add_action( 'init', 'Kontentblocks\init_Kontentfields', 15 );
@@ -1063,4 +835,5 @@ function init_Kontentfields()
     foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
         require_once $file;
     }
+
 }

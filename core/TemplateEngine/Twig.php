@@ -1,6 +1,6 @@
 <?php
-
-class KBTwig
+namespace Kontentblocks\TemplateEngine;
+class Twig
 {
 
     private static $loader      = null;
@@ -11,17 +11,17 @@ class KBTwig
 
 
         if ( self::$loader === null ) {
-            self::$loader = new Twig_Loader_Filesystem( self::getDefaultPath() );
+            self::$loader = new \Twig_Loader_Filesystem( self::getDefaultPath() );
         }
 
         if ( self::$environment === null ) {
-            self::$environment = new Twig_Environment(
+            self::$environment = new \Twig_Environment(
                 self::$loader, array(
                 'cache' => apply_filters( 'kb_twig_cache_path', WP_CONTENT_DIR . '/twigcache/' ),
                 'auto_reload' => TRUE,
                 'debug' => TRUE
                 ) );
-            self::$environment->addExtension(new Twig_Extension_Debug());
+            self::$environment->addExtension(new \Twig_Extension_Debug());
         }
         
 

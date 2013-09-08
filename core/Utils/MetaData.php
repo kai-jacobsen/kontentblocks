@@ -1,18 +1,20 @@
 <?php
+
 namespace Kontentblocks\Utils;
 
 class MetaData
 {
-    protected $post_id;
-    protected $index   = array( );
-    protected $modules = array( );
-    protected $meta    = array( );
-    protected $package = array( );
 
-    public function __construct($post_id)
+    protected $post_id;
+    protected $index   = array();
+    protected $modules = array();
+    protected $meta    = array();
+    protected $package = array();
+
+    public function __construct( $post_id )
     {
         if ( !isset( $post_id ) || $post_id === 0 ) {
-            throw new Exception('a valid post id must be provided');
+            throw new Exception( 'a valid post id must be provided' );
         }
 
         $this->post_id = $post_id;
@@ -25,7 +27,7 @@ class MetaData
     // -----------------------------------
     // Backups
     // -----------------------------------
-    
+
     /**
      * Get the array of backup packages
      * @return mixed array() | false
@@ -38,6 +40,7 @@ class MetaData
         else {
             return false;
         }
+
     }
 
     /**
@@ -47,15 +50,15 @@ class MetaData
      */
     public function restoreBackup( $timestamp )
     {
-        $backup = $this->_get_backup_bucket( $timestamp );
-        if ($backup){
-            $this->saveIndex($backup['data']['index']);
-            $this->saveModules($backup['data']['modules']);
-            $this->_self_update();
+        $backup = $this->_getBackupBucket( $timestamp );
+        if ( $backup ) {
+            $this->saveIndex( $backup[ 'data' ][ 'index' ] );
+            $this->saveModules( $backup[ 'data' ][ 'modules' ] );
+            $this->_selfUpdate();
             return true;
-            
         }
         return false;
+
     }
 
     /**
@@ -65,6 +68,7 @@ class MetaData
     private function _selfUpdate()
     {
         $this->_getPostCustom();
+
     }
 
     /**
@@ -78,6 +82,7 @@ class MetaData
             'modules' => $this->modules
         );
         return $this;
+
     }
 
     /**
@@ -88,17 +93,20 @@ class MetaData
     public function saveIndex( $index )
     {
         return update_post_meta( $this->post_id, 'kb_kontentblocks', $index );
+
     }
-    
+
     /**
      * Saves the module data arrays to postmeta
      * @param array $modules
      */
-    public function saveModules($modules){
-     
-        foreach((array)$modules as $id => $module){
-            update_post_meta($this->post_id, '_' . $id, $module);
+    public function saveModules( $modules )
+    {
+
+        foreach ( ( array ) $modules as $id => $module ) {
+            update_post_meta( $this->post_id, '_' . $id, $module );
         }
+
     }
 
     /**
@@ -130,7 +138,7 @@ class MetaData
         if ( !$this->package ) {
             $this->pack();
         }
-        
+
         $user = wp_get_current_user();
 
         $backup_data                   = $this->_getBackupData();
@@ -144,19 +152,17 @@ class MetaData
 
     }
 
-    
     private function _getBackupData()
     {
         if ( !empty( $this->meta[ '_kb_backup' ] ) ) {
             return $this->meta[ '_kb_backup' ];
         }
         else {
-            return array( );
+            return array();
         }
 
     }
 
-    
     /**
      * Gets all postmeta for current post.
      * Setup the Object.
@@ -184,9 +190,10 @@ class MetaData
     private function _setupModuleData( $meta )
     {
         foreach ( $this->index as $id => $data ) {
-            $collection[ '_' . $id ] = (!empty($meta[ '_' . $id ])) ? $meta[ '_' . $id ] : '';
+            $collection[ '_' . $id ] = (!empty( $meta[ '_' . $id ] )) ? $meta[ '_' . $id ] : '';
         }
         return $collection;
+
     }
 
     /**
@@ -198,7 +205,6 @@ class MetaData
 
     }
 
-    
     private function _getBackupBucket( $timestamp )
     {
         if ( $this->getBackups() ) {
@@ -215,28 +221,36 @@ class MetaData
         }
 
     }
-    
-    public function saveModule($id, $data){
-        return update_post_meta($this->post_id, '_' . $id, $data);
-    }
-    
-    public function getIndex(){
-        return $this->index;
-    }
-    
-    public function getModules(){
-        return $this->modules;
-    }
-    
-    public function hasModules($area)
+
+    public function saveModule( $id, $data )
     {
-        if (!empty($this->index)){
-            foreach($this->index as $module){
-                if($module['area'] === $area && $module['draft'] !== 'true' && $module['status'] !== 'kb_inactive'){
+        return update_post_meta( $this->post_id, '_' . $id, $data );
+
+    }
+
+    public function getIndex()
+    {
+        return $this->index;
+
+    }
+
+    public function getModules()
+    {
+        return $this->modules;
+
+    }
+
+    public function hasModules( $area )
+    {
+        if ( !empty( $this->index ) ) {
+            foreach ( $this->index as $module ) {
+                if ( $module[ 'area' ] === $area && $module[ 'draft' ] !== 'true' && $module[ 'status' ] !== 'kb_inactive' ) {
                     return true;
                 }
             }
         }
         return false;
+
     }
+
 }
