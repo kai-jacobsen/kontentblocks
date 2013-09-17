@@ -14,7 +14,7 @@ class MetaData
     public function __construct( $post_id )
     {
         if ( !isset( $post_id ) || $post_id === 0 ) {
-            throw new Exception( 'a valid post id must be provided' );
+            throw new \Exception( 'a valid post id must be provided' );
         }
 
         $this->post_id = $post_id;
@@ -150,6 +150,15 @@ class MetaData
         $this->_selfUpdate();
         return $this;
 
+    }
+    
+    public function getPageTemplate()
+    {
+        if (!empty($this->meta['_wp_page_template'])){
+            return $this->meta['_wp_page_template'];
+        } else if (  get_post_type($this->post_id === 'page') && empty($this->meta['_wp_page_template']) ){
+            return 'default';
+        }
     }
 
     private function _getBackupData()

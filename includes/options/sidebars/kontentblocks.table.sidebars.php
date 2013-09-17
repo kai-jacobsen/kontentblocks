@@ -1,7 +1,7 @@
 <?php
 
 namespace Kontentblocks\Admin\Sidebars;
-
+use Kontentblocks\Utils\AreaDirectory;
 if(!class_exists('WP_List_Table')){
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
@@ -34,8 +34,7 @@ Class Kontentblocks_Sidebars_Table extends \WP_List_Table
 	 */
 	private function get_data()
 	{
-		global $Kontentblocks;
-		$this->areas = $Kontentblocks->get_dynamic_areas('side');
+        $this->areas = AreaDirectory::getInstance()->getGlobalAreas();
 	}
 
 	/**

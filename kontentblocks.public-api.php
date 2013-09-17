@@ -180,7 +180,6 @@ function has_modules( $area_id, $post_id = null )
 {
     global $post;
     $post_id = (null === $post_id) ? $post->ID : $post_id;
-
     $Meta = new MetaData( $post_id );
     return $Meta->hasModules( $area_id );
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Kontentblocks\Modules;
-use Kontentblocks\Utils\ImageObject;
+use Kontentblocks\Utils\ImageObject,
+    Kontentblocks\Utils\AreaDirectory;
 /*
  * Structure
  * 
@@ -144,7 +145,7 @@ class Module
         $this->settings = wp_parse_args( $block_settings, $defaults );
 
         //connect this block to areas
-        $this->connect( $block_settings );
+        AreaDirectory::getInstance()->connect( get_class($this), $block_settings );
 
         $reflector = new \ReflectionClass( get_class( $this ) );
         $this->path        = dirname($reflector->getFileName());
@@ -434,47 +435,6 @@ class Module
         do_action( 'block_footer', $this );
     }
 
-    /**
-     * Connects this block to areas
-     * This is useful if a plugin registers additional blocks which has to be available to specific areas
-     * 
-     * @param array $args
-     * @return array 
-     */
-    private function connect( $args )
-    {
-        global $Kontentblocks;
-        $areas = $Kontentblocks->areas;
-
-        if ( !empty( $args[ 'connect' ] ) && $args[ 'connect' ] === 'any' ) {
-
-            foreach ( $areas as $area_id => $area ) {
-                if ( !in_array( get_class( $this ), $area[ 'available_blocks' ] ) ) {
-                    $Kontentblocks->areas[ $area_id ][ 'available_blocks' ][ ] = get_class( $this );
-                }
-            }
-        }
-        else if ( !empty( $args[ 'connect' ] ) and is_array( $args[ 'connect' ] ) ) {
-            $update = false;
-
-
-            foreach ( $args[ 'connect' ] as $area_id ) {
-                if ( empty( $areas[ $area_id ] ) )
-                    continue;
-
-                $area = $areas[ $area_id ];
-
-                if ( !in_array( get_class( $this ), $area[ 'available_blocks' ] ) )
-                    $area[ 'available_blocks' ][ ] = get_class( $this );
-                $areas[ $area_id ]             = $area;
-                $update                        = true;
-            }
-
-            if ( $update )
-                $Kontentblocks->areas = $areas;
-        }
-
-    }
 
     /**
      * On Site Edit link for logged in users 

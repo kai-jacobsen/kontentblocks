@@ -7,6 +7,7 @@ use Kontentblocks\Admin\EditScreen,
     Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Hooks\Capabilities,
+    Kontentblocks\Utils\AreaDirectory,
     Kontentblocks\Utils\ModuleDirectory;
 
 /*
@@ -237,20 +238,13 @@ Class Kontentblocks
     public function register_block( $classname )
     {
 
-        $this->ModuleDirectory = new ModuleDirectory();
+        $this->ModuleDirectory = ModuleDirectory::getInstance();
 
         if ( !class_exists( $classname ) ) {
             return false;
         }
 
         $this->ModuleDirectory->add($classname);
-//        
-//        if ( is_admin() ) {
-//            $this->blocks[ $classname ] = new $classname;
-//        }
-//        else {
-//            $this->blocks[ $classname ] = $classname;
-//        }
 
     }
 
@@ -324,43 +318,8 @@ Class Kontentblocks
      */
     public function register_area( $args, $manual = true )
     {
-
-        $defaults = array(
-            'id' => '', // unique id of area
-            'name' => '', // public shown name
-            'description' => '', // public description
-            'before_area' => '<div id="%s" class="kb_area %s">', //default wrapper markup
-            'after_area' => '</div>',
-            'post_type' => array(), // array of post types where this area is available to
-            'page_template' => array(), // array of page template names where this area is available to
-            'available_blocks' => array(), // array of classnames
-            'area_templates' => array(), // array of area template ids
-            'dynamic' => false, // whether this is an dynamic area
-            'manual' => $manual, // true if set by code
-            'block_limit' => '0', // how many blocks are allowed
-            'order' => 0, // order index for sorting
-            'dev_mode' => false, // deprecated
-            'context' => 'normal', // where on the edit screen
-            'belongs_to' => __( 'Pages', 'kontentblocks' ) // internal identification, sorting helper
-        );
-
-        if ( !empty( $args[ 'id' ] ) ) {
-            $args[ 'id' ] = sanitize_title( $args[ 'id' ] );
-        }
-        // merge defaults with provided args
-        $area = wp_parse_args( $args, $defaults );
-
-        $registered_areas = $this->areas;
-
-        if ( empty( $registered_areas[ $area[ 'id' ] ] ) ) {
-            $registered_areas[ $area[ 'id' ] ] = $area;
-        }
-        else {
-            $registered_areas[ $area[ 'id' ] ] = wp_parse_args( $registered_areas[ $area[ 'id' ] ], $area );
-        }
-
-        $this->areas = $registered_areas;
-
+            $AreaDirectory = AreaDirectory::getInstance();
+            $AreaDirectory->addArea($args, $manual);
     }
 
     /**
@@ -499,7 +458,6 @@ Class Kontentblocks
      */
     public function get_dynamic_areas( $context = false, $exclude = false )
     {
-
         $d_areas = array();
         $sareas  = get_option( 'kb_registered_areas' );
 
@@ -549,7 +507,7 @@ Class Kontentblocks
         $settings = wp_parse_args( $args, $defaults );
 
         if ( !empty( $settings[ 'id' ] ) ) {
-            $this->area_templates[ $settings[ 'id' ] ] = $settings;
+            AreaDirectory::getInstance()->addTemplate($settings);
         }
 
     }

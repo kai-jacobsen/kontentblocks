@@ -1,5 +1,7 @@
 <?php
+
 namespace Kontentblocks\Admin;
+
 /*
  * Kontentblocks: Areas: Menu Class
  * @package Kontentblocks
@@ -8,117 +10,115 @@ namespace Kontentblocks\Admin;
 
 class ModuleMenu
 {
-	/*
-	 * Blocks available through menu
-	 */
+    /*
+     * Blocks available through menu
+     */
 
-	public $blocks = array( );
-
-
-	/*
-	 * Blocks sorted by their category
-	 */
-	public $categories = array( );
+    public $blocks = array();
 
 
-	/*
-	 * Whitelist for available categories
-	 */
-	public $cats = array( );
+    /*
+     * Blocks sorted by their category
+     */
+    public $categories = array();
 
-	/*
-	 * Area id passed to constructor for unique container ids
-	 */
-	private $id = '';
 
-	/*
-	 * Area context passed to constructor
-	 */
-	private $context = '';
+    /*
+     * Whitelist for available categories
+     */
+    public $cats = array();
 
-	/*
-	 * Localization String
-	 */
-	public $l18n = array( );
+    /*
+     * Area id passed to constructor for unique container ids
+     */
+    private $id = '';
 
-	/*
-	 * Constructor
-	 */
+    /*
+     * Area context passed to constructor
+     */
+    private $context = '';
 
-	function __construct( $blocks, $id, $context )
-	{
+    /*
+     * Localization String
+     */
+    public $l18n = array();
 
-		if ( empty( $blocks ) or !is_array( $blocks ) or !isset( $id ) or !isset( $context ) )
-			return false;
+    /*
+     * Constructor
+     */
 
-		//assign id
-		$this->id		= $id;
+    function __construct( $blocks, $id, $context )
+    {
 
-		//assign context
-		$this->context	= $context;
+        if ( empty( $blocks ) or !is_array( $blocks ) or !isset( $id ) or !isset( $context ) )
+            return false;
 
-		//assign blocks
-		$this->blocks	= $blocks;
+        //assign id
+        $this->id = $id;
 
-		//setup available cats
-		$this->_setup_cats();
-		
-		$this->_prepare_categories();
+        //assign context
+        $this->context = $context;
 
-		// sort blocks to categories
-		$this->_blocks_to_categories();
+        //assign blocks
+        $this->blocks = $blocks;
 
-		
-		
-		$this->l18n = array(
-			// l18n
-			'add_block' => __( 'add module', 'kontentblocks' ),
-			'add' => __( 'add', 'kontentblocks' ),
-			'add_template' => __( 'add template', 'kontentblocks' ),
-			'no_blocks' => __( 'Sorry, no Blocks available for this Area', 'kontentblocks' ),
-			'modules' => __( 'Add new module', 'kontentblocks' )
-		);
+        //setup available cats
+        $this->_setup_cats();
 
-		add_action( 'admin_footer', array( $this, 'menu_footer' ), 10, 1 );
-	}
+        $this->_prepare_categories();
 
-	/* Menu Footer
-	 * 
-	 * Print modal menu contents to the admin footer
-	 * Makes sure that the modal is outside of wp-wrap and positions as expected
-	 */
+        // sort blocks to categories
+        $this->_blocks_to_categories();
 
-	public function menu_footer()
-	{
-		// prepare a class for the menu <ul> to avoid two columns if not necessary
-		$menu_class = ( count( $this->blocks ) <= 4 ) ? 'one-column-menu' : 'two-column-menu';
 
-		$out = "<div id='{$this->id}-nav' class='reveal-modal modules-menu-overlay {$menu_class}'>";
-		$out.= "<div class='modal-inner cf'>";
+        $this->l18n = array(
+            // l18n
+            'add_block' => __( 'add module', 'kontentblocks' ),
+            'add' => __( 'add', 'kontentblocks' ),
+            'add_template' => __( 'add template', 'kontentblocks' ),
+            'no_blocks' => __( 'Sorry, no Blocks available for this Area', 'kontentblocks' ),
+            'modules' => __( 'Add new module', 'kontentblocks' )
+        );
 
-		$out .= "<div class='area-blocks-menu-tabs'>";
-		$out .= $this->_get_nav_tabs();
-		$out .= $this->_get_tabs_content();
-		$out .= "</div>";
+        add_action( 'admin_footer', array( $this, 'menu_footer' ), 10, 1 );
 
-		$out .= "</div>"; // end inner
-		$out .= "</div>"; // end moddal container
-		echo $out;
-	}
+    }
 
-	
-	
-	/*
-	 * Admin menu link, opens the modal
-	 */
-	public function menu_link()
-	{
+    /* Menu Footer
+     * 
+     * Print modal menu contents to the admin footer
+     * Makes sure that the modal is outside of wp-wrap and positions as expected
+     */
 
-		if ( current_user_can( 'create_kontentblocks' ) )
-		{
-			if ( !empty( $this->blocks ) )
-			{
-				$out = " <div class='add-modules cantsort'>
+    public function menu_footer()
+    {
+        // prepare a class for the menu <ul> to avoid two columns if not necessary
+        $menu_class = ( count( $this->blocks ) <= 4 ) ? 'one-column-menu' : 'two-column-menu';
+
+        $out = "<div id='{$this->id}-nav' class='reveal-modal modules-menu-overlay {$menu_class}'>";
+        $out.= "<div class='modal-inner cf'>";
+
+        $out .= "<div class='area-blocks-menu-tabs'>";
+        $out .= $this->_get_nav_tabs();
+        $out .= $this->_get_tabs_content();
+        $out .= "</div>";
+
+        $out .= "</div>"; // end inner
+        $out .= "</div>"; // end moddal container
+        echo $out;
+
+    }
+
+    /*
+     * Admin menu link, opens the modal
+     */
+
+    public function menu_link()
+    {
+
+        if ( current_user_can( 'create_kontentblocks' ) ) {
+            if ( !empty( $this->blocks ) ) {
+                $out = " <div class='add-modules cantsort'>
 							<a class='modal modules-link' 
 							href='#'
 							data-area='{$this->id}'
@@ -128,194 +128,189 @@ class ModuleMenu
 							{$this->l18n[ 'modules' ]}
 						</a>
 					</div>";
-			}
-			return $out;
-		}
-		return false;
-	}
+                return $out;
+            }
+        return false;
+        }
 
-	/*
-	 * Tab Navigation for categories markup
-	 */
+    }
 
-	private function _get_nav_tabs()
-	{
-		$out = '';
+    /*
+     * Tab Navigation for categories markup
+     */
 
-		$out .= "<ul id='blocks-menu-{$this->id}-nav' class='block-menu-tabs'>";
+    private function _get_nav_tabs()
+    {
+        $out = '';
 
-		$i = 1;
-		foreach ( $this->categories as $cat => $items )
-		{
-			if ($i !== 1 && empty($items) )
-				continue;
-			
-			$out .= "<li> <a href='#{$this->id}-{$cat}-tab'>{$this->cats[ $cat ]}</a></li>";
-		
-		$i++;	
-		}
+        $out .= "<ul id='blocks-menu-{$this->id}-nav' class='block-menu-tabs'>";
 
-		$out .= "</ul>";
+        $i = 1;
+        foreach ( $this->categories as $cat => $items ) {
+            if ( $i !== 1 && empty( $items ) )
+                continue;
 
-		return $out;
-	}
+            $out .= "<li> <a href='#{$this->id}-{$cat}-tab'>{$this->cats[ $cat ]}</a></li>";
 
-	/*
-	 * Markup for tabs content
-	 */
+            $i++;
+        }
 
-	private function _get_tabs_content()
-	{
+        $out .= "</ul>";
 
-		if ( current_user_can( 'create_kontentblocks' ) )
-		{
-			$out = '';
+        return $out;
 
-			foreach ( $this->categories as $cat => $items )
-			{
+    }
 
-				$out.= "<div id='{$this->id}-{$cat}-tab'>";
-				$out.= "<ul  class='blocks-menu'>";
+    /*
+     * Markup for tabs content
+     */
 
+    private function _get_tabs_content()
+    {
 
-				foreach ( $items as $item )
-				{
-					$out.= $this->_get_item( $item );
-				}
-				
+        if ( current_user_can( 'create_kontentblocks' ) ) {
+            $out = '';
+
+            foreach ( $this->categories as $cat => $items ) {
+
+                $out.= "<div id='{$this->id}-{$cat}-tab'>";
+                $out.= "<ul  class='blocks-menu'>";
 
 
-				$out.= "</ul>";
-				$out.= "</div>";
-			}
-			return $out;
-		}
-	}
+                foreach ( $items as $item ) {
+                    $out.= $this->_get_item( $item );
+                }
 
 
-	/*
-	 * Markup for menu normal items
-	 */
 
-	private function _get_item( $item )
-	{
+                $out.= "</ul>";
+                $out.= "</div>";
+            }
+            return $out;
+        }
 
-		$settings = $item->settings;
+    }
 
-		if ( isset( $settings[ 'hidden' ] ) && $settings[ 'hidden' ] == true )
-			return null;
+    /*
+     * Markup for menu normal items
+     */
 
-		
-		$instance_id    = (isset( $item->instance_id )) 
-                            ? "data-instance_id='{$item->instance_id}'" 
-                            : null;
-		$master         = (isset($item->master)) ? "data-master=master" : null;
-		
+    private function _get_item( $item )
+    {
 
-		$img            = (!empty( $settings[ 'icon' ] )) ? $settings[ 'icon' ] : KB_PLUGIN_URL . 'css/default.png';
-		$blockclass     = get_class( $item );
+        $settings = $item->settings;
 
-		$out = "	<li class='block-nav-item' data-value='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >
+        if ( isset( $settings[ 'hidden' ] ) && $settings[ 'hidden' ] == true )
+            return null;
+
+
+        $instance_id = (isset( $item->instance_id )) ? "data-instance_id='{$item->instance_id}'" : null;
+        $master      = (isset( $item->master )) ? "data-master=master" : null;
+
+
+        $img        = (!empty( $settings[ 'icon' ] )) ? $settings[ 'icon' ] : KB_PLUGIN_URL . 'css/default.png';
+        $blockclass = get_class( $item );
+
+        $out = "	<li class='block-nav-item' data-value='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >
 						<div class='block-icon'><img src='{$img}' ></div>
 						<div class='block-info'><h3>{$settings[ 'public_name' ]}</h3>
 							<p class='description'>{$settings[ 'description' ]}</p>
 						</div>
 						<span class='action'>{$this->l18n[ 'add' ]}</span>
 					</li>";
-		return $out;
-	}
+        return $out;
 
-	/*
-	 * Sort blocks to categories
-	 * If category is not set, assign the first from the whitelist
-	 */
+    }
 
-	private function _blocks_to_categories()
-	{
-		global $Kontentblocks;
+    /*
+     * Sort blocks to categories
+     * If category is not set, assign the first from the whitelist
+     */
 
-		foreach ( $this->blocks as $block )
-		{
-			// check for categories
-			$cat						 = (!empty( $block->settings[ 'category' ] )) ? $this->_get_valid_category( $block->settings[ 'category' ] ) : 'standard';
-			$this->categories[ $cat ][ ]	 = $block;
-		}
-		
-		// add templates
-		$saved_block_templates = get_option( 'kb_block_templates' );
+    private function _blocks_to_categories()
+    {
+        global $Kontentblocks;
 
-		if ( !empty( $saved_block_templates ) )
-		{
-			foreach ( $saved_block_templates as $tpl )
-			{
-				//$blocks[ $tpl[ 'class' ] ] = $Kontentblocks->blocks[ $tpl[ 'class' ] ];
-				
-				$this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ] = new $tpl[ 'class' ] ;
-				
-				if ( !empty( $tpl[ 'instance_id' ] ) )
-				{
-					$this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->instance_id = $tpl[ 'instance_id' ];
-					$this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->settings['public_name'] = $tpl[ 'name' ];
-				}
-				
-				if (!empty( $tpl[ 'master'] ) )
-				{
-					$this->categories[ 'templates'][ $tpl[ 'instance_id' ] ]->master = true; 
-				}
-			}
-		}
-	}
+        foreach ( $this->blocks as $block ) {
+            // check for categories
+            $cat                         = (!empty( $block->settings[ 'category' ] )) ? $this->_get_valid_category( $block->settings[ 'category' ] ) : 'standard';
+            $this->categories[ $cat ][] = $block;
+        }
 
-	/*
-	 * Validate category against whitelist
-	 * If it fails, assign the first category of the whitelist
-	 */
+        // add templates
+        $saved_block_templates = get_option( 'kb_block_templates' );
 
-	private function _get_valid_category( $cat )
-	{
+        if ( !empty( $saved_block_templates ) ) {
+            foreach ( $saved_block_templates as $tpl ) {
+                //$blocks[ $tpl[ 'class' ] ] = $Kontentblocks->blocks[ $tpl[ 'class' ] ];
 
-		foreach ( $this->cats as $c => $name )
-		{
-			if ( $c == $cat )
-				return $cat;
-		}
-		return (isset($this->cats[0])) ? $this->cats[ 0 ] : false;
-	}
+                $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ] = new $tpl[ 'class' ];
 
-	/*
-	 * Filterable array of allowed cats
-	 * uses @filter kb_menu_cats
-	 * @return void
-	 */
+                if ( !empty( $tpl[ 'instance_id' ] ) ) {
+                    $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->instance_id             = $tpl[ 'instance_id' ];
+                    $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->settings[ 'public_name' ] = $tpl[ 'name' ];
+                }
 
-	private function _setup_cats()
-	{
-		// defaults
-		$cats = array(
-			'standard'	=> __( 'Standard', 'kontentblocks' ),
-		);
-		
-		$cats = apply_filters( 'kb_menu_cats', $cats );
-		
-						
-		$cats['special']	= __( 'Spezial', 'kontentblocks' );
-		$cats['core']		= __( 'System', 'kontentblocks' ); 	
-		$cats['templates']	= __( 'Templates', 'kontentblocks' );
+                if ( !empty( $tpl[ 'master' ] ) ) {
+                    $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->master = true;
+                }
+            }
+        }
 
-		$this->cats = $cats;
-	}
+    }
 
-	/*
-	 * Create initial array to preserve the right order
-	 */
-	public function _prepare_categories()
-	{
-		foreach( $this->cats as $cat => $name)
-		{
-			$this->categories[$cat] = array();
-		}
-		
-	}
+    /*
+     * Validate category against whitelist
+     * If it fails, assign the first category of the whitelist
+     */
+
+    private function _get_valid_category( $cat )
+    {
+
+        foreach ( $this->cats as $c => $name ) {
+            if ( $c == $cat )
+                return $cat;
+        }
+        return (isset( $this->cats[ 0 ] )) ? $this->cats[ 0 ] : false;
+
+    }
+
+    /*
+     * Filterable array of allowed cats
+     * uses @filter kb_menu_cats
+     * @return void
+     */
+
+    private function _setup_cats()
+    {
+        // defaults
+        $cats = array(
+            'standard' => __( 'Standard', 'kontentblocks' ),
+        );
+
+        $cats = apply_filters( 'kb_menu_cats', $cats );
+
+        
+        $cats[ 'media']     = __('Media', 'kontentblocks');
+        $cats[ 'special' ]   = __( 'Spezial', 'kontentblocks' );
+        
+        $cats[ 'core' ]      = __( 'System', 'kontentblocks' );
+        $cats[ 'templates' ] = __( 'Templates', 'kontentblocks' );
+
+        $this->cats = $cats;
+
+    }
+
+    /*
+     * Create initial array to preserve the right order
+     */
+
+    public function _prepare_categories()
+    {
+        foreach ( $this->cats as $cat => $name ) {
+            $this->categories[ $cat ] = array();
+        }
+
+    }
 
 }
-

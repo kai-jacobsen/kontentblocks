@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields;  
+namespace Kontentblocks\Fields;
 
 define( 'KB_FIELD_PATH', plugin_dir_path( __FILE__ ) . 'Definitions/' );
 define( 'KB_FIELD_CSS', plugin_dir_url( __FILE__ ) . 'Definitions/css/' );
@@ -75,7 +75,7 @@ Class Kontentfields
      * 
      * @type array
      * */
-    public $groups = array( );
+    public $groups = array();
 
     /**
      * Flag used to save fields to tabs (jqueryUI)
@@ -89,7 +89,7 @@ Class Kontentfields
      * 
      * @type array
      * */
-    public $tabs = array( );
+    public $tabs = array();
 
     /**
      * Flag used to save fields to a section
@@ -103,7 +103,7 @@ Class Kontentfields
      * 
      * @type array
      * */
-    public $sections = array( );
+    public $sections = array();
 
     /**
      * Constructor
@@ -123,6 +123,7 @@ Class Kontentfields
         add_action( 'kb_before_field', array( __CLASS__, 'standard_before_field' ) );
         add_action( 'kb_after_field', array( __CLASS__, 'standard_after_field' ) );
         add_filter( 'kb_field_wrapper', array( __CLASS__, 'standard_field_wrapper' ), 2, 2 );
+
     }
 
     /**
@@ -135,7 +136,7 @@ Class Kontentfields
      * */
     public function register_field( $id, $class )
     {
-        
+
         $this->fields[ $id ] = new $class;
         if ( method_exists( $class, 'admin_print_styles' ) ) {
 
@@ -151,6 +152,7 @@ Class Kontentfields
             if ( isset( $_GET[ 'action' ] ) and $_GET[ 'action' ] == 'tb_edit_dynamic_areas' )
                 add_action( 'admin_print_scripts', array( $class, 'admin_print_styles' ) );
         }
+
     }
 
     /**
@@ -173,6 +175,7 @@ Class Kontentfields
         $group   = $this->groupflag;
 
         $this->collect_fields( $field, $key, $args, $section, $tabs, $group );
+
     }
 
     /**
@@ -185,7 +188,7 @@ Class Kontentfields
     private function render()
     {
 
-        $saveforlater = array( );
+        $saveforlater = array();
         // get collected fields
         $fields       = $this->collected_fields[ $this->classname ];
 
@@ -202,13 +205,13 @@ Class Kontentfields
                     // if group inside tabs
                     if ( !empty( $field[ 'group' ] ) ) {
                         // // section -> tabs -> group -> field
-                        $saveforlater[ $field[ 'section' ] ][ 'section' ][ $field[ 'tabs' ] ][ 'tabbed' ][ $field[ 'group' ] ][ 'group' ][ ] = $field;
+                        $saveforlater[ $field[ 'section' ] ][ 'section' ][ $field[ 'tabs' ] ][ 'tabbed' ][ $field[ 'group' ] ][ 'group' ][] = $field;
                         continue;
                     }
                     else {
 
                         // section->tabs->field
-                        $saveforlater[ $field[ 'section' ] ][ 'section' ][ $field[ 'tabs' ] ][ 'tabbed' ][ ] = $field;
+                        $saveforlater[ $field[ 'section' ] ][ 'section' ][ $field[ 'tabs' ] ][ 'tabbed' ][] = $field;
                         continue;
                     }
                 }
@@ -221,17 +224,17 @@ Class Kontentfields
                 // else no section
             }
             else {
-            // no section but tabs     
+                // no section but tabs     
                 // if tabs are set
                 if ( !empty( $field[ 'tabs' ] ) ) {
                     // if grou is set
                     if ( !empty( $field[ 'group' ] ) ) {
                         // tabs->tab->group->fields
-                        $saveforlater[ $field[ 'tabs' ] ][ 'tabbed' ][ $field[ 'group' ] ][ 'group' ][ ] = $field;
+                        $saveforlater[ $field[ 'tabs' ] ][ 'tabbed' ][ $field[ 'group' ] ][ 'group' ][] = $field;
                         continue;
                     }
                     // tabs->tab->field
-                    $saveforlater[ $field[ 'tabs' ] ][ 'tabbed' ][ ] = $field;
+                    $saveforlater[ $field[ 'tabs' ] ][ 'tabbed' ][] = $field;
                     continue;
                 }
                 else {
@@ -239,7 +242,7 @@ Class Kontentfields
 
                     if ( !empty( $field[ 'group' ] ) ) {
                         // groupid->group->field
-                        $saveforlater[ $field[ 'group' ] ][ 'group' ][ ] = $field;
+                        $saveforlater[ $field[ 'group' ] ][ 'group' ][] = $field;
                     }
                     else {
                         // no tabs, just single field
@@ -278,7 +281,8 @@ Class Kontentfields
         //$this->collected_fields[$this->classname] = array();
         do_action( 'after_fields_output', $fields );
 
-        $this->collected_fields = array( );
+        $this->collected_fields = array();
+
     }
 
     /**
@@ -346,6 +350,7 @@ Class Kontentfields
             }
         }
         echo "</div>";
+
     }
 
     /**
@@ -372,6 +377,7 @@ Class Kontentfields
             $this->output_field( $field );
         }
         echo "</div>";
+
     }
 
     /**
@@ -412,6 +418,7 @@ Class Kontentfields
         }
 
         echo "</div>";
+
     }
 
     /**
@@ -424,15 +431,15 @@ Class Kontentfields
     private function output_field( $field )
     {
         // setup;
-        $this->instance          = $this->fields[ $field[ 'field' ] ];
+        $this->instance = $this->fields[ $field[ 'field' ] ];
         if ( !$this->instance )
             return;
-        
-        $this->instance->key = $field['key'];
-        $this->instance->blockid = $this->blockid;
-        $this->instance->data    = (!empty($this->data[$field['key']])) ? $this->data[$field['key']] : '';
-        $this->instance->settings = $field['args'];
-        
+
+        $this->instance->key      = $field[ 'key' ];
+        $this->instance->blockid  = $this->blockid;
+        $this->instance->data     = (!empty( $this->data[ $field[ 'key' ] ] )) ? $this->data[ $field[ 'key' ] ] : '';
+        $this->instance->settings = $field[ 'args' ];
+
         if ( $this->parent ) {
             if ( $this->parent->area_context )
                 $this->instance->area_context = $this->parent->area_context;
@@ -469,6 +476,7 @@ Class Kontentfields
 
         do_action( 'kb_after_field' );
         do_action( "kb_after_{$field[ 'field' ]}" );
+
     }
 
     /**
@@ -499,10 +507,10 @@ Class Kontentfields
         );
 
         $merged = wp_parse_args( $args, $defaults );
-        
-        if ( isset($args['array']) && is_string($args['array'])){
-            if ( empty( $this->collected_fields[ $this->classname ][ $key .'_' .$args['array'] ] ) ) {
-                $this->collected_fields[ $this->classname ][ $key .'_' .$args['array'] ] = array
+
+        if ( isset( $args[ 'array' ] ) && is_string( $args[ 'array' ] ) ) {
+            if ( empty( $this->collected_fields[ $this->classname ][ $key . '_' . $args[ 'array' ] ] ) ) {
+                $this->collected_fields[ $this->classname ][ $key . '_' . $args[ 'array' ] ] = array
                     (
                     'field' => $field,
                     'key' => $key,
@@ -511,9 +519,8 @@ Class Kontentfields
                     'tabs' => $tabs,
                     'group' => $group
                 );
-            }            
+            }
         }
-
         elseif ( empty( $this->collected_fields[ $this->classname ][ $key ] ) ) {
             $this->collected_fields[ $this->classname ][ $key ] = array
                 (
@@ -525,6 +532,7 @@ Class Kontentfields
                 'group' => $group
             );
         }
+
     }
 
     /**
@@ -549,7 +557,8 @@ Class Kontentfields
         $this->parent    = $parent;
         $this->classname = get_class( $parent );
         $this->blockid   = $blockid;
-        $this->data      = $data;
+        $this->data      = $this->sanitize_data( $data );
+
     }
 
     /**
@@ -563,7 +572,7 @@ Class Kontentfields
         $exist = maybe_unserialize( get_option( 'kontentfields' ) );
         $new   = $this->collected_fields;
 
-        if (empty($new))
+        if ( empty( $new ) )
             return false;
 
 
@@ -578,6 +587,7 @@ Class Kontentfields
 
 
         $this->render();
+
     }
 
     /**
@@ -589,24 +599,27 @@ Class Kontentfields
      * */
     public function save( $old )
     {
-        
-        if (!isset($this->fieldoptions[$this->classname]))
+        if ( !isset( $this->fieldoptions[ $this->classname ] ) )
             return false;
-        
+
         $fields = $this->fieldoptions[ $this->classname ];
 
-        if (empty($fields))
+        if ( empty( $fields ) )
             return false;
 
-        $return = array( );
+        $return = array();
 
         foreach ( $fields as $field ) {
 
             $old      = (!empty( $old[ $field[ 'key' ] ] )) ? $old[ $field[ 'key' ] ] : '';
             $filtered = null;
 
-            if ( !empty( $this->data[ $field[ 'key' ] ] ) )
+
+            if ( !empty( $this->data[ $field[ 'key' ] ] ) ) {
+
                 $filtered = apply_filters( "kb_pre_save_field_{$field[ 'field' ]}", $this->data[ $field[ 'key' ] ] );
+            }
+
 
             if ( false === $filtered ) {
                 $return[ $field[ 'key' ] ] = $old[ $field[ 'key' ] ];
@@ -615,7 +628,8 @@ Class Kontentfields
                 $return[ $field[ 'key' ] ] = $filtered;
             }
         }
-        return $return;
+        return wp_parse_args( $return, $this->data );
+
     }
 
     /**
@@ -632,6 +646,7 @@ Class Kontentfields
 
             return $output;
         }
+
     }
 
     /**
@@ -647,6 +662,7 @@ Class Kontentfields
         $output = apply_filters( "kb_output_field_{$field}", $this->data[ $key ] );
         $output = apply_filters( "{$this->classname}_field_{$field}", $output );
         echo $output;
+
     }
 
     /* ---------------------------------------------------------
@@ -656,11 +672,13 @@ Class Kontentfields
     public static function standard_before_field( $field )
     {
         echo "<div class='kb_field {$field[ 'field' ]} clearfix'>";
+
     }
 
     public static function standard_after_field()
     {
         echo '</div>';
+
     }
 
     /**
@@ -673,11 +691,12 @@ Class Kontentfields
      */
     public function section_open( $id, $title = '', $description = '' )
     {
-        $this->sectionflag   = $id;
+        $this->sectionflag     = $id;
         $this->sections[ $id ] = array(
             'title' => $title,
             'description' => $description
         );
+
     }
 
     /**
@@ -686,6 +705,7 @@ Class Kontentfields
     public function section_close()
     {
         $this->sectionflag = NULL;
+
     }
 
     /**
@@ -697,8 +717,9 @@ Class Kontentfields
      */
     public function start_tabs( $id, $args = NULL )
     {
-        $this->tabflag   = $id;
+        $this->tabflag     = $id;
         $this->tabs[ $id ] = $args;
+
     }
 
     /**
@@ -707,6 +728,7 @@ Class Kontentfields
     public function end_tabs()
     {
         $this->tabflag = NULL;
+
     }
 
     /**
@@ -729,6 +751,7 @@ Class Kontentfields
         $args = wp_parse_args( $args, $defaults );
 
         $this->groups[ $id ] = $args;
+
     }
 
     /**
@@ -737,6 +760,7 @@ Class Kontentfields
     public function end_group()
     {
         $this->groupflag = NULL;
+
     }
 
     /**
@@ -755,6 +779,7 @@ Class Kontentfields
         $out.= $wrapper[ 'after' ];
 
         return $out;
+
     }
 
     /**
@@ -773,6 +798,7 @@ Class Kontentfields
 
         //$id = str_replace(array('-','_'), '', $id);
         return $id;
+
     }
 
     /*
@@ -789,6 +815,23 @@ Class Kontentfields
                 'std' => $default
                 )
         );
+
+    }
+
+    public function sanitize_data( $data )
+    {
+        if ( !empty( $data ) ) {
+            foreach ( $data as $key => $value ) {
+                if ( $value === 'true' ) {
+                    $data[ $key ] = true;
+                }
+                else if ( $value === 'false' ) {
+                    $data[ $key ] = false;
+                }
+                
+            }
+        }
+        return $data;
     }
 
 }

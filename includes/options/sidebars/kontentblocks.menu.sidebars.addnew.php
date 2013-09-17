@@ -241,8 +241,8 @@
 	$html.="				</table>
 						</div>
 					</div>
-				</div>";
-	$html .= "</div>
+				</div></div>";
+	$html .= "
 			<div class='kb_area_buttons'>
 			<input id='add-area' type='submit' class='button-primary' value='create' >
 			<a href='admin.php?page={$current_screen->parent_base}' class='button'>Cancel</a>
