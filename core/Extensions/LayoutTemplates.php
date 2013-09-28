@@ -31,7 +31,6 @@ class Layout_Templates
     public function meta_box_controls()
     {
         echo "<div id='layout-templates'></div>";
-
     }
 
     public function add_default_post_type_support()

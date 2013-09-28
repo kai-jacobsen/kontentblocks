@@ -241,7 +241,7 @@ class Area
 
         echo "  <div class='kb_area_head clearfix  {$this->context} {$header_class}'>";
         echo "	<div class='area_title_text '> ";
-
+        echo " <input type='hidden' name='areas[]' value='{$this->id}' >";
         $this->settingsMenu->render();
 
         echo "	<span class='title'>{$this->name}</span>

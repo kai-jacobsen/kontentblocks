@@ -14,6 +14,7 @@
             this.createButton = this._createButton();
 
             this.update();
+            console.log(this);
         },
         _selectContainer: function() {
             return $("<div class='select-container'></div>").appendTo(this.el);
@@ -105,7 +106,7 @@
 
             if (kbpage.areas) {
                 _.each(kbpage.areas, function(context) {
-                    concat += _.pluck(context, 'id');
+                    concat += context.id;
                 });
             }
             return this.hash(concat.replace(',', ''));

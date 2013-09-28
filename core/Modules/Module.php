@@ -140,7 +140,8 @@ class Module
             'hidden' => false,
             'predefined' => false,
             'in_dynamic' => false,
-            'cacheable' => true
+            'cacheable' => true,
+            'meta' => array()
         );
         $this->settings = wp_parse_args( $block_settings, $defaults );
 

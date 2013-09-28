@@ -1,19 +1,20 @@
 <?php
 
-use Kontentblocks\Kontentblocks;
+use Kontentblocks\Kontentblocks,
+    Kontentblocks\Utils\AreaDirectory,
+    Kontentblocks\Admin\PostDataContainer,
+    Kontentblocks\Admin\ScreenManager;
 
 class KB_Sidebar_Area_Selector
 {
-    protected $Kontentblocks;
-    protected $UI;
+
     protected $sideAreas;
-        
+    protected $globalSidebars = array();
+    protected $postSidebars   = array();
+    protected $activeSidebars = array();
+
     function __construct()
     {
-        
-        $this->Kontentblocks = Kontentblocks::getInstance();
-        $this->UI = $this->Kontentblocks->UI;
-        
         $this->setup_actions();
 
     }
@@ -38,131 +39,51 @@ class KB_Sidebar_Area_Selector
      * 1. fresh,unedited page: no data, no timestamp
      * 2. data and timestamp
      * 3. timestamp only, all sidebars deactivated
+     * TODO:: rewirte based on new structure
+     * TODO:: resort global sidebars and post sidebars to own arrays
      */
 
     function sidebar_selector_content( $context )
     {
-        
-        if ( empty( $this->UI->areas['side'] )) {
-            return;
-        }
+        $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
+        $pdc     = new PostDataContainer( $post_id );
+        $Screen  = new ScreenManager( $pdc );
+
+        $this->_setupAreas( $Screen->getContextAreas( 'side' ) );
 
         // saved sidebar settings
-        if ( isset( $_GET[ 'post' ] ) ) {
-            $data = get_post_meta( $_GET[ 'post' ], 'active_sidebar_areas', true );
-            $flag = get_post_meta( $_GET[ 'post' ], '_sidebars_updated', true );
+        if ( $post_id ) {
+            $this->activeSidebars = get_post_meta( $post_id, 'active_sidebar_areas', true );
+            $this->flag           = get_post_meta( $post_id, '_sidebars_updated', true );
         }
         else {
-            $data = __return_empty_array();
-            $flag = false;
+            $this->data = __return_empty_array();
+            $this->flag = false;
         }
-
-
         // init output
         $out = '';
 
-        // get dynamic areas, dynamic areas currently are only used for sidebars
-        $dynamic_areas = $this->UI->_find_available_areas( $this->Kontentblocks->get_areas( 'side' ), false );
-        $extracted     = self::extract_areas( $dynamic_areas );
-
-        // get regular side areas
-        $post_sidebars = !empty( $this->UI->areas[ 'side' ] ) ? self::extract_areas( $this->UI->areas[ 'side' ] ) : __return_empty_array();
-
-        // all available areas
-        $areas = (is_array( $extracted ) && is_array( $post_sidebars )) ? array_merge( $extracted, $post_sidebars ) : null;
-
-        // all areas 
-        $allareas = $this->Kontentblocks->get_areas();
-        // remove box if there are no areas to chose from
-
-        $hide = (count( $areas ) < 2 ) ? 'hide' : '';
-
-        $out .= "
-				<div class='context-header orange {$hide}'>
-					<h2>globale Sidebars</h2>
-					<p class='description'>Eine kurze Erklärung hierzu.</p>
-				</div>
-				<div class='area_sidebars {$hide}'>
-					<div class='context-box area-context'>
-				<div class='active_dynamic_areas_wrapper'>
-				
-				<input type='hidden' name='_sidebars_updated' value='" . time() . "' />
-				<ul class='connect' style='min-height:25px;' id='active-dynamic-areas'>";
-
+        $out.= $this->openActiveList();
 
         // if there is no stored data, active sidebar equals $post_sidebars
-        if ( empty( $data ) and empty( $flag ) ) {
+        if ( empty( $this->activeSidebars ) and empty( $this->flag ) ) {
 
-            foreach ( $post_sidebars as $area ) {
-                if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] or $area[ 'dynamic' ] )
-                    continue;;
-
-                $disabled = (true == $area[ 'dynamic' ]) ? '' : 'ui-state-disabled';
-                $out .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
-
-                if ( true == $area[ 'dynamic' ] ) {
-                    $out .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&context={$context}&TB_iframe=1'>edit</a></span>";
-                }
-                $out .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
-
-                //remove area from collection
-                unset( $areas[ $area[ 'id' ] ] );
-            }
-        } // endif
+            $out.= $this->initialState();
+        }
         // we have data
-        elseif ( !empty( $data ) and isset( $flag ) ) {
+        elseif ( !empty( $this->activeSidebars ) and isset( $this->flag ) ) {
 
-            if ( !is_array( $data ) )
-                return;
-
-            foreach ( $data as $area ) {
-
-                if ( empty( $allareas[ $area ] ) ) {
-                    unset( $areas[ $area[ 'id' ] ] );
-                    continue;
-                }
-
-
-                $area     = $allareas[ $area ];
-                $disabled = (true == $area[ 'dynamic' ]) ? '' : 'ui-state-disabled';
-                $out .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
-                if ( true == $area[ 'dynamic' ] ) {
-                    $out .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&context={$context}&TB_iframe=1'>edit</a></span>";
-                }
-                $out .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
-                //unset from dynamic areas
-                unset( $areas[ $area[ 'id' ] ] );
-            }
+            $out.= $this->savedState();
         }
-        elseif ( empty( $data ) and !empty( $flag ) ) {
-            
-        }
-        {
-            
+        elseif ( empty( $this->activeSidebars ) and !empty( $this->flag ) ) {
+            $out.= "<p>No sidebars active</p>";
         }
 
-        $out .= "</ul>
-					</div>";
+        $out.= $this->closeActiveList();
 
+        $out.= $this->openInactiveList();
 
-        $out .= "<div  class='dynamic-area-selector-wrapper'>
-					<h4>Inaktive Sidebars</h4>
-					<ul class='connect' style='min-height:25px;' id='existing-areas'>";
-        if ( !empty( $areas ) ) {
-            foreach ( $areas as $area ) {
-                if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] )
-                    continue;;
-                $out .= "<li id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
-                if ( true == $area[ 'dynamic' ] ) {
-                    $out .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&TB_iframe=1'>edit</a></span>";
-                };
-                $out .= "</li>";
-            }
-        }
-        else {
-            $out .= "<p>Keine Bereiche verfügbar.</p>";
-        }
-
+        $out.= $this->inactiveListItems();
 
         $out .= "</ul>
 					</div>
@@ -172,144 +93,38 @@ class KB_Sidebar_Area_Selector
 
     }
 
-    /**
-     * Form Callback 
-     */
-    function sidebar_selector_content_old( $context )
-    {
-        global  $post;
-
-        if ( empty( $this->UI->areas[ 'side' ] ) )
-            return;
-
-        $data = get_post_meta( $post->ID, 'active_sidebar_areas', true );
-        $out  = __return_null();
-
-        $dynamic_areas = $$this->UI->_find_available_areas( $this->Kontentblocks->get_dynamic_areas(), false );
-
-        $extracted = self::extract_areas( $dynamic_areas );
-
-        $post_sidebars = !empty( $$this->UI->areas[ 'side' ] ) ? self::extract_areas( $$this->UI->areas[ 'side' ] ) : __return_empty_array();
-        $areas         = (is_array( $extracted ) && is_array( $post_sidebars )) ? array_merge( $extracted, $post_sidebars ) : null;
-
-        $flag = (!empty( $post_sidebars )) ? true : false;
-
-        if ( count( $areas ) < 2 )
-            return;
-
-        if ( !empty( $areas ) or true == $flag ) {
-
-            $out .= "<div class='area_sidebars'>
-					<div class='context-box area-context'>
-					<div class='active_dynamic_areas_wrapper'>
-					<div class='context-header'>
-						<h2>Sidebars</h2>
-						<p class='description'>Eine kurze Erklärung hierzu.</p>
-					</div>
-					<ul class='connect' id='active-dynamic-areas'>";
-
-            if ( !empty( $data ) ) {
-                foreach ( $data as $area ) {
-
-                    if ( empty( $this->Kontentblocks->areas[ $area ] ) ) {
-                        unset( $areas[ $area[ 'id' ] ] );
-                        continue;
-                    }
-
-
-                    $area     = $this->Kontentblocks->areas[ $area ];
-                    $disabled = (true == $area[ 'dynamic' ]) ? '' : 'ui-state-disabled';
-                    $out .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
-                    if ( true == $area[ 'dynamic' ] ) {
-                        $out .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&context={$context}&TB_iframe=1'>edit</a></span>";
-                    }
-                    $out .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
-                    //unset from dynamic areas
-                    unset( $areas[ $area[ 'id' ] ] );
-                }
-            }
-            else {
-                if ( !empty( $post_sidebars ) ) {
-
-                    foreach ( $post_sidebars as $area ) {
-                        if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] )
-                            continue;;
-
-                        $disabled = (true == $area[ 'dynamic' ]) ? '' : 'ui-state-disabled';
-                        $out .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
-
-                        if ( true == $area[ 'dynamic' ] ) {
-                            $out .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&context={$context}&TB_iframe=1'>edit</a></span>";
-                        }
-                        $out .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
-                        unset( $areas[ $area[ 'id' ] ] );
-                    }
-                }
-            }
-
-            $out .= "</ul>
-					</div>";
-
-            $out .= "<div  class='dynamic-area-selector-wrapper'>
-					<h4>Inaktive Sidebars</h4>
-					<ul class='connect' id='existing-areas'>";
-            if ( !empty( $areas ) ) {
-                foreach ( $areas as $area ) {
-                    if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] )
-                        continue;;
-                    $out .= "<li id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
-                    if ( true == $area[ 'dynamic' ] ) {
-                        $out .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&TB_iframe=1'>edit</a></span>";
-                    };
-                    $out .= "</li>";
-                }
-            }
-            else {
-                $out .= "<p>Keine Bereiche verfügbar.</p>";
-            }
-
-
-            $out .= "</ul>
-					</div>
-					</div>
-					</div>";
-
-            echo $out;
-        }
-
-    }
-
     function save( $post_id )
     {
-        if ( empty( $_POST ) )
+        if ( empty( $_POST ) ) {
             return;
+        }
 
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
-        if ( defined( 'ONSITE_EDIT' ) )
+        }
+        if ( defined( 'ONSITE_EDIT' ) ) {
             return;
-        if ( !isset( $_POST[ 'post_type' ] ) )
+        }
+
+        if ( !isset( $_POST[ 'post_type' ] ) ) {
             return;
-        // verify this came from the our screen and with proper authorization,
-        // because save_post can be triggered at other times
-        /* if ( !empty($_POST) )
-          {
-          if (!wp_verify_nonce( $_POST['kb_noncename'], plugin_basename( __FILE__ ) ) )
-          return;
-          } */
+        }
 
         // Check permissions
         if ( 'page' == $_POST[ 'post_type' ] ) {
-            if ( !current_user_can( 'edit_page', $post_id ) )
+            if ( !current_user_can( 'edit_page', $post_id ) ) {
                 return;
+            }
         }
         else {
-            if ( !current_user_can( 'edit_post', $post_id ) )
+            if ( !current_user_can( 'edit_post', $post_id ) ) {
                 return;
+            }
         }
 
-        if ( !current_user_can( 'edit_kontentblocks' ) )
+        if ( !current_user_can( 'edit_kontentblocks' ) ) {
             return;
+        }
 
         // verification done
 
@@ -329,21 +144,130 @@ class KB_Sidebar_Area_Selector
 
     }
 
-    public static function extract_areas( $side_areas )
-    {
-        $extract = array();
-        if ( !empty( $side_areas ) ) {
-            foreach ( $side_areas as $area ) {
-                $extract[ $area[ 'id' ] ] = $area;
-            }
-        }
-        return $extract;
-
-    }
-
     public function modal_markup()
     {
         echo "<div id='da-modal' class='reveal large reveal-modal'><iframe seamless id='da-frame' src='' width='100%' height='400'></iframe></div>";
+
+    }
+
+    public function _setupAreas( $areas )
+    {
+        $this->areas = $areas;
+
+        foreach ( $areas as $args ) {
+            if ( $args[ 'dynamic' ] == true ) {
+                $this->globalSidebars[ $args[ 'id' ] ] = $args;
+            }
+            else {
+                $this->postSidebars[ $args[ 'id' ] ] = $args;
+            }
+        }
+
+    }
+
+    public function openActiveList()
+    {
+        // all areas 
+        // remove box if there are no areas to chose from
+        $hide = (count( $this->areas ) < 2 ) ? 'hide' : '';
+
+        return "
+				<div class='context-header orange {$hide}'>
+					<h2>globale Sidebars</h2>
+					<p class='description'>Eine kurze Erklärung hierzu.</p>
+				</div>
+				<div class='area_sidebars {$hide}'>
+					<div class='context-box area-context'>
+				<div class='active_dynamic_areas_wrapper'>
+				
+				<input type='hidden' name='_sidebars_updated' value='" . time() . "' />
+				<ul class='connect' style='min-height:25px;' id='active-dynamic-areas'>";
+
+    }
+
+    public function initialState()
+    {
+        $return = '';
+        foreach ( $this->postSidebars as $area ) {
+            if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] or $area[ 'dynamic' ] ) {
+                continue;
+            }
+            // TODO: Check $disabled = (true == $area[ 'dynamic' ]) ? '' : 'ui-state-disabled';
+            $return .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
+
+            if ( true == $area[ 'dynamic' ] ) {
+                $return .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&context=side&TB_iframe=1'>edit</a></span>";
+            }
+            $return .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
+
+            //remove area from collection
+            unset( $this->areas[ $area[ 'id' ] ] );
+        }
+        return $return;
+
+    }
+
+    public function savedState()
+    {
+        if ( !is_array( $this->activeSidebars ) ) {
+            return '';
+        }
+
+        $return = '';
+
+        foreach ( $this->activeSidebars as $area ) {
+
+            $areaDefinition = $this->areas[ $area ];
+
+            $return .= "<li class='dynamic-area-active' id='{$areaDefinition[ 'id' ]}' name='{$areaDefinition[ 'id' ]}'>{$areaDefinition[ 'name' ]}";
+            if ( true == $areaDefinition[ 'dynamic' ] ) {
+                $return .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$areaDefinition[ 'id' ]}&daction=show&context=side&TB_iframe=1'>edit</a></span>";
+            }
+            $return .= "<input id='{$areaDefinition[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$areaDefinition[ 'id' ]}' /></li>";
+            //unset from dynamic areas
+            unset( $this->areas[ $areaDefinition[ 'id' ] ] );
+        }
+        return $return;
+
+    }
+
+    public function closeActiveList()
+    {
+        return "</ul></div>";
+
+    }
+
+    public function openInactiveList()
+    {
+
+        return "<div  class='dynamic-area-selector-wrapper'>
+					<h4>Inaktive Sidebars</h4>
+					<ul class='connect' style='min-height:25px;' id='existing-areas'>";
+
+    }
+
+    public function inactiveListItems()
+    {
+        $return = '';
+        if ( !empty( $this->areas ) ) {
+            foreach ( $this->areas as $area ) {
+                if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] ) {
+                    continue;
+                }
+
+                $return .= "<li id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
+
+                if ( true === $area[ 'dynamic' ] ) {
+                    $return .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&TB_iframe=1'>edit</a></span>";
+                }
+
+                $return .= "</li>";
+            }
+        }
+        else {
+            $return .= "<p>Keine Bereiche verfügbar.</p>";
+        }
+        return $return;
 
     }
 
@@ -356,5 +280,3 @@ function add_selector_meta_box()
     new KB_Sidebar_Area_Selector();
 
 }
-
-?>

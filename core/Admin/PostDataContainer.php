@@ -39,6 +39,12 @@ class PostDataContainer extends AbstractDataContainer
 
     }
 
+    public function getMetaData()
+    {
+        return $this->MetaData;
+
+    }
+
     public function getAllModules()
     {
         return $this->modules;
@@ -95,10 +101,9 @@ class PostDataContainer extends AbstractDataContainer
 
     public function getAreaSettings( $id )
     {
-        if ( isset( $this->meta[ 'kb_area_settings' ] ) ) {
-            if ( !empty( $this->meta[ 'kb_area_settings' ][ $id ] ) ) {
-                return $this->meta[ 'kb_area_settings' ][ $id ];
-            }
+        $settings = $this->MetaData->getMetaData( 'kb_area_settings' );
+        if ( !empty( $settings[ $id ] ) ) {
+            return $settings[ $id ];
         }
         return false;
 

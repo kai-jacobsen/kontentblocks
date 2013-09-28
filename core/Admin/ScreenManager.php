@@ -9,6 +9,7 @@ class ScreenManager
 {
 
     protected $rawAreas;
+    protected $postAreas;
     protected $contextLayout;
     protected $contexts;
 
@@ -52,7 +53,7 @@ class ScreenManager
         }
 
         foreach ( $this->rawAreas as $area ) {
-            $contextfy[ $area[ 'context' ] ][] = $area;
+            $contextfy[ $area[ 'context' ] ][$area['id']] = $area;
         }
 
         return $contextfy;
@@ -68,6 +69,8 @@ class ScreenManager
             return array();
         }
     }
+    
+    
 
     /*
      * Default Context Layout
@@ -112,4 +115,10 @@ class ScreenManager
 
     }
 
+
+
+    
+    public function getPostAreas(){
+        return $this->postAreas;
+    }
 }

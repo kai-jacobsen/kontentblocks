@@ -44,6 +44,21 @@ class MetaData
     }
 
     /**
+     * Wrapper to retrieve data by key from post meta
+     * @param id string Key
+     */
+    public function getMetaData($id)
+    {
+        if ( !empty( $this->meta[ $id ] ) ) {
+            return $this->meta[ $id ];
+        }
+        else {
+            return null;
+        }
+
+    }
+
+    /**
      * Get Backup and update post meta
      * @param string $timestamp
      * @return boolean
@@ -151,14 +166,16 @@ class MetaData
         return $this;
 
     }
-    
+
     public function getPageTemplate()
     {
-        if (!empty($this->meta['_wp_page_template'])){
-            return $this->meta['_wp_page_template'];
-        } else if (  get_post_type($this->post_id === 'page') && empty($this->meta['_wp_page_template']) ){
+        if ( !empty( $this->meta[ '_wp_page_template' ] ) ) {
+            return $this->meta[ '_wp_page_template' ];
+        }
+        else if ( get_post_type( $this->post_id === 'page' ) && empty( $this->meta[ '_wp_page_template' ] ) ) {
             return 'default';
         }
+
     }
 
     private function _getBackupData()
@@ -236,10 +253,29 @@ class MetaData
         return update_post_meta( $this->post_id, '_' . $id, $data );
 
     }
+    
+    public function saveMetaData($id, $data){
+        return update_post_meta($this->post_id, $id, $data);
+    }
 
     public function getIndex()
     {
-        return $this->index;
+        return $this->cleanIndex();
+
+    }
+
+    public function addToIndex( $id, $args )
+    {
+        if ( !isset( $this->index[ $id ] ) ) {
+            $this->index[ $id ] = $args;
+            return $this->_updateIndex();
+        }
+
+    }
+
+    private function _updateIndex()
+    {
+        return update_post_meta( $this->post_id, 'kb_kontentblocks', $this->index );
 
     }
 
@@ -259,6 +295,23 @@ class MetaData
             }
         }
         return false;
+
+    }
+
+    public function cleanIndex()
+    {
+        $cleaned = array();
+
+        foreach ( $this->index as $def ) {
+            if ( isset( $def[ 'class' ] ) ) {
+                $cleaned[] = $def;
+            }
+            else {
+                // TODO remove from index;
+            }
+        }
+
+        return $cleaned;
 
     }
 

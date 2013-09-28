@@ -9,11 +9,12 @@ class ModuleFactory
 
     public function __construct( $moduleArgs )
     {
-        if (  !isset( $moduleArgs ) ) {
-            throw new Exception( 'This is not a valid Module' );
+        if (  !isset( $moduleArgs ) or !isset($moduleArgs['class']) ) {
+            throw new \Exception( 'This is not a valid Module' );
         }
 
         $this->args = $moduleArgs;
+        return $this;
             
     }
 
@@ -31,7 +32,8 @@ class ModuleFactory
             'status' => 'kb_active',
             'draft' => 'pain',
             'locked' => false,
-            'area_context' => 'normal'
+            'area_context' => 'normal',
+            'meta' => array()
         );
 
             $parsedArgs = wp_parse_args( $moduleArgs, $defaults );

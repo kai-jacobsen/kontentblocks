@@ -1,5 +1,9 @@
 <?php
 
+use Kontentblocks\Utils\MetaData,
+    Kontentblocks\Utils\ModuleDirectory,
+    Kontentblocks\Utils\GlobalData;
+
 add_action( 'wp_ajax_kb_generate_blocks', 'KB_Ajax_Generate_Module::get_instance' );
 
 final class KB_Ajax_Generate_Module
@@ -159,7 +163,8 @@ final class KB_Ajax_Generate_Module
             wp_send_json_error( 'Post ID missing' );
 
         // get existing modules reference
-        $this->modules = get_post_meta( $this->post_id, 'kb_kontentblocks', true );
+        $this->PostMeta = new MetaData( $this->post_id );
+        $this->modules  = $this->PostMeta->getModules();
 
         // Override Class / type if this originates from a master template
         if ( $this->master )
@@ -190,16 +195,15 @@ final class KB_Ajax_Generate_Module
      */
     private function setupModule()
     {
-        global $Kontentblocks;
-
         $module = FALSE;
 
         // get module instance from factory
-        if ( class_exists( $this->type ) )
-            $module = new $Kontentblocks->blocks[ $this->type ];
-        else
+        if ( class_exists( $this->type ) ) {
+            $module = ModuleDirectory::getInstance()->get( $this->type );
+        }
+        else {
             wp_send_json_error( $this->type . ' does not exist' );
-
+        }
 
         //You are still with me, proceed
         return $module;
@@ -251,7 +255,7 @@ final class KB_Ajax_Generate_Module
         }
         else {
             $count = 1;
-        };
+        }
 
         return $count;
 
@@ -290,18 +294,19 @@ final class KB_Ajax_Generate_Module
             'master' => $this->master,
             'master_ref' => ($this->master) ? $this->template : false
         );
-
+        
         if ( $this->template ) {
-            $tpl = $Kontentblocks->get_block_template( $this->template );
+            $globalData = new GlobalData();
+            $tpl = $globalData->getTemplate($this->template);
             if ( $tpl ) {
                 $new_module[ 'name' ] = $tpl[ 'name' ];
             }
         }
 
 
-        $new_module = apply_filters( 'kb_modify_new_module', $new_module );
+        $new_module_filtered = apply_filters( 'kb_modify_new_module', $new_module );
 
-        return $new_module;
+        return $new_module_filtered;
 
     }
 
@@ -333,11 +338,11 @@ final class KB_Ajax_Generate_Module
     private function saveNewModule()
     {
         // add new block and update 
-        $this->modules[ $this->new_id ] = $this->new_module;
-        $update                       = update_post_meta( $this->post_id, 'kb_kontentblocks', $this->modules );
-
-        if ( !$update )
-            wp_send_json_error( 'Saving not successful!' );
+        $update = $this->PostMeta->addToIndex($this->new_id, $this->new_module);
+        
+        if ( !$update ) {
+            wp_send_json_error( $this->modules );
+        }
 
     }
 

@@ -27,9 +27,8 @@ class AreaSettingsMenu
         $areaTemplates = $this->_getAssignedTemplates();
         // Markup and fields markup
         if ( !empty( $areaTemplates ) ) {
-            $data = $this->dataContainer->getAreaSettings( $this->parent );
-
-            $custom = (isset( $data[ 'custom' ] )) ? $data[ 'custom' ] : false;
+            $data = $this->dataContainer->getAreaSettings( $this->id );
+            $custom = (isset( $data[ 'custom' ] )) ? $data[ 'custom' ] : '';
 
             echo "
 			<div class='kb_area_templates'>
@@ -37,7 +36,7 @@ class AreaSettingsMenu
 				
 				<ul class='kb_the_menu list kb_dd_list kb_open'>";
             foreach ( $areaTemplates as $tpl ) {
-                $this->_areaTemplateItem( $tpl, $this->id, $data );
+                $this->_areaTemplateItem( $tpl, $data );
             }
 
             echo "	

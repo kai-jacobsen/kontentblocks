@@ -3,35 +3,15 @@
 namespace Kontentblocks\Admin;
 
 use Kontentblocks\Kontentblocks,
-    Kontentblocks\Utils\MetaData,
+    Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\ScreenManager,
+    Kontentblocks\Utils\MetaData,
     Kontentblocks\Helper;
 
 Class EditScreen
 {
 
     protected $hooks;
-    
-    /**
-     * Id of current post
-     */
-    public $post_id;
-
-    /**
-     * Settings saved for the areas on this post
-     * @var array 
-     */
-    private $_saved_area_settings = array();
-
-    /**
-     * Sorted Modules / assigned to areas 
-     */
-    public $sortedModules = array();
-
-    /**
-     * default context layout 
-     */
-    private $context_layout = array();
     protected $postData;
 
     /**
@@ -40,11 +20,11 @@ Class EditScreen
      */
     function __construct()
     {
-        $this->hooks = array('post.php', 'post-new.php');
+        $this->hooks   = array( 'post.php', 'post-new.php' );
         $this->manager = Kontentblocks::getInstance();
         global $pagenow;
 
-        if ( !in_array( $pagenow, $this->hooks) ) {
+        if ( !in_array( $pagenow, $this->hooks ) ) {
             return null;
         }
 
@@ -65,9 +45,6 @@ Class EditScreen
         global $post;
 
         $this->postData = new PostDataContainer( $post->ID );
-
-        // current post area settings
-        $this->_saved_area_settings = get_post_meta( $post->ID, 'kb_area_settings', true );
 
     }
 
@@ -121,31 +98,39 @@ Class EditScreen
     {
         global $Kontentblocks, $lcMobile;
 
-
         // verify if this is an auto save routine. 
         // If it is our form has not been submitted, so we dont want to do anything
-        if ( empty( $_POST ) )
+        if ( empty( $_POST ) ) {
             return;
-        if ( empty( $_POST[ 'kb_noncename' ] ) )
+        }
+
+        if ( empty( $_POST[ 'kb_noncename' ] ) ) {
             return;
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        }
+
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
+        }
 
         // verify this came from the our screen and with proper authorization,
         // because save_post can be triggered at other times
         if ( !empty( $_POST ) ) {
-            if ( !wp_verify_nonce( $_POST[ 'kb_noncename' ], plugin_basename( __FILE__ ) ) )
+            if ( !wp_verify_nonce( $_POST[ 'kb_noncename' ], plugin_basename( __FILE__ ) ) ) {
                 return;
+            }
         }
 
         // Check permissions
         if ( 'page' == $_POST[ 'post_type' ] ) {
-            if ( !current_user_can( 'edit_page', $post_id ) )
+            if ( !current_user_can( 'edit_page', $post_id ) ) {
                 return;
+            }
         }
         else {
-            if ( !current_user_can( 'edit_post', $post_id ) )
+            if ( !current_user_can( 'edit_post', $post_id ) ) {
+
                 return;
+            }
         }
 
         if ( !current_user_can( 'edit_kontentblocks' ) ) {
@@ -160,52 +145,49 @@ Class EditScreen
 
         $real_post_id = isset( $_POST[ 'post_ID' ] ) ? $_POST[ 'post_ID' ] : NULL;
 
-        $this->_postmeta = $this->_get_post_custom( $real_post_id );
-
-        // calls the save function for every block
-        $kb_blocks = (!empty( $this->_postmeta[ 'kb_kontentblocks' ] )) ? $this->_postmeta[ 'kb_kontentblocks' ] : '';
+        $MetaData      = new MetaData($real_post_id);
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
-            $Meta = new MetaData( $real_post_id );
-            $Meta->backup( 'Before regular update' );
+            $MetaData->backup( 'Before regular update' );
         }
 
-        if ( !empty( $kb_blocks ) ) {
-            foreach ( $kb_blocks as $block ) {
+        if ( !empty( $MetaData->getIndex() ) ) {
+            foreach ( $MetaData->getIndex() as $module ) {
 
-                if ( !class_exists( $block[ 'class' ] ) )
+                if ( !class_exists( $module[ 'class' ] ) ) {
                     continue;
+                }
 
                 //hack 
                 $id     = null;
                 $tosave = array();
 
-                $instance          = $this->manager->blocks[ $block[ 'class' ] ];
+                $Factory           = new ModuleFactory( $module );
+                $instance          = $Factory->getModule();
                 $instance->post_id = $real_post_id;
 
                 // new data from $_POST
-                $data = (!empty( $_POST[ $block[ 'instance_id' ] ] )) ? $_POST[ $block[ 'instance_id' ] ] : null;
+                $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
 
                 // old, saved data
-                $old = $this->_postmeta[ '_' . $block[ 'instance_id' ] ];
-
+                $old = $MetaData->getMetaData( $module[ 'instance_id' ] );
 
 
                 // check for draft and set to false
-                $block[ 'draft' ] = self::_draft_check( $block );
+                $module[ 'draft' ] = self::_draft_check( $module );
 
                 // special block specific data
-                $block = self::_individual_block_data( $block, $data );
+                $module = self::_individual_block_data( $module, $data );
 
-                $block = apply_filters( 'save_module_data', $block, $data );
+                $module = apply_filters( 'save_module_data', $module, $data );
 
-                $updateblocks[ $block[ 'instance_id' ] ] = $block;
+                $updateblocks[ $module[ 'instance_id' ] ] = $module;
 
 
                 // call save method on block
                 // if locking of blocks is used, and a block is locked, use old data
-                if ( KONTENTLOCK && $block[ 'locked' ] == 'locked' or $data == null ) {
+                if ( KONTENTLOCK && $module[ 'locked' ] == 'locked' or $data === null ) {
                     $new = $old;
                 }
                 else {
@@ -217,34 +199,35 @@ Class EditScreen
                 // store new data in post meta
                 if ( $new && $new != $old ) {
                     if ( $_POST[ 'wp-preview' ] === 'dopreview' ) {
-                        update_post_meta( $real_post_id, '_preview_' . $block[ 'instance_id' ], $new );
+                        update_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ], $new );
                     }
                     // if this is a preview, save temporary data for previews
                     // save real data
                     else {
-                        update_post_meta( $real_post_id, '_' . $block[ 'instance_id' ], $new );
-                        delete_post_meta( $real_post_id, '_preview_' . $block[ 'instance_id' ] );
+                        update_post_meta( $real_post_id, '_' . $module[ 'instance_id' ], $new );
+                        delete_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ] );
                     }
-
-                    // delete transient on update
-                    delete_transient( $block[ 'instance_id' ] );
                 }
             }
-            update_post_meta( $real_post_id, 'kb_kontentblocks', $updateblocks );
+            $MetaData->saveIndex( $updateblocks );
         }
 
+
+
         // save area settings which are specific to this post (ID-wise)
-        if ( !empty( $this->manager->areas ) ) {
+        if ( !empty( $_POST['areas'] ) ) {
 
-            if ( $lcMobile && $lcMobile === true )
-                ;
-            return;
+            $collection = $MetaData->getMetaData('kb_area_settings');
+            foreach ( $_POST['areas'] as $id ) {
+                
+                if (isset($_POST[$id])){
+                    $collection[$id] = $_POST[$id];
+                }
 
-            foreach ( $Kontentblocks->get_areas() as $k => $v ) {
-                $tosave[ $k ] = Area::save_custom_area_settings( $k );
             }
-
-            update_post_meta( $real_post_id, 'kb_area_settings', $tosave );
+            
+            $MetaData->saveMetaData('kb_area_settings', $collection);
+            
         }
 
     }
@@ -293,10 +276,9 @@ Class EditScreen
      * 
      * @param array $context 
      */
-    public function renderScreen( )
+    public function renderScreen()
     {
-
-        $ScreenManager = new ScreenManager($this->postData);
+        $ScreenManager = new ScreenManager( $this->postData );
         $ScreenManager->render();
 
     }
@@ -315,11 +297,12 @@ Class EditScreen
 
     public function toJSON()
     {
+        global $post;
         $toJSON = array(
             'areas' => $this->postData->get( 'areas' ),
             'page_template' => $this->postData->get( 'pageTemplate' ),
             'post_type' => $this->postData->get( 'postType' ),
-            'post_id' => $this->post_id
+            'post_id' => $post->ID
         );
 
         echo "<script> var kbpage =" . json_encode( $toJSON ) . "</script>";

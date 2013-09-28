@@ -1,7 +1,8 @@
 <?php
+use Kontentblocks\Utils\ModuleDirectory;
 global $current_screen;
-$templateables = $Kontentblocks->get_templateables();
-
+$templateables = ModuleDirectory::getInstance()->getModuleTemplates();
+d($templateables);
 
 echo "	<form method='POST' action='admin.php?page={$current_screen->parent_base}'>
 	<input type='hidden' name='action' value='add-template' >

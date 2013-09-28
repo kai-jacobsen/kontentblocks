@@ -11,7 +11,13 @@ class AreaDirectory
     protected $templates = array();
     static $instance;
 
-    public function getInstance()
+    /**
+     * Singleton Pattern
+     * Get the Instance of the Area Directory
+     * original instantiated on plugin startup
+     * @return object | Area directory instance
+     */
+    public static function getInstance()
     {
         if ( null == self::$instance ) {
             self::$instance = new self;
@@ -19,9 +25,18 @@ class AreaDirectory
         }
 
         return self::$instance;
-
     }
 
+    
+    
+    
+    /**
+     * Init Function
+     * Gets areas which were added by the user through the admin interface
+     * Adds those areas to the directory
+     * 
+     * @return void
+     */
     public function init()
     {
         $storedAreas = get_option( 'kb_registered_areas' );
@@ -33,6 +48,17 @@ class AreaDirectory
 
     }
 
+    
+    /**
+     * Adds an area to the directory
+     * Merges default arguments with provided arguments
+     * Manual indicates if the area has been registered by code (true) or
+     * was added though the admin interface (false)
+     * 
+     * @param array $args
+     * @param bool $manual
+     * @return $void
+     */
     public function addArea( $args, $manual = true )
     {
         if ( !empty( $args[ 'id' ] ) ) {
@@ -51,6 +77,14 @@ class AreaDirectory
 
     }
 
+    
+    
+    /**
+     * Save an area to global areas
+     * @param string $id identifier of area
+     * @param array $args area arguments
+     * @return bool | update successful true | false
+     */
     public function saveArea( $id, $args )
     {
         $storedAreas = get_option( 'kb_registered_areas' );
@@ -60,6 +94,14 @@ class AreaDirectory
 
     }
 
+    
+    
+    
+    /**
+     * Returns an area from the directory by id
+     * @param string $id
+     * @return mixed null | area array
+     */
     public function getArea( $id )
     {
         if ( isset( $this->rawAreas[ $id ] ) ) {
@@ -71,7 +113,12 @@ class AreaDirectory
 
     }
 
-    public function getGlobalAreas( $context = null )
+    
+    /**
+     * Returns only globally registered areas
+     * @return array
+     */
+    public function getGlobalAreas( )
     {
         $collection = array();
         foreach ( $this->rawAreas as $area ) {

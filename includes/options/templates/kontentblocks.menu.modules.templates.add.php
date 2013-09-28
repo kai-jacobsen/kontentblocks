@@ -67,7 +67,7 @@ wp_redirect($location);
  */
 function _getID($blocks)
 {
-        $collect = '';
+        $collect = array(0);
         if ( !empty( $blocks ) )
         {
             foreach ( $blocks as $block )

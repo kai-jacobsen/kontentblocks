@@ -16,7 +16,7 @@ class Module_Admin_Actions
     public function form( $module )
     {
         $this->module = $module;
-        $this->data   = $module->meta;
+        $this->data   = (!empty($module->meta)) ? $module->meta : $this->_getDefaults();
 
         $out = "<div class='module-meta-actions'>";
 
@@ -36,7 +36,6 @@ class Module_Admin_Actions
     private function _scheduleField()
     {
         $start = $this->data[ 'schedule' ][ 'start' ];
-        var_dump($this->data);
         $return = "<div class='meta-field'>";
         $return.= "<label>Timeout <input type='text' class='datepicker' value='{$start[ 'public' ]}' name='{$this->module->instance_id}[meta][schedule][start][public]''  /></label>";
         $return.= "<input type='hidden' class='altfield' name='{$this->module->instance_id}[meta][schedule][start][hidden]' value='{$start[ 'hidden' ]}' >";
@@ -59,7 +58,23 @@ class Module_Admin_Actions
     public function save( $block, $data )
     {
 
-        $defaults        = array(
+        
+        
+        $meta            = wp_parse_args( $data[ 'meta' ], $this->_getDefaults() );
+        
+//        $startdate = !empty($meta['start']['hidden']) ? $meta['start']['hidden'] : '';
+//        $starttime = !empty($meta['start']['time']) ? $meta['start']['time'] : '';
+//        $start_concat = $startdate . ' ' . $starttime;
+//        $timestamp = strtotime($start_concat);
+//        var_dump($timestamp);
+//        die();
+        $block[ 'meta' ] = $meta;
+        return $block;
+
+    }
+    
+    private function _getDefaults(){
+        return array(
             'adminonly' => '',
             'schedule' => array(
                 'start' => array(
@@ -72,18 +87,6 @@ class Module_Admin_Actions
                 )
             )
         );
-        
-        $meta            = wp_parse_args( $data[ 'meta' ], $defaults );
-        
-//        $startdate = !empty($meta['start']['hidden']) ? $meta['start']['hidden'] : '';
-//        $starttime = !empty($meta['start']['time']) ? $meta['start']['time'] : '';
-//        $start_concat = $startdate . ' ' . $starttime;
-//        $timestamp = strtotime($start_concat);
-//        var_dump($timestamp);
-//        die();
-        $block[ 'meta' ] = $meta;
-        return $block;
-
     }
 
     public function renderCheck( $instance )
