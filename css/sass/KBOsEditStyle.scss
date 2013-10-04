@@ -1,5 +1,7 @@
 @import "compass/css3";
 @import "partials/_base";
+
+
 .os-edit-wrapper {
     position: absolute;
     right: 0;
@@ -78,9 +80,7 @@ body.onsite-editing {
         padding: 0;
         z-index:9999;
 
-        iframe html{
-            height: auto;
-        }
+
     }
 
 }
@@ -102,4 +102,9 @@ body.onsite-editing {
 
         }
     }
+}
+
+#osframe{
+    overflow: hidden;
+    border:0;
 }

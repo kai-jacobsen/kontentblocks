@@ -1,17 +1,20 @@
 <?php
 
 namespace Kontentblocks\Hooks;
+
 use Kontentblocks\Kontentblocks;
+
 class Enqueues
 {
 
     protected $strings;
     protected $DI;
+    protected $styles;
 
-    public function __construct(  )
+    public function __construct()
     {
         $this->strings = $this->_defaultStrings();
-        $this->Caps      = Kontentblocks::getInstance()->Capabilities;
+        $this->Caps    = Kontentblocks::getInstance()->Capabilities;
 
 
         // enqueue styles and scripts where needed
@@ -21,6 +24,15 @@ class Enqueues
         add_action( 'admin_print_styles-toplevel_page_kontentblocks-templates', array( $this, 'enqueue' ), 30 );
         add_action( 'admin_print_styles-toplevel_page_kontentblocks-areas', array( $this, 'enqueue' ), 30 );
         add_action( 'admin_print_styles-toplevel_page_dynamic_areas', array( $this, 'enqueue' ), 30 );
+
+    }
+
+    function addStyle( $handle, $src )
+    {
+        $this->styles[ $handle ] = array(
+            'handle' => $handle,
+            'src' => $src
+        );
 
     }
 
@@ -38,15 +50,21 @@ class Enqueues
 
             // Main Stylesheet
             wp_enqueue_style( 'kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css' );
+            wp_enqueue_style( 'vex', KB_PLUGIN_URL . 'js/vex/css/vex.css' );
+            wp_enqueue_style( 'vex-flat', KB_PLUGIN_URL . 'js/vex/css/vex-theme-flat-attack.css' );
+
+            $this->enqueueStyles();
 
             // Plugins - Chosen, Noty, Sortable Touch
-            wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . 'js/kb_plugins.js' );
+            wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . 'dist/min/plugins.min.js', null, null, true );
 
             // Main Kontentblocks script file
-            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . 'js/kontentblocks.js', array( 'jquery-ui-core',
+            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . 'dist/min/kontentblocks.min.js', array( 'jquery-ui-core',
                 'jquery-ui-sortable',
                 'jquery-ui-tabs',
-                'jquery-ui-mouse' ) );
+                'jquery-ui-mouse' ), '0.7', true );
+
+            wp_enqueue_script( 'Kontentblocks-Extensions', KB_PLUGIN_URL . 'dist/min/extensions.min.js', array( 'kontentblocks-base' ), null, true );
 
 
             // add Kontentblocks l18n strings
@@ -123,6 +141,16 @@ class Enqueues
             'block_duplicate' => __( 'If you have unsaved changes, please update first. Duplicate Module?', 'kontentblocks' ),
             'block_duplicate_success' => __( 'Successfully duplicated.', 'kontentblocks' )
         );
+
+    }
+
+    public function enqueueStyles()
+    {
+        if ( !empty( $this->styles ) ) {
+            foreach ( $this->styles as $style ) {
+                wp_enqueue_style( $style[ 'handle' ], $style[ 'src' ] );
+            }
+        }
 
     }
 

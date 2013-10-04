@@ -108,5 +108,17 @@ class PostDataContainer extends AbstractDataContainer
         return false;
 
     }
+    
+    public function getModuleData( $id )
+    {
+        $data = $this->MetaData->getMetaData($id);
+        
+        if ($data !== NULL){
+            return $data;
+        } else {
+            return '';
+        }
+
+    }
 
 }

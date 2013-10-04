@@ -467,7 +467,6 @@ class Proxy extends \Kontentblocks\Modules\Module {
 	
 	function enqueue_files()
 	{
-		wp_enqueue_script('proxy', KB_TEMPLATE_URL .'kb_proxy/KBProxy.js', array('jquery', 'kontentblocks-base'));
 		wp_enqueue_style('proxy', KB_TEMPLATE_URL . 'kb_proxy/KBProxy.css');
 	}
 	

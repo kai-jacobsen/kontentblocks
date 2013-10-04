@@ -10,22 +10,34 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['js/<%= pkg.name %>.js'],
-                    'dist/fields.min.js': ['<%= concat.dist.dest %>']
-
+                    'dist/min/<%= pkg.name %>.min.js': ['js/<%= pkg.name %>.js'],
+                    'dist/min/fields.min.js': ['<%= concat.fields.dest %>'],
+                    'dist/min/extensions.min.js': ['<%= concat.extensions.dest %>'],
+                    'dist/min/plugins.min.js': ['<%= concat.plugins.dest %>']
                 }
             }
         },
         concat: {
             options: {
-                // define a string to put between each file in the concatenated output
+                seperator: ';'
 
             },
-            dist: {
+            fields: {
                 // the files to concatenate
-                src: ['fields/**/*.js'],
+                src: ['core/Fields/Definitions/js/**/*.js'],
                 // the location of the resulting JS file
-                dest: 'dist/fields_built.js'
+                dest: 'dist/fields.concat.js',
+                nonull:true
+            },
+            extensions: {
+                src:['js/extensions/**/*.js'],
+                dest: 'dist/extensions.concat.js',
+                nonull:true
+            },
+            plugins:{
+                src:['js/plugins/**/*.js'],
+                dest: 'dist/plugins.concat.js',
+                nonull:true
             }
         },
         compass: {
@@ -37,8 +49,11 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['js/<%= pkg.name %>.js', 'css/**/*.scss'],
-            tasks: [ 'compass']
+            files: ['js/<%= pkg.name %>.js', 'css/**/*.scss', 'js/**/*.js'],
+            tasks: [ 'compass', 'concat', 'uglify'],
+            options: {
+                livereload:true
+            }
         }
     });
 
@@ -48,6 +63,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-compass');
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['concat', 'uglify', 'compass']);
 
 };

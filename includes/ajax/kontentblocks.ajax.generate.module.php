@@ -1,8 +1,8 @@
 <?php
 
 use Kontentblocks\Utils\MetaData,
-    Kontentblocks\Utils\ModuleDirectory,
-    Kontentblocks\Utils\GlobalData;
+    Kontentblocks\Utils\GlobalData,
+    Kontentblocks\Utils\ModuleDirectory;
 
 add_action( 'wp_ajax_kb_generate_blocks', 'KB_Ajax_Generate_Module::get_instance' );
 
@@ -163,8 +163,12 @@ final class KB_Ajax_Generate_Module
             wp_send_json_error( 'Post ID missing' );
 
         // get existing modules reference
-        $this->PostMeta = new MetaData( $this->post_id );
-        $this->modules  = $this->PostMeta->getModules();
+        if ( $this->post_id == -1 ) {
+            $this->dataHandler = new GlobalData();
+        }
+        else {
+            $this->dataHandler = new MetaData( $this->post_id );
+        }
 
         // Override Class / type if this originates from a master template
         if ( $this->master )
@@ -175,13 +179,13 @@ final class KB_Ajax_Generate_Module
 
         // No Error until this point, get module instance and proceed
         $this->module = $this->setupModule();
-
+        
         // Set new id
         $this->new_id = $this->_setNewId();
 
         //prepare new block
         $this->new_module = $this->prepareNewModule();
-
+        
         // Save data
         $this->updateData();
 
@@ -269,7 +273,12 @@ final class KB_Ajax_Generate_Module
     private function _setNewId()
     {
         $prefix = apply_filters( 'kb_post_module_prefix', 'module-' );
-        return $prefix . $this->post_id . '_' . $this->count;
+        if ( $this->post_id != -1 ) {
+            return $prefix . $this->post_id . '_' . $this->count;
+        }
+        else {
+            return $prefix . 'kb-block-da' . $this->area . '_' . $this->count;
+        }
 
     }
 
@@ -294,10 +303,10 @@ final class KB_Ajax_Generate_Module
             'master' => $this->master,
             'master_ref' => ($this->master) ? $this->template : false
         );
-        
+
         if ( $this->template ) {
             $globalData = new GlobalData();
-            $tpl = $globalData->getTemplate($this->template);
+            $tpl        = $globalData->getTemplate( $this->template );
             if ( $tpl ) {
                 $new_module[ 'name' ] = $tpl[ 'name' ];
             }
@@ -338,10 +347,10 @@ final class KB_Ajax_Generate_Module
     private function saveNewModule()
     {
         // add new block and update 
-        $update = $this->PostMeta->addToIndex($this->new_id, $this->new_module);
+        $update = $this->dataHandler->addToIndex( $this->new_id, $this->new_module );
         
-        if ( !$update ) {
-            wp_send_json_error( $this->modules );
+        if ( $update != true ) {
+            wp_send_json_error( 'Update failed' );
         }
 
     }

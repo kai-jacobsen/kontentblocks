@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Modules\ModuleFactory;
+
 //======================================
 // Purpose of this Class
 //-------------------------------------
@@ -133,11 +135,6 @@ class AreaRender
 
     }
 
-    public function __destruct()
-    {
-        
-    }
-
     /**
      * Prepare and gather all necessary module data
      */
@@ -147,11 +144,9 @@ class AreaRender
          * Get modules from post meta or option
          */
         $this->modules = $this->get_modules();
-
         //bail if empty
         if ( empty( $this->raw_modules ) )
             return false;
-
         // Instantiate Modules
         $this->modules = $this->setup_modules();
 
@@ -175,7 +170,6 @@ class AreaRender
      */
     public function render( $echo = true )
     {
-
         $tmp            = $tmpcol         = null;
         $element_id     = $pre_element_id = '';
 
@@ -187,9 +181,9 @@ class AreaRender
         // collect html
         $output = '';
 
+
         if ( empty( $this->modules ) )
             return false;
-
         // general module properties
         $module_args = $this->_this_prepare_module_args();
 
@@ -712,10 +706,7 @@ class AreaRender
         $modules = $this->_modify_modules( $this->raw_modules );
 
         $modules = $this->_setup_modules( $modules );
-
-
-        foreach ( ( array ) $modules as $instance ) {
-
+        foreach ( $modules as $instance ) {
             if ( isset( $_GET[ 'preview' ] ) && $_GET[ 'preview' ] == 'true' ) {
                 $collection[] = $instance;
             }
@@ -803,11 +794,11 @@ class AreaRender
             $module = apply_filters( 'kb_modify_block', $module );
             $module = apply_filters( "kb_modify_block_{$module[ 'id' ]}", $module );
 
-            if ( !class_exists( $args[ 'class' ] ) or empty( $this->manager->blocks[ $args[ 'class' ] ] ) )
-                continue;
+            $Factory = new ModuleFactory( $module );
+
 
             // new instance
-            $instance = new $args[ 'class' ]( $args[ 'id' ], $args[ 'name' ], $args );
+            $instance = $Factory->getModule();
 
             $instance->set_status( $args[ 'status' ] );
             $instance->set_draft( $args[ 'draft' ] );
@@ -828,8 +819,6 @@ class AreaRender
      */
     public function _get_area_template()
     {
-
-
         if ( !empty( $this->modules ) ) {
             $blockcount = count( $this->modules );
 
@@ -936,10 +925,10 @@ class AreaRender
      */
     public function _this_prepare_module_args()
     {
-
+        $page_template = get_post_meta( $this->post_id, '_wp_page_template', true );
         return apply_filters( 'kb_prepare_module', array(
             'post_id' => $this->post_id,
-            'page_template' => get_post_meta( $this->post_id, '_wp_page_template', true ),
+            'page_template' => ($page_template === '') ? 'default' : $page_template,
             'post_type' => get_post_type( $this->post_id ),
             'context' => $this->context,
             'subcontext' => $this->subcontext,

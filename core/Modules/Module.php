@@ -228,18 +228,17 @@ class Module
          * 
          */
         // set post_id
-        if ( !isset( $post->ID ) ) {
-            if ( true == $Kontentblocks->post_context ) {
-                $this->post_id = $_REQUEST[ 'post_id' ];
-            }
-            else {
-                $this->post_id = null;
-            }
-        }
-        else {
-            $this->post_id = $post->ID;
-        }
-
+//        if ( !isset( $post->ID ) ) {
+//            if ( true == $Kontentblocks->post_context ) {
+//                $this->post_id = $_REQUEST[ 'post_id' ];
+//            }
+//            else {
+//                $this->post_id = null;
+//            }
+//        }
+//        else {
+//            $this->post_id = $post->ID;
+//        }
         // open tag for block list item
         echo $this->_open_list_item();
 
@@ -249,20 +248,13 @@ class Module
         // inner block open
         echo $this->_open_inner();
 
-        if ( true == $Kontentblocks->post_context ) {
-            $data = get_post_meta( $this->post_id, '_' . $this->instance_id, true );
-        }
-        else {
-            $data = get_option( $this->instance_id, array( ) );
-        }
-
         // if disabled don't output, just show disabled message
         if ( $this->settings[ 'disabled' ] ) {
             echo "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         }
         else {
             // output the form fields for this block
-            $this->options( $data );
+            $this->options( $this->new_instance );
         }
                     
         echo $this->footer();
@@ -449,7 +441,6 @@ class Module
         global $Kontentblocks, $post;
 
         $link_class = null;
-
         $admin   = admin_url();
         if ( $post_id === null )
             $post_id = (!empty( $_REQUEST[ 'post_id' ] )) ? $_REQUEST[ 'post_id' ] : $post->ID;
@@ -484,11 +475,10 @@ class Module
 
 
         $nonce = wp_create_nonce( 'onsiteedit' );
-
         $out = "
 		<div class='os-edit-wrapper os-controls {$link_class}'>
 		<a class='reveal os-edit-block' title='{$edittext}' data='{$this->instance_id}' data-url='{$admin}/admin-ajax.php?
-		action=os_edit_block&
+		action=os-edit-module&
 		daction=show&
 		post_id={$post_id}&
 		context={$context}&

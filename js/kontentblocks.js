@@ -21,6 +21,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
         openedModal: false,
         init: function()
         {
+            vex.defaultOptions.className = 'vex-theme-flat-attack';
 
             // cache KB MetaBox
             kbMetaBox = $('#kontentblocks_stage');
@@ -39,8 +40,8 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
             }
 
             $('.reveal-modal').bind('reveal:opened', function() {
-                if ($(this).find('.ui-tabs-panel').length > 0)
-                    $(this).find('.ui-tabs-panel').jScrollPane();
+//                if ($(this).find('.ui-tabs-panel').length > 0)
+//                    $(this).find('.ui-tabs-panel').jScrollPane();
                 KB.openedModal = $(this);
 
 
@@ -80,6 +81,17 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
                 e.preventDefault();
 
                 activeArea = $(this).attr('data-area');
+                openedModal = vex.open({
+                    content: $('#' + activeArea + '-nav').html(),
+                    afterOpen: function() {
+                        KB.menutabs();
+                        var $el = $('#' + activeArea + '-nav');
+//                        if ($el.find('.ui-tabs-panel').length > 0) {
+//                            $el.find('.ui-tabs-panel').jScrollPane();
+//                        }
+                    },
+                    contentClassName: 'modules-menu'
+                });
 
             });
 
@@ -185,7 +197,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
             $('.area-blocks-menu-tabs').tabs({
                 show: function(event, ui)
                 {
-                    $(ui.panel).jScrollPane();
+//                    $(ui.panel).jScrollPane(); 
                 }
             });
         },
@@ -197,6 +209,13 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
                 var length = $('.kb_fieldtabs li').length;
 
                 $('.kb_fieldtabs').tabs({
+                    activate: function() {
+
+                        $window = $(window).height();
+//                        $('.content').height($window - 250);
+
+                        $('.nano').nanoScroller();
+                    }
                 });
 
                 $('.kb_fieldtabs').each(function() {
@@ -231,7 +250,9 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
                 {
 
 
-                    $(this).parent().nextAll('.kb_inner:first').slideToggle('fast');
+                    $(this).parent().nextAll('.kb_inner:first').slideToggle('fast', function(){
+                        $('body').trigger('module::opened');
+                    });
                     $('#' + activeBlock).toggleClass('kb-open', 1000);
                 }
             });
@@ -891,10 +912,6 @@ jQuery(document).ready(function($) {
     // init KB
     KB.init();
 
-    // convert select boxes to prettier ones, 
-    function init_chzn() {
-        //$('.chzn').chosen();
-    }
 
     $('#stage-inner').delegate('.kb_save_area', 'click', function(e) {
         e.preventDefault();
@@ -943,7 +960,7 @@ jQuery(document).ready(function($) {
         mouse_inside_menu = true;
     }, function() {
         mouse_inside_menu = false;
-    })
+    });
 
     $('body').mouseup(function() {
         if (mouse_inside_menu == false) {
@@ -955,11 +972,11 @@ jQuery(document).ready(function($) {
                 }
             })
         }
-    })
+    });
 
     $('.kb_area_head').mousedown(function() {
         activeArea = $(this).next().attr('id');
-    })
+    });
 
     // Create new Block from Menu
     /*$('.kb_the_menu li').click(function(){
@@ -982,23 +999,20 @@ jQuery(document).ready(function($) {
      
      });*/
 
-    $('.blocks-menu li').click(function() {
+    $('body').on('click', '.blocks-menu li', function() {
         caller = $(this);
+        
         if (KB.userCan('create_kontentblocks'))
         {
-
-            var reveal = $(this).closest('.reveal-modal').attr('id');
-
-            $('#' + reveal).trigger('reveal:close');
+            vex.close(openedModal.data().vex.id);
 
             KB.blockCreate(caller);
             menus = $('.kb_open');
             $(menus).each(function() {
                 if ($(this).hasClass('kb_open')) {
                     $(this).fadeOut('fast').toggleClass('kb_open');
-
                 }
-            })
+            });
         }
         else
         {

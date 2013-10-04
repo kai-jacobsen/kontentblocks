@@ -122,3 +122,11 @@ function getAreaTemplates()
     return $collection;
 
 }
+
+function underscoreit($val){
+    if (!is_string( $val ) ){
+        return $val;
+    } else {
+        return '_' . $val;
+    }
+}

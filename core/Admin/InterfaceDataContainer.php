@@ -10,4 +10,6 @@ interface InterfaceDataContainer
     public function getAllModules();
     
     public function getModulesforArea($id);
+    
+    public function getModuleData($id);
 }

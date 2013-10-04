@@ -23,7 +23,6 @@ class Backup_Inspect
             add_meta_box( 'kb-backup-inspect', 'Backup Inspect', array( $this, 'meta_box_controls' ), $screen->post_type, 'side', 'high' );
         }
 
-        add_action( 'admin_print_scripts', array( $this, 'print_scripts' ) );
 
     }
 
@@ -36,12 +35,6 @@ class Backup_Inspect
     public function add_default_post_type_support()
     {
         add_post_type_support( 'page', 'backup-inspect' );
-
-    }
-
-    public function print_scripts()
-    {
-        wp_enqueue_script( 'backup-inspect', KB_PLUGIN_URL . '/js/BackupInspect.js', array( 'backbone', 'underscore', 'kb_plugins' ), null, true );
 
     }
 

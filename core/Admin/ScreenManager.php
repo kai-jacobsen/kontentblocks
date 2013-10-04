@@ -8,6 +8,7 @@ use Kontentblocks\Admin\PostDataContainer,
 class ScreenManager
 {
 
+    
     protected $rawAreas;
     protected $postAreas;
     protected $contextLayout;
@@ -115,9 +116,6 @@ class ScreenManager
 
     }
 
-
-
-    
     public function getPostAreas(){
         return $this->postAreas;
     }

@@ -27,10 +27,10 @@ class KB_Sidebar_Area_Selector
             return;
         }
 
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'save_post', array( $this, 'save' ), 5 );  //save early
         add_action( 'context_box_side', array( $this, 'sidebar_selector_content' ), 10, 1 );
         add_action( 'admin_footer', array( $this, 'modal_markup' ) );
+        $this->nonce = wp_create_nonce( 'editGlobalArea' );
 
     }
 
@@ -137,13 +137,6 @@ class KB_Sidebar_Area_Selector
         }
 
     }
-
-    function enqueue_scripts()
-    {
-        wp_enqueue_script( 'KBAreaSelector', KB_PLUGIN_URL . 'js/KBAreaSelector.js', array( 'jquery-ui-sortable' ) );
-
-    }
-
     public function modal_markup()
     {
         echo "<div id='da-modal' class='reveal large reveal-modal'><iframe seamless id='da-frame' src='' width='100%' height='400'></iframe></div>";
@@ -196,7 +189,7 @@ class KB_Sidebar_Area_Selector
             $return .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
 
             if ( true == $area[ 'dynamic' ] ) {
-                $return .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&context=side&TB_iframe=1'>edit</a></span>";
+                $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$area[ 'id' ]}&daction=show&context=side&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
             }
             $return .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
 
@@ -221,7 +214,7 @@ class KB_Sidebar_Area_Selector
 
             $return .= "<li class='dynamic-area-active' id='{$areaDefinition[ 'id' ]}' name='{$areaDefinition[ 'id' ]}'>{$areaDefinition[ 'name' ]}";
             if ( true == $areaDefinition[ 'dynamic' ] ) {
-                $return .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$areaDefinition[ 'id' ]}&daction=show&context=side&TB_iframe=1'>edit</a></span>";
+                $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$areaDefinition[ 'id' ]}&daction=show&context=side&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
             }
             $return .= "<input id='{$areaDefinition[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$areaDefinition[ 'id' ]}' /></li>";
             //unset from dynamic areas
@@ -258,7 +251,7 @@ class KB_Sidebar_Area_Selector
                 $return .= "<li id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
 
                 if ( true === $area[ 'dynamic' ] ) {
-                    $return .= "<span><a class='reveal' data-url='admin-ajax.php?action=tb_edit_dynamic_areas&area={$area[ 'id' ]}&daction=show&TB_iframe=1'>edit</a></span>";
+                    $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$area[ 'id' ]}&daction=show&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
                 }
 
                 $return .= "</li>";

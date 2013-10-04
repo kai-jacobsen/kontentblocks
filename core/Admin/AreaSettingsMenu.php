@@ -23,7 +23,6 @@ class AreaSettingsMenu
 
     public function render()
     {
-
         $areaTemplates = $this->_getAssignedTemplates();
         // Markup and fields markup
         if ( !empty( $areaTemplates ) ) {

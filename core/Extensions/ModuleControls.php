@@ -93,11 +93,11 @@ class Module_Admin_Actions
     {
 
         $adminonly = (!empty( $instance->meta[ 'adminonly' ] )) ? $instance->meta[ 'adminonly' ] : false;
-        if ( $adminonly && ( bool ) $adminonly === TRUE && is_user_logged_in() ) {
-            return TRUE;
+        if ( ($adminonly && ( bool ) $adminonly === TRUE) && is_user_logged_in() ) {
+            return FALSE;
         }
         else {
-            return FALSE;
+            return TRUE;
         }
 
     }

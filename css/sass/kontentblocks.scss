@@ -29,6 +29,9 @@
 // Reveal JS
 -----------------------------*/
 @import "partials/_reveal-js";
+@import "partials/_vex";
+@import "partials/_nano";
+@import "partials/_global-area-edit";
 
 
 /* --------------------------
@@ -447,7 +450,7 @@ input[type="checkbox"][checked] {
 
 
 .active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {
-    font-family: sans-serif;
+    font-family: 'Open-Sans', sans-serif;
 
     font-style: italic;
     margin: 0;
@@ -465,7 +468,7 @@ input[type="checkbox"][checked] {
 }
 
 .kb_thickbox h2 {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-style: italic;
     margin: 20px 0 0 0;

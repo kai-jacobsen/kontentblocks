@@ -124,6 +124,19 @@ Class Kontentfields
         add_action( 'kb_after_field', array( __CLASS__, 'standard_after_field' ) );
         add_filter( 'kb_field_wrapper', array( __CLASS__, 'standard_field_wrapper' ), 2, 2 );
 
+
+        add_action( 'admin_print_styles-post.php', array( __CLASS__, 'admin_print_styles' ) );
+        add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'admin_print_styles' ) );
+        add_action( 'admin_print_styles-toplevel_page_kontentblocks-sidebars', array( __CLASS__, 'admin_print_styles' ) );
+        add_action( 'admin_print_styles-toplevel_page_kontentblocks-templates', array( __CLASS__, 'admin_print_styles' ) );
+        add_action( 'admin_print_styles-toplevel_page_kontentblocks-areas', array( __CLASS__, 'admin_print_styles' ) );
+
+        if ( isset( $_GET[ 'action' ] ) and $_GET[ 'action' ] == 'os_edit_block' )
+            add_action( 'admin_print_scripts', array( __CLASS__, 'admin_print_styles' ) );
+
+        if ( isset( $_GET[ 'action' ] ) and $_GET[ 'action' ] == 'tb_edit_dynamic_areas' )
+            add_action( 'admin_print_scripts', array( __CLASS__, 'admin_print_styles' ) );
+
     }
 
     /**
@@ -136,25 +149,17 @@ Class Kontentfields
      * */
     public function register_field( $id, $class )
     {
-
         $this->fields[ $id ] = new $class;
-        if ( method_exists( $class, 'admin_print_styles' ) ) {
-
-            add_action( 'admin_print_styles-post.php', array( $class, 'admin_print_styles' ) );
-            add_action( 'admin_print_styles-post-new.php', array( $class, 'admin_print_styles' ) );
-            add_action( 'admin_print_styles-toplevel_page_kontentblocks-sidebars', array( $class, 'admin_print_styles' ) );
-            add_action( 'admin_print_styles-toplevel_page_kontentblocks-templates', array( $class, 'admin_print_styles' ) );
-            add_action( 'admin_print_styles-toplevel_page_kontentblocks-areas', array( $class, 'admin_print_styles' ) );
-
-            if ( isset( $_GET[ 'action' ] ) and $_GET[ 'action' ] == 'os_edit_block' )
-                add_action( 'admin_print_scripts', array( $class, 'admin_print_styles' ) );
-
-            if ( isset( $_GET[ 'action' ] ) and $_GET[ 'action' ] == 'tb_edit_dynamic_areas' )
-                add_action( 'admin_print_scripts', array( $class, 'admin_print_styles' ) );
-        }
 
     }
 
+    public function admin_print_styles(){
+        
+    wp_enqueue_script('Kontentblocks-Fields', KB_PLUGIN_URL . '/dist/min/fields.min.js', array('jquery', 'backbone', 'underscore', 'wp-color-picker', 'kontentblocks-base'), '0.7' , true);
+        
+        
+    }
+    
     /**
      * register a field for the block and store it to $this->collected_fields
      * setup if this field belongs to a section, tabgroup or fieldgroup
@@ -828,10 +833,10 @@ Class Kontentfields
                 else if ( $value === 'false' ) {
                     $data[ $key ] = false;
                 }
-                
             }
         }
         return $data;
+
     }
 
 }

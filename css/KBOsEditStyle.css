@@ -4,7 +4,7 @@
   display: none;
 }
 
-/* line 3, sass/KBOsEditStyle.scss */
+/* line 5, sass/KBOsEditStyle.scss */
 .os-edit-wrapper {
   position: absolute;
   right: 0;
@@ -15,16 +15,16 @@
   background: transparent;
 }
 
-/* line 16, sass/KBOsEditStyle.scss */
+/* line 18, sass/KBOsEditStyle.scss */
 body.onsite-editing .os-edit-container > .os-edit-wrapper {
   display: block;
   opacity: 1;
 }
-/* line 21, sass/KBOsEditStyle.scss */
+/* line 23, sass/KBOsEditStyle.scss */
 body.onsite-editing .os-edit-container {
   position: relative;
 }
-/* line 25, sass/KBOsEditStyle.scss */
+/* line 27, sass/KBOsEditStyle.scss */
 body.onsite-editing .os-edit-wrapper a {
   line-height: 16px;
   background: transparent;
@@ -42,18 +42,18 @@ body.onsite-editing .os-edit-wrapper a {
   -o-transition: opacity 0.3s;
   transition: opacity 0.3s;
 }
-/* line 40, sass/KBOsEditStyle.scss */
+/* line 42, sass/KBOsEditStyle.scss */
 body.onsite-editing .os-edit-wrapper a:hover {
   opacity: 1;
   color: #333;
 }
-/* line 46, sass/KBOsEditStyle.scss */
+/* line 48, sass/KBOsEditStyle.scss */
 body.onsite-editing a.os-edit-block {
   line-height: 24px;
   float: right;
   cursor: pointer;
 }
-/* line 52, sass/KBOsEditStyle.scss */
+/* line 54, sass/KBOsEditStyle.scss */
 body.onsite-editing a.os-edit-block span {
   display: block;
   height: 24px;
@@ -62,27 +62,23 @@ body.onsite-editing a.os-edit-block span {
   float: right;
   margin-left: 10px;
 }
-/* line 63, sass/KBOsEditStyle.scss */
+/* line 65, sass/KBOsEditStyle.scss */
 body.onsite-editing .master a.os-edit-block span {
   background-color: #d54e21;
 }
-/* line 67, sass/KBOsEditStyle.scss */
+/* line 69, sass/KBOsEditStyle.scss */
 body.onsite-editing a.os-description {
   background: url("info.png") no-repeat;
   display: none;
 }
-/* line 72, sass/KBOsEditStyle.scss */
+/* line 74, sass/KBOsEditStyle.scss */
 body.onsite-editing .hide {
   display: none;
 }
-/* line 77, sass/KBOsEditStyle.scss */
+/* line 79, sass/KBOsEditStyle.scss */
 body.onsite-editing #onsite-modal {
   padding: 0;
   z-index: 9999;
-}
-/* line 81, sass/KBOsEditStyle.scss */
-body.onsite-editing #onsite-modal iframe html {
-  height: auto;
 }
 
 /* line 90, sass/KBOsEditStyle.scss */
@@ -96,4 +92,10 @@ body.onsite-editing #onsite-modal iframe html {
 /* line 98, sass/KBOsEditStyle.scss */
 #wp-toolbar .os-edit.os-edit-off a {
   color: #999;
+}
+
+/* line 107, sass/KBOsEditStyle.scss */
+#osframe {
+  overflow: hidden;
+  border: 0;
 }

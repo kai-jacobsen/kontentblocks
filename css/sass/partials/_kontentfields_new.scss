@@ -166,65 +166,7 @@ Field Tabs
 }
 
 
-/* Onsite Styles slightly different */
-body.on-site-editing{
-    padding-top: 0px;
 
-    .kb_field{
-
-        label.heading {
-            display: block;
-            margin-bottom: 8px;
-            border-left: 12px solid #33b5e5;
-            padding-left: 9px;
-            margin-left: -20px;
-            font-style: italic;
-            font-size: 13px;
-            color: #333333;
-            text-shadow: 1px 1px 0px white;
-        }
-    } 
-
-    .kb_fieldtabs{
-
-        ul.ui-tabs-nav{
-            margin-left: 0;
-            background: #fff;
-        }
-
-        .ui-widget-content{
-            border: none;
-            border-top: none;
-        }
-    } 
-
-    .os-header{
-        background: #333;
-        padding: 4px;
-        position: fixed;
-        width: 100%;
-        margin-left: 0px;
-        margin-top: -20px;
-        z-index: 9999;
-        box-shadow: 1px -1px 1px #000;
-        border-top: 1px solid #777;
-        bottom: 0;
-        font-size: 12px;
-
-        .os-update{
-            background: #f2f2f2;
-            border: 1px solid #ccc;
-            padding: 4px 10px;
-            cursor: pointer;
-            font-size: 12px;
-
-            &:hover{
-                background-color: $lightblue;
-                color: #fff;
-            }
-        }
-    }
-}
 
 @import "partials/_fields/_plupload";
 @import "partials/_fields/_date";
@@ -232,3 +174,4 @@ body.on-site-editing{
 @import "partials/_fields/_radioImages";
 @import "partials/_fields/_image";
 @import "partials/_fields/_advancedLink";
+

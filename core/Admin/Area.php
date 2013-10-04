@@ -5,7 +5,8 @@ namespace Kontentblocks\Admin;
 use Kontentblocks\Admin\AbstractDataContainer,
     Kontentblocks\Admin\ModuleMenu,
     Kontentblocks\Utils\ModuleDirectory,
-    Kontentblocks\Admin\AreaSettingsMenu;
+    Kontentblocks\Admin\AreaSettingsMenu,
+    Kontentblocks\Helper as H;
 
 class Area
 {
@@ -89,7 +90,7 @@ class Area
      * @param array $area
      * @return type 
      */
-    function __construct( $area, AbstractDataContainer $dataContext )
+    function __construct( $area, AbstractDataContainer $dataContainer )
     {
 
         if ( empty( $area ) ) {
@@ -106,17 +107,16 @@ class Area
         );
 
 
-        $this->dataContext = $dataContext;
+        $this->dataContainer = $dataContainer;
 
         $this->_setupAreaProperties( $area );
 
         // All Modules which are accessible by this area
         $this->validModules = $this->filterAttachedModules();
 
-        $this->attachedModules = $this->dataContext->getModulesForArea( $this->id );
-
+        $this->attachedModules = $this->dataContainer->getModulesForArea( $this->id );
         $this->moduleMenu   = new ModuleMenu( $this->validModules, $this->id, $this->context );
-        $this->settingsMenu = new AreaSettingsMenu( $this, $this->dataContext );
+        $this->settingsMenu = new AreaSettingsMenu( $this, $this->dataContainer );
 
     }
 
@@ -154,7 +154,7 @@ class Area
     }
 
     /**
-     * Filter blocks by area, based upon settings
+     * Filter blocks by area, baseed upon settings
      * 
      * @global object Kontentblocks
      * return array 
@@ -163,7 +163,7 @@ class Area
     private function filterAttachedModules()
     {
         // declare array
-        $modules = ModuleDirectory::getInstance()->getAllModules($this->dataContext);
+        $modules = ModuleDirectory::getInstance()->getAllModules($this->dataContainer);
         if ( empty( $modules ) ) {
             return false;
         }
@@ -222,11 +222,9 @@ class Area
         // prepare string
         $limit = ($this->limit == '0') ? null : absint( $this->limit );
 
-
         if ( null !== $limit ) {
             echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
         }
-
     }
 
     /**
@@ -242,6 +240,7 @@ class Area
         echo "  <div class='kb_area_head clearfix  {$this->context} {$header_class}'>";
         echo "	<div class='area_title_text '> ";
         echo " <input type='hidden' name='areas[]' value='{$this->id}' >";
+
         $this->settingsMenu->render();
 
         echo "	<span class='title'>{$this->name}</span>
@@ -265,19 +264,21 @@ class Area
             $unavailable_blocks = implode( ' ', $this->assignedModules );
         }
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' data-page_template='{$this->dataContext->get( 'pageTemplate' )}' data-post_type='{$this->dataContext->get( 'postType' )}' data-blacklist='{$unavailable_blocks}' data-limit='{$this->limit}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
+        echo "<ul style='' data-context='{$this->context}' data-page_template='{$this->dataContainer->get( 'pageTemplate' )}' data-post_type='{$this->dataContainer->get( 'postType' )}' data-blacklist='{$unavailable_blocks}' data-limit='{$this->limit}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
 
         if ( !empty( $this->attachedModules ) ) {
-
-            foreach ( $this->attachedModules as $block ) {
-                $block->set(
+            // TODO:Quatsch
+            foreach ( $this->attachedModules as $module ) {
+                $module->set(
                     array(
                         'area_context' => $this->context,
-                        'post_type' => $this->post_type,
-                        'page_template' => $this->page_template
+                        'post_type' => $this->dataContainer->get('postType'),
+                        'page_template' => $this->dataContainer->get('pageTemplate'),
+                        'new_instance' => $this->dataContainer->getModuleData(H\underscoreit($module->instance_id)),
+                        'post_id' => $this->dataContainer->get('postid')
                     )
                 );
-                $block->_render_options();
+                $module->_render_options();
             }
         }
 

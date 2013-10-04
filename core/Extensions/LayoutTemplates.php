@@ -24,7 +24,6 @@ class Layout_Templates
             add_meta_box( 'kb-layout-templates', 'Layout Templates', array( $this, 'meta_box_controls' ), $screen->post_type, 'side', 'high' );
         }
 
-        add_action( 'admin_print_scripts', array( $this, 'print_scripts' ) );
 
     }
 
@@ -38,13 +37,6 @@ class Layout_Templates
         add_post_type_support( 'page', 'layout-templates' );
 
     }
-
-    public function print_scripts()
-    {
-        wp_enqueue_script( 'layout-templates', KB_PLUGIN_URL . '/js/LayoutTemplates.js', array( 'backbone', 'underscore' ), null, true );
-
-    }
-
     public function get_templates()
     {
 

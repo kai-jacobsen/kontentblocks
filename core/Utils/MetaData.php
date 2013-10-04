@@ -49,6 +49,7 @@ class MetaData
      */
     public function getMetaData($id)
     {
+        
         if ( !empty( $this->meta[ $id ] ) ) {
             return $this->meta[ $id ];
         }

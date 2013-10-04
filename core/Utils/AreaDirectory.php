@@ -4,6 +4,10 @@ namespace Kontentblocks\Utils;
 
 use Kontentblocks\Admin\PostDataContainer;
 
+/**
+ * The AreaDirectory is a single interaction container to access area definitions throughout the plugin
+ * 
+ */
 class AreaDirectory
 {
 
@@ -100,7 +104,7 @@ class AreaDirectory
     /**
      * Returns an area from the directory by id
      * @param string $id
-     * @return mixed null | area array
+     * @return mixed null if area is not set | area array args if area is set
      */
     public function getArea( $id )
     {
@@ -116,6 +120,7 @@ class AreaDirectory
     
     /**
      * Returns only globally registered areas
+     * i.e. all areas where dynamic equals true
      * @return array
      */
     public function getGlobalAreas( )
@@ -130,12 +135,20 @@ class AreaDirectory
 
     }
 
+    /**
+     * Returns all registered area templates
+     * @return array of template definitions
+     */
     public function getTemplates()
     {
         return $this->templates;
 
     }
 
+    /**
+     * Registers an area template and adds it to the area templates array
+     * @param array $args
+     */
     public function addTemplate( $args )
     {
         if ( !empty( $args[ 'id' ] ) ) {
@@ -144,6 +157,16 @@ class AreaDirectory
 
     }
 
+    /**
+     * Modules can connect themselves to an area by specifing the connect parameter
+     * This method handles the connection by adding the module classname to the
+     * assigned modules array of the area
+     * 
+     * A Module can be added to all registered areas by setting connect to 'any'
+     * TODO: In future versions it should be possible to add modules only to areas by context
+     * @param string $classname
+     * @param array $args module args
+     */
     public function connect( $classname, $args )
     {
         if ( !empty( $args[ 'connect' ] ) && $args[ 'connect' ] === 'any' ) {
@@ -175,6 +198,14 @@ class AreaDirectory
 
     }
 
+    /**
+     * Filters registered areas by post settings
+     * This needs an instance of the PostDataContainer Class to provide
+     * all necessary informations for the filter
+     * Areas can be limited to post types and/or page templates
+     * @param \Kontentblocks\Admin\PostDataContainer $postData
+     * @return boolean
+     */
     public function filterForPost( PostDataContainer $postData )
     {
 
@@ -219,6 +250,14 @@ class AreaDirectory
 
     }
 
+    /**
+     * Private helper method to order the areas array by a specified field
+     * i.e. order
+     * 
+     * @param array $areas
+     * @param string $field
+     * @return array
+     */
     private function orderBy( $areas, $field )
     {
         $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
@@ -227,6 +266,12 @@ class AreaDirectory
 
     }
 
+    /**
+     * Normalize each area by passing it through this method
+     * 
+     * @param bool $manual
+     * @return array
+     */
     private function _getDefaults( $manual = true )
     {
         return array(

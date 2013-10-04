@@ -122,7 +122,7 @@ class ModuleMenu
 							<a class='modal modules-link' 
 							href='#'
 							data-area='{$this->id}'
-							data-reveal-id='{$this->id}-nav' 
+							data-reveal-id_='{$this->id}-nav' 
 							data-animation='fade' 
 							data-animationSpeed='150'>
 							{$this->l18n[ 'modules' ]}

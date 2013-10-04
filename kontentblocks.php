@@ -111,8 +111,12 @@ Class Kontentblocks
     public function init()
     {
 
+        if (isset($_GET['resetkb'])){
+            delete_option('kb_dynamic_areas');
+        }
         /* Define some path constants to make things a bit easier */
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+        define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
         define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/core-modules/' );
         define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/core-modules/' );
 
@@ -120,7 +124,8 @@ Class Kontentblocks
         include_once dirname( __FILE__ ) . '/Autoloader.php';
         require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
-        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
+//        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
+        require_once dirname( __FILE__ ) . '/includes/overlay-osedit.php';
 
         // additional cap feature, only used on demand and not properly tested yet
         define( 'KONTENTLOCK', false );
@@ -333,8 +338,7 @@ Class Kontentblocks
         }
 
 
-        $args = $this->get_area( $area );
-
+        $args = AreaDirectory::getInstance()->getArea($area);
         if ( !$args ) {
             return false;
         }
@@ -679,10 +683,12 @@ Class Kontentblocks
 
         if ( is_user_logged_in() && !is_admin() ) {
             add_action( 'wp_footer', array( $this, 'add_reveal' ) );
-            wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . '/js/kb_plugins.js', array( 'jquery', 'jquery-ui-mouse' ) );
+            wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . '/dist/min/plugins.min.js', array( 'jquery', 'jquery-ui-mouse' ) );
             wp_enqueue_script( 'KBOnSiteEditing', KB_PLUGIN_URL . '/js/KBOnSiteEditing.js', array( 'KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse' ) );
             wp_enqueue_style( 'thickbox' );
             wp_enqueue_style( 'KB', KB_PLUGIN_URL . '/css/kontentblocks.css' );
+            wp_enqueue_style( 'vex', KB_PLUGIN_URL . '/js/vex/css/vex.css' );
+            wp_enqueue_style( 'vex-theme', KB_PLUGIN_URL . '/js/vex/css/vex-theme-flat-attack.css' );
             wp_enqueue_style( 'KBOsEditStyle', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
         }
 
