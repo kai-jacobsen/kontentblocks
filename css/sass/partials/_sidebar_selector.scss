@@ -2,8 +2,6 @@
 
 	padding: 10px;
 	background: #fff;
-	@include box-shadow(0 1px 3px #ccc);
-	border: 1px solid #ccc;
 
 	.context-header{
 
@@ -16,14 +14,18 @@
 	.connect {
 
 		li {
-		    background: lighten($lightblue, 25%);
-		    color: #fff;
+		    background: #f9f9f9;
+		    color: #333;
+            font-weight: 100;
 		    padding: 5px;
-		    border: 1px solid #000;
-		    -webkit-transition: background 1s linear;
+		    border: 1px solid #f2f2f2;
+            border-bottom: 1px solid #aaa;
+            border-right: 1px solid #aaa;
+            border-left:4px solid $orange;
+		    -webkit-transition: border 1s linear;
 
 		    &.dynamic-area-active {
-	  			background: $lightblue;
+	  			border-left: 4px solid $lightblue;
 
 	  			&:hover span {
 	    			display: inline;
@@ -31,10 +33,10 @@
 
 				span {
 	    			float: right;
-	    			color: lighten($lightblue, 10%);
+	    			color: lighten($lightblue, 90%);
 
 	    			a{
-	    				color: #fff;
+	    				color: #999;
 	    				cursor: pointer;
 	    			}
 				}

@@ -58,8 +58,10 @@ class Module_Admin_Actions
     public function save( $block, $data )
     {
 
-        
-        
+        if ( !isset( $data[ 'meta' ] ) ) {
+            return $block;
+        }
+
         $meta            = wp_parse_args( $data[ 'meta' ], $this->_getDefaults() );
         
 //        $startdate = !empty($meta['start']['hidden']) ? $meta['start']['hidden'] : '';

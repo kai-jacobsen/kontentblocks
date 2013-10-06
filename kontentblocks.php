@@ -111,8 +111,8 @@ Class Kontentblocks
     public function init()
     {
 
-        if (isset($_GET['resetkb'])){
-            delete_option('kb_dynamic_areas');
+        if ( isset( $_GET[ 'resetkb' ] ) ) {
+            delete_option( 'kb_dynamic_areas' );
         }
         /* Define some path constants to make things a bit easier */
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -249,7 +249,7 @@ Class Kontentblocks
             return false;
         }
 
-        $this->ModuleDirectory->add($classname);
+        $this->ModuleDirectory->add( $classname );
 
     }
 
@@ -323,8 +323,9 @@ Class Kontentblocks
      */
     public function register_area( $args, $manual = true )
     {
-            $AreaDirectory = AreaDirectory::getInstance();
-            $AreaDirectory->addArea($args, $manual);
+        $AreaDirectory = AreaDirectory::getInstance();
+        $AreaDirectory->addArea( $args, $manual );
+
     }
 
     /**
@@ -338,7 +339,7 @@ Class Kontentblocks
         }
 
 
-        $args = AreaDirectory::getInstance()->getArea($area);
+        $args = AreaDirectory::getInstance()->getArea( $area );
         if ( !$args ) {
             return false;
         }
@@ -511,7 +512,7 @@ Class Kontentblocks
         $settings = wp_parse_args( $args, $defaults );
 
         if ( !empty( $settings[ 'id' ] ) ) {
-            AreaDirectory::getInstance()->addTemplate($settings);
+            AreaDirectory::getInstance()->addTemplate( $settings );
         }
 
     }
@@ -681,15 +682,36 @@ Class Kontentblocks
     {
         // Thickbox on front end for logged in users
 
+        $config = array(
+            'url' => KB_PLUGIN_URL
+        );
+
         if ( is_user_logged_in() && !is_admin() ) {
             add_action( 'wp_footer', array( $this, 'add_reveal' ) );
-            wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . '/dist/min/plugins.min.js', array( 'jquery', 'jquery-ui-mouse' ) );
+            wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . '/dist/min/plugins.min.js', array( 'jquery', 'jquery-ui-mouse', 'wp-color-picker' ) );
             wp_enqueue_script( 'KBOnSiteEditing', KB_PLUGIN_URL . '/js/KBOnSiteEditing.js', array( 'KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse' ) );
-            wp_enqueue_style( 'thickbox' );
+            wp_enqueue_script( 'kb-backbone', KB_PLUGIN_URL . 'dist/min/backbone.min.js', array( 'backbone' ), null, true );
+            wp_enqueue_script( 'kb-app', KB_PLUGIN_URL . 'dist/min/app.min.js', array( 'kb-backbone', 'jquery-ui-tabs', 'jquery-ui-draggable' ), null, true );
+            wp_localize_script( 'kb-app', 'KBAppConfig', $config );
+//            wp_enqueue_style( 'thickbox' );
             wp_enqueue_style( 'KB', KB_PLUGIN_URL . '/css/kontentblocks.css' );
             wp_enqueue_style( 'vex', KB_PLUGIN_URL . '/js/vex/css/vex.css' );
             wp_enqueue_style( 'vex-theme', KB_PLUGIN_URL . '/js/vex/css/vex-theme-flat-attack.css' );
+            wp_enqueue_style( 'wp-color-picker' );
             wp_enqueue_style( 'KBOsEditStyle', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
+
+            wp_enqueue_script(
+                'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), false, 1
+            );
+            wp_enqueue_script(
+                'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), false, 1
+            );
+            $colorpicker_l10n = array(
+                'clear' => __( 'Clear' ),
+                'defaultString' => __( 'Default' ),
+                'pick' => __( 'Select Color' )
+            );
+            wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
         }
 
     }

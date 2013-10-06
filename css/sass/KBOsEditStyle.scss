@@ -24,6 +24,14 @@ body.onsite-editing {
         position: relative;
     }
 
+    .controls-wrap{
+        list-style: none;
+
+        li{
+            float: left;
+        }
+    }
+
     .os-edit-wrapper a {
         line-height: 16px;
         background: transparent;
@@ -34,7 +42,6 @@ body.onsite-editing {
         padding-left: 0px;
         color: #000;
         opacity: 1;
-        text-indent: -9999px;
         text-decoration: none;
         @include transition(opacity .3s);
     }
@@ -107,4 +114,92 @@ body.onsite-editing {
 #osframe{
     overflow: hidden;
     border:0;
+}
+
+.os-controls-container{
+
+    
+    .controls-title{
+        font-weight: 100;
+        background: #fcfcfc;
+        padding: 10px;
+        margin: 0;
+        font-family: 'Open Sans';
+        font-size: 15px;
+        border:1px solid #f9f9f9;
+        border-right:1px solid #aaa;
+        border-bottom: none;
+        cursor: move;
+    }
+
+    font-family: 'Open Sans', sans-serif;
+    position: absolute;
+    width: 400px;
+    padding: 0px;
+    background: #f9f9f9;
+    top: 150px;
+    left:20px;
+    z-index:110;
+
+    span{
+        padding: 0 10px;
+        font-size: 10px;
+        font-style: italic;
+    }
+    
+    .close-controls{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-size: 10px;
+        cursor: pointer;
+    }
+    
+    .control-wrap{
+        background: #fff;
+        padding: 10px;
+        border:1px solid #f9f9f9;
+        border-bottom: 1px solid #aaa;
+        border-right:1px solid #aaa;
+        
+        
+        
+        label{
+            font-family: 'Open Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 100;
+        }
+    }
+    
+    .kb_fieldtabs {
+        li a{
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        ul.ui-tabs-nav{
+            border: 0;
+            margin-left: 0;
+            border-right: 1px solid #aaa;
+            border-left: 1px solid #f9f9f9;
+            position: relative;
+            top: -2px;
+            background: #fff;
+            border-radius: 0;
+
+        }
+    }
+    
+    table{
+        
+        td{
+            font-size: 12px;
+            padding-right: 8px;
+        }
+    }
+
+}
+
+.edit-active{
+    outline: 1px solid lightblue;
 }

@@ -208,7 +208,7 @@ class ModuleMenu
         $master      = (isset( $item->master )) ? "data-master=master" : null;
 
 
-        $img        = (!empty( $settings[ 'icon' ] )) ? $settings[ 'icon' ] : KB_PLUGIN_URL . 'css/default.png';
+        $img        = (!empty( $settings[ 'icon' ] )) ? $settings[ 'icon' ] : '';
         $blockclass = get_class( $item );
 
         $out = "	<li class='block-nav-item' data-value='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >

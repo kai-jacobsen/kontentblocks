@@ -70,18 +70,18 @@ jQuery(document).ready(function($) {
 
     $("body").on('click', '.reveal', function(e) {
         e.preventDefault();
-        target = $(this).attr('data-url');
-        height = $(window).height();
-        $('#osframe').attr('src', target).attr('height', height - 200);
-
-//        $("#onsite-modal").reveal({animation: 'fade'});
-       openedModal = vex.open({
-            content: $('#onsite-modal').html(),
-            contentClassName: 'onsite',
-            afterOpen: function(){
-                
-            }
-        });
+//        target = $(this).attr('data-url');
+//        height = $(window).height();
+//        $('#osframe').attr('src', target).attr('height', height - 200);
+//
+////        $("#onsite-modal").reveal({animation: 'fade'});
+//       openedModal = vex.open({
+//            content: $('#onsite-modal').html(),
+//            contentClassName: 'onsite',
+//            afterOpen: function(){
+//                
+//            }
+//        });
         $(window).resize(function() {
             height = $(window).height();
             $('#osframe').attr('height', height - 200);

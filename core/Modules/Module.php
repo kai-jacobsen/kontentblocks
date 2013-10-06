@@ -150,7 +150,7 @@ class Module
 
         $reflector = new \ReflectionClass( get_class( $this ) );
         $this->path        = dirname($reflector->getFileName());
-
+        
     }
 
     /* -----------------------------------------------------
@@ -462,8 +462,9 @@ class Module
 
             $reference = (isset( $this->master_ref )) ? $this->master_ref : null;
 
-            if ( !$reference )
+            if ( !$reference ) {
                 $reference = $this->instance_id;
+            }
 
 
             $block       = $tpls[ $reference ];
@@ -475,6 +476,8 @@ class Module
 
 
         $nonce = wp_create_nonce( 'onsiteedit' );
+        $this->editURL = "{$admin}/admin-ajax.php?action=os-edit-module&daction=show&post_id={$post_id}&context={$context}&area_context={$area_context}&columns={$columns}&instance={$instance_id}&class={$class}&subcontext={$subcontext}&page_template={$page_template}&post_type={$post_type}&_wpnonce={$nonce}&TB_iframe=1&height=600&width=800";
+        
         $out = "
 		<div class='os-edit-wrapper os-controls {$link_class}'>
 		<a class='reveal os-edit-block' title='{$edittext}' data='{$this->instance_id}' data-url='{$admin}/admin-ajax.php?
@@ -496,7 +499,7 @@ class Module
 		<a class='os-description' title='{$this->settings[ 'description' ]}'>info</a>
 		</div>";
 
-        return $out;
+        //return $out;
 
     }
 
@@ -639,6 +642,18 @@ class Module
 
         return new ImageObject( $id, $width, $height, $crop );
 
+    }
+    
+    
+    public function toJSON(){
+        
+        $dump = json_encode(get_object_vars($this));
+        
+        echo "<script>"
+        . "var Konfig = Konfig || [];"
+            . "Konfig.push({$dump});"
+            . "</script>";
+        
     }
 
 //    public function get_link_object( $href )

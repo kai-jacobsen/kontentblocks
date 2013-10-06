@@ -333,6 +333,7 @@ class AreaRender
         if ( method_exists( $module, 'shutdown' ) )
             $mhtml .= $module->shutdown();
 
+        $module->toJSON();
 
         return $mhtml;
 
@@ -378,7 +379,7 @@ class AreaRender
 
         // inner HTML
         $html = $module->block( $module->new_instance );
-
+        
         // Some modules might return false, that's ok
         if ( false === $html ) {
             return false;

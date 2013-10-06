@@ -30,6 +30,7 @@
 -----------------------------*/
 @import "partials/_reveal-js";
 @import "partials/_vex";
+@import "partials/_rangeslider";
 @import "partials/_nano";
 @import "partials/_global-area-edit";
 
@@ -446,6 +447,7 @@ input[type="checkbox"][checked] {
 
 #kontentblocks_stage {
     position: relative;
+    margin-bottom: 20px;
 }
 
 

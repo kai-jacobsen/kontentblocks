@@ -11,9 +11,11 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     'dist/min/<%= pkg.name %>.min.js': ['js/<%= pkg.name %>.js'],
+                    'dist/min/app.min.js':['js/app.js'],
                     'dist/min/fields.min.js': ['<%= concat.fields.dest %>'],
                     'dist/min/extensions.min.js': ['<%= concat.extensions.dest %>'],
-                    'dist/min/plugins.min.js': ['<%= concat.plugins.dest %>']
+                    'dist/min/plugins.min.js': ['<%= concat.plugins.dest %>'],
+                    'dist/min/backbone.min.js': ['<%= concat.backbone.dest %>']
                 }
             }
         },
@@ -38,6 +40,11 @@ module.exports = function(grunt) {
                 src:['js/plugins/**/*.js'],
                 dest: 'dist/plugins.concat.js',
                 nonull:true
+            },
+            backbone:{
+                src:['js/Backbone/**/*.js'],
+                dest: 'dist/backbone.concat.js',
+                nonull: true
             }
         },
         compass: {
