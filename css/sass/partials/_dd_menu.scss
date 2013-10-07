@@ -92,7 +92,7 @@
 	margin: 0;
 	top:40px;
 	right: 0;
-	background: $lightblue;
+	background: #333;
 	z-index: 666;
 	@include box-shadow(0px 1px 3px #ccc);
 
@@ -101,7 +101,7 @@
 		width: 10px;
 		height: 10px;
 		display: block;
-		background: $lightblue;
+		background: #333;
 		position: absolute;
 		right: 17px;
 		top: -5px;

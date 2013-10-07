@@ -1,1 +1,71 @@
-html,body{height:100% !important}html{background:#fff;overflow:hidden}#root-container.nano{margin:0;padding:0;width:100%;height:100%;overflow:hidden}body.on-site-editing{padding-top:0px}body.on-site-editing .kb_field label.heading{display:block;margin-bottom:8px;border-left:12px solid #33b5e5;padding-left:9px;margin-left:-20px;font-style:italic;font-size:13px;color:#333333;text-shadow:1px 1px 0px white}body.on-site-editing .kb_fieldtabs ul.ui-tabs-nav{margin-left:0;background:#fff}body.on-site-editing .kb_fieldtabs .ui-widget-content{border:none;border-top:none}body.on-site-editing .os-header{padding:4px;position:fixed;width:100%;margin-left:0px;margin-top:-20px;z-index:9999;bottom:0;font-size:12px;background:#fff}body.on-site-editing .os-header .os-update{background:#f2f2f2;border:1px solid #ccc;padding:4px 10px;cursor:pointer;font-size:12px}body.on-site-editing .os-header .os-update:hover{color:#fff}
+/* line 1, sass/OSinlinestyles.scss */
+html, body {
+  height: 100% !important;
+}
+
+/* line 6, sass/OSinlinestyles.scss */
+html {
+  background: #fff;
+  overflow: hidden;
+}
+
+/* line 11, sass/OSinlinestyles.scss */
+#root-container.nano {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Onsite Styles slightly different */
+/* line 21, sass/OSinlinestyles.scss */
+body.on-site-editing {
+  padding-top: 0px;
+}
+/* line 26, sass/OSinlinestyles.scss */
+body.on-site-editing .kb_field label.heading {
+  display: block;
+  margin-bottom: 8px;
+  border-left: 12px solid #33b5e5;
+  padding-left: 9px;
+  margin-left: -20px;
+  font-style: italic;
+  font-size: 13px;
+  color: #333333;
+  text-shadow: 1px 1px 0px white;
+}
+/* line 41, sass/OSinlinestyles.scss */
+body.on-site-editing .kb_fieldtabs ul.ui-tabs-nav {
+  margin-left: 0;
+  background: #fff;
+}
+/* line 46, sass/OSinlinestyles.scss */
+body.on-site-editing .kb_fieldtabs .ui-widget-content {
+  border: none;
+  border-top: none;
+}
+/* line 52, sass/OSinlinestyles.scss */
+body.on-site-editing .os-header {
+  padding: 4px;
+  position: fixed;
+  width: 100%;
+  margin-left: 0px;
+  margin-top: -20px;
+  z-index: 9999;
+  bottom: 0;
+  font-size: 12px;
+  background: #fff;
+}
+/* line 63, sass/OSinlinestyles.scss */
+body.on-site-editing .os-header .os-update {
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+/* line 70, sass/OSinlinestyles.scss */
+body.on-site-editing .os-header .os-update:hover {
+  color: #fff;
+}

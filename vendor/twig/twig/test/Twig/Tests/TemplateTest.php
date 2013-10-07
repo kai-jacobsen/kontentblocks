@@ -27,9 +27,10 @@ class Twig_Tests_TemplateTest extends PHPUnit_Framework_TestCase
         $template = $env->loadTemplate($name);
 
         $context = array(
-            'string'       => 'foo',
-            'array'        => array('foo' => 'foo'),
-            'array_access' => new Twig_TemplateArrayAccessObject(),
+            'string'          => 'foo',
+            'array'           => array('foo' => 'foo'),
+            'array_access'    => new Twig_TemplateArrayAccessObject(),
+            'magic_exception' => new Twig_TemplateMagicPropertyObjectWithException(),
         );
 
         try {
@@ -52,6 +53,7 @@ class Twig_Tests_TemplateTest extends PHPUnit_Framework_TestCase
             array('{{ attribute(array, -10) }}', 'Key "-10" for array with keys "foo" does not exist in "%s" at line 1', false),
             array('{{ array_access.a }}', 'Method "a" for object "Twig_TemplateArrayAccessObject" does not exist in "%s" at line 1', false),
             array('{% macro foo(obj) %}{{ obj.missing_method() }}{% endmacro %}{{ _self.foo(array_access) }}', 'Method "missing_method" for object "Twig_TemplateArrayAccessObject" does not exist in "%s" at line 1', false),
+            array('{{ magic_exception.test }}', 'An exception has been thrown during the rendering of a template ("Hey! Don\'t try to isset me!") in "%s" at line 1.', false),
         );
 
         if (function_exists('twig_template_get_attributes')) {
@@ -255,9 +257,9 @@ class Twig_Tests_TemplateTest extends PHPUnit_Framework_TestCase
         $methodObject        = new Twig_TemplateMethodObject();
         $magicMethodObject   = new Twig_TemplateMagicMethodObject();
 
-        $anyType    = Twig_TemplateInterface::ANY_CALL;
-        $methodType = Twig_TemplateInterface::METHOD_CALL;
-        $arrayType  = Twig_TemplateInterface::ARRAY_CALL;
+        $anyType    = Twig_Template::ANY_CALL;
+        $methodType = Twig_Template::METHOD_CALL;
+        $arrayType  = Twig_Template::ARRAY_CALL;
 
         $basicTests = array(
             // array(defined, value, property to fetch)
@@ -411,7 +413,7 @@ class Twig_TemplateTest extends Twig_Template
     {
     }
 
-    public function getAttribute($object, $item, array $arguments = array(), $type = Twig_TemplateInterface::ANY_CALL, $isDefinedTest = false, $ignoreStrictCheck = false)
+    public function getAttribute($object, $item, array $arguments = array(), $type = Twig_Template::ANY_CALL, $isDefinedTest = false, $ignoreStrictCheck = false)
     {
         if ($this->useExtGetAttribute) {
             return twig_template_get_attributes($this, $object, $item, $arguments, $type, $isDefinedTest, $ignoreStrictCheck);
@@ -477,6 +479,14 @@ class Twig_TemplateMagicPropertyObject
     public function __get($name)
     {
         return array_key_exists($name, $this->attributes) ? $this->attributes[$name] : null;
+    }
+}
+
+class Twig_TemplateMagicPropertyObjectWithException
+{
+    public function __isset($key)
+    {
+        throw new Exception("Hey! Don't try to isset me!");
     }
 }
 

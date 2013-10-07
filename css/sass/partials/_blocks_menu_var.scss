@@ -75,17 +75,26 @@
     li {
         overflow: hidden;
         float: left;
+        background: #fcfcfc;
         height: 105px;
         width: 255px;
         color: #666;
         margin-left: 0px;
         margin-bottom: 1px;
         position: relative;
+        border: 1px solid #f2f2f2;
+        border-right: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+        padding:10px;
 
+        h3{
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 100;
+        }
     }
 
     li:hover{
-        background: $lightblue;
+        background: #333;
         cursor: pointer;
 
         .block-info{
@@ -93,6 +102,7 @@
             h3{
                 color: #fff;
                 text-shadow: 1px 1px 1px #000;
+
             }
 
             p.description{
@@ -123,21 +133,19 @@
 
 
         h3{
-            padding-top: 6px;
+            padding-top: 0px;
             margin-top: 0;
-            margin-bottom: 5px;
+            margin-bottom: 0px;
             @include text-shadow(1px 1px 1px #fff);
             font-size: 14px;
-            text-align: center;
-            margin-top: 10px;
         }
 
         p.description{
             font-weight: normal;
             font-style: normal;
             font-size: 12px;
-            padding: 5px 10px;
-            text-align: center;
+            padding: 0;
+            margin: 0;
             color: #999;
             font-style: italic;
         }
@@ -146,8 +154,8 @@
     li span.action{
         visibility: hidden;
         position: absolute;
-        right: 5px;
-        bottom: 5px;
+        right: 10px;
+        bottom: 10px;
         color: #ccc;
         font-style: italic;
         font-size: 11px;

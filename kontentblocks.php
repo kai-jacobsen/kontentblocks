@@ -125,7 +125,7 @@ Class Kontentblocks
         require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
 //        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
-        require_once dirname( __FILE__ ) . '/includes/overlay-osedit.php';
+        require_once dirname( __FILE__ ) . '/includes/ajax-actions.php';
 
         // additional cap feature, only used on demand and not properly tested yet
         define( 'KONTENTLOCK', false );
@@ -517,123 +517,123 @@ Class Kontentblocks
 
     }
 
-    /**
-     * Get Blocks
-     * @param string $post_id
-     * @param string $area
-     * @return array
-     */
-    public static function get_blocks( $post_id, $area, $post_context )
-    {
-        if ( true === $post_context ) {
-            return get_post_meta( $post_id, 'kb_kontentblocks', true );
-        }
-        else {
-            $dynamic_areas = get_option( 'kb_dynamic_areas' );
+//    /**
+//     * Get Blocks
+//     * @param string $post_id
+//     * @param string $area
+//     * @return array
+//     */
+//    public static function get_blocks( $post_id, $area, $post_context )
+//    {
+//        if ( true === $post_context ) {
+//            return get_post_meta( $post_id, 'kb_kontentblocks', true );
+//        }
+//        else {
+//            $dynamic_areas = get_option( 'kb_dynamic_areas' );
+//
+//            if ( !empty( $dynamic_areas[ $area ] ) )
+//                return $dynamic_areas[ $area ];
+//        }
+//
+//    }
+//
+//    /**
+//     * Get block data depending on context
+//     * @param string $post_id
+//     * @param array $block
+//     * @return array 
+//     */
+//    public static function get_data( $post_id, $block, $post_context )
+//    {
+//
+//        if ( isset( $block->master ) && $block->master === true )
+//            return get_option( $block->instance_id );
+//
+//        if ( true === $post_context ) {
+//            if ( isset( $_GET[ 'preview' ] ) ) {
+//                $preview_data = get_post_meta( $post_id, '_preview_' . $block->instance_id, true );
+//                if ( !empty( $preview_data ) ) {
+//                    return $preview_data;
+//                }
+//                else {
+//                    return get_post_meta( $post_id, '_' . $block->instance_id, true );
+//                }
+//            }
+//            else {
+//                return get_post_meta( $post_id, '_' . $block->instance_id, true );
+//            }
+//        }
+//        else {
+//            return get_option( $block->instance_id );
+//        }
+//
+//    }
+//
+//    public function get_area_template( $collection, $this_area_settings, $area_options )
+//    {
+//        $area_template = null;
+//
+//        if ( !empty( $collection ) ) {
+//            $blockcount = count( $collection );
+//
+//
+//            $assigned_area_templates = (!empty( $area_options[ 'area_templates' ] )) ? $area_options[ 'area_templates' ] : null;
+//            $forced_tpl              = (null != $assigned_area_templates) ? $this->get_forced_templates( $assigned_area_templates ) : null;
+//
+//            if ( !empty( $forced_tpl ) ) {
+//                foreach ( $forced_tpl as $ftpl ) {
+//                    if ( in_array( $blockcount, $ftpl[ 'force_by' ] ) ) {
+//                        $area_template = $ftpl;
+//
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            if ( $this->use_wrapper ) {
+//                if ( !empty( $this->default_wrapper ) && is_array( $this->default_wrapper ) ) {
+//                    $area_template = $this->default_wrapper;
+//                }
+//            }
+//
+//
+//
+//            if ( empty( $forced_tpl ) or null == $area_template ) {
+//
+//                $atpl = (!empty( $this_area_settings[ 'area_template' ] ) ) ? $this_area_settings[ 'area_template' ] : null;
+//                if ( null !== $atpl ) {
+//                    $area_template = $this->area_templates[ $atpl ];
+//                }
+//            }
+//        }
+//        return $area_template;
+//
+//    }
 
-            if ( !empty( $dynamic_areas[ $area ] ) )
-                return $dynamic_areas[ $area ];
-        }
-
-    }
-
-    /**
-     * Get block data depending on context
-     * @param string $post_id
-     * @param array $block
-     * @return array 
-     */
-    public static function get_data( $post_id, $block, $post_context )
-    {
-
-        if ( isset( $block->master ) && $block->master === true )
-            return get_option( $block->instance_id );
-
-        if ( true === $post_context ) {
-            if ( isset( $_GET[ 'preview' ] ) ) {
-                $preview_data = get_post_meta( $post_id, '_preview_' . $block->instance_id, true );
-                if ( !empty( $preview_data ) ) {
-                    return $preview_data;
-                }
-                else {
-                    return get_post_meta( $post_id, '_' . $block->instance_id, true );
-                }
-            }
-            else {
-                return get_post_meta( $post_id, '_' . $block->instance_id, true );
-            }
-        }
-        else {
-            return get_option( $block->instance_id );
-        }
-
-    }
-
-    public function get_area_template( $collection, $this_area_settings, $area_options )
-    {
-        $area_template = null;
-
-        if ( !empty( $collection ) ) {
-            $blockcount = count( $collection );
-
-
-            $assigned_area_templates = (!empty( $area_options[ 'area_templates' ] )) ? $area_options[ 'area_templates' ] : null;
-            $forced_tpl              = (null != $assigned_area_templates) ? $this->get_forced_templates( $assigned_area_templates ) : null;
-
-            if ( !empty( $forced_tpl ) ) {
-                foreach ( $forced_tpl as $ftpl ) {
-                    if ( in_array( $blockcount, $ftpl[ 'force_by' ] ) ) {
-                        $area_template = $ftpl;
-
-                        break;
-                    }
-                }
-            }
-
-            if ( $this->use_wrapper ) {
-                if ( !empty( $this->default_wrapper ) && is_array( $this->default_wrapper ) ) {
-                    $area_template = $this->default_wrapper;
-                }
-            }
-
-
-
-            if ( empty( $forced_tpl ) or null == $area_template ) {
-
-                $atpl = (!empty( $this_area_settings[ 'area_template' ] ) ) ? $this_area_settings[ 'area_template' ] : null;
-                if ( null !== $atpl ) {
-                    $area_template = $this->area_templates[ $atpl ];
-                }
-            }
-        }
-        return $area_template;
-
-    }
-
-    public function get_forced_templates( $assigned_area_templates )
-    {
-        $forced_areas = null;
-        $settings     = array();
-
-        if ( !empty( $assigned_area_templates ) ) {
-
-            foreach ( $assigned_area_templates as $atpl ) {
-                $atpl = (!empty( $this->area_templates[ $atpl ] )) ? $this->area_templates[ $atpl ] : null;
-                if ( !empty( $atpl[ 'force_by' ] ) ) {
-                    $forced_areas[] = $atpl;
-                }
-            }
-        }
-
-        if ( !empty( $forced_areas ) ) {
-            foreach ( $forced_areas as $area ) {
-                $settings[ $area[ 'id' ] ] = $area;
-            }
-        }
-
-        return $settings;
-
-    }
+//    public function get_forced_templates( $assigned_area_templates )
+//    {
+//        $forced_areas = null;
+//        $settings     = array();
+//
+//        if ( !empty( $assigned_area_templates ) ) {
+//
+//            foreach ( $assigned_area_templates as $atpl ) {
+//                $atpl = (!empty( $this->area_templates[ $atpl ] )) ? $this->area_templates[ $atpl ] : null;
+//                if ( !empty( $atpl[ 'force_by' ] ) ) {
+//                    $forced_areas[] = $atpl;
+//                }
+//            }
+//        }
+//
+//        if ( !empty( $forced_areas ) ) {
+//            foreach ( $forced_areas as $area ) {
+//                $settings[ $area[ 'id' ] ] = $area;
+//            }
+//        }
+//
+//        return $settings;
+//
+//    }
 
     public function _set_block_templates()
     {
@@ -647,16 +647,16 @@ Class Kontentblocks
 
     }
 
-    public function get_block_template( $id )
-    {
-        $tpls = $this->get_block_templates();
-
-        if ( isset( $tpls[ $id ] ) )
-            return $tpls[ $id ];
-        else
-            return false;
-
-    }
+//    public function get_block_template( $id )
+//    {
+//        $tpls = $this->get_block_templates();
+//
+//        if ( isset( $tpls[ $id ] ) )
+//            return $tpls[ $id ];
+//        else
+//            return false;
+//
+//    }
 
     /**
      * Retrieve templateable Templates from Block Collection
@@ -725,25 +725,25 @@ Class Kontentblocks
 
     }
 
-    /*
-     * Adds a class to each block of each area for better targeting / styling purposes
-     */
-
-    public function get_element_class( $i, $count )
-    {
-        $class = __return_empty_array();
-
-        if ( 1 == $i )
-            $class[] = " first-module";
-
-        if ( $count == $i )
-            $class[] = " last-module";
-
-        $class[] = " element-{$i}";
-
-        return implode( ' ', $class );
-
-    }
+//    /*
+//     * Adds a class to each block of each area for better targeting / styling purposes
+//     */
+//
+//    public function get_element_class( $i, $count )
+//    {
+//        $class = __return_empty_array();
+//
+//        if ( 1 == $i )
+//            $class[] = " first-module";
+//
+//        if ( $count == $i )
+//            $class[] = " last-module";
+//
+//        $class[] = " element-{$i}";
+//
+//        return implode( ' ', $class );
+//
+//    }
 
     public function _modify_blocks( $blocks )
     {

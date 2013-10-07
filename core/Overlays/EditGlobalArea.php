@@ -4,7 +4,8 @@ namespace Kontentblocks\Overlays;
 
 use Kontentblocks\Admin\GlobalDataContainer,
     Kontentblocks\Admin\EditScreen,
-    Kontentblocks\Utils\ModuleDirectory;
+    Kontentblocks\Utils\ModuleDirectory,
+    Kontentblocks\Modules\ModuleFactory;
 
 class EditGlobalArea
 {
@@ -143,7 +144,8 @@ class EditGlobalArea
                     $new = $old;
                 }
                 else {
-                    $instance = ModuleDirectory::getInstance()->get( $module[ 'class' ] );
+                    $Factory = new ModuleFactory($module);
+                    $instance = $Factory->getModule();
                     $new      = $instance->save( $old, $module[ 'instance_id' ], $data );
                 }
 
@@ -168,6 +170,8 @@ class EditGlobalArea
             $GlobalData->saveAreaSettings( $collection );
         }
 
+        echo "<script>var win = window.dialogArguments || opener || parent || top;"
+        . "win.vex.close(win.openedModal.data().vex.id);</script>";
         exit();
 
     }
