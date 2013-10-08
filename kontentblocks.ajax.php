@@ -131,218 +131,133 @@ function kb_generate_blocks_cb()
 	exit;
 }*/
 
-add_action( 'wp_ajax_kb_generate_blocks_dynamic', 'kb_generate_blocks_dynamic_cb' );
-function kb_generate_blocks_dynamic_cb()
-{
-	global $Kontentblocks;
-	
-	$Kontentblocks->set_post_context(false);
-	
-	$verification = kb_verify_ajax_nonce();
-	if (true !== $verification) exit;
+//add_action( 'wp_ajax_kb_generate_blocks_dynamic', 'kb_generate_blocks_dynamic_cb' );
+//function kb_generate_blocks_dynamic_cb()
+//{
+//	global $Kontentblocks;
+//	
+//	$Kontentblocks->set_post_context(false);
+//	
+//	$verification = kb_verify_ajax_nonce();
+//	if (true !== $verification) exit;
+//
+//
+//	
+//	$kb_type = $_POST['kb_type'];
+//	$kb_count = $_POST['kb_count'];
+//	$kb_area = $_POST['kb_area'];
+//	$master = ($_POST['master'] !== 'false') ? true : false;
+//	$template = $_POST['template'];
+//	$duplicate = ($_POST['duplicate'] != 'false') ? $_POST['duplicate'] : false;
+//	
+//
+//	// get existing KBlocks
+//	$dynamic_areas = get_option('kb_dynamic_areas');
+//	$dynamic_area_blocks = $dynamic_areas[$kb_area];
+//	
+//	// get instance
+//	
+//	if ($master)
+//		$kb_type = 'KB_Master_Module';
+//	
+//	
+//	$instance = $Kontentblocks->blocks[$kb_type];
+//	
+//	// current highest id is stored in a hidden field and is taken as base for the new block id
+//	if ( $kb_count != 0 )
+//	{
+//		$kb_blocks_count = $kb_count + 1;
+//	}
+//	else
+//	{
+//		$kb_blocks_count = 1;
+//	};
+//	
+//	// prepare new block id
+//	$kb_new_id = 'kb-block-da' . $kb_area . '_' . $kb_blocks_count;
+//
+//	// prepare new block data
+//	$new_block = array(
+//		'id' => $instance->id,
+//		'instance_id' => $kb_new_id,
+//		'area' => $kb_area,
+//		'class' => $kb_type,
+//		'name' => $instance->settings['public_name'],
+//		'status' => 'kb_active',
+//		'draft' => 'true',
+//		'locked' => 'false',
+//		'area_context' => 'side',
+//		'master'		=> $master
+//	);
+//	
+//	if ($template)
+//	{
+//		$tpl = $Kontentblocks->get_block_template($template);
+//		if ($tpl)
+//		{
+//			$new_block['name'] = $tpl['name'];
+//		}
+//	}
+//	
+//	$instance->set($new_block);
+//	
+//	
+//	
+//	// add new block and update 
+//	$dynamic_area_blocks[$kb_new_id] = $new_block;
+//	$dynamic_areas[$kb_area] = $dynamic_area_blocks;
+//	$update = update_option('kb_dynamic_areas', $dynamic_areas);
+//	
+//	//create data for templates
+//	if ( $template !== 'false' && $master !== false)
+//	{
+//		update_option($kb_new_id, $template);
+//		
+//	}
+//	elseif ( $template != 'false')
+//	{
+//		$master_data = get_option($template);
+//		update_option($kb_new_id, $master_data);
+//		
+//	}
+//	
+//	if ( $duplicate )
+//	{
+//		$master_data = get_option($duplicate);
+//		update_option($kb_new_id, $master_data);
+//	}
+//
+//	// make sure that the block only get generated if update was successfuk
+//	if ( $update == true )
+//	{
+//		if (empty($_POST['kbajax']))
+//		{
+//			$instance->_render_options( false );
+//		}
+//		else
+//		{
+//			ob_start();
+//			$instance->_render_options( false );
+//			$html = ob_get_clean();
+//			
+//			$response = array
+//			(
+//				'id' => $kb_new_id,
+//				'name' => $instance->settings['public_name'],
+//				'html' => ($html)
+//			);
+//			
+//			echo json_encode($response);
+//		}
+//		
+//	}
+//	else
+//	{
+//		echo 'error';
+//	}
+//	exit;
+//}
 
-
-	
-	$kb_type = $_POST['kb_type'];
-	$kb_count = $_POST['kb_count'];
-	$kb_area = $_POST['kb_area'];
-	$master = ($_POST['master'] !== 'false') ? true : false;
-	$template = $_POST['template'];
-	$duplicate = ($_POST['duplicate'] != 'false') ? $_POST['duplicate'] : false;
-	
-
-	// get existing KBlocks
-	$dynamic_areas = get_option('kb_dynamic_areas');
-	$dynamic_area_blocks = $dynamic_areas[$kb_area];
-	
-	// get instance
-	
-	if ($master)
-		$kb_type = 'KB_Master_Module';
-	
-	
-	$instance = $Kontentblocks->blocks[$kb_type];
-	
-	// current highest id is stored in a hidden field and is taken as base for the new block id
-	if ( $kb_count != 0 )
-	{
-		$kb_blocks_count = $kb_count + 1;
-	}
-	else
-	{
-		$kb_blocks_count = 1;
-	};
-	
-	// prepare new block id
-	$kb_new_id = 'kb-block-da' . $kb_area . '_' . $kb_blocks_count;
-
-	// prepare new block data
-	$new_block = array(
-		'id' => $instance->id,
-		'instance_id' => $kb_new_id,
-		'area' => $kb_area,
-		'class' => $kb_type,
-		'name' => $instance->settings['public_name'],
-		'status' => 'kb_active',
-		'draft' => 'true',
-		'locked' => 'false',
-		'area_context' => 'side',
-		'master'		=> $master
-	);
-	
-	if ($template)
-	{
-		$tpl = $Kontentblocks->get_block_template($template);
-		if ($tpl)
-		{
-			$new_block['name'] = $tpl['name'];
-		}
-	}
-	
-	$instance->set($new_block);
-	
-	
-	
-	// add new block and update 
-	$dynamic_area_blocks[$kb_new_id] = $new_block;
-	$dynamic_areas[$kb_area] = $dynamic_area_blocks;
-	$update = update_option('kb_dynamic_areas', $dynamic_areas);
-	
-	//create data for templates
-	if ( $template !== 'false' && $master !== false)
-	{
-		update_option($kb_new_id, $template);
-		
-	}
-	elseif ( $template != 'false')
-	{
-		$master_data = get_option($template);
-		update_option($kb_new_id, $master_data);
-		
-	}
-	
-	if ( $duplicate )
-	{
-		$master_data = get_option($duplicate);
-		update_option($kb_new_id, $master_data);
-	}
-
-	// make sure that the block only get generated if update was successfuk
-	if ( $update == true )
-	{
-		if (empty($_POST['kbajax']))
-		{
-			$instance->_render_options( false );
-		}
-		else
-		{
-			ob_start();
-			$instance->_render_options( false );
-			$html = ob_get_clean();
-			
-			$response = array
-			(
-				'id' => $kb_new_id,
-				'name' => $instance->settings['public_name'],
-				'html' => ($html)
-			);
-			
-			echo json_encode($response);
-		}
-		
-	}
-	else
-	{
-		echo 'error';
-	}
-	exit;
-}
-
-add_action( 'wp_ajax_kb_sort_blocks', 'kb_sort_blocks_cb' );
-
-function kb_sort_blocks_cb()
-{
-	$verification = kb_verify_ajax_nonce();
-	if ( false == $verification) exit;
-	
-	if ( isset( $_POST['data'] ) )
-	{
-		$new = '';
-		$post_id = $_POST['post_id'];
-		$data = $_POST['data'];
-		$old = get_post_meta( $post_id, 'kb_kontentblocks', true );
-
-        
-		foreach ( $data as $area => $v ):
-
-			parse_str( $v, $result );
-
-			foreach ( $result as $k => $v ):
-
-				foreach ( $old as $id => $block ):
-                
-                    if ( $id === $k)
-                        unset($old[$k]);
-
-					if ( $block['area'] == $area && $block['instance_id'] == $k ):
-						$new[$block['instance_id']] = $block;
-					endif;
-				endforeach;
-			endforeach;
-		endforeach;
-
-        $save = array_merge($old, $new);
-
-		$update = update_post_meta( $post_id, 'kb_kontentblocks', $save );
-
-		if ($update)
-			$json['success'] = true;
-		else
-			$json['success'] = false;
-		
-	}
-}
-
-add_action( 'wp_ajax_kb_sort_blocks_dynamic', 'kb_sort_blocks_dynamic_cb' );
-
-function kb_sort_blocks_dynamic_cb()
-{
-
-	$verification = kb_verify_ajax_nonce();
-	if ( false == $verification) exit;
-	
-	if ( isset( $_POST['data'] ) )
-	{
-		$new = '';
-		$area_id = $_POST['area_id'];
-		$data = $_POST['data'];
-		$dynamic_areas = get_option('kb_dynamic_areas');
-		$old = $dynamic_areas[$area_id];
-
-		foreach ( $data as $area => $v ):
-
-			parse_str( $v, $result );
-		
-			foreach ( $result as $k => $v ):
-
-				foreach ( $old as $block ):
-
-					if ( $block['instance_id'] == $k ):
-						$new[$block['instance_id']] = $block;
-					endif;
-				endforeach;
-			endforeach;
-		endforeach;
-
-        $dynamic_areas[$area_id] = $new;
-		$update = update_option('kb_dynamic_areas', $dynamic_areas );
-
-		if ($update)
-			wp_send_json_success ( );
-		else
-			wp_send_json_error ( );
-	}
-}
 
 add_action( 'wp_ajax_kb_remove_block', 'kb_remove_callback' );
 

@@ -370,7 +370,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
 
             KB.ajax(
                     {
-                        action: 'kb_sort_blocks',
+                        action: 'resortModules', //'kb_sort_blocks',
                         data: data,
                         post_id: post_id
                     },

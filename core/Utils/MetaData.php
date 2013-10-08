@@ -305,7 +305,7 @@ class MetaData
 
         foreach ( $this->index as $def ) {
             if ( isset( $def[ 'class' ] ) ) {
-                $cleaned[] = $def;
+                $cleaned[$def['instance_id']] = $def;
             }
             else {
                 // TODO remove from index;

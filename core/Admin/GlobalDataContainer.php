@@ -4,8 +4,7 @@ namespace Kontentblocks\Admin;
 
 use Kontentblocks\Admin\AbstractDataContainer,
     Kontentblocks\Utils\GlobalData,
-    Kontentblocks\Utils\AreaDirectory,
-    Kontentblocks\Modules\ModuleFactory;
+    Kontentblocks\Utils\AreaDirectory;
 
 class GlobalDataContainer extends AbstractDataContainer
 {

@@ -4,7 +4,6 @@ namespace Kontentblocks\Overlays;
 
 use Kontentblocks\Admin\GlobalDataContainer,
     Kontentblocks\Admin\EditScreen,
-    Kontentblocks\Utils\ModuleDirectory,
     Kontentblocks\Modules\ModuleFactory;
 
 class EditGlobalArea

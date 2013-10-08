@@ -38,6 +38,12 @@ class GlobalData
 
     }
 
+    public function getRawIndex()
+    {
+        return $this->rawIndex;
+
+    }
+
     public function getModuleData( $id )
     {
         return get_option( $id );
@@ -78,6 +84,12 @@ class GlobalData
         $this->rawIndex[ $args[ 'area' ] ][ $id ] = $args;
         return $this->_updateRawIndex();
 
+    }
+    
+    
+    public function updateAreaInIndex($id, $data){
+        $this->rawIndex[$id] = $data;
+        return $this->_updateRawIndex();
     }
 
     private function _updateRawIndex()

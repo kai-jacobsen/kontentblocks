@@ -125,7 +125,7 @@ Class Kontentblocks
         require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
 //        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
-        require_once dirname( __FILE__ ) . '/includes/ajax-actions.php';
+        require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
 
         // additional cap feature, only used on demand and not properly tested yet
         define( 'KONTENTLOCK', false );

@@ -68,7 +68,7 @@ var KBDynamicArea;
 
             KB.ajax(
                     {
-                        action: 'kb_sort_blocks_dynamic',
+                        action: 'resortModules', //'kb_sort_blocks_dynamic',
                         data: data,
                         area_id: activeArea
                     },
