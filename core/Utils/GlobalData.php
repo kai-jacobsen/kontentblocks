@@ -37,6 +37,11 @@ class GlobalData
 
     }
 
+    public function saveIndex( $index )
+    {
+        return update_option( 'kb_dynamic_areas', $index );
+
+    }
 
     public function getModuleData( $id )
     {
@@ -53,26 +58,19 @@ class GlobalData
     public function getIndexForArea( $id )
     {
         $collect = array();
-        foreach ($this->index as $module){
-            if ($module['area'] === $id){
-                $collect[$module['instance_id']] = $module;
+        foreach ( $this->index as $module ) {
+            if ( $module[ 'area' ] === $id ) {
+                $collect[ $module[ 'instance_id' ] ] = $module;
             }
         }
         return $collect;
-    }
 
+    }
 
     public function addToIndex( $id, $args )
     {
         $this->index[ $id ] = $args;
         return $this->_updateIndex();
-
-    }
-
-    public function updateAreaInIndex( $id, $data )
-    {
-        $this->rawIndex[ $id ] = $data;
-        return $this->_updateRawIndex();
 
     }
 
@@ -89,30 +87,6 @@ class GlobalData
     }
 
     public function _setupAreaIndex()
-    {
-        return get_option( 'kb_dynamic_areas' );
-
-    }
-
-//    public function _setupAreaIndex()
-//    {
-//        $recollect = array();
-//        $option    = get_option( 'kb_dynamic_areas' );
-//        if ( !empty( $option ) && is_array( $option ) ) {
-//            foreach ( $option as $areaid => $modules ) {
-//                if ( is_array( $modules ) ) {
-//                    foreach ( $modules as $module ) {
-//                        $Factory              = new \Kontentblocks\Modules\ModuleFactory( $module );
-//                        $recollect[ $areaid ][] = $Factory->getModule();
-//                    }
-//                }
-//            }
-//        }
-//        return $recollect;
-//
-//    }
-
-    public function _setupRawAreaIndex()
     {
         return get_option( 'kb_dynamic_areas' );
 

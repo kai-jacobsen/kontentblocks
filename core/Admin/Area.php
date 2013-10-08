@@ -34,7 +34,7 @@ class Area
      * @var int
      */
     private $block_limit = '';
-    protected $limit = '';
+    protected $limit     = '';
 
     /**
      * Array of Blocks allowed for this area
@@ -115,8 +115,8 @@ class Area
         $this->validModules = $this->filterAttachedModules();
 
         $this->attachedModules = $this->dataContainer->getModulesForArea( $this->id );
-        $this->moduleMenu   = new ModuleMenu( $this->validModules, $this->id, $this->context );
-        $this->settingsMenu = new AreaSettingsMenu( $this, $this->dataContainer );
+        $this->moduleMenu      = new ModuleMenu( $this->validModules, $this->id, $this->context );
+        $this->settingsMenu    = new AreaSettingsMenu( $this, $this->dataContainer );
 
     }
 
@@ -163,7 +163,7 @@ class Area
     private function filterAttachedModules()
     {
         // declare array
-        $modules = ModuleDirectory::getInstance()->getAllModules($this->dataContainer);
+        $modules = ModuleDirectory::getInstance()->getAllModules( $this->dataContainer );
         if ( empty( $modules ) ) {
             return false;
         }
@@ -177,7 +177,8 @@ class Area
 
             if ( is_array( $this->assignedModules ) ) {
                 $is__in_area_available = ( in_array( get_class( $module ), $this->assignedModules ) ) ? true : false;
-            } else {
+            }
+            else {
                 $is__in_area_available = false;
             }
 
@@ -212,7 +213,6 @@ class Area
 
     }
 
-
     /*
      * Get Markup for block limit indicator, return void if unlimited
      */
@@ -225,6 +225,7 @@ class Area
         if ( null !== $limit ) {
             echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
         }
+
     }
 
     /**
@@ -272,10 +273,10 @@ class Area
                 $module->set(
                     array(
                         'area_context' => $this->context,
-                        'post_type' => $this->dataContainer->get('postType'),
-                        'page_template' => $this->dataContainer->get('pageTemplate'),
-                        'new_instance' => $this->dataContainer->getModuleData(H\underscoreit($module->instance_id)),
-                        'post_id' => $this->dataContainer->get('postid')
+                        'post_type' => $this->dataContainer->get( 'postType' ),
+                        'page_template' => $this->dataContainer->get( 'pageTemplate' ),
+                        'new_instance' => $this->dataContainer->getModuleData( H\underscoreit( $module->instance_id ) ),
+                        'post_id' => $this->dataContainer->get( 'postid' )
                     )
                 );
                 $module->_render_options();
@@ -300,7 +301,7 @@ class Area
     public function _adaptProperties()
     {
         $this->assignedModules = $this->available_blocks;
-        $this->limit = $this->block_limit;
+        $this->limit           = $this->block_limit;
 
     }
 

@@ -71,6 +71,7 @@ class AreaDirectory
 
         // merge defaults with provided args
         $area = wp_parse_args( $args, $this->_getDefaults($manual) );
+       
 
         if ( empty( $this->rawAreas[ $area[ 'id' ] ] ) ) {
             $this->rawAreas[ $area[ 'id' ] ] = $area;
@@ -78,7 +79,6 @@ class AreaDirectory
         else {
             $this->rawAreas[ $area[ 'id' ] ] = wp_parse_args( $this->rawAreas[ $area[ 'id' ] ], $area );
         }
-
     }
 
     
@@ -172,7 +172,7 @@ class AreaDirectory
         if ( !empty( $args[ 'connect' ] ) && $args[ 'connect' ] === 'any' ) {
 
             foreach ( $this->rawAreas as $area_id => $area ) {
-                if ( !in_array( $classname, $area[ 'available_blocks' ] ) ) {
+                if ( $area['available_blocks'] === NULL || !in_array( $classname, $area[ 'available_blocks' ] ) ) {
                     $this->rawAreas[ $area_id ][ 'available_blocks' ][] = $classname;
                 }
             }

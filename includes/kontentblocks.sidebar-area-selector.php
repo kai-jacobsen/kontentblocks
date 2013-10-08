@@ -1,8 +1,6 @@
 <?php
 
-use Kontentblocks\Kontentblocks,
-    Kontentblocks\Utils\AreaDirectory,
-    Kontentblocks\Admin\PostDataContainer,
+use Kontentblocks\Admin\PostDataContainer,
     Kontentblocks\Admin\ScreenManager;
 
 class KB_Sidebar_Area_Selector
@@ -251,7 +249,7 @@ class KB_Sidebar_Area_Selector
                 $return .= "<li id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
 
                 if ( true === $area[ 'dynamic' ] ) {
-                    $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$area[ 'id' ]}&daction=show&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
+                    $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$area[ 'id' ]}&daction=show&context=side&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
                 }
 
                 $return .= "</li>";
