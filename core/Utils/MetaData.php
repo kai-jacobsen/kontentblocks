@@ -299,7 +299,7 @@ class MetaData
 
     }
 
-    public function cleanIndex()
+    public function cleanIndex()                                        
     {
         $cleaned = array();
 

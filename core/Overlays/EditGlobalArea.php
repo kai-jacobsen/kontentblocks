@@ -120,7 +120,7 @@ class EditGlobalArea
 
         $GlobalData = $this->dataContainer->getDataHandler();
 
-        $modules = $GlobalData->getRawIndexForArea( $areaid );
+        $modules = $GlobalData->getIndexForArea( $areaid );
 
         if ( !empty( $modules ) ) {
             foreach ( $modules as $module ) {

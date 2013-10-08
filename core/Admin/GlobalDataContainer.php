@@ -4,7 +4,8 @@ namespace Kontentblocks\Admin;
 
 use Kontentblocks\Admin\AbstractDataContainer,
     Kontentblocks\Utils\GlobalData,
-    Kontentblocks\Utils\AreaDirectory;
+    Kontentblocks\Utils\AreaDirectory,
+    Kontentblocks\Modules\ModuleFactory;
 
 class GlobalDataContainer extends AbstractDataContainer
 {
@@ -45,15 +46,43 @@ class GlobalDataContainer extends AbstractDataContainer
 
     public function getModulesforArea( $areaid )
     {
-        return $this->globalData->getIndexForArea($areaid);
-        
+        $byArea = $this->getSortedModules();
+        if ( !empty( $byArea[ $areaid ] ) ) {
+            return $byArea[ $areaid ];
+        }
+        else {
+            return false;
+        }
 
     }
 
+    public function getSortedModules()
+    {
+        $sorted = array();
+
+        if ( is_array( $this->modules ) ) {
+            foreach ( $this->modules as $module ) {
+                $area_id = $module->area;
+
+                $sorted[ $area_id ][] = $module;
+            }
+            return $sorted;
+        }
+
+    }
 
     private function _setupModules()
     {
-        //TODO
+        $collection = array();
+        $index      = $this->globalData->getIndex();
+        if ( is_array( $index ) ) {
+            foreach ( $index as $module ) {
+                $factory      = new ModuleFactory( $module );
+                $collection[] = $factory->getModule();
+            }
+        }
+        return $collection;
+
     }
 
     public function getModuleData( $id )

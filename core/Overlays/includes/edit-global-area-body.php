@@ -32,8 +32,7 @@ use Kontentblocks\Utils\AreaDirectory,
 
 
             wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
-
-            echo Helper\getbaseIdField( $this->dataContainer->getDataHandler()->getIndexForArea($this->id) );
+            echo Helper\getbaseIdField( $this->dataContainer->getAllModules() );
 
             // add a hidden field to the meta box, javascript will use this
             echo '<input type="hidden" id="post_ID" value="-1" />';
