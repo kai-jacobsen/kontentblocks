@@ -70,7 +70,7 @@ class ScreenContext
 
             // render modules for the area
             $area->render();
-
+            $area->toJSON();
             echo "</div><!-- close area wrap -->";
         }
 

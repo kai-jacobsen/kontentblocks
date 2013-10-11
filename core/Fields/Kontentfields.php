@@ -155,7 +155,7 @@ Class Kontentfields
 
     public function admin_print_styles(){
         
-    wp_enqueue_script('Kontentblocks-Fields', KB_PLUGIN_URL . '/dist/min/fields.min.js', array('jquery', 'backbone', 'underscore', 'wp-color-picker', 'kontentblocks-base'), '0.7' , true);
+    wp_enqueue_script('Kontentblocks-Fields', KB_PLUGIN_URL . '/js/dist/fields.min.js', array('jquery', 'backbone', 'underscore', 'wp-color-picker', 'kontentblocks-base'), '0.7' , true);
         
         
     }

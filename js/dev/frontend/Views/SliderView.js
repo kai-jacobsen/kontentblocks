@@ -41,7 +41,7 @@ KB.SliderView = Backbone.View.extend({
         
         var mt = that.targetEl.css('marginTop');
         jQuery("#KBMarginTop").ionRangeSlider({
-            from: parseInt(mt),
+            from: parseInt(mt, 10),
             postfix: 'px',
             onChange: function(obj) {
                 that.targetEl.css('marginTop', obj.fromNumber);
@@ -50,7 +50,7 @@ KB.SliderView = Backbone.View.extend({
         
         var mb = that.targetEl.css('marginBottom');
         jQuery("#KBMarginBottom").ionRangeSlider({
-            from: parseInt(mb),
+            from: parseInt(mb, 10),
             postfix: 'px',
             onChange: function(obj) {
                 that.targetEl.css('marginBottom', obj.fromNumber);

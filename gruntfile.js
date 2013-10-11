@@ -10,12 +10,12 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'dist/min/<%= pkg.name %>.min.js': ['js/<%= pkg.name %>.js'],
-                    'dist/min/app.min.js':['js/app.js'],
-                    'dist/min/fields.min.js': ['<%= concat.fields.dest %>'],
-                    'dist/min/extensions.min.js': ['<%= concat.extensions.dest %>'],
-                    'dist/min/plugins.min.js': ['<%= concat.plugins.dest %>'],
-                    'dist/min/backbone.min.js': ['<%= concat.backbone.dest %>']
+                    'js/dist//<%= pkg.name %>.min.js': ['js/dev/<%= pkg.name %>.js'],
+                    'js/dist/fields.min.js': ['<%= concat.fields.dest %>'],
+                    'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
+                    'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
+                    'js/dist/frontend.min.js': ['<%= concat.frontend.dest %>'],
+                    'js/dist/backend.min.js': ['<%= concat.backend.dest %>']
                 }
             }
         },
@@ -25,25 +25,28 @@ module.exports = function(grunt) {
 
             },
             fields: {
-                // the files to concatenate
                 src: ['core/Fields/Definitions/js/**/*.js'],
-                // the location of the resulting JS file
-                dest: 'dist/fields.concat.js',
-                nonull:true
+                dest: 'js/tmp/fields.concat.js',
+                nonull: true
             },
             extensions: {
-                src:['js/extensions/**/*.js'],
-                dest: 'dist/extensions.concat.js',
-                nonull:true
+                src: ['js/dev/extensions/**/*.js'],
+                dest: 'js/tmp/extensions.concat.js',
+                nonull: true
             },
-            plugins:{
-                src:['js/plugins/**/*.js'],
-                dest: 'dist/plugins.concat.js',
-                nonull:true
+            plugins: {
+                src: ['js/dev/plugins/**/*.js'],
+                dest: 'js/tmp/plugins.concat.js',
+                nonull: true
             },
-            backbone:{
-                src:['js/Backbone/**/*.js'],
-                dest: 'dist/backbone.concat.js',
+            frontend: {
+                src: ['js/dev/frontend/**/*.js', 'js/dev/frontend/frontend.js'],
+                dest: 'js/tmp/frontend.concat.js',
+                nonull: true
+            },
+            backend: {
+                src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js'],
+                dest: 'js/tmp/backend.concat.js',
                 nonull: true
             }
         },
@@ -56,10 +59,17 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['js/<%= pkg.name %>.js', 'css/**/*.scss', 'js/**/*.js'],
-            tasks: [ 'compass', 'concat', 'uglify'],
+            files: ['js/dev/<%= pkg.name %>.js', 'css/**/*.scss', 'js/dev/**/*.js'],
+            tasks: ['compass', 'concat', 'uglify'],
             options: {
-                livereload:true
+                livereload: true
+            }
+        },
+        clean: ["js/tmp"],
+        jshint: {
+            dev: ['js/dev/frontend/**/*.js'],
+            options: {
+                force: true
             }
         }
     });
@@ -69,7 +79,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-compass');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify', 'compass']);
+    grunt.registerTask('default', ['concat', 'uglify', 'compass', 'clean']);
+    grunt.registerTask('hint', ['jshint']);
 
 };

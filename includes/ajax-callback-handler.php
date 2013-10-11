@@ -2,7 +2,10 @@
 
 use Kontentblocks\Overlays\OnsiteEditModule,
     Kontentblocks\Overlays\EditGlobalArea,
-    Kontentblocks\Ajax\SortModules;
+    Kontentblocks\Ajax\SortModules,
+    Kontentblocks\Ajax\RemoveModules,
+    Kontentblocks\Ajax\ChangeModuleStatus,
+    Kontentblocks\Ajax\ChangeArea;
 
 /**
  * -----------------------------------------
@@ -42,3 +45,40 @@ function resortModulesCb()
 }
 
 add_action( 'wp_ajax_resortModules', 'resortModulesCb' );
+
+/**
+ * -----------------------------------------
+ * Handler for removing modules 
+ * -----------------------------------------
+ */
+function removeModulesCb()
+{
+    $RemoveModules = new RemoveModules();
+
+}
+
+add_action( 'wp_ajax_removeModules', 'removeModulesCb' );
+
+/**
+ * -----------------------------------------
+ * Handler for changing module visiblity 
+ * -----------------------------------------
+ */
+function changeModuleStatusCb()
+{
+    $ChangeModuleStatus = new ChangeModuleStatus();
+}
+
+add_action( 'wp_ajax_changeModuleStatus', 'changeModuleStatusCb' );
+
+/**
+ * -----------------------------------------
+ * Handler for changing module visiblity 
+ * -----------------------------------------
+ */
+function changeAreaCb()
+{
+    $ChangeArea = new ChangeArea();
+}
+
+add_action( 'wp_ajax_changeArea', 'changeAreaCb' );

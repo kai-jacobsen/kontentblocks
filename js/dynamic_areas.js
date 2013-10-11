@@ -18,7 +18,7 @@ var KBDynamicArea;
 
             KB.ajax(
                     {
-                        action: 'kb_change_status_dynamic',
+                        action: 'changeModuleStatus',
                         block_id: this_id,
                         area_id: activeArea
                     },
@@ -165,7 +165,7 @@ var KBDynamicArea;
 
                         KB.ajax(
                                 {
-                                    action: 'kb_remove_block_dynamic',
+                                    action: 'removeModules',
                                     block_id: this_id,
                                     area_id: activeArea
                                 },

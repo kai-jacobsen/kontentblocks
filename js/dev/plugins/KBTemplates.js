@@ -1,12 +1,11 @@
-var KBApp = KBApp || {};
-
+var KB = KB || {};
 KB.Templates = (function($) {
 
     var tmpl_cache = {};
 
     function getTmplCache(){
         return tmpl_cache;
-    };
+    }
 
     function render(tmpl_name, tmpl_data) {
         
@@ -35,24 +34,3 @@ KB.Templates = (function($) {
         render: render
     };
 }(jQuery));
-
-var KBApp = (function() {
-    var app = {};
-
-    var Views = [];
-
-    var Collection = new KB.ModulesCollection(Konfig, {
-        model: KB.ModuleModel
-    });
-
-    _.each(Collection.models, function(model) {
-        Views.push(new KB.ModuleView({
-            el: '#' + model.get('instance_id'),
-            model: model
-        }));
-    });
-
-    app.Collection = Collection;
-    app.Views = Views;
-    return app;
-}());

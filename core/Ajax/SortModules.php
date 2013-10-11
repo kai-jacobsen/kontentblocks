@@ -9,7 +9,6 @@ class SortModules
 {
 
     protected $postId;
-    protected $areaId = null;
     protected $data;
     protected $old;
     protected $dataHandler;
@@ -22,7 +21,6 @@ class SortModules
 
         $this->postId      = $_POST[ 'post_id' ];
         $this->data        = $_POST[ 'data' ];
-        $this->areaId      = $this->_getAreaId();
         $this->dataHandler = $this->_setupDataHandler();
         $this->old         = $this->_getOldData();
 
@@ -37,17 +35,6 @@ class SortModules
         }
         else {
             return new MetaData( $this->postId );
-        }
-
-    }
-
-    public function _getAreaId()
-    {
-        if ( $this->postId == -1 ) {
-            return $_POST[ 'area_id' ];
-        }
-        else {
-            return null;
         }
 
     }

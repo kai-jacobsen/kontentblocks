@@ -618,7 +618,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
 
                                 KB.ajax(
                                         {
-                                            action: 'kb_save_area',
+                                            action: 'changeArea',
                                             block_id: block_id,
                                             area_id: area_id
                                         },
@@ -765,7 +765,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
 
                         KB.ajax(
                                 {
-                                    action: 'kb_remove_block',
+                                    action: 'removeModules',
                                     block_id: this_id
                                 },
                         function(response)
@@ -800,7 +800,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
 
             KB.ajax(
                     {
-                        action: 'kb_change_status',
+                        action: 'changeModuleStatus',
                         block_id: this_id
                     },
             function(response)

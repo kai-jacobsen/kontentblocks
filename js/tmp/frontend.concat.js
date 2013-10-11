@@ -97,7 +97,7 @@ KB.SliderView = Backbone.View.extend({
         
         var mt = that.targetEl.css('marginTop');
         jQuery("#KBMarginTop").ionRangeSlider({
-            from: parseInt(mt),
+            from: parseInt(mt, 10),
             postfix: 'px',
             onChange: function(obj) {
                 that.targetEl.css('marginTop', obj.fromNumber);
@@ -106,7 +106,7 @@ KB.SliderView = Backbone.View.extend({
         
         var mb = that.targetEl.css('marginBottom');
         jQuery("#KBMarginBottom").ionRangeSlider({
-            from: parseInt(mb),
+            from: parseInt(mb, 10),
             postfix: 'px',
             onChange: function(obj) {
                 that.targetEl.css('marginBottom', obj.fromNumber);
@@ -126,3 +126,28 @@ KB.SliderView = Backbone.View.extend({
         this.remove(); 
     }
 });
+var KBApp = KBApp || {};
+
+
+var KBApp = (function($) {
+    var app = {};
+
+    var Views = [];
+
+    var Collection = new KB.ModulesCollection(Konfig, {
+        model: KB.ModuleModel
+    });
+
+    _.each(Collection.models, function(model) {
+        Views.push(new KB.ModuleView({
+            el: '#' + model.get('instance_id'),
+            model: model
+        }));
+    });
+    
+    $('body').append(KB.Templates.render('fe_iframe', {}));
+
+    app.Collection = Collection;
+    app.Views = Views;
+    return app;
+}(jQuery));

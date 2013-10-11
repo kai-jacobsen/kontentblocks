@@ -2,7 +2,9 @@
 
 namespace Kontentblocks\Utils;
 
-class MetaData
+use Kontentblocks\Interfaces\DataHandlerInterface;
+
+class MetaData implements DataHandlerInterface
 {
 
     protected $post_id;
@@ -95,7 +97,7 @@ class MetaData
     {
         $this->package = array(
             'index' => $this->index,
-            'modules' => $this->modules
+            'modules' => $this->modules,
         );
         return $this;
 
@@ -110,6 +112,25 @@ class MetaData
     {
         return update_post_meta( $this->post_id, 'kb_kontentblocks', $index );
 
+    }
+    
+    
+    public function removeFromIndex($id){
+        if (isset($this->index[$id])){
+            unset($this->index[$id]);
+            if ($this->saveIndex( $this->index )){
+                return delete_post_meta($this->post_id, '_' . $id);
+            }
+        }
+    }
+    
+    
+     public function getModuleDefinition($id){
+        if (isset($this->index[$id])){
+            return $this->index[$id];
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -267,10 +288,9 @@ class MetaData
 
     public function addToIndex( $id, $args )
     {
-        if ( !isset( $this->index[ $id ] ) ) {
+       
             $this->index[ $id ] = $args;
             return $this->_updateIndex();
-        }
 
     }
 

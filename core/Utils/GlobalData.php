@@ -2,9 +2,10 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Helper as H;
+use Kontentblocks\Helper as H,
+    Kontentblocks\Interfaces\DataHandlerInterface;
 
-class GlobalData
+class GlobalData implements DataHandlerInterface
 {
 
     protected $templates;
@@ -31,12 +32,18 @@ class GlobalData
 
     }
 
+    /*
+     * Data stored in option 'kb_dynamic_areas' 
+     */
     public function getIndex()
     {
         return $this->index;
 
     }
 
+    /*
+     * Save the given array of module definitions to database
+     */
     public function saveIndex( $index )
     {
         return update_option( 'kb_dynamic_areas', $index );
@@ -72,6 +79,25 @@ class GlobalData
         $this->index[ $id ] = $args;
         return $this->_updateIndex();
 
+    }
+
+    public function removeFromIndex( $id )
+    {
+        if ( isset( $this->index[ $id ] ) ) {
+            unset( $this->index[ $id ] );
+            if ( $this->_updateIndex() ) {
+                return delete_option( $id );
+            }
+        }
+
+    }
+    
+    public function getModuleDefinition($id){
+        if (isset($this->index[$id])){
+            return $this->index[$id];
+        } else {
+            return false;
+        }
     }
 
     private function _updateIndex()

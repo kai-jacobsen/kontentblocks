@@ -41,7 +41,6 @@ h2.kb-title {
     border: none;
 
     &:hover {
-        border:1px solid #ccc;
     }
 
     &:focus{
@@ -149,6 +148,8 @@ h5.kb_properties_title {
 
 .edit input:focus, .edit input:hover {
     background: #fff;
+    border-bottom: 1px solid #aaa;
+    border-right: 1px solid #aaa;
 }
 
 .chzn-container {

@@ -117,7 +117,6 @@ class Area
         $this->attachedModules = $this->dataContainer->getModulesForArea( $this->id );
         $this->moduleMenu      = new ModuleMenu( $this->validModules, $this->id, $this->context );
         $this->settingsMenu    = new AreaSettingsMenu( $this, $this->dataContainer );
-
     }
 
     public function get( $param )
@@ -303,6 +302,20 @@ class Area
         $this->assignedModules = $this->available_blocks;
         $this->limit           = $this->block_limit;
 
+    }
+
+    public function toJSON()
+    {
+        $area = array(
+            'id' => $this->id,
+            'assignedModules' => $this->assignedModules,
+            'modules' => $this->attachedModules
+        );
+        $json = json_encode($area);
+        echo "<script>"
+        . "var KBK = KBK || {};"
+            . "KBK.Areas = KBK.Areas || {};"
+            . "KBK.Areas['{$this->id}'] = {$json};</script>";
     }
 
 }

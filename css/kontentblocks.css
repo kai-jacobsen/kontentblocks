@@ -68,16 +68,12 @@ h2.kb-title {
 .kb-name .block-title {
   border: none;
 }
-/* line 43, sass/partials/_block_style.scss */
-.kb-name .block-title:hover {
-  border: 1px solid #ccc;
-}
-/* line 47, sass/partials/_block_style.scss */
+/* line 46, sass/partials/_block_style.scss */
 .kb-name .block-title:focus {
   width: 100%;
 }
 
-/* line 53, sass/partials/_block_style.scss */
+/* line 52, sass/partials/_block_style.scss */
 .kb-move {
   width: 16px;
   height: 16px;
@@ -88,12 +84,12 @@ h2.kb-title {
   opacity: .4;
   cursor: move;
 }
-/* line 63, sass/partials/_block_style.scss */
+/* line 62, sass/partials/_block_style.scss */
 .kb-move:hover {
   opacity: 1;
 }
 
-/* line 69, sass/partials/_block_style.scss */
+/* line 68, sass/partials/_block_style.scss */
 .kb_inner {
   padding: 0px;
   overflow: hidden;
@@ -102,24 +98,24 @@ h2.kb-title {
   border: 1px solid #e6e6e6;
 }
 
-/* line 77, sass/partials/_block_style.scss */
+/* line 76, sass/partials/_block_style.scss */
 .ui-icon {
   float: left;
 }
 
-/* line 81, sass/partials/_block_style.scss */
+/* line 80, sass/partials/_block_style.scss */
 .kb_block_title {
   padding: 8px;
 }
 
-/* line 86, sass/partials/_block_style.scss */
+/* line 85, sass/partials/_block_style.scss */
 .kb_block_title .description {
   padding: 0;
   margin: 0;
   padding: 6px 20px;
 }
 
-/* line 92, sass/partials/_block_style.scss */
+/* line 91, sass/partials/_block_style.scss */
 .kb_toggle_box {
   line-height: 30px;
   margin-right: 8px;
@@ -129,32 +125,32 @@ h2.kb-title {
   cursor: pointer;
 }
 
-/* line 101, sass/partials/_block_style.scss */
+/* line 100, sass/partials/_block_style.scss */
 .kb_shortcode_display {
   padding: 10px 0;
 }
 
-/* line 105, sass/partials/_block_style.scss */
+/* line 104, sass/partials/_block_style.scss */
 .kb-toggle-editor {
   float: right;
 }
 
-/* line 109, sass/partials/_block_style.scss */
+/* line 108, sass/partials/_block_style.scss */
 .kb_block_area {
   width: 200px;
 }
 
-/* line 113, sass/partials/_block_style.scss */
+/* line 112, sass/partials/_block_style.scss */
 .chzn-container {
   margin-right: 15px;
 }
 
-/* line 117, sass/partials/_block_style.scss */
+/* line 116, sass/partials/_block_style.scss */
 .prop-wrapper {
   clear: both;
 }
 
-/* line 121, sass/partials/_block_style.scss */
+/* line 120, sass/partials/_block_style.scss */
 h5.kb_properties_title {
   font-size: 14px;
   font-style: italic;
@@ -164,7 +160,7 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 130, sass/partials/_block_style.scss */
+/* line 129, sass/partials/_block_style.scss */
 .kb_properties {
   background: #fff;
   padding: 10px;
@@ -174,7 +170,7 @@ h5.kb_properties_title {
   clear: both;
 }
 
-/* line 140, sass/partials/_block_style.scss */
+/* line 139, sass/partials/_block_style.scss */
 .edit input {
   width: 180px !important;
   margin-left: -3px;
@@ -185,22 +181,24 @@ h5.kb_properties_title {
   box-shadow: none;
 }
 
-/* line 150, sass/partials/_block_style.scss */
+/* line 149, sass/partials/_block_style.scss */
 .edit input:focus, .edit input:hover {
   background: #fff;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
 }
 
-/* line 154, sass/partials/_block_style.scss */
+/* line 155, sass/partials/_block_style.scss */
 .chzn-container {
   margin-bottom: 15px;
 }
 
-/* line 158, sass/partials/_block_style.scss */
+/* line 159, sass/partials/_block_style.scss */
 .li.ui-state-highlight {
   background: #f2f2f2;
 }
 
-/* line 162, sass/partials/_block_style.scss */
+/* line 163, sass/partials/_block_style.scss */
 .block-head {
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
@@ -223,7 +221,7 @@ h5.kb_properties_title {
   font-weight: 100;
 }
 
-/* line 184, sass/partials/_block_style.scss */
+/* line 185, sass/partials/_block_style.scss */
 .kb-toggle {
   background: url(icons/toggle.png) no-repeat #f9f9f9;
   background-position: 12px 16px;
@@ -233,7 +231,7 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 196, sass/partials/_block_style.scss */
+/* line 197, sass/partials/_block_style.scss */
 .kb-ajax-status {
   background: url(assets/ajax-loader.gif) no-repeat;
   width: 16px;
@@ -245,7 +243,7 @@ h5.kb_properties_title {
   margin-right: 35px;
 }
 
-/* line 207, sass/partials/_block_style.scss */
+/* line 208, sass/partials/_block_style.scss */
 .kb-disabled-icon {
   background: url(assets/disabled.png) no-repeat;
   width: 16px;
@@ -257,7 +255,7 @@ h5.kb_properties_title {
   background-position: 7px;
 }
 
-/* line 218, sass/partials/_block_style.scss */
+/* line 219, sass/partials/_block_style.scss */
 .kb-lock {
   width: 16px;
   height: 16px;
@@ -270,19 +268,19 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 230, sass/partials/_block_style.scss */
+/* line 231, sass/partials/_block_style.scss */
 .kb-lock.unlocked {
   background-image: url(assets/lock-open.png);
   background-repeat: no-repeat;
 }
 
-/* line 234, sass/partials/_block_style.scss */
+/* line 235, sass/partials/_block_style.scss */
 .kb-lock.locked {
   background-image: url(assets/lock-closed.gif);
   background-repeat: no-repeat;
 }
 
-/* line 239, sass/partials/_block_style.scss */
+/* line 240, sass/partials/_block_style.scss */
 .kb-ajax-status-dark {
   background: url(assets/ajax-loader-dark.gif) no-repeat;
   width: 16px;
@@ -293,7 +291,7 @@ h5.kb_properties_title {
   display: none;
 }
 
-/* line 249, sass/partials/_block_style.scss */
+/* line 250, sass/partials/_block_style.scss */
 .kb-name {
   float: left;
   padding-left: 8px;
@@ -301,7 +299,7 @@ h5.kb_properties_title {
   font-weight: 500;
 }
 
-/* line 257, sass/partials/_block_style.scss */
+/* line 258, sass/partials/_block_style.scss */
 .kb-sub-name {
   float: left;
   width: auto;
@@ -310,12 +308,12 @@ h5.kb_properties_title {
 }
 
 /* Helper */
-/* line 265, sass/partials/_block_style.scss */
+/* line 266, sass/partials/_block_style.scss */
 .wp-dialog {
   z-index: 101;
 }
 
-/* line 269, sass/partials/_block_style.scss */
+/* line 270, sass/partials/_block_style.scss */
 .ui-widget-overlay {
   width: 10000px !important;
   height: 10000px !important;
@@ -323,7 +321,7 @@ h5.kb_properties_title {
   z-index: 19;
 }
 
-/* line 276, sass/partials/_block_style.scss */
+/* line 277, sass/partials/_block_style.scss */
 .kb-inactive-indicator {
   width: 30px;
   height: 30px;
@@ -334,7 +332,7 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 286, sass/partials/_block_style.scss */
+/* line 287, sass/partials/_block_style.scss */
 .kb_inactive .kb-inactive-indicator {
   display: block;
 }

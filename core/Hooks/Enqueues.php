@@ -56,16 +56,17 @@ class Enqueues
             $this->enqueueStyles();
 
             // Plugins - Chosen, Noty, Sortable Touch
-            wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . 'dist/min/plugins.min.js', null, null, true );
+            wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true );
 
             // Main Kontentblocks script file
-            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . 'dist/min/kontentblocks.min.js', array( 'jquery-ui-core',
+            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . '/js/dist/kontentblocks.min.js', array( 'jquery-ui-core',
                 'jquery-ui-sortable',
                 'jquery-ui-tabs',
                 'jquery-ui-mouse' ), '0.7', true );
+            
 
-            wp_enqueue_script( 'Kontentblocks-Extensions', KB_PLUGIN_URL . 'dist/min/extensions.min.js', array( 'kontentblocks-base' ), null, true );
-
+            wp_enqueue_script( 'Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array( 'kontentblocks-base' ), null, true );
+            wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('kontentblocks-base'), null, true);
 
             // add Kontentblocks l18n strings
             $localize = $this->_localize();
