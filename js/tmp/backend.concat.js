@@ -1,8 +1,6 @@
 var KB = KB || {};
 
-KB.AreasCollection = Backbone.Collection.extend({
-    
-}); 
+KB.AreasCollection = Backbone.Collection.extend({}); 
 var KB = KB || {};
 
 KB.ModulesCollection = Backbone.Collection.extend({
@@ -20,70 +18,46 @@ KB.ModuleView = Backbone.View.extend({
         this.render();
 
     },
-    events: {
-        "click a.os-edit-block": "openVex",
-        "dblclick": "openVex",
-        "click .slider-controls" : "openSlider"
-
-    },
     render: function() {
-        this.$el.append(KB.Templates.render('module-controls', {model: this.model.toJSON()}));
-    },
-    openVex: function() {
-        target = this.model.get('editURL');
-        height = jQuery(window).height();
-        jQuery('#osframe').attr('src', target).attr('height', height - 200);
-
-//        $("#onsite-modal").reveal({animation: 'fade'});
-        KB.openedModal = vex.open({
-            content: jQuery('#onsite-modal').html(),
-            contentClassName: 'onsite',
-            afterOpen: function() {
-                jQuery('.nano').nanoScroller();
-            }
-        });
-    },
-    openSlider: function(){
-        
-        if (KB.OpenSlider){
-            KB.OpenSlider.destroy();
-        }
-        
-        KB.OpenSlider = new KB.SliderView({
-            tagName: 'div',
-            id: 'slider-unique',
-            className: 'slider-controls-wrapper',
-            model: this.model,
-            parent: this
-        });
+        console.log(this);
     }
+    
 
 });
 'use strict';
 var KBK = KBK || {};
 KBK.App = (function($) {
 
-    var AreaCollection = new KB.AreasCollection({
-        model: KB.ModuleModel
-    });
-
+    var AreaCollection = new KB.AreasCollection();
+    var Views = [];
     function init() {
-        console.log(this);
         addModules();
     }
 
     function addModules() {
 
         _.each(KBK.Areas, function(area) {
-            console.log(area.modules);
-             AreaCollection.add(area.modules);
+            if (area.modules) {
+                _.each(area.modules, function(module) {
+                    AreaCollection.add(new KB.ModuleModel(module));
+                });
+            }
+        });
+
+        _.each(AreaCollection.models, function(model) {
+            Views.push(new KB.ModuleView({
+                el: '#' + model.get('instance_id'),
+                model: model
+            }));
         });
 
     }
 
+
+
     return {
-        Areas: AreaCollection,
-        init: init 
+        areas: AreaCollection,
+        init: init
     };
 
 }(jQuery));

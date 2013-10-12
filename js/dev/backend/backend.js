@@ -2,27 +2,36 @@
 var KBK = KBK || {};
 KBK.App = (function($) {
 
-    var AreaCollection = new KB.AreasCollection({
-        model: KB.ModuleModel
-    });
-
+    var AreaCollection = new KB.AreasCollection();
+    var Views = [];
     function init() {
-        console.log(this);
         addModules();
     }
 
     function addModules() {
 
         _.each(KBK.Areas, function(area) {
-            console.log(area.modules);
-             AreaCollection.add(area.modules);
+            if (area.modules) {
+                _.each(area.modules, function(module) {
+                    AreaCollection.add(new KB.ModuleModel(module));
+                });
+            }
+        });
+
+        _.each(AreaCollection.models, function(model) {
+            Views.push(new KB.ModuleView({
+                el: '#' + model.get('instance_id'),
+                model: model
+            }));
         });
 
     }
 
+
+
     return {
-        Areas: AreaCollection,
-        init: init 
+        areas: AreaCollection,
+        init: init
     };
 
 }(jQuery));

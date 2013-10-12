@@ -36,14 +36,14 @@ class PageSettings
 		
 	}
 	
-	public function edit_form_hook()
+	public static function edit_form_hook()
 	{
 		remove_meta_box('pageparentdiv', 'page', 'side');
 		add_action('edit_form_after_title', array( __CLASS__, 'page_template_content'), 5);
 		
 	}
 	
-	public function page_template_content()
+	public static function page_template_content()
 	{
 		global $post;
 		

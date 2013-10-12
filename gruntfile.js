@@ -8,14 +8,18 @@ module.exports = function(grunt) {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                 mangle: true
             },
-            dist: {
+            prim: {
                 files: {
                     'js/dist//<%= pkg.name %>.min.js': ['js/dev/<%= pkg.name %>.js'],
-                    'js/dist/fields.min.js': ['<%= concat.fields.dest %>'],
-                    'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
-                    'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
                     'js/dist/frontend.min.js': ['<%= concat.frontend.dest %>'],
                     'js/dist/backend.min.js': ['<%= concat.backend.dest %>']
+                }
+            },
+            sec: {
+                files: {
+                    'js/dist/fields.min.js': ['<%= concat.fields.dest %>'],
+                    'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
+                    'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>']
                 }
             }
         },
@@ -60,9 +64,10 @@ module.exports = function(grunt) {
         },
         watch: {
             files: ['js/dev/<%= pkg.name %>.js', 'css/**/*.scss', 'js/dev/**/*.js'],
-            tasks: ['compass', 'concat', 'uglify'],
+            tasks: ['compass', 'concat', 'uglify:prim'],
             options: {
-                livereload: true
+                livereload: true,
+                nospawn: true
             }
         },
         clean: ["js/tmp"],
@@ -82,7 +87,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify', 'compass', 'clean']);
+    grunt.registerTask('default', ['concat', 'uglify:prim', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);
 
 };

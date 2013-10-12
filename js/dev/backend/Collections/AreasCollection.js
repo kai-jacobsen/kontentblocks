@@ -1,5 +1,3 @@
 var KB = KB || {};
 
-KB.AreasCollection = Backbone.Collection.extend({
-    
-}); 
+KB.AreasCollection = Backbone.Collection.extend({}); 
