@@ -1,36 +1,40 @@
 'use strict';
 var KBK = KBK || {};
+KBK.Views = {};
+KBK.Modules = new KB.ModulesCollection({
+    model: KB.ModuleModel
+});
+KBK.Areas = new KB.AreasCollection(_.toArray(KBK.RawAreas), {
+    model: KB.AreaModel
+});
 KBK.App = (function($) {
 
-    var AreaCollection = new KB.AreasCollection();
-    var Views = [];
     function init() {
+        
+        KBK.Modules.on('add', createViews );
+        
         addModules();
     }
 
     function addModules() {
-
-        _.each(KBK.Areas, function(area) {
+        _.each(KBK.RawAreas, function(area) {
             if (area.modules) {
                 _.each(area.modules, function(module) {
-                    AreaCollection.add(new KB.ModuleModel(module));
+                    KBK.Modules.add(new KB.ModuleModel(module));
                 });
             }
         });
-
-        _.each(AreaCollection.models, function(model) {
-            Views.push(new KB.ModuleView({
-                el: '#' + model.get('instance_id'),
-                model: model
-            }));
-        });
-
     }
-
-
+    
+    function createViews(module){
+        KBK.Views[module.get('instance_id')] =  new KB.ModuleView({
+            model: module,
+            el: '#' + module.get('instance_id')
+        });
+    }
+    
 
     return {
-        areas: AreaCollection,
         init: init
     };
 

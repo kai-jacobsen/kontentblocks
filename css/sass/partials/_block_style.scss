@@ -167,6 +167,7 @@ h5.kb_properties_title {
     border: 1px solid #f2f2f2;
     border-bottom: 1px solid #aaa;
     border-right: 1px solid #aaa;
+    border-left:3px solid #92cd81;
     height: auto;
     line-height: 35px;
     position: relative;
@@ -180,6 +181,10 @@ h5.kb_properties_title {
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     position: relative;
     font-weight: 100;
+    
+    &.module-inactive{
+        border-left: 3px solid red;
+    }
 }
 
 .kb-toggle {

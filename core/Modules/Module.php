@@ -1,7 +1,10 @@
 <?php
+
 namespace Kontentblocks\Modules;
+
 use Kontentblocks\Utils\ImageObject,
     Kontentblocks\Utils\AreaDirectory;
+
 /*
  * Structure
  * 
@@ -40,7 +43,7 @@ class Module
      * 
      * @var array
      */
-    var $settings = array( );
+    var $settings = array();
 
     /**
      * Unique ID for a block, key of the post meta
@@ -55,7 +58,7 @@ class Module
      * 
      * @var array 
      */
-    var $new_instance = array( );
+    var $new_instance = array();
 
     /**
      * Hold draft status
@@ -146,11 +149,11 @@ class Module
         $this->settings = wp_parse_args( $block_settings, $defaults );
 
         //connect this block to areas
-        AreaDirectory::getInstance()->connect( get_class($this), $block_settings );
+        AreaDirectory::getInstance()->connect( get_class( $this ), $block_settings );
 
-        $reflector = new \ReflectionClass( get_class( $this ) );
-        $this->path        = dirname($reflector->getFileName());
-        
+        $reflector  = new \ReflectionClass( get_class( $this ) );
+        $this->path = dirname( $reflector->getFileName() );
+
     }
 
     /* -----------------------------------------------------
@@ -175,7 +178,7 @@ class Module
      * Method to save whatever form fields are in the options() method
      * Gets called by the meta box save callback
      */
-    public function save($a, $b, $c)
+    public function save( $a, $b, $c )
     {
         
     }
@@ -185,7 +188,7 @@ class Module
      * Frontend display method.
      * Has no default output yet, and must be overwritten 
      */
-    public function block($data)
+    public function block( $data )
     {
         
     }
@@ -256,7 +259,7 @@ class Module
             // output the form fields for this block
             $this->options( $this->new_instance );
         }
-                    
+
         echo $this->footer();
 
         echo $this->_close_inner();
@@ -322,9 +325,8 @@ class Module
             $out .= "<div class='kb_block_title'>";
 
             if ( !empty( $description ) )
-               // $out .= "<p class='description'>{$description}</p>";
-
-            $out .= "		<div class='block-notice hide'>
+            // $out .= "<p class='description'>{$description}</p>";
+                $out .= "		<div class='block-notice hide'>
 							<p>Es wurden Veränderungen vorgenommen. <input type='submit' class='button-primary' value='Aktualisieren' /></p>
 						</div>
 						{$l18n_draft_status}
@@ -388,18 +390,18 @@ class Module
         if ( !$this->settings[ 'predefined' ] ) {
             if ( !$this->settings[ 'disabled' ] ) {
                 if ( current_user_can( 'delete_kontentblocks' ) )
-                    $html .="<li><div class='kb-delete kb_delete_block block-menu-icon'></div></li>";
+                    $html .="<li><div class='kb-delete kb_delete_block block-menu-icon js-delete-module'></div></li>";
             }
         }
 
         // status button
         if ( !$this->settings[ 'disabled' ] ) {
             if ( current_user_can( 'deactivate_kontentblocks' ) )
-                $html .="<li><div class='kb-power kb_set_status block-menu-icon {$this->status}'></div></li>";
+                $html .="<li><div class='kb-power kb_set_status block-menu-icon js-module-status {$this->status}'></div></li>";
         }
 
         // TODO: Cap Check
-        $html .= "<li><div class='kb-duplicate block-menu-icon'></div></a></li>";
+        $html .= "<li><div class='kb-duplicate block-menu-icon js-module-duplicate'></div></a></li>";
 
         $html = apply_filters( 'kb_block_header_menu', $html, $this );
 
@@ -408,7 +410,7 @@ class Module
 
 
         // ajax spinner
-        $html .="<div class='kb-ajax-status'></div>";
+        //$html .="<div class='kb-ajax-status'></div>";
 
 
         //close header
@@ -426,8 +428,8 @@ class Module
     {
         do_action( "block_footer_{$this->id}" );
         do_action( 'block_footer', $this );
-    }
 
+    }
 
     /**
      * On Site Edit link for logged in users 
@@ -441,9 +443,9 @@ class Module
         global $Kontentblocks, $post;
 
         $link_class = null;
-        $admin   = admin_url();
+        $admin      = admin_url();
         if ( $post_id === null )
-            $post_id = (!empty( $_REQUEST[ 'post_id' ] )) ? $_REQUEST[ 'post_id' ] : $post->ID;
+            $post_id    = (!empty( $_REQUEST[ 'post_id' ] )) ? $_REQUEST[ 'post_id' ] : $post->ID;
 
         $context = ($Kontentblocks->post_context) ? 'true' : 'false';
 
@@ -475,9 +477,9 @@ class Module
         }
 
 
-        $nonce = wp_create_nonce( 'onsiteedit' );
+        $nonce         = wp_create_nonce( 'onsiteedit' );
         $this->editURL = "{$admin}/admin-ajax.php?action=os-edit-module&daction=show&post_id={$post_id}&context={$context}&area_context={$area_context}&columns={$columns}&instance={$instance_id}&class={$class}&subcontext={$subcontext}&page_template={$page_template}&post_type={$post_type}&_wpnonce={$nonce}&TB_iframe=1&height=600&width=800";
-        
+
         $out = "
 		<div class='os-edit-wrapper os-controls {$link_class}'>
 		<a class='reveal os-edit-block' title='{$edittext}' data='{$this->instance_id}' data-url='{$admin}/admin-ajax.php?
@@ -606,20 +608,16 @@ class Module
 
     }
 
-    /*
+    /**
      * Get resized image
+     * @deprecated 
      */
-
     public function get_image_url( $id, $width = 150, $height = 150, $crop = true )
     {
-
-
         if ( !isset( $id ) )
             return false;
 
-        $src = wp_get_attachment_image_src( $id, 'full' );
-
-
+        $src    = wp_get_attachment_image_src( $id, 'full' );
         $return = wp_img_resizer_src( array( 'url' => $src[ 0 ], 'height' => $height, 'width' => $width, 'crop' => $crop ) );
 
         if ( !is_wp_error( $return ) )
@@ -643,17 +641,17 @@ class Module
         return new ImageObject( $id, $width, $height, $crop );
 
     }
-    
-    
-    public function toJSON(){
-        
-        $dump = json_encode(get_object_vars($this));
-        
+
+    public function toJSON()
+    {
+
+        $dump = json_encode( get_object_vars( $this ) );
+
         echo "<script>"
         . "var Konfig = Konfig || [];"
-            . "Konfig.push({$dump});"
-            . "</script>";
-        
+        . "Konfig.push({$dump});"
+        . "</script>";
+
     }
 
 //    public function get_link_object( $href )
@@ -664,7 +662,6 @@ class Module
 //        return new KB_Link_Object( $href );
 //
 //    }
-
 }
 
 //end class

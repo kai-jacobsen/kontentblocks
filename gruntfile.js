@@ -72,7 +72,7 @@ module.exports = function(grunt) {
         },
         clean: ["js/tmp"],
         jshint: {
-            dev: ['js/dev/frontend/**/*.js'],
+            dev: ['js/dev/frontend/**/*.js', 'js/dev/backend/**/*.js'],
             options: {
                 force: true
             }
