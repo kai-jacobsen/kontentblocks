@@ -117,7 +117,7 @@ Class Kontentfields
 
     public function init()
     {
-        
+
         $this->fieldoptions = get_option( 'kontentfields' );
         add_action( 'kb_before_field', array( __CLASS__, 'standard_before_field' ) );
         add_action( 'kb_after_field', array( __CLASS__, 'standard_after_field' ) );
@@ -152,13 +152,13 @@ Class Kontentfields
 
     }
 
-    public static function admin_print_styles(){
-        
-    wp_enqueue_script('Kontentblocks-Fields', KB_PLUGIN_URL . '/js/dist/fields.min.js', array('jquery', 'backbone', 'underscore', 'wp-color-picker', 'kontentblocks-base'), '0.7' , true);
-        
-        
+    public static function admin_print_styles()
+    {
+
+        wp_enqueue_script( 'Kontentblocks-Fields', KB_PLUGIN_URL . '/js/dist/fields.min.js', array( 'jquery', 'backbone', 'underscore', 'wp-color-picker', 'kontentblocks-base' ), '0.7', true );
+
     }
-    
+
     /**
      * register a field for the block and store it to $this->collected_fields
      * setup if this field belongs to a section, tabgroup or fieldgroup
@@ -199,7 +199,10 @@ Class Kontentfields
 
 
 
-        foreach ( $fields as $field ):
+        foreach ( $fields as $uid => $field ):
+
+            $field[ 'uid' ] = $uid;
+
 
             // if inside a section
             if ( !empty( $field[ 'section' ] ) ) {
@@ -438,6 +441,8 @@ Class Kontentfields
         $this->instance = $this->fields[ $field[ 'field' ] ];
         if ( !$this->instance )
             return;
+
+        d( $field );
 
         $this->instance->key      = $field[ 'key' ];
         $this->instance->blockid  = $this->blockid;
