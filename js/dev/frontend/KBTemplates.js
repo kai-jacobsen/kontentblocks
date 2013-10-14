@@ -10,7 +10,7 @@ KB.Templates = (function($) {
     function render(tmpl_name, tmpl_data) {
         
         if (!tmpl_cache[tmpl_name]) {
-            var tmpl_dir = KBAppConfig.url + 'js/templates';
+            var tmpl_dir = kontentblocks.config.url + 'js/templates';
             var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
 
             var tmpl_string;
@@ -25,7 +25,6 @@ KB.Templates = (function($) {
 
             tmpl_cache[tmpl_name] = _.template(tmpl_string);
         }
-
         return tmpl_cache[tmpl_name](tmpl_data);
     }
     

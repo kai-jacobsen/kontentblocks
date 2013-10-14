@@ -2,6 +2,9 @@ var KB = KB || {};
 
 KB.ModuleView = Backbone.View.extend({
     initialize: function() {
+        
+        console.log(jQuery('[data-rel]'));
+        
         this.render();
 
     },

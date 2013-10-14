@@ -9,6 +9,8 @@ wp_enqueue_style( 'colors' );
 wp_enqueue_style( 'ie' );
 wp_enqueue_script( 'link' );
 
+$current_screen = WP_Screen::get();
+
 
 $admin_body_class = preg_replace( '/[^a-z0-9_-]+/i', '-', $hook_suffix );
 

@@ -10,11 +10,10 @@
  * activeArea - id of current area where mouse has been pressed
  */
 
-var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
-
+var latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
+var KB = KB || {};
 (function($) {
-
-    KB = {
+    _.extend( KB, {
         //indicator
         duplicate: false,
         postContext: true,
@@ -244,12 +243,11 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
             $(kbMetaBox).on('click', '.kb-toggle', function() {
                 if (KB.isLocked() && !KB.userCan('lock_kontentblocks'))
                 {
+
                     KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
                 }
                 else
                 {
-
-
                     $(this).parent().nextAll('.kb_inner:first').slideToggle('fast', function(){
                         $('body').trigger('module::opened');
                     });
@@ -904,7 +902,8 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
         {
             return $('#' + activeBlock).hasClass('disabled');
         }
-    }
+    });
+
 })(jQuery);
 
 jQuery(document).ready(function($) {

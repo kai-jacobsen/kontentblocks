@@ -1,5 +1,7 @@
+'use strict';
 var KB = KB || {};
+KB.Backbone = KB.Backbone || {};
 
-KB.ModuleModel = Backbone.Model.extend({
+KB.Backbone.ModuleModel = Backbone.Model.extend({
     idAttribute: 'instance_id'
 });

@@ -1,5 +1,7 @@
+'use strict';
 var KB = KB || {};
+KB.Backbone = KB.Backbone || {};
 
-KB.AreaModel = Backbone.Model.extend({
+KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: 'id'
 });

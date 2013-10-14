@@ -1,40 +1,28 @@
+'use strict';
 var KB = KB || {};
+KB.Backbone = KB.Backbone || {};
 
-KB.ModuleView = Backbone.View.extend({
-    
+KB.Backbone.ModuleView = Backbone.View.extend({
     $head: null,
     $body: null,
     ModuleMenu: null,
-    
     initialize: function() {
+
+        // Setup Elements
         this.$head = jQuery('.block-head', this.$el);
         this.$body = jQuery('.kb_inner', this.$el);
-        this.ModuleMenu = new KB.ModuleMenuView({
+        this.ModuleMenu = new KB.Backbone.ModuleMenuView({
             el: this.$head,
             parent: this
         });
+
+        // Setup View
+        this.setupDefaultMenuItems();
     },
-    events: {
-        'click .js-module-delete' : 'deleteModule',
-        'click .js-module-status' : 'changeModuleStatus',
-        'click .js-module-duplicate' : 'duplicateModule'
-    },
-    render: function() {
-    },
-    deleteModule: function(){
-        console.log('delete');
-    },
-    changeModuleStatus: function(){
-        this.$head.toggleClass('module-inactive');
-    },
-    duplicateModule: function(){
-        console.log('duplicate');
-    },
-    getStatus: function(){
-        return this.model.get('active');
+    setupDefaultMenuItems: function() {
+        this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({model: this.model, parent: this}));
     }
-    
-    
-    
 
 });

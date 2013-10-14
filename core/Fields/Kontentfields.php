@@ -117,9 +117,8 @@ Class Kontentfields
 
     public function init()
     {
-
+        
         $this->fieldoptions = get_option( 'kontentfields' );
-
         add_action( 'kb_before_field', array( __CLASS__, 'standard_before_field' ) );
         add_action( 'kb_after_field', array( __CLASS__, 'standard_after_field' ) );
         add_filter( 'kb_field_wrapper', array( __CLASS__, 'standard_field_wrapper' ), 2, 2 );

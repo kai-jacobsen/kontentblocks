@@ -1,25 +1,25 @@
 .kb_block_selector {
-	position: relative;
-	width: 32px;
-	float: right;
-	text-align: center;
-	padding: 0px;
-	background: none;
-	background-position: 0 0;
-	cursor: pointer;
-	border-left: 1px solid #f9f9f9;
+    position: relative;
+    width: 32px;
+    float: right;
+    text-align: center;
+    padding: 0px;
+    background: none;
+    background-position: 0 0;
+    cursor: pointer;
+    border-left: 1px solid #f9f9f9;
 }
 
 .kb_block_template_selector {
-	position: relative;
-	width: 32px;
-	float: right;
-	text-align: center;
-	padding: 0px;
-	background: none;
-	background-position: 0 0;
-	cursor: pointer;
-	border-left: 1px solid #f9f9f9;
+    position: relative;
+    width: 32px;
+    float: right;
+    text-align: center;
+    padding: 0px;
+    background: none;
+    background-position: 0 0;
+    cursor: pointer;
+    border-left: 1px solid #f9f9f9;
 }
 
 .kb_dd_menu_item span {
@@ -30,7 +30,7 @@
 }
 
 /*.kb_dd_menu_item:hover {
-	background-position: 0 -32px;
+    background-position: 0 -32px;
 }*/
 
 .kb_dd_menu_item:before {
@@ -44,118 +44,118 @@
 }
 
 .kb_menu_opener {
-	cursor: pointer;
-	padding-left: 10px;
-	width: 35px;
-	height: 35px;
-	background: url('icon-cog-small.png') center;
-	text-indent: -9999px;
-	background-repeat: no-repeat;
-	position: absolute;
-	right: 0;
+    cursor: pointer;
+    padding-left: 10px;
+    width: 35px;
+    height: 35px;
+    background: url('icon-cog-small.png') center;
+    text-indent: -9999px;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 0;
 }
 
 
 
 /*.kb_the_menu.two-column-menu {
-	display: none;
-	position: absolute;
-	padding: 0;
-	background: #fff;
-	z-index: 5050;
-	margin: 0;
-	width: 580px;
-	background: #dadada;
-	right: 0;
+    display: none;
+    position: absolute;
+    padding: 0;
+    background: #fff;
+    z-index: 5050;
+    margin: 0;
+    width: 580px;
+    background: #dadada;
+    right: 0;
         box-shadow: 1px 1px 8px #333;
 }
 .kb_the_menu.one-column-menu {
     display: none;
-	position: absolute;
-	padding: 0;
-	background: #fff;
-	z-index: 5050;
-	margin: 0;
-	
-    	width: 290px;
-	
-    	background: #d2d2d2;
-	right: 0;
+    position: absolute;
+    padding: 0;
+    background: #fff;
+    z-index: 5050;
+    margin: 0;
+    
+        width: 290px;
+    
+        background: #d2d2d2;
+    right: 0;
         box-shadow: 1px 1px 8px #333;
 }*/
 
 .kb_the_menu.bar {
     display: none;
-	position: absolute;
-	padding: 0;
-	z-index: 950;
-	margin: 0;
-	top:40px;
-	right: 0;
-	background: #333;
-	z-index: 666;
-	@include box-shadow(0px 1px 3px #ccc);
+    position: absolute;
+    padding: 0;
+    z-index: 950;
+    margin: 0;
+    top:40px;
+    right: 0;
+    background: #333;
+    z-index: 945;
+    @include box-shadow(0px 1px 3px #ccc);
 
-	&:before{
-		content: '';
-		width: 10px;
-		height: 10px;
-		display: block;
-		background: #333;
-		position: absolute;
-		right: 17px;
-		top: -5px;
-		@include transform( rotate(45deg));
-		z-index: 665;
-	}
+    &:before{
+        content: '';
+        width: 10px;
+        height: 10px;
+        display: block;
+        background: #333;
+        position: absolute;
+        right: 17px;
+        top: -5px;
+        @include transform( rotate(45deg));
+        z-index: 665;
+    }
 
-	li{
-		height: 30px;
-		display: block;
-		width: 30px;
-		text-align: center;
-		border: none !important;
-		float: left;
-		cursor: block;
-		padding: 0 5px;
-		margin-bottom: 0;
+    li{
+        height: 30px;
+        display: block;
+        width: 30px;
+        text-align: center;
+        border: none !important;
+        float: left;
+        cursor: pointer;
+        padding: 0 5px;
+        margin-bottom: 0;
+        @include transition( all .3s linear);
+        background-position: 0 0px !important;
 
 
-		&:hover{
-			background-color: lighten($lightblue, 10%) !important;
-			}
+        &:hover{
+            cursor: pointer;
+            background-position: 0 -30px !important; 
+        }
 
-		.block-menu-icon{
-			width: 30px;
-			height: 30px;
-			display: block;
-			background-position: 0 0px !important;
-			@include transition( all .3s linear);
+        .block-menu-icon{
+            width: 30px;
+            height: 30px;
+            display: block;
 
-		&:hover{
-			cursor: pointer;
-			background-position: 0 -30px !important;
-			background-color: lighten($lightblue, 10%) !important;
-			}
+            &:hover{
+                background-position: 0 -30px !important; 
 
-		&.kb-delete{
-			background: url('assets/delete.png') no-repeat;
+            }
 
-			}
+            &.kb-delete{
+                background: url('assets/delete.png') no-repeat;
 
-		&.kb-power{
-			background: url('assets/power.png') no-repeat;
-			}
+            }
 
-		&.kb-duplicate{
-			background: url('assets/duplicate.png') no-repeat;
-			}
+            &.module-status{
+                background: url('assets/power.png') no-repeat;
+            }
 
-		}
+            &.kb-duplicate{
+                background: url('assets/duplicate.png') no-repeat;
+            }
 
-	}
+        }
 
-	
+    }
+
+
 }
 
 .kb_the_menu p.description {
@@ -171,7 +171,7 @@
 }
 
 .kb_the_menu span {
-        position: absolute;
+    position: absolute;
     top: 0px;
     right: 0px;
 }
@@ -192,34 +192,34 @@
 }
 
 .kb_the_menu li {
-	padding: 0 5px;
-	border-top: 1px solid #f9f9f9;
-	border-bottom: 1px solid #999;
-	margin: 0;
-	cursor: pointer;
-	width: 279px;
-	float: left;
-        position: relative;
-	right: 0;
+    padding: 0 5px;
+    border-top: 1px solid #f9f9f9;
+    border-bottom: 1px solid #999;
+    margin: 0;
+    cursor: pointer;
+    width: 279px;
+    float: left;
+    position: relative;
+    right: 0;
 }
 
 
 .kb_the_menu li span {
-	display: none;
-	color: #687282;
-        position: absolute;
-        right:10px;
-        font-size: 10px;
+    display: none;
+    color: #687282;
+    position: absolute;
+    right:10px;
+    font-size: 10px;
 }
 
 .kb_the_menu li:hover span {
-	display: inline;
-	text-shadow: none;
-	
+    display: inline;
+    text-shadow: none;
+
 }
 
 .kb_dd_list {
-	top:40px;
+    top:40px;
 }
 
 
@@ -234,53 +234,53 @@ p.no-blocks {
 
 .kb_area_templates{
 
-	.kb_menu_opener {
-		cursor: pointer;
-		padding-left: 10px;
-		width: 35px;
-		height: 35px;
-		background: url('icon-cog-small.png') center;
-		text-indent: -9999px;
-		background-repeat: no-repeat;
-		position: absolute;
-		left: -22px;
-	}
+    .kb_menu_opener {
+        cursor: pointer;
+        padding-left: 10px;
+        width: 35px;
+        height: 35px;
+        background: url('icon-cog-small.png') center;
+        text-indent: -9999px;
+        background-repeat: no-repeat;
+        position: absolute;
+        left: -22px;
+    }
 
-	.kb_the_menu.list {
-	    display: none;
-		position: absolute;
-		padding: 0;
-		z-index: 950;
-		margin: 0;
-		top:40px;
-		left: 0;
-		background: $lightblue;
-		z-index: 666;
-		@include box-shadow(0px 1px 3px #ccc);
+    .kb_the_menu.list {
+        display: none;
+        position: absolute;
+        padding: 0;
+        z-index: 950;
+        margin: 0;
+        top:40px;
+        left: 0;
+        background: $lightblue;
+        z-index: 945;
+        @include box-shadow(0px 1px 3px #ccc);
 
-		li.area_template{
-			width: 180px;
-			display: block;
-			float: none;
-			background: $lightblue;
-			color: white;
-			padding: 4px 0 4px 4px;
-			border-top: none;
-		}
+        li.area_template{
+            width: 180px;
+            display: block;
+            float: none;
+            background: $lightblue;
+            color: white;
+            padding: 4px 0 4px 4px;
+            border-top: none;
+        }
 
-		&:before{
-			content: '';
-			width: 10px;
-			height: 10px;
-			display: block;
-			background: $lightblue;
-			position: absolute;
-			left: 17px;
-			top: -5px;
-			@include transform( rotate(45deg));
-			z-index: 665;
-		}
-	}
+        &:before{
+            content: '';
+            width: 10px;
+            height: 10px;
+            display: block;
+            background: $lightblue;
+            position: absolute;
+            left: 17px;
+            top: -5px;
+            @include transform( rotate(45deg));
+            z-index: 665;
+        }
+    }
 
 
 }

@@ -1,4 +1,5 @@
+'use strict';
 var KB = KB || {};
+KB.Backbone = KB.Backbone || {};
 
-KB.ModulesCollection = Backbone.Collection.extend({
-}); 
+KB.Backbone.ModulesCollection = Backbone.Collection.extend({}); 

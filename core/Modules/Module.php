@@ -381,32 +381,32 @@ class Module
         $html .="<div class='kb-sub-name'>{$this->settings[ 'public_name' ]}</div>";
 
         // Open the drop down menu
-        $html .= "<div class='menu-wrap'>
+        $html .= "<div class='menu-wrap'></div>";
 			
-			<div class='kb_dd_menu kb_menu_opener'>Actions</div>
-			<ul class='kb_the_menu bar kb_dd_list'>";
-
-        // delete button
-        if ( !$this->settings[ 'predefined' ] ) {
-            if ( !$this->settings[ 'disabled' ] ) {
-                if ( current_user_can( 'delete_kontentblocks' ) )
-                    $html .="<li><div class='kb-delete kb_delete_block block-menu-icon js-delete-module'></div></li>";
-            }
-        }
-
-        // status button
-        if ( !$this->settings[ 'disabled' ] ) {
-            if ( current_user_can( 'deactivate_kontentblocks' ) )
-                $html .="<li><div class='kb-power kb_set_status block-menu-icon js-module-status {$this->status}'></div></li>";
-        }
-
-        // TODO: Cap Check
-        $html .= "<li><div class='kb-duplicate block-menu-icon js-module-duplicate'></div></a></li>";
-
-        $html = apply_filters( 'kb_block_header_menu', $html, $this );
-
-
-        $html .= "</ul></div>";
+//        $html .= "<div class='kb_dd_menu kb_menu_opener'>Actions</div>
+//                    <ul class='kb_the_menu bar kb_dd_list'>";
+//
+//        // delete button
+//        if ( !$this->settings[ 'predefined' ] ) {
+//            if ( !$this->settings[ 'disabled' ] ) {
+//                if ( current_user_can( 'delete_kontentblocks' ) )
+//                    $html .="<li><div class='kb-delete kb_delete_block block-menu-icon js-delete-module'></div></li>";
+//            }
+//        }
+//
+//        // status button
+//        if ( !$this->settings[ 'disabled' ] ) {
+//            if ( current_user_can( 'deactivate_kontentblocks' ) )
+//                $html .="<li><div class='kb-power kb_set_status block-menu-icon js-module-status {$this->status}'></div></li>";
+//        }
+//
+//        // TODO: Cap Check
+//        $html .= "<li><div class='kb-duplicate block-menu-icon js-module-duplicate'></div></a></li>";
+//
+//        $html = apply_filters( 'kb_block_header_menu', $html, $this );
+//
+//
+//        $html .= "</ul></div>";
 
 
         // ajax spinner

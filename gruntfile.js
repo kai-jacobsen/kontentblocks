@@ -26,7 +26,6 @@ module.exports = function(grunt) {
         concat: {
             options: {
                 seperator: ';'
-
             },
             fields: {
                 src: ['core/Fields/Definitions/js/**/*.js'],
@@ -63,7 +62,7 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['js/dev/<%= pkg.name %>.js', 'css/**/*.scss', 'js/dev/**/*.js'],
+            files: ['js/dev/<%= pkg.name %>.js', 'css/**/*.scss', 'js/dev/**/**/*.js', 'js/dev/**/*.js'],
             tasks: ['compass', 'concat', 'uglify:prim'],
             options: {
                 livereload: true,
@@ -87,7 +86,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify:prim', 'compass', 'clean']);
+    grunt.registerTask('default', ['concat', 'uglify:prim', 'uglify:sec', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);
 
 };

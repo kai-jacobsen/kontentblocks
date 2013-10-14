@@ -25,6 +25,9 @@ class Enqueues
         add_action( 'admin_print_styles-toplevel_page_kontentblocks-areas', array( $this, 'enqueue' ), 30 );
         add_action( 'admin_print_styles-toplevel_page_dynamic_areas', array( $this, 'enqueue' ), 30 );
 
+        // Frontend On-Site Editing
+        add_action( 'wp_enqueue_scripts', array( $this, '_on_site_editing_setup' ) );
+
     }
 
     function addStyle( $handle, $src )
@@ -58,16 +61,12 @@ class Enqueues
             // Plugins - Chosen, Noty, Sortable Touch
             wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true );
 
-            // Main Kontentblocks script file
-            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . '/js/dist/kontentblocks.min.js', array( 'jquery-ui-core',
-                'jquery-ui-sortable',
-                'jquery-ui-tabs',
-                'jquery-ui-mouse' ), '0.7', true );
-            
 
             wp_enqueue_script( 'Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array( 'kontentblocks-base' ), null, true );
-            wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('kontentblocks-base'), null, true);
+            wp_enqueue_script( 'KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array( 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse' ), null, true );
 
+            // Main Kontentblocks script file
+            wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . '/js/dist/kontentblocks.min.js', array( 'KB-Backend' ), '0.7', true );
             // add Kontentblocks l18n strings
             $localize = $this->_localize();
             wp_localize_script( 'kontentblocks-base', 'kontentblocks', $localize );
@@ -79,6 +78,45 @@ class Enqueues
         }
 
         do_action( 'kb_enqueue_files' );
+
+    }
+
+    // Front End editing 
+    public function _on_site_editing_setup()
+    {
+        // Thickbox on front end for logged in users
+
+        $config = array(
+            'url' => KB_PLUGIN_URL
+        );
+
+        if ( is_user_logged_in() && !is_admin() ) {
+            //add_action( 'wp_footer', array( $this, 'add_reveal' ) );
+            wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . 'js/dist/plugins.min.js', array( 'jquery', 'jquery-ui-mouse', 'wp-color-picker' ) );
+            wp_enqueue_script( 'KBOnSiteEditing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array( 'KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse' ) );
+            wp_localize_script( 'KBOnSiteEditing', 'kontentblocks', $this->_localize() );
+            wp_enqueue_script( 'kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array( 'backbone', 'jquery-ui-tabs', 'jquery-ui-draggable' ), null, true );
+            wp_localize_script( 'kb-frontend', 'KBAppConfig', $config );
+//            wp_enqueue_style( 'thickbox' );
+            wp_enqueue_style( 'KB', KB_PLUGIN_URL . '/css/kontentblocks.css' );
+            wp_enqueue_style( 'vex', KB_PLUGIN_URL . '/js/vex/css/vex.css' );
+            wp_enqueue_style( 'vex-theme', KB_PLUGIN_URL . '/js/vex/css/vex-theme-flat-attack.css' );
+            wp_enqueue_style( 'wp-color-picker' );
+            wp_enqueue_style( 'KBOsEditStyle', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
+
+            wp_enqueue_script(
+                'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), false, 1
+            );
+            wp_enqueue_script(
+                'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), false, 1
+            );
+            $colorpicker_l10n = array(
+                'clear' => __( 'Clear' ),
+                'defaultString' => __( 'Default' ),
+                'pick' => __( 'Select Color' )
+            );
+            wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
+        }
 
     }
 
@@ -111,7 +149,11 @@ class Enqueues
         return array
             (
             'l18n' => $this->_defaultStrings(),
-            'caps' => $caps
+            'caps' => $caps,
+            'config' => array(
+                'url' => KB_PLUGIN_URL
+            ),
+            'fields' => get_option('kontentfields')
         );
 
     }

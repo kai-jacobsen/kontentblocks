@@ -31,9 +31,14 @@ h2.kb-title {
     padding: 6px;
     border: none;
     position: relative;
-
+    z-index: 1002;
     &.kb-open .block-head{
         @include box-shadow(1px 1px 1px #fff);
+    }
+    
+    &.kb_inactive{
+        z-index: 1002;
+        position: relative;
     }
 }
 
@@ -181,10 +186,11 @@ h5.kb_properties_title {
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     position: relative;
     font-weight: 100;
-    
-    &.module-inactive{
-        border-left: 3px solid red;
-    }
+
+}
+
+.kb_block.kb_inactive .block-head{
+    border-left: 3px solid red;
 }
 
 .kb-toggle {

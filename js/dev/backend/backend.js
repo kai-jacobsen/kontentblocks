@@ -1,42 +1,39 @@
 'use strict';
-var KBK = KBK || {};
-KBK.Views = {};
-KBK.Modules = new KB.ModulesCollection({
-    model: KB.ModuleModel
+var KB = KB || {};
+KB.Views = {};
+KB.Modules = new KB.Backbone.ModulesCollection([],{
+    model: KB.Backbone.ModuleModel
 });
-KBK.Areas = new KB.AreasCollection(_.toArray(KBK.RawAreas), {
-    model: KB.AreaModel
+KB.Areas = new KB.Backbone.AreasCollection(_.toArray(KB.RawAreas), {
+    model: KB.Backbone.AreaModel
 });
-KBK.App = (function($) {
+KB.App = (function($) {
 
     function init() {
-        
-        KBK.Modules.on('add', createViews );
-        
+        KB.Modules.on('add', createViews );
         addModules();
     }
 
     function addModules() {
-        _.each(KBK.RawAreas, function(area) {
+        _.each(KB.RawAreas, function(area) {
             if (area.modules) {
                 _.each(area.modules, function(module) {
-                    KBK.Modules.add(new KB.ModuleModel(module));
+                    KB.Modules.add(new KB.Backbone.ModuleModel(module));
                 });
             }
         });
     }
     
     function createViews(module){
-        KBK.Views[module.get('instance_id')] =  new KB.ModuleView({
+        KB.Views[module.get('instance_id')] =  new KB.Backbone.ModuleView({
             model: module,
-            el: '#' + module.get('instance_id')
+            el: '#' + module.get('instance_id'),
         });
     }
     
-
     return {
         init: init
     };
 
 }(jQuery));
-KBK.App.init();
+KB.App.init();

@@ -139,16 +139,13 @@ Class Kontentblocks
             include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
             include_once dirname( __FILE__ ) . '/includes/kontentblocks.sidebar-area-selector.php';
 
-            $this->Capabilities = new Capabilities();
-            $this->Enqueues     = new Enqueues();
-            $this->UI           = new EditScreen();
-        }
 
+            $this->UI = new EditScreen();
+        }
+        $this->Capabilities = new Capabilities();
+        $this->Enqueues     = new Enqueues();
         // setup vars
         add_action( 'init', array( $this, '_set_block_templates' ), 850 );
-
-        // Frontend On-Site Editing
-        add_action( 'init', array( $this, '_on_site_editing_setup' ) );
 
         // load Templates automatically
         add_action( 'init', array( $this, '_load_templates' ), 9 );
@@ -609,7 +606,6 @@ Class Kontentblocks
 //        return $area_template;
 //
 //    }
-
 //    public function get_forced_templates( $assigned_area_templates )
 //    {
 //        $forced_areas = null;
@@ -674,44 +670,6 @@ Class Kontentblocks
             }
         }
         return $blocks;
-
-    }
-
-    // Front End editing 
-    public function _on_site_editing_setup()
-    {
-        // Thickbox on front end for logged in users
-
-        $config = array(
-            'url' => KB_PLUGIN_URL
-        );
-
-        if ( is_user_logged_in() && !is_admin() ) {
-            //add_action( 'wp_footer', array( $this, 'add_reveal' ) );
-            wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . 'js/dist/plugins.min.js', array( 'jquery', 'jquery-ui-mouse', 'wp-color-picker' ) );
-            wp_enqueue_script( 'KBOnSiteEditing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array( 'KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse' ) );
-            wp_enqueue_script( 'kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array( 'backbone', 'jquery-ui-tabs', 'jquery-ui-draggable'  ), null, true );
-            wp_localize_script( 'kb-frontend', 'KBAppConfig', $config );
-//            wp_enqueue_style( 'thickbox' );
-            wp_enqueue_style( 'KB', KB_PLUGIN_URL . '/css/kontentblocks.css' );
-            wp_enqueue_style( 'vex', KB_PLUGIN_URL . '/js/vex/css/vex.css' );
-            wp_enqueue_style( 'vex-theme', KB_PLUGIN_URL . '/js/vex/css/vex-theme-flat-attack.css' );
-            wp_enqueue_style( 'wp-color-picker' );
-            wp_enqueue_style( 'KBOsEditStyle', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
-
-            wp_enqueue_script(
-                'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), false, 1
-            );
-            wp_enqueue_script(
-                'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), false, 1
-            );
-            $colorpicker_l10n = array(
-                'clear' => __( 'Clear' ),
-                'defaultString' => __( 'Default' ),
-                'pick' => __( 'Select Color' )
-            );
-            wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
-        }
 
     }
 

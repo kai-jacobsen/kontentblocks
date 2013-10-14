@@ -313,9 +313,9 @@ class Area
         );
         $json = json_encode($area);
         echo "<script>"
-        . "var KBK = KBK || {};"
-            . "KBK.RawAreas = KBK.RawAreas || {};"
-            . "KBK.RawAreas['{$this->id}'] = {$json};</script>";
+        . "var KB = KB || {};"
+            . "KB.RawAreas = KB.RawAreas || {};"
+            . "KB.RawAreas['{$this->id}'] = {$json};</script>";
     }
 
 }
