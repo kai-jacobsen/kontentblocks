@@ -3,19 +3,21 @@ var KB = KB || {};
 KB.ModuleView = Backbone.View.extend({
     initialize: function() {
         
-        console.log(jQuery('[data-rel]'));
         
         this.render();
-
+        
     },
     events: {
         "click a.os-edit-block": "openVex",
-        "dblclick": "openVex",
+        "click .editable": "initEtch",
         "click .slider-controls" : "openSlider"
-
     },
     render: function() {
         this.$el.append(KB.Templates.render('module-controls', {model: this.model.toJSON()}));
+    },
+    initEtch: function(){
+        console.log(this);
+        etch.editableInit();
     },
     openVex: function() {
         target = this.model.get('editURL');
