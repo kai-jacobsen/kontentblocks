@@ -15,7 +15,7 @@ class RemoveModules
     public function __construct()
     {
         $this->postId      = $_POST[ 'post_id' ];
-        $this->instance_id = $_POST[ 'block_id' ];
+        $this->instance_id = $_POST[ 'instance_id' ];
         $this->dataHandler = $this->_setupDataHandler();
         
         $this->remove();

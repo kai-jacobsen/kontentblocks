@@ -15,7 +15,7 @@ class HeadlineObject
     }
     
     public function getTag($tag = 'h3'){
-        echo "<" . $tag . " class='editable' contenteditable='true'>" . $this->value . "</" . $tag . ">";
+        echo "<" . $tag . " class='editable' contenteditable='true' data-button-class='all'>" . $this->value . "</" . $tag . ">";
     }
     
 }

@@ -1173,7 +1173,7 @@ h5.kb_properties_title {
 /* line 21, sass/partials/_etch.scss */
 .etch-editor-button span,
 .etch-editor-button span {
-  background: url("../assets/images/editor_icons.png") no-repeat;
+  background: url("../css/assets/editor_icons.png") no-repeat;
   display: block;
   height: 100%;
   width: 100%;
