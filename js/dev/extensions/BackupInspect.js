@@ -1,9 +1,11 @@
-(function($) {
+var KB = KB || {};
+KB.Ext = KB.Ext || {};
 
-    var BackupInspect = {
+KB.Ext.Backup = (function($) {
+
+    return {
         el: $('#backup-inspect'),
         init: function() {
-
             this.listEl = $('<ul></ul>').appendTo(this.el);
             if (this.listEl.length > 0) {
                 this.update();
@@ -19,6 +21,7 @@
                     },
             function(response)
             {
+                console.log(response); 
                 that.items = response;
                 that.renderList(response);
             });
@@ -59,6 +62,6 @@
 
     };
 
-    BackupInspect.init();
 
 }(jQuery));
+KB.Ext.Backup.init();

@@ -111,7 +111,7 @@ final class KB_Ajax_Generate_Module
      * singleton patter
      * @return object
      */
-    public function get_instance()
+    public static function get_instance()
     {
         // create an object
         NULL === self::$instance and self::$instance = new self;

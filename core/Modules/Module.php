@@ -3,7 +3,8 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Utils\ImageObject,
-    Kontentblocks\Utils\AreaDirectory;
+    Kontentblocks\Utils\AreaDirectory,
+    Kontentblocks\Fields\Refield;
 
 /*
  * Structure
@@ -119,6 +120,9 @@ class Module
      */
     var $post_type = '';
     public $path;
+    
+    
+    public $fields;
 
     /**
      * II. Constructor
@@ -153,6 +157,10 @@ class Module
 
         $reflector  = new \ReflectionClass( get_class( $this ) );
         $this->path = dirname( $reflector->getFileName() );
+        
+        if (  method_exists( $this, 'fields' )){
+            $this->fields = new Refield();
+        }
 
     }
 

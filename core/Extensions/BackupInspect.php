@@ -20,7 +20,7 @@ class Backup_Inspect
         $screen = get_current_screen();
 
         if ( post_type_supports( $screen->post_type, 'backup-inspect' ) ) {
-            add_meta_box( 'kb-backup-inspect', 'Backup Inspect', array( $this, 'meta_box_controls' ), $screen->post_type, 'side', 'high' );
+            add_meta_box( 'kb-backup-inspect', 'Metadata Backup', array( $this, 'meta_box_controls' ), $screen->post_type, 'side', 'high' );
         }
 
 
@@ -53,6 +53,7 @@ class Backup_Inspect
     {
 
         $Meta = new MetaData( $post_id );
+        
         $Meta->backup( 'Before restoring backup from:' . date( 'h:j:s', $id ) );
         $Meta->delete();
         return $Meta->restoreBackup( $id );
@@ -64,6 +65,7 @@ class Backup_Inspect
         $post_id = $_REQUEST[ 'post_id' ];
 
         $Meta = new MetaData( $post_id );
+        
         wp_send_json( $Meta->getBackups() );
 
     }

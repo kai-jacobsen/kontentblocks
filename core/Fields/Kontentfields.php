@@ -442,7 +442,6 @@ Class Kontentfields
         if ( !$this->instance )
             return;
 
-        d( $field );
 
         $this->instance->key      = $field[ 'key' ];
         $this->instance->blockid  = $this->blockid;

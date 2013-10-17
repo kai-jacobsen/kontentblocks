@@ -21,7 +21,7 @@ class MetaData implements DataHandlerInterface
 
         $this->post_id = $post_id;
         $this->_selfUpdate();
-
+        
         return $this;
 
     }
@@ -49,9 +49,9 @@ class MetaData implements DataHandlerInterface
      * Wrapper to retrieve data by key from post meta
      * @param id string Key
      */
-    public function getMetaData($id)
+    public function getMetaData( $id )
     {
-        
+
         if ( !empty( $this->meta[ $id ] ) ) {
             return $this->meta[ $id ];
         }
@@ -72,6 +72,7 @@ class MetaData implements DataHandlerInterface
         if ( $backup ) {
             $this->saveIndex( $backup[ 'data' ][ 'index' ] );
             $this->saveModules( $backup[ 'data' ][ 'modules' ] );
+            $this->saveSupplemental( $backup['data']['supplemental']);
             $this->_selfUpdate();
             return true;
         }
@@ -98,6 +99,7 @@ class MetaData implements DataHandlerInterface
         $this->package = array(
             'index' => $this->index,
             'modules' => $this->modules,
+            'supplemental' => $this->_getSupplementalBackupData()
         );
         return $this;
 
@@ -113,24 +115,27 @@ class MetaData implements DataHandlerInterface
         return update_post_meta( $this->post_id, 'kb_kontentblocks', $index );
 
     }
-    
-    
-    public function removeFromIndex($id){
-        if (isset($this->index[$id])){
-            unset($this->index[$id]);
-            if ($this->saveIndex( $this->index )){
-                return delete_post_meta($this->post_id, '_' . $id);
+
+    public function removeFromIndex( $id )
+    {
+        if ( isset( $this->index[ $id ] ) ) {
+            unset( $this->index[ $id ] );
+            if ( $this->saveIndex( $this->index ) ) {
+                return delete_post_meta( $this->post_id, '_' . $id );
             }
         }
+
     }
-    
-    
-     public function getModuleDefinition($id){
-        if (isset($this->index[$id])){
-            return $this->index[$id];
-        } else {
+
+    public function getModuleDefinition( $id )
+    {
+        if ( isset( $this->index[ $id ] ) ) {
+            return $this->index[ $id ];
+        }
+        else {
             return false;
         }
+
     }
 
     /**
@@ -275,9 +280,11 @@ class MetaData implements DataHandlerInterface
         return update_post_meta( $this->post_id, '_' . $id, $data );
 
     }
-    
-    public function saveMetaData($id, $data){
-        return update_post_meta($this->post_id, $id, $data);
+
+    public function saveMetaData( $id, $data )
+    {
+        return update_post_meta( $this->post_id, $id, $data );
+
     }
 
     public function getIndex()
@@ -288,9 +295,9 @@ class MetaData implements DataHandlerInterface
 
     public function addToIndex( $id, $args )
     {
-       
-            $this->index[ $id ] = $args;
-            return $this->_updateIndex();
+
+        $this->index[ $id ] = $args;
+        return $this->_updateIndex();
 
     }
 
@@ -319,13 +326,13 @@ class MetaData implements DataHandlerInterface
 
     }
 
-    public function cleanIndex()                                        
+    public function cleanIndex()
     {
         $cleaned = array();
 
         foreach ( $this->index as $def ) {
             if ( isset( $def[ 'class' ] ) ) {
-                $cleaned[$def['instance_id']] = $def;
+                $cleaned[ $def[ 'instance_id' ] ] = $def;
             }
             else {
                 // TODO remove from index;
@@ -334,6 +341,35 @@ class MetaData implements DataHandlerInterface
 
         return $cleaned;
 
+    }
+
+    public function _getSupplementalBackupData()
+    {
+        $meta  = $this->meta;
+        $index = $this->index;
+        $blacklist = array('kb_kontentblocks', '_edit_lock', '_sidebars_updated', '_kb_backup');
+
+        if ( !empty( $index ) ) {
+            foreach ( $index as $k => $v ) {
+                unset($meta[$k]);
+            }
+        }
+        
+        foreach ($blacklist as $key){
+            unset($meta[$key]);
+        }
+        
+        return $meta;
+
+    }
+
+    public function saveSupplemental( $data )
+    {
+        
+        foreach($data as $key => $value){
+            delete_post_meta($this->post_id, $key);
+            update_post_meta($this->post_id, $key, $value);
+        }
     }
 
 }

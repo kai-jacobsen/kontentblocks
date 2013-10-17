@@ -1,5 +1,5 @@
 <?php
-kb_register_block('Proxy');
+//kb_register_block('Proxy');
 
 class Proxy extends \Kontentblocks\Modules\Module {
 	

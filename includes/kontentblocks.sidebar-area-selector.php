@@ -25,7 +25,7 @@ class KB_Sidebar_Area_Selector
             return;
         }
 
-        add_action( 'save_post', array( $this, 'save' ), 5 );  //save early
+        add_action( 'save_post', array( $this, 'save' ), 11 );  //save early
         add_action( 'context_box_side', array( $this, 'sidebar_selector_content' ), 10, 1 );
         add_action( 'admin_footer', array( $this, 'modal_markup' ) );
         $this->nonce = wp_create_nonce( 'editGlobalArea' );
@@ -133,6 +133,7 @@ class KB_Sidebar_Area_Selector
         else {
             delete_post_meta( $post_id, 'active_sidebar_areas' );
         }
+        
 
     }
     public function modal_markup()

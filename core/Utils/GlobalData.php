@@ -135,5 +135,10 @@ class GlobalData implements DataHandlerInterface
         return get_option( 'kb_dynamic_area_settings' );
 
     }
+    
+    // @TODO: global backup
+    public function backup(){
+        
+    }
 
 }

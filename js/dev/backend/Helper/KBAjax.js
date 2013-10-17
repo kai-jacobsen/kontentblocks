@@ -5,13 +5,15 @@ KB.Ajax = (function($) {
     return {
         send: function(data, callback) {
 
-            var data = {};
+            
             var nonce = $('#_kontentblocks_ajax_nonce').val();
             var postID = $('#post_ID').val();
 
             data._kb_nonce = nonce;
             data.post_id = postID;
             data.kbajax = 'true';
+            
+            
 
             $(kbMetaBox).addClass('kb_loading');
             $('#publish').attr('disabled', 'disabled');

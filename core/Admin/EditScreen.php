@@ -150,6 +150,7 @@ Class EditScreen
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
             $MetaData->backup( 'Before regular update' );
+            
         }
 
         if ( !empty( $MetaData->getIndex() ) ) {

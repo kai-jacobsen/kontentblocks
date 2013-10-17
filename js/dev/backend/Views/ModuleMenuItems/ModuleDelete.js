@@ -5,11 +5,14 @@ KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     className: 'kb-delete block-menu-icon',
+    initialize: function(){
+         _.bindAll(this, "yes", "no"); 
+    },
     events: {
         'click': 'deleteModule'
     },
     deleteModule: function() {
-        KB.Notice.notice('Delete Module', 'success', 4500);
+        KB.Notice.confirm('Really?', this.yes, this.no);
     },
     isValid: function() {
         var settings = this.model.get('settings');
@@ -20,5 +23,11 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         } else {
             return false;
         }
+    },
+    yes:function(){
+        this.model.destroy();
+    },
+    no: function(){
+        return false; 
     }
 }); 
