@@ -131,8 +131,9 @@ class Module
      * @param string $name default name, can be individual overwritten
      * @param array $block_settings
      */
-    function __construct( $id, $name, $block_settings = NULL )
+    function __construct( $id, $name, $args = NULL )
     {
+        
         $this->id       = $id;
         $this->name     = $name;
         $defaults       = array(
@@ -140,26 +141,29 @@ class Module
             'disabled' => false,
             'public_name' => $this->name,
             'wrapper' => 'usewrapper',
-            'before_block' => '<div id="%s" class="module ' . $this->id . ' %s">',
-            'after_block' => '</div>',
+            'wrap' => true,
+            'before_block' => '<div id="%s" class="module ' . $this->id . ' %s">', //TODO: Remove
+            'beforeModule' => '<div id="%s" class="module ' . $this->id . ' %s">',
+            'after_block' => '</div>', //TODO: Remove
+            'afterModule' => '</div>',
             'description' => '',
             'connect' => null,
             'hidden' => false,
             'predefined' => false,
-            'in_dynamic' => false,
-            'cacheable' => true,
-            'meta' => array()
+            'globallyAvailable' => false,
+            'cacheable' => true, //TODO: Remove
         );
-        $this->settings = wp_parse_args( $block_settings, $defaults );
+        $this->settings = wp_parse_args( $args, $defaults );
 
         //connect this block to areas
-        AreaDirectory::getInstance()->connect( get_class( $this ), $block_settings );
+        AreaDirectory::getInstance()->connect( get_class( $this ), $args );
 
         $reflector  = new \ReflectionClass( get_class( $this ) );
         $this->path = dirname( $reflector->getFileName() );
         
         if (  method_exists( $this, 'fields' )){
-            $this->fields = new Refield();
+            $this->Fields = new Refield($this->instance_id);
+            $this->fields();
         }
 
     }

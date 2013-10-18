@@ -1,8 +1,9 @@
 <?php
+
 namespace Kontentblocks\Fields;
+
 class Field
 {
-
 
     public function html( $key, $args, $data )
     {

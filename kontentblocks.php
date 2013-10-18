@@ -3,7 +3,7 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Admin\EditScreen,
-    Kontentblocks\Fields\Kontentfields,
+    Kontentfields\KFHandler,
     Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Hooks\Capabilities,
@@ -772,10 +772,14 @@ add_action( 'init', 'Kontentblocks\init_Kontentfields', 15 );
 function init_Kontentfields()
 {
     global $Kontentfields;
-    $Kontentfields = new Kontentfields;
+    $Kontentfields = new KFHandler;
     $Kontentfields->init();
     // load field files...
     foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
+        require_once $file;
+    }
+    
+    foreach ( glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file ) {
         require_once $file;
     }
 

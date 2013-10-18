@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentfields;
+namespace Kontentblocks;
 
 use Kontentblocks\Fields\Field;
 
@@ -31,4 +31,4 @@ Class FieldText extends Field
 
 }
 
-kb_register_field( 'text', 'Kontentfields\FieldText' );
+kb_register_field2( 'text', 'Kontentfields\FieldText' );

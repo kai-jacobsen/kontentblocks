@@ -12,7 +12,6 @@ class ModuleFactory
         if (  !isset( $moduleArgs ) or !isset($moduleArgs['class']) ) {
             throw new \Exception( 'This is not a valid Module' );
         }
-
         $this->args = $moduleArgs;
         return $this;
             

@@ -19,13 +19,15 @@ class Module_Prototype extends Module
             'category' => 'media'
         );
 
+
         parent::__construct( 'prototype', 'Prototype', $args );
+        
 
     }
 
     function options( $data )
     {
-        
+        $this->Fields->render();
     }
 
     function block( $data )
@@ -36,6 +38,21 @@ class Module_Prototype extends Module
     function save( $old, $id, $data )
     {
         
+    }
+
+    function fields()
+    {
+
+        $groupA = $this->Fields->addGroup( 'Peter' )
+            ->addField( 'type', 'key', array( 'stuff' => 'stuff' ) )
+            ->addField( 'type', 'key2', array( 'stuff' => 'stuff' ) );
+
+        $fieldB = $this->Fields->addSingleField('Andrew')
+            ->addField('text', 'key3', array( 'stuff' => 'stuff' ) );
+        
+        
+        
+
     }
 
 }

@@ -17,7 +17,7 @@ module.exports = function(grunt) {
             },
             sec: {
                 files: {
-                    'js/dist/fields.min.js': ['<%= concat.fields.dest %>'],
+                    'js/dist/fields.min.js': ['<%= concat.kontentfields.dest %>'],
                     'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
                     'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>']
                 }
@@ -27,8 +27,8 @@ module.exports = function(grunt) {
             options: {
                 seperator: ';'
             },
-            fields: {
-                src: ['core/Fields/Definitions/js/**/*.js'],
+            kontentfields: {
+                src: ['core/Kontentfields/Definitions/js/**/*.js'],
                 dest: 'js/tmp/fields.concat.js',
                 nonull: true
             },

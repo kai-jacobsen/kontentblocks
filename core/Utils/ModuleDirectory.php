@@ -24,7 +24,7 @@ class ModuleDirectory
     public function add( $classname )
     {
         if ( !isset( $this->modules[ 'classname' ] ) ) {
-            $this->modules[ $classname ] = new $classname;
+            $this->modules[ $classname ] = new $classname();
         }
 
     }

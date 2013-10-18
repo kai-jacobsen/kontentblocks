@@ -1,6 +1,7 @@
 <?php
 
-use Kontentblocks\Utils\MetaData;
+use Kontentblocks\Utils\MetaData,
+    Kontentblocks\Fields\FieldDirectory;
 
 if ( !defined( 'ABSPATH' ) ) {
     die( 'Direct access not permitted.' );
@@ -146,10 +147,14 @@ function kb_register_field( $id, $class )
 {
     global $Kontentfields;
     $Kontentfields->register_field( $id, $class );
+};
 
-}
+function kb_register_field2( $id, $class )
+{
 
-;
+    $FieldDirectory = FieldDirectory::getInstance()->registerField( $id, $class );
+    d($FieldDirectory);
+};
 
 /*
  * Get Dev Mode Status of Kontentblocks
@@ -176,6 +181,7 @@ function kb_get_plugin_path()
 /*
  * Has modules
  */
+
 function has_modules( $area_id, $post_id = null )
 {
     global $post;
@@ -183,8 +189,9 @@ function has_modules( $area_id, $post_id = null )
         return;
     }
     $post_id = (null === $post_id) ? $post->ID : $post_id;
-    
+
 
     $Meta = new MetaData( $post_id );
     return $Meta->hasModules( $area_id );
+
 }
