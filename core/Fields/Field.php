@@ -2,30 +2,139 @@
 
 namespace Kontentblocks\Fields;
 
-class Field
+abstract class Field
 {
 
-    public function html( $key, $args, $data )
+    protected $baseId;
+    protected $args;
+    protected $data;
+    protected $key;
+    protected $type;
+    protected static $defaults;
+
+    public function setKey( $key )
     {
-        echo 'Method must be overriden by class method';
+        $this->key = $key;
+
+    }
+
+    public function getKey()
+    {
+        return $this->key;
+
+    }
+
+    public function setArgs( $args )
+    {
+        $this->args = $args;
+
+    }
+
+    public function setBaseId( $id )
+    {
+        $this->baseId = $id;
+
+    }
+
+    public function setData( $data )
+    {
+        $this->data = $data;
+
+    }
+
+    public function setType( $type )
+    {
+        $this->type = $type;
+
+    }
+
+    public abstract function form();
+
+    public function build()
+    {
+        $this->header();
+        $this->body();
+        $this->footer();
+
+    }
+
+    public function header()
+    {
+        echo '<div class="kb_field_header">';
+        if ( !empty( $this->args[ 'title' ] ) ) {
+            echo "<h4>{$this->args[ 'title' ]} --</h4>";
+        }
+        echo '</div>';
+        echo "<div class='kb_field {$this->type} clearfix'>";
+
+    }
+
+    public function body()
+    {
+
+        $this->label();
+        $this->form();
+        $this->description();
+
+    }
+
+    public function footer()
+    {
+        echo "</div>";
+
+    }
+
+    public function label()
+    {
+        if ( !empty( $this->getArg( 'label' ) ) ) {
+            echo "<label class='kb_label heading' for='{$this->get_field_id()}'>{$this->getArg( 'label' )}</label>";
+        }
+
+    }
+
+    /*
+     * Get description if available
+     */
+
+    public function description()
+    {
+        if ( !empty( $this->getArg( 'description' ) ) ) {
+            echo "<p class='description'>{$this->getArg( 'description' )}</p>";
+        }
+
+    }
+
+    
+    public function save( $keydata)
+    {
+        return $keydata;
+    }
+    
+    
+    public function getArg( $arg )
+    {
+        if ( !empty( $this->args[ $arg ] ) ) {
+            return $this->args[ $arg ];
+        }
+        else {
+            return false;
+        }
 
     }
 
     /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
      * */
-    public function get_field_id( $key, $rnd = false )
+    public function get_field_id( $rnd = false )
     {
         if ( $rnd ) {
             $number = rand( 1, 9999 );
-            $id     = $this->blockid . '_' . $key . '_' . $number;
+            $id     = $this->baseId . '_' . $this->key . '_' . $number;
         }
         else {
-            $id = $this->blockid . '_' . $key;
+            $id = $this->baseId . '_' . $this->key;
         }
 
-
-        //$id = str_replace(array('-','_'), '', $id);
         return $id;
 
     }
@@ -39,37 +148,40 @@ class Field
      * @param bool $akey - if true add ['$akey'] to the key
      * @return string 
      */
-    public function get_field_name( $key, $array = false, $akey = NULL, $multiple = false )
+    public function get_field_name( $array = false, $akey = NULL, $multiple = false )
     {
         if ( $array === true && $akey !== NULL && $multiple ) {
-            return "{$this->blockid}[{$key}][{$akey}][]";
+            return "{$this->baseId}[{$this->key}][{$akey}][]";
         }
         elseif ( $array === true && $akey !== NULL ) {
-            return "{$this->blockid}[{$key}][{$akey}]";
+            return "{$this->baseId}[{$this->key}][{$akey}]";
         }
         else if ( is_bool( $array ) && $array === true ) {
-            return "{$this->blockid}[{$key}][]";
+            return "{$this->baseId}[{$this->key}][]";
         }
         else if ( is_string( $array ) && is_string( $akey ) ) {
-            return "{$this->blockid}[$key][$array][$akey]";
+            return "{$this->baseId}[{$this->key}][$array][$akey]";
         }
         else if ( is_string( $array ) ) {
-            return "{$this->blockid}[$key][$array]";
+            return "{$this->baseId}[{$this->key}][$array]";
         }
         else {
-            return "{$this->blockid}[{$key}]";
+            return "{$this->baseId}[{$this->key}]";
         }
 
     }
 
     public function get_value( $key, $args, $data )
     {
-        if ( is_string( $args[ 'array' ] ) )
-            return (isset( $data[ $key ][ $args[ 'array' ] ] )) ? $data[ $key ][ $args[ 'array' ] ] : '';
-        elseif ( !empty( $data[ $key ] ) )
-            return $data[ $key ];
-        else
-            return $args[ 'std' ];
+        if ( is_string( $this->getArg[ 'array' ] ) ) {
+            return (isset( $this->data[ $key ][ $args[ 'array' ] ] )) ? $this->data[ $key ][ $args[ 'array' ] ] : '';
+        }
+        elseif ( !empty( $this->data[ $key ] ) ) {
+            return $this->data[ $key ];
+        }
+        else {
+            return $this->getArg[ 'std' ];
+        }
 
     }
 
@@ -81,30 +193,6 @@ class Field
         else {
             return (!empty( $this->data )) ? $this->data : $return;
         }
-
-    }
-
-    /**
-     * Helper to generate a full <label ... with the right id
-     * 
-     * @param string $key
-     * @param string $label
-     * @return string - html markup 
-     */
-    public function get_label( $key, $label )
-    {
-        return "<label class='kb_label heading' for='{$this->get_field_id( $key )}'>{$label}</label>";
-
-    }
-
-    /*
-     * Get description if available
-     */
-
-    public function get_description( $args )
-    {
-        if ( !empty( $args[ 'description' ] ) )
-            return "<p class='description'>{$args[ 'description' ]}</p>";
 
     }
 
@@ -121,5 +209,3 @@ class Field
     }
 
 }
-
-?>

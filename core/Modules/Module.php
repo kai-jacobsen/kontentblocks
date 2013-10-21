@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Utils\ImageObject,
-    Kontentblocks\Utils\AreaDirectory,
+use Kontentblocks\Utils\AreaDirectory,
     Kontentblocks\Fields\Refield;
 
 /*
@@ -17,7 +16,7 @@ use Kontentblocks\Utils\ImageObject,
  * VI. Addiotional Stuff
  */
 
-class Module
+abstract class Module
 {
     /* -----------------------------------------------------
      * I. Properties
@@ -38,13 +37,6 @@ class Module
      * @var string 
      */
     var $id = '';
-
-    /**
-     * Settings for a Block as definied on construction
-     * 
-     * @var array
-     */
-    var $settings = array();
 
     /**
      * Unique ID for a block, key of the post meta
@@ -77,20 +69,6 @@ class Module
     var $area = 'kontentblocks';
 
     /**
-     * Holds status 
-     * 
-     * @var string for some odd reason has to be kb_active or kb_inactive
-     */
-    var $active = 'kb_active';
-
-    /**
-     * Holds column count / identifier 
-     * 
-     * @var integer set by area templates
-     */
-    var $columns = null;
-
-    /**
      * Area main context
      * set within render_blocks
      * 
@@ -120,9 +98,6 @@ class Module
      */
     var $post_type = '';
     public $path;
-    
-    
-    public $fields;
 
     /**
      * II. Constructor
@@ -131,38 +106,19 @@ class Module
      * @param string $name default name, can be individual overwritten
      * @param array $block_settings
      */
-    function __construct( $id, $name, $args = NULL )
+    function __construct( $args = NULL, $data = array() )
     {
-        
-        $this->id       = $id;
-        $this->name     = $name;
-        $defaults       = array(
-            'id' => $id,
-            'disabled' => false,
-            'public_name' => $this->name,
-            'wrapper' => 'usewrapper',
-            'wrap' => true,
-            'before_block' => '<div id="%s" class="module ' . $this->id . ' %s">', //TODO: Remove
-            'beforeModule' => '<div id="%s" class="module ' . $this->id . ' %s">',
-            'after_block' => '</div>', //TODO: Remove
-            'afterModule' => '</div>',
-            'description' => '',
-            'connect' => null,
-            'hidden' => false,
-            'predefined' => false,
-            'globallyAvailable' => false,
-            'cacheable' => true, //TODO: Remove
-        );
-        $this->settings = wp_parse_args( $args, $defaults );
-
+        $this->set( $args );
         //connect this block to areas
         AreaDirectory::getInstance()->connect( get_class( $this ), $args );
 
+        $this->new_instance = $data;
+
         $reflector  = new \ReflectionClass( get_class( $this ) );
         $this->path = dirname( $reflector->getFileName() );
-        
-        if (  method_exists( $this, 'fields' )){
-            $this->Fields = new Refield($this->instance_id);
+
+        if ( method_exists( $this, 'fields' ) ) {
+            $this->Fields = new Refield( $this );
             $this->fields();
         }
 
@@ -180,9 +136,10 @@ class Module
      * gets called by ui display callback
      *  
      */
-    public function options( $data )
+    public function options()
     {
-        
+        $this->Fields->render();
+
     }
 
     /**
@@ -190,20 +147,18 @@ class Module
      * Method to save whatever form fields are in the options() method
      * Gets called by the meta box save callback
      */
-    public function save( $a, $b, $c )
+    public function save( $data )
     {
-        
+        return $this->saveFields($data);
+
     }
 
     /**
-     * block()
+     * module()
      * Frontend display method.
      * Has no default output yet, and must be overwritten 
      */
-    public function block( $data )
-    {
-        
-    }
+    public abstract function module( $data );
 
     /**
      * setup()
@@ -215,6 +170,11 @@ class Module
     public function setup()
     {
         
+    }
+
+    public function saveFields($data)
+    {
+       return $this->Fields->save($data);
     }
 
     /* -----------------------------------------------------
@@ -231,29 +191,8 @@ class Module
      * @param open | css class kb_open added / not added
      * @param args array (post_type, 'page_template')
      */
-    public function _render_options( $open = false )
+    public function _render_options()
     {
-        global $post, $Kontentblocks;
-
-        $this->open = $open;
-
-        /* $post is not available during an ajax call
-         * but we're using the same function for blocks already added, and new added block via AJAX
-         * maybe just check for XHR request
-         * 
-         */
-        // set post_id
-//        if ( !isset( $post->ID ) ) {
-//            if ( true == $Kontentblocks->post_context ) {
-//                $this->post_id = $_REQUEST[ 'post_id' ];
-//            }
-//            else {
-//                $this->post_id = null;
-//            }
-//        }
-//        else {
-//            $this->post_id = $post->ID;
-//        }
         // open tag for block list item
         echo $this->_open_list_item();
 
@@ -264,7 +203,7 @@ class Module
         echo $this->_open_inner();
 
         // if disabled don't output, just show disabled message
-        if ( $this->settings[ 'disabled' ] ) {
+        if ( $this->disabled ) {
             echo "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         }
         else {
@@ -289,17 +228,15 @@ class Module
         $classname = get_class( $this );
 
         // additional classes to set for the item
-
-        $disabledclass = ($this->settings[ 'disabled' ]) ? 'disabled' : null;
-        $uidisabled    = ($this->settings[ 'disabled' ]) ? 'ui-state-disabled' : null;
+        $disabledclass = ($this->disabled) ? 'disabled' : null;
+        $uidisabled    = ($this->disabled) ? 'ui-state-disabled' : null;
 
         //$locked = ( $this->locked == 'false' || empty($this->locked) ) ? 'unlocked' : 'locked';
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
-        $unsortable = ((isset( $this->settings[ 'unsortable' ] ) and $this->settings[ 'unsortable' ]) == '1') ? 'cantsort' : null;
+        $unsortable = ((isset( $this->unsortable ) and $this->unsortable) == '1') ? 'cantsort' : null;
 
-        $openclass = (true == $this->open) ? 'kb-open' : null;
         // Block List Item
-        return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->id} kb_wrapper kb_block {$this->status} {$disabledclass} {$uidisabled} {$unsortable} {$openclass}'>
+        return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->id} kb_wrapper kb_block {$this->status} {$disabledclass} {$uidisabled} {$unsortable}'>
 		<input type='hidden' name='{$this->instance_id}[area_context]' value='$this->area_context' /> 
 		";
 
@@ -330,7 +267,7 @@ class Module
             echo $lockedmsg;
         }
         else {
-            $description       = (!empty( $this->settings[ 'description' ] )) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->settings[ 'description' ] : '';
+            $description       = (!empty( $this->description )) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->description : '';
             $l18n_block_title  = __( 'Modul Bezeichnung', 'kontentblocks' );
             $l18n_draft_status = ( $this->draft == 'true' ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
 
@@ -377,12 +314,12 @@ class Module
         $html .= "<div class='kb-inactive-indicator kb_set_status'></div>";
 
         // locked icon
-        if ( !$this->settings[ 'disabled' ] && KONTENTLOCK ) {
+        if ( !$this->disabled && KONTENTLOCK ) {
             $html .="<div class='kb-lock {$this->locked}'></div>";
         }
 
         // disabled icon
-        if ( $this->settings[ 'disabled' ] ) {
+        if ( $this->disabled ) {
             $html .="<div class='kb-disabled-icon'></div>";
         }
 
@@ -390,42 +327,11 @@ class Module
         $html .="<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='{$this->name}' /></div>";
 
         // original name
-        $html .="<div class='kb-sub-name'>{$this->settings[ 'public_name' ]}</div>";
+        $html .="<div class='kb-sub-name'>{$this->public_name}</div>";
 
         // Open the drop down menu
         $html .= "<div class='menu-wrap'></div>";
-			
-//        $html .= "<div class='kb_dd_menu kb_menu_opener'>Actions</div>
-//                    <ul class='kb_the_menu bar kb_dd_list'>";
-//
-//        // delete button
-//        if ( !$this->settings[ 'predefined' ] ) {
-//            if ( !$this->settings[ 'disabled' ] ) {
-//                if ( current_user_can( 'delete_kontentblocks' ) )
-//                    $html .="<li><div class='kb-delete kb_delete_block block-menu-icon js-delete-module'></div></li>";
-//            }
-//        }
-//
-//        // status button
-//        if ( !$this->settings[ 'disabled' ] ) {
-//            if ( current_user_can( 'deactivate_kontentblocks' ) )
-//                $html .="<li><div class='kb-power kb_set_status block-menu-icon js-module-status {$this->status}'></div></li>";
-//        }
-//
-//        // TODO: Cap Check
-//        $html .= "<li><div class='kb-duplicate block-menu-icon js-module-duplicate'></div></a></li>";
-//
-//        $html = apply_filters( 'kb_block_header_menu', $html, $this );
-//
-//
-//        $html .= "</ul></div>";
 
-
-        // ajax spinner
-        //$html .="<div class='kb-ajax-status'></div>";
-
-
-        //close header
         $html .="</div>";
 
         return $html;
@@ -450,7 +356,7 @@ class Module
     {
 
 
-        $edittext = (!empty( $this->settings[ 'os_edittext' ] )) ? $this->settings[ 'os_edittext' ] : __( 'edit' );
+        $edittext = (!empty( $this->os_edittext )) ? $this->os_edittext : __( 'edit' );
 
         global $Kontentblocks, $post;
 
@@ -510,7 +416,7 @@ class Module
 		TB_iframe=1&
 		height=600&
 		width=800'><span></span>{$edittext}</a>
-		<a class='os-description' title='{$this->settings[ 'description' ]}'>info</a>
+		<a class='os-description' title='{$this->description}'>info</a>
 		</div>";
 
         //return $out;
@@ -533,9 +439,9 @@ class Module
             _doing_it_wrong( 'set() on block instance', '$args must be an array of key/value pairs', '0.7' );
             return false;
         }
-
-        foreach ( $args as $k => $v )
+        foreach ( $args as $k => $v ) {
             $this->$k = $v;
+        }
 
     }
 
@@ -578,35 +484,16 @@ class Module
     }
 
     /*
-     * Render widget title
-     * A helper method
-     */
-
-    public function _render_widget_title( $subcontext )
-    {
-        if ( 'side' == $subcontext ) {
-
-            if ( !empty( $this->new_instance[ 'widget_title' ] ) ) {
-                $widget_title = apply_filters( 'the_title', $this->new_instance[ 'widget_title' ] );
-                $headline     = apply_filters( 'kb_widget_headline_weight', 'h3' );
-                return "<{$headline} class='widget-title'>{$widget_title}</{$headline}>";
-            }
-        }
-
-    }
-
-    /*
      * Return data
      */
 
-    public function get_data( $key = null, $return = '' )
+    public function getData( $key = null, $return = '' )
     {
-        $data = $this->new_instance;
-
-        if ( empty( $data ) or empty( $key ) )
+        if ( empty( $this->new_instance ) or empty( $key ) ) {
             return false;
+        }
 
-        return (!empty( $data[ $key ] )) ? $data[ $key ] : $return;
+        return (!empty( $this->new_instance[ $key ] )) ? $this->new_instance[ $key ] : $return;
 
     }
 
@@ -614,43 +501,15 @@ class Module
      * Set Additional data
      */
 
-    public function set_data( $key, $value )
+    public function setData( $key, $value )
     {
         $this->new_instance[ $key ] = $value;
-
-    }
-
-    /**
-     * Get resized image
-     * @deprecated 
-     */
-    public function get_image_url( $id, $width = 150, $height = 150, $crop = true )
-    {
-        if ( !isset( $id ) )
-            return false;
-
-        $src    = wp_get_attachment_image_src( $id, 'full' );
-        $return = wp_img_resizer_src( array( 'url' => $src[ 0 ], 'height' => $height, 'width' => $width, 'crop' => $crop ) );
-
-        if ( !is_wp_error( $return ) )
-            return $return;
-        else
-            return '';
 
     }
 
     public function get_module_path( $path )
     {
         return dirname( $path );
-
-    }
-
-    public function getImageObject( $id, $width = 150, $height = 150, $crop = true )
-    {
-        if ( empty( $id ) )
-            return false;
-
-        return new ImageObject( $id, $width, $height, $crop );
 
     }
 
@@ -666,14 +525,22 @@ class Module
 
     }
 
-//    public function get_link_object( $href )
-//    {
-//        if ( empty( $href ) )
-//            return false;
-//
-//        return new KB_Link_Object( $href );
-//
-//    }
-}
+    public static function getDefaults()
+    {
+        return array(
+            'disabled' => false,
+            'public_name' => 'Give me Name',
+            'wrap' => true,
+            'beforeModule' => '<div id="%s" class="module %s %s">',
+            'afterModule' => '</div>',
+            'description' => '',
+            'connect' => null,
+            'hidden' => false,
+            'predefined' => false,
+            'globallyAvailable' => false,
+            'category' => false
+        );
 
-//end class
+    }
+
+}

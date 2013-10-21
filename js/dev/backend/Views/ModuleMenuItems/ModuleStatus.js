@@ -12,8 +12,8 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
         this.options.parent.$el.toggleClass('kb_inactive');
     },
     isValid: function() {
-        var settings = this.model.get('settings');
-        if (!settings.disabled &&
+        
+        if (!this.model.get('disabled') &&
                 KB.Caps.userCan('deactivate_kontentblocks')) {
             return true;
         } else {

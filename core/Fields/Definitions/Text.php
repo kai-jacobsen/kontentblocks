@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks;
+namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 
-Class FieldText extends Field
+Class Text extends Field
 {
 
     function html( $key, $args, $data )
@@ -29,6 +29,11 @@ Class FieldText extends Field
 
     }
 
+    public function form()
+    {
+        echo "<input type='text' id='{$this->get_field_id()}' name='{$this->get_field_name()}'  value='' />";
+    }
+
 }
 
-kb_register_field2( 'text', 'Kontentfields\FieldText' );
+kb_register_field2( 'text', 'Kontentblocks\Fields\Definitions\Text' );

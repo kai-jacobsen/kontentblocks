@@ -5,7 +5,9 @@ namespace Kontentblocks\Admin;
 use Kontentblocks\Admin\AbstractDataContainer,
     Kontentblocks\Admin\ModuleMenu,
     Kontentblocks\Utils\ModuleDirectory,
+    Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\AreaSettingsMenu,
+    Kontentblocks\TemplateEngine\CoreTemplate,
     Kontentblocks\Helper as H;
 
 class Area
@@ -106,19 +108,29 @@ class Area
             'modules' => __( 'Add new module', 'kontentblocks' )
         );
 
-
+        
         $this->dataContainer = $dataContainer;
 
         $this->_setupAreaProperties( $area );
 
         // All Modules which are accessible by this area
-        $this->validModules = $this->filterAttachedModules();
+        $this->validModules = $this->getValidModules();
 
+        //actual stored module for this area
         $this->attachedModules = $this->dataContainer->getModulesForArea( $this->id );
+        
+        // Menu wit available modules for this area
         $this->moduleMenu      = new ModuleMenu( $this->validModules, $this->id, $this->context );
+        
+        // custom settins for this area
         $this->settingsMenu    = new AreaSettingsMenu( $this, $this->dataContainer );
     }
 
+    /**
+     * Simple getter method to retrieve area properties
+     * @param string $param | property key
+     * @return mixed | value or false
+     */
     public function get( $param )
     {
         if ( isset( $this->$param ) ) {
@@ -130,6 +142,12 @@ class Area
 
     }
 
+    /**
+     * Simple setter method to bulk set properties
+     * Calls additional methods for each key, if available
+     * to validate / sanitize input
+     * @param array $args
+     */
     private function _setupAreaProperties( $args )
     {
         foreach ( $args as $key => $value ) {
@@ -153,16 +171,18 @@ class Area
     }
 
     /**
-     * Filter blocks by area, baseed upon settings
+     * Get modules which are set to be available
+     * by this area.
      * 
      * @global object Kontentblocks
      * return array 
      * TODO: Hat hier nichts zu suchen
      */
-    private function filterAttachedModules()
+    private function getValidModules()
     {
         // declare array
         $modules = ModuleDirectory::getInstance()->getAllModules( $this->dataContainer );
+        
         if ( empty( $modules ) ) {
             return false;
         }
@@ -170,12 +190,12 @@ class Area
         $validModules = array();
 
         foreach ( $modules as $module ) {
-            $disabled = ($module->settings[ 'disabled' ] == true) ? true : false;
+            $disabled = ($module[ 'disabled' ] == true) ? true : false;
 
-            $cat = (!empty( $module->settings[ 'category' ] )) ? $module->settings[ 'category' ] : false;
+            $cat = (!empty( $module[ 'category' ] )) ? $module[ 'category' ] : false;
 
             if ( is_array( $this->assignedModules ) ) {
-                $is__in_area_available = ( in_array( get_class( $module ), $this->assignedModules ) ) ? true : false;
+                $is__in_area_available = ( in_array( $module['class'], $this->assignedModules ) ) ? true : false;
             }
             else {
                 $is__in_area_available = false;
@@ -200,6 +220,12 @@ class Area
 
     }
 
+    /**
+     * Usort callback to sort modules alphabetically by name
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
     private function _sort_by_name( $a, $b )
     {
         $al = strtolower( $a->settings[ 'public_name' ] );
@@ -215,7 +241,6 @@ class Area
     /*
      * Get Markup for block limit indicator, return void if unlimited
      */
-
     private function _getModuleLimitTag()
     {
         // prepare string
@@ -234,22 +259,11 @@ class Area
      */
     public function header()
     {
+        $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
 
-        $header_class = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
-
-        echo "  <div class='kb_area_head clearfix  {$this->context} {$header_class}'>";
-        echo "	<div class='area_title_text '> ";
-        echo " <input type='hidden' name='areas[]' value='{$this->id}' >";
-
-        $this->settingsMenu->render();
-
-        echo "	<span class='title'>{$this->name}</span>
-				<span class='description'>{$this->description}</span>
-                </div>";
-
-        echo "	<div class='kb-ajax-status-dark'></div>
-                </div>";
-
+        $Tpl = new CoreTemplate('Area-Header.twig', array('area' => $this, 'headerClass' => $headerClass));
+        $Tpl->render(true);
+        
     }
 
     /**
@@ -269,16 +283,18 @@ class Area
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
             foreach ( $this->attachedModules as $module ) {
-                $module->set(
+                $Factory = new ModuleFactory($module);
+                $instance = $Factory->getModule();
+                $instance->set(
                     array(
                         'area_context' => $this->context,
                         'post_type' => $this->dataContainer->get( 'postType' ),
                         'page_template' => $this->dataContainer->get( 'pageTemplate' ),
-                        'new_instance' => $this->dataContainer->getModuleData( H\underscoreit( $module->instance_id ) ),
+                        'new_instance' => $this->dataContainer->getModuleData( H\underscoreit( $instance->instance_id ) ),
                         'post_id' => $this->dataContainer->get( 'postid' )
                     )
                 );
-                $module->_render_options();
+                $instance->_render_options();
             }
         }
 

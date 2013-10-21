@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
-class FieldDirectory
+class FieldRegistry
 {
 
     static $instance;
@@ -16,11 +16,6 @@ class FieldDirectory
 
         return self::$instance;
 
-    }
-
-    public function __construct()
-    {
-        
     }
 
     public function registerField( $id, $class )

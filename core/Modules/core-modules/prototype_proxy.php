@@ -34,7 +34,7 @@ class Proxy extends \Kontentblocks\Modules\Module {
 		add_filter('kb_modify_data_src_proxy', array($this, 'change_post_id'));
 	}
 	
-	public function options($data) {
+	public function options() {
 		
 		$defaults = array(
 			'post_type' => null,
@@ -93,13 +93,13 @@ class Proxy extends \Kontentblocks\Modules\Module {
 	}
 	
 	
-	public function block($data) {
+	public function module($data) {
 		return false;
 	}
 	
 	
 	
-	public function save($old, $id, $data) {
+	public function save($data) {
 		
 		return $data;	
 	}

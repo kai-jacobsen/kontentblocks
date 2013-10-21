@@ -164,16 +164,17 @@ Class EditScreen
                 $id     = null;
                 $tosave = array();
 
+                // new data from $_POST
+                $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
+                
                 $Factory           = new ModuleFactory( $module );
                 $instance          = $Factory->getModule();
                 $instance->post_id = $real_post_id;
 
-                // new data from $_POST
-                $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
-
                 // old, saved data
                 $old = $MetaData->getMetaData( $module[ 'instance_id' ] );
 
+                $instance->new_instance = $old;
 
                 // check for draft and set to false
                 $module[ 'draft' ] = self::_draft_check( $module );
@@ -192,7 +193,7 @@ Class EditScreen
                     $new = $old;
                 }
                 else {
-                    $new = $instance->save( $old, $id, $data );
+                    $new = $instance->save( $data );
                     $new = apply_filters( 'modify_block_data', $new );
                 }
 

@@ -15,9 +15,8 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         KB.Notice.confirm('Really?', this.yes, this.no);
     },
     isValid: function() {
-        var settings = this.model.get('settings');
-        if (!settings.predefined &&
-                !settings.disabled &&
+        if (!this.model.get('predefined') &&
+                !this.model.get('disabled') &&
                 KB.Caps.userCan('delete_kontentblocks')) {
             return true;
         } else {

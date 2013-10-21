@@ -3,9 +3,9 @@
 namespace Kontentblocks\Admin;
 
 use Kontentblocks\Utils\MetaData,
-    Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\AbstractDataContainer,
-    Kontentblocks\Utils\AreaDirectory;
+    Kontentblocks\Utils\AreaDirectory,
+    Kontentblocks\Utils\ModuleDirectory;
 
 class PostDataContainer extends AbstractDataContainer
 {
@@ -66,10 +66,9 @@ class PostDataContainer extends AbstractDataContainer
     public function getSortedModules()
     {
         $sorted = array();
-
         if ( is_array( $this->modules ) ) {
             foreach ( $this->modules as $module ) {
-                $area_id = $module->area;
+                $area_id = $module['area'];
 
                 $sorted[ $area_id ][] = $module;
             }
@@ -81,15 +80,12 @@ class PostDataContainer extends AbstractDataContainer
     private function _setupModules()
     {
         $collection = array();
-        $index      = $this->MetaData->getIndex();
-        if ( $index ) {
-            foreach ( $index as $module ) {
-                $factory      = new ModuleFactory( $module );
-                $collection[] = $factory->getModule();
-            }
+        $modules =  $this->MetaData->getIndex();
+
+        foreach($modules as $module){
+            $collection[] = wp_parse_args($module, ModuleDirectory::getInstance()->get($module['class']));
         }
         return $collection;
-
     }
 
     public function _findAreas()

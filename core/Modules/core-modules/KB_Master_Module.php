@@ -4,8 +4,8 @@ use Kontentblocks\Modules\Module;
 kb_register_block('KB_Master_Module');
 
 class KB_Master_Module extends Module {
-	function __construct() {
-		$args = array(
+
+    public static $defaults = array(
 		'public_name' => 'Master Template',
 		'description' => 'Referenz zu einem Master Template',
 		'in_dynamic' => true,
@@ -16,11 +16,9 @@ class KB_Master_Module extends Module {
 		'os_edittext'	=> 'Master Template',
 		'hidden'		=> true
 		);
-		parent::__construct( 'master_template', 'Master',$args );
-	}
-	
-	function options($data) {
-		global $Kontentblocks;
+
+
+    public function options() {
 		
 		$master = $this->master_ref;
 
@@ -31,7 +29,7 @@ class KB_Master_Module extends Module {
 	}
 	
 	
-	function block($data) {
+	public function  module($data) {
 		
 		global $Kontentblocks;
 		$tpls = $Kontentblocks->get_block_templates();
@@ -45,7 +43,7 @@ class KB_Master_Module extends Module {
 	}
 	
 	
-	function save($old, $id, $data) {
+	public function save($data) {
 		return $data['master'];
 	}
 	

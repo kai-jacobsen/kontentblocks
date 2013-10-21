@@ -2924,35 +2924,41 @@ li.gallery-item textarea:focus {
 .kb_field input[type=text] {
   height: 30px;
   line-height: 22px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #fcfcfc;
+  border-right: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
   font-size: 14px;
-}
-/* line 35, sass/partials/_kontentfields_new.scss */
-.kb_field input[type=text]:focus {
-  -webkit-box-shadow: 1px 1px 8px #0074a2;
-  -moz-box-shadow: 1px 1px 8px #0074a2;
-  box-shadow: 1px 1px 8px #0074a2;
+  width: 40%;
+  -webkit-transition: width 0.2s ease-out;
+  -moz-transition: width 0.2s ease-out;
+  -o-transition: width 0.2s ease-out;
+  transition: width 0.2s ease-out;
 }
 /* line 39, sass/partials/_kontentfields_new.scss */
+.kb_field input[type=text]:focus {
+  width: 65%;
+  border-right: 0;
+}
+/* line 45, sass/partials/_kontentfields_new.scss */
 .kb_field input[type=text].large {
   width: 100%;
 }
-/* line 44, sass/partials/_kontentfields_new.scss */
+/* line 50, sass/partials/_kontentfields_new.scss */
 .kb_field input[type=checkbox] {
   margin-right: 3px;
   line-height: 150%;
 }
-/* line 49, sass/partials/_kontentfields_new.scss */
+/* line 55, sass/partials/_kontentfields_new.scss */
 .kb_field select {
   min-width: 200px;
 }
-/* line 53, sass/partials/_kontentfields_new.scss */
+/* line 59, sass/partials/_kontentfields_new.scss */
 .kb_field textarea:focus {
   -webkit-box-shadow: 1px 1px 8px #0074a2;
   -moz-box-shadow: 1px 1px 8px #0074a2;
   box-shadow: 1px 1px 8px #0074a2;
 }
-/* line 57, sass/partials/_kontentfields_new.scss */
+/* line 63, sass/partials/_kontentfields_new.scss */
 .kb_field p.description {
   font-size: 11px;
 }
@@ -2960,19 +2966,19 @@ li.gallery-item textarea:focus {
 /*
 Field Tabs
 */
-/* line 72, sass/partials/_kontentfields_new.scss */
+/* line 78, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs {
   position: relative;
   zoom: 1;
 }
-/* line 78, sass/partials/_kontentfields_new.scss */
+/* line 84, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav {
   margin-bottom: 0px;
   margin-left: -8px;
   border-bottom: 2px solid #f9f9f9;
   border-top: 2px solid #f9f9f9;
 }
-/* line 84, sass/partials/_kontentfields_new.scss */
+/* line 90, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li {
   padding: 8px 0px 5px 0px;
   background: #fff;
@@ -2982,7 +2988,7 @@ Field Tabs
   position: relative;
   top: 2px;
 }
-/* line 94, sass/partials/_kontentfields_new.scss */
+/* line 100, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a {
   padding: 2px 22px;
   text-decoration: none;
@@ -2990,62 +2996,62 @@ Field Tabs
   top: 2px;
   font-weight: 100;
 }
-/* line 100, sass/partials/_kontentfields_new.scss */
+/* line 106, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a:focus, .kb_fieldtabs ul.ui-tabs-nav li a:active {
   border: none;
   outline: none;
 }
-/* line 105, sass/partials/_kontentfields_new.scss */
+/* line 111, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a:hover {
   color: #666;
 }
-/* line 112, sass/partials/_kontentfields_new.scss */
+/* line 118, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li:hover {
   border-bottom: 2px solid #0074a2;
 }
-/* line 116, sass/partials/_kontentfields_new.scss */
+/* line 122, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active {
   background-color: #fff;
   border-bottom: 2px solid #0074a2;
 }
-/* line 120, sass/partials/_kontentfields_new.scss */
+/* line 126, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active a {
   color: #333;
   font-weight: 700;
 }
-/* line 128, sass/partials/_kontentfields_new.scss */
+/* line 134, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs .ui-widget-content {
   padding: 0px;
 }
 
-/* line 133, sass/partials/_kontentfields_new.scss */
+/* line 139, sass/partials/_kontentfields_new.scss */
 .field-wrapper {
   margin-bottom: 10px;
 }
-/* line 137, sass/partials/_kontentfields_new.scss */
+/* line 143, sass/partials/_kontentfields_new.scss */
 .field-wrapper label {
   width: 120px;
   display: inline-block;
 }
-/* line 142, sass/partials/_kontentfields_new.scss */
+/* line 148, sass/partials/_kontentfields_new.scss */
 .field-wrapper input[type=text] {
   margin-left: 0px;
 }
 
 /* groups */
-/* line 151, sass/partials/_kontentfields_new.scss */
+/* line 157, sass/partials/_kontentfields_new.scss */
 .kb_group_header {
   padding: 20px;
   background-color: #0074a2;
 }
-/* line 155, sass/partials/_kontentfields_new.scss */
+/* line 161, sass/partials/_kontentfields_new.scss */
 .kb_group_header h2 {
   margin: 0 !important;
   padding: 0 !important;
   color: #fff !important;
   text-shadow: 1px 1px 1px #999999;
 }
-/* line 162, sass/partials/_kontentfields_new.scss */
+/* line 168, sass/partials/_kontentfields_new.scss */
 .kb_group_header p.description {
   color: #f2f2f2;
   padding: 0;

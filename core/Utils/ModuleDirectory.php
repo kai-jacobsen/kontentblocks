@@ -2,7 +2,8 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Admin\AbstractDataContainer;
+use Kontentblocks\Admin\AbstractDataContainer,
+    Kontentblocks\Modules\Module;
 
 class ModuleDirectory
 {
@@ -23,9 +24,13 @@ class ModuleDirectory
 
     public function add( $classname )
     {
-        if ( !isset( $this->modules[ 'classname' ] ) ) {
-            $this->modules[ $classname ] = new $classname();
-        }
+        
+        if ( !isset( $this->modules[ 'classname' ] ) && property_exists( $classname, 'defaults' ) ) {
+            $args = $classname::$defaults;
+            $args['class'] = $classname;
+            $args = wp_parse_args($args, Module::getDefaults());
+            $this->modules[ $classname ] = $args;
+        } 
 
     }
 
@@ -53,7 +58,7 @@ class ModuleDirectory
 
     public function _filterForGlobalArea( $module )
     {
-        if ( $module->settings[ 'in_dynamic' ] ) {
+        if ( isset($module['globallyAvailable']) && $module['globallyAvailable'] === true ) {
             return $module;
         }
 

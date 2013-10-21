@@ -1,14 +1,16 @@
 <?php
 
 namespace Kontentblocks\Fields;
-use Kontentblocks\Fields\FieldDirectory;
+
+use Kontentblocks\Fields\FieldRegistry;
 
 class FieldSingle
 {
-    public $id;
-    protected $fields;
 
-    public function __construct($id)
+    public $id;
+    protected $field;
+
+    public function __construct( $id )
     {
         $this->id = $id;
         return $this;
@@ -23,15 +25,24 @@ class FieldSingle
      */
     public function addField( $type, $key, $args )
     {
-        $Factory = FieldDirectory::getInstance();
-        $this->field = $Factory->getField($type);
+        $Factory     = FieldRegistry::getInstance();
+        $this->field = $Factory->getField( $type );
+        $this->field->setKey( $key );
+        $this->field->setArgs( $args );
         return $this;
 
     }
 
     public function render()
     {
-       d($this);
+        
+    }
+
+    public function save( $data )
+    {
+            d($data);
+            return array( $this->field->getKey() => $this->field->save( $data[ $this->field->getKey() ] ));
+        
 
     }
 

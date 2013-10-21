@@ -70,7 +70,6 @@ class ModuleMenu
         // sort blocks to categories
         $this->_blocks_to_categories();
 
-
         $this->l18n = array(
             // l18n
             'add_block' => __( 'add module', 'kontentblocks' ),
@@ -198,23 +197,22 @@ class ModuleMenu
     private function _get_item( $item )
     {
 
-        $settings = $item->settings;
 
-        if ( isset( $settings[ 'hidden' ] ) && $settings[ 'hidden' ] == true )
+        if ( isset( $item[ 'hidden' ] ) && $item[ 'hidden' ] == true )
             return null;
 
 
-        $instance_id = (isset( $item->instance_id )) ? "data-instance_id='{$item->instance_id}'" : null;
-        $master      = (isset( $item->master )) ? "data-master=master" : null;
+        $instance_id = (isset( $item['reference_id'] )) ? "data-reference_id='{$item['reference_id']}'" : null;
+        $master      = (isset( $item['master'] )) ? "data-master=master" : null;
 
 
-        $img        = (!empty( $settings[ 'icon' ] )) ? $settings[ 'icon' ] : '';
-        $blockclass = get_class( $item );
+        $img        = (!empty( $item['icon'])) ? $item[ 'icon' ] : '';
+        $blockclass = $item['class'];
 
         $out = "	<li class='block-nav-item' data-value='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >
 						<div class='block-icon'><img src='{$img}' ></div>
-						<div class='block-info'><h3>{$settings[ 'public_name' ]}</h3>
-							<p class='description'>{$settings[ 'description' ]}</p>
+						<div class='block-info'><h3>{$item[ 'public_name' ]}</h3>
+							<p class='description'>{$item[ 'description' ]}</p>
 						</div>
 						<span class='action'>{$this->l18n[ 'add' ]}</span>
 					</li>";

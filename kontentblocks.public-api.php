@@ -1,7 +1,7 @@
 <?php
 
 use Kontentblocks\Utils\MetaData,
-    Kontentblocks\Fields\FieldDirectory;
+    Kontentblocks\Fields\FieldRegistry;
 
 if ( !defined( 'ABSPATH' ) ) {
     die( 'Direct access not permitted.' );
@@ -152,8 +152,7 @@ function kb_register_field( $id, $class )
 function kb_register_field2( $id, $class )
 {
 
-    $FieldDirectory = FieldDirectory::getInstance()->registerField( $id, $class );
-    d($FieldDirectory);
+     FieldRegistry::getInstance()->registerField( $id, $class );
 };
 
 /*

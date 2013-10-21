@@ -8,11 +8,16 @@ use Kontentblocks\Fields\Fieldgroup,
 class Refield
 {
 
+    protected $parentClassName;
+    protected $moduleId;
     protected $structure;
 
-    public function __construct($instance_id)
+    public function __construct( $module )
     {
-        d($instance_id);
+        //TODO Check
+        $this->parentClassName = get_class( $module );
+        $this->moduleId        = $module->instance_id;
+        $this->data            = $module->new_instance;
         return $this;
 
     }
@@ -42,6 +47,16 @@ class Refield
 
     }
 
+    public function save($data)
+    {
+        $collection = array();
+        foreach($this->structure as $definition){
+            $definition->save($data);
+        }
+        d($collection);
+        exit;
+    }
+
     public function render()
     {
         echo "<pre>";
@@ -62,7 +77,7 @@ class Refield
     public function renderSectionBody( $definition )
     {
         echo "<div>";
-        $definition->render();
+        $definition->render( $this->moduleId, $this->data );
         echo "</div>";
 
     }

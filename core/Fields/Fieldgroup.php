@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Fields\FieldRegistry;
+
 class Fieldgroup
 {
 
@@ -25,20 +27,24 @@ class Fieldgroup
     public function addField( $type, $key, $args )
     {
         if ( !$this->fieldExists( $key ) ) {
-            $this->fields[ $key ] = array(
-                'type' => $type,
-                'key' => $key,
-                'args' => $args
-            );
+            $Factory     = FieldRegistry::getInstance();
+            $field = $Factory->getField( $type );
+            $field->setKey( $key );
+            $field->setArgs( $args );
+            $field->setType($type);
+            $this->fields[$key] = $field;
         }
         return $this;
 
     }
 
-    public function render()
+    public function render( $moduleId, $data )
     {
-        foreach ($this->fields as $field){
-            print_r($field);
+        foreach ( $this->fields as $field ) {
+            $field->setBaseId($moduleId);
+            $field->setData($data);
+            $field->build();
+                
         }
     }
 
@@ -51,6 +57,17 @@ class Fieldgroup
     {
         return isset( $this->fields[ $key ] );
 
+    }
+    
+    
+    public function save( $data)
+    {
+        $collect = array();
+        foreach ($this->fields as $field){
+            $collect[$field->getKey()] = $field->save($data[$field->getKey()]);
+        }
+        return $collect;
+        exit;
     }
 
 }

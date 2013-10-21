@@ -2,7 +2,7 @@
 
 namespace Kontentfields;
 
-use Kontentblocks\Fields\Field;
+use Kontentfields\Field;
 
 Class FieldText extends Field
 {
@@ -11,7 +11,6 @@ Class FieldText extends Field
     
     public function __construct()
     {
-        echo "'Hello";
 
     }
     

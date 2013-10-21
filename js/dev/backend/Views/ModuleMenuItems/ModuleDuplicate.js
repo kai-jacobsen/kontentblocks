@@ -11,9 +11,8 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         KB.Notice.notice('Duplicate Module', 'success', 4500);
     },
     isValid: function() {
-        var settings = this.model.get('settings');
-        if (!settings.predefined &&
-                !settings.disabled &&
+        if (!this.model.get('predefined') &&
+                !this.model.get('disabled') &&
                 KB.Caps.userCan('edit_kontentblocks')) {
             return true;
         } else {

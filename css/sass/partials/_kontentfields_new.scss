@@ -29,11 +29,17 @@
     input[type=text]{
         height: 30px;
         line-height: 22px;
-        border: 1px solid #aaaaaa;
+        border: 1px solid #fcfcfc;
+        border-right: 1px solid #aaa;
+        border-bottom: 1px solid #aaa; 
         font-size:14px;
+        width:40%;
+        @include transition(width .2s ease-out);
 
         &:focus{
-            @include box-shadow(1px 1px 8px $lightblue);
+            width: 65%;
+            border-right: 0;
+            // @include box-shadow(1px 1px 8px $lightblue);
         }
 
         &.large{

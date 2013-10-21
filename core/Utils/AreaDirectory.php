@@ -195,7 +195,6 @@ class AreaDirectory
                 $update                     = true;
             }
         }
-
     }
 
     /**
