@@ -43,7 +43,7 @@ module.exports = function(grunt) {
                 nonull: true
             },
             frontend: {
-                src: ['js/dev/frontend/**/*.js', 'js/dev/frontend/frontend.js'],
+                src: ['js/dev/frontend/etch/etch.js','js/dev/frontend/**/*.js', 'js/dev/frontend/frontend.js'],
                 dest: 'js/tmp/frontend.concat.js',
                 nonull: true
             },

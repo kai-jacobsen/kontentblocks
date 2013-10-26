@@ -2,21 +2,23 @@ var KB = KB || {};
 
 KB.ModuleView = Backbone.View.extend({
     initialize: function() {
-        
-        console.log(jQuery('[data-rel]'));
-        
+        console.log(this.model);
+        this.model.bind('save', this.model.save);
         this.render();
 
     },
+    save: function(){
+        
+    },
     events: {
         "click a.os-edit-block": "openVex",
-        "dblclick": "openVex",
-        "click .slider-controls" : "openSlider"
-
+        "click .editable": "initEtch",
+        "click .slider-controls": "openSlider"
     },
     render: function() {
         this.$el.append(KB.Templates.render('module-controls', {model: this.model.toJSON()}));
     },
+    initEtch: etch.editableInit,
     openVex: function() {
         target = this.model.get('editURL');
         height = jQuery(window).height();
@@ -31,12 +33,12 @@ KB.ModuleView = Backbone.View.extend({
             }
         });
     },
-    openSlider: function(){
-        
-        if (KB.OpenSlider){
+    openSlider: function() {
+
+        if (KB.OpenSlider) {
             KB.OpenSlider.destroy();
         }
-        
+
         KB.OpenSlider = new KB.SliderView({
             tagName: 'div',
             id: 'slider-unique',
