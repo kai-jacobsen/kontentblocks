@@ -1,0 +1,10 @@
+{# empty Twig template #}
+
+    {{ 
+test.get('key').
+    el('h1').
+    addClass('peter bob andrew').
+    addAttr({'data-rel': 'what', 'data-is':'stuff'}).
+    html()|raw }}
+
+    {{ dump(test.get('key')) }}

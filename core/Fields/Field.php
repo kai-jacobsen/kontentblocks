@@ -7,10 +7,10 @@ abstract class Field
 
     protected $baseId;
     protected $args;
-    protected $data;
+    protected $value;
     protected $key;
     protected $type;
-    protected static $defaults;
+    public $returnObj;
 
     public function setKey( $key )
     {
@@ -30,21 +30,46 @@ abstract class Field
 
     }
 
-    public function setBaseId( $id )
+    public function setBaseId( $id, $array = false )
     {
-        $this->baseId = $id;
+        if (!$array){
+            $this->baseId = $id;
+        } else {
+            $this->baseId = $id . '[' . $array . ']';
+        }
 
     }
 
     public function setData( $data )
     {
-        $this->data = $data;
+        $this->value = $data;
 
     }
 
     public function setType( $type )
     {
         $this->type = $type;
+
+    }
+
+    public function setup( $data, $moduleId )
+    {
+        $this->setData( $data );
+        $this->parentModule = $moduleId;
+    }
+
+    public function getReturnObj()
+    {
+        if ( !empty( $this->defaults[ 'returnObj' ] ) ) {
+            $classname = $this->defaults['returnObj'];
+            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
+            $this->returnObj = new $classpath($this->value, $this->parentModule);
+            return $this->returnObj;
+        }
+        else {
+            $this->returnObj = new \Kontentblocks\Fields\Returnobjects\StandardFieldReturn( $this->value, $this->parentModule);
+            return $this->returnObj;
+        }
 
     }
 
@@ -92,6 +117,12 @@ abstract class Field
 
     }
 
+    public function getValue()
+    {
+        return $this->value;
+
+    }
+
     /*
      * Get description if available
      */
@@ -104,13 +135,12 @@ abstract class Field
 
     }
 
-    
-    public function save( $keydata)
+    public function save( $keydata )
     {
         return $keydata;
+
     }
-    
-    
+
     public function getArg( $arg )
     {
         if ( !empty( $this->args[ $arg ] ) ) {

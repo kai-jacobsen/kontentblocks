@@ -93,7 +93,7 @@ class Proxy extends \Kontentblocks\Modules\Module {
 	}
 	
 	
-	public function module($data) {
+	public function render($data) {
 		return false;
 	}
 	

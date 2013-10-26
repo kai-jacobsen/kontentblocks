@@ -29,7 +29,7 @@ class KB_Master_Module extends Module {
 	}
 	
 	
-	public function  module($data) {
+	public function  render($data) {
 		
 		global $Kontentblocks;
 		$tpls = $Kontentblocks->get_block_templates();

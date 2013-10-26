@@ -17,9 +17,10 @@ class Module_Prototype extends Module
         'category' => 'media'
     );
 
-    public function module( $data )
+    public function render($data)
     {
-        
+        $tpl = new ModuleTemplate($this, '/templates/prototype.twig');
+        return $tpl->render();
     }
 
     public function fields()
@@ -28,12 +29,20 @@ class Module_Prototype extends Module
         $groupA = $this->Fields->addGroup( 'Peter' )
             ->addField( 'text', 'key', array(
                 'label' => 'stuff',
-                'description' => 'My first new description'
+                'description' => 'My first new description',
+                'arrayKey' => 'test'
             ) )
-            ->addField( 'text', 'key2', array( 'label' => 'stuff' ) );
+            ->addField( 'text', 'key2', array( 'label' => 'stuff', 'arrayKey' => 'test' ) );
 
-        $fieldB = $this->Fields->addSingleField( 'Andrew' )
+        $fieldB = $this->Fields->addGroup( 'Andrew' )
             ->addField( 'text', 'key3', array( 'stuff' => 'stuff' ) );
+
+    }
+
+    public function __destruct()
+    {
+
+        echo "\n" . memory_get_peak_usage();
 
     }
 

@@ -138,7 +138,7 @@ abstract class Module
      */
     public function options()
     {
-        $this->Fields->render();
+        $this->Fields->renderFields();
 
     }
 
@@ -149,7 +149,7 @@ abstract class Module
      */
     public function save( $data )
     {
-        return $this->saveFields($data);
+        return $this->saveFields( $data );
 
     }
 
@@ -158,7 +158,15 @@ abstract class Module
      * Frontend display method.
      * Has no default output yet, and must be overwritten 
      */
-    public abstract function module( $data );
+    final public function module( $data )
+    {
+
+        $this->_setupFieldData();
+        return $this->render( $data );
+
+    }
+
+    public abstract function render( $data );
 
     /**
      * setup()
@@ -172,9 +180,20 @@ abstract class Module
         
     }
 
-    public function saveFields($data)
+    public function saveFields( $data )
     {
-       return $this->Fields->save($data);
+        return $this->Fields->save( $data );
+
+    }
+
+    public function _setupFieldData()
+    {
+
+        $this->Fields->setup( $this->new_instance );
+        foreach ( $this->new_instance as $key => $v ) {
+            $field = $this->Fields->getFieldByKey( $key );
+            $this->new_instance[ $key ] = ($field !== NULL) ? $field->getReturnObj() : null;
+        }
     }
 
     /* -----------------------------------------------------
@@ -208,6 +227,7 @@ abstract class Module
         }
         else {
             // output the form fields for this block
+            $this->Fields->data = $this->new_instance;
             $this->options( $this->new_instance );
         }
 
@@ -487,6 +507,12 @@ abstract class Module
      * Return data
      */
 
+    public function get( $key = null, $return = '' )
+    {
+        return (!empty( $this->new_instance[ $key ] )) ? $this->new_instance[ $key ] : $return;
+
+    }
+
     public function getData( $key = null, $return = '' )
     {
         if ( empty( $this->new_instance ) or empty( $key ) ) {
@@ -494,6 +520,12 @@ abstract class Module
         }
 
         return (!empty( $this->new_instance[ $key ] )) ? $this->new_instance[ $key ] : $return;
+
+    }
+
+    public function getDataObj( $key = null )
+    {
+        $test = $this->Fields->getFieldByKey( $key );
 
     }
 
@@ -538,7 +570,8 @@ abstract class Module
             'hidden' => false,
             'predefined' => false,
             'globallyAvailable' => false,
-            'category' => false
+            'category' => false,
+            'columns' => ''
         );
 
     }

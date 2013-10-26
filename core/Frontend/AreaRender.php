@@ -2,7 +2,8 @@
 
 namespace Kontentblocks\Frontend;
 
-use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleFactory,
+    Kontentblocks\Modules\Module;
 
 //======================================
 // Purpose of this Class
@@ -132,7 +133,6 @@ class AreaRender
 
         // rollin'
         $this->prepare_area();
-
     }
 
     /**
@@ -145,8 +145,9 @@ class AreaRender
          */
         $this->modules = $this->get_modules();
         //bail if empty
-        if ( empty( $this->raw_modules ) )
+        if ( empty( $this->raw_modules ) ) {
             return false;
+        }
         // Instantiate Modules
         $this->modules = $this->setup_modules();
 
@@ -180,6 +181,7 @@ class AreaRender
 
         // collect html
         $output = '';
+
 
 
         if ( empty( $this->modules ) )
@@ -281,7 +283,7 @@ class AreaRender
         }
 
         // if this blocks uses a wrapper (default behaviour), print before markup
-        if ( $module->settings[ 'wrapper' ] ) {
+        if ( $module->wrap ) {
             // Additional Classes to add to the wrapper
             $classestoadd[] = $this->_get_element_class();
             $classestoadd[] = (isset( $module->repeater ) && $module->repeater === true) ? ' repeater' : null;
@@ -289,10 +291,9 @@ class AreaRender
             // add On Site Editor container 
             if ( is_user_logged_in() )
                 $classestoadd[] = 'os-edit-container';
-
             // add classes to markup
             if ( !empty( $classestoadd ) ) {
-                $mhtml .= sprintf( stripslashes( $module->settings[ 'before_block' ] ), $module->instance_id, implode( ' ', $classestoadd ) );
+                $mhtml .= sprintf( stripslashes( $module->beforeModule ), $module->instance_id, $module->id, implode( ' ', $classestoadd ) );
             }
             else {
                 $mhtml .= sprintf( stripslashes( $module->settings[ 'before_block' ] ), NULL );
@@ -318,10 +319,10 @@ class AreaRender
         $mhtml = null;
 
         // if block uses wrapper, print after markup
-        if ( $module->settings[ 'wrapper' ] ) {
-            $mhtml .= $module->settings[ 'after_block' ];
+        if ( $module->wrap ) {
+            $mhtml .= $module->afterModule;
         }
-        elseif ( is_user_logged_in() && !$module->settings[ 'wrapper' ] ) {
+        elseif ( is_user_logged_in() && !$module->wrap ) {
             // close os-edit-container if block doesnt use a wrapper
             $mhtml .= "</div>";
         }
@@ -330,8 +331,9 @@ class AreaRender
         }
 
         // Call the shutdown method if it exists
-        if ( method_exists( $module, 'shutdown' ) )
+        if ( method_exists( $module, 'shutdown' ) ) {
             $mhtml .= $module->shutdown();
+        }
 
         $module->toJSON();
 
@@ -378,7 +380,7 @@ class AreaRender
 
 
         // inner HTML
-        $html = $module->block( $module->new_instance );
+        $html = $module->module( $module->new_instance );
         
         // Some modules might return false, that's ok
         if ( false === $html ) {
@@ -390,7 +392,7 @@ class AreaRender
 
             if ( method_exists( $html, 'block' ) ) {
 
-                $html = $html->block( $html->external_data );
+                $html = $html->module( $html->external_data );
             }
         }
 
@@ -712,7 +714,7 @@ class AreaRender
                 $collection[] = $instance;
             }
             elseif (
-                $instance->active == false OR $instance->draft == 'true' OR $instance->settings[ 'disabled' ] == true OR !apply_filters( 'kb_collect', $instance )
+                $instance->active == false OR $instance->draft == 'true' OR $instance->disabled == true OR !apply_filters( 'kb_collect', $instance )
             ) {
                 continue;
             }
@@ -772,25 +774,13 @@ class AreaRender
      */
     public function _setup_modules( $modules )
     {
-        if ( empty( $modules ) )
+        if ( empty( $modules ) ) {
             return false;
-
-        $defaults = array(
-            'id' => 'generic_id',
-            'instance_id' => null,
-            'area' => 'kontentblocks',
-            'class' => null,
-            'name' => null,
-            'status' => 'kb_active',
-            'draft' => 'pain',
-            'locked' => false,
-            'area_context' => 'normal'
-        );
-
+        }
 
         foreach ( ( array ) $modules as $module ) {
 
-            $args = wp_parse_args( $module, $defaults );
+            $args = wp_parse_args( $module, Module::getDefaults() );
 
             $module = apply_filters( 'kb_modify_block', $module );
             $module = apply_filters( "kb_modify_block_{$module[ 'id' ]}", $module );
@@ -978,5 +968,6 @@ class AreaRender
         return implode( ' ', $class );
 
     }
+    
 
 }
