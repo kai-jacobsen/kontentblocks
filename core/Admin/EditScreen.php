@@ -8,10 +8,25 @@ use Kontentblocks\Kontentblocks,
     Kontentblocks\Utils\MetaData,
     Kontentblocks\Helper;
 
+/**
+ * Purpose: Creates the UI for the registered post type, which is just page by default
+ * Removes default meta boxes and adds the custom ui
+ * Handles saving of areas while in post context
+ * 
+ */
 Class EditScreen
 {
 
+    /**
+     * Whitelist of hooks
+     * @var array 
+     */
     protected $hooks;
+
+    /**
+     * Post data Handler
+     * @var objext 
+     */
     protected $postData;
 
     /**
@@ -43,7 +58,6 @@ Class EditScreen
     public function preparePostData()
     {
         global $post;
-
         $this->postData = new PostDataContainer( $post->ID );
 
     }
@@ -59,11 +73,8 @@ Class EditScreen
     }
 
     /**
-     * Renders the main metabox.
-     * Calls block method on each block to create the actual form fields
+     * Renders the stage.
      * 
-     * @global object Kontentblocks
-     * TODO: support for Kontentblocks specific caps
      */
     function userInterface()
     {
@@ -74,8 +85,8 @@ Class EditScreen
         wp_nonce_field( plugin_basename( __FILE__ ), 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
 
-        // output hidden input field and set the base_id as reference for new blocks
-        // this makes sure that new blocks have a unique id
+        // output hidden input field and set the base_id as reference for new modules
+        // this makes sure that new modules have a unique id
         echo Helper\getbaseIdField( $this->postData->getAllModules() );
 
         // hackish way to keep functionality of dynamically create tinymce instances
@@ -90,13 +101,13 @@ Class EditScreen
     }
 
     /**
-     * Calls save mthod on each Block
+     * Calls save mthod on each Module
      * 
+     * TODO: Outsource saving routine
      * @global object Kontentblocks
      */
     function save( $post_id, $post_object )
     {
-        global $Kontentblocks, $lcMobile;
 
         // verify if this is an auto save routine. 
         // If it is our form has not been submitted, so we dont want to do anything
@@ -141,18 +152,17 @@ Class EditScreen
             return;
         }
 
-
-
         $real_post_id = isset( $_POST[ 'post_ID' ] ) ? $_POST[ 'post_ID' ] : NULL;
 
-        $MetaData      = new MetaData($real_post_id);
+        // Intantiate Postmeta data handler
+        $MetaData = new MetaData( $real_post_id );
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
             $MetaData->backup( 'Before regular update' );
-            
         }
 
+        
         if ( !empty( $MetaData->getIndex() ) ) {
             foreach ( $MetaData->getIndex() as $module ) {
 
@@ -165,25 +175,29 @@ Class EditScreen
                 $tosave = array();
 
                 // new data from $_POST
+                //TODO: filter incoming data
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
-                
+                $old = $MetaData->getMetaData( $module[ 'instance_id' ] );
+
                 $Factory           = new ModuleFactory( $module );
                 $instance          = $Factory->getModule();
                 $instance->post_id = $real_post_id;
 
                 // old, saved data
-                $old = $MetaData->getMetaData( $module[ 'instance_id' ] );
-
+                //TODO
                 $instance->new_instance = $old;
 
                 // check for draft and set to false
+                // TODO: Lame
                 $module[ 'draft' ] = self::_draft_check( $module );
 
                 // special block specific data
+               
                 $module = self::_individual_block_data( $module, $data );
 
                 $module = apply_filters( 'save_module_data', $module, $data );
 
+                // create updated index
                 $updateblocks[ $module[ 'instance_id' ] ] = $module;
 
 
@@ -199,14 +213,14 @@ Class EditScreen
 
 
                 // store new data in post meta
+                // if this is a preview, save temporary data for previews
                 if ( $new && $new != $old ) {
                     if ( $_POST[ 'wp-preview' ] === 'dopreview' ) {
                         update_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ], $new );
                     }
-                    // if this is a preview, save temporary data for previews
                     // save real data
                     else {
-                        update_post_meta( $real_post_id, '_' . $module[ 'instance_id' ], $new );
+                        $MetaData->saveModule($module['instance_id'], $new);
                         delete_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ] );
                     }
                 }
@@ -214,22 +228,17 @@ Class EditScreen
             $MetaData->saveIndex( $updateblocks );
         }
 
-
-
         // save area settings which are specific to this post (ID-wise)
-        if ( !empty( $_POST['areas'] ) ) {
+        if ( !empty( $_POST[ 'areas' ] ) ) {
 
-            $collection = $MetaData->getMetaData('kb_area_settings');
-            foreach ( $_POST['areas'] as $id ) {
-                
-                if (isset($_POST[$id])){
-                    $collection[$id] = $_POST[$id];
+            $collection = $MetaData->getMetaData( 'kb_area_settings' );
+            foreach ( $_POST[ 'areas' ] as $id ) {
+
+                if ( isset( $_POST[ $id ] ) ) {
+                    $collection[ $id ] = $_POST[ $id ];
                 }
-
             }
-            
-            $MetaData->saveMetaData('kb_area_settings', $collection);
-            
+            $MetaData->saveMetaData( 'kb_area_settings', $collection );
         }
 
     }
@@ -274,9 +283,9 @@ Class EditScreen
     }
 
     /**
-     * Render each context if areas are available
+     * Create a new Screen Manager which will handle the several sections
+     * True edit screen layout starts here
      * 
-     * @param array $context 
      */
     public function renderScreen()
     {

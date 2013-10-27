@@ -28,7 +28,7 @@ class FieldArray
     {
         foreach ( $this->fields as $field ) {
             $fielddata = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : '';
-            $field->setup( $fielddata, $this->baseId );
+            $field->setup( $fielddata, $baseId );
         }
 
     }

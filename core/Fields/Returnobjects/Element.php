@@ -11,13 +11,15 @@ class Element extends FieldReturnObject
     protected $classes    = array();
     protected $attributes = array();
 
-    public function __construct( $value, $baseId )
+    public function __construct( $value, $field )
     {
-        parent::__construct( $value );
         if ( is_user_logged_in() ) {
-            $this->addClass('editable');
-            $this->addAttr('contenteditable', 'true');
+            $this->addClass( 'editable' );
+            $this->addAttr( 'data-module', $field->parentModule );
+            $this->addAttr( 'data-key', $field->getKey() );
+            $this->addAttr( 'data-arrayKey', $field->getArg( 'arrayKey' ) );
         }
+        parent::__construct( $value );
 
     }
 
@@ -56,7 +58,7 @@ class Element extends FieldReturnObject
     public function html()
     {
         $format = '<%1$s %3$s>%2$s</%1$s>';
-        return sprintf( $format, $this->el, $this->value, $this->_renderAttributes() );
+        return sprintf( $format, $this->el, apply_filters('the_content',$this->value), $this->_renderAttributes() );
 
     }
 

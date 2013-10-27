@@ -8,24 +8,50 @@ use Kontentblocks\Admin\PostDataContainer,
 class ScreenManager
 {
 
-    
+    /**
+     * Raw areas are all areas which are available in the current context
+     * e.g. are assigned to pagetemplate and/or post type
+     * @var array 
+     */
     protected $rawAreas;
+
+    /**
+     * TODO: What is this?
+     * @var array 
+     */
     protected $postAreas;
+
+    /**
+     * Definition of possible sections for the edit screen
+     * A context does not get rendered if there are no areas 
+     * assigned to it.
+     * @var array 
+     */
     protected $contextLayout;
+
+    /**
+     * Final sorted assignment of areas to contexts
+     * TODO: Var name sucks
+     * @var array 
+     */
     protected $contexts;
 
     public function __construct( PostDataContainer $postData )
     {
 
+        // get areas available
         if ( empty( $postData->get( 'areas' ) ) ) {
             return false;
         }
 
-        $this->postData = $postData;
+        $this->postData      = $postData;
         $this->contextLayout = $this->_getDefaultContextLayout();
         $this->rawAreas      = $postData->get( 'areas' );
         $this->contexts      = $this->areasSortedByContext( $this->rawAreas );
-        $this->hasSidebar    = $this->evaluateLayout();
+
+        // test if final context layout includes an sidebar
+        // e.g. if an area is assigned to 'side'
+        $this->hasSidebar = $this->evaluateLayout();
 
     }
 
@@ -37,8 +63,9 @@ class ScreenManager
     {
         foreach ( $this->contextLayout as $contextId => $args ) {
 
-                $context = new ScreenContext( $args, $this );
-                $context->render();
+            // delegate the actual output to ScreenContext
+            $context = new ScreenContext( $args, $this );
+            $context->render();
         }
 
     }
@@ -50,28 +77,27 @@ class ScreenManager
     public function areasSortedByContext()
     {
         if ( !$this->rawAreas ) {
-            throw new Exception('No Areas specified for context');
+            throw new Exception( 'No Areas specified for context' );
         }
 
         foreach ( $this->rawAreas as $area ) {
-            $contextfy[ $area[ 'context' ] ][$area['id']] = $area;
+            $contextfy[ $area[ 'context' ] ][ $area[ 'id' ] ] = $area;
         }
 
         return $contextfy;
 
     }
-    
-    
-    public function getContextAreas($id)
+
+    public function getContextAreas( $id )
     {
-        if (isset($this->contexts[$id])){
-            return $this->contexts[$id];
-        } else {
+        if ( isset( $this->contexts[ $id ] ) ) {
+            return $this->contexts[ $id ];
+        }
+        else {
             return array();
         }
+
     }
-    
-    
 
     /*
      * Default Context Layout
@@ -116,7 +142,10 @@ class ScreenManager
 
     }
 
-    public function getPostAreas(){
+    public function getPostAreas()
+    {
         return $this->postAreas;
+
     }
+
 }

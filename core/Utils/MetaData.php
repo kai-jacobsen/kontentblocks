@@ -274,6 +274,12 @@ class MetaData implements DataHandlerInterface
         }
 
     }
+    
+    public function getModuleData($id){
+        if (isset($this->modules[$id])){
+            return $this->modules[$id];
+        }
+    }
 
     public function saveModule( $id, $data )
     {

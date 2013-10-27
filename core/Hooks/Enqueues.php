@@ -87,15 +87,18 @@ class Enqueues
         // Thickbox on front end for logged in users
 
         $config = array(
-            'url' => KB_PLUGIN_URL
+            'url' => KB_PLUGIN_URL,
+            'ajaxurl' => admin_url('admin-ajax.php')
         );
 
         if ( is_user_logged_in() && !is_admin() ) {
             //add_action( 'wp_footer', array( $this, 'add_reveal' ) );
             wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . 'js/dist/plugins.min.js', array( 'jquery', 'jquery-ui-mouse', 'wp-color-picker' ) );
+            
             wp_enqueue_script( 'KBOnSiteEditing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array( 'KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse' ) );
             wp_localize_script( 'KBOnSiteEditing', 'kontentblocks', $this->_localize() );
-            wp_enqueue_script( 'kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array( 'backbone', 'jquery-ui-tabs', 'jquery-ui-draggable' ), null, true );
+            wp_enqueue_script( 'kb-shared', KB_PLUGIN_URL . 'js/dist/shared.min.js', array( 'KBPlugins' ), null, true );
+            wp_enqueue_script( 'kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array( 'backbone', 'jquery-ui-tabs', 'jquery-ui-draggable', 'kb-shared' ), null, true );
             wp_localize_script( 'kb-frontend', 'KBAppConfig', $config );
 //            wp_enqueue_style( 'thickbox' );
             wp_enqueue_style( 'KB', KB_PLUGIN_URL . '/css/kontentblocks.css' );
@@ -153,7 +156,7 @@ class Enqueues
             'config' => array(
                 'url' => KB_PLUGIN_URL
             ),
-            'fields' => get_option('kontentfields')
+            'fields' => get_option( 'kontentfields' )
         );
 
     }

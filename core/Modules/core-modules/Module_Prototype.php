@@ -14,7 +14,8 @@ class Module_Prototype extends Module
         'in_dynamic' => true,
         'templateable' => true,
         'connect' => 'any',
-        'category' => 'media'
+        'category' => 'media',
+        'id' => 'prototype'
     );
 
     public function render($data)

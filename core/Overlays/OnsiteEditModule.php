@@ -2,7 +2,8 @@
 
 namespace Kontentblocks\Overlays;
 
-use Kontentblocks\Utils\ModuleDirectory;
+use Kontentblocks\Utils\ModuleDirectory,
+    Kontentblocks\Modules\ModuleFactory;
 
 class OnsiteEditModule
 {
@@ -110,8 +111,11 @@ class OnsiteEditModule
     public function module()
     {
 
-        $instance = ModuleDirectory::getInstance()->get( $this->class );
-        $instance->set( get_object_vars( $this ) );
+        $args = ModuleDirectory::getInstance()->get( $this->class );
+
+        $Factory                = new ModuleFactory( $args );
+        $instance               = $Factory->getModule();
+        $instance->Fields->data = $this->getData();
         $instance->options( $this->getData() );
 
     }
@@ -166,8 +170,10 @@ class OnsiteEditModule
         $old    = get_post_meta( $this->postId, '_' . $this->instance_id, true );
         $data   = (isset( $_POST[ $this->instance_id ] )) ? $_POST[ $this->instance_id ] : null;
 
-        $instance = ModuleDirectory::getInstance()->get( $this->class );
+        $args = ModuleDirectory::getInstance()->get( $this->class );
 
+        $Factory           = new ModuleFactory( $args );
+        $instance          = $Factory->getModule();
         $instance->columns = $this->columns;
         $instance->set( get_object_vars( $this ) );
 
@@ -196,7 +202,7 @@ class OnsiteEditModule
         if ( $update == true ) {
             $instance->instance_id = $this->instance_id;
             $result                = array(
-                'output' => stripslashes( $instance->block( $new ) ) . $instance->print_edit_link( $this->postId ),
+                'output' => stripslashes( $instance->module( $new ) ) . $instance->print_edit_link( $this->postId ),
                 'callback' => $instance->id
             );
 

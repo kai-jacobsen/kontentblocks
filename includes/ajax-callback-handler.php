@@ -5,7 +5,8 @@ use Kontentblocks\Overlays\OnsiteEditModule,
     Kontentblocks\Ajax\SortModules,
     Kontentblocks\Ajax\RemoveModules,
     Kontentblocks\Ajax\ChangeModuleStatus,
-    Kontentblocks\Ajax\ChangeArea;
+    Kontentblocks\Ajax\ChangeArea,
+    Kontentblocks\Ajax\Frontend\SaveInlineEdit;
 
 /**
  * -----------------------------------------
@@ -82,3 +83,16 @@ function changeAreaCb()
 }
 
 add_action( 'wp_ajax_changeArea', 'changeAreaCb' );
+
+
+/**
+ * -----------------------------------------
+ * Handler for saving frontend inline edit 
+ * -----------------------------------------
+ */
+function saveInlineEditCb()
+{
+    $saveInlineEdit = new SaveInlineEdit();
+}
+
+add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );

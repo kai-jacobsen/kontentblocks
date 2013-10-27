@@ -63,11 +63,11 @@ abstract class Field
         if ( !empty( $this->defaults[ 'returnObj' ] ) ) {
             $classname = $this->defaults['returnObj'];
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
-            $this->returnObj = new $classpath($this->value, $this->parentModule);
+            $this->returnObj = new $classpath($this->value, $this);
             return $this->returnObj;
         }
         else {
-            $this->returnObj = new \Kontentblocks\Fields\Returnobjects\StandardFieldReturn( $this->value, $this->parentModule);
+            $this->returnObj = new \Kontentblocks\Fields\Returnobjects\StandardFieldReturn( $this->value);
             return $this->returnObj;
         }
 

@@ -12,7 +12,8 @@ module.exports = function(grunt) {
                 files: {
                     'js/dist//<%= pkg.name %>.min.js': ['js/dev/<%= pkg.name %>.js'],
                     'js/dist/frontend.min.js': ['<%= concat.frontend.dest %>'],
-                    'js/dist/backend.min.js': ['<%= concat.backend.dest %>']
+                    'js/dist/backend.min.js': ['<%= concat.backend.dest %>'],
+                    'js/dist/shared.min.js': ['<%= concat.shared.dest %>']
                 }
             },
             sec: {
@@ -51,6 +52,11 @@ module.exports = function(grunt) {
                 src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js'],
                 dest: 'js/tmp/backend.concat.js',
                 nonull: true
+            },
+            shared: {
+                src: ['js/dev/shared/**/*.js'],
+                dest: 'js/tmp/shared.concat.js',
+                notnull: true
             }
         },
         compass: {
