@@ -5,15 +5,15 @@ KB.Ajax = (function($) {
     return {
         send: function(data, callback) {
 
-            
+
             var nonce = $('#_kontentblocks_ajax_nonce').val();
             var postID = $('#post_ID').val();
 
             data._kb_nonce = nonce;
             data.post_id = postID;
             data.kbajax = 'true';
-            
-            
+
+
 
             $(kbMetaBox).addClass('kb_loading');
             $('#publish').attr('disabled', 'disabled');
@@ -24,10 +24,11 @@ KB.Ajax = (function($) {
                 type: 'POST',
                 dataType: 'json',
                 success: function(data) {
-
-                    if (data.success && data.success === false){
-                        KB.Notice.notice('Error', 'error', 3500);
+                    if (data) {
+                        callback;
                     }
+
+
                 },
                 error: function() {
                     // generic error message

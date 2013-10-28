@@ -1,8 +1,8 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Areas;
 
-use Kontentblocks\Utils\AreaDirectory;
+use Kontentblocks\Utils\RegionRegistry;
 
 class AreaSettingsMenu
 {
@@ -76,7 +76,7 @@ class AreaSettingsMenu
      */
     public function _getAssignedTemplates()
     {
-        $registeredAreaTemplates = AreaDirectory::getInstance()->getTemplates();
+        $registeredAreaTemplates = RegionRegistry::getInstance()->getTemplates();
         $collect = array();
         if ( !empty( $this->areaTemplates ) ) {
             foreach ( $this->areaTemplates as $tplid ) {

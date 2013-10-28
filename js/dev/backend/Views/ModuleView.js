@@ -15,7 +15,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             el: this.$head,
             parent: this
         });
-
+        
         // Setup View
         this.setupDefaultMenuItems();
     },

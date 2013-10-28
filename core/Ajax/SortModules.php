@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Utils\GlobalData,
-    Kontentblocks\Utils\MetaData;
+use Kontentblocks\Utils\GlobalDataHandler,
+    Kontentblocks\Utils\PostMetaDataHandler;
 
 class SortModules
 {
@@ -31,10 +31,10 @@ class SortModules
     public function _setupDataHandler()
     {
         if ( $this->postId == -1 ) {
-            return new GlobalData();
+            return new GlobalDataHandler();
         }
         else {
-            return new MetaData( $this->postId );
+            return new PostMetaDataHandler( $this->postId );
         }
 
     }

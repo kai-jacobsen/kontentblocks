@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Utils\MetaData;
+use Kontentblocks\Utils\PostMetaDataHandler;
 
 class ChangeArea
 {
@@ -20,7 +20,7 @@ class ChangeArea
         $this->postId = $_POST['post_id'];
         $this->newArea = $_POST['area_id'];
         $this->instanceId = $_POST['block_id'];
-        $this->dataHandler = new MetaData($this->postId);
+        $this->dataHandler = new PostMetaDataHandler($this->postId);
 
         $this->updateArea();
         

@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Interfaces;
 
-interface DataHandlerInterface
+interface InterfaceDataHandler
 {
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\TemplateEngine;
+namespace Kontentblocks\Templating;
 
 class CoreTemplate
 {
@@ -17,7 +17,7 @@ class CoreTemplate
 
         $this->data    = $data;
         $this->tplFile = ($tpl !== false) ? $tpl : null;
-        $this->path    = KB_PLUGIN_PATH . 'core/TemplateEngine/templates/';
+        $this->path    = KB_PLUGIN_PATH . 'core/Templating/templates/';
         $this->engine  = Twig::getInstance();
 
     }

@@ -2,9 +2,9 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Interfaces\DataHandlerInterface;
+use Kontentblocks\Interfaces\InterfaceDataHandler;
 
-class MetaData implements DataHandlerInterface
+class PostMetaDataHandler implements InterfaceDataHandler
 {
 
     protected $post_id;
@@ -301,8 +301,8 @@ class MetaData implements DataHandlerInterface
 
     public function addToIndex( $id, $args )
     {
-
         $this->index[ $id ] = $args;
+
         return $this->_updateIndex();
 
     }
@@ -323,7 +323,7 @@ class MetaData implements DataHandlerInterface
     {
         if ( !empty( $this->index ) ) {
             foreach ( $this->index as $module ) {
-                if ( $module[ 'area' ] === $area && $module[ 'draft' ] !== 'true' && $module[ 'status' ] !== 'kb_inactive' ) {
+                if ( $module[ 'area' ] === $area && $module[ 'draft' ] !== 'true' && $module[ 'active' ] !== false ) {
                     return true;
                 }
             }

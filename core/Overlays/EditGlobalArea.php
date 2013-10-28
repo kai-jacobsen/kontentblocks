@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Overlays;
 
-use Kontentblocks\Admin\GlobalDataContainer,
+use Kontentblocks\Admin\GlobalContextData,
     Kontentblocks\Admin\EditScreen,
     Kontentblocks\Modules\ModuleFactory;
 
@@ -15,7 +15,7 @@ class EditGlobalArea
 
     public function __construct()
     {
-        $this->dataContainer = new GlobalDataContainer();
+        $this->dataContainer = new GlobalContextData();
         $this->nonce         = wp_create_nonce( 'editGlobalArea' );
         $this->bootstrap();
 
@@ -118,14 +118,14 @@ class EditGlobalArea
 
         $areaid = $_REQUEST[ 'area' ];
 
-        $GlobalData = $this->dataContainer->getDataHandler();
+        $GlobalDataHandler = $this->dataContainer->getDataHandler();
 
-        $modules = $GlobalData->getIndexForArea( $areaid );
+        $modules = $GlobalDataHandler->getIndexForArea( $areaid );
 
         if ( !empty( $modules ) ) {
             foreach ( $modules as $module ) {
                 // old, saved data
-                $old = $GlobalData->getModuleData( $module[ 'instance_id' ] );
+                $old = $GlobalDataHandler->getModuleData( $module[ 'instance_id' ] );
 
                 // new data from $_POST
                 $data              = stripslashes_deep( $_POST[ $module[ 'instance_id' ] ] );
@@ -150,23 +150,23 @@ class EditGlobalArea
 
                 // store new data in post meta
                 if ( $new && $new != $old ) {
-                    $GlobalData->saveModuleData( $module[ 'instance_id' ], $new );
+                    $GlobalDataHandler->saveModuleData( $module[ 'instance_id' ], $new );
                 }
 
-                $GlobalData->addToIndex( $module[ 'instance_id' ], $module );
+                $GlobalDataHandler->addToIndex( $module[ 'instance_id' ], $module );
             }
         }
 
         if ( !empty( $_POST[ 'areas' ] ) ) {
 
-            $collection = $GlobalData->getAreaSettings();
+            $collection = $GlobalDataHandler->getAreaSettings();
             foreach ( $_POST[ 'areas' ] as $id ) {
 
                 if ( isset( $_POST[ $id ] ) ) {
                     $collection[ $id ] = $_POST[ $id ];
                 }
             }
-            $GlobalData->saveAreaSettings( $collection );
+            $GlobalDataHandler->saveAreaSettings( $collection );
         }
 
         echo "<script>var win = window.dialogArguments || opener || parent || top;"

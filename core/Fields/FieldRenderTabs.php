@@ -8,7 +8,7 @@ namespace Kontentblocks\Fields;
  * 
  * There may be different ways to organize in future releases
  * Instantiated by:
- * @see Kontentblocks\Fields\Refield::render()
+ * @see Kontentblocks\Fields\FieldManager::render()
  * 
  * @package Fields
  * @since 1.0.0

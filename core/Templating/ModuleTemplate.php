@@ -1,5 +1,5 @@
 <?php
-namespace Kontentblocks\TemplateEngine;
+namespace Kontentblocks\Templating;
 class ModuleTemplate
 {
 
@@ -20,7 +20,6 @@ class ModuleTemplate
         $this->tplFile = ($tpl !== false) ? $tpl : get_class( $module ) . '.twig';
 
         $this->engine = Twig::getInstance();
-
     }
 
     public function render( $echo = false )

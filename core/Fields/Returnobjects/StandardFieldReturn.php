@@ -1,8 +1,8 @@
 <?php
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Fields\Returnobjects\FieldReturnObject;
+use Kontentblocks\Abstracts\AbstractFieldReturn;
 
-class StandardFieldReturn extends FieldReturnObject{
+class StandardFieldReturn extends AbstractFieldReturn{
     
 }

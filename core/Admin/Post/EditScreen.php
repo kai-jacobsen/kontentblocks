@@ -1,11 +1,11 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Post;
 
 use Kontentblocks\Kontentblocks,
     Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Admin\ScreenManager,
-    Kontentblocks\Utils\MetaData,
+    Kontentblocks\Admin\Post\ScreenManager,
+    Kontentblocks\Utils\PostMetaDataHandler,
     Kontentblocks\Helper;
 
 /**
@@ -58,7 +58,7 @@ Class EditScreen
     public function preparePostData()
     {
         global $post;
-        $this->postData = new PostDataContainer( $post->ID );
+        $this->postData = new PostContextData( $post->ID );
 
     }
 
@@ -155,16 +155,16 @@ Class EditScreen
         $real_post_id = isset( $_POST[ 'post_ID' ] ) ? $_POST[ 'post_ID' ] : NULL;
 
         // Intantiate Postmeta data handler
-        $MetaData = new MetaData( $real_post_id );
+        $PostMetaDataHandler = new PostMetaDataHandler( $real_post_id );
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
-            $MetaData->backup( 'Before regular update' );
+            $PostMetaDataHandler->backup( 'Before regular update' );
         }
 
         
-        if ( !empty( $MetaData->getIndex() ) ) {
-            foreach ( $MetaData->getIndex() as $module ) {
+        if ( !empty( $PostMetaDataHandler->getIndex() ) ) {
+            foreach ( $PostMetaDataHandler->getIndex() as $module ) {
 
                 if ( !class_exists( $module[ 'class' ] ) ) {
                     continue;
@@ -177,7 +177,7 @@ Class EditScreen
                 // new data from $_POST
                 //TODO: filter incoming data
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
-                $old = $MetaData->getMetaData( $module[ 'instance_id' ] );
+                $old = $PostMetaDataHandler->getMetaData( $module[ 'instance_id' ] );
 
                 $Factory           = new ModuleFactory( $module );
                 $instance          = $Factory->getModule();
@@ -220,25 +220,25 @@ Class EditScreen
                     }
                     // save real data
                     else {
-                        $MetaData->saveModule($module['instance_id'], $new);
+                        $PostMetaDataHandler->saveModule($module['instance_id'], $new);
                         delete_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ] );
                     }
                 }
             }
-            $MetaData->saveIndex( $updateblocks );
+            $PostMetaDataHandler->saveIndex( $updateblocks );
         }
 
         // save area settings which are specific to this post (ID-wise)
         if ( !empty( $_POST[ 'areas' ] ) ) {
 
-            $collection = $MetaData->getMetaData( 'kb_area_settings' );
+            $collection = $PostMetaDataHandler->getMetaData( 'kb_area_settings' );
             foreach ( $_POST[ 'areas' ] as $id ) {
 
                 if ( isset( $_POST[ $id ] ) ) {
                     $collection[ $id ] = $_POST[ $id ];
                 }
             }
-            $MetaData->saveMetaData( 'kb_area_settings', $collection );
+            $PostMetaDataHandler->saveMetaData( 'kb_area_settings', $collection );
         }
 
     }

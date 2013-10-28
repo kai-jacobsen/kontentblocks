@@ -2,7 +2,7 @@
 
 use Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Utils\ModuleDirectory;
+    Kontentblocks\Utils\ModuleRegistry;
 
 add_action( 'wp_ajax_os-edit-module', 'os_edit_block_callback' );
 add_action( 'tb_update_os_block', 'tb_update_os_block_cb' );
@@ -172,7 +172,7 @@ function tb_show_edit_block_cb()
                     echo "<div class='kb_block' id='{$instance_id}'>";
 
 
-                    $instance                = ModuleDirectory::getInstance()->get( $class );
+                    $instance                = ModuleRegistry::getInstance()->get( $class );
                     $instance->instance_id   = $instance_id;
                     $instance->area_context  = $area_context;
                     $instance->subcontext    = $subcontext;
@@ -220,7 +220,7 @@ function tb_show_edit_block_cb()
                 $old  = get_post_meta( $post_id, '_' . $instance_id, true );
                 $data = (isset( $_POST[ $instance_id ] )) ? $_POST[ $instance_id ] : null;
 
-                $instance                = ModuleDirectory::getInstance()->get( $class );
+                $instance                = ModuleRegistry::getInstance()->get( $class );
 
                 $instance->columns       = $columns;
                 $instance->area_context  = $area_context;

@@ -2,13 +2,13 @@
 
 namespace Kontentblocks;
 
-use Kontentblocks\Admin\EditScreen,
+use Kontentblocks\Admin\Post\EditScreen,
     Kontentfields\KFHandler,
     Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Hooks\Capabilities,
-    Kontentblocks\Utils\AreaDirectory,
-    Kontentblocks\Utils\ModuleDirectory;
+    Kontentblocks\Utils\RegionRegistry,
+    Kontentblocks\Utils\ModuleRegistry;
 
 /*
   Plugin Name:Kontentblocks.
@@ -91,14 +91,13 @@ Class Kontentblocks
      */
     public $Capabilities;
     protected $Enqueues;
-    public $ModuleDirectory;
+    public $ModuleRegistry;
 
     public static function getInstance()
     {
         if ( null == self::$instance ) {
             self::$instance = new self;
         }
-
         return self::$instance;
 
     }
@@ -132,8 +131,9 @@ Class Kontentblocks
 
         /* Include all necessary files on admin area */
         if ( is_admin() ) {
+            require_once 'includes/ajax/kontentblocks.ajax.generate.module.php';
+
             include_once dirname( __FILE__ ) . '/kontentblocks.options.php';
-            include_once dirname( __FILE__ ) . '/kontentblocks.ajax.php';
             include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
             include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
             include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
@@ -141,11 +141,13 @@ Class Kontentblocks
 
 
             $this->UI = new EditScreen();
+            $this->Capabilities = new Capabilities();
         }
-        $this->Capabilities = new Capabilities();
+
         $this->Enqueues     = new Enqueues();
         // setup vars
         add_action( 'init', array( $this, '_set_block_templates' ), 850 );
+
 
         // load Templates automatically
         add_action( 'init', array( $this, '_load_templates' ), 9 );
@@ -240,13 +242,12 @@ Class Kontentblocks
     public function register_block( $classname )
     {
 
-        $this->ModuleDirectory = ModuleDirectory::getInstance();
+        $this->ModuleRegistry = ModuleRegistry::getInstance();
 
         if ( !class_exists( $classname ) ) {
             return false;
         }
-
-        $this->ModuleDirectory->add( $classname );
+        $this->ModuleRegistry->add( $classname );
 
     }
 
@@ -270,22 +271,12 @@ Class Kontentblocks
         if ( empty( $blocks ) )
             return false;
 
-        $defaults = array(
-            'id' => 'generic_id',
-            'instance_id' => null,
-            'area' => 'kontentblocks',
-            'class' => null,
-            'name' => null,
-            'status' => 'kb_active',
-            'draft' => 'pain',
-            'locked' => false,
-            'area_context' => 'normal'
-        );
+
 
 
         foreach ( ( array ) $blocks as $block ) {
 
-            $args = wp_parse_args( $block, $defaults );
+            $args = wp_parse_args( $block, Modules\Module::getDefaults() );
 
             $block = apply_filters( 'kb_modify_block', $block );
             $block = apply_filters( "kb_modify_block_{$block[ 'id' ]}", $block );
@@ -320,8 +311,8 @@ Class Kontentblocks
      */
     public function register_area( $args, $manual = true )
     {
-        $AreaDirectory = AreaDirectory::getInstance();
-        $AreaDirectory->addArea( $args, $manual );
+        $RegionRegistry = RegionRegistry::getInstance();
+        $RegionRegistry->addRegion( $args, $manual );
 
     }
 
@@ -336,7 +327,7 @@ Class Kontentblocks
         }
 
 
-        $args = AreaDirectory::getInstance()->getArea( $area );
+        $args = RegionRegistry::getInstance()->getArea( $area );
         if ( !$args ) {
             return false;
         }
@@ -509,7 +500,7 @@ Class Kontentblocks
         $settings = wp_parse_args( $args, $defaults );
 
         if ( !empty( $settings[ 'id' ] ) ) {
-            AreaDirectory::getInstance()->addTemplate( $settings );
+            RegionRegistry::getInstance()->addTemplate( $settings );
         }
 
     }
@@ -754,6 +745,8 @@ Class Kontentblocks
         return $template;
 
     }
+    
+
 
 }
 
@@ -771,15 +764,17 @@ add_action( 'init', 'Kontentblocks\init_Kontentfields', 15 );
 
 function init_Kontentfields()
 {
+    foreach ( glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file ) {
+        require_once $file;
+    }
+    if ( !is_admin() ) {
+        return false;
+    }
     global $Kontentfields;
     $Kontentfields = new KFHandler;
     $Kontentfields->init();
     // load field files...
     foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
-        require_once $file;
-    }
-    
-    foreach ( glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file ) {
         require_once $file;
     }
 

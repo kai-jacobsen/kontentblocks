@@ -1,5 +1,5 @@
 <?php
-namespace Kontentblocks\TemplateEngine;
+namespace Kontentblocks\Templating;
 class Twig
 {
 

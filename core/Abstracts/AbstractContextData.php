@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Abstracts;
 
-use Kontentblocks\Admin\InterfaceDataContainer;
+use Kontentblocks\Interfaces\InterfaceDataContainer;
 
-abstract class AbstractDataContainer implements InterfaceDataContainer
+abstract class AbstractContextData implements InterfaceDataContainer
 {
 
 

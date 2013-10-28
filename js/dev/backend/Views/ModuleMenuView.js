@@ -14,7 +14,6 @@ KB.Backbone.ModuleMenuView = Backbone.View.extend({
         this.$menuWrap.append(KB.Templates.render('be_moduleMenu', {}));
 
         this.$menuList = jQuery('.kb_the_menu', this.$menuWrap);
-        this.render();
     },
     addItem: function(view, model) {
         
@@ -24,7 +23,5 @@ KB.Backbone.ModuleMenuView = Backbone.View.extend({
             this.$menuList.append($menuItem);
         }
         
-    },
-    render: function() {
     }
 });

@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks\Fields\Returnobjects;
+namespace Kontentblocks\Abstracts;
 
-use Kontentblocks\Fields\Returnobjects\FieldReturnInterface;
+use Kontentblocks\Interfaces\InterfaceFieldReturn;
 
-abstract class FieldReturnObject implements FieldReturnInterface
+abstract class AbstractFieldReturn implements InterfaceFieldReturn
 {
 
     public $value;

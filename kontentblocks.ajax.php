@@ -1,7 +1,6 @@
 <?php
 
 
-require_once 'includes/ajax/kontentblocks.ajax.generate.module.php';
 
 
 add_action( 'wp_ajax_kb_lock_block', 'kb_block_lock_callback' );
@@ -79,4 +78,3 @@ function kb_verify_ajax_nonce()
 		}
 	}
 }
-?>

@@ -1,7 +1,7 @@
 <?php
 
 namespace Kontentblocks\Extensions;
-use Kontentblocks\Utils\MetaData;
+use Kontentblocks\Utils\PostMetaDataHandler;
 
 class Backup_Inspect
 {
@@ -52,7 +52,7 @@ class Backup_Inspect
     public function restore_backup( $post_id, $id )
     {
 
-        $Meta = new MetaData( $post_id );
+        $Meta = new PostMetaDataHandler( $post_id );
         
         $Meta->backup( 'Before restoring backup from:' . date( 'h:j:s', $id ) );
         $Meta->delete();
@@ -64,7 +64,7 @@ class Backup_Inspect
     {
         $post_id = $_REQUEST[ 'post_id' ];
 
-        $Meta = new MetaData( $post_id );
+        $Meta = new PostMetaDataHandler( $post_id );
         
         wp_send_json( $Meta->getBackups() );
 

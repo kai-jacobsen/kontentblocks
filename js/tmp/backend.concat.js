@@ -16,15 +16,15 @@ KB.Ajax = (function($) {
     return {
         send: function(data, callback) {
 
-            
+
             var nonce = $('#_kontentblocks_ajax_nonce').val();
             var postID = $('#post_ID').val();
 
             data._kb_nonce = nonce;
             data.post_id = postID;
             data.kbajax = 'true';
-            
-            
+
+
 
             $(kbMetaBox).addClass('kb_loading');
             $('#publish').attr('disabled', 'disabled');
@@ -35,10 +35,11 @@ KB.Ajax = (function($) {
                 type: 'POST',
                 dataType: 'json',
                 success: function(data) {
-
-                    if (data.success && data.success === false){
-                        KB.Notice.notice('Error', 'error', 3500);
+                    if (data) {
+                        callback;
                     }
+
+
                 },
                 error: function() {
                     // generic error message
@@ -173,8 +174,8 @@ KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     className: 'kb-delete block-menu-icon',
-    initialize: function(){
-         _.bindAll(this, "yes", "no"); 
+    initialize: function() {
+        _.bindAll(this, "yes", "no");
     },
     events: {
         'click': 'deleteModule'
@@ -191,11 +192,19 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
             return false;
         }
     },
-    yes:function(){
-        this.model.destroy();
+    yes: function() {
+        KB.Ajax.send({
+            action: 'removeModules',
+            module: this.model.get('instance_id')
+        }, this.success.call(this));
     },
-    no: function(){
-        return false; 
+    no: function() {
+        return false;
+    },
+    success: function() {
+        
+        KB.Notice.notice('Good bye', 'success');
+        this.options.parent.$el.hide(500);
     }
 }); 
 'use strict';
@@ -225,6 +234,12 @@ var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
+    initialize: function(){
+        var that = this;
+        this.options.parent.$el.on('click', '.js-module-status', function(event){
+            that.changeStatus();
+        });
+    },
     className: 'module-status block-menu-icon',
     events: {
         'click': 'changeStatus'
@@ -232,6 +247,12 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
     changeStatus: function() {
         this.options.parent.$head.toggleClass('module-inactive');
         this.options.parent.$el.toggleClass('kb_inactive');
+        
+        KB.Ajax.send({
+            action: 'changeModuleStatus',
+            module: this.model.get('instance_id')
+        }, this.success.call(this));
+        
     },
     isValid: function() {
         
@@ -241,6 +262,10 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
         } else {
             return false;
         }
+    },
+    success: function(){
+        console.log(this.model);
+        KB.Notice.notice('Status changed', 'success');
     }
 }); 
 'use strict';
@@ -259,7 +284,6 @@ KB.Backbone.ModuleMenuView = Backbone.View.extend({
         this.$menuWrap.append(KB.Templates.render('be_moduleMenu', {}));
 
         this.$menuList = jQuery('.kb_the_menu', this.$menuWrap);
-        this.render();
     },
     addItem: function(view, model) {
         
@@ -269,8 +293,6 @@ KB.Backbone.ModuleMenuView = Backbone.View.extend({
             this.$menuList.append($menuItem);
         }
         
-    },
-    render: function() {
     }
 });
 'use strict';
@@ -290,7 +312,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             el: this.$head,
             parent: this
         });
-
+        
         // Setup View
         this.setupDefaultMenuItems();
     },
@@ -314,6 +336,7 @@ KB.App = (function($) {
 
     function init() {
         KB.Modules.on('add', createViews );
+        
         addModules();
     }
 
@@ -330,7 +353,7 @@ KB.App = (function($) {
     function createViews(module){
         KB.Views[module.get('instance_id')] =  new KB.Backbone.ModuleView({
             model: module,
-            el: '#' + module.get('instance_id'),
+            el: '#' + module.get('instance_id')
         });
     }
     

@@ -1,9 +1,9 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Post;
 
-use Kontentblocks\Admin\PostDataContainer,
-    Kontentblocks\Admin\ScreenContext;
+use Kontentblocks\Admin\Post\PostContextData,
+    Kontentblocks\Admin\Post\ScreenContext;
 
 class ScreenManager
 {
@@ -30,13 +30,13 @@ class ScreenManager
     protected $contextLayout;
 
     /**
-     * Final sorted assignment of areas to contexts
+     * Final sorted assignment of areas to regions
      * TODO: Var name sucks
      * @var array 
      */
-    protected $contexts;
+    protected $regions;
 
-    public function __construct( PostDataContainer $postData )
+    public function __construct( PostContextData $postData )
     {
 
         // get areas available
@@ -47,8 +47,7 @@ class ScreenManager
         $this->postData      = $postData;
         $this->contextLayout = $this->_getDefaultContextLayout();
         $this->rawAreas      = $postData->get( 'areas' );
-        $this->contexts      = $this->areasSortedByContext( $this->rawAreas );
-
+        $this->regions      = $this->areasSortedByRegion( $this->rawAreas );
         // test if final context layout includes an sidebar
         // e.g. if an area is assigned to 'side'
         $this->hasSidebar = $this->evaluateLayout();
@@ -74,24 +73,25 @@ class ScreenManager
      * Sort raw Area definitions to array
      * @return array
      */
-    public function areasSortedByContext()
+    public function areasSortedByRegion()
     {
         if ( !$this->rawAreas ) {
-            throw new Exception( 'No Areas specified for context' );
+            throw new Exception( 'No Areas specified for region' );
         }
 
         foreach ( $this->rawAreas as $area ) {
-            $contextfy[ $area[ 'context' ] ][ $area[ 'id' ] ] = $area;
+            $regions[ $area[ 'context' ] ][ $area[ 'id' ] ] = $area;
         }
 
-        return $contextfy;
+        return $regions;
 
     }
 
-    public function getContextAreas( $id )
+    
+    public function getRegionAreas( $id )
     {
-        if ( isset( $this->contexts[ $id ] ) ) {
-            return $this->contexts[ $id ];
+        if ( isset( $this->regions[ $id ] ) ) {
+            return $this->regions[ $id ];
         }
         else {
             return array();
@@ -138,7 +138,7 @@ class ScreenManager
 
     public function evaluateLayout()
     {
-        return (!empty( $this->contexts[ 'side' ] )) ? true : false;
+        return (!empty( $this->regions[ 'side' ] )) ? true : false;
 
     }
 

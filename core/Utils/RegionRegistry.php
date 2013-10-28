@@ -2,13 +2,13 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Admin\PostDataContainer;
+use Kontentblocks\Admin\Post\PostContextData;
 
 /**
- * The AreaDirectory is a single interaction container to access area definitions throughout the plugin
+ * The RegionRegistry is a single interaction container to access area definitions throughout the plugin
  * 
  */
-class AreaDirectory
+class RegionRegistry
 {
 
     protected $rawAreas  = array();
@@ -46,7 +46,7 @@ class AreaDirectory
         $storedAreas = get_option( 'kb_registered_areas' );
         if ( !empty( $storedAreas ) ) {
             foreach ( $storedAreas as $area ) {
-                $this->addArea( $area, false );
+                $this->addRegion( $area, false );
             }
         }
 
@@ -63,7 +63,7 @@ class AreaDirectory
      * @param bool $manual
      * @return $void
      */
-    public function addArea( $args, $manual = true )
+    public function addRegion( $args, $manual = true )
     {
         if ( !empty( $args[ 'id' ] ) ) {
             $args[ 'id' ] = sanitize_title( $args[ 'id' ] );
@@ -199,13 +199,13 @@ class AreaDirectory
 
     /**
      * Filters registered areas by post settings
-     * This needs an instance of the PostDataContainer Class to provide
+     * This needs an instance of the PostContextData Class to provide
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
-     * @param \Kontentblocks\Admin\PostDataContainer $postData
+     * @param \Kontentblocks\Admin\PostContextData $postData
      * @return boolean
      */
-    public function filterForPost( PostDataContainer $postData )
+    public function filterForPost( PostContextData $postData )
     {
 
         $pageTemplate = $postData->get( 'pageTemplate' );

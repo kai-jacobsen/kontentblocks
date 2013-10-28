@@ -1,7 +1,7 @@
 <?php
 
 namespace Kontentblocks\Admin\Sidebars;
-use Kontentblocks\Utils\AreaDirectory;
+use Kontentblocks\Utils\RegionRegistry;
 if(!class_exists('WP_List_Table')){
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
@@ -34,7 +34,7 @@ Class Kontentblocks_Sidebars_Table extends \WP_List_Table
 	 */
 	private function get_data()
 	{
-        $this->areas = AreaDirectory::getInstance()->getGlobalAreas();
+        $this->areas = RegionRegistry::getInstance()->getGlobalAreas();
 	}
 
 	/**

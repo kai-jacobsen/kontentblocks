@@ -3,8 +3,8 @@
 namespace Kontentblocks\Admin\Sidebars;
 
 use Kontentblocks\Admin\Area,
-    Kontentblocks\Admin\GlobalDataContainer,
-    Kontentblocks\Utils\AreaDirectory;
+    Kontentblocks\Admin\GlobalContextData,
+    Kontentblocks\Utils\RegionRegistry;
 
 global $Kontentblocks, $Kontentbox, $current_screen;
 
@@ -19,8 +19,8 @@ else
 
 wp_enqueue_script( 'dynamic_areas', KB_PLUGIN_URL . '/js/dynamic_areas.js', array( 'kontentblocks-base' ), true, true );
 
-$dataContainer = new GlobalDataContainer();
-$area          = AreaDirectory::getInstance()->getArea( $area_id );
+$dataContainer = new GlobalContextData();
+$area          = RegionRegistry::getInstance()->getArea( $area_id );
 
 $html = "	<div class='kb_page_wrap'>
 				<div class='kb_options_header'>

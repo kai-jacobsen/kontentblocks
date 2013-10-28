@@ -115,7 +115,6 @@ class AreaRender
      */
     public function __construct( $manager, $post_id, $args, $context, $subcontext )
     {
-
         // Inject Kontentblocks Manager Object
         $this->manager = $manager;
 
@@ -791,10 +790,6 @@ class AreaRender
             // new instance
             $instance = $Factory->getModule();
 
-            $instance->set_status( $args[ 'status' ] );
-            $instance->set_draft( $args[ 'draft' ] );
-            $instance->set_area( $args[ 'area' ] );
-
             foreach ( $args as $k => $v )
                 $instance->$k = $v;
 
@@ -969,5 +964,6 @@ class AreaRender
 
     }
     
+
 
 }

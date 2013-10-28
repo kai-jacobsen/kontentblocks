@@ -2,12 +2,12 @@
 
 namespace Kontentblocks\Admin;
 
-use Kontentblocks\Admin\AbstractDataContainer,
-    Kontentblocks\Utils\GlobalData,
-    Kontentblocks\Utils\AreaDirectory,
+use Kontentblocks\Abstracts\AbstractContextData,
+    Kontentblocks\Utils\GlobalDataHandler,
+    Kontentblocks\Utils\RegionRegistry,
     Kontentblocks\Modules\ModuleFactory;
 
-class GlobalDataContainer extends AbstractDataContainer
+class GlobalContextData extends AbstractContextData
 {
 
     protected $globalData;
@@ -16,7 +16,7 @@ class GlobalDataContainer extends AbstractDataContainer
 
     public function __construct()
     {
-        $this->globalData = new GlobalData();
+        $this->globalData = new GlobalDataHandler();
         $this->areas      = $this->_findAreas();
         $this->modules    = $this->_setupModules();
 
@@ -93,8 +93,8 @@ class GlobalDataContainer extends AbstractDataContainer
 
     public function _findAreas()
     {
-        $AreaDirectory = AreaDirectory::getInstance();
-        return $AreaDirectory->getGlobalAreas();
+        $RegionRegistry = RegionRegistry::getInstance();
+        return $RegionRegistry->getGlobalAreas();
 
     }
 

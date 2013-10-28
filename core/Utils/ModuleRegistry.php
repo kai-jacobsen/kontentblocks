@@ -2,10 +2,11 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Admin\AbstractDataContainer,
-    Kontentblocks\Modules\Module;
+use Kontentblocks\Abstracts\AbstractContextData,
+    Kontentblocks\Modules\Module,
+    Kontentblocks\Utils\RegionRegistry;
 
-class ModuleDirectory
+class ModuleRegistry
 {
 
     static $instance;
@@ -24,13 +25,13 @@ class ModuleDirectory
 
     public function add( $classname )
     {
-        
         if ( !isset( $this->modules[ 'classname' ] ) && property_exists( $classname, 'defaults' ) ) {
-            $args = $classname::$defaults;
-            $args['class'] = $classname;
-            $args = wp_parse_args($args, Module::getDefaults());
+            $args                        = $classname::$defaults;
+            $args[ 'class' ]             = $classname;
+            $args                        = wp_parse_args( $args, Module::getDefaults() );
             $this->modules[ $classname ] = $args;
-        } 
+            RegionRegistry::getInstance()->connect( $classname, $args );
+        }
 
     }
 
@@ -45,7 +46,7 @@ class ModuleDirectory
 
     }
 
-    public function getAllModules( AbstractDataContainer $dataContainer )
+    public function getAllModules( AbstractContextData $dataContainer )
     {
         if ( $dataContainer->isPostContext() ) {
             return $this->modules;
@@ -58,7 +59,7 @@ class ModuleDirectory
 
     public function _filterForGlobalArea( $module )
     {
-        if ( isset($module['globallyAvailable']) && $module['globallyAvailable'] === true ) {
+        if ( isset( $module[ 'globallyAvailable' ] ) && $module[ 'globallyAvailable' ] === true ) {
             return $module;
         }
 

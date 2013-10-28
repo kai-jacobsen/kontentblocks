@@ -1,8 +1,9 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Post;
 
-use Kontentblocks\Admin\ScreenManager;
+use Kontentblocks\Admin\Post\ScreenManager,
+    Kontentblocks\Admin\Areas\Area;
 
 class ScreenContext
 {
@@ -17,14 +18,14 @@ class ScreenContext
             throw new Exception( 'No Arguments specified for single Context' );
         }
 
+        
         $this->args        = $args;
         $this->id          = $args[ 'id' ];
         $this->title       = $args[ 'title' ];
         $this->description = $args[ 'description' ];
-        $this->Manager     = $ScreenManager;
-        $this->postData    = $this->Manager->postData;
-        $this->areas       = $this->Manager->getContextAreas( $this->id );
-
+        $this->postData    = $ScreenManager->postData;
+        $this->areas       = $ScreenManager->getRegionAreas( $this->id );
+        $this->EditScreenHasSidebar = $ScreenManager->hasSidebar;
     }
 
     public function render()
@@ -42,7 +43,7 @@ class ScreenContext
 
     public function openContext()
     {
-        $side = $this->Manager->hasSidebar ? 'has-sidebar' : 'no-sidebar';
+        $side = $this->EditScreenHasSidebar ? 'has-sidebar' : 'no-sidebar';
 
         echo "<div id='context_{$this->id}' class='area-{$this->id} {$side}'>
                     <div class='context-inner area-holder context-box'>
@@ -63,7 +64,7 @@ class ScreenContext
             }
             echo "<div class='area-wrap clearfix cf'>";
             // Setup new Area
-
+            
             $area = new Area( $args, $this->postData );
             // do area header markup
             $area->header();

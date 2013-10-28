@@ -11,10 +11,10 @@ use Kontentblocks\Fields\FieldRegistry,
  * This serves as a collection handler for fields and offers
  * methods to interact with registered fields.
  * 
- * Gets instantiated by Kontentblocks\Fields\Refield when
+ * Gets instantiated by Kontentblocks\Fields\FieldManager when
  * addSection() is called 
  * 
- * @see Kontentblocks\Fields\Refield::addSection()
+ * @see Kontentblocks\Fields\FieldManager::addSection()
  * @package Fields
  * @since 1.0.0
  */

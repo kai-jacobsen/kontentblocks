@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Admin\Sidebars;
 
-use Kontentblocks\Utils\AreaDirectory;
+use Kontentblocks\Utils\RegionRegistry;
 
 // Actions
 add_action( 'admin_menu', 'Kontentblocks\Admin\Sidebars\add_menu' );
@@ -292,11 +292,11 @@ function updateArea()
         die( '' );
     }
 
-    $old = AreaDirectory::getInstance()->getArea( $area_id );
+    $old = RegionRegistry::getInstance()->getArea( $area_id );
     $Kontentfields->setup( 'SidebarEditScreen', 'new_area', $data );
     $new = $Kontentfields->save( $old );
 
-    AreaDirectory::getInstance()->saveArea( $area_id, $new );
+    RegionRegistry::getInstance()->saveArea( $area_id, $new );
     $location = add_query_arg( array( 'message' => '1', 'action' => false ) );
     wp_redirect( $location );
 

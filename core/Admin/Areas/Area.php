@@ -1,13 +1,13 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Areas;
 
-use Kontentblocks\Admin\AbstractDataContainer,
-    Kontentblocks\Admin\ModuleMenu,
-    Kontentblocks\Utils\ModuleDirectory,
+use Kontentblocks\Abstracts\AbstractContextData,
+    Kontentblocks\Admin\Areas\ModuleMenu,
+    Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Admin\AreaSettingsMenu,
-    Kontentblocks\TemplateEngine\CoreTemplate,
+    Kontentblocks\Admin\Areas\AreaSettingsMenu,
+    Kontentblocks\Templating\CoreTemplate,
     Kontentblocks\Helper as H;
 
 class Area
@@ -92,7 +92,7 @@ class Area
      * @param array $area
      * @return type 
      */
-    function __construct( $area, AbstractDataContainer $dataContainer )
+    function __construct( $area, AbstractContextData $dataContainer )
     {
 
         if ( empty( $area ) ) {
@@ -181,8 +181,7 @@ class Area
     private function getValidModules()
     {
         // declare array
-        $modules = ModuleDirectory::getInstance()->getAllModules( $this->dataContainer );
-        
+        $modules = ModuleRegistry::getInstance()->getAllModules( $this->dataContainer );
         if ( empty( $modules ) ) {
             return false;
         }
@@ -228,8 +227,8 @@ class Area
      */
     private function _sort_by_name( $a, $b )
     {
-        $al = strtolower( $a->settings[ 'public_name' ] );
-        $bl = strtolower( $b->settings[ 'public_name' ] );
+        $al = strtolower( $a[ 'public_name' ] );
+        $bl = strtolower( $b[ 'public_name' ] );
 
         if ( $al == $bl ) {
             return 0;
@@ -273,7 +272,6 @@ class Area
     {
         // list of unavailable blocks, class names
         $unavailable_blocks = '';
-
         if ( !empty( $this->assignedModules ) && is_array( $this->assignedModules ) ) {
             $unavailable_blocks = implode( ' ', $this->assignedModules );
         }
@@ -333,5 +331,7 @@ class Area
             . "KB.RawAreas = KB.RawAreas || {};"
             . "KB.RawAreas['{$this->id}'] = {$json};</script>";
     }
+    
+    
 
 }

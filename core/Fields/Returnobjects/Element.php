@@ -2,9 +2,9 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Fields\Returnobjects\FieldReturnObject;
+use Kontentblocks\Abstracts\AbstractFieldReturn;
 
-class Element extends FieldReturnObject
+class Element extends AbstractFieldReturn
 {
 
     protected $el;

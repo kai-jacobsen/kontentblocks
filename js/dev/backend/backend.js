@@ -11,6 +11,7 @@ KB.App = (function($) {
 
     function init() {
         KB.Modules.on('add', createViews );
+        
         addModules();
     }
 
@@ -27,7 +28,7 @@ KB.App = (function($) {
     function createViews(module){
         KB.Views[module.get('instance_id')] =  new KB.Backbone.ModuleView({
             model: module,
-            el: '#' + module.get('instance_id'),
+            el: '#' + module.get('instance_id')
         });
     }
     

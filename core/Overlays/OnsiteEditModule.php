@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Overlays;
 
-use Kontentblocks\Utils\ModuleDirectory,
+use Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory;
 
 class OnsiteEditModule
@@ -111,7 +111,7 @@ class OnsiteEditModule
     public function module()
     {
 
-        $args = ModuleDirectory::getInstance()->get( $this->class );
+        $args = ModuleRegistry::getInstance()->get( $this->class );
 
         $Factory                = new ModuleFactory( $args );
         $instance               = $Factory->getModule();
@@ -170,7 +170,7 @@ class OnsiteEditModule
         $old    = get_post_meta( $this->postId, '_' . $this->instance_id, true );
         $data   = (isset( $_POST[ $this->instance_id ] )) ? $_POST[ $this->instance_id ] : null;
 
-        $args = ModuleDirectory::getInstance()->get( $this->class );
+        $args = ModuleRegistry::getInstance()->get( $this->class );
 
         $Factory           = new ModuleFactory( $args );
         $instance          = $Factory->getModule();

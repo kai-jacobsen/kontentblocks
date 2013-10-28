@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Interfaces;
 
 interface InterfaceDataContainer
 {

@@ -1,8 +1,8 @@
 <?php
 
 namespace Kontentblocks\Helper;
-use Kontentblocks\Utils\ModuleDirectory,
-    Kontentblocks\Utils\AreaDirectory;
+use Kontentblocks\Utils\ModuleRegistry,
+    Kontentblocks\Utils\RegionRegistry;
 
 /**
  * Render a hidden editor instance as reference
@@ -91,7 +91,7 @@ function getPageTemplates()
 
 function getAssignedModules( $dataContainer )
 {
-    $modules    = ModuleDirectory::getInstance()->getAllModules( $dataContainer );
+    $modules    = ModuleRegistry::getInstance()->getAllModules( $dataContainer );
     $collection = array();
 
     foreach ( $modules as $module ) {
@@ -109,7 +109,7 @@ function getAssignedModules( $dataContainer )
 
 function getAreaTemplates()
 {
-    $templates  = AreaDirectory::getInstance()->getTemplates();
+    $templates  = RegionRegistry::getInstance()->getTemplates();
     $collection = array();
 
     foreach ( $templates as $tpl ) {

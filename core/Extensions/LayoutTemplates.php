@@ -1,7 +1,7 @@
 <?php
 
 namespace Kontentblocks\Extensions;
-use Kontentblocks\Utils\MetaData;
+use Kontentblocks\Utils\PostMetaDataHandler;
 class Layout_Templates
 {
 
@@ -162,7 +162,7 @@ class Layout_Templates
     private function _reset_post_meta( $template, $post_id, $config )
     {
 
-        $Meta = new MetaData( $post_id );
+        $Meta = new PostMetaDataHandler( $post_id );
 
         $templates = get_option( 'kb_layout_templates' );
 

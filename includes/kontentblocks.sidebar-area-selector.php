@@ -1,7 +1,7 @@
 <?php
 
-use Kontentblocks\Admin\PostDataContainer,
-    Kontentblocks\Admin\ScreenManager;
+use Kontentblocks\Admin\Post\PostContextData,
+    Kontentblocks\Admin\Post\ScreenManager;
 
 class KB_Sidebar_Area_Selector
 {
@@ -44,10 +44,10 @@ class KB_Sidebar_Area_Selector
     function sidebar_selector_content( $context )
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
-        $pdc     = new PostDataContainer( $post_id );
+        $pdc     = new PostContextData( $post_id );
         $Screen  = new ScreenManager( $pdc );
 
-        $this->_setupAreas( $Screen->getContextAreas( 'side' ) );
+        $this->_setupAreas( $Screen->getRegionAreas( 'side' ) );
 
         // saved sidebar settings
         if ( $post_id ) {

@@ -5,8 +5,8 @@ KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     className: 'kb-delete block-menu-icon',
-    initialize: function(){
-         _.bindAll(this, "yes", "no"); 
+    initialize: function() {
+        _.bindAll(this, "yes", "no");
     },
     events: {
         'click': 'deleteModule'
@@ -23,10 +23,18 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
             return false;
         }
     },
-    yes:function(){
-        this.model.destroy();
+    yes: function() {
+        KB.Ajax.send({
+            action: 'removeModules',
+            module: this.model.get('instance_id')
+        }, this.success.call(this));
     },
-    no: function(){
-        return false; 
+    no: function() {
+        return false;
+    },
+    success: function() {
+        
+        KB.Notice.notice('Good bye', 'success');
+        this.options.parent.$el.hide(500);
     }
 }); 

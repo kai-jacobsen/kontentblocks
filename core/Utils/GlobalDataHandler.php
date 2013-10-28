@@ -3,9 +3,9 @@
 namespace Kontentblocks\Utils;
 
 use Kontentblocks\Helper as H,
-    Kontentblocks\Interfaces\DataHandlerInterface;
+    Kontentblocks\Interfaces\InterfaceDataHandler;
 
-class GlobalData implements DataHandlerInterface
+class GlobalDataHandler implements InterfaceDataHandler
 {
 
     protected $templates;

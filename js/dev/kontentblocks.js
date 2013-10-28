@@ -63,18 +63,7 @@ var KB = KB || {};
                 KB.kbSortable();
             }
 
-            // Bind block delete
-            $(kbMetaBox).on('click', '.kb_delete_block', function(e)
-            {
-                if (KB.isDisabled())
-                {
-                    KB.notice(kontentblocks.l18n.block_disabled_delete, 'alert');
-                }
-                else
-                {
-                    KB.blockDelete();
-                }
-            });
+            
 
             $(kbMetaBox).on('click', '.modules-link', function(e) {
                 e.preventDefault();
@@ -100,18 +89,7 @@ var KB = KB || {};
                 KB.duplicateBlock();
             });
 
-            // Bind set status
-            $(kbMetaBox).on('click', '.kb_set_status', function(e) {
-                $caller = $(this);
-                if (KB.isDisabled())
-                {
-                    KB.notice(kontentblocks.l18n.block_disabled_delete, 'alert');
-                }
-                else
-                {
-                    KB.blockStatus($caller);
-                }
-            });
+            
 
 
             // Bind locking
@@ -681,7 +659,7 @@ var KB = KB || {};
             var data = {};
 
             data.type = ($(caller).attr('data-value')) ? $(caller).attr('data-value') : $(caller).attr('data-blockclass'),
-                    data.template = ($(caller).attr('data-instance_id')) ? $(caller).attr('data-instance_id') : false;
+            data.template = ($(caller).attr('data-instance_id')) ? $(caller).attr('data-instance_id') : false;
             data.master = ($(caller).attr('data-master')) ? true : false;
             data.page_template = $('#' + activeArea).attr('data-page_template');
             data.post_type = $('#' + activeArea).attr('data-post_type') ? $('#' + activeArea).attr('data-post_type') : false;
@@ -745,78 +723,11 @@ var KB = KB || {};
                     // add tiny mce
                     KB.tinymce(newid, daddy);
 
-                })
-
+                });
+                KB.Modules.add(result.module);
                 // add / trigger global event
                 $(document).trigger('kb_block_added');
 
-            })
-        },
-        blockDelete: function()
-        {
-            KB.confirm(
-                    kontentblocks.l18n.block_delete,
-                    function()
-                    {
-                        $('#' + activeBlock + ' .kb-ajax-status').show();
-                        var this_id = activeBlock;
-
-                        KB.ajax(
-                                {
-                                    action: 'removeModules',
-                                    block_id: this_id
-                                },
-                        function(response)
-                        {
-                            if (response == 1)
-                            {
-                                KB.notice(kontentblocks.l18n.block_deleted_and_data, 'alert');
-                            } else if (response == 0)
-                            {
-                                KB.notice(kontentblocks.l18n.block_delete_error, 'error');
-                            } else if (response == 2)
-                            {
-                                KB.notice(kontentblocks.l18n.block_deleted, 'alert')
-                            }
-                            $('#' + activeBlock).slideUp(350, function() {
-                                $(this).remove();
-                            });
-                        })
-                    },
-                    function()
-                    {
-                        KB.notice('Allright, lets keep it then');
-                    }
-            );
-
-        },
-        blockStatus: function(caller)
-        {
-            $('#' + activeBlock + ' .kb-ajax-status').show();
-            var object = $(caller);
-            var this_id = activeBlock;
-
-            KB.ajax(
-                    {
-                        action: 'changeModuleStatus',
-                        block_id: this_id
-                    },
-            function(response)
-            {
-                if (response == false)
-                {
-                    $('.kb-ajax-status').hide();
-                    return;
-                }
-                else if (response == 1) {
-                    KB.notice(kontentblocks.l18n.block_deactivated, 'alert');
-                } else if (response == 2) {
-                    KB.notice(kontentblocks.l18n.block_reactivated, 'alert');
-                }
-
-                $('#' + activeBlock).toggleClass('kb_inactive');
-                $(object).toggleClass('kb_inactive');
-                $('.kb-ajax-status').hide();
             })
         },
         blockLock: function(caller)

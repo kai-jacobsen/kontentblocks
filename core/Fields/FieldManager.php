@@ -6,7 +6,7 @@ use Kontentblocks\Fields\FieldSection,
     Kontentblocks\Fields\FieldRenderTabs;
 
 /**
- * Refield
+ * FieldManager
  * // TODO: Change working title
  * // TODO: Rename Groups to Sections
  * Purpose of this class:
@@ -24,7 +24,7 @@ use Kontentblocks\Fields\FieldSection,
  * @param object | Module instance
  * @return self
  */
-class Refield
+class FieldManager
 {
 
     /**

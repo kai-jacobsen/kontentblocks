@@ -1,8 +1,9 @@
 <?php
 
-use Kontentblocks\Utils\MetaData,
-    Kontentblocks\Utils\GlobalData,
-    Kontentblocks\Utils\ModuleDirectory;
+use Kontentblocks\Utils\PostMetaDataHandler,
+    Kontentblocks\Utils\GlobalDataHandler,
+    Kontentblocks\Utils\ModuleRegistry,
+    Kontentblocks\Modules\ModuleFactory;
 
 add_action( 'wp_ajax_kb_generate_blocks', 'KB_Ajax_Generate_Module::get_instance' );
 
@@ -164,10 +165,10 @@ final class KB_Ajax_Generate_Module
 
         // get existing modules reference
         if ( $this->post_id == -1 ) {
-            $this->dataHandler = new GlobalData();
+            $this->dataHandler = new GlobalDataHandler();
         }
         else {
-            $this->dataHandler = new MetaData( $this->post_id );
+            $this->dataHandler = new PostMetaDataHandler( $this->post_id );
         }
 
         // Override Class / type if this originates from a master template
@@ -179,13 +180,13 @@ final class KB_Ajax_Generate_Module
 
         // No Error until this point, get module instance and proceed
         $this->module = $this->setupModule();
-        
+
         // Set new id
         $this->new_id = $this->_setNewId();
 
         //prepare new block
         $this->new_module = $this->prepareNewModule();
-        
+
         // Save data
         $this->updateData();
 
@@ -203,7 +204,7 @@ final class KB_Ajax_Generate_Module
 
         // get module instance from factory
         if ( class_exists( $this->type ) ) {
-            $module = ModuleDirectory::getInstance()->get( $this->type );
+            $module = ModuleRegistry::getInstance()->get( $this->type );
         }
         else {
             wp_send_json_error( $this->type . ' does not exist' );
@@ -287,25 +288,23 @@ final class KB_Ajax_Generate_Module
      */
     private function prepareNewModule()
     {
-        global $Kontentblocks;
 
         // prepare new block data
         $new_module = array(
-            'id' => $this->module->id,
+            'id' => $this->module[ 'id' ],
             'instance_id' => $this->new_id,
             'area' => $this->area,
             'class' => $this->type,
-            'name' => $this->module->settings[ 'public_name' ],
-            'status' => '',
-            'draft' => 'true',
-            'locked' => 'false',
+            'name' => $this->module[ 'public_name' ],
+            'draft' => true,
             'area_context' => $this->context,
             'master' => $this->master,
             'master_ref' => ($this->master) ? $this->template : false
         );
 
+        $args = wp_parse_args( $new_module, \Kontentblocks\Modules\Module::getDefaults() );
         if ( $this->template ) {
-            $globalData = new GlobalData();
+            $globalData = new GlobalDataHandler();
             $tpl        = $globalData->getTemplate( $this->template );
             if ( $tpl ) {
                 $new_module[ 'name' ] = $tpl[ 'name' ];
@@ -313,7 +312,7 @@ final class KB_Ajax_Generate_Module
         }
 
 
-        $new_module_filtered = apply_filters( 'kb_modify_new_module', $new_module );
+        $new_module_filtered = apply_filters( 'kb_modify_new_module', $args );
 
         return $new_module_filtered;
 
@@ -326,8 +325,9 @@ final class KB_Ajax_Generate_Module
     private function updateData()
     {
         //update module
-        $this->module->set( $this->new_module );
+        $Factory = new ModuleFactory( $this->new_module );
 
+        $this->newInstance = $Factory->getModule();
         //save module to reference array
         $this->saveNewModule();
 
@@ -348,7 +348,6 @@ final class KB_Ajax_Generate_Module
     {
         // add new block and update 
         $update = $this->dataHandler->addToIndex( $this->new_id, $this->new_module );
-        
         if ( $update != true ) {
             wp_send_json_error( 'Update failed' );
         }
@@ -394,21 +393,22 @@ final class KB_Ajax_Generate_Module
     {
 
         if ( empty( $_POST[ 'kbajax' ] ) ) {
-            $this->module->_render_options();
+            $this->newInstance->_render_options();
         }
         else {
             ob_start();
-            $this->module->_render_options( true );
+            $this->newInstance->_render_options( true );
             $html = ob_get_clean();
 
             $response = array
                 (
                 'id' => $this->new_id,
-                'name' => $this->module->settings[ 'public_name' ],
+                'module' => get_object_vars($this->newInstance),
+                'name' => $this->newInstance->public_name,
                 'html' => $html
             );
 
-            echo wp_send_json( $response );
+            wp_send_json( $response );
             do_action( 'block_added', $this->post_id, $this->new_module );
         }
 

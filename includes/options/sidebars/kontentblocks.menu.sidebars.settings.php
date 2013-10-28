@@ -4,8 +4,8 @@ namespace Kontentblocks\Menus\Sidebar;
 
 global $current_screen, $Kontentfields;
 
-use Kontentblocks\Utils\AreaDirectory,
-    Kontentblocks\Admin\GlobalDataContainer,
+use Kontentblocks\Utils\RegionRegistry,
+    Kontentblocks\Admin\GlobalContextData,
     Kontentblocks\Helper as Helper;
 
 if ( isset( $_GET[ 'area' ] ) ) {
@@ -15,8 +15,8 @@ else {
     die( 'Something wrong here Baby!' );
 }
 
-$dataContainer = new GlobalDataContainer();
-$area          = AreaDirectory::getInstance()->getArea( $area_id );
+$dataContainer = new GlobalContextData();
+$area          = RegionRegistry::getInstance()->getArea( $area_id );
 
 $Kontentfields->setup( 'SidebarEditScreen', 'new_area', $area );
 

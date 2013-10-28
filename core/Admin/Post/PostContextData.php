@@ -1,16 +1,16 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Post;
 
-use Kontentblocks\Utils\MetaData,
-    Kontentblocks\Admin\AbstractDataContainer,
-    Kontentblocks\Utils\AreaDirectory,
-    Kontentblocks\Utils\ModuleDirectory;
+use Kontentblocks\Utils\PostMetaDataHandler,
+    Kontentblocks\Abstracts\AbstractContextData,
+    Kontentblocks\Utils\RegionRegistry,
+    Kontentblocks\Utils\ModuleRegistry;
 
-class PostDataContainer extends AbstractDataContainer
+class PostContextData extends AbstractContextData
 {
 
-    protected $MetaData;
+    protected $PostMetaDataHandler;
     protected $postid;
     protected $pageTemplate;
     protected $postType;
@@ -23,10 +23,10 @@ class PostDataContainer extends AbstractDataContainer
             return false;
         }
 
-        $this->MetaData = new MetaData( $postid );
+        $this->PostMetaDataHandler = new PostMetaDataHandler( $postid );
 
         $this->postid       = $postid;
-        $this->pageTemplate = $this->MetaData->getPageTemplate();
+        $this->pageTemplate = $this->PostMetaDataHandler->getPageTemplate();
         $this->postType     = get_post_type( $this->postid );
         $this->modules      = $this->_setupModules();
         $this->areas        = $this->_findAreas();
@@ -41,7 +41,7 @@ class PostDataContainer extends AbstractDataContainer
 
     public function getMetaData()
     {
-        return $this->MetaData;
+        return $this->PostMetaDataHandler;
 
     }
 
@@ -80,24 +80,24 @@ class PostDataContainer extends AbstractDataContainer
     private function _setupModules()
     {
         $collection = array();
-        $modules =  $this->MetaData->getIndex();
+        $modules =  $this->PostMetaDataHandler->getIndex();
 
         foreach($modules as $module){
-            $collection[] = wp_parse_args($module, ModuleDirectory::getInstance()->get($module['class']));
+            $collection[] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['class']));
         }
         return $collection;
     }
 
     public function _findAreas()
     {
-        $AreaDirectory = AreaDirectory::getInstance();
-        return $AreaDirectory->filterForPost( $this );
+        $RegionRegistry = RegionRegistry::getInstance();
+        return $RegionRegistry->filterForPost( $this );
 
     }
 
     public function getAreaSettings( $id )
     {
-        $settings = $this->MetaData->getMetaData( 'kb_area_settings' );
+        $settings = $this->PostMetaDataHandler->getMetaData( 'kb_area_settings' );
         if ( !empty( $settings[ $id ] ) ) {
             return $settings[ $id ];
         }
@@ -107,7 +107,7 @@ class PostDataContainer extends AbstractDataContainer
     
     public function getModuleData( $id )
     {
-        $data = $this->MetaData->getMetaData($id);
+        $data = $this->PostMetaDataHandler->getMetaData($id);
         
         if ($data !== NULL){
             return $data;

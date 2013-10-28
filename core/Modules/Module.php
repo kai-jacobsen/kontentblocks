@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Utils\AreaDirectory,
-    Kontentblocks\Fields\Refield;
+use Kontentblocks\Fields\FieldManager;
 
 /*
  * Structure
@@ -110,7 +109,6 @@ abstract class Module
     {
         $this->set( $args );
         //connect this block to areas
-        AreaDirectory::getInstance()->connect( get_class( $this ), $args );
 
         $this->new_instance = $data;
 
@@ -118,7 +116,7 @@ abstract class Module
         $this->path = dirname( $reflector->getFileName() );
 
         if ( method_exists( $this, 'fields' ) ) {
-            $this->Fields = new Refield( $this );
+            $this->Fields = new FieldManager( $this );
             $this->fields();
         }
 
@@ -160,8 +158,9 @@ abstract class Module
      */
     final public function module( $data )
     {
-
-        $this->_setupFieldData();
+        if (isset($this->Fields)){
+            $this->_setupFieldData();
+        }
         return $this->render( $data );
 
     }
@@ -189,11 +188,13 @@ abstract class Module
     public function _setupFieldData()
     {
 
+        
         $this->Fields->setup( $this->new_instance );
         foreach ( $this->new_instance as $key => $v ) {
-            $field = $this->Fields->getFieldByKey( $key );
+            $field                      = $this->Fields->getFieldByKey( $key );
             $this->new_instance[ $key ] = ($field !== NULL) ? $field->getReturnObj() : null;
         }
+
     }
 
     /* -----------------------------------------------------
@@ -256,7 +257,7 @@ abstract class Module
         $unsortable = ((isset( $this->unsortable ) and $this->unsortable) == '1') ? 'cantsort' : null;
 
         // Block List Item
-        return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->id} kb_wrapper kb_block {$this->status} {$disabledclass} {$uidisabled} {$unsortable}'>
+        return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->id} kb_wrapper kb_block {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
 		<input type='hidden' name='{$this->instance_id}[area_context]' value='$this->area_context' /> 
 		";
 
@@ -331,7 +332,7 @@ abstract class Module
         // toggle button
         $html .="<div class='kb-toggle'></div>";
 
-        $html .= "<div class='kb-inactive-indicator kb_set_status'></div>";
+        $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
 
         // locked icon
         if ( !$this->disabled && KONTENTLOCK ) {
@@ -554,12 +555,15 @@ abstract class Module
         . "var Konfig = Konfig || [];"
         . "Konfig.push({$dump});"
         . "</script>";
+        
 
     }
 
     public static function getDefaults()
     {
+
         return array(
+            'active' => true,
             'disabled' => false,
             'public_name' => 'Give me Name',
             'wrap' => true,
@@ -571,8 +575,19 @@ abstract class Module
             'predefined' => false,
             'globallyAvailable' => false,
             'category' => false,
-            'columns' => ''
+            'columns' => null
         );
+
+    }
+
+    public function getStatusClass()
+    {
+        if ( $this->active ) {
+            return 'activated';
+        }
+        else {
+            return 'deactivated';
+        }
 
     }
 

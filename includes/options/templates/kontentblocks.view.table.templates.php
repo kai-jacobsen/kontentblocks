@@ -1,7 +1,7 @@
 <?php
-use Kontentblocks\Utils\ModuleDirectory;
+use Kontentblocks\Utils\ModuleRegistry;
 global $current_screen;
-$templateables = ModuleDirectory::getInstance()->getModuleTemplates();
+$templateables = ModuleRegistry::getInstance()->getModuleTemplates();
 d($templateables);
 
 echo "	<form method='POST' action='admin.php?page={$current_screen->parent_base}'>

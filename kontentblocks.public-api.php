@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Utils\MetaData,
+use Kontentblocks\Utils\PostMetaDataHandler,
     Kontentblocks\Fields\FieldRegistry;
 
 if ( !defined( 'ABSPATH' ) ) {
@@ -190,7 +190,7 @@ function has_modules( $area_id, $post_id = null )
     $post_id = (null === $post_id) ? $post->ID : $post_id;
 
 
-    $Meta = new MetaData( $post_id );
+    $Meta = new PostMetaDataHandler( $post_id );
     return $Meta->hasModules( $area_id );
 
 }

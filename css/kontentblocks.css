@@ -463,14 +463,16 @@ h5.kb_properties_title {
 .vex.vex-theme-flat-attack .vex-content.modules-menu {
   width: 75%;
   padding: 15px;
+  border-bottom: 1px solid #666;
+  border-right: 1px solid #666;
 }
-/* line 16, sass/partials/_vex.scss */
+/* line 18, sass/partials/_vex.scss */
 .vex.vex-theme-flat-attack .vex-content.onsite {
   width: 75%;
   min-width: 600px;
   padding: 15px;
 }
-/* line 22, sass/partials/_vex.scss */
+/* line 24, sass/partials/_vex.scss */
 .vex.vex-theme-flat-attack .vex-content.editGlobalArea {
   width: 75%;
   min-width: 600px;

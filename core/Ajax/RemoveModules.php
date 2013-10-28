@@ -2,20 +2,20 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Utils\MetaData,
-    Kontentblocks\Utils\GlobalData;
+use Kontentblocks\Utils\PostMetaDataHandler,
+    Kontentblocks\Utils\GlobalDataHandler;
 
 class RemoveModules
 {
 
     protected $postId;
-    protected $instance_id;
+    protected $module;
     protected $dataHandler;
 
     public function __construct()
     {
         $this->postId      = $_POST[ 'post_id' ];
-        $this->instance_id = $_POST[ 'instance_id' ];
+        $this->module = $_POST[ 'module' ];
         $this->dataHandler = $this->_setupDataHandler();
         
         $this->remove();
@@ -24,16 +24,16 @@ class RemoveModules
     public function _setupDataHandler()
     {
         if ( $this->postId == -1 ) {
-            return new GlobalData();
+            return new GlobalDataHandler();
         } else {
-            return new MetaData($this->postId);
+            return new PostMetaDataHandler($this->postId);
         }
 
     }
 
     public function remove()
     {
-        $update = $this->dataHandler->removeFromIndex($this->instance_id);
+        $update = $this->dataHandler->removeFromIndex($this->module);
         wp_send_json($update);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Utils\AreaDirectory,
+use Kontentblocks\Utils\RegionRegistry,
     Kontentblocks\Helper,
     Kontentblocks\Admin\Area;
 ?>
@@ -17,7 +17,7 @@ use Kontentblocks\Utils\AreaDirectory,
             // get areas data
 //    $areas           = $Kontentblocks->get_areas();
 //    $area            = $areas[ $area_id ];
-            $areaArgs = AreaDirectory::getInstance()->getArea( $this->id );
+            $areaArgs = RegionRegistry::getInstance()->getArea( $this->id );
 //    $d_areas         = get_option( 'kb_dynamic_areas' );
 //    $dareas_settings = get_option( 'kb_dynamic_areas_settings' );
 //

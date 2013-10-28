@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Utils\GlobalData,
-    Kontentblocks\Utils\MetaData;
+use Kontentblocks\Utils\GlobalDataHandler,
+    Kontentblocks\Utils\PostMetaDataHandler;
 
 class ChangeModuleStatus
 {
@@ -16,7 +16,7 @@ class ChangeModuleStatus
     {
 
         $this->postId      = $_POST[ 'post_id' ];
-        $this->instance_id = $_POST[ 'block_id' ];
+        $this->instance_id = $_POST[ 'module' ];
         $this->dataHandler = $this->_setupDataHandler();
 
         $this->changeStatus();
@@ -26,10 +26,10 @@ class ChangeModuleStatus
     public function _setupDataHandler()
     {
         if ( $this->postId == -1 ) {
-            return new GlobalData();
+            return new GlobalDataHandler();
         }
         else {
-            return new MetaData($this->postId);
+            return new PostMetaDataHandler($this->postId);
         }
 
     }
@@ -41,10 +41,10 @@ class ChangeModuleStatus
         
         if ($moduleDefinition){
             
-            if ($moduleDefinition['status'] === 'kb_inactive'){
-                $moduleDefinition['status'] = 'kb_active';
+            if ($moduleDefinition['active'] != true){
+                $moduleDefinition['active'] = true;
             } else {
-                $moduleDefinition['status'] = 'kb_inactive';
+                $moduleDefinition['active'] = false;
             }
             
             $update = $this->dataHandler->addToIndex($this->instance_id, $moduleDefinition);

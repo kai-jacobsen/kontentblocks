@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Areas;
 
 /*
  * Kontentblocks: Areas: Menu Class
@@ -129,7 +129,7 @@ class ModuleMenu
 					</div>";
                 return $out;
             }
-        return false;
+            return false;
         }
 
     }
@@ -144,14 +144,13 @@ class ModuleMenu
 
         $out .= "<ul id='blocks-menu-{$this->id}-nav' class='block-menu-tabs'>";
 
-        $i = 1;
         foreach ( $this->categories as $cat => $items ) {
-            if ( $i !== 1 && empty( $items ) )
+            if ( empty( $items ) )
                 continue;
 
             $out .= "<li> <a href='#{$this->id}-{$cat}-tab'>{$this->cats[ $cat ]}</a></li>";
 
-            $i++;
+            
         }
 
         $out .= "</ul>";
@@ -171,7 +170,9 @@ class ModuleMenu
             $out = '';
 
             foreach ( $this->categories as $cat => $items ) {
-
+                if ( empty( $items ) ) {
+                    continue;
+                }
                 $out.= "<div id='{$this->id}-{$cat}-tab'>";
                 $out.= "<ul  class='blocks-menu'>";
 
@@ -202,12 +203,12 @@ class ModuleMenu
             return null;
 
 
-        $instance_id = (isset( $item['reference_id'] )) ? "data-reference_id='{$item['reference_id']}'" : null;
-        $master      = (isset( $item['master'] )) ? "data-master=master" : null;
+        $instance_id = (isset( $item[ 'reference_id' ] )) ? "data-reference_id='{$item[ 'reference_id' ]}'" : null;
+        $master      = (isset( $item[ 'master' ] )) ? "data-master=master" : null;
 
 
-        $img        = (!empty( $item['icon'])) ? $item[ 'icon' ] : '';
-        $blockclass = $item['class'];
+        $img        = (!empty( $item[ 'icon' ] )) ? $item[ 'icon' ] : '';
+        $blockclass = $item[ 'class' ];
 
         $out = "	<li class='block-nav-item' data-value='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >
 						<div class='block-icon'><img src='{$img}' ></div>
@@ -231,10 +232,9 @@ class ModuleMenu
 
         foreach ( $this->blocks as $block ) {
             // check for categories
-            $cat                         = (!empty( $block->settings[ 'category' ] )) ? $this->_get_valid_category( $block->settings[ 'category' ] ) : 'standard';
+            $cat                        = (!empty( $block[ 'category' ] ) ) ? $this->_get_valid_category( $block[ 'category' ] ) : 'standard';
             $this->categories[ $cat ][] = $block;
         }
-
         // add templates
         $saved_block_templates = get_option( 'kb_block_templates' );
 
@@ -245,7 +245,7 @@ class ModuleMenu
                 $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ] = new $tpl[ 'class' ];
 
                 if ( !empty( $tpl[ 'instance_id' ] ) ) {
-                    $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->instance_id             = $tpl[ 'instance_id' ];
+                    $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->instance_id               = $tpl[ 'instance_id' ];
                     $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ]->settings[ 'public_name' ] = $tpl[ 'name' ];
                 }
 
@@ -264,10 +264,11 @@ class ModuleMenu
 
     private function _get_valid_category( $cat )
     {
-
         foreach ( $this->cats as $c => $name ) {
-            if ( $c == $cat )
+            if ( $c == $cat ) {
+                
                 return $cat;
+            }
         }
         return (isset( $this->cats[ 0 ] )) ? $this->cats[ 0 ] : false;
 
@@ -288,10 +289,10 @@ class ModuleMenu
 
         $cats = apply_filters( 'kb_menu_cats', $cats );
 
-        
-        $cats[ 'media']     = __('Media', 'kontentblocks');
-        $cats[ 'special' ]   = __( 'Spezial', 'kontentblocks' );
-        
+
+        $cats[ 'media' ]   = __( 'Media', 'kontentblocks' );
+        $cats[ 'special' ] = __( 'Spezial', 'kontentblocks' );
+
         $cats[ 'core' ]      = __( 'System', 'kontentblocks' );
         $cats[ 'templates' ] = __( 'Templates', 'kontentblocks' );
 
