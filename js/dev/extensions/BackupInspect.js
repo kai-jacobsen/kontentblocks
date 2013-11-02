@@ -21,7 +21,6 @@ KB.Ext.Backup = (function($) {
                     },
             function(response)
             {
-                console.log(response); 
                 that.items = response;
                 that.renderList(response);
             });

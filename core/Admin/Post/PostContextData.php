@@ -70,7 +70,7 @@ class PostContextData extends AbstractContextData
             foreach ( $this->modules as $module ) {
                 $area_id = $module['area'];
 
-                $sorted[ $area_id ][] = $module;
+                $sorted[ $area_id ][$module['instance_id']] = $module;
             }
             return $sorted;
         }

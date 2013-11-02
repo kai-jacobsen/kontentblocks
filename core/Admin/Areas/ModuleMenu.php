@@ -118,14 +118,7 @@ class ModuleMenu
         if ( current_user_can( 'create_kontentblocks' ) ) {
             if ( !empty( $this->blocks ) ) {
                 $out = " <div class='add-modules cantsort'>
-							<a class='modal modules-link' 
-							href='#'
-							data-area='{$this->id}'
-							data-reveal-id_='{$this->id}-nav' 
-							data-animation='fade' 
-							data-animationSpeed='150'>
-							{$this->l18n[ 'modules' ]}
-						</a>
+							
 					</div>";
                 return $out;
             }
@@ -203,14 +196,14 @@ class ModuleMenu
             return null;
 
 
-        $instance_id = (isset( $item[ 'reference_id' ] )) ? "data-reference_id='{$item[ 'reference_id' ]}'" : null;
-        $master      = (isset( $item[ 'master' ] )) ? "data-master=master" : null;
+        $instance_id = (isset( $item[ 'reference_id' ] )) ? "data-template_reference='{$item[ 'reference_id' ]}' data-template=true" : null;
+        $master      = (isset( $item[ 'master' ] )) ? "data-master=true" : null;
 
 
         $img        = (!empty( $item[ 'icon' ] )) ? $item[ 'icon' ] : '';
         $blockclass = $item[ 'class' ];
 
-        $out = "	<li class='block-nav-item' data-value='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >
+        $out = "	<li class='block-nav-item' data-type='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >
 						<div class='block-icon'><img src='{$img}' ></div>
 						<div class='block-info'><h3>{$item[ 'public_name' ]}</h3>
 							<p class='description'>{$item[ 'description' ]}</p>

@@ -108,7 +108,6 @@ abstract class Module
     function __construct( $args = NULL, $data = array() )
     {
         $this->set( $args );
-        //connect this block to areas
 
         $this->new_instance = $data;
 
@@ -158,7 +157,7 @@ abstract class Module
      */
     final public function module( $data )
     {
-        if (isset($this->Fields)){
+        if ( isset( $this->Fields ) ) {
             $this->_setupFieldData();
         }
         return $this->render( $data );
@@ -188,7 +187,7 @@ abstract class Module
     public function _setupFieldData()
     {
 
-        
+
         $this->Fields->setup( $this->new_instance );
         foreach ( $this->new_instance as $key => $v ) {
             $field                      = $this->Fields->getFieldByKey( $key );
@@ -228,7 +227,9 @@ abstract class Module
         }
         else {
             // output the form fields for this block
-            $this->Fields->data = $this->new_instance;
+            if ( isset( $this->Fields ) ) {
+                $this->Fields->data = $this->new_instance;
+            }
             $this->options( $this->new_instance );
         }
 
@@ -283,20 +284,20 @@ abstract class Module
 
         // markup for each block
         $out = "<div class='kb_inner'>";
-
         if ( $lockedmsg && KONTENTLOCK ) {
             echo $lockedmsg;
         }
         else {
             $description       = (!empty( $this->description )) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->description : '';
             $l18n_block_title  = __( 'Modul Bezeichnung', 'kontentblocks' );
-            $l18n_draft_status = ( $this->draft == 'true' ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
+            $l18n_draft_status = ( $this->draft === true ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
 
             $out .= "<div class='kb_block_title'>";
 
-            if ( !empty( $description ) )
-            // $out .= "<p class='description'>{$description}</p>";
-                $out .= "		<div class='block-notice hide'>
+            if ( !empty( $description ) ) {
+                // $out .= "<p class='description'>{$description}</p>";
+            }
+            $out .= "		<div class='block-notice hide'>
 							<p>Es wurden Veränderungen vorgenommen. <input type='submit' class='button-primary' value='Aktualisieren' /></p>
 						</div>
 						{$l18n_draft_status}
@@ -555,7 +556,6 @@ abstract class Module
         . "var Konfig = Konfig || [];"
         . "Konfig.push({$dump});"
         . "</script>";
-        
 
     }
 
@@ -566,16 +566,17 @@ abstract class Module
             'active' => true,
             'disabled' => false,
             'public_name' => 'Give me Name',
+            'name' => '',
             'wrap' => true,
             'beforeModule' => '<div id="%s" class="module %s %s">',
             'afterModule' => '</div>',
             'description' => '',
-            'connect' => null,
+            'connect' => 'any',
             'hidden' => false,
             'predefined' => false,
             'globallyAvailable' => false,
-            'category' => false,
-            'columns' => null
+            'draft' => true,
+            'templateable' => true
         );
 
     }

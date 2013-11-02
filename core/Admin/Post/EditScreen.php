@@ -310,13 +310,12 @@ Class EditScreen
     {
         global $post;
         $toJSON = array(
-            'areas' => $this->postData->get( 'areas' ),
             'page_template' => $this->postData->get( 'pageTemplate' ),
             'post_type' => $this->postData->get( 'postType' ),
             'post_id' => $post->ID
         );
 
-        echo "<script> var kbpage =" . json_encode( $toJSON ) . "</script>";
+        echo "<script> var KB = KB || {}; KB.Screen =" . json_encode( $toJSON ) . "</script>";
 
     }
 

@@ -3,21 +3,22 @@ var KB = KB || {};
 KB.Ajax = (function($) {
 
     return {
-        send: function(data, callback) {
+        send: function(data, callback, scope) {
 
 
-            var nonce = $('#_kontentblocks_ajax_nonce').val();
-            var postID = $('#post_ID').val();
 
-            data._kb_nonce = nonce;
-            data.post_id = postID;
-            data.kbajax = 'true';
+            data.supplemental = data.supplemental || {};
 
-
+            
+            data.count = parseInt($('#kb_all_blocks').val());
+            data.nonce = $('#_kontentblocks_ajax_nonce').val();
+            data.post_id = parseInt($('#post_ID').val()) || -1;
+            data.kbajax = true;
 
             $(kbMetaBox).addClass('kb_loading');
-            $('#publish').attr('disabled', 'disabled');
 
+
+            $('#publish').attr('disabled', 'disabled');
             $.ajax({
                 url: ajaxurl,
                 data: data,
@@ -25,7 +26,14 @@ KB.Ajax = (function($) {
                 dataType: 'json',
                 success: function(data) {
                     if (data) {
-                        callback;
+                        var count =  parseInt($('#kb_all_blocks').val()) + 1;
+                        $('#kb_all_blocks').val(count);
+
+                        if (scope){
+                            callback.call(scope, data);
+                        } else {
+                            callback(data);
+                        }
                     }
 
 

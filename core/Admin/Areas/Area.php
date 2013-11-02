@@ -276,7 +276,7 @@ class Area
             $unavailable_blocks = implode( ' ', $this->assignedModules );
         }
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' data-page_template='{$this->dataContainer->get( 'pageTemplate' )}' data-post_type='{$this->dataContainer->get( 'postType' )}' data-blacklist='{$unavailable_blocks}' data-limit='{$this->limit}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
+        echo "<ul style='' data-context='{$this->context}' data-blacklist='{$unavailable_blocks}' id='{$this->id}-list' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
 
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
@@ -323,7 +323,8 @@ class Area
         $area = array(
             'id' => $this->id,
             'assignedModules' => $this->assignedModules,
-            'modules' => $this->attachedModules
+            'modules' => $this->attachedModules,
+            'limit' => absint($this->limit)
         );
         $json = json_encode($area);
         echo "<script>"

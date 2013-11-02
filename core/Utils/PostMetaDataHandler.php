@@ -21,7 +21,6 @@ class PostMetaDataHandler implements InterfaceDataHandler
 
         $this->post_id = $post_id;
         $this->_selfUpdate();
-        
         return $this;
 
     }

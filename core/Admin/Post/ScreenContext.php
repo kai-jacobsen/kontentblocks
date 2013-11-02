@@ -62,7 +62,7 @@ class ScreenContext
             if ( $args[ 'dynamic' ] ) {
                 continue;
             }
-            echo "<div class='area-wrap clearfix cf'>";
+            echo "<div id='{$args['id']}' class='area-wrap clearfix cf'>";
             // Setup new Area
             
             $area = new Area( $args, $this->postData );

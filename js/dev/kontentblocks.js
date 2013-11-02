@@ -65,24 +65,6 @@ var KB = KB || {};
 
             
 
-            $(kbMetaBox).on('click', '.modules-link', function(e) {
-                e.preventDefault();
-
-                activeArea = $(this).attr('data-area');
-                openedModal = vex.open({
-                    content: $('#' + activeArea + '-nav').html(),
-                    afterOpen: function() {
-                        KB.menutabs();
-                        var $el = $('#' + activeArea + '-nav');
-//                        if ($el.find('.ui-tabs-panel').length > 0) {
-//                            $el.find('.ui-tabs-panel').jScrollPane();
-//                        }
-                    },
-                    contentClassName: 'modules-menu'
-                });
-
-            });
-
 
             $(kbMetaBox).on('click', '.kb-duplicate', function(e)
             {
@@ -664,7 +646,7 @@ var KB = KB || {};
             data.page_template = $('#' + activeArea).attr('data-page_template');
             data.post_type = $('#' + activeArea).attr('data-post_type') ? $('#' + activeArea).attr('data-post_type') : false;
             data.post_id = $('#post_ID').val(),
-                    data.count = $('#kb_all_blocks').val();
+            data.count = $('#kb_all_blocks').val();
             data.duplicate = KB.duplicate;
             data.area = activeArea;
             data.context = $('#' + activeArea).attr('data-context');
@@ -908,27 +890,27 @@ jQuery(document).ready(function($) {
      }
      
      });*/
-
-    $('body').on('click', '.blocks-menu li', function() {
-        caller = $(this);
-        
-        if (KB.userCan('create_kontentblocks'))
-        {
-            vex.close(openedModal.data().vex.id);
-
-            KB.blockCreate(caller);
-            menus = $('.kb_open');
-            $(menus).each(function() {
-                if ($(this).hasClass('kb_open')) {
-                    $(this).fadeOut('fast').toggleClass('kb_open');
-                }
-            });
-        }
-        else
-        {
-            KB.notice(kontentblocks.l18n.sec_no_permission, 'alert');
-        }
-
-    });
+//
+//    $('body').on('click', '.blocks-menu li', function() {
+//        caller = $(this);
+//        
+//        if (KB.userCan('create_kontentblocks'))
+//        {
+//            vex.close(openedModal.data().vex.id);
+//
+//            KB.blockCreate(caller);
+//            menus = $('.kb_open');
+//            $(menus).each(function() {
+//                if ($(this).hasClass('kb_open')) {
+//                    $(this).fadeOut('fast').toggleClass('kb_open');
+//                }
+//            });
+//        }
+//        else
+//        {
+//            KB.notice(kontentblocks.l18n.sec_no_permission, 'alert');
+//        }
+//
+//    });
 
 }); // end document ready

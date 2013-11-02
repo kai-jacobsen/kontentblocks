@@ -17,8 +17,6 @@ class ModuleRegistry
         if ( null == self::$instance ) {
             self::$instance = new self;
         }
-
-
         return self::$instance;
 
     }
@@ -26,11 +24,20 @@ class ModuleRegistry
     public function add( $classname )
     {
         if ( !isset( $this->modules[ 'classname' ] ) && property_exists( $classname, 'defaults' ) ) {
-            $args                        = $classname::$defaults;
-            $args[ 'class' ]             = $classname;
-            $args                        = wp_parse_args( $args, Module::getDefaults() );
-            $this->modules[ $classname ] = $args;
-            RegionRegistry::getInstance()->connect( $classname, $args );
+            // Defaults from the specific Module
+            // contains id, name, public name etc..
+            $args = $classname::$defaults;
+
+            // manually add the classname for futire reference
+            $args[ 'class' ] = $classname;
+
+            // add missing args from general Defaults
+            $finalargs = wp_parse_args( $args, Module::getDefaults() );
+
+            // Add module to registry
+            $this->modules[ $classname ] = $finalargs;
+            // Handle connection to regions
+            RegionRegistry::getInstance()->connect( $classname, $finalargs );
         }
 
     }

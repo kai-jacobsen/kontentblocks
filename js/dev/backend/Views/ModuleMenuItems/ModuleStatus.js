@@ -26,7 +26,7 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
     isValid: function() {
         
         if (!this.model.get('disabled') &&
-                KB.Caps.userCan('deactivate_kontentblocks')) {
+                KB.Checks.userCan('deactivate_kontentblocks')) {
             return true;
         } else {
             return false;

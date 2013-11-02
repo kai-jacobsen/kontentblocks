@@ -108,9 +108,10 @@
 
             var concat = '';
 
-            if (kbpage.areas) {
-                _.each(kbpage.areas, function(context) {
+            if (KB.RawAreas) {
+                _.each(KB.RawAreas, function(context) {
                     concat += context.id;
+                    console.log(concat);
                 });
             }
             return this.hash(concat.replace(',', ''));

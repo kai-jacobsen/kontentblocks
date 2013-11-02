@@ -6,7 +6,8 @@ use Kontentblocks\Overlays\OnsiteEditModule,
     Kontentblocks\Ajax\RemoveModules,
     Kontentblocks\Ajax\ChangeModuleStatus,
     Kontentblocks\Ajax\ChangeArea,
-    Kontentblocks\Ajax\Frontend\SaveInlineEdit;
+    Kontentblocks\Ajax\Frontend\SaveInlineEdit,
+    Kontentblocks\Ajax\CreateNewModule;
 
 /**
  * -----------------------------------------
@@ -84,6 +85,18 @@ function changeAreaCb()
 
 add_action( 'wp_ajax_changeArea', 'changeAreaCb' );
 
+
+/**
+ * -----------------------------------------
+ * Handler for creating new modules 
+ * -----------------------------------------
+ */
+function createNewModuleCb()
+{
+    $createNewModule = new CreateNewModule();
+}
+
+add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
 
 /**
  * -----------------------------------------

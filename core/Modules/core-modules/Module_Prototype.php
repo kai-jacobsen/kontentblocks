@@ -10,6 +10,7 @@ class Module_Prototype extends Module
 
     public static $defaults = array(
         'public_name' => 'Prototype',
+        'name' => 'Prototype',
         'description' => '',
         'globallyAvailable' => true,
         'templateable' => true,

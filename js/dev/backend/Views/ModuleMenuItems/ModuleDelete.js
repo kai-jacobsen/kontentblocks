@@ -17,7 +17,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     isValid: function() {
         if (!this.model.get('predefined') &&
                 !this.model.get('disabled') &&
-                KB.Caps.userCan('delete_kontentblocks')) {
+                KB.Checks.userCan('delete_kontentblocks')) {
             return true;
         } else {
             return false;
@@ -33,8 +33,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         return false;
     },
     success: function() {
-        
+        KB.Modules.remove(this.model);
         KB.Notice.notice('Good bye', 'success');
-        this.options.parent.$el.hide(500);
     }
 }); 
