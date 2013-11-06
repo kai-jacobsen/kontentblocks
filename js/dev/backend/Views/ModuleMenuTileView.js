@@ -40,7 +40,9 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
     },
     success: function(data) {
         this.options.parentView.modulesList.append(data.html);
-        KB.Modules.add(data.module);
+        KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
+        KB.Modules.add(KB.lastAddedModule);
+        KB.TinyMCE.addEditor();
         // repaint
         // add module to collection
     }

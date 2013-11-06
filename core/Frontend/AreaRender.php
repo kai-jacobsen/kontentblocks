@@ -199,7 +199,7 @@ class AreaRender
             $wrapperclasses = array();
 
 
-            $element_id = $module->id;
+            $element_id = $module->settings['id'];
 
             if ( $element_id == $pre_element_id )
                 $module->repeater = true;
@@ -251,7 +251,7 @@ class AreaRender
                 array_push( $area_template_cols, $tmpcol );
 
 
-            $pre_element_id = $module->id;
+            $pre_element_id = $module->settings['id'];
         }
 
 
@@ -282,7 +282,7 @@ class AreaRender
         }
 
         // if this blocks uses a wrapper (default behaviour), print before markup
-        if ( $module->wrap ) {
+        if ( $module->settings['wrap'] ) {
             // Additional Classes to add to the wrapper
             $classestoadd[] = $this->_get_element_class();
             $classestoadd[] = (isset( $module->repeater ) && $module->repeater === true) ? ' repeater' : null;
@@ -292,10 +292,10 @@ class AreaRender
                 $classestoadd[] = 'os-edit-container';
             // add classes to markup
             if ( !empty( $classestoadd ) ) {
-                $mhtml .= sprintf( stripslashes( $module->beforeModule ), $module->instance_id, $module->id, implode( ' ', $classestoadd ) );
+                $mhtml .= sprintf( stripslashes( $module->settings['beforeModule'] ), $module->instance_id, $module->settings['id'], implode( ' ', $classestoadd ) );
             }
             else {
-                $mhtml .= sprintf( stripslashes( $module->settings[ 'before_block' ] ), NULL );
+                $mhtml .= sprintf( stripslashes( $module->settings[ 'beforeModule' ] ), NULL );
             }
         }
 
@@ -318,10 +318,10 @@ class AreaRender
         $mhtml = null;
 
         // if block uses wrapper, print after markup
-        if ( $module->wrap ) {
-            $mhtml .= $module->afterModule;
+        if ( $module->settings['wrap'] ) {
+            $mhtml .= $module->settings['afterModule'];
         }
-        elseif ( is_user_logged_in() && !$module->wrap ) {
+        elseif ( is_user_logged_in() && !$module->settings['wrap'] ) {
             // close os-edit-container if block doesnt use a wrapper
             $mhtml .= "</div>";
         }
@@ -713,7 +713,7 @@ class AreaRender
                 $collection[] = $instance;
             }
             elseif (
-                $instance->active == false OR $instance->draft == 'true' OR $instance->disabled == true OR !apply_filters( 'kb_collect', $instance )
+                $instance->settings['active'] == false OR $instance->settings['draft'] == 'true' OR $instance->settings['disabled'] == true OR !apply_filters( 'kb_collect', $instance )
             ) {
                 continue;
             }
@@ -742,18 +742,19 @@ class AreaRender
             if ( isset( $item[ 'master' ] ) && $item[ 'master' ] === true ) {
                 $tpls = $this->manager->get_block_templates();
 
-                $ref = (isset( $item[ 'master_ref' ] )) ? $item[ 'master_ref' ] : null;
+                $ref = (isset( $item[ 'master_reference' ] )) ? $item[ 'master_reference' ] : null;
 
 
-                if ( empty( $ref ) )
+                if ( empty( $ref ) ) {
                     $ref = get_option( $module );
+                }
 
                 $args = $tpls[ $ref ];
 
 
-                $item[ 'class' ]       = $args[ 'class' ];
+                $item['settings'][ 'class' ]       = $args[ 'class' ];
                 $item[ 'instance_id' ] = $args[ 'instance_id' ];
-                $item[ 'dynamic' ]     = true;
+                $item['settings'][ 'dynamic' ]     = true;
 
                 $collection[ $module ] = $item;
             }
@@ -779,19 +780,14 @@ class AreaRender
 
         foreach ( ( array ) $modules as $module ) {
 
-            $args = wp_parse_args( $module, Module::getDefaults() );
-
             $module = apply_filters( 'kb_modify_block', $module );
-            $module = apply_filters( "kb_modify_block_{$module[ 'id' ]}", $module );
+            $module = apply_filters( "kb_modify_block_{$module['settings'][ 'id' ]}", $module );
 
             $Factory = new ModuleFactory( $module );
 
 
             // new instance
             $instance = $Factory->getModule();
-
-            foreach ( $args as $k => $v )
-                $instance->$k = $v;
 
             $collection[] = $instance;
         }

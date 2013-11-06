@@ -5,7 +5,8 @@ KB.Backbone = KB.Backbone || {};
 KB.Backbone.AreaView = Backbone.View.extend({
     initialize: function() {
         this.controlsContainer = jQuery('.add-modules', this.$el);
-        this.modulesList = jQuery('#' + this.model.get('id') + '-list', this.$el);
+        this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
+        this.model.view = this;
         this.render();
     },
     events: {
@@ -17,7 +18,8 @@ KB.Backbone.AreaView = Backbone.View.extend({
     addControls: function() {
         this.controlsContainer.append(KB.Templates.render('be_areaAddModule', {}));
     },
-    openModulesMenu: function() {
+    openModulesMenu: function(e) {
+        e.preventDefault();
         var that = this;
         KB.openedModal = vex.open({
             content: jQuery('#' + that.model.get('id') + '-nav').html(),

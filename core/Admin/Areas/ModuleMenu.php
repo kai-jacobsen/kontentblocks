@@ -192,21 +192,21 @@ class ModuleMenu
     {
 
 
-        if ( isset( $item[ 'hidden' ] ) && $item[ 'hidden' ] == true )
+        if ( isset( $item[ 'settings' ][ 'hidden' ] ) && $item[ 'settings' ][ 'hidden' ] == true )
             return null;
 
 
-        $instance_id = (isset( $item[ 'reference_id' ] )) ? "data-template_reference='{$item[ 'reference_id' ]}' data-template=true" : null;
-        $master      = (isset( $item[ 'master' ] )) ? "data-master=true" : null;
+        $instance_id = (isset( $item[ 'template_reference' ] )) ? "data-template_reference='{$item[ 'reference_id' ]}' data-template=true" : null;
+        $master      = (isset( $item[ 'settings' ][ 'master' ] )) ? "data-master=true" : null;
 
 
-        $img        = (!empty( $item[ 'icon' ] )) ? $item[ 'icon' ] : '';
-        $blockclass = $item[ 'class' ];
+        $img        = (!empty( $item[ 'settings' ][ 'icon' ] )) ? $item[ 'settings' ][ 'icon' ] : '';
+        $blockclass = $item[ 'settings' ][ 'class' ];
 
         $out = "	<li class='block-nav-item' data-type='{$blockclass}' {$instance_id} {$master} data-context='{$this->context}' >
 						<div class='block-icon'><img src='{$img}' ></div>
-						<div class='block-info'><h3>{$item[ 'public_name' ]}</h3>
-							<p class='description'>{$item[ 'description' ]}</p>
+						<div class='block-info'><h3>{$item[ 'settings' ][ 'public_name' ]}</h3>
+							<p class='description'>{$item[ 'settings' ][ 'description' ]}</p>
 						</div>
 						<span class='action'>{$this->l18n[ 'add' ]}</span>
 					</li>";
@@ -225,7 +225,7 @@ class ModuleMenu
 
         foreach ( $this->blocks as $block ) {
             // check for categories
-            $cat                        = (!empty( $block[ 'category' ] ) ) ? $this->_get_valid_category( $block[ 'category' ] ) : 'standard';
+            $cat                        = (!empty( $block[ 'settings' ][ 'category' ] ) ) ? $this->_get_valid_category( $block[ 'settings' ][ 'category' ] ) : 'standard';
             $this->categories[ $cat ][] = $block;
         }
         // add templates

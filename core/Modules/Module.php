@@ -17,86 +17,6 @@ use Kontentblocks\Fields\FieldManager;
 
 abstract class Module
 {
-    /* -----------------------------------------------------
-     * I. Properties
-     * -----------------------------------------------------
-     */
-
-    /**
-     * Public Name of this Block
-     * 
-     * @var string 
-     */
-    var $name = '';
-
-    /**
-     * Internal generic identifier, for css classes etc
-     * This is not specific to a single Block, it identifies the 'type' of the block
-     * 
-     * @var string 
-     */
-    var $id = '';
-
-    /**
-     * Unique ID for a block, key of the post meta
-     * Whenever you have to refer to a specific block, this is the id
-     * 
-     * @var string 
-     */
-    var $instance_id = null;
-
-    /**
-     * stolen from widgets concept, holds the new data from $_POST array
-     * 
-     * @var array 
-     */
-    var $new_instance = array();
-
-    /**
-     * Hold draft status
-     * 
-     * New created blocks will be created as draft = true
-     * @var bool  
-     */
-    var $draft = true;
-
-    /**
-     * Holds belonging area
-     * 
-     * @var string id of area 
-     */
-    var $area = 'kontentblocks';
-
-    /**
-     * Area main context
-     * set within render_blocks
-     * 
-     * @var string set by template tag 
-     */
-    var $context = '';
-
-    /**
-     * Area subcontext
-     * set within render_blocks 
-     * 
-     * @var string set by template tag
-     */
-    var $subcontext = '';
-
-    /**
-     * current page template 
-     * 
-     * @var string plain filename of template file, no path
-     */
-    var $page_template = '';
-
-    /**
-     * current post type 
-     * 
-     * @var string
-     */
-    var $post_type = '';
-    public $path;
 
     /**
      * II. Constructor
@@ -222,7 +142,7 @@ abstract class Module
         echo $this->_open_inner();
 
         // if disabled don't output, just show disabled message
-        if ( $this->disabled ) {
+        if ( $this->settings[ 'disabled' ] ) {
             echo "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         }
         else {
@@ -250,15 +170,15 @@ abstract class Module
         $classname = get_class( $this );
 
         // additional classes to set for the item
-        $disabledclass = ($this->disabled) ? 'disabled' : null;
-        $uidisabled    = ($this->disabled) ? 'ui-state-disabled' : null;
+        $disabledclass = ($this->settings[ 'disabled' ]) ? 'disabled' : null;
+        $uidisabled    = ($this->settings[ 'disabled' ]) ? 'ui-state-disabled' : null;
 
         //$locked = ( $this->locked == 'false' || empty($this->locked) ) ? 'unlocked' : 'locked';
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
         $unsortable = ((isset( $this->unsortable ) and $this->unsortable) == '1') ? 'cantsort' : null;
 
         // Block List Item
-        return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->id} kb_wrapper kb_block {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
+        return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->settings[ 'id' ]} kb_wrapper kb_block {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
 		<input type='hidden' name='{$this->instance_id}[area_context]' value='$this->area_context' /> 
 		";
 
@@ -288,9 +208,9 @@ abstract class Module
             echo $lockedmsg;
         }
         else {
-            $description       = (!empty( $this->description )) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->description : '';
+            $description       = (!empty( $this->settings[ 'description' ] )) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->settings[ 'description' ] : '';
             $l18n_block_title  = __( 'Modul Bezeichnung', 'kontentblocks' );
-            $l18n_draft_status = ( $this->draft === true ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
+            $l18n_draft_status = ( $this->settings[ 'draft' ] === true ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
 
             $out .= "<div class='kb_block_title'>";
 
@@ -336,25 +256,26 @@ abstract class Module
         $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
 
         // locked icon
-        if ( !$this->disabled && KONTENTLOCK ) {
+        if ( !$this->settings[ 'disabled' ] && KONTENTLOCK ) {
             $html .="<div class='kb-lock {$this->locked}'></div>";
         }
 
         // disabled icon
-        if ( $this->disabled ) {
+        if ( $this->settings[ 'disabled' ] ) {
             $html .="<div class='kb-disabled-icon'></div>";
         }
 
         // name
-        $html .="<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='{$this->name}' /></div>";
+        $html .="<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='". esc_attr( $this->settings[ 'name' ]) ."' /></div>";
 
         // original name
-        $html .="<div class='kb-sub-name'>{$this->public_name}</div>";
+        $html .="<div class='kb-sub-name'>{$this->settings[ 'public_name' ]}</div>";
+
+        $html .="</div>";
 
         // Open the drop down menu
         $html .= "<div class='menu-wrap'></div>";
 
-        $html .="</div>";
 
         return $html;
 
@@ -366,7 +287,7 @@ abstract class Module
 
     public function footer()
     {
-        do_action( "block_footer_{$this->id}" );
+        do_action( "block_footer_{$this->settings[ 'id' ]}" );
         do_action( 'block_footer', $this );
 
     }
@@ -378,7 +299,7 @@ abstract class Module
     {
 
 
-        $edittext = (!empty( $this->os_edittext )) ? $this->os_edittext : __( 'edit' );
+        $edittext = (!empty( $this->settings[ 'os_edittext' ] )) ? $this->setting[ 'os_edittext' ] : __( 'edit' );
 
         global $Kontentblocks, $post;
 
@@ -387,11 +308,10 @@ abstract class Module
         if ( $post_id === null )
             $post_id    = (!empty( $_REQUEST[ 'post_id' ] )) ? $_REQUEST[ 'post_id' ] : $post->ID;
 
-        $context = ($Kontentblocks->post_context) ? 'true' : 'false';
-
+        $context       = ($Kontentblocks->post_context) ? 'true' : 'false';
         $class         = get_class( $this );
         $area_context  = $this->area_context;
-        $columns       = $this->columns;
+        $columns       = (isset( $this->columns )) ? $this->columns : null;
         $page_template = $this->page_template;
         $post_type     = $this->post_type;
         $subcontext    = $this->subcontext;
@@ -402,7 +322,7 @@ abstract class Module
 
             $tpls = $Kontentblocks->get_block_templates();
 
-            $reference = (isset( $this->master_ref )) ? $this->master_ref : null;
+            $reference = (isset( $this->master_reference )) ? $this->master_refeference : null;
 
             if ( !$reference ) {
                 $reference = $this->instance_id;
@@ -438,7 +358,7 @@ abstract class Module
 		TB_iframe=1&
 		height=600&
 		width=800'><span></span>{$edittext}</a>
-		<a class='os-description' title='{$this->description}'>info</a>
+		<a class='os-description' title='{$this->settings[ 'description' ]}'>info</a>
 		</div>";
 
         //return $out;
@@ -474,10 +394,10 @@ abstract class Module
     public function set_status( $status )
     {
         if ( $status == 'kb_inactive' ) {
-            $this->active = false;
+            $this->settings[ 'active' ] = false;
         }
         elseif ( $status == 'kb_active' or $status == '' ) {
-            $this->active = true;
+            $this->settings[ 'active' ] = true;
         }
 
     }
@@ -488,10 +408,10 @@ abstract class Module
     public function set_draft( $draft )
     {
         if ( $draft == 'true' ) {
-            $this->draft = true;
+            $this->settings[ 'draft' ] = true;
         }
         elseif ( $draft == 'false' ) {
-            $this->draft = false;
+            $this->settings[ 'draft' ] = false;
         }
 
     }
@@ -576,14 +496,14 @@ abstract class Module
             'predefined' => false,
             'globallyAvailable' => false,
             'draft' => true,
-            'templateable' => true
+            'templateable' => true,
         );
 
     }
 
     public function getStatusClass()
     {
-        if ( $this->active ) {
+        if ( $this->settings[ 'active' ] ) {
             return 'activated';
         }
         else {

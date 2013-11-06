@@ -8,41 +8,34 @@ KB.Backbone.AreasCollection = Backbone.Collection.extend({
 var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
-KB.Backbone.ModulesCollection = Backbone.Collection.extend({}); 
+KB.Backbone.ModulesCollection = Backbone.Collection.extend({
+    
+}); 
 var KB = KB || {};
 
 KB.Ajax = (function($) {
 
     return {
         send: function(data, callback, scope) {
-
-
-
             data.supplemental = data.supplemental || {};
-
-            
             data.count = parseInt($('#kb_all_blocks').val());
             data.nonce = $('#_kontentblocks_ajax_nonce').val();
             data.post_id = parseInt($('#post_ID').val()) || -1;
             data.kbajax = true;
 
             $(kbMetaBox).addClass('kb_loading');
-
-
             $('#publish').attr('disabled', 'disabled');
-            $.ajax({
+
+            return $.ajax({
                 url: ajaxurl,
                 data: data,
                 type: 'POST',
                 dataType: 'json',
                 success: function(data) {
                     if (data) {
-                        var count =  parseInt($('#kb_all_blocks').val()) + 1;
-                        $('#kb_all_blocks').val(count);
-
-                        if (scope){
+                        if (scope && callback){ 
                             callback.call(scope, data);
-                        } else {
+                        } else if (callback) {
                             callback(data);
                         }
                     }
@@ -151,18 +144,292 @@ KB.Templates = (function($) {
 }(jQuery));
 var KB = KB || {};
 
+KB.TinyMCE = (function($) {
+
+    return {
+        removeEditors: function() {
+            // do nothing if it is the native editor
+            $('.wp-editor-wrap').each(function() {
+                if ($(this).attr('id') === 'wp-content-wrap')
+                {
+                    // do nothing
+                } else
+                {
+                    // get the id
+                    var textarea = jQuery(this).find('textarea').attr('id');
+                    // remove controls
+                    tinyMCE.execCommand('mceRemoveControl', false, textarea);
+                }
+            });
+        },
+        restoreEditors: function() {
+            $('.wp-editor-wrap').each(function()
+            {
+                // find all textareas with tinymce support
+                var textarea = $(this).find('textarea').attr('id');
+                // add controls back
+                tinyMCE.execCommand('mceAddControl', false, textarea);
+                // 
+                // if instance was in html mode, we have to switch manually back to visual mode
+                // will look ugly otherwise, and don't see an alternative
+                if ($(this).hasClass('html-active'))
+                {
+                    $(this).removeClass('html-active').addClass('tmce-active');
+                }
+            });
+        },
+        addEditor: function() {
+            // get settings from native WP Editor
+            // Editor may not be initialized and is not accesible throught
+            // the tinymce api, thats why we take the settings from preInit
+            var settings = tinyMCEPreInit.mceInit['content'];
+            console.log(settings);
+            $('.wp-editor-area', KB.lastAddedModule.view.$el).each(function() {
+                var id = this.id;
+
+                // add new editor id to settings
+                settings['elements'] = id;
+                new tinymce.Editor(id, settings).render();
+                // doesn't wok without, but don't really know what this does
+                var qtsettings = {
+                    'buttons': '',
+                    'disabled_buttons': '',
+                    'id': id
+                };
+                new QTags(qtsettings);
+
+
+            });
+
+            setTimeout(function() {
+                $('.wp-editor-wrap', KB.lastAddedModule.view.$el).removeClass('html-active').addClass('tmce-active');
+                QTags._buttonsInit();
+            }, 1500);
+
+//
+//            // add qt settings for the new instance as well
+//            tinyMCEPreInit.qtInit[newid] = qtsettings;
+
+//            // create new instance
+//            ed = new tinymce.Editor(newid, settings);
+//
+//            // render new instance
+//            ed.render();
+
+//            // add quicktags
+//            var qt = new QTags(qtsettings);
+
+            // hackish..set a short delay to reset the new editor to visual mode and hide qt buttons
+            // this is necessary :/
+
+
+        }
+
+    };
+
+}(jQuery));
+/**
+ * 
+ * These is a collection of helper functions to handle
+ * the user interface / user interaction such as 
+ * - Sorting
+ * - TinyMCE De-/Initialization
+ * - Tabs initialization
+ * - UI repainting / updating
+ * 
+ * @package Kontentblocks
+ * @subpackage Backend/UI
+ * @type @exp;KB
+ */
+
+var KB = KB || {};
+
+KB.Ui = (function($) {
+
+    return {
+        initTabs: function() {
+
+            $('.kb_fieldtabs').tabs({
+                activate: function() {
+//                       var $window = $(window).height();
+//                        $('.content').height($window - 250);
+                    // re-init nano scroller
+                    $('.nano').nanoScroller();
+                }
+            });
+
+            $('.kb_fieldtabs').each(function() {
+
+                var length = $('.kb_fieldtabs li').length;
+                if (length === 1)
+                {
+                    $(this).find('.ui-tabs-nav').css('display', 'none');
+                }
+            });
+        },
+        initSortable: function() {
+
+            var currentModule, areaOver;
+            var validModule = false;
+            var that = this;
+
+            /*
+             * Test if the current sorted module
+             * is allowed in (potentially) new area
+             * Checks if either the module limit of the area
+             * has been reached or if the current module
+             * type is not in the array of assigned modules
+             * of the area
+             */
+            function isValidModule() {
+                if (_.indexOf(areaOver.get('assignedModules'), currentModule.get('settings').class) === -1 &&
+                        areaOver.get('limit') <= filterModulesByArea(areaOver.get('id')).length) {
+                    KB.Notice.notice('Not allowed here', 'error');
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            /**
+             * Get an array of modules by area id 
+             * @param id string
+             * @returns array of all found modules in that area
+             */
+            function filterModulesByArea(id) {
+                return _.filter(KB.Modules.models, function(model) {
+                    return model.get('area').get('id') === id;
+                });
+            }
+
+            // handles sorting of the blocks.
+            $('.kb_sortable').sortable({
+                //settings
+                placeholder: "ui-state-highlight",
+                ghost: true,
+                connectWith: ".kb_connect",
+                handle: '.kb-move',
+                cancel: 'li.disabled, li.cantsort',
+                tolerance: 'pointer',
+                delay: 150,
+                revert: 350,
+                // start event
+                start: function(event, ui)
+                {
+                    // set current model 
+                    currentModule = KB.Modules.get(ui.item.attr('id'));
+                    currentModule.view.$body.hide();
+                    // close open modules, sorting on open container
+                    // doesn't work very well
+                    $('.kb-open').toggleClass('kb-open');
+                    $('.kb_inner').hide();
+
+                    // tinyMCE doesn't like to be moved in the DOM
+                    KB.TinyMCE.removeEditors();
+
+                    // Add a global trigger to sortable.start, maybe other Blocks might need it
+                    $(document).trigger('kb_sortable_start', [event, ui]);
+                },
+                stop: function(event, ui)
+                {
+                    var serializedData = [];
+
+                    // restore TinyMCE editors 
+                    KB.TinyMCE.restoreEditors();
+
+                    // global trigger when soprtable is done		
+                    $(document).trigger('kb_sortable_stop', [event, ui]);
+
+                },
+                over: function(event, ui)
+                {
+                    // keep track of target area
+                    areaOver = KB.Areas.get(this.id);
+                },
+                receive: function(event, ui) {
+
+                    if (!isValidModule()) {
+                        // inform the user
+                        KB.Notice.notice('Module not allowed in this area');
+                        // cancel sorting
+                        $(ui.sender).sortable('cancel');
+                    }
+                },
+                update: function(ev, ui) {
+
+                    // update will fire twice when modules are
+                    // moved between two areas, once for each list
+                    // this makes sure that the right action(s) are only done once
+                    if (this === ui.item.parent('ul')[0] && !ui.sender) {
+                        // function call applies when target area == orign
+                        $.when(that.resort(ui.sender)).done(function() {
+                            KB.Notice.notice('Order was updated successfully', 'success');
+                        });
+                    } else if (ui.sender) {
+                        // function call applies when target area != origin
+                        // chain reordering and change of area
+                        $.when(that.changeArea(areaOver, currentModule)).
+                                then(function(){that.resort(ui.sender);}).
+                                done(function() {
+                            KB.Notice.notice('Area change and order were updated successfully', 'success');
+                        });
+                    }
+                }
+            });
+        },
+        /**
+         * Handles saving of new module order per area
+         * @param sender jQueryUI sortable sender list
+         * @returns {jqXHR}
+         */
+        resort: function(sender) {
+            // serialize data
+            var serializedData = {};
+            $('.kb_sortable').each(function() {
+                serializedData[this.id] = $('#' + this.id).sortable('serialize', {
+                    attribute: 'rel'
+                });
+            });
+
+            return KB.Ajax.send({
+                action: 'resortModules',
+                data: serializedData
+            });
+        },
+        /**
+         * 
+         * @param object targetArea
+         * @param object module
+         * @returns {jqXHR}
+         */
+        changeArea: function(targetArea, module) {
+            return KB.Ajax.send({
+                action: 'changeArea',
+                block_id: module.get('instance_id'),
+                area_id: targetArea.get('id')
+            });
+        }
+    };
+
+}(jQuery));
+var KB = KB || {};
+
 KB.ViewsCollection = function() {
-    this.views = {},
-            this.add = function(id, view) {
-                this.views[id] = view;
-            };
+    this.views = {};
+
+    this.add = function(id, view) {
+        this.views[id] = view;
+        
+    };
+
     this.remove = function(id) {
         var view = this.get(id);
-        view.$el.fadeOut(500,function(){
+        view.$el.fadeOut(500, function() {
             view.remove();
         });
         delete this.views[id];
     };
+
     this.get = function(id) {
         if (this.views[id]) {
             return this.views[id];
@@ -236,7 +503,8 @@ KB.Backbone = KB.Backbone || {};
 KB.Backbone.AreaView = Backbone.View.extend({
     initialize: function() {
         this.controlsContainer = jQuery('.add-modules', this.$el);
-        this.modulesList = jQuery('#' + this.model.get('id') + '-list', this.$el);
+        this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
+        this.model.view = this;
         this.render();
     },
     events: {
@@ -248,7 +516,8 @@ KB.Backbone.AreaView = Backbone.View.extend({
     addControls: function() {
         this.controlsContainer.append(KB.Templates.render('be_areaAddModule', {}));
     },
-    openModulesMenu: function() {
+    openModulesMenu: function(e) {
+        e.preventDefault();
         var that = this;
         KB.openedModal = vex.open({
             content: jQuery('#' + that.model.get('id') + '-nav').html(),
@@ -308,7 +577,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         KB.Ajax.send({
             action: 'removeModules',
             module: this.model.get('instance_id')
-        }, this.success.call(this));
+        }, this.success, this);
     },
     no: function() {
         return false;
@@ -328,7 +597,14 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         'click': 'duplicateModule'
     },
     duplicateModule: function() {
-        console.log(KB); 
+        KB.Ajax.send({
+            action: 'duplicateModule',
+            module: this.model.get('instance_id'),
+            page_template: KB.Screen.page_template,
+            post_type: KB.Screen.post_type,
+            area_context: this.model.get('area').get('context')
+        }, this.success, this);
+
     },
     isValid: function() {
         if (!this.model.get('predefined') &&
@@ -338,6 +614,11 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         } else {
             return false;
         }
+    },
+    success: function(data) {
+        this.model.get('area').view.modulesList.append(data.html);
+        KB.Modules.add(data.module);
+
     }
 }); 
 'use strict';
@@ -358,11 +639,12 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
     changeStatus: function() {
         this.options.parent.$head.toggleClass('module-inactive');
         this.options.parent.$el.toggleClass('kb_inactive');
+        this.options.parent.$el.toggleClass('activated deactivated');
         
         KB.Ajax.send({
             action: 'changeModuleStatus',
             module: this.model.get('instance_id')
-        }, this.success.call(this));
+        }, this.success, this);
         
     },
     isValid: function() {
@@ -375,7 +657,6 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
         }
     },
     success: function(){
-        console.log(this.model);
         KB.Notice.notice('Status changed', 'success');
     }
 }); 
@@ -421,7 +702,9 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
     },
     success: function(data) {
         this.options.parentView.modulesList.append(data.html);
-        KB.Modules.add(data.module);
+        KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
+        KB.Modules.add(KB.lastAddedModule);
+        KB.TinyMCE.addEditor();
         // repaint
         // add module to collection
     }
@@ -436,22 +719,23 @@ KB.Backbone.ModuleMenuView = Backbone.View.extend({
     $menuWrap: null,
     $menuList: null,
     events: {
-        
+        'click .kb_menu_opener' : 'toggleMenu'
     },
     initialize: function() {
         this.$menuWrap = jQuery('.menu-wrap', this.$el);
         this.$menuWrap.append(KB.Templates.render('be_moduleMenu', {}));
-
-        this.$menuList = jQuery('.kb_the_menu', this.$menuWrap);
+        this.$menuList = jQuery('.module-actions', this.$menuWrap);
     },
     addItem: function(view, model) {
-        
-        if (view.isValid && view.isValid() === true){
+
+        if (view.isValid && view.isValid() === true) {
             var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
             var $menuItem = $liItem.append(view.el);
             this.$menuList.append($menuItem);
         }
-        
+    },
+    toggleMenu: function(){
+        this.$menuList.fadeToggle(250);
     }
 });
 'use strict';
@@ -468,50 +752,96 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.$head = jQuery('.block-head', this.$el);
         this.$body = jQuery('.kb_inner', this.$el);
         this.ModuleMenu = new KB.Backbone.ModuleMenuView({
-            el: this.$head,
+            el: this.$el,
             parent: this
         });
+        this.model.view = this;
         
         // Setup View
         this.setupDefaultMenuItems();
     },
     setupDefaultMenuItems: function() {
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
         this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
     }
 
 });
 'use strict';
 var KB = KB || {};
 
+// ---------------
+// Collections 
+// ---------------
 
+/*
+ * Views, not a Backbone collection
+ * simple getter/setter access point to views
+ */
 KB.Views = {
     Modules: new KB.ViewsCollection,
-    Areas: {}
+    Areas: new KB.ViewsCollection
 };
 
+/*
+ * All Modules are collected here
+ * Get by 'id'
+ */
 KB.Modules = new KB.Backbone.ModulesCollection([], {
     model: KB.Backbone.ModuleModel
 });
 
+/*
+ *  All Areas are collected in this Backbone Collection
+ *  Get by 'instance_id'
+ */
 KB.Areas = new KB.Backbone.AreasCollection([], {
     model: KB.Backbone.AreaModel
 });
 
+/*
+ * Init function
+ * Register event listeners
+ * Create Views for areas and modules
+ * None of this functions is meant to be used directly
+ * from outside the function itself.
+ * Use events on the backbone items instead
+ * handle UI specific actions
+ */
 KB.App = (function($) {
 
     function init() {
+        // Register basic events
         KB.Modules.on('add', createModuleViews);
         KB.Areas.on('add', createAreaViews);
         KB.Modules.on('remove', removeModule);
+        
+        // Create views
         addViews();
+        
+        // get the UI on track
+        KB.Ui.initSortable();
     }
 
+    /**
+     * Iterate and throught raw areas as they were
+     * output by toJSON() method on each area upon
+     * server side page creation
+     * 
+     * Modules are taken from the raw areas and
+     * collected seperatly in their own collection
+     * 
+     * View generation is handled by the 'add' event callback
+     * as registered above
+     * @returns void
+     */
     function addViews() {
+        // iterate over raw areas
         _.each(KB.RawAreas, function(area) {
+            // create new area model
             KB.Areas.add(new KB.Backbone.AreaModel(area));
 
+            // create models from already attached modules
             if (area.modules) {
                 _.each(area.modules, function(module) {
                     KB.Modules.add(module);
@@ -521,28 +851,62 @@ KB.App = (function($) {
     }
 
 
+    /**
+     * Create views for modules and add them
+     * to the custom collection
+     * @param module Backbone Model
+     * @returns void
+     */
     function createModuleViews(module) {
+        
+        // assign the full corresponding area model to the module model
+        var areaModel = KB.Areas.get(module.get('area'));
+        module.set('area', areaModel);
+        
+        // crete view
         KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
-        })
-                );
+        }));
+        
+        // update the reference counter, used as base number
+        // for new modules
+        var count = parseInt($('#kb_all_blocks').val()) + 1;
+        $('#kb_all_blocks').val(count);
+        
+        // re-init tabs
+        // TODO: don't re-init globally
+        KB.Ui.initTabs();
     }
 
+    /**
+     * 
+     * @param area Backbone Model
+     * @returns void
+     */
     function createAreaViews(area) {
-        KB.Views.Areas[area.get('id')] = new KB.Backbone.AreaView({
+        KB.Views.Areas.add(area.get('id'), new KB.Backbone.AreaView({
             model: area,
-            el: '#' + area.get('id')
-        });
+            el: '#' + area.get('id') + '-container'
+        }));
     }
 
+    /**
+     * Removes a view from the collection.
+     * The collection will destroy corresponding views
+     * @param model Backbone Model
+     * @returns void
+     */
     function removeModule(model) {
         KB.Views.Modules.remove(model.get('instance_id'));
     }
 
+    // revealing module pattern
     return {
         init: init
     };
 
 }(jQuery));
+
+// get started
 KB.App.init();

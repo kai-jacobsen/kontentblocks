@@ -166,10 +166,10 @@ Class EditScreen
         if ( !empty( $PostMetaDataHandler->getIndex() ) ) {
             foreach ( $PostMetaDataHandler->getIndex() as $module ) {
 
-                if ( !class_exists( $module[ 'class' ] ) ) {
+                if ( !class_exists( $module['settings'][ 'class' ] ) ) {
                     continue;
                 }
-
+                
                 //hack 
                 $id     = null;
                 $tosave = array();
@@ -179,24 +179,24 @@ Class EditScreen
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
                 $old = $PostMetaDataHandler->getMetaData( $module[ 'instance_id' ] );
 
+                
                 $Factory           = new ModuleFactory( $module );
                 $instance          = $Factory->getModule();
                 $instance->post_id = $real_post_id;
-
                 // old, saved data
                 //TODO
                 $instance->new_instance = $old;
 
                 // check for draft and set to false
                 // TODO: Lame
-                $module[ 'draft' ] = self::_draft_check( $module );
+                $module['settings'][ 'draft' ] = FALSE; 
 
                 // special block specific data
                
                 $module = self::_individual_block_data( $module, $data );
 
                 $module = apply_filters( 'save_module_data', $module, $data );
-
+                        
                 // create updated index
                 $updateblocks[ $module[ 'instance_id' ] ] = $module;
 
@@ -225,6 +225,7 @@ Class EditScreen
                     }
                 }
             }
+
             $PostMetaDataHandler->saveIndex( $updateblocks );
         }
 
@@ -255,12 +256,14 @@ Class EditScreen
      */
     public static function _individual_block_data( $block, $data )
     {
-        $block[ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block[ 'name' ];
+        $block['settings'][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block['settings'][ 'name' ];
 
-        if ( !empty( $data[ 'area_context' ] ) )
+        // TODO Maybe Remove
+        if ( !empty( $data[ 'area_context' ] ) ) {
             $block[ 'area_context' ] = $data[ 'area_context' ];
+        }
 
-        $block = apply_filters( "kb_additional_block_data_{$block[ 'id' ]}", $block, $data );
+        $block = apply_filters( "kb_additional_block_data_{$block['settings'][ 'id' ]}", $block, $data );
 
         return $block;
 

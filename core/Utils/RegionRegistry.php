@@ -29,11 +29,9 @@ class RegionRegistry
         }
 
         return self::$instance;
+
     }
 
-    
-    
-    
     /**
      * Init Function
      * Gets areas which were added by the user through the admin interface
@@ -52,7 +50,6 @@ class RegionRegistry
 
     }
 
-    
     /**
      * Adds an area to the directory
      * Merges default arguments with provided arguments
@@ -70,8 +67,8 @@ class RegionRegistry
         }
 
         // merge defaults with provided args
-        $area = wp_parse_args( $args, $this->_getDefaults($manual) );
-       
+        $area = wp_parse_args( $args, $this->_getDefaults( $manual ) );
+
 
         if ( empty( $this->rawAreas[ $area[ 'id' ] ] ) ) {
             $this->rawAreas[ $area[ 'id' ] ] = $area;
@@ -79,10 +76,9 @@ class RegionRegistry
         else {
             $this->rawAreas[ $area[ 'id' ] ] = wp_parse_args( $this->rawAreas[ $area[ 'id' ] ], $area );
         }
+
     }
 
-    
-    
     /**
      * Save an area to global areas
      * @param string $id identifier of area
@@ -98,9 +94,6 @@ class RegionRegistry
 
     }
 
-    
-    
-    
     /**
      * Returns an area from the directory by id
      * @param string $id
@@ -117,13 +110,12 @@ class RegionRegistry
 
     }
 
-    
     /**
      * Returns only globally registered areas
      * i.e. all areas where dynamic equals true
      * @return array
      */
-    public function getGlobalAreas( )
+    public function getGlobalAreas()
     {
         $collection = array();
         foreach ( $this->rawAreas as $area ) {
@@ -169,19 +161,19 @@ class RegionRegistry
      */
     public function connect( $classname, $args )
     {
-        if ( !empty( $args[ 'connect' ] ) && $args[ 'connect' ] === 'any' ) {
+        if ( !empty( $args[ 'settings' ][ 'connect' ] ) && $args[ 'settings' ][ 'connect' ] === 'any' ) {
 
             foreach ( $this->rawAreas as $area_id => $area ) {
-                if ( $area['available_blocks'] === NULL || !in_array( $classname, $area[ 'available_blocks' ] ) ) {
+                if ( $area[ 'available_blocks' ] === NULL || !in_array( $classname, $area[ 'available_blocks' ] ) ) {
                     $this->rawAreas[ $area_id ][ 'available_blocks' ][] = $classname;
                 }
             }
         }
-        else if ( !empty( $args[ 'connect' ] ) and is_array( $args[ 'connect' ] ) ) {
+        else if ( !empty( $args[ 'settings' ][ 'connect' ] ) and is_array( $args[ 'settings' ][ 'connect' ] ) ) {
             $update = false;
 
 
-            foreach ( $args[ 'connect' ] as $area_id ) {
+            foreach ( $args[ 'settings' ][ 'connect' ] as $area_id ) {
                 if ( empty( $this->rawAreas[ $area_id ] ) ) {
                     continue;
                 }
@@ -195,6 +187,7 @@ class RegionRegistry
                 $update                     = true;
             }
         }
+
     }
 
     /**

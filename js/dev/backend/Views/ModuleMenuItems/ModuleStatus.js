@@ -16,11 +16,12 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
     changeStatus: function() {
         this.options.parent.$head.toggleClass('module-inactive');
         this.options.parent.$el.toggleClass('kb_inactive');
+        this.options.parent.$el.toggleClass('activated deactivated');
         
         KB.Ajax.send({
             action: 'changeModuleStatus',
             module: this.model.get('instance_id')
-        }, this.success.call(this));
+        }, this.success, this);
         
     },
     isValid: function() {
@@ -33,7 +34,6 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
         }
     },
     success: function(){
-        console.log(this.model);
         KB.Notice.notice('Status changed', 'success');
     }
 }); 

@@ -81,9 +81,8 @@ class PostContextData extends AbstractContextData
     {
         $collection = array();
         $modules =  $this->PostMetaDataHandler->getIndex();
-
         foreach($modules as $module){
-            $collection[] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['class']));
+            $collection[] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['settings']['class']));
         }
         return $collection;
     }

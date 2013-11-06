@@ -27,8 +27,8 @@ abstract class Field
     public function setArgs( $args )
     {
         $this->args = $args;
-
     }
+
 
     public function setBaseId( $id, $array = false )
     {

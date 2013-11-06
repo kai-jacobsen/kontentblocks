@@ -62,10 +62,10 @@ class ScreenContext
             if ( $args[ 'dynamic' ] ) {
                 continue;
             }
-            echo "<div id='{$args['id']}' class='area-wrap clearfix cf'>";
+            echo "<div id='{$args['id']}-container' class='area-wrap clearfix cf'>";
             // Setup new Area
             
-            $area = new Area( $args, $this->postData );
+            $area = new Area( $args, $this->postData, $this->id );
             // do area header markup
             $area->header();
 

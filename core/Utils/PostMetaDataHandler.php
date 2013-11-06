@@ -21,8 +21,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
 
         $this->post_id = $post_id;
         $this->_selfUpdate();
-        return $this;
 
+        if (isset($_GET['kbdebug'])){
+            d($this);
+        }
+        return $this;
     }
 
     // -----------------------------------
@@ -112,14 +115,13 @@ class PostMetaDataHandler implements InterfaceDataHandler
     public function saveIndex( $index )
     {
         return update_post_meta( $this->post_id, 'kb_kontentblocks', $index );
-
     }
 
     public function removeFromIndex( $id )
     {
         if ( isset( $this->index[ $id ] ) ) {
             unset( $this->index[ $id ] );
-            if ( $this->saveIndex( $this->index ) ) {
+            if ( $this->saveIndex( $this->index ) !== false ) {
                 return delete_post_meta( $this->post_id, '_' . $id );
             }
         }
@@ -280,7 +282,7 @@ class PostMetaDataHandler implements InterfaceDataHandler
         }
     }
 
-    public function saveModule( $id, $data )
+    public function saveModule( $id, $data = '' )
     {
         return update_post_meta( $this->post_id, '_' . $id, $data );
 
@@ -301,7 +303,10 @@ class PostMetaDataHandler implements InterfaceDataHandler
     public function addToIndex( $id, $args )
     {
         $this->index[ $id ] = $args;
-
+        if (!isset($this->meta['_' . $id])){
+            $this->saveModule($id, '');
+        }
+        
         return $this->_updateIndex();
 
     }
@@ -336,7 +341,7 @@ class PostMetaDataHandler implements InterfaceDataHandler
         $cleaned = array();
 
         foreach ( $this->index as $def ) {
-            if ( isset( $def[ 'class' ] ) ) {
+            if ( isset( $def['settings'][ 'class' ] ) ) {
                 $cleaned[ $def[ 'instance_id' ] ] = $def;
             }
             else {

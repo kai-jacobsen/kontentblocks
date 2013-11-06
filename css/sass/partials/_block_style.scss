@@ -1,4 +1,4 @@
-.kb_inactive {
+.kb_inactive, .deactivated {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
     filter: alpha(opacity=90);
     opacity: .9;
@@ -32,10 +32,11 @@ h2.kb-title {
     border: none;
     position: relative;
     z-index: 1002;
+
     &.kb-open .block-head{
         @include box-shadow(1px 1px 1px #fff);
     }
-    
+
     &.kb_inactive{
         z-index: 1002;
         position: relative;
@@ -295,7 +296,84 @@ h5.kb_properties_title {
     cursor: pointer;
 }
 
-.kb_inactive .kb-inactive-indicator{
+.kb_inactive .kb-inactive-indicator, .deactivated .kb-inactive-indicator{
     display: block;
 }
 
+.menu-wrap{
+
+    border-top: 0;
+    overflow:hidden;
+    float:right;
+    position: absolute;
+    height:34px;
+    top:8px;
+    right:7px;
+
+    .module-actions{
+
+        height:30px;
+        overflow:hidden;
+
+
+        li{
+
+            display: block;
+            text-align: center;
+            border: none !important;
+            float: left;
+            cursor: pointer;
+            margin-bottom: 0;
+            @include transition( all .3s linear);
+            /*background-position: 0 0px !important;*/
+
+
+            &:hover{
+                cursor: pointer;
+                /*background-position: 0 -30px !important;*/ 
+            }
+
+
+            .block-menu-icon{
+                display: block;
+                font: normal 14px/1 'dashicons' !important;
+                text-shadow: 1px 1px 1px #fff;
+
+                &:before{
+                    width: 30px;
+                    height:34px;
+                    display: block;
+                    color:rgba(0,0,0,0.5);
+                    position: relative;
+                    top: 4px;
+                    line-height: 25px;
+                }
+
+                &:hover{
+                    &:before{
+                        color:#333; 
+                    }
+                }
+
+                &.kb-delete:before{
+                    /*background: url('assets/delete.png') no-repeat;*/
+                    content: '\f117';
+
+                }
+
+                &.module-status:before{
+                    /*background: url('assets/power.png') no-repeat;*/
+                    content: '\f177';
+                }
+
+                &.kb-duplicate:before{
+                    /*background: url('assets/duplicate.png') no-repeat;*/
+                    content: '\f105';
+
+                }
+
+            }
+
+        }
+    }
+}

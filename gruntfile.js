@@ -6,7 +6,7 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                mangle: true
+                mangle: false
             },
             prim: {
                 files: {
@@ -28,11 +28,11 @@ module.exports = function(grunt) {
             options: {
                 seperator: ';'
             },
-            kontentfields: {
-                src: ['core/Kontentfields/Definitions/js/**/*.js'],
-                dest: 'js/tmp/fields.concat.js',
-                nonull: true
-            },
+//            kontentfields: {
+//                src: ['core/Kontentfields/Definitions/js/**/*.js'],
+//                dest: 'js/tmp/fields.concat.js',
+//                nonull: true
+//            },
             extensions: {
                 src: ['js/dev/extensions/**/*.js'],
                 dest: 'js/tmp/extensions.concat.js',

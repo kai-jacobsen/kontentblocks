@@ -1,5 +1,9 @@
 .kb_field{
 
+    .wp-editor-container{
+        border: 0 !important;
+    }
+    
     &.checkbox{
         background: transparent;
     }

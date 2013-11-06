@@ -27,7 +27,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         KB.Ajax.send({
             action: 'removeModules',
             module: this.model.get('instance_id')
-        }, this.success.call(this));
+        }, this.success, this);
     },
     no: function() {
         return false;

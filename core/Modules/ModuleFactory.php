@@ -11,7 +11,7 @@ class ModuleFactory
 
     public function __construct( $moduleArgs )
     {
-        if ( !isset( $moduleArgs ) or !isset( $moduleArgs[ 'class' ] ) ) {
+        if ( !isset( $moduleArgs ) or !isset( $moduleArgs['settings'][ 'class' ] ) ) {
             throw new \Exception( 'This is not a valid Module' );
         }
         $this->args = $moduleArgs;
@@ -24,9 +24,9 @@ class ModuleFactory
 
         $moduleArgs = $this->args;
         $module     = apply_filters( 'kb_modify_block', $moduleArgs );
-        $module     = apply_filters( "kb_modify_block_{$moduleArgs[ 'id' ]}", $moduleArgs );
+        $module     = apply_filters( "kb_modify_block_{$moduleArgs['settings'][ 'id' ]}", $moduleArgs );
         // new instance
-        $instance   = new $module[ 'class' ]( $module );
+        $instance   = new $module['settings'][ 'class' ]( $module );
         return $instance;
 
     }

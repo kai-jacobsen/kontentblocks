@@ -182,7 +182,7 @@ class CreateNewModule
             $globalData = new GlobalDataHandler();
             $tpl        = $globalData->getTemplate( $this->metaArgs[ 'template_reference' ] );
             if ( $tpl ) {
-                $this->moduleArgs[ 'name' ] = $tpl[ 'name' ];
+                $this->moduleArgs['settings'][ 'public_name' ] = $tpl[ 'name' ];
             }
         }
 
@@ -217,7 +217,7 @@ class CreateNewModule
     {
         // add new block and update 
         $update = $this->dataHandler->addToIndex( $this->newInstanceID, $this->newModule );
-        if ( $update !== true ) {
+        if ( $update !== true && !is_int( $update ) ) {
             wp_send_json_error( 'Update failed' );
         }
 
@@ -269,7 +269,7 @@ class CreateNewModule
             (
             'id' => $this->newInstanceID,
             'module' => get_object_vars( $this->newInstance ),
-            'name' => $this->newInstance->public_name,
+            'name' => $this->newInstance->settings['public_name'],
             'html' => $html
         );
 

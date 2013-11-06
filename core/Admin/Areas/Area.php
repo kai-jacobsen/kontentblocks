@@ -92,7 +92,7 @@ class Area
      * @param array $area
      * @return type 
      */
-    function __construct( $area, AbstractContextData $dataContainer )
+    function __construct( $area, AbstractContextData $dataContainer, $context = 'global' )
     {
 
         if ( empty( $area ) ) {
@@ -108,6 +108,7 @@ class Area
             'modules' => __( 'Add new module', 'kontentblocks' )
         );
 
+        $this->context = $context;
         
         $this->dataContainer = $dataContainer;
 
@@ -182,19 +183,19 @@ class Area
     {
         // declare array
         $modules = ModuleRegistry::getInstance()->getAllModules( $this->dataContainer );
+        
         if ( empty( $modules ) ) {
             return false;
         }
-
         $validModules = array();
 
         foreach ( $modules as $module ) {
-            $disabled = ($module[ 'disabled' ] == true) ? true : false;
+            $disabled = ($module['settings'][ 'disabled' ] == true) ? true : false;
 
-            $cat = (!empty( $module[ 'category' ] )) ? $module[ 'category' ] : false;
+            $cat = (!empty( $module['settings'][ 'category' ] )) ? $module['settings'][ 'category' ] : false;
 
             if ( is_array( $this->assignedModules ) ) {
-                $is__in_area_available = ( in_array( $module['class'], $this->assignedModules ) ) ? true : false;
+                $is__in_area_available = ( in_array( $module['settings']['class'], $this->assignedModules ) ) ? true : false;
             }
             else {
                 $is__in_area_available = false;
@@ -227,8 +228,8 @@ class Area
      */
     private function _sort_by_name( $a, $b )
     {
-        $al = strtolower( $a[ 'public_name' ] );
-        $bl = strtolower( $b[ 'public_name' ] );
+        $al = strtolower( $a['settings'][ 'public_name' ] );
+        $bl = strtolower( $b['settings'][ 'public_name' ] );
 
         if ( $al == $bl ) {
             return 0;
@@ -276,8 +277,7 @@ class Area
             $unavailable_blocks = implode( ' ', $this->assignedModules );
         }
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' data-blacklist='{$unavailable_blocks}' id='{$this->id}-list' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
-
+        echo "<ul style='' data-context='{$this->context}' data-blacklist='{$unavailable_blocks}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
             foreach ( $this->attachedModules as $module ) {
@@ -324,7 +324,8 @@ class Area
             'id' => $this->id,
             'assignedModules' => $this->assignedModules,
             'modules' => $this->attachedModules,
-            'limit' => absint($this->limit)
+            'limit' => absint($this->limit),
+            'context' => $this->context
         );
         $json = json_encode($area);
         echo "<script>"

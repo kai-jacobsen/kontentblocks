@@ -8,7 +8,14 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         'click': 'duplicateModule'
     },
     duplicateModule: function() {
-        console.log(KB); 
+        KB.Ajax.send({
+            action: 'duplicateModule',
+            module: this.model.get('instance_id'),
+            page_template: KB.Screen.page_template,
+            post_type: KB.Screen.post_type,
+            area_context: this.model.get('area').get('context')
+        }, this.success, this);
+
     },
     isValid: function() {
         if (!this.model.get('predefined') &&
@@ -18,5 +25,10 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         } else {
             return false;
         }
+    },
+    success: function(data) {
+        this.model.get('area').view.modulesList.append(data.html);
+        KB.Modules.add(data.module);
+
     }
 }); 

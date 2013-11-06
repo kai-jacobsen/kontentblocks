@@ -7,7 +7,8 @@ use Kontentblocks\Overlays\OnsiteEditModule,
     Kontentblocks\Ajax\ChangeModuleStatus,
     Kontentblocks\Ajax\ChangeArea,
     Kontentblocks\Ajax\Frontend\SaveInlineEdit,
-    Kontentblocks\Ajax\CreateNewModule;
+    Kontentblocks\Ajax\CreateNewModule,
+    Kontentblocks\Ajax\DuplicateModule;
 
 /**
  * -----------------------------------------
@@ -97,6 +98,18 @@ function createNewModuleCb()
 }
 
 add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
+
+/**
+ * -----------------------------------------
+ * Handler for creating new modules 
+ * -----------------------------------------
+ */
+function duplicateModuleCb()
+{
+    $duplicateModule = new DuplicateModule();
+}
+
+add_action( 'wp_ajax_duplicateModule', 'duplicateModuleCb' );
 
 /**
  * -----------------------------------------

@@ -26,18 +26,17 @@ class ModuleRegistry
         if ( !isset( $this->modules[ 'classname' ] ) && property_exists( $classname, 'defaults' ) ) {
             // Defaults from the specific Module
             // contains id, name, public name etc..
-            $args = $classname::$defaults;
-
-            // manually add the classname for futire reference
+            $moduleArgs      = array();
+            $args            = $classname::$defaults;
             $args[ 'class' ] = $classname;
 
             // add missing args from general Defaults
-            $finalargs = wp_parse_args( $args, Module::getDefaults() );
+            $moduleArgs[ 'settings' ] = wp_parse_args( $args, Module::getDefaults() );
 
             // Add module to registry
-            $this->modules[ $classname ] = $finalargs;
+            $this->modules[ $classname ] = $moduleArgs;
             // Handle connection to regions
-            RegionRegistry::getInstance()->connect( $classname, $finalargs );
+            RegionRegistry::getInstance()->connect( $classname, $moduleArgs );
         }
 
     }

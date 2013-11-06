@@ -1,4 +1,4 @@
-/*
+res/*
  * TODO: There are still some functions which could be wrapped inside KB Object
  * Rewrite this Shit
  */
@@ -163,29 +163,7 @@ var KB = KB || {};
         ktftabs: function()
         {
             // Tabs for Kontentfields			
-            if ($('.kb_fieldtabs'))
-            {
-                var length = $('.kb_fieldtabs li').length;
-
-                $('.kb_fieldtabs').tabs({
-                    activate: function() {
-
-                        $window = $(window).height();
-//                        $('.content').height($window - 250);
-
-                        $('.nano').nanoScroller();
-                    }
-                });
-
-                $('.kb_fieldtabs').each(function() {
-
-                    if (length === 1)
-                    {
-                        $(this).find('.ui-tabs-nav').css('display', 'none');
-                    }
-
-                });
-            }
+            
 
 
 
@@ -473,167 +451,167 @@ var KB = KB || {};
         },
         kbSortable: function()
         {
-            // to do: get rid of stage inner
-            // handles sorting of the blocks.
-            $('.kb_sortable').sortable(
-                    {
-                        //settings
-                        placeholder: "ui-state-highlight",
-                        ghost: true,
-                        connectWith: ".kb_connect",
-                        handle: '.kb-move',
-                        cancel: 'li.disabled, li.cantsort',
-                        // start event
-                        start: function(event, ui)
-                        {
-                            $(ui.item).find('.kb_inner').hide();
-                            $('.kb-open').toggleClass('kb-open');
-                            $('.kb_inner').hide();
-                            KB.remove_tinymce();
-                            // Add a global trigger to sortable.start, maybe other Blocks might need it
-                            $(document).trigger('kb_sortable_start', [event, ui]);
-                        },
-                        stop: function(event, ui)
-                        {
-                            KB.restore_tinymce();
-                            // global trigger when soprtable is done		
-                            $(document).trigger('kb_sortable_stop', [event, ui]);
-                        },
-                        over: function(event, ui)
-                        {
-                            var area_id = this.id;
-                            // type blacklist
-                            var blacklist = $('#' + area_id).attr('data-blacklist');
-                            if (blacklist !== '')
-                            {
-                                blackblocks = blacklist.split(' ');
-                            }
-                            else
-                            {
-                                blackblocks = {};
-                            }
-                            // ''
-                            itemclass = ui.item[0].dataset.blockclass;
-                            blacklisted = $.inArray(itemclass, blackblocks);
-
-                            if (blacklisted === -1)
-                            {
-                                //$(ui.helper).addClass('disabled');
-                                console.log('line 544:' + ui.helper);
-                            }
-                            else
-                            {
-                                //$(ui.helper).removeClass('disabled');
-                                console.log('line 548:' + ui.helper);
-
-                            }
-                        },
-                        receive: function(event, ui) {
-
-                            var area_id = this.id;
-                            var block_id = activeBlock;
-
-                            // block limit
-                            var block_limit = $('#' + area_id).attr('data-limit');
-
-                            var present_blocks = $('#' + area_id + ' .kb_block').length;
-
-                            // type blacklist
-                            var blacklist = $('#' + area_id).attr('data-blacklist');
-                            if (blacklist !== '')
-                            {
-                                blackblocks = blacklist.split(' ');
-                            }
-                            else
-                            {
-                                blackblocks = {};
-                            }
-                            // ''
-                            itemclass = ui.item[0].dataset.blockclass;
-                            blacklisted = $.inArray(itemclass, blackblocks);
-
-                            // first check if block is blacklisted and throw alert, else check for block limit
-
-                            if (blacklisted === -1)
-                            {
-                                KB.alert(kontentblocks.l18n.area_block_not_allowed,
-                                        function()
-                                        {
-                                            $(ui.sender).sortable('cancel');
-                                            return;
-                                        });
-                            }
-                            else if (block_limit !== '0' && present_blocks > block_limit) {
-
-                                KB.alert(kontentblocks.l18n.area_sort_full,
-                                        function()
-                                        {
-                                            $(ui.sender).sortable('cancel');
-                                            return;
-                                        });
-                            } else
-                            {
-
-                                KB.ajax(
-                                        {
-                                            action: 'changeArea',
-                                            block_id: block_id,
-                                            area_id: area_id
-                                        },
-                                function(response)
-                                {
-                                    // revert back if response is not valid, due to verification
-                                    if (false == response)
-                                    {
-                                        $(ui.sender).sortable('cancel');
-                                        return;
-                                    }
-                                    else
-                                    {
-
-                                        KB.notice('Area change saved', 'alert');
-                                        KB.resort();
-                                    }
-
-
-
-                                })
-                            }
-
-                        },
-                        update: function(ev, ui) {
-                            // var post_id = jQuery('#post_ID').val();
-                            data = {};
-
-                            jQuery('.kb_sortable').each(function() {
-                                data[this.id] = jQuery('#' + this.id).sortable('serialize', {
-                                    attribute: 'rel'
-                                });
-                            })
-
-                            if (this === ui.item.parent('ul')[0] && !ui.sender) {
-                                KB.resort();
-
-                            } else if (ui.sender) {
-                                // do nothing
-                            }
-                        }
-                    });
+//            // to do: get rid of stage inner
+//            // handles sorting of the blocks.
+//            $('.kb_sortable').sortable(
+//                    {
+//                        //settings
+//                        placeholder: "ui-state-highlight",
+//                        ghost: true,
+//                        connectWith: ".kb_connect",
+//                        handle: '.kb-move',
+//                        cancel: 'li.disabled, li.cantsort',
+//                        // start event
+//                        start: function(event, ui)
+//                        {
+//                            $(ui.item).find('.kb_inner').hide();
+//                            $('.kb-open').toggleClass('kb-open');
+//                            $('.kb_inner').hide();
+//                            KB.remove_tinymce();
+//                            // Add a global trigger to sortable.start, maybe other Blocks might need it
+//                            $(document).trigger('kb_sortable_start', [event, ui]);
+//                        },
+//                        stop: function(event, ui)
+//                        {
+//                            KB.restore_tinymce();
+//                            // global trigger when soprtable is done		
+//                            $(document).trigger('kb_sortable_stop', [event, ui]);
+//                        },
+//                        over: function(event, ui)
+//                        {
+//                            var area_id = this.id;
+//                            // type blacklist
+//                            var blacklist = $('#' + area_id).attr('data-blacklist');
+//                            if (blacklist !== '')
+//                            {
+//                                blackblocks = blacklist.split(' ');
+//                            }
+//                            else
+//                            {
+//                                blackblocks = {};
+//                            }
+//                            // ''
+//                            itemclass = ui.item[0].dataset.blockclass;
+//                            blacklisted = $.inArray(itemclass, blackblocks);
+//
+//                            if (blacklisted === -1)
+//                            {
+//                                //$(ui.helper).addClass('disabled');
+//                                console.log('line 544:' + ui.helper);
+//                            }
+//                            else
+//                            {
+//                                //$(ui.helper).removeClass('disabled');
+//                                console.log('line 548:' + ui.helper);
+//
+//                            }
+//                        },
+//                        receive: function(event, ui) {
+//
+//                            var area_id = this.id;
+//                            var block_id = activeBlock;
+//
+//                            // block limit
+//                            var block_limit = $('#' + area_id).attr('data-limit');
+//
+//                            var present_blocks = $('#' + area_id + ' .kb_block').length;
+//
+//                            // type blacklist
+//                            var blacklist = $('#' + area_id).attr('data-blacklist');
+//                            if (blacklist !== '')
+//                            {
+//                                blackblocks = blacklist.split(' ');
+//                            }
+//                            else
+//                            {
+//                                blackblocks = {};
+//                            }
+//                            // ''
+//                            itemclass = ui.item[0].dataset.blockclass;
+//                            blacklisted = $.inArray(itemclass, blackblocks);
+//
+//                            // first check if block is blacklisted and throw alert, else check for block limit
+//
+//                            if (blacklisted === -1)
+//                            {
+//                                KB.alert(kontentblocks.l18n.area_block_not_allowed,
+//                                        function()
+//                                        {
+//                                            $(ui.sender).sortable('cancel');
+//                                            return;
+//                                        });
+//                            }
+//                            else if (block_limit !== '0' && present_blocks > block_limit) {
+//
+//                                KB.alert(kontentblocks.l18n.area_sort_full,
+//                                        function()
+//                                        {
+//                                            $(ui.sender).sortable('cancel');
+//                                            return;
+//                                        });
+//                            } else
+//                            {
+//
+//                                KB.ajax(
+//                                        {
+//                                            action: 'changeArea',
+//                                            block_id: block_id,
+//                                            area_id: area_id
+//                                        },
+//                                function(response)
+//                                {
+//                                    // revert back if response is not valid, due to verification
+//                                    if (false == response)
+//                                    {
+//                                        $(ui.sender).sortable('cancel');
+//                                        return;
+//                                    }
+//                                    else
+//                                    {
+//
+//                                        KB.notice('Area change saved', 'alert');
+//                                        KB.resort();
+//                                    }
+//
+//
+//
+//                                })
+//                            }
+//
+//                        },
+//                        update: function(ev, ui) {
+//                            // var post_id = jQuery('#post_ID').val();
+//                            data = {};
+//
+//                            jQuery('.kb_sortable').each(function() {
+//                                data[this.id] = jQuery('#' + this.id).sortable('serialize', {
+//                                    attribute: 'rel'
+//                                });
+//                            })
+//
+//                            if (this === ui.item.parent('ul')[0] && !ui.sender) {
+//                                KB.resort();
+//
+//                            } else if (ui.sender) {
+//                                // do nothing
+//                            }
+//                        }
+//                    });
         },
         duplicateBlock: function()
         {
-            KB.confirm(
-                    kontentblocks.l18n.block_duplicate,
-                    function()
-                    {
-                        KB.duplicate = activeBlock;
-                        KB.blockCreate($('#' + activeBlock));
-                    },
-                    function()
-                    {
-                        KB.notice(kontentblocks.l18n.block_duplicate_success);
-                    }
-            );
+//            KB.confirm(
+//                    kontentblocks.l18n.block_duplicate,
+//                    function()
+//                    {
+//                        KB.duplicate = activeBlock;
+//                        KB.blockCreate($('#' + activeBlock));
+//                    },
+//                    function()
+//                    {
+//                        KB.notice(kontentblocks.l18n.block_duplicate_success);
+//                    }
+//            );
 
         },
         blockCreate: function(caller)

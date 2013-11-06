@@ -21,7 +21,6 @@ class ChangeArea
         $this->newArea = $_POST['area_id'];
         $this->instanceId = $_POST['block_id'];
         $this->dataHandler = new PostMetaDataHandler($this->postId);
-
         $this->updateArea();
         
     }

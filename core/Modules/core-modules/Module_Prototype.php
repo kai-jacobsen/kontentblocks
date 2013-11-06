@@ -21,7 +21,6 @@ class Module_Prototype extends Module
 
     public function render( $data )
     {
-        var_dump($this->new_instance);
         $tpl = new ModuleTemplate( $this, '/templates/prototype.twig' );
         return $tpl->render();
 
@@ -31,11 +30,10 @@ class Module_Prototype extends Module
     {
 
         $groupA = $this->Fields->addGroup( 'Peter' )
-            ->addField( 'text', 'key', array(
+            ->addField( 'editor', 'editortext', array(
                 'label' => 'stuff',
                 'description' => 'My first new description',
-                'arrayKey' => 'test',
-                'returnObj' => false
+                'media' => false
             ) )
             ->addField( 'text', 'keya', array(
                 'label' => 'stuff',
