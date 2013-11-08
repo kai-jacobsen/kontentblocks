@@ -369,10 +369,12 @@ KB.Ui = (function($) {
                         // function call applies when target area != origin
                         // chain reordering and change of area
                         $.when(that.changeArea(areaOver, currentModule)).
-                                then(function(){that.resort(ui.sender);}).
+                                then(function() {
+                                    that.resort(ui.sender);
+                                }).
                                 done(function() {
-                            KB.Notice.notice('Area change and order were updated successfully', 'success');
-                        });
+                                    KB.Notice.notice('Area change and order were updated successfully', 'success');
+                                });
                     }
                 }
             });
@@ -408,7 +410,23 @@ KB.Ui = (function($) {
                 block_id: module.get('instance_id'),
                 area_id: targetArea.get('id')
             });
+        },
+        toggleModule: function() {
+            $('body').on('click', '.kb-toggle', function() {
+                if (KB.isLocked() && !KB.userCan('lock_kontentblocks'))
+                {
+                    KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
+                }
+                else
+                {
+                    $(this).parent().nextAll('.kb_inner:first').slideToggle('fast', function() {
+                        $('body').trigger('module::opened');
+                    });
+                    $('#' + activeBlock).toggleClass('kb-open', 1000);
+                }
+            });
         }
+
     };
 
 }(jQuery));
@@ -503,12 +521,15 @@ KB.Backbone = KB.Backbone || {};
 KB.Backbone.AreaView = Backbone.View.extend({
     initialize: function() {
         this.controlsContainer = jQuery('.add-modules', this.$el);
+        this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
         this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
         this.model.view = this;
         this.render();
+        console.log(this);
     },
     events: {
-        'click .modules-link': 'openModulesMenu'
+        'click .modules-link': 'openModulesMenu',
+        'click .js-area-settings-opener' : 'toggleSettings'
     },
     render: function() {
         this.addControls();
@@ -534,6 +555,11 @@ KB.Backbone.AreaView = Backbone.View.extend({
             },
             contentClassName: 'modules-menu'
         }) || null;
+    },
+    toggleSettings:function(e){
+        e.preventDefault();
+        this.settingsContainer.slideToggle().toggleClass('open');
+        KB.currentArea = this.model;
     }
 
 });
@@ -746,8 +772,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     $head: null,
     $body: null,
     ModuleMenu: null,
+    events:{
+        'click .kb-toggle' : 'toggleBody'
+    },
     initialize: function() {
-
+        
         // Setup Elements
         this.$head = jQuery('.block-head', this.$el);
         this.$body = jQuery('.kb_inner', this.$el);
@@ -764,12 +793,20 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({model: this.model, parent: this}));
         this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
         this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
+    },
+    toggleBody: function(){
+        if (KB.Checks.userCan('edit_kontentblocks')){
+            this.$body.slideToggle();
+            KB.currentModule = this.model;
+        }
     }
 
 });
 'use strict';
 var KB = KB || {};
 
+KB.currentModule = {};
+KB.currentArea = {};
 // ---------------
 // Collections 
 // ---------------

@@ -139,10 +139,12 @@ KB.Ui = (function($) {
                         // function call applies when target area != origin
                         // chain reordering and change of area
                         $.when(that.changeArea(areaOver, currentModule)).
-                                then(function(){that.resort(ui.sender);}).
+                                then(function() {
+                                    that.resort(ui.sender);
+                                }).
                                 done(function() {
-                            KB.Notice.notice('Area change and order were updated successfully', 'success');
-                        });
+                                    KB.Notice.notice('Area change and order were updated successfully', 'success');
+                                });
                     }
                 }
             });
@@ -178,7 +180,23 @@ KB.Ui = (function($) {
                 block_id: module.get('instance_id'),
                 area_id: targetArea.get('id')
             });
+        },
+        toggleModule: function() {
+            $('body').on('click', '.kb-toggle', function() {
+                if (KB.isLocked() && !KB.userCan('lock_kontentblocks'))
+                {
+                    KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
+                }
+                else
+                {
+                    $(this).parent().nextAll('.kb_inner:first').slideToggle('fast', function() {
+                        $('body').trigger('module::opened');
+                    });
+                    $('#' + activeBlock).toggleClass('kb-open', 1000);
+                }
+            });
         }
+
     };
 
 }(jQuery));

@@ -147,7 +147,8 @@ Class Kontentblocks
         $this->Enqueues     = new Enqueues();
         // setup vars
         add_action( 'init', array( $this, '_set_block_templates' ), 850 );
-
+        
+        add_post_type_support('page', 'kontentblocks');
 
         // load Templates automatically
         add_action( 'init', array( $this, '_load_templates' ), 9 );

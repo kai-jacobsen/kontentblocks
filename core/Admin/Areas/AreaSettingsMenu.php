@@ -9,15 +9,13 @@ class AreaSettingsMenu
 
     protected $defaults;
 
-    public function __construct( $area, $dataContainer )
+    public function __construct( Area $area, $dataContainer )
     {
         $this->defaults      = $this->_getDefaults();
-        $this->parent        = $area;
-        $this->id            = $this->parent->get('id');
-        $this->areaTemplates = $this->parent->get('area_templates');
-        $this->defaultTpl = $this->parent->get('default_tpl');
+        $this->id            = $area->get( 'id' );
+        $this->areaTemplates = $area->get( 'area_templates' );
+        $this->defaultTpl    = $area->get( 'default_tpl' );
         $this->dataContainer = $dataContainer;
-
 
     }
 
@@ -26,21 +24,25 @@ class AreaSettingsMenu
         $areaTemplates = $this->_getAssignedTemplates();
         // Markup and fields markup
         if ( !empty( $areaTemplates ) ) {
-            $data = $this->dataContainer->getAreaSettings( $this->id );
+            $data   = $this->dataContainer->getAreaSettings( $this->id );
             $custom = (isset( $data[ 'custom' ] )) ? $data[ 'custom' ] : '';
 
             echo "
-			<div class='kb_area_templates'>
-				<a class='kb_dd_menu kb_menu_opener' href='#'>Templates</a>
-				
-				<ul class='kb_the_menu list kb_dd_list kb_open'>";
+            <a class='js-area-settings-opener' href='javascript:;'>l</a>    
+			<div class='kb-area-settings-wrapper' style='display:none;'>
+            <div class='kb-area-settings'>
+            <h3>Layouts</h3>
+            <ul class='kb-area-templates'>";
+            
             foreach ( $areaTemplates as $tpl ) {
                 $this->_areaTemplateItem( $tpl, $data );
             }
 
             echo "	
-                <li><input name='{$this->id}[custom]' value='{$custom}' /></li>
-                </ul></div>";
+            </ul>
+            <h4>Custom Layout</h4>
+            <div><input name='{$this->id}[custom]' value='{$custom}' /></div>
+            </div></div>";
         }
 
     }
@@ -77,7 +79,7 @@ class AreaSettingsMenu
     public function _getAssignedTemplates()
     {
         $registeredAreaTemplates = RegionRegistry::getInstance()->getTemplates();
-        $collect = array();
+        $collect                 = array();
         if ( !empty( $this->areaTemplates ) ) {
             foreach ( $this->areaTemplates as $tplid ) {
                 if ( !empty( $registeredAreaTemplates[ $tplid ] ) ) {

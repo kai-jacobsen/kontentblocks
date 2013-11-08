@@ -6,8 +6,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     $head: null,
     $body: null,
     ModuleMenu: null,
+    events:{
+        'click .kb-toggle' : 'toggleBody'
+    },
     initialize: function() {
-
+        
         // Setup Elements
         this.$head = jQuery('.block-head', this.$el);
         this.$body = jQuery('.kb_inner', this.$el);
@@ -24,6 +27,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({model: this.model, parent: this}));
         this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
         this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
+    },
+    toggleBody: function(){
+        if (KB.Checks.userCan('edit_kontentblocks')){
+            this.$body.slideToggle();
+            KB.currentModule = this.model;
+        }
     }
 
 });

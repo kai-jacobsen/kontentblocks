@@ -1,6 +1,8 @@
 'use strict';
 var KB = KB || {};
 
+KB.currentModule = {};
+KB.currentArea = {};
 // ---------------
 // Collections 
 // ---------------

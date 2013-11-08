@@ -203,7 +203,7 @@ abstract class Module
         $lockedmsg = (!current_user_can( 'lock_kontentblocks' )) ? 'Content is locked' : null;
 
         // markup for each block
-        $out = "<div class='kb_inner'>";
+        $out = "<div style='display:none;' class='kb_inner'>";
         if ( $lockedmsg && KONTENTLOCK ) {
             echo $lockedmsg;
         }

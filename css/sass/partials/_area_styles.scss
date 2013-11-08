@@ -1,14 +1,20 @@
+.area_title_text{
+    // padding-left: 15px;
+    // padding-right: 15px;
+    
+}
+
 .context-header {
     padding: 10px 10px 10px 10px;
-//    background: #f9f9f9;
-//    border-left: 3px solid $lightblue;
+    //    background: #f9f9f9;
+    //    border-left: 3px solid $lightblue;
     margin-bottom: 0px;
-     border-bottom: 1px solid #ccc;
-     background:#f9f9f9;
+    border-bottom: 1px solid #ccc;
+    background:#f9f9f9;
 
-     &.orange{
-       // border-left: 3px solid $orange;
-     }
+    &.orange{
+        // border-left: 3px solid $orange;
+    }
 }
 
 #poststuff .context-header h2, #poststuff .context-area h2{
@@ -33,22 +39,21 @@
 .kb_area_head {
     //background: #002e3e;
     //border-bottom: 1px solid #ccc;
-    height: 37px;
+    //height: 37px;
+    position:relative;
 }
 
 .area_title_text {
 }
 
-
 .area-wrap{
-
 
     .area_title_text span.title  {
         font-size: 13px;
         margin-left: 0px;
         font-weight: normal;
         color: #ccc;
-        padding-left: 10px;
+        padding-left: 27px;
         line-height: 37px;
     }
 
@@ -90,7 +95,7 @@
     height: 32px;
     background: url(assets/gear-32.jpg) no-repeat;
     position: relative;
-        cursor: pointer;
+    cursor: pointer;
 }
 .area_settings_list {
     position: absolute;
@@ -147,17 +152,10 @@
 
 .kb_area_templates {
     position: relative;
-        cursor: pointer;
+    cursor: pointer;
 }
 
 
-.area_template{
-    background: #d2d2d2;
-    border-top: 1px solid #f9f9f9;
-    border-bottom: 1px solid #dadada;
-    padding: 0 10px;
-    margin: 0;
-}
 
 /* new design */
 
@@ -165,19 +163,18 @@
 
 .area-wrap {
     margin: 0;
-    padding: 10px;
+    padding: 0px;
     background: #fcfcfc;
-//    border: 1px solid #eaeaea;
+    //    border: 1px solid #eaeaea;
     border-bottom: 1px solid #bbb;
     border-top: 1px solid #fefefe;
-
-
-
 
     .prime-actions{
         display: none !important;
     }
 }
+
+
 
 .area-wrap:first-child{
     padding-top: 0;
@@ -208,7 +205,14 @@
 }
 
 .area-top {
-    
+
+}
+
+.kb_area_list_item{
+    //min-height: 60px;    
+    background: none;
+    border: none;
+    padding: 5px 20px;
 }
 
 .area-normal.has-sidebar {
@@ -239,14 +243,15 @@
     clear: both;
 }
 .area-holder, .context-area {
-   // min-height: 180px;
+    // min-height: 180px;
     margin-bottom: 20px;
     padding: 0px;
     // border: 1px solid #f2f2f2;
     background: #f9f9f9;
     box-shadow: 0px 1px 1px #fff;
     border: 1px solid #ccc;
-    border-bottom: none;
+    border-bottom: 1px solid #aaa;
+    border-right: 1px solid #aaa;
     //@include box-shadow(0px 1px 4px #cccccc);
 
 }
@@ -267,51 +272,51 @@
     padding: 10px;
     background: #fff;
 
-        select {
-    padding:3px;
-    margin: 0;
-    margin-left: 6px;
-    background: #fff;
-    color:#888;
-    border:1px solid #eaeaea;
-    outline:none;
-    display: inline-block;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    appearance:none;
-    cursor:pointer;
-    line-height: 13px !important;
-    font-size: 12px;
-}
+    select {
+        padding:3px;
+        margin: 0;
+        margin-left: 6px;
+        background: #fff;
+        color:#888;
+        border:1px solid #eaeaea;
+        outline:none;
+        display: inline-block;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
+        cursor:pointer;
+        line-height: 13px !important;
+        font-size: 12px;
+    }
 
 
-/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    select {padding-right:18px}
-}
+    /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+        select {padding-right:18px}
+    }
 
-label {position:relative;}
-label:after {
-    content:'<>';
-    font:11px "Consolas", monospace;
-    color:#aaa;
-    -webkit-transform:rotate(90deg);
-    -moz-transform:rotate(90deg);
-    -ms-transform:rotate(90deg);
-    transform:rotate(90deg);
-    right:3px; top:2px;
-    padding:0 0 2px;
-    border-bottom:1px solid #ddd;
-    position:absolute;
-    pointer-events:none;
-}
-label:before {
-    content:'';
-    background:#f8f8f8;
-    position:absolute;
-    pointer-events:none;
-    display:block;
-}
+    label {position:relative;}
+    label:after {
+        content:'<>';
+        font:11px "Consolas", monospace;
+        color:#aaa;
+        -webkit-transform:rotate(90deg);
+        -moz-transform:rotate(90deg);
+        -ms-transform:rotate(90deg);
+        transform:rotate(90deg);
+        right:3px; top:2px;
+        padding:0 0 2px;
+        border-bottom:1px solid #ddd;
+        position:absolute;
+        pointer-events:none;
+    }
+    label:before {
+        content:'';
+        background:#f8f8f8;
+        position:absolute;
+        pointer-events:none;
+        display:block;
+    }
 }
 
 .reframe-select-parent {

@@ -54,6 +54,7 @@
 // Area::Header
 -----------------------------*/
 @import "partials/_area_styles";
+@import "partials/_area-settings";
 
 /* --------------------------
 // Plugins
@@ -342,12 +343,17 @@ li.gallery-item textarea:focus {
 
 .kb_draft {
     padding: 5px 0 5px 20px;
-    border-left: 3px solid $orange;
-    margin-left: -7px;
-    font-weight: bold;
-    background: #fff;
+    border-left: 0px solid $orange;
+    margin-left: 0px;
+    font-weight: 300;
+    background: #f9f9f9;
+    border-bottom: 1px solid #fcfcfc;
+    font-style: italic;
+    color:#333;
     margin-bottom: 0;
+    margin-top: 0;
 
+    
 }
 
 .kb_loading{
@@ -423,12 +429,7 @@ input[type="checkbox"][checked] {
 /* context */
 
 
-.kb_area_list_item{
-    //min-height: 60px;    
-    background: none;
-    border: none;
-    padding: 5px 10px;
-}
+
 
 .maximize-side {
     position: absolute;

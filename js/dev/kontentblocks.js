@@ -51,19 +51,6 @@ var KB = KB || {};
                 tinyMCE.triggerSave();
             });
 
-            // init chosen
-            //KB.initChzn();
-
-            // init title toggle
-            KB.titleToggle();
-
-            // init sortable
-            if (KB.userCan('sort_kontentblocks'))
-            {
-                KB.kbSortable();
-            }
-
-            
 
 
             $(kbMetaBox).on('click', '.kb-duplicate', function(e)
@@ -165,127 +152,12 @@ var KB = KB || {};
             // Tabs for Kontentfields			
             
 
-
-
             // bind to custom event after a new block has been added to init tabs for Kontentfields
             $(document).on('kb_block_added', function(event)
             {
                 if ($('.kb_fieldtabs'))
                 {
                     $('.kb_fieldtabs').tabs();
-                }
-            });
-        },
-        titleToggle: function()
-        {
-            $(kbMetaBox).on('click', '.kb-toggle', function() {
-                if (KB.isLocked() && !KB.userCan('lock_kontentblocks'))
-                {
-
-                    KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
-                }
-                else
-                {
-                    $(this).parent().nextAll('.kb_inner:first').slideToggle('fast', function(){
-                        $('body').trigger('module::opened');
-                    });
-                    $('#' + activeBlock).toggleClass('kb-open', 1000);
-                }
-            });
-
-            // initially toggle all blocks
-            $(' .kb_inner').hide();
-        },
-        initChzn: function()
-        {
-            //$('.chzn').chosen();
-        },
-        // handles dynamic creation of TinyMCE instances
-        tinymce: function(newid, parent)
-        {
-            // get settings from native WP Editor 
-            var settings = tinyMCEPreInit.mceInit['content'];
-
-            // add new editor id to settings
-            settings['elements'] = newid;
-
-            // add settings object to tinyMCEPreInit Object
-            tinyMCEPreInit.mceInit[newid] = settings;
-
-            // doesn't wok without, but don't really know what this does
-            qtsettings = {
-                'buttons': '',
-                'disabled_buttons': '',
-                'id': newid
-            };
-
-            // add qt settings for the new instance as well
-            tinyMCEPreInit.qtInit[newid] = qtsettings;
-
-            // create new instance
-            ed = new tinymce.Editor(newid, settings);
-
-            // render new instance
-            ed.render();
-
-            // add quicktags
-            var qt = new QTags(qtsettings);
-
-            // hackish..set a short delay to reset the new editor to visual mode and hide qt buttons
-            // this is necessary :/
-            setTimeout(function() {
-                $(parent).removeClass('html-active').addClass('tmce-active');
-                QTags._buttonsInit();
-            },
-                    1500);
-        },
-        /*
-         * Handles TinyMCE removal, since TinyMCE doesn't like to be moved inside the DOM
-         * this has to be called on every instance whenever sortables is working
-         * 
-         */
-        remove_tinymce: function()
-        {
-            // ipad / mobile condition
-            if (typeof (tinyMCE) === 'undefined')
-                return false;
-
-            // do nothing if it is the native editor
-            $('.wp-editor-wrap').each(function() {
-                if ($(this).attr('id') === 'wp-content-wrap')
-                {
-                    // do nothing
-                } else
-                {
-                    // get the id
-                    textarea = jQuery(this).find('textarea').attr('id');
-                    // remove controls
-                    tinyMCE.execCommand('mceRemoveControl', false, textarea);
-                }
-            });
-        },
-        /*
-         * When sortable is done, restore tinymce functionality to each instance
-         */
-
-        restore_tinymce: function()
-        {
-
-            if (typeof (tinyMCE) === 'undefined')
-                return false;
-
-            jQuery('#kontentblocks_stage .wp-editor-wrap').each(function()
-            {
-                // find all textareas with tinymce support
-                textarea = jQuery(this).find('textarea').attr('id');
-                // add controls back
-                tinyMCE.execCommand('mceAddControl', false, textarea);
-                // 
-                // if instance was in html mode, we have to switch manually back to visual mode
-                // will look ugly otherwise, and don't see an alternative
-                if ($(this).hasClass('html-active'))
-                {
-                    $(this).removeClass('html-active').addClass('tmce-active');
                 }
             });
         },
@@ -449,171 +321,7 @@ var KB = KB || {};
                 }
             }
         },
-        kbSortable: function()
-        {
-//            // to do: get rid of stage inner
-//            // handles sorting of the blocks.
-//            $('.kb_sortable').sortable(
-//                    {
-//                        //settings
-//                        placeholder: "ui-state-highlight",
-//                        ghost: true,
-//                        connectWith: ".kb_connect",
-//                        handle: '.kb-move',
-//                        cancel: 'li.disabled, li.cantsort',
-//                        // start event
-//                        start: function(event, ui)
-//                        {
-//                            $(ui.item).find('.kb_inner').hide();
-//                            $('.kb-open').toggleClass('kb-open');
-//                            $('.kb_inner').hide();
-//                            KB.remove_tinymce();
-//                            // Add a global trigger to sortable.start, maybe other Blocks might need it
-//                            $(document).trigger('kb_sortable_start', [event, ui]);
-//                        },
-//                        stop: function(event, ui)
-//                        {
-//                            KB.restore_tinymce();
-//                            // global trigger when soprtable is done		
-//                            $(document).trigger('kb_sortable_stop', [event, ui]);
-//                        },
-//                        over: function(event, ui)
-//                        {
-//                            var area_id = this.id;
-//                            // type blacklist
-//                            var blacklist = $('#' + area_id).attr('data-blacklist');
-//                            if (blacklist !== '')
-//                            {
-//                                blackblocks = blacklist.split(' ');
-//                            }
-//                            else
-//                            {
-//                                blackblocks = {};
-//                            }
-//                            // ''
-//                            itemclass = ui.item[0].dataset.blockclass;
-//                            blacklisted = $.inArray(itemclass, blackblocks);
-//
-//                            if (blacklisted === -1)
-//                            {
-//                                //$(ui.helper).addClass('disabled');
-//                                console.log('line 544:' + ui.helper);
-//                            }
-//                            else
-//                            {
-//                                //$(ui.helper).removeClass('disabled');
-//                                console.log('line 548:' + ui.helper);
-//
-//                            }
-//                        },
-//                        receive: function(event, ui) {
-//
-//                            var area_id = this.id;
-//                            var block_id = activeBlock;
-//
-//                            // block limit
-//                            var block_limit = $('#' + area_id).attr('data-limit');
-//
-//                            var present_blocks = $('#' + area_id + ' .kb_block').length;
-//
-//                            // type blacklist
-//                            var blacklist = $('#' + area_id).attr('data-blacklist');
-//                            if (blacklist !== '')
-//                            {
-//                                blackblocks = blacklist.split(' ');
-//                            }
-//                            else
-//                            {
-//                                blackblocks = {};
-//                            }
-//                            // ''
-//                            itemclass = ui.item[0].dataset.blockclass;
-//                            blacklisted = $.inArray(itemclass, blackblocks);
-//
-//                            // first check if block is blacklisted and throw alert, else check for block limit
-//
-//                            if (blacklisted === -1)
-//                            {
-//                                KB.alert(kontentblocks.l18n.area_block_not_allowed,
-//                                        function()
-//                                        {
-//                                            $(ui.sender).sortable('cancel');
-//                                            return;
-//                                        });
-//                            }
-//                            else if (block_limit !== '0' && present_blocks > block_limit) {
-//
-//                                KB.alert(kontentblocks.l18n.area_sort_full,
-//                                        function()
-//                                        {
-//                                            $(ui.sender).sortable('cancel');
-//                                            return;
-//                                        });
-//                            } else
-//                            {
-//
-//                                KB.ajax(
-//                                        {
-//                                            action: 'changeArea',
-//                                            block_id: block_id,
-//                                            area_id: area_id
-//                                        },
-//                                function(response)
-//                                {
-//                                    // revert back if response is not valid, due to verification
-//                                    if (false == response)
-//                                    {
-//                                        $(ui.sender).sortable('cancel');
-//                                        return;
-//                                    }
-//                                    else
-//                                    {
-//
-//                                        KB.notice('Area change saved', 'alert');
-//                                        KB.resort();
-//                                    }
-//
-//
-//
-//                                })
-//                            }
-//
-//                        },
-//                        update: function(ev, ui) {
-//                            // var post_id = jQuery('#post_ID').val();
-//                            data = {};
-//
-//                            jQuery('.kb_sortable').each(function() {
-//                                data[this.id] = jQuery('#' + this.id).sortable('serialize', {
-//                                    attribute: 'rel'
-//                                });
-//                            })
-//
-//                            if (this === ui.item.parent('ul')[0] && !ui.sender) {
-//                                KB.resort();
-//
-//                            } else if (ui.sender) {
-//                                // do nothing
-//                            }
-//                        }
-//                    });
-        },
-        duplicateBlock: function()
-        {
-//            KB.confirm(
-//                    kontentblocks.l18n.block_duplicate,
-//                    function()
-//                    {
-//                        KB.duplicate = activeBlock;
-//                        KB.blockCreate($('#' + activeBlock));
-//                    },
-//                    function()
-//                    {
-//                        KB.notice(kontentblocks.l18n.block_duplicate_success);
-//                    }
-//            );
-
-        },
+        
         blockCreate: function(caller)
         {
             var data = {};
@@ -736,23 +444,7 @@ var KB = KB || {};
                 $('.kb-ajax-status').hide();
             })
         },
-        validateForm: function(form)
-        {
-            return !$(form).find('.form-required').filter(
-                    function()
-                    {
-                        return $('input:visible', this).val() == '';
-                    })
-                    .addClass('form-invalid')
-                    .find('input:visible')
-                    .change(
-                            function()
-                            {
-                                $(this).closest('.form-invalid')
-                                        .removeClass('form-invalid');
-                            })
-                    .size();
-        },
+        
         userCan: function(cap)
         {
             check = $.inArray(cap, kontentblocks.caps);
@@ -848,26 +540,7 @@ jQuery(document).ready(function($) {
         activeArea = $(this).next().attr('id');
     });
 
-    // Create new Block from Menu
-    /*$('.kb_the_menu li').click(function(){
-     caller = $(this);
-     if (KB.userCan('create_kontentblocks'))
-     {
-     KB.blockCreate(caller);
-     menus = $('.kb_open');
-     $(menus).each(function(){
-     if ($(this).hasClass('kb_open')){
-     $(this).fadeOut('fast').toggleClass('kb_open');
-     
-     }
-     })
-     }
-     else
-     {
-     KB.notice(kontentblocks.l18n.sec_no_permission, 'alert');
-     }
-     
-     });*/
+
 //
 //    $('body').on('click', '.blocks-menu li', function() {
 //        caller = $(this);

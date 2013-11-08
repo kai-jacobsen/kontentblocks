@@ -130,7 +130,6 @@ class ScreenManager
                 'description' => __( 'Full width area at the bottom of this page', 'kontentblocks' )
             )
         );
-
         // plugins may change this
         return apply_filters( 'kb_default_context_layout', $defaults );
 

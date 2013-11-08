@@ -88,8 +88,7 @@ Field Tabs
     ul.ui-tabs-nav{
         margin-bottom: 0px;
         margin-left: -8px;
-        border-bottom: 2px solid #f9f9f9;
-        border-top: 2px solid #f9f9f9;
+        padding:10px 0;
 
         li{
             padding: 8px 0px 5px 0px;
@@ -129,7 +128,7 @@ Field Tabs
 
                 a{
                     color: #333;
-                    font-weight: 700;
+                    font-weight: 100;
                 }
             }
         }

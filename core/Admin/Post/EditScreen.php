@@ -38,7 +38,6 @@ Class EditScreen
         $this->hooks   = array( 'post.php', 'post-new.php' );
         $this->manager = Kontentblocks::getInstance();
         global $pagenow;
-
         if ( !in_array( $pagenow, $this->hooks ) ) {
             return null;
         }
@@ -79,6 +78,10 @@ Class EditScreen
     function userInterface()
     {
 
+        if  ( !post_type_supports( $this->postData->get('postType'), 'kontentblocks' )) {
+            return false;
+        }
+        
         echo "<div class='clearfix' id='kontentblocks_stage'>";
 
         // Use nonce for verification

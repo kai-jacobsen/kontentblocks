@@ -110,9 +110,9 @@
         toggleHeading: function(e) {
             e.preventDefault();
             var range = window.getSelection().getRangeAt(0);
-            var wrapper = range.commonAncestorContainer.parentElement
+            var wrapper = range.commonAncestorContainer.parentElement;
             if ($(wrapper).is('h3')) {
-                $(wrapper).replaceWith(wrapper.textContent)
+                $(wrapper).replaceWith(wrapper.textContent);
                 return;
             }
             var h3 = document.createElement('h3');
@@ -310,7 +310,7 @@
                         $editable.find('img').unbind('mouseenter');
 
                         // remove any latent image tool model references
-                        $(etch.config.selector + ' img').data('editableImageModel', false)
+                        $(etch.config.selector + ' img').data('editableImageModel', false);
                     }
 
                     // once the editor is removed, remove the body binding for it
@@ -350,14 +350,14 @@
                 cb({model: model, view: view});
             }
         });
-    }
+    };
 
     $.fn.etchFindEditable = function() {
         // function that looks for the editable selector on itself or its parents
         // and returns that el when it is found
         var $el = $(this);
         return $el.is(etch.config.selector) ? $el : $el.closest(etch.config.selector);
-    }
+    };
 
     window.etch = etch;
 })(jQuery);
@@ -391,7 +391,7 @@ function pasteHtmlAtCaret(html) {
                 sel.addRange(range);
             }
         }
-    } else if (document.selection && document.selection.type != "Control") {
+    } else if (document.selection && document.selection.type !== "Control") {
         // IE < 9
         document.selection.createRange().pasteHTML(html);
     }

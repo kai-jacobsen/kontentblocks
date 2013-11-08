@@ -111,7 +111,7 @@ h2.kb-title {
 
 /* line 86, sass/partials/_block_style.scss */
 .kb_block_title {
-  padding: 8px;
+  padding: 0px;
 }
 
 /* line 91, sass/partials/_block_style.scss */
@@ -2202,9 +2202,10 @@ p.no-blocks {
 .add-modules {
   display: block;
   overflow: hidden;
+  padding: 8px 20px;
 }
 
-/* line 53, sass/partials/_blocks_menu_var.scss */
+/* line 54, sass/partials/_blocks_menu_var.scss */
 .modules-link {
   float: right;
   background: url("assets/add-modules.png") no-repeat 0 2px;
@@ -2213,12 +2214,12 @@ p.no-blocks {
   font-size: 12px;
 }
 
-/* line 62, sass/partials/_blocks_menu_var.scss */
+/* line 63, sass/partials/_blocks_menu_var.scss */
 .jspScrollable .blocks-menu li {
   width: 260px;
 }
 
-/* line 66, sass/partials/_blocks_menu_var.scss */
+/* line 67, sass/partials/_blocks_menu_var.scss */
 .blocks-menu {
   background: transparent;
   margin-bottom: 0;
@@ -2228,7 +2229,7 @@ p.no-blocks {
   padding: 0px;
   margin-left: 0px;
 }
-/* line 75, sass/partials/_blocks_menu_var.scss */
+/* line 76, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li {
   overflow: hidden;
   float: left;
@@ -2244,26 +2245,26 @@ p.no-blocks {
   border-bottom: 1px solid #aaa;
   padding: 10px;
 }
-/* line 90, sass/partials/_blocks_menu_var.scss */
+/* line 91, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li h3 {
   font-family: 'Open Sans', sans-serif;
   font-weight: 100;
 }
-/* line 96, sass/partials/_blocks_menu_var.scss */
+/* line 97, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li:hover {
   background: #333;
   cursor: pointer;
 }
-/* line 102, sass/partials/_blocks_menu_var.scss */
+/* line 103, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li:hover .block-info h3 {
   color: #fff;
   text-shadow: 1px 1px 1px #000;
 }
-/* line 108, sass/partials/_blocks_menu_var.scss */
+/* line 109, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li:hover .block-info p.description {
   color: #f2f2f2;
 }
-/* line 118, sass/partials/_blocks_menu_var.scss */
+/* line 119, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li .block-icon {
   float: left;
   width: 30px;
@@ -2271,16 +2272,16 @@ p.no-blocks {
   margin-right: 10px;
   display: none;
 }
-/* line 126, sass/partials/_blocks_menu_var.scss */
+/* line 127, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li .block-icon img {
   width: 40px;
   height: 40px;
 }
-/* line 131, sass/partials/_blocks_menu_var.scss */
+/* line 132, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li .block-info {
   /*margin-left: 35px;*/
 }
-/* line 135, sass/partials/_blocks_menu_var.scss */
+/* line 136, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li .block-info h3 {
   padding-top: 0px;
   margin-top: 0;
@@ -2288,7 +2289,7 @@ p.no-blocks {
   text-shadow: 1px 1px 1px white;
   font-size: 14px;
 }
-/* line 143, sass/partials/_blocks_menu_var.scss */
+/* line 144, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li .block-info p.description {
   font-weight: normal;
   font-style: normal;
@@ -2298,7 +2299,7 @@ p.no-blocks {
   color: #999;
   font-style: italic;
 }
-/* line 154, sass/partials/_blocks_menu_var.scss */
+/* line 155, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li span.action {
   visibility: hidden;
   position: absolute;
@@ -2308,29 +2309,29 @@ p.no-blocks {
   font-style: italic;
   font-size: 11px;
 }
-/* line 164, sass/partials/_blocks_menu_var.scss */
+/* line 165, sass/partials/_blocks_menu_var.scss */
 .blocks-menu li:hover span.action {
   visibility: visible;
 }
 
-/* line 169, sass/partials/_blocks_menu_var.scss */
+/* line 170, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs {
   position: relative;
   zoom: 1;
 }
-/* line 175, sass/partials/_blocks_menu_var.scss */
+/* line 176, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs ul.ui-tabs-nav {
   margin-bottom: 10px;
   margin-left: -8px;
 }
-/* line 179, sass/partials/_blocks_menu_var.scss */
+/* line 180, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs ul.ui-tabs-nav li {
   float: left;
   margin-bottom: 0;
   position: relative;
   top: 2px;
 }
-/* line 186, sass/partials/_blocks_menu_var.scss */
+/* line 187, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs ul.ui-tabs-nav li a {
   padding: 2px 22px;
   text-decoration: none;
@@ -2340,25 +2341,25 @@ p.no-blocks {
   top: 2px;
   font-family: 'Open Sans';
 }
-/* line 195, sass/partials/_blocks_menu_var.scss */
+/* line 196, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs ul.ui-tabs-nav li a:focus, .area-blocks-menu-tabs ul.ui-tabs-nav li a:active {
   border: none;
   outline: none;
 }
-/* line 200, sass/partials/_blocks_menu_var.scss */
+/* line 201, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs ul.ui-tabs-nav li a:hover {
   color: #666;
 }
-/* line 210, sass/partials/_blocks_menu_var.scss */
+/* line 211, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs ul.ui-tabs-nav li.ui-tabs-active {
   background-color: #fff;
 }
-/* line 213, sass/partials/_blocks_menu_var.scss */
+/* line 214, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs ul.ui-tabs-nav li.ui-tabs-active a {
   color: #333;
   font-weight: 700;
 }
-/* line 221, sass/partials/_blocks_menu_var.scss */
+/* line 222, sass/partials/_blocks_menu_var.scss */
 .area-blocks-menu-tabs .ui-widget-content {
   padding: 0px;
 }
@@ -2369,18 +2370,18 @@ p.no-blocks {
  * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
  * may not operate correctly without them.
  */
-/* line 236, sass/partials/_blocks_menu_var.scss */
+/* line 237, sass/partials/_blocks_menu_var.scss */
 .jspContainer {
   overflow: hidden;
   position: relative;
 }
 
-/* line 243, sass/partials/_blocks_menu_var.scss */
+/* line 244, sass/partials/_blocks_menu_var.scss */
 .jspPane {
   position: absolute;
 }
 
-/* line 248, sass/partials/_blocks_menu_var.scss */
+/* line 249, sass/partials/_blocks_menu_var.scss */
 .jspVerticalBar {
   position: absolute;
   top: 0;
@@ -2390,7 +2391,7 @@ p.no-blocks {
   background: red;
 }
 
-/* line 258, sass/partials/_blocks_menu_var.scss */
+/* line 259, sass/partials/_blocks_menu_var.scss */
 .jspHorizontalBar {
   position: absolute;
   bottom: 0;
@@ -2400,30 +2401,30 @@ p.no-blocks {
   background: #0074a2;
 }
 
-/* line 269, sass/partials/_blocks_menu_var.scss */
+/* line 270, sass/partials/_blocks_menu_var.scss */
 .jspVerticalBar *,
 .jspHorizontalBar * {
   margin: 0;
   padding: 0;
 }
 
-/* line 275, sass/partials/_blocks_menu_var.scss */
+/* line 276, sass/partials/_blocks_menu_var.scss */
 .jspCap {
   display: none;
 }
 
-/* line 280, sass/partials/_blocks_menu_var.scss */
+/* line 281, sass/partials/_blocks_menu_var.scss */
 .jspHorizontalBar .jspCap {
   float: left;
 }
 
-/* line 285, sass/partials/_blocks_menu_var.scss */
+/* line 286, sass/partials/_blocks_menu_var.scss */
 .jspTrack {
   background: #222;
   position: relative;
 }
 
-/* line 291, sass/partials/_blocks_menu_var.scss */
+/* line 292, sass/partials/_blocks_menu_var.scss */
 .jspDrag {
   background: #0074a2;
   position: relative;
@@ -2432,14 +2433,14 @@ p.no-blocks {
   cursor: pointer;
 }
 
-/* line 301, sass/partials/_blocks_menu_var.scss */
+/* line 302, sass/partials/_blocks_menu_var.scss */
 .jspHorizontalBar .jspTrack,
 .jspHorizontalBar .jspDrag {
   float: left;
   height: 100%;
 }
 
-/* line 307, sass/partials/_blocks_menu_var.scss */
+/* line 308, sass/partials/_blocks_menu_var.scss */
 .jspArrow {
   background: #0074a2;
   text-indent: -20000px;
@@ -2447,30 +2448,30 @@ p.no-blocks {
   cursor: pointer;
 }
 
-/* line 315, sass/partials/_blocks_menu_var.scss */
+/* line 316, sass/partials/_blocks_menu_var.scss */
 .jspArrow.jspDisabled {
   cursor: default;
   background: #80808d;
 }
 
-/* line 321, sass/partials/_blocks_menu_var.scss */
+/* line 322, sass/partials/_blocks_menu_var.scss */
 .jspVerticalBar .jspArrow {
   height: 16px;
 }
 
-/* line 326, sass/partials/_blocks_menu_var.scss */
+/* line 327, sass/partials/_blocks_menu_var.scss */
 .jspHorizontalBar .jspArrow {
   width: 16px;
   float: left;
   height: 100%;
 }
 
-/* line 333, sass/partials/_blocks_menu_var.scss */
+/* line 334, sass/partials/_blocks_menu_var.scss */
 .jspVerticalBar .jspArrow:focus {
   outline: none;
 }
 
-/* line 338, sass/partials/_blocks_menu_var.scss */
+/* line 339, sass/partials/_blocks_menu_var.scss */
 .jspCorner {
   background: #eeeef4;
   float: left;
@@ -2478,12 +2479,12 @@ p.no-blocks {
 }
 
 /* Yuk! CSS Hack for IE6 3 pixel bug :( */
-/* line 346, sass/partials/_blocks_menu_var.scss */
+/* line 347, sass/partials/_blocks_menu_var.scss */
 * html .jspCorner {
   margin: 0 -3px 0 0;
 }
 
-/* line 1, sass/partials/_area_styles.scss */
+/* line 7, sass/partials/_area_styles.scss */
 .context-header {
   padding: 10px 10px 10px 10px;
   margin-bottom: 0px;
@@ -2491,7 +2492,7 @@ p.no-blocks {
   background: #f9f9f9;
 }
 
-/* line 14, sass/partials/_area_styles.scss */
+/* line 20, sass/partials/_area_styles.scss */
 #poststuff .context-header h2, #poststuff .context-area h2 {
   font-style: normal;
   margin: 0;
@@ -2503,42 +2504,42 @@ p.no-blocks {
   text-shadow: 0px 1px 1px #fff;
 }
 
-/* line 27, sass/partials/_area_styles.scss */
+/* line 33, sass/partials/_area_styles.scss */
 .context-header p.description {
   color: #aaa;
   font-size: 12px;
 }
 
-/* line 33, sass/partials/_area_styles.scss */
+/* line 39, sass/partials/_area_styles.scss */
 .kb_area_head {
-  height: 37px;
+  position: relative;
 }
 
-/* line 46, sass/partials/_area_styles.scss */
+/* line 51, sass/partials/_area_styles.scss */
 .area-wrap .area_title_text span.title {
   font-size: 13px;
   margin-left: 0px;
   font-weight: normal;
   color: #ccc;
-  padding-left: 10px;
+  padding-left: 27px;
   line-height: 37px;
 }
-/* line 55, sass/partials/_area_styles.scss */
+/* line 60, sass/partials/_area_styles.scss */
 .area-wrap .area_title_text span.description {
   font-size: 12px;
   margin-left: 10px;
   color: #ccc;
 }
-/* line 64, sass/partials/_area_styles.scss */
+/* line 69, sass/partials/_area_styles.scss */
 .area-wrap:hover .area_title_text span.title {
   color: #222;
 }
-/* line 68, sass/partials/_area_styles.scss */
+/* line 73, sass/partials/_area_styles.scss */
 .area-wrap:hover .area_title_text span.description {
   color: #222;
 }
 
-/* line 77, sass/partials/_area_styles.scss */
+/* line 82, sass/partials/_area_styles.scss */
 .area_description p {
   padding: 0 0 0 16px;
   margin: 0;
@@ -2547,7 +2548,7 @@ p.no-blocks {
 }
 
 /* Area Settings */
-/* line 86, sass/partials/_area_styles.scss */
+/* line 91, sass/partials/_area_styles.scss */
 .kb_area_settings {
   display: block;
   float: left;
@@ -2558,7 +2559,7 @@ p.no-blocks {
   cursor: pointer;
 }
 
-/* line 95, sass/partials/_area_styles.scss */
+/* line 100, sass/partials/_area_styles.scss */
 .area_settings_list {
   position: absolute;
   width: 220px;
@@ -2578,7 +2579,7 @@ p.no-blocks {
   left: 25px;
 }
 
-/* line 113, sass/partials/_area_styles.scss */
+/* line 118, sass/partials/_area_styles.scss */
 .area_setting {
   background: #2d3138 !important;
   border-top: 1px solid #3e444f;
@@ -2587,7 +2588,7 @@ p.no-blocks {
   margin: 0;
 }
 
-/* line 120, sass/partials/_area_styles.scss */
+/* line 125, sass/partials/_area_styles.scss */
 .area_setting .description {
   font-size: 11px;
   padding: 5px;
@@ -2595,12 +2596,12 @@ p.no-blocks {
   line-height: 100%;
 }
 
-/* line 128, sass/partials/_area_styles.scss */
+/* line 133, sass/partials/_area_styles.scss */
 .area_setting.class label {
   padding-left: 10px;
 }
 
-/* line 132, sass/partials/_area_styles.scss */
+/* line 137, sass/partials/_area_styles.scss */
 .area_setting.custom-css textarea {
   width: 100%;
   background: #3e444f;
@@ -2609,52 +2610,43 @@ p.no-blocks {
   color: #ccc;
 }
 
-/* line 140, sass/partials/_area_styles.scss */
+/* line 145, sass/partials/_area_styles.scss */
 .area_setting.custom-css textarea:focus {
   background: #fff;
   color: #000;
 }
 
-/* line 144, sass/partials/_area_styles.scss */
+/* line 149, sass/partials/_area_styles.scss */
 .area_setting.classselect select {
   width: 100%;
 }
 
-/* line 148, sass/partials/_area_styles.scss */
+/* line 153, sass/partials/_area_styles.scss */
 .kb_area_templates {
   position: relative;
   cursor: pointer;
 }
 
-/* line 154, sass/partials/_area_styles.scss */
-.area_template {
-  background: #d2d2d2;
-  border-top: 1px solid #f9f9f9;
-  border-bottom: 1px solid #dadada;
-  padding: 0 10px;
-  margin: 0;
-}
-
 /* new design */
-/* line 166, sass/partials/_area_styles.scss */
+/* line 164, sass/partials/_area_styles.scss */
 .area-wrap {
   margin: 0;
-  padding: 10px;
+  padding: 0px;
   background: #fcfcfc;
   border-bottom: 1px solid #bbb;
   border-top: 1px solid #fefefe;
 }
-/* line 177, sass/partials/_area_styles.scss */
+/* line 172, sass/partials/_area_styles.scss */
 .area-wrap .prime-actions {
   display: none !important;
 }
 
-/* line 182, sass/partials/_area_styles.scss */
+/* line 179, sass/partials/_area_styles.scss */
 .area-wrap:first-child {
   padding-top: 0;
 }
 
-/* line 189, sass/partials/_area_styles.scss */
+/* line 186, sass/partials/_area_styles.scss */
 .kb-area .add-modules a {
   display: block;
   color: #ccc;
@@ -2671,14 +2663,21 @@ p.no-blocks {
   transition: all 0.3s linear;
   margin-top: 8px;
 }
-/* line 201, sass/partials/_area_styles.scss */
+/* line 198, sass/partials/_area_styles.scss */
 .kb-area .add-modules a:hover {
   color: #999;
   border-color: #999;
   background-color: #f2f2f2;
 }
 
-/* line 214, sass/partials/_area_styles.scss */
+/* line 211, sass/partials/_area_styles.scss */
+.kb_area_list_item {
+  background: none;
+  border: none;
+  padding: 5px 20px;
+}
+
+/* line 218, sass/partials/_area_styles.scss */
 .area-normal.has-sidebar {
   float: left;
   width: 58%;
@@ -2687,7 +2686,7 @@ p.no-blocks {
   min-width: 550px;
 }
 
-/* line 222, sass/partials/_area_styles.scss */
+/* line 226, sass/partials/_area_styles.scss */
 .area-normal.has-sidebar {
   -webkit-transition: width .3s linear;
   left: 0;
@@ -2695,7 +2694,7 @@ p.no-blocks {
   min-width: 550px;
 }
 
-/* line 229, sass/partials/_area_styles.scss */
+/* line 233, sass/partials/_area_styles.scss */
 .area-side {
   float: right;
   width: 36%;
@@ -2704,22 +2703,23 @@ p.no-blocks {
   z-index: 888;
 }
 
-/* line 238, sass/partials/_area_styles.scss */
+/* line 242, sass/partials/_area_styles.scss */
 .area-bottom {
   clear: both;
 }
 
-/* line 241, sass/partials/_area_styles.scss */
+/* line 245, sass/partials/_area_styles.scss */
 .area-holder, .context-area {
   margin-bottom: 20px;
   padding: 0px;
   background: #f9f9f9;
   box-shadow: 0px 1px 1px #fff;
   border: 1px solid #ccc;
-  border-bottom: none;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
 }
 
-/* line 256, sass/partials/_area_styles.scss */
+/* line 261, sass/partials/_area_styles.scss */
 .block_limit {
   font-size: 10px;
   display: block;
@@ -2727,7 +2727,7 @@ p.no-blocks {
   color: #ccc;
 }
 
-/* line 263, sass/partials/_area_styles.scss */
+/* line 268, sass/partials/_area_styles.scss */
 .kb-selectbox {
   border: 1px solid #eaeaea;
   border-top: none;
@@ -2736,7 +2736,7 @@ p.no-blocks {
   background: #fff;
   /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
 }
-/* line 270, sass/partials/_area_styles.scss */
+/* line 275, sass/partials/_area_styles.scss */
 .kb-selectbox select {
   padding: 3px;
   margin: 0;
@@ -2754,16 +2754,16 @@ p.no-blocks {
   font-size: 12px;
 }
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  /* line 290, sass/partials/_area_styles.scss */
+  /* line 295, sass/partials/_area_styles.scss */
   .kb-selectbox select {
     padding-right: 18px;
   }
 }
-/* line 293, sass/partials/_area_styles.scss */
+/* line 298, sass/partials/_area_styles.scss */
 .kb-selectbox label {
   position: relative;
 }
-/* line 294, sass/partials/_area_styles.scss */
+/* line 299, sass/partials/_area_styles.scss */
 .kb-selectbox label:after {
   content: '<>';
   font: 11px "Consolas", monospace;
@@ -2779,7 +2779,7 @@ p.no-blocks {
   position: absolute;
   pointer-events: none;
 }
-/* line 308, sass/partials/_area_styles.scss */
+/* line 313, sass/partials/_area_styles.scss */
 .kb-selectbox label:before {
   content: '';
   background: #f8f8f8;
@@ -2788,19 +2788,55 @@ p.no-blocks {
   display: block;
 }
 
-/* line 317, sass/partials/_area_styles.scss */
+/* line 322, sass/partials/_area_styles.scss */
 .reframe-select-parent {
   float: left;
   margin-right: -1px;
 }
 
-/* line 324, sass/partials/_area_styles.scss */
+/* line 329, sass/partials/_area_styles.scss */
 .reframe-select-template {
   float: left;
 }
-/* line 327, sass/partials/_area_styles.scss */
+/* line 332, sass/partials/_area_styles.scss */
 .reframe-select-template label {
   margin-right: 10px;
+}
+
+/* line 1, sass/partials/_area-settings.scss */
+.js-area-settings-opener {
+  cursor: pointer;
+  padding-left: 0px;
+  width: 35px;
+  height: 35px;
+  background: url("icon-cog-small.png") center;
+  text-indent: -9999px;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 0;
+}
+
+/* line 13, sass/partials/_area-settings.scss */
+.kb-area-settings-wrapper {
+  overflow: hidden;
+  background: whitesmoke;
+  box-shadow: inset -1px 1px 12px #aaa;
+  border-bottom: 1px solid #aaa;
+}
+
+/* line 20, sass/partials/_area-settings.scss */
+.kb-area-settings {
+  padding: 10px;
+}
+/* line 24, sass/partials/_area-settings.scss */
+.kb-area-settings .kb-area-templates {
+  overflow: hidden;
+}
+/* line 27, sass/partials/_area-settings.scss */
+.kb-area-settings .kb-area-templates li {
+  display: block;
+  float: left;
+  margin-left: 8px;
 }
 
 /* line 1, sass/partials/_plugin_noty.scss */
@@ -3308,7 +3344,7 @@ body.on-site-editing {
   margin-left: 0;
 }
 
-/* line 79, sass/kontentblocks.scss */
+/* line 80, sass/kontentblocks.scss */
 .ui-state-highlight {
   height: 1.1em;
   line-height: 1.2em;
@@ -3318,14 +3354,14 @@ body.on-site-editing {
   margin: 0 5px;
 }
 
-/* line 88, sass/kontentblocks.scss */
+/* line 89, sass/kontentblocks.scss */
 .ui-sortable-helper {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
   filter: alpha(opacity=70);
   opacity: .7;
 }
 
-/* line 98, sass/kontentblocks.scss */
+/* line 99, sass/kontentblocks.scss */
 .area-meta {
   float: right;
   width: 200px;
@@ -3335,12 +3371,12 @@ body.on-site-editing {
   color: #999;
 }
 
-/* line 107, sass/kontentblocks.scss */
+/* line 108, sass/kontentblocks.scss */
 .kb_vcard_image {
   float: left;
 }
 
-/* line 111, sass/kontentblocks.scss */
+/* line 112, sass/kontentblocks.scss */
 .kb_image_frame {
   width: 150px;
   height: 150px;
@@ -3354,33 +3390,33 @@ body.on-site-editing {
   margin-bottom: 15px;
 }
 
-/* line 124, sass/kontentblocks.scss */
+/* line 125, sass/kontentblocks.scss */
 .vcard-upload {
   margin-top: 15px;
 }
 
-/* line 128, sass/kontentblocks.scss */
+/* line 129, sass/kontentblocks.scss */
 .vcard_description {
   float: left;
 }
 
-/* line 132, sass/kontentblocks.scss */
+/* line 133, sass/kontentblocks.scss */
 .kb_vcard_item {
   overflow: hidden;
 }
 
-/* line 136, sass/kontentblocks.scss */
+/* line 137, sass/kontentblocks.scss */
 .slider_image_frame {
   width: 300px;
   height: 150px;
 }
 
-/* line 141, sass/kontentblocks.scss */
+/* line 142, sass/kontentblocks.scss */
 .slider_image_frame img {
   max-height: 100%;
 }
 
-/* line 145, sass/kontentblocks.scss */
+/* line 146, sass/kontentblocks.scss */
 .kb_accordion_inner {
   display: block;
   border: 1px solid #CCC;
@@ -3388,17 +3424,17 @@ body.on-site-editing {
   padding: 8px;
 }
 
-/* line 152, sass/kontentblocks.scss */
+/* line 153, sass/kontentblocks.scss */
 #context_side .kb-sub-name {
   display: none;
 }
 
-/* line 156, sass/kontentblocks.scss */
+/* line 157, sass/kontentblocks.scss */
 .area-meta {
   border-right: 1px solid #ccc;
 }
 
-/* line 162, sass/kontentblocks.scss */
+/* line 163, sass/kontentblocks.scss */
 .clearfix:after {
   content: ".";
   display: block;
@@ -3408,28 +3444,28 @@ body.on-site-editing {
   height: 0;
 }
 
-/* line 171, sass/kontentblocks.scss */
+/* line 172, sass/kontentblocks.scss */
 .clearfix {
   display: inline-block;
 }
 
-/* line 175, sass/kontentblocks.scss */
+/* line 176, sass/kontentblocks.scss */
 html[xmlns] .clearfix {
   display: block;
 }
 
-/* line 179, sass/kontentblocks.scss */
+/* line 180, sass/kontentblocks.scss */
 * html .clearfix {
   height: 1%;
 }
 
 /* Accordion */
-/* line 184, sass/kontentblocks.scss */
+/* line 185, sass/kontentblocks.scss */
 .accordion-head {
   margin-bottom: 20px;
 }
 
-/* line 188, sass/kontentblocks.scss */
+/* line 189, sass/kontentblocks.scss */
 .kb_new_accordion_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -3438,12 +3474,12 @@ html[xmlns] .clearfix {
 }
 
 /* Tabs */
-/* line 196, sass/kontentblocks.scss */
+/* line 197, sass/kontentblocks.scss */
 .tab-head {
   margin-bottom: 20px;
 }
 
-/* line 200, sass/kontentblocks.scss */
+/* line 201, sass/kontentblocks.scss */
 .kb_new_tab_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -3452,105 +3488,105 @@ html[xmlns] .clearfix {
 }
 
 /* Kontentbox */
-/* line 208, sass/kontentblocks.scss */
+/* line 209, sass/kontentblocks.scss */
 .kb_kontentbox_wrapper {
   overflow: hidden;
 }
 
-/* line 212, sass/kontentblocks.scss */
+/* line 213, sass/kontentblocks.scss */
 .kb_kontentbox_content_wrapper {
   width: 75%;
   float: left;
 }
 
-/* line 217, sass/kontentblocks.scss */
+/* line 218, sass/kontentblocks.scss */
 .kb_image_wrapper {
   margin-top: 30px;
 }
 
-/* line 221, sass/kontentblocks.scss */
+/* line 222, sass/kontentblocks.scss */
 .kb_link_wrap {
   overflow: hidden;
   clear: both;
   margin-top: 15px;
 }
 
-/* line 227, sass/kontentblocks.scss */
+/* line 228, sass/kontentblocks.scss */
 .kb_kontentbox_layout_wrapper, .kb_kontentblocks_sizes_wrapper, .kb_kontentbox_align_wrapper {
   float: left;
   margin: 15px;
 }
 
-/* line 232, sass/kontentblocks.scss */
+/* line 233, sass/kontentblocks.scss */
 .kb_kontentbox_align_wrapper label {
   width: 50px;
   float: left;
 }
 
-/* line 237, sass/kontentblocks.scss */
+/* line 238, sass/kontentblocks.scss */
 .chzn-container {
   width: 200px !important;
 }
 
-/* line 241, sass/kontentblocks.scss */
+/* line 242, sass/kontentblocks.scss */
 .area_description {
   font-size: 11px;
   color: #999;
 }
 
 /* Audio */
-/* line 247, sass/kontentblocks.scss */
+/* line 248, sass/kontentblocks.scss */
 .kb_audio_item {
   padding: 8px 0;
 }
 
-/* line 251, sass/kontentblocks.scss */
+/* line 252, sass/kontentblocks.scss */
 .kb_audio_item label {
   display: block;
 }
 
 /* Video */
-/* line 256, sass/kontentblocks.scss */
+/* line 257, sass/kontentblocks.scss */
 .kb_video .kb_image_wrapper {
   float: left;
 }
 
-/* line 260, sass/kontentblocks.scss */
+/* line 261, sass/kontentblocks.scss */
 .kb_video_files_wrapper {
   margin-top: 30px;
   float: left;
 }
 
-/* line 265, sass/kontentblocks.scss */
+/* line 266, sass/kontentblocks.scss */
 .kb_video_item label {
   display: block;
 }
 
-/* line 269, sass/kontentblocks.scss */
+/* line 270, sass/kontentblocks.scss */
 .kb_video_item {
   margin-bottom: 8px;
 }
 
-/* line 273, sass/kontentblocks.scss */
+/* line 274, sass/kontentblocks.scss */
 .kb_video_Size {
   clear: both;
   padding-top: 20px;
 }
 
 /* Flexslider */
-/* line 279, sass/kontentblocks.scss */
+/* line 280, sass/kontentblocks.scss */
 .kb_button_wrapper {
   padding: 8px;
   overflow: hidden;
 }
 
-/* line 284, sass/kontentblocks.scss */
+/* line 285, sass/kontentblocks.scss */
 .uploaded {
   overflow: hidden;
   padding-bottom: 20px;
 }
 
-/* line 289, sass/kontentblocks.scss */
+/* line 290, sass/kontentblocks.scss */
 li.gallery-item {
   background: white;
   /* Old browsers */
@@ -3570,13 +3606,13 @@ li.gallery-item {
   margin: 0 20px 0 0;
 }
 
-/* line 308, sass/kontentblocks.scss */
+/* line 309, sass/kontentblocks.scss */
 li.gallery-item label {
   display: block;
   color: #eaeaea;
 }
 
-/* line 313, sass/kontentblocks.scss */
+/* line 314, sass/kontentblocks.scss */
 li.gallery-item textarea {
   border: none;
   width: 148px;
@@ -3586,19 +3622,19 @@ li.gallery-item textarea {
   border: 1px dotted #eaeaea;
 }
 
-/* line 322, sass/kontentblocks.scss */
+/* line 323, sass/kontentblocks.scss */
 li.gallery-item textarea:focus {
   background: #fff;
 }
 
 /* Sidebar Widget */
-/* line 327, sass/kontentblocks.scss */
+/* line 328, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper {
   float: left;
   margin: 0 20px 20px 0;
 }
 
-/* line 332, sass/kontentblocks.scss */
+/* line 333, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper label {
   display: block;
 }
@@ -3695,10 +3731,9 @@ Field Tabs
 .kb_fieldtabs ul.ui-tabs-nav {
   margin-bottom: 0px;
   margin-left: -8px;
-  border-bottom: 2px solid #f9f9f9;
-  border-top: 2px solid #f9f9f9;
+  padding: 10px 0;
 }
-/* line 94, sass/partials/_kontentfields_new.scss */
+/* line 93, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li {
   padding: 8px 0px 5px 0px;
   background: #fff;
@@ -3708,7 +3743,7 @@ Field Tabs
   position: relative;
   top: 2px;
 }
-/* line 104, sass/partials/_kontentfields_new.scss */
+/* line 103, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a {
   padding: 2px 22px;
   text-decoration: none;
@@ -3716,62 +3751,62 @@ Field Tabs
   top: 2px;
   font-weight: 100;
 }
-/* line 110, sass/partials/_kontentfields_new.scss */
+/* line 109, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a:focus, .kb_fieldtabs ul.ui-tabs-nav li a:active {
   border: none;
   outline: none;
 }
-/* line 115, sass/partials/_kontentfields_new.scss */
+/* line 114, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li a:hover {
   color: #666;
 }
-/* line 122, sass/partials/_kontentfields_new.scss */
+/* line 121, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li:hover {
   border-bottom: 2px solid #0074a2;
 }
-/* line 126, sass/partials/_kontentfields_new.scss */
+/* line 125, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active {
   background-color: #fff;
   border-bottom: 2px solid #0074a2;
 }
-/* line 130, sass/partials/_kontentfields_new.scss */
+/* line 129, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active a {
   color: #333;
-  font-weight: 700;
+  font-weight: 100;
 }
-/* line 138, sass/partials/_kontentfields_new.scss */
+/* line 137, sass/partials/_kontentfields_new.scss */
 .kb_fieldtabs .ui-widget-content {
   padding: 0px;
 }
 
-/* line 143, sass/partials/_kontentfields_new.scss */
+/* line 142, sass/partials/_kontentfields_new.scss */
 .field-wrapper {
   margin-bottom: 10px;
 }
-/* line 147, sass/partials/_kontentfields_new.scss */
+/* line 146, sass/partials/_kontentfields_new.scss */
 .field-wrapper label {
   width: 120px;
   display: inline-block;
 }
-/* line 152, sass/partials/_kontentfields_new.scss */
+/* line 151, sass/partials/_kontentfields_new.scss */
 .field-wrapper input[type=text] {
   margin-left: 0px;
 }
 
 /* groups */
-/* line 161, sass/partials/_kontentfields_new.scss */
+/* line 160, sass/partials/_kontentfields_new.scss */
 .kb_group_header {
   padding: 20px;
   background-color: #0074a2;
 }
-/* line 165, sass/partials/_kontentfields_new.scss */
+/* line 164, sass/partials/_kontentfields_new.scss */
 .kb_group_header h2 {
   margin: 0 !important;
   padding: 0 !important;
   color: #fff !important;
   text-shadow: 1px 1px 1px #999999;
 }
-/* line 172, sass/partials/_kontentfields_new.scss */
+/* line 171, sass/partials/_kontentfields_new.scss */
 .kb_group_header p.description {
   color: #f2f2f2;
   padding: 0;
@@ -4371,45 +4406,49 @@ div.kb-drag-drop-inside p {
   top: 25px;
 }
 
-/* line 343, sass/kontentblocks.scss */
+/* line 344, sass/kontentblocks.scss */
 .kb_draft {
   padding: 5px 0 5px 20px;
-  border-left: 3px solid #d54e21;
-  margin-left: -7px;
-  font-weight: bold;
-  background: #fff;
+  border-left: 0px solid #d54e21;
+  margin-left: 0px;
+  font-weight: 300;
+  background: #f9f9f9;
+  border-bottom: 1px solid #fcfcfc;
+  font-style: italic;
+  color: #333;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
-/* line 353, sass/kontentblocks.scss */
+/* line 359, sass/kontentblocks.scss */
 .kb_loading {
   opacity: .4;
 }
 
-/* line 357, sass/kontentblocks.scss */
+/* line 363, sass/kontentblocks.scss */
 input[type="checkbox"][checked] {
   opacity: .8;
 }
 
-/* line 361, sass/kontentblocks.scss */
+/* line 367, sass/kontentblocks.scss */
 .kb_block_options {
   padding: 10px;
   margin-top: 20px;
 }
 
-/* line 366, sass/kontentblocks.scss */
+/* line 372, sass/kontentblocks.scss */
 .kb_block_options .kb_field {
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
 
-/* line 372, sass/kontentblocks.scss */
+/* line 378, sass/kontentblocks.scss */
 .kb_block {
   -webkit-transition: box-shadow .3s linear;
 }
 
-/* line 377, sass/kontentblocks.scss */
+/* line 383, sass/kontentblocks.scss */
 .area-side .kb-open {
   width: 150%;
   margin-left: -56%;
@@ -4417,19 +4456,19 @@ input[type="checkbox"][checked] {
   z-index: 4500;
 }
 
-/* line 385, sass/kontentblocks.scss */
+/* line 391, sass/kontentblocks.scss */
 .tooltip {
   display: none;
   opacity: 0;
   -webkit-transition: opacity .5s linear;
 }
 
-/* line 391, sass/kontentblocks.scss */
+/* line 397, sass/kontentblocks.scss */
 .area_template {
   position: relative;
 }
 
-/* line 395, sass/kontentblocks.scss */
+/* line 401, sass/kontentblocks.scss */
 .area_template:hover .tooltip {
   display: block;
   opacity: 0;
@@ -4439,7 +4478,7 @@ input[type="checkbox"][checked] {
   opacity: 1;
 }
 
-/* line 404, sass/kontentblocks.scss */
+/* line 410, sass/kontentblocks.scss */
 .area_template img.tpl-mini {
   float: left;
   margin-right: 8px;
@@ -5862,14 +5901,7 @@ button.ui-button::-moz-focus-inner {
  * http://docs.jquery.com/UI/Tabs#theming
  */
 /* context */
-/* line 426, sass/kontentblocks.scss */
-.kb_area_list_item {
-  background: none;
-  border: none;
-  padding: 5px 10px;
-}
-
-/* line 433, sass/kontentblocks.scss */
+/* line 434, sass/kontentblocks.scss */
 .maximize-side {
   position: absolute;
   width: 75%;
@@ -5879,7 +5911,7 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 442, sass/kontentblocks.scss */
+/* line 443, sass/kontentblocks.scss */
 .maximize-normal {
   position: absolute;
   width: 75%;
@@ -5889,31 +5921,31 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 451, sass/kontentblocks.scss */
+/* line 452, sass/kontentblocks.scss */
 #kontentblocks_stage {
   position: relative;
   margin-bottom: 20px;
 }
 
-/* line 457, sass/kontentblocks.scss */
+/* line 458, sass/kontentblocks.scss */
 .active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {
   font-family: 'Open-Sans', sans-serif;
   font-style: italic;
   margin: 0;
 }
 
-/* line 464, sass/kontentblocks.scss */
+/* line 465, sass/kontentblocks.scss */
 .area_sidebars li {
   cursor: move;
 }
 
-/* line 470, sass/kontentblocks.scss */
+/* line 471, sass/kontentblocks.scss */
 .page-template-wrapper.context-area {
   min-height: 0px;
   overflow: hidden;
 }
 
-/* line 475, sass/kontentblocks.scss */
+/* line 476, sass/kontentblocks.scss */
 .kb_thickbox h2 {
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   font-weight: normal;
@@ -5921,23 +5953,23 @@ button.ui-button::-moz-focus-inner {
   margin: 20px 0 0 0;
 }
 
-/* line 482, sass/kontentblocks.scss */
+/* line 483, sass/kontentblocks.scss */
 .kb_thickbox .context-header {
   margin-bottom: 20px;
 }
 
-/* line 486, sass/kontentblocks.scss */
+/* line 487, sass/kontentblocks.scss */
 #TB_window {
   z-index: 6000 !important;
 }
 
-/* line 493, sass/kontentblocks.scss */
+/* line 494, sass/kontentblocks.scss */
 textarea.quicktags {
   width: 100%;
 }
 
 /* Redirect */
-/* line 503, sass/kontentblocks.scss */
+/* line 504, sass/kontentblocks.scss */
 .redirect-wrapper input[type=radio] {
   float: left;
   width: 16px;
@@ -5946,39 +5978,39 @@ textarea.quicktags {
   margin-right: 16px;
 }
 
-/* line 513, sass/kontentblocks.scss */
+/* line 514, sass/kontentblocks.scss */
 .wp-editor-area {
   /*height: 500px;*/
 }
 
-/* line 517, sass/kontentblocks.scss */
+/* line 518, sass/kontentblocks.scss */
 #context_normal {
   /* min-height: 600px;
   _height: 600px;*/
 }
 
-/* line 522, sass/kontentblocks.scss */
+/* line 523, sass/kontentblocks.scss */
 .quicktags textarea {
   background: #fff;
 }
 
 /* Responsive Admin Layout */
 @media screen and (max-width: 1299px) {
-  /* line 532, sass/kontentblocks.scss */
+  /* line 533, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 100%;
   }
 
-  /* line 538, sass/kontentblocks.scss */
+  /* line 539, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: left;
     width: 100%;
   }
 
-  /* line 543, sass/kontentblocks.scss */
+  /* line 544, sass/kontentblocks.scss */
   .area-side .kb-open {
     width: auto;
     margin-left: 0;
@@ -5987,21 +6019,21 @@ textarea.quicktags {
   }
 }
 @media screen and (min-width: 1300px) {
-  /* line 554, sass/kontentblocks.scss */
+  /* line 555, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 60%;
   }
 
-  /* line 560, sass/kontentblocks.scss */
+  /* line 561, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: right;
     width: 38%;
   }
 
-  /* line 565, sass/kontentblocks.scss */
+  /* line 566, sass/kontentblocks.scss */
   .area-side .kb-open {
     width: 750px;
     margin-left: 0;
@@ -6011,29 +6043,29 @@ textarea.quicktags {
     margin-left: -400px;
   }
 }
-/* line 576, sass/kontentblocks.scss */
+/* line 577, sass/kontentblocks.scss */
 .clear {
   clear: both;
 }
 
-/* line 580, sass/kontentblocks.scss */
+/* line 581, sass/kontentblocks.scss */
 .mceIframeContainer iframe {
   /*height: 150px !important;*/
 }
 
-/* line 584, sass/kontentblocks.scss */
+/* line 585, sass/kontentblocks.scss */
 .kb_field textarea {
   width: 100%;
   height: 80px;
 }
 
 /* Field Image Gallery */
-/* line 592, sass/kontentblocks.scss */
+/* line 593, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper {
   overflow: hidden;
 }
 
-/* line 596, sass/kontentblocks.scss */
+/* line 597, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li {
   float: left;
   margin-right: 12px;
@@ -6042,25 +6074,25 @@ textarea.quicktags {
   position: relative;
 }
 
-/* line 604, sass/kontentblocks.scss */
+/* line 605, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.selected {
   border: 3px solid blue;
 }
 
-/* line 608, sass/kontentblocks.scss */
+/* line 609, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li img {
   width: 107px;
   height: 107px;
 }
 
-/* line 614, sass/kontentblocks.scss */
+/* line 615, sass/kontentblocks.scss */
 .kb-field-gallery-info {
   min-height: 100px;
   background: #ccc;
   margin: 20px 0;
 }
 
-/* line 620, sass/kontentblocks.scss */
+/* line 621, sass/kontentblocks.scss */
 .kb-field-gallery-image-delete {
   display: none;
   position: absolute;
@@ -6072,7 +6104,7 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 631, sass/kontentblocks.scss */
+/* line 632, sass/kontentblocks.scss */
 .kb-field-gallery-image-info {
   display: none;
   position: absolute;
@@ -6084,24 +6116,24 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 642, sass/kontentblocks.scss */
+/* line 643, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li:hover > span, .kb-field-gallery-wrapper li.todelete > span.delete {
   display: block;
 }
 
-/* line 646, sass/kontentblocks.scss */
+/* line 647, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.todelete {
   opacity: .5;
 }
 
-/* line 653, sass/kontentblocks.scss */
+/* line 654, sass/kontentblocks.scss */
 .custom.kb_area_list_item {
   background: none;
   border: none;
   padding: 0;
 }
 
-/* line 660, sass/kontentblocks.scss */
+/* line 661, sass/kontentblocks.scss */
 .custom .kb_field {
   background-color: #fff !important;
 }

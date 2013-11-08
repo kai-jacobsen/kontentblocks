@@ -5,12 +5,15 @@ KB.Backbone = KB.Backbone || {};
 KB.Backbone.AreaView = Backbone.View.extend({
     initialize: function() {
         this.controlsContainer = jQuery('.add-modules', this.$el);
+        this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
         this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
         this.model.view = this;
         this.render();
+        console.log(this);
     },
     events: {
-        'click .modules-link': 'openModulesMenu'
+        'click .modules-link': 'openModulesMenu',
+        'click .js-area-settings-opener' : 'toggleSettings'
     },
     render: function() {
         this.addControls();
@@ -36,6 +39,11 @@ KB.Backbone.AreaView = Backbone.View.extend({
             },
             contentClassName: 'modules-menu'
         }) || null;
+    },
+    toggleSettings:function(e){
+        e.preventDefault();
+        this.settingsContainer.slideToggle().toggleClass('open');
+        KB.currentArea = this.model;
     }
 
 });
