@@ -1,4 +1,4 @@
-res/*
+/*
  * TODO: There are still some functions which could be wrapped inside KB Object
  * Rewrite this Shit
  */
@@ -10,10 +10,11 @@ res/*
  * activeArea - id of current area where mouse has been pressed
  */
 
-var latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
-var KB = KB || {};
+var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
+
 (function($) {
-    _.extend( KB, {
+
+    _.extend(KB, {
         //indicator
         duplicate: false,
         postContext: true,
@@ -30,8 +31,6 @@ var KB = KB || {};
             {
                 KB.ktftabs();
             }
-
-
 
             if ($('.area-blocks-menu-tabs'))
             {
@@ -51,68 +50,44 @@ var KB = KB || {};
                 tinyMCE.triggerSave();
             });
 
-
-
-            $(kbMetaBox).on('click', '.kb-duplicate', function(e)
-            {
-                KB.duplicateBlock();
-            });
-
-            
-
-
-            // Bind locking
-            $(kbMetaBox).on('click', '.kb-lock', function(e)
-            {
-                $caller = $(this);
-                e.preventDefault();
-                if (KB.userCan('lock_kontentblocks'))
-                {
-                    KB.blockLock($caller);
-                }
-                else if (!KB.userCan('lock_kontentblocks'))
-                {
-                    KB.notice(kontentblocks.l18n.sec_no_permission, 'alert');
-                }
-            });
-
-
-
+            // Keep 4 Kontentfields
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
             jQuery(document).ajaxComplete(function(e, o, settings)
             {
                 KB.metaBoxReorder(e, o, settings, 'restore');
             });
 
+            // Keep 4 Kontentfields
             // Bind AjaxSend to remove TinyMCE before global MetaBox reordering
             jQuery(document).ajaxSend(function(e, o, settings)
             {
                 KB.metaBoxReorder(e, o, settings, 'remove');
             });
 
+            // Keep 4 Kontentfields
             // Overrides the WP original function to keep an eye on dynamically generated editors
             $(kbMetaBox).on('mousedown', '.wp-editor-wrap', function(e) {
                 wpActiveEditor = this.id.slice(3, -5);
             });
 
+            // Keep 4 Kontentfields
             $(kbMetaBox).on('mousedown', '.quicktags', function(e) {
                 wpActiveEditor = $(this).find('textarea').attr('id');
             });
 
-
-
-
+            // Keep 4 Kontentfields
             // set the global activeBlock variable dynamically
             $('body').on('mousedown', '.kb_block', function(e) {
                 activeBlock = this.id;
             });
 
+            // Keep 4 Kontentfields
             // set the global activeField variable dynamically
             $('body').on('mousedown', '.kb_field', function(e) {
                 activeField = this;
             });
 
-
+            // Keep 4 Kontentfields
             // set activeArea dynamically
             $('.kb_area_list_item').mousedown(function() {
                 activeArea = this.id;
@@ -135,8 +110,6 @@ var KB = KB || {};
                     $('body').trigger('modal-close');
                 }
             });
-
-
         },
         menutabs: function()
         {
@@ -147,17 +120,129 @@ var KB = KB || {};
                 }
             });
         },
+        // Keep 4 Kontentfields
         ktftabs: function()
         {
             // Tabs for Kontentfields			
-            
+            if ($('.kb_fieldtabs'))
+            {
+                var length = $('.kb_fieldtabs li').length;
 
+                $('.kb_fieldtabs').tabs({
+                    activate: function() {
+
+                        $window = $(window).height();
+//                        $('.content').height($window - 250);
+
+                        $('.nano').nanoScroller();
+                    }
+                });
+
+                $('.kb_fieldtabs').each(function() {
+
+                    if (length === 1)
+                    {
+                        $(this).find('.ui-tabs-nav').css('display', 'none');
+                    }
+
+                });
+            }
             // bind to custom event after a new block has been added to init tabs for Kontentfields
             $(document).on('kb_block_added', function(event)
             {
                 if ($('.kb_fieldtabs'))
                 {
                     $('.kb_fieldtabs').tabs();
+                }
+            });
+        },
+        // handles dynamic creation of TinyMCE instances
+        // Keep 4 Kontentfields
+        tinymce: function(newid, parent)
+        {
+            // get settings from native WP Editor 
+            var settings = tinyMCEPreInit.mceInit['content'];
+
+            // add new editor id to settings
+            settings['elements'] = newid;
+
+            // add settings object to tinyMCEPreInit Object
+            tinyMCEPreInit.mceInit[newid] = settings;
+
+            // doesn't wok without, but don't really know what this does
+            qtsettings = {
+                'buttons': '',
+                'disabled_buttons': '',
+                'id': newid
+            };
+
+            // add qt settings for the new instance as well
+            tinyMCEPreInit.qtInit[newid] = qtsettings;
+
+            // create new instance
+            ed = new tinymce.Editor(newid, settings);
+
+            // render new instance
+            ed.render();
+
+            // add quicktags
+            var qt = new QTags(qtsettings);
+
+            // hackish..set a short delay to reset the new editor to visual mode and hide qt buttons
+            // this is necessary :/
+            setTimeout(function() {
+                $(parent).removeClass('html-active').addClass('tmce-active');
+                QTags._buttonsInit();
+            },
+                    1500);
+        },
+        /*
+         * Handles TinyMCE removal, since TinyMCE doesn't like to be moved inside the DOM
+         * this has to be called on every instance whenever sortables is working
+         * 
+         */
+        remove_tinymce: function()
+        {
+            // ipad / mobile condition
+            if (typeof (tinyMCE) === 'undefined')
+                return false;
+
+            // do nothing if it is the native editor
+            $('.wp-editor-wrap').each(function() {
+                if ($(this).attr('id') === 'wp-content-wrap')
+                {
+                    // do nothing
+                } else
+                {
+                    // get the id
+                    textarea = jQuery(this).find('textarea').attr('id');
+                    // remove controls
+                    tinyMCE.execCommand('mceRemoveControl', false, textarea);
+                }
+            });
+        },
+        /*
+         * When sortable is done, restore tinymce functionality to each instance
+         */
+
+        restore_tinymce: function()
+        {
+
+            if (typeof (tinyMCE) === 'undefined')
+                return false;
+
+            jQuery('#kontentblocks_stage .wp-editor-wrap').each(function()
+            {
+                // find all textareas with tinymce support
+                textarea = jQuery(this).find('textarea').attr('id');
+                // add controls back
+                tinyMCE.execCommand('mceAddControl', false, textarea);
+                // 
+                // if instance was in html mode, we have to switch manually back to visual mode
+                // will look ugly otherwise, and don't see an alternative
+                if ($(this).hasClass('html-active'))
+                {
+                    $(this).removeClass('html-active').addClass('tmce-active');
                 }
             });
         },
@@ -246,6 +331,7 @@ var KB = KB || {};
          * handles nonce as well, so no need to do the same things over and over again
          */
 
+        // Keep 4 Kontentfields ?
         ajax: function(data, callback)
         {
             // get nonce
@@ -261,7 +347,6 @@ var KB = KB || {};
 
             $(kbMetaBox).addClass('kb_loading');
             $('#publish').attr('disabled', 'disabled');
-
 
             $.ajax({
                 url: ajaxurl,
@@ -296,107 +381,6 @@ var KB = KB || {};
                 }
             })
 
-        },
-        metaBoxReorder: function(e, o, settings, action)
-        {
-            if (settings.data)
-            {
-                var a = settings.data;
-                var b = a.split('&');
-                var result = {};
-                $.each(b, function(x, y) {
-                    var temp = y.split('=');
-                    result[temp[0]] = temp[1];
-                });
-
-                if (result.action === 'meta-box-order') {
-                    if (action === 'restore')
-                    {
-                        KB.restore_tinymce();
-                    }
-                    else if (action === 'remove')
-                    {
-                        KB.remove_tinymce();
-                    }
-                }
-            }
-        },
-        
-        blockCreate: function(caller)
-        {
-            var data = {};
-
-            data.type = ($(caller).attr('data-value')) ? $(caller).attr('data-value') : $(caller).attr('data-blockclass'),
-            data.template = ($(caller).attr('data-instance_id')) ? $(caller).attr('data-instance_id') : false;
-            data.master = ($(caller).attr('data-master')) ? true : false;
-            data.page_template = $('#' + activeArea).attr('data-page_template');
-            data.post_type = $('#' + activeArea).attr('data-post_type') ? $('#' + activeArea).attr('data-post_type') : false;
-            data.post_id = $('#post_ID').val(),
-            data.count = $('#kb_all_blocks').val();
-            data.duplicate = KB.duplicate;
-            data.area = activeArea;
-            data.context = $('#' + activeArea).attr('data-context');
-
-            // block limit
-            list_limit = $('#' + activeArea).attr('data-limit');
-            list_children = $('#' + activeArea + ' li.kb_block').length;
-
-
-            if (list_limit !== 0 && list_children === list_limit) {
-                KB.alert(kontentblocks.l18n.area_create_full);
-
-                return false;
-            }
-            $(this).parent().fadeOut('fast');
-            var spinner = $(caller).closest('.kb_area_head').find('.kb-ajax-status');
-            $(spinner).show();
-            // fire ajax request, gets the block html and append it the "stage"
-
-            KB.ajax(
-                    {
-                        action: 'kb_generate_blocks',
-                        data: data
-                    },
-            function(response)
-            {
-                KB.duplicate = false;
-
-                result = response
-                // #kb_main, should get rid of this rigid structure
-                $('#' + activeArea).append(result.html);
-                $(spinner).hide();
-                // ugly way, sets the global var latestBlock to the id of the new generated block
-                latestBlock = result.id;
-                // update count
-                data.count = parseInt(data.count) + 1;
-
-                $('#kb_all_blocks').val(data.count);
-
-                // hides the advanced options panel
-                $('.kb_properties_title').nextAll('.kb_properties').hide();
-
-                // see top of file, re-initiate fancy select boxes
-                //KB.initChzn();
-
-                // Handles initiation of newly added instances of the Wordpress Editor.
-                // Includes TinyMce and Quicktag Buttons
-
-                // find the ID of the textarea, should use @latestBlock instead		
-                textareas = jQuery('#' + latestBlock).find('.wp-editor-wrap textarea');
-
-                $(textareas).each(function() {
-                    var daddy = $(this).closest('.wp-editor-wrap');
-                    var newid = $(this).attr('id');
-
-                    // add tiny mce
-                    KB.tinymce(newid, daddy);
-
-                });
-                KB.Modules.add(result.module);
-                // add / trigger global event
-                $(document).trigger('kb_block_added');
-
-            })
         },
         blockLock: function(caller)
         {
@@ -444,18 +428,22 @@ var KB = KB || {};
                 $('.kb-ajax-status').hide();
             })
         },
-        
-        userCan: function(cap)
+        validateForm: function(form)
         {
-            check = $.inArray(cap, kontentblocks.caps);
-            if (check != -1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return !$(form).find('.form-required').filter(
+                    function()
+                    {
+                        return $('input:visible', this).val() == '';
+                    })
+                    .addClass('form-invalid')
+                    .find('input:visible')
+                    .change(
+                            function()
+                            {
+                                $(this).closest('.form-invalid')
+                                        .removeClass('form-invalid');
+                            })
+                    .size();
         },
         isLocked: function()
         {
@@ -465,8 +453,7 @@ var KB = KB || {};
         {
             return $('#' + activeBlock).hasClass('disabled');
         }
-    });
-
+    })
 })(jQuery);
 
 jQuery(document).ready(function($) {
@@ -499,69 +486,9 @@ jQuery(document).ready(function($) {
     var mouse_inside_menu = false;
     var kb_menu_open = false;
 
-
-    $('body').on('click', '.kb_dd_menu', function(data, handler) {
-        data.preventDefault();
-        if (data.target == this)
-        {
-            menus = $('.kb_open');
-            $(menus).each(function() {
-                if ($(this).hasClass('kb_open')) {
-                    $(this).fadeOut('fast').toggleClass('kb_open');
-
-                }
-            })
-            menu = $(this).parent().find('.kb_dd_list');
-            $(menu).slideToggle('fast').toggleClass('kb_open');
-
-        }
-
-    });
-
-    $('.kb_dd_menu, .kb_dd_list').hover(function() {
-        mouse_inside_menu = true;
-    }, function() {
-        mouse_inside_menu = false;
-    });
-
-    $('body').mouseup(function() {
-        if (mouse_inside_menu == false) {
-            menus = $('.kb_open');
-            $(menus).each(function() {
-                if ($(this).hasClass('kb_open')) {
-                    $(this).fadeOut('fast').toggleClass('kb_open');
-
-                }
-            })
-        }
-    });
-
     $('.kb_area_head').mousedown(function() {
         activeArea = $(this).next().attr('id');
     });
 
-
-//
-//    $('body').on('click', '.blocks-menu li', function() {
-//        caller = $(this);
-//        
-//        if (KB.userCan('create_kontentblocks'))
-//        {
-//            vex.close(openedModal.data().vex.id);
-//
-//            KB.blockCreate(caller);
-//            menus = $('.kb_open');
-//            $(menus).each(function() {
-//                if ($(this).hasClass('kb_open')) {
-//                    $(this).fadeOut('fast').toggleClass('kb_open');
-//                }
-//            });
-//        }
-//        else
-//        {
-//            KB.notice(kontentblocks.l18n.sec_no_permission, 'alert');
-//        }
-//
-//    });
 
 }); // end document ready

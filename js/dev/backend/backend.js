@@ -53,7 +53,10 @@ KB.App = (function($) {
         addViews();
         
         // get the UI on track
-        KB.Ui.initSortable();
+        KB.Ui.init();
+        
+        
+        
     }
 
     /**

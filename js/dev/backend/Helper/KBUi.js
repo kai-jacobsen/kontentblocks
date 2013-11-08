@@ -9,7 +9,7 @@
  * 
  * @package Kontentblocks
  * @subpackage Backend/UI
- * @type @exp;KB
+ * @type @exp; KB
  */
 
 var KB = KB || {};
@@ -17,6 +17,24 @@ var KB = KB || {};
 KB.Ui = (function($) {
 
     return {
+        init: function(){
+            
+            // init Sortable
+            this.initSortable();
+            
+            // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
+            jQuery(document).ajaxComplete(function(e, o, settings)
+            {
+                KB.metaBoxReorder(e, o, settings, 'restore');
+            });
+
+            // Bind AjaxSend to remove TinyMCE before global MetaBox reordering
+            jQuery(document).ajaxSend(function(e, o, settings)
+            {
+                KB.metaBoxReorder(e, o, settings, 'remove');
+            });
+            
+        },
         initTabs: function() {
 
             $('.kb_fieldtabs').tabs({
@@ -182,6 +200,7 @@ KB.Ui = (function($) {
             });
         },
         toggleModule: function() {
+            
             $('body').on('click', '.kb-toggle', function() {
                 if (KB.isLocked() && !KB.userCan('lock_kontentblocks'))
                 {
@@ -195,6 +214,30 @@ KB.Ui = (function($) {
                     $('#' + activeBlock).toggleClass('kb-open', 1000);
                 }
             });
+        },
+        metaBoxReorder: function(e, o ,settings, action) {
+            
+            if (settings.data)
+            {
+                var a = settings.data;
+                var b = a.split('&');
+                var result = {};
+                $.each(b, function(x, y) {
+                    var temp = y.split('=');
+                    result[temp[0]] = temp[1];
+                });
+
+                if (result.action === 'meta-box-order') {
+                    if (action === 'restore')
+                    {
+                        KB.restore_tinymce();
+                    }
+                    else if (action === 'remove')
+                    {
+                        KB.remove_tinymce();
+                    }
+                }
+            }
         }
 
     };
