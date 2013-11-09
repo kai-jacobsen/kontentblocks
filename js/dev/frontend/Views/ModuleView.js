@@ -19,18 +19,31 @@ KB.ModuleView = Backbone.View.extend({
     },
     initEtch: etch.editableInit,
     openVex: function() {
-        var target = this.model.get('editURL');
-        var height = jQuery(window).height();
-        jQuery('#osframe').attr('src', target).attr('height', height - 200);
+        
+        if (KB.OpenOnsite) {
+            KB.OpenOnsite.destroy();
+        }
+        
+        KB.OpenOnsite = new KB.Backbone.OnsiteView({
+            tagName: 'div',
+            id: 'onsite-modal',
+            model: this.model,
+            view: this
+        });
+        
+        
+//        var target = this.model.get('editURL');
+//        var height = jQuery(window).height();
+//        jQuery('#osframe').attr('src', target).attr('height', height - 200);
 
 //        $("#onsite-modal").reveal({animation: 'fade'});
-        KB.openedModal = vex.open({
-            content: jQuery('#onsite-modal').html(),
-            contentClassName: 'onsite',
-            afterOpen: function() {
-                jQuery('.nano').nanoScroller();
-            }
-        });
+//        KB.openedModal = vex.open({
+//            content: jQuery('#onsite-modal').html(),
+//            contentClassName: 'onsite',
+//            afterOpen: function() {
+//                jQuery('.nano').nanoScroller();
+//            }
+//        });
     },
     openSlider: function() {
 

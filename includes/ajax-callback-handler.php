@@ -8,7 +8,8 @@ use Kontentblocks\Overlays\OnsiteEditModule,
     Kontentblocks\Ajax\ChangeArea,
     Kontentblocks\Ajax\Frontend\SaveInlineEdit,
     Kontentblocks\Ajax\CreateNewModule,
-    Kontentblocks\Ajax\DuplicateModule;
+    Kontentblocks\Ajax\DuplicateModule,
+    Kontentblocks\Ajax\Frontend\GetModuleOptions;
 
 /**
  * -----------------------------------------
@@ -122,3 +123,15 @@ function saveInlineEditCb()
 }
 
 add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );
+
+/**
+ * -----------------------------------------
+ * Handler onsite editing 
+ * -----------------------------------------
+ */
+function getModuleOptionsCb()
+{
+    $getModuleOptions = new GetModuleOptions();
+}
+
+add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );

@@ -203,3 +203,27 @@ body.onsite-editing {
 .edit-active{
     outline: 1px solid lightblue;
 }
+
+
+// experiments
+
+#onsite-modal{
+    width: 800px;
+    height: 350px;
+    background: #fff;
+    position: absolute;
+    top:40px;
+    left:40px;
+    border:1px solid #ccc;
+    border-bottom: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    overflow: auto;
+    
+    * {
+        box-sizing: content-box;
+    }
+    
+    .kb_field{
+        width: 90%;
+    }
+}

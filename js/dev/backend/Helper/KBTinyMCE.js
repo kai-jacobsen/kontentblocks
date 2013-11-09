@@ -39,13 +39,15 @@ KB.TinyMCE = (function($) {
             // Editor may not be initialized and is not accesible throught
             // the tinymce api, thats why we take the settings from preInit
             var settings = tinyMCEPreInit.mceInit['content'];
-            console.log(settings);
+
             $('.wp-editor-area', KB.lastAddedModule.view.$el).each(function() {
                 var id = this.id;
 
                 // add new editor id to settings
                 settings['elements'] = id;
-                new tinymce.Editor(id, settings).render();
+
+//                new tinymce.Editor(id, settings).render();
+                tinyMCE.init(settings);
                 // doesn't wok without, but don't really know what this does
                 var qtsettings = {
                     'buttons': '',

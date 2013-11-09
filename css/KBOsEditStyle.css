@@ -185,3 +185,25 @@ body.onsite-editing #onsite-modal {
 .edit-active {
   outline: 1px solid lightblue;
 }
+
+/* line 210, sass/KBOsEditStyle.scss */
+#onsite-modal {
+  width: 800px;
+  height: 350px;
+  background: #fff;
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  border: 1px solid #ccc;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  overflow: auto;
+}
+/* line 222, sass/KBOsEditStyle.scss */
+#onsite-modal * {
+  box-sizing: content-box;
+}
+/* line 226, sass/KBOsEditStyle.scss */
+#onsite-modal .kb_field {
+  width: 90%;
+}

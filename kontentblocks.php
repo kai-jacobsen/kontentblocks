@@ -129,14 +129,14 @@ Class Kontentblocks
         // additional cap feature, only used on demand and not properly tested yet
         define( 'KONTENTLOCK', false );
 
+            include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
+        include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
         /* Include all necessary files on admin area */
         if ( is_admin() ) {
             require_once 'includes/ajax/kontentblocks.ajax.generate.module.php';
 
             include_once dirname( __FILE__ ) . '/kontentblocks.options.php';
             include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
-            include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
-            include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
             include_once dirname( __FILE__ ) . '/includes/kontentblocks.sidebar-area-selector.php';
 
 
