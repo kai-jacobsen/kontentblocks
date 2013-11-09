@@ -52,17 +52,17 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
 
             // Keep 4 Kontentfields
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
-            jQuery(document).ajaxComplete(function(e, o, settings)
-            {
-                KB.metaBoxReorder(e, o, settings, 'restore');
-            });
-
-            // Keep 4 Kontentfields
-            // Bind AjaxSend to remove TinyMCE before global MetaBox reordering
-            jQuery(document).ajaxSend(function(e, o, settings)
-            {
-                KB.metaBoxReorder(e, o, settings, 'remove');
-            });
+//            jQuery(document).ajaxComplete(function(e, o, settings)
+//            {
+//                KB.metaBoxReorder(e, o, settings, 'restore');
+//            });
+//
+//            // Keep 4 Kontentfields
+//            // Bind AjaxSend to remove TinyMCE before global MetaBox reordering
+//            jQuery(document).ajaxSend(function(e, o, settings)
+//            {
+//                KB.metaBoxReorder(e, o, settings, 'remove');
+//            });
 
             // Keep 4 Kontentfields
             // Overrides the WP original function to keep an eye on dynamically generated editors
@@ -248,7 +248,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
         },
         /*
          * Handles resorting of Blocks and stores the new order via ajax
-         */
+         */ 
 
         resort: function() {
 
@@ -481,10 +481,6 @@ jQuery(document).ready(function($) {
             })
         });
     });
-
-
-    var mouse_inside_menu = false;
-    var kb_menu_open = false;
 
     $('.kb_area_head').mousedown(function() {
         activeArea = $(this).next().attr('id');

@@ -149,15 +149,15 @@ class AreaRender
         }
         // Instantiate Modules
         $this->modules = $this->setup_modules();
-
         /**
          * Get individual settings from post meta or option
          */
         $this->settings = $this->get_settings();
 
         // If we have settings, we can prepare the area template
-        if ( $this->settings )
+        if ( $this->settings ) {
             $this->area_template = $this->_set_area_template();
+        }
 
     }
 
@@ -389,7 +389,7 @@ class AreaRender
         // Let a Module shortcircuit this.
         if ( is_object( $html ) ) {
 
-            if ( method_exists( $html, 'block' ) ) {
+            if ( method_exists( $html, 'module' ) ) {
 
                 $html = $html->module( $html->external_data );
             }

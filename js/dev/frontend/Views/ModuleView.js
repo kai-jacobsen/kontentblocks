@@ -19,8 +19,8 @@ KB.ModuleView = Backbone.View.extend({
     },
     initEtch: etch.editableInit,
     openVex: function() {
-        target = this.model.get('editURL');
-        height = jQuery(window).height();
+        var target = this.model.get('editURL');
+        var height = jQuery(window).height();
         jQuery('#osframe').attr('src', target).attr('height', height - 200);
 
 //        $("#onsite-modal").reveal({animation: 'fade'});

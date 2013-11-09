@@ -66,6 +66,7 @@ abstract class Module
      */
     public function save( $data )
     {
+        
         return $this->saveFields( $data );
 
     }
@@ -292,76 +293,48 @@ abstract class Module
 
     }
 
-    /**
+    
+    public function _print_edit_link($post_id = null){
+        
+    }
+
+        /**
      * On Site Edit link for logged in users 
      */
     public function print_edit_link( $post_id = null )
     {
 
+        global $Kontentblocks, $post;
 
         $edittext = (!empty( $this->settings[ 'os_edittext' ] )) ? $this->setting[ 'os_edittext' ] : __( 'edit' );
 
-        global $Kontentblocks, $post;
 
-        $link_class = null;
-        $admin      = admin_url();
         if ( $post_id === null )
             $post_id    = (!empty( $_REQUEST[ 'post_id' ] )) ? $_REQUEST[ 'post_id' ] : $post->ID;
 
-        $context       = ($Kontentblocks->post_context) ? 'true' : 'false';
-        $class         = get_class( $this );
-        $area_context  = $this->area_context;
-        $columns       = (isset( $this->columns )) ? $this->columns : null;
-        $page_template = $this->page_template;
-        $post_type     = $this->post_type;
-        $subcontext    = $this->subcontext;
-        $instance_id   = $this->instance_id;
-
+        
         // overrides for master templates
-        if ( !empty( $this->master ) && $this->master === true ) {
-
-            $tpls = $Kontentblocks->get_block_templates();
-
-            $reference = (isset( $this->master_reference )) ? $this->master_refeference : null;
-
-            if ( !$reference ) {
-                $reference = $this->instance_id;
-            }
-
-
-            $block       = $tpls[ $reference ];
-            $class       = $block[ 'class' ];
-            $context     = 'false';
-            $instance_id = $reference;
-            $link_class  = 'master';
-        }
+//        if ( !empty( $this->master ) && $this->master === true ) {
+//
+//            $tpls = $Kontentblocks->get_block_templates();
+//
+//            $reference = (isset( $this->master_reference )) ? $this->master_refeference : null;
+//
+//            if ( !$reference ) {
+//                $reference = $this->instance_id;
+//            }
+//
+//
+//            $block       = $tpls[ $reference ];
+//            $class       = $block[ 'class' ];
+//            $context     = 'false';
+//            $instance_id = $reference;
+//            $link_class  = 'master';
+//        }
 
 
         $nonce         = wp_create_nonce( 'onsiteedit' );
-        $this->editURL = "{$admin}/admin-ajax.php?action=os-edit-module&daction=show&post_id={$post_id}&context={$context}&area_context={$area_context}&columns={$columns}&instance={$instance_id}&class={$class}&subcontext={$subcontext}&page_template={$page_template}&post_type={$post_type}&_wpnonce={$nonce}&TB_iframe=1&height=600&width=800";
-
-        $out = "
-		<div class='os-edit-wrapper os-controls {$link_class}'>
-		<a class='reveal os-edit-block' title='{$edittext}' data='{$this->instance_id}' data-url='{$admin}/admin-ajax.php?
-		action=os-edit-module&
-		daction=show&
-		post_id={$post_id}&
-		context={$context}&
-		area_context={$area_context}&
-		columns={$columns}&
-		instance={$instance_id}&
-		class={$class}&
-		subcontext={$subcontext}&
-		page_template={$page_template}&
-		post_type={$post_type}&
-		_wpnonce={$nonce}&
-		TB_iframe=1&
-		height=600&
-		width=800'><span></span>{$edittext}</a>
-		<a class='os-description' title='{$this->settings[ 'description' ]}'>info</a>
-		</div>";
-
-        //return $out;
+        $this->editURL = admin_url() . "/admin-ajax.php?action=os-edit-module&daction=show&_wpnonce=$nonce";
 
     }
 

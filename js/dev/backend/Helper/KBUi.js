@@ -18,20 +18,20 @@ KB.Ui = (function($) {
 
     return {
         init: function(){
-            
+            var that = this;
             // init Sortable
             this.initSortable();
             
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
             jQuery(document).ajaxComplete(function(e, o, settings)
             {
-                KB.metaBoxReorder(e, o, settings, 'restore');
+                that.metaBoxReorder(e, o, settings, 'restore');
             });
 
             // Bind AjaxSend to remove TinyMCE before global MetaBox reordering
             jQuery(document).ajaxSend(function(e, o, settings)
             {
-                KB.metaBoxReorder(e, o, settings, 'remove');
+                that.metaBoxReorder(e, o, settings, 'remove');
             });
             
         },

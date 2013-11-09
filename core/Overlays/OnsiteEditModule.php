@@ -3,7 +3,9 @@
 namespace Kontentblocks\Overlays;
 
 use Kontentblocks\Utils\ModuleRegistry,
-    Kontentblocks\Modules\ModuleFactory;
+    Kontentblocks\Modules\ModuleFactory,
+    Kontentblocks\Utils\PostMetaDataHandler,
+    Kontentblocks\Utils\GlobalDataHandler;
 
 class OnsiteEditModule
 {
@@ -17,6 +19,7 @@ class OnsiteEditModule
     protected $class;
     protected $area_context;
     protected $columns;
+    protected $dataHandler;
     private $data;
 
     public function __construct()
@@ -49,7 +52,8 @@ class OnsiteEditModule
             wp_die( __( '' ) );
         }
 
-
+        $this->setupRequestData();
+        $this->dataHandler = $this->setupDataHandler();
         switch ( $_GET[ 'daction' ] ) {
             case 'show':
                 $this->render();
@@ -66,7 +70,6 @@ class OnsiteEditModule
     public function render()
     {
 
-        $this->setupRequestData();
 
         // render admin header
         $this->header();
@@ -83,6 +86,7 @@ class OnsiteEditModule
 
     public function header()
     {
+        // globals used in include
         global $hook_suffix, $Kontentblocks, $Kontentbox, $wp_version, $current_screen, $current_user, $wp_locale;
         include_once KB_PLUGIN_PATH . 'includes/parts/admin-header.php';
 
@@ -111,8 +115,9 @@ class OnsiteEditModule
     public function module()
     {
 
-        $args = ModuleRegistry::getInstance()->get( $this->class );
-
+//        $args = ModuleRegistry::getInstance()->get( $this->class );
+        // TODO: Schwachsinn
+        $args                   = $this->dataHandler->getModuleDefinition( $this->instance_id );
         $Factory                = new ModuleFactory( $args );
         $instance               = $Factory->getModule();
         $instance->Fields->data = $this->getData();
@@ -124,7 +129,6 @@ class OnsiteEditModule
     {
         $this->instance_id   = $_REQUEST[ 'instance' ];
         $this->postId        = $_REQUEST[ 'post_id' ];
-        $this->class         = $_REQUEST[ 'class' ];
         $this->area_context  = $_REQUEST[ 'area_context' ];
         $this->columns       = $_REQUEST[ 'columns' ];
         $this->postContext   = $_REQUEST[ 'context' ];
@@ -136,12 +140,9 @@ class OnsiteEditModule
 
     public function getData()
     {
-        if ( 'true' == $this->postContext ) {
-            return get_post_meta( $this->postId, '_' . $this->instance_id, true );
-        }
-        elseif ( 'false' == $this->postContext ) {
-            return get_option( $this->instance_id, array() );
-        }
+        
+        return $this->dataHandler->getModuleData($this->instance_id);
+        
 
     }
 
@@ -162,48 +163,40 @@ class OnsiteEditModule
 
     public function save()
     {
-        global $Kontentblocks;
-
-        $this->setupRequestData();
 
         $update = true;
-        $old    = get_post_meta( $this->postId, '_' . $this->instance_id, true );
+        $old    = $this->dataHandler->getModuleData( $this->instance_id );
         $data   = (isset( $_POST[ $this->instance_id ] )) ? $_POST[ $this->instance_id ] : null;
-
-        $args = ModuleRegistry::getInstance()->get( $this->class );
+        
+        $args = $this->dataHandler->getModuleDefinition( $this->instance_id );
 
         $Factory           = new ModuleFactory( $args );
         $instance          = $Factory->getModule();
         $instance->columns = $this->columns;
         $instance->set( get_object_vars( $this ) );
 
-        $new = $instance->save( $old, $this->instance_id, $data );
-
-        if ( 'false' == $this->postContext )
-            $Kontentblocks->set_post_context( false );
-        else
-            $Kontentblocks->set_post_context( true );
-
-        $instance->new_instance = $new;
-
+        $instance->new_instance = $old;
+        $new = $instance->save( $data );
         // store new data in post meta
         if ( $new && $new != $old ) {
-            if ( 'true' == $this->postContext ) {
-                $update = update_post_meta( $this->postId, '_' . $this->instance_id, $new );
-            }
-            elseif ( 'false' == $this->postContext ) {
-                $update = update_option( $this->instance_id, $new );
-            }
+            $update = $this->dataHandler->saveModule($this->instance_id, $new);
+//            if ( 'true' == $this->postContext ) {
+//                $update = update_post_meta( $this->postId, '_' . $this->instance_id, $new );
+//            }
+//            elseif ( 'false' == $this->postContext ) {
+//                $update = update_option( $this->instance_id, $new );
+//            }
         }
 
-        if ( true === $new )
+        if ( true === $new ) {
             $update = true;
+        }
 
         if ( $update == true ) {
             $instance->instance_id = $this->instance_id;
             $result                = array(
                 'output' => stripslashes( $instance->module( $new ) ) . $instance->print_edit_link( $this->postId ),
-                'callback' => $instance->id
+                'callback' => $instance->settings[ 'id' ]
             );
 
             $json = (json_encode( $result ));
@@ -222,6 +215,21 @@ class OnsiteEditModule
 			</script>";
         }
         exit();
+
+    }
+
+    public function setupDataHandler()
+    {
+        if ( !isset( $this->postId ) ) {
+            throw new Exception( 'Post ID is not optional!' );
+        }
+
+        if ( $this->postId === -1 ) {
+            return new GlobalDataHandler();
+        }
+        else {
+            return new PostMetaDataHandler( $this->postId );
+        }
 
     }
 

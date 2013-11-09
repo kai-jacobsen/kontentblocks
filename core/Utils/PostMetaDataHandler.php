@@ -277,8 +277,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
     }
     
     public function getModuleData($id){
-        if (isset($this->modules[$id])){
-            return $this->modules[$id];
+        
+        
+        
+        if (isset($this->modules['_' . $id])){
+            return $this->modules['_' . $id];
         }
     }
 
