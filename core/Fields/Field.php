@@ -10,9 +10,12 @@ abstract class Field
     protected $value;
     protected $key;
     protected $type;
+    protected $path;
     public $returnObj;
 
-    public function setKey( $key )
+    
+
+        public function setKey( $key )
     {
         $this->key = $key;
 
@@ -120,7 +123,7 @@ abstract class Field
 
     public function getValue()
     {
-        return $this->value;
+        return stripslashes_deep( $this->value );
 
     }
 

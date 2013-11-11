@@ -13,7 +13,8 @@ module.exports = function(grunt) {
                     'js/dist//<%= pkg.name %>.min.js': ['js/dev/<%= pkg.name %>.js'],
                     'js/dist/frontend.min.js': ['<%= concat.frontend.dest %>'],
                     'js/dist/backend.min.js': ['<%= concat.backend.dest %>'],
-                    'js/dist/shared.min.js': ['<%= concat.shared.dest %>']
+                    'js/dist/shared.min.js': ['<%= concat.shared.dest %>'],
+                    'js/dist/refields.min.js': ['<%= concat.refields.dest %>']
                 }
             },
             sec: {
@@ -28,11 +29,16 @@ module.exports = function(grunt) {
             options: {
                 seperator: ';'
             },
-//            kontentfields: {
-//                src: ['core/Kontentfields/Definitions/js/**/*.js'],
-//                dest: 'js/tmp/fields.concat.js',
-//                nonull: true
-//            },
+            kontentfields: {
+                src: ['core/Kontentfields/Fields/js/**/*.js'],
+                dest: 'js/tmp/fields.concat.js',
+                nonull: true
+            },
+            refields: {
+                src: ['core/Fields/Definitions/js/**/*.js'],
+                dest: 'js/tmp/refields.concat.js',
+                nonull: true
+            },
             extensions: {
                 src: ['js/dev/extensions/**/*.js'],
                 dest: 'js/tmp/extensions.concat.js',
@@ -68,11 +74,12 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['js/dev/<%= pkg.name %>.js', 'css/**/*.scss', 'js/dev/**/**/*.js', 'js/dev/**/*.js'],
+            files: ['js/dev/<%= pkg.name %>.js', 'css/**/*.scss', 'js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
             tasks: ['compass', 'concat', 'uglify:prim'],
             options: {
                 livereload: true,
-                nospawn: true
+                nospawn: true,
+                message: 'SASS and Uglify finished running'
             }
         },
         clean: ["js/tmp"],
@@ -91,6 +98,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-notify');
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify:prim', 'uglify:sec', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);

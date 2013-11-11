@@ -9,7 +9,8 @@ use Kontentblocks\Overlays\OnsiteEditModule,
     Kontentblocks\Ajax\Frontend\SaveInlineEdit,
     Kontentblocks\Ajax\CreateNewModule,
     Kontentblocks\Ajax\DuplicateModule,
-    Kontentblocks\Ajax\Frontend\GetModuleOptions;
+    Kontentblocks\Ajax\Frontend\GetModuleOptions,
+    Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
 
 /**
  * -----------------------------------------
@@ -135,3 +136,15 @@ function getModuleOptionsCb()
 }
 
 add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );
+
+/**
+ * -----------------------------------------
+ * Handler onsite saving 
+ * -----------------------------------------
+ */
+function updateModuleOptionsCb()
+{
+    $updateModuleOptions = new UpdateModuleOptions();
+}
+
+add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );

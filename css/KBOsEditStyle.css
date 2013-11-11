@@ -188,22 +188,36 @@ body.onsite-editing #onsite-modal {
 
 /* line 210, sass/KBOsEditStyle.scss */
 #onsite-modal {
+  font-family: 'Open Sans', sans-serif;
   width: 800px;
-  height: 350px;
   background: #fff;
-  position: absolute;
+  position: fixed;
   top: 40px;
-  left: 40px;
+  right: 40px;
   border: 1px solid #ccc;
   border-bottom: 1px solid #aaa;
   border-right: 1px solid #aaa;
   overflow: auto;
+  opacity: 1;
 }
 /* line 222, sass/KBOsEditStyle.scss */
 #onsite-modal * {
   box-sizing: content-box;
 }
-/* line 226, sass/KBOsEditStyle.scss */
+/* line 227, sass/KBOsEditStyle.scss */
+#onsite-modal .controls-title {
+  font-size: 14px;
+  margin: 0;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: 'move';
+}
+/* line 236, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field {
-  width: 90%;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* line 241, sass/KBOsEditStyle.scss */
+#onsite-modal:hover {
+  opacity: 1;
 }

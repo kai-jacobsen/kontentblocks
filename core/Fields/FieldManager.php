@@ -117,10 +117,10 @@ class FieldManager
      * @param string $id
      * @return object groupobject
      */
-    public function addGroup( $id )
+    public function addGroup( $id, $args = array() )
     {
         if ( !$this->idExists( $id ) ) {
-            $this->structure[ $id ] = new FieldSection( $id );
+            $this->structure[ $id ] = new FieldSection( $id, $args );
             return $this->structure[ $id ];
         }
 

@@ -21,7 +21,10 @@ class Module_Prototype extends Module
 
     public function render( $data )
     {
-        $tpl = new ModuleTemplate( $this, '/templates/prototype.twig' );
+
+        $para = apply_filters( 'the_content', $data[ 'editortext' ] );
+        $img  = wp_prepare_attachment_for_js( $data[ 'stuffing' ][ 'image' ][ 'id' ] );
+        $tpl  = new ModuleTemplate( $this, '/templates/prototype.twig', array( 'real' => $para, 'img' => $img ) );
         return $tpl->render();
 
     }
@@ -29,46 +32,18 @@ class Module_Prototype extends Module
     public function fields()
     {
 
-        $groupA = $this->Fields->addGroup( 'Peter' )
+        $groupA = $this->Fields->addGroup( 'Peter', array('label' => 'What') )
+            ->addField( 'image', 'image', array(
+            'label' => 'stuff',
+            'description' => 'My first image',
+            'arrayKey' => 'stuffing'
+            ) );
+        $groupB = $this->Fields->addGroup( 'Klaus' )
             ->addField( 'editor', 'editortext', array(
-                'label' => 'stuff',
-                'description' => 'My first new description',
-                'media' => false
-            ) )
-            ->addField( 'text', 'keya', array(
-                'label' => 'stuff',
-                'description' => 'My first new description',
-                'arrayKey' => 'test'
-            ) )
-            ->addField( 'text', 'keys', array(
-                'label' => 'stuff',
-                'description' => 'My first new description',
-                'arrayKey' => 'test'
-            ) )
-            ->addField( 'text', 'keyq', array(
-                'label' => 'stuff',
-                'description' => 'My first new description',
-                'arrayKey' => 'test'
-            ) )
-            ->addField( 'text', 'keyw', array(
-                'label' => 'stuff',
-                'description' => 'My first new description',
-                'arrayKey' => 'test'
-            ) )
-            ->addField( 'text', 'keye', array(
-                'label' => 'stuff',
-                'description' => 'My first new description',
-                'arrayKey' => 'test'
-            ) )
-            ->addField( 'text', 'keyt', array(
-                'label' => 'stuff',
-                'description' => 'My first new description',
-                'arrayKey' => 'test'
-            ) )
-            ->addField( 'text', 'key2', array( 'label' => 'stuff', 'arrayKey' => 'test' ) );
-
-        $fieldB = $this->Fields->addGroup( 'Andrew' )
-            ->addField( 'text', 'key3', array( 'stuff' => 'stuff' ) );
+            'label' => 'stuff',
+            'description' => 'My first new description',
+            'media' => true
+            ) );
 
     }
 

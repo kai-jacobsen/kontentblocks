@@ -28,7 +28,6 @@ abstract class Module
     function __construct( $args = NULL, $data = array() )
     {
         $this->set( $args );
-
         $this->new_instance = $data;
 
         $reflector  = new \ReflectionClass( get_class( $this ) );

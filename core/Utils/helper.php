@@ -142,7 +142,7 @@ function kb_wp_editor($block_id, $data, $name = NULL, $media = true, $args = arr
 		'editor_class' => 'kb_editor_textarea', // add extra class(es) to the editor textarea
 		'teeny' => false, // output the minimal editor config used in Press This
 		'dfw' => false, // replace the default fullscreen with DFW (needs specific DOM elements and css)
-		'tinymce' => array('height' => 250), // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
+		'tinymce' => array('height' => '250px'), // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
 		'quicktags' => true
 	);
 	

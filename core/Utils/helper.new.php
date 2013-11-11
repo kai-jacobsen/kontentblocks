@@ -1,6 +1,7 @@
 <?php
 
 namespace Kontentblocks\Helper;
+
 use Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Utils\RegionRegistry;
 
@@ -13,6 +14,18 @@ function getHiddenEditor()
     wp_editor( '', 'content' );
     echo '</div>';
 
+}
+
+/**
+ * Get data Handler
+ */
+function getDataHandler( $post_id = null )
+{
+    if ($post_id && $post_id !== -1){
+        return new \Kontentblocks\Utils\PostMetaDataHandler($post_id);
+    } else {
+        return new \Kontentblocks\Utils\GlobalDataHandler();
+    }
 }
 
 /**
@@ -45,9 +58,9 @@ function getHighestId( $index )
     $collect = '';
     if ( !empty( $index ) ) {
         foreach ( $index as $module ) {
-            $module     = maybe_unserialize( $module );
-            $count      = strrchr( $module['instance_id'], "_" );
-            $id         = str_replace( '_', '', $count );
+            $module    = maybe_unserialize( $module );
+            $count     = strrchr( $module[ 'instance_id' ], "_" );
+            $id        = str_replace( '_', '', $count );
             $collect[] = $id;
         }
     }
@@ -123,10 +136,13 @@ function getAreaTemplates()
 
 }
 
-function underscoreit($val){
-    if (!is_string( $val ) ){
+function underscoreit( $val )
+{
+    if ( !is_string( $val ) ) {
         return $val;
-    } else {
+    }
+    else {
         return '_' . $val;
     }
+
 }

@@ -6137,3 +6137,29 @@ textarea.quicktags {
 .custom .kb_field {
   background-color: #fff !important;
 }
+
+/* line 3, sass/partials/_refields/_image.scss */
+.kb_field.image .kb-field-image-wrapper {
+  overflow: hidden;
+}
+/* line 7, sass/partials/_refields/_image.scss */
+.kb_field.image .kb-js-add-image {
+  background: #f2f2f2;
+  width: 150px;
+  height: 150px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  float: left;
+  margin-right: 15px;
+}
+/* line 20, sass/partials/_refields/_image.scss */
+.kb_field.image .kb-js-image-meta-wrapper label {
+  display: block;
+  font-weight: 100;
+  font-size: 12px;
+}
+/* line 26, sass/partials/_refields/_image.scss */
+.kb_field.image .kb-js-image-meta-wrapper input[type=text] {
+  color: #ccc;
+  font-weight: 100;
+}

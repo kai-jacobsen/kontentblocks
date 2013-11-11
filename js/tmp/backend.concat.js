@@ -189,7 +189,12 @@ KB.TinyMCE = (function($) {
 
                 // add new editor id to settings
                 settings['elements'] = id;
-
+                settings['height'] = 350;
+                settings['setup'] = function(ed){
+                    ed.onInit.add(function(){
+                        jQuery(document).trigger('newEditor', ed);
+                    });
+                };
 //                new tinymce.Editor(id, settings).render();
                 tinyMCE.init(settings);
                 // doesn't wok without, but don't really know what this does
@@ -852,6 +857,7 @@ var KB = KB || {};
 
 KB.currentModule = {};
 KB.currentArea = {};
+KB.Fields = {};
 // ---------------
 // Collections 
 // ---------------

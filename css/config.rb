@@ -9,6 +9,7 @@ javascripts_dir = "/"
 add_import_path "sass/partials"
 add_import_path "sass/partials/_fields"
 add_import_path "sass/partials/_options"
+add_import_path "sass/partials/_refields"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :compressed

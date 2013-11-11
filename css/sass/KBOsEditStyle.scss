@@ -118,7 +118,7 @@ body.onsite-editing {
 
 .os-controls-container{
 
-    
+
     .controls-title{
         font-weight: 100;
         background: #fcfcfc;
@@ -146,7 +146,7 @@ body.onsite-editing {
         font-size: 10px;
         font-style: italic;
     }
-    
+
     .close-controls{
         position: absolute;
         right: 10px;
@@ -154,29 +154,29 @@ body.onsite-editing {
         font-size: 10px;
         cursor: pointer;
     }
-    
+
     .control-wrap{
         background: #fff;
         padding: 10px;
         border:1px solid #f9f9f9;
         border-bottom: 1px solid #aaa;
         border-right:1px solid #aaa;
-        
-        
-        
+
+
+
         label{
             font-family: 'Open Sans', sans-serif;
             font-size: 13px;
             font-weight: 100;
         }
     }
-    
+
     .kb_fieldtabs {
         li a{
             font-size: 12px;
             font-family: 'Open Sans', sans-serif;
         }
-        
+
         ul.ui-tabs-nav{
             border: 0;
             margin-left: 0;
@@ -189,9 +189,9 @@ body.onsite-editing {
 
         }
     }
-    
+
     table{
-        
+
         td{
             font-size: 12px;
             padding-right: 8px;
@@ -208,22 +208,38 @@ body.onsite-editing {
 // experiments
 
 #onsite-modal{
+    font-family: 'Open Sans', sans-serif;
     width: 800px;
-    height: 350px;
     background: #fff;
-    position: absolute;
+    position: fixed;
     top:40px;
-    left:40px;
+    right:40px;
     border:1px solid #ccc;
     border-bottom: 1px solid #aaa;
     border-right: 1px solid #aaa;
     overflow: auto;
-    
+    opacity: 1;
     * {
         box-sizing: content-box;
     }
+
+    
+    .controls-title{
+        font-size: 14px;
+        margin: 0;
+        padding: 5px 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: 'move';
+        
+    }
     
     .kb_field{
-        width: 90%;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    &:hover{
+        opacity:1;
+        
     }
 }

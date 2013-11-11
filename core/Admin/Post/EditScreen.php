@@ -9,7 +9,7 @@ use Kontentblocks\Kontentblocks,
     Kontentblocks\Helper;
 
 /**
- * Purpose: Creates the UI for the registered post type, which is just page by default
+ * Purpose: Creates the UI for the registered post type, which is just 'page' by default
  * Removes default meta boxes and adds the custom ui
  * Handles saving of areas while in post context
  * 

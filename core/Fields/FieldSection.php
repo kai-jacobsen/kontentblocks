@@ -47,10 +47,10 @@ class FieldSection
      * @param string $id
      * @return \Kontentblocks\Fields\FieldSection
      */
-    public function __construct( $id )
+    public function __construct( $id, $args )
     {
         $this->id = $id;
-        return $this;
+        $this->args = $this->prepareArgs($args);
 
     }
 
@@ -146,7 +146,7 @@ class FieldSection
      */
     public function getLabel()
     {
-        return self::$defaults[ 'label' ];
+        return $this->args[ 'label' ];
 
     }
 
@@ -175,6 +175,11 @@ class FieldSection
     {
         return isset( $this->fields[ $key ] );
 
+    }
+
+    public function prepareArgs($args)
+    {
+        return wp_parse_args($args, self::$defaults);
     }
 
 }

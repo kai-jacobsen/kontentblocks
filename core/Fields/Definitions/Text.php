@@ -7,6 +7,7 @@ use Kontentblocks\Fields\Field;
 Class Text extends Field
 {
 
+    
     protected $defaults = array(
         'returnObj' => 'Element'
     );
@@ -14,7 +15,8 @@ Class Text extends Field
 
     public function form()
     {
-        echo "<input type='text' id='{$this->get_field_id()}' name='{$this->get_field_name()}'  value='{$this->getValue()}' />";
+        $value = esc_attr($this->getValue());
+        echo "<input type='text' id='{$this->get_field_id()}' name='{$this->get_field_name()}'  value='{$value}' />";
     }
 
 }

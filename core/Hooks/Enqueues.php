@@ -62,9 +62,11 @@ class Enqueues
             wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true );
 
 
+
             wp_enqueue_script( 'Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array( 'kontentblocks-base' ), null, true );
             wp_enqueue_script( 'KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array( 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse' ), null, true );
 
+            wp_enqueue_script( 'Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend'), null, true );
             // Main Kontentblocks script file
             wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . '/js/dist/kontentblocks.min.js', array( 'KB-Backend' ), '0.7', true );
             // add Kontentblocks l18n strings
@@ -84,25 +86,24 @@ class Enqueues
     // Front End editing 
     public function _on_site_editing_setup()
     {
-        
+
         \Kontentblocks\Helper\getHiddenEditor();
         // Thickbox on front end for logged in users
         wp_enqueue_media();
-        
-        
+
+
         $config = array(
             'url' => KB_PLUGIN_URL,
-            'ajaxurl' => admin_url('admin-ajax.php')
+            'ajaxurl' => admin_url( 'admin-ajax.php' )
         );
 
         if ( is_user_logged_in() && !is_admin() ) {
             //add_action( 'wp_footer', array( $this, 'add_reveal' ) );
             wp_enqueue_script( 'KBPlugins', KB_PLUGIN_URL . 'js/dist/plugins.min.js', array( 'jquery', 'jquery-ui-mouse', 'wp-color-picker' ) );
-            
+
             wp_enqueue_script( 'KBOnSiteEditing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array( 'KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse' ) );
             wp_localize_script( 'KBOnSiteEditing', 'kontentblocks', $this->_localize() );
             wp_enqueue_script( 'kb-shared', KB_PLUGIN_URL . 'js/dist/shared.min.js', array( 'KBPlugins' ), null, true );
-            wp_enqueue_script( 'kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array( 'backbone', 'jquery-ui-tabs', 'jquery-ui-draggable', 'kb-shared' ), null, true );
             wp_localize_script( 'kb-frontend', 'KBAppConfig', $config );
 //            wp_enqueue_style( 'thickbox' );
             wp_enqueue_style( 'KB', KB_PLUGIN_URL . '/css/kontentblocks.css' );
@@ -111,7 +112,7 @@ class Enqueues
             wp_enqueue_style( 'wp-color-picker' );
             wp_enqueue_style( 'KBOsEditStyle', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
 
-            
+
             wp_enqueue_style( 'kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css' );
             wp_enqueue_style( 'vex', KB_PLUGIN_URL . 'js/vex/css/vex.css' );
             wp_enqueue_style( 'vex-flat', KB_PLUGIN_URL . 'js/vex/css/vex-theme-flat-attack.css' );
@@ -122,12 +123,15 @@ class Enqueues
             wp_enqueue_script( 'kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true );
 
 
+
             wp_enqueue_script( 'Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array( 'kontentblocks-base' ), null, true );
             wp_enqueue_script( 'KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array( 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse' ), null, true );
+            wp_enqueue_script( 'kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array( 'backbone', 'jquery-ui-tabs', 'jquery-ui-draggable', 'kb-shared', 'KB-Backend' ), null, true );
+            wp_enqueue_script( 'Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend'), null, true );
 
             // Main Kontentblocks script file
             wp_enqueue_script( 'kontentblocks-base', KB_PLUGIN_URL . '/js/dist/kontentblocks.min.js', array( 'KB-Backend' ), '0.7', true );
-            
+
             wp_enqueue_script(
                 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), false, 1
             );
