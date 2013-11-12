@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Admin\Post;
 
-use Kontentblocks\Admin\Post\PostContextData,
+use Kontentblocks\Admin\Post\PostEnvironment,
     Kontentblocks\Admin\Post\ScreenContext;
 
 class ScreenManager
@@ -36,7 +36,7 @@ class ScreenManager
      */
     protected $regions;
 
-    public function __construct( PostContextData $postData )
+    public function __construct( PostEnvironment $postData )
     {
 
         // get areas available
@@ -45,7 +45,7 @@ class ScreenManager
         }
 
         $this->postData      = $postData;
-        $this->contextLayout = $this->_getDefaultContextLayout();
+        $this->regionLayout = $this->_getDefaultRegionLayout();
         $this->rawAreas      = $postData->get( 'areas' );
         $this->regions      = $this->areasSortedByRegion( $this->rawAreas );
         // test if final context layout includes an sidebar
@@ -60,7 +60,7 @@ class ScreenManager
 
     public function render()
     {
-        foreach ( $this->contextLayout as $contextId => $args ) {
+        foreach ( $this->regionLayout as $contextId => $args ) {
 
             // delegate the actual output to ScreenContext
             $context = new ScreenContext( $args, $this );
@@ -82,7 +82,6 @@ class ScreenManager
         foreach ( $this->rawAreas as $area ) {
             $regions[ $area[ 'context' ] ][ $area[ 'id' ] ] = $area;
         }
-
         return $regions;
 
     }
@@ -106,7 +105,7 @@ class ScreenManager
      * @filter kb_default_context_layout
      */
 
-    public function _getDefaultContextLayout()
+    public function _getDefaultRegionLayout()
     {
         $defaults = array(
             'top' => array(

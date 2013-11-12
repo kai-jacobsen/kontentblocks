@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Admin\Post\PostContextData,
+use Kontentblocks\Admin\Post\PostEnvironment,
     Kontentblocks\Admin\Post\ScreenManager;
 
 class KB_Sidebar_Area_Selector
@@ -44,7 +44,7 @@ class KB_Sidebar_Area_Selector
     function sidebar_selector_content( $context )
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
-        $pdc     = new PostContextData( $post_id );
+        $pdc     = new PostEnvironment( $post_id );
         $Screen  = new ScreenManager( $pdc );
 
         $this->_setupAreas( $Screen->getRegionAreas( 'side' ) );
@@ -208,7 +208,6 @@ class KB_Sidebar_Area_Selector
         $return = '';
 
         foreach ( $this->activeSidebars as $area ) {
-
             $areaDefinition = $this->areas[ $area ];
 
             $return .= "<li class='dynamic-area-active' id='{$areaDefinition[ 'id' ]}' name='{$areaDefinition[ 'id' ]}'>{$areaDefinition[ 'name' ]}";

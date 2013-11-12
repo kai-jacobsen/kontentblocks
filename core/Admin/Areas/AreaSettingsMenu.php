@@ -2,20 +2,21 @@
 
 namespace Kontentblocks\Admin\Areas;
 
-use Kontentblocks\Utils\RegionRegistry;
+use Kontentblocks\Utils\RegionRegistry,
+    Kontentblocks\Abstracts\AbstractEnvironment;
 
 class AreaSettingsMenu
 {
 
     protected $defaults;
 
-    public function __construct( Area $area, $dataContainer )
+    public function __construct( Area $area, AbstractEnvironment $environment )
     {
         $this->defaults      = $this->_getDefaults();
         $this->id            = $area->get( 'id' );
-        $this->areaTemplates = $area->get( 'area_templates' );
-        $this->defaultTpl    = $area->get( 'default_tpl' );
-        $this->dataContainer = $dataContainer;
+        $this->areaTemplates = $area->get( 'layouts' );
+        $this->defaultTpl    = $area->get( 'defaultLayout' );
+        $this->environment = $environment;
 
     }
 
@@ -24,7 +25,7 @@ class AreaSettingsMenu
         $areaTemplates = $this->_getAssignedTemplates();
         // Markup and fields markup
         if ( !empty( $areaTemplates ) ) {
-            $data   = $this->dataContainer->getAreaSettings( $this->id );
+            $data   = $this->environment->getAreaSettings( $this->id );
             $custom = (isset( $data[ 'custom' ] )) ? $data[ 'custom' ] : '';
 
             echo "

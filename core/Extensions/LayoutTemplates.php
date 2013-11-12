@@ -1,7 +1,7 @@
 <?php
 
 namespace Kontentblocks\Extensions;
-use Kontentblocks\Utils\PostMetaDataHandler;
+use Kontentblocks\Admin\Post\PostMetaDataHandler;
 class Layout_Templates
 {
 

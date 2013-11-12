@@ -2,9 +2,8 @@
 
 namespace Kontentblocks\Interfaces;
 
-interface InterfaceDataContainer
+interface InterfaceEnvironment
 {
-
     public function isPostContext();
 
     public function getAllModules();

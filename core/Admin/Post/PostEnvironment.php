@@ -2,12 +2,12 @@
 
 namespace Kontentblocks\Admin\Post;
 
-use Kontentblocks\Utils\PostMetaDataHandler,
-    Kontentblocks\Abstracts\AbstractContextData,
+use Kontentblocks\Admin\Post\PostMetaDataHandler,
+    Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Utils\RegionRegistry,
     Kontentblocks\Utils\ModuleRegistry;
 
-class PostContextData extends AbstractContextData
+class PostEnvironment extends AbstractEnvironment
 {
 
     protected $PostMetaDataHandler;
@@ -23,34 +23,52 @@ class PostContextData extends AbstractContextData
             return false;
         }
 
-        $this->PostMetaDataHandler = new PostMetaDataHandler( $postid );
+        $this->dataHandler = new PostMetaDataHandler( $postid );
 
         $this->postid       = $postid;
-        $this->pageTemplate = $this->PostMetaDataHandler->getPageTemplate();
-        $this->postType     = get_post_type( $this->postid );
+        $this->pageTemplate = $this->dataHandler->getPageTemplate();
+        $this->postType     = $this->dataHandler->getPostType();
         $this->modules      = $this->_setupModules();
         $this->areas        = $this->_findAreas();
 
     }
 
+    /**
+     * Helper Method to indicate whether its post or global data
+     * TODO: use is_a etc. instead
+     * @return boolean
+     */
     public function isPostContext()
     {
         return true;
-
     }
 
+    
+    /**
+     * returns the PostMetaDataHandler instance
+     * @return object
+     */
     public function getMetaData()
     {
-        return $this->PostMetaDataHandler;
+        return $this->dataHandler;
 
     }
 
+    /**
+     * Returns all modules set to this post
+     * @return type
+     */
     public function getAllModules()
     {
         return $this->modules;
 
     }
 
+    /**
+     * returns module definitions sorted by areas
+     * @param string $areaid
+     * @return boolean
+     */
     public function getModulesforArea( $areaid )
     {
         $byArea = $this->getSortedModules();
@@ -63,30 +81,40 @@ class PostContextData extends AbstractContextData
 
     }
 
+    /**
+     * Sorts module definitions to areas
+     * @return array
+     */
     public function getSortedModules()
     {
         $sorted = array();
         if ( is_array( $this->modules ) ) {
             foreach ( $this->modules as $module ) {
-                $area_id = $module['area'];
-
-                $sorted[ $area_id ][$module['instance_id']] = $module;
+                $sorted[ $module['area'] ][$module['instance_id']] = $module;
             }
             return $sorted;
         }
 
     }
 
+    /**
+     * prepares modules attached to this post
+     * @return type
+     */
     private function _setupModules()
     {
         $collection = array();
-        $modules =  $this->PostMetaDataHandler->getIndex();
+        $modules =  $this->dataHandler->getIndex();
         foreach($modules as $module){
             $collection[] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['settings']['class']));
         }
         return $collection;
     }
 
+    /**
+     * returns all areas which are available in this environment
+     * @return array
+     */
     public function _findAreas()
     {
         $RegionRegistry = RegionRegistry::getInstance();
@@ -94,9 +122,14 @@ class PostContextData extends AbstractContextData
 
     }
 
+    /**
+     * Get settings for given area
+     * @param string $id
+     * @return boolean
+     */
     public function getAreaSettings( $id )
     {
-        $settings = $this->PostMetaDataHandler->getMetaData( 'kb_area_settings' );
+        $settings = $this->dataHandler->getMetaData( 'kb_area_settings' );
         if ( !empty( $settings[ $id ] ) ) {
             return $settings[ $id ];
         }
@@ -104,9 +137,15 @@ class PostContextData extends AbstractContextData
 
     }
     
+    /**
+     * Wrapper to low level handler method
+     * returns instance data or an empty string
+     * @param string $id
+     * @return string
+     */
     public function getModuleData( $id )
     {
-        $data = $this->PostMetaDataHandler->getMetaData($id);
+        $data = $this->dataHandler->getModuleData($id);
         
         if ($data !== NULL){
             return $data;

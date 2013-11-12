@@ -5,7 +5,7 @@ namespace Kontentblocks\Admin\Post;
 use Kontentblocks\Kontentblocks,
     Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\Post\ScreenManager,
-    Kontentblocks\Utils\PostMetaDataHandler,
+    Kontentblocks\Admin\Post\PostMetaDataHandler,
     Kontentblocks\Helper;
 
 /**
@@ -57,7 +57,7 @@ Class EditScreen
     public function preparePostData()
     {
         global $post;
-        $this->postData = new PostContextData( $post->ID );
+        $this->postData = new PostEnvironment( $post->ID );
 
     }
 

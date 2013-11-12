@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Utils\PostMetaDataHandler,
+use Kontentblocks\Admin\Post\PostMetaDataHandler,
     Kontentblocks\Utils\GlobalDataHandler;
 
 class RemoveModules

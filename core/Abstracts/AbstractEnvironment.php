@@ -2,9 +2,9 @@
 
 namespace Kontentblocks\Abstracts;
 
-use Kontentblocks\Interfaces\InterfaceDataContainer;
+use Kontentblocks\Interfaces\InterfaceEnvironment;
 
-abstract class AbstractContextData implements InterfaceDataContainer
+abstract class AbstractEnvironment implements InterfaceEnvironment
 {
 
 

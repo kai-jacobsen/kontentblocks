@@ -2,97 +2,22 @@
 
 namespace Kontentblocks\Admin\Areas;
 
-use Kontentblocks\Abstracts\AbstractContextData,
+use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Admin\Areas\ModuleMenu,
     Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\Areas\AreaSettingsMenu,
-    Kontentblocks\Templating\CoreTemplate,
-    Kontentblocks\Helper as H;
+    Kontentblocks\Templating\CoreTemplate;
 
 class Area
 {
-
-    /**
-     * Area ID 
-     * @var string 
-     */
-    private $id = '';
-
-    /**
-     * Public Name
-     * @var string
-     */
-    private $name = '';
-
-    /**
-     * Description
-     * @var string
-     */
-    private $description = '';
-
-    /**
-     * Limit of Blocks this Area can hold
-     * @var int
-     */
-    private $block_limit = '';
-    protected $limit     = '';
-
-    /**
-     * Array of Blocks allowed for this area
-     * @var array
-     */
-    private $available_blocks = array();
-
-    /**
-     * Templates available to this area
-     * @var array
-     */
-    private $area_templates = array();
-
-    /**
-     * Standard template
-     * @var string
-     */
-    private $default_tpl = 'default';
-
-    /**
-     * Blocks assigned to this area
-     * @var array
-     */
-    public $blocks             = array();
-    protected $attachedModules = array();
-    private $settings          = array();
-
-    /**
-     * Normal, Top, Side, Bottom - Place on the Edit Screen
-     * @var string
-     */
-    public $context = '';
-
-    /**
-     * current page template 
-     */
-    public $page_template;
-
-    /**
-     * current post type 
-     */
-    public $post_type;
-
-
-    /*
-     * Module Menu Instance for this area
-     */
-    protected $moduleMenu;
-    protected $settingsMenu;
 
     /**
      * Class Constructor
      * @param array $area
      * @return type 
      */
-    function __construct( $area, AbstractContextData $dataContainer, $context = 'global' )
+    function __construct( $area, AbstractEnvironment $environment, $context = 'global' )
     {
 
         if ( empty( $area ) ) {
@@ -108,23 +33,26 @@ class Area
             'modules' => __( 'Add new module', 'kontentblocks' )
         );
 
+        // context in regards of position on the edit screen
         $this->context = $context;
         
-        $this->dataContainer = $dataContainer;
+        // environment
+        $this->environment = $environment;
 
+        // batch setting of properties
         $this->_setupAreaProperties( $area );
 
         // All Modules which are accessible by this area
-        $this->validModules = $this->getValidModules();
+        $this->validModules = ModuleRegistry::getInstance()->getValidModulesForArea($this, $environment);
 
-        //actual stored module for this area
-        $this->attachedModules = $this->dataContainer->getModulesForArea( $this->id );
-        
         // Menu wit available modules for this area
         $this->moduleMenu      = new ModuleMenu( $this->validModules, $this->id, $this->context );
         
+        //actual stored module for this area
+        $this->attachedModules = $this->environment->getModulesForArea( $this->id );
+        
         // custom settins for this area
-        $this->settingsMenu    = new AreaSettingsMenu( $this, $this->dataContainer );
+        $this->settingsMenu    = new AreaSettingsMenu( $this, $this->environment );
     }
 
     /**
@@ -144,7 +72,7 @@ class Area
     }
 
     /**
-     * Simple setter method to bulk set properties
+     * Simple setter method to batch set properties
      * Calls additional methods for each key, if available
      * to validate / sanitize input
      * @param array $args
@@ -159,10 +87,6 @@ class Area
                 $this->$key = $value;
             }
         }
-
-        // TODO: Stop Insanity
-        $this->_adaptProperties();
-
     }
 
     private function default_tpl( $val )
@@ -171,72 +95,6 @@ class Area
 
     }
 
-    /**
-     * Get modules which are set to be available
-     * by this area.
-     * 
-     * @global object Kontentblocks
-     * return array 
-     * TODO: Hat hier nichts zu suchen
-     */
-    private function getValidModules()
-    {
-        // declare array
-        $modules = ModuleRegistry::getInstance()->getAllModules( $this->dataContainer );
-        
-        if ( empty( $modules ) ) {
-            return false;
-        }
-        $validModules = array();
-
-        foreach ( $modules as $module ) {
-            $disabled = ($module['settings'][ 'disabled' ] == true) ? true : false;
-
-            $cat = (!empty( $module['settings'][ 'category' ] )) ? $module['settings'][ 'category' ] : false;
-
-            if ( is_array( $this->assignedModules ) ) {
-                $is__in_area_available = ( in_array( $module['settings']['class'], $this->assignedModules ) ) ? true : false;
-            }
-            else {
-                $is__in_area_available = false;
-            }
-
-            if ( $cat == 'core' ) {
-                $validModules[] = $module;
-            }
-            elseif (
-                true === $disabled OR false === $is__in_area_available
-            ) {
-                continue;
-            }
-            else {
-                $validModules[] = $module;
-            }
-        }
-        //sort alphabetically
-        usort( $validModules, array( $this, '_sort_by_name' ) );
-
-        return $validModules;
-
-    }
-
-    /**
-     * Usort callback to sort modules alphabetically by name
-     * @param array $a
-     * @param array $b
-     * @return int
-     */
-    private function _sort_by_name( $a, $b )
-    {
-        $al = strtolower( $a['settings'][ 'public_name' ] );
-        $bl = strtolower( $b['settings'][ 'public_name' ] );
-
-        if ( $al == $bl ) {
-            return 0;
-        }
-        return ($al > $bl) ? +1 : -1;
-
-    }
 
     /*
      * Get Markup for block limit indicator, return void if unlimited
@@ -286,10 +144,10 @@ class Area
                 $instance->set(
                     array(
                         'area_context' => $this->context,
-                        'post_type' => $this->dataContainer->get( 'postType' ),
-                        'page_template' => $this->dataContainer->get( 'pageTemplate' ),
-                        'new_instance' => $this->dataContainer->getModuleData( H\underscoreit( $instance->instance_id ) ),
-                        'post_id' => $this->dataContainer->get( 'postid' )
+                        'post_type' => $this->environment->get( 'postType' ),
+                        'page_template' => $this->environment->get( 'pageTemplate' ),
+                        'new_instance' => $this->environment->getModuleData( $instance->instance_id  ),
+                        'post_id' => $this->environment->get( 'postid' )
                     )
                 );
                 $instance->_render_options();
@@ -311,13 +169,7 @@ class Area
      * Helper Methods
      */
 
-    public function _adaptProperties()
-    {
-        $this->assignedModules = $this->available_blocks;
-        $this->limit           = $this->block_limit;
-
-    }
-
+  
     public function toJSON()
     {
         $area = array(

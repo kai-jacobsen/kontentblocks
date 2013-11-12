@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Utils\GlobalDataHandler,
-    Kontentblocks\Utils\PostMetaDataHandler;
+    Kontentblocks\Admin\Post\PostMetaDataHandler;
 
 class SortModules
 {

@@ -4,7 +4,7 @@ namespace Kontentblocks\Overlays;
 
 use Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Utils\PostMetaDataHandler,
+    Kontentblocks\Admin\Post\PostMetaDataHandler,
     Kontentblocks\Utils\GlobalDataHandler;
 
 class OnsiteEditModule

@@ -2,12 +2,12 @@
 
 namespace Kontentblocks\Admin;
 
-use Kontentblocks\Abstracts\AbstractContextData,
+use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Utils\GlobalDataHandler,
     Kontentblocks\Utils\RegionRegistry,
     Kontentblocks\Modules\ModuleFactory;
 
-class GlobalContextData extends AbstractContextData
+class GlobalContextData extends AbstractEnvironment
 {
 
     protected $globalData;

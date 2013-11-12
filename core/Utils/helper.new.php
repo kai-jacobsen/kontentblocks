@@ -22,7 +22,7 @@ function getHiddenEditor()
 function getDataHandler( $post_id = null )
 {
     if ($post_id && $post_id !== -1){
-        return new \Kontentblocks\Utils\PostMetaDataHandler($post_id);
+        return new \Kontentblocks\Admin\Post\PostMetaDataHandler($post_id);
     } else {
         return new \Kontentblocks\Utils\GlobalDataHandler();
     }

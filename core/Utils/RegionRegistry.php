@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Admin\Post\PostContextData;
+use Kontentblocks\Admin\Post\PostEnvironment;
 
 /**
  * The RegionRegistry is a single interaction container to access area definitions throughout the plugin
@@ -68,7 +68,6 @@ class RegionRegistry
 
         // merge defaults with provided args
         $area = wp_parse_args( $args, $this->_getDefaults( $manual ) );
-
 
         if ( empty( $this->rawAreas[ $area[ 'id' ] ] ) ) {
             $this->rawAreas[ $area[ 'id' ] ] = $area;
@@ -164,8 +163,8 @@ class RegionRegistry
         if ( !empty( $args[ 'settings' ][ 'connect' ] ) && $args[ 'settings' ][ 'connect' ] === 'any' ) {
 
             foreach ( $this->rawAreas as $area_id => $area ) {
-                if ( $area[ 'available_blocks' ] === NULL || !in_array( $classname, $area[ 'available_blocks' ] ) ) {
-                    $this->rawAreas[ $area_id ][ 'available_blocks' ][] = $classname;
+                if ( $area[ 'assignedModules' ] === NULL || !in_array( $classname, $area[ 'assignedModules' ] ) ) {
+                    $this->rawAreas[ $area_id ][ 'assignedModules' ][] = $classname;
                 }
             }
         }
@@ -180,8 +179,8 @@ class RegionRegistry
 
                 $area = $this->rawAreas[ $area_id ];
 
-                if ( !in_array( $classname, $area[ 'available_blocks' ] ) ) {
-                    $area[ 'available_blocks' ][] = $classname;
+                if ( !in_array( $classname, $area[ 'assignedModules' ] ) ) {
+                    $area[ 'assignedModules' ][] = $classname;
                 }
                 $this->rawAreas[ $area_id ] = $area;
                 $update                     = true;
@@ -192,13 +191,13 @@ class RegionRegistry
 
     /**
      * Filters registered areas by post settings
-     * This needs an instance of the PostContextData Class to provide
+     * This needs an instance of the PostEnvironment Class to provide
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
-     * @param \Kontentblocks\Admin\PostContextData $postData
+     * @param \Kontentblocks\Admin\PostEnvironment $postData
      * @return boolean
      */
-    public function filterForPost( PostContextData $postData )
+    public function filterForPost( PostEnvironment $postData )
     {
 
         $pageTemplate = $postData->get( 'pageTemplate' );
@@ -219,18 +218,18 @@ class RegionRegistry
                 $area[ 'context' ] = 'side';
             }
 
-            if ( (!empty( $area[ 'page_template' ] ) ) && (!empty( $area[ 'post_type' ] )) ) {
-                if ( in_array( $pageTemplate, $area[ 'page_template' ] ) && in_array( $postType, $area[ 'post_type' ] ) ) {
+            if ( (!empty( $area[ 'pageTemplates' ] ) ) && (!empty( $area[ 'postTypes' ] )) ) {
+                if ( in_array( $pageTemplate, $area[ 'pageTemplates' ] ) && in_array( $postType, $area[ 'postTypes' ] ) ) {
                     $areas[] = $area;
                 }
             }
-            elseif ( !empty( $area[ 'page_template' ] ) ) {
-                if ( in_array( $pageTemplate, $area[ 'page_template' ] ) ) {
+            elseif ( !empty( $area[ 'pageTemplates' ] ) ) {
+                if ( in_array( $pageTemplate, $area[ 'pageTemplates' ] ) ) {
                     $areas[] = $area;
                 }
             }
-            elseif ( !empty( $area[ 'post_type' ] ) ) {
-                if ( in_array( $postType, $area[ 'post_type' ] ) ) {
+            elseif ( !empty( $area[ 'postTypes' ] ) ) {
+                if ( in_array( $postType, $area[ 'postTypes' ] ) ) {
                     $areas[] = $area;
                 }
             }
@@ -250,7 +249,7 @@ class RegionRegistry
      * @param string $field
      * @return array
      */
-    private function orderBy( $areas, $field )
+    private function orderBy( $areas, $field ) 
     {
         $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
         usort( $areas, create_function( '$a,$b', $code ) );
@@ -270,19 +269,18 @@ class RegionRegistry
             'id' => '', // unique id of area
             'name' => '', // public shown name
             'description' => '', // public description
-            'before_area' => '<div id="%s" class="kb_area %s">', //default wrapper markup
-            'after_area' => '</div>',
-            'post_type' => array(), // array of post types where this area is available to
-            'page_template' => array(), // array of page template names where this area is available to
-            'available_blocks' => array(), // array of classnames
-            'area_templates' => array(), // array of area template ids
+            'beforeArea' => '<div id="%s" class="kb_area %s">', //default wrapper markup
+            'afterArea' => '</div>',
+            'postTypes' => array(), // array of post types where this area is available to
+            'pageTemplates' => array(), // array of page template names where this area is available to
+            'assignedModules' => array(), // array of classnames
+            'layouts' => array(), // array of area template ids
             'dynamic' => false, // whether this is an dynamic area
             'manual' => $manual, // true if set by code
-            'block_limit' => '0', // how many blocks are allowed
+            'limit' => '0', // how many blocks are allowed
             'order' => 0, // order index for sorting
             'dev_mode' => false, // deprecated
-            'context' => 'normal', // where on the edit screen
-            'belongs_to' => __( 'Pages', 'kontentblocks' ) // internal identification, sorting helper
+            'context' => 'normal' // where on the edit screen
         );
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Utils;
+namespace Kontentblocks\Admin\Post;
 
 use Kontentblocks\Interfaces\InterfaceDataHandler;
 
@@ -103,6 +103,7 @@ class PostMetaDataHandler implements InterfaceDataHandler
         else {
             return false;
         }
+
     }
 
     /**
@@ -139,6 +140,15 @@ class PostMetaDataHandler implements InterfaceDataHandler
         else if ( get_post_type( $this->post_id === 'page' ) && empty( $this->meta[ '_wp_page_template' ] ) ) {
             return 'default';
         }
+
+    }
+
+    /**
+     * Get Post Type by postid
+     */
+    public function getPostType()
+    {
+        return get_post_type( $this->post_id );
 
     }
 
@@ -188,14 +198,18 @@ class PostMetaDataHandler implements InterfaceDataHandler
     /**
      * Get module data by instance_id if available
      * Make sure that the given id is prefixed for hidden keys
-     * TODO: Check prefix or auto-prefix
      * @param type $id
      * @return type
      */
     public function getModuleData( $id )
     {
-        if ( isset( $this->modules[ '_' . $id ] ) ) {
-            return $this->modules[ '_' . $id ];
+        
+        if ($id[0] !== '_'){
+            $id = '_' . $id;
+        }
+        
+        if ( isset( $this->modules[ $id ] ) ) {
+            return $this->modules[ $id ];
         }
 
     }
