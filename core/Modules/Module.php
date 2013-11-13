@@ -2,7 +2,9 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Fields\FieldManager;
+use Kontentblocks\Fields\FieldManager,
+    Kontentblocks\Abstracts\AbstractEnvironment,
+    Kontentblocks\Admin\Areas\Area;
 
 /*
  * Structure
@@ -25,11 +27,20 @@ abstract class Module
      * @param string $name default name, can be individual overwritten
      * @param array $block_settings
      */
-    function __construct( $args = NULL, $data = array() )
+    function __construct( $args = NULL, $data = array(), AbstractEnvironment $environment = null, Area $area = null )
     {
         $this->set( $args );
         $this->moduleData = $data;
 
+        
+        if (isset($environment)){
+            $this->setEnvironment($environment);
+        }
+        
+        if (isset($area)){
+            $this->setArea($area);
+        }
+        
         $reflector  = new \ReflectionClass( get_class( $this ) );
         $this->path = dirname( $reflector->getFileName() );
 
@@ -55,6 +66,7 @@ abstract class Module
     public function options()
     {
         $this->Fields->renderFields();
+
     }
 
     /**
@@ -64,10 +76,11 @@ abstract class Module
      */
     public function save( $data )
     {
-        if (isset($this->Fields)){
+        if ( isset( $this->Fields ) ) {
             return $this->saveFields( $data );
         }
         return $data;
+
     }
 
     /**
@@ -98,16 +111,18 @@ abstract class Module
         
     }
 
+    
     public function saveFields( $data )
     {
         return $this->Fields->save( $data );
+
     }
 
     public function _setupFieldData()
     {
         $this->Fields->setup( $this->moduleData );
         foreach ( $this->moduleData as $key => $v ) {
-            $field                      = $this->Fields->getFieldByKey( $key );
+            $field                    = $this->Fields->getFieldByKey( $key );
             $this->moduleData[ $key ] = ($field !== NULL) ? $field->getReturnObj() : null;
         }
 
@@ -263,7 +278,7 @@ abstract class Module
         }
 
         // name
-        $html .="<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='". esc_attr( $this->settings[ 'name' ]) ."' /></div>";
+        $html .="<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='" . esc_attr( $this->settings[ 'name' ] ) . "' /></div>";
 
         // original name
         $html .="<div class='kb-sub-name'>{$this->settings[ 'public_name' ]}</div>";
@@ -289,12 +304,12 @@ abstract class Module
 
     }
 
-    
-    public function _print_edit_link($post_id = null){
+    public function _print_edit_link( $post_id = null )
+    {
         
     }
 
-        /**
+    /**
      * On Site Edit link for logged in users 
      */
     public function print_edit_link( $post_id = null )
@@ -306,9 +321,9 @@ abstract class Module
 
 
         if ( $post_id === null )
-            $post_id    = (!empty( $_REQUEST[ 'post_id' ] )) ? $_REQUEST[ 'post_id' ] : $post->ID;
+            $post_id = (!empty( $_REQUEST[ 'post_id' ] )) ? $_REQUEST[ 'post_id' ] : $post->ID;
 
-        
+
         // overrides for master templates
 //        if ( !empty( $this->master ) && $this->master === true ) {
 //
@@ -357,6 +372,26 @@ abstract class Module
 
     }
 
+    public function setEnvironment( $environment )
+    {
+
+        $this->environment = array(
+            'postType' => $environment->get( 'postType' ),
+            'pageTemplate' => $environment->get( 'pageTemplate' ),
+            'postId' => absint( $environment->get( 'postid' ) )
+        );
+    }
+    
+    public function setArea( $area ){
+        
+        $this->areaAttributes = array(
+            'context' => $area->get('context'),
+            'id'    => $area->id,
+        );
+        d($this);
+        
+    }
+
     /**
      * Set active/inactive status of this instance
      * TODO: Remove, make it useless
@@ -392,14 +427,12 @@ abstract class Module
      * Set the area where this Block is located
      * TODO: remove, make it useless
      */
-
     public function get( $key = null, $return = '' )
     {
         return (!empty( $this->moduleData[ $key ] )) ? $this->moduleData[ $key ] : $return;
 
     }
 
-    
     public function getData( $key = null, $return = '' )
     {
         if ( empty( $this->moduleData ) or empty( $key ) ) {

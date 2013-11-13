@@ -130,16 +130,9 @@ class Area
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
             foreach ( $this->attachedModules as $module ) {
-                $Factory = new ModuleFactory($module, $this->environment->getModuleData( $module['instance_id'] ));
+                $Factory = new ModuleFactory($module, $this->environment->getModuleData( $module['instance_id'] ), $this->environment, $this);
                 $instance = $Factory->getModule();
-                $instance->set(
-                    array(
-                        'areaContext' => $this->context,
-                        'postType' => $this->environment->get( 'postType' ),
-                        'pageTemplate' => $this->environment->get( 'pageTemplate' ),
-                        'postId' => $this->environment->get( 'postid' )
-                    )
-                );
+                
                 $instance->_render_options();
             }
         }

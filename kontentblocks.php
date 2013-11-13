@@ -333,7 +333,7 @@ Class Kontentblocks
             return false;
         }
 
-        $Renderer = new AreaRender( $this, $post_id, $args, $context, $subcontext );
+        $Renderer = new AreaRender( $post_id, $args, $context, $subcontext );
         $output   = $Renderer->render( $echo );
         return $output;
 
