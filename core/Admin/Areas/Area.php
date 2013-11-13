@@ -124,25 +124,20 @@ class Area
      */
     public function render()
     {
-        // list of unavailable blocks, class names
-        $unavailable_blocks = '';
-        if ( !empty( $this->assignedModules ) && is_array( $this->assignedModules ) ) {
-            $unavailable_blocks = implode( ' ', $this->assignedModules );
-        }
+        
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' data-blacklist='{$unavailable_blocks}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
+        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
             foreach ( $this->attachedModules as $module ) {
-                $Factory = new ModuleFactory($module);
+                $Factory = new ModuleFactory($module, $this->environment->getModuleData( $instance->instance_id ));
                 $instance = $Factory->getModule();
                 $instance->set(
                     array(
-                        'area_context' => $this->context,
-                        'post_type' => $this->environment->get( 'postType' ),
-                        'page_template' => $this->environment->get( 'pageTemplate' ),
-                        'new_instance' => $this->environment->getModuleData( $instance->instance_id  ),
-                        'post_id' => $this->environment->get( 'postid' )
+                        'areaContext' => $this->context,
+                        'postType' => $this->environment->get( 'postType' ),
+                        'pageTemplate' => $this->environment->get( 'pageTemplate' ),
+                        'postId' => $this->environment->get( 'postid' )
                     )
                 );
                 $instance->_render_options();
