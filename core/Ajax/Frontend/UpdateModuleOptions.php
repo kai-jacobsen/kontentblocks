@@ -18,7 +18,7 @@ class UpdateModuleOptions
         $dataHandler = \Kontentblocks\Helper\getDataHandler( $module[ 'post_id' ] );
         $dataHandler->saveModule($instance->instance_id, $parsed[ $instance->instance_id ] );
         
-        $instance->new_instance = $parsed[ $instance->instance_id ];
+        $instance->moduleData = $parsed[ $instance->instance_id ];
         wp_send_json( wp_kses_post($instance->module( $parsed[ $instance->instance_id ] ) ));
 
     }

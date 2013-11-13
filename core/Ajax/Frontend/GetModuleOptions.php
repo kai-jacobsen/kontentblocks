@@ -10,12 +10,12 @@ class GetModuleOptions
 
         $module = $_POST[ 'module' ];
 
-        $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module, $module[ 'new_instance' ] );
+        $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module, $module[ 'moduleData' ] );
         $instance = $Factory->getModule();
 
 
 
-        wp_send_json( $instance->options( $instance->new_instance ) );
+        wp_send_json( $instance->options( $instance->moduleData ) );
 
     }
 

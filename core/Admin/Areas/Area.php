@@ -130,7 +130,7 @@ class Area
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
             foreach ( $this->attachedModules as $module ) {
-                $Factory = new ModuleFactory($module, $this->environment->getModuleData( $instance->instance_id ));
+                $Factory = new ModuleFactory($module, $this->environment->getModuleData( $module['instance_id'] ));
                 $instance = $Factory->getModule();
                 $instance->set(
                     array(

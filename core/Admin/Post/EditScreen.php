@@ -188,7 +188,7 @@ Class EditScreen
                 $instance->post_id = $real_post_id;
                 // old, saved data
                 //TODO
-                $instance->new_instance = $old;
+                $instance->moduleData = $old;
 
                 // check for draft and set to false
                 // TODO: Lame

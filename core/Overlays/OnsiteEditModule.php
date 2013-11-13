@@ -175,7 +175,7 @@ class OnsiteEditModule
         $instance->columns = $this->columns;
         $instance->set( get_object_vars( $this ) );
 
-        $instance->new_instance = $old;
+        $instance->moduleData = $old;
         $new = $instance->save( $data );
         // store new data in post meta
         if ( $new && $new != $old ) {

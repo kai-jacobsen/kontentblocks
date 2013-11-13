@@ -28,7 +28,7 @@ abstract class Module
     function __construct( $args = NULL, $data = array() )
     {
         $this->set( $args );
-        $this->new_instance = $data;
+        $this->moduleData = $data;
 
         $reflector  = new \ReflectionClass( get_class( $this ) );
         $this->path = dirname( $reflector->getFileName() );
@@ -55,7 +55,6 @@ abstract class Module
     public function options()
     {
         $this->Fields->renderFields();
-
     }
 
     /**
@@ -65,9 +64,10 @@ abstract class Module
      */
     public function save( $data )
     {
-        
-        return $this->saveFields( $data );
-
+        if (isset($this->Fields)){
+            return $this->saveFields( $data );
+        }
+        return $data;
     }
 
     /**
@@ -101,17 +101,14 @@ abstract class Module
     public function saveFields( $data )
     {
         return $this->Fields->save( $data );
-
     }
 
     public function _setupFieldData()
     {
-
-
-        $this->Fields->setup( $this->new_instance );
-        foreach ( $this->new_instance as $key => $v ) {
+        $this->Fields->setup( $this->moduleData );
+        foreach ( $this->moduleData as $key => $v ) {
             $field                      = $this->Fields->getFieldByKey( $key );
-            $this->new_instance[ $key ] = ($field !== NULL) ? $field->getReturnObj() : null;
+            $this->moduleData[ $key ] = ($field !== NULL) ? $field->getReturnObj() : null;
         }
 
     }
@@ -133,13 +130,13 @@ abstract class Module
     public function _render_options()
     {
         // open tag for block list item
-        echo $this->_open_list_item();
+        echo $this->_openListItem();
 
         //markup for block header
         echo $this->header();
 
         // inner block open
-        echo $this->_open_inner();
+        echo $this->_openInner();
 
         // if disabled don't output, just show disabled message
         if ( $this->settings[ 'disabled' ] ) {
@@ -148,20 +145,20 @@ abstract class Module
         else {
             // output the form fields for this block
             if ( isset( $this->Fields ) ) {
-                $this->Fields->data = $this->new_instance;
+                $this->Fields->data = $this->moduleData;
             }
-            $this->options( $this->new_instance );
+            $this->options( $this->moduleData );
         }
 
         echo $this->footer();
 
-        echo $this->_close_inner();
+        echo $this->_closeInner();
 
-        echo $this->_close_list_item();
+        echo $this->_closeListItem();
 
     }
 
-    private function _open_list_item()
+    private function _openListItem()
     {
         // extract the block id number
         $count = strrchr( $this->instance_id, "_" );
@@ -188,7 +185,7 @@ abstract class Module
      * Close list item
      */
 
-    private function _close_list_item()
+    private function _closeListItem()
     {
         return "</li>";
 
@@ -198,7 +195,7 @@ abstract class Module
      * Outputs everything inside the block
      */
 
-    private function _open_inner()
+    private function _openInner()
     {
         $lockedmsg = (!current_user_can( 'lock_kontentblocks' )) ? 'Content is locked' : null;
 
@@ -231,7 +228,7 @@ abstract class Module
      * Close block inner
      */
 
-    private function _close_inner()
+    private function _closeInner()
     {
         return "</div>";
 
@@ -345,6 +342,7 @@ abstract class Module
     /* set()
      * Public method to set class properties
      * expects $args to be an associative array with key => value pairs
+     * 
      */
 
     public function set( $args )
@@ -361,6 +359,7 @@ abstract class Module
 
     /**
      * Set active/inactive status of this instance
+     * TODO: Remove, make it useless
      * @param string $status 
      */
     public function set_status( $status )
@@ -375,7 +374,8 @@ abstract class Module
     }
 
     /**
-     * Set draft status of this instance 
+     * Set draft status of this instance
+     * TODO: remove, make it useless 
      */
     public function set_draft( $draft )
     {
@@ -389,31 +389,24 @@ abstract class Module
     }
 
     /**
-     * Set the area where this Block is located 
-     */
-    public function set_area( $area )
-    {
-        $this->area = $area;
-
-    }
-
-    /*
-     * Return data
+     * Set the area where this Block is located
+     * TODO: remove, make it useless
      */
 
     public function get( $key = null, $return = '' )
     {
-        return (!empty( $this->new_instance[ $key ] )) ? $this->new_instance[ $key ] : $return;
+        return (!empty( $this->moduleData[ $key ] )) ? $this->moduleData[ $key ] : $return;
 
     }
 
+    
     public function getData( $key = null, $return = '' )
     {
-        if ( empty( $this->new_instance ) or empty( $key ) ) {
+        if ( empty( $this->moduleData ) or empty( $key ) ) {
             return false;
         }
 
-        return (!empty( $this->new_instance[ $key ] )) ? $this->new_instance[ $key ] : $return;
+        return (!empty( $this->moduleData[ $key ] )) ? $this->moduleData[ $key ] : $return;
 
     }
 
@@ -429,7 +422,7 @@ abstract class Module
 
     public function setData( $key, $value )
     {
-        $this->new_instance[ $key ] = $value;
+        $this->moduleData[ $key ] = $value;
 
     }
 

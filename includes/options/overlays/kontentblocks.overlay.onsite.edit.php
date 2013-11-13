@@ -235,7 +235,7 @@ function tb_show_edit_block_cb()
                 else
                     $Kontentblocks->set_post_context( true );
 
-                $instance->new_instance = $new;
+                $instance->moduleData = $new;
 
                 // store new data in post meta
                 if ( $new && $new != $old ) {

@@ -16,7 +16,7 @@ class ModuleTemplate
         }
 
         $this->module  = $module;
-        $this->data    = $this->_setupData( $module->new_instance, $addData );
+        $this->data    = $this->_setupData( $module->moduleData, $addData );
         $this->tplFile = ($tpl !== false) ? $tpl : get_class( $module ) . '.twig';
 
         $this->engine = Twig::getInstance();

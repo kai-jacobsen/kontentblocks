@@ -230,7 +230,7 @@ class AreaRender
             $module->set( $module_args );
 
             // Set data
-            $module->new_instance = $this->_get_instance_data( $module );
+            $module->moduleData = $this->_get_instance_data( $module );
 
 
 
@@ -379,7 +379,7 @@ class AreaRender
 
 
         // inner HTML
-        $html = $module->module( $module->new_instance );
+        $html = $module->module( $module->moduleData );
         
         // Some modules might return false, that's ok
         if ( false === $html ) {

@@ -62,7 +62,7 @@ class FieldManager
     {
         //TODO Check
         $this->moduleId = $module->instance_id;
-        $this->data = $module->new_instance;
+        $this->data = $module->moduleData;
         return $this;
 
     }
