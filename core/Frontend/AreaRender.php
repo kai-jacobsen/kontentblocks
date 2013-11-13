@@ -463,11 +463,11 @@ class AreaRender
         $args = apply_filters( 'kb_area_args_to_render', $args );
 
         $this->id                = $args[ 'id' ];
-        $this->available_modules = $args[ 'available_blocks' ];
-        $this->before            = $args[ 'before_area' ];
-        $this->after             = $args[ 'after_area' ];
+        $this->available_modules = $args[ 'assignedModules' ];
+        $this->before            = $args[ 'beforeArea' ];
+        $this->after             = $args[ 'afterArea' ];
         $this->dynamic           = $args[ 'dynamic' ];
-        $this->area_templates    = $args[ 'area_templates' ];
+        $this->area_templates    = $args[ 'layouts' ];
 
     }
 

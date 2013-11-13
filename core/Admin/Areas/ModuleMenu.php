@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Admin\Areas;
 
+use Kontentblocks\Utils\ModuleRegistry;
+
 /*
  * Kontentblocks: Areas: Menu Class
  * @package Kontentblocks
@@ -47,28 +49,27 @@ class ModuleMenu
      * Constructor
      */
 
-    function __construct( $blocks, $id, $context )
+    function __construct( $area )
     {
+        // All Modules which are accessible by this area
+        $this->modules = ModuleRegistry::getInstance()->getValidModulesForArea( $area, $area->environment );
 
-        if ( empty( $blocks ) or !is_array( $blocks ) or !isset( $id ) or !isset( $context ) )
+        if ( empty( $this->modules ) or !is_array( $this->modules ) or !isset( $area->id ) or !isset( $area->context ) ) {
             return false;
-
+        }
         //assign id
-        $this->id = $id;
+        $this->id = $area->id;
 
         //assign context
-        $this->context = $context;
-
-        //assign blocks
-        $this->blocks = $blocks;
+        $this->context = $area->context;
 
         //setup available cats
-        $this->_setup_cats();
+        $this->_setupCats();
 
-        $this->_prepare_categories();
+        $this->_prepareCategories();
 
         // sort blocks to categories
-        $this->_blocks_to_categories();
+        $this->_modulesToCategories();
 
         $this->l18n = array(
             // l18n
@@ -79,7 +80,7 @@ class ModuleMenu
             'modules' => __( 'Add new module', 'kontentblocks' )
         );
 
-        add_action( 'admin_footer', array( $this, 'menu_footer' ), 10, 1 );
+        add_action( 'admin_footer', array( $this, 'menuFooter' ), 10, 1 );
 
     }
 
@@ -89,17 +90,17 @@ class ModuleMenu
      * Makes sure that the modal is outside of wp-wrap and positions as expected
      */
 
-    public function menu_footer()
+    public function menuFooter()
     {
         // prepare a class for the menu <ul> to avoid two columns if not necessary
-        $menu_class = ( count( $this->blocks ) <= 4 ) ? 'one-column-menu' : 'two-column-menu';
+        $menu_class = ( count( $this->modules ) <= 4 ) ? 'one-column-menu' : 'two-column-menu';
 
         $out = "<div id='{$this->id}-nav' class='reveal-modal modules-menu-overlay {$menu_class}'>";
         $out.= "<div class='modal-inner cf'>";
 
         $out .= "<div class='area-blocks-menu-tabs'>";
-        $out .= $this->_get_nav_tabs();
-        $out .= $this->_get_tabs_content();
+        $out .= $this->_getNavTabs();
+        $out .= $this->_getTabsContent();
         $out .= "</div>";
 
         $out .= "</div>"; // end inner
@@ -112,11 +113,11 @@ class ModuleMenu
      * Admin menu link, opens the modal
      */
 
-    public function menu_link()
+    public function menuLink()
     {
 
         if ( current_user_can( 'create_kontentblocks' ) ) {
-            if ( !empty( $this->blocks ) ) {
+            if ( !empty( $this->modules ) ) {
                 $out = " <div class='add-modules cantsort'>
 							
 					</div>";
@@ -131,7 +132,7 @@ class ModuleMenu
      * Tab Navigation for categories markup
      */
 
-    private function _get_nav_tabs()
+    private function _getNavTabs()
     {
         $out = '';
 
@@ -142,8 +143,6 @@ class ModuleMenu
                 continue;
 
             $out .= "<li> <a href='#{$this->id}-{$cat}-tab'>{$this->cats[ $cat ]}</a></li>";
-
-            
         }
 
         $out .= "</ul>";
@@ -156,7 +155,7 @@ class ModuleMenu
      * Markup for tabs content
      */
 
-    private function _get_tabs_content()
+    private function _getTabsContent()
     {
 
         if ( current_user_can( 'create_kontentblocks' ) ) {
@@ -171,10 +170,8 @@ class ModuleMenu
 
 
                 foreach ( $items as $item ) {
-                    $out.= $this->_get_item( $item );
+                    $out.= $this->_getItem( $item );
                 }
-
-
 
                 $out.= "</ul>";
                 $out.= "</div>";
@@ -188,7 +185,7 @@ class ModuleMenu
      * Markup for menu normal items
      */
 
-    private function _get_item( $item )
+    private function _getItem( $item )
     {
 
 
@@ -219,21 +216,19 @@ class ModuleMenu
      * If category is not set, assign the first from the whitelist
      */
 
-    private function _blocks_to_categories()
+    private function _modulesToCategories()
     {
-        global $Kontentblocks;
 
-        foreach ( $this->blocks as $block ) {
+        foreach ( $this->modules as $module ) {
             // check for categories
-            $cat                        = (!empty( $block[ 'settings' ][ 'category' ] ) ) ? $this->_get_valid_category( $block[ 'settings' ][ 'category' ] ) : 'standard';
-            $this->categories[ $cat ][] = $block;
+            $cat                        = (!empty( $module[ 'settings' ][ 'category' ] ) ) ? $this->_getValidCategory( $module[ 'settings' ][ 'category' ] ) : 'standard';
+            $this->categories[ $cat ][] = $module;
         }
         // add templates
         $saved_block_templates = get_option( 'kb_block_templates' );
 
         if ( !empty( $saved_block_templates ) ) {
             foreach ( $saved_block_templates as $tpl ) {
-                //$blocks[ $tpl[ 'class' ] ] = $Kontentblocks->blocks[ $tpl[ 'class' ] ];
 
                 $this->categories[ 'templates' ][ $tpl[ 'instance_id' ] ] = new $tpl[ 'class' ];
 
@@ -247,7 +242,6 @@ class ModuleMenu
                 }
             }
         }
-
     }
 
     /*
@@ -255,11 +249,11 @@ class ModuleMenu
      * If it fails, assign the first category of the whitelist
      */
 
-    private function _get_valid_category( $cat )
+    private function _getValidCategory( $cat )
     {
         foreach ( $this->cats as $c => $name ) {
             if ( $c == $cat ) {
-                
+
                 return $cat;
             }
         }
@@ -273,7 +267,7 @@ class ModuleMenu
      * @return void
      */
 
-    private function _setup_cats()
+    private function _setupCats()
     {
         // defaults
         $cats = array(
@@ -297,7 +291,7 @@ class ModuleMenu
      * Create initial array to preserve the right order
      */
 
-    public function _prepare_categories()
+    public function _prepareCategories()
     {
         foreach ( $this->cats as $cat => $name ) {
             $this->categories[ $cat ] = array();

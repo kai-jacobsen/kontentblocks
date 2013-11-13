@@ -4,7 +4,6 @@ namespace Kontentblocks\Admin\Areas;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Admin\Areas\ModuleMenu,
-    Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\Areas\AreaSettingsMenu,
     Kontentblocks\Templating\CoreTemplate;
@@ -42,11 +41,8 @@ class Area
         // batch setting of properties
         $this->_setupAreaProperties( $area );
 
-        // All Modules which are accessible by this area
-        $this->validModules = ModuleRegistry::getInstance()->getValidModulesForArea($this, $environment);
-
         // Menu wit available modules for this area
-        $this->moduleMenu      = new ModuleMenu( $this->validModules, $this->id, $this->context );
+        $this->moduleMenu      = new ModuleMenu( $this );
         
         //actual stored module for this area
         $this->attachedModules = $this->environment->getModulesForArea( $this->id );
@@ -157,7 +153,7 @@ class Area
         echo "</ul>";
 
         if ( $this->moduleMenu ) {
-            echo $this->moduleMenu->menu_link();
+            echo $this->moduleMenu->menuLink();
         }
 
         // block limit
