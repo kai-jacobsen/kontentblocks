@@ -89,13 +89,13 @@ function kb_render_blocks( $id = NULL, $area = 'kontentblocks' )
 
 add_action( 'area', 'kb_render_area', 10, 4 );
 
-function kb_render_area( $area = 'kontentblocks', $id = NULL, $context = null, $subcontext = null )
+function kb_render_area( $area = 'kontentblocks', $id = NULL, $args = null )
 {
     global $Kontentblocks, $post;
     $Kontentblocks->set_post_context( true );
     $post_id = (null === $id) ? $post->ID : $id;
 
-    $Kontentblocks->render_area( $post_id, $area, $context, $subcontext );
+    $Kontentblocks->render_area( $post_id, $area, $args );
 
 }
 

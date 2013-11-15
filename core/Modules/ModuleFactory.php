@@ -9,15 +9,14 @@ class ModuleFactory
 
     protected $args;
 
-    public function __construct( $moduleArgs, $data = null, $environment = null, $area = null )
+    public function __construct( $moduleArgs, $environment = null )
     {
         if ( !isset( $moduleArgs ) or !isset( $moduleArgs['settings'][ 'class' ] ) ) {
             throw new \Exception( 'This is not a valid Module' );
         }
         $this->args = $moduleArgs;
-        $this->data = ($data === null) ? array() : $data;
+        $this->data = $environment->getModuleData($moduleArgs['instance_id']);
         $this->environment = $environment;
-        $this->area = $area;
         return $this;
 
     }
@@ -31,7 +30,7 @@ class ModuleFactory
         // new instance
         $classname = $module['settings']['class'];
         if (  class_exists( $classname )){
-            $instance   = new $classname( $module, $this->data, $this->environment, $this->area );
+            $instance   = new $classname( $module, $this->data, $this->environment );
         }
         return $instance;
 

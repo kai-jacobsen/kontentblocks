@@ -10,7 +10,7 @@ use Kontentblocks\Admin\Post\PostMetaDataHandler,
 class PostEnvironment extends AbstractEnvironment
 {
 
-    protected $PostMetaDataHandler;
+    protected $dataHandler;
     protected $postid;
     protected $pageTemplate;
     protected $postType;
@@ -25,11 +25,12 @@ class PostEnvironment extends AbstractEnvironment
 
         $this->dataHandler = new PostMetaDataHandler( $postid );
 
-        $this->postid       = $postid;
-        $this->pageTemplate = $this->dataHandler->getPageTemplate();
-        $this->postType     = $this->dataHandler->getPostType();
-        $this->modules      = $this->_setupModules();
-        $this->areas        = $this->_findAreas();
+        $this->postid        = $postid;
+        $this->pageTemplate  = $this->dataHandler->getPageTemplate();
+        $this->postType      = $this->dataHandler->getPostType();
+        $this->modules       = $this->_setupModules();
+        $this->modulesByArea = $this->getSortedModules();
+        $this->areas         = $this->_findAreas();
 
     }
 
@@ -41,9 +42,9 @@ class PostEnvironment extends AbstractEnvironment
     public function isPostContext()
     {
         return true;
+
     }
 
-    
     /**
      * returns the PostMetaDataHandler instance
      * @return object
@@ -90,7 +91,7 @@ class PostEnvironment extends AbstractEnvironment
         $sorted = array();
         if ( is_array( $this->modules ) ) {
             foreach ( $this->modules as $module ) {
-                $sorted[ $module['area'] ][$module['instance_id']] = $module;
+                $sorted[ $module[ 'area' ] ][ $module[ 'instance_id' ] ] = $module;
             }
             return $sorted;
         }
@@ -104,11 +105,29 @@ class PostEnvironment extends AbstractEnvironment
     private function _setupModules()
     {
         $collection = array();
-        $modules =  $this->dataHandler->getIndex();
-        foreach($modules as $module){
-            $collection[] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['settings']['class']));
+        $modules    = $this->dataHandler->getIndex();
+        foreach ( $modules as $module ) {
+            $collection[ $module[ 'instance_id' ] ] = wp_parse_args( $module, ModuleRegistry::getInstance()->get( $module[ 'settings' ][ 'class' ] ) );
         }
         return $collection;
+
+    }
+
+    /**
+     * Sort Modules to areas
+     */
+    private function _sortModules()
+    {
+        if (empty($this->modules)){
+            return false;
+        }
+        
+        $sorted = array();
+        foreach ($this->modules as $module){
+            $sorted[$module['area']][$module['instance_id']] = $module;
+        }
+        return $sorted;
+            
     }
 
     /**
@@ -136,7 +155,7 @@ class PostEnvironment extends AbstractEnvironment
         return false;
 
     }
-    
+
     /**
      * Wrapper to low level handler method
      * returns instance data or an empty string
@@ -145,11 +164,12 @@ class PostEnvironment extends AbstractEnvironment
      */
     public function getModuleData( $id )
     {
-        $data = $this->dataHandler->getModuleData($id);
-        
-        if ($data !== NULL){
+        $data = $this->dataHandler->getModuleData( $id );
+
+        if ( $data !== NULL ) {
             return $data;
-        } else {
+        }
+        else {
             return '';
         }
 

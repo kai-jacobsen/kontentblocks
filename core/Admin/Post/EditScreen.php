@@ -261,10 +261,6 @@ Class EditScreen
     {
         $block['settings'][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block['settings'][ 'name' ];
 
-        // TODO Maybe Remove
-        if ( !empty( $data[ 'area_context' ] ) ) {
-            $block[ 'area_context' ] = $data[ 'area_context' ];
-        }
 
         $block = apply_filters( "kb_additional_block_data_{$block['settings'][ 'id' ]}", $block, $data );
 

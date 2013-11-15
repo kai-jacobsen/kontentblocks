@@ -1,13 +1,13 @@
 <?php
 
-namespace Kontentblocks\Admin;
+namespace Kontentblocks\Admin\Nonpost;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Utils\GlobalDataHandler,
     Kontentblocks\Utils\RegionRegistry,
     Kontentblocks\Modules\ModuleFactory;
 
-class GlobalContextData extends AbstractEnvironment
+class GlobalEnvironment extends AbstractEnvironment
 {
 
     protected $globalData;

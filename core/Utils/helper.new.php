@@ -29,6 +29,20 @@ function getDataHandler( $post_id = null )
 }
 
 /**
+ * Get environment
+ */
+function getEnvironment( $postId = null )
+{
+    if ($postId && $postId !== -1){
+        return new \Kontentblocks\Admin\Post\PostEnvironment($postId);
+    } else {
+        return new \Kontentblocks\Admin\Nonpost\GlobalEnvironment();
+    }
+}
+
+
+
+/**
  * Echos a hidden input field with the base_id
  * Helper Function
  */

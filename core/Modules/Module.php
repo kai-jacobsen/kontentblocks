@@ -37,10 +37,7 @@ abstract class Module
             $this->setEnvironment($environment);
         }
         
-        if (isset($area)){
-            $this->setArea($area);
-        }
-        
+                
         $reflector  = new \ReflectionClass( get_class( $this ) );
         $this->path = dirname( $reflector->getFileName() );
 
@@ -374,7 +371,6 @@ abstract class Module
 
     public function setEnvironment( $environment )
     {
-
         $this->environment = array(
             'postType' => $environment->get( 'postType' ),
             'pageTemplate' => $environment->get( 'pageTemplate' ),
@@ -382,15 +378,6 @@ abstract class Module
         );
     }
     
-    public function setArea( $area ){
-        
-        $this->areaAttributes = array(
-            'context' => $area->get('context'),
-            'id'    => $area->id,
-        );
-        d($this);
-        
-    }
 
     /**
      * Set active/inactive status of this instance

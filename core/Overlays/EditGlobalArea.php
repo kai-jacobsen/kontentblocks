@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Overlays;
 
-use Kontentblocks\Admin\GlobalContextData,
+use Kontentblocks\Admin\GlobalEnvironment,
     Kontentblocks\Admin\EditScreen,
     Kontentblocks\Modules\ModuleFactory;
 
@@ -15,7 +15,7 @@ class EditGlobalArea
 
     public function __construct()
     {
-        $this->dataContainer = new GlobalContextData();
+        $this->dataContainer = new GlobalEnvironment();
         $this->nonce         = wp_create_nonce( 'editGlobalArea' );
         $this->bootstrap();
 
