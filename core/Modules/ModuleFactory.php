@@ -9,13 +9,18 @@ class ModuleFactory
 
     protected $args;
 
-    public function __construct( $moduleArgs, $environment = null )
+    public function __construct( $moduleArgs, $environment = null, $data = null )
     {
         if ( !isset( $moduleArgs ) or !isset( $moduleArgs['settings'][ 'class' ] ) ) {
             throw new \Exception( 'This is not a valid Module' );
         }
         $this->args = $moduleArgs;
-        $this->data = $environment->getModuleData($moduleArgs['instance_id']);
+        
+        if ($data === null){
+            $this->data = $environment->getModuleData($moduleArgs['instance_id']);
+        } else {
+            $this->data = $data;
+        }
         $this->environment = $environment;
         return $this;
 

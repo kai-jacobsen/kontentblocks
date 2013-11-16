@@ -158,16 +158,16 @@ Class EditScreen
         $real_post_id = isset( $_POST[ 'post_ID' ] ) ? $_POST[ 'post_ID' ] : NULL;
 
         // Intantiate Postmeta data handler
-        $PostMetaDataHandler = new PostMetaDataHandler( $real_post_id );
+        $Environment = \Kontentblocks\Helper\getEnvironment($real_post_id);
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
-            $PostMetaDataHandler->backup( 'Before regular update' );
+            $Environment->getDataHandler()->backup( 'Before regular update' );
         }
 
         
-        if ( !empty( $PostMetaDataHandler->getIndex() ) ) {
-            foreach ( $PostMetaDataHandler->getIndex() as $module ) {
+        if ( !empty( $Environment->getDataHandler()->getIndex() ) ) {
+            foreach ( $Environment->getDataHandler()->getIndex() as $module ) {
 
                 if ( !class_exists( $module['settings'][ 'class' ] ) ) {
                     continue;
@@ -180,10 +180,10 @@ Class EditScreen
                 // new data from $_POST
                 //TODO: filter incoming data
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
-                $old = $PostMetaDataHandler->getMetaData( $module[ 'instance_id' ] );
+                $old = $Environment->getDataHandler()->getMetaData( $module[ 'instance_id' ] );
 
                 
-                $Factory           = new ModuleFactory( $module );
+                $Factory           = new ModuleFactory( $module, $Environment );
                 $instance          = $Factory->getModule();
                 $instance->post_id = $real_post_id;
                 // old, saved data
@@ -223,26 +223,26 @@ Class EditScreen
                     }
                     // save real data
                     else {
-                        $PostMetaDataHandler->saveModule($module['instance_id'], $new);
+                        $Environment->getDataHandler()->saveModule($module['instance_id'], $new);
                         delete_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ] );
                     }
                 }
             }
 
-            $PostMetaDataHandler->saveIndex( $updateblocks );
+            $Environment->getDataHandler()->saveIndex( $updateblocks );
         }
 
         // save area settings which are specific to this post (ID-wise)
         if ( !empty( $_POST[ 'areas' ] ) ) {
 
-            $collection = $PostMetaDataHandler->getMetaData( 'kb_area_settings' );
+            $collection = $Environment->getDataHandler()->getMetaData( 'kb_area_settings' );
             foreach ( $_POST[ 'areas' ] as $id ) {
 
                 if ( isset( $_POST[ $id ] ) ) {
                     $collection[ $id ] = $_POST[ $id ];
                 }
             }
-            $PostMetaDataHandler->saveMetaData( 'kb_area_settings', $collection );
+            $Environment->getDataHandler()->saveMetaData( 'kb_area_settings', $collection );
         }
 
     }

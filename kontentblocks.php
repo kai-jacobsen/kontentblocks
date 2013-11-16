@@ -320,14 +320,20 @@ Class Kontentblocks
     /**
      * New Experimental Frontend Output factory
      */
-    public function render_area( $post_id, $area = null, $args = null, $echo = true )
+    public function render_area( $post_id, $area = null, $context = null, $subcontext = null, $args = null, $echo = true )
     {
 
         if ( !isset( $area ) ) {
             return false;
         }
         
-        $Renderer = new AreaRender( $post_id, $area, $args, 'what' );
+
+        $args = RegionRegistry::getInstance()->getArea( $area );
+        if ( !$args ) {
+            return false;
+        }
+
+        $Renderer = new AreaRender( $post_id, $args, $context, $subcontext );
         $output   = $Renderer->render( $echo );
         return $output;
 

@@ -35,6 +35,10 @@ KB.Ui = (function($) {
             });
             
         },
+        repaint: function($el){
+            this.initTabs();
+            KB.TinyMCE.addEditor($el);
+        },
         initTabs: function() {
 
             $('.kb_fieldtabs').tabs({
@@ -161,6 +165,7 @@ KB.Ui = (function($) {
                                     that.resort(ui.sender);
                                 }).
                                 done(function() {
+                                    that.triggerAreaChange(areaOver, currentModule);
                                     KB.Notice.notice('Area change and order were updated successfully', 'success');
                                 });
                     }
@@ -198,6 +203,9 @@ KB.Ui = (function($) {
                 block_id: module.get('instance_id'),
                 area_id: targetArea.get('id')
             });
+        },
+        triggerAreaChange: function(newArea, module){
+            module.set('area', newArea.get('id'));
         },
         toggleModule: function() {
             

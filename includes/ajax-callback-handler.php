@@ -10,7 +10,8 @@ use Kontentblocks\Overlays\OnsiteEditModule,
     Kontentblocks\Ajax\CreateNewModule,
     Kontentblocks\Ajax\DuplicateModule,
     Kontentblocks\Ajax\Frontend\GetModuleOptions,
-    Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
+    Kontentblocks\Ajax\Frontend\UpdateModuleOptions,
+    Kontentblocks\Ajax\AfterAreaChange;
 
 /**
  * -----------------------------------------
@@ -72,6 +73,7 @@ add_action( 'wp_ajax_removeModules', 'removeModulesCb' );
 function changeModuleStatusCb()
 {
     $ChangeModuleStatus = new ChangeModuleStatus();
+
 }
 
 add_action( 'wp_ajax_changeModuleStatus', 'changeModuleStatusCb' );
@@ -84,10 +86,10 @@ add_action( 'wp_ajax_changeModuleStatus', 'changeModuleStatusCb' );
 function changeAreaCb()
 {
     $ChangeArea = new ChangeArea();
+
 }
 
 add_action( 'wp_ajax_changeArea', 'changeAreaCb' );
-
 
 /**
  * -----------------------------------------
@@ -97,6 +99,7 @@ add_action( 'wp_ajax_changeArea', 'changeAreaCb' );
 function createNewModuleCb()
 {
     $createNewModule = new CreateNewModule();
+
 }
 
 add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
@@ -109,9 +112,23 @@ add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
 function duplicateModuleCb()
 {
     $duplicateModule = new DuplicateModule();
+
 }
 
 add_action( 'wp_ajax_duplicateModule', 'duplicateModuleCb' );
+
+/**
+ * -----------------------------------------
+ * Handler onsite saving 
+ * -----------------------------------------
+ */
+function afterAreaChangeCb()
+{
+    $afterAreaChange = new AfterAreaChange();
+
+}
+
+add_action( 'wp_ajax_afterAreaChange', 'afterAreaChangeCb' );
 
 /**
  * -----------------------------------------
@@ -121,6 +138,7 @@ add_action( 'wp_ajax_duplicateModule', 'duplicateModuleCb' );
 function saveInlineEditCb()
 {
     $saveInlineEdit = new SaveInlineEdit();
+
 }
 
 add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );
@@ -133,6 +151,7 @@ add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );
 function getModuleOptionsCb()
 {
     $getModuleOptions = new GetModuleOptions();
+
 }
 
 add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );
@@ -145,6 +164,7 @@ add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );
 function updateModuleOptionsCb()
 {
     $updateModuleOptions = new UpdateModuleOptions();
+
 }
 
 add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );

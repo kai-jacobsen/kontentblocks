@@ -97,19 +97,14 @@ KB.App = (function($) {
     function createModuleViews(module) {
         
         // assign the full corresponding area model to the module model
-        var areaModel = KB.Areas.get(module.get('area'));
-        module.set('area', areaModel);
+        module.setArea(KB.Areas.get(module.get('area')));
+        module.bind('change:area', module.areaChanged);
         
         // crete view
         KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
         }));
-        
-        // update the reference counter, used as base number
-        // for new modules
-        var count = parseInt($('#kb_all_blocks').val()) + 1;
-        $('#kb_all_blocks').val(count);
         
         // re-init tabs
         // TODO: don't re-init globally

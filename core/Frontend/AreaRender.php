@@ -777,7 +777,8 @@ class AreaRender
             $module = apply_filters( 'kb_modify_block', $module );
             $module = apply_filters( "kb_modify_block_{$module['settings'][ 'id' ]}", $module );
 
-            $Factory = new ModuleFactory( $module );
+            $env = new \Kontentblocks\Admin\Post\PostEnvironment($this->post_id);
+            $Factory = new ModuleFactory( $module, $env );
 
 
             // new instance
@@ -812,7 +813,7 @@ class AreaRender
                 }
             }
 
-            if ( $this->manager->use_wrapper ) {
+            if ( 1 === 1 ) {
                 if ( !empty( $this->manager->default_wrapper ) && is_array( $this->manager->default_wrapper ) ) {
                     return $this->manager->default_wrapper;
                 }

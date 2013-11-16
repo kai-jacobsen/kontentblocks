@@ -31,8 +31,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     toggleBody: function(){
         if (KB.Checks.userCan('edit_kontentblocks')){
             this.$body.slideToggle();
+            this.$el.toggleClass('kb-open');
             KB.currentModule = this.model;
         }
+    },
+    updateModuleForm: function(){
+        KB.Ajax.send({
+            action: 'afterAreaChange',
+            module: this.model.toJSON()
+        }, this.insertNewUpdateForm, this);
+    },
+    insertNewUpdateForm: function(response){
+        this.$body.html(response);
+        KB.Ui.repaint(this.$el);
     }
 
 });

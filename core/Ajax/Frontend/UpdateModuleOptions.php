@@ -13,7 +13,8 @@ class UpdateModuleOptions
         $parsed = array();
         parse_str( $data, $parsed );
 
-        $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module );
+        $Environment = new \Kontentblocks\Admin\Post\PostEnvironment($module['post_id']);
+        $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module, $Environment );
         $instance = $Factory->getModule();
         $dataHandler = \Kontentblocks\Helper\getDataHandler( $module[ 'post_id' ] );
         $dataHandler->saveModule($instance->instance_id, $parsed[ $instance->instance_id ] );

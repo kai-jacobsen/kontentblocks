@@ -44,6 +44,10 @@ class PostEnvironment extends AbstractEnvironment
         return true;
 
     }
+    
+    public function getDataHandler(){
+        return $this->dataHandler;
+    }
 
     /**
      * returns the PostMetaDataHandler instance

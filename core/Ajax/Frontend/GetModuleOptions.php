@@ -10,7 +10,8 @@ class GetModuleOptions
 
         $module = $_POST[ 'module' ];
 
-        $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module, $module[ 'moduleData' ] );
+        $Environment = new \Kontentblocks\Admin\Post\PostEnvironment($module['post_id']);
+        $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module, $Environment, $module['moduleData'] );
         $instance = $Factory->getModule();
 
 

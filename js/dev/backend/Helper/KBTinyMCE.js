@@ -34,13 +34,18 @@ KB.TinyMCE = (function($) {
                 }
             });
         },
-        addEditor: function() {
+        addEditor: function($el) {
             // get settings from native WP Editor
             // Editor may not be initialized and is not accesible throught
             // the tinymce api, thats why we take the settings from preInit
             var settings = tinyMCEPreInit.mceInit['content'];
 
-            $('.wp-editor-area', KB.lastAddedModule.view.$el).each(function() {
+            if (!$el){
+                $el = KB.lastAddedModule.view.$el;
+                console.log($el);
+            }
+
+            $('.wp-editor-area', $el).each(function() {
                 var id = this.id;
 
                 // add new editor id to settings
@@ -65,7 +70,7 @@ KB.TinyMCE = (function($) {
             });
 
             setTimeout(function() {
-                $('.wp-editor-wrap', KB.lastAddedModule.view.$el).removeClass('html-active').addClass('tmce-active');
+                $('.wp-editor-wrap', $el).removeClass('html-active').addClass('tmce-active');
                 QTags._buttonsInit();
             }, 1500);
 

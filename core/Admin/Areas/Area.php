@@ -130,11 +130,11 @@ class Area
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
             foreach ( $this->attachedModules as $module ) {
+                
+                $module['areaContext'] = $this->context;
                 $Factory = new ModuleFactory($module, $this->environment);
                 $instance = $Factory->getModule();
-                $instance->set(array(
-                    'areaContext' => $this->context
-                ));
+                
                 $instance->_render_options();
             }
         }

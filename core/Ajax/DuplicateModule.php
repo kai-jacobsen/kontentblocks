@@ -18,45 +18,37 @@ class DuplicateModule
         $this->postId     = $_POST[ 'post_id' ];
         $this->instanceId = $_POST[ 'module' ];
 
-        $this->dataHandler   = $this->getDataHandler();
+        $this->Environment   = $this->setupEnvironment();
         $this->newInstanceId = $this->getNewInstanceId();
 
         $this->duplicate();
 
     }
 
-    private function getDataHandler()
+    private function setupEnvironment()
     {
-        if ( $this->postId === -1 ) {
-            return new GlobalDataHandler();
-        }
-        else {
-            return new PostMetaDataHandler( $this->postId );
-        }
+        return \Kontentblocks\Helper\getEnvironment($this->postId);
 
     }
 
     private function duplicate()
     {
-        $moduleDefinition                          = $this->dataHandler->getModuleDefinition( $this->instanceId );
+        $moduleDefinition                          = $this->Environment->getDataHandler()->getModuleDefinition( $this->instanceId );
         $moduleDefinition[ 'settings' ][ 'draft' ] = true;
         $moduleDefinition[ 'instance_id' ]         = $this->newInstanceId;
 
 
-        $update = $this->dataHandler->addToIndex( $moduleDefinition[ 'instance_id' ], $moduleDefinition );
+        $update = $this->Environment->getDataHandler()->addToIndex( $moduleDefinition[ 'instance_id' ], $moduleDefinition );
         if ( $update !== true ) {
             wp_send_json_error( 'Update failed' );
         }
         else {
-            $original = $this->dataHandler->getModuleData( $this->instanceId );
-            $this->dataHandler->saveModule( $this->newInstanceId, $original );
+            $original = $this->Environment->getDataHandler()->getModuleData( $this->instanceId );
+            $this->Environment->getDataHandler()->saveModule( $this->newInstanceId, $original );
 
+            $moduleDefinition[ 'areaContext' ]  = filter_var( $_POST[ 'areaContext' ], FILTER_SANITIZE_STRING );
 
-            $moduleDefinition[ 'page_template' ] = filter_var( $_POST[ 'page_template' ], FILTER_SANITIZE_STRING );
-            $moduleDefinition[ 'post_type' ]     = filter_var( $_POST[ 'post_type' ], FILTER_SANITIZE_STRING );
-            $moduleDefinition[ 'area_context' ]  = filter_var( $_POST[ 'area_context' ], FILTER_SANITIZE_STRING );
-
-            $Factory     = new ModuleFactory( $moduleDefinition );
+            $Factory     = new ModuleFactory( $moduleDefinition, $this->Environment );
             $newInstance = $Factory->getModule();
 
 
@@ -79,7 +71,7 @@ class DuplicateModule
 
     public function getNewInstanceId()
     {
-        $base   = \Kontentblocks\Helper\getHighestId( $this->dataHandler->getIndex() );
+        $base   = \Kontentblocks\Helper\getHighestId( $this->Environment->getDataHandler()->getIndex() );
         $prefix = apply_filters( 'kb_post_module_prefix', 'module-' );
         if ( $this->postId !== -1 ) {
             return $prefix . $this->postId . '_' . ++$base;

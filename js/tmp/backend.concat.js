@@ -178,13 +178,18 @@ KB.TinyMCE = (function($) {
                 }
             });
         },
-        addEditor: function() {
+        addEditor: function($el) {
             // get settings from native WP Editor
             // Editor may not be initialized and is not accesible throught
             // the tinymce api, thats why we take the settings from preInit
             var settings = tinyMCEPreInit.mceInit['content'];
 
-            $('.wp-editor-area', KB.lastAddedModule.view.$el).each(function() {
+            if (!$el){
+                $el = KB.lastAddedModule.view.$el;
+                console.log($el);
+            }
+
+            $('.wp-editor-area', $el).each(function() {
                 var id = this.id;
 
                 // add new editor id to settings
@@ -209,7 +214,7 @@ KB.TinyMCE = (function($) {
             });
 
             setTimeout(function() {
-                $('.wp-editor-wrap', KB.lastAddedModule.view.$el).removeClass('html-active').addClass('tmce-active');
+                $('.wp-editor-wrap', $el).removeClass('html-active').addClass('tmce-active');
                 QTags._buttonsInit();
             }, 1500);
 
@@ -271,6 +276,10 @@ KB.Ui = (function($) {
                 that.metaBoxReorder(e, o, settings, 'remove');
             });
             
+        },
+        repaint: function($el){
+            this.initTabs();
+            KB.TinyMCE.addEditor($el);
         },
         initTabs: function() {
 
@@ -398,6 +407,7 @@ KB.Ui = (function($) {
                                     that.resort(ui.sender);
                                 }).
                                 done(function() {
+                                    that.triggerAreaChange(areaOver, currentModule);
                                     KB.Notice.notice('Area change and order were updated successfully', 'success');
                                 });
                     }
@@ -435,6 +445,9 @@ KB.Ui = (function($) {
                 block_id: module.get('instance_id'),
                 area_id: targetArea.get('id')
             });
+        },
+        triggerAreaChange: function(newArea, module){
+            module.set('area', newArea.get('id'));
         },
         toggleModule: function() {
             
@@ -533,9 +546,16 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
             instance_id: that.get('instance_id')
         }, that.destroyed);
     },
-    destroyed: function(){
-        console.log(this);
-    }
+    destroyed: function() {
+
+    },
+    setArea: function(area){ 
+        this.area = area;
+    },
+    areaChanged: function() {
+        // @see backend::views:ModuleView.js
+        this.view.updateModuleForm();
+   }
 });
 'use strict';
 var KB = KB || {};
@@ -575,7 +595,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
         this.model.view = this;
         this.render();
-        console.log(this);
     },
     events: {
         'click .modules-link': 'openModulesMenu',
@@ -676,9 +695,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         KB.Ajax.send({
             action: 'duplicateModule',
             module: this.model.get('instance_id'),
-            page_template: KB.Screen.page_template,
-            post_type: KB.Screen.post_type,
-            area_context: this.model.get('area').get('context')
+            areaContext: this.model.get('area').get('context')
         }, this.success, this);
 
     },
@@ -694,6 +711,11 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
     success: function(data) {
         this.model.get('area').view.modulesList.append(data.html);
         KB.Modules.add(data.module);
+        // update the reference counter, used as base number
+        // for new modules
+        var count = parseInt(jQuery('#kb_all_blocks').val()) + 1;
+        jQuery('#kb_all_blocks').val(count);
+
 
     }
 }); 
@@ -768,9 +790,7 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
             master: this.model.get('master'),
             template: this.model.get('template'),
             duplicate: this.model.get('duplicate'),
-            page_template: KB.Screen.page_template,
-            post_type: KB.Screen.post_type,
-            area_context: this.model.get('context'),
+            areaContext: this.model.get('context'),
             area: this.options.area
         };
 
@@ -781,6 +801,13 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
         KB.TinyMCE.addEditor();
+
+        // update the reference counter, used as base number
+        // for new modules
+        var count = parseInt(jQuery('#kb_all_blocks').val()) + 1;
+        jQuery('#kb_all_blocks').val(count);
+
+
         // repaint
         // add module to collection
     }
@@ -847,8 +874,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     toggleBody: function(){
         if (KB.Checks.userCan('edit_kontentblocks')){
             this.$body.slideToggle();
+            this.$el.toggleClass('kb-open');
             KB.currentModule = this.model;
         }
+    },
+    updateModuleForm: function(){
+        KB.Ajax.send({
+            action: 'afterAreaChange',
+            module: this.model.toJSON()
+        }, this.insertNewUpdateForm, this);
+    },
+    insertNewUpdateForm: function(response){
+        this.$body.html(response);
+        KB.Ui.repaint(this.$el);
     }
 
 });
@@ -951,19 +989,14 @@ KB.App = (function($) {
     function createModuleViews(module) {
         
         // assign the full corresponding area model to the module model
-        var areaModel = KB.Areas.get(module.get('area'));
-        module.set('area', areaModel);
+        module.setArea(KB.Areas.get(module.get('area')));
+        module.bind('change:area', module.areaChanged);
         
         // crete view
         KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
         }));
-        
-        // update the reference counter, used as base number
-        // for new modules
-        var count = parseInt($('#kb_all_blocks').val()) + 1;
-        $('#kb_all_blocks').val(count);
         
         // re-init tabs
         // TODO: don't re-init globally

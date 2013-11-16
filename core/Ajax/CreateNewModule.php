@@ -2,9 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Admin\Post\PostMetaDataHandler,
-    Kontentblocks\Utils\GlobalDataHandler,
-    Kontentblocks\Modules\ModuleFactory,
+use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Utils\ModuleRegistry;
 
 class CreateNewModule
@@ -58,7 +56,7 @@ class CreateNewModule
         $this->setupRequestData();
 
         // Setup Data Handler
-        $this->dataHandler = $this->setupDataHandler();
+        $this->environment = $this->setupEnvironment();
 
         // Setup new Count var
         $this->newCount = $this->_updateCount();
@@ -92,17 +90,9 @@ class CreateNewModule
      * No errors or unset data allowed. 
      */
 
-    private function setupDataHandler()
+    private function setupEnvironment()
     {
-
-
-        // setup context specific data handler
-        if ( $this->post_id == -1 ) {
-            return new GlobalDataHandler();
-        }
-        else {
-            return new PostMetaDataHandler( $this->post_id );
-        }
+        return \Kontentblocks\Helper\getEnvironment( $this->post_id );
 
     }
 
@@ -182,7 +172,7 @@ class CreateNewModule
             $globalData = new GlobalDataHandler();
             $tpl        = $globalData->getTemplate( $this->metaArgs[ 'template_reference' ] );
             if ( $tpl ) {
-                $this->moduleArgs['settings'][ 'public_name' ] = $tpl[ 'name' ];
+                $this->moduleArgs[ 'settings' ][ 'public_name' ] = $tpl[ 'name' ];
             }
         }
 
@@ -195,16 +185,11 @@ class CreateNewModule
     private function updateData()
     {
 
-        $this->newInstance->set( $this->postArgs );
-
         //save module to reference array
         $this->saveNewModule();
 
         // handle template generation
         $this->handleTemplates();
-
-        // handle duplicates
-        $this->handleDuplicate();
 
         $this->render();
 
@@ -216,7 +201,7 @@ class CreateNewModule
     private function saveNewModule()
     {
         // add new block and update 
-        $update = $this->dataHandler->addToIndex( $this->newInstanceID, $this->newModule );
+        $update = $this->environment->getDataHandler()->addToIndex( $this->newInstanceID, $this->newModule );
         if ( $update !== true && !is_int( $update ) ) {
             wp_send_json_error( 'Update failed' );
         }
@@ -240,22 +225,6 @@ class CreateNewModule
     }
 
     /**
-     * Handle generation of duplicates
-     */
-    private function handleDuplicate()
-    {
-
-        if ( !empty( $this->metaArgs[ 'duplicate' ] ) ) {
-            $master_data = get_post_meta( $this->post_id, '_' . $this->metaArgs[ 'duplicate_reference' ], true );
-            $update      = update_post_meta( $this->post_id, '_' . $this->newInstanceID, $master_data );
-
-            if ( !$update )
-                wp_send_json_error( 'Upddate not successful' );
-        }
-
-    }
-
-    /**
      * Output result
      */
     private function render()
@@ -269,7 +238,7 @@ class CreateNewModule
             (
             'id' => $this->newInstanceID,
             'module' => get_object_vars( $this->newInstance ),
-            'name' => $this->newInstance->settings['public_name'],
+            'name' => $this->newInstance->settings[ 'public_name' ],
             'html' => $html
         );
 
@@ -286,36 +255,28 @@ class CreateNewModule
 
         $this->post_id = filter_var( $_POST[ 'post_id' ], FILTER_VALIDATE_INT );
         $this->count   = filter_var( $_POST[ 'count' ], FILTER_VALIDATE_INT );
-        $this->type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
-        
-        $moduleArgs    = array(
+        $this->type    = filter_var( $_POST[ 'type' ], FILTER_SANITIZE_STRING );
+
+        $moduleArgs = array(
             'area' => FILTER_SANITIZE_STRING,
             'master' => FILTER_VALIDATE_BOOLEAN,
             'master_reference' => FILTER_SANITIZE_STRING,
-        );
-
-        $postArgs = array(
-            'page_template' => FILTER_SANITIZE_STRING,
-            'post_type' => FILTER_SANITIZE_STRING,
-            'area_context' => FILTER_SANITIZE_STRING
+            'areaContext' => FILTER_SANITIZE_STRING
         );
 
         $metaArgs = array(
-        'template' => FILTER_VALIDATE_BOOLEAN,
-        'template_reference' => FILTER_SANITIZE_STRING,
-        'duplicate' => FILTER_VALIDATE_BOOLEAN,
-        'duplicate_reference' => FILTER_SANITIZE_STRING
+            'template' => FILTER_VALIDATE_BOOLEAN,
+            'template_reference' => FILTER_SANITIZE_STRING
         );
 
-        $this->metaArgs = filter_var_array( $_POST, $metaArgs );
+        $this->metaArgs   = filter_var_array( $_POST, $metaArgs );
         $this->moduleArgs = filter_var_array( $_POST, $moduleArgs );
-        $this->postArgs   = filter_var_array( $_POST, $postArgs );
 
     }
 
     public function createModuleInstance()
     {
-        $Factory = new ModuleFactory( $this->newModule );
+        $Factory = new ModuleFactory( $this->newModule, $this->environment );
         return $Factory->getModule();
 
     }

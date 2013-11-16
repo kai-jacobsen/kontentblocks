@@ -30,9 +30,7 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
             master: this.model.get('master'),
             template: this.model.get('template'),
             duplicate: this.model.get('duplicate'),
-            page_template: KB.Screen.page_template,
-            post_type: KB.Screen.post_type,
-            area_context: this.model.get('context'),
+            areaContext: this.model.get('context'),
             area: this.options.area
         };
 
@@ -43,6 +41,13 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
         KB.TinyMCE.addEditor();
+
+        // update the reference counter, used as base number
+        // for new modules
+        var count = parseInt(jQuery('#kb_all_blocks').val()) + 1;
+        jQuery('#kb_all_blocks').val(count);
+
+
         // repaint
         // add module to collection
     }

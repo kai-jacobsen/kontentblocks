@@ -20,6 +20,7 @@ use Kontentblocks\Fields\FieldManager,
 abstract class Module
 {
 
+    protected $environment;
     /**
      * II. Constructor
      * 
@@ -185,10 +186,9 @@ abstract class Module
         //$locked = ( $this->locked == 'false' || empty($this->locked) ) ? 'unlocked' : 'locked';
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
         $unsortable = ((isset( $this->unsortable ) and $this->unsortable) == '1') ? 'cantsort' : null;
-
         // Block List Item
         return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->settings[ 'id' ]} kb_wrapper kb_block {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
-		<input type='hidden' name='{$this->instance_id}[area_context]' value='$this->area_context' /> 
+		<input type='hidden' name='{$this->instance_id}[areaContext]' value='$this->areaContext' /> 
 		";
 
     }

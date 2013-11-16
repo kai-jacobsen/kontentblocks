@@ -9,7 +9,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
         this.model.view = this;
         this.render();
-        console.log(this);
     },
     events: {
         'click .modules-link': 'openModulesMenu',
