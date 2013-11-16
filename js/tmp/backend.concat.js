@@ -447,6 +447,7 @@ KB.Ui = (function($) {
             });
         },
         triggerAreaChange: function(newArea, module){
+            module.set('areaContext', newArea.get('context'));
             module.set('area', newArea.get('id'));
         },
         toggleModule: function() {

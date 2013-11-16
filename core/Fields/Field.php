@@ -100,7 +100,6 @@ abstract class Field
 
     public function body()
     {
-
         $this->label();
         $this->form();
         $this->description();

@@ -31,13 +31,15 @@ class Module_Prototype extends Module
 
     public function fields()
     {
-
         $groupA = $this->Fields->addGroup( 'Peter', array('label' => 'What') )
             ->addField( 'image', 'image', array(
             'label' => 'stuff',
             'description' => 'My first image',
             'arrayKey' => 'stuffing'
             ) );
+        
+        
+        
         $groupB = $this->Fields->addGroup( 'Klaus' )
             ->addField( 'editor', 'editortext', array(
             'label' => 'stuff',

@@ -112,7 +112,7 @@ class FieldManager
     }
 
     /**
-     * Creates a new section if there is an exisitng one
+     * Creates a new section if there is not an exisiting one
      * or returns the section
      * @param string $id
      * @return object groupobject
@@ -121,8 +121,8 @@ class FieldManager
     {
         if ( !$this->idExists( $id ) ) {
             $this->structure[ $id ] = new FieldSection( $id, $args );
-            return $this->structure[ $id ];
         }
+            return $this->structure[ $id ];
 
     }
 
