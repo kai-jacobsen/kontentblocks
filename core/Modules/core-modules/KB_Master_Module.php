@@ -43,7 +43,7 @@ class KB_Master_Module extends Module {
 	}
 	
 	
-	public function save($data) {
+	public function save($data, $old) {
 		return $data['master'];
 	}
 	

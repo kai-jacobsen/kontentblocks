@@ -5,7 +5,6 @@ namespace Kontentblocks\Admin\Post;
 use Kontentblocks\Kontentblocks,
     Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\Post\ScreenManager,
-    Kontentblocks\Admin\Post\PostMetaDataHandler,
     Kontentblocks\Helper;
 
 /**
@@ -56,6 +55,7 @@ Class EditScreen
      */
     public function preparePostData()
     {
+
         global $post;
         $this->postData = new PostEnvironment( $post->ID );
 
@@ -78,10 +78,10 @@ Class EditScreen
     function userInterface()
     {
 
-        if  ( !post_type_supports( $this->postData->get('postType'), 'kontentblocks' )) {
+        if ( !post_type_supports( $this->postData->get( 'postType' ), 'kontentblocks' ) ) {
             return false;
         }
-        
+
         echo "<div class='clearfix' id='kontentblocks_stage'>";
 
         // Use nonce for verification
@@ -158,21 +158,21 @@ Class EditScreen
         $real_post_id = isset( $_POST[ 'post_ID' ] ) ? $_POST[ 'post_ID' ] : NULL;
 
         // Intantiate Postmeta data handler
-        $Environment = \Kontentblocks\Helper\getEnvironment($real_post_id);
+        $Environment = \Kontentblocks\Helper\getEnvironment( $real_post_id );
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
             $Environment->getDataHandler()->backup( 'Before regular update' );
         }
 
-        
+
         if ( !empty( $Environment->getDataHandler()->getIndex() ) ) {
             foreach ( $Environment->getDataHandler()->getIndex() as $module ) {
 
-                if ( !class_exists( $module['settings'][ 'class' ] ) ) {
+                if ( !class_exists( $module[ 'settings' ][ 'class' ] ) ) {
                     continue;
                 }
-                
+
                 //hack 
                 $id     = null;
                 $tosave = array();
@@ -180,26 +180,25 @@ Class EditScreen
                 // new data from $_POST
                 //TODO: filter incoming data
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
-                $old = $Environment->getDataHandler()->getMetaData( $module[ 'instance_id' ] );
-
+                $old  = $Environment->getDataHandler()->getModuleData( $module[ 'instance_id' ] );
                 
-                $Factory           = new ModuleFactory( $module, $Environment );
-                $instance          = $Factory->getModule();
-                $instance->post_id = $real_post_id;
+                $Factory              = new ModuleFactory( $module, $Environment );
+                $instance             = $Factory->getModule();
+                $instance->post_id    = $real_post_id;
                 // old, saved data
                 //TODO
                 $instance->moduleData = $old;
 
                 // check for draft and set to false
                 // TODO: Lame
-                $module['settings'][ 'draft' ] = FALSE; 
+                $module[ 'settings' ][ 'draft' ] = FALSE;
 
                 // special block specific data
-               
+
                 $module = self::_individual_block_data( $module, $data );
 
                 $module = apply_filters( 'save_module_data', $module, $data );
-                        
+
                 // create updated index
                 $updateblocks[ $module[ 'instance_id' ] ] = $module;
 
@@ -210,20 +209,22 @@ Class EditScreen
                     $new = $old;
                 }
                 else {
-                    $new = $instance->save( $data );
+                    $new = $instance->save( $data, $old );
+                    
                     $new = apply_filters( 'modify_block_data', $new );
+                    $savedData = wp_parse_args($new, $old);
                 }
 
 
                 // store new data in post meta
                 // if this is a preview, save temporary data for previews
-                if ( $new && $new != $old ) {
+                if ( $savedData && $savedData != $old ) {
                     if ( $_POST[ 'wp-preview' ] === 'dopreview' ) {
-                        update_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ], $new );
+                        update_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ], $savedData );
                     }
                     // save real data
                     else {
-                        $Environment->getDataHandler()->saveModule($module['instance_id'], $new);
+                        $Environment->getDataHandler()->saveModule( $module[ 'instance_id' ], $savedData );
                         delete_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ] );
                     }
                 }
@@ -259,10 +260,10 @@ Class EditScreen
      */
     public static function _individual_block_data( $block, $data )
     {
-        $block['settings'][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block['settings'][ 'name' ];
+        $block[ 'settings' ][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block[ 'settings' ][ 'name' ];
 
 
-        $block = apply_filters( "kb_additional_block_data_{$block['settings'][ 'id' ]}", $block, $data );
+        $block = apply_filters( "kb_additional_block_data_{$block[ 'settings' ][ 'id' ]}", $block, $data );
 
         return $block;
 
@@ -291,6 +292,7 @@ Class EditScreen
      */
     public function renderScreen()
     {
+
         $ScreenManager = new ScreenManager( $this->postData );
         $ScreenManager->render();
 

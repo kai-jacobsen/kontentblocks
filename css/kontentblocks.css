@@ -6160,6 +6160,6 @@ textarea.quicktags {
 }
 /* line 26, sass/partials/_refields/_image.scss */
 .kb_field.image .kb-js-image-meta-wrapper input[type=text] {
-  color: #ccc;
+  color: #333;
   font-weight: 100;
 }

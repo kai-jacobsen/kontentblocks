@@ -43,14 +43,27 @@ class FieldSection
     );
 
     /**
+     * Counter for total number of added fields in this section
+     * @var int 
+     */
+    protected $numberOfFields = 0;
+
+    /**
+     * Counter for actual fields to render
+     * @var int 
+     */
+    protected $numberOfVisibleFields = 0;
+
+    /**
      * Constructor
      * @param string $id
      * @return \Kontentblocks\Fields\FieldSection
      */
-    public function __construct( $id, $args )
+    public function __construct( $id, $args, $areaContext = null )
     {
-        $this->id = $id;
-        $this->args = $this->prepareArgs($args);
+        $this->id          = $id;
+        $this->args        = $this->prepareArgs( $args );
+        $this->areaContext = $areaContext;
 
     }
 
@@ -66,26 +79,42 @@ class FieldSection
     public function addField( $type, $key, $args )
     {
         if ( !$this->fieldExists( $key ) ) {
-            $Factory = FieldRegistry::getInstance();
-            $field   = $Factory->getField( $type );
+            $Registry = FieldRegistry::getInstance();
+            $field    = $Registry->getField( $type );
             $field->setKey( $key );
             $field->setArgs( $args );
             $field->setType( $type );
 
+            $this->markByAreaContext( $field );
+
             if ( isset( $args[ 'arrayKey' ] ) ) {
-                if ( !$this->fieldExists( $args[ 'arrayKey' ] ) ) {
-                    $FieldArray                          = $this->fields[ $args[ 'arrayKey' ] ] = new FieldArray( $args[ 'arrayKey' ] );
-                }
-                else {
-                    $FieldArray = $this->fields[ $args[ 'arrayKey' ] ];
-                }
-                $FieldArray->addField( $key, $field );
+                $this->addArrayField( $field, $key, $args );
             }
             else {
                 $this->fields[ $key ] = $field;
             }
+            $this->_increaseVisibleFields();
         }
         return $this;
+
+    }
+
+    /**
+     * Handle special array notation
+     * @param object $field
+     * @param string $key
+     * @param array $args
+     */
+    public function addArrayField( $field, $key, $args )
+    {
+        if ( !$this->fieldExists( $args[ 'arrayKey' ] ) ) {
+            $FieldArray                          = $this->fields[ $args[ 'arrayKey' ] ] = new FieldArray( $args[ 'arrayKey' ] );
+        }
+        else {
+
+            $FieldArray = $this->fields[ $args[ 'arrayKey' ] ];
+        }
+        $FieldArray->addField( $key, $field );
 
     }
 
@@ -100,6 +129,10 @@ class FieldSection
      */
     public function render( $moduleId, $data )
     {
+        if ( empty( $this->fields ) ) {
+            return;
+        }
+
         foreach ( $this->fields as $field ) {
             $fielddata = (!empty( $data[ $field->getKey() ] )) ? $data[ $field->getKey() ] : '';
             $field->setBaseId( $moduleId );
@@ -118,7 +151,9 @@ class FieldSection
     {
         $collect = array();
         foreach ( $this->fields as $field ) {
-            $collect[ $field->getKey() ] = $field->save( $data[ $field->getKey() ] );
+            if ( isset( $data[ $field->getKey() ] ) ) {
+                $collect[ $field->getKey() ] = $field->save( $data[ $field->getKey() ] );
+            }
         }
         return $collect;
 
@@ -177,9 +212,43 @@ class FieldSection
 
     }
 
-    public function prepareArgs($args)
+    public function prepareArgs( $args )
     {
-        return wp_parse_args($args, self::$defaults);
+        return wp_parse_args( $args, self::$defaults );
+
+    }
+
+    public function markByAreaContext( $field )
+    {
+        if ( !isset( $this->areaContext ) || $this->areaContext === false ) {
+            return $field->setDisplay( true );
+        }
+        else if ( in_array( $this->areaContext, $field->getArg( 'areaContext' ) ) ) {
+            return $field->setDisplay( true );
+        }
+        else {
+            $this->_decreaseVisibleFields();
+            return $field->setDisplay( false );
+        }
+
+    }
+
+    private function _increaseVisibleFields()
+    {
+        $this->numberOfVisibleFields++;
+        $this->numberOfFields++;
+
+    }
+
+    private function _decreaseVisibleFields()
+    {
+        $this->numberOfVisibleFields--;
+
+    }
+
+    public function getNumberOfVisibleFields()
+    {
+        return $this->numberOfVisibleFields;
     }
 
 }

@@ -21,8 +21,11 @@ class Module_Prototype extends Module
 
     public function render( $data )
     {
-
-        $para = apply_filters( 'the_content', $data[ 'editortext' ] );
+        if (empty($data)){
+            return;
+        }
+        
+        $para = apply_filters( 'the_content', $this->getData('editortext') );
         $img  = wp_prepare_attachment_for_js( $data[ 'stuffing' ][ 'image' ][ 'id' ] );
         $tpl  = new ModuleTemplate( $this, '/templates/prototype.twig', array( 'real' => $para, 'img' => $img ) );
         return $tpl->render();
@@ -35,18 +38,16 @@ class Module_Prototype extends Module
             ->addField( 'image', 'image', array(
             'label' => 'stuff',
             'description' => 'My first image',
-            'arrayKey' => 'stuffing'
-            ) );
+            'arrayKey' => 'stuffing',
+            'areaContext' => array('side', 'normal')
+            ) )
+            ->addField('text', 'sometext', array(
+                'label' => 'Label for Text',
+                'descriptiom' => 'stuff',
+                'arrayKey' => 'stuffing',
+                'areaContext' => array('side')
+            ));
         
-        
-        
-        $groupB = $this->Fields->addGroup( 'Klaus' )
-            ->addField( 'editor', 'editortext', array(
-            'label' => 'stuff',
-            'description' => 'My first new description',
-            'media' => true
-            ) );
-
     }
 
 }

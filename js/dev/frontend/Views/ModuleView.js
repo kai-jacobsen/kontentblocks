@@ -16,6 +16,7 @@ KB.ModuleView = Backbone.View.extend({
         "click .slider-controls": "openSlider"
     },
     render: function() {
+        console.log('render');
         this.$el.append(KB.Templates.render('module-controls', {model: this.model.toJSON()}));
     },
     initEtch: etch.editableInit,

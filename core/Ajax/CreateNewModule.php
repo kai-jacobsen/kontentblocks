@@ -190,7 +190,6 @@ class CreateNewModule
 
         // handle template generation
         $this->handleTemplates();
-
         $this->render();
 
     }
@@ -229,15 +228,13 @@ class CreateNewModule
      */
     private function render()
     {
-
         ob_start();
         $this->newInstance->_render_options();
         $html = ob_get_clean();
-
         $response = array
             (
             'id' => $this->newInstanceID,
-            'module' => get_object_vars( $this->newInstance ),
+            'module' => $this->newModule,
             'name' => $this->newInstance->settings[ 'public_name' ],
             'html' => $html
         );

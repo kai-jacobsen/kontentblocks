@@ -63,6 +63,7 @@ class FieldManager
         //TODO Check
         $this->moduleId = $module->instance_id;
         $this->data = $module->moduleData;
+        $this->module = $module;
         return $this;
 
     }
@@ -120,7 +121,7 @@ class FieldManager
     public function addGroup( $id, $args = array() )
     {
         if ( !$this->idExists( $id ) ) {
-            $this->structure[ $id ] = new FieldSection( $id, $args );
+            $this->structure[ $id ] = new FieldSection( $id, $args, $this->module->getAreaContext() );
         }
             return $this->structure[ $id ];
 

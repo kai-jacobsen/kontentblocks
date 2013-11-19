@@ -21,6 +21,8 @@ abstract class Module
 {
 
     protected $environment;
+
+    public $settings;
     /**
      * II. Constructor
      * 
@@ -33,12 +35,11 @@ abstract class Module
         $this->set( $args );
         $this->moduleData = $data;
 
-        
-        if (isset($environment)){
-            $this->setEnvironment($environment);
+        if ( isset( $environment ) ) {
+            $this->setEnvironment( $environment );
         }
-        
-                
+
+
         $reflector  = new \ReflectionClass( get_class( $this ) );
         $this->path = dirname( $reflector->getFileName() );
 
@@ -72,10 +73,10 @@ abstract class Module
      * Method to save whatever form fields are in the options() method
      * Gets called by the meta box save callback
      */
-    public function save( $data )
+    public function save( $data, $old  )
     {
         if ( isset( $this->Fields ) ) {
-            return $this->saveFields( $data );
+            return $this->saveFields( $data, $old );
         }
         return $data;
 
@@ -109,15 +110,18 @@ abstract class Module
         
     }
 
-    
-    public function saveFields( $data )
+    public function saveFields( $data, $old )
     {
-        return $this->Fields->save( $data );
+        return $this->Fields->save( $data, $old );
 
     }
 
     public function _setupFieldData()
     {
+        if (empty($this->moduleData)){
+            return;
+        }
+        
         $this->Fields->setup( $this->moduleData );
         foreach ( $this->moduleData as $key => $v ) {
             $field                    = $this->Fields->getFieldByKey( $key );
@@ -364,7 +368,28 @@ abstract class Module
             return false;
         }
         foreach ( $args as $k => $v ) {
-            $this->$k = $v;
+            if ( method_exists( $this, 'set' . ucfirst( $k ) ) ) {
+                $this->{'set' . ucfirst( $k )}( $v );
+            }
+            else {
+                $this->$k = $v;
+            }
+        }
+
+    }
+
+    public function setAreaContext( $areaContext )
+    {
+        $this->areaContext = $areaContext;
+
+    }
+
+    public function getAreaContext()
+    {
+        if (isset($this->areaContext)){
+            return $this->areaContext;
+        } else {
+            return false;
         }
 
     }
@@ -376,8 +401,8 @@ abstract class Module
             'pageTemplate' => $environment->get( 'pageTemplate' ),
             'postId' => absint( $environment->get( 'postid' ) )
         );
+
     }
-    
 
     /**
      * Set active/inactive status of this instance
@@ -455,11 +480,20 @@ abstract class Module
     public function toJSON()
     {
 
-        $dump = json_encode( get_object_vars( $this ) );
-
+        $toJSON = array(
+            'settings' => $this->settings,
+            'instance_id' => $this->instance_id,
+            'moduleData' => $this->moduleData,
+            'area'      => $this->area,
+            'post_id' => $this->post_id,
+            'areaContext' => $this->areaContext
+        );
+        
+        $enc = json_encode($toJSON);
+        
         echo "<script>"
         . "var Konfig = Konfig || [];"
-        . "Konfig.push({$dump});"
+        . "Konfig.push({$enc});"
         . "</script>";
 
     }

@@ -13,9 +13,7 @@ abstract class Field
     protected $path;
     public $returnObj;
 
-    
-
-        public function setKey( $key )
+    public function setKey( $key )
     {
         $this->key = $key;
 
@@ -30,14 +28,15 @@ abstract class Field
     public function setArgs( $args )
     {
         $this->args = $args;
-    }
 
+    }
 
     public function setBaseId( $id, $array = false )
     {
-        if (!$array){
+        if ( !$array ) {
             $this->baseId = $id;
-        } else {
+        }
+        else {
             $this->baseId = $id . '[' . $array . ']';
         }
 
@@ -59,20 +58,21 @@ abstract class Field
     {
         $this->setData( $data );
         $this->parentModule = $moduleId;
+
     }
 
     public function getReturnObj()
     {
-        if ( $this->returnObj  ) {
-            $classname = $this->defaults['returnObj'];
-            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
-            $this->returnObj = new $classpath($this->value, $this);
+        if ( $this->returnObj ) {
+            $classname       = $this->defaults[ 'returnObj' ];
+            $classpath       = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
+            $this->returnObj = new $classpath( $this->value, $this );
             return $this->returnObj;
         }
         else {
 //            $this->returnObj = new \Kontentblocks\Fields\Returnobjects\StandardFieldReturn( $this->value);
 //            return $this->returnObj;
-                return $this->value;
+            return $this->value;
         }
 
     }
@@ -81,6 +81,10 @@ abstract class Field
 
     public function build()
     {
+        if ( !$this->getDisplay() ) {
+            return;
+        }
+
         $this->header();
         $this->body();
         $this->footer();
@@ -89,7 +93,10 @@ abstract class Field
 
     public function header()
     {
-        echo '<div class="kb_field_header">';
+
+
+        echo '<div class="kb-field-wrapper">'
+        . '<div class="kb_field_header">';
         if ( !empty( $this->args[ 'title' ] ) ) {
             echo "<h4>{$this->args[ 'title' ]} --</h4>";
         }
@@ -100,6 +107,7 @@ abstract class Field
 
     public function body()
     {
+
         $this->label();
         $this->form();
         $this->description();
@@ -108,6 +116,7 @@ abstract class Field
 
     public function footer()
     {
+        echo "</div>";
         echo "</div>";
 
     }
@@ -138,6 +147,7 @@ abstract class Field
 
     }
 
+
     public function save( $keydata )
     {
         return $keydata;
@@ -152,6 +162,18 @@ abstract class Field
         else {
             return false;
         }
+
+    }
+
+    public function getDisplay()
+    {
+        return $this->args[ 'display' ];
+
+    }
+
+    public function setDisplay( $bool )
+    {
+        $this->args[ 'display' ] = $bool;
 
     }
 

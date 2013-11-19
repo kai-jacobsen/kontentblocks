@@ -99,7 +99,7 @@ class Proxy extends \Kontentblocks\Modules\Module {
 	
 	
 	
-	public function save($data) {
+	public function save($data, $old) {
 		
 		return $data;	
 	}

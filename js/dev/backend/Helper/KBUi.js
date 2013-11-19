@@ -201,7 +201,8 @@ KB.Ui = (function($) {
             return KB.Ajax.send({
                 action: 'changeArea',
                 block_id: module.get('instance_id'),
-                area_id: targetArea.get('id')
+                area_id: targetArea.get('id'),
+                context: targetArea.get('context')
             });
         },
         triggerAreaChange: function(newArea, module){

@@ -771,12 +771,12 @@ function init_Kontentfields()
     if ( !is_admin() ) {
         return false;
     }
-    global $Kontentfields;
-    $Kontentfields = new KFHandler;
-    $Kontentfields->init();
-    // load field files...
-    foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
-        require_once $file;
-    }
+//    global $Kontentfields;
+//    $Kontentfields = new KFHandler;
+//    $Kontentfields->init();
+//    // load field files...
+//    foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
+//        require_once $file;
+//    }
 
 }

@@ -33,6 +33,8 @@ class FieldArray
 
     }
 
+
+
     public function save( $data )
     {
         $collect = array();
@@ -51,7 +53,7 @@ class FieldArray
 
     public function getReturnObj()
     {
-        $this->returnObj = new \Kontentblocks\Fields\Returnobjects\ArrayFieldReturn( $this->fields);
+        $this->returnObj = new \Kontentblocks\Fields\Returnobjects\ArrayFieldReturn( $this->fields );
         return $this->returnObj;
 
     }

@@ -38,7 +38,6 @@ class ScreenManager
 
     public function __construct( PostEnvironment $postData )
     {
-
         // get areas available
         if ( empty( $postData->get( 'areas' ) ) ) {
             return false;

@@ -21,13 +21,13 @@ class FieldRenderTabs
      * @var array 
      */
     protected $structure;
-    
+
     /**
      * Unique identifier inherited by module
      * @var string 
      */
     protected $baseId;
-    
+
     /**
      * Instance data from module
      * Gets passed through to section handler
@@ -35,23 +35,21 @@ class FieldRenderTabs
      */
     protected $data;
 
-    
     /**
      * Constructor
      * @param type $structure
      */
-    public function __construct( $structure)
+    public function __construct( $structure )
     {
         $this->structure = $structure;
 
     }
-    
-    
-    public function render($baseId, $data)
+
+    public function render( $baseId, $data )
     {
         $this->baseId = $baseId;
-        $this->data = $data;
-        
+        $this->data   = $data;
+
         $this->tabNavigation();
         $this->tabContainers();
 
@@ -62,9 +60,10 @@ class FieldRenderTabs
         echo "<div class='kb_fieldtabs'>";
         echo "<ul>";
 
-        foreach ( $this->structure as $definition ) {
-
-            echo "<li><a href='#tab-{$definition->getID()}'>{$definition->getLabel()}</a></li>";
+        foreach ( $this->structure as $section ) {
+            if ( $section->getNumberOfVisibleFields() > 0 ) {
+                echo "<li><a href='#tab-{$section->getID()}'>{$section->getLabel()}</a></li>";
+            }
         }
         echo '</ul>';
 
@@ -72,12 +71,15 @@ class FieldRenderTabs
 
     public function tabContainers()
     {
-        foreach( $this->structure as $definition) {
-            echo "<div id='tab-{$definition->getID()}'>";
-            $definition->render($this->baseId, $this->data);
-            echo "</div>";
+        foreach ( $this->structure as $section ) {
+            if ( $section->getNumberOfVisibleFields() > 0 ) {
+                echo "<div id='tab-{$section->getID()}'>";
+                $section->render( $this->baseId, $this->data );
+                echo "</div>";
+            }
         }
         echo "</div>";
+
     }
 
 }
