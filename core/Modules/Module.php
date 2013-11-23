@@ -3,9 +3,7 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Fields\FieldManager,
-    Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Admin\Areas\Area;
-
+    Kontentblocks\Abstracts\AbstractEnvironment;
 /*
  * Structure
  * 
@@ -20,7 +18,7 @@ use Kontentblocks\Fields\FieldManager,
 abstract class Module
 {
 
-    protected $environment;
+  public $environment;
 
     public $settings;
     /**
@@ -30,7 +28,7 @@ abstract class Module
      * @param string $name default name, can be individual overwritten
      * @param array $block_settings
      */
-    function __construct( $args = NULL, $data = array(), AbstractEnvironment $environment = null, Area $area = null )
+    function __construct( $args = NULL, $data = array(), AbstractEnvironment $environment = null )
     {
         $this->set( $args );
         $this->moduleData = $data;
@@ -507,8 +505,7 @@ abstract class Module
             'public_name' => 'Give me Name',
             'name' => '',
             'wrap' => true,
-            'beforeModule' => '<div id="%s" class="module %s %s">',
-            'afterModule' => '</div>',
+            'wrapperClasses' => '',
             'description' => '',
             'connect' => 'any',
             'hidden' => false,
@@ -529,6 +526,13 @@ abstract class Module
             return 'deactivated';
         }
 
+    }
+    
+    public function _addAreaAttributes( $args)
+    {
+      if ($this->environment){
+        $this->environment += $args;
+      }
     }
 
 }

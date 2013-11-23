@@ -87,15 +87,17 @@ function kb_render_blocks( $id = NULL, $area = 'kontentblocks' )
 
 }
 
-add_action( 'area', 'kb_render_area', 10, 4 );
+add_action( 'area', 'kb_render_area', 10, 3 );
 
-function kb_render_area( $area = 'kontentblocks', $id = NULL, $args = null )
+function kb_render_area( $area = 'kontentblocks', $id = NULL, $additionalArgs = null )
 {
     global $Kontentblocks, $post;
-    $Kontentblocks->set_post_context( true );
-    $post_id = (null === $id) ? $post->ID : $id;
+//    $Kontentblocks->set_post_context( true );
+    $postId = (null === $id) ? $post->ID : $id;
 
-    $Kontentblocks->render_area( $post_id, $area, $args );
+//    $Kontentblocks->render_area( $post_id, $area, $args );
+    $AreaRender = new Kontentblocks\Frontend\AreaRender($postId, $area, $additionalArgs);
+    $AreaRender->render(true);
 
 }
 

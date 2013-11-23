@@ -788,7 +788,7 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
         // prepare data to send
         var data = {
             action: 'createNewModule',
-            type: this.model.get('type'),
+            'class': this.model.get('type'),
             master: this.model.get('master'),
             template: this.model.get('template'),
             duplicate: this.model.get('duplicate'),

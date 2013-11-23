@@ -212,7 +212,8 @@ Class EditScreen
                     $new = $instance->save( $data, $old );
                     
                     $new = apply_filters( 'modify_block_data', $new );
-                    $savedData = wp_parse_args($new, $old);
+                    $savedData = Helper\arrayMergeRecursiveAsItShouldBe( $new, $old);
+                    
                 }
 
 

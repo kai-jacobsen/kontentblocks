@@ -199,8 +199,12 @@ class CreateNewModule
      */
     private function saveNewModule()
     {
+        $toSave = $this->newModule;
+        
+        //dont save settings
+        unset($toSave['settings']);
         // add new block and update 
-        $update = $this->environment->getDataHandler()->addToIndex( $this->newInstanceID, $this->newModule );
+        $update = $this->environment->getDataHandler()->addToIndex( $this->newInstanceID, $toSave );
         if ( $update !== true && !is_int( $update ) ) {
             wp_send_json_error( 'Update failed' );
         }
@@ -252,13 +256,14 @@ class CreateNewModule
 
         $this->post_id = filter_var( $_POST[ 'post_id' ], FILTER_VALIDATE_INT );
         $this->count   = filter_var( $_POST[ 'count' ], FILTER_VALIDATE_INT );
-        $this->type    = filter_var( $_POST[ 'type' ], FILTER_SANITIZE_STRING );
+        $this->type    = filter_var( $_POST[ 'class' ], FILTER_SANITIZE_STRING );
 
         $moduleArgs = array(
             'area' => FILTER_SANITIZE_STRING,
             'master' => FILTER_VALIDATE_BOOLEAN,
             'master_reference' => FILTER_SANITIZE_STRING,
-            'areaContext' => FILTER_SANITIZE_STRING
+            'areaContext' => FILTER_SANITIZE_STRING,
+            'class' => FILTER_SANITIZE_STRING
         );
 
         $metaArgs = array(

@@ -326,13 +326,11 @@ Class Kontentblocks
         if ( !isset( $area ) ) {
             return false;
         }
-        
 
         $args = RegionRegistry::getInstance()->getArea( $area );
         if ( !$args ) {
             return false;
         }
-
         $Renderer = new AreaRender( $post_id, $args, $context, $subcontext );
         $output   = $Renderer->render( $echo );
         return $output;
@@ -494,8 +492,9 @@ Class Kontentblocks
             'id' => '',
             'label' => '',
             'layout' => array(),
-            'last-item' => '',
-            'thumbnail' => null
+            'last-item' => false,
+            'thumbnail' => null,
+            'cycle' => false
         );
 
         $settings = wp_parse_args( $args, $defaults );

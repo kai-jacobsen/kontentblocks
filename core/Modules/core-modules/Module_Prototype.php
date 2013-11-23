@@ -16,7 +16,10 @@ class Module_Prototype extends Module
         'templateable' => true,
         'connect' => 'any',
         'category' => 'media',
-        'id' => 'prototype'
+        'id' => 'prototype',
+        'controls' => array(
+            'width' => 400
+        )
     );
 
     public function render( $data )
@@ -44,7 +47,6 @@ class Module_Prototype extends Module
             ->addField('text', 'sometext', array(
                 'label' => 'Label for Text',
                 'descriptiom' => 'stuff',
-                'arrayKey' => 'stuffing',
                 'areaContext' => array('side')
             ));
         

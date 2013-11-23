@@ -37,7 +37,7 @@ class Area
         
         // environment
         $this->environment = $environment;
-
+        
         // batch setting of properties
         $this->_setupAreaProperties( $area );
 
@@ -130,7 +130,7 @@ class Area
         if ( !empty( $this->attachedModules ) ) {
             // TODO:Quatsch
             foreach ( $this->attachedModules as $module ) {
-                
+              
                 $module['areaContext'] = $this->context;
                 $Factory = new ModuleFactory($module, $this->environment);
                 $instance = $Factory->getModule();
