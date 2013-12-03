@@ -109,7 +109,6 @@ Class Kontentblocks
 
     public function init()
     {
-
         if ( isset( $_GET[ 'resetkb' ] ) ) {
             delete_option( 'kb_dynamic_areas' );
         }
@@ -184,7 +183,6 @@ Class Kontentblocks
         $paths = apply_filters( 'kb_add_template_path', $paths );
         $paths = apply_filters( 'kb_add_module_path', $paths );
         foreach ( $paths as $path ) {
-
             $dirs = glob( $path . '_*', GLOB_ONLYDIR );
 
             if ( !empty( $dirs ) ) {
@@ -192,6 +190,7 @@ Class Kontentblocks
                     $files = glob( $subdir . '/*.php' );
 
                     foreach ( $files as $template ) {
+
                         if ( strpos( basename( $template ), '__' ) === false )
                             include_once($template);
                     }

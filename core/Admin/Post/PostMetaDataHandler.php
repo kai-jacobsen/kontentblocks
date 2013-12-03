@@ -327,14 +327,13 @@ class PostMetaDataHandler implements InterfaceDataHandler
         $cleaned = array();
 
         foreach ( $this->index as $def ) {
-            if ( isset( $def[ 'settings' ][ 'class' ] ) ) {
+            if ( isset( $def[ 'class' ] ) ) {
                 $cleaned[ $def[ 'instance_id' ] ] = $def;
             }
             else {
                 // TODO remove from index;
             }
         }
-
         return $cleaned;
 
     }

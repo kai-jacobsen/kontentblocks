@@ -169,20 +169,19 @@ Class EditScreen
         if ( !empty( $Environment->getDataHandler()->getIndex() ) ) {
             foreach ( $Environment->getDataHandler()->getIndex() as $module ) {
 
-                if ( !class_exists( $module[ 'settings' ][ 'class' ] ) ) {
+                if ( !class_exists( $module[ 'class' ] ) ) {
                     continue;
                 }
 
                 //hack 
                 $id     = null;
-                $tosave = array();
 
                 // new data from $_POST
                 //TODO: filter incoming data
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
                 $old  = $Environment->getDataHandler()->getModuleData( $module[ 'instance_id' ] );
                 
-                $Factory              = new ModuleFactory( $module, $Environment );
+                $Factory              = new ModuleFactory($module['class'], $module, $Environment );
                 $instance             = $Factory->getModule();
                 $instance->post_id    = $real_post_id;
                 // old, saved data
@@ -191,17 +190,15 @@ Class EditScreen
 
                 // check for draft and set to false
                 // TODO: Lame
-                $module[ 'settings' ][ 'draft' ] = FALSE;
+                $module[ 'state' ][ 'draft' ] = FALSE;
 
                 // special block specific data
-
                 $module = self::_individual_block_data( $module, $data );
 
                 $module = apply_filters( 'save_module_data', $module, $data );
 
                 // create updated index
                 $updateblocks[ $module[ 'instance_id' ] ] = $module;
-
 
                 // call save method on block
                 // if locking of blocks is used, and a block is locked, use old data
@@ -261,13 +258,9 @@ Class EditScreen
      */
     public static function _individual_block_data( $block, $data )
     {
-        $block[ 'settings' ][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block[ 'settings' ][ 'name' ];
-
-
-        $block = apply_filters( "kb_additional_block_data_{$block[ 'settings' ][ 'id' ]}", $block, $data );
+        $block['overrides'][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block[ 'overrides' ][ 'name' ];
 
         return $block;
-
     }
 
     /**

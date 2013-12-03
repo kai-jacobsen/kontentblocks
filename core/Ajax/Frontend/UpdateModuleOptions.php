@@ -13,14 +13,23 @@ class UpdateModuleOptions
         $parsed = array();
         parse_str( $data, $parsed );
 
-        $Environment = new \Kontentblocks\Admin\Post\PostEnvironment($module['post_id']);
-        $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module, $Environment );
-        $instance = $Factory->getModule();
+        $Environment = new \Kontentblocks\Admin\Post\PostEnvironment( $module[ 'post_id' ] );
+        $Factory     = new \Kontentblocks\Modules\ModuleFactory( $module[ 'class' ], $module, $Environment );
+        $instance    = $Factory->getModule();
         $dataHandler = \Kontentblocks\Helper\getDataHandler( $module[ 'post_id' ] );
-        $dataHandler->saveModule($instance->instance_id, $parsed[ $instance->instance_id ] );
+        $old         = $dataHandler->getModuleData( '_' . $module['instance_id'] );
+        $mergedData  = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe( $parsed[ $instance->instance_id ], $old );
+
+        $dataHandler->saveModule( $instance->instance_id, $mergedData );
+
+        $instance->moduleData = $mergedData;
         
-        $instance->moduleData = $parsed[ $instance->instance_id ];
-        wp_send_json( wp_kses_post($instance->module( $parsed[ $instance->instance_id ] ) ));
+        $return = array(
+            'html' => wp_kses_post( $instance->module( $mergedData ) ),
+            'newModuleData' => $mergedData
+        );
+        
+        wp_send_json( $return );
 
     }
 

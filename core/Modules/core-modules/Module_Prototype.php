@@ -18,7 +18,7 @@ class Module_Prototype extends Module
         'category' => 'media',
         'id' => 'prototype',
         'controls' => array(
-            'width' => 400
+        'width' => 400
         )
     );
 
@@ -30,7 +30,7 @@ class Module_Prototype extends Module
         
         $para = apply_filters( 'the_content', $this->getData('editortext') );
         $img  = wp_prepare_attachment_for_js( $data[ 'stuffing' ][ 'image' ][ 'id' ] );
-        $tpl  = new ModuleTemplate( $this, '/templates/prototype.twig', array( 'real' => $para, 'img' => $img ) );
+        $tpl  = new ModuleTemplate( $this, 'prototype.twig', array( 'real' => $para, 'img' => $img ) );
         return $tpl->render();
 
     }

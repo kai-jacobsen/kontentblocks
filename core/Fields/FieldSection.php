@@ -220,7 +220,7 @@ class FieldSection
 
     public function markByAreaContext( $field )
     {
-        if ( !isset( $this->areaContext ) || $this->areaContext === false ) {
+        if ( !isset( $this->areaContext ) || $this->areaContext === false || ($field->getArg( 'areaContext' ) === false) ) {
             return $field->setDisplay( true );
         }
         else if ( in_array( $this->areaContext, $field->getArg( 'areaContext' ) ) ) {

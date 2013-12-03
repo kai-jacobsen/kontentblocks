@@ -24,16 +24,16 @@ class ModuleTemplate
 
     public function render( $echo = false )
     {
-        if ( !empty( $this->module->path ) ) {
+        if ( !is_file( trailingslashit( Twig::getDefaultPath()) . $this->tplFile ) ) {
+            echo "<script>console.log('template {$this->tplFile} missing');</script>";
+            return false;
+        }
+        elseif ( !empty( $this->module->path ) ) {
             if ( is_file( trailingslashit( $this->module->path ) . $this->tplFile ) ) {
                 $this->setPath( $this->module->path );
             }
         }
 
-        elseif ( !is_file( trailingslashit( Twig::getDefaultPath()) . $this->tplFile ) ) {
-            echo "<script>console.log('template {$this->tplFile} missing');</script>";
-            return false;
-        }
 
 
 

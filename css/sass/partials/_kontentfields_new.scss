@@ -32,11 +32,13 @@
 
     input[type=text]{
         height: 30px;
+		padding: 0;
         line-height: 22px;
         border: 1px solid #fcfcfc;
         border-right: 1px solid #aaa;
         border-bottom: 1px solid #aaa; 
         font-size:14px;
+		background: #efefef;
         width:40%;
         @include transition(width .2s ease-out);
 

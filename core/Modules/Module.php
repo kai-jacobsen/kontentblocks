@@ -4,6 +4,7 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Fields\FieldManager,
     Kontentblocks\Abstracts\AbstractEnvironment;
+
 /*
  * Structure
  * 
@@ -18,9 +19,9 @@ use Kontentblocks\Fields\FieldManager,
 abstract class Module
 {
 
-  public $environment;
-
+    public $environment;
     public $settings;
+
     /**
      * II. Constructor
      * 
@@ -71,7 +72,7 @@ abstract class Module
      * Method to save whatever form fields are in the options() method
      * Gets called by the meta box save callback
      */
-    public function save( $data, $old  )
+    public function save( $data, $old )
     {
         if ( isset( $this->Fields ) ) {
             return $this->saveFields( $data, $old );
@@ -116,10 +117,10 @@ abstract class Module
 
     public function _setupFieldData()
     {
-        if (empty($this->moduleData)){
+        if ( empty( $this->moduleData ) ) {
             return;
         }
-        
+
         $this->Fields->setup( $this->moduleData );
         foreach ( $this->moduleData as $key => $v ) {
             $field                    = $this->Fields->getFieldByKey( $key );
@@ -221,7 +222,7 @@ abstract class Module
         else {
             $description       = (!empty( $this->settings[ 'description' ] )) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->settings[ 'description' ] : '';
             $l18n_block_title  = __( 'Modul Bezeichnung', 'kontentblocks' );
-            $l18n_draft_status = ( $this->settings[ 'draft' ] === true ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
+            $l18n_draft_status = ( $this->state[ 'draft' ] === true ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks' ) . '</p>' : '';
 
             $out .= "<div class='kb_block_title'>";
 
@@ -277,7 +278,7 @@ abstract class Module
         }
 
         // name
-        $html .="<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='" . esc_attr( $this->settings[ 'name' ] ) . "' /></div>";
+        $html .="<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='" . esc_attr( $this->getModuleName() ) . "' /></div>";
 
         // original name
         $html .="<div class='kb-sub-name'>{$this->settings[ 'public_name' ]}</div>";
@@ -384,9 +385,10 @@ abstract class Module
 
     public function getAreaContext()
     {
-        if (isset($this->areaContext)){
+        if ( isset( $this->areaContext ) ) {
             return $this->areaContext;
-        } else {
+        }
+        else {
             return false;
         }
 
@@ -410,10 +412,10 @@ abstract class Module
     public function set_status( $status )
     {
         if ( $status == 'kb_inactive' ) {
-            $this->settings[ 'active' ] = false;
+            $this->state[ 'active' ] = false;
         }
         elseif ( $status == 'kb_active' or $status == '' ) {
-            $this->settings[ 'active' ] = true;
+            $this->state[ 'active' ] = true;
         }
 
     }
@@ -425,10 +427,10 @@ abstract class Module
     public function set_draft( $draft )
     {
         if ( $draft == 'true' ) {
-            $this->settings[ 'draft' ] = true;
+            $this->state[ 'draft' ] = true;
         }
         elseif ( $draft == 'false' ) {
-            $this->settings[ 'draft' ] = false;
+            $this->state[ 'draft' ] = false;
         }
 
     }
@@ -480,18 +482,20 @@ abstract class Module
 
         $toJSON = array(
             'settings' => $this->settings,
+            'state'     => $this->state,
             'instance_id' => $this->instance_id,
             'moduleData' => $this->moduleData,
-            'area'      => $this->area,
-            'post_id' => $this->post_id,
-            'areaContext' => $this->areaContext
+            'area' => $this->area,
+            'post_id' => $this->environment['postId'],
+            'areaContext' => $this->areaContext,
+            'class' => get_class($this),
         );
-        
-        $enc = json_encode($toJSON);
-        
+
+        $enc = json_encode( $toJSON );
+
         echo "<script>"
-        . "var Konfig = Konfig || [];"
-        . "Konfig.push({$enc});"
+        . "var KB = KB || {}; KB.PageModules = KB.PageModules || [];"
+        . "KB.PageModules.push({$enc});"
         . "</script>";
 
     }
@@ -500,7 +504,6 @@ abstract class Module
     {
 
         return array(
-            'active' => true,
             'disabled' => false,
             'public_name' => 'Give me Name',
             'name' => '',
@@ -511,15 +514,23 @@ abstract class Module
             'hidden' => false,
             'predefined' => false,
             'globallyAvailable' => false,
-            'draft' => true,
             'templateable' => true,
+        );
+
+    }
+
+    public static function getDefaultState()
+    {
+        return array(
+            'active' => true,
+            'draft' => true
         );
 
     }
 
     public function getStatusClass()
     {
-        if ( $this->settings[ 'active' ] ) {
+        if ( $this->state[ 'active' ] ) {
             return 'activated';
         }
         else {
@@ -527,12 +538,22 @@ abstract class Module
         }
 
     }
-    
-    public function _addAreaAttributes( $args)
+
+    public function _addAreaAttributes( $args )
     {
-      if ($this->environment){
-        $this->environment += $args;
-      }
+        if ( $this->environment ) {
+            $this->environment += $args;
+        }
+
+    }
+
+    public function getModuleName()
+    {
+        if (isset($this->overrides)){
+            return $this->overrides['name'];
+        } else {
+            return $this->settings['name'];
+        }
     }
 
 }

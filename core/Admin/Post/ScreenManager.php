@@ -50,7 +50,6 @@ class ScreenManager
         // test if final context layout includes an sidebar
         // e.g. if an area is assigned to 'side'
         $this->hasSidebar = $this->evaluateLayout();
-
     }
 
     /*

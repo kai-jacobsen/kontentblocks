@@ -278,7 +278,7 @@ class CreateNewModule
 
     public function createModuleInstance()
     {
-        $Factory = new ModuleFactory( $this->newModule, $this->environment );
+        $Factory = new ModuleFactory($this->type ,$this->newModule, $this->environment );
         return $Factory->getModule();
 
     }

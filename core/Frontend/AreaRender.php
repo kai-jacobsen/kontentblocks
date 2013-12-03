@@ -53,11 +53,9 @@ class AreaRender
     // Iterate over modules
     foreach ( $this->modules as $module ) {
 
-      $output.= $this->_beforeModule( $module );
-
-      d($module);
-
-      $output.= $this->_afterModule( $module );
+      $output.= $this->beforeModule( $this->_beforeModule( $module ), $module );
+      $output.= $module->module($module->moduleData);
+      $output.= $this->afterModule( $this->_afterModule( $module ), $module);
     }
 
 
@@ -75,7 +73,17 @@ class AreaRender
 
   }
 
-  public function _beforeModule( $module )
+  public function beforeModule( $classes, $module )
+  {
+      return sprintf('<div id="%1$s" class="%2$s">', $module->instance_id, implode(' ', $classes));
+  }
+  
+  public function afterModule($_after,$module){
+      $module->toJSON();
+      return "</div>";
+  }
+
+    public function _beforeModule( $module )
   {
     $module->_addAreaAttributes( $this->area->getPublicAttributes() );
     $layoutClasses     = $this->area->getCurrentLayoutClasses();
@@ -83,18 +91,18 @@ class AreaRender
     $additionalClasses = $this->getAdditionalClasses( $module );
 
     $mergedClasses = array_merge( $layoutClasses, $moduleClasses, $additionalClasses );
-    d($mergedClasses);
+
     if ( method_exists( $module, 'preRender' ) ) {
       $module->preRender();
     }
-
+    return $mergedClasses;
   }
 
   public function _afterModule($module)
   {
     $this->previousModule = $module->settings[ 'id' ];
     $this->position++;
-    $this->area->layout->next();
+    $this->area->nextLayout();
   }
 
   public function _validate()
@@ -109,7 +117,7 @@ class AreaRender
   public function getAdditionalClasses( $module )
   {
     $classes = array();
-
+    
     $classes[] = $module->settings['id'];
     
     if ($this->position === 1){
@@ -132,6 +140,11 @@ class AreaRender
       $this->repeating = false;
     }
     
+    if ($this->repeating && $this->area->getSetting('mergeRepeating')){
+        $classes[] = 'module-merged';
+    } else {
+        $classes[] = 'module';
+    }
     
     return $classes;
 

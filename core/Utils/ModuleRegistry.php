@@ -33,7 +33,7 @@ class ModuleRegistry
 
             // add missing args from general Defaults
             $moduleArgs[ 'settings' ] = wp_parse_args( $args, Module::getDefaults() );
-
+            $moduleArgs[ 'state' ] = Module::getDefaultState();
             // Add module to registry
             $this->modules[ $classname ] = $moduleArgs;
             // Handle connection to regions

@@ -41,10 +41,10 @@ class ChangeModuleStatus
         
         if ($moduleDefinition){
             
-            if ($moduleDefinition['settings']['active'] != true){
-                $moduleDefinition['settings']['active'] = true;
+            if ($moduleDefinition['state']['active'] != true){
+                $moduleDefinition['state']['active'] = true;
             } else {
-                $moduleDefinition['settings']['active'] = false;
+                $moduleDefinition['state']['active'] = false;
             }
             
             $update = $this->dataHandler->addToIndex($this->instance_id, $moduleDefinition);

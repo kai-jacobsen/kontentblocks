@@ -1,12 +1,12 @@
-var KBApp = KBApp || {};
+var KB = KB || {};
 
 
-var KBApp = (function($) {
-    var app = {};
+	KB.Frontend = (function($) {
+    var api = {};
 
     var Views = [];
 
-    var Collection = new KB.ModulesCollection(Konfig, {
+    var Collection = new KB.ModulesCollection(KB.PageModules, {
         model: KB.ModuleModel
     });
 
@@ -19,7 +19,7 @@ var KBApp = (function($) {
     
     $('body').append(KB.Templates.render('fe_iframe', {}));
 
-    app.Collection = Collection;
-    app.Views = Views;
-    return app;
+    api.Collection = Collection;
+    api.Views = Views;
+    return api;
 }(jQuery));

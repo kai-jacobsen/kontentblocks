@@ -25,8 +25,9 @@ class ModuleIterator implements \Iterator,  \Countable
 
   public function getModule()
   {
+    $moduleDef = $this->modules[  $this->key()];  
     $Factory = new \Kontentblocks\Modules\ModuleFactory(
-        $this->modules[ $this->key() ], $this->Environment, $this->Environment->getModuleData( $this->key() ) );
+        $moduleDef['class'] ,$moduleDef, $this->Environment, $this->Environment->getModuleData( $this->key() ) );
     return $Factory->getModule();
 
   }
