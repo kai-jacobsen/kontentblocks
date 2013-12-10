@@ -1,25 +1,25 @@
 var KB = KB || {};
 
 
-	KB.Frontend = (function($) {
-    var api = {};
+KB.Frontend = (function($) {
+	var api = {};
 
-    var Views = [];
+	var Views = [];
 
-    var Collection = new KB.ModulesCollection(KB.PageModules, {
-        model: KB.ModuleModel
-    });
+	var Collection = new KB.ModulesCollection(KB.PageModules, {
+		model: KB.ModuleModel
+	});
 
-    _.each(Collection.models, function(model) {
-        Views.push(new KB.ModuleView({
-            el: '#' + model.get('instance_id'),
-            model: model
-        }));
-    });
-    
-    $('body').append(KB.Templates.render('fe_iframe', {}));
+	_.each(Collection.models, function(model) {
+		Views.push(new KB.ModuleView({
+			el: '#' + model.get('instance_id'), 
+			model: model
+		}));
+	});
 
-    api.Collection = Collection;
-    api.Views = Views;
-    return api;
+	$('body').append(KB.Templates.render('fe_iframe', {}));
+
+	api.Collection = Collection;
+	api.Views = Views;
+	return api;
 }(jQuery));

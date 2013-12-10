@@ -13,7 +13,7 @@ KB.ModuleView = Backbone.View.extend({
     events: {
         "click a.os-edit-block": "openVex",
         "click .editable": "initEtch",
-        "click .slider-controls": "openSlider"
+        "click .kb-js-open-layout-controls": "openLayoutControls"
     },
     render: function() {
         console.log('render');
@@ -47,13 +47,13 @@ KB.ModuleView = Backbone.View.extend({
 //            }
 //        });
     },
-    openSlider: function() {
+    openLayoutControls: function() {
 
-        if (KB.OpenSlider) {
-            KB.OpenSlider.destroy();
+        if (KB.OpenedLayoutControls) {
+            KB.OpenedLayoutControls.destroy();
         }
 
-        KB.OpenSlider = new KB.SliderView({
+        KB.OpenedLayoutControls = new KB.ModuleLayoutControls({
             tagName: 'div',
             id: 'slider-unique',
             className: 'slider-controls-wrapper',

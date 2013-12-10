@@ -85,9 +85,10 @@ class Area
         }
     }
 
+    
     private function default_tpl( $val )
     {
-        $this->default_tpl = (!empty( $val )) ? $val : 'er';
+        $this->default_tpl = (!empty( $val )) ? $val : 'default-area-template';
     }
 
 

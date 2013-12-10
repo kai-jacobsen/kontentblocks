@@ -1,3 +1,4 @@
+
 var KB = KB || {};
 
 KB.Backbone.ModuleMenuTileView = Backbone.View.extend({

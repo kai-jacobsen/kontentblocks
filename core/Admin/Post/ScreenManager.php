@@ -40,7 +40,7 @@ class ScreenManager
     {
         // get areas available
         if ( empty( $postData->get( 'areas' ) ) ) {
-            return false;
+            throw new \Exception('ScreenManager needs areas!');
         }
 
         $this->postData      = $postData;

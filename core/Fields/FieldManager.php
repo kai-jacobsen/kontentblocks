@@ -2,9 +2,6 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Fields\FieldSection,
-    Kontentblocks\Fields\FieldRenderTabs;
-
 /**
  * FieldManager
  * // TODO: Change working title
@@ -62,12 +59,28 @@ class FieldManager
     {
         //TODO Check
         $this->moduleId = $module->instance_id;
-        $this->data = $module->moduleData;
-        $this->module = $module;
-        return $this;
+        $this->data     = $module->moduleData;
+        $this->module   = $module;
 
     }
 
+    /**
+     * Creates a new section if there is not an exisiting one
+     * or returns the section
+     * @param string $id
+     * @return object groupobject
+     */
+    public function addGroup( $id, $args = array() )
+    {
+        if ( !$this->idExists( $id ) ) {
+            $this->structure[ $id ] = new FieldSection( $id, $args, $this->module->getAreaContext() );
+        }
+        return $this->structure[ $id ];
+
+    }
+
+    
+    
     public function save( $data )
     {
         $collection = array();
@@ -91,7 +104,7 @@ class FieldManager
      */
     public function renderFields()
     {
-        $Renderer = new FieldRenderTabs( $this->structure, $this );
+        $Renderer = new FieldRenderToggles( $this->structure, $this );
         $Renderer->render( $this->moduleId, $this->data );
 
     }
@@ -106,24 +119,9 @@ class FieldManager
             $this->FieldsById = $this->collectAllFields();
         }
         foreach ( $this->FieldsById as $field ) {
-            $data = (!empty($instanceData[$field->getKey()])) ? $instanceData[$field->getKey()] : '';
+            $data = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : '';
             $field->setup( $data, $this->moduleId );
         }
-
-    }
-
-    /**
-     * Creates a new section if there is not an exisiting one
-     * or returns the section
-     * @param string $id
-     * @return object groupobject
-     */
-    public function addGroup( $id, $args = array() )
-    {
-        if ( !$this->idExists( $id ) ) {
-            $this->structure[ $id ] = new FieldSection( $id, $args, $this->module->getAreaContext() );
-        }
-            return $this->structure[ $id ];
 
     }
 

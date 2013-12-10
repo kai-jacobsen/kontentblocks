@@ -1,7 +1,7 @@
 var KB = KB || {};
 KB.OSConfig = KB.OSConfig || {};
 
-KB.SliderView = Backbone.View.extend({
+KB.ModuleLayoutControls = Backbone.View.extend({
     initialize: function() {
         this.targetEl = this.options.parent.$el;
         
@@ -17,10 +17,12 @@ KB.SliderView = Backbone.View.extend({
         
         this.targetEl.addClass('edit-active');
         
-        this.$el.append(KB.Templates.render('slider', {model: this.model.toJSON()}));
+        this.$el.append(KB.Templates.render('fe_moduleLayoutControls', {model: this.model.toJSON()}));
         
         var container = jQuery('.os-controls-container', this.$el);
         
+		// init draggable 
+		// store last position on drag stop
         container.css('position', 'absolute').draggable({
             handle: 'h2',
             containment: 'window',
@@ -29,6 +31,7 @@ KB.SliderView = Backbone.View.extend({
             }
         });
         
+		// restore last position
         if (KB.OSConfig.Position){
             container.css({
                 top: KB.OSConfig.Position.top,
@@ -56,14 +59,6 @@ KB.SliderView = Backbone.View.extend({
                 that.targetEl.css('marginBottom', obj.fromNumber);
             }
         });
-        
-//        jQuery("#KBWidth").ionRangeSlider({ 
-//            from: 100,
-//            postfix: '%',
-//            onChange: function(obj) {
-//                that.targetEl.css('width', obj.fromNumber + '%');
-//            }
-//        });
     },
     destroy: function(){
         this.targetEl.removeClass('edit-active');

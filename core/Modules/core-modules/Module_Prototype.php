@@ -49,6 +49,13 @@ class Module_Prototype extends Module
                 'descriptiom' => 'stuff',
                 'areaContext' => array('side')
             ));
+        $groupB = $this->Fields->addGroup( 'Andrews', array('label' => 'What') )
+            ->addField( 'editor', 'text-a-lot', array(
+            'label' => 'Text-A-Lot',
+            'description' => 'nothing left to say',
+            'arrayKey' => 'stuffing',
+            'areaContext' => array('side', 'normal')
+            ) );
         
     }
 

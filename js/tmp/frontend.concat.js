@@ -470,6 +470,73 @@ KB.ModuleModel = Backbone.Model.extend({
     }
 });
 var KB = KB || {};
+KB.OSConfig = KB.OSConfig || {};
+
+KB.ModuleLayoutControls = Backbone.View.extend({
+    initialize: function() {
+        this.targetEl = this.options.parent.$el;
+        
+        this.render();
+    },
+    
+    events: {
+        "click a.close-controls" : "destroy"
+    },
+    
+    render: function() {
+        var that = this;
+        
+        this.targetEl.addClass('edit-active');
+        
+        this.$el.append(KB.Templates.render('fe_moduleLayoutControls', {model: this.model.toJSON()}));
+        
+        var container = jQuery('.os-controls-container', this.$el);
+        
+		// init draggable 
+		// store last position on drag stop
+        container.css('position', 'absolute').draggable({
+            handle: 'h2',
+            containment: 'window',
+            stop: function(eve, ui){
+                KB.OSConfig.Position = ui.position;
+            }
+        });
+        
+		// restore last position
+        if (KB.OSConfig.Position){
+            container.css({
+                top: KB.OSConfig.Position.top,
+                left: KB.OSConfig.Position.left
+            });
+        }
+        
+        jQuery('body').append(this.$el);
+        this.$el.tabs();
+        
+        var mt = that.targetEl.css('marginTop');
+        jQuery("#KBMarginTop").ionRangeSlider({
+            from: parseInt(mt, 10),
+            postfix: 'px',
+            onChange: function(obj) {
+                that.targetEl.css('marginTop', obj.fromNumber);
+            }
+        });
+        
+        var mb = that.targetEl.css('marginBottom');
+        jQuery("#KBMarginBottom").ionRangeSlider({
+            from: parseInt(mb, 10),
+            postfix: 'px',
+            onChange: function(obj) {
+                that.targetEl.css('marginBottom', obj.fromNumber);
+            }
+        });
+    },
+    destroy: function(){
+        this.targetEl.removeClass('edit-active');
+        this.remove(); 
+    }
+});
+var KB = KB || {};
 
 KB.ModuleView = Backbone.View.extend({
     initialize: function() {
@@ -484,7 +551,7 @@ KB.ModuleView = Backbone.View.extend({
     events: {
         "click a.os-edit-block": "openVex",
         "click .editable": "initEtch",
-        "click .slider-controls": "openSlider"
+        "click .kb-js-open-layout-controls": "openLayoutControls"
     },
     render: function() {
         console.log('render');
@@ -518,13 +585,13 @@ KB.ModuleView = Backbone.View.extend({
 //            }
 //        });
     },
-    openSlider: function() {
+    openLayoutControls: function() {
 
-        if (KB.OpenSlider) {
-            KB.OpenSlider.destroy();
+        if (KB.OpenedLayoutControls) {
+            KB.OpenedLayoutControls.destroy();
         }
 
-        KB.OpenSlider = new KB.SliderView({
+        KB.OpenedLayoutControls = new KB.ModuleLayoutControls({
             tagName: 'div',
             id: 'slider-unique',
             className: 'slider-controls-wrapper',
@@ -658,99 +725,27 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 
 });
 var KB = KB || {};
-KB.OSConfig = KB.OSConfig || {};
-
-KB.SliderView = Backbone.View.extend({
-    initialize: function() {
-        this.targetEl = this.options.parent.$el;
-        
-        this.render();
-    },
-    
-    events: {
-        "click a.close-controls" : "destroy"
-    },
-    
-    render: function() {
-        var that = this;
-        
-        this.targetEl.addClass('edit-active');
-        
-        this.$el.append(KB.Templates.render('slider', {model: this.model.toJSON()}));
-        
-        var container = jQuery('.os-controls-container', this.$el);
-        
-        container.css('position', 'absolute').draggable({
-            handle: 'h2',
-            containment: 'window',
-            stop: function(eve, ui){
-                KB.OSConfig.Position = ui.position;
-            }
-        });
-        
-        if (KB.OSConfig.Position){
-            container.css({
-                top: KB.OSConfig.Position.top,
-                left: KB.OSConfig.Position.left
-            });
-        }
-        
-        jQuery('body').append(this.$el);
-        this.$el.tabs();
-        
-        var mt = that.targetEl.css('marginTop');
-        jQuery("#KBMarginTop").ionRangeSlider({
-            from: parseInt(mt, 10),
-            postfix: 'px',
-            onChange: function(obj) {
-                that.targetEl.css('marginTop', obj.fromNumber);
-            }
-        });
-        
-        var mb = that.targetEl.css('marginBottom');
-        jQuery("#KBMarginBottom").ionRangeSlider({
-            from: parseInt(mb, 10),
-            postfix: 'px',
-            onChange: function(obj) {
-                that.targetEl.css('marginBottom', obj.fromNumber);
-            }
-        });
-        
-//        jQuery("#KBWidth").ionRangeSlider({ 
-//            from: 100,
-//            postfix: '%',
-//            onChange: function(obj) {
-//                that.targetEl.css('width', obj.fromNumber + '%');
-//            }
-//        });
-    },
-    destroy: function(){
-        this.targetEl.removeClass('edit-active');
-        this.remove(); 
-    }
-});
-var KB = KB || {};
 
 
-	KB.Frontend = (function($) {
-    var api = {};
+KB.Frontend = (function($) {
+	var api = {};
 
-    var Views = [];
+	var Views = [];
 
-    var Collection = new KB.ModulesCollection(KB.PageModules, {
-        model: KB.ModuleModel
-    });
+	var Collection = new KB.ModulesCollection(KB.PageModules, {
+		model: KB.ModuleModel
+	});
 
-    _.each(Collection.models, function(model) {
-        Views.push(new KB.ModuleView({
-            el: '#' + model.get('instance_id'),
-            model: model
-        }));
-    });
-    
-    $('body').append(KB.Templates.render('fe_iframe', {}));
+	_.each(Collection.models, function(model) {
+		Views.push(new KB.ModuleView({
+			el: '#' + model.get('instance_id'), 
+			model: model
+		}));
+	});
 
-    api.Collection = Collection;
-    api.Views = Views;
-    return api;
+	$('body').append(KB.Templates.render('fe_iframe', {}));
+
+	api.Collection = Collection;
+	api.Views = Views;
+	return api;
 }(jQuery));

@@ -45,7 +45,7 @@ Class EditScreen
         add_action( 'add_meta_boxes', array( $this, 'addUserInterface' ), 20, 2 );
         add_action( 'save_post', array( $this, 'save' ), 10, 2 );
         add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
-        add_action( 'admin_footer', array( $this, 'copymove_modal' ) );
+//        add_action( 'admin_footer', array( $this, 'copymove_modal' ) );
 
     }
 
@@ -298,11 +298,11 @@ Class EditScreen
      * Gets filled by Ajax
      */
 
-    public function copymove_modal()
-    {
-        echo "<div id='kb-copymove' class='reveal-modal small copymove'></div>\n";
-
-    }
+//    public function copymove_modal()
+//    {
+//        echo "<div id='kb-copymove' class='reveal-modal small copymove'></div>\n";
+//
+//    }
 
     public function toJSON()
     {

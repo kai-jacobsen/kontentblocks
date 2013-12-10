@@ -1,4 +1,5 @@
 <div class="os-controls-container">
+	<% console.log(model) %>
     <a class="close-controls">close</a>
     <h2 class="controls-title">Edit Stuff<span> ID: <%= model.instance_id %></span>
     </h2>
@@ -34,11 +35,11 @@
                     </tr>
                     <tr>
                         <td>Type:</td>
-                        <td><%= model.id %></td>
+                        <td><%= model.class %></td>
                     </tr>
                     <tr>
                         <td>Label:</td>
-                        <td><%= model.name %></td>
+                        <td><%= model.settings.name %></td>
                     </tr>
                     <tr>
                         <td>Description:</td>

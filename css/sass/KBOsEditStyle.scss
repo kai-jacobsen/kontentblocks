@@ -15,7 +15,9 @@
 
 body.onsite-editing {
 
-	
+	.module{
+		min-height: 30px;
+	}
 	
     .os-edit-container > .os-edit-wrapper {
         display: block;
@@ -25,6 +27,8 @@ body.onsite-editing {
     .os-edit-container {
         position: relative;
     }
+	
+	
 
     .controls-wrap{
         list-style: none;
@@ -36,7 +40,6 @@ body.onsite-editing {
 
     .os-edit-wrapper a {
         line-height: 16px;
-        background: transparent;
         display: block;
         margin: 2px 0px;
         float: left;
@@ -53,21 +56,25 @@ body.onsite-editing {
         color: #333;
     }
 
-
-    a.os-edit-block {
+	
+	
+    a.os-edit-block, a.kb-module-layout-controls {
         line-height: 24px;
         float: right;
         cursor: pointer;
+		background: $dark-grey;
+		border-radius:4px;
+		color: #fff;
+		padding-right: 10px;
     }
 
     a.os-edit-block span {
         display: block;
         height: 24px;
         width: 24px;
-
-        background: url('pencil.png') $lightblue no-repeat 6px 6px;
-        float: right;
-        margin-left: 10px;
+        background: url('pencil.png') $dark-grey no-repeat 6px 6px;
+        float: left;
+        margin-right: 10px;
 
     }
 
@@ -248,6 +255,7 @@ body.onsite-editing {
 	
     .kb_field{
         width: 100%;
+		-moz-box-sizing: border-box;
         box-sizing: border-box;
     }
     

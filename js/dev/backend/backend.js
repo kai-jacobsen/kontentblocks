@@ -55,9 +55,6 @@ KB.App = (function($) {
         
         // get the UI on track
         KB.Ui.init();
-        
-        
-        
     }
 
     /**
@@ -100,7 +97,7 @@ KB.App = (function($) {
         module.setArea(KB.Areas.get(module.get('area')));
         module.bind('change:area', module.areaChanged);
         
-        // crete view
+        // create view
         KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
