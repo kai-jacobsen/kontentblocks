@@ -58,14 +58,17 @@ class FieldRenderToggles
 
     }
 
+    /**
+     * @var $section \Kontentblocks\Fields\FieldSection;
+     */
     public function renderTogglebox()
     {
         if ( $this->length > 1 ) {
             $this->_before();
 
-            foreach ( $this->structure as $section ) {
+            foreach ( $this->structure as  $section ) {
                 if ( $section->getNumberOfVisibleFields() > 0 ) {
-                    echo "<h3 class='kb-togglebox-header'>{$section->getLabel()}</h3>";
+                    echo "<div class='kb-togglebox-header'><h3>{$section->getLabel()}</h3></div>";
                     echo "<div class='kb-togglebox-box' id='toggle-{$section->getID()}'>";
                     $section->render( $this->baseId, $this->data );
                     echo "</div>";

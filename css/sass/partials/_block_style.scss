@@ -31,7 +31,7 @@ h2.kb-title {
     padding: 6px;
     border: none;
     position: relative;
-    z-index: 1002;
+    z-index: 15;
 
     &.kb-open .block-head{
         @include box-shadow(1px 1px 1px #fff);
@@ -330,7 +330,7 @@ h5.kb_properties_title {
 
             &:hover{
                 cursor: pointer;
-                /*background-position: 0 -30px !important;*/ 
+                /*background-position: 0 -30px !important;*/
             }
 
 
@@ -351,7 +351,7 @@ h5.kb_properties_title {
 
                 &:hover{
                     &:before{
-                        color:#333; 
+                        color:#333;
                     }
                 }
 

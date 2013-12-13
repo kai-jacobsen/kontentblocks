@@ -56,7 +56,7 @@ h2.kb-title {
   padding: 6px;
   border: none;
   position: relative;
-  z-index: 1002;
+  z-index: 15;
 }
 /* line 36, sass/partials/_block_style.scss */
 .kb_block.kb-open .block-head {
@@ -420,11 +420,18 @@ h5.kb_properties_title {
 }
 
 /* line 3, sass/partials/_refields/_render-toggles.scss */
-.kb_fieldtoggles h3.kb-togglebox-header {
-  background: #ccc;
+.kb_fieldtoggles .kb-togglebox-header {
+  background: #fcfcfc;
   padding: 4px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
 }
-/* line 8, sass/partials/_refields/_render-toggles.scss */
+/* line 9, sass/partials/_refields/_render-toggles.scss */
+.kb_fieldtoggles .kb-togglebox-header h3 {
+  font-size: 12px !important;
+  font-weight: 200;
+}
+/* line 15, sass/partials/_refields/_render-toggles.scss */
 .kb_fieldtoggles .kb-togglebox-box {
   display: none;
 }

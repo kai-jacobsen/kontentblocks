@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Admin\Post;
 
-use Kontentblocks\Kontentblocks,
-    Kontentblocks\Modules\ModuleFactory,
+use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Admin\Post\ScreenManager,
     Kontentblocks\Helper;
 
@@ -11,7 +10,9 @@ use Kontentblocks\Kontentblocks,
  * Purpose: Creates the UI for the registered post type, which is just 'page' by default
  * Removes default meta boxes and adds the custom ui
  * Handles saving of areas while in post context
- * 
+ * @package Kontentblocks
+ * @subpackage Post 
+ * @since 1.0.0
  */
 Class EditScreen
 {
@@ -34,9 +35,10 @@ Class EditScreen
      */
     function __construct()
     {
-        $this->hooks   = array( 'post.php', 'post-new.php' );
-        $this->manager = Kontentblocks::getInstance();
         global $pagenow;
+
+        $this->hooks   = $this->_setupPageHooks();
+        
         if ( !in_array( $pagenow, $this->hooks ) ) {
             return null;
         }
@@ -45,24 +47,25 @@ Class EditScreen
         add_action( 'add_meta_boxes', array( $this, 'addUserInterface' ), 20, 2 );
         add_action( 'save_post', array( $this, 'save' ), 10, 2 );
         add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
-//        add_action( 'admin_footer', array( $this, 'copymove_modal' ) );
 
     }
 
     /**
      * setup post specific data used throughout the script
-     * @global object $post 
+     * @global \WP_Post $post
+     * @uses \Kontentblocks\Admin\Post\PostEnvironment
+     * @since 1.0.0  
      */
     public function preparePostData()
     {
-
         global $post;
         $this->postData = new PostEnvironment( $post->ID );
 
     }
 
     /**
-     * Add main Metabox to specified post types / page templates
+     * main hook to add the interface
+     * @since 1.0.0
      * 
      */
     function addUserInterface()
@@ -72,16 +75,21 @@ Class EditScreen
     }
 
     /**
-     * Renders the stage.
-     * 
+     * User Interface
+     * Prepares the outer html 
+     * Adds some generic but important meta informations in hidden fields
+     * calls renderScreen
+     * @since 1.0.0
      */
     function userInterface()
     {
 
+        // bail if post type doesn't support kontentblocks
         if ( !post_type_supports( $this->postData->get( 'postType' ), 'kontentblocks' ) ) {
             return false;
         }
 
+        // the main wrapper for the interface
         echo "<div class='clearfix' id='kontentblocks_stage'>";
 
         // Use nonce for verification
@@ -96,7 +104,8 @@ Class EditScreen
         if ( !post_type_supports( $this->postData->get( 'postType' ), 'editor' ) and !post_type_supports( $this->postData->get( 'postType' ), 'kb_content' ) ) {
             Helper\getHiddenEditor();
         }
-
+        
+        // baaam
         $this->renderScreen();
 
         echo "</div> <!--end ks -->";
@@ -104,10 +113,12 @@ Class EditScreen
     }
 
     /**
-     * Calls save mthod on each Module
+     * Handles the saving of modules and supplemental data
      * 
-     * TODO: Outsource saving routine
-     * @global object Kontentblocks
+     * @todo Split up or outsource in own class,
+     * @param int $post_id The current post id
+     * @param \WP_Post $post_object Post object
+     * @since 1.0.0
      */
     function save( $post_id, $post_object )
     {
@@ -251,10 +262,13 @@ Class EditScreen
     #-------------------------------------------------
 
     /**
-     *
+     * Save individual module data
+     * Such as individiual module title
+     * this data gets directly store on the module definition
      * @param array $block
      * @param array $data
-     * @return array 
+     * @return array
+     * @todo find usage and rename to ..._module_dat... 
      */
     public static function _individual_block_data( $block, $data )
     {
@@ -266,7 +280,9 @@ Class EditScreen
     /**
      * Checks if block is in draft mode and if so publish it by setting 'draft' to false
      * @param array $block
-     * @return string 
+     * @return string
+     * @todo Evaluate sense of this method
+     * @since 1.0.0 
      */
     public static function _draft_check( $block )
     {
@@ -280,8 +296,12 @@ Class EditScreen
     }
 
     /**
+     * Render
      * Create a new Screen Manager which will handle the several sections
      * True edit screen layout starts here
+     * @uses Kontentblocks\Admin\Post\ScreenManager
+     * @return void
+     * @since 1.0.0
      * 
      */
     public function renderScreen()
@@ -289,21 +309,14 @@ Class EditScreen
 
         $ScreenManager = new ScreenManager( $this->postData );
         $ScreenManager->render();
-
     }
 
-    /*
-     * Markup for the block action copymove
-     * 
-     * Gets filled by Ajax
+    /**
+     * toJSON
+     * Make certain properties available throught the frontend
+     * @since 1.0.0
+     * @return void
      */
-
-//    public function copymove_modal()
-//    {
-//        echo "<div id='kb-copymove' class='reveal-modal small copymove'></div>\n";
-//
-//    }
-
     public function toJSON()
     {
         global $post;
@@ -312,9 +325,19 @@ Class EditScreen
             'post_type' => $this->postData->get( 'postType' ),
             'post_id' => $post->ID
         );
-
         echo "<script> var KB = KB || {}; KB.Screen =" . json_encode( $toJSON ) . "</script>";
 
+    }
+
+    /**
+     * Setup default whitelist of allowed wp backend page hooks
+     * @since 1.0.0
+     * @return array
+     * @filter kb_page_hooks modify allowed page hooks
+     */
+    private function _setupPageHooks()
+    {
+        return apply_filters('kb_page_hooks', array( 'post.php', 'post-new.php' ));
     }
 
 }

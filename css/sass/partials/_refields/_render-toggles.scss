@@ -1,8 +1,15 @@
 .kb_fieldtoggles{
 	
-	h3.kb-togglebox-header{
-		background: #ccc;
+	.kb-togglebox-header{
+		background: #fcfcfc;
 		padding: 4px;
+		border-bottom: 1px solid #ccc;
+		cursor: pointer;
+		
+		h3{
+			font-size: 12px !important;
+			font-weight: 200;
+		}
 	}
 	
 	.kb-togglebox-box{

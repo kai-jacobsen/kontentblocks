@@ -58,11 +58,8 @@ class AreaRender
       $output.= $this->afterModule( $this->_afterModule( $module ), $module);
     }
 
-
     // close area wrapper
     $output.= $this->area->closeArea();
-
-
 
     if ( $echo ) {
       echo $output;
@@ -77,7 +74,7 @@ class AreaRender
   {
       return sprintf('<div id="%1$s" class="%2$s">', $module->instance_id, implode(' ', $classes));
   }
-  
+
   public function afterModule($_after,$module){
       $module->toJSON();
       return "</div>";
@@ -117,17 +114,17 @@ class AreaRender
   public function getAdditionalClasses( $module )
   {
     $classes = array();
-    
+
     $classes[] = $module->settings['id'];
-    
+
     if ($this->position === 1){
       $classes[] = 'first-module';
     }
-    
+
     if ($this->position === count($this->modules)){
       $classes[] = 'last-module';
     }
-    
+
     if ( is_user_logged_in() ) {
       $classes[] = 'os-edit-container';
     }
@@ -139,13 +136,13 @@ class AreaRender
     else {
       $this->repeating = false;
     }
-    
+
     if ($this->repeating && $this->area->getSetting('mergeRepeating')){
         $classes[] = 'module-merged';
     } else {
         $classes[] = 'module';
     }
-    
+
     return $classes;
 
   }

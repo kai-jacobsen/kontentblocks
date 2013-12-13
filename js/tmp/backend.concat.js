@@ -263,7 +263,7 @@ KB.Ui = (function($) {
 			var that = this;
 			// init Sortable
 			this.initSortable();
-			this.initToggleboxes();
+			this.initToggleBoxes();
 			// Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
 			jQuery(document).ajaxComplete(function(e, o, settings)
 			{
@@ -302,10 +302,11 @@ KB.Ui = (function($) {
 			});
 		},
 		initToggleBoxes: function(){
-			$('.kb-togglebox-header').on(function(){
-				console.log('clickediclick');
-				$(this).next('div').slideToggle();
+			$('.kb-togglebox-header').on('click', function(){
+				$(this).next('div').slideToggle().toggleClass('kb-toggle-open').end().toggleClass('kb-toggle-open');
 			});
+			
+			$('.kb-togglebox-header').first().trigger('click');
 		},
 		initSortable: function() {
 

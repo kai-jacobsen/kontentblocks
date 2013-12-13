@@ -7,9 +7,25 @@ use Kontentblocks\Admin\Post\PostMetaDataHandler,
     Kontentblocks\Utils\RegionRegistry,
     Kontentblocks\Utils\ModuleRegistry;
 
+
+/**
+ * Post Environment
+ * 
+ * This class provides an API to the underlying PostMetaDataHandler which 
+ * interacts with the WordPress API directly.
+ * Basically it's just a wrapper to often used functions around the post meta data
+ * resp. the actual module data
+ * @package Kontentblocks
+ * @subpackage Post
+ * @since 1.0.0
+ */
 class PostEnvironment extends AbstractEnvironment
 {
 
+    /**
+     * 
+     * @var type 
+     */
     protected $dataHandler;
     protected $postid;
     protected $pageTemplate;

@@ -5,11 +5,66 @@ namespace Kontentblocks\Admin\Areas;
 use Kontentblocks\Utils\RegionRegistry,
     Kontentblocks\Abstracts\AbstractEnvironment;
 
+
+/**
+ * Class description:
+ * This Class handles the creation of the area settings menu.
+ * By now area settings are limited to area templates, so the menu will
+ * only show up if area templates were set to the area.
+ * 
+ * This has some potential in it, but two years of usage show that
+ * there is no actual important usage for area templates and/or additional
+ * settings at all.
+ * 
+ * Most propably this will become a dev-only menu, because most settings related 
+ * stuff is too difficult for normal users to understand.
+ * 
+ * Priority: low
+ * TODO: think about additional settings like:
+ * - limit rendering of areas to specific roles or logged in users only
+ * - possibility to add custom css classes / style settings
+ */
 class AreaSettingsMenu
 {
 
+    /**
+     * Defualt available settings keys
+     * @var array 
+     */
     protected $defaults;
 
+    /**
+     * ID of parent area
+     * @var string
+     */
+    protected $id;
+    
+    /**
+     * Area templates which are set to be available by parent area
+     * @var array area template definitions arrays
+     */
+    protected $areaTemplates;
+    
+    /**
+     * default template set to parent area, if set at all
+     * @var string 
+     */
+    protected $defaultTpl;
+    
+    /**
+     * Environment for data handling
+     * Either a instance of: \Admin\Post\PostEnvironment or \Admin\Nonpost\GlobalEnvironment
+     * 
+     * @var object \Kontentblocks\Abstract\AbstractEnvironment
+     */
+    protected $environment;
+
+
+    /**
+     * Class Constuctor
+     * @param \Kontentblocks\Admin\Areas\Area $area
+     * @param \Kontentblocks\Abstracts\AbstractEnvironment $environment
+     */
     public function __construct( Area $area, AbstractEnvironment $environment )
     {
         $this->defaults      = $this->_getDefaults();
@@ -20,6 +75,12 @@ class AreaSettingsMenu
 
     }
 
+    /**
+     * Output method
+     * renders the html for the menu
+     * TODO: Could use a twig template
+     * 
+     */
     public function render()
     {
         $areaTemplates = $this->_getAssignedTemplates();
@@ -48,6 +109,13 @@ class AreaSettingsMenu
 
     }
 
+    
+    /**
+     * Handles a single area template li item
+     * @param string $tpl item
+     * @param string $data saved data
+     * TODO: Twig it!
+     */
     private function _areaTemplateItem( $tpl, $data )
     {
 
@@ -72,10 +140,10 @@ class AreaSettingsMenu
     }
 
     /**
-     * Get Templates registered for this area
-     * basically verifies that a template exists
+     * Get actual Template settings array for registered templates
+     * verifies that a template actually exists
      * @param array $registered_templates
-     * @return array or void 
+     * @return array or null 
      */
     public function _getAssignedTemplates()
     {
@@ -95,6 +163,12 @@ class AreaSettingsMenu
 
     }
 
+    
+    /**
+     * Available settings keys should be set here
+     * Simple for now, may get extended
+     * @return array
+     */
     private function _getDefaults()
     {
         $defaults = array(
@@ -105,6 +179,15 @@ class AreaSettingsMenu
 
     }
 
+    /**
+     * This is actual a filter to make sure that a template is set in any case
+     * Checks if a template was already saved
+     * if not, and a default template was set for the area it will return
+     * the default template, else the saved data
+     * @param string $tpl
+     * @param array $data saved area settings data
+     * @return type
+     */
     public function getSelectedTemplate( $tpl, $data )
     {
         if ( empty( $data[ 'area_template' ] ) ) {

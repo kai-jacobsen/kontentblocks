@@ -7,7 +7,7 @@ use Kontentblocks\Utils\ModuleRegistry;
 /*
  * Kontentblocks: Areas: Menu Class
  * @package Kontentblocks
- * @subpackage Areas 
+ * @subpackage Areas
  */
 
 class ModuleMenu
@@ -52,7 +52,7 @@ class ModuleMenu
     function __construct( $area )
     {
         // All Modules which are accessible by this area
-        $this->modules = ModuleRegistry::getInstance()->getValidModulesForArea( $area, $area->environment );
+        $this->modules = ModuleRegistry::getInstance()->getValidModulesForArea( $area, $area->get( 'environment' ) );
 
         if ( empty( $this->modules ) or !is_array( $this->modules ) or !isset( $area->id ) or !isset( $area->context ) ) {
             return false;
@@ -85,7 +85,7 @@ class ModuleMenu
     }
 
     /* Menu Footer
-     * 
+     *
      * Print modal menu contents to the admin footer
      * Makes sure that the modal is outside of wp-wrap and positions as expected
      */
@@ -119,7 +119,7 @@ class ModuleMenu
         if ( current_user_can( 'create_kontentblocks' ) ) {
             if ( !empty( $this->modules ) ) {
                 $out = " <div class='add-modules cantsort'>
-							
+
 					</div>";
                 return $out;
             }

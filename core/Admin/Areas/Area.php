@@ -8,21 +8,64 @@ use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Admin\Areas\AreaSettingsMenu,
     Kontentblocks\Templating\CoreTemplate;
 
+/**
+ * Area
+ * Class description:
+ * @package Kontentblocks
+ * @subpackage Areas
+ * @since 1.0.0
+ *
+ *
+ */
 class Area
 {
 
     /**
-     * Class Constructor
-     * @param array $area
-     * @return type 
+     * Location on the edit screen
+     * Valid locations are: top | normal | side | bottom
+     * @var string
      */
-    function __construct( $area, AbstractEnvironment $environment, $context = 'global' )
+    protected $context;
+
+    /**
+     * Environment for data handling
+     * Either a instance of: \Admin\Post\PostEnvironment or \Admin\Nonpost\GlobalEnvironment
+     *
+     * @var object \Kontentblocks\Abstract\AbstractEnvironment
+     */
+    protected $environment;
+
+    /**
+     * The "add new module" modal menu
+     * @var object \Kontentblocks\Admin\Areas\ModuleMenu
+     */
+    protected $moduleMenu;
+
+    /**
+     * Modules which were saved on this area
+     * @var array array of module settings from database
+     */
+    protected $attachedModules;
+
+    /**
+     * Settings menu object
+     * @var object \Kontentblocks\Admin\Areas\AreaSettingsMenu
+     */
+    protected $settingsMenu;
+
+    /**
+     * Class Constructor
+     * @param array $area area settings array
+     */
+    function __construct( $area, AbstractEnvironment $environment, $context = 'normal' )
     {
 
         if ( empty( $area ) ) {
             throw new \Exception( 'No Arguments for Area specified' );
         }
+
         // setup localization string
+        // TODO: Outsource all i18n strings to seperate file
         $this->l18n = array(
             // l18n
             'add_block' => __( 'add module', 'kontentblocks' ),
@@ -34,21 +77,126 @@ class Area
 
         // context in regards of position on the edit screen
         $this->context = $context;
-        
+
         // environment
         $this->environment = $environment;
-        
+
         // batch setting of properties
         $this->_setupAreaProperties( $area );
 
         // Menu wit available modules for this area
-        $this->moduleMenu      = new ModuleMenu( $this );
-        
+        $this->moduleMenu = new ModuleMenu( $this );
+
         //actual stored module for this area
         $this->attachedModules = $this->environment->getModulesForArea( $this->id );
-        
+
         // custom settins for this area
-        $this->settingsMenu    = new AreaSettingsMenu( $this, $this->environment );
+        $this->settingsMenu = new AreaSettingsMenu( $this, $this->environment );
+
+    }
+
+    private function default_tpl( $val )
+    {
+        $this->default_tpl = (!empty( $val )) ? $val : 'default-area-template';
+
+    }
+
+    /*
+     * Get Markup for block limit indicator, return void if unlimited
+     */
+
+    private function _getModuleLimitTag()
+    {
+        // prepare string
+        $limit = ($this->limit == '0') ? null : absint( $this->limit );
+
+        if ( null !== $limit ) {
+            echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
+        }
+
+    }
+
+    /**
+     * Area Header Markup
+     *
+     * Creates the markup for the area header
+     * utilizes twig template
+     */
+    public function header()
+    {
+        $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
+
+        $Tpl = new CoreTemplate( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );
+        $Tpl->render( true );
+
+    }
+
+    /**
+     * Render all attached modules for this area
+     * backend only
+     */
+    public function render()
+    {
+
+        // list items for this area, block limit gets stored here
+        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
+        if ( !empty( $this->attachedModules ) ) {
+
+
+            foreach ( $this->attachedModules as $module ) {
+                $module[ 'areaContext' ] = $this->context;
+                $Factory                 = new ModuleFactory( $module[ 'class' ], $module, $this->environment );
+                $instance                = $Factory->getModule();
+                $instance->_render_options();
+            }
+        }
+
+        echo "</ul>";
+
+        // render "add new module" link, if available
+        if ( $this->moduleMenu ) {
+            echo $this->moduleMenu->menuLink();
+        }
+
+        // block limit tag, if applicable
+        $this->_getModuleLimitTag();
+
+    }
+
+    /*
+     * ################################################
+     * Helper Methods beyond this point
+     * ################################################
+     */
+
+    /**
+     * toJSON
+     * make certain area properties accessable throught the frontend
+     * renders a script tag with an json array of area properties
+     */
+    public function toJSON()
+    {
+
+        // This gets checked elsewhere as well
+        // but to be sure that this doesn't happen
+        // for normal users, better safe than sorry
+        if ( !is_user_logged_in() ) {
+            return;
+        }
+
+        $area = array(
+            'id' => $this->id,
+            'assignedModules' => $this->assignedModules,
+            'modules' => $this->attachedModules,
+            'limit' => absint( $this->limit ),
+            'context' => $this->context
+        );
+        $json = json_encode( $area );
+        echo "<script>"
+        . "var KB = KB || {};"
+        . "KB.RawAreas = KB.RawAreas || {};"
+        . "KB.RawAreas['{$this->id}'] = {$json};</script>";
+
     }
 
     /**
@@ -83,93 +231,7 @@ class Area
                 $this->$key = $value;
             }
         }
-    }
-
-    
-    private function default_tpl( $val )
-    {
-        $this->default_tpl = (!empty( $val )) ? $val : 'default-area-template';
-    }
-
-
-    /*
-     * Get Markup for block limit indicator, return void if unlimited
-     */
-    private function _getModuleLimitTag()
-    {
-        // prepare string
-        $limit = ($this->limit == '0') ? null : absint( $this->limit );
-
-        if ( null !== $limit ) {
-            echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
-        }
 
     }
-
-    /**
-     * Do Area Header
-     * 
-     * Creates all the markup for the area header 
-     */
-    public function header()
-    {
-        $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
-
-        $Tpl = new CoreTemplate('Area-Header.twig', array('area' => $this, 'headerClass' => $headerClass));
-        $Tpl->render(true);
-        
-    }
-
-    /**
-     * Render all Modules for this Area
-     */
-    public function render()
-    {
-        
-        // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
-        if ( !empty( $this->attachedModules ) ) {
-            // TODO:Quatsch
-            foreach ( $this->attachedModules as $module ) {
-                $module['areaContext'] = $this->context;
-                $Factory = new ModuleFactory($module['class'], $module, $this->environment);
-                $instance = $Factory->getModule();
-                $instance->_render_options();
-            }
-        }
-
-        echo "</ul>";
-
-        if ( $this->moduleMenu ) {
-            echo $this->moduleMenu->menuLink();
-        }
-
-        // block limit
-        $this->_getModuleLimitTag();
-
-    }
-
-    /*
-     * Helper Methods
-     */
-
-  
-    public function toJSON()
-    {
-        $area = array(
-            'id' => $this->id,
-            'assignedModules' => $this->assignedModules,
-            'modules' => $this->attachedModules,
-            'limit' => absint($this->limit),
-            'context' => $this->context
-        );
-        $json = json_encode($area);
-        echo "<script>"
-        . "var KB = KB || {};"
-            . "KB.RawAreas = KB.RawAreas || {};"
-            . "KB.RawAreas['{$this->id}'] = {$json};</script>";
-    }
-    
-    
 
 }
