@@ -17,6 +17,7 @@ class DuplicateModule
     {
         $this->postId     = $_POST[ 'post_id' ];
         $this->instanceId = $_POST[ 'module' ];
+        $this->class      = $_POST[ 'class' ];
 
         $this->Environment   = $this->setupEnvironment();
         $this->newInstanceId = $this->getNewInstanceId();
@@ -48,7 +49,7 @@ class DuplicateModule
 
             $moduleDefinition[ 'areaContext' ]  = filter_var( $_POST[ 'areaContext' ], FILTER_SANITIZE_STRING );
 
-            $Factory     = new ModuleFactory( $moduleDefinition, $this->Environment );
+            $Factory     = new ModuleFactory( $this->class, $moduleDefinition, $this->Environment);
             $newInstance = $Factory->getModule();
 
 
@@ -56,10 +57,11 @@ class DuplicateModule
             $newInstance->_render_options();
             $html = ob_get_clean();
 
+
             $response = array
                 (
                 'id' => $this->newInstanceId,
-                'module' => get_object_vars( $newInstance ),
+                'module' => $moduleDefinition,
                 'name' => $newInstance->settings[ 'public_name' ],
                 'html' => $html
             );

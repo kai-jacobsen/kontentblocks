@@ -17,13 +17,13 @@ Class Editor extends Field
         $name  = $this->get_field_name( $this->getArg('array') );
         $id    = $this->get_field_id( true );
         $value = $this->getValue();
-        ob_start();
+
+        $this->label();
         kb_wp_editor( $id, $value, $name, $media );
-        $html = ob_get_clean();
-        echo $html;
+        $this->description();
 
     }
 
 }
 
-kb_register_field2( 'editor', 'Kontentblocks\Fields\Definitions\Editor' );
+kb_register_fieldtype( 'editor', 'Kontentblocks\Fields\Definitions\Editor' );

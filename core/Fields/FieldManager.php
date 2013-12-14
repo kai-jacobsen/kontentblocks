@@ -9,14 +9,14 @@ namespace Kontentblocks\Fields;
  * Purpose of this class:
  * Connecting fields to a module and offering an API to interact with
  * fields and the underlying structure.
- * 
+ *
  * There are two different cases which are handled by this class:
  * 1) Backend: preparing fields and initiate the rendering of the field output
  * 2) Frontend: Setting fields up.
- * 
+ *
  * Instantiated by Kontentblocks\Modules\Module if fields() method is present
  * in extending class
- * 
+ *
  * @see Kontentblocks\Modules\Module::__cosntruct()
  * @param object | Module instance
  * @return self
@@ -27,26 +27,26 @@ class FieldManager
     /**
      * Unique ID from module
      * Used to prefix form fields
-     * @var string 
+     * @var string
      */
     protected $moduleId;
 
     /**
      * Collection of added Sections / Fields ...
-     * @var array 
+     * @var array
      */
     protected $structure;
 
     /**
-     * Object to handle the section layout 
+     * Object to handle the section layout
      * e.g. defaults to tabs
-     * @var object 
+     * @var object
      */
     protected $Render;
 
     /**
      * registered fields in one flat array
-     * @var array 
+     * @var array
      */
     protected $FieldsById;
 
@@ -79,13 +79,13 @@ class FieldManager
 
     }
 
-    
-    
-    public function save( $data )
+
+
+    public function save( $data, $oldData )
     {
         $collection = array();
         foreach ( $this->structure as $definition ) {
-            $return     = ($definition->save( $data ));
+            $return     = ($definition->save( $data, $oldData ));
             $collection = $collection + $return;
         }
         return $collection;
@@ -127,11 +127,11 @@ class FieldManager
 
     /**
      * Get a field object by key
-     * returns the object on success 
+     * returns the object on success
      * or false if key does not exist
-     * 
+     *
      * @param string $key
-     * @return mixed 
+     * @return mixed
      */
     public function getFieldByKey( $key )
     {
@@ -150,7 +150,7 @@ class FieldManager
 
     /**
      * Extract single fields from structure object
-     * and stores them in one singel flat array 
+     * and stores them in one singel flat array
      * @return array
      */
     public function collectAllFields()

@@ -34,4 +34,4 @@ Class Image extends Field
 
 }
 
-kb_register_field2( 'image', 'Kontentblocks\Fields\Definitions\Image' );
+kb_register_fieldtype( 'image', 'Kontentblocks\Fields\Definitions\Image' );

@@ -430,8 +430,10 @@ h5.kb_properties_title {
 .kb_fieldtoggles .kb-togglebox-header h3 {
   font-size: 12px !important;
   font-weight: 200;
+  padding: 6px;
+  margin: 0;
 }
-/* line 15, sass/partials/_refields/_render-toggles.scss */
+/* line 17, sass/partials/_refields/_render-toggles.scss */
 .kb_fieldtoggles .kb-togglebox-box {
   display: none;
 }

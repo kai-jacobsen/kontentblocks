@@ -82,12 +82,13 @@ abstract class Field
     public function build()
     {
         if ( !$this->getDisplay() ) {
-            return;
+            $this->renderHidden();
         }
-
-        $this->header();
-        $this->body();
-        $this->footer();
+        else {
+            $this->header();
+            $this->body();
+            $this->footer();
+        }
 
     }
 
@@ -107,10 +108,14 @@ abstract class Field
 
     public function body()
     {
-
-        $this->label();
+        if ( method_exists( $this, 'preForm' ) ) {
+            $this->preForm();
+        }
         $this->form();
-        $this->description();
+
+        if ( method_exists( $this, 'postForm' ) ) {
+            $this->postForm();
+        }
 
     }
 
@@ -131,7 +136,25 @@ abstract class Field
 
     public function getValue()
     {
-        return stripslashes_deep( $this->value );
+        if ( method_exists( $this, 'filter' ) ) {
+            return $this->filter( $this->value );
+        }
+
+        return $this->value;
+
+    }
+
+    public function renderHidden()
+    {
+
+        if ( is_array( $this->value ) ) {
+            foreach ( $this->value as $k => $v ) {
+                echo "<input type='hidden' name='{$this->get_field_name( $k )}' value='{$v}' >";
+            }
+        }
+        else {
+            echo "<input type='hidden' name='{$this->get_field_name()}' value='{$this->getValue()}' >";
+        }
 
     }
 
@@ -147,20 +170,25 @@ abstract class Field
 
     }
 
+    public function _save( $keydata, $oldKeyData = NULL )
+    {
+        return $this->save( $keydata, $oldKeyData );
 
-    public function save( $keydata )
+    }
+
+    public function save( $keydata, $oldKeyData )
     {
         return $keydata;
 
     }
 
-    public function getArg( $arg )
+    public function getArg( $arg, $default = false )
     {
         if ( !empty( $this->args[ $arg ] ) ) {
             return $this->args[ $arg ];
         }
         else {
-            return false;
+            return $default;
         }
 
     }
@@ -197,11 +225,11 @@ abstract class Field
     /**
      * Helper to generate input names and connect them to the current block
      * This method has options to generate a name, name[] or name['key']
-     * 
+     *
      * @param string $key - base key for the input field
      * @param bool $array - if true add [] to the key
      * @param bool $akey - if true add ['$akey'] to the key
-     * @return string 
+     * @return string
      */
     public function get_field_name( $array = false, $akey = NULL, $multiple = false )
     {
@@ -240,6 +268,12 @@ abstract class Field
 
     }
 
+    public function getPlaceholder()
+    {
+        return $this->getArg( 'placeholder' );
+
+    }
+
     public function get_data( $key, $return = '' )
     {
         if ( is_array( $this->data ) ) {
@@ -253,9 +287,9 @@ abstract class Field
 
     /**
      * Helper to create a class attribute
-     * 
+     *
      * @param string $class
-     * @return string - html attribute 
+     * @return string - html attribute
      */
     public function get_css_class( $class )
     {

@@ -7,13 +7,13 @@ use Kontentblocks\Fields\FieldRegistry,
 
 /**
  * Purpose of this Class:
- * 
+ *
  * This serves as a collection handler for fields and offers
  * methods to interact with registered fields.
- * 
+ *
  * Gets instantiated by Kontentblocks\Fields\FieldManager when
- * addSection() is called 
- * 
+ * addSection() is called
+ *
  * @see Kontentblocks\Fields\FieldManager::addSection()
  * @package Fields
  * @since 1.0.0
@@ -23,19 +23,19 @@ class FieldSection
 
     /**
      * Unique identifier
-     * @var string 
+     * @var string
      */
     public $id;
 
     /**
      * Arra of registered fields for this section
-     * @var array 
+     * @var array
      */
     protected $fields;
 
     /**
      * Preset defaults
-     * @var array 
+     * @var array
      */
     public static $defaults = array(
         'label' => 'Fieldgroup',
@@ -44,13 +44,13 @@ class FieldSection
 
     /**
      * Counter for total number of added fields in this section
-     * @var int 
+     * @var int
      */
     protected $numberOfFields = 0;
 
     /**
      * Counter for actual fields to render
-     * @var int 
+     * @var int
      */
     protected $numberOfVisibleFields = 0;
 
@@ -61,6 +61,7 @@ class FieldSection
      */
     public function __construct( $id, $args, $areaContext = null )
     {
+
         $this->id          = $id;
         $this->args        = $this->prepareArgs( $args );
         $this->areaContext = $areaContext;
@@ -69,7 +70,7 @@ class FieldSection
 
     /**
      * Add a field definition to the group field collection
-     * 
+     *
      * TODO: Reduce conditional nesting
      * @param string $type | Type of form field
      * @param string $key | Unique key
@@ -134,7 +135,14 @@ class FieldSection
         }
 
         foreach ( $this->fields as $field ) {
-            $fielddata = (!empty( $data[ $field->getKey() ] )) ? $data[ $field->getKey() ] : '';
+            // TODO: Keep an eye on it
+            if ( isset( $data[ $field->getKey() ] ) ) {
+                $fielddata = (is_array( $data ) && !is_null( $data[ $field->getKey() ] )) ? $data[ $field->getKey() ] : '';
+            }
+            else {
+                $fielddata = '';
+            }
+
             $field->setBaseId( $moduleId );
             $field->setData( $fielddata );
             $field->build();
@@ -147,12 +155,17 @@ class FieldSection
      * @param array $data
      * @return array
      */
-    public function save( $data )
+    public function save( $data, $oldData )
     {
         $collect = array();
         foreach ( $this->fields as $field ) {
+            $old = (isset( $oldData[ $field->getKey() ] )) ? $oldData[ $field->getKey() ] : NULL;
+
             if ( isset( $data[ $field->getKey() ] ) ) {
-                $collect[ $field->getKey() ] = $field->save( $data[ $field->getKey() ] );
+                $collect[ $field->getKey() ] = $field->_save( $data[ $field->getKey() ], $old );
+            }
+            else {
+                $collect[ $field->getKey() ] = $field->_save( NULL, $old );
             }
         }
         return $collect;
@@ -249,6 +262,7 @@ class FieldSection
     public function getNumberOfVisibleFields()
     {
         return $this->numberOfVisibleFields;
+
     }
 
 }

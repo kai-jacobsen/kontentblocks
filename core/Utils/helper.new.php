@@ -171,23 +171,38 @@ function underscoreit( $val )
 function arrayMergeRecursiveAsItShouldBe( $new, $old )
 {
     $merged = $new;
+
     if ( is_array( $old ) ) {
         foreach ( $old as $key => $val ) {
             if ( is_array( $old[ $key ] ) ) {
-                if ( isset( $merged[ $key ] ) ) {
+                if ( isset( $merged[ $key ] ) && $merged[ $key ] !== NULL ) {
                     $merged[ $key ] = arrayMergeRecursiveAsItShouldBe( $merged[ $key ], $old[ $key ] );
+                }
+                elseif ( isset( $merged[ $key ] ) && $merged[ $key ] === NULL ) {
+                    $merged[ $key ] = NULL;
                 }
                 else {
                     $merged[ $key ] = arrayMergeRecursiveAsItShouldBe( $old[ $key ], $old[ $key ] );
                 }
             }
             else {
-                if ( !isset( $merged[ $key ] ) ) {
+                if ( $merged[ $key ] === NULL ) {
+                    unset( $merged[ $key ] );
+                }
+                elseif ( !isset( $merged[ $key ] ) ) {
                     $merged[ $key ] = $val;
                 }
             }
         }
     }
+
     return $merged;
+
+}
+
+
+function noOptionsMessage()
+{
+    return "<div class='kb-no-options'>No Options available</div>";
 
 }

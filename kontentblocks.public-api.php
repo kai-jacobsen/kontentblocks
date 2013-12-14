@@ -9,9 +9,9 @@ if ( !defined( 'ABSPATH' ) ) {
 
 /**
  * Has to be used by each Block Class to register itself
- * 
+ *
  * @global object $Kontentblocks
- * @param string $classname 
+ * @param string $classname
  */
 function kb_register_block( $classname )
 {
@@ -23,9 +23,9 @@ function kb_register_block( $classname )
 /**
  * Used to register specific per-post area settings, basically css classes to be used for a area
  * Might be handy, if you use a block for different, but similar occassions, but need slightly different styling or grid layouts
- * 
+ *
  * @global object $Kontentblocks
- * @param array $args 
+ * @param array $args
  */
 function kb_register_area_settings( $args )
 {
@@ -36,8 +36,8 @@ function kb_register_area_settings( $args )
 
 /**
  * Manually register area
- * 
- * Those Areas can not be deleted through the admin menu 
+ *
+ * Those Areas can not be deleted through the admin menu
  */
 function kb_register_area( $args )
 {
@@ -48,7 +48,7 @@ function kb_register_area( $args )
 
 /**
  * Used to register specific area templates, basically css classes to be used for a area
- * 
+ *
  * @global object $Kontentblocks
  * @param array $args
  * @param string id | unique identifier string
@@ -72,10 +72,10 @@ function kb_register_wrapper( $area_template )
 
 /**
  * Template Tag to render a area and containing blocks
- * 
+ *
  * @global object $Kontentblocks
  * @param string $post_id
- * @param string $area 
+ * @param string $area
  */
 function kb_render_blocks( $id = NULL, $area = 'kontentblocks' )
 {
@@ -140,22 +140,22 @@ function kb_render_area_sidebar( $id = null, $context = null, $subcontext = 'sid
 
 /**
  * Used by each Field Class to register itself
- * 
+ *
  * @global object $Kontentfields
  * @param string $id
- * @param string $class 
+ * @param string $class
  */
 function kb_register_field( $id, $class )
 {
     global $Kontentfields;
     $Kontentfields->register_field( $id, $class );
-};
+}
 
-function kb_register_field2( $id, $class )
+function kb_register_fieldtype( $id, $class )
 {
 
      FieldRegistry::getInstance()->registerField( $id, $class );
-};
+}
 
 /*
  * Get Dev Mode Status of Kontentblocks

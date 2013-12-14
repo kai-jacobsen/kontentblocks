@@ -11,7 +11,7 @@ use Kontentblocks\Modules\ModuleFactory,
  * Removes default meta boxes and adds the custom ui
  * Handles saving of areas while in post context
  * @package Kontentblocks
- * @subpackage Post 
+ * @subpackage Post
  * @since 1.0.0
  */
 Class EditScreen
@@ -19,26 +19,26 @@ Class EditScreen
 
     /**
      * Whitelist of hooks
-     * @var array 
+     * @var array
      */
     protected $hooks;
 
     /**
      * Post data Handler
-     * @var objext 
+     * @var objext
      */
     protected $postData;
 
     /**
      * Add the main metabox to all given post types in the kb_register_kontentblocks function call
-     * 
+     *
      */
     function __construct()
     {
         global $pagenow;
 
-        $this->hooks   = $this->_setupPageHooks();
-        
+        $this->hooks = $this->_setupPageHooks();
+
         if ( !in_array( $pagenow, $this->hooks ) ) {
             return null;
         }
@@ -54,7 +54,7 @@ Class EditScreen
      * setup post specific data used throughout the script
      * @global \WP_Post $post
      * @uses \Kontentblocks\Admin\Post\PostEnvironment
-     * @since 1.0.0  
+     * @since 1.0.0
      */
     public function preparePostData()
     {
@@ -66,7 +66,7 @@ Class EditScreen
     /**
      * main hook to add the interface
      * @since 1.0.0
-     * 
+     *
      */
     function addUserInterface()
     {
@@ -76,7 +76,7 @@ Class EditScreen
 
     /**
      * User Interface
-     * Prepares the outer html 
+     * Prepares the outer html
      * Adds some generic but important meta informations in hidden fields
      * calls renderScreen
      * @since 1.0.0
@@ -104,7 +104,7 @@ Class EditScreen
         if ( !post_type_supports( $this->postData->get( 'postType' ), 'editor' ) and !post_type_supports( $this->postData->get( 'postType' ), 'kb_content' ) ) {
             Helper\getHiddenEditor();
         }
-        
+
         // baaam
         $this->renderScreen();
 
@@ -114,7 +114,7 @@ Class EditScreen
 
     /**
      * Handles the saving of modules and supplemental data
-     * 
+     *
      * @todo Split up or outsource in own class,
      * @param int $post_id The current post id
      * @param \WP_Post $post_object Post object
@@ -123,7 +123,7 @@ Class EditScreen
     function save( $post_id, $post_object )
     {
 
-        // verify if this is an auto save routine. 
+        // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
         if ( empty( $_POST ) ) {
             return;
@@ -184,15 +184,15 @@ Class EditScreen
                     continue;
                 }
 
-                //hack 
-                $id     = null;
+                //hack
+                $id = null;
 
                 // new data from $_POST
                 //TODO: filter incoming data
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
                 $old  = $Environment->getDataHandler()->getModuleData( $module[ 'instance_id' ] );
-                
-                $Factory              = new ModuleFactory($module['class'], $module, $Environment );
+
+                $Factory              = new ModuleFactory( $module[ 'class' ], $module, $Environment );
                 $instance             = $Factory->getModule();
                 $instance->post_id    = $real_post_id;
                 // old, saved data
@@ -218,9 +218,9 @@ Class EditScreen
                 }
                 else {
                     $new = $instance->save( $data, $old );
-                    
                     $new = apply_filters( 'modify_block_data', $new );
-                    $savedData = Helper\arrayMergeRecursiveAsItShouldBe( $new, $old);
+
+                    $savedData = Helper\arrayMergeRecursiveAsItShouldBe( $new, $old );
                     
                 }
 
@@ -268,13 +268,14 @@ Class EditScreen
      * @param array $block
      * @param array $data
      * @return array
-     * @todo find usage and rename to ..._module_dat... 
+     * @todo find usage and rename to ..._module_dat...
      */
     public static function _individual_block_data( $block, $data )
     {
-        $block['overrides'][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block[ 'overrides' ][ 'name' ];
+        $block[ 'overrides' ][ 'name' ] = (!empty( $data[ 'block_title' ] )) ? $data[ 'block_title' ] : $block[ 'overrides' ][ 'name' ];
 
         return $block;
+
     }
 
     /**
@@ -282,7 +283,7 @@ Class EditScreen
      * @param array $block
      * @return string
      * @todo Evaluate sense of this method
-     * @since 1.0.0 
+     * @since 1.0.0
      */
     public static function _draft_check( $block )
     {
@@ -302,13 +303,14 @@ Class EditScreen
      * @uses Kontentblocks\Admin\Post\ScreenManager
      * @return void
      * @since 1.0.0
-     * 
+     *
      */
     public function renderScreen()
     {
 
         $ScreenManager = new ScreenManager( $this->postData );
         $ScreenManager->render();
+
     }
 
     /**
@@ -337,7 +339,8 @@ Class EditScreen
      */
     private function _setupPageHooks()
     {
-        return apply_filters('kb_page_hooks', array( 'post.php', 'post-new.php' ));
+        return apply_filters( 'kb_page_hooks', array( 'post.php', 'post-new.php' ) );
+
     }
 
 }

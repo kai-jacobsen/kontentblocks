@@ -241,14 +241,14 @@ KB.TinyMCE = (function($) {
 
 }(jQuery));
 /**
- * 
+ *
  * These is a collection of helper functions to handle
- * the user interface / user interaction such as 
+ * the user interface / user interaction such as
  * - Sorting
  * - TinyMCE De-/Initialization
  * - Tabs initialization
  * - UI repainting / updating
- * 
+ *
  * @package Kontentblocks
  * @subpackage Backend/UI
  * @type @exp; KB
@@ -279,7 +279,7 @@ KB.Ui = (function($) {
 		},
 		repaint: function($el) {
 			this.initTabs();
-			this.initToggleboxes();
+			this.initToggleBoxes();
 			KB.TinyMCE.addEditor($el);
 		},
 		initTabs: function() {
@@ -305,8 +305,8 @@ KB.Ui = (function($) {
 			$('.kb-togglebox-header').on('click', function(){
 				$(this).next('div').slideToggle().toggleClass('kb-toggle-open').end().toggleClass('kb-toggle-open');
 			});
-			
-			$('.kb-togglebox-header').first().trigger('click');
+
+			$('.kb_fieldtoggles div:first-child').trigger('click');
 		},
 		initSortable: function() {
 
@@ -333,7 +333,7 @@ KB.Ui = (function($) {
 			}
 
 			/**
-			 * Get an array of modules by area id 
+			 * Get an array of modules by area id
 			 * @param id string
 			 * @returns array of all found modules in that area
 			 */
@@ -357,7 +357,7 @@ KB.Ui = (function($) {
 				// start event
 				start: function(event, ui)
 				{
-					// set current model 
+					// set current model
 					currentModule = KB.Modules.get(ui.item.attr('id'));
 					currentModule.view.$body.hide();
 					// close open modules, sorting on open container
@@ -375,10 +375,10 @@ KB.Ui = (function($) {
 				{
 					var serializedData = [];
 
-					// restore TinyMCE editors 
+					// restore TinyMCE editors
 					KB.TinyMCE.restoreEditors();
 
-					// global trigger when soprtable is done		
+					// global trigger when soprtable is done
 					$(document).trigger('kb_sortable_stop', [event, ui]);
 
 				},
@@ -441,7 +441,7 @@ KB.Ui = (function($) {
 			});
 		},
 		/**
-		 * 
+		 *
 		 * @param object targetArea
 		 * @param object module
 		 * @returns {jqXHR}
@@ -701,10 +701,12 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         'click': 'duplicateModule'
     },
     duplicateModule: function() {
+		console.log(this.model);
         KB.Ajax.send({
             action: 'duplicateModule',
             module: this.model.get('instance_id'),
-            areaContext: this.model.get('area').get('context')
+            areaContext: this.model.area.get('context'),
+			'class': this.model.get('class')
         }, this.success, this);
 
     },
@@ -718,7 +720,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         }
     },
     success: function(data) {
-        this.model.get('area').view.modulesList.append(data.html);
+        this.model.area.view.modulesList.append(data.html);
         KB.Modules.add(data.module);
         // update the reference counter, used as base number
         // for new modules
@@ -727,7 +729,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
 
 
     }
-}); 
+});
 'use strict';
 var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
@@ -856,48 +858,53 @@ var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.ModuleView = Backbone.View.extend({
-    $head: null,
-    $body: null,
-    ModuleMenu: null,
-    events:{
-        'click .kb-toggle' : 'toggleBody'
-    },
-    initialize: function() {
-        
-        // Setup Elements
-        this.$head = jQuery('.block-head', this.$el);
-        this.$body = jQuery('.kb_inner', this.$el);
-        this.ModuleMenu = new KB.Backbone.ModuleMenuView({
-            el: this.$el,
-            parent: this
-        });
-        this.model.view = this;
-        
-        // Setup View
-        this.setupDefaultMenuItems();
-    },
-    setupDefaultMenuItems: function() {
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({model: this.model, parent: this}));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
-    },
-    toggleBody: function(){
-        if (KB.Checks.userCan('edit_kontentblocks')){
-            this.$body.slideToggle();
-            this.$el.toggleClass('kb-open');
-            KB.currentModule = this.model;
-        }
-    },
-    updateModuleForm: function(){
-        KB.Ajax.send({
-            action: 'afterAreaChange',
-            module: this.model.toJSON()
-        }, this.insertNewUpdateForm, this);
-    },
-    insertNewUpdateForm: function(response){
-        this.$body.html(response);
-        KB.Ui.repaint(this.$el);
-    }
+	$head: null,
+	$body: null,
+	ModuleMenu: null,
+	events: {
+		'click .kb-toggle': 'toggleBody'
+	},
+	initialize: function() {
+
+		// Setup Elements
+		this.$head = jQuery('.block-head', this.$el);
+		this.$body = jQuery('.kb_inner', this.$el);
+		this.ModuleMenu = new KB.Backbone.ModuleMenuView({
+			el: this.$el,
+			parent: this
+		});
+		this.model.view = this;
+
+		// Setup View
+		this.setupDefaultMenuItems();
+	},
+	setupDefaultMenuItems: function() {
+		this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({model: this.model, parent: this}));
+		this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
+		this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
+	},
+	toggleBody: function() {
+		if (KB.Checks.userCan('edit_kontentblocks')) {
+			this.$body.slideToggle();
+			this.$el.toggleClass('kb-open');
+			KB.currentModule = this.model;
+		}
+	},
+	updateModuleForm: function() {
+		KB.Ajax.send({
+			action: 'afterAreaChange',
+			module: this.model.toJSON()
+		}, this.insertNewUpdateForm, this);
+	},
+	insertNewUpdateForm: function(response) {
+		console.log(response);
+		if (response !== '') {
+			this.$body.html(response);
+		} else {
+			this.$body.html('empty');
+		}
+		KB.Ui.repaint(this.$el);
+	}
 
 });
 'use strict';

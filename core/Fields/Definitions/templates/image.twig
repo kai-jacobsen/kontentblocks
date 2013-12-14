@@ -1,18 +1,19 @@
 {# empty Twig template #}
+{{ field.label() }}
 
 <div class='kb-field-image-wrapper'>
     <div class='kb-js-add-image' >
         <img src='{{ image.getSize('thumbnail')}}' >
     </div>
-        
+
     <div class="kb-js-image-meta-wrapper">
         <label>Title</label>
         <input class='kb-js-image-title kb-observe' type="text" name='{{ field.get_field_name( 'title') }}' value='{{value.title}}' >
         <label>Caption</label>
         <input class='kb-js-image-caption kb-observe' type="text" name='{{ field.get_field_name( 'caption') }}' value='{{value.caption}}' >
     </div>
-    
+
     <input class='kb-js-image-id' type='hidden' name='{{field.get_field_name( 'id' )}}' value='{{value.id}}' >
 </div>
-
+{{ field.description() }}
 {#{{ dump() }}#}

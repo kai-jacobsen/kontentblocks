@@ -1,12 +1,12 @@
 /**
- * 
+ *
  * These is a collection of helper functions to handle
- * the user interface / user interaction such as 
+ * the user interface / user interaction such as
  * - Sorting
  * - TinyMCE De-/Initialization
  * - Tabs initialization
  * - UI repainting / updating
- * 
+ *
  * @package Kontentblocks
  * @subpackage Backend/UI
  * @type @exp; KB
@@ -37,7 +37,7 @@ KB.Ui = (function($) {
 		},
 		repaint: function($el) {
 			this.initTabs();
-			this.initToggleboxes();
+			this.initToggleBoxes();
 			KB.TinyMCE.addEditor($el);
 		},
 		initTabs: function() {
@@ -63,8 +63,8 @@ KB.Ui = (function($) {
 			$('.kb-togglebox-header').on('click', function(){
 				$(this).next('div').slideToggle().toggleClass('kb-toggle-open').end().toggleClass('kb-toggle-open');
 			});
-			
-			$('.kb-togglebox-header').first().trigger('click');
+
+			$('.kb_fieldtoggles div:first-child').trigger('click');
 		},
 		initSortable: function() {
 
@@ -91,7 +91,7 @@ KB.Ui = (function($) {
 			}
 
 			/**
-			 * Get an array of modules by area id 
+			 * Get an array of modules by area id
 			 * @param id string
 			 * @returns array of all found modules in that area
 			 */
@@ -115,7 +115,7 @@ KB.Ui = (function($) {
 				// start event
 				start: function(event, ui)
 				{
-					// set current model 
+					// set current model
 					currentModule = KB.Modules.get(ui.item.attr('id'));
 					currentModule.view.$body.hide();
 					// close open modules, sorting on open container
@@ -133,10 +133,10 @@ KB.Ui = (function($) {
 				{
 					var serializedData = [];
 
-					// restore TinyMCE editors 
+					// restore TinyMCE editors
 					KB.TinyMCE.restoreEditors();
 
-					// global trigger when soprtable is done		
+					// global trigger when soprtable is done
 					$(document).trigger('kb_sortable_stop', [event, ui]);
 
 				},
@@ -199,7 +199,7 @@ KB.Ui = (function($) {
 			});
 		},
 		/**
-		 * 
+		 *
 		 * @param object targetArea
 		 * @param object module
 		 * @returns {jqXHR}

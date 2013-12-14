@@ -1,19 +1,21 @@
 .kb_fieldtoggles{
-	
+
 	.kb-togglebox-header{
 		background: #fcfcfc;
 		padding: 4px;
 		border-bottom: 1px solid #ccc;
 		cursor: pointer;
-		
+
 		h3{
 			font-size: 12px !important;
 			font-weight: 200;
+			padding: 6px;
+			margin: 0;
 		}
 	}
-	
+
 	.kb-togglebox-box{
 		display: none;
 	}
-	
+
 }

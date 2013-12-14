@@ -25,7 +25,7 @@ class Area
      * Valid locations are: top | normal | side | bottom
      * @var string
      */
-    protected $context;
+    public $context;
 
     /**
      * Environment for data handling

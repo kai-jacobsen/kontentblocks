@@ -62,6 +62,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 			success: function(res) {
 				that.$form.append(res);
 				KB.Ui.initTabs();
+				KB.Ui.initToggleBoxes();
 				KB.TinyMCE.addEditor();
 			},
 			error: function() {
@@ -113,9 +114,9 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 	},
 	applyControlsSettings: function($el) {
 		var settings = this.model.get('settings');
-		
+
 		if (settings.controls && settings.controls.width){
-			
+
 			$el.css('width', settings.controls.width + 'px');
 		}
 	}

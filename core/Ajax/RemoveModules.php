@@ -17,7 +17,7 @@ class RemoveModules
         $this->postId      = $_POST[ 'post_id' ];
         $this->module = $_POST[ 'module' ];
         $this->dataHandler = $this->_setupDataHandler();
-        
+
         $this->remove();
     }
 

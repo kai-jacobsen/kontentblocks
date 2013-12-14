@@ -8,10 +8,12 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         'click': 'duplicateModule'
     },
     duplicateModule: function() {
+		console.log(this.model);
         KB.Ajax.send({
             action: 'duplicateModule',
             module: this.model.get('instance_id'),
-            areaContext: this.model.get('area').get('context')
+            areaContext: this.model.area.get('context'),
+			'class': this.model.get('class')
         }, this.success, this);
 
     },
@@ -25,7 +27,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         }
     },
     success: function(data) {
-        this.model.get('area').view.modulesList.append(data.html);
+        this.model.area.view.modulesList.append(data.html);
         KB.Modules.add(data.module);
         // update the reference counter, used as base number
         // for new modules
@@ -34,4 +36,4 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
 
 
     }
-}); 
+});

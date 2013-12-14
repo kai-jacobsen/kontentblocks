@@ -18,45 +18,58 @@ class Module_Prototype extends Module
         'category' => 'media',
         'id' => 'prototype',
         'controls' => array(
-        'width' => 400
+            'width' => 400
         )
     );
 
     public function render( $data )
     {
-        if (empty($data)){
+        if ( empty( $data ) ) {
             return;
         }
-        
-        $para = apply_filters( 'the_content', $this->getData('editortext') );
-        $img  = wp_prepare_attachment_for_js( $data[ 'stuffing' ][ 'image' ][ 'id' ] );
-        $tpl  = new ModuleTemplate( $this, 'prototype.twig', array( 'real' => $para, 'img' => $img ) );
+
+        $para = apply_filters( 'the_content', $this->getData( 'editortext' ) );
+//        $img  = wp_prepare_attachment_for_js( $data[ 'stuffing' ][ 'image' ][ 'id' ] );
+        $tpl  = new ModuleTemplate( $this, 'prototype.twig', array( 'real' => $para ) );
         return $tpl->render();
 
     }
 
     public function fields()
     {
-        $groupA = $this->Fields->addGroup( 'Peter', array('label' => 'What') )
-            ->addField( 'image', 'image', array(
-            'label' => 'stuff',
-            'description' => 'My first image',
-            'arrayKey' => 'stuffing',
-            'areaContext' => array('side', 'normal')
-            ) )
-            ->addField('text', 'sometext', array(
+        $groupA = $this->Fields->addGroup( 'Peter', array( 'label' => 'What' ) )
+            ->addField(
+                'text', 'sometext', array(
                 'label' => 'Label for Text',
                 'descriptiom' => 'stuff',
-                'areaContext' => array('side')
-            ));
-        $groupB = $this->Fields->addGroup( 'Andrews', array('label' => 'What') )
-            ->addField( 'editor', 'text-a-lot', array(
-            'label' => 'Text-A-Lot',
-            'description' => 'nothing left to say',
-            'arrayKey' => 'stuffing',
-            'areaContext' => array('side', 'normal')
+                'type' => 'text',
+                'text' => 'My first checkbox',
+                'areaContext' => array( 'normal', 'side' ),
+                'arrayKey' => 'stuffing'
+                )
+            )
+            ->addField(
+                'image', 'somecheckimage', array(
+                'label' => 'Label for Text',
+                'descriptiom' => 'stuff',
+                'type' => 'text',
+                'text' => 'My first checkbox',
+                'areaContext' => array( 'normal' ),
+                'std' => true,
+                'arrayKey' => 'stuffing'
+                )
+            )
+            ->addField(
+            'checkbox', 'somecheckbox', array(
+            'label' => 'Label for Text',
+            'descriptiom' => 'stuff',
+            'type' => 'text',
+            'text' => 'My first checkbox',
+            'areaContext' => array( 'normal' ),
+            'std' => true,
+            'arrayKey' => 'stuffing'
             ) );
-        
+
     }
 
 }

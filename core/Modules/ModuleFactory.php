@@ -32,9 +32,11 @@ class ModuleFactory
 
         $moduleArgs = $this->args;
         $classname  = $moduleArgs[ 'class' ];
-        $moduleArgs['settings'] = wp_parse_args($classname::$defaults, Module::getDefaults());
-        $module     = apply_filters( 'kb_modify_block', $moduleArgs );
-        $module     = apply_filters( "kb_modify_block_{$moduleArgs[ 'settings' ][ 'id' ]}", $moduleArgs );
+
+        $moduleArgs[ 'settings' ] = wp_parse_args( $classname::$defaults, Module::getDefaults() );
+        $module                   = apply_filters( 'kb_modify_block', $moduleArgs );
+        $module                 = apply_filters( "kb_modify_block_{$moduleArgs[ 'settings' ][ 'id' ]}", $moduleArgs );
+
         // new instance
         if ( class_exists( $classname ) ) {
             $instance = new $classname( $module, $this->data, $this->environment );

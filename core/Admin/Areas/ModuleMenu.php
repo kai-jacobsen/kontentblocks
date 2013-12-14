@@ -53,7 +53,6 @@ class ModuleMenu
     {
         // All Modules which are accessible by this area
         $this->modules = ModuleRegistry::getInstance()->getValidModulesForArea( $area, $area->get( 'environment' ) );
-
         if ( empty( $this->modules ) or !is_array( $this->modules ) or !isset( $area->id ) or !isset( $area->context ) ) {
             return false;
         }
@@ -79,6 +78,7 @@ class ModuleMenu
             'no_blocks' => __( 'Sorry, no Blocks available for this Area', 'kontentblocks' ),
             'modules' => __( 'Add new module', 'kontentblocks' )
         );
+
 
         add_action( 'admin_footer', array( $this, 'menuFooter' ), 10, 1 );
 
