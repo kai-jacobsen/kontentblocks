@@ -7,6 +7,10 @@ use Kontentblocks\Fields\Field;
 Class Checkbox extends Field
 {
 
+    protected $defaults = array(
+        'renderHidden' => true
+    );
+
     public function form()
     {
         $checked = checked( $this->getValue(), true, false );
@@ -30,6 +34,12 @@ Class Checkbox extends Field
 
     }
 
+
+    public function filter( $var )
+    {
+        return filter_var( $var, FILTER_VALIDATE_BOOLEAN );
+
+    }
 
 }
 

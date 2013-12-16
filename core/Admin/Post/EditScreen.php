@@ -221,7 +221,6 @@ Class EditScreen
                     $new = apply_filters( 'modify_block_data', $new );
 
                     $savedData = Helper\arrayMergeRecursiveAsItShouldBe( $new, $old );
-                    
                 }
 
 

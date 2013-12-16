@@ -82,7 +82,12 @@ abstract class Field
     public function build()
     {
         if ( !$this->getDisplay() ) {
-            $this->renderHidden();
+            if ( $this->getDefault( 'renderHidden' ) ) {
+                $this->renderHidden();
+            }
+            else {
+                return FALSE;
+            }
         }
         else {
             $this->header();
@@ -108,9 +113,11 @@ abstract class Field
 
     public function body()
     {
+
         if ( method_exists( $this, 'preForm' ) ) {
             $this->preForm();
         }
+
         $this->form();
 
         if ( method_exists( $this, 'postForm' ) ) {
@@ -146,10 +153,30 @@ abstract class Field
 
     public function renderHidden()
     {
+        if ( empty( $this->getValue() ) ) {
+            return false;
+        }
 
-        if ( is_array( $this->value ) ) {
-            foreach ( $this->value as $k => $v ) {
-                echo "<input type='hidden' name='{$this->get_field_name( $k )}' value='{$v}' >";
+        if ( is_array( $this->getValue() ) ) {
+            $is_assoc = \Kontentblocks\Helper\is_assoc_array( $this->getValue() );
+
+            if ( !$is_assoc ) {
+                foreach ( $this->getValue() as $item ) {
+
+                    if ( is_array( $item ) && \Kontentblocks\Helper\is_assoc_array( $item ) ) {
+                        foreach ( $item as $ikey => $ival ) {
+                            echo "<input type='hidden' name='{$this->get_field_name( true, $ikey, true )}' value='{$ival}' >";
+                        }
+                    }
+                    else {
+                        echo "<input type='hidden' name='{$this->get_field_name( true )}' value='{$item}' >";
+                    }
+                }
+            }
+            else {
+                foreach ( $this->value as $k => $v ) {
+                    echo "<input type='hidden' name='{$this->get_field_name( true, $k )}' value='{$v}' >";
+                }
             }
         }
         else {
@@ -179,6 +206,19 @@ abstract class Field
     public function save( $keydata, $oldKeyData )
     {
         return $keydata;
+
+    }
+
+
+    public function getDefault( $key )
+    {
+
+        if ( isset( $this->defaults[ $key ] ) ) {
+            return $this->defaults[ $key ];
+        }
+        else {
+            return false;
+        }
 
     }
 

@@ -88,7 +88,8 @@ class AreaOutput
             'wrapperClass' => 'area',
             'useWrapper' => TRUE,
             'element' => 'div',
-            'mergeRepeating' => false
+            'mergeRepeating' => false,
+            'action' => null
         );
 
         if ( $settings ) {
@@ -154,6 +155,7 @@ class AreaOutput
             'context' => $this->settings[ 'context' ],
             'subcontext' => $this->settings[ 'subcontext' ],
             'area_template' => $this->settings[ 'area_template' ],
+            'action' => $this->settings[ 'action' ],
             'area_id' => $this->id
         );
 

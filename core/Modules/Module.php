@@ -7,7 +7,7 @@ use Kontentblocks\Fields\FieldManager,
 
 /*
  * Structure
- * 
+ *
  * I. Properties
  * II. Costructor & Setup
  * III. Primary Block methods
@@ -19,12 +19,12 @@ use Kontentblocks\Fields\FieldManager,
 abstract class Module
 {
 
-    public $environment;
+    public $envVars;
     public $settings;
 
     /**
      * II. Constructor
-     * 
+     *
      * @param string $id identifier
      * @param string $name default name, can be individual overwritten
      * @param array $block_settings
@@ -35,7 +35,7 @@ abstract class Module
         $this->moduleData = $data;
 
         if ( isset( $environment ) ) {
-            $this->setEnvironment( $environment );
+            $this->setEnvVars( $environment );
         }
 
 
@@ -59,7 +59,7 @@ abstract class Module
      * Method for the backend display
      * has to be overwritten by each block
      * gets called by ui display callback
-     *  
+     *
      */
     public function options()
     {
@@ -81,16 +81,25 @@ abstract class Module
 
     }
 
+
+
     /**
      * module()
      * Frontend display method.
-     * Has no default output yet, and must be overwritten 
+     * Has no default output yet, and must be overwritten
      */
     final public function module( $data )
     {
         if ( isset( $this->Fields ) ) {
             $this->_setupFieldData();
         }
+        if ( $this->getEnvVar( 'action' ) ) {
+            if ( method_exists( $this, $this->getEnvVar( 'action' ) . 'Action' ) ) {
+                $method = $this->getEnvVar( 'action' ) . 'Action';
+                return call_user_func( array( $this, $method ), $data );
+            }
+        }
+
         return $this->render( $data );
 
     }
@@ -106,7 +115,7 @@ abstract class Module
      */
     public function setup()
     {
-        
+
     }
 
     public function saveFields( $data, $old )
@@ -136,7 +145,7 @@ abstract class Module
 
     /**
      * Generate Block markup for whatever is inside 'options' method of a BLock
-     * 
+     *
      * @global object post
      * @param array block
      * @param $context | area context
@@ -191,7 +200,7 @@ abstract class Module
         $unsortable = ((isset( $this->unsortable ) and $this->unsortable) == '1') ? 'cantsort' : null;
         // Block List Item
         return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->settings[ 'id' ]} kb_wrapper kb_block {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
-		<input type='hidden' name='{$this->instance_id}[areaContext]' value='$this->areaContext' /> 
+		<input type='hidden' name='{$this->instance_id}[areaContext]' value='$this->areaContext' />
 		";
 
     }
@@ -251,7 +260,7 @@ abstract class Module
 
     /**
      * Create Markup for Block Header
-     * 
+     *
      */
     private function header()
     {
@@ -306,11 +315,11 @@ abstract class Module
 
     public function _print_edit_link( $post_id = null )
     {
-        
+
     }
 
     /**
-     * On Site Edit link for logged in users 
+     * On Site Edit link for logged in users
      */
     public function print_edit_link( $post_id = null )
     {
@@ -357,7 +366,7 @@ abstract class Module
     /* set()
      * Public method to set class properties
      * expects $args to be an associative array with key => value pairs
-     * 
+     *
      */
 
     public function set( $args )
@@ -394,9 +403,9 @@ abstract class Module
 
     }
 
-    public function setEnvironment( $environment )
+    public function setEnvVars( $environment )
     {
-        $this->environment = array(
+        $this->envVars = array(
             'postType' => $environment->get( 'postType' ),
             'pageTemplate' => $environment->get( 'pageTemplate' ),
             'postId' => absint( $environment->get( 'postid' ) )
@@ -407,7 +416,7 @@ abstract class Module
     /**
      * Set active/inactive status of this instance
      * TODO: Remove, make it useless
-     * @param string $status 
+     * @param string $status
      */
     public function set_status( $status )
     {
@@ -422,7 +431,7 @@ abstract class Module
 
     /**
      * Set draft status of this instance
-     * TODO: remove, make it useless 
+     * TODO: remove, make it useless
      */
     public function set_draft( $draft )
     {
@@ -461,6 +470,17 @@ abstract class Module
 
     }
 
+    public function getEnvVar( $var )
+    {
+        if ( isset( $this->envVars[ $var ] ) ) {
+            return $this->envVars[ $var ];
+        }
+        else {
+            return null;
+        }
+
+    }
+
     /*
      * Set Additional data
      */
@@ -482,13 +502,13 @@ abstract class Module
 
         $toJSON = array(
             'settings' => $this->settings,
-            'state'     => $this->state,
+            'state' => $this->state,
             'instance_id' => $this->instance_id,
             'moduleData' => $this->moduleData,
             'area' => $this->area,
-            'post_id' => $this->environment['postId'],
+            'post_id' => $this->envVars[ 'postId' ],
             'areaContext' => $this->areaContext,
-            'class' => get_class($this),
+            'class' => get_class( $this ),
         );
 
         $enc = json_encode( $toJSON );
@@ -541,19 +561,21 @@ abstract class Module
 
     public function _addAreaAttributes( $args )
     {
-        if ( $this->environment ) {
-            $this->environment += $args;
+        if ( $this->envVars ) {
+            $this->envVars += $args;
         }
 
     }
 
     public function getModuleName()
     {
-        if (isset($this->overrides)){
-            return $this->overrides['name'];
-        } else {
-            return $this->settings['name'];
+        if ( isset( $this->overrides ) ) {
+            return $this->overrides[ 'name' ];
         }
+        else {
+            return $this->settings[ 'name' ];
+        }
+
     }
 
 }

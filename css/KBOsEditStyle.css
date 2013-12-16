@@ -236,7 +236,11 @@ body.onsite-editing #onsite-modal {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 262, sass/KBOsEditStyle.scss */
+/* line 261, sass/KBOsEditStyle.scss */
+#onsite-modal .kb_field label {
+  font-size: 12px;
+}
+/* line 267, sass/KBOsEditStyle.scss */
 #onsite-modal:hover {
   opacity: 1;
 }

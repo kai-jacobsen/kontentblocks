@@ -200,9 +200,24 @@ function arrayMergeRecursiveAsItShouldBe( $new, $old )
 
 }
 
-
+/**
+ * If the output of the module forms is a empty string
+ * @return string
+ */
 function noOptionsMessage()
 {
     return "<div class='kb-no-options'>No Options available</div>";
+
+}
+
+/**
+ * Test if an array is indexed or associative
+ * @param array $array
+ * @return bool
+ */
+function is_assoc_array( $array )
+{
+    $array = array_keys( $array );
+    return ($array !== array_keys( $array ));
 
 }

@@ -18,7 +18,7 @@ class Module_Prototype extends Module
         'category' => 'media',
         'id' => 'prototype',
         'controls' => array(
-            'width' => 400
+            'width' => 600
         )
     );
 
@@ -38,38 +38,55 @@ class Module_Prototype extends Module
     public function fields()
     {
         $groupA = $this->Fields->addGroup( 'Peter', array( 'label' => 'What' ) )
+//            ->addField(
+//            'editor', 'sometext', array(
+//            'label' => 'Label for Text',
+//            'descriptiom' => 'stuff',
+//            'type' => 'text',
+//            'text' => 'My first checkbox',
+//            'arrayKey' => 'stuffing'
+//            )
+//        )
+//            ->addField(
+//                'image', 'somecheckimage', array(
+//                'label' => 'Label for Text',
+//                'descriptiom' => 'stuff',
+//                'type' => 'text',
+//                'text' => 'My first checkbox',
+//                'areaContext' => array( 'normal', 'side' ),
+//                'std' => true,
+//                'arrayKey' => 'stuffing'
+//                )
+//            )
             ->addField(
-                'text', 'sometext', array(
-                'label' => 'Label for Text',
-                'descriptiom' => 'stuff',
-                'type' => 'text',
-                'text' => 'My first checkbox',
-                'areaContext' => array( 'normal', 'side' ),
-                'arrayKey' => 'stuffing'
-                )
-            )
-            ->addField(
-                'image', 'somecheckimage', array(
-                'label' => 'Label for Text',
-                'descriptiom' => 'stuff',
-                'type' => 'text',
-                'text' => 'My first checkbox',
-                'areaContext' => array( 'normal' ),
-                'std' => true,
-                'arrayKey' => 'stuffing'
-                )
-            )
-            ->addField(
-            'checkbox', 'somecheckbox', array(
+            'color', 'somecheckbox', array(
             'label' => 'Label for Text',
-            'descriptiom' => 'stuff',
+            'description' => 'Maybe a Description is waht longer than this',
             'type' => 'text',
             'text' => 'My first checkbox',
             'areaContext' => array( 'normal' ),
-            'std' => true,
-            'arrayKey' => 'stuffing'
+            'arrayKey' => 'stuffing',
+            'options' => array(
+                array(
+                    'value' => 'world',
+                    'label' => 'Hello World'
+                ),
+                array(
+                    'value' => 'sekt',
+                    'label' => 'A Dog'
+                ),
+                array(
+                    'value' => 'beer',
+                    'label' => 'Bier'
+                )
+            )
             ) );
 
     }
 
+    public function pageRenderAction( $data )
+    {
+        d( 'pageRender' );
+
+    }
 }

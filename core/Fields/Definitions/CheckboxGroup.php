@@ -4,7 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 
-Class CheckboxSet extends Field
+Class CheckboxGroup extends Field
 {
 
     protected $defaults = array(
@@ -14,18 +14,16 @@ Class CheckboxSet extends Field
     public function form()
     {
         $options = $this->getArg( 'options', array() );
-        $data    = $this->getValue();
 
         $this->label();
 
         foreach ( $options as $item ) {
 
-            if ( !isset( $item[ 'key' ] ) OR !isset( $item[ 'label' ] ) OR !isset( $item[ 'value' ] ) ) {
-                throw new Exception( 'Provide valid checkbox items. Check your code. Either a key, value or label is missing' );
+            if (  !isset( $item[ 'label' ] ) OR !isset( $item[ 'value' ] ) ) {
+                throw new Exception( 'Provide valid checkbox items. Check your code.Either a value or label is missing' );
             }
-
-            $checked = ($item[ 'value' ] === $data[ $item[ 'key' ] ]) ? 'checked="checked"' : '';
-            echo "<div class='kb-checkboxset-item'><label><input type='checkbox' id='{$this->get_field_id()}' name='{$this->get_field_name( true, $item[ 'key' ], false )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
+            $checked = (in_array( $item[ 'value' ], $this->getValue() )) ? 'checked="checked"' : '';
+            echo "<div class='kb-checkboxgroup-item'><label><input type='checkbox' id='{$this->get_field_id()}' name='{$this->get_field_name( true )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
         }
 
         $this->description();
@@ -39,8 +37,8 @@ Class CheckboxSet extends Field
 
         foreach ( $options as $k => $v ) {
 
-            if ( !isset( $fielddata[ $v[ 'key' ] ] ) ) {
-                $fielddata[ $v[ 'key' ] ] = FALSE;
+            if ( !in_array( $v, $options ) ) {
+                $fielddata[ $k ] = FALSE;
             }
         }
 
@@ -82,4 +80,4 @@ Class CheckboxSet extends Field
 
 }
 
-kb_register_fieldtype( 'checkboxset', 'Kontentblocks\Fields\Definitions\CheckboxSet' );
+kb_register_fieldtype( 'checkboxgroup', 'Kontentblocks\Fields\Definitions\CheckboxGroup' );
