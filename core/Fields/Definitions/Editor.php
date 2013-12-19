@@ -1,9 +1,13 @@
 <?php
 
 namespace Kontentblocks\Fields\Definitions;
-
 use Kontentblocks\Fields\Field;
 
+/**
+ * Wordpress 'native' TinyMCE WYSIWYG Editor
+ * @todo replace kb_wp_editor function
+ * @todo more generic additional args array
+ */
 Class Editor extends Field
 {
 
@@ -25,5 +29,5 @@ Class Editor extends Field
     }
 
 }
-
+//register
 kb_register_fieldtype( 'editor', 'Kontentblocks\Fields\Definitions\Editor' );

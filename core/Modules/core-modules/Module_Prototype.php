@@ -27,11 +27,10 @@ class Module_Prototype extends Module
         if ( empty( $data ) ) {
             return;
         }
-
-        $para = apply_filters( 'the_content', $this->getData( 'editortext' ) );
+//        return apply_filters( 'the_content', $this->getData( 'stuffing' )->get( 'somecheckbox' ) );
 //        $img  = wp_prepare_attachment_for_js( $data[ 'stuffing' ][ 'image' ][ 'id' ] );
-        $tpl  = new ModuleTemplate( $this, 'prototype.twig', array( 'real' => $para ) );
-        return $tpl->render();
+//        $tpl  = new ModuleTemplate( $this, 'prototype.twig', array( 'real' => $para ) );
+//        return $tpl->render();
 
     }
 
@@ -59,7 +58,7 @@ class Module_Prototype extends Module
 //                )
 //            )
             ->addField(
-            'color', 'somecheckbox', array(
+            'customtaxonomy', 'somecheckbox', array(
             'label' => 'Label for Text',
             'description' => 'Maybe a Description is waht longer than this',
             'type' => 'text',
@@ -68,25 +67,21 @@ class Module_Prototype extends Module
             'arrayKey' => 'stuffing',
             'options' => array(
                 array(
-                    'value' => 'world',
+                    'value' => 1,
                     'label' => 'Hello World'
                 ),
                 array(
-                    'value' => 'sekt',
+                    'value' => 2,
                     'label' => 'A Dog'
                 ),
                 array(
-                    'value' => 'beer',
+                    'value' => 3,
                     'label' => 'Bier'
                 )
-            )
+            ),
+            'filter' => false
             ) );
 
     }
 
-    public function pageRenderAction( $data )
-    {
-        d( 'pageRender' );
-
-    }
 }

@@ -4,13 +4,21 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 
+/**
+ * Single checkbox renders to boolean true or false
+ * Unchecked will always return false instead of NULL
+ */
 Class Checkbox extends Field
 {
 
+    // field defaults
     protected $defaults = array(
         'renderHidden' => true
     );
 
+    /**
+     * Checkbox Form HTML
+     */
     public function form()
     {
         $checked = checked( $this->getValue(), true, false );
@@ -20,21 +28,31 @@ Class Checkbox extends Field
 
     }
 
+    /**
+     * Custom save filter
+     * Makes sure that a value is saved even for unchecked fields
+     * @param string $data value of key from $_POST data
+     * @param string $oldData value of key from saved data
+     * @return boolean
+     */
     public function save( $data, $oldData )
     {
-        if ( $data === 'on' || $data == '1' ) {
+
+        if ( filter_var( $data, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) ) {
             return true;
         }
-//        elseif ( !is_null( $oldData ) ) {
-//            return $oldData;
-//        }
         else {
             return false;
         }
 
     }
 
-
+    /**
+     * Custom retrieve filter
+     * Makes sure that value is a true boolean
+     * @param mixed $var value as saved
+     * @return bool
+     */
     public function filter( $var )
     {
         return filter_var( $var, FILTER_VALIDATE_BOOLEAN );
@@ -43,4 +61,5 @@ Class Checkbox extends Field
 
 }
 
+//register
 kb_register_fieldtype( 'checkbox', 'Kontentblocks\Fields\Definitions\Checkbox' );

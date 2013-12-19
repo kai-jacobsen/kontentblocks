@@ -1,19 +1,28 @@
 var KB = KB || {};
 
 KB.Fields.Color = (function($) {
-	$(document).ready(function() {
-		var link_color = $(".kb-color-picker");
-		link_color.wpColorPicker({
-			change: function(event, ui) {
-				console.log(event.target);
-				/* pickColor(link_color.wpColorPicker("color"));*/
-			},
-			clear: function() {
-				pickColor("");
-			}
-		});
+
+	$(document).on('onsite::opened', function() {
+		KB.Fields.Color.init();
 	});
+
+	return {
+		init: function() {
+
+			$(".kb-color-picker").wpColorPicker({
+				change: function(event, ui) {
+				},
+				clear: function() {
+					pickColor("");
+				}
+			});
+		}
+	};
+
+
+
 }(jQuery));
+KB.Fields.Color.init();
 var KB = KB || {};
 
 KB.Fields.Image = (function($) {

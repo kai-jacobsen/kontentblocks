@@ -542,11 +542,11 @@ KB.ModuleView = Backbone.View.extend({
     initialize: function() {
         this.model.bind('save', this.model.save);
         this.model.view = this;
-        this.render(); 
+        this.render();
 
     },
     save: function(){
-        
+
     },
     events: {
         "click a.os-edit-block": "openVex",
@@ -559,19 +559,19 @@ KB.ModuleView = Backbone.View.extend({
     },
     initEtch: etch.editableInit,
     openVex: function() {
-        
+
         if (KB.OpenOnsite) {
             KB.OpenOnsite.destroy();
         }
-        
+
         KB.OpenOnsite = new KB.Backbone.OnsiteView({
             tagName: 'div',
             id: 'onsite-modal',
             model: this.model,
             view: this
         });
-        
-        
+
+
 //        var target = this.model.get('editURL');
 //        var height = jQuery(window).height();
 //        jQuery('#osframe').attr('src', target).attr('height', height - 200);
@@ -667,6 +667,8 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 				KB.Ui.initTabs();
 				KB.Ui.initToggleBoxes();
 				KB.TinyMCE.addEditor();
+				jQuery(document).trigger('onsite::opened');
+
 			},
 			error: function() {
 				console.log('e');
@@ -688,7 +690,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 			dataType: 'json',
 			success: function(res) {
 				that.options.view.$el.html(res.html);
-				that.model.set('moduleData',res.newModuleData);
+				that.model.set('moduleData', res.newModuleData);
 				console.log(that.model);
 				that.model.view.render();
 			},
@@ -718,7 +720,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 	applyControlsSettings: function($el) {
 		var settings = this.model.get('settings');
 
-		if (settings.controls && settings.controls.width){
+		if (settings.controls && settings.controls.width) {
 
 			$el.css('width', settings.controls.width + 'px');
 		}

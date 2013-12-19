@@ -262,6 +262,10 @@ body.onsite-editing {
 			font-size: 12px;
 		}
 
+		input[type=button], .button{
+			text-transform: none !important;
+		}
+
     }
 
     &:hover{

@@ -240,7 +240,11 @@ body.onsite-editing #onsite-modal {
 #onsite-modal .kb_field label {
   font-size: 12px;
 }
-/* line 267, sass/KBOsEditStyle.scss */
+/* line 265, sass/KBOsEditStyle.scss */
+#onsite-modal .kb_field input[type=button], #onsite-modal .kb_field .button {
+  text-transform: none !important;
+}
+/* line 271, sass/KBOsEditStyle.scss */
 #onsite-modal:hover {
   opacity: 1;
 }

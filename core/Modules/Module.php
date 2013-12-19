@@ -454,12 +454,15 @@ abstract class Module
 
     }
 
-    public function getData( $key = null, $return = '' )
+    public function getData( $key = null, $arrayKey = null, $return = '' )
     {
         if ( empty( $this->moduleData ) or empty( $key ) ) {
             return false;
         }
 
+        if ( !is_null( $arrayKey ) ) {
+            return (!empty( $this->moduleData[ $arrayKey ][ $key ] )) ? $this->moduleData[ $arrayKey ][ $key ] : $return;
+        }
         return (!empty( $this->moduleData[ $key ] )) ? $this->moduleData[ $key ] : $return;
 
     }

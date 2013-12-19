@@ -4,13 +4,22 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 
+/**
+ * Checkboxset
+ * Multiple key => value pairs as checkboxes
+ */
 Class CheckboxSet extends Field
 {
 
+    // Field defaults
     protected $defaults = array(
         'renderHidden' => true
     );
 
+    /**
+     * Checkboxset form html
+     * @throws Exception
+     */
     public function form()
     {
         $options = $this->getArg( 'options', array() );
@@ -32,6 +41,17 @@ Class CheckboxSet extends Field
 
     }
 
+    /**
+     * Custom save filter
+     * Unchecked boxes will get the value FALSE
+     * 'fake' boolean values get converted to true ones,
+     * means any of these: '1', 'on', 'true', '0', 'false', 'off'
+     * Important to note that you must not define a value as FALSE in the options array,
+     * in that case you'll have a hard time.
+     * @param array $fielddata - from $_POST
+     * @param array $old - as saved
+     * @return array
+     */
     public function save( $fielddata, $old )
     {
         $collect = array();
@@ -47,7 +67,12 @@ Class CheckboxSet extends Field
         if ( is_array( $fielddata ) && !empty( $fielddata ) ) {
             foreach ( $fielddata as $k => $v ) {
 
-                $filtered = filter_var( $v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+                if ( $this->getArg( 'filter', true ) ) {
+                    $filtered = filter_var( $v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+                }
+                else {
+                    $filtered = $v;
+                }
 
                 if ( $filtered === NULL ) {
                     $collect[ $k ] = $v;
@@ -66,7 +91,13 @@ Class CheckboxSet extends Field
         $collect = array();
         if ( !empty( $fielddata ) ) {
             foreach ( $fielddata as $k => $v ) {
-                $filtered = filter_var( $v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+
+                if ( $this->getArg( 'filter', true ) ) {
+                    $filtered = filter_var( $v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+                }
+                else {
+                    $filtered = $v;
+                }
 
                 if ( $filtered !== NULL ) {
                     $collect[ $k ] = $filtered;

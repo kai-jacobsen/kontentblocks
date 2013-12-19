@@ -2,9 +2,12 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
+/**
+ * @todo: finish
+ */
 class ArrayFieldReturn
 {
-    
+
     protected $fields;
     public $value;
 
@@ -18,7 +21,7 @@ class ArrayFieldReturn
     public function setupFields()
     {
         $collect = array();
-        
+
         foreach ($this->fields as $field){
             $fieldkey = $field->getKey();
             $this->$fieldkey = $field->getReturnObj();
@@ -26,11 +29,11 @@ class ArrayFieldReturn
         }
         $this->value = $collect;
     }
-    
+
     public function get($key){
         return $this->$key;
     }
-    
-    
+
+
 
 }

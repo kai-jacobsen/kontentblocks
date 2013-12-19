@@ -64,6 +64,8 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 				KB.Ui.initTabs();
 				KB.Ui.initToggleBoxes();
 				KB.TinyMCE.addEditor();
+				jQuery(document).trigger('onsite::opened');
+
 			},
 			error: function() {
 				console.log('e');
@@ -85,7 +87,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 			dataType: 'json',
 			success: function(res) {
 				that.options.view.$el.html(res.html);
-				that.model.set('moduleData',res.newModuleData);
+				that.model.set('moduleData', res.newModuleData);
 				console.log(that.model);
 				that.model.view.render();
 			},
@@ -115,7 +117,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 	applyControlsSettings: function($el) {
 		var settings = this.model.get('settings');
 
-		if (settings.controls && settings.controls.width){
+		if (settings.controls && settings.controls.width) {
 
 			$el.css('width', settings.controls.width + 'px');
 		}

@@ -81,6 +81,11 @@ abstract class Field
 
     public function build()
     {
+
+        if ( method_exists( $this, 'enqueue' ) ) {
+            $this->enqueue();
+        }
+
         if ( !$this->getDisplay() ) {
             if ( $this->getDefault( 'renderHidden' ) ) {
                 $this->renderHidden();
@@ -209,7 +214,6 @@ abstract class Field
 
     }
 
-
     public function getDefault( $key )
     {
 
@@ -224,7 +228,7 @@ abstract class Field
 
     public function getArg( $arg, $default = false )
     {
-        if ( !empty( $this->args[ $arg ] ) ) {
+        if ( isset( $this->args[ $arg ] ) ) {
             return $this->args[ $arg ];
         }
         else {
