@@ -58,13 +58,14 @@ class Module_Prototype extends Module
 //                )
 //            )
             ->addField(
-            'customtaxonomy', 'somecheckbox', array(
+            'chosetaxonomy', 'somecheckbox', array(
             'label' => 'Label for Text',
             'description' => 'Maybe a Description is waht longer than this',
             'type' => 'text',
             'text' => 'My first checkbox',
             'areaContext' => array( 'normal' ),
             'arrayKey' => 'stuffing',
+            'taxonomy' => 'category',
             'options' => array(
                 array(
                     'value' => 1,

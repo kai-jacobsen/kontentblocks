@@ -143,7 +143,6 @@ abstract class Field
         if ( !empty( $this->getArg( 'label' ) ) ) {
             echo "<label class='kb_label heading' for='{$this->get_field_id()}'>{$this->getArg( 'label' )}</label>";
         }
-
     }
 
     public function getValue()
