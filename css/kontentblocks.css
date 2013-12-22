@@ -3363,7 +3363,7 @@ body.on-site-editing {
   margin-left: 0;
 }
 
-/* line 81, sass/kontentblocks.scss */
+/* line 82, sass/kontentblocks.scss */
 .ui-state-highlight {
   height: 1.1em;
   line-height: 1.2em;
@@ -3373,14 +3373,14 @@ body.on-site-editing {
   margin: 0 5px;
 }
 
-/* line 90, sass/kontentblocks.scss */
+/* line 91, sass/kontentblocks.scss */
 .ui-sortable-helper {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
   filter: alpha(opacity=70);
   opacity: .7;
 }
 
-/* line 100, sass/kontentblocks.scss */
+/* line 101, sass/kontentblocks.scss */
 .area-meta {
   float: right;
   width: 200px;
@@ -3390,12 +3390,12 @@ body.on-site-editing {
   color: #999;
 }
 
-/* line 109, sass/kontentblocks.scss */
+/* line 110, sass/kontentblocks.scss */
 .kb_vcard_image {
   float: left;
 }
 
-/* line 113, sass/kontentblocks.scss */
+/* line 114, sass/kontentblocks.scss */
 .kb_image_frame {
   width: 150px;
   height: 150px;
@@ -3409,33 +3409,33 @@ body.on-site-editing {
   margin-bottom: 15px;
 }
 
-/* line 126, sass/kontentblocks.scss */
+/* line 127, sass/kontentblocks.scss */
 .vcard-upload {
   margin-top: 15px;
 }
 
-/* line 130, sass/kontentblocks.scss */
+/* line 131, sass/kontentblocks.scss */
 .vcard_description {
   float: left;
 }
 
-/* line 134, sass/kontentblocks.scss */
+/* line 135, sass/kontentblocks.scss */
 .kb_vcard_item {
   overflow: hidden;
 }
 
-/* line 138, sass/kontentblocks.scss */
+/* line 139, sass/kontentblocks.scss */
 .slider_image_frame {
   width: 300px;
   height: 150px;
 }
 
-/* line 143, sass/kontentblocks.scss */
+/* line 144, sass/kontentblocks.scss */
 .slider_image_frame img {
   max-height: 100%;
 }
 
-/* line 147, sass/kontentblocks.scss */
+/* line 148, sass/kontentblocks.scss */
 .kb_accordion_inner {
   display: block;
   border: 1px solid #CCC;
@@ -3443,17 +3443,17 @@ body.on-site-editing {
   padding: 8px;
 }
 
-/* line 154, sass/kontentblocks.scss */
+/* line 155, sass/kontentblocks.scss */
 #context_side .kb-sub-name {
   display: none;
 }
 
-/* line 158, sass/kontentblocks.scss */
+/* line 159, sass/kontentblocks.scss */
 .area-meta {
   border-right: 1px solid #ccc;
 }
 
-/* line 164, sass/kontentblocks.scss */
+/* line 165, sass/kontentblocks.scss */
 .clearfix:after {
   content: ".";
   display: block;
@@ -3463,28 +3463,28 @@ body.on-site-editing {
   height: 0;
 }
 
-/* line 173, sass/kontentblocks.scss */
+/* line 174, sass/kontentblocks.scss */
 .clearfix {
   display: inline-block;
 }
 
-/* line 177, sass/kontentblocks.scss */
+/* line 178, sass/kontentblocks.scss */
 html[xmlns] .clearfix {
   display: block;
 }
 
-/* line 181, sass/kontentblocks.scss */
+/* line 182, sass/kontentblocks.scss */
 * html .clearfix {
   height: 1%;
 }
 
 /* Accordion */
-/* line 186, sass/kontentblocks.scss */
+/* line 187, sass/kontentblocks.scss */
 .accordion-head {
   margin-bottom: 20px;
 }
 
-/* line 190, sass/kontentblocks.scss */
+/* line 191, sass/kontentblocks.scss */
 .kb_new_accordion_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -3493,12 +3493,12 @@ html[xmlns] .clearfix {
 }
 
 /* Tabs */
-/* line 198, sass/kontentblocks.scss */
+/* line 199, sass/kontentblocks.scss */
 .tab-head {
   margin-bottom: 20px;
 }
 
-/* line 202, sass/kontentblocks.scss */
+/* line 203, sass/kontentblocks.scss */
 .kb_new_tab_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -3507,105 +3507,105 @@ html[xmlns] .clearfix {
 }
 
 /* Kontentbox */
-/* line 210, sass/kontentblocks.scss */
+/* line 211, sass/kontentblocks.scss */
 .kb_kontentbox_wrapper {
   overflow: hidden;
 }
 
-/* line 214, sass/kontentblocks.scss */
+/* line 215, sass/kontentblocks.scss */
 .kb_kontentbox_content_wrapper {
   width: 75%;
   float: left;
 }
 
-/* line 219, sass/kontentblocks.scss */
+/* line 220, sass/kontentblocks.scss */
 .kb_image_wrapper {
   margin-top: 30px;
 }
 
-/* line 223, sass/kontentblocks.scss */
+/* line 224, sass/kontentblocks.scss */
 .kb_link_wrap {
   overflow: hidden;
   clear: both;
   margin-top: 15px;
 }
 
-/* line 229, sass/kontentblocks.scss */
+/* line 230, sass/kontentblocks.scss */
 .kb_kontentbox_layout_wrapper, .kb_kontentblocks_sizes_wrapper, .kb_kontentbox_align_wrapper {
   float: left;
   margin: 15px;
 }
 
-/* line 234, sass/kontentblocks.scss */
+/* line 235, sass/kontentblocks.scss */
 .kb_kontentbox_align_wrapper label {
   width: 50px;
   float: left;
 }
 
-/* line 239, sass/kontentblocks.scss */
+/* line 240, sass/kontentblocks.scss */
 .chzn-container {
   width: 200px !important;
 }
 
-/* line 243, sass/kontentblocks.scss */
+/* line 244, sass/kontentblocks.scss */
 .area_description {
   font-size: 11px;
   color: #999;
 }
 
 /* Audio */
-/* line 249, sass/kontentblocks.scss */
+/* line 250, sass/kontentblocks.scss */
 .kb_audio_item {
   padding: 8px 0;
 }
 
-/* line 253, sass/kontentblocks.scss */
+/* line 254, sass/kontentblocks.scss */
 .kb_audio_item label {
   display: block;
 }
 
 /* Video */
-/* line 258, sass/kontentblocks.scss */
+/* line 259, sass/kontentblocks.scss */
 .kb_video .kb_image_wrapper {
   float: left;
 }
 
-/* line 262, sass/kontentblocks.scss */
+/* line 263, sass/kontentblocks.scss */
 .kb_video_files_wrapper {
   margin-top: 30px;
   float: left;
 }
 
-/* line 267, sass/kontentblocks.scss */
+/* line 268, sass/kontentblocks.scss */
 .kb_video_item label {
   display: block;
 }
 
-/* line 271, sass/kontentblocks.scss */
+/* line 272, sass/kontentblocks.scss */
 .kb_video_item {
   margin-bottom: 8px;
 }
 
-/* line 275, sass/kontentblocks.scss */
+/* line 276, sass/kontentblocks.scss */
 .kb_video_Size {
   clear: both;
   padding-top: 20px;
 }
 
 /* Flexslider */
-/* line 281, sass/kontentblocks.scss */
+/* line 282, sass/kontentblocks.scss */
 .kb_button_wrapper {
   padding: 8px;
   overflow: hidden;
 }
 
-/* line 286, sass/kontentblocks.scss */
+/* line 287, sass/kontentblocks.scss */
 .uploaded {
   overflow: hidden;
   padding-bottom: 20px;
 }
 
-/* line 291, sass/kontentblocks.scss */
+/* line 292, sass/kontentblocks.scss */
 li.gallery-item {
   background: white;
   /* Old browsers */
@@ -3625,13 +3625,13 @@ li.gallery-item {
   margin: 0 20px 0 0;
 }
 
-/* line 310, sass/kontentblocks.scss */
+/* line 311, sass/kontentblocks.scss */
 li.gallery-item label {
   display: block;
   color: #eaeaea;
 }
 
-/* line 315, sass/kontentblocks.scss */
+/* line 316, sass/kontentblocks.scss */
 li.gallery-item textarea {
   border: none;
   width: 148px;
@@ -3641,25 +3641,25 @@ li.gallery-item textarea {
   border: 1px dotted #eaeaea;
 }
 
-/* line 324, sass/kontentblocks.scss */
+/* line 325, sass/kontentblocks.scss */
 li.gallery-item textarea:focus {
   background: #fff;
 }
 
 /* Sidebar Widget */
-/* line 329, sass/kontentblocks.scss */
+/* line 330, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper {
   float: left;
   margin: 0 20px 20px 0;
 }
 
-/* line 334, sass/kontentblocks.scss */
+/* line 335, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper label {
   display: block;
 }
 
 /* -------------------
-    Fields 
+    Fields
 ----------------------*/
 /* line 1, sass/partials/_kontentfields_new.scss */
 .module-meta-actions {
@@ -4421,7 +4421,7 @@ div.kb-drag-drop-inside p {
   top: 25px;
 }
 
-/* line 345, sass/kontentblocks.scss */
+/* line 346, sass/kontentblocks.scss */
 .kb_draft {
   padding: 5px 0 5px 20px;
   border-left: 0px solid #d54e21;
@@ -4435,35 +4435,35 @@ div.kb-drag-drop-inside p {
   margin-top: 0;
 }
 
-/* line 360, sass/kontentblocks.scss */
+/* line 361, sass/kontentblocks.scss */
 .kb_loading {
   opacity: .4;
 }
 
-/* line 364, sass/kontentblocks.scss */
+/* line 365, sass/kontentblocks.scss */
 input[type="checkbox"][checked] {
   opacity: .8;
 }
 
-/* line 368, sass/kontentblocks.scss */
+/* line 369, sass/kontentblocks.scss */
 .kb_block_options {
   padding: 10px;
   margin-top: 20px;
 }
 
-/* line 373, sass/kontentblocks.scss */
+/* line 374, sass/kontentblocks.scss */
 .kb_block_options .kb_field {
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
 
-/* line 379, sass/kontentblocks.scss */
+/* line 380, sass/kontentblocks.scss */
 .kb_block {
   -webkit-transition: box-shadow .3s linear;
 }
 
-/* line 384, sass/kontentblocks.scss */
+/* line 385, sass/kontentblocks.scss */
 .area-side .kb-open {
   width: 150%;
   margin-left: -56%;
@@ -4471,19 +4471,19 @@ input[type="checkbox"][checked] {
   z-index: 4500;
 }
 
-/* line 392, sass/kontentblocks.scss */
+/* line 393, sass/kontentblocks.scss */
 .tooltip {
   display: none;
   opacity: 0;
   -webkit-transition: opacity .5s linear;
 }
 
-/* line 398, sass/kontentblocks.scss */
+/* line 399, sass/kontentblocks.scss */
 .area_template {
   position: relative;
 }
 
-/* line 402, sass/kontentblocks.scss */
+/* line 403, sass/kontentblocks.scss */
 .area_template:hover .tooltip {
   display: block;
   opacity: 0;
@@ -4493,7 +4493,7 @@ input[type="checkbox"][checked] {
   opacity: 1;
 }
 
-/* line 411, sass/kontentblocks.scss */
+/* line 412, sass/kontentblocks.scss */
 .area_template img.tpl-mini {
   float: left;
   margin-right: 8px;
@@ -5916,7 +5916,7 @@ button.ui-button::-moz-focus-inner {
  * http://docs.jquery.com/UI/Tabs#theming
  */
 /* context */
-/* line 435, sass/kontentblocks.scss */
+/* line 436, sass/kontentblocks.scss */
 .maximize-side {
   position: absolute;
   width: 75%;
@@ -5926,7 +5926,7 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 444, sass/kontentblocks.scss */
+/* line 445, sass/kontentblocks.scss */
 .maximize-normal {
   position: absolute;
   width: 75%;
@@ -5936,31 +5936,31 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 453, sass/kontentblocks.scss */
+/* line 454, sass/kontentblocks.scss */
 #kontentblocks_stage {
   position: relative;
   margin-bottom: 20px;
 }
 
-/* line 459, sass/kontentblocks.scss */
+/* line 460, sass/kontentblocks.scss */
 .active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {
   font-family: 'Open-Sans', sans-serif;
   font-style: italic;
   margin: 0;
 }
 
-/* line 466, sass/kontentblocks.scss */
+/* line 467, sass/kontentblocks.scss */
 .area_sidebars li {
   cursor: move;
 }
 
-/* line 472, sass/kontentblocks.scss */
+/* line 473, sass/kontentblocks.scss */
 .page-template-wrapper.context-area {
   min-height: 0px;
   overflow: hidden;
 }
 
-/* line 477, sass/kontentblocks.scss */
+/* line 478, sass/kontentblocks.scss */
 .kb_thickbox h2 {
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   font-weight: normal;
@@ -5968,23 +5968,23 @@ button.ui-button::-moz-focus-inner {
   margin: 20px 0 0 0;
 }
 
-/* line 484, sass/kontentblocks.scss */
+/* line 485, sass/kontentblocks.scss */
 .kb_thickbox .context-header {
   margin-bottom: 20px;
 }
 
-/* line 488, sass/kontentblocks.scss */
+/* line 489, sass/kontentblocks.scss */
 #TB_window {
   z-index: 6000 !important;
 }
 
-/* line 495, sass/kontentblocks.scss */
+/* line 496, sass/kontentblocks.scss */
 textarea.quicktags {
   width: 100%;
 }
 
 /* Redirect */
-/* line 505, sass/kontentblocks.scss */
+/* line 506, sass/kontentblocks.scss */
 .redirect-wrapper input[type=radio] {
   float: left;
   width: 16px;
@@ -5993,39 +5993,39 @@ textarea.quicktags {
   margin-right: 16px;
 }
 
-/* line 515, sass/kontentblocks.scss */
+/* line 516, sass/kontentblocks.scss */
 .wp-editor-area {
   /*height: 500px;*/
 }
 
-/* line 519, sass/kontentblocks.scss */
+/* line 520, sass/kontentblocks.scss */
 #context_normal {
   /* min-height: 600px;
   _height: 600px;*/
 }
 
-/* line 524, sass/kontentblocks.scss */
+/* line 525, sass/kontentblocks.scss */
 .quicktags textarea {
   background: #fff;
 }
 
 /* Responsive Admin Layout */
 @media screen and (max-width: 1299px) {
-  /* line 534, sass/kontentblocks.scss */
+  /* line 535, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 100%;
   }
 
-  /* line 540, sass/kontentblocks.scss */
+  /* line 541, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: left;
     width: 100%;
   }
 
-  /* line 545, sass/kontentblocks.scss */
+  /* line 546, sass/kontentblocks.scss */
   .area-side .kb-open {
     width: auto;
     margin-left: 0;
@@ -6034,21 +6034,21 @@ textarea.quicktags {
   }
 }
 @media screen and (min-width: 1300px) {
-  /* line 556, sass/kontentblocks.scss */
+  /* line 557, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 60%;
   }
 
-  /* line 562, sass/kontentblocks.scss */
+  /* line 563, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: right;
     width: 38%;
   }
 
-  /* line 567, sass/kontentblocks.scss */
+  /* line 568, sass/kontentblocks.scss */
   .area-side .kb-open {
     width: 750px;
     margin-left: 0;
@@ -6058,29 +6058,29 @@ textarea.quicktags {
     margin-left: -400px;
   }
 }
-/* line 578, sass/kontentblocks.scss */
+/* line 579, sass/kontentblocks.scss */
 .clear {
   clear: both;
 }
 
-/* line 582, sass/kontentblocks.scss */
+/* line 583, sass/kontentblocks.scss */
 .mceIframeContainer iframe {
   /*height: 150px !important;*/
 }
 
-/* line 586, sass/kontentblocks.scss */
+/* line 587, sass/kontentblocks.scss */
 .kb_field textarea {
   width: 100%;
   height: 80px;
 }
 
 /* Field Image Gallery */
-/* line 594, sass/kontentblocks.scss */
+/* line 595, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper {
   overflow: hidden;
 }
 
-/* line 598, sass/kontentblocks.scss */
+/* line 599, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li {
   float: left;
   margin-right: 12px;
@@ -6089,25 +6089,25 @@ textarea.quicktags {
   position: relative;
 }
 
-/* line 606, sass/kontentblocks.scss */
+/* line 607, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.selected {
   border: 3px solid blue;
 }
 
-/* line 610, sass/kontentblocks.scss */
+/* line 611, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li img {
   width: 107px;
   height: 107px;
 }
 
-/* line 616, sass/kontentblocks.scss */
+/* line 617, sass/kontentblocks.scss */
 .kb-field-gallery-info {
   min-height: 100px;
   background: #ccc;
   margin: 20px 0;
 }
 
-/* line 622, sass/kontentblocks.scss */
+/* line 623, sass/kontentblocks.scss */
 .kb-field-gallery-image-delete {
   display: none;
   position: absolute;
@@ -6119,7 +6119,7 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 633, sass/kontentblocks.scss */
+/* line 634, sass/kontentblocks.scss */
 .kb-field-gallery-image-info {
   display: none;
   position: absolute;
@@ -6131,24 +6131,24 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 644, sass/kontentblocks.scss */
+/* line 645, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li:hover > span, .kb-field-gallery-wrapper li.todelete > span.delete {
   display: block;
 }
 
-/* line 648, sass/kontentblocks.scss */
+/* line 649, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.todelete {
   opacity: .5;
 }
 
-/* line 655, sass/kontentblocks.scss */
+/* line 656, sass/kontentblocks.scss */
 .custom.kb_area_list_item {
   background: none;
   border: none;
   padding: 0;
 }
 
-/* line 662, sass/kontentblocks.scss */
+/* line 663, sass/kontentblocks.scss */
 .custom .kb_field {
   background-color: #fff !important;
 }
@@ -6177,4 +6177,308 @@ textarea.quicktags {
 .kb_field.image .kb-js-image-meta-wrapper input[type=text] {
   color: #333;
   font-weight: 100;
+}
+
+/*
+
+    Zebra_DatePicker: a lightweight jQuery date picker plugin
+
+    Metalic Theme
+
+    copyright (c) 2011 - 2013 Stefan Gabos
+    http://stefangabos.ro/jquery/zebra-datepicker/
+
+*/
+/* line 14, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker *,
+.Zebra_DatePicker *:after,
+.Zebra_DatePicker *:before {
+  -moz-box-sizing: content-box !important;
+  -webkit-box-sizing: content-box !important;
+  box-sizing: content-box !important;
+}
+
+/* line 16, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker {
+  position: absolute;
+  background: #373737;
+  border: 3px solid #373737;
+  display: none;
+  z-index: 10000;
+  font-family: 'Open Sans', Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+  font-size: 13px;
+}
+
+/* line 18, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker * {
+  margin: 0;
+  padding: 0;
+  color: #666;
+  background: transparent;
+  border: none;
+}
+
+/* = GLOBALS
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 22, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 25, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td,
+.Zebra_DatePicker th {
+  text-align: center;
+  padding: 5px 0;
+}
+
+/* line 27, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td {
+  cursor: pointer;
+}
+
+/* line 31, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_daypicker,
+.Zebra_DatePicker .dp_monthpicker,
+.Zebra_DatePicker .dp_yearpicker {
+  margin-top: 3px;
+}
+
+/* line 36, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_daypicker td,
+.Zebra_DatePicker .dp_daypicker th,
+.Zebra_DatePicker .dp_monthpicker td,
+.Zebra_DatePicker .dp_yearpicker td {
+  width: 30px;
+  border: 1px solid #BBB;
+  background: #dedede url("assets/zebra-datepicker/default-date.png") repeat-x top;
+  color: #666666;
+}
+
+/* line 40, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker,
+.Zebra_DatePicker .dp_header .dp_hover,
+.Zebra_DatePicker .dp_footer .dp_hover {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* = HEADER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 44, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header td {
+  color: #e0e0e0;
+}
+
+/* line 47, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_previous,
+.Zebra_DatePicker .dp_header .dp_next {
+  width: 30px;
+}
+
+/* line 49, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_caption {
+  font-weight: bold;
+}
+
+/* line 50, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_hover {
+  background: #67AABB;
+  color: white;
+}
+
+/* line 51, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_blocked {
+  color: #888;
+  cursor: default;
+}
+
+/* = DATEPICKER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 56, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_week_number,
+.Zebra_DatePicker .dp_daypicker th {
+  background: #F1F1F1;
+  font-size: 9px;
+  padding-top: 7px;
+}
+
+/* line 60, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_weekend_disabled,
+.Zebra_DatePicker td.dp_not_in_month,
+.Zebra_DatePicker td.dp_not_in_month_selectable {
+  background: #ececec url("assets/zebra-datepicker/disabled-date.png");
+  color: #CCC;
+  cursor: default;
+}
+
+/* line 61, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_not_in_month_selectable {
+  cursor: pointer;
+}
+
+/* line 63, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_weekend {
+  background: #dedede url("assets/zebra-datepicker/default-date.png") repeat-x top;
+  color: #666666;
+}
+
+/* line 65, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_selected {
+  background: #E26262;
+  color: #e0e0e0 !important;
+}
+
+/* = MONTHPICKER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 69, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_monthpicker td {
+  width: 33%;
+}
+
+/* = YEARPICKER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 73, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_yearpicker td {
+  width: 33%;
+}
+
+/* = FOOTER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 77, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_footer {
+  margin-top: 3px;
+}
+
+/* line 78, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_footer .dp_hover {
+  background: #67AABB;
+  color: white;
+}
+
+/* = SELECT CURRENT DAY
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 82, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_today {
+  color: #E0E0E0;
+  padding: 3px;
+}
+
+/* = CLEAR DATE
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 86, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_clear {
+  color: #E0E0E0;
+  padding: 3px;
+}
+
+/* = SOME MORE GLOBALS (MUST BE LAST IN ORDER TO OVERWRITE PRESIOUS PROPERTIES)
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 90, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_current {
+  color: #e26261;
+}
+
+/* line 91, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_disabled_current {
+  color: #e38585;
+}
+
+/* line 92, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_hover {
+  background: #67aabb url("assets/zebra-datepicker/selected-date.png") repeat-x top;
+  color: white;
+}
+
+/* line 93, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_disabled {
+  background: #ececec url("assets/zebra-datepicker/disabled-date.png") repeat-x top;
+  color: #DDD;
+  cursor: default;
+}
+
+/* = ICON
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 97, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon {
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: url("assets/zebra-datepicker/calendar.png") no-repeat left top;
+  text-indent: -9000px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 0;
+  vertical-align: top;
+  right: 8px  !important;
+}
+
+/* line 98, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon_Disabled {
+  background-image: url("assets/zebra-datepicker/calendar-disabled.png");
+}
+
+/* don't set vertical margins! */
+/* line 101, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon {
+  margin: 0 0 0 3px;
+}
+
+/* line 102, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon_Inside {
+  margin: 0 3px 0 0;
+}
+
+/* line 105, sass/partials/_refields/_date.scss */
+.kb_field.date input.kb-datepicker {
+  width: 120px;
+}
+
+/* line 1, sass/partials/_refields/_file.scss */
+.kb-field-file-wrapper {
+  position: relative;
+}
+/* line 5, sass/partials/_refields/_file.scss */
+.kb-field-file-wrapper table {
+  margin-bottom: 10px;
+}
+/* line 9, sass/partials/_refields/_file.scss */
+.kb-field-file-wrapper table tr td:first-child {
+  padding: 0 10px;
+  border: none;
+}
+
+/**
+ * Hide Sidebar
+ */
+/* line 678, sass/kontentblocks.scss */
+.no-sidebar .attachments-browser .media-toolbar,
+.no-sidebar .attachments-browser .attachments,
+.no-sidebar .attachments-browser .uploader-inline {
+  right: 0;
+}
+
+/* line 682, sass/kontentblocks.scss */
+.no-sidebar .media-sidebar {
+  display: none;
+}
+
+/* line 686, sass/kontentblocks.scss */
+.smaller {
+  top: 100px;
+  right: 350px;
+  bottom: 100px;
+  left: 350px;
+}
+
+/* line 693, sass/kontentblocks.scss */
+.smaller {
+  top: 10%;
+  right: 15%;
+  bottom: 10%;
+  left: 15%;
 }

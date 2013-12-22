@@ -1,5 +1,3 @@
-'use strict';
-
 var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 

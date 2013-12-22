@@ -244,7 +244,47 @@ body.onsite-editing #onsite-modal {
 #onsite-modal .kb_field input[type=button], #onsite-modal .kb_field .button {
   text-transform: none !important;
 }
-/* line 271, sass/KBOsEditStyle.scss */
+/* line 279, sass/KBOsEditStyle.scss */
+#onsite-modal .kb_field textarea:focus,
+#onsite-modal .kb_field input[type="text"]:focus,
+#onsite-modal .kb_field input[type="password"]:focus,
+#onsite-modal .kb_field input[type="email"]:focus,
+#onsite-modal .kb_field input[type="number"]:focus,
+#onsite-modal .kb_field input[type="search"]:focus,
+#onsite-modal .kb_field input[type="tel"]:focus,
+#onsite-modal .kb_field input[type="url"]:focus,
+#onsite-modal .kb_field input[type="checkbox"]:focus,
+#onsite-modal .kb_field input[type="radio"]:focus,
+#onsite-modal .kb_field select:focus {
+  border-color: #999;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+}
+/* line 293, sass/KBOsEditStyle.scss */
+#onsite-modal .kb_field textarea,
+#onsite-modal .kb_field input[type="text"],
+#onsite-modal .kb_field input[type="password"],
+#onsite-modal .kb_field input[type="email"],
+#onsite-modal .kb_field input[type="number"],
+#onsite-modal .kb_field input[type="search"],
+#onsite-modal .kb_field input[type="tel"],
+#onsite-modal .kb_field input[type="url"],
+#onsite-modal .kb_field select {
+  background-color: #fff;
+  color: #333;
+  border-color: #666;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+}
+/* line 301, sass/KBOsEditStyle.scss */
+#onsite-modal .kb_field select[disabled] {
+  color: #7f7f7f;
+}
+/* line 305, sass/KBOsEditStyle.scss */
+#onsite-modal .kb_field select:focus {
+  border-color: #aaa;
+}
+/* line 311, sass/KBOsEditStyle.scss */
 #onsite-modal:hover {
   opacity: 1;
 }

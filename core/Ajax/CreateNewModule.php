@@ -50,7 +50,7 @@ class CreateNewModule
         }
 
         // ------------------------------------
-        // The Program 
+        // The Program
         // ------------------------------------
         // Setup Data from $_POST
         $this->setupRequestData();
@@ -83,11 +83,11 @@ class CreateNewModule
     /*
      * Setup $_POST Data
      * sets class properties
-     * 
+     *
      * data array should match properties
      * If any of the method calls fail validation, wp_send_json_error gets fired
      * and the Action exits.
-     * No errors or unset data allowed. 
+     * No errors or unset data allowed.
      */
 
     private function setupEnvironment()
@@ -107,7 +107,7 @@ class CreateNewModule
 
     /**
      * Setup Module
-     * 
+     *
      * instantiate the module and setup
      * @global $Kontentblocks
      */
@@ -128,7 +128,7 @@ class CreateNewModule
 
     /**
      * Update Count
-     * 
+     *
      * Set the counter as reference for the new module id
      * counting doesn't start with zero
      */
@@ -147,12 +147,12 @@ class CreateNewModule
 
     /**
      * Set new Module id
-     * 
+     *
      * Unique id for new module
      */
     private function setupNewID()
     {
-        $prefix = apply_filters( 'kb_post_module_prefix', 'module-' );
+        $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
         if ( $this->post_id !== -1 ) {
             return $prefix . $this->post_id . '_' . $this->newCount;
         }
@@ -200,10 +200,10 @@ class CreateNewModule
     private function saveNewModule()
     {
         $toSave = $this->newModule;
-        
+
         //dont save settings
         unset($toSave['settings']);
-        // add new block and update 
+        // add new block and update
         $update = $this->environment->getDataHandler()->addToIndex( $this->newInstanceID, $toSave );
         if ( $update !== true && !is_int( $update ) ) {
             wp_send_json_error( 'Update failed' );

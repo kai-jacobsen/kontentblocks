@@ -133,7 +133,7 @@ class KB_Sidebar_Area_Selector
         else {
             delete_post_meta( $post_id, 'active_sidebar_areas' );
         }
-        
+
 
     }
     public function modal_markup()
@@ -159,7 +159,7 @@ class KB_Sidebar_Area_Selector
 
     public function openActiveList()
     {
-        // all areas 
+        // all areas
         // remove box if there are no areas to chose from
         $hide = (count( $this->areas ) < 2 ) ? 'hide' : '';
 
@@ -171,7 +171,7 @@ class KB_Sidebar_Area_Selector
 				<div class='area_sidebars {$hide}'>
 					<div class='context-box area-context'>
 				<div class='active_dynamic_areas_wrapper'>
-				
+
 				<input type='hidden' name='_sidebars_updated' value='" . time() . "' />
 				<ul class='connect' style='min-height:25px;' id='active-dynamic-areas'>";
 
@@ -208,6 +208,11 @@ class KB_Sidebar_Area_Selector
         $return = '';
 
         foreach ( $this->activeSidebars as $area ) {
+
+            if ( !isset( $this->areas[ $area ] ) ) {
+                continue;
+            }
+
             $areaDefinition = $this->areas[ $area ];
 
             $return .= "<li class='dynamic-area-active' id='{$areaDefinition[ 'id' ]}' name='{$areaDefinition[ 'id' ]}'>{$areaDefinition[ 'name' ]}";

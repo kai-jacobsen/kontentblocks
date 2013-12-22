@@ -1,9 +1,8 @@
-'use strict';
 var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.ModuleModel = Backbone.Model.extend({
-    idAttribute: 'instance_id',
+	idAttribute: 'instance_id',
     destroy: function() {
         var that = this;
         KB.Ajax.send({
@@ -14,7 +13,7 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     destroyed: function() {
 
     },
-    setArea: function(area){ 
+    setArea: function(area){
         this.area = area;
     },
     areaChanged: function() {

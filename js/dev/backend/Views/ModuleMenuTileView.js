@@ -45,7 +45,7 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
 
         // update the reference counter, used as base number
         // for new modules
-        var count = parseInt(jQuery('#kb_all_blocks').val()) + 1;
+        var count = parseInt(jQuery('#kb_all_blocks').val(), 10) + 1;
         jQuery('#kb_all_blocks').val(count);
 
 

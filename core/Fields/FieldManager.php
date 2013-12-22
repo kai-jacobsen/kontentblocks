@@ -62,6 +62,7 @@ class FieldManager
         $this->data     = $module->moduleData;
         $this->module   = $module;
 
+
     }
 
     /**
@@ -78,8 +79,6 @@ class FieldManager
         return $this->structure[ $id ];
 
     }
-
-
 
     public function save( $data, $oldData )
     {

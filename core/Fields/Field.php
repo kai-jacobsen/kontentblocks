@@ -40,6 +40,8 @@ abstract class Field
             $this->baseId = $id . '[' . $array . ']';
         }
 
+        $this->parentModuleId = $id;
+
     }
 
     public function setData( $data )
@@ -82,6 +84,8 @@ abstract class Field
     public function build()
     {
 
+        $this->uniqueId = uniqid();
+
         if ( method_exists( $this, 'enqueue' ) ) {
             $this->enqueue();
         }
@@ -105,8 +109,7 @@ abstract class Field
     public function header()
     {
 
-
-        echo '<div class="kb-field-wrapper">'
+        echo '<div class="kb-field-wrapper" id=' . $this->uniqueId . '>'
         . '<div class="kb_field_header">';
         if ( !empty( $this->args[ 'title' ] ) ) {
             echo "<h4>{$this->args[ 'title' ]} --</h4>";
@@ -125,9 +128,23 @@ abstract class Field
 
         $this->form();
 
+        $this->javascriptSettings();
+
         if ( method_exists( $this, 'postForm' ) ) {
             $this->postForm();
         }
+
+    }
+
+    public function javascriptSettings()
+    {
+        $settings = $this->getArg( 'jSettings' );
+
+        if ( !$settings ) {
+            return;
+        }
+
+        printf( '<script>var KB = KB || {}; KB.FieldConfig = KB.FieldConfig || {}; KB.FieldConfig["%s"] = %s;</script>', $this->uniqueId, json_encode( $settings ) );
 
     }
 
@@ -143,15 +160,36 @@ abstract class Field
         if ( !empty( $this->getArg( 'label' ) ) ) {
             echo "<label class='kb_label heading' for='{$this->get_field_id()}'>{$this->getArg( 'label' )}</label>";
         }
+
     }
 
-    public function getValue()
+    public function getValue( $arrKey = null )
     {
         if ( method_exists( $this, 'filter' ) ) {
             return $this->filter( $this->value );
         }
 
+        if ( $arrKey ) {
+            return $this->getValueFromArray( $arrKey );
+        }
+
         return $this->value;
+
+    }
+
+    public function getValueFromArray( $arrKey )
+    {
+        if ( is_array( $this->value ) && isset( $this->value[ $arrKey ] ) ) {
+            if ( \method_exists( $this, 'filter' ) ) {
+                return $this->filter( $this->value[ $arrKey ] );
+            }
+            else {
+                return $this->value[ $arrKey ];
+            }
+        }
+        else {
+            return NULL;
+        }
 
     }
 

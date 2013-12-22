@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kontentblocks 1.0.0\n"
+"POT-Creation-Date: 2013-12-22 20:41+0100\n"
+"PO-Revision-Date: 2013-12-22 20:42+0100\n"
+"Last-Translator: Kai Jacobsen <kai@ungestaltbar.de>\n"
+"Language-Team: Kai Jacobsen\n"
+"Language: Deutsch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e;_x\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ../core/Language/.\n"
+
+#: ../core/Language/./packages/i18n_Refields.php:6
+msgid "Title"
+msgstr "Titel"
+
+#: ../core/Language/./packages/i18n_Refields.php:10
+msgid "Filename"
+msgstr "Dateinamen"
+
+#: ../core/Language/./packages/i18n_Refields.php:11
+msgid "Edit link"
+msgstr "Bearbeiten URL"
+
+#: ../core/Language/./packages/i18n_Refields.php:12
+msgid "Select file"
+msgstr "Datei wählen"
+
+#: ../core/Language/./packages/i18n_Refields.php:16
+msgid "Caption"
+msgstr "Bildunterschrift"
+
+#: ../core/Language/./packages/i18n_ExtPageSettings.php:5
+msgid "Page Settings"
+msgstr "Seiteneinstellungen"
+
+#: ../core/Language/./packages/i18n_ExtPageSettings.php:6
+msgid "No Parent"
+msgstr "Keine Elternseite"
+
+#: ../core/Language/./packages/i18n_ExtPageSettings.php:7
+msgid "Parent Page"
+msgstr "Elternseite"
+
+#: ../core/Language/./packages/i18n_ExtPageSettings.php:8
+msgid "Page Template"
+msgstr "Seitenvorlage"
+
+#: ../core/Language/./packages/i18n_ExtPageSettings.php:9
+msgid "Default Template"
+msgstr "Standardvorlage"

@@ -1,4 +1,3 @@
-'use strict';
 var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
@@ -31,7 +30,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         KB.Modules.add(data.module);
         // update the reference counter, used as base number
         // for new modules
-        var count = parseInt(jQuery('#kb_all_blocks').val()) + 1;
+        var count = parseInt(jQuery('#kb_all_blocks').val(), 10) + 1;
         jQuery('#kb_all_blocks').val(count);
 
 

@@ -76,9 +76,12 @@ class FieldSection
      * @param string $key | Unique key
      * @param array $args | additional parameters, may differ by field type
      * @return self Fluid layout
+     * @todo check if field type exists
      */
     public function addField( $type, $key, $args )
     {
+
+
         if ( !$this->fieldExists( $key ) ) {
             $Registry = FieldRegistry::getInstance();
             $field    = $Registry->getField( $type );

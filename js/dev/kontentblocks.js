@@ -85,6 +85,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
             // set the global activeField variable dynamically
             $('body').on('mousedown', '.kb_field', function(e) {
                 activeField = this;
+
             });
 
             // Keep 4 Kontentfields
@@ -116,14 +117,14 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
             $('.area-blocks-menu-tabs').tabs({
                 show: function(event, ui)
                 {
-//                    $(ui.panel).jScrollPane(); 
+//                    $(ui.panel).jScrollPane();
                 }
             });
         },
         // Keep 4 Kontentfields
         ktftabs: function()
         {
-            // Tabs for Kontentfields			
+            // Tabs for Kontentfields
             if ($('.kb_fieldtabs'))
             {
                 var length = $('.kb_fieldtabs li').length;
@@ -160,7 +161,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
         // Keep 4 Kontentfields
         tinymce: function(newid, parent)
         {
-            // get settings from native WP Editor 
+            // get settings from native WP Editor
             var settings = tinyMCEPreInit.mceInit['content'];
 
             // add new editor id to settings
@@ -199,7 +200,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
         /*
          * Handles TinyMCE removal, since TinyMCE doesn't like to be moved inside the DOM
          * this has to be called on every instance whenever sortables is working
-         * 
+         *
          */
         remove_tinymce: function()
         {
@@ -237,7 +238,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
                 textarea = jQuery(this).find('textarea').attr('id');
                 // add controls back
                 tinyMCE.execCommand('mceAddControl', false, textarea);
-                // 
+                //
                 // if instance was in html mode, we have to switch manually back to visual mode
                 // will look ugly otherwise, and don't see an alternative
                 if ($(this).hasClass('html-active'))
@@ -248,7 +249,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
         },
         /*
          * Handles resorting of Blocks and stores the new order via ajax
-         */ 
+         */
 
         resort: function() {
 

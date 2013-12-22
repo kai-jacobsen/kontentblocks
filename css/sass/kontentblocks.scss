@@ -36,6 +36,7 @@
 @import "partials/_nano";
 @import "partials/_alertify";
 @import "partials/_etch";
+
 @import "partials/_global-area-edit";
 
 
@@ -337,7 +338,7 @@ li.gallery-item textarea:focus {
 
 
 /* -------------------
-    Fields 
+    Fields
 ----------------------*/
 @import "partials/_kontentfields_new";
 
@@ -354,7 +355,7 @@ li.gallery-item textarea:focus {
     margin-bottom: 0;
     margin-top: 0;
 
-    
+
 }
 
 .kb_loading{
@@ -513,7 +514,7 @@ textarea.quicktags {
 
 
 .wp-editor-area {
-    /*height: 500px;*/ 
+    /*height: 500px;*/
 }
 
 #context_normal {
@@ -665,3 +666,33 @@ textarea.quicktags {
 
 
 @import '_refields/_image';
+@import '_refields/_date';
+@import '_refields/_file';
+
+
+/**
+ * Hide Sidebar
+ */
+.no-sidebar .attachments-browser .media-toolbar,
+.no-sidebar .attachments-browser .attachments,
+.no-sidebar .attachments-browser .uploader-inline {
+	right: 0;
+}
+
+.no-sidebar .media-sidebar {
+	display: none;
+}
+
+.smaller {
+	top:    100px;
+	right:  350px;
+	bottom: 100px;
+	left:   350px;
+}
+
+.smaller {
+	top:    10%;
+	right:  15%;
+	bottom: 10%;
+	left:   15%;
+}

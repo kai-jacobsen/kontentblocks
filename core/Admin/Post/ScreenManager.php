@@ -11,28 +11,28 @@ class ScreenManager
     /**
      * Raw areas are all areas which are available in the current context
      * e.g. are assigned to pagetemplate and/or post type
-     * @var array 
+     * @var array
      */
     protected $rawAreas;
 
     /**
      * TODO: What is this?
-     * @var array 
+     * @var array
      */
     protected $postAreas;
 
     /**
      * Definition of possible sections for the edit screen
-     * A context does not get rendered if there are no areas 
+     * A context does not get rendered if there are no areas
      * assigned to it.
-     * @var array 
+     * @var array
      */
     protected $contextLayout;
 
     /**
      * Final sorted assignment of areas to regions
      * TODO: Var name sucks
-     * @var array 
+     * @var array
      */
     protected $regions;
 
@@ -84,7 +84,7 @@ class ScreenManager
 
     }
 
-    
+
     public function getRegionAreas( $id )
     {
         if ( isset( $this->regions[ $id ] ) ) {
@@ -98,7 +98,7 @@ class ScreenManager
 
     /*
      * Default Context Layout
-     * 
+     *
      * @return array default context layout
      * @filter kb_default_context_layout
      */

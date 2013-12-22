@@ -7,12 +7,12 @@
     </div>
 
     <div class="kb-js-image-meta-wrapper">
-        <label>Title</label>
+        <label>{{ i18n.title }} </label>
         <input class='kb-js-image-title kb-observe' type="text" name='{{ field.get_field_name( 'title') }}' value='{{value.title}}' >
-        <label>Caption</label>
+        <label>{{ i18n.caption }}</label>
         <input class='kb-js-image-caption kb-observe' type="text" name='{{ field.get_field_name( 'caption') }}' value='{{value.caption}}' >
     </div>
-
+	{{dump(i18n)}}
     <input class='kb-js-image-id' type='hidden' name='{{field.get_field_name( 'id' )}}' value='{{value.id}}' >
 </div>
 {{ field.description() }}

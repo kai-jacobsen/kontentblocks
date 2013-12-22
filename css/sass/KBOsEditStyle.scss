@@ -266,6 +266,46 @@ body.onsite-editing {
 			text-transform: none !important;
 		}
 
+		textarea:focus,
+		input[type="text"]:focus,
+		input[type="password"]:focus,
+		input[type="email"]:focus,
+		input[type="number"]:focus,
+		input[type="search"]:focus,
+		input[type="tel"]:focus,
+		input[type="url"]:focus,
+		input[type="checkbox"]:focus,
+		input[type="radio"]:focus,
+		select:focus {
+			border-color: #999;
+			font-family: 'Open Sans', sans-serif;
+			font-size: 12px;
+		}
+
+		textarea,
+		input[type="text"],
+		input[type="password"],
+		input[type="email"],
+		input[type="number"],
+		input[type="search"],
+		input[type="tel"],
+		input[type="url"],
+		select {
+			background-color: #fff;
+			color: #333;
+			border-color: #666;
+			font-family: 'Open Sans', sans-serif;
+			font-size: 12px;
+		}
+
+		select[disabled] {
+			color: #7f7f7f;
+		}
+
+		select:focus {
+			border-color: #aaa;
+		}
+
     }
 
     &:hover{

@@ -66,7 +66,6 @@ class AreaOutput
 
     private function _setupLayout()
     {
-
         if ( !empty( $this->settings[ 'custom' ] ) ) {
             return $this->_setupCustomLayout( $this->settings[ 'custom' ] );
         }
@@ -89,7 +88,8 @@ class AreaOutput
             'useWrapper' => TRUE,
             'element' => 'div',
             'mergeRepeating' => false,
-            'action' => null
+            'action' => null,
+            'area_template' => 'default'
         );
 
         if ( $settings ) {

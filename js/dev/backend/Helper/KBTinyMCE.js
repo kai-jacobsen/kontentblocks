@@ -25,7 +25,7 @@ KB.TinyMCE = (function($) {
                 var textarea = $(this).find('textarea').attr('id');
                 // add controls back
                 tinyMCE.execCommand('mceAddControl', false, textarea);
-                // 
+                //
                 // if instance was in html mode, we have to switch manually back to visual mode
                 // will look ugly otherwise, and don't see an alternative
                 if ($(this).hasClass('html-active'))
@@ -38,7 +38,7 @@ KB.TinyMCE = (function($) {
             // get settings from native WP Editor
             // Editor may not be initialized and is not accesible throught
             // the tinymce api, thats why we take the settings from preInit
-            var settings = tinyMCEPreInit.mceInit['content'];
+            var settings = tinyMCEPreInit.mceInit.content;
 
             if (!$el){
                 $el = KB.lastAddedModule.view.$el;
@@ -49,9 +49,9 @@ KB.TinyMCE = (function($) {
                 var id = this.id;
 
                 // add new editor id to settings
-                settings['elements'] = id;
-                settings['height'] = 350;
-                settings['setup'] = function(ed){
+                settings.elements = id;
+				settings.height = 350;
+				settings.setup = function(ed) {
                     ed.onInit.add(function(){
                         jQuery(document).trigger('newEditor', ed);
                     });

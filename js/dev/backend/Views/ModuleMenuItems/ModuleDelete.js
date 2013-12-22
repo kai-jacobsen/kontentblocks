@@ -1,5 +1,3 @@
-'use strict';
-
 var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
@@ -36,4 +34,4 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         KB.Modules.remove(this.model);
         KB.Notice.notice('Good bye', 'success');
     }
-}); 
+});

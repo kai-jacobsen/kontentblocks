@@ -30,28 +30,28 @@ Class Kontentblocks
 
     /**
      * Stores created areas
-     * @var array 
+     * @var array
      */
     public $areas = array();
 
     /**
      * Stores a instance for each Block
-     * 
-     * @var array objects 
+     *
+     * @var array objects
      */
     public $blocks = array();
 
     /**
      * Stores area settings
-     * 
+     *
      * @var array
      */
     public $area_settings = array();
 
     /**
      * Store Area Templates
-     * 
-     * @var array 
+     *
+     * @var array
      */
     public $area_templates = array();
 
@@ -67,7 +67,7 @@ Class Kontentblocks
 
     /*
      * Array of Roles and Caps used by and for Kontentblocks
-     * 
+     *
      * @var array
      */
     public $caps = array();
@@ -75,19 +75,19 @@ Class Kontentblocks
     /**
      * Set  Post Context
      * indicates where the data is stored. either post_meta (true) or option(false)
-     * defaults to true, and is set to false if called on option pages 
+     * defaults to true, and is set to false if called on option pages
      */
     public $post_context = true;
 
     /**
-     * Available Block Templates 
+     * Available Block Templates
      */
     public $block_templates = array();
 
     /*
      * Constructor
      * Setup constants and include necessary files
-     * 
+     *
      */
     public $Capabilities;
     protected $Enqueues;
@@ -104,7 +104,7 @@ Class Kontentblocks
 
     function __construct()
     {
-        
+
     }
 
     public function init()
@@ -117,6 +117,7 @@ Class Kontentblocks
         define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
         define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/core-modules/' );
         define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/core-modules/' );
+        define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . '/Definitions/js/' );
 
         // Files used used on front and backend
         include_once dirname( __FILE__ ) . '/Autoloader.php';
@@ -128,7 +129,7 @@ Class Kontentblocks
         // additional cap feature, only used on demand and not properly tested yet
         define( 'KONTENTLOCK', false );
 
-            include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
+        include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
         include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
         /* Include all necessary files on admin area */
         if ( is_admin() ) {
@@ -139,15 +140,15 @@ Class Kontentblocks
             include_once dirname( __FILE__ ) . '/includes/kontentblocks.sidebar-area-selector.php';
 
 
-            $this->UI = new EditScreen();
+            $this->UI           = new EditScreen();
             $this->Capabilities = new Capabilities();
         }
 
-        $this->Enqueues     = new Enqueues();
+        $this->Enqueues = new Enqueues();
         // setup vars
         add_action( 'init', array( $this, '_set_block_templates' ), 850 );
-        
-        add_post_type_support('page', 'kontentblocks');
+
+        add_post_type_support( 'page', 'kontentblocks' );
 
         // load Templates automatically
         add_action( 'init', array( $this, '_load_templates' ), 9 );
@@ -155,12 +156,29 @@ Class Kontentblocks
         // Load Plugins
         add_action( 'init', array( $this, '_load_plugins' ), 9 );
 
+        add_action( 'admin_head', array( $this, 'livereload' ) );
+
+        add_action( 'plugins_loaded', array( $this, 'i18n' ) );
+
+    }
+
+    public function livereload()
+    {
+        echo '<script src="http://localhost:35729/livereload.js"></script>';
+
+    }
+
+    public function i18n()
+    {
+        load_plugin_textdomain( 'Kontentblocks', false, dirname( plugin_basename( __FILE__ ) ) . '/language/' );
+        \Kontentblocks\Language\I18n::getInstance();
+
     }
 
     /**
      * Indicate whether we are on a post edit screen or inside the dynamic areas section
-     * 
-     * @param bool $bool . defaults to true 
+     *
+     * @param bool $bool . defaults to true
      * @return void
      */
     public function set_post_context( $bool )
@@ -172,9 +190,9 @@ Class Kontentblocks
     /**
      * Load (Block)Template Files
      * Simply auto-includes all .php files inside the templates folder
-     * 
+     *
      * uses filter: kb_template_paths to register / modify path array from the outside
-     * 
+     *
      * TODO: Some Kind of verification and/or switch to meta data usage
      */
     public function _load_templates()
@@ -196,7 +214,6 @@ Class Kontentblocks
                     }
                 }
             }
-
             $files = glob( $path . '*.php' );
             foreach ( $files as $template ) {
                 if ( strpos( basename( $template ), '__' ) === false )
@@ -223,7 +240,6 @@ Class Kontentblocks
             $files = glob( $path . '*.php' );
 
             foreach ( $files as $template ) {
-
                 include_once($template);
             }
         }
@@ -235,7 +251,7 @@ Class Kontentblocks
     /*
      * Instantiate a Block Class and store it
      * Each Block registers itself by using kb_register_blocks which calls this method
-     * 
+     *
      * @param string classname
      */
 
@@ -305,7 +321,7 @@ Class Kontentblocks
      *
      * if KB is in dev_mode, data gets handled by code and any saved data gets ignored
      * if KB is not in dev mode, initial setup happens just once, further editing of areas happens by the plugin menu page
-     * 
+     *
      * @param array $args
      * @return array
      */
@@ -402,7 +418,7 @@ Class Kontentblocks
      * Filter  areas from entire areas array
      * This will actually return all areas, dynamic or not
      * @param context - string
-     * @return array 
+     * @return array
      */
     public function get_areas( $context = false )
     {
@@ -445,7 +461,7 @@ Class Kontentblocks
     /**
      * Filter dynamic areas from entire areas array
      * @param context - string
-     * @return array 
+     * @return array
      */
     public function get_dynamic_areas( $context = false, $exclude = false )
     {
@@ -481,7 +497,7 @@ Class Kontentblocks
      */
 
     /**
-     * register area template 
+     * register area template
      */
     public function register_area_template( $args )
     {
@@ -528,7 +544,7 @@ Class Kontentblocks
 //     * Get block data depending on context
 //     * @param string $post_id
 //     * @param array $block
-//     * @return array 
+//     * @return array
 //     */
 //    public static function get_data( $post_id, $block, $post_context )
 //    {
@@ -744,8 +760,6 @@ Class Kontentblocks
         return $template;
 
     }
-    
-
 
 }
 
@@ -769,12 +783,12 @@ function init_Kontentfields()
     if ( !is_admin() ) {
         return false;
     }
-//    global $Kontentfields;
-//    $Kontentfields = new KFHandler;
-//    $Kontentfields->init();
-//    // load field files...
-//    foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
-//        require_once $file;
-//    }
+    global $Kontentfields;
+    $Kontentfields = new KFHandler;
+    $Kontentfields->init();
+    // load field files...
+    foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
+        require_once $file;
+    }
 
 }

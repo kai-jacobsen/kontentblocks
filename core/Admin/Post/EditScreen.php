@@ -123,6 +123,7 @@ Class EditScreen
     function save( $post_id, $post_object )
     {
 
+        $savedData = null;
         // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
         if ( empty( $_POST ) ) {
@@ -306,6 +307,10 @@ Class EditScreen
      */
     public function renderScreen()
     {
+
+        if ( empty( $this->postData->get( 'areas' ) ) ) {
+            return;
+        }
 
         $ScreenManager = new ScreenManager( $this->postData );
         $ScreenManager->render();

@@ -1,6 +1,7 @@
 <?php
 
 namespace Kontentblocks\Fields\Definitions;
+
 use Kontentblocks\Fields\Field;
 
 /**
@@ -28,15 +29,17 @@ Class Image extends Field
         // using twig template for html output
         $tpl = new \Kontentblocks\Templating\FieldTemplate(
             'image.twig', array(
-                'field' => $this,
-                'value' => $value,
-                'image' => new \Kontentblocks\Utils\AttachmentHandler($value['id'])
+            'field' => $this,
+            'value' => $value,
+            'image' => new \Kontentblocks\Utils\AttachmentHandler( $value[ 'id' ] ),
+            'i18n' => \Kontentblocks\Language\I18n::getPackages( 'Refields.image', 'Refields.common' )
             )
         );
-        $tpl->render(true);
+        $tpl->render( true );
 
     }
 
 }
+
 //register
 kb_register_fieldtype( 'image', 'Kontentblocks\Fields\Definitions\Image' );

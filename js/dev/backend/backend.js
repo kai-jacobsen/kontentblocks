@@ -1,11 +1,10 @@
-'use strict';
 var KB = KB || {};
 
 KB.currentModule = {};
 KB.currentArea = {};
 KB.Fields = {};
 // ---------------
-// Collections 
+// Collections
 // ---------------
 
 /*
@@ -13,8 +12,8 @@ KB.Fields = {};
  * simple getter/setter access point to views
  */
 KB.Views = {
-    Modules: new KB.ViewsCollection,
-    Areas: new KB.ViewsCollection
+    Modules: new KB.ViewsCollection(),
+	Areas: new KB.ViewsCollection()
 };
 
 /*
@@ -49,10 +48,10 @@ KB.App = (function($) {
         KB.Modules.on('add', createModuleViews);
         KB.Areas.on('add', createAreaViews);
         KB.Modules.on('remove', removeModule);
-        
+
         // Create views
         addViews();
-        
+
         // get the UI on track
         KB.Ui.init();
     }
@@ -61,10 +60,10 @@ KB.App = (function($) {
      * Iterate and throught raw areas as they were
      * output by toJSON() method on each area upon
      * server side page creation
-     * 
+     *
      * Modules are taken from the raw areas and
      * collected seperatly in their own collection
-     * 
+     *
      * View generation is handled by the 'add' event callback
      * as registered above
      * @returns void
@@ -92,24 +91,24 @@ KB.App = (function($) {
      * @returns void
      */
     function createModuleViews(module) {
-        
+
         // assign the full corresponding area model to the module model
         module.setArea(KB.Areas.get(module.get('area')));
         module.bind('change:area', module.areaChanged);
-        
+
         // create view
         KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
         }));
-        
+
         // re-init tabs
         // TODO: don't re-init globally
         KB.Ui.initTabs();
     }
 
     /**
-     * 
+     *
      * @param area Backbone Model
      * @returns void
      */

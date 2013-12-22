@@ -1,8 +1,8 @@
-'use strict';
 
 var KB = KB || {};
 
 KB.Notice = (function($) {
+	'use strict';
 
     return {
         notice: function(msg, type) {

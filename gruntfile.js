@@ -74,19 +74,36 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['js/dev/<%= pkg.name %>.js', 'css/**/*.scss', 'js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
-            tasks: ['compass', 'concat', 'uglify:prim'],
             options: {
-                livereload: true,
-                nospawn: true,
-                message: 'SASS and Uglify finished running'
-            }
+				livereload: true
+			},
+			js: {
+				files: ['js/dev/<%= pkg.name %>.js', 'js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
+				tasks: ['concat', 'uglify:prim', 'clean', 'jshint']
+			},
+			sass: {
+				options: {
+					livereload: false
+				},
+				files: ['css/**/*.scss'],
+				tasks: ['compass']
+			},
+			css: {
+				files: ['css/*.css'],
+				tasks: []
+			}
         },
         clean: ["js/tmp"],
         jshint: {
             dev: ['js/dev/frontend/**/*.js', 'js/dev/backend/**/*.js'],
             options: {
-                force: true
+                force: true,
+				globals: {
+					jQuery: true,
+					_: true,
+					Backbone: true,
+					console: true
+				}
             }
         }
     });
