@@ -25,10 +25,9 @@ class ModuleTemplate
     public function render( $echo = false )
     {
         if ( !is_file( trailingslashit( Twig::getDefaultPath()) . $this->tplFile ) ) {
-            echo "<script>console.log('template {$this->tplFile} missing');</script>";
-            return false;
         }
-        elseif ( !empty( $this->module->path ) ) {
+
+        if ( !empty( $this->module->path ) ) {
             if ( is_file( trailingslashit( $this->module->path ) . $this->tplFile ) ) {
                 $this->setPath( $this->module->path );
             }
@@ -76,7 +75,7 @@ class ModuleTemplate
             $data = $modData;
         }
 
-        // make sure there is a key value pair, if not 
+        // make sure there is a key value pair, if not
         // make 'data' the default key
         if ( !is_array( $data ) ) {
             $data = array(

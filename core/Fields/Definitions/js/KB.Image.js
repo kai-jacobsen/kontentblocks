@@ -1,61 +1,75 @@
 var KB = KB || {};
 
-KB.Fields.Image = (function($) {
-    var that = this;
+KB.Fields.register('Image', (function($) {
+	'use strict';
+	var self;
 
-    var selector = '.kb-js-add-image';
-    var $container = null;
-    var $wrapper = null;
-    var $id, $title, $caption;
+	self = {
+		selector: '.kb-js-add-image',
+		reset: '.kb-js-reset-image',
+		_frame: null,
+		$container: null,
+		$wrapper: null,
+		$id: null,
+		$title: null,
+		$caption: null,
+		init: function() {
+			var that = this;
 
-    var _frame = null;
+			$(this.selector).on('click', function(e) {
+				e.preventDefault();
+				that.$container = $('.kb-field-image-container', activeField);
+				that.$wrapper = $('.kb-field-image-wrapper', activeField);
+				that.$id = $('.kb-js-image-id', that.$wrapper);
+				that.$title = $('.kb-js-image-title', that.$wrapper);
+				that.$caption = $('.kb-js-image-caption', that.$wrapper);
+				that.openModal();
+			});
 
-    $(document).on('click', selector, function() {
-        $container = $(this);
-        $wrapper = $(this).parent();
-        $id = $('.kb-js-image-id', $wrapper);
-        $title = $('.kb-js-image-title', $wrapper);
-        $caption = $('.kb-js-image-caption', $wrapper);
-        openMediaDialog();
-    });
+		},
+		openModal: function() {
 
-    function openMediaDialog() {
+			// opens dialog if not already declared
+			if (this._frame) {
+				this._frame.open();
+				return;
+			}
 
-        // opens dialog if not already declared
-        if (_frame) {
-            _frame.open();
-            return;
-        }
+			this._frame = wp.media({
+				// Custom attributes
+				title: KB.i18n.Refields.image.modalTitle,
+				button: {
+					text: KB.i18n.Refields.common.select
+				},
+				multiple: false,
+				library: {
+					type: 'image'
+				}
+			});
+			this._frame.state('library').on('select', function() {
+				// Get the selected attachment. Since we have disabled multiple selection
+				// we want the first one of the collection.
+				var attachment = this.get('selection').first();
 
-        _frame = wp.media({
-            // Custom attributes
-            title: 'My first Media Modal',
-            button: {
-                text: 'whooop'
-            },
-            multiple: false,
-            library: {
-                type: 'image'
-            }
-        });
-        _frame.state('library').on('select', function() {
-            // Get the selected attachment. Since we have disabled multiple selection
-            // we want the first one of the collection.
-            var attachment = this.get('selection').first();
+				self.handleAttachment(attachment);
+			});
 
-            handleAttachment(attachment);
-        });
- 
-        _frame.open();
+			this._frame.open();
 
-    }
-    function handleAttachment(attachment) {
-        $container.html('<img src="' + attachment.get('sizes').thumbnail.url + '" >');
-        $id.val(attachment.get('id')); 
-        $title.val(attachment.get('title')); 
-        $caption.val(attachment.get('caption')); 
-        $(document).trigger('KB:osUpdate');
-        
-    }
+		},
+		handleAttachment: function(attachment) {
+			this.$container.html('<img src="' + attachment.get('sizes').thumbnail.url + '" >');
+			this.$id.val(attachment.get('id'));
+			this.$title.val(attachment.get('title'));
+			this.$caption.val(attachment.get('caption'));
+			$(document).trigger('KB:osUpdate');
 
-}(jQuery));
+		},
+		update: function() {
+			this.init();
+		}
+	};
+	return self;
+
+
+}(jQuery)));

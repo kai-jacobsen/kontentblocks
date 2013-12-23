@@ -19,6 +19,8 @@ class I18n
 
     private function __construct()
     {
+        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+        add_action( 'admin_footer', array( $this, 'toJSON' ) );
         self::loadPackages();
 
     }
@@ -76,6 +78,15 @@ class I18n
             return $result[ $context ];
         }
         return array();
+
+    }
+
+    public static function toJSON()
+    {
+        if ( is_user_logged_in() ) {
+            $json = json_encode( self::$packages );
+            echo "<script>var KB = KB || {}; KB.i18n = {$json};</script>";
+        }
 
     }
 

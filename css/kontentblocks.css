@@ -6439,17 +6439,29 @@ button.Zebra_DatePicker_Icon_Inside {
 }
 
 /* line 1, sass/partials/_refields/_file.scss */
-.kb-field-file-wrapper {
+.kb_field.file {
   position: relative;
 }
-/* line 5, sass/partials/_refields/_file.scss */
-.kb-field-file-wrapper table {
+/* line 4, sass/partials/_refields/_file.scss */
+.kb_field.file table {
+  width: 250px;
   margin-bottom: 10px;
+  border: none;
 }
 /* line 9, sass/partials/_refields/_file.scss */
-.kb-field-file-wrapper table tr td:first-child {
+.kb_field.file table tr td:first-child {
   padding: 0 10px;
+}
+/* line 13, sass/partials/_refields/_file.scss */
+.kb_field.file table td {
   border: none;
+}
+
+/* line 19, sass/partials/_refields/_file.scss */
+.kb-js-reset-file {
+  cursor: pointer;
+  line-height: 28px;
+  padding-left: 8px;
 }
 
 /**
@@ -6481,4 +6493,9 @@ button.Zebra_DatePicker_Icon_Inside {
   right: 15%;
   bottom: 10%;
   left: 15%;
+}
+
+/* line 700, sass/kontentblocks.scss */
+.kb-hide {
+  display: none;
 }

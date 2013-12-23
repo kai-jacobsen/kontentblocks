@@ -33,6 +33,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 		jQuery(document).on('KB:osUpdate', function() {
 			that.serialize();
 		});
+
 		jQuery(document).on('change', '.kb-observe', function() {
 			that.serialize();
 		});
@@ -40,7 +41,8 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 	},
 	events: {
 		'keyup': 'delayInput',
-		'click a.close-controls': 'destroy'
+		'click a.close-controls': 'destroy',
+		'click a.kb-save-form': 'serialize'
 	},
 	render: function() {
 		var that = this;
@@ -55,7 +57,8 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 			url: ajaxurl,
 			data: {
 				action: 'getModuleOptions',
-				module: that.model.toJSON()
+				module: that.model.toJSON(),
+				_ajax_nonce: kontentblocks.nonces.kb_frontsite_open
 			},
 			type: 'POST',
 			dataType: 'html',
@@ -64,7 +67,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 				KB.Ui.initTabs();
 				KB.Ui.initToggleBoxes();
 				KB.TinyMCE.addEditor();
-				jQuery(document).trigger('onsite::opened');
+				KB.Fields.trigger('update');
 
 			},
 			error: function() {
@@ -88,7 +91,6 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 			success: function(res) {
 				that.options.view.$el.html(res.html);
 				that.model.set('moduleData', res.newModuleData);
-				console.log(that.model);
 				that.model.view.render();
 			},
 			error: function() {

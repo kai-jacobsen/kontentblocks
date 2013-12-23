@@ -2,7 +2,6 @@ var KB = KB || {};
 
 KB.currentModule = {};
 KB.currentArea = {};
-KB.Fields = {};
 // ---------------
 // Collections
 // ---------------

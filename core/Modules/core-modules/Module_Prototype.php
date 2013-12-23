@@ -24,13 +24,10 @@ class Module_Prototype extends Module
 
     public function render( $data )
     {
-        if ( empty( $data ) ) {
-            return;
-        }
 //        return apply_filters( 'the_content', $this->getData( 'somecheckbox' ) );
-//        $img  = wp_prepare_attachment_for_js( $data[ 'stuffing' ][ 'image' ][ 'id' ] );
-//        $tpl  = new ModuleTemplate( $this, 'prototype.twig', array( 'real' => $para ) );
-//        return $tpl->render();
+        $file = wp_prepare_attachment_for_js( $this->getData( 'id', 'somefile' ) );
+        $tpl  = new ModuleTemplate( $this, '/templates/prototype.twig', array( 'file' => $file ) );
+        return $tpl->render();
 
     }
 
@@ -58,7 +55,7 @@ class Module_Prototype extends Module
 //                )
 //            )
             ->addField(
-            'image', 'somefile', array(
+            'file', 'somefile', array(
             'label' => 'Label for Text',
             'description' => 'Maybe a Description is waht longer than this',
             'type' => 'text',

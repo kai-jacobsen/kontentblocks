@@ -1,27 +1,36 @@
 var KB = KB || {};
 
-KB.Fields.File = (function($) {
+KB.Fields.register('File', (function($) {
 
 	var self, attachment;
 
 	self = {
 		selector: '.kb-js-add-file',
+		remove: '.kb-js-reset-file',
 		container: null,
 		init: function() {
 			var that = this;
-			$(this.selector).on('click', function() {
-				that.container = $(activeField);
+			$(this.selector).on('click', function(e) {
+				e.preventDefault();
+				that.container = $('.kb-field-file-wrapper', activeField);
 				that.frame().open();
 			});
+
+			$(this.remove).on('click', function(e) {
+				e.preventDefault();
+				that.container = $('.kb-field-file-wrapper', activeField);
+				that.resetFields();
+			});
+
 		},
 		frame: function() {
 			if (this._frame)
 				return this._frame;
 
 			this._frame = wp.media({
-				title: 'Select a file',
+				title: KB.i18n.Refields.file.modalTitle,
 				button: {
-					text: 'Select'
+					text: KB.i18n.Refields.common.select
 				},
 				multiple: false,
 				library: {
@@ -49,11 +58,20 @@ KB.Fields.File = (function($) {
 			$('.kb-file-title', this.container).html(attachment.get('title'));
 			$('.kb-file-id', this.container).html(attachment.get('id'));
 			$('.kb-file-editLink', this.container).attr('href', attachment.get('editLink'));
-
+			$(this.remove, activeField).show();
+			console.log($('.kb-file-attachment-id', this.container));
+			this.container.show(750);
+		},
+		resetFields: function() {
+			$('.kb-file-attachment-id', this.container).val('');
+			this.container.hide(750);
+			$(this.remove, activeField).hide();
+		},
+		update: function() {
+			this.init();
 		}
 	};
 
 	return self;
 
-}(jQuery));
-KB.Fields.File.init();
+}(jQuery)));

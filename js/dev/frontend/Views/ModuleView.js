@@ -1,37 +1,36 @@
 var KB = KB || {};
 
 KB.ModuleView = Backbone.View.extend({
-    initialize: function() {
-        this.model.bind('save', this.model.save);
-        this.model.view = this;
-        this.render();
+	initialize: function() {
+		this.model.bind('save', this.model.save);
+		this.model.view = this;
+		this.render();
 
-    },
-    save: function(){
+	},
+	save: function() {
 
-    },
-    events: {
-        "click a.os-edit-block": "openVex",
-        "click .editable": "initEtch",
-        "click .kb-js-open-layout-controls": "openLayoutControls"
-    },
-    render: function() {
-        console.log('render');
-        this.$el.append(KB.Templates.render('module-controls', {model: this.model.toJSON()}));
-    },
-    initEtch: etch.editableInit,
-    openVex: function() {
+	},
+	events: {
+		"click a.os-edit-block": "openVex",
+		"click .editable": "initEtch",
+		"click .kb-js-open-layout-controls": "openLayoutControls"
+	},
+	render: function() {
+		console.log('render');
+		this.$el.append(KB.Templates.render('module-controls', {model: this.model.toJSON()}));
+	},
+	openVex: function() {
 
-        if (KB.OpenOnsite) {
-            KB.OpenOnsite.destroy();
-        }
+		if (KB.OpenOnsite) {
+			KB.OpenOnsite.destroy();
+		}
 
-        KB.OpenOnsite = new KB.Backbone.OnsiteView({
-            tagName: 'div',
-            id: 'onsite-modal',
-            model: this.model,
-            view: this
-        });
+		KB.OpenOnsite = new KB.Backbone.OnsiteView({
+			tagName: 'div',
+			id: 'onsite-modal',
+			model: this.model,
+			view: this
+		});
 
 
 //        var target = this.model.get('editURL');
@@ -46,20 +45,20 @@ KB.ModuleView = Backbone.View.extend({
 //                jQuery('.nano').nanoScroller();
 //            }
 //        });
-    },
-    openLayoutControls: function() {
+	},
+	openLayoutControls: function() {
 
-        if (KB.OpenedLayoutControls) {
-            KB.OpenedLayoutControls.destroy();
-        }
+		if (KB.OpenedLayoutControls) {
+			KB.OpenedLayoutControls.destroy();
+		}
 
-        KB.OpenedLayoutControls = new KB.ModuleLayoutControls({
-            tagName: 'div',
-            id: 'slider-unique',
-            className: 'slider-controls-wrapper',
-            model: this.model,
-            parent: this
-        });
-    }
+		KB.OpenedLayoutControls = new KB.ModuleLayoutControls({
+			tagName: 'div',
+			id: 'slider-unique',
+			className: 'slider-controls-wrapper',
+			model: this.model,
+			parent: this
+		});
+	}
 
 });

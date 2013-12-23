@@ -1,5 +1,4 @@
 <?php
-
 /*
  * File needs more love and should be cleaned up
  * Basically, important are those two _send_to filters, because those vars
@@ -22,11 +21,13 @@
  * and can be accessed by scripts which need them.
  *  
  */
+
 if (isset($_GET['from_iframe']))
 	add_filter( 'image_send_to_editor', 'kb_image_send_to_editor', 1, 8 );
 
 function kb_image_send_to_editor($html, $id, $caption, $title, $align, $url, $size, $alt = '')
 {
+
 	?>
 	<script type="text/javascript">
 		// send image variables back to opener
@@ -42,7 +43,7 @@ function kb_image_send_to_editor($html, $id, $caption, $title, $align, $url, $si
 		win.kb_size = '<?php echo $size ?>';
 	</script>
 	<?php
-	
+
 	return $html;
 }
 
@@ -50,6 +51,8 @@ function kb_image_send_to_editor($html, $id, $caption, $title, $align, $url, $si
  * See above, but for non-image files
  * TODO: also put the two missing args to the window 
  */
+
+
 
 if (isset($_GET['from_iframe']))
 	add_filter( 'media_send_to_editor', 'kb_file_send_to_editor', 1, 3 );

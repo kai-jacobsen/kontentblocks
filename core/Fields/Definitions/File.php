@@ -26,7 +26,8 @@ Class File extends Field
             'field' => $this,
             'value' => $value,
             'i18n' => \Kontentblocks\Language\I18n::getPackages( 'Refields.file', 'Refields.common' ),
-            'file' => new \Kontentblocks\Utils\AttachmentHandler( $value[ 'id' ] )
+            'file' => new \Kontentblocks\Utils\AttachmentHandler( $value[ 'id' ] ),
+            'isEmpty' => (empty( $value[ 'id' ] )) ? 'kb-hide' : ''
             )
         );
         $tpl->render( true );

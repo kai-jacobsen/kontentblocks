@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2013-12-22 20:41+0100\n"
-"PO-Revision-Date: 2013-12-22 20:42+0100\n"
+"POT-Creation-Date: 2013-12-23 11:03+0100\n"
+"PO-Revision-Date: 2013-12-23 11:04+0100\n"
 "Last-Translator: Kai Jacobsen <kai@ungestaltbar.de>\n"
 "Language-Team: Kai Jacobsen\n"
 "Language: Deutsch\n"
@@ -19,21 +19,41 @@ msgstr ""
 msgid "Title"
 msgstr "Titel"
 
-#: ../core/Language/./packages/i18n_Refields.php:10
+#: ../core/Language/./packages/i18n_Refields.php:7
+msgid "Select"
+msgstr "Auswählen"
+
+#: ../core/Language/./packages/i18n_Refields.php:8
+msgid "Insert"
+msgstr "Einfügen"
+
+#: ../core/Language/./packages/i18n_Refields.php:12
 msgid "Filename"
 msgstr "Dateinamen"
 
-#: ../core/Language/./packages/i18n_Refields.php:11
+#: ../core/Language/./packages/i18n_Refields.php:13
 msgid "Edit link"
 msgstr "Bearbeiten URL"
 
-#: ../core/Language/./packages/i18n_Refields.php:12
+#: ../core/Language/./packages/i18n_Refields.php:14
 msgid "Select file"
 msgstr "Datei wählen"
 
+#: ../core/Language/./packages/i18n_Refields.php:15
+msgid "Remove"
+msgstr "Entfernen"
+
 #: ../core/Language/./packages/i18n_Refields.php:16
+msgid "Select a file or upload a new one"
+msgstr "Eine Datei auswählen oder hochladen"
+
+#: ../core/Language/./packages/i18n_Refields.php:20
 msgid "Caption"
 msgstr "Bildunterschrift"
+
+#: ../core/Language/./packages/i18n_Refields.php:21
+msgid "Select an image or upload a new one"
+msgstr "Ein Bild auswählen oder neu hochladen"
 
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:5
 msgid "Page Settings"

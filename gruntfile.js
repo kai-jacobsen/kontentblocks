@@ -6,7 +6,9 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                mangle: false
+                mangle: false,
+				beautify: true,
+				compress: false
             },
             prim: {
                 files: {
@@ -55,7 +57,7 @@ module.exports = function(grunt) {
                 nonull: true
             },
             backend: {
-                src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js'],
+                src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js', 'js/dev/backend/Fields.loader.js'],
                 dest: 'js/tmp/backend.concat.js',
                 nonull: true
             },

@@ -1,10 +1,8 @@
 var KB = KB || {};
 
-KB.Fields.Color = (function($) {
+KB.Fields.register('Color', (function($) {
 
-	$(document).on('onsite::opened', function() {
-		KB.Fields.Color.init();
-	});
+
 
 	return {
 		init: function() {
@@ -16,10 +14,12 @@ KB.Fields.Color = (function($) {
 					pickColor("");
 				}
 			});
+		},
+		update: function() {
+			this.init();
 		}
 	};
 
 
 
-}(jQuery));
-KB.Fields.Color.init();
+}(jQuery)));

@@ -58,11 +58,7 @@ class Twig_Parser implements Twig_ParserInterface
     }
 
     /**
-     * Converts a token stream to a node tree.
-     *
-     * @param Twig_TokenStream $stream A token stream instance
-     *
-     * @return Twig_Node_Module A node tree
+     * {@inheritdoc}
      */
     public function parse(Twig_TokenStream $stream, $test = null, $dropNeedle = false)
     {
@@ -384,7 +380,7 @@ class Twig_Parser implements Twig_ParserInterface
         }
 
         foreach ($node as $k => $n) {
-            if (null !== $n && null === $n = $this->filterBodyNodes($n)) {
+            if (null !== $n && null === $this->filterBodyNodes($n)) {
                 $node->removeNode($k);
             }
         }

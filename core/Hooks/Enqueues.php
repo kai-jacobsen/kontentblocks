@@ -7,13 +7,11 @@ use Kontentblocks\Kontentblocks;
 class Enqueues
 {
 
-    protected $strings;
     protected $DI;
     protected $styles;
 
     public function __construct()
     {
-        $this->strings = $this->_defaultStrings();
         $this->Caps    = Kontentblocks::getInstance()->Capabilities;
 
 
@@ -175,44 +173,19 @@ class Enqueues
         // Setup the global js object base
         return array
             (
-            'l18n' => $this->_defaultStrings(),
             'caps' => $caps,
             'config' => array(
                 'url' => KB_PLUGIN_URL
             ),
-            'fields' => get_option( 'kontentfields' )
+//            'fields' => get_option( 'kontentfields' ),
+            'nonces' => array(
+                'kb_frontsite_save' => wp_create_nonce( 'save-form' ),
+                'kb_frontsite_open' => wp_create_nonce( 'open-form' )
+            )
         );
 
     }
 
-    private function _defaultStrings()
-    {
-        // Translation String pushed to the dom as global js object
-        return array(
-            // security messages
-            'sec_no_permission' => __( 'You don\'t have the right permission for this action', 'kontentblocks' ),
-            'sec_nonce_failed' => __( 'Nonce is not set, Request stopped', 'kontentblocks' ),
-            // area messages
-            'area_create_full' => __( 'The limit for this Area has been reached. You first have to delete one block to add a new one', 'kontentblocks' ),
-            'area_sort_full' => __( 'Delete one block in order to add a new one', 'kontentblocks' ),
-            'area_block_not_allowed' => __( 'This Block is not allowed in this area', 'kontentblocks' ),
-            //block messages
-            'block_delete' => __( 'This will delete the Block permanently. Are you sure?', 'kontentblocks' ),
-            'block_resorting' => __( 'Blocks have been resorted', 'kontentblocks' ),
-            'block_deleted_and_data' => __( 'Block and meta data has been sucessfully deleted', 'kontentblocks' ),
-            'block_deleted' => __( 'Block has been sucessfully deleted. There was no saved data to remove.', 'kontentblocks' ),
-            'block_delete_error' => __( 'Oh oh, an error. This shouldn\'t happen', 'kontentblocks' ),
-            'block_deactivated' => __( 'Block has been deactivated.', 'kontentblocks' ),
-            'block_reactivated' => __( 'Block is active again.', 'kontentblocks' ),
-            'block_locked' => __( 'Block has been locked', 'kontentblocks' ),
-            'block_unlocked' => __( 'Block has been unlocked', 'kontentblocks' ),
-            'block_disabled_delete' => __( 'This Block is disabled and cannot be deleted.', 'kontentblocks' ),
-            'block_disabled_status' => __( 'Block is disabled, status cannot be changed', 'kontentblocks' ),
-            'block_duplicate' => __( 'If you have unsaved changes, please update first. Duplicate Module?', 'kontentblocks' ),
-            'block_duplicate_success' => __( 'Successfully duplicated.', 'kontentblocks' )
-        );
-
-    }
 
     public function enqueueStyles()
     {

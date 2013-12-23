@@ -8,6 +8,8 @@ class GetModuleOptions
     public function __construct()
     {
 
+        check_ajax_referer( 'open-form' );
+
         $module = $_POST[ 'module' ];
         $Environment = new \Kontentblocks\Admin\Post\PostEnvironment($module['post_id']);
         $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module['class'], $module, $Environment, $module['moduleData'] );

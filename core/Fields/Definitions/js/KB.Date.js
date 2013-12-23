@@ -1,10 +1,7 @@
 var KB = KB || {};
 
-KB.Fields.Date = (function($) {
+KB.Fields.register('Date', (function($) {
 	var settings = {};
-	$(document).on('onsite::opened', function() {
-		KB.Fields.Date.init();
-	});
 
 	return {
 		defaults: {
@@ -27,10 +24,12 @@ KB.Fields.Date = (function($) {
 
 			});
 
+		},
+		update: function() {
+			this.init();
 		}
 	};
 
 
 
-}(jQuery));
-KB.Fields.Date.init();
+}(jQuery)));
