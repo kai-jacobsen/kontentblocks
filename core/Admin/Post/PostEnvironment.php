@@ -5,13 +5,14 @@ namespace Kontentblocks\Admin\Post;
 use Kontentblocks\Admin\Post\PostMetaDataHandler,
     Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Utils\RegionRegistry,
-    Kontentblocks\Utils\ModuleRegistry;
+    Kontentblocks\Utils\ModuleRegistry,
+    Kontentblocks\Admin\Storage\ModuleStoragePostMeta;
 
 
 /**
  * Post Environment
- * 
- * This class provides an API to the underlying PostMetaDataHandler which 
+ *
+ * This class provides an API to the underlying PostMetametaData which
  * interacts with the WordPress API directly.
  * Basically it's just a wrapper to often used functions around the post meta data
  * resp. the actual module data
@@ -23,30 +24,34 @@ class PostEnvironment extends AbstractEnvironment
 {
 
     /**
-     * 
-     * @var type 
+     *
+     * @var type
      */
-    protected $dataHandler;
+    protected $MetaData;
+    protected $Storage;
     protected $postid;
     protected $pageTemplate;
     protected $postType;
     protected $modules;
     protected $areas;
 
-    public function __construct( $postid )
+    public function __construct($postid)
     {
-        if ( !isset( $postid ) ) {
+        if (!isset($postid)) {
             return false;
         }
 
-        $this->dataHandler = new PostMetaDataHandler( $postid );
+        $this->postid = $postid;
 
-        $this->postid        = $postid;
-        $this->pageTemplate  = $this->dataHandler->getPageTemplate();
-        $this->postType      = $this->dataHandler->getPostType();
-        $this->modules       = $this->_setupModules();
+        $this->MetaData = new PostMetaDataHandler($postid);
+        $this->Storage = new ModuleStoragePostMeta($postid, $this->MetaData);
+
+        $this->pageTemplate = $this->MetaData->getPageTemplate();
+        $this->postType = $this->MetaData->getPostType();
+
+        $this->modules = $this->_setupModules();
         $this->modulesByArea = $this->getSortedModules();
-        $this->areas         = $this->_findAreas();
+        $this->areas = $this->_findAreas();
 
     }
 
@@ -61,20 +66,19 @@ class PostEnvironment extends AbstractEnvironment
 
     }
 
-    public function getDataHandler()
-    {
-        return $this->dataHandler;
-
-    }
 
     /**
-     * returns the PostMetaDataHandler instance
+     * returns the PostMetaData instance
      * @return object
      */
     public function getMetaData()
     {
-        return $this->dataHandler;
+        return $this->MetaData;
+    }
 
+
+    public function getStorage(){
+        return $this->Storage;
     }
 
     /**
@@ -92,13 +96,12 @@ class PostEnvironment extends AbstractEnvironment
      * @param string $areaid
      * @return boolean
      */
-    public function getModulesforArea( $areaid )
+    public function getModulesforArea($areaid)
     {
         $byArea = $this->getSortedModules();
-        if ( !empty( $byArea[ $areaid ] ) ) {
-            return $byArea[ $areaid ];
-        }
-        else {
+        if (!empty($byArea[$areaid])) {
+            return $byArea[$areaid];
+        } else {
             return false;
         }
 
@@ -111,9 +114,9 @@ class PostEnvironment extends AbstractEnvironment
     public function getSortedModules()
     {
         $sorted = array();
-        if ( is_array( $this->modules ) ) {
-            foreach ( $this->modules as $module ) {
-                $sorted[ $module[ 'area' ] ][ $module[ 'instance_id' ] ] = $module;
+        if (is_array($this->modules)) {
+            foreach ($this->modules as $module) {
+                $sorted[$module['area']][$module['instance_id']] = $module;
             }
             return $sorted;
         }
@@ -127,9 +130,9 @@ class PostEnvironment extends AbstractEnvironment
     private function _setupModules()
     {
         $collection = array();
-        $modules    = $this->dataHandler->getIndex();
-        foreach ( $modules as $module ) {
-            $collection[ $module[ 'instance_id' ] ] = wp_parse_args( $module, ModuleRegistry::getInstance()->get( $module[ 'class' ] ) );
+        $modules = $this->Storage->getIndex();
+        foreach ($modules as $module) {
+            $collection[$module['instance_id']] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['class']));
         }
         return $collection;
 
@@ -140,13 +143,13 @@ class PostEnvironment extends AbstractEnvironment
      */
     private function _sortModules()
     {
-        if ( empty( $this->modules ) ) {
+        if (empty($this->modules)) {
             return false;
         }
 
         $sorted = array();
-        foreach ( $this->modules as $module ) {
-            $sorted[ $module[ 'area' ] ][ $module[ 'instance_id' ] ] = $module;
+        foreach ($this->modules as $module) {
+            $sorted[$module['area']][$module['instance_id']] = $module;
         }
         return $sorted;
 
@@ -159,19 +162,18 @@ class PostEnvironment extends AbstractEnvironment
     public function _findAreas()
     {
         $RegionRegistry = RegionRegistry::getInstance();
-        return $RegionRegistry->filterForPost( $this );
+        return $RegionRegistry->filterForPost($this);
 
     }
 
     /**
      * Get Area Definition
      */
-    public function getAreaDefinition( $area )
+    public function getAreaDefinition($area)
     {
-        if ( isset( $this->areas[ $area ] ) ) {
-            return $this->areas[ $area ];
-        }
-        else {
+        if (isset($this->areas[$area])) {
+            return $this->areas[$area];
+        } else {
             return false;
         }
 
@@ -182,11 +184,11 @@ class PostEnvironment extends AbstractEnvironment
      * @param string $id
      * @return boolean
      */
-    public function getAreaSettings( $id )
+    public function getAreaSettings($id)
     {
-        $settings = $this->dataHandler->getMetaData( 'kb_area_settings' );
-        if ( !empty( $settings[ $id ] ) ) {
-            return $settings[ $id ];
+        $settings = $this->MetaData->getMetaData('kb_area_settings');
+        if (!empty($settings[$id])) {
+            return $settings[$id];
         }
         return false;
 
@@ -198,19 +200,17 @@ class PostEnvironment extends AbstractEnvironment
      * @param string $id
      * @return string
      */
-    public function getModuleData( $id )
+    public function getModuleData($id)
     {
-        $data = $this->dataHandler->getModuleData( $id );
+        $data = $this->Storage->getModuleData($id);
 
-        if ( $data !== NULL ) {
+        if ($data !== NULL) {
             return $data;
-        }
-        else {
+        } else {
             return '';
         }
 
     }
 
-    
 
 }

@@ -221,3 +221,12 @@ function is_assoc_array( $array )
     return ($array !== array_keys( $array ));
 
 }
+
+/**
+ * Helper function get_post_custom
+ */
+function maybe_unserialize_recursive($input)
+{
+    return maybe_unserialize($input[0]);
+
+}

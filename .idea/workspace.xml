@@ -6,11 +6,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Admin/Post/ModuleStoragePostMeta.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Interfaces/InterfaceDataHandler.php" afterPath="$PROJECT_DIR$/core/Interfaces/InterfaceDataHandler.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/backend/Views/ModuleMenuView.js" afterPath="$PROJECT_DIR$/js/dev/backend/Views/ModuleMenuView.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Interfaces/InterfaceDataHandler.php" afterPath="$PROJECT_DIR$/core/Interfaces/InterfaceDataStorage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Admin/Storage/BackupManager.php" afterPath="$PROJECT_DIR$/core/Admin/Storage/BackupManager.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Admin/Post/EditScreen.php" afterPath="$PROJECT_DIR$/core/Admin/Post/EditScreen.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Admin/Storage/ModuleStoragePostMeta.php" afterPath="$PROJECT_DIR$/core/Admin/Storage/ModuleStoragePostMeta.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php" afterPath="$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php" afterPath="$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Utils/helper.new.php" afterPath="$PROJECT_DIR$/core/Utils/helper.new.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kontentblocks.iws" />
@@ -33,61 +35,57 @@
     <favorites_list name="kontentblocks" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="PostMetaDataHandler.php" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="13" column="49" selection-start="330" selection-end="330" vertical-scroll-proportion="-8.666667" vertical-offset="0" max-vertical-offset="8838">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="InterfaceDataHandler.php" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceDataHandler.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="50" column="33" selection-start="1182" selection-end="1182" vertical-scroll-proportion="-25.444445" vertical-offset="213" max-vertical-offset="1044">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ModuleStoragePostMeta.php" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/core/Admin/Post/ModuleStoragePostMeta.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="1" column="0" selection-start="6" selection-end="6" vertical-scroll-proportion="0.040816326" vertical-offset="0" max-vertical-offset="441">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="PostMetaDataHandler.php" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="55" column="24" selection-start="1240" selection-end="1240" vertical-scroll-proportion="-8.888889" vertical-offset="750" max-vertical-offset="8838">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="PostEnvironment.php" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="21" column="6" selection-start="561" selection-end="561" vertical-scroll-proportion="0.35320088" vertical-offset="218" max-vertical-offset="3996">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="ModuleStoragePostMeta.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Admin/Storage/ModuleStoragePostMeta.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="4518">
+              <folding>
+                <element signature="e#46#95#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EditScreen.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/Admin/Post/EditScreen.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="254" column="39" selection-start="8144" selection-end="8144" vertical-scroll-proportion="0.8063624" vertical-offset="3989" max-vertical-offset="6408">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PostEnvironment.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="80" column="30" selection-start="1877" selection-end="1877" vertical-scroll-proportion="-6.122807" vertical-offset="1091" max-vertical-offset="3996">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PostMetaDataHandler.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="0" selection-start="667" selection-end="667" vertical-scroll-proportion="-5.740741" vertical-offset="421" max-vertical-offset="5544">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="helper.new.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Utils/helper.new.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="227" column="0" selection-start="5156" selection-end="5156" vertical-scroll-proportion="-145.74074" vertical-offset="151" max-vertical-offset="4266">
+              <folding>
+                <marker date="1387894314779" expanded="false" signature="228:242" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -107,9 +105,15 @@
         <option value="$PROJECT_DIR$/js/dev/backend/Views/ModuleView.js" />
         <option value="$PROJECT_DIR$/js/dev/backend/Fields.loader.js" />
         <option value="$PROJECT_DIR$/js/dev/backend/Views/ModuleMenuView.js" />
-        <option value="$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php" />
         <option value="$PROJECT_DIR$/core/Interfaces/InterfaceDataHandler.php" />
         <option value="$PROJECT_DIR$/core/Admin/Post/ModuleStoragePostMeta.php" />
+        <option value="$PROJECT_DIR$/core/Admin/Storage/BackupManager.php" />
+        <option value="$PROJECT_DIR$/core/Utils/helper.new.php" />
+        <option value="$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php" />
+        <option value="$PROJECT_DIR$/core/Interfaces/InterfaceDataStorage.php" />
+        <option value="$PROJECT_DIR$/core/Admin/Storage/ModuleStoragePostMeta.php" />
+        <option value="$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php" />
+        <option value="$PROJECT_DIR$/core/Admin/Post/EditScreen.php" />
       </list>
     </option>
   </component>
@@ -135,12 +139,15 @@
             <id>PHP</id>
           </State>
           <State>
+            <id>Spelling</id>
+          </State>
+          <State>
             <id>UnusedPHP</id>
           </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>PhpUnusedPrivateMethodInspection</id>
+            <id>SpellCheckingInspection</id>
           </State>
         </selected-state>
       </profile-state>
@@ -172,6 +179,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -203,6 +211,42 @@
               <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Utils" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Interfaces" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -219,6 +263,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Frontend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Storage" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -264,7 +330,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -277,6 +342,11 @@
     <property name="FullScreen" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="Console.TableResult.DefaultCopyAction" value="Comma-separated Values (CSV)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/core/Admin/Storage" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -313,26 +383,47 @@
     <frame x="-1" y="-4" width="1602" height="905" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="99" y="96" width="1402" height="705" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948717" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42802548" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32948717" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24967825" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26254827" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948717" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42802548" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24920736" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26252377" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="99" y="96" width="1402" height="705" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="99" y="96" width="1402" height="705" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948717" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32948717" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42802548" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24920736" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26252377" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USERS">
@@ -351,25 +442,58 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/dev/backend/backend.js">
+    <entry file="file://$PROJECT_DIR$/core/Admin/Storage/ModuleStoragePostMeta.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="14" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="72" max-vertical-offset="2592">
+        <state line="125" column="21" selection-start="2951" selection-end="2951" vertical-scroll-proportion="0.0" vertical-offset="2009" max-vertical-offset="4410">
+          <folding>
+            <element signature="e#46#95#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="39" selection-start="1118" selection-end="1118" vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="3870">
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceDataStorage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="36" selection-start="1154" selection-end="1154" vertical-scroll-proportion="0.0" vertical-offset="258" max-vertical-offset="1008">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="132" column="0" selection-start="2939" selection-end="2939" vertical-scroll-proportion="0.0" vertical-offset="1989" max-vertical-offset="5472">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Utils/helper.new.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="227" column="0" selection-start="5156" selection-end="5156" vertical-scroll-proportion="0.0" vertical-offset="3471" max-vertical-offset="4266">
+          <folding>
+            <marker date="1387894314779" expanded="false" signature="228:242" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/backend/backend.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="14" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="72" max-vertical-offset="2592" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/backend/Views/ModuleView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="0" selection-start="2045" selection-end="2045" vertical-scroll-proportion="0.0" vertical-offset="1134" max-vertical-offset="1260">
-          <folding />
-        </state>
+        <state line="63" column="0" selection-start="2045" selection-end="2045" vertical-scroll-proportion="0.0" vertical-offset="1134" max-vertical-offset="1260" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/backend/backend.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="31" selection-start="251" selection-end="251" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2592">
-          <folding />
-        </state>
+        <state line="13" column="31" selection-start="251" selection-end="251" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2592" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/backend/Helper/KBViewsCollection.js">
@@ -379,16 +503,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/backend/backend.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2160">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2160" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/backend/backend.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="5" selection-start="2977" selection-end="2977" vertical-scroll-proportion="0.0" vertical-offset="1539" max-vertical-offset="2448">
-          <folding />
-        </state>
+        <state line="118" column="5" selection-start="2977" selection-end="2977" vertical-scroll-proportion="0.0" vertical-offset="1539" max-vertical-offset="2448" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Utils/helper.php">
@@ -415,19 +535,19 @@
       </provider>
     </entry>
     <entry file="dbDummy://dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..test_options">
+      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100" />
       </provider>
-      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
-        <state />
-      </provider>
     </entry>
     <entry file="dbDummy://dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..rs_posts">
-      <provider editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="1.0" vertical-offset="29" max-vertical-offset="525" />
-      </provider>
       <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
         <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="1.0" vertical-offset="29" max-vertical-offset="525" />
       </provider>
     </entry>
     <entry file="dbDummy://db-console:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/">
@@ -452,9 +572,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Frontend/AreaRender.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="66" selection-start="661" selection-end="661" vertical-scroll-proportion="-10.666667" vertical-offset="252" max-vertical-offset="2970">
-          <folding />
-        </state>
+        <state line="30" column="66" selection-start="661" selection-end="661" vertical-scroll-proportion="-10.666667" vertical-offset="252" max-vertical-offset="2970" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceEnvironment.php">
@@ -466,49 +584,73 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Frontend/ModuleIterator.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="88" selection-start="703" selection-end="703" vertical-scroll-proportion="0.6196404" vertical-offset="74" max-vertical-offset="1602">
-          <folding />
-        </state>
+        <state line="29" column="88" selection-start="703" selection-end="703" vertical-scroll-proportion="0.6196404" vertical-offset="74" max-vertical-offset="1602" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/backend/Views/ModuleView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="0" selection-start="2045" selection-end="2045" vertical-scroll-proportion="0.86266667" vertical-offset="487" max-vertical-offset="1260">
-          <folding />
-        </state>
+        <state line="63" column="0" selection-start="2045" selection-end="2045" vertical-scroll-proportion="0.86266667" vertical-offset="487" max-vertical-offset="1260" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/backend/backend.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="14" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="72" max-vertical-offset="2592">
+        <state line="5" column="14" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="72" max-vertical-offset="2592" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Admin/Storage/BackupManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="64" selection-end="64" vertical-scroll-proportion="-4.6666665" vertical-offset="0" max-vertical-offset="252" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Utils/helper.new.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="227" column="0" selection-start="5156" selection-end="5156" vertical-scroll-proportion="-145.74074" vertical-offset="151" max-vertical-offset="4266">
+          <folding>
+            <marker date="1387894314779" expanded="false" signature="228:242" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceDataStorage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="0" selection-start="784" selection-end="784" vertical-scroll-proportion="-11.777778" vertical-offset="240" max-vertical-offset="972">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Abstracts/AbstractEnvironment.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="15" selection-start="110" selection-end="110" vertical-scroll-proportion="0.24489796" vertical-offset="0" max-vertical-offset="504">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Admin/Storage/ModuleStoragePostMeta.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="4518">
+          <folding>
+            <element signature="e#46#95#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="49" selection-start="330" selection-end="330" vertical-scroll-proportion="-8.666667" vertical-offset="0" max-vertical-offset="8838">
+        <state line="32" column="0" selection-start="667" selection-end="667" vertical-scroll-proportion="-5.740741" vertical-offset="421" max-vertical-offset="5544">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="6" selection-start="561" selection-end="561" vertical-scroll-proportion="0.35320088" vertical-offset="218" max-vertical-offset="3996">
+        <state line="80" column="30" selection-start="1877" selection-end="1877" vertical-scroll-proportion="-6.122807" vertical-offset="1091" max-vertical-offset="3996">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceDataHandler.php">
+    <entry file="file://$PROJECT_DIR$/core/Admin/Post/EditScreen.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="33" selection-start="1182" selection-end="1182" vertical-scroll-proportion="-25.444445" vertical-offset="213" max-vertical-offset="1044">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Admin/Post/ModuleStoragePostMeta.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="6" selection-end="6" vertical-scroll-proportion="0.040816326" vertical-offset="0" max-vertical-offset="441">
+        <state line="254" column="39" selection-start="8144" selection-end="8144" vertical-scroll-proportion="0.8063624" vertical-offset="3989" max-vertical-offset="6408">
           <folding />
         </state>
       </provider>

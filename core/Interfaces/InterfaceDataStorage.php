@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Interfaces;
 
-interface InterfaceDataHandler
+interface InterfaceDataStorage
 {
 
     /**
@@ -30,13 +30,9 @@ interface InterfaceDataHandler
      */
     public function addToIndex($id, $args);
 
-    public function _selfUpdate();
-
     public function removeFromIndex($id);
 
     public function getModuleDefinition($id);
-
-    public function delete();
 
     public function getModuleData($id);
 
@@ -48,5 +44,5 @@ interface InterfaceDataHandler
 
     public function getModules();
 
-    public function hasModules();
+    public function hasModules($area);
 }

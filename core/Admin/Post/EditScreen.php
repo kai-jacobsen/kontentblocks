@@ -174,12 +174,12 @@ Class EditScreen
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
-            $Environment->getDataHandler()->backup( 'Before regular update' );
+            $Environment->getMetaData()->backup( 'Before regular update' );
         }
 
 
-        if ( !empty( $Environment->getDataHandler()->getIndex() ) ) {
-            foreach ( $Environment->getDataHandler()->getIndex() as $module ) {
+        if ( !empty( $Environment->getStorage()->getIndex() ) ) {
+            foreach ( $Environment->getStorage()->getIndex() as $module ) {
 
                 if ( !class_exists( $module[ 'class' ] ) ) {
                     continue;
@@ -191,7 +191,7 @@ Class EditScreen
                 // new data from $_POST
                 //TODO: filter incoming data
                 $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
-                $old  = $Environment->getDataHandler()->getModuleData( $module[ 'instance_id' ] );
+                $old  = $Environment->getStorage()->getModuleData( $module[ 'instance_id' ] );
 
                 $Factory              = new ModuleFactory( $module[ 'class' ], $module, $Environment );
                 $instance             = $Factory->getModule();
@@ -233,26 +233,26 @@ Class EditScreen
                     }
                     // save real data
                     else {
-                        $Environment->getDataHandler()->saveModule( $module[ 'instance_id' ], $savedData );
+                        $Environment->getStorage()->saveModule( $module[ 'instance_id' ], $savedData );
                         delete_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ] );
                     }
                 }
             }
 
-            $Environment->getDataHandler()->saveIndex( $updateblocks );
+            $Environment->getStorage()->saveIndex( $updateblocks );
         }
 
         // save area settings which are specific to this post (ID-wise)
         if ( !empty( $_POST[ 'areas' ] ) ) {
 
-            $collection = $Environment->getDataHandler()->getMetaData( 'kb_area_settings' );
+            $collection = $Environment->getMetaData()->getMetaData( 'kb_area_settings' );
             foreach ( $_POST[ 'areas' ] as $id ) {
 
                 if ( isset( $_POST[ $id ] ) ) {
                     $collection[ $id ] = $_POST[ $id ];
                 }
             }
-            $Environment->getDataHandler()->saveMetaData( 'kb_area_settings', $collection );
+            $Environment->getMetaData()->saveMetaData( 'kb_area_settings', $collection );
         }
 
     }
