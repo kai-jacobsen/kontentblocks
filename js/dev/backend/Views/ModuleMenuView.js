@@ -4,7 +4,7 @@ KB.Backbone = KB.Backbone || {};
 
 /**
  * Creates the individual module-actions menu
- * ike: duplicate, delete, status
+ * like: duplicate, delete, status
  */
 KB.Backbone.ModuleMenuView = Backbone.View.extend({
     $menuWrap: null, // wrap container jQuery element

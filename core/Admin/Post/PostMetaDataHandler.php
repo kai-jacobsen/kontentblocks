@@ -4,19 +4,26 @@ namespace Kontentblocks\Admin\Post;
 
 use Kontentblocks\Interfaces\InterfaceDataHandler;
 
+/**
+ * Class PostMetaDataHandler
+ * @package Kontentblocks\Admin\Post
+ * @todo: extract backup routine
+ * @todo: create a custom table storage alternative
+ * @todo update Interface
+ */
 class PostMetaDataHandler implements InterfaceDataHandler
 {
 
     protected $post_id;
-    protected $index   = array();
+    protected $index = array();
     protected $modules = array();
-    protected $meta    = array();
+    protected $meta = array();
     protected $package = array();
 
-    public function __construct( $post_id )
+    public function __construct($post_id)
     {
-        if ( !isset( $post_id ) || $post_id === 0 ) {
-            throw new \Exception( 'a valid post id must be provided' );
+        if (!isset($post_id) || $post_id === 0) {
+            throw new \Exception('a valid post id must be provided');
         }
 
         $this->post_id = $post_id;
@@ -46,13 +53,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * Wrapper to retrieve data by key from post meta
      * @param id string Key
      */
-    public function getMetaData( $id )
+    public function getMetaData($id)
     {
-
-        if ( !empty( $this->meta[ $id ] ) ) {
-            return $this->meta[ $id ];
-        }
-        else {
+        if (!empty($this->meta[$id])) {
+            return $this->meta[$id];
+        } else {
             return null;
         }
 
@@ -73,18 +78,18 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param array $index
      * @return type
      */
-    public function saveIndex( $index )
+    public function saveIndex($index)
     {
-        return update_post_meta( $this->post_id, 'kb_kontentblocks', $index );
+        return update_post_meta($this->post_id, 'kb_kontentblocks', $index);
 
     }
 
-    public function removeFromIndex( $id )
+    public function removeFromIndex($id)
     {
-        if ( isset( $this->index[ $id ] ) ) {
-            unset( $this->index[ $id ] );
-            if ( $this->saveIndex( $this->index ) !== false ) {
-                return delete_post_meta( $this->post_id, '_' . $id );
+        if (isset($this->index[$id])) {
+            unset($this->index[$id]);
+            if ($this->saveIndex($this->index) !== false) {
+                return delete_post_meta($this->post_id, '_' . $id);
             }
         }
 
@@ -95,12 +100,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param string $id
      * @return boolean
      */
-    public function getModuleDefinition( $id )
+    public function getModuleDefinition($id)
     {
-        if ( isset( $this->index[ $id ] ) ) {
-            return $this->index[ $id ];
-        }
-        else {
+        if (isset($this->index[$id])) {
+            return $this->index[$id];
+        } else {
             return false;
         }
 
@@ -113,11 +117,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
     public function delete()
     {
 
-        foreach ( $this->index as $id => $module ) {
-            delete_post_meta( $this->post_id, $id );
+        foreach ($this->index as $id => $module) {
+            delete_post_meta($this->post_id, $id);
         }
 
-        delete_post_meta( $this->post_id, 'kb_kontentblocks' );
+        delete_post_meta($this->post_id, 'kb_kontentblocks');
         $this->_selfUpdate();
 
         return $this;
@@ -134,10 +138,9 @@ class PostMetaDataHandler implements InterfaceDataHandler
      */
     public function getPageTemplate()
     {
-        if ( !empty( $this->meta[ '_wp_page_template' ] ) ) {
-            return $this->meta[ '_wp_page_template' ];
-        }
-        else if ( get_post_type( $this->post_id === 'page' ) && empty( $this->meta[ '_wp_page_template' ] ) ) {
+        if (!empty($this->meta['_wp_page_template'])) {
+            return $this->meta['_wp_page_template'];
+        } else if (get_post_type($this->post_id === 'page') && empty($this->meta['_wp_page_template'])) {
             return 'default';
         }
 
@@ -148,7 +151,7 @@ class PostMetaDataHandler implements InterfaceDataHandler
      */
     public function getPostType()
     {
-        return get_post_type( $this->post_id );
+        return get_post_type($this->post_id);
 
     }
 
@@ -159,13 +162,13 @@ class PostMetaDataHandler implements InterfaceDataHandler
      */
     private function _getPostCustom()
     {
-        $this->meta = array_map( array( $this, 'maybe_unserialize_recursive' ), get_post_custom( $this->post_id ) );
-        if ( empty( $this->meta[ 'kb_kontentblocks' ] ) ) {
+        $this->meta = array_map(array($this, 'maybe_unserialize_recursive'), get_post_custom($this->post_id));
+        if (empty($this->meta['kb_kontentblocks'])) {
             return false;
         }
 
-        $this->index   = $this->meta[ 'kb_kontentblocks' ];
-        $this->modules = $this->_setupModuleData( $this->meta );
+        $this->index = $this->meta['kb_kontentblocks'];
+        $this->modules = $this->_setupModuleData($this->meta);
         return $this;
 
     }
@@ -177,10 +180,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param array $meta
      * @return array
      */
-    private function _setupModuleData( $meta )
+    private function _setupModuleData($meta)
     {
-        foreach ( $this->index as $id => $data ) {
-            $collection[ '_' . $id ] = (!empty( $meta[ '_' . $id ] )) ? $meta[ '_' . $id ] : '';
+        foreach ($this->index as $id => $data) {
+            $collection['_' . $id] = (!empty($meta['_' . $id])) ? $meta['_' . $id] : '';
+            $collection['_preview_' . $id] = (!empty($meta['_preview_' . $id])) ? $meta['_preview_' . $id] : '';
         }
         return $collection;
 
@@ -189,9 +193,9 @@ class PostMetaDataHandler implements InterfaceDataHandler
     /**
      * Helper function get_post_custom
      */
-    private function maybe_unserialize_recursive( $input )
+    private function maybe_unserialize_recursive($input)
     {
-        return maybe_unserialize( $input[ 0 ] );
+        return maybe_unserialize($input[0]);
 
     }
 
@@ -201,30 +205,35 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param type $id
      * @return type
      */
-    public function getModuleData( $id )
+    public function getModuleData($id)
     {
-        
-        if ($id[0] !== '_'){
+
+        if ($id[0] !== '_') {
             $id = '_' . $id;
         }
-        
-        if ( isset( $this->modules[ $id ] ) ) {
-            return $this->modules[ $id ];
+
+        if (is_preview()) {
+            $id = '_preview' . $id;
+        }
+
+        if (isset($this->modules[$id])) {
+            return $this->modules[$id];
         }
 
     }
 
+
     /**
      * Wrapper to save module data
      * Makes sure that the data is stored as hidden key
-     * TODO: test if _ is given and don't prefix if so
-     * @param string $id 
-     * @param type $data
+     * @todo: test if _ is given and don't prefix if so
+     * @param string $id
+     * @param array $data
      * @return boolean | new meta id
      */
-    public function saveModule( $id, $data = '' )
+    public function saveModule($id, $data = '')
     {
-        return update_post_meta( $this->post_id, '_' . $id, $data );
+        return update_post_meta($this->post_id, '_' . $id, $data);
 
     }
 
@@ -233,10 +242,10 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * Saves the module data arrays to postmeta
      * @param array $modules
      */
-    public function saveModules( $modules )
+    public function saveModules($modules)
     {
-        foreach ( ( array ) $modules as $id => $module ) {
-            $this->saveModule( $id, $module );
+        foreach (( array )$modules as $id => $module) {
+            $this->saveModule($id, $module);
         }
 
     }
@@ -247,9 +256,9 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param mixed $data value
      * @return boolean | new meta id
      */
-    public function saveMetaData( $id, $data )
+    public function saveMetaData($id, $data)
     {
-        return update_post_meta( $this->post_id, $id, $data );
+        return update_post_meta($this->post_id, $id, $data);
 
     }
 
@@ -270,13 +279,13 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * the module definition
      * @param string $id module instance_id
      * @param array $args module attributes array
-     * @return mixed boolean | new meta id 
+     * @return mixed boolean | new meta id
      */
-    public function addToIndex( $id, $args )
+    public function addToIndex($id, $args)
     {
-        $this->index[ $id ] = $args;
-        if ( !isset( $this->meta[ '_' . $id ] ) ) {
-            $this->saveModule( $id, '' );
+        $this->index[$id] = $args;
+        if (!isset($this->meta['_' . $id])) {
+            $this->saveModule($id, '');
         }
 
         return $this->_updateIndex();
@@ -289,7 +298,7 @@ class PostMetaDataHandler implements InterfaceDataHandler
      */
     private function _updateIndex()
     {
-        return update_post_meta( $this->post_id, 'kb_kontentblocks', $this->index );
+        return update_post_meta($this->post_id, 'kb_kontentblocks', $this->index);
 
     }
 
@@ -305,11 +314,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param string $area
      * @return boolean
      */
-    public function hasModules( $area )
+    public function hasModules($area)
     {
-        if ( !empty( $this->index ) ) {
-            foreach ( $this->index as $module ) {
-                if ( $module[ 'area' ] === $area && $module[ 'draft' ] !== 'true' && $module[ 'active' ] !== false ) {
+        if (!empty($this->index)) {
+            foreach ($this->index as $module) {
+                if ($module['area'] === $area && $module['draft'] !== 'true' && $module['active'] !== false) {
                     return true;
                 }
             }
@@ -326,11 +335,10 @@ class PostMetaDataHandler implements InterfaceDataHandler
     {
         $cleaned = array();
 
-        foreach ( $this->index as $def ) {
-            if ( isset( $def[ 'class' ] ) ) {
-                $cleaned[ $def[ 'instance_id' ] ] = $def;
-            }
-            else {
+        foreach ($this->index as $def) {
+            if (isset($def['class'])) {
+                $cleaned[$def['instance_id']] = $def;
+            } else {
                 // TODO remove from index;
             }
         }
@@ -348,10 +356,9 @@ class PostMetaDataHandler implements InterfaceDataHandler
      */
     public function getBackups()
     {
-        if ( !empty( $this->meta[ '_kb_backup' ] ) ) {
-            return $this->meta[ '_kb_backup' ];
-        }
-        else {
+        if (!empty($this->meta['_kb_backup'])) {
+            return $this->meta['_kb_backup'];
+        } else {
             return false;
         }
 
@@ -364,13 +371,13 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param string $timestamp
      * @return boolean
      */
-    public function restoreBackup( $timestamp )
+    public function restoreBackup($timestamp)
     {
-        $backup = $this->_getBackupBucket( $timestamp );
-        if ( $backup ) {
-            $this->saveIndex( $backup[ 'data' ][ 'index' ] );
-            $this->saveModules( $backup[ 'data' ][ 'modules' ] );
-            $this->saveSupplemental( $backup[ 'data' ][ 'supplemental' ] );
+        $backup = $this->_getBackupBucket($timestamp);
+        if ($backup) {
+            $this->saveIndex($backup['data']['index']);
+            $this->saveModules($backup['data']['modules']);
+            $this->saveSupplemental($backup['data']['supplemental']);
             $this->_selfUpdate();
             return true;
         }
@@ -383,18 +390,16 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param integer unix $timestamp
      * @return mixed false or array of data
      */
-    private function _getBackupBucket( $timestamp )
+    private function _getBackupBucket($timestamp)
     {
-        if ( $this->getBackups() ) {
+        if ($this->getBackups()) {
             $backups = $this->getBackups();
-            if ( isset( $backups[ $timestamp ] ) ) {
-                return $backups[ $timestamp ];
-            }
-            else {
+            if (isset($backups[$timestamp])) {
+                return $backups[$timestamp];
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -406,20 +411,20 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * @param string $logmsg
      * @return self
      */
-    public function backup( $logmsg = '' )
+    public function backup($logmsg = '')
     {
-        if ( !$this->package ) {
+        if (!$this->package) {
             $this->pack();
         }
 
         $user = wp_get_current_user();
 
-        $backup_data                   = $this->_getBackupData();
-        $now                           = time();
-        $backup_data[ $now ][ 'data' ] = $this->package;
-        $backup_data[ $now ][ 'msg' ]  = $logmsg . ' (by ' . $user->user_login . ')';
+        $backup_data = $this->_getBackupData();
+        $now = time();
+        $backup_data[$now]['data'] = $this->package;
+        $backup_data[$now]['msg'] = $logmsg . ' (by ' . $user->user_login . ')';
 
-        update_post_meta( $this->post_id, '_kb_backup', array_slice( $backup_data, -8, 8, true ) );
+        update_post_meta($this->post_id, '_kb_backup', array_slice($backup_data, -8, 8, true));
         $this->_selfUpdate();
         return $this;
 
@@ -432,10 +437,9 @@ class PostMetaDataHandler implements InterfaceDataHandler
      */
     private function _getBackupData()
     {
-        if ( !empty( $this->meta[ '_kb_backup' ] ) ) {
-            return $this->meta[ '_kb_backup' ];
-        }
-        else {
+        if (!empty($this->meta['_kb_backup'])) {
+            return $this->meta['_kb_backup'];
+        } else {
             return array();
         }
 
@@ -447,18 +451,18 @@ class PostMetaDataHandler implements InterfaceDataHandler
      */
     public function _getSupplementalBackupData()
     {
-        $meta      = $this->meta;
-        $index     = $this->index;
-        $blacklist = array( 'kb_kontentblocks', '_edit_lock', '_sidebars_updated', '_kb_backup' );
+        $meta = $this->meta;
+        $index = $this->index;
+        $blacklist = array('kb_kontentblocks', '_edit_lock', '_sidebars_updated', '_kb_backup');
 
-        if ( !empty( $index ) ) {
-            foreach ( $index as $k => $v ) {
-                unset( $meta[ $k ] );
+        if (!empty($index)) {
+            foreach ($index as $k => $v) {
+                unset($meta[$k]);
             }
         }
 
-        foreach ( $blacklist as $key ) {
-            unset( $meta[ $key ] );
+        foreach ($blacklist as $key) {
+            unset($meta[$key]);
         }
 
         return $meta;
@@ -469,11 +473,11 @@ class PostMetaDataHandler implements InterfaceDataHandler
      * Saves non kontentblocks related meta data
      * @param type $data
      */
-    public function saveSupplemental( $data )
+    public function saveSupplemental($data)
     {
-        foreach ( $data as $key => $value ) {
-            delete_post_meta( $this->post_id, $key );
-            add_post_meta( $this->post_id, $key, $value );
+        foreach ($data as $key => $value) {
+            delete_post_meta($this->post_id, $key);
+            add_post_meta($this->post_id, $key, $value);
         }
 
     }

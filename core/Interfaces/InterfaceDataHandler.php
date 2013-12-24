@@ -7,19 +7,19 @@ interface InterfaceDataHandler
 
     /**
      * Get the index of the attached modules
-     * 
+     *
      * Returns an array of module definitions as arrays
-     * @return array 
+     * @return array
      */
     public function getIndex();
 
     /**
      * Saves the index to the database
-     * 
-     * @param index Full array of module Definitions
+     *
+     * @param $index
      * @return boolean Indicates whether update was successful or failed
      */
-    public function saveIndex( $index );
+    public function saveIndex($index);
 
     /**
      * Add a module definition to the index
@@ -28,5 +28,25 @@ interface InterfaceDataHandler
      * @param array $args module definition array
      * @return boolean Indicates whether update was succesful or failed
      */
-    public function addToIndex( $id, $args );
+    public function addToIndex($id, $args);
+
+    public function _selfUpdate();
+
+    public function removeFromIndex($id);
+
+    public function getModuleDefinition($id);
+
+    public function delete();
+
+    public function getModuleData($id);
+
+    public function saveModule($id, $data = '');
+
+    public function saveModules($modules);
+
+    public function _updateIndex();
+
+    public function getModules();
+
+    public function hasModules();
 }
