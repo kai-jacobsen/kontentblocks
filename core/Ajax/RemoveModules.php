@@ -14,9 +14,12 @@ class RemoveModules
 
     public function __construct()
     {
+        check_ajax_referer('kb-delete');
+
+
         $this->postId      = $_POST[ 'post_id' ];
         $this->module = $_POST[ 'module' ];
-        $this->dataHandler = $this->_setupDataHandler();
+        $this->Storage = \Kontentblocks\Helper\getStorage($this->postId);
 
         $this->remove();
     }
@@ -33,7 +36,7 @@ class RemoveModules
 
     public function remove()
     {
-        $update = $this->dataHandler->removeFromIndex($this->module);
+        $update = $this->Storage->removeFromIndex($this->module);
         wp_send_json($update);
     }
 

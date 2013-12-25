@@ -12,6 +12,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
             action: 'duplicateModule',
             module: this.model.get('instance_id'),
             areaContext: this.model.area.get('context'),
+            _ajax_nonce: kontentblocks.nonces.create,
 			'class': this.model.get('class')
         }, this.success, this);
 
@@ -26,13 +27,19 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         }
     },
     success: function(data) {
+
+        if (data === -1){
+            KB.Notice.notice('Request Error', 'error');
+            return false;
+        }
+
         this.model.area.view.modulesList.append(data.html);
         KB.Modules.add(data.module);
         // update the reference counter, used as base number
         // for new modules
         var count = parseInt(jQuery('#kb_all_blocks').val(), 10) + 1;
         jQuery('#kb_all_blocks').val(count);
-
+        KB.Notice.notice('Module Duplicated', 'success');
 
     }
 });

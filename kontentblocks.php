@@ -95,7 +95,7 @@ Class Kontentblocks
 
     public static function getInstance()
     {
-        if ( null == self::$instance ) {
+        if (null == self::$instance) {
             self::$instance = new self;
         }
         return self::$instance;
@@ -109,56 +109,56 @@ Class Kontentblocks
 
     public function init()
     {
-        if ( isset( $_GET[ 'resetkb' ] ) ) {
-            delete_option( 'kb_dynamic_areas' );
+        if (isset($_GET['resetkb'])) {
+            delete_option('kb_dynamic_areas');
         }
         /* Define some path constants to make things a bit easier */
-        define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-        define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/core-modules/' );
-        define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/core-modules/' );
-        define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . '/Definitions/js/' );
+        define('KB_PLUGIN_URL', plugin_dir_url(__FILE__));
+        define('KB_PLUGIN_PATH', plugin_dir_path(__FILE__));
+        define('KB_TEMPLATE_URL', plugin_dir_url(__FILE__) . '/core/Modules/core-modules/');
+        define('KB_TEMPLATE_PATH', plugin_dir_path(__FILE__) . 'core/Modules/core-modules/');
+        define('KB_REFIELD_JS', plugin_dir_url(__FILE__) . '/Definitions/js/');
 
         // Files used used on front and backend
-        include_once dirname( __FILE__ ) . '/Autoloader.php';
-        require_once dirname( __FILE__ ) . '/vendor/autoload.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
+        include_once dirname(__FILE__) . '/Autoloader.php';
+        require_once dirname(__FILE__) . '/vendor/autoload.php';
+        require_once dirname(__FILE__) . '/kontentblocks.public-api.php';
 //        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
-        require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
+        require_once dirname(__FILE__) . '/includes/ajax-callback-handler.php';
 
         // additional cap feature, only used on demand and not properly tested yet
-        define( 'KONTENTLOCK', false );
+        define('KONTENTLOCK', false);
 
-        include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
-        include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
+        include_once dirname(__FILE__) . '/core/Utils/helper.php';
+        include_once dirname(__FILE__) . '/core/Utils/helper.new.php';
         /* Include all necessary files on admin area */
-        if ( is_admin() ) {
+        if (is_admin()) {
             require_once 'includes/ajax/kontentblocks.ajax.generate.module.php';
 
-            include_once dirname( __FILE__ ) . '/kontentblocks.options.php';
-            include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
-            include_once dirname( __FILE__ ) . '/includes/kontentblocks.sidebar-area-selector.php';
+            include_once dirname(__FILE__) . '/kontentblocks.options.php';
+            include_once dirname(__FILE__) . '/core/Hooks/setup.php';
+            include_once dirname(__FILE__) . '/includes/kontentblocks.sidebar-area-selector.php';
 
 
-            $this->UI           = new EditScreen();
+            $this->UI = new EditScreen();
             $this->Capabilities = new Capabilities();
         }
 
         $this->Enqueues = new Enqueues();
         // setup vars
-        add_action( 'init', array( $this, '_set_block_templates' ), 850 );
+        add_action('init', array($this, '_set_block_templates'), 850);
 
-        add_post_type_support( 'page', 'kontentblocks' );
+        add_post_type_support('page', 'kontentblocks');
 
         // load Templates automatically
-        add_action( 'init', array( $this, '_load_templates' ), 9 );
+        add_action('init', array($this, '_load_templates'), 9);
 
         // Load Plugins
-        add_action( 'init', array( $this, '_load_plugins' ), 9 );
+        add_action('init', array($this, '_load_plugins'), 9);
 
-        add_action( 'admin_head', array( $this, 'livereload' ) );
+        add_action('admin_head', array($this, 'livereload'));
 
-        add_action( 'plugins_loaded', array( $this, 'i18n' ) );
+        add_action('plugins_loaded', array($this, 'i18n'));
 
     }
 
@@ -170,7 +170,7 @@ Class Kontentblocks
 
     public function i18n()
     {
-        load_plugin_textdomain( 'Kontentblocks', false, dirname( plugin_basename( __FILE__ ) ) . '/language/' );
+        load_plugin_textdomain('Kontentblocks', false, dirname(plugin_basename(__FILE__)) . '/language/');
         \Kontentblocks\Language\I18n::getInstance();
 
     }
@@ -181,7 +181,7 @@ Class Kontentblocks
      * @param bool $bool . defaults to true
      * @return void
      */
-    public function set_post_context( $bool )
+    public function set_post_context($bool)
     {
         $this->post_context = $bool;
 
@@ -197,31 +197,31 @@ Class Kontentblocks
      */
     public function _load_templates()
     {
-        $paths = array( KB_TEMPLATE_PATH );
-        $paths = apply_filters( 'kb_add_template_path', $paths );
-        $paths = apply_filters( 'kb_add_module_path', $paths );
-        foreach ( $paths as $path ) {
-            $dirs = glob( $path . '_*', GLOB_ONLYDIR );
+        $paths = array(KB_TEMPLATE_PATH);
+        $paths = apply_filters('kb_add_template_path', $paths);
+        $paths = apply_filters('kb_add_module_path', $paths);
+        foreach ($paths as $path) {
+            $dirs = glob($path . '_*', GLOB_ONLYDIR);
 
-            if ( !empty( $dirs ) ) {
-                foreach ( $dirs as $subdir ) {
-                    $files = glob( $subdir . '/*.php' );
+            if (!empty($dirs)) {
+                foreach ($dirs as $subdir) {
+                    $files = glob($subdir . '/*.php');
 
-                    foreach ( $files as $template ) {
+                    foreach ($files as $template) {
 
-                        if ( strpos( basename( $template ), '__' ) === false )
+                        if (strpos(basename($template), '__') === false)
                             include_once($template);
                     }
                 }
             }
-            $files = glob( $path . '*.php' );
-            foreach ( $files as $template ) {
-                if ( strpos( basename( $template ), '__' ) === false )
+            $files = glob($path . '*.php');
+            foreach ($files as $template) {
+                if (strpos(basename($template), '__') === false)
                     include_once($template);
             }
         }
 
-        do_action( 'kb_load_templates' );
+        do_action('kb_load_templates');
 
     }
 
@@ -232,19 +232,29 @@ Class Kontentblocks
     public function _load_plugins()
     {
 
-        $paths   = array( kb_get_plugin_path() );
-        $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
-        $paths   = apply_filters( 'kb_add_plugin_path', $paths );
+        $paths = array(kb_get_plugin_path());
+        $paths[] = plugin_dir_path(__FILE__) . '/helper/';
+        $paths = apply_filters('kb_add_plugin_path', $paths);
 
-        foreach ( $paths as $path ) {
-            $files = glob( $path . '*.php' );
+        foreach ($paths as $path) {
 
-            foreach ( $files as $template ) {
+            //take care of dirs
+            foreach (glob($path . "*", GLOB_ONLYDIR) as $filename) {
+                $base = basename($filename);
+                if (file_exists(trailingslashit($filename) . $base . '.php')) {
+                    include_once($filename . $base . '.php');
+
+                }
+            }
+
+            // take care of files
+            $files = glob($path . '*.php');
+            foreach ($files as $template) {
                 include_once($template);
             }
         }
 
-        do_action( 'kontentblocks_init' );
+        do_action('kontentblocks_init');
 
     }
 
@@ -255,15 +265,15 @@ Class Kontentblocks
      * @param string classname
      */
 
-    public function register_block( $classname )
+    public function register_block($classname)
     {
 
         $this->ModuleRegistry = ModuleRegistry::getInstance();
 
-        if ( !class_exists( $classname ) ) {
+        if (!class_exists($classname)) {
             return false;
         }
-        $this->ModuleRegistry->add( $classname );
+        $this->ModuleRegistry->add($classname);
 
     }
 
@@ -271,9 +281,9 @@ Class Kontentblocks
      * Defaul wrapper template
      */
 
-    public function register_wrapper( $area_template )
+    public function register_wrapper($area_template)
     {
-        $this->use_wrapper     = true;
+        $this->use_wrapper = true;
         $this->default_wrapper = $area_template;
 
     }
@@ -282,32 +292,30 @@ Class Kontentblocks
      * Setup Blocks takes arrays of block data and returns objects
      */
 
-    public function _setup_blocks( $blocks )
+    public function _setup_blocks($blocks)
     {
-        if ( empty( $blocks ) )
+        if (empty($blocks))
             return false;
 
 
+        foreach (( array )$blocks as $block) {
 
+            $args = wp_parse_args($block, Modules\Module::getDefaults());
 
-        foreach ( ( array ) $blocks as $block ) {
+            $block = apply_filters('kb_modify_block', $block);
+            $block = apply_filters("kb_modify_block_{$block['id']}", $block);
 
-            $args = wp_parse_args( $block, Modules\Module::getDefaults() );
-
-            $block = apply_filters( 'kb_modify_block', $block );
-            $block = apply_filters( "kb_modify_block_{$block[ 'id' ]}", $block );
-
-            if ( !class_exists( $args[ 'class' ] ) or empty( $this->blocks[ $args[ 'class' ] ] ) )
+            if (!class_exists($args['class']) or empty($this->blocks[$args['class']]))
                 continue;
 
             // new instance
-            $instance = new $args[ 'class' ]( $args[ 'id' ], $args[ 'name' ], $args );
+            $instance = new $args['class']($args['id'], $args['name'], $args);
 
-            $instance->set_status( $args[ 'status' ] );
-            $instance->set_draft( $args[ 'draft' ] );
-            $instance->set_area( $args[ 'area' ] );
+            $instance->set_status($args['status']);
+            $instance->set_draft($args['draft']);
+            $instance->set_area($args['area']);
 
-            foreach ( $args as $k => $v )
+            foreach ($args as $k => $v)
                 $instance->$k = $v;
             $collection[] = $instance;
         }
@@ -325,29 +333,29 @@ Class Kontentblocks
      * @param array $args
      * @return array
      */
-    public function register_area( $args, $manual = true )
+    public function register_area($args, $manual = true)
     {
         $RegionRegistry = RegionRegistry::getInstance();
-        $RegionRegistry->addRegion( $args, $manual );
+        $RegionRegistry->addRegion($args, $manual);
 
     }
 
     /**
      * New Experimental Frontend Output factory
      */
-    public function render_area( $post_id, $area = null, $context = null, $subcontext = null, $args = null, $echo = true )
+    public function render_area($post_id, $area = null, $context = null, $subcontext = null, $args = null, $echo = true)
     {
 
-        if ( !isset( $area ) ) {
+        if (!isset($area)) {
             return false;
         }
 
-        $args = RegionRegistry::getInstance()->getArea( $area );
-        if ( !$args ) {
+        $args = RegionRegistry::getInstance()->getArea($area);
+        if (!$args) {
             return false;
         }
-        $Renderer = new AreaRender( $post_id, $args, $context, $subcontext );
-        $output   = $Renderer->render( $echo );
+        $Renderer = new AreaRender($post_id, $args, $context, $subcontext);
+        $output = $Renderer->render($echo);
         return $output;
 
     }
@@ -358,19 +366,19 @@ Class Kontentblocks
      *
      * @param int
      */
-    static function _get_highest_id( $blocks )
+    static function _get_highest_id($blocks)
     {
         $collect = '';
-        if ( !empty( $blocks ) ) {
-            foreach ( $blocks as $block ) {
-                $block     = maybe_unserialize( $block );
-                $count     = strrchr( $block[ 'instance_id' ], "_" );
-                $id        = str_replace( '_', '', $count );
+        if (!empty($blocks)) {
+            foreach ($blocks as $block) {
+                $block = maybe_unserialize($block);
+                $count = strrchr($block['instance_id'], "_");
+                $id = str_replace('_', '', $count);
                 $collect[] = $id;
             }
         }
 
-        return max( $collect );
+        return max($collect);
 
     }
 
@@ -380,33 +388,29 @@ Class Kontentblocks
      * @param string $area
      * @return array
      */
-    private function setup_blocks( $blocks, $area )
+    private function setup_blocks($blocks, $area)
     {
         $areablocks = array();
 
 
-
-        $blocks = $this->_modify_blocks( $blocks );
-
-
-        $blocks = $this->_setup_blocks( $blocks );
+        $blocks = $this->_modify_blocks($blocks);
 
 
+        $blocks = $this->_setup_blocks($blocks);
 
-        foreach ( ( array ) $blocks as $instance ) {
 
-            if ( $instance->area == $area ) {
+        foreach (( array )$blocks as $instance) {
+
+            if ($instance->area == $area) {
                 if (
-                    $instance->active == false OR $instance->draft == 'true' OR $instance->settings[ 'disabled' ] == true
+                    $instance->active == false OR $instance->draft == 'true' OR $instance->settings['disabled'] == true
                 ) {
 
                     continue;
-                }
-                else {
+                } else {
                     $areablocks[] = $instance;
                 }
-            }
-            else {
+            } else {
                 continue;
             }
         }
@@ -420,24 +424,23 @@ Class Kontentblocks
      * @param context - string
      * @return array
      */
-    public function get_areas( $context = false )
+    public function get_areas($context = false)
     {
 
-        $areas  = array();
-        $sareas = get_option( 'kb_registered_areas' );
+        $areas = array();
+        $sareas = get_option('kb_registered_areas');
 
 
-        $collection = array_merge( ( array ) $sareas, $this->areas );
+        $collection = array_merge(( array )$sareas, $this->areas);
 
-        foreach ( $collection as $area ) {
-            if ( false != $context ) {
-                if ( $area[ 'context' ] === $context ) {
-                    $areas[ $area[ 'id' ] ] = $area;
+        foreach ($collection as $area) {
+            if (false != $context) {
+                if ($area['context'] === $context) {
+                    $areas[$area['id']] = $area;
                 }
-            }
-            else {
+            } else {
 
-                $areas[ $area[ 'id' ] ] = $area;
+                $areas[$area['id']] = $area;
             }
         }
         return $areas;
@@ -447,12 +450,12 @@ Class Kontentblocks
     /**
      * Get a single area
      */
-    public function get_area( $area )
+    public function get_area($area)
     {
         $areas = $this->get_areas();
 
-        if ( isset( $areas[ $area ] ) )
-            return $areas[ $area ];
+        if (isset($areas[$area]))
+            return $areas[$area];
         else
             return false;
 
@@ -463,26 +466,24 @@ Class Kontentblocks
      * @param context - string
      * @return array
      */
-    public function get_dynamic_areas( $context = false, $exclude = false )
+    public function get_dynamic_areas($context = false, $exclude = false)
     {
         $d_areas = array();
-        $sareas  = get_option( 'kb_registered_areas' );
+        $sareas = get_option('kb_registered_areas');
 
 
-        $collection = array_merge( ( array ) $sareas, $this->areas );
+        $collection = array_merge(( array )$sareas, $this->areas);
 
-        foreach ( $collection as $area ) {
-            if ( $area[ 'dynamic' ] && $area[ 'dynamic' ] == true ) {
-                if ( false != $context ) {
-                    if ( in_array( $area[ 'context' ], ( array ) $context ) ) {
-                        $d_areas[ $area[ 'id' ] ] = $area;
+        foreach ($collection as $area) {
+            if ($area['dynamic'] && $area['dynamic'] == true) {
+                if (false != $context) {
+                    if (in_array($area['context'], ( array )$context)) {
+                        $d_areas[$area['id']] = $area;
                     }
-                }
-                elseif ( false != $exclude && $area[ 'context' ] === $exclude ) {
+                } elseif (false != $exclude && $area['context'] === $exclude) {
                     continue;
-                }
-                else {
-                    $d_areas[ $area[ 'id' ] ] = $area;
+                } else {
+                    $d_areas[$area['id']] = $area;
                 }
             }
         }
@@ -499,11 +500,11 @@ Class Kontentblocks
     /**
      * register area template
      */
-    public function register_area_template( $args )
+    public function register_area_template($args)
     {
 
         $defaults = array
-            (
+        (
             'id' => '',
             'label' => '',
             'layout' => array(),
@@ -512,10 +513,10 @@ Class Kontentblocks
             'cycle' => false
         );
 
-        $settings = wp_parse_args( $args, $defaults );
+        $settings = wp_parse_args($args, $defaults);
 
-        if ( !empty( $settings[ 'id' ] ) ) {
-            RegionRegistry::getInstance()->addTemplate( $settings );
+        if (!empty($settings['id'])) {
+            RegionRegistry::getInstance()->addTemplate($settings);
         }
 
     }
@@ -639,7 +640,7 @@ Class Kontentblocks
 
     public function _set_block_templates()
     {
-        $this->block_templates = get_option( 'kb_block_templates' );
+        $this->block_templates = get_option('kb_block_templates');
 
     }
 
@@ -668,9 +669,9 @@ Class Kontentblocks
     {
         $blocks = null;
 
-        if ( !empty( $this->blocks ) ) {
-            foreach ( $this->blocks as $block ) {
-                if ( isset( $block->settings[ 'templateable' ] ) and $block->settings[ 'templateable' ] == true ) {
+        if (!empty($this->blocks)) {
+            foreach ($this->blocks as $block) {
+                if (isset($block->settings['templateable']) and $block->settings['templateable'] == true) {
                     $blocks[] = $block;
                 }
             }
@@ -708,30 +709,29 @@ Class Kontentblocks
 //
 //    }
 
-    public function _modify_blocks( $blocks )
+    public function _modify_blocks($blocks)
     {
 
-        foreach ( $blocks as $block => $item ) {
+        foreach ($blocks as $block => $item) {
 
-            if ( isset( $item[ 'master' ] ) && $item[ 'master' ] === true ) {
+            if (isset($item['master']) && $item['master'] === true) {
                 $tpls = $this->get_block_templates();
 
 
-
-                $ref = (isset( $item[ 'master_ref' ] )) ? $item[ 'master_ref' ] : null;
-
-
-                if ( empty( $ref ) )
-                    $ref = get_option( $block );
-
-                $args = $tpls[ $ref ];
+                $ref = (isset($item['master_ref'])) ? $item['master_ref'] : null;
 
 
-                $item[ 'class' ]       = $args[ 'class' ];
-                $item[ 'instance_id' ] = $args[ 'instance_id' ];
-                $item[ 'dynamic' ]     = true;
+                if (empty($ref))
+                    $ref = get_option($block);
 
-                $blocks[ $block ] = $item;
+                $args = $tpls[$ref];
+
+
+                $item['class'] = $args['class'];
+                $item['instance_id'] = $args['instance_id'];
+                $item['dynamic'] = true;
+
+                $blocks[$block] = $item;
             }
         }
 
@@ -739,13 +739,13 @@ Class Kontentblocks
 
     }
 
-    public function _virtual_template( $saved_area_settings )
+    public function _virtual_template($saved_area_settings)
     {
-        $columns = explode( ',', $saved_area_settings );
+        $columns = explode(',', $saved_area_settings);
 
-        foreach ( $columns as $col ) {
+        foreach ($columns as $col) {
             $layout[] = array(
-                'classes' => $this->_translate_col( $col ),
+                'classes' => $this->_translate_col($col),
                 'columns' => $col
             );
         };
@@ -766,28 +766,26 @@ Class Kontentblocks
 // end Kontentblocks
 
 
-
-
 global $Kontentblocks;
 $Kontentblocks = Kontentblocks::getInstance();
 $Kontentblocks->init();
 
 global $Kontentfields, $K;
-add_action( 'init', 'Kontentblocks\init_Kontentfields', 15 );
+add_action('init', 'Kontentblocks\init_Kontentfields', 15);
 
 function init_Kontentfields()
 {
-    foreach ( glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file ) {
+    foreach (glob(KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php') as $file) {
         require_once $file;
     }
-    if ( !is_admin() ) {
+    if (!is_admin()) {
         return false;
     }
     global $Kontentfields;
     $Kontentfields = new KFHandler;
     $Kontentfields->init();
     // load field files...
-    foreach ( glob( KB_FIELD_PATH . '*.php' ) as $file ) {
+    foreach (glob(KB_FIELD_PATH . '*.php') as $file) {
         require_once $file;
     }
 

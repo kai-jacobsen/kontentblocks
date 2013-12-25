@@ -21,18 +21,18 @@ class ChangeArea
         $this->newArea = $_POST['area_id'];
         $this->newAreaContext = $_POST['context'];
         $this->instanceId = $_POST['block_id'];
-        $this->dataHandler = new PostMetaDataHandler($this->postId);
+        $this->Storage = \Kontentblocks\Helper\getStorage($this->postId);
         $this->updateArea();
         
     }
 
     public function updateArea()
     {
-        $moduleDefinition = $this->dataHandler->getModuleDefinition($this->instanceId);
+        $moduleDefinition = $this->Storage->getModuleDefinition($this->instanceId);
         
         $moduleDefinition['area'] = $this->newArea;
         $moduleDefinition['areaContext'] = $this->newAreaContext;
-        $update = $this->dataHandler->addToIndex($this->instanceId, $moduleDefinition);
+        $update = $this->Storage->addToIndex($this->instanceId, $moduleDefinition);
         wp_send_json($update);
     }
 

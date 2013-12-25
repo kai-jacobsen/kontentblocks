@@ -15,37 +15,36 @@ class DuplicateModule
 
     public function __construct()
     {
+        // verify action
+        check_ajax_referer('kb-create');
+
         $this->postId     = $_POST[ 'post_id' ];
         $this->instanceId = $_POST[ 'module' ];
         $this->class      = $_POST[ 'class' ];
 
-        $this->Environment   = $this->setupEnvironment();
+        $this->Environment   = \Kontentblocks\Helper\getEnvironment($this->postId);
+
         $this->newInstanceId = $this->getNewInstanceId();
 
         $this->duplicate();
 
     }
 
-    private function setupEnvironment()
-    {
-        return \Kontentblocks\Helper\getEnvironment($this->postId);
-
-    }
 
     private function duplicate()
     {
-        $moduleDefinition                          = $this->Environment->getDataHandler()->getModuleDefinition( $this->instanceId );
+        $moduleDefinition                          = $this->Environment->getStorage()->getModuleDefinition( $this->instanceId );
         $moduleDefinition[ 'settings' ][ 'draft' ] = true;
         $moduleDefinition[ 'instance_id' ]         = $this->newInstanceId;
 
 
-        $update = $this->Environment->getDataHandler()->addToIndex( $moduleDefinition[ 'instance_id' ], $moduleDefinition );
+        $update = $this->Environment->getStorage()->addToIndex( $moduleDefinition[ 'instance_id' ], $moduleDefinition );
         if ( $update !== true ) {
             wp_send_json_error( 'Update failed' );
         }
         else {
-            $original = $this->Environment->getDataHandler()->getModuleData( $this->instanceId );
-            $this->Environment->getDataHandler()->saveModule( $this->newInstanceId, $original );
+            $original = $this->Environment->getStorage()->getModuleData( $this->instanceId );
+            $this->Environment->getStorage()->saveModule( $this->newInstanceId, $original );
 
             $moduleDefinition[ 'areaContext' ]  = filter_var( $_POST[ 'areaContext' ], FILTER_SANITIZE_STRING );
 
@@ -73,7 +72,7 @@ class DuplicateModule
 
     public function getNewInstanceId()
     {
-        $base   = \Kontentblocks\Helper\getHighestId( $this->Environment->getDataHandler()->getIndex() );
+        $base   = \Kontentblocks\Helper\getHighestId( $this->Environment->getStorage()->getIndex() );
         $prefix = apply_filters( 'kb_post_module_prefix', 'module-' );
         if ( $this->postId !== -1 ) {
             return $prefix . $this->postId . '_' . ++$base;

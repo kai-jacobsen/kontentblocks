@@ -8,7 +8,7 @@ class GetModuleOptions
     public function __construct()
     {
 
-        check_ajax_referer( 'open-form' );
+        check_ajax_referer( 'kb-read' );
 
         $module = $_POST[ 'module' ];
         $Environment = new \Kontentblocks\Admin\Post\PostEnvironment($module['post_id']);

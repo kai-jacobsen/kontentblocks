@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Helper;
 
+use Kontentblocks\Admin\Storage\GlobalDataStorage;
+use Kontentblocks\Admin\Storage\ModuleStoragePostMeta;
 use Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Utils\RegionRegistry;
 
@@ -11,7 +13,7 @@ use Kontentblocks\Utils\ModuleRegistry,
 function getHiddenEditor()
 {
     echo "<div style='display: none;'>";
-    wp_editor( '', 'content' );
+    wp_editor('', 'content');
     echo '</div>';
 
 }
@@ -19,13 +21,25 @@ function getHiddenEditor()
 /**
  * Get data Handler
  */
-function getDataHandler( $post_id = null )
+function getDataHandler($post_id = null)
 {
-    if ( $post_id && $post_id !== -1 ) {
-        return new \Kontentblocks\Admin\Post\PostMetaDataHandler( $post_id );
-    }
-    else {
+    if ($post_id && $post_id !== -1) {
+        return new \Kontentblocks\Admin\Post\PostMetaDataHandler($post_id);
+    } else {
         return new \Kontentblocks\Utils\GlobalDataHandler();
+    }
+
+}
+
+/**
+ * Get Storage
+ */
+function getStorage($post_id = null)
+{
+    if ($post_id && $post_id !== -1) {
+        return new ModuleStoragePostMeta($post_id);
+    } else {
+        return new GlobalDataStorage();
     }
 
 }
@@ -33,12 +47,11 @@ function getDataHandler( $post_id = null )
 /**
  * Get environment
  */
-function getEnvironment( $postId = null )
+function getEnvironment($postId = null)
 {
-    if ( $postId && $postId !== -1 ) {
-        return new \Kontentblocks\Admin\Post\PostEnvironment( $postId );
-    }
-    else {
+    if ($postId && $postId !== -1) {
+        return new \Kontentblocks\Admin\Post\PostEnvironment($postId);
+    } else {
         return new \Kontentblocks\Admin\Nonpost\GlobalEnvironment();
     }
 
@@ -48,14 +61,13 @@ function getEnvironment( $postId = null )
  * Echos a hidden input field with the base_id
  * Helper Function
  */
-function getbaseIdField( $index )
+function getbaseIdField($index)
 {
 
     // prepare base id for new blocks
-    if ( !empty( $index ) ) {
-        $base_id = getHighestId( $index );
-    }
-    else {
+    if (!empty($index)) {
+        $base_id = getHighestId($index);
+    } else {
         $base_id = 0;
     }
     // add a hidden field to the meta box, javascript will use this
@@ -69,28 +81,28 @@ function getbaseIdField( $index )
  *
  * @param int
  */
-function getHighestId( $index )
+function getHighestId($index)
 {
     $collect = '';
-    if ( !empty( $index ) ) {
-        foreach ( $index as $module ) {
-            $module    = maybe_unserialize( $module );
-            $count     = strrchr( $module[ 'instance_id' ], "_" );
-            $id        = str_replace( '_', '', $count );
+    if (!empty($index)) {
+        foreach ($index as $module) {
+            $module = maybe_unserialize($module);
+            $count = strrchr($module['instance_id'], "_");
+            $id = str_replace('_', '', $count);
             $collect[] = $id;
         }
     }
-    return max( $collect );
+    return max($collect);
 
 }
 
 function getPostTypes()
 {
-    $postTypes  = get_post_types( array( 'public' => true ), 'objects', 'and' );
+    $postTypes = get_post_types(array('public' => true), 'objects', 'and');
     $collection = array();
 
-    foreach ( $postTypes as $pt ) {
-        $collect      = array(
+    foreach ($postTypes as $pt) {
+        $collect = array(
             'name' => $pt->labels->name,
             'value' => $pt->name
         );
@@ -103,12 +115,12 @@ function getPostTypes()
 function getPageTemplates()
 {
 
-    $page_templates                         = get_page_templates();
-    $page_templates[ 'Default (page.php)' ] = 'default';
-    $collection                             = array();
+    $page_templates = get_page_templates();
+    $page_templates['Default (page.php)'] = 'default';
+    $collection = array();
 
-    foreach ( $page_templates as $template => $filename ) {
-        $collect      = array(
+    foreach ($page_templates as $template => $filename) {
+        $collect = array(
             'name' => $template,
             'value' => $filename
         );
@@ -118,16 +130,16 @@ function getPageTemplates()
 
 }
 
-function getAssignedModules( $dataContainer )
+function getAssignedModules($dataContainer)
 {
-    $modules    = ModuleRegistry::getInstance()->getAllModules( $dataContainer );
+    $modules = ModuleRegistry::getInstance()->getAllModules($dataContainer);
     $collection = array();
 
-    foreach ( $modules as $module ) {
-        if ( isset( $module->settings[ 'in_dynamic' ] ) && $module->settings[ 'in_dynamic' ] === true ) {
-            $collect      = array(
-                'name' => $module->settings[ 'public_name' ],
-                'value' => get_class( $module )
+    foreach ($modules as $module) {
+        if (isset($module->settings['in_dynamic']) && $module->settings['in_dynamic'] === true) {
+            $collect = array(
+                'name' => $module->settings['public_name'],
+                'value' => get_class($module)
             );
             $collection[] = $collect;
         }
@@ -138,13 +150,13 @@ function getAssignedModules( $dataContainer )
 
 function getAreaTemplates()
 {
-    $templates  = RegionRegistry::getInstance()->getTemplates();
+    $templates = RegionRegistry::getInstance()->getTemplates();
     $collection = array();
 
-    foreach ( $templates as $tpl ) {
-        $collect      = array(
-            'name' => $tpl[ 'label' ],
-            'value' => $tpl[ 'id' ]
+    foreach ($templates as $tpl) {
+        $collect = array(
+            'name' => $tpl['label'],
+            'value' => $tpl['id']
         );
         $collection[] = $collect;
     }
@@ -152,12 +164,11 @@ function getAreaTemplates()
 
 }
 
-function underscoreit( $val )
+function underscoreit($val)
 {
-    if ( !is_string( $val ) ) {
+    if (!is_string($val)) {
         return $val;
-    }
-    else {
+    } else {
         return '_' . $val;
     }
 
@@ -168,29 +179,25 @@ function underscoreit( $val )
  * @param array $new
  * @param array $old
  */
-function arrayMergeRecursiveAsItShouldBe( $new, $old )
+function arrayMergeRecursiveAsItShouldBe($new, $old)
 {
     $merged = $new;
 
-    if ( is_array( $old ) ) {
-        foreach ( $old as $key => $val ) {
-            if ( is_array( $old[ $key ] ) ) {
-                if ( isset( $merged[ $key ] ) && $merged[ $key ] !== NULL ) {
-                    $merged[ $key ] = arrayMergeRecursiveAsItShouldBe( $merged[ $key ], $old[ $key ] );
+    if (is_array($old)) {
+        foreach ($old as $key => $val) {
+            if (is_array($old[$key])) {
+                if (isset($merged[$key]) && $merged[$key] !== NULL) {
+                    $merged[$key] = arrayMergeRecursiveAsItShouldBe($merged[$key], $old[$key]);
+                } elseif (isset($merged[$key]) && $merged[$key] === NULL) {
+                    $merged[$key] = NULL;
+                } else {
+                    $merged[$key] = arrayMergeRecursiveAsItShouldBe($old[$key], $old[$key]);
                 }
-                elseif ( isset( $merged[ $key ] ) && $merged[ $key ] === NULL ) {
-                    $merged[ $key ] = NULL;
-                }
-                else {
-                    $merged[ $key ] = arrayMergeRecursiveAsItShouldBe( $old[ $key ], $old[ $key ] );
-                }
-            }
-            else {
-                if ( $merged[ $key ] === NULL ) {
-                    unset( $merged[ $key ] );
-                }
-                elseif ( !isset( $merged[ $key ] ) ) {
-                    $merged[ $key ] = $val;
+            } else {
+                if ($merged[$key] === NULL) {
+                    unset($merged[$key]);
+                } elseif (!isset($merged[$key])) {
+                    $merged[$key] = $val;
                 }
             }
         }
@@ -215,10 +222,10 @@ function noOptionsMessage()
  * @param array $array
  * @return bool
  */
-function is_assoc_array( $array )
+function is_assoc_array($array)
 {
-    $array = array_keys( $array );
-    return ($array !== array_keys( $array ));
+    $array = array_keys($array);
+    return ($array !== array_keys($array));
 
 }
 

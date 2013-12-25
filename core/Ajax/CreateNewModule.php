@@ -49,6 +49,8 @@ class CreateNewModule
             define( 'KB_GENERATE', true );
         }
 
+        check_ajax_referer('kb-create');
+
         // ------------------------------------
         // The Program
         // ------------------------------------
@@ -204,7 +206,7 @@ class CreateNewModule
         //dont save settings
         unset($toSave['settings']);
         // add new block and update
-        $update = $this->environment->getDataHandler()->addToIndex( $this->newInstanceID, $toSave );
+        $update = $this->environment->getStorage()->addToIndex( $this->newInstanceID, $toSave );
         if ( $update !== true && !is_int( $update ) ) {
             wp_send_json_error( 'Update failed' );
         }

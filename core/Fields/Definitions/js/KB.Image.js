@@ -16,7 +16,7 @@ KB.Fields.register('Image', (function($) {
 		init: function() {
 			var that = this;
 
-			$(this.selector).on('click', function(e) {
+			$('body').on('click', this.selector, function(e) {
 				e.preventDefault();
 				that.$container = $('.kb-field-image-container', activeField);
 				that.$wrapper = $('.kb-field-image-wrapper', activeField);

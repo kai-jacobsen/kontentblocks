@@ -10,13 +10,13 @@ KB.Fields.register('File', (function($) {
 		container: null,
 		init: function() {
 			var that = this;
-			$(this.selector).on('click', function(e) {
+			$('body').on('click',this.selector, function(e) {
 				e.preventDefault();
 				that.container = $('.kb-field-file-wrapper', activeField);
 				that.frame().open();
 			});
 
-			$(this.remove).on('click', function(e) {
+			$('body').on('click', this.remove, function(e) {
 				e.preventDefault();
 				that.container = $('.kb-field-file-wrapper', activeField);
 				that.resetFields();

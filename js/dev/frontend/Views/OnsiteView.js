@@ -58,7 +58,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 			data: {
 				action: 'getModuleOptions',
 				module: that.model.toJSON(),
-				_ajax_nonce: kontentblocks.nonces.kb_frontsite_open
+				_ajax_nonce: kontentblocks.nonces.read
 			},
 			type: 'POST',
 			dataType: 'html',
@@ -84,7 +84,8 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 			data: {
 				action: 'updateModuleOptions',
 				data: that.$form.serialize().replace(/\'/g, '%27'),
-				module: that.model.toJSON()
+				module: that.model.toJSON(),
+                _ajax_nonce: kontentblocks.nonces.update
 			},
 			type: 'POST',
 			dataType: 'json',

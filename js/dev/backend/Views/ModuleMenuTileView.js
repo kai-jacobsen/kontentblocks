@@ -32,7 +32,8 @@ KB.Backbone.ModuleMenuTileView = Backbone.View.extend({
             template: this.model.get('template'),
             duplicate: this.model.get('duplicate'),
             areaContext: this.model.get('context'),
-            area: this.options.area
+            area: this.options.area,
+            _ajax_nonce: kontentblocks.nonces.create
         };
 
         KB.Ajax.send(data, this.success, this);

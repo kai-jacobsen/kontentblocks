@@ -19,7 +19,6 @@ KB.Fields.register('Date', (function($) {
 				if (id) {
 					settings = KB.FieldConfig[id] || {};
 				}
-				console.log(_.extend(that.defaults, settings));
 				$(item).Zebra_DatePicker(_.extend(that.defaults, settings));
 
 			});

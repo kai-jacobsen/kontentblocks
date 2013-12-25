@@ -20,7 +20,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<input type="hidden" class="kb-file-attachment-id" name="{{ field.get_field_name('id')}}">
+	<input type="hidden" class="kb-file-attachment-id" value="{{ file.getAttr('id') }}" name="{{ field.get_field_name('id')}}">
 </div>
 <a class="button primary kb-js-add-file">{{ i18n.selectFile }}</a>
 <a class="kb-js-reset-file {{ isEmpty }}">{{ i18n.remove }}</a>
