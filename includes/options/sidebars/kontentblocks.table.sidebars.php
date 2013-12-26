@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Admin\Sidebars;
+namespace Kontentblocks\Backend\Sidebars;
 use Kontentblocks\Utils\RegionRegistry;
 if(!class_exists('WP_List_Table')){
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );

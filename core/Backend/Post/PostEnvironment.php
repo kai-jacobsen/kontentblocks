@@ -1,12 +1,12 @@
 <?php
 
-namespace Kontentblocks\Admin\Post;
+namespace Kontentblocks\Backend\Post;
 
-use Kontentblocks\Admin\Post\PostMetaDataHandler,
+use Kontentblocks\Backend\Post\PostMetaDataHandler,
     Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Utils\RegionRegistry,
-    Kontentblocks\Utils\ModuleRegistry,
-    Kontentblocks\Admin\Storage\ModuleStoragePostMeta;
+    Kontentblocks\Backend\Areas\AreaRegistry,
+    Kontentblocks\Modules\ModuleRegistry,
+    Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
 
 
 /**
@@ -161,7 +161,7 @@ class PostEnvironment extends AbstractEnvironment
      */
     public function _findAreas()
     {
-        $RegionRegistry = RegionRegistry::getInstance();
+        $RegionRegistry = AreaRegistry::getInstance();
         return $RegionRegistry->filterForPost($this);
 
     }
@@ -177,6 +177,11 @@ class PostEnvironment extends AbstractEnvironment
             return false;
         }
 
+    }
+
+
+    public function getAreas(){
+        return $this->areas;
     }
 
     /**
@@ -203,14 +208,12 @@ class PostEnvironment extends AbstractEnvironment
     public function getModuleData($id)
     {
         $data = $this->Storage->getModuleData($id);
-
         if ($data !== NULL) {
             return $data;
         } else {
-            return '';
+            return 'hello';
         }
 
     }
-
 
 }

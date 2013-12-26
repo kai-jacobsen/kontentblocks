@@ -2,13 +2,13 @@
 
 namespace Kontentblocks;
 
-use Kontentblocks\Admin\Post\EditScreen,
+use Kontentblocks\Backend\Post\EditScreen,
     Kontentfields\KFHandler,
     Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Hooks\Capabilities,
-    Kontentblocks\Utils\RegionRegistry,
-    Kontentblocks\Utils\ModuleRegistry;
+    Kontentblocks\Backend\Areas\AreaRegistry,
+    Kontentblocks\Modules\ModuleRegistry;
 
 /*
   Plugin Name:Kontentblocks.
@@ -130,6 +130,7 @@ Class Kontentblocks
         define('KONTENTLOCK', false);
 
         include_once dirname(__FILE__) . '/core/Utils/helper.php';
+        include_once dirname(__FILE__) . '/core/Utils/tables.php';
         include_once dirname(__FILE__) . '/core/Utils/helper.new.php';
         /* Include all necessary files on admin area */
         if (is_admin()) {
@@ -335,8 +336,8 @@ Class Kontentblocks
      */
     public function register_area($args, $manual = true)
     {
-        $RegionRegistry = RegionRegistry::getInstance();
-        $RegionRegistry->addRegion($args, $manual);
+        $AreaRegistry = AreaRegistry::getInstance();
+        $AreaRegistry->addArea($args, $manual);
 
     }
 
@@ -350,7 +351,7 @@ Class Kontentblocks
             return false;
         }
 
-        $args = RegionRegistry::getInstance()->getArea($area);
+        $args = AreaRegistry::getInstance()->getArea($area);
         if (!$args) {
             return false;
         }
@@ -516,7 +517,7 @@ Class Kontentblocks
         $settings = wp_parse_args($args, $defaults);
 
         if (!empty($settings['id'])) {
-            RegionRegistry::getInstance()->addTemplate($settings);
+            AreaRegistry::getInstance()->addTemplate($settings);
         }
 
     }

@@ -2,10 +2,10 @@
 
 namespace Kontentblocks\Helper;
 
-use Kontentblocks\Admin\Storage\GlobalDataStorage;
-use Kontentblocks\Admin\Storage\ModuleStoragePostMeta;
-use Kontentblocks\Utils\ModuleRegistry,
-    Kontentblocks\Utils\RegionRegistry;
+use Kontentblocks\Backend\Storage\GlobalDataStorage;
+use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
+use Kontentblocks\Modules\ModuleRegistry,
+    Kontentblocks\Backend\Areas\AreaRegistry;
 
 /**
  * Render a hidden editor instance as reference
@@ -24,7 +24,7 @@ function getHiddenEditor()
 function getDataHandler($post_id = null)
 {
     if ($post_id && $post_id !== -1) {
-        return new \Kontentblocks\Admin\Post\PostMetaDataHandler($post_id);
+        return new \Kontentblocks\Backend\Post\PostMetaDataHandler($post_id);
     } else {
         return new \Kontentblocks\Utils\GlobalDataHandler();
     }
@@ -50,9 +50,9 @@ function getStorage($post_id = null)
 function getEnvironment($postId = null)
 {
     if ($postId && $postId !== -1) {
-        return new \Kontentblocks\Admin\Post\PostEnvironment($postId);
+        return new \Kontentblocks\Backend\Post\PostEnvironment($postId);
     } else {
-        return new \Kontentblocks\Admin\Nonpost\GlobalEnvironment();
+        return new \Kontentblocks\Backend\Nonpost\GlobalEnvironment();
     }
 
 }
@@ -150,7 +150,7 @@ function getAssignedModules($dataContainer)
 
 function getAreaTemplates()
 {
-    $templates = RegionRegistry::getInstance()->getTemplates();
+    $templates = AreaRegistry::getInstance()->getTemplates();
     $collection = array();
 
     foreach ($templates as $tpl) {

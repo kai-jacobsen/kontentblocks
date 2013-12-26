@@ -1,14 +1,14 @@
 <?php
 
-namespace Kontentblocks\Utils;
+namespace Kontentblocks\Backend\Areas;
 
-use Kontentblocks\Admin\Post\PostEnvironment;
+use Kontentblocks\Backend\Post\PostEnvironment;
 
 /**
- * The RegionRegistry is a single interaction container to access area definitions throughout the plugin
+ * The AreaRegistry is a single interaction container to access area definitions throughout the plugin
  * 
  */
-class RegionRegistry
+class AreaRegistry
 {
 
   protected $rawAreas  = array();
@@ -44,7 +44,7 @@ class RegionRegistry
     $storedAreas = get_option( 'kb_registered_areas' );
     if ( !empty( $storedAreas ) ) {
       foreach ( $storedAreas as $area ) {
-        $this->addRegion( $area, false );
+        $this->addArea( $area, false );
       }
     }
 
@@ -60,7 +60,7 @@ class RegionRegistry
    * @param bool $manual
    * @return $void
    */
-  public function addRegion( $args, $manual = true )
+  public function addArea( $args, $manual = true )
   {
     if ( !empty( $args[ 'id' ] ) ) {
       $args[ 'id' ] = sanitize_title( $args[ 'id' ] );
@@ -213,7 +213,7 @@ class RegionRegistry
    * This needs an instance of the PostEnvironment Class to provide
    * all necessary informations for the filter
    * Areas can be limited to post types and/or page templates
-   * @param \Kontentblocks\Admin\PostEnvironment $postData
+   * @param Kontentblocks\Backend\PostEnvironment $postData
    * @return boolean
    */
   public function filterForPost( PostEnvironment $postData )

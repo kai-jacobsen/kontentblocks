@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax\Frontend;
 
 use Kontentblocks\Utils\GlobalDataHandler,
-    Kontentblocks\Admin\Post\PostMetaDataHandler;
+    Kontentblocks\Backend\Post\PostMetaDataHandler;
 
 class SaveInlineEdit
 {

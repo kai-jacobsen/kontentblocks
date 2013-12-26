@@ -5,10 +5,9 @@ namespace Kontentblocks\Hooks;
 /*
  * Add Plugin Theme Support
  */
-add_theme_support( 'kontentblocks' );
+use Kontentblocks\Backend\Storage\BackupManager;
 
-
-
+add_theme_support('kontentblocks');
 
 
 /*
@@ -20,33 +19,37 @@ add_theme_support( 'kontentblocks' );
 function remove_editor_support()
 {
     // hidden for pages by default
-    if ( apply_filters( 'kb_remove_editor_page', true ) ) {
-        remove_post_type_support( 'page', 'editor' );
+    if (apply_filters('kb_remove_editor_page', true)) {
+        remove_post_type_support('page', 'editor');
     }
 
     // visible for posts by default
-    if ( apply_filters( 'kb_remove_editor_post', false ) ) {
-        remove_post_type_support( 'post', 'editor' );
+    if (apply_filters('kb_remove_editor_post', false)) {
+        remove_post_type_support('post', 'editor');
     }
 
 }
 
-add_action( 'init', __NAMESPACE__ . '\remove_editor_support' );
+add_action('init', __NAMESPACE__ . '\remove_editor_support');
 
 
-
-
+function deleteBackup($post_id)
+{
+    BackupManager::deletePostCallback($post_id);
+}
+add_action('delete_post', __NAMESPACE__ . '\deleteBackup');
 
 /*
  * Media Library Fix
- *  re-adds the submit button to the media upload 
+ *  re-adds the submit button to the media upload
+ *  @todo Outdated
  */
 
-function readd_submit_button( $args )
+function readd_submit_button($args)
 {
-    $args[ 'send' ] = true;
+    $args['send'] = true;
     return $args;
 
 }
 
-add_filter( 'get_media_item_args', __NAMESPACE__ . '\readd_submit_button', 99, 1 );
+add_filter('get_media_item_args', __NAMESPACE__ . '\readd_submit_button', 99, 1);

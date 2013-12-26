@@ -1,12 +1,12 @@
 <?php
 
-namespace Kontentblocks\Admin\Sidebars;
+namespace Kontentblocks\Backend\Sidebars;
 
 use Kontentblocks\Utils\RegionRegistry;
 
 // Actions
-add_action( 'admin_menu', 'Kontentblocks\Admin\Sidebars\add_menu' );
-add_action( 'current_screen', 'Kontentblocks\Admin\Sidebars\kontentblocks_sidebars_action_switch', 100 );
+add_action( 'admin_menu', 'Kontentblocks\Backend\Sidebars\add_menu' );
+add_action( 'current_screen', 'Kontentblocks\Backend\Sidebars\kontentblocks_sidebars_action_switch', 100 );
 
 // table view
 include 'kontentblocks.table.sidebars.php';
@@ -15,7 +15,7 @@ include 'kontentblocks.table.sidebars.php';
 function add_menu()
 {
 
-    $kb_sidebars = add_menu_page( 'Kontentblocks Sidebars', 'Sidebars', 'manage_kontentblocks', 'kontentblocks-sidebars', 'Kontentblocks\Admin\Sidebars\sidebars_init' );
+    $kb_sidebars = add_menu_page( 'Kontentblocks Sidebars', 'Sidebars', 'manage_kontentblocks', 'kontentblocks-sidebars', 'Kontentblocks\Backend\Sidebars\sidebars_init' );
     add_submenu_page( 'kontentblocks-sidebars', 'Overview', 'All Sidebars', 'manage_kontentblocks', 'kontentblocks-sidebars' );
 
 }
@@ -179,7 +179,7 @@ function update_area_contents()
 
 }
 
-add_action( 'kontentblocks-sidebars-update', 'Kontentblocks\Admin\Sidebars\update_area_contents', 9999 );
+add_action( 'kontentblocks-sidebars-update', 'Kontentblocks\Backend\Sidebars\update_area_contents', 9999 );
 
 /**
  * Add
@@ -236,7 +236,7 @@ function add()
 
 }
 
-add_action( 'kontentblocks-sidebars-add', 'Kontentblocks\Admin\Sidebars\add', 9999 );
+add_action( 'kontentblocks-sidebars-add', 'Kontentblocks\Backend\Sidebars\add', 9999 );
 
 /**
  * Delete Area
@@ -272,7 +272,7 @@ function delete_area()
 
 }
 
-add_action( 'kontentblocks-sidebars-delete', 'Kontentblocks\Admin\Sidebars\delete_area', 1 );
+add_action( 'kontentblocks-sidebars-delete', 'Kontentblocks\Backend\Sidebars\delete_area', 1 );
 
 /*
  * Update Settings for area
@@ -356,4 +356,4 @@ function update_area()
 
 }
 
-add_action( 'kontentblocks-sidebars-settings-update', 'Kontentblocks\Admin\Sidebars\updateArea' );
+add_action( 'kontentblocks-sidebars-settings-update', 'Kontentblocks\Backend\Sidebars\updateArea' );

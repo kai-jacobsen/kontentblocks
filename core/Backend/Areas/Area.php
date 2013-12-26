@@ -1,11 +1,11 @@
 <?php
 
-namespace Kontentblocks\Admin\Areas;
+namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Admin\Areas\ModuleMenu,
+    Kontentblocks\Backend\Areas\ModuleMenu,
     Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Admin\Areas\AreaSettingsMenu,
+    Kontentblocks\Backend\Areas\AreaSettingsMenu,
     Kontentblocks\Templating\CoreTemplate;
 
 /**
@@ -37,7 +37,7 @@ class Area
 
     /**
      * The "add new module" modal menu
-     * @var object \Kontentblocks\Admin\Areas\ModuleMenu
+     * @var object \Kontentblocks\Backend\Areas\ModuleMenu
      */
     protected $moduleMenu;
 
@@ -49,7 +49,7 @@ class Area
 
     /**
      * Settings menu object
-     * @var object \Kontentblocks\Admin\Areas\AreaSettingsMenu
+     * @var object \Kontentblocks\Backend\Areas\AreaSettingsMenu
      */
     protected $settingsMenu;
 

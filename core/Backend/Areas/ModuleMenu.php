@@ -1,8 +1,8 @@
 <?php
 
-namespace Kontentblocks\Admin\Areas;
+namespace Kontentblocks\Backend\Areas;
 
-use Kontentblocks\Utils\ModuleRegistry;
+use Kontentblocks\Modules\ModuleRegistry;
 
 /*
  * Kontentblocks: Areas: Menu Class

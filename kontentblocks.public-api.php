@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Admin\Post\PostMetaDataHandler,
+use Kontentblocks\Backend\Post\PostMetaDataHandler,
     Kontentblocks\Fields\FieldRegistry;
 
 if ( !defined( 'ABSPATH' ) ) {

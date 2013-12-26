@@ -1,10 +1,11 @@
 <?php
 
-namespace Kontentblocks\Admin\Post;
+namespace Kontentblocks\Backend\Post;
 
 use Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Admin\Post\ScreenManager,
+    Kontentblocks\Backend\Post\ScreenManager,
     Kontentblocks\Helper;
+use Kontentblocks\Backend\Storage\BackupManager;
 
 /**
  * Purpose: Creates the UI for the registered post type, which is just 'page' by default
@@ -53,7 +54,7 @@ Class EditScreen
     /**
      * setup post specific data used throughout the script
      * @global \WP_Post $post
-     * @uses \Kontentblocks\Admin\Post\PostEnvironment
+     * @uses \Kontentblocks\Backend\Post\PostEnvironment
      * @since 1.0.0
      */
     public function preparePostData()
@@ -174,72 +175,83 @@ Class EditScreen
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
-            $Environment->getMetaData()->backup( 'Before regular update' );
+//            $Environment->getMetaData()->backup( 'Before regular update' );
+                $BackupManager = new BackupManager($Environment->getStorage());
+                $BackupManager->backup('Before regular update');
         }
 
+        $index = $Environment->getStorage()->getIndex();
 
-        if ( !empty( $Environment->getStorage()->getIndex() ) ) {
-            foreach ( $Environment->getStorage()->getIndex() as $module ) {
+        if ( !empty( $Environment->getAreas() ) ) {
+            foreach ( $Environment->getAreas() as $area ) {
 
-                if ( !class_exists( $module[ 'class' ] ) ) {
+                $modules = $Environment->getModulesforArea($area['id']);
+
+                if (empty($modules)){
                     continue;
                 }
 
-                //hack
-                $id = null;
-
-                // new data from $_POST
-                //TODO: filter incoming data
-                $data = (!empty( $_POST[ $module[ 'instance_id' ] ] )) ? $_POST[ $module[ 'instance_id' ] ] : null;
-                $old  = $Environment->getStorage()->getModuleData( $module[ 'instance_id' ] );
-
-                $Factory              = new ModuleFactory( $module[ 'class' ], $module, $Environment );
-                $instance             = $Factory->getModule();
-                $instance->post_id    = $real_post_id;
-                // old, saved data
-                //TODO
-                $instance->moduleData = $old;
-
-                // check for draft and set to false
-                // TODO: Lame
-                $module[ 'state' ][ 'draft' ] = FALSE;
-
-                // special block specific data
-                $module = self::_individual_block_data( $module, $data );
-
-                $module = apply_filters( 'save_module_data', $module, $data );
-
-                // create updated index
-                $updateblocks[ $module[ 'instance_id' ] ] = $module;
-
-                // call save method on block
-                // if locking of blocks is used, and a block is locked, use old data
-                if ( KONTENTLOCK && $module[ 'locked' ] == 'locked' or $data === null ) {
-                    $new = $old;
-                }
-                else {
-                    $new = $instance->save( $data, $old );
-                    $new = apply_filters( 'modify_block_data', $new );
-
-                    $savedData = Helper\arrayMergeRecursiveAsItShouldBe( $new, $old );
-                }
-
-
-                // store new data in post meta
-                // if this is a preview, save temporary data for previews
-                if ( $savedData && $savedData != $old ) {
-                    if ( $_POST[ 'wp-preview' ] === 'dopreview' ) {
-                        update_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ], $savedData );
+                foreach($modules as $module){
+                    if ( !class_exists( $module[ 'class' ] ) ) {
+                        continue;
                     }
-                    // save real data
-                    else {
-                        $Environment->getStorage()->saveModule( $module[ 'instance_id' ], $savedData );
-                        delete_post_meta( $real_post_id, '_preview_' . $module[ 'instance_id' ] );
+
+                    //hack
+                    $id = null;
+
+                    // new data from $_POST
+                    //TODO: filter incoming data
+                    $data = (!empty($_POST[$module['instance_id']])) ? $_POST[$module['instance_id']] : null;
+                    $old = $Environment->getStorage()->getModuleData($module['instance_id']);
+
+                    $Factory = new ModuleFactory($module['class'], $module, $Environment);
+                    $instance = $Factory->getModule();
+                    $instance->post_id = $real_post_id;
+                    // old, saved data
+                    //TODO
+                    $instance->moduleData = $old;
+
+                    // check for draft and set to false
+                    // TODO: Lame
+                    $module['state']['draft'] = FALSE;
+
+                    // special block specific data
+                    $module = self::_individual_block_data($module, $data);
+
+                    $module = apply_filters('save_module_data', $module, $data);
+
+                    // create updated index
+                    $index[$module['instance_id']] = $module;
+
+                    // call save method on block
+                    // if locking of blocks is used, and a block is locked, use old data
+                    if (KONTENTLOCK && $module['locked'] == 'locked' or $data === null) {
+                        $new = $old;
+                    } else {
+                        $new = $instance->save($data, $old);
+                        $new = apply_filters('modify_block_data', $new);
+
+                        $savedData = Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
                     }
+
+
+                    // store new data in post meta
+                    // if this is a preview, save temporary data for previews
+                    if ($savedData && $savedData != $old) {
+                        if ($_POST['wp-preview'] === 'dopreview') {
+                            update_post_meta($real_post_id, '_preview_' . $module['instance_id'], $savedData);
+                        } // save real data
+                        else {
+                            $Environment->getStorage()->saveModule($module['instance_id'], $savedData);
+                            delete_post_meta($real_post_id, '_preview_' . $module['instance_id']);
+                        }
+                    }
+
+
                 }
             }
 
-            $Environment->getStorage()->saveIndex( $updateblocks );
+            $Environment->getStorage()->saveIndex( $index );
         }
 
         // save area settings which are specific to this post (ID-wise)
@@ -300,7 +312,7 @@ Class EditScreen
      * Render
      * Create a new Screen Manager which will handle the several sections
      * True edit screen layout starts here
-     * @uses Kontentblocks\Admin\Post\ScreenManager
+     * @uses Kontentblocks\Backend\Post\ScreenManager
      * @return void
      * @since 1.0.0
      *

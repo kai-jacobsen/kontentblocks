@@ -1,73 +1,76 @@
 <?php
 
 namespace Kontentblocks\Extensions;
-use Kontentblocks\Admin\Post\PostMetaDataHandler;
+use Kontentblocks\Backend\Storage\BackupManager;
 
 class Backup_Inspect
 {
 
     public function __construct()
     {
-        add_action( 'init', array( $this, 'add_default_post_type_support' ) );
-        add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ), 15, 2 );
-        add_action( 'wp_ajax_get_backups', array( $this, 'get_backups' ) );
-        add_action( 'init', array( $this, 'observe_query' ) );
+        add_action( 'init', array( $this, 'postTypeSupport' ) );
+        add_action( 'add_meta_boxes', array( $this, 'addMetaBox' ), 15, 2 );
+        add_action( 'wp_ajax_get_backups', array( $this, 'getBackups' ) );
+        add_action( 'init', array( $this, 'observeQuery' ) );
 
     }
 
-    public function add_meta_box()
+    public function addMetaBox()
     {
         $screen = get_current_screen();
 
         if ( post_type_supports( $screen->post_type, 'backup-inspect' ) ) {
-            add_meta_box( 'kb-backup-inspect', 'Metadata Backup', array( $this, 'meta_box_controls' ), $screen->post_type, 'side', 'high' );
+            add_meta_box( 'kb-backup-inspect', 'Kontenblocks Backup', array( $this, 'controls' ), $screen->post_type, 'side', 'high' );
         }
 
 
     }
 
-    public function meta_box_controls()
+    public function controls()
     {
         echo "<div id='backup-inspect'></div>";
 
     }
 
-    public function add_default_post_type_support()
+    public function postTypeSupport()
     {
         add_post_type_support( 'page', 'backup-inspect' );
 
     }
 
-    public function observe_query()
+    public function observeQuery()
     {
         if ( isset( $_GET[ 'restore_backup' ] ) ) {
 
             $location = add_query_arg( array( 'restore_backup' => false, 'post_id' => false ) );
-            $this->restore_backup( $_GET[ 'post_id' ], $_GET[ 'restore_backup' ] );
+            $this->restoreBackup( $_GET[ 'post_id' ], $_GET[ 'restore_backup' ] );
             wp_redirect($location);
         }
 
     }
 
-    public function restore_backup( $post_id, $id )
+    public function restoreBackup( $post_id, $id )
     {
 
-        $Meta = new PostMetaDataHandler( $post_id );
-        
-        $Meta->backup( 'Before restoring backup from:' . date( 'h:j:s', $id ) );
-        $Meta->delete();
-        return $Meta->restoreBackup( $id );
+        $Storage = \Kontentblocks\Helper\getStorage($post_id);
+
+        $BackupManager = new BackupManager($Storage);
+        $BackupManager->backup('before backup restore');
+        $BackupManager->restoreBackup($id);
 
     }
 
-    public function get_backups()
+    public function getBackups()
     {
         $post_id = $_REQUEST[ 'post_id' ];
 
-        $Meta = new PostMetaDataHandler( $post_id );
-        
-        wp_send_json( $Meta->getBackups() );
+        $Storage = \Kontentblocks\Helper\getStorage($post_id);
+        $BackupManager = new BackupManager($Storage);
+        $backups = $BackupManager->queryBackup($post_id);
 
+        $return = (!empty($backups)) ? unserialize($backups->value) : array();
+
+        wp_send_json( $return );
     }
 
 }

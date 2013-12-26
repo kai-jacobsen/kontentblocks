@@ -1,8 +1,8 @@
 <?php
 
-namespace Kontentblocks\Admin\Areas;
+namespace Kontentblocks\Backend\Areas;
 
-use Kontentblocks\Utils\RegionRegistry,
+use Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Abstracts\AbstractEnvironment;
 
 
@@ -62,7 +62,7 @@ class AreaSettingsMenu
 
     /**
      * Class Constuctor
-     * @param \Kontentblocks\Admin\Areas\Area $area
+     * @param \Kontentblocks\Backend\Areas\Area $area
      * @param \Kontentblocks\Abstracts\AbstractEnvironment $environment
      */
     public function __construct( Area $area, AbstractEnvironment $environment )
@@ -147,7 +147,7 @@ class AreaSettingsMenu
      */
     public function _getAssignedTemplates()
     {
-        $registeredAreaTemplates = RegionRegistry::getInstance()->getTemplates();
+        $registeredAreaTemplates = AreaRegistry::getInstance()->getTemplates();
         $collect                 = array();
         if ( !empty( $this->areaTemplates ) ) {
             foreach ( $this->areaTemplates as $tplid ) {

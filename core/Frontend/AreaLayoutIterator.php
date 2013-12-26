@@ -14,7 +14,7 @@ class AreaLayoutIterator implements \Iterator
   public function __construct( $id )
   {
 
-    $this->_setup( \Kontentblocks\Utils\RegionRegistry::getInstance()->getTemplate( $id ) );
+    $this->_setup( \Kontentblocks\Backend\Areas\AreaRegistry::getInstance()->getTemplate( $id ) );
 
   }
 

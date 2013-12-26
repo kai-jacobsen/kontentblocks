@@ -1,9 +1,9 @@
 <?php
 
-namespace Kontentblocks\Admin\Sidebars;
+namespace Kontentblocks\Backend\Sidebars;
 
-use Kontentblocks\Admin\Area,
-    Kontentblocks\Admin\GlobalEnvironment,
+use Kontentblocks\Backend\Area,
+    Kontentblocks\Backend\GlobalEnvironment,
     Kontentblocks\Utils\RegionRegistry;
 
 global $Kontentblocks, $Kontentbox, $current_screen;

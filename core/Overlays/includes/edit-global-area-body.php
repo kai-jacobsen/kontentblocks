@@ -1,8 +1,8 @@
 <?php
 
-use Kontentblocks\Utils\RegionRegistry,
+use Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Helper,
-    Kontentblocks\Admin\Area;
+    Kontentblocks\Backend\Area;
 ?>
 <body class="wp-admin no-js <?php echo apply_filters( 'admin_body_class', '' ) . " $admin_body_class"; ?>">
     <div id="root-container" class="nano">	
@@ -17,7 +17,7 @@ use Kontentblocks\Utils\RegionRegistry,
             // get areas data
 //    $areas           = $Kontentblocks->get_areas();
 //    $area            = $areas[ $area_id ];
-            $areaArgs = RegionRegistry::getInstance()->getArea( $this->id );
+            $areaArgs = AreaRegistry::getInstance()->getArea( $this->id );
 //    $d_areas         = get_option( 'kb_dynamic_areas' );
 //    $dareas_settings = get_option( 'kb_dynamic_areas_settings' );
 //

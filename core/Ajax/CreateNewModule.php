@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Utils\ModuleRegistry;
+    Kontentblocks\Modules\ModuleRegistry;
 
 class CreateNewModule
 {

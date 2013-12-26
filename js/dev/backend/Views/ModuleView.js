@@ -52,6 +52,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 		}, this.insertNewUpdateForm, this);
 	},
 	insertNewUpdateForm: function(response) {
+        console.log(response);
 		if (response !== '') {
 			this.$body.html(response);
 		} else {

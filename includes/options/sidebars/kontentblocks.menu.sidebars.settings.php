@@ -5,7 +5,7 @@ namespace Kontentblocks\Menus\Sidebar;
 global $current_screen, $Kontentfields;
 
 use Kontentblocks\Utils\RegionRegistry,
-    Kontentblocks\Admin\GlobalEnvironment,
+    Kontentblocks\Backend\GlobalEnvironment,
     Kontentblocks\Helper as Helper;
 
 if ( isset( $_GET[ 'area' ] ) ) {

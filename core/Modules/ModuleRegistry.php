@@ -1,11 +1,11 @@
 <?php
 
-namespace Kontentblocks\Utils;
+namespace Kontentblocks\Modules;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Modules\Module,
-    Kontentblocks\Utils\RegionRegistry,
-    Kontentblocks\Admin\Areas\Area;
+    Kontentblocks\Backend\Areas\AreaRegistry,
+    Kontentblocks\Backend\Areas\Area;
 
 class ModuleRegistry
 {
@@ -37,7 +37,7 @@ class ModuleRegistry
             // Add module to registry
             $this->modules[ $classname ] = $moduleArgs;
             // Handle connection to regions
-            RegionRegistry::getInstance()->connect( $classname, $moduleArgs );
+            AreaRegistry::getInstance()->connect( $classname, $moduleArgs );
         }
 
     }

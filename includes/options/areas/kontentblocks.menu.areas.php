@@ -1,11 +1,11 @@
 <?php
 
-namespace Kontentblocks\Admin\Areas;
+namespace Kontentblocks\Backend\Areas;
 
 
 // Actions
-add_action( 'admin_menu', 'Kontentblocks\Admin\Areas\add_menu');
-add_action('init', 'Kontentblocks\Admin\Areas\kontentblocks_areas_action_switch',100);
+add_action( 'admin_menu', 'Kontentblocks\Backend\Areas\add_menu');
+add_action('init', 'Kontentblocks\Backend\Areas\kontentblocks_areas_action_switch',100);
 
 // table view
 include 'kontentblocks.table.areas.php';
@@ -14,7 +14,7 @@ include 'kontentblocks.table.areas.php';
 // Add menu page
 function add_menu(){
 	
-	$kb_areas = add_menu_page('Kontentblocks Areas', 'Areas', 'manage_kontentblocks', 'kontentblocks-areas', 'Kontentblocks\Admin\Areas\init');
+	$kb_areas = add_menu_page('Kontentblocks Areas', 'Areas', 'manage_kontentblocks', 'kontentblocks-areas', 'Kontentblocks\Backend\Areas\init');
 	add_submenu_page('kontentblocks-areas', 'Overview', 'All Areas', 'manage_kontentblocks', 'kontentblocks-areas');
 };
 
@@ -165,7 +165,7 @@ function add()
 			wp_redirect($location);
 		}    
 }
-add_action('kontentblocks-areas-add', 'Kontentblocks\Admin\Areas\add' ,9999 );
+add_action('kontentblocks-areas-add', 'Kontentblocks\Backend\Areas\add' ,9999 );
 
 /*
  * Update Callback
@@ -237,7 +237,7 @@ function update_area_contents()
 	}
 	wp_redirect($location);
 }
-add_action('kontentblocks-areas-update', 'Kontentblocks\Admin\Areas\update_area_contents',9999);
+add_action('kontentblocks-areas-update', 'Kontentblocks\Backend\Areas\update_area_contents',9999);
 
 
 
@@ -276,7 +276,7 @@ function delete_area()
 	wp_redirect($location);
 
 }
-add_action('kontentblocks-areas-delete', 'Kontentblocks\Admin\Areas\delete_area',1);
+add_action('kontentblocks-areas-delete', 'Kontentblocks\Backend\Areas\delete_area',1);
 
 /*
  * Update Settings for area
@@ -334,4 +334,4 @@ function update_area()
 	$location = add_query_arg(array('message'=>'1', 'action' => false));
 	wp_redirect($location);
 }
-add_action('kontentblocks-areas-settings-update', 'Kontentblocks\Admin\Areas\update_area');
+add_action('kontentblocks-areas-settings-update', 'Kontentblocks\Backend\Areas\update_area');

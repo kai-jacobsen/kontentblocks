@@ -1,7 +1,7 @@
 <?php
 
-use Kontentblocks\Admin\Post\PostEnvironment,
-    Kontentblocks\Admin\Post\ScreenManager;
+use Kontentblocks\Backend\Post\PostEnvironment,
+    Kontentblocks\Backend\Post\ScreenManager;
 
 class KB_Sidebar_Area_Selector
 {

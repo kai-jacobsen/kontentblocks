@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks\Admin\Nonpost;
+namespace Kontentblocks\Backend\Nonpost;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Utils\GlobalDataHandler,
-    Kontentblocks\Utils\RegionRegistry,
+    Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleFactory;
 
 class GlobalEnvironment extends AbstractEnvironment
@@ -93,7 +93,7 @@ class GlobalEnvironment extends AbstractEnvironment
 
     public function _findAreas()
     {
-        $RegionRegistry = RegionRegistry::getInstance();
+        $RegionRegistry = AreaRegistry::getInstance();
         return $RegionRegistry->getGlobalAreas();
 
     }

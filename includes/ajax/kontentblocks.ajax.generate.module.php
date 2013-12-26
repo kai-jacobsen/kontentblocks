@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Admin\Post\PostMetaDataHandler,
+use Kontentblocks\Backend\Post\PostMetaDataHandler,
     Kontentblocks\Utils\GlobalDataHandler,
     Kontentblocks\Utils\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory;

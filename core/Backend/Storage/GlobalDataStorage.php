@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Admin\Storage;
+namespace Kontentblocks\Backend\Storage;
 
 use Kontentblocks\Interfaces\InterfaceDataStorage;
 

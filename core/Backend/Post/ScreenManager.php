@@ -1,9 +1,9 @@
 <?php
 
-namespace Kontentblocks\Admin\Post;
+namespace Kontentblocks\Backend\Post;
 
-use Kontentblocks\Admin\Post\PostEnvironment,
-    Kontentblocks\Admin\Post\ScreenContext;
+use Kontentblocks\Backend\Post\PostEnvironment,
+    Kontentblocks\Backend\Post\ScreenContext;
 
 class ScreenManager
 {

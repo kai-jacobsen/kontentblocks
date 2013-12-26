@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks\Admin\Templates;
+namespace Kontentblocks\Backend\Templates;
 
 // Actions
-add_action( 'admin_menu', 'Kontentblocks\Admin\Templates\add_menu');
-add_action('init', 'Kontentblocks\Admin\Templates\action_switch',666);
+add_action( 'admin_menu', 'Kontentblocks\Backend\Templates\add_menu');
+add_action('init', 'Kontentblocks\Backend\Templates\action_switch',666);
 
 add_action('delete_module_template', __NAMESPACE__ .'\\delete');
 add_action('update_module_template', __NAMESPACE__ .'\\update');
@@ -17,7 +17,7 @@ include 'kontentblocks.table.templates.php';
 // Add menu page
 function add_menu(){
 	
-	$kb_sidebars = add_menu_page('Kontentblocks Templates', 'Templates', 'manage_kontentblocks', 'kontentblocks-templates', 'Kontentblocks\Admin\Templates\init');
+	$kb_sidebars = add_menu_page('Kontentblocks Templates', 'Templates', 'manage_kontentblocks', 'kontentblocks-templates', 'Kontentblocks\Backend\Templates\init');
 	add_submenu_page('kontentblocks-templates', 'Overview', 'All Templates', 'manage_kontentblocks', 'kontentblocks-templates');
 };
 

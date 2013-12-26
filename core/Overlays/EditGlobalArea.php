@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Overlays;
 
-use Kontentblocks\Admin\GlobalEnvironment,
-    Kontentblocks\Admin\EditScreen,
+use Kontentblocks\Backend\GlobalEnvironment,
+   Kontentblocks\Backend\\EditScreen,
     Kontentblocks\Modules\ModuleFactory;
 
 class EditGlobalArea

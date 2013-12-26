@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
@@ -7,8 +7,8 @@ module.exports = function(grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                 mangle: false,
-				beautify: true,
-				compress: false
+                beautify: true,
+                compress: false
             },
             prim: {
                 files: {
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
                 nonull: true
             },
             frontend: {
-                src: ['js/dev/frontend/etch/etch.js','js/dev/frontend/**/*.js', 'js/dev/frontend/frontend.js'],
+                src: ['js/dev/frontend/etch/etch.js', 'js/dev/frontend/**/*.js', 'js/dev/frontend/frontend.js'],
                 dest: 'js/tmp/frontend.concat.js',
                 nonull: true
             },
@@ -77,35 +77,35 @@ module.exports = function(grunt) {
         },
         watch: {
             options: {
-				livereload: true
-			},
-			js: {
-				files: ['js/dev/<%= pkg.name %>.js', 'js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
-				tasks: ['concat', 'uglify:prim', 'clean', 'jshint']
-			},
-			sass: {
-				options: {
-					livereload: false
-				},
-				files: ['css/**/*.scss'],
-				tasks: ['compass']
-			},
-			css: {
-				files: ['css/*.css'],
-				tasks: []
-			}
+                livereload: true
+            },
+            js: {
+                files: ['js/dev/<%= pkg.name %>.js', 'js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
+                tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint']
+            },
+            sass: {
+                options: {
+                    livereload: false
+                },
+                files: ['css/**/*.scss'],
+                tasks: ['compass']
+            },
+            css: {
+                files: ['css/*.css'],
+                tasks: []
+            }
         },
         clean: ["js/tmp"],
         jshint: {
             dev: ['js/dev/frontend/**/*.js', 'js/dev/backend/**/*.js'],
             options: {
                 force: true,
-				globals: {
-					jQuery: true,
-					_: true,
-					Backbone: true,
-					console: true
-				}
+                globals: {
+                    jQuery: true,
+                    _: true,
+                    Backbone: true,
+                    console: true
+                }
             }
         }
     });

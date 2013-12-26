@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Admin\Templates;
+namespace Kontentblocks\Backend\Templates;
 
 global $Kontentblocks, $current_screen, $Kontentbox;
 

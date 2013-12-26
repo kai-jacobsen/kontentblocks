@@ -2,9 +2,9 @@
 
 namespace Kontentblocks\Overlays;
 
-use Kontentblocks\Utils\ModuleRegistry,
+use Kontentblocks\Modules\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Admin\Post\PostMetaDataHandler,
+    Kontentblocks\Backend\Post\PostMetaDataHandler,
     Kontentblocks\Utils\GlobalDataHandler;
 
 class OnsiteEditModule

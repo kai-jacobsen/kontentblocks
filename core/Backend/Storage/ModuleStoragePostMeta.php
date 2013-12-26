@@ -1,7 +1,7 @@
 <?php
-namespace Kontentblocks\Admin\Storage;
+namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Admin\Post\PostMetaDataHandler;
+use Kontentblocks\Backend\Post\PostMetaDataHandler;
 use Kontentblocks\Interfaces\InterfaceDataStorage;
 
 class ModuleStoragePostMeta implements InterfaceDataStorage
@@ -19,7 +19,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
 
         $this->post_id = $post_id;
 
-        if (is_null($MetaData)){
+        if (is_null($MetaData)) {
             $this->MetaData = new PostMetaDataHandler($post_id);
         } else {
             $this->MetaData = $MetaData;
@@ -63,7 +63,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     public function addToIndex($id, $args)
     {
         $this->index[$id] = $args;
-        if (!isset($this->meta['_' . $id])) {
+        if (!$this->getModuleData($id)) {
             $this->saveModule($id, '');
         }
 
@@ -158,6 +158,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
             return $this->modules[$id];
         }
 
+        return null;
     }
 
     /**
@@ -233,6 +234,10 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     {
         $cleaned = array();
 
+        if (empty($this->index)){
+            return $cleaned;
+        }
+
         foreach ($this->index as $def) {
             if (isset($def['class'])) {
                 $cleaned[$def['instance_id']] = $def;
@@ -241,6 +246,39 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
             }
         }
         return $cleaned;
+
+    }
+
+    public function backup()
+    {
+        return array(
+            'id' => $this->post_id,
+            'index' => $this->getIndex(),
+            'modules' => $this->getModules()
+        );
+    }
+
+    public function restoreBackup($data)
+    {
+        if (is_null($data)){
+            return;
+        }
+
+        $index = $data['index'];
+        $modules = $data['modules'];
+
+        // delete old data
+        foreach ($modules as $k => $value) {
+            delete_post_meta($this->post_id, $k);
+        }
+        delete_post_meta($this->post_id, 'kb_kontentblocks');
+
+        //set new old data from backup;
+        update_post_meta($this->post_id, 'kb_kontentblocks', $index);
+
+        foreach ($modules as $k => $value) {
+            update_post_meta($this->post_id, $k, $value);
+        }
 
     }
 }

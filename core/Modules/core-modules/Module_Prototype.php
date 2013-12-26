@@ -43,17 +43,16 @@ class Module_Prototype extends Module
 //            'arrayKey' => 'stuffing'
 //            )
 //        )
-//            ->addField(
-//                'image', 'somecheckimage', array(
-//                'label' => 'Label for Text',
-//                'descriptiom' => 'stuff',
-//                'type' => 'text',
-//                'text' => 'My first checkbox',
-//                'areaContext' => array( 'normal', 'side' ),
-//                'std' => true,
-//                'arrayKey' => 'stuffing'
-//                )
-//            )
+            ->addField(
+                'checkbox', 'somecheckbox', array(
+                'label' => 'Label for Text',
+                'descriptiom' => 'stuff',
+                'type' => 'text',
+                'text' => 'My first checkbox',
+                'areaContext' => array( 'normal', 'side' ),
+                'std' => true,
+                )
+            )
             ->addField(
             'file', 'somefile', array(
             'label' => 'Label for Text',

@@ -28,8 +28,7 @@ KB.Ext.Backup = (function($) {
         },
         renderList: function(items) {
             var that = this;
-
-
+            console.log(items);
             this.listEl.empty();
             _.each(items, function(item, key) {
                 that.listEl.append(_.template("\

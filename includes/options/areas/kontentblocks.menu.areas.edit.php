@@ -1,6 +1,6 @@
 <?php
-namespace Kontentblocks\Admin\Sidebars;
-use Kontentblocks\Admin\Area;
+namespace Kontentblocks\Backend\Sidebars;
+use Kontentblocks\Backend\Area;
 
 global $Kontentblocks, $Kontentbox, $current_screen;
 
