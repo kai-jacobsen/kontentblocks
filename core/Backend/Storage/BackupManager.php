@@ -115,6 +115,8 @@ class BackupManager
 
         //set reference
         $this->Storage->getDataBackend()->add('kb_last_backup', $now);
+
+        wp_cache_delete('kb_backups', 'kontentblocks');
         return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
     }
 
@@ -149,6 +151,9 @@ class BackupManager
 
         $this->Storage->getDataBackend()->add('kb_last_backup', $now);
 
+
+        wp_cache_delete('kb_backups', 'kontentblocks');
+
         return $wpdb->update($wpdb->prefix . "kb_backups", $data, array('id' => $this->package->id));
     }
 
@@ -175,9 +180,18 @@ class BackupManager
         global $wpdb;
         $prefix = $wpdb->prefix;
 
-        $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = {$id} OR literal_id = {$id}";
+        $cache = wp_cache_get('kb_backups','kontentblocks');
+        if ($cache !== false){
+            return $cache;
+        } else {
+            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = {$id} OR literal_id = {$id}";
+            $result = $wpdb->get_row($sql);
+            wp_cache_set('kb_backups', $result, 'kontentblocks');
+            return $result;
+        }
 
-        return $wpdb->get_row($sql);
+
+
     }
 
     /**
