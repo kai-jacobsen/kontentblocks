@@ -79,7 +79,7 @@ class Backup_Inspect
 
     public function heartbeatReceive($response, $data)
     {
-        if (isset($data['kbBackupWatcher'])) {
+        if (isset($data['kbBackupWatcher']) && $data['kbBackupWatcher'] != NULL) {
 
             $Storage = \Kontentblocks\Helper\getStorage($data['post_id']);
 

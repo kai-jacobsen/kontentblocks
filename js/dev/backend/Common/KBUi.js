@@ -22,7 +22,11 @@ KB.Ui = (function($) {
 			// init Sortable
 			this.initSortable();
 			this.initToggleBoxes();
-			// Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
+
+            wp.heartbeat.interval( 'fast', 15 );
+
+
+            // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
 			jQuery(document).ajaxComplete(function(e, o, settings)
 			{
 				that.metaBoxReorder(e, o, settings, 'restore');
@@ -33,6 +37,7 @@ KB.Ui = (function($) {
 			{
 				that.metaBoxReorder(e, o, settings, 'remove');
 			});
+
 
 		},
 		repaint: function($el) {

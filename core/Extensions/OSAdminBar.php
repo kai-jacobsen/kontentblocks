@@ -14,3 +14,14 @@ function toolbar_os_control( $wp_admin_bar ) {
 
   $wp_admin_bar->add_node($args);
 }
+
+add_filter('heartbeat_received', 'hbreceived', 10, 2);
+function hbreceived($response, $data){
+
+    if (isset($data['kbEditWatcher'])){
+        $response['kbEditWatcher'] = wp_check_post_lock(114);
+    }
+
+    return $response;
+
+}

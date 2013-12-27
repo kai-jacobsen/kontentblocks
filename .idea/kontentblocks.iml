@@ -12,10 +12,12 @@
     <orderEntry type="module-library">
       <library name="PHP">
         <CLASSES>
-          <root url="file://$USER_HOME$/development/wordpress/wordpress 3.7.1DE/wordpress" />
+          <root url="file://$MODULE_DIR$/../../../wp-admin" />
+          <root url="file://$MODULE_DIR$/../../../wp-includes" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$USER_HOME$/development/wordpress/wordpress 3.7.1DE/wordpress" />
+          <root url="file://$MODULE_DIR$/../../../wp-admin" />
+          <root url="file://$MODULE_DIR$/../../../wp-includes" />
         </SOURCES>
       </library>
     </orderEntry>

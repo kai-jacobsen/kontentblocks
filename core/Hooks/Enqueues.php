@@ -108,7 +108,7 @@ class Enqueues
             wp_enqueue_style('vex-theme', KB_PLUGIN_URL . '/js/vex/css/vex-theme-flat-attack.css');
             wp_enqueue_style('KBOsEditStyle', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
             wp_enqueue_style('wp-color-picker');
-
+            wp_enqueue_script('heartbeat');
             wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
             wp_enqueue_style('vex', KB_PLUGIN_URL . 'js/vex/css/vex.css');
             wp_enqueue_style('vex-flat', KB_PLUGIN_URL . 'js/vex/css/vex-theme-flat-attack.css');
@@ -119,7 +119,7 @@ class Enqueues
             wp_enqueue_script('kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true);
 
 
-            wp_enqueue_script('Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kontentblocks-base'), null, true);
+//            wp_enqueue_script('Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kontentblocks-base'), null, true);
             wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse'), null, true);
             wp_enqueue_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('backbone', 'jquery-ui-tabs', 'jquery-ui-draggable', 'kb-shared', 'KB-Backend'), null, true);
             wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend'), null, true);

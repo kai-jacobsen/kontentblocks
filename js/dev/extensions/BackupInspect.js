@@ -23,7 +23,7 @@ KB.Ext.Backup = (function($) {
 
             // Heartbeat receive data
             $(document).on('heartbeat-tick', function(e, data){
-                if (data.kbHasNewBackups && data.kbHasNewBackups !== false){
+                if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)){
                    that.renderList(data.kbHasNewBackups);
                 }
             })
@@ -47,7 +47,6 @@ KB.Ext.Backup = (function($) {
             var that = this;
             this.listEl.empty();
 
-
             _.each(items, function(item, key) {
                 that.lastItem = key;
                 that.listEl.append(_.template("\
@@ -63,7 +62,6 @@ KB.Ext.Backup = (function($) {
                     </details>\n\
                 </li>", {data: {time: new moment.unix(key).format('HH:mm:ss / DD.MMM')}, item: item, key: key}))
             });
-
 
             // no notice on first run
             if (!this.firstRun){

@@ -15,6 +15,14 @@ var KBOnSiteEditing;
                 container = $(this).closest('.os-edit-container');
             });
 
+            // Heartbeat send data
+            $(document).on('heartbeat-send', function(e, data){
+                data.kbEditWatcher = 'Peter is here';
+            });
+
+            $(document).on('heartbeat-tick', function(e, data){
+                console.log(data);
+            });
 
             $('body').on('mousedown', 'textarea', function()
             {
