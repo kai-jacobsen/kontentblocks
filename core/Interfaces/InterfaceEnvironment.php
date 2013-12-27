@@ -4,7 +4,6 @@ namespace Kontentblocks\Interfaces;
 
 interface InterfaceEnvironment
 {
-    public function isPostContext();
 
     public function getAllModules();
     

@@ -1581,18 +1581,18 @@
 																						case 'F':
 																						case 'M':
 
-																							// if day is given as day name, we'll check against the names in the used language
+																							// if day is given as day name, we'll check against the names in the used languages
 																							if (match.character == 'D' || match.character == 'l')
 																								iterable = plugin.settings.days;
 
-																							// if month is given as month name, we'll check against the names in the used language
+																							// if month is given as month name, we'll check against the names in the used languages
 																							else
 																								iterable = plugin.settings.months;
 
 																							// by default, we assume the day or month was not entered correctly
 																							valid = false;
 
-																							// iterate through the month/days in the used language
+																							// iterate through the month/days in the used languages
 																							$.each(iterable, function(key, value) {
 
 																								// if month/day was entered correctly, don't look further

@@ -1,9 +1,11 @@
 <?php
 
+namespace Kontentblocks\Extensions;
+
 use Kontentblocks\Backend\Post\PostEnvironment,
     Kontentblocks\Backend\Post\ScreenManager;
 
-class KB_Sidebar_Area_Selector
+class SidebarSelector
 {
 
     protected $sideAreas;
@@ -269,10 +271,10 @@ class KB_Sidebar_Area_Selector
 
 }
 
-add_action( 'init', 'add_selector_meta_box', 900 );
+add_action( 'init', '\Kontentblocks\Extensions\add_selector_meta_box', 900 );
 
 function add_selector_meta_box()
 {
-    new KB_Sidebar_Area_Selector();
+    new SidebarSelector();
 
 }
