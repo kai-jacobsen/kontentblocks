@@ -34,5 +34,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     success: function() {
         KB.Modules.remove(this.model);
         KB.Notice.notice('Good bye', 'success');
+        wp.heartbeat.interval( 'fast', 2 );
+
     }
 });

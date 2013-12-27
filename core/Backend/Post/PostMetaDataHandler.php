@@ -31,6 +31,17 @@ class PostMetaDataHandler
     }
 
 
+    public function add($key, $data)
+    {
+        return $this->saveMetaData($key, $data);
+    }
+
+
+    public function get($key)
+    {
+        return $this->getMetaData($key);
+    }
+
     /**
      * Wrapper to retrieve data by key from post meta
      * @param id string Key
@@ -100,7 +111,6 @@ class PostMetaDataHandler
     {
         return update_post_meta($this->post_id, $id, $data);
     }
-
 
 
     /**

@@ -68,6 +68,7 @@ class Enqueues
             // add Kontentblocks l18n strings
             $localize = $this->_localize();
             wp_localize_script('kontentblocks-base', 'kontentblocks', $localize);
+            wp_enqueue_script('heartbeat');
         }
 
         if ($is_IE) {

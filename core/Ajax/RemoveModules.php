@@ -4,6 +4,7 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\Post\PostMetaDataHandler,
     Kontentblocks\Utils\GlobalDataHandler;
+use Kontentblocks\Backend\Storage\BackupManager;
 
 class RemoveModules
 {
@@ -24,18 +25,10 @@ class RemoveModules
         $this->remove();
     }
 
-    public function _setupDataHandler()
-    {
-        if ( $this->postId == -1 ) {
-            return new GlobalDataHandler();
-        } else {
-            return new PostMetaDataHandler($this->postId);
-        }
-
-    }
-
     public function remove()
     {
+        $BackupManager = new BackupManager($this->Storage);
+        $BackupManager->backup("Before Module: {$this->module} was deleted");
         $update = $this->Storage->removeFromIndex($this->module);
         wp_send_json($update);
     }

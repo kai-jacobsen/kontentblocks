@@ -113,6 +113,8 @@ class BackupManager
             'literal_id' => (!is_numeric($this->backupData['id'])) ? $this->backupData['id'] : NULL
         );
 
+        //set reference
+        $this->Storage->getDataBackend()->add('kb_last_backup', $now);
         return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
     }
 
@@ -145,6 +147,8 @@ class BackupManager
             'value' => serialize(stripslashes_deep($existingData))
         );
 
+        $this->Storage->getDataBackend()->add('kb_last_backup', $now);
+
         return $wpdb->update($wpdb->prefix . "kb_backups", $data, array('id' => $this->package->id));
     }
 
@@ -172,7 +176,6 @@ class BackupManager
         $prefix = $wpdb->prefix;
 
         $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = {$id} OR literal_id = {$id}";
-
 
         return $wpdb->get_row($sql);
     }
@@ -207,9 +210,15 @@ class BackupManager
     {
         global $wpdb;
 
-        $wpdb->delete( $wpdb->prefix . "kb_backups", array('post_id' => $post_id) );
+        $wpdb->delete($wpdb->prefix . "kb_backups", array('post_id' => $post_id));
 
-}
+    }
 
+
+    public function setTransient($timestamp)
+    {
+        set_transient('kb_last_backup', $timestamp);
+
+    }
 
 }

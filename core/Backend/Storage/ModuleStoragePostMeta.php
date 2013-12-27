@@ -9,9 +9,10 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
 
     protected $post_id;
     protected $index;
-    protected $MetaData;
+    protected $DataBackend;
+    protected $modules;
 
-    public function __construct($post_id, PostMetaDataHandler $MetaData = null)
+    public function __construct($post_id, PostMetaDataHandler $DataBackend = null)
     {
         if (!isset($post_id) || $post_id === 0) {
             throw new \Exception('a valid post id must be provided');
@@ -19,10 +20,10 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
 
         $this->post_id = $post_id;
 
-        if (is_null($MetaData)) {
-            $this->MetaData = new PostMetaDataHandler($post_id);
+        if (is_null($DataBackend)) {
+            $this->DataBackend = new PostMetaDataHandler($post_id);
         } else {
-            $this->MetaData = $MetaData;
+            $this->DataBackend = $DataBackend;
         }
         $this->setup();
 
@@ -38,6 +39,11 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     {
         return $this->cleanIndex();
 
+    }
+
+
+    public function getDataBackend(){
+        return $this->DataBackend;
     }
 
 
@@ -110,10 +116,10 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
      */
     private function setup()
     {
-        if (empty($this->MetaData->getMetaData('kb_kontentblocks'))) {
+        if (empty($this->DataBackend->getMetaData('kb_kontentblocks'))) {
             return false;
         }
-        $this->index = $this->MetaData->getMetaData('kb_kontentblocks');
+        $this->index = $this->DataBackend->getMetaData('kb_kontentblocks');
         $this->modules = $this->_setupModuleData();
         return $this;
 
@@ -128,7 +134,8 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
      */
     private function _setupModuleData()
     {
-        $meta = $this->MetaData->getCompleteDataset();
+        $collection = array();
+        $meta = $this->DataBackend->getCompleteDataset();
         foreach ($this->index as $id => $data) {
             $collection['_' . $id] = (!empty($meta['_' . $id])) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = (!empty($meta['_preview_' . $id])) ? $meta['_preview_' . $id] : '';
