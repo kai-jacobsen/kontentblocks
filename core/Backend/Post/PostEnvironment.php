@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Backend\Post;
 
-use Kontentblocks\Backend\Post\PostMetaDataHandler,
+use Kontentblocks\Backend\Post\PostMetaDataBackend,
     Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleRegistry,
@@ -43,7 +43,7 @@ class PostEnvironment extends AbstractEnvironment
 
         $this->postid = $postid;
 
-        $this->MetaData = new PostMetaDataHandler($postid);
+        $this->MetaData = new PostMetaDataBackend($postid);
         $this->Storage = new ModuleStoragePostMeta($postid, $this->MetaData);
 
         $this->pageTemplate = $this->MetaData->getPageTemplate();
@@ -71,7 +71,7 @@ class PostEnvironment extends AbstractEnvironment
      * returns the PostMetaData instance
      * @return object
      */
-    public function getMetaData()
+    public function getDataBackend()
     {
         return $this->MetaData;
     }
@@ -134,6 +134,7 @@ class PostEnvironment extends AbstractEnvironment
         foreach ($modules as $module) {
             $collection[$module['instance_id']] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['class']));
         }
+        d($collection);
         return $collection;
 
     }
@@ -191,7 +192,7 @@ class PostEnvironment extends AbstractEnvironment
      */
     public function getAreaSettings($id)
     {
-        $settings = $this->MetaData->getMetaData('kb_area_settings');
+        $settings = $this->MetaData->get('kb_area_settings');
         if (!empty($settings[$id])) {
             return $settings[$id];
         }

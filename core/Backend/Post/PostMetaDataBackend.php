@@ -2,15 +2,14 @@
 
 namespace Kontentblocks\Backend\Post;
 
+use Kontentblocks\Interfaces\InterfaceDataBackend;
+
 
 /**
- * Class PostMetaDataHandler
+ * Class PostMetaDataBackend
  * @package Kontentblocks\Backend\Post
- * @todo: extract backup routine
- * @todo: create a custom table storage alternative
- * @todo update Interface
  */
-class PostMetaDataHandler
+class PostMetaDataBackend implements InterfaceDataBackend
 {
 
     protected $post_id;
@@ -31,32 +30,46 @@ class PostMetaDataHandler
     }
 
 
-    public function add($key, $data)
+    public function add($key, $value)
     {
-        return $this->saveMetaData($key, $data);
+        $this->update($key, $value);
+
     }
 
-
-    public function get($key)
+    /**
+     * Simple wrapper to update_post_meta
+     * @param $key
+     * @param $value
+     * @internal param string $id key
+     * @internal param mixed $data value
+     * @return boolean
+     */
+    public function update($key, $value)
     {
-        return $this->getMetaData($key);
+        return update_post_meta($this->post_id, $key, $value);
     }
 
     /**
      * Wrapper to retrieve data by key from post meta
      * @param id string Key
+     * @return null
      */
-    public function getMetaData($id)
+    public function get($key)
     {
-        if (!empty($this->meta[$id])) {
-            return $this->meta[$id];
+        if (!empty($this->meta[$key])) {
+            return $this->meta[$key];
         } else {
             return null;
         }
-
     }
 
-    public function getCompleteDataset()
+    public function delete($key)
+    {
+        return delete_post_meta($this->post_id, $key);
+    }
+
+
+    public function getAll()
     {
         return $this->meta;
     }
@@ -99,19 +112,6 @@ class PostMetaDataHandler
         return $this;
 
     }
-
-
-    /**
-     * Simple wrapper to update_post_meta
-     * @param string $id key
-     * @param mixed $data value
-     * @return boolean | new meta id
-     */
-    public function saveMetaData($id, $data)
-    {
-        return update_post_meta($this->post_id, $id, $data);
-    }
-
 
     /**
      * Makes sure the object stays in line with actual meta data

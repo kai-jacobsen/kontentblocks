@@ -3,14 +3,14 @@
 namespace Kontentblocks\Ajax\Frontend;
 
 use Kontentblocks\Utils\GlobalDataHandler,
-    Kontentblocks\Backend\Post\PostMetaDataHandler;
+    Kontentblocks\Backend\Post\PostMetaDataBackend;
 
 class SaveInlineEdit
 {
     public function __construct()
     {   
         $data = $_POST['data'];
-        $Handler = new PostMetaDataHandler($data['postId']);
+        $Handler = new PostMetaDataBackend($data['postId']);
         
         $old = $Handler->getModuleData('_' . $data['module']);
         

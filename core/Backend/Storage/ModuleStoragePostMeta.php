@@ -1,7 +1,7 @@
 <?php
 namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Backend\Post\PostMetaDataHandler;
+use Kontentblocks\Backend\Post\PostMetaDataBackend;
 use Kontentblocks\Interfaces\InterfaceDataStorage;
 
 class ModuleStoragePostMeta implements InterfaceDataStorage
@@ -12,7 +12,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     protected $DataBackend;
     protected $modules;
 
-    public function __construct($post_id, PostMetaDataHandler $DataBackend = null)
+    public function __construct($post_id, PostMetaDataBackend $DataBackend = null)
     {
         if (!isset($post_id) || $post_id === 0) {
             throw new \Exception('a valid post id must be provided');
@@ -21,7 +21,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
         $this->post_id = $post_id;
 
         if (is_null($DataBackend)) {
-            $this->DataBackend = new PostMetaDataHandler($post_id);
+            $this->DataBackend = new PostMetaDataBackend($post_id);
         } else {
             $this->DataBackend = $DataBackend;
         }
@@ -42,7 +42,8 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     }
 
 
-    public function getDataBackend(){
+    public function getDataBackend()
+    {
         return $this->DataBackend;
     }
 
@@ -116,10 +117,10 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
      */
     private function setup()
     {
-        if (empty($this->DataBackend->getMetaData('kb_kontentblocks'))) {
+        if (empty($this->DataBackend->get('kb_kontentblocks'))) {
             return false;
         }
-        $this->index = $this->DataBackend->getMetaData('kb_kontentblocks');
+        $this->index = $this->DataBackend->get('kb_kontentblocks');
         $this->modules = $this->_setupModuleData();
         return $this;
 
@@ -135,7 +136,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     private function _setupModuleData()
     {
         $collection = array();
-        $meta = $this->DataBackend->getCompleteDataset();
+        $meta = $this->DataBackend->getAll();
         foreach ($this->index as $id => $data) {
             $collection['_' . $id] = (!empty($meta['_' . $id])) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = (!empty($meta['_preview_' . $id])) ? $meta['_preview_' . $id] : '';
@@ -241,7 +242,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     {
         $cleaned = array();
 
-        if (empty($this->index)){
+        if (empty($this->index)) {
             return $cleaned;
         }
 
@@ -265,9 +266,18 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
         );
     }
 
+
+    public function deleteAll()
+    {
+        foreach($this->getIndex() as $k => $module){
+            delete_post_meta($this->post_id, '_' . $k);
+        }
+        delete_post_meta($this->post_id, 'kb_kontentblocks');
+    }
+
     public function restoreBackup($data)
     {
-        if (is_null($data)){
+        if (is_null($data)) {
             return;
         }
 
@@ -275,17 +285,20 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
         $modules = $data['modules'];
 
         // delete old data
-        foreach ($modules as $k => $value) {
-            delete_post_meta($this->post_id, $k);
+        if (!empty($modules)) {
+            foreach ($modules as $k => $value) {
+                delete_post_meta($this->post_id, $k);
+            }
         }
         delete_post_meta($this->post_id, 'kb_kontentblocks');
 
         //set new old data from backup;
         update_post_meta($this->post_id, 'kb_kontentblocks', $index);
 
-        foreach ($modules as $k => $value) {
-            update_post_meta($this->post_id, $k, $value);
+        if (!empty($modules)) {
+            foreach ($modules as $k => $value) {
+                update_post_meta($this->post_id, $k, $value);
+            }
         }
-
     }
 }

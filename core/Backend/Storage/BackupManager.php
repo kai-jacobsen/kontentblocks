@@ -87,10 +87,15 @@ class BackupManager
     /**
      * Insert Backup
      * Creates a new database entry
+     * @todo nonces
      */
     public function insertBackup()
     {
         global $wpdb;
+
+        if (!current_user_can('administrator')) {
+            wp_die('Hackin?');
+        }
 
         $insert = array();
         $user = wp_get_current_user();
@@ -127,6 +132,10 @@ class BackupManager
     public function updateBackup()
     {
         global $wpdb;
+
+        if (!current_user_can('administrator')) {
+            wp_die('Hackin?');
+        }
 
         $existingData = unserialize($this->package->value);
         $user = wp_get_current_user();
@@ -178,10 +187,15 @@ class BackupManager
     public function queryBackup($id)
     {
         global $wpdb;
+
+        if (!current_user_can('administrator')) {
+            wp_die('Hackin?');
+        }
+
         $prefix = $wpdb->prefix;
 
-        $cache = wp_cache_get('kb_backups','kontentblocks');
-        if ($cache !== false){
+        $cache = wp_cache_get('kb_backups', 'kontentblocks');
+        if ($cache !== false) {
             return $cache;
         } else {
             $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = {$id} OR literal_id = {$id}";
@@ -189,7 +203,6 @@ class BackupManager
             wp_cache_set('kb_backups', $result, 'kontentblocks');
             return $result;
         }
-
 
 
     }

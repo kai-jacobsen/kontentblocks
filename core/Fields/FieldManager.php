@@ -57,7 +57,7 @@ class FieldManager
      */
     public function __construct( $module )
     {
-        //TODO Check
+        //TODO Check module consistency
         $this->moduleId = $module->instance_id;
         $this->data     = $module->moduleData;
         $this->module   = $module;
@@ -103,7 +103,7 @@ class FieldManager
      */
     public function renderFields()
     {
-        $Renderer = new FieldRenderToggles( $this->structure, $this );
+        $Renderer = new FieldRenderTabs( $this->structure );
         $Renderer->render( $this->moduleId, $this->data );
 
     }

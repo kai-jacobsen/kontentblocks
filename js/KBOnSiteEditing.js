@@ -4,9 +4,8 @@ var KBOnSiteEditing;
 
     KBOnSiteEditing = {
         init: function() {
-
+        var that = this;
             $('#wpadminbar').on('click', 'li.os-edit a', function(e) {
-
                 e.preventDefault();
             });
 

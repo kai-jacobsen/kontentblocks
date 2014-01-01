@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Helper;
 
+use Kontentblocks\Backend\GlobalData\GlobalDataBackend;
+use Kontentblocks\Backend\GlobalData\GlobalEnvironment;
 use Kontentblocks\Backend\Storage\GlobalDataStorage;
 use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
 use Kontentblocks\Modules\ModuleRegistry,
@@ -21,12 +23,12 @@ function getHiddenEditor()
 /**
  * Get data Handler
  */
-function getDataHandler($post_id = null)
+function getDataBackend($post_id = null)
 {
     if ($post_id && $post_id !== -1) {
-        return new \Kontentblocks\Backend\Post\PostMetaDataHandler($post_id);
+        return new \Kontentblocks\Backend\Post\PostMetaDataBackend($post_id);
     } else {
-        return new \Kontentblocks\Utils\GlobalDataHandler();
+        return new GlobalDataBackend();
     }
 
 }
@@ -52,7 +54,7 @@ function getEnvironment($postId = null)
     if ($postId && $postId !== -1) {
         return new \Kontentblocks\Backend\Post\PostEnvironment($postId);
     } else {
-        return new \Kontentblocks\Backend\Nonpost\GlobalEnvironment();
+        return new GlobalEnvironment();
     }
 
 }

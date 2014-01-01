@@ -4,7 +4,7 @@ namespace Kontentblocks\Backend\Storage;
 
 use Kontentblocks\Interfaces\InterfaceDataStorage;
 
-class GlobalDataStorage implements InterfaceDataStorage{
+class ModuleStorageGlobal implements InterfaceDataStorage{
 
     /**
      * Get the index of the attached modules

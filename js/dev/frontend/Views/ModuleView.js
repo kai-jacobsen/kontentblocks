@@ -2,6 +2,7 @@ var KB = KB || {};
 
 KB.ModuleView = Backbone.View.extend({
 	initialize: function() {
+        console.log('view init');
 		this.model.bind('save', this.model.save);
 		this.model.view = this;
 		this.render();

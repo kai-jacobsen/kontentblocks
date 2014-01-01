@@ -3,14 +3,13 @@
 use Kontentblocks\Modules\Module,
     Kontentblocks\Templating\ModuleTemplate;
 
-kb_register_block( 'Module_Prototype' );
 
 class Module_Prototype extends Module
 {
 
     public static $defaults = array(
-        'public_name' => 'Prototype',
-        'name' => 'Prototype',
+        'public_name' => 'Super Prototype',
+        'name' => 'Super Prototype',
         'description' => '',
         'globallyAvailable' => true,
         'templateable' => true,
@@ -34,15 +33,29 @@ class Module_Prototype extends Module
     public function fields()
     {
         $groupA = $this->Fields->addGroup( 'Peter', array( 'label' => 'What' ) )
-//            ->addField(
-//            'editor', 'sometext', array(
-//            'label' => 'Label for Text',
-//            'descriptiom' => 'stuff',
-//            'type' => 'text',
-//            'text' => 'My first checkbox',
-//            'arrayKey' => 'stuffing'
-//            )
-//        )
+            ->addField(
+                'editor', 'someeditor', array(
+                'label' => 'Label for Text',
+                'descriptiom' => 'stuff',
+                'type' => 'text',
+                'text' => 'My first checkbox',
+                'areaContext' => array( 'normal', 'side' ),
+                'std' => true,
+                )
+            )
+            ->addField(
+            'file', 'somefile', array(
+            'label' => 'Label for Text',
+            'description' => 'Maybe a Description is waht longer than this',
+            'type' => 'text',
+            'text' => 'My first checkbox',
+            'areaContext' => array( 'normal' ),
+            'taxonomy' => 'category',
+            'jSettings' => array(
+                        'format' => 'Y'
+            )
+            ) );
+        $groupB = $this->Fields->addGroup( 'Andrew', array( 'label' => 'What what!' ) )
             ->addField(
                 'checkbox', 'somecheckbox', array(
                 'label' => 'Label for Text',
@@ -54,7 +67,7 @@ class Module_Prototype extends Module
                 )
             )
             ->addField(
-            'file', 'somefile', array(
+            'image', 'someimage', array(
             'label' => 'Label for Text',
             'description' => 'Maybe a Description is waht longer than this',
             'type' => 'text',

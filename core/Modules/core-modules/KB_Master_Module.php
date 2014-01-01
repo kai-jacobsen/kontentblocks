@@ -1,7 +1,6 @@
 <?php
 
 use Kontentblocks\Modules\Module;
-kb_register_block('KB_Master_Module');
 
 class KB_Master_Module extends Module {
 

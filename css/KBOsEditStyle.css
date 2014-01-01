@@ -272,7 +272,7 @@ body.onsite-editing #onsite-modal {
 #onsite-modal .kb_field select {
   background-color: #fff;
   color: #333;
-  border-color: #666;
+  border-color: #efefef;
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
 }

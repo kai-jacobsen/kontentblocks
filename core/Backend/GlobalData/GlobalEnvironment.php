@@ -1,9 +1,8 @@
 <?php
 
-namespace Kontentblocks\Backend\Nonpost;
+namespace Kontentblocks\Backend\GlobalData;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Utils\GlobalDataHandler,
     Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleFactory;
 
@@ -16,7 +15,7 @@ class GlobalEnvironment extends AbstractEnvironment
 
     public function __construct()
     {
-        $this->globalData = new GlobalDataHandler();
+        $this->globalData = new GlobalDataBackend();
         $this->areas      = $this->_findAreas();
         $this->modules    = $this->_setupModules();
 
@@ -98,7 +97,7 @@ class GlobalEnvironment extends AbstractEnvironment
 
     }
 
-    public function getDataHandler()
+    public function getDataBackend()
     {
         return $this->globalData;
 

@@ -58,6 +58,7 @@ class Enqueues
             // Plugins - Chosen, Noty, Sortable Touch
             wp_enqueue_script('kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true);
 
+            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins'), null, true);
 
             wp_enqueue_script('Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kontentblocks-base'), null, true);
 
@@ -100,7 +101,8 @@ class Enqueues
 
             wp_enqueue_script('KBOnSiteEditing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse'));
             wp_localize_script('KBOnSiteEditing', 'kontentblocks', $this->_localize());
-            wp_enqueue_script('kb-shared', KB_PLUGIN_URL . 'js/dist/shared.min.js', array('KBPlugins'), null, true);
+            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('KBPlugins'), null, true);
+            wp_enqueue_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-common'), null, true);
             wp_localize_script('kb-frontend', 'KBAppConfig', $config);
 //            wp_enqueue_style( 'thickbox' );
             wp_enqueue_style('KB', KB_PLUGIN_URL . '/css/kontentblocks.css');

@@ -1,43 +1,44 @@
 <?php
 
 namespace Kontentblocks\Extensions;
-use Kontentblocks\Backend\Post\PostMetaDataHandler;
-class Layout_Templates
+use Kontentblocks\Backend\Storage\BackupManager;
+
+class LayoutTemplates
 {
 
     public function __construct()
     {
-        add_action( 'init', array( $this, 'add_default_post_type_support' ) );
-        add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
-        add_action( 'wp_ajax_get_layout_templates', array( $this, 'get_templates' ) );
-        add_action( 'wp_ajax_set_layout_template', array( $this, 'set_template' ) );
-        add_action( 'wp_ajax_delete_layout_template', array($this, 'delete_template'));
-        add_action( 'init', array( $this, 'observe_query' ) );
+        add_action( 'init', array( $this, 'postTypeSupport' ) );
+        add_action( 'add_meta_boxes', array( $this, 'metaBox' ) );
+        add_action( 'wp_ajax_get_layout_templates', array( $this, 'getTemplates' ) );
+        add_action( 'wp_ajax_set_layout_template', array( $this, 'setTemplate' ) );
+        add_action( 'wp_ajax_delete_layout_template', array($this, 'deleteTemplate'));
+        add_action( 'init', array( $this, 'observeQuery' ) );
 
     }
 
-    public function add_meta_box()
+    public function metaBox()
     {
         $screen = get_current_screen();
 
         if ( post_type_supports( $screen->post_type, 'layout-templates' ) ) {
-            add_meta_box( 'kb-layout-templates', 'Layout Templates', array( $this, 'meta_box_controls' ), $screen->post_type, 'side', 'high' );
+            add_meta_box( 'kb-layout-templates', 'Layout Templates', array( $this, 'controls' ), $screen->post_type, 'side', 'high' );
         }
 
 
     }
 
-    public function meta_box_controls()
+    public function controls()
     {
         echo "<div id='layout-templates'></div>";
     }
 
-    public function add_default_post_type_support()
+    public function postTypeSupport()
     {
         add_post_type_support( 'page', 'layout-templates' );
 
     }
-    public function get_templates()
+    public function getTemplates()
     {
 
         $data   = $_REQUEST[ 'data' ];
@@ -54,7 +55,7 @@ class Layout_Templates
 
     }
 
-    public function set_template()
+    public function setTemplate()
     {
 
 
@@ -64,7 +65,7 @@ class Layout_Templates
         $name    = (!empty( $data[ 'name' ] )) ? $data[ 'name' ] : wp_send_json_error();
 
         if ( isset( $config ) ) {
-            if ( $this->_save_template( $config, $name, $post_id ) ) {
+            if ( $this->_saveTemplate( $config, $name, $post_id ) ) {
                 wp_send_json_success();
             }
             else {
@@ -73,7 +74,7 @@ class Layout_Templates
         }
 
     }
-    public function delete_template()
+    public function deleteTemplate()
     {
 
 
@@ -83,7 +84,7 @@ class Layout_Templates
         $name    = (!empty( $data[ 'name' ] )) ? $data[ 'name' ] : wp_send_json_error();
 
         if ( isset( $config ) ) {
-            if ( $this->_delete_template( $config, $name, $post_id ) ) {
+            if ( $this->_deleteTemplate( $config, $name, $post_id ) ) {
                 wp_send_json_success();
             }
             else {
@@ -93,7 +94,7 @@ class Layout_Templates
 
     }
 
-    private function _save_template( $config, $name, $post_id )
+    private function _saveTemplate( $config, $name, $post_id )
     {
         $templates = get_option( 'kb_layout_templates' );
         $id        = sanitize_title( $name );
@@ -102,7 +103,7 @@ class Layout_Templates
         if ( !isset( $bucket[ $id ] ) ) {
             $bucket[ $id ] = array(
                 'name' => $name,
-                'layout' => $this->_normalize_current_layout( $post_id )
+                'layout' => $this->_normalizeLayout( $post_id )
             );
 
             $templates[ $config ] = $bucket;
@@ -112,7 +113,7 @@ class Layout_Templates
 
     }
     
-    private function _delete_template( $config, $id, $post_id )
+    private function _deleteTemplate( $config, $id, $post_id )
     {
         $templates = get_option( 'kb_layout_templates' );
         $bucket    = (!empty( $templates[ $config ] )) ? $templates[ $config ] : array( );
@@ -127,7 +128,7 @@ class Layout_Templates
 
     }
 
-    private function _normalize_current_layout( $post_id )
+    private function _normalizeLayout( $post_id )
     {
         $layout = get_post_meta( $post_id, 'kb_kontentblocks', true );
 
@@ -147,10 +148,10 @@ class Layout_Templates
 
     }
 
-    public function observe_query()
+    public function observeQuery()
     {
         if ( isset( $_GET[ 'load_template' ] ) ) {
-            $setup_data = $this->_reset_post_meta( $_GET[ 'load_template' ], $_GET[ 'post_id' ], $_GET[ 'config' ] );
+            $setup_data = $this->_resetPostMeta( $_GET[ 'load_template' ], $_GET[ 'post_id' ], $_GET[ 'config' ] );
             if ( $setup_data ) {
                 $location = add_query_arg( array( 'load_template' => false, 'post_id' => false, 'config' => false ) );
                 wp_redirect( $location );
@@ -159,25 +160,24 @@ class Layout_Templates
 
     }
 
-    private function _reset_post_meta( $template, $post_id, $config )
+    private function _resetPostMeta( $template, $post_id, $config )
     {
-
-        $Meta = new PostMetaDataHandler( $post_id );
-
+        $Storage = \Kontentblocks\Helper\getStorage($post_id);
+        $BackupManager = new BackupManager($Storage);
         $templates = get_option( 'kb_layout_templates' );
 
         if ( isset( $templates[ $config ][ $template ] ) ) {
-            $Meta->backup('Before loading template:' . $template );
-            $Meta->delete();
+            $BackupManager->backup('Before loading template:' . $template );
+            $Storage->deleteAll();
             
-            $prepare = $this->_prepare_from_template($templates[ $config ][ $template ], $post_id);
-            return $Meta->saveIndex($prepare); // returns bool
+            $prepare = $this->_prepareFromTemplate($templates[ $config ][ $template ], $post_id);
+            return $Storage->saveIndex($prepare); // returns bool
         }
         return false;
         
     }
 
-    private function _prepare_from_template($index, $post_id)
+    private function _prepareFromTemplate($index, $post_id)
     {
         $i = 1;
         $collection = array();
@@ -191,4 +191,4 @@ class Layout_Templates
         return $collection;
     }
 }
-new Layout_Templates();
+new LayoutTemplates();

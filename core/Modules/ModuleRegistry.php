@@ -22,14 +22,21 @@ class ModuleRegistry
 
     }
 
-    public function add( $classname )
+    public function add( $file )
     {
+        // file should be the full path from the loader
+        // @todo replace module reflection class path getting with this to save ressources
+        include_once($file);
+
+        $classname = str_replace('.php','',basename($file));
+
         if ( !isset( $this->modules[ 'classname' ] ) && property_exists( $classname, 'defaults' ) ) {
             // Defaults from the specific Module
             // contains id, name, public name etc..
             $moduleArgs      = array();
             $args            = $classname::$defaults;
             $args[ 'class' ] = $classname;
+            $args[ 'path']   = trailingslashit(dirname($file));
 
             // add missing args from general Defaults
             $moduleArgs[ 'settings' ] = wp_parse_args( $args, Module::getDefaults() );
@@ -109,7 +116,13 @@ class ModuleRegistry
                 continue;
             }
 
-            // shorthand caegory
+            // todo: possible a mistake
+            // hidden modules are not added
+            if ( $module[ 'settings' ][ 'hidden' ] ) {
+                continue;
+            }
+
+            // shorthand category
             $cat = $module[ 'settings' ][ 'category' ];
 
             // Module has to be assigned to area, either by area definition or through module 'connect'

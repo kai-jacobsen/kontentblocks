@@ -6,7 +6,74 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Interfaces/InterfaceDataBackend.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Menus/MenuManager.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dist/common.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/plugins/hoverIntent.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/plugins/store.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Backend/Nonpost/GlobalEnvironment.php" afterPath="$PROJECT_DIR$/core/Backend/GlobalData/GlobalEnvironment.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Backend/Post/PostMetaDataHandler.php" afterPath="$PROJECT_DIR$/core/Backend/Post/PostMetaDataBackend.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Backend/Storage/GlobalDataStorage.php" afterPath="$PROJECT_DIR$/core/Backend/Storage/ModuleStorageGlobal.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Utils/GlobalDataHandler.php" afterPath="$PROJECT_DIR$/core/Backend/GlobalData/GlobalDataBackend.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/dev/backend/Common/KBAjax.js" afterPath="$PROJECT_DIR$/js/dev/common/KBAjax.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/dev/backend/Common/KBChecks.js" afterPath="$PROJECT_DIR$/js/dev/common/KBChecks.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/dev/backend/Common/KBNotice.js" afterPath="$PROJECT_DIR$/js/dev/common/KBNotice.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/dev/backend/Common/KBTemplates.js" afterPath="$PROJECT_DIR$/js/dev/common/KBTemplates.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/dev/backend/Common/KBTinyMCE.js" afterPath="$PROJECT_DIR$/js/dev/common/KBTinyMCE.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/dev/backend/Common/KBUi.js" afterPath="$PROJECT_DIR$/js/dev/common/KBUi.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/dev/backend/Common/KBViewsCollection.js" afterPath="$PROJECT_DIR$/js/dev/backend/Collections/KBViewsCollection.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Storage/BackupManager.php" afterPath="$PROJECT_DIR$/core/Backend/Storage/BackupManager.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/ChangeArea.php" afterPath="$PROJECT_DIR$/core/Ajax/ChangeArea.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/ChangeModuleStatus.php" afterPath="$PROJECT_DIR$/core/Ajax/ChangeModuleStatus.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" afterPath="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/DuplicateModule.php" afterPath="$PROJECT_DIR$/core/Ajax/DuplicateModule.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Post/EditScreen.php" afterPath="$PROJECT_DIR$/core/Backend/Post/EditScreen.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Definitions/Editor.php" afterPath="$PROJECT_DIR$/core/Fields/Definitions/Editor.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Hooks/Enqueues.php" afterPath="$PROJECT_DIR$/core/Hooks/Enqueues.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Field.php" afterPath="$PROJECT_DIR$/core/Fields/Field.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/FieldManager.php" afterPath="$PROJECT_DIR$/core/Fields/FieldManager.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/FieldSection.php" afterPath="$PROJECT_DIR$/core/Fields/FieldSection.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php" afterPath="$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Definitions/js/KB.File.js" afterPath="$PROJECT_DIR$/core/Fields/Definitions/js/KB.File.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Definitions/js/KB.Image.js" afterPath="$PROJECT_DIR$/core/Fields/Definitions/js/KB.Image.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/KBOnSiteEditing.js" afterPath="$PROJECT_DIR$/js/KBOnSiteEditing.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/KBOsEditStyle.css" afterPath="$PROJECT_DIR$/css/KBOsEditStyle.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/sass/KBOsEditStyle.scss" afterPath="$PROJECT_DIR$/css/sass/KBOsEditStyle.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" afterPath="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Extensions/LayoutTemplates.php" afterPath="$PROJECT_DIR$/core/Extensions/LayoutTemplates.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/Module.php" afterPath="$PROJECT_DIR$/core/Modules/Module.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php" afterPath="$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/backend/Views/ModuleView.js" afterPath="$PROJECT_DIR$/js/dev/backend/Views/ModuleView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" afterPath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Overlays/OnsiteEditModule.php" afterPath="$PROJECT_DIR$/core/Overlays/OnsiteEditModule.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Post/PostEnvironment.php" afterPath="$PROJECT_DIR$/core/Backend/Post/PostEnvironment.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/RemoveModules.php" afterPath="$PROJECT_DIR$/core/Ajax/RemoveModules.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/Frontend/SaveInlineEdit.php" afterPath="$PROJECT_DIR$/core/Ajax/Frontend/SaveInlineEdit.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Post/ScreenContext.php" afterPath="$PROJECT_DIR$/core/Backend/Post/ScreenContext.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Extensions/SidebarSelector.php" afterPath="$PROJECT_DIR$/core/Extensions/SidebarSelector.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/SortModules.php" afterPath="$PROJECT_DIR$/core/Ajax/SortModules.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/backend/backend.js" afterPath="$PROJECT_DIR$/js/dev/backend/backend.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/backend.min.js" afterPath="$PROJECT_DIR$/js/dist/backend.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/extensions.min.js" afterPath="$PROJECT_DIR$/js/dist/extensions.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/templates/fe_onsite-form.html" afterPath="$PROJECT_DIR$/js/templates/fe_onsite-form.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/fields.min.js" afterPath="$PROJECT_DIR$/js/dist/fields.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/frontend.min.js" afterPath="$PROJECT_DIR$/js/dist/frontend.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gruntfile.js" afterPath="$PROJECT_DIR$/gruntfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Utils/helper.new.php" afterPath="$PROJECT_DIR$/core/Utils/helper.new.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/kontentblocks.css" afterPath="$PROJECT_DIR$/css/kontentblocks.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" afterPath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.options.php" afterPath="$PROJECT_DIR$/kontentblocks.options.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.php" afterPath="$PROJECT_DIR$/kontentblocks.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.public-api.php" afterPath="$PROJECT_DIR$/kontentblocks.public-api.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/sass/kontentblocks.scss" afterPath="$PROJECT_DIR$/css/sass/kontentblocks.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/plugins.min.js" afterPath="$PROJECT_DIR$/js/dist/plugins.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/refields.min.js" afterPath="$PROJECT_DIR$/js/dist/refields.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/shared.min.js" afterPath="$PROJECT_DIR$/js/dist/shared.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Utils/tables.php" afterPath="$PROJECT_DIR$/core/Utils/tables.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kontentblocks.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,13 +96,90 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BackupManager.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/Backend/Storage/BackupManager.php">
+      <file leaf-file-name="tables.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Utils/tables.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="188" column="65" selection-start="4919" selection-end="4919" vertical-scroll-proportion="0.8317757" vertical-offset="2921" max-vertical-offset="4356">
+            <state line="46" column="44" selection-start="1335" selection-end="1335" vertical-scroll-proportion="-15.0" vertical-offset="423" max-vertical-offset="972">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="kontentblocks.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/kontentblocks.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="215" column="0" selection-start="5807" selection-end="5807" vertical-scroll-proportion="-8.740741" vertical-offset="3634" max-vertical-offset="8766">
               <folding>
-                <marker date="1388167223021" expanded="true" signature="4730:4807" placeholder="SELECT * FRO..." />
+                <marker date="1388613434183" expanded="true" signature="10926:11043" placeholder="..." />
+                <marker date="1388613434183" expanded="true" signature="11002:11024" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PostEnvironment.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/Backend/Post/PostEnvironment.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="136" column="23" selection-start="3197" selection-end="3197" vertical-scroll-proportion="0.7721239" vertical-offset="2099" max-vertical-offset="4068">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CreateNewModule.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Ajax/CreateNewModule.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="206" column="30" selection-start="4717" selection-end="4717" vertical-scroll-proportion="-8.074074" vertical-offset="3490" max-vertical-offset="5274">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Module_Prototype.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="25" selection-start="235" selection-end="235" vertical-scroll-proportion="-4.6666665" vertical-offset="72" max-vertical-offset="1620">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MenuManager.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Menus/MenuManager.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="0" selection-start="88" selection-end="88" vertical-scroll-proportion="-5.3333335" vertical-offset="0" max-vertical-offset="270">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModuleRegistry.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Modules/ModuleRegistry.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="43" column="27" selection-start="1380" selection-end="1380" vertical-scroll-proportion="-20.11111" vertical-offset="231" max-vertical-offset="3078">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Module.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="371" column="17" selection-start="10202" selection-end="10202" vertical-scroll-proportion="-9.407408" vertical-offset="6424" max-vertical-offset="10584">
+              <folding>
+                <marker date="1388614211095" expanded="true" signature="5544:5641" placeholder="..." />
+                <marker date="1388614211095" expanded="false" signature="6024:6037" placeholder="..." />
+                <marker date="1388614211095" expanded="true" signature="6858:6991" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModuleFactory.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Modules/ModuleFactory.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="16" column="23" selection-start="375" selection-end="375" vertical-scroll-proportion="-10.666667" vertical-offset="0" max-vertical-offset="972">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -53,57 +197,57 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/core/Admin/Post/PostEnvironment.php" />
-        <option value="$PROJECT_DIR$/core/Admin/Post/PostMetaDataHandler.php" />
-        <option value="$PROJECT_DIR$/core/Admin/Post/ScreenContext.php" />
-        <option value="$PROJECT_DIR$/core/Admin/Post/ScreenManager.php" />
-        <option value="$PROJECT_DIR$/core/Admin/Storage/BackupManager.php" />
-        <option value="$PROJECT_DIR$/core/Admin/Storage/GlobalDataStorage.php" />
-        <option value="$PROJECT_DIR$/core/Admin/Storage/ModuleStoragePostMeta.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/AfterAreaChange.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/ChangeArea.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/ChangeModuleStatus.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/DuplicateModule.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/Frontend/SaveInlineEdit.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/SortModules.php" />
-        <option value="$PROJECT_DIR$/core/Extensions/LayoutTemplates.php" />
-        <option value="$PROJECT_DIR$/core/Hooks/setup.php" />
-        <option value="$PROJECT_DIR$/core/Overlays/EditGlobalArea.php" />
-        <option value="$PROJECT_DIR$/core/Utils/ModuleRegistry.php" />
-        <option value="$PROJECT_DIR$/core/Utils/RegionRegistry.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" />
-        <option value="$PROJECT_DIR$/core/Backend/Areas/ModuleMenu.php" />
-        <option value="$PROJECT_DIR$/core/Overlays/OnsiteEditModule.php" />
-        <option value="$PROJECT_DIR$/core/Backend/Areas/AreaSettingsMenu.php" />
-        <option value="$PROJECT_DIR$/core/Backend/Nonpost/GlobalEnvironment.php" />
-        <option value="$PROJECT_DIR$/core/Backend/Post/PostEnvironment.php" />
-        <option value="$PROJECT_DIR$/core/Frontend/AreaLayoutIterator.php" />
-        <option value="$PROJECT_DIR$/core/Overlays/includes/edit-global-area-body.php" />
-        <option value="$PROJECT_DIR$/core/Utils/helper.new.php" />
-        <option value="$PROJECT_DIR$/core/Backend/Areas/RegionRegistry.php" />
-        <option value="$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php" />
-        <option value="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" />
-        <option value="$PROJECT_DIR$/core/Templating/ModuleTemplate.php" />
-        <option value="$PROJECT_DIR$/core/Interfaces/InterfaceEnvironment.php" />
-        <option value="$PROJECT_DIR$/kontentblocks.php" />
-        <option value="$PROJECT_DIR$/core/Extensions/SidebarSelector.php" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/core/Backend/Post/PostMetaDataHandler.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/RemoveModules.php" />
-        <option value="$PROJECT_DIR$/js/dev/backend/Views/ModuleMenuItems/ModuleDelete.js" />
-        <option value="$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php" />
-        <option value="$PROJECT_DIR$/core/Extensions/BackupInspect.php" />
-        <option value="$PROJECT_DIR$/js/dev/extensions/BackupInspect.js" />
+        <option value="$PROJECT_DIR$/js/templates/fe_onsite-form.html" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/Views/OnsiteView.js" />
+        <option value="$PROJECT_DIR$/gruntfile.js" />
+        <option value="$PROJECT_DIR$/js/dev/plugins/store.js" />
+        <option value="$PROJECT_DIR$/js/dev/backend/Collections/KBViewsCollection.js" />
+        <option value="$PROJECT_DIR$/js/dev/backend/Views/ContextView.js" />
         <option value="$PROJECT_DIR$/js/dev/backend/backend.js" />
-        <option value="$PROJECT_DIR$/js/dev/backend/Common/KBUi.js" />
-        <option value="$PROJECT_DIR$/core/Extensions/OSAdminBar.php" />
-        <option value="$PROJECT_DIR$/js/KBOnSiteEditing.js" />
-        <option value="$PROJECT_DIR$/core/Hooks/Enqueues.php" />
-        <option value="$PROJECT_DIR$/../../../wp-admin/includes/post.php" />
-        <option value="$PROJECT_DIR$/js/dev/plugins/details.polyfill.js" />
+        <option value="$PROJECT_DIR$/js/dev/backend/Views/ModuleView.js" />
+        <option value="$PROJECT_DIR$/js/dev/plugins/hoverIntent.js" />
+        <option value="$PROJECT_DIR$/css/sass/kontentblocks.scss" />
+        <option value="$PROJECT_DIR$/core/Backend/Post/ScreenContext.php" />
+        <option value="$PROJECT_DIR$/core/Extensions/SidebarSelector.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Post/ScreenManager.php" />
+        <option value="$PROJECT_DIR$/core/Extensions/LayoutTemplates.php" />
+        <option value="dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..rs_kb_options" />
+        <option value="$PROJECT_DIR$/../../../wp-includes/post.php" />
+        <option value="$PROJECT_DIR$/js/dev/common/KBTinyMCE.js" />
+        <option value="$PROJECT_DIR$/js/dev/common/KBUi.js" />
+        <option value="$PROJECT_DIR$/core/Fields/Definitions/js/KB.File.js" />
+        <option value="$PROJECT_DIR$/core/Fields/Definitions/js/KB.Image.js" />
+        <option value="$PROJECT_DIR$/css/sass/KBOsEditStyle.scss" />
+        <option value="$PROJECT_DIR$/core/Fields/FieldRenderTabs.php" />
+        <option value="$PROJECT_DIR$/core/Fields/FieldManager.php" />
+        <option value="$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php" />
+        <option value="$PROJECT_DIR$/core/Fields/FieldSection.php" />
+        <option value="$PROJECT_DIR$/core/Fields/Definitions/Editor.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Post/PostMetaDataBackend.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Nonpost/GlobalEnvironment.php" />
+        <option value="$PROJECT_DIR$/core/Backend/GlobData/GlobalEnvironment.php" />
+        <option value="$PROJECT_DIR$/core/Backend/GlobalData/GlobalEnvironment.php" />
+        <option value="$PROJECT_DIR$/core/Utils/helper.new.php" />
+        <option value="$PROJECT_DIR$/core/Fields/Field.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Global/GlobalDataBackend.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Post/EditScreen.php" />
         <option value="$PROJECT_DIR$/core/Backend/Storage/BackupManager.php" />
+        <option value="$PROJECT_DIR$/core/Backend/GlobalData/GlobalDataBackend.php" />
+        <option value="$PROJECT_DIR$/core/Utils/tables.php" />
+        <option value="$PROJECT_DIR$/kontentblocks.options.php" />
+        <option value="$PROJECT_DIR$/core/Menus/MenuManager.php" />
+        <option value="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" />
+        <option value="$PROJECT_DIR$/kontentblocks.php" />
+        <option value="$PROJECT_DIR$/../Module/modules/MyModule.php" />
+        <option value="$PROJECT_DIR$/core/Modules/Module.php" />
+        <option value="$PROJECT_DIR$/core/Modules/ModuleFactory.php" />
+        <option value="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Areas/Area.php" />
+        <option value="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" />
+        <option value="dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..rs_postmeta" />
+        <option value="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" />
+        <option value="$PROJECT_DIR$/core/Backend/Post/PostEnvironment.php" />
       </list>
     </option>
   </component>
@@ -140,10 +284,13 @@
           <State>
             <id>SASS/SCSS</id>
           </State>
+          <State>
+            <id>UndefinedPHP</id>
+          </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>SassScssUnresolvedPlaceholderSelector</id>
+            <id>PhpUndefinedClassInspection</id>
           </State>
         </selected-state>
       </profile-state>
@@ -175,8 +322,23 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PHP" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedLibraryNode" />
+            </PATH_ELEMENT>
+          </PATH>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="kontentblocks" />
@@ -207,7 +369,97 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="includes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core-modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Menus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Backend" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -229,7 +481,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Storage" />
+              <option name="myItemId" value="Post" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -248,12 +500,33 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Areas" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Ajax" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -262,7 +535,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../wp-includes" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Module/modules/MyModule.php" />
     <property name="FullScreen" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="Console.TableResult.DefaultCopyAction" value="Comma-separated Values (CSV)" />
@@ -270,10 +543,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/core/Backend/Nonpost" />
+      <recent name="$PROJECT_DIR$/js/dev/backend/Collections" />
+      <recent name="$PROJECT_DIR$/js/dev/backend" />
+      <recent name="$PROJECT_DIR$/js/dev" />
       <recent name="$PROJECT_DIR$/core/Extensions" />
-      <recent name="$PROJECT_DIR$/core/Backend/Areas" />
-      <recent name="$PROJECT_DIR$/core/Modules" />
-      <recent name="$PROJECT_DIR$/core/Admin/Storage" />
     </key>
   </component>
   <component name="RunManager">
@@ -307,30 +581,50 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1600" height="876" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21171771" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32756326" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14780293" sideWeight="0.49968293" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2756325" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28894806" sideWeight="0.49968293" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2488889" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.264127" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2673016" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948717" sideWeight="0.50031704" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32756326" sideWeight="0.50031704" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="99" y="96" width="1402" height="705" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="124" width="1402" height="705" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32756326" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -373,368 +667,374 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/css/assets/delete.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/assets/editor_icons.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/assets/gear-32.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/assets/image-bg.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/assets/layouts.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/assets/sprite-skin-nice.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/success.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Utils/helper.php">
+    <entry file="file://$PROJECT_DIR$/js/dev/plugins/hoverIntent.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="155" column="1" selection-start="4711" selection-end="4711" vertical-scroll-proportion="0.9471366" vertical-offset="1929" max-vertical-offset="2682">
+        <state line="114" column="11" selection-start="4939" selection-end="4939" vertical-scroll-proportion="0.8965517" vertical-offset="1428" max-vertical-offset="2160" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/backend/Views/ModuleView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="41" selection-start="1122" selection-end="1122" vertical-scroll-proportion="0.0" vertical-offset="216" max-vertical-offset="1566" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/sass/kontentblocks.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="333" column="0" selection-start="5788" selection-end="5788" vertical-scroll-proportion="1.7037038" vertical-offset="6040" max-vertical-offset="12132" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Post/ScreenContext.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="88" selection-start="1216" selection-end="1236" vertical-scroll-proportion="0.0" vertical-offset="530" max-vertical-offset="1692" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Extensions/SidebarSelector.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="0" selection-start="1373" selection-end="1373" vertical-scroll-proportion="-8.925926" vertical-offset="713" max-vertical-offset="5238" />
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..rs_kb_options">
+      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Post/ScreenManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="41" selection-start="981" selection-end="981" vertical-scroll-proportion="0.0" vertical-offset="756" max-vertical-offset="2754" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Storage/ModuleStorageGlobal.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="5" selection-start="1040" selection-end="1040" vertical-scroll-proportion="0.0" vertical-offset="294" max-vertical-offset="1566" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../wp-includes/post.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2011" column="0" selection-start="67994" selection-end="67994" vertical-scroll-proportion="0.8359909" vertical-offset="35723" max-vertical-offset="91368">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/Image.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="10" selection-start="1006" selection-end="1006" vertical-scroll-proportion="-19.88889" vertical-offset="237" max-vertical-offset="918" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/js/KB.Image.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="15" selection-start="878" selection-end="878" vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="1458" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/sass/KBOsEditStyle.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="295" column="33" selection-start="5041" selection-end="5041" vertical-scroll-proportion="-18.037037" vertical-offset="4823" max-vertical-offset="5778" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/templates/image.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="658" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/js/KB.File.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="8" selection-start="949" selection-end="949" vertical-scroll-proportion="0.0" vertical-offset="411" max-vertical-offset="1458" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/common/KBTinyMCE.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="33" selection-start="2037" selection-end="2045" vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1854" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/common/KBUi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="20" selection-start="1450" selection-end="1450" vertical-scroll-proportion="0.0" vertical-offset="666" max-vertical-offset="5616" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/FieldManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="57" selection-start="2640" selection-end="2640" vertical-scroll-proportion="0.4349776" vertical-offset="1599" max-vertical-offset="3312" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/Editor.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="30" selection-start="724" selection-end="724" vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="828" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/FieldSection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="151" column="0" selection-start="3842" selection-end="3842" vertical-scroll-proportion="0.0" vertical-offset="2340" max-vertical-offset="5022" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/FieldRenderTabs.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="76" column="5" selection-start="1626" selection-end="1626" vertical-scroll-proportion="0.0" vertical-offset="1368" max-vertical-offset="1638" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="45" selection-start="244" selection-end="244" vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="666" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Ajax/Frontend/SaveInlineEdit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="24" selection-start="71" selection-end="71" vertical-scroll-proportion="0.0" vertical-offset="72" max-vertical-offset="558" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/GlobalData/GlobalEnvironment.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="99" column="20" selection-start="2143" selection-end="2143" vertical-scroll-proportion="0.0" vertical-offset="1782" max-vertical-offset="2016">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Overlays/EditGlobalArea.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="51" selection-start="3058" selection-end="3058" vertical-scroll-proportion="0.3144654" vertical-offset="2010" max-vertical-offset="3312">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Ajax/ChangeModuleStatus.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="24" selection-start="62" selection-end="62" vertical-scroll-proportion="0.0" vertical-offset="72" max-vertical-offset="954">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Post/PostMetaDataBackend.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="2394">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Post/EditScreen.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="266" column="42" selection-start="8618" selection-end="8636" vertical-scroll-proportion="0.0" vertical-offset="4788" max-vertical-offset="6624">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Extensions/LayoutTemplates.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="86" selection-start="546" selection-end="546" vertical-scroll-proportion="-9.333333" vertical-offset="0" max-vertical-offset="3582">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Storage/BackupManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="22" selection-start="179" selection-end="179" vertical-scroll-proportion="0.31858408" vertical-offset="0" max-vertical-offset="4590">
           <folding>
-            <marker date="1387826300457" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1387826300457" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1387826300457" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1387826300457" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1387826300457" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1387826300457" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1388594094691" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../wp-includes/option.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="242" column="0" selection-start="8120" selection-end="8120" vertical-scroll-proportion="0.6143293" vertical-offset="3881" max-vertical-offset="19422">
+          <folding>
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT optio..$wpdb-&gt;options WHERE..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT optio..$wpdb-&gt;options WHERE..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT optio..$wpdb-&gt;options WHERE..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT optio..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;sitemeta WHERE..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="INSERT INTO ..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT autol..$wpdb-&gt;options WHERE..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;sitemeta WHERE..." />
+            <marker date="1388448888694" expanded="true" signature="-1:-1" placeholder="SELECT meta_..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/GlobalData/GlobalDataBackend.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="24" selection-start="239" selection-end="239" vertical-scroll-proportion="-8.0" vertical-offset="0" max-vertical-offset="648">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="0" selection-start="1864" selection-end="1864" vertical-scroll-proportion="-23.444445" vertical-offset="771" max-vertical-offset="5544">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceDataStorage.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1008">
+        <state line="29" column="7" selection-start="739" selection-end="739" vertical-scroll-proportion="-9.444445" vertical-offset="267" max-vertical-offset="1008">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceFieldReturn.php">
+    <entry file="file://$PROJECT_DIR$/core/Fields/Field.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="475">
+        <state line="127" column="13" selection-start="2655" selection-end="2655" vertical-scroll-proportion="0.42824602" vertical-offset="2098" max-vertical-offset="6696">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceEnvironment.php">
+    <entry file="file://$PROJECT_DIR$/core/Utils/helper.new.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="77" selection-end="77" vertical-scroll-proportion="-4.0" vertical-offset="0" max-vertical-offset="342">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Abstracts/AbstractEnvironment.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="504">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Abstracts/AbstractFieldReturn.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="286" selection-end="286" vertical-scroll-proportion="-10.0" vertical-offset="0" max-vertical-offset="558">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/KBImage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1800">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/img/mitgux/alert.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/img/mitgux/bg.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/img/mitgux/close.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/img/mitgux/done.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/img/mitgux/error.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/img/alert-lines.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/img/closelabel.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dist/fields.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="27288">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dist/refields.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="15" selection-start="283" selection-end="283" vertical-scroll-proportion="0.22468793" vertical-offset="0" max-vertical-offset="3222">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dist/kontentblocks.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5454">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dist/backend.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="28" selection-start="2300" selection-end="2300" vertical-scroll-proportion="0.41525424" vertical-offset="1182" max-vertical-offset="14508">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Extensions/ModuleControls.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2052">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Extensions/SidebarSelector.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="260" column="0" selection-start="7929" selection-end="7929" vertical-scroll-proportion="0.31277534" vertical-offset="4467" max-vertical-offset="5148">
+        <state line="22" column="3" selection-start="533" selection-end="533" vertical-scroll-proportion="0.33962265" vertical-offset="144" max-vertical-offset="4338">
           <folding>
-            <marker date="1388135998303" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388135998303" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1388520339119" expanded="false" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
+    <entry file="file://$PROJECT_DIR$/core/Utils/tables.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="8" selection-start="187" selection-end="187" vertical-scroll-proportion="0.1815562" vertical-offset="0" max-vertical-offset="694">
+        <state line="46" column="44" selection-start="1335" selection-end="1335" vertical-scroll-proportion="-15.0" vertical-offset="423" max-vertical-offset="972">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Language/I18n.php">
+    <entry file="file://$PROJECT_DIR$/kontentblocks.options.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="533" selection-end="533" vertical-scroll-proportion="0.0259366" vertical-offset="504" max-vertical-offset="1782">
+        <state line="2" column="1" selection-start="9" selection-end="9" vertical-scroll-proportion="0.0754717" vertical-offset="0" max-vertical-offset="477">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Autoloader.php">
+    <entry file="file://$PROJECT_DIR$/core/Menus/MenuManager.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="721">
+        <state line="8" column="0" selection-start="88" selection-end="88" vertical-scroll-proportion="-5.3333335" vertical-offset="0" max-vertical-offset="270">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/options/areas/kontentblocks.menu.areas.addnew.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="11" selection-start="17" selection-end="17" vertical-scroll-proportion="0.041002277" vertical-offset="0" max-vertical-offset="4644">
+          <folding>
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1376084870000" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kontentblocks.public-api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="15" selection-start="391" selection-end="391" vertical-scroll-proportion="0.476082" vertical-offset="115" max-vertical-offset="3672">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="-5.3333335" vertical-offset="0" max-vertical-offset="990">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kontentblocks.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="160" column="0" selection-start="4291" selection-end="4291" vertical-scroll-proportion="0.38760808" vertical-offset="2611" max-vertical-offset="8694">
+        <state line="215" column="0" selection-start="5807" selection-end="5807" vertical-scroll-proportion="-8.740741" vertical-offset="3634" max-vertical-offset="8766">
           <folding>
-            <marker date="1388136436615" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388136436615" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1388613434183" expanded="true" signature="10926:11043" placeholder="..." />
+            <marker date="1388613434183" expanded="true" signature="11002:11024" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Module/modules/MyModule.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="14" selection-start="102" selection-end="102" vertical-scroll-proportion="-4.0" vertical-offset="0" max-vertical-offset="918">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="371" column="17" selection-start="10202" selection-end="10202" vertical-scroll-proportion="-9.407408" vertical-offset="6424" max-vertical-offset="10584">
+          <folding>
+            <marker date="1388614211095" expanded="true" signature="5544:5641" placeholder="..." />
+            <marker date="1388614211095" expanded="false" signature="6024:6037" placeholder="..." />
+            <marker date="1388614211095" expanded="true" signature="6858:6991" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/ModuleFactory.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="23" selection-start="375" selection-end="375" vertical-scroll-proportion="-10.666667" vertical-offset="0" max-vertical-offset="972">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Areas/Area.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="96" column="0" selection-start="1398" selection-end="2636" vertical-scroll-proportion="0.51729107" vertical-offset="1369" max-vertical-offset="4374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/ModuleRegistry.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="27" selection-start="1380" selection-end="1380" vertical-scroll-proportion="-20.11111" vertical-offset="231" max-vertical-offset="3078">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="25" selection-start="235" selection-end="235" vertical-scroll-proportion="-4.6666665" vertical-offset="72" max-vertical-offset="1620">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..rs_postmeta">
+      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="108">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Ajax/CreateNewModule.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="4" selection-start="83" selection-end="83" vertical-scroll-proportion="-0.6666667" vertical-offset="72" max-vertical-offset="5292">
+        <state line="206" column="30" selection-start="4717" selection-end="4717" vertical-scroll-proportion="-8.074074" vertical-offset="3490" max-vertical-offset="5274">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Backend/Post/PostMetaDataHandler.php">
+    <entry file="file://$PROJECT_DIR$/core/Backend/Post/PostEnvironment.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="40" selection-start="848" selection-end="848" vertical-scroll-proportion="0.7058824" vertical-offset="378" max-vertical-offset="2394">
+        <state line="136" column="23" selection-start="3197" selection-end="3197" vertical-scroll-proportion="0.7721239" vertical-offset="2099" max-vertical-offset="4068">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Ajax/RemoveModules.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="77" selection-start="737" selection-end="737" vertical-scroll-proportion="-12.222222" vertical-offset="210" max-vertical-offset="756">
-          <folding>
-            <element signature="e#38#132#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="23" selection-start="312" selection-end="312" vertical-scroll-proportion="-8.0" vertical-offset="0" max-vertical-offset="5328">
-          <folding>
-            <element signature="e#48#99#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/backend/Views/ModuleMenuItems/ModuleDelete.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="41" selection-start="1039" selection-end="1083" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="810">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/extensions/BackupInspect.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="15" selection-start="593" selection-end="593" vertical-scroll-proportion="0.0" vertical-offset="126" max-vertical-offset="1692">
-          <folding>
-            <marker date="1388157489256" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388157489256" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388157489256" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388157489256" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388157489256" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388157489256" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1388157489256" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gruntfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="19" selection-start="2489" selection-end="2489" vertical-scroll-proportion="0.0" vertical-offset="522" max-vertical-offset="2340">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Extensions/BackupInspect.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="82" selection-start="421" selection-end="504" vertical-scroll-proportion="0.40588236" vertical-offset="63" max-vertical-offset="1962">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/frontend/frontend.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/backend/Fields.loader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="3" selection-start="1092" selection-end="1092" vertical-scroll-proportion="0.89145905" vertical-offset="237" max-vertical-offset="846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/backend/backend.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="29" selection-start="328" selection-end="328" vertical-scroll-proportion="0.3683274" vertical-offset="117" max-vertical-offset="2592">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/backend/Common/KBUi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="902" selection-end="902" vertical-scroll-proportion="0.47508895" vertical-offset="435" max-vertical-offset="4896">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/KBOnSiteEditing.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="34" selection-start="634" selection-end="634" vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="1944">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/development/wordpress/wordpress 3.7.1DE/wordpress/wp-admin/includes/post.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1176" column="9" selection-start="37672" selection-end="37672" vertical-scroll-proportion="0.33199194" vertical-offset="20913" max-vertical-offset="26154">
-          <folding>
-            <marker date="1382455332000" expanded="true" signature="-1:-1" placeholder="SELECT ID, p..$wpdb-&gt;posts WHERE..." />
-            <marker date="1382455332000" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1382455332000" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta&#10;&#9;&#9;&#9;GROUP..." />
-            <marker date="1382455332000" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta WHERE..." />
-            <marker date="1382455332000" expanded="true" signature="-1:-1" placeholder="SELECT post_..$wpdb-&gt;postmeta&#10;&#9;&#9;WHERE..." />
-            <marker date="1382455332000" expanded="true" signature="-1:-1" placeholder="SELECT DISTI..$wpdb-&gt;posts WHERE..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Hooks/Enqueues.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="22" selection-start="4620" selection-end="4620" vertical-scroll-proportion="-7.740741" vertical-offset="1789" max-vertical-offset="3726">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Extensions/OSAdminBar.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="46" selection-start="628" selection-end="628" vertical-scroll-proportion="-14.0" vertical-offset="0" max-vertical-offset="576">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../wp-admin/includes/post.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1187" column="18" selection-start="38077" selection-end="38077" vertical-scroll-proportion="-13.777778" vertical-offset="20904" max-vertical-offset="26118">
-          <folding>
-            <marker date="1388162635041" expanded="true" signature="-1:-1" placeholder="SELECT ID, p..$wpdb-&gt;posts WHERE..." />
-            <marker date="1388162635041" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1388162635041" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta&#10;&#9;&#9;&#9;GROUP..." />
-            <marker date="1388162635041" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta WHERE..." />
-            <marker date="1388162635041" expanded="true" signature="-1:-1" placeholder="SELECT post_..$wpdb-&gt;postmeta&#10;&#9;&#9;WHERE..." />
-            <marker date="1388162635041" expanded="true" signature="-1:-1" placeholder="SELECT DISTI..$wpdb-&gt;posts WHERE..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/plugins/details.polyfill.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="28" selection-start="2770" selection-end="2770" vertical-scroll-proportion="0.19672132" vertical-offset="0" max-vertical-offset="549">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Backend/Storage/BackupManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="188" column="65" selection-start="4919" selection-end="4919" vertical-scroll-proportion="0.8317757" vertical-offset="2921" max-vertical-offset="4356">
-          <folding>
-            <marker date="1388167223021" expanded="true" signature="4730:4807" placeholder="SELECT * FRO..." />
-          </folding>
         </state>
       </provider>
     </entry>

@@ -175,7 +175,7 @@ Class EditScreen
 
         // Backup data, not for Previews
         if ( !isset( $_POST[ 'wp_preview' ] ) ) {
-//            $Environment->getMetaData()->backup( 'Before regular update' );
+//            $Environment->getDataBackend()->backup( 'Before regular update' );
                 $BackupManager = new BackupManager($Environment->getStorage());
                 $BackupManager->backup('Before regular update');
         }
@@ -257,14 +257,14 @@ Class EditScreen
         // save area settings which are specific to this post (ID-wise)
         if ( !empty( $_POST[ 'areas' ] ) ) {
 
-            $collection = $Environment->getMetaData()->getMetaData( 'kb_area_settings' );
+            $collection = $Environment->getDataBackend()->get( 'kb_area_settings' );
             foreach ( $_POST[ 'areas' ] as $id ) {
 
                 if ( isset( $_POST[ $id ] ) ) {
                     $collection[ $id ] = $_POST[ $id ];
                 }
             }
-            $Environment->getMetaData()->saveMetaData( 'kb_area_settings', $collection );
+            $Environment->getDataBackend()->update( 'kb_area_settings', $collection );
         }
 
     }
@@ -320,7 +320,7 @@ Class EditScreen
     public function renderScreen()
     {
 
-        if ( empty( $this->postData->get( 'areas' ) ) ) {
+        if ( ( $this->postData->get( 'areas' ) === FALSE ) ) {
             return;
         }
 

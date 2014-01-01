@@ -12,7 +12,8 @@ KB.currentArea = {};
  */
 KB.Views = {
     Modules: new KB.ViewsCollection(),
-	Areas: new KB.ViewsCollection()
+    Areas: new KB.ViewsCollection(),
+    Context: new KB.ViewsCollection()
 };
 
 /*
@@ -40,7 +41,7 @@ KB.Areas = new KB.Backbone.AreasCollection([], {
  * Use events on the backbone items instead
  * handle UI specific actions
  */
-KB.App = (function($) {
+KB.App = (function ($) {
 
     function init() {
         // Register basic events
@@ -69,17 +70,19 @@ KB.App = (function($) {
      */
     function addViews() {
         // iterate over raw areas
-        _.each(KB.RawAreas, function(area) {
+        _.each(KB.RawAreas, function (area) {
             // create new area model
             KB.Areas.add(new KB.Backbone.AreaModel(area));
 
             // create models from already attached modules
             if (area.modules) {
-                _.each(area.modules, function(module) {
+                _.each(area.modules, function (module) {
                     KB.Modules.add(module);
                 });
             }
         });
+
+
     }
 
 
@@ -105,6 +108,7 @@ KB.App = (function($) {
         // TODO: don't re-init globally
         KB.Ui.initTabs();
     }
+
 
     /**
      *

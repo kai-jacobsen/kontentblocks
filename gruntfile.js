@@ -15,8 +15,8 @@ module.exports = function (grunt) {
                     'js/dist//<%= pkg.name %>.min.js': ['js/dev/<%= pkg.name %>.js'],
                     'js/dist/frontend.min.js': ['<%= concat.frontend.dest %>'],
                     'js/dist/backend.min.js': ['<%= concat.backend.dest %>'],
-                    'js/dist/shared.min.js': ['<%= concat.shared.dest %>'],
-                    'js/dist/refields.min.js': ['<%= concat.refields.dest %>']
+                    'js/dist/refields.min.js': ['<%= concat.refields.dest %>'],
+                    'js/dist/common.min.js': ['<%= concat.common.dest %>']
                 }
             },
             sec: {
@@ -51,6 +51,11 @@ module.exports = function (grunt) {
                 dest: 'js/tmp/plugins.concat.js',
                 nonull: true
             },
+            common: {
+                src: ['js/dev/common/**/*.js'],
+                dest: 'js/tmp/common.concat.js',
+                nonull: true
+            },
             frontend: {
                 src: ['js/dev/frontend/etch/etch.js', 'js/dev/frontend/**/*.js', 'js/dev/frontend/frontend.js'],
                 dest: 'js/tmp/frontend.concat.js',
@@ -60,11 +65,6 @@ module.exports = function (grunt) {
                 src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js', 'js/dev/backend/Fields.loader.js'],
                 dest: 'js/tmp/backend.concat.js',
                 nonull: true
-            },
-            shared: {
-                src: ['js/dev/shared/**/*.js'],
-                dest: 'js/tmp/shared.concat.js',
-                notnull: true
             }
         },
         compass: {

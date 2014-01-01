@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\Post\PostMetaDataHandler,
+use Kontentblocks\Backend\Post\PostMetaDataBackend,
     Kontentblocks\Utils\GlobalDataHandler,
     Kontentblocks\Modules\ModuleFactory;
 

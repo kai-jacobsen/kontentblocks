@@ -148,6 +148,8 @@ class FieldSection
 
             $field->setBaseId( $moduleId );
             $field->setData( $fielddata );
+
+
             $field->build();
         }
 

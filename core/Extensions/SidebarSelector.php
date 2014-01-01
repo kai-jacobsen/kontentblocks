@@ -47,6 +47,11 @@ class SidebarSelector
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
         $pdc     = new PostEnvironment( $post_id );
+
+        if (!$pdc->get('areas')){
+            return false;
+        }
+
         $Screen  = new ScreenManager( $pdc );
 
         $this->_setupAreas( $Screen->getRegionAreas( 'side' ) );

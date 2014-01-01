@@ -39,8 +39,6 @@ abstract class Module
         }
 
 
-        $reflector  = new \ReflectionClass( get_class( $this ) );
-        $this->path = dirname( $reflector->getFileName() );
 
         if ( method_exists( $this, 'fields' ) ) {
             $this->Fields = new FieldManager( $this );
@@ -372,7 +370,7 @@ abstract class Module
     public function set( $args )
     {
         if ( !is_array( $args ) ) {
-            _doing_it_wrong( 'set() on block instance', '$args must be an array of key/value pairs', '0.7' );
+            _doing_it_wrong( 'set() on block instance', '$args must be an array of key/value pairs', '1.0.0' );
             return false;
         }
         foreach ( $args as $k => $v ) {
@@ -496,7 +494,7 @@ abstract class Module
 
     public function get_module_path( $path )
     {
-        return dirname( $path );
+        return $this->settings['path'];
 
     }
 

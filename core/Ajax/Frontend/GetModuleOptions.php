@@ -10,6 +10,10 @@ class GetModuleOptions
 
         check_ajax_referer( 'kb-read' );
 
+        if (!defined('KB_ONSITE_ACTIVE')){
+            define('KB_ONSITE_ACTIVE', true);
+        }
+
         $module = $_POST[ 'module' ];
         $Environment = new \Kontentblocks\Backend\Post\PostEnvironment($module['post_id']);
         $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module['class'], $module, $Environment, $module['moduleData'] );
@@ -22,7 +26,6 @@ class GetModuleOptions
 
         echo stripslashes_deep( $html );
         exit;
-
     }
 
 }

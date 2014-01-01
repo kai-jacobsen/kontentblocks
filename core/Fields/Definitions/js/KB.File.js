@@ -59,7 +59,6 @@ KB.Fields.register('File', (function($) {
 			$('.kb-file-id', this.container).html(attachment.get('id'));
 			$('.kb-file-editLink', this.container).attr('href', attachment.get('editLink'));
 			$(this.remove, activeField).show();
-			console.log($('.kb-file-attachment-id', this.container));
 			this.container.show(750);
 		},
 		resetFields: function() {

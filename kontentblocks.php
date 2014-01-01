@@ -197,6 +197,9 @@ Class Kontentblocks
      */
     public function _load_templates()
     {
+
+        $Registry = ModuleRegistry::getInstance();
+
         $paths = array(KB_TEMPLATE_PATH);
         $paths = apply_filters('kb_add_template_path', $paths);
         $paths = apply_filters('kb_add_module_path', $paths);
@@ -210,14 +213,15 @@ Class Kontentblocks
                     foreach ($files as $template) {
 
                         if (strpos(basename($template), '__') === false)
-                            include_once($template);
+
+                        $Registry->add($template);
                     }
                 }
             }
             $files = glob($path . '*.php');
             foreach ($files as $template) {
                 if (strpos(basename($template), '__') === false)
-                    include_once($template);
+                    $Registry->add($template);
             }
         }
 
