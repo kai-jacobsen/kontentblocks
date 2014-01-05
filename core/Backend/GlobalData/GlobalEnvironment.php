@@ -12,20 +12,17 @@ class GlobalEnvironment extends AbstractEnvironment
     protected $globalData;
     protected $areas;
     protected $modules;
+    protected $Storage;
 
-    public function __construct()
+    public function __construct($id)
     {
-        $this->globalData = new GlobalDataBackend();
-        $this->areas      = $this->_findAreas();
-        $this->modules    = $this->_setupModules();
+        $this->areaId = $id;
+        $this->Storage = \Kontentblocks\Helper\getStorage($id);
+        $this->areas = $this->_findAreas();
+        $this->modules = $this->_setupModules();
 
     }
 
-    public function isPostContext()
-    {
-        return false;
-
-    }
 
     public function getAllModules()
     {
@@ -33,23 +30,22 @@ class GlobalEnvironment extends AbstractEnvironment
 
     }
 
-    public function getAreaSettings( $id )
+    public function getAreaSettings($id)
     {
         $settings = $this->globalData->getAreaSettings();
-        if ( !empty( $settings[ $id ] ) ) {
-            return $settings[ $id ];
+        if (!empty($settings[$id])) {
+            return $settings[$id];
         }
         return false;
 
     }
 
-    public function getModulesforArea( $areaid )
+    public function getModulesForArea($areaid)
     {
         $byArea = $this->getSortedModules();
-        if ( !empty( $byArea[ $areaid ] ) ) {
-            return $byArea[ $areaid ];
-        }
-        else {
+        if (!empty($byArea[$areaid])) {
+            return $byArea[$areaid];
+        } else {
             return false;
         }
 
@@ -59,11 +55,9 @@ class GlobalEnvironment extends AbstractEnvironment
     {
         $sorted = array();
 
-        if ( is_array( $this->modules ) ) {
-            foreach ( $this->modules as $module ) {
-                $area_id = $module->area;
-
-                $sorted[ $area_id ][] = $module;
+        if (is_array($this->modules)) {
+            foreach ($this->modules as $module) {
+                $sorted[$module['area']][$module['instance_id']] = $module;
             }
             return $sorted;
         }
@@ -73,33 +67,36 @@ class GlobalEnvironment extends AbstractEnvironment
     private function _setupModules()
     {
         $collection = array();
-        $index      = $this->globalData->getIndex();
-        if ( is_array( $index ) ) {
-            foreach ( $index as $module ) {
-                $factory      = new ModuleFactory( $module );
-                $collection[] = $factory->getModule();
+        $index = $this->Storage->getIndex();
+        if (is_array($index)) {
+            foreach ($index as $module) {
+                $collection[$module['instance_id']] = ModuleFactory::parseModule($module);
             }
         }
         return $collection;
 
     }
 
-    public function getModuleData( $id )
+    public function getModuleData($id)
     {
-        return $this->globalData->getModuleData( $id );
+        return $this->Storage->getModuleData($id);
 
+    }
+
+    public function isPostContext(){
+        return false;
     }
 
     public function _findAreas()
     {
-        $RegionRegistry = AreaRegistry::getInstance();
-        return $RegionRegistry->getGlobalAreas();
+        $AreaRegistry = AreaRegistry::getInstance();
+        return $AreaRegistry->getGlobalAreas();
 
     }
 
-    public function getDataBackend()
+    public function getStorage()
     {
-        return $this->globalData;
+        return $this->Storage;
 
     }
 

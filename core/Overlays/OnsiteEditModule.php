@@ -4,7 +4,7 @@ namespace Kontentblocks\Overlays;
 
 use Kontentblocks\Modules\ModuleRegistry,
     Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Backend\Post\PostMetaDataBackend,
+    Kontentblocks\Backend\API\PostMetaAPI,
     Kontentblocks\Utils\GlobalDataHandler;
 
 class OnsiteEditModule
@@ -228,7 +228,7 @@ class OnsiteEditModule
             return new GlobalDataHandler();
         }
         else {
-            return new PostMetaDataBackend( $this->postId );
+            return new PostMetaAPI( $this->postId );
         }
 
     }

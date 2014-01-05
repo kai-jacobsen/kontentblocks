@@ -1,11 +1,12 @@
 <?php
 
-namespace Kontentblocks\Backend\GlobalDataBackend;
+namespace Kontentblocks\Backend\API;
 
-use Kontentblocks\Interfaces\InterfaceDataBackend;
+use Kontentblocks\Interfaces\InterfaceDataAPI;
 
-class GlobalDataBackend implements InterfaceDataBackend
+class GlobalDataAPI implements InterfaceDataAPI
 {
+
 
 
     public function add($key, $value)

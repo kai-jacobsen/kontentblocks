@@ -9,6 +9,7 @@ use Kontentblocks\Backend\Post\EditScreen,
     Kontentblocks\Hooks\Capabilities,
     Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Menus\MenuManager;
 
 /*
   Plugin Name:Kontentblocks.
@@ -227,6 +228,9 @@ Class Kontentblocks
 
         do_action('kb_load_templates');
 
+
+        // todo remove from here
+        MenuManager::getInstance();
     }
 
     /**

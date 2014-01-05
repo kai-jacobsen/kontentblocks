@@ -207,7 +207,7 @@ class CreateNewModule
         // add new block and update
         $update = $this->environment->getStorage()->addToIndex( $this->newInstanceID, $toSave );
         if ( $update !== true && !is_int( $update ) ) {
-            wp_send_json_error( 'Update failed' );
+            wp_send_json_error( 'Update to Index failed' );
         }
 
     }
@@ -255,7 +255,7 @@ class CreateNewModule
 //            wp_send_json( wp_verify_nonce( $_POST[ 'nonce' ], '_kontentblocks_ajax_magic' ) );
 //        }
 
-        $this->post_id = filter_var( $_POST[ 'post_id' ], FILTER_VALIDATE_INT );
+        $this->post_id = filter_var( $_POST[ 'post_id' ]);
         $this->count   = filter_var( $_POST[ 'count' ], FILTER_VALIDATE_INT );
         $this->type    = filter_var( $_POST[ 'class' ], FILTER_SANITIZE_STRING );
 

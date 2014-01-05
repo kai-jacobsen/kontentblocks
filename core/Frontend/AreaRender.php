@@ -51,7 +51,6 @@ class AreaRender
         // start area output & crete opening wrapper
         $output.= $this->area->openArea();
 
-
         // Iterate over modules
         foreach ( $this->modules as $module ) {
 
@@ -75,6 +74,7 @@ class AreaRender
 
     public function beforeModule( $classes, $module )
     {
+
         return sprintf( '<div id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ) );
 
     }
@@ -94,7 +94,6 @@ class AreaRender
         $additionalClasses = $this->getAdditionalClasses( $module );
 
         $mergedClasses = array_merge( $layoutClasses, $moduleClasses, $additionalClasses );
-
         if ( method_exists( $module, 'preRender' ) ) {
             $module->preRender();
         }

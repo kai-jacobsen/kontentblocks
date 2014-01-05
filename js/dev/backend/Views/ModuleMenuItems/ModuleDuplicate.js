@@ -40,6 +40,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         var count = parseInt(jQuery('#kb_all_blocks').val(), 10) + 1;
         jQuery('#kb_all_blocks').val(count);
         KB.Notice.notice('Module Duplicated', 'success');
+        KB.Ui.repaint('#'+data.module.instance_id);
 
     }
 });

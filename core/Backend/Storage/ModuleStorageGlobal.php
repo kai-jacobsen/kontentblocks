@@ -2,9 +2,39 @@
 
 namespace Kontentblocks\Backend\Storage;
 
+use Kontentblocks\Backend\API\AreaTableAPI;
 use Kontentblocks\Interfaces\InterfaceDataStorage;
 
-class ModuleStorageGlobal implements InterfaceDataStorage{
+class ModuleStorageGlobal implements InterfaceDataStorage
+{
+
+    protected $index = array();
+
+    public function __construct($id)
+    {
+        $this->areaId = $id;
+        $this->DataBackend = new AreaTableAPI($id);
+
+        $this->setup();
+
+    }
+
+    private function setup()
+    {
+        $this->DataBackend->setId($this->areaId);
+
+        $index = $this->DataBackend->get('index');
+
+        // no index, no modules, no fun
+        if (!$index) {
+            return false;
+        }
+
+        $this->index = $index;
+        $this->modules = $this->setupModuleData();
+        return $this;
+    }
+
 
     /**
      * Get the index of the attached modules
@@ -14,7 +44,7 @@ class ModuleStorageGlobal implements InterfaceDataStorage{
      */
     public function getIndex()
     {
-        // TODO: Implement getIndex() method.
+        return $this->index;
     }
 
     /**
@@ -37,37 +67,58 @@ class ModuleStorageGlobal implements InterfaceDataStorage{
      */
     public function addToIndex($id, $args)
     {
-        // TODO: Implement addToIndex() method.
+        $this->index[$id] = $args;
+        if (!$this->getModuleData($id)) {
+            $this->saveModule($id);
+        }
+
+        return $this->_updateIndex();
     }
 
     public function removeFromIndex($id)
     {
-        // TODO: Implement removeFromIndex() method.
+        if (isset($this->index[$id])) {
+            unset($this->index[$id]);
+            if ($this->_updateIndex() !== false) {
+                return $this->DataBackend->delete($id);
+            }
+        }
     }
 
     public function getModuleDefinition($id)
     {
-        // TODO: Implement getModuleDefinition() method.
+        if (isset($this->index[$id])) {
+            return $this->index[$id];
+        } else {
+            return false;
+        }
     }
 
     public function getModuleData($id)
     {
-        // TODO: Implement getModuleData() method.
+        if (isset($this->modules[$id])) {
+            return $this->modules[$id];
+        }
+
+        return null;
     }
 
     public function saveModule($id, $data = '')
     {
-        // TODO: Implement saveModule() method.
+
+        return $this->DataBackend->update($id, $data);
     }
 
     public function saveModules($modules)
     {
-        // TODO: Implement saveModules() method.
+        foreach (( array )$modules as $id => $module) {
+            $this->saveModule($id, $module);
+        }
     }
 
     public function _updateIndex()
     {
-        // TODO: Implement _updateIndex() method.
+        return $this->DataBackend->update('index', $this->index);
     }
 
     public function getModules()
@@ -79,4 +130,25 @@ class ModuleStorageGlobal implements InterfaceDataStorage{
     {
         // TODO: Implement hasModules() method.
     }
+
+    public function backup()
+    {
+        // TODO: Implement backup() method.
+    }
+
+    private function setupModuleData()
+    {
+        $collection = array();
+        $meta = $this->DataBackend->getAll();
+        foreach ($this->index as $id => $data) {
+            $collection['_' . $id] = (!empty($meta['_' . $id])) ? $meta['_' . $id] : '';
+        }
+        return $collection;
+    }
+
+    public function getDataBackend(){
+        return $this->DataBackend;
+    }
+
+
 }

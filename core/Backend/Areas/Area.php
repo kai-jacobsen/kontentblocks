@@ -116,6 +116,13 @@ class Area
 
     }
 
+    public function build(){
+        $this->header();
+        $this->render();
+        $this->toJSON();
+        $this->footer();
+    }
+
     /**
      * Area Header Markup
      *
@@ -124,11 +131,18 @@ class Area
      */
     public function header()
     {
+        echo "<div id='{$this->id}-container' class='area-wrap clearfix cf'>";
+
+
         $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
 
         $Tpl = new CoreTemplate( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );
         $Tpl->render( true );
 
+    }
+
+    public function footer(){
+        echo "</div><!-- close area wrap -->";
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace Kontentblocks\Helper;
 
-use Kontentblocks\Backend\GlobalData\GlobalDataBackend;
+use Kontentblocks\Backend\GlobalData\GlobalDataAPI;
 use Kontentblocks\Backend\GlobalData\GlobalEnvironment;
-use Kontentblocks\Backend\Storage\GlobalDataStorage;
+use Kontentblocks\Backend\Storage\ModuleStorageGlobal;
 use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
 use Kontentblocks\Modules\ModuleRegistry,
     Kontentblocks\Backend\Areas\AreaRegistry;
@@ -25,10 +25,10 @@ function getHiddenEditor()
  */
 function getDataBackend($post_id = null)
 {
-    if ($post_id && $post_id !== -1) {
-        return new \Kontentblocks\Backend\Post\PostMetaDataBackend($post_id);
+    if ($post_id && is_numeric($id) && $post_id !== -1) {
+        return new \Kontentblocks\Backend\API\PostMetaAPI($post_id);
     } else {
-        return new GlobalDataBackend();
+        return new GlobalDataAPI();
     }
 
 }
@@ -36,12 +36,12 @@ function getDataBackend($post_id = null)
 /**
  * Get Storage
  */
-function getStorage($post_id = null)
+function getStorage($id = null)
 {
-    if ($post_id && $post_id !== -1) {
-        return new ModuleStoragePostMeta($post_id);
+    if ($id && is_numeric($id) &&  $id != -1) {
+        return new ModuleStoragePostMeta($id);
     } else {
-        return new GlobalDataStorage();
+        return new ModuleStorageGlobal($id);
     }
 
 }
@@ -49,12 +49,12 @@ function getStorage($post_id = null)
 /**
  * Get environment
  */
-function getEnvironment($postId = null)
+function getEnvironment($id = null)
 {
-    if ($postId && $postId !== -1) {
-        return new \Kontentblocks\Backend\Post\PostEnvironment($postId);
+    if ($id && is_numeric($id) && $id !== -1) {
+        return new \Kontentblocks\Backend\Post\PostEnvironment($id);
     } else {
-        return new GlobalEnvironment();
+        return new GlobalEnvironment($id);
     }
 
 }

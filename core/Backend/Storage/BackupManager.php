@@ -119,7 +119,7 @@ class BackupManager
         );
 
         //set reference
-        $this->Storage->getDataBackend()->add('kb_last_backup', $now);
+        $this->Storage->getDataBackend()->update('kb_last_backup', $now);
 
         wp_cache_delete('kb_backups', 'kontentblocks');
         return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
@@ -198,7 +198,7 @@ class BackupManager
         if ($cache !== false) {
             return $cache;
         } else {
-            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = {$id} OR literal_id = {$id}";
+            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
             $result = $wpdb->get_row($sql);
             wp_cache_set('kb_backups', $result, 'kontentblocks');
             return $result;

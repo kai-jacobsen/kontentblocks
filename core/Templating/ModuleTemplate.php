@@ -25,14 +25,14 @@ class ModuleTemplate
     public function render( $echo = false )
     {
         if ( !is_file( trailingslashit( get_stylesheet_directory() . '/module-templates') . $this->tplFile ) ) {
-            $this->setPath( $this->module->path );
+            $this->setPath( $this->module->settings['path'] );
         }
         elseif ( !is_file( trailingslashit( get_template_directory() . '/module-templates') . $this->tplFile ) ) {
-            $this->setPath( $this->module->path );
+            $this->setPath( $this->module->settings['path'] );
         }
         elseif ( !empty( $this->module->path ) ) {
             if ( is_file( trailingslashit( $this->module->path ) . $this->tplFile ) ) {
-                $this->setPath( $this->module->path );
+                $this->setPath( $this->module->settings['path'] );
             }
         }
 

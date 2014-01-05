@@ -73,7 +73,7 @@ class ModuleRegistry
 
     public function _filterForGlobalArea( $module )
     {
-        if ( isset( $module[ 'globallyAvailable' ] ) && $module[ 'globallyAvailable' ] === true ) {
+        if ( isset( $module['settings'][ 'globallyAvailable' ] ) && $module['settings'][ 'globallyAvailable' ] === true ) {
             return $module;
         }
 

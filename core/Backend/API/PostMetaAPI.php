@@ -1,15 +1,15 @@
 <?php
 
-namespace Kontentblocks\Backend\Post;
+namespace Kontentblocks\Backend\API;
 
-use Kontentblocks\Interfaces\InterfaceDataBackend;
+use Kontentblocks\Interfaces\InterfaceDataAPI;
 
 
 /**
- * Class PostMetaDataBackend
+ * Class PostMetaAPI
  * @package Kontentblocks\Backend\Post
  */
-class PostMetaDataBackend implements InterfaceDataBackend
+class PostMetaAPI implements InterfaceDataAPI
 {
 
     protected $post_id;
@@ -104,6 +104,7 @@ class PostMetaDataBackend implements InterfaceDataBackend
     /**
      * Gets all postmeta for current post.
      * Setup the Object.
+     * @todo account for multiple keys
      * @return self
      */
     private function _getPostCustom()

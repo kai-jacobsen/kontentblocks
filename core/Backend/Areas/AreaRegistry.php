@@ -44,7 +44,7 @@ class AreaRegistry
     $storedAreas = get_option( 'kb_registered_areas' );
     if ( !empty( $storedAreas ) ) {
       foreach ( $storedAreas as $area ) {
-        $this->addArea( $area, false );
+//        $this->addArea( $area, false );
       }
     }
 

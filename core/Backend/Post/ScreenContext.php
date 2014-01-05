@@ -61,7 +61,6 @@ class ScreenContext
             if ($args['dynamic']) {
                 continue;
             }
-            echo "<div id='{$args['id']}-container' class='area-wrap clearfix cf'>";
             // Setup new Area
 
             $area = new Area($args, $this->postData, $this->id);
@@ -71,7 +70,7 @@ class ScreenContext
             // render modules for the area
             $area->render();
             $area->toJSON();
-            echo "</div><!-- close area wrap -->";
+            $area->footer();
         }
 
     }

@@ -60,6 +60,7 @@ class ModuleMenu
         $this->id = $area->id;
 
         //assign context
+        //@todo think about how global modules should handle this
         $this->context = $area->context;
 
         //setup available cats

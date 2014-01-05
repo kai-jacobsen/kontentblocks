@@ -7,7 +7,7 @@ interface InterfaceEnvironment
 
     public function getAllModules();
     
-    public function getModulesforArea($id);
+    public function getModulesForArea($id);
     
     public function getModuleData($id);
 }

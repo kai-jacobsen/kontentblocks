@@ -7,7 +7,8 @@ KB.Ajax = (function($) {
             data.supplemental = data.supplemental || {};
             data.count = parseInt($('#kb_all_blocks').val(), 10);
             data.nonce = $('#_kontentblocks_ajax_nonce').val();
-            data.post_id = parseInt($('#post_ID').val(), 10) || -1;
+//            data.post_id = parseInt($('#post_ID').val(), 10) || -1;
+            data.post_id = KB.Screen.post_id;
             data.kbajax = true;
 
             $(kbMetaBox).addClass('kb_loading');

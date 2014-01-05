@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Interfaces;
 
-interface InterfaceDataBackend
+interface InterfaceDataAPI
 {
 
     public function add($key, $value);

@@ -1,7 +1,7 @@
 <?php
 namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Backend\Post\PostMetaDataBackend;
+use Kontentblocks\Backend\API\PostMetaAPI;
 use Kontentblocks\Interfaces\InterfaceDataStorage;
 
 class ModuleStoragePostMeta implements InterfaceDataStorage
@@ -12,7 +12,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     protected $DataBackend;
     protected $modules;
 
-    public function __construct($post_id, PostMetaDataBackend $DataBackend = null)
+    public function __construct($post_id, PostMetaAPI $DataBackend = null)
     {
         if (!isset($post_id) || $post_id === 0) {
             throw new \Exception('a valid post id must be provided');
@@ -21,7 +21,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
         $this->post_id = $post_id;
 
         if (is_null($DataBackend)) {
-            $this->DataBackend = new PostMetaDataBackend($post_id);
+            $this->DataBackend = new PostMetaAPI($post_id);
         } else {
             $this->DataBackend = $DataBackend;
         }
@@ -81,6 +81,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     /**
      * Remove a module from the index
      * @todo PMDataHandler should delete
+     * @todo this->saveIndex > updateIndex
      * @param $id string
      * @return bool
      */
@@ -102,6 +103,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
      */
     public function getModuleDefinition($id)
     {
+        wp_send_json_success($id);
         if (isset($this->index[$id])) {
             return $this->index[$id];
         } else {

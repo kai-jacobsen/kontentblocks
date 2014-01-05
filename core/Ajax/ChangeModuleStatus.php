@@ -2,9 +2,6 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Utils\GlobalDataHandler,
-    Kontentblocks\Backend\Post\PostMetaDataBackend;
-
 class ChangeModuleStatus
 {
 
@@ -28,7 +25,6 @@ class ChangeModuleStatus
     {
         
         $moduleDefinition = $this->Storage->getModuleDefinition($this->instance_id);
-        
         if ($moduleDefinition){
             
             if ($moduleDefinition['state']['active'] != true){

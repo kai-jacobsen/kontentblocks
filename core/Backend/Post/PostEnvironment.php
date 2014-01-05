@@ -2,17 +2,17 @@
 
 namespace Kontentblocks\Backend\Post;
 
-use Kontentblocks\Backend\Post\PostMetaDataBackend,
-    Kontentblocks\Abstracts\AbstractEnvironment,
+use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Backend\Areas\AreaRegistry,
-    Kontentblocks\Modules\ModuleRegistry,
     Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
+use Kontentblocks\Backend\API\PostMetaAPI;
+use Kontentblocks\Modules\ModuleFactory;
 
 
 /**
  * Post Environment
  *
- * This class provides an API to the underlying PostMetametaData which
+ * This class provides an API to the underlying PostMetaData which
  * interacts with the WordPress API directly.
  * Basically it's just a wrapper to often used functions around the post meta data
  * resp. the actual module data
@@ -43,7 +43,7 @@ class PostEnvironment extends AbstractEnvironment
 
         $this->postid = $postid;
 
-        $this->MetaData = new PostMetaDataBackend($postid);
+        $this->MetaData = new PostMetaAPI($postid);
         $this->Storage = new ModuleStoragePostMeta($postid, $this->MetaData);
 
         $this->pageTemplate = $this->MetaData->getPageTemplate();
@@ -96,7 +96,7 @@ class PostEnvironment extends AbstractEnvironment
      * @param string $areaid
      * @return boolean
      */
-    public function getModulesforArea($areaid)
+    public function getModulesForArea($areaid)
     {
         $byArea = $this->getSortedModules();
         if (!empty($byArea[$areaid])) {
@@ -132,9 +132,8 @@ class PostEnvironment extends AbstractEnvironment
         $collection = array();
         $modules = $this->Storage->getIndex();
         foreach ($modules as $module) {
-            $collection[$module['instance_id']] = wp_parse_args($module, ModuleRegistry::getInstance()->get($module['class']));
+            $collection[$module['instance_id']] = ModuleFactory::parseModule($module);
         }
-        d($collection);
         return $collection;
 
     }
