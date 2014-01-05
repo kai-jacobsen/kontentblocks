@@ -96,8 +96,8 @@ class ModuleStorageGlobal implements InterfaceDataStorage
 
     public function getModuleData($id)
     {
-        if (isset($this->modules[$id])) {
-            return $this->modules[$id];
+        if (isset($this->modules[$id][0])) {
+            return $this->modules[$id][0];
         }
 
         return null;
@@ -105,12 +105,12 @@ class ModuleStorageGlobal implements InterfaceDataStorage
 
     public function saveModule($id, $data = '')
     {
-
         return $this->DataBackend->update($id, $data);
     }
 
     public function saveModules($modules)
     {
+
         foreach (( array )$modules as $id => $module) {
             $this->saveModule($id, $module);
         }
@@ -141,7 +141,7 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         $collection = array();
         $meta = $this->DataBackend->getAll();
         foreach ($this->index as $id => $data) {
-            $collection['_' . $id] = (!empty($meta['_' . $id])) ? $meta['_' . $id] : '';
+            $collection[$id] = (!empty($meta[$id])) ? $meta[$id] : '';
         }
         return $collection;
     }

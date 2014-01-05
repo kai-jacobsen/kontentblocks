@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Backend\Areas;
 
-use Kontentblocks\Backend\Post\PostEnvironment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 
 /**
  * The AreaRegistry is a single interaction container to access area definitions throughout the plugin

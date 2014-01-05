@@ -10,4 +10,6 @@ interface InterfaceEnvironment
     public function getModulesForArea($id);
     
     public function getModuleData($id);
+
+    public function save();
 }

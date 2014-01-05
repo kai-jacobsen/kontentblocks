@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Helper;
 
-use Kontentblocks\Backend\GlobalData\GlobalDataAPI;
-use Kontentblocks\Backend\GlobalData\GlobalEnvironment;
+use Kontentblocks\Backend\API\GlobalDataAPI;
+use Kontentblocks\Backend\Environment\GlobalEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorageGlobal;
 use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
 use Kontentblocks\Modules\ModuleRegistry,
@@ -52,7 +52,7 @@ function getStorage($id = null)
 function getEnvironment($id = null)
 {
     if ($id && is_numeric($id) && $id !== -1) {
-        return new \Kontentblocks\Backend\Post\PostEnvironment($id);
+        return new \Kontentblocks\Backend\Environment\PostEnvironment($id);
     } else {
         return new GlobalEnvironment($id);
     }

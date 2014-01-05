@@ -1,11 +1,12 @@
 <?php
 
-namespace Kontentblocks\Backend\Post;
+namespace Kontentblocks\Backend\Environment;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
 use Kontentblocks\Backend\API\PostMetaAPI;
+use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Modules\ModuleFactory;
 
 
@@ -64,6 +65,10 @@ class PostEnvironment extends AbstractEnvironment
     {
         return true;
 
+    }
+
+    public function getId(){
+        return $this->postid;
     }
 
 
@@ -214,6 +219,12 @@ class PostEnvironment extends AbstractEnvironment
             return 'hello';
         }
 
+    }
+
+    public function save()
+    {
+        $SaveHandler = new SavePost($this);
+        $SaveHandler->save();
     }
 
 }

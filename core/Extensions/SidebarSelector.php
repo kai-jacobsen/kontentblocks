@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Extensions;
 
-use Kontentblocks\Backend\Post\PostEnvironment,
-    Kontentblocks\Backend\Post\ScreenManager;
+use Kontentblocks\Backend\Environment\PostEnvironment,
+    Kontentblocks\Backend\Screen\ScreenManager;
 
 class SidebarSelector
 {

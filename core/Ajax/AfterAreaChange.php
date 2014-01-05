@@ -10,7 +10,7 @@ class AfterAreaChange
 
         $data = $_POST;
 
-        $Environment = new \Kontentblocks\Backend\Post\PostEnvironment($data['post_id']);
+        $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment($data['post_id']);
         $Factory  = new \Kontentblocks\Modules\ModuleFactory( $data['module']['class'], $data['module'], $Environment );
         $instance = $Factory->getModule();
         ob_start();

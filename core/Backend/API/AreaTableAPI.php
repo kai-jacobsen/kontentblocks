@@ -48,6 +48,9 @@ class AreaTableAPI implements InterfaceDataAPI
 
     public function update($key, $value)
     {
+
+
+
         // create new
         if (!$this->keyExists($key)) {
             return $this->add($key, $value);
@@ -142,7 +145,7 @@ class AreaTableAPI implements InterfaceDataAPI
         $collection = array();
         foreach ($res as $row) {
 
-            $collection[$row['area_id']][$row['area_key']][] = $row['area_value'];
+            $collection[$row['area_id']][$row['area_key']][] = maybe_unserialize($row['area_value']);
         }
         return $collection;
     }

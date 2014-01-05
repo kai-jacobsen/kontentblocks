@@ -72,12 +72,9 @@ class MenuSidebars extends AbstractMenuEntry
         }
 
         $areaId = $_POST['area'];
+        /** @var $Environment \Kontentblocks\Backend\Environment\GlobalEnvironment */
         $Environment = \Kontentblocks\Helper\getEnvironment($areaId);
-        d($Environment);
-        exit;
-
-
-        // do stuff
+        $update = $Environment->save();
 
     }
 

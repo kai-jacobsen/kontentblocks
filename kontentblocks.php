@@ -2,7 +2,7 @@
 
 namespace Kontentblocks;
 
-use Kontentblocks\Backend\Post\EditScreen,
+use Kontentblocks\Backend\Screen\EditScreen,
     Kontentfields\KFHandler,
     Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,

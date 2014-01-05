@@ -1,14 +1,15 @@
 <?php
 
-namespace Kontentblocks\Backend\GlobalData;
+namespace Kontentblocks\Backend\Environment;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Backend\Environment\Save\SaveGlobal;
 
 class GlobalEnvironment extends AbstractEnvironment
 {
-
+    protected $areaID;
     protected $globalData;
     protected $areas;
     protected $modules;
@@ -100,4 +101,9 @@ class GlobalEnvironment extends AbstractEnvironment
 
     }
 
+    public function save()
+    {
+        $SaveHandler = new SaveGlobal($this);
+        $SaveHandler->save();
+    }
 }

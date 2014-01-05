@@ -53,7 +53,7 @@ class AreaSettingsMenu
     
     /**
      * Environment for data handling
-     * Either a instance of: \Admin\Post\PostEnvironment or \Admin\Nonpost\GlobalEnvironment
+     * Either a instance of: \Admin\Environment\PostEnvironment or \Admin\Nonpost\GlobalEnvironment
      * 
      * @var object \Kontentblocks\Abstract\AbstractEnvironment
      */

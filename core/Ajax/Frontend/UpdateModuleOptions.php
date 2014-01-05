@@ -16,7 +16,7 @@ class UpdateModuleOptions
         $parsed = array();
         parse_str($data, $parsed);
 
-        $Environment = new \Kontentblocks\Backend\Post\PostEnvironment($module['post_id']);
+        $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment($module['post_id']);
         $Factory = new \Kontentblocks\Modules\ModuleFactory($module['class'], $module, $Environment);
         $instance = $Factory->getModule();
         $old = $Environment->getStorage()->getModuleData('_' . $module['instance_id']);
