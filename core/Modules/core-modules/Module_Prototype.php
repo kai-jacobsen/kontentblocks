@@ -12,7 +12,7 @@ class Module_Prototype extends Module
         'name' => 'Super Prototype',
         'description' => '',
         'globallyAvailable' => true,
-        'templateable' => true,
+        'asTemplate' => true,
         'connect' => 'any',
         'category' => 'media',
         'id' => 'prototype',
@@ -36,10 +36,30 @@ class Module_Prototype extends Module
             ->addField(
                 'editor', 'someeditor', array(
                 'label' => 'Label for Text',
-                'descriptiom' => 'stuff',
+                'description' => 'stuff',
                 'type' => 'text',
                 'text' => 'My first checkbox',
-                'areaContext' => array( 'normal', 'side' ),
+                'areaContext' => array( 'normal' ),
+                'std' => true,
+                ))
+            ->addField(
+                'checkbox', 'checkythebox', array(
+                    'label' => 'Label for Text',
+                    'description' => 'stuff',
+                    'type' => 'text',
+                    'text' => 'My first checkbox',
+                    'areaContext' => array( 'side' ),
+                    'std' => true,
+                )
+            );
+        $groupB = $this->Fields->addGroup( 'Andrew', array( 'label' => 'What' ) )
+            ->addField(
+                'checkbox', 'somecheckbox', array(
+                'label' => 'Label for Text',
+                'description' => 'stuff',
+                'type' => 'text',
+                'text' => 'My first checkbox',
+                'areaContext' => array( 'side' ),
                 'std' => true,
                 )
             );

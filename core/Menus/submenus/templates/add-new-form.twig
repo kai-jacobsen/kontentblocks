@@ -1,0 +1,60 @@
+<div class="templates-add-new-form-wrapper">
+    <h3>Create a new Template</h3>
+
+    <p class="description">Please chose the Module Type and provide an name for the template to identify it
+        later</p>
+
+    <form class="templates-add-new-form" method="post" action="">
+        <div class="kb-menu-field-section">
+
+            <div class="kb-menu-field kb-menu-field-with-spinner">
+                <label>Template Name </label>
+                <input class="kb-change-observe"
+                       onchange="KB.Menus.createSanitizedId(this, 'templates')"
+                       type="text"
+                       name="new-template[name]"
+                       value="{{ data.name }}">
+
+                <span class="spinner"></span>
+
+            </div>
+            <div class="kb-menu-field">
+                <label>Template ID </label>
+                <input class="kb-js-area-id" type="text" readonly name="new-template[id]" value="{{ data.id }}">
+            </div>
+        </div>
+        <div class="kb-menu-field-section">
+            <div class="kb-menu-field-section_description">
+                <p class="description">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </p>
+            </div>
+            <div class="kb-menu-field-section_inputs">
+                <div class="kb-menu-field">
+                    <input type="checkbox" name="new-template[master]" {{ master }} value="1">
+                    <label>create a master Template?</label>
+                </div>
+            </div>
+        </div>
+        <div class="kb-menu-field-section">
+
+            <div class="kb-menu-field-section_description">
+                <p class="description">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </p>
+            </div>
+            <div class="kb-menu-field-section_inputs">
+                <div class="kb-menu-field">
+                    <select class="styled" name="new-template[type]">
+                        {% for module in modules %}
+                            <option {{ module.selected }} value="{{ module.class }}">{{ module.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="create" >
+        <input type="hidden" name="_nonce" value="{{ nonce }}">
+        <input type="hidden" name="action" value="create">
+    </form>
+</div>

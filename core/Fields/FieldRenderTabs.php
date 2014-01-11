@@ -76,6 +76,8 @@ class FieldRenderTabs
                 echo "<div id='tab-{$section->getID()}'>";
                 $section->render( $this->baseId, $this->data );
                 echo "</div>";
+            } else{
+                $section->render( $this->baseId, $this->data );
             }
         }
         echo "</div>";

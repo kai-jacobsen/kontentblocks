@@ -3246,44 +3246,44 @@ body.on-site-editing {
   margin-bottom: 0;
 }
 
-/* line 98, sass/partials/_options/_page.scss */
-.area-inputs .kb-menu-field {
+/* line 96, sass/partials/_options/_page.scss */
+.kb-menu-field {
   margin: 6px 0;
 }
-/* line 102, sass/partials/_options/_page.scss */
-.area-inputs .kb-menu-field label {
+/* line 101, sass/partials/_options/_page.scss */
+.kb-menu-field label {
   display: inline-block;
   width: 200px;
 }
-/* line 107, sass/partials/_options/_page.scss */
-.area-inputs .kb-menu-field input[type=text] {
+/* line 106, sass/partials/_options/_page.scss */
+.kb-menu-field input[type=text] {
   width: 300px;
 }
-/* line 111, sass/partials/_options/_page.scss */
-.area-inputs .kb-menu-field textarea {
+/* line 110, sass/partials/_options/_page.scss */
+.kb-menu-field textarea {
   width: 300px;
   height: 120px;
   vertical-align: top;
 }
 
-/* line 119, sass/partials/_options/_page.scss */
+/* line 117, sass/partials/_options/_page.scss */
 .kb-menu-field-section_description {
   float: left;
   width: 190px;
   padding-right: 15px;
 }
 
-/* line 125, sass/partials/_options/_page.scss */
+/* line 123, sass/partials/_options/_page.scss */
 .kb-menu-field-section_inputs {
   margin-left: 210px;
 }
 
-/* line 129, sass/partials/_options/_page.scss */
+/* line 127, sass/partials/_options/_page.scss */
 .kb-menu-field-section {
   overflow: hidden;
 }
 
-/* line 135, sass/partials/_options/_page.scss */
+/* line 133, sass/partials/_options/_page.scss */
 .kb-menu-field-with-spinner .spinner {
   float: none;
   display: none;
@@ -3291,7 +3291,7 @@ body.on-site-editing {
   top: 5px;
   left: -35px;
 }
-/* line 144, sass/partials/_options/_page.scss */
+/* line 142, sass/partials/_options/_page.scss */
 .kb-menu-field-with-spinner.loading .spinner {
   display: inline-block;
 }

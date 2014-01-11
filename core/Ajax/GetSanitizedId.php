@@ -3,6 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Modules\ModuleTemplates;
 
 class GetSanitizedId
 {
@@ -17,10 +18,20 @@ class GetSanitizedId
         check_ajax_referer('kb-read');
 
         $value = filter_var($_POST['inputvalue'], FILTER_SANITIZE_STRING);
+        $checkmode = filter_var($_POST['checkmode'], FILTER_SANITIZE_STRING);
+        $check = true;
 
-        $check = AreaRegistry::getInstance()->areaExists(trim($value));
+        switch ($checkmode) {
+            case 'areas':
+                $check = AreaRegistry::getInstance()->areaExists(trim($value));
+                break;
+            case 'templates':
+                $check = ModuleTemplates::getInstance()->templateExists(trim($value));
+                break;
+        }
 
-        if (!$check){
+        echo $check;
+        if ($check === false) {
             wp_send_json(sanitize_title($value));
         } else {
             wp_send_json_error();

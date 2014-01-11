@@ -166,14 +166,7 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         // TODO: Implement getModules() method.
     }
 
-    /**
-     * Check if area has modules
-     * @param string $area
-     */
-    public function hasModules($area)
-    {
-        // TODO: Implement hasModules() method.
-    }
+
 
     /**
      * Prepare the data to backup

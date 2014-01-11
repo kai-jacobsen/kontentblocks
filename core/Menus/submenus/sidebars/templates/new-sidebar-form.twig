@@ -19,7 +19,7 @@
         <div class="kb-menu-field kb-menu-field-with-spinner">
             <label>Name</label>
             <input {% if editMode %} readonly {% endif %} class="regular kb-change-observe"
-                                                          onchange="KB.Menus.createSanitizedId(this)" type="text"
+                                                          onchange="KB.Menus.createSanitizedId(this, 'areas')" type="text"
                                                           name="{{ basename }}[name]" value="{{ name }}">
             <span class="spinner"></span>
 

@@ -3,13 +3,14 @@ KB.Menus = (function ($) {
     return {
         loadingContainer: null,
         initiatorEl: null,
-        createSanitizedId: function (el) {
+        createSanitizedId: function (el, mode) {
             this.initiatorEl = $(el);
             this.loadingContainer = this.initiatorEl.closest('.kb-menu-field').addClass('loading');
             $('#kb-submit').attr('disabled', 'disabled');
 
             KB.Ajax.send({
                 inputvalue : el.value,
+                checkmode: mode,
                 action: 'getSanitizedId',
                 _ajax_nonce : kontentblocks.nonces.read
             }, this.insertId, this);

@@ -25,7 +25,6 @@ Class Image extends Field
             'caption' => ''
         );
         $value         = wp_parse_args( $this->getValue(), $imageDefaults );
-
         // using twig template for html output
         $tpl = new \Kontentblocks\Templating\FieldTemplate(
             'image.twig', array(

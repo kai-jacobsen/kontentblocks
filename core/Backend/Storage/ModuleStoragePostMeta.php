@@ -103,7 +103,6 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
      */
     public function getModuleDefinition($id)
     {
-        wp_send_json_success($id);
         if (isset($this->index[$id])) {
             return $this->index[$id];
         } else {
@@ -218,23 +217,23 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
     }
 
 
-    /**
-     * Checks if there are stored modules for a given area
-     * Stops looking after a first valid module was found
-     * @param string $area
-     * @return boolean
-     */
-    public function hasModules($area)
-    {
-        if (!empty($this->index)) {
-            foreach ($this->index as $module) {
-                if ($module['area'] === $area && $module['draft'] !== 'true' && $module['active'] !== false) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    /**
+//     * Checks if there are stored modules for a given area
+//     * Stops looking after a first valid module was found
+//     * @param string $area
+//     * @return boolean
+//     */
+//    public function hasModules($area)
+//    {
+//        if (!empty($this->index)) {
+//            foreach ($this->index as $module) {
+//                if ($module['area'] === $area && $module['draft'] !== 'true' && $module['active'] !== false) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     /**
      * Returns an array with the instance_id as key

@@ -55,7 +55,8 @@ class ModuleRegistry
             return $this->modules[ $classname ];
         }
         else {
-            return new \Exception( 'Cannot get module from collection' );
+            return null;
+            //return new \Exception( 'Cannot get module from collection' );
         }
 
     }
@@ -87,7 +88,8 @@ class ModuleRegistry
 
     private function _filterModuleTemplates( $module )
     {
-        if ( isset( $module->settings[ 'templateable' ] ) and $module->settings[ 'templateable' ] == true ) {
+        if ( isset( $module['settings'][ 'asTemplate' ] ) and $module['settings'][ 'asTemplate' ] == true ) {
+
             return $module;
         }
     }

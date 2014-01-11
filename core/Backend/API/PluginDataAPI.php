@@ -35,6 +35,11 @@ class PluginDataAPI implements InterfaceDataAPI
     public function add($key, $value)
     {
 
+        // create new
+        if ($this->keyExists($key)) {
+            return $this->update($key, $value);
+        }
+
         $insert = array(
             'data_group' => $this->group,
             'data_key' => $key,
@@ -105,7 +110,12 @@ class PluginDataAPI implements InterfaceDataAPI
 
     public function getAll()
     {
-        // TODO: Implement
+        $unpacked = array();
+        $groupData = (is_null($this->getGroupData())) ? array() : $this->getGroupData();
+        foreach ($groupData as $k => $v) {
+            $unpacked[$k] = $v[0];
+        }
+        return $unpacked;
     }
 
     public function delete($key = null)
@@ -163,7 +173,7 @@ class PluginDataAPI implements InterfaceDataAPI
         if (isset($this->dataByGroups[$this->group])) {
             return $this->dataByGroups[$this->group];
         } else {
-            return false;
+            return null; // was false before
         }
     }
 

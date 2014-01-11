@@ -48,21 +48,21 @@ KB.Ui = function ($) {
 //                normal.removeClass('non-active-context');
 //            })
 
-            jQuery('.kb_inner').on('mouseover',function(){
+            jQuery('.kb_inner').on('mouseover', function () {
                 var $con = $(this).closest('.kb-context-container');
-               $con.addClass('active-context').removeClass('non-active-context');
+                $con.addClass('active-context').removeClass('non-active-context');
                 $('.kb-context-container').not($con).addClass('non-active-context').removeClass('active-context');
             });
 
-            jQuery('.kb-toggle',side ).click( function () {
-                if(that.isSorting){
+            jQuery('.kb-toggle', side).click(function () {
+                if (that.isSorting) {
                     return false;
                 }
                 side.addClass('active-context').removeClass('non-active-context');
                 normal.addClass('non-active-context');
             })
-            jQuery('.kb-toggle',normal ).click( function () {
-                if(that.isSorting){
+            jQuery('.kb-toggle', normal).click(function () {
+                if (that.isSorting) {
                     return false;
                 }
                 side.delay(700).removeClass('active-context').addClass('non-active-context');
@@ -245,7 +245,8 @@ KB.Ui = function ($) {
 
             return KB.Ajax.send({
                 action: 'resortModules',
-                data: serializedData
+                data: serializedData,
+                _ajax_nonce: kontentblocks.nonces.update
             });
         },
         /**

@@ -44,7 +44,5 @@ interface InterfaceDataStorage
 
     public function getModules();
 
-    public function hasModules($area);
-
     public function backup();
 }

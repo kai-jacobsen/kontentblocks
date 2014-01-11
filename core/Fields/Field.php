@@ -87,7 +87,6 @@ abstract class Field
         if (method_exists($this, 'enqueue')) {
             $this->enqueue();
         }
-
         if (!$this->getDisplay()) {
             if ($this->getDefault('renderHidden')) {
                 $this->renderHidden();
@@ -243,7 +242,11 @@ abstract class Field
 
     public function save($keydata, $oldKeyData)
     {
-        return $keydata;
+        if (is_null($keydata)){
+            return $oldKeyData;
+        } else {
+            return $keydata;
+        }
 
     }
 

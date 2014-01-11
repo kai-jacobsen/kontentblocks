@@ -8,7 +8,7 @@ class KB_Master_Module extends Module {
 		'public_name' => 'Master Template',
 		'description' => 'Referenz zu einem Master Template',
 		'in_dynamic' => true,
-		'templateable'	=> false,
+        'asTemplate' => false,
 		'os_edittext'	=> '',
 		'master'		=> true,
 		'cacheable'		=> false,

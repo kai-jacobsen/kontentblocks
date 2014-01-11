@@ -29,7 +29,6 @@ class ChangeArea
     public function updateArea()
     {
         $moduleDefinition = $this->Storage->getModuleDefinition($this->instanceId);
-        
         $moduleDefinition['area'] = $this->newArea;
         $moduleDefinition['areaContext'] = $this->newAreaContext;
         $update = $this->Storage->addToIndex($this->instanceId, $moduleDefinition);

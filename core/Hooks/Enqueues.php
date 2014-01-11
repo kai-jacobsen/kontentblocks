@@ -19,7 +19,7 @@ class Enqueues
         add_action('admin_print_styles-post.php', array($this, 'enqueue'), 30);
         add_action('admin_print_styles-post-new.php', array($this, 'enqueue'), 30);
         add_action('admin_print_styles-toplevel_page_kontentblocks-sidebars', array($this, 'enqueue'), 30);
-        add_action('admin_print_styles-toplevel_page_kontentblocks-templates', array($this, 'enqueue'), 30);
+        add_action('admin_print_styles-kontentblocks_page_kontentblocks-templates', array($this, 'enqueue'), 30);
         add_action('admin_print_styles-toplevel_page_kontentblocks-areas', array($this, 'enqueue'), 30);
         add_action('admin_print_styles-toplevel_page_dynamic_areas', array($this, 'enqueue'), 30);
 
@@ -58,7 +58,7 @@ class Enqueues
             // Plugins - Chosen, Noty, Sortable Touch
             wp_enqueue_script('kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true);
 
-            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins'), null, true);
+            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins', 'backbone', 'underscore'), null, true);
 
             wp_enqueue_script('Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kontentblocks-base'), null, true);
 

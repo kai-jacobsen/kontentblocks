@@ -12,14 +12,7 @@ class MenuAreas extends AbstractMenuEntry
         'priority' => 20
     );
 
-    public function __construct(){
 
-        //todo parse defaults
-        foreach (self::$args as $k => $arg){
-            $this->$k = $arg;
-        }
-
-    }
 
     public function title()
     {

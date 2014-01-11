@@ -6,12 +6,14 @@ class ModuleFactory
 {
 
     protected $args;
+    protected $class;
 
     public function __construct($class, $moduleArgs, $environment = null, $data = null)
     {
         if (!isset($moduleArgs) or !isset($class)) {
             throw new \Exception('This is not a valid Module');
         }
+        $this->class = $class;
         $this->args = $moduleArgs;
 
         if ($data === null) {
@@ -26,12 +28,10 @@ class ModuleFactory
     public function getModule()
     {
 
-        $moduleArgs = $this->args;
-        $classname = $moduleArgs['class'];
+        $classname = $this->class;
 
-
-        $module = apply_filters('kb_modify_block', $moduleArgs);
-        $module = apply_filters("kb_modify_block_{$moduleArgs['settings']['id']}", $moduleArgs);
+        $module = apply_filters('kb_modify_block', $this->args);
+        $module = apply_filters("kb_modify_block_{$this->args['settings']['id']}", $this->args);
         // new instance
         if (class_exists($classname)) {
             $instance = new $classname($module, $this->data, $this->environment);

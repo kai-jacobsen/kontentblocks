@@ -8,13 +8,12 @@ function init()
 {
 
     $dbVersion = get_option('kb_dbVersion');
-    if ($dbVersion !== '1.0.11') {
+    if ($dbVersion !== '1.0.12') {
         global $wpdb;
 
         $backups = $wpdb->prefix . "kb_backups";
         $meta = $wpdb->prefix . "kb_plugindata";
         $areas = $wpdb->prefix . "kb_areas";
-        $templates = $wpdb->prefix . "kb_templates";
 
         $sql = "CREATE TABLE $backups (
   id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -31,6 +30,7 @@ function init()
         data_key VARCHAR(128) NOT NULL,
         data_value longtext NOT NULL,
         data_group varchar(32) DEFAULT 'common' NOT NULL,
+        data_lang CHAR(2) DEFAULT 'de' NOT NULL,
         PRIMARY KEY  (id)
         );";
 
@@ -46,6 +46,6 @@ function init()
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
 
-        update_option("kb_dbVersion", '1.0.11');
+        update_option("kb_dbVersion", '1.0.12');
     }
 }

@@ -19,9 +19,10 @@ class AttachmentHandler
 
     public function getSize( $size = 'thumbnail' )
     {
-        if ( !isset( $this->field[ 'sizes' ] ) ) {
+        if ( !isset( $this->file[ 'sizes' ] ) ) {
             return null;
         }
+
 
         if ( isset( $this->file[ 'sizes' ][ $size ] ) ) {
             return $this->file[ 'sizes' ][ $size ][ 'url' ];
