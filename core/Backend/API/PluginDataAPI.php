@@ -7,33 +7,28 @@ use Kontentblocks\Interfaces\InterfaceDataAPI;
 /**
  * @property mixed areasDefinitions
  */
-class AreaTableAPI implements InterfaceDataAPI
+class PluginDataAPI implements InterfaceDataAPI
 {
 
-    protected $areaId;
     /**
      * @var null Database object
      */
     protected $db = null;
-
+    protected $group = null;
     protected $tablename = null;
-    protected $dataByAreas = array();
-    protected $currentAreaDefinition;
-    protected $areasDefinitions = array();
+    protected $dataByGroups = array();
 
-    public function __construct($areaId = null)
+    public function __construct($group = null)
     {
 
         global $wpdb;
 
-
-
         $this->db = $wpdb;
-        $this->tablename = $wpdb->prefix . 'kb_areas';
+        $this->tablename = $wpdb->prefix . 'kb_plugindata';
         $this->selfUpdate();
 
-        if ($areaId) {
-            $this->setId($areaId);
+        if ($group) {
+            $this->setGroup($group);
         }
     }
 
@@ -41,9 +36,9 @@ class AreaTableAPI implements InterfaceDataAPI
     {
 
         $insert = array(
-            'area_id' => $this->areaId,
-            'area_key' => $key,
-            'area_value' => wp_unslash(maybe_serialize($value))
+            'data_group' => $this->group,
+            'data_key' => $key,
+            'data_value' => wp_unslash(maybe_serialize($value))
         );
 
         $result = $this->db->insert($this->tablename, $insert, array('%s', '%s', '%s'));
@@ -51,7 +46,7 @@ class AreaTableAPI implements InterfaceDataAPI
         if ($result === false) {
             return false;
         } else {
-            wp_cache_delete('kb_areas_all', 'kontentblocks');
+            wp_cache_delete('kb_plugindata', 'kontentblocks');
             $this->selfUpdate();
             return true;
         }
@@ -67,14 +62,14 @@ class AreaTableAPI implements InterfaceDataAPI
 
         //update existing
         $update = array(
-            'area_value' => maybe_serialize($value)
+            'data_value' => maybe_serialize($value)
         );
         $result = $this->db->update(
             $this->tablename,
             $update,
             array(
-                'area_id' => $this->areaId,
-                'area_key' => $key
+                'data_group' => $this->group,
+                'data_key' => $key
             ),
             array(
                 '%s'
@@ -87,7 +82,7 @@ class AreaTableAPI implements InterfaceDataAPI
         if ($result === false) {
             return false;
         } else {
-            wp_cache_delete('kb_areas_all', 'kontentblocks');
+            wp_cache_delete('kb_plugindata', 'kontentblocks');
             return true;
         }
 
@@ -95,7 +90,7 @@ class AreaTableAPI implements InterfaceDataAPI
 
     public function get($key)
     {
-        $data = $this->getAreaData();
+        $data = $this->getGroupData();
 
         if (!$data) {
             return null;
@@ -110,41 +105,40 @@ class AreaTableAPI implements InterfaceDataAPI
 
     public function getAll()
     {
-        return $this->getAreaData();
+        // TODO: Implement
     }
 
     public function delete($key = null)
     {
         if ($key) {
-            $result = $this->db->delete($this->tablename, array('area_id' => $this->areaId, 'area_key' => $key));
+            $result = $this->db->delete($this->tablename, array('data_group' => $this->group, 'data_key' => $key));
         } else {
-            $result = $this->db->delete($this->tablename, array('area_id' => $this->areaId));
+            $result = $this->db->delete($this->tablename, array('data_group' => $this->group));
         }
         if ($result === false) {
             return false;
         } else {
-            wp_cache_delete('kb_areas_all', 'kontentblocks');
+            wp_cache_delete('kb_plugindata', 'kontentblocks');
             return true;
         }
     }
 
     private function selfUpdate()
     {
-        $cache = wp_cache_get('kb_areas_all', 'kontentblocks');
+        $cache = wp_cache_get('kb_plugindata', 'kontentblocks');
         if ($cache !== false) {
             $res = $cache;
         } else {
             $res = $this->db->get_results("SELECT * FROM $this->tablename;", ARRAY_A);
-            wp_cache_set('kb_areas_all', $res, 'kontentblocks', 600);
+            wp_cache_set('kb_plugindata', $res, 'kontentblocks', 600);
 
         }
 
         if (!empty($res)) {
-            $this->dataByAreas = $this->reorganizeTableData($res);
-            $this->areasDefinitions = $this->filterAreaDefinitions($res);
+            $this->dataByGroups = $this->reorganizeTableData($res);
         } else {
             // todo ? what is supposed to be
-            $this->dataByAreas = $res;
+            $this->dataByGroups = $res;
         }
 
     }
@@ -159,52 +153,30 @@ class AreaTableAPI implements InterfaceDataAPI
         $collection = array();
         foreach ($res as $row) {
 
-            $collection[$row['area_id']][$row['area_key']][] = maybe_unserialize($row['area_value']);
+            $collection[$row['data_group']][$row['data_key']][] = maybe_unserialize($row['data_value']);
         }
         return $collection;
     }
 
-    private function filterAreaDefinitions($res)
+    private function getGroupData()
     {
-        $collection = array();
-
-        foreach ($res as $row) {
-            if ($row['area_key'] === 'definition') {
-                $collection[$row['area_id']] = maybe_unserialize($row['area_value']);
-            }
-        }
-        return $collection;
-    }
-
-    private function getAreaData()
-    {
-        if (isset($this->dataByAreas[$this->areaId])) {
-            return $this->dataByAreas[$this->areaId];
+        if (isset($this->dataByGroups[$this->group])) {
+            return $this->dataByGroups[$this->group];
         } else {
             return false;
         }
     }
 
-    public function setId($id)
+    public function setGroup($id)
     {
-        $this->areaId = $id;
-        $this->currentAreaDefinition = $this->areasDefinitions[$id];
+        $this->group = $id;
         return $this;
     }
 
     private function keyExists($key)
     {
-        $data = $this->getAreaData();
+        $data = $this->getGroupData();
         return isset($data[$key]);
     }
 
-    public function getAreaDefinitions()
-    {
-        return $this->areasDefinitions;
-    }
-
-    public function getAreaDefinition()
-    {
-        return $this->currentAreaDefinition;
-    }
 }

@@ -1,0 +1,89 @@
+{% if editMode %}
+    <h3>Edit Sidebar</h3>
+{% else %}
+    <h3>Create a new Sidebar</h3>
+{% endif %}
+
+<form method="post" action="">
+
+    {% if editMode %}
+        <input type="hidden" name="action" value="update-settings">
+    {% else %}
+        <input type="hidden" name="action" value="create">
+    {% endif %}
+
+
+
+    <div class="kb-menu-field-section area-inputs">
+
+        <div class="kb-menu-field kb-menu-field-with-spinner">
+            <label>Name</label>
+            <input {% if editMode %} readonly {% endif %} class="regular kb-change-observe"
+                                                          onchange="KB.Menus.createSanitizedId(this)" type="text"
+                                                          name="{{ basename }}[name]" value="{{ name }}">
+            <span class="spinner"></span>
+
+        </div>
+        <div class="kb-menu-field">
+            <label>ID</label>
+            <input readonly class="kb-js-area-id" type="text" name="{{ basename }}[id]" value="{{ id }}">
+
+        </div>
+        <div class="kb-menu-field">
+            <label>Description</label>
+            <textarea name="{{ basename }}[description]">{{ description }}</textarea>
+        </div>
+
+    </div>
+
+
+    <h3>Post Types</h3>
+
+    <div class="kb-menu-field-section">
+        <div class="kb-menu-field-section_description">
+            <p class="description">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+        </div>
+        <div class="kb-menu-field-section_inputs">
+            {% for postType in postTypes %}
+                <div class="kb-menu-field">
+
+                    <label><input {{ postType.checked }} type="checkbox" name="{{ basename }}[postTypes][]"
+                                                         value="{{ postType.value }}">{{ postType.name }}</label>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+
+    <h3>Page Templates</h3>
+
+    <div class="kb-menu-field-section">
+        <div class="kb-menu-field-section_description">
+            <p class="description">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+        </div>
+        <div class="kb-menu-field-section_inputs">
+            {% for pageTpl in pageTemplates %}
+                <div class="kb-menu-field">
+
+                    <label><input {{ pageTpl.checked }} type="checkbox" name="{{ basename }}[pageTemplates][]"
+                                                        value="{{ pageTpl.value }}">{{ pageTpl.name }}</label>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <div class="kb-menu-field-post-action">
+        {% if editMode %}
+            <input id="kb-submit" type="submit" value="update" class="primary button kb-button-primary">
+        {% else %}
+            <input id="kb-submit" type="submit" value="create" class="primary button kb-button-primary">
+        {% endif %}
+
+    </div>
+</form>

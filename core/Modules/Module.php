@@ -539,8 +539,9 @@ abstract class Module
             'connect' => 'any',
             'hidden' => false,
             'predefined' => false,
-            'globallyAvailable' => false,
-            'templateable' => true,
+            'inGlobalSidebars',
+            'inGlobalAreas' => false,
+            'asTemplate' => true
         );
 
     }

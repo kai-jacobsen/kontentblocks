@@ -29,6 +29,7 @@ KB.Ajax = (function($) {
                     }
                 },
                 error: function() {
+                    console.log('error');
                     // generic error message
                     KB.notice('<p>Generic Ajax Error</p>', 'error');
                 },

@@ -158,7 +158,7 @@ class BackupManager
             'value' => serialize(stripslashes_deep($existingData))
         );
 
-        $this->Storage->getDataBackend()->add('kb_last_backup', $now);
+        $this->Storage->getDataBackend()->update('kb_last_backup', $now);
 
 
         wp_cache_delete('kb_backups', 'kontentblocks');

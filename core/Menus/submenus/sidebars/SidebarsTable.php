@@ -4,7 +4,7 @@ namespace Kontentblocks\Menus;
 
 use Kontentblocks\Backend\Areas\AreaRegistry;
 
-if(!class_exists('WP_List_Tabdynamic areale')){
+if(!class_exists('WP_List_Table')){
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
@@ -95,7 +95,7 @@ Class SidebarsTable extends \WP_List_Table
     function column_name($item)
     {
         //Build row actions
-        $delete_nonce = wp_create_nonce('delete_area');
+        $delete_nonce = wp_create_nonce('kb_delete_area');
 
         $dynamic = (!empty($item['dynamic']) && $item['dynamic'] == true) ? ' (dynamic)' : null;
         $manual = (!empty($item['manual']) && $item['manual'] == true) ? ' (predefined) ' : null;

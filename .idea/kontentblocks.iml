@@ -22,6 +22,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="jQuery" level="project" />
+    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 

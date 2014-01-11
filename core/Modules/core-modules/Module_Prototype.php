@@ -42,43 +42,7 @@ class Module_Prototype extends Module
                 'areaContext' => array( 'normal', 'side' ),
                 'std' => true,
                 )
-            )
-            ->addField(
-            'file', 'somefile', array(
-            'label' => 'Label for Text',
-            'description' => 'Maybe a Description is waht longer than this',
-            'type' => 'text',
-            'text' => 'My first checkbox',
-            'areaContext' => array( 'normal' ),
-            'taxonomy' => 'category',
-            'jSettings' => array(
-                        'format' => 'Y'
-            )
-            ) );
-        $groupB = $this->Fields->addGroup( 'Andrew', array( 'label' => 'What what!' ) )
-            ->addField(
-                'checkbox', 'somecheckbox', array(
-                'label' => 'Label for Text',
-                'descriptiom' => 'stuff',
-                'type' => 'text',
-                'text' => 'My first checkbox',
-                'areaContext' => array( 'normal', 'side' ),
-                'std' => true,
-                )
-            )
-            ->addField(
-            'image', 'someimage', array(
-            'label' => 'Label for Text',
-            'description' => 'Maybe a Description is waht longer than this',
-            'type' => 'text',
-            'text' => 'My first checkbox',
-            'areaContext' => array( 'normal' ),
-            'taxonomy' => 'category',
-            'jSettings' => array(
-                        'format' => 'Y'
-            )
-            ) );
-
+            );
     }
 
 }

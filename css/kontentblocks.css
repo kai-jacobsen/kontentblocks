@@ -1709,142 +1709,6 @@ h5.kb_properties_title {
   background: #fff;
 }
 
-/* === Editor === */
-/* line 2, sass/partials/_etch.scss */
-.etch-editor-panel {
-  display: none;
-  padding: 5px;
-  position: absolute;
-  z-index: 10000;
-  background: #dadada;
-  border: 1px solid #bdbdbd;
-  color: #535353;
-  text-shadow: 0 1px 0 #fff;
-  background-image: -moz-linear-gradient(center bottom, #cccccc 0%, #dddddd 100%);
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dddddd), to(#cccccc));
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  -webkit-box-shadow: inset 1px 0 0 #dfdfdf, inset 0 1px 0 #dfdfdf, inset -1px 0 0 #dfdfdf, inset 0 -1px 0 #dfdfdf, 0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-/* line 9, sass/partials/_etch.scss */
-.etch-editor-button {
-  display: block;
-  float: left;
-  margin-right: 3px;
-  position: relative;
-  text-decoration: none;
-  display: block;
-  width: 27px;
-  height: 27px;
-  background: #dadada;
-  border: 1px solid #aaa;
-  color: #535353;
-  text-shadow: 0 1px 0 #fff;
-  background: -moz-linear-gradient(center bottom, #e1e1e1 0%, #efefef 100%);
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#f1f1f1));
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-
-/* line 16, sass/partials/_etch.scss */
-.etch-editor-button:last-child {
-  margin-right: 0;
-}
-
-/* line 17, sass/partials/_etch.scss */
-.etch-editor-button:hover {
-  background: #fff;
-  border-color: #999;
-}
-
-/* line 18, sass/partials/_etch.scss */
-.etch-editor-button span:active {
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
-  border-color: #999;
-}
-
-/* line 21, sass/partials/_etch.scss */
-.etch-editor-button span,
-.etch-editor-button span {
-  background: url("../css/assets/editor_icons.png") no-repeat;
-  display: block;
-  height: 100%;
-  width: 100%;
-}
-
-/* line 25, sass/partials/_etch.scss */
-.etch-editor-panel .etch-bold span {
-  background-position: 0 0;
-}
-
-/* line 26, sass/partials/_etch.scss */
-.etch-editor-panel .etch-italic span {
-  background-position: -30px 0;
-}
-
-/* line 27, sass/partials/_etch.scss */
-.etch-editor-panel .etch-underline span {
-  background-position: -60px 0;
-}
-
-/* line 28, sass/partials/_etch.scss */
-.etch-editor-panel .etch-unordered-list span {
-  background-position: -90px 0;
-}
-
-/* line 29, sass/partials/_etch.scss */
-.etch-editor-panel .etch-ordered-list span {
-  background-position: -120px 0;
-}
-
-/* line 30, sass/partials/_etch.scss */
-.etch-editor-panel .etch-image span {
-  background-position: -150px 0;
-}
-
-/* line 31, sass/partials/_etch.scss */
-.etch-editor-panel .etch-link span {
-  background-position: -180px 0;
-}
-
-/* line 32, sass/partials/_etch.scss */
-.etch-editor-panel .etch-save span {
-  background-position: -210px 0;
-}
-
-/* line 33, sass/partials/_etch.scss */
-.etch-editor-panel .etch-justify-left span {
-  background-position: -240px 0;
-}
-
-/* line 34, sass/partials/_etch.scss */
-.etch-editor-panel .etch-justify-center span {
-  background-position: -270px 0;
-}
-
-/* line 35, sass/partials/_etch.scss */
-.etch-editor-panel .etch-justify-right span {
-  background-position: -300px 0;
-}
-
-/* line 36, sass/partials/_etch.scss */
-.etch-editor-panel .etch-cite span {
-  background-position: -330px 0;
-}
-
-/* line 37, sass/partials/_etch.scss */
-.etch-editor-panel .etch-heading span {
-  background-position: -360px 0;
-}
-
-/* line 38, sass/partials/_etch.scss */
-.etch-editor-panel .etch-clear-formatting span {
-  background-position: -390px 0;
-}
-
 /* line 3, sass/partials/_global-area-edit.scss */
 .global-area-edit .kb_page_wrap {
   padding: 0;
@@ -3295,7 +3159,7 @@ div.noty_modal {
 }
 
 /* line 1, sass/partials/_options/_page.scss */
-.kb_page_wrap {
+.kb-page-wrap {
   padding: 20px;
   min-width: 400px;
   max-width: 1100px;
@@ -3305,7 +3169,7 @@ div.noty_modal {
 }
 
 /* line 14, sass/partials/_options/_page.scss */
-.os-wrapper .kb_page_wrap {
+.os-wrapper .kb-page-wrap {
   max-width: none;
   margin-top: 0px;
   padding: 0;
@@ -3324,46 +3188,115 @@ div.noty_modal {
 /*
 Overlay Override
 */
-/* line 36, sass/partials/_options/_page.scss */
+/* line 34, sass/partials/_options/_page.scss */
 body.on-site-editing {
   padding-top: 0;
 }
 
-/* line 40, sass/partials/_options/_page.scss */
+/* line 38, sass/partials/_options/_page.scss */
 .kb-overlay {
   background: #fff !important;
 }
-/* line 44, sass/partials/_options/_page.scss */
+/* line 42, sass/partials/_options/_page.scss */
 .kb-overlay .kb_page_wrap {
   padding: 0px;
   margin-top: 0;
 }
-/* line 49, sass/partials/_options/_page.scss */
+/* line 47, sass/partials/_options/_page.scss */
 .kb-overlay .area-holder {
   border: none;
 }
 
-/* line 55, sass/partials/_options/_page.scss */
+/* line 53, sass/partials/_options/_page.scss */
 .kb-area-overlay {
   background: #fff !important;
   padding-top: 0;
 }
-/* line 59, sass/partials/_options/_page.scss */
+/* line 57, sass/partials/_options/_page.scss */
 .kb-area-overlay .kb_page_wrap {
   padding: 20px 20px;
   margin-top: 0;
 }
-/* line 64, sass/partials/_options/_page.scss */
+/* line 62, sass/partials/_options/_page.scss */
 .kb-area-overlay .area-holder {
   border: none;
 }
 
-/* line 71, sass/partials/_options/_page.scss */
+/* line 69, sass/partials/_options/_page.scss */
 .block-template-wrapper.kb_page_wrap .kb_fieldtabs ul.ui-tabs-nav {
   margin-left: 0;
 }
 
-/* line 79, sass/kontentblocks.scss */
+/*
+*
+* Admin Pages
+* Sidebars, Areas
+*/
+/* line 82, sass/partials/_options/_page.scss */
+.kb-page-wrap .area-wrap {
+  border: 0;
+  background: #fff;
+}
+/* line 87, sass/partials/_options/_page.scss */
+.kb-page-wrap .area-title-text {
+  display: none;
+}
+/* line 91, sass/partials/_options/_page.scss */
+.kb-page-wrap h3 {
+  margin-bottom: 0;
+}
+
+/* line 98, sass/partials/_options/_page.scss */
+.area-inputs .kb-menu-field {
+  margin: 6px 0;
+}
+/* line 102, sass/partials/_options/_page.scss */
+.area-inputs .kb-menu-field label {
+  display: inline-block;
+  width: 200px;
+}
+/* line 107, sass/partials/_options/_page.scss */
+.area-inputs .kb-menu-field input[type=text] {
+  width: 300px;
+}
+/* line 111, sass/partials/_options/_page.scss */
+.area-inputs .kb-menu-field textarea {
+  width: 300px;
+  height: 120px;
+  vertical-align: top;
+}
+
+/* line 119, sass/partials/_options/_page.scss */
+.kb-menu-field-section_description {
+  float: left;
+  width: 190px;
+  padding-right: 15px;
+}
+
+/* line 125, sass/partials/_options/_page.scss */
+.kb-menu-field-section_inputs {
+  margin-left: 210px;
+}
+
+/* line 129, sass/partials/_options/_page.scss */
+.kb-menu-field-section {
+  overflow: hidden;
+}
+
+/* line 135, sass/partials/_options/_page.scss */
+.kb-menu-field-with-spinner .spinner {
+  float: none;
+  display: none;
+  position: relative;
+  top: 5px;
+  left: -35px;
+}
+/* line 144, sass/partials/_options/_page.scss */
+.kb-menu-field-with-spinner.loading .spinner {
+  display: inline-block;
+}
+
+/* line 77, sass/kontentblocks.scss */
 .ui-state-highlight {
   height: 1.1em;
   line-height: 1.2em;
@@ -3373,14 +3306,14 @@ body.on-site-editing {
   margin: 0 5px;
 }
 
-/* line 88, sass/kontentblocks.scss */
+/* line 86, sass/kontentblocks.scss */
 .ui-sortable-helper {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
   filter: alpha(opacity=70);
   opacity: .7;
 }
 
-/* line 94, sass/kontentblocks.scss */
+/* line 92, sass/kontentblocks.scss */
 .area-meta {
   float: right;
   width: 200px;
@@ -3390,12 +3323,12 @@ body.on-site-editing {
   color: #999;
 }
 
-/* line 103, sass/kontentblocks.scss */
+/* line 101, sass/kontentblocks.scss */
 .kb_vcard_image {
   float: left;
 }
 
-/* line 107, sass/kontentblocks.scss */
+/* line 105, sass/kontentblocks.scss */
 .kb_image_frame {
   width: 150px;
   height: 150px;
@@ -3409,33 +3342,33 @@ body.on-site-editing {
   margin-bottom: 15px;
 }
 
-/* line 120, sass/kontentblocks.scss */
+/* line 118, sass/kontentblocks.scss */
 .vcard-upload {
   margin-top: 15px;
 }
 
-/* line 124, sass/kontentblocks.scss */
+/* line 122, sass/kontentblocks.scss */
 .vcard_description {
   float: left;
 }
 
-/* line 128, sass/kontentblocks.scss */
+/* line 126, sass/kontentblocks.scss */
 .kb_vcard_item {
   overflow: hidden;
 }
 
-/* line 132, sass/kontentblocks.scss */
+/* line 130, sass/kontentblocks.scss */
 .slider_image_frame {
   width: 300px;
   height: 150px;
 }
 
-/* line 137, sass/kontentblocks.scss */
+/* line 135, sass/kontentblocks.scss */
 .slider_image_frame img {
   max-height: 100%;
 }
 
-/* line 141, sass/kontentblocks.scss */
+/* line 139, sass/kontentblocks.scss */
 .kb_accordion_inner {
   display: block;
   border: 1px solid #CCC;
@@ -3443,17 +3376,17 @@ body.on-site-editing {
   padding: 8px;
 }
 
-/* line 148, sass/kontentblocks.scss */
+/* line 146, sass/kontentblocks.scss */
 #context_side .kb-sub-name {
   display: none;
 }
 
-/* line 152, sass/kontentblocks.scss */
+/* line 150, sass/kontentblocks.scss */
 .area-meta {
   border-right: 1px solid #ccc;
 }
 
-/* line 156, sass/kontentblocks.scss */
+/* line 154, sass/kontentblocks.scss */
 .clearfix:after {
   content: ".";
   display: block;
@@ -3463,28 +3396,28 @@ body.on-site-editing {
   height: 0;
 }
 
-/* line 165, sass/kontentblocks.scss */
+/* line 163, sass/kontentblocks.scss */
 .clearfix {
   display: inline-block;
 }
 
-/* line 169, sass/kontentblocks.scss */
+/* line 167, sass/kontentblocks.scss */
 html[xmlns] .clearfix {
   display: block;
 }
 
-/* line 173, sass/kontentblocks.scss */
+/* line 171, sass/kontentblocks.scss */
 * html .clearfix {
   height: 1%;
 }
 
 /* Accordion */
-/* line 178, sass/kontentblocks.scss */
+/* line 176, sass/kontentblocks.scss */
 .accordion-head {
   margin-bottom: 20px;
 }
 
-/* line 182, sass/kontentblocks.scss */
+/* line 180, sass/kontentblocks.scss */
 .kb_new_accordion_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -3493,12 +3426,12 @@ html[xmlns] .clearfix {
 }
 
 /* Tabs */
-/* line 190, sass/kontentblocks.scss */
+/* line 188, sass/kontentblocks.scss */
 .tab-head {
   margin-bottom: 20px;
 }
 
-/* line 194, sass/kontentblocks.scss */
+/* line 192, sass/kontentblocks.scss */
 .kb_new_tab_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -3507,105 +3440,105 @@ html[xmlns] .clearfix {
 }
 
 /* Kontentbox */
-/* line 202, sass/kontentblocks.scss */
+/* line 200, sass/kontentblocks.scss */
 .kb_kontentbox_wrapper {
   overflow: hidden;
 }
 
-/* line 206, sass/kontentblocks.scss */
+/* line 204, sass/kontentblocks.scss */
 .kb_kontentbox_content_wrapper {
   width: 75%;
   float: left;
 }
 
-/* line 211, sass/kontentblocks.scss */
+/* line 209, sass/kontentblocks.scss */
 .kb_image_wrapper {
   margin-top: 30px;
 }
 
-/* line 215, sass/kontentblocks.scss */
+/* line 213, sass/kontentblocks.scss */
 .kb_link_wrap {
   overflow: hidden;
   clear: both;
   margin-top: 15px;
 }
 
-/* line 221, sass/kontentblocks.scss */
+/* line 219, sass/kontentblocks.scss */
 .kb_kontentbox_layout_wrapper, .kb_kontentblocks_sizes_wrapper, .kb_kontentbox_align_wrapper {
   float: left;
   margin: 15px;
 }
 
-/* line 226, sass/kontentblocks.scss */
+/* line 224, sass/kontentblocks.scss */
 .kb_kontentbox_align_wrapper label {
   width: 50px;
   float: left;
 }
 
-/* line 231, sass/kontentblocks.scss */
+/* line 229, sass/kontentblocks.scss */
 .chzn-container {
   width: 200px !important;
 }
 
-/* line 235, sass/kontentblocks.scss */
+/* line 233, sass/kontentblocks.scss */
 .area_description {
   font-size: 11px;
   color: #999;
 }
 
 /* Audio */
-/* line 241, sass/kontentblocks.scss */
+/* line 239, sass/kontentblocks.scss */
 .kb_audio_item {
   padding: 8px 0;
 }
 
-/* line 245, sass/kontentblocks.scss */
+/* line 243, sass/kontentblocks.scss */
 .kb_audio_item label {
   display: block;
 }
 
 /* Video */
-/* line 250, sass/kontentblocks.scss */
+/* line 248, sass/kontentblocks.scss */
 .kb_video .kb_image_wrapper {
   float: left;
 }
 
-/* line 254, sass/kontentblocks.scss */
+/* line 252, sass/kontentblocks.scss */
 .kb_video_files_wrapper {
   margin-top: 30px;
   float: left;
 }
 
-/* line 259, sass/kontentblocks.scss */
+/* line 257, sass/kontentblocks.scss */
 .kb_video_item label {
   display: block;
 }
 
-/* line 263, sass/kontentblocks.scss */
+/* line 261, sass/kontentblocks.scss */
 .kb_video_item {
   margin-bottom: 8px;
 }
 
-/* line 267, sass/kontentblocks.scss */
+/* line 265, sass/kontentblocks.scss */
 .kb_video_Size {
   clear: both;
   padding-top: 20px;
 }
 
 /* Flexslider */
-/* line 273, sass/kontentblocks.scss */
+/* line 271, sass/kontentblocks.scss */
 .kb_button_wrapper {
   padding: 8px;
   overflow: hidden;
 }
 
-/* line 278, sass/kontentblocks.scss */
+/* line 276, sass/kontentblocks.scss */
 .uploaded {
   overflow: hidden;
   padding-bottom: 20px;
 }
 
-/* line 283, sass/kontentblocks.scss */
+/* line 281, sass/kontentblocks.scss */
 li.gallery-item {
   background: white;
   /* Old browsers */
@@ -3625,13 +3558,13 @@ li.gallery-item {
   margin: 0 20px 0 0;
 }
 
-/* line 302, sass/kontentblocks.scss */
+/* line 300, sass/kontentblocks.scss */
 li.gallery-item label {
   display: block;
   color: #eaeaea;
 }
 
-/* line 307, sass/kontentblocks.scss */
+/* line 305, sass/kontentblocks.scss */
 li.gallery-item textarea {
   border: none;
   width: 148px;
@@ -3641,19 +3574,19 @@ li.gallery-item textarea {
   border: 1px dotted #eaeaea;
 }
 
-/* line 316, sass/kontentblocks.scss */
+/* line 314, sass/kontentblocks.scss */
 li.gallery-item textarea:focus {
   background: #fff;
 }
 
 /* Sidebar Widget */
-/* line 321, sass/kontentblocks.scss */
+/* line 319, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper {
   float: left;
   margin: 0 20px 20px 0;
 }
 
-/* line 326, sass/kontentblocks.scss */
+/* line 324, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper label {
   display: block;
 }
@@ -4421,7 +4354,7 @@ div.kb-drag-drop-inside p {
   top: 25px;
 }
 
-/* line 334, sass/kontentblocks.scss */
+/* line 332, sass/kontentblocks.scss */
 .kb_draft {
   padding: 5px 0 5px 20px;
   border-left: 0px solid #d54e21;
@@ -4435,47 +4368,47 @@ div.kb-drag-drop-inside p {
   margin-top: 0;
 }
 
-/* line 347, sass/kontentblocks.scss */
+/* line 345, sass/kontentblocks.scss */
 .kb_loading {
   opacity: .4;
 }
 
-/* line 351, sass/kontentblocks.scss */
+/* line 349, sass/kontentblocks.scss */
 input[type="checkbox"][checked] {
   opacity: .8;
 }
 
-/* line 355, sass/kontentblocks.scss */
+/* line 353, sass/kontentblocks.scss */
 .kb_block_options {
   padding: 10px;
   margin-top: 20px;
 }
 
-/* line 360, sass/kontentblocks.scss */
+/* line 358, sass/kontentblocks.scss */
 .kb_block_options .kb_field {
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
 
-/* line 366, sass/kontentblocks.scss */
+/* line 364, sass/kontentblocks.scss */
 .kb_block {
   -webkit-transition: box-shadow .3s linear;
 }
 
-/* line 377, sass/kontentblocks.scss */
+/* line 375, sass/kontentblocks.scss */
 .tooltip {
   display: none;
   opacity: 0;
   -webkit-transition: opacity .5s linear;
 }
 
-/* line 383, sass/kontentblocks.scss */
+/* line 381, sass/kontentblocks.scss */
 .area_template {
   position: relative;
 }
 
-/* line 387, sass/kontentblocks.scss */
+/* line 385, sass/kontentblocks.scss */
 .area_template:hover .tooltip {
   display: block;
   opacity: 0;
@@ -4485,7 +4418,7 @@ input[type="checkbox"][checked] {
   opacity: 1;
 }
 
-/* line 396, sass/kontentblocks.scss */
+/* line 394, sass/kontentblocks.scss */
 .area_template img.tpl-mini {
   float: left;
   margin-right: 8px;
@@ -5908,7 +5841,7 @@ button.ui-button::-moz-focus-inner {
  * http://docs.jquery.com/UI/Tabs#theming
  */
 /* context */
-/* line 414, sass/kontentblocks.scss */
+/* line 412, sass/kontentblocks.scss */
 .maximize-side {
   position: absolute;
   width: 75%;
@@ -5918,7 +5851,7 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 423, sass/kontentblocks.scss */
+/* line 421, sass/kontentblocks.scss */
 .maximize-normal {
   position: absolute;
   width: 75%;
@@ -5928,31 +5861,31 @@ button.ui-button::-moz-focus-inner {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 432, sass/kontentblocks.scss */
+/* line 430, sass/kontentblocks.scss */
 #kontentblocks_stage {
   position: relative;
   margin-bottom: 20px;
 }
 
-/* line 437, sass/kontentblocks.scss */
+/* line 435, sass/kontentblocks.scss */
 .active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {
   font-family: 'Open-Sans', sans-serif;
   font-style: italic;
   margin: 0;
 }
 
-/* line 444, sass/kontentblocks.scss */
+/* line 442, sass/kontentblocks.scss */
 .area_sidebars li {
   cursor: move;
 }
 
-/* line 448, sass/kontentblocks.scss */
+/* line 446, sass/kontentblocks.scss */
 .page-template-wrapper.context-area {
   min-height: 0px;
   overflow: hidden;
 }
 
-/* line 453, sass/kontentblocks.scss */
+/* line 451, sass/kontentblocks.scss */
 .kb_thickbox h2 {
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   font-weight: normal;
@@ -5960,23 +5893,23 @@ button.ui-button::-moz-focus-inner {
   margin: 20px 0 0 0;
 }
 
-/* line 460, sass/kontentblocks.scss */
+/* line 458, sass/kontentblocks.scss */
 .kb_thickbox .context-header {
   margin-bottom: 20px;
 }
 
-/* line 464, sass/kontentblocks.scss */
+/* line 462, sass/kontentblocks.scss */
 #TB_window {
   z-index: 6000 !important;
 }
 
-/* line 468, sass/kontentblocks.scss */
+/* line 466, sass/kontentblocks.scss */
 textarea.quicktags {
   width: 100%;
 }
 
 /* Redirect */
-/* line 478, sass/kontentblocks.scss */
+/* line 476, sass/kontentblocks.scss */
 .redirect-wrapper input[type=radio] {
   float: left;
   width: 16px;
@@ -5985,32 +5918,32 @@ textarea.quicktags {
   margin-right: 16px;
 }
 
-/* line 487, sass/kontentblocks.scss */
+/* line 485, sass/kontentblocks.scss */
 .wp-editor-area {
   /*height: 500px;*/
 }
 
-/* line 491, sass/kontentblocks.scss */
+/* line 489, sass/kontentblocks.scss */
 #context_normal {
   /* min-height: 600px;
   _height: 600px;*/
 }
 
-/* line 496, sass/kontentblocks.scss */
+/* line 494, sass/kontentblocks.scss */
 .quicktags textarea {
   background: #fff;
 }
 
 /* Responsive Admin Layout */
 @media screen and (max-width: 1399px) {
-  /* line 502, sass/kontentblocks.scss */
+  /* line 500, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 100%;
   }
 
-  /* line 508, sass/kontentblocks.scss */
+  /* line 506, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: left;
@@ -6018,51 +5951,51 @@ textarea.quicktags {
   }
 }
 @media screen and (min-width: 1400px) {
-  /* line 522, sass/kontentblocks.scss */
+  /* line 520, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 65%;
   }
-  /* line 527, sass/kontentblocks.scss */
+  /* line 525, sass/kontentblocks.scss */
   .area-normal.has-sidebar.non-active-context {
     width: 33%;
   }
 
-  /* line 532, sass/kontentblocks.scss */
+  /* line 530, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: right;
     width: 33%;
   }
-  /* line 537, sass/kontentblocks.scss */
+  /* line 535, sass/kontentblocks.scss */
   .area-side.active-context {
     width: 65%;
   }
 }
-/* line 552, sass/kontentblocks.scss */
+/* line 550, sass/kontentblocks.scss */
 .clear {
   clear: both;
 }
 
-/* line 556, sass/kontentblocks.scss */
+/* line 554, sass/kontentblocks.scss */
 .mceIframeContainer iframe {
   /*height: 150px !important;*/
 }
 
-/* line 560, sass/kontentblocks.scss */
+/* line 558, sass/kontentblocks.scss */
 .kb_field textarea {
   width: 100%;
   height: 80px;
 }
 
 /* Field Image Gallery */
-/* line 567, sass/kontentblocks.scss */
+/* line 565, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper {
   overflow: hidden;
 }
 
-/* line 571, sass/kontentblocks.scss */
+/* line 569, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li {
   float: left;
   margin-right: 12px;
@@ -6071,25 +6004,25 @@ textarea.quicktags {
   position: relative;
 }
 
-/* line 579, sass/kontentblocks.scss */
+/* line 577, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.selected {
   border: 3px solid blue;
 }
 
-/* line 583, sass/kontentblocks.scss */
+/* line 581, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li img {
   width: 107px;
   height: 107px;
 }
 
-/* line 589, sass/kontentblocks.scss */
+/* line 587, sass/kontentblocks.scss */
 .kb-field-gallery-info {
   min-height: 100px;
   background: #ccc;
   margin: 20px 0;
 }
 
-/* line 595, sass/kontentblocks.scss */
+/* line 593, sass/kontentblocks.scss */
 .kb-field-gallery-image-delete {
   display: none;
   position: absolute;
@@ -6101,7 +6034,7 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 606, sass/kontentblocks.scss */
+/* line 604, sass/kontentblocks.scss */
 .kb-field-gallery-image-info {
   display: none;
   position: absolute;
@@ -6113,24 +6046,24 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 617, sass/kontentblocks.scss */
+/* line 615, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li:hover > span, .kb-field-gallery-wrapper li.todelete > span.delete {
   display: block;
 }
 
-/* line 621, sass/kontentblocks.scss */
+/* line 619, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.todelete {
   opacity: .5;
 }
 
-/* line 625, sass/kontentblocks.scss */
+/* line 623, sass/kontentblocks.scss */
 .custom.kb_area_list_item {
   background: none;
   border: none;
   padding: 0;
 }
 
-/* line 632, sass/kontentblocks.scss */
+/* line 630, sass/kontentblocks.scss */
 .custom .kb_field {
   background-color: #fff !important;
 }
@@ -6449,19 +6382,19 @@ button.Zebra_DatePicker_Icon_Inside {
 /**
  * Hide Sidebar
  */
-/* line 645, sass/kontentblocks.scss */
+/* line 643, sass/kontentblocks.scss */
 .no-sidebar .attachments-browser .media-toolbar,
 .no-sidebar .attachments-browser .attachments,
 .no-sidebar .attachments-browser .uploader-inline {
   right: 0;
 }
 
-/* line 649, sass/kontentblocks.scss */
+/* line 647, sass/kontentblocks.scss */
 .no-sidebar .media-sidebar {
   display: none;
 }
 
-/* line 653, sass/kontentblocks.scss */
+/* line 651, sass/kontentblocks.scss */
 .smaller {
   top: 100px;
   right: 350px;
@@ -6469,7 +6402,7 @@ button.Zebra_DatePicker_Icon_Inside {
   left: 350px;
 }
 
-/* line 660, sass/kontentblocks.scss */
+/* line 658, sass/kontentblocks.scss */
 .smaller {
   top: 10%;
   right: 15%;
@@ -6477,7 +6410,7 @@ button.Zebra_DatePicker_Icon_Inside {
   left: 15%;
 }
 
-/* line 667, sass/kontentblocks.scss */
+/* line 665, sass/kontentblocks.scss */
 .kb-hide {
   display: none;
 }

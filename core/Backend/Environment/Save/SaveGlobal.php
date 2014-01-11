@@ -40,8 +40,6 @@ class SaveGlobal implements InterfaceSaveHandler
                 continue;
             }
 
-
-
             //hack
             $id = null;
 
@@ -84,13 +82,15 @@ class SaveGlobal implements InterfaceSaveHandler
             // store new data in post meta
             // if this is a preview, save temporary data for previews
             if ($savedData) {
-                $this->Environment->getStorage()->saveModule($module['instance_id'], $savedData);
+                $moduleSaved = $this->Environment->getStorage()->saveModule($module['instance_id'], $savedData);
             }
 
-
         }
-        $this->Environment->getStorage()->saveIndex($this->index);
+        if ($moduleSaved){
+            $indexSaved = $this->Environment->getStorage()->saveIndex($this->index);
+        }
 
+        return $indexSaved;
 
     }
 

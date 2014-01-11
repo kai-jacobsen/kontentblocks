@@ -19,6 +19,10 @@ class ModuleStorageGlobal implements InterfaceDataStorage
 
     }
 
+    /**
+     * Setup the working state for the provided area
+     * @return $this|bool
+     */
     private function setup()
     {
         $this->DataBackend->setId($this->areaId);
@@ -55,12 +59,14 @@ class ModuleStorageGlobal implements InterfaceDataStorage
      */
     public function saveIndex($index)
     {
-        // TODO: Implement saveIndex() method.
+        // todo: validate $index
+        $this->index = $index;
+        return $this->_updateIndex();
     }
 
     /**
      * Add a module definition to the index
-     * Index should get updated  afterwards
+     * Index gets updated afterwards
      * @param string $id Unique id of module i.e. instance_id
      * @param array $args module definition array
      * @return boolean Indicates whether update was succesful or failed
@@ -75,6 +81,11 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         return $this->_updateIndex();
     }
 
+    /**
+     * Remove module from index an delete corresponding data
+     * @param strinf $id module instance id
+     * @return bool true on success, false on failure
+     */
     public function removeFromIndex($id)
     {
         if (isset($this->index[$id])) {
@@ -85,6 +96,12 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         }
     }
 
+    /**
+     * Get a module definition from index
+     * @param string $id module instance id
+     * @return bool false if not set
+     * @return array if set
+     */
     public function getModuleDefinition($id)
     {
         if (isset($this->index[$id])) {
@@ -94,6 +111,12 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         }
     }
 
+    /**
+     * Get data for module
+     * @param string $id module instance id
+     * @return array data if exists
+     * @return null if no data
+     */
     public function getModuleData($id)
     {
         if (isset($this->modules[$id][0])) {
@@ -103,11 +126,21 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         return null;
     }
 
+    /**
+     * Save module data to table
+     * @param $id module instance id
+     * @param array|string $data data array
+     * @return bool true|false success|failure
+     */
     public function saveModule($id, $data = '')
     {
         return $this->DataBackend->update($id, $data);
     }
 
+    /**
+     * Wrapper to ::saveModule, batch mode
+     * @param array $modules
+     */
     public function saveModules($modules)
     {
 
@@ -116,26 +149,47 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         }
     }
 
+    /**
+     * Store index to table
+     * @return bool true|false success|failure
+     */
     public function _updateIndex()
     {
         return $this->DataBackend->update('index', $this->index);
     }
 
+    /**
+     * Get all modules
+     */
     public function getModules()
     {
         // TODO: Implement getModules() method.
     }
 
+    /**
+     * Check if area has modules
+     * @param string $area
+     */
     public function hasModules($area)
     {
         // TODO: Implement hasModules() method.
     }
 
+    /**
+     * Prepare the data to backup
+     * Gets called by the BackupManager,
+     * which expects the data to save in return
+     */
     public function backup()
     {
         // TODO: Implement backup() method.
     }
 
+    /**
+     * Rearrange modules to an associative array
+     * with the instance id as key
+     * @return array
+     */
     private function setupModuleData()
     {
         $collection = array();
@@ -146,6 +200,10 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         return $collection;
     }
 
+    /**
+     * Returns the AreaTableAPI Instance
+     * @return AreaTableAPI
+     */
     public function getDataBackend(){
         return $this->DataBackend;
     }

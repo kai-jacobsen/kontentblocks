@@ -168,3 +168,16 @@ function updateModuleOptionsCb()
 }
 
 add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );
+
+/**
+ * -----------------------------------------
+ * Get sanitized Id
+ * -----------------------------------------
+ */
+function getSanitizedIdCb()
+{
+    new \Kontentblocks\Ajax\GetSanitizedId();
+
+}
+
+add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );

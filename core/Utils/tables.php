@@ -14,6 +14,7 @@ function init()
         $backups = $wpdb->prefix . "kb_backups";
         $meta = $wpdb->prefix . "kb_plugindata";
         $areas = $wpdb->prefix . "kb_areas";
+        $templates = $wpdb->prefix . "kb_templates";
 
         $sql = "CREATE TABLE $backups (
   id mediumint(9) NOT NULL AUTO_INCREMENT,

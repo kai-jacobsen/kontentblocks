@@ -13,19 +13,18 @@ class CoreTemplate
     public function __construct( $tpl = false, $data = false )
     {
 
-
-
         $this->data    = $data;
         $this->tplFile = ($tpl !== false) ? $tpl : null;
         $this->path    = KB_PLUGIN_PATH . 'core/Templating/templates/';
         $this->engine  = Twig::getInstance();
 
+        //initial path
+        $this->setPath($this->path);
+
     }
 
     public function render( $echo = false )
     {
-        $this->setPath($this->path);
-
         if ( !is_file( trailingslashit( $this->path ) . $this->tplFile ) ) {
             echo "<script>console.log('template {$this->tplFile} missing');</script>";
             return false;
@@ -43,9 +42,8 @@ class CoreTemplate
 
     public function setPath( $path )
     {
-
+        $this->path = $path;
         Twig::setPath( $path );
-
     }
 
     public function __destruct()

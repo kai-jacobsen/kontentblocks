@@ -58,4 +58,6 @@ abstract class AbstractMenuEntry implements InterfaceMenuEntry
         $this->path = trailingslashit( dirname($file) );
         $this->subfolder = $this->path . $this->handle;
     }
+
+
 }

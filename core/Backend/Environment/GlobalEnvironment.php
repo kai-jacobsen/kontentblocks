@@ -104,6 +104,6 @@ class GlobalEnvironment extends AbstractEnvironment
     public function save()
     {
         $SaveHandler = new SaveGlobal($this);
-        $SaveHandler->save();
+        return $SaveHandler->save();
     }
 }
