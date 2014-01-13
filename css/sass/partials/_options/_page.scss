@@ -6,6 +6,7 @@
   background: #fff;
   border: 1px solid #ccc;
   margin-top: 20px;
+  position: relative;
 
 }
 
@@ -78,40 +79,39 @@ body.on-site-editing {
 * Sidebars, Areas
 */
 
-.kb-page-wrap{
-  .area-wrap{
+.kb-page-wrap {
+  .area-wrap {
     border: 0;
     background: #fff;
   }
 
-  .area-title-text{
+  .area-title-text {
     display: none;
   }
 
-  h3{
+  h3 {
     margin-bottom: 0;
   }
 }
 
 .kb-menu-field {
 
+  margin: 6px 0;
 
-    margin: 6px 0;
+  label {
+    display: inline-block;
+    width: 200px;
+  }
 
-    label {
-      display: inline-block;
-      width: 200px;
-    }
+  input[type=text] {
+    width: 300px;
+  }
 
-    input[type=text] {
-      width: 300px;
-    }
-
-    textarea {
-      width: 300px;
-      height: 120px;
-      vertical-align: top;
-    }
+  textarea {
+    width: 300px;
+    height: 120px;
+    vertical-align: top;
+  }
 }
 
 .kb-menu-field-section_description {
@@ -143,5 +143,36 @@ body.on-site-editing {
       display: inline-block;
     }
 
+  }
+}
+
+.kb-language-switch-wrapper {
+  position: absolute;
+  right: 40px;
+  top: 10px;
+
+  p {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  ul {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    float: right;
+  }
+
+  li {
+    display: inline-block;
+    margin: 0 4px;
+
+    &.kb-current-template-language{
+      @include opacity(.3);
+    }
+
+    a {
+      text-indent: -9999px;
+    }
   }
 }

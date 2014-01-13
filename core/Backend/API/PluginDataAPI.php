@@ -30,7 +30,8 @@ use Kontentblocks\Interfaces\InterfaceDataAPI;
  * good practice is to call reset() afterwards.
  * Example:
  *
- * $ClassInstance->setGroup('template')->setLang('de')->add('foo', 'bar')->reset();
+ * $ClassInstance->setGroup('template')->setLang('de')->add('foo', 'bar');
+ * $ClassInstance->reset();
  *
  * There is no need to set the group/lang context over and over again, use it only if it differs from the initial state.
  * It's your responsibility anyway.
@@ -47,7 +48,7 @@ class PluginDataAPI implements InterfaceDataAPI
 {
 
     /**
-     * @var object 
+     * @var object
      */
     protected $db = null;
     protected $initGroup = null;
@@ -65,7 +66,6 @@ class PluginDataAPI implements InterfaceDataAPI
 
         global $wpdb;
 
-
         $this->db = $wpdb;
         $this->tablename = $wpdb->prefix . 'kb_plugindata';
 
@@ -73,15 +73,12 @@ class PluginDataAPI implements InterfaceDataAPI
             $this->setGroup($group);
         }
 
-
         $this->setLang(\Kontentblocks\Language\I18n::getActiveLanguage());
-
         $this->selfUpdate();
 
         if ($lang) {
             $this->setLang($lang);
         }
-
     }
 
     public function add($key, $value)
@@ -269,8 +266,8 @@ class PluginDataAPI implements InterfaceDataAPI
 
     public function setLang($code = 'de')
     {
-        if ($this->initLanguage) {
-            $this->initLanguage;
+        if (!$this->initLanguage) {
+            $this->initLanguage = $code;
         }
 
         $this->language = $code;
@@ -304,7 +301,10 @@ class PluginDataAPI implements InterfaceDataAPI
 
         if (!empty($res)) {
             foreach ($res as $e) {
-                $collect[$e['data_lang']] = $e['id'];
+                $collect[$e['data_lang']] = array(
+                    'tid' => $e['id'],
+                    'id' => $e['data_key']
+                );
             }
         }
 

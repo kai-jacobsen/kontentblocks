@@ -72,17 +72,36 @@ class MenuTemplates extends AbstractMenuEntry
     }
 
 
+    /**
+     * Edit the template contents view callback
+     *
+     * If the requested template is not found in a multilanguage project,
+     * and this may be because of language switch,
+     * a link is provided to create a version of template in the current language context
+     *
+     * @since 1.0.0
+     * @return void
+     */
     public function editModule()
     {
         if (empty($_GET['template'])) {
             wp_die('no template arg provided');
         }
 
+        $template = $_GET['template'];
+
+        // TODO Include a public context switch
+        // Modules resp. the input form of a module may rely on a certain context
+        // or have different fields configuration
+        // TODO Explanation text for non-developers on page
         $context = (isset($_GET['area-context'])) ? $_GET['area-context'] : 'normal';
         $API = new PluginDataAPI('module');
-        $moduleDef = $API->get($_GET['template']);
+        $moduleDef = $API->get($template);
+        $templateDef = $API->setGroup('template')->get($template);
 
-
+        $API->reset();
+        // handle missing module definition
+        // TODO add I18n
         if (is_null($moduleDef)) {
             print "Requested template does not exist";
             $this->maybeSuggestTranslation();
@@ -92,10 +111,18 @@ class MenuTemplates extends AbstractMenuEntry
         //set area context on init
         $moduleDef['areaContext'] = $context;
 
+        $languages = $API->reset()->getLanguagesForKey($template);
+        if (!empty($languages)) {
+            $this->renderLanguageSwitch($languages);
+        }
+
         print "<div id='kontentblocks_stage'>";
+        print "<h3>Editing \"{$templateDef['name']}\"</h3>";
+        // infamous hidden editor hack
         \Kontentblocks\Helper\getHiddenEditor();
         $moduleData = $API->setGroup('tpldata')->get($moduleDef['instance_id']);
 
+        // no data from db equals null, null is invalid
         if (is_null($moduleData)) {
             $moduleData = array();
         }
@@ -108,11 +135,12 @@ class MenuTemplates extends AbstractMenuEntry
         print "<input type='hidden' name='action' value='update' >";
         print "<input type='hidden' name='templateId' value='{$Instance->instance_id}' >";
         wp_nonce_field('update-template');
+
+        // render user input form
         $Instance->options();
 
         print "<input type='submit' value='update'>";
         print "</form>";
-
         print "</div>";
 
     }
@@ -230,10 +258,10 @@ class MenuTemplates extends AbstractMenuEntry
 
 
         $API->setLang(I18n::getActiveLanguage());
-//        $updateMod = $API->update($templateId, $moduleDef);
-//        $updateTpl = $API->setGroup('template')->update($templateId, $templateDef);
+        $updateMod = $API->update($templateId, $moduleDef);
+        $updateTpl = $API->setGroup('template')->update($templateId, $templateDef);
 
-        if ($updateMod && $updateTpl){
+        if ($updateMod && $updateTpl) {
             $url = add_query_arg(array('action' => false));
             wp_redirect($url);
         }
@@ -284,6 +312,38 @@ class MenuTemplates extends AbstractMenuEntry
             $url = add_query_arg(array('action' => 'add-translation'));
             print "<a href='{$url}'>Add Translation</a>";
         }
+    }
+
+    private function renderLanguageSwitch($languages)
+    {
+        if (count($languages) < 1) {
+            return;
+        }
+
+        print "<div class='kb-language-switch-wrapper'><p class='description'>This template is also available in following languages:</p>";
+        print "<ul class='kb-templates-languages kb-language-switch'>";
+
+        foreach ($languages as $l => $v) {
+
+            $url = ($l !== I18n::getActiveLanguage())
+                ? add_query_arg(array(
+                    'view' => 'edit',
+                    'template' => $v['id'],
+                    'tid' => $v['tid'],
+                    'lang' => $l
+                )) : false;
+            $link = ($url) ? "<a class='flag flag-{$l}' href='{$url}'>{$l}</a>" : '';
+
+            if ($url !== false){
+                print "<li>{$link}</li>";
+            } else {
+                print "<li class='flag flag-{$l} kb-current-template-language'>{$l}</li>";
+            }
+        }
+
+
+
+        print "</ul></div>";
     }
 
 
