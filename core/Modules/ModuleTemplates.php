@@ -10,6 +10,7 @@ namespace Kontentblocks\Modules;
 
 
 use Kontentblocks\Backend\API\PluginDataAPI;
+use Kontentblocks\Language\I18n;
 
 class ModuleTemplates
 {
@@ -31,7 +32,7 @@ class ModuleTemplates
     public function __construct()
     {
         // init Table
-        $this->API = new PluginDataAPI('tpldef');
+        $this->API = new PluginDataAPI('template');
 
         // gather important data
         $this->setup();
@@ -49,14 +50,13 @@ class ModuleTemplates
 
     private function setup()
     {
-        $data = $this->API->getAll();
-        $this->templates = array_filter($data, function($item){
-            return $item['template'];
+        $data = $this->prepareData($this->API->getRaw());
+        $this->templates = array_filter($data, function ($item) {
+            return !$item['master'];
         });
-        $this->masterTemplates = array_filter($data, function($item){
+        $this->masterTemplates = array_filter($data, function ($item) {
             return $item['master'];
         });
-
         if (empty($data)) {
             return false;
         }
@@ -66,6 +66,27 @@ class ModuleTemplates
     public function getAllTemplates()
     {
         return array_merge($this->templates, $this->masterTemplates);
+    }
+
+    private function prepareData($getRaw)
+    {
+        $templates = array_filter($getRaw, function ($e) {
+            return ($e['data_group'] === 'template');
+        });
+
+        $prepared = array();
+
+        foreach ($templates as $item) {
+            $value = maybe_unserialize($item['data_value']);
+
+            $pre = array(
+                'tid' => $item['id'],
+                'id' => $item['data_key']
+            );
+
+            $prepared[$item['data_key']] = wp_parse_args($value, $pre);
+        }
+        return $prepared;
     }
 
 

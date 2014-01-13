@@ -4,6 +4,7 @@ namespace Kontentblocks\Menus;
 
 use Kontentblocks\Abstracts\AbstractMenuEntry;
 use Kontentblocks\Backend\API\PluginDataAPI;
+use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreTemplate;
@@ -22,7 +23,9 @@ class MenuTemplates extends AbstractMenuEntry
         'pageTitle' => 'Manage Templates',
         'actions' => array(
             'create' => 'createTemplate',
-            'update' => 'update'
+            'update' => 'update',
+            'delete' => 'delete',
+            'add-translation' => 'addTranslation'
         ),
         'views' => array(
             'display' => 'overviewView',
@@ -71,18 +74,19 @@ class MenuTemplates extends AbstractMenuEntry
 
     public function editModule()
     {
-
         if (empty($_GET['template'])) {
             wp_die('no template arg provided');
         }
 
         $context = (isset($_GET['area-context'])) ? $_GET['area-context'] : 'normal';
-        $API = new PluginDataAPI('tpldef');
+        $API = new PluginDataAPI('module');
         $moduleDef = $API->get($_GET['template']);
 
 
         if (is_null($moduleDef)) {
             print "Requested template does not exist";
+            $this->maybeSuggestTranslation();
+            return;
         }
 
         //set area context on init
@@ -90,10 +94,9 @@ class MenuTemplates extends AbstractMenuEntry
 
         print "<div id='kontentblocks_stage'>";
         \Kontentblocks\Helper\getHiddenEditor();
-
         $moduleData = $API->setGroup('tpldata')->get($moduleDef['instance_id']);
 
-        if (is_null($moduleData)){
+        if (is_null($moduleData)) {
             $moduleData = array();
         }
 
@@ -143,7 +146,8 @@ class MenuTemplates extends AbstractMenuEntry
             'master' => false,
             'name' => null,
             'id' => null,
-            'type' => null
+            'type' => null,
+            'olang' => I18n::getActiveLanguage()
         );
         // parse $_POST data
         $data = wp_parse_args($_POST['new-template'], $defaults);
@@ -163,14 +167,15 @@ class MenuTemplates extends AbstractMenuEntry
 
         $definition['master'] = $data['master'];
         $definition['template'] = true;
-        $definition['template_reference'] = $data['id'];
-        $definition['template_name'] = $data['name'];
         $definition['instance_id'] = $data['id'];
 
-        $API = new PluginDataAPI('tpldef');
-        $insert = $API->update($data['id'], $definition);
+        $API = new PluginDataAPI('module');
+        $insertModule = $API->update($data['id'], $definition);
 
-        if ($insert === true) {
+        $insertDef = $API->setGroup('template')->update($data['id'], $data);
+        $insertDef = $API->setGroup('template')->update($data['id'], $data);
+
+        if ($insertModule === true && $insertDef === true) {
             $url = add_query_arg(array('view' => 'edit', 'template' => $data['id']));
             wp_redirect($url);
         } else {
@@ -191,13 +196,13 @@ class MenuTemplates extends AbstractMenuEntry
         $API = new PluginDataAPI('tpldata');
         $old = $API->get($templateID);
 
-        if (is_null($old)){
+        if (is_null($old)) {
             $old = array();
         };
 
-        $moduleDef = $API->setGroup('tpldef')->get($templateID);
+        $moduleDef = $API->setGroup('module')->get($templateID);
 
-        $Factory = new ModuleFactory($moduleDef['settings']['class'],$moduleDef,null, $old);
+        $Factory = new ModuleFactory($moduleDef['settings']['class'], $moduleDef, null, $old);
         /** @var $Instance \Kontentblocks\Modules\Module */
         $Instance = $Factory->getModule();
         $new = $Instance->save($_POST[$templateID], $old);
@@ -207,6 +212,39 @@ class MenuTemplates extends AbstractMenuEntry
         $update = $API->update($templateID, $toSave);
 
     }
+
+    public function delete()
+    {
+
+    }
+
+
+    public function addTranslation()
+    {
+        $templateId = $_GET['template'];
+        $tid = $_GET['tid'];
+        // data comes from default language
+        $API = new PluginDataAPI('module', I18n::getDefaultLanguageCode());
+        $moduleDef = $API->get($templateId);
+        $templateDef = $API->get($tid);
+
+
+        $API->setLang(I18n::getActiveLanguage());
+//        $updateMod = $API->update($templateId, $moduleDef);
+//        $updateTpl = $API->setGroup('template')->update($templateId, $templateDef);
+
+        if ($updateMod && $updateTpl){
+            $url = add_query_arg(array('action' => false));
+            wp_redirect($url);
+        }
+    }
+
+    /*
+     * ------------------------------------------------------------
+     * HELPER METHODS AND SECONDARY STUFF
+     * ------------------------------------------------------------
+     */
+
 
     /**
      * toJSON
@@ -238,6 +276,14 @@ class MenuTemplates extends AbstractMenuEntry
         }
         return $collection;
 
+    }
+
+    private function maybeSuggestTranslation()
+    {
+        if (I18n::getActiveLanguage() !== I18n::getDefaultLanguageCode()) {
+            $url = add_query_arg(array('action' => 'add-translation'));
+            print "<a href='{$url}'>Add Translation</a>";
+        }
     }
 
 

@@ -47,9 +47,13 @@ Class TemplatesTable extends \WP_List_Table
         switch($column_name)
         {
             case 'id':
-                return $item['template_reference'];
+                return $item['id'];
             case 'name':
-                return $item['template_name'];
+                return $item['name'];
+            case 'type':
+                return $item['type'];
+            case 'tid':
+                return $item['tid'];
             default:
                 return 'needs method';
         }
@@ -67,26 +71,7 @@ Class TemplatesTable extends \WP_List_Table
         );
     }
 
-    /**
-     * Method for column 'id', adds action links to the column
-     *
-     * @param string $item
-     * @return string
-     */
-    function column_id($item)
-    {
-        //Build row actions
-        $actions = array(
-            'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['template_reference']),
-        );
 
-        //Return the title contents
-        return sprintf('%1$s %3$s',
-            /*$1%s*/ $item['template_reference'],
-            /*$2%s*/ $item['template_reference'],
-            /*$3%s*/ $this->row_actions($actions)
-        );
-    }
 
     function column_name($item)
     {
@@ -94,45 +79,21 @@ Class TemplatesTable extends \WP_List_Table
         $delete_nonce = wp_create_nonce('kb_delete_template');
 
             $actions = array(
-                'edit'      => sprintf('<a href="?page=%s&view=%s&template=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['template_reference']),
-                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&nonce=%s">Löschen</a>',$_GET['page'],'delete',$item['template_reference'], $delete_nonce),
+                'edit'      => sprintf('<a href="?page=%s&view=%s&template=%s&tid=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['id'], $item['tid']),
+                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&tid=%s&nonce=%s">Löschen</a>',$_GET['page'],'delete',$item['id'],$item['tid'],$delete_nonce),
             );
 
 
         //Return the title contents
         return sprintf('%1$s %3$s',
-            /*$1%s*/ $item['template_name'],
-            /*$2%s*/ $item['template_name'],
+            /*$1%s*/ $item['name'],
+            /*$2%s*/ $item['name'],
             /*$3%s*/ $this->row_actions($actions)
         );
     }
 
 
 
-    /*
-     * Column method for supported blocks
-     */
-    function column_available_blocks($item){
-
-        $return = '';
-        if (!empty($item['available_blocks']))
-        {
-            foreach ($item['available_blocks'] as $block)
-            {
-                $return .= $block.'<br>';
-            }
-        }
-        return $return;
-    }
-
-
-    /**
-     * Column method to display blocklimit
-     */
-    function column_limit($item)
-    {
-        return $item['block_limit'];
-    }
 
     /**
      * Define colums used
@@ -140,9 +101,11 @@ Class TemplatesTable extends \WP_List_Table
      */
     function get_columns(){
         $columns = array(
-            //'cb'        => '<input type="checkbox" />', //Render a checkbox instead of text
+            'cb'        => '<input type="checkbox" />', //Render a checkbox instead of text
             'name'    => 'Name',
-            'id'     => 'ID'
+            'id'     => 'ID',
+            'type' => 'Module',
+            'tid'   => 'TID'
             //'available_blocks' => 'Features',
             //'limit' => 'Limit'
         );
