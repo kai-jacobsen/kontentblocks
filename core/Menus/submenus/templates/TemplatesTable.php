@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Menus;
 
+use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleTemplates;
 
 if(!class_exists('WP_List_Table')){
@@ -78,9 +79,11 @@ Class TemplatesTable extends \WP_List_Table
         //Build row actions
         $delete_nonce = wp_create_nonce('kb_delete_template');
 
+        $lang = (I18n::wpmlActive()) ? 'Löschen (alle Sprachen)' : 'Löschen';
+
             $actions = array(
                 'edit'      => sprintf('<a href="?page=%s&view=%s&template=%s&tid=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['id'], $item['tid']),
-                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&tid=%s&nonce=%s">Löschen</a>',$_GET['page'],'delete',$item['id'],$item['tid'],$delete_nonce),
+                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&tid=%s&nonce=%s">%s</a>',$_GET['page'],'delete',$item['id'],$item['tid'],$delete_nonce, $lang),
             );
 
 
@@ -249,7 +252,7 @@ Class TemplatesTable extends \WP_List_Table
     }
 
     function usort_reorder($a,$b){
-        $orderby = (!empty($_REQUEST['orderby'])) ? $_REQUEST['orderby'] : 'template_name'; //If no sort, default to id
+        $orderby = (!empty($_REQUEST['orderby'])) ? $_REQUEST['orderby'] : 'name'; //If no sort, default to id
         $order = (!empty($_REQUEST['order'])) ? $_REQUEST['order'] : 'asc'; //If no order, default to asc
         $result = strcmp($a[$orderby], $b[$orderby]); //Determine sort order
         return ($order==='asc') ? $result : -$result; //Send final sort direction to usort

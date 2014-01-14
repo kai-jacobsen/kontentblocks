@@ -187,14 +187,28 @@ class PluginDataAPI implements InterfaceDataAPI
     public function delete($key = null)
     {
         if ($key) {
-            $result = $this->db->delete($this->tablename, array('data_group' => $this->group, 'data_key' => $key));
+            $result = $this->db->delete($this->tablename, array('data_key' => $key, 'data_lang' => $this->language));
         } else {
-            $result = $this->db->delete($this->tablename, array('data_group' => $this->group));
+            $result = $this->db->delete($this->tablename, array('data_group' => $this->group, 'data_lang' => $this->language));
         }
         if ($result === false) {
             return false;
         } else {
             wp_cache_delete('kb_plugindata_' . $this->language, 'kontentblocks');
+            return true;
+        }
+    }
+
+    public function deleteAll($key)
+    {
+        $languages = $this->getLanguagesForKey($key);
+        $result = $this->db->delete($this->tablename, array('data_key' => $key));
+        if ($result === false) {
+            return false;
+        } else {
+            foreach($languages as $l => $v){
+                wp_cache_delete('kb_plugindata_' . $l, 'kontentblocks');
+            }
             return true;
         }
     }
@@ -309,6 +323,16 @@ class PluginDataAPI implements InterfaceDataAPI
         }
 
         return $collect;
+    }
+
+    public function hasMultipleLanguages($key)
+    {
+        $query = $this->getLanguagesForKey($key);
+        if (count($query) > 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

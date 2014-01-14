@@ -6,10 +6,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" afterPath="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php" afterPath="$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/sass/partials/_options/_page.scss" afterPath="$PROJECT_DIR$/css/sass/partials/_options/_page.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/kontentblocks.css" afterPath="$PROJECT_DIR$/css/kontentblocks.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/kaiser.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/kaiser.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kontentblocks.iws" />
@@ -36,9 +38,9 @@
       <file leaf-file-name="MenuTemplates.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="16" selection-start="3059" selection-end="3059" vertical-scroll-proportion="-6.4814816" vertical-offset="1571" max-vertical-offset="6300">
+            <state line="265" column="29" selection-start="8398" selection-end="8398" vertical-scroll-proportion="-8.592592" vertical-offset="4430" max-vertical-offset="7434">
               <folding>
-                <marker date="1389650932478" expanded="true" signature="3592:3759" placeholder="..." />
+                <marker date="1389687107984" expanded="true" signature="3700:3867" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -77,30 +79,41 @@
       <file leaf-file-name="TemplatesTable.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="84" selection-start="2094" selection-end="2094" vertical-scroll-proportion="0.0" vertical-offset="1458" max-vertical-offset="4752">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PluginDataAPI.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="269" column="39" selection-start="7268" selection-end="7268" vertical-scroll-proportion="0.48913044" vertical-offset="4617" max-vertical-offset="5742">
+            <state line="85" column="173" selection-start="2454" selection-end="2454" vertical-scroll-proportion="-17.11111" vertical-offset="1068" max-vertical-offset="4806">
               <folding>
-                <marker date="1389650953430" expanded="true" signature="5555:5621" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-                <marker date="1389650953430" expanded="true" signature="7907:7995" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-                <marker date="1389650953430" expanded="true" signature="7907:7994" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-                <marker date="1389650953430" expanded="true" signature="7907:7997" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+                <element signature="e#39#71#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ModuleTemplates.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="PluginDataAPI.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="191" column="124" selection-start="5132" selection-end="5132" vertical-scroll-proportion="-17.777779" vertical-offset="2958" max-vertical-offset="6174">
+              <folding>
+                <marker date="1389686793348" expanded="true" signature="6017:6083" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+                <marker date="1389686793348" expanded="true" signature="8369:8457" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+                <marker date="1389686793348" expanded="true" signature="8369:8456" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+                <marker date="1389686793348" expanded="true" signature="8369:8459" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GetSanitizedId.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/Ajax/GetSanitizedId.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="25" selection-start="914" selection-end="914" vertical-scroll-proportion="-16.518518" vertical-offset="94" max-vertical-offset="792">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModuleTemplates.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/Modules/ModuleTemplates.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="17" selection-start="1269" selection-end="1269" vertical-scroll-proportion="0.0" vertical-offset="1062" max-vertical-offset="1764">
+            <state line="51" column="37" selection-start="888" selection-end="888" vertical-scroll-proportion="0.45845273" vertical-offset="490" max-vertical-offset="1818">
               <folding />
             </state>
           </provider>
@@ -144,7 +157,6 @@
         <option value="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" />
         <option value="$PROJECT_DIR$/core/Hooks/Enqueues.php" />
         <option value="$PROJECT_DIR$/js/dev/common/KBMenus.js" />
-        <option value="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" />
         <option value="$PROJECT_DIR$/core/Menus/submenus/sidebars/templates/new-sidebar-form.twig" />
         <option value="$PROJECT_DIR$/core/Menus/submenus/templates/add-new-form.twig" />
         <option value="$PROJECT_DIR$/core/Backend/Areas/Area.php" />
@@ -171,14 +183,15 @@
         <option value="$PROJECT_DIR$/core/Utils/helper.new.php" />
         <option value="$PROJECT_DIR$/core/Fields/Field.php" />
         <option value="$PROJECT_DIR$/core/Language/I18n.php" />
-        <option value="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" />
-        <option value="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" />
         <option value="$PROJECT_DIR$/css/sass/partials/_flags.scss" />
         <option value="$PROJECT_DIR$/css/sass/kontentblocks.scss" />
         <option value="$PROJECT_DIR$/css/sass/partials/_options/_page.scss" />
         <option value="dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..rs_kb_plugindata" />
-        <option value="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" />
+        <option value="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" />
         <option value="$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php" />
+        <option value="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" />
+        <option value="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" />
+        <option value="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" />
       </list>
     </option>
   </component>
@@ -282,7 +295,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -296,51 +309,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sass" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sass" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="partials" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
+              <option name="myItemId" value="Ajax" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -431,7 +404,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42435896" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28846154" sideWeight="0.49968293" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28846154" sideWeight="0.49968293" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.247305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27330375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -702,25 +675,6 @@
         <state line="247" column="28" selection-start="5778" selection-end="5778" vertical-scroll-proportion="0.0" vertical-offset="4075" max-vertical-offset="6750" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Ajax/GetSanitizedId.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="998" selection-end="998" vertical-scroll-proportion="-16.185184" vertical-offset="319" max-vertical-offset="864" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="84" selection-start="2094" selection-end="2094" vertical-scroll-proportion="0.0" vertical-offset="1260" max-vertical-offset="4752">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Modules/ModuleTemplates.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="17" selection-start="1269" selection-end="1269" vertical-scroll-proportion="0.0" vertical-offset="1062" max-vertical-offset="1764">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../../wp-includes/l10n.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="6" selection-start="96" selection-end="99" vertical-scroll-proportion="0.2382353" vertical-offset="0" max-vertical-offset="14598" />
@@ -747,6 +701,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="173" selection-start="2454" selection-end="2454" vertical-scroll-proportion="-17.11111" vertical-offset="1068" max-vertical-offset="4806">
+          <folding>
+            <element signature="e#39#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="191" column="124" selection-start="5132" selection-end="5132" vertical-scroll-proportion="-17.777779" vertical-offset="2958" max-vertical-offset="6174">
+          <folding>
+            <marker date="1389686793348" expanded="true" signature="6017:6083" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+            <marker date="1389686793348" expanded="true" signature="8369:8457" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+            <marker date="1389686793348" expanded="true" signature="8369:8456" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+            <marker date="1389686793348" expanded="true" signature="8369:8459" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="dbDummy://dbtable:/b5c669bf/743be213-d28d-4bfe-a389-23d598092e26/restrap..rs_kb_plugindata">
       <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
         <state />
@@ -759,22 +734,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="16" selection-start="3059" selection-end="3059" vertical-scroll-proportion="-6.4814816" vertical-offset="1571" max-vertical-offset="6300">
+        <state line="265" column="29" selection-start="8398" selection-end="8398" vertical-scroll-proportion="-8.592592" vertical-offset="4430" max-vertical-offset="7434">
           <folding>
-            <marker date="1389650932478" expanded="true" signature="3592:3759" placeholder="..." />
+            <marker date="1389687107984" expanded="true" signature="3700:3867" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php">
+    <entry file="file://$PROJECT_DIR$/core/Ajax/GetSanitizedId.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="269" column="39" selection-start="7268" selection-end="7268" vertical-scroll-proportion="0.48913044" vertical-offset="4617" max-vertical-offset="5742">
-          <folding>
-            <marker date="1389650953430" expanded="true" signature="5555:5621" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-            <marker date="1389650953430" expanded="true" signature="7907:7995" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-            <marker date="1389650953430" expanded="true" signature="7907:7994" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-            <marker date="1389650953430" expanded="true" signature="7907:7997" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-          </folding>
+        <state line="31" column="25" selection-start="914" selection-end="914" vertical-scroll-proportion="-16.518518" vertical-offset="94" max-vertical-offset="792">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/ModuleTemplates.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="37" selection-start="888" selection-end="888" vertical-scroll-proportion="0.45845273" vertical-offset="490" max-vertical-offset="1818">
+          <folding />
         </state>
       </provider>
     </entry>

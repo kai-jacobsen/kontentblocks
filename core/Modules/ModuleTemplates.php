@@ -39,9 +39,17 @@ class ModuleTemplates
 
     }
 
+    public function getTemplate($id)
+    {
+
+    }
+
     public function templateExists($id)
     {
-        if (isset($this->templates[$id]) || isset($this->masterTemplates[$id])) {
+        $all = $this->getAllTemplates();
+
+
+        if (array_key_exists($id,$all)) {
             return true;
         } else {
             return false;
@@ -57,6 +65,7 @@ class ModuleTemplates
         $this->masterTemplates = array_filter($data, function ($item) {
             return $item['master'];
         });
+
         if (empty($data)) {
             return false;
         }

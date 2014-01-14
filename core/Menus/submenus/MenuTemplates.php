@@ -7,6 +7,7 @@ use Kontentblocks\Backend\API\PluginDataAPI;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Modules\ModuleTemplates;
 use Kontentblocks\Templating\CoreTemplate;
 
 class MenuTemplates extends AbstractMenuEntry
@@ -29,7 +30,8 @@ class MenuTemplates extends AbstractMenuEntry
         ),
         'views' => array(
             'display' => 'overviewView',
-            'edit' => 'editModule'
+            'edit' => 'editModule',
+            'confirm-ml-delete' => 'confirmMultilanguageDelete'
         )
     );
 
@@ -197,14 +199,16 @@ class MenuTemplates extends AbstractMenuEntry
         $definition['template'] = true;
         $definition['instance_id'] = $data['id'];
 
+
         $API = new PluginDataAPI('module');
         $insertModule = $API->update($data['id'], $definition);
-
-        $insertDef = $API->setGroup('template')->update($data['id'], $data);
         $insertDef = $API->setGroup('template')->update($data['id'], $data);
 
-        if ($insertModule === true && $insertDef === true) {
-            $url = add_query_arg(array('view' => 'edit', 'template' => $data['id']));
+        $allTemplates = ModuleTemplates::getInstance()->getAllTemplates();
+        $full = (isset($allTemplates[$data['id']])) ? $allTemplates[$data['id']] : null;
+
+        if ($insertModule === true && $insertDef === true && !is_null($full)) {
+            $url = add_query_arg(array('view' => 'edit', 'template' => $data['id'], 'tid' => $full['tid']));
             wp_redirect($url);
         } else {
             $url = add_query_arg(array('message' => '498'));
@@ -243,7 +247,63 @@ class MenuTemplates extends AbstractMenuEntry
 
     public function delete()
     {
+        wp_verify_nonce($_GET['nonce'], 'kb_delete_template');
 
+        if (!isset($_GET['template']) || !isset($_GET['tid'])) {
+            wp_die('It\'s not that simple');
+        }
+
+        $templateId = filter_var($_GET['template'], FILTER_SANITIZE_STRING);
+        $tid = filter_var($_GET['tid'], FILTER_SANITIZE_NUMBER_INT);
+
+        $API = new PluginDataAPI('template');
+
+        if ($API->hasMultipleLanguages($templateId) && I18n::wpmlActive() && !isset($_GET['mode'])) {
+            $url = add_query_arg(array('view' => 'confirm-ml-delete', 'action' => false));
+            wp_redirect($url);
+        }
+
+        // Fallback to single
+        $mode = (isset($_GET['mode'])) ? filter_var($_GET['mode'], FILTER_SANITIZE_STRING) : 'single';
+
+
+        $modewhitelist = array('single', 'all');
+        if (!in_array($mode, $modewhitelist)){
+            throw new \UnexpectedValueException('Mode MUST be either "all" or "single".');
+        }
+
+        if ($mode === 'all'){
+            $delete = $API->deleteAll($templateId);
+        } else {
+            $delete = $API->delete($templateId);
+        }
+
+        if ($delete) {
+            $url = add_query_arg(array('action' => false, 'template' => false, 'tid' => false, 'nonce' => false, 'mode' => false));
+            wp_redirect($url);
+        } else {
+            wp_die('Template does not exist (anymore)');
+        }
+    }
+
+    public function confirmMultilanguageDelete()
+    {
+        wp_verify_nonce($_GET['nonce'], 'kb_delete_template');
+
+        if (!isset($_GET['template']) || !isset($_GET['tid'])) {
+            wp_die('It\'s not that simple');
+        }
+
+        $templateId = filter_var($_GET['template'], FILTER_SANITIZE_STRING);
+        $tid = filter_var($_GET['tid'], FILTER_SANITIZE_NUMBER_INT);
+
+        print "<h4>Do you want to delete the Template in all languages? Or just in the current language?</h4>";
+
+        $urlAll = add_query_arg(array('mode' => 'all', 'action' => 'delete', 'view' => false));
+        $urlSingle = add_query_arg(array('mode' => 'single', 'action' => 'delete', 'view' => false));
+
+        print "<a href='{$urlAll}'>All</a>";
+        print "<a href='{$urlSingle}'>Single</a>";
     }
 
 
@@ -251,6 +311,11 @@ class MenuTemplates extends AbstractMenuEntry
     {
         $templateId = $_GET['template'];
         $tid = $_GET['tid'];
+
+        if (!isset($templateId) || !isset($tid)) {
+            wp_die('This cannot work');
+        }
+
         // data comes from default language
         $API = new PluginDataAPI('module', I18n::getDefaultLanguageCode());
         $moduleDef = $API->get($templateId);
@@ -316,7 +381,7 @@ class MenuTemplates extends AbstractMenuEntry
 
     private function renderLanguageSwitch($languages)
     {
-        if (count($languages) < 1) {
+        if (count($languages) < 1 || !I18n::wpmlActive()) {
             return;
         }
 
@@ -334,13 +399,12 @@ class MenuTemplates extends AbstractMenuEntry
                 )) : false;
             $link = ($url) ? "<a class='flag flag-{$l}' href='{$url}'>{$l}</a>" : '';
 
-            if ($url !== false){
+            if ($url !== false) {
                 print "<li>{$link}</li>";
             } else {
                 print "<li class='flag flag-{$l} kb-current-template-language'>{$l}</li>";
             }
         }
-
 
 
         print "</ul></div>";

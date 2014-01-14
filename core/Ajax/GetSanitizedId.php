@@ -12,6 +12,7 @@ class GetSanitizedId
     protected $dataHandler;
     protected $instanceId;
 
+    // TODO first sanitize the input, check if other languages exits and/or template exists in non-l18n context
     public function __construct()
     {
         // verify action
@@ -24,20 +25,15 @@ class GetSanitizedId
         switch ($checkmode) {
             case 'areas':
                 $check = AreaRegistry::getInstance()->areaExists(trim($value));
-                break;
             case 'templates':
                 $check = ModuleTemplates::getInstance()->templateExists(trim($value));
-                break;
         }
 
-        echo $check;
         if ($check === false) {
             wp_send_json(sanitize_title($value));
         } else {
             wp_send_json_error();
         }
-
-
     }
 
 }
