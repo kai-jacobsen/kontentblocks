@@ -40,29 +40,9 @@ class Module_Prototype extends Module
                 'type' => 'text',
                 'text' => 'My first checkbox',
                 'areaContext' => array( 'normal' ),
-                'std' => true,
-                ))
-            ->addField(
-                'checkbox', 'checkythebox', array(
-                    'label' => 'Label for Text',
-                    'description' => 'stuff',
-                    'type' => 'text',
-                    'text' => 'My first checkbox',
-                    'areaContext' => array( 'side' ),
-                    'std' => true,
-                )
-            );
-        $groupB = $this->Fields->addGroup( 'Andrew', array( 'label' => 'What' ) )
-            ->addField(
-                'checkbox', 'somecheckbox', array(
-                'label' => 'Label for Text',
-                'description' => 'stuff',
-                'type' => 'text',
-                'text' => 'My first checkbox',
-                'areaContext' => array( 'side' ),
-                'std' => true,
-                )
-            );
+                'std' => 'Lorem Ipsum'
+                ));
+
     }
 
 }

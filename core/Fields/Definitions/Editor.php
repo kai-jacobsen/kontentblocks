@@ -23,15 +23,15 @@ Class Editor extends Field
         $id = $this->get_field_id(true);
         $value = $this->getValue();
         $this->label();
-        kb_wp_editor($id, $value, $name, $media);
         $this->description();
+        kb_wp_editor($id, $value, $name, $media);
 
     }
-
-    public function frontsideForm()
-    {
-        echo 'Frontside onyl';
-    }
+//
+//    public function frontsideForm()
+//    {
+//        echo 'Frontside onyl';
+//    }
 
     public function filter($value)
     {

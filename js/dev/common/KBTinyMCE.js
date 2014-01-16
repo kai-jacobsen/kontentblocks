@@ -42,22 +42,25 @@ KB.TinyMCE = (function($) {
 
             if (!$el){
                 $el = KB.lastAddedModule.view.$el;
-                console.log($el);
             }
 
             $('.wp-editor-area', $el).each(function() {
                 var id = this.id;
-
                 // add new editor id to settings
                 settings.elements = id;
+                settings.id = id;
 				settings.height = 350;
 				settings.setup = function(ed) {
-                    ed.onInit.add(function(){
+                    ed.on('init', function(){
                         jQuery(document).trigger('newEditor', ed);
                     });
                 };
+
+                var ed = new tinymce.Editor(id, settings, tinymce.EditorManager);
+                ed.render();
 //                new tinymce.Editor(id, settings).render();
-                tinyMCE.init(settings);
+//                tinyMCE.init(settings);
+
                 // doesn't wok without, but don't really know what this does
                 var qtsettings = {
                     'buttons': '',

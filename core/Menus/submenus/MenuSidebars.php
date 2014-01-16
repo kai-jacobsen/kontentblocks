@@ -12,12 +12,20 @@ use Kontentblocks\Templating\CoreTemplate;
  * Class MenuSidebars
  * @package Kontentblocks
  * @subpackage Menus
+ * @since 1.0.0
  */
 class MenuSidebars extends AbstractMenuEntry
 {
 
     /**
      * Config
+     * - handle: unique identifier
+     * - name: Menu item label
+     * - priority: order prio
+     * - pageTitle: Title for all views
+     * - actions: index array of actions or associative action => method map
+     * - views: see above,for views
+     * - messages: User feedback messages, like wp admin notices
      * @todo refine
      * @var array
      */

@@ -96,7 +96,7 @@ class MenuManager
      * @since 1.0.0
      * @return void
      */
-    public function addMenuEntry( $class, $args, $file)
+    public function addMenuEntry($class, $args, $file)
     {
         if (!isset($this->entries[$args['handle']])) {
             $instance = new $class;
@@ -248,6 +248,8 @@ class MenuManager
         // render the title
         $item->title();
 
+        $this->handleMessages($item);
+
         // check if item has requested view
         $itemview = $item->hasView($view);
 
@@ -274,6 +276,31 @@ class MenuManager
         $this->toJSON();
         $item->toJSON();
 
+    }
+
+    /**
+     * @param \Kontentblocks\Abstracts\AbstractMenuEntry $view
+     * @since 1.0.0
+     */
+    public function handleMessages($view)
+    {
+        if (!isset($_GET['message'])) {
+            return;
+        }
+
+        $msgCode = $_GET['message'];
+        $msg = $view->getMessage($msgCode);
+
+        if (!is_null($msg)) {
+            switch ($msg['type']) {
+                case 'notice':
+                    printf("<div class='updated fade'><p>%s</p></div>", $msg['msg']);
+                    break;
+                case 'error':
+                    printf("<div class='error fade'><p>%s</p></div>", $msg['msg']);
+                    break;
+            }
+        }
     }
 
     /**

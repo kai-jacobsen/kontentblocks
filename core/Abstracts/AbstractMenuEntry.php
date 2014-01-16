@@ -55,8 +55,22 @@ abstract class AbstractMenuEntry implements InterfaceMenuEntry
 
     public function setPath($file)
     {
-        $this->path = trailingslashit( dirname($file) );
+        $this->path = trailingslashit(dirname($file));
         $this->subfolder = $this->path . $this->handle;
+    }
+
+    public function title()
+    {
+        if (!empty(static::$args['pageTitle'])) {
+            printf("<h2>%s</h2>", static::$args['pageTitle']);
+        }
+    }
+
+    public function getMessage($msgCode)
+    {
+        if (isset(static::$args['messages'][$msgCode])) {
+            return static::$args['messages'][$msgCode];
+        }
     }
 
 

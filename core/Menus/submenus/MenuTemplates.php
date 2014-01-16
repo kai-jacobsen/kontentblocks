@@ -14,6 +14,14 @@ class MenuTemplates extends AbstractMenuEntry
 {
     /**
      * Config
+     *
+     * - handle: unique identifier
+     * - name: Menu item label
+     * - priority: order prio
+     * - pageTitle: Title for all views
+     * - actions: index array of actions or associative action => method map
+     * - views: see above,for views
+     * - messages: User feedback messages, like wp admin notices
      * @todo refine
      * @var array
      */
@@ -32,13 +40,19 @@ class MenuTemplates extends AbstractMenuEntry
             'display' => 'overviewView',
             'edit' => 'editModule',
             'confirm-ml-delete' => 'confirmMultilanguageDelete'
+        ),
+        'messages' => array(
+            '1' => array(
+                'msg' => 'Template successfully created. Happy Editing.',
+                'type' => 'notice'
+            ),
+            '2' => array(
+                'msg' => 'Template content successfully updated. Happy Editing.',
+                'type' => 'notice'
+            )
         )
     );
 
-    public function title()
-    {
-        echo "<h2>{$this->pageTitle}</h2>";
-    }
 
     /*
      * ------------------------------------
@@ -49,10 +63,19 @@ class MenuTemplates extends AbstractMenuEntry
     /**
      * Initial view
      * Overview Table, extended instance of \WP_LIST_TABLE
+     * 'Create new'-Form is integrated on this page
+     *
+     * @since 1.0.0
      */
     public function overviewView()
     {
+        /*
+         * Form validation happens on the frontend
+         * if this fails for any reason, data is preserved anyway
+         * for completeness
+         */
         $postData = (!empty($_POST['new-template'])) ? $_POST['new-template'] : array();
+
         // Data for twig
         $templateData = array(
             'modules' => $this->prepareModulesforSelectbox($postData),
@@ -61,7 +84,8 @@ class MenuTemplates extends AbstractMenuEntry
             'master' => (isset($postData['master'])) ? 'checked="checked"' : ''
         );
 
-        // new Twig template
+        // To keep html out of php files as much as possible twig is used
+        // Good thing about twig is it handles unset vars gracefully
         $FormNew = new CoreTemplate('add-new-form.twig', $templateData);
         $FormNew->setPath($this->subfolder);
         $FormNew->render(true);
@@ -71,13 +95,14 @@ class MenuTemplates extends AbstractMenuEntry
         $Table = new TemplatesTable();
         $Table->prepare_items();
         $Table->display();
+        // that's it
     }
 
 
     /**
      * Edit the template contents view callback
      *
-     * If the requested template is not found in a multilanguage project,
+     * If the requested template is not found in a multilanguage project (wpml),
      * and this may be because of language switch,
      * a link is provided to create a version of template in the current language context
      *
@@ -99,25 +124,32 @@ class MenuTemplates extends AbstractMenuEntry
         $context = (isset($_GET['area-context'])) ? $_GET['area-context'] : 'normal';
         $API = new PluginDataAPI('module');
         $moduleDef = $API->get($template);
-        $templateDef = $API->setGroup('template')->get($template);
-
-        $API->reset();
-        // handle missing module definition
-        // TODO add I18n
         if (is_null($moduleDef)) {
             print "Requested template does not exist";
             $this->maybeSuggestTranslation();
             return;
         }
 
+        // get non persistent module settings
+        $moduleDef = ModuleFactory::parseModule($moduleDef);
         //set area context on init
         $moduleDef['areaContext'] = $context;
 
-        $languages = $API->reset()->getLanguagesForKey($template);
-        if (!empty($languages)) {
-            $this->renderLanguageSwitch($languages);
+        $templateDef = $API->setGroup('template')->get($template);
+        // reset state
+        $API->reset();
+        // handle missing module definition
+        // TODO add I18n string
+
+        // render language switch if wpml is active
+        if (I18n::wpmlActive()) {
+            $languages = $API->getLanguagesForKey($template);
+            if (!empty($languages)) {
+                $this->renderLanguageSwitch($languages);
+            }
         }
 
+        // create essential markup and render the module
         print "<div id='kontentblocks_stage'>";
         print "<h3>Editing \"{$templateDef['name']}\"</h3>";
         // infamous hidden editor hack
@@ -125,6 +157,7 @@ class MenuTemplates extends AbstractMenuEntry
         $moduleData = $API->setGroup('tpldata')->get($moduleDef['instance_id']);
 
         // no data from db equals null, null is invalid
+        // we can't pass null to the factory, if environment is null as well
         if (is_null($moduleData)) {
             $moduleData = array();
         }
@@ -147,6 +180,32 @@ class MenuTemplates extends AbstractMenuEntry
 
     }
 
+    /**
+     * Ask the user if all templates of specified id should be deleted
+     * if there are multiple templates with the same id (translations)
+     */
+    public function confirmMultilanguageDelete()
+    {
+        // check nonce
+        wp_verify_nonce($_GET['nonce'], 'kb_delete_template');
+
+        if (!isset($_GET['template']) || !isset($_GET['tid'])) {
+            wp_die('It\'s not that simple');
+        }
+
+        // TODO I18n string
+        print "<h4>Do you want to delete the Template in all languages? Or just in the current language?</h4>";
+
+        // add mode parameter
+        $urlAll = add_query_arg(array('mode' => 'all', 'action' => 'delete', 'view' => false));
+        $urlSingle = add_query_arg(array('mode' => 'single', 'action' => 'delete', 'view' => false));
+
+        // TODO UI Design
+        print "<a href='{$urlAll}'>All</a>";
+        print "<a href='{$urlSingle}'>Single</a>";
+    }
+
+
     /*
      * ------------------------------------
      * ACTIONS
@@ -159,6 +218,9 @@ class MenuTemplates extends AbstractMenuEntry
      */
     public function createTemplate()
     {
+        /*
+         * Permissions check
+         */
         if (!wp_verify_nonce($_POST['_nonce'], 'new-template')) {
             wp_die('Verification failed');
         }
@@ -171,6 +233,7 @@ class MenuTemplates extends AbstractMenuEntry
             wp_die('Action not permitted');
         }
 
+
         // set defaults
         $defaults = array(
             'master' => false,
@@ -181,9 +244,11 @@ class MenuTemplates extends AbstractMenuEntry
         );
         // parse $_POST data
         $data = wp_parse_args($_POST['new-template'], $defaults);
+
+        // convert checkbox input to boolean
         $data['master'] = ($data['master'] === '1') ? true : false;
 
-        // last check
+        // 3 good reasons to stop
         if (is_null($data['id']) || is_null($data['name'] || is_null($data['type']))) {
             wp_die('Missing arguments');
         }
@@ -194,60 +259,97 @@ class MenuTemplates extends AbstractMenuEntry
             wp_die('Definition not found');
         }
 
-
+        //set individual module definition args for later reference
         $definition['master'] = $data['master'];
         $definition['template'] = true;
         $definition['instance_id'] = $data['id'];
+        $definition['class'] = $data['type'];
 
+        // settings are not persistent
+        unset($definition['settings']);
 
+        // Insert into db
         $API = new PluginDataAPI('module');
         $insertModule = $API->update($data['id'], $definition);
         $insertDef = $API->setGroup('template')->update($data['id'], $data);
 
+        // get inserted template back to get the db unique id (tid)
         $allTemplates = ModuleTemplates::getInstance()->getAllTemplates();
         $full = (isset($allTemplates[$data['id']])) ? $allTemplates[$data['id']] : null;
 
+        // redirect to success page
+        // TODO: meaningful error page / message handling
         if ($insertModule === true && $insertDef === true && !is_null($full)) {
-            $url = add_query_arg(array('view' => 'edit', 'template' => $data['id'], 'tid' => $full['tid']));
+            $url = add_query_arg(array('view' => 'edit', 'template' => $data['id'], 'tid' => $full['tid'], 'message' => '1'));
             wp_redirect($url);
         } else {
-            $url = add_query_arg(array('message' => '498'));
+            // todo remove incomplete data set if something failed
+            $url = add_query_arg(array('message' => '500'));
             wp_redirect($url);
         }
     }
 
-
+    /**
+     * Update callback
+     * Comes from the edit screen, save module data
+     */
     public function update()
     {
+        // check nonce
         check_admin_referer('update-template');
+
+        //check user
+        if (!current_user_can('edit_kontentblocks')) {
+            wp_die('Action not permitted');
+        }
+
 
         isset($_POST['templateId'])
             ? $templateID = $_POST['templateId']
             : wp_die('No templateId given');
 
         $API = new PluginDataAPI('tpldata');
+
+        // get existing data or set to empty array
         $old = $API->get($templateID);
 
         if (is_null($old)) {
             $old = array();
         };
 
-        $moduleDef = $API->setGroup('module')->get($templateID);
+        // get module definition
+        $moduleDefTpl = $API->setGroup('module')->get($templateID);
+        $moduleDef = ModuleFactory::parseModule($moduleDefTpl);
 
-        $Factory = new ModuleFactory($moduleDef['settings']['class'], $moduleDef, null, $old);
+        $Factory = new ModuleFactory($moduleDef['class'], $moduleDef, null, $old);
         /** @var $Instance \Kontentblocks\Modules\Module */
         $Instance = $Factory->getModule();
         $new = $Instance->save($_POST[$templateID], $old);
         $toSave = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
         // switch back to data group
         $API->setGroup('tpldata');
+        // update data
         $update = $API->update($templateID, $toSave);
 
+        if ($update) {
+            $url = add_query_arg(array('message' => 2));
+            wp_redirect($url);
+        }
+
+        // Todo Saving failed
+        // Most likely because of connection errors
     }
 
+    /**
+     * Delete Template callback
+     * @throws \UnexpectedValueException
+     */
     public function delete()
     {
+        // check nonce
         wp_verify_nonce($_GET['nonce'], 'kb_delete_template');
+
+        // check for essentials
 
         if (!isset($_GET['template']) || !isset($_GET['tid'])) {
             wp_die('It\'s not that simple');
@@ -258,6 +360,9 @@ class MenuTemplates extends AbstractMenuEntry
 
         $API = new PluginDataAPI('template');
 
+        // In a multilingual context there needs to be checked if the current template is
+        // a translation resp. other templates with the same id exists.
+        // In that case the user gets asked if all languages should be deteled or just this one
         if ($API->hasMultipleLanguages($templateId) && I18n::wpmlActive() && !isset($_GET['mode'])) {
             $url = add_query_arg(array('view' => 'confirm-ml-delete', 'action' => false));
             wp_redirect($url);
@@ -266,13 +371,15 @@ class MenuTemplates extends AbstractMenuEntry
         // Fallback to single
         $mode = (isset($_GET['mode'])) ? filter_var($_GET['mode'], FILTER_SANITIZE_STRING) : 'single';
 
-
+        // allowed modes
         $modewhitelist = array('single', 'all');
-        if (!in_array($mode, $modewhitelist)){
+
+        if (!in_array($mode, $modewhitelist)) {
             throw new \UnexpectedValueException('Mode MUST be either "all" or "single".');
         }
 
-        if ($mode === 'all'){
+        // finally destroy data
+        if ($mode === 'all') {
             $delete = $API->deleteAll($templateId);
         } else {
             $delete = $API->delete($templateId);
@@ -284,26 +391,6 @@ class MenuTemplates extends AbstractMenuEntry
         } else {
             wp_die('Template does not exist (anymore)');
         }
-    }
-
-    public function confirmMultilanguageDelete()
-    {
-        wp_verify_nonce($_GET['nonce'], 'kb_delete_template');
-
-        if (!isset($_GET['template']) || !isset($_GET['tid'])) {
-            wp_die('It\'s not that simple');
-        }
-
-        $templateId = filter_var($_GET['template'], FILTER_SANITIZE_STRING);
-        $tid = filter_var($_GET['tid'], FILTER_SANITIZE_NUMBER_INT);
-
-        print "<h4>Do you want to delete the Template in all languages? Or just in the current language?</h4>";
-
-        $urlAll = add_query_arg(array('mode' => 'all', 'action' => 'delete', 'view' => false));
-        $urlSingle = add_query_arg(array('mode' => 'single', 'action' => 'delete', 'view' => false));
-
-        print "<a href='{$urlAll}'>All</a>";
-        print "<a href='{$urlSingle}'>Single</a>";
     }
 
 
@@ -350,6 +437,11 @@ class MenuTemplates extends AbstractMenuEntry
         echo "<script> var KB = KB || {}; KB.Screen['post_id'] = 'templates';</script>";
     }
 
+    /**
+     * Gets all available Modules from registry
+     * @param $postData potential incomplete form data
+     * @return array
+     */
     private function prepareModulesforSelectbox($postData)
     {
 
@@ -371,14 +463,26 @@ class MenuTemplates extends AbstractMenuEntry
 
     }
 
+    /**
+     * When a user is on the edit template screen and switches languages,
+     * this method is called inside the edit view if the requested language does not exist
+     * Ask the user if a translation should be created
+     * // TODO add "get back to previous screen" choice | cancel
+     */
     private function maybeSuggestTranslation()
     {
-        if (I18n::getActiveLanguage() !== I18n::getDefaultLanguageCode()) {
-            $url = add_query_arg(array('action' => 'add-translation'));
-            print "<a href='{$url}'>Add Translation</a>";
-        }
+        $url = add_query_arg(array('action' => 'add-translation'));
+        print "<a href='{$url}'>Add Translation</a>";
     }
 
+    /**
+     * Checks if the current template has different languages available
+     * and provide links to switch to the languages
+     * this will trigger a wpml language context switch as well
+     * works as expected
+     * Gets called inside the edit view
+     * @param $languages
+     */
     private function renderLanguageSwitch($languages)
     {
         if (count($languages) < 1 || !I18n::wpmlActive()) {
@@ -405,10 +509,7 @@ class MenuTemplates extends AbstractMenuEntry
                 print "<li class='flag flag-{$l} kb-current-template-language'>{$l}</li>";
             }
         }
-
-
         print "</ul></div>";
     }
-
 
 }

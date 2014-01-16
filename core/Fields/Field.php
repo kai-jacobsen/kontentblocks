@@ -64,7 +64,7 @@ abstract class Field
 
     public function getReturnObj()
     {
-        if ($this->returnObj) {
+        if (!$this->returnObj) {
             $classname = $this->defaults['returnObj'];
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
             $this->returnObj = new $classpath($this->value, $this);
