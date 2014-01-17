@@ -331,10 +331,10 @@ li.gallery-item textarea:focus {
 @import "partials/_kontentfields_new";
 .kb_draft {
   padding: 5px 0 5px 20px;
-  border-left: 0px solid $orange;
+  border-left: 2px solid $orange;
   margin-left: 0px;
   font-weight: 300;
-  background: #f9f9f9;
+  background: #fff;
   border-bottom: 1px solid #fcfcfc;
   font-style: italic;
   color: #333;
@@ -664,4 +664,8 @@ textarea.quicktags {
 
 .kb-hide {
   display: none;
+}
+
+.editable{
+  outline: 1px dotted #333;
 }

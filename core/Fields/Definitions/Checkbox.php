@@ -13,7 +13,8 @@ Class Checkbox extends Field
 
     // field defaults
     protected $defaults = array(
-        'renderHidden' => true
+        'renderHidden' => true,
+        'returnObj' => false
     );
 
     /**

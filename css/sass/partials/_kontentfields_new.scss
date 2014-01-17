@@ -4,15 +4,15 @@
 
 .kb_field{
 
-    .wp-editor-container{
-        border: 0 !important;
-    }
+//    .wp-editor-container{
+//        border: 0 !important;
+//    }
 
     &.checkbox{
-        background: transparent;
+//        background: transparent;
     }
 
-    background-color: #fff;
+    background-color: #f1f1f1;
     padding: 20px 20px 25px 20px;
     border-bottom: 1px solid #f2f2f2;
     &:last-child{
@@ -22,14 +22,17 @@
     /* Shared */
 
     label.heading{
-        display: block;
-        margin-bottom: 8px;
-        border-left: 2px solid #33b5e5;
-        padding-left: 20px;
-        margin-left: -20px;
-		font-weight: 700;
-        font-size: 13px;
-        color: #333333;
+      display: block;
+      margin-bottom: 14px;
+      padding-bottom: 4px;
+      /* border-left: 2px solid #33b5e5; */
+      /* padding-left: 20px; */
+      /* margin-left: -20px; */
+      font-weight: 700;
+      font-size: 13px;
+      color: #333333;
+      border-bottom: 1px solid #aaa;
+      box-shadow: 0px 1px 1px #fff;
     }
 
     input[type=text]{
@@ -85,17 +88,17 @@ Field Tabs
 
     ul.ui-tabs-nav{
         margin-bottom: 0px;
-        margin-left: -8px;
-        padding:10px 0;
+        margin-left: 0px;
+        padding:10px 0 0 0;
 
         li{
             padding: 8px 0px 5px 0px;
             background: #fff;
             float: left;
-            border-bottom: 2px solid #f9f9f9;
+//            border-bottom: 2px solid #f9f9f9;
             margin-bottom: 0;
             position: relative;
-            top:2px;
+            top:0px;
 
 
             a{
@@ -117,12 +120,13 @@ Field Tabs
 
 
             &:hover{
-                border-bottom: 2px solid $lightblue;
+//                border-bottom: 2px solid $lightblue;
             }
 
             &.ui-tabs-active{
-                background-color: #fff;
-                border-bottom: 2px solid $lightblue;
+                background-color: #f1f1f1;
+//                border-bottom: 2px solid $lightblue;
+              border-right: 1px solid #aaa;
 
                 a{
                     color: #333;

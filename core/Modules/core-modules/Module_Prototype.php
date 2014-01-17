@@ -32,7 +32,7 @@ class Module_Prototype extends Module
 
     public function fields()
     {
-        $groupA = $this->Fields->addGroup( 'Peter', array( 'label' => 'What' ) )
+        $groupA = $this->Fields->addGroup( 'First', array( 'label' => 'Editor' ) )
             ->addField(
                 'editor', 'someeditor', array(
                 'label' => 'Label for Text',
@@ -41,7 +41,45 @@ class Module_Prototype extends Module
                 'text' => 'My first checkbox',
                 'areaContext' => array( 'normal' ),
                 'std' => 'Lorem Ipsum'
-                ));
+                ))
+            ->addField(
+                'text', 'headline', array(
+                'label' => 'Label for Text',
+                'description' => 'stuff',
+                'type' => 'text',
+                'text' => 'My first checkbox',
+                'areaContext' => array( 'normal' ),
+                'std' => 'Lorem Ipsum'
+            ));
+
+        $groupB = $this->Fields->addGroup( 'Second', array( 'label' => 'Options' ) )
+            ->addField(
+                'checkbox', 'alternate', array(
+                'label' => 'Activate alternative layout',
+                'description' => 'This module has an alternative layout',
+                'text' => 'My first checkbox',
+                'areaContext' => array( 'normal' ),
+            ))->addField(
+                'checkboxgroup', 'alternateGroup', array(
+                'label' => 'Activate alternative layouts options',
+                'description' => 'This module has an alternative layout',
+                'text' => 'Some options for you buddy',
+                'areaContext' => array( 'normal' ),
+                'options' => array(
+                    array(
+                        'value' => 'something',
+                        'label' => 'Paint it red'
+                    ),
+                    array(
+                        'value' => 'something',
+                        'label' => 'Enter Sandman'
+                    ),
+                    array(
+                        'value' => 'something',
+                        'label' => 'Ball Tongue'
+                    )
+                )
+            ));
 
     }
 

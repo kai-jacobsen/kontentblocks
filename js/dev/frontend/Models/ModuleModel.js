@@ -20,7 +20,6 @@ KB.ModuleModel = Backbone.Model.extend({
             dataType: 'json',
             cookie: encodeURIComponent( document.cookie ),
             success: function(data) {
-                
                 console.log('sent');
             },
             error: function() {

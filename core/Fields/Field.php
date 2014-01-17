@@ -66,6 +66,9 @@ abstract class Field
     {
         if (!$this->returnObj) {
             $classname = $this->defaults['returnObj'];
+            if (!$classname) {
+                return;
+            }
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
             $this->returnObj = new $classpath($this->value, $this);
             return $this->returnObj;
@@ -242,7 +245,7 @@ abstract class Field
 
     public function save($keydata, $oldKeyData)
     {
-        if (is_null($keydata)){
+        if (is_null($keydata)) {
             return $oldKeyData;
         } else {
             return $keydata;

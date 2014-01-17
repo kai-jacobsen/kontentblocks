@@ -21,6 +21,7 @@ class ModuleFactory
         } else {
             $this->data = $data;
         }
+
         $this->environment = $environment;
 
     }

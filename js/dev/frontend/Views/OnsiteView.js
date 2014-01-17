@@ -52,7 +52,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 		KB.lastAddedModule = {
 			view: that
 		};
-
+        console.log(that.model);
 		jQuery.ajax({
 			url: ajaxurl,
 			data: {
@@ -68,6 +68,7 @@ KB.Backbone.OnsiteView = Backbone.View.extend({
 				KB.Ui.initToggleBoxes();
 				KB.TinyMCE.addEditor();
 				KB.Fields.trigger('update');
+                tinymceinit();
 
 			},
 			error: function() {

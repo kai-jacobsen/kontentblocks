@@ -48,39 +48,122 @@ class PluginDataAPI implements InterfaceDataAPI
 {
 
     /**
+     * wpdb database oject
      * @var object
+     * @since 1.0.0
      */
     protected $db = null;
+
+    /**
+     * Group as set on init resp. the first ever called group id
+     * Stays the same throughout instance lifetime
+     * @var string
+     * @since 1.0.0
+     */
     protected $initGroup = null;
+
+    /**
+     * Current working state group column id
+     * @var string
+     * @since 1.0.0
+     */
     protected $group = null;
+
+    /**
+     * Language as set on init resp. the system default language
+     * @var string
+     * @since 1.0.0
+     */
     protected $initLanguage = null;
+
+    /**
+     * Current working state language
+     * @var string
+     * @since 1.0.0
+     */
     protected $language;
+
+    /**
+     * name of the db table
+     * @var string
+     * @since 1.0.0
+     */
     protected $tablename = null;
+
+    /**
+     * Table data of the current language, sorted by group id
+     * associative array
+     * @var array
+     * @since 1.0.0
+     */
     protected $dataByGroups = array();
+
+    /**
+     * Table data of the current language, sorted by unique id key
+     * @var array
+     * @since 1.0.0
+     */
     protected $dataById = array();
+
+    /**
+     * raw result of the initial select query
+     * @var array
+     * @since 1.0.0
+     */
     protected $dataRaw = array();
 
 
+    /**
+     *
+     * On construction a group id must be set.
+     * Language will default to the locale as returned by get_locale()
+     *
+     * @TODO Pointless to use this class without a group set
+     * @param string|null $group
+     * @param string|null $lang
+     * @throws \UnexpectedValueException if no group is set
+     * @since 1.0.0
+     */
     public function __construct($group = null, $lang = null)
     {
 
+        if (is_null($group)) {
+            throw new \UnexpectedValueException('A group id must be provided on instantiation');
+        }
+
         global $wpdb;
 
+        // import wpdb
         $this->db = $wpdb;
+
+        // TODO Multisite tests
+        //set the correct tablename
         $this->tablename = $wpdb->prefix . 'kb_plugindata';
 
-        if ($group) {
-            $this->setGroup($group);
-        }
+        // set group
+        $this->setGroup(filter_var($group, FILTER_SANITIZE_STRING));
 
-        $this->setLang(\Kontentblocks\Language\I18n::getActiveLanguage());
+        // set state language
+        $this->setLang($lang);
+
+        // setup state
+        // queries the table for all data where group and lang equals what has been set
         $this->selfUpdate();
 
-        if ($lang) {
-            $this->setLang($lang);
-        }
+
     }
 
+    /**
+     * Insert provided data into the table, where group and language
+     * are taken from the current instance state
+     * 'Update' should be preferred, since 'add' will never create a new entry, if the given key
+     * already exist,...by now.
+     * @TODO add support for multiple keys, like post meta or the options api works
+     * @TODO not critical though
+     * @param string $key
+     * @param mixed $value
+     * @return bool true on success, false on failure
+     */
     public function add($key, $value)
     {
 
@@ -89,6 +172,7 @@ class PluginDataAPI implements InterfaceDataAPI
             return $this->update($key, $value);
         }
 
+        // prepare data to insert
         $insert = array(
             'data_group' => $this->group,
             'data_key' => $key,
@@ -96,6 +180,7 @@ class PluginDataAPI implements InterfaceDataAPI
             'data_lang' => $this->language
         );
 
+        // query
         $result = $this->db->insert($this->tablename, $insert, array('%s', '%s', '%s', '%s'));
 
         if ($result === false) {
@@ -108,18 +193,25 @@ class PluginDataAPI implements InterfaceDataAPI
         }
     }
 
+    /**
+     * Update data or add new if key doesn't exist
+     * @param string $key
+     * @param string $value
+     * @return bool
+     */
     public function update($key, $value)
     {
 
-        // create new
+        // create new if key doesn't exist
         if (!$this->keyExists($key)) {
             return $this->add($key, $value);
         }
 
-        //update existing
+        //set new value
         $update = array(
             'data_value' => maybe_serialize($value)
         );
+        // query
         $result = $this->db->update(
             $this->tablename,
             $update,
@@ -145,14 +237,19 @@ class PluginDataAPI implements InterfaceDataAPI
 
     }
 
+    /**
+     * Get data by group id or unique id
+     * @param mixed $key
+     * @return mixed|null
+     */
     public function get($key)
     {
+        // prepare data
         if (is_numeric($key)) {
             $data = $this->dataById;
         } else {
             $data = $this->getGroupData();
         }
-
 
         if (!$data) {
             return null;
@@ -169,6 +266,10 @@ class PluginDataAPI implements InterfaceDataAPI
     }
 
 
+    /**
+     * Get all data from current group
+     * @return array
+     */
     public function getAll()
     {
         $unpacked = array();
@@ -179,11 +280,19 @@ class PluginDataAPI implements InterfaceDataAPI
         return $unpacked;
     }
 
+    /**
+     * Get raw data
+     * @return array
+     */
     public function getRaw()
     {
         return $this->dataRaw;
     }
 
+    /**
+     * @param null $key
+     * @return bool
+     */
     public function delete($key = null)
     {
         if ($key) {
@@ -199,6 +308,11 @@ class PluginDataAPI implements InterfaceDataAPI
         }
     }
 
+    /**
+     * Delete all is language agnostic
+     * @param string $key
+     * @return bool
+     */
     public function deleteAll($key)
     {
         $languages = $this->getLanguagesForKey($key);
@@ -206,12 +320,13 @@ class PluginDataAPI implements InterfaceDataAPI
         if ($result === false) {
             return false;
         } else {
-            foreach($languages as $l => $v){
+            foreach ($languages as $l => $v) {
                 wp_cache_delete('kb_plugindata_' . $l, 'kontentblocks');
             }
             return true;
         }
     }
+
 
     private function selfUpdate()
     {
@@ -237,7 +352,7 @@ class PluginDataAPI implements InterfaceDataAPI
     }
 
     /**
-     * Rearrange table data to assoc. array, by area_id
+     * Rearrange table data to assoc. array
      * @param $res
      * @return array
      */
@@ -278,8 +393,13 @@ class PluginDataAPI implements InterfaceDataAPI
         return $this;
     }
 
-    public function setLang($code = 'de')
+    public function setLang($code = null)
     {
+        // override with current active language if not set
+        if (is_null($code)){
+            $code = \Kontentblocks\Language\I18n::getActiveLanguage();
+        }
+
         if (!$this->initLanguage) {
             $this->initLanguage = $code;
         }

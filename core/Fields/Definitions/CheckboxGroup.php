@@ -17,7 +17,9 @@ Class CheckboxGroup extends Field
 
     // Field defaults
     protected $defaults = array(
-        'renderHidden' => true
+        'renderHidden' => true,
+        'returnObj' => false
+
     );
 
     /**

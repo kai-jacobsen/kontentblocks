@@ -2,10 +2,29 @@
 
 namespace Kontentblocks\Language;
 
+/**
+ * Class I18n
+ *
+ * Provides an API to the language string management which are
+ * separated into single files
+ * Provides some basic methods to check for (WPML) languages
+ *
+ * @package Kontentblocks
+ * @subpackage Language
+ */
 class I18n
 {
-
+    /**
+     * A Package is a set of translateable strings
+     * which are placed under a certain namespace
+     * @var array
+     */
     static $packages;
+
+    /**
+     * Singleton Instance
+     * @var self Object
+     */
     static $instance;
 
     public static function getInstance()
@@ -14,9 +33,12 @@ class I18n
             self::$instance = new self;
         }
         return self::$instance;
-
     }
 
+    /**
+     * Constructor
+     * Add action and load packages from subfolder
+     */
     private function __construct()
     {
         add_action('wp_footer', array($this, 'toJSON'));
@@ -25,6 +47,9 @@ class I18n
 
     }
 
+    /**
+     * Auto-include all .php files from subfolder /packages
+     */
     private static function loadPackages()
     {
         $path = dirname(__FILE__);
@@ -36,6 +61,11 @@ class I18n
 
     }
 
+    /**
+     * Each language package must register itself with this method
+     * @param $context string I18n-namespace
+     * @param $strings array of translatable string
+     */
     public static function addPackage($context, $strings)
     {
         if (!isset(self::$packages[$context])) {
@@ -43,6 +73,7 @@ class I18n
         }
 
     }
+
 
     public static function getPackage($context)
     {

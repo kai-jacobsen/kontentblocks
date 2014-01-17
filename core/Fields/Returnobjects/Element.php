@@ -58,7 +58,7 @@ class Element extends AbstractFieldReturn
     public function html()
     {
         $format = '<%1$s %3$s>%2$s</%1$s>';
-        return sprintf( $format, $this->el, apply_filters('the_content',$this->value), $this->_renderAttributes() );
+        return sprintf( $format, $this->el, apply_filters('the_content', $this->value), $this->_renderAttributes() );
 
     }
 

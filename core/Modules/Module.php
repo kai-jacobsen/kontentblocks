@@ -510,7 +510,7 @@ abstract class Module
             'settings' => $this->settings,
             'state' => $this->state,
             'instance_id' => $this->instance_id,
-            'moduleData' => $this->moduleData,
+            'moduleData' => $this->rawModuleData,
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->areaContext,

@@ -28,7 +28,7 @@ KB.Frontend = (function($) {
 
 jQuery(document).ready(function(){
     tinymce.init({
-        selector: "kontentblocks.editable",
+        selector: "div.editable",
         theme: "modern",
         skin: false,
         menubar: false,
@@ -36,6 +36,22 @@ jQuery(document).ready(function(){
         schema: "html5",
         inline: true,
         toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
+        statusbar: false,
+        setup: function(ed){
+            ed.on('blur', function(){
+                console.log(ed.getContent());
+            });
+        }
+    });
+    tinymce.init({
+        selector: "h1.editable",
+        theme: "modern",
+        skin: false,
+        menubar: false,
+        add_unload_trigger: false,
+        schema: "html5",
+        inline: true,
+        toolbar: false,
         statusbar: false,
         setup: function(ed){
             ed.on('blur', function(){
