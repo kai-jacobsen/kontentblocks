@@ -17,6 +17,8 @@ abstract class AbstractMenuEntry implements InterfaceMenuEntry
         foreach (static::$args as $k => $arg) {
             $this->$k = $arg;
         }
+
+
     }
 
     public function hasView($view)
@@ -55,8 +57,12 @@ abstract class AbstractMenuEntry implements InterfaceMenuEntry
 
     public function setPath($file)
     {
+
+        $folder = $this->handle;
+        isset(static::$args['subdir']) && $folder = static::$args['subdir'];
+
         $this->path = trailingslashit(dirname($file));
-        $this->subfolder = $this->path . $this->handle;
+        $this->subfolder = $this->path . $folder;
     }
 
     public function title()

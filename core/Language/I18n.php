@@ -163,4 +163,16 @@ class I18n
            return self::get2CharLocale();
         }
     }
+
+    public static function getActiveLanguages()
+    {
+        global $sitepress;
+
+        if (is_object($sitepress) && self::wpmlActive()){
+            return $sitepress->get_active_languages();
+        }
+
+        return self::getDefaultLanguageCode();
+
+    }
 }

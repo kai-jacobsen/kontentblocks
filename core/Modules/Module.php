@@ -87,8 +87,13 @@ abstract class Module
      * Frontend display method.
      * Has no default output yet, and must be overwritten
      */
-    final public function module($data)
+    final public function module($data = null)
     {
+        if (is_null($data) && !is_null($this->moduleData)){
+            $data = $this->moduleData;
+            $this->rawModuleData = $this->moduleData;
+        }
+
         if (isset($this->Fields)) {
             $this->_setupFieldData();
         }

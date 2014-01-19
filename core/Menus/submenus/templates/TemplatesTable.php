@@ -53,8 +53,8 @@ Class TemplatesTable extends \WP_List_Table
                 return $item['name'];
             case 'type':
                 return $item['type'];
-            case 'tid':
-                return $item['tid'];
+            case 'dbid':
+                return $item['dbid'];
             default:
                 return 'needs method';
         }
@@ -82,8 +82,8 @@ Class TemplatesTable extends \WP_List_Table
         $lang = (I18n::wpmlActive()) ? 'Löschen (alle Sprachen)' : 'Löschen';
 
             $actions = array(
-                'edit'      => sprintf('<a href="?page=%s&view=%s&template=%s&tid=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['id'], $item['tid']),
-                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&tid=%s&nonce=%s">%s</a>',$_GET['page'],'delete',$item['id'],$item['tid'],$delete_nonce, $lang),
+                'edit'      => sprintf('<a href="?page=%s&view=%s&template=%s&tid=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['id'], $item['dbid']),
+                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&tid=%s&nonce=%s">%s</a>',$_GET['page'],'delete',$item['id'],$item['dbid'],$delete_nonce, $lang),
             );
 
 
@@ -108,7 +108,7 @@ Class TemplatesTable extends \WP_List_Table
             'name'    => 'Name',
             'id'     => 'ID',
             'type' => 'Module',
-            'tid'   => 'TID'
+            'dbid'   => 'dbid'
             //'available_blocks' => 'Features',
             //'limit' => 'Limit'
         );

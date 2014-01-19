@@ -44,7 +44,7 @@ class ScreenManager
         }
 
         $this->postData      = $postData;
-        $this->regionLayout = $this->_getDefaultRegionLayout();
+        $this->regionLayout = self::getDefaultRegionLayout();
         $this->rawAreas      = $postData->get( 'areas' );
         $this->regions      = $this->areasSortedByRegion( $this->rawAreas );
         // test if final context layout includes an sidebar
@@ -103,7 +103,7 @@ class ScreenManager
      * @filter kb_default_context_layout
      */
 
-    public function _getDefaultRegionLayout()
+    public static function getDefaultRegionLayout()
     {
         $defaults = array(
             'top' => array(

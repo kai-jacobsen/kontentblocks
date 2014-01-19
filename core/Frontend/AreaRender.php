@@ -2,6 +2,9 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Frontend\AreaOutput;
+use Kontentblocks\Frontend\ModuleIterator;
+
 class AreaRender
 {
 
@@ -28,10 +31,10 @@ class AreaRender
             return;
         }
         else {
-            $this->modules = new \Kontentblocks\Frontend\ModuleIterator( $modules, $this->environment );
+            $this->modules = new ModuleIterator( $modules, $this->environment );
         }
 
-        $this->area = new \Kontentblocks\Frontend\AreaOutput(
+        $this->area = new AreaOutput(
             $this->environment->getAreaDefinition( $area ), $this->environment->getAreaSettings( $area ), $additionalArgs );
 
     }
@@ -51,11 +54,12 @@ class AreaRender
         // start area output & crete opening wrapper
         $output.= $this->area->openArea();
 
-        // Iterate over modules
+        // Iterate over modules (ModuleIterator)
         foreach ( $this->modules as $module ) {
 
             // TODO whoooo bad
             // quick fix to test onsite editing
+            // module->module will, depending on field configuration, modify moduleData
             $module->rawModuleData = $module->moduleData;
 
             $output.= $this->beforeModule( $this->_beforeModule( $module ), $module );

@@ -89,7 +89,7 @@ class ModuleTemplates
             $value = maybe_unserialize($item['data_value']);
 
             $pre = array(
-                'tid' => $item['id'],
+                'dbid' => $item['id'],
                 'id' => $item['data_key']
             );
 

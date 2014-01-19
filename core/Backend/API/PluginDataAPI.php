@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Backend\API;
 
+use Kontentblocks\Abstracts\AbstractTableAPI;
 use Kontentblocks\Interfaces\InterfaceDataAPI;
 
 /**
@@ -48,11 +49,11 @@ class PluginDataAPI implements InterfaceDataAPI
 {
 
     /**
-     * wpdb database oject
+     * wpdb database object
      * @var object
      * @since 1.0.0
      */
-    protected $db = null;
+    public  $db = null;
 
     /**
      * Group as set on init resp. the first ever called group id
@@ -88,7 +89,7 @@ class PluginDataAPI implements InterfaceDataAPI
      * @var string
      * @since 1.0.0
      */
-    protected $tablename = null;
+    public  $tablename = null;
 
     /**
      * Table data of the current language, sorted by group id
@@ -409,6 +410,8 @@ class PluginDataAPI implements InterfaceDataAPI
         return $this;
     }
 
+
+
     public function reset()
     {
         $this->setGroup($this->initGroup);
@@ -436,7 +439,7 @@ class PluginDataAPI implements InterfaceDataAPI
         if (!empty($res)) {
             foreach ($res as $e) {
                 $collect[$e['data_lang']] = array(
-                    'tid' => $e['id'],
+                    'dbid' => $e['id'],
                     'id' => $e['data_key']
                 );
             }
@@ -453,6 +456,13 @@ class PluginDataAPI implements InterfaceDataAPI
         } else {
             return false;
         }
+    }
+
+    public function getLanguageByTid($key)
+    {
+        $query = "SELECT data_lang FROM $this->tablename WHERE id = '%d';";
+        $res = $this->db->get_var($this->db->prepare($query, $key));
+        return $res;
     }
 
 }

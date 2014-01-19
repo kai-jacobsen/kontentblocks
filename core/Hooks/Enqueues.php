@@ -21,6 +21,7 @@ class Enqueues
         add_action('admin_print_styles-toplevel_page_kontentblocks-sidebars', array($this, 'enqueue'), 30);
         add_action('admin_print_styles-kontentblocks_page_kontentblocks-templates', array($this, 'enqueue'), 30);
         add_action('admin_print_styles-toplevel_page_kontentblocks-areas', array($this, 'enqueue'), 30);
+        add_action('admin_print_styles-kontentblocks_page_kontentblocks-areas', array($this, 'enqueue'), 30);
         add_action('admin_print_styles-toplevel_page_dynamic_areas', array($this, 'enqueue'), 30);
 
         // Frontend On-Site Editing

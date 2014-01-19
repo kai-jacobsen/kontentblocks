@@ -14,10 +14,12 @@
         <CLASSES>
           <root url="file://$MODULE_DIR$/../../../wp-admin" />
           <root url="file://$MODULE_DIR$/../../../wp-includes" />
+          <root url="file://$MODULE_DIR$/../sitepress-multilingual-cms" />
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/../../../wp-admin" />
           <root url="file://$MODULE_DIR$/../../../wp-includes" />
+          <root url="file://$MODULE_DIR$/../sitepress-multilingual-cms" />
         </SOURCES>
       </library>
     </orderEntry>

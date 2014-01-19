@@ -69,6 +69,8 @@ class MenuTemplates extends AbstractMenuEntry
      */
     public function overviewView()
     {
+
+
         /*
          * Form validation happens on the frontend
          * if this fails for any reason, data is preserved anyway
@@ -189,7 +191,7 @@ class MenuTemplates extends AbstractMenuEntry
         // check nonce
         wp_verify_nonce($_GET['nonce'], 'kb_delete_template');
 
-        if (!isset($_GET['template']) || !isset($_GET['tid'])) {
+        if (!isset($_GET['template']) || !isset($_GET['dbid'])) {
             wp_die('It\'s not that simple');
         }
 
@@ -280,7 +282,7 @@ class MenuTemplates extends AbstractMenuEntry
         // redirect to success page
         // TODO: meaningful error page / message handling
         if ($insertModule === true && $insertDef === true && !is_null($full)) {
-            $url = add_query_arg(array('view' => 'edit', 'template' => $data['id'], 'tid' => $full['tid'], 'message' => '1'));
+            $url = add_query_arg(array('view' => 'edit', 'template' => $data['id'], 'dbid' => $full['dbid'], 'message' => '1'));
             wp_redirect($url);
         } else {
             // todo remove incomplete data set if something failed
@@ -351,22 +353,23 @@ class MenuTemplates extends AbstractMenuEntry
 
         // check for essentials
 
-        if (!isset($_GET['template']) || !isset($_GET['tid'])) {
+        if (!isset($_GET['template']) || !isset($_GET['dbid'])) {
             wp_die('It\'s not that simple');
         }
 
         $templateId = filter_var($_GET['template'], FILTER_SANITIZE_STRING);
-        $tid = filter_var($_GET['tid'], FILTER_SANITIZE_NUMBER_INT);
+        $tid = filter_var($_GET['dbid'], FILTER_SANITIZE_NUMBER_INT);
 
         $API = new PluginDataAPI('template');
 
         // In a multilingual context there needs to be checked if the current template is
         // a translation resp. other templates with the same id exists.
-        // In that case the user gets asked if all languages should be deteled or just this one
+        // In that case the user gets asked if all languages should be deleted or just this one
         if ($API->hasMultipleLanguages($templateId) && I18n::wpmlActive() && !isset($_GET['mode'])) {
             $url = add_query_arg(array('view' => 'confirm-ml-delete', 'action' => false));
             wp_redirect($url);
         }
+
 
         // Fallback to single
         $mode = (isset($_GET['mode'])) ? filter_var($_GET['mode'], FILTER_SANITIZE_STRING) : 'single';
@@ -386,7 +389,7 @@ class MenuTemplates extends AbstractMenuEntry
         }
 
         if ($delete) {
-            $url = add_query_arg(array('action' => false, 'template' => false, 'tid' => false, 'nonce' => false, 'mode' => false));
+            $url = add_query_arg(array('action' => false, 'template' => false, 'dbid' => false, 'nonce' => false, 'mode' => false));
             wp_redirect($url);
         } else {
             wp_die('Template does not exist (anymore)');
@@ -397,14 +400,25 @@ class MenuTemplates extends AbstractMenuEntry
     public function addTranslation()
     {
         $templateId = $_GET['template'];
-        $tid = $_GET['tid'];
+        $tid = $_GET['dbid'];
 
         if (!isset($templateId) || !isset($tid)) {
             wp_die('This cannot work');
         }
 
+
         // data comes from default language
-        $API = new PluginDataAPI('module', I18n::getDefaultLanguageCode());
+        $API = new PluginDataAPI('module');
+
+        $olang = $API->getLanguageByTid($tid);
+
+        if (is_null($olang)){
+            // todo handle error, original does not exist
+            wp_die('TID does not exists anymore');
+        }
+
+        $API->setLang($olang);
+
         $moduleDef = $API->get($templateId);
         $templateDef = $API->get($tid);
 
@@ -498,7 +512,7 @@ class MenuTemplates extends AbstractMenuEntry
                 ? add_query_arg(array(
                     'view' => 'edit',
                     'template' => $v['id'],
-                    'tid' => $v['tid'],
+                    'dbid' => $v['dbid'],
                     'lang' => $l
                 )) : false;
             $link = ($url) ? "<a class='flag flag-{$l}' href='{$url}'>{$l}</a>" : '';

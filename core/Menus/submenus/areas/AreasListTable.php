@@ -9,10 +9,10 @@ if(!class_exists('WP_List_Table')){
 }
 
 
-Class SidebarsTable extends \WP_List_Table
+Class AreasListTable extends \WP_List_Table
 {
 
-    protected $sidebars;
+    protected $data;
 
     function __construct()
     {
@@ -25,16 +25,15 @@ Class SidebarsTable extends \WP_List_Table
             'ajax'      => true        //does this table support ajax?
         ) );
 
-        $this->get_data();
     }
 
     /**
      * Get registered areas from options and assign it to property
      *
      */
-    private function get_data()
+    public function set_data($data)
     {
-        $this->sidebars = AreaRegistry::getInstance()->getGlobalAreas();
+        $this->data = $data;
     }
 
     /**
@@ -81,8 +80,9 @@ Class SidebarsTable extends \WP_List_Table
     {
         //Build row actions
         $actions = array(
-            'edit'      => sprintf('<a href="?page=%s&action=%s&area=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit',$item['id']),
+            'edit'      => sprintf('<a href="?page=%s&action=%s&area=%s&aid=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit',$item['id'], $item['dbid']),
         );
+
 
         //Return the title contents
         return sprintf('%1$s %3$s',
@@ -103,15 +103,15 @@ Class SidebarsTable extends \WP_List_Table
         if ( !empty($item['manual']) && true === $item['manual'])
         {
             $actions = array(
-                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id'])
+                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s&aid=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id'], $item['dbid'])
             );
         }
         else
         {
             $actions = array(
-                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id']),
-                'delete'    => sprintf('<a href="?page=%s&action=%s&area=%s&nonce=%s">Löschen</a>',$_REQUEST['page'],'delete',$item['id'], $delete_nonce),
-                'settings'	=> sprintf('<a href="?page=%s&view=%s&area=%s">Einstellungen</a>',$_REQUEST['page'],'edit-settings',$item['id'])
+                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s&aid=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id'], $item['dbid']),
+                'delete'    => sprintf('<a href="?page=%s&action=%s&area=%s&nonce=%s&aid=%s">Löschen</a>',$_REQUEST['page'],'delete',$item['id'], $delete_nonce, $item['dbid']),
+                'settings'	=> sprintf('<a href="?page=%s&view=%s&area=%s&aid=%s">Einstellungen</a>',$_REQUEST['page'],'edit-settings',$item['id'], $item['dbid'])
             );
         }
 
@@ -234,7 +234,7 @@ Class SidebarsTable extends \WP_List_Table
          * use sort and pagination data to build a custom query instead, as you'll
          * be able to use your precisely-queried data immediately.
          */
-        $data = $this->sidebars;
+        $data = $this->data;
 
 
         /**

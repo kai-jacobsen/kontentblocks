@@ -48,7 +48,7 @@ class Module_Prototype extends Module
                 'description' => 'stuff',
                 'type' => 'text',
                 'text' => 'My first checkbox',
-                'areaContext' => array( 'normal' ),
+                'areaContext' => array( 'side' ),
                 'std' => 'Lorem Ipsum'
             ));
 

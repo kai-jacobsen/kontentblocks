@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Backend\API\AreaTableAPI;
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Language\I18n;
 
 /**
  * The AreaRegistry is a single interaction container to access area definitions throughout the plugin
@@ -70,32 +71,37 @@ class AreaRegistry
             $args['id'] = sanitize_title($args['id']);
         }
 
+        if (empty($args['dbid'])){
+            $args['dbid'] = -1;
+        }
+
         // merge defaults with provided args
         $area = wp_parse_args($args, self::getDefaults($manual));
-
         if (empty($this->rawAreas[$area['id']])) {
             $this->rawAreas[$area['id']] = $area;
         } else {
             $this->rawAreas[$area['id']] = wp_parse_args($this->rawAreas[$area['id']], $area);
         }
 
+        $this->preFilterAreas($this->rawAreas[$area['id']]);
+
 
     }
 
-    /**
-     * Save an area to global areas
-     * @param string $id identifier of area
-     * @param array $args area arguments
-     * @return bool | update successful true | false
-     */
-    public function saveArea($id, $args)
-    {
-        $storedAreas = get_option('kb_registered_areas');
-
-        $storedAreas[$id] = $args;
-        return update_option('kb_registered_areas', $storedAreas);
-
-    }
+//    /**
+//     * Save an area to global areas
+//     * @param string $id identifier of area
+//     * @param array $args area arguments
+//     * @return bool | update successful true | false
+//     */
+//    public function saveArea($id, $args)
+//    {
+//        $storedAreas = get_option('kb_registered_areas');
+//
+//        $storedAreas[$id] = $args;
+//        return update_option('kb_registered_areas', $storedAreas);
+//
+//    }
 
     /**
      * Returns an area from the directory by id
@@ -112,22 +118,30 @@ class AreaRegistry
 
     }
 
-    /**
-     * Returns only globally registered areas
-     * i.e. all areas where dynamic equals true
-     * @return array
-     */
+    public function getGlobalSidebars()
+    {
+        return $this->globalSidebars;
+    }
+
     public function getGlobalAreas()
     {
-        $collection = array();
-        foreach ($this->rawAreas as $area) {
-            if ($area['dynamic'] === true) {
-                $collection[] = $area;
+        return $this->globalAreas;
+    }
+
+
+    public function preFilterAreas($area)
+    {
+        if ($area['dynamic'] === true
+            && (in_array(I18n::getActiveLanguage(), (array)$area['lang'] ) || $area['lang'] === 'any')
+        ) {
+            if ($area['context'] === 'side') {
+                $this->globalSidebars[] = $area;
+            } else {
+                $this->globalAreas[] = $area;
             }
         }
-        return $collection;
-
     }
+
 
     /**
      * Returns all registered area templates
@@ -214,7 +228,7 @@ class AreaRegistry
      * This needs an instance of the PostEnvironment Class to provide
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
-     * @param Kontentblocks\Backend\PostEnvironment $postData
+     * @param Kontentblocks\Admin\Environment\PostEnvironment $postData
      * @return boolean
      */
     public function filterForPost(PostEnvironment $postData)
@@ -294,7 +308,8 @@ class AreaRegistry
             'limit' => 0, // how many blocks are allowed
             'order' => 0, // order index for sorting
             'dev_mode' => false, // deprecated
-            'context' => 'normal' // where on the edit screen
+            'context' => 'normal', // where on the edit screen
+            'lang' => 'any'
         );
 
     }
