@@ -82,6 +82,7 @@ KB.Ui = function ($) {
 //                        $('.content').height($window - 250);
                     // re-init nano scroller
                     $('.nano').nanoScroller();
+                    $('body').trigger('kontentblocks::tabsChange');
                 }
             });
 

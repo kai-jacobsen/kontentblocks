@@ -510,6 +510,7 @@ abstract class Module
 
     public function toJSON()
     {
+        // todo only used on frontend
 
         $toJSON = array(
             'settings' => $this->settings,
@@ -519,14 +520,14 @@ abstract class Module
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->areaContext,
-            'class' => get_class($this),
+            'class' => get_class($this)
         );
 
         $enc = json_encode($toJSON);
 
         echo "<script>"
-            . "var KB = KB || {}; KB.PageModules = KB.PageModules || [];"
-            . "KB.PageModules.push({$enc});"
+            . "var KB = KB || {}; KB.PageModules = KB.PageModules || {};"
+            . "KB.PageModules.{$this->instance_id} = {$enc}"
             . "</script>";
 
     }
@@ -544,7 +545,7 @@ abstract class Module
             'connect' => 'any',
             'hidden' => false,
             'predefined' => false,
-            'inGlobalSidebars',
+            'inGlobalSidebars' => false,
             'inGlobalAreas' => false,
             'asTemplate' => true
         );

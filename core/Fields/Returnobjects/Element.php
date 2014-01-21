@@ -20,7 +20,6 @@ class Element extends AbstractFieldReturn
             $this->addAttr( 'data-arrayKey', $field->getArg( 'arrayKey' ) );
         }
         parent::__construct( $value );
-
     }
 
     public function addClass( $class )

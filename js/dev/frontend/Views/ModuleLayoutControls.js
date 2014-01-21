@@ -1,10 +1,21 @@
 var KB = KB || {};
 KB.OSConfig = KB.OSConfig || {};
 
+/**
+ * Still very experimental
+ * Idea is to provide some additional controls for each module
+ * to change basic css properties
+ * // TODO too verbose, too specific, not hookable
+ * // TODO add a way to save and restore this settings to the module
+ * // TODO has no backend implementation
+ *
+ * Creates the modal with available controls to change css values
+ * By now limited to margin and designed as an quick proof of concept
+ * @type {*|void|Object}
+ */
 KB.ModuleLayoutControls = Backbone.View.extend({
     initialize: function() {
         this.targetEl = this.options.parent.$el;
-        
         this.render();
     },
     

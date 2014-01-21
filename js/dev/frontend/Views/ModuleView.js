@@ -1,15 +1,19 @@
 var KB = KB || {};
-
+/**
+ * That is what is rendered for each module when the user enters frontside editing mode
+ * This will initiate the FrontsideEditView
+ * TODO: Don't rely on containers to position the controls and calculate position dynamically
+ * @type {*|void|Object}
+ */
 KB.ModuleView = Backbone.View.extend({
 	initialize: function() {
-        console.log('view init');
 		this.model.bind('save', this.model.save);
 		this.model.view = this;
 		this.render();
 
 	},
 	save: function() {
-
+        // TODO utilize this for saving instead of handling this by the modal view
 	},
 	events: {
 		"click a.os-edit-block": "openVex",
@@ -17,38 +21,26 @@ KB.ModuleView = Backbone.View.extend({
 		"click .kb-js-open-layout-controls": "openLayoutControls"
 	},
 	render: function() {
-		console.log('render');
-		this.$el.append(KB.Templates.render('module-controls', {model: this.model.toJSON()}));
+		this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON()}));
 	},
+    // TODO change old name
 	openVex: function() {
 
-		if (KB.OpenOnsite) {
-			KB.OpenOnsite.destroy();
+        // There can and should always be only a single instance of the modal
+		if (KB.FrontendEditModal) {
+			KB.FrontendEditModal.destroy();
 		}
 
-		KB.OpenOnsite = new KB.Backbone.OnsiteView({
+		KB.FrontendEditModal = new KB.Backbone.FrontendEditView({
 			tagName: 'div',
 			id: 'onsite-modal',
 			model: this.model,
 			view: this
 		});
-
-
-//        var target = this.model.get('editURL');
-//        var height = jQuery(window).height();
-//        jQuery('#osframe').attr('src', target).attr('height', height - 200);
-
-//        $("#onsite-modal").reveal({animation: 'fade'});
-//        KB.openedModal = vex.open({
-//            content: jQuery('#onsite-modal').html(),
-//            contentClassName: 'onsite',
-//            afterOpen: function() {
-//                jQuery('.nano').nanoScroller();
-//            }
-//        });
 	},
 	openLayoutControls: function() {
 
+        // only one instance
 		if (KB.OpenedLayoutControls) {
 			KB.OpenedLayoutControls.destroy();
 		}
@@ -61,5 +53,4 @@ KB.ModuleView = Backbone.View.extend({
 			parent: this
 		});
 	}
-
 });

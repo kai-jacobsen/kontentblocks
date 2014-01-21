@@ -6,31 +6,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Menus/AreasController.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Frontend/SlotRender.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Menus/submenus/sidebars/SidebarsTable.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/areas/AreasListTable.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Menus/submenus/sidebars/hello.twig" afterPath="$PROJECT_DIR$/core/Menus/submenus/areas/hello.twig" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/Menus/submenus/sidebars/templates/new-sidebar-form.twig" afterPath="$PROJECT_DIR$/core/Menus/submenus/areas/templates/new-area-form.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Abstracts/AbstractMenuEntry.php" afterPath="$PROJECT_DIR$/core/Abstracts/AbstractMenuEntry.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/AreaLayoutIterator.php" afterPath="$PROJECT_DIR$/core/Frontend/AreaLayoutIterator.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php" afterPath="$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/AreaRender.php" afterPath="$PROJECT_DIR$/core/Frontend/AreaRender.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" afterPath="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Hooks/Enqueues.php" afterPath="$PROJECT_DIR$/core/Hooks/Enqueues.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Language/I18n.php" afterPath="$PROJECT_DIR$/core/Language/I18n.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/MenuAreas.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/MenuAreas.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/MenuSidebars.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/MenuSidebars.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/templates/frontend/module-edit-form.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/OnsiteView.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/js/templates/fe_onsite-form.html" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/templates/module-controls.html" afterPath="$PROJECT_DIR$/js/templates/frontend/module-controls.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" afterPath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/common/KBUi.js" afterPath="$PROJECT_DIR$/js/dev/common/KBUi.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/Module.php" afterPath="$PROJECT_DIR$/core/Modules/Module.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/ModuleIterator.php" afterPath="$PROJECT_DIR$/core/Frontend/ModuleIterator.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleLayoutControls.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleLayoutControls.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" afterPath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php" afterPath="$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Screen/ScreenManager.php" afterPath="$PROJECT_DIR$/core/Backend/Screen/ScreenManager.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/templates/add-new-form.twig" afterPath="$PROJECT_DIR$/core/Menus/submenus/templates/add-new-form.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/kaiser.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/kaiser.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/kontentblocks.iml" afterPath="$PROJECT_DIR$/.idea/kontentblocks.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Collections/ModulesCollection.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Collections/ModulesCollection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/SlotRender.php" afterPath="$PROJECT_DIR$/core/Frontend/SlotRender.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" afterPath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/backend.min.js" afterPath="$PROJECT_DIR$/js/dist/backend.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/common.min.js" afterPath="$PROJECT_DIR$/js/dist/common.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/extensions.min.js" afterPath="$PROJECT_DIR$/js/dist/extensions.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/fields.min.js" afterPath="$PROJECT_DIR$/js/dist/fields.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/frontend.js" afterPath="$PROJECT_DIR$/js/dev/frontend/frontend.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/frontend.min.js" afterPath="$PROJECT_DIR$/js/dist/frontend.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" afterPath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/plugins.min.js" afterPath="$PROJECT_DIR$/js/dist/plugins.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig" afterPath="$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/refields.min.js" afterPath="$PROJECT_DIR$/js/dist/refields.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Hooks/setup.php" afterPath="$PROJECT_DIR$/core/Hooks/setup.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kontentblocks.iws" />
@@ -54,61 +54,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AreaRender.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Frontend/AreaRender.php">
+      <file leaf-file-name="FrontendEditView.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="86" column="37" selection-start="2109" selection-end="2215" vertical-scroll-proportion="-8.0" vertical-offset="1332" max-vertical-offset="3114">
-              <folding>
-                <element signature="e#42#80#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ModuleIterator.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Frontend/ModuleIterator.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="36" selection-start="1869" selection-end="1869" vertical-scroll-proportion="-22.11111" vertical-offset="1023" max-vertical-offset="1836">
+            <state line="25" column="8" selection-start="844" selection-end="844" vertical-scroll-proportion="0.5704057" vertical-offset="211" max-vertical-offset="4392">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Module.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
+      <file leaf-file-name="Fields.loader.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/dev/backend/Fields.loader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="371" column="7" selection-start="10326" selection-end="10326" vertical-scroll-proportion="-24.962963" vertical-offset="6004" max-vertical-offset="10746">
-              <folding>
-                <marker date="1390162721783" expanded="true" signature="5822:5919" placeholder="..." />
-                <marker date="1390162721783" expanded="false" signature="6300:6313" placeholder="..." />
-                <marker date="1390162721783" expanded="true" signature="7097:7230" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SlotRender.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/Frontend/SlotRender.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="26" selection-start="769" selection-end="769" vertical-scroll-proportion="0.6721992" vertical-offset="0" max-vertical-offset="723">
+            <state line="2" column="15" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="846">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AreaOutput.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Frontend/AreaOutput.php">
+      <file leaf-file-name="ModuleView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="9" selection-start="143" selection-end="143" vertical-scroll-proportion="-0.6666667" vertical-offset="162" max-vertical-offset="3060">
+            <state line="18" column="28" selection-start="575" selection-end="575" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="1098">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AreaLayoutIterator.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Frontend/AreaLayoutIterator.php">
+      <file leaf-file-name="frontend.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/dev/frontend/frontend.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="0" selection-start="1694" selection-end="1694" vertical-scroll-proportion="-0.7777778" vertical-offset="1275" max-vertical-offset="1998">
+            <state line="46" column="23" selection-start="1207" selection-end="1208" vertical-scroll-proportion="0.0" vertical-offset="828" max-vertical-offset="1692">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModuleLayoutControls.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/ModuleLayoutControls.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="40" selection-start="341" selection-end="341" vertical-scroll-proportion="0.0" vertical-offset="162" max-vertical-offset="1494">
               <folding />
             </state>
           </provider>
@@ -127,30 +112,14 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/css/sass/partials/_options/_page.scss" />
-        <option value="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" />
-        <option value="$PROJECT_DIR$/js/dev/common/KBTinyMCE.js" />
-        <option value="$PROJECT_DIR$/core/Fields/Definitions/Editor.php" />
-        <option value="$PROJECT_DIR$/core/Ajax/SortModules.php" />
-        <option value="$PROJECT_DIR$/css/sass/partials/_block_style.scss" />
-        <option value="$PROJECT_DIR$/css/sass/partials/_kontentfields_new.scss" />
-        <option value="$PROJECT_DIR$/core/Fields/Definitions/Checkbox.php" />
-        <option value="$PROJECT_DIR$/core/Fields/Definitions/CheckboxGroup.php" />
-        <option value="$PROJECT_DIR$/core/Fields/Field.php" />
-        <option value="$PROJECT_DIR$/core/Fields/Definitions/Image.php" />
-        <option value="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" />
         <option value="$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php" />
         <option value="$PROJECT_DIR$/core/Modules/ModuleFactory.php" />
-        <option value="$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig" />
         <option value="$PROJECT_DIR$/core/Fields/Definitions/Text.php" />
-        <option value="$PROJECT_DIR$/js/dev/frontend/frontend.js" />
         <option value="$PROJECT_DIR$/css/sass/kontentblocks.scss" />
         <option value="$PROJECT_DIR$/js/dev/frontend/Models/ModuleModel.js" />
-        <option value="$PROJECT_DIR$/js/dev/frontend/Views/OnsiteView.js" />
         <option value="$PROJECT_DIR$/core/Backend/Storage/ModuleStorageGlobal.php" />
         <option value="$PROJECT_DIR$/core/Backend/API/AbstractTableAPI.php" />
         <option value="$PROJECT_DIR$/core/Abstracts/AbstractTableAPI.php" />
-        <option value="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" />
         <option value="$PROJECT_DIR$/core/Menus/submenus/sidebars/SidebarsTable.php" />
         <option value="$PROJECT_DIR$/core/Language/I18n.php" />
         <option value="$PROJECT_DIR$/core/Menus/MenuManager.php" />
@@ -176,8 +145,24 @@
         <option value="$PROJECT_DIR$/core/Frontend/AreaRender.php" />
         <option value="$PROJECT_DIR$/core/Frontend/AreaLayoutIterator.php" />
         <option value="$PROJECT_DIR$/core/Frontend/ModuleIterator.php" />
-        <option value="$PROJECT_DIR$/core/Modules/Module.php" />
         <option value="$PROJECT_DIR$/core/Frontend/SlotRender.php" />
+        <option value="$PROJECT_DIR$/js/templates/fe_onsite-form.html" />
+        <option value="$PROJECT_DIR$/js/dev/common/KBUi.js" />
+        <option value="$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig" />
+        <option value="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" />
+        <option value="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" />
+        <option value="$PROJECT_DIR$/core/Fields/Field.php" />
+        <option value="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" />
+        <option value="$PROJECT_DIR$/core/Modules/Module.php" />
+        <option value="$PROJECT_DIR$/core/Hooks/setup.php" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/Collections/ModulesCollection.js" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/frontend.js" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/Views/OnsiteView.js" />
+        <option value="$PROJECT_DIR$/js/templates/fe_iframe.html" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/Views/ModuleLayoutControls.js" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/Views/FrontsideEditView.js" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" />
+        <option value="$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js" />
       </list>
     </option>
   </component>
@@ -300,6 +285,46 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="frontend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="dev" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -344,133 +369,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="frontend" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sass" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Frontend" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Backend" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Backend" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Environment" />
+              <option name="myItemId" value="backend" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -496,11 +395,11 @@
       <recent name="$PROJECT_DIR$/core/Menus/submenus/templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/js/templates/frontend" />
       <recent name="$PROJECT_DIR$/core/Abstracts" />
       <recent name="$PROJECT_DIR$/js/dev/common" />
       <recent name="$PROJECT_DIR$/core/Backend/Environment" />
       <recent name="$PROJECT_DIR$/core/Backend/API" />
-      <recent name="$PROJECT_DIR$/core/Backend/Nonpost" />
     </key>
   </component>
   <component name="RunManager">
@@ -559,11 +458,11 @@
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42435896" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42435896" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28846154" sideWeight="0.49968293" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.247305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27330375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.247305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27330375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32692307" sideWeight="0.50031704" order="9" side_tool="false" content_ui="tabs" />
@@ -596,9 +495,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.247305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27330375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -617,120 +516,10 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="4" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/css/sass/partials/_kontentfields_new.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="23" selection-start="442" selection-end="442" vertical-scroll-proportion="-8.210526" vertical-offset="0" max-vertical-offset="3510" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/Checkbox.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="28" selection-start="318" selection-end="347" vertical-scroll-proportion="-4.6666665" vertical-offset="162" max-vertical-offset="1296" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/CheckboxGroup.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="572" selection-end="572" vertical-scroll-proportion="-8.666667" vertical-offset="144" max-vertical-offset="2358" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Fields/Field.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="23" selection-start="1148" selection-end="1148" vertical-scroll-proportion="-5.5925927" vertical-offset="1091" max-vertical-offset="6804" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/Image.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="17" selection-start="695" selection-end="695" vertical-scroll-proportion="-18.0" vertical-offset="54" max-vertical-offset="900" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Fields/Returnobjects/Element.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="73" selection-start="579" selection-end="579" vertical-scroll-proportion="0.0" vertical-offset="155" max-vertical-offset="1818" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Modules/ModuleFactory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="0" selection-start="569" selection-end="569" vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="990" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="18" selection-start="18" selection-end="18" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="367" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/Editor.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="539" selection-end="592" vertical-scroll-proportion="0.6948229" vertical-offset="177" max-vertical-offset="900" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="294" selection-end="294" vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="666" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/Text.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="661" selection-end="661" vertical-scroll-proportion="0.3915493" vertical-offset="244" max-vertical-offset="954" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/frontend/frontend.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="22" selection-start="1275" selection-end="1275" vertical-scroll-proportion="0.0" vertical-offset="717" max-vertical-offset="1224" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/sass/kontentblocks.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="669" column="27" selection-start="10904" selection-end="10904" vertical-scroll-proportion="0.82572615" vertical-offset="11445" max-vertical-offset="12168" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Models/ModuleModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="14" selection-start="817" selection-end="817" vertical-scroll-proportion="0.624" vertical-offset="0" max-vertical-offset="750" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="38" selection-start="317" selection-end="317" vertical-scroll-proportion="0.0" vertical-offset="866" max-vertical-offset="1260" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/OnsiteView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="30" selection-start="1619" selection-end="1619" vertical-scroll-proportion="0.0" vertical-offset="972" max-vertical-offset="2430" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Utils/tables.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="47" selection-start="1270" selection-end="1270" vertical-scroll-proportion="0.62655604" vertical-offset="285" max-vertical-offset="1008" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Backend/Storage/ModuleStorageGlobal.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="29" selection-start="340" selection-end="340" vertical-scroll-proportion="-5.3333335" vertical-offset="108" max-vertical-offset="3762" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Interfaces/InterfaceDataAPI.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="10" selection-start="54" selection-end="54" vertical-scroll-proportion="0.099585064" vertical-offset="0" max-vertical-offset="723" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="45" selection-start="1600" selection-end="1600" vertical-scroll-proportion="-11.592592" vertical-offset="587" max-vertical-offset="1656" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../sitepress-multilingual-cms/sitepress.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1228" column="13" selection-start="57327" selection-end="57327" vertical-scroll-proportion="0.94929576" vertical-offset="21430" max-vertical-offset="150246" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Language/I18n.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="174" column="46" selection-start="3846" selection-end="3846" vertical-scroll-proportion="-25.444445" vertical-offset="2445" max-vertical-offset="3312" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/areas/hello.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="725" />
@@ -804,48 +593,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="18" selection-start="1878" selection-end="1878" vertical-scroll-proportion="0.0" vertical-offset="1332" max-vertical-offset="5976">
-          <folding />
-        </state>
+        <state line="74" column="18" selection-start="1878" selection-end="1878" vertical-scroll-proportion="0.0" vertical-offset="1332" max-vertical-offset="5976" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/areas/AreasListTable.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="53" selection-start="2710" selection-end="2710" vertical-scroll-proportion="0.22676057" vertical-offset="1621" max-vertical-offset="5724">
-          <folding />
-        </state>
+        <state line="99" column="53" selection-start="2710" selection-end="2710" vertical-scroll-proportion="0.22676057" vertical-offset="1621" max-vertical-offset="5724" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="441" column="20" selection-start="11578" selection-end="11578" vertical-scroll-proportion="0.1887324" vertical-offset="7804" max-vertical-offset="8514">
-          <folding>
-            <marker date="1390133467060" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-            <marker date="1390133467060" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
-            <marker date="1390133467060" expanded="true" signature="-1:-1" placeholder="SELECT data_..$this-&gt;tablename WHERE..." />
-          </folding>
-        </state>
+        <state line="441" column="20" selection-start="11578" selection-end="11578" vertical-scroll-proportion="0.1887324" vertical-offset="7804" max-vertical-offset="8514" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="514" column="33" selection-start="16686" selection-end="16686" vertical-scroll-proportion="0.49295774" vertical-offset="8902" max-vertical-offset="9612">
-          <folding />
-        </state>
+        <state line="514" column="33" selection-start="16686" selection-end="16686" vertical-scroll-proportion="0.49295774" vertical-offset="8902" max-vertical-offset="9612" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="24" selection-start="3022" selection-end="3022" vertical-scroll-proportion="0.0" vertical-offset="1980" max-vertical-offset="4806">
-          <folding />
-        </state>
+        <state line="110" column="24" selection-start="3022" selection-end="3022" vertical-scroll-proportion="0.0" vertical-offset="1980" max-vertical-offset="4806" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Modules/ModuleTemplates.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="91" column="16" selection-start="1848" selection-end="1848" vertical-scroll-proportion="0.6016598" vertical-offset="1203" max-vertical-offset="1926">
-          <folding />
-        </state>
+        <state line="91" column="16" selection-start="1848" selection-end="1848" vertical-scroll-proportion="0.6016598" vertical-offset="1203" max-vertical-offset="1926" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Environment/GlobalEnvironment.php">
@@ -860,62 +633,160 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/AreasController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="20" selection-start="1518" selection-end="1518" vertical-scroll-proportion="0.0" vertical-offset="1026" max-vertical-offset="7758">
-          <folding />
-        </state>
+        <state line="57" column="20" selection-start="1518" selection-end="1518" vertical-scroll-proportion="0.0" vertical-offset="1026" max-vertical-offset="7758" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Frontend/AreaOutput.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="9" selection-start="143" selection-end="143" vertical-scroll-proportion="-0.6666667" vertical-offset="162" max-vertical-offset="3060">
-          <folding />
-        </state>
+        <state line="10" column="9" selection-start="143" selection-end="143" vertical-scroll-proportion="0.045918368" vertical-offset="162" max-vertical-offset="3060" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Environment/PostEnvironment.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="31" selection-start="598" selection-end="598" vertical-scroll-proportion="0.32365146" vertical-offset="0" max-vertical-offset="4158">
-          <folding />
-        </state>
+        <state line="18" column="31" selection-start="598" selection-end="598" vertical-scroll-proportion="0.32365146" vertical-offset="0" max-vertical-offset="4158" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Frontend/AreaLayoutIterator.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="0" selection-start="1694" selection-end="1694" vertical-scroll-proportion="-0.7777778" vertical-offset="1275" max-vertical-offset="1998">
-          <folding />
-        </state>
+        <state line="72" column="0" selection-start="1694" selection-end="1694" vertical-scroll-proportion="0.05357143" vertical-offset="1275" max-vertical-offset="1998" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Frontend/ModuleIterator.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="36" selection-start="1869" selection-end="1869" vertical-scroll-proportion="-22.11111" vertical-offset="1023" max-vertical-offset="1836">
-          <folding />
-        </state>
+        <state line="90" column="36" selection-start="1869" selection-end="1869" vertical-scroll-proportion="-22.11111" vertical-offset="1023" max-vertical-offset="1836" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Frontend/AreaRender.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="37" selection-start="2109" selection-end="2215" vertical-scroll-proportion="-8.0" vertical-offset="1332" max-vertical-offset="3114">
-          <folding>
-            <element signature="e#42#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="371" column="7" selection-start="10326" selection-end="10326" vertical-scroll-proportion="-24.962963" vertical-offset="6004" max-vertical-offset="10746">
-          <folding>
-            <marker date="1390162721783" expanded="true" signature="5822:5919" placeholder="..." />
-            <marker date="1390162721783" expanded="false" signature="6300:6313" placeholder="..." />
-            <marker date="1390162721783" expanded="true" signature="7097:7230" placeholder="..." />
-          </folding>
-        </state>
+        <state line="86" column="37" selection-start="2109" selection-end="2215" vertical-scroll-proportion="-8.0" vertical-offset="1332" max-vertical-offset="3114" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Frontend/SlotRender.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="26" selection-start="769" selection-end="769" vertical-scroll-proportion="0.6721992" vertical-offset="0" max-vertical-offset="723">
+        <state line="26" column="39" selection-start="619" selection-end="619" vertical-scroll-proportion="0.3112245" vertical-offset="346" max-vertical-offset="918" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/templates/frontend/module-edit-form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="126" max-vertical-offset="270" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/common/KBUi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="67" selection-start="2986" selection-end="2986" vertical-scroll-proportion="0.0" vertical-offset="1184" max-vertical-offset="5652" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Models/ModuleModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="14" selection-start="524" selection-end="524" vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="684" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="22" selection-start="59" selection-end="59" vertical-scroll-proportion="-0.6666667" vertical-offset="0" max-vertical-offset="126" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/Areas/Area.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="121" column="18" selection-start="3243" selection-end="3246" vertical-scroll-proportion="19.40351" vertical-offset="3284" max-vertical-offset="4626" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="47" selection-start="1602" selection-end="1602" vertical-scroll-proportion="-15.333333" vertical-offset="486" max-vertical-offset="1656" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="0" selection-start="294" selection-end="294" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="666" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="23" selection-start="1064" selection-end="1064" vertical-scroll-proportion="0.0" vertical-offset="558" max-vertical-offset="864" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/FieldArray.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="21" selection-start="744" selection-end="746" vertical-scroll-proportion="0.3323442" vertical-offset="554" max-vertical-offset="2052" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Returnobjects/Element.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="5" selection-start="637" selection-end="637" vertical-scroll-proportion="0.65667576" vertical-offset="155" max-vertical-offset="1800" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/FieldRegistry.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="35" selection-start="447" selection-end="447" vertical-scroll-proportion="0.7547684" vertical-offset="209" max-vertical-offset="810" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/FieldSection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="35" selection-start="2011" selection-end="2011" vertical-scroll-proportion="0.4305177" vertical-offset="1408" max-vertical-offset="5022" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Definitions/Date.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="3" selection-start="237" selection-end="237" vertical-scroll-proportion="0.66490763" vertical-offset="0" max-vertical-offset="684" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Fields/Field.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="35" selection-start="1672" selection-end="1672" vertical-scroll-proportion="0.3982808" vertical-offset="1427" max-vertical-offset="6804" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="529" column="50" selection-start="14097" selection-end="14097" vertical-scroll-proportion="0.0" vertical-offset="9197" max-vertical-offset="10764" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Hooks/setup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="0" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.26430517" vertical-offset="1001" max-vertical-offset="1368" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Collections/ModulesCollection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="19" selection-end="19" vertical-scroll-proportion="0.04568528" vertical-offset="0" max-vertical-offset="394" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/templates/fe_iframe.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="419" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/ModuleLayoutControls.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="40" selection-start="341" selection-end="341" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1494">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/frontend/frontend.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="23" selection-start="1207" selection-end="1208" vertical-scroll-proportion="0.0" vertical-offset="828" max-vertical-offset="1692">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/backend/Fields.loader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="15" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="846">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="28" selection-start="575" selection-end="575" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="1098">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="8" selection-start="844" selection-end="844" vertical-scroll-proportion="0.5704057" vertical-offset="211" max-vertical-offset="4392">
           <folding />
         </state>
       </provider>

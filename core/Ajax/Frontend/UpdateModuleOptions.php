@@ -29,8 +29,9 @@ class UpdateModuleOptions
 
         $instance->moduleData = $mergedData;
 
+        //todo was kses
         $return = array(
-            'html' => wp_kses_post($instance->module($mergedData)),
+            'html' =>$instance->module($mergedData),
             'newModuleData' => $mergedData
         );
 

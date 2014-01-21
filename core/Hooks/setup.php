@@ -53,3 +53,18 @@ function readd_submit_button($args)
 }
 
 add_filter('get_media_item_args', __NAMESPACE__ . '\readd_submit_button', 99, 1);
+
+
+// todo change name
+add_action( 'init', '\Kontentblocks\Hooks\vipx_allow_contenteditable_on_divs' );
+function vipx_allow_contenteditable_on_divs() {
+    global $allowedposttags;
+
+    $tags = array( 'div', 'h1' );
+    $new_attributes = array( 'contenteditable' => array(), 'data-key' => array() );
+
+    foreach ( $tags as $tag ) {
+        if ( isset( $allowedposttags[ $tag ] ) && is_array( $allowedposttags[ $tag ] ) )
+            $allowedposttags[ $tag ] = array_merge( $allowedposttags[ $tag ], $new_attributes );
+    }
+}
