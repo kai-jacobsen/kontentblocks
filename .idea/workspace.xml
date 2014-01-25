@@ -6,52 +6,89 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Fields/Returnobjects/Image.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Utils/ImageResize.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Utils/JSONBridge.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/frontend/ROImageTest.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Abstracts/AbstractFieldReturn.php" afterPath="$PROJECT_DIR$/core/Abstracts/AbstractFieldReturn.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" afterPath="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/AreasController.php" afterPath="$PROJECT_DIR$/core/Menus/AreasController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/areas/AreasListTable.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/areas/AreasListTable.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Definitions/Color.php" afterPath="$PROJECT_DIR$/core/Fields/Definitions/Color.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/DuplicateModule.php" afterPath="$PROJECT_DIR$/core/Ajax/DuplicateModule.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" afterPath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" afterPath="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Definitions/Image.php" afterPath="$PROJECT_DIR$/core/Fields/Definitions/Image.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/common/KBMenus.js" afterPath="$PROJECT_DIR$/js/dev/common/KBMenus.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/KBOsEditStyle.css" afterPath="$PROJECT_DIR$/css/KBOsEditStyle.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/sass/KBOsEditStyle.scss" afterPath="$PROJECT_DIR$/css/sass/KBOsEditStyle.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/MenuAreas.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/MenuAreas.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/Module.php" afterPath="$PROJECT_DIR$/core/Modules/Module.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Templating/ModuleTemplate.php" afterPath="$PROJECT_DIR$/core/Templating/ModuleTemplate.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" afterPath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php" afterPath="$PROJECT_DIR$/core/Backend/API/PluginDataAPI.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" afterPath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/sass/partials/_kontentfields_new.scss" afterPath="$PROJECT_DIR$/css/sass/partials/_kontentfields_new.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/templates/add-new-form.twig" afterPath="$PROJECT_DIR$/core/Menus/submenus/templates/add-new-form.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/ajax-callback-handler.php" afterPath="$PROJECT_DIR$/includes/ajax-callback-handler.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/backend.min.js" afterPath="$PROJECT_DIR$/js/dist/backend.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/common.min.js" afterPath="$PROJECT_DIR$/js/dist/common.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/extensions.min.js" afterPath="$PROJECT_DIR$/js/dist/extensions.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/templates/fe_moduleLayoutControls.html" afterPath="$PROJECT_DIR$/js/templates/fe_moduleLayoutControls.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/fields.min.js" afterPath="$PROJECT_DIR$/js/dist/fields.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/frontend.js" afterPath="$PROJECT_DIR$/js/dev/frontend/frontend.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/frontend.min.js" afterPath="$PROJECT_DIR$/js/dist/frontend.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/kaiser.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/kaiser.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/kontentblocks.css" afterPath="$PROJECT_DIR$/css/kontentblocks.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" afterPath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.php" afterPath="$PROJECT_DIR$/kontentblocks.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/sass/kontentblocks.scss" afterPath="$PROJECT_DIR$/css/sass/kontentblocks.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/templates/frontend/module-controls.html" afterPath="$PROJECT_DIR$/js/templates/frontend/module-controls.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/templates/frontend/module-edit-form.html" afterPath="$PROJECT_DIR$/js/templates/frontend/module-edit-form.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/areas/templates/new-area-form.twig" afterPath="$PROJECT_DIR$/core/Menus/submenus/areas/templates/new-area-form.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/plugins.min.js" afterPath="$PROJECT_DIR$/js/dist/plugins.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig" afterPath="$PROJECT_DIR$/core/Modules/core-modules/templates/prototype.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/refields.min.js" afterPath="$PROJECT_DIR$/js/dist/refields.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Hooks/setup.php" afterPath="$PROJECT_DIR$/core/Hooks/setup.php" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Field.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/callback.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/checkbox.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/checkboxGroup.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/color.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/color.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/cropimage.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/image-error.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/image-loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/align/aligncenter.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/align/alignleft.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/align/alignright.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/headline/headline_even.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/headline/headline_left.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/headline/headline_right.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/kontakt/portrait_large.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/kontakt/portrait_small.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/teaser/headline_first.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/images/teaser/headline_second.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/kvm.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/css/move.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/customTaxonomy.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/date.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/editor.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/file.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/image.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/imageGallery.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/imageSize.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBDate.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBFile.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBFile_35.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBImageGallery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBLink.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBLinkAdv.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBPageContent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBQuicktags.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBRadioImages.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBSingleImage.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBSingleImage_35.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBTime.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/KBkvm.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/color.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/js/plupload.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/key_value_multiple.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/link.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/linkAdvanced.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/pageContent.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/pageSelector.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/paragraph.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/plupload.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/quicktags.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/radio.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/radioImages.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/select.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/text.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/textarea.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/time.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/Fields/wp_content.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/Kontentfields/KFHandler.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/areas/kontentblocks.menu.areas.addnew.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/areas/kontentblocks.menu.areas.edit.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/areas/kontentblocks.menu.areas.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/areas/kontentblocks.menu.areas.settings.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/areas/kontentblocks.table.areas.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/blocks/kb.options.block-templates.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/blocks/kb.options.block_templates.add.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/blocks/kb.options.block_templates.edit.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/blocks/kb.options.blocks.class.table.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/blocks/kb.options.blocks.edit.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/blocks/kb.options.blocks.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/kb.options.capabilities.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/overlays/kontentblocks.overlay.areas.edit.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/overlays/kontentblocks.overlay.onsite.edit.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/sidebars/kontentblocks.menu.sidebars.addnew.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/sidebars/kontentblocks.menu.sidebars.edit.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/sidebars/kontentblocks.menu.sidebars.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/sidebars/kontentblocks.menu.sidebars.settings.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/sidebars/kontentblocks.table.sidebars.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/templates/kontentblocks.menu.modules.templates.add.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/templates/kontentblocks.menu.modules.templates.edit.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/templates/kontentblocks.menu.modules.templates.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/templates/kontentblocks.table.templates.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/includes/options/templates/kontentblocks.view.table.templates.php" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kontentblocks.iws" />
@@ -96,7 +133,7 @@
       <file leaf-file-name="UpdateModuleOptions.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="324" max-vertical-offset="846">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="846">
               <folding />
             </state>
           </provider>
@@ -105,12 +142,8 @@
       <file leaf-file-name="Module.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="362" column="66" selection-start="10094" selection-end="10097" vertical-scroll-proportion="0.30508474" vertical-offset="6408" max-vertical-offset="11052">
-              <folding>
-                <marker date="1390513950562" expanded="true" signature="5936:6033" placeholder="..." />
-                <marker date="1390513950562" expanded="false" signature="6414:6427" placeholder="..." />
-                <marker date="1390513950562" expanded="true" signature="7211:7344" placeholder="..." />
-              </folding>
+            <state line="362" column="66" selection-start="10094" selection-end="10097" vertical-scroll-proportion="0.0" vertical-offset="6516" max-vertical-offset="11052">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -118,7 +151,7 @@
       <file leaf-file-name="KBOsEditStyle.scss" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/sass/KBOsEditStyle.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="218" column="22" selection-start="3207" selection-end="3207" vertical-scroll-proportion="0.0" vertical-offset="3728" max-vertical-offset="6534">
+            <state line="218" column="22" selection-start="3207" selection-end="3207" vertical-scroll-proportion="0.0" vertical-offset="3924" max-vertical-offset="6534">
               <folding />
             </state>
           </provider>
@@ -309,7 +342,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -358,6 +390,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -477,9 +510,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.247305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27330375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -775,12 +808,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="362" column="66" selection-start="10094" selection-end="10097" vertical-scroll-proportion="0.30508474" vertical-offset="6408" max-vertical-offset="11052">
-          <folding>
-            <marker date="1390513950562" expanded="true" signature="5936:6033" placeholder="..." />
-            <marker date="1390513950562" expanded="false" signature="6414:6427" placeholder="..." />
-            <marker date="1390513950562" expanded="true" signature="7211:7344" placeholder="..." />
-          </folding>
+        <state line="362" column="66" selection-start="10094" selection-end="10097" vertical-scroll-proportion="0.0" vertical-offset="6516" max-vertical-offset="11052">
+          <folding />
         </state>
       </provider>
     </entry>
