@@ -124,7 +124,6 @@ Class Kontentblocks
         include_once dirname(__FILE__) . '/Autoloader.php';
         require_once dirname(__FILE__) . '/vendor/autoload.php';
         require_once dirname(__FILE__) . '/kontentblocks.public-api.php';
-//        require_once dirname( __FILE__ ) . '/includes/options/overlays/kontentblocks.overlay.onsite.edit.php';
         require_once dirname(__FILE__) . '/includes/ajax-callback-handler.php';
 
         // additional cap feature, only used on demand and not properly tested yet
@@ -136,7 +135,6 @@ Class Kontentblocks
         /* Include all necessary files on admin area */
         if (is_admin()) {
 
-            include_once dirname(__FILE__) . '/kontentblocks.options.php';
             include_once dirname(__FILE__) . '/core/Hooks/setup.php';
 
 
@@ -474,13 +472,6 @@ function init_Kontentfields()
     }
     if (!is_admin()) {
         return false;
-    }
-    global $Kontentfields;
-    $Kontentfields = new KFHandler;
-    $Kontentfields->init();
-    // load field files...
-    foreach (glob(KB_FIELD_PATH . '*.php') as $file) {
-        require_once $file;
     }
 
 }

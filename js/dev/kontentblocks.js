@@ -322,7 +322,7 @@ var KB, latestBlock, activeBlock, activeArea, activeField, kbMetaBox;
                             if (typeof (pos_cb) == 'function') {
                                 pos_cb();
                             }
-                        }},
+                        }}
                 ],
                 closable: false,
                 timeout: false

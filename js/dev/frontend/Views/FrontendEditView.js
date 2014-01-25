@@ -185,7 +185,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
     initScrollbars: function (height) {
         jQuery('.nano', this.$el).height(height);
-        jQuery('.nano').nanoScroller();
+        jQuery('.nano').nanoScroller({ preventPageScrolling: true });
     },
     // Serialize current form fields and send it to the server
     // By now this will generate the new module output without saving the actual data
