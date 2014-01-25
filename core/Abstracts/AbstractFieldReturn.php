@@ -16,8 +16,15 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn
 
     }
 
-    public function getValue()
+    public function getValue($arraykey = null)
     {
+
+        if (is_array($this->value) && !is_null($arraykey)){
+            if (isset($this->value[$arraykey])){
+                return $this->value[$arraykey];
+            }
+        }
+
         return $this->value;
 
     }

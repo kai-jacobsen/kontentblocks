@@ -57,7 +57,9 @@ class Element extends AbstractFieldReturn
     public function html()
     {
         $format = '<%1$s %3$s>%2$s</%1$s>';
-        return sprintf( $format, $this->el, apply_filters('the_content', $this->value), $this->_renderAttributes() );
+        $filtered = apply_filters('the_content', $this->value);
+        $codeblocks = $this->fixcodeblocks($filtered);
+        return sprintf( $format, $this->el, $codeblocks , $this->_renderAttributes() );
 
     }
 
@@ -90,5 +92,16 @@ class Element extends AbstractFieldReturn
         return trim( $returnstr );
 
     }
+
+    public function fixcodeblocks($string)
+    {
+        return preg_replace_callback('#<(code|pre)([^>]*)>(((?!</?\1).)*|(?R))*</\1>#si', array($this,'specialchars'), $string);
+    }
+
+    public function specialchars($matches)
+    {
+        return '<'.$matches[1].$matches[2].'>'.htmlspecialchars(substr(str_replace('<'.$matches[1].$matches[2].'>', '', $matches[0]), 0, -(strlen($matches[1]) + 3))).'</'.$matches[1].'>';
+    }
+
 
 }

@@ -137,7 +137,11 @@ abstract class Module
         $this->Fields->setup($this->moduleData);
         foreach ($this->moduleData as $key => $v) {
             $field = $this->Fields->getFieldByKey($key);
-            $this->moduleData[$key] = ($field !== NULL) ? $field->getReturnObj() : null;
+            $this->moduleData[$key] = ($field !== NULL  ) ? $field->getReturnObj() : null;
+
+            if ($this->moduleData[$key] === null){
+                $this->moduleData[$key] = $v;
+            }
         }
 
     }
@@ -462,6 +466,18 @@ abstract class Module
             return (!empty($this->moduleData[$arrayKey][$key])) ? $this->moduleData[$arrayKey][$key] : $return;
         }
         return (!empty($this->moduleData[$key])) ? $this->moduleData[$key] : $return;
+
+    }
+    public function getRawData($key = null, $arrayKey = null, $return = '')
+    {
+        if (empty($this->rawModuleData) or empty($key)) {
+            return false;
+        }
+
+        if (!is_null($arrayKey)) {
+            return (!empty($this->rawModuleData[$arrayKey][$key])) ? $this->rawModuleData[$arrayKey][$key] : $return;
+        }
+        return (!empty($this->rawModuleData[$key])) ? $this->rawModuleData[$key] : $return;
 
     }
 

@@ -666,6 +666,8 @@ textarea.quicktags {
   display: none;
 }
 
-.editable{
-  outline: 1px dotted #333;
+.onsite-editing .editable{
+  outline: 1px dashed #999;
+  padding: 3px;
+  background-color: #ffffe0;
 }

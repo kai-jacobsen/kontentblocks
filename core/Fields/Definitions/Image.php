@@ -13,7 +13,7 @@ Class Image extends Field
 {
 
     protected $defaults = array(
-        'returnObj' => false
+        'returnObj' => 'Image'
     );
 
     public function form()

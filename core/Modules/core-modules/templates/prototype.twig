@@ -1,2 +1,6 @@
-{{ headline.el('h1').html() | raw }}
-{{ someeditor.el('div').html() | raw }}
+<div style="margin-bottom: 20px; {% if alternate %}background: #0b97c4; {% endif %}">
+    {{ headline.el('h1').html() | raw }}
+    {{ someeditor.el('div').html() | raw }}
+    {{ testimage.size(250,250).upscale().html() | raw }}
+
+</div>

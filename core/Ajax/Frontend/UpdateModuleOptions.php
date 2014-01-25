@@ -12,7 +12,7 @@ class UpdateModuleOptions
 
         $module = $_POST['module'];
         $data = $_POST['data'];
-        $update = (isset($_POST['mode']) && $_POST['mode'] === 'update') ? true : false;
+        $update = (isset($_POST['editmode']) && $_POST['editmode'] === 'update') ? true : false;
         $parsed = array();
         parse_str($data, $parsed);
 
@@ -29,9 +29,8 @@ class UpdateModuleOptions
 
         $instance->moduleData = $mergedData;
 
-        //todo was kses
         $return = array(
-            'html' =>$instance->module($mergedData),
+            'html' => wp_kses_post($instance->module($mergedData)),
             'newModuleData' => $mergedData
         );
 

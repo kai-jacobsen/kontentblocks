@@ -1,315 +1,357 @@
 @import "compass/css3";
 @import "partials/_base";
 
+.os-edit-container {
+  position: relative;
+}
+
+.controls-wrap {
+  list-style: none;
+
+  li {
+    float: left;
+
+  }
+}
 
 .os-edit-wrapper {
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index:108;
-    padding: 5px 0px 10px 12px;
-    display: none;
-    background: transparent;
+  position: absolute;
+  z-index: 5;
+  padding: 5px 14px 10px 12px;
+  background: transparent;
+
+  a {
+    line-height: 16px;
+    display: inline-block;
+    margin: 2px 0px;
+    float: left;
+    font-size: 18px;
+    padding: 4px;
+    color: #ffffff;
+    opacity: 1;
+    text-decoration: none;
+    @include transition(all .3s ease-in-out);
+    cursor: pointer;
+    border: 1px solid transparent;
+    background-color: #333;
+
+
+    &.dashicons {
+      width: 26px;
+      height: 26px;
+    }
+
+    &:hover {
+      background-color: #f2f2f2;
+      color: #333;
+      text-decoration: none;
+      border-bottom: none;
+      border: 1px solid #333;
+      font-size: 18px;
+      @include border-radius(20px);
+
+    }
+  }
 
 }
 
 body.onsite-editing {
 
-	.module{
-		min-height: 30px;
-	}
+  .module {
+    min-height: 30px;
+  }
 
-    .os-edit-container > .os-edit-wrapper {
-        display: block;
-        opacity: 1;
+  .os-edit-container > .os-edit-wrapper {
+    display: block;
+    opacity: 1;
+  }
+
+  .os-edit-container {
+    position: relative;
+  }
+
+  .controls-wrap {
+    list-style: none;
+
+    li {
+      float: left;
     }
+  }
 
-    .os-edit-container {
-        position: relative;
-    }
+  .os-edit-wrapper a:hover {
+    opacity: 1;
+    color: #333;
+  }
 
+  .master a.os-edit-block span {
+    background-color: $orange;
+  }
 
+  a.os-description {
+    background: url('info.png') no-repeat;
+    display: none;
+  }
 
-    .controls-wrap{
-        list-style: none;
+  .hide {
+    display: none;
+  }
 
-        li{
-            float: left;
-        }
-    }
+  #onsite-modal {
+    padding: 0;
+    z-index: 9999;
 
-    .os-edit-wrapper a {
-        line-height: 16px;
-        display: block;
-        margin: 2px 0px;
-        float: left;
-        font-size: 12px;
-        padding-left: 0px;
-        color: #000;
-        opacity: 1;
-        text-decoration: none;
-        @include transition(opacity .3s);
-    }
-
-    .os-edit-wrapper a:hover {
-        opacity: 1;
-        color: #333;
-    }
-
-
-
-    a.os-edit-block, a.kb-module-layout-controls {
-        line-height: 24px;
-        float: right;
-        cursor: pointer;
-		background: $dark-grey;
-		border-radius:4px;
-		color: #fff;
-		padding-right: 10px;
-    }
-
-    a.os-edit-block span {
-        display: block;
-        height: 24px;
-        width: 24px;
-        background: url('pencil.png') $dark-grey no-repeat 6px 6px;
-        float: left;
-        margin-right: 10px;
-
-    }
-
-    .master a.os-edit-block span{
-        background-color: $orange;
-    }
-
-    a.os-description {
-        background: url('info.png') no-repeat;
-        display: none;
-    }
-
-    .hide {
-        display: none;
-    }
-
-
-    #onsite-modal{
-        padding: 0;
-        z-index:9999;
-
-
-    }
+  }
 
 }
 
+#wp-toolbar {
+  .os-edit {
+    background: $lightblue;
 
-#wp-toolbar{
-    .os-edit {
-        background: $lightblue;
+    &.os-edit-off {
 
-        &.os-edit-off{
+      background: none !important;
 
-            background: none !important;
+      a {
+        color: #999;
 
+      }
 
-            a {
-                color: #999;
-
-            }
-
-        }
     }
+  }
 }
 
-#osframe{
-    overflow: hidden;
-    border:0;
+#osframe {
+  overflow: hidden;
+  border: 0;
 }
 
-.os-controls-container{
+.os-controls-container {
 
+  .controls-title {
+    font-weight: 100;
+    background: #fcfcfc;
+    padding: 10px;
+    margin: 0;
+    font-family: 'Open Sans';
+    font-size: 15px;
+    border: 1px solid #f9f9f9;
+    border-right: 1px solid #aaa;
+    border-bottom: none;
+    cursor: move;
+  }
 
-    .controls-title{
-        font-weight: 100;
-        background: #fcfcfc;
-        padding: 10px;
-        margin: 0;
-        font-family: 'Open Sans';
-        font-size: 15px;
-        border:1px solid #f9f9f9;
-        border-right:1px solid #aaa;
-        border-bottom: none;
-        cursor: move;
-    }
+  font-family: 'Open Sans', sans-serif;
+  position: absolute;
+  width: 400px;
+  padding: 0px;
+  background: #f9f9f9;
+  top: 150px;
+  left: 20px;
+  z-index: 110;
 
-    font-family: 'Open Sans', sans-serif;
+  span {
+    padding: 0 10px;
+    font-size: 10px;
+    font-style: italic;
+  }
+
+  .close-controls {
     position: absolute;
-    width: 400px;
-    padding: 0px;
-    background: #f9f9f9;
-    top: 150px;
-    left:20px;
-    z-index:110;
+    right: 10px;
+    top: 10px;
+    font-size: 10px;
+    cursor: pointer;
+  }
 
-    span{
-        padding: 0 10px;
-        font-size: 10px;
-        font-style: italic;
-    }
-
-    .close-controls{
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        font-size: 10px;
-        cursor: pointer;
-    }
-
-    .control-wrap{
-        background: #fff;
-        padding: 10px;
-        border:1px solid #f9f9f9;
-        border-bottom: 1px solid #aaa;
-        border-right:1px solid #aaa;
-
-
-
-        label{
-            font-family: 'Open Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 100;
-        }
-    }
-
-    .kb_fieldtabs {
-        li a{
-            font-size: 12px;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        ul.ui-tabs-nav{
-            border: 0;
-            margin-left: 0;
-            border-right: 1px solid #aaa;
-            border-left: 1px solid #f9f9f9;
-            position: relative;
-            top: -2px;
-            background: #fff;
-            border-radius: 0;
-
-        }
-    }
-
-    table{
-
-        td{
-            font-size: 12px;
-            padding-right: 8px;
-        }
-    }
-
-}
-
-.edit-active{
-    outline: 1px solid lightblue;
-}
-
-
-// experiments
-
-#onsite-modal{
-    font-family: 'Open Sans', sans-serif;
-    width: 800px;
+  .control-wrap {
     background: #fff;
-    position: fixed;
-    top:40px;
-    right:40px;
-	box-shadow: 1px 1px 40px #333;
+    padding: 10px;
+    border: 1px solid #f9f9f9;
     border-bottom: 1px solid #aaa;
     border-right: 1px solid #aaa;
-    overflow: auto;
-    opacity: 1;
-    * {
-        box-sizing: content-box;
+
+    label {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 100;
+    }
+  }
+
+  .kb_fieldtabs {
+    li a {
+      font-size: 12px;
+      font-family: 'Open Sans', sans-serif;
     }
 
-
-    .controls-title{
-        font-size: 12px;
-        margin: 0;
-        padding: 5px 10px;
-        cursor: move;
-		background: #333;
-		color: #fcfcfc;
-		font-weight: 100;
-
-    }
-
-	a.close-controls{
-		position: absolute;
-		top:3px;
-		right:3px;
-		color:#fff;
-		font-size: 11px;
-		cursor: pointer;
-	}
-
-    .kb_field{
-        width: 100%;
-		-moz-box-sizing: border-box;
-        box-sizing: border-box;
-
-		label{
-			font-size: 12px;
-		}
-
-		input[type=button], .button{
-			text-transform: none !important;
-		}
-
-		textarea:focus,
-		input[type="text"]:focus,
-		input[type="password"]:focus,
-		input[type="email"]:focus,
-		input[type="number"]:focus,
-		input[type="search"]:focus,
-		input[type="tel"]:focus,
-		input[type="url"]:focus,
-		input[type="checkbox"]:focus,
-		input[type="radio"]:focus,
-		select:focus {
-			border-color: #999;
-			font-family: 'Open Sans', sans-serif;
-			font-size: 12px;
-		}
-
-		textarea,
-		input[type="text"],
-		input[type="password"],
-		input[type="email"],
-		input[type="number"],
-		input[type="search"],
-		input[type="tel"],
-		input[type="url"],
-		select {
-			background-color: #fff;
-			color: #333;
-			border-color: #efefef;
-			font-family: 'Open Sans', sans-serif;
-			font-size: 12px;
-		}
-
-		select[disabled] {
-			color: #7f7f7f;
-		}
-
-		select:focus {
-			border-color: #aaa;
-		}
+    ul.ui-tabs-nav {
+      border: 0;
+      margin-left: 0;
+      border-right: 1px solid #aaa;
+      border-left: 1px solid #f9f9f9;
+      position: relative;
+      top: -2px;
+      background: #fff;
+      border-radius: 0;
 
     }
+  }
+
+  table {
+
+    td {
+      font-size: 12px;
+      padding-right: 8px;
+    }
+  }
+
+}
+
+.edit-active {
+  outline: 1px solid lightblue;
+}
+
+// experiments
+#onsite-modal *{
+  @include box-sizing(content-box);
+}
+
+#onsite-modal a:hover{
+  text-decoration: none;
+}
+
+#onsite-modal {
+  font-family: 'Open Sans', sans-serif;
+  width: 800px;
+  background: #fff;
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  box-shadow: 1px 1px 40px #333;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  overflow: auto;
+  opacity: 1;
+  z-index: 101;
+
+
+  .controls-title {
+    font-size: 12px;
+    margin: 0;
+    padding: 0px 10px 0px 60px;
+    height: 30px;
+    line-height: 30px;
+    cursor: move;
+    background: #333;
+    color: #fcfcfc;
+    font-weight: 100;
+    box-sizing: border-box;
+  }
+
+  .os-controls-meta{
+    background-color: #333;
+  }
+
+  a.close-controls {
+    position: absolute;
+    top: 4px;
+    right: 3px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    @include transition(all .3s ease-in-out);
 
     &:hover{
-        opacity:1;
-
+      color: $orange;
     }
+  }
+
+  a.kb-save-form{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 30px;
+    font-size: 13px;
+    padding: 0px 12px;
+    line-height: 30px;
+
+  }
+
+  .kb-button-primary{
+    color: #fff;
+    background-color: $lightblue;
+    @include transition(all .3s ease-in-out);
+    cursor: pointer;
+
+    &:hover{
+      background-color: $orange;
+      text-decoration: none;
+    }
+  }
+
+  .kb_fieldtabs ul.ui-tabs-nav{
+    padding-top: 0;
+    background-color: lighten(#333, 50%);
+    border-radius: 0;
+  }
+
+  .kb_field {
+    width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    label {
+      font-size: 12px;
+    }
+
+    input[type=button], .button {
+      text-transform: none !important;
+    }
+
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus,
+    input[type="search"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    input[type="checkbox"]:focus,
+    input[type="radio"]:focus,
+    select:focus {
+      border-color: #999;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12px;
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="number"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    select {
+      background-color: #fff;
+      color: #333;
+      border-color: #efefef;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12px;
+    }
+
+    select[disabled] {
+      color: #7f7f7f;
+    }
+
+    select:focus {
+      border-color: #aaa;
+    }
+
+  }
+
+  &:hover {
+    opacity: 1;
+
+  }
 }

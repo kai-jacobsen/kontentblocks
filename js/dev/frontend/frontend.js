@@ -9,7 +9,7 @@ KB.Frontend = (function ($) {
 
     // Custom Views Collection
     var Views = [];
-
+    console.log(KB.fromServer);
     var Collection = new KB.ModulesCollection(_.toArray(KB.PageModules), {
         model: KB.ModuleModel
     });
@@ -46,13 +46,19 @@ jQuery(document).ready(function () {
             statusbar: false,
             setup: function (ed) {
                 ed.on('blur', function () {
-                    console.log(jQuery(ed.bodyElement).data());
                     var data = jQuery(ed.bodyElement).data();
                     var module = data.module;
                     var key = data.key;
                     var value = ed.getContent();
 
+
                     KB.PageModules[module].moduleData[key] = value;
+                    KB.PageModules[module].isDirty = true;
+
+//                    if (KB.FrontendEditModal) {
+//                        KB.FrontendEditModal.serialize();
+//                    }
+
                 });
             }
         });
@@ -68,21 +74,26 @@ jQuery(document).ready(function () {
             statusbar: false,
             setup: function (ed) {
                 ed.on('blur', function () {
-                    console.log(jQuery(ed.bodyElement).data());
                     var data = jQuery(ed.bodyElement).data();
                     var module = data.module;
                     var key = data.key;
                     var value = ed.getContent();
 
                     KB.PageModules[module].moduleData[key] = value;
+                    KB.PageModules[module].isDirty = true;
 
+
+//                    if (KB.FrontendEditModal) {
+//                        KB.FrontendEditModal.render();
+//                    }
                 });
             }
         });
     }
+
     inlineEdit();
 
-    jQuery(window).on('kontentblocks::ajaxUpdate', function(){
+    jQuery(window).on('kontentblocks::ajaxUpdate', function () {
         inlineEdit();
     });
 

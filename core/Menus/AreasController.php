@@ -10,7 +10,8 @@ use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\CoreTemplate;
 
-abstract class AreasController extends AbstractMenuEntry{
+abstract class AreasController extends AbstractMenuEntry
+{
 
     /**
      *
@@ -38,7 +39,7 @@ abstract class AreasController extends AbstractMenuEntry{
         // The actual table class
         include_once(trailingslashit($this->subfolder) . 'AreasListTable.php');
         $Table = new AreasListTable();
-        if ($this->handle === 'sidebars'){
+        if ($this->handle === 'sidebars') {
             $Table->set_data(AreaRegistry::getInstance()->getGlobalSidebars());
         } else {
             $Table->set_data(AreaRegistry::getInstance()->getGlobalAreas());
@@ -72,7 +73,7 @@ abstract class AreasController extends AbstractMenuEntry{
 
         $areaDef = AreaRegistry::getInstance()->getArea($areaId);
         // handle predefined areas and check if they are available for the current language
-        if ($areaDef['manual'] === true && !in_array(I18n::getActiveLanguage(), (array)$areaDef['lang']) && $areaDef['lang'] !== 'any'){
+        if ($areaDef['manual'] === true && !in_array(I18n::getActiveLanguage(), (array)$areaDef['lang']) && $areaDef['lang'] !== 'any') {
             print "Not available in this language";
         }
 
@@ -86,7 +87,6 @@ abstract class AreasController extends AbstractMenuEntry{
         // render language switch if wpml is active
         if (I18n::wpmlActive()) {
             $languages = $Environment->getStorage()->getDataBackend()->getLanguagesForKey($areaDef['id']);
-            d($languages);
             if (!empty($languages)) {
                 $this->renderLanguageSwitch($languages);
             }
@@ -151,7 +151,10 @@ abstract class AreasController extends AbstractMenuEntry{
             'basename' => 'new-sidebar',
             'name' => $areaDef['name'],
             'id' => $areaDef['id'],
+            'areaContext' => $areaDef['context'],
             'editMode' => true,
+            'contexts' => ScreenManager::getDefaultRegionLayout(),
+            'renderContextSelect' => ($this->handle === 'sidebars') ? false : true,
             'postTypes' => $this->preparedPostTypes($areaDef),
             'pageTemplates' => $this->preparedPageTemplates($areaDef),
             'description' => (!empty($areaDef['description'])) ?
@@ -219,8 +222,25 @@ abstract class AreasController extends AbstractMenuEntry{
                 wp_redirect($url);
             }
 
+            // Fallback to single
+            $mode = (isset($_GET['mode'])) ? filter_var($_GET['mode'], FILTER_SANITIZE_STRING) : 'single';
 
-            $delete = $Storage->getDataBackend()->delete();
+            // allowed modes
+            $modewhitelist = array('single', 'all');
+
+            if (!in_array($mode, $modewhitelist)) {
+                throw new \UnexpectedValueException('Mode MUST be either "all" or "single".');
+            }
+
+            // finally destroy data
+            if ($mode === 'all') {
+                $Storage->getDataBackend()->deleteAll();
+            } else {
+                $Storage->getDataBackend()->delete();
+            }
+
+
+//            $delete = $Storage->getDataBackend()->delete();
 
             if ($delete) {
                 $url = add_query_arg(array('nonce' => false, 'action' => false, 'message' => '3'));
@@ -294,6 +314,8 @@ abstract class AreasController extends AbstractMenuEntry{
         $areaDef = maybe_unserialize($row['area_value']);
         $full = wp_parse_args($areaDef, AreaRegistry::getDefaults(false));
 
+        // override language
+        $full['lang'] = I18n::getActiveLanguage();
 
         $API->setLang(I18n::getActiveLanguage());
         $updateArea = $API->update('definition', $full);
@@ -421,6 +443,42 @@ abstract class AreasController extends AbstractMenuEntry{
     {
         $url = add_query_arg(array('action' => 'add-translation'));
         print "<a href='{$url}'>Add Translation</a>";
+    }
+
+    /**
+     * Checks if the current template has different languages available
+     * and provide links to switch to the languages
+     * this will trigger a wpml language context switch as well
+     * works as expected
+     * Gets called inside the edit view
+     * @param $languages
+     */
+    public function renderLanguageSwitch($languages)
+    {
+        if (count($languages) < 1 || !I18n::wpmlActive()) {
+            return;
+        }
+
+        print "<div class='kb-language-switch-wrapper'><p class='description'>This template is also available in following languages:</p>";
+        print "<ul class='kb-templates-languages kb-language-switch'>";
+
+        foreach ($languages as $l => $v) {
+
+            $url = ($l !== I18n::getActiveLanguage())
+                ? add_query_arg(array(
+                    'template' => $v['id'],
+                    'dbid' => $v['dbid'],
+                    'lang' => $l
+                )) : false;
+            $link = ($url) ? "<a class='flag flag-{$l}' href='{$url}'>{$l}</a>" : '';
+
+            if ($url !== false) {
+                print "<li>{$link}</li>";
+            } else {
+                print "<li class='flag flag-{$l} kb-current-template-language'>{$l}</li>";
+            }
+        }
+        print "</ul></div>";
     }
 
 }

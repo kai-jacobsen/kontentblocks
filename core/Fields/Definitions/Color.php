@@ -10,6 +10,10 @@ use Kontentblocks\Fields\Field;
 Class Color extends Field
 {
 
+    protected  $defaults = array(
+        'returnObj' => false
+    );
+
     // enqueue files on admin side
     // frontend scripts are handled globally
     // see \Kontentblocks\Enqueues\Hooks

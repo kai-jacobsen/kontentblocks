@@ -445,7 +445,12 @@ class PluginDataAPI implements InterfaceDataAPI
             }
         }
 
-        return $collect;
+        if (is_null($collect)){
+            return false;
+        } else {
+            return $collect;
+        }
+
     }
 
     public function hasMultipleLanguages($key)

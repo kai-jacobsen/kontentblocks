@@ -60,8 +60,8 @@ add_action( 'init', '\Kontentblocks\Hooks\vipx_allow_contenteditable_on_divs' );
 function vipx_allow_contenteditable_on_divs() {
     global $allowedposttags;
 
-    $tags = array( 'div', 'h1' );
-    $new_attributes = array( 'contenteditable' => array(), 'data-key' => array() );
+    $tags = array( 'div', 'h1', 'img', 'h2', 'h3' );
+    $new_attributes = array( 'contenteditable' => array(), 'data-key' => array(), 'data-module' => array() );
 
     foreach ( $tags as $tag ) {
         if ( isset( $allowedposttags[ $tag ] ) && is_array( $allowedposttags[ $tag ] ) )

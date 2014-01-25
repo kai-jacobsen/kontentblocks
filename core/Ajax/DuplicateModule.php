@@ -74,7 +74,7 @@ class DuplicateModule
     public function getNewInstanceId()
     {
         $base = \Kontentblocks\Helper\getHighestId($this->Environment->getStorage()->getIndex());
-        $prefix = apply_filters('kb_post_module_prefix', 'module-');
+        $prefix = apply_filters('kb_post_module_prefix', 'module_');
         if ($this->postId !== -1) {
             return $prefix . $this->postId . '_' . ++$base;
         } else {

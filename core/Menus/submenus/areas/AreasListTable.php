@@ -103,15 +103,15 @@ Class AreasListTable extends \WP_List_Table
         if ( !empty($item['manual']) && true === $item['manual'])
         {
             $actions = array(
-                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s&aid=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id'], $item['dbid'])
+                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s&dbid=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id'], $item['dbid'])
             );
         }
         else
         {
             $actions = array(
-                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s&aid=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id'], $item['dbid']),
-                'delete'    => sprintf('<a href="?page=%s&action=%s&area=%s&nonce=%s&aid=%s">Löschen</a>',$_REQUEST['page'],'delete',$item['id'], $delete_nonce, $item['dbid']),
-                'settings'	=> sprintf('<a href="?page=%s&view=%s&area=%s&aid=%s">Einstellungen</a>',$_REQUEST['page'],'edit-settings',$item['id'], $item['dbid'])
+                'edit'      => sprintf('<a href="?page=%s&view=%s&area=%s&dbid=%s">Inhalte bearbeiten</a>',$_REQUEST['page'],'edit-modules',$item['id'], $item['dbid']),
+                'delete'    => sprintf('<a href="?page=%s&action=%s&area=%s&nonce=%s&dbid=%s">Löschen</a>',$_REQUEST['page'],'delete',$item['id'], $delete_nonce, $item['dbid']),
+                'settings'	=> sprintf('<a href="?page=%s&view=%s&area=%s&dbid=%s">Einstellungen</a>',$_REQUEST['page'],'edit-settings',$item['id'], $item['dbid'])
             );
         }
 

@@ -16,17 +16,14 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     initialize: function () {
         var that = this;
 
+        this.model.on('change',this.test,this);
+
         // add form skeleton to modal
         jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON()})).appendTo(this.$el);
 
         // cache elements
         this.$form = jQuery('#onsite-form', this.$el);
         this.$formContent = jQuery('#onsite-content', this.$el);
-
-        
-
-        // apply settings for the modal from the active module, if any
-        this.applyControlsSettings(this.$el);
 
         // init draggable container and store position in config var
         this.$el.css('position', 'fixed').draggable({
@@ -74,9 +71,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.serialize();
         });
 
+        // append modal to body
+        jQuery('body').append(this.$el);
         // load the form
         this.render();
     },
+
     // TODO move above event listeners here
     events: {
         'keyup': 'delayInput',
@@ -85,13 +85,16 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
     render: function () {
         var that = this;
-        // append modal to body
-        jQuery('body').append(this.$el);
+
+
+        // apply settings for the modal from the active module, if any
+        this.applyControlsSettings(this.$el);
 
         // update reference var
         KB.lastAddedModule = {
             view: that
         };
+
 
         // get the form
         jQuery.ajax({
@@ -104,6 +107,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             type: 'POST',
             dataType: 'html',
             success: function (res) {
+                that.$formContent.empty();
 
                 // append the html to the inner form container
                 that.$formContent.append(res);
@@ -114,7 +118,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 KB.Ui.initToggleBoxes();
                 KB.TinyMCE.addEditor();
 
-                // Inform fields that the were loaded
+                // Inform fields that they were loaded
                 KB.Fields.trigger('update');
 
                 // Make the modal fit
@@ -127,8 +131,14 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
     },
 
-    reload: function(){
-        this.$el.empty();
+    reload: function (moduleView) {
+
+        if (this.model.get('instance_id') === moduleView.model.get('instance_id')){
+            return false;
+        }
+        this.model = moduleView.model;
+        this.view = moduleView;
+        this.render();
     },
 
     // position and height of the modal may change depending on user action resp. contents
@@ -189,6 +199,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 action: 'updateModuleOptions',
                 data: that.$form.serialize().replace(/\'/g, '%27'),
                 module: that.model.toJSON(),
+                editmode: 'update',
                 _ajax_nonce: kontentblocks.nonces.update
             },
             type: 'POST',

@@ -181,3 +181,17 @@ function getSanitizedIdCb()
 }
 
 add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );
+
+
+/**
+ * -----------------------------------------
+ * Frontend get resized image
+ * -----------------------------------------
+ */
+function fieldGetImageCb()
+{
+    new \Kontentblocks\Ajax\Frontend\FieldGetImage();
+
+}
+
+add_action( 'wp_ajax_fieldGetImage', 'fieldGetImageCb' );

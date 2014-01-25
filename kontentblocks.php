@@ -156,7 +156,7 @@ Class Kontentblocks
         // Load Plugins
         add_action('init', array($this, '_load_plugins'), 9);
 
-        add_action('admin_head', array($this, 'livereload'));
+        add_action('wp_head', array($this, 'livereload'));
 
         add_action('plugins_loaded', array($this, 'i18n'));
 
@@ -165,6 +165,7 @@ Class Kontentblocks
     public function livereload()
     {
         echo '<script src="http://localhost:35729/livereload.js"></script>';
+        echo '<script src="http://localhost:35730/livereload.js"></script>';
 
     }
 

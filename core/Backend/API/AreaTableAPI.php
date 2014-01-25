@@ -117,8 +117,9 @@ class AreaTableAPI implements InterfaceDataAPI
         if ($result === false) {
             return false;
         } else {
-            wp_cache_delete('kb_areas_all_' . $this->language, 'kontentblocks');
+            $this->flushCacheGroups();
             $this->selfUpdate();
+
             return true;
         }
     }
@@ -158,7 +159,7 @@ class AreaTableAPI implements InterfaceDataAPI
         if ($result === false) {
             return false;
         } else {
-            wp_cache_delete('kb_areas_all_' . $this->language, 'kontentblocks');
+            $this->flushCacheGroups();
             return true;
         }
 
@@ -205,6 +206,17 @@ class AreaTableAPI implements InterfaceDataAPI
             return false;
         } else {
             wp_cache_delete('kb_areas_all_' . $this->language, 'kontentblocks');
+            return true;
+        }
+    }
+
+    public function deleteAll()
+    {
+        $result = $this->db->delete($this->tablename, array('area_id' => $this->areaId));
+        if ($result === false) {
+            return false;
+        } else {
+            $this->flushCacheGroups();
             return true;
         }
     }
@@ -292,7 +304,6 @@ class AreaTableAPI implements InterfaceDataAPI
         if (!$this->initLanguage) {
             $this->initLanguage = $code;
         }
-
         $this->language = $code;
         $this->selfUpdate();
         return $this;

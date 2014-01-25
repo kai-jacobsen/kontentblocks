@@ -3,6 +3,7 @@
 namespace Kontentblocks\Menus;
 
 use Kontentblocks\Abstracts\AbstractMenuEntry;
+use Kontentblocks\Language\I18n;
 
 class MenuAreas extends AreasController
 {
@@ -36,8 +37,36 @@ class MenuAreas extends AreasController
             'display' => 'viewOverview',
             'edit-modules' => 'viewModules',
             'add-new' => 'viewAdd',
-            'edit-settings' => 'viewEditSettings'
+            'edit-settings' => 'viewEditSettings',
+            'confirm-ml-delete' => 'confirmMultilanguageDelete'
+
         )
     );
+
+    /**
+     * Ask the user if all templates of specified id should be deleted
+     * if there are multiple templates with the same id (translations)
+     */
+    public function confirmMultilanguageDelete()
+    {
+        // check nonce
+        wp_verify_nonce($_GET['nonce'], 'kb_delete_template');
+
+        if (!isset($_GET['area']) || !isset($_GET['dbid'])) {
+            wp_die('It\'s not that simple');
+        }
+
+        // TODO I18n string
+        print "<h4>Do you want to delete the Template in all languages? Or just in the current language?</h4>";
+
+        // add mode parameter
+        $urlAll = add_query_arg(array('mode' => 'all', 'action' => 'delete', 'view' => false));
+        $urlSingle = add_query_arg(array('mode' => 'single', 'action' => 'delete', 'view' => false));
+
+        // TODO UI Design
+        print "<a href='{$urlAll}'>All</a>";
+        print "<a href='{$urlSingle}'>Single</a>";
+    }
+
 
 }

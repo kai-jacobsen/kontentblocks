@@ -3,33 +3,41 @@ KB.Menus = (function ($) {
     return {
         loadingContainer: null,
         initiatorEl: null,
+        sendButton: null,
         createSanitizedId: function (el, mode) {
             this.initiatorEl = $(el);
             this.loadingContainer = this.initiatorEl.closest('.kb-menu-field').addClass('loading');
-            $('#kb-submit').attr('disabled', 'disabled');
+            this.$sendButton = $('#kb-submit');
+
+            this.disableSendButton();
 
             KB.Ajax.send({
-                inputvalue : el.value,
+                inputvalue: el.value,
                 checkmode: mode,
                 action: 'getSanitizedId',
-                _ajax_nonce : kontentblocks.nonces.read
+                _ajax_nonce: kontentblocks.nonces.read
             }, this.insertId, this);
         },
 
-        insertId: function(res){
+        insertId: function (res) {
 
-            console.log(res.success === false);
-            if (res.success == false){
-                this.initiatorEl.addClass(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       )
+            if (res === 'translate') {
+                this.initiatorEl.addClass()
                 $('.kb-js-area-id').val('Please chose a different name');
 
             } else {
                 $('.kb-js-area-id').val(res);
-                $('#kb-submit').removeAttr('disabled');
-
+                this.enableSendButton();
             }
 
             this.loadingContainer.removeClass('loading');
+
+        },
+        disableSendButton: function () {
+            this.$sendButton.attr('disabled', 'disabled').val('Disabled');
+        },
+        enableSendButton: function () {
+            this.$sendButton.attr('disabled', false).val('Create');
 
         }
 
