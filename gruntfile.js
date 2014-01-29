@@ -12,7 +12,6 @@ module.exports = function (grunt) {
             },
             prim: {
                 files: {
-                    'js/dist//<%= pkg.name %>.min.js': ['js/dev/<%= pkg.name %>.js'],
                     'js/dist/frontend.min.js': ['<%= concat.frontend.dest %>'],
                     'js/dist/backend.min.js': ['<%= concat.backend.dest %>'],
                     'js/dist/refields.min.js': ['<%= concat.refields.dest %>'],
@@ -80,7 +79,7 @@ module.exports = function (grunt) {
                 livereload: true
             },
             js: {
-                files: ['js/dev/<%= pkg.name %>.js', 'js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
+                files: ['js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
                 tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint']
             },
             sass: {

@@ -32,7 +32,7 @@ KB.Ext.Backup = (function($) {
             var that = this;
 
 
-            KB.ajax(
+            KB.Ajax.send(
                     {
                         action: 'get_backups'
                     },

@@ -6,52 +6,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/backend/Views/ModuleBrowser/ModuleBrowser.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/backend/Views/ModuleBrowser/ModuleBrowserModuleDescription.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/backend/Views/ModuleBrowser/ModuleBrowserModulesList.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/backend/Views/ModuleBrowser/ModuleBrowserNavigation.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/backend/Models/ModuleDefinition.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/dev/backend/Collections/ModulesDefinitionsCollection.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/css/sass/partials/_module-browser.scss" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/templates/backend/modulebrowser/module-browser.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/templates/backend/modulebrowser/module-description.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/templates/backend/modulebrowser/module-list-item.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/templates/backend/modulebrowser/module-template-list-item.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/AreaRender.php" afterPath="$PROJECT_DIR$/core/Frontend/AreaRender.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/backend/Views/AreaView.js" afterPath="$PROJECT_DIR$/js/dev/backend/Views/AreaView.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/js/dev/kontentblocks.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/extensions/BackupInspect.js" afterPath="$PROJECT_DIR$/js/dev/extensions/BackupInspect.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" afterPath="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Utils/JSONBridge.php" afterPath="$PROJECT_DIR$/core/Utils/JSONBridge.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/common/KBChecks.js" afterPath="$PROJECT_DIR$/js/dev/common/KBChecks.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/common/KBTemplates.js" afterPath="$PROJECT_DIR$/js/dev/common/KBTemplates.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" afterPath="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/Module.php" afterPath="$PROJECT_DIR$/core/Modules/Module.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleFactory.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleFactory.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/ModuleIterator.php" afterPath="$PROJECT_DIR$/core/Frontend/ModuleIterator.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Areas/ModuleMenu.php" afterPath="$PROJECT_DIR$/core/Backend/Areas/ModuleMenu.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php" afterPath="$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" afterPath="$PROJECT_DIR$/core/Modules/core-modules/Module_Prototype.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Environment/PostEnvironment.php" afterPath="$PROJECT_DIR$/core/Backend/Environment/PostEnvironment.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/API/PostMetaAPI.php" afterPath="$PROJECT_DIR$/core/Backend/API/PostMetaAPI.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" afterPath="$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" afterPath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/backend.min.js" afterPath="$PROJECT_DIR$/js/dist/backend.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/common/KBAjax.js" afterPath="$PROJECT_DIR$/js/dev/common/KBAjax.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/extensions/LayoutTemplates.js" afterPath="$PROJECT_DIR$/js/dev/extensions/LayoutTemplates.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/common.min.js" afterPath="$PROJECT_DIR$/js/dist/common.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/extensions.min.js" afterPath="$PROJECT_DIR$/js/dist/extensions.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/fields.min.js" afterPath="$PROJECT_DIR$/js/dist/fields.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/frontend.min.js" afterPath="$PROJECT_DIR$/js/dist/frontend.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gruntfile.js" afterPath="$PROJECT_DIR$/gruntfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/kontentblocks.css" afterPath="$PROJECT_DIR$/css/kontentblocks.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" afterPath="$PROJECT_DIR$/js/dist/kontentblocks.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.php" afterPath="$PROJECT_DIR$/kontentblocks.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/sass/kontentblocks.scss" afterPath="$PROJECT_DIR$/css/sass/kontentblocks.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/plugins.min.js" afterPath="$PROJECT_DIR$/js/dist/plugins.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/refields.min.js" afterPath="$PROJECT_DIR$/js/dist/refields.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kontentblocks.iws" />
@@ -86,50 +48,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ModuleFactory.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Modules/ModuleFactory.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="82" selection-start="508" selection-end="508" vertical-scroll-proportion="-7.5925927" vertical-offset="137" max-vertical-offset="1008">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PostEnvironment.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Backend/Environment/PostEnvironment.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="134" column="21" selection-start="3000" selection-end="3000" vertical-scroll-proportion="37.592594" vertical-offset="3337" max-vertical-offset="4176">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ModuleStoragePostMeta.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php">
           <provider selected="true" editor-type-id="text-editor">
             <state line="191" column="0" selection-start="4608" selection-end="4608" vertical-scroll-proportion="-5.1578946" vertical-offset="3126" max-vertical-offset="5688">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Module.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="191" column="0" selection-start="4922" selection-end="4922" vertical-scroll-proportion="-10.859649" vertical-offset="2819" max-vertical-offset="11088">
-              <folding>
-                <marker date="1390855114437" expanded="true" signature="5938:6035" placeholder="..." />
-                <marker date="1390855114437" expanded="false" signature="6416:6429" placeholder="..." />
-                <marker date="1390855114437" expanded="true" signature="7213:7346" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PostMetaAPI.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Backend/API/PostMetaAPI.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="109" column="21" selection-start="2414" selection-end="2414" vertical-scroll-proportion="-34.42105" vertical-offset="0" max-vertical-offset="2412">
               <folding />
             </state>
           </provider>
@@ -147,16 +69,61 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BackupInspect.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="BackupInspect.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/dev/extensions/BackupInspect.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="27" selection-start="2094" selection-end="2094" vertical-scroll-proportion="0.4537931" vertical-offset="823" max-vertical-offset="1692">
+            <state line="34" column="24" selection-start="962" selection-end="962" vertical-scroll-proportion="0.0" vertical-offset="383" max-vertical-offset="1692">
               <folding>
-                <marker date="1390978810865" expanded="true" signature="1459:1958" placeholder="..." />
-                <marker date="1390978810865" expanded="true" signature="1492:1933" placeholder="..." />
-                <marker date="1390978810865" expanded="true" signature="1529:1615" placeholder="..." />
-                <marker date="1390978810865" expanded="true" signature="1681:1923" placeholder="..." />
+                <marker date="1390979754665" expanded="true" signature="1464:1963" placeholder="..." />
+                <marker date="1390979754665" expanded="true" signature="1497:1938" placeholder="..." />
+                <marker date="1390979754665" expanded="true" signature="1534:1620" placeholder="..." />
+                <marker date="1390979754665" expanded="true" signature="1686:1928" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KBAjax.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/dev/common/KBAjax.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="48" selection-start="1284" selection-end="1284" vertical-scroll-proportion="0.0" vertical-offset="267" max-vertical-offset="846">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LayoutTemplates.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/dev/extensions/LayoutTemplates.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="56" column="12" selection-start="1763" selection-end="1763" vertical-scroll-proportion="0.0" vertical-offset="838" max-vertical-offset="3078">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gruntfile.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/gruntfile.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="114" column="14" selection-start="3886" selection-end="3886" vertical-scroll-proportion="0.92515594" vertical-offset="1607" max-vertical-offset="2466">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KBLink.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/KBLink.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="73" column="12" selection-start="1579" selection-end="1579" vertical-scroll-proportion="0.0" vertical-offset="869" max-vertical-offset="1944">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KBOnSiteEditing.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/KBOnSiteEditing.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1926">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -183,20 +150,16 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/css/sass/partials/_kontentfields_new.scss" />
-        <option value="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" />
         <option value="$PROJECT_DIR$/js/templates/fe_moduleLayoutControls.html" />
         <option value="$PROJECT_DIR$/js/templates/frontend/module-edit-form.html" />
         <option value="$PROJECT_DIR$/css/sass/KBOsEditStyle.scss" />
         <option value="$PROJECT_DIR$/js/dev/frontend/ROImageTest.js" />
-        <option value="$PROJECT_DIR$/js/dev/kontentblocks.js" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js" />
         <option value="$PROJECT_DIR$/js/dev/common/KBChecks.js" />
         <option value="$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php" />
         <option value="$PROJECT_DIR$/js/dev/backend/Collections/ModulesCollection.js" />
         <option value="$PROJECT_DIR$/css/sass/kontentblocks.scss" />
-        <option value="$PROJECT_DIR$/gruntfile.js" />
         <option value="$PROJECT_DIR$/css/kontentblocks.css" />
         <option value="$PROJECT_DIR$/kontentblocks.php" />
         <option value="$PROJECT_DIR$/js/dev/backend/Collections/ModuleDefinitions.js" />
@@ -233,7 +196,11 @@
         <option value="$PROJECT_DIR$/core/Backend/Environment/PostEnvironment.php" />
         <option value="$PROJECT_DIR$/core/Backend/Storage/ModuleStoragePostMeta.php" />
         <option value="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" />
+        <option value="$PROJECT_DIR$/js/dev/kontentblocks.js" />
         <option value="$PROJECT_DIR$/js/dev/extensions/BackupInspect.js" />
+        <option value="$PROJECT_DIR$/js/dev/common/KBAjax.js" />
+        <option value="$PROJECT_DIR$/js/dev/extensions/LayoutTemplates.js" />
+        <option value="$PROJECT_DIR$/gruntfile.js" />
       </list>
     </option>
   </component>
@@ -318,6 +285,10 @@
               <option name="myItemId" value="kontentblocks" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.jetbrains.php.config.PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -380,38 +351,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="extensions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kontentblocks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Extensions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -502,8 +441,9 @@
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31282052" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31282052" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22692308" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32564104" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28846154" sideWeight="0.49968293" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.247305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27330375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -516,7 +456,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32564104" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -564,36 +503,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="9" selection-start="1705" selection-end="1733" vertical-scroll-proportion="0.4127907" vertical-offset="777" max-vertical-offset="1350" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="188" column="2" selection-start="6058" selection-end="6058" vertical-scroll-proportion="0.0" vertical-offset="3059" max-vertical-offset="4590" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/dev/backend/Collections/ModulesCollection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="3" selection-start="53" selection-end="118" vertical-scroll-proportion="0.18711019" vertical-offset="0" max-vertical-offset="481" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kontentblocks.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="157" column="30" selection-start="4108" selection-end="4108" vertical-scroll-proportion="0.41629955" vertical-offset="2637" max-vertical-offset="8712" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/kontentblocks.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1752" column="0" selection-start="41244" selection-end="41244" vertical-scroll-proportion="0.0" vertical-offset="31536" max-vertical-offset="116226" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gruntfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="9" selection-start="4011" selection-end="4011" vertical-scroll-proportion="0.3846154" vertical-offset="1903" max-vertical-offset="2484" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="32" selection-start="336" selection-end="336" vertical-scroll-proportion="-8.666667" vertical-offset="0" max-vertical-offset="1008" />
@@ -824,9 +733,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="191" column="0" selection-start="4922" selection-end="4922" vertical-scroll-proportion="-10.859649" vertical-offset="2819" max-vertical-offset="11088">
           <folding>
-            <marker date="1390855114437" expanded="true" signature="5938:6035" placeholder="..." />
-            <marker date="1390855114437" expanded="false" signature="6416:6429" placeholder="..." />
-            <marker date="1390855114437" expanded="true" signature="7213:7346" placeholder="..." />
+            <marker date="1390855114437" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1390855114437" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1390855114437" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -885,15 +794,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="481">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/KBLink.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="73" column="12" selection-start="1579" selection-end="1579" vertical-scroll-proportion="0.0" vertical-offset="869" max-vertical-offset="1944">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/KBOnSiteEditing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1926">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/extensions/BackupInspect.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="27" selection-start="2094" selection-end="2094" vertical-scroll-proportion="0.4537931" vertical-offset="823" max-vertical-offset="1692">
+        <state line="34" column="24" selection-start="962" selection-end="962" vertical-scroll-proportion="0.0" vertical-offset="383" max-vertical-offset="1692">
           <folding>
-            <marker date="1390978810865" expanded="true" signature="1459:1958" placeholder="..." />
-            <marker date="1390978810865" expanded="true" signature="1492:1933" placeholder="..." />
-            <marker date="1390978810865" expanded="true" signature="1529:1615" placeholder="..." />
-            <marker date="1390978810865" expanded="true" signature="1681:1923" placeholder="..." />
+            <marker date="1390979754665" expanded="true" signature="1464:1963" placeholder="..." />
+            <marker date="1390979754665" expanded="true" signature="1497:1938" placeholder="..." />
+            <marker date="1390979754665" expanded="true" signature="1534:1620" placeholder="..." />
+            <marker date="1390979754665" expanded="true" signature="1686:1928" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/common/KBAjax.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="48" selection-start="1284" selection-end="1284" vertical-scroll-proportion="0.0" vertical-offset="267" max-vertical-offset="846">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dev/extensions/LayoutTemplates.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="12" selection-start="1763" selection-end="1763" vertical-scroll-proportion="0.0" vertical-offset="838" max-vertical-offset="3078">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="14" selection-start="3886" selection-end="3886" vertical-scroll-proportion="0.92515594" vertical-offset="1607" max-vertical-offset="2466">
+          <folding />
         </state>
       </provider>
     </entry>

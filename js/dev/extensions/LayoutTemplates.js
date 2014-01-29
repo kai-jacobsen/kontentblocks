@@ -1,9 +1,9 @@
-(function($) {
+(function ($) {
 
     var LayoutTemplates = {
         el: $('#layout-templates'),
-        init: function() {
-            
+        init: function () {
+
             if (this.el.length === 0) {
                 return false;
             }
@@ -20,32 +20,31 @@
 
             this.update();
         },
-        _selectContainer: function() {
+        _selectContainer: function () {
             return $("<div class='select-container'></div>").appendTo(this.el);
         },
-        _createSelectMenu: function() {
+        _createSelectMenu: function () {
             $('<select name="layout-template"></select>').appendTo(this.selectContainer);
             return $('select', this.el);
         },
-        update: function() {
+        update: function () {
             var that = this;
 
 
-            KB.ajax(
-                    {
-                        action: 'get_layout_templates',
-                        data: {
-                            areaConfig: this.areaConfig
-                        }
-                    },
-            function(response)
-            {
-                that.options = response;
-                that.renderSelectMenu(response);
-            });
+            KB.Ajax.send(
+                {
+                    action: 'get_layout_templates',
+                    data: {
+                        areaConfig: this.areaConfig
+                    }
+                },
+                function (response) {
+                    that.options = response;
+                    that.renderSelectMenu(response);
+                });
 
         },
-        save: function() {
+        save: function () {
             var that = this;
             var value = this.createInput.val();
 
@@ -54,23 +53,23 @@
                 return false;
             }
 
-            KB.ajax(
-                    {
-                        action: 'set_layout_template',
-                        data: {
-                            areaConfig: this.areaConfig,
-                            name: value
-                        }
-                    },
-            function(response)
-            {
-                that.update();
-                that.createInput.val('');
-                KB.notice('Saved', 'success');
-            });
+            KB.Ajax.send
+            (
+                {
+                    action: 'set_layout_template',
+                    data: {
+                        areaConfig: this.areaConfig,
+                        name: value
+                    }
+                },
+                function (response) {
+                    that.update();
+                    that.createInput.val('');
+                    KB.notice('Saved', 'success');
+                });
 
         },
-        delete: function() {
+        delete: function () {
             var that = this;
             var value = this.selectMenuEl.val();
 
@@ -79,84 +78,83 @@
                 return false;
             }
 
-            KB.ajax(
-                    {
-                        action: 'delete_layout_template',
-                        data: {
-                            areaConfig: this.areaConfig,
-                            name: value
-                        }
-                    },
-            function(response)
-            {
-                that.update();
-                KB.notice('Saved', 'success');
-            });
+            KB.Ajax.send(
+                {
+                    action: 'delete_layout_template',
+                    data: {
+                        areaConfig: this.areaConfig,
+                        name: value
+                    }
+                },
+                function (response) {
+                    that.update();
+                    KB.notice('Saved', 'success');
+                });
 
         },
-        renderSelectMenu: function(data) {
+        renderSelectMenu: function (data) {
             var that = this;
             that.selectMenuEl.empty();
-            _.each(data, function(item, key, s) {
+            _.each(data, function (item, key, s) {
                 that.selectMenuEl.append(_.template("<option value='<%= data.key %>'><%= data.name %></option>", {data: {
-                        key: key,
-                        name: item.name
-                    }}));
+                    key: key,
+                    name: item.name
+                }}));
             });
         },
-        _areaConfig: function() {
+        _areaConfig: function () {
 
             var concat = '';
 
             if (KB.RawAreas) {
-                _.each(KB.RawAreas, function(context) {
+                _.each(KB.RawAreas, function (context) {
                     concat += context.id;
                     console.log(concat);
                 });
             }
             return this.hash(concat.replace(',', ''));
         },
-        hash: function(s) {
-            return s.split("").reduce(function(a, b) {
+        hash: function (s) {
+            return s.split("").reduce(function (a, b) {
                 a = ((a << 5) - a) + b.charCodeAt(0);
                 return a & a
             }, 0);
 
         },
-        _createContainer: function() {
+        _createContainer: function () {
             return ($("<div class='create-container'></div>").appendTo(this.el));
         },
-        _createInput: function() {
+        _createInput: function () {
             return $("<input type='text' >").appendTo(this.createContainer);
         },
-        _createButton: function() {
+        _createButton: function () {
             var that = this;
             var button = $("<a class='button'>Save</a>").appendTo(this.createContainer);
-            button.on('click', function(e) {
+            button.on('click', function (e) {
                 e.preventDefault();
                 that.save();
             })
             return button;
         },
-        _loadButton: function() {
+        _loadButton: function () {
             var that = this;
             var button = $("<a class='button'>Load</a>").appendTo(this.selectContainer);
-            button.on('click', function(e) {
+            button.on('click', function (e) {
                 e.preventDefault();
                 that.load();
             })
             return button;
         },
-        _deleteButton: function() {
+        _deleteButton: function () {
             var that = this;
             var button = $("<a class='delete-js'>delete</a>").appendTo(this.selectContainer);
-            button.on('click', function(e) {
+            button.on('click', function (e) {
                 e.preventDefault();
                 that.delete();
             })
             return button;
         },
-        load: function() {
+        load: function () {
             var location = window.location.href + '&load_template=' + this.selectMenuEl.val() + '&post_id=' + $('#post_ID').val() + '&config=' + this.areaConfig;
             window.location = location;
         }

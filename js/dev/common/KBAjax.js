@@ -11,7 +11,6 @@ KB.Ajax = (function($) {
             data.post_id = KB.Screen.post_id;
             data.kbajax = true;
 
-            $(kbMetaBox).addClass('kb_loading');
             $('#publish').attr('disabled', 'disabled');
 
             return $.ajax({
@@ -34,7 +33,6 @@ KB.Ajax = (function($) {
                     KB.notice('<p>Generic Ajax Error</p>', 'error');
                 },
                 complete: function() {
-                    $(kbMetaBox).removeClass('kb_loading');
                     $('#publish').removeAttr('disabled');
                 }
             });
