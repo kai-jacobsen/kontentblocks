@@ -111,6 +111,11 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
 
     }
 
+    public function reset(){
+        $this->getDataBackend()->_selfUpdate();
+        $this->setup();
+        return $this;
+    }
 
     /**
      * Setup Kontentblocks Data for post
@@ -163,6 +168,7 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
             $id = '_preview' . $id;
         }
 
+
         if (isset($this->modules[$id])) {
             return $this->modules[$id];
         }
@@ -181,8 +187,9 @@ class ModuleStoragePostMeta implements InterfaceDataStorage
      */
     public function saveModule($id, $data = '')
     {
-        return update_post_meta($this->post_id, '_' . $id, $data);
 
+        $update = update_post_meta($this->post_id, '_' . $id, $data);
+        return $update;
     }
 
     /**

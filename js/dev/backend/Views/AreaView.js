@@ -2,7 +2,7 @@ var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.AreaView = Backbone.View.extend({
-    initialize: function() {
+    initialize: function () {
         this.controlsContainer = jQuery('.add-modules', this.$el);
         this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
         this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
@@ -10,21 +10,37 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.render();
     },
     events: {
-        'click .modules-link': 'openModulesMenu',
-        'click .js-area-settings-opener' : 'toggleSettings'
+        'click .modules-link': 'openModuleBrowser',
+        'click .js-area-settings-opener': 'toggleSettings'
     },
-    render: function() {
+    render: function () {
         this.addControls();
     },
-    addControls: function() {
+    addControls: function () {
         this.controlsContainer.append(KB.Templates.render('be_areaAddModule', {}));
     },
-    openModulesMenu: function(e) {
+    openModuleBrowser: function (e) {
+        e.preventDefault();
+
+        KB.ModuleBrowser = null;
+
+        if (!KB.ModuleBrowser) {
+            KB.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+                area: this
+            });
+        }
+
+        KB.ModuleBrowser.render();
+
+    },
+
+    // old module menu
+    openModulesMenu: function (e) {
         e.preventDefault();
         var that = this;
         KB.openedModal = vex.open({
             content: jQuery('#' + that.model.get('id') + '-nav').html(),
-            afterOpen: function() {
+            afterOpen: function () {
                 KB.menutabs();
                 that.menuView = new KB.Backbone.AreaModuleMenuView({
                     el: this.$vexContent,
@@ -32,13 +48,13 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     parentView: that
                 });
             },
-            afterClose: function(){
+            afterClose: function () {
                 that.menuView.remove();
             },
             contentClassName: 'modules-menu'
         }) || null;
     },
-    toggleSettings:function(e){
+    toggleSettings: function (e) {
         e.preventDefault();
         this.settingsContainer.slideToggle().toggleClass('open');
         KB.currentArea = this.model;

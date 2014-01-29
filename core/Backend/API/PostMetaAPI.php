@@ -118,7 +118,7 @@ class PostMetaAPI implements InterfaceDataAPI
      * Makes sure the object stays in line with actual meta data
      * Should be called after any meta data modification
      */
-    private function _selfUpdate()
+    public function _selfUpdate()
     {
         $this->_getPostCustom();
 

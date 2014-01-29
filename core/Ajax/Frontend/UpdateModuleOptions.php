@@ -27,6 +27,7 @@ class UpdateModuleOptions
             $Environment->getStorage()->saveModule($instance->instance_id, $mergedData);
         }
 
+        $instance->rawModuleData = $mergedData;
         $instance->moduleData = $mergedData;
 
         $return = array(

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Utils\JSONBridge;
 
 /*
  * Kontentblocks: Areas: Menu Class
@@ -282,9 +283,10 @@ class ModuleMenu
         $cats[ 'special' ] = __( 'Spezial', 'kontentblocks' );
 
         $cats[ 'core' ]      = __( 'System', 'kontentblocks' );
-        $cats[ 'templates' ] = __( 'Templates', 'kontentblocks' );
+        $cats[ 'template' ] = __( 'Templates', 'kontentblocks' );
 
         $this->cats = $cats;
+        JSONBridge::getInstance()->registerData('ModuleCategories', null, $cats);
 
     }
 

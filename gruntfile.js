@@ -88,7 +88,7 @@ module.exports = function (grunt) {
                     livereload: false
                 },
                 files: ['css/**/*.scss'],
-                tasks: ['compass']
+                tasks: ['compass', 'autoprefixer']
             },
             css: {
                 files: ['css/*.css'],
@@ -107,6 +107,13 @@ module.exports = function (grunt) {
                     console: true
                 }
             }
+        },
+        autoprefixer: {
+            // prefix the specified file
+            single_file: {
+                src: 'css/kontentblocks.css',
+                dest: 'css/kontentblocks.css'
+            },
         }
     });
 
@@ -117,6 +124,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-notify');
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify:prim', 'uglify:sec', 'compass', 'clean']);

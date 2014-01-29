@@ -1,0 +1,139 @@
+#module-browser {
+
+  background: #fff;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* Yep! */
+  width: 800px;
+  height: 65%;
+  z-index: 299;
+  box-shadow: 1px 1px 30px #333;
+}
+
+.module-browser-wrapper * {
+  @include box-sizing(border-box);
+  position: relative;
+
+  .close-browser{
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 59;
+  }
+
+}
+#wpwrap{
+  @include transition(all .8s ease-in-out);
+}
+
+#wpwrap.module-browser-open {
+  filter: blur(2px);
+  pointer-events:none;
+}
+
+.module-browser-wrapper {
+  height: 100%;
+  position: relative;
+}
+
+.module-browser-header {
+  height: 36px;
+  background: #333;
+  position: relative;
+  z-index: 99;
+  padding-left: 0px;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /*li*/
+  .cat-item {
+    display: inline-block;
+    color: #fff;
+    height: 36px;
+    padding: 6px 10px;
+    line-height: 24px;
+    cursor: pointer;
+
+    &.active{
+      background-color: $lightblue;
+    }
+  }
+}
+
+.module-browser__left-column {
+  width: 280px;
+  display: block;
+  float: left;
+  border-right: 1px solid #ccc ;
+  height: 100%;
+  margin-top: -36px;
+  padding-top: 36px;
+  background-color: #f9f9f9;
+}
+
+.module-browser__right-column {
+  width: 500px;
+  display: block;
+  height: 100%;
+  margin-top: -36px;
+  padding-top: 36px;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+}
+
+
+.modules-list {
+  padding: 0;
+  margin: 0;
+}
+
+.modules-list-item {
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #fff;
+  position: relative;
+  padding: 4px 0;
+  margin: 0;
+
+  &:hover{
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .dashicons-plus {
+    position: absolute;
+    left: 0px;
+    top: -1px;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    @include transition(all .3s ease-in-out);
+    z-index: 595;
+
+    &:hover {
+      background-color: $lightblue;
+      color: #fff;
+    }
+  }
+
+  h4 {
+    display: inline-block;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    padding-left: 40px;
+  }
+
+  p{
+    padding-top: 0;
+    margin-top: 0;
+    padding-left: 40px;
+  }
+}

@@ -82,8 +82,8 @@ Class TemplatesTable extends \WP_List_Table
         $lang = (I18n::wpmlActive()) ? 'Löschen (alle Sprachen)' : 'Löschen';
 
             $actions = array(
-                'edit'      => sprintf('<a href="?page=%s&view=%s&template=%s&tid=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['id'], $item['dbid']),
-                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&tid=%s&nonce=%s">%s</a>',$_GET['page'],'delete',$item['id'],$item['dbid'],$delete_nonce, $lang),
+                'edit'      => sprintf('<a href="?page=%s&view=%s&template=%s&dbid=%s">Inhalte bearbeiten</a>',$_GET['page'],'edit',$item['id'], $item['dbid']),
+                'delete'    => sprintf('<a href="?page=%s&action=%s&template=%s&dbid=%s&nonce=%s">%s</a>',$_GET['page'],'delete',$item['id'],$item['dbid'],$delete_nonce, $lang),
             );
 
 

@@ -18,7 +18,7 @@ class ModuleIterator implements \Iterator, \Countable
 
     public function __construct($modules, $Environment)
     {
-        $this->modules = $modules;
+        $this->modules = $this->setupModules($modules);
         $this->Environment = $Environment;
 
     }
@@ -40,7 +40,7 @@ class ModuleIterator implements \Iterator, \Countable
 
     }
 
-        public function key()
+    public function key()
     {
         return key($this->modules);
 
@@ -83,14 +83,28 @@ class ModuleIterator implements \Iterator, \Countable
     public function setPosition($pos)
     {
         $this->rewind();
-        for($i = 1; $i < $pos; $i++){
+        for ($i = 1; $i < $pos; $i++) {
             $this->next();
         }
 
-        if ($this->valid()){
+        if ($this->valid()) {
             return $this->current();
         }
 
+    }
+
+    private function setupModules($modules)
+    {
+        $collect = array();
+
+        foreach ($modules as $id => $module ) {
+            if ($module['state']['draft']){
+                continue;
+            }
+            $collect[$id] = $module;
+        }
+
+        return $collect;
     }
 
 }

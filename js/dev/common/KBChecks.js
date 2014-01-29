@@ -4,6 +4,7 @@ KB.Checks = (function($) {
     return {
         blockLimit: function(areamodel) {
             var limit = areamodel.get('limit');
+            // todo potentially wrong
             var children = areamodel.get('assignedModules').length;
             if (limit === 0) {
                 return false;

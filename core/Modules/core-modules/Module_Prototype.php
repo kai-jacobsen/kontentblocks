@@ -10,7 +10,7 @@ class Module_Prototype extends Module
     public static $defaults = array(
         'public_name' => 'Super Prototype',
         'name' => 'Super Prototype',
-        'description' => '',
+        'description' => 'Some short description',
         'globallyAvailable' => true,
         'asTemplate' => true,
         'connect' => 'any',
@@ -25,7 +25,7 @@ class Module_Prototype extends Module
     {
 
         $tpl = 'default.twig';
-        if (!$this->getData('testimage')->hasImage){
+        if (!$this->getRawData('testimage')){
             $tpl = 'textonly.twig';
         }
 

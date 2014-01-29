@@ -89,6 +89,7 @@ abstract class Module
      */
     final public function module($data = null)
     {
+
         if (is_null($data) && !is_null($this->moduleData)){
             $data = $this->moduleData;
             $this->rawModuleData = $this->moduleData;
@@ -162,6 +163,7 @@ abstract class Module
      */
     public function _render_options()
     {
+
         // open tag for block list item
         echo $this->_openListItem();
 

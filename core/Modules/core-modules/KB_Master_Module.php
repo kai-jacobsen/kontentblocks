@@ -13,7 +13,8 @@ class KB_Master_Module extends Module {
 		'master'		=> true,
 		'cacheable'		=> false,
 		'os_edittext'	=> 'Master Template',
-		'hidden'		=> true
+		'hidden'		=> true,
+        'category'      => 'core'
 		);
 
 

@@ -21,7 +21,7 @@ class MenuTemplates extends AbstractMenuEntry
      * - pageTitle: Title for all views
      * - actions: index array of actions or associative action => method map
      * - views: see above,for views
-     * - messages: User feedback messages, like wp admin notices
+     * - messages: User feedback messages, like wp admin notices but custom
      * @todo refine
      * @var array
      */
@@ -266,6 +266,7 @@ class MenuTemplates extends AbstractMenuEntry
         $definition['template'] = true;
         $definition['instance_id'] = $data['id'];
         $definition['class'] = $data['type'];
+        $definition['category'] = 'template';
 
         // settings are not persistent
         unset($definition['settings']);

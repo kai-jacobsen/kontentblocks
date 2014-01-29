@@ -4,6 +4,7 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Modules\ModuleTemplates;
 
 class CreateNewModule
 {
@@ -74,9 +75,6 @@ class CreateNewModule
 
         // handle override from template
         $this->templateOverride();
-
-        // create the new module finally
-        $this->newInstance = $this->createModuleInstance();
 
         $this->updateData();
 
@@ -171,10 +169,11 @@ class CreateNewModule
     {
 
         if ( $this->metaArgs[ 'template' ] ) {
-            $globalData = new GlobalDataHandler();
-            $tpl        = $globalData->getTemplate( $this->metaArgs[ 'template_reference' ] );
+            $ModuleTemplates = ModuleTemplates::getInstance();
+            $tpl        = $ModuleTemplates->getModuleTemplate( $this->metaArgs[ 'templateReference' ] );
+
             if ( $tpl ) {
-                $this->moduleArgs[ 'settings' ][ 'public_name' ] = $tpl[ 'name' ];
+//                $this->moduleArgs[ 'settings' ][ 'public_name' ] = $tpl[ 'name' ];
             }
         }
 
@@ -192,6 +191,8 @@ class CreateNewModule
 
         // handle template generation
         $this->handleTemplates();
+
+
         $this->render();
 
     }
@@ -219,9 +220,10 @@ class CreateNewModule
     {
         //create data for templates
         if ( $this->metaArgs[ 'template' ] ) {
-            $master_data = get_option( $this->metaArgs[ 'template_reference' ] );
-            $update      = update_post_meta( $this->post_id, '_' . $this->newInstanceID, $master_data );
 
+            $master_data = ModuleTemplates::getInstance()->getTemplateData( $this->metaArgs[ 'templateReference' ] );
+            $update      = $this->environment->getStorage()->saveModule($this->newInstanceID, $master_data );
+            $this->environment->getStorage()->reset();
             if ( !$update )
                 wp_send_json_error( 'Upddate not successful' );
         }
@@ -234,6 +236,10 @@ class CreateNewModule
     private function render()
     {
         ob_start();
+
+        // create the new module finally
+        $this->newInstance = $this->createModuleInstance();
+
         $this->newInstance->_render_options();
         $html = ob_get_clean();
         $response = array
@@ -269,7 +275,7 @@ class CreateNewModule
 
         $metaArgs = array(
             'template' => FILTER_VALIDATE_BOOLEAN,
-            'template_reference' => FILTER_SANITIZE_STRING
+            'templateReference' => FILTER_SANITIZE_STRING
         );
 
         $this->metaArgs   = filter_var_array( $_POST, $metaArgs );

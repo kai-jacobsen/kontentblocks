@@ -22,6 +22,7 @@ class ModuleFactory
             $this->data = $data;
         }
 
+
         $this->environment = $environment;
 
     }

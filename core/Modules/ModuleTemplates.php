@@ -33,7 +33,6 @@ class ModuleTemplates
     {
         // init Table
         $this->API = new PluginDataAPI('template');
-
         // gather important data
         $this->setup();
 
@@ -44,12 +43,32 @@ class ModuleTemplates
 
     }
 
+    public function getModuleTemplate($id)
+    {
+        $this->API->setGroup('module');
+        if ($this->API->get($id)){
+            return $this->API->get($id);
+        } else {
+            return false;
+        }
+    }
+
+    public function getTemplateData($id)
+    {
+        $this->API->setGroup('tpldata');
+        if ($this->API->get($id)){
+            return $this->API->get($id);
+        } else {
+            return array();
+        }
+    }
+
     public function templateExists($id)
     {
         $all = $this->getAllTemplates();
 
 
-        if (array_key_exists($id,$all)) {
+        if (array_key_exists($id, $all)) {
             return true;
         } else {
             return false;
@@ -96,6 +115,15 @@ class ModuleTemplates
             $prepared[$item['data_key']] = wp_parse_args($value, $pre);
         }
         return $prepared;
+    }
+
+    public function getAllTemplateModules()
+    {
+        $this->API->setGroup('module');
+        $tpls = $this->API->getAll();
+        $this->API->reset();
+        return $tpls;
+
     }
 
 

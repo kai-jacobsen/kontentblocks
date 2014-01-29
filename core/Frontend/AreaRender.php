@@ -56,11 +56,12 @@ class AreaRender
 
         // Iterate over modules (ModuleIterator)
         foreach ( $this->modules as $module ) {
-
             // TODO whoooo bad
             // quick fix to test onsite editing
             // module->module will, depending on field configuration, modify moduleData
             $module->rawModuleData = $module->moduleData;
+
+            
 
             $output.= $this->beforeModule( $this->_beforeModule( $module ), $module );
             $output.= $module->module( $module->moduleData );
