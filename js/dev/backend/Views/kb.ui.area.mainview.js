@@ -34,26 +34,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
 
     },
 
-    // old module menu
-    openModulesMenu: function (e) {
-        e.preventDefault();
-        var that = this;
-        KB.openedModal = vex.open({
-            content: jQuery('#' + that.model.get('id') + '-nav').html(),
-            afterOpen: function () {
-                KB.menutabs();
-                that.menuView = new KB.Backbone.AreaModuleMenuView({
-                    el: this.$vexContent,
-                    area: that.model.get('id'),
-                    parentView: that
-                });
-            },
-            afterClose: function () {
-                that.menuView.remove();
-            },
-            contentClassName: 'modules-menu'
-        }) || null;
-    },
+
     toggleSettings: function (e) {
         e.preventDefault();
         this.settingsContainer.slideToggle().toggleClass('open');
