@@ -24,7 +24,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             el: this.$el,
             parent: this
         });
-        console.log(store.get(this.instanceId + '_open'));
         if (store.get(this.instanceId + '_open')){
             this.toggleBody();
             this.model.set('open', true);

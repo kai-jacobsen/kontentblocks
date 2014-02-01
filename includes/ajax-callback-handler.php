@@ -1,17 +1,19 @@
 <?php
 
-use Kontentblocks\Overlays\OnsiteEditModule,
-    Kontentblocks\Overlays\EditGlobalArea,
-    Kontentblocks\Ajax\SortModules,
-    Kontentblocks\Ajax\RemoveModules,
-    Kontentblocks\Ajax\ChangeModuleStatus,
-    Kontentblocks\Ajax\ChangeArea,
-    Kontentblocks\Ajax\Frontend\SaveInlineEdit,
-    Kontentblocks\Ajax\CreateNewModule,
-    Kontentblocks\Ajax\DuplicateModule,
-    Kontentblocks\Ajax\Frontend\GetModuleOptions,
-    Kontentblocks\Ajax\Frontend\UpdateModuleOptions,
-    Kontentblocks\Ajax\AfterAreaChange;
+use Kontentblocks\Ajax\Frontend\FieldGetImage;
+use Kontentblocks\Ajax\GetSanitizedId;
+use Kontentblocks\Overlays\OnsiteEditModule;
+use Kontentblocks\Overlays\EditGlobalArea;
+use Kontentblocks\Ajax\SortModules;
+use Kontentblocks\Ajax\RemoveModules;
+use Kontentblocks\Ajax\ChangeModuleStatus;
+use Kontentblocks\Ajax\ChangeArea;
+use Kontentblocks\Ajax\Frontend\SaveInlineEdit;
+use Kontentblocks\Ajax\CreateNewModule;
+use Kontentblocks\Ajax\DuplicateModule;
+use Kontentblocks\Ajax\Frontend\GetModuleOptions;
+use Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
+use Kontentblocks\Ajax\AfterAreaChange;
 
 /**
  * -----------------------------------------
@@ -20,11 +22,11 @@ use Kontentblocks\Overlays\OnsiteEditModule,
  */
 function osEditModuleCb()
 {
-    $OnsiteEditModule = new OnsiteEditModule();
+    new OnsiteEditModule();
 
 }
 
-add_action( 'wp_ajax_os-edit-module', 'osEditModuleCb' );
+add_action('wp_ajax_os-edit-module', 'osEditModuleCb');
 
 /**
  * -----------------------------------------
@@ -33,67 +35,67 @@ add_action( 'wp_ajax_os-edit-module', 'osEditModuleCb' );
  */
 function editGlobalAreaCb()
 {
-    $EditGlobalArea = new EditGlobalArea();
+    new EditGlobalArea();
 
 }
 
-add_action( 'wp_ajax_editGlobalArea', 'editGlobalAreaCb' );
+add_action('wp_ajax_editGlobalArea', 'editGlobalAreaCb');
 
 /**
  * -----------------------------------------
- * Handler for resorting modules 
+ * Handler for resorting modules
  * -----------------------------------------
  */
 function resortModulesCb()
 {
-    $SortModules = new SortModules();
+    new SortModules();
 
 }
 
-add_action( 'wp_ajax_resortModules', 'resortModulesCb' );
+add_action('wp_ajax_resortModules', 'resortModulesCb');
 
 /**
  * -----------------------------------------
- * Handler for removing modules 
+ * Handler for removing modules
  * -----------------------------------------
  */
 function removeModulesCb()
 {
-    $RemoveModules = new RemoveModules();
+    new RemoveModules();
 
 }
 
-add_action( 'wp_ajax_removeModules', 'removeModulesCb' );
+add_action('wp_ajax_removeModules', 'removeModulesCb');
 
 /**
  * -----------------------------------------
- * Handler for changing module visiblity 
+ * Handler for changing module visiblity
  * -----------------------------------------
  */
 function changeModuleStatusCb()
 {
-    $ChangeModuleStatus = new ChangeModuleStatus();
+    new ChangeModuleStatus();
 
 }
 
-add_action( 'wp_ajax_changeModuleStatus', 'changeModuleStatusCb' );
+add_action('wp_ajax_changeModuleStatus', 'changeModuleStatusCb');
 
 /**
  * -----------------------------------------
- * Handler for changing module visiblity 
+ * Handler for changing module visiblity
  * -----------------------------------------
  */
 function changeAreaCb()
 {
-    $ChangeArea = new ChangeArea();
+    new ChangeArea();
 
 }
 
-add_action( 'wp_ajax_changeArea', 'changeAreaCb' );
+add_action('wp_ajax_changeArea', 'changeAreaCb');
 
 /**
  * -----------------------------------------
- * Handler for creating new modules 
+ * Handler for creating new modules
  * -----------------------------------------
  */
 function createNewModuleCb()
@@ -102,72 +104,72 @@ function createNewModuleCb()
 
 }
 
-add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
+add_action('wp_ajax_createNewModule', 'createNewModuleCb');
 
 /**
  * -----------------------------------------
- * Handler for creating new modules 
+ * Handler for creating new modules
  * -----------------------------------------
  */
 function duplicateModuleCb()
 {
-    $duplicateModule = new DuplicateModule();
+    new DuplicateModule();
 
 }
 
-add_action( 'wp_ajax_duplicateModule', 'duplicateModuleCb' );
+add_action('wp_ajax_duplicateModule', 'duplicateModuleCb');
 
 /**
  * -----------------------------------------
- * Handler onsite saving 
+ * Handler onsite saving
  * -----------------------------------------
  */
 function afterAreaChangeCb()
 {
-    $afterAreaChange = new AfterAreaChange();
+    new AfterAreaChange();
 
 }
 
-add_action( 'wp_ajax_afterAreaChange', 'afterAreaChangeCb' );
+add_action('wp_ajax_afterAreaChange', 'afterAreaChangeCb');
 
 /**
  * -----------------------------------------
- * Handler for saving frontend inline edit 
+ * Handler for saving frontend inline edit
  * -----------------------------------------
  */
 function saveInlineEditCb()
 {
-    $saveInlineEdit = new SaveInlineEdit();
+    new SaveInlineEdit();
 
 }
 
-add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );
+add_action('wp_ajax_saveInlineEdit', 'saveInlineEditCb');
 
 /**
  * -----------------------------------------
- * Handler onsite editing 
+ * Handler onsite editing
  * -----------------------------------------
  */
 function getModuleOptionsCb()
 {
-    $getModuleOptions = new GetModuleOptions();
+    new GetModuleOptions();
 
 }
 
-add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );
+add_action('wp_ajax_getModuleOptions', 'getModuleOptionsCb');
 
 /**
  * -----------------------------------------
- * Handler onsite saving 
+ * Handler onsite saving
  * -----------------------------------------
  */
 function updateModuleOptionsCb()
 {
-    $updateModuleOptions = new UpdateModuleOptions();
+    new UpdateModuleOptions();
 
 }
 
-add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );
+add_action('wp_ajax_updateModuleOptions', 'updateModuleOptionsCb');
 
 /**
  * -----------------------------------------
@@ -176,11 +178,11 @@ add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );
  */
 function getSanitizedIdCb()
 {
-    new \Kontentblocks\Ajax\GetSanitizedId();
+    new GetSanitizedId();
 
 }
 
-add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );
+add_action('wp_ajax_getSanitizedId', 'getSanitizedIdCb');
 
 
 /**
@@ -190,8 +192,8 @@ add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );
  */
 function fieldGetImageCb()
 {
-    new \Kontentblocks\Ajax\Frontend\FieldGetImage();
+    new FieldGetImage();
 
 }
 
-add_action( 'wp_ajax_fieldGetImage', 'fieldGetImageCb' );
+add_action('wp_ajax_fieldGetImage', 'fieldGetImageCb');

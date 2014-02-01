@@ -59,17 +59,16 @@ class Enqueues
             // Plugins - Chosen, Noty, Sortable Touch
             wp_enqueue_script('kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true);
 
-            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins', 'backbone', 'underscore'), null, true);
+            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins', 'backbone', 'underscore','jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable'), null, true);
 
-            wp_enqueue_script('Kontentblocks-Extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kontentblocks-base'), null, true);
+            wp_enqueue_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
+            wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse'), null, true);
 
-            wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend', 'wp-color-picker'), null, true);
+            wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend', 'wp-color-picker', 'kb-extensions'), null, true);
             // Main Kontentblocks script file
-            wp_enqueue_script('kontentblocks-base', KB_PLUGIN_URL . '/js/dist/kontentblocks.min.js', null, '0.7', true);
-            wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse', 'kontentblocks-base'), null, true);
             // add Kontentblocks l18n strings
             $localize = $this->_localize();
-            wp_localize_script('kontentblocks-base', 'kontentblocks', $localize);
+            wp_localize_script('kb-common', 'kontentblocks', $localize);
             wp_enqueue_script('heartbeat');
         }
 
@@ -102,7 +101,7 @@ class Enqueues
 
             wp_enqueue_script('KBOnSiteEditing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse'));
             wp_localize_script('KBOnSiteEditing', 'kontentblocks', $this->_localize());
-            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('KBPlugins'), null, true);
+            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('KBPlugins', 'jquery-ui-tabs'), null, true);
             wp_enqueue_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-common'), null, true);
             wp_localize_script('kb-frontend', 'KBAppConfig', $config);
 //            wp_enqueue_style( 'thickbox' );

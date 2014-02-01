@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
+use Kontentblocks\Backend\API\PluginDataAPI;
 use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Modules\ModuleTemplates;
@@ -46,8 +47,8 @@ class CreateNewModule
 
     public function __construct()
     {
-        if ( !defined( 'KB_GENERATE' ) ) {
-            define( 'KB_GENERATE', true );
+        if (!defined('KB_GENERATE')) {
+            define('KB_GENERATE', true);
         }
 
         check_ajax_referer('kb-create');
@@ -67,15 +68,14 @@ class CreateNewModule
         // new instance id
         $this->newInstanceID = $this->setupNewID();
 
-        // Setup module args
-        $this->newModule = $this->setupModuleArgs();
-
         // override class if master
         $this->overrideModuleClassEventually();
 
         // handle override from template
         $this->templateOverride();
 
+        // Setup module args
+        $this->newModule = $this->setupModuleArgs();
         $this->updateData();
 
     }
@@ -92,17 +92,24 @@ class CreateNewModule
 
     private function setupEnvironment()
     {
-        return \Kontentblocks\Helper\getEnvironment( $this->post_id );
+        return \Kontentblocks\Helper\getEnvironment($this->post_id);
 
     }
 
     private function overrideModuleClassEventually()
     {
         // Override Class / type if this originates from a master template
-        if ( $this->moduleArgs[ 'master' ] ) {
-            $this->moduleArgs[ 'class' ] = 'KB_Master_Module';
-        }
+        if ($this->moduleArgs['master']) {
 
+
+            $API = new PluginDataAPI('template');
+            $this->moduleArgs['tpldef'] = $API->getRawByKey($this->metaArgs['templateReference']);
+
+            $this->type = 'KB_Master_Module';
+            $this->moduleArgs['class'] = 'KB_Master_Module';
+            $this->moduleArgs['master_reference'] = $this->metaArgs['templateReference'];
+
+        }
     }
 
     /**
@@ -114,14 +121,13 @@ class CreateNewModule
     private function setupModuleArgs()
     {
         // Get Prototype from registry
-        if ( class_exists( $this->type ) ) {
-            $proto                  = ModuleRegistry::getInstance()->get( $this->type );
-            $proto                  = wp_parse_args( $this->moduleArgs, $proto );
-            $proto[ 'instance_id' ] = $this->newInstanceID;
+        if (class_exists($this->type)) {
+            $proto = ModuleRegistry::getInstance()->get($this->type);
+            $proto = wp_parse_args($this->moduleArgs, $proto);
+            $proto['instance_id'] = $this->newInstanceID;
             return $proto;
-        }
-        else {
-            wp_send_json_error( $this->type . ' does not exist' );
+        } else {
+            wp_send_json_error($this->type . ' does not exist');
         }
 
     }
@@ -136,10 +142,9 @@ class CreateNewModule
     {
         $count = $this->count;
 
-        if ( $count != 0 ) {
+        if ($count != 0) {
             return $count + 1;
-        }
-        else {
+        } else {
             return 1;
         }
 
@@ -152,12 +157,11 @@ class CreateNewModule
      */
     private function setupNewID()
     {
-        $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
-        if ( $this->post_id !== -1 ) {
+        $prefix = apply_filters('kb_post_module_prefix', 'module_');
+        if ($this->post_id !== -1) {
             return $prefix . $this->post_id . '_' . $this->newCount;
-        }
-        else {
-            return $prefix . 'kb-block-da' . $this->moduleArgs[ 'area' ] . '_' . $this->newCount;
+        } else {
+            return $prefix . 'kb-block-da' . $this->moduleArgs['area'] . '_' . $this->newCount;
         }
 
     }
@@ -168,11 +172,11 @@ class CreateNewModule
     private function templateOverride()
     {
 
-        if ( $this->metaArgs[ 'template' ] ) {
+        if ($this->metaArgs['template']) {
             $ModuleTemplates = ModuleTemplates::getInstance();
-            $tpl        = $ModuleTemplates->getModuleTemplate( $this->metaArgs[ 'templateReference' ] );
+            $tpl = $ModuleTemplates->getModuleTemplate($this->metaArgs['templateReference']);
 
-            if ( $tpl ) {
+            if ($tpl) {
 //                $this->moduleArgs[ 'settings' ][ 'public_name' ] = $tpl[ 'name' ];
             }
         }
@@ -206,9 +210,9 @@ class CreateNewModule
         //dont save settings
         unset($toSave['settings']);
         // add new block and update
-        $update = $this->environment->getStorage()->addToIndex( $this->newInstanceID, $toSave );
-        if ( $update !== true && !is_int( $update ) ) {
-            wp_send_json_error( 'Update to Index failed' );
+        $update = $this->environment->getStorage()->addToIndex($this->newInstanceID, $toSave);
+        if ($update !== true && !is_int($update)) {
+            wp_send_json_error('Update to Index failed');
         }
 
     }
@@ -219,13 +223,13 @@ class CreateNewModule
     private function handleTemplates()
     {
         //create data for templates
-        if ( $this->metaArgs[ 'template' ] ) {
+        if ($this->metaArgs['template']) {
 
-            $master_data = ModuleTemplates::getInstance()->getTemplateData( $this->metaArgs[ 'templateReference' ] );
-            $update      = $this->environment->getStorage()->saveModule($this->newInstanceID, $master_data );
+            $master_data = ModuleTemplates::getInstance()->getTemplateData($this->metaArgs['templateReference']);
+            $update = $this->environment->getStorage()->saveModule($this->newInstanceID, $master_data);
             $this->environment->getStorage()->reset();
-            if ( !$update )
-                wp_send_json_error( 'Upddate not successful' );
+            if (!$update)
+                wp_send_json_error('Upddate not successful');
         }
 
     }
@@ -243,14 +247,14 @@ class CreateNewModule
         $this->newInstance->_render_options();
         $html = ob_get_clean();
         $response = array
-            (
+        (
             'id' => $this->newInstanceID,
             'module' => $this->newModule,
-            'name' => $this->newInstance->settings[ 'public_name' ],
+            'name' => $this->newInstance->settings['public_name'],
             'html' => $html
         );
 
-        wp_send_json( $response );
+        wp_send_json($response);
 
     }
 
@@ -261,14 +265,13 @@ class CreateNewModule
 //            wp_send_json( wp_verify_nonce( $_POST[ 'nonce' ], '_kontentblocks_ajax_magic' ) );
 //        }
 
-        $this->post_id = filter_var( $_POST[ 'post_id' ]);
-        $this->count   = filter_var( $_POST[ 'count' ], FILTER_VALIDATE_INT );
-        $this->type    = filter_var( $_POST[ 'class' ], FILTER_SANITIZE_STRING );
+        $this->post_id = filter_var($_POST['post_id']);
+        $this->count = filter_var($_POST['count'], FILTER_VALIDATE_INT);
+        $this->type = filter_var($_POST['class'], FILTER_SANITIZE_STRING);
 
         $moduleArgs = array(
             'area' => FILTER_SANITIZE_STRING,
             'master' => FILTER_VALIDATE_BOOLEAN,
-            'master_reference' => FILTER_SANITIZE_STRING,
             'areaContext' => FILTER_SANITIZE_STRING,
             'class' => FILTER_SANITIZE_STRING
         );
@@ -278,14 +281,14 @@ class CreateNewModule
             'templateReference' => FILTER_SANITIZE_STRING
         );
 
-        $this->metaArgs   = filter_var_array( $_POST, $metaArgs );
-        $this->moduleArgs = filter_var_array( $_POST, $moduleArgs );
+        $this->metaArgs = filter_var_array($_POST, $metaArgs);
+        $this->moduleArgs = filter_var_array($_POST, $moduleArgs);
 
     }
 
     public function createModuleInstance()
     {
-        $Factory = new ModuleFactory($this->type ,$this->newModule, $this->environment );
+        $Factory = new ModuleFactory($this->type, $this->newModule, $this->environment);
         return $Factory->getModule();
 
     }

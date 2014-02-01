@@ -20,6 +20,10 @@
   padding: 5px 14px 10px 12px;
   background: transparent;
 
+  &.master-module a{
+      background-color: $orange;
+  }
+
   a {
     line-height: 16px;
     display: inline-block;
@@ -34,6 +38,7 @@
     cursor: pointer;
     border: 1px solid transparent;
     background-color: #333;
+
 
 
     &.dashicons {

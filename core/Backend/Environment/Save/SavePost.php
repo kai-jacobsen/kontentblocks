@@ -77,6 +77,9 @@ class SavePost implements InterfaceSaveHandler
 
                 /** @var $instance \Kontentblocks\Modules\Module */
                 $instance = $Factory->getModule();
+
+
+
                 // Set the 'old' data to the module
                 $instance->moduleData = $old;
 
@@ -94,7 +97,11 @@ class SavePost implements InterfaceSaveHandler
                     $new = $old;
                 } else {
                     $new = $instance->save($data, $old);
-                    $savedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
+                    if ($new === false){
+                        $savedData = null;
+                    } else {
+                        $savedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
+                    }
                 }
 
 

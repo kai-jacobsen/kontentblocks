@@ -3,7 +3,7 @@
     var LayoutTemplates = {
         el: $('#layout-templates'),
         init: function () {
-
+            console.log('loaded');
             if (this.el.length === 0) {
                 return false;
             }

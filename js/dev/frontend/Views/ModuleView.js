@@ -8,10 +8,14 @@ var KB = KB || {};
 KB.ModuleView = Backbone.View.extend({
 
     initialize: function () {
+        var that  = this;
         this.model.bind('save', this.model.save);
         this.model.view = this;
         this.render();
         this.setControlsPosition();
+        jQuery(window).on('kontentblocks::ajaxUpdate', function(){
+             that.setControlsPosition();
+        });
 
     },
     save: function () {
@@ -23,6 +27,7 @@ KB.ModuleView = Backbone.View.extend({
         "click .kb-js-open-layout-controls": "openLayoutControls"
     },
     render: function () {
+        console.log(this.model);
         this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON()}));
     },
     // TODO change old name

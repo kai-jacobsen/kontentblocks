@@ -59,10 +59,10 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     close:function(){
         jQuery('#wpwrap').removeClass('module-browser-open');
         this.trigger('browser:close');
-        this.unbind();
+//        this.unbind();
         this.remove();
-        delete this.$el;
-        delete this.el;
+//        delete this.$el;
+//        delete this.el;
     },
     // update list view upon navigation
     update: function(model){
@@ -103,7 +103,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             template: module.get('template'),
             templateReference: module.get('instance_id'), // is set on templates
             duplicate: module.get('duplicate'),
-            areaContext: module.get('context'),
+            areaContext: this.options.area.model.get('context'),
             area: this.options.area.model.get('id'),
             _ajax_nonce: kontentblocks.nonces.create
         };

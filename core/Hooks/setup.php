@@ -68,3 +68,6 @@ function vipx_allow_contenteditable_on_divs() {
             $allowedposttags[ $tag ] = array_merge( $allowedposttags[ $tag ], $new_attributes );
     }
 }
+
+
+add_action('icl_make_duplicate', array('\Kontentblocks\Language\KB2WPMLDuplicates', 'handleDuplicate'),10,4);

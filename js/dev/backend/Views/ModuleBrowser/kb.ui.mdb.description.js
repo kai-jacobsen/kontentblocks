@@ -13,9 +13,9 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
 
     },
     close: function(){
-        this.unbind();
-        this.remove();
-        delete this.$el;
-        delete this.el;
+//        this.unbind();
+//        this.remove();
+//        delete this.$el;
+//        delete this.el;
     }
 });

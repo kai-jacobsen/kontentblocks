@@ -32,7 +32,6 @@ class Module_Prototype extends Module
         else if ($this->getData('alternate', null, false)){
             $tpl = 'alternate.twig';
         }
-
         $tpl = new ModuleTemplate($this, $tpl);
         return $tpl->render();
 

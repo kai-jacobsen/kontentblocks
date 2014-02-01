@@ -62,7 +62,6 @@ class AreaRender
             $module->rawModuleData = $module->moduleData;
 
             
-
             $output.= $this->beforeModule( $this->_beforeModule( $module ), $module );
             $output.= $module->module( $module->moduleData );
 

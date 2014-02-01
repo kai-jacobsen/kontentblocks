@@ -53,7 +53,7 @@ class PluginDataAPI implements InterfaceDataAPI
      * @var object
      * @since 1.0.0
      */
-    public  $db = null;
+    public $db = null;
 
     /**
      * Group as set on init resp. the first ever called group id
@@ -89,7 +89,7 @@ class PluginDataAPI implements InterfaceDataAPI
      * @var string
      * @since 1.0.0
      */
-    public  $tablename = null;
+    public $tablename = null;
 
     /**
      * Table data of the current language, sorted by group id
@@ -290,6 +290,21 @@ class PluginDataAPI implements InterfaceDataAPI
         return $this->dataRaw;
     }
 
+    public function getRawByKey( $key = null)
+    {
+        if (is_null($key)) {
+            throw new \BadFunctionCallException('Provide key');
+        }
+
+        foreach ($this->getRaw() as $raw) {
+            if ($raw['data_key'] === $key && $raw['data_group'] === $this->group){
+                return $raw;
+            }
+        }
+        return null;
+    }
+
+
     /**
      * @param null $key
      * @return bool
@@ -397,7 +412,7 @@ class PluginDataAPI implements InterfaceDataAPI
     public function setLang($code = null)
     {
         // override with current active language if not set
-        if (is_null($code)){
+        if (is_null($code)) {
             $code = \Kontentblocks\Language\I18n::getActiveLanguage();
         }
 
@@ -409,7 +424,6 @@ class PluginDataAPI implements InterfaceDataAPI
         $this->selfUpdate();
         return $this;
     }
-
 
 
     public function reset()
@@ -445,7 +459,7 @@ class PluginDataAPI implements InterfaceDataAPI
             }
         }
 
-        if (is_null($collect)){
+        if (is_null($collect)) {
             return false;
         } else {
             return $collect;

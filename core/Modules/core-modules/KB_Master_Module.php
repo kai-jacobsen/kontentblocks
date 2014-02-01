@@ -6,6 +6,7 @@ class KB_Master_Module extends Module {
 
     public static $defaults = array(
 		'public_name' => 'Master Template',
+        'id' => 'core-master',
 		'description' => 'Referenz zu einem Master Template',
 		'in_dynamic' => true,
         'asTemplate' => false,
@@ -19,10 +20,13 @@ class KB_Master_Module extends Module {
 
 
     public function options() {
-		
-		$master = $this->master_ref;
 
-		$link = admin_url("admin.php?page=kontentblocks-templates&action=edit_template&template={$master}&redirect=true");
+        $master = $this->master_reference;
+        $API = new \Kontentblocks\Backend\API\PluginDataAPI('template');
+        d($API->get($master));
+
+        $lng = \Kontentblocks\Language\I18n::getInstance()->getActiveLanguage();
+		$link = admin_url("admin.php?page=kontentblocks-templates&view=edit&template={$master}&dbid={$this->tpldef['id']}&lang={$lng}&redirect=true");
 		
 		echo "<a href='{$link}'>Orginal bearbeiten</a>";
 		echo "<input type='hidden' name='{$this->instance_id}[master]' value='{$master}' />";
@@ -30,21 +34,25 @@ class KB_Master_Module extends Module {
 	
 	
 	public function  render($data) {
-		
-		global $Kontentblocks;
-		$tpls = $Kontentblocks->get_block_templates();
-		
-		$reference = $tpls[$data];
-		
-		$instance = new $reference['class'];
-		$instance->external_data = get_option($reference['instance_id']);
-		
-		return $instance;
+
+
+        return false;
+
+        $API = new \Kontentblocks\Backend\API\PluginDataAPI('tpldata');
+		$data = $API->get($this->tpldef['data_key']);
+        $tpldef = maybe_unserialize($this->tpldef['data_value']);
+
+        $args = \Kontentblocks\Modules\ModuleRegistry::getInstance()->get($tpldef['type']);
+        $args['instance_id'] = $this->instance_id;
+        $Factory = new \Kontentblocks\Modules\ModuleFactory($tpldef['type'], $args, null, $data);
+        $instance = $Factory->getModule();
+		$instance->rawData = $data;
+        return $instance->render($data);
 	}
 	
 	
 	public function save($data, $old) {
-		return $data['master'];
+		return false;
 	}
 	
 }

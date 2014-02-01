@@ -13,24 +13,48 @@ abstract class Field
     protected $path;
     public $returnObj;
 
+    /**
+     * set storage key
+     * @param string $key
+     * @since 1.0.0
+     */
     public function setKey($key)
     {
         $this->key = $key;
 
     }
 
+    /**
+     * get storage key
+     * @return string
+     * @since 1.0.0
+     */
     public function getKey()
     {
         return $this->key;
 
     }
 
+    /**
+     * Field parameters array
+     * @param array $args
+     * @since 1.0.0
+     */
     public function setArgs($args)
     {
         $this->args = $args;
 
     }
 
+    /**
+     * base prefix for the field
+     * generally based upon the parent module instance id
+     * like: module_x_n['$key']
+     * optional as array
+     * @param $id
+     * @param bool $array
+     * @since 1.0.0
+     */
     public function setBaseId($id, $array = false)
     {
         if (!$array) {
@@ -39,22 +63,42 @@ abstract class Field
             $this->baseId = $id . '[' . $array . ']';
         }
 
+        // set parent module id which equals given id
         $this->parentModuleId = $id;
 
     }
 
+    /**
+     * Set field data
+     * Data from _POST[$this->key]
+     * @param mixed $data
+     * @since 1.0.0
+     */
     public function setData($data)
     {
         $this->value = $data;
 
     }
 
+    /**
+     * Type of field as set upon field registration
+     * like: 'text', 'checkbox' etc..
+     * @param string $type
+     * @since 1.0.0
+     */
     public function setType($type)
     {
         $this->type = $type;
 
     }
 
+    /**
+     * Setup method
+     * @param mixed $data
+     * @param string $moduleId
+     * @TODO Investigate the differnce between parentModule and parentModuleId, set above
+     * @since 1.0.0
+     */
     public function setup($data, $moduleId)
     {
         $this->setData($data);
@@ -62,6 +106,12 @@ abstract class Field
 
     }
 
+    /**
+     * Get a special object for the field type if field has one set
+     * @TODO: Re-think if there should be one default object
+     * @since 1.0.0
+     * @return object
+     */
     public function getReturnObj()
     {
         if (!$this->returnObj) {
@@ -80,22 +130,41 @@ abstract class Field
 
     }
 
+    /**
+     * The actual output method for the field markup
+     * Any markup should be echoed, not returned
+     * @since 1.0.0
+     * @return void
+     */
     public abstract function form();
 
+    /**
+     * Build the whole field, including surrounding wrapper
+     * and optional 'hooks"
+     * @TODO add some wp hooks here?
+     * @since 1.0.0
+     * @return bool
+     */
     public function build()
     {
 
         $this->uniqueId = uniqid();
 
+        // optional call to simplify enqueueing
         if (method_exists($this, 'enqueue')) {
             $this->enqueue();
         }
+
+        // A Field might not be present, i.e. if it's not set to
+        // the current context
+        // Checkboxes are actual use case, checked boxes will render hidden to preserve the value during save
         if (!$this->getDisplay()) {
             if ($this->getDefault('renderHidden')) {
                 $this->renderHidden();
             } else {
                 return FALSE;
             }
+            // Full markup
         } else {
             $this->header();
             $this->body();
@@ -104,6 +173,10 @@ abstract class Field
 
     }
 
+    /**
+     * Header wrap markup
+     * @since 1.0.0
+     */
     public function header()
     {
 
@@ -117,40 +190,58 @@ abstract class Field
 
     }
 
+    /**
+     * Field body markup
+     * This method calls the actual form() method.
+     */
     public function body()
     {
 
+        /*
+         * optional method to render something before the field
+         * @TODO replace with wp hook
+         */
         if (method_exists($this, 'preForm')) {
             $this->preForm();
         }
 
+        // When viewing front the frontside, an optional method can be user for the output
         if (defined('KB_ONSITE_ACTIVE') && KB_ONSITE_ACTIVE && method_exists($this, 'frontsideForm')) {
             $this->frontsideForm();
         } else {
             $this->form();
         }
 
-
+        // some field (colorpicker etc) might have some individual settings
         $this->javascriptSettings();
 
+        /*
+         * optional call after the body
+         * @TODO replace with wp hook
+         */
         if (method_exists($this, 'postForm')) {
             $this->postForm();
         }
 
     }
 
+    /**
+     * JSON Encode custom settings for the field
+     */
     public function javascriptSettings()
     {
         $settings = $this->getArg('jSettings');
-
         if (!$settings) {
             return;
         }
-
         printf('<script>var KB = KB || {}; KB.FieldConfig = KB.FieldConfig || {}; KB.FieldConfig["%s"] = %s;</script>', $this->uniqueId, json_encode($settings));
 
     }
 
+    /**
+     * Footer
+     * @todo add wp hook
+     */
     public function footer()
     {
         echo "</div>";
@@ -158,6 +249,9 @@ abstract class Field
 
     }
 
+    /**
+     * Helper Method to create a complete label tag
+     */
     public function label()
     {
         if (!empty($this->getArg('label'))) {
@@ -166,6 +260,12 @@ abstract class Field
 
     }
 
+    /**
+     * Wrapper, helper method to get the key
+     * Will call filter() if available
+     * @param string $arrKey
+     * @return null
+     */
     public function getValue($arrKey = null)
     {
         if (method_exists($this, 'filter')) {

@@ -30,10 +30,10 @@ class ModuleFactory
     public function getModule()
     {
 
-        $classname = $this->class;
 
         $module = apply_filters('kb_modify_block', $this->args);
         $module = apply_filters("kb_modify_block_{$this->args['settings']['id']}", $this->args);
+        $classname = $this->class;
         // new instance
         if (class_exists($classname)) {
             $instance = new $classname($module, $this->data, $this->environment);
@@ -41,6 +41,8 @@ class ModuleFactory
         return $instance;
 
     }
+
+
 
     public static function parseModule($module)
     {

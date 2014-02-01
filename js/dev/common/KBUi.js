@@ -21,9 +21,18 @@ KB.Ui = function ($) {
         init: function () {
             var that = this;
             // init Sortable
+            this.initTabs();
             this.initSortable();
             this.initToggleBoxes();
             this.flexContext();
+            // set the global activeField variable dynamically
+            $('body').on('mousedown', '.kb_field', function(e) {
+                activeField = this;
+            });
+            // set the global activeBlock variable dynamically
+            $('body').on('mousedown', '.kb_block', function(e) {
+                activeBlock = this.id;
+            });
 
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
             jQuery(document).ajaxComplete(function (e, o, settings) {
@@ -75,7 +84,6 @@ KB.Ui = function ($) {
             KB.TinyMCE.addEditor($el);
         },
         initTabs: function () {
-
             $('.kb_fieldtabs').tabs({
                 activate: function () {
 //                       var $window = $(window).height();
@@ -307,3 +315,4 @@ KB.Ui = function ($) {
     };
 
 }(jQuery);
+KB.Ui.init();

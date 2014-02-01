@@ -12,9 +12,9 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
         var that = this;
         _.each(this.models, function (model) {
             var cat = (_.isUndefined(model.get('settings').category)) ? 'standard' : model.get('settings').category;
-            that.categories[cat].modules[model.get('settings').class] = model;
+            that.categories[cat].modules.push(model);
         });
-
+        console.log(that.categories);
     },
     prepareCategories: function () {
         var cats = {};
@@ -22,7 +22,7 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
             cats[key] = {
                 id: key,
                 name: item,
-                modules: {}
+                modules: []
             };
         });
         return cats;

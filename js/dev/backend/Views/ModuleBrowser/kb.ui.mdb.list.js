@@ -7,7 +7,7 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
     },
     // render list
     render: function (el) {
-        if (this.model.get('tpldef')){
+        if (this.model.get('tpldef')) {
             console.log(this.model.get('tpldef'));
             this.$el.html(KB.Templates.render('backend/modulebrowser/module-template-list-item', {module: this.model.toJSON()}));
         } else {
@@ -48,10 +48,12 @@ KB.Backbone.ModuleBrowserModulesList = Backbone.View.extend({
         var first = false;
         this.$el.empty();
         _.each(this.modules, function (module) {
-            if (!that.subviews[module.cid]) {
-                console.log('create new view li');
-                that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that});
-            }
+               that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that});
+
+//            if (!that.subviews[module.cid]) {
+//                console.log('create new view li');
+//                that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that});
+//            }
             if (first === false) {
                 that.options.browser.loadDetails(module);
                 first = !first;

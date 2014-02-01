@@ -131,7 +131,7 @@ abstract class Module
 
     public function _setupFieldData()
     {
-        if (empty($this->moduleData)) {
+        if (empty($this->moduleData) || !is_array($this->moduleData)) {
             return;
         }
 
@@ -540,6 +540,11 @@ abstract class Module
             'areaContext' => $this->areaContext,
             'class' => get_class($this)
         );
+
+        if (isset($this->master) && $this->master){
+            $toJSON['master'] = true;
+            $toJSON['tpldef'] = $this->tpldef;
+        }
 
         $enc = json_encode($toJSON);
 

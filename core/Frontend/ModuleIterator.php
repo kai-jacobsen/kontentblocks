@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Backend\API\PluginDataAPI;
+
 class ModuleIterator implements \Iterator, \Countable
 {
 
@@ -27,7 +29,7 @@ class ModuleIterator implements \Iterator, \Countable
     {
         $moduleDef = $this->modules[$this->key()];
         $Factory = new \Kontentblocks\Modules\ModuleFactory(
-            $moduleDef['class'], $moduleDef, $this->Environment, $this->Environment->getModuleData($this->key()));
+            $moduleDef['class'], $moduleDef, $this->Environment, $this->getModuleData($moduleDef));
         return $Factory->getModule();
 
     }
@@ -101,10 +103,42 @@ class ModuleIterator implements \Iterator, \Countable
             if ($module['state']['draft']){
                 continue;
             }
+
+            if (isset($module['master']) && $module['master']) {
+                $tpl = $module['tpldef'];
+
+                $API = new PluginDataAPI('tpldata');
+                $this->data = $API->get($tpl['data_key']);
+
+                $tpldef = maybe_unserialize($tpl['data_value']);
+                $args = \Kontentblocks\Modules\ModuleRegistry::getInstance()->get($tpldef['type']);
+                $args['instance_id'] = $module['instance_id'];
+                $args['overrides'] = $module['overrides'];
+                $args['area'] = $module['area'];
+                $args['class'] = $tpldef['type'];
+                $args['areaContext'] = $module['areaContext'];
+                $args['state'] = $module['state'];
+                $args['tpldef'] = $module['tpldef'];
+                $args['master'] = true;
+                $module = $args;
+            }
+
             $collect[$id] = $module;
         }
 
         return $collect;
+    }
+
+    private function getModuleData($moduleDef)
+    {
+        if ($moduleDef['master']){
+            $tpl = $moduleDef['tpldef'];
+            $API = new PluginDataAPI('tpldata');
+            return $API->get($tpl['data_key']);
+
+        } else {
+            return $this->Environment->getModuleData($this->key());
+        }
     }
 
 }
