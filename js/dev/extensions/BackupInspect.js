@@ -65,7 +65,7 @@ KB.Ext.Backup = (function($) {
 console.log(this.firstRun);
             // no notice on first run
             if (!this.firstRun){
-                KB.Notice.notice('<h3>Message from the Back.Up.Joe!</h3><p>New Backups were created</p>', 'success');
+                KB.Notice.notice('<p>New Backups were created</p>', 'success');
             }
             this.firstRun = false;
 

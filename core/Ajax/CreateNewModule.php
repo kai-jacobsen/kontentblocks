@@ -101,7 +101,6 @@ class CreateNewModule
         // Override Class / type if this originates from a master template
         if ($this->moduleArgs['master']) {
 
-
             $API = new PluginDataAPI('template');
             $this->moduleArgs['tpldef'] = $API->getRawByKey($this->metaArgs['templateReference']);
 
@@ -174,10 +173,9 @@ class CreateNewModule
 
         if ($this->metaArgs['template']) {
             $ModuleTemplates = ModuleTemplates::getInstance();
-            $tpl = $ModuleTemplates->getModuleTemplate($this->metaArgs['templateReference']);
-
+            $tpl = $ModuleTemplates->getTemplate($this->metaArgs['templateReference']);
             if ($tpl) {
-//                $this->moduleArgs[ 'settings' ][ 'public_name' ] = $tpl[ 'name' ];
+                $this->moduleArgs[ 'overrides' ][ 'name' ] = $tpl['name'];
             }
         }
 

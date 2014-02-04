@@ -2,47 +2,101 @@
 
 namespace Kontentblocks\Backend\Screen;
 
-use Kontentblocks\Backend\Screen\ScreenManager,
-    Kontentblocks\Backend\Areas\Area;
+use Kontentblocks\Backend\Areas\Area;
 
+/**
+ * Class ScreenContext
+ * @package Kontentblocks\Backend\Screen
+ * @since 1.0.0
+ */
 class ScreenContext
 {
+    /**
+     * Literal identifier of this 'context'
+     * currently possible values: 'top', 'normal', 'side', 'bottom'
+     * @var string
+     */
+    protected $id;
 
-    protected $args;
+    /**
+     * Label for this context as printed in the context header
+     * @var string
+     */
+    protected $title;
+
+    /**
+     * Short description of the context
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * Array of area definitions
+     * Contains only areas which are set to this context
+     * @var array
+     */
     protected $areas;
-    protected $hasSidebar;
 
+    /**
+     * Indicator if the current screen has 'side' areas or not
+     * Does only account for non-dynamic sidebar areas
+     * Dynamic areas are treated differently
+     * String: 'has-sidebar' or 'no-sidebar'
+     * @TODO non-intuitive and semantically wrong to return a string
+     * @var string
+     */
+    protected $editScreenHasSidebar;
+
+    /**
+     * Class constructor
+     * @param $args
+     * @param ScreenManager $ScreenManager
+     * @throws Exception
+     */
     public function __construct($args, ScreenManager $ScreenManager)
     {
         if (empty($args)) {
             throw new Exception('No Arguments specified for single Context');
         }
 
-
-        $this->args = $args;
         $this->id = $args['id'];
         $this->title = $args['title'];
         $this->description = $args['description'];
-        $this->postData = $ScreenManager->postData;
-        $this->areas = $ScreenManager->getRegionAreas($this->id);
-        $this->EditScreenHasSidebar = $ScreenManager->hasSidebar;
+        $this->Environment = $ScreenManager->getEnvironment();
+        $this->areas = $ScreenManager->getContextAreas($this->id);
+        $this->editScreenHasSidebar = $ScreenManager->hasSidebar();
+        $this->ScreenManager = $ScreenManager;
     }
 
+
+    /**
+     * Wrapper to render the context to screen
+     * @uses action context_box_{id}
+     * @since 1.0.0
+     */
     public function render()
     {
         if (!empty($this->areas)) {
+            // print outer wrapper markup
             $this->openContext();
+            //render actual areas
             $this->renderAreas();
+            //close wrapper markup
             $this->closeContext();
         } else {
-            do_action("context_box_{$this->id}", $this->id);
+            // call the hook anyway
+            do_action("context_box_{$this->id}", $this->id, $this->ScreenManager);
         }
 
     }
 
+    /**
+     * Print opening markup to the screen
+     * @since 1.0.0
+     */
     public function openContext()
     {
-        $side = $this->EditScreenHasSidebar ? 'has-sidebar' : 'no-sidebar';
+        $side = $this->editScreenHasSidebar ? 'has-sidebar' : 'no-sidebar';
 
         echo "<div id='context_{$this->id}' class='area-{$this->id} kb-context-container {$side}'>
                     <div class='context-inner area-holder context-box'>
@@ -53,35 +107,56 @@ class ScreenContext
 
     }
 
+    /**
+     * Instantiate Areas and render each instance to the screen
+     * @since 1.0.0
+     */
     public function renderAreas()
     {
 
         foreach ($this->areas as $args) {
+
             // exclude dynamic areas
             if ($args['dynamic']) {
                 continue;
             }
-            // Setup new Area
 
-            $area = new Area($args, $this->postData, $this->id);
+            // Setup new Area
+            $area = new Area($args, $this->Environment, $this->id);
             // do area header markup
             $area->header();
-
+            // @TODO toJSON needs to be replaced
             // render modules for the area
             $area->render();
+            // @TODO temporary fix
             $area->toJSON();
+            //render area footer
             $area->footer();
         }
 
     }
 
+    /**
+     * Close container and call hook
+     * @since 1.0.0
+     */
     public function closeContext()
     {
         echo "</div>"; // end inner
         // hook to add custom stuff after areas
-        do_action("context_box_{$this->id}", $this->id);
+        do_action("context_box_{$this->id}", $this->id, $this->ScreenManager);
         echo "</div>";
 
+    }
+
+    /**
+     * Getter for Screen Manager
+     * @return ScreenManager
+     * @since 1.0.0
+     */
+    public function getScreenManager()
+    {
+        return $this->ScreenManager;
     }
 
 }

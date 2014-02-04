@@ -63,6 +63,7 @@ abstract class Module
      */
     public function options()
     {
+
         $this->Fields->renderFields();
 
     }
@@ -570,7 +571,8 @@ abstract class Module
             'predefined' => false,
             'inGlobalSidebars' => false,
             'inGlobalAreas' => false,
-            'asTemplate' => true
+            'asTemplate' => true,
+            'category' => 'standard'
         );
 
     }

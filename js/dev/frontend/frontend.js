@@ -9,7 +9,6 @@ KB.Frontend = (function ($) {
 
     // Custom Views Collection
     var Views = [];
-    console.log(KB.fromServer);
     var Collection = new KB.ModulesCollection(_.toArray(KB.PageModules), {
         model: KB.ModuleModel
     });
@@ -51,9 +50,11 @@ jQuery(document).ready(function () {
                     var key = data.key;
                     var value = ed.getContent();
 
+                    var moduleData = KB.CurrentModel.get('moduleData');
+                    moduleData[key] = value;
+                    console.log(moduleData);
+                    KB.CurrentModel.set('moduleData', moduleData);
 
-                    KB.PageModules[module].moduleData[key] = value;
-                    KB.PageModules[module].isDirty = true;
 
 //                    if (KB.FrontendEditModal) {
 //                        KB.FrontendEditModal.serialize();
@@ -79,9 +80,9 @@ jQuery(document).ready(function () {
                     var key = data.key;
                     var value = ed.getContent();
 
-                    KB.PageModules[module].moduleData[key] = value;
-                    KB.PageModules[module].isDirty = true;
-
+                    var moduleData = KB.CurrentModel.get('moduleData');
+                    moduleData[key] = value;
+                    KB.CurrentModel.set('moduleData', moduleData);
 
 //                    if (KB.FrontendEditModal) {
 //                        KB.FrontendEditModal.render();
@@ -97,4 +98,11 @@ jQuery(document).ready(function () {
         inlineEdit();
     });
 
+
+
+});
+
+
+jQuery('.area').sortable({
+    cancel: '.editable'
 });

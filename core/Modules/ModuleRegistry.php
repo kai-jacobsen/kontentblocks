@@ -57,6 +57,9 @@ class ModuleRegistry
             // Handle connection to regions
             AreaRegistry::getInstance()->connect($classname, $moduleArgs);
 
+            if (method_exists($classname, 'init')){
+                $classname::init();
+            }
         }
 
     }

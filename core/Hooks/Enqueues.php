@@ -52,8 +52,6 @@ class Enqueues
 
             // Main Stylesheet
             wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
-            wp_enqueue_style('vex', KB_PLUGIN_URL . 'js/vex/css/vex.css');
-            wp_enqueue_style('vex-flat', KB_PLUGIN_URL . 'js/vex/css/vex-theme-flat-attack.css');
             $this->enqueueStyles();
 
             // Plugins - Chosen, Noty, Sortable Touch
@@ -96,9 +94,7 @@ class Enqueues
         );
 
         if (is_user_logged_in() && !is_admin()) {
-            //add_action( 'wp_footer', array( $this, 'add_reveal' ) );
             wp_enqueue_script('KBPlugins', KB_PLUGIN_URL . 'js/dist/plugins.min.js', array('jquery', 'jquery-ui-mouse', 'wp-color-picker'));
-
             wp_enqueue_script('KBOnSiteEditing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('KBPlugins', 'jquery', 'thickbox', 'jquery-ui-mouse'));
             wp_localize_script('KBOnSiteEditing', 'kontentblocks', $this->_localize());
             wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('KBPlugins', 'jquery-ui-tabs'), null, true);
@@ -106,14 +102,10 @@ class Enqueues
             wp_localize_script('kb-frontend', 'KBAppConfig', $config);
 //            wp_enqueue_style( 'thickbox' );
             wp_enqueue_style('KB', KB_PLUGIN_URL . '/css/kontentblocks.css');
-            wp_enqueue_style('vex', KB_PLUGIN_URL . '/js/vex/css/vex.css');
-            wp_enqueue_style('vex-theme', KB_PLUGIN_URL . '/js/vex/css/vex-theme-flat-attack.css');
             wp_enqueue_style('KBOsEditStyle', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
             wp_enqueue_style('wp-color-picker');
             wp_enqueue_script('heartbeat');
             wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
-            wp_enqueue_style('vex', KB_PLUGIN_URL . 'js/vex/css/vex.css');
-            wp_enqueue_style('vex-flat', KB_PLUGIN_URL . 'js/vex/css/vex-theme-flat-attack.css');
 
             $this->enqueueStyles();
 

@@ -127,11 +127,9 @@ class SavePost implements InterfaceSaveHandler
 
                 $areasData = $_POST['areas'];
 
-                if (isset($areasData[$area['id']])) {
-                    $collection[$area['id']] = $areasData[$area['id']];
-
+                foreach($areasData as $id){
+                    $collection[$id] = $_POST[$id];
                 }
-
                 $this->Environment->getDataBackend()->update('kb_area_settings', $collection);
             }
         }

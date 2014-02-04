@@ -28,7 +28,7 @@ class SidebarSelector
         }
 
         add_action( 'save_post', array( $this, 'save' ), 11 );  //save early
-        add_action( 'context_box_side', array( $this, 'sidebar_selector_content' ), 10, 1 );
+        add_action( 'context_box_side', array( $this, 'sidebar_selector_content' ), 10, 2 );
         add_action( 'admin_footer', array( $this, 'modal_markup' ) );
         $this->nonce = wp_create_nonce( 'editGlobalArea' );
 
@@ -43,18 +43,18 @@ class SidebarSelector
      * TODO:: resort global sidebars and post sidebars to own arrays
      */
 
-    function sidebar_selector_content( $context )
+    function sidebar_selector_content( $context, $ScreenManager )
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
-        $pdc     = new PostEnvironment( $post_id );
+        $pdc     = $ScreenManager->getEnvironment();
 
         if (!$pdc->get('areas')){
             return false;
         }
 
-        $Screen  = new ScreenManager( $pdc );
+        $Screen  = $ScreenManager;
 
-        $this->_setupAreas( $Screen->getRegionAreas( 'side' ) );
+        $this->_setupAreas( $Screen->getContextAreas( 'side' ) );
 
         // saved sidebar settings
         if ( $post_id ) {
@@ -151,8 +151,8 @@ class SidebarSelector
 
     public function _setupAreas( $areas )
     {
+        d($areas);
         $this->areas = $areas;
-
         foreach ( $areas as $args ) {
             if ( $args[ 'dynamic' ] == true ) {
                 $this->globalSidebars[ $args[ 'id' ] ] = $args;

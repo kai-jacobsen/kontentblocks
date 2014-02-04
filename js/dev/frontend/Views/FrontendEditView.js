@@ -137,7 +137,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             return false;
         }
         this.model = moduleView.model;
-        this.view = moduleView;
+        this.options.view = moduleView;
         this.render();
     },
 

@@ -84,19 +84,37 @@ class AreaRender
     public function beforeModule( $classes, $module )
     {
 
-        return sprintf( '<div id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ) );
+
+        $layout = $this->area->getCurrentLayoutClasses();
+
+        if (!empty($layout)){
+            return sprintf( '<div class="wrap %3$s"><div id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ), implode(' ', $layout) );
+        } else {
+            return sprintf( '<div id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ) );
+
+        }
 
     }
 
     public function afterModule( $_after, $module )
     {
         $module->toJSON();
-        return "</div>";
+
+        $layout = $this->area->getCurrentLayoutClasses();
+        if (!empty($layout)){
+            return "</div></div>";
+        } else {
+            return "</div>";
+
+        }
+
 
     }
 
     public function _beforeModule( $module )
     {
+
+
         $module->_addAreaAttributes( $this->area->getPublicAttributes() );
         $layoutClasses     = $this->area->getCurrentLayoutClasses();
         $moduleClasses     = $this->modules->getCurrentModuleClasses();

@@ -8,8 +8,8 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     //element class
     className: 'kb-overlay',
     //events
-    events:{
-        'click .close-browser' : 'close'
+    events: {
+        'click .close-browser': 'close'
     },
     subviews: {
 
@@ -56,7 +56,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     },
     // close the browser
     // TODO clean up and remove all references & bindings
-    close:function(){
+    close: function () {
         jQuery('#wpwrap').removeClass('module-browser-open');
         this.trigger('browser:close');
 //        this.unbind();
@@ -65,26 +65,25 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
 //        delete this.el;
     },
     // update list view upon navigation
-    update: function(model){
+    update: function (model) {
         var id = model.get('id');
         var modules = this.modulesDefinitions.getModules(id);
         this.subviews.ModulesList.setModules(modules).update();
-        this.subviews.ModulesList.bind('loadDetails', _.bind(this.loadDetails, this));
-        this.subviews.ModulesList.bind('createModule', _.bind(this.createModule, this));
+        this.listenTo(this.subviews.ModulesList, 'loadDetails', this.loadDetails);
+        this.listenTo(this.subviews.ModulesList, 'createModule', this.createModule);
 
     },
     // update details in description view
-    loadDetails: function(model){
+    loadDetails: function (model) {
         this.subviews.ModuleDescription.model = model;
         this.subviews.ModuleDescription.update();
     },
     // create module action
-    createModule: function(module) {
+    createModule: function (module) {
         // check if capability is right for this action
         if (KB.Checks.userCan('create_kontentblocks')) {
-            KB.Notice.notice('Yeah', 'success');
         } else {
-            KB.Notice.notice('Oh well', 'error');
+            KB.Notice.notice('You\'re not allowed to do this', 'error');
         }
 
         // check if block limit isn't reached
@@ -93,8 +92,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             KB.Notice.notice('Limit for this area reached', 'error');
             return false;
         }
-        console.clear();
-        console.log(module);
         // prepare data to send
         var data = {
             action: 'createNewModule',
@@ -114,7 +111,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     },
     // create module success callback
     // TODO Re-initialize ui components
-    success: function(data) {
+    success: function (data) {
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
@@ -134,16 +131,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         var fullDefs = [];
 
         // @TODO a module class which was assigned to an area is not necessarily present
-//        if (assignedModules.length > 0) {
-//            _.each(assignedModules, function (module) {
-//                if (KB.fromServer.ModuleDefinitions[module]){
-//                    fullDefs.push(KB.fromServer.ModuleDefinitions[module]);
-//                }
-//            });
-//        }
 
-        _.each(KB.fromServer.ModuleDefinitions, function(module){
-            if (_.indexOf(assignedModules,module.settings.class) !== -1){
+        _.each(KB.fromServer.ModuleDefinitions, function (module) {
+            if (_.indexOf(assignedModules, module.settings.class) !== -1) {
                 fullDefs.push(module);
             }
         });

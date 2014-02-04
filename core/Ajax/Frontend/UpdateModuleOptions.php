@@ -9,13 +9,13 @@ class UpdateModuleOptions
 
     public function __construct()
     {
-
+        global $wp_embed;
         check_ajax_referer('kb-update');
 
         $module = $_POST['module'];
         $data = $_POST['data'];
 
-        if ($module['master']){
+        if (isset($module['master']) && $module['master']) {
             wp_send_json($this->handleMasterModule($module, $data));
         }
 
@@ -38,7 +38,7 @@ class UpdateModuleOptions
         $instance->moduleData = $mergedData;
 
         $return = array(
-            'html' => wp_kses_post($instance->module($mergedData)),
+            'html' => wp_kses_post($wp_embed->autoembed($instance->module($mergedData))),
             'newModuleData' => $mergedData
         );
 
@@ -56,8 +56,7 @@ class UpdateModuleOptions
         $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment(-1);
         $Factory = new \Kontentblocks\Modules\ModuleFactory($module['class'], $module, $Environment);
         $instance = $Factory->getModule();
-
-        $API = new PluginDataAPI('tpldata');
+        $API = new PluginDataAPI('tpldata', $module['tpldef']['data_lang']);
         $old = $API->get($module['tpldef']['data_key']);
         $new = $instance->save($parsed[$instance->instance_id], $old);
         $mergedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);

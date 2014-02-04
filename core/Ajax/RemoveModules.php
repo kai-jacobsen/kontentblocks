@@ -18,8 +18,8 @@ class RemoveModules
         check_ajax_referer('kb-delete');
 
 
-        $this->postId      = $_POST[ 'post_id' ];
-        $this->module = $_POST[ 'module' ];
+        $this->postId = $_POST['post_id'];
+        $this->module = $_POST['module'];
         $this->Storage = \Kontentblocks\Helper\getStorage($this->postId);
 
         $this->remove();

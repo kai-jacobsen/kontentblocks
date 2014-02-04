@@ -23,15 +23,16 @@ class Module_Prototype extends Module
 
     public function render($data)
     {
-
         $tpl = 'default.twig';
-        if (!$this->getRawData('testimage')){
+        if ($this->getEnvVar('area_template') === '3-columns') {
+            $tpl = '3-columns.twig';
+        } else if (!$this->getRawData('testimage')) {
             $tpl = 'textonly.twig';
-        }
-
-        else if ($this->getData('alternate', null, false)){
+        } else if ($this->getData('alternate', null, false)) {
             $tpl = 'alternate.twig';
         }
+
+
         $tpl = new ModuleTemplate($this, $tpl);
         return $tpl->render();
 

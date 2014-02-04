@@ -222,7 +222,7 @@ h5.kb_properties_title {
 }
 
 /* line 193, sass/partials/_block_style.scss */
-.kb_block.kb_inactive .block-head {
+.kb_block.kb_inactive .block-head, .kb_block.deactivated .block-head {
   border-left: 3px solid red;
 }
 
@@ -331,10 +331,10 @@ h5.kb_properties_title {
   width: 30px;
   height: 30px;
   padding-top: 5px;
-  background: red url("assets/power.png") 0 -27px no-repeat;
   float: left;
   display: none;
   cursor: pointer;
+  background-color: red;
 }
 
 /* line 299, sass/partials/_block_style.scss */

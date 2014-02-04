@@ -70,7 +70,7 @@ abstract class Field
 
     /**
      * Set field data
-     * Data from _POST[$this->key]
+     * Data from _POST[{baseid}[$this->key]]
      * @param mixed $data
      * @since 1.0.0
      */
@@ -96,7 +96,7 @@ abstract class Field
      * Setup method
      * @param mixed $data
      * @param string $moduleId
-     * @TODO Investigate the differnce between parentModule and parentModuleId, set above
+     * @TODO Investigate the difference between parentModule and parentModuleId, set above
      * @since 1.0.0
      */
     public function setup($data, $moduleId)
@@ -227,6 +227,7 @@ abstract class Field
 
     /**
      * JSON Encode custom settings for the field
+     * @TODO use JSONTransport
      */
     public function javascriptSettings()
     {
@@ -328,7 +329,6 @@ abstract class Field
     /*
      * Get description if available
      */
-
     public function description()
     {
         if (!empty($this->getArg('description'))) {

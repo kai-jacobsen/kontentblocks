@@ -245,6 +245,7 @@ class PluginDataAPI implements InterfaceDataAPI
      */
     public function get($key)
     {
+
         // prepare data
         if (is_numeric($key)) {
             $data = $this->dataById;
@@ -290,18 +291,23 @@ class PluginDataAPI implements InterfaceDataAPI
         return $this->dataRaw;
     }
 
-    public function getRawByKey( $key = null)
+    public function getRawByKey($key = null)
     {
         if (is_null($key)) {
             throw new \BadFunctionCallException('Provide key');
         }
 
         foreach ($this->getRaw() as $raw) {
-            if ($raw['data_key'] === $key && $raw['data_group'] === $this->group){
+            if ($raw['data_key'] === $key && $raw['data_group'] === $this->group) {
                 return $raw;
             }
         }
         return null;
+    }
+
+    public function getByDBID($id)
+    {
+        return $this->db->get_row("SELECT * FROM $this->tablename WHERE id = $id", ARRAY_A);
     }
 
 
@@ -433,7 +439,7 @@ class PluginDataAPI implements InterfaceDataAPI
         return $this;
     }
 
-    private function keyExists($key)
+    public function keyExists($key)
     {
         $data = $this->getGroupData();
         return isset($data[$key]);

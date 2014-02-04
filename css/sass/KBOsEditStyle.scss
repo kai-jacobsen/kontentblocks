@@ -9,9 +9,12 @@
   list-style: none;
 
   li {
-    float: left;
 
   }
+}
+
+.module:hover .os-edit-wrapper{
+  opacity: 1;
 }
 
 .os-edit-wrapper {
@@ -19,17 +22,18 @@
   z-index: 5;
   padding: 5px 14px 10px 12px;
   background: transparent;
+  opacity: .0;
 
   &.master-module a{
       background-color: $orange;
   }
 
   a {
-    line-height: 16px;
+    line-height: 12px;
     display: inline-block;
-    margin: 2px 0px;
+    margin: 0px 0px;
     float: left;
-    font-size: 18px;
+    font-size: 14px;
     padding: 4px;
     color: #ffffff;
     opacity: 1;
@@ -37,13 +41,14 @@
     @include transition(all .3s ease-in-out);
     cursor: pointer;
     border: 1px solid transparent;
+    border-radius: 2px;
     background-color: #333;
 
 
 
     &.dashicons {
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
     }
 
     &:hover {
@@ -52,7 +57,7 @@
       text-decoration: none;
       border-bottom: none;
       border: 1px solid #333;
-      font-size: 18px;
+      font-size: 14px;
       @include border-radius(20px);
 
     }

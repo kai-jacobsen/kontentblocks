@@ -2,15 +2,14 @@
 
 namespace Kontentblocks\Backend\Screen;
 
-use Kontentblocks\Backend\Environment\PostEnvironment,
-    Kontentblocks\Backend\Screen\ScreenContext;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 
 class ScreenManager
 {
 
     /**
-     * Raw areas are all areas which are available in the current context
-     * e.g. are assigned to pagetemplate and/or post type
+     * Raw areas are all areas which are available in the current environment
+     * e.g. are assigned to current page template and/or post type
      * @var array
      */
     protected $rawAreas;
@@ -20,6 +19,12 @@ class ScreenManager
      * @var array
      */
     protected $postAreas;
+
+    /**
+     * Environment Instance
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     */
+    protected $Environment;
 
     /**
      * Definition of possible sections for the edit screen
@@ -36,32 +41,48 @@ class ScreenManager
      */
     protected $regions;
 
-    public function __construct( PostEnvironment $postData )
+    /**
+     * Indicates if sidebars exists or not
+     * @var boolean
+     */
+    protected $hasSidebar;
+
+    /**
+     * Class Constructor
+     * @param PostEnvironment $Environment
+     * @throws \Exception
+     */
+    public function __construct(PostEnvironment $Environment)
     {
         // get areas available
-        if ( empty( $postData->get( 'areas' ) ) ) {
+        // TODO wrong! shouldn't raise an exception, do nothing instead
+        if (empty($Environment->get('areas'))) {
             throw new \Exception('ScreenManager needs areas!');
         }
 
-        $this->postData      = $postData;
-        $this->regionLayout = self::getDefaultRegionLayout();
-        $this->rawAreas      = $postData->get( 'areas' );
-        $this->regions      = $this->areasSortedByRegion( $this->rawAreas );
+        // set this environment
+        $this->Environment = $Environment;
+        //setup region layout
+        $this->contextLayout = self::getDefaultContextLayout();
+        // setup raw areas
+        $this->rawAreas = $Environment->get('areas');
+        // setup filtered areas
+        $this->regions = $this->areasSortedByRegion($this->rawAreas);
         // test if final context layout includes an sidebar
-        // e.g. if an area is assigned to 'side'
+        // e.g. if an non-dynamic area is assigned to 'side'
         $this->hasSidebar = $this->evaluateLayout();
     }
 
-    /*
-     * Main Render function
-     */
 
+    /**
+     * Instantiate a context object for each context and render
+     * @since 1.0.0
+     */
     public function render()
     {
-        foreach ( $this->regionLayout as $contextId => $args ) {
-
+        foreach ($this->contextLayout as $contextId => $args) {
             // delegate the actual output to ScreenContext
-            $context = new ScreenContext( $args, $this );
+            $context = new ScreenContext($args, $this);
             $context->render();
         }
 
@@ -69,79 +90,116 @@ class ScreenManager
 
     /**
      * Sort raw Area definitions to array
+     * @throws Exception
      * @return array
+     * @since 1.0.0
      */
     public function areasSortedByRegion()
     {
-        if ( !$this->rawAreas ) {
-            throw new Exception( 'No Areas specified for region' );
+        if (!$this->rawAreas) {
+            throw new Exception('No Areas specified for region');
         }
 
-        foreach ( $this->rawAreas as $area ) {
-            $regions[ $area[ 'context' ] ][ $area[ 'id' ] ] = $area;
+        foreach ($this->rawAreas as $area) {
+            if (!$area['dynamic']) {
+                $regions[$area['context']][$area['id']] = $area;
+            }
         }
         return $regions;
-
     }
 
 
-    public function getRegionAreas( $id )
+    /**
+     * Getter to retrieve areas by context id
+     * @param $id
+     * @return array
+     * @since 1.0.0
+     */
+    public function getContextAreas($id)
     {
-        if ( isset( $this->regions[ $id ] ) ) {
-            return $this->regions[ $id ];
-        }
-        else {
+        if (isset($this->regions[$id])) {
+            return $this->regions[$id];
+        } else {
             return array();
         }
 
     }
 
-    /*
-     * Default Context Layout
-     *
-     * @return array default context layout
-     * @filter kb_default_context_layout
+    /**
+     * Getter for available areas
+     * @return array
+     * @since 1.0.0
      */
-
-    public static function getDefaultRegionLayout()
-    {
-        $defaults = array(
-            'top' => array(
-                'id' => 'top',
-                'title' => __( 'Page header', 'kontentblocks' ),
-                'description' => __( 'Full width area at the top of this page', 'kontentblocks' )
-            ),
-            'normal' => array(
-                'id' => 'normal',
-                'title' => __( 'Content', 'kontentblocks' ),
-                'description' => __( 'Main content column of this page', 'kontentblocks' )
-            ),
-            'side' => array(
-                'id' => 'side',
-                'title' => __( 'Page Sidebar', 'kontentblocks' ),
-                'description' => __( 'Sidebar of this page', 'kontentblocks' )
-            ),
-            'bottom' => array(
-                'id' => 'bottom',
-                'title' => __( 'Footer', 'kontentblocks' ),
-                'description' => __( 'Full width area at the bottom of this page', 'kontentblocks' )
-            )
-        );
-        // plugins may change this
-        return apply_filters( 'kb_default_context_layout', $defaults );
-
-    }
-
-    public function evaluateLayout()
-    {
-        return (!empty( $this->regions[ 'side' ] )) ? true : false;
-
-    }
-
     public function getPostAreas()
     {
         return $this->postAreas;
 
+    }
+
+    /**
+     * Getter for Environment instance
+     * @return PostEnvironment
+     * @since 1.0.0
+     */
+    public function getEnvironment()
+    {
+        return $this->Environment;
+    }
+
+
+    /**
+     * Default Context Layout
+     *
+     * @return array default context layout
+     * @filter kb_default_context_layout
+     * @since 1.0.0
+     */
+    public static function getDefaultContextLayout()
+    {
+        $defaults = array(
+            'top' => array(
+                'id' => 'top',
+                'title' => __('Page header', 'kontentblocks'),
+                'description' => __('Full width area at the top of this page', 'kontentblocks')
+            ),
+            'normal' => array(
+                'id' => 'normal',
+                'title' => __('Content', 'kontentblocks'),
+                'description' => __('Main content column of this page', 'kontentblocks')
+            ),
+            'side' => array(
+                'id' => 'side',
+                'title' => __('Page Sidebar', 'kontentblocks'),
+                'description' => __('Sidebar of this page', 'kontentblocks')
+            ),
+            'bottom' => array(
+                'id' => 'bottom',
+                'title' => __('Footer', 'kontentblocks'),
+                'description' => __('Full width area at the bottom of this page', 'kontentblocks')
+            )
+        );
+        // plugins may change this
+        return apply_filters('kb_default_context_layout', $defaults);
+
+    }
+
+    /**
+     * Test if sidebars are available
+     * @return bool
+     * @since 1.0.0
+     */
+    public function evaluateLayout()
+    {
+        return (!empty($this->regions['side']));
+
+    }
+
+    /**
+     * Get sidebar indicator flag
+     * @return bool
+     */
+    public function hasSidebar(){
+        return $this->hasSidebar;
     }
 
 }

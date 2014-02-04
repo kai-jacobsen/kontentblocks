@@ -40,7 +40,12 @@ class ModuleTemplates
 
     public function getTemplate($id)
     {
-
+        $this->API->setGroup('template');
+        if ($this->API->get($id)){
+            return $this->API->get($id);
+        } else {
+            return false;
+        }
     }
 
     public function getModuleTemplate($id)
@@ -66,7 +71,6 @@ class ModuleTemplates
     public function templateExists($id)
     {
         $all = $this->getAllTemplates();
-
 
         if (array_key_exists($id, $all)) {
             return true;

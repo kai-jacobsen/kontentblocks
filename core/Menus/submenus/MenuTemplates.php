@@ -334,9 +334,17 @@ class MenuTemplates extends AbstractMenuEntry
         // update data
         $update = $API->update($templateID, $toSave);
 
+
+        if ( $update && isset($_GET['redirect']) && is_numeric($_GET['redirect'])) {
+            $postlink = admin_url("post.php?post={$_GET['redirect']}&action=edit&lang={$_GET['lang']}");
+            wp_redirect($postlink);
+            exit;
+        }
+
         if ($update) {
             $url = add_query_arg(array('message' => 2));
             wp_redirect($url);
+            exit;
         }
 
         // Todo Saving failed
@@ -369,6 +377,7 @@ class MenuTemplates extends AbstractMenuEntry
         if ($API->hasMultipleLanguages($templateId) && I18n::wpmlActive() && !isset($_GET['mode'])) {
             $url = add_query_arg(array('view' => 'confirm-ml-delete', 'action' => false));
             wp_redirect($url);
+            exit;
         }
 
 
@@ -413,7 +422,7 @@ class MenuTemplates extends AbstractMenuEntry
 
         $olang = $API->getLanguageByTid($tid);
 
-        if (is_null($olang)){
+        if (is_null($olang)) {
             // todo handle error, original does not exist
             wp_die('TID does not exists anymore');
         }
