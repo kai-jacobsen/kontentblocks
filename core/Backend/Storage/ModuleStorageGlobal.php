@@ -10,6 +10,10 @@ class ModuleStorageGlobal implements InterfaceDataStorage
 
     protected $index = array();
 
+    protected $areaSettings;
+
+    protected $modules;
+
     public function __construct($id)
     {
         $this->areaId = $id;
@@ -36,6 +40,7 @@ class ModuleStorageGlobal implements InterfaceDataStorage
 
         $this->index = $index;
         $this->modules = $this->setupModuleData();
+        $this->areaSettings = $this->setupAreaSettings();
         return $this;
     }
 
@@ -62,6 +67,15 @@ class ModuleStorageGlobal implements InterfaceDataStorage
         // todo: validate $index
         $this->index = $index;
         return $this->_updateIndex();
+    }
+
+
+    public function getAreaSettings($id){
+        return $this->areaSettings;
+    }
+
+    public function getAreaDefinition($id){
+        return $this->DataBackend->getAreaDefinition();
     }
 
     /**
@@ -199,6 +213,16 @@ class ModuleStorageGlobal implements InterfaceDataStorage
      */
     public function getDataBackend(){
         return $this->DataBackend;
+    }
+
+    /**
+     * Setup area Settings
+     * @TODO Settings are not available for global areas yet
+     * @return array
+     */
+    private function setupAreaSettings()
+    {
+        return array();
     }
 
 

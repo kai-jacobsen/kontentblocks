@@ -511,10 +511,13 @@ class AreaTableAPI implements InterfaceDataAPI
     public function flushCacheGroups()
     {
         $langs = I18n::getActiveLanguages();
-        if (!empty($langs)) {
+        if (!empty($langs && is_array($langs))) {
             foreach ($langs as $k => $v) {
                 wp_cache_delete('kb_areas_all_' . $k, 'kontentblocks');
             }
+        } else{
+            wp_cache_delete('kb_areas_all_' . I18n::getDefaultLanguageCode(), 'kontentblocks');
+
         }
     }
 

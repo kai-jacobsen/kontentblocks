@@ -137,6 +137,17 @@ class ScreenManager
     }
 
     /**
+     * Getter for all areas
+     * @return array
+     * @since 1.0.0
+     */
+    public function getRawAreas()
+    {
+        return $this->rawAreas;
+
+    }
+
+    /**
      * Getter for Environment instance
      * @return PostEnvironment
      * @since 1.0.0

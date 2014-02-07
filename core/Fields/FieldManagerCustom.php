@@ -3,24 +3,9 @@
 namespace Kontentblocks\Fields;
 
 /**
- * FieldManager
- * // TODO: Change working title
- * // TODO: Rename Groups to Sections
- * Purpose of this class:
- * Connecting fields to a module and offering an API to interact with
- * fields and the underlying structure.
- *
- * There are two different cases which are handled by this class:
- * 1) Backend: preparing fields and initiate the rendering of the field output
- * 2) Frontend: Setting fields up.
- *
- * Instantiated by Kontentblocks\Modules\Module if fields() method is present
- * in extending class
- *
- * @see Kontentblocks\Modules\Module::__cosntruct()
- * @param object | Module instance
+ * FieldManagerCustom
  */
-class FieldManager
+class FieldManagerCustom
 {
 
     /**
@@ -28,7 +13,7 @@ class FieldManager
      * Used to prefix form fields
      * @var string
      */
-    protected $moduleId;
+    protected $baseId;
 
     /**
      * Collection of added Sections / Fields ...
@@ -54,13 +39,11 @@ class FieldManager
      * @param object $module
      * @return self
      */
-    public function __construct( $module )
+    public function __construct($id, $data = array())
     {
         //TODO Check module consistency
-        $this->moduleId = $module->instance_id;
-        $this->data     = $module->moduleData;
-        $this->module   = $module;
-
+        $this->baseId = $id;
+        $this->data = $data;
 
     }
 
@@ -70,20 +53,20 @@ class FieldManager
      * @param string $id
      * @return object groupobject
      */
-    public function addGroup( $id, $args = array() )
+    public function addGroup($id, $args = array())
     {
-        if ( !$this->idExists( $id ) ) {
-            $this->structure[ $id ] = new FieldSection( $id, $args, $this->module->getAreaContext() );
+        if (!$this->idExists($id)) {
+            $this->structure[$id] = new FieldSection($id, $args, false);
         }
-        return $this->structure[ $id ];
+        return $this->structure[$id];
 
     }
 
-    public function save( $data, $oldData )
+    public function save($data, $oldData)
     {
         $collection = array();
-        foreach ( $this->structure as $definition ) {
-            $return     = ($definition->save( $data, $oldData ));
+        foreach ($this->structure as $definition) {
+            $return = ($definition->save($data, $oldData));
             $collection = $collection + $return;
         }
         return $collection;
@@ -102,8 +85,8 @@ class FieldManager
      */
     public function renderFields()
     {
-        $Renderer = new FieldRenderTabs( $this->structure );
-        $Renderer->render( $this->moduleId, $this->data );
+        $Renderer = new FieldRenderTabs($this->structure);
+        $Renderer->render($this->baseId, $this->data);
 
     }
 
@@ -111,14 +94,14 @@ class FieldManager
      * Prepare fields for frontend output
      * @param array $instanceData
      */
-    public function setup( $instanceData )
+    public function setup($instanceData)
     {
-        if ( empty( $this->FieldsById ) ) {
+        if (empty($this->FieldsById)) {
             $this->FieldsById = $this->collectAllFields();
         }
-        foreach ( $this->FieldsById as $field ) {
-            $data = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : '';
-            $field->setup( $data, $this->moduleId );
+        foreach ($this->FieldsById as $field) {
+            $data = (!empty($instanceData[$field->getKey()])) ? $instanceData[$field->getKey()] : '';
+            $field->setup($data, $this->baseId);
         }
 
     }
@@ -131,16 +114,15 @@ class FieldManager
      * @param string $key
      * @return mixed
      */
-    public function getFieldByKey( $key )
+    public function getFieldByKey($key)
     {
-        if ( empty( $this->FieldsById ) ) {
+        if (empty($this->FieldsById)) {
             $this->FieldsById = $this->collectAllFields();
         }
 
-        if ( isset( $this->FieldsById[ $key ] ) ) {
-            return $this->FieldsById[ $key ];
-        }
-        else {
+        if (isset($this->FieldsById[$key])) {
+            return $this->FieldsById[$key];
+        } else {
             false;
         }
 
@@ -154,7 +136,7 @@ class FieldManager
     public function collectAllFields()
     {
         $collect = array();
-        foreach ( $this->structure as $def ) {
+        foreach ($this->structure as $def) {
             $collect = $collect + $def->getFields();
         }
         return $collect;
@@ -167,11 +149,16 @@ class FieldManager
      * @param string $id
      * @return object
      */
-    public function idExists( $id )
+    public function idExists($id)
     {
         // TODO Test for right inheritance / abstract class
-        return (isset( $this->structure[ $id ] ));
+        return (isset($this->structure[$id]));
 
+    }
+
+    public function setData($data)
+    {
+        $this->data = $data;
     }
 
 }

@@ -9,7 +9,7 @@ use Kontentblocks\Backend\Environment\Save\SaveGlobal;
 
 class GlobalEnvironment extends AbstractEnvironment
 {
-    protected $areaID;
+    protected $areaId;
     protected $globalData;
     protected $areas;
     protected $modules;
@@ -33,12 +33,16 @@ class GlobalEnvironment extends AbstractEnvironment
 
     public function getAreaSettings($id)
     {
-        $settings = $this->globalData->getAreaSettings();
+        $settings = $this->Storage->getAreaSettings($id);
         if (!empty($settings[$id])) {
             return $settings[$id];
         }
         return false;
 
+    }
+
+    public function getAreaDefinition($id){
+        return $this->Storage->getAreaDefinition($id);
     }
 
     public function getModulesForArea($areaid)

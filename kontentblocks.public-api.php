@@ -122,17 +122,12 @@ function kb_render_area_sidebar( $id = null, $context = null, $subcontext = 'sid
     global $Kontentblocks, $post;
     $post_id = (null === $id) ? $post->ID : $id;
     $areas   = get_post_meta( $post_id, 'active_sidebar_areas', true );
-    $r_areas = $Kontentblocks->get_areas();
     if ( !empty( $areas ) ) {
         foreach ( $areas as $area ) {
 
-            if ( !isset( $r_areas[ $area ] ) )
-                continue;
+            $AreaRender = new Kontentblocks\Frontend\AreaRender($area, $area, array());
+            $AreaRender->render(true);
 
-            $get = $r_areas[ $area ];
-
-            $check = (empty( $get[ 'dynamic' ] )) ? $Kontentblocks->set_post_context( true ) : $Kontentblocks->set_post_context( false );
-            $Kontentblocks->render_blocks( $post_id, $area, $context, $subcontext );
         }
     }
 

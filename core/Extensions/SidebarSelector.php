@@ -54,7 +54,7 @@ class SidebarSelector
 
         $Screen  = $ScreenManager;
 
-        $this->_setupAreas( $Screen->getContextAreas( 'side' ) );
+        $this->_setupAreas( $Screen->getRawAreas() );
 
         // saved sidebar settings
         if ( $post_id ) {
@@ -151,9 +151,10 @@ class SidebarSelector
 
     public function _setupAreas( $areas )
     {
-        d($areas);
-        $this->areas = $areas;
-        foreach ( $areas as $args ) {
+        $this->areas = array_filter($areas, function($area){
+            return ($area['context'] === 'side');
+        });
+        foreach ( $this->areas as $args ) {
             if ( $args[ 'dynamic' ] == true ) {
                 $this->globalSidebars[ $args[ 'id' ] ] = $args;
             }
@@ -161,14 +162,13 @@ class SidebarSelector
                 $this->postSidebars[ $args[ 'id' ] ] = $args;
             }
         }
-
     }
 
     public function openActiveList()
     {
         // all areas
         // remove box if there are no areas to chose from
-        $hide = (count( $this->areas ) < 2 ) ? 'hide' : '';
+        $hide = (count( $this->postSidebars ) > 0 ) ? '' : 'hide';
 
         return "
 				<div class='context-header orange {$hide}'>

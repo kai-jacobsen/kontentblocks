@@ -15,7 +15,8 @@ class GetModuleOptions
         }
 
         $module = $_POST[ 'module' ];
-        $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment($module['post_id']);
+        $Environment = \Kontentblocks\Helper\getEnvironment($module['post_id']);
+//        $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment($module['post_id']);
         $Factory  = new \Kontentblocks\Modules\ModuleFactory( $module['class'], $module, $Environment, $module['moduleData'] );
         $instance    = $Factory->getModule();
 
