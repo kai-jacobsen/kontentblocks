@@ -3,6 +3,7 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
+use Kontentblocks\Backend\Dynamic\ModuleTemplates;
 use Kontentblocks\Backend\Screen\EditScreen,
     Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,
@@ -142,6 +143,7 @@ Class Kontentblocks
             $this->Capabilities = new Capabilities();
 
             DynamicAreas::getInstance();
+            ModuleTemplates::getInstance();
 
 
         }

@@ -50,7 +50,8 @@ class AreaRegistry
         $areas = get_posts(
             array(
                 'post_type' => 'kb-dyar',
-                'posts_per_page' => -1
+                'posts_per_page' => -1,
+                'suppress_filters' => false
             )
         );
 

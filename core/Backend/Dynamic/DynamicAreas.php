@@ -52,10 +52,10 @@ class DynamicAreas
     public function addAdminMenu()
     {
 
-        if (!\Kontentblocks\Helper\adminMenuExists('Kontenblocks')) {
+        if (!\Kontentblocks\Helper\adminMenuExists('Kontentblocks')) {
             add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks', 'edit.php?post_type=kb-dyar', false, false);
         }
-        add_submenu_page('kontentblocks', 'Areas', 'Areas', 'manage_kontentblocks', 'edit.php?post_type=dyar', false);
+        add_submenu_page('edit.php?post_type=kb-dyar', 'Areas', 'Areas', 'manage_kontentblocks', 'edit.php?post_type=kb-dyar', false);
 
     }
 
@@ -176,10 +176,6 @@ class DynamicAreas
             return false;
         }
 
-        // @TODO add nonce
-//        if (empty($_POST['create_area'])) {
-//            return false;
-//        }
 
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return false;
@@ -187,9 +183,9 @@ class DynamicAreas
 
         // verify this came from the our screen and with proper authorization,
         // because save_post can be triggered at other times
-//        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
-//            return false;
-//        }
+        if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
+            return false;
+        }
 
         // Check permissions
         if (!current_user_can('edit_post', $this->postid)) {

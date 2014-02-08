@@ -77,8 +77,6 @@ class SavePost implements InterfaceSaveHandler
                 /** @var $instance \Kontentblocks\Modules\Module */
                 $instance = $Factory->getModule();
 
-                get_post_type();
-
                 // Set the 'old' data to the module
                 $instance->moduleData = $old;
 
