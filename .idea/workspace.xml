@@ -9,12 +9,12 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Backend/Dynamic/ModuleTemplates.php" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Templating/templates/add-new-form.twig" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Templating/templates/module-template.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Dynamic/DynamicAreas.php" afterPath="$PROJECT_DIR$/core/Backend/Dynamic/DynamicAreas.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php" afterPath="$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/AreaRender.php" afterPath="$PROJECT_DIR$/core/Frontend/AreaRender.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Dynamic/DynamicAreas.php" afterPath="$PROJECT_DIR$/core/Backend/Dynamic/DynamicAreas.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Environment/Save/SavePost.php" afterPath="$PROJECT_DIR$/core/Backend/Environment/Save/SavePost.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.php" afterPath="$PROJECT_DIR$/kontentblocks.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.php" afterPath="$PROJECT_DIR$/kontentblocks.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Environment/Save/SavePost.php" afterPath="$PROJECT_DIR$/core/Backend/Environment/Save/SavePost.php" />
     </list>
     <ignored path="kontentblocks.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,7 +40,7 @@
       <file leaf-file-name="DynamicAreas.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Backend/Dynamic/DynamicAreas.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="91" column="0" selection-start="2304" selection-end="2438" vertical-scroll-proportion="-11.925926" vertical-offset="1244" max-vertical-offset="5436">
+            <state line="91" column="0" selection-start="2304" selection-end="2438" vertical-scroll-proportion="0.0" vertical-offset="1638" max-vertical-offset="5508">
               <folding />
             </state>
           </provider>
@@ -49,7 +49,7 @@
       <file leaf-file-name="ModuleTemplates.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/Backend/Dynamic/ModuleTemplates.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="177" column="0" selection-start="5362" selection-end="5362" vertical-scroll-proportion="0.5007299" vertical-offset="2843" max-vertical-offset="6264">
+            <state line="177" column="0" selection-start="5362" selection-end="5362" vertical-scroll-proportion="0.47572815" vertical-offset="2843" max-vertical-offset="6264">
               <folding>
                 <element signature="e#49#91#0" expanded="true" />
               </folding>
@@ -60,7 +60,7 @@
       <file leaf-file-name="module-template.twig" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Templating/templates/module-template.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="28" selection-start="28" selection-end="28" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="234">
+            <state line="0" column="28" selection-start="28" selection-end="28" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="234">
               <folding />
             </state>
           </provider>
@@ -69,7 +69,7 @@
       <file leaf-file-name="ModuleFactory.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Modules/ModuleFactory.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="32" selection-start="1078" selection-end="1083" vertical-scroll-proportion="-7.9298244" vertical-offset="376" max-vertical-offset="1044">
+            <state line="46" column="32" selection-start="1078" selection-end="1083" vertical-scroll-proportion="0.0" vertical-offset="376" max-vertical-offset="1044">
               <folding />
             </state>
           </provider>
@@ -81,7 +81,7 @@
             <state />
           </provider>
           <provider editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="108">
               <folding />
             </state>
           </provider>
@@ -90,7 +90,7 @@
       <file leaf-file-name="MenuTemplates.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="318" column="8" selection-start="10321" selection-end="10321" vertical-scroll-proportion="-11.185185" vertical-offset="5314" max-vertical-offset="9684">
+            <state line="318" column="8" selection-start="10321" selection-end="10321" vertical-scroll-proportion="0.0" vertical-offset="5724" max-vertical-offset="9792">
               <folding />
             </state>
           </provider>
@@ -99,7 +99,7 @@
       <file leaf-file-name="add-new-form.twig" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Templating/templates/add-new-form.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="14" selection-start="2519" selection-end="2519" vertical-scroll-proportion="-10.814815" vertical-offset="734" max-vertical-offset="1188">
+            <state line="57" column="14" selection-start="2519" selection-end="2519" vertical-scroll-proportion="0.0" vertical-offset="734" max-vertical-offset="1188">
               <folding />
             </state>
           </provider>
@@ -108,10 +108,8 @@
       <file leaf-file-name="helper.new.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Utils/helper.new.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="34" selection-start="1115" selection-end="1115" vertical-scroll-proportion="-2.770115" vertical-offset="587" max-vertical-offset="4590">
-              <folding>
-                <marker date="1391862123429" expanded="false" signature="505:519" placeholder="..." />
-              </folding>
+            <state line="52" column="34" selection-start="1115" selection-end="1115" vertical-scroll-proportion="0.0" vertical-offset="936" max-vertical-offset="4698">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -119,7 +117,7 @@
       <file leaf-file-name="PostEnvironment.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Backend/Environment/PostEnvironment.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="189" column="5" selection-start="4227" selection-end="4227" vertical-scroll-proportion="-6.5925927" vertical-offset="3134" max-vertical-offset="4266">
+            <state line="189" column="5" selection-start="4227" selection-end="4227" vertical-scroll-proportion="0.0" vertical-offset="3402" max-vertical-offset="4356">
               <folding />
             </state>
           </provider>
@@ -128,7 +126,7 @@
       <file leaf-file-name="SavePost.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Backend/Environment/Save/SavePost.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="142" column="0" selection-start="4530" selection-end="4530" vertical-scroll-proportion="-24.518518" vertical-offset="1840" max-vertical-offset="3726">
+            <state line="142" column="0" selection-start="4530" selection-end="4530" vertical-scroll-proportion="0.0" vertical-offset="2556" max-vertical-offset="3780">
               <folding />
             </state>
           </provider>
@@ -561,7 +559,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-4" width="1602" height="905" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31282052" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
@@ -601,9 +599,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.247305" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="800" y="24" width="800" height="876" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27330375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -750,9 +748,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/MenuManager.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="35" selection-start="3837" selection-end="3958" vertical-scroll-proportion="0.0" vertical-offset="2448" max-vertical-offset="6588">
-          <folding />
-        </state>
+        <state line="136" column="35" selection-start="3837" selection-end="3958" vertical-scroll-proportion="0.0" vertical-offset="2448" max-vertical-offset="6588" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/MenuAreas.php">
@@ -788,16 +784,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Screen/EditScreen.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="97" column="25" selection-start="2463" selection-end="2463" vertical-scroll-proportion="-9.814815" vertical-offset="1409" max-vertical-offset="3726">
-          <folding />
-        </state>
+        <state line="97" column="25" selection-start="2463" selection-end="2463" vertical-scroll-proportion="-9.814815" vertical-offset="1409" max-vertical-offset="3726" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/css/sass/partials/_options/_page.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="1" selection-start="1290" selection-end="1290" vertical-scroll-proportion="-0.6666667" vertical-offset="2034" max-vertical-offset="3438">
-          <folding />
-        </state>
+        <state line="114" column="1" selection-start="1290" selection-end="1290" vertical-scroll-proportion="-0.6666667" vertical-offset="2034" max-vertical-offset="3438" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Templating/templates/new-area-form.twig">
@@ -808,33 +800,23 @@
     <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="543" column="78" selection-start="14612" selection-end="14612" vertical-scroll-proportion="0.0" vertical-offset="9540" max-vertical-offset="11250">
-          <folding>
-            <marker date="1391862569017" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1391862569017" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1391862569017" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/templates/frontend/module-controls.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="75" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="431">
-          <folding />
-        </state>
+        <state line="0" column="75" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="431" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/css/sass/KBOsEditStyle.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="32" selection-start="441" selection-end="441" vertical-scroll-proportion="0.0" vertical-offset="300" max-vertical-offset="6786">
-          <folding />
-        </state>
+        <state line="31" column="32" selection-start="441" selection-end="441" vertical-scroll-proportion="0.0" vertical-offset="300" max-vertical-offset="6786" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kontentblocks.public-api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="13" selection-start="2294" selection-end="2294" vertical-scroll-proportion="0.0" vertical-offset="1559" max-vertical-offset="3582">
-          <folding />
-        </state>
+        <state line="95" column="13" selection-start="2294" selection-end="2294" vertical-scroll-proportion="0.0" vertical-offset="1559" max-vertical-offset="3582" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Areas/AreaRegistry.php">
@@ -853,31 +835,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/templates/add-new-form.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1152">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1152" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/templates/TemplatesTable.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="682" selection-end="682" vertical-scroll-proportion="-15.0" vertical-offset="81" max-vertical-offset="4788">
-          <folding />
-        </state>
+        <state line="28" column="0" selection-start="682" selection-end="682" vertical-scroll-proportion="-15.0" vertical-offset="81" max-vertical-offset="4788" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kontentblocks.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="145" column="43" selection-start="3778" selection-end="3778" vertical-scroll-proportion="5.3333335" vertical-offset="2610" max-vertical-offset="7452">
-          <folding>
-            <marker date="1391871912755" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1391871912755" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Templating/templates/add-new-form.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="14" selection-start="2519" selection-end="2519" vertical-scroll-proportion="-10.814815" vertical-offset="734" max-vertical-offset="1188">
+        <state line="57" column="14" selection-start="2519" selection-end="2519" vertical-scroll-proportion="0.0" vertical-offset="734" max-vertical-offset="1188">
           <folding />
         </state>
       </provider>
@@ -894,7 +869,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Modules/ModuleFactory.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="32" selection-start="1078" selection-end="1083" vertical-scroll-proportion="-7.9298244" vertical-offset="376" max-vertical-offset="1044">
+        <state line="46" column="32" selection-start="1078" selection-end="1083" vertical-scroll-proportion="0.0" vertical-offset="376" max-vertical-offset="1044">
           <folding />
         </state>
       </provider>
@@ -908,7 +883,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Dynamic/DynamicAreas.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="91" column="0" selection-start="2304" selection-end="2438" vertical-scroll-proportion="-11.925926" vertical-offset="1244" max-vertical-offset="5436">
+        <state line="91" column="0" selection-start="2304" selection-end="2438" vertical-scroll-proportion="0.0" vertical-offset="1638" max-vertical-offset="5508">
           <folding />
         </state>
       </provider>
@@ -916,74 +891,41 @@
     <entry file="file://$PROJECT_DIR$/../../../wp-includes/post.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1040" column="17" selection-start="29098" selection-end="29098" vertical-scroll-proportion="0.4510949" vertical-offset="18303" max-vertical-offset="91872">
-          <folding>
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT post_..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT post_..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT COUNT..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT comme..$wpdb-&gt;comments WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT comme..$wpdb-&gt;comments WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT post_..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT post_..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT pinge..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT pinge..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT to_pi..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT ID, p..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT * FRO..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT comme..$wpdb-&gt;comments WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT meta_..$wpdb-&gt;postmeta WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT post_..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT post_..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT DATE_..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT ID FR..$wpdb-&gt;posts WHERE..." />
-            <marker date="1391861460317" expanded="true" signature="-1:-1" placeholder="SELECT $wpdb..$wpdb-&gt;posts WHERE..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Utils/helper.new.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="34" selection-start="1115" selection-end="1115" vertical-scroll-proportion="-2.770115" vertical-offset="587" max-vertical-offset="4590">
-          <folding>
-            <marker date="1391862123429" expanded="false" signature="505:519" placeholder="..." />
-          </folding>
+        <state line="52" column="34" selection-start="1115" selection-end="1115" vertical-scroll-proportion="0.0" vertical-offset="936" max-vertical-offset="4698">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Environment/PostEnvironment.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="189" column="5" selection-start="4227" selection-end="4227" vertical-scroll-proportion="-6.5925927" vertical-offset="3134" max-vertical-offset="4266">
+        <state line="189" column="5" selection-start="4227" selection-end="4227" vertical-scroll-proportion="0.0" vertical-offset="3402" max-vertical-offset="4356">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Environment/Save/SavePost.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="0" selection-start="4530" selection-end="4530" vertical-scroll-proportion="-24.518518" vertical-offset="1840" max-vertical-offset="3726">
+        <state line="142" column="0" selection-start="4530" selection-end="4530" vertical-scroll-proportion="0.0" vertical-offset="2556" max-vertical-offset="3780">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/submenus/MenuTemplates.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="318" column="8" selection-start="10321" selection-end="10321" vertical-scroll-proportion="-11.185185" vertical-offset="5314" max-vertical-offset="9684">
+        <state line="318" column="8" selection-start="10321" selection-end="10321" vertical-scroll-proportion="0.0" vertical-offset="5724" max-vertical-offset="9792">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Backend/Dynamic/ModuleTemplates.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="177" column="0" selection-start="5362" selection-end="5362" vertical-scroll-proportion="0.5007299" vertical-offset="2843" max-vertical-offset="6264">
+        <state line="177" column="0" selection-start="5362" selection-end="5362" vertical-scroll-proportion="0.47572815" vertical-offset="2843" max-vertical-offset="6264">
           <folding>
             <element signature="e#49#91#0" expanded="true" />
           </folding>
