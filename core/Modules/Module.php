@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
+use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Fields\FieldManager,
     Kontentblocks\Abstracts\AbstractEnvironment;
 
@@ -539,7 +540,8 @@ abstract class Module
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->areaContext,
-            'class' => get_class($this)
+            'class' => get_class($this),
+            'inDynamic' => AreaRegistry::getInstance()->isDynamic($this->area)
         );
 
         if (isset($this->master) && $this->master){

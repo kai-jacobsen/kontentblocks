@@ -1,0 +1,109 @@
+<div class="postbox {% if editMode %} closed {% endif %}">
+    <h3 class="hndle">Edit Settings</h3>
+    <div class="inside">
+
+        <div class="kb-area-settings__inner">
+            <form method="post" action="">
+
+                <div class="kb-menu-field-section area-inputs">
+
+                    <div class="kb-menu-field kb-menu-field-with-spinner">
+                        <label>Name</label>
+                        <input {% if editMode %} readonly {% endif %} placeholder="unique name"
+                                                                      class="regular kb-change-observe"
+                                                                      onchange="KB.Menus.createSanitizedId(this, 'areas')"
+                                                                      type="text"
+                                                                      name="{{ basename }}[name]" value="{{ name }}">
+                        <span class="spinner"></span>
+
+                    </div>
+                    <div class="kb-menu-field">
+                        <label>ID</label>
+                        <input readonly placeholder="filled by system" class="kb-js-area-id" type="text"
+                               name="{{ basename }}[id]"
+                               value="{{ id }}">
+
+                    </div>
+                    <div class="kb-menu-field">
+                        <label>Description</label>
+                        <textarea placeholder="Add a short description"
+                                  name="{{ basename }}[description]">{{ description }}</textarea>
+                    </div>
+
+                </div>
+                {% if renderContextSelect == true %}
+                    <h3>Context</h3>
+
+                    <div class="kb-menu-field-section">
+                        <div class="kb-menu-field-section_description">
+                            <p class="description">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            </p>
+                        </div>
+                        <div class="kb-menu-field-section_inputs">
+                            <div class="kb-menu-field">
+                                <select name="{{ basename }}[context]">
+                                    {% for context in contexts %}
+                                        <option {% if context.id == areaContext %} selected="selected" {% endif %}
+                                                value="{{ context.id }}">{{ context.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+                    <input type="hidden" name="{{ basename }}[context]" value="side">
+                {% endif %}
+
+                <h3>Post Types</h3>
+
+                <div class="kb-menu-field-section">
+                    <div class="kb-menu-field-section_description">
+                        <p class="description">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        </p>
+                    </div>
+                    <div class="kb-menu-field-section_inputs">
+                        {% for postType in postTypes %}
+                            <div class="kb-menu-field">
+
+                                <label><input {{ postType.checked }} type="checkbox" name="{{ basename }}[postTypes][]"
+                                                                     value="{{ postType.value }}">{{ postType.name }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+
+                <h3>Page Templates</h3>
+
+                <div class="kb-menu-field-section">
+                    <div class="kb-menu-field-section_description">
+                        <p class="description">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        </p>
+                    </div>
+                    <div class="kb-menu-field-section_inputs">
+                        {% for pageTpl in pageTemplates %}
+                            <div class="kb-menu-field">
+
+                                <label><input {{ pageTpl.checked }} type="checkbox"
+                                                                    name="{{ basename }}[pageTemplates][]"
+                                                                    value="{{ pageTpl.value }}">{{ pageTpl.name }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>

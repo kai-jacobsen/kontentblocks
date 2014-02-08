@@ -126,14 +126,15 @@ class MenuManager
             foreach ($this->entries as $entry) {
 
                 $handle = 'kontentblocks-' . $entry->handle;
+                $callback = (isset($entry->url)) ? $entry->url : array($this, 'parseViewRequest');
 
                 if ($first) {
-                    add_menu_page($handle, 'Kontentblocks', 'manage_kontentblocks', $handle, array($this, 'parseViewRequest'));
-                    add_submenu_page($handle, $entry->name, $entry->name, 'manage_kontentblocks', $handle, array($this, 'parseViewRequest'));
+                    add_menu_page($handle, 'Kontentblocks', 'manage_kontentblocks', $handle, $callback);
+                    add_submenu_page($handle, $entry->name, $entry->name, 'manage_kontentblocks', $handle, $callback );
                     $first = false;
                     $mainSlug = $handle;
                 } else {
-                    add_submenu_page($mainSlug, $entry->name, $entry->name, 'manage_kontentblocks', $handle, array($this, 'parseViewRequest'));
+                    add_submenu_page($mainSlug, $entry->name, $entry->name, 'manage_kontentblocks', $handle, $callback);
 
                 }
             }

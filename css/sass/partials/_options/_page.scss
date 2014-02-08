@@ -100,7 +100,7 @@ body.on-site-editing {
 
   label {
     display: inline-block;
-    width: 200px;
+    width: 240px;
   }
 
   input[type=text] {
@@ -121,11 +121,12 @@ body.on-site-editing {
 }
 
 .kb-menu-field-section_inputs {
-  margin-left: 210px;
+  margin-left: 270px;
 }
 
 .kb-menu-field-section {
   overflow: hidden;
+  padding: 15px 0;
 }
 
 .kb-menu-field-with-spinner {
@@ -174,5 +175,12 @@ body.on-site-editing {
     a {
       text-indent: -9999px;
     }
+  }
+}
+
+body.post-type-kb-dyar{
+
+  .kb_area_head.clearfix{
+    display: none;
   }
 }

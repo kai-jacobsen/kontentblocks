@@ -18,13 +18,12 @@ class AreaRender
     public function __construct( $postId, $area, $additionalArgs )
     {
 
-
         if ( !isset( $postId ) || !isset( $area ) ) {
             return;
         }
 
-        $this->environment = \Kontentblocks\Helper\getEnvironment( $postId );
 
+        $this->environment = \Kontentblocks\Helper\getEnvironment( $postId );
         $modules = $this->environment->getModulesforArea( $area );
 
         if ( !$modules ) {

@@ -4,6 +4,7 @@ namespace Kontentblocks\Helper;
 
 use Kontentblocks\Backend\API\GlobalDataAPI;
 use Kontentblocks\Backend\Environment\GlobalEnvironment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorageGlobal;
 use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
 use Kontentblocks\Modules\ModuleRegistry,
@@ -52,9 +53,10 @@ function getStorage($id = null)
 function getEnvironment($id = null)
 {
     if ($id && is_numeric($id) && $id !== -1) {
-        return new \Kontentblocks\Backend\Environment\PostEnvironment($id);
+        return new PostEnvironment($id);
     } else {
-        return new GlobalEnvironment($id);
+        $area = AreaRegistry::getInstance()->getArea($id);
+        return new PostEnvironment($area['parent_id']);
     }
 
 }
@@ -238,4 +240,17 @@ function maybe_unserialize_recursive($input)
 {
     return maybe_unserialize($input[0]);
 
+}
+
+/**
+ * Check if a top level admin menu exists
+ */
+function adminMenuExists($id){
+    global $menu;
+    foreach($menu as $item) {
+        if(strtolower($item[0]) == strtolower($id)) {
+            return true;
+        }
+    }
+    return false;
 }

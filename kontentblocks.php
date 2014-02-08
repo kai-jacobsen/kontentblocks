@@ -2,8 +2,8 @@
 
 namespace Kontentblocks;
 
+use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Screen\EditScreen,
-    Kontentfields\KFHandler,
     Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Hooks\Capabilities,
@@ -140,6 +140,10 @@ Class Kontentblocks
 
             $this->UI = new EditScreen();
             $this->Capabilities = new Capabilities();
+
+            DynamicAreas::getInstance();
+
+
         }
 
         $this->Enqueues = new Enqueues();
@@ -230,7 +234,7 @@ Class Kontentblocks
 
 
         // todo remove from here
-        MenuManager::getInstance();
+//        MenuManager::getInstance();
     }
 
     /**
@@ -296,17 +300,6 @@ Class Kontentblocks
 
     }
 
-    /*
-     * Setup Blocks takes arrays of block data and returns objects
-     */
-
-    public function _setup_blocks($blocks)
-    {
-        wp_die(__LINE__, __FILE__);
-
-
-    }
-
     /**
      * Prepare new area
      * two ways to go:
@@ -324,57 +317,6 @@ Class Kontentblocks
 
     }
 
-    /**
-     * New Experimental Frontend Output factory
-     */
-    public function render_area($post_id, $area = null, $context = null, $subcontext = null, $args = null, $echo = true)
-    {
-
-        if (!isset($area)) {
-            return false;
-        }
-
-        $args = AreaRegistry::getInstance()->getArea($area);
-        if (!$args) {
-            return false;
-        }
-        $Renderer = new AreaRender($post_id, $args, $context, $subcontext);
-        $output = $Renderer->render($echo);
-        return $output;
-
-    }
-
-    static function _get_highest_id($blocks)
-    {
-        wp_die(__LINE__, __FILE__);
-
-    }
-    private function setup_blocks($blocks, $area)
-    {
-        wp_die(__LINE__, __FILE__);
-
-
-    }
-    public function get_areas($context = false)
-    {
-
-        wp_die(__LINE__, __FILE__);
-
-    }
-
-    /**
-     * Get a single area
-     */
-    public function get_area($area)
-    {
-        wp_die(__LINE__, __FILE__);
-    }
-
-    public function get_dynamic_areas($context = false, $exclude = false)
-    {
-        wp_die(__LINE__, __FILE__);
-
-    }
 
     /*
      * ------------------------------------------------
@@ -447,12 +389,6 @@ Class Kontentblocks
 
     }
 
-
-    public function _modify_blocks($blocks)
-    {
-        wp_die(__LINE__, __FILE__);
-
-    }
 
 }
 

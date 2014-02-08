@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Backend\API\AreaTableAPI;
+use Kontentblocks\Backend\API\PostMetaAPI;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Language\I18n;
 
@@ -45,8 +46,22 @@ class AreaRegistry
      */
     public function init()
     {
-        $Table = new AreaTableAPI();
-        $dynamicAreas = $Table->getAreaDefinitions();
+
+        $areas = get_posts(
+            array(
+                'post_type' => 'kb-dyar',
+                'posts_per_page' => -1
+            )
+        );
+
+        if (!empty($areas)) {
+            foreach ($areas as $areapost) {
+                $area = get_post_meta($areapost->ID, '_area', true);
+                $area['parent_id'] = $areapost->ID;
+                $dynamicAreas[] = $area;
+            }
+        }
+
         if (!empty($dynamicAreas)) {
             foreach ($dynamicAreas as $area) {
                 $this->addArea($area, false);
@@ -71,7 +86,7 @@ class AreaRegistry
             $args['id'] = sanitize_title($args['id']);
         }
 
-        if (empty($args['dbid'])){
+        if (empty($args['dbid'])) {
             $args['dbid'] = -1;
         }
 
@@ -132,7 +147,7 @@ class AreaRegistry
     public function preFilterAreas($area)
     {
         if ($area['dynamic'] === true
-            && (in_array(I18n::getActiveLanguage(), (array)$area['lang'] ) || $area['lang'] === 'any')
+            && (in_array(I18n::getActiveLanguage(), (array)$area['lang']) || $area['lang'] === 'any')
         ) {
             if ($area['context'] === 'side') {
                 $this->globalSidebars[] = $area;
@@ -321,6 +336,12 @@ class AreaRegistry
         } else {
             return false;
         }
+    }
+
+    public function isDynamic($id)
+    {
+        $area = $this->getArea($id);
+        return $area['dynamic'];
     }
 
 }

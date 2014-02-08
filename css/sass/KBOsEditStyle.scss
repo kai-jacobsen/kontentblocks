@@ -28,6 +28,10 @@
       background-color: $orange;
   }
 
+  &.dynamic-module a{
+    background-color: $lightblue;
+  }
+
   a {
     line-height: 12px;
     display: inline-block;

@@ -3355,7 +3355,7 @@ body.on-site-editing {
 /* line 101, sass/partials/_options/_page.scss */
 .kb-menu-field label {
   display: inline-block;
-  width: 200px;
+  width: 240px;
 }
 /* line 106, sass/partials/_options/_page.scss */
 .kb-menu-field input[type=text] {
@@ -3377,15 +3377,16 @@ body.on-site-editing {
 
 /* line 123, sass/partials/_options/_page.scss */
 .kb-menu-field-section_inputs {
-  margin-left: 210px;
+  margin-left: 270px;
 }
 
 /* line 127, sass/partials/_options/_page.scss */
 .kb-menu-field-section {
   overflow: hidden;
+  padding: 15px 0;
 }
 
-/* line 133, sass/partials/_options/_page.scss */
+/* line 134, sass/partials/_options/_page.scss */
 .kb-menu-field-with-spinner .spinner {
   float: none;
   display: none;
@@ -3393,42 +3394,47 @@ body.on-site-editing {
   top: 5px;
   left: -35px;
 }
-/* line 142, sass/partials/_options/_page.scss */
+/* line 143, sass/partials/_options/_page.scss */
 .kb-menu-field-with-spinner.loading .spinner {
   display: inline-block;
 }
 
-/* line 149, sass/partials/_options/_page.scss */
+/* line 150, sass/partials/_options/_page.scss */
 .kb-language-switch-wrapper {
   position: absolute;
   right: 40px;
   top: 10px;
 }
-/* line 154, sass/partials/_options/_page.scss */
+/* line 155, sass/partials/_options/_page.scss */
 .kb-language-switch-wrapper p {
   padding-bottom: 0;
   margin-bottom: 0;
 }
-/* line 159, sass/partials/_options/_page.scss */
+/* line 160, sass/partials/_options/_page.scss */
 .kb-language-switch-wrapper ul {
   margin: 0;
   margin-top: 10px;
   padding: 0;
   float: right;
 }
-/* line 166, sass/partials/_options/_page.scss */
+/* line 167, sass/partials/_options/_page.scss */
 .kb-language-switch-wrapper li {
   display: inline-block;
   margin: 0 4px;
 }
-/* line 170, sass/partials/_options/_page.scss */
+/* line 171, sass/partials/_options/_page.scss */
 .kb-language-switch-wrapper li.kb-current-template-language {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
   opacity: 0.3;
 }
-/* line 174, sass/partials/_options/_page.scss */
+/* line 175, sass/partials/_options/_page.scss */
 .kb-language-switch-wrapper li a {
   text-indent: -9999px;
+}
+
+/* line 183, sass/partials/_options/_page.scss */
+body.post-type-kb-dyar .kb_area_head.clearfix {
+  display: none;
 }
 
 /* line 79, sass/kontentblocks.scss */

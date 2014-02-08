@@ -28,6 +28,7 @@ class SavePost implements InterfaceSaveHandler
      */
     public function save()
     {
+
         // mic check one two, one two
         if (!$this->auth()) {
             return false;
@@ -37,7 +38,6 @@ class SavePost implements InterfaceSaveHandler
         $this->index = $this->Environment->getStorage()->getIndex();
 
         $areas = $this->Environment->getAreas();
-
         // Bail out if no areas are set
         if (empty($areas)) {
             return false;
@@ -60,7 +60,6 @@ class SavePost implements InterfaceSaveHandler
                 if (!class_exists($module['class'])) {
                     continue;
                 }
-
                 //hack
                 $id = null;
 
@@ -78,7 +77,7 @@ class SavePost implements InterfaceSaveHandler
                 /** @var $instance \Kontentblocks\Modules\Module */
                 $instance = $Factory->getModule();
 
-
+                get_post_type();
 
                 // Set the 'old' data to the module
                 $instance->moduleData = $old;
@@ -108,7 +107,7 @@ class SavePost implements InterfaceSaveHandler
                 // store new data in post meta
                 // if this is a preview, save temporary data for previews
                 if ($savedData) {
-                    if ($_POST['wp-preview'] === 'dopreview') {
+                    if (is_preview()) {
                         update_post_meta($this->postid, '_preview_' . $module['instance_id'], $savedData);
                     } // save real data
                     else {
@@ -128,7 +127,9 @@ class SavePost implements InterfaceSaveHandler
                 $areasData = $_POST['areas'];
 
                 foreach($areasData as $id){
-                    $collection[$id] = $_POST[$id];
+                    if (!empty($_POST[$id])){
+                        $collection[$id] = $_POST[$id];
+                    }
                 }
                 $this->Environment->getDataBackend()->update('kb_area_settings', $collection);
             }

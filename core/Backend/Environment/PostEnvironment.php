@@ -166,6 +166,11 @@ class PostEnvironment extends AbstractEnvironment
      */
     public function _findAreas()
     {
+
+        if ($this->postType === 'kb-dyar'){
+            return array($this->MetaData->get('_area'));
+        }
+
         $RegionRegistry = AreaRegistry::getInstance();
         return $RegionRegistry->filterForPost($this);
 
