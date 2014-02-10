@@ -3,9 +3,6 @@
 
 namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Interfaces\InterfaceDataStorage;
-use Kontentblocks\Interfaces\InterfaceEnvironment;
-
 /**
  * Class BackupManager
  * @package Kontentblocks\Backend\Storage
@@ -17,8 +14,6 @@ class BackupManager
 {
     /**
      * Instance of an Storage Object
-     * which must implement InterfaceDataStorage
-     * @var \Kontentblocks\Interfaces\InterfaceDataStorage
      */
     protected $Storage;
 
@@ -41,7 +36,7 @@ class BackupManager
      * @param InterfaceDataStorage $Storage
      * @throws \BadFunctionCallException
      */
-    public function __construct(InterfaceDataStorage $Storage)
+    public function __construct($Storage)
     {
         if (!$Storage) {
             throw new \BadFunctionCallException('A Storage Object must be given');

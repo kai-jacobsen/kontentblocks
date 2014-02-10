@@ -2,9 +2,8 @@
 namespace Kontentblocks\Backend\Storage;
 
 use Kontentblocks\Backend\API\PostMetaAPI;
-use Kontentblocks\Interfaces\InterfaceDataStorage;
 
-class ModuleStoragePostMeta implements InterfaceDataStorage
+class ModuleStoragePostMeta
 {
 
     protected $post_id;

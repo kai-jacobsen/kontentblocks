@@ -2,14 +2,13 @@
 
 namespace Kontentblocks\Backend\API;
 
-use Kontentblocks\Interfaces\InterfaceDataAPI;
 
 
 /**
  * Class PostMetaAPI
  * @package Kontentblocks\Backend\Post
  */
-class PostMetaAPI implements InterfaceDataAPI
+class PostMetaAPI
 {
 
     protected $post_id;

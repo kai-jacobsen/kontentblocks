@@ -4,7 +4,8 @@ namespace Kontentblocks\Abstracts;
 
 use Kontentblocks\Interfaces\InterfaceEnvironment;
 
-abstract class AbstractEnvironment implements InterfaceEnvironment
+// TODO Outsource
+abstract class AbstractEnvironment
 {
 
 

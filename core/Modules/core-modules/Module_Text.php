@@ -38,7 +38,7 @@ class Module_Text extends Module
             ->addField(
                 'editor', 'sometext', array(
                 'label' => 'Sometext',
-                'areaContext' => array('normal'),
+                'areaContext' => array('normal','side'),
                 'media' => true
             ));
 
