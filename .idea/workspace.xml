@@ -6,33 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Templating/templates/master-module-invalid.twig" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/Templating/templates/master-module-valid.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Areas/Area.php" afterPath="$PROJECT_DIR$/core/Backend/Areas/Area.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" afterPath="$PROJECT_DIR$/core/Ajax/CreateNewModule.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" afterPath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" afterPath="$PROJECT_DIR$/core/Ajax/GetSanitizedId.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" afterPath="$PROJECT_DIR$/core/Modules/core-modules/KB_Master_Module.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/Module.php" afterPath="$PROJECT_DIR$/core/Modules/Module.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/ModuleIterator.php" afterPath="$PROJECT_DIR$/core/Frontend/ModuleIterator.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Models/ModuleModel.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Models/ModuleModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleRegistry.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Dynamic/ModuleTemplates.php" afterPath="$PROJECT_DIR$/core/Backend/Dynamic/ModuleTemplates.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" afterPath="$PROJECT_DIR$/core/Modules/ModuleTemplates.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" afterPath="$PROJECT_DIR$/core/Ajax/Frontend/UpdateModuleOptions.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/backend.min.js" afterPath="$PROJECT_DIR$/js/dist/backend.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/common.min.js" afterPath="$PROJECT_DIR$/js/dist/common.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/extensions.min.js" afterPath="$PROJECT_DIR$/js/dist/extensions.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/fields.min.js" afterPath="$PROJECT_DIR$/js/dist/fields.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/frontend.js" afterPath="$PROJECT_DIR$/js/dev/frontend/frontend.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/frontend.min.js" afterPath="$PROJECT_DIR$/js/dist/frontend.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/backend/Views/ModuleBrowser/kb.ui.mdb.mainview.js" afterPath="$PROJECT_DIR$/js/dev/backend/Views/ModuleBrowser/kb.ui.mdb.mainview.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.php" afterPath="$PROJECT_DIR$/kontentblocks.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/plugins.min.js" afterPath="$PROJECT_DIR$/js/dist/plugins.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/refields.min.js" afterPath="$PROJECT_DIR$/js/dist/refields.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Utils/tables.php" afterPath="$PROJECT_DIR$/core/Utils/tables.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" afterPath="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" />
     </list>
     <ignored path="kontentblocks.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -121,33 +95,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Module.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/Modules/Module.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="551" column="36" selection-start="14813" selection-end="14813" vertical-scroll-proportion="-12.666667" vertical-offset="9540" max-vertical-offset="11196">
-              <folding>
-                <marker date="1392053482949" expanded="true" signature="6017:6114" placeholder="..." />
-                <marker date="1392053482949" expanded="false" signature="6495:6508" placeholder="..." />
-                <marker date="1392053482949" expanded="true" signature="7292:7425" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FrontendEditView.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="201" column="35" selection-start="6569" selection-end="6569" vertical-scroll-proportion="0.0" vertical-offset="3438" max-vertical-offset="4590">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="frontend.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="frontend.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/dev/frontend/frontend.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="0" selection-start="2909" selection-end="2973" vertical-scroll-proportion="0.7692308" vertical-offset="1476" max-vertical-offset="2016">
+            <state line="102" column="0" selection-start="2909" selection-end="2973" vertical-scroll-proportion="0.0" vertical-offset="1476" max-vertical-offset="2016">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_page.scss" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/sass/partials/_options/_page.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="0" selection-start="121" selection-end="121" vertical-scroll-proportion="-4.6666665" vertical-offset="0" max-vertical-offset="3438">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AreaTableAPI.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="111" column="19" selection-start="3209" selection-end="3209" vertical-scroll-proportion="0.14285715" vertical-offset="1899" max-vertical-offset="9990">
+              <folding>
+                <marker date="1392070120967" expanded="true" signature="6871:6918" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+                <marker date="1392070120967" expanded="true" signature="9105:9171" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+                <marker date="1392070120967" expanded="true" signature="13152:13234" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+                <marker date="1392070120967" expanded="true" signature="14299:14353" placeholder="SELECT data_..$this-&gt;tablename WHERE..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -177,7 +152,6 @@
         <option value="$PROJECT_DIR$/core/Fields/FieldManagerCustom.php" />
         <option value="$PROJECT_DIR$/core/Backend/Screen/ScreenManager.php" />
         <option value="$PROJECT_DIR$/core/Extensions/SidebarSelector.php" />
-        <option value="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" />
         <option value="$PROJECT_DIR$/core/Backend/Environment/GlobalEnvironment.php" />
         <option value="$PROJECT_DIR$/core/Backend/Storage/ModuleStorageGlobal.php" />
         <option value="$PROJECT_DIR$/core/Fields/Field.php" />
@@ -216,6 +190,7 @@
         <option value="$PROJECT_DIR$/js/dev/frontend/Models/ModuleModel.js" />
         <option value="$PROJECT_DIR$/js/dev/frontend/Views/ModuleView.js" />
         <option value="$PROJECT_DIR$/js/dev/frontend/frontend.js" />
+        <option value="$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php" />
       </list>
     </option>
   </component>
@@ -427,7 +402,127 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sass" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sass" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="partials" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sass" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="partials" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_options" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kontentblocks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="API" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -517,10 +612,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-4" width="1602" height="905" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31282052" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31282052" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22692308" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32564104" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43076923" sideWeight="0.49968293" order="12" side_tool="false" content_ui="tabs" />
@@ -582,11 +677,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/Ajax/Frontend/GetModuleOptions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="10" selection-start="294" selection-end="375" vertical-scroll-proportion="0.42323652" vertical-offset="0" max-vertical-offset="723" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/Menus/MenuManager.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="136" column="35" selection-start="3837" selection-end="3958" vertical-scroll-proportion="0.0" vertical-offset="2448" max-vertical-offset="6588" />
@@ -619,11 +709,6 @@
     <entry file="file://$PROJECT_DIR$/core/Backend/Screen/EditScreen.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="97" column="25" selection-start="2463" selection-end="2463" vertical-scroll-proportion="-9.814815" vertical-offset="1409" max-vertical-offset="3726" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/sass/partials/_options/_page.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="1" selection-start="1290" selection-end="1290" vertical-scroll-proportion="-0.6666667" vertical-offset="2034" max-vertical-offset="3438" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Templating/templates/new-area-form.twig">
@@ -835,9 +920,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="551" column="36" selection-start="14813" selection-end="14813" vertical-scroll-proportion="-12.666667" vertical-offset="9540" max-vertical-offset="11196">
           <folding>
-            <marker date="1392053482949" expanded="true" signature="6017:6114" placeholder="..." />
-            <marker date="1392053482949" expanded="false" signature="6495:6508" placeholder="..." />
-            <marker date="1392053482949" expanded="true" signature="7292:7425" placeholder="..." />
+            <marker date="1392053482949" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1392053482949" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1392053482949" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -896,8 +981,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/dev/frontend/frontend.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="0" selection-start="2909" selection-end="2973" vertical-scroll-proportion="0.7692308" vertical-offset="1476" max-vertical-offset="2016">
+        <state line="102" column="0" selection-start="2909" selection-end="2973" vertical-scroll-proportion="0.0" vertical-offset="1476" max-vertical-offset="2016">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/sass/partials/_options/_page.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="121" selection-end="121" vertical-scroll-proportion="-4.6666665" vertical-offset="0" max-vertical-offset="3438">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Backend/API/AreaTableAPI.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="111" column="19" selection-start="3209" selection-end="3209" vertical-scroll-proportion="0.14285715" vertical-offset="1899" max-vertical-offset="9990">
+          <folding>
+            <marker date="1392070120967" expanded="true" signature="6871:6918" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+            <marker date="1392070120967" expanded="true" signature="9105:9171" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+            <marker date="1392070120967" expanded="true" signature="13152:13234" placeholder="SELECT * FRO..$this-&gt;tablename WHERE..." />
+            <marker date="1392070120967" expanded="true" signature="14299:14353" placeholder="SELECT data_..$this-&gt;tablename WHERE..." />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -109,6 +109,8 @@ class AreaTableAPI implements InterfaceDataAPI
      */
     public function __construct($areaId = null, $lang = null)
     {
+        d('TableApi')
+
         global $wpdb;
         // shorthand db object
         $this->db = $wpdb;
