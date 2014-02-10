@@ -45,20 +45,26 @@ class GetSanitizedId
             return 'translate';
         }
 
-        return $sane;
+        return str_replace('-', '_', $sane);
+
     }
 
     private function checkTemplateExists($ad)
     {
         $sane = sanitize_title($ad);
-        $API = new PluginDataAPI('template');
-        $langs = $API->getLanguagesForKey($sane);
-        // key exists
-        if ($langs !== false) {
+
+        $posts = get_posts(array(
+            'post_type' => 'kb-mdtpl',
+            'posts_per_page' => 1,
+            'name' => $sane,
+            'suppress_filters' => false
+        ));
+
+        if (!empty($posts)) {
             return 'translate';
         }
 
-        return $sane;
+        return str_replace('-', '_', $sane);
 
     }
 

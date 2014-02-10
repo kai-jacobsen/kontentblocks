@@ -57,22 +57,22 @@ class Area
      * Class Constructor
      * @param array $area area settings array
      */
-    function __construct( $area, AbstractEnvironment $environment, $context = 'normal' )
+    function __construct($area, AbstractEnvironment $environment, $context = 'normal')
     {
 
-        if ( empty( $area ) ) {
-            throw new \Exception( 'No Arguments for Area specified' );
+        if (empty($area)) {
+            throw new \Exception('No Arguments for Area specified');
         }
 
         // setup localization string
         // TODO: Outsource all i18n strings to seperate file
         $this->l18n = array(
             // l18n
-            'add_block' => __( 'add module', 'kontentblocks' ),
-            'add' => __( 'add', 'kontentblocks' ),
-            'add_template' => __( 'add template', 'kontentblocks' ),
-            'no_blocks' => __( 'Sorry, no Blocks available for this Area', 'kontentblocks' ),
-            'modules' => __( 'Add new module', 'kontentblocks' )
+            'add_block' => __('add module', 'kontentblocks'),
+            'add' => __('add', 'kontentblocks'),
+            'add_template' => __('add template', 'kontentblocks'),
+            'no_blocks' => __('Sorry, no Blocks available for this Area', 'kontentblocks'),
+            'modules' => __('Add new module', 'kontentblocks')
         );
 
         // context in regards of position on the edit screen
@@ -82,22 +82,22 @@ class Area
         $this->environment = $environment;
 
         // batch setting of properties
-        $this->_setupAreaProperties( $area );
+        $this->_setupAreaProperties($area);
 
         // Menu wit available modules for this area
-        $this->moduleMenu = new ModuleMenu( $this );
+        $this->moduleMenu = new ModuleMenu($this);
 
         //actual stored module for this area
-        $this->attachedModules = $this->environment->getModulesForArea( $this->id );
+        $this->attachedModules = $this->environment->getModulesForArea($this->id);
 
         // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu( $this, $this->environment );
+        $this->settingsMenu = new AreaSettingsMenu($this, $this->environment);
 
     }
 
-    private function default_tpl( $val )
+    private function default_tpl($val)
     {
-        $this->default_tpl = (!empty( $val )) ? $val : 'default-area-template';
+        $this->default_tpl = (!empty($val)) ? $val : 'default-area-template';
 
     }
 
@@ -108,15 +108,16 @@ class Area
     private function _getModuleLimitTag()
     {
         // prepare string
-        $limit = ($this->limit == '0') ? null : absint( $this->limit );
+        $limit = ($this->limit == '0') ? null : absint($this->limit);
 
-        if ( null !== $limit ) {
+        if (null !== $limit) {
             echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
         }
 
     }
 
-    public function build(){
+    public function build()
+    {
         $this->header();
         $this->render();
         $this->toJSON();
@@ -136,12 +137,13 @@ class Area
 
         $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
 
-        $Tpl = new CoreTemplate( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );
-        $Tpl->render( true );
+        $Tpl = new CoreTemplate('Area-Header.twig', array('area' => $this, 'headerClass' => $headerClass));
+        $Tpl->render(true);
 
     }
 
-    public function footer(){
+    public function footer()
+    {
         echo "</div><!-- close area wrap -->";
     }
 
@@ -154,13 +156,14 @@ class Area
 
         // list items for this area, block limit gets stored here
         echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
-        if ( !empty( $this->attachedModules ) ) {
+        if (!empty($this->attachedModules)) {
 
 
-            foreach ( $this->attachedModules as $module ) {
-                $module[ 'areaContext' ] = $this->context;
-                $Factory                 = new ModuleFactory( $module[ 'class' ], $module, $this->environment );
-                $instance                = $Factory->getModule();
+            foreach ($this->attachedModules as $module) {
+                $module['areaContext'] = $this->context;
+                $module = apply_filters('kb_before_module_options', $module);
+                $Factory = new ModuleFactory($module['class'], $module, $this->environment);
+                $instance = $Factory->getModule();
                 $instance->_render_options();
             }
         }
@@ -168,7 +171,7 @@ class Area
         echo "</ul>";
 
         // render "add new module" link, if available
-        if ( $this->moduleMenu ) {
+        if ($this->moduleMenu) {
             echo $this->moduleMenu->menuLink();
         }
 
@@ -194,7 +197,7 @@ class Area
         // This gets checked elsewhere as well
         // but to be sure that this doesn't happen
         // for normal users, better safe than sorry
-        if ( !is_user_logged_in() ) {
+        if (!is_user_logged_in()) {
             return;
         }
 
@@ -202,14 +205,14 @@ class Area
             'id' => $this->id,
             'assignedModules' => $this->assignedModules,
             'modules' => $this->attachedModules,
-            'limit' => absint( $this->limit ),
+            'limit' => absint($this->limit),
             'context' => $this->context
         );
-        $json = json_encode( $area );
+        $json = json_encode($area);
         echo "<script>"
-        . "var KB = KB || {};"
-        . "KB.RawAreas = KB.RawAreas || {};"
-        . "KB.RawAreas['{$this->id}'] = {$json};</script>";
+            . "var KB = KB || {};"
+            . "KB.RawAreas = KB.RawAreas || {};"
+            . "KB.RawAreas['{$this->id}'] = {$json};</script>";
 
     }
 
@@ -218,12 +221,11 @@ class Area
      * @param string $param | property key
      * @return mixed | value or false
      */
-    public function get( $param )
+    public function get($param)
     {
-        if ( isset( $this->$param ) ) {
+        if (isset($this->$param)) {
             return $this->$param;
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -235,13 +237,12 @@ class Area
      * to validate / sanitize input
      * @param array $args
      */
-    private function _setupAreaProperties( $args )
+    private function _setupAreaProperties($args)
     {
-        foreach ( $args as $key => $value ) {
-            if ( method_exists( $this, $key ) ) {
-                $this->$key( $value );
-            }
-            else {
+        foreach ($args as $key => $value) {
+            if (method_exists($this, $key)) {
+                $this->$key($value);
+            } else {
                 $this->$key = $value;
             }
         }

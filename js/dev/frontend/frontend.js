@@ -50,9 +50,8 @@ jQuery(document).ready(function () {
                     var key = data.key;
                     var value = ed.getContent();
 
-                    var moduleData = KB.CurrentModel.get('moduleData');
+                    var moduleData = _.clone(KB.CurrentModel.get('moduleData'));
                     moduleData[key] = value;
-                    console.log(moduleData);
                     KB.CurrentModel.set('moduleData', moduleData);
 
 
@@ -80,7 +79,7 @@ jQuery(document).ready(function () {
                     var key = data.key;
                     var value = ed.getContent();
 
-                    var moduleData = KB.CurrentModel.get('moduleData');
+                    var moduleData = _.clone(KB.CurrentModel.get('moduleData'));
                     moduleData[key] = value;
                     KB.CurrentModel.set('moduleData', moduleData);
 
@@ -101,8 +100,8 @@ jQuery(document).ready(function () {
 
 
 });
-
-
-jQuery('.area').sortable({
-    cancel: '.editable'
-});
+//
+//
+//jQuery('.area').sortable({
+//    cancel: '.editable'
+//});

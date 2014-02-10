@@ -544,13 +544,12 @@ abstract class Module
             'inDynamic' => AreaRegistry::getInstance()->isDynamic($this->area)
         );
 
+
         if (isset($this->master) && $this->master){
             $toJSON['master'] = true;
-            $toJSON['tpldef'] = $this->tpldef;
+            $toJSON['post_id'] = $this->master_id;
         }
-
         $enc = json_encode($toJSON);
-
         echo "<script>"
             . "var KB = KB || {}; KB.PageModules = KB.PageModules || {};"
             . "KB.PageModules.{$this->instance_id} = {$enc}"

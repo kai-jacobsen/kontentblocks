@@ -183,12 +183,10 @@ class ModuleRegistry
             JSONBridge::getInstance()->registerData('ModuleDefinitions', $classname, $moduleArgs);
         }
 
-        $tpldefs = ModuleTemplates::getInstance()->getAllTemplates();
-        foreach (ModuleTemplates::getInstance()->getAllTemplateModules() as $name => $moduleArgs) {
+        foreach (ModuleTemplates::getInstance()->getAllTemplates() as $name => $moduleArgs) {
             $moduleClass = $moduleArgs['class'];
             $clone = wp_parse_args($moduleArgs, $this->get($moduleClass));
             $clone['settings']['category'] = 'template';
-            $clone['tpldef'] = $tpldefs[$name];
             JSONBridge::getInstance()->registerData('ModuleDefinitions', $name, $clone);
         }
     }

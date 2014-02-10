@@ -3,6 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\API\PluginDataAPI;
+use Kontentblocks\Backend\API\PostMetaAPI;
 use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Modules\ModuleTemplates;
@@ -99,16 +100,10 @@ class CreateNewModule
     private function overrideModuleClassEventually()
     {
         // Override Class / type if this originates from a master template
-        if ($this->moduleArgs['master']) {
+        $this->moduleArgs = apply_filters('kb_intercept_module_args', $this->moduleArgs);
 
-            $API = new PluginDataAPI('template');
-            $this->moduleArgs['tpldef'] = $API->getRawByKey($this->metaArgs['templateReference']);
 
-            $this->type = 'KB_Master_Module';
-            $this->moduleArgs['class'] = 'KB_Master_Module';
-            $this->moduleArgs['master_reference'] = $this->metaArgs['templateReference'];
 
-        }
     }
 
     /**
@@ -171,12 +166,8 @@ class CreateNewModule
     private function templateOverride()
     {
 
-        if ($this->metaArgs['template']) {
-            $ModuleTemplates = ModuleTemplates::getInstance();
-            $tpl = $ModuleTemplates->getTemplate($this->metaArgs['templateReference']);
-            if ($tpl) {
-                $this->moduleArgs[ 'overrides' ][ 'name' ] = $tpl['name'];
-            }
+        if ($this->moduleArgs['template']) {
+                $this->moduleArgs[ 'overrides' ][ 'name' ] = $this->moduleArgs['templateObj']['name'];
         }
 
     }
@@ -221,9 +212,11 @@ class CreateNewModule
     private function handleTemplates()
     {
         //create data for templates
-        if ($this->metaArgs['template']) {
+        if ($this->moduleArgs['template']) {
 
-            $master_data = ModuleTemplates::getInstance()->getTemplateData($this->metaArgs['templateReference']);
+            $PostMeta = new PostMetaAPI($this->moduleArgs['master_id']);
+
+            $master_data = $PostMeta->get($this->moduleArgs['templateObj']['id']);
             $update = $this->environment->getStorage()->saveModule($this->newInstanceID, $master_data);
             $this->environment->getStorage()->reset();
             if (!$update)
@@ -271,22 +264,29 @@ class CreateNewModule
             'area' => FILTER_SANITIZE_STRING,
             'master' => FILTER_VALIDATE_BOOLEAN,
             'areaContext' => FILTER_SANITIZE_STRING,
-            'class' => FILTER_SANITIZE_STRING
-        );
-
-        $metaArgs = array(
             'template' => FILTER_VALIDATE_BOOLEAN,
-            'templateReference' => FILTER_SANITIZE_STRING
+            'class' => FILTER_SANITIZE_STRING,
+            'master_id' => FILTER_SANITIZE_NUMBER_INT,
         );
 
-        $this->metaArgs = filter_var_array($_POST, $metaArgs);
+//        $metaArgs = array(
+//            'template' => FILTER_VALIDATE_BOOLEAN,
+//            'templateReference' => FILTER_SANITIZE_STRING
+//        );
+
+//        $this->metaArgs = filter_var_array($_POST, $metaArgs);
         $this->moduleArgs = filter_var_array($_POST, $moduleArgs);
+
+        if (isset($_POST['templateObj'])){
+            $this->moduleArgs['templateObj']['name'] = $_POST['templateObj']['post_title'];
+            $this->moduleArgs['templateObj']['id'] = $_POST['templateObj']['post_name'];
+        }
 
     }
 
     public function createModuleInstance()
     {
-        $Factory = new ModuleFactory($this->type, $this->newModule, $this->environment);
+        $Factory = new ModuleFactory($this->newModule['class'], $this->newModule, $this->environment);
         return $Factory->getModule();
 
     }

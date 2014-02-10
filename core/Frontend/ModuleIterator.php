@@ -67,7 +67,6 @@ class ModuleIterator implements \Iterator, \Countable
     {
         $this->modules = $this->setupModules($modules);
         $this->Environment = $Environment;
-
     }
 
     /**
@@ -202,6 +201,7 @@ class ModuleIterator implements \Iterator, \Countable
      *
      * @param $modules
      * @return array
+     * @filter kb_render_setup_module
      * @since 1.0.0
      */
     private function setupModules($modules)
@@ -215,46 +215,14 @@ class ModuleIterator implements \Iterator, \Countable
                 continue;
             }
 
-
             /*
              * Master modules only
              * --------------------
              */
             // @TODO handle non existing templates better
             // @TODO Move this to a filter inside the actual module!!!11!
-            if (isset($module['master']) && $module['master']) {
-                $API = new PluginDataAPI('tpldata');
-                $tpl = $module['tpldef'];
 
-                // if module has it's own translation, check if the module still exist
-                if (isset($module['overrides']['translated']) && $module['overrides']['translated']) {
-                    if (!$API->keyExists($tpl['data_key'])) {
-                        continue;
-                    }
-                    // if module is still bound to it's origin ( in case of wpml duplicate) check if the original still exist
-                } else {
-                    I18n::getInstance()->wpmlActive() && $API->setLang($tpl['data_lang']);
-                    if (!$API->keyExists($tpl['data_key'])) {
-                        continue;
-                    }
-                }
-
-                $this->data = $API->get($tpl['data_key']);
-
-                $tpldef = maybe_unserialize($tpl['data_value']);
-                $args = \Kontentblocks\Modules\ModuleRegistry::getInstance()->get($tpldef['type']);
-                $args['instance_id'] = $module['instance_id'];
-                $args['overrides'] = $module['overrides'];
-                $args['area'] = $module['area'];
-                $args['class'] = $tpldef['type'];
-                $args['areaContext'] = $module['areaContext'];
-                $args['state'] = $module['state'];
-                $args['tpldef'] = $module['tpldef'];
-                $args['master'] = true;
-                $module = $args;
-            }
-
-            $collect[$id] = $module;
+            $collect[$id] = apply_filters('kb_render_setup_module', $module);
         }
 
         return $collect;
@@ -269,38 +237,7 @@ class ModuleIterator implements \Iterator, \Countable
      */
     private function getModuleData($moduleDef)
     {
-        if ($moduleDef['master']) {
-            return $this->getMasterModuleData($moduleDef);
-        } else {
-            return $this->Environment->getModuleData($this->key());
-        }
-    }
-
-    /**
-     * Get data for master modules
-     * @param $moduleDef
-     * @return array|mixed|null
-     * @TODO move somewhere else
-     */
-    private function getMasterModuleData($moduleDef)
-    {
-        $tpl = $moduleDef['tpldef'];
-        // Check if there is data
-        $API = new PluginDataAPI('tpldata');
-        $data = $API->get($tpl['data_key']);
-        $I18n = I18n::getInstance();
-        if (is_null($data) && $I18n->wpmlActive()) {
-            if ($tpl['data_lang'] !== $I18n->getActiveLanguage()) {
-                $API->setLang($tpl['data_lang']);
-                $data = $API->get($tpl['data_key']);
-            }
-        }
-
-        if (is_null($data)) {
-            return array();
-        } else {
-            return $data;
-        }
+        return apply_filters('kb_setup_render_module_data', $this->Environment->getModuleData($this->key()), $moduleDef);
     }
 
 }

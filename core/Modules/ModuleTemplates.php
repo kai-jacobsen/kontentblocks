@@ -31,8 +31,6 @@ class ModuleTemplates
 
     public function __construct()
     {
-        // init Table
-        $this->API = new PluginDataAPI('template');
         // gather important data
         $this->setup();
 
@@ -41,7 +39,7 @@ class ModuleTemplates
     public function getTemplate($id)
     {
         $this->API->setGroup('template');
-        if ($this->API->get($id)){
+        if ($this->API->get($id)) {
             return $this->API->get($id);
         } else {
             return false;
@@ -51,7 +49,7 @@ class ModuleTemplates
     public function getModuleTemplate($id)
     {
         $this->API->setGroup('module');
-        if ($this->API->get($id)){
+        if ($this->API->get($id)) {
             return $this->API->get($id);
         } else {
             return false;
@@ -61,7 +59,7 @@ class ModuleTemplates
     public function getTemplateData($id)
     {
         $this->API->setGroup('tpldata');
-        if ($this->API->get($id)){
+        if ($this->API->get($id)) {
             return $this->API->get($id);
         } else {
             return array();
@@ -81,11 +79,29 @@ class ModuleTemplates
 
     private function setup()
     {
-        $data = $this->prepareData($this->API->getRaw());
-        $this->templates = array_filter($data, function ($item) {
+        $collect = array();
+
+        $data = get_posts(array(
+            'post_type' => 'kb-mdtpl',
+            'posts_per_page' => -1,
+            'suppress_filters' => false
+        ));
+
+
+        if (empty($data)) {
+            return;
+        }
+
+        foreach ($data as $tpl) {
+            $def = get_post_meta($tpl->ID, 'template', true);
+            $def['templateObj'] = $tpl;
+            $collect[$tpl->post_name] = $def;
+        }
+
+        $this->templates = array_filter($collect, function ($item) {
             return !$item['master'];
         });
-        $this->masterTemplates = array_filter($data, function ($item) {
+        $this->masterTemplates = array_filter($collect, function ($item) {
             return $item['master'];
         });
 
@@ -100,35 +116,6 @@ class ModuleTemplates
         return array_merge($this->templates, $this->masterTemplates);
     }
 
-    private function prepareData($getRaw)
-    {
-        $templates = array_filter($getRaw, function ($e) {
-            return ($e['data_group'] === 'template');
-        });
-
-        $prepared = array();
-
-        foreach ($templates as $item) {
-            $value = maybe_unserialize($item['data_value']);
-
-            $pre = array(
-                'dbid' => $item['id'],
-                'id' => $item['data_key']
-            );
-
-            $prepared[$item['data_key']] = wp_parse_args($value, $pre);
-        }
-        return $prepared;
-    }
-
-    public function getAllTemplateModules()
-    {
-        $this->API->setGroup('module');
-        $tpls = $this->API->getAll();
-        $this->API->reset();
-        return $tpls;
-
-    }
 
 
 }

@@ -97,8 +97,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             action: 'createNewModule',
             'class': module.get('settings').class,
             master: module.get('master'),
+            master_id: module.get('master_id'),
             template: module.get('template'),
-            templateReference: module.get('instance_id'), // is set on templates
+            templateObj: module.get('templateObj'),
             duplicate: module.get('duplicate'),
             areaContext: this.options.area.model.get('context'),
             area: this.options.area.model.get('id'),

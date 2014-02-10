@@ -10,6 +10,7 @@ KB.ModuleView = Backbone.View.extend({
     initialize: function () {
         var that = this;
         this.model.bind('save', this.model.save);
+        this.listenTo(this.model, 'change', this.modelChange);
         this.model.view = this;
         this.render();
         this.setControlsPosition();
@@ -17,6 +18,10 @@ KB.ModuleView = Backbone.View.extend({
             that.setControlsPosition();
         });
 
+    },
+    modelChange: function(){
+        console.log(this);
+        this.$el.addClass('isDirty');
     },
     save: function () {
         // TODO utilize this for saving instead of handling this by the modal view

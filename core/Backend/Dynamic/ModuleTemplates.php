@@ -41,7 +41,6 @@ class ModuleTemplates
      */
     public function __construct()
     {
-
         add_action('init', array($this, 'registerPostType'));
         add_action('admin_menu', array($this, 'addAdminMenu'), 19);
         add_action('edit_form_after_title', array($this, 'addForm'), 1);
@@ -103,7 +102,7 @@ class ModuleTemplates
         \Kontentblocks\Helper\getHiddenEditor();
 
 
-        $moduleData = $MetaData->get($post->post_name);
+        $moduleData = $MetaData->get('_' . $template['instance_id']);
 
         // no data from db equals null, null is invalid
         // we can't pass null to the factory, if environment is null as well
@@ -167,24 +166,22 @@ class ModuleTemplates
         if (!$this->auth($postId)) return false;
         $MetaData = new PostMetaAPI($postId);
 
-        if (empty($MetaData->get('template'))) {
+        $tpl = $MetaData->get('template');
+        if (empty($tpl)) {
             $this->createTemplate($postId, $MetaData);
         } else {
 
-            $PostMeta = new PostMetaAPI($postId);
-            $id = $postObj->post_name;
+            $id = $tpl['instance_id'];
             $data = $_POST[$id];
-            $old = (empty($PostMeta->get($id))) ? array() : $PostMeta->get($id);
+            $old = (empty($MetaData->get('_' . $id))) ? array() : $MetaData->get('_' . $id);
 
-            $moduleDef = ModuleFactory::parseModule($PostMeta->get('template'));
-
+            $moduleDef = ModuleFactory::parseModule($tpl);
             $Factory = new ModuleFactory($moduleDef['class'], $moduleDef, null, $old);
             /** @var $Instance \Kontentblocks\Modules\Module */
             $Instance = $Factory->getModule();
             $new = $Instance->save($data, $old);
             $toSave = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
-
-            $PostMeta->update($id, $toSave);
+            $MetaData->update('_' . $id, $toSave);
         }
 
 
@@ -256,8 +253,8 @@ class ModuleTemplates
     {
 
         $args = array(
-            'public' => false,
-            'publicly_queryable' => true,
+            'public' => true,
+            'publicly_queryable' => false,
             'show_ui' => true,
             'show_in_menu' => false,
             'query_var' => true,

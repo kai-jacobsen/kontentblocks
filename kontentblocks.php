@@ -142,11 +142,12 @@ Class Kontentblocks
             $this->UI = new EditScreen();
             $this->Capabilities = new Capabilities();
 
-            DynamicAreas::getInstance();
-            ModuleTemplates::getInstance();
 
 
         }
+
+        DynamicAreas::getInstance();
+        ModuleTemplates::getInstance();
 
         $this->Enqueues = new Enqueues();
         // setup vars

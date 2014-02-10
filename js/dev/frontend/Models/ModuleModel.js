@@ -1,6 +1,7 @@
 var KB = KB || {};
 
 KB.ModuleModel = Backbone.Model.extend({
+
     idAttribute: 'instance_id',
     save: function(model) {
         var module = model.get('editableModel');
