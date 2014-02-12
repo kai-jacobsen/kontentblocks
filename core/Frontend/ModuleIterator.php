@@ -67,6 +67,7 @@ class ModuleIterator implements \Iterator, \Countable
     {
         $this->modules = $this->setupModules($modules);
         $this->Environment = $Environment;
+
     }
 
     /**

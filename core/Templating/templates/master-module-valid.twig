@@ -1,13 +1,14 @@
+{{ dump() }}
 <div class="kb_field">
     <div class="inside">
 
 
 
         {% if translated %}
-            <p>There is a translation available for this module which will be used on the frontend</p>
+            <p>{{ i18n.validTranslated }}</p>
         {% endif %}
 
 
-        <a href="{{ editUrl }}">Edit Original</a>
+        <a href="{{ editUrl }}">{{ i18n.editLink }}</a>
     </div>
 </div>

@@ -20,7 +20,6 @@ module.exports = function (grunt) {
             },
             sec: {
                 files: {
-                    'js/dist/fields.min.js': ['<%= concat.kontentfields.dest %>'],
                     'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
                     'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>']
                 }
@@ -29,11 +28,6 @@ module.exports = function (grunt) {
         concat: {
             options: {
                 seperator: ';'
-            },
-            kontentfields: {
-                src: ['core/Kontentfields/Fields/js/**/*.js'],
-                dest: 'js/tmp/fields.concat.js',
-                nonull: true
             },
             refields: {
                 src: ['core/Fields/Definitions/js/**/*.js'],
@@ -112,7 +106,7 @@ module.exports = function (grunt) {
             single_file: {
                 src: 'css/kontentblocks.css',
                 dest: 'css/kontentblocks.css'
-            },
+            }
         }
     });
 

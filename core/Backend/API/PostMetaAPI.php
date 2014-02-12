@@ -2,33 +2,55 @@
 
 namespace Kontentblocks\Backend\API;
 
-
-
 /**
  * Class PostMetaAPI
+ * Wrapper to WordPress native post meta functions
+ * This class has been stripped down to the essentials during development and has only the least necessary
+ * methods available for the plugin to work.
+ * Victim of refactoring.
+ * @TODO complete.
  * @package Kontentblocks\Backend\Post
+ * @since 1.0.0
  */
 class PostMetaAPI
 {
 
-    protected $post_id;
-    protected $index = array();
-    protected $modules = array();
-    protected $meta = array();
-    protected $package = array();
+    /**
+     * Post ID to get meta from
+     * @var int
+     */
+    protected $postId;
 
-    public function __construct($post_id)
+    /**
+     * 'cached' meta data
+     * @TODO unnecessary
+     * @var array
+     */
+    protected $meta = array();
+
+    /**
+     * Class constructor
+     * @param $postId
+     * @throws \Exception
+     */
+    public function __construct($postId)
     {
-        if (!isset($post_id) || $post_id === 0) {
+        if (!isset($postId) || $postId === 0) {
             throw new \Exception('a valid post id must be provided');
         }
 
-        $this->post_id = $post_id;
+        $this->postId = $postId;
         $this->_selfUpdate();
 
     }
 
-
+    /**
+     * Updates existing keys or creates new ones
+     * Wrapper to ::update() since the plugin does not make use of multiple
+     * equal keys (yet)
+     * @param $key
+     * @param $value
+     */
     public function add($key, $value)
     {
         $this->update($key, $value);
@@ -45,7 +67,7 @@ class PostMetaAPI
      */
     public function update($key, $value)
     {
-        return update_post_meta($this->post_id, $key, $value);
+        return update_post_meta($this->postId, $key, $value);
     }
 
     /**
@@ -62,12 +84,20 @@ class PostMetaAPI
         }
     }
 
+    /**
+     * Delete meta by key
+     * @param $key
+     * @return bool
+     */
     public function delete($key)
     {
-        return delete_post_meta($this->post_id, $key);
+        return delete_post_meta($this->postId, $key);
     }
 
-
+    /**
+     * Returns all meta data for this postId
+     * @return array
+     */
     public function getAll()
     {
         return $this->meta;
@@ -75,20 +105,21 @@ class PostMetaAPI
 
 
     /**
-     * returns the page template if isset
-     * returns 'default' if not in order to normalize this module attribute
-     * If post type doesn't support page templates, it's still
+     * returns the page template if available
+     * returns 'default' if not. in order to normalize this module attribute
+     * If post type does not support page templates, it's still
      * 'default' on the module
      * TODO: Could refer to template hierachie files as well?
+     * TODO: custom post types default?
      * @return string
      */
     public function getPageTemplate()
     {
         if (!empty($this->meta['_wp_page_template'])) {
             return $this->meta['_wp_page_template'];
-        } else if (get_post_type($this->post_id === 'page') && empty($this->meta['_wp_page_template'])) {
-            return 'default';
         }
+
+        return 'default';
 
     }
 
@@ -97,18 +128,18 @@ class PostMetaAPI
      */
     public function getPostType()
     {
-        return get_post_type($this->post_id);
+        return get_post_type($this->postId);
     }
 
     /**
-     * Gets all postmeta for current post.
+     * Gets all post meta for current post.
      * Setup the Object.
      * @todo account for multiple keys
      * @return self
      */
     private function _getPostCustom()
     {
-        $this->meta = array_map('\Kontentblocks\Helper\maybe_unserialize_recursive', get_post_custom($this->post_id));
+        $this->meta = array_map('\Kontentblocks\Helper\maybe_unserialize_recursive', get_post_custom($this->postId));
         return $this;
 
     }
@@ -123,5 +154,12 @@ class PostMetaAPI
 
     }
 
+    /**
+     * Getter for objects post id
+     * @return int
+     */
+    public function getPostId(){
+        return $this->postId;
+    }
 
 }

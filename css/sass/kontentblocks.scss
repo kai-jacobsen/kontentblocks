@@ -1,5 +1,8 @@
-@charset "utf-8";
-/* CSS Document */
+@import "compass/css3";
+@import "partials/_base";
+
+
+
 #kb_select {
   margin-bottom: 12px;
 }
@@ -12,12 +15,10 @@
   display: none;
 }
 
-@import "compass/css3";
 /* --------------------------
 // Base
 -----------------------------*/
 
-@import "partials/_base";
 
 /* --------------------------
 // Block Styles Backend UI
@@ -26,51 +27,39 @@
 @import "partials/_block_style";
 @import "partials/_refields/_render-toggles";
 
+
 /* --------------------------
-// Reveal JS
+// Plugins (external/vendor)
 -----------------------------*/
-@import "partials/_reveal-js";
-@import "partials/_vex";
-@import "partials/_simtip";
-@import "partials/_rangeslider";
-@import "partials/_nano";
-@import "partials/_alertify";
+//@import "partials/_vendor/_plugin_noty";
+//@import "partials/_vendor/_reveal-js";
+//@import "partials/_vendor/_vex";
+//@import "partials/_vendor/_simtip";
+@import "partials/_vendor/_rangeslider";
+@import "partials/_vendor/_nano";
+@import "partials/_vendor/_alertify";
+
+
+/* --------------------------
+// Areas realted styling
+-----------------------------*/
+@import "partials/_areas/area-styles";
+@import "partials/_areas/area-settings";
+
+
+
 
 @import "partials/_global-area-edit";
 
-@import "partials/_module-browser";
+@import "partials/_areas/_module-browser";
 
-/* --------------------------
-// DD Menu Styles
------------------------------*/
-@import "partials/_dd_menu.scss";
 
-/* --------------------------
-// Blocks Menu Modal
------------------------------*/
-//@import "partials/_blocks_menu";
-@import "partials/_blocks_menu_var";
-
-/* --------------------------
-// Area::Header
------------------------------*/
-@import "partials/_area_styles";
-@import "partials/_area-settings";
-
-/* --------------------------
-// Plugins
------------------------------*/
-@import "partials/_plugin_noty";
 
 /* --------------------------
 // Extensions
 -----------------------------*/
-@import "partials/_sidebar_selector";
+@import "partials/_extensions/sidebar-selector";
 
-/* --------------------------
-// KB Plugins
------------------------------*/
-@import "partials/_copymove";
 
 /* --------------------------
 // WP Admin Menu Options
@@ -330,7 +319,7 @@ li.gallery-item textarea:focus {
 /* -------------------
     Fields
 ----------------------*/
-@import "partials/_kontentfields_new";
+@import "partials/kontentfields-new";
 .kb_draft {
   padding: 5px 0 5px 20px;
   border-left: 2px solid $orange;
@@ -407,7 +396,7 @@ input[type="checkbox"][checked] {
 /*--------------------------------
  Jquery UI Custom
  ---------------------------------*/
-@import "partials/jquery_ui_custom";
+//@import "partials/jquery_ui_custom";
 
 /* context */
 
@@ -632,10 +621,6 @@ textarea.quicktags {
 .custom .kb_field {
   background-color: #fff !important;
 }
-
-@import '_refields/_image';
-@import '_refields/_date';
-@import '_refields/_file';
 
 /**
  * Hide Sidebar

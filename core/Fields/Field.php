@@ -419,6 +419,8 @@ abstract class Field
             return "{$this->baseId}[{$this->key}][{$akey}]";
         } else if (is_bool($array) && $array === true) {
             return "{$this->baseId}[{$this->key}][]";
+        } else if (is_string($array) && is_string($akey) && $multiple) {
+            return "{$this->baseId}[{$this->key}][$array][$akey][]";
         } else if (is_string($array) && is_string($akey)) {
             return "{$this->baseId}[{$this->key}][$array][$akey]";
         } else if (is_string($array)) {

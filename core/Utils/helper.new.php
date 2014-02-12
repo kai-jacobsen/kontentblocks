@@ -52,11 +52,16 @@ function getStorage($id = null)
  */
 function getEnvironment($id = null)
 {
+    global $post;
     if ($id && is_numeric($id) && $id !== -1) {
         return new PostEnvironment($id);
     } else {
         $area = AreaRegistry::getInstance()->getArea($id);
-        return new PostEnvironment($area['parent_id']);
+        if (isset($area['parent_id'])){
+            return new PostEnvironment($area['parent_id']);
+        } else {
+            return new PostEnvironment(get_the_ID());
+        }
     }
 
 }

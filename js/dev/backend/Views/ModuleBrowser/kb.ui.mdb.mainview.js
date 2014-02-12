@@ -52,17 +52,18 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         });
 
         // bind to navigation views custom change event
-        this.subviews.Navigation.bind('browser:change', _.bind(this.update, this));
+        this.listenTo(this.subviews.Navigation,'browser:change', this.update);
+        this.listenTo(this.subviews.ModulesList,'createModule', this.createModule);
+//        this.subviews.Navigation.bind('browser:change', _.bind(this.update, this));
     },
     // close the browser
     // TODO clean up and remove all references & bindings
     close: function () {
         jQuery('#wpwrap').removeClass('module-browser-open');
         this.trigger('browser:close');
-//        this.unbind();
+        this.unbind();
         this.remove();
-//        delete this.$el;
-//        delete this.el;
+        delete this.$el;
     },
     // update list view upon navigation
     update: function (model) {
@@ -70,7 +71,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         var modules = this.modulesDefinitions.getModules(id);
         this.subviews.ModulesList.setModules(modules).update();
         this.listenTo(this.subviews.ModulesList, 'loadDetails', this.loadDetails);
-        this.listenTo(this.subviews.ModulesList, 'createModule', this.createModule);
 
     },
     // update details in description view
@@ -80,6 +80,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     },
     // create module action
     createModule: function (module) {
+        console.log('create called');
         // check if capability is right for this action
         if (KB.Checks.userCan('create_kontentblocks')) {
         } else {

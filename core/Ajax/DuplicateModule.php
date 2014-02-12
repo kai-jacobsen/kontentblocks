@@ -34,6 +34,11 @@ class DuplicateModule
 
     private function duplicate()
     {
+        // TODO: Dangerous? Too hacky?
+        global $post;
+        $tempPost = $post;
+        $post = get_post($this->postId);
+
         $stored = $this->Environment->getStorage()->getModuleDefinition($this->instanceId);
         $moduleDefinition = ModuleFactory::parseModule($stored);
         $moduleDefinition['settings']['draft'] = true;
@@ -47,7 +52,11 @@ class DuplicateModule
             $original = $this->Environment->getStorage()->getModuleData($this->instanceId);
             $this->Environment->getStorage()->saveModule($this->newInstanceId, $original);
 
+
             $moduleDefinition['areaContext'] = filter_var($_POST['areaContext'], FILTER_SANITIZE_STRING);
+
+            $this->Environment->getStorage()->reset();
+            $moduleDefinition = apply_filters('kb_before_module_options', $moduleDefinition);
 
             $Factory = new ModuleFactory($this->class, $moduleDefinition, $this->Environment);
             $newInstance = $Factory->getModule();
@@ -66,6 +75,7 @@ class DuplicateModule
                 'html' => $html
             );
 
+            $post = $tempPost;
             wp_send_json($response);
         }
 

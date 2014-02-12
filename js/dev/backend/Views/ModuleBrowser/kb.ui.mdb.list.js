@@ -8,7 +8,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
     // render list
     render: function (el) {
         if (this.model.get('tpldef')) {
-            console.log(this.model.get('tpldef'));
             this.$el.html(KB.Templates.render('backend/modulebrowser/module-template-list-item', {module: this.model.toJSON()}));
         } else {
             this.$el.html(KB.Templates.render('backend/modulebrowser/module-list-item', {module: this.model.toJSON()}));

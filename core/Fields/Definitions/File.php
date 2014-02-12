@@ -3,6 +3,8 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Language\I18n;
+use Kontentblocks\Utils\AttachmentHandler;
 
 /**
  * Single file insert/upload.
@@ -25,8 +27,8 @@ Class File extends Field
             'file.twig', array(
             'field' => $this,
             'value' => $value,
-            'i18n' => \Kontentblocks\Language\I18n::getPackages( 'Refields.file', 'Refields.common' ),
-            'file' => new \Kontentblocks\Utils\AttachmentHandler( $value[ 'id' ] ),
+            'i18n' => I18n::getPackages( 'Refields.file', 'Refields.common' ),
+            'file' => new AttachmentHandler( $value[ 'id' ] ),
             'isEmpty' => (empty( $value[ 'id' ] )) ? 'kb-hide' : ''
             )
         );

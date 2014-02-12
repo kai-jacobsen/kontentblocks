@@ -41,6 +41,11 @@ class KB_Master_Module extends Module
 
     public static function validateModule($module)
     {
+
+
+        if (!isset($module['master_id']))
+            return $module;
+
         $masterId = $module['master_id'];
         $translated = false;
         $duplicate = (!empty(get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true)));
@@ -56,7 +61,7 @@ class KB_Master_Module extends Module
 
         }
 
-        if (is_null($masterId)){
+        if (is_null($masterId)) {
             $module['state']['draft'] = true;
             $module['state']['active'] = false;
             $module['state']['valid'] = false;
@@ -90,7 +95,8 @@ class KB_Master_Module extends Module
             'editUrl' => get_edit_post_link($masterId),
             'translated' => $translated,
             'duplicate' => $duplicate,
-            'module' => $this
+            'module' => $this,
+            'i18n' => I18n::getInstance()->getPackage('CoreModules.master')
         );
 
         $tpl = (isset($this->state['valid']) && $this->state['valid']) ? 'master-module-valid.twig' : 'master-module-invalid.twig';
@@ -145,16 +151,19 @@ class KB_Master_Module extends Module
             return $final;
         }
 
+        return $module;
     }
 
     public static function setupModuleData($module, $moduleDef)
     {
-        $masterId = $moduleDef['master_id'];
-        $tplId = $moduleDef['templateObj']['id'];
+        if ($moduleDef['master']){
+            $masterId = $moduleDef['master_id'];
+            $tplId = $moduleDef['templateObj']['id'];
 
-        $data = get_post_meta($masterId, '_' . $tplId, true);
-        return $data;
-
+            $data = get_post_meta($masterId, '_' . $tplId, true);
+            return $data;
+        }
+        return $module;
     }
 
     /**

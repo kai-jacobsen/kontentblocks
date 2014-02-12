@@ -100,8 +100,8 @@ jQuery(document).ready(function () {
 
 
 });
-//
-//
-//jQuery('.area').sortable({
-//    cancel: '.editable'
-//});
+
+
+jQuery('.area').sortable({
+    cancel: '.editable'
+});

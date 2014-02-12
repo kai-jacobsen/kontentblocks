@@ -3,10 +3,10 @@
 namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Backend\Areas\ModuleMenu,
     Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Backend\Areas\AreaSettingsMenu,
     Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Utils\JSONBridge;
 
 /**
  * Area
@@ -35,11 +35,6 @@ class Area
      */
     protected $environment;
 
-    /**
-     * The "add new module" modal menu
-     * @var object \Kontentblocks\Backend\Areas\ModuleMenu
-     */
-    protected $moduleMenu;
 
     /**
      * Modules which were saved on this area
@@ -85,7 +80,7 @@ class Area
         $this->_setupAreaProperties($area);
 
         // Menu wit available modules for this area
-        $this->moduleMenu = new ModuleMenu($this);
+//        $this->moduleMenu = new ModuleMenu($this);
 
         //actual stored module for this area
         $this->attachedModules = $this->environment->getModulesForArea($this->id);
@@ -93,6 +88,7 @@ class Area
         // custom settins for this area
         $this->settingsMenu = new AreaSettingsMenu($this, $this->environment);
 
+        $this->setupCats();
     }
 
     private function default_tpl($val)
@@ -171,10 +167,11 @@ class Area
         echo "</ul>";
 
         // render "add new module" link, if available
-        if ($this->moduleMenu) {
-            echo $this->moduleMenu->menuLink();
-        }
+//        if ($this->moduleMenu) {
+//            echo $this->moduleMenu->menuLink();
+//        }
 
+        echo $this->menuLink();
         // block limit tag, if applicable
         $this->_getModuleLimitTag();
 
@@ -249,4 +246,43 @@ class Area
 
     }
 
+    private function menuLink()
+    {
+        if (current_user_can('create_kontentblocks')) {
+            if (!empty($this->assignedModules)) {
+                $out = " <div class='add-modules cantsort'>
+
+					</div>";
+                return $out;
+            }
+            return false;
+        }
+    }
+
+    /*
+ * Filterable array of allowed cats
+ * uses @filter kb_menu_cats
+ * @return void
+ */
+
+    private function setupCats()
+    {
+        // defaults
+        $cats = array(
+            'standard' => __( 'Standard', 'kontentblocks' ),
+        );
+
+        $cats = apply_filters( 'kb_menu_cats', $cats );
+
+
+        $cats[ 'media' ]   = __( 'Media', 'kontentblocks' );
+        $cats[ 'special' ] = __( 'Spezial', 'kontentblocks' );
+
+        $cats[ 'core' ]      = __( 'System', 'kontentblocks' );
+        $cats[ 'template' ] = __( 'Templates', 'kontentblocks' );
+
+        $this->cats = $cats;
+        JSONBridge::getInstance()->registerData('ModuleCategories', null, $cats);
+
+    }
 }

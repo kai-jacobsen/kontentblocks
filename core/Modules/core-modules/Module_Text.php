@@ -25,7 +25,6 @@ class Module_Text extends Module
         $tpl = 'normal.twig';
 
 
-
         $tpl = new ModuleTemplate($this, $tpl);
         return $tpl->render();
 
@@ -36,10 +35,12 @@ class Module_Text extends Module
 
         $groupB = $this->Fields->addGroup('Second', array('label' => 'Options'))
             ->addField(
-                'editor', 'sometext', array(
+                'text', 'sometext', array(
                 'label' => 'Sometext',
                 'areaContext' => array('normal','side'),
-                'media' => true
+                'media' => true,
+                'returnObj' => 'Element',
+                'arrayKey' => 'stuff'
             ));
 
     }
