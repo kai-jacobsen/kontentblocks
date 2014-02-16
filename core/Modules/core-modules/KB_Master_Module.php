@@ -72,7 +72,7 @@ class KB_Master_Module extends Module
 
     }
 
-    public function options()
+    public function options($data)
     {
         $masterId = $this->master_id;
         $translated = false;

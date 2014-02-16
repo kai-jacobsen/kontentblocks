@@ -6,6 +6,8 @@ class JSONBridge
 {
 
     protected $data = array();
+    protected $modules = array();
+    protected $areas = array();
 
     protected static $instance;
 
@@ -32,9 +34,11 @@ class JSONBridge
         }
     }
 
+
     public function registerData($group, $key, $data)
     {
-        if(is_null($key)){
+
+        if (is_null($key)) {
             $this->data[$group] = $data;
         } else {
             $this->data[$group][$key] = $data;
@@ -42,9 +46,34 @@ class JSONBridge
         return $this;
     }
 
+    public function registerModule($module)
+    {
+        $this->modules[$module['instance_id']] = $module;
+    }
+
+    public function registerModules($modules)
+    {
+        if (!is_array($modules)) {
+            return false;
+        }
+
+        foreach ($modules as $module) {
+            $this->registerModule($module);
+        }
+    }
+
+    public function registerArea($area)
+    {
+        $this->areas[$area['id']] = $area;
+    }
+
 
     public function printJSON()
     {
+
+        $this->data['Modules'] = $this->modules;
+        $this->data['Areas'] = $this->areas;
+
         $json = json_encode($this->data);
 
         print "<script>var KB = KB || {}; KB.fromServer = {}; KB.fromServer =  {$json};</script>";

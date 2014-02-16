@@ -1,16 +1,14 @@
 var KB = KB || {};
 
-KB.TinyMCE = (function($) {
+KB.TinyMCE = (function ($) {
 
     return {
-        removeEditors: function() {
+        removeEditors: function () {
             // do nothing if it is the native editor
-            $('.wp-editor-wrap').each(function() {
-                if ($(this).attr('id') === 'wp-content-wrap')
-                {
+            $('.wp-editor-wrap').each(function () {
+                if ($(this).attr('id') === 'wp-content-wrap') {
                     // do nothing
-                } else
-                {
+                } else {
                     // get the id
                     var textarea = jQuery(this).find('textarea').attr('id');
                     // remove controls
@@ -18,9 +16,8 @@ KB.TinyMCE = (function($) {
                 }
             });
         },
-        restoreEditors: function() {
-            $('.wp-editor-wrap').each(function()
-            {
+        restoreEditors: function () {
+            $('.wp-editor-wrap').each(function () {
                 // find all textareas with tinymce support
                 var textarea = $(this).find('textarea').attr('id');
                 // add controls back
@@ -28,30 +25,28 @@ KB.TinyMCE = (function($) {
                 //
                 // if instance was in html mode, we have to switch manually back to visual mode
                 // will look ugly otherwise, and don't see an alternative
-                if ($(this).hasClass('html-active'))
-                {
+                if ($(this).hasClass('html-active')) {
                     $(this).removeClass('html-active').addClass('tmce-active');
                 }
             });
         },
-        addEditor: function($el) {
+        addEditor: function ($el, quicktags) {
             // get settings from native WP Editor
             // Editor may not be initialized and is not accesible throught
             // the tinymce api, thats why we take the settings from preInit
             var settings = tinyMCEPreInit.mceInit.content;
-
-            if (!$el){
+            if (!$el) {
                 $el = KB.lastAddedModule.view.$el;
             }
 
-            $('.wp-editor-area', $el).each(function() {
+            $('.wp-editor-area', $el).each(function () {
                 var id = this.id;
                 // add new editor id to settings
                 settings.elements = id;
                 settings.id = id;
-				settings.height = 350;
-				settings.setup = function(ed) {
-                    ed.on('init', function(){
+                settings.height = 350;
+                settings.setup = function (ed) {
+                    ed.on('init', function () {
                         jQuery(document).trigger('newEditor', ed);
                     });
                 };
@@ -72,7 +67,7 @@ KB.TinyMCE = (function($) {
 
             });
 
-            setTimeout(function() {
+            setTimeout(function () {
                 $('.wp-editor-wrap', $el).removeClass('html-active').addClass('tmce-active');
                 QTags._buttonsInit();
             }, 1500);
@@ -94,6 +89,21 @@ KB.TinyMCE = (function($) {
             // this is necessary :/
 
 
+        },
+        remoteGetEditor: function ($el, name, content) {
+            var id = $el.attr('id');
+            KB.Ajax.send({
+                action: 'getRemoteEditor',
+                editorId: id + '_ed',
+                editorName: name,
+                editorContent: content,
+                _ajax_nonce: kontentblocks.nonces.read
+
+            }, function(data){
+
+                $el.empty().append(data);
+                this.addEditor($el);
+            },this);
         }
 
     };

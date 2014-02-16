@@ -1,7 +1,8 @@
 KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
     tagName: 'li',
     className: 'modules-list-item',
-    initialize: function () {
+    initialize: function (options) {
+        this.options = options || {};
         // listen to browser close event
 //        this.options.parent.options.browser.on('browser:close', this.close, this);
     },
@@ -33,6 +34,9 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
 });
 
 KB.Backbone.ModuleBrowserModulesList = Backbone.View.extend({
+    initialize: function (options) {
+        this.options = options || {};
+    },
     modules: {},
     subviews: {},
     // set modules to render
@@ -47,7 +51,7 @@ KB.Backbone.ModuleBrowserModulesList = Backbone.View.extend({
         var first = false;
         this.$el.empty();
         _.each(this.modules, function (module) {
-               that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that});
+            that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that});
 
 //            if (!that.subviews[module.cid]) {
 //                console.log('create new view li');

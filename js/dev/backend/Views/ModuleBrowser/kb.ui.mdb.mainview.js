@@ -1,6 +1,11 @@
 KB.Backbone = KB.Backbone || {};
 // TODO Proper cleanup
 KB.Backbone.ModuleBrowser = Backbone.View.extend({
+    initialize: function(options){
+        var that = this;
+        this.options = options || {};
+
+    },
     // element tag
     tagName: 'div',
     // element id

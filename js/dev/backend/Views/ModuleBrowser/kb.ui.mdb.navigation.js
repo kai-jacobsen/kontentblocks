@@ -1,6 +1,9 @@
 KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
 
     item: Backbone.View.extend({
+        initialize: function(options){
+            this.options = options || {};
+        },
         tagName: 'li',
         className: 'cat-item',
         events: {
@@ -30,8 +33,9 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
         }
     }),
     catSet: false,
-    initialize: function () {
+    initialize: function (options) {
         var that = this;
+        this.options = options || {};
 
         this.$list = jQuery('<ul></ul>').appendTo(this.$el);
 

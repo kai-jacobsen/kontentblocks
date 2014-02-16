@@ -61,7 +61,7 @@ function vipx_allow_contenteditable_on_divs() {
     global $allowedposttags;
 
     $tags = array( 'div', 'h1', 'img', 'h2', 'h3' );
-    $new_attributes = array( 'contenteditable' => array(), 'data-key' => array(), 'data-module' => array() );
+    $new_attributes = array( 'contenteditable' => array(), 'data-key' => array(), 'data-module' => array(), 'data-arrayKey' => array(), 'data-index' => array() );
 
     foreach ( $tags as $tag ) {
         if ( isset( $allowedposttags[ $tag ] ) && is_array( $allowedposttags[ $tag ] ) )

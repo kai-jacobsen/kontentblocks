@@ -1,6 +1,7 @@
 <?php
 
 namespace Kontentblocks\Frontend;
+use Kontentblocks\Utils\JSONBridge;
 
 /**
  * Class AreaOutput
@@ -62,6 +63,7 @@ class AreaOutput
      */
     public function __construct( $areaAttrs, $areaSettings, $additionalArgs )
     {
+        JSONBridge::getInstance()->registerArea($areaAttrs);
         $this->id       = $areaAttrs[ 'id' ];
         $this->settings = $this->_setupSettings( $additionalArgs, $areaSettings );
         $this->layout = $this->_setupLayout();
@@ -85,6 +87,7 @@ class AreaOutput
      */
     public function closeArea()
     {
+
         return sprintf( "</%s>", $this->settings[ 'element' ] );
 
     }

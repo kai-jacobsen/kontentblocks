@@ -32,7 +32,6 @@ class Module_Prototype extends Module
             $tpl = 'alternate.twig';
         }
 
-
         $tpl = new ModuleTemplate($this, $tpl);
         return $tpl->render();
 
@@ -48,7 +47,8 @@ class Module_Prototype extends Module
                 'type' => 'text',
                 'text' => 'My first checkbox',
                 'areaContext' => array('normal'),
-                'std' => 'Lorem Ipsum'
+                'std' => 'Lorem Ipsum',
+                'returnObj' => 'Element'
             ))
             ->addField(
                 'image', 'testimage', array(

@@ -4,6 +4,7 @@ namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Backend\API\PluginDataAPI;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Utils\JSONBridge;
 
 /**
  * Class ModuleIterator
@@ -67,7 +68,6 @@ class ModuleIterator implements \Iterator, \Countable
     {
         $this->modules = $this->setupModules($modules);
         $this->Environment = $Environment;
-
     }
 
     /**

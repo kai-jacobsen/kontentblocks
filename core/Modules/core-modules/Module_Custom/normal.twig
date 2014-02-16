@@ -1,0 +1,29 @@
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        {% for item in items %}
+            <li data-target="#myCarousel"
+                data-slide-to="{{ loop.index0 }}" {% if (loop.first) %} class="active" {% endif %}></li>
+        {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+        {% for item in items %}
+
+            <div class="item {% if loop.first %} active {% endif %}">
+                <img src="{{ item.image }}" alt="Stuff it">
+
+                <div class="container">
+                    {{ item.content.el('div').addClass('carousel-caption').html() | raw }}
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+<a class="left carousel-control" href="#myCarousel" data-slide="prev"><span
+            class="glyphicon glyphicon-chevron-left"></span></a>
+<a class="right carousel-control" href="#myCarousel" data-slide="next"><span
+            class="glyphicon glyphicon-chevron-right"></span></a>
+</div><!-- /.carousel -->

@@ -1,0 +1,31 @@
+<div class="kb-field--wrap">
+    <ul class="kb-generic--list">
+
+    </ul>
+    <a class="button-primary kb-js--generic-create-item">create</a>
+    <script type="text/template" class="template">
+        <li class="kb-generic--list-item">
+            <h3 class="kb-js-generic-toggle kb-generic--toggle-title">Item</h3>
+            <div class="kb-generic--toggle-box">
+                <div id="kb-generic--editor-<%= counter %>" class="kb_field kb-remote-editor" data-name="<%= base %>[content][]">
+                    <% console.log(content) %>
+                    <%= content %>
+                </div>
+                <div class="kb_field">
+                    <div class="kb-generic--image-wrapper">
+
+                        <% if (!_.isNull(imgsrc)){ %>
+
+                        <img src="<%= imgsrc.sizes.thumbnail.url %>" >
+
+                        <% } %>
+                    </div>
+                    <input class="kb-js-generic--imgid" type="hidden" name="<%= base %>[imgid][]" value="<%= imgid %>">
+                </div>
+                <a class='kb-js-add-custom'>add image</a>
+
+            </div>
+
+        </li>
+    </script>
+</div>

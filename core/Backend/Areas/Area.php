@@ -161,19 +161,18 @@ class Area
                 $Factory = new ModuleFactory($module['class'], $module, $this->environment);
                 $instance = $Factory->getModule();
                 $instance->_render_options();
+                JSONBridge::getInstance()->registerModule($instance->toJSON());
+
             }
         }
 
         echo "</ul>";
 
-        // render "add new module" link, if available
-//        if ($this->moduleMenu) {
-//            echo $this->moduleMenu->menuLink();
-//        }
-
         echo $this->menuLink();
         // block limit tag, if applicable
         $this->_getModuleLimitTag();
+
+
 
     }
 
@@ -198,19 +197,15 @@ class Area
             return;
         }
 
+
         $area = array(
             'id' => $this->id,
             'assignedModules' => $this->assignedModules,
-            'modules' => $this->attachedModules,
             'limit' => absint($this->limit),
             'context' => $this->context
         );
-        $json = json_encode($area);
-        echo "<script>"
-            . "var KB = KB || {};"
-            . "KB.RawAreas = KB.RawAreas || {};"
-            . "KB.RawAreas['{$this->id}'] = {$json};</script>";
 
+        JSONBridge::getInstance()->registerArea($area);
     }
 
     /**

@@ -11,7 +11,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // show/hide module inner
         // actual module actions are outsourced to individual files
         'click.kb1 .kb-toggle': 'toggleBody',
-        'click.kb2 .kb-toggle': 'setOpenStatus'
+        'click.kb2 .kb-toggle': 'setOpenStatus',
+        'mouseenter' : 'setFocusedModule'
+    },
+    setFocusedModule: function(){
+        KB.focusedModule = this.model;
     },
     initialize: function () {
         var that = this;
@@ -28,12 +32,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             this.toggleBody();
             this.model.set('open', true);
         }
-
         // set view on model for later reference
         this.model.view = this;
-
         // Setup View
         this.setupDefaultMenuItems();
+
     },
     // setup default actions for modules
     // duplicate | delete | change active status
@@ -55,7 +58,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
     },
     setOpenStatus: function () {
-        console.log('toggle');
         this.model.set('open', !this.model.get('open'));
         store.set(this.model.get('instance_id') + '_open', this.model.get('open'));
     },
@@ -75,6 +77,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // re-init UI listeners
         // @todo there is a better way
         KB.Ui.repaint(this.$el);
+        this.trigger('kb:backend::viewUpdated');
+
 
     }
 

@@ -1,2 +1,6 @@
 var KB = KB || {};
-KB.ModulesCollection = Backbone.Collection.extend({});
+KB.Backbone = KB.Backbone || {};
+
+KB.Backbone.ModulesCollection = Backbone.Collection.extend({
+
+});

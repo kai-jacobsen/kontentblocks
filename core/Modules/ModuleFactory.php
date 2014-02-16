@@ -23,6 +23,7 @@ class ModuleFactory
         }
 
 
+
         $this->environment = $environment;
 
     }
@@ -37,6 +38,10 @@ class ModuleFactory
         // new instance
         if (class_exists($classname)) {
             $instance = new $classname($module, $this->data, $this->environment);
+        }
+
+        if (!isset($instance->rawModuleData)){
+            $instance->rawModuleData = $this->data;
         }
         return $instance;
 

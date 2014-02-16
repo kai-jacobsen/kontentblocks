@@ -28,6 +28,7 @@
 @import "partials/_refields/_render-toggles";
 
 
+
 /* --------------------------
 // Plugins (external/vendor)
 -----------------------------*/
@@ -47,6 +48,12 @@
 @import "partials/_areas/area-settings";
 
 
+/* --------------------------
+// Fields
+-----------------------------*/
+@import "partials/_refields/date";
+@import "partials/_refields/file";
+@import "partials/_refields/image";
 
 
 @import "partials/_global-area-edit";
@@ -152,7 +159,7 @@
 }
 
 .clearfix {
-  display: inline-block;
+  display: block;
 }
 
 html[xmlns] .clearfix {

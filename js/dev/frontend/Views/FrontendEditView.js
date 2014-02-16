@@ -13,8 +13,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     // timer handle for delayed keyup events
     timerId: null,
     // init
-    initialize: function () {
+    initialize: function (options) {
         var that = this;
+
+        this.view = options.view;
 
         this.model.on('change',this.test,this);
 
@@ -24,7 +26,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         // cache elements
         this.$form = jQuery('#onsite-form', this.$el);
         this.$formContent = jQuery('#onsite-content', this.$el);
-
+        this.$inner = jQuery('.os-content-inner', this.$formContent);
         // init draggable container and store position in config var
         this.$el.css('position', 'fixed').draggable({
             handle: 'h2',
@@ -43,7 +45,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
         // Attach custom tabs:change event to fit the modal to new height
         // TODO this is too specific to tabs
-        jQuery('body').on('kontentblocks::tabsChange', function () {
+            jQuery('body').on('kontentblocks::tabsChange', function () {
             that.recalibrate();
         });
 
@@ -107,10 +109,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             type: 'POST',
             dataType: 'html',
             success: function (res) {
-                that.$formContent.empty();
+                that.$inner.empty();
 
                 // append the html to the inner form container
-                that.$formContent.append(res);
+                that.$inner.append(res);
                 // (Re)Init UI widgets
                 // TODO find better method for this
 
@@ -123,6 +125,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
                 // Make the modal fit
                 that.recalibrate();
+                that.view.trigger('kb:frontend::viewLoaded');
+
             },
             error: function () {
                 // TODO Error message
@@ -154,7 +158,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         winH = (jQuery(window).height()) - 40;
         // get height of modal contents
         // TODO too specific to tabs
-        conH = jQuery('.kb_fieldtabs').height();
+        conH = jQuery('.os-content-inner').height();
         //get position of modal
         position = this.$el.position();
 

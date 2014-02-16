@@ -54,6 +54,8 @@ KB.App = (function ($) {
 
         // get the UI on track
         KB.Ui.init();
+
+
     }
 
     /**
@@ -70,18 +72,15 @@ KB.App = (function ($) {
      */
     function addViews() {
         // iterate over raw areas
-        _.each(KB.RawAreas, function (area) {
+        _.each(KB.fromServer.Areas, function (area) {
             // create new area model
             KB.Areas.add(new KB.Backbone.AreaModel(area));
-
-            // create models from already attached modules
-            if (area.modules) {
-                _.each(area.modules, function (module) {
-                    KB.Modules.add(module);
-                });
-            }
         });
 
+        // create models from already attached modules
+        _.each(KB.fromServer.Modules, function (module) {
+            KB.Modules.add(module);
+        });
 
     }
 
@@ -131,6 +130,7 @@ KB.App = (function ($) {
     function removeModule(model) {
         KB.Views.Modules.remove(model.get('instance_id'));
     }
+
 
     // revealing module pattern
     return {

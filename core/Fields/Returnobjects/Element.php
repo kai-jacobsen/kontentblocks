@@ -14,10 +14,18 @@ class Element extends AbstractFieldReturn
     public function __construct($value, $field)
     {
         if (is_user_logged_in()) {
-            $this->addClass('editable');
-            $this->addAttr('data-module', $field->parentModule);
-            $this->addAttr('data-key', $field->getKey());
-            $this->addAttr('data-arrayKey', $field->getArg('arrayKey'));
+            if (is_object($field)) {
+                $this->addClass('editable');
+                $this->addAttr('data-module', $field->parentModule);
+                $this->addAttr('data-key', $field->getKey());
+                $this->addAttr('data-arrayKey', $field->getArg('arrayKey'));
+            } else if (is_array($field)){
+                $this->addClass('editable');
+                $this->addAttr('data-module', $field['instance_id']);
+                $this->addAttr('data-key', $field['key']);
+                $this->addAttr('data-arrayKey', $field['arrayKey']);
+                $this->addAttr('data-index', $field['index']);
+            }
         }
         parent::__construct($value);
     }

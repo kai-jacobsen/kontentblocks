@@ -1,5 +1,7 @@
 KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
-    initialize:function(){
+    initialize: function (options) {
+        this.options = options || {};
+
         this.options.browser.on('browser:close', this.close, this);
     },
     update: function () {
@@ -7,12 +9,12 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
         this.$el.empty();
 
         this.$el.html(KB.Templates.render('backend/modulebrowser/module-description', {module: this.model.toJSON()}));
-        if (this.model.get('settings').helpfile !== false){
+        if (this.model.get('settings').helpfile !== false) {
             this.$el.append(KB.Templates.render(this.model.get('settings').helpfile, {module: this.model.toJSON()}));
         }
 
     },
-    close: function(){
+    close: function () {
 //        this.unbind();
 //        this.remove();
 //        delete this.$el;

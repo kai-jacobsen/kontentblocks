@@ -2,11 +2,10 @@ var KB = KB || {};
 KB.Backbone = KB.Backbone || {};
 
 KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
-    initialize: function(){
+    initialize: function(options){
         var that = this;
-        this.options.parent.$el.on('click', '.js-module-status', function(event){
-            that.changeStatus();
-        });
+        this.options = options || {};
+
     },
     className: 'module-status block-menu-icon',
     events: {

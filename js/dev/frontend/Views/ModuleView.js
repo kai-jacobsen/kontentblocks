@@ -1,11 +1,12 @@
 var KB = KB || {};
+KB.Backbone = KB.Backbone || {};
 /**
  * That is what is rendered for each module when the user enters frontside editing mode
  * This will initiate the FrontsideEditView
  * TODO: Don't rely on containers to position the controls and calculate position dynamically
  * @type {*|void|Object}
  */
-KB.ModuleView = Backbone.View.extend({
+KB.Backbone.ModuleView = Backbone.View.extend({
 
     initialize: function () {
         var that = this;
@@ -20,7 +21,6 @@ KB.ModuleView = Backbone.View.extend({
 
     },
     modelChange: function(){
-        console.log(this);
         this.$el.addClass('isDirty');
     },
     save: function () {
@@ -35,7 +35,6 @@ KB.ModuleView = Backbone.View.extend({
     render: function () {
         this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON()}));
     },
-    // TODO change old name
     openOptions: function () {
 
         // There can and should always be only a single instance of the modal
@@ -49,6 +48,9 @@ KB.ModuleView = Backbone.View.extend({
             model: this.model,
             view: this
         });
+
+        KB.focusedModule = this.model;
+        that.trigger('kb:frontend::viewLoaded');
     },
     reloadModal: function () {
         if (KB.FrontendEditModal) {
@@ -75,7 +77,7 @@ KB.ModuleView = Backbone.View.extend({
         var $controls = jQuery('.os-controls', this.$el);
         var pos = this.$el.offset();
         var mwidth = this.$el.width() - 150;
-        $controls.offset({ top: pos.top, left: pos.left - 15});
+        $controls.offset({ top: pos.top + 60, left: pos.left - 15});
 //        $controls.css({'top':pos.top + 'px', 'right':0})
     },
     updateModule: function () {

@@ -2,6 +2,7 @@
 
 use Kontentblocks\Ajax\Frontend\FieldGetImage;
 use Kontentblocks\Ajax\GetSanitizedId;
+use Kontentblocks\Ajax\RemoteGetEditor;
 use Kontentblocks\Overlays\OnsiteEditModule;
 use Kontentblocks\Overlays\EditGlobalArea;
 use Kontentblocks\Ajax\SortModules;
@@ -197,3 +198,17 @@ function fieldGetImageCb()
 }
 
 add_action('wp_ajax_fieldGetImage', 'fieldGetImageCb');
+
+
+/**
+ * -----------------------------------------
+ * Get remote editor markup
+ * -----------------------------------------
+ */
+function getRemoteEditorCb()
+{
+    new RemoteGetEditor();
+
+}
+
+add_action('wp_ajax_getRemoteEditor', 'getRemoteEditorCb');

@@ -212,12 +212,10 @@ Class Kontentblocks
         $paths = apply_filters('kb_add_template_path', $paths);
         $paths = apply_filters('kb_add_module_path', $paths);
         foreach ($paths as $path) {
-            $dirs = glob($path . '_*', GLOB_ONLYDIR);
-
+            $dirs = glob($path . 'Module*', GLOB_ONLYDIR);
             if (!empty($dirs)) {
                 foreach ($dirs as $subdir) {
-                    $files = glob($subdir . '/*.php');
-
+                    $files = glob($subdir . '/Module*.php');
                     foreach ($files as $template) {
 
                         if (strpos(basename($template), '__') === false)
@@ -383,14 +381,6 @@ Class Kontentblocks
 
     }
 
-    function add_reveal()
-    {
-        echo "<div id='onsite-modal' class='reveal large reveal-modal'>
-            <iframe seamless id='osframe' src='' width='100%' height='400'>
-            </iframe>
-            </div>";
-
-    }
 
 
 }

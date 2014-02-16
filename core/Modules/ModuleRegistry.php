@@ -52,6 +52,7 @@ class ModuleRegistry
             if (!isset($moduleArgs['state'])) {
                 $moduleArgs['state'] = Module::getDefaultState();
             }
+            $moduleArgs['uri'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path']));
             // Add module to registry
             $this->modules[$classname] = $moduleArgs;
             // Handle connection to regions

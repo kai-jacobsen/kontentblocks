@@ -168,10 +168,6 @@
     //    border: 1px solid #eaeaea;
     border-bottom: 1px solid #bbb;
     border-top: 1px solid #fefefe;
-
-    .prime-actions{
-        display: none !important;
-    }
 }
 
 
@@ -180,33 +176,7 @@
     padding-top: 0;
 }
 
-.kb-area{
 
-    .add-modules{
-        a{
-            display: block;
-            color: #ccc;
-            font-size: 15px;
-            text-decoration: none;    
-            padding: 10px;
-            border: dashed 1px #ccc;
-            text-align: center;
-            background-color: transparent;
-            @include transition(all .3s linear);
-            margin-top: 8px;
-
-            &:hover{
-                color: #999;
-                border-color: #999;
-                background-color: #f2f2f2;
-            }
-        }
-    }
-}
-
-.area-top {
-
-}
 
 .kb_area_list_item{
     //min-height: 60px;    
@@ -334,5 +304,20 @@
     }
 }
 
+.add-modules{
+  a{
+    float: right;
+    margin-bottom: 15px;
+    margin-right: 25px;
+    text-decoration: none;
+    font-size: 12px;
 
+    &:before{
+      content: "\f132";
+      font-family: 'dashicons';
+      position: relative;
+      top: 2px;
+    }
+  }
+}
 

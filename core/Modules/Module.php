@@ -62,7 +62,7 @@ abstract class Module
      * gets called by ui display callback
      *
      */
-    public function options()
+    public function options($data)
     {
 
         $this->Fields->renderFields();
@@ -191,6 +191,11 @@ abstract class Module
         echo $this->_closeInner();
 
         echo $this->_closeListItem();
+
+        if (method_exists($this, 'adminEnqueue')){
+            $this->adminEnqueue();
+        }
+
 
     }
 
@@ -549,11 +554,8 @@ abstract class Module
             $toJSON['master'] = true;
             $toJSON['post_id'] = $this->master_id;
         }
-        $enc = json_encode($toJSON);
-        echo "<script>"
-            . "var KB = KB || {}; KB.PageModules = KB.PageModules || {};"
-            . "KB.PageModules.{$this->instance_id} = {$enc}"
-            . "</script>";
+
+        return $toJSON;
 
     }
 

@@ -71,30 +71,8 @@ var KBOnSiteEditing;
 
 
 jQuery(document).ready(function($) {
-    vex.defaultOptions.className = 'vex-theme-flat-attack';
 
     KBOnSiteEditing.init();
-
-    $("body").on('click', '.reveal', function(e) {
-        e.preventDefault();
-//        target = $(this).attr('data-url');
-//        height = $(window).height();
-//        $('#osframe').attr('src', target).attr('height', height - 200);
-//
-////        $("#onsite-modal").reveal({animation: 'fade'});
-//       openedModal = vex.open({
-//            content: $('#onsite-modal').html(),
-//            contentClassName: 'onsite',
-//            afterOpen: function(){
-//                
-//            }
-//        });
-        $(window).resize(function() {
-            height = $(window).height();
-            $('#osframe').attr('height', height - 200);
-        });
-
-    });
 
 });
 
