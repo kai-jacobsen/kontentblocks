@@ -17,10 +17,14 @@ class Module_Custom extends Module
         'connect' => 'any',
         'id' => 'wysiwyg',
         'controls' => array(
-            'width' => 600
+            'width' => 800
         )
     );
 
+
+    public static function init(){
+        add_filter('kb_modify_module_data', array(__CLASS__,'modifyModuleData'));
+    }
 
     public function adminEnqueue()
     {
@@ -47,13 +51,13 @@ class Module_Custom extends Module
 
         $coll = array();
 
-        foreach ($data as $k => $s) {
+        foreach ($data['items'] as $k => $s) {
 
             $item = array(
                 'content' => new \Kontentblocks\Fields\Returnobjects\Element($s['content'], array(
                         'instance_id' => $this->instance_id,
                         'key' => 'content',
-                        'arrayKey' => null,
+                        'arrayKey' => 'items',
                         'index' => $k
                     )),
                 'image' => \Kontentblocks\Utils\ImageResize::getInstance()->process($s['imgid'],1600,500,true,true,true)
@@ -80,28 +84,35 @@ class Module_Custom extends Module
             return $data;
         }
 
-        $coll = array();
-        foreach ($data['content'] as $k => $v) {
-            $coll[] = array(
-                'content' => $v,
-                'imgid' => $data['imgid'][$k]
-            );
-        }
-        return stripslashes_deep($coll);
+        if (!is_array($data))
+            return $data;
+
+        return stripslashes_deep(array('items' => $data['items']));
     }
 
     private function prepareData($data)
     {
         if (empty($data)){
-            return;
+            return array();
         }
         $pre = array();
         foreach ($data as $item) {
-            $item['imgsrc'] = wp_prepare_attachment_for_js($item['imgid']);
+            $item['imgsrc'] = (isset($item['imgid'])) ? wp_prepare_attachment_for_js($item['imgid']) : null;
             $pre[] = $item;
         }
         return $pre;
     }
 
+    public static function modifyModuleData($data){
+        if (empty($data['items'])){
+            return array();
+        }
+        $pre = array();
+        foreach ($data['items'] as $item) {
+            $item['imgsrc'] = wp_prepare_attachment_for_js($item['imgid']);
+            $pre['items'][] = $item;
+        }
+        return $pre;
+    }
 
 }

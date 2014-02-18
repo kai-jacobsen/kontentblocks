@@ -4,18 +4,20 @@ KB.Ajax = (function($) {
 
     return {
         send: function(data, callback, scope) {
-            data.supplemental = data.supplemental || {};
-            data.count = parseInt($('#kb_all_blocks').val(), 10);
-            data.nonce = $('#_kontentblocks_ajax_nonce').val();
-//            data.post_id = parseInt($('#post_ID').val(), 10) || -1;
-            data.post_id = KB.Screen.post_id;
-            data.kbajax = true;
+            var pid = (KB.Screen && KB.Screen.post_id) ? KB.Screen.post_id : false;
+            var sned = _.extend( {
+                supplemental: data.supplemental || {},
+            count: parseInt($('#kb_all_blocks').val(), 10),
+            nonce: $('#_kontentblocks_ajax_nonce').val(),
+            post_id: pid,
+            kbajax: true
+            }, data);
 
             $('#publish').attr('disabled', 'disabled');
 
             return $.ajax({
                 url: ajaxurl,
-                data: data,
+                data: sned,
                 type: 'POST',
                 dataType: 'json',
                 success: function(data) {

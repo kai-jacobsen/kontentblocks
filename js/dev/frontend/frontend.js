@@ -200,18 +200,17 @@ jQuery(document).ready(function () {
                     var key = data.key;
                     var value = ed.getContent();
                     var index = data.index;
-
+                    var arrayKey = data.arraykey;
 
                     var moduleData = _.clone(KB.CurrentModel.get('moduleData'));
-                    console.log(index);
-                    if (!_.isUndefined(index)){
+                    if (!_.isUndefined(index) && !_.isUndefined(arrayKey)){
+                        moduleData[arrayKey][index][key] = value;
+                    } else if (!_.isUndefined(index)) {
                         moduleData[index][key] = value;
-                    } else {
-                        moduleData[key] = value;
+                    } else if (!_.isUndefined(arrayKey)){
+                        moduleData[arrayKey][key] = value;
                     }
-
                     KB.CurrentModel.set('moduleData', moduleData);
-                    console.log(KB.CurrentModel.get('moduleData'));
 
 //                    if (KB.FrontendEditModal) {
 //                        KB.FrontendEditModal.serialize();

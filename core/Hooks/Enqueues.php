@@ -45,6 +45,11 @@ class Enqueues
         // enqueue scripts
         if (is_admin()) {
 
+            $config = array(
+                'url' => KB_PLUGIN_URL,
+                'frontend' => false
+            );
+
             // Main Stylesheet
             wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
             $this->enqueueStyles();
@@ -56,7 +61,7 @@ class Enqueues
 
             wp_enqueue_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
             wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse'), null, true);
-
+            wp_localize_script('KB-Backend', 'KBAppConfig', $config);
             wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend', 'wp-color-picker', 'kb-extensions'), null, true);
             // Main Kontentblocks script file
             // add Kontentblocks l18n strings

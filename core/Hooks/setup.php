@@ -37,6 +37,7 @@ function deleteBackup($post_id)
 {
     BackupManager::deletePostCallback($post_id);
 }
+
 add_action('delete_post', __NAMESPACE__ . '\deleteBackup');
 
 /*
@@ -56,17 +57,27 @@ add_filter('get_media_item_args', __NAMESPACE__ . '\readd_submit_button', 99, 1)
 
 
 // todo change name
-add_action( 'init', '\Kontentblocks\Hooks\vipx_allow_contenteditable_on_divs' );
-function vipx_allow_contenteditable_on_divs() {
+add_action('init', '\Kontentblocks\Hooks\vipx_allow_contenteditable_on_divs');
+function vipx_allow_contenteditable_on_divs()
+{
     global $allowedposttags;
 
-    $tags = array( 'div', 'h1', 'img', 'h2', 'h3' );
-    $new_attributes = array( 'contenteditable' => array(), 'data-key' => array(), 'data-module' => array(), 'data-arrayKey' => array(), 'data-index' => array() );
+    $tags = array('div', 'h1', 'img', 'h2', 'h3', 'li', 'ol', 'ul', 'a');
+    $new_attributes = array('contenteditable' => array(), 'data-key' => array(), 'data-module' => array(), 'data-arrayKey' => array(), 'data-index' => array(), 'data-ride' => array(), 'data-slide' => array(), 'data-slide-to' => array(), 'data-target' => array(), 'style' => array());
 
-    foreach ( $tags as $tag ) {
-        if ( isset( $allowedposttags[ $tag ] ) && is_array( $allowedposttags[ $tag ] ) )
-            $allowedposttags[ $tag ] = array_merge( $allowedposttags[ $tag ], $new_attributes );
+    foreach ($tags as $tag) {
+        if (isset($allowedposttags[$tag]) && is_array($allowedposttags[$tag]))
+            $allowedposttags[$tag] = array_merge($allowedposttags[$tag], $new_attributes);
     }
 }
 
+add_filter('safe_style_css', '\Kontentblocks\Hooks\add_safe_attributes');
+function add_safe_attributes($css)
+{
+
+    $css[] = 'background-image';
+    $css[] = 'background-position';
+    $css[] = 'background-size';
+    return $css;
+}
 

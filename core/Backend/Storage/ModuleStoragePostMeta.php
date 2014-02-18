@@ -167,7 +167,6 @@ class ModuleStoragePostMeta
             $id = '_preview' . $id;
         }
 
-
         if (isset($this->modules[$id])) {
             return $this->modules[$id];
         }

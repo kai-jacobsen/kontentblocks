@@ -541,12 +541,13 @@ abstract class Module
             'settings' => $this->settings,
             'state' => $this->state,
             'instance_id' => $this->instance_id,
-            'moduleData' => $this->rawModuleData,
+            'moduleData' => apply_filters('kb_modify_module_data',$this->rawModuleData),
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->areaContext,
             'class' => get_class($this),
-            'inDynamic' => AreaRegistry::getInstance()->isDynamic($this->area)
+            'inDynamic' => AreaRegistry::getInstance()->isDynamic($this->area),
+            'uri' => $this->uri
         );
 
 

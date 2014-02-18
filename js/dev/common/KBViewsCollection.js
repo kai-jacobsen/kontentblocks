@@ -14,9 +14,7 @@ KB.ViewsCollection = function () {
 
     this.remove = function (id) {
         var view = this.get(id);
-        view.$el.fadeOut(500, function () {
-            view.remove();
-        });
+        this.trigger('kb:backend::viewDeleted', view);
         delete this.views[id];
     };
 
@@ -33,3 +31,5 @@ KB.ViewsCollection = function () {
     };
 
 };
+
+_.extend(KB.ViewsCollection.prototype, Backbone.Events);

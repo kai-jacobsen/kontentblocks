@@ -90,12 +90,14 @@ KB.TinyMCE = (function ($) {
 
 
         },
-        remoteGetEditor: function ($el, name, content) {
+        remoteGetEditor: function ($el, name, content, post_id) {
+            var pid = post_id || KB.Screen.post_id;
             var id = $el.attr('id');
             KB.Ajax.send({
                 action: 'getRemoteEditor',
                 editorId: id + '_ed',
                 editorName: name,
+                post_id: pid,
                 editorContent: content,
                 _ajax_nonce: kontentblocks.nonces.read
 

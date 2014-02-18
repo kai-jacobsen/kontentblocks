@@ -55,7 +55,7 @@ module.exports = function (grunt) {
                 nonull: true
             },
             backend: {
-                src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js', 'js/dev/backend/kb.fields.loader.js','js/cjs/app.js'],
+                src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js'],
                 dest: 'js/tmp/backend.concat.js',
                 nonull: true
             }

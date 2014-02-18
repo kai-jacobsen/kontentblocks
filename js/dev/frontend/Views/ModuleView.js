@@ -50,7 +50,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         });
 
         KB.focusedModule = this.model;
-        that.trigger('kb:frontend::viewLoaded');
     },
     reloadModal: function () {
         if (KB.FrontendEditModal) {
@@ -84,7 +83,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var that = this;
         var moduleData = {};
         moduleData[that.model.get('instance_id')] = that.model.get('moduleData');
-        console.log(moduleData);
         jQuery.ajax({
             url: ajaxurl,
             data: {
@@ -100,6 +98,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.$el.html(res.html);
                 that.model.set('moduleData', res.newModuleData);
                 that.model.view.render();
+                that.model.view.trigger('kb:moduleUpdated');
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
             },
             error: function () {

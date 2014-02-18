@@ -8,9 +8,7 @@
     </ol>
     <div class="carousel-inner">
         {% for item in items %}
-
-            <div class="item {% if loop.first %} active {% endif %}">
-                <img src="{{ item.image }}" alt="Stuff it">
+            <div style="background-image: url('{{ item.image }}'); background-position: center; background-size: cover;" class="item {% if loop.first %} active {% endif %}">
 
                 <div class="container">
                     {{ item.content.el('div').addClass('carousel-caption').html() | raw }}

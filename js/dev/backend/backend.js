@@ -28,7 +28,7 @@ KB.Modules = new KB.Backbone.ModulesCollection([], {
  *  All Areas are collected in this Backbone Collection
  *  Get by 'instance_id'
  */
-KB.Areas = new KB.Backbone.AreasCollection([], {
+KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
 });
 

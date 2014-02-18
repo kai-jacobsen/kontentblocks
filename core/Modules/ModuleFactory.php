@@ -23,7 +23,6 @@ class ModuleFactory
         }
 
 
-
         $this->environment = $environment;
 
     }

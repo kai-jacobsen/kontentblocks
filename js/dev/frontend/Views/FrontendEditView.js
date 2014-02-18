@@ -15,10 +15,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     // init
     initialize: function (options) {
         var that = this;
-
+        this.options = options;
         this.view = options.view;
 
         this.model.on('change',this.test,this);
+
+        this.on('recalibrate', this.recalibrate, this);
 
         // add form skeleton to modal
         jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON()})).appendTo(this.$el);
@@ -110,7 +112,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: 'html',
             success: function (res) {
                 that.$inner.empty();
-
+                that.$inner.attr('id', that.view.model.get('instance_id'));
                 // append the html to the inner form container
                 that.$inner.append(res);
                 // (Re)Init UI widgets
@@ -125,7 +127,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
                 // Make the modal fit
                 that.recalibrate();
-                that.view.trigger('kb:frontend::viewLoaded');
+                var localView = _.clone(that.view);
+                localView.setElement(that.$inner);
+                that.view.trigger('kb:frontend::viewLoaded', localView);
 
             },
             error: function () {
@@ -196,7 +200,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     serialize: function () {
         var that = this;
         tinymce.triggerSave();
-
         jQuery.ajax({
             url: ajaxurl,
             data: {
@@ -212,6 +215,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.options.view.$el.html(res.html);
                 that.model.set('moduleData', res.newModuleData);
                 that.model.view.render();
+                that.model.view.delegateEvents();
+                that.model.view.trigger('kb:moduleUpdated');
+
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
             },
             error: function () {

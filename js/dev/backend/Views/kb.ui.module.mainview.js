@@ -36,6 +36,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.view = this;
         // Setup View
         this.setupDefaultMenuItems();
+        KB.Views.Modules.on('kb:backend::viewDeleted', function(view){
+            view.$el.fadeOut(500);
+        });
+
 
     },
     // setup default actions for modules
