@@ -18,7 +18,8 @@ _.extend(KB.CustomModule.prototype, {
         this.defaults = {
             content: '',
             imgid: null,
-            imgsrc: null
+            imgsrc: null,
+            label: ''
         };
         this.elCount = 0;
         this.$wrapper = $('.kb-field--wrap', this.view.$el);
@@ -39,7 +40,11 @@ _.extend(KB.CustomModule.prototype, {
         });
 
         this.$wrapper.on('click', '.kb-js-generic-toggle', function () {
-            jQuery(this).next().slideToggle();
+            jQuery(this).not('input').next().slideToggle(350, function(){
+                if (KB.FrontendEditModal){
+                    KB.FrontendEditModal.recalibrate();
+                }
+            });
 
         });
 
@@ -52,6 +57,11 @@ _.extend(KB.CustomModule.prototype, {
                 select: _.bind(that.select, that)
             })
         });
+
+        this.$wrapper.on('click', '.kb-js-generic--delete', function(e){
+             $(e.currentTarget).closest('.kb-generic--list-item').hide(150);
+        });
+
         this.initialSetup();
     },
     addItem: function (data, index) {
@@ -69,6 +79,16 @@ _.extend(KB.CustomModule.prototype, {
         _.each(data.items, function (item) {
             that.addItem(item);
         });
+        $('.kb-generic--list').sortable({
+            handle: '.kb-js-generic--move',
+            stop: function(){
+                console.log('stop');
+                KB.TinyMCE.restoreEditors();
+            },
+            start:function(){
+                KB.TinyMCE.removeEditors();
+            }
+        })
     },
     viewLoaded: function (view) {
         this.preInit(view);
@@ -77,7 +97,7 @@ _.extend(KB.CustomModule.prototype, {
     },
     select: function (modal) {
         var attachment = modal.get('selection').first();
-        var url = attachment.get('sizes').thumbnail;
+        var url = attachment.get('sizes').large;
         this.$imgid.val(attachment.get('id'));
         this.$imgwrap.empty().append('<img src="' + url.url + '" >');
     }
@@ -106,10 +126,8 @@ var CustomModule = (function ($) {
 
         },
         listen: function () {
-            $('[data-ride="carousel"]').each(function () {
-                var $carousel = $(this)
-                $carousel.carousel($carousel.data())
-            })
+            $(document).foundation('orbit');
+            $(window).trigger('resize');
         }
 
     }

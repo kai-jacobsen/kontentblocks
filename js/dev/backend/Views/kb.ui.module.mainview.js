@@ -12,7 +12,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // actual module actions are outsourced to individual files
         'click.kb1 .kb-toggle': 'toggleBody',
         'click.kb2 .kb-toggle': 'setOpenStatus',
-        'mouseenter' : 'setFocusedModule'
+        'mouseenter' : 'setFocusedModule',
+        'dblclick' : 'fullscreen',
+        'click .kb-fullscreen' : 'fullscreen'
     },
     setFocusedModule: function(){
         KB.focusedModule = this.model;
@@ -37,7 +39,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // Setup View
         this.setupDefaultMenuItems();
         KB.Views.Modules.on('kb:backend::viewDeleted', function(view){
-            view.$el.fadeOut(500);
+            view.$el.fadeOut(500, function(){
+                view.$el.remove();
+            });
+
         });
 
 
@@ -82,8 +87,34 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // @todo there is a better way
         KB.Ui.repaint(this.$el);
         this.trigger('kb:backend::viewUpdated');
+    },
+    fullscreen: function(){
+        var that = this;
+        this.sizeTimer = null;
+        var $stage = $('#kontentblocks_stage');
+        $stage.addClass('fullscreen');
+        var $title = $('.fullscreen--title-wrapper', $stage);
 
+        $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + this.model.get('settings').name + "</h2>").show();
+        $('.fullscreen--close').on('click', _.bind(this.closeFullscreen,this));
+        this.$el.addClass('fullscreen-module');
+        $('#post-body').removeClass('columns-2').addClass('columns-1');
 
+        this.sizeTimer = setInterval(function(){
+            var h = $('.kb_inner', that.$el).height() + 150;
+            $stage.height(h);
+        },750);
+
+    },
+    closeFullscreen: function(){
+        var that = this;
+        var $stage = $('#kontentblocks_stage');
+        $stage.removeClass('fullscreen');
+        clearInterval(this.sizeTimer);
+        this.$el.removeClass('fullscreen-module');
+        $('#post-body').removeClass('columns-1').addClass('columns-2');
+        $('.fullscreen--title-wrapper', $stage).hide();
+        $stage.css('height', '100%');
     }
 
 });

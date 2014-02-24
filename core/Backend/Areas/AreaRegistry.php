@@ -134,6 +134,13 @@ class AreaRegistry
 
     }
 
+    public function getAreasByContext($context)
+    {
+        return array_filter($this->rawAreas, function ($area) use ($context) {
+            return ($area['context'] === $context);
+        });
+    }
+
     public function getGlobalSidebars()
     {
         return $this->globalSidebars;
@@ -222,21 +229,31 @@ class AreaRegistry
             $update = false;
 
 
-            foreach ($args['settings']['connect'] as $area_id) {
-                if (empty($this->rawAreas[$area_id])) {
-                    continue;
-                }
+            foreach ($args['settings']['connect'] as $id) {
 
-                $area = $this->rawAreas[$area_id];
+                if (in_array($id, array('top', 'normal', 'side', 'bottom'))) {
+                    foreach ($this->getAreasByContext($id) as $connection) {
+                        $args['settings']['connect'] = array($connection['id']);
+                        $this->connect($classname, $args);
+                    }
+                } else {
 
-                if (!in_array($classname, $area['assignedModules'])) {
-                    $area['assignedModules'][] = $classname;
+                    if (empty($this->rawAreas[$id])) {
+                        continue;
+                    }
+
+                    $area = $this->rawAreas[$id];
+
+                    if (!in_array($classname, $area['assignedModules'])) {
+                        $area['assignedModules'][] = $classname;
+                    }
+                    $this->rawAreas[$id] = $area;
+                    $update = true;
                 }
-                $this->rawAreas[$area_id] = $area;
-                $update = true;
             }
-        }
 
+
+        }
     }
 
     /**
@@ -244,10 +261,11 @@ class AreaRegistry
      * This needs an instance of the PostEnvironment Class to provide
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
-     * @param Kontentblocks\Admin\Environment\PostEnvironment $postData
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $postData
      * @return boolean
      */
-    public function filterForPost(PostEnvironment $postData)
+    public
+    function filterForPost(PostEnvironment $postData)
     {
 
         $pageTemplate = $postData->get('pageTemplate');
@@ -295,7 +313,8 @@ class AreaRegistry
      * @param string $field
      * @return array
      */
-    private function orderBy($areas, $field)
+    private
+    function orderBy($areas, $field)
     {
         $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
         uasort($areas, create_function('$a,$b', $code));
@@ -309,7 +328,8 @@ class AreaRegistry
      * @param bool $manual
      * @return array
      */
-    public static function getDefaults($manual = true)
+    public
+    static function getDefaults($manual = true)
     {
         return array(
             'id' => '', // unique id of area

@@ -1,0 +1,36 @@
+#kb-toolbar {
+
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  left: 0;
+  background-color: #333;
+  z-index: 999999;
+  height: 35px;
+
+  .mce-ico{
+    color: #fff;
+  }
+
+  .mce-toolbar-grp{
+    background-color: #333;
+    min-width: 650px;
+  }
+
+  .mce-i-kbcancleinline{
+    font-family: 'dashicons';
+
+    &:before{
+      content: "\f335";
+      font-family: 'dashicons';
+      width: 15px;
+      height: 15px;
+      font-size: 22px;
+    }
+  }
+
+  .mce-menubtn span{
+    color: #fff;
+  }
+
+}

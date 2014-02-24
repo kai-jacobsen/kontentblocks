@@ -85,7 +85,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     },
     // create module action
     createModule: function (module) {
-        console.log('create called');
         // check if capability is right for this action
         if (KB.Checks.userCan('create_kontentblocks')) {
         } else {
@@ -94,7 +93,8 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
 
         // check if block limit isn't reached
         var Area = KB.Areas.get(this.options.area.model.get('id'));
-        if (KB.Checks.blockLimit(Area)) {
+        if (!KB.Checks.blockLimit(Area)) {
+            console.log('block limit reached');
             KB.Notice.notice('Limit for this area reached', 'error');
             return false;
         }

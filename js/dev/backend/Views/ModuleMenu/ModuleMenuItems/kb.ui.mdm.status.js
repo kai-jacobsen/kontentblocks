@@ -31,7 +31,6 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
     },
     success: function(){
         this.options.parent.$head.toggleClass('module-inactive');
-        this.options.parent.$el.toggleClass('kb_inactive');
         this.options.parent.$el.toggleClass('activated deactivated');
         KB.Notice.notice('Status changed', 'success');
     }

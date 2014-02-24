@@ -36,7 +36,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON()}));
     },
     openOptions: function () {
-
         // There can and should always be only a single instance of the modal
         if (KB.FrontendEditModal) {
             KB.FrontendEditModal.destroy();
@@ -56,6 +55,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             KB.FrontendEditModal.reload(this);
         }
         KB.CurrentModel = this.model;
+        KB.focusedModule = this.model;
+
     },
     openLayoutControls: function () {
 
@@ -76,13 +77,16 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var $controls = jQuery('.os-controls', this.$el);
         var pos = this.$el.offset();
         var mwidth = this.$el.width() - 150;
-        $controls.offset({ top: pos.top + 60, left: pos.left - 15});
+        $controls.offset({ top: pos.top + 20, left: pos.left - 15, zIndex: 999999});
 //        $controls.css({'top':pos.top + 'px', 'right':0})
     },
     updateModule: function () {
         var that = this;
         var moduleData = {};
+        var refresh = false;
         moduleData[that.model.get('instance_id')] = that.model.get('moduleData');
+
+
         jQuery.ajax({
             url: ajaxurl,
             data: {
@@ -90,12 +94,16 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 data: jQuery.param(moduleData).replace(/\'/g, '%27'),
                 module: that.model.toJSON(),
                 editmode: 'update',
+                refresh: refresh,
                 _ajax_nonce: kontentblocks.nonces.update
             },
             type: 'POST',
             dataType: 'json',
             success: function (res) {
-                that.$el.html(res.html);
+                if (refresh){
+                    that.$el.html(res.html);
+                }
+                tinymce.triggerSave();
                 that.model.set('moduleData', res.newModuleData);
                 that.model.view.render();
                 that.model.view.trigger('kb:moduleUpdated');

@@ -72,12 +72,20 @@ class ModuleTemplate
      */
     private function _setupData( $modData, $addData )
     {
+
+
         if ( $addData ) {
             $data = wp_parse_args( $addData, $modData );
         }
         else {
             $data = $modData;
         }
+
+        if (!is_array($data)){
+            $data = array();
+        }
+
+        $data['module'] = $this->module->toJSON();
 
         // make sure there is a key value pair, if not
         // make 'data' the default key

@@ -10,23 +10,12 @@ class Element extends AbstractFieldReturn
     protected $el;
     protected $classes = array();
     protected $attributes = array();
+    protected $inlineEdit = true;
+    protected $field;
 
     public function __construct($value, $field)
     {
-        if (is_user_logged_in()) {
-            if (is_object($field)) {
-                $this->addClass('editable');
-                $this->addAttr('data-module', $field->parentModule);
-                $this->addAttr('data-key', $field->getKey());
-                $this->addAttr('data-arrayKey', $field->getArg('arrayKey'));
-            } else if (is_array($field)){
-                $this->addClass('editable');
-                $this->addAttr('data-module', $field['instance_id']);
-                $this->addAttr('data-key', $field['key']);
-                $this->addAttr('data-arrayKey', $field['arrayKey']);
-                $this->addAttr('data-index', $field['index']);
-            }
-        }
+        $this->field = $field;
         parent::__construct($value);
     }
 
@@ -47,7 +36,9 @@ class Element extends AbstractFieldReturn
         if (is_array($attr)) {
             $this->attributes = array_merge($this->attributes, $attr);
         } else {
-            $this->attributes[$attr] = $value;
+            if ($value !== false){
+                $this->attributes[$attr] = $value;
+            }
         }
         return $this;
 
@@ -62,6 +53,23 @@ class Element extends AbstractFieldReturn
 
     public function html()
     {
+
+        if (is_user_logged_in() && $this->inlineEdit) {
+            if (is_object($this->field)) {
+                $this->addClass('editable');
+                $this->addAttr('data-module', $this->field->parentModule);
+                $this->addAttr('data-key', $this->field->getKey());
+                $this->addAttr('data-arrayKey', $this->field->getArg('arrayKey'));
+            } else if (is_array($this->field)) {
+                $this->addClass('editable');
+                $this->addAttr('data-module', $this->field['instance_id']);
+                $this->addAttr('data-key', $this->field['key']);
+                $this->addAttr('data-arrayKey', $this->field['arrayKey']);
+                $this->addAttr('data-index', $this->field['index']);
+            }
+        }
+
+
         $format = '<%1$s %3$s>%2$s</%1$s>';
         $filtered = apply_filters('the_content', $this->value);
         $codeblocks = $this->fixcodeblocks($filtered);
@@ -112,6 +120,13 @@ class Element extends AbstractFieldReturn
     public function __toString()
     {
         return $this->value;
+    }
+
+    public function inlineEdit($bool)
+    {
+        $in = filter_var($bool, FILTER_VALIDATE_BOOLEAN);
+        $this->inlineEdit = $in;
+        return $this;
     }
 
 }

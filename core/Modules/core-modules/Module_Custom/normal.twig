@@ -1,27 +1,14 @@
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        {% for item in items %}
-            <li data-target="#myCarousel"
-                data-slide-to="{{ loop.index0 }}" {% if (loop.first) %} class="active" {% endif %}></li>
-        {% endfor %}
-    </ol>
-    <div class="carousel-inner">
-        {% for item in items %}
-            <div style="background-image: url('{{ item.image }}'); background-position: center; background-size: cover;" class="item {% if loop.first %} active {% endif %}">
+<ul class="example-orbit" data-orbit>
 
-                <div class="container">
-                    {{ item.content.el('div').addClass('carousel-caption').html() | raw }}
-                </div>
+    {% for item in items %}
+        <li style="background-image: url('{{ item.image }}'); background-position: center; background-size: cover;" class="item {% if loop.first %} active {% endif %}">
+            <div class="orbit-caption">
+                {{ item.content.inlineEdit(false).el('div').addClass('carousel-caption').html() | raw }}
             </div>
+        </li>
 
-        {% endfor %}
+    {% endfor %}
 
-    </div>
+</ul>
 
-</div>
-<a class="left carousel-control" href="#myCarousel" data-slide="prev"><span
-            class="glyphicon glyphicon-chevron-left"></span></a>
-<a class="right carousel-control" href="#myCarousel" data-slide="next"><span
-            class="glyphicon glyphicon-chevron-right"></span></a>
-</div><!-- /.carousel -->
+

@@ -26,21 +26,177 @@
   margin: 0px 5px 0 5px;
   background: #f2f2f2;
   border: 1px solid #ccc;
-  border-bottom: 0;
-  border-left: 0;
   color: #333;
+  border-radius: 4px;
 }
 
-/* line 13, sass/partials/_common/_common.scss */
+/* line 12, sass/partials/_common/_common.scss */
+.kb-generic--image-wrapper {
+  height: 150px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* line 18, sass/partials/_common/_common.scss */
+.kb-generic--image-wrapper img {
+  vertical-align: middle;
+}
+
+/* line 23, sass/partials/_common/_common.scss */
 .kb-generic--toggle-box {
   padding: 0 5px 5px;
 }
 
-/* line 17, sass/partials/_common/_common.scss */
+/* line 27, sass/partials/_common/_common.scss */
 .kb-generic--list {
   margin: 0;
   list-style: none;
+  padding: 20px 0;
+}
+/* line 32, sass/partials/_common/_common.scss */
+.kb-generic--list li {
+  margin-bottom: 10px;
+}
+
+/* line 37, sass/partials/_common/_common.scss */
+.kb-field--wrap {
+  padding: 10px;
+}
+
+/* line 41, sass/partials/_common/_common.scss */
+.kb-js-generic--move:before {
+  content: "\f156";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  font-size: 20px;
+  cursor: move;
+}
+
+/* line 51, sass/partials/_common/_common.scss */
+.kb-js-generic--delete:before {
+  content: "\f117";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  font-size: 18px;
+}
+
+/* line 60, sass/partials/_common/_common.scss */
+.kb-js-generic--move, .kb-js-generic--delete {
+  display: inline-block;
+  margin: 0 3px;
+  color: #999;
+  position: relative;
+  top: 6px;
+}
+
+/* line 68, sass/partials/_common/_common.scss */
+.kb-generic--editable-title {
+  display: inline-block;
+}
+
+/* line 1, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen {
+  min-height: 750px;
+}
+/* line 7, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .kb-whiteout {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  display: block !important;
+  z-index: 49;
+}
+/* line 18, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen--title-wrapper {
+  position: absolute;
+  z-index: 50;
+  left: 15px;
+  top: 15px;
+}
+/* line 24, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen--title-wrapper h2 {
+  font-family: 'open sans';
+  font-weight: 100;
+  font-size: 30px;
+}
+/* line 30, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen--title-wrapper .fullscreen--close:before {
+  content: "\f335";
+  width: 15px;
+  height: 15px;
+  display: block;
+  color: #333;
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  z-index: 52;
+  font-family: 'dashicons';
+  font-size: 25px;
+}
+/* line 47, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module {
+  position: absolute;
+  left: 15px;
+  top: 80px;
+  z-index: 51;
+  width: 95%;
   padding: 0;
+  border: none;
+}
+/* line 56, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module .block-head {
+  display: none;
+}
+/* line 60, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module .menu-wrap {
+  top: -50px;
+}
+/* line 64, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module .kb_inner {
+  border: none;
+}
+
+/* line 1, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  left: 0;
+  background-color: #333;
+  z-index: 999999;
+  height: 35px;
+}
+/* line 11, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-ico {
+  color: #fff;
+}
+/* line 15, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-toolbar-grp {
+  background-color: #333;
+  min-width: 650px;
+}
+/* line 20, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-i-kbcancleinline {
+  font-family: 'dashicons';
+}
+/* line 23, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-i-kbcancleinline:before {
+  content: "\f335";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  font-size: 22px;
+}
+/* line 32, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-menubtn span {
+  color: #fff;
 }
 
 /* line 1, sass/partials/_block_style.scss */
@@ -50,17 +206,17 @@
   opacity: .9;
 }
 
-/* line 8, sass/partials/_block_style.scss */
+/* line 7, sass/partials/_block_style.scss */
 .kb_block.cantsort .block-head {
   cursor: no-drop !important;
 }
 
-/* line 12, sass/partials/_block_style.scss */
+/* line 11, sass/partials/_block_style.scss */
 .kb_toggle_box {
   float: left;
 }
 
-/* line 16, sass/partials/_block_style.scss */
+/* line 15, sass/partials/_block_style.scss */
 h2.kb-title {
   border-radius: 4px;
   background: #eaeaea;
@@ -70,7 +226,7 @@ h2.kb-title {
   box-shadow: 1px solid #fff;
 }
 
-/* line 29, sass/partials/_block_style.scss */
+/* line 28, sass/partials/_block_style.scss */
 .kb_block {
   margin: 0;
   padding: 6px;
@@ -78,27 +234,27 @@ h2.kb-title {
   position: relative;
   z-index: 15;
 }
-/* line 36, sass/partials/_block_style.scss */
+/* line 35, sass/partials/_block_style.scss */
 .kb_block.kb-open .block-head {
   -webkit-box-shadow: 1px 1px 1px white;
   box-shadow: 1px 1px 1px white;
 }
-/* line 40, sass/partials/_block_style.scss */
+/* line 39, sass/partials/_block_style.scss */
 .kb_block.kb_inactive {
   z-index: 1002;
   position: relative;
 }
 
-/* line 46, sass/partials/_block_style.scss */
+/* line 45, sass/partials/_block_style.scss */
 .kb-name .block-title {
   border: none;
 }
-/* line 52, sass/partials/_block_style.scss */
+/* line 51, sass/partials/_block_style.scss */
 .kb-name .block-title:focus {
   width: 100%;
 }
 
-/* line 58, sass/partials/_block_style.scss */
+/* line 56, sass/partials/_block_style.scss */
 .kb-move {
   width: 16px;
   height: 16px;
@@ -109,12 +265,12 @@ h2.kb-title {
   opacity: .4;
   cursor: move;
 }
-/* line 68, sass/partials/_block_style.scss */
+/* line 66, sass/partials/_block_style.scss */
 .kb-move:hover {
   opacity: 1;
 }
 
-/* line 74, sass/partials/_block_style.scss */
+/* line 71, sass/partials/_block_style.scss */
 .kb_inner {
   padding: 0px;
   overflow: hidden;
@@ -123,24 +279,24 @@ h2.kb-title {
   border: 1px solid #e6e6e6;
 }
 
-/* line 82, sass/partials/_block_style.scss */
+/* line 79, sass/partials/_block_style.scss */
 .ui-icon {
   float: left;
 }
 
-/* line 86, sass/partials/_block_style.scss */
+/* line 83, sass/partials/_block_style.scss */
 .kb_block_title {
   padding: 0px;
 }
 
-/* line 91, sass/partials/_block_style.scss */
+/* line 88, sass/partials/_block_style.scss */
 .kb_block_title .description {
   padding: 0;
   margin: 0;
   padding: 6px 20px;
 }
 
-/* line 97, sass/partials/_block_style.scss */
+/* line 94, sass/partials/_block_style.scss */
 .kb_toggle_box {
   line-height: 30px;
   margin-right: 8px;
@@ -150,32 +306,32 @@ h2.kb-title {
   cursor: pointer;
 }
 
-/* line 106, sass/partials/_block_style.scss */
+/* line 103, sass/partials/_block_style.scss */
 .kb_shortcode_display {
   padding: 10px 0;
 }
 
-/* line 110, sass/partials/_block_style.scss */
+/* line 107, sass/partials/_block_style.scss */
 .kb-toggle-editor {
   float: right;
 }
 
-/* line 114, sass/partials/_block_style.scss */
+/* line 111, sass/partials/_block_style.scss */
 .kb_block_area {
   width: 200px;
 }
 
-/* line 118, sass/partials/_block_style.scss */
+/* line 115, sass/partials/_block_style.scss */
 .chzn-container {
   margin-right: 15px;
 }
 
-/* line 122, sass/partials/_block_style.scss */
+/* line 119, sass/partials/_block_style.scss */
 .prop-wrapper {
   clear: both;
 }
 
-/* line 126, sass/partials/_block_style.scss */
+/* line 123, sass/partials/_block_style.scss */
 h5.kb_properties_title {
   font-size: 14px;
   font-style: italic;
@@ -185,7 +341,7 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 135, sass/partials/_block_style.scss */
+/* line 132, sass/partials/_block_style.scss */
 .kb_properties {
   background: #fff;
   padding: 10px;
@@ -193,7 +349,7 @@ h5.kb_properties_title {
   clear: both;
 }
 
-/* line 145, sass/partials/_block_style.scss */
+/* line 142, sass/partials/_block_style.scss */
 .edit input {
   width: 180px !important;
   margin-left: -3px;
@@ -205,24 +361,24 @@ h5.kb_properties_title {
   box-shadow: none;
 }
 
-/* line 155, sass/partials/_block_style.scss */
+/* line 152, sass/partials/_block_style.scss */
 .edit input:focus, .edit input:hover {
   background: #fff;
   border-bottom: 1px solid #aaa;
   border-right: 1px solid #aaa;
 }
 
-/* line 161, sass/partials/_block_style.scss */
+/* line 158, sass/partials/_block_style.scss */
 .chzn-container {
   margin-bottom: 15px;
 }
 
-/* line 165, sass/partials/_block_style.scss */
+/* line 162, sass/partials/_block_style.scss */
 .li.ui-state-highlight {
   background: #f2f2f2;
 }
 
-/* line 169, sass/partials/_block_style.scss */
+/* line 166, sass/partials/_block_style.scss */
 .block-head {
   border-radius: 2px;
   border: 1px solid #f2f2f2;
@@ -244,12 +400,12 @@ h5.kb_properties_title {
   font-weight: 100;
 }
 
-/* line 193, sass/partials/_block_style.scss */
+/* line 190, sass/partials/_block_style.scss */
 .kb_block.kb_inactive .block-head, .kb_block.deactivated .block-head {
   border-left: 3px solid red;
 }
 
-/* line 197, sass/partials/_block_style.scss */
+/* line 194, sass/partials/_block_style.scss */
 .kb-toggle {
   background: url(icons/toggle.png) no-repeat #f9f9f9;
   background-position: 12px 16px;
@@ -259,7 +415,23 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 209, sass/partials/_block_style.scss */
+/* line 204, sass/partials/_block_style.scss */
+.kb-fullscreen:before {
+  content: "\f211";
+  font-family: 'dashicons';
+  width: 18px;
+  color: #999;
+  font-size: 13px;
+  height: 35px;
+  float: left;
+  cursor: pointer;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  top: 1px;
+  position: relative;
+}
+
+/* line 219, sass/partials/_block_style.scss */
 .kb-ajax-status {
   background: url(assets/ajax-loader.gif) no-repeat;
   width: 16px;
@@ -271,7 +443,7 @@ h5.kb_properties_title {
   margin-right: 35px;
 }
 
-/* line 220, sass/partials/_block_style.scss */
+/* line 230, sass/partials/_block_style.scss */
 .kb-disabled-icon {
   background: url(assets/disabled.png) no-repeat;
   width: 16px;
@@ -283,7 +455,7 @@ h5.kb_properties_title {
   background-position: 7px;
 }
 
-/* line 231, sass/partials/_block_style.scss */
+/* line 241, sass/partials/_block_style.scss */
 .kb-lock {
   width: 16px;
   height: 16px;
@@ -296,19 +468,19 @@ h5.kb_properties_title {
   cursor: pointer;
 }
 
-/* line 243, sass/partials/_block_style.scss */
+/* line 253, sass/partials/_block_style.scss */
 .kb-lock.unlocked {
   background-image: url(assets/lock-open.png);
   background-repeat: no-repeat;
 }
 
-/* line 247, sass/partials/_block_style.scss */
+/* line 258, sass/partials/_block_style.scss */
 .kb-lock.locked {
   background-image: url(assets/lock-closed.gif);
   background-repeat: no-repeat;
 }
 
-/* line 252, sass/partials/_block_style.scss */
+/* line 263, sass/partials/_block_style.scss */
 .kb-ajax-status-dark {
   background: url(assets/ajax-loader-dark.gif) no-repeat;
   width: 16px;
@@ -319,7 +491,7 @@ h5.kb_properties_title {
   display: none;
 }
 
-/* line 262, sass/partials/_block_style.scss */
+/* line 273, sass/partials/_block_style.scss */
 .kb-name {
   float: left;
   padding-left: 8px;
@@ -327,7 +499,7 @@ h5.kb_properties_title {
   font-weight: 500;
 }
 
-/* line 270, sass/partials/_block_style.scss */
+/* line 281, sass/partials/_block_style.scss */
 .kb-sub-name {
   float: left;
   width: auto;
@@ -336,12 +508,12 @@ h5.kb_properties_title {
 }
 
 /* Helper */
-/* line 278, sass/partials/_block_style.scss */
+/* line 289, sass/partials/_block_style.scss */
 .wp-dialog {
   z-index: 101;
 }
 
-/* line 282, sass/partials/_block_style.scss */
+/* line 293, sass/partials/_block_style.scss */
 .ui-widget-overlay {
   width: 10000px !important;
   height: 10000px !important;
@@ -349,7 +521,7 @@ h5.kb_properties_title {
   z-index: 19;
 }
 
-/* line 289, sass/partials/_block_style.scss */
+/* line 300, sass/partials/_block_style.scss */
 .kb-inactive-indicator {
   width: 30px;
   height: 30px;
@@ -360,12 +532,12 @@ h5.kb_properties_title {
   background-color: red;
 }
 
-/* line 299, sass/partials/_block_style.scss */
+/* line 310, sass/partials/_block_style.scss */
 .kb_inactive .kb-inactive-indicator, .deactivated .kb-inactive-indicator {
   display: block;
 }
 
-/* line 303, sass/partials/_block_style.scss */
+/* line 314, sass/partials/_block_style.scss */
 .menu-wrap {
   border-top: 0;
   overflow: hidden;
@@ -375,12 +547,12 @@ h5.kb_properties_title {
   top: 8px;
   right: 7px;
 }
-/* line 313, sass/partials/_block_style.scss */
+/* line 324, sass/partials/_block_style.scss */
 .menu-wrap .module-actions {
   height: 30px;
   overflow: hidden;
 }
-/* line 319, sass/partials/_block_style.scss */
+/* line 329, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li {
   display: block;
   text-align: center;
@@ -392,18 +564,18 @@ h5.kb_properties_title {
   transition: all 0.3s linear;
   /*background-position: 0 0px !important;*/
 }
-/* line 331, sass/partials/_block_style.scss */
+/* line 340, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li:hover {
   cursor: pointer;
   /*background-position: 0 -30px !important;*/
 }
-/* line 337, sass/partials/_block_style.scss */
+/* line 345, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li .block-menu-icon {
   display: block;
   font: normal 14px/1 'dashicons' !important;
   text-shadow: 1px 1px 1px #fff;
 }
-/* line 342, sass/partials/_block_style.scss */
+/* line 350, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li .block-menu-icon:before {
   width: 30px;
   height: 34px;
@@ -413,27 +585,27 @@ h5.kb_properties_title {
   top: 4px;
   line-height: 25px;
 }
-/* line 353, sass/partials/_block_style.scss */
+/* line 361, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li .block-menu-icon:hover:before {
   color: #333;
 }
-/* line 358, sass/partials/_block_style.scss */
+/* line 366, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li .block-menu-icon.kb-delete:before {
   /*background: url('assets/delete.png') no-repeat;*/
   content: '\f117';
 }
-/* line 364, sass/partials/_block_style.scss */
+/* line 372, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li .block-menu-icon.module-status:before {
   /*background: url('assets/power.png') no-repeat;*/
   content: '\f177';
 }
-/* line 369, sass/partials/_block_style.scss */
+/* line 377, sass/partials/_block_style.scss */
 .menu-wrap .module-actions li .block-menu-icon.kb-duplicate:before {
   /*background: url('assets/duplicate.png') no-repeat;*/
   content: '\f105';
 }
 
-/* line 381, sass/partials/_block_style.scss */
+/* line 389, sass/partials/_block_style.scss */
 .kb-area .ui-state-highlight {
   background: transparent;
   border: 1px dotted #CCCCCC;
@@ -2130,7 +2302,7 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   display: none;
 }
 
-/* line 76, sass/kontentblocks.scss */
+/* line 83, sass/kontentblocks.scss */
 .ui-state-highlight {
   height: 1.1em;
   line-height: 1.2em;
@@ -2140,14 +2312,14 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   margin: 0 5px;
 }
 
-/* line 85, sass/kontentblocks.scss */
+/* line 92, sass/kontentblocks.scss */
 .ui-sortable-helper {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
   filter: alpha(opacity=70);
   opacity: .7;
 }
 
-/* line 91, sass/kontentblocks.scss */
+/* line 98, sass/kontentblocks.scss */
 .area-meta {
   float: right;
   width: 200px;
@@ -2157,12 +2329,12 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   color: #999;
 }
 
-/* line 100, sass/kontentblocks.scss */
+/* line 107, sass/kontentblocks.scss */
 .kb_vcard_image {
   float: left;
 }
 
-/* line 104, sass/kontentblocks.scss */
+/* line 111, sass/kontentblocks.scss */
 .kb_image_frame {
   width: 150px;
   height: 150px;
@@ -2174,33 +2346,33 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   margin-bottom: 15px;
 }
 
-/* line 117, sass/kontentblocks.scss */
+/* line 124, sass/kontentblocks.scss */
 .vcard-upload {
   margin-top: 15px;
 }
 
-/* line 121, sass/kontentblocks.scss */
+/* line 128, sass/kontentblocks.scss */
 .vcard_description {
   float: left;
 }
 
-/* line 125, sass/kontentblocks.scss */
+/* line 132, sass/kontentblocks.scss */
 .kb_vcard_item {
   overflow: hidden;
 }
 
-/* line 129, sass/kontentblocks.scss */
+/* line 136, sass/kontentblocks.scss */
 .slider_image_frame {
   width: 300px;
   height: 150px;
 }
 
-/* line 134, sass/kontentblocks.scss */
+/* line 141, sass/kontentblocks.scss */
 .slider_image_frame img {
   max-height: 100%;
 }
 
-/* line 138, sass/kontentblocks.scss */
+/* line 145, sass/kontentblocks.scss */
 .kb_accordion_inner {
   display: block;
   border: 1px solid #CCC;
@@ -2208,17 +2380,17 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   padding: 8px;
 }
 
-/* line 145, sass/kontentblocks.scss */
+/* line 152, sass/kontentblocks.scss */
 #context_side .kb-sub-name {
   display: none;
 }
 
-/* line 149, sass/kontentblocks.scss */
+/* line 156, sass/kontentblocks.scss */
 .area-meta {
   border-right: 1px solid #ccc;
 }
 
-/* line 153, sass/kontentblocks.scss */
+/* line 160, sass/kontentblocks.scss */
 .clearfix:after {
   content: ".";
   display: block;
@@ -2228,28 +2400,28 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   height: 0;
 }
 
-/* line 162, sass/kontentblocks.scss */
+/* line 169, sass/kontentblocks.scss */
 .clearfix {
   display: block;
 }
 
-/* line 166, sass/kontentblocks.scss */
+/* line 173, sass/kontentblocks.scss */
 html[xmlns] .clearfix {
   display: block;
 }
 
-/* line 170, sass/kontentblocks.scss */
+/* line 177, sass/kontentblocks.scss */
 * html .clearfix {
   height: 1%;
 }
 
 /* Accordion */
-/* line 175, sass/kontentblocks.scss */
+/* line 182, sass/kontentblocks.scss */
 .accordion-head {
   margin-bottom: 20px;
 }
 
-/* line 179, sass/kontentblocks.scss */
+/* line 186, sass/kontentblocks.scss */
 .kb_new_accordion_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -2258,12 +2430,12 @@ html[xmlns] .clearfix {
 }
 
 /* Tabs */
-/* line 187, sass/kontentblocks.scss */
+/* line 194, sass/kontentblocks.scss */
 .tab-head {
   margin-bottom: 20px;
 }
 
-/* line 191, sass/kontentblocks.scss */
+/* line 198, sass/kontentblocks.scss */
 .kb_new_tab_item {
   padding: 15px;
   border: 1px dotted #ccc;
@@ -2272,105 +2444,105 @@ html[xmlns] .clearfix {
 }
 
 /* Kontentbox */
-/* line 199, sass/kontentblocks.scss */
+/* line 206, sass/kontentblocks.scss */
 .kb_kontentbox_wrapper {
   overflow: hidden;
 }
 
-/* line 203, sass/kontentblocks.scss */
+/* line 210, sass/kontentblocks.scss */
 .kb_kontentbox_content_wrapper {
   width: 75%;
   float: left;
 }
 
-/* line 208, sass/kontentblocks.scss */
+/* line 215, sass/kontentblocks.scss */
 .kb_image_wrapper {
   margin-top: 30px;
 }
 
-/* line 212, sass/kontentblocks.scss */
+/* line 219, sass/kontentblocks.scss */
 .kb_link_wrap {
   overflow: hidden;
   clear: both;
   margin-top: 15px;
 }
 
-/* line 218, sass/kontentblocks.scss */
+/* line 225, sass/kontentblocks.scss */
 .kb_kontentbox_layout_wrapper, .kb_kontentblocks_sizes_wrapper, .kb_kontentbox_align_wrapper {
   float: left;
   margin: 15px;
 }
 
-/* line 223, sass/kontentblocks.scss */
+/* line 230, sass/kontentblocks.scss */
 .kb_kontentbox_align_wrapper label {
   width: 50px;
   float: left;
 }
 
-/* line 228, sass/kontentblocks.scss */
+/* line 235, sass/kontentblocks.scss */
 .chzn-container {
   width: 200px !important;
 }
 
-/* line 232, sass/kontentblocks.scss */
+/* line 239, sass/kontentblocks.scss */
 .area_description {
   font-size: 11px;
   color: #999;
 }
 
 /* Audio */
-/* line 238, sass/kontentblocks.scss */
+/* line 245, sass/kontentblocks.scss */
 .kb_audio_item {
   padding: 8px 0;
 }
 
-/* line 242, sass/kontentblocks.scss */
+/* line 249, sass/kontentblocks.scss */
 .kb_audio_item label {
   display: block;
 }
 
 /* Video */
-/* line 247, sass/kontentblocks.scss */
+/* line 254, sass/kontentblocks.scss */
 .kb_video .kb_image_wrapper {
   float: left;
 }
 
-/* line 251, sass/kontentblocks.scss */
+/* line 258, sass/kontentblocks.scss */
 .kb_video_files_wrapper {
   margin-top: 30px;
   float: left;
 }
 
-/* line 256, sass/kontentblocks.scss */
+/* line 263, sass/kontentblocks.scss */
 .kb_video_item label {
   display: block;
 }
 
-/* line 260, sass/kontentblocks.scss */
+/* line 267, sass/kontentblocks.scss */
 .kb_video_item {
   margin-bottom: 8px;
 }
 
-/* line 264, sass/kontentblocks.scss */
+/* line 271, sass/kontentblocks.scss */
 .kb_video_Size {
   clear: both;
   padding-top: 20px;
 }
 
 /* Flexslider */
-/* line 270, sass/kontentblocks.scss */
+/* line 277, sass/kontentblocks.scss */
 .kb_button_wrapper {
   padding: 8px;
   overflow: hidden;
 }
 
-/* line 275, sass/kontentblocks.scss */
+/* line 282, sass/kontentblocks.scss */
 .uploaded {
   overflow: hidden;
   padding-bottom: 20px;
 }
 
-/* line 280, sass/kontentblocks.scss */
+/* line 287, sass/kontentblocks.scss */
 li.gallery-item {
   background: white;
   /* Old browsers */
@@ -2388,13 +2560,13 @@ li.gallery-item {
   margin: 0 20px 0 0;
 }
 
-/* line 299, sass/kontentblocks.scss */
+/* line 306, sass/kontentblocks.scss */
 li.gallery-item label {
   display: block;
   color: #eaeaea;
 }
 
-/* line 304, sass/kontentblocks.scss */
+/* line 311, sass/kontentblocks.scss */
 li.gallery-item textarea {
   border: none;
   width: 148px;
@@ -2404,19 +2576,19 @@ li.gallery-item textarea {
   border: 1px dotted #eaeaea;
 }
 
-/* line 313, sass/kontentblocks.scss */
+/* line 320, sass/kontentblocks.scss */
 li.gallery-item textarea:focus {
   background: #fff;
 }
 
 /* Sidebar Widget */
-/* line 318, sass/kontentblocks.scss */
+/* line 325, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper {
   float: left;
   margin: 0 20px 20px 0;
 }
 
-/* line 323, sass/kontentblocks.scss */
+/* line 330, sass/kontentblocks.scss */
 .kb_sidebar_select_wrapper label {
   display: block;
 }
@@ -2431,7 +2603,7 @@ li.gallery-item textarea:focus {
 
 /* line 5, sass/partials/_kontentfields-new.scss */
 .kb_field {
-  background-color: #f1f1f1;
+  background-color: #fff;
   padding: 20px 20px 25px 20px;
   border-bottom: 1px solid #f2f2f2;
   /* Shared */
@@ -2533,13 +2705,13 @@ Field Tabs
 }
 /* line 127, sass/partials/_kontentfields-new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active {
-  background-color: #f1f1f1;
-  border-right: 1px solid #aaa;
+  background-color: #fff;
+  border-right: 1px solid #eee;
 }
 /* line 132, sass/partials/_kontentfields-new.scss */
 .kb_fieldtabs ul.ui-tabs-nav li.ui-tabs-active a {
-  color: #333;
-  font-weight: 100;
+  color: #000;
+  font-weight: 500;
 }
 /* line 140, sass/partials/_kontentfields-new.scss */
 .kb_fieldtabs .ui-widget-content {
@@ -2580,7 +2752,7 @@ Field Tabs
   margin: 0;
 }
 
-/* line 331, sass/kontentblocks.scss */
+/* line 338, sass/kontentblocks.scss */
 .kb_draft {
   padding: 5px 0 5px 20px;
   border-left: 2px solid #d54e21;
@@ -2594,47 +2766,47 @@ Field Tabs
   margin-top: 0;
 }
 
-/* line 344, sass/kontentblocks.scss */
+/* line 351, sass/kontentblocks.scss */
 .kb_loading {
   opacity: .4;
 }
 
-/* line 348, sass/kontentblocks.scss */
+/* line 355, sass/kontentblocks.scss */
 input[type="checkbox"][checked] {
   opacity: .8;
 }
 
-/* line 352, sass/kontentblocks.scss */
+/* line 359, sass/kontentblocks.scss */
 .kb_block_options {
   padding: 10px;
   margin-top: 20px;
 }
 
-/* line 357, sass/kontentblocks.scss */
+/* line 364, sass/kontentblocks.scss */
 .kb_block_options .kb_field {
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
 
-/* line 363, sass/kontentblocks.scss */
+/* line 370, sass/kontentblocks.scss */
 .kb_block {
   -webkit-transition: -webkit-box-shadow .3s linear;
 }
 
-/* line 374, sass/kontentblocks.scss */
+/* line 381, sass/kontentblocks.scss */
 .tooltip {
   display: none;
   opacity: 0;
   -webkit-transition: opacity .5s linear;
 }
 
-/* line 380, sass/kontentblocks.scss */
+/* line 387, sass/kontentblocks.scss */
 .area_template {
   position: relative;
 }
 
-/* line 384, sass/kontentblocks.scss */
+/* line 391, sass/kontentblocks.scss */
 .area_template:hover .tooltip {
   display: block;
   opacity: 0;
@@ -2644,7 +2816,7 @@ input[type="checkbox"][checked] {
   opacity: 1;
 }
 
-/* line 393, sass/kontentblocks.scss */
+/* line 400, sass/kontentblocks.scss */
 .area_template img.tpl-mini {
   float: left;
   margin-right: 8px;
@@ -2659,7 +2831,7 @@ input[type="checkbox"][checked] {
  Jquery UI Custom
  ---------------------------------*/
 /* context */
-/* line 411, sass/kontentblocks.scss */
+/* line 418, sass/kontentblocks.scss */
 .maximize-side {
   position: absolute;
   width: 75%;
@@ -2670,7 +2842,7 @@ input[type="checkbox"][checked] {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 420, sass/kontentblocks.scss */
+/* line 427, sass/kontentblocks.scss */
 .maximize-normal {
   position: absolute;
   width: 75%;
@@ -2681,31 +2853,31 @@ input[type="checkbox"][checked] {
   box-shadow: 1px 1px 6px #666;
 }
 
-/* line 429, sass/kontentblocks.scss */
+/* line 436, sass/kontentblocks.scss */
 #kontentblocks_stage {
   position: relative;
   margin-bottom: 20px;
 }
 
-/* line 434, sass/kontentblocks.scss */
+/* line 441, sass/kontentblocks.scss */
 .active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {
   font-family: 'Open-Sans', sans-serif;
   font-style: italic;
   margin: 0;
 }
 
-/* line 441, sass/kontentblocks.scss */
+/* line 448, sass/kontentblocks.scss */
 .area_sidebars li {
   cursor: move;
 }
 
-/* line 445, sass/kontentblocks.scss */
+/* line 452, sass/kontentblocks.scss */
 .page-template-wrapper.context-area {
   min-height: 0px;
   overflow: hidden;
 }
 
-/* line 450, sass/kontentblocks.scss */
+/* line 457, sass/kontentblocks.scss */
 .kb_thickbox h2 {
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   font-weight: normal;
@@ -2713,23 +2885,23 @@ input[type="checkbox"][checked] {
   margin: 20px 0 0 0;
 }
 
-/* line 457, sass/kontentblocks.scss */
+/* line 464, sass/kontentblocks.scss */
 .kb_thickbox .context-header {
   margin-bottom: 20px;
 }
 
-/* line 461, sass/kontentblocks.scss */
+/* line 468, sass/kontentblocks.scss */
 #TB_window {
   z-index: 6000 !important;
 }
 
-/* line 465, sass/kontentblocks.scss */
+/* line 472, sass/kontentblocks.scss */
 textarea.quicktags {
   width: 100%;
 }
 
 /* Redirect */
-/* line 475, sass/kontentblocks.scss */
+/* line 482, sass/kontentblocks.scss */
 .redirect-wrapper input[type=radio] {
   float: left;
   width: 16px;
@@ -2738,32 +2910,32 @@ textarea.quicktags {
   margin-right: 16px;
 }
 
-/* line 484, sass/kontentblocks.scss */
+/* line 491, sass/kontentblocks.scss */
 .wp-editor-area {
   /*height: 500px;*/
 }
 
-/* line 488, sass/kontentblocks.scss */
+/* line 495, sass/kontentblocks.scss */
 #context_normal {
   /* min-height: 600px;
   _height: 600px;*/
 }
 
-/* line 493, sass/kontentblocks.scss */
+/* line 500, sass/kontentblocks.scss */
 .quicktags textarea {
   background: #fff;
 }
 
 /* Responsive Admin Layout */
 @media screen and (max-width: 1399px) {
-  /* line 499, sass/kontentblocks.scss */
+  /* line 506, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 100%;
   }
 
-  /* line 505, sass/kontentblocks.scss */
+  /* line 512, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: left;
@@ -2771,51 +2943,51 @@ textarea.quicktags {
   }
 }
 @media screen and (min-width: 1400px) {
-  /* line 519, sass/kontentblocks.scss */
+  /* line 526, sass/kontentblocks.scss */
   .area-normal.has-sidebar {
     float: left;
     min-width: 0;
     width: 65%;
   }
-  /* line 524, sass/kontentblocks.scss */
+  /* line 531, sass/kontentblocks.scss */
   .area-normal.has-sidebar.non-active-context {
     width: 33%;
   }
 
-  /* line 529, sass/kontentblocks.scss */
+  /* line 536, sass/kontentblocks.scss */
   .area-side {
     min-width: 0;
     float: right;
     width: 33%;
   }
-  /* line 534, sass/kontentblocks.scss */
+  /* line 541, sass/kontentblocks.scss */
   .area-side.active-context {
     width: 65%;
   }
 }
-/* line 549, sass/kontentblocks.scss */
+/* line 556, sass/kontentblocks.scss */
 .clear {
   clear: both;
 }
 
-/* line 553, sass/kontentblocks.scss */
+/* line 560, sass/kontentblocks.scss */
 .mceIframeContainer iframe {
   /*height: 150px !important;*/
 }
 
-/* line 557, sass/kontentblocks.scss */
+/* line 564, sass/kontentblocks.scss */
 .kb_field textarea {
   width: 100%;
   height: 80px;
 }
 
 /* Field Image Gallery */
-/* line 564, sass/kontentblocks.scss */
+/* line 571, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper {
   overflow: hidden;
 }
 
-/* line 568, sass/kontentblocks.scss */
+/* line 575, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li {
   float: left;
   margin-right: 12px;
@@ -2824,25 +2996,25 @@ textarea.quicktags {
   position: relative;
 }
 
-/* line 576, sass/kontentblocks.scss */
+/* line 583, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.selected {
   border: 3px solid blue;
 }
 
-/* line 580, sass/kontentblocks.scss */
+/* line 587, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li img {
   width: 107px;
   height: 107px;
 }
 
-/* line 586, sass/kontentblocks.scss */
+/* line 593, sass/kontentblocks.scss */
 .kb-field-gallery-info {
   min-height: 100px;
   background: #ccc;
   margin: 20px 0;
 }
 
-/* line 592, sass/kontentblocks.scss */
+/* line 599, sass/kontentblocks.scss */
 .kb-field-gallery-image-delete {
   display: none;
   position: absolute;
@@ -2854,7 +3026,7 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 603, sass/kontentblocks.scss */
+/* line 610, sass/kontentblocks.scss */
 .kb-field-gallery-image-info {
   display: none;
   position: absolute;
@@ -2866,24 +3038,24 @@ textarea.quicktags {
   cursor: pointer;
 }
 
-/* line 614, sass/kontentblocks.scss */
+/* line 621, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li:hover > span, .kb-field-gallery-wrapper li.todelete > span.delete {
   display: block;
 }
 
-/* line 618, sass/kontentblocks.scss */
+/* line 625, sass/kontentblocks.scss */
 .kb-field-gallery-wrapper li.todelete {
   opacity: .5;
 }
 
-/* line 622, sass/kontentblocks.scss */
+/* line 629, sass/kontentblocks.scss */
 .custom.kb_area_list_item {
   background: none;
   border: none;
   padding: 0;
 }
 
-/* line 629, sass/kontentblocks.scss */
+/* line 636, sass/kontentblocks.scss */
 .custom .kb_field {
   background-color: #fff !important;
 }
@@ -2891,19 +3063,19 @@ textarea.quicktags {
 /**
  * Hide Sidebar
  */
-/* line 638, sass/kontentblocks.scss */
+/* line 645, sass/kontentblocks.scss */
 .no-sidebar .attachments-browser .media-toolbar,
 .no-sidebar .attachments-browser .attachments,
 .no-sidebar .attachments-browser .uploader-inline {
   right: 0;
 }
 
-/* line 642, sass/kontentblocks.scss */
+/* line 649, sass/kontentblocks.scss */
 .no-sidebar .media-sidebar {
   display: none;
 }
 
-/* line 646, sass/kontentblocks.scss */
+/* line 653, sass/kontentblocks.scss */
 .smaller {
   top: 100px;
   right: 350px;
@@ -2911,7 +3083,7 @@ textarea.quicktags {
   left: 350px;
 }
 
-/* line 653, sass/kontentblocks.scss */
+/* line 660, sass/kontentblocks.scss */
 .smaller {
   top: 10%;
   right: 15%;
@@ -2919,12 +3091,12 @@ textarea.quicktags {
   left: 15%;
 }
 
-/* line 660, sass/kontentblocks.scss */
+/* line 667, sass/kontentblocks.scss */
 .kb-hide {
   display: none;
 }
 
-/* line 664, sass/kontentblocks.scss */
+/* line 671, sass/kontentblocks.scss */
 .onsite-editing .editable {
   outline: 1px dashed #999;
   padding: 3px;

@@ -38,10 +38,15 @@ class GetSanitizedId
     private function checkAreaExists($ad)
     {
         $sane = sanitize_title($ad);
-        $Storage = \Kontentblocks\Helper\getStorage($ad);
-        $langs = $Storage->getDataBackend()->getLanguagesForKey($sane);
-        // key exists
-        if ($langs !== false) {
+
+        $posts = get_posts(array(
+            'post_type' => 'kb-dyar',
+            'posts_per_page' => 1,
+            'name' => $sane,
+            'suppress_filters' => false
+        ));
+
+        if (!empty($posts)) {
             return 'translate';
         }
 

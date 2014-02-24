@@ -39,7 +39,7 @@ abstract class Module
         $this->moduleData = $data;
 
         if (isset($environment)) {
-            $this->setEnvVars($environment);
+            $this->setEnvVarsFromEnvironment($environment);
         }
 
 
@@ -91,6 +91,7 @@ abstract class Module
      */
     final public function module($data = null)
     {
+
 
         if (is_null($data) && !is_null($this->moduleData)){
             $data = $this->moduleData;
@@ -288,8 +289,9 @@ abstract class Module
         $html .= "<div class='kb-move'></div>";
         // toggle button
         $html .= "<div class='kb-toggle'></div>";
+        $html .= "<div class='kb-fullscreen'></div>";
 
-        $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
+//        $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
 
         // locked icon
         if (!$this->settings['disabled'] && KONTENTLOCK) {
@@ -390,6 +392,7 @@ abstract class Module
             _doing_it_wrong('set() on block instance', '$args must be an array of key/value pairs', '1.0.0');
             return false;
         }
+
         foreach ($args as $k => $v) {
             if (method_exists($this, 'set' . ucfirst($k))) {
                 $this->{'set' . ucfirst($k)}($v);
@@ -398,6 +401,11 @@ abstract class Module
             }
         }
 
+    }
+
+    public function setEnvVars($vars)
+    {
+        $this->envVars = wp_parse_args($this->envVars, $vars);
     }
 
     public function setAreaContext($areaContext)
@@ -416,13 +424,15 @@ abstract class Module
 
     }
 
-    public function setEnvVars($environment)
+    public function setEnvVarsfromEnvironment($environment)
     {
-        $this->envVars = array(
+
+
+        $this->envVars = wp_parse_args($this->envVars,array(
             'postType' => $environment->get('postType'),
             'pageTemplate' => $environment->get('pageTemplate'),
             'postId' => absint($environment->get('postid'))
-        );
+        ));
 
     }
 
@@ -536,12 +546,12 @@ abstract class Module
     public function toJSON()
     {
         // todo only used on frontend
-
         $toJSON = array(
+            'envVars' => $this->envVars,
             'settings' => $this->settings,
             'state' => $this->state,
             'instance_id' => $this->instance_id,
-            'moduleData' => apply_filters('kb_modify_module_data',$this->rawModuleData),
+            'moduleData' => apply_filters('kb_modify_module_data',$this->rawModuleData, $this->settings),
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->areaContext,
@@ -549,7 +559,6 @@ abstract class Module
             'inDynamic' => AreaRegistry::getInstance()->isDynamic($this->area),
             'uri' => $this->uri
         );
-
 
         if (isset($this->master) && $this->master){
             $toJSON['master'] = true;

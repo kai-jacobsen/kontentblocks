@@ -5,29 +5,46 @@ KB.TinyMCE = (function ($) {
     return {
         removeEditors: function () {
             // do nothing if it is the native editor
-            $('.wp-editor-wrap').each(function () {
+            $('.wp-editor-area').each(function () {
                 if ($(this).attr('id') === 'wp-content-wrap') {
                     // do nothing
                 } else {
                     // get the id
-                    var textarea = jQuery(this).find('textarea').attr('id');
+                    var textarea = this.id;
+                    console.log(textarea, 'removeEd');
                     // remove controls
-                    tinyMCE.execCommand('mceRemoveControl', false, textarea);
+                    tinyMCE.execCommand('mceRemoveEditor', false, textarea);
                 }
             });
         },
         restoreEditors: function () {
             $('.wp-editor-wrap').each(function () {
-                // find all textareas with tinymce support
-                var textarea = $(this).find('textarea').attr('id');
-                // add controls back
-                tinyMCE.execCommand('mceAddControl', false, textarea);
-                //
-                // if instance was in html mode, we have to switch manually back to visual mode
-                // will look ugly otherwise, and don't see an alternative
-                if ($(this).hasClass('html-active')) {
-                    $(this).removeClass('html-active').addClass('tmce-active');
-                }
+//                // find all textareas with tinymce support
+//                var textarea = $(this).find('textarea').attr('id');
+//                // add controls back
+//                tinyMCE.execCommand('mceAddEditor', false, textarea);
+//                //
+//                // if instance was in html mode, we have to switch manually back to visual mode
+//                // will look ugly otherwise, and don't see an alternative
+//                if ($(this).hasClass('html-active')) {
+//                    $(this).removeClass('html-active').addClass('tmce-active');
+//                }
+                var settings = tinyMCEPreInit.mceInit.content;
+
+                var id = $(this).find('textarea').attr('id');
+
+                // add new editor id to settings
+                settings.elements = id;
+                settings.selector = '#'+id;
+                settings.id = id;
+                settings.height = 350;
+                settings.setup = function (ed) {
+                    ed.on('init', function () {
+                        jQuery(document).trigger('newEditor', ed);
+                    });
+                };
+
+                var ed = tinymce.init(settings);
             });
         },
         addEditor: function ($el, quicktags) {
@@ -43,6 +60,7 @@ KB.TinyMCE = (function ($) {
                 var id = this.id;
                 // add new editor id to settings
                 settings.elements = id;
+                settings.selector = '#'+id;
                 settings.id = id;
                 settings.height = 350;
                 settings.setup = function (ed) {
@@ -51,8 +69,9 @@ KB.TinyMCE = (function ($) {
                     });
                 };
 
-                var ed = new tinymce.Editor(id, settings, tinymce.EditorManager);
-                ed.render();
+                var ed = tinymce.init(settings);
+//                ed.render();
+                console.log(ed);
 //                new tinymce.Editor(id, settings).render();
 //                tinyMCE.init(settings);
 

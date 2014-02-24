@@ -4,13 +4,11 @@ KB.Checks = (function($) {
     return {
         blockLimit: function(areamodel) {
             var limit = areamodel.get('limit');
-            // todo potentially wrong
-            var children = areamodel.get('assignedModules').length;
-            if (limit === 0) {
-                return false;
-            }
+            // todo potentially wrong, yeah it's wrong
+            var children = $('#' + areamodel.get('id') + ' li.kb_block').length;
 
-            if (children === limit) {
+            if (limit !== 0 && children === limit) {
+                console.log('asdf');
                 return false;
             }
 

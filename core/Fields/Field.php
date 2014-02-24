@@ -393,9 +393,9 @@ abstract class Field
     {
         if ($rnd) {
             $number = rand(1, 9999);
-            $id = $this->baseId . '_' . $this->key . '_' . $number;
+            $id = sanitize_title($this->baseId . '_' . $this->key . '_' . $number);
         } else {
-            $id = $this->baseId . '_' . $this->key;
+            $id = sanitize_title($this->baseId . '_' . $this->key);
         }
 
         return $id;

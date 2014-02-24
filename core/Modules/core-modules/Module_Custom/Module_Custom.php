@@ -22,8 +22,9 @@ class Module_Custom extends Module
     );
 
 
-    public static function init(){
-        add_filter('kb_modify_module_data', array(__CLASS__,'modifyModuleData'));
+    public static function init()
+    {
+        add_filter('kb_modify_module_data', array(__CLASS__, 'modifyModuleData'), 10, 2);
     }
 
     public function adminEnqueue()
@@ -31,9 +32,8 @@ class Module_Custom extends Module
         wp_enqueue_script('module-custom', $this->uri . '/module-custom.js', false, false, true);
     }
 
-    public function options($data)
+    public function optionsCallback($data)
     {
-
         $data = $this->prepareData($data);
         $Bridge = JSONBridge::getInstance();
         $Bridge->registerData('moduleData', $this->instance_id, $data);
@@ -47,11 +47,13 @@ class Module_Custom extends Module
         $Bridge = JSONBridge::getInstance();
         $Bridge->registerData('moduleData', $this->instance_id, $data);
 
-        $tpl = 'normal.twig';
-
         $coll = array();
 
         foreach ($data['items'] as $k => $s) {
+
+            if (!is_array($s)) {
+                continue;
+            }
 
             $item = array(
                 'content' => new \Kontentblocks\Fields\Returnobjects\Element($s['content'], array(
@@ -60,7 +62,8 @@ class Module_Custom extends Module
                         'arrayKey' => 'items',
                         'index' => $k
                     )),
-                'image' => \Kontentblocks\Utils\ImageResize::getInstance()->process($s['imgid'],1600,500,true,true,true)
+                'image' => \Kontentblocks\Utils\ImageResize::getInstance()->process($s['imgid'], 1600, 500, true, true, true),
+                'circle' => \Kontentblocks\Utils\ImageResize::getInstance()->process($s['imgid'], 400, 400, true, true, true)
             );
             $coll[] = $item;
 
@@ -69,12 +72,42 @@ class Module_Custom extends Module
         $tplData = array(
             'items' => $coll
         );
-
-        $tpl = new ModuleTemplate($this, $tpl, $tplData);
+        $tpl = new ModuleTemplate($this, $this->getData('template'), $tplData);
         $tpl->setPath($this->getSetting('path'));
+
+
         $this->adminEnqueue();
         return $tpl->render();
 
+    }
+
+    public function fields()
+    {
+        $this->Fields->addGroup('test', array('label' => 'Callback'))
+            ->addField(
+                'callback', 'items', array(
+                    'label' => 'Custom Callback',
+                    'callback' => array($this, 'optionsCallback'),
+                    'args' => array($this->moduleData)
+                )
+            );
+        $this->Fields->addGroup('more', array('label' => 'Tabssy'))
+            ->addField(
+                'select', 'template', array(
+                    'label' => 'Template',
+                    'options' => array(
+                        array(
+                            'name' => 'Slider',
+                            'value' => 'normal.twig'
+                        ),
+                        array(
+                            'name' => 'Featurettes',
+                            'value' => 'teaser.twig'
+                        ),
+                    ),
+                    'std' => 'normal.twig'
+                )
+            );
     }
 
     public function save($data, $old)
@@ -84,34 +117,51 @@ class Module_Custom extends Module
             return $data;
         }
 
-        if (!is_array($data))
+        if (!isset($data['items']) || !is_array($data['items']))
             return $data;
 
-        return stripslashes_deep(array('items' => $data['items']));
+        return stripslashes_deep($data);
     }
 
     private function prepareData($data)
     {
-        if (empty($data)){
+        if (empty($data['items']) || !is_array($data['items'])) {
             return array();
         }
         $pre = array();
-        foreach ($data as $item) {
+        foreach ($data['items'] as $item) {
+
             $item['imgsrc'] = (isset($item['imgid'])) ? wp_prepare_attachment_for_js($item['imgid']) : null;
             $pre[] = $item;
         }
         return $pre;
     }
 
-    public static function modifyModuleData($data){
-        if (empty($data['items'])){
+    /**
+     * Pre-Output filter
+     * Adds in the image complete informations
+     * @param $data
+     * @param $settings
+     * @return array
+     */
+    public static function modifyModuleData($data, $settings)
+    {
+        if ($settings['class'] !== 'Module_Custom') {
+            return $data;
+        }
+
+        if (empty($data['items'])) {
             return array();
         }
         $pre = array();
         foreach ($data['items'] as $item) {
+            if (!isset($item['imgid'])) {
+                continue;
+            }
             $item['imgsrc'] = wp_prepare_attachment_for_js($item['imgid']);
             $pre['items'][] = $item;
         }
+        $pre['template'] = $data['template'];
         return $pre;
     }
 

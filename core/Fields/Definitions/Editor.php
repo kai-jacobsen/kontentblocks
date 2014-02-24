@@ -25,7 +25,6 @@ Class Editor extends Field
         $this->label();
         $this->description();
         kb_wp_editor($id, $value, $name, $media);
-
     }
 //
 //    public function frontsideForm()

@@ -23,7 +23,6 @@ class AreaRender
             return;
         }
 
-
         $this->environment = \Kontentblocks\Helper\getEnvironment($postId);
         $modules = $this->environment->getModulesforArea($area);
 

@@ -26,11 +26,11 @@ KB.Ui = function ($) {
             this.initToggleBoxes();
             this.flexContext();
             // set the global activeField variable dynamically
-            $('body').on('mousedown', '.kb_field', function(e) {
+            $('body').on('mousedown', '.kb_field', function (e) {
                 activeField = this;
             });
             // set the global activeBlock variable dynamically
-            $('body').on('mousedown', '.kb_block', function(e) {
+            $('body').on('mousedown', '.kb_block', function (e) {
                 activeBlock = this.id;
             });
 
@@ -60,6 +60,11 @@ KB.Ui = function ($) {
             jQuery('.kb_inner').on('mouseover', function () {
                 var $con = $(this).closest('.kb-context-container');
                 $con.addClass('active-context').removeClass('non-active-context');
+
+                if ($con.hasClass('area-top') || $con.hasClass('area-bottom')){
+                    return false;
+                }
+
                 $('.kb-context-container').not($con).addClass('non-active-context').removeClass('active-context');
             });
 
@@ -124,11 +129,15 @@ KB.Ui = function ($) {
              */
             function
                 isValidModule() {
+
+                var limit = areaOver.get('limit');
+                var nom = numberOfModulesInArea(areaOver.get('id'));
+
                 if (
                     _.indexOf(areaOver.get(
-                        'assignedModules'), currentModule.get('settings').class) === -1 &&
-                        areaOver.get('limit') <=
-                            filterModulesByArea(areaOver.get('id')).length) {
+                        'assignedModules'), currentModule.get('settings').class) === -1) {
+                    return false;
+                } else if (limit !== 0 && limit <= nom - 1 ) {
                     KB.Notice.notice(
                         'Not allowed here', 'error');
                     return false;
@@ -148,9 +157,13 @@ KB.Ui = function ($) {
              */
             function filterModulesByArea(id) {
                 return _.filter(KB.Modules.models, function (model) {
-                        return model.get('area').get('id') === id;
+                        return model.get('area') === id;
                     }
                 );
+            }
+
+            function numberOfModulesInArea(id) {
+                return $('#' + id + ' li.kb_block').length;
             }
 
             // handles sorting of the blocks.
@@ -206,12 +219,16 @@ KB.Ui = function ($) {
 
                     if (!isValidModule()) {
                         // inform the user
-                        KB.Notice.notice('Module not allowed in this area');
+                        KB.Notice.notice('Module not allowed in this area', 'error');
                         // cancel sorting
                         $(ui.sender).sortable('cancel');
                     }
                 },
                 update: function (ev, ui) {
+
+                    if (!isValidModule()){
+                        return false;
+                    }
 
                     // update will fire twice when modules are
                     // moved between two areas, once for each list
@@ -223,6 +240,12 @@ KB.Ui = function ($) {
                             KB.Notice.notice('Order was updated successfully', 'success');
                         });
                     } else if (ui.sender) {
+
+                        // do nothing if the receiver rejected the request
+                        if (ui.item.parent('ul')[0].id === ui.sender.attr('id')){
+                            return false;
+                        }
+
                         // function call applies when target area != origin
                         // chain reordering and change of area
                         $.when(that.changeArea(areaOver, currentModule)).

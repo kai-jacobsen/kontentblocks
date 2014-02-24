@@ -46,7 +46,6 @@ class Module_Prototype extends Module
                 'description' => 'stuff',
                 'type' => 'text',
                 'text' => 'My first checkbox',
-                'areaContext' => array('normal'),
                 'std' => 'Lorem Ipsum',
                 'returnObj' => 'Element'
             ))
@@ -56,28 +55,13 @@ class Module_Prototype extends Module
                 'description' => 'stuff',
                 'type' => 'text',
                 'text' => 'My first checkbox',
-                'areaContext' => array('normal'),
+                'returnObj' => 'Image'
             ));
 
         $groupB = $this->Fields->addGroup('Second', array('label' => 'Options'))
             ->addField(
                 'editor', 'sometext', array(
-                'label' => 'Sometext',
-                'areaContext' => array('normal'),
-            ))
-            ->addField(
-                'checkbox', 'alternate', array(
-                'label' => 'Activate alternative layout',
-                'description' => 'This module has an alternative layout',
-                'text' => 'My first checkbox',
-                'areaContext' => array('normal'),
-            ))->addField(
-                'color', 'bgcolor', array(
-                'label' => 'Background Color',
-                'description' => 'Change section bakground color',
-                'text' => 'My first color choser',
-                'areaContext' => array('normal'),
-                'std' => '#f2f2f2'
+                'label' => 'Sometext'
             ));
 
     }

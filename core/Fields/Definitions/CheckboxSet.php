@@ -7,6 +7,7 @@ use Kontentblocks\Fields\Field;
 /**
  * Checkboxset
  * Multiple key => value pairs as checkboxes
+ * 
  */
 Class CheckboxSet extends Field
 {

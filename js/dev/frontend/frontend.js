@@ -45,6 +45,11 @@ KB.Areas = new KB.Backbone.AreasCollection([], {
 KB.App = (function ($) {
 
     function init() {
+
+
+        var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
+        $toolbar.hide();
+
         // Register basic events
         KB.Modules.on('add', createModuleViews);
         KB.Areas.on('add', createAreaViews);
@@ -94,7 +99,6 @@ KB.App = (function ($) {
      */
     function createModuleViews(module) {
 
-        console.log(module);
         // assign the full corresponding area model to the module model
         module.setArea(KB.Areas.get(module.get('area')));
         module.bind('change:area', module.areaChanged);
@@ -105,7 +109,6 @@ KB.App = (function ($) {
             el: '#' + module.get('instance_id')
         }));
 
-        console.log('hello', module);
         // re-init tabs
         // TODO: don't re-init globally
         KB.Ui.initTabs();
@@ -186,35 +189,61 @@ jQuery(document).ready(function () {
         tinymce.init({
             selector: "div.editable",
             theme: "modern",
-            skin: false,
+            skin: 'lightgray',
             menubar: false,
             add_unload_trigger: false,
+            fixed_toolbar_container: '#kb-toolbar',
             schema: "html5",
             inline: true,
-            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
+            toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
             statusbar: false,
             setup: function (ed) {
-                ed.on('blur', function () {
+
+                ed.on('init', function(){
+                    console.log('init');
                     var data = jQuery(ed.bodyElement).data();
                     var module = data.module;
-                    var key = data.key;
-                    var value = ed.getContent();
-                    var index = data.index;
-                    var arrayKey = data.arraykey;
+                    ed.module = KB.Modules.get(module);
+                    ed.kbDataRef = {
+                        key: data.key,
+                        index: data.index,
+                        arrayKey: data.arrayKey
+                    };
+                });
 
-                    var moduleData = _.clone(KB.CurrentModel.get('moduleData'));
-                    if (!_.isUndefined(index) && !_.isUndefined(arrayKey)){
-                        moduleData[arrayKey][index][key] = value;
-                    } else if (!_.isUndefined(index)) {
-                        moduleData[index][key] = value;
-                    } else if (!_.isUndefined(arrayKey)){
-                        moduleData[arrayKey][key] = value;
+                ed.on('focus', function(e){
+                    jQuery('#kb-toolbar').show();
+                });
+
+                ed.addButton( 'kbcancleinline', {
+                    title: 'Stop inline Edit',
+                    onClick: function(){
+                        tinymce.activeEditor = null;
+                        tinymce.focusedEditor = null;
+                        document.activeElement.blur();
+                        jQuery('#kb-toolbar').hide();
+
                     }
-                    KB.CurrentModel.set('moduleData', moduleData);
+                } );
 
-//                    if (KB.FrontendEditModal) {
-//                        KB.FrontendEditModal.serialize();
-//                    }
+                ed.on('blur', function () {
+
+                    jQuery('#kb-toolbar').hide();
+
+                    var data = ed.kbDataRef;
+                    var value = ed.getContent();
+
+                    var moduleData = _.clone(KB.focusedModule.get('moduleData'));
+                    if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)){
+                        moduleData[data.arrayKey][data.index][data.key] = value;
+                    } else if (!_.isUndefined(data.index)) {
+                        moduleData[data.index][data.key] = value;
+                    } else if (!_.isUndefined(data.arrayKey)){
+                        moduleData[data.arrayKey][data.key] = value;
+                    } else {
+                        moduleData[data.key] = value;
+                    }
+                    ed.module.set('moduleData', moduleData);
 
                 });
             }
@@ -226,6 +255,7 @@ jQuery(document).ready(function () {
             menubar: false,
             add_unload_trigger: false,
             schema: "html5",
+            fixed_toolbar_container: '#kb-toolbar',
             inline: true,
             toolbar: false,
             statusbar: false,
@@ -251,7 +281,8 @@ jQuery(document).ready(function () {
     inlineEdit();
 
     jQuery(window).on('kontentblocks::ajaxUpdate', function () {
-        inlineEdit();
+//        inlineEdit();
+
     });
 
 

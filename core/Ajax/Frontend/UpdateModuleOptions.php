@@ -17,6 +17,7 @@ class UpdateModuleOptions
         $module = $_POST['module'];
         $data = $_POST['data'];
         $update = (isset($_POST['editmode']) && $_POST['editmode'] === 'update') ? true : false;
+        $refresh = (isset($_POST['refresh']) && $_POST['refresh'] === 'false' ) ? false : true;
         $parsed = array();
         parse_str($data, $parsed);
 
@@ -36,7 +37,7 @@ class UpdateModuleOptions
             $Environment->getStorage()->saveModule($instance->instance_id, $mergedData);
         }
 
-        $mergedData = apply_filters('kb_modify_module_data', $mergedData);
+        $mergedData = apply_filters('kb_modify_module_data', $mergedData, $instance->settings);
         $instance->rawModuleData = $mergedData;
         $instance->moduleData = $mergedData;
         $return = array(

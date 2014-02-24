@@ -13,14 +13,13 @@
   }
 }
 
-.module:hover .os-edit-wrapper{
+.module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper{
   opacity: 1;
 }
 
 .os-edit-wrapper {
   position: absolute;
   z-index: 5;
-  padding: 5px 14px 10px 12px;
   background: transparent;
   opacity: .0;
 
@@ -35,8 +34,8 @@
   a {
     line-height: 12px;
     display: inline-block;
-    margin: 0px 0px;
     float: left;
+    margin: 0px 0px;
     font-size: 14px;
     padding: 4px;
     color: #ffffff;

@@ -13,7 +13,7 @@ class Module_Text extends Module
         'description' => 'Some short description',
         'globallyAvailable' => true,
         'asTemplate' => true,
-        'connect' => array('content-secondary'),
+        'connect' => array('normal', 'side'),
         'id' => 'wysiwyg',
         'controls' => array(
             'width' => 600
@@ -23,8 +23,6 @@ class Module_Text extends Module
     public function render($data)
     {
         $tpl = 'normal.twig';
-
-
         $tpl = new ModuleTemplate($this, $tpl);
         return $tpl->render();
 
@@ -35,12 +33,11 @@ class Module_Text extends Module
 
         $groupB = $this->Fields->addGroup('Second', array('label' => 'Options'))
             ->addField(
-                'text', 'sometext', array(
+                'editor', 'sometext', array(
                 'label' => 'Sometext',
                 'areaContext' => array('normal','side'),
                 'media' => true,
-                'returnObj' => 'Element',
-                'arrayKey' => 'stuff'
+                'returnObj' => 'Element'
             ));
 
     }
