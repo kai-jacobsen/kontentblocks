@@ -17,5 +17,4 @@
         "composer/installers": "v1.0.6",
         "twig/twig": "1.*"
     }
-
 }
