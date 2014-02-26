@@ -55,13 +55,14 @@ class Element extends AbstractFieldReturn
     {
 
         if (is_user_logged_in() && $this->inlineEdit) {
+            $editableClass = $this->getEditableClass();
             if (is_object($this->field)) {
-                $this->addClass('editable');
+                $this->addClass($editableClass);
                 $this->addAttr('data-module', $this->field->parentModule);
                 $this->addAttr('data-key', $this->field->getKey());
                 $this->addAttr('data-arrayKey', $this->field->getArg('arrayKey'));
             } else if (is_array($this->field)) {
-                $this->addClass('editable');
+                $this->addClass($editableClass);
                 $this->addAttr('data-module', $this->field['instance_id']);
                 $this->addAttr('data-key', $this->field['key']);
                 $this->addAttr('data-arrayKey', $this->field['arrayKey']);
@@ -132,6 +133,22 @@ class Element extends AbstractFieldReturn
         $in = filter_var($bool, FILTER_VALIDATE_BOOLEAN);
         $this->inlineEdit = $in;
         return $this;
+    }
+
+    private function getEditableClass()
+    {
+        $titles = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
+        $text = array('div', 'p', 'span');
+
+        if (in_array($this->el,$titles)){
+            return 'editable-title';
+        }
+
+        if (in_array($this->el,$text)){
+            return 'editable';
+        }
+
+        return 'not-editable';
     }
 
 }

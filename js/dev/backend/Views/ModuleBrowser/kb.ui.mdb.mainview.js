@@ -124,6 +124,8 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         KB.Modules.add(KB.lastAddedModule);
         KB.TinyMCE.addEditor();
 
+        KB.Fields.trigger('update');
+
         // update the reference counter, used as base number
         // for new modules
         var count = parseInt(jQuery('#kb_all_blocks').val(), 10) + 1;

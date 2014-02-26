@@ -222,7 +222,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.model.view.render();
                 that.model.view.delegateEvents();
                 that.model.view.trigger('kb:moduleUpdated');
-
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
 
                 jQuery('.editable', that.options.view.$el).each(function(i, el){

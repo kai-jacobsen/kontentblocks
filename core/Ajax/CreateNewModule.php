@@ -196,6 +196,7 @@ class CreateNewModule
     private function saveNewModule()
     {
         $toSave = $this->newModule;
+
         //dont save settings
         unset($toSave['settings']);
         // add new block and update

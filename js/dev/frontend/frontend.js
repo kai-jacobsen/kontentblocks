@@ -255,7 +255,7 @@ jQuery(document).ready(function () {
         }
     );
 
-    jQuery('h2.editable').each(
+    jQuery('.editable-title').each(
 
         function (item) {
 

@@ -74,9 +74,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         });
     },
     setControlsPosition: function () {
+
+        var mSettings = this.model.get('settings');
+
         var $controls = jQuery('.os-controls', this.$el);
         var pos = this.$el.offset();
         var mwidth = this.$el.width() - 150;
+
+        if (mSettings.controls && mSettings.controls.toolbar){
+            console.log(mSettings.controls.toolbar.top);
+            pos.top = mSettings.controls.toolbar.top;
+            pos.left = mSettings.controls.toolbar.left;
+        }
+
         $controls.offset({ top: pos.top + 20, left: pos.left - 15, zIndex: 999999});
 //        $controls.css({'top':pos.top + 'px', 'right':0})
     },
@@ -108,6 +118,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.model.view.render();
                 that.model.view.trigger('kb:moduleUpdated');
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
+                KB.Notice.notice('Module saved successfully', 'success');
             },
             error: function () {
                 console.log('e');

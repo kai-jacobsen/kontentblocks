@@ -85,6 +85,7 @@ class SavePost implements InterfaceSaveHandler
                 $module = $this->moduleOverrides($module, $data);
 
                 // create updated index
+                unset($module['settings']);
                 $this->index[$module['instance_id']] = $module;
 
                 // call save method on block
