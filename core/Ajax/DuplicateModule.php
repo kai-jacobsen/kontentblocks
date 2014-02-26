@@ -41,9 +41,10 @@ class DuplicateModule
 
         $stored = $this->Environment->getStorage()->getModuleDefinition($this->instanceId);
         $moduleDefinition = ModuleFactory::parseModule($stored);
-        $moduleDefinition['settings']['draft'] = true;
+        $moduleDefinition['state']['draft'] = true;
         $moduleDefinition['instance_id'] = $this->newInstanceId;
 
+        unset($moduleDefinition['settings']);
 
         $update = $this->Environment->getStorage()->addToIndex($moduleDefinition['instance_id'], $moduleDefinition);
         if ($update !== true) {
