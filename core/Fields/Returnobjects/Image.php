@@ -71,6 +71,13 @@ class Image extends AbstractFieldReturn
 
     }
 
+    public function src(){
+        $this->prepareSrc();
+        $this->toJSON();
+
+        return $this->src;
+    }
+
     private function _cleanSpaces($string)
     {
         return esc_attr(preg_replace('/\s{2,}/', ' ', $string));
