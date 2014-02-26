@@ -6,29 +6,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ba9804b-e314-4dc7-9dbc-4477adb8d9ee" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Backend/Areas/Area.php" afterPath="$PROJECT_DIR$/core/Backend/Areas/Area.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/AreaOutput.php" afterPath="$PROJECT_DIR$/core/Frontend/AreaOutput.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Frontend/AreaRender.php" afterPath="$PROJECT_DIR$/core/Frontend/AreaRender.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" afterPath="$PROJECT_DIR$/core/Fields/Returnobjects/Element.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Field.php" afterPath="$PROJECT_DIR$/core/Fields/Field.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/FieldManager.php" afterPath="$PROJECT_DIR$/core/Fields/FieldManager.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/FieldSection.php" afterPath="$PROJECT_DIR$/core/Fields/FieldSection.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js" afterPath="$PROJECT_DIR$/js/dev/frontend/Views/FrontendEditView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Fields/Returnobjects/Image.php" afterPath="$PROJECT_DIR$/core/Fields/Returnobjects/Image.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/Module.php" afterPath="$PROJECT_DIR$/core/Modules/Module.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/ROImageTest.js" afterPath="$PROJECT_DIR$/js/dev/frontend/ROImageTest.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/backend.min.js" afterPath="$PROJECT_DIR$/js/dist/backend.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/common.min.js" afterPath="$PROJECT_DIR$/js/dist/common.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/extensions.min.js" afterPath="$PROJECT_DIR$/js/dist/extensions.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/frontend/frontend.js" afterPath="$PROJECT_DIR$/js/dev/frontend/frontend.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/frontend.min.js" afterPath="$PROJECT_DIR$/js/dist/frontend.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dev/backend/Collections/kb.ui.mdb.definitions.js" afterPath="$PROJECT_DIR$/js/dev/backend/Collections/kb.ui.mdb.definitions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.php" afterPath="$PROJECT_DIR$/kontentblocks.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kontentblocks.public-api.php" afterPath="$PROJECT_DIR$/kontentblocks.public-api.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/plugins.min.js" afterPath="$PROJECT_DIR$/js/dist/plugins.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/dist/refields.min.js" afterPath="$PROJECT_DIR$/js/dist/refields.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/Modules/core-modules/Module_Custom/teaser.twig" afterPath="$PROJECT_DIR$/core/Modules/core-modules/Module_Custom/teaser.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kontentblocks.iws" />
@@ -636,7 +613,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34753662" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34753662" sideWeight="0.49968293" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22692308" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32356858" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43076923" sideWeight="0.49968293" order="12" side_tool="false" content_ui="tabs" />
