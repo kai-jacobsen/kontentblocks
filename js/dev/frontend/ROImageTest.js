@@ -60,11 +60,12 @@ KB.Stuff = (function ($) {
             var settings = KB.fromServer.FrontSettings[mId][fkey];
 
 
-            var moduleData = KB.CurrentModel.get('moduleData');
+            var cModule = KB.Modules.get(mId);
+            var moduleData = cModule.get('moduleData');
             moduleData[fkey] = _.extend(moduleData[fkey],{
                 id:id
             });
-            KB.CurrentModel.set('moduleData', moduleData);
+            cModule.set('moduleData', moduleData);
 
             jQuery.ajax({
                 url: ajaxurl,

@@ -65,9 +65,10 @@ class FieldManager
     }
 
     /**
-     * Creates a new section if there is not an exisiting one
-     * or returns the section
+     * Creates a new section if there is not already one with the same id
+     * or returns the section if exists
      * @param string $id
+     * @param array $args
      * @return object groupobject
      */
     public function addGroup( $id, $args = array() )
@@ -148,7 +149,7 @@ class FieldManager
 
     /**
      * Extract single fields from structure object
-     * and stores them in one singel flat array
+     * and stores them in one single flat array
      * @return array
      */
     public function collectAllFields()

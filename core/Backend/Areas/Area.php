@@ -114,6 +114,8 @@ class Area
 
     public function build()
     {
+
+
         $this->header();
         $this->render();
         $this->toJSON();
@@ -189,7 +191,6 @@ class Area
      */
     public function toJSON()
     {
-
         // This gets checked elsewhere as well
         // but to be sure that this doesn't happen
         // for normal users, better safe than sorry

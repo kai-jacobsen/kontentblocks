@@ -212,6 +212,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             success: function (res) {
+
+                jQuery('.editable', that.options.view.$el).each(function(i, el){
+                    tinymce.remove('#' +el.id);
+                });
+
                 that.options.view.$el.html(res.html);
                 that.model.set('moduleData', res.newModuleData);
                 that.model.view.render();
@@ -219,6 +224,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.model.view.trigger('kb:moduleUpdated');
 
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
+
+                jQuery('.editable', that.options.view.$el).each(function(i, el){
+                    initTinymce(el);
+                });
+
             },
             error: function () {
                 console.log('e');

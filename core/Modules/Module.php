@@ -6,22 +6,36 @@ use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Fields\FieldManager,
     Kontentblocks\Abstracts\AbstractEnvironment;
 
-/*
- * Structure
- *
- * I. Properties
- * II. Constructor & Setup
- * III. Primary Block methods
- * IV. Backend Business Logic
- * V. Helper
- * VI. Additional Stuff
- */
 
 abstract class Module
 {
 
+    /**
+     * Environment vars
+     *
+     * @var array
+     */
     public $envVars;
+
+    /**
+     * @var array
+     */
     public $settings;
+
+    /**
+     * The actual module data
+     * Data may be modified by Refields and/or other filters
+     * This data will no stay consistent throughout the request
+     * @var array
+     */
+    public $moduleData;
+
+    /**
+     * The moduleData unmodified and untouched
+     * until the server dies
+     * @var array
+     */
+    public $rawModuleData;
 
     /**
      * II. Constructor
@@ -35,9 +49,11 @@ abstract class Module
      */
     function __construct($args = NULL, $data = array(), AbstractEnvironment $environment = null)
     {
+        // batch setup
         $this->set($args);
-        $this->moduleData = $data;
 
+        $this->moduleData = $data;
+        $this->rawModuleData = $data;
         if (isset($environment)) {
             $this->setEnvVarsFromEnvironment($environment);
         }
@@ -58,7 +74,6 @@ abstract class Module
     /**
      * options()
      * Method for the backend display
-     * has to be overwritten by each block
      * gets called by ui display callback
      *
      */
@@ -95,7 +110,6 @@ abstract class Module
 
         if (is_null($data) && !is_null($this->moduleData)){
             $data = $this->moduleData;
-            $this->rawModuleData = $this->moduleData;
         }
 
         if (isset($this->Fields)) {

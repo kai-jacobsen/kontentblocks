@@ -1,5 +1,25 @@
 {
+
+    "name": "ksr/Kontentblocks",
+    "description": "Whoooo!",
+    "keywords": ["wordpress", "plugin", "kontenblocks"],
+    "homepage": "http://kontentblocks.de",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Kai Jacobsen",
+            "email": "ungestaltbar@gmail.com",
+            "homepage": "http://jcbsn.de"
+        }
+    ],
+    "type": "wordpress-plugin",
+    "require": {
+        "php": ">=5.3.2",
+        "composer/installers": "v1.0.6"
+    },
+
     "require": {
         "twig/twig": "1.*"
     }
+
 }

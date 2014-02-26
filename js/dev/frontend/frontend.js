@@ -180,112 +180,147 @@ KB.App.init();
 //    return api;
 //}(jQuery));
 
+function initTinymce(item) {
+
+    tinymce.init({
+        selector: '#' + item.id,
+        theme: "modern",
+        skin: 'lightgray',
+        menubar: false,
+        add_unload_trigger: false,
+        fixed_toolbar_container: '#kb-toolbar',
+        schema: "html5",
+        inline: true,
+        toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
+        statusbar: false,
+        setup: function (ed) {
+
+            ed.on('init', function () {
+                var data = jQuery(ed.bodyElement).data();
+                var module = data.module;
+                ed.module = KB.Modules.get(module);
+                ed.kbDataRef = {
+                    key: data.key,
+                    index: data.index,
+                    arrayKey: data.arraykey
+                };
+            });
+
+            ed.on('focus', function (e) {
+                jQuery('#kb-toolbar').show();
+            });
+
+            ed.addButton('kbcancleinline', {
+                title: 'Stop inline Edit',
+                onClick: function () {
+                    tinymce.activeEditor = null;
+                    tinymce.focusedEditor = null;
+                    document.activeElement.blur();
+                    jQuery('#kb-toolbar').hide();
+
+                }
+            });
+
+            ed.on('blur', function () {
+
+                jQuery('#kb-toolbar').hide();
+
+                var data = ed.kbDataRef;
+                var value = ed.getContent();
+
+                var moduleData = _.clone(ed.module.get('moduleData'));
+                if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
+                    moduleData[data.arrayKey][data.index][data.key] = value;
+                } else if (!_.isUndefined(data.index)) {
+                    moduleData[data.index][data.key] = value;
+                } else if (!_.isUndefined(data.arrayKey)) {
+                    moduleData[data.arrayKey][data.key] = value;
+                } else {
+                    moduleData[data.key] = value;
+                }
+                ed.module.set('moduleData', moduleData);
+
+            });
+        }
+    });
+}
 
 // Test Code
 // TODO Rewrite
 jQuery(document).ready(function () {
 
-    function inlineEdit() {
-        tinymce.init({
-            selector: "div.editable",
-            theme: "modern",
-            skin: 'lightgray',
-            menubar: false,
-            add_unload_trigger: false,
-            fixed_toolbar_container: '#kb-toolbar',
-            schema: "html5",
-            inline: true,
-            toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
-            statusbar: false,
-            setup: function (ed) {
 
-                ed.on('init', function(){
-                    console.log('init');
-                    var data = jQuery(ed.bodyElement).data();
-                    var module = data.module;
-                    ed.module = KB.Modules.get(module);
-                    ed.kbDataRef = {
-                        key: data.key,
-                        index: data.index,
-                        arrayKey: data.arrayKey
-                    };
-                });
+    jQuery('div.editable').each(function (i,item) {
+            initTinymce(item);
+        }
+    );
 
-                ed.on('focus', function(e){
-                    jQuery('#kb-toolbar').show();
-                });
+    jQuery('h2.editable').each(
 
-                ed.addButton( 'kbcancleinline', {
-                    title: 'Stop inline Edit',
-                    onClick: function(){
-                        tinymce.activeEditor = null;
-                        tinymce.focusedEditor = null;
-                        document.activeElement.blur();
+        function (item) {
+
+            tinymce.init({
+                selector: '#' + this.id,
+                theme: "modern",
+                skin: false,
+                menubar: false,
+                add_unload_trigger: false,
+                schema: "html5",
+                fixed_toolbar_container: '#kb-toolbar',
+                inline: true,
+                toolbar: false,
+                statusbar: false,
+                setup: function (ed) {
+
+                    ed.on('init', function () {
+                        var data = jQuery(ed.bodyElement).data();
+                        var module = data.module;
+                        ed.module = KB.Modules.get(module);
+                        ed.kbDataRef = {
+                            key: data.key,
+                            index: data.index,
+                            arrayKey: data.arraykey
+                        };
+                    });
+
+                    ed.on('focus', function (e) {
+                        jQuery('#kb-toolbar').show();
+                    });
+
+                    ed.addButton('kbcancleinline', {
+                        title: 'Stop inline Edit',
+                        onClick: function () {
+                            tinymce.activeEditor = null;
+                            tinymce.focusedEditor = null;
+                            document.activeElement.blur();
+                            jQuery('#kb-toolbar').hide();
+
+                        }
+                    });
+
+                    ed.on('blur', function () {
+
                         jQuery('#kb-toolbar').hide();
 
-                    }
-                } );
+                        var data = ed.kbDataRef;
+                        var value = ed.getContent();
 
-                ed.on('blur', function () {
+                        var moduleData = _.clone(ed.module.get('moduleData'));
+                        if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
+                            moduleData[data.arrayKey][data.index][data.key] = value;
+                        } else if (!_.isUndefined(data.index)) {
+                            moduleData[data.index][data.key] = value;
+                        } else if (!_.isUndefined(data.arrayKey)) {
+                            moduleData[data.arrayKey][data.key] = value;
+                        } else {
+                            moduleData[data.key] = value;
+                        }
+                        ed.module.set('moduleData', moduleData);
 
-                    jQuery('#kb-toolbar').hide();
-
-                    var data = ed.kbDataRef;
-                    var value = ed.getContent();
-
-                    var moduleData = _.clone(KB.focusedModule.get('moduleData'));
-                    if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)){
-                        moduleData[data.arrayKey][data.index][data.key] = value;
-                    } else if (!_.isUndefined(data.index)) {
-                        moduleData[data.index][data.key] = value;
-                    } else if (!_.isUndefined(data.arrayKey)){
-                        moduleData[data.arrayKey][data.key] = value;
-                    } else {
-                        moduleData[data.key] = value;
-                    }
-                    ed.module.set('moduleData', moduleData);
-
-                });
-            }
+                    });
+                }
+            });
         });
-        tinymce.init({
-            selector: "h1.editable",
-            theme: "modern",
-            skin: false,
-            menubar: false,
-            add_unload_trigger: false,
-            schema: "html5",
-            fixed_toolbar_container: '#kb-toolbar',
-            inline: true,
-            toolbar: false,
-            statusbar: false,
-            setup: function (ed) {
-                ed.on('blur', function () {
-                    var data = jQuery(ed.bodyElement).data();
-                    var module = data.module;
-                    var key = data.key;
-                    var value = ed.getContent();
-
-                    var moduleData = _.clone(KB.CurrentModel.get('moduleData'));
-                    moduleData[key] = value;
-                    KB.CurrentModel.set('moduleData', moduleData);
-
-//                    if (KB.FrontendEditModal) {
-//                        KB.FrontendEditModal.render();
-//                    }
-                });
-            }
-        });
-    }
-
-    inlineEdit();
-
-    jQuery(window).on('kontentblocks::ajaxUpdate', function () {
-//        inlineEdit();
-
-    });
-
-
 
 });
 

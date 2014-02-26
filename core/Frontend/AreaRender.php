@@ -18,7 +18,6 @@ class AreaRender
 
     public function __construct($postId, $area, $additionalArgs)
     {
-
         if (!isset($postId) || !isset($area)) {
             return;
         }

@@ -70,10 +70,15 @@ class Element extends AbstractFieldReturn
         }
 
 
-        $format = '<%1$s %3$s>%2$s</%1$s>';
-        $filtered = apply_filters('the_content', $this->value);
+        $format = '<%1$s id="%4$s" %3$s>%2$s</%1$s>';
+
+        if (!in_array($this->el, array('h1', 'h2', 'h3', 'h4', 'h5', 'h6'))){
+            $filtered = apply_filters('the_content', $this->value);
+        } else {
+            $filtered = $this->value;
+        }
         $codeblocks = $this->fixcodeblocks($filtered);
-        return sprintf($format, $this->el, $codeblocks, $this->_renderAttributes());
+        return sprintf($format, $this->el, $codeblocks, $this->_renderAttributes(), uniqid('kb'));
 
     }
 

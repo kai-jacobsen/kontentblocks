@@ -309,6 +309,7 @@ Class Kontentblocks
      * if KB is not in dev mode, initial setup happens just once, further editing of areas happens by the plugin menu page
      *
      * @param array $args
+     * @param bool $manual
      * @return array
      */
     public function register_area($args, $manual = true)

@@ -117,14 +117,14 @@ function kb_render_area_dynamic( $area = null, $id = NULL, $context = null, $sub
 
 add_action( 'sidebar_areas', 'kb_render_area_sidebar', 10, 3 );
 
-function kb_render_area_sidebar( $id = null, $context = null, $subcontext = 'side' )
+function kb_render_area_sidebar( $id = null, $additionalArgs= array() )
 {
     global  $post;
     $post_id = (null === $id) ? $post->ID : $id;
     $areas   = get_post_meta( $post_id, 'active_sidebar_areas', true );
     if ( !empty( $areas ) ) {
         foreach ( $areas as $area ) {
-            $AreaRender = new Kontentblocks\Frontend\AreaRender($area, $area, array());
+            $AreaRender = new Kontentblocks\Frontend\AreaRender($area, $area, $additionalArgs);
             $AreaRender->render(true);
 
         }

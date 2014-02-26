@@ -5,12 +5,52 @@ namespace Kontentblocks\Fields;
 abstract class Field
 {
 
+    /**
+     * Base id/key for the field
+     * @var string
+     */
     protected $baseId;
+
+    /**
+     * Shared/common arguments are
+     * - label string
+     * - description string
+     * - areaContext array of contexts
+     * @TODO What else
+     * @var array additional arguments
+     */
     protected $args;
+
+    /**
+     * Actual data for field
+     * @var mixed
+     */
     protected $value;
+
+    /**
+     * key
+     * @var string
+     */
     protected $key;
+
+    /**
+     * Current field type
+     * @var string
+     */
     protected $type;
+
+    /**
+     * Path to field definition
+     * @var string
+     * @TODO really?
+     */
     protected $path;
+
+    /**
+     * Return Object
+     * @var \Kontentblocks\Interfaces\InterfaceFieldReturn
+     * @TODO Concept is WIP
+     */
     public $returnObj;
 
     /**
@@ -21,7 +61,6 @@ abstract class Field
     public function setKey($key)
     {
         $this->key = $key;
-
     }
 
     /**
@@ -108,7 +147,7 @@ abstract class Field
 
     /**
      * Get a special object for the field type if field has one set
-     * @TODO: Re-think if there should be one default object
+     * @TODO: Revise if there should be one default object
      * @since 1.0.0
      * @return object
      */
@@ -147,7 +186,7 @@ abstract class Field
      */
     public function build()
     {
-
+        // nobody knows
         $this->uniqueId = uniqid();
 
         // optional call to simplify enqueueing
@@ -157,7 +196,7 @@ abstract class Field
 
         // A Field might not be present, i.e. if it's not set to
         // the current context
-        // Checkboxes are actual use case, checked boxes will render hidden to preserve the value during save
+        // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
         if (!$this->getDisplay()) {
             if ($this->getDefault('renderHidden')) {
                 $this->renderHidden();
@@ -175,6 +214,7 @@ abstract class Field
 
     /**
      * Header wrap markup
+     * @TODO Let twig kick in
      * @since 1.0.0
      */
     public function header()
@@ -205,7 +245,7 @@ abstract class Field
             $this->preForm();
         }
 
-        // When viewing front the frontside, an optional method can be user for the output
+        // When viewing from the frontend, an optional method can be user for the output
         if (defined('KB_ONSITE_ACTIVE') && KB_ONSITE_ACTIVE && method_exists($this, 'frontsideForm')) {
             $this->frontsideForm();
         } else {
@@ -245,8 +285,7 @@ abstract class Field
      */
     public function footer()
     {
-        echo "</div>";
-        echo "</div>";
+        echo "</div></div>";
 
     }
 
@@ -392,7 +431,7 @@ abstract class Field
     public function get_field_id($rnd = false)
     {
         if ($rnd) {
-            $number = rand(1, 9999);
+            $number = uniqid('kbf');
             $id = sanitize_title($this->baseId . '_' . $this->key . '_' . $number);
         } else {
             $id = sanitize_title($this->baseId . '_' . $this->key);
@@ -403,12 +442,14 @@ abstract class Field
     }
 
     /**
-     * Helper to generate input names and connect them to the current block
-     * This method has options to generate a name, name[] or name['key']
+     * Helper to generate input names and connect them to the current module
+     * This method has options to generate a name, name[] or name['key'] and probably some
+     * more hidden possibilities :)
      *
-     * @param string $key - base key for the input field
      * @param bool $array - if true add [] to the key
      * @param bool $akey - if true add ['$akey'] to the key
+     * @param bool $multiple
+     * @internal param string $key - base key for the input field
      * @return string
      */
     public function get_field_name($array = false, $akey = NULL, $multiple = false)

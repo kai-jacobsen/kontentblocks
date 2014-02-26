@@ -12,7 +12,7 @@ use Kontentblocks\Fields\FieldRegistry,
  * methods to interact with registered fields.
  *
  * Gets instantiated by Kontentblocks\Fields\FieldManager when
- * addSection() is called
+ * addGroup() is called
  *
  * @see Kontentblocks\Fields\FieldManager::addSection()
  * @package Fields
@@ -28,7 +28,7 @@ class FieldSection
     public $id;
 
     /**
-     * Arra of registered fields for this section
+     * Array of registered fields for this section
      * @var array
      */
     protected $fields;
@@ -57,6 +57,8 @@ class FieldSection
     /**
      * Constructor
      * @param string $id
+     * @param $args
+     * @param string $areaContext
      * @return \Kontentblocks\Fields\FieldSection
      */
     public function __construct( $id, $args, $areaContext = null )

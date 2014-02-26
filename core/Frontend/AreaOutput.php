@@ -102,7 +102,9 @@ class AreaOutput
         $classes = array(
             $this->settings[ 'wrapperClass' ],
             $this->id,
-            $this->getLayoutId()
+            $this->getLayoutId(),
+            $this->getContext(),
+            $this->getSubcontext()
         );
 
         return implode( ' ', $classes );
@@ -116,7 +118,7 @@ class AreaOutput
      */
     public function getContext()
     {
-        return $this->setupArgs[ 'context' ];
+        return $this->getSetting('context');
 
     }
 
@@ -127,7 +129,7 @@ class AreaOutput
      */
     public function getSubcontext()
     {
-        return $this->setupArgs[ 'subcontext' ];
+        return $this->getSetting('subcontext');
 
     }
 

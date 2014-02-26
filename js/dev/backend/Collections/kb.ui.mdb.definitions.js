@@ -11,10 +11,12 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     sortToCategories: function () {
         var that = this;
         _.each(this.models, function (model) {
+            if (model.get('settings').hidden === true) {
+                return;
+            }
             var cat = (_.isUndefined(model.get('settings').category)) ? 'standard' : model.get('settings').category;
             that.categories[cat].modules.push(model);
         });
-        console.log(that.categories);
     },
     prepareCategories: function () {
         var cats = {};
