@@ -1,5 +1,4 @@
 {
-
     "name": "ksr/Kontentblocks",
     "description": "Whoooo!",
     "keywords": ["wordpress", "plugin", "kontenblocks"],
@@ -15,10 +14,7 @@
     "type": "wordpress-plugin",
     "require": {
         "php": ">=5.3.2",
-        "composer/installers": "v1.0.6"
-    },
-
-    "require": {
+        "composer/installers": "v1.0.6",
         "twig/twig": "1.*"
     }
 
