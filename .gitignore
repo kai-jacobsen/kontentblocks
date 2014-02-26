@@ -3,3 +3,8 @@
 /nbproject/private/
 /backup/
 /css/.sass-cache/
+/core/Modules/core-modules/Module_Prototype.php
+/core/Modules/core-modules/Module_Prototype.html
+/core/Modules/core-modules/Module_Text.php
+/core/Modules/core-modules/Module_Custom/
+.idea/
