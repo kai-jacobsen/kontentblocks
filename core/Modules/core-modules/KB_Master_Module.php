@@ -10,10 +10,10 @@ class KB_Master_Module extends Module
 
 
     public static $defaults = array(
-        'public_name' => 'Master Template',
+        'publicName' => 'Master Template',
         'id' => 'core-master',
         'description' => 'Referenz zu einem Master Template',
-        'in_dynamic' => true,
+        'globallyAvailable' => true,
         'asTemplate' => false,
         'os_edittext' => '',
         'master' => true,

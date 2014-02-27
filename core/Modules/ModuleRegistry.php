@@ -168,8 +168,8 @@ class ModuleRegistry
      */
     private function _sort_by_name($a, $b)
     {
-        $al = strtolower($a['settings']['public_name']);
-        $bl = strtolower($b['settings']['public_name']);
+        $al = strtolower($a['settings']['publicName']);
+        $bl = strtolower($b['settings']['publicName']);
 
         if ($al == $bl) {
             return 0;

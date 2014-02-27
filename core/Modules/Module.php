@@ -321,7 +321,7 @@ abstract class Module
         $html .= "<div class='kb-name'><input class='block-title' type='text' name='{$this->instance_id}[block_title]' value='" . esc_attr($this->getModuleName()) . "' /></div>";
 
         // original name
-        $html .= "<div class='kb-sub-name'>{$this->settings['public_name']}</div>";
+        $html .= "<div class='kb-sub-name'>{$this->getSetting('publicName')}</div>";
 
         $html .= "</div>";
 
@@ -588,7 +588,7 @@ abstract class Module
 
         return array(
             'disabled' => false,
-            'public_name' => 'Give me Name',
+            'publicName' => 'Give me Name',
             'name' => '',
             'wrap' => true,
             'wrapperClasses' => '',

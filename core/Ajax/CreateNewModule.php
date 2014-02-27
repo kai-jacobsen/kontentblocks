@@ -242,7 +242,7 @@ class CreateNewModule
         (
             'id' => $this->newInstanceID,
             'module' => $this->newModule,
-            'name' => $this->newInstance->settings['public_name'],
+            'name' => $this->newInstance->settings['publicName'],
             'html' => $html
         );
 

@@ -72,7 +72,7 @@ class DuplicateModule
             (
                 'id' => $this->newInstanceId,
                 'module' => $moduleDefinition,
-                'name' => $newInstance->settings['public_name'],
+                'name' => $newInstance->settings['publicName'],
                 'html' => $html
             );
 

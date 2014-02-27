@@ -145,9 +145,9 @@ function getAssignedModules($dataContainer)
     $collection = array();
 
     foreach ($modules as $module) {
-        if (isset($module->settings['in_dynamic']) && $module->settings['in_dynamic'] === true) {
+        if (isset($module->settings['globallyAvailable']) && $module->settings['globallyAvailable'] === true) {
             $collect = array(
-                'name' => $module->settings['public_name'],
+                'name' => $module->settings['publicName'],
                 'value' => get_class($module)
             );
             $collection[] = $collect;
@@ -187,6 +187,7 @@ function underscoreit($val)
  * Merge arrays as it should be
  * @param array $new
  * @param array $old
+ * @return array
  */
 function arrayMergeRecursiveAsItShouldBe($new, $old)
 {
