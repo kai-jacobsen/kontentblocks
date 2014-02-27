@@ -79,8 +79,6 @@ class Area
         // batch setting of properties
         $this->_setupAreaProperties($area);
 
-        // Menu wit available modules for this area
-//        $this->moduleMenu = new ModuleMenu($this);
 
         //actual stored module for this area
         $this->attachedModules = $this->environment->getModulesForArea($this->id);

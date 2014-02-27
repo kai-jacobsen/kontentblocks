@@ -34,26 +34,27 @@
   }
 
   a {
-    line-height: 18px;
+    line-height: 20px;
     display: inline-block;
+    box-sizing: border-box;
     float: left;
     margin: 0px 0px;
     font-size: 14px;
-    padding: 4px;
+    padding: 0px;
     color: #333;
     opacity: 1;
     text-decoration: none;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
-    border: 1px solid transparent;
+    border: 1px solid #333;
     @include border-radius(20px);
     background-color: #fff;
 
 
 
     &.dashicons {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
     }
 
     &:hover {
