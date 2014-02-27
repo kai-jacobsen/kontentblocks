@@ -551,9 +551,15 @@ abstract class Module
 
     }
 
-    public function get_module_path($path)
+    public function getPath()
     {
-        return $this->settings['path'];
+        return $this->getSetting('path');
+
+    }
+
+    public function getUri()
+    {
+        return $this->getSetting('uri');
 
     }
 
@@ -571,7 +577,7 @@ abstract class Module
             'areaContext' => $this->areaContext,
             'class' => get_class($this),
             'inDynamic' => AreaRegistry::getInstance()->isDynamic($this->area),
-            'uri' => $this->uri
+            'uri' => $this->getUri()
         );
 
         if (isset($this->master) && $this->master){

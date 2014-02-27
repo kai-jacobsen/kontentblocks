@@ -42,6 +42,7 @@ class ModuleRegistry
             $args = $classname::$defaults;
             $args['class'] = $classname;
             $args['path'] = trailingslashit(dirname($file));
+            $args['uri'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path']));
             $args['helpfile'] = false;
             // setup helpfile
             if (file_exists(trailingslashit($args['path']) . $classname . '.html')) {
@@ -52,7 +53,6 @@ class ModuleRegistry
             if (!isset($moduleArgs['state'])) {
                 $moduleArgs['state'] = Module::getDefaultState();
             }
-            $moduleArgs['uri'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path']));
             // Add module to registry
             $this->modules[$classname] = $moduleArgs;
             // Handle connection to regions
