@@ -40,10 +40,7 @@
 /* --------------------------
 // Plugins (external/vendor)
 -----------------------------*/
-//@import "partials/_vendor/_plugin_noty";
-//@import "partials/_vendor/_reveal-js";
-//@import "partials/_vendor/_vex";
-//@import "partials/_vendor/_simtip";
+
 @import "partials/_vendor/_rangeslider";
 @import "partials/_vendor/_nano";
 @import "partials/_vendor/_alertify";
@@ -59,10 +56,11 @@
 /* --------------------------
 // Fields
 -----------------------------*/
+@import "partials/_refields/common";
 @import "partials/_refields/date";
 @import "partials/_refields/file";
 @import "partials/_refields/image";
-
+@import "partials/_refields/tabs";
 
 @import "partials/_global-area-edit";
 

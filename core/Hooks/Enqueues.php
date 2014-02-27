@@ -83,10 +83,7 @@ class Enqueues
     public function _on_site_editing_setup()
     {
 
-        \Kontentblocks\Helper\getHiddenEditor();
         // Thickbox on front end for logged in users
-        wp_enqueue_media();
-
 
         $config = array(
             'url' => KB_PLUGIN_URL,
@@ -95,6 +92,10 @@ class Enqueues
         );
 
         if (is_user_logged_in() && !is_admin()) {
+
+
+
+
 
             // place this in load order
             /*
@@ -134,6 +135,11 @@ class Enqueues
                 'pick' => __('Select Color')
             );
             wp_localize_script('wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n);
+
+            wp_enqueue_media();
+
+                    \Kontentblocks\Helper\getHiddenEditor();
+
         }
 
     }

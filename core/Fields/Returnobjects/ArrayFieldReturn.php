@@ -34,6 +34,4 @@ class ArrayFieldReturn
         return $this->$key;
     }
 
-
-
 }

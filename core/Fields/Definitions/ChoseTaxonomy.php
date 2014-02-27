@@ -36,7 +36,7 @@ Class ChoseTaxonomy extends Field
 
         $this->label();
 
-        print "<select id='{$this->get_field_id()}' name='{$this->get_field_name()}'>";
+        print "<select id='{$this->getFieldId()}' name='{$this->getFieldName()}'>";
 
         if ( $this->getArg( 'empty', true ) ) {
             print "<option value='' name=''>Bitte wählen</option>";

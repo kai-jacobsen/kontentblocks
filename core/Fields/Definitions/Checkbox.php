@@ -24,7 +24,7 @@ Class Checkbox extends Field
     {
         $checked = checked( $this->getValue(), true, false );
         $this->label();
-        echo "<label><input type='checkbox' id='{$this->get_field_id()}' name='{$this->get_field_name()}'  {$checked} /> {$this->getArg( 'text', 'Please label this checkbox' )}</label>";
+        echo "<label><input type='checkbox' id='{$this->getFieldId()}' name='{$this->getFieldName()}'  {$checked} /> {$this->getArg( 'text', 'Please label this checkbox' )}</label>";
         $this->description();
 
     }

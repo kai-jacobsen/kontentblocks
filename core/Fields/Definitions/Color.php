@@ -30,7 +30,7 @@ Class Color extends Field
     {
         $this->label();
 
-        echo "<input class='kb-color-picker' type='text' name='{$this->get_field_name()}' id='{$this->get_field_id()}' value='{$this->getValue()}' size='8' />";
+        echo "<input class='kb-color-picker' type='text' name='{$this->getFieldName()}' id='{$this->getFieldId()}' value='{$this->getValue()}' size='8' />";
 
         $this->description();
 

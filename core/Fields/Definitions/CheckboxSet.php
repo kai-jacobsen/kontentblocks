@@ -35,7 +35,7 @@ Class CheckboxSet extends Field
             }
 
             $checked = ($item[ 'value' ] === $data[ $item[ 'key' ] ]) ? 'checked="checked"' : '';
-            echo "<div class='kb-checkboxset-item'><label><input type='checkbox' id='{$this->get_field_id()}' name='{$this->get_field_name( true, $item[ 'key' ], false )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
+            echo "<div class='kb-checkboxset-item'><label><input type='checkbox' id='{$this->getFieldId()}' name='{$this->getFieldName( true, $item[ 'key' ], false )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
         }
 
         $this->description();

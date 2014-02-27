@@ -19,8 +19,8 @@ Class Editor extends Field
     public function form()
     {
         $media = $this->getArg('media');
-        $name = $this->get_field_name($this->getArg('array'));
-        $id = $this->get_field_id(true);
+        $name = $this->getFieldName($this->getArg('array'));
+        $id = $this->getFieldId(true);
         $value = $this->getValue();
         $this->label();
         $this->description();

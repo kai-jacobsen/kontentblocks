@@ -12,12 +12,6 @@
 //        background: transparent;
     }
 
-    background-color: #fff;
-    padding: 20px 20px 25px 20px;
-    border-bottom: 1px solid #f2f2f2;
-    &:last-child{
-		// border-bottom: 0px;
-    }
 
     /* Shared */
 
@@ -34,23 +28,23 @@
       border-bottom: 1px solid #aaa;
       box-shadow: 0px 1px 1px #fff;
     }
-
-    input[type=text]{
-        height: 30px;
-		padding: 0;
-        line-height: 22px;
-        border: 1px solid #efefef;
-        font-size:14px;
-		background: #fcfcfc;
-		box-shadow: none;
-        width:40%;
-		padding: 0 10px;
-        @include transition(width .2s ease-out);
-
-        &.large{
-            width: 100%;
-        }
-    }
+//
+//    input[type=text]{
+//        height: 30px;
+//		padding: 0;
+//        line-height: 22px;
+//        border: 1px solid #efefef;
+//        font-size:14px;
+//		background: #fcfcfc;
+//		box-shadow: none;
+//        width:40%;
+//		padding: 0 10px;
+//        @include transition(width .2s ease-out);
+//
+//        &.large{
+//            width: 100%;
+//        }
+//    }
 
     input[type=checkbox]{
         margin-right: 3px;
@@ -80,67 +74,7 @@
 Field Tabs
 */
 
-.kb_fieldtabs{
 
-    position: relative; 
-    zoom: 1; 
-
-
-    ul.ui-tabs-nav{
-        margin-bottom: 0px;
-        margin-left: 0px;
-        padding:10px 0 0 0;
-
-        li{
-            padding: 8px 0px 5px 0px;
-            background: #fff;
-            float: left;
-//            border-bottom: 2px solid #f9f9f9;
-            margin-bottom: 0;
-            position: relative;
-            top:0px;
-
-
-            a{
-                padding: 2px 22px;
-                text-decoration: none;
-                color:#999;
-                top:2px;
-                font-weight:100;
-              font-size: 13px;
-                &:focus, &:active{
-                    border: none;
-                    outline: none;
-                }
-
-                &:hover{
-                    color: #666;
-                }
-            }
-
-
-
-            &:hover{
-//                border-bottom: 2px solid $lightblue;
-            }
-
-            &.ui-tabs-active{
-                background-color: #fff;
-//                border-bottom: 2px solid $lightblue;
-              border-right: 1px solid #eee;
-
-                a{
-                    color: #000;
-                    font-weight: 500;
-                }
-            }
-        }
-    }
-
-    .ui-widget-content{
-        padding:0px;
-    }
-}
 
 .field-wrapper{
 

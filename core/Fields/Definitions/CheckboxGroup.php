@@ -37,7 +37,7 @@ Class CheckboxGroup extends Field
                 throw new Exception( 'Provide valid checkbox items. Check your code.Either a value or label is missing' );
             }
             $checked = (in_array( $item[ 'value' ], $this->getValue() )) ? 'checked="checked"' : '';
-            echo "<div class='kb-checkboxgroup-item'><label><input type='checkbox' id='{$this->get_field_id()}' name='{$this->get_field_name( true )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
+            echo "<div class='kb-checkboxgroup-item'><label><input type='checkbox' id='{$this->getFieldId()}' name='{$this->getFieldName( true )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
         }
 
         $this->description();

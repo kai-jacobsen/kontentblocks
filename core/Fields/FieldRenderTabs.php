@@ -57,7 +57,7 @@ class FieldRenderTabs
 
     public function tabNavigation()
     {
-        echo "<div class='kb_fieldtabs'>";
+        echo "<div class='kb_fieldtabs kb-field--tabs'>";
         echo "<ul>";
 
         foreach ( $this->structure as $section ) {

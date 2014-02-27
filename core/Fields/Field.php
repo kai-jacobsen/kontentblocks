@@ -2,6 +2,11 @@
 
 namespace Kontentblocks\Fields;
 
+/**
+ * Class Field
+ * @package Kontentblocks\Fields
+ * @since 1.0.0
+ */
 abstract class Field
 {
 
@@ -133,7 +138,7 @@ abstract class Field
 
     /**
      * Setup method
-     * @param mixed $data
+     * @param mixed $data fields assigned value
      * @param string $moduleId
      * @TODO Investigate the difference between parentModule and parentModuleId, set above
      * @since 1.0.0
@@ -148,6 +153,7 @@ abstract class Field
     /**
      * Get a special object for the field type if field has one set
      * @TODO: Revise if there should be one default object
+     * @TODO: should be possible to provide an custom object as well
      * @since 1.0.0
      * @return object
      */
@@ -172,6 +178,7 @@ abstract class Field
     /**
      * The actual output method for the field markup
      * Any markup should be echoed, not returned
+     * Must be overridden by the individual field class
      * @since 1.0.0
      * @return void
      */
@@ -221,22 +228,22 @@ abstract class Field
     {
 
         echo '<div class="kb-field-wrapper" id=' . $this->uniqueId . '>'
-            . '<div class="kb_field_header">';
+            . '<div class="kb-field-header">';
         if (!empty($this->args['title'])) {
             echo "<h4>{$this->args['title']} --</h4>";
         }
         echo '</div>';
-        echo "<div class='kb_field {$this->type} clearfix'>";
+        echo "<div class='kb_field kb-field kb-field--{$this->type} kb-field--reset clearfix'>";
 
     }
 
     /**
      * Field body markup
      * This method calls the actual form() method.
+     * @since 1.0.0
      */
     public function body()
     {
-
         /*
          * optional method to render something before the field
          * @TODO replace with wp hook
@@ -252,7 +259,7 @@ abstract class Field
             $this->form();
         }
 
-        // some field (colorpicker etc) might have some individual settings
+        // some fields (colorpicker etc) might have some individual settings
         $this->javascriptSettings();
 
         /*
@@ -268,6 +275,7 @@ abstract class Field
     /**
      * JSON Encode custom settings for the field
      * @TODO use JSONTransport
+     * @since 1.0.0
      */
     public function javascriptSettings()
     {
@@ -282,6 +290,7 @@ abstract class Field
     /**
      * Footer
      * @todo add wp hook
+     * @since 1.0.0
      */
     public function footer()
     {
@@ -291,11 +300,12 @@ abstract class Field
 
     /**
      * Helper Method to create a complete label tag
+     * @since 1.0.0
      */
     public function label()
     {
         if (!empty($this->getArg('label'))) {
-            echo "<label class='kb_label heading' for='{$this->get_field_id()}'>{$this->getArg('label')}</label>";
+            echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getFieldId()}'>{$this->getArg('label')}</label>";
         }
 
     }
@@ -304,7 +314,7 @@ abstract class Field
      * Wrapper, helper method to get the key
      * Will call filter() if available
      * @param string $arrKey
-     * @return null
+     * @return mixed|null returns null if data does not exist
      */
     public function getValue($arrKey = null)
     {
@@ -320,6 +330,12 @@ abstract class Field
 
     }
 
+    /**
+     * If field stores data in an associative array
+     * @param string $arrKey
+     * @return mixed|null returns null if key does not exist
+     * @since 1.0.0
+     */
     public function getValueFromArray($arrKey)
     {
         if (is_array($this->value) && isset($this->value[$arrKey])) {
@@ -334,6 +350,11 @@ abstract class Field
 
     }
 
+    /**
+     * Handles the generation of hidden input fields with the correct data
+     * @return bool false if there is no data to render
+     * @since 1.0.0
+     */
     public function renderHidden()
     {
         if (empty($this->getValue())) {
@@ -348,40 +369,53 @@ abstract class Field
 
                     if (is_array($item) && \Kontentblocks\Helper\is_assoc_array($item)) {
                         foreach ($item as $ikey => $ival) {
-                            echo "<input type='hidden' name='{$this->get_field_name(true, $ikey, true)}' value='{$ival}' >";
+                            echo "<input type='hidden' name='{$this->getFieldName(true, $ikey, true)}' value='{$ival}' >";
                         }
                     } else {
-                        echo "<input type='hidden' name='{$this->get_field_name(true)}' value='{$item}' >";
+                        echo "<input type='hidden' name='{$this->getFieldName(true)}' value='{$item}' >";
                     }
                 }
             } else {
                 foreach ($this->value as $k => $v) {
-                    echo "<input type='hidden' name='{$this->get_field_name(true, $k)}' value='{$v}' >";
+                    echo "<input type='hidden' name='{$this->getFieldName(true, $k)}' value='{$v}' >";
                 }
             }
         } else {
-            echo "<input type='hidden' name='{$this->get_field_name()}' value='{$this->getValue()}' >";
+            echo "<input type='hidden' name='{$this->getFieldName()}' value='{$this->getValue()}' >";
         }
-
     }
 
-    /*
+    /**
+     * Renders description markup
      * Get description if available
+     * @since 1.0.0
      */
     public function description()
     {
         if (!empty($this->getArg('description'))) {
-            echo "<p class='description'>{$this->getArg('description')}</p>";
+            echo "<p class='description kb-field--description'>{$this->getArg('description')}</p>";
         }
 
     }
 
+    /**
+     * Wrapper to the actual save method
+     * @param mixed $keydata
+     * @param mixed|null $oldKeyData
+     * @return mixed
+     */
     public function _save($keydata, $oldKeyData = NULL)
     {
         return $this->save($keydata, $oldKeyData);
 
     }
 
+    /**
+     * Fields saving method
+     * @param mixed $keydata
+     * @param mixed $oldKeyData
+     * @return mixed
+     */
     public function save($keydata, $oldKeyData)
     {
         if (is_null($keydata)) {
@@ -403,6 +437,12 @@ abstract class Field
 
     }
 
+    /**
+     * Wrapper method to get a single arg from the args array
+     * @param string $arg argument to retrieve
+     * @param mixed $default return value if arg is not set
+     * @return mixed arg value
+     */
     public function getArg($arg, $default = false)
     {
         if (isset($this->args[$arg])) {
@@ -413,12 +453,20 @@ abstract class Field
 
     }
 
+    /**
+     * Mainly used internally to specifiy the fields visibility
+     * @return bool
+     */
     public function getDisplay()
     {
         return $this->args['display'];
 
     }
 
+    /**
+     * Set fields visibility
+     * @param $bool
+     */
     public function setDisplay($bool)
     {
         $this->args['display'] = $bool;
@@ -428,7 +476,7 @@ abstract class Field
     /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
      * */
-    public function get_field_id($rnd = false)
+    public function getFieldId($rnd = false)
     {
         if ($rnd) {
             $number = uniqid('kbf');
@@ -452,7 +500,7 @@ abstract class Field
      * @internal param string $key - base key for the input field
      * @return string
      */
-    public function get_field_name($array = false, $akey = NULL, $multiple = false)
+    public function getFieldName($array = false, $akey = NULL, $multiple = false)
     {
         if ($array === true && $akey !== NULL && $multiple) {
             return "{$this->baseId}[{$this->key}][{$akey}][]";
@@ -472,44 +520,52 @@ abstract class Field
 
     }
 
-    public function get_value($key, $args, $data)
-    {
-        if (is_string($this->getArg['array'])) {
-            return (isset($this->data[$key][$args['array']])) ? $this->data[$key][$args['array']] : '';
-        } elseif (!empty($this->data[$key])) {
-            return $this->data[$key];
-        } else {
-            return $this->getArg['std'];
-        }
-
-    }
-
     public function getPlaceholder()
     {
         return $this->getArg('placeholder');
 
     }
 
-    public function get_data($key, $return = '')
-    {
-        if (is_array($this->data)) {
-            return (!empty($this->data[$key])) ? $this->data[$key] : $return;
-        } else {
-            return (!empty($this->data)) ? $this->data : $return;
-        }
-
-    }
-
-    /**
-     * Helper to create a class attribute
-     *
-     * @param string $class
-     * @return string - html attribute
+    /*
+     * Stuff to delete
+     * @TODO: Verify and delete
+     * -------------------------------
      */
-    public function get_css_class($class)
-    {
-        return "class=\"{$class}\"";
 
-    }
+//
+//    public function getValue($key, $args, $data)
+//    {
+//        if (is_string($this->getArg['array'])) {
+//            return (isset($this->data[$key][$args['array']])) ? $this->data[$key][$args['array']] : '';
+//        } elseif (!empty($this->data[$key])) {
+//            return $this->data[$key];
+//        } else {
+//            return $this->getArg['std'];
+//        }
+//
+//    }
+
+//
+//    public function get_data($key, $return = '')
+//    {
+//        if (is_array($this->data)) {
+//            return (!empty($this->data[$key])) ? $this->data[$key] : $return;
+//        } else {
+//            return (!empty($this->data)) ? $this->data : $return;
+//        }
+//
+//    }
+//
+//    /**
+//     * Helper to create a class attribute
+//     *
+//     * @param string $class
+//     * @return string - html attribute
+//     */
+//    public function get_css_class($class)
+//    {
+//        return "class=\"{$class}\"";
+//
+//    }
 
 }

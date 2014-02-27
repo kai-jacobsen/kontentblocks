@@ -25,7 +25,7 @@ Class Text extends Field
     {
         $this->label();
         $type = $this->getArg( 'type', 'text' );
-        echo "<input type='{$type}' id='{$this->get_field_id()}' name='{$this->get_field_name()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
+        echo "<input type='{$type}' id='{$this->getFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
         $this->description();
 
     }

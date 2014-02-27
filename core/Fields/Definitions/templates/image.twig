@@ -6,10 +6,10 @@
 
     <div class="kb-js-image-meta-wrapper">
         <label>{{ i18n.title }} </label>
-        <input class='kb-js-image-title kb-observe' type="text" name='{{ field.get_field_name( 'title') }}' value='{{value.title}}' >
+        <input class='kb-js-image-title kb-observe' type="text" name='{{ field.getFieldName( 'title') }}' value='{{value.title}}' >
         <label>{{ i18n.caption }}</label>
-        <input class='kb-js-image-caption kb-observe' type="text" name='{{ field.get_field_name( 'caption') }}' value='{{value.caption}}' >
+        <input class='kb-js-image-caption kb-observe' type="text" name='{{ field.getFieldName( 'caption') }}' value='{{value.caption}}' >
     </div>
-    <input class='kb-js-image-id' type='hidden' name='{{field.get_field_name( 'id' )}}' value='{{value.id}}' >
+    <input class='kb-js-image-id' type='hidden' name='{{field.getFieldName( 'id' )}}' value='{{value.id}}' >
 </div>
 {{ field.description() }}

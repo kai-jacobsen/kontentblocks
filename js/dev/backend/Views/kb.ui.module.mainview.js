@@ -63,7 +63,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             this.$el.toggleClass('kb-open');
             // set current module to prime object property
             KB.currentModule = this.model;
-
+            this.setOpenStatus();
         }
     },
     setOpenStatus: function () {
@@ -99,6 +99,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         jQuery('.fullscreen--close').on('click', _.bind(this.closeFullscreen,this));
         this.$el.addClass('fullscreen-module');
         jQuery('#post-body').removeClass('columns-2').addClass('columns-1');
+
+        if (!this.model.get('open')){
+            this.setOpenStatus();
+            this.toggleBody();
+        }
 
         this.sizeTimer = setInterval(function(){
             var h = jQuery('.kb_inner', that.$el).height() + 150;

@@ -79,7 +79,13 @@ class Element extends AbstractFieldReturn
             $filtered = $this->value;
         }
         $codeblocks = $this->fixcodeblocks($filtered);
-        return sprintf($format, $this->el, $codeblocks, $this->_renderAttributes(), uniqid('kb'));
+
+        if (is_user_logged_in()){
+            return sprintf($format, $this->el, $codeblocks, $this->_renderAttributes(), uniqid('kb'));
+        } else {
+            $format = '<%1$s %3$s>%2$s</%1$s>';
+            return sprintf($format, $this->el, $codeblocks, $this->_renderAttributes());
+        }
 
     }
 
