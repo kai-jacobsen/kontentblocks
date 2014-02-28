@@ -129,10 +129,6 @@ class Element extends AbstractFieldReturn
         return '<' . $matches[1] . $matches[2] . '>' . htmlspecialchars(substr(str_replace('<' . $matches[1] . $matches[2] . '>', '', $matches[0]), 0, -(strlen($matches[1]) + 3))) . '</' . $matches[1] . '>';
     }
 
-    public function __toString()
-    {
-        return $this->value;
-    }
 
     public function inlineEdit($bool)
     {

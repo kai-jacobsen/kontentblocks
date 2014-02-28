@@ -33,7 +33,6 @@ class SavePost
             return false;
         }
 
-
         $this->index = $this->Environment->getStorage()->getIndex();
 
         $areas = $this->Environment->getAreas();
