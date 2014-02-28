@@ -3,7 +3,7 @@ var KB = KB || {};
 KB.Fields.register('Color', (function($) {
 	return {
 		init: function() {
-            $('body').on('mouseup', '.kb_field.color', function(){
+            $('body').on('mouseup', '.kb_field--color', function(){
                 setTimeout(function(){
                     console.log('whoop');
                     if (KB.FrontendEditModal){
