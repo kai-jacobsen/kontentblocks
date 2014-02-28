@@ -446,7 +446,7 @@ abstract class Module
         $this->envVars = wp_parse_args($this->envVars,array(
             'postType' => $environment->get('postType'),
             'pageTemplate' => $environment->get('pageTemplate'),
-            'postId' => absint($environment->get('postid'))
+            'postId' => absint($environment->get('postID'))
         ));
 
     }

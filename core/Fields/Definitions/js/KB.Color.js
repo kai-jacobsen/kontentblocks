@@ -5,10 +5,11 @@ KB.Fields.register('Color', (function($) {
 		init: function() {
             $('body').on('mouseup', '.kb_field.color', function(){
                 setTimeout(function(){
+                    console.log('whoop');
                     if (KB.FrontendEditModal){
                         KB.FrontendEditModal.recalibrate();
                     }
-                },75);
+                }, 150);
 
             });
 
