@@ -122,7 +122,8 @@ class ModuleStoragePostMeta
      */
     private function setup()
     {
-        if (empty($this->DataBackend->get('kb_kontentblocks'))) {
+        $index = $this->DataBackend->get('kb_kontentblocks');
+        if (empty($index)) {
             return false;
         }
         $this->index = $this->DataBackend->get('kb_kontentblocks');

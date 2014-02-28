@@ -46,7 +46,8 @@ class KB_Master_Module extends Module
 
         $masterId = $module['master_id'];
         $translated = false;
-        $duplicate = (!empty(get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true)));
+        $icl = get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true);
+        $duplicate = !empty($icl);
 
 
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
@@ -74,7 +75,8 @@ class KB_Master_Module extends Module
     {
         $masterId = $this->master_id;
         $translated = false;
-        $duplicate = (!empty(get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true)));
+        $icl = get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true);
+        $duplicate = !empty($icl);
 
 
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
@@ -119,7 +121,8 @@ class KB_Master_Module extends Module
     {
         if ($module['master']) {
             $masterId = $module['master_id'];
-            $duplicate = (!empty(get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true)));
+            $icl = get_post_meta(get_the_ID(), '_icl_lang_duplicate_of', true);
+            $duplicate = (!empty($icl));
 
 
             if (I18n::getInstance()->wpmlActive() && !$duplicate) {

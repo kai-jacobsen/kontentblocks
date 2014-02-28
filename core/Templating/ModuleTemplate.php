@@ -24,7 +24,7 @@ class ModuleTemplate
 
     public function render( $echo = false )
     {
-
+        $modulePath = $this->module->getPath();
 
         if ( is_file( trailingslashit( get_stylesheet_directory() . '/module-templates/' . $this->module->settings['id']) . $this->tplFile ) ) {
             $this->setPath( trailingslashit( get_template_directory() . '/module-templates/' . $this->module->settings['id'] ) );
@@ -33,9 +33,8 @@ class ModuleTemplate
         elseif ( is_file( trailingslashit( get_template_directory() . '/module-templates/' . $this->module->settings['id'] ) . $this->tplFile ) ) {
             $this->setPath( trailingslashit( get_template_directory() . '/module-templates/' . $this->module->settings['id'] ));
         }
-        elseif ( !empty( $this->module->path ) ) {
-            if ( is_file( trailingslashit( $this->module->path ) . $this->tplFile ) ) {
-
+        elseif ( !empty( $modulePath ) ) {
+            if ( is_file( trailingslashit( $modulePath ) . $this->tplFile ) ) {
                 $this->setPath( $this->module->settings['path'] );
             }
         }

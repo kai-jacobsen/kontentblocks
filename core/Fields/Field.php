@@ -304,7 +304,8 @@ abstract class Field
      */
     public function label()
     {
-        if (!empty($this->getArg('label'))) {
+        $label = $this->getArg('label');
+        if (!empty($label)) {
             echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getFieldId()}'>{$this->getArg('label')}</label>";
         }
 
