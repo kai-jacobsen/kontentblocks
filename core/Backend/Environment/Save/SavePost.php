@@ -4,10 +4,9 @@ namespace Kontentblocks\Backend\Environment\Save;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\BackupManager;
-use Kontentblocks\Interfaces\InterfaceSaveHandler;
 use Kontentblocks\Modules\ModuleFactory;
 
-class SavePost implements InterfaceSaveHandler
+class SavePost
 {
 
     protected $Environment;
