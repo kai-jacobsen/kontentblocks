@@ -173,7 +173,8 @@ class ModuleTemplates
 
             $id = $tpl['instance_id'];
             $data = $_POST[$id];
-            $old = (empty($MetaData->get('_' . $id))) ? array() : $MetaData->get('_' . $id);
+            $existingData = $MetaData->get('_' . $id);
+            $old = (empty($existingData)) ? array() : $existingData;
 
             $moduleDef = ModuleFactory::parseModule($tpl);
             $Factory = new ModuleFactory($moduleDef['class'], $moduleDef, null, $old);
