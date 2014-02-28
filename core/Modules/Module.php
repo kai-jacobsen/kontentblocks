@@ -581,12 +581,11 @@ abstract class Module
             'uri' => $this->getUri()
         );
 
-        unset($toJSON['settings']['path']);
 
 
         if (isset($this->master) && $this->master){
             $toJSON['master'] = true;
-            $toJSON['master_id'] = $this->master_id;
+            $toJSON['master_id'] = $this
             $toJSON['post_id'] = $this->master_id;
         }
 
