@@ -53,7 +53,6 @@ class Element extends AbstractFieldReturn
 
     public function html()
     {
-
         if (is_user_logged_in() && $this->inlineEdit) {
             $editableClass = $this->getEditableClass();
             if (is_object($this->field)) {

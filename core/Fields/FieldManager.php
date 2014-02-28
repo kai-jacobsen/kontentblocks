@@ -47,7 +47,7 @@ class FieldManager
      * registered fields in one flat array
      * @var array
      */
-    protected $FieldsById;
+    protected $fieldsById;
 
     /**
      * Constructor
@@ -114,10 +114,10 @@ class FieldManager
      */
     public function setup( $instanceData )
     {
-        if ( empty( $this->FieldsById ) ) {
-            $this->FieldsById = $this->collectAllFields();
+        if ( empty( $this->fieldsById ) ) {
+            $this->fieldsById = $this->collectAllFields();
         }
-        foreach ( $this->FieldsById as $field ) {
+        foreach ( $this->fieldsById as $field ) {
             $data = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : '';
             $field->setup( $data, $this->moduleId );
         }
@@ -134,12 +134,12 @@ class FieldManager
      */
     public function getFieldByKey( $key )
     {
-        if ( empty( $this->FieldsById ) ) {
-            $this->FieldsById = $this->collectAllFields();
+        if ( empty( $this->fieldsById ) ) {
+            $this->fieldsById = $this->collectAllFields();
         }
 
-        if ( isset( $this->FieldsById[ $key ] ) ) {
-            return $this->FieldsById[ $key ];
+        if ( isset( $this->fieldsById[ $key ] ) ) {
+            return $this->fieldsById[ $key ];
         }
         else {
             false;

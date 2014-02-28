@@ -7,18 +7,7 @@ if ( !defined( 'ABSPATH' ) ) {
     die( 'Direct access not permitted.' );
 }
 
-/**
- * Has to be used by each Block Class to register itself
- *
- * @global object $Kontentblocks
- * @param string $classname
- */
-function kb_register_block( $classname )
-{
-    global $Kontentblocks;
-    $Kontentblocks->register_block( $classname );
 
-}
 
 /**
  * Used to register specific per-post area settings, basically css classes to be used for a area
@@ -63,32 +52,9 @@ function kb_register_area_template( $args )
 
 }
 
-function kb_register_wrapper( $area_template )
-{
-    global $Kontentblocks;
-    $Kontentblocks->register_wrapper( $area_template );
 
-}
-
-/**
- * Template Tag to render a area and containing blocks
- *
- * @global object $Kontentblocks
- * @param string $post_id
- * @param string $area
- */
-function kb_render_blocks( $id = NULL, $area = 'kontentblocks' )
-{
-    global $Kontentblocks, $post;
-    $Kontentblocks->set_post_context( true );
-    $post_id = (null === $post_id) ? $post->ID : $id;
-
-    $Kontentblocks->render_blocks( $post_id, $area );
-
-}
 
 add_action( 'area', 'kb_render_area', 10, 3 );
-
 function kb_render_area( $area = 'kontentblocks', $id = NULL, $additionalArgs = null )
 {
     global $Kontentblocks, $post;
@@ -101,22 +67,9 @@ function kb_render_area( $area = 'kontentblocks', $id = NULL, $additionalArgs = 
 
 }
 
-add_action( 'dynamic_area', 'kb_render_area_dynamic', 10, 4 );
 
-function kb_render_area_dynamic( $area = null, $id = NULL, $context = null, $subcontext = null )
-{
-    global $Kontentblocks, $post;
-
-    $Kontentblocks->set_post_context( false );
-
-    $post_id = (null === $id) ? $post->ID : $id;
-
-    $Kontentblocks->render_blocks( $post_id, $area, $context, $subcontext );
-
-}
 
 add_action( 'sidebar_areas', 'kb_render_area_sidebar', 10, 3 );
-
 function kb_render_area_sidebar( $id = null, $additionalArgs= array() )
 {
     global  $post;
@@ -132,36 +85,13 @@ function kb_render_area_sidebar( $id = null, $additionalArgs= array() )
 
 }
 
-/**
- * Used by each Field Class to register itself
- *
- * @global object $Kontentfields
- * @param string $id
- * @param string $class
- */
-function kb_register_field( $id, $class )
-{
-    global $Kontentfields;
-    $Kontentfields->register_field( $id, $class );
-}
 
 function kb_register_fieldtype( $id, $class )
 {
-
      FieldRegistry::getInstance()->registerField( $id, $class );
 }
 
-/*
- * Get Dev Mode Status of Kontentblocks
- */
 
-function kb_is_dev_mode()
-{
-    global $Kontentblocks;
-
-    return $Kontentblocks->dev_mode;
-
-}
 
 /*
  * Plugin Path
@@ -184,7 +114,6 @@ function has_modules( $area_id, $post_id = null )
         return;
     }
     $post_id = (null === $post_id) ? $post->ID : $post_id;
-
 
     $Meta = new PostMetaAPI( $post_id );
     return $Meta->hasModules( $area_id );

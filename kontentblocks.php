@@ -5,23 +5,21 @@ namespace Kontentblocks;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\ModuleTemplates;
 use Kontentblocks\Backend\Screen\EditScreen,
-    Kontentblocks\Frontend\AreaRender,
     Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Hooks\Capabilities,
     Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleRegistry;
-use Kontentblocks\Menus\MenuManager;
 
 /*
-  Plugin Name:Kontentblocks.
+  Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
-  Description: Content Management on steroids
-  Version: 0.7
+  Description: Modularize content
+  Version: 1.0.0-alpha
   Author: Kai Jacobsen
   Author URI: http://kontentblocks.de
   Text Domain: Kontentblocks
   Domain Path: /languages
-  License: Split License / GPL3
+  License: GPL3
  */
 
 Class Kontentblocks
@@ -111,9 +109,7 @@ Class Kontentblocks
 
     public function init()
     {
-        if (isset($_GET['resetkb'])) {
-            delete_option('kb_dynamic_areas');
-        }
+
         /* Define some path constants to make things a bit easier */
         define('KB_PLUGIN_URL', plugin_dir_url(__FILE__));
         define('KB_PLUGIN_PATH', plugin_dir_path(__FILE__));
@@ -138,21 +134,18 @@ Class Kontentblocks
 
             include_once dirname(__FILE__) . '/core/Hooks/setup.php';
 
-
+            // @TODO Quatsch
             $this->UI = new EditScreen();
             $this->Capabilities = new Capabilities();
-
-
-
         }
 
+        // Temporary
+        // @TODO Quatsch
         DynamicAreas::getInstance();
         ModuleTemplates::getInstance();
 
+        // @TODO Quatsch
         $this->Enqueues = new Enqueues();
-        // setup vars
-        add_action('init', array($this, '_set_block_templates'), 850);
-
         add_post_type_support('page', 'kontentblocks');
 
         // load Templates automatically
@@ -183,17 +176,6 @@ Class Kontentblocks
 
     }
 
-    /**
-     * Indicate whether we are on a post edit screen or inside the dynamic areas section
-     *
-     * @param bool $bool . defaults to true
-     * @return void
-     */
-    public function set_post_context($bool)
-    {
-        $this->post_context = $bool;
-
-    }
 
     /**
      * Load (Block)Template Files
@@ -271,36 +253,6 @@ Class Kontentblocks
 
     }
 
-    /*
-     * Instantiate a Block Class and store it
-     * Each Block registers itself by using kb_register_blocks which calls this method
-     *
-     * @param string classname
-     */
-
-    public function register_block($classname)
-    {
-
-        $this->ModuleRegistry = ModuleRegistry::getInstance();
-
-        if (!class_exists($classname)) {
-            return false;
-        }
-        $this->ModuleRegistry->add($classname);
-
-    }
-
-    /*
-     * Defaul wrapper template
-     */
-
-    public function register_wrapper($area_template)
-    {
-        $this->use_wrapper = true;
-        $this->default_wrapper = $area_template;
-
-    }
-
     /**
      * Prepare new area
      * two ways to go:
@@ -350,40 +302,6 @@ Class Kontentblocks
 
     }
 
-    public function _set_block_templates()
-    {
-        $this->block_templates = get_option('kb_block_templates');
-
-    }
-
-    public function get_block_templates()
-    {
-        return $this->block_templates;
-
-    }
-
-
-    /**
-     * Retrieve templateable Templates from Block Collection
-     * @return array
-     */
-    public function get_templateables()
-    {
-        $blocks = null;
-
-        if (!empty($this->blocks)) {
-            foreach ($this->blocks as $block) {
-                if (isset($block->settings['templateable']) and $block->settings['templateable'] == true) {
-                    $blocks[] = $block;
-                }
-            }
-        }
-        return $blocks;
-
-    }
-
-
-
 }
 
 // end Kontentblocks
@@ -393,7 +311,6 @@ global $Kontentblocks;
 $Kontentblocks = Kontentblocks::getInstance();
 $Kontentblocks->init();
 
-global $Kontentfields, $K;
 add_action('init', 'Kontentblocks\init_Kontentfields', 15);
 
 function init_Kontentfields()

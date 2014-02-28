@@ -15,10 +15,8 @@ class KB_Master_Module extends Module
         'description' => 'Referenz zu einem Master Template',
         'globallyAvailable' => true,
         'asTemplate' => false,
-        'os_edittext' => '',
         'master' => true,
         'cacheable' => false,
-        'os_edittext' => 'Master Template',
         'hidden' => true,
         'category' => 'core'
     );
@@ -106,7 +104,7 @@ class KB_Master_Module extends Module
 
     }
 
-
+    // Has no output
     public function  render($data)
     {
         return false;
@@ -180,6 +178,7 @@ class KB_Master_Module extends Module
         return $moduleArgs;
     }
 
+    // Nothing to save here
     public function save($data, $old)
     {
         return false;
