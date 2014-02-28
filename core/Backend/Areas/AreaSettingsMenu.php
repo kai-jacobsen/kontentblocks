@@ -1,9 +1,7 @@
 <?php
 
 namespace Kontentblocks\Backend\Areas;
-
-use Kontentblocks\Backend\Areas\AreaRegistry,
-    Kontentblocks\Abstracts\AbstractEnvironment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 
 
 /**
@@ -63,9 +61,9 @@ class AreaSettingsMenu
     /**
      * Class Constuctor
      * @param \Kontentblocks\Backend\Areas\Area $area
-     * @param \Kontentblocks\Abstracts\AbstractEnvironment $environment
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
      */
-    public function __construct( Area $area, AbstractEnvironment $environment )
+    public function __construct( Area $area, PostEnvironment $environment )
     {
         $this->defaults      = $this->_getDefaults();
         $this->id            = $area->get( 'id' );

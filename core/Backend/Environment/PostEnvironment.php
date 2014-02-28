@@ -13,64 +13,86 @@ use Kontentblocks\Modules\ModuleFactory;
 /**
  * Post Environment
  *
- * This class provides an API to the underlying PostMetaData which
- * interacts with the WordPress API directly.
- * Basically it's just a wrapper to often used functions around the post meta data
- * resp. the actual module data
  * @package Kontentblocks
  * @subpackage Post
  * @since 1.0.0
  */
-class PostEnvironment extends AbstractEnvironment
+class PostEnvironment
 {
 
     /**
-     *
-     * @var type
+     * @var \Kontentblocks\Backend\API\PostMetaAPI
      */
     protected $MetaData;
+
+    /**
+     * @var \Kontentblocks\Backend\Storage\ModuleStoragePostMeta
+     */
     protected $Storage;
-    protected $postid;
+
+    /**
+     * @var int
+     */
+    protected $postID;
+
+    /**
+     * @var string
+     */
     protected $pageTemplate;
+
+    /**
+     * @var string
+     */
     protected $postType;
+
+    /**
+     * @var array
+     */
     protected $modules;
+
+    /**
+     * @var array
+     */
     protected $areas;
 
-    public function __construct($postid)
+
+    /**
+     * Class constructor
+     * @param $postID
+     */
+    public function __construct($postID)
     {
-        if (!isset($postid)) {
+        if (!isset($postID)) {
             return false;
         }
 
-        $this->postid = $postid;
+        $this->postID = $postID;
 
-        $this->MetaData = new PostMetaAPI($postid);
-        $this->Storage = new ModuleStoragePostMeta($postid, $this->MetaData);
+        $this->MetaData = new PostMetaAPI($postID);
+        $this->Storage = new ModuleStoragePostMeta($postID, $this->MetaData);
 
         $this->pageTemplate = $this->MetaData->getPageTemplate();
         $this->postType = $this->MetaData->getPostType();
 
-        $this->modules = $this->_setupModules();
+        $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
-        $this->areas = $this->_findAreas();
-
-    }
-
-    /**
-     * Helper Method to indicate whether its post or global data
-     * TODO: use is_a etc. instead
-     * @return boolean
-     */
-    public function isPostContext()
-    {
-        return true;
+        $this->areas = $this->findAreas();
 
     }
 
     public function getId(){
-        return $this->postid;
+        return $this->postID;
     }
 
+    public function get( $param )
+    {
+        if ( isset( $this->$param ) ) {
+            return $this->$param;
+        }
+        else {
+            return false;
+        }
+    }
 
     /**
      * returns the PostMetaData instance
@@ -132,7 +154,7 @@ class PostEnvironment extends AbstractEnvironment
      * prepares modules attached to this post
      * @return type
      */
-    private function _setupModules()
+    private function setupModules()
     {
         $collection = array();
         $modules = $this->Storage->getIndex();
@@ -144,27 +166,10 @@ class PostEnvironment extends AbstractEnvironment
     }
 
     /**
-     * Sort Modules to areas
-     */
-    private function _sortModules()
-    {
-        if (empty($this->modules)) {
-            return false;
-        }
-
-        $sorted = array();
-        foreach ($this->modules as $module) {
-            $sorted[$module['area']][$module['instance_id']] = $module;
-        }
-        return $sorted;
-
-    }
-
-    /**
      * returns all areas which are available in this environment
      * @return array
      */
-    public function _findAreas()
+    public function findAreas()
     {
 
         if ($this->postType === 'kb-dyar'){
@@ -206,7 +211,6 @@ class PostEnvironment extends AbstractEnvironment
             return $settings[$id];
         }
         return false;
-
     }
 
     /**
@@ -221,11 +225,11 @@ class PostEnvironment extends AbstractEnvironment
         if ($data !== NULL) {
             return $data;
         } else {
-            // TODO Attention!
-            return 'hello';
+            return array();
         }
 
     }
+
 
     public function save()
     {

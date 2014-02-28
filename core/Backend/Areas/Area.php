@@ -6,6 +6,7 @@ use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Backend\Areas\AreaSettingsMenu,
     Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\JSONBridge;
 
 /**
@@ -29,9 +30,8 @@ class Area
 
     /**
      * Environment for data handling
-     * Either a instance of: \Admin\Environment\PostEnvironment or \Admin\Nonpost\GlobalEnvironment
      *
-     * @var object \Kontentblocks\Abstract\AbstractEnvironment
+     * @var object \Kontentblocks\Backend\Environment\PostEnvironment
      */
     protected $environment;
 
@@ -51,8 +51,11 @@ class Area
     /**
      * Class Constructor
      * @param array $area area settings array
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
+     * @param string $context
+     * @throws \Exception
      */
-    function __construct($area, AbstractEnvironment $environment, $context = 'normal')
+    function __construct($area, PostEnvironment $environment, $context = 'normal')
     {
 
         if (empty($area)) {
@@ -95,8 +98,10 @@ class Area
 
     }
 
-    /*
-     * Get Markup for block limit indicator, return void if unlimited
+    /**
+     * Get Markup for block limit indicator
+     * 0 indicates unlimited and is the default setting
+     * @since 1.0.0
      */
 
     private function _getModuleLimitTag()
@@ -110,10 +115,12 @@ class Area
 
     }
 
+    /**
+     * Wrapper to build the area markup
+     * @since 1.0.0
+     */
     public function build()
     {
-
-
         $this->header();
         $this->render();
         $this->toJSON();
@@ -138,6 +145,9 @@ class Area
 
     }
 
+    /**
+     * Area Footer markup
+     */
     public function footer()
     {
         echo "</div><!-- close area wrap -->";
@@ -168,6 +178,7 @@ class Area
 
         echo "</ul>";
 
+        // @TODO move to js
         echo $this->menuLink();
         // block limit tag, if applicable
         $this->_getModuleLimitTag();
@@ -184,18 +195,14 @@ class Area
 
     /**
      * toJSON
-     * make certain area properties accessable throught the frontend
-     * renders a script tag with an json array of area properties
+     * make certain area properties are accessible by js frontend-only
      */
     public function toJSON()
     {
-        // This gets checked elsewhere as well
-        // but to be sure that this doesn't happen
-        // for normal users, better safe than sorry
+
         if (!is_user_logged_in()) {
             return;
         }
-
 
         $area = array(
             'id' => $this->id,
@@ -244,9 +251,7 @@ class Area
     {
         if (current_user_can('create_kontentblocks')) {
             if (!empty($this->assignedModules)) {
-                $out = " <div class='add-modules cantsort'>
-
-					</div>";
+                $out = " <div class='add-modules cantsort'></div>";
                 return $out;
             }
             return false;
@@ -276,6 +281,7 @@ class Area
         $cats[ 'template' ] = __( 'Templates', 'kontentblocks' );
 
         $this->cats = $cats;
+
         JSONBridge::getInstance()->registerData('ModuleCategories', null, $cats);
 
     }

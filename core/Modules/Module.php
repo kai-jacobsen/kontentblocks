@@ -3,6 +3,7 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\FieldManager,
     Kontentblocks\Abstracts\AbstractEnvironment;
 
@@ -42,12 +43,12 @@ abstract class Module
      *
      * @param null $args
      * @param array $data
-     * @param \Kontentblocks\Abstracts\AbstractEnvironment $environment
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
      * @internal param string $id identifier
      * @internal param string $name default name, can be individual overwritten
      * @internal param array $block_settings
      */
-    function __construct($args = NULL, $data = array(), AbstractEnvironment $environment = null)
+    function __construct($args = NULL, $data = array(), PostEnvironment $environment = null)
     {
         // batch setup
         $this->set($args);

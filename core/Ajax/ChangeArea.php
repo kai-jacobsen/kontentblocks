@@ -7,7 +7,7 @@ use Kontentblocks\Backend\API\PostMetaAPI;
 class ChangeArea
 {
     
-    protected $postId;
+    protected $postID;
     protected $dataHandler;
     protected $newArea;
     protected $instanceId;
@@ -17,11 +17,11 @@ class ChangeArea
 
     public function __construct()
     {
-        $this->postId = $_POST['post_id'];
+        $this->postID = $_POST['post_id'];
         $this->newArea = $_POST['area_id'];
         $this->newAreaContext = $_POST['context'];
         $this->instanceId = $_POST['block_id'];
-        $this->Storage = \Kontentblocks\Helper\getStorage($this->postId);
+        $this->Storage = \Kontentblocks\Helper\getStorage($this->postID);
         $this->updateArea();
         
     }
