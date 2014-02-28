@@ -585,7 +585,7 @@ abstract class Module
 
         if (isset($this->master) && $this->master){
             $toJSON['master'] = true;
-            $toJSON['master_id'] = $this
+            $toJSON['master_id'] = $this->master_id;
             $toJSON['post_id'] = $this->master_id;
         }
 
