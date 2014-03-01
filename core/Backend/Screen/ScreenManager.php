@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Backend\Screen;
 
+use Exception;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 
 class ScreenManager
@@ -91,7 +92,7 @@ class ScreenManager
     public function areasSortedByRegion()
     {
         if (!$this->rawAreas) {
-            throw new Exception('No Areas specified for region');
+            throw new \Exception('No Areas specified for region');
         }
 
         foreach ($this->rawAreas as $area) {
