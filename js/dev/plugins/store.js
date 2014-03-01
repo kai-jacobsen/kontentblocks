@@ -150,13 +150,13 @@
 
     try {
         var testKey = '__storejs__'
-        store.set(testKey, testKey)
+        store.set(testKey, testKey);
         if (store.get(testKey) != testKey) { store.disabled = true }
         store.remove(testKey)
     } catch(e) {
         store.disabled = true
     }
-    store.enabled = !store.disabled
+    store.enabled = !store.disabled;
 
     if (typeof module != 'undefined' && module.exports) { module.exports = store }
     else if (typeof define === 'function' && define.amd) { define(store) }

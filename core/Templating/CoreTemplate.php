@@ -37,7 +37,8 @@ class CoreTemplate
         else {
             return $this->engine->render( $this->tplFile, $this->data );
         }
-
+        
+        return false;
     }
 
     public function setPath( $path )

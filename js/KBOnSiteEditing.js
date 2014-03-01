@@ -28,7 +28,7 @@ var KBOnSiteEditing;
                 wpActiveEditor = $(this).attr('id');
             });
 
-            callbacks = new Object();
+            callbacks = {};
             $this = this;
 
         },

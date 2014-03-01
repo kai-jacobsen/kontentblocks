@@ -151,7 +151,7 @@
             button.on('click', function (e) {
                 e.preventDefault();
                 that.delete();
-            })
+            });
             return button;
         },
         load: function () {

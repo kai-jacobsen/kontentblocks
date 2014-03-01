@@ -79,7 +79,7 @@ class AreaRegistry
      *
      * @param array $args
      * @param bool $manual
-     * @return $void
+     * @return void
      */
     public function addArea($args, $manual = true)
     {

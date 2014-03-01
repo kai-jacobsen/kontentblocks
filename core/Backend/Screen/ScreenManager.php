@@ -54,18 +54,12 @@ class ScreenManager
      */
     public function __construct(PostEnvironment $Environment)
     {
-        // get areas available
-        // TODO wrong! shouldn't raise an exception, do nothing instead
-        if (empty($Environment->get('areas'))) {
-            throw new \Exception('ScreenManager needs areas!');
-        }
-
+        // setup raw areas
+        $this->rawAreas = $Environment->get('areas');
         // set this environment
         $this->Environment = $Environment;
         //setup region layout
         $this->contextLayout = self::getDefaultContextLayout();
-        // setup raw areas
-        $this->rawAreas = $Environment->get('areas');
         // setup filtered areas
         $this->regions = $this->areasSortedByRegion($this->rawAreas);
         // test if final context layout includes an sidebar

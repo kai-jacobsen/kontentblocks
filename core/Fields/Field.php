@@ -358,7 +358,8 @@ abstract class Field
      */
     public function renderHidden()
     {
-        if (empty($this->getValue())) {
+        $value = $this->getValue();
+        if (empty($value)) {
             return false;
         }
 
@@ -393,7 +394,8 @@ abstract class Field
      */
     public function description()
     {
-        if (!empty($this->getArg('description'))) {
+        $description = $this->getArg('description');
+        if (!empty($description)) {
             echo "<p class='description kb-field--description'>{$this->getArg('description')}</p>";
         }
 

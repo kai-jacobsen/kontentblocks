@@ -74,7 +74,7 @@ KB.Ui = function ($) {
                 }
                 side.addClass('active-context').removeClass('non-active-context');
                 normal.addClass('non-active-context');
-            })
+            });
             jQuery('.kb-toggle', normal).click(function () {
                 if (that.isSorting) {
                     return false;
