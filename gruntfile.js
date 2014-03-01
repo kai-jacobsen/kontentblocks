@@ -1,10 +1,7 @@
 module.exports = function (grunt) {
 
-<<<<<<< HEAD
     var clean = false;
 
-=======
->>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -12,13 +9,8 @@ module.exports = function (grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                 mangle: false,
-<<<<<<< HEAD
                 beautify: false,
                 compress: true
-=======
-                beautify: true,
-                compress: false
->>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
             },
             prim: {
                 files: {
@@ -84,11 +76,7 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
-<<<<<<< HEAD
                 tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint', 'rsync']
-=======
-                tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint']
->>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
             },
             sass: {
                 options: {
@@ -121,23 +109,6 @@ module.exports = function (grunt) {
                 src: 'css/kontentblocks.css',
                 dest: 'css/kontentblocks.css'
             }
-<<<<<<< HEAD
-        },
-        rsync: {
-            stage: {
-                files: '/var/www/Restrap/wp-content/plugins/kontentblocks/',
-                options: {
-                    host: "horologium.uberspace.de",
-                    port: "22",
-                    user: "devblock",
-                    clean: clean,
-                    remoteBase: "~/html/dev/content/plugins/Kontentblocks",
-                    verbose: true,
-                    additionalOptions: ['--exclude-from=/var/www/Restrap/wp-content/plugins/kontentblocks/.gitignore', '-v', '--stats']
-                }
-            }
-=======
->>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
         }
     });
 
@@ -150,11 +121,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-notify');
-<<<<<<< HEAD
     grunt.loadNpmTasks('grunt-rsync-2');
 
-=======
->>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify:prim', 'uglify:sec', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);
