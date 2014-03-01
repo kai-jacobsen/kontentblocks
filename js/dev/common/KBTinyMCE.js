@@ -11,12 +11,10 @@ KB.TinyMCE = (function ($) {
                 } else {
                     // get the id
                     var textarea = this.id;
+
+                    console.log(textarea, 'removeEd');
                     // remove controls
-                    if (tinyMCE.majorVersion === 3){
-                        tinyMCE.execCommand('mceRemoveControls', false, textarea);
-                    } else {
-                        tinyMCE.execCommand('mceRemoveEditor', false, textarea);
-                    }
+                    tinyMCE.execCommand('mceRemoveEditor', false, textarea);
                 }
             });
         },
@@ -73,9 +71,7 @@ KB.TinyMCE = (function ($) {
                 };
 
                 var ed = tinymce.init(settings);
-//                ed.render();
-//                new tinymce.Editor(id, settings).render();
-//                tinyMCE.init(settings);
+
 
                 // doesn't wok without, but don't really know what this does
                 var qtsettings = {
@@ -92,6 +88,7 @@ KB.TinyMCE = (function ($) {
                 $('.wp-editor-wrap', $el).removeClass('html-active').addClass('tmce-active');
                 QTags._buttonsInit();
             }, 1500);
+
 
 
         },

@@ -104,6 +104,7 @@ class ScreenManager
             }
         }
         return $areas;
+
     }
 
 
