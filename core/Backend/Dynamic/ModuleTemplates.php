@@ -52,8 +52,9 @@ class ModuleTemplates
     public function addAdminMenu()
     {
         if (!\Kontentblocks\Helper\adminMenuExists('Kontentblocks')) {
-            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks', 'edit.php?post_type=kb-mdtpl', false, false);
+            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks',admin_url() . 'edit.php?post_type=kb-mdtpl', false, false);
         }
+
         add_submenu_page(admin_url() . 'edit.php?post_type=kb-dyar', 'Templates', 'Templates', 'manage_kontentblocks', admin_url() . 'edit.php?post_type=kb-mdtpl', false);
 
     }

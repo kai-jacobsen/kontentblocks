@@ -219,19 +219,32 @@
 /* line 15, sass/partials/_block_style.scss */
 h2.kb-title {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   border-radius: 4px;
   background: #eaeaea;
   border: 1px solid #ccc;
   padding-left: 20px !important;
   -webkit-box-shadow: 1px solid #fff;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-box-shadow: 1px solid #fff;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-box-shadow: 1px solid #fff;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px solid #fff;
 }
 
@@ -247,9 +260,15 @@ h2.kb-title {
 .kb_block.kb-open .block-head {
   -webkit-box-shadow: 1px 1px 1px white;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-box-shadow: 1px 1px 1px white;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-box-shadow: 1px 1px 1px white;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px 1px 1px white;
 }
 /* line 39, sass/partials/_block_style.scss */
@@ -359,10 +378,17 @@ h5.kb_properties_title {
   background: #fff;
   padding: 10px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   border-radius: 8px;
   clear: both;
 }
@@ -376,9 +402,15 @@ h5.kb_properties_title {
   font-size: 12px;
   border: 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: none;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: none;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: none;
 }
 
@@ -402,10 +434,17 @@ h5.kb_properties_title {
 /* line 166, sass/partials/_block_style.scss */
 .block-head {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   border-radius: 2px;
   border: 1px solid #f2f2f2;
   border-bottom: 1px solid #aaa;
@@ -452,9 +491,15 @@ h5.kb_properties_title {
   float: left;
   cursor: pointer;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: none;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: none;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: none;
   top: 1px;
   position: relative;
@@ -591,10 +636,17 @@ h5.kb_properties_title {
   margin-bottom: 0;
   -webkit-transition: all 0.3s linear;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transition: all 0.3s linear;
   -o-transition: all 0.3s linear;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transition: all 0.3s linear;
   /*background-position: 0 0px !important;*/
 }
@@ -992,6 +1044,7 @@ h5.kb_properties_title {
   opacity: .01;
   -webkit-transition: .2s;
 <<<<<<< HEAD
+<<<<<<< HEAD
   transition: .2s;
 =======
   -moz-transition: .2s;
@@ -1000,6 +1053,16 @@ h5.kb_properties_title {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+=======
+  transition: .2s;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   border-radius: 5px;
 }
 
@@ -1010,10 +1073,17 @@ h5.kb_properties_title {
   position: relative;
   margin: 0 1px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   border-radius: 3px;
 }
 
@@ -1030,11 +1100,19 @@ h5.kb_properties_title {
 .alertify-log {
   -webkit-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   -ms-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   -o-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -ms-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -o-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   /* easeOutBack */
 }
@@ -1043,11 +1121,19 @@ h5.kb_properties_title {
 .alertify-hide {
   -webkit-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   -ms-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   -o-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -ms-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -o-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   /* easeInBack */
 }
@@ -1056,11 +1142,19 @@ h5.kb_properties_title {
 .alertify-log-hide {
   -webkit-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   -ms-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   -o-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -ms-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -o-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   /* easeInBack */
 }
@@ -1098,12 +1192,21 @@ h5.kb_properties_title {
 .alertify-hidden {
   -webkit-transform: translate(0, -150px);
 <<<<<<< HEAD
+<<<<<<< HEAD
   -ms-transform: translate(0, -150px);
 =======
   -moz-transform: translate(0, -150px);
   -ms-transform: translate(0, -150px);
   -o-transform: translate(0, -150px);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transform: translate(0, -150px);
+  -ms-transform: translate(0, -150px);
+  -o-transform: translate(0, -150px);
+=======
+  -ms-transform: translate(0, -150px);
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transform: translate(0, -150px);
   opacity: 0;
   display: none;
@@ -1149,12 +1252,21 @@ h5.kb_properties_title {
 .alertify-log-hide {
   -webkit-transform: translate(300px, 0);
 <<<<<<< HEAD
+<<<<<<< HEAD
   -ms-transform: translate(300px, 0);
 =======
   -moz-transform: translate(300px, 0);
   -ms-transform: translate(300px, 0);
   -o-transform: translate(300px, 0);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transform: translate(300px, 0);
+  -ms-transform: translate(300px, 0);
+  -o-transform: translate(300px, 0);
+=======
+  -ms-transform: translate(300px, 0);
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transform: translate(300px, 0);
   opacity: 0;
 }
@@ -1240,10 +1352,17 @@ h5.kb_properties_title {
   border-bottom: 1px solid #aaa;
   -webkit-background-clip: padding;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   /* Safari 4? Chrome 6? */
   -moz-background-clip: padding;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  /* Safari 4? Chrome 6? */
+  -moz-background-clip: padding;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   /* Firefox 3.6 */
   background-clip: padding-box;
   /* Firefox 4, Safari 5, Opera 10, IE 9 */
@@ -1265,12 +1384,21 @@ h5.kb_properties_title {
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
   background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
 <<<<<<< HEAD
+<<<<<<< HEAD
   background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.3)), to(rgba(255, 255, 255, 0)));
 =======
   background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
   background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
   background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
 >>>>>>> 3e358bd... repo fuck up
+=======
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+=======
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.3)), to(rgba(255, 255, 255, 0)));
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   background-image: linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
 }
 
@@ -1416,9 +1544,15 @@ h5.kb_properties_title {
   display: none;
   -webkit-box-shadow: 1px 1px 6px #333;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-box-shadow: 1px 1px 6px #333;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-box-shadow: 1px 1px 6px #333;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px 1px 6px #333;
   -webkit-border-bottom-right-radius: 8px;
   -webkit-border-bottom-left-radius: 8px;
@@ -1536,9 +1670,15 @@ h5.kb_properties_title {
   padding: 0px;
   background: #f9f9f9;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: 0px 1px 1px #fff;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: 0px 1px 1px #fff;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 0px 1px 1px #fff;
   border: 1px solid #ccc;
   border-bottom: 1px solid #aaa;
@@ -1596,9 +1736,15 @@ h5.kb_properties_title {
   color: #aaa;
   -webkit-transform: rotate(90deg);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transform: rotate(90deg);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transform: rotate(90deg);
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
   right: 3px;
@@ -1666,9 +1812,15 @@ h5.kb_properties_title {
   overflow: hidden;
   background: whitesmoke;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: inset -1px 1px 12px #aaa;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: inset -1px 1px 12px #aaa;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: inset -1px 1px 12px #aaa;
   border-bottom: 1px solid #aaa;
 }
@@ -1709,18 +1861,31 @@ h5.kb_properties_title {
   font-size: 14px;
   background: #fcfcfc;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: none;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: none;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: none;
   width: 40%;
   padding: 0 10px;
   -webkit-transition: width 0.2s ease-out;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transition: width 0.2s ease-out;
   -o-transition: width 0.2s ease-out;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: width 0.2s ease-out;
+  -o-transition: width 0.2s ease-out;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transition: width 0.2s ease-out;
 }
 /* line 26, sass/partials/_refields/_common.scss */
@@ -1819,10 +1984,17 @@ h5.kb_properties_title {
 .Zebra_DatePicker .dp_header .dp_hover,
 .Zebra_DatePicker .dp_footer .dp_hover {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   border-radius: 5px;
 }
 
@@ -2112,9 +2284,15 @@ button.Zebra_DatePicker_Icon_Inside {
 .global-area-edit .area-holder {
   border: 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: 0;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: 0;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 0;
   background: #fff;
 }
@@ -2138,18 +2316,30 @@ button.Zebra_DatePicker_Icon_Inside {
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transform: translate(-50%, -50%);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transform: translate(-50%, -50%);
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: 800px;
   height: 65%;
   z-index: 299;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: 1px 1px 30px #333;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: 1px 1px 30px #333;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px 1px 30px #333;
 }
 
@@ -2174,19 +2364,32 @@ button.Zebra_DatePicker_Icon_Inside {
 #wpwrap {
   -webkit-transition: all 0.8s ease-in-out;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transition: all 0.8s ease-in-out;
   -o-transition: all 0.8s ease-in-out;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: all 0.8s ease-in-out;
+  -o-transition: all 0.8s ease-in-out;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transition: all 0.8s ease-in-out;
 }
 
 /* line 35, sass/partials/_areas/_module-browser.scss */
 #wpwrap.module-browser-open {
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-filter: blur(2px);
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-filter: blur(2px);
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   filter: blur(2px);
   pointer-events: none;
 }
@@ -2279,10 +2482,17 @@ button.Zebra_DatePicker_Icon_Inside {
   line-height: 32px;
   -webkit-transition: all 0.3s ease-in-out;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   transition: all 0.3s ease-in-out;
   z-index: 595;
 }
@@ -2381,9 +2591,15 @@ button.Zebra_DatePicker_Icon_Inside {
 .os-wrapper .area-holder {
   border: none;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: none;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: none;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: none;
 }
 
@@ -2577,10 +2793,17 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   background: #fff;
   border: 1px solid #ccc;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   border-radius: 8px;
   margin-right: 15px;
   margin-bottom: 15px;
@@ -2788,6 +3011,7 @@ li.gallery-item {
   /* Old browsers */
   background: -webkit-linear-gradient(top, white 0%, #f7f7f7 100%);
 <<<<<<< HEAD
+<<<<<<< HEAD
   background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f7f7f7));
   background: -webkit-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
 =======
@@ -2795,15 +3019,30 @@ li.gallery-item {
   background: -o-linear-gradient(top, white 0%, #f7f7f7 100%);
   background: -ms-linear-gradient(top, white 0%, #f7f7f7 100%);
 >>>>>>> 3e358bd... repo fuck up
+=======
+  background: -moz-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: -o-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: -ms-linear-gradient(top, white 0%, #f7f7f7 100%);
+=======
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f7f7f7));
+  background: -webkit-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   background: linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0);
   /* IE6-9 */
   -webkit-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
   float: left;
   padding: 8px;
@@ -2869,9 +3108,15 @@ li.gallery-item textarea:focus {
   color: #333333;
   border-bottom: 1px solid #aaa;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: 0px 1px 1px #fff;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: 0px 1px 1px #fff;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 0px 1px 1px #fff;
 }
 /* line 49, sass/partials/_kontentfields-new.scss */
@@ -2887,9 +3132,15 @@ li.gallery-item textarea:focus {
 .kb_field textarea:focus {
   -webkit-box-shadow: 1px 1px 8px #0074a2;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   -moz-box-shadow: 1px 1px 8px #0074a2;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -moz-box-shadow: 1px 1px 8px #0074a2;
+=======
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px 1px 8px #0074a2;
 }
 /* line 62, sass/partials/_kontentfields-new.scss */
@@ -2974,10 +3225,17 @@ input[type="checkbox"][checked] {
 /* line 368, sass/kontentblocks.scss */
 .kb_block {
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-transition: -webkit-box-shadow .3s linear;
 =======
   -webkit-transition: box-shadow .3s linear;
 >>>>>>> 3e358bd... repo fuck up
+=======
+  -webkit-transition: box-shadow .3s linear;
+=======
+  -webkit-transition: -webkit-box-shadow .3s linear;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
 }
 
 /* line 379, sass/kontentblocks.scss */
@@ -3025,9 +3283,15 @@ input[type="checkbox"][checked] {
   z-index: 4500;
   right: 0px;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: 1px 1px 6px #666;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: 1px 1px 6px #666;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px 1px 6px #666;
 }
 
@@ -3039,9 +3303,15 @@ input[type="checkbox"][checked] {
   z-index: 4500;
   left: 0px;
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-box-shadow: 1px 1px 6px #666;
 =======
 >>>>>>> 3e358bd... repo fuck up
+=======
+=======
+  -webkit-box-shadow: 1px 1px 6px #666;
+>>>>>>> f826ece2291e070881781e3cdaa1f0651a48223e
+>>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
   box-shadow: 1px 1px 6px #666;
 }
 
