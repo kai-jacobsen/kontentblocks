@@ -1,5 +1,10 @@
 module.exports = function (grunt) {
 
+<<<<<<< HEAD
+=======
+    var clean = false;
+
+>>>>>>> 3e358bd... repo fuck up
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -7,8 +12,13 @@ module.exports = function (grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                 mangle: false,
+<<<<<<< HEAD
                 beautify: true,
                 compress: false
+=======
+                beautify: false,
+                compress: true
+>>>>>>> 3e358bd... repo fuck up
             },
             prim: {
                 files: {
@@ -74,7 +84,11 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
+<<<<<<< HEAD
                 tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint']
+=======
+                tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint', 'rsync']
+>>>>>>> 3e358bd... repo fuck up
             },
             sass: {
                 options: {
@@ -107,6 +121,23 @@ module.exports = function (grunt) {
                 src: 'css/kontentblocks.css',
                 dest: 'css/kontentblocks.css'
             }
+<<<<<<< HEAD
+=======
+        },
+        rsync: {
+            stage: {
+                files: '/var/www/Restrap/wp-content/plugins/kontentblocks/',
+                options: {
+                    host: "horologium.uberspace.de",
+                    port: "22",
+                    user: "devblock",
+                    clean: clean,
+                    remoteBase: "~/html/dev/content/plugins/Kontentblocks",
+                    verbose: true,
+                    additionalOptions: ['--exclude-from=/var/www/Restrap/wp-content/plugins/kontentblocks/.gitignore', '-v', '--stats']
+                }
+            }
+>>>>>>> 3e358bd... repo fuck up
         }
     });
 
@@ -119,6 +150,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-notify');
+<<<<<<< HEAD
+=======
+    grunt.loadNpmTasks('grunt-rsync-2');
+
+>>>>>>> 3e358bd... repo fuck up
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify:prim', 'uglify:sec', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);

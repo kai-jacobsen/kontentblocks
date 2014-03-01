@@ -11,7 +11,6 @@ KB.TinyMCE = (function ($) {
                 } else {
                     // get the id
                     var textarea = this.id;
-                    console.log(textarea, 'removeEd');
                     // remove controls
                     tinyMCE.execCommand('mceRemoveEditor', false, textarea);
                 }
@@ -70,10 +69,6 @@ KB.TinyMCE = (function ($) {
                 };
 
                 var ed = tinymce.init(settings);
-//                ed.render();
-                console.log(ed);
-//                new tinymce.Editor(id, settings).render();
-//                tinyMCE.init(settings);
 
                 // doesn't wok without, but don't really know what this does
                 var qtsettings = {
@@ -90,22 +85,6 @@ KB.TinyMCE = (function ($) {
                 $('.wp-editor-wrap', $el).removeClass('html-active').addClass('tmce-active');
                 QTags._buttonsInit();
             }, 1500);
-
-//
-//            // add qt settings for the new instance as well
-//            tinyMCEPreInit.qtInit[newid] = qtsettings;
-
-//            // create new instance
-//            ed = new tinymce.Editor(newid, settings);
-//
-//            // render new instance
-//            ed.render();
-
-//            // add quicktags
-//            var qt = new QTags(qtsettings);
-
-            // hackish..set a short delay to reset the new editor to visual mode and hide qt buttons
-            // this is necessary :/
 
 
         },

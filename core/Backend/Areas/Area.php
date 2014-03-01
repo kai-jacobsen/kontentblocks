@@ -166,6 +166,10 @@ class Area
 
 
             foreach ($this->attachedModules as $module) {
+
+                if (!class_exists($module['class'])){
+                    continue;
+                }
                 $module['areaContext'] = $this->context;
                 $module = apply_filters('kb_before_module_options', $module);
                 $Factory = new ModuleFactory($module['class'], $module, $this->environment);

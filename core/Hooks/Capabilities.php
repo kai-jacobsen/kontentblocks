@@ -22,7 +22,8 @@ class Capabilities
     {
         $options = get_option( 'kontentblocks_capabilities' );
 
-        if ( empty( $options ) ) {
+        // TODO HOTFIX
+        if ( !empty( $options ) ) {
             update_option( 'kontentblocks_capabilities', $this->capabilities );
 
             $caps = ( empty( $options )) ? $caps : $options;

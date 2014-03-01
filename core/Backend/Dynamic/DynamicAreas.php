@@ -40,7 +40,6 @@ class DynamicAreas
      */
     public function __construct()
     {
-
         add_action('init', array($this, 'registerPostType'));
         add_action('admin_menu', array($this, 'addAdminMenu'), 19);
         add_action('edit_form_after_title', array($this, 'addForm'), 1);
@@ -53,9 +52,9 @@ class DynamicAreas
     {
 
         if (!\Kontentblocks\Helper\adminMenuExists('Kontentblocks')) {
-            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks', 'edit.php?post_type=kb-dyar', false, false);
+            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks', admin_url() . 'edit.php?post_type=kb-dyar', false, false);
         }
-        add_submenu_page('edit.php?post_type=kb-dyar', 'Areas', 'Areas', 'manage_kontentblocks', 'edit.php?post_type=kb-dyar', false);
+        add_submenu_page(admin_url() . 'edit.php?post_type=kb-dyar', 'Areas', 'Areas', 'manage_kontentblocks', admin_url() . 'edit.php?post_type=kb-dyar', false);
 
     }
 
