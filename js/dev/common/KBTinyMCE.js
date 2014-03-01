@@ -87,11 +87,6 @@ KB.TinyMCE = (function ($) {
                 QTags._buttonsInit();
             }, 1500);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
-
         },
         remoteGetEditor: function ($el, name, content, post_id) {
             var pid = post_id || KB.Screen.post_id;
