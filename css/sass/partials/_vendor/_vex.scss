@@ -1,0 +1,30 @@
+.vex.vex-theme-flat-attack{
+    padding-bottom: 0 !important;
+    
+    .vex-close{
+        font-size: 12px;
+    }
+}
+
+.vex.vex-theme-flat-attack .vex-content{
+    
+    &.modules-menu{
+        width: 75%;
+        padding: 15px;
+        border-bottom: 1px solid #666;
+        border-right: 1px solid #666; 
+    }
+    
+    &.onsite{
+        width: 75%;
+        min-width: 600px;
+        padding: 15px;
+    }
+    
+    &.editGlobalArea{
+        width: 75%;
+        min-width: 600px;
+        padding: 15px;
+    }
+    
+}

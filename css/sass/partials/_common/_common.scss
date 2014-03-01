@@ -1,0 +1,70 @@
+.kb-generic--toggle-title {
+  padding: 5px;
+  padding-left: 15px;
+  margin: 0px 5px 0 5px;
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 4px;
+
+}
+
+.kb-generic--image-wrapper {
+  height: 150px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+
+  img {
+    vertical-align: middle;
+  }
+}
+
+.kb-generic--toggle-box {
+  padding: 0 5px 5px;
+}
+
+.kb-generic--list {
+  margin: 0;
+  list-style: none;
+  padding: 20px 0;
+
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.kb-field--wrap {
+  padding: 10px;
+}
+
+.kb-js-generic--move:before {
+  content: "\f156";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  font-size: 20px;
+  cursor: move;
+}
+
+.kb-js-generic--delete:before {
+  content: "\f117";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  font-size: 18px;
+}
+
+.kb-js-generic--move, .kb-js-generic--delete{
+  display: inline-block;
+  margin: 0 3px;
+  color: #999;
+  position: relative;
+  top: 6px;
+}
+
+.kb-generic--editable-title{
+  display: inline-block;
+}

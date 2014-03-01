@@ -1,0 +1,34 @@
+.js-area-settings-opener {
+    cursor: pointer;
+    padding-left: 0px;
+    width: 35px;
+    height: 35px;
+    background: url('icon-cog-small.png') center;
+    text-indent: -9999px;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0;
+}
+
+.kb-area-settings-wrapper{
+    overflow: hidden;
+    background: whitesmoke;
+    box-shadow: inset -1px 1px 12px #aaa;
+    border-bottom: 1px solid #aaa;
+}
+
+.kb-area-settings{
+
+    padding:10px;
+
+    .kb-area-templates{
+        overflow:hidden;
+
+        li{
+            display: block;
+            float: left;
+            margin-left: 8px;
+
+        }
+    }
+}

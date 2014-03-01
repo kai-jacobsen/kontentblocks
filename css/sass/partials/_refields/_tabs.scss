@@ -1,0 +1,52 @@
+.kb-field--tabs{
+
+  position: relative;
+  zoom: 1;
+
+  ul.ui-tabs-nav{
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding:10px 0 0 0;
+
+    li{
+      padding: 8px 0px 5px 0px;
+      background: #fff;
+      float: left;
+      margin-bottom: 0;
+      position: relative;
+      top:0px;
+
+
+      a{
+        padding: 2px 22px;
+        text-decoration: none;
+        color:#999;
+        top:2px;
+        font-weight:100;
+        font-size: 13px;
+        &:focus, &:active{
+          border: none;
+          outline: none;
+        }
+
+        &:hover{
+          color: #666;
+        }
+      }
+
+      &.ui-tabs-active{
+        background-color: #fff;
+        border-right: 1px solid #eee;
+
+        a{
+          color: #000;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .ui-widget-content{
+    padding:0px;
+  }
+}

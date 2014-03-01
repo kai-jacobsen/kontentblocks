@@ -1,0 +1,38 @@
+<?php
+
+namespace Kontentblocks\Ajax;
+
+use Kontentblocks\Backend\API\PostMetaAPI;
+
+class ChangeArea
+{
+    
+    protected $postID;
+    protected $dataHandler;
+    protected $newArea;
+    protected $instanceId;
+
+
+
+
+    public function __construct()
+    {
+        $this->postID = $_POST['post_id'];
+        $this->newArea = $_POST['area_id'];
+        $this->newAreaContext = $_POST['context'];
+        $this->instanceId = $_POST['block_id'];
+        $this->Storage = \Kontentblocks\Helper\getStorage($this->postID);
+        $this->updateArea();
+        
+    }
+
+    public function updateArea()
+    {
+        $moduleDefinition = $this->Storage->getModuleDefinition($this->instanceId);
+        $moduleDefinition['area'] = $this->newArea;
+        $moduleDefinition['areaContext'] = $this->newAreaContext;
+        $update = $this->Storage->addToIndex($this->instanceId, $moduleDefinition);
+        wp_send_json($update);
+    }
+
+}

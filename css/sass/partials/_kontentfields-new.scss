@@ -1,0 +1,113 @@
+.module-meta-actions{
+	display: none;
+}
+
+.kb_field{
+
+//    .wp-editor-container{
+//        border: 0 !important;
+//    }
+
+    &.checkbox{
+//        background: transparent;
+    }
+
+
+    /* Shared */
+
+    label.heading{
+      display: block;
+      margin-bottom: 14px;
+      padding-bottom: 4px;
+      /* border-left: 2px solid #33b5e5; */
+      /* padding-left: 20px; */
+      /* margin-left: -20px; */
+      font-weight: 700;
+      font-size: 13px;
+      color: #333333;
+      border-bottom: 1px solid #aaa;
+      box-shadow: 0px 1px 1px #fff;
+    }
+//
+//    input[type=text]{
+//        height: 30px;
+//		padding: 0;
+//        line-height: 22px;
+//        border: 1px solid #efefef;
+//        font-size:14px;
+//		background: #fcfcfc;
+//		box-shadow: none;
+//        width:40%;
+//		padding: 0 10px;
+//        @include transition(width .2s ease-out);
+//
+//        &.large{
+//            width: 100%;
+//        }
+//    }
+
+    input[type=checkbox]{
+        margin-right: 3px;
+        line-height: 150%;
+    }
+
+    select{
+        min-width: 200px;
+    }
+
+    textarea:focus{
+        @include box-shadow(1px 1px 8px $lightblue);
+    }
+
+    p.description{
+        font-size: 11px;
+    }
+
+    /* Special Cases*/
+
+    &.radio{
+    }
+}
+
+
+/*
+Field Tabs
+*/
+
+
+
+.field-wrapper{
+
+    margin-bottom: 10px;
+
+    label{
+        width: 120px;
+        display: inline-block;
+    }
+
+    input[type=text]{
+        margin-left:0px;
+
+    }
+
+}
+
+
+/* groups */
+.kb_group_header{
+    padding: 20px;
+    background-color: $lightblue;
+
+    h2{
+        margin: 0 !important;
+        padding: 0 !important;
+        color: #fff !important;
+        @include text-shadow(1px 1px 1px #999);
+    }
+
+    p.description {
+        color: #f2f2f2;
+        padding: 0;
+        margin: 0;
+    }
+}

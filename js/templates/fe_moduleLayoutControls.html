@@ -1,0 +1,53 @@
+<div class="os-controls-container">
+    <a class="close-controls">close</a>
+    <h2 class="controls-title">Edit Stuff<span> ID: <%= model.instance_id %></span>
+    </h2>
+    <div class="kb_fieldtabs">
+        <ul>
+            <li>
+                <a href="#tabs1">Settings</a>
+            </li>
+            <li>
+                <a href="#tabs2">Info</a>
+            </li>
+        </ul>
+        <div id="tabs1">
+            <div class="control-wrap">
+                <label for='KBMarginTop'>Margin Top:</label>
+                <input type="text" id="KBMarginTop" name="kbmargintop" value="-80;80" />
+            </div>
+            <div class='control-wrap'>
+                <label for='KBMarginBottom'>Margin Bottom:</label>
+                <input type="text" id="KBMarginBottom" name="kbmarginbottom" value="-80;80" />
+            </div>
+<!--            <div class='control-wrap'>
+                <label for='KBWidth'>Width:</label>
+                <input type="text" id="KBWidth" name="kbwidth" value="0;100" />
+            </div>-->
+        </div>
+        <div id="tabs2">
+            <div class="control-wrap">
+                <table>
+                    <tr>
+                        <td>ID:</td>
+                        <td><%= model.instance_id %></td>
+                    </tr>
+                    <tr>
+                        <td>Type:</td>
+                        <td><%= model.class %></td>
+                    </tr>
+                    <tr>
+                        <td>Label:</td>
+                        <td><%= model.settings.name %></td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td><%= model.settings.description %></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

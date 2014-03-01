@@ -1,0 +1,3160 @@
+/* Colors */
+/* line 11, sass/partials/_base.scss */
+.hide {
+  display: none;
+}
+
+/* line 6, sass/kontentblocks.scss */
+#kb_select {
+  margin-bottom: 12px;
+}
+
+/* line 10, sass/kontentblocks.scss */
+:focus {
+  outline: none;
+}
+
+/* line 14, sass/kontentblocks.scss */
+.hide {
+  display: none;
+}
+
+/* line 1, sass/partials/_common/_common.scss */
+.kb-generic--toggle-title {
+  padding: 5px;
+  padding-left: 15px;
+  margin: 0px 5px 0 5px;
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 4px;
+}
+
+/* line 12, sass/partials/_common/_common.scss */
+.kb-generic--image-wrapper {
+  height: 150px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* line 18, sass/partials/_common/_common.scss */
+.kb-generic--image-wrapper img {
+  vertical-align: middle;
+}
+
+/* line 23, sass/partials/_common/_common.scss */
+.kb-generic--toggle-box {
+  padding: 0 5px 5px;
+}
+
+/* line 27, sass/partials/_common/_common.scss */
+.kb-generic--list {
+  margin: 0;
+  list-style: none;
+  padding: 20px 0;
+}
+/* line 32, sass/partials/_common/_common.scss */
+.kb-generic--list li {
+  margin-bottom: 10px;
+}
+
+/* line 37, sass/partials/_common/_common.scss */
+.kb-field--wrap {
+  padding: 10px;
+}
+
+/* line 41, sass/partials/_common/_common.scss */
+.kb-js-generic--move:before {
+  content: "\f156";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  font-size: 20px;
+  cursor: move;
+}
+
+/* line 51, sass/partials/_common/_common.scss */
+.kb-js-generic--delete:before {
+  content: "\f117";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  font-size: 18px;
+}
+
+/* line 60, sass/partials/_common/_common.scss */
+.kb-js-generic--move, .kb-js-generic--delete {
+  display: inline-block;
+  margin: 0 3px;
+  color: #999;
+  position: relative;
+  top: 6px;
+}
+
+/* line 68, sass/partials/_common/_common.scss */
+.kb-generic--editable-title {
+  display: inline-block;
+}
+
+/* line 1, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen {
+  min-height: 750px;
+}
+/* line 7, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .kb-whiteout {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  display: block !important;
+  z-index: 49;
+}
+/* line 18, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen--title-wrapper {
+  position: absolute;
+  z-index: 50;
+  left: 15px;
+  top: 15px;
+}
+/* line 24, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen--title-wrapper h2 {
+  font-family: 'open sans';
+  font-weight: 100;
+  font-size: 30px;
+}
+/* line 30, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen--title-wrapper .fullscreen--close:before {
+  content: "\f335";
+  width: 15px;
+  height: 15px;
+  display: block;
+  color: #333;
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  z-index: 52;
+  font-family: 'dashicons';
+  font-size: 25px;
+}
+/* line 47, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module {
+  position: absolute;
+  left: 15px;
+  top: 80px;
+  z-index: 51;
+  width: 95%;
+  padding: 0;
+  border: none;
+}
+/* line 56, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module .block-head {
+  display: none;
+}
+/* line 60, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module .menu-wrap {
+  top: -50px;
+}
+/* line 64, sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module .kb_inner {
+  border: none;
+}
+
+/* line 1, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  left: 0;
+  background-color: #333;
+  z-index: 999999;
+  height: 35px;
+}
+/* line 11, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-ico {
+  color: #fff;
+}
+/* line 15, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-toolbar-grp {
+  background-color: #333;
+  min-width: 650px;
+}
+/* line 20, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-i-kbcancleinline {
+  font-family: 'dashicons';
+}
+/* line 23, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-i-kbcancleinline:before {
+  content: "\f335";
+  font-family: 'dashicons';
+  width: 15px;
+  height: 15px;
+  font-size: 22px;
+}
+/* line 32, sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-menubtn span {
+  color: #fff;
+}
+
+/* line 1, sass/partials/_block_style.scss */
+.kb_inactive, .deactivated {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+  filter: alpha(opacity=90);
+  opacity: .9;
+}
+
+/* line 7, sass/partials/_block_style.scss */
+.kb_block.cantsort .block-head {
+  cursor: no-drop !important;
+}
+
+/* line 11, sass/partials/_block_style.scss */
+.kb_toggle_box {
+  float: left;
+}
+
+/* line 15, sass/partials/_block_style.scss */
+h2.kb-title {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background: #eaeaea;
+  border: 1px solid #ccc;
+  padding-left: 20px !important;
+  -webkit-box-shadow: 1px solid #fff;
+  -moz-box-shadow: 1px solid #fff;
+  box-shadow: 1px solid #fff;
+}
+
+/* line 28, sass/partials/_block_style.scss */
+.kb_block {
+  margin: 0;
+  padding: 6px;
+  border: none;
+  position: relative;
+  z-index: 15;
+}
+/* line 35, sass/partials/_block_style.scss */
+.kb_block.kb-open .block-head {
+  -webkit-box-shadow: 1px 1px 1px white;
+  -moz-box-shadow: 1px 1px 1px white;
+  box-shadow: 1px 1px 1px white;
+}
+/* line 39, sass/partials/_block_style.scss */
+.kb_block.kb_inactive {
+  z-index: 1002;
+  position: relative;
+}
+
+/* line 45, sass/partials/_block_style.scss */
+.kb-name .block-title {
+  border: none;
+}
+/* line 51, sass/partials/_block_style.scss */
+.kb-name .block-title:focus {
+  width: 100%;
+}
+
+/* line 56, sass/partials/_block_style.scss */
+.kb-move {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: -20px;
+  top: 8px;
+  background: url("icons/move.png") no-repeat;
+  opacity: .4;
+  cursor: move;
+}
+/* line 66, sass/partials/_block_style.scss */
+.kb-move:hover {
+  opacity: 1;
+}
+
+/* line 71, sass/partials/_block_style.scss */
+.kb_inner {
+  padding: 0px;
+  overflow: hidden;
+  background: #fff;
+  margin-left: 1px;
+  border: 1px solid #e6e6e6;
+}
+
+/* line 79, sass/partials/_block_style.scss */
+.ui-icon {
+  float: left;
+}
+
+/* line 83, sass/partials/_block_style.scss */
+.kb_block_title {
+  padding: 0px;
+}
+
+/* line 88, sass/partials/_block_style.scss */
+.kb_block_title .description {
+  padding: 0;
+  margin: 0;
+  padding: 6px 20px;
+}
+
+/* line 94, sass/partials/_block_style.scss */
+.kb_toggle_box {
+  line-height: 30px;
+  margin-right: 8px;
+  position: relative;
+  top: 7px;
+  left: 5px;
+  cursor: pointer;
+}
+
+/* line 103, sass/partials/_block_style.scss */
+.kb_shortcode_display {
+  padding: 10px 0;
+}
+
+/* line 107, sass/partials/_block_style.scss */
+.kb-toggle-editor {
+  float: right;
+}
+
+/* line 111, sass/partials/_block_style.scss */
+.kb_block_area {
+  width: 200px;
+}
+
+/* line 115, sass/partials/_block_style.scss */
+.chzn-container {
+  margin-right: 15px;
+}
+
+/* line 119, sass/partials/_block_style.scss */
+.prop-wrapper {
+  clear: both;
+}
+
+/* line 123, sass/partials/_block_style.scss */
+h5.kb_properties_title {
+  font-size: 14px;
+  font-style: italic;
+  color: #ccc;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* line 132, sass/partials/_block_style.scss */
+.kb_properties {
+  background: #fff;
+  padding: 10px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  clear: both;
+}
+
+/* line 142, sass/partials/_block_style.scss */
+.edit input {
+  width: 180px !important;
+  margin-left: -3px;
+  margin-top: 5px;
+  background: #f9f9f9;
+  font-size: 12px;
+  border: 0;
+  box-shadow: none;
+}
+
+/* line 152, sass/partials/_block_style.scss */
+.edit input:focus, .edit input:hover {
+  background: #fff;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+}
+
+/* line 158, sass/partials/_block_style.scss */
+.chzn-container {
+  margin-bottom: 15px;
+}
+
+/* line 162, sass/partials/_block_style.scss */
+.li.ui-state-highlight {
+  background: #f2f2f2;
+}
+
+/* line 166, sass/partials/_block_style.scss */
+.block-head {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 2px;
+  border: 1px solid #f2f2f2;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  border-left: 3px solid #92cd81;
+  height: auto;
+  line-height: 35px;
+  position: relative;
+  text-shadow: 1px -1px 0 #333;
+  color: black;
+  width: 100%;
+  word-wrap: break-word;
+  /*cursor: move;*/
+  /*z-index: 3;*/
+  background-color: #f9f9f9;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  position: relative;
+  font-weight: 100;
+}
+
+/* line 190, sass/partials/_block_style.scss */
+.kb_block.kb_inactive .block-head, .kb_block.deactivated .block-head {
+  border-left: 3px solid red;
+}
+
+/* line 194, sass/partials/_block_style.scss */
+.kb-toggle {
+  background: url(icons/toggle.png) no-repeat #f9f9f9;
+  background-position: 12px 16px;
+  width: 35px;
+  height: 35px;
+  float: left;
+  cursor: pointer;
+}
+
+/* line 204, sass/partials/_block_style.scss */
+.kb-fullscreen:before {
+  content: "\f211";
+  font-family: 'dashicons';
+  width: 18px;
+  color: #999;
+  font-size: 13px;
+  height: 35px;
+  float: left;
+  cursor: pointer;
+  box-shadow: none;
+  top: 1px;
+  position: relative;
+}
+
+/* line 219, sass/partials/_block_style.scss */
+.kb-ajax-status {
+  background: url(assets/ajax-loader.gif) no-repeat;
+  width: 16px;
+  height: 16px;
+  padding: 10px 7px;
+  float: right;
+  background-position: 7px;
+  display: none;
+  margin-right: 35px;
+}
+
+/* line 230, sass/partials/_block_style.scss */
+.kb-disabled-icon {
+  background: url(assets/disabled.png) no-repeat;
+  width: 16px;
+  height: 16px;
+  float: left;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #ccc;
+  padding: 10px 7px;
+  background-position: 7px;
+}
+
+/* line 241, sass/partials/_block_style.scss */
+.kb-lock {
+  width: 16px;
+  height: 16px;
+  float: left;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #ccc;
+  padding: 10px 7px;
+  background-position: 7px;
+  background-repeat: none;
+  cursor: pointer;
+}
+
+/* line 253, sass/partials/_block_style.scss */
+.kb-lock.unlocked {
+  background-image: url(assets/lock-open.png);
+  background-repeat: no-repeat;
+}
+
+/* line 258, sass/partials/_block_style.scss */
+.kb-lock.locked {
+  background-image: url(assets/lock-closed.gif);
+  background-repeat: no-repeat;
+}
+
+/* line 263, sass/partials/_block_style.scss */
+.kb-ajax-status-dark {
+  background: url(assets/ajax-loader-dark.gif) no-repeat;
+  width: 16px;
+  height: 16px;
+  padding: 10px 7px;
+  float: right;
+  background-position: 7px;
+  display: none;
+}
+
+/* line 273, sass/partials/_block_style.scss */
+.kb-name {
+  float: left;
+  padding-left: 8px;
+  margin-right: 20px;
+  font-weight: 500;
+}
+
+/* line 281, sass/partials/_block_style.scss */
+.kb-sub-name {
+  float: left;
+  width: auto;
+  color: #ccc;
+  text-shadow: 1px 1px 1px #fff;
+}
+
+/* Helper */
+/* line 289, sass/partials/_block_style.scss */
+.wp-dialog {
+  z-index: 101;
+}
+
+/* line 293, sass/partials/_block_style.scss */
+.ui-widget-overlay {
+  width: 10000px !important;
+  height: 10000px !important;
+  position: fixed !important;
+  z-index: 19;
+}
+
+/* line 300, sass/partials/_block_style.scss */
+.kb-inactive-indicator {
+  width: 30px;
+  height: 30px;
+  padding-top: 5px;
+  float: left;
+  display: none;
+  cursor: pointer;
+  background-color: red;
+}
+
+/* line 310, sass/partials/_block_style.scss */
+.kb_inactive .kb-inactive-indicator, .deactivated .kb-inactive-indicator {
+  display: block;
+}
+
+/* line 314, sass/partials/_block_style.scss */
+.menu-wrap {
+  border-top: 0;
+  overflow: hidden;
+  float: right;
+  position: absolute;
+  height: 34px;
+  top: 8px;
+  right: 7px;
+}
+/* line 324, sass/partials/_block_style.scss */
+.menu-wrap .module-actions {
+  height: 30px;
+  overflow: hidden;
+}
+/* line 329, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li {
+  display: block;
+  text-align: center;
+  border: none !important;
+  float: left;
+  cursor: pointer;
+  margin-bottom: 0;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+  /*background-position: 0 0px !important;*/
+}
+/* line 340, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li:hover {
+  cursor: pointer;
+  /*background-position: 0 -30px !important;*/
+}
+/* line 345, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li .block-menu-icon {
+  display: block;
+  font: normal 14px/1 'dashicons' !important;
+  text-shadow: 1px 1px 1px #fff;
+}
+/* line 350, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li .block-menu-icon:before {
+  width: 30px;
+  height: 34px;
+  display: block;
+  color: rgba(0, 0, 0, 0.5);
+  position: relative;
+  top: 4px;
+  line-height: 25px;
+}
+/* line 361, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li .block-menu-icon:hover:before {
+  color: #333;
+}
+/* line 366, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li .block-menu-icon.kb-delete:before {
+  /*background: url('assets/delete.png') no-repeat;*/
+  content: '\f117';
+}
+/* line 372, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li .block-menu-icon.module-status:before {
+  /*background: url('assets/power.png') no-repeat;*/
+  content: '\f177';
+}
+/* line 377, sass/partials/_block_style.scss */
+.menu-wrap .module-actions li .block-menu-icon.kb-duplicate:before {
+  /*background: url('assets/duplicate.png') no-repeat;*/
+  content: '\f105';
+}
+
+/* line 389, sass/partials/_block_style.scss */
+.kb-area .ui-state-highlight {
+  background: transparent;
+  border: 1px dotted #CCCCCC;
+}
+
+/* line 3, sass/partials/_refields/_render-toggles.scss */
+.kb_fieldtoggles .kb-togglebox-header {
+  background: #fcfcfc;
+  padding: 4px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+/* line 9, sass/partials/_refields/_render-toggles.scss */
+.kb_fieldtoggles .kb-togglebox-header h3 {
+  font-size: 12px !important;
+  font-weight: 200;
+  padding: 6px;
+  margin: 0;
+}
+/* line 17, sass/partials/_refields/_render-toggles.scss */
+.kb_fieldtoggles .kb-togglebox-box {
+  display: none;
+}
+
+/* line 9, sass/partials/_vendor/_rangeslider.scss */
+.irs {
+  position: relative;
+  display: block;
+}
+
+/* line 12, sass/partials/_vendor/_rangeslider.scss */
+.irs-line {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+/* line 16, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-left, .irs-line-mid, .irs-line-right {
+  position: absolute;
+  display: block;
+  top: 0;
+}
+
+/* line 20, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-left {
+  left: 0;
+  width: 10%;
+}
+
+/* line 23, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-mid {
+  left: 10%;
+  width: 80%;
+}
+
+/* line 26, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-right {
+  right: 0;
+  width: 10%;
+}
+
+/* line 30, sass/partials/_vendor/_rangeslider.scss */
+.irs-diapason {
+  position: absolute;
+  display: block;
+  left: 0;
+  width: 100%;
+}
+
+/* line 34, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider {
+  position: absolute;
+  display: block;
+  cursor: default;
+  z-index: 1;
+}
+
+/* line 39, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider.single {
+  left: 10px;
+}
+
+/* line 42, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider.single:before {
+  position: absolute;
+  display: block;
+  content: "";
+  top: -50%;
+  left: -150%;
+  width: 400%;
+  height: 200%;
+  background: rgba(0, 0, 0, 0);
+}
+
+/* line 48, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider.from {
+  left: 100px;
+}
+
+/* line 51, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider.from:before {
+  position: absolute;
+  display: block;
+  content: "";
+  top: -50%;
+  left: -300%;
+  width: 400%;
+  height: 200%;
+  background: rgba(0, 0, 0, 0);
+}
+
+/* line 57, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider.to {
+  left: 300px;
+}
+
+/* line 60, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider.to:before {
+  position: absolute;
+  display: block;
+  content: "";
+  top: -50%;
+  left: 0;
+  width: 400%;
+  height: 200%;
+  background: rgba(0, 0, 0, 0);
+}
+
+/* line 66, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider.last {
+  z-index: 2;
+}
+
+/* line 70, sass/partials/_vendor/_rangeslider.scss */
+.irs-min {
+  position: absolute;
+  display: block;
+  left: 0;
+  cursor: default;
+}
+
+/* line 75, sass/partials/_vendor/_rangeslider.scss */
+.irs-max {
+  position: absolute;
+  display: block;
+  right: 0;
+  cursor: default;
+}
+
+/* line 81, sass/partials/_vendor/_rangeslider.scss */
+.irs-from, .irs-to, .irs-single {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  cursor: default;
+  white-space: nowrap;
+}
+
+/* line 89, sass/partials/_vendor/_rangeslider.scss */
+.irs-grid {
+  position: absolute;
+  display: none;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+/* line 94, sass/partials/_vendor/_rangeslider.scss */
+.irs-with-grid .irs-grid {
+  display: block;
+}
+
+/* line 97, sass/partials/_vendor/_rangeslider.scss */
+.irs-grid-pol {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 8px;
+  background: #000;
+}
+
+/* line 103, sass/partials/_vendor/_rangeslider.scss */
+.irs-grid-pol.small {
+  height: 4px;
+}
+
+/* line 106, sass/partials/_vendor/_rangeslider.scss */
+.irs-grid-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100px;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 9px;
+  line-height: 9px;
+  color: #000;
+}
+
+/* line 128, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-mid,
+.irs-line-left,
+.irs-line-right,
+.irs-diapason,
+.irs-slider {
+  background: url(assets/sprite-skin-nice.png) repeat-x;
+}
+
+/* line 132, sass/partials/_vendor/_rangeslider.scss */
+.irs {
+  height: 40px;
+}
+
+/* line 135, sass/partials/_vendor/_rangeslider.scss */
+.irs-with-grid {
+  height: 60px;
+}
+
+/* line 138, sass/partials/_vendor/_rangeslider.scss */
+.irs-line {
+  height: 8px;
+  top: 25px;
+}
+
+/* line 141, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-left {
+  height: 8px;
+  background-position: 0 -30px;
+}
+
+/* line 145, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-mid {
+  height: 8px;
+  background-position: 0 0;
+}
+
+/* line 149, sass/partials/_vendor/_rangeslider.scss */
+.irs-line-right {
+  height: 8px;
+  background-position: 100% -30px;
+}
+
+/* line 154, sass/partials/_vendor/_rangeslider.scss */
+.irs-diapason {
+  height: 8px;
+  top: 25px;
+  background-position: 0 -60px;
+}
+
+/* line 159, sass/partials/_vendor/_rangeslider.scss */
+.irs-slider {
+  width: 22px;
+  height: 22px;
+  top: 17px;
+  background-position: 0 -90px;
+}
+
+/* line 164, sass/partials/_vendor/_rangeslider.scss */
+#irs-active-slider, .irs-slider:hover {
+  background-position: 0 -120px;
+}
+
+/* line 168, sass/partials/_vendor/_rangeslider.scss */
+.irs-min, .irs-max {
+  color: #999;
+  font-size: 10px;
+  line-height: 1.333;
+  text-shadow: none;
+  top: 0;
+  padding: 1px 3px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+/* line 176, sass/partials/_vendor/_rangeslider.scss */
+.lt-ie9 .irs-min, .lt-ie9 .irs-max {
+  background: #ccc;
+}
+
+/* line 180, sass/partials/_vendor/_rangeslider.scss */
+.irs-from, .irs-to, .irs-single {
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.333;
+  text-shadow: none;
+  padding: 1px 5px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+/* line 188, sass/partials/_vendor/_rangeslider.scss */
+.lt-ie9 .irs-from, .lt-ie9 .irs-to, .lt-ie9 .irs-single {
+  background: #999;
+}
+
+/* line 192, sass/partials/_vendor/_rangeslider.scss */
+.irs-grid-pol {
+  background: #99a4ac;
+}
+
+/* line 195, sass/partials/_vendor/_rangeslider.scss */
+.irs-grid-text {
+  color: #99a4ac;
+}
+
+/** initial setup **/
+/* line 2, sass/partials/_vendor/_nano.scss */
+.nano {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* line 8, sass/partials/_vendor/_nano.scss */
+.nano .content {
+  position: absolute;
+  overflow: scroll;
+  overflow-x: hidden;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* line 20, sass/partials/_vendor/_nano.scss */
+.nano .content::-webkit-scrollbar {
+  visibility: hidden;
+}
+
+/* line 23, sass/partials/_vendor/_nano.scss */
+.has-scrollbar .content::-webkit-scrollbar {
+  visibility: visible;
+}
+
+/* line 26, sass/partials/_vendor/_nano.scss */
+.nano > .pane {
+  background: rgba(0, 0, 0, 0.25);
+  position: absolute;
+  width: 10px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  visibility: hidden\9;
+  /* Target only IE7 and IE8 with this hack */
+  opacity: .01;
+  -webkit-transition: .2s;
+  -moz-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* line 43, sass/partials/_vendor/_nano.scss */
+.nano > .pane > .slider {
+  background: #444;
+  background: rgba(0, 0, 0, 0.5);
+  position: relative;
+  margin: 0 1px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/* line 52, sass/partials/_vendor/_nano.scss */
+.nano:hover > .pane, .pane.active, .pane.flashed {
+  visibility: visible\9;
+  /* Target only IE7 and IE8 with this hack */
+  opacity: 0.99;
+}
+
+/* line 3, sass/partials/_vendor/_alertify.scss */
+.alertify,
+.alertify-show,
+.alertify-log {
+  -webkit-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -moz-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -ms-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -o-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* easeOutBack */
+}
+
+/* line 10, sass/partials/_vendor/_alertify.scss */
+.alertify-hide {
+  -webkit-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -moz-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -ms-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -o-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  /* easeInBack */
+}
+
+/* line 17, sass/partials/_vendor/_alertify.scss */
+.alertify-log-hide {
+  -webkit-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -moz-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -ms-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -o-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  /* easeInBack */
+}
+
+/* line 24, sass/partials/_vendor/_alertify.scss */
+.alertify-cover {
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+
+/* line 31, sass/partials/_vendor/_alertify.scss */
+.alertify-cover-hidden {
+  display: none;
+}
+
+/* line 34, sass/partials/_vendor/_alertify.scss */
+.alertify {
+  position: fixed;
+  z-index: 99999;
+  top: 200px;
+  left: 50%;
+  width: 550px;
+  margin-left: -275px;
+  opacity: 1;
+}
+
+/* line 41, sass/partials/_vendor/_alertify.scss */
+.alertify-hidden {
+  -webkit-transform: translate(0, -150px);
+  -moz-transform: translate(0, -150px);
+  -ms-transform: translate(0, -150px);
+  -o-transform: translate(0, -150px);
+  transform: translate(0, -150px);
+  opacity: 0;
+  display: none;
+}
+
+/* overwrite display: none; for everything except IE6-8 */
+/* line 51, sass/partials/_vendor/_alertify.scss */
+:root * > .alertify-hidden {
+  display: block;
+  visibility: hidden;
+}
+
+/* line 55, sass/partials/_vendor/_alertify.scss */
+.alertify-logs {
+  position: fixed;
+  z-index: 5000;
+  bottom: 10px;
+  right: 10px;
+  width: 300px;
+}
+
+/* line 62, sass/partials/_vendor/_alertify.scss */
+.alertify-logs-hidden {
+  display: none;
+}
+
+/* line 65, sass/partials/_vendor/_alertify.scss */
+.alertify-log {
+  display: block;
+  margin-top: 0px;
+  position: relative;
+  right: -300px;
+  opacity: 0;
+}
+
+/* line 72, sass/partials/_vendor/_alertify.scss */
+.alertify-log-show {
+  right: 0;
+  opacity: 1;
+}
+
+/* line 76, sass/partials/_vendor/_alertify.scss */
+.alertify-log-hide {
+  -webkit-transform: translate(300px, 0);
+  -moz-transform: translate(300px, 0);
+  -ms-transform: translate(300px, 0);
+  -o-transform: translate(300px, 0);
+  transform: translate(300px, 0);
+  opacity: 0;
+}
+
+/* line 84, sass/partials/_vendor/_alertify.scss */
+.alertify-dialog {
+  padding: 25px;
+}
+
+/* line 87, sass/partials/_vendor/_alertify.scss */
+.alertify-resetFocus {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* line 97, sass/partials/_vendor/_alertify.scss */
+.alertify-inner {
+  text-align: center;
+}
+
+/* line 100, sass/partials/_vendor/_alertify.scss */
+.alertify-text {
+  margin-bottom: 15px;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 100%;
+}
+
+/* line 113, sass/partials/_vendor/_alertify.scss */
+.alertify-button,
+.alertify-button:hover,
+.alertify-button:active,
+.alertify-button:visited {
+  background: none;
+  text-decoration: none;
+  border: none;
+  /* line-height and font-size for input button */
+  line-height: 1.5;
+  font-size: 100%;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+@media only screen and (max-width: 680px) {
+  /* line 127, sass/partials/_vendor/_alertify.scss */
+  .alertify,
+  .alertify-logs {
+    width: 90%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  /* line 133, sass/partials/_vendor/_alertify.scss */
+  .alertify {
+    left: 5%;
+    margin: 0;
+  }
+}
+/**
+ * Default Look and Feel
+ */
+/* line 143, sass/partials/_vendor/_alertify.scss */
+.alertify,
+.alertify-log {
+  font-family: 'Open-Sans', sans-serif;
+}
+
+/* line 146, sass/partials/_vendor/_alertify.scss */
+.alertify {
+  background: #FFF;
+  border: 1px solid #f2f2f2;
+  border-right: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  -webkit-background-clip: padding;
+  /* Safari 4? Chrome 6? */
+  -moz-background-clip: padding;
+  /* Firefox 3.6 */
+  background-clip: padding-box;
+  /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+
+/* line 155, sass/partials/_vendor/_alertify.scss */
+.alertify-text {
+  border: 1px solid #CCC;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* line 160, sass/partials/_vendor/_alertify.scss */
+.alertify-button {
+  color: #FFF;
+  font-weight: bold;
+  padding: 6px 15px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+}
+
+/* line 173, sass/partials/_vendor/_alertify.scss */
+.alertify-button:hover,
+.alertify-button:focus {
+  outline: none;
+}
+
+/* line 178, sass/partials/_vendor/_alertify.scss */
+.alertify-button:active {
+  position: relative;
+}
+
+/* line 183, sass/partials/_vendor/_alertify.scss */
+.alertify-button-cancel,
+.alertify-button-cancel:hover,
+.alertify-button-cancel:focus {
+  background-color: #FE1A00;
+  border: 1px solid #D83526;
+}
+
+/* line 189, sass/partials/_vendor/_alertify.scss */
+.alertify-button-ok,
+.alertify-button-ok:hover,
+.alertify-button-ok:focus {
+  background-color: #5CB811;
+  border: 1px solid #3B7808;
+}
+
+/* line 194, sass/partials/_vendor/_alertify.scss */
+.alertify-log {
+  background: #1F1F1F;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 15px;
+  border: 1px solid #f2f2f2;
+  font-family: 'Open Sans', sans-serif;
+  border-right: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  color: #333;
+  font-weight: 100;
+}
+/* line 205, sass/partials/_vendor/_alertify.scss */
+.alertify-log h4 {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 210, sass/partials/_vendor/_alertify.scss */
+.alertify-log-error {
+  border-left: 3px solid red;
+  background: #fff;
+}
+
+/* line 214, sass/partials/_vendor/_alertify.scss */
+.alertify-log-success {
+  border-left: 3px solid green;
+  background: #fff;
+}
+
+/* line 7, sass/partials/_areas/_area-styles.scss */
+.context-header {
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 0px;
+  border-bottom: 1px solid #ccc;
+  background: #f9f9f9;
+}
+
+/* line 20, sass/partials/_areas/_area-styles.scss */
+#poststuff .context-header h2, #poststuff .context-area h2 {
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  color: #222;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 100%;
+  text-shadow: 0px 1px 1px #fff;
+}
+
+/* line 33, sass/partials/_areas/_area-styles.scss */
+.context-header p.description {
+  color: #aaa;
+  font-size: 12px;
+}
+
+/* line 39, sass/partials/_areas/_area-styles.scss */
+.kb_area_head {
+  position: relative;
+}
+
+/* line 51, sass/partials/_areas/_area-styles.scss */
+.area-wrap .area_title_text span.title {
+  font-size: 13px;
+  margin-left: 0px;
+  font-weight: normal;
+  color: #ccc;
+  padding-left: 27px;
+  line-height: 37px;
+}
+/* line 60, sass/partials/_areas/_area-styles.scss */
+.area-wrap .area_title_text span.description {
+  font-size: 12px;
+  margin-left: 10px;
+  color: #ccc;
+}
+/* line 69, sass/partials/_areas/_area-styles.scss */
+.area-wrap:hover .area_title_text span.title {
+  color: #222;
+}
+/* line 73, sass/partials/_areas/_area-styles.scss */
+.area-wrap:hover .area_title_text span.description {
+  color: #222;
+}
+
+/* line 82, sass/partials/_areas/_area-styles.scss */
+.area_description p {
+  padding: 0 0 0 16px;
+  margin: 0;
+  font-size: 1.1em;
+  font-style: italic;
+}
+
+/* Area Settings */
+/* line 91, sass/partials/_areas/_area-styles.scss */
+.kb_area_settings {
+  display: block;
+  float: left;
+  width: 32px;
+  height: 32px;
+  background: url(assets/gear-32.jpg) no-repeat;
+  position: relative;
+  cursor: pointer;
+}
+
+/* line 100, sass/partials/_areas/_area-styles.scss */
+.area_settings_list {
+  position: absolute;
+  width: 220px;
+  background: #2D3138;
+  top: 20px;
+  z-index: 5050;
+  display: none;
+  -webkit-box-shadow: 1px 1px 6px #333;
+  -moz-box-shadow: 1px 1px 6px #333;
+  box-shadow: 1px 1px 6px #333;
+  -webkit-border-bottom-right-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  left: 25px;
+}
+
+/* line 118, sass/partials/_areas/_area-styles.scss */
+.area_setting {
+  background: #2d3138 !important;
+  border-top: 1px solid #3e444f;
+  border-bottom: 1px solid #212122;
+  padding: 0 10px;
+  margin: 0;
+}
+
+/* line 125, sass/partials/_areas/_area-styles.scss */
+.area_setting .description {
+  font-size: 11px;
+  padding: 5px;
+  margin: 0;
+  line-height: 100%;
+}
+
+/* line 133, sass/partials/_areas/_area-styles.scss */
+.area_setting.class label {
+  padding-left: 10px;
+}
+
+/* line 137, sass/partials/_areas/_area-styles.scss */
+.area_setting.custom-css textarea {
+  width: 100%;
+  background: #3e444f;
+  line-height: 100%;
+  height: 100px;
+  color: #ccc;
+}
+
+/* line 145, sass/partials/_areas/_area-styles.scss */
+.area_setting.custom-css textarea:focus {
+  background: #fff;
+  color: #000;
+}
+
+/* line 149, sass/partials/_areas/_area-styles.scss */
+.area_setting.classselect select {
+  width: 100%;
+}
+
+/* line 153, sass/partials/_areas/_area-styles.scss */
+.kb_area_templates {
+  position: relative;
+  cursor: pointer;
+}
+
+/* new design */
+/* line 164, sass/partials/_areas/_area-styles.scss */
+.area-wrap {
+  margin: 0;
+  padding: 0px;
+  background: #fcfcfc;
+  border-bottom: 1px solid #bbb;
+  border-top: 1px solid #fefefe;
+}
+
+/* line 175, sass/partials/_areas/_area-styles.scss */
+.area-wrap:first-child {
+  padding-top: 0;
+}
+
+/* line 181, sass/partials/_areas/_area-styles.scss */
+.kb_area_list_item {
+  background: none;
+  border: none;
+  padding: 5px 20px;
+}
+
+/* line 188, sass/partials/_areas/_area-styles.scss */
+.area-normal.has-sidebar {
+  float: left;
+  width: 58%;
+  left: 0;
+  z-index: 888;
+  min-width: 550px;
+}
+
+/* line 196, sass/partials/_areas/_area-styles.scss */
+.area-normal.has-sidebar {
+  -webkit-transition: width .3s linear;
+  left: 0;
+  z-index: 888;
+  min-width: 550px;
+}
+
+/* line 203, sass/partials/_areas/_area-styles.scss */
+.area-side {
+  float: right;
+  width: 36%;
+  -webkit-transition: width .3s linear;
+  right: 0;
+  z-index: 888;
+}
+
+/* line 212, sass/partials/_areas/_area-styles.scss */
+.area-bottom {
+  clear: both;
+}
+
+/* line 215, sass/partials/_areas/_area-styles.scss */
+.area-holder, .context-area {
+  margin-bottom: 20px;
+  padding: 0px;
+  background: #f9f9f9;
+  box-shadow: 0px 1px 1px #fff;
+  border: 1px solid #ccc;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+}
+
+/* line 231, sass/partials/_areas/_area-styles.scss */
+.block_limit {
+  font-size: 10px;
+  display: block;
+  float: right;
+  color: #ccc;
+}
+
+/* line 238, sass/partials/_areas/_area-styles.scss */
+.kb-selectbox {
+  border: 1px solid #eaeaea;
+  border-top: none;
+  border-bottom: none;
+  padding: 10px;
+  background: #fff;
+  /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+}
+/* line 245, sass/partials/_areas/_area-styles.scss */
+.kb-selectbox select {
+  padding: 3px;
+  margin: 0;
+  margin-left: 6px;
+  background: #fff;
+  color: #888;
+  border: 1px solid #eaeaea;
+  outline: none;
+  display: inline-block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  line-height: 13px !important;
+  font-size: 12px;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* line 265, sass/partials/_areas/_area-styles.scss */
+  .kb-selectbox select {
+    padding-right: 18px;
+  }
+}
+/* line 268, sass/partials/_areas/_area-styles.scss */
+.kb-selectbox label {
+  position: relative;
+}
+/* line 269, sass/partials/_areas/_area-styles.scss */
+.kb-selectbox label:after {
+  content: '<>';
+  font: 11px "Consolas", monospace;
+  color: #aaa;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  right: 3px;
+  top: 2px;
+  padding: 0 0 2px;
+  border-bottom: 1px solid #ddd;
+  position: absolute;
+  pointer-events: none;
+}
+/* line 283, sass/partials/_areas/_area-styles.scss */
+.kb-selectbox label:before {
+  content: '';
+  background: #f8f8f8;
+  position: absolute;
+  pointer-events: none;
+  display: block;
+}
+
+/* line 292, sass/partials/_areas/_area-styles.scss */
+.reframe-select-parent {
+  float: left;
+  margin-right: -1px;
+}
+
+/* line 299, sass/partials/_areas/_area-styles.scss */
+.reframe-select-template {
+  float: left;
+}
+/* line 302, sass/partials/_areas/_area-styles.scss */
+.reframe-select-template label {
+  margin-right: 10px;
+}
+
+/* line 308, sass/partials/_areas/_area-styles.scss */
+.add-modules a {
+  float: right;
+  margin-bottom: 15px;
+  margin-right: 25px;
+  text-decoration: none;
+  font-size: 12px;
+}
+/* line 315, sass/partials/_areas/_area-styles.scss */
+.add-modules a:before {
+  content: "\f132";
+  font-family: 'dashicons';
+  position: relative;
+  top: 2px;
+}
+
+/* line 1, sass/partials/_areas/_area-settings.scss */
+.js-area-settings-opener {
+  cursor: pointer;
+  padding-left: 0px;
+  width: 35px;
+  height: 35px;
+  background: url("icon-cog-small.png") center;
+  text-indent: -9999px;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 0;
+}
+
+/* line 13, sass/partials/_areas/_area-settings.scss */
+.kb-area-settings-wrapper {
+  overflow: hidden;
+  background: whitesmoke;
+  box-shadow: inset -1px 1px 12px #aaa;
+  border-bottom: 1px solid #aaa;
+}
+
+/* line 20, sass/partials/_areas/_area-settings.scss */
+.kb-area-settings {
+  padding: 10px;
+}
+/* line 24, sass/partials/_areas/_area-settings.scss */
+.kb-area-settings .kb-area-templates {
+  overflow: hidden;
+}
+/* line 27, sass/partials/_areas/_area-settings.scss */
+.kb-area-settings .kb-area-templates li {
+  display: block;
+  float: left;
+  margin-left: 8px;
+}
+
+/*
+* Fields Common Styles
+*
+*/
+/* line 6, sass/partials/_refields/_common.scss */
+.kb-field {
+  background-color: #fff;
+  padding: 20px 20px 25px 20px;
+  border-bottom: 1px solid #f2f2f2;
+  text-align: left !important;
+}
+/* line 13, sass/partials/_refields/_common.scss */
+.kb-field input[type=text] {
+  text-align: left;
+  height: 30px;
+  padding: 0;
+  line-height: 22px;
+  border: 1px solid #dadada;
+  font-size: 14px;
+  background: #fcfcfc;
+  box-shadow: none;
+  width: 40%;
+  padding: 0 10px;
+  -webkit-transition: width 0.2s ease-out;
+  -moz-transition: width 0.2s ease-out;
+  -o-transition: width 0.2s ease-out;
+  transition: width 0.2s ease-out;
+}
+/* line 26, sass/partials/_refields/_common.scss */
+.kb-field input[type=text].large {
+  width: 100%;
+}
+/* line 32, sass/partials/_refields/_common.scss */
+.kb-field select {
+  min-width: 200px;
+  max-width: 50%;
+  height: 30px !important;
+  padding: 0px 4px !important;
+  line-height: 30px;
+  margin: 0 !important;
+}
+
+/*
+
+    Zebra_DatePicker: a lightweight jQuery date picker plugin
+
+    Metalic Theme
+
+    copyright (c) 2011 - 2013 Stefan Gabos
+    http://stefangabos.ro/jquery/zebra-datepicker/
+
+*/
+/* line 14, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker *,
+.Zebra_DatePicker *:after,
+.Zebra_DatePicker *:before {
+  -moz-box-sizing: content-box !important;
+  -webkit-box-sizing: content-box !important;
+  box-sizing: content-box !important;
+}
+
+/* line 16, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker {
+  position: absolute;
+  background: #373737;
+  border: 3px solid #373737;
+  display: none;
+  z-index: 10000;
+  font-family: 'Open Sans', Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+  font-size: 13px;
+}
+
+/* line 18, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker * {
+  margin: 0;
+  padding: 0;
+  color: #666;
+  background: transparent;
+  border: none;
+}
+
+/* = GLOBALS
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 22, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 25, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td,
+.Zebra_DatePicker th {
+  text-align: center;
+  padding: 5px 0;
+}
+
+/* line 27, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td {
+  cursor: pointer;
+}
+
+/* line 31, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_daypicker,
+.Zebra_DatePicker .dp_monthpicker,
+.Zebra_DatePicker .dp_yearpicker {
+  margin-top: 3px;
+}
+
+/* line 36, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_daypicker td,
+.Zebra_DatePicker .dp_daypicker th,
+.Zebra_DatePicker .dp_monthpicker td,
+.Zebra_DatePicker .dp_yearpicker td {
+  width: 30px;
+  border: 1px solid #BBB;
+  background: #dedede url("assets/zebra-datepicker/default-date.png") repeat-x top;
+  color: #666666;
+}
+
+/* line 40, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker,
+.Zebra_DatePicker .dp_header .dp_hover,
+.Zebra_DatePicker .dp_footer .dp_hover {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* = HEADER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 44, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header td {
+  color: #e0e0e0;
+}
+
+/* line 47, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_previous,
+.Zebra_DatePicker .dp_header .dp_next {
+  width: 30px;
+}
+
+/* line 49, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_caption {
+  font-weight: bold;
+}
+
+/* line 50, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_hover {
+  background: #67AABB;
+  color: white;
+}
+
+/* line 51, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_header .dp_blocked {
+  color: #888;
+  cursor: default;
+}
+
+/* = DATEPICKER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 56, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_week_number,
+.Zebra_DatePicker .dp_daypicker th {
+  background: #F1F1F1;
+  font-size: 9px;
+  padding-top: 7px;
+}
+
+/* line 60, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_weekend_disabled,
+.Zebra_DatePicker td.dp_not_in_month,
+.Zebra_DatePicker td.dp_not_in_month_selectable {
+  background: #ececec url("assets/zebra-datepicker/disabled-date.png");
+  color: #CCC;
+  cursor: default;
+}
+
+/* line 61, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_not_in_month_selectable {
+  cursor: pointer;
+}
+
+/* line 63, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_weekend {
+  background: #dedede url("assets/zebra-datepicker/default-date.png") repeat-x top;
+  color: #666666;
+}
+
+/* line 65, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_selected {
+  background: #E26262;
+  color: #e0e0e0 !important;
+}
+
+/* = MONTHPICKER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 69, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_monthpicker td {
+  width: 33%;
+}
+
+/* = YEARPICKER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 73, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_yearpicker td {
+  width: 33%;
+}
+
+/* = FOOTER
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 77, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_footer {
+  margin-top: 3px;
+}
+
+/* line 78, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_footer .dp_hover {
+  background: #67AABB;
+  color: white;
+}
+
+/* = SELECT CURRENT DAY
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 82, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_today {
+  color: #E0E0E0;
+  padding: 3px;
+}
+
+/* = CLEAR DATE
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 86, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker .dp_clear {
+  color: #E0E0E0;
+  padding: 3px;
+}
+
+/* = SOME MORE GLOBALS (MUST BE LAST IN ORDER TO OVERWRITE PRESIOUS PROPERTIES)
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 90, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_current {
+  color: #e26261;
+}
+
+/* line 91, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_disabled_current {
+  color: #e38585;
+}
+
+/* line 92, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_hover {
+  background: #67aabb url("assets/zebra-datepicker/selected-date.png") repeat-x top;
+  color: white;
+}
+
+/* line 93, sass/partials/_refields/_date.scss */
+.Zebra_DatePicker td.dp_disabled {
+  background: #ececec url("assets/zebra-datepicker/disabled-date.png") repeat-x top;
+  color: #DDD;
+  cursor: default;
+}
+
+/* = ICON
+----------------------------------------------------------------------------------------------------------------------*/
+/* line 97, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon {
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: url("assets/zebra-datepicker/calendar.png") no-repeat left top;
+  text-indent: -9000px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 0;
+  vertical-align: top;
+  right: 8px  !important;
+}
+
+/* line 98, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon_Disabled {
+  background-image: url("assets/zebra-datepicker/calendar-disabled.png");
+}
+
+/* don't set vertical margins! */
+/* line 101, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon {
+  margin: 0 0 0 3px;
+}
+
+/* line 102, sass/partials/_refields/_date.scss */
+button.Zebra_DatePicker_Icon_Inside {
+  margin: 0 3px 0 0;
+}
+
+/* line 105, sass/partials/_refields/_date.scss */
+.kb_field.date input.kb-datepicker {
+  width: 120px;
+}
+
+/* line 1, sass/partials/_refields/_file.scss */
+.kb-field--file {
+  position: relative;
+}
+/* line 4, sass/partials/_refields/_file.scss */
+.kb-field--file table {
+  width: 250px;
+  margin-bottom: 10px;
+  border: none;
+}
+/* line 9, sass/partials/_refields/_file.scss */
+.kb-field--file table tr td:first-child {
+  padding: 0 10px;
+}
+/* line 13, sass/partials/_refields/_file.scss */
+.kb-field--file table td {
+  border: none;
+}
+
+/* line 19, sass/partials/_refields/_file.scss */
+.kb-js-reset-file {
+  cursor: pointer;
+  line-height: 28px;
+  padding-left: 8px;
+}
+
+/* line 3, sass/partials/_refields/_image.scss */
+.kb-field--image .kb-field-image-wrapper {
+  overflow: hidden;
+}
+/* line 7, sass/partials/_refields/_image.scss */
+.kb-field--image .kb-js-add-image {
+  background: #fcfcfc;
+  width: 150px;
+  height: 150px;
+  border: 1px solid #f2f2f2;
+  padding: 10px;
+  float: left;
+  margin-right: 15px;
+}
+/* line 20, sass/partials/_refields/_image.scss */
+.kb-field--image .kb-js-image-meta-wrapper label {
+  display: block;
+  font-weight: 100;
+  font-size: 12px;
+}
+/* line 26, sass/partials/_refields/_image.scss */
+.kb-field--image .kb-js-image-meta-wrapper input[type=text] {
+  color: #333;
+  font-weight: 100;
+}
+
+/* line 1, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs {
+  position: relative;
+  zoom: 1;
+}
+/* line 6, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs ul.ui-tabs-nav {
+  margin-bottom: 0px;
+  margin-left: 0px;
+  padding: 10px 0 0 0;
+}
+/* line 11, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs ul.ui-tabs-nav li {
+  padding: 8px 0px 5px 0px;
+  background: #fff;
+  float: left;
+  margin-bottom: 0;
+  position: relative;
+  top: 0px;
+}
+/* line 20, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs ul.ui-tabs-nav li a {
+  padding: 2px 22px;
+  text-decoration: none;
+  color: #999;
+  top: 2px;
+  font-weight: 100;
+  font-size: 13px;
+}
+/* line 27, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs ul.ui-tabs-nav li a:focus, .kb-field--tabs ul.ui-tabs-nav li a:active {
+  border: none;
+  outline: none;
+}
+/* line 32, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs ul.ui-tabs-nav li a:hover {
+  color: #666;
+}
+/* line 37, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs ul.ui-tabs-nav li.ui-tabs-active {
+  background-color: #fff;
+  border-right: 1px solid #eee;
+}
+/* line 41, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs ul.ui-tabs-nav li.ui-tabs-active a {
+  color: #000;
+  font-weight: 500;
+}
+/* line 49, sass/partials/_refields/_tabs.scss */
+.kb-field--tabs .ui-widget-content {
+  padding: 0px;
+}
+
+/* line 3, sass/partials/_global-area-edit.scss */
+.global-area-edit .kb_page_wrap {
+  padding: 0;
+}
+/* line 7, sass/partials/_global-area-edit.scss */
+.global-area-edit .area-holder {
+  border: 0;
+  box-shadow: 0;
+  background: #fff;
+}
+/* line 13, sass/partials/_global-area-edit.scss */
+.global-area-edit .kb_page_wrap {
+  max-width: 100%;
+  border: 0;
+}
+/* line 18, sass/partials/_global-area-edit.scss */
+.global-area-edit span.title {
+  font-family: 'Open Sans';
+  font-weight: 100;
+  font-size: 22px;
+}
+
+/* line 1, sass/partials/_areas/_module-browser.scss */
+#module-browser {
+  background: #fff;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 65%;
+  z-index: 299;
+  box-shadow: 1px 1px 30px #333;
+}
+
+/* line 17, sass/partials/_areas/_module-browser.scss */
+.module-browser-wrapper * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+/* line 21, sass/partials/_areas/_module-browser.scss */
+.module-browser-wrapper * .close-browser {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 59;
+}
+
+/* line 31, sass/partials/_areas/_module-browser.scss */
+#wpwrap {
+  -webkit-transition: all 0.8s ease-in-out;
+  -moz-transition: all 0.8s ease-in-out;
+  -o-transition: all 0.8s ease-in-out;
+  transition: all 0.8s ease-in-out;
+}
+
+/* line 35, sass/partials/_areas/_module-browser.scss */
+#wpwrap.module-browser-open {
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* line 40, sass/partials/_areas/_module-browser.scss */
+.module-browser-wrapper {
+  height: 100%;
+  position: relative;
+}
+
+/* line 45, sass/partials/_areas/_module-browser.scss */
+.module-browser-header {
+  height: 36px;
+  background: #333;
+  position: relative;
+  z-index: 99;
+  padding-left: 0px;
+  /*li*/
+}
+/* line 52, sass/partials/_areas/_module-browser.scss */
+.module-browser-header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* line 59, sass/partials/_areas/_module-browser.scss */
+.module-browser-header .cat-item {
+  display: inline-block;
+  color: #fff;
+  height: 36px;
+  padding: 6px 10px;
+  line-height: 24px;
+  cursor: pointer;
+}
+/* line 67, sass/partials/_areas/_module-browser.scss */
+.module-browser-header .cat-item.active {
+  background-color: #0074a2;
+}
+
+/* line 73, sass/partials/_areas/_module-browser.scss */
+.module-browser__left-column {
+  width: 280px;
+  display: block;
+  float: left;
+  border-right: 1px solid #cccccc;
+  height: 100%;
+  margin-top: -36px;
+  padding-top: 36px;
+  background-color: #f9f9f9;
+}
+
+/* line 84, sass/partials/_areas/_module-browser.scss */
+.module-browser__right-column {
+  width: 500px;
+  display: block;
+  height: 100%;
+  margin-top: -36px;
+  padding-top: 36px;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+}
+
+/* line 96, sass/partials/_areas/_module-browser.scss */
+.modules-list {
+  padding: 0;
+  margin: 0;
+}
+
+/* line 101, sass/partials/_areas/_module-browser.scss */
+.modules-list-item {
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #fff;
+  position: relative;
+  padding: 4px 0;
+  margin: 0;
+}
+/* line 108, sass/partials/_areas/_module-browser.scss */
+.modules-list-item:hover {
+  background-color: #fff;
+  cursor: pointer;
+}
+/* line 113, sass/partials/_areas/_module-browser.scss */
+.modules-list-item .dashicons-plus {
+  position: absolute;
+  left: 0px;
+  top: -1px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  z-index: 595;
+}
+/* line 123, sass/partials/_areas/_module-browser.scss */
+.modules-list-item .dashicons-plus:hover {
+  background-color: #0074a2;
+  color: #fff;
+}
+/* line 129, sass/partials/_areas/_module-browser.scss */
+.modules-list-item h4 {
+  display: inline-block;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  padding-left: 40px;
+}
+/* line 137, sass/partials/_areas/_module-browser.scss */
+.modules-list-item p {
+  padding-top: 0;
+  margin-top: 0;
+  padding-left: 40px;
+}
+
+/* line 1, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars {
+  padding: 10px;
+  background: #fff;
+}
+/* line 8, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars .context-header h2 {
+  margin-top: 0;
+  padding-top: 0;
+}
+/* line 16, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars .connect li {
+  background: #f9f9f9;
+  color: #333;
+  font-weight: 100;
+  padding: 5px;
+  border: 1px solid #f2f2f2;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  border-left: 4px solid #d54e21;
+  -webkit-transition: border 1s linear;
+}
+/* line 27, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars .connect li.dynamic-area-active {
+  border-left: 4px solid #0074a2;
+}
+/* line 30, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars .connect li.dynamic-area-active:hover span {
+  display: inline;
+}
+/* line 34, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars .connect li.dynamic-area-active span {
+  float: right;
+  color: white;
+}
+/* line 38, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars .connect li.dynamic-area-active span a {
+  color: #999;
+  cursor: pointer;
+}
+/* line 48, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars #existing-areas li {
+  opacity: .7;
+}
+/* line 51, sass/partials/_extensions/_sidebar-selector.scss */
+.area_sidebars #existing-areas li span {
+  display: none;
+}
+
+/* line 1, sass/partials/_options/_page.scss */
+.kb-page-wrap {
+  padding: 20px;
+  min-width: 400px;
+  max-width: 1100px;
+  background: #fff;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  position: relative;
+}
+
+/* line 15, sass/partials/_options/_page.scss */
+.os-wrapper .kb-page-wrap {
+  max-width: none;
+  margin-top: 0px;
+  padding: 0;
+  border: none;
+}
+/* line 22, sass/partials/_options/_page.scss */
+.os-wrapper .kb_block {
+  padding: 0;
+}
+/* line 26, sass/partials/_options/_page.scss */
+.os-wrapper .area-holder {
+  border: none;
+  box-shadow: none;
+}
+
+/*
+Overlay Override
+*/
+/* line 35, sass/partials/_options/_page.scss */
+body.on-site-editing {
+  padding-top: 0;
+}
+
+/* line 39, sass/partials/_options/_page.scss */
+.kb-overlay {
+  background: #fff !important;
+}
+/* line 43, sass/partials/_options/_page.scss */
+.kb-overlay .kb_page_wrap {
+  padding: 0px;
+  margin-top: 0;
+}
+/* line 48, sass/partials/_options/_page.scss */
+.kb-overlay .area-holder {
+  border: none;
+}
+
+/* line 54, sass/partials/_options/_page.scss */
+.kb-area-overlay {
+  background: #fff !important;
+  padding-top: 0;
+}
+/* line 58, sass/partials/_options/_page.scss */
+.kb-area-overlay .kb_page_wrap {
+  padding: 20px 20px;
+  margin-top: 0;
+}
+/* line 63, sass/partials/_options/_page.scss */
+.kb-area-overlay .area-holder {
+  border: none;
+}
+
+/* line 70, sass/partials/_options/_page.scss */
+.block-template-wrapper.kb_page_wrap .kb_fieldtabs ul.ui-tabs-nav {
+  margin-left: 0;
+}
+
+/*
+*
+* Admin Pages
+* Sidebars, Areas
+*/
+/* line 83, sass/partials/_options/_page.scss */
+.kb-page-wrap .area-wrap {
+  border: 0;
+  background: #fff;
+}
+/* line 88, sass/partials/_options/_page.scss */
+.kb-page-wrap .area-title-text {
+  display: none;
+}
+/* line 92, sass/partials/_options/_page.scss */
+.kb-page-wrap h3 {
+  margin-bottom: 0;
+}
+
+/* line 97, sass/partials/_options/_page.scss */
+.kb-menu-field {
+  margin: 6px 0;
+}
+/* line 101, sass/partials/_options/_page.scss */
+.kb-menu-field label {
+  display: inline-block;
+  width: 240px;
+}
+/* line 106, sass/partials/_options/_page.scss */
+.kb-menu-field input[type=text] {
+  width: 300px;
+}
+/* line 110, sass/partials/_options/_page.scss */
+.kb-menu-field textarea {
+  width: 300px;
+  height: 120px;
+  vertical-align: top;
+}
+
+/* line 117, sass/partials/_options/_page.scss */
+.kb-menu-field-section_description {
+  float: left;
+  width: 190px;
+  padding-right: 15px;
+}
+
+/* line 123, sass/partials/_options/_page.scss */
+.kb-menu-field-section_inputs {
+  margin-left: 270px;
+}
+
+/* line 127, sass/partials/_options/_page.scss */
+.kb-menu-field-section {
+  overflow: hidden;
+  padding: 15px 0;
+}
+
+/* line 134, sass/partials/_options/_page.scss */
+.kb-menu-field-with-spinner .spinner {
+  float: none;
+  display: none;
+  position: relative;
+  top: 5px;
+  left: -35px;
+}
+/* line 143, sass/partials/_options/_page.scss */
+.kb-menu-field-with-spinner.loading .spinner {
+  display: inline-block;
+}
+
+/* line 150, sass/partials/_options/_page.scss */
+.kb-language-switch-wrapper {
+  position: absolute;
+  right: 40px;
+  top: 10px;
+}
+/* line 155, sass/partials/_options/_page.scss */
+.kb-language-switch-wrapper p {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+/* line 160, sass/partials/_options/_page.scss */
+.kb-language-switch-wrapper ul {
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+  float: right;
+}
+/* line 167, sass/partials/_options/_page.scss */
+.kb-language-switch-wrapper li {
+  display: inline-block;
+  margin: 0 4px;
+}
+/* line 171, sass/partials/_options/_page.scss */
+.kb-language-switch-wrapper li.kb-current-template-language {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+  opacity: 0.3;
+}
+/* line 175, sass/partials/_options/_page.scss */
+.kb-language-switch-wrapper li a {
+  text-indent: -9999px;
+}
+
+/* line 183, sass/partials/_options/_page.scss */
+body.post-type-kb-dyar .kb_area_head.clearfix {
+  display: none;
+}
+
+/* line 81, sass/kontentblocks.scss */
+.ui-state-highlight {
+  height: 1.1em;
+  line-height: 1.2em;
+  padding: 10px;
+  border: 1px dotted #ccc;
+  background: #eaeaea;
+  margin: 0 5px;
+}
+
+/* line 90, sass/kontentblocks.scss */
+.ui-sortable-helper {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  opacity: .7;
+}
+
+/* line 96, sass/kontentblocks.scss */
+.area-meta {
+  float: right;
+  width: 200px;
+  line-height: 32px;
+  padding-right: 8px;
+  text-align: right;
+  color: #999;
+}
+
+/* line 105, sass/kontentblocks.scss */
+.kb_vcard_image {
+  float: left;
+}
+
+/* line 109, sass/kontentblocks.scss */
+.kb_image_frame {
+  width: 150px;
+  height: 150px;
+  padding: 9px;
+  background: #fff;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+/* line 122, sass/kontentblocks.scss */
+.vcard-upload {
+  margin-top: 15px;
+}
+
+/* line 126, sass/kontentblocks.scss */
+.vcard_description {
+  float: left;
+}
+
+/* line 130, sass/kontentblocks.scss */
+.kb_vcard_item {
+  overflow: hidden;
+}
+
+/* line 134, sass/kontentblocks.scss */
+.slider_image_frame {
+  width: 300px;
+  height: 150px;
+}
+
+/* line 139, sass/kontentblocks.scss */
+.slider_image_frame img {
+  max-height: 100%;
+}
+
+/* line 143, sass/kontentblocks.scss */
+.kb_accordion_inner {
+  display: block;
+  border: 1px solid #CCC;
+  border-top: none;
+  padding: 8px;
+}
+
+/* line 150, sass/kontentblocks.scss */
+#context_side .kb-sub-name {
+  display: none;
+}
+
+/* line 154, sass/kontentblocks.scss */
+.area-meta {
+  border-right: 1px solid #ccc;
+}
+
+/* line 158, sass/kontentblocks.scss */
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+/* line 167, sass/kontentblocks.scss */
+.clearfix {
+  display: block;
+}
+
+/* line 171, sass/kontentblocks.scss */
+html[xmlns] .clearfix {
+  display: block;
+}
+
+/* line 175, sass/kontentblocks.scss */
+* html .clearfix {
+  height: 1%;
+}
+
+/* Accordion */
+/* line 180, sass/kontentblocks.scss */
+.accordion-head {
+  margin-bottom: 20px;
+}
+
+/* line 184, sass/kontentblocks.scss */
+.kb_new_accordion_item {
+  padding: 15px;
+  border: 1px dotted #ccc;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+}
+
+/* Tabs */
+/* line 192, sass/kontentblocks.scss */
+.tab-head {
+  margin-bottom: 20px;
+}
+
+/* line 196, sass/kontentblocks.scss */
+.kb_new_tab_item {
+  padding: 15px;
+  border: 1px dotted #ccc;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+}
+
+/* Kontentbox */
+/* line 204, sass/kontentblocks.scss */
+.kb_kontentbox_wrapper {
+  overflow: hidden;
+}
+
+/* line 208, sass/kontentblocks.scss */
+.kb_kontentbox_content_wrapper {
+  width: 75%;
+  float: left;
+}
+
+/* line 213, sass/kontentblocks.scss */
+.kb_image_wrapper {
+  margin-top: 30px;
+}
+
+/* line 217, sass/kontentblocks.scss */
+.kb_link_wrap {
+  overflow: hidden;
+  clear: both;
+  margin-top: 15px;
+}
+
+/* line 223, sass/kontentblocks.scss */
+.kb_kontentbox_layout_wrapper, .kb_kontentblocks_sizes_wrapper, .kb_kontentbox_align_wrapper {
+  float: left;
+  margin: 15px;
+}
+
+/* line 228, sass/kontentblocks.scss */
+.kb_kontentbox_align_wrapper label {
+  width: 50px;
+  float: left;
+}
+
+/* line 233, sass/kontentblocks.scss */
+.chzn-container {
+  width: 200px !important;
+}
+
+/* line 237, sass/kontentblocks.scss */
+.area_description {
+  font-size: 11px;
+  color: #999;
+}
+
+/* Audio */
+/* line 243, sass/kontentblocks.scss */
+.kb_audio_item {
+  padding: 8px 0;
+}
+
+/* line 247, sass/kontentblocks.scss */
+.kb_audio_item label {
+  display: block;
+}
+
+/* Video */
+/* line 252, sass/kontentblocks.scss */
+.kb_video .kb_image_wrapper {
+  float: left;
+}
+
+/* line 256, sass/kontentblocks.scss */
+.kb_video_files_wrapper {
+  margin-top: 30px;
+  float: left;
+}
+
+/* line 261, sass/kontentblocks.scss */
+.kb_video_item label {
+  display: block;
+}
+
+/* line 265, sass/kontentblocks.scss */
+.kb_video_item {
+  margin-bottom: 8px;
+}
+
+/* line 269, sass/kontentblocks.scss */
+.kb_video_Size {
+  clear: both;
+  padding-top: 20px;
+}
+
+/* Flexslider */
+/* line 275, sass/kontentblocks.scss */
+.kb_button_wrapper {
+  padding: 8px;
+  overflow: hidden;
+}
+
+/* line 280, sass/kontentblocks.scss */
+.uploaded {
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+/* line 285, sass/kontentblocks.scss */
+li.gallery-item {
+  background: white;
+  /* Old browsers */
+  background: -webkit-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: -moz-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: -o-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: -ms-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0);
+  /* IE6-9 */
+  -webkit-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
+  -moz-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
+  box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
+  float: left;
+  padding: 8px;
+  margin: 0 20px 0 0;
+}
+
+/* line 304, sass/kontentblocks.scss */
+li.gallery-item label {
+  display: block;
+  color: #eaeaea;
+}
+
+/* line 309, sass/kontentblocks.scss */
+li.gallery-item textarea {
+  border: none;
+  width: 148px;
+  display: block;
+  background: transparent;
+  margin: 8px 0;
+  border: 1px dotted #eaeaea;
+}
+
+/* line 318, sass/kontentblocks.scss */
+li.gallery-item textarea:focus {
+  background: #fff;
+}
+
+/* Sidebar Widget */
+/* line 323, sass/kontentblocks.scss */
+.kb_sidebar_select_wrapper {
+  float: left;
+  margin: 0 20px 20px 0;
+}
+
+/* line 328, sass/kontentblocks.scss */
+.kb_sidebar_select_wrapper label {
+  display: block;
+}
+
+/* -------------------
+    Fields
+----------------------*/
+/* line 1, sass/partials/_kontentfields-new.scss */
+.module-meta-actions {
+  display: none;
+}
+
+/* line 5, sass/partials/_kontentfields-new.scss */
+.kb_field {
+  /* Shared */
+  /* Special Cases*/
+}
+/* line 18, sass/partials/_kontentfields-new.scss */
+.kb_field label.heading {
+  display: block;
+  margin-bottom: 14px;
+  padding-bottom: 4px;
+  /* border-left: 2px solid #33b5e5; */
+  /* padding-left: 20px; */
+  /* margin-left: -20px; */
+  font-weight: 700;
+  font-size: 13px;
+  color: #333333;
+  border-bottom: 1px solid #aaa;
+  box-shadow: 0px 1px 1px #fff;
+}
+/* line 49, sass/partials/_kontentfields-new.scss */
+.kb_field input[type=checkbox] {
+  margin-right: 3px;
+  line-height: 150%;
+}
+/* line 54, sass/partials/_kontentfields-new.scss */
+.kb_field select {
+  min-width: 200px;
+}
+/* line 58, sass/partials/_kontentfields-new.scss */
+.kb_field textarea:focus {
+  -webkit-box-shadow: 1px 1px 8px #0074a2;
+  -moz-box-shadow: 1px 1px 8px #0074a2;
+  box-shadow: 1px 1px 8px #0074a2;
+}
+/* line 62, sass/partials/_kontentfields-new.scss */
+.kb_field p.description {
+  font-size: 11px;
+}
+
+/*
+Field Tabs
+*/
+/* line 79, sass/partials/_kontentfields-new.scss */
+.field-wrapper {
+  margin-bottom: 10px;
+}
+/* line 83, sass/partials/_kontentfields-new.scss */
+.field-wrapper label {
+  width: 120px;
+  display: inline-block;
+}
+/* line 88, sass/partials/_kontentfields-new.scss */
+.field-wrapper input[type=text] {
+  margin-left: 0px;
+}
+
+/* groups */
+/* line 97, sass/partials/_kontentfields-new.scss */
+.kb_group_header {
+  padding: 20px;
+  background-color: #0074a2;
+}
+/* line 101, sass/partials/_kontentfields-new.scss */
+.kb_group_header h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #fff !important;
+  text-shadow: 1px 1px 1px #999999;
+}
+/* line 108, sass/partials/_kontentfields-new.scss */
+.kb_group_header p.description {
+  color: #f2f2f2;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 336, sass/kontentblocks.scss */
+.kb_draft {
+  padding: 5px 0 5px 20px;
+  border-left: 2px solid #d54e21;
+  margin-left: 0px;
+  font-weight: 300;
+  background: #fff;
+  border-bottom: 1px solid #fcfcfc;
+  font-style: italic;
+  color: #333;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+/* line 349, sass/kontentblocks.scss */
+.kb_loading {
+  opacity: .4;
+}
+
+/* line 353, sass/kontentblocks.scss */
+input[type="checkbox"][checked] {
+  opacity: .8;
+}
+
+/* line 357, sass/kontentblocks.scss */
+.kb_block_options {
+  padding: 10px;
+  margin-top: 20px;
+}
+
+/* line 362, sass/kontentblocks.scss */
+.kb_block_options .kb_field {
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+/* line 368, sass/kontentblocks.scss */
+.kb_block {
+  -webkit-transition: box-shadow .3s linear;
+}
+
+/* line 379, sass/kontentblocks.scss */
+.tooltip {
+  display: none;
+  opacity: 0;
+  -webkit-transition: opacity .5s linear;
+}
+
+/* line 385, sass/kontentblocks.scss */
+.area_template {
+  position: relative;
+}
+
+/* line 389, sass/kontentblocks.scss */
+.area_template:hover .tooltip {
+  display: block;
+  opacity: 0;
+  position: absolute;
+  left: 102%;
+  top: -32px;
+  opacity: 1;
+}
+
+/* line 398, sass/kontentblocks.scss */
+.area_template img.tpl-mini {
+  float: left;
+  margin-right: 8px;
+  height: 24px;
+  position: relative;
+  top: 4px;
+}
+
+/* Misc visuals
+----------------------------------*/
+/*--------------------------------
+ Jquery UI Custom
+ ---------------------------------*/
+/* context */
+/* line 416, sass/kontentblocks.scss */
+.maximize-side {
+  position: absolute;
+  width: 75%;
+  float: none;
+  z-index: 4500;
+  right: 0px;
+  box-shadow: 1px 1px 6px #666;
+}
+
+/* line 425, sass/kontentblocks.scss */
+.maximize-normal {
+  position: absolute;
+  width: 75%;
+  float: none;
+  z-index: 4500;
+  left: 0px;
+  box-shadow: 1px 1px 6px #666;
+}
+
+/* line 434, sass/kontentblocks.scss */
+#kontentblocks_stage {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* line 439, sass/kontentblocks.scss */
+.active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {
+  font-family: 'Open-Sans', sans-serif;
+  font-style: italic;
+  margin: 0;
+}
+
+/* line 446, sass/kontentblocks.scss */
+.area_sidebars li {
+  cursor: move;
+}
+
+/* line 450, sass/kontentblocks.scss */
+.page-template-wrapper.context-area {
+  min-height: 0px;
+  overflow: hidden;
+}
+
+/* line 455, sass/kontentblocks.scss */
+.kb_thickbox h2 {
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-style: italic;
+  margin: 20px 0 0 0;
+}
+
+/* line 462, sass/kontentblocks.scss */
+.kb_thickbox .context-header {
+  margin-bottom: 20px;
+}
+
+/* line 466, sass/kontentblocks.scss */
+#TB_window {
+  z-index: 6000 !important;
+}
+
+/* line 470, sass/kontentblocks.scss */
+textarea.quicktags {
+  width: 100%;
+}
+
+/* Redirect */
+/* line 480, sass/kontentblocks.scss */
+.redirect-wrapper input[type=radio] {
+  float: left;
+  width: 16px;
+  height: 16px;
+  display: block;
+  margin-right: 16px;
+}
+
+/* line 489, sass/kontentblocks.scss */
+.wp-editor-area {
+  /*height: 500px;*/
+}
+
+/* line 493, sass/kontentblocks.scss */
+#context_normal {
+  /* min-height: 600px;
+  _height: 600px;*/
+}
+
+/* line 498, sass/kontentblocks.scss */
+.quicktags textarea {
+  background: #fff;
+}
+
+/* Responsive Admin Layout */
+@media screen and (max-width: 1399px) {
+  /* line 504, sass/kontentblocks.scss */
+  .area-normal.has-sidebar {
+    float: left;
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* line 510, sass/kontentblocks.scss */
+  .area-side {
+    min-width: 0;
+    float: left;
+    width: 100%;
+  }
+}
+@media screen and (min-width: 1400px) {
+  /* line 524, sass/kontentblocks.scss */
+  .area-normal.has-sidebar {
+    float: left;
+    min-width: 0;
+    width: 65%;
+  }
+  /* line 529, sass/kontentblocks.scss */
+  .area-normal.has-sidebar.non-active-context {
+    width: 33%;
+  }
+
+  /* line 534, sass/kontentblocks.scss */
+  .area-side {
+    min-width: 0;
+    float: right;
+    width: 33%;
+  }
+  /* line 539, sass/kontentblocks.scss */
+  .area-side.active-context {
+    width: 65%;
+  }
+}
+/* line 554, sass/kontentblocks.scss */
+.clear {
+  clear: both;
+}
+
+/* line 558, sass/kontentblocks.scss */
+.mceIframeContainer iframe {
+  /*height: 150px !important;*/
+}
+
+/* line 562, sass/kontentblocks.scss */
+.kb_field textarea {
+  width: 100%;
+  height: 80px;
+}
+
+/* Field Image Gallery */
+/* line 569, sass/kontentblocks.scss */
+.kb-field-gallery-wrapper {
+  overflow: hidden;
+}
+
+/* line 573, sass/kontentblocks.scss */
+.kb-field-gallery-wrapper li {
+  float: left;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  border: 3px solid white;
+  position: relative;
+}
+
+/* line 581, sass/kontentblocks.scss */
+.kb-field-gallery-wrapper li.selected {
+  border: 3px solid blue;
+}
+
+/* line 585, sass/kontentblocks.scss */
+.kb-field-gallery-wrapper li img {
+  width: 107px;
+  height: 107px;
+}
+
+/* line 591, sass/kontentblocks.scss */
+.kb-field-gallery-info {
+  min-height: 100px;
+  background: #ccc;
+  margin: 20px 0;
+}
+
+/* line 597, sass/kontentblocks.scss */
+.kb-field-gallery-image-delete {
+  display: none;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  right: 0;
+  top: 0px;
+  cursor: pointer;
+}
+
+/* line 608, sass/kontentblocks.scss */
+.kb-field-gallery-image-info {
+  display: none;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: blue;
+  right: 22px;
+  top: 0px;
+  cursor: pointer;
+}
+
+/* line 619, sass/kontentblocks.scss */
+.kb-field-gallery-wrapper li:hover > span, .kb-field-gallery-wrapper li.todelete > span.delete {
+  display: block;
+}
+
+/* line 623, sass/kontentblocks.scss */
+.kb-field-gallery-wrapper li.todelete {
+  opacity: .5;
+}
+
+/* line 627, sass/kontentblocks.scss */
+.custom.kb_area_list_item {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* line 634, sass/kontentblocks.scss */
+.custom .kb_field {
+  background-color: #fff !important;
+}
+
+/**
+ * Hide Sidebar
+ */
+/* line 643, sass/kontentblocks.scss */
+.no-sidebar .attachments-browser .media-toolbar,
+.no-sidebar .attachments-browser .attachments,
+.no-sidebar .attachments-browser .uploader-inline {
+  right: 0;
+}
+
+/* line 647, sass/kontentblocks.scss */
+.no-sidebar .media-sidebar {
+  display: none;
+}
+
+/* line 651, sass/kontentblocks.scss */
+.smaller {
+  top: 100px;
+  right: 350px;
+  bottom: 100px;
+  left: 350px;
+}
+
+/* line 658, sass/kontentblocks.scss */
+.smaller {
+  top: 10%;
+  right: 15%;
+  bottom: 10%;
+  left: 15%;
+}
+
+/* line 665, sass/kontentblocks.scss */
+.kb-hide {
+  display: none;
+}
+
+/* line 669, sass/kontentblocks.scss */
+.onsite-editing .editable {
+  outline: 1px dashed #999;
+  padding: 3px;
+  background-color: #ffffe0;
+}

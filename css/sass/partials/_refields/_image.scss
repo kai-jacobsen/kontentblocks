@@ -1,0 +1,32 @@
+.kb-field--image{
+
+    .kb-field-image-wrapper{
+        overflow: hidden;
+    }
+    
+    .kb-js-add-image{
+
+        background:#fcfcfc; 
+        width:150px; 
+        height:150px; 
+        border:1px solid #f2f2f2;
+        padding: 10px;
+        float: left;
+        margin-right: 15px;
+    }
+    
+    .kb-js-image-meta-wrapper{
+        
+        label{
+            display: block;
+            font-weight: 100;
+            font-size: 12px;
+        }
+        
+        input[type=text]{
+            color:#333; 
+            font-weight: 100;
+        }
+    }
+
+}

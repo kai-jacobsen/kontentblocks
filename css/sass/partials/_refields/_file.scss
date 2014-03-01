@@ -1,0 +1,24 @@
+.kb-field--file{
+	position:relative;
+
+	table{
+		width: 250px;
+		margin-bottom: 10px;
+		border: none;
+
+		tr td:first-child{
+			padding: 0 10px;
+		}
+
+		td{
+			border: none;
+
+		}
+	}
+}
+.kb-js-reset-file {
+  cursor: pointer;
+  line-height: 28px;
+  padding-left: 8px;
+
+}

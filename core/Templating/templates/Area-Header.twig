@@ -1,0 +1,12 @@
+<div class='kb_area_head clearfix  {{area.get('context')}} {{ headerClass }}'>
+    <div class='area_title_text area-title-text'>
+        <span class='title'>{{area.get('name')}}</span>
+        <span class='description'>{{area.get('description')}}</span>
+        <input type='hidden' name='areas[]' value='{{area.get('id')}}' >
+
+
+        {{area.get('settingsMenu').render}}
+    </div>
+
+    <div class='kb-ajax-status-dark'></div>
+</div>
