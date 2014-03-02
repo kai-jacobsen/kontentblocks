@@ -213,9 +213,12 @@ function initTinymce(item) {
             ed.addButton('kbcancleinline', {
                 title: 'Stop inline Edit',
                 onClick: function () {
+                    document.activeElement.blur();
+                    ed.theme.panel.focusin = false;
+                    ed.theme.panel._visible = false;
                     tinymce.activeEditor = null;
                     tinymce.focusedEditor = null;
-                    document.activeElement.blur();
+                    jQuery('.mce-tinymce', '#kb-toolbar').hide();
                     jQuery('#kb-toolbar').hide();
 
                 }
@@ -268,7 +271,7 @@ jQuery(document).ready(function () {
                 schema: "html5",
                 fixed_toolbar_container: '#kb-toolbar',
                 inline: true,
-                toolbar: false,
+                toolbar: 'kbcancleinline',
                 statusbar: false,
                 setup: function (ed) {
 

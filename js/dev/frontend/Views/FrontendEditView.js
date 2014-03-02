@@ -90,7 +90,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     render: function () {
         var that = this;
 
-
         // apply settings for the modal from the active module, if any
         this.applyControlsSettings(this.$el);
 
@@ -128,7 +127,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 // Make the modal fit
                 that.recalibrate();
                 var localView = _.clone(that.view);
-                localView.setElement(that.$inner);
+                localView.$el = that.$inner;
                 that.view.trigger('kb:frontend::viewLoaded', localView);
 
             },
@@ -146,6 +145,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         }
         this.model = moduleView.model;
         this.options.view = moduleView;
+        this.unload();
         this.render();
     },
 
@@ -255,7 +255,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
     },
     destroy: function () {
+        this.unload();
         this.remove();
+    },
+    unload: function(){
+        alert('unload');
     },
     // Modules can pass special settings to manipulate the modal
     // By now it's limited to the width

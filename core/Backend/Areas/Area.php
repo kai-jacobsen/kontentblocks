@@ -170,10 +170,7 @@ class Area
                 if (!class_exists($module['class'])){
                     continue;
                 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 6d9c53884e992cd60fc3f2ce815da2e506b10933
                 $module['areaContext'] = $this->context;
                 $module = apply_filters('kb_before_module_options', $module);
                 $Factory = new ModuleFactory($module['class'], $module, $this->environment);

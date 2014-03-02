@@ -76,7 +76,7 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
-                tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint', 'rsync']
+                tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint']
             },
             sass: {
                 options: {

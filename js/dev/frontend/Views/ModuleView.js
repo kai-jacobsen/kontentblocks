@@ -36,11 +36,13 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON()}));
     },
     openOptions: function () {
+
         // There can and should always be only a single instance of the modal
         if (KB.FrontendEditModal) {
-            KB.FrontendEditModal.destroy();
+            this.reloadModal();
+            return false;
+//            KB.FrontendEditModal.destroy();
         }
-
         KB.FrontendEditModal = new KB.Backbone.FrontendEditView({
             tagName: 'div',
             id: 'onsite-modal',
