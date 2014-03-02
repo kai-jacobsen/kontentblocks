@@ -8,9 +8,10 @@ module.exports = function (grunt) {
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                mangle: false,
+                mangle: true,
                 beautify: false,
-                compress: true
+                compress: true,
+                drop_console: true
             },
             prim: {
                 files: {

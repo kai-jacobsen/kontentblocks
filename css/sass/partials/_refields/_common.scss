@@ -38,12 +38,14 @@
     margin: 0 !important;
   }
 
+}
 
-
-
-
+.kb-field-wrapper{
+  padding: 10px;
 }
 
 .kb-field--reset {
-
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
 }

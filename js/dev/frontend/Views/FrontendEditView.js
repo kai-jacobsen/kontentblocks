@@ -18,7 +18,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.options = options;
         this.view = options.view;
 
-        this.model.on('change',this.test,this);
+        this.model.on('change', this.test, this);
 
         this.on('recalibrate', this.recalibrate, this);
 
@@ -47,7 +47,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
         // Attach custom tabs:change event to fit the modal to new height
         // TODO this is too specific to tabs
-            jQuery('body').on('kontentblocks::tabsChange', function () {
+        jQuery('body').on('kontentblocks::tabsChange', function () {
             that.recalibrate();
         });
 
@@ -89,7 +89,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
     render: function () {
         var that = this;
-
+        this.$el.show();
         // apply settings for the modal from the active module, if any
         this.applyControlsSettings(this.$el);
 
@@ -124,11 +124,15 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 // Inform fields that they were loaded
                 KB.Fields.trigger('update');
 
-                // Make the modal fit
-                that.recalibrate();
+
                 var localView = _.clone(that.view);
                 localView.$el = that.$inner;
                 that.view.trigger('kb:frontend::viewLoaded', localView);
+
+                // Make the modal fit
+                setTimeout(function(){
+                    that.recalibrate();
+                },1000);
 
             },
             error: function () {
@@ -139,14 +143,19 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
 
     reload: function (moduleView) {
-
-        if (this.model.get('instance_id') === moduleView.model.get('instance_id')){
+        this.unload();
+        if (this.model && (this.model.get('instance_id') === moduleView.model.get('instance_id'))) {
             return false;
         }
         this.model = moduleView.model;
         this.options.view = moduleView;
-        this.unload();
+        this.view = moduleView;
         this.render();
+    },
+
+    unset: function () {
+        this.model = null;
+        this.options.view = null;
     },
 
     // position and height of the modal may change depending on user action resp. contents
@@ -213,8 +222,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: 'json',
             success: function (res) {
 
-                jQuery('.editable', that.options.view.$el).each(function(i, el){
-                    tinymce.remove('#' +el.id);
+                jQuery('.editable', that.options.view.$el).each(function (i, el) {
+                    tinymce.remove('#' + el.id);
                 });
 
                 that.options.view.$el.html(res.html);
@@ -224,7 +233,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.model.view.trigger('kb:moduleUpdated');
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
 
-                jQuery('.editable', that.options.view.$el).each(function(i, el){
+                jQuery('.editable', that.options.view.$el).each(function (i, el) {
                     initTinymce(el);
                 });
 
@@ -256,10 +265,18 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
     destroy: function () {
         this.unload();
+        this.unbind();
         this.remove();
+        KB.FrontendEditModal = null;
     },
-    unload: function(){
-        alert('unload');
+    unload: function () {
+        this.unset();
+        jQuery('.wp-editor-area', this.$el).each(function(i, item){
+            tinymce.remove('#'+item.id);
+        });
+
+
+
     },
     // Modules can pass special settings to manipulate the modal
     // By now it's limited to the width

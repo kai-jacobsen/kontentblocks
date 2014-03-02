@@ -528,6 +528,11 @@ textarea.quicktags {
 
     &.non-active-context {
       width: 33%;
+
+      .kb-sub-name{
+        display: none;
+      }
+
     }
   }
 
@@ -671,3 +676,4 @@ textarea.quicktags {
   padding: 3px;
   background-color: #ffffe0;
 }
+

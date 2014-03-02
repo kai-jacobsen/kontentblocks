@@ -40,6 +40,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // There can and should always be only a single instance of the modal
         if (KB.FrontendEditModal) {
             this.reloadModal();
+            console.log('openOptions');
             return false;
 //            KB.FrontendEditModal.destroy();
         }
@@ -54,6 +55,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     reloadModal: function () {
         if (KB.FrontendEditModal) {
+            console.log('reloadModal');
             KB.FrontendEditModal.reload(this);
         }
         KB.CurrentModel = this.model;

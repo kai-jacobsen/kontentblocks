@@ -1,17 +1,21 @@
 .kb-generic--toggle-title {
-  padding: 5px;
+  padding: 0px;
+  padding-bottom: 5px;
   padding-left: 15px;
   margin: 0px 5px 0 5px;
   background: #f2f2f2;
   border: 1px solid #ccc;
   color: #333;
-  border-radius: 4px;
 
 }
 
 .kb-generic--image-wrapper {
   height: 150px;
+  max-width: 300px;
   overflow: hidden;
+  background: #f2f2f2;
+  padding: 5px !important;
+  border: 1px solid #dadada;
   display: inline-block;
   vertical-align: middle;
 
@@ -22,6 +26,11 @@
 
 .kb-generic--toggle-box {
   padding: 0 5px 5px;
+
+}
+
+.kb-generic--inner{
+  padding: 5px;
 }
 
 .kb-generic--list {
@@ -66,5 +75,13 @@
 }
 
 .kb-generic--editable-title{
-  display: inline-block;
+  display: inline-block !important;
+  width: 250px !important;
+  margin-left: 20px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.kb-js-add-custom{
+  font-size: 13px;
 }

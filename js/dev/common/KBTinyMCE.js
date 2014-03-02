@@ -88,16 +88,23 @@ KB.TinyMCE = (function ($) {
             }, 1500);
 
         },
-        remoteGetEditor: function ($el, name, content, post_id) {
+        remoteGetEditor: function ($el, name, content, post_id, media) {
             var pid = post_id || KB.Screen.post_id;
             var id = $el.attr('id');
+            if (!media) {
+                var media = false;
+            }
+
             KB.Ajax.send({
                 action: 'getRemoteEditor',
                 editorId: id + '_ed',
                 editorName: name,
                 post_id: pid,
                 editorContent: content,
-                _ajax_nonce: kontentblocks.nonces.read
+                _ajax_nonce: kontentblocks.nonces.read,
+                args: {
+                    media_buttons: media
+                }
 
             }, function(data){
 
