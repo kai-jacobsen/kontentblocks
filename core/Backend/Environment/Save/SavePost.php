@@ -119,7 +119,7 @@ class SavePost
             // save area settings which are specific to this post (ID-wise)
             if (!empty($_POST['areas'])) {
 
-                $collection = $this->Environment->getDataBackend()->get('kb_area_settings');
+                $collection = $this->Environment->getDataHandler()->get('kb_area_settings');
 
                 $areasData = $_POST['areas'];
 
@@ -128,7 +128,7 @@ class SavePost
                         $collection[$id] = $_POST[$id];
                     }
                 }
-                $this->Environment->getDataBackend()->update('kb_area_settings', $collection);
+                $this->Environment->getDataHandler()->update('kb_area_settings', $collection);
             }
         }
         // finally update the index

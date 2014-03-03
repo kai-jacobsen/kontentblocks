@@ -114,7 +114,7 @@ class BackupManager
         );
 
         //set reference
-        $this->Storage->getDataBackend()->update('kb_last_backup', $now);
+        $this->Storage->getDataHandler()->update('kb_last_backup', $now);
 
         wp_cache_delete('kb_backups', 'kontentblocks');
         return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
@@ -153,7 +153,7 @@ class BackupManager
             'value' => serialize(stripslashes_deep($existingData))
         );
 
-        $this->Storage->getDataBackend()->update('kb_last_backup', $now);
+        $this->Storage->getDataHandler()->update('kb_last_backup', $now);
 
 
         wp_cache_delete('kb_backups', 'kontentblocks');

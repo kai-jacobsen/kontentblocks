@@ -24,7 +24,7 @@ function getHiddenEditor()
 /**
  * Get data Handler
  */
-function getDataBackend($post_id = null)
+function getDataHandler($post_id = null)
 {
     if ($post_id && is_numeric($id) && $post_id !== -1) {
         return new \Kontentblocks\Backend\API\PostMetaAPI($post_id);

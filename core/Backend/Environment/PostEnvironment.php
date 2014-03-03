@@ -98,7 +98,7 @@ class PostEnvironment
      * returns the PostMetaData instance
      * @return object
      */
-    public function getDataBackend()
+    public function getDataHandler()
     {
         return $this->MetaData;
     }
