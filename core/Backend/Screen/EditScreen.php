@@ -9,6 +9,7 @@ use Kontentblocks\Modules\ModuleFactory,
 use Kontentblocks\Backend\Storage\BackupManager;
 
 /**
+ * Edit Screen (Post Edit Screen)
  * Purpose: Creates the UI for the registered post type, which is just 'page' by default
  * Removes default meta boxes and adds the custom ui
  * Handles saving of areas while in post context
@@ -39,15 +40,19 @@ Class EditScreen
     {
         global $pagenow;
 
-        $this->hooks = $this->_setupPageHooks();
+        $this->hooks = $this->setupPageHooks();
 
         if ( !in_array( $pagenow, $this->hooks ) ) {
             return null;
         }
 
+        // prepare current posts data
         add_action( 'add_meta_boxes', array( $this, 'preparePostData' ), 10 );
+        // add UI
         add_action( 'add_meta_boxes', array( $this, 'addUserInterface' ), 20, 2 );
+        // register save callback
         add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+        // expose data to the document
         add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
 
     }
@@ -73,7 +78,6 @@ Class EditScreen
     function addUserInterface()
     {
         add_action( 'edit_form_after_editor', array( $this, 'userInterface' ), 10 );
-
     }
 
     /**
@@ -108,7 +112,7 @@ Class EditScreen
             Helper\getHiddenEditor();
         }
 
-        // baaam
+        // tada
         $this->renderScreen();
 
         echo "</div> <!--end ks -->";
@@ -120,13 +124,14 @@ Class EditScreen
      *
      * @todo Split up or outsource in own class (done, but optimize!)
      * @param int $post_id The current post id
+     * @return void
      * @since 1.0.0
      */
     function save( $post_id )
     {
         $Environment = \Kontentblocks\Helper\getEnvironment( $post_id );
         $Environment->save();
-        return;
+
     }
 
     # ------------------------------------------------
@@ -134,23 +139,23 @@ Class EditScreen
     #-------------------------------------------------
 
 
-    /**
-     * Checks if block is in draft mode and if so publish it by setting 'draft' to false
-     * @param array $block
-     * @return string
-     * @todo Evaluate sense of this method
-     * @since 1.0.0
-     */
-    public static function _draft_check( $block )
-    {
-        if ( !empty( $_POST[ 'wp-preview' ] ) )
-            return $block[ 'draft' ];
-
-        if ( 'true' === $block[ 'draft' ] ) {
-            return 'false';
-        }
-
-    }
+//    /**
+//     * Checks if block is in draft mode and if so publish it by setting 'draft' to false
+//     * @param array $block
+//     * @return string
+//     * @todo Evaluate sense of this method
+//     * @since 1.0.0
+//     */
+//    public static function _draft_check( $block )
+//    {
+//        if ( !empty( $_POST[ 'wp-preview' ] ) )
+//            return $block[ 'draft' ];
+//
+//        if ( 'true' === $block[ 'draft' ] ) {
+//            return 'false';
+//        }
+//
+//    }
 
     /**
      * Render
@@ -163,11 +168,9 @@ Class EditScreen
      */
     public function renderScreen()
     {
-
         if ( ( $this->postData->get( 'areas' ) === FALSE ) ) {
-            return;
+            return false;
         }
-
         $ScreenManager = new ScreenManager( $this->postData );
         $ScreenManager->render();
 
@@ -175,7 +178,7 @@ Class EditScreen
 
     /**
      * toJSON
-     * Make certain properties available throught the frontend
+     * Make certain properties available throughout the frontend
      * @since 1.0.0
      * @return void
      */
@@ -197,7 +200,7 @@ Class EditScreen
      * @return array
      * @filter kb_page_hooks modify allowed page hooks
      */
-    private function _setupPageHooks()
+    private function setupPageHooks()
     {
         return apply_filters( 'kb_page_hooks', array( 'post.php', 'post-new.php' ) );
 

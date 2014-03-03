@@ -3,15 +3,50 @@ namespace Kontentblocks\Backend\Storage;
 
 use Kontentblocks\Backend\API\PostMetaAPI;
 
+/**
+ * Mid-level wrapper to underlying data handler
+ * Class ModuleStoragePostMeta
+ * @package Kontentblocks\Backend\Storage
+ */
 class ModuleStoragePostMeta
 {
-
+    /**
+     * current post id
+     * @var int
+     * @since 1.0.0
+     */
     protected $post_id;
+
+    /**
+     * Module Index
+     * @var array
+     * @since 1.0.0
+     */
     protected $index;
-    protected $DataBackend;
+
+    /**
+     * Data Handler
+     * @var \Kontentblocks\Backend\API\PostMetaAPI
+     * @since 1.0.0
+     */
+    protected $DataHandler;
+
+    /**
+     * modules to handle
+     * @var array
+     * @since 1.0.0
+     */
     protected $modules;
 
-    public function __construct($post_id, PostMetaAPI $DataBackend = null)
+
+    /**
+     * Class constructor
+     * @param $post_id
+     * @param PostMetaAPI $DataHandler
+     * @throws \Exception
+     * @since 1.0.0
+     */
+    public function __construct($post_id, PostMetaAPI $DataHandler = null)
     {
         if (!isset($post_id) || $post_id === 0) {
             throw new \Exception('a valid post id must be provided');
@@ -19,10 +54,11 @@ class ModuleStoragePostMeta
 
         $this->post_id = $post_id;
 
-        if (is_null($DataBackend)) {
-            $this->DataBackend = new PostMetaAPI($post_id);
+        // Late init data handler if not provided
+        if (is_null($DataHandler)) {
+            $this->DataHandler = new PostMetaAPI($post_id);
         } else {
-            $this->DataBackend = $DataBackend;
+            $this->DataHandler = $DataHandler;
         }
         $this->setup();
 
@@ -40,10 +76,13 @@ class ModuleStoragePostMeta
 
     }
 
-
-    public function getDataBackend()
+    /**
+     * Getter for DataHandler
+     * @return PostMetaAPI
+     */
+    public function getDataHandler()
     {
-        return $this->DataBackend;
+        return $this->DataHandler;
     }
 
 
@@ -64,7 +103,7 @@ class ModuleStoragePostMeta
      * the module definition
      * @param string $id module instance_id
      * @param array $args module attributes array
-     * @return mixed boolean | new meta id
+     * @return mixed boolean
      */
     public function addToIndex($id, $args)
     {
@@ -110,8 +149,12 @@ class ModuleStoragePostMeta
 
     }
 
+    /**
+     * This will reload the post meta data and re-init thiss class
+     * @return $this
+     */
     public function reset(){
-        $this->getDataBackend()->_selfUpdate();
+        $this->getDataHandler()->_selfUpdate();
         $this->setup();
         return $this;
     }
@@ -122,16 +165,15 @@ class ModuleStoragePostMeta
      */
     private function setup()
     {
-        $index = $this->DataBackend->get('kb_kontentblocks');
+        $index = $this->DataHandler->get('kb_kontentblocks');
         if (empty($index)) {
             return false;
         }
-        $this->index = $this->DataBackend->get('kb_kontentblocks');
-        $this->modules = $this->_setupModuleData();
+        $this->index = $this->DataHandler->get('kb_kontentblocks');
+        $this->modules = $this->setupModuleData();
         return $this;
 
     }
-
 
     /**
      * Normalizes module meta data
@@ -139,10 +181,10 @@ class ModuleStoragePostMeta
      * but are on the meta table..
      * @return array
      */
-    private function _setupModuleData()
+    private function setupModuleData()
     {
         $collection = array();
-        $meta = $this->DataBackend->getAll();
+        $meta = $this->DataHandler->getAll();
         foreach ($this->index as $id => $data) {
             $collection['_' . $id] = (!empty($meta['_' . $id])) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = (!empty($meta['_preview_' . $id])) ? $meta['_preview_' . $id] : '';
@@ -181,8 +223,8 @@ class ModuleStoragePostMeta
      * @todo: test if _ is given and don't prefix if so
      * @todo PMDataHandler should update
      * @param $id string $id
-     * @param $data array $data
-     * @return boolean | new meta id
+     * @param array|string $data array $data
+     * @return boolean | new
      */
     public function saveModule($id, $data = '')
     {
@@ -195,6 +237,7 @@ class ModuleStoragePostMeta
      * Batch update Modules
      * Saves the module data arrays to postmeta
      * @param array $modules
+     * @since 1.0.0
      */
     public function saveModules($modules)
     {
@@ -208,6 +251,7 @@ class ModuleStoragePostMeta
      * Wrapper to update the index meta data
      * @Todo PMDataHandler should update
      * @return void
+     * @since 1.0.0
      */
     public function _updateIndex()
     {
@@ -215,7 +259,11 @@ class ModuleStoragePostMeta
 
     }
 
-
+    /**
+     * Getter for modules
+     * @return array
+     * @since 1.0.0
+     */
     public function getModules()
     {
         return $this->modules;
@@ -244,6 +292,7 @@ class ModuleStoragePostMeta
     /**
      * Returns an array with the instance_id as key
      * @return type
+     * @since 1.0.0
      */
     public function cleanIndex()
     {
@@ -264,6 +313,12 @@ class ModuleStoragePostMeta
 
     }
 
+    /**
+     * Prepare and return the data to backup
+     * @return array
+     * @TODO: add filter
+     * @since 1.0.0
+     */
     public function backup()
     {
         return array(
@@ -273,7 +328,10 @@ class ModuleStoragePostMeta
         );
     }
 
-
+    /**
+     * Delete all module-related data
+     * @since 1.0.0
+     */
     public function deleteAll()
     {
         foreach($this->getIndex() as $k => $module){
@@ -282,6 +340,11 @@ class ModuleStoragePostMeta
         delete_post_meta($this->post_id, 'kb_kontentblocks');
     }
 
+    /**
+     * Handle data restore
+     * @param $data
+     * @since 1.0.0
+     */
     public function restoreBackup($data)
     {
         if (is_null($data)) {

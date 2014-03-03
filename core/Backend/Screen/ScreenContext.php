@@ -13,20 +13,23 @@ class ScreenContext
 {
     /**
      * Literal identifier of this 'context'
-     * currently possible values: 'top', 'normal', 'side', 'bottom'
+     * current possible values: 'top', 'normal', 'side', 'bottom'
      * @var string
+     * @since 1.0.0
      */
     protected $id;
 
     /**
      * Label for this context as printed in the context header
      * @var string
+     * @since 1.0.0
      */
     protected $title;
 
     /**
      * Short description of the context
      * @var string
+     * @since 1.0.0
      */
     protected $description;
 
@@ -34,6 +37,7 @@ class ScreenContext
      * Array of area definitions
      * Contains only areas which are set to this context
      * @var array
+     * @since 1.0.0
      */
     protected $areas;
 
@@ -44,6 +48,7 @@ class ScreenContext
      * String: 'has-sidebar' or 'no-sidebar'
      * @TODO non-intuitive and semantically wrong to return a string
      * @var string
+     * @since 1.0.0
      */
     protected $editScreenHasSidebar;
 
@@ -52,6 +57,7 @@ class ScreenContext
      * @param $args
      * @param ScreenManager $ScreenManager
      * @throws Exception
+     * @since 1.0.0
      */
     public function __construct($args, ScreenManager $ScreenManager)
     {

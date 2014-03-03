@@ -243,13 +243,3 @@ function init_template_redirect()
 {
     new \Kontentblocks\Extensions\TemplateRedirect();
 }
-
-//
-////add_action('template_redirect', 'ReFrame_redirect',40);
-//function ReFrame_redirect()
-//{
-//
-//    $redirect = new \Kontentblocks\Extensions\TemplateRedirect();
-//    $redirect->redirect();
-//
-//}

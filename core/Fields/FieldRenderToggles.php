@@ -49,6 +49,11 @@ class FieldRenderToggles
 
     }
 
+    /**
+     * Wrapper to render method
+     * @param $baseId
+     * @param $data
+     */
     public function render( $baseId, $data )
     {
         $this->baseId = $baseId;

@@ -45,6 +45,11 @@ class FieldRenderTabs
 
     }
 
+    /**
+     * Wrapper to output methods
+     * @param $baseId
+     * @param $data
+     */
     public function render( $baseId, $data )
     {
         $this->baseId = $baseId;
@@ -55,6 +60,9 @@ class FieldRenderTabs
 
     }
 
+    /**
+     * Renders the tab navigation markup
+     */
     public function tabNavigation()
     {
         echo "<div class='kb_fieldtabs kb-field--tabs'>";
@@ -69,6 +77,9 @@ class FieldRenderTabs
 
     }
 
+    /**
+     * Renders the tab containers
+     */
     public function tabContainers()
     {
         foreach ( $this->structure as $section ) {

@@ -13,6 +13,7 @@ abstract class Field
     /**
      * Base id/key for the field
      * @var string
+     * @since 1.0.0
      */
     protected $baseId;
 
@@ -23,24 +24,28 @@ abstract class Field
      * - areaContext array of contexts
      * @TODO What else
      * @var array additional arguments
+     * @since 1.0.0
      */
     protected $args;
 
     /**
      * Actual data for field
      * @var mixed
+     * @since 1.0.0
      */
     protected $value;
 
     /**
      * key
      * @var string
+     * @since 1.0.0
      */
     protected $key;
 
     /**
      * Current field type
      * @var string
+     * @since 1.0.0
      */
     protected $type;
 
@@ -48,6 +53,7 @@ abstract class Field
      * Path to field definition
      * @var string
      * @TODO really?
+     * @since 1.0.0
      */
     protected $path;
 
@@ -55,6 +61,7 @@ abstract class Field
      * Return Object
      * @var \Kontentblocks\Interfaces\InterfaceFieldReturn
      * @TODO Concept is WIP
+     *
      */
     public $returnObj;
 

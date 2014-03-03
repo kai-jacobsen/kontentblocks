@@ -160,6 +160,7 @@ class FieldSection
     /**
      * TODO: DocBlock me!
      * @param array $data
+     * @param $oldData
      * @return array
      */
     public function save( $data, $oldData )
@@ -253,6 +254,9 @@ class FieldSection
 
     }
 
+    /**
+     * Increase number of visible fields property
+     */
     private function _increaseVisibleFields()
     {
         $this->numberOfVisibleFields++;
@@ -260,12 +264,19 @@ class FieldSection
 
     }
 
+    /**
+     * Descrease number of visible fields property
+     */
     private function _decreaseVisibleFields()
     {
         $this->numberOfVisibleFields--;
 
     }
 
+    /**
+     * Getter Number of visible fields
+     * @return int
+     */
     public function getNumberOfVisibleFields()
     {
         return $this->numberOfVisibleFields;

@@ -12,18 +12,21 @@ class ScreenManager
      * Raw areas are all areas which are available in the current environment
      * e.g. are assigned to current page template and/or post type
      * @var array
+     * @since 1.0.0
      */
     protected $rawAreas;
 
     /**
      * TODO: What is this?
      * @var array
+     * @since 1.0.0
      */
     protected $postAreas;
 
     /**
      * Environment Instance
      * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     * @since 1.0.0
      */
     protected $Environment;
 
@@ -32,6 +35,7 @@ class ScreenManager
      * A context does not get rendered if there are no areas
      * assigned to it.
      * @var array
+     * @since 1.0.0
      */
     protected $contextLayout;
 
@@ -39,12 +43,14 @@ class ScreenManager
      * Final sorted assignment of areas to regions
      * TODO: Var name sucks
      * @var array
+     * @since 1.0.0
      */
     protected $regions;
 
     /**
      * Indicates if sidebars exists or not
      * @var boolean
+     * @since 1.0.0
      */
     protected $hasSidebar;
 
@@ -62,7 +68,7 @@ class ScreenManager
         //setup region layout
         $this->contextLayout = self::getDefaultContextLayout();
         // setup filtered areas
-        $this->regions = $this->areasSortedByRegion($this->rawAreas);
+        $this->contexts = $this->areasSortedByContext($this->rawAreas);
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
         $this->hasSidebar = $this->evaluateLayout();
@@ -89,14 +95,11 @@ class ScreenManager
      * @return array
      * @since 1.0.0
      */
-    public function areasSortedByRegion()
+    public function areasSortedByContext()
     {
         if (!$this->rawAreas) {
         return array();
         }
-
-
-
 
         foreach ($this->rawAreas as $area) {
             if (!$area['dynamic']) {
@@ -115,8 +118,8 @@ class ScreenManager
      */
     public function getContextAreas($id)
     {
-        if (isset($this->regions[$id])) {
-            return $this->regions[$id];
+        if (isset($this->contexts[$id])) {
+            return $this->contexts[$id];
         } else {
             return array();
         }
@@ -199,7 +202,7 @@ class ScreenManager
      */
     public function evaluateLayout()
     {
-        return (!empty($this->regions['side']));
+        return (!empty($this->contexts['side']));
 
     }
 

@@ -7,5 +7,6 @@ interface InterfaceFieldReturn
     public function getValue();
 
     public function __toString();
-    
+
+    public function handleLoggedInUsers();
 }

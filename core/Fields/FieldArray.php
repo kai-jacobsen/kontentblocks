@@ -2,14 +2,43 @@
 
 namespace Kontentblocks\Fields;
 
+/**
+ * Class FieldArray
+ * To group a set of x field under one key
+ * @package Kontentblocks\Fields
+ */
 class FieldArray
 {
 
+    /**
+     *
+     * @var string
+     * @since 1.0.0
+     */
     protected $key;
+
+    /**
+     * Attached fields
+     * @var array
+     * @since 1.0.0
+     */
     protected $fields;
+
+    /**
+     * @var base id
+     * @since 1.0.0
+     */
     protected $baseId;
+
+    /**
+     * @var
+     * @since 1.0.0
+     */
     protected $returnObj;
 
+    /**
+     * @param $key Class
+     */
     public function __construct( $key )
     {
         $this->key = $key;
@@ -17,6 +46,12 @@ class FieldArray
 
     }
 
+    /**
+     * Add field
+     * @param string $key
+     * @param object $fieldobject
+     * @return $this
+     */
     public function addField( $key, $fieldobject )
     {
         $this->fields[ $key ] = $fieldobject;
@@ -24,6 +59,11 @@ class FieldArray
 
     }
 
+    /**
+     * Wrapper to each fields setup method
+     * @param $instanceData
+     * @param $baseId
+     */
     public function setup( $instanceData, $baseId )
     {
         foreach ( $this->fields as $field ) {
@@ -33,6 +73,12 @@ class FieldArray
 
     }
 
+    /**
+     * Pass through _save() method to each field
+     * @param $data
+     * @param $oldData
+     * @return array
+     */
     public function _save( $data, $oldData )
     {
         $collect = array();
@@ -50,12 +96,21 @@ class FieldArray
 
     }
 
+    /**
+     * Getter for $key
+     * @return string
+     */
     public function getKey()
     {
         return $this->key;
 
     }
 
+    /**
+     * Special Return Object
+     * will setup each fields return object seperately
+     * @return Returnobjects\ArrayFieldReturn
+     */
     public function getReturnObj()
     {
         $this->returnObj = new \Kontentblocks\Fields\Returnobjects\ArrayFieldReturn( $this->fields );
