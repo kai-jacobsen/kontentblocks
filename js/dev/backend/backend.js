@@ -15,7 +15,7 @@ KB.Views = {
     Areas: new KB.ViewsCollection(),
     Context: new KB.ViewsCollection()
 };
-
+console.log(KB);
 /*
  * All Modules are collected here
  * Get by 'id'
