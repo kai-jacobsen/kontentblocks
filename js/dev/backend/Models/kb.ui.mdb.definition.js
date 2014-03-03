@@ -8,6 +8,5 @@ KB.Backbone.ModuleDefinition = Backbone.Model.extend({
                 return that.get('settings').class;
             }
         }());
-        console.log(this);
     }
 });

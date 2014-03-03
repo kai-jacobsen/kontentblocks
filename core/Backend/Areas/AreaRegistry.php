@@ -3,21 +3,53 @@
 namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Backend\API\AreaTableAPI;
-use Kontentblocks\Backend\API\PostMetaAPI;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Language\I18n;
 
 /**
- * The AreaRegistry is a single interaction container to access area definitions throughout the plugin
- *
+ * Area Registry
+ * -----------------------------
+ * Collects all registered areas
+ * Collects all registered area templates
+ * Handles the connection Module > Area
+ * @since 1.0.0
  */
 class AreaRegistry
 {
 
+    /**
+     * All register areas
+     * @var array
+     * @since 1.0.0
+     */
     protected $rawAreas = array();
+
+    /**
+     * Global areas with context 'side' filtered
+     * @var array
+     * @since 1.0.0
+     */
     protected $globalSidebars = array();
+
+    /**
+     * all global areas filtered
+     * @var array
+     * @since 1.0.0
+     */
     protected $globalAreas = array();
+
+    /**
+     * area templates
+     * @var array
+     * @since 1.0.0
+     */
     protected $templates = array();
+
+    /**
+     * this instance
+     * @var object self
+     * @since 1.0.0
+     */
     static $instance;
 
     /**
@@ -25,6 +57,7 @@ class AreaRegistry
      * Get the Instance of the Area Directory
      * original instantiated on plugin startup
      * @return object | Area directory instance
+     * @since 1.0.0
      */
     public static function getInstance()
     {
@@ -43,10 +76,10 @@ class AreaRegistry
      * Adds those areas to the directory
      *
      * @return void
+     * @since 1.0.0
      */
     public function init()
     {
-
         $areas = get_posts(
             array(
                 'post_type' => 'kb-dyar',
@@ -72,23 +105,20 @@ class AreaRegistry
     }
 
     /**
-     * Adds an area to the directory
+     * Adds an area to the registry
      * Merges default arguments with provided arguments
-     * Manual indicates if the area has been registered by code (true) or
-     * was added though the admin interface (false)
+     * $Manual indicates if the area has been registered by code (true) or
+     * was added through the admin interface (false)
      *
      * @param array $args
      * @param bool $manual
      * @return void
+     * @since 1.0.0
      */
     public function addArea($args, $manual = true)
     {
         if (!empty($args['id'])) {
             $args['id'] = sanitize_title($args['id']);
-        }
-
-        if (empty($args['dbid'])) {
-            $args['dbid'] = -1;
         }
 
         // merge defaults with provided args
@@ -100,29 +130,13 @@ class AreaRegistry
         }
 
         $this->preFilterAreas($this->rawAreas[$area['id']]);
-
-
     }
 
-//    /**
-//     * Save an area to global areas
-//     * @param string $id identifier of area
-//     * @param array $args area arguments
-//     * @return bool | update successful true | false
-//     */
-//    public function saveArea($id, $args)
-//    {
-//        $storedAreas = get_option('kb_registered_areas');
-//
-//        $storedAreas[$id] = $args;
-//        return update_option('kb_registered_areas', $storedAreas);
-//
-//    }
-
     /**
-     * Returns an area from the directory by id
+     * Returns an area from the registry by id
      * @param string $id
      * @return mixed null if area is not set | area array args if area is set
+     * @since 1.0.0
      */
     public function getArea($id)
     {
@@ -134,6 +148,12 @@ class AreaRegistry
 
     }
 
+    /**
+     * Retrieve all areas in given context
+     * @param string $context
+     * @return array
+     * @since 1.0.0
+     */
     public function getAreasByContext($context)
     {
         return array_filter($this->rawAreas, function ($area) use ($context) {
@@ -141,17 +161,32 @@ class AreaRegistry
         });
     }
 
+    /**
+     * Getter for global sidebars
+     * @return array
+     * @since 1.0.0
+     */
     public function getGlobalSidebars()
     {
         return $this->globalSidebars;
     }
 
+    /**
+     * getter for global areas
+     * @return array
+     * @since 1.0.0
+     */
     public function getGlobalAreas()
     {
         return $this->globalAreas;
     }
 
 
+    /**
+     * Sort areas to common used collections
+     * @param $area
+     * @since 1.0.0
+     */
     public function preFilterAreas($area)
     {
         if ($area['dynamic'] === true
@@ -169,6 +204,7 @@ class AreaRegistry
     /**
      * Returns all registered area templates
      * @return array of template definitions
+     * @since 1.0.0
      */
     public function getTemplates()
     {
@@ -179,6 +215,7 @@ class AreaRegistry
     /**
      * Registers an area template and adds it to the area templates array
      * @param array $args
+     * @since 1.0.0
      */
     public function addTemplate($args)
     {
@@ -196,6 +233,12 @@ class AreaRegistry
 
     }
 
+    /**
+     * Get a template by id
+     * @param string $id
+     * @return null | array of params
+     * @since 1.0.0
+     */
     public function getTemplate($id)
     {
         if (isset($this->templates[$id])) {
@@ -207,12 +250,13 @@ class AreaRegistry
     }
 
     /**
-     * Modules can connect themselves to an area by specifing the connect parameter
-     * This method handles the connection by adding the module classname to the
+     * Modules can connect themselves to an area by specifying the connect parameter
+     * This method handles the connection by adding the modules classname to the
      * assigned modules array of the area
      *
      * A Module can be added to all registered areas by setting connect to 'any'
-     * TODO: In future versions it should be possible to add modules only to areas by context
+     * A Module can be added to all registered areas of an specific context by settint connect
+     * to one or more of the following words : 'top', 'normal', 'side', 'bottom'
      * @param string $classname
      * @param array $args module args
      */
@@ -248,11 +292,8 @@ class AreaRegistry
                         $area['assignedModules'][] = $classname;
                     }
                     $this->rawAreas[$id] = $area;
-                    $update = true;
                 }
             }
-
-
         }
     }
 
@@ -263,9 +304,9 @@ class AreaRegistry
      * Areas can be limited to post types and/or page templates
      * @param \Kontentblocks\Backend\Environment\PostEnvironment $postData
      * @return boolean
+     * @since 1.0.0
      */
-    public
-    function filterForPost(PostEnvironment $postData)
+    public function filterForPost(PostEnvironment $postData)
     {
 
         $pageTemplate = $postData->get('pageTemplate');
@@ -312,6 +353,7 @@ class AreaRegistry
      * @param array $areas
      * @param string $field
      * @return array
+     * @since 1.0.0
      */
     private
     function orderBy($areas, $field)
@@ -327,9 +369,9 @@ class AreaRegistry
      *
      * @param bool $manual
      * @return array
+     * @since 1.0.0
      */
-    public
-    static function getDefaults($manual = true)
+    public static function getDefaults($manual = true)
     {
         return array(
             'id' => '', // unique id of area
@@ -339,17 +381,22 @@ class AreaRegistry
             'pageTemplates' => array(), // array of page template names where this area is available to
             'assignedModules' => array(), // array of classnames
             'layouts' => array(), // array of area template ids
+            'defaultTpl' => 'default', // default Tpl to use, if none is set
             'dynamic' => false, // whether this is an dynamic area
             'manual' => $manual, // true if set by code
             'limit' => 0, // how many blocks are allowed
             'order' => 0, // order index for sorting
-            'dev_mode' => false, // deprecated
-            'context' => 'normal', // where on the edit screen
-            'lang' => 'any'
+            'context' => 'normal', // location on the edit screen
         );
 
     }
 
+    /**
+     * Check if an area id already exists
+     * @param string $id
+     * @return bool
+     * @since 1.0.0
+     */
     public function areaExists($id)
     {
         if (isset($this->rawAreas[$id])) {
@@ -359,6 +406,12 @@ class AreaRegistry
         }
     }
 
+    /**
+     * Check if area is dynamic
+     * @param $id
+     * @return mixed
+     * @since 1.0.0
+     */
     public function isDynamic($id)
     {
         $area = $this->getArea($id);

@@ -20,7 +20,7 @@ KB.Views = {
  * All Modules are collected here
  * Get by 'id'
  */
-KB.Modules = new KB.Backbone.ModulesCollection([], {
+KB.Modules = new Backbone.Collection([], {
     model: KB.Backbone.ModuleModel
 });
 

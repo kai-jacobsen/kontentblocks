@@ -28,7 +28,7 @@ KB.ModuleLayoutControls = Backbone.View.extend({
         
         this.targetEl.addClass('edit-active');
         
-        this.$el.append(KB.Templates.render('fe_moduleLayoutControls', {model: this.model.toJSON()}));
+        this.$el.append(KB.Templates.render('frontend/module-layout-controls', {model: this.model.toJSON()}));
         
         var container = jQuery('.os-controls-container', this.$el);
         

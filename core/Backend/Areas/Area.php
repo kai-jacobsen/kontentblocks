@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Backend\Areas;
 
-use Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Modules\ModuleFactory,
+use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Backend\Areas\AreaSettingsMenu,
     Kontentblocks\Templating\CoreTemplate;
 use Kontentblocks\Backend\Environment\PostEnvironment;
@@ -12,6 +11,7 @@ use Kontentblocks\Utils\JSONBridge;
 /**
  * Area
  * Class description:
+ * Creates the area output on the backend only.
  * @package Kontentblocks
  * @subpackage Areas
  * @since 1.0.0
@@ -33,7 +33,7 @@ class Area
      *
      * @var object \Kontentblocks\Backend\Environment\PostEnvironment
      */
-    protected $environment;
+    protected $Environment;
 
 
     /**
@@ -51,11 +51,11 @@ class Area
     /**
      * Class Constructor
      * @param array $area area settings array
-     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $Environment
      * @param string $context
      * @throws \Exception
      */
-    function __construct($area, PostEnvironment $environment, $context = 'normal')
+    function __construct($area, PostEnvironment $Environment, $context = 'normal')
     {
 
         if (empty($area)) {
@@ -77,42 +77,19 @@ class Area
         $this->context = $context;
 
         // environment
-        $this->environment = $environment;
+        $this->Environment = $Environment;
 
         // batch setting of properties
-        $this->_setupAreaProperties($area);
+        $this->setupAreaProperties($area);
 
 
         //actual stored module for this area
-        $this->attachedModules = $this->environment->getModulesForArea($this->id);
+        $this->attachedModules = $this->Environment->getModulesForArea($this->id);
 
         // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu($this, $this->environment);
+        $this->settingsMenu = new AreaSettingsMenu($this, $this->Environment);
 
         $this->setupCats();
-    }
-
-    private function default_tpl($val)
-    {
-        $this->default_tpl = (!empty($val)) ? $val : 'default-area-template';
-
-    }
-
-    /**
-     * Get Markup for block limit indicator
-     * 0 indicates unlimited and is the default setting
-     * @since 1.0.0
-     */
-
-    private function _getModuleLimitTag()
-    {
-        // prepare string
-        $limit = ($this->limit == '0') ? null : absint($this->limit);
-
-        if (null !== $limit) {
-            echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
-        }
-
     }
 
     /**
@@ -136,14 +113,44 @@ class Area
     public function header()
     {
         echo "<div id='{$this->id}-container' class='area-wrap clearfix cf'>";
-
-
         $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
 
         $Tpl = new CoreTemplate('Area-Header.twig', array('area' => $this, 'headerClass' => $headerClass));
         $Tpl->render(true);
 
     }
+
+    /**
+     * Render all attached modules for this area
+     * backend only
+     */
+    public function render()
+    {
+        // list items for this area, block limit gets stored here
+        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
+        if (!empty($this->attachedModules)) {
+            foreach ($this->attachedModules as $module) {
+
+                if (!class_exists($module['class'])) {
+                    continue;
+                }
+                $module['areaContext'] = $this->context;
+                $module = apply_filters('kb_before_module_options', $module);
+                $Factory = new ModuleFactory($module['class'], $module, $this->Environment);
+                $instance = $Factory->getModule();
+                $instance->_render_options();
+                JSONBridge::getInstance()->registerModule($instance->toJSON());
+            }
+        }
+
+        echo "</ul>";
+
+        // @TODO move to js
+        echo $this->menuLink();
+        // block limit tag, if applicable
+        $this->getModuleLimitTag();
+    }
+
 
     /**
      * Area Footer markup
@@ -153,44 +160,7 @@ class Area
         echo "</div><!-- close area wrap -->";
     }
 
-    /**
-     * Render all attached modules for this area
-     * backend only
-     */
-    public function render()
-    {
 
-        // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
-        if (!empty($this->attachedModules)) {
-
-
-            foreach ($this->attachedModules as $module) {
-
-                if (!class_exists($module['class'])){
-                    continue;
-                }
-
-                $module['areaContext'] = $this->context;
-                $module = apply_filters('kb_before_module_options', $module);
-                $Factory = new ModuleFactory($module['class'], $module, $this->environment);
-                $instance = $Factory->getModule();
-                $instance->_render_options();
-                JSONBridge::getInstance()->registerModule($instance->toJSON());
-
-            }
-        }
-
-        echo "</ul>";
-
-        // @TODO move to js
-        echo $this->menuLink();
-        // block limit tag, if applicable
-        $this->_getModuleLimitTag();
-
-
-
-    }
 
     /*
      * ################################################
@@ -240,7 +210,7 @@ class Area
      * to validate / sanitize input
      * @param array $args
      */
-    private function _setupAreaProperties($args)
+    private function setupAreaProperties($args)
     {
         foreach ($args as $key => $value) {
             if (method_exists($this, $key)) {
@@ -251,6 +221,25 @@ class Area
         }
 
     }
+
+
+    /**
+     * Get Markup for block limit indicator
+     * 0 indicates unlimited and is the default setting
+     * @since 1.0.0
+     */
+
+    private function getModuleLimitTag()
+    {
+        // prepare string
+        $limit = ($this->limit == '0') ? null : absint($this->limit);
+
+        if (null !== $limit) {
+            echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
+        }
+
+    }
+
 
     private function menuLink()
     {
@@ -263,27 +252,26 @@ class Area
         }
     }
 
-    /*
- * Filterable array of allowed cats
- * uses @filter kb_menu_cats
- * @return void
- */
-
+    /**
+     * Filterable array of allowed cats
+     * uses @filter kb_menu_cats
+     * @return void
+     */
     private function setupCats()
     {
         // defaults
         $cats = array(
-            'standard' => __( 'Standard', 'kontentblocks' ),
+            'standard' => __('Standard', 'kontentblocks'),
         );
 
-        $cats = apply_filters( 'kb_menu_cats', $cats );
+        $cats = apply_filters('kb_menu_cats', $cats);
 
 
-        $cats[ 'media' ]   = __( 'Media', 'kontentblocks' );
-        $cats[ 'special' ] = __( 'Spezial', 'kontentblocks' );
+        $cats['media'] = __('Media', 'kontentblocks');
+        $cats['special'] = __('Spezial', 'kontentblocks');
 
-        $cats[ 'core' ]      = __( 'System', 'kontentblocks' );
-        $cats[ 'template' ] = __( 'Templates', 'kontentblocks' );
+        $cats['core'] = __('System', 'kontentblocks');
+        $cats['template'] = __('Templates', 'kontentblocks');
 
         $this->cats = $cats;
 

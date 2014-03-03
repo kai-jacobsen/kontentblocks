@@ -8,6 +8,12 @@ use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\CoreTemplate;
 
+/**
+ * Class DynamicAreas
+ * Custom post type for global, dynamic created areas resp. sidebars
+ * @TODO Labels, ...
+ * @package Kontentblocks
+ */
 class DynamicAreas
 {
 
@@ -47,7 +53,11 @@ class DynamicAreas
         add_action('wp_insert_post_data', array($this, 'postData'), 10, 2);
     }
 
-
+    /**
+     * Add menu entry
+     * Add "Kontentblocks" main menu item if it does not exists
+     * else add as sub menu item
+     */
     public function addAdminMenu()
     {
 
@@ -58,6 +68,9 @@ class DynamicAreas
 
     }
 
+    /**
+     * Add new / create new form
+     */
     public function addForm()
     {
 
@@ -157,6 +170,7 @@ class DynamicAreas
         register_post_type('kb-dyar', $args);
         remove_post_type_support('kb-dyar', 'editor');
         remove_post_type_support('kb-dyar', 'title');
+        remove_post_type_support('kb-dyar', 'revisions');
     }
 
     /**
@@ -180,7 +194,7 @@ class DynamicAreas
             return false;
         }
 
-        // verify this came from the our screen and with proper authorization,
+        // verify this came from our screen and with proper authorization,
         // because save_post can be triggered at other times
         if (!wp_verify_nonce($_POST['kb_noncename'], 'kontentblocks_save_post')) {
             return false;

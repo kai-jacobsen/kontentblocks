@@ -18,6 +18,7 @@ class PostMetaAPI
     /**
      * Post ID to get meta from
      * @var int
+     * @since 1.0.0
      */
     protected $postId;
 
@@ -25,6 +26,7 @@ class PostMetaAPI
      * 'cached' meta data
      * @TODO unnecessary
      * @var array
+     * @since 1.0.0
      */
     protected $meta = array();
 
@@ -32,6 +34,7 @@ class PostMetaAPI
      * Class constructor
      * @param $postId
      * @throws \Exception
+     * @since 1.0.0
      */
     public function __construct($postId)
     {
@@ -50,6 +53,7 @@ class PostMetaAPI
      * equal keys (yet)
      * @param $key
      * @param $value
+     * @since 1.0.0
      */
     public function add($key, $value)
     {
@@ -64,6 +68,7 @@ class PostMetaAPI
      * @internal param string $id key
      * @internal param mixed $data value
      * @return boolean
+     * @since 1.0.0
      */
     public function update($key, $value)
     {
@@ -74,6 +79,7 @@ class PostMetaAPI
      * Wrapper to retrieve data by key from post meta
      * @param id string Key
      * @return null
+     * @since 1.0.0
      */
     public function get($key)
     {
@@ -88,6 +94,7 @@ class PostMetaAPI
      * Delete meta by key
      * @param $key
      * @return bool
+     * @since 1.0.0
      */
     public function delete($key)
     {
@@ -97,6 +104,7 @@ class PostMetaAPI
     /**
      * Returns all meta data for this postId
      * @return array
+     * @since 1.0.0
      */
     public function getAll()
     {
@@ -112,6 +120,7 @@ class PostMetaAPI
      * TODO: Could refer to template hierachie files as well?
      * TODO: custom post types default?
      * @return string
+     * @since 1.0.0
      */
     public function getPageTemplate()
     {
@@ -125,6 +134,7 @@ class PostMetaAPI
 
     /**
      * Get Post Type by postid
+     * @since 1.0.0
      */
     public function getPostType()
     {
@@ -136,6 +146,7 @@ class PostMetaAPI
      * Setup the Object.
      * @todo account for multiple keys
      * @return self
+     * @since 1.0.0
      */
     private function _getPostCustom()
     {
@@ -147,16 +158,19 @@ class PostMetaAPI
     /**
      * Makes sure the object stays in line with actual meta data
      * Should be called after any meta data modification
+     * @return self
+     * @since 1.0.0
      */
     public function _selfUpdate()
     {
         $this->_getPostCustom();
-
+        return $this;
     }
 
     /**
      * Getter for objects post id
      * @return int
+     * @since 1.0.0
      */
     public function getPostId(){
         return $this->postId;
