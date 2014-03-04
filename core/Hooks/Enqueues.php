@@ -3,6 +3,7 @@
 namespace Kontentblocks\Hooks;
 
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\JSONBridge;
 
 class Enqueues
 {
@@ -14,41 +15,29 @@ class Enqueues
     {
         $this->Caps = Kontentblocks::getInstance()->Capabilities;
 
-
         // enqueue styles and scripts where needed
-        add_action('admin_print_styles-post.php', array($this, 'enqueue'), 30);
-        add_action('admin_print_styles-post-new.php', array($this, 'enqueue'), 30);
+        add_action('admin_print_styles-post.php', array($this, 'adminEnqueue'), 30);
+        add_action('admin_print_styles-post-new.php', array($this, 'adminEnqueue'), 30);
 
         // Frontend On-Site Editing
-        add_action('wp_enqueue_scripts', array($this, '_on_site_editing_setup'));
+        add_action('wp_enqueue_scripts', array($this, 'userEnqueue'));
 
     }
 
-    function addStyle($handle, $src)
-    {
-        $this->styles[$handle] = array(
-            'handle' => $handle,
-            'src' => $src
-        );
-
-    }
 
     /**
      * Enqueue all styles and scripts
      * Array for localization strings used by JS actions
-     * TODO: complete l18n strings, develop nameing scheme
      */
-    function enqueue()
+    function adminEnqueue()
     {
         global $is_IE;
+
+        $this->appConfig();
 
         // enqueue scripts
         if (is_admin()) {
 
-            $config = array(
-                'url' => KB_PLUGIN_URL,
-                'frontend' => false
-            );
 
             // Main Stylesheet
             wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
@@ -57,11 +46,10 @@ class Enqueues
             // Plugins - Chosen, Noty, Sortable Touch
             wp_enqueue_script('kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true);
 
-            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins', 'backbone', 'underscore','jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable'), null, true);
+            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins', 'backbone', 'underscore', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable'), null, true);
 
             wp_enqueue_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
             wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse'), null, true);
-            wp_localize_script('KB-Backend', 'KBAppConfig', $config);
             wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend', 'wp-color-picker', 'kb-extensions'), null, true);
             // Main Kontentblocks script file
             // add Kontentblocks l18n strings
@@ -80,22 +68,14 @@ class Enqueues
     }
 
     // Front End editing
-    public function _on_site_editing_setup()
+    public function userEnqueue()
     {
-
+        $this->appConfig();
         // Thickbox on front end for logged in users
 
-        $config = array(
-            'url' => KB_PLUGIN_URL,
-            'ajaxurl' => admin_url('admin-ajax.php'),
-            'frontend' => true
-        );
+
 
         if (is_user_logged_in() && !is_admin()) {
-
-
-
-
 
             // place this in load order
             /*
@@ -109,11 +89,10 @@ class Enqueues
             );
 
             wp_enqueue_script('kb-plugins', KB_PLUGIN_URL . 'js/dist/plugins.min.js', $dependecies, null, true);
-            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb-plugins', ), null, true);
+            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb-plugins',), null, true);
             wp_enqueue_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-common'), null, true);
             wp_enqueue_script('kb-onsite-editing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('kb-frontend', 'jquery-ui-mouse'), null, true);
             wp_localize_script('kb-common', 'kontentblocks', $this->_localize());
-            wp_localize_script('kb-frontend', 'KBAppConfig', $config);
             wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('kb-frontend'), null, true);
 
             wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css');
@@ -124,10 +103,10 @@ class Enqueues
             $this->enqueueStyles();
 
             wp_enqueue_script(
-                'iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, 1
+                'iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true
             );
             wp_enqueue_script(
-                'wp-color-picker', admin_url('js/color-picker.min.js'), array('iris'), false, 1
+                'wp-color-picker', admin_url('js/color-picker.min.js'), array('iris'), false, true
             );
             $colorpicker_l10n = array(
                 'clear' => __('Clear'),
@@ -138,10 +117,25 @@ class Enqueues
 
             wp_enqueue_media();
 
-                    \Kontentblocks\Helper\getHiddenEditor();
+            \Kontentblocks\Helper\getHiddenEditor();
 
         }
 
+    }
+
+    public function appConfig()
+    {
+
+        $data = array(
+            'frontend' => !is_admin(),
+            'loggedIn' => is_user_logged_in(),
+            'user' => wp_get_current_user(),
+            'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
+            'url' => (is_user_logged_in()) ? KB_PLUGIN_URL : null
+        );
+
+
+        JSONBridge::getInstance()->registerPublicData('config', null, $data);
     }
 
     private function _localize()

@@ -56,6 +56,7 @@ KB.App = (function ($) {
         KB.Ui.init();
 
 
+
     }
 
     /**
@@ -141,3 +142,12 @@ KB.App = (function ($) {
 
 // get started
 KB.App.init();
+
+
+jQuery(document).ready(function(){
+
+    if (KB.appData && !KB.appData.config.frontend){
+        KB.Views.Modules.ready();
+    }
+
+});

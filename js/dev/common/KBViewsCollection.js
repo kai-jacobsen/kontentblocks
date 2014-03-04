@@ -9,8 +9,14 @@ KB.ViewsCollection = function () {
 
     this.add = function (id, view) {
         this.views[id] = view;
-        this.trigger('kb:viewAdded', view);
+        view.trigger('kb:viewAdded');
     };
+
+    this.ready = function(){
+        _.each(this.views, function(view){
+            view.trigger('kb:ready', view);
+        });
+    }
 
     this.remove = function (id) {
         var view = this.get(id);

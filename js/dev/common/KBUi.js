@@ -57,7 +57,7 @@ KB.Ui = function ($) {
 //                normal.removeClass('non-active-context');
 //            })
 
-            jQuery('.kb_inner').on('mouseover', function () {
+            jQuery('body').on('mouseover','.kb_inner', function () {
                 var $con = $(this).closest('.kb-context-container');
                 $con.addClass('active-context').removeClass('non-active-context');
 

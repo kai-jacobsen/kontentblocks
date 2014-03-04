@@ -6,6 +6,7 @@ class JSONBridge
 {
 
     protected $data = array();
+    protected $publicData = array();
     protected $modules = array();
     protected $areas = array();
 
@@ -32,6 +33,9 @@ class JSONBridge
             add_action('wp_print_footer_scripts', array($this, 'printJSON'), 9);
             add_action('admin_footer', array($this, 'printJSON'), 9);
         }
+        add_action('wp_print_footer_scripts', array($this, 'printPublicJSON'), 9);
+        add_action('admin_footer', array($this, 'printPublicJSON'), 9);
+
     }
 
 
@@ -45,6 +49,17 @@ class JSONBridge
         }
         return $this;
     }
+
+    public function registerPublicData($group, $key, $data)
+    {
+        if (is_null($key)) {
+            $this->publicData[$group] = $data;
+        } else {
+            $this->publicData[$group][$key] = $data;
+        }
+        return $this;
+    }
+
 
     public function registerModule($module)
     {
@@ -79,5 +94,11 @@ class JSONBridge
         print "<script>var KB = KB || {}; KB.fromServer = {}; KB.fromServer =  {$json};</script>";
     }
 
+    public function printPublicJSON(){
+
+        $json = json_encode($this->publicData);
+
+        print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json};</script>";
+    }
 
 }
