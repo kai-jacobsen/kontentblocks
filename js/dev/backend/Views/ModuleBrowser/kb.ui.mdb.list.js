@@ -20,10 +20,11 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
         'click .kb-js-create-module': 'createModule'
     },
     loadDetails: function () {
-        this.options.parent.trigger('loadDetails', this.model);
+        console.log(this);
+        this.options.browser.loadDetails(this.model);
     },
     createModule: function () {
-        this.options.parent.trigger('createModule', this.model);
+        this.options.browser.createModule(this.model);
 
     },
     close: function () {
@@ -51,7 +52,7 @@ KB.Backbone.ModuleBrowserModulesList = Backbone.View.extend({
         var first = false;
         this.$el.empty();
         _.each(this.modules, function (module) {
-            that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that});
+            that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that, browser: that.options.browser});
 
 //            if (!that.subviews[module.cid]) {
 //                console.log('create new view li');

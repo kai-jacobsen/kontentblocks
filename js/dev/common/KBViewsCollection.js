@@ -12,8 +12,8 @@ KB.ViewsCollection = function () {
         view.trigger('kb:viewAdded');
     };
 
-    this.ready = function(){
-        _.each(this.views, function(view){
+    this.ready = function () {
+        _.each(this.views, function (view) {
             view.trigger('kb:ready', view);
         });
     }
@@ -31,8 +31,8 @@ KB.ViewsCollection = function () {
     };
 
     this.filterByModelAttr = function (attr, value) {
-        return _.filter(this.views, function(view){
-                return (view.model.get(attr)) === value;
+        return _.filter(this.views, function (view) {
+            return (view.model.get(attr)) === value;
         });
     };
 

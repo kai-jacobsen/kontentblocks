@@ -11,7 +11,8 @@ KB.Backbone.AreaView = Backbone.View.extend({
     },
     events: {
         'click .modules-link': 'openModuleBrowser',
-        'click .js-area-settings-opener': 'toggleSettings'
+        'click .js-area-settings-opener': 'toggleSettings',
+        'mouseenter': 'setActive'
     },
     render: function () {
         this.addControls();
@@ -40,6 +41,9 @@ KB.Backbone.AreaView = Backbone.View.extend({
     toggleSettings: function (e) {
         e.preventDefault();
         this.settingsContainer.slideToggle().toggleClass('open');
+        KB.currentArea = this.model;
+    },
+    setActive: function(){
         KB.currentArea = this.model;
     }
 

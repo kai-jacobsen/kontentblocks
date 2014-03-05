@@ -94,6 +94,11 @@ class ModuleIterator implements \Iterator, \Countable
     protected function getModule()
     {
         $moduleDef = $this->modules[$this->key()];
+
+        if (!class_exists($moduleDef['class'])){
+            return null;
+        }
+
         $Factory = new \Kontentblocks\Modules\ModuleFactory(
             $moduleDef['class'], $moduleDef, $this->Environment, $this->getModuleData($moduleDef));
         return $Factory->getModule();

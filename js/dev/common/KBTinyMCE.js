@@ -11,7 +11,6 @@ KB.TinyMCE = (function ($) {
                 } else {
                     // get the id
                     var textarea = this.id;
-                    console.log(textarea, 'removeEd');
                     // remove controls
                     tinyMCE.execCommand('mceRemoveEditor', false, textarea);
                 }

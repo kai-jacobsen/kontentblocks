@@ -13,13 +13,16 @@ class ModuleFactory
         if (!isset($moduleArgs) or !isset($class)) {
             throw new \Exception('This is not a valid Module');
         }
+
+
+
         $this->class = $class;
         $this->args = $moduleArgs;
 
         if ($data === null) {
-            $this->data = $environment->getModuleData($moduleArgs['instance_id']);
+            $this->data = apply_filters('kb_modify_module_data',$environment->getModuleData($moduleArgs['instance_id']), $moduleArgs);
         } else {
-            $this->data = $data;
+            $this->data = apply_filters('kb_modify_module_data', $data, $moduleArgs);
         }
 
 

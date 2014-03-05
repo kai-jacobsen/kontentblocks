@@ -40,7 +40,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // There can and should always be only a single instance of the modal
         if (KB.FrontendEditModal) {
             this.reloadModal();
-            console.log('openOptions');
             return false;
 //            KB.FrontendEditModal.destroy();
         }
@@ -55,7 +54,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     reloadModal: function () {
         if (KB.FrontendEditModal) {
-            console.log('reloadModal');
             KB.FrontendEditModal.reload(this);
         }
         KB.CurrentModel = this.model;
@@ -86,7 +84,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var mwidth = this.$el.width() - 150;
 
         if (mSettings.controls && mSettings.controls.toolbar){
-            console.log(mSettings.controls.toolbar.top);
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }

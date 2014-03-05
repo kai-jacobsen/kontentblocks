@@ -1,7 +1,6 @@
 KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
     initialize: function (options) {
         this.options = options || {};
-
         this.options.browser.on('browser:close', this.close, this);
     },
     update: function () {

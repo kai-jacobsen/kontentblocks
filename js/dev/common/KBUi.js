@@ -179,10 +179,12 @@ KB.Ui = function ($) {
                 revert: 350,
                 // start event
                 start: function (event, ui) {
+
                     // set current model
                     that.isSorting = true;
                     $('#kontentblocks_stage').addClass('kb-is-sorting');
                     currentModule = KB.Modules.get(ui.item.attr('id'));
+                    areaOver = KB.currentArea;
                     $(KB).trigger('kb:sortable::start');
 
                     // close open modules, sorting on open container

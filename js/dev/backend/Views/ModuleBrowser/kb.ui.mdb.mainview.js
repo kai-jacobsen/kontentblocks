@@ -75,7 +75,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         var id = model.get('id');
         var modules = this.modulesDefinitions.getModules(id);
         this.subviews.ModulesList.setModules(modules).update();
-        this.listenTo(this.subviews.ModulesList, 'loadDetails', this.loadDetails);
+//        this.listenTo(this.subviews.ModulesList, 'loadDetails', this.loadDetails);
 
     },
     // update details in description view

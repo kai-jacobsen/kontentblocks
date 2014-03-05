@@ -29,6 +29,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.$form = jQuery('#onsite-form', this.$el);
         this.$formContent = jQuery('#onsite-content', this.$el);
         this.$inner = jQuery('.os-content-inner', this.$formContent);
+
         // init draggable container and store position in config var
         this.$el.css('position', 'fixed').draggable({
             handle: 'h2',
