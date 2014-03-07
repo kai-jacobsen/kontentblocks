@@ -19,9 +19,10 @@ KB.ViewsCollection = function () {
         });
     };
 
-    this.ready = function () {
+    this.readyOnFront = function () {
         _.each(this.views, function (view) {
             view.trigger('kb:'+view.model.get('class'), view);
+            console.log('loadtrigger');
             KB.trigger('kb:'+view.model.get('class')+':loadedOnFront', view);
         });
     };

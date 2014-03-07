@@ -120,7 +120,7 @@ class AreaRender
         $moduleClasses = $this->modules->getCurrentModuleClasses();
         $additionalClasses = $this->getAdditionalClasses($module);
 
-        $mergedClasses = array_merge($layoutClasses, $moduleClasses, $additionalClasses);
+        $mergedClasses = array_merge( $moduleClasses, $additionalClasses);
         if (method_exists($module, 'preRender')) {
             $module->preRender();
         }

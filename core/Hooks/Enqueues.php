@@ -20,7 +20,7 @@ class Enqueues
         add_action('admin_print_styles-post-new.php', array($this, 'adminEnqueue'), 30);
 
         // Frontend On-Site Editing
-        add_action('wp_enqueue_scripts', array($this, 'userEnqueue'));
+        add_action('wp_enqueue_scripts', array($this, 'userEnqueue'),9);
 
     }
 
@@ -70,11 +70,10 @@ class Enqueues
     // Front End editing
     public function userEnqueue()
     {
+
+
         $this->appConfig();
         // Thickbox on front end for logged in users
-
-
-
         if (is_user_logged_in() && !is_admin()) {
 
             // place this in load order
@@ -115,9 +114,9 @@ class Enqueues
             );
             wp_localize_script('wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n);
 
-            wp_enqueue_media();
-
             \Kontentblocks\Helper\getHiddenEditor();
+            wp_enqueue_script('image-edit');
+            wp_enqueue_media();
 
         }
 

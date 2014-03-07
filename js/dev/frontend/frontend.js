@@ -331,7 +331,7 @@ jQuery(document).ready(function () {
 jQuery(document).ready(function(){
 
     if (KB.appData && KB.appData.config.frontend){
-        KB.Views.Modules.ready();
+        KB.Views.Modules.readyOnFront();
     }
 
 });
