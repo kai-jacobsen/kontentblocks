@@ -43,16 +43,15 @@ class DuplicateModule
         $moduleDefinition = ModuleFactory::parseModule($stored);
         $moduleDefinition['state']['draft'] = true;
         $moduleDefinition['instance_id'] = $this->newInstanceId;
+        $toIndex = $moduleDefinition;
+        unset($toIndex['settings']);
 
-        unset($moduleDefinition['settings']);
-
-        $update = $this->Environment->getStorage()->addToIndex($moduleDefinition['instance_id'], $moduleDefinition);
+        $update = $this->Environment->getStorage()->addToIndex($toIndex['instance_id'], $toIndex);
         if ($update !== true) {
             wp_send_json_error('Update failed');
         } else {
             $original = $this->Environment->getStorage()->getModuleData($this->instanceId);
             $this->Environment->getStorage()->saveModule($this->newInstanceId, $original);
-
 
             $moduleDefinition['areaContext'] = filter_var($_POST['areaContext'], FILTER_SANITIZE_STRING);
 

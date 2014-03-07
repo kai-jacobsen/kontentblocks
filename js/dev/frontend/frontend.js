@@ -2,6 +2,7 @@ var KB = KB || {};
 
 KB.currentModule = {};
 KB.currentArea = {};
+_.extend(KB, Backbone.Events);
 
 // ---------------
 // Collections
@@ -324,6 +325,14 @@ jQuery(document).ready(function () {
                 }
             });
         });
+
+});
+
+jQuery(document).ready(function(){
+
+    if (KB.appData && KB.appData.config.frontend){
+        KB.Views.Modules.ready();
+    }
 
 });
 

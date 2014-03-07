@@ -1,5 +1,7 @@
 var KB = KB || {};
 
+_.extend(KB, Backbone.Events);
+
 KB.currentModule = {};
 KB.currentArea = {};
 // ---------------
@@ -15,7 +17,6 @@ KB.Views = {
     Areas: new KB.ViewsCollection(),
     Context: new KB.ViewsCollection()
 };
-console.log(KB);
 /*
  * All Modules are collected here
  * Get by 'id'
@@ -54,9 +55,6 @@ KB.App = (function ($) {
 
         // get the UI on track
         KB.Ui.init();
-
-
-
     }
 
     /**

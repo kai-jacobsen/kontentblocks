@@ -128,6 +128,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
                 var localView = _.clone(that.view);
                 localView.$el = that.$inner;
+                console.log(that.view);
                 that.view.trigger('kb:frontend::viewLoaded', localView);
 
                 // Make the modal fit

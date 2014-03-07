@@ -9,14 +9,23 @@ KB.ViewsCollection = function () {
 
     this.add = function (id, view) {
         this.views[id] = view;
-        view.trigger('kb:viewAdded');
+        KB.trigger('kb:'+view.model.get('class')+':added', view);
     };
 
     this.ready = function () {
         _.each(this.views, function (view) {
-            view.trigger('kb:ready', view);
+            view.trigger('kb:'+view.model.get('class'), view);
+            KB.trigger('kb:'+view.model.get('class')+':loaded', view);
         });
-    }
+    };
+
+    this.ready = function () {
+        _.each(this.views, function (view) {
+            view.trigger('kb:'+view.model.get('class'), view);
+            KB.trigger('kb:'+view.model.get('class')+':loadedOnFront', view);
+        });
+    };
+
 
     this.remove = function (id) {
         var view = this.get(id);
