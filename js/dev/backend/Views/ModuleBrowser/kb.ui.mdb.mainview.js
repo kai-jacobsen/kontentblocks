@@ -123,7 +123,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
         KB.TinyMCE.addEditor();
-
         KB.Fields.trigger('update');
 
         // update the reference counter, used as base number

@@ -8,6 +8,7 @@ KB.Utils.MediaWorkflow = function (args) {
         buttontext : 'Buttontext',
         multiple: false,
         type: 'image',
+        title: '',
         select: false,
         ready:false
     }
@@ -16,7 +17,7 @@ KB.Utils.MediaWorkflow = function (args) {
         if (_frame)
             return _frame;
         _frame = wp.media({
-            title: '',
+            title: options.title,
             button: {
                 text: options.buttontext
             },

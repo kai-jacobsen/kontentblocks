@@ -59,7 +59,7 @@ class ModuleRegistry
             AreaRegistry::getInstance()->connect($classname, $moduleArgs);
 
             if (method_exists($classname, 'init')){
-                $classname::init();
+                $classname::init($moduleArgs);
             }
         }
 
