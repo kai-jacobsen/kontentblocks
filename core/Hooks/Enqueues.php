@@ -49,7 +49,7 @@ class Enqueues
             wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins', 'backbone', 'underscore', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable'), null, true);
 
             wp_enqueue_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
-            wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse'), null, true);
+            wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-mouse', 'kb-common'), null, true);
             wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend', 'wp-color-picker', 'kb-extensions'), null, true);
             // Main Kontentblocks script file
             // add Kontentblocks l18n strings
