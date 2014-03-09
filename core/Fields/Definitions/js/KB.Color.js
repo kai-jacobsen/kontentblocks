@@ -22,7 +22,6 @@ KB.Fields.register('Color', (function($) {
 			});
 		},
 		update: function() {
-            console.log('Debug::Field Color update listener');
 			this.init();
 		}
 	};
