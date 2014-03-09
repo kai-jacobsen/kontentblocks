@@ -58,15 +58,15 @@ class FieldSection
      * Constructor
      * @param string $id
      * @param $args
-     * @param string $areaContext
+     * @param array $areaContext
      * @return \Kontentblocks\Fields\FieldSection
      */
-    public function __construct( $id, $args, $areaContext = null )
+    public function __construct($id, $args, $envVars)
     {
 
-        $this->id          = $id;
-        $this->args        = $this->prepareArgs( $args );
-        $this->areaContext = $areaContext;
+        $this->id = $id;
+        $this->args = $this->prepareArgs($args);
+        $this->envVars = $envVars;
 
     }
 
@@ -80,24 +80,20 @@ class FieldSection
      * @return self Fluid layout
      * @todo check if field type exists
      */
-    public function addField( $type, $key, $args )
+    public function addField($type, $key, $args)
     {
-
-
-        if ( !$this->fieldExists( $key ) ) {
+        if (!$this->fieldExists($key)) {
             $Registry = FieldRegistry::getInstance();
-            $field    = $Registry->getField( $type );
-            $field->setKey( $key );
-            $field->setArgs( $args );
-            $field->setType( $type );
+            $field = $Registry->getField($type);
+            $field->setKey($key);
+            $field->setArgs($args);
+            $field->setType($type);
+            $this->markByEnvVar($field);
 
-            $this->markByAreaContext( $field );
-
-            if ( isset( $args[ 'arrayKey' ] ) ) {
-                $this->addArrayField( $field, $key, $args );
-            }
-            else {
-                $this->fields[ $key ] = $field;
+            if (isset($args['arrayKey'])) {
+                $this->addArrayField($field, $key, $args);
+            } else {
+                $this->fields[$key] = $field;
             }
             $this->_increaseVisibleFields();
         }
@@ -111,16 +107,15 @@ class FieldSection
      * @param string $key
      * @param array $args
      */
-    public function addArrayField( $field, $key, $args )
+    public function addArrayField($field, $key, $args)
     {
-        if ( !$this->fieldExists( $args[ 'arrayKey' ] ) ) {
-            $FieldArray                          = $this->fields[ $args[ 'arrayKey' ] ] = new FieldArray( $args[ 'arrayKey' ] );
-        }
-        else {
+        if (!$this->fieldExists($args['arrayKey'])) {
+            $FieldArray = $this->fields[$args['arrayKey']] = new FieldArray($args['arrayKey']);
+        } else {
 
-            $FieldArray = $this->fields[ $args[ 'arrayKey' ] ];
+            $FieldArray = $this->fields[$args['arrayKey']];
         }
-        $FieldArray->addField( $key, $field );
+        $FieldArray->addField($key, $field);
 
     }
 
@@ -133,27 +128,33 @@ class FieldSection
      * TODO: Change moduleId zo baseId for consistency
      * TODO: Check if possible / Refactor to set properties earlier
      */
-    public function render( $moduleId, $data )
+    public function render($moduleId, $data)
     {
-        if ( empty( $this->fields ) ) {
+        if (empty($this->fields)) {
             return;
         }
 
-        foreach ( $this->fields as $field ) {
+        foreach ($this->fields as $field) {
             // TODO: Keep an eye on it
-            if ( isset( $data[ $field->getKey() ] ) ) {
-                $fielddata = (is_array( $data ) && !is_null( $data[ $field->getKey() ] )) ? $data[ $field->getKey() ] : '';
-            }
-            else {
-                $fielddata = '';
+            if (isset($data[$field->getKey()])) {
+                $fielddata = (is_array($data) && !is_null($data[$field->getKey()])) ? $data[$field->getKey()] : $this->getFieldStd($field);
+            } else {
+                $fielddata = $this->getFieldStd($field);
             }
 
-            $field->setBaseId( $moduleId );
-            $field->setData( $fielddata );
+            $field->setBaseId($moduleId);
+            $field->setData($fielddata);
 
 
             $field->build();
         }
+
+    }
+
+
+    private function getFieldStd($field)
+    {
+        return $field->getArg('std', '');
 
     }
 
@@ -163,17 +164,16 @@ class FieldSection
      * @param $oldData
      * @return array
      */
-    public function save( $data, $oldData )
+    public function save($data, $oldData)
     {
         $collect = array();
-        foreach ( $this->fields as $field ) {
-            $old = (isset( $oldData[ $field->getKey() ] )) ? $oldData[ $field->getKey() ] : NULL;
+        foreach ($this->fields as $field) {
+            $old = (isset($oldData[$field->getKey()])) ? $oldData[$field->getKey()] : NULL;
 
-            if ( isset( $data[ $field->getKey() ] ) ) {
-                $collect[ $field->getKey() ] = $field->_save( $data[ $field->getKey() ], $old );
-            }
-            else {
-                $collect[ $field->getKey() ] = $field->_save( NULL, $old );
+            if (isset($data[$field->getKey()])) {
+                $collect[$field->getKey()] = $field->_save($data[$field->getKey()], $old);
+            } else {
+                $collect[$field->getKey()] = $field->_save(NULL, $old);
             }
         }
         return $collect;
@@ -202,7 +202,7 @@ class FieldSection
      */
     public function getLabel()
     {
-        return $this->args[ 'label' ];
+        return $this->args['label'];
 
     }
 
@@ -227,30 +227,49 @@ class FieldSection
      * @param string $key
      * @return bool
      */
-    public function fieldExists( $key )
+    public function fieldExists($key)
     {
-        return isset( $this->fields[ $key ] );
+        return isset($this->fields[$key]);
 
     }
 
-    public function prepareArgs( $args )
+    public function prepareArgs($args)
     {
-        return wp_parse_args( $args, self::$defaults );
+        return wp_parse_args($args, self::$defaults);
 
     }
 
-    public function markByAreaContext( $field )
+    /**
+     * Set visibility of field based on environment vars given by the module
+     * By following a hierachie: PostType -> PageTemplate -> AreaContext
+     * @param $field
+     * @return mixed
+     */
+    public function markByEnvVar($field)
     {
-        if ( !isset( $this->areaContext ) || $this->areaContext === false || ($field->getArg( 'areaContext' ) === false) ) {
-            return $field->setDisplay( true );
+        $areaContext = $this->envVars['areaContext'];
+        $postType = $this->envVars['postType'];
+        $pageTemplate = $this->envVars['pageTemplate'];
+
+
+
+
+        if ($field->getArg('postType') && !in_array($postType, (array)$field->getArg('postType'))) {
+            return $field->setDisplay(false);
         }
-        else if ( in_array( $this->areaContext, $field->getArg( 'areaContext' ) ) ) {
-            return $field->setDisplay( true );
+
+        if ($field->getArg('pageTemplate') && !in_array($pageTemplate, (array)$field->getArg('pageTemplate'))) {
+            return $field->setDisplay(false);
         }
-        else {
-            $this->_decreaseVisibleFields();
-            return $field->setDisplay( false );
+
+        if (!isset($areaContext) || $areaContext === false || ($field->getArg('areaContext') === false)) {
+            return $field->setDisplay(true);
+        } else if (in_array($areaContext, $field->getArg('areaContext'))) {
+            return $field->setDisplay(true);
         }
+
+        $this->_decreaseVisibleFields();
+        return $field->setDisplay(false);
 
     }
 

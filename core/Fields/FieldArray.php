@@ -67,7 +67,7 @@ class FieldArray
     public function setup( $instanceData, $baseId )
     {
         foreach ( $this->fields as $field ) {
-            $fielddata = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : '';
+            $fielddata = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : $field->getArg('std', '');
             $field->setup( $fielddata, $baseId );
         }
 

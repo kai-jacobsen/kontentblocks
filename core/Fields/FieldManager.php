@@ -75,7 +75,7 @@ class FieldManager
     public function addGroup( $id, $args = array() )
     {
         if ( !$this->idExists( $id ) ) {
-            $this->structure[ $id ] = new FieldSection( $id, $args, $this->module->getAreaContext() );
+            $this->structure[ $id ] = new FieldSection( $id, $args, $this->module->envVars );
         }
         return $this->structure[ $id ];
 

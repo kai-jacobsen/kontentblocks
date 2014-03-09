@@ -69,7 +69,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     setOpenStatus: function () {
         this.model.set('open', !this.model.get('open'));
         store.set(this.model.get('instance_id') + '_open', this.model.get('open'));
-        console.log(this.model.get('open'));
     },
     // get called when a module was dragged to a different area / area context
     updateModuleForm: function () {

@@ -442,11 +442,12 @@ abstract class Module
     public function setEnvVarsfromEnvironment($environment)
     {
 
-
         $this->envVars = wp_parse_args($this->envVars,array(
             'postType' => $environment->get('postType'),
             'pageTemplate' => $environment->get('pageTemplate'),
-            'postId' => absint($environment->get('postID'))
+            'postId' => absint($environment->get('postID')),
+            'areaContext' => $this->getAreaContext(),
+            'area' => $this->area
         ));
 
     }

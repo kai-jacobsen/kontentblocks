@@ -18,6 +18,8 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     },
     areaChanged: function() {
         // @see backend::views:ModuleView.js
+        var envVars = this.get('envVars');
+        envVars.areaContext = this.get('areaContext');
         this.view.updateModuleForm();
    }
 });

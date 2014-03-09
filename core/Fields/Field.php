@@ -536,46 +536,4 @@ abstract class Field
 
     }
 
-    /*
-     * Stuff to delete
-     * @TODO: Verify and delete
-     * -------------------------------
-     */
-
-//
-//    public function getValue($key, $args, $data)
-//    {
-//        if (is_string($this->getArg['array'])) {
-//            return (isset($this->data[$key][$args['array']])) ? $this->data[$key][$args['array']] : '';
-//        } elseif (!empty($this->data[$key])) {
-//            return $this->data[$key];
-//        } else {
-//            return $this->getArg['std'];
-//        }
-//
-//    }
-
-//
-//    public function get_data($key, $return = '')
-//    {
-//        if (is_array($this->data)) {
-//            return (!empty($this->data[$key])) ? $this->data[$key] : $return;
-//        } else {
-//            return (!empty($this->data)) ? $this->data : $return;
-//        }
-//
-//    }
-//
-//    /**
-//     * Helper to create a class attribute
-//     *
-//     * @param string $class
-//     * @return string - html attribute
-//     */
-//    public function get_css_class($class)
-//    {
-//        return "class=\"{$class}\"";
-//
-//    }
-
 }
