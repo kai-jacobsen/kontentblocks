@@ -148,7 +148,7 @@ Class Kontentblocks
         ModuleTemplates::getInstance();
 
         // @TODO Quatsch
-        $this->Enqueues = new Enqueues();
+        $this->Enqueues = Enqueues::getInstance();
         add_post_type_support('page', 'kontentblocks');
 
         // load Templates automatically

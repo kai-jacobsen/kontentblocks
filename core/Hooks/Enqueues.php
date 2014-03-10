@@ -8,9 +8,21 @@ use Kontentblocks\Utils\JSONBridge;
 class Enqueues
 {
 
+    public static $instance;
     protected $styles;
     protected $adminScripts = array();
     protected $userScripts = array();
+
+
+    public static function getInstance()
+    {
+        if (null == self::$instance) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+
+    }
+
 
     public function __construct()
     {
@@ -99,6 +111,7 @@ class Enqueues
             wp_enqueue_style('ie8css', KB_PLUGIN_URL . 'css/ie8css.css');
         }
 
+        $this->enqueueAdminScripts();
         do_action('kb_enqueue_files');
 
     }
@@ -121,7 +134,7 @@ class Enqueues
             wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css');
             wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
             $this->enqueueStyles();
-
+            $this->enqueueUserScripts();
             wp_localize_script('kb-common', 'kontentblocks', $this->_localize());
 
             wp_enqueue_script('wp-iris');
@@ -223,12 +236,42 @@ class Enqueues
         if (is_null($def['handle']) || is_null($def['src'])) {
             return false;
         }
+        switch ($where) {
 
+            case 'both':
+                $this->adminScripts[$args['handle']] = $def;
+                $this->userScripts[$args['handle']] = $def;
+                break;
+            case 'user':
+                $this->userScripts[$args['handle']] = $def;
+                break;
+            case 'admin':
+                $this->adminScripts[$args['handle']] = $def;
+                break;
+        }
 
     }
 
     private function customScripts()
     {
+        $all = array_merge($this->adminScripts, $this->userScripts);
+        foreach ($all as  $args) {
+
+            wp_register_script($args['handle'], $args['src'], $args['deps'], $args['version'], $args['footer']);
+        }
     }
 
+    private function enqueueAdminScripts()
+    {
+        foreach ($this->adminScripts as $script) {
+            wp_enqueue_script($script['handle']);
+        }
+    }
+
+    private function enqueueUserScripts()
+    {
+        foreach ($this->userScripts as $script) {
+            wp_enqueue_script($script['handle']);
+        }
+    }
 }
