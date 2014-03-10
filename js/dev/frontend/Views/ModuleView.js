@@ -97,7 +97,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var refresh = false;
         moduleData[that.model.get('instance_id')] = that.model.get('moduleData');
 
-
         jQuery.ajax({
             url: ajaxurl,
             data: {

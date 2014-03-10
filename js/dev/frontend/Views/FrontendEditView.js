@@ -172,7 +172,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         // get window height
         winH = (jQuery(window).height()) - 40;
         // get height of modal contents
-        // TODO too specific to tabs
         conH = jQuery('.os-content-inner').height();
         //get position of modal
         position = this.$el.position();
@@ -207,7 +206,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         jQuery('.nano').nanoScroller({ preventPageScrolling: true });
     },
     // Serialize current form fields and send it to the server
-    // By now this will generate the new module output without saving the actual data
     serialize: function () {
         var that = this;
         tinymce.triggerSave();
@@ -277,9 +275,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         jQuery('.wp-editor-area', this.$el).each(function(i, item){
             tinymce.remove('#'+item.id);
         });
-
-
-
     },
     // Modules can pass special settings to manipulate the modal
     // By now it's limited to the width
