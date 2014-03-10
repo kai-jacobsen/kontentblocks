@@ -36,6 +36,10 @@ Class Color extends Field
 
     }
 
+    public function concat($data){
+        return false;
+    }
+
 }
 
 // register

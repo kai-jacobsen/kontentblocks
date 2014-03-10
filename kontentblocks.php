@@ -25,6 +25,9 @@ use Kontentblocks\Backend\Screen\EditScreen,
 Class Kontentblocks
 {
 
+    const VERSION = '1.0.0alpha';
+    const DEVMODE = true;
+
     public $dev_mode = true;
     static $instance;
 

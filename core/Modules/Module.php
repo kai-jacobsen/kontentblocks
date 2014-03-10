@@ -109,7 +109,7 @@ abstract class Module
     {
 
 
-        if (is_null($data) && !is_null($this->moduleData)){
+        if (is_null($data) && !is_null($this->moduleData)) {
             $data = $this->moduleData;
         }
 
@@ -156,9 +156,9 @@ abstract class Module
         $this->Fields->setup($this->moduleData);
         foreach ($this->moduleData as $key => $v) {
             $field = $this->Fields->getFieldByKey($key);
-            $this->moduleData[$key] = ($field !== NULL  ) ? $field->getReturnObj() : null;
+            $this->moduleData[$key] = ($field !== NULL) ? $field->getReturnObj() : null;
 
-            if ($this->moduleData[$key] === null){
+            if ($this->moduleData[$key] === null) {
                 $this->moduleData[$key] = $v;
             }
         }
@@ -208,7 +208,7 @@ abstract class Module
 
         echo $this->_closeListItem();
 
-        if (method_exists($this, 'adminEnqueue')){
+        if (method_exists($this, 'adminEnqueue')) {
             $this->adminEnqueue();
         }
 
@@ -442,7 +442,7 @@ abstract class Module
     public function setEnvVarsfromEnvironment($environment)
     {
 
-        $this->envVars = wp_parse_args($this->envVars,array(
+        $this->envVars = wp_parse_args($this->envVars, array(
             'postType' => $environment->get('postType'),
             'pageTemplate' => $environment->get('pageTemplate'),
             'postId' => absint($environment->get('postID')),
@@ -503,6 +503,7 @@ abstract class Module
         return (!empty($this->moduleData[$key])) ? $this->moduleData[$key] : $return;
 
     }
+
     public function getRawData($key = null, $arrayKey = null, $return = '')
     {
         if (empty($this->rawModuleData) or empty($key)) {
@@ -565,6 +566,19 @@ abstract class Module
 
     }
 
+    public function isPublic()
+    {
+        if ($this->getSetting('disabled') || $this->getSetting('hidden')){
+            return false;
+        }
+
+        if (!$this->state['active'] || $this->state['draft']){
+            return false;
+        }
+
+        return true;
+    }
+
     public function toJSON()
     {
         // todo only used on frontend
@@ -573,7 +587,7 @@ abstract class Module
             'settings' => $this->settings,
             'state' => $this->state,
             'instance_id' => $this->instance_id,
-            'moduleData' => apply_filters('kb_modify_module_data',$this->rawModuleData, $this->settings),
+            'moduleData' => apply_filters('kb_modify_module_data', $this->rawModuleData, $this->settings),
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->areaContext,
@@ -583,8 +597,7 @@ abstract class Module
         );
 
 
-
-        if (isset($this->master) && $this->master){
+        if (isset($this->master) && $this->master) {
             $toJSON['master'] = true;
             $toJSON['master_id'] = $this->master_id;
             $toJSON['post_id'] = $this->master_id;

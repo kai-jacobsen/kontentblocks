@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Backend\Environment\Save\ConcatContent;
+
 /**
  * Class Field
  * @package Kontentblocks\Fields
@@ -64,6 +66,11 @@ abstract class Field
      *
      */
     public $returnObj;
+
+    /**
+     * @var \Kontentblocks\Modules\Module
+     */
+    protected  $module;
 
     /**
      * set storage key
@@ -416,7 +423,10 @@ abstract class Field
      */
     public function _save($keydata, $oldKeyData = NULL)
     {
-        return $this->save($keydata, $oldKeyData);
+        $data = $this->save($keydata, $oldKeyData);
+        $this->handleConcatContent($data);
+
+        return $data;
 
     }
 
@@ -435,6 +445,31 @@ abstract class Field
         }
 
     }
+
+
+    public function handleConcatContent($data)
+    {
+
+        if (!$this->module->isPublic()){
+            return false;
+        }
+
+        if (!$this->getArg('concat')){
+            return false;
+        }
+
+        if (method_exists($this, 'concat')){
+            return ConcatContent::getInstance()->addString($this->concat($data));
+        }
+
+        return ConcatContent::getInstance()->addString($data);
+
+    }
+
+    public function setModule($module){
+        $this->module = $module;
+    }
+
 
     public function getDefault($key)
     {

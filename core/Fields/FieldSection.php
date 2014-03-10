@@ -61,12 +61,13 @@ class FieldSection
      * @param array $areaContext
      * @return \Kontentblocks\Fields\FieldSection
      */
-    public function __construct($id, $args, $envVars)
+    public function __construct($id, $args, $envVars, $module)
     {
 
         $this->id = $id;
         $this->args = $this->prepareArgs($args);
         $this->envVars = $envVars;
+        $this->module = $module;
 
     }
 
@@ -168,6 +169,9 @@ class FieldSection
     {
         $collect = array();
         foreach ($this->fields as $field) {
+
+            $field->setModule($this->module);
+
             $old = (isset($oldData[$field->getKey()])) ? $oldData[$field->getKey()] : NULL;
 
             if (isset($data[$field->getKey()])) {

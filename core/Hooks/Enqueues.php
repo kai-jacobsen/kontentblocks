@@ -8,20 +8,60 @@ use Kontentblocks\Utils\JSONBridge;
 class Enqueues
 {
 
-    protected $DI;
     protected $styles;
+    protected $adminScripts = array();
+    protected $userScripts = array();
 
     public function __construct()
     {
+
         $this->Caps = Kontentblocks::getInstance()->Capabilities;
+
+        add_action('init', array($this, 'registerScripts'));
 
         // enqueue styles and scripts where needed
         add_action('admin_print_styles-post.php', array($this, 'adminEnqueue'), 30);
         add_action('admin_print_styles-post-new.php', array($this, 'adminEnqueue'), 30);
 
-        // Frontend On-Site Editing
-        add_action('wp_enqueue_scripts', array($this, 'userEnqueue'),9);
+        // Frontend Enqueueing
+        add_action('wp_enqueue_scripts', array($this, 'userEnqueue'), 9);
 
+    }
+
+
+    public function registerScripts()
+    {
+        $dependecies = array(
+            'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse', 'jquery-ui-draggable', 'backbone', 'underscore', 'wp-color-picker'
+        );
+        // Plugins
+        wp_register_script('kb-plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', $dependecies, null, true);
+
+        // Common & Util. Functions
+        wp_register_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb-plugins'), null, true);
+
+        // Extensions
+        wp_register_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
+
+        // Backend 'controller'
+        wp_register_script('kb-backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('kb-extensions'), null, true);
+
+        // fields handler
+        wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('kb-backend'), null, true);
+
+        // frontend controller
+        wp_register_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-common'), null, true);
+
+        // Onsite
+        wp_register_script('kb-onsite-editing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('kb-frontend'), null, true);
+
+        // WP iris
+        wp_register_script('wp-iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true);
+
+        // WP color picker
+        wp_register_script('wp-color-picker', admin_url('js/color-picker.min.js'), array('wp-iris'), false, true);
+
+        $this->customScripts();
     }
 
 
@@ -38,24 +78,20 @@ class Enqueues
         // enqueue scripts
         if (is_admin()) {
 
-
             // Main Stylesheet
             wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
             $this->enqueueStyles();
 
-            // Plugins - Chosen, Noty, Sortable Touch
-            wp_enqueue_script('kb_plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', null, null, true);
+            wp_enqueue_script('kb_plugins');
+            wp_enqueue_script('kb-common');
+            wp_enqueue_script('kb-extensions');
+            wp_enqueue_script('kb-backend');
+            wp_enqueue_script('kb-refields');
+            wp_enqueue_script('heartbeat');
 
-            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb_plugins', 'backbone', 'underscore', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable'), null, true);
-
-            wp_enqueue_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
-            wp_enqueue_script('KB-Backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('jquery-ui-mouse', 'kb-common'), null, true);
-            wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('KB-Backend', 'wp-color-picker', 'kb-extensions'), null, true);
-            // Main Kontentblocks script file
             // add Kontentblocks l18n strings
             $localize = $this->_localize();
             wp_localize_script('kb-common', 'kontentblocks', $localize);
-            wp_enqueue_script('heartbeat');
         }
 
         if ($is_IE) {
@@ -71,42 +107,25 @@ class Enqueues
     public function userEnqueue()
     {
 
-
         $this->appConfig();
-        // Thickbox on front end for logged in users
         if (is_user_logged_in() && !is_admin()) {
 
-            // place this in load order
-            /*
-             * Plugins
-             * Common Code Modules
-             * Frontend Controller Views,Models,Collections
-             */
-
-            $dependecies = array(
-                'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse', 'jquery-ui-draggable', 'backbone', 'wp-color-picker'
-            );
-
-            wp_enqueue_script('kb-plugins', KB_PLUGIN_URL . 'js/dist/plugins.min.js', $dependecies, null, true);
-            wp_enqueue_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb-plugins',), null, true);
-            wp_enqueue_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-common'), null, true);
-            wp_enqueue_script('kb-onsite-editing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('kb-frontend', 'jquery-ui-mouse'), null, true);
-            wp_localize_script('kb-common', 'kontentblocks', $this->_localize());
-            wp_enqueue_script('Kontentblocks-Refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('kb-frontend'), null, true);
-
-            wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css');
-            wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
+            wp_enqueue_script('kb-plugins');
+            wp_enqueue_script('kb-common');
+            wp_enqueue_script('kb-frontend');
+            wp_enqueue_script('kb-onsite-editing');
+            wp_enqueue_script('kb-refields');
             wp_enqueue_style('wp-color-picker');
             wp_enqueue_script('heartbeat');
 
+            wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css');
+            wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
             $this->enqueueStyles();
 
-            wp_enqueue_script(
-                'iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true
-            );
-            wp_enqueue_script(
-                'wp-color-picker', admin_url('js/color-picker.min.js'), array('iris'), false, true
-            );
+            wp_localize_script('kb-common', 'kontentblocks', $this->_localize());
+
+            wp_enqueue_script('wp-iris');
+            wp_enqueue_script('wp-color-picker');
             $colorpicker_l10n = array(
                 'clear' => __('Clear'),
                 'defaultString' => __('Default'),
@@ -115,9 +134,8 @@ class Enqueues
             wp_localize_script('wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n);
 
             \Kontentblocks\Helper\getHiddenEditor();
-            wp_enqueue_script('image-edit');
-            wp_enqueue_media();
 
+            wp_enqueue_media();
         }
 
     }
@@ -132,7 +150,6 @@ class Enqueues
             'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
             'url' => (is_user_logged_in()) ? KB_PLUGIN_URL : null
         );
-
 
         JSONBridge::getInstance()->registerPublicData('config', null, $data);
     }
@@ -167,9 +184,9 @@ class Enqueues
         (
             'caps' => $caps,
             'config' => array(
-                'url' => KB_PLUGIN_URL
+                'url' => KB_PLUGIN_URL,
+                'dev' => Kontentblocks::DEVMODE
             ),
-//            'fields' => get_option( 'kontentfields' ),
             'nonces' => array(
                 'update' => wp_create_nonce('kb-update'),
                 'create' => wp_create_nonce('kb-create'),
@@ -189,6 +206,29 @@ class Enqueues
             }
         }
 
+    }
+
+    public function addScript($args, $where = 'both')
+    {
+        $defaults = array(
+            'handle' => null,
+            'src' => null,
+            'deps' => array(),
+            'version' => Kontentblocks::VERSION,
+            'footer' => true
+        );
+
+        $def = wp_parse_args($args, $defaults);
+
+        if (is_null($def['handle']) || is_null($def['src'])) {
+            return false;
+        }
+
+
+    }
+
+    private function customScripts()
+    {
     }
 
 }

@@ -3,7 +3,7 @@
     var LayoutTemplates = {
         el: $('#layout-templates'),
         init: function () {
-            console.log('loaded');
+            _K.debug('Layout Templates loaded');
             if (this.el.length === 0) {
                 return false;
             }
@@ -106,10 +106,10 @@
 
             var concat = '';
 
-            if (KB.RawAreas) {
-                _.each(KB.RawAreas, function (context) {
+            if (KB.fromServer.Areas) {
+                _.each(KB.fromServer.Areas, function (context) {
                     concat += context.id;
-                    console.log(concat);
+                    _K.debug('Layout Templates: Concat', concat);
                 });
             }
             return this.hash(concat.replace(',', ''));

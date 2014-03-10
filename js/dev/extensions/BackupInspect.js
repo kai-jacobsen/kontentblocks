@@ -62,7 +62,7 @@ KB.Ext.Backup = (function($) {
                     </details>\n\
                 </li>", {data: {time: new moment.unix(key).format('HH:mm:ss / DD.MMM')}, item: item, key: key}))
             });
-console.log(this.firstRun);
+            _K.info('Backup Inspect::FirstRun:', this.firstRun);
             // no notice on first run
             if (!this.firstRun){
                 KB.Notice.notice('<p>New Backups were created</p>', 'success');
