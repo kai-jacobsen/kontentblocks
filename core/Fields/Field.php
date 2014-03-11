@@ -159,6 +159,7 @@ abstract class Field
      */
     public function setup($data, $moduleId)
     {
+
         $this->setData($data);
         $this->parentModule = $moduleId;
 
@@ -174,7 +175,7 @@ abstract class Field
     public function getReturnObj()
     {
         if (!$this->returnObj && $this->getArg('returnObj')) {
-            $classname = $this->defaults['returnObj'];
+            $classname = $this->getDefault('returnObj');
             if (!$classname) {
                 return;
             }
@@ -474,8 +475,8 @@ abstract class Field
     public function getDefault($key)
     {
 
-        if (isset($this->defaults[$key])) {
-            return $this->defaults[$key];
+        if (isset(static::$defaults[$key])) {
+            return static::$defaults[$key];
         } else {
             return false;
         }

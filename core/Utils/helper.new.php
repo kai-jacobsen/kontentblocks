@@ -28,10 +28,8 @@ function getDataHandler($post_id = null)
 {
     if ($post_id && is_numeric($id) && $post_id !== -1) {
         return new \Kontentblocks\Backend\API\PostMetaAPI($post_id);
-    } else {
-        return new GlobalDataAPI();
     }
-
+    return null;
 }
 
 /**
@@ -41,9 +39,8 @@ function getStorage($id = null)
 {
     if ($id && is_numeric($id) &&  $id != -1) {
         return new ModuleStoragePostMeta($id);
-    } else {
-        return new ModuleStorageGlobal($id);
     }
+    return null;
 
 }
 
@@ -60,7 +57,7 @@ function getEnvironment($id = null)
         if (isset($area['parent_id'])){
             return new PostEnvironment($area['parent_id']);
         } else {
-            return new PostEnvironment(get_the_ID());
+            return new PostEnvironment($post->ID);
         }
     }
 
@@ -214,16 +211,6 @@ function arrayMergeRecursiveAsItShouldBe($new, $old)
     }
 
     return $merged;
-
-}
-
-/**
- * If the output of the module forms is a empty string
- * @return string
- */
-function noOptionsMessage()
-{
-    return "<div class='kb-no-options'>No Options available</div>";
 
 }
 
