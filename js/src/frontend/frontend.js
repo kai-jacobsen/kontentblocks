@@ -20,7 +20,7 @@ KB.Views = {
  * All Modules are collected here
  * Get by 'id'
  */
-KB.Modules = new KB.Backbone.ModulesCollection([], {
+KB.Modules = new Backbone.Collection([], {
     model: KB.Backbone.ModuleModel
 });
 
@@ -28,7 +28,7 @@ KB.Modules = new KB.Backbone.ModulesCollection([], {
  *  All Areas are collected in this Backbone Collection
  *  Get by 'instance_id'
  */
-KB.Areas = new KB.Backbone.AreasCollection([], {
+KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
 });
 
@@ -146,38 +146,6 @@ KB.App = (function ($) {
 
 // get started
 KB.App.init();
-//
-//KB.Frontend = (function ($) {
-//    'use strict';
-//
-//    // Public facing access point
-//    // TODO pointless?
-//    var api = {};
-//
-//
-//    // Custom Views Collection
-//    var Views = [];
-//    var Collection = new KB.Backbone.ModulesCollection(_.toArray(KB.PageModules), {
-//        model: KB.ModuleModel
-//    });
-//
-//    _.each(Collection.models, function (model) {
-//        Views.push(new KB.ModuleView({
-//            el: '#' + model.get('instance_id'),
-//            model: model
-//        }));
-//
-//        KB.Views.Modules.add(model.get('instance_id'), new KB.ModuleView({
-//            el: '#' + model.get('instance_id'),
-//            model: model
-//        }));
-//    });
-//
-//
-//    api.Collection = Collection;
-//    api.Views = Views;
-//    return api;
-//}(jQuery));
 
 function initTinymce(item) {
 
