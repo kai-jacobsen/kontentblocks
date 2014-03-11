@@ -1,5 +1,3 @@
-var KB = KB || {};
-KB.Backbone = KB.Backbone || {};
 /**
  * That is what is rendered for each module when the user enters frontside editing mode
  * This will initiate the FrontsideEditView

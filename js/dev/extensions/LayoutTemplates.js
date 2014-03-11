@@ -3,7 +3,13 @@
     var LayoutTemplates = {
         el: $('#layout-templates'),
         init: function () {
+            if (KB.appData.config.frontend){
+                _K.info('Layout Templates stopped');
+                return false;
+            }
+
             _K.debug('Layout Templates loaded');
+
             if (this.el.length === 0) {
                 return false;
             }

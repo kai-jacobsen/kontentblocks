@@ -1,6 +1,3 @@
-var KB = KB || {};
-KB.Ext = KB.Ext || {};
-
 KB.Ext.Backup = (function($) {
 
     return {
@@ -8,6 +5,12 @@ KB.Ext.Backup = (function($) {
         lastItem: null,
         firstRun: true,
         init: function() {
+
+            if (KB.appData.config.frontend){
+                _K.info('Backup Inspect stopped');
+                return false;
+            }
+
             var that = this;
             this.listEl = $('<ul></ul>').appendTo(this.el);
             if (this.listEl.length > 0) {

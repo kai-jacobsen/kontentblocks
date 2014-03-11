@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Ajax = (function($) {
 
     return {

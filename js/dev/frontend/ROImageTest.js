@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Stuff = (function ($) {
 
     var self, attachment;

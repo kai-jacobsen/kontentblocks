@@ -1,6 +1,3 @@
-var KB = KB || {};
-KB.Utils = KB.Utils || {};
-
 KB.Utils.MediaWorkflow = function (args) {
     var _frame, options;
 

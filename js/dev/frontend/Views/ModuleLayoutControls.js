@@ -1,6 +1,3 @@
-var KB = KB || {};
-KB.OSConfig = KB.OSConfig || {};
-
 /**
  * Still very experimental
  * Idea is to provide some additional controls for each module

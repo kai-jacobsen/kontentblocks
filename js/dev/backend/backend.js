@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 _.extend(KB, Backbone.Events);
 
 KB.currentModule = {};

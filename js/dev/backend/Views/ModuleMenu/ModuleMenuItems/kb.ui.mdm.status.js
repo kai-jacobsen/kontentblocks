@@ -1,6 +1,3 @@
-var KB = KB || {};
-KB.Backbone = KB.Backbone || {};
-
 KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
     initialize: function(options){
         var that = this;

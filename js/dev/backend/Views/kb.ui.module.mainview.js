@@ -1,7 +1,3 @@
-var KB = KB || {};
-// Kontentblocks Backbone Namespacing
-KB.Backbone = KB.Backbone || {};
-
 KB.Backbone.ModuleView = Backbone.View.extend({
     $head: null, // header jQuery element
     $body: null, // module inner jQuery element

@@ -1,5 +1,3 @@
-var KB = KB || {};
-KB.Backbone = KB.Backbone || {};
 /**
  * This is the modal which wraps the modules input form
  * and loads when the user clicks on "edit" while in frontend editing mode

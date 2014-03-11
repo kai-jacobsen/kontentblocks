@@ -7,6 +7,11 @@ var KBAreaSelector;
             {
                 init: function()
                 {
+                    if (KB.appData.config.frontend){
+                        _K.info('Area Selector stopped');
+                        return false;
+                    }
+
                     $('#existing-areas, #active-dynamic-areas').sortable({
                         connectWith: '.connect',
                         cancel: "li.ui-state-disabled",

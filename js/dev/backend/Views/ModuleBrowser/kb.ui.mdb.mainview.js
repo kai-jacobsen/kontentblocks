@@ -1,4 +1,3 @@
-KB.Backbone = KB.Backbone || {};
 // TODO Proper cleanup
 KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options){

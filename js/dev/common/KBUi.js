@@ -12,8 +12,6 @@
  * @type @exp; KB
  */
 
-var KB = KB || {};
-
 KB.Ui = function ($) {
 
     return {

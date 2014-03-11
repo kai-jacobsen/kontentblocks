@@ -1,4 +1,3 @@
-var KB = KB || {};
 KB.Templates = (function($) {
 
     var tmpl_cache = {};

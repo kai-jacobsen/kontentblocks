@@ -1,6 +1,3 @@
-
-var KB = KB || {};
-
 KB.Notice = (function($) {
 	'use strict';
 

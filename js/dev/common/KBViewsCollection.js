@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 /*
  Simple Get/Set implementation to set and get views
  No magic here

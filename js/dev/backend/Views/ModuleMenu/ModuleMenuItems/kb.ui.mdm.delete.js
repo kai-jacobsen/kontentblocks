@@ -1,6 +1,3 @@
-var KB = KB || {};
-KB.Backbone = KB.Backbone || {};
-
 KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     className: 'kb-delete block-menu-icon',
     initialize: function() {

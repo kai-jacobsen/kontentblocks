@@ -1,7 +1,4 @@
-var KB = KB || {};
-KB.Backbone = KB.Backbone || {};
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
-
     setup: function () {
         this.categories = this.prepareCategories();
         this.sortToCategories();

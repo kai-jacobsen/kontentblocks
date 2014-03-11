@@ -1,7 +1,3 @@
-var KB = KB || {};
-// Kontentblocks Backbone namespacing
-KB.Backbone = KB.Backbone || {};
-
 /**
  * Creates the individual module-actions menu
  * like: duplicate, delete, status

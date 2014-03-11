@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.TinyMCE = (function ($) {
 
     return {

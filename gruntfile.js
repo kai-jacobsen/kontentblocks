@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                 nonull: true
             },
             common: {
-                src: ['js/dev/common/**/*.js'],
+                src: ['js/dev/common/KBNamespaces.js','js/dev/common/**/*.js'],
                 dest: 'js/tmp/common.concat.js',
                 nonull: true
             },

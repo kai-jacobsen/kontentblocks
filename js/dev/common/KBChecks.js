@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Checks = (function($) {
     return {
         blockLimit: function(areamodel) {

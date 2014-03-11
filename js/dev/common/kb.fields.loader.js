@@ -1,7 +1,3 @@
-// failsafe object definition
-var KB = KB || {};
-// setup object
-KB.Fields = {};
 // include Backbone events handler
 _.extend(KB.Fields, Backbone.Events);
 // include custom functions
