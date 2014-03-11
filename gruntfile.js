@@ -6,25 +6,38 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
-            options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                mangle: false,
-                beautify: true,
-                compress: false,
-                drop_console: false
-            },
-            prim: {
+            dist: {
+                options: {
+                    banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                    mangle: false,
+                    beautify: false,
+                    compress: true,
+                    drop_console: true
+                },
                 files: {
                     'js/dist/frontend.min.js': ['<%= concat.frontend.dest %>'],
                     'js/dist/backend.min.js': ['<%= concat.backend.dest %>'],
                     'js/dist/refields.min.js': ['<%= concat.refields.dest %>'],
-                    'js/dist/common.min.js': ['<%= concat.common.dest %>']
-                }
-            },
-            sec: {
-                files: {
+                    'js/dist/common.min.js': ['<%= concat.common.dest %>'],
                     'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
                     'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>']
+                }
+            },
+            dev: {
+                options: {
+                    banner: '/*! <%= pkg.name %> DevVersion <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                    mangle: false,
+                    beautify: true,
+                    compress: false,
+                    drop_console: false
+                },
+                files: {
+                    'js/dev/frontend.js': ['<%= concat.frontend.dest %>'],
+                    'js/dev/backend.js': ['<%= concat.backend.dest %>'],
+                    'js/dev/refields.js': ['<%= concat.refields.dest %>'],
+                    'js/dev/common.js': ['<%= concat.common.dest %>'],
+                    'js/dev/extensions.js': ['<%= concat.extensions.dest %>'],
+                    'js/dev/plugins.js': ['<%= concat.plugins.dest %>']
                 }
             }
         },
@@ -38,27 +51,27 @@ module.exports = function (grunt) {
                 nonull: true
             },
             extensions: {
-                src: ['js/dev/extensions/**/*.js'],
+                src: ['js/src/extensions/**/*.js'],
                 dest: 'js/tmp/extensions.concat.js',
                 nonull: true
             },
             plugins: {
-                src: ['js/dev/plugins/**/*.js'],
+                src: ['js/src/plugins/**/*.js'],
                 dest: 'js/tmp/plugins.concat.js',
                 nonull: true
             },
             common: {
-                src: ['js/dev/common/KBNamespaces.js','js/dev/common/**/*.js'],
+                src: ['js/src/common/KBNamespaces.js','js/src/common/**/*.js'],
                 dest: 'js/tmp/common.concat.js',
                 nonull: true
             },
             frontend: {
-                src: ['js/dev/frontend/**/*.js', 'js/dev/frontend/frontend.js'],
+                src: ['js/src/frontend/**/*.js', 'js/src/frontend/frontend.js'],
                 dest: 'js/tmp/frontend.concat.js',
                 nonull: true
             },
             backend: {
-                src: ['js/dev/backend/**/*.js', 'js/dev/backend/backend.js'],
+                src: ['js/src/backend/**/*.js', 'js/src/backend/backend.js'],
                 dest: 'js/tmp/backend.concat.js',
                 nonull: true
             }
@@ -76,8 +89,8 @@ module.exports = function (grunt) {
                 livereload: true
             },
             js: {
-                files: ['js/dev/**/**/*.js', 'js/dev/**/*.js', 'core/Fields/Definitions/**/*.js'],
-                tasks: ['concat', 'uglify:prim', 'uglify:sec', 'clean', 'jshint']
+                files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js'],
+                tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint']
             },
             sass: {
                 options: {
@@ -93,7 +106,7 @@ module.exports = function (grunt) {
         },
         clean: ["js/tmp"],
         jshint: {
-            dev: ['js/dev/frontend/**/*.js', 'js/dev/backend/**/*.js'],
+            src: ['js/src/frontend/**/*.js', 'js/src/backend/**/*.js'],
             options: {
                 force: true,
                 globals: {
@@ -124,7 +137,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-rsync-2');
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify:prim', 'uglify:sec', 'compass', 'clean']);
+    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);
 
 };

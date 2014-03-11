@@ -236,11 +236,14 @@
 
 /* line 15, sass/partials/_block_style.scss */
 h2.kb-title {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
   border-radius: 4px;
   background: #eaeaea;
   border: 1px solid #ccc;
   padding-left: 20px !important;
   -webkit-box-shadow: 1px solid #fff;
+  -moz-box-shadow: 1px solid #fff;
   box-shadow: 1px solid #fff;
 }
 
@@ -255,6 +258,7 @@ h2.kb-title {
 /* line 35, sass/partials/_block_style.scss */
 .kb_block.kb-open .block-head {
   -webkit-box-shadow: 1px 1px 1px white;
+  -moz-box-shadow: 1px 1px 1px white;
   box-shadow: 1px 1px 1px white;
 }
 /* line 39, sass/partials/_block_style.scss */
@@ -363,6 +367,8 @@ h5.kb_properties_title {
 .kb_properties {
   background: #fff;
   padding: 10px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
   border-radius: 8px;
   clear: both;
 }
@@ -375,7 +381,6 @@ h5.kb_properties_title {
   background: #f9f9f9;
   font-size: 12px;
   border: 0;
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -398,6 +403,8 @@ h5.kb_properties_title {
 
 /* line 166, sass/partials/_block_style.scss */
 .block-head {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
   border-radius: 2px;
   border: 1px solid #f2f2f2;
   border-bottom: 1px solid #aaa;
@@ -443,7 +450,6 @@ h5.kb_properties_title {
   height: 35px;
   float: left;
   cursor: pointer;
-  -webkit-box-shadow: none;
   box-shadow: none;
   top: 1px;
   position: relative;
@@ -579,6 +585,8 @@ h5.kb_properties_title {
   cursor: pointer;
   margin-bottom: 0;
   -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
   /*background-position: 0 0px !important;*/
 }
@@ -975,7 +983,11 @@ h5.kb_properties_title {
   /* Target only IE7 and IE8 with this hack */
   opacity: .01;
   -webkit-transition: .2s;
+  -moz-transition: .2s;
+  -o-transition: .2s;
   transition: .2s;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border-radius: 5px;
 }
 
@@ -985,6 +997,8 @@ h5.kb_properties_title {
   background: rgba(0, 0, 0, 0.5);
   position: relative;
   margin: 0 1px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
   border-radius: 3px;
 }
 
@@ -1000,6 +1014,9 @@ h5.kb_properties_title {
 .alertify-show,
 .alertify-log {
   -webkit-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -moz-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -ms-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -o-transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transition: all 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   /* easeOutBack */
 }
@@ -1007,6 +1024,9 @@ h5.kb_properties_title {
 /* line 10, sass/partials/_vendor/_alertify.scss */
 .alertify-hide {
   -webkit-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -moz-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -ms-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -o-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   /* easeInBack */
 }
@@ -1014,6 +1034,9 @@ h5.kb_properties_title {
 /* line 17, sass/partials/_vendor/_alertify.scss */
 .alertify-log-hide {
   -webkit-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -moz-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -ms-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -o-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   /* easeInBack */
 }
@@ -1050,7 +1073,9 @@ h5.kb_properties_title {
 /* line 41, sass/partials/_vendor/_alertify.scss */
 .alertify-hidden {
   -webkit-transform: translate(0, -150px);
+  -moz-transform: translate(0, -150px);
   -ms-transform: translate(0, -150px);
+  -o-transform: translate(0, -150px);
   transform: translate(0, -150px);
   opacity: 0;
   display: none;
@@ -1095,7 +1120,9 @@ h5.kb_properties_title {
 /* line 76, sass/partials/_vendor/_alertify.scss */
 .alertify-log-hide {
   -webkit-transform: translate(300px, 0);
+  -moz-transform: translate(300px, 0);
   -ms-transform: translate(300px, 0);
+  -o-transform: translate(300px, 0);
   transform: translate(300px, 0);
   opacity: 0;
 }
@@ -1180,6 +1207,8 @@ h5.kb_properties_title {
   border-right: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
   -webkit-background-clip: padding;
+  /* Safari 4? Chrome 6? */
+  -moz-background-clip: padding;
   /* Firefox 3.6 */
   background-clip: padding-box;
   /* Firefox 4, Safari 5, Opera 10, IE 9 */
@@ -1200,7 +1229,9 @@ h5.kb_properties_title {
   text-decoration: none;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
   background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.3)), to(rgba(255, 255, 255, 0)));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
   background-image: linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
 }
 
@@ -1345,6 +1376,7 @@ h5.kb_properties_title {
   z-index: 5050;
   display: none;
   -webkit-box-shadow: 1px 1px 6px #333;
+  -moz-box-shadow: 1px 1px 6px #333;
   box-shadow: 1px 1px 6px #333;
   -webkit-border-bottom-right-radius: 8px;
   -webkit-border-bottom-left-radius: 8px;
@@ -1461,7 +1493,6 @@ h5.kb_properties_title {
   margin-bottom: 20px;
   padding: 0px;
   background: #f9f9f9;
-  -webkit-box-shadow: 0px 1px 1px #fff;
   box-shadow: 0px 1px 1px #fff;
   border: 1px solid #ccc;
   border-bottom: 1px solid #aaa;
@@ -1518,6 +1549,7 @@ h5.kb_properties_title {
   font: 11px "Consolas", monospace;
   color: #aaa;
   -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
   right: 3px;
@@ -1584,7 +1616,6 @@ h5.kb_properties_title {
 .kb-area-settings-wrapper {
   overflow: hidden;
   background: whitesmoke;
-  -webkit-box-shadow: inset -1px 1px 12px #aaa;
   box-shadow: inset -1px 1px 12px #aaa;
   border-bottom: 1px solid #aaa;
 }
@@ -1624,11 +1655,12 @@ h5.kb_properties_title {
   border: 1px solid #dadada;
   font-size: 14px;
   background: #fcfcfc;
-  -webkit-box-shadow: none;
   box-shadow: none;
   width: 40%;
   padding: 0 10px;
   -webkit-transition: width 0.2s ease-out;
+  -moz-transition: width 0.2s ease-out;
+  -o-transition: width 0.2s ease-out;
   transition: width 0.2s ease-out;
 }
 /* line 26, sass/partials/_refields/_common.scss */
@@ -1738,6 +1770,8 @@ h5.kb_properties_title {
 .Zebra_DatePicker,
 .Zebra_DatePicker .dp_header .dp_hover,
 .Zebra_DatePicker .dp_footer .dp_hover {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
   border-radius: 5px;
 }
 
@@ -2026,7 +2060,6 @@ button.Zebra_DatePicker_Icon_Inside {
 /* line 7, sass/partials/_global-area-edit.scss */
 .global-area-edit .area-holder {
   border: 0;
-  -webkit-box-shadow: 0;
   box-shadow: 0;
   background: #fff;
 }
@@ -2049,12 +2082,12 @@ button.Zebra_DatePicker_Icon_Inside {
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: 800px;
   height: 65%;
   z-index: 299;
-  -webkit-box-shadow: 1px 1px 30px #333;
   box-shadow: 1px 1px 30px #333;
 }
 
@@ -2078,12 +2111,13 @@ button.Zebra_DatePicker_Icon_Inside {
 /* line 31, sass/partials/_areas/_module-browser.scss */
 #wpwrap {
   -webkit-transition: all 0.8s ease-in-out;
+  -moz-transition: all 0.8s ease-in-out;
+  -o-transition: all 0.8s ease-in-out;
   transition: all 0.8s ease-in-out;
 }
 
 /* line 35, sass/partials/_areas/_module-browser.scss */
 #wpwrap.module-browser-open {
-  -webkit-filter: blur(2px);
   filter: blur(2px);
   pointer-events: none;
 }
@@ -2175,6 +2209,8 @@ button.Zebra_DatePicker_Icon_Inside {
   height: 32px;
   line-height: 32px;
   -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   z-index: 595;
 }
@@ -2272,7 +2308,6 @@ button.Zebra_DatePicker_Icon_Inside {
 /* line 26, sass/partials/_options/_page.scss */
 .os-wrapper .area-holder {
   border: none;
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -2465,6 +2500,8 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   padding: 9px;
   background: #fff;
   border: 1px solid #ccc;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
   border-radius: 8px;
   margin-right: 15px;
   margin-bottom: 15px;
@@ -2671,13 +2708,15 @@ li.gallery-item {
   background: white;
   /* Old browsers */
   background: -webkit-linear-gradient(top, white 0%, #f7f7f7 100%);
-  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f7f7f7));
-  background: -webkit-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+  background: -moz-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: -o-linear-gradient(top, white 0%, #f7f7f7 100%);
+  background: -ms-linear-gradient(top, white 0%, #f7f7f7 100%);
   background: linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0);
   /* IE6-9 */
   -webkit-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
+  -moz-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
   box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
   float: left;
   padding: 8px;
@@ -2742,7 +2781,6 @@ li.gallery-item textarea:focus {
   font-size: 13px;
   color: #333333;
   border-bottom: 1px solid #aaa;
-  -webkit-box-shadow: 0px 1px 1px #fff;
   box-shadow: 0px 1px 1px #fff;
 }
 /* line 49, sass/partials/_kontentfields-new.scss */
@@ -2757,6 +2795,7 @@ li.gallery-item textarea:focus {
 /* line 58, sass/partials/_kontentfields-new.scss */
 .kb_field textarea:focus {
   -webkit-box-shadow: 1px 1px 8px #0074a2;
+  -moz-box-shadow: 1px 1px 8px #0074a2;
   box-shadow: 1px 1px 8px #0074a2;
 }
 /* line 62, sass/partials/_kontentfields-new.scss */
@@ -2840,7 +2879,7 @@ input[type="checkbox"][checked] {
 
 /* line 368, sass/kontentblocks.scss */
 .kb_block {
-  -webkit-transition: -webkit-box-shadow .3s linear;
+  -webkit-transition: box-shadow .3s linear;
 }
 
 /* line 379, sass/kontentblocks.scss */
@@ -2887,7 +2926,6 @@ input[type="checkbox"][checked] {
   float: none;
   z-index: 4500;
   right: 0px;
-  -webkit-box-shadow: 1px 1px 6px #666;
   box-shadow: 1px 1px 6px #666;
 }
 
@@ -2898,7 +2936,6 @@ input[type="checkbox"][checked] {
   float: none;
   z-index: 4500;
   left: 0px;
-  -webkit-box-shadow: 1px 1px 6px #666;
   box-shadow: 1px 1px 6px #666;
 }
 
