@@ -297,6 +297,7 @@ jQuery(document).ready(function () {
 jQuery(document).ready(function(){
 
     if (KB.appData && KB.appData.config.frontend){
+        _K.info('Frontend Modules Ready Event fired');
         KB.Views.Modules.readyOnFront();
     }
 

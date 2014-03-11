@@ -143,6 +143,7 @@ KB.App.init();
 jQuery(document).ready(function(){
 
     if (KB.appData && !KB.appData.config.frontend){
+        _K.info('Backend Modules Ready Event fired');
         KB.Views.Modules.ready();
     }
 

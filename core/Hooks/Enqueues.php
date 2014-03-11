@@ -55,17 +55,20 @@ class Enqueues
         // Extensions
         wp_register_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
 
-        // Backend 'controller'
-        wp_register_script('kb-backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('kb-extensions'), null, true);
+        if (is_admin()){
+            // Backend 'controller'
+            wp_register_script('kb-backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('kb-extensions'), null, true);
+        } else{
+            // frontend controller
+            wp_register_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-extensions'), null, true);
+        }
 
-        // fields handler
-        wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/dist/refields.min.js', array('kb-backend'), null, true);
-
-        // frontend controller
-        wp_register_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-common'), null, true);
 
         // Onsite
         wp_register_script('kb-onsite-editing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('kb-frontend'), null, true);
+
+        // fields handler
+        wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/dist/refields.min.js',null, null, true);
 
         // WP iris
         wp_register_script('wp-iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true);
@@ -94,9 +97,6 @@ class Enqueues
             wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
             $this->enqueueStyles();
 
-            wp_enqueue_script('kb_plugins');
-            wp_enqueue_script('kb-common');
-            wp_enqueue_script('kb-extensions');
             wp_enqueue_script('kb-backend');
             wp_enqueue_script('kb-refields');
             wp_enqueue_script('heartbeat');
@@ -123,8 +123,6 @@ class Enqueues
         $this->appConfig();
         if (is_user_logged_in() && !is_admin()) {
 
-            wp_enqueue_script('kb-plugins');
-            wp_enqueue_script('kb-common');
             wp_enqueue_script('kb-frontend');
             wp_enqueue_script('kb-onsite-editing');
             wp_enqueue_script('kb-refields');
@@ -155,13 +153,20 @@ class Enqueues
 
     public function appConfig()
     {
+        global $post;
+
+        $screen = (function_exists('get_current_screen')) ? get_current_screen() : null;
 
         $data = array(
             'frontend' => !is_admin(),
             'loggedIn' => is_user_logged_in(),
             'user' => wp_get_current_user(),
             'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
-            'url' => (is_user_logged_in()) ? KB_PLUGIN_URL : null
+            'url' => (is_user_logged_in()) ? KB_PLUGIN_URL : null,
+            'post' => ($post) ? $post : null,
+            'screen' => $screen,
+            'dev' => Kontentblocks::DEVMODE,
+            'version' => Kontentblocks::VERSION
         );
 
         JSONBridge::getInstance()->registerPublicData('config', null, $data);
