@@ -10,6 +10,11 @@ use Kontentblocks\Fields\Field;
 Class ChoseTaxonomy extends Field
 {
 
+    public static $defaults = array(
+        'type' => 'chosetaxonomy',
+
+    );
+
     /**
      * Select field form html
      */
@@ -52,10 +57,5 @@ Class ChoseTaxonomy extends Field
         print "</select>";
 
         $this->description();
-
     }
-
 }
-
-// register
-kb_register_fieldtype( 'chosetaxonomy', 'Kontentblocks\Fields\Definitions\ChoseTaxonomy' );

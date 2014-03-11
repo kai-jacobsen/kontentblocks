@@ -2,6 +2,7 @@
 
 use Kontentblocks\Backend\API\PostMetaAPI,
     Kontentblocks\Fields\FieldRegistry;
+use Kontentblocks\Backend\Areas\AreaRegistry;
 
 if ( !defined( 'ABSPATH' ) ) {
     die( 'Direct access not permitted.' );
@@ -30,8 +31,9 @@ function kb_register_area_settings( $args )
  */
 function kb_register_area( $args )
 {
-    global $Kontentblocks;
-    $Kontentblocks->register_area( $args );
+    $AreaRegistry = AreaRegistry::getInstance();
+    $AreaRegistry->addArea($args, true);
+
 
 }
 
@@ -47,8 +49,23 @@ function kb_register_area( $args )
  */
 function kb_register_area_template( $args )
 {
-    global $Kontentblocks;
-    $Kontentblocks->register_area_template( $args );
+    $defaults = array
+    (
+        'id' => '',
+        'label' => '',
+        'layout' => array(),
+        'last-item' => false,
+        'thumbnail' => null,
+        'cycle' => false
+    );
+
+    $settings = wp_parse_args($args, $defaults);
+
+    if (!empty($settings['id'])) {
+        AreaRegistry::getInstance()->addTemplate($settings);
+    }
+
+
 
 }
 

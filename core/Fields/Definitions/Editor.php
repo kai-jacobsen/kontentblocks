@@ -12,7 +12,8 @@ use Kontentblocks\Fields\Field;
 Class Editor extends Field
 {
 
-    protected $defaults = array(
+    public static $defaults = array(
+        'type' => 'editor',
         'returnObj' => 'Element'
     );
 
@@ -26,11 +27,6 @@ Class Editor extends Field
         $this->description();
         kb_wp_editor($id, $value, $name, $media);
     }
-//
-//    public function frontsideForm()
-//    {
-//        echo 'Frontside onyl';
-//    }
 
     public function filter($value)
     {
@@ -38,6 +34,3 @@ Class Editor extends Field
     }
 
 }
-
-//register
-kb_register_fieldtype('editor', 'Kontentblocks\Fields\Definitions\Editor');

@@ -13,7 +13,8 @@ Class Callback extends Field
 {
 
     // Defaults
-    protected $defaults = array(
+    public static  $defaults = array(
+        'type' => 'callback',
         'returnObj' => false
     );
 
@@ -32,6 +33,3 @@ Class Callback extends Field
 
 
 }
-
-// register
-kb_register_fieldtype( 'callback', 'Kontentblocks\Fields\Definitions\Callback' );

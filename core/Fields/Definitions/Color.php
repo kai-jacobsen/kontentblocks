@@ -10,7 +10,8 @@ use Kontentblocks\Fields\Field;
 Class Color extends Field
 {
 
-    protected  $defaults = array(
+    public static $defaults = array(
+        'type' => 'color',
         'returnObj' => false
     );
 
@@ -41,6 +42,3 @@ Class Color extends Field
     }
 
 }
-
-// register
-kb_register_fieldtype( 'color', 'Kontentblocks\Fields\Definitions\Color' );

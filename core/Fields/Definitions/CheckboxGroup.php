@@ -16,10 +16,10 @@ Class CheckboxGroup extends Field
 {
 
     // Field defaults
-    protected $defaults = array(
+    public static $defaults = array(
         'renderHidden' => true,
-        'returnObj' => false
-
+        'returnObj' => false,
+        'type' => 'checkboxgroup'
     );
 
     /**
@@ -120,6 +120,3 @@ Class CheckboxGroup extends Field
     }
 
 }
-
-// register
-kb_register_fieldtype( 'checkboxgroup', 'Kontentblocks\Fields\Definitions\CheckboxGroup' );

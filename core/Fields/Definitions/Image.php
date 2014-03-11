@@ -12,7 +12,8 @@ use Kontentblocks\Fields\Field;
 Class Image extends Field
 {
 
-    protected $defaults = array(
+    public static  $defaults = array(
+        'type' => 'image',
         'returnObj' => 'Image'
     );
 
@@ -39,6 +40,3 @@ Class Image extends Field
     }
 
 }
-
-//register
-kb_register_fieldtype( 'image', 'Kontentblocks\Fields\Definitions\Image' );

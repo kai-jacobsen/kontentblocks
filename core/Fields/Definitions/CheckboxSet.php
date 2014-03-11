@@ -13,8 +13,9 @@ Class CheckboxSet extends Field
 {
 
     // Field defaults
-    protected $defaults = array(
-        'renderHidden' => true
+    public static  $defaults = array(
+        'renderHidden' => true,
+        'type' => 'checkboxset'
     );
 
     /**
@@ -113,5 +114,3 @@ Class CheckboxSet extends Field
     }
 
 }
-
-kb_register_fieldtype( 'checkboxset', 'Kontentblocks\Fields\Definitions\CheckboxSet' );

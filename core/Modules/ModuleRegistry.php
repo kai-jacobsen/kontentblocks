@@ -30,7 +30,6 @@ class ModuleRegistry
     public function add($file)
     {
         // file should be the full path from the loader
-        // @todo | done | replace module reflection class path getting with this to save ressources
         include_once($file);
 
         $classname = str_replace('.php', '', basename($file));

@@ -10,6 +10,10 @@ use Kontentblocks\Fields\Field;
 Class Select extends Field
 {
 
+    public static $defaults = array(
+        'type' => 'select'
+    );
+
     /**
      * Select field form html
      */
@@ -43,6 +47,3 @@ Class Select extends Field
     }
 
 }
-
-// register
-kb_register_fieldtype( 'select', 'Kontentblocks\Fields\Definitions\Select' );

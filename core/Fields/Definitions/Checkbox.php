@@ -12,7 +12,8 @@ Class Checkbox extends Field
 {
 
     // field defaults
-    protected $defaults = array(
+    public static  $defaults = array(
+        'type' => 'checkbox',
         'renderHidden' => true,
         'returnObj' => false
     );
@@ -61,6 +62,3 @@ Class Checkbox extends Field
     }
 
 }
-
-//register
-kb_register_fieldtype( 'checkbox', 'Kontentblocks\Fields\Definitions\Checkbox' );

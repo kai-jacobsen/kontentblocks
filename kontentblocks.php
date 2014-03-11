@@ -9,6 +9,7 @@ use Kontentblocks\Backend\Screen\EditScreen,
     Kontentblocks\Hooks\Capabilities,
     Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Fields\FieldRegistry;
 
 /*
   Plugin Name: Kontentblocks
@@ -105,57 +106,59 @@ Class Kontentblocks
 
     }
 
-    function __construct()
+    private function __construct()
     {
-
     }
 
     public function init()
     {
 
-        /* Define some path constants to make things a bit easier */
         define('KB_PLUGIN_URL', plugin_dir_url(__FILE__));
         define('KB_PLUGIN_PATH', plugin_dir_path(__FILE__));
         define('KB_TEMPLATE_URL', plugin_dir_url(__FILE__) . '/core/Modules/core-modules/');
         define('KB_TEMPLATE_PATH', plugin_dir_path(__FILE__) . 'core/Modules/core-modules/');
         define('KB_REFIELD_JS', plugin_dir_url(__FILE__) . '/Definitions/js/');
 
+        // additional cap feature, only used on demand and not properly tested yet
+        // still there for historical reasons
+        define('KONTENTLOCK', false);
+
         // Files used used on front and backend
         include_once dirname(__FILE__) . '/Autoloader.php';
         require_once dirname(__FILE__) . '/vendor/autoload.php';
         require_once dirname(__FILE__) . '/kontentblocks.public-api.php';
-        require_once dirname(__FILE__) . '/includes/ajax-callback-handler.php';
 
-        // additional cap feature, only used on demand and not properly tested yet
-        define('KONTENTLOCK', false);
 
         include_once dirname(__FILE__) . '/core/Utils/helper.php';
-        include_once dirname(__FILE__) . '/core/Utils/tables.php';
         include_once dirname(__FILE__) . '/core/Utils/helper.new.php';
+
         /* Include all necessary files on admin area */
         if (is_admin()) {
 
+            include_once dirname(__FILE__) . '/core/Utils/tables.php';
             include_once dirname(__FILE__) . '/core/Hooks/setup.php';
+            require_once dirname(__FILE__) . '/includes/ajax-callback-handler.php';
 
             // @TODO Quatsch
-            $this->UI = new EditScreen();
-            $this->Capabilities = new Capabilities();
+            new EditScreen();
+            new Capabilities();
         }
 
         // Temporary
-        // @TODO Quatsch
         DynamicAreas::getInstance();
         ModuleTemplates::getInstance();
+        Enqueues::getInstance();
 
-        // @TODO Quatsch
-        $this->Enqueues = Enqueues::getInstance();
         add_post_type_support('page', 'kontentblocks');
 
         // load Templates automatically
-        add_action('init', array($this, '_load_templates'), 9);
+        add_action('init', array($this, 'loadModules'), 9);
 
         // Load Plugins
-        add_action('init', array($this, '_load_plugins'), 9);
+        add_action('init', array($this, 'loadExtensions'), 9);
+
+        // Load Fields
+        add_action('init', array($this, 'loadFields'), 9);
 
         add_action('wp_head', array($this, 'livereload'));
         add_action('admin_head', array($this, 'livereload'));
@@ -168,14 +171,13 @@ Class Kontentblocks
     {
         echo '<script src="http://localhost:35729/livereload.js"></script>';
         echo '<script src="http://localhost:35730/livereload.js"></script>';
-
     }
 
 
     public function i18n()
     {
         load_plugin_textdomain('Kontentblocks', false, dirname(plugin_basename(__FILE__)) . '/languages/');
-        \Kontentblocks\Language\I18n::getInstance();
+        Language\I18n::getInstance();
 
     }
 
@@ -185,16 +187,18 @@ Class Kontentblocks
      * Simply auto-includes all .php files inside the templates folder
      *
      * uses filter: kb_template_paths to register / modify path array from the outside
-     *
-     * TODO: Some Kind of verification and/or switch to meta data usage
      */
-    public function _load_templates()
+    public function loadModules()
     {
 
         $Registry = ModuleRegistry::getInstance();
 
+        // add core modules path
         $paths = array(KB_TEMPLATE_PATH);
+
+        // deprecated
         $paths = apply_filters('kb_add_template_path', $paths);
+        // replacement for '_add_template_path'
         $paths = apply_filters('kb_add_module_path', $paths);
         foreach ($paths as $path) {
             $dirs = glob($path . 'Module*', GLOB_ONLYDIR);
@@ -205,7 +209,7 @@ Class Kontentblocks
 
                         if (strpos(basename($template), '__') === false)
 
-                        $Registry->add($template);
+                            $Registry->add($template);
                     }
                 }
             }
@@ -218,16 +222,13 @@ Class Kontentblocks
 
         do_action('kb_load_templates');
 
-
-        // todo remove from here
-//        MenuManager::getInstance();
     }
 
     /**
-     * Load Plugins to extend certain functionalities
-     * @since 0.8
+     * Load Extensions
+     * @since 1.0.0
      */
-    public function _load_plugins()
+    public function loadExtensions()
     {
 
         $paths = array(kb_get_plugin_path());
@@ -257,72 +258,20 @@ Class Kontentblocks
     }
 
     /**
-     * Prepare new area
-     * two ways to go:
-     *
-     * if KB is in dev_mode, data gets handled by code and any saved data gets ignored
-     * if KB is not in dev mode, initial setup happens just once, further editing of areas happens by the plugin menu page
-     *
-     * @param array $args
-     * @param bool $manual
-     * @return array
+     *  Load Field Definitions
      */
-    public function register_area($args, $manual = true)
+    public function loadFields()
     {
-        $AreaRegistry = AreaRegistry::getInstance();
-        $AreaRegistry->addArea($args, $manual);
-
-    }
-
-
-    /*
-     * ------------------------------------------------
-     * Area Settings
-     * ------------------------------------------------
-     */
-
-    /**
-     * register area template
-     */
-    public function register_area_template($args)
-    {
-
-        $defaults = array
-        (
-            'id' => '',
-            'label' => '',
-            'layout' => array(),
-            'last-item' => false,
-            'thumbnail' => null,
-            'cycle' => false
-        );
-
-        $settings = wp_parse_args($args, $defaults);
-
-        if (!empty($settings['id'])) {
-            AreaRegistry::getInstance()->addTemplate($settings);
+        if (is_user_logged_in()) {
+            foreach (glob(KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php') as $file) {
+                FieldRegistry::getInstance()->add($file);
+            }
         }
-
     }
 
 }
 
 // end Kontentblocks
 
-
-global $Kontentblocks;
-$Kontentblocks = Kontentblocks::getInstance();
-$Kontentblocks->init();
-
-add_action('init', 'Kontentblocks\init_Kontentfields', 15);
-
-function init_Kontentfields()
-{
-    foreach (glob(KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php') as $file) {
-        require_once $file;
-    }
-    if (!is_admin()) {
-        return false;
-    }
-
-}
+// Fire it up
+Kontentblocks::getInstance()->init();

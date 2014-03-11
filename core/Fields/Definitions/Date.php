@@ -12,6 +12,11 @@ use Kontentblocks\Fields\Field;
  */
 Class Date extends Field
 {
+
+    public static $defaults = array(
+        'type' => 'date'
+    );
+
     /**
      * Form
      */
@@ -27,6 +32,3 @@ Class Date extends Field
 
     
 }
-
-// register
-kb_register_fieldtype( 'date', 'Kontentblocks\Fields\Definitions\Date' );

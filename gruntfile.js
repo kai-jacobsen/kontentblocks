@@ -110,20 +110,6 @@ module.exports = function (grunt) {
                 src: 'css/kontentblocks.css',
                 dest: 'css/kontentblocks.css'
             }
-        },
-        rsync: {
-            stage: {
-                files: '/var/www/Restrap/wp-content/plugins/kontentblocks/',
-                options: {
-                    host: "horologium.uberspace.de",
-                    port: "22",
-                    user: "devblock",
-                    clean: clean,
-                    remoteBase: "~/html/dev/content/plugins/Kontentblocks",
-                    verbose: true,
-                    additionalOptions: ['--exclude-from=/var/www/Restrap/wp-content/plugins/kontentblocks/.gitignore', '-v', '--stats']
-                }
-            }
         }
     });
 

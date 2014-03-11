@@ -14,6 +14,9 @@ use Kontentblocks\Utils\AttachmentHandler;
  */
 Class File extends Field
 {
+    public static $defaults = array(
+        'type' => 'file'
+    );
 
     public function form()
     {
@@ -37,6 +40,3 @@ Class File extends Field
     }
 
 }
-
-//register
-kb_register_fieldtype( 'file', 'Kontentblocks\Fields\Definitions\File' );

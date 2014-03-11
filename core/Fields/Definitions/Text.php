@@ -14,7 +14,7 @@ Class Text extends Field
 {
 
     // Defaults
-    protected $defaults = array(
+    public static $defaults = array(
         'returnObj' => 'Element'
     );
 
