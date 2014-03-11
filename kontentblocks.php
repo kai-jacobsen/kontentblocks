@@ -29,64 +29,10 @@ Class Kontentblocks
     const VERSION = '1.0.0alpha';
     const DEVMODE = true;
 
+
     public $dev_mode = true;
     static $instance;
 
-    /**
-     * Stores created areas
-     * @var array
-     */
-    public $areas = array();
-
-    /**
-     * Stores a instance for each Block
-     *
-     * @var array objects
-     */
-    public $blocks = array();
-
-    /**
-     * Stores area settings
-     *
-     * @var array
-     */
-    public $area_settings = array();
-
-    /**
-     * Store Area Templates
-     *
-     * @var array
-     */
-    public $area_templates = array();
-
-    /*
-     * Flag for wrapper usage
-     */
-    public $use_wrapper = false;
-
-    /*
-     * Default Wrapper Template
-     */
-    public $default_wrapper = null;
-
-    /*
-     * Array of Roles and Caps used by and for Kontentblocks
-     *
-     * @var array
-     */
-    public $caps = array();
-
-    /**
-     * Set  Post Context
-     * indicates where the data is stored. either post_meta (true) or option(false)
-     * defaults to true, and is set to false if called on option pages
-     */
-    public $post_context = true;
-
-    /**
-     * Available Block Templates
-     */
-    public $block_templates = array();
 
     /*
      * Constructor
@@ -94,7 +40,6 @@ Class Kontentblocks
      *
      */
     public $Capabilities;
-    protected $Enqueues;
     public $ModuleRegistry;
 
     public static function getInstance()
@@ -170,7 +115,6 @@ Class Kontentblocks
     public function livereload()
     {
         echo '<script src="http://localhost:35729/livereload.js"></script>';
-        echo '<script src="http://localhost:35730/livereload.js"></script>';
     }
 
 

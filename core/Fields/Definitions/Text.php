@@ -15,7 +15,8 @@ Class Text extends Field
 
     // Defaults
     public static $defaults = array(
-        'returnObj' => 'Element'
+        'returnObj' => 'Element',
+        'type' => 'text'
     );
 
     /**
@@ -42,6 +43,3 @@ Class Text extends Field
     }
 
 }
-
-// register
-kb_register_fieldtype( 'text', 'Kontentblocks\Fields\Definitions\Text' );
