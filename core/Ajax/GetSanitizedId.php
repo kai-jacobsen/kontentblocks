@@ -16,11 +16,10 @@ class GetSanitizedId
     // TODO first sanitize the input, check if other languages exits and/or template exists in non-l18n context
     public function __construct()
     {
-        check_ajax_referer('kb-read');
-
 
         // verify action
         check_ajax_referer('kb-read');
+
         $value = filter_var($_POST['inputvalue'], FILTER_SANITIZE_STRING);
         $checkmode = filter_var($_POST['checkmode'], FILTER_SANITIZE_STRING);
         $check = true;
