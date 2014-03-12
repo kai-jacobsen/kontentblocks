@@ -128,7 +128,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 localView.$el = that.$inner;
                 localView.parentView = that.view;
                 that.view.trigger('kb:frontend::viewLoaded', localView);
-
+                _K.info('Frontend Modal opened with view of:' + that.view.model.get('instance_id'));
                 // Make the modal fit
                 setTimeout(function(){
                     that.recalibrate();
@@ -198,13 +198,17 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         if (position.top < 40) {
             this.$el.css('top', '40px');
         }
+
+        _K.info('Frontend Modal resizing done!');
     },
     initScrollbars: function (height) {
         jQuery('.nano', this.$el).height(height);
         jQuery('.nano').nanoScroller({ preventPageScrolling: true });
+        _K.info('Nano Scrollbars (re)initialized!');
     },
     // Serialize current form fields and send it to the server
     serialize: function () {
+        _K.info('Frontend Modal called serialize function');
         var that = this;
         tinymce.triggerSave();
         jQuery.ajax({
@@ -235,6 +239,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
                     initTinymce(el);
                 });
+
+                KB.Notice.notice('Module Data saved successfully', 'success');
+                _K.info('Frontend Modal saved data for:' +that.model.get('instance_id'));
 
             },
             error: function () {

@@ -253,7 +253,7 @@ body.onsite-editing {
   .controls-title {
     font-size: 12px;
     margin: 0;
-    padding: 0px 10px 0px 60px;
+    padding: 0px 10px 0px 150px;
     height: 30px;
     line-height: 30px;
     cursor: move;
@@ -284,7 +284,7 @@ body.onsite-editing {
   a.kb-save-form{
     position: absolute;
     top: 0px;
-    left: 0px;
+    left: 71px;
     height: 30px;
     font-size: 13px;
     padding: 0px 12px;
@@ -299,15 +299,40 @@ body.onsite-editing {
     cursor: pointer;
 
     &:hover{
-      background-color: $orange;
+      background-color: red;
       text-decoration: none;
     }
   }
+
+  .kb-button-secondary{
+    color: #fff;
+    background-color: $orange;
+    @include transition(all .3s ease-in-out);
+    cursor: pointer;
+
+    &:hover{
+      background-color: green;
+      text-decoration: none;
+    }
+  }
+
+  a.kb-preview-form{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 30px;
+    font-size: 13px;
+    padding: 0px 12px;
+    line-height: 30px;
+
+  }
+
 
   .kb_fieldtabs ul.ui-tabs-nav{
     padding-top: 0;
     background-color: lighten(#333, 50%);
     border-radius: 0;
+    overflow: hidden;
   }
 
   .kb_field {

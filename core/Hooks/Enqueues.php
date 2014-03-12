@@ -43,6 +43,7 @@ class Enqueues
 
     public function registerScripts()
     {
+
         $dependecies = array(
             'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse', 'jquery-ui-draggable', 'backbone', 'underscore', 'wp-color-picker'
         );

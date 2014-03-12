@@ -1,121 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-11 */
-KB.Ext.Backup = function($) {
-    return {
-        el: $("#backup-inspect"),
-        lastItem: null,
-        firstRun: true,
-        init: function() {
-            if (KB.appData.config.frontend) {
-                _K.info("Backup Inspect stopped");
-                return false;
-            }
-            var that = this;
-            this.listEl = $("<ul></ul>").appendTo(this.el);
-            if (this.listEl.length > 0) {
-                this.update();
-            }
-            $(document).on("heartbeat-send", function(e, data) {
-                data.kbBackupWatcher = that.lastItem;
-                data.post_id = KB.Screen.post_id;
-            });
-            $(document).on("heartbeat-tick", function(e, data) {
-                if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {
-                    that.renderList(data.kbHasNewBackups);
-                }
-            });
-        },
-        update: function() {
-            var that = this;
-            KB.Ajax.send({
-                action: "get_backups"
-            }, function(response) {
-                that.items = response;
-                that.renderList(response);
-            });
-        },
-        renderList: function(items) {
-            var that = this;
-            this.listEl.empty();
-            _.each(items, function(item, key) {
-                that.lastItem = key;
-                that.listEl.append(_.template("                <li>\n                    <details>\n                        <summary>\n                            <%= data.time %>\n                        </summary>\n                    <div class='actions' data-id='<%= key %>'>\n                        <span class='js-review'>Review</span>\n                        <span class='js-restore'>Restore</span>\n                        <p class='description'><b>Comment:</b> <%= item.msg %></p>\n                    </details>\n                </li>", {
-                    data: {
-                        time: new moment.unix(key).format("HH:mm:ss / DD.MMM")
-                    },
-                    item: item,
-                    key: key
-                }));
-            });
-            _K.info("Backup Inspect::FirstRun:", this.firstRun);
-            if (!this.firstRun) {
-                KB.Notice.notice("<p>New Backups were created</p>", "success");
-            }
-            this.firstRun = false;
-            this.listEl.on("click", ".js-restore", function(e) {
-                var id = $(this).parent().attr("data-id");
-                that.restore(id);
-            });
-        },
-        restore: function(id) {
-            var that = this;
-            var location = window.location.href + "&restore_backup=" + id + "&post_id=" + $("#post_ID").val();
-            window.location = location;
-        }
-    };
-}(jQuery);
-
-KB.Ext.Backup.init();
-
-var KBAreaSelector;
-
-(function($) {
-    KBAreaSelector = {
-        init: function() {
-            if (KB.appData.config.frontend) {
-                _K.info("Area Selector stopped");
-                return false;
-            }
-            $("#existing-areas, #active-dynamic-areas").sortable({
-                connectWith: ".connect",
-                cancel: "li.ui-state-disabled",
-                placeholder: "sortable-placeholder",
-                helper: "clone",
-                receive: function(event, ui) {
-                    item = ui.item;
-                    id = $(item).attr("id");
-                    $(item).toggleClass("dynamic-area-active");
-                    if (this.id == "active-dynamic-areas") {
-                        action = "<span><a href=''>edit</a></span>";
-                        content = "<input id='" + id + "_hidden' type='hidden' name='active_sidebar_areas[]' value='" + id + "' />";
-                        $(item).append(content);
-                    } else {
-                        $("input#" + id + "_hidden").remove();
-                    }
-                }
-            });
-        }
-    };
-    $(document).ready(KBAreaSelector.init);
-})(jQuery);
-
-jQuery(document).ready(function($) {
-    $("body").on("click", "a.da-modal", function(e) {
-        e.preventDefault();
-        target = $(this).attr("data-url");
-        height = $(window).height();
-        $("#da-frame").attr("src", target).attr("height", height - 200);
-        $(window).resize(function() {
-            height = $(window).height();
-            $("#da-frame").attr("height", height - 200);
-        });
-        var $content = $("#da-modal");
-        openedModal = vex.open({
-            content: $content.html(),
-            contentClassName: "editGlobalArea"
-        });
-    });
-});
-
+/*! kontentblocks DevVersion 2014-03-12 */
 (function($) {
     var LayoutTemplates = {
         el: $("#layout-templates"),
@@ -263,3 +146,120 @@ jQuery(document).ready(function($) {
     };
     LayoutTemplates.init();
 })(jQuery);
+
+var KBAreaSelector;
+
+(function($) {
+    KBAreaSelector = {
+        init: function() {
+            if (KB.appData.config.frontend) {
+                _K.info("Area Selector stopped");
+                return false;
+            }
+            $("#existing-areas, #active-dynamic-areas").sortable({
+                connectWith: ".connect",
+                cancel: "li.ui-state-disabled",
+                placeholder: "sortable-placeholder",
+                helper: "clone",
+                receive: function(event, ui) {
+                    item = ui.item;
+                    id = $(item).attr("id");
+                    $(item).toggleClass("dynamic-area-active");
+                    if (this.id == "active-dynamic-areas") {
+                        action = "<span><a href=''>edit</a></span>";
+                        content = "<input id='" + id + "_hidden' type='hidden' name='active_sidebar_areas[]' value='" + id + "' />";
+                        $(item).append(content);
+                    } else {
+                        $("input#" + id + "_hidden").remove();
+                    }
+                }
+            });
+        }
+    };
+    $(document).ready(KBAreaSelector.init);
+})(jQuery);
+
+jQuery(document).ready(function($) {
+    $("body").on("click", "a.da-modal", function(e) {
+        e.preventDefault();
+        target = $(this).attr("data-url");
+        height = $(window).height();
+        $("#da-frame").attr("src", target).attr("height", height - 200);
+        $(window).resize(function() {
+            height = $(window).height();
+            $("#da-frame").attr("height", height - 200);
+        });
+        var $content = $("#da-modal");
+        openedModal = vex.open({
+            content: $content.html(),
+            contentClassName: "editGlobalArea"
+        });
+    });
+});
+
+KB.Ext.Backup = function($) {
+    return {
+        el: $("#backup-inspect"),
+        lastItem: null,
+        firstRun: true,
+        init: function() {
+            if (KB.appData.config.frontend) {
+                _K.info("Backup Inspect stopped");
+                return false;
+            }
+            var that = this;
+            this.listEl = $("<ul></ul>").appendTo(this.el);
+            if (this.listEl.length > 0) {
+                this.update();
+            }
+            $(document).on("heartbeat-send", function(e, data) {
+                data.kbBackupWatcher = that.lastItem;
+                data.post_id = KB.Screen.post_id;
+            });
+            $(document).on("heartbeat-tick", function(e, data) {
+                if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {
+                    that.renderList(data.kbHasNewBackups);
+                }
+            });
+        },
+        update: function() {
+            var that = this;
+            KB.Ajax.send({
+                action: "get_backups"
+            }, function(response) {
+                that.items = response;
+                that.renderList(response);
+            });
+        },
+        renderList: function(items) {
+            var that = this;
+            this.listEl.empty();
+            _.each(items, function(item, key) {
+                that.lastItem = key;
+                that.listEl.append(_.template("                <li>\n                    <details>\n                        <summary>\n                            <%= data.time %>\n                        </summary>\n                    <div class='actions' data-id='<%= key %>'>\n                        <span class='js-review'>Review</span>\n                        <span class='js-restore'>Restore</span>\n                        <p class='description'><b>Comment:</b> <%= item.msg %></p>\n                    </details>\n                </li>", {
+                    data: {
+                        time: new moment.unix(key).format("HH:mm:ss / DD.MMM")
+                    },
+                    item: item,
+                    key: key
+                }));
+            });
+            _K.info("Backup Inspect::FirstRun:", this.firstRun);
+            if (!this.firstRun) {
+                KB.Notice.notice("<p>New Backups were created</p>", "success");
+            }
+            this.firstRun = false;
+            this.listEl.on("click", ".js-restore", function(e) {
+                var id = $(this).parent().attr("data-id");
+                that.restore(id);
+            });
+        },
+        restore: function(id) {
+            var that = this;
+            var location = window.location.href + "&restore_backup=" + id + "&post_id=" + $("#post_ID").val();
+            window.location = location;
+        }
+    };
+}(jQuery);
+
+KB.Ext.Backup.init();

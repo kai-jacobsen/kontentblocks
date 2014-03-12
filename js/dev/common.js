@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-11 */
+/*! kontentblocks DevVersion 2014-03-12 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -69,6 +69,27 @@ KB.Checks = function($) {
         }
     };
 }(jQuery);
+
+_.extend(KB.Fields, Backbone.Events);
+
+_.extend(KB.Fields, {
+    fields: {},
+    register: function(id, object) {
+        _.extend(object, Backbone.Events);
+        this.fields[id] = object;
+        if (object.hasOwnProperty("init")) {
+            object.init();
+        }
+        object.listenTo(this, "update", object.update);
+    },
+    get: function(id) {
+        if (this.fields[id]) {
+            return this.fields[id];
+        } else {
+            return null;
+        }
+    }
+});
 
 Logger.useDefaults();
 
@@ -563,24 +584,3 @@ KB.ViewsCollection = function() {
 };
 
 _.extend(KB.ViewsCollection.prototype, Backbone.Events);
-
-_.extend(KB.Fields, Backbone.Events);
-
-_.extend(KB.Fields, {
-    fields: {},
-    register: function(id, object) {
-        _.extend(object, Backbone.Events);
-        this.fields[id] = object;
-        if (object.hasOwnProperty("init")) {
-            object.init();
-        }
-        object.listenTo(this, "update", object.update);
-    },
-    get: function(id) {
-        if (this.fields[id]) {
-            return this.fields[id];
-        } else {
-            return null;
-        }
-    }
-});

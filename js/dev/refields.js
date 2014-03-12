@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-11 */
+/*! kontentblocks DevVersion 2014-03-12 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {

@@ -9,7 +9,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                    mangle: false,
+                    mangle: true,
                     beautify: false,
                     compress: true,
                     drop_console: true
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                 nonull: true
             },
             common: {
-                src: ['js/src/common/KBNamespaces.js','js/src/common/**/*.js'],
+                src: ['js/src/common/kb.cm.Namespaces.js','js/src/common/**/*.js'],
                 dest: 'js/tmp/common.concat.js',
                 nonull: true
             },

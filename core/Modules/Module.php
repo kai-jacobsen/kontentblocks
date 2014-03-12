@@ -581,6 +581,9 @@ abstract class Module
 
     public function toJSON()
     {
+
+
+
         // todo only used on frontend
         $toJSON = array(
             'envVars' => $this->envVars,

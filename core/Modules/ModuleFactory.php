@@ -33,9 +33,10 @@ class ModuleFactory
     public function getModule()
     {
 
+        $preparedArgs = $this->prepareArgs($this->args);
 
-        $module = apply_filters('kb_modify_block', $this->args);
-        $module = apply_filters("kb_modify_block_{$this->args['settings']['id']}", $this->args);
+        $module = apply_filters('kb_modify_block', $preparedArgs);
+        $module = apply_filters("kb_modify_block_{$preparedArgs['settings']['id']}", $preparedArgs);
         $classname = $this->class;
         // new instance
         if (class_exists($classname)) {
@@ -54,6 +55,18 @@ class ModuleFactory
     public static function parseModule($module)
     {
         return wp_parse_args($module, ModuleRegistry::getInstance()->get($module['class']));
+    }
+
+    private function prepareArgs($args)
+    {
+
+        if (isset($args['overrides'])){
+
+            if (!empty($args['overrides']['name'])){
+                $args['settings']['name'] = $args['overrides']['name'];
+            }
+        }
+        return $args;
     }
 
 }

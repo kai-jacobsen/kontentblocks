@@ -1,8 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-11 */
-KB.Backbone.AreasCollection = Backbone.Collection.extend({});
-
-KB.Backbone.ModulesCollection = Backbone.Collection.extend({});
-
+/*! kontentblocks DevVersion 2014-03-12 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -249,6 +245,63 @@ KB.StuffBG = function($) {
 
 KB.StuffBG.init();
 
+KB.ModuleLayoutControls = Backbone.View.extend({
+    initialize: function() {
+        this.targetEl = this.options.parent.$el;
+        this.render();
+    },
+    events: {
+        "click a.close-controls": "destroy"
+    },
+    render: function() {
+        var that = this;
+        this.targetEl.addClass("edit-active");
+        this.$el.append(KB.Templates.render("frontend/module-layout-controls", {
+            model: this.model.toJSON()
+        }));
+        var container = jQuery(".os-controls-container", this.$el);
+        container.css("position", "absolute").draggable({
+            handle: "h2",
+            containment: "window",
+            stop: function(eve, ui) {
+                KB.OSConfig.Position = ui.position;
+            }
+        });
+        if (KB.OSConfig.Position) {
+            container.css({
+                top: KB.OSConfig.Position.top,
+                left: KB.OSConfig.Position.left
+            });
+        }
+        jQuery("body").append(this.$el);
+        this.$el.tabs();
+        var mt = that.targetEl.css("marginTop");
+        jQuery("#KBMarginTop").ionRangeSlider({
+            from: parseInt(mt, 10),
+            postfix: "px",
+            onChange: function(obj) {
+                that.targetEl.css("marginTop", obj.fromNumber);
+            }
+        });
+        var mb = that.targetEl.css("marginBottom");
+        jQuery("#KBMarginBottom").ionRangeSlider({
+            from: parseInt(mb, 10),
+            postfix: "px",
+            onChange: function(obj) {
+                that.targetEl.css("marginBottom", obj.fromNumber);
+            }
+        });
+    },
+    destroy: function() {
+        this.targetEl.removeClass("edit-active");
+        this.remove();
+    }
+});
+
+KB.Backbone.AreaView = Backbone.View.extend({
+    initialize: function() {}
+});
+
 KB.Backbone.FrontendEditView = Backbone.View.extend({
     $form: null,
     $formContent: null,
@@ -330,6 +383,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 localView.$el = that.$inner;
                 localView.parentView = that.view;
                 that.view.trigger("kb:frontend::viewLoaded", localView);
+                _K.info("Frontend Modal opened with view of:" + that.view.model.get("instance_id"));
                 setTimeout(function() {
                     that.recalibrate();
                 }, 1e3);
@@ -369,14 +423,17 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         if (position.top < 40) {
             this.$el.css("top", "40px");
         }
+        _K.info("Frontend Modal resizing done!");
     },
     initScrollbars: function(height) {
         jQuery(".nano", this.$el).height(height);
         jQuery(".nano").nanoScroller({
             preventPageScrolling: true
         });
+        _K.info("Nano Scrollbars (re)initialized!");
     },
     serialize: function() {
+        _K.info("Frontend Modal called serialize function");
         var that = this;
         tinymce.triggerSave();
         jQuery.ajax({
@@ -404,6 +461,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 jQuery(".editable", that.options.view.$el).each(function(i, el) {
                     initTinymce(el);
                 });
+                KB.Notice.notice("Module Data saved successfully", "success");
+                _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
             },
             error: function() {
                 console.log("e");
@@ -443,59 +502,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         if (settings.controls && settings.controls.width) {
             $el.css("width", settings.controls.width + "px");
         }
-    }
-});
-
-KB.ModuleLayoutControls = Backbone.View.extend({
-    initialize: function() {
-        this.targetEl = this.options.parent.$el;
-        this.render();
-    },
-    events: {
-        "click a.close-controls": "destroy"
-    },
-    render: function() {
-        var that = this;
-        this.targetEl.addClass("edit-active");
-        this.$el.append(KB.Templates.render("frontend/module-layout-controls", {
-            model: this.model.toJSON()
-        }));
-        var container = jQuery(".os-controls-container", this.$el);
-        container.css("position", "absolute").draggable({
-            handle: "h2",
-            containment: "window",
-            stop: function(eve, ui) {
-                KB.OSConfig.Position = ui.position;
-            }
-        });
-        if (KB.OSConfig.Position) {
-            container.css({
-                top: KB.OSConfig.Position.top,
-                left: KB.OSConfig.Position.left
-            });
-        }
-        jQuery("body").append(this.$el);
-        this.$el.tabs();
-        var mt = that.targetEl.css("marginTop");
-        jQuery("#KBMarginTop").ionRangeSlider({
-            from: parseInt(mt, 10),
-            postfix: "px",
-            onChange: function(obj) {
-                that.targetEl.css("marginTop", obj.fromNumber);
-            }
-        });
-        var mb = that.targetEl.css("marginBottom");
-        jQuery("#KBMarginBottom").ionRangeSlider({
-            from: parseInt(mb, 10),
-            postfix: "px",
-            onChange: function(obj) {
-                that.targetEl.css("marginBottom", obj.fromNumber);
-            }
-        });
-    },
-    destroy: function() {
-        this.targetEl.removeClass("edit-active");
-        this.remove();
     }
 });
 
@@ -606,10 +612,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             }
         });
     }
-});
-
-KB.Backbone.AreaView = Backbone.View.extend({
-    initialize: function() {}
 });
 
 KB.currentModule = {};
