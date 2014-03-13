@@ -1,33 +1,35 @@
-.kb-field--image{
+.kb-field--image {
 
   padding-bottom: 10px;
 
-    .kb-field-image-wrapper{
-        overflow: hidden;
+  .kb-field-image-wrapper {
+    overflow: hidden;
+  }
+
+  .kb-js-add-image {
+    cursor: pointer;
+    background: #fcfcfc;
+    border: 1px solid #f2f2f2;
+    max-height: 350px;
+    min-width: 150px;
+    min-height: 150px;
+    padding: 10px;
+    float: left;
+    margin-right: 15px;
+  }
+
+  .kb-js-image-meta-wrapper {
+
+    label {
+      display: block;
+      font-weight: 100;
+      font-size: 12px;
     }
-    
-    .kb-js-add-image{
-        cursor: pointer;
-        background:#fcfcfc; 
-        border:1px solid #f2f2f2;
-        max-height: 350px;
-        padding: 10px;
-        float: left;
-        margin-right: 15px;
+
+    input[type=text] {
+      color: #333;
+      font-weight: 100;
     }
-    
-    .kb-js-image-meta-wrapper{
-        
-        label{
-            display: block;
-            font-weight: 100;
-            font-size: 12px;
-        }
-        
-        input[type=text]{
-            color:#333; 
-            font-weight: 100;
-        }
-    }
+  }
 
 }

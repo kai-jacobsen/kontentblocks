@@ -50,6 +50,8 @@ abstract class CustomForm
      */
     protected $FieldManager;
 
+    protected $saveAsSingle = false;
+
     /**
      * Form data
      * @var array
@@ -124,7 +126,8 @@ abstract class CustomForm
         $defaults = array(
             'title' => 'No Title provided',
             'context' => 'advanced',
-            'priority' => 'high'
+            'priority' => 'high',
+            'saveAsSingle' => false
         );
 
         $mb = wp_parse_args($this->metaBox, $defaults);
@@ -136,6 +139,10 @@ abstract class CustomForm
 
     public function form($postObj)
     {
+        if (!in_array($postObj->post_type, $this->postTypes)){
+            return;
+        }
+
         $this->setupData($postObj->ID);
         $this->FieldManager = new FieldManagerCustom($this->baseId, $this->data);
 
@@ -146,11 +153,25 @@ abstract class CustomForm
 
     public function save($postId)
     {
+        if (empty($_POST[$this->baseId])) {
+            return;
+        }
+
         $old = $this->setupData($postId);
         $this->FieldManager = new FieldManagerCustom($this->baseId, $this->data);
 
         $new = $this->fields($this->FieldManager)->save($_POST[$this->baseId], $old);
         update_post_meta($postId, $this->baseId, $new);
+
+        if ($this->saveAsSingle) {
+            foreach ($new as $k => $v) {
+                if (empty($v)) {
+                    delete_post_meta($postId, $this->baseId . '_' . $k);
+                } else {
+                    update_post_meta($postId, $this->baseId . '_' . $k, $v);
+                }
+            }
+        }
     }
 
 

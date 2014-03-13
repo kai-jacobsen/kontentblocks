@@ -1654,7 +1654,6 @@ h5.kb_properties_title {
 
 /* line 47, sass/partials/_refields/_common.scss */
 .kb-field--reset {
-  padding: 0;
   margin: 0;
   font-size: 12px;
 }
@@ -1956,17 +1955,19 @@ button.Zebra_DatePicker_Icon_Inside {
   background: #fcfcfc;
   border: 1px solid #f2f2f2;
   max-height: 350px;
+  min-width: 150px;
+  min-height: 150px;
   padding: 10px;
   float: left;
   margin-right: 15px;
 }
-/* line 21, sass/partials/_refields/_image.scss */
+/* line 23, sass/partials/_refields/_image.scss */
 .kb-field--image .kb-js-image-meta-wrapper label {
   display: block;
   font-weight: 100;
   font-size: 12px;
 }
-/* line 27, sass/partials/_refields/_image.scss */
+/* line 29, sass/partials/_refields/_image.scss */
 .kb-field--image .kb-js-image-meta-wrapper input[type=text] {
   color: #333;
   font-weight: 100;
