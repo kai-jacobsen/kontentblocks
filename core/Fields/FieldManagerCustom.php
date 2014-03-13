@@ -61,7 +61,7 @@ class FieldManagerCustom
     public function addGroup($id, $args = array())
     {
         if (!$this->idExists($id)) {
-            $this->structure[$id] = new FieldSection($id, $args, false);
+            $this->structure[$id] = new FieldSection($id, $args, false, $this);
         }
         return $this->structure[$id];
 
@@ -72,7 +72,7 @@ class FieldManagerCustom
         $collection = array();
         foreach ($this->structure as $definition) {
             $return = ($definition->save($data, $oldData));
-            $collection = $collection + $return;
+            $collection  = $collection + $return;
         }
         return $collection;
 
@@ -92,7 +92,6 @@ class FieldManagerCustom
     {
         $Renderer = new FieldRenderTabs($this->structure);
         $Renderer->render($this->baseId, $this->data);
-
     }
 
     /**
@@ -168,4 +167,7 @@ class FieldManagerCustom
         $this->data = $data;
     }
 
+    public function isPublic(){
+        return false;
+    }
 }

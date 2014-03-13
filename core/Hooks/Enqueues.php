@@ -124,7 +124,6 @@ class Enqueues
         $this->appConfig();
         if (is_user_logged_in() && !is_admin()) {
 
-            wp_enqueue_script('image-edit');
             wp_enqueue_script('kb-frontend');
             wp_enqueue_script('kb-onsite-editing');
             wp_enqueue_script('kb-refields');

@@ -19,8 +19,12 @@ class AttachmentHandler
 
     public function getSize( $size = 'thumbnail' )
     {
-        if ( !isset( $this->file[ 'sizes' ] ) ) {
+        if ( !isset( $this->file[ 'sizes' ] ) && !is_array($size) ) {
             return null;
+        }
+
+        if (is_array($size)){
+            return ImageResize::getInstance()->process($this->getAttr('id'), $size[0], $size[1], true, true, false);
         }
 
 

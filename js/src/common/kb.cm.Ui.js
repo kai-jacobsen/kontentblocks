@@ -27,6 +27,8 @@ KB.Ui = function ($) {
             $('body').on('mousedown', '.kb_field', function (e) {
                 activeField = this;
             });
+
+
             // set the global activeBlock variable dynamically
             $('body').on('mousedown', '.kb_block', function (e) {
                 activeBlock = this.id;

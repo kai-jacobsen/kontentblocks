@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-12 */
+/*! kontentblocks DevVersion 2014-03-13 */
 (function($) {
     var LayoutTemplates = {
         el: $("#layout-templates"),

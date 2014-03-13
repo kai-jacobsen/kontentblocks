@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
+use Kontentblocks\Utils\JSONBridge;
 
 /**
  * Class Field
@@ -294,10 +295,13 @@ abstract class Field
      */
     public function javascriptSettings()
     {
+        JSONBridge::getInstance()->registerData('Fields', $this->uniqueId, $this->args);
         $settings = $this->getArg('jSettings');
         if (!$settings) {
             return;
         }
+
+
         printf('<script>var KB = KB || {}; KB.FieldConfig = KB.FieldConfig || {}; KB.FieldConfig["%s"] = %s;</script>', $this->uniqueId, json_encode($settings));
 
     }
@@ -450,7 +454,6 @@ abstract class Field
 
     public function handleConcatContent($data)
     {
-
         if (!$this->module->isPublic()){
             return false;
         }

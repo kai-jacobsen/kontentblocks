@@ -1,15 +1,31 @@
 {{ field.label() }}
 <div class='kb-field-image-wrapper'>
-    <div class='kb-js-add-image kb-field-image-container' >
-        <img src='{{ image.getSize('thumbnail')}}' >
+    <div class='kb-js-add-image kb-field-image-container'>
+
+        {% if (field.getArg('previewSize')) %}
+            <img src='{{ image.getSize(field.getArg('previewSize')) }}'>
+        {% else %}
+            <img src='{{ image.getSize('thumbnail') }}'>
+        {% endif %}
+
     </div>
 
-    <div class="kb-js-image-meta-wrapper">
-        <label>{{ i18n.title }} </label>
-        <input class='kb-js-image-title kb-observe' type="text" name='{{ field.getFieldName( 'title') }}' value='{{value.title}}' >
-        <label>{{ i18n.caption }}</label>
-        <input class='kb-js-image-caption kb-observe' type="text" name='{{ field.getFieldName( 'caption') }}' value='{{value.caption}}' >
+    {% if (field.getArg('hideMeta') == true) %}
+    <div style="display: none;">
+        {% endif %}
+
+        <div class="kb-js-image-meta-wrapper">
+            <label>{{ i18n.title }} </label>
+            <input class='kb-js-image-title kb-observe' type="text" name='{{ field.getFieldName( 'title') }}'
+                   value='{{ value.title }}'>
+            <label>{{ i18n.caption }}</label>
+            <input class='kb-js-image-caption kb-observe' type="text" name='{{ field.getFieldName( 'caption') }}'
+                   value='{{ value.caption }}'>
+        </div>
+        {% if (field.getArg('hideMeta') == true) %}
+
     </div>
-    <input class='kb-js-image-id' type='hidden' name='{{field.getFieldName( 'id' )}}' value='{{value.id}}' >
+    {% endif %}
+    <input class='kb-js-image-id' type='hidden' name='{{ field.getFieldName( 'id' ) }}' value='{{ value.id }}'>
 </div>
 {{ field.description() }}

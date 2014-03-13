@@ -1,15 +1,16 @@
 .kb-field--image{
 
+  padding-bottom: 10px;
+
     .kb-field-image-wrapper{
         overflow: hidden;
     }
     
     .kb-js-add-image{
-
+        cursor: pointer;
         background:#fcfcfc; 
-        width:150px; 
-        height:150px; 
         border:1px solid #f2f2f2;
+        max-height: 350px;
         padding: 10px;
         float: left;
         margin-right: 15px;

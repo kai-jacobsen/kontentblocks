@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-12 */
+/*! kontentblocks DevVersion 2014-03-13 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -136,6 +136,7 @@ KB.Fields.register("Image", function($) {
             var that = this;
             $("body").on("click", this.selector, function(e) {
                 e.preventDefault();
+                that.settings = that.getSettings(this);
                 that.$container = $(".kb-field-image-container", activeField);
                 that.$wrapper = $(".kb-field-image-wrapper", activeField);
                 that.$id = $(".kb-js-image-id", that.$wrapper);
@@ -143,6 +144,13 @@ KB.Fields.register("Image", function($) {
                 that.$caption = $(".kb-js-image-caption", that.$wrapper);
                 that.openModal();
             });
+        },
+        getSettings: function(el) {
+            var parent = $(el).closest(".kb-field-wrapper");
+            var id = parent.attr("id");
+            if (KB.fromServer.Fields[id]) {
+                return KB.fromServer.Fields[id];
+            }
         },
         frame: function() {
             if (this._frame) return this._frame;
@@ -163,6 +171,7 @@ KB.Fields.register("Image", function($) {
                 }
             });
             this._frame.state("library").on("select", this.select);
+            this._frame.open();
             return this._frame;
         },
         select: function() {
@@ -170,7 +179,33 @@ KB.Fields.register("Image", function($) {
             self.handleAttachment(attachment);
         },
         handleAttachment: function(attachment) {
-            this.$container.html('<img src="' + attachment.get("sizes").thumbnail.url + '" >');
+            var that = this;
+            var url, args;
+            if (this.settings && this.settings.previewSize) {
+                args = {
+                    width: this.settings.previewSize[0],
+                    height: this.settings.previewSize[1],
+                    crop: true,
+                    upscale: false
+                };
+                jQuery.ajax({
+                    url: ajaxurl,
+                    data: {
+                        action: "fieldGetImage",
+                        args: args,
+                        id: attachment.get("id"),
+                        _ajax_nonce: kontentblocks.nonces.get
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(res) {
+                        that.$container.html('<img src="' + res + '" >');
+                    },
+                    error: function() {}
+                });
+            } else {
+                this.$container.html('<img src="' + attachment.get("sizes").thumbnail.url + '" >');
+            }
             this.$id.val(attachment.get("id"));
             this.$title.val(attachment.get("title"));
             this.$caption.val(attachment.get("caption"));

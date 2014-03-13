@@ -11,7 +11,7 @@ class FieldTemplate
     protected $path;
     protected $I18n;
 
-    public function __construct( $tpl = false, $data = false )
+    public function __construct( $tpl = false, $data = null )
     {
 
         $this->data    = $data;

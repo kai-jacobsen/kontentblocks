@@ -339,22 +339,23 @@ body.onsite-editing #onsite-modal {
   background-color: #b3b3b3;
   border-radius: 0;
   overflow: hidden;
+  list-style: none;
 }
-/* line 338, sass/KBOsEditStyle.scss */
+/* line 339, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field {
   width: 100%;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 343, sass/KBOsEditStyle.scss */
+/* line 344, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field label {
   font-size: 12px;
 }
-/* line 347, sass/KBOsEditStyle.scss */
+/* line 348, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field input[type=button], #onsite-modal .kb_field .button {
   text-transform: none !important;
 }
-/* line 361, sass/KBOsEditStyle.scss */
+/* line 362, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field textarea:focus,
 #onsite-modal .kb_field input[type="text"]:focus,
 #onsite-modal .kb_field input[type="password"]:focus,
@@ -370,7 +371,7 @@ body.onsite-editing #onsite-modal {
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
 }
-/* line 375, sass/KBOsEditStyle.scss */
+/* line 376, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field textarea,
 #onsite-modal .kb_field input[type="text"],
 #onsite-modal .kb_field input[type="password"],
@@ -386,15 +387,15 @@ body.onsite-editing #onsite-modal {
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
 }
-/* line 383, sass/KBOsEditStyle.scss */
+/* line 384, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field select[disabled] {
   color: #7f7f7f;
 }
-/* line 387, sass/KBOsEditStyle.scss */
+/* line 388, sass/KBOsEditStyle.scss */
 #onsite-modal .kb_field select:focus {
   border-color: #aaa;
 }
-/* line 393, sass/KBOsEditStyle.scss */
+/* line 394, sass/KBOsEditStyle.scss */
 #onsite-modal:hover {
   opacity: 1;
 }
