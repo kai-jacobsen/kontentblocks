@@ -110,15 +110,17 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: 'json',
             success: function (res) {
                 that.$inner.empty();
-                if (res.json){
-                    var merged = _.extend(KB.fromServer, res.json);
-                    KB.fromServer = merged;
-                }
+
                 that.$inner.attr('id', that.view.model.get('instance_id'));
                 // append the html to the inner form container
                 that.$inner.append(res.html);
                 // (Re)Init UI widgets
                 // TODO find better method for this
+
+                if (res.json){
+                    var merged = _.extend(KB.fromServer, res.json);
+                    KB.fromServer = merged;
+                }
 
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();

@@ -373,12 +373,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: "json",
             success: function(res) {
                 that.$inner.empty();
+                that.$inner.attr("id", that.view.model.get("instance_id"));
+                that.$inner.append(res.html);
                 if (res.json) {
                     var merged = _.extend(KB.fromServer, res.json);
                     KB.fromServer = merged;
                 }
-                that.$inner.attr("id", that.view.model.get("instance_id"));
-                that.$inner.append(res.html);
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();
                 KB.TinyMCE.addEditor();
