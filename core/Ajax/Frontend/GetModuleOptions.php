@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Ajax\Frontend;
 
+use Kontentblocks\Utils\JSONBridge;
+
 class GetModuleOptions
 {
 
@@ -25,7 +27,13 @@ class GetModuleOptions
         $instance->options( $instance->moduleData );
         $html = ob_get_clean();
 
-        echo stripslashes_deep( $html );
+        $return = array(
+            'html' => stripslashes_deep($html),
+            'json' => JSONBridge::getInstance()->getJSON()
+        );
+
+//        echo stripslashes_deep( $html );
+        wp_send_json($return);
         exit;
     }
 

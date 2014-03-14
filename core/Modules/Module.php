@@ -112,7 +112,6 @@ abstract class Module
         if (is_null($data) && !is_null($this->moduleData)) {
             $data = $this->moduleData;
         }
-
         if (isset($this->Fields)) {
             $this->_setupFieldData();
         }

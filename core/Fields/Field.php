@@ -277,7 +277,6 @@ abstract class Field
 
         // some fields (colorpicker etc) might have some individual settings
         $this->javascriptSettings();
-
         /*
          * optional call after the body
          * @TODO replace with wp hook
@@ -296,6 +295,7 @@ abstract class Field
     public function javascriptSettings()
     {
         JSONBridge::getInstance()->registerData('Fields', $this->uniqueId, $this->args);
+
         $settings = $this->getArg('jSettings');
         if (!$settings) {
             return;

@@ -1,17 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kaiser
- * Date: 12.03.14
- * Time: 17:44
- */
-
-namespace Kontentblocks\Abstracts;
+namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Fields\FieldManagerCustom;
+use Kontentblocks\Frontend\SingleModuleRender;
+use Kontentblocks\Modules\Module;
 
-abstract class CustomForm
+class CustomModulePanel
 {
 
     /**
@@ -19,6 +14,18 @@ abstract class CustomForm
      * @var string
      */
     protected $baseId;
+
+    /**
+     * Static Module Classname
+     * @var string
+     */
+    protected $moduleClass;
+
+    /*
+     * Module Instance
+     * @var \Kontentblocks\Modules\StaticModule
+     */
+    protected $Module;
 
     /**
      * Post Types
@@ -50,13 +57,13 @@ abstract class CustomForm
      */
     protected $FieldManager;
 
-    protected $saveAsSingle = false;
-
     /**
      * Form data
      * @var array
      */
     protected $data;
+
+    protected $saveAsSingle;
 
     public function __construct($args)
     {
@@ -65,17 +72,30 @@ abstract class CustomForm
         if (is_null($args['baseId'])) {
             throw new \Exception('MUST provide a base id');
         }
-
-        // mumbo jumbo
+        // mumbo jumbo magical setup
         $this->setupArgs($args);
 
-        $this->setupHooks();
+        if (is_admin()) {
+            $this->setupHooks();
+        }
+
+    }
+
+
+    public function  render()
+    {
+        $this->setupData(get_the_ID());
+        $this->Module = $this->setupModule($this->moduleClass);
+        $Render = new SingleModuleRender($this->Module);
+        $Render->render();
+
     }
 
     private function parseDefaults($args)
     {
         $defaults = array(
             'baseId' => null,
+            'moduleClass' => null,
             'metaBox' => false,
             'hook' => 'edit_form_after_title',
             'postTypes' => array(),
@@ -84,8 +104,6 @@ abstract class CustomForm
 
         return wp_parse_args($args, $defaults);
     }
-
-    abstract function fields(FieldManagerCustom $FieldManager);
 
 
     private function setupArgs($args)
@@ -139,15 +157,16 @@ abstract class CustomForm
 
     public function form($postObj)
     {
-        if (!in_array($postObj->post_type, $this->postTypes)){
+
+        if (!in_array($postObj->post_type, $this->postTypes)) {
             return;
         }
 
         $this->setupData($postObj->ID);
-        $this->FieldManager = new FieldManagerCustom($this->baseId, $this->data);
+        $this->Module = $this->setupModule($this->moduleClass);
 
         $this->beforeForm();
-        $this->fields($this->FieldManager)->renderFields();
+        $this->Module->options($this->data);
         $this->afterForm();
     }
 
@@ -156,12 +175,10 @@ abstract class CustomForm
         if (empty($_POST[$this->baseId])) {
             return;
         }
-
+        $this->Module = $this->setupModule($this->moduleClass);
         $old = $this->setupData($postId);
-        $this->FieldManager = new FieldManagerCustom($this->baseId, $this->data);
-
-        $new = $this->fields($this->FieldManager)->save($_POST[$this->baseId], $old);
-        update_post_meta($postId, $this->baseId, $new);
+        $new = $this->Module->save($_POST[$this->baseId], $old);
+        update_post_meta($postId, '_' . $this->baseId, $new);
 
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {
@@ -189,6 +206,34 @@ abstract class CustomForm
 
     private function setupData($postId)
     {
-        $this->data = get_post_meta($postId, $this->baseId, true);
+        $this->data = get_post_meta($postId, '_' . $this->baseId, true);
+        return $this->data;
+    }
+
+
+    /**
+     * @TODO Too hacky, works as proof
+     */
+    private function setupModule($module)
+    {
+        $moduleArgs = array();
+
+        $defaults = array(
+            'instance_id' => $this->baseId,
+            'areaContext' => 'static',
+            'post_id' => get_the_ID(),
+            'area' => 'static',
+            'class' => $module
+        );
+
+        $moduleArgs['settings'] = Module::getDefaults();
+        $moduleArgs['state'] = Module::getDefaultState();
+        $moduleArgs['state']['draft'] = false;
+        $moduleArgs['settings']['id'] = $this->baseId . '_static';
+        $moduleArgs['settings']['class'] = $module;
+        $moduleArgs = wp_parse_args($defaults, $moduleArgs);
+        $Environment = \Kontentblocks\Helper\getEnvironment(get_the_ID());
+        return new $module($moduleArgs, $this->data, $Environment);
+
     }
 }

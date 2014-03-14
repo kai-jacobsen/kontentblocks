@@ -94,11 +94,21 @@ class JSONBridge
         print "<script>var KB = KB || {}; KB.fromServer = {}; KB.fromServer =  {$json};</script>";
     }
 
-    public function printPublicJSON(){
+    public function printPublicJSON()
+    {
 
         $json = json_encode($this->publicData);
 
         print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json};</script>";
     }
+
+    public function getJSON()
+    {
+        $this->data['Modules'] = $this->modules;
+        $this->data['Areas'] = $this->areas;
+
+        return $this->data;
+    }
+
 
 }

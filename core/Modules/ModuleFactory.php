@@ -14,8 +14,6 @@ class ModuleFactory
             throw new \Exception('This is not a valid Module');
         }
 
-
-
         $this->class = $class;
         $this->args = $moduleArgs;
 

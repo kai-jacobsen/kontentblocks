@@ -30,7 +30,7 @@ KB.Fields.register('Image', (function ($) {
         getSettings: function (el) {
             var parent = $(el).closest('.kb-field-wrapper');
             var id = parent.attr('id');
-            if (KB.fromServer.Fields[id]) {
+            if (KB.fromServer.Fields && KB.fromServer.Fields[id] ) {
                 return KB.fromServer.Fields[id];
             }
         },

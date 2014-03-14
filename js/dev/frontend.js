@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-13 */
+/*! kontentblocks DevVersion 2014-03-14 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -370,11 +370,15 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 _ajax_nonce: kontentblocks.nonces.read
             },
             type: "POST",
-            dataType: "html",
+            dataType: "json",
             success: function(res) {
                 that.$inner.empty();
+                if (res.json) {
+                    var merged = _.extend(KB.fromServer, res.json);
+                    KB.fromServer = merged;
+                }
                 that.$inner.attr("id", that.view.model.get("instance_id"));
-                that.$inner.append(res);
+                that.$inner.append(res.html);
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();
                 KB.TinyMCE.addEditor();
