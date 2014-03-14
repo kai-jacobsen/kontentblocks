@@ -187,6 +187,7 @@ function kb_wp_editor($block_id, $data, $name = NULL, $media = true, $args = arr
             'paste_remove_styles' => true,
             'menubar' => false,
             'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
+            'plugins' => 'charmap', 'hr', 'media', 'paste', 'tabfocus', 'textcolor', 'fullscreen', 'wordpress', 'wpeditimage', 'wpgallery', 'wplink', 'wpdialogs', 'wpview',
 
         ), // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
         'quicktags' => true
