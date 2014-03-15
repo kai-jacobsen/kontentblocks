@@ -51,6 +51,8 @@ class DynamicAreas
         add_action('edit_form_after_title', array($this, 'addForm'), 1);
         add_action('save_post', array($this, 'save'));
         add_action('wp_insert_post_data', array($this, 'postData'), 10, 2);
+        add_filter('post_updated_messages', array($this, 'postTypeMessages'));
+
     }
 
     /**
@@ -62,9 +64,9 @@ class DynamicAreas
     {
 
         if (!\Kontentblocks\Helper\adminMenuExists('Kontentblocks')) {
-            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks', admin_url() . 'edit.php?post_type=kb-dyar', false, false);
+            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks', '/edit.php?post_type=kb-dyar', false, false);
         }
-        add_submenu_page(admin_url() . 'edit.php?post_type=kb-dyar', 'Areas', 'Areas', 'manage_kontentblocks', admin_url() . 'edit.php?post_type=kb-dyar', false);
+        add_submenu_page('/edit.php?post_type=kb-dyar', 'Areas', 'Areas', 'manage_kontentblocks', '/edit.php?post_type=kb-dyar', false);
 
     }
 
@@ -154,7 +156,25 @@ class DynamicAreas
     public function registerPostType()
     {
 
+        $labels = array(
+            'name' => _x('Areas', 'post type general name', 'Kontentblocks'),
+            'singular_name' => _x('Area', 'post type singular name', 'Kontentblocks'),
+            'menu_name' => _x('Areas', 'admin menu', 'Kontentblocks'),
+            'name_admin_bar' => _x('Areas', 'add new on admin bar', 'Kontentblocks'),
+            'add_new' => _x('Add New', 'book', 'Kontentblocks'),
+            'add_new_item' => __('Add New Area', 'Kontentblocks'),
+            'new_item' => __('New Area', 'Kontentblocks'),
+            'edit_item' => __('Edit Area', 'Kontentblocks'),
+            'view_item' => __('View Area', 'Kontentblocks'),
+            'all_items' => __('All Areas', 'Kontentblocks'),
+            'search_items' => __('Search Areas', 'Kontentblocks'),
+            'parent_item_colon' => __('Parent Area:', 'Kontentblocks'),
+            'not_found' => __('No Areas found.', 'Kontentblocks'),
+            'not_found_in_trash' => __('No Areas found in Trash.', 'Kontentblocks'),
+        );
+
         $args = array(
+            'labels' => $labels,
             'public' => false,
             'publicly_queryable' => true,
             'show_ui' => true,
@@ -171,6 +191,35 @@ class DynamicAreas
         remove_post_type_support('kb-dyar', 'editor');
         remove_post_type_support('kb-dyar', 'title');
         remove_post_type_support('kb-dyar', 'revisions');
+    }
+
+    public function postTypeMessages($messages)
+    {
+        $post = get_post();
+        $post_type = get_post_type($post);
+        $post_type_object = get_post_type_object($post_type);
+
+        $messages['kb-dyar'] = array(
+            0 => '', // Unused. Messages start at index 1.
+            1 => __('Area updated.', 'Kontentblocks'),
+            2 => __('Custom field updated.', 'Kontentblocks'), // not used
+            3 => __('Custom field deleted.', 'Kontentblocks'), // not used
+            4 => __('Area updated.', 'Kontentblocks'),
+            /* translators: %s: date and time of the revision */
+            5 => isset($_GET['revision']) ? sprintf(__('Area restored to revision from %s', 'Kontentblocks'), wp_post_revision_title((int)$_GET['revision'], false)) : false,
+            6 => __('Area published.', 'Kontentblocks'),
+            7 => __('Area saved.', 'Kontentblocks'),
+            8 => __('Area submitted.', 'Kontentblocks'),
+            9 => sprintf(
+                __('Area scheduled for: <strong>%1$s</strong>.', 'Kontentblocks'),
+                // translators: Publish box date format, see http://php.net/date
+                date_i18n(__('M j, Y @ G:i', 'Kontentblocks'), strtotime($post->post_date))
+            ),
+            10 => __('Area draft updated.', 'Kontentblocks'),
+        );
+
+
+        return $messages;
     }
 
     /**

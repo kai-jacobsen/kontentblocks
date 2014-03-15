@@ -294,7 +294,7 @@ abstract class Field
      */
     public function javascriptSettings()
     {
-        JSONBridge::getInstance()->registerData('Fields', $this->uniqueId, $this->args);
+        JSONBridge::getInstance()->registerData('Fields', $this->uniqueId, $this->cleanedArgs());
 
         $settings = $this->getArg('jSettings');
         if (!$settings) {
@@ -573,6 +573,19 @@ abstract class Field
     {
         return $this->getArg('placeholder');
 
+    }
+
+    /**
+     * Prepare Args for JSON
+     * @TODO hacky
+     */
+    private function cleanedArgs()
+    {
+        if (method_exists($this, 'argsToJson')){
+            return $this->argsToJson();
+        } else{
+            return $this->args;
+        }
     }
 
 }

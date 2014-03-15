@@ -23,7 +23,7 @@ class ModuleTemplates
 
     /**
      * Singleton Pattern
-     * @return MenuManager
+     * @return self
      */
     public static function getInstance()
     {
@@ -46,16 +46,17 @@ class ModuleTemplates
         add_action('edit_form_after_title', array($this, 'addForm'), 1);
         add_action('save_post', array($this, 'save'), 11, 2);
         add_action('wp_insert_post_data', array($this, 'postData'), 10, 2);
+        add_filter('post_updated_messages', array($this, 'postTypeMessages'));
     }
 
 
     public function addAdminMenu()
     {
         if (!\Kontentblocks\Helper\adminMenuExists('Kontentblocks')) {
-            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks',admin_url() . 'edit.php?post_type=kb-mdtpl', false, false);
+            add_menu_page('kontentblocks', 'Kontentblocks', 'manage_kontentblocks', '/edit.php?post_type=kb-mdtpl', false, false);
         }
 
-        add_submenu_page(admin_url() . 'edit.php?post_type=kb-dyar', 'Templates', 'Templates', 'manage_kontentblocks', admin_url() . 'edit.php?post_type=kb-mdtpl', false);
+        add_submenu_page('/edit.php?post_type=kb-dyar', 'Templates', 'Templates', 'manage_kontentblocks', '/edit.php?post_type=kb-mdtpl', false);
 
     }
 
@@ -253,8 +254,26 @@ class ModuleTemplates
     public function registerPostType()
     {
 
+        $labels = array(
+            'name' => _x('Module Templates', 'post type general name', 'Kontentblocks'),
+            'singular_name' => _x('Module Template', 'post type singular name', 'Kontentblocks'),
+            'menu_name' => _x('Module Templates', 'admin menu', 'Kontentblocks'),
+            'name_admin_bar' => _x('Module Templates', 'add new on admin bar', 'Kontentblocks'),
+            'add_new' => _x('Add New', 'book', 'Kontentblocks'),
+            'add_new_item' => __('Add New Module Template', 'Kontentblocks'),
+            'new_item' => __('New Module Template', 'Kontentblocks'),
+            'edit_item' => __('Edit Module Template', 'Kontentblocks'),
+            'view_item' => __('View Module Template', 'Kontentblocks'),
+            'all_items' => __('All Module Templates', 'Kontentblocks'),
+            'search_items' => __('Search Module Templates', 'Kontentblocks'),
+            'parent_item_colon' => __('Parent Module Template:', 'Kontentblocks'),
+            'not_found' => __('No Module Templates found.', 'Kontentblocks'),
+            'not_found_in_trash' => __('No Module Templates found in Trash.', 'Kontentblocks'),
+        );
+
         $args = array(
-            'public' => true,
+            'labels' => $labels,
+            'public' => false,
             'publicly_queryable' => false,
             'show_ui' => true,
             'show_in_menu' => false,
@@ -271,8 +290,37 @@ class ModuleTemplates
         remove_post_type_support('kb-mdtpl', 'title');
     }
 
+    public function postTypeMessages($messages)
+    {
+        $post             = get_post();
+        $post_type        = get_post_type( $post );
+        $post_type_object = get_post_type_object( $post_type );
+
+        $messages['kb-mdtpl'] = array(
+            0  => '', // Unused. Messages start at index 1.
+            1  => __( 'Module Template updated.', 'Kontentblocks' ),
+            2  => __( 'Custom field updated.', 'Kontentblocks' ), // not used
+            3  => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
+            4  => __( 'Module Template updated.', 'Kontentblocks' ),
+            /* translators: %s: date and time of the revision */
+            5  => isset( $_GET['revision'] ) ? sprintf( __( 'Module Template restored to revision from %s', 'Kontentblocks' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+            6  => __( 'Module Template published.', 'Kontentblocks' ),
+            7  => __( 'Module Template saved.', 'Kontentblocks' ),
+            8  => __( 'Module Template submitted.', 'Kontentblocks' ),
+            9  => sprintf(
+                __( 'Module Template scheduled for: <strong>%1$s</strong>.', 'Kontentblocks' ),
+                // translators: Publish box date format, see http://php.net/date
+                date_i18n( __( 'M j, Y @ G:i', 'Kontentblocks' ), strtotime( $post->post_date ) )
+            ),
+            10 => __( 'Module Template draft updated.', 'Kontentblocks' ),
+        );
+
+        return $messages;
+    }
+
     /**
      * Various checks
+     * @param $postId
      * @return bool
      */
     private function auth($postId)

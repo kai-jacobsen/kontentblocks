@@ -172,9 +172,24 @@ function kb_wp_editor($block_id, $data, $name = NULL, $media = true, $args = arr
 //        'plugins' => implode( ',', $plugins ),
 //    );
 //
+    $plugins = array_unique( apply_filters( 'tiny_mce_plugins', array(
+        'charmap',
+        'hr',
+        'media',
+        'paste',
+        'tabfocus',
+        'textcolor',
+        'fullscreen',
+        'wordpress',
+        'wpeditimage',
+        'wpgallery',
+        'wplink',
+        'wpdialogs',
+        'wpview',
+    ) ) );
     $settings = array(
         'wpautop' => false, // use wpautop?
-        'media_buttons' => $media, // show insert/upload button(s)
+        'media_buttons' => false, // show insert/upload button(s)
         'textarea_name' => $name, // set the textarea name to something different, square brackets [] can be used here
         'tabindex' => '',
         'editor_css' => '',
@@ -187,7 +202,7 @@ function kb_wp_editor($block_id, $data, $name = NULL, $media = true, $args = arr
             'paste_remove_styles' => true,
             'menubar' => false,
             'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
-            'plugins' => 'charmap', 'hr', 'media', 'paste', 'tabfocus', 'textcolor', 'fullscreen', 'wordpress', 'wpeditimage', 'wpgallery', 'wplink', 'wpdialogs', 'wpview',
+            'plugins' => implode(',', $plugins)
 
         ), // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
         'quicktags' => true

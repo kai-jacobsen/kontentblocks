@@ -2,8 +2,6 @@
 
 namespace Kontentblocks\Frontend;
 
-use Kontentblocks\Frontend\AreaOutput;
-use Kontentblocks\Frontend\ModuleIterator;
 use Kontentblocks\Utils\JSONBridge;
 
 class AreaRender

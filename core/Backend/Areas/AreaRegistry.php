@@ -190,7 +190,6 @@ class AreaRegistry
     public function preFilterAreas($area)
     {
         if ($area['dynamic'] === true
-            && (in_array(I18n::getActiveLanguage(), (array)$area['lang']) || $area['lang'] === 'any')
         ) {
             if ($area['context'] === 'side') {
                 $this->globalSidebars[] = $area;

@@ -86,6 +86,7 @@ function getbaseIdField($index)
  * extracts the attached number of every block and returns the highest number found
  *
  * @param int
+ * @return mixed
  */
 function getHighestId($index)
 {
@@ -246,4 +247,22 @@ function adminMenuExists($id){
         }
     }
     return false;
+}
+
+/**
+ * Evaluate the current template file if possible
+ * @return string
+ * @since 1.0.0
+ */
+function getTemplateFile()
+{
+    global $template;
+
+    if ( !empty( $template ) ) {
+        return str_replace('.php', '', basename( $template ));
+    }
+    else {
+        return 'generic';
+    }
+
 }

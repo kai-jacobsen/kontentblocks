@@ -43,25 +43,26 @@ class Enqueues
 
     public function registerScripts()
     {
-
+        $folder = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? 'dev' : 'dist';
+        $suffix = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
         $dependecies = array(
             'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-sortable', 'jquery-ui-mouse', 'jquery-ui-draggable', 'backbone', 'underscore', 'wp-color-picker'
         );
         // Plugins
-        wp_register_script('kb-plugins', KB_PLUGIN_URL . '/js/dist/plugins.min.js', $dependecies, null, true);
+        wp_register_script('kb-plugins', KB_PLUGIN_URL . '/js/'. $folder .'/plugins'.$suffix.'.js', $dependecies, null, true);
 
         // Common & Util. Functions
-        wp_register_script('kb-common', KB_PLUGIN_URL . 'js/dist/common.min.js', array('kb-plugins'), null, true);
+        wp_register_script('kb-common', KB_PLUGIN_URL . 'js/'. $folder .'/common'.$suffix.'.js', array('kb-plugins'), null, true);
 
         // Extensions
-        wp_register_script('kb-extensions', KB_PLUGIN_URL . '/js/dist/extensions.min.js', array('kb-common'), null, true);
+        wp_register_script('kb-extensions', KB_PLUGIN_URL . '/js/'. $folder .'/extensions'.$suffix.'.js', array('kb-common'), null, true);
 
         if (is_admin()){
             // Backend 'controller'
-            wp_register_script('kb-backend', KB_PLUGIN_URL . '/js/dist/backend.min.js', array('kb-extensions'), null, true);
+            wp_register_script('kb-backend', KB_PLUGIN_URL . '/js/'. $folder .'/backend'.$suffix.'.js', array('kb-extensions'), null, true);
         } else{
             // frontend controller
-            wp_register_script('kb-frontend', KB_PLUGIN_URL . 'js/dist/frontend.min.js', array('kb-extensions'), null, true);
+            wp_register_script('kb-frontend', KB_PLUGIN_URL . 'js/'. $folder .'/frontend'.$suffix.'.js', array('kb-extensions'), null, true);
         }
 
 
@@ -69,13 +70,13 @@ class Enqueues
         wp_register_script('kb-onsite-editing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('kb-frontend'), null, true);
 
         // fields handler
-        wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/dist/refields.min.js',null, null, true);
+        wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/'. $folder .'/refields'.$suffix.'.js',null, null, true);
 
         // WP iris
-        wp_register_script('wp-iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true);
+        wp_register_script('wp-iris', admin_url('js/iris'.$suffix.'.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true);
 
         // WP color picker
-        wp_register_script('wp-color-picker', admin_url('js/color-picker.min.js'), array('wp-iris'), false, true);
+        wp_register_script('wp-color-picker', admin_url('js/color-picker'.$suffix.'.js'), array('wp-iris'), false, true);
 
         $this->customScripts();
     }

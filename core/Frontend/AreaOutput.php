@@ -178,7 +178,7 @@ class AreaOutput
     private function _setupSettings( $args, $settings = null )
     {
         $defaults = array(
-            'context' => $this->_getTemplateFile(),
+            'context' => \Kontentblocks\Helper\getTemplateFile(),
             'subcontext' => 'content',
             'wrapperClass' => 'area',
             'useWrapper' => TRUE,
@@ -197,23 +197,6 @@ class AreaOutput
 
     }
 
-    /**
-     * Evaluate the current template file if possible
-     * @return string
-     * @since 1.0.0
-     */
-    private function _getTemplateFile()
-    {
-        global $template;
-
-        if ( !empty( $template ) ) {
-            return basename( $template );
-        }
-        else {
-            return 'generic';
-        }
-
-    }
 
     /**
      * Gets additional css classes specified by the area template
@@ -263,6 +246,9 @@ class AreaOutput
 
     }
 
+    /**
+     * @return array
+     */
     public function getPublicAttributes()
     {
         return array(

@@ -13,7 +13,7 @@ Class Callback extends Field
 {
 
     // Defaults
-    public static  $defaults = array(
+    public static $defaults = array(
         'type' => 'callback',
         'returnObj' => false
     );
@@ -23,7 +23,7 @@ Class Callback extends Field
      */
     public function form()
     {
-        if (!$this->getArg('callback')){
+        if (!$this->getArg('callback')) {
             echo "<p>No Callback specified</p>";
         }
 
@@ -31,5 +31,11 @@ Class Callback extends Field
 
     }
 
+    public function argsToJson()
+    {
+        $args = $this->args;
+        unset($args['callback']);
+        return $args;
+    }
 
 }
