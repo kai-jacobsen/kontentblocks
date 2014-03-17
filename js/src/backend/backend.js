@@ -69,13 +69,13 @@ KB.App = (function ($) {
      */
     function addViews() {
         // iterate over raw areas
-        _.each(KB.fromServer.Areas, function (area) {
+        _.each(KB.payload.Areas, function (area) {
             // create new area model
             KB.Areas.add(new KB.Backbone.AreaModel(area));
         });
 
         // create models from already attached modules
-        _.each(KB.fromServer.Modules, function (module) {
+        _.each(KB.payload.Modules, function (module) {
             KB.Modules.add(module);
         });
 

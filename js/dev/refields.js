@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-14 */
+/*! Kontentblocks DevVersion 2014-03-17 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -148,8 +148,8 @@ KB.Fields.register("Image", function($) {
         getSettings: function(el) {
             var parent = $(el).closest(".kb-field-wrapper");
             var id = parent.attr("id");
-            if (KB.fromServer.Fields && KB.fromServer.Fields[id]) {
-                return KB.fromServer.Fields[id];
+            if (KB.payload.Fields && KB.payload.Fields[id]) {
+                return KB.payload.Fields[id];
             }
         },
         frame: function() {

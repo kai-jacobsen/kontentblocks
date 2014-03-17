@@ -13,7 +13,7 @@
   }
 }
 
-.module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper{
+.module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
   opacity: 1;
 }
 
@@ -24,12 +24,11 @@
   opacity: .0;
   z-index: 99999;
 
-
-  &.master-module a{
-      background-color: $orange;
+  &.master-module a {
+    background-color: $orange;
   }
 
-  &.dynamic-module a{
+  &.dynamic-module a {
     background-color: $lightblue;
   }
 
@@ -49,8 +48,6 @@
     border: 1px solid #333;
     @include border-radius(20px);
     background-color: #fff;
-
-
 
     &.dashicons {
       width: 22px;
@@ -227,11 +224,11 @@ body.onsite-editing {
 }
 
 // experiments
-#onsite-modal *{
+#onsite-modal * {
   @include box-sizing(content-box);
 }
 
-#onsite-modal a:hover{
+#onsite-modal a:hover {
   text-decoration: none;
 }
 
@@ -249,7 +246,6 @@ body.onsite-editing {
   opacity: 1;
   z-index: 101;
 
-
   .controls-title {
     font-size: 12px;
     margin: 0;
@@ -263,7 +259,7 @@ body.onsite-editing {
     box-sizing: border-box;
   }
 
-  .os-controls-meta{
+  .os-controls-meta {
     background-color: #333;
   }
 
@@ -276,12 +272,12 @@ body.onsite-editing {
     cursor: pointer;
     @include transition(all .3s ease-in-out);
 
-    &:hover{
+    &:hover {
       color: $orange;
     }
   }
 
-  a.kb-save-form{
+  a.kb-save-form {
     position: absolute;
     top: 0px;
     left: 71px;
@@ -292,31 +288,31 @@ body.onsite-editing {
 
   }
 
-  .kb-button-primary{
+  .kb-button-primary {
     color: #fff;
     background-color: $lightblue;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
 
-    &:hover{
+    &:hover {
       background-color: red;
       text-decoration: none;
     }
   }
 
-  .kb-button-secondary{
+  .kb-button-secondary {
     color: #fff;
     background-color: $orange;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
 
-    &:hover{
+    &:hover {
       background-color: green;
       text-decoration: none;
     }
   }
 
-  a.kb-preview-form{
+  a.kb-preview-form {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -327,8 +323,7 @@ body.onsite-editing {
 
   }
 
-
-  .kb_fieldtabs ul.ui-tabs-nav{
+  .kb_fieldtabs ul.ui-tabs-nav {
     padding-top: 0;
     background-color: lighten(#333, 50%);
     border-radius: 0;
@@ -394,5 +389,17 @@ body.onsite-editing {
   &:hover {
     opacity: 1;
 
+  }
+}
+
+#onsite-modal.isDirty {
+  .kb-dirty-notice {
+    display: inline;
+  }
+}
+
+#onsite-modal {
+  .kb-dirty-notice {
+    display: none;
   }
 }

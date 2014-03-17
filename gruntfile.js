@@ -8,7 +8,7 @@ module.exports = function (grunt) {
         uglify: {
             dist: {
                 options: {
-                    banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                    banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
                     mangle: true,
                     beautify: false,
                     compress: true,

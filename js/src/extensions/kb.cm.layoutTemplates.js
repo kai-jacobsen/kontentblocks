@@ -112,8 +112,8 @@
 
             var concat = '';
 
-            if (KB.fromServer.Areas) {
-                _.each(KB.fromServer.Areas, function (context) {
+            if (KB.payload.Areas) {
+                _.each(KB.payload.Areas, function (context) {
                     concat += context.id;
                     _K.debug('Layout Templates: Concat', concat);
                 });

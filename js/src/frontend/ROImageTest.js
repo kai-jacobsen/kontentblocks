@@ -55,7 +55,7 @@ KB.Stuff = (function ($) {
             var id = attachment.get('id');
             var mId = this.img.attr('data-module');
             var fkey = this.img.attr('data-key');
-            var settings = KB.fromServer.FrontSettings[mId][fkey];
+            var settings = KB.payload.FrontSettings[mId][fkey];
 
 
             var cModule = KB.Modules.get(mId);
@@ -162,7 +162,7 @@ KB.StuffBG = (function ($) {
             var id = attachment.get('id');
             var mId = this.img.attr('data-module');
             var fkey = this.img.attr('data-key');
-            var settings = KB.fromServer.FrontSettings[mId][fkey];
+            var settings = KB.payload.FrontSettings[mId][fkey];
 
 
             var cModule = KB.Modules.get(mId);

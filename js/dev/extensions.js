@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-14 */
+/*! Kontentblocks DevVersion 2014-03-17 */
 (function($) {
     var LayoutTemplates = {
         el: $("#layout-templates"),
@@ -92,8 +92,8 @@
         },
         _areaConfig: function() {
             var concat = "";
-            if (KB.fromServer.Areas) {
-                _.each(KB.fromServer.Areas, function(context) {
+            if (KB.payload.Areas) {
+                _.each(KB.payload.Areas, function(context) {
                     concat += context.id;
                     _K.debug("Layout Templates: Concat", concat);
                 });

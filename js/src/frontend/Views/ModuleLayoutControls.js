@@ -11,7 +11,8 @@
  * @type {*|void|Object}
  */
 KB.ModuleLayoutControls = Backbone.View.extend({
-    initialize: function() {
+    initialize: function(options) {
+        this.options = options;
         this.targetEl = this.options.parent.$el;
         this.render();
     },

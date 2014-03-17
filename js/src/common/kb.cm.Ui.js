@@ -68,14 +68,14 @@ KB.Ui = function ($) {
                 $('.kb-context-container').not($con).addClass('non-active-context').removeClass('active-context');
             });
 
-            jQuery('.kb-toggle', side).click(function () {
+            side.on('click', '.kb-toggle', function () {
                 if (that.isSorting) {
                     return false;
                 }
                 side.addClass('active-context').removeClass('non-active-context');
                 normal.addClass('non-active-context');
             });
-            jQuery('.kb-toggle', normal).click(function () {
+            normal.on('click', '.kb-toggle', function () {
                 if (that.isSorting) {
                     return false;
                 }
@@ -89,7 +89,8 @@ KB.Ui = function ($) {
             KB.TinyMCE.addEditor($el);
         },
         initTabs: function () {
-            $('.kb_fieldtabs').tabs({
+            var selector = $('.kb_fieldtabs');
+            selector.tabs({
                 activate: function () {
 //                       var $window = $(window).height();
 //                        $('.content').height($window - 250);
@@ -99,7 +100,7 @@ KB.Ui = function ($) {
                 }
             });
 
-            $('.kb_fieldtabs').each(function () {
+            selector.each(function () {
                 var length = $('.ui-tabs-nav li', $(this)).length;
                 if (length === 1) {
                     $(this).find('.ui-tabs-nav').css('display', 'none');
@@ -328,10 +329,10 @@ KB.Ui = function ($) {
 
                 if (result.action === 'meta-box-order') {
                     if (action === 'restore') {
-                        KB.restore_tinymce();
+                        KB.TinyMCE.restoreEditors();
                     }
                     else if (action === 'remove') {
-                        KB.remove_tinymce();
+                        KB.TinyMCE.removeEditors();
                     }
                 }
             }

@@ -2,13 +2,15 @@
 
 namespace Kontentblocks\Tables;
 
+use Kontentblocks\Kontentblocks;
+
 add_action('plugins_loaded', '\Kontentblocks\Tables\init');
 
 function init()
 {
 
     $dbVersion = get_option('kb_dbVersion');
-    if ($dbVersion !== '1.0.12') {
+    if ($dbVersion !== Kontentblocks::TABLEVERSION) {
         global $wpdb;
 
         $backups = $wpdb->prefix . "kb_backups";
@@ -25,7 +27,6 @@ function init()
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
-
         update_option("kb_dbVersion", '1.0.12');
     }
 }

@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-14 */
+/*! Kontentblocks DevVersion 2014-03-17 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -121,7 +121,7 @@ KB.Stuff = function($) {
             var id = attachment.get("id");
             var mId = this.img.attr("data-module");
             var fkey = this.img.attr("data-key");
-            var settings = KB.fromServer.FrontSettings[mId][fkey];
+            var settings = KB.payload.FrontSettings[mId][fkey];
             var cModule = KB.Modules.get(mId);
             var moduleData = cModule.get("moduleData");
             moduleData[fkey] = _.extend(moduleData[fkey], {
@@ -207,7 +207,7 @@ KB.StuffBG = function($) {
             var id = attachment.get("id");
             var mId = this.img.attr("data-module");
             var fkey = this.img.attr("data-key");
-            var settings = KB.fromServer.FrontSettings[mId][fkey];
+            var settings = KB.payload.FrontSettings[mId][fkey];
             var cModule = KB.Modules.get(mId);
             var moduleData = cModule.get("moduleData");
             moduleData[fkey] = _.extend(moduleData[fkey], {
@@ -246,7 +246,8 @@ KB.StuffBG = function($) {
 KB.StuffBG.init();
 
 KB.ModuleLayoutControls = Backbone.View.extend({
-    initialize: function() {
+    initialize: function(options) {
+        this.options = options;
         this.targetEl = this.options.parent.$el;
         this.render();
     },
@@ -332,28 +333,38 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         jQuery("body").on("kontentblocks::tabsChange", function() {
             that.recalibrate();
         });
-        if (KB.OSConfig.OsPosition) {
+        if (KB.OSConfig.wrapPosition) {
             this.$el.css({
-                top: KB.OSConfig.OsPosition.top,
-                left: KB.OSConfig.OsPosition.left
+                top: KB.OSConfig.wrapPosition.top,
+                left: KB.OSConfig.wrapPosition.left
             });
         }
         jQuery(document).on("newEditor", function(e, ed) {
             that.attachEditorEvents(ed);
         });
         jQuery(document).on("KB:osUpdate", function() {
-            that.serialize();
+            that.serialize(false);
         });
         jQuery(document).on("change", ".kb-observe", function() {
-            that.serialize();
+            that.serialize(false);
         });
         jQuery("body").append(this.$el);
         this.render();
     },
+    test: function() {
+        _K.info("Test Debug: Module Data changed");
+    },
     events: {
         keyup: "delayInput",
         "click a.close-controls": "destroy",
-        "click a.kb-save-form": "serialize"
+        "click a.kb-save-form": "update",
+        "click a.kb-preview-form": "preview"
+    },
+    preview: function() {
+        this.serialize(false);
+    },
+    update: function() {
+        this.serialize(true);
     },
     render: function() {
         var that = this;
@@ -376,8 +387,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.$inner.attr("id", that.view.model.get("instance_id"));
                 that.$inner.append(res.html);
                 if (res.json) {
-                    var merged = _.extend(KB.fromServer, res.json);
-                    KB.fromServer = merged;
+                    var merged = _.extend(KB.payload, res.json);
+                    KB.payload = merged;
                 }
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();
@@ -436,8 +447,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
         _K.info("Nano Scrollbars (re)initialized!");
     },
-    serialize: function() {
-        _K.info("Frontend Modal called serialize function");
+    serialize: function(save) {
+        _K.info("Frontend Modal called serialize function. Savemode", save);
         var that = this;
         tinymce.triggerSave();
         jQuery.ajax({
@@ -446,7 +457,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 action: "updateModuleOptions",
                 data: that.$form.serialize().replace(/\'/g, "%27"),
                 module: that.model.toJSON(),
-                editmode: "update",
+                editmode: save ? "update" : "preview",
                 _ajax_nonce: kontentblocks.nonces.update
             },
             type: "POST",
@@ -465,7 +476,13 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 jQuery(".editable", that.options.view.$el).each(function(i, el) {
                     initTinymce(el);
                 });
-                KB.Notice.notice("Module Data saved successfully", "success");
+                if (save) {
+                    KB.Notice.notice("Module Data saved successfully", "success");
+                    that.$el.removeClass("isDirty");
+                } else {
+                    KB.Notice.notice("Module Preview updated", "success");
+                    that.$el.addClass("isDirty");
+                }
                 _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
             },
             error: function() {
@@ -649,10 +666,10 @@ KB.App = function($) {
         KB.Ui.init();
     }
     function addViews() {
-        _.each(KB.fromServer.Areas, function(area) {
+        _.each(KB.payload.Areas, function(area) {
             KB.Areas.add(new KB.Backbone.AreaModel(area));
         });
-        _.each(KB.fromServer.Modules, function(module) {
+        _.each(KB.payload.Modules, function(module) {
             KB.Modules.add(module);
         });
     }
@@ -680,6 +697,13 @@ KB.App = function($) {
 }(jQuery);
 
 KB.App.init();
+
+jQuery(document).ready(function() {
+    if (KB.appData && KB.appData.config.frontend) {
+        _K.info("Frontend Modules Ready Event fired");
+        KB.Views.Modules.readyOnFront();
+    }
+});
 
 function initTinymce(item) {
     tinymce.init({
@@ -710,12 +734,9 @@ function initTinymce(item) {
             ed.addButton("kbcancleinline", {
                 title: "Stop inline Edit",
                 onClick: function() {
-                    document.activeElement.blur();
-                    ed.theme.panel.focusin = false;
-                    ed.theme.panel._visible = false;
                     tinymce.activeEditor = null;
                     tinymce.focusedEditor = null;
-                    jQuery(".mce-tinymce", "#kb-toolbar").hide();
+                    document.activeElement.blur();
                     jQuery("#kb-toolbar").hide();
                 }
             });
@@ -797,11 +818,4 @@ jQuery(document).ready(function() {
             }
         });
     });
-});
-
-jQuery(document).ready(function() {
-    if (KB.appData && KB.appData.config.frontend) {
-        _K.info("Frontend Modules Ready Event fired");
-        KB.Views.Modules.readyOnFront();
-    }
 });

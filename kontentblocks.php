@@ -28,7 +28,7 @@ Class Kontentblocks
 
     const VERSION = '1.0.0alpha';
     const DEVMODE = true;
-
+    const TABLEVERSION = '1.0.12';
 
     public $dev_mode = true;
     static $instance;
@@ -84,7 +84,7 @@ Class Kontentblocks
             include_once dirname(__FILE__) . '/core/Hooks/setup.php';
             require_once dirname(__FILE__) . '/includes/ajax-callback-handler.php';
 
-            // @TODO Quatsch
+            // @TODO stinks
             new EditScreen();
             new Capabilities();
         }
@@ -94,6 +94,7 @@ Class Kontentblocks
         ModuleTemplates::getInstance();
         Enqueues::getInstance();
 
+        // enabled for 'page' by default
         add_post_type_support('page', 'kontentblocks');
 
         // load Templates automatically
@@ -104,6 +105,7 @@ Class Kontentblocks
 
         // Load Fields
         add_action('init', array($this, 'loadFields'), 9);
+
 
         add_action('wp_head', array($this, 'livereload'));
         add_action('admin_head', array($this, 'livereload'));
@@ -127,7 +129,7 @@ Class Kontentblocks
 
 
     /**
-     * Load (Block)Template Files
+     * Load Module Files
      * Simply auto-includes all .php files inside the templates folder
      *
      * uses filter: kb_template_paths to register / modify path array from the outside

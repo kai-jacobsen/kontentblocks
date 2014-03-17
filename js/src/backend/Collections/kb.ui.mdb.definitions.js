@@ -19,7 +19,7 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     },
     prepareCategories: function () {
         var cats = {};
-        _.each(KB.fromServer.ModuleCategories, function (item, key) {
+        _.each(KB.payload.ModuleCategories, function (item, key) {
             cats[key] = {
                 id: key,
                 name: item,

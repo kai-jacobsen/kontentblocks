@@ -1,21 +1,24 @@
-.kb-field--file{
-	position:relative;
+.kb-field--file {
+  position: relative;
 
-	table{
-		width: 250px;
-		margin-bottom: 10px;
-		border: none;
+  table {
+    max-width: 500px;
+    margin-bottom: 10px;
+    border: none;
+    font-size: 12px !important;
 
-		tr td:first-child{
-			padding: 0 10px;
-		}
+    tr td:first-child {
+      padding: 0 30px 0 0;
+    }
 
-		td{
-			border: none;
+    td {
+      border: none;
+      font-size: 12px !important;
 
-		}
-	}
+    }
+  }
 }
+
 .kb-js-reset-file {
   cursor: pointer;
   line-height: 28px;

@@ -243,7 +243,7 @@ abstract class Field
     public function header()
     {
 
-        echo '<div class="kb-field-wrapper" id=' . $this->uniqueId . '>'
+        echo '<div class="kb-field-wrapper js-field-identifier" id=' . $this->uniqueId . '>'
             . '<div class="kb-field-header">';
         if (!empty($this->args['title'])) {
             echo "<h4>{$this->args['title']} --</h4>";

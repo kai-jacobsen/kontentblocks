@@ -1921,20 +1921,22 @@ button.Zebra_DatePicker_Icon_Inside {
 }
 /* line 4, sass/partials/_refields/_file.scss */
 .kb-field--file table {
-  width: 250px;
+  max-width: 500px;
   margin-bottom: 10px;
   border: none;
+  font-size: 12px !important;
 }
-/* line 9, sass/partials/_refields/_file.scss */
+/* line 10, sass/partials/_refields/_file.scss */
 .kb-field--file table tr td:first-child {
-  padding: 0 10px;
+  padding: 0 30px 0 0;
 }
-/* line 13, sass/partials/_refields/_file.scss */
+/* line 14, sass/partials/_refields/_file.scss */
 .kb-field--file table td {
   border: none;
+  font-size: 12px !important;
 }
 
-/* line 19, sass/partials/_refields/_file.scss */
+/* line 22, sass/partials/_refields/_file.scss */
 .kb-js-reset-file {
   cursor: pointer;
   line-height: 28px;

@@ -1,4 +1,4 @@
-/*! kontentblocks DevVersion 2014-03-14 */
+/*! Kontentblocks DevVersion 2014-03-17 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();
@@ -20,7 +20,7 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     },
     prepareCategories: function() {
         var cats = {};
-        _.each(KB.fromServer.ModuleCategories, function(item, key) {
+        _.each(KB.payload.ModuleCategories, function(item, key) {
             cats[key] = {
                 id: key,
                 name: item,
@@ -244,7 +244,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     prepareAssignedModules: function() {
         var assignedModules = this.area.model.get("assignedModules");
         var fullDefs = [];
-        _.each(KB.fromServer.ModuleDefinitions, function(module) {
+        _.each(KB.payload.ModuleDefinitions, function(module) {
             if (_.indexOf(assignedModules, module.settings.class) !== -1) {
                 fullDefs.push(module);
             }
@@ -597,10 +597,10 @@ KB.App = function($) {
         KB.Ui.init();
     }
     function addViews() {
-        _.each(KB.fromServer.Areas, function(area) {
+        _.each(KB.payload.Areas, function(area) {
             KB.Areas.add(new KB.Backbone.AreaModel(area));
         });
-        _.each(KB.fromServer.Modules, function(module) {
+        _.each(KB.payload.Modules, function(module) {
             KB.Modules.add(module);
         });
     }

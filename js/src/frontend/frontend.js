@@ -18,7 +18,7 @@ KB.Views = {
 
 /*
  * All Modules are collected here
- * Get by 'id'
+ * Get by 'instance_id'
  */
 KB.Modules = new Backbone.Collection([], {
     model: KB.Backbone.ModuleModel
@@ -26,7 +26,7 @@ KB.Modules = new Backbone.Collection([], {
 
 /*
  *  All Areas are collected in this Backbone Collection
- *  Get by 'instance_id'
+ *  Get by 'id'
  */
 KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
@@ -77,13 +77,13 @@ KB.App = (function ($) {
      */
     function addViews() {
         // iterate over raw areas
-        _.each(KB.fromServer.Areas, function (area) {
+        _.each(KB.payload.Areas, function (area) {
             // create new area model
             KB.Areas.add(new KB.Backbone.AreaModel(area));
         });
 
         // create models from already attached modules
-        _.each(KB.fromServer.Modules, function (module) {
+        _.each(KB.payload.Modules, function (module) {
             KB.Modules.add(module);
         });
 
@@ -147,152 +147,6 @@ KB.App = (function ($) {
 // get started
 KB.App.init();
 
-function initTinymce(item) {
-
-    tinymce.init({
-        selector: '#' + item.id,
-        theme: "modern",
-        skin: 'lightgray',
-        menubar: false,
-        add_unload_trigger: false,
-        fixed_toolbar_container: '#kb-toolbar',
-        schema: "html5",
-        inline: true,
-        toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
-        statusbar: false,
-        setup: function (ed) {
-
-            ed.on('init', function () {
-                var data = jQuery(ed.bodyElement).data();
-                var module = data.module;
-                ed.module = KB.Modules.get(module);
-                ed.kbDataRef = {
-                    key: data.key,
-                    index: data.index,
-                    arrayKey: data.arraykey
-                };
-            });
-
-            ed.on('focus', function (e) {
-                jQuery('#kb-toolbar').show();
-            });
-
-            ed.addButton('kbcancleinline', {
-                title: 'Stop inline Edit',
-                onClick: function () {
-                    document.activeElement.blur();
-                    ed.theme.panel.focusin = false;
-                    ed.theme.panel._visible = false;
-                    tinymce.activeEditor = null;
-                    tinymce.focusedEditor = null;
-                    jQuery('.mce-tinymce', '#kb-toolbar').hide();
-                    jQuery('#kb-toolbar').hide();
-
-                }
-            });
-
-            ed.on('blur', function () {
-
-                jQuery('#kb-toolbar').hide();
-
-                var data = ed.kbDataRef;
-                var value = ed.getContent();
-
-                var moduleData = _.clone(ed.module.get('moduleData'));
-                if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.index][data.key] = value;
-                } else if (!_.isUndefined(data.index)) {
-                    moduleData[data.index][data.key] = value;
-                } else if (!_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.key] = value;
-                } else {
-                    moduleData[data.key] = value;
-                }
-                ed.module.set('moduleData', moduleData);
-
-            });
-        }
-    });
-}
-
-// Test Code
-// TODO Rewrite
-jQuery(document).ready(function () {
-
-
-    jQuery('div.editable').each(function (i,item) {
-            initTinymce(item);
-        }
-    );
-
-    jQuery('.editable-title').each(
-
-        function (item) {
-
-            tinymce.init({
-                selector: '#' + this.id,
-                theme: "modern",
-                skin: false,
-                menubar: false,
-                add_unload_trigger: false,
-                schema: "html5",
-                fixed_toolbar_container: '#kb-toolbar',
-                inline: true,
-                toolbar: 'kbcancleinline',
-                statusbar: false,
-                setup: function (ed) {
-
-                    ed.on('init', function () {
-                        var data = jQuery(ed.bodyElement).data();
-                        var module = data.module;
-                        ed.module = KB.Modules.get(module);
-                        ed.kbDataRef = {
-                            key: data.key,
-                            index: data.index,
-                            arrayKey: data.arraykey
-                        };
-                    });
-
-                    ed.on('focus', function (e) {
-                        jQuery('#kb-toolbar').show();
-                    });
-
-                    ed.addButton('kbcancleinline', {
-                        title: 'Stop inline Edit',
-                        onClick: function () {
-                            tinymce.activeEditor = null;
-                            tinymce.focusedEditor = null;
-                            document.activeElement.blur();
-                            jQuery('#kb-toolbar').hide();
-
-                        }
-                    });
-
-                    ed.on('blur', function () {
-
-                        jQuery('#kb-toolbar').hide();
-
-                        var data = ed.kbDataRef;
-                        var value = ed.getContent();
-
-                        var moduleData = _.clone(ed.module.get('moduleData'));
-                        if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
-                            moduleData[data.arrayKey][data.index][data.key] = value;
-                        } else if (!_.isUndefined(data.index)) {
-                            moduleData[data.index][data.key] = value;
-                        } else if (!_.isUndefined(data.arrayKey)) {
-                            moduleData[data.arrayKey][data.key] = value;
-                        } else {
-                            moduleData[data.key] = value;
-                        }
-                        ed.module.set('moduleData', moduleData);
-
-                    });
-                }
-            });
-        });
-
-});
 
 jQuery(document).ready(function(){
 
