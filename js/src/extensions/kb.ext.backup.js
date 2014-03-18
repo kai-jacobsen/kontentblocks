@@ -34,10 +34,10 @@ KB.Ext.Backup = (function($) {
         update: function() {
             var that = this;
 
-
             KB.Ajax.send(
                     {
-                        action: 'get_backups'
+                        action: 'get_backups',
+                        _ajax_nonce: kontentblocks.nonces.read
                     },
             function(response)
             {
@@ -68,7 +68,7 @@ KB.Ext.Backup = (function($) {
             _K.info('Backup Inspect::FirstRun:', this.firstRun);
             // no notice on first run
             if (!this.firstRun){
-                KB.Notice.notice('<p>New Backups were created</p>', 'success');
+                KB.Notice.notice('<p>' + KB.i18n.Extensions.backups.newBackupcreated + '</p>', 'success');
             }
             this.firstRun = false;
 

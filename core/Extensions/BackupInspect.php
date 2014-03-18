@@ -64,6 +64,8 @@ class Backup_Inspect
 
     public function getBackups()
     {
+        check_ajax_referer('kb-read');
+
         $post_id = $_REQUEST['post_id'];
 
         $Storage = \Kontentblocks\Helper\getStorage($post_id);

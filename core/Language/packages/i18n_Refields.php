@@ -19,5 +19,11 @@
     'image' => array(
         'caption' => __( 'Caption', 'Kontentblocks' ),
         'modalTitle' => __( 'Select an image or upload a new one', 'Kontentblocks' )
+    ),
+    // Field:: choseTaxonomy
+    'choseTaxonomy' => array(
+        'noTaxonomySet' => __('Please provide a Taxonomy identifier', 'Kontentblocks'),
+        'noTaxonomyFound' => __('There is no such Taxonomy registered', 'Kontentblocks'),
+        'emptyTaxonomySelect' => __('Please chose', 'Kontentblocks')
     )
 ) );

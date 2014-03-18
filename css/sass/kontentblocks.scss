@@ -1,8 +1,6 @@
 @import "compass/css3";
 @import "partials/_base";
 
-
-
 #kb_select {
   margin-bottom: 12px;
 }
@@ -21,12 +19,10 @@
 @import "partials/_common/common";
 @import "partials/_common/fullscreen";
 
-
 /* --------------------------
 // Frontend
 -----------------------------*/
 @import "partials/_frontend/toolbar";
-
 
 /* --------------------------
 // Block Styles Backend UI
@@ -34,8 +30,6 @@
 
 @import "partials/_block_style";
 @import "partials/_refields/_render-toggles";
-
-
 
 /* --------------------------
 // Plugins (external/vendor)
@@ -45,13 +39,11 @@
 @import "partials/_vendor/_nano";
 @import "partials/_vendor/_alertify";
 
-
 /* --------------------------
 // Areas realted styling
 -----------------------------*/
 @import "partials/_areas/area-styles";
 @import "partials/_areas/area-settings";
-
 
 /* --------------------------
 // Fields
@@ -67,13 +59,11 @@
 
 @import "partials/_areas/_module-browser";
 
-
-
 /* --------------------------
 // Extensions
 -----------------------------*/
 @import "partials/_extensions/sidebar-selector";
-
+@import "partials/_extensions/layout-configurations";
 
 /* --------------------------
 // WP Admin Menu Options
@@ -530,7 +520,7 @@ textarea.quicktags {
     &.non-active-context {
       width: 33%;
 
-      .kb-sub-name{
+      .kb-sub-name {
         display: none;
       }
 
@@ -672,7 +662,7 @@ textarea.quicktags {
   display: none;
 }
 
-.onsite-editing .editable{
+.onsite-editing .editable {
   outline: 1px dashed #999;
   padding: 3px;
   background-color: #ffffe0;

@@ -53,7 +53,6 @@ class BackupManager
     public function backup($logmsg = '')
     {
         $this->backupData = $this->Storage->backup();
-
         $this->msg = $logmsg;
         $this->save();
     }
@@ -116,7 +115,7 @@ class BackupManager
         //set reference
         $this->Storage->getDataHandler()->update('kb_last_backup', $now);
 
-        wp_cache_delete('kb_backups', 'kontentblocks');
+        wp_cache_delete('kb_backups_'.$data['post_id'], 'kontentblocks');
         return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
     }
 
@@ -156,7 +155,7 @@ class BackupManager
         $this->Storage->getDataHandler()->update('kb_last_backup', $now);
 
 
-        wp_cache_delete('kb_backups', 'kontentblocks');
+        wp_cache_delete('kb_backups_'.$this->backupData['id'], 'kontentblocks');
 
         return $wpdb->update($wpdb->prefix . "kb_backups", $data, array('id' => $this->package->id));
     }
@@ -189,13 +188,13 @@ class BackupManager
 
         $prefix = $wpdb->prefix;
 
-        $cache = wp_cache_get('kb_backups', 'kontentblocks');
+        $cache = wp_cache_get('kb_backups_'.$id, 'kontentblocks');
         if ($cache !== false) {
             return $cache;
         } else {
             $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
             $result = $wpdb->get_row($sql);
-            wp_cache_set('kb_backups', $result, 'kontentblocks');
+            wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');
             return $result;
         }
 

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-17 */
+/*! Kontentblocks DevVersion 2014-03-18 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -331,15 +331,20 @@ KB.Ui = function($) {
         isSorting: false,
         init: function() {
             var that = this;
+            var $body = $("body");
             this.initTabs();
             this.initSortable();
             this.initToggleBoxes();
             this.flexContext();
-            $("body").on("mousedown", ".kb_field", function(e) {
+            $body.on("mousedown", ".kb_field", function(e) {
                 activeField = this;
             });
-            $("body").on("mousedown", ".kb_block", function(e) {
+            $body.on("mousedown", ".kb_block", function(e) {
                 activeBlock = this.id;
+            });
+            $body.on("mouseenter", ".kb-js-field-identifier", function() {
+                KB.currentFieldId = this.id;
+                _K.log("Current Field Id set to:", KB.currentFieldId);
             });
             jQuery(document).ajaxComplete(function(e, o, settings) {
                 that.metaBoxReorder(e, o, settings, "restore");

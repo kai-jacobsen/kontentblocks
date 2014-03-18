@@ -1,14 +1,14 @@
 (function ($) {
 
-    var LayoutTemplates = {
-        el: $('#layout-templates'),
+    var LayoutConfigurations = {
+        el: $('#kb-layout-configurations'),
         init: function () {
             if (KB.appData.config.frontend){
-                _K.info('Layout Templates stopped');
+                _K.info('Layout Configurations stopped');
                 return false;
             }
 
-            _K.debug('Layout Templates loaded');
+            _K.debug('Layout Configurations start up');
 
             if (this.el.length === 0) {
                 return false;
@@ -27,10 +27,10 @@
             this.update();
         },
         _selectContainer: function () {
-            return $("<div class='select-container'></div>").appendTo(this.el);
+            return $("<div class='select-container clearfix'><p>Load an exisiting configuration. Note!: This will reset the current.</p></div>").appendTo(this.el);
         },
         _createSelectMenu: function () {
-            $('<select name="layout-template"></select>').appendTo(this.selectContainer);
+            $('<select name="kb-layout-configuration"></select>').appendTo(this.selectContainer);
             return $('select', this.el);
         },
         update: function () {
@@ -39,9 +39,10 @@
 
             KB.Ajax.send(
                 {
-                    action: 'get_layout_templates',
+                    action: 'get_layout_configurations',
+                    _ajax_nonce: kontentblocks.nonces.read,
                     data: {
-                        areaConfig: this.areaConfig
+                        areaConfig: this.areaConfig,
                     }
                 },
                 function (response) {
@@ -62,10 +63,11 @@
             KB.Ajax.send
             (
                 {
-                    action: 'set_layout_template',
+                    action: 'set_layout_configuration',
+                    _ajax_nonce: kontentblocks.nonces.update,
                     data: {
                         areaConfig: this.areaConfig,
-                        name: value
+                        name: value,
                     }
                 },
                 function (response) {
@@ -86,15 +88,16 @@
 
             KB.Ajax.send(
                 {
-                    action: 'delete_layout_template',
+                    action: 'delete_layout_configuration',
+                    _ajax_nonce: kontentblocks.nonces.delete,
                     data: {
                         areaConfig: this.areaConfig,
-                        name: value
+                        name: value,
                     }
                 },
                 function (response) {
                     that.update();
-                    KB.notice('Saved', 'success');
+                    KB.notice('Deleted', 'success');
                 });
 
         },
@@ -115,7 +118,7 @@
             if (KB.payload.Areas) {
                 _.each(KB.payload.Areas, function (context) {
                     concat += context.id;
-                    _K.debug('Layout Templates: Concat', concat);
+                    _K.debug('Layout Configurations: Concat', concat);
                 });
             }
             return this.hash(concat.replace(',', ''));
@@ -132,10 +135,11 @@
         },
         _createInput: function () {
             return $("<input type='text' >").appendTo(this.createContainer);
+
         },
         _createButton: function () {
             var that = this;
-            var button = $("<a class='button'>Save</a>").appendTo(this.createContainer);
+            var button = $("<a class='button kb-lc-save'>Save</a>").appendTo(this.createContainer);
             button.on('click', function (e) {
                 e.preventDefault();
                 that.save();
@@ -144,7 +148,7 @@
         },
         _loadButton: function () {
             var that = this;
-            var button = $("<a class='button'>Load</a>").appendTo(this.selectContainer);
+            var button = $("<a class='button-primary kb-lc-load'>Load</a>").appendTo(this.selectContainer);
             button.on('click', function (e) {
                 e.preventDefault();
                 that.load();
@@ -153,7 +157,7 @@
         },
         _deleteButton: function () {
             var that = this;
-            var button = $("<a class='delete-js'>delete</a>").appendTo(this.selectContainer);
+            var button = $("<a class='delete-js kb-lc-delete'>delete</a>").appendTo(this.selectContainer);
             button.on('click', function (e) {
                 e.preventDefault();
                 that.delete();
@@ -161,12 +165,12 @@
             return button;
         },
         load: function () {
-            var location = window.location.href + '&load_template=' + this.selectMenuEl.val() + '&post_id=' + $('#post_ID').val() + '&config=' + this.areaConfig;
+            var location = window.location.href + '&kb_load_configuration=' + this.selectMenuEl.val() + '&post_id=' + $('#post_ID').val() + '&config=' + this.areaConfig;
             window.location = location;
         }
 
     };
 
-    LayoutTemplates.init();
+    LayoutConfigurations.init();
 
 }(jQuery));

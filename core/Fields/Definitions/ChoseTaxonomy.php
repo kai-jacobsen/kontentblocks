@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Language\I18n;
 
 /**
  * Prebuild select field to chose one entry of a taxonomy
@@ -20,15 +21,18 @@ Class ChoseTaxonomy extends Field
      */
     public function form()
     {
+
+        $i18n = I18n::getPackages('Refields.common', 'Refields.choseTaxonomy');
+
         $tax = $this->getArg( 'taxonomy' );
 
         if ( !$tax ) {
-            echo __( 'Please set a taxonomy to show', 'kontentblocks' );
+            echo $i18n['noTaxonomySet'];
             return;
         }
 
         if ( !taxonomy_exists( $tax ) ) {
-            echo __( 'Such a Taxonomy does not exist yet', 'kontentblocks' );
+            echo $i18n['noTaxonomyFound'];
             return;
         }
 
@@ -44,7 +48,7 @@ Class ChoseTaxonomy extends Field
         print "<select id='{$this->getFieldId()}' name='{$this->getFieldName()}'>";
 
         if ( $this->getArg( 'empty', true ) ) {
-            print "<option value='' name=''>Bitte wählen</option>";
+            print "<option value='' name=''>{$i18n['emptyTaxonomySelect']}</option>";
         }
 
         if ( !empty( $terms ) ) {

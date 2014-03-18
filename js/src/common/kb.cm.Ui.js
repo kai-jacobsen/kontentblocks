@@ -15,23 +15,34 @@
 KB.Ui = function ($) {
 
     return {
+        // sorting indication
         isSorting: false,
+        // boot up
         init: function () {
             var that = this;
-            // init Sortable
+            var $body = $('body');
+            // init general ui components
             this.initTabs();
             this.initSortable();
             this.initToggleBoxes();
             this.flexContext();
+
             // set the global activeField variable dynamically
-            $('body').on('mousedown', '.kb_field', function (e) {
+            // legacy
+            $body.on('mousedown', '.kb_field', function (e) {
                 activeField = this;
             });
 
-
             // set the global activeBlock variable dynamically
-            $('body').on('mousedown', '.kb_block', function (e) {
+            // legacy
+            $body.on('mousedown', '.kb_block', function (e) {
                 activeBlock = this.id;
+            });
+
+            // set the current field id as reference
+            $body.on('mouseenter', '.kb-js-field-identifier', function(){
+               KB.currentFieldId = this.id;
+               _K.log('Current Field Id set to:', KB.currentFieldId);
             });
 
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
@@ -43,8 +54,6 @@ KB.Ui = function ($) {
             jQuery(document).ajaxSend(function (e, o, settings) {
                 that.metaBoxReorder(e, o, settings, 'remove');
             });
-
-
         },
         flexContext: function () {
             var side = $('.area-side');
@@ -317,7 +326,6 @@ KB.Ui = function ($) {
             });
         },
         metaBoxReorder: function (e, o, settings, action) {
-
             if (settings.data) {
                 var a = settings.data;
                 var b = a.split('&');

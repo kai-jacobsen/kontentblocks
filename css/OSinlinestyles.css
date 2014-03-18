@@ -1,15 +1,15 @@
-/* line 1, sass/OSinlinestyles.scss */
+/* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 html, body {
   height: 100% !important;
 }
 
-/* line 6, sass/OSinlinestyles.scss */
+/* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 html {
   background: #fff;
   overflow: hidden;
 }
 
-/* line 11, sass/OSinlinestyles.scss */
+/* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 #root-container.nano {
   margin: 0;
   padding: 0;
@@ -19,11 +19,11 @@ html {
 }
 
 /* Onsite Styles slightly different */
-/* line 21, sass/OSinlinestyles.scss */
+/* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 body.on-site-editing {
   padding-top: 0px;
 }
-/* line 26, sass/OSinlinestyles.scss */
+/* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 body.on-site-editing .kb_field label.heading {
   display: block;
   margin-bottom: 8px;
@@ -35,17 +35,17 @@ body.on-site-editing .kb_field label.heading {
   color: #333333;
   text-shadow: 1px 1px 0px white;
 }
-/* line 41, sass/OSinlinestyles.scss */
+/* line 41, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 body.on-site-editing .kb_fieldtabs ul.ui-tabs-nav {
   margin-left: 0;
   background: #fff;
 }
-/* line 46, sass/OSinlinestyles.scss */
+/* line 46, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 body.on-site-editing .kb_fieldtabs .ui-widget-content {
   border: none;
   border-top: none;
 }
-/* line 52, sass/OSinlinestyles.scss */
+/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 body.on-site-editing .os-header {
   padding: 4px;
   position: fixed;
@@ -57,7 +57,7 @@ body.on-site-editing .os-header {
   font-size: 12px;
   background: #fff;
 }
-/* line 63, sass/OSinlinestyles.scss */
+/* line 63, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 body.on-site-editing .os-header .os-update {
   background: #f2f2f2;
   border: 1px solid #ccc;
@@ -65,7 +65,7 @@ body.on-site-editing .os-header .os-update {
   cursor: pointer;
   font-size: 12px;
 }
-/* line 70, sass/OSinlinestyles.scss */
+/* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/OSinlinestyles.scss */
 body.on-site-editing .os-header .os-update:hover {
   color: #fff;
 }

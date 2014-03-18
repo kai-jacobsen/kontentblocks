@@ -21,7 +21,6 @@ _.extend(KB.Fields, {
         // call field objects init method on 'update' event
         // fails gracefully if there is no update method
         object.listenTo(this, 'update', object.update);
-
     },
 
     /**

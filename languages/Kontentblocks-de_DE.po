@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2013-12-23 11:03+0100\n"
-"PO-Revision-Date: 2013-12-23 11:04+0100\n"
+"POT-Creation-Date: 2014-03-17 08:44+0100\n"
+"PO-Revision-Date: 2014-03-17 08:52+0100\n"
 "Last-Translator: Kai Jacobsen <kai@ungestaltbar.de>\n"
 "Language-Team: Kai Jacobsen\n"
 "Language: Deutsch\n"
@@ -14,63 +14,384 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ../core/Language/.\n"
+"X-Poedit-SearchPath-1: ../core/.\n"
+
+#: ../core/Language/./packages/i18n_CoreModules.php:6
+#: ../core/./Language/packages/i18n_CoreModules.php:6
+msgid "A translated version exists and will be used"
+msgstr ""
+
+#: ../core/Language/./packages/i18n_CoreModules.php:7
+#: ../core/./Language/packages/i18n_CoreModules.php:7
+msgid "Edit original"
+msgstr "Original bearbeiten"
 
 #: ../core/Language/./packages/i18n_Refields.php:6
+#: ../core/Language/./packages/i18n_Areas.php:6
+#: ../core/./Language/packages/i18n_Refields.php:6
+#: ../core/./Language/packages/i18n_Areas.php:6
 msgid "Title"
 msgstr "Titel"
 
 #: ../core/Language/./packages/i18n_Refields.php:7
+#: ../core/./Language/packages/i18n_Refields.php:7
 msgid "Select"
 msgstr "Auswählen"
 
 #: ../core/Language/./packages/i18n_Refields.php:8
+#: ../core/./Language/packages/i18n_Refields.php:8
 msgid "Insert"
 msgstr "Einfügen"
 
 #: ../core/Language/./packages/i18n_Refields.php:12
+#: ../core/./Language/packages/i18n_Refields.php:12
 msgid "Filename"
 msgstr "Dateinamen"
 
 #: ../core/Language/./packages/i18n_Refields.php:13
+#: ../core/./Language/packages/i18n_Refields.php:13
 msgid "Edit link"
 msgstr "Bearbeiten URL"
 
 #: ../core/Language/./packages/i18n_Refields.php:14
+#: ../core/./Language/packages/i18n_Refields.php:14
 msgid "Select file"
 msgstr "Datei wählen"
 
 #: ../core/Language/./packages/i18n_Refields.php:15
+#: ../core/./Language/packages/i18n_Refields.php:15
 msgid "Remove"
 msgstr "Entfernen"
 
 #: ../core/Language/./packages/i18n_Refields.php:16
+#: ../core/./Language/packages/i18n_Refields.php:16
 msgid "Select a file or upload a new one"
 msgstr "Eine Datei auswählen oder hochladen"
 
 #: ../core/Language/./packages/i18n_Refields.php:20
+#: ../core/./Language/packages/i18n_Refields.php:20
 msgid "Caption"
 msgstr "Bildunterschrift"
 
 #: ../core/Language/./packages/i18n_Refields.php:21
+#: ../core/./Language/packages/i18n_Refields.php:21
 msgid "Select an image or upload a new one"
 msgstr "Ein Bild auswählen oder neu hochladen"
 
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:5
+#: ../core/./Language/packages/i18n_ExtPageSettings.php:5
 msgid "Page Settings"
 msgstr "Seiteneinstellungen"
 
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:6
+#: ../core/./Language/packages/i18n_ExtPageSettings.php:6
 msgid "No Parent"
 msgstr "Keine Elternseite"
 
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:7
+#: ../core/./Language/packages/i18n_ExtPageSettings.php:7
 msgid "Parent Page"
 msgstr "Elternseite"
 
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:8
+#: ../core/./Language/packages/i18n_ExtPageSettings.php:8
 msgid "Page Template"
 msgstr "Seitenvorlage"
 
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:9
+#: ../core/./Language/packages/i18n_ExtPageSettings.php:9
 msgid "Default Template"
 msgstr "Standardvorlage"
+
+#: ../core/./Fields/Definitions/Select.php:24
+msgid "Please set options to show"
+msgstr ""
+
+#: ../core/./Fields/Definitions/ChoseTaxonomy.php:26
+msgid "Please set a taxonomy to show"
+msgstr ""
+
+#: ../core/./Fields/Definitions/ChoseTaxonomy.php:31
+msgid "Such a Taxonomy does not exist yet"
+msgstr "Keine Taxonomy mit der angegebenen ID gefunden"
+
+#: ../core/./Hooks/Enqueues.php:143
+msgid "Clear"
+msgstr ""
+
+#: ../core/./Hooks/Enqueues.php:144
+#, fuzzy
+msgid "Default"
+msgstr "Standardvorlage"
+
+#: ../core/./Hooks/Enqueues.php:145
+msgid "Select Color"
+msgstr "Farbe wählen"
+
+#: ../core/./Backend/Areas/Area.php:69
+msgid "add module"
+msgstr "Module hinzufügen"
+
+#: ../core/./Backend/Areas/Area.php:70
+msgid "add"
+msgstr "hinzufügen"
+
+#: ../core/./Backend/Areas/Area.php:71
+msgid "add template"
+msgstr "Vorlage hinzufügen"
+
+#: ../core/./Backend/Areas/Area.php:72
+msgid "Sorry, no Blocks available for this Area"
+msgstr ""
+
+#: ../core/./Backend/Areas/Area.php:73
+msgid "Add new module"
+msgstr "Neues Modul hinzufügen"
+
+#: ../core/./Backend/Areas/Area.php:263
+msgid "Standard"
+msgstr ""
+
+#: ../core/./Backend/Areas/Area.php:269
+msgid "Media"
+msgstr ""
+
+#: ../core/./Backend/Areas/Area.php:270
+msgid "Spezial"
+msgstr ""
+
+#: ../core/./Backend/Areas/Area.php:272
+msgid "System"
+msgstr ""
+
+#: ../core/./Backend/Areas/Area.php:273
+msgid "Templates"
+msgstr "Vorlagen"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:258
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:260
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:261
+msgid "Module Templates"
+msgstr "Modulevorlagen"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:259
+msgid "Module Template"
+msgstr "Modulevorlage"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:262
+#: ../core/./Backend/Dynamic/DynamicAreas.php:164
+msgid "Add New"
+msgstr "Hinzufügen"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:263
+msgid "Add New Module Template"
+msgstr "Neue Modulvorlage hinzufügen"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:264
+msgid "New Module Template"
+msgstr "Neue Modulvorlage"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:265
+msgid "Edit Module Template"
+msgstr "Modulevorlage bearbeiten"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:266
+msgid "View Module Template"
+msgstr "Modulvorlage ansehen"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:267
+msgid "All Module Templates"
+msgstr "Alle Modulvorlagen"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:268
+msgid "Search Module Templates"
+msgstr "Modulvorlagen durchsuchen"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:269
+#, fuzzy
+msgid "Parent Module Template:"
+msgstr "Seitenvorlage"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:270
+msgid "No Module Templates found."
+msgstr "Keine Modulvorlagen gefunden"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:271
+msgid "No Module Templates found in Trash."
+msgstr "Keine Modulvorlagen im Papierkorb"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:301
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:304
+msgid "Module Template updated."
+msgstr "Modulvorlage wurde aktualisiert."
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:302
+#: ../core/./Backend/Dynamic/DynamicAreas.php:205
+msgid "Custom field updated."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:303
+#: ../core/./Backend/Dynamic/DynamicAreas.php:206
+msgid "Custom field deleted."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:306
+#, php-format
+msgid "Module Template restored to revision from %s"
+msgstr "Modulvorlage wurde aus %s wiederhergestellt"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:307
+msgid "Module Template published."
+msgstr "Modulvorlage veröffentlicht"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:308
+msgid "Module Template saved."
+msgstr "Modulvorlage wurde gespeichert"
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:309
+msgid "Module Template submitted."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:311
+#, php-format
+msgid "Module Template scheduled for: <strong>%1$s</strong>."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:313
+#: ../core/./Backend/Dynamic/DynamicAreas.php:216
+msgid "M j, Y @ G:i"
+msgstr ""
+
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:315
+msgid "Module Template draft updated."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:160
+#: ../core/./Backend/Dynamic/DynamicAreas.php:162
+#: ../core/./Backend/Dynamic/DynamicAreas.php:163
+msgid "Areas"
+msgstr "Areas"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:161
+msgid "Area"
+msgstr "Area"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:165
+msgid "Add New Area"
+msgstr "Neue Area hinzufügen"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:166
+msgid "New Area"
+msgstr "Neue Area"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:167
+msgid "Edit Area"
+msgstr "Area bearbeiten"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:168
+msgid "View Area"
+msgstr "Area ansehen"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:169
+msgid "All Areas"
+msgstr "Alle Areas"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:170
+msgid "Search Areas"
+msgstr "Areas durchsuchen"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:171
+#, fuzzy
+msgid "Parent Area:"
+msgstr "Elternseite"
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:172
+msgid "No Areas found."
+msgstr "Keine Areas gefunden."
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:173
+msgid "No Areas found in Trash."
+msgstr "Keine Areas im Papierkorb."
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:204
+#: ../core/./Backend/Dynamic/DynamicAreas.php:207
+msgid "Area updated."
+msgstr "Area wurde aktualisiert."
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:209
+#, php-format
+msgid "Area restored to revision from %s"
+msgstr ""
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:210
+msgid "Area published."
+msgstr "Area wurde veröffentlicht."
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:211
+msgid "Area saved."
+msgstr "Area wurde gespeichert."
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:212
+msgid "Area submitted."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:214
+#, php-format
+msgid "Area scheduled for: <strong>%1$s</strong>."
+msgstr ""
+
+#: ../core/./Backend/Dynamic/DynamicAreas.php:218
+msgid "Area draft updated."
+msgstr ""
+
+#: ../core/./Backend/Screen/ScreenManager.php:174
+msgid "Page header"
+msgstr "Header"
+
+#: ../core/./Backend/Screen/ScreenManager.php:175
+msgid "Full width area at the top of this page"
+msgstr ""
+
+#: ../core/./Backend/Screen/ScreenManager.php:179
+msgid "Content"
+msgstr "Inhalt"
+
+#: ../core/./Backend/Screen/ScreenManager.php:180
+msgid "Main content column of this page"
+msgstr "Hauptinhaltsspalte der Seite"
+
+#: ../core/./Backend/Screen/ScreenManager.php:184
+msgid "Page Sidebar"
+msgstr "Sidebar"
+
+#: ../core/./Backend/Screen/ScreenManager.php:185
+msgid "Sidebar of this page"
+msgstr "Sidebar der Seite"
+
+#: ../core/./Backend/Screen/ScreenManager.php:189
+msgid "Footer"
+msgstr "Footer"
+
+#: ../core/./Backend/Screen/ScreenManager.php:190
+msgid "Full width area at the bottom of this page"
+msgstr ""
+
+#: ../core/./Modules/Module.php:262
+msgid "<strong><em>Beschreibung:</em> </strong>"
+msgstr "<strong><em>Beschreibung:</em> </strong>"
+
+#: ../core/./Modules/Module.php:263
+msgid "Modul Bezeichnung"
+msgstr ""
+
+#: ../core/./Modules/Module.php:264
+msgid ""
+"This Module is a draft and won't be public until you publish or update the "
+"post"
+msgstr ""
+"Diese Modul ist im Entwurfstatus und wird beim nächsten Aktualisieren "
+"veröffentlicht."
+
+#: ../core/./Modules/Module.php:360
+msgid "edit"
+msgstr "bearbeite"

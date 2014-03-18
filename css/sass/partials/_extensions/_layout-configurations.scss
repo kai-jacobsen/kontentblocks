@@ -1,0 +1,35 @@
+#kb-layout-configurations{
+
+  .select-container{
+
+    padding: 8px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+
+    select{
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .kb-lc-load{
+      float: right;
+    }
+
+    .kb-lc-delete{
+      float: left;
+      line-height: 32px;
+      color: red;
+      cursor: pointer;
+    }
+  }
+
+  .create-container{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-top: 0;
+
+    input[type=text]{
+      margin-right: 15px;
+    }
+  }
+}

@@ -13,7 +13,6 @@ class GetSanitizedId
     protected $dataHandler;
     protected $instanceId;
 
-    // TODO first sanitize the input, check if other languages exits and/or template exists in non-l18n context
     public function __construct()
     {
 
