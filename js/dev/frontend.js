@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-18 */
+/*! Kontentblocks DevVersion 2014-03-19 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -225,8 +225,7 @@ KB.StuffBG = function($) {
                 type: "GET",
                 dataType: "json",
                 success: function(res) {
-                    console.log(that.img);
-                    that.img.css("backgroundImage", res);
+                    that.img.css("backgroundImage", "url('" + res + "')");
                 },
                 error: function() {}
             });

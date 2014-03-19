@@ -61,21 +61,29 @@ class Image extends AbstractFieldReturn
 
     public function html()
     {
-
         $this->prepareSrc();
         $format = '<%1$s %3$s src="%2$s" >';
-
         $this->toJSON();
-
         return sprintf($format, 'img', $this->src, $this->_renderAttributes());
 
     }
 
-    public function src(){
+    public function src()
+    {
         $this->prepareSrc();
         $this->toJSON();
 
         return $this->src;
+    }
+
+    public function background()
+    {
+        $this->prepareSrc();
+        $format = ' %2$s style="background-image: url(\'%1$s\')" >';
+        $this->toJSON();
+        return sprintf($format, $this->src, $this->_renderAttributes());
+
+
     }
 
     private function _cleanSpaces($string)
@@ -138,6 +146,6 @@ class Image extends AbstractFieldReturn
             )
         );
 
-        JSONBridge::getInstance()->registerData('FrontSettings',$this->moduleId, $json );
+        JSONBridge::getInstance()->registerData('FrontSettings', $this->moduleId, $json);
     }
 }

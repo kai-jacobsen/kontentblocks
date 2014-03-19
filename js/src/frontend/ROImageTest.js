@@ -183,8 +183,7 @@ KB.StuffBG = (function ($) {
                 type: 'GET',
                 dataType: 'json',
                 success: function (res) {
-                    console.log(that.img);
-                    that.img.css('backgroundImage', res);
+                    that.img.css('backgroundImage', "url('" + res +"')");
                 },
                 error: function () {
 
