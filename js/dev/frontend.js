@@ -668,6 +668,10 @@ KB.App = function($) {
         KB.Ui.init();
     }
     function addViews() {
+        console.log(KB);
+        if (KB.appData.config.preview) {
+            return false;
+        }
         _.each(KB.payload.Areas, function(area) {
             KB.Areas.add(new KB.Backbone.AreaModel(area));
         });

@@ -162,6 +162,7 @@ class Enqueues
 
         $data = array(
             'frontend' => !is_admin(),
+            'preview' => is_preview(),
             'loggedIn' => is_user_logged_in(),
             'user' => wp_get_current_user(),
             'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
@@ -171,6 +172,10 @@ class Enqueues
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION
         );
+
+        if (is_preview()){
+            $data['loggedIn'] = false;
+        }
 
         JSONBridge::getInstance()->registerPublicData('config', null, $data);
     }

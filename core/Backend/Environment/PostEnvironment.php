@@ -65,7 +65,6 @@ class PostEnvironment
         if (!isset($postID)) {
             return false;
         }
-
         $this->postID = $postID;
 
         $this->MetaData = new PostMetaAPI($postID);

@@ -76,6 +76,12 @@ KB.App = (function ($) {
      * @returns void
      */
     function addViews() {
+
+        console.log(KB);
+        if (KB.appData.config.preview){
+            return false;
+        }
+
         // iterate over raw areas
         _.each(KB.payload.Areas, function (area) {
             // create new area model

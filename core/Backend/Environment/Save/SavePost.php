@@ -41,6 +41,9 @@ class SavePost
             return false;
         }
 
+
+
+
         // create backup
         $this->createBackup();
 
@@ -100,15 +103,16 @@ class SavePost
                     }
                 }
 
-
                 // store new data in post meta
                 // if this is a preview, save temporary data for previews
                 if ($savedData) {
-                    if (is_preview()) {
+
+                    if (isset($_POST['wp-preview']) && $_POST['wp-preview'] === 'dopreview') {
                         update_post_meta($this->postid, '_preview_' . $module['instance_id'], $savedData);
                     } // save real data
                     else {
                         $this->Environment->getStorage()->saveModule($module['instance_id'], $savedData);
+
                         delete_post_meta($this->postid, '_preview_' . $module['instance_id']);
                     }
                 }
@@ -150,6 +154,7 @@ class SavePost
      */
     private function auth()
     {
+
         // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
         if (empty($_POST)) {
@@ -182,6 +187,8 @@ class SavePost
         if (get_post_type($this->postid) == 'revision' && !isset($_POST['wp-preview'])) {
             return false;
         }
+
+
 
         // checks passed
         return true;

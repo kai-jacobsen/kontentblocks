@@ -129,6 +129,11 @@ Class EditScreen
      */
     function save( $post_id )
     {
+
+        if (isset($_POST['wp-preview']) && $_POST['wp-preview'] === 'dopreview'){
+            $post_id = get_the_ID();
+        }
+
         $Environment = \Kontentblocks\Helper\getEnvironment( $post_id );
         $Environment->save();
 
