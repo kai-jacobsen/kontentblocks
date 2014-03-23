@@ -8,6 +8,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
     initialize: function () {
         var that = this;
+
+        if (!KB.Checks.userCan('edit_kontentblocks')){
+            return;
+        }
+
         this.model.bind('save', this.model.save);
         this.listenTo(this.model, 'change', this.modelChange);
         this.model.view = this;

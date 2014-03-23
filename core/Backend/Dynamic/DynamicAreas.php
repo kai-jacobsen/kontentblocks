@@ -52,7 +52,9 @@ class DynamicAreas
         add_action('save_post', array($this, 'save'));
         add_action('wp_insert_post_data', array($this, 'postData'), 10, 2);
         add_filter('post_updated_messages', array($this, 'postTypeMessages'));
-
+        add_filter('post_row_actions', array($this, 'rowActions'), 10, 2);
+        add_action('admin_footer', array($this, 'hackItAway'),99);
+        add_filter('post_class', array($this, 'addRowClass'), 10, 3);
     }
 
     /**
@@ -131,7 +133,8 @@ class DynamicAreas
             'postTypes' => $newArea['postTypes'],
             'pageTemplates' => $newArea['pageTemplates'],
             'dynamic' => true,
-            'context' => $newArea['context']
+            'context' => $newArea['context'],
+            'manual' => filter_var($newArea['manual'], FILTER_VALIDATE_BOOLEAN)
         );
 
         $full = wp_parse_args($data, AreaRegistry::getDefaults(false));
@@ -325,7 +328,8 @@ class DynamicAreas
                     '',
             'areaContext' => $data['context'],
             'name' => $data['name'],
-            'id' => $data['id']
+            'id' => $data['id'],
+            'manual' => (isset($data['manual'])) ? $data['manual'] : false
         );
 
         $Form = new CoreTemplate('new-area-form.twig', $templateData);
@@ -338,10 +342,6 @@ class DynamicAreas
 
         $areaDef = AreaRegistry::getInstance()->getArea($area['id']);
 
-        // handle predefined areas and check if they are available for the current language
-        if ($areaDef['manual'] === true && !in_array(I18n::getActiveLanguage(), (array)$areaDef['lang']) && $areaDef['lang'] !== 'any') {
-            print "Not available in this language";
-        }
 
         // todo: maybe a case for twig
         print "<div class='postbox'>";
@@ -358,6 +358,45 @@ class DynamicAreas
 
         print "</div>";
 
+    }
+
+    public function rowActions($actions, $post)
+    {
+        if ($post->post_type === 'kb-dyar') {
+
+            $meta = get_post_meta($post->ID, '_area', true);
+            if ($meta['dynamic'] === true && $meta['manual'] === true) {
+                $actions['trash'] = "<span class='kb-js-predefined-area'>Area is predefined</span>";
+            }
+
+        }
+        return $actions;
+    }
+
+    public function hackItAway()
+    {
+        $screen = get_current_screen();
+        if (isset($screen->post_type) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
+
+            echo "<script>
+            jQuery('.kb-is-dynamic-area .check-column input[type=checkbox]').attr('disabled', 'disabled');
+            </script>";
+
+        }
+
+    }
+
+    public function addRowClass($classes, $class, $post_id)
+    {
+        $screen = get_current_screen();
+        if (isset($screen->post_type) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
+
+            $meta = get_post_meta($post_id, '_area', true);
+            if ($meta['dynamic'] === true && $meta['manual'] === true) {
+                $classes[] = ' kb-is-dynamic-area';
+            }
+        }
+        return $classes;
     }
 
 }

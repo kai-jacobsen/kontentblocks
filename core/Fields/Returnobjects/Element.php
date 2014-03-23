@@ -54,6 +54,7 @@ class Element extends AbstractFieldReturn
     {
         $this->field = $field;
         parent::__construct($value);
+
     }
 
     /**
@@ -116,22 +117,6 @@ class Element extends AbstractFieldReturn
 
         $this->handleLoggedInUsers();
 
-//        if (is_user_logged_in() && $this->inlineEdit) {
-//            $editableClass = $this->getEditableClass();
-//            if (is_object($this->field)) {
-//                $this->addClass($editableClass);
-//                $this->addAttr('data-module', $this->field->parentModule);
-//                $this->addAttr('data-key', $this->field->getKey());
-//                $this->addAttr('data-arrayKey', $this->field->getArg('arrayKey'));
-//            } else if (is_array($this->field)) {
-//                $this->addClass($editableClass);
-//                $this->addAttr('data-module', $this->field['instance_id']);
-//                $this->addAttr('data-key', $this->field['key']);
-//                $this->addAttr('data-arrayKey', $this->field['arrayKey']);
-//                $this->addAttr('data-index', $this->field['index']);
-//            }
-//        }
-
 
         $format = '<%1$s id="%4$s" %3$s>%2$s</%1$s>';
 
@@ -176,7 +161,7 @@ class Element extends AbstractFieldReturn
     }
 
     /**
-     * Ftom array to string
+     * From array to string
      * @return string
      * @since 1.0.0
      */

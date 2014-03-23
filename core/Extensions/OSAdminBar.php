@@ -5,9 +5,12 @@ if ( is_user_logged_in() && !(is_admin()) && current_user_can( 'manage_kontentbl
 }
 
 function toolbar_os_control( $wp_admin_bar ) {
-  $args = array(
+
+    $i18n = \Kontentblocks\Language\I18n::getPackage('Extensions.adminBar');
+
+    $args = array(
     'id' => 'os-support',
-    'title' => 'Onsite Editing',
+    'title' => $i18n['showEditable'],
 	'href'	=> '#',
     'meta' => array('class' => 'os-edit os-edit-off', 'onclick' => 'KBOnSiteEditing.control(this);')
   );

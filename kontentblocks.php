@@ -98,7 +98,7 @@ Class Kontentblocks
         add_post_type_support('page', 'kontentblocks');
 
         // load Templates automatically
-        add_action('init', array($this, 'loadModules'), 9);
+        add_action('areas_setup', array($this, 'loadModules'), 9);
 
         // Load Plugins
         add_action('init', array($this, 'loadExtensions'), 9);
@@ -208,10 +208,8 @@ Class Kontentblocks
      */
     public function loadFields()
     {
-        if (is_user_logged_in()) {
             foreach (glob(KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php') as $file) {
                 FieldRegistry::getInstance()->add($file);
-            }
         }
     }
 

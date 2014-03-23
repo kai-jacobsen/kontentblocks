@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2014-03-17 08:44+0100\n"
-"PO-Revision-Date: 2014-03-17 08:52+0100\n"
+"POT-Creation-Date: 2014-03-19 08:45+0100\n"
+"PO-Revision-Date: 2014-03-19 08:45+0100\n"
 "Last-Translator: Kai Jacobsen <kai@ungestaltbar.de>\n"
 "Language-Team: Kai Jacobsen\n"
 "Language: Deutsch\n"
@@ -15,6 +15,16 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ../core/Language/.\n"
 "X-Poedit-SearchPath-1: ../core/.\n"
+
+#: ../core/Language/./packages/i18n.jsFrontend.php:6
+#: ../core/./Language/packages/i18n.jsFrontend.php:6
+msgid "Module preview updated"
+msgstr "Modulvorschau wurde aktualisiert."
+
+#: ../core/Language/./packages/i18n.jsFrontend.php:7
+#: ../core/./Language/packages/i18n.jsFrontend.php:7
+msgid "Module data successfully saved"
+msgstr "Moduldaten wurde gespeichert"
 
 #: ../core/Language/./packages/i18n_CoreModules.php:6
 #: ../core/./Language/packages/i18n_CoreModules.php:6
@@ -78,6 +88,36 @@ msgstr "Bildunterschrift"
 msgid "Select an image or upload a new one"
 msgstr "Ein Bild auswählen oder neu hochladen"
 
+#: ../core/Language/./packages/i18n_Refields.php:25
+#: ../core/./Language/packages/i18n_Refields.php:25
+msgid "Please provide a Taxonomy identifier"
+msgstr "Es wurde keine registrierte Taxonomie angegeben."
+
+#: ../core/Language/./packages/i18n_Refields.php:26
+#: ../core/./Language/packages/i18n_Refields.php:26
+msgid "There is no such Taxonomy registered"
+msgstr "Anegegebene Taxonomie existiert nicht."
+
+#: ../core/Language/./packages/i18n_Refields.php:27
+#: ../core/./Language/packages/i18n_Refields.php:27
+msgid "Please chose"
+msgstr "Bitte wählen"
+
+#: ../core/Language/./packages/i18n_Extensions.php:6
+#: ../core/./Language/packages/i18n_Extensions.php:6
+msgid "Layout Configurations"
+msgstr "Layout Konfigurationen"
+
+#: ../core/Language/./packages/i18n_Extensions.php:9
+#: ../core/./Language/packages/i18n_Extensions.php:9
+msgid "New Backup was created"
+msgstr "Neues Backup wurde erstellt."
+
+#: ../core/Language/./packages/i18n_Extensions.php:12
+#: ../core/./Language/packages/i18n_Extensions.php:12
+msgid "Show editable elements"
+msgstr "Editierbare Elemente anzeigen"
+
 #: ../core/Language/./packages/i18n_ExtPageSettings.php:5
 #: ../core/./Language/packages/i18n_ExtPageSettings.php:5
 msgid "Page Settings"
@@ -105,22 +145,13 @@ msgstr "Standardvorlage"
 
 #: ../core/./Fields/Definitions/Select.php:24
 msgid "Please set options to show"
-msgstr ""
-
-#: ../core/./Fields/Definitions/ChoseTaxonomy.php:26
-msgid "Please set a taxonomy to show"
-msgstr ""
-
-#: ../core/./Fields/Definitions/ChoseTaxonomy.php:31
-msgid "Such a Taxonomy does not exist yet"
-msgstr "Keine Taxonomy mit der angegebenen ID gefunden"
+msgstr "Es wurden keine Optionen zur Auswahl angegeben."
 
 #: ../core/./Hooks/Enqueues.php:143
 msgid "Clear"
-msgstr ""
+msgstr "Reset"
 
 #: ../core/./Hooks/Enqueues.php:144
-#, fuzzy
 msgid "Default"
 msgstr "Standardvorlage"
 
@@ -208,9 +239,8 @@ msgid "Search Module Templates"
 msgstr "Modulvorlagen durchsuchen"
 
 #: ../core/./Backend/Dynamic/ModuleTemplates.php:269
-#, fuzzy
 msgid "Parent Module Template:"
-msgstr "Seitenvorlage"
+msgstr "Übergeordnete Modulvorlage"
 
 #: ../core/./Backend/Dynamic/ModuleTemplates.php:270
 msgid "No Module Templates found."
@@ -301,9 +331,8 @@ msgid "Search Areas"
 msgstr "Areas durchsuchen"
 
 #: ../core/./Backend/Dynamic/DynamicAreas.php:171
-#, fuzzy
 msgid "Parent Area:"
-msgstr "Elternseite"
+msgstr "Elternarea"
 
 #: ../core/./Backend/Dynamic/DynamicAreas.php:172
 msgid "No Areas found."
@@ -395,3 +424,6 @@ msgstr ""
 #: ../core/./Modules/Module.php:360
 msgid "edit"
 msgstr "bearbeite"
+
+#~ msgid "Such a Taxonomy does not exist yet"
+#~ msgstr "Keine Taxonomy mit der angegebenen ID gefunden"

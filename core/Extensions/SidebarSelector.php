@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Extensions;
 
+use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment,
     Kontentblocks\Backend\Screen\ScreenManager;
 
@@ -15,11 +16,11 @@ class SidebarSelector
 
     function __construct()
     {
-        $this->setup_actions();
+        $this->setupActions();
 
     }
 
-    function setup_actions()
+    function setupActions()
     {
         global $pagenow;
 
@@ -28,8 +29,7 @@ class SidebarSelector
         }
 
         add_action( 'save_post', array( $this, 'save' ), 11 );  //save early
-        add_action( 'context_box_side', array( $this, 'sidebar_selector_content' ), 10, 2 );
-        add_action( 'admin_footer', array( $this, 'modal_markup' ) );
+        add_action( 'context_box_side', array( $this, 'metaBox' ), 10, 2 );
         $this->nonce = wp_create_nonce( 'editGlobalArea' );
 
     }
@@ -43,7 +43,7 @@ class SidebarSelector
      * TODO:: resort global sidebars and post sidebars to own arrays
      */
 
-    function sidebar_selector_content( $context, $ScreenManager )
+    function metaBox( $context, $ScreenManager )
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
         $pdc     = $ScreenManager->getEnvironment();
@@ -53,9 +53,7 @@ class SidebarSelector
         }
 
         $Screen  = $ScreenManager;
-
         $this->_setupAreas( $Screen->getRawAreas() );
-
         // saved sidebar settings
         if ( $post_id ) {
             $this->activeSidebars = get_post_meta( $post_id, 'active_sidebar_areas', true );
@@ -100,7 +98,7 @@ class SidebarSelector
 
     function save( $post_id )
     {
-        if ( empty( $_POST ) ) {
+        if ( empty( $_POST ) || empty($_POST['kb_sidebar_selector']) ) {
             return;
         }
 
@@ -143,15 +141,13 @@ class SidebarSelector
 
 
     }
-    public function modal_markup()
-    {
-        echo "<div id='da-modal' class='reveal large reveal-modal'><iframe seamless id='da-frame' src='' width='100%' height='400'></iframe></div>";
 
-    }
 
     public function _setupAreas( $areas )
     {
-        $this->areas = array_filter($areas, function($area){
+
+        $merged = array_merge($areas, AreaRegistry::getInstance()->getGlobalSidebars());
+        $this->areas = array_filter($merged, function($area){
             return ($area['context'] === 'side');
         });
         foreach ( $this->areas as $args ) {
@@ -178,7 +174,7 @@ class SidebarSelector
 				<div class='area_sidebars {$hide}'>
 					<div class='context-box area-context'>
 				<div class='active_dynamic_areas_wrapper'>
-
+                <input type='hidden' name='kb_sidebar_selector' value='true' />
 				<input type='hidden' name='_sidebars_updated' value='" . time() . "' />
 				<ul class='connect' style='min-height:25px;' id='active-dynamic-areas'>";
 
@@ -195,7 +191,8 @@ class SidebarSelector
             $return .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
 
             if ( true == $area[ 'dynamic' ] ) {
-                $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$area[ 'id' ]}&daction=show&context=side&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
+                $editUrl = get_edit_post_link($area['parent_id']).'&redirect=true';
+                $return .= "<span><a href='{$editUrl}' class='kb-js-edit-sidebar' data-area='{$area['id']}'>edit</a></span>";
             }
             $return .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
 
@@ -224,7 +221,8 @@ class SidebarSelector
 
             $return .= "<li class='dynamic-area-active' id='{$areaDefinition[ 'id' ]}' name='{$areaDefinition[ 'id' ]}'>{$areaDefinition[ 'name' ]}";
             if ( true == $areaDefinition[ 'dynamic' ] ) {
-                $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$areaDefinition[ 'id' ]}&daction=show&context=side&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
+                $editUrl = get_edit_post_link($areaDefinition['parent_id']).'&redirect=true';
+                $return .= "<span><a href='{$editUrl}' class='kb-js-edit-sidebar' data-area='{$areaDefinition['id']}'>edit</a></span>";
             }
             $return .= "<input id='{$areaDefinition[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$areaDefinition[ 'id' ]}' /></li>";
             //unset from dynamic areas
@@ -257,11 +255,11 @@ class SidebarSelector
                 if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] ) {
                     continue;
                 }
-
-                $return .= "<li id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
+                $editUrl = get_edit_post_link($area['parent_id']).'&redirect=true';
+                $return .= "<li id='{$area[ 'id' ]}'  name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
 
                 if ( true === $area[ 'dynamic' ] ) {
-                    $return .= "<span><a class='da-modal' data-url='admin-ajax.php?action=editGlobalArea&area={$area[ 'id' ]}&daction=show&context=side&TB_iframe=1&nonce={$this->nonce}'>edit</a></span>";
+                    $return .= "<span><a class='kb-js-edit-sidebar' href='{$editUrl}' data-area='{$area['id']}'>edit</a></span>";
                 }
 
                 $return .= "</li>";

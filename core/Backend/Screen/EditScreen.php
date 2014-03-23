@@ -139,24 +139,6 @@ Class EditScreen
     #-------------------------------------------------
 
 
-//    /**
-//     * Checks if block is in draft mode and if so publish it by setting 'draft' to false
-//     * @param array $block
-//     * @return string
-//     * @todo Evaluate sense of this method
-//     * @since 1.0.0
-//     */
-//    public static function _draft_check( $block )
-//    {
-//        if ( !empty( $_POST[ 'wp-preview' ] ) )
-//            return $block[ 'draft' ];
-//
-//        if ( 'true' === $block[ 'draft' ] ) {
-//            return 'false';
-//        }
-//
-//    }
-
     /**
      * Render
      * Create a new Screen Manager which will handle the several sections

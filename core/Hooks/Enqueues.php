@@ -72,8 +72,8 @@ class Enqueues
         // fields handler
         wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/'. $folder .'/refields'.$suffix.'.js',null, null, true);
 
-        // WP iris
-        wp_register_script('wp-iris', admin_url('js/iris'.$suffix.'.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true);
+        // WP iris // no dev version available in core
+        wp_register_script('wp-iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true);
 
         // WP color picker
         wp_register_script('wp-color-picker', admin_url('js/color-picker'.$suffix.'.js'), array('wp-iris'), false, true);
@@ -134,7 +134,6 @@ class Enqueues
             wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css');
             wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
             $this->enqueueStyles();
-            $this->enqueueUserScripts();
             wp_localize_script('kb-common', 'kontentblocks', $this->_localize());
 
             wp_enqueue_script('wp-iris');
@@ -150,6 +149,8 @@ class Enqueues
 
             wp_enqueue_media();
         }
+        $this->enqueueUserScripts();
+
 
     }
 
@@ -256,7 +257,6 @@ class Enqueues
                 $this->adminScripts[$args['handle']] = $def;
                 break;
         }
-
     }
 
     private function customScripts()

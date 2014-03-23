@@ -50,6 +50,7 @@ function getStorage($id = null)
 function getEnvironment($id = null)
 {
     global $post;
+
     if ($id && is_numeric($id) && $id !== -1) {
         return new PostEnvironment($id);
     } else {

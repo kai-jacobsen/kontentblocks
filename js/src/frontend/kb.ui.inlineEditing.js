@@ -1,6 +1,10 @@
 
 function initTinymce(item) {
 
+    if (!KB.Checks.userCan('edit_kontentblocks')){
+        return;
+    }
+
     tinymce.init({
         selector: '#' + item.id,
         theme: "modern",
@@ -77,6 +81,10 @@ jQuery(document).ready(function () {
     jQuery('.editable-title').each(
 
         function (item) {
+
+            if (!KB.Checks.userCan('edit_kontentblocks')){
+                return;
+            }
 
             tinymce.init({
                 selector: '#' + this.id,

@@ -79,7 +79,7 @@ class Image extends AbstractFieldReturn
     public function background()
     {
         $this->prepareSrc();
-        $format = ' %2$s style="background-image: url(\'%1$s\')" >';
+        $format = ' %2$s style="background-image: url(\'%1$s\')"';
         $this->toJSON();
         return sprintf($format, $this->src, $this->_renderAttributes());
 

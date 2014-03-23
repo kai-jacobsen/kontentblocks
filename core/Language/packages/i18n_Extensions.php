@@ -7,5 +7,8 @@
     ),
     'backups' => array(
         'newBackupcreated' => __('New Backup was created', 'Kontentblocks')
+    ),
+    'adminBar' => array(
+        'showEditable' => __('Show editable elements', 'Kontentblocks')
     )
 ) );

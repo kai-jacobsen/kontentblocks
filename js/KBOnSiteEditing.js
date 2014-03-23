@@ -16,11 +16,11 @@ var KBOnSiteEditing;
 
             // Heartbeat send data
             $(document).on('heartbeat-send', function(e, data){
-                data.kbEditWatcher = 'Peter is here';
+                data.kbEditWatcher = 'Peter is here'; // actual user
             });
 
             $(document).on('heartbeat-tick', function(e, data){
-                console.log(data);
+                // check response
             });
 
             $('body').on('mousedown', 'textarea', function()
@@ -36,6 +36,12 @@ var KBOnSiteEditing;
         {
             $(caller).parent('li').toggleClass('os-edit-off');
             $('body').toggleClass('onsite-editing');
+
+
+            $('.editable').each(function(i, el){
+                console.log(el);
+            });
+
         },
         refresh: function(result) {
 

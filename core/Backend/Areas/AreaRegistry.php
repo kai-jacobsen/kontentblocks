@@ -52,6 +52,8 @@ class AreaRegistry
      */
     static $instance;
 
+    protected $AreaDynamicManager;
+
     /**
      * Singleton Pattern
      * Get the Instance of the Area Directory
@@ -63,11 +65,16 @@ class AreaRegistry
     {
         if (null == self::$instance) {
             self::$instance = new self;
-            self::$instance->init();
         }
 
         return self::$instance;
 
+    }
+
+    public function __construct()
+    {
+        $this->AreaDynamicManager = AreaDynamicManager::getInstance();
+        add_action('dynamic_areas_setup', array($this, 'init'));
     }
 
     /**
@@ -102,6 +109,7 @@ class AreaRegistry
             }
         }
 
+        do_action('areas_setup');
     }
 
     /**
@@ -123,6 +131,11 @@ class AreaRegistry
 
         // merge defaults with provided args
         $area = wp_parse_args($args, self::getDefaults($manual));
+
+        if ($area['dynamic'] === true && $manual) {
+            $this->AreaDynamicManager->add($area);
+        }
+
         if (empty($this->rawAreas[$area['id']])) {
             $this->rawAreas[$area['id']] = $area;
         } else {
@@ -192,9 +205,9 @@ class AreaRegistry
         if ($area['dynamic'] === true
         ) {
             if ($area['context'] === 'side') {
-                $this->globalSidebars[] = $area;
+                $this->globalSidebars[$area['id']] = $area;
             } else {
-                $this->globalAreas[] = $area;
+                $this->globalAreas[$area['id']] = $area;
             }
         }
     }

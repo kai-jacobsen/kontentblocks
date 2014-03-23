@@ -111,6 +111,7 @@ class CreateNewModule
      *
      * instantiate the module and setup
      * @global $Kontentblocks
+     * @return array|null
      */
     private function setupModuleArgs()
     {
@@ -231,7 +232,7 @@ class CreateNewModule
      */
     private function render()
     {
-        ob_start();
+//        ob_start();
 
         // create the new module finally
         $this->newInstance = $this->createModuleInstance();
@@ -252,12 +253,14 @@ class CreateNewModule
 
     private function setupRequestData()
     {
-
+        global $post;
 //        if ( !wp_verify_nonce( $_POST[ 'nonce' ], '_kontentblocks_ajax_magic' ) ) {
 //            wp_send_json( wp_verify_nonce( $_POST[ 'nonce' ], '_kontentblocks_ajax_magic' ) );
 //        }
 
         $this->post_id = filter_var($_POST['post_id']);
+        $post = get_post($this->post_id);
+        setup_postdata($post);
         $this->count = filter_var($_POST['count'], FILTER_VALIDATE_INT);
         $this->type = filter_var($_POST['class'], FILTER_SANITIZE_STRING);
 
@@ -287,7 +290,8 @@ class CreateNewModule
 
     public function createModuleInstance()
     {
-        $Factory = new ModuleFactory($this->newModule['class'], $this->newModule, $this->environment);
+        $module = apply_filters('kb_before_module_options', $this->newModule);
+        $Factory = new ModuleFactory($module['class'], $module, $this->environment);
         return $Factory->getModule();
 
     }

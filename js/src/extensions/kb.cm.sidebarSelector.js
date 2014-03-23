@@ -1,71 +1,42 @@
-var KBAreaSelector;
-
-(function($) {
+KB.AreaSelector = (function ($) {
 
 
-    KBAreaSelector =
-            {
-                init: function()
-                {
-                    if (KB.appData.config.frontend){
-                        _K.info('Area Selector stopped');
-                        return false;
-                    }
-
-                    $('#existing-areas, #active-dynamic-areas').sortable({
-                        connectWith: '.connect',
-                        cancel: "li.ui-state-disabled",
-                        placeholder: "sortable-placeholder",
-                        helper: "clone",
-                        receive: function(event, ui)
-                        {
-                            item = ui.item;
-                            id = $(item).attr('id');
-
-                            $(item).toggleClass('dynamic-area-active');
-
-                            if (this.id == 'active-dynamic-areas')
-                            {
-                                action = "<span><a href=''>edit</a></span>";
-
-                                content = "<input id='" + id + "_hidden' type='hidden' name='active_sidebar_areas[]' value='" + id + "' />";
-                                $(item).append(content);
-                            }
-                            else
-                            {
-                                $('input#' + id + '_hidden').remove();
-
-                            }
-                        }
-                    })
-                }
-
+    return{
+        $stage : null,
+        areaToEdit: null,
+        $editWrap: null,
+        init: function () {
+            if (KB.appData.config.frontend) {
+                _K.info('Area Selector stopped');
+                return false;
             }
+            this.sortable();
 
+        },
+        sortable: function () {
+            $('#existing-areas, #active-dynamic-areas').sortable({
+                connectWith: '.connect',
+                cancel: "li.ui-state-disabled",
+                placeholder: "sortable-placeholder",
+                helper: "clone",
+                receive: function (event, ui) {
+                    item = ui.item;
+                    id = $(item).attr('id');
 
-    $(document).ready(KBAreaSelector.init);
-})(jQuery);
+                    $(item).toggleClass('dynamic-area-active');
 
+                    if (this.id == 'active-dynamic-areas') {
+                        action = "<span><a href=''>edit</a></span>";
 
-jQuery(document).ready(function($) {
+                        content = "<input id='" + id + "_hidden' type='hidden' name='active_sidebar_areas[]' value='" + id + "' />";
+                        $(item).append(content);
+                    }
+                    else {
+                        $('input#' + id + '_hidden').remove();
 
-    $("body").on('click', 'a.da-modal', function(e) {
-        e.preventDefault();
-
-        target = $(this).attr('data-url');
-        height = $(window).height();
-        $('#da-frame').attr('src', target).attr('height', height - 200);
-        
-        $(window).resize(function() {
-            height = $(window).height();
-            $('#da-frame').attr('height', height - 200);
-        });
-        var $content = $('#da-modal');
-        openedModal = vex.open({
-            content: $content.html(),
-            contentClassName: 'editGlobalArea'
-        });
-
-    });
-
-});
+                    }
+                }
+            })
+        }
+    }
+}(jQuery)).init();

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-19 */
+/*! Kontentblocks DevVersion 2014-03-22 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -476,10 +476,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     initTinymce(el);
                 });
                 if (save) {
-                    KB.Notice.notice("Module Data saved successfully", "success");
+                    KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
                     that.$el.removeClass("isDirty");
                 } else {
-                    KB.Notice.notice("Module Preview updated", "success");
+                    KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
                     that.$el.addClass("isDirty");
                 }
                 _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
@@ -528,6 +528,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 KB.Backbone.ModuleView = Backbone.View.extend({
     initialize: function() {
         var that = this;
+        if (!KB.Checks.userCan("edit_kontentblocks")) {
+            return;
+        }
         this.model.bind("save", this.model.save);
         this.listenTo(this.model, "change", this.modelChange);
         this.model.view = this;
@@ -705,6 +708,9 @@ jQuery(document).ready(function() {
 });
 
 function initTinymce(item) {
+    if (!KB.Checks.userCan("edit_kontentblocks")) {
+        return;
+    }
     tinymce.init({
         selector: "#" + item.id,
         theme: "modern",
@@ -764,6 +770,9 @@ jQuery(document).ready(function() {
         initTinymce(item);
     });
     jQuery(".editable-title").each(function(item) {
+        if (!KB.Checks.userCan("edit_kontentblocks")) {
+            return;
+        }
         tinymce.init({
             selector: "#" + this.id,
             theme: "modern",

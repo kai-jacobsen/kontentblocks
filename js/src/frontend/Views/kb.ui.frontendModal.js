@@ -251,10 +251,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 });
 
                 if (save) {
-                    KB.Notice.notice('Module Data saved successfully', 'success');
+                    KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
                     that.$el.removeClass('isDirty');
                 } else {
-                    KB.Notice.notice('Module Preview updated', 'success');
+                    KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
                     that.$el.addClass('isDirty');
 
                 }
