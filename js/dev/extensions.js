@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-22 */
+/*! Kontentblocks DevVersion 2014-03-23 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),
@@ -225,7 +225,7 @@ KB.Ext.Backup = function($) {
             this.listEl.empty();
             _.each(items, function(item, key) {
                 that.lastItem = key;
-                that.listEl.append(_.template("                <li>\n                    <details>\n                        <summary>\n                            <%= data.time %>\n                        </summary>\n                    <div class='actions' data-id='<%= key %>'>\n                        <span class='js-review'>Review</span>\n                        <span class='js-restore'>Restore</span>\n                        <p class='description'><b>Comment:</b> <%= item.msg %></p>\n                    </details>\n                </li>", {
+                that.listEl.append(_.template("                <li>\n                    <details>\n                        <summary>\n                            <%= data.time %>\n                        </summary>\n                    <div class='actions' data-id='<%= key %>'>\n                        <span class='js-restore'>Restore</span>\n                        <p class='description'><b>Comment:</b> <%= item.msg %></p>\n                    </details>\n                </li>", {
                     data: {
                         time: new moment.unix(key).format("HH:mm:ss / DD.MMM")
                     },

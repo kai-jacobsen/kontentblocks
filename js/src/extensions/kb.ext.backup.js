@@ -59,7 +59,6 @@ KB.Ext.Backup = (function($) {
                             <%= data.time %>\n\
                         </summary>\n\
                     <div class='actions' data-id='<%= key %>'>\n\
-                        <span class='js-review'>Review</span>\n\
                         <span class='js-restore'>Restore</span>\n\
                         <p class='description'><b>Comment:</b> <%= item.msg %></p>\n\
                     </details>\n\
