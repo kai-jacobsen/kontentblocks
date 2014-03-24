@@ -96,7 +96,6 @@ KB.Stuff = function($) {
             this.renderControls();
         },
         renderControls: function() {
-            console.clear();
             var temp;
             $(this.selector).each(function(index, obj) {
                 $(obj).hover(function() {
@@ -198,6 +197,25 @@ KB.StuffBG = function($) {
                 e.preventDefault();
                 that.container = $(".kb-field-file-wrapper", activeField);
                 that.resetFields();
+            });
+            this.renderControls();
+        },
+        renderControls: function() {
+            var temp;
+            $(this.selector).each(function(index, obj) {
+                $(obj).hover(function() {
+                    var pos = $(this).offset();
+                    var height = $(this).height();
+                    $(this).css("cursor", "pointer");
+                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($("body")).css({
+                        position: "absolute",
+                        top: pos.top + "px",
+                        left: 20 + pos.left + "px"
+                    });
+                }, function() {
+                    $(this).css("cursor", "inherit");
+                    temp.remove();
+                });
             });
         },
         frame: function() {
