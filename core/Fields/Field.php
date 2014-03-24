@@ -71,7 +71,7 @@ abstract class Field
     /**
      * @var \Kontentblocks\Modules\Module
      */
-    protected  $module;
+    protected $module;
 
     /**
      * set storage key
@@ -135,8 +135,7 @@ abstract class Field
      */
     public function setData($data)
     {
-        $this->value = $data;
-
+        $this->value = $this->_sanitize($data);
     }
 
     /**
@@ -175,6 +174,7 @@ abstract class Field
      */
     public function getReturnObj()
     {
+
         if (!$this->returnObj && $this->getArg('returnObj')) {
             $classname = $this->getDefault('returnObj');
             if (!$classname) {
@@ -300,9 +300,8 @@ abstract class Field
         if (!$settings) {
             return;
         }
-
-
-        printf('<script>var KB = KB || {}; KB.FieldConfig = KB.FieldConfig || {}; KB.FieldConfig["%s"] = %s;</script>', $this->uniqueId, json_encode($settings));
+        JSONBridge::getInstance()->registerData('FieldsConfig', $this->uniqueId, $settings);
+//        printf('<script>var KB = KB || {}; KB.FieldConfig = KB.FieldConfig || {}; KB.FieldConfig["%s"] = %s;</script>', $this->uniqueId, json_encode($settings));
 
     }
 
@@ -338,8 +337,8 @@ abstract class Field
      */
     public function getValue($arrKey = null)
     {
-        if (method_exists($this, 'filter')) {
-            return $this->filter($this->value);
+        if (method_exists($this, 'inputFilter')) {
+            return $this->inputFilter($this->value);
         }
 
         if ($arrKey) {
@@ -359,8 +358,8 @@ abstract class Field
     public function getValueFromArray($arrKey)
     {
         if (is_array($this->value) && isset($this->value[$arrKey])) {
-            if (\method_exists($this, 'filter')) {
-                return $this->filter($this->value[$arrKey]);
+            if (\method_exists($this, 'inputFilter')) {
+                return $this->inputFilter($this->value[$arrKey]);
             } else {
                 return $this->value[$arrKey];
             }
@@ -369,6 +368,16 @@ abstract class Field
         }
 
     }
+
+    public function _sanitize($value)
+    {
+        if (method_exists($this, 'outputFilter')){
+            return $this->outputFilter($value);
+        } else {
+            return $value;
+        }
+    }
+
 
     /**
      * Handles the generation of hidden input fields with the correct data
@@ -454,23 +463,28 @@ abstract class Field
 
     public function handleConcatContent($data)
     {
-        if (!$this->module->isPublic()){
+        // if module is not supposed to have public data, don't concat
+        if (!method_exists($this->module, 'isPublic') || !$this->module->isPublic()) {
             return false;
         }
 
-        if (!$this->getArg('concat')){
+        // if field is not set to concat, bail out
+        if (!$this->getArg('concat')) {
             return false;
         }
 
-        if (method_exists($this, 'concat')){
+        // Field might modify the concat string before it gets added
+        if (method_exists($this, 'concat')) {
             return ConcatContent::getInstance()->addString($this->concat($data));
         }
 
+        // add the plain data to officer Con Tencat
         return ConcatContent::getInstance()->addString($data);
 
     }
 
-    public function setModule($module){
+    public function setModule($module)
+    {
         $this->module = $module;
     }
 
@@ -581,9 +595,9 @@ abstract class Field
      */
     private function cleanedArgs()
     {
-        if (method_exists($this, 'argsToJson')){
+        if (method_exists($this, 'argsToJson')) {
             return $this->argsToJson();
-        } else{
+        } else {
             return $this->args;
         }
     }

@@ -29,7 +29,6 @@ class UpdateModuleOptions
         $Factory = new \Kontentblocks\Modules\ModuleFactory($module['class'], $module, $Environment);
         $instance = $Factory->getModule();
         $old = $Environment->getStorage()->getModuleData($module['instance_id']);
-
         $new = $instance->save($parsed[$instance->instance_id], $old);
         $mergedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
 

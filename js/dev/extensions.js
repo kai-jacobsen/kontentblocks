@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-23 */
+/*! Kontentblocks DevVersion 2014-03-24 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),

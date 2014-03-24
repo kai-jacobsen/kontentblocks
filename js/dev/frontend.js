@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-23 */
+/*! Kontentblocks DevVersion 2014-03-24 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -82,15 +82,36 @@ KB.Stuff = function($) {
         img: null,
         init: function() {
             var that = this;
-            $("body").on("click", this.selector, function(e) {
+            var $body = $("body");
+            $body.on("click", this.selector, function(e) {
                 e.preventDefault();
                 that.img = $(this);
                 that.frame().open();
             });
-            $("body").on("click", this.remove, function(e) {
+            $body.on("click", this.remove, function(e) {
                 e.preventDefault();
                 that.container = $(".kb-field-file-wrapper", activeField);
                 that.resetFields();
+            });
+            this.renderControls();
+        },
+        renderControls: function() {
+            console.clear();
+            var temp;
+            $(this.selector).each(function(index, obj) {
+                $(obj).hover(function() {
+                    var pos = $(this).offset();
+                    var height = $(this).height();
+                    $(this).css("cursor", "pointer");
+                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($("body")).css({
+                        position: "absolute",
+                        top: pos.top + "px",
+                        left: 20 + pos.left + "px"
+                    });
+                }, function() {
+                    $(this).css("cursor", "inherit");
+                    temp.remove();
+                });
             });
         },
         frame: function() {
@@ -668,7 +689,6 @@ KB.App = function($) {
         KB.Ui.init();
     }
     function addViews() {
-        console.log(KB);
         if (KB.appData.config.preview) {
             return false;
         }

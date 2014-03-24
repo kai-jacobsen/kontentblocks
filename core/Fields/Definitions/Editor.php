@@ -28,9 +28,13 @@ Class Editor extends Field
         kb_wp_editor($id, $value, $name, $media);
     }
 
-    public function filter($value)
+    public function inputFilter($value)
     {
         return wp_unslash($value);
+    }
+
+    public function outputFilter($value){
+        return wp_kses_post($value);
     }
 
 }

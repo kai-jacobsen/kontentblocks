@@ -77,7 +77,6 @@ KB.App = (function ($) {
      */
     function addViews() {
 
-        console.log(KB);
         if (KB.appData.config.preview){
             return false;
         }
