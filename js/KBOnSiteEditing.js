@@ -37,9 +37,9 @@ var KBOnSiteEditing;
             $(caller).parent('li').toggleClass('os-edit-off');
             $('body').toggleClass('onsite-editing');
 
+            $('.kooltip').powerTip('show');
 
             $('.editable').each(function(i, el){
-                console.log(el);
             });
 
         },

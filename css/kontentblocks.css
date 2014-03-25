@@ -3325,6 +3325,6 @@ textarea.quicktags {
 
 /* line 666, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/kontentblocks.scss */
 .onsite-editing .editable {
-  outline: 1px dashed #999;
+  outline: 1px dashed currentcolor;
   padding: 3px;
 }
