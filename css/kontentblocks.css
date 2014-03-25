@@ -3324,7 +3324,7 @@ textarea.quicktags {
 }
 
 /* line 666, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/kontentblocks.scss */
-.onsite-editing .editable {
+.onsite-editing .editable, .onsite-editing .editable-image, .onsite-editing .editable-bg-image {
   outline: 1px dashed currentcolor;
-  padding: 3px;
+  padding: 1px;
 }

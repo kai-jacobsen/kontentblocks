@@ -663,7 +663,7 @@ textarea.quicktags {
   display: none;
 }
 
-.onsite-editing .editable {
+.onsite-editing .editable, .onsite-editing .editable-image, .onsite-editing .editable-bg-image {
   outline: 1px dashed currentcolor;
   padding: 1px;
 //  background-color: #ffffe0;
