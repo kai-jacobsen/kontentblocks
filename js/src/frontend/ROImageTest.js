@@ -23,14 +23,16 @@ KB.Stuff = (function ($) {
                 that.resetFields();
             });
 
-            KB.on('kb:moduleControlsAdded', function(){
+            KB.on('kb:moduleControlsAdded', function () {
                 that.renderControls();
             });
 
         },
         renderControls: function () {
             $(this.selector).each(function (index, obj) {
-                $(this).css('cursor', 'pointer');
+                $('body').on('mouseover', $(this), function () {
+                    $(this).css('cursor', 'pointer');
+                });
             });
         },
         frame: function () {
@@ -145,7 +147,9 @@ KB.StuffBG = (function ($) {
         },
         renderControls: function () {
             $(this.selector).each(function (index, obj) {
+                $('body').on('mouseover', $(this), function () {
                     $(this).css('cursor', 'pointer');
+                });
             });
         },
         frame: function () {

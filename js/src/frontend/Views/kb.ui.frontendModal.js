@@ -245,6 +245,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.model.view.trigger('kb:moduleUpdated');
                 that.view.trigger('kb:frontend::viewUpdated');
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
+                KB.trigger('kb:frontendModalUpdated');
 
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
                     initTinymce(el);

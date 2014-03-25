@@ -167,6 +167,15 @@ jQuery(document).ready(function(){
         fadeOutTime:0
     });
 
+    KB.on('kb:frontendModalUpdated', function(){
+        jQuery('.koolkip').powerTip({
+            placement: 'ne',
+            followMouse: true,
+            fadeInTime: 0,
+            fadeOutTime:0
+        });
+    });
+
 });
 
 //
