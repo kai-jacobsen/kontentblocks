@@ -72,7 +72,7 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn
     private function getEditableClass()
     {
         $titles = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
-        $text = array('div', 'p', 'span');
+        $text = array('div', 'p', 'span', 'article', 'section');
 
         if (in_array($this->el, $titles)) {
             return 'editable-title';

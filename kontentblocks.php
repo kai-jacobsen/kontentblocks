@@ -7,7 +7,6 @@ use Kontentblocks\Backend\Dynamic\ModuleTemplates;
 use Kontentblocks\Backend\Screen\EditScreen,
     Kontentblocks\Hooks\Enqueues,
     Kontentblocks\Hooks\Capabilities,
-    Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Fields\FieldRegistry;
 
@@ -29,16 +28,12 @@ Class Kontentblocks
     const VERSION = '1.0.0alpha';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.12';
+    const CONTENTCONCAT = TRUE;
+
 
     public $dev_mode = true;
     static $instance;
 
-
-    /*
-     * Constructor
-     * Setup constants and include necessary files
-     *
-     */
     public $Capabilities;
     public $ModuleRegistry;
 
@@ -51,20 +46,14 @@ Class Kontentblocks
 
     }
 
-    private function __construct()
-    {
-    }
-
     public function init()
     {
-
         define('KB_PLUGIN_URL', plugin_dir_url(__FILE__));
         define('KB_PLUGIN_PATH', plugin_dir_path(__FILE__));
         define('KB_TEMPLATE_URL', plugin_dir_url(__FILE__) . '/core/Modules/core-modules/');
         define('KB_TEMPLATE_PATH', plugin_dir_path(__FILE__) . 'core/Modules/core-modules/');
         define('KB_REFIELD_JS', plugin_dir_url(__FILE__) . '/Definitions/js/');
 
-        // additional cap feature, only used on demand and not properly tested yet
         // still there for historical reasons
         define('KONTENTLOCK', false);
 
