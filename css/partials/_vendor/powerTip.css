@@ -1,0 +1,124 @@
+/* PowerTip Plugin */
+/* line 2, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip {
+  cursor: default;
+  background-color: #333;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  color: #fff;
+  display: none;
+  padding: 10px;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 2147483647;
+}
+
+/* line 14, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip:before {
+  content: "";
+  position: absolute;
+}
+
+/* line 18, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.n:before, #powerTip.s:before {
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  left: 50%;
+  margin-left: -5px;
+}
+
+/* line 24, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.e:before, #powerTip.w:before {
+  border-bottom: 5px solid transparent;
+  border-top: 5px solid transparent;
+  margin-top: -5px;
+  top: 50%;
+}
+
+/* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.n:before {
+  border-top: 10px solid #333;
+  border-top: 10px solid rgba(0, 0, 0, 0.8);
+  bottom: -10px;
+}
+
+/* line 35, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.e:before {
+  border-right: 10px solid #333;
+  border-right: 10px solid rgba(0, 0, 0, 0.8);
+  left: -10px;
+}
+
+/* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.s:before {
+  border-bottom: 10px solid #333;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+  top: -10px;
+}
+
+/* line 45, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.w:before {
+  border-left: 10px solid #333;
+  border-left: 10px solid rgba(0, 0, 0, 0.8);
+  right: -10px;
+}
+
+/* line 50, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.ne:before, #powerTip.se:before {
+  border-right: 10px solid transparent;
+  border-left: 0;
+  left: 10px;
+}
+
+/* line 55, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.nw:before, #powerTip.sw:before {
+  border-left: 10px solid transparent;
+  border-right: 0;
+  right: 10px;
+}
+
+/* line 60, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.ne:before, #powerTip.nw:before {
+  border-top: 10px solid #333;
+  border-top: 10px solid rgba(0, 0, 0, 0.8);
+  bottom: -10px;
+}
+
+/* line 65, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.se:before, #powerTip.sw:before {
+  border-bottom: 10px solid #333;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+  top: -10px;
+}
+
+/* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.nw-alt:before, #powerTip.ne-alt:before,
+#powerTip.sw-alt:before, #powerTip.se-alt:before {
+  border-top: 10px solid #333;
+  border-top: 10px solid rgba(0, 0, 0, 0.8);
+  bottom: -10px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  left: 10px;
+}
+
+/* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.ne-alt:before {
+  left: auto;
+  right: 10px;
+}
+
+/* line 83, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.sw-alt:before, #powerTip.se-alt:before {
+  border-top: none;
+  border-bottom: 10px solid #333;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+  bottom: auto;
+  top: -10px;
+}
+
+/* line 90, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/powerTip.scss */
+#powerTip.se-alt:before {
+  left: auto;
+  right: 10px;
+}

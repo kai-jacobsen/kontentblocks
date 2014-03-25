@@ -24,6 +24,8 @@ class Image extends AbstractFieldReturn
         $this->hasImage = (empty($value['id'])) ? false : true;
         if (is_user_logged_in()) {
             $this->addClass('editable-image');
+            $this->addClass('koolkip');
+            $this->addAttr('data-powertip', 'Click to change the image');
             $this->addAttr('data-module', $field->parentModule);
             $this->addAttr('data-key', $field->getKey());
             $this->addAttr('data-arrayKey', $field->getArg('arrayKey'));

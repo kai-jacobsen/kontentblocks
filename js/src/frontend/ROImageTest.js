@@ -22,18 +22,16 @@ KB.Stuff = (function ($) {
                 that.resetFields();
             });
 
-//            KB.on('kb:moduleControlsAdded', function(){
-//                that.renderControls();
-//            });
+            KB.on('kb:moduleControlsAdded', function(){
+                that.renderControls();
+            });
 
         },
-//        renderControls: function () {
-//            $(this.selector).each(function (index, obj) {
-//                var mid = $(this).attr('data-module');
-//                $(this).css('cursor', 'pointer');
-//                $('<li><a>Click to change image</a></li>').appendTo($('#' + mid + ' .controls-wrap'));
-//            });
-//        },
+        renderControls: function () {
+            $(this.selector).each(function (index, obj) {
+                $(this).css('cursor', 'pointer');
+            });
+        },
         frame: function () {
             if (this._frame)
                 return this._frame;

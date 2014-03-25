@@ -55,6 +55,7 @@ KB.Ui = function ($) {
                 that.metaBoxReorder(e, o, settings, 'remove');
             });
         },
+
         flexContext: function () {
             var side = $('.area-side');
             var normal = $('.area-normal');

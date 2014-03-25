@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-24 */
+/*! Kontentblocks DevVersion 2014-03-25 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -92,6 +92,14 @@ KB.Stuff = function($) {
                 e.preventDefault();
                 that.container = $(".kb-field-file-wrapper", activeField);
                 that.resetFields();
+            });
+            KB.on("kb:moduleControlsAdded", function() {
+                that.renderControls();
+            });
+        },
+        renderControls: function() {
+            $(this.selector).each(function(index, obj) {
+                $(this).css("cursor", "pointer");
             });
         },
         frame: function() {
@@ -730,6 +738,12 @@ jQuery(document).ready(function() {
         _K.info("Frontend Modules Ready Event fired");
         KB.Views.Modules.readyOnFront();
     }
+    jQuery(".koolkip").powerTip({
+        placement: "ne",
+        followMouse: true,
+        fadeInTime: 0,
+        fadeOutTime: 0
+    });
 });
 
 function initTinymce(item) {

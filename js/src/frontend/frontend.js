@@ -160,6 +160,13 @@ jQuery(document).ready(function(){
         KB.Views.Modules.readyOnFront();
     }
 
+    jQuery('.koolkip').powerTip({
+        placement: 'ne',
+        followMouse: true,
+        fadeInTime: 0,
+        fadeOutTime:0
+    });
+
 });
 
 //
