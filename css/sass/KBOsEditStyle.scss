@@ -9,7 +9,7 @@
   list-style: none;
 
   li {
-
+    display: block;
   }
 }
 
@@ -17,11 +17,17 @@
   opacity: 1;
 }
 
+.isDirty {
+  .kb-module-dirty-state {
+    display: block !important;
+  }
+}
+
 .os-edit-wrapper {
   position: absolute;
   z-index: 5;
   background: transparent;
-  opacity: .0;
+  opacity: 0;
   z-index: 9969;
 
   &.master-module a {
@@ -33,35 +39,43 @@
   }
 
   a {
-    line-height: 20px;
-    display: inline-block;
+    line-height: 18px !important;
+    display: block;
     box-sizing: border-box;
-    float: left;
     margin: 0px 0px;
-    font-size: 14px;
-    padding: 0px;
-    color: #333;
-    opacity: 1;
+    font-size: 12px !important;
+    padding: 2px 12px 2px 2px;
+    color: #fff;
     text-decoration: none;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
-    border: 1px solid #333;
-    @include border-radius(20px);
-    background-color: #fff;
+    border-left: 1px solid #fff;
+    background-color: #333;
+    opacity: .9;
 
-    &.dashicons {
-      width: 22px;
-      height: 22px;
+    &.kb-nbb {
+      border-bottom: none !important;
+    }
+
+    &.kb-nbt {
+      border-top: none !important;
+    }
+
+    &.kb-module-dirty-state {
+      background-color: red;
+      padding-left: 6px;
+      display: none;
+    }
+
+    span {
+      font-size: 13px !important;
+      line-height: 18px;
     }
 
     &:hover {
-      color: #333;
+      color: #fff;
       text-decoration: none;
-      border-bottom: none;
-      border: 1px solid #333;
-      font-size: 14px;
-      @include border-radius(20px);
-
+      font-size: 13px !important;
     }
   }
 
@@ -86,8 +100,9 @@ body.onsite-editing {
     list-style: none;
 
     li {
-      float: left;
+      display: block;
     }
+
   }
 
   .os-edit-wrapper a:hover {

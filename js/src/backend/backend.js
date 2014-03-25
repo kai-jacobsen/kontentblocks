@@ -1,4 +1,4 @@
-_.extend(KB, Backbone.Events);
+//_.extend(KB, Backbone.Events);
 
 KB.currentModule = {};
 KB.currentArea = {};

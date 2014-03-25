@@ -11,6 +11,8 @@ KB.Ext = {};
 
 KB.OSConfig = {};
 
+_.extend(KB, Backbone.Events);
+
 KB.Ajax = function($) {
     return {
         send: function(data, callback, scope) {

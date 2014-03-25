@@ -122,6 +122,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.model.view.trigger('kb:moduleUpdated');
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
                 KB.Notice.notice('Module saved successfully', 'success');
+                that.$el.removeClass('isDirty');
             },
             error: function () {
                 console.log('e');

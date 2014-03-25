@@ -22,27 +22,18 @@ KB.Stuff = (function ($) {
                 that.resetFields();
             });
 
-            this.renderControls();
+//            KB.on('kb:moduleControlsAdded', function(){
+//                that.renderControls();
+//            });
 
         },
-        renderControls: function () {
-            var temp;
-            $(this.selector).each(function(index, obj){
-                $(obj).hover(function(){
-                    var pos = $(this).offset();
-                    var height = $(this).height();
-                    $(this).css('cursor', 'pointer');
-                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($('body')).css({
-                        'position' : 'absolute',
-                        'top' : pos.top + 'px',
-                        'left' : 20 + pos.left + 'px'
-                    });
-                }, function(){
-                    $(this).css('cursor', 'inherit');
-                    temp.remove();
-                });
-            });
-        },
+//        renderControls: function () {
+//            $(this.selector).each(function (index, obj) {
+//                var mid = $(this).attr('data-module');
+//                $(this).css('cursor', 'pointer');
+//                $('<li><a>Click to change image</a></li>').appendTo($('#' + mid + ' .controls-wrap'));
+//            });
+//        },
         frame: function () {
             if (this._frame)
                 return this._frame;
@@ -153,17 +144,19 @@ KB.StuffBG = (function ($) {
         },
         renderControls: function () {
             var temp;
-            $(this.selector).each(function(index, obj){
-                $(obj).hover(function(){
+            $(this.selector).each(function (index, obj) {
+                $(obj).hover(function () {
                     var pos = $(this).offset();
-                    var height = $(this).height();
+                    var width = $(this).width();
+                    var mid = $(this).attr('data-module');
+                    console.log(mid);
                     $(this).css('cursor', 'pointer');
-                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($('body')).css({
-                        'position' : 'absolute',
-                        'top' : pos.top + 'px',
-                        'left' : 20 + pos.left + 'px'
+                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($('#' + mid + ' .controls-wrap')).css({
+                        'position': 'absolute',
+                        'top': pos.top + 80 + 'px',
+                        'left': width + pos.left - 135 + 'px'
                     });
-                }, function(){
+                }, function () {
                     $(this).css('cursor', 'inherit');
                     temp.remove();
                 });

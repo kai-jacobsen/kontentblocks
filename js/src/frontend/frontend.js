@@ -1,6 +1,5 @@
 KB.currentModule = {};
 KB.currentArea = {};
-_.extend(KB, Backbone.Events);
 
 // ---------------
 // Collections
@@ -91,6 +90,7 @@ KB.App = (function ($) {
         _.each(KB.payload.Modules, function (module) {
             KB.Modules.add(module);
         });
+        KB.trigger('kb:moduleControlsAdded');
 
     }
 

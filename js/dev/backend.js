@@ -568,8 +568,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     }
 });
 
-_.extend(KB, Backbone.Events);
-
 KB.currentModule = {};
 
 KB.currentArea = {};

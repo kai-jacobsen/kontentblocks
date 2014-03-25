@@ -93,25 +93,6 @@ KB.Stuff = function($) {
                 that.container = $(".kb-field-file-wrapper", activeField);
                 that.resetFields();
             });
-            this.renderControls();
-        },
-        renderControls: function() {
-            var temp;
-            $(this.selector).each(function(index, obj) {
-                $(obj).hover(function() {
-                    var pos = $(this).offset();
-                    var height = $(this).height();
-                    $(this).css("cursor", "pointer");
-                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($("body")).css({
-                        position: "absolute",
-                        top: pos.top + "px",
-                        left: 20 + pos.left + "px"
-                    });
-                }, function() {
-                    $(this).css("cursor", "inherit");
-                    temp.remove();
-                });
-            });
         },
         frame: function() {
             if (this._frame) return this._frame;
@@ -205,12 +186,14 @@ KB.StuffBG = function($) {
             $(this.selector).each(function(index, obj) {
                 $(obj).hover(function() {
                     var pos = $(this).offset();
-                    var height = $(this).height();
+                    var width = $(this).width();
+                    var mid = $(this).attr("data-module");
+                    console.log(mid);
                     $(this).css("cursor", "pointer");
-                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($("body")).css({
+                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($("#" + mid + " .controls-wrap")).css({
                         position: "absolute",
-                        top: pos.top + "px",
-                        left: 20 + pos.left + "px"
+                        top: pos.top + 80 + "px",
+                        left: width + pos.left - 135 + "px"
                     });
                 }, function() {
                     $(this).css("cursor", "inherit");
@@ -668,6 +651,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.model.view.trigger("kb:moduleUpdated");
                 jQuery(window).trigger("kontentblocks::ajaxUpdate");
                 KB.Notice.notice("Module saved successfully", "success");
+                that.$el.removeClass("isDirty");
             },
             error: function() {
                 console.log("e");
@@ -679,8 +663,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 KB.currentModule = {};
 
 KB.currentArea = {};
-
-_.extend(KB, Backbone.Events);
 
 KB.Views = {
     Modules: new KB.ViewsCollection(),
@@ -716,6 +698,7 @@ KB.App = function($) {
         _.each(KB.payload.Modules, function(module) {
             KB.Modules.add(module);
         });
+        KB.trigger("kb:moduleControlsAdded");
     }
     function createModuleViews(module) {
         module.setArea(KB.Areas.get(module.get("area")));
