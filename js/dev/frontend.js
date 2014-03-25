@@ -100,7 +100,7 @@ KB.Stuff = function($) {
         },
         renderControls: function() {
             $(this.selector).each(function(index, obj) {
-                $("body").on("mouseover", $(this), function() {
+                $("body").on("mouseover", ".editable-image", function() {
                     $(this).css("cursor", "pointer");
                 });
             });
@@ -196,7 +196,7 @@ KB.StuffBG = function($) {
         },
         renderControls: function() {
             $(this.selector).each(function(index, obj) {
-                $("body").on("mouseover", $(this), function() {
+                $("body").on("mouseover", ".editable-bg-image", function() {
                     $(this).css("cursor", "pointer");
                 });
             });
