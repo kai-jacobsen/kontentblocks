@@ -86,6 +86,7 @@ KB.Stuff = function($) {
             $body.on("click", this.selector, function(e) {
                 e.preventDefault();
                 that.img = $(this);
+                that.parent = KB.currentModule;
                 that.frame().open();
             });
             $body.on("click", this.remove, function(e) {
@@ -149,6 +150,7 @@ KB.Stuff = function($) {
                 dataType: "json",
                 success: function(res) {
                     that.img.attr("src", res);
+                    that.parrent.$el.addClass("isDirty");
                 },
                 error: function() {}
             });
@@ -180,6 +182,7 @@ KB.StuffBG = function($) {
             $("body").on("click", this.selector, function(e) {
                 e.preventDefault();
                 that.img = $(this);
+                that.parent = KB.currentModule;
                 that.frame().open();
             });
             $("body").on("click", this.remove, function(e) {
@@ -197,7 +200,7 @@ KB.StuffBG = function($) {
         frame: function() {
             if (this._frame) return this._frame;
             this._frame = wp.media({
-                title: "Hello",
+                title: "Change background image",
                 button: {
                     text: "Insert"
                 },
@@ -241,6 +244,7 @@ KB.StuffBG = function($) {
                 dataType: "json",
                 success: function(res) {
                     that.img.css("backgroundImage", "url('" + res + "')");
+                    that.parent.$el.addClass("isDirty");
                 },
                 error: function() {}
             });
@@ -563,7 +567,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click a.os-edit-block": "openOptions",
         "click .editable": "reloadModal",
         "click .kb-js-inline-update": "updateModule",
-        "click .kb-js-open-layout-controls": "openLayoutControls"
+        "click .kb-js-open-layout-controls": "openLayoutControls",
+        hover: "setActive"
+    },
+    setActive: function() {
+        KB.currentModule = this;
     },
     render: function() {
         this.$el.append(KB.Templates.render("frontend/module-controls", {

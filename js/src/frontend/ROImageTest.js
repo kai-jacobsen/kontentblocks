@@ -12,6 +12,7 @@ KB.Stuff = (function ($) {
             $body.on('click', this.selector, function (e) {
                 e.preventDefault();
                 that.img = $(this);
+                that.parent = KB.currentModule;
                 that.frame().open();
             });
 
@@ -88,6 +89,7 @@ KB.Stuff = (function ($) {
                 dataType: 'json',
                 success: function (res) {
                     that.img.attr('src', res);
+                    that.parrent.$el.addClass('isDirty');
                 },
                 error: function () {
 
@@ -129,6 +131,7 @@ KB.StuffBG = (function ($) {
             $('body').on('click', this.selector, function (e) {
                 e.preventDefault();
                 that.img = $(this);
+                that.parent = KB.currentModule;
                 that.frame().open();
             });
 
@@ -150,7 +153,7 @@ KB.StuffBG = (function ($) {
                 return this._frame;
 
             this._frame = wp.media({
-                title: 'Hello',
+                title: 'Change background image',
                 button: {
                     text: 'Insert'
                 },
@@ -201,6 +204,7 @@ KB.StuffBG = (function ($) {
                 dataType: 'json',
                 success: function (res) {
                     that.img.css('backgroundImage', "url('" + res + "')");
+                    that.parent.$el.addClass('isDirty');
                 },
                 error: function () {
 

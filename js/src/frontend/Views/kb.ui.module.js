@@ -33,7 +33,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click a.os-edit-block": "openOptions",
         "click .editable": "reloadModal",
         "click .kb-js-inline-update": "updateModule",
-        "click .kb-js-open-layout-controls": "openLayoutControls"
+        "click .kb-js-open-layout-controls": "openLayoutControls",
+        "hover": "setActive"
+    },
+    setActive: function(){
+        KB.currentModule = this;
     },
     render: function () {
         this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON()}));
