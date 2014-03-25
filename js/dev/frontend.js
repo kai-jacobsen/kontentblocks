@@ -190,23 +190,8 @@ KB.StuffBG = function($) {
             this.renderControls();
         },
         renderControls: function() {
-            var temp;
             $(this.selector).each(function(index, obj) {
-                $(obj).hover(function() {
-                    var pos = $(this).offset();
-                    var width = $(this).width();
-                    var mid = $(this).attr("data-module");
-                    console.log(mid);
-                    $(this).css("cursor", "pointer");
-                    temp = $('<div style="padding: 5px; background-color: #333; color: #fff; opacity: .9; font-size:11px;">Click to change image</div>').appendTo($("#" + mid + " .controls-wrap")).css({
-                        position: "absolute",
-                        top: pos.top + 80 + "px",
-                        left: width + pos.left - 135 + "px"
-                    });
-                }, function() {
-                    $(this).css("cursor", "inherit");
-                    temp.remove();
-                });
+                $(this).css("cursor", "pointer");
             });
         },
         frame: function() {
