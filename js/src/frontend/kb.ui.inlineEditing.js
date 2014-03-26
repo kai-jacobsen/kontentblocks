@@ -33,21 +33,25 @@ function initTinymce(item) {
                 jQuery('#kb-toolbar').show();
             });
 
+            ed.on('change', function(e){
+                _K.log('Got Dirty');
+            });
+
             ed.addButton('kbcancleinline', {
                 title: 'Stop inline Edit',
-                onClick: function () {
+                onClick: function (ed) {
+                    _K.log('ed', tinymce.activeEditor);
+                    tinymce.activeEditor.fire('blur');
                     tinymce.activeEditor = null;
                     tinymce.focusedEditor = null;
                     document.activeElement.blur();
                     jQuery('#kb-toolbar').hide();
-
                 }
             });
 
             ed.on('blur', function () {
 
                 jQuery('#kb-toolbar').hide();
-
                 var data = ed.kbDataRef;
                 var value = ed.getContent();
 
@@ -61,7 +65,10 @@ function initTinymce(item) {
                 } else {
                     moduleData[data.key] = value;
                 }
-                ed.module.set('moduleData', moduleData);
+                if (ed.isDirty()){
+                    ed.module.trigger('change');
+                    ed.module.set('moduleData', moduleData);
+                }
 
             });
         }

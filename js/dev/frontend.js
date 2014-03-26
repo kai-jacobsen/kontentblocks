@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-25 */
+/*! Kontentblocks DevVersion 2014-03-26 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -564,8 +564,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             that.setControlsPosition();
         });
     },
-    modelChange: function() {
+    getDirty: function() {
         this.$el.addClass("isDirty");
+    },
+    getClean: function() {
+        this.$el.removeClass("isDirty");
+    },
+    modelChange: function() {
+        this.getDirty();
     },
     save: function() {},
     events: {
@@ -781,9 +787,14 @@ function initTinymce(item) {
             ed.on("focus", function(e) {
                 jQuery("#kb-toolbar").show();
             });
+            ed.on("change", function(e) {
+                _K.log("Got Dirty");
+            });
             ed.addButton("kbcancleinline", {
                 title: "Stop inline Edit",
-                onClick: function() {
+                onClick: function(ed) {
+                    _K.log("ed", tinymce.activeEditor);
+                    tinymce.activeEditor.fire("blur");
                     tinymce.activeEditor = null;
                     tinymce.focusedEditor = null;
                     document.activeElement.blur();
@@ -804,7 +815,10 @@ function initTinymce(item) {
                 } else {
                     moduleData[data.key] = value;
                 }
-                ed.module.set("moduleData", moduleData);
+                if (ed.isDirty()) {
+                    ed.module.trigger("change");
+                    ed.module.set("moduleData", moduleData);
+                }
             });
         }
     });

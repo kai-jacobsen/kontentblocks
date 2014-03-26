@@ -23,8 +23,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         });
 
     },
-    modelChange: function(){
+    getDirty: function(){
         this.$el.addClass('isDirty');
+    },
+    getClean: function(){
+        this.$el.removeClass('isDirty');
+    },
+    modelChange: function(){
+        this.getDirty();
     },
     save: function () {
         // TODO utilize this for saving instead of handling this by the modal view
