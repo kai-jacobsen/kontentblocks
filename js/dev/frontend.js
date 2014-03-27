@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-26 */
+/*! Kontentblocks DevVersion 2014-03-27 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {

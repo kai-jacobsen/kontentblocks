@@ -9,6 +9,7 @@ class JSONBridge
     protected $publicData = array();
     protected $modules = array();
     protected $areas = array();
+    protected $fieldData = array();
 
     protected static $instance;
 
@@ -60,6 +61,10 @@ class JSONBridge
         return $this;
     }
 
+    public function registerFieldData($modid, $type, $data)
+    {
+        $this->fieldData[$type][$modid] = $data;
+    }
 
     public function registerModule($module)
     {
@@ -85,9 +90,9 @@ class JSONBridge
 
     public function printJSON()
     {
-
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;
+        $this->data['fieldData'] = $this->fieldData;
         $json = json_encode($this->data);
         print "<script>var KB = KB || {}; KB.payload = {}; KB.payload =  {$json};</script>";
     }
@@ -104,7 +109,6 @@ class JSONBridge
     {
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;
-
         return $this->data;
     }
 

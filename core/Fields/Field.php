@@ -74,6 +74,11 @@ abstract class Field
     protected $module;
 
     /**
+     * @var string module instance_id
+     */
+    protected $parentModuleId;
+
+    /**
      * set storage key
      * @param string $key
      * @since 1.0.0
@@ -121,7 +126,6 @@ abstract class Field
         } else {
             $this->baseId = $id . '[' . $array . ']';
         }
-
         // set parent module id which equals given id
         $this->parentModuleId = $id;
 
@@ -159,10 +163,8 @@ abstract class Field
      */
     public function setup($data, $moduleId)
     {
-
+        $this->parentModuleId = $moduleId;
         $this->setData($data);
-        $this->parentModule = $moduleId;
-
     }
 
     /**
