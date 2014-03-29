@@ -40,7 +40,9 @@ function initTinymce(item) {
             ed.addButton('kbcancleinline', {
                 title: 'Stop inline Edit',
                 onClick: function (ed) {
-                    _K.log('ed', tinymce.activeEditor);
+                    if (tinymce.activeEditor.isDirty()){
+                        tinymce.activeEditor.module.view.getDirty();
+                    }
                     tinymce.activeEditor.fire('blur');
                     tinymce.activeEditor = null;
                     tinymce.focusedEditor = null;
@@ -124,6 +126,10 @@ jQuery(document).ready(function () {
                     ed.addButton('kbcancleinline', {
                         title: 'Stop inline Edit',
                         onClick: function () {
+                            if (tinymce.activeEditor.isDirty()){
+                                tinymce.activeEditor.module.view.getDirty();
+                            }
+                            tinymce.activeEditor.fire('blur');
                             tinymce.activeEditor = null;
                             tinymce.focusedEditor = null;
                             document.activeElement.blur();

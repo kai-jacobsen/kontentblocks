@@ -25,7 +25,6 @@
 
 .os-edit-wrapper {
   position: absolute;
-  z-index: 5;
   background: transparent;
   opacity: 0;
   z-index: 9969;
@@ -76,6 +75,7 @@
       color: #fff;
       text-decoration: none;
       font-size: 13px !important;
+      padding-left: 10px;
     }
   }
 
@@ -264,14 +264,16 @@ body.onsite-editing {
   .controls-title {
     font-size: 12px;
     margin: 0;
-    padding: 0px 10px 0px 150px;
+    padding: 0px 10px 0px 10px;
     height: 30px;
     line-height: 30px;
     cursor: move;
     background: #333;
     color: #fcfcfc;
+    text-shadow:0 0 1px #000;
     font-weight: 100;
     box-sizing: border-box;
+    text-align: center;
   }
 
   .os-controls-meta {
@@ -293,13 +295,12 @@ body.onsite-editing {
   }
 
   a.kb-save-form {
-    position: absolute;
-    top: 0px;
-    left: 71px;
     height: 30px;
     font-size: 13px;
     padding: 0px 12px;
     line-height: 30px;
+    float: left;
+    display: block;
 
   }
 
@@ -327,15 +328,19 @@ body.onsite-editing {
     }
   }
 
-  a.kb-preview-form {
+  .kb-controls--buttons-wrap{
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left:0;
+  }
+
+  a.kb-preview-form {
     height: 30px;
     font-size: 13px;
     padding: 0px 12px;
     line-height: 30px;
-
+    float: left;
+    display: block;
   }
 
   .kb_fieldtabs ul.ui-tabs-nav {
@@ -409,7 +414,10 @@ body.onsite-editing {
 
 #onsite-modal.isDirty {
   .kb-dirty-notice {
-    display: inline;
+    position: absolute;
+    top: -5px;
+    left: 31px;
+    display: block;
   }
 }
 
@@ -417,4 +425,12 @@ body.onsite-editing {
   .kb-dirty-notice {
     display: none;
   }
+}
+
+.kb-modal--loading{
+  min-height: 150px;
+  line-height: 150px;
+  text-align: center;
+  font-size: 30px;
+  color: #f2f2f2;
 }

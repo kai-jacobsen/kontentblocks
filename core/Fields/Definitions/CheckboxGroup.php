@@ -93,7 +93,7 @@ Class CheckboxGroup extends Field
      * @param array $fielddata
      * @return array
      */
-    public function filter( $fielddata )
+    public function inputFilter( $fielddata )
     {
         $collect = array();
         if ( !empty( $fielddata ) ) {

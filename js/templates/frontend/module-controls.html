@@ -2,16 +2,16 @@
     <ul class="controls-wrap">
         <li>
             <a class='os-edit-block kb-nbb' title='edit' data='<%= model.instance_id %>'
-               data-url='<%= model.editURL %>'><span class="dashicons dashicons-edit"></span>Edit</a>
+               data-url='<%= model.editURL %>'><span class="dashicons dashicons-edit"></span><%= i18n.moduleControls.controlsEdit %></a>
         </li>
         <!--<li>-->
             <!--<a class='kb-module-layout-controls kb-js-open-layout-controls dashicons dashicons-hammer'></a>-->
         <!--</li>-->
         <li>
-            <a class='kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update'><span class="dashicons dashicons-update"></span>Update</a>
+            <a class='kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update'><span class="dashicons dashicons-update"></span><%= i18n.moduleControls.controlsUpdate %></a>
         </li>
         <li>
-            <a class='kb-module-dirty-state kb-nbt'><span class=""></span>Data was modified</a>
+            <a class='kb-module-dirty-state kb-nbt'><span class=""></span><%= i18n.moduleControls.controlsChanged %></a>
         </li>
     </ul>
 </div>

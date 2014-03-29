@@ -46,7 +46,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function () {
-        this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON()}));
+        this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON(), i18n: KB.i18n.jsFrontend}));
     },
     openOptions: function () {
 

@@ -114,7 +114,6 @@ class BackupManager
 
         //set reference
         $this->Storage->getDataHandler()->update('kb_last_backup', $now);
-
         wp_cache_delete('kb_backups_'.$data['post_id'], 'kontentblocks');
         return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
     }

@@ -36,7 +36,7 @@ Class Text extends Field
      * @param string $value
      * @return string filtered
      */
-    public function filter( $value )
+    public function inputFilter( $value )
     {
         return esc_attr( $value );
 

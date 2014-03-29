@@ -52,7 +52,7 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn
             $editableClass = $this->getEditableClass();
             if (is_object($this->field)) {
                 $this->addClass($editableClass);
-                $this->addAttr('data-module', $this->field->parentModule);
+                $this->addAttr('data-module', $this->field->parentModuleId);
                 $this->addAttr('data-key', $this->field->getKey());
                 $this->addAttr('data-arrayKey', $this->field->getArg('arrayKey'));
             } else if (is_array($this->field)) {

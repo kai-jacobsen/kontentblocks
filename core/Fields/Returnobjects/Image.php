@@ -19,14 +19,14 @@ class Image extends AbstractFieldReturn
 
     public function __construct($value, $field)
     {
-        $this->moduleId = $field->parentModule;
+        $this->moduleId = $field->parentModuleId;
         $this->key = $field->getKey();
         $this->hasImage = (empty($value['id'])) ? false : true;
         if (is_user_logged_in()) {
             $this->addClass('editable-image');
             $this->addClass('koolkip');
             $this->addAttr('data-powertip', 'Click to change the image');
-            $this->addAttr('data-module', $field->parentModule);
+            $this->addAttr('data-module', $field->parentModuleId);
             $this->addAttr('data-key', $field->getKey());
             $this->addAttr('data-arrayKey', $field->getArg('arrayKey'));
         }

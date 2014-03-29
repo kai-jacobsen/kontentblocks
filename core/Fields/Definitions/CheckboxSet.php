@@ -88,7 +88,7 @@ Class CheckboxSet extends Field
 
     }
 
-    public function filter( $fielddata )
+    public function inputFilter( $fielddata )
     {
         $collect = array();
         if ( !empty( $fielddata ) ) {

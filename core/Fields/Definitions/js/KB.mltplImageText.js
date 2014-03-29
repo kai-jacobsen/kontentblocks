@@ -131,7 +131,7 @@ _.extend(KB.MultipleImageText.prototype, {
         this.$imgwrap.empty().append('<img src="' + url.url + '" >');
     },
     listen: function () {
-        $(document).foundation('orbit');
+
         $(window).trigger('resize');
         initFlicker(this.view.parentView.el);
     }

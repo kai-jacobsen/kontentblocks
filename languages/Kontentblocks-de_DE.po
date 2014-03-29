@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2014-03-19 08:45+0100\n"
-"PO-Revision-Date: 2014-03-19 08:45+0100\n"
+"POT-Creation-Date: 2014-03-28 08:16+0100\n"
+"PO-Revision-Date: 2014-03-28 08:17+0100\n"
 "Last-Translator: Kai Jacobsen <kai@ungestaltbar.de>\n"
 "Language-Team: Kai Jacobsen\n"
 "Language: Deutsch\n"
@@ -25,6 +25,28 @@ msgstr "Modulvorschau wurde aktualisiert."
 #: ../core/./Language/packages/i18n.jsFrontend.php:7
 msgid "Module data successfully saved"
 msgstr "Moduldaten wurde gespeichert"
+
+#: ../core/Language/./packages/i18n.jsFrontend.php:8
+#: ../core/./Language/packages/i18n.jsFrontend.php:8
+msgid "Preview"
+msgstr "Vorschau"
+
+#: ../core/Language/./packages/i18n.jsFrontend.php:9
+#: ../core/Language/./packages/i18n.jsFrontend.php:14
+#: ../core/./Language/packages/i18n.jsFrontend.php:9
+#: ../core/./Language/packages/i18n.jsFrontend.php:14
+msgid "Save"
+msgstr "Speichern"
+
+#: ../core/Language/./packages/i18n.jsFrontend.php:12
+#: ../core/./Language/packages/i18n.jsFrontend.php:12
+msgid "Data was changed"
+msgstr "Inhalt wurde geändert"
+
+#: ../core/Language/./packages/i18n.jsFrontend.php:13
+#: ../core/./Language/packages/i18n.jsFrontend.php:13
+msgid "Edit"
+msgstr "Bearbeiten"
 
 #: ../core/Language/./packages/i18n_CoreModules.php:6
 #: ../core/./Language/packages/i18n_CoreModules.php:6
@@ -147,15 +169,15 @@ msgstr "Standardvorlage"
 msgid "Please set options to show"
 msgstr "Es wurden keine Optionen zur Auswahl angegeben."
 
-#: ../core/./Hooks/Enqueues.php:143
+#: ../core/./Hooks/Enqueues.php:142
 msgid "Clear"
 msgstr "Reset"
 
-#: ../core/./Hooks/Enqueues.php:144
+#: ../core/./Hooks/Enqueues.php:143
 msgid "Default"
 msgstr "Standardvorlage"
 
-#: ../core/./Hooks/Enqueues.php:145
+#: ../core/./Hooks/Enqueues.php:144
 msgid "Select Color"
 msgstr "Farbe wählen"
 
@@ -210,7 +232,7 @@ msgid "Module Template"
 msgstr "Modulevorlage"
 
 #: ../core/./Backend/Dynamic/ModuleTemplates.php:262
-#: ../core/./Backend/Dynamic/DynamicAreas.php:164
+#: ../core/./Backend/Dynamic/DynamicAreas.php:167
 msgid "Add New"
 msgstr "Hinzufügen"
 
@@ -256,12 +278,12 @@ msgid "Module Template updated."
 msgstr "Modulvorlage wurde aktualisiert."
 
 #: ../core/./Backend/Dynamic/ModuleTemplates.php:302
-#: ../core/./Backend/Dynamic/DynamicAreas.php:205
+#: ../core/./Backend/Dynamic/DynamicAreas.php:208
 msgid "Custom field updated."
 msgstr ""
 
 #: ../core/./Backend/Dynamic/ModuleTemplates.php:303
-#: ../core/./Backend/Dynamic/DynamicAreas.php:206
+#: ../core/./Backend/Dynamic/DynamicAreas.php:209
 msgid "Custom field deleted."
 msgstr ""
 
@@ -288,7 +310,7 @@ msgid "Module Template scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
 #: ../core/./Backend/Dynamic/ModuleTemplates.php:313
-#: ../core/./Backend/Dynamic/DynamicAreas.php:216
+#: ../core/./Backend/Dynamic/DynamicAreas.php:219
 msgid "M j, Y @ G:i"
 msgstr ""
 
@@ -296,80 +318,80 @@ msgstr ""
 msgid "Module Template draft updated."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:160
-#: ../core/./Backend/Dynamic/DynamicAreas.php:162
 #: ../core/./Backend/Dynamic/DynamicAreas.php:163
+#: ../core/./Backend/Dynamic/DynamicAreas.php:165
+#: ../core/./Backend/Dynamic/DynamicAreas.php:166
 msgid "Areas"
 msgstr "Areas"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:161
+#: ../core/./Backend/Dynamic/DynamicAreas.php:164
 msgid "Area"
 msgstr "Area"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:165
+#: ../core/./Backend/Dynamic/DynamicAreas.php:168
 msgid "Add New Area"
 msgstr "Neue Area hinzufügen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:166
+#: ../core/./Backend/Dynamic/DynamicAreas.php:169
 msgid "New Area"
 msgstr "Neue Area"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:167
+#: ../core/./Backend/Dynamic/DynamicAreas.php:170
 msgid "Edit Area"
 msgstr "Area bearbeiten"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:168
+#: ../core/./Backend/Dynamic/DynamicAreas.php:171
 msgid "View Area"
 msgstr "Area ansehen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:169
+#: ../core/./Backend/Dynamic/DynamicAreas.php:172
 msgid "All Areas"
 msgstr "Alle Areas"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:170
+#: ../core/./Backend/Dynamic/DynamicAreas.php:173
 msgid "Search Areas"
 msgstr "Areas durchsuchen"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:171
+#: ../core/./Backend/Dynamic/DynamicAreas.php:174
 msgid "Parent Area:"
 msgstr "Elternarea"
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:172
+#: ../core/./Backend/Dynamic/DynamicAreas.php:175
 msgid "No Areas found."
 msgstr "Keine Areas gefunden."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:173
+#: ../core/./Backend/Dynamic/DynamicAreas.php:176
 msgid "No Areas found in Trash."
 msgstr "Keine Areas im Papierkorb."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:204
 #: ../core/./Backend/Dynamic/DynamicAreas.php:207
+#: ../core/./Backend/Dynamic/DynamicAreas.php:210
 msgid "Area updated."
 msgstr "Area wurde aktualisiert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:209
+#: ../core/./Backend/Dynamic/DynamicAreas.php:212
 #, php-format
 msgid "Area restored to revision from %s"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:210
+#: ../core/./Backend/Dynamic/DynamicAreas.php:213
 msgid "Area published."
 msgstr "Area wurde veröffentlicht."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:211
+#: ../core/./Backend/Dynamic/DynamicAreas.php:214
 msgid "Area saved."
 msgstr "Area wurde gespeichert."
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:212
+#: ../core/./Backend/Dynamic/DynamicAreas.php:215
 msgid "Area submitted."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:214
+#: ../core/./Backend/Dynamic/DynamicAreas.php:217
 #, php-format
 msgid "Area scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/DynamicAreas.php:218
+#: ../core/./Backend/Dynamic/DynamicAreas.php:221
 msgid "Area draft updated."
 msgstr ""
 

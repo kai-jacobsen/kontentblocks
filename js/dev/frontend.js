@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-27 */
+/*! Kontentblocks DevVersion 2014-03-29 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -336,7 +336,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.model.on("change", this.test, this);
         this.on("recalibrate", this.recalibrate, this);
         jQuery(KB.Templates.render("frontend/module-edit-form", {
-            model: this.model.toJSON()
+            model: this.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
         })).appendTo(this.$el);
         this.$form = jQuery("#onsite-form", this.$el);
         this.$formContent = jQuery("#onsite-content", this.$el);
@@ -586,7 +587,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     render: function() {
         this.$el.append(KB.Templates.render("frontend/module-controls", {
-            model: this.model.toJSON()
+            model: this.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
         }));
     },
     openOptions: function() {
@@ -793,7 +795,9 @@ function initTinymce(item) {
             ed.addButton("kbcancleinline", {
                 title: "Stop inline Edit",
                 onClick: function(ed) {
-                    _K.log("ed", tinymce.activeEditor);
+                    if (tinymce.activeEditor.isDirty()) {
+                        tinymce.activeEditor.module.view.getDirty();
+                    }
                     tinymce.activeEditor.fire("blur");
                     tinymce.activeEditor = null;
                     tinymce.focusedEditor = null;
@@ -860,6 +864,10 @@ jQuery(document).ready(function() {
                 ed.addButton("kbcancleinline", {
                     title: "Stop inline Edit",
                     onClick: function() {
+                        if (tinymce.activeEditor.isDirty()) {
+                            tinymce.activeEditor.module.view.getDirty();
+                        }
+                        tinymce.activeEditor.fire("blur");
                         tinymce.activeEditor = null;
                         tinymce.focusedEditor = null;
                         document.activeElement.blur();

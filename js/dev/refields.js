@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-27 */
+/*! Kontentblocks DevVersion 2014-03-29 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -326,7 +326,6 @@ _.extend(KB.MultipleImageText.prototype, {
         this.$imgwrap.empty().append('<img src="' + url.url + '" >');
     },
     listen: function() {
-        $(document).foundation("orbit");
         $(window).trigger("resize");
         initFlicker(this.view.parentView.el);
     }

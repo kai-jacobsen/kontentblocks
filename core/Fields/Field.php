@@ -76,7 +76,7 @@ abstract class Field
     /**
      * @var string module instance_id
      */
-    protected $parentModuleId;
+    public $parentModuleId;
 
     /**
      * set storage key

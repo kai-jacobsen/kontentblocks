@@ -21,7 +21,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.on('recalibrate', this.recalibrate, this);
 
         // add form skeleton to modal
-        jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON()})).appendTo(this.$el);
+        jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON(), i18n:KB.i18n.jsFrontend})).appendTo(this.$el);
 
         // cache elements
         this.$form = jQuery('#onsite-form', this.$el);
@@ -106,7 +106,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         KB.lastAddedModule = {
             view: that
         };
-
 
         // get the form
         jQuery.ajax({

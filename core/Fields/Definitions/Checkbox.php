@@ -55,7 +55,7 @@ Class Checkbox extends Field
      * @param mixed $var value as saved
      * @return bool
      */
-    public function filter( $var )
+    public function inputFilter( $var )
     {
         return filter_var( $var, FILTER_VALIDATE_BOOLEAN );
 

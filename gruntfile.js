@@ -9,7 +9,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
-                    mangle: true,
+                    mangle: false,
                     beautify: false,
                     compress: true,
                     drop_console: true
