@@ -74,7 +74,6 @@ Class Kontentblocks
             require_once dirname(__FILE__) . '/includes/ajax-callback-handler.php';
 
             // @TODO stinks
-            new EditScreen();
             new Capabilities();
         }
 
@@ -95,6 +94,7 @@ Class Kontentblocks
         // Load Fields
         add_action('init', array($this, 'loadFields'), 9);
 
+        add_action('init', array($this, 'initInterface'), 9);
 
         add_action('wp_head', array($this, 'livereload'));
         add_action('admin_head', array($this, 'livereload'));
@@ -108,6 +108,9 @@ Class Kontentblocks
         echo '<script src="http://localhost:35729/livereload.js"></script>';
     }
 
+    public function initInterface(){
+        new EditScreen();
+    }
 
     public function i18n()
     {
