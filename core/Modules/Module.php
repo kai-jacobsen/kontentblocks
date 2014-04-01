@@ -92,6 +92,7 @@ abstract class Module
      */
     public function save($data, $old)
     {
+
         if (isset($this->Fields)) {
             return $this->saveFields($data, $old);
         }

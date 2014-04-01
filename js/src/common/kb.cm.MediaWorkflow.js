@@ -50,9 +50,8 @@ KB.Utils.MediaWorkflow = function (args) {
     function select(){
 
         if (options.select === false){
-            alert('No callbak given');
+            alert('No callback given');
         }
-        console.log(options.select);
         options.select(this);
     }
 

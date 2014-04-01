@@ -1,10 +1,34 @@
-var KB = KB || {};
+KB.Fields.register('MultipleImageText', (function ($) {
+    return {
+        init: function (modalView) {
+            _K.log('MIT init called');
+            $('.kb-mltpl-image-text--stage', $('body')).each(function(index,el){
+                var view = modalView || KB.Views.Modules.get($(el).data('module'));
+                _K.log('MultipleImageText init called: ', view);
+
+                if (!view.MIT){
+                    view.MIT = new KB.MultipleImageText(view);
+                }
+            });
+        },
+        update: function () {
+            _K.log('Fields shall update');
+            this.init();
+        },
+        frontUpdate: function(modalView) {
+            _K.log('Field shall update on front');
+            this.init(modalView);
+        }
+    };
+}(jQuery)));
 KB.MultipleImageText = function (view) {
+
     this.view = view;
     this.view.on('kb:frontend::viewLoaded', _.bind(this.viewLoaded, this));
     this.view.on('kb:backend::viewUpdated', this.listen);
     this.view.on('kb:frontend::viewUpdated', _.bind(this.listen, this));
     this.view.on('kb:viewAdded', _.bind(this.preInit, this));
+    this.preInit();
 };
 
 _.extend(KB.MultipleImageText.prototype, {
@@ -28,6 +52,8 @@ _.extend(KB.MultipleImageText.prototype, {
 
         // wrapper div
         this.$wrapper = $('.kb-field--wrap', this.view.$el);
+
+        this.key = this.$wrapper.data('fieldkey');
         // list el
         this.$list = $('.kb-generic--list', this.$wrapper);
         // view parent el
@@ -38,7 +64,7 @@ _.extend(KB.MultipleImageText.prototype, {
         // item underscore template, loaded async.
         this.template = $('.template', this.$wrapper).html();
         // module instance id
-        this.instance_id = this.view.model.get('instance_id');
+        this.instance_id = this.view.model.get('instance_id') +'[' + this.key + ']';
         // init
 
         this.init();
@@ -83,15 +109,16 @@ _.extend(KB.MultipleImageText.prototype, {
         this.$wrapper.on('click', '.kb-js-generic--delete', function (e) {
             $(e.currentTarget).closest('.kb-generic--list-item').hide(150).remove();
         });
+        console.log(this, this.view);
         this.initialSetup();
     },
     initialSetup: function () {
         var that = this;
         var mid = this.view.model.get('instance_id');
         // create items from existing data
-        if (!KB.payload.fieldData){
-            return false;
-        }
+            if (!KB.payload.fieldData){
+                return false;
+            }
         var data = (KB.payload.fieldData['mltpl-image-text']) ? KB.payload.fieldData['mltpl-image-text'][mid] : [];
         _.each(data, function (item) {
             that.addItem(item);
@@ -111,6 +138,7 @@ _.extend(KB.MultipleImageText.prototype, {
     addItem: function (data, index) {
         var moduleData = data || _.extend(this.defaults, this.view.model.get('moduleData'));
         this.count = index || jQuery('.kb-generic--list-item', this.$list).length;
+        console.log(this);
         this.$list.append(_.template(this.template, _.extend({base: this.instance_id, counter: this.count}, moduleData)));
         var $el = jQuery('.kb-generic--list-item', this.$list).last().find('.kb-remote-editor');
         var editorName = $el.attr('data-name');
@@ -147,42 +175,42 @@ _.extend(KB.MultipleImageText.prototype, {
             if (KB.appData && !KB.appData.config.loggedIn) {
                 return;
             }
-            KB.on('kb:Module_MultipleImageText:added', function (view) {
-                view.MIT = new KB.MultipleImageText(view);
-                view.MIT.preInit.call(view.MIT);
-
-            });
-
-            KB.on('kb:Module_MultipleImageText:loaded', function (view) {
-                view.MIT = new KB.MultipleImageText(view);
-                view.MIT.preInit.call(view.MIT);
-            });
-
-            KB.on('kb:Module_MultipleImageText:loadedOnFront', function (view) {
-                view.MIT = new KB.MultipleImageText(view);
-            });
+//            KB.on('kb:Module_MultipleImageText:added', function (view) {
+//                view.MIT = new KB.MultipleImageText(view);
+//                view.MIT.preInit.call(view.MIT);
+//
+//            });
+//
+//            KB.on('kb:Module_MultipleImageText:loaded', function (view) {
+//                view.MIT = new KB.MultipleImageText(view);
+//                view.MIT.preInit.call(view.MIT);
+//            });
+//
+//            KB.on('kb:Module_MultipleImageText:loadedOnFront', function (view) {
+//                view.MIT = new KB.MultipleImageText(view);
+//            });
 
         }
     }
 }(jQuery).init());
 
-
-function initFlicker(scope) {
-    jQuery('.flicker', jQuery(scope)).flicker({
-        'arrows': true,
-        'auto_flick': false,
-        'auto_flick_delay': 10,
-        'dot_navigation': true,
-        'block_text': false,
-        'flick_animation': 'transition-slide',
-        'theme': 'light'
-    });
-}
-
-jQuery(document).ready(function ($) {
-
-    if (KB.appData && KB.appData.config.frontend) {
-        initFlicker('body');
-    }
-
-});
+//
+//function initFlicker(scope) {
+//    jQuery('.flicker', jQuery(scope)).flicker({
+//        'arrows': true,
+//        'auto_flick': false,
+//        'auto_flick_delay': 10,
+//        'dot_navigation': true,
+//        'block_text': false,
+//        'flick_animation': 'transition-slide',
+//        'theme': 'light'
+//    });
+//}
+//
+//jQuery(document).ready(function ($) {
+//
+//    if (KB.appData && KB.appData.config.frontend) {
+//        initFlicker('body');
+//    }
+//
+//});

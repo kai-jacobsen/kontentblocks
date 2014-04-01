@@ -1,0 +1,14 @@
+<div class="kb-field kb-js-field field-api-image">
+
+    <div class="field-api-image--wrapper">
+        <div class="field-api-image--frame">
+            <% if (config.value.url) { %>
+            <img src="<%= config.value.url %>">
+            <% }; %>
+        </div>
+        <input class="field-api-image--image-id" type="hidden" name="<%= baseId %>[<%= index %>][<%= config.key %>]"
+               value="<%= config.value.id %>">
+    </div>
+    <a class="button button-primary flexible-fields--js-add-image">Add</a>
+</div>
+

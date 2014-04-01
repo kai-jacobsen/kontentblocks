@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-29 */
+/*! Kontentblocks DevVersion 2014-04-01 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();
@@ -234,12 +234,18 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
+        _K.log("new module created");
+        this.parseAdditionalJSON(data.json);
         KB.TinyMCE.addEditor();
-        setTimeout(function() {
-            KB.Fields.trigger("update");
-        }, 500);
+        KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
         var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
         jQuery("#kb_all_blocks").val(count);
+    },
+    parseAdditionalJSON: function(json) {
+        if (!KB.payload.Fields) {
+            KB.payload.Fields = {};
+        }
+        _.extend(KB.payload.Fields, json.Fields);
     },
     prepareAssignedModules: function() {
         var assignedModules = this.area.model.get("assignedModules");
@@ -603,6 +609,7 @@ KB.App = function($) {
         });
     }
     function createModuleViews(module) {
+        _K.log("new module view added");
         module.setArea(KB.Areas.get(module.get("area")));
         module.bind("change:area", module.areaChanged);
         KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({

@@ -20,7 +20,8 @@ module.exports = function (grunt) {
                     'js/dist/refields.min.js': ['<%= concat.refields.dest %>'],
                     'js/dist/common.min.js': ['<%= concat.common.dest %>'],
                     'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
-                    'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>']
+                    'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
+                    'js/dist/fieldsAPI.min.js': ['<%= concat.fieldsAPI.dest %>']
                 }
             },
             dev: {
@@ -37,7 +38,8 @@ module.exports = function (grunt) {
                     'js/dev/refields.js': ['<%= concat.refields.dest %>'],
                     'js/dev/common.js': ['<%= concat.common.dest %>'],
                     'js/dev/extensions.js': ['<%= concat.extensions.dest %>'],
-                    'js/dev/plugins.js': ['<%= concat.plugins.dest %>']
+                    'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
+                    'js/dev/fieldsAPI.js': ['<%= concat.fieldsAPI.dest %>']
                 }
             }
         },
@@ -74,6 +76,10 @@ module.exports = function (grunt) {
                 src: ['js/src/backend/**/*.js', 'js/src/backend/backend.js'],
                 dest: 'js/tmp/backend.concat.js',
                 nonull: true
+            },
+            fieldsAPI: {
+                src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/**/*.js'],
+                dest: 'js/tmp/fieldsAPI.concat.js'
             }
         },
         compass: {

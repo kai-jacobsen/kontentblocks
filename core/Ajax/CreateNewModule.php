@@ -7,6 +7,7 @@ use Kontentblocks\Backend\API\PostMetaAPI;
 use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Modules\ModuleTemplates;
+use Kontentblocks\Utils\JSONBridge;
 
 class CreateNewModule
 {
@@ -244,6 +245,7 @@ class CreateNewModule
             'id' => $this->newInstanceID,
             'module' => $this->newModule,
             'name' => $this->newInstance->settings['publicName'],
+            'json' => JSONBridge::getInstance()->getJSON(),
             'html' => $html
         );
 

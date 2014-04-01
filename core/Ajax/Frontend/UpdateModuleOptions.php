@@ -31,7 +31,6 @@ class UpdateModuleOptions
         $old = $Environment->getStorage()->getModuleData($module['instance_id']);
         $new = $instance->save($parsed[$instance->instance_id], $old);
         $mergedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
-
         if ($update) {
             $Environment->getStorage()->saveModule($instance->instance_id, $mergedData);
         }

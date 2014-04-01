@@ -455,7 +455,7 @@ abstract class Field
     public function save($keydata, $oldKeyData)
     {
         if (is_null($keydata)) {
-            return $oldKeyData;
+            return null;
         } else {
             return $keydata;
         }

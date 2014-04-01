@@ -67,7 +67,6 @@ class SavePost
                 // new data from $_POST
                 //TODO: filter incoming data
                 $data = (!empty($_POST[$module['instance_id']])) ? $_POST[$module['instance_id']] : null;
-
                 /** @var $old array() */
                 $old = $this->Environment->getStorage()->getModuleData($module['instance_id']);
 
@@ -96,6 +95,7 @@ class SavePost
                     $new = $old;
                 } else {
                     $new = $instance->save($data, $old);
+
                     if ($new === false){
                         $savedData = null;
                     } else {

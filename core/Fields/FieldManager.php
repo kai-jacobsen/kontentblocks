@@ -124,6 +124,7 @@ class FieldManager
      */
     public function setup( $instanceData )
     {
+
         if ( empty( $this->fieldsById ) ) {
             $this->fieldsById = $this->collectAllFields();
         }

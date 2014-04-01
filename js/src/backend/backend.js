@@ -89,7 +89,7 @@ KB.App = (function ($) {
      * @returns void
      */
     function createModuleViews(module) {
-
+        _K.log('new module view added');
         // assign the full corresponding area model to the module model
         module.setArea(KB.Areas.get(module.get('area')));
         module.bind('change:area', module.areaChanged);

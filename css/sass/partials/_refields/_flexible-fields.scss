@@ -1,0 +1,63 @@
+.flexible-fields--toggle-title {
+  background-color: #fafafa;
+  border: 1px solid #ccc;
+  position: relative;
+
+  & h3{
+    padding: 3px !important;
+    margin: 0 !important;
+  }
+
+  & input[type="text"] {
+    font-size: 13px !important;
+    padding-left: 15px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid transparent;
+    display: inline-block;
+    margin: 0 !important;
+
+    &:hover{
+      border-color: #ccc;
+      background-color: #fafafa;
+    }
+
+    &:focus{
+      background-color: #fff;
+    }
+  }
+
+  .flexible-fields--js-toggle.dashicons{
+    font-size: 22px !important;
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+  }
+
+  .flexible-fields--js-trash{
+    position: absolute;
+    right: 15px;
+    font-size: 15px !important;
+    top: 11px;
+    color: #666;
+    cursor: pointer;
+
+    &:hover{
+        color:#000;
+    }
+  }
+
+}
+
+.os-content-inner {
+  .flexible-fields--item-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+
+    li {
+      margin-bottom: 10px;
+    }
+  }
+}

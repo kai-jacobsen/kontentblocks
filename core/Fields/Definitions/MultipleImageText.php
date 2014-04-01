@@ -27,7 +27,7 @@ Class MultipleImageText extends Field
     public function form()
     {
         $this->label();
-        $tpl = new FieldTemplate('mltpl-image-text.twig', array());
+        $tpl = new FieldTemplate('mltpl-image-text.twig', array('field' => $this));
         $tpl->render(true);
         $this->description();
 
@@ -50,4 +50,5 @@ Class MultipleImageText extends Field
 
         return $data;
     }
+
 }

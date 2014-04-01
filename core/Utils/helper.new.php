@@ -191,27 +191,30 @@ function underscoreit($val)
 function arrayMergeRecursiveAsItShouldBe($new, $old)
 {
     $merged = $new;
-
     if (is_array($old)) {
         foreach ($old as $key => $val) {
             if (is_array($old[$key])) {
-                if (isset($merged[$key]) && $merged[$key] !== NULL) {
+                if (array_key_exists($key,$merged) && isset($merged[$key]) && $merged[$key] !== NULL) {
+                   // key exists and is not null, dig further into the array until actual values are reached
                     $merged[$key] = arrayMergeRecursiveAsItShouldBe($merged[$key], $old[$key]);
-                } elseif (isset($merged[$key]) && $merged[$key] === NULL) {
+                } elseif (array_key_exists($key,$merged) && $merged[$key] === NULL) {
+                    // explicit set the new value to NULL
                     $merged[$key] = NULL;
                 } else {
+                    // preserve the old value
                     $merged[$key] = arrayMergeRecursiveAsItShouldBe($old[$key], $old[$key]);
                 }
             } else {
-                if (isset($merged[$key]) && $merged[$key] === NULL) {
+                if (array_key_exists($key,$merged) && $merged[$key] === NULL) {
+                    // key was set to null on purpose, and gets removed finally
                     unset($merged[$key]);
                 } elseif (!isset($merged[$key])) {
+                    // there is something missing in current(new) data, add it
                     $merged[$key] = $val;
                 }
             }
         }
     }
-
     return $merged;
 
 }

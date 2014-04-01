@@ -66,6 +66,7 @@ class JSONBridge
         $this->fieldData[$type][$modid] = $data;
     }
 
+
     public function registerModule($module)
     {
         $this->modules[$module['instance_id']] = $module;

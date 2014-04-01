@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-29 */
+/*! Kontentblocks DevVersion 2014-04-01 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -76,13 +76,27 @@ _.extend(KB.Fields, Backbone.Events);
 
 _.extend(KB.Fields, {
     fields: {},
+    addEvent: function() {
+        this.listenTo(KB, "kb:ready", this.init);
+        this.listenTo(this, "newModule", this.newModule);
+    },
     register: function(id, object) {
         _.extend(object, Backbone.Events);
         this.fields[id] = object;
-        if (object.hasOwnProperty("init")) {
-            object.init();
-        }
-        object.listenTo(this, "update", object.update);
+    },
+    init: function() {
+        var that = this;
+        _.each(_.toArray(this.fields), function(object) {
+            if (object.hasOwnProperty("init")) {
+                object.init();
+            }
+            object.listenTo(that, "update", object.update);
+            object.listenTo(that, "frontUpdate", object.frontUpdate);
+        });
+    },
+    newModule: function(object) {
+        _K.log("new Module added for Fields");
+        this.init();
     },
     get: function(id) {
         if (this.fields[id]) {
@@ -92,6 +106,8 @@ _.extend(KB.Fields, {
         }
     }
 });
+
+KB.Fields.addEvent();
 
 Logger.useDefaults();
 
@@ -138,9 +154,8 @@ KB.Utils.MediaWorkflow = function(args) {
     function ready() {}
     function select() {
         if (options.select === false) {
-            alert("No callbak given");
+            alert("No callback given");
         }
-        console.log(options.select);
         options.select(this);
     }
     init(args);
@@ -558,20 +573,24 @@ KB.Ui.init();
 
 KB.ViewsCollection = function() {
     this.views = {};
+    this.lastViewAdded = null;
     this.add = function(id, view) {
         this.views[id] = view;
         KB.trigger("kb:" + view.model.get("class") + ":added", view);
+        this.lastViewAdded = view;
     };
     this.ready = function() {
         _.each(this.views, function(view) {
             view.trigger("kb:" + view.model.get("class"), view);
             KB.trigger("kb:" + view.model.get("class") + ":loaded", view);
+            KB.trigger("kb:ready");
         });
     };
     this.readyOnFront = function() {
         _.each(this.views, function(view) {
             view.trigger("kb:" + view.model.get("class"), view);
             KB.trigger("kb:" + view.model.get("class") + ":loadedOnFront", view);
+            KB.trigger("kb:ready");
         });
     };
     this.remove = function(id) {

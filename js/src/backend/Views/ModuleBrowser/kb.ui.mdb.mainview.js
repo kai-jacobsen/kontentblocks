@@ -121,12 +121,14 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
+        _K.log('new module created');
+
+
+        this.parseAdditionalJSON(data.json);
+
+
         KB.TinyMCE.addEditor();
-
-        setTimeout(function(){
-            KB.Fields.trigger('update');
-        },500);
-
+        KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
 
         // update the reference counter, used as base number
         // for new modules
@@ -135,6 +137,14 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
 
         // repaint
         // add module to collection
+    },
+    parseAdditionalJSON: function(json){
+        // create the object if it doesn't exist already
+        if (!KB.payload.Fields){
+            KB.payload.Fields = {};
+        }
+
+        _.extend(KB.payload.Fields, json.Fields);
     },
     // helper method to convert list of assigned classnames to object with module definitions
     prepareAssignedModules: function () {

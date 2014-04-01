@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-03-29 */
+/*! Kontentblocks DevVersion 2014-04-01 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -334,7 +334,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.options = options;
         this.view = options.view;
         this.model.on("change", this.test, this);
-        this.on("recalibrate", this.recalibrate, this);
+        this.listenTo(this, "recalibrate", this.recalibrate);
         jQuery(KB.Templates.render("frontend/module-edit-form", {
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
@@ -416,11 +416,13 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();
                 KB.TinyMCE.addEditor();
-                KB.Fields.trigger("update");
                 var localView = _.clone(that.view);
                 localView.$el = that.$inner;
                 localView.parentView = that.view;
                 that.view.trigger("kb:frontend::viewLoaded", localView);
+                setTimeout(function() {
+                    KB.Fields.trigger("frontUpdate", localView);
+                }, 500);
                 _K.info("Frontend Modal opened with view of:" + that.view.model.get("instance_id"));
                 setTimeout(function() {
                     that.recalibrate();
@@ -764,6 +766,7 @@ function initTinymce(item) {
     if (!KB.Checks.userCan("edit_kontentblocks")) {
         return;
     }
+    console.log(item);
     tinymce.init({
         selector: "#" + item.id,
         theme: "modern",
@@ -829,7 +832,10 @@ function initTinymce(item) {
 }
 
 jQuery(document).ready(function() {
-    jQuery("div.editable").each(function(i, item) {
+    jQuery(".editable").each(function(i, item) {
+        if (!KB.Checks.userCan("edit_kontentblocks")) {
+            return;
+        }
         initTinymce(item);
     });
     jQuery(".editable-title").each(function(item) {

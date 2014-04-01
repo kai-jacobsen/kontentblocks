@@ -5,6 +5,8 @@ function initTinymce(item) {
         return;
     }
 
+    console.log(item);
+
     tinymce.init({
         selector: '#' + item.id,
         theme: "modern",
@@ -82,7 +84,12 @@ function initTinymce(item) {
 jQuery(document).ready(function () {
 
 
-    jQuery('div.editable').each(function (i,item) {
+    jQuery('.editable').each(function (i,item) {
+
+            if (!KB.Checks.userCan('edit_kontentblocks')){
+                return;
+            }
+
             initTinymce(item);
         }
     );

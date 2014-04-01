@@ -16,6 +16,7 @@ use Kontentblocks\Fields\FieldRegistry,
  *
  * @see Kontentblocks\Fields\FieldManager::addSection()
  * @package Fields
+ * @package Fields
  * @since 1.0.0
  */
 class FieldSection

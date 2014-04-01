@@ -1,4 +1,4 @@
-<div class="kb-field--wrap">
+<div data-fieldkey="{{ field.key }}" data-module="{{ field.parentModuleId }}" class="kb-field--wrap kb-mltpl-image-text--stage">
     <ul class="kb-generic--list">
 
     </ul>
@@ -9,7 +9,7 @@
                 <div class="kb-js-generic--move"></div>
                 <div class="kb-js-generic--delete"></div>
                 <input class="kb-generic--editable-title" type="text" value="<%= label %>"
-                       name="<%= base %>[items][<%= counter %>][label]">
+                       name="<%= base %>[<%= counter %>][label]">
             </div>
             <div class="kb-generic--toggle-box" style="display: none;">
                 <div class="kb-generic-tabs kb_fieldtabs">
@@ -29,7 +29,7 @@
                                     <% } %>
                                 </div>
                                 <input class="kb-js-generic--imgid" type="hidden"
-                                       name="<%= base %>[items][<%= counter %>][imgid]"
+                                       name="<%= base %>[<%= counter %>][imgid]"
                                        value="<%= imgid %>">
                             </div>
                             <a class='kb-js-add-custom'><% if (imgid) { %> change image <% } else { %> add image <% }
@@ -39,7 +39,7 @@
                     <div id="tab-text-<%= base %>">
                         <div class="kb-generic--inner">
                             <div id="kb_gen_ed_<%= _.uniqueId() %>_<%= counter %>" class="kb_field kb-remote-editor"
-                                 data-name="<%= base %>[items][<%= counter %>][content]">
+                                 data-name="<%= base %>[<%= counter %>][content]">
                                 <%= content %>
                             </div>
                         </div>

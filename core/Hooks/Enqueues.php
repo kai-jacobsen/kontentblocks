@@ -69,8 +69,12 @@ class Enqueues
         // Onsite
         wp_register_script('kb-onsite-editing', KB_PLUGIN_URL . 'js/KBOnSiteEditing.js', array('kb-frontend'), null, true);
 
+
+        // FieldsAPI
+        wp_register_script('kb-fields-api', KB_PLUGIN_URL . 'js/'. $folder .'/fieldsAPI'.$suffix.'.js', null, null, true);
+
         // fields handler
-        wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/'. $folder .'/refields'.$suffix.'.js',null, null, true);
+        wp_register_script('kb-refields', KB_PLUGIN_URL . '/js/'. $folder .'/refields'.$suffix.'.js',array('kb-fields-api'), null, true);
 
         // WP iris // no dev version available in core
         wp_register_script('wp-iris', admin_url('js/iris.min.js'), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), false, true);
