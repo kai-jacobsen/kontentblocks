@@ -23,6 +23,7 @@ _.extend(KB.Fields, {
 
     init: function () {
         var that = this;
+        console.log('init');
         _.each(_.toArray(this.fields), function (object) {
             // call init method if available
             if (object.hasOwnProperty('init')) {

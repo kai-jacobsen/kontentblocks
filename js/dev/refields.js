@@ -1,9 +1,10 @@
-/*! Kontentblocks DevVersion 2014-04-01 */
+/*! Kontentblocks DevVersion 2014-04-03 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
+            _K.log("Color init", $(".kb-color-picker"));
             $("body").on("mouseup", ".kb-field--color", function() {
                 setTimeout(function() {
                     if (KB.FrontendEditModal) {
@@ -19,6 +20,10 @@ KB.Fields.register("Color", function($) {
             });
         },
         update: function() {
+            this.init();
+        },
+        frontUpdate: function(view) {
+            console.log(view);
             this.init();
         }
     };
@@ -83,7 +88,7 @@ KB.Fields.register("File", function($) {
                 },
                 multiple: false,
                 library: {
-                    type: "application"
+                    type: ""
                 }
             });
             this._frame.on("ready", this.ready);
@@ -264,6 +269,7 @@ KB.Fields.register("Image", function($) {
         $caption: null,
         init: function() {
             var that = this;
+            _K.log("init image refield");
             $("body").on("click", this.selector, function(e) {
                 e.preventDefault();
                 that.settings = that.getSettings(this);

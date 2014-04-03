@@ -15,6 +15,7 @@ KB.Fields.register('Image', (function ($) {
         $caption: null,
         init: function () {
             var that = this;
+            _K.log('init image refield');
             $('body').on('click', this.selector, function (e) {
                 e.preventDefault();
                 that.settings = that.getSettings(this);

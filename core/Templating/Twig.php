@@ -1,5 +1,7 @@
 <?php
 namespace Kontentblocks\Templating;
+use Twig_SimpleFunction;
+
 class Twig
 {
 
@@ -22,6 +24,12 @@ class Twig
                 'debug' => TRUE
                 ) );
             self::$environment->addExtension(new \Twig_Extension_Debug());
+
+            $getPermalink = new Twig_SimpleFunction('get_permalink', function ($id) {
+                return get_permalink($id);
+            });
+            self::$environment->addFunction($getPermalink);
+
         }
         
 
@@ -37,7 +45,7 @@ class Twig
 
     protected function __construct()
     {
-        
+
     }
 
     private function __clone()

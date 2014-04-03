@@ -15,17 +15,16 @@ KB.ViewsCollection = function () {
         _.each(this.views, function (view) {
             view.trigger('kb:'+view.model.get('class'), view);
             KB.trigger('kb:'+view.model.get('class')+':loaded', view);
-            KB.trigger('kb:ready');
         });
+        KB.trigger('kb:ready');
     };
 
     this.readyOnFront = function () {
         _.each(this.views, function (view) {
             view.trigger('kb:'+view.model.get('class'), view);
             KB.trigger('kb:'+view.model.get('class')+':loadedOnFront', view);
-            KB.trigger('kb:ready');
-
         });
+        KB.trigger('kb:ready');
     };
 
 

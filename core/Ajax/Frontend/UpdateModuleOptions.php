@@ -38,6 +38,7 @@ class UpdateModuleOptions
         $mergedData = apply_filters('kb_modify_module_data', $mergedData, $instance->settings);
         $instance->rawModuleData = $mergedData;
         $instance->moduleData = $mergedData;
+
         $return = array(
 //            'html' => wp_kses_post($wp_embed->autoembed($instance->module($mergedData))),
             'html' => $instance->module($mergedData),

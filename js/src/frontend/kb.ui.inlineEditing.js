@@ -5,7 +5,6 @@ function initTinymce(item) {
         return;
     }
 
-    console.log(item);
 
     tinymce.init({
         selector: '#' + item.id,
@@ -29,6 +28,7 @@ function initTinymce(item) {
                     index: data.index,
                     arrayKey: data.arraykey
                 };
+                ed.module.view.$el.addClass('inline-editing-active');
             });
 
             ed.on('focus', function (e) {

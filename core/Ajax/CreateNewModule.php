@@ -233,7 +233,7 @@ class CreateNewModule
      */
     private function render()
     {
-//        ob_start();
+        ob_start();
 
         // create the new module finally
         $this->newInstance = $this->createModuleInstance();

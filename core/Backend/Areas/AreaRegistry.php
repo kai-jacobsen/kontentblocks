@@ -174,6 +174,14 @@ class AreaRegistry
         });
     }
 
+
+    public function getAreasByPageTemplate($tpl)
+    {
+        return array_filter($this->rawAreas, function($area) use ($tpl){
+            return (in_array($tpl,$area['pageTemplates']));
+        });
+    }
+
     /**
      * Getter for global sidebars
      * @return array
@@ -284,12 +292,16 @@ class AreaRegistry
         } else if (!empty($args['settings']['connect']) and is_array($args['settings']['connect'])) {
             $update = false;
 
-
             foreach ($args['settings']['connect'] as $id) {
-
+                // check for context
                 if (in_array($id, array('top', 'normal', 'side', 'bottom'))) {
                     foreach ($this->getAreasByContext($id) as $connection) {
                         $args['settings']['connect'] = array($connection['id']);
+                        $this->connect($classname, $args);
+                    }
+                } else if (is_string($id) && (strpos($id, '.php') !== false || $id === 'default')) {
+                    foreach($this->getAreasByPageTemplate($id) as $tplcon){
+                        $args['settings']['connect'] = array($tplcon['id']);
                         $this->connect($classname, $args);
                     }
                 } else {

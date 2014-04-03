@@ -27,7 +27,6 @@ KB.TinyMCE = (function ($) {
 //                    $(this).removeClass('html-active').addClass('tmce-active');
 //                }
                 var settings = tinyMCEPreInit.mceInit.content;
-
                 var id = $(this).find('textarea').attr('id');
 
                 // add new editor id to settings
@@ -49,12 +48,14 @@ KB.TinyMCE = (function ($) {
             // Editor may not be initialized and is not accesible throught
             // the tinymce api, thats why we take the settings from preInit
             var settings = tinyMCEPreInit.mceInit.content;
+
             if (!$el) {
                 $el = KB.lastAddedModule.view.$el;
             }
 
             $('.wp-editor-area', $el).each(function () {
                 var id = this.id;
+
                 // add new editor id to settings
                 settings.elements = id;
                 settings.selector = '#'+id;
@@ -65,7 +66,7 @@ KB.TinyMCE = (function ($) {
                         jQuery(document).trigger('newEditor', ed);
                     });
                 };
-
+                console.log(tinymce.init(settings));
                 var ed = tinymce.init(settings);
 
                 // doesn't wok without, but don't really know what this does

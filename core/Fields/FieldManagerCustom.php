@@ -72,7 +72,7 @@ class FieldManagerCustom
         $collection = array();
         foreach ($this->structure as $definition) {
             $return = ($definition->save($data, $oldData));
-            $collection  = $collection + $return;
+            $collection = $collection + $return;
         }
         return $collection;
 
@@ -105,6 +105,7 @@ class FieldManagerCustom
         }
         foreach ($this->fieldsById as $field) {
             $data = (!empty($instanceData[$field->getKey()])) ? $instanceData[$field->getKey()] : '';
+
             $field->setup($data, $this->baseId);
         }
 
@@ -167,7 +168,21 @@ class FieldManagerCustom
         $this->data = $data;
     }
 
-    public function isPublic(){
+    public function isPublic()
+    {
         return false;
+    }
+
+    public function prepareDataAndGet()
+    {
+        $collect = array();
+        if (!empty($this->fieldsById)) {
+            foreach ($this->fieldsById as $field) {
+                $collect[$field->getKey()] = $field->getValue();
+            }
+
+            return $collect;
+        }
+        return $this->data;
     }
 }

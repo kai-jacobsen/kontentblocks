@@ -49,6 +49,7 @@ class PanelRegistry
     public function get($id)
     {
         if (isset($this->panels[$id])){
+
             return $this->panels[$id];
         }
     }

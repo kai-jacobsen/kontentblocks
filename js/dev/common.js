@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-01 */
+/*! Kontentblocks DevVersion 2014-04-03 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -86,6 +86,7 @@ _.extend(KB.Fields, {
     },
     init: function() {
         var that = this;
+        console.log("init");
         _.each(_.toArray(this.fields), function(object) {
             if (object.hasOwnProperty("init")) {
                 object.init();
@@ -306,6 +307,7 @@ KB.TinyMCE = function($) {
                         jQuery(document).trigger("newEditor", ed);
                     });
                 };
+                console.log(tinymce.init(settings));
                 var ed = tinymce.init(settings);
                 var qtsettings = {
                     buttons: "",
@@ -583,15 +585,15 @@ KB.ViewsCollection = function() {
         _.each(this.views, function(view) {
             view.trigger("kb:" + view.model.get("class"), view);
             KB.trigger("kb:" + view.model.get("class") + ":loaded", view);
-            KB.trigger("kb:ready");
         });
+        KB.trigger("kb:ready");
     };
     this.readyOnFront = function() {
         _.each(this.views, function(view) {
             view.trigger("kb:" + view.model.get("class"), view);
             KB.trigger("kb:" + view.model.get("class") + ":loadedOnFront", view);
-            KB.trigger("kb:ready");
         });
+        KB.trigger("kb:ready");
     };
     this.remove = function(id) {
         var view = this.get(id);

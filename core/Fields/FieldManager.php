@@ -130,6 +130,7 @@ class FieldManager
         }
         foreach ( $this->fieldsById as $field ) {
             $data = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : '';
+
             $field->setup( $data, $this->moduleId );
         }
 

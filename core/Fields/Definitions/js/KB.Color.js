@@ -3,6 +3,7 @@ var KB = KB || {};
 KB.Fields.register('Color', (function($) {
 	return {
 		init: function() {
+            _K.log('Color init', $(".kb-color-picker"));
             $('body').on('mouseup', '.kb-field--color', function(){
                 setTimeout(function(){
                     if (KB.FrontendEditModal){
@@ -13,7 +14,6 @@ KB.Fields.register('Color', (function($) {
             });
 
 			$(".kb-color-picker").wpColorPicker({
-
 				change: function(event, ui) {
 				},
 				clear: function() {
@@ -23,7 +23,12 @@ KB.Fields.register('Color', (function($) {
 		},
 		update: function() {
 			this.init();
-		}
+		},
+        frontUpdate: function(view){
+            console.log(view);
+            this.init();
+        }
+
 	};
 }(jQuery)));
 

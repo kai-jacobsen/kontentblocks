@@ -116,6 +116,8 @@ abstract class Module
         if (isset($this->Fields)) {
             $this->_setupFieldData();
         }
+
+
         if ($this->getEnvVar('action')) {
             if (method_exists($this, $this->getEnvVar('action') . 'Action')) {
                 $method = $this->getEnvVar('action') . 'Action';
@@ -152,11 +154,11 @@ abstract class Module
         if (empty($this->moduleData) || !is_array($this->moduleData)) {
             return;
         }
-
         $this->Fields->setup($this->moduleData);
         foreach ($this->moduleData as $key => $v) {
             $field = $this->Fields->getFieldByKey($key);
             $this->moduleData[$key] = ($field !== NULL) ? $field->getReturnObj() : null;
+
 
             if ($this->moduleData[$key] === null) {
                 $this->moduleData[$key] = $v;

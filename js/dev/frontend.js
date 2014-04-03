@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-01 */
+/*! Kontentblocks DevVersion 2014-04-03 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -420,10 +420,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 localView.$el = that.$inner;
                 localView.parentView = that.view;
                 that.view.trigger("kb:frontend::viewLoaded", localView);
+                _K.info("Frontend Modal opened with view of:" + that.view.model.get("instance_id"));
                 setTimeout(function() {
                     KB.Fields.trigger("frontUpdate", localView);
                 }, 500);
-                _K.info("Frontend Modal opened with view of:" + that.view.model.get("instance_id"));
                 setTimeout(function() {
                     that.recalibrate();
                 }, 1e3);
@@ -766,7 +766,6 @@ function initTinymce(item) {
     if (!KB.Checks.userCan("edit_kontentblocks")) {
         return;
     }
-    console.log(item);
     tinymce.init({
         selector: "#" + item.id,
         theme: "modern",
@@ -788,6 +787,7 @@ function initTinymce(item) {
                     index: data.index,
                     arrayKey: data.arraykey
                 };
+                ed.module.view.$el.addClass("inline-editing-active");
             });
             ed.on("focus", function(e) {
                 jQuery("#kb-toolbar").show();

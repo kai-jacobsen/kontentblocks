@@ -80,6 +80,7 @@ class Image extends AbstractFieldReturn
 
     public function background()
     {
+
         $this->prepareSrc();
         $format = ' %2$s style="background-image: url(\'%1$s\')"';
         $this->toJSON();
@@ -133,7 +134,6 @@ class Image extends AbstractFieldReturn
 
     private function prepareSrc()
     {
-
         $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, true, true, $this->upscale);
     }
 

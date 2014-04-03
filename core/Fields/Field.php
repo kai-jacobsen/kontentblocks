@@ -178,12 +178,21 @@ abstract class Field
     {
 
         if (!$this->returnObj && $this->getArg('returnObj')) {
-            $classname = $this->getDefault('returnObj');
+            $classname = $this->getArg('returnObj');
             if (!$classname) {
                 return;
             }
+            // first try
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
-            $this->returnObj = new $classpath($this->value, $this);
+            if (class_exists('Kontentblocks\\Fields\\Returnobjects\\' . $classname, true)){
+                $this->returnObj = new $classpath($this->value, $this);
+            }
+
+            // second try
+            if (class_exists($classname)){
+                $this->returnObj = new $classname($this->value, $this);
+            }
+
             return $this->returnObj;
         } else {
 //            $this->returnObj = new \Kontentblocks\Fields\Returnobjects\StandardFieldReturn( $this->value);

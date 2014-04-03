@@ -34,7 +34,7 @@ KB.Fields.register('File', (function($) {
 				},
 				multiple: false,
 				library: {
-					type: 'application'
+					type: ''
 				}
 			});
 

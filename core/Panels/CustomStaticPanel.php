@@ -63,6 +63,7 @@ abstract class CustomStaticPanel
         $this->setupArgs($args);
 
         $this->setupHooks();
+
     }
 
     private function parseDefaults($args)
@@ -132,8 +133,15 @@ abstract class CustomStaticPanel
 
     public function form($postObj)
     {
-        if (!in_array($postObj->post_type, $this->postTypes)){
+
+
+
+        if (!in_array($postObj->post_type, $this->postTypes)) {
             return;
+        }
+
+        if (!post_type_supports($postObj->post_type, 'editor')){
+            \Kontentblocks\Helper\getHiddenEditor();
         }
 
         $this->setupData($postObj->ID);
@@ -146,6 +154,7 @@ abstract class CustomStaticPanel
 
     public function save($postId)
     {
+
         if (empty($_POST[$this->baseId])) {
             return;
         }
@@ -183,5 +192,19 @@ abstract class CustomStaticPanel
     private function setupData($postId)
     {
         $this->data = get_post_meta($postId, $this->baseId, true);
+    }
+
+    public function setup($postId)
+    {
+        $this->setupData($postId);
+        $this->FieldManager = new FieldManagerCustom($this->baseId, $this->data);
+        $this->fields($this->FieldManager)->setup($this->data);
+        return $this;
+
+    }
+
+    public function getData()
+    {
+        return $this->FieldManager->prepareDataAndGet();
     }
 }

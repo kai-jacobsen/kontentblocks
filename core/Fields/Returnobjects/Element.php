@@ -43,6 +43,18 @@ class Element extends AbstractFieldReturn
      */
     protected $field;
 
+    /**
+     * Indicator for additional link
+     * @var bool
+     */
+    protected $hasLink = false;
+
+    /**
+     * Link target
+     * @var string
+     */
+    protected $target;
+
 
     /**
      * Class constructore
@@ -74,6 +86,15 @@ class Element extends AbstractFieldReturn
 
     }
 
+
+    public function addLink($target)
+    {
+        $this->hasLink = true;
+        $this->target = $target;
+        return $this;
+
+    }
+
     /**
      * Add an attribute to the stack of attributes
      * @param string $attr
@@ -86,7 +107,7 @@ class Element extends AbstractFieldReturn
         if (is_array($attr)) {
             $this->attributes = array_merge($this->attributes, $attr);
         } else {
-            if ($value !== false){
+            if ($value !== false) {
                 $this->attributes[$attr] = $value;
             }
         }
@@ -119,18 +140,29 @@ class Element extends AbstractFieldReturn
 
 
         $format = '<%1$s id="%4$s" %3$s>%2$s</%1$s>';
+        $formatWithLink = '<%1$s id="%4$s" %3$s><a href="%5$s">%2$s</a></%1$s>';
 
-        if (!in_array($this->el, array('h1', 'h2', 'h3', 'h4', 'h5', 'h6'))){
+
+        if (!in_array($this->el, array('h1', 'h2', 'h3', 'h4', 'h5', 'h6'))) {
             $filtered = apply_filters('the_content', $this->value);
         } else {
             $filtered = $this->value;
         }
 
-        if (is_user_logged_in()){
-            return sprintf($format, $this->el, $filtered, $this->_renderAttributes(), uniqid('kb'));
+        if (is_user_logged_in()) {
+            if (!$this->hasLink){
+                return sprintf($format, $this->el, $filtered, $this->_renderAttributes(), uniqid('kb'));
+            } else if ($this->hasLink){
+                return sprintf($formatWithLink, $this->el, $filtered, $this->_renderAttributes(), uniqid('kb'), $this->target);
+            }
         } else {
-            $format = '<%1$s %3$s>%2$s</%1$s>';
-            return sprintf($format, $this->el, $filtered, $this->_renderAttributes());
+            if (!$this->hasLink){
+                $format = '<%1$s %3$s>%2$s</%1$s>';
+                return sprintf($format, $this->el, $filtered, $this->_renderAttributes());
+            } else if($this->hasLink) {
+                $format = '<%1$s %3$s><a href="%4$s">%2$s</a></%1$s>';
+                return sprintf($format, $this->el, $filtered, $this->_renderAttributes(), $this->target);
+            }
         }
 
     }

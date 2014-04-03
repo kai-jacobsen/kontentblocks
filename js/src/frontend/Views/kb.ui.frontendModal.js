@@ -137,12 +137,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 localView.$el = that.$inner;
                 localView.parentView = that.view;
                 that.view.trigger('kb:frontend::viewLoaded', localView);
+                _K.info('Frontend Modal opened with view of:' + that.view.model.get('instance_id'));
 
                 setTimeout(function(){
                     KB.Fields.trigger('frontUpdate', localView);
                 },500);
 
-                _K.info('Frontend Modal opened with view of:' + that.view.model.get('instance_id'));
                 // Make the modal fit
                 setTimeout(function () {
                     that.recalibrate();

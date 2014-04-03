@@ -15,5 +15,8 @@ function autoloadKontentblocks($cls)
 
     $path = dirname( __FILE__)  . 
         str_replace('\\', DIRECTORY_SEPARATOR, $cls) . '.php';
-    require_once($path);
+
+    if (file_exists($path)){
+        require_once($path);
+    }
 }
