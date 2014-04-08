@@ -203,7 +203,7 @@ class CreateNewModule
         unset($toSave['settings']);
         // add new block and update
         $update = $this->environment->getStorage()->addToIndex($this->newInstanceID, $toSave);
-        if ($update !== true && !is_int($update)) {
+        if ($update === false) {
             wp_send_json_error('Update to Index failed');
         }
 
@@ -219,11 +219,11 @@ class CreateNewModule
 
             $PostMeta = new PostMetaAPI($this->moduleArgs['master_id']);
 
-            $master_data = $PostMeta->get($this->moduleArgs['templateObj']['id']);
+            $master_data = $PostMeta->get('_' . $this->moduleArgs['templateObj']['id']);
             $update = $this->environment->getStorage()->saveModule($this->newInstanceID, $master_data);
             $this->environment->getStorage()->reset();
             if (!$update)
-                wp_send_json_error('Upddate not successful');
+                wp_send_json_error('Update not successful');
         }
 
     }

@@ -228,7 +228,6 @@ class ModuleStoragePostMeta
      */
     public function saveModule($id, $data = '')
     {
-
         $update = update_post_meta($this->post_id, '_' . $id, $data);
         return $update;
     }
