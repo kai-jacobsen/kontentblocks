@@ -15,27 +15,8 @@ class Image extends AbstractFieldReturn
     protected $src = null;
     protected $classes = array();
     protected $attributes = array();
+    protected $uid;
 
-
-    public function __construct($value, $field)
-    {
-        $this->moduleId = $field->parentModuleId;
-        $this->key = $field->getKey();
-        $this->hasImage = (empty($value['id'])) ? false : true;
-        if (is_user_logged_in()) {
-            $this->addClass('editable-image');
-            $this->addClass('koolkip');
-            $this->addAttr('data-powertip', 'Click to change the image');
-            $this->addAttr('data-module', $field->parentModuleId);
-            $this->addAttr('data-key', $field->getKey());
-            $this->addAttr('data-arrayKey', $field->getArg('arrayKey'));
-        }
-
-//        add_action('wp_footer', array($this, 'toJSON'));
-        parent::__construct($value);
-//        $this->prepareSrc();
-
-    }
 
     public function addClass($class)
     {
@@ -44,9 +25,22 @@ class Image extends AbstractFieldReturn
             $this->classes = array_merge($this->classes, $class);
         } else {
             $this->classes = array_merge(explode(' ', $this->_cleanSpaces($class)), $this->classes);
+
         }
+
         return $this;
 
+    }
+
+    public function removeClass($class)
+    {
+        $key = array_search($class, $this->classes);
+
+        if ($key) {
+            unset($this->classes[$key]);
+        }
+
+        return $this;
     }
 
     public function addAttr($attr, $value = '')
@@ -63,6 +57,7 @@ class Image extends AbstractFieldReturn
 
     public function html()
     {
+        $this->handleLoggedInUsers();
         $this->prepareSrc();
         $format = '<%1$s %3$s src="%2$s" >';
         $this->toJSON();
@@ -80,7 +75,10 @@ class Image extends AbstractFieldReturn
 
     public function background()
     {
+        $this->handleLoggedInUsers();
 
+        $this->removeClass('editable-image');
+        $this->addClass('editable-bg-image');
         $this->prepareSrc();
         $format = ' %2$s style="background-image: url(\'%1$s\')"';
         $this->toJSON();
@@ -137,17 +135,26 @@ class Image extends AbstractFieldReturn
         $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, true, true, $this->upscale);
     }
 
+    /**
+     * Different classes for Headlines and the rest
+     * @return string
+     */
+    public function getEditableClass()
+    {
+        return 'editable-image';
+    }
+
     public function toJSON()
     {
         $json = array(
-            $this->key => array(
-                'width' => $this->width,
-                'height' => $this->height,
-                'crop' => true,
-                'upscale' => $this->upscale
-            )
+
+            'width' => $this->width,
+            'height' => $this->height,
+            'crop' => true,
+            'upscale' => $this->upscale
+
         );
 
-        JSONBridge::getInstance()->registerData('FrontSettings', $this->moduleId, $json);
+        JSONBridge::getInstance()->registerData('FrontSettings', $this->uid, $json);
     }
 }

@@ -55,8 +55,6 @@ Class FlexibleFields extends Field
     public function save($new, $old)
     {
 
-
-
         if (is_array($old)) {
             foreach ($old as $k => $v){
                 if (!array_key_exists($k, $new)){

@@ -129,6 +129,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
 
         KB.TinyMCE.addEditor();
         KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
+        KB.Views.Modules.lastViewAdded.$el.addClass('kb-open');
 
         // update the reference counter, used as base number
         // for new modules

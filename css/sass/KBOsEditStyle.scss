@@ -300,12 +300,24 @@ body.onsite-editing {
   }
 
   a.kb-save-form {
+    position: relative;
     height: 30px;
     font-size: 13px;
     padding: 0px 12px;
     line-height: 30px;
     float: left;
     display: block;
+    min-width: 50px;
+    text-decoration: none;
+    border: none;
+
+    .dashicons{
+      font-size: 13px;
+      text-decoration: none;
+      position: relative;
+      top: 10px;
+      left: -8px;
+    }
 
   }
 
@@ -346,6 +358,8 @@ body.onsite-editing {
     line-height: 30px;
     float: left;
     display: block;
+    text-decoration: none;
+    border: none;
   }
 
   .kb_fieldtabs ul.ui-tabs-nav {
@@ -421,7 +435,7 @@ body.onsite-editing {
   .kb-dirty-notice {
     position: absolute;
     top: -5px;
-    left: 31px;
+    right: 5px;
     display: block;
   }
 }

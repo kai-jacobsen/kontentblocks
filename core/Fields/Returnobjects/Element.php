@@ -28,12 +28,6 @@ class Element extends AbstractFieldReturn
      */
     protected $attributes = array();
 
-    /**
-     * Settings to activate/deactivate inline editing
-     * @var bool
-     * @since 1.0.0
-     */
-    protected $inlineEdit = true;
 
     /**
      * The field object if this comes from ReField
@@ -55,19 +49,6 @@ class Element extends AbstractFieldReturn
      */
     protected $target;
 
-
-    /**
-     * Class constructore
-     * @param $value
-     * @param $field
-     * @since 1.0.0
-     */
-    public function __construct($value, $field)
-    {
-        $this->field = $field;
-        parent::__construct($value);
-
-    }
 
     /**
      * Add a (css) class to the stack of classes
@@ -150,16 +131,16 @@ class Element extends AbstractFieldReturn
         }
 
         if (is_user_logged_in()) {
-            if (!$this->hasLink){
+            if (!$this->hasLink) {
                 return sprintf($format, $this->el, $filtered, $this->_renderAttributes(), uniqid('kb'));
-            } else if ($this->hasLink){
+            } else if ($this->hasLink) {
                 return sprintf($formatWithLink, $this->el, $filtered, $this->_renderAttributes(), uniqid('kb'), $this->target);
             }
         } else {
-            if (!$this->hasLink){
+            if (!$this->hasLink) {
                 $format = '<%1$s %3$s>%2$s</%1$s>';
                 return sprintf($format, $this->el, $filtered, $this->_renderAttributes());
-            } else if($this->hasLink) {
+            } else if ($this->hasLink) {
                 $format = '<%1$s %3$s><a href="%4$s">%2$s</a></%1$s>';
                 return sprintf($format, $this->el, $filtered, $this->_renderAttributes(), $this->target);
             }
@@ -219,16 +200,26 @@ class Element extends AbstractFieldReturn
         return '<' . $matches[1] . $matches[2] . '>' . htmlspecialchars(substr(str_replace('<' . $matches[1] . $matches[2] . '>', '', $matches[0]), 0, -(strlen($matches[1]) + 3))) . '</' . $matches[1] . '>';
     }
 
+
     /**
-     * Set inline edit support on or off
-     * @param $bool
-     * @return $this
+     * Different classes for Headlines and the rest
+     * @return string
      */
-    public function inlineEdit($bool)
+    public function getEditableClass()
     {
-        $in = filter_var($bool, FILTER_VALIDATE_BOOLEAN);
-        $this->inlineEdit = $in;
-        return $this;
+        $titles = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
+        $text = array('div', 'p', 'span', 'article', 'section');
+
+        if (in_array($this->el, $titles)) {
+            return 'editable-title';
+        }
+
+        if (in_array($this->el, $text)) {
+            return 'editable';
+        }
+
+        return 'not-editable';
     }
+
 
 }

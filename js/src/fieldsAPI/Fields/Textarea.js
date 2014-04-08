@@ -1,7 +1,6 @@
 KB.FieldsAPI.Textarea = function (config) {
-    var defaults;
 
-    defaults = {
+    this.defaults = {
         std: 'some textvalue',
         label: 'Field label',
         description: 'A description',
@@ -11,7 +10,7 @@ KB.FieldsAPI.Textarea = function (config) {
 
     this.templatePath = 'fields/Textarea';
 
-    this.config = _.defaults(config, defaults);
+    this.config = _.defaults(config, this.defaults);
     this.baseId = this.prepareBaseId();
 };
 
@@ -26,7 +25,11 @@ _.extend(KB.FieldsAPI.Textarea.prototype, {
     },
     setValue: function(value){
         this.config.value = value;
+    },
+    resetValue:function(){
+        this.config.value = this.defaults.value;
     }
+
 
 });
 

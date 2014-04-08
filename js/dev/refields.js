@@ -1,10 +1,9 @@
-/*! Kontentblocks DevVersion 2014-04-03 */
+/*! Kontentblocks DevVersion 2014-04-07 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
-            _K.log("Color init", $(".kb-color-picker"));
             $("body").on("mouseup", ".kb-field--color", function() {
                 setTimeout(function() {
                     if (KB.FrontendEditModal) {
@@ -12,6 +11,7 @@ KB.Fields.register("Color", function($) {
                     }
                 }, 150);
             });
+            _K.log("Color init", $(".kb-color-picker"));
             $(".kb-color-picker").wpColorPicker({
                 change: function(event, ui) {},
                 clear: function() {
@@ -211,8 +211,11 @@ _.extend(KB.FlexibleFields.prototype, {
     },
     renderFields: function(tab, $con, index, data) {
         _.each(tab.fields, function(field) {
+            console.log(field);
             if (data && data[field.config.key]) {
                 field.setValue(data[field.config.key]);
+            } else {
+                field.resetValue();
             }
             $con.append(field.render(index));
         });
@@ -234,6 +237,7 @@ _.extend(KB.FlexibleFields.prototype, {
             field.fieldId = that.fid;
             field.key = key;
             field.$parent = that.$el;
+            console.log(field);
             fields[key] = KB.FieldsAPI.get(field);
         });
         return fields;
@@ -273,8 +277,8 @@ KB.Fields.register("Image", function($) {
             $("body").on("click", this.selector, function(e) {
                 e.preventDefault();
                 that.settings = that.getSettings(this);
-                that.$container = $(".kb-field-image-container", activeField);
-                that.$wrapper = $(".kb-field-image-wrapper", activeField);
+                that.$wrapper = $(this).closest(".kb-field-image-wrapper");
+                that.$container = $(".kb-field-image-container", that.$wrapper);
                 that.$id = $(".kb-js-image-id", that.$wrapper);
                 that.$title = $(".kb-js-image-title", that.$wrapper);
                 that.$caption = $(".kb-js-image-caption", that.$wrapper);
@@ -349,9 +353,60 @@ KB.Fields.register("Image", function($) {
         },
         update: function() {
             this.init();
+        },
+        updateFront: function() {
+            this.init();
         }
     };
     return self;
+}(jQuery));
+
+KB.Fields.register("Link", function($) {
+    var self, restore_htmlUpdate, restore_isMce;
+    return {
+        $input: null,
+        init: function() {
+            var that = this;
+            $("body").on("click", ".kb-js-add-link", function(e) {
+                e.preventDefault();
+                that.$input = $(this).prev().attr("id");
+                that.open();
+            });
+        },
+        open: function(input) {
+            var that = this;
+            wpActiveEditor = this.$input;
+            wpLink.open();
+            restore_htmlUpdate = wpLink.htmlUpdate;
+            restore_isMce = wpLink.isMCE;
+            wpLink.isMCE = function() {
+                return false;
+            };
+            wpLink.htmlUpdate = function() {
+                var attrs, html, start, end, cursor, textarea = wpLink.textarea, result;
+                if (!textarea) return;
+                attrs = wpLink.getAttrs();
+                if (!attrs.href || attrs.href == "http://") return;
+                href = attrs.href;
+                title = attrs.title;
+                jQuery(textarea).empty();
+                textarea.value = href;
+                wpLink.close();
+                that.close();
+                textarea.focus();
+            };
+        },
+        close: function() {
+            wpLink.isMCE = restore_isMce;
+            wpLink.htmlUpdate = restore_htmlUpdate;
+        },
+        update: function() {
+            this.init();
+        },
+        updateFront: function() {
+            this.init();
+        }
+    };
 }(jQuery));
 
 KB.Fields.register("MultipleImageText", function($) {

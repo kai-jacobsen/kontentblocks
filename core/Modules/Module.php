@@ -80,9 +80,11 @@ abstract class Module
      */
     public function options($data)
     {
+        if (isset($this->Fields) && is_object($this->Fields)){
+            $this->Fields->renderFields();
+        }
 
-        $this->Fields->renderFields();
-
+        return false;
     }
 
     /**

@@ -83,7 +83,6 @@ _.extend(KB.FlexibleFields.prototype, {
 
     addItem: function (data) {
         var that = this;
-
         if (_.isNull(data)) {
             return
         }
@@ -112,12 +111,12 @@ _.extend(KB.FlexibleFields.prototype, {
 
     renderFields: function (tab, $con, index, data) {
         _.each(tab.fields, function (field) {
-
-
+            console.log(field);
             if (data && data[field.config.key]) {
                 field.setValue(data[field.config.key]);
+            } else {
+                field.resetValue();
             }
-
 
             $con.append(field.render(index));
         });
@@ -141,6 +140,7 @@ _.extend(KB.FlexibleFields.prototype, {
             field.fieldId = that.fid;
             field.key = key;
             field.$parent = that.$el;
+            console.log(field);
             fields[key] = KB.FieldsAPI.get(field);
         });
         return fields;

@@ -4,15 +4,29 @@ namespace Kontentblocks\Abstracts;
 
 use Kontentblocks\Interfaces\InterfaceFieldReturn;
 
+
 abstract class AbstractFieldReturn implements InterfaceFieldReturn
 {
 
     public $value;
 
-    public function __construct($value)
-    {
-        $this->value = $value;
+    public $moduleId;
 
+    public $key;
+
+    public $arrayKey;
+
+    public $index = null;
+
+    protected $inlineEdit = true;
+
+    protected $uid;
+
+    public function __construct($value, $field)
+    {
+        $this->setValue($value);
+        $this->setupFromField($field);
+        $this->uid = uniqid('kb');
     }
 
     /**
@@ -33,6 +47,8 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn
 
     }
 
+    abstract function getEditableClass();
+
     /**
      * Make this usable in twig templates without voodoo
      * @return mixed
@@ -50,40 +66,49 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn
     {
         if (is_user_logged_in() && $this->inlineEdit) {
             $editableClass = $this->getEditableClass();
-            if (is_object($this->field)) {
-                $this->addClass($editableClass);
-                $this->addAttr('data-module', $this->field->parentModuleId);
-                $this->addAttr('data-key', $this->field->getKey());
-                $this->addAttr('data-arrayKey', $this->field->getArg('arrayKey'));
-            } else if (is_array($this->field)) {
-                $this->addClass($editableClass);
-                $this->addAttr('data-module', $this->field['instance_id']);
-                $this->addAttr('data-key', $this->field['key']);
-                $this->addAttr('data-arrayKey', $this->field['arrayKey']);
-                $this->addAttr('data-index', $this->field['index']);
+            $this->addClass($editableClass);
+            $this->addAttr('data-module', $this->moduleId);
+            $this->addAttr('data-key', $this->key);
+            $this->addAttr('data-arrayKey', $this->arrayKey);
+            if (!is_null($this->index)) {
+                $this->addAttr('data-index', $this->index);
             }
+            $this->addAttr('data-uid', $this->uid);
         }
     }
 
     /**
-     * Different classes for Headlines and the rest
-     * @return string
+     * Set inline edit support on or off
+     * @param $bool
+     * @return $this
      */
-    private function getEditableClass()
+    public function inlineEdit($bool)
     {
-        $titles = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
-        $text = array('div', 'p', 'span', 'article', 'section');
-
-        if (in_array($this->el, $titles)) {
-            return 'editable-title';
-        }
-
-        if (in_array($this->el, $text)) {
-            return 'editable';
-        }
-
-        return 'not-editable';
+        $in = filter_var($bool, FILTER_VALIDATE_BOOLEAN);
+        $this->inlineEdit = $in;
+        return $this;
     }
 
+    public function setValue($value)
+    {
+
+        $this->value = $value;
+    }
+
+    private function setupFromField($field)
+    {
+        if (is_object($field)) {
+            $this->moduleId = $field->parentModuleId;
+            $this->key = $field->getKey();
+            $this->arrayKey = $field->getArg('arrayKey');
+        } else if (is_array($field)) {
+            $this->moduleId = $field['instance_id'];
+            $this->key = $field['key'];
+            $this->arrayKey = $field['arrayKey'];
+            $this->index = $field['index'];
+        }
+
+
+    }
 
 }

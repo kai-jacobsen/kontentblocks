@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-03 */
+/*! Kontentblocks DevVersion 2014-04-07 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();
@@ -238,6 +238,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.parseAdditionalJSON(data.json);
         KB.TinyMCE.addEditor();
         KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
+        KB.Views.Modules.lastViewAdded.$el.addClass("kb-open");
         var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
         jQuery("#kb_all_blocks").val(count);
     },

@@ -15,10 +15,15 @@ use Kontentblocks\Modules\ModuleRegistry,
  */
 function getHiddenEditor()
 {
-    echo "<div style='display: none;'>";
-    wp_editor('', 'content');
-    echo '</div>';
+    global $kbHiddenEditorCalled;
 
+    if (!$kbHiddenEditorCalled){
+        echo "<div style='display: none;'>";
+        wp_editor('', 'content');
+        echo '</div>';
+    }
+
+    $kbHiddenEditorCalled = true;
 }
 
 /**

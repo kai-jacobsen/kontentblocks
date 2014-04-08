@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-03 */
+/*! Kontentblocks DevVersion 2014-04-07 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -97,7 +97,13 @@ _.extend(KB.Fields, {
     },
     newModule: function(object) {
         _K.log("new Module added for Fields");
-        this.init();
+        var that = this;
+        object.listenTo(this, "update", object.update);
+        object.listenTo(this, "frontUpdate", object.frontUpdate);
+        setTimeout(function() {
+            that.trigger("update");
+            console.log("triggered");
+        }, 750);
     },
     get: function(id) {
         if (this.fields[id]) {

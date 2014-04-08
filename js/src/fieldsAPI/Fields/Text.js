@@ -1,7 +1,5 @@
 KB.FieldsAPI.Text = function (config) {
-    var defaults;
-
-    defaults = {
+    this.defaults = {
         std: 'some textvalue',
         label: 'Field label',
         description: 'A description',
@@ -11,7 +9,8 @@ KB.FieldsAPI.Text = function (config) {
 
     this.templatePath = 'fields/Text';
 
-    this.config = _.defaults(config, defaults);
+    this.config = _.defaults(config, this.defaults);
+
     this.baseId = this.prepareBaseId();
 };
 
@@ -26,6 +25,9 @@ _.extend(KB.FieldsAPI.Text.prototype, {
     },
     setValue: function(value){
         this.config.value = value;
+    },
+    resetValue:function(){
+        this.config.value = this.defaults.value;
     }
 
 });

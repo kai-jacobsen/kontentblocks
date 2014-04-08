@@ -15,17 +15,6 @@ Class Color extends Field
         'returnObj' => false
     );
 
-    // enqueue files on admin side
-    // frontend scripts are handled globally
-    // see \Kontentblocks\Enqueues\Hooks
-    public function enqueue()
-    {
-        if ( is_admin() ) {
-            wp_enqueue_style( 'wp-color-picker' );
-            wp_enqueue_script( 'wp-color-picker' );
-        }
-
-    }
 
     public function form()
     {

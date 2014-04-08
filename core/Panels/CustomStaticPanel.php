@@ -49,7 +49,7 @@ abstract class CustomStaticPanel
      * Form data
      * @var array
      */
-    protected $data;
+    protected $data = null;
 
     public function __construct($args)
     {
@@ -117,6 +117,11 @@ abstract class CustomStaticPanel
     public function metaBox($postObj)
     {
 
+        if (!post_type_supports($postObj->post_type, 'editor')) {
+            \Kontentblocks\Helper\getHiddenEditor();
+        }
+
+
         $defaults = array(
             'title' => 'No Title provided',
             'context' => 'advanced',
@@ -134,13 +139,11 @@ abstract class CustomStaticPanel
     public function form($postObj)
     {
 
-
-
         if (!in_array($postObj->post_type, $this->postTypes)) {
             return;
         }
 
-        if (!post_type_supports($postObj->post_type, 'editor')){
+        if (!post_type_supports($postObj->post_type, 'editor')) {
             \Kontentblocks\Helper\getHiddenEditor();
         }
 
@@ -176,7 +179,9 @@ abstract class CustomStaticPanel
         }
     }
 
-
+    /**
+     * Markup before inner form
+     */
     private function beforeForm()
     {
         echo "<div class='postbox'>
@@ -184,25 +189,54 @@ abstract class CustomStaticPanel
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
     }
 
+    /**
+     * Markup after
+     */
     private function afterForm()
     {
         echo "</div></div></div>";
     }
 
+    /**
+     * Setup panel related meta data
+     * @param $postId
+     * @TODO use meta api?
+     */
     private function setupData($postId)
     {
-        $this->data = get_post_meta($postId, $this->baseId, true);
+        if (is_object($postId)) {
+            $id = $postId->ID;
+        } else {
+            $id = $postId;
+        }
+
+
+        $this->data = get_post_meta($id, $this->baseId, true);
+        return $this->data;
     }
 
+    /**
+     * Manually set up fielddata
+     * Makes it possible to get the Panel from the registry, and use it as data container
+     * @TODO __Revise__
+     * @param $postId
+     * @return $this
+     */
     public function setup($postId)
     {
         $this->setupData($postId);
         $this->FieldManager = new FieldManagerCustom($this->baseId, $this->data);
+
         $this->fields($this->FieldManager)->setup($this->data);
         return $this;
 
     }
 
+    /**
+     * After setup, get the setup object
+     * @return array
+     * @TODO __Revise__
+     */
     public function getData()
     {
         return $this->FieldManager->prepareDataAndGet();

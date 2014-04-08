@@ -1,5 +1,6 @@
 <?php
 namespace Kontentblocks\Templating;
+use Kontentblocks\Utils\ImageResize;
 use Twig_SimpleFunction;
 
 class Twig
@@ -29,6 +30,10 @@ class Twig
                 return get_permalink($id);
             });
             self::$environment->addFunction($getPermalink);
+            $getImage = new Twig_SimpleFunction('getImage', function ($id, $width = null, $height = null) {
+                return ImageResize::getInstance()->process($id,$width,$height,true,true,true);
+            });
+            self::$environment->addFunction($getImage);
 
         }
         

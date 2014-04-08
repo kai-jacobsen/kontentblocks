@@ -204,9 +204,20 @@ class CustomModulePanel
         echo "</div></div></div>";
     }
 
+    /**
+     * @TODO: REVISE POST ID
+     * @param $postId
+     * @return mixed
+     */
     private function setupData($postId)
     {
-        $this->data = get_post_meta($postId, '_' . $this->baseId, true);
+        if (is_object($postId)){
+            $id = $postId->ID;
+        } else {
+            $id = $postId;
+        }
+
+        $this->data = get_post_meta($id, '_' . $this->baseId, true);
         return $this->data;
     }
 

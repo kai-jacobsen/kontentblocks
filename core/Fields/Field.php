@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
@@ -348,12 +349,13 @@ abstract class Field
      */
     public function getValue($arrKey = null)
     {
-        if (method_exists($this, 'inputFilter')) {
-            return $this->inputFilter($this->value);
-        }
-
         if ($arrKey) {
             return $this->getValueFromArray($arrKey);
+        }
+
+
+        if (method_exists($this, 'inputFilter')) {
+            return $this->inputFilter($this->value);
         }
 
         return $this->value;
@@ -553,7 +555,11 @@ abstract class Field
     public function getFieldId($rnd = false)
     {
         if ($rnd) {
-            $number = uniqid('kbf');
+            if (is_bool($rnd)){
+                $number = uniqid('kbf');
+            } else {
+                $number = $rnd;
+            }
             $id = sanitize_title($this->baseId . '_' . $this->key . '_' . $number);
         } else {
             $id = sanitize_title($this->baseId . '_' . $this->key);

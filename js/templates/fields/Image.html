@@ -1,14 +1,32 @@
-<div class="kb-field kb-js-field field-api-image">
+<div class="kb_field kb-field kb-field--image kb-fieldapi-field">
+    <div class='kb-field-image-wrapper'>
+        <div class='kb-js-add-image kb-field-image-container'>
 
-    <div class="field-api-image--wrapper">
-        <div class="field-api-image--frame">
             <% if (config.value.url) { %>
             <img src="<%= config.value.url %>">
             <% }; %>
-        </div>
-        <input class="field-api-image--image-id" type="hidden" name="<%= baseId %>[<%= index %>][<%= config.key %>]"
-               value="<%= config.value.id %>">
-    </div>
-    <a class="button button-primary flexible-fields--js-add-image">Add</a>
-</div>
 
+        </div>
+
+        <% if (config.hideMeta){ %>
+        <div style="display: none;">
+            <% }; %>
+
+            <div class="kb-js-image-meta-wrapper">
+                <label><%= i18n.title %> </label>
+                <input class='kb-js-image-title kb-observe' type="text"
+                       name='<%= baseId %>[<%= index %>][<%= config.key %>][title]'
+                       value='<%= config.value.title %>'>
+                <label><%= i18n.caption %></label>
+                <input class='kb-js-image-caption kb-observe' type="text"
+                       name='<%= baseId %>[<%= index %>][<%= config.key %>][caption]'
+                       value='<%= config.value.caption %>'>
+            </div>
+            <% if (config.hideMeta) { %>
+
+        </div>
+        <% }; %>
+        <input class='kb-js-image-id' type='hidden' name='<%= baseId %>[<%= index %>][<%= config.key %>][id]'
+               value='<%= config.value.id %>'>
+    </div>
+</div>

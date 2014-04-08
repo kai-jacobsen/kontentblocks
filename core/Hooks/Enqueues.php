@@ -112,6 +112,9 @@ class Enqueues
             wp_localize_script('kb-common', 'kontentblocks', $localize);
         }
 
+        wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_script( 'wp-color-picker' );
+
         if ($is_IE) {
             wp_enqueue_script('respond', KB_PLUGIN_URL . 'js/respond.min.js', null, true, true);
             wp_enqueue_style('ie8css', KB_PLUGIN_URL . 'css/ie8css.css');

@@ -664,9 +664,12 @@ textarea.quicktags {
   display: none;
 }
 
-.onsite-editing .editable, .onsite-editing .editable-image, .onsite-editing .editable-bg-image {
+.onsite-editing .editable, .onsite-editing .editable-image, .onsite-editing .editable-bg-image, .onsite-editing .editable-title {
   outline: 1px dashed currentcolor;
-  padding: 1px;
 //  background-color: #ffffe0;
 }
+//.logged-in .editable, .logged-in .editable-image, .logged-in .editable-bg-image {
+//  outline: 1px dashed currentcolor;
+////  background-color: #ffffe0;
+//}
 

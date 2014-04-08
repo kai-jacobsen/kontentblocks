@@ -173,6 +173,11 @@ class FieldManagerCustom
         return false;
     }
 
+    /**
+     * Returns the fields data in one flat array
+     * @return array
+     * @TODO: __Revise__
+     */
     public function prepareDataAndGet()
     {
         $collect = array();

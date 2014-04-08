@@ -134,6 +134,12 @@ class FlexibleFieldsFactory
                     'index' => $index
                 ));
             case 'image':
+                return new \Kontentblocks\Fields\Returnobjects\Image($keydata, array(
+                    'instance_id' => $this->moduleId,
+                    'key' => $key,
+                    'arrayKey' => $this->arrayKey,
+                    'index' => $index
+                ));
                 break;
 
         }

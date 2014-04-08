@@ -32,6 +32,7 @@ class PanelRegistry
      */
     public function add($id, $args)
     {
+
         if (!isset($this->panels[$id])) {
             if (isset($args['moduleClass']) && class_exists($args['moduleClass'])) {
                 $this->panels[$id] = new CustomModulePanel($args);
@@ -48,8 +49,8 @@ class PanelRegistry
 
     public function get($id)
     {
-        if (isset($this->panels[$id])){
 
+        if (isset($this->panels[$id])){
             return $this->panels[$id];
         }
     }

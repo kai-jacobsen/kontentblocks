@@ -19,8 +19,9 @@ KB.Fields.register('Image', (function ($) {
             $('body').on('click', this.selector, function (e) {
                 e.preventDefault();
                 that.settings = that.getSettings(this);
-                that.$container = $('.kb-field-image-container', activeField);
-                that.$wrapper = $('.kb-field-image-wrapper', activeField);
+
+                that.$wrapper = $(this).closest('.kb-field-image-wrapper');
+                that.$container = $('.kb-field-image-container', that.$wrapper);
                 that.$id = $('.kb-js-image-id', that.$wrapper);
                 that.$title = $('.kb-js-image-title', that.$wrapper);
                 that.$caption = $('.kb-js-image-caption', that.$wrapper);
@@ -106,6 +107,9 @@ KB.Fields.register('Image', (function ($) {
 
         },
         update: function () {
+            this.init();
+        },
+        updateFront: function(){
             this.init();
         }
     };
