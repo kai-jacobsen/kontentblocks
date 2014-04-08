@@ -92,7 +92,7 @@ class KB_Master_Module extends Module
 
         $templateData = array(
             'valid' => $this->state['valid'],
-            'editUrl' => get_edit_post_link($masterId),
+            'editUrl' => get_edit_post_link($masterId) . '&amp;return=' . get_the_ID(),
             'translated' => $translated,
             'duplicate' => $duplicate,
             'module' => $this,

@@ -1,13 +1,15 @@
 <div class="kb_field">
     <div class="inside">
+        <div class="kb-edit-original">
+
+            {% if translated %}
+                <p>{{ i18n.validTranslated }}</p>
+            {% endif %}
+
+            <p>Der Inhalt dieses Moduls wird zentral verwaltet:</p>
+            <a class="button button-primary" href="{{ editUrl }}">{{ i18n.editLink }}</a>
+        </div>
 
 
-
-        {% if translated %}
-            <p>{{ i18n.validTranslated }}</p>
-        {% endif %}
-
-
-        <a href="{{ editUrl }}">{{ i18n.editLink }}</a>
     </div>
 </div>

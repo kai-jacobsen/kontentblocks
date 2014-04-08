@@ -121,6 +121,10 @@ class ModuleTemplates
             'instance' => $Instance
         );
 
+        if (isset($_GET['return'])){
+            echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
+        }
+
         // To keep html out of php files as much as possible twig is used
         // Good thing about twig is it handles unset vars gracefully
         $FormNew = new CoreTemplate('module-template.twig', $templateData);
@@ -184,6 +188,13 @@ class ModuleTemplates
             $new = $Instance->save($data, $old);
             $toSave = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
             $MetaData->update('_' . $id, $toSave);
+
+            if (isset($_POST['kb_return_to_post'])){
+                $url = get_edit_post_link($_POST['kb_return_to_post']);
+                wp_redirect(html_entity_decode($url));
+                exit;
+            }
+
         }
 
 
