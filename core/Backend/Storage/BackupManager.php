@@ -87,7 +87,7 @@ class BackupManager
     {
         global $wpdb;
 
-        if (!current_user_can('administrator')) {
+        if (!current_user_can('edit_kontentblocks')) {
             wp_die('Hackin?');
         }
 
@@ -126,7 +126,7 @@ class BackupManager
     {
         global $wpdb;
 
-        if (!current_user_can('administrator')) {
+        if (!current_user_can('edit_kontentblocks')) {
             wp_die('Hackin?');
         }
 
@@ -181,7 +181,7 @@ class BackupManager
     {
         global $wpdb;
 
-        if (!current_user_can('administrator')) {
+        if (!current_user_can('edit_kontentblocks')) {
             wp_die('Hackin?');
         }
 
