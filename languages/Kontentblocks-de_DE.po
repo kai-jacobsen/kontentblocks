@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2014-03-28 08:16+0100\n"
-"PO-Revision-Date: 2014-03-28 08:17+0100\n"
+"POT-Creation-Date: 2014-04-10 08:19+0100\n"
+"PO-Revision-Date: 2014-04-10 08:20+0100\n"
 "Last-Translator: Kai Jacobsen <kai@ungestaltbar.de>\n"
 "Language-Team: Kai Jacobsen\n"
 "Language: Deutsch\n"
@@ -130,13 +130,23 @@ msgstr "Bitte wählen"
 msgid "Layout Configurations"
 msgstr "Layout Konfigurationen"
 
-#: ../core/Language/./packages/i18n_Extensions.php:9
-#: ../core/./Language/packages/i18n_Extensions.php:9
+#: ../core/Language/./packages/i18n_Extensions.php:7
+#: ../core/./Language/packages/i18n_Extensions.php:7
+msgid ""
+"Load a stored module layout configuration or save the current. Loading a "
+"configuration will remove all current modules and data."
+msgstr ""
+"Eine gespeicherte Modullayoutkonfiguration laden oder die aktuelle "
+"speichern. Das Laden einer Konfiguration entfernt alle aktuellen Module und "
+"die dazugehörigen Daten."
+
+#: ../core/Language/./packages/i18n_Extensions.php:10
+#: ../core/./Language/packages/i18n_Extensions.php:10
 msgid "New Backup was created"
 msgstr "Neues Backup wurde erstellt."
 
-#: ../core/Language/./packages/i18n_Extensions.php:12
-#: ../core/./Language/packages/i18n_Extensions.php:12
+#: ../core/Language/./packages/i18n_Extensions.php:13
+#: ../core/./Language/packages/i18n_Extensions.php:13
 msgid "Show editable elements"
 msgstr "Editierbare Elemente anzeigen"
 
@@ -169,15 +179,15 @@ msgstr "Standardvorlage"
 msgid "Please set options to show"
 msgstr "Es wurden keine Optionen zur Auswahl angegeben."
 
-#: ../core/./Hooks/Enqueues.php:142
+#: ../core/./Hooks/Enqueues.php:149
 msgid "Clear"
 msgstr "Reset"
 
-#: ../core/./Hooks/Enqueues.php:143
+#: ../core/./Hooks/Enqueues.php:150
 msgid "Default"
 msgstr "Standardvorlage"
 
-#: ../core/./Hooks/Enqueues.php:144
+#: ../core/./Hooks/Enqueues.php:151
 msgid "Select Color"
 msgstr "Farbe wählen"
 
@@ -221,100 +231,100 @@ msgstr ""
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:258
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:260
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:261
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:269
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:271
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:272
 msgid "Module Templates"
 msgstr "Modulevorlagen"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:259
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:270
 msgid "Module Template"
 msgstr "Modulevorlage"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:262
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:273
 #: ../core/./Backend/Dynamic/DynamicAreas.php:167
 msgid "Add New"
 msgstr "Hinzufügen"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:263
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:274
 msgid "Add New Module Template"
 msgstr "Neue Modulvorlage hinzufügen"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:264
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:275
 msgid "New Module Template"
 msgstr "Neue Modulvorlage"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:265
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:276
 msgid "Edit Module Template"
 msgstr "Modulevorlage bearbeiten"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:266
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:277
 msgid "View Module Template"
 msgstr "Modulvorlage ansehen"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:267
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:278
 msgid "All Module Templates"
 msgstr "Alle Modulvorlagen"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:268
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:279
 msgid "Search Module Templates"
 msgstr "Modulvorlagen durchsuchen"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:269
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:280
 msgid "Parent Module Template:"
 msgstr "Übergeordnete Modulvorlage"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:270
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:281
 msgid "No Module Templates found."
 msgstr "Keine Modulvorlagen gefunden"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:271
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:282
 msgid "No Module Templates found in Trash."
 msgstr "Keine Modulvorlagen im Papierkorb"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:301
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:304
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:312
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:315
 msgid "Module Template updated."
 msgstr "Modulvorlage wurde aktualisiert."
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:302
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:313
 #: ../core/./Backend/Dynamic/DynamicAreas.php:208
 msgid "Custom field updated."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:303
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:314
 #: ../core/./Backend/Dynamic/DynamicAreas.php:209
 msgid "Custom field deleted."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:306
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:317
 #, php-format
 msgid "Module Template restored to revision from %s"
 msgstr "Modulvorlage wurde aus %s wiederhergestellt"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:307
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:318
 msgid "Module Template published."
 msgstr "Modulvorlage veröffentlicht"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:308
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:319
 msgid "Module Template saved."
 msgstr "Modulvorlage wurde gespeichert"
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:309
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:320
 msgid "Module Template submitted."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:311
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:322
 #, php-format
 msgid "Module Template scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:313
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:324
 #: ../core/./Backend/Dynamic/DynamicAreas.php:219
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: ../core/./Backend/Dynamic/ModuleTemplates.php:315
+#: ../core/./Backend/Dynamic/ModuleTemplates.php:326
 msgid "Module Template draft updated."
 msgstr ""
 
@@ -427,15 +437,15 @@ msgstr "Footer"
 msgid "Full width area at the bottom of this page"
 msgstr ""
 
-#: ../core/./Modules/Module.php:262
+#: ../core/./Modules/Module.php:267
 msgid "<strong><em>Beschreibung:</em> </strong>"
 msgstr "<strong><em>Beschreibung:</em> </strong>"
 
-#: ../core/./Modules/Module.php:263
+#: ../core/./Modules/Module.php:268
 msgid "Modul Bezeichnung"
 msgstr ""
 
-#: ../core/./Modules/Module.php:264
+#: ../core/./Modules/Module.php:269
 msgid ""
 "This Module is a draft and won't be public until you publish or update the "
 "post"
@@ -443,7 +453,7 @@ msgstr ""
 "Diese Modul ist im Entwurfstatus und wird beim nächsten Aktualisieren "
 "veröffentlicht."
 
-#: ../core/./Modules/Module.php:360
+#: ../core/./Modules/Module.php:365
 msgid "edit"
 msgstr "bearbeite"
 

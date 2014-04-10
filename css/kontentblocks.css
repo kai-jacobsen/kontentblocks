@@ -2104,6 +2104,12 @@ button.Zebra_DatePicker_Icon_Inside {
   color: #333;
   font-weight: 100;
 }
+/* line 35, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
+.kb-field--image .kb-field-image--footer {
+  clear: both;
+  margin-top: 10px;
+  padding: 8px 0;
+}
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs {

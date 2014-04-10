@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-09 */
+/*! Kontentblocks DevVersion 2014-04-10 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();

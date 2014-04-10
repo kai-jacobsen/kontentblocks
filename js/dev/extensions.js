@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-09 */
+/*! Kontentblocks DevVersion 2014-04-10 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),
@@ -23,7 +23,7 @@
             this.update();
         },
         _selectContainer: function() {
-            return $("<div class='select-container clearfix'><p>Load an exisiting configuration. Note!: This will reset the current.</p></div>").appendTo(this.el);
+            return $("<div class='select-container clearfix'>" + KB.i18n.Extensions.layoutConfigs.info + "</div>").appendTo(this.el);
         },
         _createSelectMenu: function() {
             $('<select name="kb-layout-configuration"></select>').appendTo(this.selectContainer);

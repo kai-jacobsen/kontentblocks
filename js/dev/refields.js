@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-09 */
+/*! Kontentblocks DevVersion 2014-04-10 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -274,16 +274,24 @@ KB.Fields.register("Image", function($) {
         init: function() {
             var that = this;
             _K.log("init image refield");
-            $("body").on("click", this.selector, function(e) {
+            var $body = $("body");
+            $body.on("click", this.selector, function(e) {
                 e.preventDefault();
+                that.setupInputs(this);
                 that.settings = that.getSettings(this);
-                that.$wrapper = $(this).closest(".kb-field-image-wrapper");
-                that.$container = $(".kb-field-image-container", that.$wrapper);
-                that.$id = $(".kb-js-image-id", that.$wrapper);
-                that.$title = $(".kb-js-image-title", that.$wrapper);
-                that.$caption = $(".kb-js-image-caption", that.$wrapper);
                 that.openModal();
             });
+            $body.on("click", this.reset, function(e) {
+                that.setupInputs(this);
+                that.resetInputs();
+            });
+        },
+        setupInputs: function(anchor) {
+            this.$wrapper = $(anchor).closest(".kb-field-image-wrapper");
+            this.$container = $(".kb-field-image-container", this.$wrapper);
+            this.$id = $(".kb-js-image-id", this.$wrapper);
+            this.$title = $(".kb-js-image-title", this.$wrapper);
+            this.$caption = $(".kb-js-image-caption", this.$wrapper);
         },
         getSettings: function(el) {
             var parent = $(el).closest(".kb-field-wrapper");
@@ -350,6 +358,12 @@ KB.Fields.register("Image", function($) {
             this.$title.val(attachment.get("title"));
             this.$caption.val(attachment.get("caption"));
             $(document).trigger("KB:osUpdate");
+        },
+        resetInputs: function() {
+            this.$container.empty();
+            this.$id.val("");
+            this.$title("");
+            this.$caption("");
         },
         update: function() {
             this.init();
