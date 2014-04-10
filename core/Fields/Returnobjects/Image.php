@@ -16,7 +16,7 @@ class Image extends AbstractFieldReturn
     protected $classes = array();
     protected $attributes = array();
     protected $uid;
-
+    protected $background = false;
 
     public function addClass($class)
     {
@@ -35,10 +35,10 @@ class Image extends AbstractFieldReturn
     public function removeClass($class)
     {
         $key = array_search($class, $this->classes);
-
         if ($key) {
             unset($this->classes[$key]);
         }
+
 
         return $this;
     }
@@ -75,10 +75,8 @@ class Image extends AbstractFieldReturn
 
     public function background()
     {
+        $this->background = true;
         $this->handleLoggedInUsers();
-
-        $this->removeClass('editable-image');
-        $this->addClass('editable-bg-image');
         $this->prepareSrc();
         $format = ' %2$s style="background-image: url(\'%1$s\')"';
         $this->toJSON();
@@ -141,7 +139,12 @@ class Image extends AbstractFieldReturn
      */
     public function getEditableClass()
     {
-        return 'editable-image';
+        if ($this->background) {
+            return 'editable-bg-image';
+
+        } else {
+            return 'editable-image';
+        }
     }
 
     public function toJSON()

@@ -75,7 +75,6 @@ KB.Stuff = (function ($) {
             };
 
             var data = this.img.data();
-            console.log(data);
             var mId = data.module;
             var fkey = data.fieldKey;
             var cModule = KB.Modules.get(mId);
@@ -197,16 +196,28 @@ KB.StuffBG = (function ($) {
         handleAttachment: function (attachment) {
             var that = this;
             var id = attachment.get('id');
-            var mId = this.img.attr('data-module');
-            var fkey = this.img.attr('data-key');
-            var settings = KB.payload.FrontSettings[mId][fkey];
 
+            var value = {
+                id: id,
+                title: attachment.get('title'),
+                caption: attachment.get('caption')
+            };
 
+            var data = this.img.data();
+            var mId = data.module;
             var cModule = KB.Modules.get(mId);
-            var moduleData = cModule.get('moduleData');
-            moduleData[fkey] = _.extend(moduleData[fkey], {
-                id: id
-            });
+            var moduleData = _.clone(cModule.get('moduleData'));
+            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
+                moduleData[data.arraykey][data.index][data.key] = value;
+            } else if (!_.isEmpty(data.index)) {
+                moduleData[data.index][data.key] = value;
+            } else if (!_.isEmpty(data.arraykey)) {
+                moduleData[data.arraykey][data.key] = value;
+            } else {
+                moduleData[data.key] = value;
+            }
+
+            var settings = KB.payload.FrontSettings[data.uid];
             cModule.set('moduleData', moduleData);
 
             jQuery.ajax({

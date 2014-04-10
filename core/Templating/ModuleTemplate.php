@@ -26,6 +26,7 @@ class ModuleTemplate
     {
         $modulePath = $this->module->getPath();
 
+        // @TODO remove this pseudo clever code
         if ( is_file( trailingslashit( get_stylesheet_directory() . '/module-templates/' . $this->module->settings['id']) . $this->tplFile ) ) {
             $this->setPath( trailingslashit( get_template_directory() . '/module-templates/' . $this->module->settings['id'] ) );
 
