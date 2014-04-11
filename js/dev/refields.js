@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-10 */
+/*! Kontentblocks DevVersion 2014-04-11 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -362,7 +362,7 @@ KB.Fields.register("Image", function($) {
         resetInputs: function() {
             this.$container.empty();
             this.$id.val("");
-            this.$title("");
+            this.$title.val("");
             this.$caption("");
         },
         update: function() {

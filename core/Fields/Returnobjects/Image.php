@@ -75,11 +75,14 @@ class Image extends AbstractFieldReturn
 
     public function background()
     {
+
         $this->background = true;
         $this->handleLoggedInUsers();
         $this->prepareSrc();
-        $format = ' %2$s style="background-image: url(\'%1$s\')"';
         $this->toJSON();
+
+        $format = ' %2$s style="background-image: url(\'%1$s\');"';
+
         return sprintf($format, $this->src, $this->_renderAttributes());
 
 
@@ -130,7 +133,11 @@ class Image extends AbstractFieldReturn
 
     private function prepareSrc()
     {
-        $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, true, true, $this->upscale);
+        if ($this->getValue('id')){
+            return $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, true, true, $this->upscale);
+        }
+
+        return false;
     }
 
     /**

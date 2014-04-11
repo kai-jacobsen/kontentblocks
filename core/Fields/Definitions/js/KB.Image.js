@@ -119,7 +119,7 @@ KB.Fields.register('Image', (function ($) {
         resetInputs: function(){
             this.$container.empty();
             this.$id.val('');
-            this.$title('');
+            this.$title.val('');
             this.$caption('');
         },
         update: function () {
