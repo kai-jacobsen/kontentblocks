@@ -4,6 +4,7 @@ namespace Kontentblocks\Hooks;
 
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\MobileDetect;
 
 class Enqueues
 {
@@ -177,7 +178,8 @@ class Enqueues
             'post' => ($post) ? $post : null,
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
-            'version' => Kontentblocks::VERSION
+            'version' => Kontentblocks::VERSION,
+            'isMobile' => MobileDetect::getInstance()->isMobile()
         );
 
         if (is_preview()){
