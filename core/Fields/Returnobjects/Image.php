@@ -138,7 +138,7 @@ class Image extends AbstractFieldReturn
     private function prepareSrc()
     {
         if ($this->getValue('id')) {
-            return $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, true, true, $this->upscale);
+            return $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, $this->crop, true, $this->upscale);
         }
 
         return false;
