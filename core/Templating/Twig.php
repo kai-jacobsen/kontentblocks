@@ -29,11 +29,19 @@ class Twig
             $getPermalink = new Twig_SimpleFunction('get_permalink', function ($id) {
                 return get_permalink($id);
             });
+
             self::$environment->addFunction($getPermalink);
+
             $getImage = new Twig_SimpleFunction('getImage', function ($id, $width = null, $height = null) {
                 return ImageResize::getInstance()->process($id,$width,$height,true,true,true);
             });
             self::$environment->addFunction($getImage);
+
+            $wpNavMenu = new Twig_SimpleFunction('wp_nav_menu', function ($args) {
+                $args['echo'] = false;
+                return wp_nav_menu($args);
+            });
+            self::$environment->addFunction($wpNavMenu);
 
         }
         
