@@ -10,7 +10,7 @@ class CoreTemplate
     protected $engine;
     protected $path;
 
-    public function __construct( $tpl = false, $data = false )
+    public function __construct( $tpl = false, $data = array() )
     {
 
         $this->data    = $data;

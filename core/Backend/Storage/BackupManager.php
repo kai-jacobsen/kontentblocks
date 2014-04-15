@@ -144,7 +144,8 @@ class BackupManager
 
         // truncate, never more than 8 backups
         // @todo add filter for max number of updates
-        $existingData = array_slice($existingData, -8, 8, true);
+        $backupLimit = apply_filters('kb_backups_to_keep', 8);
+        $existingData = array_slice($existingData, -$backupLimit, $backupLimit, true);
 
         $data = array(
             'updated' => date("Y-m-d H:i:s", time()),
@@ -152,7 +153,6 @@ class BackupManager
         );
 
         $this->Storage->getDataHandler()->update('kb_last_backup', $now);
-
 
         wp_cache_delete('kb_backups_'.$this->backupData['id'], 'kontentblocks');
 

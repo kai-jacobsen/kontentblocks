@@ -31,7 +31,7 @@ class Area
     /**
      * Environment for data handling
      *
-     * @var object \Kontentblocks\Backend\Environment\PostEnvironment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      */
     protected $Environment;
 
@@ -44,7 +44,7 @@ class Area
 
     /**
      * Settings menu object
-     * @var object \Kontentblocks\Backend\Areas\AreaSettingsMenu
+     * @var \Kontentblocks\Backend\Areas\AreaSettingsMenu
      */
     protected $settingsMenu;
 
