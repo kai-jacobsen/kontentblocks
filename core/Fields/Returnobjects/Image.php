@@ -17,6 +17,7 @@ class Image extends AbstractFieldReturn
     protected $attributes = array();
     protected $uid;
     protected $background = false;
+    protected $crop = true;
 
     public function addClass($class)
     {
@@ -75,7 +76,6 @@ class Image extends AbstractFieldReturn
 
     public function background()
     {
-
         $this->background = true;
         $this->handleLoggedInUsers();
         $this->prepareSrc();
@@ -84,8 +84,6 @@ class Image extends AbstractFieldReturn
         $format = ' %2$s style="background-image: url(\'%1$s\');"';
 
         return sprintf($format, $this->src, $this->_renderAttributes());
-
-
     }
 
     private function _cleanSpaces($string)
@@ -121,6 +119,12 @@ class Image extends AbstractFieldReturn
         return $this;
     }
 
+    public function crop($crop)
+    {
+        $this->crop = $crop;
+        return $this;
+    }
+
     private function _attributesList()
     {
         $returnstr = '';
@@ -133,8 +137,8 @@ class Image extends AbstractFieldReturn
 
     private function prepareSrc()
     {
-        if ($this->getValue('id')){
-            return $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, true, true, $this->upscale);
+        if ($this->getValue('id')) {
+            return $this->src = ImageResize::getInstance()->process($this->getValue('id'), $this->width, $this->height, $this->crop, true, $this->upscale);
         }
 
         return false;
@@ -160,7 +164,7 @@ class Image extends AbstractFieldReturn
 
             'width' => $this->width,
             'height' => $this->height,
-            'crop' => true,
+            'crop' => $this->crop,
             'upscale' => $this->upscale
 
         );
