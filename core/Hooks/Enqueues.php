@@ -165,6 +165,8 @@ class Enqueues
     {
         global $post;
 
+
+
         $screen = (function_exists('get_current_screen')) ? get_current_screen() : null;
 
         $data = array(
@@ -174,7 +176,7 @@ class Enqueues
             'user' => wp_get_current_user(),
             'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
             'url' => (is_user_logged_in()) ? KB_PLUGIN_URL : null,
-            'post' => ($post) ? $post : null,
+            'post' => ($post && is_user_logged_in()) ? $post : null,
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION
