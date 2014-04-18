@@ -73,7 +73,7 @@ abstract class CustomStaticPanel
             'metaBox' => false,
             'hook' => 'edit_form_after_title',
             'postTypes' => array(),
-            'pageTemplate' => array('default')
+            'pageTemplates' => array('default')
         );
 
         return wp_parse_args($args, $defaults);
@@ -167,6 +167,7 @@ abstract class CustomStaticPanel
 
         $new = $this->fields($this->FieldManager)->save($_POST[$this->baseId], $old);
         update_post_meta($postId, $this->baseId, $new);
+
 
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {

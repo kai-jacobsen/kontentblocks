@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-11 */
+/*! Kontentblocks DevVersion 2014-04-18 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -141,11 +141,11 @@ KB.Stuff = function($) {
             var fkey = data.fieldKey;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get("moduleData"));
-            if (!_.isUndefined(data.index) && !_.isUndefined(data.arraykey)) {
+            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
                 moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isUndefined(data.index)) {
+            } else if (!_.isEmpty(data.index)) {
                 moduleData[data.index][data.key] = value;
-            } else if (!_.isUndefined(data.arraykey)) {
+            } else if (!_.isEmpty(data.arraykey)) {
                 moduleData[data.arraykey][data.key] = value;
             } else {
                 moduleData[data.key] = value;

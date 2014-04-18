@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-11 */
+/*! Kontentblocks DevVersion 2014-04-18 */
 var KB = KB || {};
 
 KB.Backbone = {};
