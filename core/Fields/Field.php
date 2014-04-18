@@ -177,7 +177,6 @@ abstract class Field
      */
     public function getReturnObj()
     {
-
         if (!$this->returnObj && $this->getArg('returnObj')) {
             $classname = $this->getArg('returnObj');
             if (!$classname) {

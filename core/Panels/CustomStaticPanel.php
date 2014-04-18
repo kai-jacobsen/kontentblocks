@@ -64,6 +64,7 @@ abstract class CustomStaticPanel
 
         $this->setupHooks();
 
+
     }
 
     private function parseDefaults($args)

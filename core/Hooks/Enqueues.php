@@ -36,6 +36,8 @@ class Enqueues
         add_action('admin_print_styles-post.php', array($this, 'adminEnqueue'), 30);
         add_action('admin_print_styles-post-new.php', array($this, 'adminEnqueue'), 30);
 
+        add_action('kb_enqueue_admin_script', array($this, 'adminEnqueue'));
+
         // Frontend Enqueueing
         add_action('wp_enqueue_scripts', array($this, 'userEnqueue'), 9);
 
