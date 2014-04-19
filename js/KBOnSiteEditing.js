@@ -16,7 +16,8 @@ var KBOnSiteEditing;
 
             // Heartbeat send data
             $(document).on('heartbeat-send', function(e, data){
-                data.kbEditWatcher = 'Peter is here'; // actual user
+                var id = KB.appData.config.post.ID
+                data.kbEditWatcher = id; // actual user
             });
 
             $(document).on('heartbeat-tick', function(e, data){

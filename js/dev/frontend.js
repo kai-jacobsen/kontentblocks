@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-18 */
+/*! Kontentblocks DevVersion 2014-04-19 */
 KB.Templates = function($) {
     var tmpl_cache = {};
     function getTmplCache() {
@@ -528,6 +528,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 if (save) {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
                     that.$el.removeClass("isDirty");
+                    that.model.view.getClean();
                 } else {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
                     that.$el.addClass("isDirty");

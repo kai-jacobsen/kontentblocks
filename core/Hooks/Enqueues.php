@@ -132,6 +132,10 @@ class Enqueues
     public function userEnqueue()
     {
 
+//        if (!isset($_GET['kbedit'])){
+//            return;
+//        }
+
         $this->appConfig();
         if (is_user_logged_in() && !is_admin()) {
 
