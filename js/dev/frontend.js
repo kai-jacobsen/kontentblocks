@@ -141,11 +141,11 @@ KB.Stuff = function($) {
             var fkey = data.fieldKey;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get("moduleData"));
-            if (!_.isUndefined(data.index) && !_.isUndefined(data.arraykey)) {
+            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
                 moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isUndefined(data.index)) {
+            } else if (!_.isEmpty(data.index)) {
                 moduleData[data.index][data.key] = value;
-            } else if (!_.isUndefined(data.arraykey)) {
+            } else if (!_.isEmpty(data.arraykey)) {
                 moduleData[data.arraykey][data.key] = value;
             } else {
                 moduleData[data.key] = value;
@@ -528,6 +528,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 if (save) {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
                     that.$el.removeClass("isDirty");
+                    that.model.view.getClean();
                 } else {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
                     that.$el.addClass("isDirty");

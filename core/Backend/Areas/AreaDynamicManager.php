@@ -2,15 +2,37 @@
 
 namespace Kontentblocks\Backend\Areas;
 
+/**
+ * Handles creation and removal of manually added dynamic areas
+ *
+ * Class AreaDynamicManager
+ * @package Kontentblocks\Backend\Areas
+ */
 class AreaDynamicManager
 {
 
+    /**
+     * All currently available areas
+     * @var array
+     */
     protected $areas = array();
 
+    /**
+     * Areas to be added
+     * @var array
+     */
     protected $newAreas = array();
 
+    /**
+     * Areas to be removed
+     * @var array
+     */
     protected $removedAreas = array();
 
+    /**
+     * Flag: Changes detected
+     * @var bool
+     */
     protected $isDirty = false;
 
     /**
@@ -22,7 +44,7 @@ class AreaDynamicManager
 
     /**
      * Singleton Pattern
-     * @return object | Area directory instance
+     * @return self
      * @since 1.0.0
      */
     public static function getInstance()
@@ -35,13 +57,21 @@ class AreaDynamicManager
 
     }
 
-
+    /**
+     * Class constructor
+     */
     public function __construct()
     {
+        // Test for differences
         add_action('init', array($this, 'synchronize'), 9);
+        // Add notice if differences were detected
         add_action('admin_notices', array($this, 'dirtyMessage'));
     }
 
+    /**
+     *
+     * @param $area
+     */
     public function add($area)
     {
         $this->areas[$area['id']] = $area;

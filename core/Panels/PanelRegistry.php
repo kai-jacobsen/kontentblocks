@@ -32,7 +32,6 @@ class PanelRegistry
      */
     public function add($id, $args)
     {
-
         if (!isset($this->panels[$id])) {
             if (isset($args['moduleClass']) && class_exists($args['moduleClass'])) {
                 $this->panels[$id] = new CustomModulePanel($args);

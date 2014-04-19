@@ -4,6 +4,7 @@ namespace Kontentblocks\Hooks;
 
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\MobileDetect;
 
 class Enqueues
 {
@@ -34,6 +35,8 @@ class Enqueues
         // enqueue styles and scripts where needed
         add_action('admin_print_styles-post.php', array($this, 'adminEnqueue'), 30);
         add_action('admin_print_styles-post-new.php', array($this, 'adminEnqueue'), 30);
+
+        add_action('kb_enqueue_admin_script', array($this, 'adminEnqueue'));
 
         // Frontend Enqueueing
         add_action('wp_enqueue_scripts', array($this, 'userEnqueue'), 9);
@@ -129,6 +132,10 @@ class Enqueues
     public function userEnqueue()
     {
 
+//        if (!isset($_GET['kbedit'])){
+//            return;
+//        }
+
         $this->appConfig();
         if (is_user_logged_in() && !is_admin()) {
 
@@ -179,7 +186,8 @@ class Enqueues
             'post' => ($post && is_user_logged_in()) ? $post : null,
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
-            'version' => Kontentblocks::VERSION
+            'version' => Kontentblocks::VERSION,
+            'isMobile' => MobileDetect::getInstance()->isMobile()
         );
 
         if (is_preview()){

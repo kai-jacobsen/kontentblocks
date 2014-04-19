@@ -193,6 +193,7 @@ function kb_wp_editor($block_id, $data, $name = NULL, $media = true, $args = arr
         'textarea_name' => $name, // set the textarea name to something different, square brackets [] can be used here
         'tabindex' => '',
         'editor_css' => '',
+        'drag_drop_upload' => true,
         'editor_class' => 'kb_editor_textarea', // add extra class(es) to the editor textarea
         'teeny' => false, // output the minimal editor config used in Press This
         'dfw' => false, // replace the default fullscreen with DFW (needs specific DOM elements and css)
