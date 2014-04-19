@@ -58,6 +58,7 @@ class Image extends AbstractFieldReturn
 
     public function html()
     {
+        $this->addAttr('data-powertip', 'Click to change image');
         $this->handleLoggedInUsers();
         $this->prepareSrc();
         $format = '<%1$s %3$s src="%2$s" >';
@@ -76,6 +77,7 @@ class Image extends AbstractFieldReturn
 
     public function background()
     {
+        $this->addAttr('data-powertip', 'Click to change image');
         $this->background = true;
         $this->handleLoggedInUsers();
         $this->prepareSrc();
