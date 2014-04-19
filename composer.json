@@ -15,6 +15,6 @@
     "require": {
         "php": ">=5.3.2",
         "twig/twig": "1.*",
-        "mobiledetect/mobiledetectlib": "dev-master"
+        "mobiledetect/mobiledetectlib": "*"
     }
 }
