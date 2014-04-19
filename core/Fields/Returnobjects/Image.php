@@ -58,6 +58,7 @@ class Image extends AbstractFieldReturn
 
     public function html()
     {
+        $this->addClass('koolkip');
         $this->addAttr('data-powertip', 'Click to change image');
         $this->handleLoggedInUsers();
         $this->prepareSrc();
