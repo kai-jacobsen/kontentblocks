@@ -372,7 +372,7 @@ class ModuleTemplates
 
     /**
      * Gets all available Modules from registry
-     * @param $postData potential incomplete form data
+     * @param array $postData potential incomplete form data
      * @return array
      */
     private function prepareModulesforSelectbox($postData)

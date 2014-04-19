@@ -1,4 +1,4 @@
-
+// Inline Bootstrap File
 function initTinymce(item) {
 
     if (!KB.Checks.userCan('edit_kontentblocks')){

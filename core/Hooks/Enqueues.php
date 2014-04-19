@@ -160,7 +160,6 @@ class Enqueues
             wp_localize_script('wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n);
 
             \Kontentblocks\Helper\getHiddenEditor();
-
             wp_enqueue_media();
         }
         $this->enqueueUserScripts();

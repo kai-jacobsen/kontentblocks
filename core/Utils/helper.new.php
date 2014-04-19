@@ -2,10 +2,7 @@
 
 namespace Kontentblocks\Helper;
 
-use Kontentblocks\Backend\API\GlobalDataAPI;
-use Kontentblocks\Backend\Environment\GlobalEnvironment;
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Backend\Storage\ModuleStorageGlobal;
 use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
 use Kontentblocks\Modules\ModuleRegistry,
     Kontentblocks\Backend\Areas\AreaRegistry;

@@ -23,7 +23,7 @@ class SavePost
      * Save method for post related modules
      * @todo move the code from EditScreen to a new file (done)
      * @todo split this in chunks
-     * @return void
+     * @return false    if auth fails or areas are empty
      */
     public function save()
     {

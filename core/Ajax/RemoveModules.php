@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\API\PostMetaAPI,
-    Kontentblocks\Utils\GlobalDataHandler;
+use Kontentblocks\Backend\API\PostMetaAPI;
 use Kontentblocks\Backend\Storage\BackupManager;
 
 class RemoveModules
