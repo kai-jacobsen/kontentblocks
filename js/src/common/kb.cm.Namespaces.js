@@ -4,5 +4,6 @@ KB.Fields = {};
 KB.Utils = {};
 KB.Ext = {};
 KB.OSConfig = {};
+KB.IEdit = {};
 
 _.extend(KB, Backbone.Events);

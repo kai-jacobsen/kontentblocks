@@ -11,6 +11,8 @@ KB.Ext = {};
 
 KB.OSConfig = {};
 
+KB.IEdit = {};
+
 _.extend(KB, Backbone.Events);
 
 KB.Ajax = function($) {

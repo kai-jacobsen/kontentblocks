@@ -28,7 +28,7 @@ Class EditScreen
 
     /**
      * Post data Handler
-     * @var objext
+     * @var object
      */
     protected $postData;
 

@@ -252,7 +252,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 KB.trigger('kb:frontendModalUpdated');
 
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
-                    initTinymce(el);
+                    KB.IEdit.Text(el);
                 });
 
                 if (save) {
