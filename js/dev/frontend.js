@@ -1,80 +1,108 @@
 /*! Kontentblocks DevVersion 2014-04-19 */
-KB.Templates = function($) {
-    var tmpl_cache = {};
-    function getTmplCache() {
-        return tmpl_cache;
-    }
-    function render(tmpl_name, tmpl_data) {
-        if (!tmpl_cache[tmpl_name]) {
-            var tmpl_dir = kontentblocks.config.url + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".html";
-            var tmpl_string;
-            $.ajax({
-                url: tmpl_url,
-                method: "GET",
-                async: false,
-                success: function(data) {
-                    tmpl_string = data;
+KB.IEdit.BackgroundImage = function($) {
+    var self, attachment;
+    self = {
+        selector: ".editable-bg-image",
+        remove: ".kb-js-reset-file",
+        img: null,
+        init: function() {
+            var that = this;
+            $("body").on("click", this.selector, function(e) {
+                e.preventDefault();
+                that.img = $(this);
+                that.parent = KB.currentModule;
+                that.frame().open();
+            });
+            $("body").on("click", this.remove, function(e) {
+                e.preventDefault();
+                that.container = $(".kb-field-file-wrapper", activeField);
+                that.resetFields();
+            });
+            this.renderControls();
+        },
+        renderControls: function() {
+            $(this.selector).each(function(index, obj) {
+                $("body").on("mouseover", ".editable-bg-image", function() {
+                    $(this).css("cursor", "pointer");
+                });
+            });
+        },
+        frame: function() {
+            if (this._frame) return this._frame;
+            this._frame = wp.media({
+                title: "Change background image",
+                button: {
+                    text: "Insert"
+                },
+                multiple: false,
+                library: {
+                    type: "image"
                 }
             });
-            tmpl_cache[tmpl_name] = _.template(tmpl_string);
+            this._frame.on("ready", this.ready);
+            this._frame.state("library").on("select", this.select);
+            return this._frame;
+        },
+        ready: function() {
+            $(".media-modal").addClass(" smaller no-sidebar");
+        },
+        select: function() {
+            attachment = this.get("selection").first();
+            self.handleAttachment(attachment);
+        },
+        handleAttachment: function(attachment) {
+            var that = this;
+            var id = attachment.get("id");
+            var value = {
+                id: id,
+                title: attachment.get("title"),
+                caption: attachment.get("caption")
+            };
+            var data = this.img.data();
+            var mId = data.module;
+            var cModule = KB.Modules.get(mId);
+            var moduleData = _.clone(cModule.get("moduleData"));
+            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
+                moduleData[data.arraykey][data.index][data.key] = value;
+            } else if (!_.isEmpty(data.index)) {
+                moduleData[data.index][data.key] = value;
+            } else if (!_.isEmpty(data.arraykey)) {
+                moduleData[data.arraykey][data.key] = value;
+            } else {
+                moduleData[data.key] = value;
+            }
+            var settings = KB.payload.FrontSettings[data.uid];
+            cModule.set("moduleData", moduleData);
+            jQuery.ajax({
+                url: ajaxurl,
+                data: {
+                    action: "fieldGetImage",
+                    args: settings,
+                    id: id,
+                    _ajax_nonce: kontentblocks.nonces.get
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(res) {
+                    that.img.css("backgroundImage", "url('" + res + "')");
+                    that.parent.$el.addClass("isDirty");
+                },
+                error: function() {}
+            });
+        },
+        resetFields: function() {
+            $(".kb-file-attachment-id", this.container).val("");
+            this.container.hide(750);
+            $(this.remove, activeField).hide();
+        },
+        update: function() {
+            this.init();
         }
-        return tmpl_cache[tmpl_name](tmpl_data);
-    }
-    return {
-        render: render
     };
+    return self;
 }(jQuery);
 
-KB.Backbone.AreaModel = Backbone.Model.extend({
-    idAttribute: "id"
-});
-
-KB.Backbone.ModuleModel = Backbone.Model.extend({
-    idAttribute: "instance_id",
-    destroy: function() {
-        var that = this;
-        KB.Ajax.send({
-            action: "removeModules",
-            instance_id: that.get("instance_id")
-        }, that.destroyed);
-    },
-    destroyed: function() {},
-    setArea: function(area) {
-        this.area = area;
-    },
-    areaChanged: function() {
-        this.view.updateModuleForm();
-    },
-    save: function(model) {
-        var module = model.get("editableModel");
-        var el = model.get("editable");
-        var dataset = jQuery(el).data();
-        dataset.data = jQuery(el).html();
-        dataset.postId = module.get("post_id");
-        jQuery.ajax({
-            url: KBAppConfig.ajaxurl,
-            data: {
-                action: "saveInlineEdit",
-                data: dataset
-            },
-            type: "POST",
-            dataType: "json",
-            cookie: encodeURIComponent(document.cookie),
-            success: function(data) {
-                console.log("sent");
-            },
-            error: function() {
-                console.log("not sent");
-            },
-            complete: function() {
-                console.log("no matter what");
-            }
-        });
-    }
-});
-
-KB.Stuff = function($) {
+KB.IEdit.Image = function($) {
     var self, attachment;
     self = {
         selector: ".editable-image",
@@ -181,114 +209,153 @@ KB.Stuff = function($) {
     return self;
 }(jQuery);
 
-KB.Stuff.init();
-
-var KB = KB || {};
-
-KB.StuffBG = function($) {
-    var self, attachment;
-    self = {
-        selector: ".editable-bg-image",
-        remove: ".kb-js-reset-file",
-        img: null,
-        init: function() {
-            var that = this;
-            $("body").on("click", this.selector, function(e) {
-                e.preventDefault();
-                that.img = $(this);
-                that.parent = KB.currentModule;
-                that.frame().open();
+KB.IEdit.Text = function(el) {
+    if (_.isUndefined(el)) {
+        return false;
+    }
+    var settings = KB.payload.FrontSettings[el.id].tinymce;
+    var defaults = {
+        theme: "modern",
+        skin: "lightgray",
+        menubar: false,
+        add_unload_trigger: false,
+        fixed_toolbar_container: "#kb-toolbar",
+        schema: "html5",
+        inline: true,
+        toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
+        statusbar: false,
+        setup: function(ed) {
+            ed.on("init", function() {
+                var data = jQuery(ed.bodyElement).data();
+                var module = data.module;
+                ed.module = KB.Modules.get(module);
+                ed.kbDataRef = {
+                    key: data.key,
+                    index: data.index,
+                    arrayKey: data.arraykey
+                };
+                ed.module.view.$el.addClass("inline-editing-active");
             });
-            $("body").on("click", this.remove, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.resetFields();
+            ed.on("focus", function(e) {
+                jQuery("#kb-toolbar").show();
             });
-            this.renderControls();
-        },
-        renderControls: function() {
-            $(this.selector).each(function(index, obj) {
-                $("body").on("mouseover", ".editable-bg-image", function() {
-                    $(this).css("cursor", "pointer");
-                });
+            ed.on("change", function(e) {
+                _K.log("Got Dirty");
             });
-        },
-        frame: function() {
-            if (this._frame) return this._frame;
-            this._frame = wp.media({
-                title: "Change background image",
-                button: {
-                    text: "Insert"
-                },
-                multiple: false,
-                library: {
-                    type: "image"
+            ed.addButton("kbcancleinline", {
+                title: "Stop inline Edit",
+                onClick: function(ed) {
+                    if (tinymce.activeEditor.isDirty()) {
+                        tinymce.activeEditor.module.view.getDirty();
+                    }
+                    tinymce.activeEditor.fire("blur");
+                    tinymce.activeEditor = null;
+                    tinymce.focusedEditor = null;
+                    document.activeElement.blur();
+                    jQuery("#kb-toolbar").hide();
                 }
             });
-            this._frame.on("ready", this.ready);
-            this._frame.state("library").on("select", this.select);
-            return this._frame;
-        },
-        ready: function() {
-            $(".media-modal").addClass(" smaller no-sidebar");
-        },
-        select: function() {
-            attachment = this.get("selection").first();
-            self.handleAttachment(attachment);
-        },
-        handleAttachment: function(attachment) {
-            var that = this;
-            var id = attachment.get("id");
-            var value = {
-                id: id,
-                title: attachment.get("title"),
-                caption: attachment.get("caption")
-            };
-            var data = this.img.data();
-            var mId = data.module;
-            var cModule = KB.Modules.get(mId);
-            var moduleData = _.clone(cModule.get("moduleData"));
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isEmpty(data.index)) {
-                moduleData[data.index][data.key] = value;
-            } else if (!_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.key] = value;
-            } else {
-                moduleData[data.key] = value;
-            }
-            var settings = KB.payload.FrontSettings[data.uid];
-            cModule.set("moduleData", moduleData);
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    action: "fieldGetImage",
-                    args: settings,
-                    id: id,
-                    _ajax_nonce: kontentblocks.nonces.get
-                },
-                type: "GET",
-                dataType: "json",
-                success: function(res) {
-                    that.img.css("backgroundImage", "url('" + res + "')");
-                    that.parent.$el.addClass("isDirty");
-                },
-                error: function() {}
+            ed.on("blur", function() {
+                jQuery("#kb-toolbar").hide();
+                var data = ed.kbDataRef;
+                var value = ed.getContent();
+                var moduleData = _.clone(ed.module.get("moduleData"));
+                if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
+                    moduleData[data.arrayKey][data.index][data.key] = value;
+                } else if (!_.isUndefined(data.index)) {
+                    moduleData[data.index][data.key] = value;
+                } else if (!_.isUndefined(data.arrayKey)) {
+                    moduleData[data.arrayKey][data.key] = value;
+                } else {
+                    moduleData[data.key] = value;
+                }
+                if (ed.isDirty()) {
+                    ed.module.trigger("change");
+                    ed.module.set("moduleData", moduleData);
+                }
             });
-        },
-        resetFields: function() {
-            $(".kb-file-attachment-id", this.container).val("");
-            this.container.hide(750);
-            $(this.remove, activeField).hide();
-        },
-        update: function() {
-            this.init();
         }
     };
-    return self;
+    defaults = _.extend(defaults, settings);
+    tinymce.init(_.defaults(defaults, {
+        selector: "#" + el.id
+    }));
+};
+
+KB.Templates = function($) {
+    var tmpl_cache = {};
+    function getTmplCache() {
+        return tmpl_cache;
+    }
+    function render(tmpl_name, tmpl_data) {
+        if (!tmpl_cache[tmpl_name]) {
+            var tmpl_dir = kontentblocks.config.url + "js/templates";
+            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".html";
+            var tmpl_string;
+            $.ajax({
+                url: tmpl_url,
+                method: "GET",
+                async: false,
+                success: function(data) {
+                    tmpl_string = data;
+                }
+            });
+            tmpl_cache[tmpl_name] = _.template(tmpl_string);
+        }
+        return tmpl_cache[tmpl_name](tmpl_data);
+    }
+    return {
+        render: render
+    };
 }(jQuery);
 
-KB.StuffBG.init();
+KB.Backbone.AreaModel = Backbone.Model.extend({
+    idAttribute: "id"
+});
+
+KB.Backbone.ModuleModel = Backbone.Model.extend({
+    idAttribute: "instance_id",
+    destroy: function() {
+        var that = this;
+        KB.Ajax.send({
+            action: "removeModules",
+            instance_id: that.get("instance_id")
+        }, that.destroyed);
+    },
+    destroyed: function() {},
+    setArea: function(area) {
+        this.area = area;
+    },
+    areaChanged: function() {
+        this.view.updateModuleForm();
+    },
+    save: function(model) {
+        var module = model.get("editableModel");
+        var el = model.get("editable");
+        var dataset = jQuery(el).data();
+        dataset.data = jQuery(el).html();
+        dataset.postId = module.get("post_id");
+        jQuery.ajax({
+            url: KBAppConfig.ajaxurl,
+            data: {
+                action: "saveInlineEdit",
+                data: dataset
+            },
+            type: "POST",
+            dataType: "json",
+            cookie: encodeURIComponent(document.cookie),
+            success: function(data) {
+                console.log("sent");
+            },
+            error: function() {
+                console.log("not sent");
+            },
+            complete: function() {
+                console.log("no matter what");
+            }
+        });
+    }
+});
 
 KB.ModuleLayoutControls = Backbone.View.extend({
     initialize: function(options) {
@@ -523,7 +590,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 jQuery(window).trigger("kontentblocks::ajaxUpdate");
                 KB.trigger("kb:frontendModalUpdated");
                 jQuery(".editable", that.options.view.$el).each(function(i, el) {
-                    initTinymce(el);
+                    KB.IEdit.Text(el);
                 });
                 if (save) {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
@@ -786,141 +853,16 @@ jQuery(document).ready(function() {
     });
 });
 
-function initTinymce(item) {
-    if (!KB.Checks.userCan("edit_kontentblocks")) {
-        return;
-    }
-    tinymce.init({
-        selector: "#" + item.id,
-        theme: "modern",
-        skin: "lightgray",
-        menubar: false,
-        add_unload_trigger: false,
-        fixed_toolbar_container: "#kb-toolbar",
-        schema: "html5",
-        inline: true,
-        toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
-        statusbar: false,
-        setup: function(ed) {
-            ed.on("init", function() {
-                var data = jQuery(ed.bodyElement).data();
-                var module = data.module;
-                ed.module = KB.Modules.get(module);
-                ed.kbDataRef = {
-                    key: data.key,
-                    index: data.index,
-                    arrayKey: data.arraykey
-                };
-                ed.module.view.$el.addClass("inline-editing-active");
-            });
-            ed.on("focus", function(e) {
-                jQuery("#kb-toolbar").show();
-            });
-            ed.on("change", function(e) {
-                _K.log("Got Dirty");
-            });
-            ed.addButton("kbcancleinline", {
-                title: "Stop inline Edit",
-                onClick: function(ed) {
-                    if (tinymce.activeEditor.isDirty()) {
-                        tinymce.activeEditor.module.view.getDirty();
-                    }
-                    tinymce.activeEditor.fire("blur");
-                    tinymce.activeEditor = null;
-                    tinymce.focusedEditor = null;
-                    document.activeElement.blur();
-                    jQuery("#kb-toolbar").hide();
-                }
-            });
-            ed.on("blur", function() {
-                jQuery("#kb-toolbar").hide();
-                var data = ed.kbDataRef;
-                var value = ed.getContent();
-                var moduleData = _.clone(ed.module.get("moduleData"));
-                if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.index][data.key] = value;
-                } else if (!_.isUndefined(data.index)) {
-                    moduleData[data.index][data.key] = value;
-                } else if (!_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.key] = value;
-                } else {
-                    moduleData[data.key] = value;
-                }
-                if (ed.isDirty()) {
-                    ed.module.trigger("change");
-                    ed.module.set("moduleData", moduleData);
-                }
-            });
-        }
-    });
-}
-
 jQuery(document).ready(function() {
+    if (!KB.Checks.userCan("edit_kontentblocks")) {
+        return false;
+    }
     jQuery(".editable").each(function(i, item) {
         if (!KB.Checks.userCan("edit_kontentblocks")) {
             return;
         }
-        initTinymce(item);
+        KB.IEdit.Text(item);
     });
-    jQuery(".editable-title").each(function(item) {
-        if (!KB.Checks.userCan("edit_kontentblocks")) {
-            return;
-        }
-        tinymce.init({
-            selector: "#" + this.id,
-            theme: "modern",
-            skin: false,
-            menubar: false,
-            add_unload_trigger: false,
-            schema: "html5",
-            fixed_toolbar_container: "#kb-toolbar",
-            inline: true,
-            toolbar: "kbcancleinline",
-            statusbar: false,
-            setup: function(ed) {
-                ed.on("init", function() {
-                    var data = jQuery(ed.bodyElement).data();
-                    var module = data.module;
-                    ed.module = KB.Modules.get(module);
-                    ed.kbDataRef = {
-                        key: data.key,
-                        index: data.index,
-                        arrayKey: data.arraykey
-                    };
-                });
-                ed.on("focus", function(e) {
-                    jQuery("#kb-toolbar").show();
-                });
-                ed.addButton("kbcancleinline", {
-                    title: "Stop inline Edit",
-                    onClick: function() {
-                        if (tinymce.activeEditor.isDirty()) {
-                            tinymce.activeEditor.module.view.getDirty();
-                        }
-                        tinymce.activeEditor.fire("blur");
-                        tinymce.activeEditor = null;
-                        tinymce.focusedEditor = null;
-                        document.activeElement.blur();
-                        jQuery("#kb-toolbar").hide();
-                    }
-                });
-                ed.on("blur", function() {
-                    jQuery("#kb-toolbar").hide();
-                    var data = ed.kbDataRef;
-                    var value = ed.getContent();
-                    var moduleData = _.clone(ed.module.get("moduleData"));
-                    if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
-                        moduleData[data.arrayKey][data.index][data.key] = value;
-                    } else if (!_.isUndefined(data.index)) {
-                        moduleData[data.index][data.key] = value;
-                    } else if (!_.isUndefined(data.arrayKey)) {
-                        moduleData[data.arrayKey][data.key] = value;
-                    } else {
-                        moduleData[data.key] = value;
-                    }
-                    ed.module.set("moduleData", moduleData);
-                });
-            }
-        });
-    });
+    KB.IEdit.Image.init();
+    KB.IEdit.BackgroundImage.init();
 });

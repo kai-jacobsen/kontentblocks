@@ -27,6 +27,7 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn
         $this->setValue($value);
         $this->setupFromField($field);
         $this->uid = uniqid('kb');
+        $this->field = $field;
     }
 
     /**
@@ -95,12 +96,17 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn
         $this->value = $value;
     }
 
+    /**
+     * @TODO Rethink array mode, was a hack
+     * @param $field
+     */
     private function setupFromField($field)
     {
         if (is_object($field)) {
             $this->moduleId = $field->parentModuleId;
             $this->key = $field->getKey();
             $this->arrayKey = $field->getArg('arrayKey');
+
         } else if (is_array($field)) {
             $this->moduleId = $field['instance_id'];
             $this->key = $field['key'];
