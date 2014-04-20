@@ -211,7 +211,6 @@ _.extend(KB.FlexibleFields.prototype, {
     },
     renderFields: function(tab, $con, index, data) {
         _.each(tab.fields, function(field) {
-            console.log(field);
             if (data && data[field.config.key]) {
                 field.setValue(data[field.config.key]);
             } else {

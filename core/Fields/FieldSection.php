@@ -24,7 +24,7 @@ class FieldSection
 
     /**
      * Unique identifier
-     * @var string
+     * @var string id unique identifier
      */
     public $id;
 
@@ -55,13 +55,16 @@ class FieldSection
      */
     protected $numberOfVisibleFields = 0;
 
-    /**
-     * Constructor
-     * @param string $id
-     * @param $args
-     * @param array $areaContext
-     * @return \Kontentblocks\Fields\FieldSection
-     */
+	/**
+	 * Constructor
+	 *
+	 * @param string $id
+	 * @param $args
+	 * @param $envVars
+	 * @param $module
+	 * @internal param array $areaContext
+	 * @return \Kontentblocks\Fields\FieldSection
+	 */
     public function __construct($id, $args, $envVars, $module)
     {
 
@@ -114,7 +117,6 @@ class FieldSection
         if (!$this->fieldExists($args['arrayKey'])) {
             $FieldArray = $this->fields[$args['arrayKey']] = new FieldArray($args['arrayKey']);
         } else {
-
             $FieldArray = $this->fields[$args['arrayKey']];
         }
         $FieldArray->addField($key, $field);
