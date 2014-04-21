@@ -89,7 +89,7 @@ class Area
         // custom settins for this area
         $this->settingsMenu = new AreaSettingsMenu($this, $this->Environment);
 
-        $this->setupCats();
+        $this->cats = self::setupCats();
     }
 
     /**
@@ -254,9 +254,9 @@ class Area
     /**
      * Filterable array of allowed cats
      * uses @filter kb_menu_cats
-     * @return void
+     * @return array $cats
      */
-    private function setupCats()
+    public static function setupCats()
     {
         // defaults
         $cats = array(
@@ -272,9 +272,9 @@ class Area
         $cats['core'] = __('System', 'kontentblocks');
         $cats['template'] = __('Templates', 'kontentblocks');
 
-        $this->cats = $cats;
+	    JSONBridge::getInstance()->registerData('ModuleCategories', null, $cats);
+	    return $cats;
 
-        JSONBridge::getInstance()->registerData('ModuleCategories', null, $cats);
 
     }
 }

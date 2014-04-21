@@ -65,8 +65,6 @@ class PostMetaAPI
      * Simple wrapper to update_post_meta
      * @param $key
      * @param $value
-     * @internal param string $id key
-     * @internal param mixed $data value
      * @return boolean
      * @since 1.0.0
      */
