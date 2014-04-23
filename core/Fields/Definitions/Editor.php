@@ -37,4 +37,8 @@ Class Editor extends Field
         return wp_kses_post($value);
     }
 
+	public function save($value, $old){
+		return wp_kses_post($value);
+	}
+
 }

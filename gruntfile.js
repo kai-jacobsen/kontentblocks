@@ -78,7 +78,7 @@ module.exports = function (grunt) {
                 nonull: true
             },
             fieldsAPI: {
-                src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/**/*.js'],
+                src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/_Field.js' ,  'js/src/fieldsAPI/Fields/**/*.js'],
                 dest: 'js/tmp/fieldsAPI.concat.js'
             }
         },

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-20 */
+/*! Kontentblocks DevVersion 2014-04-23 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -143,9 +143,9 @@ KB.Utils.MediaWorkflow = function(args) {
             button: {
                 text: options.buttontext
             },
-            multiple: true,
+            multiple: options.multiple,
             library: {
-                type: "image"
+                type: options.type
             }
         });
         _frame.on("ready", ready);
@@ -315,7 +315,6 @@ KB.TinyMCE = function($) {
                         jQuery(document).trigger("newEditor", ed);
                     });
                 };
-                console.log(tinymce.init(settings));
                 var ed = tinymce.init(settings);
                 var qtsettings = {
                     buttons: "",
@@ -329,9 +328,9 @@ KB.TinyMCE = function($) {
                 QTags._buttonsInit();
             }, 1500);
         },
-        remoteGetEditor: function($el, name, content, post_id, media) {
+        remoteGetEditor: function($el, name, id, content, post_id, media) {
             var pid = post_id || KB.Screen.post_id;
-            var id = $el.attr("id");
+            var id = id || $el.attr("id");
             if (!media) {
                 var media = false;
             }

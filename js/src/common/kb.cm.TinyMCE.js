@@ -66,7 +66,6 @@ KB.TinyMCE = (function ($) {
                         jQuery(document).trigger('newEditor', ed);
                     });
                 };
-                console.log(tinymce.init(settings));
                 var ed = tinymce.init(settings);
 
                 // doesn't wok without, but don't really know what this does
@@ -86,9 +85,9 @@ KB.TinyMCE = (function ($) {
             }, 1500);
 
         },
-        remoteGetEditor: function ($el, name, content, post_id, media) {
+        remoteGetEditor: function ($el, name, id, content, post_id, media) {
             var pid = post_id || KB.Screen.post_id;
-            var id = $el.attr('id');
+            var id = id || $el.attr('id');
             if (!media) {
                 var media = false;
             }
@@ -105,7 +104,6 @@ KB.TinyMCE = (function ($) {
                 }
 
             }, function(data){
-
                 $el.empty().append(data);
                 this.addEditor($el);
             },this);

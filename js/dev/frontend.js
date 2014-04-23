@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-20 */
+/*! Kontentblocks DevVersion 2014-04-23 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {

@@ -7,7 +7,11 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
         var that = this;
         this.$el.empty();
 
-        this.$el.html(KB.Templates.render('backend/modulebrowser/module-description', {module: this.model.toJSON()}));
+        if (this.model.get('template')){
+            this.$el.html(KB.Templates.render('backend/modulebrowser/module-template-description', {module: this.model.toJSON()}));
+        } else {
+            this.$el.html(KB.Templates.render('backend/modulebrowser/module-description', {module: this.model.toJSON()}));
+        }
         if (this.model.get('settings').helpfile !== false) {
             this.$el.append(KB.Templates.render(this.model.get('settings').helpfile, {module: this.model.toJSON()}));
         }

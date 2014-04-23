@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-20 */
+/*! Kontentblocks DevVersion 2014-04-23 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -11,11 +11,89 @@ KB.FieldsAPI = function() {
     };
 }();
 
-KB.FieldsAPI.Image = function(config) {
-    var that = this;
-    this.$currentWrapper = null;
-    this.$currentFrame = null;
-    this.defaults = {
+KB.FieldsAPI.FieldStdModel = Backbone.Model.extend({});
+
+KB.FieldsAPI.Field = Backbone.View.extend({
+    initialize: function(config) {
+        this.defaults = this.defaults || {};
+        this.config = _.defaults(config, this.defaults);
+        this.model = new KB.FieldsAPI.FieldStdModel({
+            value: this.get("std")
+        });
+        this.model.view = this;
+        this.baseId = this.prepareBaseId();
+    },
+    get: function(key) {
+        if (!_.isUndefined(this.config[key])) {
+            return this.config[key];
+        } else {
+            return null;
+        }
+    },
+    set: function(key, value) {
+        this.config[key] = value;
+    },
+    setValue: function(val) {
+        this.model.set("value", val);
+    },
+    prepareBaseId: function() {
+        return this.config.moduleId + "[" + this.config.fieldKey + "]";
+    }
+});
+
+KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
+    $editorWrap: null,
+    templatePath: "fields/Editor",
+    defaults: {
+        std: "some textvalue",
+        label: "Field label",
+        description: "A description",
+        value: "",
+        key: null
+    },
+    initialize: function(config) {
+        KB.FieldsAPI.Field.prototype.initialize.call(this, config);
+    },
+    setValue: function(value) {
+        this.model.set("value", value);
+    },
+    render: function(index) {
+        this.index = index;
+        return KB.Templates.render(this.templatePath, {
+            config: this.config,
+            baseId: this.baseId,
+            index: index,
+            model: this.model.toJSON()
+        });
+    },
+    postRender: function() {
+        var name = this.baseId + "[" + this.index + "]" + "[" + this.get("key") + "]";
+        var edId = this.get("moduleId") + "_" + this.get("key") + "_editor_" + this.index;
+        this.$editorWrap = jQuery(".kb-ff-editor-wrapper", this.$container);
+        KB.TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get("value"), 5, false);
+    }
+});
+
+KB.FieldsAPI.register("editor", KB.FieldsAPI.Editor);
+
+KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
+    $currentWrapper: null,
+    $currentFrame: null,
+    templatePath: "fields/Image",
+    initialize: function(config) {
+        var that = this;
+        KB.FieldsAPI.Field.prototype.initialize.call(this, config);
+        this.config.$parent.on("click", ".flexible-fields--js-add-image", function() {
+            that.$currentWrapper = jQuery(this).closest(".field-api-image");
+            that.$currentFrame = jQuery(".field-api-image--frame", that.$currentWrapper);
+            that.$IdInput = jQuery(".field-api-image--image-id", that.$currentWrapper);
+            new KB.Utils.MediaWorkflow({
+                title: "Hello",
+                select: _.bind(that.handleAttachment, that)
+            });
+        });
+    },
+    defaults: {
         std: "",
         label: "Image",
         description: "Awesome image",
@@ -26,21 +104,13 @@ KB.FieldsAPI.Image = function(config) {
             title: ""
         },
         key: null
-    };
-    this.templatePath = "fields/Image";
-    this.config = _.defaults(config, this.defaults);
-    this.baseId = this.prepareBaseId();
-};
-
-_.extend(KB.FieldsAPI.Image.prototype, {
-    prepareBaseId: function() {
-        return this.config.moduleId + "[" + this.config.fieldKey + "]";
     },
     render: function(index) {
         return KB.Templates.render(this.templatePath, {
             config: this.config,
             baseId: this.baseId,
             index: index,
+            model: this.model.toJSON(),
             i18n: _.extend(KB.i18n.Refields.image, KB.i18n.Refields.common)
         });
     },
@@ -52,6 +122,10 @@ _.extend(KB.FieldsAPI.Image.prototype, {
             upscale: false,
             crop: true
         };
+        if (!value.id) {
+            return;
+        }
+        this.model.set("value", value);
         jQuery.ajax({
             url: ajaxurl,
             data: {
@@ -73,9 +147,6 @@ _.extend(KB.FieldsAPI.Image.prototype, {
             }
         });
     },
-    resetValue: function() {
-        this.config.value = this.defaults.value;
-    },
     handleAttachment: function(media) {
         var att = media.get("selection").first();
         if (att.get("sizes").thumbnail) {
@@ -87,69 +158,43 @@ _.extend(KB.FieldsAPI.Image.prototype, {
 
 KB.FieldsAPI.register("image", KB.FieldsAPI.Image);
 
-KB.FieldsAPI.Text = function(config) {
-    this.defaults = {
+KB.FieldsAPI.Text = KB.FieldsAPI.Field.extend({
+    templatePath: "fields/Text",
+    defaults: {
         std: "some textvalue",
         label: "Field label",
         description: "A description",
         value: "",
         key: null
-    };
-    this.templatePath = "fields/Text";
-    this.config = _.defaults(config, this.defaults);
-    this.baseId = this.prepareBaseId();
-};
-
-_.extend(KB.FieldsAPI.Text.prototype, {
-    prepareBaseId: function() {
-        return this.config.moduleId + "[" + this.config.fieldKey + "]";
     },
     render: function(index) {
         return KB.Templates.render(this.templatePath, {
             config: this.config,
             baseId: this.baseId,
-            index: index
+            index: index,
+            model: this.model.toJSON()
         });
-    },
-    setValue: function(value) {
-        this.config.value = value;
-    },
-    resetValue: function() {
-        this.config.value = this.defaults.value;
     }
 });
 
 KB.FieldsAPI.register("text", KB.FieldsAPI.Text);
 
-KB.FieldsAPI.Textarea = function(config) {
-    this.defaults = {
+KB.FieldsAPI.Textarea = KB.FieldsAPI.Field.extend({
+    defaults: {
         std: "some textvalue",
         label: "Field label",
         description: "A description",
         value: "",
         key: null
-    };
-    this.templatePath = "fields/Textarea";
-    this.config = _.defaults(config, this.defaults);
-    this.baseId = this.prepareBaseId();
-};
-
-_.extend(KB.FieldsAPI.Textarea.prototype, {
-    prepareBaseId: function() {
-        return this.config.moduleId + "[" + this.config.fieldKey + "]";
     },
+    templatePath: "fields/Textarea",
     render: function(index) {
         return KB.Templates.render(this.templatePath, {
             config: this.config,
             baseId: this.baseId,
-            index: index
+            index: index,
+            model: this.model.toJSON()
         });
-    },
-    setValue: function(value) {
-        this.config.value = value;
-    },
-    resetValue: function() {
-        this.config.value = this.defaults.value;
     }
 });
 

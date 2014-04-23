@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-20 */
+/*! Kontentblocks DevVersion 2014-04-23 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();
@@ -76,9 +76,15 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
     update: function() {
         var that = this;
         this.$el.empty();
-        this.$el.html(KB.Templates.render("backend/modulebrowser/module-description", {
-            module: this.model.toJSON()
-        }));
+        if (this.model.get("template")) {
+            this.$el.html(KB.Templates.render("backend/modulebrowser/module-template-description", {
+                module: this.model.toJSON()
+            }));
+        } else {
+            this.$el.html(KB.Templates.render("backend/modulebrowser/module-description", {
+                module: this.model.toJSON()
+            }));
+        }
         if (this.model.get("settings").helpfile !== false) {
             this.$el.append(KB.Templates.render(this.model.get("settings").helpfile, {
                 module: this.model.toJSON()
@@ -95,7 +101,8 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
         this.options = options || {};
     },
     render: function(el) {
-        if (this.model.get("tpldef")) {
+        console.log(this.model);
+        if (this.model.get("template")) {
             this.$el.html(KB.Templates.render("backend/modulebrowser/module-template-list-item", {
                 module: this.model.toJSON()
             }));
