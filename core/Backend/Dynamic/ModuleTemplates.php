@@ -98,6 +98,7 @@ class ModuleTemplates
         $moduleDef = ModuleFactory::parseModule($template);
         //set area context on init
         $moduleDef['areaContext'] = $context;
+        $moduleDef['area'] = 'module-template';
 
         // create essential markup and render the module
         // infamous hidden editor hack
