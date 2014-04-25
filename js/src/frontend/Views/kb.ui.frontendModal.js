@@ -146,7 +146,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 // Make the modal fit
                 setTimeout(function () {
                     that.recalibrate();
-                }, 1000);
+                }, 700);
+
 
             },
             error: function () {

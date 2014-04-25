@@ -172,6 +172,6 @@ class Image extends AbstractFieldReturn
 
         );
 
-        JSONBridge::getInstance()->registerData('FrontSettings', $this->uid, $json);
+        JSONBridge::getInstance()->registerData('FrontSettings', $this->uniqueId, $json);
     }
 }

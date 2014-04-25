@@ -110,6 +110,7 @@ class JSONBridge
     {
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;
+	    $this->data['fieldData'] = $this->fieldData;
         return $this->data;
     }
 

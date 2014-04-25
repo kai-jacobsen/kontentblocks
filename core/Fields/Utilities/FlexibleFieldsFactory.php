@@ -4,145 +4,138 @@ namespace Kontentblocks\Fields\Utilities;
 
 use Kontentblocks\Fields\Definitions\FlexibleFields;
 
-class FlexibleFieldsFactory
-{
+class FlexibleFieldsFactory {
 
-    /**
-     * @var \Kontentblocks\Fields\Definitions\FlexibleFields
-     */
-    protected $Field;
+	/**
+	 * @var \Kontentblocks\Fields\Definitions\FlexibleFields
+	 */
+	protected $Field;
 
-    /**
-     * @var string id of parent module
-     */
-    protected $moduleId;
+	/**
+	 * @var string id of parent module
+	 */
+	protected $moduleId;
 
-    /**
-     * @var string
-     */
-    protected $arrayKey;
+	/**
+	 * @var string
+	 */
+	protected $arrayKey;
 
-    /**
-     * @var array data of this field from moduleData
-     */
-    protected $fieldData;
+	/**
+	 * @var array data of this field from moduleData
+	 */
+	protected $fieldData;
 
-    /**
-     * Flexible Field config array
-     * @var array
-     */
-    protected $config;
+	/**
+	 * Flexible Field config array
+	 * @var array
+	 */
+	protected $config;
 
-    /**
-     * Class Constructor
-     * @param FlexibleFields $Field
-     */
-    public function __construct(FlexibleFields $Field)
-    {
-        $this->Field = $Field;
+	/**
+	 * Class Constructor
+	 *
+	 * @param FlexibleFields $Field
+	 */
+	public function __construct( FlexibleFields $Field ) {
+		$this->Field = $Field;
 
-        $this->arrayKey = $Field->getKey();
-        $this->fieldData = $Field->getValue();
-        $this->moduleId = $Field->parentModuleId;
-        $this->config = $Field->getArg('config');
+		$this->arrayKey  = $Field->getKey();
+		$this->fieldData = $Field->getValue();
+		$this->moduleId  = $Field->parentModuleId;
+		$this->config    = $Field->getArg( 'config' );
 
-    }
+	}
 
-    public function getItems()
-    {
-        // check properties integrity
-        if (!$this->validate()) {
-            return false;
-        };
+	public function getItems() {
+		// check properties integrity
+		if ( ! $this->validate() ) {
+			return false;
+		};
 
-        $items = $this->setupItems();
+		$items = $this->setupItems();
 
-        if (!is_array($items)){
-            return array();
-        }
+		if ( ! is_array( $items ) ) {
+			return array();
+		}
 
-        return $items;
-    }
+		return $items;
+	}
 
-    public function setupItems()
-    {
-        $fields = $this->extractFieldsFromConfig();
-        $items = array();
-        foreach ($this->fieldData as $index => $data) {
-            $item = array();
-            foreach ($fields as $key => $conf) {
-                $item[$key] = $this->getReturnObj($conf['type'], $data[$key], $index, $key);
-            }
-            $items[] = $item;
-        }
-        return $items;
-    }
+	public function setupItems() {
+		$fields = $this->extractFieldsFromConfig();
+		$items  = array();
+		foreach ( $this->fieldData as $index => $data ) {
+			$item = array();
+			foreach ( $fields as $key => $conf ) {
+				$item[ $key ] = $this->getReturnObj( $conf['type'], $data[ $key ], $index, $key );
+			}
+			$items[] = $item;
+		}
 
-    private function validate()
-    {
+		return $items;
+	}
 
-        if (empty($this->fieldData)) {
-            return false;
-        }
+	private function validate() {
 
-        if (!isset($this->moduleId)) {
-            return false;
-        }
+		if ( empty( $this->fieldData ) ) {
+			return false;
+		}
 
-        if (!isset($this->arrayKey)) {
-            return false;
-        }
+		if ( ! isset( $this->moduleId ) ) {
+			return false;
+		}
+
+		if ( ! isset( $this->arrayKey ) ) {
+			return false;
+		}
 
 
-        if (!isset($this->config)) {
-            return false;
-        }
+		if ( ! isset( $this->config ) ) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    private function extractFieldsFromConfig()
-    {
-        $collect = array();
-        foreach ($this->config as $key => $tab) {
-            if (!empty($tab['fields'])) {
-                $collect += $tab['fields'];
-            }
-        }
-        return $collect;
-    }
+	private function extractFieldsFromConfig() {
+		$collect = array();
+		foreach ( $this->config as $key => $tab ) {
+			if ( ! empty( $tab['fields'] ) ) {
+				$collect += $tab['fields'];
+			}
+		}
 
-    private function getReturnObj($type, $keydata, $index, $key)
-    {
-        switch ($type) {
+		return $collect;
+	}
 
-            case 'text':
-                return new \Kontentblocks\Fields\Returnobjects\Element($keydata, array(
-                    'instance_id' => $this->moduleId,
-                    'key' => $key,
-                    'arrayKey' => $this->arrayKey,
-                    'index' => $index
-                ));
+	private function getReturnObj( $type, $keydata, $index, $key ) {
+		switch ( $type ) {
 
-                break;
+			case ( 'text' ):
+			case ( 'editor' ):
+			case ( 'textarea' ):
+				return new \Kontentblocks\Fields\Returnobjects\Element( $keydata, array(
+					'instance_id' => $this->moduleId,
+					'key'         => $key,
+					'arrayKey'    => $this->arrayKey,
+					'index'       => $index,
+					'type'        => $type
+				) );
 
-            case 'textarea':
-                return new \Kontentblocks\Fields\Returnobjects\Element($keydata, array(
-                    'instance_id' => $this->moduleId,
-                    'key' => $key,
-                    'arrayKey' => $this->arrayKey,
-                    'index' => $index
-                ));
-            case 'image':
-                return new \Kontentblocks\Fields\Returnobjects\Image($keydata, array(
-                    'instance_id' => $this->moduleId,
-                    'key' => $key,
-                    'arrayKey' => $this->arrayKey,
-                    'index' => $index
-                ));
-                break;
+				break;
 
-        }
-    }
+			case ( 'image' ):
+				return new \Kontentblocks\Fields\Returnobjects\Image( $keydata, array(
+					'instance_id' => $this->moduleId,
+					'key'         => $key,
+					'arrayKey'    => $this->arrayKey,
+					'index'       => $index,
+					'type'        => $type
+				) );
+				break;
+
+		}
+	}
 
 }

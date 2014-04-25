@@ -1,4 +1,11 @@
+/**
+ * Handles all tinymce inline editors
+ * @param el DOM Node
+ * @returns {boolean}
+ * @constructor
+ */
 KB.IEdit.Text = function (el) {
+    var settings;
 
     if (_.isUndefined(el)) {
         return false;
@@ -6,7 +13,11 @@ KB.IEdit.Text = function (el) {
 
     // get settings from payload
     //@TODO needs API
-    var settings = KB.payload.FrontSettings[el.id].tinymce;
+
+
+    if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]){
+        settings = (KB.payload.FrontSettings[el.id].tinymce) ? KB.payload.FrontSettings[el.id].tinymce : {} ;
+    }
 
     // defaults
     var defaults = {

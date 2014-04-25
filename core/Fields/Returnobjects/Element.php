@@ -124,7 +124,6 @@ class Element extends AbstractFieldReturn {
 	 * @since 1.0.0
 	 */
 	public function html() {
-		$this->uniqueId = uniqid( 'kb' );
 		$this->handleLoggedInUsers();
 		$this->toJSON();
 
@@ -236,6 +235,7 @@ class Element extends AbstractFieldReturn {
 	}
 
 	public function toJSON() {
+
 		$json = array(
 			'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce )
 		);

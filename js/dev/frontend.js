@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-23 */
+/*! Kontentblocks DevVersion 2014-04-25 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -210,10 +210,13 @@ KB.IEdit.Image = function($) {
 }(jQuery);
 
 KB.IEdit.Text = function(el) {
+    var settings;
     if (_.isUndefined(el)) {
         return false;
     }
-    var settings = KB.payload.FrontSettings[el.id].tinymce;
+    if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]) {
+        settings = KB.payload.FrontSettings[el.id].tinymce ? KB.payload.FrontSettings[el.id].tinymce : {};
+    }
     var defaults = {
         theme: "modern",
         skin: "lightgray",
@@ -489,7 +492,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 }, 500);
                 setTimeout(function() {
                     that.recalibrate();
-                }, 1e3);
+                }, 700);
             },
             error: function() {
                 console.log("e");

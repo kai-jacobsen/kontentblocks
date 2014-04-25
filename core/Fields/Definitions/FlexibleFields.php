@@ -53,6 +53,8 @@ Class FlexibleFields extends Field {
 	 * @return mixed $new
 	 */
 	public function save( $new, $old ) {
+
+
 		if ( is_array( $old ) ) {
 			foreach ( $old as $k => $v ) {
 				if ( ! array_key_exists( $k, $new ) ) {
@@ -60,16 +62,17 @@ Class FlexibleFields extends Field {
 				}
 			}
 		}
-
 		foreach ( $new as &$field ) {
-			if (is_null($field)){
+			if ( is_null( $field ) ) {
 				continue;
 			}
 
-			$fieldInstance = FieldRegistry::getInstance()->getField($field['type']);
-			$field[$field['key']] = $fieldInstance->save($field[$field['key']]);
-		}
+			foreach ( $field['_mapping'] as $key => $type ) {
+				$fieldInstance          = FieldRegistry::getInstance()->getField( $type );
+				$field[ $key ] = $fieldInstance->save( $field[ $key ], $old );
+			}
 
+		}
 		return $new;
 	}
 

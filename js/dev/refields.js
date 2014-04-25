@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-23 */
+/*! Kontentblocks DevVersion 2014-04-25 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -225,8 +225,7 @@ _.extend(KB.FlexibleFields.prototype, {
                 fieldInstance.setValue(data[fieldInstance.get("key")]);
             }
             $con.append(fieldInstance.render(uid));
-            $con.append('<input type="hidden" name="' + fieldInstance.baseId + "[" + uid + '][type]" value="' + fieldInstance.get("type") + '" >');
-            $con.append('<input type="hidden" name="' + fieldInstance.baseId + "[" + uid + '][key]" value="' + fieldInstance.get("key") + '" >');
+            $con.append('<input type="hidden" name="' + fieldInstance.baseId + "[" + uid + "][_mapping][" + fieldInstance.get("key") + ']" value="' + fieldInstance.get("type") + '" >');
             fieldInstance.$container = $con;
             if (fieldInstance.postRender) {
                 fieldInstance.postRender.call(fieldInstance);
