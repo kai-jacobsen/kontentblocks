@@ -1,5 +1,6 @@
 /* Colors */
-/* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+@import url(assets/genericons/genericons.css);
+/* line 14, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .hide {
   display: none;
 }

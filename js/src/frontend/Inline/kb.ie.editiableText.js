@@ -67,7 +67,6 @@ KB.IEdit.Text = function (el) {
             });
 
             ed.on('blur', function () {
-
                 jQuery('#kb-toolbar').hide();
                 var data = ed.kbDataRef;
                 var value = ed.getContent();

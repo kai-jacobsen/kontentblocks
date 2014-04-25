@@ -557,7 +557,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var $stage = jQuery("#kontentblocks_stage");
         $stage.addClass("fullscreen");
         var $title = jQuery(".fullscreen--title-wrapper", $stage);
-        $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + this.model.get("settings").name + "</h2>").show();
+        var $description = jQuery(".fullscreen--description-wrapper", $stage);
+        var titleVal = this.$el.find(".block-title").val();
+        $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + titleVal + "</h2>").show();
+        $description.empty().append("<p class='description'>" + this.model.get("settings").description + "</p>").show();
         jQuery(".fullscreen--close").on("click", _.bind(this.closeFullscreen, this));
         this.$el.addClass("fullscreen-module");
         jQuery("#post-body").removeClass("columns-2").addClass("columns-1");
