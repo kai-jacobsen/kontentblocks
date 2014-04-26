@@ -219,13 +219,12 @@ KB.IEdit.Text = function(el) {
     }
     var defaults = {
         theme: "modern",
-        skin: "lightgray",
+        skin: false,
         menubar: false,
         add_unload_trigger: false,
         fixed_toolbar_container: "#kb-toolbar",
         schema: "html5",
         inline: true,
-        toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
         statusbar: false,
         setup: function(ed) {
             ed.on("init", function() {
@@ -492,7 +491,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 }, 500);
                 setTimeout(function() {
                     that.recalibrate();
-                }, 700);
+                }, 600);
             },
             error: function() {
                 console.log("e");
@@ -827,6 +826,7 @@ jQuery(document).ready(function() {
             fadeOutTime: 0
         });
     });
+    jQuery(window).on("resize DOMNodeInserted", function() {});
 });
 
 jQuery(document).ready(function() {

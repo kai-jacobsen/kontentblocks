@@ -84,7 +84,6 @@ Class Kontentblocks
 
         // enabled for 'page' by default
         add_post_type_support('page', 'kontentblocks');
-
         // load Templates automatically
         add_action('areas_setup', array($this, 'loadModules'), 9);
 
@@ -109,7 +108,9 @@ Class Kontentblocks
     }
 
     public function initInterface(){
-        new EditScreen();
+	    //@TODO move out of here
+	    remove_post_type_support('page', 'revisions');
+	    new EditScreen();
     }
 
     public function i18n()

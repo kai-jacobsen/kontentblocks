@@ -74,6 +74,7 @@ Class FlexibleFields extends Field {
 			}
 
 		}
+//		d($new, $old); exit;
 		return $new;
 	}
 

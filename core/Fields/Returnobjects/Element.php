@@ -226,7 +226,7 @@ class Element extends AbstractFieldReturn {
 		}
 
 		if ( in_array( $this->el, $text ) ) {
-			$this->tinymce['toolbar'] = "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media";
+			$this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
 
 			return 'editable';
 		}
@@ -235,6 +235,7 @@ class Element extends AbstractFieldReturn {
 	}
 
 	public function toJSON() {
+
 
 		$json = array(
 			'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce )

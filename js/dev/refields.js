@@ -126,7 +126,7 @@ KB.Fields.register("File", function($) {
 KB.Fields.register("FlexibleFields", function($) {
     return {
         init: function(modalView) {
-            _K.log("FF init called");
+            _K.info("FF init called");
             $(".flexible-fields--stage", $("body")).each(function(index, el) {
                 var view = modalView || KB.Views.Modules.get($(el).data("module"));
                 var key = $(el).data("fieldkey");
@@ -141,13 +141,15 @@ KB.Fields.register("FlexibleFields", function($) {
             this.init();
         },
         frontUpdate: function(modalView) {
-            _K.log("Field shall update on front");
+            _K.info("Field shall update on front");
             this.init(modalView);
         }
     };
 }(jQuery));
 
 KB.FlexibleFields = function(view, fid, key, el) {
+    _K.info("New FF Instance created");
+    _K.info("FF Config", KB.payload.Fields);
     this.$el = jQuery(el);
     this.view = view;
     this.moduleId = view.model.get("instance_id");
@@ -164,7 +166,8 @@ KB.FlexibleFields = function(view, fid, key, el) {
             },
             stop: function() {
                 KB.TinyMCE.restoreEditors();
-            }
+            },
+            handle: ".flexible-fields--js-drag-handle"
         });
     }
 };
@@ -181,9 +184,12 @@ _.extend(KB.FlexibleFields.prototype, {
         if (payload.fieldData["flexible-fields"] && payload.fieldData["flexible-fields"][moduleId]) {
             data = KB.payload.fieldData["flexible-fields"][moduleId];
         }
+        console.log("d", data);
         if (_.toArray(data).length > 0) {
             _.each(data, function(item) {
-                that.addItem(item);
+                if (_.isObject(item)) {
+                    that.addItem(item);
+                }
             });
         }
     },
@@ -206,7 +212,7 @@ _.extend(KB.FlexibleFields.prototype, {
         hidden = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[_uid]";
         value = data && data.tab ? data.tab.title : "Item #" + uid;
         $item = jQuery('<li class="flexible-fields--list-item"><input type="hidden" name="' + hidden + '" value="' + uid + '"> </li>').appendTo(this.$list);
-        jQuery('<div class="flexible-fields--toggle-title">' + '<h3><div class="dashicons dashicons-arrow-right flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' + "</div>").appendTo($item);
+        jQuery('<div class="flexible-fields--toggle-title">' + '<h3><span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span><div class="genericon genericon-expand flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' + "</div>").appendTo($item);
         $toggleBox = jQuery('<div class="flexible-fields--toggle-box kb-hide"></div>').appendTo($item);
         $tabs = jQuery('<div class="kb-field--tabs kb_fieldtabs"></div>').appendTo($toggleBox);
         $tabnav = jQuery('<ul class="flexible-field--tab-nav"></ul>').appendTo($tabs);
@@ -256,7 +262,7 @@ _.extend(KB.FlexibleFields.prototype, {
 });
 
 jQuery("body").on("click", ".flexible-fields--js-toggle", function() {
-    jQuery(this).toggleClass("dashicons-arrow-right dashicons-arrow-down");
+    jQuery(this).toggleClass("genericons-expand genericons.collapse");
     jQuery(this).parent().parent().next("div").slideToggle(450, function() {
         if (KB.FrontendEditModal) {
             KB.FrontendEditModal.trigger("recalibrate");

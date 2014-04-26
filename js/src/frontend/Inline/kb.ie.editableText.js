@@ -22,13 +22,12 @@ KB.IEdit.Text = function (el) {
     // defaults
     var defaults = {
         theme: 'modern',
-        skin: 'lightgray',
+        skin: false,
         menubar: false,
         add_unload_trigger: false,
         fixed_toolbar_container: '#kb-toolbar',
         schema: 'html5',
         inline: true,
-        toolbar: "kbcancleinline | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image     | print preview media",
         statusbar: false,
         setup: function (ed) {
 
@@ -42,6 +41,7 @@ KB.IEdit.Text = function (el) {
                     arrayKey: data.arraykey
                 };
                 ed.module.view.$el.addClass('inline-editing-active');
+
             });
 
             ed.on('focus', function (e) {

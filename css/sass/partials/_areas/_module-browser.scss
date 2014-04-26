@@ -12,6 +12,7 @@
   height: 65%;
   z-index: 299;
   box-shadow: 1px 1px 30px #333;
+
 }
 
 .module-browser-wrapper * {
@@ -21,10 +22,11 @@
   .close-browser{
     position: absolute;
     right: 8px;
-    top: 8px;
+    top: 12px;
     color: #fff;
     cursor: pointer;
     z-index: 59;
+    font-size: 12px;
   }
 
 }
@@ -40,6 +42,8 @@
 .module-browser-wrapper {
   height: 100%;
   position: relative;
+  overflow: hidden;
+
 }
 
 .module-browser-header {
@@ -71,13 +75,15 @@
 }
 
 .module-browser__left-column {
+  @include box-sizing('border-box');
   width: 280px;
   display: block;
   float: left;
   border-right: 1px solid #ccc ;
   height: 100%;
-  margin-top: -36px;
+  margin-top: 0px;
   padding-top: 36px;
+  padding-bottom: 36px;
   background-color: #f9f9f9;
 }
 
@@ -94,8 +100,8 @@
 
 
 .modules-list {
-  padding: 0;
   margin: 0;
+  padding: 0 0 72px;
 }
 
 .modules-list-item {

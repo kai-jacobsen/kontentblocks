@@ -55,6 +55,7 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
         KB.FieldsAPI.Field.prototype.initialize.call(this, config);
     },
     setValue: function(value) {
+        console.log("val", value);
         this.model.set("value", value);
     },
     render: function(index) {
@@ -70,6 +71,7 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
         var name = this.baseId + "[" + this.index + "]" + "[" + this.get("key") + "]";
         var edId = this.get("moduleId") + "_" + this.get("key") + "_editor_" + this.index;
         this.$editorWrap = jQuery(".kb-ff-editor-wrapper", this.$container);
+        console.log(this.model.toJSON());
         KB.TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get("value"), 5, false);
     }
 });
@@ -115,6 +117,7 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
         });
     },
     setValue: function(value) {
+        _K.info("FF Model", value);
         var that = this;
         var args = {
             width: 150,
@@ -138,9 +141,8 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
             dataType: "json",
             async: false,
             success: function(res) {
-                that.config.value = _.extend(value, {
-                    url: res
-                });
+                var attrs = that.model.get("value");
+                attrs.url = res;
             },
             error: function() {
                 _K.error("Unable to get image");

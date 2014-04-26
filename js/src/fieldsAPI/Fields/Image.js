@@ -42,6 +42,7 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
         });
     },
     setValue: function (value) {
+        _K.info('FF Model', value);
         var that = this;
         var args = {
             width: 150,
@@ -68,9 +69,8 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
             dataType: "json",
             async: false,
             success: function (res) {
-                that.config.value = _.extend(value, {
-                    url: res
-                });
+                var attrs = that.model.get('value');
+                attrs.url = res;
             },
             error: function () {
                 _K.error('Unable to get image');

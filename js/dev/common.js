@@ -334,6 +334,7 @@ KB.TinyMCE = function($) {
             if (!media) {
                 var media = false;
             }
+            console.log(content);
             KB.Ajax.send({
                 action: "getRemoteEditor",
                 editorId: id + "_ed",
@@ -345,6 +346,7 @@ KB.TinyMCE = function($) {
                     media_buttons: media
                 }
             }, function(data) {
+                console.log(data);
                 $el.empty().append(data);
                 this.addEditor($el);
             }, this);

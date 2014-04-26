@@ -65,7 +65,7 @@ class Enqueues
             wp_register_script('kb-backend', KB_PLUGIN_URL . '/js/'. $folder .'/backend'.$suffix.'.js', array('kb-extensions'), null, true);
         } else{
             // frontend controller
-            wp_register_script('kb-frontend', KB_PLUGIN_URL . 'js/'. $folder .'/frontend'.$suffix.'.js', array('kb-extensions'), null, true);
+            wp_register_script('kb-frontend', KB_PLUGIN_URL . 'js/'. $folder .'/frontend'.$suffix.'.js', array('kb-extensions', ), null, true);
         }
 
 
