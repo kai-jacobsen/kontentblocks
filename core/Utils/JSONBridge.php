@@ -95,6 +95,7 @@ class JSONBridge
         $this->data['Areas'] = $this->areas;
         $this->data['fieldData'] = $this->fieldData;
         $json = json_encode($this->data);
+
         print "<script>var KB = KB || {}; KB.payload = {}; KB.payload =  {$json};</script>";
     }
 

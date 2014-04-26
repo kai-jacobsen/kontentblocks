@@ -2,7 +2,6 @@ KB.FieldsAPI.FieldStdModel = Backbone.Model.extend({});
 
 KB.FieldsAPI.Field = Backbone.View.extend({
     initialize: function (config) {
-
         this.defaults = this.defaults || {};
         this.config = _.defaults(config, this.defaults);
         this.model = new KB.FieldsAPI.FieldStdModel({value: this.get('std')});
@@ -21,7 +20,7 @@ KB.FieldsAPI.Field = Backbone.View.extend({
         this.config[key] = value;
     },
     setValue: function(val){
-        this.model.set('value', val)
+        this.model.set('value', val);
     },
     prepareBaseId: function () {
         return this.config.moduleId + '[' + this.config.fieldKey + ']';

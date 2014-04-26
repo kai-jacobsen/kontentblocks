@@ -25,12 +25,10 @@ class GetModuleOptions
         ob_start();
         $instance->options( $instance->moduleData );
         $html = ob_get_clean();
-
         $return = array(
             'html' => stripslashes_deep($html),
-            'json' => JSONBridge::getInstance()->getJSON()
+            'json' => stripslashes_deep( JSONBridge::getInstance()->getJSON())
         );
-
 //        echo stripslashes_deep( $html );
         wp_send_json($return);
         exit;

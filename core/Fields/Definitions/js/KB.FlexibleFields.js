@@ -1,7 +1,7 @@
 KB.Fields.register('FlexibleFields', (function ($) {
     return {
         init: function (modalView) {
-            _K.log('FF init called');
+            _K.info('FF init called');
             // find all instances on load
             $('.flexible-fields--stage', $('body')).each(function (index, el) {
                 var view = modalView || KB.Views.Modules.get($(el).data('module'));
@@ -20,7 +20,7 @@ KB.Fields.register('FlexibleFields', (function ($) {
             this.init();
         },
         frontUpdate: function (modalView) {
-            _K.log('Field shall update on front');
+            _K.info('Field shall update on front');
             this.init(modalView);
         }
     };
@@ -28,6 +28,8 @@ KB.Fields.register('FlexibleFields', (function ($) {
 
 
 KB.FlexibleFields = function (view, fid, key, el) {
+    _K.info('New FF Instance created');
+    _K.info('FF Config',KB.payload.Fields);
     this.$el = jQuery(el);
     this.view = view;
     this.moduleId = view.model.get('instance_id');
@@ -35,8 +37,9 @@ KB.FlexibleFields = function (view, fid, key, el) {
     this.fieldKey = key;
     this.config = KB.payload.Fields[fid].config;
 
-    if (this.config.length > 0) {
 
+
+    if (this.config.length > 0) {
         this.setupConfig();
         this.setupElements();
         this.initialSetup();
@@ -47,7 +50,8 @@ KB.FlexibleFields = function (view, fid, key, el) {
             },
             stop: function(){
                 KB.TinyMCE.restoreEditors();
-            }
+            },
+            handle: '.flexible-fields--js-drag-handle'
         });
     }
 
@@ -60,20 +64,20 @@ _.extend(KB.FlexibleFields.prototype, {
         var data = null;
         var moduleId = this.view.model.get('instance_id');
         var payload = KB.payload;
-
         // bail if no fieldData was set on page creation
         if (!payload.fieldData) {
             return false;
         }
 
-
         if (payload.fieldData['flexible-fields'] && payload.fieldData['flexible-fields'][moduleId]) {
             data = KB.payload.fieldData['flexible-fields'][moduleId];
         }
-
+        console.log('d',data);
         if (_.toArray(data).length > 0) {
             _.each(data, function (item) {
-                that.addItem(item);
+               if (_.isObject(item)){
+                   that.addItem(item);
+               }
             });
         }
 
@@ -111,7 +115,7 @@ _.extend(KB.FlexibleFields.prototype, {
         $item = jQuery('<li class="flexible-fields--list-item"><input type="hidden" name="' + hidden + '" value="' + uid + '"> </li>').appendTo(this.$list);
         // append new title/toggletitle to item
         jQuery('<div class="flexible-fields--toggle-title">' +
-        '<h3><div class="dashicons dashicons-arrow-right flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' +
+        '<h3><span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span><div class="genericon genericon-expand flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' +
         '</div>').appendTo($item);
         // append toggle container
         $toggleBox = jQuery('<div class="flexible-fields--toggle-box kb-hide"></div>').appendTo($item);
@@ -135,7 +139,6 @@ _.extend(KB.FlexibleFields.prototype, {
 
     renderFields: function (tab, $con, uid, data) {
         var fieldInstance;
-
         _.each(tab.fields, function (field) {
             fieldInstance = KB.FieldsAPI.get(field);
             if (data && data[fieldInstance.get('key')]) {
@@ -179,7 +182,7 @@ _.extend(KB.FlexibleFields.prototype, {
 });
 
 jQuery('body').on('click', '.flexible-fields--js-toggle', function () {
-    jQuery(this).toggleClass('dashicons-arrow-right dashicons-arrow-down')
+    jQuery(this).toggleClass('genericons-expand genericons.collapse')
     jQuery(this).parent().parent().next('div').slideToggle(450, function () {
 
         if (KB.FrontendEditModal) {

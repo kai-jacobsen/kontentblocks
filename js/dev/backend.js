@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-25 */
+/*! Kontentblocks DevVersion 2014-04-26 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();
@@ -101,7 +101,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
         this.options = options || {};
     },
     render: function(el) {
-        console.log(this.model);
         if (this.model.get("template")) {
             this.$el.html(KB.Templates.render("backend/modulebrowser/module-template-list-item", {
                 module: this.model.toJSON()
@@ -162,6 +161,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options) {
         var that = this;
         this.options = options || {};
+        _K.log("module browser initialized");
     },
     tagName: "div",
     id: "module-browser",
@@ -195,6 +195,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         });
         this.listenTo(this.subviews.Navigation, "browser:change", this.update);
         this.listenTo(this.subviews.ModulesList, "createModule", this.createModule);
+        jQuery(".nano").nanoScroller({
+            flash: true
+        });
     },
     close: function() {
         jQuery("#wpwrap").removeClass("module-browser-open");

@@ -3,7 +3,7 @@
   border: 1px solid #ccc;
   position: relative;
 
-  & h3{
+  & h3 {
     padding: 3px !important;
     margin: 0 !important;
   }
@@ -17,33 +17,53 @@
     display: inline-block;
     margin: 0 !important;
 
-    &:hover{
+    &:hover {
       border-color: #ccc;
       background-color: #fafafa;
     }
 
-    &:focus{
+    &:focus {
       background-color: #fff;
     }
   }
 
-  .flexible-fields--js-toggle.dashicons{
-    font-size: 22px !important;
+  .flexible-fields--js-toggle {
+    font-size: 18px !important;
     position: relative;
     top: 5px;
+    left: 3px;
     cursor: pointer;
+    color: #999;
+
+    &:hover{
+      color: #333;
+    }
   }
 
-  .flexible-fields--js-trash{
+  .flexible-fields--js-drag-handle {
+
+    cursor: move;
+    &:before {
+      top: 3px;
+      position: relative;
+      font-size: 24px !important;
+      left: -3px;
+      color: #666;
+      text-shadow: 1px 1px 1px #FFF;
+    }
+
+  }
+
+  .flexible-fields--js-trash {
     position: absolute;
     right: 15px;
     font-size: 15px !important;
     top: 11px;
-    color: #666;
+    color: #999;
     cursor: pointer;
 
-    &:hover{
-        color:#000;
+    &:hover {
+      color: #333;
     }
   }
 

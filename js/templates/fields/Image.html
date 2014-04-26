@@ -1,9 +1,10 @@
+<% console.log(model); %>
 <div class="kb_field kb-field kb-field--image kb-fieldapi-field">
     <div class='kb-field-image-wrapper'>
         <div class='kb-js-add-image kb-field-image-container'>
 
-            <% if (config.value.url) { %>
-            <img src="<%= config.value.url %>">
+            <% if (model.value.url) { %>
+            <img src="<%= model.value.url %>">
             <% }; %>
 
         </div>
@@ -16,11 +17,11 @@
                 <label><%= i18n.title %> </label>
                 <input class='kb-js-image-title kb-observe' type="text"
                        name='<%= baseId %>[<%= index %>][<%= config.key %>][title]'
-                       value='<%= config.value.title %>'>
+                       value='<%= model.value.title %>'>
                 <label><%= i18n.caption %></label>
                 <input class='kb-js-image-caption kb-observe' type="text"
                        name='<%= baseId %>[<%= index %>][<%= config.key %>][caption]'
-                       value='<%= config.value.caption %>'>
+                       value='<%= model.value.caption %>'>
             </div>
             <% if (config.hideMeta) { %>
 
@@ -30,6 +31,6 @@
             <a class="button kb-js-reset-image">Reset</a>
         </div>
         <input class='kb-js-image-id' type='hidden' name='<%= baseId %>[<%= index %>][<%= config.key %>][id]'
-               value='<%= config.value.id %>'>
+               value='<%= model.value.id %>'>
     </div>
 </div>
