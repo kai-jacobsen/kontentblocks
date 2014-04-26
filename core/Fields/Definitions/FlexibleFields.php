@@ -31,6 +31,7 @@ Class FlexibleFields extends Field {
 	}
 
 	public function outputFilter( $value ) {
+		d($value);
 		// make sure it's an simple indexed array to preserve order
 		if ( is_array( $value ) ) {
 			$forJSON = array_values( $value );
