@@ -75,13 +75,15 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     insertNewUpdateForm: function (response) {
         if (response !== '') {
-            this.$body.html(response);
+            this.$body.html(response.html);
         } else {
             this.$body.html('empty');
         }
+        KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         // re-init UI listeners
         // @todo there is a better way
         KB.Ui.repaint(this.$el);
+        KB.Fields.trigger('update');
         this.trigger('kb:backend::viewUpdated');
     },
     fullscreen: function(){

@@ -190,7 +190,7 @@ function underscoreit($val)
  * @param array $old
  * @return array
  */
-function arrayMergeRecursiveAsItShouldBe(&$new, $old)
+function arrayMergeRecursiveAsItShouldBe($new, $old)
 {
     $merged = $new;
     if (is_array($old)) {

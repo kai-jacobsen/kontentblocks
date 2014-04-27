@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-26 */
+/*! Kontentblocks DevVersion 2014-04-27 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -131,9 +131,7 @@ KB.Fields.register("FlexibleFields", function($) {
                 var view = modalView || KB.Views.Modules.get($(el).data("module"));
                 var key = $(el).data("fieldkey");
                 var fid = $(el).closest(".kb-js-field-identifier").attr("id");
-                if (!view.FlexibleFields) {
-                    view.FlexibleFields = new KB.FlexibleFields(view, fid, key, el);
-                }
+                view[key] = new KB.FlexibleFields(view, fid, key, el);
             });
         },
         update: function() {
@@ -182,9 +180,8 @@ _.extend(KB.FlexibleFields.prototype, {
             return false;
         }
         if (payload.fieldData["flexible-fields"] && payload.fieldData["flexible-fields"][moduleId]) {
-            data = KB.payload.fieldData["flexible-fields"][moduleId];
+            data = KB.payload.fieldData["flexible-fields"][moduleId][this.fieldKey];
         }
-        console.log("d", data);
         if (_.toArray(data).length > 0) {
             _.each(data, function(item) {
                 if (_.isObject(item)) {
@@ -207,7 +204,7 @@ _.extend(KB.FlexibleFields.prototype, {
         if (_.isNull(data) || _.isUndefined(data)) {
             return;
         }
-        uid = data && data.uid ? data._uid : _.uniqueId("ffid");
+        uid = data && data._uid ? data._uid : _.uniqueId("ffid");
         name = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[tab][title]";
         hidden = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[_uid]";
         value = data && data.tab ? data.tab.title : "Item #" + uid;

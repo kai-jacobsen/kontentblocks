@@ -104,7 +104,6 @@ KB.TinyMCE = (function ($) {
                 }
 
             }, function(data){
-                console.log(data);
                 $el.empty().append(data);
                 this.addEditor($el);
             },this);

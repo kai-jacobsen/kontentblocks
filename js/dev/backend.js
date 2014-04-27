@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-26 */
+/*! Kontentblocks DevVersion 2014-04-27 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();
@@ -547,11 +547,13 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     insertNewUpdateForm: function(response) {
         if (response !== "") {
-            this.$body.html(response);
+            this.$body.html(response.html);
         } else {
             this.$body.html("empty");
         }
+        KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         KB.Ui.repaint(this.$el);
+        KB.Fields.trigger("update");
         this.trigger("kb:backend::viewUpdated");
     },
     fullscreen: function() {

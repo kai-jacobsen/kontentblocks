@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-26 */
+/*! Kontentblocks DevVersion 2014-04-27 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -88,7 +88,6 @@ _.extend(KB.Fields, {
     },
     init: function() {
         var that = this;
-        console.log("init");
         _.each(_.toArray(this.fields), function(object) {
             if (object.hasOwnProperty("init")) {
                 object.init();
@@ -346,7 +345,6 @@ KB.TinyMCE = function($) {
                     media_buttons: media
                 }
             }, function(data) {
-                console.log(data);
                 $el.empty().append(data);
                 this.addEditor($el);
             }, this);

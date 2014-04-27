@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-26 */
+/*! Kontentblocks DevVersion 2014-04-27 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -55,7 +55,6 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
         KB.FieldsAPI.Field.prototype.initialize.call(this, config);
     },
     setValue: function(value) {
-        console.log("val", value);
         this.model.set("value", value);
     },
     render: function(index) {
@@ -71,7 +70,6 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
         var name = this.baseId + "[" + this.index + "]" + "[" + this.get("key") + "]";
         var edId = this.get("moduleId") + "_" + this.get("key") + "_editor_" + this.index;
         this.$editorWrap = jQuery(".kb-ff-editor-wrapper", this.$container);
-        console.log(this.model.toJSON());
         KB.TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get("value"), 5, false);
     }
 });

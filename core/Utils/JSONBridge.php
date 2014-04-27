@@ -61,9 +61,9 @@ class JSONBridge
         return $this;
     }
 
-    public function registerFieldData($modid, $type, $data)
+    public function registerFieldData($modid, $type, $data, $key)
     {
-        $this->fieldData[$type][$modid] = $data;
+        $this->fieldData[$type][$modid][$key] = $data;
     }
 
 
@@ -104,7 +104,7 @@ class JSONBridge
 
         $json = json_encode($this->publicData);
 
-        print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json};</script>";
+        print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json}; KB.on = jQuery.noop;</script>";
     }
 
     public function getJSON()

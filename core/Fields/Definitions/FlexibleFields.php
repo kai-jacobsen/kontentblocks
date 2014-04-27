@@ -31,13 +31,13 @@ Class FlexibleFields extends Field {
 	}
 
 	public function outputFilter( $value ) {
-		d($value);
+//		d($this->getKey(), $value);
 		// make sure it's an simple indexed array to preserve order
 		if ( is_array( $value ) ) {
 			$forJSON = array_values( $value );
 		}
 		$Bridge = JSONBridge::getInstance();
-		$Bridge->registerFieldData( $this->parentModuleId, $this->type, $forJSON );
+		$Bridge->registerFieldData( $this->parentModuleId, $this->type, $forJSON, $this->getKey() );
 
 		return $value;
 	}
@@ -55,6 +55,9 @@ Class FlexibleFields extends Field {
 	 */
 	public function save( $new, $old ) {
 
+		if (is_null($new)){
+			return $old;
+		}
 
 		if ( is_array( $old ) ) {
 			foreach ( $old as $k => $v ) {
@@ -74,7 +77,6 @@ Class FlexibleFields extends Field {
 			}
 
 		}
-//		d($new, $old); exit;
 		return $new;
 	}
 

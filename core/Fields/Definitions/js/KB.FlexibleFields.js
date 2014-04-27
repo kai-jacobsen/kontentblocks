@@ -9,9 +9,7 @@ KB.Fields.register('FlexibleFields', (function ($) {
                 var fid = $(el).closest('.kb-js-field-identifier').attr('id');
 
                 // attach a new FF instance to the view
-                if (!view.FlexibleFields) {
-                    view.FlexibleFields = new KB.FlexibleFields(view, fid, key, el);
-                }
+                    view[key] = new KB.FlexibleFields(view, fid, key, el);
 
             });
         },
@@ -70,9 +68,8 @@ _.extend(KB.FlexibleFields.prototype, {
         }
 
         if (payload.fieldData['flexible-fields'] && payload.fieldData['flexible-fields'][moduleId]) {
-            data = KB.payload.fieldData['flexible-fields'][moduleId];
+            data = KB.payload.fieldData['flexible-fields'][moduleId][this.fieldKey];
         }
-        console.log('d',data);
         if (_.toArray(data).length > 0) {
             _.each(data, function (item) {
                if (_.isObject(item)){
@@ -104,7 +101,7 @@ _.extend(KB.FlexibleFields.prototype, {
         }
 
         // take uid from existing data or create new one
-        uid = (data && data.uid) ? data._uid : _.uniqueId('ffid');
+        uid = (data && data._uid) ? data._uid : _.uniqueId('ffid');
         // input name for item titel
         name = this.moduleId + '[' + this.fieldKey + '][' + uid + ']' + '[tab][title]';
         // hidden input name for unique item identifier
