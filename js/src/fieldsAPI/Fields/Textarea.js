@@ -4,7 +4,6 @@ KB.FieldsAPI.Textarea = KB.FieldsAPI.Field.extend({
         std: 'some textvalue',
         label: 'Field label',
         description: 'A description',
-        value: '',
         key: null
     },
 

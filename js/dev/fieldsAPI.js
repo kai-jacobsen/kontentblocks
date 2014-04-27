@@ -115,6 +115,7 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
         });
     },
     setValue: function(value) {
+        var attrs;
         _K.info("FF Model", value);
         var that = this;
         var args = {
@@ -127,25 +128,31 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
             return;
         }
         this.model.set("value", value);
-        jQuery.ajax({
-            url: ajaxurl,
-            data: {
-                action: "fieldGetImage",
-                args: args,
-                id: value.id,
-                _ajax_nonce: kontentblocks.nonces.get
-            },
-            type: "GET",
-            dataType: "json",
-            async: false,
-            success: function(res) {
-                var attrs = that.model.get("value");
-                attrs.url = res;
-            },
-            error: function() {
-                _K.error("Unable to get image");
-            }
-        });
+        if (KB.Util.stex.get("img" + value.id + "x" + args.width + "x" + args.height)) {
+            attrs = that.model.get("value");
+            attrs.url = KB.Util.stex.get("img" + value.id + "x" + args.width + "x" + args.height);
+        } else {
+            jQuery.ajax({
+                url: ajaxurl,
+                data: {
+                    action: "fieldGetImage",
+                    args: args,
+                    id: value.id,
+                    _ajax_nonce: kontentblocks.nonces.get
+                },
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(res) {
+                    KB.Util.stex.set("img" + value.id + "x" + args.width + "x" + args.height, res, 60 * 1e3 * 60);
+                    var attrs = that.model.get("value");
+                    attrs.url = res;
+                },
+                error: function() {
+                    _K.error("Unable to get image");
+                }
+            });
+        }
     },
     handleAttachment: function(media) {
         var att = media.get("selection").first();
@@ -184,7 +191,6 @@ KB.FieldsAPI.Textarea = KB.FieldsAPI.Field.extend({
         std: "some textvalue",
         label: "Field label",
         description: "A description",
-        value: "",
         key: null
     },
     templatePath: "fields/Textarea",
