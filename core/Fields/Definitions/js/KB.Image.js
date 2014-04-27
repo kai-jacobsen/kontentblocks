@@ -92,6 +92,8 @@ KB.Fields.register('Image', (function ($) {
                     upscale: false
                 };
 
+
+
                 jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -104,6 +106,7 @@ KB.Fields.register('Image', (function ($) {
                     dataType: "json",
                     success: function(res) {
                         that.$container.html('<img src="' + res + '" >');
+//                        KB.Util.stex.set(attachment.get('id') + args.width + args.height, res, 60 * 1000 * 60);
                     },
                     error: function() {}
                 });

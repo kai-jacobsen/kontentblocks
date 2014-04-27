@@ -5,7 +5,8 @@
     'common' => array(
         'title' => __( 'Title', 'Kontentblocks' ),
         'select' => __( 'Select', 'Kontentblocks' ),
-        'insert' => __( 'Insert', 'Kontentblocks' )
+        'insert' => __( 'Insert', 'Kontentblocks' ),
+	    'reset' => __('Reset', 'Kontentblocks')
     ),
     // Field::File
     'file' => array(
