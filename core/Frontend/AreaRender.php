@@ -37,7 +37,7 @@ class AreaRender
     public function render($echo)
     {
         if (!$this->_validate()) {
-            return;
+            return false;
         }
 
         // ----------------------------

@@ -146,7 +146,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 // Make the modal fit
                 setTimeout(function () {
                     that.recalibrate();
-                }, 1000);
+                }, 600);
+
 
             },
             error: function () {
@@ -252,7 +253,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 KB.trigger('kb:frontendModalUpdated');
 
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
-                    initTinymce(el);
+                    KB.IEdit.Text(el);
                 });
 
                 if (save) {

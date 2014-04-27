@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Ajax;
 
+use Kontentblocks\Utils\JSONBridge;
+
 class AfterAreaChange
 {
 
@@ -17,11 +19,16 @@ class AfterAreaChange
         $instance->options( $instance->moduleData );
         $html = ob_get_clean();
 
+	    $return = array(
+		    'html' => stripslashes_deep($html),
+		    'json' => stripslashes_deep( JSONBridge::getInstance()->getJSON())
+	    );
+
         if ( empty( $html ) ) {
             wp_send_json( \Kontentblocks\Helper\noOptionsMessage() );
         }
 
-        wp_send_json( $html );
+        wp_send_json( $return );
 
     }
 

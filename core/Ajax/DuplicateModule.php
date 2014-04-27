@@ -3,7 +3,6 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\API\PostMetaAPI,
-    Kontentblocks\Utils\GlobalDataHandler,
     Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
 

@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\API\PluginDataAPI;
 use Kontentblocks\Backend\API\PostMetaAPI;
 use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Modules\ModuleRegistry;

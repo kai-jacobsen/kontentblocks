@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Ajax\Frontend;
 
-use Kontentblocks\Backend\API\PluginDataAPI;
 use Kontentblocks\Utils\JSONBridge;
 
 class UpdateModuleOptions

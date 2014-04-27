@@ -18,9 +18,9 @@ KB.Utils.MediaWorkflow = function (args) {
             button: {
                 text: options.buttontext
             },
-            multiple: true,
+            multiple: options.multiple,
             library: {
-                type: 'image'
+                type: options.type
             }
         });
         _frame.on('ready', ready);

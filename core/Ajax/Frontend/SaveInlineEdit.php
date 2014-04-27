@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Ajax\Frontend;
 
-use Kontentblocks\Utils\GlobalDataHandler,
-    Kontentblocks\Backend\API\PostMetaAPI;
+use Kontentblocks\Backend\API\PostMetaAPI;
 
 class SaveInlineEdit
 {

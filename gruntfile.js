@@ -11,7 +11,7 @@ module.exports = function (grunt) {
                     banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
                     mangle: false,
                     beautify: false,
-                    compress: true,
+                    compress: false,
                     drop_console: true
                 },
                 files: {
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
                 nonull: true
             },
             fieldsAPI: {
-                src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/**/*.js'],
+                src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/_Field.js' ,  'js/src/fieldsAPI/Fields/**/*.js'],
                 dest: 'js/tmp/fieldsAPI.concat.js'
             }
         },

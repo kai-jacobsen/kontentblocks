@@ -76,9 +76,15 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
     update: function() {
         var that = this;
         this.$el.empty();
-        this.$el.html(KB.Templates.render("backend/modulebrowser/module-description", {
-            module: this.model.toJSON()
-        }));
+        if (this.model.get("template")) {
+            this.$el.html(KB.Templates.render("backend/modulebrowser/module-template-description", {
+                module: this.model.toJSON()
+            }));
+        } else {
+            this.$el.html(KB.Templates.render("backend/modulebrowser/module-description", {
+                module: this.model.toJSON()
+            }));
+        }
         if (this.model.get("settings").helpfile !== false) {
             this.$el.append(KB.Templates.render(this.model.get("settings").helpfile, {
                 module: this.model.toJSON()
@@ -95,7 +101,7 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
         this.options = options || {};
     },
     render: function(el) {
-        if (this.model.get("tpldef")) {
+        if (this.model.get("template")) {
             this.$el.html(KB.Templates.render("backend/modulebrowser/module-template-list-item", {
                 module: this.model.toJSON()
             }));
@@ -155,6 +161,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options) {
         var that = this;
         this.options = options || {};
+        _K.log("module browser initialized");
     },
     tagName: "div",
     id: "module-browser",
@@ -188,6 +195,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         });
         this.listenTo(this.subviews.Navigation, "browser:change", this.update);
         this.listenTo(this.subviews.ModulesList, "createModule", this.createModule);
+        jQuery(".nano").nanoScroller({
+            flash: true
+        });
     },
     close: function() {
         jQuery("#wpwrap").removeClass("module-browser-open");
@@ -537,11 +547,13 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     insertNewUpdateForm: function(response) {
         if (response !== "") {
-            this.$body.html(response);
+            this.$body.html(response.html);
         } else {
             this.$body.html("empty");
         }
+        KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         KB.Ui.repaint(this.$el);
+        KB.Fields.trigger("update");
         this.trigger("kb:backend::viewUpdated");
     },
     fullscreen: function() {
@@ -550,7 +562,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var $stage = jQuery("#kontentblocks_stage");
         $stage.addClass("fullscreen");
         var $title = jQuery(".fullscreen--title-wrapper", $stage);
-        $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + this.model.get("settings").name + "</h2>").show();
+        var $description = jQuery(".fullscreen--description-wrapper", $stage);
+        var titleVal = this.$el.find(".block-title").val();
+        $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + titleVal + "</h2>").show();
+        $description.empty().append("<p class='description'>" + this.model.get("settings").description + "</p>").show();
         jQuery(".fullscreen--close").on("click", _.bind(this.closeFullscreen, this));
         this.$el.addClass("fullscreen-module");
         jQuery("#post-body").removeClass("columns-2").addClass("columns-1");

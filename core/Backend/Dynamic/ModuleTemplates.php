@@ -10,6 +10,7 @@ use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Utils\JSONBridge;
 
 class ModuleTemplates
 {
@@ -97,6 +98,7 @@ class ModuleTemplates
         $moduleDef = ModuleFactory::parseModule($template);
         //set area context on init
         $moduleDef['areaContext'] = $context;
+        $moduleDef['area'] = 'module-template';
 
         // create essential markup and render the module
         // infamous hidden editor hack
@@ -114,8 +116,10 @@ class ModuleTemplates
         $Factory = new ModuleFactory($moduleDef['settings']['class'], $moduleDef, null, $moduleData);
         /** @var $Instance \Kontentblocks\Modules\Module */
         $Instance = $Factory->getModule();
+	    JSONBridge::getInstance()->registerModule($Instance->toJSON());
 
-        // Data for twig
+
+	    // Data for twig
         $templateData = array(
             'nonce' => wp_create_nonce('update-template'),
             'instance' => $Instance
@@ -126,7 +130,6 @@ class ModuleTemplates
         }
 
         // To keep html out of php files as much as possible twig is used
-        // Good thing about twig is it handles unset vars gracefully
         $FormNew = new CoreTemplate('module-template.twig', $templateData);
         $FormNew->render(true);
 
@@ -372,7 +375,7 @@ class ModuleTemplates
 
     /**
      * Gets all available Modules from registry
-     * @param $postData potential incomplete form data
+     * @param array $postData potential incomplete form data
      * @return array
      */
     private function prepareModulesforSelectbox($postData)

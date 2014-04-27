@@ -28,7 +28,7 @@ Class EditScreen
 
     /**
      * Post data Handler
-     * @var objext
+     * @var object
      */
     protected $postData;
 
@@ -99,6 +99,7 @@ Class EditScreen
         echo "<div class='clearfix' id='kontentblocks_stage'>";
         echo "<div class='kb-whiteout' style='display: none;'></div>";
         echo "<div class='fullscreen--title-wrapper' style='display: none;'></div>";
+        echo "<div class='fullscreen--description-wrapper' style='display: none;'></div>";
         // Use nonce for verification
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );

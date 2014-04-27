@@ -23,7 +23,7 @@ class SavePost
      * Save method for post related modules
      * @todo move the code from EditScreen to a new file (done)
      * @todo split this in chunks
-     * @return void
+     * @return false    if auth fails or areas are empty
      */
     public function save()
     {
@@ -106,13 +106,11 @@ class SavePost
                 // store new data in post meta
                 // if this is a preview, save temporary data for previews
                 if ($savedData) {
-
                     if (isset($_POST['wp-preview']) && $_POST['wp-preview'] === 'dopreview') {
-                        update_post_meta($this->postid, '_preview_' . $module['instance_id'], $savedData);
+                       // update_post_meta($this->postid, '_preview_' . $module['instance_id'], $savedData);
                     } // save real data
                     else {
                         $this->Environment->getStorage()->saveModule($module['instance_id'], $savedData);
-
                         delete_post_meta($this->postid, '_preview_' . $module['instance_id']);
                     }
                 }

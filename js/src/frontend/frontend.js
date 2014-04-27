@@ -176,6 +176,11 @@ jQuery(document).ready(function(){
         });
     });
 
+    jQuery( window )
+        .on( 'resize DOMNodeInserted', function() {
+//            jQuery( '.mce-text' ).removeAttr( 'style' );
+        } );
+
 });
 
 //

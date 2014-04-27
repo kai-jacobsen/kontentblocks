@@ -1,7 +1,6 @@
 <?php
 
 
-use Kontentblocks\Backend\API\PluginDataAPI;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\Module;
 

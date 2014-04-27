@@ -126,15 +126,12 @@ KB.Fields.register("File", function($) {
 KB.Fields.register("FlexibleFields", function($) {
     return {
         init: function(modalView) {
-            _K.log("FF init called");
+            _K.info("FF init called");
             $(".flexible-fields--stage", $("body")).each(function(index, el) {
                 var view = modalView || KB.Views.Modules.get($(el).data("module"));
                 var key = $(el).data("fieldkey");
                 var fid = $(el).closest(".kb-js-field-identifier").attr("id");
-                _K.log("FF init called: ", view);
-                if (!view.FlexibleFields) {
-                    view.FlexibleFields = new KB.FlexibleFields(view, fid, key, el);
-                }
+                view[key] = new KB.FlexibleFields(view, fid, key, el);
             });
         },
         update: function() {
@@ -142,13 +139,15 @@ KB.Fields.register("FlexibleFields", function($) {
             this.init();
         },
         frontUpdate: function(modalView) {
-            _K.log("Field shall update on front");
+            _K.info("Field shall update on front");
             this.init(modalView);
         }
     };
 }(jQuery));
 
 KB.FlexibleFields = function(view, fid, key, el) {
+    _K.info("New FF Instance created");
+    _K.info("FF Config", KB.payload.Fields);
     this.$el = jQuery(el);
     this.view = view;
     this.moduleId = view.model.get("instance_id");
@@ -159,7 +158,15 @@ KB.FlexibleFields = function(view, fid, key, el) {
         this.setupConfig();
         this.setupElements();
         this.initialSetup();
-        this.$list.sortable();
+        this.$list.sortable({
+            start: function() {
+                KB.TinyMCE.removeEditors();
+            },
+            stop: function() {
+                KB.TinyMCE.restoreEditors();
+            },
+            handle: ".flexible-fields--js-drag-handle"
+        });
     }
 };
 
@@ -167,15 +174,19 @@ _.extend(KB.FlexibleFields.prototype, {
     initialSetup: function() {
         var that = this;
         var data = null;
-        if (!KB.payload.fieldData) {
+        var moduleId = this.view.model.get("instance_id");
+        var payload = KB.payload;
+        if (!payload.fieldData) {
             return false;
         }
-        if (KB.payload.fieldData["flexible-fields"] && KB.payload.fieldData["flexible-fields"][this.view.model.get("instance_id")]) {
-            data = KB.payload.fieldData["flexible-fields"][this.view.model.get("instance_id")];
+        if (payload.fieldData["flexible-fields"] && payload.fieldData["flexible-fields"][moduleId]) {
+            data = KB.payload.fieldData["flexible-fields"][moduleId][this.fieldKey];
         }
         if (_.toArray(data).length > 0) {
             _.each(data, function(item) {
-                that.addItem(item);
+                if (_.isObject(item)) {
+                    that.addItem(item);
+                }
             });
         }
     },
@@ -184,21 +195,21 @@ _.extend(KB.FlexibleFields.prototype, {
         this.$list = jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
         this.$addButton = jQuery('<a class="button button-primary">Add Item</a>').appendTo(this.$el);
         this.$addButton.on("click", function() {
-            that.addItem();
+            that.addItem({});
         });
     },
     addItem: function(data) {
         var that = this;
-        if (_.isNull(data)) {
+        var $item, $toggleBox, $tabs, $tabnav, uid, name, value, hidden;
+        if (_.isNull(data) || _.isUndefined(data)) {
             return;
         }
-        var index, $item, $toggletitle, $toggleBox, $tabs, $tabnav, uid;
-        uid = data && data.uid ? data._uid : _.uniqueId("ffid");
-        var name = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[tab][title]";
-        var hidden = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[_uid]";
-        var value = data && data.tab ? data.tab.title : "Item #" + uid;
+        uid = data && data._uid ? data._uid : _.uniqueId("ffid");
+        name = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[tab][title]";
+        hidden = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[_uid]";
+        value = data && data.tab ? data.tab.title : "Item #" + uid;
         $item = jQuery('<li class="flexible-fields--list-item"><input type="hidden" name="' + hidden + '" value="' + uid + '"> </li>').appendTo(this.$list);
-        $toggletitle = jQuery('<div class="flexible-fields--toggle-title">' + '<h3><div class="dashicons dashicons-arrow-right flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' + "</div>").appendTo($item);
+        jQuery('<div class="flexible-fields--toggle-title">' + '<h3><span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span><div class="genericon genericon-expand flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' + "</div>").appendTo($item);
         $toggleBox = jQuery('<div class="flexible-fields--toggle-box kb-hide"></div>').appendTo($item);
         $tabs = jQuery('<div class="kb-field--tabs kb_fieldtabs"></div>').appendTo($toggleBox);
         $tabnav = jQuery('<ul class="flexible-field--tab-nav"></ul>').appendTo($tabs);
@@ -209,15 +220,19 @@ _.extend(KB.FlexibleFields.prototype, {
         });
         $tabs.tabs();
     },
-    renderFields: function(tab, $con, index, data) {
+    renderFields: function(tab, $con, uid, data) {
+        var fieldInstance;
         _.each(tab.fields, function(field) {
-            console.log(field);
-            if (data && data[field.config.key]) {
-                field.setValue(data[field.config.key]);
-            } else {
-                field.resetValue();
+            fieldInstance = KB.FieldsAPI.get(field);
+            if (data && data[fieldInstance.get("key")]) {
+                fieldInstance.setValue(data[fieldInstance.get("key")]);
             }
-            $con.append(field.render(index));
+            $con.append(fieldInstance.render(uid));
+            $con.append('<input type="hidden" name="' + fieldInstance.baseId + "[" + uid + "][_mapping][" + fieldInstance.get("key") + ']" value="' + fieldInstance.get("type") + '" >');
+            fieldInstance.$container = $con;
+            if (fieldInstance.postRender) {
+                fieldInstance.postRender.call(fieldInstance);
+            }
         });
     },
     setupConfig: function() {
@@ -237,15 +252,14 @@ _.extend(KB.FlexibleFields.prototype, {
             field.fieldId = that.fid;
             field.key = key;
             field.$parent = that.$el;
-            console.log(field);
-            fields[key] = KB.FieldsAPI.get(field);
+            fields[key] = field;
         });
         return fields;
     }
 });
 
 jQuery("body").on("click", ".flexible-fields--js-toggle", function() {
-    jQuery(this).toggleClass("dashicons-arrow-right dashicons-arrow-down");
+    jQuery(this).toggleClass("genericons-expand genericons.collapse");
     jQuery(this).parent().parent().next("div").slideToggle(450, function() {
         if (KB.FrontendEditModal) {
             KB.FrontendEditModal.trigger("recalibrate");
@@ -422,152 +436,3 @@ KB.Fields.register("Link", function($) {
         }
     };
 }(jQuery));
-
-KB.Fields.register("MultipleImageText", function($) {
-    return {
-        init: function(modalView) {
-            _K.log("MIT init called");
-            $(".kb-mltpl-image-text--stage", $("body")).each(function(index, el) {
-                var view = modalView || KB.Views.Modules.get($(el).data("module"));
-                _K.log("MultipleImageText init called: ", view);
-                if (!view.MIT) {
-                    view.MIT = new KB.MultipleImageText(view);
-                }
-            });
-        },
-        update: function() {
-            _K.log("Fields shall update");
-            this.init();
-        },
-        frontUpdate: function(modalView) {
-            _K.log("Field shall update on front");
-            this.init(modalView);
-        }
-    };
-}(jQuery));
-
-KB.MultipleImageText = function(view) {
-    this.view = view;
-    this.view.on("kb:frontend::viewLoaded", _.bind(this.viewLoaded, this));
-    this.view.on("kb:backend::viewUpdated", this.listen);
-    this.view.on("kb:frontend::viewUpdated", _.bind(this.listen, this));
-    this.view.on("kb:viewAdded", _.bind(this.preInit, this));
-    this.preInit();
-};
-
-_.extend(KB.MultipleImageText.prototype, {
-    preInit: function() {
-        _K.log("MultipleImageText preInit called");
-        $ = jQuery;
-        this.defaults = {
-            content: "",
-            imgid: null,
-            imgsrc: null,
-            label: ""
-        };
-        this.elCount = 0;
-        this.$wrapper = $(".kb-field--wrap", this.view.$el);
-        this.key = this.$wrapper.data("fieldkey");
-        this.$list = $(".kb-generic--list", this.$wrapper);
-        this.$parentEl = this.view.$el;
-        this.selector = ".kb-js--generic-create-item";
-        this.template = $(".template", this.$wrapper).html();
-        this.instance_id = this.view.model.get("instance_id") + "[" + this.key + "]";
-        this.init();
-    },
-    init: function() {
-        var that = this;
-        this.$list.on("mouseover", ".kb-generic--list-item", function() {
-            that.$currentItem = jQuery(this);
-        });
-        this.$wrapper.on("click", this.selector, function() {
-            that.addItem();
-        });
-        this.$wrapper.on("click", ".kb-js-generic-toggle", function() {
-            jQuery(this).not("input").next().slideToggle(350, function() {
-                if (KB.FrontendEditModal) {
-                    KB.FrontendEditModal.recalibrate();
-                }
-            });
-        });
-        this.$wrapper.on("click", ".kb-js-add-custom", function() {
-            that.$imgid = $(".kb-js-generic--imgid", that.$currentItem);
-            that.$imgwrap = $(".kb-generic--image-wrapper", that.$currentItem);
-            if (that.modal) {
-                that.modal.open();
-            } else {
-                that.modal = KB.Utils.MediaWorkflow({
-                    select: _.bind(that.select, that),
-                    buttontext: "Insert",
-                    title: "Insert or upload an image"
-                });
-            }
-        });
-        this.$wrapper.on("click", ".kb-js-generic--delete", function(e) {
-            $(e.currentTarget).closest(".kb-generic--list-item").hide(150).remove();
-        });
-        console.log(this, this.view);
-        this.initialSetup();
-    },
-    initialSetup: function() {
-        var that = this;
-        var mid = this.view.model.get("instance_id");
-        if (!KB.payload.fieldData) {
-            return false;
-        }
-        var data = KB.payload.fieldData["mltpl-image-text"] ? KB.payload.fieldData["mltpl-image-text"][mid] : [];
-        _.each(data, function(item) {
-            that.addItem(item);
-        });
-        $(".kb-generic--list").sortable({
-            handle: ".kb-js-generic--move",
-            stop: function() {
-                KB.TinyMCE.restoreEditors();
-            },
-            start: function() {
-                KB.TinyMCE.removeEditors();
-            }
-        });
-    },
-    addItem: function(data, index) {
-        var moduleData = data || _.extend(this.defaults, this.view.model.get("moduleData"));
-        this.count = index || jQuery(".kb-generic--list-item", this.$list).length;
-        console.log(this);
-        this.$list.append(_.template(this.template, _.extend({
-            base: this.instance_id,
-            counter: this.count
-        }, moduleData)));
-        var $el = jQuery(".kb-generic--list-item", this.$list).last().find(".kb-remote-editor");
-        var editorName = $el.attr("data-name");
-        KB.TinyMCE.remoteGetEditor($el, editorName, $el.html(), this.view.model.get("post_id"), false);
-        jQuery(".kb-generic-tabs").tabs();
-    },
-    viewLoaded: function(externalView) {
-        if (externalView) {
-            this.view = externalView;
-        }
-        this.preInit();
-        KB.FrontendEditModal.recalibrate();
-    },
-    select: function(modal) {
-        var attachment = modal.get("selection").first();
-        var url = attachment.get("sizes").large;
-        this.$imgid.val(attachment.get("id"));
-        this.$imgwrap.empty().append('<img src="' + url.url + '" >');
-    },
-    listen: function() {
-        $(window).trigger("resize");
-        initFlicker(this.view.parentView.el);
-    }
-});
-
-(function($) {
-    return {
-        init: function() {
-            var that = this;
-            if (KB.appData && !KB.appData.config.loggedIn) {
-                return;
-            }
-        }
-    };
-})(jQuery).init();

@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Backend\Areas\AreaRegistry,
+use Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Backend\Areas\Area;
 use Kontentblocks\Utils\JSONBridge;
 

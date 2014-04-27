@@ -11,6 +11,8 @@ KB.Ext = {};
 
 KB.OSConfig = {};
 
+KB.IEdit = {};
+
 _.extend(KB, Backbone.Events);
 
 KB.Ajax = function($) {
@@ -86,7 +88,6 @@ _.extend(KB.Fields, {
     },
     init: function() {
         var that = this;
-        console.log("init");
         _.each(_.toArray(this.fields), function(object) {
             if (object.hasOwnProperty("init")) {
                 object.init();
@@ -141,9 +142,9 @@ KB.Utils.MediaWorkflow = function(args) {
             button: {
                 text: options.buttontext
             },
-            multiple: true,
+            multiple: options.multiple,
             library: {
-                type: "image"
+                type: options.type
             }
         });
         _frame.on("ready", ready);
@@ -229,23 +230,28 @@ KB.Templates = function($) {
         return tmpl_cache;
     }
     function render(tmpl_name, tmpl_data) {
+        var tmpl_string;
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".html";
+            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs";
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;
             }
-            var tmpl_string;
-            $.ajax({
-                url: tmpl_url,
-                method: "GET",
-                async: false,
-                success: function(data) {
-                    tmpl_string = data;
-                }
-            });
-            tmpl_cache[tmpl_name] = _.template(tmpl_string);
+            if (KB.Util.stex.get(tmpl_url)) {
+                tmpl_string = KB.Util.stex.get(tmpl_url);
+            } else {
+                $.ajax({
+                    url: tmpl_url,
+                    method: "GET",
+                    async: false,
+                    success: function(data) {
+                        tmpl_string = data;
+                        KB.Util.stex.set(tmpl_url, tmpl_string, 2 * 1e3 * 60);
+                    }
+                });
+            }
+            tmpl_cache[tmpl_name] = Handlebars.compile(tmpl_string);
         }
         return tmpl_cache[tmpl_name](tmpl_data);
     }
@@ -313,7 +319,6 @@ KB.TinyMCE = function($) {
                         jQuery(document).trigger("newEditor", ed);
                     });
                 };
-                console.log(tinymce.init(settings));
                 var ed = tinymce.init(settings);
                 var qtsettings = {
                     buttons: "",
@@ -327,12 +332,13 @@ KB.TinyMCE = function($) {
                 QTags._buttonsInit();
             }, 1500);
         },
-        remoteGetEditor: function($el, name, content, post_id, media) {
+        remoteGetEditor: function($el, name, id, content, post_id, media) {
             var pid = post_id || KB.Screen.post_id;
-            var id = $el.attr("id");
+            var id = id || $el.attr("id");
             if (!media) {
                 var media = false;
             }
+            console.log(content);
             KB.Ajax.send({
                 action: "getRemoteEditor",
                 editorId: id + "_ed",
@@ -579,6 +585,30 @@ KB.Ui = function($) {
 
 KB.Ui.init();
 
+KB.Util = function($) {
+    return {
+        stex: {
+            set: function(key, val, exp) {
+                store.set(key, {
+                    val: val,
+                    exp: exp,
+                    time: new Date().getTime()
+                });
+            },
+            get: function(key) {
+                var info = store.get(key);
+                if (!info) {
+                    return null;
+                }
+                if (new Date().getTime() - info.time > info.exp) {
+                    return null;
+                }
+                return info.val;
+            }
+        }
+    };
+}(jQuery);
+
 KB.ViewsCollection = function() {
     this.views = {};
     this.lastViewAdded = null;
@@ -619,3 +649,18 @@ KB.ViewsCollection = function() {
 };
 
 _.extend(KB.ViewsCollection.prototype, Backbone.Events);
+
+Handlebars.registerHelper("debug", function(optionalValue) {
+    console.log("Current Context");
+    console.log("====================");
+    console.log(this);
+    if (optionalValue) {
+        console.log("Value");
+        console.log("====================");
+        console.log(optionalValue);
+    }
+});
+
+Handlebars.registerHelper("fieldName", function(base, index, key) {
+    return base + "[" + index + "][" + key + "]";
+});

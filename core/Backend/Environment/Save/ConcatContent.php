@@ -22,10 +22,15 @@ class ConcatContent
         add_action('save_post', array($this, 'save'), 99);
     }
 
+    /**
+     * @param $string
+     *
+     * @return bool
+     */
     public function addString($string)
     {
         if (!is_string($string)) {
-            return false;
+            return;
         }
 
         $this->content .= "\n" . $string;

@@ -3,7 +3,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options){
         var that = this;
         this.options = options || {};
-
+        _K.log('module browser initialized');
     },
     // element tag
     tagName: 'div',
@@ -59,6 +59,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.listenTo(this.subviews.Navigation,'browser:change', this.update);
         this.listenTo(this.subviews.ModulesList,'createModule', this.createModule);
 //        this.subviews.Navigation.bind('browser:change', _.bind(this.update, this));
+        jQuery('.nano').nanoScroller({flash: true });
     },
     // close the browser
     // TODO clean up and remove all references & bindings

@@ -3,7 +3,6 @@
   min-height: 750px;
 
 
-
   .kb-whiteout{
     position: absolute;
     top: 0px;
@@ -15,11 +14,18 @@
     z-index: 49;
   }
 
+  .fullscreen--description-wrapper{
+    position: relative;
+    z-index: 53;
+    top: 25px;
+    left: 45px;
+  }
+
   .fullscreen--title-wrapper{
-    position: absolute;
+    position: relative;
     z-index: 50;
-    left: 15px;
-    top:15px;
+    left: 45px;
+    top:40px;
 
     h2{
       font-family: 'open sans';
@@ -28,17 +34,18 @@
     }
 
     .fullscreen--close:before{
-      content: "\f335";
+      content: '\f406';
       width: 15px;
       height: 15px;
       display: block;
-      color: #333;
       position: absolute;
-      top: -8px;
-      left: -8px;
+      top: -30px;
+      left: -35px;
       z-index: 52;
-      font-family: 'dashicons';
-      font-size: 25px;
+      font-family: 'genericons';
+      font-size: 16px;
+      cursor: pointer;
+      color:#999;
     }
 
   }
@@ -58,7 +65,7 @@
     }
 
     .menu-wrap{
-      top: -50px;
+      display: none;
     }
 
     .kb_inner{

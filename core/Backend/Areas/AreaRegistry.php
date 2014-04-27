@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Backend\Areas;
 
-use Kontentblocks\Backend\API\AreaTableAPI;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Language\I18n;
 
