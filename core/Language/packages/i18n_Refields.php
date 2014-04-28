@@ -16,6 +16,13 @@
         'remove' => __( 'Remove', 'Kontentblocks' ),
         'modalTitle' => __( 'Select a file or upload a new one', 'Kontentblocks' )
     ),
+	// Field::Link
+    'link' => array(
+	    'linktext' => __( 'Buttonlabel', 'Kontentblocks' ),
+	    'linktitle' => __( 'Titleattribute', 'Kontentblocks' ),
+	    'linklabel' => __( 'URL', 'Kontentblocks' ),
+	    'addLink' => __('Add link', 'Kontentblocks')
+    ),
     // Field::Image
     'image' => array(
         'caption' => __( 'Caption', 'Kontentblocks' ),

@@ -2,10 +2,10 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Abstracts\AbstractFieldReturn;
+use Kontentblocks\Abstracts\AbstractEditableFieldReturn;
 use Kontentblocks\Utils\JSONBridge;
 
-class Element extends AbstractFieldReturn {
+class Element extends AbstractEditableFieldReturn {
 
 	/**
 	 * The wrapper element name to us

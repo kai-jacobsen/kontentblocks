@@ -6,7 +6,7 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Interfaces\InterfaceFieldReturn;
 
 
-abstract class AbstractFieldReturn implements InterfaceFieldReturn {
+abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
 	public $value;
 

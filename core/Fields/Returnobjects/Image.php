@@ -2,11 +2,11 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Abstracts\AbstractFieldReturn;
+use Kontentblocks\Abstracts\AbstractEditableFieldReturn;
 use Kontentblocks\Utils\ImageResize;
 use Kontentblocks\Utils\JSONBridge;
 
-class Image extends AbstractFieldReturn
+class Image extends AbstractEditableFieldReturn
 {
 
     protected $width = 150;

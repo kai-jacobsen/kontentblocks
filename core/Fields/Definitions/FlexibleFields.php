@@ -55,7 +55,7 @@ Class FlexibleFields extends Field {
 	 */
 	public function save( $new, $old ) {
 
-		if (is_null($new)){
+		if ( is_null( $new ) ) {
 			return $old;
 		}
 
@@ -72,11 +72,12 @@ Class FlexibleFields extends Field {
 			}
 
 			foreach ( $field['_mapping'] as $key => $type ) {
-				$fieldInstance          = FieldRegistry::getInstance()->getField( $type );
+				$fieldInstance = FieldRegistry::getInstance()->getField( $type );
 				$field[ $key ] = $fieldInstance->save( $field[ $key ], $old );
 			}
 
 		}
+
 		return $new;
 	}
 

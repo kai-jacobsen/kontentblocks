@@ -141,13 +141,14 @@ abstract class Field {
 	/**
 	 * Set field data
 	 * Data from _POST[{baseid}[$this->key]]
+	 * Gets called on front- and backend
 	 *
 	 * @param mixed $data
 	 *
 	 * @since 1.0.0
 	 */
 	public function setData( $data ) {
-		$this->value = $this->_sanitize( $data );
+		$this->value = $this->sanitize( $data );
 	}
 
 	/**
@@ -179,17 +180,15 @@ abstract class Field {
 
 	/**
 	 * Get a special object for the field type if field has one set
-	 * @TODO: Revise if there should be one default object
-	 * @TODO: should be possible to provide an custom object as well
+	 * @TODO Kind of Registry for Return Objects
+	 * @TODO Overall logic is fuxxed up
 	 * @since 1.0.0
 	 * @return object
 	 */
 	public function getReturnObj() {
 		if ( ! $this->returnObj && $this->getArg( 'returnObj' ) ) {
 			$classname = $this->getArg( 'returnObj' );
-			if ( ! $classname ) {
-				return;
-			}
+
 			// first try
 			$classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
 			if ( class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true ) ) {
@@ -203,8 +202,8 @@ abstract class Field {
 
 			return $this->returnObj;
 		} else {
-//            $this->returnObj = new \Kontentblocks\Fields\Returnobjects\StandardFieldReturn( $this->value);
-//            return $this->returnObj;
+//			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
+//			return $this->returnObj;
 			return $this->value;
 		}
 
@@ -355,7 +354,6 @@ abstract class Field {
 			return $this->getValueFromArray( $arrKey );
 		}
 
-
 		if ( method_exists( $this, 'inputFilter' ) ) {
 			return $this->inputFilter( $this->value );
 		}
@@ -385,7 +383,7 @@ abstract class Field {
 
 	}
 
-	public function _sanitize( $value ) {
+	public function sanitize( $value ) {
 		if ( method_exists( $this, 'outputFilter' ) ) {
 			return $this->outputFilter( $value );
 		} else {
