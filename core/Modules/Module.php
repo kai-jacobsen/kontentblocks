@@ -59,7 +59,6 @@ abstract class Module
             $this->setEnvVarsFromEnvironment($environment);
         }
 
-
         if (method_exists($this, 'fields')) {
             $this->Fields = new FieldManager($this);
             $this->fields();
@@ -111,7 +110,6 @@ abstract class Module
     final public function module($data = null)
     {
 
-
         if (is_null($data) && !is_null($this->moduleData)) {
             $data = $this->moduleData;
         }
@@ -142,7 +140,7 @@ abstract class Module
      */
     public function setup()
     {
-
+		_deprecated_function('Module:setup()', '1.0.0', null);
     }
 
     public function saveFields($data, $old)
@@ -199,14 +197,15 @@ abstract class Module
         if ($this->settings['disabled']) {
             echo "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         } else {
-            // output the form fields for this block
+            // output the form fields for this module
             if (isset($this->Fields)) {
                 $this->Fields->data = $this->moduleData;
             }
             $this->options($this->moduleData);
         }
 
-        echo $this->footer();
+	    // essentially calls wp actions
+        $this->footer();
 
         echo $this->_closeInner();
 
@@ -251,8 +250,9 @@ abstract class Module
 
     }
 
-    /*
+    /**
      * Outputs everything inside the block
+     * @TODO clean up module header from legacy code
      */
 
     private function _openInner()
@@ -265,7 +265,6 @@ abstract class Module
             echo $lockedmsg;
         } else {
             $description = (!empty($this->settings['description'])) ? __('<strong><em>Beschreibung:</em> </strong>') . $this->settings['description'] : '';
-            $l18n_block_title = __('Modul Bezeichnung', 'kontentblocks');
             $l18n_draft_status = ($this->state['draft'] === true) ? '<p class="kb_draft">' . __('This Module is a draft and won\'t be public until you publish or update the post', 'kontentblocks') . '</p>' : '';
 
             $out .= "<div class='kb_block_title'>";
@@ -349,44 +348,28 @@ abstract class Module
 
     }
 
+
     public function _print_edit_link($post_id = null)
     {
+	    _doing_it_wrong('_print_edit_link', 'Deprecated', '1.0.0');
 
     }
 
     /**
      * On Site Edit link for logged in users
+     * @TODO Deprecate
      */
     public function print_edit_link($post_id = null)
     {
 
         global $post;
-
+		_doing_it_wrong('print_edit_link', 'Deprecated', '1.0.0');
         $edittext = (!empty($this->settings['os_edittext'])) ? $this->setting['os_edittext'] : __('edit');
 
 
         if ($post_id === null)
             $post_id = (!empty($_REQUEST['post_id'])) ? $_REQUEST['post_id'] : $post->ID;
 
-
-        // overrides for master templates
-//        if ( !empty( $this->master ) && $this->master === true ) {
-//
-//            $tpls = $Kontentblocks->get_block_templates();
-//
-//            $reference = (isset( $this->master_reference )) ? $this->master_refeference : null;
-//
-//            if ( !$reference ) {
-//                $reference = $this->instance_id;
-//            }
-//
-//
-//            $block       = $tpls[ $reference ];
-//            $class       = $block[ 'class' ];
-//            $context     = 'false';
-//            $instance_id = $reference;
-//            $link_class  = 'master';
-//        }
 
 
         $nonce = wp_create_nonce('onsiteedit');
@@ -405,7 +388,12 @@ abstract class Module
      *
      */
 
-    public function set($args)
+	/**
+	 * Generic set method to add module properties
+	 * if a set*PropertyName* method exist, it gets called
+	 * @param $args
+	 */
+	public function set($args)
     {
         if (!is_array($args)) {
             _doing_it_wrong('set() on block instance', '$args must be an array of key/value pairs', '1.0.0');
@@ -422,18 +410,30 @@ abstract class Module
 
     }
 
-    public function setEnvVars($vars)
+	/**
+	 * Extend envVars wirh additional given vars
+	 * @param $vars
+	 */
+	public function setEnvVars($vars)
     {
         $this->envVars = wp_parse_args($this->envVars, $vars);
     }
 
-    public function setAreaContext($areaContext)
+	/**
+	 * Set area context of module
+	 * @param $areaContext
+	 */
+	public function setAreaContext($areaContext)
     {
         $this->areaContext = $areaContext;
 
     }
 
-    public function getAreaContext()
+	/**
+	 * Get area context of module
+	 * @return mixed
+	 */
+	public function getAreaContext()
     {
         if (isset($this->areaContext)) {
             return $this->areaContext;
@@ -443,9 +443,13 @@ abstract class Module
 
     }
 
-    public function setEnvVarsfromEnvironment($environment)
+	/**
+	 * If an Environment is given, add from that
+	 * and further extend envVars
+	 * @param $environment
+	 */
+	public function setEnvVarsfromEnvironment($environment)
     {
-
         $this->envVars = wp_parse_args($this->envVars, array(
             'postType' => $environment->get('postType'),
             'pageTemplate' => $environment->get('pageTemplate'),
@@ -463,6 +467,7 @@ abstract class Module
      */
     public function set_status($status)
     {
+	    _doing_it_wrong('set_status','Must not be used anymore', '1.0.0');
         if ($status == 'kb_inactive') {
             $this->state['active'] = false;
         } elseif ($status == 'kb_active' or $status == '') {
@@ -477,6 +482,7 @@ abstract class Module
      */
     public function set_draft($draft)
     {
+	    _doing_it_wrong('set_draft', 'Must not be used anymore', '1.0.0');
         if ($draft == 'true') {
             $this->state['draft'] = true;
         } elseif ($draft == 'false') {
@@ -491,11 +497,20 @@ abstract class Module
      */
     public function get($key = null, $return = '')
     {
+	    _doing_it_wrong('get', 'MUST not be used anymore', '1.0.0');
         return (!empty($this->moduleData[$key])) ? $this->moduleData[$key] : $return;
 
     }
 
-    public function getData($key = null, $arrayKey = null, $return = '')
+	/**
+	 * Get value from prepared / after field setup / data
+	 * @param string $key
+	 * @param string $arrayKey
+	 * @param mixed $return
+	 *
+	 * @return mixed
+	 */
+	public function getData($key = null, $arrayKey = null, $return = '')
     {
         if (empty($this->moduleData) or empty($key)) {
             return false;
@@ -508,7 +523,15 @@ abstract class Module
 
     }
 
-    public function getRawData($key = null, $arrayKey = null, $return = '')
+	/**
+	 * Get value from unprepared / unfiltered original module data
+	 * @param string $key
+	 * @param string $arrayKey
+	 * @param mixed $return
+	 * @TODO arrayKey should be handled differently
+	 * @return bool|string
+	 */
+	public function getRawData($key = null, $arrayKey = null, $return = '')
     {
         if (empty($this->rawModuleData) or empty($key)) {
             return false;
@@ -521,13 +544,23 @@ abstract class Module
 
     }
 
-    public function getDataObj($key = null)
+	/**
+	 * @TODO Test if in use?
+	 * @param null $key
+	 */
+	public function getDataObj($key = null)
     {
         $test = $this->Fields->getFieldByKey($key);
 
     }
 
-    public function getEnvVar($var)
+	/**
+	 * Get value from environment vars array
+	 * @param $var string
+	 * @since 1.0.0
+	 * @return mixed|null
+	 */
+	public function getEnvVar($var)
     {
         if (isset($this->envVars[$var])) {
             return $this->envVars[$var];
@@ -537,7 +570,12 @@ abstract class Module
 
     }
 
-    public function getSetting($var)
+	/**
+	 * Get a single module setting
+	 * @param $var string setting key
+	 * @return mixed|null
+	 */
+	public function getSetting($var)
     {
         if (isset($this->settings[$var])) {
             return $this->settings[$var];
@@ -548,29 +586,45 @@ abstract class Module
     }
 
 
-    /*
+    /**
      * Set Additional data
+     * @since 1.0.0
      */
-
     public function setData($key, $value)
     {
         $this->moduleData[$key] = $value;
 
     }
 
-    public function getPath()
+	/**
+	 * Absolute path to class
+	 * Get's set upon registration
+	 * @since 1.0.0
+	 * @return string
+	 */
+	public function getPath()
     {
         return $this->getSetting('path');
 
     }
 
-    public function getUri()
+	/**
+	 * Get's set upon registration
+	 * @since 1.0.0
+	 * @return string URI of module
+	 */
+	public function getUri()
     {
         return $this->getSetting('uri');
 
     }
 
-    public function isPublic()
+	/**
+	 * Check if module has attributes which make it non-public
+	 * @since 1.0.0
+	 * @return bool
+	 */
+	public function isPublic()
     {
         if ($this->getSetting('disabled') || $this->getSetting('hidden')){
             return false;
@@ -586,8 +640,6 @@ abstract class Module
     public function toJSON()
     {
 
-
-
         // todo only used on frontend
         $toJSON = array(
             'envVars' => $this->envVars,
@@ -602,8 +654,7 @@ abstract class Module
             'inDynamic' => AreaRegistry::getInstance()->isDynamic($this->area),
             'uri' => $this->getUri()
         );
-
-
+		// only for master templates
         if (isset($this->master) && $this->master) {
             $toJSON['master'] = true;
             $toJSON['master_id'] = $this->master_id;
@@ -614,12 +665,17 @@ abstract class Module
 
     }
 
-    public static function getDefaults()
+	/**
+	 * Module default settings array
+	 * @since 1.0.0
+	 * @return array
+	 */
+	public static function getDefaults()
     {
 
         return array(
             'disabled' => false,
-            'publicName' => 'Give me Name',
+            'publicName' => 'Module Name Missing',
             'name' => '',
             'wrap' => true,
             'wrapperClasses' => '',
@@ -635,7 +691,12 @@ abstract class Module
 
     }
 
-    public static function getDefaultState()
+	/**
+	 * Default State after creation
+	 * @since 1.0.0
+	 * @return array
+	 */
+	public static function getDefaultState()
     {
         return array(
             'active' => true,
@@ -644,7 +705,12 @@ abstract class Module
 
     }
 
-    public function getStatusClass()
+	/**
+	 * Returns a string indicator for the current status
+	 * @since 1.0.0
+	 * @return string
+	 */
+	public function getStatusClass()
     {
         if ($this->state['active']) {
             return 'activated';
@@ -654,7 +720,11 @@ abstract class Module
 
     }
 
-    public function _addAreaAttributes($args)
+	/**
+	 * Add area Attributes to env vars
+	 * @param $args
+	 */
+	public function _addAreaAttributes($args)
     {
         if ($this->envVars) {
             $this->envVars += $args;
@@ -662,7 +732,12 @@ abstract class Module
 
     }
 
-    public function getModuleName()
+	/**
+	 * Get public module name
+	 * @return mixed
+	 * @since 1.0.0
+	 */
+	public function getModuleName()
     {
         if (isset($this->overrides)) {
             return $this->overrides['name'];
