@@ -5,7 +5,8 @@ namespace Kontentblocks\Backend\Storage;
 
 /**
  * Class BackupManager
- * @package Kontentblocks\Backend\Storage
+ * @package Kontentblocks
+ * @subpackage Backend
  * @since 1.0.0
  *
  * Interact with custom backup table
@@ -191,6 +192,7 @@ class BackupManager
         if ($cache !== false) {
             return $cache;
         } else {
+	        // @TODO Use $wpdb
             $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
             $result = $wpdb->get_row($sql);
             wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');

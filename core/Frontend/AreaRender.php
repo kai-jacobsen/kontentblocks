@@ -4,178 +4,221 @@ namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Utils\JSONBridge;
 
-class AreaRender
-{
+/**
+ * Class AreaRender
+ * Handles the frontend output for an area and containing modules
+ *
+ * Usage:
+ * - simplified failsafe method: do_action('area', '## id of area ##', '## optional post id or null ##', $args)
+ * - manual method: $Render = new \Kontentblocks\Frontend\AreaRender($id, $postId, $args);
+ *                  $Render->render($echo);
+ * @package Kontentblocks\Render
+ */
+class AreaRender {
 
-    protected $area;
-    protected $environment;
-    protected $modules;
-    private $position = 1;
-    private $previousModule;
-    private $repeating;
+	/**
+	 * @var AreaOutput
+	 */
+	protected $AreaOutput;
 
-    public function __construct($postId, $area, $additionalArgs)
-    {
-        if (!isset($postId) || !isset($area)) {
-            return;
-        }
+	/**
+	 * @var \Kontentblocks\Backend\Environment\PostEnvironment
+	 */
+	protected $Environment;
 
-        $this->environment = \Kontentblocks\Helper\getEnvironment($postId);
-        $modules = $this->environment->getModulesforArea($area);
+	/**
+	 * @var ModuleIterator
+	 */
+	protected $modules;
 
-        if (!$modules) {
-            return;
-        } else {
-            $this->modules = new ModuleIterator($modules, $this->environment);
-        }
+	/**
+	 * Position
+	 * @var int
+	 */
+	private $position = 1;
 
-        $this->area = new AreaOutput(
-            $this->environment->getAreaDefinition($area), $this->environment->getAreaSettings($area), $additionalArgs);
+	/**
+	 * @var \Kontentblocks\Modules\Module
+	 */
+	private $previousModule;
 
-    }
+	/**
+	 * Flag if prev. module type equals current
+	 * @var bool
+	 */
+	private $repeating;
 
-    public function render($echo)
-    {
-        if (!$this->_validate()) {
-            return false;
-        }
+	/**
+	 * Class constructor
+	 *
+	 * @param $postId int
+	 * @param $area string area id
+	 * @param $additionalArgs array
+	 */
+	public function __construct( $postId, $area, $additionalArgs ) {
+		if ( ! isset( $postId ) || ! isset( $area ) ) {
+			return;
+		}
 
-        // ----------------------------
-        // Output starts here
-        // ----------------------------
+		$this->Environment = \Kontentblocks\Helper\getEnvironment( $postId );
+		$modules           = $this->Environment->getModulesforArea( $area );
 
-        $output = '';
+		if ( ! $modules ) {
+			return;
+		} else {
+			$this->modules = new ModuleIterator( $modules, $this->Environment );
+		}
 
-        // start area output & crete opening wrapper
-        $output .= $this->area->openArea();
+		// setup AreaOutput
+		$this->AreaOutput = new AreaOutput(
+			$this->Environment->getAreaDefinition( $area ),
+			$this->Environment->getAreaSettings( $area ),
+			$additionalArgs );
 
-        // Iterate over modules (ModuleIterator)
-        foreach ($this->modules as $module) {
+	}
 
-            if (is_null($module)){
-                continue;
-            }
-            // TODO whoooo bad
-            // quick fix to test onsite editing
-            // module->module will, depending on field configuration, modify moduleData
-            $module->rawModuleData = $module->moduleData;
+	public function render( $echo ) {
+		if ( ! $this->_validate() ) {
+			return false;
+		}
 
+		// ----------------------------
+		// Output starts here
+		// ----------------------------
 
-            $output .= $this->beforeModule($this->_beforeModule($module), $module);
-            $output .= $module->module($module->moduleData);
+		$output = '';
 
-            $output .= $this->afterModule($this->_afterModule($module), $module);
-        }
+		// start area output & create opening wrapper
+		$output .= $this->AreaOutput->openArea();
 
-        // close area wrapper
-        $output .= $this->area->closeArea();
+		/**
+		 * @var \Kontentblocks\Modules\Module $module
+		 */
+		// Iterate over modules (ModuleIterator)
+		foreach ( $this->modules as $module ) {
 
+			if ( is_null( $module ) ) {
+				continue;
+			}
+			// TODO whoooo bad
+			// quick fix to test onsite editing
+			// module->module will, depending on field configuration, modify moduleData
+			$module->rawModuleData = $module->moduleData;
 
-        if ($echo) {
-            echo $output;
-        } else {
-            return $output;
-        }
+			$output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
+			$output .= $module->module( $module->moduleData );
 
-    }
+			$output .= $this->afterModule( $this->_afterModule( $module ), $module );
+		}
 
-    public function beforeModule($classes, $module)
-    {
-
-
-        $layout = $this->area->getCurrentLayoutClasses();
-
-        if (!empty($layout)) {
-            return sprintf('<div class="wrap %3$s"><div id="%1$s" class="%2$s">', $module->instance_id, implode(' ', $classes), implode(' ', $layout));
-        } else {
-            return sprintf('<div id="%1$s" class="%2$s">', $module->instance_id, implode(' ', $classes));
-
-        }
-
-    }
-
-    public function afterModule($_after, $module)
-    {
-        JSONBridge::getInstance()->registerModule($module->toJSON());
-
-        $layout = $this->area->getCurrentLayoutClasses();
-        if (!empty($layout)) {
-            return "</div></div>";
-        } else {
-            return "</div>";
-
-        }
-
-
-    }
-
-    public function _beforeModule($module)
-    {
+		// close area wrapper
+		$output .= $this->AreaOutput->closeArea();
 
 
-        $module->_addAreaAttributes($this->area->getPublicAttributes());
-        $layoutClasses = $this->area->getCurrentLayoutClasses();
-        $moduleClasses = $this->modules->getCurrentModuleClasses();
-        $additionalClasses = $this->getAdditionalClasses($module);
+		if ( $echo ) {
+			echo $output;
+		} else {
+			return $output;
+		}
 
-        $mergedClasses = array_merge( $moduleClasses, $additionalClasses);
-        if (method_exists($module, 'preRender')) {
-            $module->preRender();
-        }
-        return $mergedClasses;
+	}
 
-    }
+	public function beforeModule( $classes, $module ) {
 
-    public function _afterModule($module)
-    {
-        $this->previousModule = $module->settings['id'];
-        $this->position++;
-        $this->area->nextLayout();
 
-    }
+		$layout = $this->AreaOutput->getCurrentLayoutClasses();
 
-    public function _validate()
-    {
-        if (!isset($this->area)) {
-            return false;
-        }
-        return true;
+		if ( ! empty( $layout ) ) {
+			return sprintf( '<div class="wrap %3$s"><div id="%1$s" class="%2$s">',
+				$module->instance_id,
+				implode( ' ', $classes ),
+				implode( ' ', $layout ) );
+		} else {
+			return sprintf( '<div id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ) );
 
-    }
+		}
 
-    public function getAdditionalClasses($module)
-    {
-        $classes = array();
+	}
 
-        $classes[] = $module->settings['id'];
+	public function afterModule( $_after, $module ) {
+		JSONBridge::getInstance()->registerModule( $module->toJSON() );
 
-        if ($this->position === 1) {
-            $classes[] = 'first-module';
-        }
+		$layout = $this->AreaOutput->getCurrentLayoutClasses();
+		if ( ! empty( $layout ) ) {
+			return "</div></div>";
+		} else {
+			return "</div>";
 
-        if ($this->position === count($this->modules)) {
-            $classes[] = 'last-module';
-        }
+		}
 
-        if (is_user_logged_in()) {
-            $classes[] = 'os-edit-container';
-        }
 
-        if ($this->previousModule === $module->settings['id']) {
-            $classes[] = 'repeater';
-            $this->repeating = true;
-        } else {
-            $this->repeating = false;
-        }
+	}
 
-        if ($this->repeating && $this->area->getSetting('mergeRepeating')) {
-            $classes[] = 'module-merged';
-        } else {
-            $classes[] = 'module';
-        }
+	public function _beforeModule( $module ) {
 
-        return $classes;
 
-    }
+		$module->_addAreaAttributes( $this->AreaOutput->getPublicAttributes() );
+		$layoutClasses     = $this->AreaOutput->getCurrentLayoutClasses();
+		$moduleClasses     = $this->modules->getCurrentModuleClasses();
+		$additionalClasses = $this->getAdditionalClasses( $module );
+
+		$mergedClasses = array_merge( $moduleClasses, $additionalClasses );
+		if ( method_exists( $module, 'preRender' ) ) {
+			$module->preRender();
+		}
+
+		return $mergedClasses;
+
+	}
+
+	public function _afterModule( $module ) {
+		$this->previousModule = $module->settings['id'];
+		$this->position ++;
+		$this->AreaOutput->nextLayout();
+
+	}
+
+	public function _validate() {
+		if ( ! isset( $this->AreaOutput ) ) {
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public function getAdditionalClasses( $module ) {
+		$classes = array();
+
+		$classes[] = $module->settings['id'];
+
+		if ( $this->position === 1 ) {
+			$classes[] = 'first-module';
+		}
+
+		if ( $this->position === count( $this->modules ) ) {
+			$classes[] = 'last-module';
+		}
+
+		if ( is_user_logged_in() ) {
+			$classes[] = 'os-edit-container';
+		}
+
+		if ( $this->previousModule === $module->settings['id'] ) {
+			$classes[]       = 'repeater';
+			$this->repeating = true;
+		} else {
+			$this->repeating = false;
+		}
+
+		if ( $this->repeating && $this->AreaOutput->getSetting( 'mergeRepeating' ) ) {
+			$classes[] = 'module-merged';
+		} else {
+			$classes[] = 'module';
+		}
+
+		return $classes;
+
+	}
 
 }

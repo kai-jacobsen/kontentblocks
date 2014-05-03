@@ -2,118 +2,195 @@
 
 namespace Kontentblocks\Utils;
 
-class JSONBridge
-{
+class JSONBridge {
 
-    protected $data = array();
-    protected $publicData = array();
-    protected $modules = array();
-    protected $areas = array();
-    protected $fieldData = array();
+	protected $data = array();
+	protected $publicData = array();
+	protected $modules = array();
+	protected $areas = array();
+	protected $fieldData = array();
 
-    protected static $instance;
+	/**
+	 * @var \Kontentblocks\Utils\JSONBridge
+	 */
+	protected static $instance;
 
-    /**
-     * Singleton Pattern
-     * original instantiated on plugin startup
-     * @return object | Area directory instance
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
+	/**
+	 * Singleton Pattern
+	 * original instantiated on plugin startup
+	 * @return object | Area directory instance
+	 */
+	public static function getInstance() {
+		if ( null == self::$instance ) {
+			self::$instance = new self;
+		}
 
-        return self::$instance;
+		return self::$instance;
 
-    }
+	}
 
-    private function __construct()
-    {
-        if (is_user_logged_in() && current_user_can('edit_kontentblocks')) {
-            add_action('wp_print_footer_scripts', array($this, 'printJSON'), 9);
-            add_action('admin_footer', array($this, 'printJSON'), 9);
-        }
-        add_action('wp_print_footer_scripts', array($this, 'printPublicJSON'), 9);
-        add_action('admin_footer', array($this, 'printPublicJSON'), 9);
+	/**
+	 * Class constructor
+	 *
+	 * @action wp_print_footer_script
+	 * @action admin_footer
+	 */
+	private function __construct() {
+		if ( is_user_logged_in() && current_user_can( 'edit_kontentblocks' ) ) {
+			add_action( 'wp_print_footer_scripts', array( $this, 'printJSON' ), 9 );
+			add_action( 'admin_footer', array( $this, 'printJSON' ), 9 );
+		}
+		add_action( 'wp_print_footer_scripts', array( $this, 'printPublicJSON' ), 9 );
+		add_action( 'admin_footer', array( $this, 'printPublicJSON' ), 9 );
 
-    }
+	}
 
+	/**
+	 * Register arbitrary data
+	 *
+	 * @param string $group key of collection
+	 * @param string $key key of data entry
+	 * @param mixed $data value of data entry
+	 *
+	 * @since 1.0.0
+	 * @return object self
+	 */
+	public function registerData( $group, $key, $data ) {
 
-    public function registerData($group, $key, $data)
-    {
+		if ( is_null( $key ) ) {
+			$this->data[ $group ] = $data;
+		} else {
+			$this->data[ $group ][ $key ] = $data;
+		}
 
-        if (is_null($key)) {
-            $this->data[$group] = $data;
-        } else {
-            $this->data[$group][$key] = $data;
-        }
-        return $this;
-    }
+		return $this;
+	}
 
-    public function registerPublicData($group, $key, $data)
-    {
-        if (is_null($key)) {
-            $this->publicData[$group] = $data;
-        } else {
-            $this->publicData[$group][$key] = $data;
-        }
-        return $this;
-    }
+	/**
+	 * Register data which must be available to not logged in users
+	 *
+	 * @param string $group key of collection
+	 * @param string $key key of data entry
+	 * @param mixed $data value of data entry
+	 *
+	 * @since 1.0.0
+	 * @return object self
+	 */
+	public function registerPublicData( $group, $key, $data ) {
+		if ( is_null( $key ) ) {
+			$this->publicData[ $group ] = $data;
+		} else {
+			$this->publicData[ $group ][ $key ] = $data;
+		}
 
-    public function registerFieldData($modid, $type, $data, $key)
-    {
-        $this->fieldData[$type][$modid][$key] = $data;
-    }
+		return $this;
+	}
 
+	/**
+	 * Register data of a field
+	 *
+	 * @param string $modid should be the module instance_id
+	 * @param string $type field type
+	 * @param mixed $data
+	 * @param string $key key of field
+	 *
+	 * @since 1.0.0
+	 * @return object $this
+	 */
+	public function registerFieldData( $modid, $type, $data, $key ) {
+		$this->fieldData[ $type ][ $modid ][ $key ] = $data;
 
-    public function registerModule($module)
-    {
-        $this->modules[$module['instance_id']] = $module;
-    }
+		return $this;
+	}
 
-    public function registerModules($modules)
-    {
-        if (!is_array($modules)) {
-            return false;
-        }
+	/**
+	 * Register module definition
+	 *
+	 * @param array $module module definition array
+	 *
+	 * @since 1.0.0
+	 * @return object $this
+	 */
+	public function registerModule( $module ) {
+		$this->modules[ $module['instance_id'] ] = $module;
 
-        foreach ($modules as $module) {
-            $this->registerModule($module);
-        }
-    }
+		return $this;
+	}
 
-    public function registerArea($area)
-    {
-        $this->areas[$area['id']] = $area;
-    }
+	/**
+	 * Wrapper to register multiple modules at once
+	 *
+	 * @param array $modules array of module definitions
+	 *
+	 * @since 1.0.0
+	 * @return false|void
+	 */
+	public function registerModules( $modules ) {
+		if ( ! is_array( $modules ) ) {
+			return false;
+		}
 
+		foreach ( $modules as $module ) {
+			$this->registerModule( $module );
+		}
+	}
 
-    public function printJSON()
-    {
-        $this->data['Modules'] = $this->modules;
-        $this->data['Areas'] = $this->areas;
-        $this->data['fieldData'] = $this->fieldData;
-        $json = json_encode($this->data);
+	/**
+	 * Register area definition
+	 *
+	 * @param array $area
+	 *
+	 * @since 1.0.0
+	 * @return object $this
+	 */
+	public function registerArea( $area ) {
+		$this->areas[ $area['id'] ] = $area;
 
-        print "<script>var KB = KB || {}; KB.payload = {}; KB.payload =  {$json};</script>";
-    }
+		return $this;
+	}
 
-    public function printPublicJSON()
-    {
+	/**
+	 * Output collected data in footer
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function printJSON() {
+		$this->data['Modules']   = $this->modules;
+		$this->data['Areas']     = $this->areas;
+		$this->data['fieldData'] = $this->fieldData;
+		$json                    = json_encode( $this->data );
 
-        $json = json_encode($this->publicData);
+		print "<script>var KB = KB || {}; KB.payload = {}; KB.payload =  {$json};</script>";
+	}
 
-        print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json}; KB.on = jQuery.noop;</script>";
-    }
+	/**
+	 * Output public data
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function printPublicJSON() {
 
-    public function getJSON()
-    {
-        $this->data['Modules'] = $this->modules;
-        $this->data['Areas'] = $this->areas;
-	    $this->data['fieldData'] = $this->fieldData;
-        return $this->data;
-    }
+		$json = json_encode( $this->publicData );
+		print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json}; KB.on = jQuery.noop;</script>";
+	}
 
+	/**
+	 * Get relevant raw data
+	 *
+	 * Used during ajax calls
+	 * Result gets merged with existing data by the corresponding caller (javascript)
+	 *
+	 * @since 1.0.0
+	 * @return array
+	 */
+	public function getJSON() {
+		$this->data['Modules']   = $this->modules;
+		$this->data['Areas']     = $this->areas;
+		$this->data['fieldData'] = $this->fieldData;
+
+		return $this->data;
+	}
 
 }
