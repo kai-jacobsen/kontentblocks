@@ -23,10 +23,10 @@ class Capabilities
         $options = get_option( 'kontentblocks_capabilities' );
 
         // TODO HOTFIX
-        if ( !empty( $options ) ) {
+        if ( empty( $options ) ) {
             update_option( 'kontentblocks_capabilities', $this->capabilities );
 
-            $caps = ( empty( $options )) ? $caps : $options;
+            $caps = ( empty( $options )) ? $options : $options;
 
             foreach ( $caps as $role => $set ) {
                 $role = get_role( $role );

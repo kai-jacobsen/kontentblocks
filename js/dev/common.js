@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-30 */
+/*! Kontentblocks DevVersion 2014-05-11 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -97,13 +97,12 @@ _.extend(KB.Fields, {
         });
     },
     newModule: function(object) {
-        _K.log("new Module added for Fields");
+        _K.info("new Module added for Fields");
         var that = this;
         object.listenTo(this, "update", object.update);
         object.listenTo(this, "frontUpdate", object.frontUpdate);
         setTimeout(function() {
             that.trigger("update");
-            console.log("triggered");
         }, 750);
     },
     get: function(id) {
@@ -120,6 +119,8 @@ KB.Fields.addEvent();
 Logger.useDefaults();
 
 var _K = Logger.get("_K");
+
+_K.setLevel(_K.INFO);
 
 if (!kontentblocks.config.dev) {
     _K.setLevel(Logger.OFF);
@@ -223,6 +224,44 @@ KB.Notice = function($) {
     };
 }(jQuery);
 
+KB.Payload = function($) {
+    return {
+        getFieldData: function(type, moduleId, key, arrayKey) {
+            var typeData;
+            if (this._typeExists(type)) {
+                typeData = KB.payload.fieldData[type];
+                if (!typeData[moduleId]) {
+                    return [];
+                }
+                if (!_.isEmpty(arrayKey)) {
+                    if (!typeData[moduleId][arrayKey]) {
+                        return [];
+                    }
+                    if (!typeData[moduleId][arrayKey][key]) {
+                        return [];
+                    }
+                    return typeData[moduleId][arrayKey][key];
+                }
+                if (!typeData[moduleId][key]) {
+                    return [];
+                }
+                return typeData[moduleId][key];
+            }
+            return [];
+        },
+        _typeExists: function(type) {
+            return !_.isUndefined(KB.payload.fieldData[type]);
+        },
+        getFieldArgs: function(key) {
+            if (KB.payload.Fields && KB.payload.Fields[key]) {
+                return KB.payload.Fields[key];
+            } else {
+                return false;
+            }
+        }
+    };
+}(jQuery);
+
 KB.Templates = function($) {
     var tmpl_cache = {};
     var hlpf_cache = {};
@@ -233,7 +272,7 @@ KB.Templates = function($) {
         var tmpl_string;
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs";
+            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + new Date().getTime();
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;
@@ -303,8 +342,9 @@ KB.TinyMCE = function($) {
                 var ed = tinymce.init(settings);
             });
         },
-        addEditor: function($el, quicktags) {
+        addEditor: function($el, quicktags, height) {
             var settings = tinyMCEPreInit.mceInit.content;
+            var edHeight = height || 350;
             if (!$el) {
                 $el = KB.lastAddedModule.view.$el;
             }
@@ -313,7 +353,7 @@ KB.TinyMCE = function($) {
                 settings.elements = id;
                 settings.selector = "#" + id;
                 settings.id = id;
-                settings.height = 350;
+                settings.height = edHeight;
                 settings.setup = function(ed) {
                     ed.on("init", function() {
                         jQuery(document).trigger("newEditor", ed);
@@ -333,13 +373,13 @@ KB.TinyMCE = function($) {
             }, 1500);
         },
         remoteGetEditor: function($el, name, id, content, post_id, media) {
-            var pid = post_id || KB.Screen.post_id;
+            var pid = post_id || KB.appData.config.post.ID;
             var id = id || $el.attr("id");
             if (!media) {
                 var media = false;
             }
-            console.log(content);
-            KB.Ajax.send({
+            console.log(id, name, pid, content);
+            return KB.Ajax.send({
                 action: "getRemoteEditor",
                 editorId: id + "_ed",
                 editorName: name,
@@ -351,7 +391,7 @@ KB.TinyMCE = function($) {
                 }
             }, function(data) {
                 $el.empty().append(data);
-                this.addEditor($el);
+                this.addEditor($el, null, 150);
             }, this);
         }
     };
@@ -375,7 +415,7 @@ KB.Ui = function($) {
             });
             $body.on("mouseenter", ".kb-js-field-identifier", function() {
                 KB.currentFieldId = this.id;
-                _K.log("Current Field Id set to:", KB.currentFieldId);
+                _K.info("Current Field Id set to:", KB.currentFieldId);
             });
             jQuery(document).ajaxComplete(function(e, o, settings) {
                 that.metaBoxReorder(e, o, settings, "restore");
@@ -519,6 +559,7 @@ KB.Ui = function($) {
                         }).done(function() {
                             that.triggerAreaChange(areaOver, currentModule);
                             $(KB).trigger("kb:sortable::update");
+                            currentModule.view.clearFields();
                             KB.Notice.notice("Area change and order were updated successfully", "success");
                         });
                     }

@@ -4,7 +4,7 @@ KB.FieldsAPI.Field = Backbone.View.extend({
     initialize: function (config) {
         this.defaults = this.defaults || {};
         this.config = _.defaults(config, this.defaults);
-        this.model = new KB.FieldsAPI.FieldStdModel({value: this.get('std')});
+        this.model = new KB.FieldsAPI.FieldStdModel({value: this.defaults.std});
         this.model.view = this;
         this.baseId = this.prepareBaseId();
 
@@ -23,6 +23,10 @@ KB.FieldsAPI.Field = Backbone.View.extend({
         this.model.set('value', val);
     },
     prepareBaseId: function () {
-        return this.config.moduleId + '[' + this.config.fieldKey + ']';
+        if (!_.isEmpty(this.config.arrayKey)) {
+            return this.config.moduleId + '[' + this.config.arrayKey + ']' + '[' + this.config.fieldKey + ']';
+        } else {
+            return this.config.moduleId + '[' + this.config.fieldKey + ']';
+        }
     }
 });

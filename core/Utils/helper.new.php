@@ -201,7 +201,7 @@ function arrayMergeRecursiveAsItShouldBe($new, $old)
                     $merged[$key] = arrayMergeRecursiveAsItShouldBe($merged[$key], $old[$key]);
                 } elseif (array_key_exists($key,$merged) && $merged[$key] === NULL) {
                     // explicit set the new value to NULL
-                    $merged[$key] = NULL;
+                    unset($merged[$key]);
                 } else {
                     // preserve the old value
                     $merged[$key] = arrayMergeRecursiveAsItShouldBe($old[$key], $old[$key]);

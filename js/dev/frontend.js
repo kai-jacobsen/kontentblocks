@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-30 */
+/*! Kontentblocks DevVersion 2014-05-11 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -242,7 +242,7 @@ KB.IEdit.Text = function(el) {
                 jQuery("#kb-toolbar").show();
             });
             ed.on("change", function(e) {
-                _K.log("Got Dirty");
+                _K.info("Got Dirty");
             });
             ed.addButton("kbcancleinline", {
                 title: "Stop inline Edit",
@@ -624,6 +624,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         if (!KB.Checks.userCan("edit_kontentblocks")) {
             return;
         }
+        this.attachedFields = [];
         this.model.bind("save", this.model.save);
         this.listenTo(this.model, "change", this.modelChange);
         this.model.view = this;
@@ -739,6 +740,34 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 console.log("e");
             }
         });
+    },
+    addField: function(key, obj, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            this.attachedFields[arrayKey][key] = obj;
+        } else {
+            this.attachedFields[key] = obj;
+        }
+    },
+    hasField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            if (!this.attachedFields[arrayKey]) {
+                this.attachedFields[arrayKey] = {};
+            }
+            return key in this.attachedFields[arrayKey];
+        } else {
+            return key in this.attachedFields;
+        }
+    },
+    getField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            return this.attachedFields[arrayKey][key];
+        } else {
+            return this.attachedFields[key];
+        }
+    },
+    clearFields: function() {
+        _K.info("Attached Fields were reset to empty object");
+        this.attachedFields = {};
     }
 });
 

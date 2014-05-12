@@ -3,7 +3,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options){
         var that = this;
         this.options = options || {};
-        _K.log('module browser initialized');
+        _K.info('module browser initialized');
     },
     // element tag
     tagName: 'div',
@@ -122,7 +122,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
-        _K.log('new module created');
+        _K.info('new module created');
 
 
         this.parseAdditionalJSON(data.json);

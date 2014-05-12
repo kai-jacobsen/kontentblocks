@@ -93,12 +93,19 @@ class JSONBridge {
 	 * @param string $type field type
 	 * @param mixed $data
 	 * @param string $key key of field
+	 * @param $arrayKey
 	 *
 	 * @since 1.0.0
 	 * @return object $this
 	 */
-	public function registerFieldData( $modid, $type, $data, $key ) {
-		$this->fieldData[ $type ][ $modid ][ $key ] = $data;
+	public function registerFieldData( $modid, $type, $data, $key, $arrayKey ) {
+
+		if (!empty($arrayKey)){
+			$this->fieldData[ $type ][ $modid ][$arrayKey][ $key ] = $data;
+		} else {
+			$this->fieldData[ $type ][ $modid ][ $key ] = $data;
+
+		}
 
 		return $this;
 	}

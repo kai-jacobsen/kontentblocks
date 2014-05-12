@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-30 */
+/*! Kontentblocks DevVersion 2014-05-11 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -18,7 +18,7 @@ KB.FieldsAPI.Field = Backbone.View.extend({
         this.defaults = this.defaults || {};
         this.config = _.defaults(config, this.defaults);
         this.model = new KB.FieldsAPI.FieldStdModel({
-            value: this.get("std")
+            value: this.defaults.std
         });
         this.model.view = this;
         this.baseId = this.prepareBaseId();
@@ -37,7 +37,11 @@ KB.FieldsAPI.Field = Backbone.View.extend({
         this.model.set("value", val);
     },
     prepareBaseId: function() {
-        return this.config.moduleId + "[" + this.config.fieldKey + "]";
+        if (!_.isEmpty(this.config.arrayKey)) {
+            return this.config.moduleId + "[" + this.config.arrayKey + "]" + "[" + this.config.fieldKey + "]";
+        } else {
+            return this.config.moduleId + "[" + this.config.fieldKey + "]";
+        }
     }
 });
 
@@ -164,6 +168,32 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
 });
 
 KB.FieldsAPI.register("image", KB.FieldsAPI.Image);
+
+KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
+    templatePath: "fields/Link",
+    defaults: {
+        std: {
+            link: "",
+            linktext: "",
+            linktitle: ""
+        },
+        label: "Link",
+        description: "",
+        key: null
+    },
+    render: function(index) {
+        console.log("b4", this.model.toJSON());
+        return KB.Templates.render(this.templatePath, {
+            config: this.config,
+            baseId: this.baseId,
+            index: index,
+            i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
+            model: this.model.toJSON()
+        });
+    }
+});
+
+KB.FieldsAPI.register("link", KB.FieldsAPI.Link);
 
 KB.FieldsAPI.Text = KB.FieldsAPI.Field.extend({
     templatePath: "fields/Text",

@@ -49,7 +49,7 @@ KB.IEdit.Text = function (el) {
             });
 
             ed.on('change', function (e) {
-                _K.log('Got Dirty');
+                _K.info('Got Dirty');
             });
 
             ed.addButton('kbcancleinline', {

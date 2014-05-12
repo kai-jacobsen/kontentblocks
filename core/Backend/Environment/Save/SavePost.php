@@ -102,7 +102,6 @@ class SavePost
                         $savedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
                     }
                 }
-
                 // store new data in post meta
                 // if this is a preview, save temporary data for previews
                 if ($savedData) {

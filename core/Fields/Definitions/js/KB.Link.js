@@ -1,6 +1,6 @@
 KB.Fields.register('Link', (function ($) {
 
-    var self, restore_htmlUpdate, restore_isMce;
+    var self, restore_htmlUpdate, restore_isMce, title, href;
 
     return {
         $input: null,
@@ -16,7 +16,6 @@ KB.Fields.register('Link', (function ($) {
             var that = this;
             // set activeEditor, in this caseour textfield, dialog won't open if not set
             wpActiveEditor = this.$input;
-
             //open the dialog
             wpLink.open();
 
@@ -53,13 +52,8 @@ KB.Fields.register('Link', (function ($) {
 
                 //Append the Url to the textarea
                 textarea.value = href;
-
                 //restore the original function
-
-
                 // close dialog and put the cursor inside the textarea
-
-
                 wpLink.close();
                 that.close();
                 textarea.focus();

@@ -38,6 +38,7 @@ class FieldArray {
 	/**
 	 * Class constructor
 	 * @since 1.0.0
+	 *
 	 * @param string $key
 	 */
 	public function __construct( $key ) {
@@ -49,11 +50,13 @@ class FieldArray {
 	 *
 	 * @param string $key
 	 * @param object $fieldobject
+	 *
 	 * @since 1.0.0
 	 * @return $this
 	 */
 	public function addField( $key, $fieldobject ) {
 		$this->fields[ $key ] = $fieldobject;
+
 		return $this;
 
 	}
@@ -63,6 +66,7 @@ class FieldArray {
 	 *
 	 * @param $instanceData
 	 * @param $baseId
+	 *
 	 * @since 1.0.0
 	 */
 	public function setup( $instanceData, $baseId ) {
@@ -74,11 +78,16 @@ class FieldArray {
 
 	}
 
+	public function setModule( $module ) {
+		$this->module = $module;
+	}
+
 	/**
 	 * Pass through _save() method to each field
 	 *
 	 * @param $data
 	 * @param $oldData
+	 *
 	 * @since 1.0.0
 	 * @return array
 	 */
@@ -86,11 +95,13 @@ class FieldArray {
 		$collect = array();
 		foreach ( $this->fields as $field ) {
 
+			$field->setModule( $this->module );
+			$old = ( isset( $oldData[ $field->getKey() ] ) ) ? $oldData[ $field->getKey() ] : null;
+
 			if ( isset( $data[ $field->getKey() ] ) ) {
-				$old = ( isset( $oldData[ $field->getKey() ] ) ) ? $oldData[ $field->getKey() ] : null;
 				$collect[ $field->getKey() ] = $field->_save( $data[ $field->getKey() ], $old );
 			} else {
-				$collect[ $field->getKey() ] = $field->_save( null );
+				$collect[ $field->getKey() ] = $field->_save( null, $old );
 			}
 		}
 
@@ -128,6 +139,7 @@ class FieldArray {
 	 * Part of the backend form rendering process
 	 *
 	 * @param string $baseId
+	 *
 	 * @since 1.0.0
 	 */
 	public function setBaseId( $baseId ) {
@@ -143,12 +155,23 @@ class FieldArray {
 	 * Part of the backend form rendering process
 	 *
 	 * @param array $data
+	 *
 	 * @since 1.0.0
 	 */
 	public function setData( $data ) {
 		foreach ( $this->fields as $field ) {
 			$fielddata = ( ! empty( $data[ $field->getKey() ] ) ) ? $data[ $field->getKey() ] : '';
 			$field->setData( $fielddata );
+		}
+
+	}
+
+
+	public function getArg( $arg, $default = false ) {
+		if ( isset( $this->args[ $arg ] ) ) {
+			return $this->args[ $arg ];
+		} else {
+			return $default;
 		}
 
 	}

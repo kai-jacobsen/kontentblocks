@@ -43,12 +43,12 @@ KB.TinyMCE = (function ($) {
                 var ed = tinymce.init(settings);
             });
         },
-        addEditor: function ($el, quicktags) {
+        addEditor: function ($el, quicktags, height) {
             // get settings from native WP Editor
             // Editor may not be initialized and is not accesible throught
             // the tinymce api, thats why we take the settings from preInit
             var settings = tinyMCEPreInit.mceInit.content;
-
+            var edHeight = height || 350;
             if (!$el) {
                 $el = KB.lastAddedModule.view.$el;
             }
@@ -60,7 +60,7 @@ KB.TinyMCE = (function ($) {
                 settings.elements = id;
                 settings.selector = '#'+id;
                 settings.id = id;
-                settings.height = 350;
+                settings.height = edHeight;
                 settings.setup = function (ed) {
                     ed.on('init', function () {
                         jQuery(document).trigger('newEditor', ed);
@@ -86,13 +86,13 @@ KB.TinyMCE = (function ($) {
 
         },
         remoteGetEditor: function ($el, name, id, content, post_id, media) {
-            var pid = post_id || KB.Screen.post_id;
+            var pid = post_id || KB.appData.config.post.ID;
             var id = id || $el.attr('id');
             if (!media) {
                 var media = false;
             }
-            console.log(content);
-            KB.Ajax.send({
+            console.log(id,name,pid,content);
+            return KB.Ajax.send({
                 action: 'getRemoteEditor',
                 editorId: id + '_ed',
                 editorName: name,
@@ -105,8 +105,9 @@ KB.TinyMCE = (function ($) {
 
             }, function(data){
                 $el.empty().append(data);
-                this.addEditor($el);
+                this.addEditor($el, null, 150);
             },this);
+
         }
 
     };

@@ -172,11 +172,9 @@ class FieldSection
     {
         $collect = array();
         foreach ($this->fields as $field) {
-
             $field->setModule($this->module);
 
             $old = (isset($oldData[$field->getKey()])) ? $oldData[$field->getKey()] : NULL;
-
             if (isset($data[$field->getKey()])) {
                 $collect[$field->getKey()] = $field->_save($data[$field->getKey()], $old);
             } else {

@@ -8,11 +8,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // actual module actions are outsourced to individual files
         'click.kb1 .kb-toggle': 'toggleBody',
         'click.kb2 .kb-toggle': 'setOpenStatus',
-        'mouseenter' : 'setFocusedModule',
-        'dblclick' : 'fullscreen',
-        'click .kb-fullscreen' : 'fullscreen'
+        'mouseenter': 'setFocusedModule',
+        'dblclick': 'fullscreen',
+        'click .kb-fullscreen': 'fullscreen'
     },
-    setFocusedModule: function(){
+    setFocusedModule: function () {
         KB.focusedModule = this.model;
     },
     initialize: function () {
@@ -20,13 +20,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // Setup Elements
         this.$head = jQuery('.block-head', this.$el);
         this.$body = jQuery('.kb_inner', this.$el);
+        this.attachedFields = {};
         this.instanceId = this.model.get('instance_id');
         // create new module actions menu
         this.ModuleMenu = new KB.Backbone.ModuleMenuView({
             el: this.$el,
             parent: this
         });
-        if (store.get(this.instanceId + '_open')){
+        if (store.get(this.instanceId + '_open')) {
             this.toggleBody();
             this.model.set('open', true);
         }
@@ -34,8 +35,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.view = this;
         // Setup View
         this.setupDefaultMenuItems();
-        KB.Views.Modules.on('kb:backend::viewDeleted', function(view){
-            view.$el.fadeOut(500, function(){
+        KB.Views.Modules.on('kb:backend::viewDeleted', function (view) {
+            view.$el.fadeOut(500, function () {
                 view.$el.remove();
             });
 
@@ -86,7 +87,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.Fields.trigger('update');
         this.trigger('kb:backend::viewUpdated');
     },
-    fullscreen: function(){
+    fullscreen: function () {
         var that = this;
         this.sizeTimer = null;
         var $stage = jQuery('#kontentblocks_stage');
@@ -96,22 +97,22 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var titleVal = this.$el.find('.block-title').val();
         $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + titleVal + "</h2>").show();
         $description.empty().append("<p class='description'>" + this.model.get('settings').description + "</p>").show();
-        jQuery('.fullscreen--close').on('click', _.bind(this.closeFullscreen,this));
+        jQuery('.fullscreen--close').on('click', _.bind(this.closeFullscreen, this));
         this.$el.addClass('fullscreen-module');
         jQuery('#post-body').removeClass('columns-2').addClass('columns-1');
 
-        if (!this.model.get('open')){
+        if (!this.model.get('open')) {
             this.setOpenStatus();
             this.toggleBody();
         }
 
-        this.sizeTimer = setInterval(function(){
+        this.sizeTimer = setInterval(function () {
             var h = jQuery('.kb_inner', that.$el).height() + 150;
             $stage.height(h);
-        },750);
+        }, 750);
 
     },
-    closeFullscreen: function(){
+    closeFullscreen: function () {
         var that = this;
         var $stage = jQuery('#kontentblocks_stage');
         $stage.removeClass('fullscreen');
@@ -120,6 +121,35 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         jQuery('#post-body').removeClass('columns-1').addClass('columns-2');
         jQuery('.fullscreen--title-wrapper', $stage).hide();
         $stage.css('height', '100%');
+    },
+    addField: function (key, obj, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            this.attachedFields[arrayKey][key] = obj;
+        } else {
+            this.attachedFields[key] = obj;
+        }
+    },
+    hasField: function (key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            if (!this.attachedFields[arrayKey]) {
+                this.attachedFields[arrayKey] = {};
+            }
+            return key in this.attachedFields[arrayKey];
+        } else {
+            return key in this.attachedFields;
+        }
+
+    },
+    getField: function (key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            return this.attachedFields[arrayKey][key];
+        } else {
+            return this.attachedFields[key];
+        }
+    },
+    clearFields: function () {
+        _K.info('Attached Fields were reset to empty object');
+        this.attachedFields = {};
     }
 
 });

@@ -5,6 +5,7 @@ namespace Kontentblocks\Ajax;
 use Kontentblocks\Backend\API\PostMetaAPI,
     Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Utils\JSONBridge;
 
 class DuplicateModule
 {
@@ -71,7 +72,9 @@ class DuplicateModule
                 'id' => $this->newInstanceId,
                 'module' => $moduleDefinition,
                 'name' => $newInstance->settings['publicName'],
-                'html' => $html
+                'html' => $html,
+                'json' => JSONBridge::getInstance()->getJSON(),
+
             );
 
             $post = $tempPost;

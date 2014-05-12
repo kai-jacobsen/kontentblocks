@@ -42,7 +42,7 @@ KB.Ui = function ($) {
             // set the current field id as reference
             $body.on('mouseenter', '.kb-js-field-identifier', function(){
                KB.currentFieldId = this.id;
-               _K.log('Current Field Id set to:', KB.currentFieldId);
+               _K.info('Current Field Id set to:', KB.currentFieldId);
             });
 
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
@@ -268,7 +268,11 @@ KB.Ui = function ($) {
                             done(function () {
                                 that.triggerAreaChange(areaOver, currentModule);
                                 $(KB).trigger('kb:sortable::update');
+
+                                // force recreation of any attached fields
+                                currentModule.view.clearFields();
                                 KB.Notice.notice('Area change and order were updated successfully', 'success');
+
                             });
                     }
                 }
@@ -311,6 +315,7 @@ KB.Ui = function ($) {
         triggerAreaChange: function (newArea, module) {
             module.set('areaContext', newArea.get('context'));
             module.set('area', newArea.get('id'));
+
         },
         toggleModule: function () {
 

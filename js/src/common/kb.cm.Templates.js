@@ -13,7 +13,7 @@ KB.Templates = (function ($) {
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + 'js/templates';
 
-            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.hbs';
+            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.hbs?'+ new Date().getTime();
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;

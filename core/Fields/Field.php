@@ -141,7 +141,8 @@ abstract class Field {
 	/**
 	 * Set field data
 	 * Data from _POST[{baseid}[$this->key]]
-	 * Gets called on front- and backend
+	 * Runs each time when data is set to the field
+	 * Frontend/Backend
 	 *
 	 * @param mixed $data
 	 *
@@ -189,6 +190,7 @@ abstract class Field {
 		if ( ! $this->returnObj && $this->getArg( 'returnObj' ) ) {
 			$classname = $this->getArg( 'returnObj' );
 
+
 			// first try
 			$classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
 			if ( class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true ) ) {
@@ -202,6 +204,7 @@ abstract class Field {
 
 			return $this->returnObj;
 		} else {
+
 //			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
 //			return $this->returnObj;
 			return $this->value;
@@ -383,6 +386,12 @@ abstract class Field {
 
 	}
 
+	/**
+	 * Whenever getValue got called, this runs
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
 	public function sanitize( $value ) {
 		if ( method_exists( $this, 'outputFilter' ) ) {
 			return $this->outputFilter( $value );

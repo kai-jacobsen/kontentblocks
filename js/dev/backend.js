@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-30 */
+/*! Kontentblocks DevVersion 2014-05-11 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     setup: function() {
         this.categories = this.prepareCategories();
@@ -161,7 +161,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options) {
         var that = this;
         this.options = options || {};
-        _K.log("module browser initialized");
+        _K.info("module browser initialized");
     },
     tagName: "div",
     id: "module-browser",
@@ -244,7 +244,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
-        _K.log("new module created");
+        _K.info("new module created");
         this.parseAdditionalJSON(data.json);
         KB.TinyMCE.addEditor();
         KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
@@ -382,12 +382,24 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
             KB.Notice.notice("Request Error", "error");
             return false;
         }
+        this.parseAdditionalJSON(data.json);
         this.model.area.view.modulesList.append(data.html);
         KB.Modules.add(data.module);
         var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
         jQuery("#kb_all_blocks").val(count);
         KB.Notice.notice("Module Duplicated", "success");
         KB.Ui.repaint("#" + data.module.instance_id);
+        KB.Fields.trigger("update");
+    },
+    parseAdditionalJSON: function(json) {
+        if (!KB.payload.Fields) {
+            KB.payload.Fields = {};
+        }
+        _.extend(KB.payload.Fields, json.Fields);
+        if (!KB.payload.fieldData) {
+            KB.payload.fieldData = {};
+        }
+        _.extend(KB.payload.fieldData, json.fieldData);
     }
 });
 
@@ -496,6 +508,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var that = this;
         this.$head = jQuery(".block-head", this.$el);
         this.$body = jQuery(".kb_inner", this.$el);
+        this.attachedFields = {};
         this.instanceId = this.model.get("instance_id");
         this.ModuleMenu = new KB.Backbone.ModuleMenuView({
             el: this.$el,
@@ -587,6 +600,34 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         jQuery("#post-body").removeClass("columns-1").addClass("columns-2");
         jQuery(".fullscreen--title-wrapper", $stage).hide();
         $stage.css("height", "100%");
+    },
+    addField: function(key, obj, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            this.attachedFields[arrayKey][key] = obj;
+        } else {
+            this.attachedFields[key] = obj;
+        }
+    },
+    hasField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            if (!this.attachedFields[arrayKey]) {
+                this.attachedFields[arrayKey] = {};
+            }
+            return key in this.attachedFields[arrayKey];
+        } else {
+            return key in this.attachedFields;
+        }
+    },
+    getField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            return this.attachedFields[arrayKey][key];
+        } else {
+            return this.attachedFields[key];
+        }
+    },
+    clearFields: function() {
+        _K.info("Attached Fields were reset to empty object");
+        this.attachedFields = {};
     }
 });
 
@@ -625,7 +666,7 @@ KB.App = function($) {
         });
     }
     function createModuleViews(module) {
-        _K.log("new module view added");
+        _K.info("ModuleViews: new added");
         module.setArea(KB.Areas.get(module.get("area")));
         module.bind("change:area", module.areaChanged);
         KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({

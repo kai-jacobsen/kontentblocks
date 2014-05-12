@@ -39,7 +39,7 @@ _.extend(KB.Fields, {
     },
 
     newModule:function(object){
-        _K.log('new Module added for Fields');
+        _K.info('new Module added for Fields');
         var that = this;
         // call field objects init method on 'update' event
         // fails gracefully if there is no update method
@@ -48,7 +48,6 @@ _.extend(KB.Fields, {
 
         setTimeout(function(){
             that.trigger('update');
-            console.log('triggered');
         },750);
     },
 

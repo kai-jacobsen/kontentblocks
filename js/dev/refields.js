@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-30 */
+/*! Kontentblocks DevVersion 2014-05-11 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -11,7 +11,6 @@ KB.Fields.register("Color", function($) {
                     }
                 }, 150);
             });
-            _K.log("Color init", $(".kb-color-picker"));
             $(".kb-color-picker").wpColorPicker({
                 change: function(event, ui) {},
                 clear: function() {
@@ -126,118 +125,63 @@ KB.Fields.register("File", function($) {
 KB.Fields.register("FlexibleFields", function($) {
     return {
         init: function(modalView) {
-            _K.info("FF init called");
             $(".flexible-fields--stage", $("body")).each(function(index, el) {
                 var view = modalView || KB.Views.Modules.get($(el).data("module"));
                 var key = $(el).data("fieldkey");
+                var arrayKey = $(el).data("arraykey");
                 var fid = $(el).closest(".kb-js-field-identifier").attr("id");
-                view[key] = new KB.FlexibleFields(view, fid, key, el);
+                if (!view.hasField(key, arrayKey)) {
+                    var obj = new KB.FlexibleFields.Controller({
+                        moduleView: view,
+                        fid: fid,
+                        key: key,
+                        arrayKey: arrayKey,
+                        el: el
+                    });
+                    view.addField(key, obj, arrayKey);
+                } else {
+                    view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
+                }
             });
         },
         update: function() {
-            _K.log("Fields shall update");
             this.init();
         },
         frontUpdate: function(modalView) {
-            _K.info("Field shall update on front");
             this.init(modalView);
         }
     };
 }(jQuery));
 
-KB.FlexibleFields = function(view, fid, key, el) {
-    _K.info("New FF Instance created");
-    _K.info("FF Config", KB.payload.Fields);
-    this.$el = jQuery(el);
-    this.view = view;
-    this.moduleId = view.model.get("instance_id");
-    this.fid = fid;
-    this.fieldKey = key;
-    this.config = KB.payload.Fields[fid].config;
-    if (this.config.length > 0) {
-        this.setupConfig();
-        this.setupElements();
-        this.initialSetup();
-        this.$list.sortable({
-            start: function() {
-                KB.TinyMCE.removeEditors();
-            },
-            stop: function() {
-                KB.TinyMCE.restoreEditors();
-            },
-            handle: ".flexible-fields--js-drag-handle"
-        });
-    }
-};
+KB.FlexibleFields = {};
 
-_.extend(KB.FlexibleFields.prototype, {
-    initialSetup: function() {
-        var that = this;
-        var data = null;
-        var moduleId = this.view.model.get("instance_id");
-        var payload = KB.payload;
-        if (!payload.fieldData) {
-            return false;
-        }
-        if (payload.fieldData["flexible-fields"] && payload.fieldData["flexible-fields"][moduleId]) {
-            data = KB.payload.fieldData["flexible-fields"][moduleId][this.fieldKey];
-        }
-        if (_.toArray(data).length > 0) {
-            _.each(data, function(item) {
-                if (_.isObject(item)) {
-                    that.addItem(item);
-                }
-            });
+KB.FlexibleFields.Controller = Backbone.View.extend({
+    initialize: function(params) {
+        this.params = params;
+        this.fieldArgs = KB.Payload.getFieldArgs(params.fid);
+        this.parentModuleId = params.moduleView.model.get("instance_id");
+        this._frame = null;
+        this.subviews = [];
+        this.bootstrap();
+        this._initialized = false;
+    },
+    bootstrap: function() {
+        if (!this._initialized) {
+            this.setupConfig();
+            this.setupElements();
+            this.initialSetup();
+            this._initialized = true;
+            _K.log("Fields: FlexibleFields instance created and initialized");
+        } else {
+            _K.log("Fields: FlexibleFields instance was already initialized. Doing nothing.");
         }
     },
-    setupElements: function() {
-        var that = this;
-        this.$list = jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
-        this.$addButton = jQuery('<a class="button button-primary">Add Item</a>').appendTo(this.$el);
-        this.$addButton.on("click", function() {
-            that.addItem({});
-        });
-    },
-    addItem: function(data) {
-        var that = this;
-        var $item, $toggleBox, $tabs, $tabnav, uid, name, value, hidden;
-        if (_.isNull(data) || _.isUndefined(data)) {
-            return;
-        }
-        uid = data && data._uid ? data._uid : _.uniqueId("ffid");
-        name = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[tab][title]";
-        hidden = this.moduleId + "[" + this.fieldKey + "][" + uid + "]" + "[_uid]";
-        value = data && data.tab ? data.tab.title : "Item #" + uid;
-        $item = jQuery('<li class="flexible-fields--list-item"><input type="hidden" name="' + hidden + '" value="' + uid + '"> </li>').appendTo(this.$list);
-        jQuery('<div class="flexible-fields--toggle-title">' + '<h3><span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span><div class="genericon genericon-expand flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' + "</div>").appendTo($item);
-        $toggleBox = jQuery('<div class="flexible-fields--toggle-box kb-hide"></div>').appendTo($item);
-        $tabs = jQuery('<div class="kb-field--tabs kb_fieldtabs"></div>').appendTo($toggleBox);
-        $tabnav = jQuery('<ul class="flexible-field--tab-nav"></ul>').appendTo($tabs);
-        _.each(this.config, function(tab) {
-            $tabnav.append('<li><a href="#tab-' + that.fid + "-" + tab.id + uid + '">' + tab.label + "</a></li>");
-            var $con = jQuery('<div id="tab-' + that.fid + "-" + tab.id + uid + '"></div>').appendTo($tabs);
-            that.renderFields(tab, $con, uid, data);
-        });
-        $tabs.tabs();
-    },
-    renderFields: function(tab, $con, uid, data) {
-        var fieldInstance;
-        _.each(tab.fields, function(field) {
-            fieldInstance = KB.FieldsAPI.get(field);
-            if (data && data[fieldInstance.get("key")]) {
-                fieldInstance.setValue(data[fieldInstance.get("key")]);
-            }
-            $con.append(fieldInstance.render(uid));
-            $con.append('<input type="hidden" name="' + fieldInstance.baseId + "[" + uid + "][_mapping][" + fieldInstance.get("key") + ']" value="' + fieldInstance.get("type") + '" >');
-            fieldInstance.$container = $con;
-            if (fieldInstance.postRender) {
-                fieldInstance.postRender.call(fieldInstance);
-            }
-        });
+    events: {
+        "click .kb-flexible-fields--js-add-item": "addItem"
     },
     setupConfig: function() {
         var that = this;
-        _.each(this.config, function(tab) {
+        _.each(this.fieldArgs.config, function(tab) {
             if (!tab.fields) {
                 return;
             }
@@ -247,28 +191,342 @@ _.extend(KB.FlexibleFields.prototype, {
     setupFields: function(fields) {
         var that = this;
         _.each(fields, function(field, key) {
-            field.moduleId = that.view.model.get("instance_id");
-            field.fieldKey = that.fieldKey;
-            field.fieldId = that.fid;
+            field.moduleId = that.params.moduleView.model.get("instance_id");
+            field.fieldId = that.params.fid;
+            field.fieldKey = that.params.key;
+            field.arrayKey = that.params.arrayKey;
             field.key = key;
             field.$parent = that.$el;
             fields[key] = field;
         });
         return fields;
+    },
+    setupElements: function() {
+        this.$list = jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
+        this.$addButton = jQuery('<a class="button button-primary kb-flexible-fields--js-add-item">Add Item</a>').appendTo(this.$el);
+    },
+    addItem: function() {
+        var model = new Backbone.Model({});
+        var Item = new KB.FlexibleFields.Item({
+            model: model,
+            parent: this
+        });
+        this.subviews.push(Item);
+        this.$list.append(Item.render());
+        KB.Ui.initTabs();
+    },
+    initialSetup: function() {
+        var that = this;
+        var payload = KB.Payload.getFieldData("flexible-fields", this.params.moduleView.model.get("instance_id"), this.params.key, this.params.arrayKey) || [];
+        _.each(payload, function(item) {
+            var model = new Backbone.Model(item);
+            var Item = new KB.FlexibleFields.Item({
+                model: model,
+                parent: that
+            });
+            that.subviews.push(Item);
+            that.$list.append(Item.render());
+        });
+        KB.Ui.initTabs();
+        this.$list.sortable({
+            handle: ".flexible-fields--js-drag-handle"
+        });
     }
 });
 
-jQuery("body").on("click", ".flexible-fields--js-toggle", function() {
-    jQuery(this).toggleClass("genericons-expand genericons.collapse");
-    jQuery(this).parent().parent().next("div").slideToggle(450, function() {
-        if (KB.FrontendEditModal) {
-            KB.FrontendEditModal.trigger("recalibrate");
+KB.FlexibleFields.Item = Backbone.View.extend({
+    tagName: "li",
+    className: "kb-flexible-fields--item-wrapper",
+    initialize: function(params) {
+        this.parentView = params.parent;
+        this.config = params.parent.fieldArgs.config;
+        this.uid = this.model.get("uid") || _.uniqueId("ff");
+        if (!this.model.get("tab")) {
+            var tabDef = {
+                title: this.uid
+            };
+            this.model.set("tab", tabDef);
         }
-    });
+    },
+    events: {
+        "click .flexible-fields--js-toggle": "toggleItem"
+    },
+    toggleItem: function() {
+        jQuery(".flexible-fields--toggle-title", this.$el).next().slideToggle();
+    },
+    render: function() {
+        var inputName = this.createInputName(this.uid);
+        var item = this.model.toJSON();
+        var $skeleton = this.$el.append(KB.Templates.render("fields/FlexibleFields/single-item", {
+            item: item,
+            inputName: inputName,
+            uid: this.uid
+        }));
+        this.renderTabs($skeleton);
+        return $skeleton;
+    },
+    renderTabs: function($skeleton) {
+        var that = this;
+        var tabNavEl = Handlebars.compile("<li><a href='#tab-{{ uid }}-{{ index }}'>{{ tab.label }}</a></li>");
+        var tabCon = Handlebars.compile("<div id='tab-{{ uid }}-{{ index }}'></div>");
+        _.each(this.config, function(tab, index) {
+            jQuery(".flexible-field--tab-nav", $skeleton).append(tabNavEl({
+                uid: that.uid,
+                tab: tab,
+                index: index
+            }));
+            var $tabsContainment = jQuery(".kb-field--tabs", $skeleton);
+            var $con = jQuery(tabCon({
+                uid: that.uid,
+                index: index
+            })).appendTo($tabsContainment);
+            that.renderFields(tab, $con);
+        });
+    },
+    renderFields: function(tab, $con) {
+        var fieldInstance;
+        var that = this, data;
+        _.each(tab.fields, function(field) {
+            fieldInstance = KB.FieldsAPI.get(field);
+            data = that.model.get(field.key);
+            console.log(that.model.get(field.key));
+            if (!_.isUndefined(data)) {
+                fieldInstance.setValue(data);
+            }
+            $con.append(fieldInstance.render(that.uid));
+            $con.append('<input type="hidden" name="' + fieldInstance.baseId + "[" + that.uid + "][_mapping][" + fieldInstance.get("key") + ']" value="' + fieldInstance.get("type") + '" >');
+            fieldInstance.$container = $con;
+            if (fieldInstance.postRender) {
+                fieldInstance.postRender.call(fieldInstance);
+            }
+        });
+    },
+    createInputName: function(uid) {
+        return this.createBaseId() + "[" + this.parentView.params.key + "]" + "[" + uid + "]";
+    },
+    createBaseId: function() {
+        if (!_.isEmpty(this.parentView.params.arrayKey)) {
+            return this.parentView.parentModuleId + "[" + this.parentView.params.arrayKey + "]";
+        } else {
+            return this.parentView.parentModuleId;
+        }
+    }
 });
 
-jQuery("body").on("click", ".flexible-fields--js-trash", function() {
-    jQuery(this).closest(".flexible-fields--list-item").remove();
+KB.Fields.register("Gallery", function($) {
+    return {
+        init: function(modalView) {
+            $(".kb-gallery--stage", $("body")).each(function(index, el) {
+                var view = modalView || KB.Views.Modules.get($(el).data("module"));
+                var key = $(el).data("fieldkey");
+                var arrayKey = $(el).data("arraykey");
+                var fid = $(el).closest(".kb-js-field-identifier").attr("id");
+                if (!view.hasField(key, arrayKey)) {
+                    var obj = new KB.Gallery.Controller({
+                        moduleView: view,
+                        fid: fid,
+                        key: key,
+                        arrayKey: arrayKey,
+                        el: el
+                    });
+                    view.addField(key, obj, arrayKey);
+                } else {
+                    view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
+                }
+            });
+        },
+        update: function() {
+            this.init();
+        },
+        frontUpdate: function(modalView) {
+            this.init(modalView);
+        }
+    };
+}(jQuery));
+
+KB.Gallery = {};
+
+KB.Gallery.ImageView = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-gallery--image-wrapper",
+    initialize: function(args) {
+        this.parentView = args.parentView;
+        this.uid = this.model.get("uid") || _.uniqueId("kbg");
+        this.editorAdded = false;
+        this._remove = false;
+    },
+    events: {
+        "click .kb-gallery--js-edit": "edit",
+        "click .kb-gallery--js-delete": "delete",
+        "click .kb-gallery--js-meta-close": "close"
+    },
+    edit: function() {
+        this.$el.wrap('<div class="kb-gallery--item-placeholder"></div>');
+        this._placeholder = this.$el.parent();
+        this.$el.addClass("kb-gallery--active-item kb_field").appendTo("body");
+        jQuery("#wpwrap").addClass("module-browser-open");
+        this.handleEditor();
+        KB.Ui.initTabs();
+    },
+    handleEditor: function() {
+        var that = this;
+        $re = jQuery(".kb-js--remote-editor", this.$el);
+        var name = this.createInputName(this.uid) + "[details][description]";
+        if (!this.editorAdded) {
+            var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get("details").description, null, false);
+            req.done(function(res) {
+                that.editorAdded = res;
+                KB.Ui.initTabs();
+            });
+        } else {
+            KB.TinyMCE.addEditor($re, null, 150);
+        }
+    },
+    "delete": function() {
+        if (!this._remove) {
+            this.$el.fadeTo(450, .5).css("borderColor", "red");
+            this._remove = true;
+            jQuery(".kb-gallery--image-remove", this.$el).val("true");
+            this.removeInput.val("true");
+        } else {
+            this.$el.fadeTo(450, 1).css("borderColor", "#ccc");
+            jQuery(".kb-gallery--image-remove", this.$el).val("");
+            this._remove = false;
+        }
+    },
+    close: function() {
+        var ed = tinymce.get(this.uid + "_ed");
+        var details = this.model.get("details");
+        details.description = ed.getContent();
+        tinymce.remove(ed);
+        this.$el.appendTo(this._placeholder).unwrap();
+        this.$el.removeClass("kb-gallery--active-item").removeClass("kb_field");
+        jQuery("#wpwrap").removeClass("module-browser-open");
+    },
+    render: function() {
+        var inputName = this.createInputName(this.uid);
+        var item = this.model.toJSON();
+        return this.$el.append(KB.Templates.render("fields/Gallery/single-image", {
+            image: item,
+            inputName: inputName,
+            uid: this.uid
+        }));
+    },
+    createInputName: function(uid) {
+        return this.createBaseId() + "[" + this.parentView.params.key + "]" + "[images]" + "[" + uid + "]";
+    },
+    createBaseId: function() {
+        if (!_.isEmpty(this.parentView.params.arrayKey)) {
+            return this.parentView.parentModuleId + "[" + this.parentView.params.arrayKey + "]";
+        } else {
+            return this.parentView.parentModuleId;
+        }
+    }
+});
+
+KB.Gallery.Controller = Backbone.View.extend({
+    initialize: function(params) {
+        this.params = params;
+        this.fieldArgs = KB.Payload.getFieldArgs(params.fid);
+        this.parentModuleId = params.moduleView.model.get("instance_id");
+        this._frame = null;
+        this.subviews = [];
+        this.bootstrap();
+        this._initialized = false;
+    },
+    events: {
+        "click .kb-gallery--js-add-images": "addImages"
+    },
+    bootstrap: function() {
+        if (!this._initialized) {
+            this.setupElements();
+            this.initialSetup();
+            this._initialized = true;
+            _K.log("Fields: Gallery instance created and initialized");
+        } else {
+            _K.log("Fields: Gallery instance was already initialized. Doing nothing.");
+        }
+    },
+    setupElements: function() {
+        this.$list = jQuery('<div class="kb-gallery--item-list"></div>').appendTo(this.$el);
+        this.$list.sortable({
+            helper: "clone",
+            revert: true,
+            delay: 300
+        });
+        this.$addButton = jQuery('<a class="button button-primary kb-gallery--js-add-images">Add Images</a>').appendTo(this.$el);
+    },
+    addImages: function() {
+        this.openModal();
+    },
+    frame: function() {
+        if (this._frame) {
+            return this._frame;
+        }
+    },
+    openModal: function() {
+        var that = this;
+        if (this._frame) {
+            this._frame.open();
+            return;
+        }
+        this._frame = wp.media({
+            title: KB.i18n.Refields.image.modalTitle,
+            button: {
+                text: KB.i18n.Refields.common.select
+            },
+            multiple: true,
+            library: {
+                type: "image"
+            }
+        });
+        this._frame.state("library").on("select", function() {
+            that.select(this);
+        });
+        this._frame.open();
+        return this._frame;
+    },
+    select: function(modal) {
+        var selection = modal.get("selection");
+        if (selection.length > 0) {
+            this.handleModalSelection(selection.models);
+        }
+    },
+    handleModalSelection: function(selection) {
+        var that = this;
+        _.each(selection, function(image) {
+            var attr = {
+                file: image.toJSON(),
+                details: {
+                    title: "",
+                    alt: "",
+                    description: ""
+                }
+            };
+            var model = new Backbone.Model(attr);
+            var imageView = new KB.Gallery.ImageView({
+                model: model,
+                parentView: that
+            });
+            that.subviews.push = imageView;
+            that.$list.append(imageView.render());
+        });
+    },
+    initialSetup: function() {
+        var that = this;
+        var data = KB.Payload.getFieldData("gallery", this.parentModuleId, this.params.key, this.params.arrayKey);
+        if (data.length > 0) {
+            _.each(data, function(image) {
+                var model = new Backbone.Model(image);
+                var imageView = new KB.Gallery.ImageView({
+                    model: model,
+                    parentView: that
+                });
+                that.subviews.push = imageView;
+                that.$list.append(imageView.render());
+            });
+        }
+    }
 });
 
 var KB = KB || {};
@@ -287,7 +545,6 @@ KB.Fields.register("Image", function($) {
         $caption: null,
         init: function() {
             var that = this;
-            _K.log("init image refield");
             var $body = $("body");
             $body.on("click", this.selector, function(e) {
                 e.preventDefault();
@@ -390,7 +647,7 @@ KB.Fields.register("Image", function($) {
 }(jQuery));
 
 KB.Fields.register("Link", function($) {
-    var self, restore_htmlUpdate, restore_isMce;
+    var self, restore_htmlUpdate, restore_isMce, title, href;
     return {
         $input: null,
         init: function() {
