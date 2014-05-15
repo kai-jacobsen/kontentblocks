@@ -40,7 +40,7 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
         this._frame = null; // media modal instance
         this.subviews = []; // image items
         this.bootstrap(); // run forrest run
-        this._initialized = false; // init flag to prevent multiple inits
+        this._initialized = false; // init flag to prevent multiple inits on same object
 
     },
     bootstrap: function () {
@@ -127,10 +127,15 @@ KB.FlexibleFields.Item = Backbone.View.extend({
         }
     },
     events: {
-        'click .flexible-fields--js-toggle' : 'toggleItem'
+        'click .flexible-fields--js-toggle' : 'toggleItem',
+        'click .flexible-fields--js-trash' : 'deleteItem'
     },
     toggleItem: function(){
         jQuery('.flexible-fields--toggle-title', this.$el).next().slideToggle();
+    },
+    deleteItem: function(){
+        this.$el.remove();
+        KB.Notice.notice('Please click update to save the changes', 'success');
     },
     render: function () {
         var inputName = this.createInputName(this.uid);
@@ -185,154 +190,3 @@ KB.FlexibleFields.Item = Backbone.View.extend({
     }
 
 });
-
-
-//KB.FlexibleFields = function (view, fid, key, el) {
-//    _K.info('New FF Instance created');
-//    this.$el = jQuery(el);
-//    this.view = view;
-//    this.moduleId = view.model.get('instance_id');
-//    this.fid = fid;
-//    this.fieldKey = key;
-//    this.config = KB.payload.Fields[fid].config;
-//
-//    this.init();
-//
-//};
-//
-//_.extend(KB.FlexibleFields.prototype, {
-//
-//    init: function () {
-//
-//        if (this.config.length > 0 && !this.initialized) {
-//            this.setupConfig();
-//            this.setupElements();
-//            this.initialSetup();
-//
-//            this.$list.sortable({
-//                start: function () {
-//                    KB.TinyMCE.removeEditors();
-//                },
-//                stop: function () {
-//                    KB.TinyMCE.restoreEditors();
-//                },
-//                handle: '.flexible-fields--js-drag-handle'
-//            });
-//            this.initialized = true;
-//        } else {
-//            _K.log('FF instance was initialized');
-//        }
-//    },
-//
-//    initialSetup: function () {
-//        var that = this;
-//        var data = null;
-//        var moduleId = this.view.model.get('instance_id');
-//        var payload = KB.payload;
-//        // bail if no fieldData was set on page creation
-//        if (!payload.fieldData) {
-//            return false;
-//        }
-//
-//        if (payload.fieldData['flexible-fields'] && payload.fieldData['flexible-fields'][moduleId]) {
-//            data = KB.payload.fieldData['flexible-fields'][moduleId][this.fieldKey];
-//        }
-//        if (_.toArray(data).length > 0) {
-//            _.each(data, function (item) {
-//                if (_.isObject(item)) {
-//                    that.addItem(item);
-//                }
-//            });
-//        }
-//
-//
-//    },
-//
-//    addItem: function (data) {
-//        var that = this;
-//        var $item, $toggleBox, $tabs, $tabnav, uid, name, value, hidden;
-//
-//        // bail if no data is set
-//        if (_.isNull(data) || _.isUndefined(data)) {
-//            return;
-//        }
-//
-//        input name for item titel
-//        name = this.moduleId + '[' + this.fieldKey + '][' + uid + ']' + '[tab][title]';
-
-
-//        // hidden input name for unique item identifier
-//        hidden = this.moduleId + '[' + this.fieldKey + '][' + uid + ']' + '[_uid]';
-
-//        // item title value from existing data or new generic one
-//        value = (data && data.tab) ? data.tab.title : 'Item #' + uid;
-
-//        // create new item node
-//        $item = jQuery('<li class="flexible-fields--list-item"><input type="hidden" name="' + hidden + '" value="' + uid + '"> </li>').appendTo(this.$list);
-
-//        // append new title/toggletitle to item
-//        jQuery('<div class="flexible-fields--toggle-title">' +
-
-//        '<h3><span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span><div class="genericon genericon-expand flexible-fields--js-toggle"></div><div class="dashicons dashicons-trash flexible-fields--js-trash"></div><input type="text" value="' + value + '" name="' + name + '" ></h3>' +
-//        '</div>').appendTo($item);
-//        // append toggle container
-//        $toggleBox = jQuery('<div class="flexible-fields--toggle-box kb-hide"></div>').appendTo($item);
-//        // add tabholder to inner (toggle)container
-
-//        $tabs = jQuery('<div class="kb-field--tabs kb_fieldtabs"></div>').appendTo($toggleBox);
-//        // append tab nav holder to tabcontainer
-
-//        $tabnav = jQuery('<ul class="flexible-field--tab-nav"></ul>').appendTo($tabs);
-
-//        // actual create the items from existing data / new empty item
-//        _.each(this.config, function (tab) {
-//            // tab nav item
-//            $tabnav.append('<li><a href="#tab-' + that.fid + '-' + tab.id + uid + '">' + tab.label + '</a></li>');
-//            // corresponding tab container
-//            var $con = jQuery('<div id="tab-' + that.fid + '-' + tab.id + uid + '"></div>').appendTo($tabs);
-//            // render fields and append to tab container
-//            that.renderFields(tab, $con, uid, data);
-//        });
-//
-//        // initialize tabs
-//        $tabs.tabs();
-//    },
-//
-//    renderFields: function (tab, $con, uid, data) {
-//        var fieldInstance;
-//        _.each(tab.fields, function (field) {
-//            fieldInstance = KB.FieldsAPI.get(field);
-//            if (data && data[fieldInstance.get('key')]) {
-//                fieldInstance.setValue(data[fieldInstance.get('key')]);
-//            }
-//            $con.append(fieldInstance.render(uid));
-//
-//            $con.append('<input type="hidden" name="' + fieldInstance.baseId + '[' + uid + '][_mapping][' + fieldInstance.get('key') + ']" value="' + fieldInstance.get('type') + '" >');
-//            fieldInstance.$container = $con;
-//
-//            if (fieldInstance.postRender) {
-//                fieldInstance.postRender.call(fieldInstance);
-//            }
-//        });
-//
-//    },
-//
-//
-//
-//});
-//
-//jQuery('body').on('click', '.flexible-fields--js-toggle', function () {
-//    jQuery(this).toggleClass('genericons-expand genericons.collapse')
-//    jQuery(this).parent().parent().next('div').slideToggle(450, function () {
-//
-//        if (KB.FrontendEditModal) {
-//            KB.FrontendEditModal.trigger('recalibrate');
-//        }
-//    });
-//
-//
-//});
-//
-//jQuery('body').on('click', '.flexible-fields--js-trash', function () {
-//    jQuery(this).closest('.flexible-fields--list-item').remove();
-//});

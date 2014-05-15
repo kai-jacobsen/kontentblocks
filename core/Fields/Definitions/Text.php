@@ -38,8 +38,10 @@ Class Text extends Field
      */
     public function inputFilter( $value )
     {
-        return esc_attr( $value );
-
+//        return esc_attr( $value );
+	    return $value;
     }
+
+
 
 }

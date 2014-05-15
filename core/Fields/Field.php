@@ -186,7 +186,12 @@ abstract class Field {
 	 * @since 1.0.0
 	 * @return object
 	 */
-	public function getReturnObj() {
+		public function getReturnObj() {
+
+			if (is_object($this->returnObj)){
+				return $this->returnObj;
+			}
+
 		if ( ! $this->returnObj && $this->getArg( 'returnObj' ) ) {
 			$classname = $this->getArg( 'returnObj' );
 
@@ -345,20 +350,31 @@ abstract class Field {
 	}
 
 	/**
-	 * Wrapper, helper method to get the key
+	 * Getter for field data
 	 * Will call filter() if available
-	 *
+	 * @TODO this method is used on several occasions
+	 * @TODO its pointless to run filter over and over again, actually the whole filter is pointless
 	 * @param string $arrKey
 	 *
 	 * @return mixed|null returns null if data does not exist
 	 */
 	public function getValue( $arrKey = null ) {
 		if ( $arrKey ) {
-			return $this->getValueFromArray( $arrKey );
+			$data =  $this->getValueFromArray( $arrKey );
+			if ( $this->getArg( 'getCallback' ) ) {
+				$data = call_user_func( $this->getArg( 'getCallback' ), $this->value );
+			}
+			return $data;
 		}
 
 		if ( method_exists( $this, 'inputFilter' ) ) {
-			return $this->inputFilter( $this->value );
+			$data = $this->inputFilter( $this->value );
+
+			if ( $this->getArg( 'getCallback' ) ) {
+				$data = call_user_func( $this->getArg( 'getCallback' ), $this->value );
+			}
+
+			return $data;
 		}
 
 		return $this->value;
@@ -387,7 +403,8 @@ abstract class Field {
 	}
 
 	/**
-	 * Whenever getValue got called, this runs
+	 * Whenever setData got called, this runs
+	 * (upon field initialization, data fom _POSt or database set to field)
 	 * @param $value
 	 *
 	 * @return mixed
@@ -461,6 +478,11 @@ abstract class Field {
 	 */
 	public function _save( $keydata, $oldKeyData = null ) {
 		$data = $this->save( $keydata, $oldKeyData );
+
+		if ( $this->getArg( 'saveCallback' ) ) {
+			$data = call_user_func( $this->getArg( 'saveCallback' ), $keydata, $oldKeyData, $data );
+		}
+
 		$this->handleConcatContent( $data );
 
 		return $data;

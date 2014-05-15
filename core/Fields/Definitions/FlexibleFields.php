@@ -32,6 +32,7 @@ Class FlexibleFields extends Field {
 
 	public function outputFilter( $value ) {
 		$forJSON = array();
+
 		// make sure it's an simple indexed array to preserve order
 		if ( is_array( $value ) ) {
 			$forJSON = array_values( $value );
@@ -40,6 +41,7 @@ Class FlexibleFields extends Field {
 		$Bridge->registerFieldData( $this->parentModuleId, $this->type, $forJSON, $this->getKey(), $this->getArg('arrayKey') );
 		return $value;
 	}
+
 
 	/**
 	 * To make sure that the saving routine doesn't preserve unset
@@ -54,8 +56,6 @@ Class FlexibleFields extends Field {
 	 */
 	public function save( $new, $old ) {
 
-
-
 		if ( is_null( $new ) ) {
 			return $old;
 		}
@@ -67,6 +67,7 @@ Class FlexibleFields extends Field {
 				}
 			}
 		}
+
 		foreach ( $new as &$field ) {
 			if ( is_null( $field ) ) {
 				continue;

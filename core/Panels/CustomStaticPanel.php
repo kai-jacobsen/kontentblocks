@@ -169,7 +169,6 @@ abstract class CustomStaticPanel
         $new = $this->fields($this->FieldManager)->save($_POST[$this->baseId], $old);
         update_post_meta($postId, $this->baseId, $new);
 
-
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {
                 if (empty($v)) {

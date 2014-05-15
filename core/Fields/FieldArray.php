@@ -155,7 +155,7 @@ class FieldArray {
 	 * Part of the backend form rendering process
 	 *
 	 * @param array $data
-	 *
+	 * @TODO set field Std Data instead of empty string
 	 * @since 1.0.0
 	 */
 	public function setData( $data ) {
@@ -174,6 +174,17 @@ class FieldArray {
 			return $default;
 		}
 
+	}
+
+	public function getValue() {
+		$collected = array();
+
+		if ( ! empty( $this->fields ) ) {
+			foreach ( $this->fields as $field ) {
+				$collected[$field->getKey()] = $field->getValue();
+			}
+		}
+		return $collected;
 	}
 
 	/**

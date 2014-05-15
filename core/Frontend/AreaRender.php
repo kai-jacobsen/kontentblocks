@@ -97,15 +97,25 @@ class AreaRender {
 		// Iterate over modules (ModuleIterator)
 		foreach ( $this->modules as $module ) {
 
+
 			if ( is_null( $module ) ) {
 				continue;
 			}
+
 			// TODO whoooo bad
 			// quick fix to test onsite editing
 			// module->module will, depending on field configuration, modify moduleData
 			$module->rawModuleData = $module->moduleData;
 
+
+			if ( method_exists( $module, 'verify' ) ) {
+				if ( ! $module->verify( $module->moduleData ) ) {
+					continue;
+				}
+			}
+
 			$output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
+
 			$output .= $module->module( $module->moduleData );
 
 			$output .= $this->afterModule( $this->_afterModule( $module ), $module );

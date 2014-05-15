@@ -183,9 +183,8 @@ class FieldManagerCustom
         $collect = array();
         if (!empty($this->fieldsById)) {
             foreach ($this->fieldsById as $field) {
-                $collect[$field->getKey()] = $field->getValue();
+                $collect[$field->getKey()] = $field->getReturnObj();
             }
-
             return $collect;
         }
         return $this->data;

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-11 */
+/*! Kontentblocks DevVersion 2014-05-12 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -49,6 +49,41 @@ KB.Fields.register("Date", function($) {
                     settings = KB.FieldConfig[id] || {};
                 }
                 $(item).Zebra_DatePicker(_.extend(that.defaults, settings));
+            });
+        },
+        update: function() {
+            this.init();
+        }
+    };
+}(jQuery));
+
+var KB = KB || {};
+
+KB.Fields.register("DateTime", function($) {
+    var settings = {};
+    return {
+        defaults: {
+            format: "d M Y",
+            offset: [ 0, 250 ],
+            onSelect: function(selected, machine, Date, $el) {
+                $(activeField).find(".kb-date-machine-format").val(machine);
+                $(activeField).find(".kb-date-unix-format").val(Math.round(Date.getTime() / 1e3));
+            }
+        },
+        init: function() {
+            var that = this;
+            _.each($(".kb-datetimepicker"), function(item) {
+                var id = $(item).closest(".kb-field-wrapper").attr("id");
+                if (id) {
+                    settings = KB.payload.Fields[id] || {};
+                }
+                $(item).datetimepicker({
+                    format: "d.m.Y H:i",
+                    inline: false,
+                    mask: true,
+                    lang: "de",
+                    allowBlank: true
+                });
             });
         },
         update: function() {
@@ -249,10 +284,15 @@ KB.FlexibleFields.Item = Backbone.View.extend({
         }
     },
     events: {
-        "click .flexible-fields--js-toggle": "toggleItem"
+        "click .flexible-fields--js-toggle": "toggleItem",
+        "click .flexible-fields--js-trash": "deleteItem"
     },
     toggleItem: function() {
         jQuery(".flexible-fields--toggle-title", this.$el).next().slideToggle();
+    },
+    deleteItem: function() {
+        this.$el.remove();
+        KB.Notice.notice("Please click update to save the changes", "success");
     },
     render: function() {
         var inputName = this.createInputName(this.uid);
