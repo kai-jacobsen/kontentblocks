@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-15 */
+/*! Kontentblocks DevVersion 2014-05-19 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -457,8 +457,9 @@ KB.Ui = function($) {
             this.initToggleBoxes();
             KB.TinyMCE.addEditor($el);
         },
-        initTabs: function() {
-            var selector = $(".kb_fieldtabs");
+        initTabs: function($cntxt) {
+            var $context = $cntxt || jQuery("body");
+            var selector = $(".kb_fieldtabs", $context);
             selector.tabs({
                 activate: function() {
                     $(".nano").nanoScroller();
@@ -478,7 +479,8 @@ KB.Ui = function($) {
             });
             $(".kb_fieldtoggles div:first-child").trigger("click");
         },
-        initSortable: function() {
+        initSortable: function($cntxt) {
+            var $context = $cntxt || jQuery("body");
             var currentModule, areaOver;
             var validModule = false;
             var that = this;
@@ -502,7 +504,7 @@ KB.Ui = function($) {
             function numberOfModulesInArea(id) {
                 return $("#" + id + " li.kb_block").length;
             }
-            $(".kb_sortable").sortable({
+            $(".kb_sortable", $context).sortable({
                 placeholder: "ui-state-highlight",
                 ghost: true,
                 connectWith: ".kb_connect",

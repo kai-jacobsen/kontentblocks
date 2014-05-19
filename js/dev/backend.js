@@ -1,5 +1,8 @@
-/*! Kontentblocks DevVersion 2014-05-15 */
+/*! Kontentblocks DevVersion 2014-05-19 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
+    initialize: function(models, options) {
+        this.area = options.area;
+    },
     setup: function() {
         this.categories = this.prepareCategories();
         this.sortToCategories();
@@ -11,12 +14,21 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     sortToCategories: function() {
         var that = this;
         _.each(this.models, function(model) {
-            if (model.get("settings").hidden === true) {
+            if (!that.validateVisibility(model)) {
                 return;
             }
             var cat = _.isUndefined(model.get("settings").category) ? "standard" : model.get("settings").category;
             that.categories[cat].modules.push(model);
         });
+    },
+    validateVisibility: function(m) {
+        if (m.get("settings").hidden) {
+            return false;
+        }
+        if (m.get("settings").disabled) {
+            return false;
+        }
+        return !(!m.get("settings").globallyAvailable && this.area.model.get("dynamic"));
     },
     prepareCategories: function() {
         var cats = {};
@@ -99,6 +111,7 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
     className: "modules-list-item",
     initialize: function(options) {
         this.options = options || {};
+        this.area = options.browser.area;
     },
     render: function(el) {
         if (this.model.get("template")) {
@@ -117,7 +130,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
         "click .kb-js-create-module": "createModule"
     },
     loadDetails: function() {
-        console.log(this);
         this.options.browser.loadDetails(this.model);
     },
     createModule: function() {
@@ -173,7 +185,8 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     render: function() {
         this.area = this.options.area;
         this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
-            model: KB.Backbone.ModuleDefinition
+            model: KB.Backbone.ModuleDefinition,
+            area: this.options.area
         }).setup();
         this.open();
     },

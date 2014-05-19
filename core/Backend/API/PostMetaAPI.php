@@ -8,7 +8,7 @@ namespace Kontentblocks\Backend\API;
  * This class has been stripped down to the essentials during development and has only the least necessary
  * methods available for the plugin to work.
  * Victim of refactoring.
- * @TODO complete.
+ * @TODO align with wp meta api
  * @package Kontentblocks\Backend\Post
  * @since 1.0.0
  */

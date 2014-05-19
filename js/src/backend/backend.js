@@ -7,7 +7,7 @@ KB.currentArea = {};
 // ---------------
 
 /*
- * Views, not a Backbone collection
+ * ViewsCollection, not a Backbone collection
  * simple getter/setter access point to views
  */
 KB.Views = {

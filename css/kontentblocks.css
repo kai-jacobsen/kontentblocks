@@ -3047,7 +3047,7 @@ button.Zebra_DatePicker_Icon_Inside {
   left: 0px;
   top: -1px;
   width: 32px;
-  height: 32px;
+  height: 101%;
   line-height: 32px;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;

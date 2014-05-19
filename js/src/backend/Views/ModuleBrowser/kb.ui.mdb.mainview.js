@@ -24,7 +24,8 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     render: function () {
         this.area = this.options.area;
         this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
-            model: KB.Backbone.ModuleDefinition
+            model: KB.Backbone.ModuleDefinition,
+            area: this.options.area
         }).setup();
 
         this.open();

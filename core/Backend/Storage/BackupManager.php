@@ -34,7 +34,7 @@ class BackupManager
     /**
      * Class Constructor
      * An Storageobject must be given
-     * @param InterfaceDataStorage $Storage
+     * @param ModuleStoragePostMeta $Storage
      * @throws \BadFunctionCallException
      */
     public function __construct($Storage)
@@ -49,7 +49,7 @@ class BackupManager
     /**
      * Backup method
      * Gets the backup data from the Storage object
-     * @param $logmsg string
+     * @param $logmsg string supplemental information for the specific backup
      */
     public function backup($logmsg = '')
     {
@@ -89,7 +89,7 @@ class BackupManager
         global $wpdb;
 
         if (!current_user_can('edit_kontentblocks')) {
-            wp_die('Hackin?');
+            return false;
         }
 
         $insert = array();
@@ -144,7 +144,6 @@ class BackupManager
         $existingData[$now]['msg'] = $this->msg . ' (by ' . $user->user_login . ')';
 
         // truncate, never more than 8 backups
-        // @todo add filter for max number of updates
         $backupLimit = apply_filters('kb_backups_to_keep', 8);
         $existingData = array_slice($existingData, -$backupLimit, $backupLimit, true);
 

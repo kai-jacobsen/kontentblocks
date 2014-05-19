@@ -60,8 +60,10 @@ class AreaRender {
 			return;
 		}
 
+
 		$this->Environment = \Kontentblocks\Helper\getEnvironment( $postId );
 		$modules           = $this->Environment->getModulesforArea( $area );
+
 
 		if ( ! $modules ) {
 			return;

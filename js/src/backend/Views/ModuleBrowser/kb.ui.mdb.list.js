@@ -3,11 +3,16 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
     className: 'modules-list-item',
     initialize: function (options) {
         this.options = options || {};
+
+        // shorthand to parent area
+        this.area = options.browser.area;
+
         // listen to browser close event
 //        this.options.parent.options.browser.on('browser:close', this.close, this);
     },
     // render list
     render: function (el) {
+
         if (this.model.get('template')) {
             this.$el.html(KB.Templates.render('backend/modulebrowser/module-template-list-item', {module: this.model.toJSON()}));
         } else {
@@ -20,7 +25,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
         'click .kb-js-create-module': 'createModule'
     },
     loadDetails: function () {
-        console.log(this);
         this.options.browser.loadDetails(this.model);
     },
     createModule: function () {
