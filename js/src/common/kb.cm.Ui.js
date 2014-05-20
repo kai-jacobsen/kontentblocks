@@ -27,6 +27,7 @@ KB.Ui = function ($) {
             this.initToggleBoxes();
             this.flexContext();
 
+            this.flushLocalStorage();
             // set the global activeField variable dynamically
             // legacy
             $body.on('mousedown', '.kb_field', function (e) {
@@ -279,6 +280,12 @@ KB.Ui = function ($) {
                     }
                 }
             });
+        },
+        flushLocalStorage: function(){
+            if (store.get('tplversion') !== '1.0.0'){
+                store.clear();
+                store.set('tplversion', '1.0.0')
+            }
         },
         /**
          * Handles saving of new module order per area

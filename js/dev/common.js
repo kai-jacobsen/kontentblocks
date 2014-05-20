@@ -407,6 +407,7 @@ KB.Ui = function($) {
             this.initSortable();
             this.initToggleBoxes();
             this.flexContext();
+            this.flushLocalStorage();
             $body.on("mousedown", ".kb_field", function(e) {
                 activeField = this;
             });
@@ -567,6 +568,12 @@ KB.Ui = function($) {
                     }
                 }
             });
+        },
+        flushLocalStorage: function() {
+            if (store.get("tplversion") !== "1.0.0") {
+                store.clear();
+                store.set("tplversion", "1.0.0");
+            }
         },
         resort: function(sender) {
             var serializedData = {};
