@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-19 */
+/*! Kontentblocks DevVersion 2014-05-20 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -174,26 +174,15 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         var that = this;
         this.options = options || {};
         _K.info("module browser initialized");
-    },
-    tagName: "div",
-    id: "module-browser",
-    className: "kb-overlay",
-    events: {
-        "click .close-browser": "close"
-    },
-    subviews: {},
-    render: function() {
         this.area = this.options.area;
         this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
             model: KB.Backbone.ModuleDefinition,
             area: this.options.area
         }).setup();
-        this.open();
-    },
-    open: function() {
-        this.$el.appendTo("body");
-        jQuery("#wpwrap").addClass("module-browser-open");
-        this.$el.append(KB.Templates.render("backend/modulebrowser/module-browser", {}));
+        var viewMode = this.getViewMode();
+        this.$el.append(KB.Templates.render("backend/modulebrowser/module-browser", {
+            viewMode: viewMode
+        }));
         this.subviews.ModulesList = new KB.Backbone.ModuleBrowserModulesList({
             el: jQuery(".modules-list", this.$el),
             browser: this
@@ -204,10 +193,46 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         });
         this.subviews.Navigation = new KB.Backbone.ModuleBrowserNavigation({
             el: jQuery(".module-categories", this.$el),
-            cats: this.modulesDefinitions.categories
+            cats: this.modulesDefinitions.categories,
+            browser: this
         });
         this.listenTo(this.subviews.Navigation, "browser:change", this.update);
         this.listenTo(this.subviews.ModulesList, "createModule", this.createModule);
+    },
+    tagName: "div",
+    id: "module-browser",
+    className: "kb-overlay",
+    events: {
+        "click .close-browser": "close",
+        "click .module-browser--switch__list-view": "toggleViewMode",
+        "click .module-browser--switch__excerpt-view": "toggleViewMode"
+    },
+    subviews: {},
+    toggleViewMode: function() {
+        jQuery(".module-browser-wrapper", this.$el).toggleClass("module-browser--list-view module-browser--excerpt-view");
+        var abbr = "mdb_" + this.area.model.get("id") + "_state";
+        var curr = store.get(abbr);
+        if (curr == "module-browser--list-view") {
+            store.set(abbr, "module-browser--excerpt-view");
+        } else {
+            store.set(abbr, "module-browser--list-view");
+        }
+    },
+    render: function() {
+        this.open();
+    },
+    getViewMode: function() {
+        var abbr = "mdb_" + this.area.model.get("id") + "_state";
+        if (store.get(abbr)) {
+            return store.get(abbr);
+        } else {
+            store.set(abbr, "module-browser--list-view");
+        }
+        return "module-browser--list-view";
+    },
+    open: function() {
+        this.$el.appendTo("body");
+        jQuery("#wpwrap").addClass("module-browser-open");
         jQuery(".nano").nanoScroller({
             flash: true
         });
@@ -215,9 +240,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     close: function() {
         jQuery("#wpwrap").removeClass("module-browser-open");
         this.trigger("browser:close");
-        this.unbind();
-        this.remove();
-        delete this.$el;
+        this.$el.detach();
     },
     update: function(model) {
         var id = model.get("id");
@@ -234,7 +257,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         }
         var Area = KB.Areas.get(this.options.area.model.get("id"));
         if (!KB.Checks.blockLimit(Area)) {
-            console.log("block limit reached");
             KB.Notice.notice("Limit for this area reached", "error");
             return false;
         }
@@ -304,9 +326,10 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
             if (count === 0) {
                 return false;
             }
+            console.log(this);
             if (this.options.parent.catSet === false) {
                 this.options.parent.catSet = true;
-                KB.ModuleBrowser.update(this.model);
+                this.options.browser.update(this.model);
                 this.$el.addClass("active");
             }
             this.options.parent.$list.append(this.$el.html(this.model.get("name") + '<span class="module-count">' + countstr + "</span>"));
@@ -321,7 +344,8 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
             var model = new Backbone.Model(cat);
             new that.item({
                 parent: that,
-                model: model
+                model: model,
+                browser: that.options.browser
             }).render();
         });
     }
@@ -484,13 +508,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
     },
     openModuleBrowser: function(e) {
         e.preventDefault();
-        KB.ModuleBrowser = null;
-        if (!KB.ModuleBrowser) {
-            KB.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+        if (!this.ModuleBrowser) {
+            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
                 area: this
             });
         }
-        KB.ModuleBrowser.render();
+        this.ModuleBrowser.render();
     },
     toggleSettings: function(e) {
         e.preventDefault();

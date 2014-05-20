@@ -1,43 +1,21 @@
 // TODO Proper cleanup
 KB.Backbone.ModuleBrowser = Backbone.View.extend({
-    initialize: function(options){
+    initialize: function (options) {
         var that = this;
         this.options = options || {};
         _K.info('module browser initialized');
-    },
-    // element tag
-    tagName: 'div',
-    // element id
-    id: 'module-browser',
-    //element class
-    className: 'kb-overlay',
-    //events
-    events: {
-        'click .close-browser': 'close'
-    },
-    subviews: {
-
-    },
-    // this method gets called when the user clicks on 'add module'
-    // prepares the modules for the browser
-    // calls 'open'
-    render: function () {
         this.area = this.options.area;
+
+
+
         this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
             model: KB.Backbone.ModuleDefinition,
             area: this.options.area
         }).setup();
 
-        this.open();
-    },
-    open: function () {
-        // render root element
-        this.$el.appendTo('body');
-        // add class to root element of wp admin screen
-        jQuery('#wpwrap').addClass('module-browser-open');
-
+        var viewMode = this.getViewMode();
         // render and append the skeleton markup to the browsers root element
-        this.$el.append(KB.Templates.render('backend/modulebrowser/module-browser', {}));
+        this.$el.append(KB.Templates.render('backend/modulebrowser/module-browser', {viewMode: viewMode}));
 
         // render the list sub view
         this.subviews.ModulesList = new KB.Backbone.ModuleBrowserModulesList({
@@ -53,23 +31,76 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         // render tab navigation subview
         this.subviews.Navigation = new KB.Backbone.ModuleBrowserNavigation({
             el: jQuery('.module-categories', this.$el),
-            cats: this.modulesDefinitions.categories
+            cats: this.modulesDefinitions.categories,
+            browser: this
         });
 
         // bind to navigation views custom change event
-        this.listenTo(this.subviews.Navigation,'browser:change', this.update);
-        this.listenTo(this.subviews.ModulesList,'createModule', this.createModule);
+        this.listenTo(this.subviews.Navigation, 'browser:change', this.update);
+        this.listenTo(this.subviews.ModulesList, 'createModule', this.createModule);
 //        this.subviews.Navigation.bind('browser:change', _.bind(this.update, this));
-        jQuery('.nano').nanoScroller({flash: true });
+    },
+    // element tag
+    tagName: 'div',
+    // element id
+    id: 'module-browser',
+    //element class
+    className: 'kb-overlay',
+    //events
+    events: {
+        'click .close-browser': 'close',
+        'click .module-browser--switch__list-view': 'toggleViewMode',
+        'click .module-browser--switch__excerpt-view': 'toggleViewMode'
+    },
+    subviews: {
+
+    },
+    toggleViewMode: function () {
+        jQuery('.module-browser-wrapper', this.$el).toggleClass('module-browser--list-view module-browser--excerpt-view');
+        var abbr = 'mdb_'+this.area.model.get('id')+'_state';
+        var curr = store.get(abbr);
+
+        if (curr == 'module-browser--list-view'){
+            store.set(abbr, 'module-browser--excerpt-view');
+        } else {
+            store.set(abbr, 'module-browser--list-view');
+        }
+    },
+
+    // this method gets called when the user clicks on 'add module'
+    // prepares the modules for the browser
+    // calls 'open'
+    render: function () {
+        this.open();
+    },
+    getViewMode: function(){
+
+        var abbr = 'mdb_'+this.area.model.get('id')+'_state';
+
+        if (store.get(abbr)){
+            return store.get(abbr);
+        } else {
+            store.set(abbr, 'module-browser--list-view');
+        }
+
+        return 'module-browser--list-view';
+    },
+    open: function () {
+        // render root element
+        this.$el.appendTo('body');
+        // add class to root element of wp admin screen
+        jQuery('#wpwrap').addClass('module-browser-open');
+        jQuery('.nano').nanoScroller({flash: true});
     },
     // close the browser
     // TODO clean up and remove all references & bindings
     close: function () {
         jQuery('#wpwrap').removeClass('module-browser-open');
         this.trigger('browser:close');
-        this.unbind();
-        this.remove();
-        delete this.$el;
+//        this.unbind();
+//        this.remove();
+        this.$el.detach();
+//        delete this.$el;
     },
     // update list view upon navigation
     update: function (model) {
@@ -95,7 +126,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         // check if block limit isn't reached
         var Area = KB.Areas.get(this.options.area.model.get('id'));
         if (!KB.Checks.blockLimit(Area)) {
-            console.log('block limit reached');
             KB.Notice.notice('Limit for this area reached', 'error');
             return false;
         }
@@ -141,12 +171,11 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         // repaint
         // add module to collection
     },
-    parseAdditionalJSON: function(json){
+    parseAdditionalJSON: function (json) {
         // create the object if it doesn't exist already
-        if (!KB.payload.Fields){
+        if (!KB.payload.Fields) {
             KB.payload.Fields = {};
         }
-
         _.extend(KB.payload.Fields, json.Fields);
     },
     // helper method to convert list of assigned classnames to object with module definitions

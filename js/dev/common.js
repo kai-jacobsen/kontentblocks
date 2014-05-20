@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-19 */
+/*! Kontentblocks DevVersion 2014-05-20 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -272,7 +272,7 @@ KB.Templates = function($) {
         var tmpl_string;
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + new Date().getTime();
+            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs";
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;
