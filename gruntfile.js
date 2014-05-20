@@ -129,6 +129,14 @@ module.exports = function (grunt) {
                 src: 'css/kontentblocks.css',
                 dest: 'css/kontentblocks.css'
             }
+        },
+        exec: {
+            removeHash: {
+                command: 'rm -f hash.txt'
+            },
+            createId: {
+                command: 'git rev-parse HEAD > hash.txt'
+            }
         }
     });
 
@@ -142,8 +150,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-rsync-2');
+    grunt.loadNpmTasks('grunt-exec');
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);
+    grunt.registerTask('bash', ['exec']);
 
 };
