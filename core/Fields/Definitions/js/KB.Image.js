@@ -80,8 +80,7 @@ KB.Fields.register('Image', (function ($) {
         },
         handleAttachment: function (attachment) {
             var that = this;
-            var url, args;
-
+            var url, args, src;
             if (this.settings && this.settings.previewSize) {
 
                 args = {
@@ -110,7 +109,9 @@ KB.Fields.register('Image', (function ($) {
                     error: function() {}
                 });
             } else {
-                this.$container.html('<img src="' + attachment.get('sizes').thumbnail.url + '" >');
+                src = (attachment.get('sizes').thumbnail) ? attachment.get('sizes').thumbnail.url : attachment.get('sizes').full.url;
+
+                this.$container.html('<img src="' + src + '" >');
             }
             this.$id.val(attachment.get('id'));
             this.$title.val(attachment.get('title'));

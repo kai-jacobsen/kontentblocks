@@ -156,7 +156,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-rsync-2');
     grunt.loadNpmTasks('grunt-exec');
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean']);
+    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass','clean', 'jshint', 'bash']);
     grunt.registerTask('hint', ['jshint']);
     grunt.registerTask('dev', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'bash']);
     grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
