@@ -3047,25 +3047,37 @@ button.Zebra_DatePicker_Icon_Inside {
 
 /* line 131, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .module-browser__right-column {
-  width: 500px;
+  width: 510px;
   display: block;
   height: 100%;
-  margin-top: -36px;
   padding-top: 36px;
-  padding-left: 10px;
   padding-right: 10px;
   float: left;
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
 }
+/* line 141, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+.module-browser__right-column .module-browser--poster-wrap {
+  margin-bottom: 20px;
+  width: 96%;
+}
+/* line 146, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+.module-browser__right-column .module-browser--poster-wrap img {
+  max-width: 100%;
+}
 
-/* line 144, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
-.modules-list {
+/* line 154, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+.modules-list, .module-description {
   margin: 0;
   padding: 0 0 72px;
 }
 
-/* line 149, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 159, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+.module-description {
+  padding-left: 15px;
+}
+
+/* line 163, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item {
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #fff;
@@ -3073,12 +3085,12 @@ button.Zebra_DatePicker_Icon_Inside {
   padding: 4px 0;
   margin: 0;
 }
-/* line 156, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 170, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item:hover {
   background-color: #fff;
   cursor: pointer;
 }
-/* line 161, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 175, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item .dashicons-plus {
   position: absolute;
   left: 0px;
@@ -3090,12 +3102,12 @@ button.Zebra_DatePicker_Icon_Inside {
   transition: all 0.3s ease-in-out;
   z-index: 595;
 }
-/* line 171, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 185, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item .dashicons-plus:hover {
   background-color: #0074a2;
   color: #fff;
 }
-/* line 177, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 191, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item h4 {
   display: inline-block;
   font-size: 14px;
@@ -3103,7 +3115,7 @@ button.Zebra_DatePicker_Icon_Inside {
   margin: 0;
   padding-left: 40px;
 }
-/* line 185, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 199, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item p {
   padding-top: 0;
   margin-top: 0;

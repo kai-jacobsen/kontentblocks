@@ -129,21 +129,35 @@
 }
 
 .module-browser__right-column {
-  width: 500px;
+  width: 510px;
   display: block;
   height: 100%;
-  margin-top: -36px;
+//  margin-top: -36px;
   padding-top: 36px;
-  padding-left: 10px;
   padding-right: 10px;
   float: left;
   @include transition(all .2s linear);
 
+  .module-browser--poster-wrap{
+
+    margin-bottom: 20px;
+    width:96%;
+
+    img{
+      max-width: 100%;
+    }
+
+  }
+
 }
 
-.modules-list {
+.modules-list, .module-description {
   margin: 0;
   padding: 0 0 72px;
+}
+
+.module-description{
+  padding-left:15px;
 }
 
 .modules-list-item {

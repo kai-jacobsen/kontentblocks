@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-20 */
+/*! Kontentblocks DevVersion 2014-05-21 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -270,9 +270,10 @@ KB.Templates = function($) {
     }
     function render(tmpl_name, tmpl_data) {
         var tmpl_string;
+        console.log(tmpl_name);
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs";
+            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + kontentblocks.config.hash;
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;
@@ -570,9 +571,9 @@ KB.Ui = function($) {
             });
         },
         flushLocalStorage: function() {
-            if (store.get("tplversion") !== "1.0.0") {
+            var hash = kontentblocks.config.hash;
+            if (store.get("kbhash") !== hash) {
                 store.clear();
-                store.set("tplversion", "1.0.0");
             }
         },
         resort: function(sender) {

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-20 */
+/*! Kontentblocks DevVersion 2014-05-21 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -94,6 +94,11 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
             }));
         } else {
             this.$el.html(KB.Templates.render("backend/modulebrowser/module-description", {
+                module: this.model.toJSON()
+            }));
+        }
+        if (this.model.get("settings").poster !== false) {
+            this.$el.append(KB.Templates.render("backend/modulebrowser/poster", {
                 module: this.model.toJSON()
             }));
         }

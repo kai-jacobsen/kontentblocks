@@ -43,9 +43,19 @@ class ModuleRegistry
             $args['uri'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path']));
             $args['helpfile'] = false;
             // setup helpfile
-            if (file_exists(trailingslashit($args['path']) . $classname . '.html')) {
-                $args['helpfile'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path'])) . $classname . '.html';
+	        $locale = get_locale();
+            if (file_exists(trailingslashit($args['path']) . $classname . '_' . $locale . '.hbs')) {
+                $args['helpfile'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path'])) . $classname . '_' . $locale . '.hbs';
             }
+
+	        if (file_exists(trailingslashit($args['path']) . $classname . '.jpg')) {
+		        $args['poster'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path'])) . $classname . '.jpg';
+	        }
+
+	        if (file_exists(trailingslashit($args['path']) . $classname . '.png')) {
+		        $args['poster'] = content_url(str_replace(WP_CONTENT_DIR, '', $args['path'])) . $classname . '.png';
+	        }
+
             // add missing args from general Defaults
             $moduleArgs['settings'] = wp_parse_args($args, Module::getDefaults());
             if (!isset($moduleArgs['state'])) {

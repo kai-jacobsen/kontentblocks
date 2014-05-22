@@ -9,11 +9,13 @@ KB.Templates = (function ($) {
 
     function render(tmpl_name, tmpl_data) {
         var tmpl_string;
-
+        console.log(tmpl_name);
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + 'js/templates';
 
-            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.hbs'; //?'+ new Date().getTime();
+            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.hbs?'+ kontentblocks.config.hash;
+
+            // if a full url is given, tmpl_url will be overwritten
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;
@@ -29,12 +31,9 @@ KB.Templates = (function ($) {
                     success: function (data) {
                         tmpl_string = data;
                         KB.Util.stex.set(tmpl_url, tmpl_string, 2 * 1000 * 60);
-
                     }
                 });
             }
-
-
             tmpl_cache[tmpl_name] = Handlebars.compile(tmpl_string);
         }
         return tmpl_cache[tmpl_name](tmpl_data);

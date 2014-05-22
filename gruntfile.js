@@ -96,7 +96,7 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js'],
-                tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint']
+                tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint', 'bash']
             },
             sass: {
                 options: {
@@ -132,10 +132,14 @@ module.exports = function (grunt) {
         },
         exec: {
             removeHash: {
-                command: 'rm -f hash.txt'
+                command: 'rm -f build/hash.php'
             },
             createId: {
-                command: 'git rev-parse HEAD > hash.txt'
+                command: './build/githash.sh > build/hash.php'
+            },
+            createDevId:{
+                command: './build/devhash.sh > build/hash.php'
+
             }
         }
     });
@@ -154,6 +158,7 @@ module.exports = function (grunt) {
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean']);
     grunt.registerTask('hint', ['jshint']);
-    grunt.registerTask('bash', ['exec']);
+    grunt.registerTask('dev', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'bash']);
+    grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
 };

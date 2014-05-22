@@ -18,6 +18,8 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
 	public $index = null;
 
+	private $field = null;
+
 	protected $inlineEdit = true;
 
 	protected $uniqueId;
