@@ -30,6 +30,8 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 		$this->uniqueId = $this->createUniqueId();
 	}
 
+
+
 	/**
 	 * Getter for value
 	 *
