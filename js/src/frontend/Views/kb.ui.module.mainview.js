@@ -101,7 +101,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.left = mSettings.controls.toolbar.left;
         }
 
-        $controls.offset({ top: pos.top + 20, left: pos.left - 15, zIndex: 999999});
+        $controls.offset({ top: pos.top + 20, left: pos.left, zIndex: 999999});
 //        $controls.css({'top':pos.top + 'px', 'right':0})
     },
     updateModule: function () {

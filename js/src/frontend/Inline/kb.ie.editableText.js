@@ -43,7 +43,6 @@ KB.IEdit.Text = function (el) {
                 ed.module.view.$el.addClass('inline-editing-active');
 
                 jQuery('body').on('click','.mce-listbox', function(){
-                    console.log(jQuery('.mce-stack-layout-item span'));
                     jQuery('.mce-stack-layout-item span').removeAttr('style');
                 });
 
@@ -51,6 +50,7 @@ KB.IEdit.Text = function (el) {
 
             ed.on('focus', function (e) {
                 jQuery('#kb-toolbar').show();
+                ed.module.view.$el.addClass('inline-edit-active');
             });
 
 
@@ -73,6 +73,7 @@ KB.IEdit.Text = function (el) {
             });
 
             ed.on('blur', function () {
+                ed.module.view.$el.removeClass('inline-edit-active');
                 jQuery('#kb-toolbar').hide();
                 var data = ed.kbDataRef;
                 var value = ed.getContent();

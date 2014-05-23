@@ -455,3 +455,11 @@ body.onsite-editing {
 }
 
 @import "partials/_onsite/wplinkdialog";
+
+.editable:hover{
+  outline: 4px dashed #ccc;
+}
+
+.inline-edit-active .controls-wrap{
+  display: none;
+}

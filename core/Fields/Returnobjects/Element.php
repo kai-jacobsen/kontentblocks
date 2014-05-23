@@ -119,6 +119,8 @@ class Element extends AbstractEditableFieldReturn {
 	 * @since 1.0.0
 	 */
 	public function html() {
+		$this->addClass( 'koolkip' );
+		$this->addAttr( 'data-powertip', 'Click to edit text' );
 		$this->handleLoggedInUsers();
 		$this->toJSON();
 

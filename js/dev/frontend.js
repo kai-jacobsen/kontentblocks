@@ -238,12 +238,12 @@ KB.IEdit.Text = function(el) {
                 };
                 ed.module.view.$el.addClass("inline-editing-active");
                 jQuery("body").on("click", ".mce-listbox", function() {
-                    console.log(jQuery(".mce-stack-layout-item span"));
                     jQuery(".mce-stack-layout-item span").removeAttr("style");
                 });
             });
             ed.on("focus", function(e) {
                 jQuery("#kb-toolbar").show();
+                ed.module.view.$el.addClass("inline-edit-active");
             });
             ed.on("change", function(e) {
                 _K.info("Got Dirty");
@@ -262,6 +262,7 @@ KB.IEdit.Text = function(el) {
                 }
             });
             ed.on("blur", function() {
+                ed.module.view.$el.removeClass("inline-edit-active");
                 jQuery("#kb-toolbar").hide();
                 var data = ed.kbDataRef;
                 var value = ed.getContent();
@@ -707,7 +708,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         $controls.offset({
             top: pos.top + 20,
-            left: pos.left - 15,
+            left: pos.left,
             zIndex: 999999
         });
     },

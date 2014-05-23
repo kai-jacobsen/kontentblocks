@@ -882,3 +882,12 @@ body.onsite-editing #onsite-modal {
     position: static;
   }
 }
+/* line 459, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+.editable:hover {
+  outline: 4px dashed #ccc;
+}
+
+/* line 463, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+.inline-edit-active .controls-wrap {
+  display: none;
+}
