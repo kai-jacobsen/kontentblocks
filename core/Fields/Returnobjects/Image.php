@@ -17,6 +17,7 @@ class Image extends AbstractEditableFieldReturn {
 	protected $uid;
 	protected $background = false;
 	protected $crop = true;
+	protected  $field;
 
 	public function addClass( $class ) {
 

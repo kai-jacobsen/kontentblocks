@@ -4,7 +4,7 @@ namespace Kontentblocks\Fields\Returnobjects;
 
 class Gallery {
 
-	protected $Field;
+	protected $field;
 
 	protected $value;
 
@@ -12,7 +12,8 @@ class Gallery {
 
 	public function __construct( $value, $Field ) {
 
-		$this->Field = $Field;
+
+		$this->field = $Field;
 		$this->value = $value;
 
 

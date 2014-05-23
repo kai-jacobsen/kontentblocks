@@ -187,7 +187,6 @@ abstract class Field {
 	 * @return object
 	 */
 		public function getReturnObj() {
-
 			if (is_object($this->returnObj)){
 				return $this->returnObj;
 			}

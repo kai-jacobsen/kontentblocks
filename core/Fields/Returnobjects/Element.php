@@ -29,13 +29,8 @@ class Element extends AbstractEditableFieldReturn {
 	protected $attributes = array();
 
 
-	/**
-	 * The field object if this comes from ReField
-	 * The array if set manually
-	 * @var object | array
-	 * @since 1.0.0
-	 */
 	protected $field;
+
 
 	/**
 	 * Indicator for additional link
@@ -235,7 +230,6 @@ class Element extends AbstractEditableFieldReturn {
 	}
 
 	public function toJSON() {
-
 
 		$json = array(
 			'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce )

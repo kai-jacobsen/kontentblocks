@@ -18,16 +18,17 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
 	public $index = null;
 
-	private $field = null;
 
 	protected $inlineEdit = true;
 
 	protected $uniqueId;
 
 	public function __construct( $value, $field ) {
+
 		$this->setValue( $value );
 		$this->setupFromField( $field );
 		$this->uniqueId = $this->createUniqueId();
+
 	}
 
 
@@ -128,7 +129,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
 		}
 		// @TODO Input Validation and error handling
-
 
 	}
 
