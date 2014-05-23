@@ -42,11 +42,17 @@ KB.IEdit.Text = function (el) {
                 };
                 ed.module.view.$el.addClass('inline-editing-active');
 
+                jQuery('body').on('click','.mce-listbox', function(){
+                    console.log(jQuery('.mce-stack-layout-item span'));
+                    jQuery('.mce-stack-layout-item span').removeAttr('style');
+                });
+
             });
 
             ed.on('focus', function (e) {
                 jQuery('#kb-toolbar').show();
             });
+
 
             ed.on('change', function (e) {
                 _K.info('Got Dirty');

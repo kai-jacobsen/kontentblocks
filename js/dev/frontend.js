@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-22 */
+/*! Kontentblocks DevVersion 2014-05-23 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -237,6 +237,10 @@ KB.IEdit.Text = function(el) {
                     arrayKey: data.arraykey
                 };
                 ed.module.view.$el.addClass("inline-editing-active");
+                jQuery("body").on("click", ".mce-listbox", function() {
+                    console.log(jQuery(".mce-stack-layout-item span"));
+                    jQuery(".mce-stack-layout-item span").removeAttr("style");
+                });
             });
             ed.on("focus", function(e) {
                 jQuery("#kb-toolbar").show();
