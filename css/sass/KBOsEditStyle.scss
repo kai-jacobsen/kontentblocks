@@ -376,7 +376,8 @@ body.onsite-editing {
     box-sizing: border-box;
 
     label {
-      font-size: 12px;
+      font-size: 12px !important;
+      color: #333 !important;
     }
 
     input[type=button], .button {
