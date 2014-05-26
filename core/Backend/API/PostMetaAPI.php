@@ -118,8 +118,6 @@ class PostMetaAPI {
 	 * returns 'default' if not. in order to normalize this module attribute
 	 * If post type does not support page templates, it's still
 	 * 'default' on the module
-	 * TODO: Could refer to template hierachie files as well?
-	 * TODO: custom post types default?
 	 * @return string
 	 * @since 1.0.0
 	 */

@@ -230,9 +230,7 @@ class BackupManager
     public static function deletePostCallback($post_id)
     {
         global $wpdb;
-
         $wpdb->delete($wpdb->prefix . "kb_backups", array('post_id' => $post_id));
-
     }
 
 

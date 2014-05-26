@@ -123,7 +123,6 @@ Class EditScreen
     /**
      * Handles the saving of modules and supplemental data
      *
-     * @todo Split up or outsource in own class (done, but optimize!)
      * @param int $post_id The current post id
      * @return void
      * @since 1.0.0

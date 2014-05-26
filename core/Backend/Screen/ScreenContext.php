@@ -140,6 +140,7 @@ class ScreenContext
             //render area footer
             $area->footer();
 
+
         }
 
     }

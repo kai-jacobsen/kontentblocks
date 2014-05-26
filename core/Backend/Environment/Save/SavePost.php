@@ -21,7 +21,6 @@ class SavePost
 
     /**
      * Save method for post related modules
-     * @todo move the code from EditScreen to a new file (done)
      * @todo split this in chunks
      * @return false    if auth fails or areas are empty
      */
@@ -40,9 +39,6 @@ class SavePost
         if (empty($areas)) {
             return false;
         }
-
-
-
 
         // create backup
         $this->createBackup();

@@ -66,7 +66,6 @@ class DuplicateModule
             $newInstance->_render_options();
             $html = ob_get_clean();
 
-
             $response = array
             (
                 'id' => $this->newInstanceId,

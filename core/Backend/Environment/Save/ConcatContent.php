@@ -19,7 +19,7 @@ namespace Kontentblocks\Backend\Environment\Save;
  * @subpackage Backend
  *
  * @since 1.0.0
- * @TODO Works currently only if save from post edit screen
+ * @TODO Works currently only if save called from post edit screen
  */
 class ConcatContent {
 	public static $instance;

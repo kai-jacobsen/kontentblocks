@@ -60,7 +60,6 @@ KB.Gallery.ImageView = Backbone.View.extend({
         'click .kb-gallery--js-meta-close': 'close'
     },
     edit: function () {
-//        this.$el.addClass('kb-gallery--active-item');
         this.$el.wrap('<div class="kb-gallery--item-placeholder"></div>');
         this._placeholder = this.$el.parent();
         this.$el.addClass('kb-gallery--active-item kb_field').appendTo('body');

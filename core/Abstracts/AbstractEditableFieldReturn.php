@@ -100,8 +100,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	}
 
 	/**
-	 * @TODO Rethink array mode, was a hack
-	 *
 	 * @param $field
 	 */
 	private function setupFromField( $field ) {
