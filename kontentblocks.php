@@ -100,7 +100,7 @@ Class Kontentblocks
 
         add_action('wp_head', array($this, 'livereload'));
 
-	    if (defined('WP_DEBUG') && WP_DEBUG){
+	    if (defined('WP_LOCAL_DEV') && WP_LOCAL_DEV){
 		    add_action('admin_head', array($this, 'livereload'));
 	    }
 
