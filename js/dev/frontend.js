@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-26 */
+/*! Kontentblocks DevVersion 2014-05-27 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -516,6 +516,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     unset: function() {
         this.model = null;
         this.options.view = null;
+        this.view.attachedFields = {};
     },
     recalibrate: function(pos) {
         var winH, conH, position, winDiff;
@@ -576,6 +577,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
                     that.$el.removeClass("isDirty");
                     that.model.view.getClean();
+                    that.trigger("kb:frontend-save");
                 } else {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
                     that.$el.addClass("isDirty");

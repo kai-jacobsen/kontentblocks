@@ -886,9 +886,10 @@ body.onsite-editing #onsite-modal {
 /* line 460, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .editable:hover {
   outline: 4px dashed #ccc;
+  outline: 4px dashed currentcolor;
 }
 
-/* line 464, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+/* line 465, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .inline-edit-active .controls-wrap {
   display: none;
 }

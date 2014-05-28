@@ -91,13 +91,13 @@ KB.TinyMCE = (function ($) {
             if (!media) {
                 var media = false;
             }
-            console.log(id,name,pid,content);
+            var editorContent = content || '';
             return KB.Ajax.send({
                 action: 'getRemoteEditor',
                 editorId: id + '_ed',
                 editorName: name,
                 post_id: pid,
-                editorContent: content,
+                editorContent: editorContent,
                 _ajax_nonce: kontentblocks.nonces.read,
                 args: {
                     media_buttons: media

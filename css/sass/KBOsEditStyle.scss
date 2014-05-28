@@ -459,6 +459,7 @@ body.onsite-editing {
 
 .editable:hover{
   outline: 4px dashed #ccc;
+  outline: 4px dashed currentcolor;
 }
 
 .inline-edit-active .controls-wrap{

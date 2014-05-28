@@ -9,7 +9,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     initialize: function () {
         var that = this;
 
-        if (!KB.Checks.userCan('edit_kontentblocks')){
+        if (!KB.Checks.userCan('edit_kontentblocks')) {
             return;
         }
         this.attachedFields = [];
@@ -23,13 +23,13 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         });
 
     },
-    getDirty: function(){
+    getDirty: function () {
         this.$el.addClass('isDirty');
     },
-    getClean: function(){
+    getClean: function () {
         this.$el.removeClass('isDirty');
     },
-    modelChange: function(){
+    modelChange: function () {
         this.getDirty();
     },
     save: function () {
@@ -42,11 +42,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click .kb-js-open-layout-controls": "openLayoutControls",
         "hover": "setActive"
     },
-    setActive: function(){
+    setActive: function () {
         KB.currentModule = this;
     },
     render: function () {
-        this.$el.append(KB.Templates.render('frontend/module-controls', {model: this.model.toJSON(), i18n: KB.i18n.jsFrontend}));
+        this.$el.append(KB.Templates.render('frontend/module-controls', {
+            model: this.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
+        }));
     },
     openOptions: function () {
 
@@ -54,7 +57,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         if (KB.FrontendEditModal) {
             this.reloadModal();
             return false;
-//            KB.FrontendEditModal.destroy();
         }
         KB.FrontendEditModal = new KB.Backbone.FrontendEditView({
             tagName: 'div',
@@ -96,12 +98,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var pos = this.$el.offset();
         var mwidth = this.$el.width() - 150;
 
-        if (mSettings.controls && mSettings.controls.toolbar){
+        if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
 
-        $controls.offset({ top: pos.top + 20, left: pos.left, zIndex: 999999});
+        $controls.offset({top: pos.top + 20, left: pos.left, zIndex: 999999});
 //        $controls.css({'top':pos.top + 'px', 'right':0})
     },
     updateModule: function () {
@@ -123,7 +125,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             success: function (res) {
-                if (refresh){
+                if (refresh) {
                     that.$el.html(res.html);
                 }
                 tinymce.triggerSave();
@@ -164,7 +166,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             return this.attachedFields[key];
         }
     },
-    clearFields: function(){
+    clearFields: function () {
         _K.info('Attached Fields were reset to empty object');
         this.attachedFields = {};
     }

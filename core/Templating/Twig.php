@@ -54,7 +54,7 @@ class Twig
 
     public static function getDefaultPath()
     {
-        return apply_filters('kb_twig_def_path', get_stylesheet_directory() . '/module-templates/');
+        return apply_filters('kb_twig_def_path', get_template_directory() . '/module-templates/');
 
     }
 

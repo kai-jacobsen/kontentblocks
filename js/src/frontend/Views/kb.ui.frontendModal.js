@@ -18,7 +18,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
         this.model.on('change', this.test, this);
 
-//        this.on('recalibrate', this.recalibrate, this);
         this.listenTo(this, 'recalibrate', this.recalibrate);
         // add form skeleton to modal
         jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON(), i18n:KB.i18n.jsFrontend})).appendTo(this.$el);
@@ -171,6 +170,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     unset: function () {
         this.model = null;
         this.options.view = null;
+        this.view.attachedFields = {};
     },
 
 // position and height of the modal may change depending on user action resp. contents
@@ -260,6 +260,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
                     that.$el.removeClass('isDirty');
                     that.model.view.getClean();
+                    that.trigger('kb:frontend-save');
                 } else {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
                     that.$el.addClass('isDirty');

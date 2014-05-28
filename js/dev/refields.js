@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-26 */
+/*! Kontentblocks DevVersion 2014-05-27 */
 var KB = KB || {};
 
 KB.Fields.register("Color", function($) {
@@ -427,12 +427,15 @@ KB.Gallery.ImageView = Backbone.View.extend({
             this.$el.fadeTo(450, .5).css("borderColor", "red");
             this._remove = true;
             jQuery(".kb-gallery--image-remove", this.$el).val("true");
-            this.removeInput.val("true");
         } else {
             this.$el.fadeTo(450, 1).css("borderColor", "#ccc");
             jQuery(".kb-gallery--image-remove", this.$el).val("");
             this._remove = false;
         }
+    },
+    remove: function() {
+        this.$el.remove();
+        delete this.$el;
     },
     close: function() {
         var ed = tinymce.get(this.uid + "_ed");
@@ -473,6 +476,9 @@ KB.Gallery.Controller = Backbone.View.extend({
         this.subviews = [];
         this.bootstrap();
         this._initialized = false;
+        if (KB.FrontendEditModal) {
+            this.listenTo(KB.FrontendEditModal, "kb:frontend-save", this.frontendSave);
+        }
     },
     events: {
         "click .kb-gallery--js-add-images": "addImages"
@@ -490,7 +496,6 @@ KB.Gallery.Controller = Backbone.View.extend({
     setupElements: function() {
         this.$list = jQuery('<div class="kb-gallery--item-list"></div>').appendTo(this.$el);
         this.$list.sortable({
-            helper: "clone",
             revert: true,
             delay: 300
         });
@@ -550,6 +555,9 @@ KB.Gallery.Controller = Backbone.View.extend({
             });
             that.subviews.push = imageView;
             that.$list.append(imageView.render());
+            if (KB.FrontendEditModal) {
+                KB.FrontendEditModal.trigger("recalibrate");
+            }
         });
     },
     initialSetup: function() {
@@ -562,8 +570,19 @@ KB.Gallery.Controller = Backbone.View.extend({
                     model: model,
                     parentView: that
                 });
-                that.subviews.push = imageView;
+                that.subviews.push(imageView);
                 that.$list.append(imageView.render());
+            });
+        }
+    },
+    frontendSave: function() {
+        var that = this;
+        if (this.subviews.length > 0) {
+            _.each(this.subviews, function(m, i) {
+                if (m._remove) {
+                    delete that.subviews[i];
+                    m.remove();
+                }
             });
         }
     }
