@@ -99,7 +99,10 @@ Class Kontentblocks
         add_action('init', array($this, 'initInterface'), 9);
 
         add_action('wp_head', array($this, 'livereload'));
-        add_action('admin_head', array($this, 'livereload'));
+
+	    if (defined('WP_DEBUG') && WP_DEBUG){
+		    add_action('admin_head', array($this, 'livereload'));
+	    }
 
         add_action('plugins_loaded', array($this, 'i18n'));
 
