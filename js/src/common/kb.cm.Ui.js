@@ -284,7 +284,7 @@ KB.Ui = function ($) {
             var hash = kontentblocks.config.hash;
             if (store.get('kbhash') !== hash){
                 store.clear();
-//                store.set('kbhash', hash)
+                store.set('kbhash', hash)
             }
         },
         /**

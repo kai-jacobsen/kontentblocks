@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-27 */
+/*! Kontentblocks DevVersion 2014-06-08 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -58,7 +58,6 @@ KB.Checks = function($) {
             var limit = areamodel.get("limit");
             var children = $("#" + areamodel.get("id") + " li.kb_block").length;
             if (limit !== 0 && children === limit) {
-                console.log("asdf");
                 return false;
             }
             return true;
@@ -270,7 +269,6 @@ KB.Templates = function($) {
     }
     function render(tmpl_name, tmpl_data) {
         var tmpl_string;
-        console.log(tmpl_name);
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + "js/templates";
             var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + kontentblocks.config.hash;
@@ -574,6 +572,7 @@ KB.Ui = function($) {
             var hash = kontentblocks.config.hash;
             if (store.get("kbhash") !== hash) {
                 store.clear();
+                store.set("kbhash", hash);
             }
         },
         resort: function(sender) {

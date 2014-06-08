@@ -49,7 +49,7 @@ class CoreTemplate
 
     public function __destruct()
     {
-        Twig::resetPath();
+//        Twig::resetPath();
 
     }
 

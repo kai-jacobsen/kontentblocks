@@ -20,9 +20,7 @@ class UpdateModuleOptions
         $refresh = (isset($_POST['refresh']) && $_POST['refresh'] === 'false' ) ? false : true;
         $parsed = array();
         parse_str($data, $parsed);
-
 //        $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment($module['post_id']);
-
         $Environment = \Kontentblocks\Helper\getEnvironment($module['post_id']);
 
         $Factory = new \Kontentblocks\Modules\ModuleFactory($module['class'], $module, $Environment);
@@ -43,6 +41,9 @@ class UpdateModuleOptions
             'html' => $instance->module($mergedData),
             'newModuleData' => $mergedData
         );
+
+
+	    do_action('kb_save_frontend_module', $module);
 
         wp_send_json($return);
 

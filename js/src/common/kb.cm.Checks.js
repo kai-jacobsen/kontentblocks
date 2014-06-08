@@ -6,7 +6,6 @@ KB.Checks = (function($) {
             var children = $('#' + areamodel.get('id') + ' li.kb_block').length;
 
             if (limit !== 0 && children === limit) {
-                console.log('asdf');
                 return false;
             }
 

@@ -5,18 +5,14 @@ namespace Kontentblocks\Fields\Definitions;
 use Kontentblocks\Fields\Field;
 
 /**
- * Simple text input field
- * Additional args are:
- * type - specific html5 input type e.g. number, email... .
  *
  */
-Class Text extends Field
+Class TemplateSelector extends Field
 {
 
     // Defaults
     public static $defaults = array(
-        'returnObj' => 'Element',
-        'type' => 'text'
+        'type' => 'templateSelector'
     );
 
     /**
@@ -30,10 +26,6 @@ Class Text extends Field
         $this->description();
 
     }
-
-	public function outputFilter($v){
-		return esc_textarea($v);
-	}
 
     /**
      * Text Input filter

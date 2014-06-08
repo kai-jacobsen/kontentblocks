@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Fields.register('DateTime', (function($) {
 	var settings = {};
 

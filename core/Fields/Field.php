@@ -477,7 +477,6 @@ abstract class Field {
 	 */
 	public function _save( $keydata, $oldKeyData = null ) {
 		$data = $this->save( $keydata, $oldKeyData );
-
 		if ( $this->getArg( 'saveCallback' ) ) {
 			$data = call_user_func( $this->getArg( 'saveCallback' ), $keydata, $oldKeyData, $data );
 		}

@@ -1,6 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-27 */
-var KB = KB || {};
-
+/*! Kontentblocks DevVersion 2014-06-08 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -28,8 +26,6 @@ KB.Fields.register("Color", function($) {
     };
 }(jQuery));
 
-var KB = KB || {};
-
 KB.Fields.register("Date", function($) {
     var settings = {};
     return {
@@ -56,8 +52,6 @@ KB.Fields.register("Date", function($) {
         }
     };
 }(jQuery));
-
-var KB = KB || {};
 
 KB.Fields.register("DateTime", function($) {
     var settings = {};
@@ -91,8 +85,6 @@ KB.Fields.register("DateTime", function($) {
         }
     };
 }(jQuery));
-
-var KB = KB || {};
 
 KB.Fields.register("File", function($) {
     var self, attachment;
@@ -588,8 +580,6 @@ KB.Gallery.Controller = Backbone.View.extend({
     }
 });
 
-var KB = KB || {};
-
 KB.Fields.register("Image", function($) {
     "use strict";
     var self;
@@ -751,5 +741,20 @@ KB.Fields.register("Link", function($) {
         updateFront: function() {
             this.init();
         }
+    };
+}(jQuery));
+
+KB.Fields.register("TemplateSelect", function($) {
+    var view;
+    return {
+        init: function() {
+            $("body").on("change.template-select", ".kb-template-select", function() {
+                if (KB.focusedModule) {
+                    KB.focusedModule.set("viewfile", $(this).val());
+                    KB.trigger("template::changed", KB.focusedModule);
+                }
+            });
+        },
+        update: function() {}
     };
 }(jQuery));

@@ -247,17 +247,19 @@ class FieldSection
     /**
      * Set visibility of field based on environment vars given by the module
      * By following a hierachie: PostType -> PageTemplate -> AreaContext
-     * @param $field
+     * @param Field $field
      * @return mixed
      */
-    public function markByEnvVar($field)
+    public function markByEnvVar(Field $field)
     {
         $areaContext = $this->envVars['areaContext'];
         $postType = $this->envVars['postType'];
         $pageTemplate = $this->envVars['pageTemplate'];
+		$moduleTemplate = $this->module->viewfile;
 
-
-
+	    if ($field->getArg('viewfile') && !in_array($moduleTemplate, (array)$field->getArg('viewfile'))) {
+		    return $field->setDisplay(false);
+	    }
 
         if ($field->getArg('postType') && !in_array($postType, (array)$field->getArg('postType'))) {
             return $field->setDisplay(false);

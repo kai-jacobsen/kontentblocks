@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-27 */
+/*! Kontentblocks DevVersion 2014-06-08 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -182,7 +182,6 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
         key: null
     },
     render: function(index) {
-        console.log("b4", this.model.toJSON());
         return KB.Templates.render(this.templatePath, {
             config: this.config,
             baseId: this.baseId,

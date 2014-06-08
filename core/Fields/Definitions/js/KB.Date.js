@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Fields.register('Date', (function($) {
 	var settings = {};
 

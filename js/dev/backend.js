@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-05-27 */
+/*! Kontentblocks DevVersion 2014-06-08 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -331,7 +331,6 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
             if (count === 0) {
                 return false;
             }
-            console.log(this);
             if (this.options.parent.catSet === false) {
                 this.options.parent.catSet = true;
                 this.options.browser.update(this.model);
@@ -565,6 +564,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             view.$el.fadeOut(500, function() {
                 view.$el.remove();
             });
+        });
+        this.listenTo(KB, "template::changed", function() {
+            console.log("called");
+            that.clearFields();
+            that.updateModuleForm();
         });
     },
     setupDefaultMenuItems: function() {
