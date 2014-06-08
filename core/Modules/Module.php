@@ -37,6 +37,7 @@ abstract class Module {
 	 */
 	public $rawModuleData;
 
+	protected $View;
 
 	private $TemplateSelector;
 
@@ -81,7 +82,7 @@ abstract class Module {
 	 *
 	 */
 	public function options( $data ) {
-		if ( filter_var($this->getSetting( 'useTemplateSelector' ),FILTER_VALIDATE_BOOLEAN) ) {
+		if ( filter_var( $this->getSetting( 'useTemplateSelector' ), FILTER_VALIDATE_BOOLEAN ) ) {
 
 			$this->TemplateSelector = new ModuleViewLoader( $this );
 			echo $this->TemplateSelector->render();
@@ -106,6 +107,7 @@ abstract class Module {
 
 			return $this->saveFields( $data, $old );
 		}
+
 		return $data;
 
 	}
@@ -125,6 +127,7 @@ abstract class Module {
 			$this->_setupFieldData();
 		}
 
+		$this->View = $this->getView();
 
 		if ( $this->getEnvVar( 'action' ) ) {
 			if ( method_exists( $this, $this->getEnvVar( 'action' ) . 'Action' ) ) {
@@ -469,6 +472,26 @@ abstract class Module {
 	}
 
 
+	public function getView() {
+		if ( $this->getSetting( 'useViewLoader' ) && is_null( $this->View ) ) {
+			$tpl      = $this->viewfile;
+			$Selector = new ModuleViewLoader( $this );
+			$full     = $Selector->getTemplateByName( $tpl );
+
+			$T = new ModuleTemplate( $this, $full['fragment'] );
+			$T->setPath( $full['basedir'] );
+
+			$this->View = $T;
+
+			return $this->View;
+		} else if ( $this->View ) {
+			return $this->View;
+		}
+
+		return null;
+	}
+
+
 	/**
 	 * Set the area where this Block is located
 	 * TODO: remove, make it useless
@@ -620,18 +643,18 @@ abstract class Module {
 
 		// todo only used on frontend
 		$toJSON = array(
-			'envVars'      => $this->envVars,
-			'settings'     => $this->settings,
-			'state'        => $this->state,
-			'instance_id'  => $this->instance_id,
-			'moduleData'   => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
-			'area'         => $this->area,
-			'post_id'      => $this->envVars['postId'],
-			'areaContext'  => $this->areaContext,
-			'viewfile' => $this->viewfile,
-			'class'        => get_class( $this ),
-			'inDynamic'    => AreaRegistry::getInstance()->isDynamic( $this->area ),
-			'uri'          => $this->getUri()
+			'envVars'     => $this->envVars,
+			'settings'    => $this->settings,
+			'state'       => $this->state,
+			'instance_id' => $this->instance_id,
+			'moduleData'  => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
+			'area'        => $this->area,
+			'post_id'     => $this->envVars['postId'],
+			'areaContext' => $this->areaContext,
+			'viewfile'    => $this->viewfile,
+			'class'       => get_class( $this ),
+			'inDynamic'   => AreaRegistry::getInstance()->isDynamic( $this->area ),
+			'uri'         => $this->getUri()
 		);
 		// only for master templates
 		if ( isset( $this->master ) && $this->master ) {
@@ -652,22 +675,21 @@ abstract class Module {
 	public static function getDefaults() {
 
 		return array(
-			'disabled'            => false,
-			'publicName'          => 'Module Name Missing',
-			'name'                => '',
-			'wrap'                => true,
-			'wrapperClasses'      => '',
-			'description'         => '',
-			'connect'             => 'any',
-			'hidden'              => false,
-			'predefined'          => false,
-			'inGlobalSidebars'    => false,
-			'inGlobalAreas'       => false,
-			'asTemplate'          => true,
-			'category'            => 'standard',
-			'useTemplateSelector' => false,
-			'TemplateSelector'    => null,
-			'Templates'           => null
+			'disabled'         => false,
+			'publicName'       => 'Module Name Missing',
+			'name'             => '',
+			'wrap'             => true,
+			'wrapperClasses'   => '',
+			'description'      => '',
+			'connect'          => 'any',
+			'hidden'           => false,
+			'predefined'       => false,
+			'inGlobalSidebars' => false,
+			'inGlobalAreas'    => false,
+			'asTemplate'       => true,
+			'category'         => 'standard',
+			'useViewLoader'    => false,
+			'TemplateSelector' => null
 		);
 
 	}

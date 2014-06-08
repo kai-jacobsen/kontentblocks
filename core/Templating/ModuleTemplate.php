@@ -122,4 +122,14 @@ class ModuleTemplate {
 		);
 	}
 
+	public function addData( $data ) {
+
+		if ( !is_array( $data ) ) {
+			return false;
+		}
+
+		$this->data = wp_parse_args($data, $this->data);
+		return true;
+	}
+
 }
