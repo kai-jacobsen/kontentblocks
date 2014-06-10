@@ -64,11 +64,15 @@ abstract class Module {
 			$this->setEnvVarsFromEnvironment( $environment );
 		}
 
+		$this->View = $this->getView();
+
+
 		if ( method_exists( $this, 'fields' ) ) {
 			$this->Fields = new FieldManager( $this );
 			$this->fields();
 
 		}
+
 
 	}
 
@@ -127,7 +131,6 @@ abstract class Module {
 			$this->_setupFieldData();
 		}
 
-		$this->View = $this->getView();
 
 		if ( $this->getEnvVar( 'action' ) ) {
 			if ( method_exists( $this, $this->getEnvVar( 'action' ) . 'Action' ) ) {
@@ -167,6 +170,7 @@ abstract class Module {
 		if ( empty( $this->moduleData ) || !is_array( $this->moduleData ) ) {
 			return;
 		}
+
 		$this->Fields->setup( $this->moduleData );
 		foreach ( $this->moduleData as $key => $v ) {
 			$field                    = $this->Fields->getFieldByKey( $key );
@@ -484,6 +488,10 @@ abstract class Module {
 
 	}
 
+	public function assignViewFile($file){
+		$this->viewfile = $file;
+	}
+
 	public function defaultView() {
 		return '';
 	}
@@ -493,7 +501,7 @@ abstract class Module {
 		if ( $this->getSetting( 'useViewLoader' ) && is_null( $this->View ) ) {
 			$tpl    = $this->getViewfile();
 			$Loader = new ModuleViewLoader( $this );
-			$T      = new ModuleTemplate( $this );
+			$T      = new ModuleView( $this );
 
 			$full = $Loader->getTemplateByName( $tpl );
 			if ( isset( $full['fragment'] ) ) {

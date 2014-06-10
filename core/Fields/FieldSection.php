@@ -256,7 +256,6 @@ class FieldSection
         $postType = $this->envVars['postType'];
         $pageTemplate = $this->envVars['pageTemplate'];
 		$moduleTemplate = $this->module->getViewfile();
-
 	    if ($field->getArg('viewfile') && !in_array($moduleTemplate, (array)$field->getArg('viewfile'))) {
 		    return $field->setDisplay(false);
 	    }

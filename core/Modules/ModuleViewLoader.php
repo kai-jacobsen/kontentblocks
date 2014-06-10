@@ -33,7 +33,7 @@ class ModuleViewLoader {
 		if ( count( $this->views ) > 1 ) {
 			$this->hasTemplates = true;
 		}
-		add_action( 'Wkb_save_frontend_module', array( $this, 'frontendSave' ) );
+		add_action( 'kb_save_frontend_module', array( $this, 'frontendSave' ) );
 	}
 
 	public function render() {
@@ -48,6 +48,7 @@ class ModuleViewLoader {
 			if ( is_null( $tpl ) ) {
 				return "<p class='notice kb-field'>No View available</p>";
 			} else {
+				$this->Module->assignViewFile($tpl['filteredfile']);
 				return "<input type='hidden' name='{$this->Module->instance_id}[viewfile]' value='{$tpl['filteredfile']}' >";
 			}
 		}
