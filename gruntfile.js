@@ -96,7 +96,7 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js'],
-                tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint']
+                tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint', 'bash']
             },
             sass: {
                 options: {
@@ -129,6 +129,18 @@ module.exports = function (grunt) {
                 src: 'css/kontentblocks.css',
                 dest: 'css/kontentblocks.css'
             }
+        },
+        exec: {
+            removeHash: {
+                command: 'rm -f build/hash.php'
+            },
+            createId: {
+                command: './build/githash.sh > build/hash.php'
+            },
+            createDevId:{
+                command: './build/devhash.sh > build/hash.php'
+
+            }
         }
     });
 
@@ -142,8 +154,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-autoprefixer');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-rsync-2');
+    grunt.loadNpmTasks('grunt-exec');
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean']);
+    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass','clean', 'jshint', 'bash']);
     grunt.registerTask('hint', ['jshint']);
+    grunt.registerTask('dev', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'bash']);
+    grunt.registerTask('bash', ['exec:removeHash', 'exec:createId']);
 
 };

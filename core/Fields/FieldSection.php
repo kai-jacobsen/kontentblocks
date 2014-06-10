@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields;
 
 use Kontentblocks\Fields\FieldRegistry,
     Kontentblocks\Fields\FieldArray;
+use Kontentblocks\Modules\Module;
 
 /**
  * Purpose of this Class:
@@ -61,11 +62,11 @@ class FieldSection
 	 * @param string $id
 	 * @param $args
 	 * @param $envVars
-	 * @param $module
+	 * @param Module $module
 	 * @internal param array $areaContext
 	 * @return \Kontentblocks\Fields\FieldSection
 	 */
-    public function __construct($id, $args, $envVars, $module)
+    public function __construct($id, $args, $envVars, Module $module)
     {
 
         $this->id = $id;
@@ -172,11 +173,9 @@ class FieldSection
     {
         $collect = array();
         foreach ($this->fields as $field) {
-
             $field->setModule($this->module);
 
             $old = (isset($oldData[$field->getKey()])) ? $oldData[$field->getKey()] : NULL;
-
             if (isset($data[$field->getKey()])) {
                 $collect[$field->getKey()] = $field->_save($data[$field->getKey()], $old);
             } else {
@@ -249,16 +248,21 @@ class FieldSection
     /**
      * Set visibility of field based on environment vars given by the module
      * By following a hierachie: PostType -> PageTemplate -> AreaContext
-     * @param $field
+     * @param Field $field
      * @return mixed
      */
-    public function markByEnvVar($field)
+    public function markByEnvVar(Field $field)
     {
         $areaContext = $this->envVars['areaContext'];
         $postType = $this->envVars['postType'];
         $pageTemplate = $this->envVars['pageTemplate'];
+		$moduleTemplate = $this->module->getViewfile();
 
-
+	    if ($this->module->getSetting('iseViewLoader')){
+		    if ($field->getArg('viewfile') && !in_array($moduleTemplate, (array)$field->getArg('viewfile'))) {
+			    return $field->setDisplay(false);
+		    }
+	    }
 
 
         if ($field->getArg('postType') && !in_array($postType, (array)$field->getArg('postType'))) {

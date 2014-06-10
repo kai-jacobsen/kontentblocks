@@ -61,6 +61,9 @@ Class Kontentblocks
         include_once dirname(__FILE__) . '/Autoloader.php';
         require_once dirname(__FILE__) . '/vendor/autoload.php';
         require_once dirname(__FILE__) . '/kontentblocks.public-api.php';
+	    if (file_exists(dirname(__FILE__) . '/build/hash.php')){
+		    require_once(dirname(__FILE__) . '/build/hash.php');
+	    }
 
 
         include_once dirname(__FILE__) . '/core/Utils/helper.php';
@@ -96,7 +99,10 @@ Class Kontentblocks
         add_action('init', array($this, 'initInterface'), 9);
 
         add_action('wp_head', array($this, 'livereload'));
-        add_action('admin_head', array($this, 'livereload'));
+
+	    if (defined('WP_LOCAL_DEV') && WP_LOCAL_DEV){
+		    add_action('admin_head', array($this, 'livereload'));
+	    }
 
         add_action('plugins_loaded', array($this, 'i18n'));
 

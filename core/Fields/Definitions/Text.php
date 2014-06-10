@@ -31,6 +31,10 @@ Class Text extends Field
 
     }
 
+	public function outputFilter($v){
+		return esc_textarea($v);
+	}
+
     /**
      * Text Input filter
      * @param string $value
@@ -38,8 +42,10 @@ Class Text extends Field
      */
     public function inputFilter( $value )
     {
-        return esc_attr( $value );
-
+//        return esc_attr( $value );
+	    return $value;
     }
+
+
 
 }

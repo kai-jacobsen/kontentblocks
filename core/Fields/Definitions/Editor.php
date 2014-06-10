@@ -34,7 +34,7 @@ Class Editor extends Field
     }
 
     public function outputFilter($value){
-        return wp_kses_post($value);
+	    return wp_kses_post($value);
     }
 
 	public function save($value, $old){

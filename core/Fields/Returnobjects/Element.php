@@ -2,10 +2,10 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Abstracts\AbstractFieldReturn;
+use Kontentblocks\Abstracts\AbstractEditableFieldReturn;
 use Kontentblocks\Utils\JSONBridge;
 
-class Element extends AbstractFieldReturn {
+class Element extends AbstractEditableFieldReturn {
 
 	/**
 	 * The wrapper element name to us
@@ -29,13 +29,8 @@ class Element extends AbstractFieldReturn {
 	protected $attributes = array();
 
 
-	/**
-	 * The field object if this comes from ReField
-	 * The array if set manually
-	 * @var object | array
-	 * @since 1.0.0
-	 */
 	protected $field;
+
 
 	/**
 	 * Indicator for additional link
@@ -124,6 +119,8 @@ class Element extends AbstractFieldReturn {
 	 * @since 1.0.0
 	 */
 	public function html() {
+		$this->addClass( 'koolkip' );
+		$this->addAttr( 'data-powertip', 'Click to edit text' );
 		$this->handleLoggedInUsers();
 		$this->toJSON();
 
@@ -235,7 +232,6 @@ class Element extends AbstractFieldReturn {
 	}
 
 	public function toJSON() {
-
 
 		$json = array(
 			'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce )

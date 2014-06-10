@@ -26,7 +26,7 @@ KB.Ui = function ($) {
             this.initSortable();
             this.initToggleBoxes();
             this.flexContext();
-
+            this.flushLocalStorage();
             // set the global activeField variable dynamically
             // legacy
             $body.on('mousedown', '.kb_field', function (e) {
@@ -40,9 +40,9 @@ KB.Ui = function ($) {
             });
 
             // set the current field id as reference
-            $body.on('mouseenter', '.kb-js-field-identifier', function(){
-               KB.currentFieldId = this.id;
-               _K.log('Current Field Id set to:', KB.currentFieldId);
+            $body.on('mouseenter', '.kb-js-field-identifier', function () {
+                KB.currentFieldId = this.id;
+                _K.info('Current Field Id set to:', KB.currentFieldId);
             });
 
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
@@ -67,11 +67,11 @@ KB.Ui = function ($) {
 //                normal.removeClass('non-active-context');
 //            })
 
-            jQuery('body').on('mouseover','.kb_inner', function () {
+            jQuery('body').on('mouseover', '.kb_module--body', function () {
                 var $con = $(this).closest('.kb-context-container');
                 $con.addClass('active-context').removeClass('non-active-context');
 
-                if ($con.hasClass('area-top') || $con.hasClass('area-bottom')){
+                if ($con.hasClass('area-top') || $con.hasClass('area-bottom')) {
                     return false;
                 }
 
@@ -98,8 +98,9 @@ KB.Ui = function ($) {
             this.initToggleBoxes();
             KB.TinyMCE.addEditor($el);
         },
-        initTabs: function () {
-            var selector = $('.kb_fieldtabs');
+        initTabs: function ($cntxt) {
+            var $context = $cntxt || jQuery('body');
+            var selector = $('.kb_fieldtabs', $context);
             selector.tabs({
                 activate: function () {
 //                       var $window = $(window).height();
@@ -111,6 +112,7 @@ KB.Ui = function ($) {
             });
 
             selector.each(function () {
+                // hide tab navigation if only one tab exists
                 var length = $('.ui-tabs-nav li', $(this)).length;
                 if (length === 1) {
                     $(this).find('.ui-tabs-nav').css('display', 'none');
@@ -124,8 +126,8 @@ KB.Ui = function ($) {
 
             $('.kb_fieldtoggles div:first-child').trigger('click');
         },
-        initSortable: function () {
-
+        initSortable: function ($cntxt) {
+            var $context = $cntxt || jQuery('body');
             var currentModule, areaOver;
             var validModule = false;
 
@@ -148,7 +150,7 @@ KB.Ui = function ($) {
                     _.indexOf(areaOver.get(
                         'assignedModules'), currentModule.get('settings').class) === -1) {
                     return false;
-                } else if (limit !== 0 && limit <= nom - 1 ) {
+                } else if (limit !== 0 && limit <= nom - 1) {
                     KB.Notice.notice(
                         'Not allowed here', 'error');
                     return false;
@@ -178,7 +180,7 @@ KB.Ui = function ($) {
             }
 
             // handles sorting of the blocks.
-            $('.kb_sortable').sortable({
+            $('.kb_sortable', $context).sortable({
                 //settings
                 placeholder: "ui-state-highlight",
                 ghost: true,
@@ -201,7 +203,7 @@ KB.Ui = function ($) {
                     // close open modules, sorting on open container
                     // doesn't work very well
                     $('.kb-open').toggleClass('kb-open');
-                    $('.kb_inner').hide();
+                    $('.kb-module--body').hide();
 
                     // tinyMCE doesn't like to be moved in the DOM
                     KB.TinyMCE.removeEditors();
@@ -239,7 +241,7 @@ KB.Ui = function ($) {
                 },
                 update: function (ev, ui) {
 
-                    if (!isValidModule()){
+                    if (!isValidModule()) {
                         return false;
                     }
 
@@ -255,7 +257,7 @@ KB.Ui = function ($) {
                     } else if (ui.sender) {
 
                         // do nothing if the receiver rejected the request
-                        if (ui.item.parent('ul')[0].id === ui.sender.attr('id')){
+                        if (ui.item.parent('ul')[0].id === ui.sender.attr('id')) {
                             return false;
                         }
 
@@ -268,11 +270,22 @@ KB.Ui = function ($) {
                             done(function () {
                                 that.triggerAreaChange(areaOver, currentModule);
                                 $(KB).trigger('kb:sortable::update');
+
+                                // force recreation of any attached fields
+                                currentModule.view.clearFields();
                                 KB.Notice.notice('Area change and order were updated successfully', 'success');
+
                             });
                     }
                 }
             });
+        },
+        flushLocalStorage: function(){
+            var hash = kontentblocks.config.hash;
+            if (store.get('kbhash') !== hash){
+                store.clear();
+                store.set('kbhash', hash)
+            }
         },
         /**
          * Handles saving of new module order per area
@@ -311,6 +324,7 @@ KB.Ui = function ($) {
         triggerAreaChange: function (newArea, module) {
             module.set('areaContext', newArea.get('context'));
             module.set('area', newArea.get('id'));
+
         },
         toggleModule: function () {
 
@@ -319,7 +333,7 @@ KB.Ui = function ($) {
                     KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
                 }
                 else {
-                    $(this).parent().nextAll('.kb_inner:first').slideToggle('fast', function () {
+                    $(this).parent().nextAll('.kb-module--body:first').slideToggle('fast', function () {
                         $('body').trigger('module::opened');
                     });
                     $('#' + activeBlock).toggleClass('kb-open', 1000);

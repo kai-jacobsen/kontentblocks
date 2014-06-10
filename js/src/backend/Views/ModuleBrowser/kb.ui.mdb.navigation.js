@@ -22,10 +22,9 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
                 return false;
             }
 
-
             if (this.options.parent.catSet === false){
                 this.options.parent.catSet = true;
-                KB.ModuleBrowser.update(this.model);
+                this.options.browser.update(this.model);
                 this.$el.addClass('active');
             }
 
@@ -41,7 +40,7 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
 
         _.each(this.options.cats, function (cat) {
             var model = new Backbone.Model(cat);
-            new that.item({parent: that, model: model}).render();
+            new that.item({parent: that, model: model, browser:that.options.browser}).render();
         });
 
     }

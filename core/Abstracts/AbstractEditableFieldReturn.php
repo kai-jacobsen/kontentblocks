@@ -6,7 +6,7 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Interfaces\InterfaceFieldReturn;
 
 
-abstract class AbstractFieldReturn implements InterfaceFieldReturn {
+abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
 	public $value;
 
@@ -18,15 +18,20 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn {
 
 	public $index = null;
 
+
 	protected $inlineEdit = true;
 
 	protected $uniqueId;
 
 	public function __construct( $value, $field ) {
+
 		$this->setValue( $value );
 		$this->setupFromField( $field );
 		$this->uniqueId = $this->createUniqueId();
+
 	}
+
+
 
 	/**
 	 * Getter for value
@@ -95,8 +100,6 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn {
 	}
 
 	/**
-	 * @TODO Rethink array mode, was a hack
-	 *
 	 * @param $field
 	 */
 	private function setupFromField( $field ) {
@@ -124,7 +127,6 @@ abstract class AbstractFieldReturn implements InterfaceFieldReturn {
 
 		}
 		// @TODO Input Validation and error handling
-
 
 	}
 

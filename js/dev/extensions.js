@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-27 */
+/*! Kontentblocks DevVersion 2014-06-10 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),
@@ -7,7 +7,7 @@
                 _K.info("Layout Configurations stopped");
                 return false;
             }
-            _K.debug("Layout Configurations start up");
+            _K.info("Layout Configurations start up");
             if (this.el.length === 0) {
                 return false;
             }

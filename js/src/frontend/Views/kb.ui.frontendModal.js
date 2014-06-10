@@ -15,10 +15,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         var that = this;
         this.options = options;
         this.view = options.view;
-
         this.model.on('change', this.test, this);
+        this.listenTo(KB, 'template::changed', function(){
+            that.serialize(false);
+            that.render();
+        });
 
-//        this.on('recalibrate', this.recalibrate, this);
         this.listenTo(this, 'recalibrate', this.recalibrate);
         // add form skeleton to modal
         jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON(), i18n:KB.i18n.jsFrontend})).appendTo(this.$el);
@@ -120,6 +122,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             success: function (res) {
 
                 that.$inner.empty();
+                that.view.clearFields();
                 that.$inner.attr('id', that.view.model.get('instance_id'));
                 // append the html to the inner form container
                 that.$inner.append(res.html);
@@ -171,6 +174,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     unset: function () {
         this.model = null;
         this.options.view = null;
+        this.view.attachedFields = {};
     },
 
 // position and height of the modal may change depending on user action resp. contents
@@ -260,6 +264,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
                     that.$el.removeClass('isDirty');
                     that.model.view.getClean();
+                    that.trigger('kb:frontend-save');
                 } else {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
                     that.$el.addClass('isDirty');
@@ -274,6 +279,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             }
         });
     },
+
 
     // delay keyup events and only fire the last
     delayInput: function () {
@@ -306,6 +312,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         jQuery('.wp-editor-area', this.$el).each(function (i, item) {
             tinymce.remove('#' + item.id);
         });
+
+
     },
 // Modules can pass special settings to manipulate the modal
 // By now it's limited to the width

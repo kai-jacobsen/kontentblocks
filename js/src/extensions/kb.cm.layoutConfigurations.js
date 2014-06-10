@@ -8,7 +8,7 @@
                 return false;
             }
 
-            _K.debug('Layout Configurations start up');
+            _K.info('Layout Configurations start up');
 
             if (this.el.length === 0) {
                 return false;

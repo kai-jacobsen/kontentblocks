@@ -1,0 +1,12 @@
+<div class="kb-template-selector--wrapper">
+    <div class="kb-selectbox">
+        <label>
+            Modultemplate
+            <select class="kb-template-select" name="{{ module.instance_id }}[viewfile]">
+                {% for template in templates %}
+                    <option {{ template.selected }} value="{{ template.filteredfile }}">{{ template.nicename }}</option>
+                {% endfor %}
+            </select></label>
+    </div>
+
+</div>

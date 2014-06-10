@@ -41,6 +41,7 @@
 @import "partials/_vendor/_nano";
 @import "partials/_vendor/_alertify";
 @import "partials/_vendor/_powerTip";
+@import "partials/_vendor/_jq.datetimepicker";
 
 /* --------------------------
 // Areas realted styling
@@ -56,8 +57,10 @@
 @import "partials/_refields/file";
 @import "partials/_refields/image";
 @import "partials/_refields/tabs";
+@import "partials/_refields/link";
 @import "partials/_refields/_customForm";
 @import "partials/_refields/_flexible-fields";
+@import "partials/_refields/_gallery";
 
 @import "partials/_global-area-edit";
 
@@ -68,6 +71,7 @@
 -----------------------------*/
 @import "partials/_extensions/sidebar-selector";
 @import "partials/_extensions/layout-configurations";
+@import "partials/_extensions/template-selector";
 
 /* --------------------------
 // WP Admin Menu Options
@@ -667,7 +671,7 @@ textarea.quicktags {
 }
 
 .onsite-editing .editable, .onsite-editing .editable-image, .onsite-editing .editable-bg-image, .onsite-editing .editable-title {
-  outline: 1px dashed currentcolor;
+//  outline: 1px dashed currentcolor;
 //  background-color: #ffffe0;
 }
 //.logged-in .editable, .logged-in .editable-image, .logged-in .editable-bg-image {

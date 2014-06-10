@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Fields.register('File', (function($) {
 
 	var self, attachment;

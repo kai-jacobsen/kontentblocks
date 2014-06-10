@@ -25,22 +25,23 @@ Class FlexibleFields extends Field {
 	 */
 	public function form() {
 		$this->label();
-		echo "<div id='{$this->getFieldId()}' data-fieldkey='{$this->key}' data-module='{$this->parentModuleId}' class='flexible-fields--stage'></div>";
+		echo "<div id='{$this->getFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg('arrayKey')}' data-module='{$this->parentModuleId}' class='flexible-fields--stage'></div>";
 		$this->description();
 
 	}
 
 	public function outputFilter( $value ) {
-//		d($this->getKey(), $value);
+		$forJSON = array();
+
 		// make sure it's an simple indexed array to preserve order
 		if ( is_array( $value ) ) {
 			$forJSON = array_values( $value );
 		}
 		$Bridge = JSONBridge::getInstance();
-		$Bridge->registerFieldData( $this->parentModuleId, $this->type, $forJSON, $this->getKey() );
-
+		$Bridge->registerFieldData( $this->parentModuleId, $this->type, $forJSON, $this->getKey(), $this->getArg('arrayKey') );
 		return $value;
 	}
+
 
 	/**
 	 * To make sure that the saving routine doesn't preserve unset
@@ -55,7 +56,7 @@ Class FlexibleFields extends Field {
 	 */
 	public function save( $new, $old ) {
 
-		if (is_null($new)){
+		if ( is_null( $new ) ) {
 			return $old;
 		}
 
@@ -66,17 +67,23 @@ Class FlexibleFields extends Field {
 				}
 			}
 		}
+
 		foreach ( $new as &$field ) {
 			if ( is_null( $field ) ) {
 				continue;
 			}
 
 			foreach ( $field['_mapping'] as $key => $type ) {
-				$fieldInstance          = FieldRegistry::getInstance()->getField( $type );
+				$fieldInstance = FieldRegistry::getInstance()->getField( $type );
 				$field[ $key ] = $fieldInstance->save( $field[ $key ], $old );
 			}
 
+			if (!isset($field['uid'])){
+				$field['uid'] = uniqid('ff');
+			}
+
 		}
+
 		return $new;
 	}
 

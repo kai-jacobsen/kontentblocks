@@ -3,7 +3,14 @@
 namespace Kontentblocks\Fields\Utilities;
 
 use Kontentblocks\Fields\Definitions\FlexibleFields;
+use Kontentblocks\Fields\Returnobjects\Element;
+use Kontentblocks\Fields\Returnobjects\Image;
 
+/**
+ * Class FlexibleFieldsFactory
+ * @package Kontentblocks\Fields\Utilities
+ * @since 1.0.0
+ */
 class FlexibleFieldsFactory {
 
 	/**
@@ -34,6 +41,7 @@ class FlexibleFieldsFactory {
 
 	/**
 	 * Class Constructor
+	 * @since 1.0.0
 	 *
 	 * @param FlexibleFields $Field
 	 */
@@ -47,6 +55,11 @@ class FlexibleFieldsFactory {
 
 	}
 
+	/**
+	 * Get prepared saved items
+	 * @since 1.0.0
+	 * @return array|bool
+	 */
 	public function getItems() {
 		// check properties integrity
 		if ( ! $this->validate() ) {
@@ -62,6 +75,11 @@ class FlexibleFieldsFactory {
 		return $items;
 	}
 
+	/**
+	 * Iterate through fields and set up
+	 * @since 1.0.0
+	 * @return array
+	 */
 	public function setupItems() {
 		$fields = $this->extractFieldsFromConfig();
 		$items  = array();
@@ -76,6 +94,11 @@ class FlexibleFieldsFactory {
 		return $items;
 	}
 
+	/**
+	 * Validate if all necessary props are set
+	 * @since 1.0.0
+	 * @return bool
+	 */
 	private function validate() {
 
 		if ( empty( $this->fieldData ) ) {
@@ -90,7 +113,6 @@ class FlexibleFieldsFactory {
 			return false;
 		}
 
-
 		if ( ! isset( $this->config ) ) {
 			return false;
 		}
@@ -98,6 +120,10 @@ class FlexibleFieldsFactory {
 		return true;
 	}
 
+	/**
+	 * Collect all fields to one array
+	 * @return array
+	 */
 	private function extractFieldsFromConfig() {
 		$collect = array();
 		foreach ( $this->config as $key => $tab ) {
@@ -109,13 +135,27 @@ class FlexibleFieldsFactory {
 		return $collect;
 	}
 
+	/**
+	 * Sets up the correct ReturnObject for each field
+	 * before frontend rendering
+	 * @TODO Should not be the responsibility of the AbstractEditableFieldReturn Class to create proper Fields
+	 * @TODO see AbstractEditableFieldSetup
+	 *
+	 * @param $type string
+	 * @param $keydata array
+	 * @param $index string
+	 * @param $key string
+	 *
+	 * @since 1.0.0
+	 * @return Element|Image
+	 */
 	private function getReturnObj( $type, $keydata, $index, $key ) {
 		switch ( $type ) {
 
 			case ( 'text' ):
 			case ( 'editor' ):
 			case ( 'textarea' ):
-				return new \Kontentblocks\Fields\Returnobjects\Element( $keydata, array(
+				return new Element( $keydata, array(
 					'instance_id' => $this->moduleId,
 					'key'         => $key,
 					'arrayKey'    => $this->arrayKey,
@@ -126,7 +166,7 @@ class FlexibleFieldsFactory {
 				break;
 
 			case ( 'image' ):
-				return new \Kontentblocks\Fields\Returnobjects\Image( $keydata, array(
+				return new Image( $keydata, array(
 					'instance_id' => $this->moduleId,
 					'key'         => $key,
 					'arrayKey'    => $this->arrayKey,
@@ -134,7 +174,6 @@ class FlexibleFieldsFactory {
 					'type'        => $type
 				) );
 				break;
-
 		}
 	}
 

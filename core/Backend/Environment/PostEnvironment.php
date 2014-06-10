@@ -180,9 +180,13 @@ class PostEnvironment
 
     }
 
-    /**
-     * Get Area Definition
-     */
+	/**
+	 * Get Area Definition
+	 *
+	 * @param array $area
+	 *
+	 * @return mixed
+	 */
     public function getAreaDefinition($area)
     {
         if (isset($this->areas[$area])) {
@@ -201,7 +205,7 @@ class PostEnvironment
     /**
      * Get settings for given area
      * @param string $id
-     * @return boolean
+     * @return mixed
      */
     public function getAreaSettings($id)
     {

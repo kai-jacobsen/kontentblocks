@@ -34,10 +34,10 @@ Class CheckboxGroup extends Field
         foreach ( $options as $item ) {
 
             if ( !isset( $item[ 'label' ] ) OR !isset( $item[ 'value' ] ) ) {
-                throw new Exception( 'Provide valid checkbox items. Check your code.Either a value or label is missing' );
+                throw new \Exception( 'Provide valid checkbox items. Check your code.Either a value or label is missing' );
             }
             $checked = (in_array( $item[ 'value' ], $this->getValue() )) ? 'checked="checked"' : '';
-            echo "<div class='kb-checkboxgroup-item'><label><input type='checkbox' id='{$this->getFieldId()}' name='{$this->getFieldName( true )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
+            echo "<div class='kb-checkboxgroup-item'><label><input type='checkbox' id='{$this->getFieldId(true)}' name='{$this->getFieldName( true )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
         }
 
         $this->description();

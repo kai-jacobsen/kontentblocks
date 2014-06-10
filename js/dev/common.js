@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-27 */
+/*! Kontentblocks DevVersion 2014-06-10 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -58,7 +58,6 @@ KB.Checks = function($) {
             var limit = areamodel.get("limit");
             var children = $("#" + areamodel.get("id") + " li.kb_block").length;
             if (limit !== 0 && children === limit) {
-                console.log("asdf");
                 return false;
             }
             return true;
@@ -97,13 +96,12 @@ _.extend(KB.Fields, {
         });
     },
     newModule: function(object) {
-        _K.log("new Module added for Fields");
+        _K.info("new Module added for Fields");
         var that = this;
         object.listenTo(this, "update", object.update);
         object.listenTo(this, "frontUpdate", object.frontUpdate);
         setTimeout(function() {
             that.trigger("update");
-            console.log("triggered");
         }, 750);
     },
     get: function(id) {
@@ -120,6 +118,8 @@ KB.Fields.addEvent();
 Logger.useDefaults();
 
 var _K = Logger.get("_K");
+
+_K.setLevel(_K.INFO);
 
 if (!kontentblocks.config.dev) {
     _K.setLevel(Logger.OFF);
@@ -223,6 +223,44 @@ KB.Notice = function($) {
     };
 }(jQuery);
 
+KB.Payload = function($) {
+    return {
+        getFieldData: function(type, moduleId, key, arrayKey) {
+            var typeData;
+            if (this._typeExists(type)) {
+                typeData = KB.payload.fieldData[type];
+                if (!typeData[moduleId]) {
+                    return [];
+                }
+                if (!_.isEmpty(arrayKey)) {
+                    if (!typeData[moduleId][arrayKey]) {
+                        return [];
+                    }
+                    if (!typeData[moduleId][arrayKey][key]) {
+                        return [];
+                    }
+                    return typeData[moduleId][arrayKey][key];
+                }
+                if (!typeData[moduleId][key]) {
+                    return [];
+                }
+                return typeData[moduleId][key];
+            }
+            return [];
+        },
+        _typeExists: function(type) {
+            return !_.isUndefined(KB.payload.fieldData[type]);
+        },
+        getFieldArgs: function(key) {
+            if (KB.payload.Fields && KB.payload.Fields[key]) {
+                return KB.payload.Fields[key];
+            } else {
+                return false;
+            }
+        }
+    };
+}(jQuery);
+
 KB.Templates = function($) {
     var tmpl_cache = {};
     var hlpf_cache = {};
@@ -233,7 +271,7 @@ KB.Templates = function($) {
         var tmpl_string;
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs";
+            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + kontentblocks.config.hash;
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;
@@ -303,8 +341,9 @@ KB.TinyMCE = function($) {
                 var ed = tinymce.init(settings);
             });
         },
-        addEditor: function($el, quicktags) {
+        addEditor: function($el, quicktags, height) {
             var settings = tinyMCEPreInit.mceInit.content;
+            var edHeight = height || 350;
             if (!$el) {
                 $el = KB.lastAddedModule.view.$el;
             }
@@ -313,7 +352,7 @@ KB.TinyMCE = function($) {
                 settings.elements = id;
                 settings.selector = "#" + id;
                 settings.id = id;
-                settings.height = 350;
+                settings.height = edHeight;
                 settings.setup = function(ed) {
                     ed.on("init", function() {
                         jQuery(document).trigger("newEditor", ed);
@@ -333,25 +372,25 @@ KB.TinyMCE = function($) {
             }, 1500);
         },
         remoteGetEditor: function($el, name, id, content, post_id, media) {
-            var pid = post_id || KB.Screen.post_id;
+            var pid = post_id || KB.appData.config.post.ID;
             var id = id || $el.attr("id");
             if (!media) {
                 var media = false;
             }
-            console.log(content);
-            KB.Ajax.send({
+            var editorContent = content || "";
+            return KB.Ajax.send({
                 action: "getRemoteEditor",
                 editorId: id + "_ed",
                 editorName: name,
                 post_id: pid,
-                editorContent: content,
+                editorContent: editorContent,
                 _ajax_nonce: kontentblocks.nonces.read,
                 args: {
                     media_buttons: media
                 }
             }, function(data) {
                 $el.empty().append(data);
-                this.addEditor($el);
+                this.addEditor($el, null, 150);
             }, this);
         }
     };
@@ -367,6 +406,7 @@ KB.Ui = function($) {
             this.initSortable();
             this.initToggleBoxes();
             this.flexContext();
+            this.flushLocalStorage();
             $body.on("mousedown", ".kb_field", function(e) {
                 activeField = this;
             });
@@ -375,7 +415,7 @@ KB.Ui = function($) {
             });
             $body.on("mouseenter", ".kb-js-field-identifier", function() {
                 KB.currentFieldId = this.id;
-                _K.log("Current Field Id set to:", KB.currentFieldId);
+                _K.info("Current Field Id set to:", KB.currentFieldId);
             });
             jQuery(document).ajaxComplete(function(e, o, settings) {
                 that.metaBoxReorder(e, o, settings, "restore");
@@ -389,7 +429,7 @@ KB.Ui = function($) {
             var normal = $(".area-normal");
             var stage = $("#kontentblocks_stage");
             var that = this;
-            jQuery("body").on("mouseover", ".kb_inner", function() {
+            jQuery("body").on("mouseover", ".kb_module--body", function() {
                 var $con = $(this).closest(".kb-context-container");
                 $con.addClass("active-context").removeClass("non-active-context");
                 if ($con.hasClass("area-top") || $con.hasClass("area-bottom")) {
@@ -417,8 +457,9 @@ KB.Ui = function($) {
             this.initToggleBoxes();
             KB.TinyMCE.addEditor($el);
         },
-        initTabs: function() {
-            var selector = $(".kb_fieldtabs");
+        initTabs: function($cntxt) {
+            var $context = $cntxt || jQuery("body");
+            var selector = $(".kb_fieldtabs", $context);
             selector.tabs({
                 activate: function() {
                     $(".nano").nanoScroller();
@@ -438,7 +479,8 @@ KB.Ui = function($) {
             });
             $(".kb_fieldtoggles div:first-child").trigger("click");
         },
-        initSortable: function() {
+        initSortable: function($cntxt) {
+            var $context = $cntxt || jQuery("body");
             var currentModule, areaOver;
             var validModule = false;
             var that = this;
@@ -462,7 +504,7 @@ KB.Ui = function($) {
             function numberOfModulesInArea(id) {
                 return $("#" + id + " li.kb_block").length;
             }
-            $(".kb_sortable").sortable({
+            $(".kb_sortable", $context).sortable({
                 placeholder: "ui-state-highlight",
                 ghost: true,
                 connectWith: ".kb_connect",
@@ -478,7 +520,7 @@ KB.Ui = function($) {
                     areaOver = KB.currentArea;
                     $(KB).trigger("kb:sortable::start");
                     $(".kb-open").toggleClass("kb-open");
-                    $(".kb_inner").hide();
+                    $(".kb-module--body").hide();
                     KB.TinyMCE.removeEditors();
                     $(document).trigger("kb_sortable_start", [ event, ui ]);
                 },
@@ -519,11 +561,19 @@ KB.Ui = function($) {
                         }).done(function() {
                             that.triggerAreaChange(areaOver, currentModule);
                             $(KB).trigger("kb:sortable::update");
+                            currentModule.view.clearFields();
                             KB.Notice.notice("Area change and order were updated successfully", "success");
                         });
                     }
                 }
             });
+        },
+        flushLocalStorage: function() {
+            var hash = kontentblocks.config.hash;
+            if (store.get("kbhash") !== hash) {
+                store.clear();
+                store.set("kbhash", hash);
+            }
         },
         resort: function(sender) {
             var serializedData = {};
@@ -555,7 +605,7 @@ KB.Ui = function($) {
                 if (KB.isLocked() && !KB.userCan("lock_kontentblocks")) {
                     KB.notice(kontentblocks.l18n.gen_no_permission, "alert");
                 } else {
-                    $(this).parent().nextAll(".kb_inner:first").slideToggle("fast", function() {
+                    $(this).parent().nextAll(".kb-module--body:first").slideToggle("fast", function() {
                         $("body").trigger("module::opened");
                     });
                     $("#" + activeBlock).toggleClass("kb-open", 1e3);

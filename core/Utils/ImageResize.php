@@ -27,7 +27,7 @@ namespace Kontentblocks\Utils {
      */
 
     if(!class_exists('ImageResize')) {
-        class ImageResize
+	        class ImageResize
         {
             /**
              * The singleton instance

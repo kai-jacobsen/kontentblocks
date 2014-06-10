@@ -182,7 +182,8 @@ class Area
             'id' => $this->id,
             'assignedModules' => $this->assignedModules,
             'limit' => absint($this->limit),
-            'context' => $this->context
+            'context' => $this->context,
+	        'dynamic' => $this->dynamic
         );
 
         JSONBridge::getInstance()->registerArea($area);

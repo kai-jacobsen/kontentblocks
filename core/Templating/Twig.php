@@ -10,6 +10,8 @@ class Twig
     private static $loader = null;
     private static $environment = null;
 
+	protected static $paths = array();
+
     public static function getInstance()
     {
 
@@ -54,7 +56,7 @@ class Twig
 
     public static function getDefaultPath()
     {
-        return apply_filters('kb_twig_def_path', get_stylesheet_directory() . '/module-templates/');
+        return apply_filters('kb_twig_def_path', get_template_directory() . '/module-templates/');
 
     }
 
@@ -70,11 +72,13 @@ class Twig
 
     public static function setPath($path)
     {
-        $paths = array();
-        $paths[] = $path;
-        $paths[] = self::getDefaultPath();
 
-        self::$loader->addPath($path);
+	    if (!in_array($path, self::$paths)){
+		    self::$paths[] = $path;
+		    self::$loader->prependPath($path);
+	    }
+
+
     }
 
     public static function resetPath()

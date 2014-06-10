@@ -4,9 +4,11 @@ namespace Kontentblocks\Backend\Storage;
 use Kontentblocks\Backend\API\PostMetaAPI;
 
 /**
- * Mid-level wrapper to underlying data handler
  * Class ModuleStoragePostMeta
- * @package Kontentblocks\Backend\Storage
+ * Mid-level wrapper to underlying data handler
+ *
+ * @package Kontentblocks
+ * @subpackage Backend
  */
 class ModuleStoragePostMeta
 {
@@ -99,8 +101,9 @@ class ModuleStoragePostMeta
     }
 
     /**
-     * Adds an module to the index and automatically save
+     * Adds an module to the index and automatically saves
      * the module definition
+     *
      * @param string $id module instance_id
      * @param array $args module attributes array
      * @return mixed boolean
@@ -150,7 +153,7 @@ class ModuleStoragePostMeta
     }
 
     /**
-     * This will reload the post meta data and re-init thiss class
+     * This will reload the post meta data and re-init this object
      * @return $this
      */
     public function reset(){
@@ -232,7 +235,7 @@ class ModuleStoragePostMeta
         return $update;
     }
 
-    /**
+	/**
      * Batch update Modules
      * Saves the module data arrays to postmeta
      * @param array $modules
@@ -246,19 +249,21 @@ class ModuleStoragePostMeta
 
     }
 
-    /**
-     * Wrapper to update the index meta data
-     * @Todo PMDataHandler should update
-     * @return void
-     * @since 1.0.0
-     */
-    public function _updateIndex()
-    {
-        return update_post_meta($this->post_id, 'kb_kontentblocks', $this->index);
+	/**
+	 * Wrapper to update the index meta data
+	 * @Todo PMDataHandler should update
+	 *
+	 * @since 1.0.0
+	 * @return bool
+	 *
+	 */
+	public function _updateIndex()
+	{
+		return update_post_meta($this->post_id, 'kb_kontentblocks', $this->index);
 
-    }
+	}
 
-    /**
+	/**
      * Getter for modules
      * @return array
      * @since 1.0.0

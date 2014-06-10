@@ -5,7 +5,8 @@ namespace Kontentblocks\Backend\Storage;
 
 /**
  * Class BackupManager
- * @package Kontentblocks\Backend\Storage
+ * @package Kontentblocks
+ * @subpackage Backend
  * @since 1.0.0
  *
  * Interact with custom backup table
@@ -33,7 +34,7 @@ class BackupManager
     /**
      * Class Constructor
      * An Storageobject must be given
-     * @param InterfaceDataStorage $Storage
+     * @param ModuleStoragePostMeta $Storage
      * @throws \BadFunctionCallException
      */
     public function __construct($Storage)
@@ -48,7 +49,7 @@ class BackupManager
     /**
      * Backup method
      * Gets the backup data from the Storage object
-     * @param $logmsg string
+     * @param $logmsg string supplemental information for the specific backup
      */
     public function backup($logmsg = '')
     {
@@ -88,7 +89,7 @@ class BackupManager
         global $wpdb;
 
         if (!current_user_can('edit_kontentblocks')) {
-            wp_die('Hackin?');
+            return false;
         }
 
         $insert = array();
@@ -143,7 +144,6 @@ class BackupManager
         $existingData[$now]['msg'] = $this->msg . ' (by ' . $user->user_login . ')';
 
         // truncate, never more than 8 backups
-        // @todo add filter for max number of updates
         $backupLimit = apply_filters('kb_backups_to_keep', 8);
         $existingData = array_slice($existingData, -$backupLimit, $backupLimit, true);
 
@@ -191,6 +191,7 @@ class BackupManager
         if ($cache !== false) {
             return $cache;
         } else {
+	        // @TODO Use $wpdb
             $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
             $result = $wpdb->get_row($sql);
             wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');
@@ -229,9 +230,7 @@ class BackupManager
     public static function deletePostCallback($post_id)
     {
         global $wpdb;
-
         $wpdb->delete($wpdb->prefix . "kb_backups", array('post_id' => $post_id));
-
     }
 
 

@@ -28,7 +28,7 @@ class SortModules
 
     /**
      * Storage Object
-     * @var \Kontentblocks\Interfaces\InterfaceDataStorage
+     * \Kontentblocks\Interfaces\InterfaceDataStorage
      */
     protected $Storage;
 

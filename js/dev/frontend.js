@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-04-27 */
+/*! Kontentblocks DevVersion 2014-06-10 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -237,12 +237,16 @@ KB.IEdit.Text = function(el) {
                     arrayKey: data.arraykey
                 };
                 ed.module.view.$el.addClass("inline-editing-active");
+                jQuery("body").on("click", ".mce-listbox", function() {
+                    jQuery(".mce-stack-layout-item span").removeAttr("style");
+                });
             });
             ed.on("focus", function(e) {
                 jQuery("#kb-toolbar").show();
+                ed.module.view.$el.addClass("inline-edit-active");
             });
             ed.on("change", function(e) {
-                _K.log("Got Dirty");
+                _K.info("Got Dirty");
             });
             ed.addButton("kbcancleinline", {
                 title: "Stop inline Edit",
@@ -258,6 +262,7 @@ KB.IEdit.Text = function(el) {
                 }
             });
             ed.on("blur", function() {
+                ed.module.view.$el.removeClass("inline-edit-active");
                 jQuery("#kb-toolbar").hide();
                 var data = ed.kbDataRef;
                 var value = ed.getContent();
@@ -399,6 +404,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.options = options;
         this.view = options.view;
         this.model.on("change", this.test, this);
+        this.listenTo(KB, "template::changed", function() {
+            that.serialize(false);
+            that.render();
+        });
         this.listenTo(this, "recalibrate", this.recalibrate);
         jQuery(KB.Templates.render("frontend/module-edit-form", {
             model: this.model.toJSON(),
@@ -472,6 +481,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: "json",
             success: function(res) {
                 that.$inner.empty();
+                that.view.clearFields();
                 that.$inner.attr("id", that.view.model.get("instance_id"));
                 that.$inner.append(res.html);
                 if (res.json) {
@@ -511,6 +521,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     unset: function() {
         this.model = null;
         this.options.view = null;
+        this.view.attachedFields = {};
     },
     recalibrate: function(pos) {
         var winH, conH, position, winDiff;
@@ -571,6 +582,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
                     that.$el.removeClass("isDirty");
                     that.model.view.getClean();
+                    that.trigger("kb:frontend-save");
                 } else {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
                     that.$el.addClass("isDirty");
@@ -624,6 +636,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         if (!KB.Checks.userCan("edit_kontentblocks")) {
             return;
         }
+        this.attachedFields = [];
         this.model.bind("save", this.model.save);
         this.listenTo(this.model, "change", this.modelChange);
         this.model.view = this;
@@ -702,7 +715,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         $controls.offset({
             top: pos.top + 20,
-            left: pos.left - 15,
+            left: pos.left - 40,
             zIndex: 999999
         });
     },
@@ -739,6 +752,34 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 console.log("e");
             }
         });
+    },
+    addField: function(key, obj, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            this.attachedFields[arrayKey][key] = obj;
+        } else {
+            this.attachedFields[key] = obj;
+        }
+    },
+    hasField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            if (!this.attachedFields[arrayKey]) {
+                this.attachedFields[arrayKey] = {};
+            }
+            return key in this.attachedFields[arrayKey];
+        } else {
+            return key in this.attachedFields;
+        }
+    },
+    getField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            return this.attachedFields[arrayKey][key];
+        } else {
+            return this.attachedFields[key];
+        }
+    },
+    clearFields: function() {
+        _K.info("Attached Fields were reset to empty object");
+        this.attachedFields = {};
     }
 });
 

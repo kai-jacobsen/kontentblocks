@@ -221,13 +221,19 @@ class Enqueues
             }
         }
 
+	    $hash = 'kb-master-replacement';
+
+	    if (function_exists('getGitHash')){
+		    $hash = getGitHash();
+	    }
         // Setup the global js object base
         return array
         (
             'caps' => $caps,
             'config' => array(
                 'url' => KB_PLUGIN_URL,
-                'dev' => Kontentblocks::DEVMODE
+                'dev' => Kontentblocks::DEVMODE,
+	            'hash' => $hash,
             ),
             'nonces' => array(
                 'update' => wp_create_nonce('kb-update'),

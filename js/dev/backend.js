@@ -1,5 +1,8 @@
-/*! Kontentblocks DevVersion 2014-04-27 */
+/*! Kontentblocks DevVersion 2014-06-10 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
+    initialize: function(models, options) {
+        this.area = options.area;
+    },
     setup: function() {
         this.categories = this.prepareCategories();
         this.sortToCategories();
@@ -11,12 +14,21 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     sortToCategories: function() {
         var that = this;
         _.each(this.models, function(model) {
-            if (model.get("settings").hidden === true) {
+            if (!that.validateVisibility(model)) {
                 return;
             }
             var cat = _.isUndefined(model.get("settings").category) ? "standard" : model.get("settings").category;
             that.categories[cat].modules.push(model);
         });
+    },
+    validateVisibility: function(m) {
+        if (m.get("settings").hidden) {
+            return false;
+        }
+        if (m.get("settings").disabled) {
+            return false;
+        }
+        return !(!m.get("settings").globallyAvailable && this.area.model.get("dynamic"));
     },
     prepareCategories: function() {
         var cats = {};
@@ -85,6 +97,11 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
                 module: this.model.toJSON()
             }));
         }
+        if (this.model.get("settings").poster !== false) {
+            this.$el.append(KB.Templates.render("backend/modulebrowser/poster", {
+                module: this.model.toJSON()
+            }));
+        }
         if (this.model.get("settings").helpfile !== false) {
             this.$el.append(KB.Templates.render(this.model.get("settings").helpfile, {
                 module: this.model.toJSON()
@@ -99,6 +116,7 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
     className: "modules-list-item",
     initialize: function(options) {
         this.options = options || {};
+        this.area = options.browser.area;
     },
     render: function(el) {
         if (this.model.get("template")) {
@@ -117,7 +135,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
         "click .kb-js-create-module": "createModule"
     },
     loadDetails: function() {
-        console.log(this);
         this.options.browser.loadDetails(this.model);
     },
     createModule: function() {
@@ -161,26 +178,16 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options) {
         var that = this;
         this.options = options || {};
-        _K.log("module browser initialized");
-    },
-    tagName: "div",
-    id: "module-browser",
-    className: "kb-overlay",
-    events: {
-        "click .close-browser": "close"
-    },
-    subviews: {},
-    render: function() {
+        _K.info("module browser initialized");
         this.area = this.options.area;
         this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
-            model: KB.Backbone.ModuleDefinition
+            model: KB.Backbone.ModuleDefinition,
+            area: this.options.area
         }).setup();
-        this.open();
-    },
-    open: function() {
-        this.$el.appendTo("body");
-        jQuery("#wpwrap").addClass("module-browser-open");
-        this.$el.append(KB.Templates.render("backend/modulebrowser/module-browser", {}));
+        var viewMode = this.getViewMode();
+        this.$el.append(KB.Templates.render("backend/modulebrowser/module-browser", {
+            viewMode: viewMode
+        }));
         this.subviews.ModulesList = new KB.Backbone.ModuleBrowserModulesList({
             el: jQuery(".modules-list", this.$el),
             browser: this
@@ -191,10 +198,46 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         });
         this.subviews.Navigation = new KB.Backbone.ModuleBrowserNavigation({
             el: jQuery(".module-categories", this.$el),
-            cats: this.modulesDefinitions.categories
+            cats: this.modulesDefinitions.categories,
+            browser: this
         });
         this.listenTo(this.subviews.Navigation, "browser:change", this.update);
         this.listenTo(this.subviews.ModulesList, "createModule", this.createModule);
+    },
+    tagName: "div",
+    id: "module-browser",
+    className: "kb-overlay",
+    events: {
+        "click .close-browser": "close",
+        "click .module-browser--switch__list-view": "toggleViewMode",
+        "click .module-browser--switch__excerpt-view": "toggleViewMode"
+    },
+    subviews: {},
+    toggleViewMode: function() {
+        jQuery(".module-browser-wrapper", this.$el).toggleClass("module-browser--list-view module-browser--excerpt-view");
+        var abbr = "mdb_" + this.area.model.get("id") + "_state";
+        var curr = store.get(abbr);
+        if (curr == "module-browser--list-view") {
+            store.set(abbr, "module-browser--excerpt-view");
+        } else {
+            store.set(abbr, "module-browser--list-view");
+        }
+    },
+    render: function() {
+        this.open();
+    },
+    getViewMode: function() {
+        var abbr = "mdb_" + this.area.model.get("id") + "_state";
+        if (store.get(abbr)) {
+            return store.get(abbr);
+        } else {
+            store.set(abbr, "module-browser--list-view");
+        }
+        return "module-browser--list-view";
+    },
+    open: function() {
+        this.$el.appendTo("body");
+        jQuery("#wpwrap").addClass("module-browser-open");
         jQuery(".nano").nanoScroller({
             flash: true
         });
@@ -202,9 +245,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     close: function() {
         jQuery("#wpwrap").removeClass("module-browser-open");
         this.trigger("browser:close");
-        this.unbind();
-        this.remove();
-        delete this.$el;
+        this.$el.detach();
     },
     update: function(model) {
         var id = model.get("id");
@@ -221,7 +262,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         }
         var Area = KB.Areas.get(this.options.area.model.get("id"));
         if (!KB.Checks.blockLimit(Area)) {
-            console.log("block limit reached");
             KB.Notice.notice("Limit for this area reached", "error");
             return false;
         }
@@ -244,7 +284,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
         KB.Modules.add(KB.lastAddedModule);
-        _K.log("new module created");
+        _K.info("new module created");
         this.parseAdditionalJSON(data.json);
         KB.TinyMCE.addEditor();
         KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
@@ -293,7 +333,7 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
             }
             if (this.options.parent.catSet === false) {
                 this.options.parent.catSet = true;
-                KB.ModuleBrowser.update(this.model);
+                this.options.browser.update(this.model);
                 this.$el.addClass("active");
             }
             this.options.parent.$list.append(this.$el.html(this.model.get("name") + '<span class="module-count">' + countstr + "</span>"));
@@ -308,7 +348,8 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
             var model = new Backbone.Model(cat);
             new that.item({
                 parent: that,
-                model: model
+                model: model,
+                browser: that.options.browser
             }).render();
         });
     }
@@ -382,12 +423,24 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
             KB.Notice.notice("Request Error", "error");
             return false;
         }
+        this.parseAdditionalJSON(data.json);
         this.model.area.view.modulesList.append(data.html);
         KB.Modules.add(data.module);
         var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
         jQuery("#kb_all_blocks").val(count);
         KB.Notice.notice("Module Duplicated", "success");
         KB.Ui.repaint("#" + data.module.instance_id);
+        KB.Fields.trigger("update");
+    },
+    parseAdditionalJSON: function(json) {
+        if (!KB.payload.Fields) {
+            KB.payload.Fields = {};
+        }
+        _.extend(KB.payload.Fields, json.Fields);
+        if (!KB.payload.fieldData) {
+            KB.payload.fieldData = {};
+        }
+        _.extend(KB.payload.fieldData, json.fieldData);
     }
 });
 
@@ -459,13 +512,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
     },
     openModuleBrowser: function(e) {
         e.preventDefault();
-        KB.ModuleBrowser = null;
-        if (!KB.ModuleBrowser) {
-            KB.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+        if (!this.ModuleBrowser) {
+            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
                 area: this
             });
         }
-        KB.ModuleBrowser.render();
+        this.ModuleBrowser.render();
     },
     toggleSettings: function(e) {
         e.preventDefault();
@@ -495,7 +547,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     initialize: function() {
         var that = this;
         this.$head = jQuery(".block-head", this.$el);
-        this.$body = jQuery(".kb_inner", this.$el);
+        this.$body = jQuery(".kb-module--body", this.$el);
+        this.$inner = jQuery(".kb-module--controls-inner", this.$el);
+        this.attachedFields = {};
         this.instanceId = this.model.get("instance_id");
         this.ModuleMenu = new KB.Backbone.ModuleMenuView({
             el: this.$el,
@@ -511,6 +565,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             view.$el.fadeOut(500, function() {
                 view.$el.remove();
             });
+        });
+        this.listenTo(KB, "template::changed", function() {
+            console.log("called");
+            that.clearFields();
+            that.updateModuleForm();
         });
     },
     setupDefaultMenuItems: function() {
@@ -547,9 +606,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     insertNewUpdateForm: function(response) {
         if (response !== "") {
-            this.$body.html(response.html);
+            this.$inner.html(response.html);
         } else {
-            this.$body.html("empty");
+            this.$inner.html("empty");
         }
         KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         KB.Ui.repaint(this.$el);
@@ -574,7 +633,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             this.toggleBody();
         }
         this.sizeTimer = setInterval(function() {
-            var h = jQuery(".kb_inner", that.$el).height() + 150;
+            var h = jQuery(".kb-module--controls-inner", that.$el).height() + 150;
             $stage.height(h);
         }, 750);
     },
@@ -587,6 +646,34 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         jQuery("#post-body").removeClass("columns-1").addClass("columns-2");
         jQuery(".fullscreen--title-wrapper", $stage).hide();
         $stage.css("height", "100%");
+    },
+    addField: function(key, obj, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            this.attachedFields[arrayKey][key] = obj;
+        } else {
+            this.attachedFields[key] = obj;
+        }
+    },
+    hasField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            if (!this.attachedFields[arrayKey]) {
+                this.attachedFields[arrayKey] = {};
+            }
+            return key in this.attachedFields[arrayKey];
+        } else {
+            return key in this.attachedFields;
+        }
+    },
+    getField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            return this.attachedFields[arrayKey][key];
+        } else {
+            return this.attachedFields[key];
+        }
+    },
+    clearFields: function() {
+        _K.info("Attached Fields were reset to empty object");
+        this.attachedFields = {};
     }
 });
 
@@ -625,7 +712,7 @@ KB.App = function($) {
         });
     }
     function createModuleViews(module) {
-        _K.log("new module view added");
+        _K.info("ModuleViews: new added");
         module.setArea(KB.Areas.get(module.get("area")));
         module.bind("change:area", module.areaChanged);
         KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({

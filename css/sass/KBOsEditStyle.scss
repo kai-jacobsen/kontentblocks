@@ -10,7 +10,6 @@
   margin: 0 !important;
   padding: 0 !important;
 
-
   li {
     display: block;
   }
@@ -18,6 +17,7 @@
 
 .module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
   opacity: 1;
+
 }
 
 .isDirty {
@@ -29,8 +29,18 @@
 .os-edit-wrapper {
   position: absolute;
   background: transparent;
-  opacity: 0;
+  border-right: 1px solid #999;
+  min-height: 80px;
+  opacity: 1;
   z-index: 9969;
+
+  .kb-module-edit{
+    border-bottom: 1px solid #ccc;
+  }
+
+  .os-action {
+    display: none;
+  }
 
   &.master-module a {
     background-color: $orange;
@@ -42,16 +52,15 @@
 
   a {
     line-height: 18px !important;
-    display: block;
+    display: inline-block;
     box-sizing: border-box;
     margin: 0px 0px;
-    font-size: 12px !important;
-    padding: 2px 12px 2px 2px;
+    font-size: 13px !important;
+    padding: 2px;
     color: #fff;
     text-decoration: none;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
-    border-left: 1px solid #fff;
     background-color: #333;
     opacity: .9;
 
@@ -71,14 +80,13 @@
 
     span {
       font-size: 13px !important;
-      line-height: 18px;
+      line-height: 13px;
     }
 
     &:hover {
-      color: #fff;
+      color: #000;
       text-decoration: none;
       font-size: 13px !important;
-      padding-left: 10px;
     }
   }
 
@@ -103,6 +111,7 @@ body.onsite-editing {
     list-style: none !important;
     margin: 0 !important;
     padding: 0 !important;
+    line-height: 1 !important;
 
     li {
       display: block;
@@ -245,8 +254,12 @@ body.onsite-editing {
 
 // experiments
 #onsite-modal * {
-  @include box-sizing(content-box);
+  @include box-sizing(border-box);
 }
+
+//#onsite-modal .kb-field *, #onsite-modal .kb-template-selector--wrapper * {
+//  @include box-sizing(border-box);
+//}
 
 #onsite-modal a:hover {
   text-decoration: none;
@@ -275,7 +288,7 @@ body.onsite-editing {
     cursor: move;
     background: #333;
     color: #fcfcfc;
-    text-shadow:0 0 1px #000;
+    text-shadow: 0 0 1px #000;
     font-weight: 100;
     box-sizing: border-box;
     text-align: center;
@@ -311,7 +324,7 @@ body.onsite-editing {
     text-decoration: none;
     border: none;
 
-    .dashicons{
+    .dashicons {
       font-size: 13px;
       text-decoration: none;
       position: relative;
@@ -345,10 +358,10 @@ body.onsite-editing {
     }
   }
 
-  .kb-controls--buttons-wrap{
+  .kb-controls--buttons-wrap {
     position: absolute;
     top: 0;
-    left:0;
+    left: 0;
   }
 
   a.kb-preview-form {
@@ -376,7 +389,8 @@ body.onsite-editing {
     box-sizing: border-box;
 
     label {
-      font-size: 12px;
+      font-size: 12px !important;
+      color: #333 !important;
     }
 
     input[type=button], .button {
@@ -446,7 +460,7 @@ body.onsite-editing {
   }
 }
 
-.kb-modal--loading{
+.kb-modal--loading {
   min-height: 150px;
   line-height: 150px;
   text-align: center;
@@ -455,3 +469,12 @@ body.onsite-editing {
 }
 
 @import "partials/_onsite/wplinkdialog";
+
+.editable:hover {
+  outline: 1px dashed #ccc;
+  outline: 1px dashed currentcolor;
+}
+
+//.inline-edit-active .controls-wrap {
+//  display: none;
+//}

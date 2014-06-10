@@ -141,13 +141,15 @@ abstract class Field {
 	/**
 	 * Set field data
 	 * Data from _POST[{baseid}[$this->key]]
+	 * Runs each time when data is set to the field
+	 * Frontend/Backend
 	 *
 	 * @param mixed $data
 	 *
 	 * @since 1.0.0
 	 */
 	public function setData( $data ) {
-		$this->value = $this->_sanitize( $data );
+		$this->value = $this->sanitize( $data );
 	}
 
 	/**
@@ -179,17 +181,20 @@ abstract class Field {
 
 	/**
 	 * Get a special object for the field type if field has one set
-	 * @TODO: Revise if there should be one default object
-	 * @TODO: should be possible to provide an custom object as well
+	 * @TODO Kind of Registry for Return Objects
+	 * @TODO Overall logic is fuxxed up
 	 * @since 1.0.0
 	 * @return object
 	 */
-	public function getReturnObj() {
+		public function getReturnObj() {
+			if (is_object($this->returnObj)){
+				return $this->returnObj;
+			}
+
 		if ( ! $this->returnObj && $this->getArg( 'returnObj' ) ) {
 			$classname = $this->getArg( 'returnObj' );
-			if ( ! $classname ) {
-				return;
-			}
+
+
 			// first try
 			$classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
 			if ( class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true ) ) {
@@ -203,8 +208,9 @@ abstract class Field {
 
 			return $this->returnObj;
 		} else {
-//            $this->returnObj = new \Kontentblocks\Fields\Returnobjects\StandardFieldReturn( $this->value);
-//            return $this->returnObj;
+
+//			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
+//			return $this->returnObj;
 			return $this->value;
 		}
 
@@ -343,21 +349,31 @@ abstract class Field {
 	}
 
 	/**
-	 * Wrapper, helper method to get the key
+	 * Getter for field data
 	 * Will call filter() if available
-	 *
+	 * @TODO this method is used on several occasions
+	 * @TODO its pointless to run filter over and over again, actually the whole filter is pointless
 	 * @param string $arrKey
 	 *
 	 * @return mixed|null returns null if data does not exist
 	 */
 	public function getValue( $arrKey = null ) {
 		if ( $arrKey ) {
-			return $this->getValueFromArray( $arrKey );
+			$data =  $this->getValueFromArray( $arrKey );
+			if ( $this->getArg( 'getCallback' ) ) {
+				$data = call_user_func( $this->getArg( 'getCallback' ), $this->value );
+			}
+			return $data;
 		}
 
-
 		if ( method_exists( $this, 'inputFilter' ) ) {
-			return $this->inputFilter( $this->value );
+			$data = $this->inputFilter( $this->value );
+
+			if ( $this->getArg( 'getCallback' ) ) {
+				$data = call_user_func( $this->getArg( 'getCallback' ), $this->value );
+			}
+
+			return $data;
 		}
 
 		return $this->value;
@@ -385,7 +401,14 @@ abstract class Field {
 
 	}
 
-	public function _sanitize( $value ) {
+	/**
+	 * Whenever setData got called, this runs
+	 * (upon field initialization, data fom _POSt or database set to field)
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
+	public function sanitize( $value ) {
 		if ( method_exists( $this, 'outputFilter' ) ) {
 			return $this->outputFilter( $value );
 		} else {
@@ -454,6 +477,10 @@ abstract class Field {
 	 */
 	public function _save( $keydata, $oldKeyData = null ) {
 		$data = $this->save( $keydata, $oldKeyData );
+		if ( $this->getArg( 'saveCallback' ) ) {
+			$data = call_user_func( $this->getArg( 'saveCallback' ), $keydata, $oldKeyData, $data );
+		}
+
 		$this->handleConcatContent( $data );
 
 		return $data;

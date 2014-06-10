@@ -15,22 +15,17 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.addControls();
     },
     addControls: function () {
-        this.controlsContainer.append(KB.Templates.render('backend/area-add-module', {
-            
-        }));
+        this.controlsContainer.append(KB.Templates.render('backend/area-add-module', {}));
     },
     openModuleBrowser: function (e) {
         e.preventDefault();
 
-        KB.ModuleBrowser = null;
-
-        if (!KB.ModuleBrowser) {
-            KB.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+        if (!this.ModuleBrowser) {
+            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
                 area: this
             });
         }
-
-        KB.ModuleBrowser.render();
+        this.ModuleBrowser.render();
 
     },
 

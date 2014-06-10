@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Fields.register('Color', (function($) {
 	return {
 		init: function() {
@@ -11,7 +9,6 @@ KB.Fields.register('Color', (function($) {
                 }, 150);
 
             });
-            _K.log('Color init', $(".kb-color-picker"));
 			$(".kb-color-picker").wpColorPicker({
 				change: function(event, ui) {
 				},
