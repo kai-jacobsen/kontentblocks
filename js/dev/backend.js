@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-08 */
+/*! Kontentblocks DevVersion 2014-06-09 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -547,7 +547,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     initialize: function() {
         var that = this;
         this.$head = jQuery(".block-head", this.$el);
-        this.$body = jQuery(".kb_inner", this.$el);
+        this.$body = jQuery(".kb-module--body", this.$el);
+        this.$inner = jQuery(".kb-module--controls-inner", this.$el);
         this.attachedFields = {};
         this.instanceId = this.model.get("instance_id");
         this.ModuleMenu = new KB.Backbone.ModuleMenuView({
@@ -605,9 +606,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     insertNewUpdateForm: function(response) {
         if (response !== "") {
-            this.$body.html(response.html);
+            this.$inner.html(response.html);
         } else {
-            this.$body.html("empty");
+            this.$inner.html("empty");
         }
         KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         KB.Ui.repaint(this.$el);
@@ -632,7 +633,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             this.toggleBody();
         }
         this.sizeTimer = setInterval(function() {
-            var h = jQuery(".kb_inner", that.$el).height() + 150;
+            var h = jQuery(".kb-module--controls-inner", that.$el).height() + 150;
             $stage.height(h);
         }, 750);
     },

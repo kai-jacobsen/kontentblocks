@@ -6,6 +6,7 @@ use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\FieldManager;
 use Kontentblocks\Templating\ModuleTemplate;
+use Kontentblocks\Templating\ModuleView;
 
 
 abstract class Module {
@@ -38,6 +39,7 @@ abstract class Module {
 	public $rawModuleData;
 
 	protected $View;
+	protected $ViewLoader;
 
 	private $TemplateSelector;
 
@@ -82,10 +84,10 @@ abstract class Module {
 	 *
 	 */
 	public function options( $data ) {
-		if ( filter_var( $this->getSetting( 'useTemplateSelector' ), FILTER_VALIDATE_BOOLEAN ) ) {
+		if ( filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN ) ) {
 
-			$this->TemplateSelector = new ModuleViewLoader( $this );
-			echo $this->TemplateSelector->render();
+			$this->ViewLoader = new ModuleViewLoader( $this );
+			echo $this->ViewLoader->render();
 		}
 
 		if ( isset( $this->Fields ) && is_object( $this->Fields ) ) {
@@ -102,9 +104,7 @@ abstract class Module {
 	 */
 	public function save( $data, $old ) {
 
-
 		if ( isset( $this->Fields ) ) {
-
 			return $this->saveFields( $data, $old );
 		}
 
@@ -273,10 +273,11 @@ abstract class Module {
 		$lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
 
 		// markup for each block
-		$out = "<div style='display:none;' class='kb_inner'>";
+		$out = "<div style='display:none;' class='kb_inner kb-module--body'>";
 		if ( $lockedmsg && KONTENTLOCK ) {
-			echo $lockedmsg;
+			$out = $lockedmsg;
 		} else {
+
 			$description       = ( !empty( $this->settings['description'] ) ) ? __( '<strong><em>Beschreibung:</em> </strong>' ) . $this->settings['description'] : '';
 			$l18n_draft_status = ( $this->state['draft'] === true ) ? '<p class="kb_draft">' . __( 'This Module is a draft and won\'t be public until you publish or update the post',
 					'kontentblocks' ) . '</p>' : '';
@@ -291,6 +292,8 @@ abstract class Module {
 						</div>
 						{$l18n_draft_status}
 					</div>";
+			$out .= "<div class='kb-module--controls-inner'>";
+
 		}
 
 		return $out;
@@ -302,7 +305,7 @@ abstract class Module {
 	 */
 
 	private function _closeInner() {
-		return "</div>";
+		return "</div></div>";
 
 	}
 
@@ -471,19 +474,37 @@ abstract class Module {
 
 	}
 
+	public function getViewfile() {
+
+		if ( isset( $this->viewfile ) ) {
+			return $this->viewfile;
+		} elseif ( method_exists( $this, 'defaultView' ) ) {
+			return $this->defaultView();
+		}
+
+	}
+
+	public function defaultView() {
+		return '';
+	}
 
 	public function getView() {
+		class_alias('Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
 		if ( $this->getSetting( 'useViewLoader' ) && is_null( $this->View ) ) {
-			$tpl      = $this->viewfile;
-			$Selector = new ModuleViewLoader( $this );
-			$full     = $Selector->getTemplateByName( $tpl );
+			$tpl    = $this->getViewfile();
+			$Loader = new ModuleViewLoader( $this );
+			$T      = new ModuleTemplate( $this );
 
-			$T = new ModuleTemplate( $this, $full['fragment'] );
-			$T->setPath( $full['basedir'] );
+			$full = $Loader->getTemplateByName( $tpl );
+			if ( isset( $full['fragment'] ) ) {
+				$T->setTplFile( $full['fragment'] );
+				$T->setPath( $full['basedir'] );
+			}
 
 			$this->View = $T;
 
 			return $this->View;
+
 		} else if ( $this->View ) {
 			return $this->View;
 		}
@@ -651,7 +672,7 @@ abstract class Module {
 			'area'        => $this->area,
 			'post_id'     => $this->envVars['postId'],
 			'areaContext' => $this->areaContext,
-			'viewfile'    => $this->viewfile,
+			'viewfile'    => $this->getViewfile(),
 			'class'       => get_class( $this ),
 			'inDynamic'   => AreaRegistry::getInstance()->isDynamic( $this->area ),
 			'uri'         => $this->getUri()
@@ -688,8 +709,7 @@ abstract class Module {
 			'inGlobalAreas'    => false,
 			'asTemplate'       => true,
 			'category'         => 'standard',
-			'useViewLoader'    => false,
-			'TemplateSelector' => null
+			'useViewLoader'    => false
 		);
 
 	}
@@ -746,10 +766,10 @@ abstract class Module {
 		}
 
 	}
-
-	public function getTemplateSelector() {
-		return $this->TemplateSelector;
-	}
+//
+//	public function getTemplateSelector() {
+//		return $this->TemplateSelector;
+//	}
 
 
 }

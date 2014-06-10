@@ -186,7 +186,7 @@
   display: none;
 }
 /* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
-#kontentblocks_stage.fullscreen .fullscreen-module .kb_inner {
+#kontentblocks_stage.fullscreen .fullscreen-module .kb-module--inner {
   border: none;
 }
 
@@ -317,7 +317,7 @@ h2.kb-title {
 }
 
 /* line 76, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
-.kb_inner {
+.kb-module--body {
   padding: 0px;
   overflow: hidden;
   background: #fff;

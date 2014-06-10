@@ -27,14 +27,13 @@ class ModuleViewLoader {
 	 * @param Module $Module
 	 */
 	public function __construct( Module $Module ) {
-		$this->ViewFilesystem = new ModuleViewFilesystem( $Module );
-
-		$this->Module    = $Module;
-		$this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->getAreaContext() );
+		$this->ViewFilesystem = ModuleViewsRegistry::getInstance()->getViewFileSystem( $Module );
+		$this->Module         = $Module;
+		$this->views          = $this->ViewFilesystem->getTemplatesforContext( $Module->getAreaContext() );
 		if ( count( $this->views ) > 1 ) {
 			$this->hasTemplates = true;
 		}
-		add_action( 'kb_save_frontend_module', array( $this, 'frontendSave' ) );
+		add_action( 'Wkb_save_frontend_module', array( $this, 'frontendSave' ) );
 	}
 
 	public function render() {
@@ -44,6 +43,13 @@ class ModuleViewLoader {
 				array( 'templates' => $this->prepareTemplates(), 'module' => $this->Module ) );
 
 			return $tpl->render();
+		} else {
+			$tpl = $this->getSingleTemplate();
+			if ( is_null( $tpl ) ) {
+				return "<p class='notice kb-field'>No View available</p>";
+			} else {
+				return "<input type='hidden' name='{$this->Module->instance_id}[viewfile]' value='{$tpl['filteredfile']}' >";
+			}
 		}
 	}
 
@@ -59,7 +65,7 @@ class ModuleViewLoader {
 	private function prepareTemplates() {
 
 		$prepared = array();
-		$selected = $this->Module->viewfile;
+		$selected = $this->Module->getViewfile();
 
 		if ( empty( $selected ) ) {
 			$selected = $this->findDefaultTemplate();
@@ -75,8 +81,8 @@ class ModuleViewLoader {
 
 	private function findDefaultTemplate() {
 
-		if ( method_exists( $this->Module, 'defaultTemplate' ) ) {
-			$setByModule = $this->Module->defaultTemplate();
+		if ( method_exists( $this->Module, 'defaultView' ) ) {
+			$setByModule = $this->Module->defaultView();
 
 			if ( !empty( $setByModule ) && $this->isValidTemplate( $setByModule ) ) {
 				return $setByModule;
@@ -117,12 +123,18 @@ class ModuleViewLoader {
 
 
 		/** @var \Kontentblocks\Backend\Storage\ModuleStoragePostMeta $Storage */
-		$Storage               = \Kontentblocks\Helper\getStorage( $postId );
-		$index                 = $Storage->getModuleDefinition( $module['instance_id'] );
+		$Storage           = \Kontentblocks\Helper\getStorage( $postId );
+		$index             = $Storage->getModuleDefinition( $module['instance_id'] );
 		$index['viewfile'] = $module['viewfile'];
 
 		$Storage->addToIndex( $module['instance_id'], $index );
 
 
+	}
+
+	private function getSingleTemplate() {
+		if ( count( $this->views ) === 1 ) {
+			return array_pop( $this->views );
+		}
 	}
 } 
