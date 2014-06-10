@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields;
 
 use Kontentblocks\Fields\FieldRegistry,
     Kontentblocks\Fields\FieldArray;
+use Kontentblocks\Modules\Module;
 
 /**
  * Purpose of this Class:
@@ -61,11 +62,11 @@ class FieldSection
 	 * @param string $id
 	 * @param $args
 	 * @param $envVars
-	 * @param $module
+	 * @param Module $module
 	 * @internal param array $areaContext
 	 * @return \Kontentblocks\Fields\FieldSection
 	 */
-    public function __construct($id, $args, $envVars, $module)
+    public function __construct($id, $args, $envVars, Module $module)
     {
 
         $this->id = $id;
@@ -256,9 +257,13 @@ class FieldSection
         $postType = $this->envVars['postType'];
         $pageTemplate = $this->envVars['pageTemplate'];
 		$moduleTemplate = $this->module->getViewfile();
-	    if ($field->getArg('viewfile') && !in_array($moduleTemplate, (array)$field->getArg('viewfile'))) {
-		    return $field->setDisplay(false);
+
+	    if ($this->module->getSetting('iseViewLoader')){
+		    if ($field->getArg('viewfile') && !in_array($moduleTemplate, (array)$field->getArg('viewfile'))) {
+			    return $field->setDisplay(false);
+		    }
 	    }
+
 
         if ($field->getArg('postType') && !in_array($postType, (array)$field->getArg('postType'))) {
             return $field->setDisplay(false);

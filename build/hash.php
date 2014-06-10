@@ -1,4 +1,4 @@
 <?php
 function getGitHash(){
-	return uniqid();
+	return "5396ac4f8c773";
 };

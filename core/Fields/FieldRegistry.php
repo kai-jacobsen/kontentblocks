@@ -78,7 +78,7 @@ class FieldRegistry
     /**
      * Get field by id
      * @param string $id
-     * @return bool
+     * @return Field | bool
      * @since 1.0.0
      */
     public function getField($id)
