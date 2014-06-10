@@ -258,7 +258,7 @@ class FieldSection
         $pageTemplate = $this->envVars['pageTemplate'];
 		$moduleTemplate = $this->module->getViewfile();
 
-	    if ($this->module->getSetting('iseViewLoader')){
+	    if ($this->module->getSetting('useViewLoader')){
 		    if ($field->getArg('viewfile') && !in_array($moduleTemplate, (array)$field->getArg('viewfile'))) {
 			    return $field->setDisplay(false);
 		    }
