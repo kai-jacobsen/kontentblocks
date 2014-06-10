@@ -67,7 +67,7 @@ KB.Ui = function ($) {
 //                normal.removeClass('non-active-context');
 //            })
 
-            jQuery('body').on('mouseover', '.kb_inner', function () {
+            jQuery('body').on('mouseover', '.kb_module--body', function () {
                 var $con = $(this).closest('.kb-context-container');
                 $con.addClass('active-context').removeClass('non-active-context');
 
@@ -203,7 +203,7 @@ KB.Ui = function ($) {
                     // close open modules, sorting on open container
                     // doesn't work very well
                     $('.kb-open').toggleClass('kb-open');
-                    $('.kb_inner').hide();
+                    $('.kb-module--body').hide();
 
                     // tinyMCE doesn't like to be moved in the DOM
                     KB.TinyMCE.removeEditors();
@@ -284,7 +284,7 @@ KB.Ui = function ($) {
             var hash = kontentblocks.config.hash;
             if (store.get('kbhash') !== hash){
                 store.clear();
-//                store.set('kbhash', hash)
+                store.set('kbhash', hash)
             }
         },
         /**
@@ -333,7 +333,7 @@ KB.Ui = function ($) {
                     KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
                 }
                 else {
-                    $(this).parent().nextAll('.kb_inner:first').slideToggle('fast', function () {
+                    $(this).parent().nextAll('.kb-module--body:first').slideToggle('fast', function () {
                         $('body').trigger('module::opened');
                     });
                     $('#' + activeBlock).toggleClass('kb-open', 1000);

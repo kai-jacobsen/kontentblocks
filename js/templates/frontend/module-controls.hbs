@@ -1,14 +1,14 @@
 <div class='os-edit-wrapper os-controls {{#if model.inDynamic }} dynamic-module {{/if}} {{#if model.master }} master-module {{/if}}'>
     <ul class="controls-wrap">
         <li>
-            <a class='os-edit-block kb-nbb' title='edit' data='{{ model.instance_id }}'
-               data-url='{{ model.editURL }}'><span class="dashicons dashicons-edit"></span>{{ i18n.moduleControls.controlsEdit }}</a>
+            <a class='os-edit-block kb-module-edit' title='edit' data='{{ model.instance_id }}'
+               data-url='{{ model.editURL }}'><span class="dashicons dashicons-edit"></span><span class="os-action">{{ i18n.moduleControls.controlsEdit }}</span></a>
         </li>
         <!--<li>-->
             <!--<a class='kb-module-layout-controls kb-js-open-layout-controls dashicons dashicons-hammer'></a>-->
         <!--</li>-->
         <li>
-            <a class='kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update'><span class="dashicons dashicons-update"></span>{{ i18n.moduleControls.controlsUpdate }}</a>
+            <a class='kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update'><span class="dashicons dashicons-update"></span><span class="os-action">{{ i18n.moduleControls.controlsUpdate }}</span></a>
         </li>
         <li>
             <a class='kb-module-dirty-state kb-nbt'><span class=""></span>{{ i18n.moduleControls.controlsChanged }}</a>

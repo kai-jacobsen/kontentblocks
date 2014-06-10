@@ -17,9 +17,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     initialize: function () {
         var that = this;
+
         // Setup Elements
         this.$head = jQuery('.block-head', this.$el);
-        this.$body = jQuery('.kb_inner', this.$el);
+        this.$body = jQuery('.kb-module--body', this.$el);
+        this.$inner = jQuery('.kb-module--controls-inner', this.$el);
         this.attachedFields = {};
         this.instanceId = this.model.get('instance_id');
         // create new module actions menu
@@ -40,6 +42,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 view.$el.remove();
             });
 
+        });
+
+        this.listenTo(KB, 'template::changed', function(){
+            console.log('called');
+            that.clearFields();
+            that.updateModuleForm();
         });
 
 
@@ -76,9 +84,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     insertNewUpdateForm: function (response) {
         if (response !== '') {
-            this.$body.html(response.html);
+            this.$inner.html(response.html);
         } else {
-            this.$body.html('empty');
+            this.$inner.html('empty');
         }
         KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         // re-init UI listeners
@@ -107,7 +115,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
 
         this.sizeTimer = setInterval(function () {
-            var h = jQuery('.kb_inner', that.$el).height() + 150;
+            var h = jQuery('.kb-module--controls-inner', that.$el).height() + 150;
             $stage.height(h);
         }, 750);
 

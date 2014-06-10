@@ -10,6 +10,8 @@ class Twig
     private static $loader = null;
     private static $environment = null;
 
+	protected static $paths = array();
+
     public static function getInstance()
     {
 
@@ -70,11 +72,13 @@ class Twig
 
     public static function setPath($path)
     {
-        $paths = array();
-        $paths[] = $path;
-        $paths[] = self::getDefaultPath();
 
-        self::$loader->addPath($path);
+	    if (!in_array($path, self::$paths)){
+		    self::$paths[] = $path;
+		    self::$loader->prependPath($path);
+	    }
+
+
     }
 
     public static function resetPath()

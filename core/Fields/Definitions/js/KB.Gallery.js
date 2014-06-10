@@ -149,7 +149,6 @@ KB.Gallery.Controller = Backbone.View.extend({
         this.subviews = []; // image items
         this.bootstrap(); // run forrest run
         this._initialized = false; // init flag to prevent multiple inits
-
         if (KB.FrontendEditModal) {
             this.listenTo(KB.FrontendEditModal, 'kb:frontend-save', this.frontendSave);
         }

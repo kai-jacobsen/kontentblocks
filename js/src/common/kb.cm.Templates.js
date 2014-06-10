@@ -9,7 +9,6 @@ KB.Templates = (function ($) {
 
     function render(tmpl_name, tmpl_data) {
         var tmpl_string;
-        console.log(tmpl_name);
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + 'js/templates';
 

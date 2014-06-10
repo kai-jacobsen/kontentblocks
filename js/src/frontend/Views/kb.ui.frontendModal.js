@@ -15,8 +15,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         var that = this;
         this.options = options;
         this.view = options.view;
-
         this.model.on('change', this.test, this);
+        this.listenTo(KB, 'template::changed', function(){
+            that.serialize(false);
+            that.render();
+        });
 
         this.listenTo(this, 'recalibrate', this.recalibrate);
         // add form skeleton to modal
@@ -119,6 +122,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             success: function (res) {
 
                 that.$inner.empty();
+                that.view.clearFields();
                 that.$inner.attr('id', that.view.model.get('instance_id'));
                 // append the html to the inner form container
                 that.$inner.append(res.html);
@@ -276,6 +280,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
     },
 
+
     // delay keyup events and only fire the last
     delayInput: function () {
         var that = this;
@@ -307,6 +312,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         jQuery('.wp-editor-area', this.$el).each(function (i, item) {
             tinymce.remove('#' + item.id);
         });
+
+
     },
 // Modules can pass special settings to manipulate the modal
 // By now it's limited to the width

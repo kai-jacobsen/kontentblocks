@@ -404,6 +404,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.options = options;
         this.view = options.view;
         this.model.on("change", this.test, this);
+        this.listenTo(KB, "template::changed", function() {
+            that.serialize(false);
+            that.render();
+        });
         this.listenTo(this, "recalibrate", this.recalibrate);
         jQuery(KB.Templates.render("frontend/module-edit-form", {
             model: this.model.toJSON(),
@@ -477,6 +481,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: "json",
             success: function(res) {
                 that.$inner.empty();
+                that.view.clearFields();
                 that.$inner.attr("id", that.view.model.get("instance_id"));
                 that.$inner.append(res.html);
                 if (res.json) {
@@ -710,7 +715,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         $controls.offset({
             top: pos.top + 20,
-            left: pos.left,
+            left: pos.left - 40,
             zIndex: 999999
         });
     },

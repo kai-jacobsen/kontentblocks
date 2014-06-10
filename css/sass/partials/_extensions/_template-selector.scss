@@ -1,0 +1,29 @@
+.kb-template-selector--wrapper{
+  padding: 1px 1px;
+  background: #fafafa;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+
+  .kb-selectbox{
+    float: right;
+    padding: 0;
+    background: transparent;
+    border-left: 0;
+    label{
+      color: #ccc;
+      font-size: 11px;
+    }
+
+    &:focus{
+      box-shadow: none;
+    }
+  }
+
+  select{
+    font-size: 11px;
+    width:150px;
+    height: 28px;
+
+  }
+
+}

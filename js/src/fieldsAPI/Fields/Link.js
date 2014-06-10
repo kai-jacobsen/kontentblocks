@@ -13,7 +13,6 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
     },
 
     render: function (index) {
-        console.log('b4',this.model.toJSON());
         return KB.Templates.render(
             this.templatePath, {
                 config: this.config,

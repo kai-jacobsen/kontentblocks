@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Fields.register('Image', (function ($) {
     'use strict';
     var self;

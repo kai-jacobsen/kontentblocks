@@ -34,7 +34,7 @@ class FieldManager
      * @var array
      * @since 1.0.0
      */
-    protected $structure;
+    public $structure;
 
     /**
      * Object to handle the section layout
@@ -145,11 +145,16 @@ class FieldManager
      * @return mixed
      * @since 1.0.0
      */
-    public function getFieldByKey( $key )
+    public function getFieldByKey( $key, $fromArray = null)
     {
         if ( empty( $this->fieldsById ) ) {
             $this->fieldsById = $this->collectAllFields();
         }
+
+	    if (isset($fromArray) && $this->fieldsById[$fromArray]){
+		    return $this->fieldsById[$fromArray]->getFieldByKey($key);
+	    }
+
 
         if ( isset( $this->fieldsById[ $key ] ) ) {
             return $this->fieldsById[ $key ];

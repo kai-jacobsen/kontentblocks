@@ -100,9 +100,10 @@ class FieldArray {
 
 			if ( isset( $data[ $field->getKey() ] ) ) {
 				$collect[ $field->getKey() ] = $field->_save( $data[ $field->getKey() ], $old );
-			} else {
-				$collect[ $field->getKey() ] = $field->_save( null, $old );
 			}
+//			else {
+//				$collect[ $field->getKey() ] = $field->_save( null, $old );
+//			}
 		}
 
 		return $collect;
@@ -173,6 +174,24 @@ class FieldArray {
 		} else {
 			return $default;
 		}
+
+	}
+
+	/**
+	 * Get a field object by key
+	 * returns the object on success
+	 * or false if key does not exist
+	 *
+	 * @param string $key
+	 * @return mixed
+	 * @since 1.0.0
+	 */
+	public function getFieldByKey( $key)
+	{
+		if (isset($this->fields[$key])){
+			return $this->fields[$key];
+		}
+		return false;
 
 	}
 

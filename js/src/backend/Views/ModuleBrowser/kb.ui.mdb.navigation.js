@@ -22,7 +22,6 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
                 return false;
             }
 
-            console.log(this);
             if (this.options.parent.catSet === false){
                 this.options.parent.catSet = true;
                 this.options.browser.update(this.model);

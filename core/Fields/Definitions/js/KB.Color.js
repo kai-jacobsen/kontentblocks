@@ -1,5 +1,3 @@
-var KB = KB || {};
-
 KB.Fields.register('Color', (function($) {
 	return {
 		init: function() {

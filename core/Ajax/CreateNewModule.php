@@ -46,6 +46,9 @@ class CreateNewModule
      */
     private $newModule;
 
+
+	private $moduleArgs;
+
     public function __construct()
     {
         if (!defined('KB_GENERATE')) {

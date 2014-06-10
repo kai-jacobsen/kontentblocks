@@ -4,7 +4,7 @@ namespace Kontentblocks\Templating;
 use Exception;
 use Kontentblocks\Utils\MobileDetect;
 
-class ModuleTemplate {
+class ModuleView {
 
 	/**
 	 * @var object  Module Instance
@@ -35,7 +35,7 @@ class ModuleTemplate {
 	 *
 	 * @throws Exception
 	 */
-	public function __construct( $module, $tpl = false, $addData = array() ) {
+	public function __construct( $module, $tpl = null, $addData = array() ) {
 
 		if ( !isset( $module ) || !is_object( $module ) ) {
 			throw new \Exception( 'Module is not set' );
@@ -54,11 +54,9 @@ class ModuleTemplate {
 	}
 
 	public function render( $echo = false ) {
-		$modulePath = $this->module->getPath();
-		if ( !empty( $modulePath ) ) {
-			if ( is_file( trailingslashit( $modulePath ) . $this->tplFile ) ) {
-				$this->setPath( $this->module->settings['path'] );
-			}
+
+		if ( empty( $this->tplFile ) ) {
+			return false; //@TODO template missing
 		}
 
 		if ( $echo ) {
@@ -70,12 +68,15 @@ class ModuleTemplate {
 	}
 
 	public function setPath( $path ) {
-		Twig::setPath( $path );
+
+		if ( !empty( $path ) && is_dir( $path ) ) {
+			Twig::setPath( $path );
+		}
 
 	}
 
 	public function __destruct() {
-		Twig::resetPath();
+		//Twig::resetPath();
 
 	}
 
@@ -122,4 +123,20 @@ class ModuleTemplate {
 		);
 	}
 
+	public function addData( $data ) {
+
+		if ( !is_array( $data ) ) {
+			return false;
+		}
+
+		$this->data = wp_parse_args( $data, $this->data );
+
+		return true;
+	}
+
+	public function setTplFile( $file ) {
+		$this->tplFile = $file;
+	}
+
 }
+

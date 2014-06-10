@@ -58,7 +58,6 @@ KB.Checks = function($) {
             var limit = areamodel.get("limit");
             var children = $("#" + areamodel.get("id") + " li.kb_block").length;
             if (limit !== 0 && children === limit) {
-                console.log("asdf");
                 return false;
             }
             return true;
@@ -270,7 +269,6 @@ KB.Templates = function($) {
     }
     function render(tmpl_name, tmpl_data) {
         var tmpl_string;
-        console.log(tmpl_name);
         if (!tmpl_cache[tmpl_name]) {
             var tmpl_dir = kontentblocks.config.url + "js/templates";
             var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + kontentblocks.config.hash;
@@ -431,7 +429,7 @@ KB.Ui = function($) {
             var normal = $(".area-normal");
             var stage = $("#kontentblocks_stage");
             var that = this;
-            jQuery("body").on("mouseover", ".kb_inner", function() {
+            jQuery("body").on("mouseover", ".kb_module--body", function() {
                 var $con = $(this).closest(".kb-context-container");
                 $con.addClass("active-context").removeClass("non-active-context");
                 if ($con.hasClass("area-top") || $con.hasClass("area-bottom")) {
@@ -522,7 +520,7 @@ KB.Ui = function($) {
                     areaOver = KB.currentArea;
                     $(KB).trigger("kb:sortable::start");
                     $(".kb-open").toggleClass("kb-open");
-                    $(".kb_inner").hide();
+                    $(".kb-module--body").hide();
                     KB.TinyMCE.removeEditors();
                     $(document).trigger("kb_sortable_start", [ event, ui ]);
                 },
@@ -574,6 +572,7 @@ KB.Ui = function($) {
             var hash = kontentblocks.config.hash;
             if (store.get("kbhash") !== hash) {
                 store.clear();
+                store.set("kbhash", hash);
             }
         },
         resort: function(sender) {
@@ -606,7 +605,7 @@ KB.Ui = function($) {
                 if (KB.isLocked() && !KB.userCan("lock_kontentblocks")) {
                     KB.notice(kontentblocks.l18n.gen_no_permission, "alert");
                 } else {
-                    $(this).parent().nextAll(".kb_inner:first").slideToggle("fast", function() {
+                    $(this).parent().nextAll(".kb-module--body:first").slideToggle("fast", function() {
                         $("body").trigger("module::opened");
                     });
                     $("#" + activeBlock).toggleClass("kb-open", 1e3);
