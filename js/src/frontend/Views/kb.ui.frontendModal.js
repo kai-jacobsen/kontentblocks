@@ -21,6 +21,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.render();
         });
 
+        this.listenTo(KB, 'frontend::recalibrate', this.recalibrate);
         this.listenTo(this, 'recalibrate', this.recalibrate);
         // add form skeleton to modal
         jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON(), i18n:KB.i18n.jsFrontend})).appendTo(this.$el);

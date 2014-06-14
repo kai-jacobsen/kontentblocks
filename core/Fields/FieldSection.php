@@ -179,7 +179,7 @@ class FieldSection
             if (isset($data[$field->getKey()])) {
                 $collect[$field->getKey()] = $field->_save($data[$field->getKey()], $old);
             } else {
-                $collect[$field->getKey()] = $field->_save(NULL, $old);
+                //$collect[$field->getKey()] = $field->_save(NULL, $old);
             }
         }
         return $collect;

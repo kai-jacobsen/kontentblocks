@@ -76,6 +76,7 @@ class Twig
 	    if (!in_array($path, self::$paths)){
 		    self::$paths[] = $path;
 		    self::$loader->prependPath($path);
+
 	    }
 
 

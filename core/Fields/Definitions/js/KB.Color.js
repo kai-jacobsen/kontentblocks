@@ -21,7 +21,6 @@ KB.Fields.register('Color', (function($) {
 			this.init();
 		},
         frontUpdate: function(view){
-            console.log(view);
             this.init();
         }
 

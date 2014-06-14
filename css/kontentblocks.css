@@ -2667,27 +2667,30 @@ button.Zebra_DatePicker_Icon_Inside {
 .flexible-fields--toggle-title h3 {
   padding: 3px !important;
   margin: 0 !important;
+  font-size: 16px !important;
 }
-/* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 12, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title input[type="text"] {
   font-size: 13px !important;
   padding-left: 15px;
-  background-color: transparent;
+  background-color: transparent !important;
   border: none;
   border-bottom: 1px solid transparent;
   display: inline-block;
   margin: 0 !important;
 }
-/* line 20, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title input[type="text"]:hover {
   border-color: #ccc;
   background-color: #fafafa;
 }
-/* line 25, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title input[type="text"]:focus {
-  background-color: #fff;
+  background-color: #fff !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
-/* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title .flexible-fields--js-toggle {
   font-size: 18px !important;
   position: relative;
@@ -2696,15 +2699,15 @@ button.Zebra_DatePicker_Icon_Inside {
   cursor: pointer;
   color: #999;
 }
-/* line 38, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title .flexible-fields--js-toggle:hover {
   color: #333;
 }
-/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 45, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title .flexible-fields--js-drag-handle {
   cursor: move;
 }
-/* line 46, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title .flexible-fields--js-drag-handle:before {
   top: 3px;
   position: relative;
@@ -2713,7 +2716,7 @@ button.Zebra_DatePicker_Icon_Inside {
   color: #666;
   text-shadow: 1px 1px 1px #FFF;
 }
-/* line 57, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 59, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title .flexible-fields--js-trash {
   position: absolute;
   right: 15px;
@@ -2722,19 +2725,19 @@ button.Zebra_DatePicker_Icon_Inside {
   color: #999;
   cursor: pointer;
 }
-/* line 65, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 67, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title .flexible-fields--js-trash:hover {
   color: #333;
 }
 
-/* line 73, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 75, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .os-content-inner .flexible-fields--item-list {
   list-style: none;
   margin: 0;
   padding: 0;
   margin-bottom: 20px;
 }
-/* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 81, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .os-content-inner .flexible-fields--item-list li {
   margin-bottom: 10px;
 }

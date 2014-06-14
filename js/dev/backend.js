@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-10 */
+/*! Kontentblocks DevVersion 2014-06-13 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -566,10 +566,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 view.$el.remove();
             });
         });
-        this.listenTo(KB, "template::changed", function() {
-            console.log("called");
+        this.listenTo(this, "template::changed", function() {
             that.clearFields();
             that.updateModuleForm();
+            console.log("templateSwitch");
         });
     },
     setupDefaultMenuItems: function() {

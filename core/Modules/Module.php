@@ -64,8 +64,6 @@ abstract class Module {
 			$this->setEnvVarsFromEnvironment( $environment );
 		}
 
-		$this->View = $this->getView();
-
 
 		if ( method_exists( $this, 'fields' ) ) {
 			$this->Fields = new FieldManager( $this );
@@ -130,6 +128,8 @@ abstract class Module {
 		if ( isset( $this->Fields ) ) {
 			$this->_setupFieldData();
 		}
+
+		$this->View = $this->getView();
 
 
 		if ( $this->getEnvVar( 'action' ) ) {
@@ -497,12 +497,11 @@ abstract class Module {
 	}
 
 	public function getView() {
-		class_alias('Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
+
 		if ( $this->getSetting( 'useViewLoader' ) && is_null( $this->View ) ) {
 			$tpl    = $this->getViewfile();
 			$Loader = new ModuleViewLoader( $this );
 			$T      = new ModuleView( $this );
-
 			$full = $Loader->getTemplateByName( $tpl );
 			if ( isset( $full['fragment'] ) ) {
 				$T->setTplFile( $full['fragment'] );

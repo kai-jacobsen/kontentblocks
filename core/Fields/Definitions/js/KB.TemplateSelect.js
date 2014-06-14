@@ -5,8 +5,9 @@ KB.Fields.register('TemplateSelect', (function($) {
         init: function() {
             $('body').on('change.template-select','.kb-template-select', function(){
                 if (KB.focusedModule){
+                    console.log(KB.focusedModule);
                     KB.focusedModule.set('viewfile', $(this).val());
-                    KB.trigger('template::changed', KB.focusedModule);
+                    KB.focusedModule.view.trigger('template::changed');
                 }
             })
         },

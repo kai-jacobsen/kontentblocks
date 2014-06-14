@@ -45,7 +45,7 @@ class FlexibleFieldsFactory {
 	 *
 	 * @param FlexibleFields $Field
 	 */
-	public function __construct( FlexibleFields $Field ) {
+	public function __construct( $value, FlexibleFields $Field ) {
 		$this->Field = $Field;
 
 		$this->arrayKey  = $Field->getKey();
@@ -175,6 +175,10 @@ class FlexibleFieldsFactory {
 				) );
 				break;
 		}
+	}
+
+	public function __toArray(){
+		return $this->getItems();
 	}
 
 }

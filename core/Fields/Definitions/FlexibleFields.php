@@ -25,7 +25,7 @@ Class FlexibleFields extends Field {
 	 */
 	public function form() {
 		$this->label();
-		echo "<div id='{$this->getFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg('arrayKey')}' data-module='{$this->parentModuleId}' class='flexible-fields--stage'></div>";
+		echo "<div id='{$this->getFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg( 'arrayKey' )}' data-module='{$this->parentModuleId}' class='flexible-fields--stage'></div>";
 		$this->description();
 
 	}
@@ -38,7 +38,12 @@ Class FlexibleFields extends Field {
 			$forJSON = array_values( $value );
 		}
 		$Bridge = JSONBridge::getInstance();
-		$Bridge->registerFieldData( $this->parentModuleId, $this->type, $forJSON, $this->getKey(), $this->getArg('arrayKey') );
+		$Bridge->registerFieldData( $this->parentModuleId,
+			$this->type,
+			$forJSON,
+			$this->getKey(),
+			$this->getArg( 'arrayKey' ) );
+
 		return $value;
 	}
 
@@ -62,27 +67,30 @@ Class FlexibleFields extends Field {
 
 		if ( is_array( $old ) ) {
 			foreach ( $old as $k => $v ) {
-				if ( ! array_key_exists( $k, $new ) ) {
+				if ( !array_key_exists( $k, $new ) ) {
 					$new[ $k ] = null;
 				}
 			}
 		}
 
-		foreach ( $new as &$field ) {
-			if ( is_null( $field ) ) {
-				continue;
-			}
+		if ( is_array( $new ) ) {
+			foreach ( $new as &$field ) {
+				if ( is_null( $field ) ) {
+					continue;
+				}
 
-			foreach ( $field['_mapping'] as $key => $type ) {
-				$fieldInstance = FieldRegistry::getInstance()->getField( $type );
-				$field[ $key ] = $fieldInstance->save( $field[ $key ], $old );
-			}
+				foreach ( $field['_mapping'] as $key => $type ) {
+					$fieldInstance = FieldRegistry::getInstance()->getField( $type );
+					$field[ $key ] = $fieldInstance->save( $field[ $key ], $old );
+				}
 
-			if (!isset($field['uid'])){
-				$field['uid'] = uniqid('ff');
-			}
+				if ( !isset( $field['uid'] ) ) {
+					$field['uid'] = uniqid( 'ff' );
+				}
 
+			}
 		}
+
 
 		return $new;
 	}

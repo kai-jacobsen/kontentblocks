@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-10 */
+/*! Kontentblocks DevVersion 2014-06-13 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -120,7 +120,6 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
     },
     setValue: function(value) {
         var attrs;
-        _K.info("FF Model", value);
         var that = this;
         var args = {
             width: 150,

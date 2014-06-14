@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-10 */
+/*! Kontentblocks DevVersion 2014-06-13 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -20,7 +20,6 @@ KB.Fields.register("Color", function($) {
             this.init();
         },
         frontUpdate: function(view) {
-            console.log(view);
             this.init();
         }
     };
@@ -166,7 +165,9 @@ KB.Fields.register("FlexibleFields", function($) {
                         el: el
                     });
                     view.addField(key, obj, arrayKey);
+                    console.log("new init");
                 } else {
+                    console.log("already init");
                     view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
                 }
             });
@@ -189,8 +190,8 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
         this.parentModuleId = params.moduleView.model.get("instance_id");
         this._frame = null;
         this.subviews = [];
-        this.bootstrap();
         this._initialized = false;
+        this.bootstrap();
     },
     bootstrap: function() {
         if (!this._initialized) {
@@ -241,6 +242,7 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
         this.subviews.push(Item);
         this.$list.append(Item.render());
         KB.Ui.initTabs();
+        KB.trigger("frontend::recalibrate");
     },
     initialSetup: function() {
         var that = this;
@@ -280,7 +282,9 @@ KB.FlexibleFields.Item = Backbone.View.extend({
         "click .flexible-fields--js-trash": "deleteItem"
     },
     toggleItem: function() {
-        jQuery(".flexible-fields--toggle-title", this.$el).next().slideToggle();
+        jQuery(".flexible-fields--toggle-title", this.$el).next().slideToggle(250, function() {
+            KB.trigger("frontend::recalibrate");
+        });
     },
     deleteItem: function() {
         this.$el.remove();
@@ -321,7 +325,6 @@ KB.FlexibleFields.Item = Backbone.View.extend({
         _.each(tab.fields, function(field) {
             fieldInstance = KB.FieldsAPI.get(field);
             data = that.model.get(field.key);
-            console.log(that.model.get(field.key));
             if (!_.isUndefined(data)) {
                 fieldInstance.setValue(data);
             }
@@ -750,8 +753,9 @@ KB.Fields.register("TemplateSelect", function($) {
         init: function() {
             $("body").on("change.template-select", ".kb-template-select", function() {
                 if (KB.focusedModule) {
+                    console.log(KB.focusedModule);
                     KB.focusedModule.set("viewfile", $(this).val());
-                    KB.trigger("template::changed", KB.focusedModule);
+                    KB.focusedModule.view.trigger("template::changed");
                 }
             });
         },

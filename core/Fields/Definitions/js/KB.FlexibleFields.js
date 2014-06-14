@@ -12,7 +12,9 @@ KB.Fields.register('FlexibleFields', (function ($) {
                 if (!view.hasField(key, arrayKey)) {
                     var obj = new KB.FlexibleFields.Controller({moduleView: view, fid: fid, key: key, arrayKey: arrayKey, el: el});
                     view.addField(key, obj, arrayKey);
+                    console.log('new init');
                 } else {
+                    console.log('already init');
                     view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
                 }
 
@@ -39,8 +41,8 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
         this.parentModuleId = params.moduleView.model.get('instance_id');
         this._frame = null; // media modal instance
         this.subviews = []; // image items
-        this.bootstrap(); // run forrest run
         this._initialized = false; // init flag to prevent multiple inits on same object
+        this.bootstrap(); // run forrest run
 
     },
     bootstrap: function () {
@@ -89,6 +91,7 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
         this.subviews.push(Item);
         this.$list.append(Item.render());
         KB.Ui.initTabs();
+        KB.trigger('frontend::recalibrate');
 
     },
     initialSetup: function () {
@@ -131,7 +134,9 @@ KB.FlexibleFields.Item = Backbone.View.extend({
         'click .flexible-fields--js-trash' : 'deleteItem'
     },
     toggleItem: function(){
-        jQuery('.flexible-fields--toggle-title', this.$el).next().slideToggle();
+        jQuery('.flexible-fields--toggle-title', this.$el).next().slideToggle(250, function(){
+            KB.trigger('frontend::recalibrate');
+        });
     },
     deleteItem: function(){
         this.$el.remove();
@@ -165,7 +170,6 @@ KB.FlexibleFields.Item = Backbone.View.extend({
 
             fieldInstance = KB.FieldsAPI.get(field);
             data = that.model.get(field.key);
-            console.log(that.model.get(field.key));
             if (!_.isUndefined(data)){
                 fieldInstance.setValue(data);
             }

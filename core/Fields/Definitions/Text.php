@@ -24,6 +24,7 @@ Class Text extends Field
      */
     public function form()
     {
+
         $this->label();
         $type = $this->getArg( 'type', 'text' );
         echo "<input type='{$type}' id='{$this->getFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
@@ -32,7 +33,7 @@ Class Text extends Field
     }
 
 	public function outputFilter($v){
-		return esc_textarea($v);
+		return $v;
 	}
 
     /**
@@ -42,8 +43,8 @@ Class Text extends Field
      */
     public function inputFilter( $value )
     {
-//        return esc_attr( $value );
-	    return $value;
+        return esc_textarea( $value );
+//	    return $value;
     }
 
 

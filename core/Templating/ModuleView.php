@@ -97,6 +97,7 @@ class ModuleView {
 			$data = $modData;
 		}
 
+
 		if ( !is_array( $data ) ) {
 			$data = array();
 		}

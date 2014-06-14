@@ -29,13 +29,12 @@ class UpdateModuleOptions
         $new = $instance->save($parsed[$instance->instance_id], $old);
         $mergedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
         if ($update) {
-            $Environment->getStorage()->saveModule($instance->instance_id, $mergedData);
+            $Environment->getStorage()->saveModule($instance->instance_id, wp_slash($mergedData));
         }
 
         $mergedData = apply_filters('kb_modify_module_data', $mergedData, $instance->settings);
         $instance->rawModuleData = $mergedData;
         $instance->moduleData = $mergedData;
-
         $return = array(
 //            'html' => wp_kses_post($wp_embed->autoembed($instance->module($mergedData))),
             'html' => $instance->module($mergedData),

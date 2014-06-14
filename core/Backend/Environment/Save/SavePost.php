@@ -95,7 +95,7 @@ class SavePost {
 						$savedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe( $new, $old );
 					}
 				}
-				// store new data in post meta
+//				d($new,$savedData); exit;
 				// if this is a preview, save temporary data for previews
 				if ( $savedData ) {
 					if ( isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview' ) {

@@ -54,6 +54,7 @@ Class Kontentblocks
         define('KB_TEMPLATE_PATH', plugin_dir_path(__FILE__) . 'core/Modules/core-modules/');
         define('KB_REFIELD_JS', plugin_dir_url(__FILE__) . '/Definitions/js/');
 
+
         // still there for historical reasons
         define('KONTENTLOCK', false);
 

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-10 */
+/*! Kontentblocks DevVersion 2014-06-13 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -408,6 +408,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.serialize(false);
             that.render();
         });
+        this.listenTo(KB, "frontend::recalibrate", this.recalibrate);
         this.listenTo(this, "recalibrate", this.recalibrate);
         jQuery(KB.Templates.render("frontend/module-edit-form", {
             model: this.model.toJSON(),
@@ -714,8 +715,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.left = mSettings.controls.toolbar.left;
         }
         $controls.offset({
-            top: pos.top + 20,
-            left: pos.left - 40,
+            top: pos.top + 40,
+            left: pos.left + 40,
             zIndex: 999999
         });
     },

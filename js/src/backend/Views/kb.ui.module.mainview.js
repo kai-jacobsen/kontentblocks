@@ -43,11 +43,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             });
 
         });
+        this.listenTo(this, 'template::changed', function(){
 
-        this.listenTo(KB, 'template::changed', function(){
-            console.log('called');
-            that.clearFields();
-            that.updateModuleForm();
+                that.clearFields();
+                that.updateModuleForm();
+                console.log('templateSwitch');
         });
 
 
