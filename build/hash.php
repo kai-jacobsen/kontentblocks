@@ -1,4 +1,4 @@
 <?php
 function getGitHash(){
-	return "f4b9de81af8e8bdbe825861c1895a10a9560ae89";
+	return "1a374c0a03332a0959105a102b967e0891867b6c";
 };
