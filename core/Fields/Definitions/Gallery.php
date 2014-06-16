@@ -37,6 +37,9 @@ Class Gallery extends Field {
 			foreach ( $data['images'] as &$image ) {
 				if ( isset( $image['file']['id'] ) ) {
 					$image['file'] = wp_prepare_attachment_for_js( $image['file']['id'] );
+					$image['file']['title'] = $image['details']['title'];
+					$image['file']['alt'] = $image['details']['alt'];
+					$image['file']['description'] = (!empty($image['details']['description'])) ? $image['details']['description'] : '';
 				}
 			}
 

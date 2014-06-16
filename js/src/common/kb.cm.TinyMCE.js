@@ -43,16 +43,20 @@ KB.TinyMCE = (function ($) {
                 var ed = tinymce.init(settings);
             });
         },
-        addEditor: function ($el, quicktags, height) {
+        addEditor: function ($el, quicktags, height, watch) {
             // get settings from native WP Editor
-            // Editor may not be initialized and is not accesible throught
+            // Editor may not be initialized and is not accessible through
             // the tinymce api, thats why we take the settings from preInit
             var settings = tinyMCEPreInit.mceInit.content;
             var edHeight = height || 350;
+            console.log(watch);
+            var live = (_.isUndefined(watch)) ? true : false;
+            // if no $el, we assume it's in the last added module
             if (!$el) {
                 $el = KB.lastAddedModule.view.$el;
             }
 
+            // find all editors and init
             $('.wp-editor-area', $el).each(function () {
                 var id = this.id;
 
@@ -60,6 +64,7 @@ KB.TinyMCE = (function ($) {
                 settings.elements = id;
                 settings.selector = '#'+id;
                 settings.id = id;
+                settings.kblive = live;
                 settings.height = edHeight;
                 settings.setup = function (ed) {
                     ed.on('init', function () {
@@ -85,7 +90,7 @@ KB.TinyMCE = (function ($) {
             }, 1500);
 
         },
-        remoteGetEditor: function ($el, name, id, content, post_id, media) {
+        remoteGetEditor: function ($el, name, id, content, post_id, media, watch) {
             var pid = post_id || KB.appData.config.post.ID;
             var id = id || $el.attr('id');
             if (!media) {
@@ -105,7 +110,7 @@ KB.TinyMCE = (function ($) {
 
             }, function(data){
                 $el.empty().append(data);
-                this.addEditor($el, null, 150);
+                this.addEditor($el, null, 150, watch);
             },this);
 
         }

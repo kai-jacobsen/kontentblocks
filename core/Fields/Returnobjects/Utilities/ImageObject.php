@@ -30,7 +30,7 @@ class ImageObject {
 	 */
 	public function __construct( $att ) {
 
-		if ( ! isset( $att ) ) {
+		if ( !isset( $att ) ) {
 			throw new \BadFunctionCallException( 'Missing attachment' );
 		}
 
@@ -148,7 +148,7 @@ class ImageObject {
 	}
 
 	public function size( $w = null, $h = null ) {
-		$this->width = $w;
+		$this->width  = $w;
 		$this->height = $h;
 
 		return $this;
@@ -187,6 +187,12 @@ class ImageObject {
 		}
 
 		return false;
+	}
+
+	public function meta( $field ) {
+		if ( isset( $this->attachment[ $field ] ) ) {
+			return $this->attachment[ $field ];
+		}
 	}
 
 }

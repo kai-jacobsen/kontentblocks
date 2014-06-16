@@ -96,14 +96,23 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
         var $controls = jQuery('.os-controls', this.$el);
         var pos = this.$el.offset();
-        var mwidth = this.$el.width() - 150;
 
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
 
-        $controls.offset({top: pos.top + 40, left: pos.left + 40, zIndex: 999999});
+
+        if (pos.top > 100) {
+            pos.top = pos.top - 70;
+        }
+
+        if (pos.left > 100){
+            pos.left = pos.left;
+        }
+
+
+        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
 //        $controls.css({'top':pos.top + 'px', 'right':0})
     },
     updateModule: function () {

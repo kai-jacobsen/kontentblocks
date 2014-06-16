@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-13 */
+/*! Kontentblocks DevVersion 2014-06-16 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -341,9 +341,11 @@ KB.TinyMCE = function($) {
                 var ed = tinymce.init(settings);
             });
         },
-        addEditor: function($el, quicktags, height) {
+        addEditor: function($el, quicktags, height, watch) {
             var settings = tinyMCEPreInit.mceInit.content;
             var edHeight = height || 350;
+            console.log(watch);
+            var live = _.isUndefined(watch) ? true : false;
             if (!$el) {
                 $el = KB.lastAddedModule.view.$el;
             }
@@ -352,6 +354,7 @@ KB.TinyMCE = function($) {
                 settings.elements = id;
                 settings.selector = "#" + id;
                 settings.id = id;
+                settings.kblive = live;
                 settings.height = edHeight;
                 settings.setup = function(ed) {
                     ed.on("init", function() {
@@ -371,7 +374,7 @@ KB.TinyMCE = function($) {
                 QTags._buttonsInit();
             }, 1500);
         },
-        remoteGetEditor: function($el, name, id, content, post_id, media) {
+        remoteGetEditor: function($el, name, id, content, post_id, media, watch) {
             var pid = post_id || KB.appData.config.post.ID;
             var id = id || $el.attr("id");
             if (!media) {
@@ -390,7 +393,7 @@ KB.TinyMCE = function($) {
                 }
             }, function(data) {
                 $el.empty().append(data);
-                this.addEditor($el, null, 150);
+                this.addEditor($el, null, 150, watch);
             }, this);
         }
     };

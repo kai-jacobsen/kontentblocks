@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Utilities;
 
 use Kontentblocks\Fields\Definitions\FlexibleFields;
+use Kontentblocks\Fields\Returnobjects\EditableLink;
 use Kontentblocks\Fields\Returnobjects\Element;
 use Kontentblocks\Fields\Returnobjects\Image;
 
@@ -62,13 +63,13 @@ class FlexibleFieldsFactory {
 	 */
 	public function getItems() {
 		// check properties integrity
-		if ( ! $this->validate() ) {
+		if ( !$this->validate() ) {
 			return false;
 		};
 
 		$items = $this->setupItems();
 
-		if ( ! is_array( $items ) ) {
+		if ( !is_array( $items ) ) {
 			return array();
 		}
 
@@ -105,15 +106,15 @@ class FlexibleFieldsFactory {
 			return false;
 		}
 
-		if ( ! isset( $this->moduleId ) ) {
+		if ( !isset( $this->moduleId ) ) {
 			return false;
 		}
 
-		if ( ! isset( $this->arrayKey ) ) {
+		if ( !isset( $this->arrayKey ) ) {
 			return false;
 		}
 
-		if ( ! isset( $this->config ) ) {
+		if ( !isset( $this->config ) ) {
 			return false;
 		}
 
@@ -127,7 +128,7 @@ class FlexibleFieldsFactory {
 	private function extractFieldsFromConfig() {
 		$collect = array();
 		foreach ( $this->config as $key => $tab ) {
-			if ( ! empty( $tab['fields'] ) ) {
+			if ( !empty( $tab['fields'] ) ) {
 				$collect += $tab['fields'];
 			}
 		}
@@ -165,6 +166,15 @@ class FlexibleFieldsFactory {
 
 				break;
 
+			case ( 'link' ):
+				return new EditableLink( $keydata, array(
+					'instance_id' => $this->moduleId,
+					'key'         => $key,
+					'arrayKey'    => $this->arrayKey,
+					'index'       => $index,
+					'type'        => $type
+				) );
+
 			case ( 'image' ):
 				return new Image( $keydata, array(
 					'instance_id' => $this->moduleId,
@@ -177,7 +187,7 @@ class FlexibleFieldsFactory {
 		}
 	}
 
-	public function __toArray(){
+	public function __toArray() {
 		return $this->getItems();
 	}
 

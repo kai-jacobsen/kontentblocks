@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-13 */
+/*! Kontentblocks DevVersion 2014-06-16 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -209,6 +209,122 @@ KB.IEdit.Image = function($) {
     return self;
 }(jQuery);
 
+KB.IEdit.Link = function($) {
+    var $form, $linkTarget, $linktext, $body, $href, $title;
+    return {
+        selector: ".editable-link",
+        oWpLink: null,
+        $anchor: null,
+        init: function() {
+            var that = this;
+            $body = $("body");
+            $body.on("click", this.selector, function(e) {
+                e.stopPropagation();
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    that.$anchor = $(this);
+                    that.open();
+                }
+            });
+            $body.on("click", "#wp-link-close", function() {
+                that.close();
+            });
+        },
+        open: function() {
+            var that = this;
+            if (!window.wpLink) {
+                return false;
+            }
+            this.restore_htmlUpdate = wpLink.htmlUpdate;
+            this.restore_isMce = wpLink.isMCE;
+            this.restore_close = wpLink.close;
+            wpLink.isMCE = function() {
+                return false;
+            };
+            wpLink.open();
+            this.addLinktextField();
+            this.customizeDialog();
+            this.setValues();
+            wpLink.htmlUpdate = function() {
+                var attrs, html, start, end, cursor, textarea = wpLink.textarea, result;
+                if (!textarea) return;
+                attrs = wpLink.getAttrs();
+                if ($linktext) {
+                    attrs.linktext = $("input", $linktext).val();
+                }
+                if (!attrs.href || attrs.href == "http://") return;
+                that.$anchor.attr("href", attrs.href);
+                that.$anchor.html(attrs.linktext);
+                that.$anchor.attr("target", attrs.target);
+                that.updateModel(attrs);
+                that.close();
+                wpLink.close();
+            };
+        },
+        addLinktextField: function() {
+            $form = $("form#wp-link");
+            $linkTarget = $(".link-target", $form);
+            $linktext = $('<div><label><span>LinkText</span><input type="text" value="hello" name="linktext" ></label></div>').insertBefore($linkTarget);
+        },
+        customizeDialog: function() {
+            $("#wp-link-wrap").addClass("kb-customized");
+        },
+        setValues: function() {
+            $href = $("#url-field", $form);
+            $title = $("#link-title-field", $form);
+            var data = this.$anchor.data();
+            var mId = data.module;
+            var moduleData = KB.Modules.get(mId).get("moduleData");
+            var lData = {};
+            console.log(data, moduleData);
+            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
+                lData = moduleData[data.arraykey][data.index][data.key];
+            } else if (!_.isEmpty(data.index)) {
+                lData = moduleData[data.index][data.key];
+            } else if (!_.isEmpty(data.arraykey)) {
+                lData = moduleData[data.arraykey][data.key];
+            } else {
+                lData = moduleData[data.key];
+            }
+            $href.val(lData.link);
+            $title.val(lData.title);
+            $linktext.find("input").val(lData.linktext);
+            if (lData.target === "_blank") {
+                $("#link-target-checkbox").prop("checked", true);
+            }
+        },
+        close: function() {
+            wpLink.isMCE = this.restore_isMce;
+            wpLink.htmlUpdate = this.restore_htmlUpdate;
+            wpLink.close = this.restore_close;
+            $linktext.remove();
+        },
+        updateModel: function(attrs) {
+            var data = this.$anchor.data();
+            var mId = data.module;
+            var fkey = data.fieldKey;
+            var cModule = KB.Modules.get(mId);
+            var value = {
+                link: attrs.href,
+                title: attrs.title,
+                target: attrs.target,
+                linktext: attrs.linktext
+            };
+            var moduleData = _.clone(cModule.get("moduleData"));
+            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
+                moduleData[data.arraykey][data.index][data.key] = value;
+            } else if (!_.isEmpty(data.index)) {
+                moduleData[data.index][data.key] = value;
+            } else if (!_.isEmpty(data.arraykey)) {
+                moduleData[data.arraykey][data.key] = value;
+            } else {
+                moduleData[data.key] = value;
+            }
+            cModule.set("moduleData", moduleData);
+        }
+    };
+}(jQuery);
+
 KB.IEdit.Text = function(el) {
     var settings;
     if (_.isUndefined(el)) {
@@ -225,6 +341,7 @@ KB.IEdit.Text = function(el) {
         fixed_toolbar_container: "#kb-toolbar",
         schema: "html5",
         inline: true,
+        plugins: "textcolor, wplink",
         statusbar: false,
         setup: function(ed) {
             ed.on("init", function() {
@@ -240,6 +357,9 @@ KB.IEdit.Text = function(el) {
                 jQuery("body").on("click", ".mce-listbox", function() {
                     jQuery(".mce-stack-layout-item span").removeAttr("style");
                 });
+            });
+            ed.on("click", function(e) {
+                e.stopPropagation();
             });
             ed.on("focus", function(e) {
                 jQuery("#kb-toolbar").show();
@@ -438,7 +558,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             });
         }
         jQuery(document).on("newEditor", function(e, ed) {
-            that.attachEditorEvents(ed);
+            console.log(ed.settings);
+            if (ed.settings && ed.settings.kblive) {
+                that.attachEditorEvents(ed);
+            }
         });
         jQuery(document).on("KB:osUpdate", function() {
             that.serialize(false);
@@ -709,14 +832,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var mSettings = this.model.get("settings");
         var $controls = jQuery(".os-controls", this.$el);
         var pos = this.$el.offset();
-        var mwidth = this.$el.width() - 150;
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
+        if (pos.top > 100) {
+            pos.top = pos.top - 70;
+        }
+        if (pos.left > 100) {
+            pos.left = pos.left;
+        }
         $controls.offset({
             top: pos.top + 40,
-            left: pos.left + 40,
+            left: pos.left + 10,
             zIndex: 999999
         });
     },
@@ -883,4 +1011,5 @@ jQuery(document).ready(function() {
     });
     KB.IEdit.Image.init();
     KB.IEdit.BackgroundImage.init();
+    KB.IEdit.Link.init();
 });

@@ -48,24 +48,6 @@ class Element extends AbstractEditableFieldReturn {
 
 	public $uniqueId;
 
-	/**
-	 * Add a (css) class to the stack of classes
-	 *
-	 * @param string $class
-	 *
-	 * @return $this
-	 * @since 1.0.0
-	 */
-	public function addClass( $class ) {
-		if ( is_array( $class ) ) {
-			$this->classes = array_merge( $this->classes, $class );
-		} else {
-			$this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
-		}
-
-		return $this;
-
-	}
 
 
 	public function addLink( $target ) {
@@ -76,27 +58,6 @@ class Element extends AbstractEditableFieldReturn {
 
 	}
 
-	/**
-	 * Add an attribute to the stack of attributes
-	 *
-	 * @param string $attr
-	 * @param string $value
-	 *
-	 * @return $this
-	 * @since 1.0.0
-	 */
-	public function addAttr( $attr, $value = '' ) {
-		if ( is_array( $attr ) ) {
-			$this->attributes = array_merge( $this->attributes, $attr );
-		} else {
-			if ( $value !== false ) {
-				$this->attributes[ $attr ] = $value;
-			}
-		}
-
-		return $this;
-
-	}
 
 	/**
 	 * Setter for el
@@ -120,7 +81,7 @@ class Element extends AbstractEditableFieldReturn {
 	 */
 	public function html() {
 		$this->addClass( 'koolkip' );
-		$this->addAttr( 'data-powertip', 'Click to edit text' );
+		$this->addAttr( 'data-powertip', 'This text has inline edit support!' );
 		$this->handleLoggedInUsers();
 		$this->toJSON();
 
@@ -161,51 +122,6 @@ class Element extends AbstractEditableFieldReturn {
 
 	}
 
-	/**
-	 * Helper to remove spaces
-	 *
-	 * @param $string
-	 *
-	 * @return string|void
-	 * @since 1.0.0
-	 */
-	private function _cleanSpaces( $string ) {
-		return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
-
-	}
-
-	/**
-	 * Render classes and extra attributes
-	 * @return string
-	 * @since 1.0.0
-	 */
-	private function _renderAttributes() {
-		$return = "class='{$this->_classList()}' ";
-		$return .= $this->_attributesList();
-
-		return trim( $return );
-
-	}
-
-	/**
-	 * From array to string
-	 * @return string
-	 * @since 1.0.0
-	 */
-	private function _classList() {
-		return trim( implode( ' ', $this->classes ) );
-
-	}
-
-	private function _attributesList() {
-		$returnstr = '';
-		foreach ( $this->attributes as $attr => $value ) {
-			$returnstr .= "{$attr}='{$value}' ";
-		}
-
-		return trim( $returnstr );
-
-	}
 
 
 	/**
@@ -217,13 +133,13 @@ class Element extends AbstractEditableFieldReturn {
 		$text   = array( 'div', 'p', 'span', 'article', 'section' );
 
 		if ( in_array( $this->el, $titles ) ) {
-			$this->tinymce['toolbar'] = "kbcancleinline | undo redo | bold italic | alignleft aligncenter alignright alignjustify  | link";
+			$this->tinymce['toolbar'] = "kbcancleinline | undo redo | bold forecolor italic | alignleft aligncenter alignright alignjustify";
 
 			return 'editable';
 		}
 
 		if ( in_array( $this->el, $text ) ) {
-			$this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
+			$this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect| bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
 
 			return 'editable';
 		}
@@ -241,4 +157,7 @@ class Element extends AbstractEditableFieldReturn {
 	}
 
 
+	protected function prepare() {
+		// TODO: Implement prepare() method.
+	}
 }

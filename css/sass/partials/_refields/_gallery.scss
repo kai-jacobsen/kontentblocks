@@ -16,46 +16,10 @@
       max-width: 100%;
     }
 
-    // active edit state
-    &.kb-gallery--active-item {
-      position: fixed;
-      top: 10%;
-      left: 50%;
-      -webkit-transform: translate(-50%, 0%);
-      -moz-transform: translate(-50%, 0%);
-      -ms-transform: translate(-50%, 0%);
-      transform: translate(-50%, 0%);
-      z-index: 8888;
-      width: 50%;
-      height: auto;
-      max-height: 80%;
-      overflow: hidden;
-      max-width: 800px;
-      background: #fff;
-      @include box-shadow(1px 1px 8px #999);
-      padding: 16px;
+  }
 
-      .kb-gallery--image-holder {
-        width: 170px;
-        float: left;
-      }
-
-      .kb-gallery--image-meta {
-        display: block !important;
-        width: 580px;
-        float: left;
-      }
-
-      .kb-gallery--js-edit, .kb-gallery--js-delete {
-        display: none !important;
-      }
-
-      .kb-gallery--meta-field {
-        margin: 20px 0;
-      }
-
-    }
-
+  .kb-gallery--header{
+    display: none;
   }
 
   .kb-gallery--image-holder {
@@ -94,6 +58,15 @@
 
 }
 
+.kb-gallery--active-item * {
+  @include box-sizing(border-box);
+}
+
+.kb-js--remote-editor * {
+  @include box-sizing(content-box);
+
+}
+
 .kb-gallery--active-item {
   position: fixed;
   top: 10%;
@@ -103,26 +76,43 @@
   -ms-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
   z-index: 8888;
-  width: 760px;
+  width: 690px;
   height: auto;
   max-height: 80%;
-  overflow: hidden;
-  max-width: 800px;
-  background: #fff;
-  @include box-shadow(1px 1px 8px #999);
-  padding: 16px;
+//  overflow: hidden;
+  max-width: 690px;
+  //  @include box-shadow(1px 1px 8px #999);
+
+  .kb-gallery--left-column {
+    width: 540px;
+    float: left;
+    display: block;
+    background: #fff;
+    height: 100%;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-top: 0;
+    @include box-shadow(1px 1px 8px #999);
+  }
+
+  .kb-gallery--right-column {
+    display: block;
+    width: 150px;
+    height: 100%;
+    float: left;
+    @include box-shadow(1px 1px 8px #999);
+    position: relative;
+    right: 1px;
+    border: 1px solid #ccc;
+    border-left: 0;
+  }
 
   .kb-gallery--image-holder {
-    width: 170px;
-    float: left;
-    position: relative;
-    top: 35px;
+
   }
 
   .kb-gallery--image-meta {
     display: block !important;
-    width: 580px;
-    float: left;
   }
 
   .kb-gallery--js-edit, .kb-gallery--js-delete {
@@ -131,9 +121,10 @@
 
   .kb-gallery--js-meta-close {
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: 170px;
+    top: 10px;
     cursor: pointer;
+    z-index: 9999;
 
     &:hover {
       -webkit-transform: scale(1.5);
@@ -148,7 +139,29 @@
   }
 
   .kb-gallery--meta-field {
-    margin: 20px 0;
+    margin: 0px 0;
   }
 
-}
+  .kb-gallery--tabs-nav {
+    padding: 0;
+    list-style: none !important;
+  }
+
+  .kb-gallery--tabs-nav li {
+    background: transparent !important;
+  }
+
+  .kb-gallery--header{
+    background: #fff;
+    z-index: 99;
+    position: relative;
+    border-bottom: 0;
+
+    h3{
+      margin: 0;
+      font-size: 22px;
+    }
+  }
+
+
+  }

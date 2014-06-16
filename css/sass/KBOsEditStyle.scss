@@ -489,6 +489,11 @@ body.onsite-editing {
 
 }
 
+.editable-link:hover{
+  outline: 1px dashed #ccc;
+  outline: 1px dashed currentcolor;
+
+}
 //.inline-edit-active .controls-wrap {
 //  display: none;
 //}

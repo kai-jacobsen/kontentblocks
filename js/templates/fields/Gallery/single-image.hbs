@@ -1,33 +1,42 @@
-<div class="kb-gallery--image-holder">
-    <img src="{{ image.file.sizes.thumbnail.url }}">
-    <span class="genericon genericon-edit kb-gallery--js-edit"></span>
-    <span class="genericon genericon-close-alt kb-gallery--js-delete"></span>
-    <input type="hidden" name="{{ inputName }}[file][id]" value="{{ image.file.id}}">
-    <input type="hidden" class="kb-gallery--image-remove" name="{{ inputName }}[remove]" value="">
+
+<div class="kb-gallery--left-column">
+    <div class="kb-gallery--header">
+        <h3>Image Details</h3>
+    </div>
+    <div class="kb-gallery--image-meta" style="display: none;">
+        <span class="genericon genericon-close-alt kb-gallery--js-meta-close"></span>
+
+        <div class="kb_fieldtabs kb-field--tabs">
+            <ul class="kb-gallery--tabs-nav">
+                <li><a href="#tab{{ uid }}-1">Details</a></li>
+                <li><a href="#tab{{ uid }}-2">Beschreibung</a></li>
+            </ul>
+            <div id="tab{{ uid }}-1">
+                <div class="kb-gallery--meta-field kb-field">
+                    <label class="heading">Titel</label>
+                    <input class="large" type="text" name="{{ inputName }}[details][title]" value="{{ image.details.title }}">
+                </div>
+                <div class="kb-gallery--meta-field kb-field">
+                    <label class="heading">Alt</label>
+                    <input class="large" type="text" name="{{ inputName }}[details][alt]" value="{{ image.details.alt }}">
+                </div>
+            </div>
+
+            <div id="tab{{ uid }}-2">
+                <div class="kb-js--remote-editor" data-uid="{{ uid }}">
+                    <textarea name="{{ inputName }}[details][description]">{{ image.details.description }}</textarea>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
-<div class="kb-gallery--image-meta" style="display: none;">
-    <span class="genericon genericon-close-alt kb-gallery--js-meta-close"></span>
-
-    <div class="kb_fieldtabs kb-field--tabs">
-        <ul class="kb-gallery--tabs-nav">
-            <li><a href="#tab{{ uid }}-1">Details</a></li>
-            <li><a href="#tab{{ uid }}-2">Beschreibung</a></li>
-        </ul>
-        <div id="tab{{ uid }}-1">
-            <div class="kb-gallery--meta-field">
-                <label class="heading">Titel</label>
-                <input type="text" name="{{ inputName }}[details][title]" value="{{ image.details.title }}">
-            </div>
-            <div class="kb-gallery--meta-field">
-                <label class="heading">Alt</label>
-                <input type="text" name="{{ inputName }}[details][alt]" value="{{ image.details.alt }}">
-            </div>
-        </div>
-
-        <div id="tab{{ uid }}-2">
-            <div class="kb-js--remote-editor" data-uid="{{ uid }}">
-            </div>
-
-        </div>
+<div class="kb-gallery--right-column">
+    <div class="kb-gallery--image-holder">
+        <img src="{{ image.file.sizes.thumbnail.url }}">
+        <span class="genericon genericon-edit kb-gallery--js-edit"></span>
+        <span class="genericon genericon-close-alt kb-gallery--js-delete"></span>
+        <input type="hidden" name="{{ inputName }}[file][id]" value="{{ image.file.id}}">
+        <input type="hidden" class="kb-gallery--image-remove" name="{{ inputName }}[remove]" value="">
     </div>
 </div>

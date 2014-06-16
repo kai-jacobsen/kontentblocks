@@ -14,7 +14,7 @@ KB.Fields.register('Link', (function ($) {
         },
         open: function (input) {
             var that = this;
-            // set activeEditor, in this caseour textfield, dialog won't open if not set
+            // set activeEditor, in this case our textfield, dialog won't open if not set
             wpActiveEditor = this.$input;
             //open the dialog
             wpLink.open();
@@ -25,7 +25,7 @@ KB.Fields.register('Link', (function ($) {
 
             // it's not tinymce, ovverride the original
             wpLink.isMCE = function () {
-                return false
+                return false;
             };
 
 

@@ -28,6 +28,7 @@ KB.IEdit.Text = function (el) {
         fixed_toolbar_container: '#kb-toolbar',
         schema: 'html5',
         inline: true,
+        plugins: 'textcolor, wplink',
         statusbar: false,
         setup: function (ed) {
 
@@ -46,6 +47,10 @@ KB.IEdit.Text = function (el) {
                     jQuery('.mce-stack-layout-item span').removeAttr('style');
                 });
 
+            });
+
+            ed.on('click', function(e){
+                e.stopPropagation();
             });
 
             ed.on('focus', function (e) {

@@ -79,7 +79,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
         var name = this.createInputName(this.uid) + '[details][description]';
 
         if (!this.editorAdded) {
-            var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get('details').description, null, false);
+            var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get('details').description, null, false, false);
             req.done(function (res) {
                 that.editorAdded = res;
                 KB.Ui.initTabs();
@@ -101,7 +101,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
             this._remove = false;
         }
     },
-    remove:function(){
+    remove: function () {
         this.$el.remove();
         delete this.$el;
     },
@@ -255,7 +255,7 @@ KB.Gallery.Controller = Backbone.View.extend({
         if (this.subviews.length > 0) {
             _.each(this.subviews, function (m, i) {
                 if (m._remove) {
-                   delete that.subviews[i];
+                    delete that.subviews[i];
                     m.remove();
                 }
             });
