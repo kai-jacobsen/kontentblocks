@@ -2761,49 +2761,15 @@ button.Zebra_DatePicker_Icon_Inside {
 .kb-gallery--stage .kb-gallery--image-wrapper img {
   max-width: 100%;
 }
-/* line 20, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
-.kb-gallery--stage .kb-gallery--image-wrapper.kb-gallery--active-item {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  -webkit-transform: translate(-50%, 0%);
-  -ms-transform: translate(-50%, 0%);
-  transform: translate(-50%, 0%);
-  z-index: 8888;
-  width: 50%;
-  height: auto;
-  max-height: 80%;
-  overflow: hidden;
-  max-width: 800px;
-  background: #fff;
-  -webkit-box-shadow: 1px 1px 8px #999999;
-  box-shadow: 1px 1px 8px #999999;
-  padding: 16px;
+/* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--stage .kb-gallery--header {
+  display: none;
 }
-/* line 38, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
-.kb-gallery--stage .kb-gallery--image-wrapper.kb-gallery--active-item .kb-gallery--image-holder {
-  width: 170px;
-  float: left;
-}
-/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
-.kb-gallery--stage .kb-gallery--image-wrapper.kb-gallery--active-item .kb-gallery--image-meta {
-  display: block !important;
-  width: 580px;
-  float: left;
-}
-/* line 49, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
-.kb-gallery--stage .kb-gallery--image-wrapper.kb-gallery--active-item .kb-gallery--js-edit, .kb-gallery--stage .kb-gallery--image-wrapper.kb-gallery--active-item .kb-gallery--js-delete {
-  display: none !important;
-}
-/* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
-.kb-gallery--stage .kb-gallery--image-wrapper.kb-gallery--active-item .kb-gallery--meta-field {
-  margin: 20px 0;
-}
-/* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 25, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--stage .kb-gallery--image-holder {
   position: relative;
 }
-/* line 65, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 29, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--stage .kb-gallery--image-holder .kb-gallery--js-edit {
   position: absolute;
   top: 5px;
@@ -2813,11 +2779,11 @@ button.Zebra_DatePicker_Icon_Inside {
   cursor: pointer;
   font-size: 14px;
 }
-/* line 73, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 37, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--stage .kb-gallery--image-holder .kb-gallery--js-edit:hover {
   background: white;
 }
-/* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--stage .kb-gallery--image-holder .kb-gallery--js-delete {
   position: absolute;
   top: 5px;
@@ -2827,12 +2793,26 @@ button.Zebra_DatePicker_Icon_Inside {
   cursor: pointer;
   font-size: 14px;
 }
-/* line 87, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 51, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--stage .kb-gallery--image-holder .kb-gallery--js-delete:hover {
   background: white;
 }
 
-/* line 97, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--active-item * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 65, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-js--remote-editor * {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item {
   position: fixed;
   top: 10%;
@@ -2841,54 +2821,88 @@ button.Zebra_DatePicker_Icon_Inside {
   -ms-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
   z-index: 8888;
-  width: 760px;
+  width: 690px;
   height: auto;
   max-height: 80%;
-  overflow: hidden;
-  max-width: 800px;
+  max-width: 690px;
+}
+/* line 86, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--active-item .kb-gallery--left-column {
+  width: 540px;
+  float: left;
+  display: block;
   background: #fff;
+  height: 100%;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-top: 0;
   -webkit-box-shadow: 1px 1px 8px #999999;
   box-shadow: 1px 1px 8px #999999;
-  padding: 16px;
 }
-/* line 115, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
-.kb-gallery--active-item .kb-gallery--image-holder {
-  width: 170px;
+/* line 98, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--active-item .kb-gallery--right-column {
+  display: block;
+  width: 150px;
+  height: 100%;
   float: left;
+  -webkit-box-shadow: 1px 1px 8px #999999;
+  box-shadow: 1px 1px 8px #999999;
   position: relative;
-  top: 35px;
+  right: 1px;
+  border: 1px solid #ccc;
+  border-left: 0;
 }
-/* line 122, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 114, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item .kb-gallery--image-meta {
   display: block !important;
-  width: 580px;
-  float: left;
 }
-/* line 128, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 118, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item .kb-gallery--js-edit, .kb-gallery--active-item .kb-gallery--js-delete {
   display: none !important;
 }
-/* line 132, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 122, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item .kb-gallery--js-meta-close {
   position: absolute;
-  right: 20px;
-  top: 20px;
+  right: 170px;
+  top: 10px;
   cursor: pointer;
+  z-index: 9999;
 }
-/* line 138, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 129, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item .kb-gallery--js-meta-close:hover {
   -webkit-transform: scale(1.5);
   -webkit-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
-/* line 145, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 136, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item .kb-gallery--tabs-nav li:first-child a {
   padding-left: 0 !important;
   margin-left: 0;
 }
-/* line 150, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+/* line 141, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item .kb-gallery--meta-field {
-  margin: 20px 0;
+  margin: 0px 0;
+}
+/* line 145, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--active-item .kb-gallery--tabs-nav {
+  padding: 0;
+  list-style: none !important;
+}
+/* line 150, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--active-item .kb-gallery--tabs-nav li {
+  background: transparent !important;
+}
+/* line 154, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--active-item .kb-gallery--header {
+  background: #fff;
+  z-index: 99;
+  position: relative;
+  border-bottom: 0;
+}
+/* line 160, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
+.kb-gallery--active-item .kb-gallery--header h3 {
+  margin: 0;
+  font-size: 22px;
 }
 
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_global-area-edit.scss */

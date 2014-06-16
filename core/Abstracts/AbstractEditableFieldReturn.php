@@ -18,20 +18,84 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
 	public $index = null;
 
+	/**
+	 * Set of css classes to add to the el
+	 * @var array
+	 * @since 1.0.0
+	 */
+	protected $classes = array();
+
+	/**
+	 * Additional attribures
+	 * @var array
+	 * @since 1.0.0
+	 */
+	protected $attributes = array();
 
 	protected $inlineEdit = true;
 
 	protected $uniqueId;
 
 	public function __construct( $value, $field ) {
-
 		$this->setValue( $value );
 		$this->setupFromField( $field );
 		$this->uniqueId = $this->createUniqueId();
+		$this->prepare();
+	}
+
+	/**
+	 * Add a (css) class to the stack of classes
+	 *
+	 * @param string $class
+	 *
+	 * @return $this
+	 * @since 1.0.0
+	 */
+	public function addClass( $class ) {
+		if ( is_array( $class ) ) {
+			$this->classes = array_merge( $this->classes, $class );
+		} else {
+			$this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
+		}
+
+		return $this;
 
 	}
 
+	/**
+	 * Add an attribute to the stack of attributes
+	 *
+	 * @param string $attr
+	 * @param string $value
+	 *
+	 * @return $this
+	 * @since 1.0.0
+	 */
+	public function addAttr( $attr, $value = '' ) {
+		if ( is_array( $attr ) ) {
+			$this->attributes = array_merge( $this->attributes, $attr );
+		} else {
+			if ( $value !== false ) {
+				$this->attributes[ $attr ] = $value;
+			}
+		}
 
+		return $this;
+
+	}
+
+	/**
+	 * Helper to remove spaces
+	 *
+	 * @param $string
+	 *
+	 * @return string|void
+	 * @since 1.0.0
+	 */
+	private function _cleanSpaces( $string ) {
+		return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
+
+	}
 
 	/**
 	 * Getter for value
@@ -53,6 +117,8 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	}
 
 	abstract function getEditableClass();
+
+	abstract function html();
 
 	/**
 	 * Make this usable in twig templates without voodoo
@@ -103,7 +169,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	 * @param $field
 	 */
 	private function setupFromField( $field ) {
-
 		if ( is_array( $field ) ) {
 			$Dummy = FieldRegistry::getInstance()->getField( $field['type'] );
 			$Dummy->setKey( $field['key'] );
@@ -115,8 +180,8 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 			$Dummy->setType( $field['type'] );
 			$Dummy->setData( $this->getValue() );
 			$field = $this->field = $Dummy;
-		}
 
+		}
 
 		if ( is_object( $field ) ) {
 			$this->moduleId = $field->parentModuleId;
@@ -124,13 +189,12 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 			$this->arrayKey = $field->getArg( 'arrayKey' );
 			$this->index    = $field->getArg( 'index' );
 			$this->field    = $field;
-
 		}
 		// @TODO Input Validation and error handling
 
 	}
 
-	private function createUniqueId() {
+	protected  function createUniqueId() {
 
 		$uid = '';
 		$uid .= 'kb_';
@@ -143,5 +207,41 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 		return $uid;
 
 	}
+
+
+	/**
+	 * Render classes and extra attributes
+	 * @return string
+	 * @since 1.0.0
+	 */
+	protected  function _renderAttributes() {
+		$return = "class='{$this->_classList()}' ";
+		$return .= $this->_attributesList();
+
+		return trim( $return );
+
+	}
+
+	/**
+	 * From array to string
+	 * @return string
+	 * @since 1.0.0
+	 */
+	protected  function _classList() {
+		return trim( implode( ' ', $this->classes ) );
+
+	}
+
+	protected  function _attributesList() {
+		$returnstr = '';
+		foreach ( $this->attributes as $attr => $value ) {
+			$returnstr .= "{$attr}='{$value}' ";
+		}
+
+		return trim( $returnstr );
+
+	}
+
+	protected abstract  function prepare();
 
 }

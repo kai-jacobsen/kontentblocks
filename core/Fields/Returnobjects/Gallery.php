@@ -27,7 +27,6 @@ class Gallery {
 	 * Create image objects from input
 	 */
 	private function setupMediaElements() {
-
 		foreach ( $this->value['images'] as $element ) {
 			if ( isset( $element['file'] ) && ! empty( $element['file'] ) ) {
 				array_push($this->images, new Utilities\ImageObject( $element['file'] ));

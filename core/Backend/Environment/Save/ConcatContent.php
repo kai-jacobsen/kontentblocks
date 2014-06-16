@@ -41,7 +41,7 @@ class ConcatContent {
 	 * @action save_post
 	 */
 	public function __construct() {
-		add_action( 'save_post', array( $this, 'save' ), 99 );
+		add_action( 'save_post', array( $this, 'save' ), 999 );
 	}
 
 	/**
@@ -64,7 +64,7 @@ class ConcatContent {
 	 * @param $postId
 	 */
 	public function save( $postId ) {
-		remove_action( 'save_post', array( $this, 'save' ), 99 );
+		remove_action( 'save_post', array( $this, 'save' ), 999 );
 
 		$post = array(
 			'ID'           => $postId,

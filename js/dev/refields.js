@@ -408,7 +408,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
         $re = jQuery(".kb-js--remote-editor", this.$el);
         var name = this.createInputName(this.uid) + "[details][description]";
         if (!this.editorAdded) {
-            var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get("details").description, null, false);
+            var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get("details").description, null, false, false);
             req.done(function(res) {
                 that.editorAdded = res;
                 KB.Ui.initTabs();

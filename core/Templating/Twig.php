@@ -28,6 +28,8 @@ class Twig
             ));
             self::$environment->addExtension(new \Twig_Extension_Debug());
 
+	        // Filters & Functions
+
             $getPermalink = new Twig_SimpleFunction('get_permalink', function ($id) {
                 return get_permalink($id);
             });
@@ -47,6 +49,10 @@ class Twig
             });
             self::$environment->addFunction($wpNavMenu);
 
+	        $applyContent = new \Twig_SimpleFilter('wf_content', function($string){
+		        return apply_filters('content', $string);
+	        });
+			self::$environment->addFilter($applyContent);
         }
 
 

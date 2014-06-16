@@ -86,12 +86,12 @@ class Image extends AbstractEditableFieldReturn {
 		return sprintf( $format, $this->src, $this->_renderAttributes() );
 	}
 
-	private function _cleanSpaces( $string ) {
+	protected  function _cleanSpaces( $string ) {
 		return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
 
 	}
 
-	private function _renderAttributes() {
+	protected  function _renderAttributes() {
 		$return = "class='{$this->_classList()}' ";
 		$return .= $this->_attributesList();
 
@@ -99,7 +99,7 @@ class Image extends AbstractEditableFieldReturn {
 
 	}
 
-	private function _classList() {
+	protected  function _classList() {
 		return trim( implode( ' ', $this->classes ) );
 
 	}
@@ -123,7 +123,7 @@ class Image extends AbstractEditableFieldReturn {
 		return $this;
 	}
 
-	private function _attributesList() {
+	protected  function _attributesList() {
 		$returnstr = '';
 		foreach ( $this->attributes as $attr => $value ) {
 			$returnstr .= "{$attr}='{$value}' ";
@@ -133,7 +133,7 @@ class Image extends AbstractEditableFieldReturn {
 
 	}
 
-	private function prepareSrc() {
+	protected  function prepareSrc() {
 
 		if ( $this->getValue( 'id' ) ) {
 			return $this->src = ImageResize::getInstance()->process( $this->getValue( 'id' ),
@@ -173,4 +173,7 @@ class Image extends AbstractEditableFieldReturn {
 		JSONBridge::getInstance()->registerData( 'FrontSettings', $this->uniqueId, $json );
 	}
 
+	protected function prepare() {
+		// TODO: Implement prepare() method.
+	}
 }

@@ -64,7 +64,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         // handle dynamically loaded tinymce instances
         // TODO find better context
         jQuery(document).on('newEditor', function (e, ed) {
-            that.attachEditorEvents(ed);
+            // live setting is
+            console.log(ed.settings);
+            if (ed.settings && ed.settings.kblive){
+                that.attachEditorEvents(ed);
+            }
         });
 
         // attach generic event listener for serialization

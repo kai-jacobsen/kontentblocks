@@ -119,8 +119,7 @@ KB.IEdit.Image = (function ($) {
         update: function () {
             this.init();
         }
-    }
-    ;
+    };
 
     return self;
 
