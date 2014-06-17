@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-16 */
+/*! Kontentblocks DevVersion 2014-06-17 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -13,9 +13,11 @@ KB.OSConfig = {};
 
 KB.IEdit = {};
 
-KB.events = {};
+KB.Events = {};
 
 _.extend(KB, Backbone.Events);
+
+_.extend(KB.Events, Backbone.Events);
 
 KB.Ajax = function($) {
     return {

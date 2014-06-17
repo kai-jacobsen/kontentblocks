@@ -16,7 +16,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.options = options;
         this.view = options.view;
         this.model.on('change', this.test, this);
-        this.listenTo(KB, 'template::changed', function(){
+        this.listenTo(this.view, 'template::changed', function(){
             that.serialize(false);
             that.render();
         });
@@ -65,7 +65,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         // TODO find better context
         jQuery(document).on('newEditor', function (e, ed) {
             // live setting is
-            console.log(ed.settings);
             if (ed.settings && ed.settings.kblive){
                 that.attachEditorEvents(ed);
             }

@@ -66,7 +66,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
         'click .kb-gallery--js-meta-close': 'close'
     },
     edit: function () {
-        this.$el.wrap('<div class="kb-gallery--item-placeholder"></div>');
+        this.$el.wrap('<div class="kb-gallery--item-placeholder kb-gallery--image-wrapper"></div>');
         this._placeholder = this.$el.parent();
         this.$el.addClass('kb-gallery--active-item kb_field').appendTo('body');
         jQuery('#wpwrap').addClass('module-browser-open');

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-16 */
+/*! Kontentblocks DevVersion 2014-06-17 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -348,6 +348,24 @@ KB.FlexibleFields.Item = Backbone.View.extend({
     }
 });
 
+KB.Fields.register("Fonticonpicker", function($) {
+    return {
+        init: function() {
+            $(".kb-fonticonpicker").fontIconPicker({
+                source: [ "icon-heart", "icon-search", "icon-user", "icon-tag", "icon-help" ],
+                emptyIcon: false,
+                hasSearch: false
+            });
+        },
+        update: function() {
+            this.init();
+        },
+        frontUpdate: function(view) {
+            this.init();
+        }
+    };
+}(jQuery));
+
 KB.Fields.register("Gallery", function($) {
     return {
         init: function(modalView) {
@@ -396,7 +414,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
         "click .kb-gallery--js-meta-close": "close"
     },
     edit: function() {
-        this.$el.wrap('<div class="kb-gallery--item-placeholder"></div>');
+        this.$el.wrap('<div class="kb-gallery--item-placeholder kb-gallery--image-wrapper"></div>');
         this._placeholder = this.$el.parent();
         this.$el.addClass("kb-gallery--active-item kb_field").appendTo("body");
         jQuery("#wpwrap").addClass("module-browser-open");

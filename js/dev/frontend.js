@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-16 */
+/*! Kontentblocks DevVersion 2014-06-17 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -524,7 +524,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.options = options;
         this.view = options.view;
         this.model.on("change", this.test, this);
-        this.listenTo(KB, "template::changed", function() {
+        this.listenTo(this.view, "template::changed", function() {
             that.serialize(false);
             that.render();
         });
@@ -558,7 +558,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             });
         }
         jQuery(document).on("newEditor", function(e, ed) {
-            console.log(ed.settings);
             if (ed.settings && ed.settings.kblive) {
                 that.attachEditorEvents(ed);
             }
