@@ -65,12 +65,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/serbanghita/Mobile-Detect.git",
-            "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e"
+            "reference": "3e61d64863885bd172b0f4ad74f73db57a4bef4c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
-            "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
+            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/3e61d64863885bd172b0f4ad74f73db57a4bef4c",
+            "reference": "3e61d64863885bd172b0f4ad74f73db57a4bef4c",
             "shasum": ""
         },
         "require": {
@@ -79,7 +79,7 @@
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2014-03-17 13:02:05",
+        "time": "2014-06-16 19:29:31",
         "type": "library",
         "installation-source": "source",
         "autoload": {

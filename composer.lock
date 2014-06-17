@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "55204018777b733c9ed0642936a118b2",
+    "hash": "61af84c311fdc5bae06c8155ddd921f9",
     "packages": [
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e"
+                "reference": "3e61d64863885bd172b0f4ad74f73db57a4bef4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
-                "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/3e61d64863885bd172b0f4ad74f73db57a4bef4c",
+                "reference": "3e61d64863885bd172b0f4ad74f73db57a4bef4c",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2014-03-17 13:02:05"
+            "time": "2014-06-16 19:29:31"
         },
         {
             "name": "twig/twig",
