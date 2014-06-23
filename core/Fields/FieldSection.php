@@ -66,7 +66,7 @@ class FieldSection
 	 * @internal param array $areaContext
 	 * @return \Kontentblocks\Fields\FieldSection
 	 */
-    public function __construct($id, $args, $envVars, Module $module)
+    public function __construct($id, $args, $envVars, $module)
     {
 
         $this->id = $id;
