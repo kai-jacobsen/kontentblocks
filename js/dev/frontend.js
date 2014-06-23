@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-17 */
+/*! Kontentblocks DevVersion 2014-06-23 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -122,9 +122,7 @@ KB.IEdit.Image = function($) {
                 that.container = $(".kb-field-file-wrapper", activeField);
                 that.resetFields();
             });
-            KB.on("kb:moduleControlsAdded", function() {
-                that.renderControls();
-            });
+            this.renderControls();
         },
         renderControls: function() {
             $(this.selector).each(function(index, obj) {
@@ -159,25 +157,16 @@ KB.IEdit.Image = function($) {
         handleAttachment: function(attachment) {
             var that = this;
             var id = attachment.get("id");
-            var value = {
-                id: id,
-                title: attachment.get("title"),
-                caption: attachment.get("caption")
-            };
+            var value = this.prepareValue(attachment);
             var data = this.img.data();
             var mId = data.module;
-            var fkey = data.fieldKey;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get("moduleData"));
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isEmpty(data.index)) {
-                moduleData[data.index][data.key] = value;
-            } else if (!_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.key] = value;
-            } else {
-                moduleData[data.key] = value;
-            }
+            var path = [];
+            path.push(data.arrayKey);
+            path.push(data.key);
+            path.push(data.index);
+            KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join("."), value);
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set("moduleData", moduleData);
             jQuery.ajax({
@@ -197,6 +186,13 @@ KB.IEdit.Image = function($) {
                 error: function() {}
             });
         },
+        prepareValue: function(attachment) {
+            return {
+                id: id,
+                title: attachment.get("title"),
+                caption: attachment.get("caption")
+            };
+        },
         resetFields: function() {
             $(".kb-file-attachment-id", this.container).val("");
             this.container.hide(750);
@@ -208,6 +204,31 @@ KB.IEdit.Image = function($) {
     };
     return self;
 }(jQuery);
+
+_.extend(KB.IEdit.Image, Backbone.Events);
+
+KB.IEdit.GalleryImage = _.extend(KB.IEdit.Image, {
+    selector: ".editable-gallery-image",
+    renderControls: function() {
+        jQuery(this.selector).each(function(index, obj) {
+            jQuery("body").on("mouseover", ".editable-gallery-image", function() {
+                jQuery(this).css("cursor", "pointer");
+            });
+        });
+    },
+    prepareValue: function(att) {
+        return {
+            details: {
+                description: "",
+                title: "",
+                alt: ""
+            },
+            id: att.get("id"),
+            remove: "",
+            uid: _.uniqueId("kbg")
+        };
+    }
+});
 
 KB.IEdit.Link = function($) {
     var $form, $linkTarget, $linktext, $body, $href, $title;
@@ -357,6 +378,7 @@ KB.IEdit.Text = function(el) {
                 jQuery("body").on("click", ".mce-listbox", function() {
                     jQuery(".mce-stack-layout-item span").removeAttr("style");
                 });
+                KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
             });
             ed.on("click", function(e) {
                 e.stopPropagation();
@@ -428,32 +450,6 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     },
     areaChanged: function() {
         this.view.updateModuleForm();
-    },
-    save: function(model) {
-        var module = model.get("editableModel");
-        var el = model.get("editable");
-        var dataset = jQuery(el).data();
-        dataset.data = jQuery(el).html();
-        dataset.postId = module.get("post_id");
-        jQuery.ajax({
-            url: KBAppConfig.ajaxurl,
-            data: {
-                action: "saveInlineEdit",
-                data: dataset
-            },
-            type: "POST",
-            dataType: "json",
-            cookie: encodeURIComponent(document.cookie),
-            success: function(data) {
-                console.log("sent");
-            },
-            error: function() {
-                console.log("not sent");
-            },
-            complete: function() {
-                console.log("no matter what");
-            }
-        });
     }
 });
 
@@ -529,6 +525,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.render();
         });
         this.listenTo(KB, "frontend::recalibrate", this.recalibrate);
+        this.listenTo(KB.Events, "KB::edit-modal-refresh", this.recalibrate);
         this.listenTo(this, "recalibrate", this.recalibrate);
         jQuery(KB.Templates.render("frontend/module-edit-form", {
             model: this.model.toJSON(),
@@ -548,16 +545,13 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         jQuery(window).on("resize", function() {
             that.recalibrate();
         });
-        jQuery("body").on("kontentblocks::tabsChange", function() {
-            that.recalibrate();
-        });
         if (KB.OSConfig.wrapPosition) {
             this.$el.css({
                 top: KB.OSConfig.wrapPosition.top,
                 left: KB.OSConfig.wrapPosition.left
             });
         }
-        jQuery(document).on("newEditor", function(e, ed) {
+        this.listenTo(KB.Events, "KB::tinymce.new-editor", function(ed) {
             if (ed.settings && ed.settings.kblive) {
                 that.attachEditorEvents(ed);
             }
@@ -698,9 +692,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.view.trigger("kb:frontend::viewUpdated");
                 jQuery(window).trigger("kontentblocks::ajaxUpdate");
                 KB.trigger("kb:frontendModalUpdated");
-                jQuery(".editable", that.options.view.$el).each(function(i, el) {
-                    KB.IEdit.Text(el);
-                });
+                setTimeout(function() {
+                    jQuery(".editable", that.options.view.$el).each(function(i, el) {
+                        console.log(jQuery(el));
+                        KB.IEdit.Text(el);
+                    });
+                }, 400);
                 if (save) {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
                     that.$el.removeClass("isDirty");
@@ -768,6 +765,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         jQuery(window).on("kontentblocks::ajaxUpdate", function() {
             that.setControlsPosition();
         });
+        this.listenTo(KB.Events, "KB::ajax-update", this.setControlsPosition);
     },
     getDirty: function() {
         this.$el.addClass("isDirty");
@@ -790,6 +788,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function() {
+        var settings = this.model.get("settings");
+        if (settings.controls && settings.controls.hide) {
+            return;
+        }
         this.$el.append(KB.Templates.render("frontend/module-controls", {
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
@@ -835,16 +837,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
-        if (pos.top > 100) {
-            pos.top = pos.top - 70;
-        }
-        if (pos.left > 100) {
-            pos.left = pos.left;
-        }
         $controls.offset({
-            top: pos.top + 40,
+            top: 40,
             left: pos.left + 10,
             zIndex: 999999
+        });
+        $controls.css({
+            top: 40 + "px",
+            right: 0
         });
     },
     updateModule: function() {
@@ -873,6 +873,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.model.view.render();
                 that.model.view.trigger("kb:moduleUpdated");
                 jQuery(window).trigger("kontentblocks::ajaxUpdate");
+                KB.Events.trigger("KB::ajax-update");
                 KB.Notice.notice("Module saved successfully", "success");
                 that.$el.removeClass("isDirty");
             },
@@ -950,6 +951,7 @@ KB.App = function($) {
             KB.Modules.add(module);
         });
         KB.trigger("kb:moduleControlsAdded");
+        KB.Events.trigger("KB::frontend-init");
     }
     function createModuleViews(module) {
         module.setArea(KB.Areas.get(module.get("area")));
@@ -980,6 +982,7 @@ jQuery(document).ready(function() {
     if (KB.appData && KB.appData.config.frontend) {
         _K.info("Frontend Modules Ready Event fired");
         KB.Views.Modules.readyOnFront();
+        KB.Events.trigger("KB::ready");
     }
     jQuery(".koolkip").powerTip({
         placement: "ne",
@@ -998,7 +1001,7 @@ jQuery(document).ready(function() {
     jQuery(window).on("resize DOMNodeInserted", function() {});
 });
 
-jQuery(document).ready(function() {
+KB.Events.on("KB::ready", function() {
     if (!KB.Checks.userCan("edit_kontentblocks")) {
         return false;
     }
@@ -1009,6 +1012,7 @@ jQuery(document).ready(function() {
         KB.IEdit.Text(item);
     });
     KB.IEdit.Image.init();
+    KB.IEdit.GalleryImage.init();
     KB.IEdit.BackgroundImage.init();
     KB.IEdit.Link.init();
 });

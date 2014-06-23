@@ -107,7 +107,9 @@ KB.Ui = function ($) {
 //                        $('.content').height($window - 250);
                     // re-init nano scroller
                     $('.nano').nanoScroller();
-                    $('body').trigger('kontentblocks::tabsChange');
+//                    $('body').trigger('kontentblocks::tabsChange');
+                    KB.Events.trigger('KB::ui-tabs-change');
+                    KB.Events.trigger('KB::edit-modal-refresh');
                 }
             });
 

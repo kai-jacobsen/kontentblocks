@@ -54,6 +54,8 @@ class Enqueues
         // Plugins
         wp_register_script('kb-plugins', KB_PLUGIN_URL . '/js/'. $folder .'/plugins'.$suffix.'.js', $dependecies, null, true);
 
+
+
         // Common & Util. Functions
         wp_register_script('kb-common', KB_PLUGIN_URL . 'js/'. $folder .'/common'.$suffix.'.js', array('kb-plugins'), null, true);
 

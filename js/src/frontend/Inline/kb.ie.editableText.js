@@ -6,7 +6,6 @@
  */
 KB.IEdit.Text = function (el) {
     var settings;
-
     if (_.isUndefined(el)) {
         return false;
     }
@@ -46,6 +45,8 @@ KB.IEdit.Text = function (el) {
                 jQuery('body').on('click','.mce-listbox', function(){
                     jQuery('.mce-stack-layout-item span').removeAttr('style');
                 });
+
+                KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
 
             });
 

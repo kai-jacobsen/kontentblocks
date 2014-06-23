@@ -1,6 +1,5 @@
 // Bootstrap File
-jQuery(document).ready(function () {
-
+KB.Events.on('KB::ready', function () {
     if (!KB.Checks.userCan('edit_kontentblocks')) {
         return false;
     }
@@ -13,8 +12,8 @@ jQuery(document).ready(function () {
             KB.IEdit.Text(item);
         }
     );
-
     KB.IEdit.Image.init();
+    KB.IEdit.GalleryImage.init();
     KB.IEdit.BackgroundImage.init();
     KB.IEdit.Link.init();
 

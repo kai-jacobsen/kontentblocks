@@ -17,7 +17,7 @@ class Image extends AbstractEditableFieldReturn {
 	protected $uid;
 	protected $background = false;
 	protected $crop = true;
-	protected  $field;
+	protected $field;
 
 	public function addClass( $class ) {
 
@@ -56,7 +56,12 @@ class Image extends AbstractEditableFieldReturn {
 
 	public function html() {
 		$this->addClass( 'koolkip' );
-		$this->addAttr( 'data-powertip', 'Click to change image' );
+
+		if ($this->inlineEdit){
+			$this->addAttr( 'data-powertip', 'Click to change image' );
+		}
+
+
 		$this->handleLoggedInUsers();
 		$this->prepareSrc();
 		$format = '<%1$s %3$s src="%2$s" >';
@@ -86,12 +91,12 @@ class Image extends AbstractEditableFieldReturn {
 		return sprintf( $format, $this->src, $this->_renderAttributes() );
 	}
 
-	protected  function _cleanSpaces( $string ) {
+	protected function _cleanSpaces( $string ) {
 		return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
 
 	}
 
-	protected  function _renderAttributes() {
+	protected function _renderAttributes() {
 		$return = "class='{$this->_classList()}' ";
 		$return .= $this->_attributesList();
 
@@ -99,7 +104,7 @@ class Image extends AbstractEditableFieldReturn {
 
 	}
 
-	protected  function _classList() {
+	protected function _classList() {
 		return trim( implode( ' ', $this->classes ) );
 
 	}
@@ -123,7 +128,7 @@ class Image extends AbstractEditableFieldReturn {
 		return $this;
 	}
 
-	protected  function _attributesList() {
+	protected function _attributesList() {
 		$returnstr = '';
 		foreach ( $this->attributes as $attr => $value ) {
 			$returnstr .= "{$attr}='{$value}' ";
@@ -133,8 +138,7 @@ class Image extends AbstractEditableFieldReturn {
 
 	}
 
-	protected  function prepareSrc() {
-
+	protected function prepareSrc() {
 		if ( $this->getValue( 'id' ) ) {
 			return $this->src = ImageResize::getInstance()->process( $this->getValue( 'id' ),
 				$this->width,
@@ -152,9 +156,13 @@ class Image extends AbstractEditableFieldReturn {
 	 * @return string
 	 */
 	public function getEditableClass() {
-		if ( $this->background ) {
-			return 'editable-bg-image';
 
+		if ( is_a( $this->field, '\Kontentblocks\Fields\Definitions\Gallery' ) ) {
+			if ($this->inlineEdit){
+				return 'editable-gallery-image';
+			}
+		} elseif ( $this->background ) {
+			return 'editable-bg-image';
 		} else {
 			return 'editable-image';
 		}
@@ -173,7 +181,17 @@ class Image extends AbstractEditableFieldReturn {
 		JSONBridge::getInstance()->registerData( 'FrontSettings', $this->uniqueId, $json );
 	}
 
+
 	protected function prepare() {
 		// TODO: Implement prepare() method.
+	}
+
+
+	public function detail($key){
+		$details = $this->getValue('details');
+		if (array_key_exists($key, $details)){
+			return $details[$key];
+		}
+		return null;
 	}
 }

@@ -13,14 +13,22 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             return;
         }
         this.attachedFields = [];
+
+        // @TODO events:investigate
         this.model.bind('save', this.model.save);
+
         this.listenTo(this.model, 'change', this.modelChange);
+
         this.model.view = this;
         this.render();
         this.setControlsPosition();
+
+        //@TODO events:replace with new handler
         jQuery(window).on('kontentblocks::ajaxUpdate', function () {
             that.setControlsPosition();
         });
+
+        this.listenTo(KB.Events, 'KB::ajax-update', this.setControlsPosition);
 
     },
     getDirty: function () {
@@ -46,7 +54,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function () {
-        this.$el.append(KB.Templates.render('frontend/module-controls', {
+        var settings = this.model.get('settings');
+        if (settings.controls && settings.controls.hide){
+            return;
+        }
+            this.$el.append(KB.Templates.render('frontend/module-controls', {
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
         }));
@@ -101,20 +113,22 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
+//
+//        console.log(pos);
+//
+//        if (pos.top > 100) {
+//            pos.top = pos.top - 70;
+//        }
+//
+//        if (pos.left > 100){
+//            pos.left = pos.left;
+//        }
 
-
-        if (pos.top > 100) {
-            pos.top = pos.top - 70;
-        }
-
-        if (pos.left > 100){
-            pos.left = pos.left;
-        }
-
-
-        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
-//        $controls.css({'top':pos.top + 'px', 'right':0})
+//        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
+        $controls.offset({top:  40, left: pos.left + 10, zIndex: 999999});
+        $controls.css({'top': 40 + 'px', 'right':0});
     },
+    // @TODO: old function updateModule() remove?
     updateModule: function () {
         var that = this;
         var moduleData = {};
@@ -141,7 +155,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.model.set('moduleData', res.newModuleData);
                 that.model.view.render();
                 that.model.view.trigger('kb:moduleUpdated');
+                // @TODO events:replace
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
+                KB.Events.trigger('KB::ajax-update');
+
                 KB.Notice.notice('Module saved successfully', 'success');
                 that.$el.removeClass('isDirty');
             },

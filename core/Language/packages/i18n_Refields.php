@@ -26,7 +26,8 @@
     // Field::Image
     'image' => array(
         'caption' => __( 'Caption', 'Kontentblocks' ),
-        'modalTitle' => __( 'Select an image or upload a new one', 'Kontentblocks' )
+        'modalTitle' => __( 'Select an image or upload a new one', 'Kontentblocks' ),
+	    'description' => __('Description', 'Kontentblocks')
     ),
     // Field:: choseTaxonomy
     'choseTaxonomy' => array(

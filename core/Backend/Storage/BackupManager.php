@@ -46,6 +46,12 @@ class BackupManager
         $this->Storage = $Storage;
     }
 
+    public static function deletePostCallback($post_id)
+    {
+        global $wpdb;
+        $wpdb->delete($wpdb->prefix . "kb_backups", array('post_id' => $post_id));
+    }
+
     /**
      * Backup method
      * Gets the backup data from the Storage object
@@ -77,6 +83,48 @@ class BackupManager
         } else {
             $this->updateBackup();
         }
+    }
+
+    /**
+     * Get existing backup data
+     * @return array
+     */
+    public function getPackage()
+    {
+        $id = $this->backupData['id'];
+
+        return $this->queryBackup($id);
+
+
+    }
+
+    /**
+     * Query for existing backups
+     * @param $id string post id or global area id
+     * @return object
+     */
+    public function queryBackup($id)
+    {
+        global $wpdb;
+
+        if (!current_user_can('edit_kontentblocks')) {
+            wp_die('Hackin?');
+        }
+
+        $prefix = $wpdb->prefix;
+
+        $cache = wp_cache_get('kb_backups_'.$id, 'kontentblocks');
+        if ($cache !== false) {
+            return $cache;
+        } else {
+	        // @TODO Use $wpdb
+            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
+            $result = $wpdb->get_row($sql);
+            wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');
+            return $result;
+        }
+
+
     }
 
     /**
@@ -159,45 +207,9 @@ class BackupManager
         return $wpdb->update($wpdb->prefix . "kb_backups", $data, array('id' => $this->package->id));
     }
 
-    /**
-     * Get existing backup data
-     * @return array
-     */
-    public function getPackage()
+    public function restoreBackup($id)
     {
-        $id = $this->backupData['id'];
-
-        return $this->queryBackup($id);
-
-
-    }
-
-    /**
-     * Query for existing backups
-     * @param $id string post id or global area id
-     * @return object
-     */
-    public function queryBackup($id)
-    {
-        global $wpdb;
-
-        if (!current_user_can('edit_kontentblocks')) {
-            wp_die('Hackin?');
-        }
-
-        $prefix = $wpdb->prefix;
-
-        $cache = wp_cache_get('kb_backups_'.$id, 'kontentblocks');
-        if ($cache !== false) {
-            return $cache;
-        } else {
-	        // @TODO Use $wpdb
-            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
-            $result = $wpdb->get_row($sql);
-            wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');
-            return $result;
-        }
-
+        $this->Storage->restoreBackup($this->getBucket($id));
 
     }
 
@@ -220,19 +232,6 @@ class BackupManager
             return NULL;
         }
     }
-
-    public function restoreBackup($id)
-    {
-        $this->Storage->restoreBackup($this->getBucket($id));
-
-    }
-
-    public static function deletePostCallback($post_id)
-    {
-        global $wpdb;
-        $wpdb->delete($wpdb->prefix . "kb_backups", array('post_id' => $post_id));
-    }
-
 
     public function setTransient($timestamp)
     {

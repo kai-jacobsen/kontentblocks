@@ -16,12 +16,19 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.options = options;
         this.view = options.view;
         this.model.on('change', this.test, this);
+
         this.listenTo(this.view, 'template::changed', function(){
             that.serialize(false);
             that.render();
         });
 
+        // @TODO events:make useless
         this.listenTo(KB, 'frontend::recalibrate', this.recalibrate);
+
+        // use this event to refresh the modal
+        this.listenTo(KB.Events, 'KB::edit-modal-refresh', this.recalibrate);
+
+        // @TODO events:make useless
         this.listenTo(this, 'recalibrate', this.recalibrate);
         // add form skeleton to modal
         jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON(), i18n:KB.i18n.jsFrontend})).appendTo(this.$el);
@@ -47,12 +54,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.recalibrate();
         });
 
-        // Attach custom tabs:change event to fit the modal to new height
-        // TODO this is too specific to tabs
-        jQuery('body').on('kontentblocks::tabsChange', function () {
-            that.recalibrate();
-        });
-
         // restore position if saved coordinates are around
         if (KB.OSConfig.wrapPosition) {
             this.$el.css({
@@ -63,8 +64,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
         // handle dynamically loaded tinymce instances
         // TODO find better context
-        jQuery(document).on('newEditor', function (e, ed) {
-            // live setting is
+        this.listenTo(KB.Events, 'KB::tinymce.new-editor', function(ed){
+            // live setting
             if (ed.settings && ed.settings.kblive){
                 that.attachEditorEvents(ed);
             }
@@ -250,7 +251,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
                     tinymce.remove('#' + el.id);
                 });
-
                 that.options.view.$el.html(res.html);
                 that.model.set('moduleData', res.newModuleData);
                 that.model.view.render();
@@ -260,9 +260,13 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 jQuery(window).trigger('kontentblocks::ajaxUpdate');
                 KB.trigger('kb:frontendModalUpdated');
 
-                jQuery('.editable', that.options.view.$el).each(function (i, el) {
-                    KB.IEdit.Text(el);
-                });
+                setTimeout(function(){
+                    jQuery('.editable', that.options.view.$el).each(function (i, el) {
+                        console.log(jQuery(el));
+                        KB.IEdit.Text(el);
+                    });
+                },400);
+
 
                 if (save) {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');

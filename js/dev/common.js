@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-17 */
+/*! Kontentblocks DevVersion 2014-06-23 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -361,7 +361,7 @@ KB.TinyMCE = function($) {
                 settings.height = edHeight;
                 settings.setup = function(ed) {
                     ed.on("init", function() {
-                        jQuery(document).trigger("newEditor", ed);
+                        KB.Events.trigger("KB::tinymce.new-editor", ed);
                     });
                 };
                 var ed = tinymce.init(settings);
@@ -469,7 +469,8 @@ KB.Ui = function($) {
             selector.tabs({
                 activate: function() {
                     $(".nano").nanoScroller();
-                    $("body").trigger("kontentblocks::tabsChange");
+                    KB.Events.trigger("KB::ui-tabs-change");
+                    KB.Events.trigger("KB::edit-modal-refresh");
                 }
             });
             selector.each(function() {
@@ -661,6 +662,18 @@ KB.Util = function($) {
                 }
                 return info.val;
             }
+        },
+        setIndex: function(obj, is, value) {
+            if (typeof is == "string") return this.setIndex(obj, is.split("."), value); else if (is.length == 1 && value !== undefined) return obj[is[0]] = value; else if (is.length == 0) return obj; else return this.setIndex(obj[is[0]], is.slice(1), value);
+        },
+        cleanArray: function(actual) {
+            var newArray = new Array();
+            for (var i = 0; i < actual.length; i++) {
+                if (actual[i]) {
+                    newArray.push(actual[i]);
+                }
+            }
+            return newArray;
         }
     };
 }(jQuery);

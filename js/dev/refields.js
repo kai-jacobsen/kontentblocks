@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-17 */
+/*! Kontentblocks DevVersion 2014-06-23 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -464,6 +464,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
         var item = this.model.toJSON();
         return this.$el.append(KB.Templates.render("fields/Gallery/single-image", {
             image: item,
+            id: item.id,
             inputName: inputName,
             uid: this.uid
         }));
@@ -487,8 +488,8 @@ KB.Gallery.Controller = Backbone.View.extend({
         this.parentModuleId = params.moduleView.model.get("instance_id");
         this._frame = null;
         this.subviews = [];
-        this.bootstrap();
         this._initialized = false;
+        this.bootstrap();
         if (KB.FrontendEditModal) {
             this.listenTo(KB.FrontendEditModal, "kb:frontend-save", this.frontendSave);
         }
@@ -559,7 +560,8 @@ KB.Gallery.Controller = Backbone.View.extend({
                     title: "",
                     alt: "",
                     description: ""
-                }
+                },
+                id: image.get("id")
             };
             var model = new Backbone.Model(attr);
             var imageView = new KB.Gallery.ImageView({
@@ -632,7 +634,7 @@ KB.Fields.register("Image", function($) {
             this.$container = $(".kb-field-image-container", this.$wrapper);
             this.$id = $(".kb-js-image-id", this.$wrapper);
             this.$title = $(".kb-js-image-title", this.$wrapper);
-            this.$caption = $(".kb-js-image-caption", this.$wrapper);
+            this.$description = $(".kb-js-image-description", this.$wrapper);
         },
         getSettings: function(el) {
             var parent = $(el).closest(".kb-field-wrapper");
@@ -698,14 +700,14 @@ KB.Fields.register("Image", function($) {
             }
             this.$id.val(attachment.get("id"));
             this.$title.val(attachment.get("title"));
-            this.$caption.val(attachment.get("caption"));
+            this.$description.val(attachment.get("caption"));
             $(document).trigger("KB:osUpdate");
         },
         resetInputs: function() {
             this.$container.empty();
             this.$id.val("");
             this.$title.val("");
-            this.$caption("");
+            this.$description("");
         },
         update: function() {
             this.init();

@@ -105,7 +105,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	 * @return array
 	 */
 	public function getValue( $arraykey = null ) {
-
 		if ( is_array( $this->value ) && ! is_null( $arraykey ) ) {
 			if ( isset( $this->value[ $arraykey ] ) ) {
 				return $this->value[ $arraykey ];
@@ -120,13 +119,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
 	abstract function html();
 
-	/**
-	 * Make this usable in twig templates without voodoo
-	 * @return mixed
-	 */
-	public function __toString() {
-		return $this->value;
-	}
 
 	/**
 	 * Add some classes and attributes dynmaically if inline support is active
@@ -243,5 +235,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	}
 
 	protected abstract  function prepare();
+
+
 
 }

@@ -11,6 +11,7 @@ KB.IEdit.Image = (function ($) {
             var $body = $('body');
             $body.on('click', this.selector, function (e) {
                 e.preventDefault();
+
                 that.img = $(this);
                 that.parent = KB.currentModule;
                 that.frame().open();
@@ -23,10 +24,8 @@ KB.IEdit.Image = (function ($) {
                 that.resetFields();
             });
 
-            KB.on('kb:moduleControlsAdded', function () {
-                that.renderControls();
-            });
-
+            // add css properties when views are ready
+            this.renderControls();
 
         },
         renderControls: function () {
@@ -69,26 +68,27 @@ KB.IEdit.Image = (function ($) {
             var that = this;
             var id = attachment.get('id');
 
-            var value = {
-                id: id,
-                title: attachment.get('title'),
-                caption: attachment.get('caption')
-            };
+            var value = this.prepareValue(attachment);
 
             var data = this.img.data();
             var mId = data.module;
-            var fkey = data.fieldKey;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get('moduleData'));
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isEmpty(data.index)) {
-                moduleData[data.index][data.key] = value;
-            } else if (!_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.key] = value;
-            } else {
-                moduleData[data.key] = value;
-            }
+
+            var path = [];
+            path.push(data.arrayKey);
+            path.push(data.key);
+            path.push(data.index);
+            KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join('.'), value);
+//            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
+//                moduleData[data.arraykey][data.index][data.key] = value;
+//            } else if (!_.isEmpty(data.index)) {
+//                moduleData[data.key][data.index] = value;
+//            } else if (!_.isEmpty(data.arraykey)) {
+//                moduleData[data.arraykey][data.key] = value;
+//            } else {
+//                moduleData[data.key] = value;
+//            }
 
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set('moduleData', moduleData);
@@ -111,6 +111,13 @@ KB.IEdit.Image = (function ($) {
                 }
             });
         },
+        prepareValue: function(attachment){
+            return {
+                id: id,
+                title: attachment.get('title'),
+                caption: attachment.get('caption')
+            };
+        },
         resetFields: function () {
             $('.kb-file-attachment-id', this.container).val('');
             this.container.hide(750);
@@ -125,3 +132,4 @@ KB.IEdit.Image = (function ($) {
 
 }
 (jQuery));
+_.extend(KB.IEdit.Image, Backbone.Events);

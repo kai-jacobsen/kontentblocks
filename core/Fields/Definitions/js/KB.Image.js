@@ -18,7 +18,6 @@ KB.Fields.register('Image', (function ($) {
                 e.preventDefault();
                 that.setupInputs(this);
                 that.settings = that.getSettings(this);
-
                 that.openModal();
             });
 
@@ -34,7 +33,7 @@ KB.Fields.register('Image', (function ($) {
             this.$container = $('.kb-field-image-container', this.$wrapper);
             this.$id = $('.kb-js-image-id', this.$wrapper);
             this.$title = $('.kb-js-image-title', this.$wrapper);
-            this.$caption = $('.kb-js-image-caption', this.$wrapper);
+            this.$description = $('.kb-js-image-description', this.$wrapper);
         },
         getSettings: function (el) {
             var parent = $(el).closest('.kb-field-wrapper');
@@ -88,8 +87,6 @@ KB.Fields.register('Image', (function ($) {
                     upscale: false
                 };
 
-
-
                 jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -108,12 +105,11 @@ KB.Fields.register('Image', (function ($) {
                 });
             } else {
                 src = (attachment.get('sizes').thumbnail) ? attachment.get('sizes').thumbnail.url : attachment.get('sizes').full.url;
-
                 this.$container.html('<img src="' + src + '" >');
             }
             this.$id.val(attachment.get('id'));
             this.$title.val(attachment.get('title'));
-            this.$caption.val(attachment.get('caption'));
+            this.$description.val(attachment.get('caption'));
             $(document).trigger('KB:osUpdate');
 
         },
@@ -121,7 +117,7 @@ KB.Fields.register('Image', (function ($) {
             this.$container.empty();
             this.$id.val('');
             this.$title.val('');
-            this.$caption('');
+            this.$description('');
         },
         update: function () {
             this.init();

@@ -69,7 +69,6 @@ namespace Kontentblocks\Utils {
                 } else {
                     $url = $attachment;
                 }
-
                 // Caipt'n, ready to hook.
                 if ( true === $upscale ) add_filter( 'image_resize_dimensions', array($this, 'upscale'), 10, 6 );
 

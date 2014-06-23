@@ -159,6 +159,6 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass','clean', 'jshint', 'bash']);
     grunt.registerTask('hint', ['jshint']);
     grunt.registerTask('dev', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'bash']);
-    grunt.registerTask('bash', ['exec:removeHash', 'exec:createId']);
+    grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
 };

@@ -67,7 +67,7 @@ KB.TinyMCE = (function ($) {
                 settings.height = edHeight;
                 settings.setup = function (ed) {
                     ed.on('init', function () {
-                        jQuery(document).trigger('newEditor', ed);
+                        KB.Events.trigger('KB::tinymce.new-editor', ed);
                     });
                 };
                 var ed = tinymce.init(settings);

@@ -33,7 +33,8 @@
 .os-edit-wrapper {
   position: absolute;
   background: transparent;
-  min-height: 80px;
+  min-height: 40px;
+  width: 60px;
   opacity: 0;
   @include transition(all .3s linear);
   z-index: 9969;
@@ -484,6 +485,12 @@ body.onsite-editing {
 }
 
 .editable-image:hover{
+  outline: 1px dashed #ccc;
+  outline: 1px dashed currentcolor;
+
+}
+
+.editable-gallery-image:hover{
   outline: 1px dashed #ccc;
   outline: 1px dashed currentcolor;
 

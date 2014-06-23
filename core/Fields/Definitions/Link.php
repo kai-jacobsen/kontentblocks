@@ -33,15 +33,17 @@ Class Link extends Field
         echo "<a class='button kb-js-add-link'>{$i18n['addLink']}</a>";
 
         if ($this->getArg('linktext', false)){
+	        $linktext = esc_textarea($this->getValue('linktext'));
 
             echo "<div class='kb-field--link-meta'><label for='{$this->getFieldId('linktext')}'>{$i18n['linktext']}</label><br>";
-            echo "<input type='text' class='kb-field--link-linktext' id='{$this->getFieldId('linktext')}' value='{$this->getValue('linktext')}' name='{$this->getFieldName('linktext')}'></div>";
+            echo "<input type='text' class='kb-field--link-linktext' id='{$this->getFieldId('linktext')}' value='{$linktext}' name='{$this->getFieldName('linktext')}'></div>";
         }
 
 	    if ($this->getArg('linktitle', false)){
+			$linktitle = esc_textarea($this->getValue('linktitle'));
 
 		    echo "<div class='kb-field--link-meta'><label for='{$this->getFieldId('linktitle')}'>{$i18n['linktitle']}</label><br>";
-		    echo "<input type='text' class='kb-field--link-linktitle' id='{$this->getFieldId('linktitle')}' value='{$this->getValue('linktitle')}' name='{$this->getFieldName('linktitle')}'></div>";
+		    echo "<input type='text' class='kb-field--link-linktitle' id='{$this->getFieldId('linktitle')}' value='{$linktitle}' name='{$this->getFieldName('linktitle')}'></div>";
 	    }
         $this->description();
 
@@ -54,6 +56,7 @@ Class Link extends Field
      */
     public function inputFilter( $value )
     {
+
         return filter_var($value, FILTER_SANITIZE_URL);
 
     }

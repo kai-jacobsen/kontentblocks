@@ -43,8 +43,7 @@ KB.Areas = new Backbone.Collection([], {
 KB.App = (function ($) {
 
     function init() {
-
-
+        // create toolbar container for tinymce inline editors
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
         $toolbar.hide();
 
@@ -58,12 +57,10 @@ KB.App = (function ($) {
 
         // get the UI on track
         KB.Ui.init();
-
-
     }
 
     /**
-     * Iterate and throught raw areas as they were
+     * Iterate through raw areas as they were
      * output by toJSON() method on each area upon
      * server side page creation
      *
@@ -90,8 +87,11 @@ KB.App = (function ($) {
         _.each(KB.payload.Modules, function (module) {
             KB.Modules.add(module);
         });
+        // @TODO events:refactor
         KB.trigger('kb:moduleControlsAdded');
 
+        // new event
+        KB.Events.trigger('KB::frontend-init');
     }
 
 
@@ -158,6 +158,7 @@ jQuery(document).ready(function(){
     if (KB.appData && KB.appData.config.frontend){
         _K.info('Frontend Modules Ready Event fired');
         KB.Views.Modules.readyOnFront();
+        KB.Events.trigger('KB::ready');
     }
 
     jQuery('.koolkip').powerTip({
@@ -182,8 +183,3 @@ jQuery(document).ready(function(){
         } );
 
 });
-
-//
-//jQuery('.area').sortable({
-//    cancel: '.editable'
-//});

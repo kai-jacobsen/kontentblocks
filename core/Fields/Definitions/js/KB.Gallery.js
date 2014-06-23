@@ -11,6 +11,7 @@ KB.Fields.register('Gallery', (function ($) {
                 var arrayKey = $(el).data('arraykey');
                 var fid = $(el).closest('.kb-js-field-identifier').attr('id');
                 if (!view.hasField(key, arrayKey)) {
+
                     var obj = new KB.Gallery.Controller({
                         moduleView: view,
                         fid: fid,
@@ -119,6 +120,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
         var item = this.model.toJSON();
         return this.$el.append(KB.Templates.render('fields/Gallery/single-image', {
             image: item,
+            id: item.id,
             inputName: inputName,
             uid: this.uid
         }));
@@ -147,8 +149,8 @@ KB.Gallery.Controller = Backbone.View.extend({
         this.parentModuleId = params.moduleView.model.get('instance_id');
         this._frame = null; // media modal instance
         this.subviews = []; // image items
-        this.bootstrap(); // run forrest run
         this._initialized = false; // init flag to prevent multiple inits
+        this.bootstrap(); // run forrest run
         if (KB.FrontendEditModal) {
             this.listenTo(KB.FrontendEditModal, 'kb:frontend-save', this.frontendSave);
         }
@@ -225,7 +227,8 @@ KB.Gallery.Controller = Backbone.View.extend({
                     'title': '',
                     'alt': '',
                     'description': ''
-                }
+                },
+                id: image.get('id')
             };
             var model = new Backbone.Model(attr);
             var imageView = new KB.Gallery.ImageView({model: model, parentView: that});
