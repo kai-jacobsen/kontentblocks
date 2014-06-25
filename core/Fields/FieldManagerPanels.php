@@ -2,12 +2,14 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Panels\AbstractPanel;
+
 /**
- * FieldManagerCustom
+ * FieldManagerPanels
  * Use ReFields outside of module context
  * WIP
  */
-class FieldManagerCustom
+class FieldManagerPanels
 {
 
     /**
@@ -36,6 +38,8 @@ class FieldManagerCustom
      */
     protected $fieldsById;
 
+	protected $Panel;
+
     /**
      * Constructor
      * @param $id
@@ -43,11 +47,12 @@ class FieldManagerCustom
      * @internal param object $module
      * @return self
      */
-    public function __construct($id, $data = array())
+    public function __construct($id, $data = array(), $Panel)
     {
         //TODO Check module consistency
         $this->baseId = $id;
         $this->data = $data;
+	    $this->Panel = $Panel;
 
     }
 
@@ -61,7 +66,7 @@ class FieldManagerCustom
     public function addGroup($id, $args = array())
     {
         if (!$this->idExists($id)) {
-            $this->structure[$id] = new FieldSection($id, $args, false, $this);
+            $this->structure[$id] = new FieldSectionPanels($id, $args, false, $this->Panel);
         }
         return $this->structure[$id];
 

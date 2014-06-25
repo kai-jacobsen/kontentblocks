@@ -2,9 +2,9 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Fields\FieldManagerCustom;
+use Kontentblocks\Fields\FieldManagerPanels;
 
-abstract class CustomOptionsPanel
+abstract class CustomOptionsPanel extends AbstractPanel
 {
 
     /**
@@ -19,7 +19,7 @@ abstract class CustomOptionsPanel
 
     /**
      * Custom Field Manager Instance
-     * @var FieldManagerCustom
+     * @var FieldManagerPanels
      */
     protected $FieldManager;
 
@@ -54,7 +54,7 @@ abstract class CustomOptionsPanel
         return wp_parse_args( $args, $defaults );
     }
 
-    abstract public function fields( FieldManagerCustom $fieldManagerCustom );
+    abstract public function fields( FieldManagerPanels $fieldManager );
 
     private function setupArgs( $args )
     {
@@ -130,7 +130,7 @@ abstract class CustomOptionsPanel
 
 
         $this->setupData( $this->baseId );
-        $this->FieldManager = new FieldManagerCustom( $this->baseId, $this->data );
+        $this->FieldManager = new FieldManagerPanels( $this->baseId, $this->data );
 
         $this->beforeForm();
         $this->fields( $this->FieldManager )->renderFields();
@@ -141,7 +141,7 @@ abstract class CustomOptionsPanel
     {
 
         $old = $this->setupData();
-        $this->FieldManager = new FieldManagerCustom( $this->baseId, $this->data );
+        $this->FieldManager = new FieldManagerPanels( $this->baseId, $this->data );
 
         $new = $this->fields( $this->FieldManager )->save( $_POST[ $this->baseId ], $old );
         update_option( $this->baseId, $new );
@@ -205,7 +205,7 @@ abstract class CustomOptionsPanel
         $this->setupData( $this->baseId );
 
         if (is_null($this->FieldManager)){
-            $this->FieldManager = new FieldManagerCustom( $this->baseId, $this->data );
+            $this->FieldManager = new FieldManagerPanels( $this->baseId, $this->data );
         }
 
         $this->fields( $this->FieldManager )->setup( $this->data );

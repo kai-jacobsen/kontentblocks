@@ -281,7 +281,6 @@ class FieldSection
 
         $this->_decreaseVisibleFields();
         return $field->setDisplay(false);
-
     }
 
     /**

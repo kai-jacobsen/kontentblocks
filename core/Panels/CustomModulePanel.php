@@ -2,11 +2,11 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Fields\FieldManagerCustom;
+use Kontentblocks\Fields\FieldManagerPanels;
 use Kontentblocks\Frontend\SingleModuleRender;
 use Kontentblocks\Modules\Module;
 
-class CustomModulePanel
+class CustomModulePanel extends AbstractPanel
 {
 
     /**
@@ -53,7 +53,7 @@ class CustomModulePanel
 
     /**
      * Custom Field Manager Instance
-     * @var FieldManagerCustom
+     * @var FieldManagerPanels
      */
     protected $FieldManager;
 
