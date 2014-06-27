@@ -16,22 +16,22 @@ namespace Kontentblocks\Fields;
  * in extending class
  *
  * @see Kontentblocks\Modules\Module::__cosntruct()
- * @param object | Module instance
+ * @param \Kontentblocks\Modules\Module
  */
 class FieldManager extends AbstractFieldManager
 {
 
     /**
      * Constructor
-     * @param object $module
+     * @param Kontentblocks\Modules\Module
      * @since 1.0.0
      */
-    public function __construct( $module )
+    public function __construct( $Module )
     {
         //TODO Check module consistency
-        $this->baseId = $module->instance_id;
-        $this->data     = $module->moduleData;
-        $this->module   = $module;
+        $this->baseId = $Module->instance_id;
+        $this->data     = $Module->moduleData;
+        $this->Module   = $Module;
     }
 
     /**
@@ -39,13 +39,14 @@ class FieldManager extends AbstractFieldManager
      * or returns the section if exists
      * @param string $id
      * @param array $args
-     * @return object groupobject
+     * @param Kontentblocks\Modules\Module
+     * @return object
      * @since 1.0.0
      */
     public function addGroup( $id, $args = array() )
     {
         if ( !$this->idExists( $id ) ) {
-            $this->structure[ $id ] = new FieldSection( $id, $args, $this->module->envVars, $this->module );
+            $this->structure[ $id ] = new FieldSection( $id, $args, $this->Module->envVars, $this->Module );
         }
         return $this->structure[ $id ];
 

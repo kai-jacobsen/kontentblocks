@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Abstracts\AbstractEditableFieldReturn;
 use Kontentblocks\Utils\ImageResize;
 use Kontentblocks\Utils\JSONBridge;
 
@@ -57,7 +56,7 @@ class Image extends AbstractEditableFieldReturn {
 	public function html() {
 		$this->addClass( 'koolkip' );
 
-		if ($this->inlineEdit){
+		if ( $this->inlineEdit ) {
 			$this->addAttr( 'data-powertip', 'Click to change image' );
 		}
 
@@ -158,7 +157,7 @@ class Image extends AbstractEditableFieldReturn {
 	public function getEditableClass() {
 
 		if ( is_a( $this->field, '\Kontentblocks\Fields\Definitions\Gallery' ) ) {
-			if ($this->inlineEdit){
+			if ( $this->inlineEdit ) {
 				return 'editable-gallery-image';
 			}
 		} elseif ( $this->background ) {
@@ -187,11 +186,12 @@ class Image extends AbstractEditableFieldReturn {
 	}
 
 
-	public function detail($key){
-		$details = $this->getValue('details');
-		if (array_key_exists($key, $details)){
-			return $details[$key];
+	public function detail( $key ) {
+		$details = $this->getValue( 'details' );
+		if ( array_key_exists( $key, $details ) ) {
+			return $details[ $key ];
 		}
+
 		return null;
 	}
 }

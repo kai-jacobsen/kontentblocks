@@ -14,10 +14,10 @@ abstract class AbstractFieldManager {
 
 	/**
 	 * Collection of added Sections / Fields ...
-	 * @var array
+	 * @var object
 	 * @since 1.0.0
 	 */
-	public $structure;
+	public $Structure;
 
 
 	/**

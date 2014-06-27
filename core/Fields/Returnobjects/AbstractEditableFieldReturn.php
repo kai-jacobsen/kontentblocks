@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Abstracts;
+namespace Kontentblocks\Fields\Returnobjects;
 
 use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Interfaces\InterfaceFieldReturn;
