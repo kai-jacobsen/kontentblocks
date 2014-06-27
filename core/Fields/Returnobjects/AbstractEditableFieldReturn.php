@@ -125,7 +125,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	 * and the user is logged in
 	 */
 	public function handleLoggedInUsers() {
-		if ( is_user_logged_in() && $this->inlineEdit ) {
+		if ( is_user_logged_in() && $this->inlineEdit && current_user_can('edit_kontentblocks') ) {
 			$editableClass = $this->getEditableClass();
 			$this->addClass( $editableClass );
 			$this->addAttr( 'data-module', $this->moduleId );
