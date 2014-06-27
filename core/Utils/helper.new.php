@@ -209,8 +209,6 @@ function arrayMergeRecursiveAsItShouldBe($new, $old)
             } else {
                 if (array_key_exists($key,$merged) && $merged[$key] === NULL) {
                     // key was set to null on purpose, and gets removed finally
-	                d($new);
-
 	                unset($merged[$key]);
                 } elseif (!isset($merged[$key])) {
                     // there is something missing in current(new) data, add it

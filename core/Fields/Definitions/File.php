@@ -36,7 +36,6 @@ Class File extends Field
             'isEmpty' => (empty( $value[ 'id' ] )) ? 'kb-hide' : ''
             )
         );
-	    d($tpl);
         $tpl->render( true );
 
     }

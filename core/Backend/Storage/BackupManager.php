@@ -108,7 +108,7 @@ class BackupManager
         $data = array(
             'created' => date("Y-m-d H:i:s", time()),
             'updated' => date("Y-m-d H:i:s", time()),
-            'value' => serialize(stripslashes_deep($insert)),
+            'value' => base64_encode(serialize($insert)),
             'post_id' => (is_numeric($this->backupData['id'])) ? $this->backupData['id'] : -1,
             'literal_id' => (!is_numeric($this->backupData['id'])) ? $this->backupData['id'] : NULL
         );
@@ -131,7 +131,7 @@ class BackupManager
             wp_die('Hackin?');
         }
 
-        $existingData = unserialize($this->package->value);
+        $existingData = unserialize(base64_decode($this->package->value));
         $user = wp_get_current_user();
 
         $value = array(
@@ -149,7 +149,7 @@ class BackupManager
 
         $data = array(
             'updated' => date("Y-m-d H:i:s", time()),
-            'value' => serialize(stripslashes_deep($existingData))
+            'value' => base64_encode(serialize($existingData))
         );
 
         $this->Storage->getDataHandler()->update('kb_last_backup', $now);
@@ -213,7 +213,7 @@ class BackupManager
             $this->package = $this->getPackage();
         }
 
-        $backupData = unserialize($this->package->value);
+        $backupData = unserialize(base64_decode($this->package->value));
         if (isset($backupData[$id])) {
             return $backupData[$id]['data'];
         } else {

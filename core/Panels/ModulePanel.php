@@ -6,7 +6,13 @@ use Kontentblocks\Fields\FieldManagerPanels;
 use Kontentblocks\Frontend\SingleModuleRender;
 use Kontentblocks\Modules\Module;
 
-class CustomModulePanel extends AbstractPanel
+/**
+ * Class ModulePanel
+ *
+ * Used on posts (any post type) and behaves / can be used like a regular module
+ * @package Kontentblocks\Panels
+ */
+class ModulePanel
 {
 
     /**

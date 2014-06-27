@@ -2,10 +2,10 @@
 namespace Kontentblocks\Fields;
 
 /**
- * Class FieldSectionPanels
+ * Class PanelFieldSection
  * @package Kontentblocks\Fields
  */
-class FieldSectionPanels extends FieldSection {
+class PanelFieldSection extends FieldSection {
 
 
 	/**

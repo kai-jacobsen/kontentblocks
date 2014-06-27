@@ -34,7 +34,7 @@ class PanelRegistry
     {
         if (!isset($this->panels[$id])) {
             if (isset($args['moduleClass']) && class_exists($args['moduleClass'])) {
-                $this->panels[$id] = new CustomModulePanel($args);
+                $this->panels[$id] = new ModulePanel($args);
             } elseif (isset($args['formClass']) && class_exists($args['formClass'])) {
                 $this->panels[$id] = new $args['formClass']($args);
             } else {

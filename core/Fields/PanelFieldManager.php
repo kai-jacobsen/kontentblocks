@@ -2,14 +2,13 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Panels\AbstractPanel;
 
 /**
  * FieldManagerPanels
  * Use ReFields outside of module context
  * WIP
  */
-class FieldManagerPanels
+class PanelFieldManager
 {
 
     /**
@@ -53,7 +52,6 @@ class FieldManagerPanels
         $this->baseId = $id;
         $this->data = $data;
 	    $this->Panel = $Panel;
-
     }
 
     /**
@@ -66,7 +64,7 @@ class FieldManagerPanels
     public function addGroup($id, $args = array())
     {
         if (!$this->idExists($id)) {
-            $this->structure[$id] = new FieldSectionPanels($id, $args, false, $this->Panel);
+            $this->structure[$id] = new PanelFieldSection($id, $args, false, $this->Panel);
         }
         return $this->structure[$id];
 
