@@ -18,38 +18,8 @@ namespace Kontentblocks\Fields;
  * @see Kontentblocks\Modules\Module::__cosntruct()
  * @param object | Module instance
  */
-class FieldManager
+class FieldManager extends AbstractFieldManager
 {
-
-    /**
-     * Unique ID from module
-     * Used to prefix form fields
-     * @var string
-     * @since 1.0.0
-     */
-    protected $moduleId;
-
-    /**
-     * Collection of added Sections / Fields ...
-     * @var array
-     * @since 1.0.0
-     */
-    public $structure;
-
-    /**
-     * Object to handle the section layout
-     * e.g. defaults to tabs
-     * @var object
-     * @since 1.0.0
-     */
-    protected $Render;
-
-    /**
-     * registered fields in one flat array
-     * @var array
-     * @since 1.0.0
-     */
-    protected $fieldsById;
 
     /**
      * Constructor
@@ -59,7 +29,7 @@ class FieldManager
     public function __construct( $module )
     {
         //TODO Check module consistency
-        $this->moduleId = $module->instance_id;
+        $this->baseId = $module->instance_id;
         $this->data     = $module->moduleData;
         $this->module   = $module;
     }
@@ -81,23 +51,7 @@ class FieldManager
 
     }
 
-    /**
-     * Calls save on each group
-     * @param $data
-     * @param $oldData
-     * @return array
-     * @since 1.0.0
-     */
-    public function save( $data, $oldData )
-    {
-        $collection = array();
-        foreach ( $this->structure as $definition ) {
-            $return     = ($definition->save( $data, $oldData ));
-            $collection = $collection + $return;
-        }
-        return $collection;
 
-    }
 
     /**
      * Backend render method | Endpoint
@@ -113,85 +67,7 @@ class FieldManager
     public function renderFields()
     {
         $Renderer = new FieldRenderTabs( $this->structure );
-        $Renderer->render( $this->moduleId, $this->data );
-
-    }
-
-    /**
-     * Prepare fields for frontend output
-     * @param array $instanceData
-     * @since 1.0.0
-     */
-    public function setup( $instanceData )
-    {
-
-        if ( empty( $this->fieldsById ) ) {
-            $this->fieldsById = $this->collectAllFields();
-        }
-        foreach ( $this->fieldsById as $field ) {
-            $data = (!empty( $instanceData[ $field->getKey() ] )) ? $instanceData[ $field->getKey() ] : '';
-
-            $field->setup( $data, $this->moduleId );
-        }
-
-    }
-
-    /**
-     * Get a field object by key
-     * returns the object on success
-     * or false if key does not exist
-     *
-     * @param string $key
-     * @return mixed
-     * @since 1.0.0
-     */
-    public function getFieldByKey( $key, $fromArray = null)
-    {
-        if ( empty( $this->fieldsById ) ) {
-            $this->fieldsById = $this->collectAllFields();
-        }
-
-	    if (isset($fromArray) && $this->fieldsById[$fromArray]){
-		    return $this->fieldsById[$fromArray]->getFieldByKey($key);
-	    }
-
-
-        if ( isset( $this->fieldsById[ $key ] ) ) {
-            return $this->fieldsById[ $key ];
-        }
-        else {
-            false;
-        }
-
-    }
-
-    /**
-     * Extract single fields from structure object
-     * and stores them in one single flat array
-     * @return array
-     * @since 1.0.0
-     */
-    public function collectAllFields()
-    {
-        $collect = array();
-        foreach ( $this->structure as $def ) {
-            $collect = $collect + $def->getFields();
-        }
-        return $collect;
-
-    }
-
-    /**
-     * Helper method to check whether an section already
-     * exists in group
-     * @param string $id
-     * @return object
-     * @since 1.0.0
-     */
-    public function idExists( $id )
-    {
-        // TODO Test for right inheritance / abstract class
-        return (isset( $this->structure[ $id ] ));
+        $Renderer->render( $this->baseId, $this->data );
 
     }
 

@@ -15,8 +15,10 @@ class PanelFieldSection extends FieldSection {
 	 * @param $args
 	 * @param $envVars
 	 * @param Panel $Panel
+	 *
 	 * @internal param array $areaContext
-	 * @return \Kontentblocks\Fields\FieldSection
+	 * @TODO // revise envVars
+	 * @return \Kontentblocks\Fields\PanelFieldSection
 	 */
 	public function __construct($id, $args, $envVars, $Panel)
 	{
@@ -30,7 +32,8 @@ class PanelFieldSection extends FieldSection {
 
 
 	/**
-	 * Set visibility of field based on environment vars given by the module
+	 * Set visibility of field based on environment vars given by the Panel
+	 * Panels have no envVars yet
 	 * @param Field $field
 	 * @return mixed
 	 */
