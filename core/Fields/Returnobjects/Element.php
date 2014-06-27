@@ -49,7 +49,6 @@ class Element extends AbstractEditableFieldReturn {
 	public $uniqueId;
 
 
-
 	public function addLink( $target ) {
 		$this->hasLink = true;
 		$this->target  = $target;
@@ -89,14 +88,14 @@ class Element extends AbstractEditableFieldReturn {
 		$formatWithLink = '<%1$s id="%4$s" %3$s><a href="%5$s">%2$s</a></%1$s>';
 
 
-		if ( ! in_array( $this->el, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) ) ) {
+		if ( !in_array( $this->el, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) ) ) {
 			$filtered = apply_filters( 'the_content', $this->value );
 		} else {
 			$filtered = $this->value;
 		}
 
 		if ( is_user_logged_in() ) {
-			if ( ! $this->hasLink ) {
+			if ( !$this->hasLink ) {
 				return sprintf( $format, $this->el, $filtered, $this->_renderAttributes(), $this->uniqueId );
 			} else if ( $this->hasLink ) {
 				return sprintf(
@@ -109,7 +108,7 @@ class Element extends AbstractEditableFieldReturn {
 				);
 			}
 		} else {
-			if ( ! $this->hasLink ) {
+			if ( !$this->hasLink ) {
 				$format = '<%1$s %3$s>%2$s</%1$s>';
 
 				return sprintf( $format, $this->el, $filtered, $this->_renderAttributes() );
@@ -121,7 +120,6 @@ class Element extends AbstractEditableFieldReturn {
 		}
 
 	}
-
 
 
 	/**
@@ -159,5 +157,11 @@ class Element extends AbstractEditableFieldReturn {
 
 	protected function prepare() {
 		// TODO: Implement prepare() method.
+	}
+
+	public function __toString() {
+		if (is_string($this->value)){
+			return $this->value;
+		}
 	}
 }

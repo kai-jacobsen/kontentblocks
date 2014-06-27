@@ -94,7 +94,7 @@ class BackupInspect {
 		$BackupManager = new BackupManager( $Storage );
 		$backups       = $BackupManager->queryBackup( $post_id );
 
-		$return           = ( !empty( $backups ) ) ? unserialize(base64_decode( $backups->value )) : array();
+		$return           = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();
 		$this->backupData = $return;
 
 		wp_send_json( $return );
@@ -121,7 +121,7 @@ class BackupInspect {
 				$BackupManager = new BackupManager( $Storage );
 				$backups       = $BackupManager->queryBackup( $data['post_id'] );
 
-				$response['kbHasNewBackups'] = ( !empty( $backups ) ) ? unserialize( $backups->value ) : array();
+				$response['kbHasNewBackups'] = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();
 			}
 		}
 
