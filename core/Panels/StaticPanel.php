@@ -2,11 +2,14 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Fields\FieldManagerCustom;
-use Kontentblocks\Frontend\SingleModuleRender;
-use Kontentblocks\Modules\Module;
+use Kontentblocks\Fields\FieldManagerPanels;
+use Kontentblocks\Fields\PanelFieldManager;
 
-class CustomModulePanel
+/**
+ * Class StaticPanel
+ * @package Kontentblocks\Panels
+ */
+abstract class StaticPanel
 {
 
     /**
@@ -14,18 +17,6 @@ class CustomModulePanel
      * @var string
      */
     protected $baseId;
-
-    /**
-     * Static Module Classname
-     * @var string
-     */
-    protected $moduleClass;
-
-    /*
-     * Module Instance
-     * @var \Kontentblocks\Modules\StaticModule
-     */
-    protected $Module;
 
     /**
      * Post Types
@@ -53,17 +44,17 @@ class CustomModulePanel
 
     /**
      * Custom Field Manager Instance
-     * @var FieldManagerCustom
+     * @var PanelFieldManager
      */
     protected $FieldManager;
+
+    protected $saveAsSingle = false;
 
     /**
      * Form data
      * @var array
      */
-    protected $data;
-
-    protected $saveAsSingle;
+    protected $data = null;
 
     public function __construct($args)
     {
@@ -72,22 +63,12 @@ class CustomModulePanel
         if (is_null($args['baseId'])) {
             throw new \Exception('MUST provide a base id');
         }
-        // mumbo jumbo magical setup
+
+        // mumbo jumbo
         $this->setupArgs($args);
 
-        if (is_admin()) {
-            $this->setupHooks();
-        }
+        $this->setupHooks();
 
-    }
-
-
-    public function  render()
-    {
-        $this->setupData(get_the_ID());
-        $this->Module = $this->setupModule($this->moduleClass);
-        $Render = new SingleModuleRender($this->Module);
-        $Render->render();
 
     }
 
@@ -95,15 +76,16 @@ class CustomModulePanel
     {
         $defaults = array(
             'baseId' => null,
-            'moduleClass' => null,
             'metaBox' => false,
             'hook' => 'edit_form_after_title',
             'postTypes' => array(),
-            'pageTemplate' => array('default')
+            'pageTemplates' => array('default')
         );
 
         return wp_parse_args($args, $defaults);
     }
+
+    abstract public function fields(PanelFieldManager $FieldManager);
 
 
     private function setupArgs($args)
@@ -141,6 +123,11 @@ class CustomModulePanel
     public function metaBox($postObj)
     {
 
+        if (!post_type_supports($postObj->post_type, 'editor')) {
+            \Kontentblocks\Helper\getHiddenEditor();
+        }
+
+
         $defaults = array(
             'title' => 'No Title provided',
             'context' => 'advanced',
@@ -162,23 +149,31 @@ class CustomModulePanel
             return;
         }
 
+        if (!post_type_supports($postObj->post_type, 'editor')) {
+            \Kontentblocks\Helper\getHiddenEditor();
+        }
+
         $this->setupData($postObj->ID);
-        $this->Module = $this->setupModule($this->moduleClass);
+        $this->FieldManager = new PanelFieldManager($this->baseId, $this->data, $this);
 
         $this->beforeForm();
-        $this->Module->options($this->data);
+        $this->fields($this->FieldManager)->renderFields();
         $this->afterForm();
     }
 
+	// @TODO simplyfy field manager instantiation
     public function save($postId)
     {
+
         if (empty($_POST[$this->baseId])) {
             return;
         }
-        $this->Module = $this->setupModule($this->moduleClass);
+
         $old = $this->setupData($postId);
-        $new = $this->Module->save($_POST[$this->baseId], $old);
-        update_post_meta($postId, '_' . $this->baseId, $new);
+        $this->FieldManager = new PanelFieldManager($this->baseId, $this->data, $this);
+
+        $new = $this->fields($this->FieldManager)->save($_POST[$this->baseId], $old);
+        update_post_meta($postId, $this->baseId, $new);
 
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {
@@ -191,7 +186,9 @@ class CustomModulePanel
         }
     }
 
-
+    /**
+     * Markup before inner form
+     */
     private function beforeForm()
     {
         echo "<div class='postbox'>
@@ -199,52 +196,56 @@ class CustomModulePanel
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
     }
 
+    /**
+     * Markup after
+     */
     private function afterForm()
     {
         echo "</div></div></div>";
     }
 
     /**
-     * @TODO: REVISE POST ID
+     * Setup panel related meta data
      * @param $postId
-     * @return mixed
+     * @TODO use meta api?
      */
     private function setupData($postId)
     {
-        if (is_object($postId)){
+        if (is_object($postId)) {
             $id = $postId->ID;
         } else {
             $id = $postId;
         }
 
-        $this->data = get_post_meta($id, '_' . $this->baseId, true);
+
+        $this->data = get_post_meta($id, $this->baseId, true);
         return $this->data;
     }
 
+    /**
+     * Manually set up fielddata
+     * Makes it possible to get the Panel from the registry, and use it as data container
+     * @TODO __Revise__
+     * @param $postId
+     * @return $this
+     */
+    public function setup($postId)
+    {
+        $this->setupData($postId);
+        $this->FieldManager = new PanelFieldManager($this->baseId, $this->data, $this);
+
+        $this->fields($this->FieldManager)->setup($this->data);
+        return $this;
+
+    }
 
     /**
-     * @TODO Too hacky, works as proof
+     * After setup, get the setup object
+     * @return array
+     * @TODO __Revise__
      */
-    private function setupModule($module)
+    public function getData()
     {
-        $moduleArgs = array();
-
-        $defaults = array(
-            'instance_id' => $this->baseId,
-            'areaContext' => 'static',
-            'post_id' => get_the_ID(),
-            'area' => 'static',
-            'class' => $module
-        );
-
-        $moduleArgs['settings'] = Module::getDefaults();
-        $moduleArgs['state'] = Module::getDefaultState();
-        $moduleArgs['state']['draft'] = false;
-        $moduleArgs['settings']['id'] = $this->baseId . '_static';
-        $moduleArgs['settings']['class'] = $module;
-        $moduleArgs = wp_parse_args($defaults, $moduleArgs);
-        $Environment = \Kontentblocks\Helper\getEnvironment(get_the_ID());
-        return new $module($moduleArgs, $this->data, $Environment);
-
+        return $this->FieldManager->prepareDataAndGet();
     }
 }

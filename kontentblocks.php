@@ -141,7 +141,6 @@ Class Kontentblocks
 
         // add core modules path
         $paths = array(KB_TEMPLATE_PATH);
-
         // deprecated
         $paths = apply_filters('kb_add_template_path', $paths);
         // replacement for '_add_template_path'
@@ -219,3 +218,4 @@ Class Kontentblocks
 
 // Fire it up
 Kontentblocks::getInstance()->init();
+

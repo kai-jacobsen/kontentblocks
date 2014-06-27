@@ -1,9 +1,7 @@
 <?php
 namespace Kontentblocks;
-
 // register SPL Autoloader
 spl_autoload_register(__NAMESPACE__ . '\\autoloadKontentblocks');
-
 function autoloadKontentblocks($cls)
 {
     $cls = ltrim($cls, '\\');

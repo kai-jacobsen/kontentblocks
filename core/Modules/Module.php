@@ -497,7 +497,9 @@ abstract class Module {
 	}
 
 	public function getView() {
-
+		if ( !class_exists('Kontentblocks\Templating\ModuleTemplate') ){
+			class_alias('Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
+		}
 		if ( $this->getSetting( 'useViewLoader' ) && is_null( $this->View ) ) {
 			$tpl    = $this->getViewfile();
 			$Loader = new ModuleViewLoader( $this );

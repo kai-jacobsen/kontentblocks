@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Templating\FieldTemplate;
 use Kontentblocks\Utils\AttachmentHandler;
 
 /**
@@ -26,7 +27,7 @@ Class File extends Field
         );
         $value        = wp_parse_args( $this->getValue(), $fileDefaults );
         // using twig template for html output
-        $tpl          = new \Kontentblocks\Templating\FieldTemplate(
+        $tpl          = new FieldTemplate(
             'file.twig', array(
             'field' => $this,
             'value' => $value,
