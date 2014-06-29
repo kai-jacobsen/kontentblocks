@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-23 */
+/*! Kontentblocks DevVersion 2014-06-29 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -365,12 +365,18 @@ KB.TinyMCE = function($) {
                     });
                 };
                 var ed = tinymce.init(settings);
+                if (!tinyMCEPreInit.mceInit[id]) {
+                    tinyMCEPreInit.mceInit[id] = settings;
+                }
                 var qtsettings = {
                     buttons: "",
                     disabled_buttons: "",
                     id: id
                 };
-                new QTags(qtsettings);
+                var qts = jQuery("#qt_" + id + "_toolbar");
+                if (!qts.length) {
+                    new QTags(qtsettings);
+                }
             });
             setTimeout(function() {
                 $(".wp-editor-wrap", $el).removeClass("html-active").addClass("tmce-active");

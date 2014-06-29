@@ -3,7 +3,6 @@
 namespace Kontentblocks\Fields\Returnobjects;
 
 
-use Kontentblocks\Abstracts\AbstractEditableFieldReturn;
 
 class EditableLink extends AbstractEditableFieldReturn {
 

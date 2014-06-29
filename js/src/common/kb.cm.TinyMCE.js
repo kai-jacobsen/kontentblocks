@@ -72,13 +72,22 @@ KB.TinyMCE = (function ($) {
                 };
                 var ed = tinymce.init(settings);
 
+                if (!tinyMCEPreInit.mceInit[id]){
+                    tinyMCEPreInit.mceInit[id] = settings;
+                }
+
                 // doesn't wok without, but don't really know what this does
+
                 var qtsettings = {
                     'buttons': '',
                     'disabled_buttons': '',
                     'id': id
                 };
-                new QTags(qtsettings);
+                var qts = jQuery('#qt_' + id + '_toolbar');
+
+                if (!qts.length){
+                    new QTags(qtsettings);
+                }
 
 
             });

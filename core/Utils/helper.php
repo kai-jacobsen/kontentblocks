@@ -188,7 +188,7 @@ function kb_wp_editor($block_id, $data, $name = NULL, $media = true, $args = arr
         'wpview',
     ) ) );
     $settings = array(
-        'wpautop' => false, // use wpautop?
+        'wpautop' => true, // use wpautop?
         'media_buttons' => false, // show insert/upload button(s)
         'textarea_name' => $name, // set the textarea name to something different, square brackets [] can be used here
         'tabindex' => '',

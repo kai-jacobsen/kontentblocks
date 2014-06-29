@@ -80,6 +80,7 @@ KB.Gallery.ImageView = Backbone.View.extend({
         var name = this.createInputName(this.uid) + '[details][description]';
 
         if (!this.editorAdded) {
+            console.log(this);
             var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get('details').description, null, false, false);
             req.done(function (res) {
                 that.editorAdded = res;
@@ -107,13 +108,30 @@ KB.Gallery.ImageView = Backbone.View.extend({
         delete this.$el;
     },
     close: function () {
-        var ed = tinymce.get(this.uid + '_ed');
+        var ed = tinymce.get(this.uid + '_ededitor');
         var details = this.model.get('details');
-        details.description = ed.getContent();
+        details.description = this.getEditorContent(ed);
+
         tinymce.remove(ed);
         this.$el.appendTo(this._placeholder).unwrap();
         this.$el.removeClass('kb-gallery--active-item').removeClass('kb_field');
         jQuery('#wpwrap').removeClass('module-browser-open');
+    },
+    getEditorContent: function(ed){
+
+        var $wrap = jQuery('#wp-' + this.uid + '_ededitor-wrap');
+        var isTinyMCE = $wrap.hasClass('tmce-active');
+
+        if (isTinyMCE){
+            return ed.getContent();
+        } else {
+            var value = document.getElementById( this.uid + '_ededitor').value;
+            value = value.replace(/<br\s*\/?>/mg,"\n");
+            console.log(value);
+            ed.setContent(value);
+            return value;
+        }
+
     },
     render: function () {
         var inputName = this.createInputName(this.uid);
