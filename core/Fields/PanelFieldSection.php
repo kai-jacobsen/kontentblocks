@@ -24,7 +24,7 @@ class PanelFieldSection extends AbstractFieldSection {
 		$this->id      = $id;
 		$this->args    = $this->prepareArgs( $args );
 		$this->envVars = $envVars;
-		$this->Panel   = $Panel;
+		$this->module   = $Panel;
 
 	}
 
