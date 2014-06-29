@@ -56,8 +56,8 @@ Class Link extends Field
      */
     public function inputFilter( $value )
     {
-
-        return filter_var($value, FILTER_SANITIZE_URL);
+		return $value;
+//        return filter_var($value, FILTER_SANITIZE_URL);
 
     }
 
