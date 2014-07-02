@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-29 */
+/*! Kontentblocks DevVersion 2014-07-02 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -255,11 +255,15 @@ KB.Payload = function($) {
         _typeExists: function(type) {
             return !_.isUndefined(KB.payload.fieldData[type]);
         },
-        getFieldArgs: function(key) {
-            if (KB.payload.Fields && KB.payload.Fields[key]) {
-                return KB.payload.Fields[key];
+        getFieldArgs: function(id, key) {
+            if (KB.payload.Fields && KB.payload.Fields[id]) {
+                if (key && KB.payload.Fields[id][key]) {
+                    return KB.payload.Fields[id][key];
+                } else {
+                    return KB.payload.Fields[id];
+                }
             } else {
-                return false;
+                return null;
             }
         }
     };
@@ -428,6 +432,9 @@ KB.Ui = function($) {
             $body.on("mouseenter", ".kb-js-field-identifier", function() {
                 KB.currentFieldId = this.id;
                 _K.info("Current Field Id set to:", KB.currentFieldId);
+            });
+            $body.on("mouseenter", ".kb_area_list_item li", function() {
+                KB.currentModuleId = this.id;
             });
             jQuery(document).ajaxComplete(function(e, o, settings) {
                 that.metaBoxReorder(e, o, settings, "restore");
@@ -675,7 +682,7 @@ KB.Util = function($) {
         cleanArray: function(actual) {
             var newArray = new Array();
             for (var i = 0; i < actual.length; i++) {
-                if (actual[i]) {
+                if (!_.isUndefined(actual[i])) {
                     newArray.push(actual[i]);
                 }
             }

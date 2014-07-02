@@ -12,9 +12,7 @@ KB.Fields.register('FlexibleFields', (function ($) {
                 if (!view.hasField(key, arrayKey)) {
                     var obj = new KB.FlexibleFields.Controller({moduleView: view, fid: fid, key: key, arrayKey: arrayKey, el: el});
                     view.addField(key, obj, arrayKey);
-                    console.log('new init');
                 } else {
-                    console.log('already init');
                     view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
                 }
 
@@ -96,8 +94,8 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
     },
     initialSetup: function () {
         var that = this;
-        var payload = KB.Payload.getFieldData('flexible-fields', this.params.moduleView.model.get('instance_id'), this.params.key, this.params.arrayKey) || [];
-
+        var payload = KB.Payload.getFieldData('flexfields', this.params.moduleView.model.get('instance_id'), this.params.key, this.params.arrayKey) || [];
+            console.log(payload);
         _.each(payload, function(item){
             var model = new Backbone.Model(item);
             var Item = new KB.FlexibleFields.Item({model: model, parent: that});
@@ -120,13 +118,13 @@ KB.FlexibleFields.Item = Backbone.View.extend({
     initialize: function (params) {
         this.parentView = params.parent;
         this.config = params.parent.fieldArgs.config;
-        this.uid = this.model.get('uid') || _.uniqueId('ff');
+        this.uid = this.model.get('_uid') || _.uniqueId('ff');
 
-        if (!this.model.get('tab')){
+        if (!this.model.get('_tab')){
             var tabDef = {
                 title: this.uid
             };
-            this.model.set('tab', tabDef);
+            this.model.set('_tab', tabDef);
         }
     },
     events: {
@@ -139,7 +137,10 @@ KB.FlexibleFields.Item = Backbone.View.extend({
         });
     },
     deleteItem: function(){
-        this.$el.remove();
+        this.$el.hide(250);
+        var inputName = this.createInputName(this.uid);
+        this.$el.append('<input type="hidden" name="' + inputName + '[delete]" value="' + this.uid + '" >');
+
         KB.Notice.notice('Please click update to save the changes', 'success');
     },
     render: function () {

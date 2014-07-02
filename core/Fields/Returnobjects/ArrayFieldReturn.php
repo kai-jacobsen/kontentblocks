@@ -24,8 +24,8 @@ class ArrayFieldReturn
 
         foreach ($this->fields as $field){
             $fieldkey = $field->getKey();
-            $this->$fieldkey = $field->getReturnObj();
-            $collect[$field->getKey()] = $field->getValue();
+            $this->$fieldkey = $field->getUserValue();
+            $collect[$field->getKey()] = $field->getUserValue();
         }
         $this->value = $collect;
     }

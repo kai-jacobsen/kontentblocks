@@ -12,7 +12,7 @@ Class Fonticonpicker extends Field
 {
 
     // Defaults
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'fonticonpicker'
     );
 
@@ -28,7 +28,7 @@ Class Fonticonpicker extends Field
 
     }
 
-	public function outputFilter($v){
+	public function setFilter($v){
 		return $v;
 	}
 
@@ -37,11 +37,20 @@ Class Fonticonpicker extends Field
      * @param string $value
      * @return string filtered
      */
-    public function inputFilter( $value )
+    public function getPublicFilter( $value )
     {
         return esc_textarea( $value );
 //	    return $value;
     }
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 
 
 

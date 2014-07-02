@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-29 */
+/*! Kontentblocks DevVersion 2014-07-02 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -109,6 +109,7 @@ KB.IEdit.Image = function($) {
         remove: ".kb-js-reset-file",
         img: null,
         init: function() {
+            console.log(this);
             var that = this;
             var $body = $("body");
             $body.on("click", this.selector, function(e) {
@@ -163,12 +164,13 @@ KB.IEdit.Image = function($) {
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get("moduleData"));
             var path = [];
-            path.push(data.arrayKey);
-            path.push(data.key);
+            path.push(data.arraykey);
             path.push(data.index);
+            path.push(data.key);
             KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join("."), value);
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set("moduleData", moduleData);
+            console.log(moduleData);
             jQuery.ajax({
                 url: ajaxurl,
                 data: {
@@ -188,7 +190,7 @@ KB.IEdit.Image = function($) {
         },
         prepareValue: function(attachment) {
             return {
-                id: id,
+                id: attachment.get("id"),
                 title: attachment.get("title"),
                 caption: attachment.get("caption")
             };
@@ -206,29 +208,6 @@ KB.IEdit.Image = function($) {
 }(jQuery);
 
 _.extend(KB.IEdit.Image, Backbone.Events);
-
-KB.IEdit.GalleryImage = _.extend(KB.IEdit.Image, {
-    selector: ".editable-gallery-image",
-    renderControls: function() {
-        jQuery(this.selector).each(function(index, obj) {
-            jQuery("body").on("mouseover", ".editable-gallery-image", function() {
-                jQuery(this).css("cursor", "pointer");
-            });
-        });
-    },
-    prepareValue: function(att) {
-        return {
-            details: {
-                description: "",
-                title: "",
-                alt: ""
-            },
-            id: att.get("id"),
-            remove: "",
-            uid: _.uniqueId("kbg")
-        };
-    }
-});
 
 KB.IEdit.Link = function($) {
     var $form, $linkTarget, $linktext, $body, $href, $title;
@@ -1012,7 +991,6 @@ KB.Events.on("KB::ready", function() {
         KB.IEdit.Text(item);
     });
     KB.IEdit.Image.init();
-    KB.IEdit.GalleryImage.init();
     KB.IEdit.BackgroundImage.init();
     KB.IEdit.Link.init();
 });

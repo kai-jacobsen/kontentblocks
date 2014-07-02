@@ -33,10 +33,13 @@ class Gallery {
 					'arrayKey'    => $this->field->getArg( 'arrayKey' ),
 					'index'       => $k,
 					'instance_id' => $this->field->parentModuleId,
-					'type'        => 'gallery'
+					'type'        => 'image'
 				);
 
 				$Obj = new Image( $element, $field );
+				// inlineEdit is potentially possible for the image itself
+				// but associated data will not change accordingly
+				// this feature (js files) was removed
 				$Obj->inlineEdit(false);
 				array_push( $this->images, $Obj );
 			}

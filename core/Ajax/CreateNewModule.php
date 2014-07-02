@@ -240,7 +240,7 @@ class CreateNewModule
         // create the new module finally
         $this->newInstance = $this->createModuleInstance();
 
-        $this->newInstance->_render_options();
+        $this->newInstance->renderOptions();
         $html = ob_get_clean();
         $response = array
         (

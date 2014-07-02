@@ -7,7 +7,7 @@ namespace Kontentblocks\Fields;
  * To group a set of x field under one key
  * @package Kontentblocks\Fields
  */
-class FieldArray {
+class FieldArray  {
 
 	/**
 	 *
@@ -101,9 +101,13 @@ class FieldArray {
 			if ( isset( $data[ $field->getKey() ] ) ) {
 				$collect[ $field->getKey() ] = $field->_save( $data[ $field->getKey() ], $old );
 			}
-//			else {
-//				$collect[ $field->getKey() ] = $field->_save( null, $old );
-//			}
+			else {
+				if ( $field->getSetting( 'forceSave' ) ) {
+					// calls save on field if key is not present
+					$collect[ $field->getKey() ] = $field->_save( null, $old );
+				}
+			}
+
 		}
 
 		return $collect;
@@ -126,7 +130,7 @@ class FieldArray {
 	 * @return object Returnobjects\ArrayFieldReturn
 	 * @since 1.0.0
 	 */
-	public function getReturnObj() {
+	public function getUserValue() {
 		$this->returnObj = new Returnobjects\ArrayFieldReturn( $this->fields );
 
 		return $this->returnObj;

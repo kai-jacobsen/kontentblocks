@@ -63,7 +63,7 @@ class DuplicateModule
 
 
             ob_start();
-            $newInstance->_render_options();
+            $newInstance->renderOptions();
             $html = ob_get_clean();
 
             $response = array

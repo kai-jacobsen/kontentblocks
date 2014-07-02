@@ -237,6 +237,7 @@ class ModuleStoragePostMeta {
 	 * @return boolean | new
 	 */
 	public function saveModule( $id, $data = '' ) {
+
 		return $this->DataHandler->update( '_' . $id, $data );
 	}
 

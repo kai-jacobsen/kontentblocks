@@ -10,7 +10,7 @@ use Kontentblocks\Fields\Field;
 Class Select extends Field
 {
 
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'select'
     );
 
@@ -46,4 +46,12 @@ Class Select extends Field
 
     }
 
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 }

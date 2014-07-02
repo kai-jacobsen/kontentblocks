@@ -13,7 +13,7 @@ Class Callback extends Field
 {
 
     // Defaults
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'callback',
         'returnObj' => false
     );
@@ -31,11 +31,23 @@ Class Callback extends Field
 
     }
 
-    public function argsToJson()
+	/**
+	 * Prevent recursion in json_encode of field args
+	 * @return array
+	 */
+	public function argsToJson()
     {
         $args = $this->args;
         unset($args['callback']);
         return $args;
     }
 
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 }

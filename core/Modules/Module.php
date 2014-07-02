@@ -41,8 +41,6 @@ abstract class Module {
 	protected $View;
 	protected $ViewLoader;
 
-	private $TemplateSelector;
-
 	/**
 	 * II. Constructor
 	 *
@@ -74,11 +72,6 @@ abstract class Module {
 
 	}
 
-	/* -----------------------------------------------------
-	 * III. Primary Block methods
-	 * -----------------------------------------------------
-	 */
-
 	/**
 	 * options()
 	 * Method for the backend display
@@ -103,6 +96,11 @@ abstract class Module {
 	 * save()
 	 * Method to save whatever form fields are in the options() method
 	 * Gets called by the meta box save callback
+	 *
+	 * @param array $data actual $_POST data for this module
+	 * @param array $old previous data or empty
+	 *
+	 * @return array
 	 */
 	public function save( $data, $old ) {
 
@@ -114,11 +112,28 @@ abstract class Module {
 
 	}
 
+	/**
+	 * Calls save on the FieldsManager
+	 *
+	 * @param array $data
+	 * @param array $old
+	 *
+	 * @return array
+	 */
+	public function saveFields( $data, $old ) {
+		return $this->Fields->save( $data, $old );
+
+	}
+
 
 	/**
-	 * module()
-	 * Frontend display method.
 	 * Wrapper to actual render method.
+	 *
+	 * It's possible to call this with custom data
+	 *
+	 * @param null $data
+	 *
+	 * @return mixed
 	 */
 	final public function module( $data = null ) {
 
@@ -149,58 +164,30 @@ abstract class Module {
 	 */
 	public abstract function render( $data );
 
+
 	/**
-	 * setup()
-	 * Setup method gets called before block() is called
-	 * Used for enqueing scripts or print inline scripts
-	 * Kinda useless since there are other ways since 3.3 , but has to be verified before removed
-	 * There may be older blocks, which use this method
+	 * Pass the raw module data to the fields, where the data
+	 * may be modified, depends on field configuration
 	 */
-	public function setup() {
-		_deprecated_function( 'Module:setup()', '1.0.0', null );
-	}
-
-
-	public function saveFields( $data, $old ) {
-		return $this->Fields->save( $data, $old );
-
-	}
-
 	public function _setupFieldData() {
 		if ( empty( $this->moduleData ) || !is_array( $this->moduleData ) ) {
 			return;
 		}
-
 		$this->Fields->setup( $this->moduleData );
 		foreach ( $this->moduleData as $key => $v ) {
+
+			/** @var \Kontentblocks\Fields\Field $field */
 			$field                    = $this->Fields->getFieldByKey( $key );
-			$this->moduleData[ $key ] = ( $field !== null ) ? $field->getReturnObj() : null;
+			$this->moduleData[ $key ] = ( $field !== null ) ? $field->getUserValue() : $v;
 
-
-			if ( $this->moduleData[ $key ] === null ) {
-				$this->moduleData[ $key ] = $v;
-			}
 		}
 
 	}
 
-
-
-	/* -----------------------------------------------------
-	 * IV. Business Logic
-	 * -----------------------------------------------------
-	 */
-
 	/**
-	 * Generate Block markup for whatever is inside 'options' method of a BLock
-	 *
-	 * @global object post
-	 * @internal param \Kontentblocks\Modules\block $array
-	 * @internal param $context | area context
-	 * @internal param \Kontentblocks\Modules\css|\Kontentblocks\Modules\open $class kb_open added / not added
-	 * @internal param array $args
+	 * Creates a complete list item for the area
 	 */
-	public function _render_options() {
+	public function renderOptions() {
 
 		// open tag for block list item
 		echo $this->_openListItem();
@@ -259,17 +246,18 @@ abstract class Module {
 
 	}
 
-	/*
-	 * Close list item
-	 */
 
+	/**
+	 * The closing li tag
+	 * @return string
+	 */
 	private function _closeListItem() {
 		return "</li>";
 
 	}
 
 	/**
-	 * Outputs everything inside the block
+	 * Outputs everything inside the module
 	 * @TODO clean up module header from legacy code
 	 */
 
@@ -304,18 +292,17 @@ abstract class Module {
 
 	}
 
-	/*
-	 * Close block inner
-	 */
 
+	/**
+	 * Lost in outer div space
+	 * @return string
+	 */
 	private function _closeInner() {
 		return "</div></div>";
-
 	}
 
 	/**
-	 * Create Markup for Block Header
-	 *
+	 * Create Markup for module header
 	 */
 	private function header() {
 		$html = '';
@@ -357,53 +344,14 @@ abstract class Module {
 
 	}
 
-	/*
-	 * Block Footer Actions
+	/**
+	 *  Some hooks for your pleasure
 	 */
-
 	public function footer() {
 		do_action( "block_footer_{$this->settings['id']}" );
 		do_action( 'block_footer', $this );
 
 	}
-
-
-	public function _print_edit_link( $post_id = null ) {
-		_doing_it_wrong( '_print_edit_link', 'Deprecated', '1.0.0' );
-
-	}
-
-	/**
-	 * On Site Edit link for logged in users
-	 * @TODO Deprecate
-	 */
-	public function print_edit_link( $post_id = null ) {
-
-		global $post;
-		_doing_it_wrong( 'print_edit_link', 'Deprecated', '1.0.0' );
-		$edittext = ( !empty( $this->settings['os_edittext'] ) ) ? $this->setting['os_edittext'] : __( 'edit' );
-
-
-		if ( $post_id === null ) {
-			$post_id = ( !empty( $_REQUEST['post_id'] ) ) ? $_REQUEST['post_id'] : $post->ID;
-		}
-
-
-		$nonce         = wp_create_nonce( 'onsiteedit' );
-		$this->editURL = admin_url() . "/admin-ajax.php?action=os-edit-module&daction=show&_wpnonce=$nonce";
-
-	}
-
-	/* -----------------------------------------------------
-	 * V. Helper
-	 * -----------------------------------------------------
-	 */
-
-	/* set()
-	 * Public method to set class properties
-	 * expects $args to be an associative array with key => value pairs
-	 *
-	 */
 
 	/**
 	 * Generic set method to add module properties
@@ -478,33 +426,51 @@ abstract class Module {
 
 	}
 
+	/**
+	 * Gets the assigned viewfile (.twig) filename
+	 * Property is empty upon module creation, in that case we find the file to use
+	 * through the ModuleLoader class
+	 * @return string
+	 */
 	public function getViewfile() {
-
+		// a viewfile was already set
 		if ( isset( $this->viewfile ) ) {
 			return $this->viewfile;
-		} elseif ( method_exists( $this, 'defaultView' ) ) {
-			return $this->defaultView();
+		} else {
+			$Loader = new ModuleViewLoader( $this );
+
+			return $Loader->findDefaultTemplate();
 		}
 
 	}
 
-	public function assignViewFile($file){
+	/**
+	 * Setter for viewfile
+	 *
+	 * @param $file
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function setViewFile( $file ) {
 		$this->viewfile = $file;
 	}
 
-	public function defaultView() {
-		return '';
-	}
 
+	/**
+	 * Setup a prepared Twig template instance if viewLoader is used
+	 * @return ModuleView|null
+	 * @since 1.0.0
+	 */
 	public function getView() {
-		if ( !class_exists('Kontentblocks\Templating\ModuleTemplate') ){
-			class_alias('Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
+		if ( !class_exists( 'Kontentblocks\Templating\ModuleTemplate' ) ) {
+			class_alias( 'Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
 		}
 		if ( $this->getSetting( 'useViewLoader' ) && is_null( $this->View ) ) {
 			$tpl    = $this->getViewfile();
 			$Loader = new ModuleViewLoader( $this );
 			$T      = new ModuleView( $this );
-			$full = $Loader->getTemplateByName( $tpl );
+			$full   = $Loader->getTemplateByName( $tpl );
 			if ( isset( $full['fragment'] ) ) {
 				$T->setTplFile( $full['fragment'] );
 				$T->setPath( $full['basedir'] );
@@ -521,17 +487,6 @@ abstract class Module {
 		return null;
 	}
 
-
-	/**
-	 * Set the area where this Block is located
-	 * TODO: remove, make it useless
-	 */
-	public function get( $key = null, $return = '' ) {
-		_doing_it_wrong( 'get', 'MUST not be used anymore', '1.0.0' );
-
-		return ( !empty( $this->moduleData[ $key ] ) ) ? $this->moduleData[ $key ] : $return;
-
-	}
 
 	/**
 	 * Get value from prepared / after field setup / data
@@ -578,15 +533,7 @@ abstract class Module {
 
 	}
 
-	/**
-	 * @TODO Test if in use?
-	 *
-	 * @param null $key
-	 */
-	public function getDataObj( $key = null ) {
-		$test = $this->Fields->getFieldByKey( $key );
 
-	}
 
 	/**
 	 * Get value from environment vars array
@@ -775,10 +722,6 @@ abstract class Module {
 		}
 
 	}
-//
-//	public function getTemplateSelector() {
-//		return $this->TemplateSelector;
-//	}
 
 
 }

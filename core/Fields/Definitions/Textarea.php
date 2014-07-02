@@ -10,35 +10,36 @@ use Kontentblocks\Fields\Field;
  * type - specific html5 input type e.g. number, email... .
  *
  */
-Class Textarea extends Field
-{
+Class Textarea extends Field {
 
 	// Defaults
-	public static $defaults = array(
-		'returnObj' => 'Element',
-		'type' => 'textarea'
+	public static $settings = array(
+		'type'      => 'textarea'
 	);
 
 	/**
 	 * Form
 	 */
-	public function form()
-	{
+	public function form() {
 		$this->label();
 		echo "<textarea id='{$this->getFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'>{$this->getValue()}</textarea>";
 		$this->description();
 
 	}
 
-	/**
-	 * Text Input filter
-	 * @param string $value
-	 * @return string filtered
-	 */
-	public function inputFilter( $value )
-	{
-		return esc_attr( $value );
 
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return esc_textarea($val);
+	}
+
+	public function prepareOutputValue($val){
+		return wp_kses_post($val);
 	}
 
 }

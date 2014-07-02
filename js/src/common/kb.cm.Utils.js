@@ -30,7 +30,8 @@ KB.Util = function ($) {
         cleanArray: function (actual) {
             var newArray = new Array();
             for (var i = 0; i < actual.length; i++) {
-                if (actual[i]) {
+
+                if (!_.isUndefined(actual[i])) {
                     newArray.push(actual[i]);
                 }
             }

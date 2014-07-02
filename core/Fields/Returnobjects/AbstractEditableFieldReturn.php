@@ -40,6 +40,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 		$this->setValue( $value );
 		$this->setupFromField( $field );
 		$this->uniqueId = $this->createUniqueId();
+
 		$this->prepare();
 	}
 
@@ -125,7 +126,9 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	 * and the user is logged in
 	 */
 	public function handleLoggedInUsers() {
+
 		if ( is_user_logged_in() && $this->inlineEdit && current_user_can('edit_kontentblocks') ) {
+			$this->addClass( 'koolkip' );
 			$editableClass = $this->getEditableClass();
 			$this->addClass( $editableClass );
 			$this->addAttr( 'data-module', $this->moduleId );

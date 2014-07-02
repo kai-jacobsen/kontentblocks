@@ -14,7 +14,7 @@ use Kontentblocks\Utils\JSONBridge;
 Class Gallery extends Field {
 
 	// Defaults
-	public static $defaults = array(
+	public static $settings = array(
 		'type' => 'gallery',
 		'returnObj' => 'Gallery'
 	);
@@ -30,10 +30,14 @@ Class Gallery extends Field {
 	}
 
 
-	public function outputFilter( $data ) {
+	public function setFilter( $data ) {
 		$forJSON = null;
 		if ( ! empty( $data['images'] ) && is_array( $data['images'] ) ) {
 			foreach ( $data['images'] as &$image ) {
+//
+//				(!empty($image['details']['description'])) ?: wp_kses_post($image['details']['description']);
+//				(!empty($image['details']['title'])) ?: wp_kses_post($image['details']['title']);
+//				d(htmlspecialchars($image['details']['title']));
 				if ( isset( $image['id'] ) ) {
 					$image['file'] = wp_prepare_attachment_for_js( $image['id'] );
 					$image['file']['title'] = $image['details']['title'];
@@ -83,5 +87,14 @@ Class Gallery extends Field {
 		}
 		return $data;
 
+	}
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
 	}
 }

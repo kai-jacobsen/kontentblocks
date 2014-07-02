@@ -15,9 +15,9 @@ use Kontentblocks\Utils\JSONBridge;
 Class FlexibleFields extends Field {
 
 	// Defaults
-	public static $defaults = array(
-		'returnObj' => false,
-		'type'      => 'flexible-fields'
+	public static $settings = array(
+		'type'      => 'flexfields',
+		'forceSave' => true
 	);
 
 	/**
@@ -30,22 +30,7 @@ Class FlexibleFields extends Field {
 
 	}
 
-	public function outputFilter( $value ) {
-		$forJSON = array();
 
-		// make sure it's an simple indexed array to preserve order
-		if ( is_array( $value ) ) {
-			$forJSON = array_values( $value );
-		}
-		$Bridge = JSONBridge::getInstance();
-		$Bridge->registerFieldData( $this->parentModuleId,
-			$this->type,
-			$forJSON,
-			$this->getKey(),
-			$this->getArg( 'arrayKey' ) );
-
-		return $value;
-	}
 
 
 	/**
@@ -65,11 +50,12 @@ Class FlexibleFields extends Field {
 			return $old;
 		}
 
-		if ( is_array( $old ) ) {
-			foreach ( $old as $k => $v ) {
-				if ( !array_key_exists( $k, $new ) ) {
-					$new[ $k ] = null;
+		if (is_array($new)){
+			foreach ($new as $item => $def){
+				if (isset($def['delete'])){
+					$new[$item] = null;
 				}
+
 			}
 		}
 
@@ -84,16 +70,50 @@ Class FlexibleFields extends Field {
 					$field[ $key ] = $fieldInstance->save( $field[ $key ], $old );
 				}
 
-				if ( !isset( $field['uid'] ) ) {
-					$field['uid'] = uniqid( 'ff' );
+				if ( !isset( $field['_uid'] ) ) {
+					$field['_uid'] = uniqid( 'ff' );
 				}
 
 			}
 		}
 
-
 		return $new;
 	}
 
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $value ) {
+
+		$forJSON = array();
+		// make sure it's an simple indexed array to preserve order
+		if ( is_array( $value ) ) {
+			$forJSON = array_values( $value );
+		}
+
+
+		// run data through fields output method to retrieve optional filtered data
+		if (!empty($forJSON)){
+			foreach ($value as &$item){
+				if (isset($item['_mapping'])){
+					foreach ( $item['_mapping'] as $key => $type ) {
+						$fieldInstance = FieldRegistry::getInstance()->getField( $type );
+						$item[ $key ] = $fieldInstance->prepareInputValue( $item[ $key ] );
+					}
+				}
+			}
+		}
+
+		$Bridge = JSONBridge::getInstance();
+		$Bridge->registerFieldData( $this->parentModuleId,
+			$this->type,
+			$forJSON,
+			$this->getKey(),
+			$this->getArg( 'arrayKey' ) );
+
+		return $value;
+	}
 
 }

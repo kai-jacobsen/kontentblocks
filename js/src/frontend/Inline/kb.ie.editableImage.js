@@ -7,11 +7,11 @@ KB.IEdit.Image = (function ($) {
         remove: '.kb-js-reset-file',
         img: null,
         init: function () {
+            console.log(this);
             var that = this;
             var $body = $('body');
             $body.on('click', this.selector, function (e) {
                 e.preventDefault();
-
                 that.img = $(this);
                 that.parent = KB.currentModule;
                 that.frame().open();
@@ -67,18 +67,16 @@ KB.IEdit.Image = (function ($) {
         handleAttachment: function (attachment) {
             var that = this;
             var id = attachment.get('id');
-
             var value = this.prepareValue(attachment);
-
             var data = this.img.data();
             var mId = data.module;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get('moduleData'));
 
             var path = [];
-            path.push(data.arrayKey);
-            path.push(data.key);
+            path.push(data.arraykey);
             path.push(data.index);
+            path.push(data.key);
             KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join('.'), value);
 //            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
 //                moduleData[data.arraykey][data.index][data.key] = value;
@@ -89,9 +87,9 @@ KB.IEdit.Image = (function ($) {
 //            } else {
 //                moduleData[data.key] = value;
 //            }
-
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set('moduleData', moduleData);
+            console.log(moduleData);
             jQuery.ajax({
                 url: ajaxurl,
                 data: {
@@ -113,7 +111,7 @@ KB.IEdit.Image = (function ($) {
         },
         prepareValue: function(attachment){
             return {
-                id: id,
+                id: attachment.get('id'),
                 title: attachment.get('title'),
                 caption: attachment.get('caption')
             };
@@ -133,3 +131,4 @@ KB.IEdit.Image = (function ($) {
 }
 (jQuery));
 _.extend(KB.IEdit.Image, Backbone.Events);
+

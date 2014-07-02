@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-29 */
+/*! Kontentblocks DevVersion 2014-07-02 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -32,16 +32,16 @@ KB.Fields.register("Date", function($) {
             format: "d M Y",
             offset: [ 0, 250 ],
             onSelect: function(selected, machine, Date, $el) {
-                $(activeField).find(".kb-date-machine-format").val(machine);
-                $(activeField).find(".kb-date-unix-format").val(Math.round(Date.getTime() / 1e3));
+                $("#" + KB.currentFieldId).find(".kb-date-machine-format").val(machine);
+                $("#" + KB.currentFieldId).find(".kb-date-unix-format").val(Math.round(Date.getTime() / 1e3));
             }
         },
         init: function() {
             var that = this;
             _.each($(".kb-datepicker"), function(item) {
                 var id = $(item).closest(".kb-field-wrapper").attr("id");
-                if (id) {
-                    settings = KB.FieldConfig[id] || {};
+                if (id && KB.payload.Fields[id].settings) {
+                    settings = KB.payload.Fields[id].settings || {};
                 }
                 $(item).Zebra_DatePicker(_.extend(that.defaults, settings));
             });
@@ -56,27 +56,28 @@ KB.Fields.register("DateTime", function($) {
     var settings = {};
     return {
         defaults: {
-            format: "d M Y",
-            offset: [ 0, 250 ],
-            onSelect: function(selected, machine, Date, $el) {
-                $(activeField).find(".kb-date-machine-format").val(machine);
-                $(activeField).find(".kb-date-unix-format").val(Math.round(Date.getTime() / 1e3));
-            }
+            format: "d.m.Y H:i",
+            inline: false,
+            mask: true,
+            lang: "de",
+            allowBlank: true
         },
         init: function() {
             var that = this;
             _.each($(".kb-datetimepicker"), function(item) {
-                var id = $(item).closest(".kb-field-wrapper").attr("id");
-                if (id) {
-                    settings = KB.payload.Fields[id] || {};
+                var $field = $(item).closest(".kb-field-wrapper");
+                var id = $field.attr("id");
+                var args = KB.Payload.getFieldArgs(id, "settings");
+                if (id && args) {
+                    settings = args;
                 }
-                $(item).datetimepicker({
-                    format: "d.m.Y H:i",
-                    inline: false,
-                    mask: true,
-                    lang: "de",
-                    allowBlank: true
+                _.extend(that.defaults, {
+                    onChangeDateTime: function(current, $input) {
+                        $(".kb-datetimepicker--js-unix", $field).val(current.dateFormat("unixtime"));
+                        $(".kb-datetimepicker--js-sql", $field).val(current.dateFormat("Y-m-d H:i:s"));
+                    }
                 });
+                $(item).datetimepicker(_.extend(that.defaults, settings));
             });
         },
         update: function() {
@@ -165,9 +166,7 @@ KB.Fields.register("FlexibleFields", function($) {
                         el: el
                     });
                     view.addField(key, obj, arrayKey);
-                    console.log("new init");
                 } else {
-                    console.log("already init");
                     view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
                 }
             });
@@ -246,7 +245,8 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
     },
     initialSetup: function() {
         var that = this;
-        var payload = KB.Payload.getFieldData("flexible-fields", this.params.moduleView.model.get("instance_id"), this.params.key, this.params.arrayKey) || [];
+        var payload = KB.Payload.getFieldData("flexfields", this.params.moduleView.model.get("instance_id"), this.params.key, this.params.arrayKey) || [];
+        console.log(payload);
         _.each(payload, function(item) {
             var model = new Backbone.Model(item);
             var Item = new KB.FlexibleFields.Item({
@@ -269,12 +269,12 @@ KB.FlexibleFields.Item = Backbone.View.extend({
     initialize: function(params) {
         this.parentView = params.parent;
         this.config = params.parent.fieldArgs.config;
-        this.uid = this.model.get("uid") || _.uniqueId("ff");
-        if (!this.model.get("tab")) {
+        this.uid = this.model.get("_uid") || _.uniqueId("ff");
+        if (!this.model.get("_tab")) {
             var tabDef = {
                 title: this.uid
             };
-            this.model.set("tab", tabDef);
+            this.model.set("_tab", tabDef);
         }
     },
     events: {
@@ -287,7 +287,9 @@ KB.FlexibleFields.Item = Backbone.View.extend({
         });
     },
     deleteItem: function() {
-        this.$el.remove();
+        this.$el.hide(250);
+        var inputName = this.createInputName(this.uid);
+        this.$el.append('<input type="hidden" name="' + inputName + '[delete]" value="' + this.uid + '" >');
         KB.Notice.notice("Please click update to save the changes", "success");
     },
     render: function() {
@@ -426,7 +428,6 @@ KB.Gallery.ImageView = Backbone.View.extend({
         $re = jQuery(".kb-js--remote-editor", this.$el);
         var name = this.createInputName(this.uid) + "[details][description]";
         if (!this.editorAdded) {
-            console.log(this);
             var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get("details").description, null, false, false);
             req.done(function(res) {
                 that.editorAdded = res;
@@ -468,7 +469,6 @@ KB.Gallery.ImageView = Backbone.View.extend({
         } else {
             var value = document.getElementById(this.uid + "_ededitor").value;
             value = value.replace(/<br\s*\/?>/gm, "\n");
-            console.log(value);
             ed.setContent(value);
             return value;
         }

@@ -138,7 +138,7 @@ class Area
                 $module = apply_filters('kb_before_module_options', $module);
                 $Factory = new ModuleFactory($module['class'], $module, $this->Environment);
                 $instance = $Factory->getModule();
-                $instance->_render_options();
+                $instance->renderOptions();
                 JSONBridge::getInstance()->registerModule($instance->toJSON());
             }
         }

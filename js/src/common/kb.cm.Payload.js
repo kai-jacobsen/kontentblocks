@@ -6,22 +6,21 @@ KB.Payload = (function ($) {
             var typeData;
             if (this._typeExists(type)) {
                 typeData = KB.payload.fieldData[type];
-
                 // no data for module id
                 if (!typeData[moduleId]) {
                     return [];
                 }
 
                 // arrayKey given
-                if (!_.isEmpty(arrayKey)){
+                if (!_.isEmpty(arrayKey)) {
 
                     // arrayKey not present in module data
-                    if (!typeData[moduleId][arrayKey]){
+                    if (!typeData[moduleId][arrayKey]) {
                         return [];
                     }
 
                     // arrayKey present but key is not
-                    if (!typeData[moduleId][arrayKey][key]){
+                    if (!typeData[moduleId][arrayKey][key]) {
                         return [];
                     }
 
@@ -42,11 +41,15 @@ KB.Payload = (function ($) {
         _typeExists: function (type) {
             return !_.isUndefined(KB.payload.fieldData[type]);
         },
-        getFieldArgs: function (key) {
-            if (KB.payload.Fields && KB.payload.Fields[key]){
-                return KB.payload.Fields[key];
+        getFieldArgs: function (id, key) {
+            if (KB.payload.Fields && KB.payload.Fields[id]) {
+                if (key && KB.payload.Fields[id][key]) {
+                    return KB.payload.Fields[id][key];
+                } else {
+                    return KB.payload.Fields[id];
+                }
             } else {
-                return false;
+                return null;
             }
         }
 

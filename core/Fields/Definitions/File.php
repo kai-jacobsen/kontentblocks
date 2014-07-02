@@ -15,7 +15,7 @@ use Kontentblocks\Utils\AttachmentHandler;
  */
 Class File extends Field
 {
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'file'
     );
 
@@ -40,11 +40,20 @@ Class File extends Field
 
     }
 
-    public function outputFilter($value){
+    public function setFilter($value){
 
         if ( !empty($value) && is_numeric(absint($value['id']))){
             return wp_prepare_attachment_for_js($value['id']);
         }
         return $value;
     }
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 }

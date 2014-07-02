@@ -33,6 +33,7 @@
     'choseTaxonomy' => array(
         'noTaxonomySet' => __('Please provide a Taxonomy identifier', 'Kontentblocks'),
         'noTaxonomyFound' => __('There is no such Taxonomy registered', 'Kontentblocks'),
-        'emptyTaxonomySelect' => __('Please chose', 'Kontentblocks')
+        'emptyTaxonomySelect' => __('Please chose', 'Kontentblocks'),
+	    'invalidTaxonomyField' => __('Please use either name,id or slug as field', 'Kontentblocks')
     )
 ) );

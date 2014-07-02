@@ -11,7 +11,7 @@ Class TemplateSelector extends Field
 {
 
     // Defaults
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'templateSelector'
     );
 
@@ -32,11 +32,20 @@ Class TemplateSelector extends Field
      * @param string $value
      * @return string filtered
      */
-    public function inputFilter( $value )
+    public function getPublicFilter( $value )
     {
 //        return esc_attr( $value );
 	    return $value;
     }
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 
 
 

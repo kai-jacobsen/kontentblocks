@@ -8,115 +8,72 @@ use Kontentblocks\Fields\Field;
  * Checkbox Group
  * Multiple Values saved as indexed array
  * This should be used if you expect a simple array of values
- * Unchecked boxes will be saved as FALSE, the index keys of the field options array
- * will therefor match the saved array
  * If you need true relational data you should use the field type 'checkboxset'
  */
-Class CheckboxGroup extends Field
-{
+Class CheckboxGroup extends Field {
 
-    // Field defaults
-    public static $defaults = array(
-        'renderHidden' => true,
-        'returnObj' => false,
-        'type' => 'checkboxgroup'
-    );
+	// Field defaults
+	public static $settings = array(
+		'renderHidden' => true,
+		'returnObj'    => false,
+		'forceSave'    => true,
+		'type'         => 'checkboxgroup'
+	);
 
-    /**
-     * Checkbox Group Form HTML
-     * @throws Exception when options data is invalid
-     */
-    public function form()
-    {
-        $options = $this->getArg( 'options', array() );
-        $this->label();
+	/**
+	 * Checkbox Group Form HTML
+	 * @throws Exception when options data is invalid
+	 */
+	public function form() {
+		$options = $this->getArg( 'options', array() );
+		$this->label();
+		$value = $this->prepareInputValue( $this->getValue() );
+		foreach ( $options as $item ) {
 
-        foreach ( $options as $item ) {
+			if ( !isset( $item['label'] ) OR !isset( $item['value'] ) ) {
+				throw new \Exception( 'Provide valid checkbox items. Check your code.Either a value or label is missing' );
+			}
+			$checked = ( in_array( $item['value'], $value ) ) ? 'checked="checked"' : '';
+			echo "<div class='kb-checkboxgroup-item'><label><input type='checkbox' id='{$this->getFieldId( true )}' name='{$this->getFieldName( true )}' value='{$item['value']}'  {$checked} /> {$item['label']}</label></div>";
+		}
 
-            if ( !isset( $item[ 'label' ] ) OR !isset( $item[ 'value' ] ) ) {
-                throw new \Exception( 'Provide valid checkbox items. Check your code.Either a value or label is missing' );
-            }
-            $checked = (in_array( $item[ 'value' ], $this->getValue() )) ? 'checked="checked"' : '';
-            echo "<div class='kb-checkboxgroup-item'><label><input type='checkbox' id='{$this->getFieldId(true)}' name='{$this->getFieldName( true )}' value='{$item[ 'value' ]}'  {$checked} /> {$item[ 'label' ]}</label></div>";
-        }
+		$this->description();
 
-        $this->description();
+	}
 
-    }
+	/**
+	 * Make sure we always deal with an array
+	 *
+	 * @param $val
+	 *
+	 * @return array
+	 */
+	protected function prepareInputValue( $val ) {
+		if ( !is_array( $val ) ) {
+			return array();
+		}
 
-    /**
-     * Custom save filter
-     * @param array $fielddata from $_POST
-     * @param array $old as saved
-     * @return array
-     */
-    public function save( $fielddata, $old )
-    {
-        $collect = array();
-        $options = $this->getArg( 'options' );
-
-        // non existing checkboxes return FALSE - always
-        foreach ( $options as $k => $v ) {
-
-            if ( !in_array( $v, $options ) ) {
-                $fielddata[ $k ] = FALSE;
-            }
-        }
-
-        if ( is_array( $fielddata ) && !empty( $fielddata ) ) {
-            foreach ( $fielddata as $k => $v ) {
-
-                // if filter true (default)
-                if ( $this->getArg( 'filter', true ) ) {
-                    $filtered = filter_var( $v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
-                }
-                else {
-                    $filtered = $v;
-                }
+		return $val;
+	}
 
 
-                if ( $filtered === NULL ) {
-                    $collect[ $k ] = $v;
-                }
-                else {
-                    $collect[ $k ] = $filtered;
-                }
-            }
-        }
-        return $collect;
+	/**
+	 * Custom save filter
+	 *
+	 * @param array $fielddata from $_POST
+	 * @param array $old as saved
+	 *
+	 * @return array
+	 */
+	public function save( $fielddata, $old ) {
 
-    }
+		if ( is_null( $fielddata ) ) {
+			return null;
+		}
 
-    /**
-     * Custom retrieval filter
-     * Converts stringyfied boolean values to true boolean values
-     * @param array $fielddata
-     * @return array
-     */
-    public function inputFilter( $fielddata )
-    {
-        $collect = array();
-        if ( !empty( $fielddata ) ) {
-            foreach ( $fielddata as $k => $v ) {
+		return $fielddata;
 
-                // if filter true (default)
-                if ( $this->getArg( 'filter', true ) ) {
-                    $filtered = filter_var( $v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
-                }
-                else {
-                    $filtered = $v;
-                }
 
-                if ( $filtered !== NULL ) {
-                    $collect[ $k ] = $filtered;
-                }
-                else {
-                    $collect[ $k ] = $v;
-                }
-            }
-        }
-        return $collect;
-
-    }
+	}
 
 }

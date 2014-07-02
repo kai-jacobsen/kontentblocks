@@ -53,7 +53,6 @@ class FlexibleFieldsFactory {
 		$this->fieldData = $Field->getValue();
 		$this->moduleId  = $Field->parentModuleId;
 		$this->config    = $Field->getArg( 'config' );
-
 	}
 
 	/**
@@ -91,6 +90,7 @@ class FlexibleFieldsFactory {
 			}
 			$items[] = $item;
 		}
+		d( $items );
 
 		return $items;
 	}

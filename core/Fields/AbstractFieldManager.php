@@ -50,8 +50,7 @@ abstract class AbstractFieldManager {
 			$this->fieldsById = $this->collectAllFields();
 		}
 		foreach ( $this->fieldsById as $field ) {
-			$data = ( !empty( $instanceData[ $field->getKey() ] ) ) ? $instanceData[ $field->getKey() ] : '';
-
+			$data = ( array_key_exists($field->getKey(), $instanceData ) ) ? $instanceData[ $field->getKey() ] : '';
 			$field->setup( $data, $this->baseId );
 		}
 
@@ -130,6 +129,7 @@ abstract class AbstractFieldManager {
 	public function save( $data, $oldData ) {
 		$collection = array();
 		foreach ( $this->structure as $definition ) {
+
 			$return     = ( $definition->save( $data, $oldData ) );
 			$collection = $collection + $return;
 		}

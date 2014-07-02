@@ -7,13 +7,12 @@ use Kontentblocks\Fields\Field;
 /**
  * Simple text input field
  * Additional args are:
- * type - specific html5 input type e.g. number, email... .
  *
  */
 Class Date extends Field
 {
 
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'date'
     );
 
@@ -30,5 +29,13 @@ Class Date extends Field
 
     }
 
-    
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 }

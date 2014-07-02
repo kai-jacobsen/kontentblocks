@@ -9,7 +9,7 @@ class JSONBridge {
 	protected $modules = array();
 	protected $areas = array();
 	protected $fieldData = array();
-
+	protected $Fields = array();
 	/**
 	 * @var \Kontentblocks\Utils\JSONBridge
 	 */
@@ -111,6 +111,18 @@ class JSONBridge {
 		return $this;
 	}
 
+	public function registerFieldArgs( $key, $data ) {
+
+		if ( is_null( $key ) ) {
+			$this->Fields = $data;
+		} else {
+			$this->Fields[ $key ] = $data;
+		}
+
+		return $this;
+	}
+
+
 	/**
 	 * Register module definition
 	 *
@@ -167,6 +179,7 @@ class JSONBridge {
 		$this->data['Modules']   = $this->modules;
 		$this->data['Areas']     = $this->areas;
 		$this->data['fieldData'] = $this->fieldData;
+		$this->data['Fields'] = $this->Fields;
 		$json                    = json_encode( $this->data );
 
 		print "<script>var KB = KB || {}; KB.payload = {}; KB.payload =  {$json};</script>";
@@ -197,6 +210,7 @@ class JSONBridge {
 		$this->data['Modules']   = $this->modules;
 		$this->data['Areas']     = $this->areas;
 		$this->data['fieldData'] = $this->fieldData;
+		$this->data['Fields'] = $this->Fields;
 
 		return $this->data;
 	}

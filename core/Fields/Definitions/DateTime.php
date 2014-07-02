@@ -13,7 +13,7 @@ use Kontentblocks\Fields\Field;
 Class DateTime extends Field
 {
 
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'datetime'
     );
 
@@ -24,22 +24,24 @@ Class DateTime extends Field
     {
         $this->label();
         echo "<input type='text' id='{$this->getFieldId()}' name='{$this->getFieldName( 'human' )}' value='{$this->getValue( 'human' )}' class='kb-datetimepicker' >";
+        echo "<input type='hidden' name='{$this->getFieldName( 'unix' )}' value='{$this->getValue( 'unix' )}' class='kb-datetimepicker--js-unix' >";
+        echo "<input type='hidden' name='{$this->getFieldName( 'sql' )}' value='{$this->getValue( 'sql' )}' class='kb-datetimepicker--js-sql' >";
 
 	    if ($this->getValue('unix')){
-		echo "<br><span style='font-size: 10px; color:#ccc; padding:0 8px;'>Unix format: {$this->getValue('unix')}</span>";
+		echo "<br><span style='font-size: 10px; color:#ccc; padding:0 8px;'>Unix timestamp: {$this->getValue('unix')}</span>";
 	    }
 
 	    $this->description();
 
     }
 
-	public function save($data, $old){
 
-		date_default_timezone_set('Europe/Berlin');
-		if (isset($data['human'])){
-			$data['unix'] = strtotime($data['human']);
-		}
-		return $data;
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
 	}
-    
 }

@@ -9,34 +9,41 @@ use Kontentblocks\Fields\Field;
  * @return array attachment id, title, caption
  *
  */
-Class Image extends Field
-{
+Class Image extends Field {
 
-    public static  $defaults = array(
-        'type' => 'image',
-        'returnObj' => 'Image'
-    );
+	public static $settings = array(
+		'type'      => 'image',
+		'returnObj' => 'Image'
+	);
 
-    public function form()
-    {
-        // image default value
-        $imageDefaults = array(
-            'id' => null,
-            'title' => '',
-            'caption' => ''
-        );
-        $value         = wp_parse_args( $this->getValue(), $imageDefaults );
-        // using twig template for html output
-        $tpl = new \Kontentblocks\Templating\FieldTemplate(
-            'image.twig', array(
-            'field' => $this,
-            'value' => $value,
-            'image' => new \Kontentblocks\Utils\AttachmentHandler( $value[ 'id' ] ),
-            'i18n' => \Kontentblocks\Language\I18n::getPackages( 'Refields.image', 'Refields.common' )
-            )
-        );
-        $tpl->render( true );
+	public function form() {
+		// image default value
+		$imageDefaults = array(
+			'id'      => null,
+			'title'   => '',
+			'caption' => ''
+		);
+		$value         = wp_parse_args( $this->getValue(), $imageDefaults );
+		// using twig template for html output
+		$tpl = new \Kontentblocks\Templating\FieldTemplate(
+			'image.twig', array(
+				'field' => $this,
+				'value' => $value,
+				'image' => new \Kontentblocks\Utils\AttachmentHandler( $value['id'] ),
+				'i18n'  => \Kontentblocks\Language\I18n::getPackages( 'Refields.image', 'Refields.common' )
+			)
+		);
+		$tpl->render( true );
 
-    }
+	}
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 
 }

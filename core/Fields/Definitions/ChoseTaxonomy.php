@@ -7,59 +7,73 @@ use Kontentblocks\Language\I18n;
 
 /**
  * Prebuild select field to chose one entry of a taxonomy
+ * Will store the taxonomy slug as value
  */
-Class ChoseTaxonomy extends Field
-{
+Class ChoseTaxonomy extends Field {
 
-    public static $defaults = array(
-        'type' => 'chosetaxonomy',
+	public static $settings = array(
+		'type' => 'chosetaxonomy',
 
-    );
+	);
 
-    /**
-     * Select field form html
-     */
-    public function form()
-    {
+	/**
+	 * Select field form html
+	 */
+	public function form() {
 
-        $i18n = I18n::getPackages('Refields.common', 'Refields.choseTaxonomy');
+		$i18n = I18n::getPackages( 'Refields.common', 'Refields.choseTaxonomy' );
 
-        $tax = $this->getArg( 'taxonomy' );
+		$tax = $this->getArg( 'taxonomy' );
 
-        if ( !$tax ) {
-            echo $i18n['noTaxonomySet'];
-            return;
-        }
+		if ( !$tax ) {
+			echo $i18n['noTaxonomySet'];
+			return;
+		}
+		if ( !taxonomy_exists( $tax ) ) {
+			echo $i18n['noTaxonomyFound'];
+			return;
+		}
 
-        if ( !taxonomy_exists( $tax ) ) {
-            echo $i18n['noTaxonomyFound'];
-            return;
-        }
+		$taxField = $this->getArg('field', 'slug');
 
-        $query = array(
-            'hide_empty' => false,
-            'taxonomy' => $tax
-        );
+		if (!in_array($taxField,array('name', 'id', 'slug'))){
+			echo $i18n['invalidTaxonomyField'];
+			return;
+		}
 
-        $terms = get_terms( $tax, $query );
+		$query = array(
+			'hide_empty' => false,
+			'taxonomy'   => $tax
+		);
 
-        $this->label();
+		$terms = get_terms( $tax, $query );
 
-        print "<select id='{$this->getFieldId()}' name='{$this->getFieldName()}'>";
+		$this->label();
 
-        if ( $this->getArg( 'empty', true ) ) {
-            print "<option value='' name=''>{$i18n['emptyTaxonomySelect']}</option>";
-        }
+		print "<select id='{$this->getFieldId()}' name='{$this->getFieldName()}'>";
 
-        if ( !empty( $terms ) ) {
-            foreach ( $terms as $term ) {
-                $selected = selected( $this->getValue(), $term->slug, false );
-                print "<option {$selected} value='{$term->slug}'>{$term->name}</option>";
-            }
-        }
+		// display 'chose ...' message as first entry
+		if ( $this->getArg( 'empty', true ) ) {
+			print "<option value='' name=''>{$i18n['emptyTaxonomySelect']}</option>";
+		}
 
-        print "</select>";
+		if ( !empty( $terms ) ) {
+			foreach ( $terms as $term ) {
+				$selected = selected( $this->getValue(), $term->$taxField, false );
+				print "<option {$selected} value='{$term->$taxField}'>{$term->name}</option>";
+			}
+		}
 
-        $this->description();
-    }
+		print "</select>";
+		$this->description();
+	}
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 }

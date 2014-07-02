@@ -57,17 +57,16 @@ class FieldRegistry
     public function add($file)
     {
         include_once($file);
-
         $classname = '\Kontentblocks\Fields\Definitions\\' . str_replace('.php', '', basename($file));
 
         if (!is_subclass_of($classname, '\Kontentblocks\Fields\Field')){
             throw new \Exception('Field MUST extend Kontentblocks Field Class');
         }
 
-        if (!isset($this->fields['classname']) && property_exists($classname, 'defaults')) {
-            // Defaults from the field
-            $args = $classname::$defaults;
 
+        if (!isset($this->fields['classname']) && property_exists($classname, 'settings')) {
+            // Defaults from the field
+            $args = $classname::$settings;
             if (!empty($args['type']) && !isset($this->fields[$args['type']])) {
                 $this->registerField($args['type'], $classname);
             }

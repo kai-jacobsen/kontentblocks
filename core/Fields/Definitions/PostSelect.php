@@ -10,7 +10,7 @@ use Kontentblocks\Fields\Field;
 Class PostSelect extends Field
 {
 
-    public static $defaults = array(
+    public static $settings = array(
         'type' => 'postSelect'
     );
 
@@ -51,5 +51,14 @@ Class PostSelect extends Field
             'order_by' => 'title',
         ));
     }
+
+	/**
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	protected function prepareInputValue( $val ) {
+		return $val;
+	}
 
 }

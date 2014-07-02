@@ -45,6 +45,10 @@ KB.Ui = function ($) {
                 _K.info('Current Field Id set to:', KB.currentFieldId);
             });
 
+            $body.on('mouseenter', '.kb_area_list_item li', function(){
+               KB.currentModuleId = this.id;
+            });
+
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
             jQuery(document).ajaxComplete(function (e, o, settings) {
                 that.metaBoxReorder(e, o, settings, 'restore');

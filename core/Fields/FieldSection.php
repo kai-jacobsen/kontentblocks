@@ -2,8 +2,6 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Fields\FieldRegistry,
-	Kontentblocks\Fields\FieldArray;
 use Kontentblocks\Modules\Module;
 
 /**
@@ -39,7 +37,7 @@ class FieldSection extends AbstractFieldSection {
 		$this->id      = $id;
 		$this->args    = $this->prepareArgs( $args );
 		$this->envVars = $envVars;
-		$this->module  = $module;
+		$this->Emitter = $module;
 
 	}
 
@@ -47,44 +45,55 @@ class FieldSection extends AbstractFieldSection {
 	 * Set visibility of field based on environment vars given by the module
 	 * By following a hierachie: PostType -> PageTemplate -> AreaContext
 	 *
-	 * @param Field $field
+	 * @param \Kontentblocks\Fields\Field $field
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	public function markByEnvVar( Field $field ) {
 		$areaContext  = $this->envVars['areaContext'];
 		$postType     = $this->envVars['postType'];
 		$pageTemplate = $this->envVars['pageTemplate'];
 
-		if ( $this->module->getSetting( 'useViewLoader' ) ) {
-			$moduleTemplate = $this->module->getViewfile();
+		if ( $this->Emitter->getSetting( 'useViewLoader' ) ) {
+			$moduleTemplate = $this->Emitter->getViewfile();
 			if ( $field->getArg( 'viewfile' ) && !in_array( $moduleTemplate, (array) $field->getArg( 'viewfile' ) ) ) {
-				return $field->setDisplay( false );
+				$field->setDisplay( false );
+
+				return;
 			}
 		}
 
 
 		if ( $field->getArg( 'postType' ) && !in_array( $postType, (array) $field->getArg( 'postType' ) ) ) {
-			return $field->setDisplay( false );
+			$field->setDisplay( false );
+
+			return;
 		}
 
 		if ( $field->getArg( 'pageTemplate' ) && !in_array( $pageTemplate,
 				(array) $field->getArg( 'pageTemplate' ) )
 		) {
-			return $field->setDisplay( false );
+			$field->setDisplay( false );
+
+			return;
 		}
 
 		if ( !isset( $areaContext ) || $areaContext === false || ( $field->getArg( 'areaContext' ) === false ) ) {
-			return $field->setDisplay( true );
+			$field->setDisplay( true );
+
+			return;
 		} else if ( in_array( $areaContext, $field->getArg( 'areaContext' ) ) ) {
-			return $field->setDisplay( true );
+			$field->setDisplay( true );
+
+			return;
 		}
 
 		$this->_decreaseVisibleFields();
 
-		return $field->setDisplay( false );
-	}
+		$field->setDisplay( false );
 
+		return;
+	}
 
 
 }

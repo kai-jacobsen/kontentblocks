@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-06-29 */
+/*! Kontentblocks DevVersion 2014-07-02 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -610,7 +610,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         } else {
             this.$inner.html("empty");
         }
-        KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
+        if (response.json.Fields) {
+            KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
+        }
         KB.Ui.repaint(this.$el);
         KB.Fields.trigger("update");
         this.trigger("kb:backend::viewUpdated");

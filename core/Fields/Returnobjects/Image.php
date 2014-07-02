@@ -131,8 +131,6 @@ class Image extends AbstractEditableFieldReturn {
 	 * @return string
 	 */
 	public function html() {
-		$this->addClass( 'koolkip' );
-
 		if ( $this->inlineEdit ) {
 			$this->addAttr( 'data-powertip', 'Click to change image' );
 		}
@@ -142,6 +140,7 @@ class Image extends AbstractEditableFieldReturn {
 		$this->prepareSrc();
 		$format = '<%1$s %3$s src="%2$s" >';
 		$this->toJSON();
+
 
 		return sprintf( $format, 'img', $this->src, $this->_renderAttributes() );
 
@@ -256,7 +255,8 @@ class Image extends AbstractEditableFieldReturn {
 	protected function _attributesList() {
 		$returnstr = '';
 		foreach ( $this->attributes as $attr => $value ) {
-			$returnstr .= "{$attr}='{$value}' ";
+			$esc = esc_attr($value);
+			$returnstr .= "{$attr}='{$esc}' ";
 		}
 
 		return trim( $returnstr );
@@ -309,7 +309,6 @@ class Image extends AbstractEditableFieldReturn {
 			'upscale' => $this->upscale
 
 		);
-
 		JSONBridge::getInstance()->registerData( 'FrontSettings', $this->uniqueId, $json );
 	}
 
@@ -330,7 +329,8 @@ class Image extends AbstractEditableFieldReturn {
 	public function detail( $key ) {
 		$details = $this->getValue( 'details' );
 		if ( array_key_exists( $key, $details ) ) {
-			return $details[ $key ];
+
+			return wp_kses_post($details[ $key ]);
 		}
 
 		return null;

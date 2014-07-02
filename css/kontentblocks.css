@@ -3014,8 +3014,8 @@ button.Zebra_DatePicker_Icon_Inside {
 }
 
 /* line 105, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_date.scss */
-.kb_field.date input.kb-datepicker {
-  width: 120px;
+.kb-field--date input.kb-datepicker {
+  width: 180px;
 }
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_file.scss */

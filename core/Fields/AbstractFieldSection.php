@@ -9,6 +9,8 @@
 namespace Kontentblocks\Fields;
 
 
+use Kontentblocks\Kontentblocks;
+
 abstract class AbstractFieldSection {
 
 	/**
@@ -22,6 +24,8 @@ abstract class AbstractFieldSection {
 	 * @var array
 	 */
 	protected $fields;
+
+	protected $Emitter;
 
 	/**
 	 * Preset defaults
@@ -63,16 +67,17 @@ abstract class AbstractFieldSection {
 	public function addField( $type, $key, $args ) {
 		if ( !$this->fieldExists( $key ) ) {
 			$Registry = FieldRegistry::getInstance();
-			$field    = $Registry->getField( $type );
-			$field->setKey( $key );
-			$field->setArgs( $args );
-			$field->setType( $type );
-			$this->markByEnvVar( $field );
+			$Field    = $Registry->getField( $type );
+
+			$Field->setKey( $key );
+			$Field->setArgs( $args );
+			$Field->setType( $type );
+			$this->markByEnvVar( $Field );
 
 			if ( isset( $args['arrayKey'] ) ) {
-				$this->addArrayField( $field, $key, $args );
+				$this->addArrayField( $Field, $key, $args );
 			} else {
-				$this->fields[ $key ] = $field;
+				$this->fields[ $key ] = $Field;
 			}
 			$this->_increaseVisibleFields();
 		}
@@ -116,12 +121,12 @@ abstract class AbstractFieldSection {
 
 		foreach ( $this->fields as $field ) {
 			// TODO: Keep an eye on it
+
 			if ( isset( $data[ $field->getKey() ] ) ) {
 				$fielddata = ( is_array( $data ) && !is_null( $data[ $field->getKey() ] ) ) ? $data[ $field->getKey() ] : $this->getFieldStd( $field );
 			} else {
 				$fielddata = $this->getFieldStd( $field );
 			}
-
 			$field->setBaseId( $moduleId );
 			$field->setData( $fielddata );
 
@@ -147,14 +152,19 @@ abstract class AbstractFieldSection {
 	 */
 	public function save( $data, $oldData ) {
 		$collect = array();
-		foreach ( $this->fields as $field ) {
-			$field->setModule( $this->module );
 
+		/** @var \Kontentblocks\Fields\Field $field */
+		foreach ( $this->fields as $field ) {
+			$field->setModule( $this->Emitter );
 			$old = ( isset( $oldData[ $field->getKey() ] ) ) ? $oldData[ $field->getKey() ] : null;
 			if ( isset( $data[ $field->getKey() ] ) ) {
 				$collect[ $field->getKey() ] = $field->_save( $data[ $field->getKey() ], $old );
 			} else {
-				//$collect[$field->getKey()] = $field->_save(NULL, $old);
+
+				if ( is_a( $field, '\Kontentblocks\Fields\FieldArray' ) || $field->getSetting( 'forceSave' ) ) {
+					// calls save on field if key is not present
+					$collect[ $field->getKey() ] = $field->_save( null, $old );
+				}
 			}
 		}
 
@@ -222,7 +232,7 @@ abstract class AbstractFieldSection {
 	/**
 	 * Increase number of visible fields property
 	 */
-	private function _increaseVisibleFields() {
+	protected function _increaseVisibleFields() {
 		$this->numberOfVisibleFields ++;
 		$this->numberOfFields ++;
 
@@ -231,7 +241,7 @@ abstract class AbstractFieldSection {
 	/**
 	 * Descrease number of visible fields property
 	 */
-	private function _decreaseVisibleFields() {
+	protected function _decreaseVisibleFields() {
 		$this->numberOfVisibleFields --;
 
 	}

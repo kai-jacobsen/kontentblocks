@@ -21,6 +21,12 @@ abstract class Field {
 	protected $baseId;
 
 	/**
+	 * Unique id generated on run time
+	 * @var string
+	 */
+	protected $uniqueId;
+
+	/**
 	 * Shared/common arguments are
 	 * - label string
 	 * - description string
@@ -123,7 +129,7 @@ abstract class Field {
 	 * @since 1.0.0
 	 */
 	public function setBaseId( $id, $array = false ) {
-		if ( ! $array ) {
+		if ( !$array ) {
 			$this->baseId = $id;
 		} else {
 			$this->baseId = $id . '[' . $array . ']';
@@ -134,6 +140,9 @@ abstract class Field {
 	}
 
 
+	/**
+	 * @return string
+	 */
 	public function getBaseId() {
 		return $this->parentModuleId;
 	}
@@ -149,7 +158,7 @@ abstract class Field {
 	 * @since 1.0.0
 	 */
 	public function setData( $data ) {
-		$this->value = $this->sanitize( $data );
+		$this->value = $this->setDataToField( $data );
 	}
 
 	/**
@@ -186,35 +195,66 @@ abstract class Field {
 	 * @since 1.0.0
 	 * @return object
 	 */
-		public function getReturnObj() {
-			if (is_object($this->returnObj)){
-				return $this->returnObj;
-			}
+	public function getUserValue() {
 
-		if ( ! $this->returnObj && $this->getArg( 'returnObj' ) ) {
+		$value = $this->prepareOutput( $this->getValue() );
+		if ( !$this->returnObj && $this->getArg( 'returnObj' ) ) {
 			$classname = $this->getArg( 'returnObj' );
 
 
 			// first try
 			$classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
 			if ( class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true ) ) {
-				$this->returnObj = new $classpath( $this->value, $this );
+				$this->returnObj = new $classpath( $value, $this );
 			}
 
 			// second try
 			if ( class_exists( $classname ) ) {
-				$this->returnObj = new $classname( $this->value, $this );
+				$this->returnObj = new $classname( $value, $this );
 			}
 
 			return $this->returnObj;
 		} else {
-
 //			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
 //			return $this->returnObj;
-			return $this->value;
+			return $value;
 		}
 
 	}
+
+	/**
+	 * Prepare output
+	 * Runs when data is requested by getUserValue
+	 * which is the recommended method to get frontend data
+	 * an optional returnObj
+	 *
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
+	public function prepareOutput( $value ) {
+
+
+		// custom method on field instance level wins over class method
+		if ( $this->getCallback( 'output' ) ) {
+			return call_user_func( $this->getCallback( 'output' ), $value );
+		} // custom method on field class level
+		else {
+			return $this->prepareOutputValue( $value );
+		}
+	}
+
+	/**
+	 * Default output, whenever data is requested for the user facing side
+	 *
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	public function prepareOutputValue( $val ) {
+		return $val;
+	}
+
 
 	/**
 	 * The actual output method for the field markup
@@ -230,7 +270,7 @@ abstract class Field {
 	 * and optional 'hooks"
 	 * @TODO add some wp hooks here?
 	 * @since 1.0.0
-	 * @return bool
+	 * @return void
 	 */
 	public function build() {
 		// nobody knows
@@ -244,11 +284,11 @@ abstract class Field {
 		// A Field might not be present, i.e. if it's not set to
 		// the current context
 		// Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
-		if ( ! $this->getDisplay() ) {
-			if ( $this->getDefault( 'renderHidden' ) ) {
+		if ( !$this->getDisplay() ) {
+			if ( $this->getSetting( 'renderHidden' ) ) {
 				$this->renderHidden();
 			} else {
-				return false;
+				return;
 			}
 			// Full markup
 		} else {
@@ -266,10 +306,10 @@ abstract class Field {
 	 */
 	public function header() {
 
-		echo '<div class="kb-field-wrapper kb-js-field-identifier" id=' . $this->uniqueId . '>'
+		echo '<div class="kb-field-wrapper kb-js-field-identifier" id=' . esc_attr( $this->uniqueId ) . '>'
 		     . '<div class="kb-field-header">';
-		if ( ! empty( $this->args['title'] ) ) {
-			echo "<h4>{$this->args['title']} --</h4>";
+		if ( !empty( $this->args['title'] ) ) {
+			echo "<h4>" . esc_html( $this->args['title'] ) . "</h4>";
 		}
 		echo '</div>';
 		echo "<div class='kb_field kb-field kb-field--{$this->type} kb-field--reset clearfix'>";
@@ -288,6 +328,15 @@ abstract class Field {
 		 */
 		if ( method_exists( $this, 'preForm' ) ) {
 			$this->preForm();
+		}
+
+		// custom method on field instance level wins over class method
+		if ( $this->getCallback( 'input' ) ) {
+			$this->value = call_user_func( $this->getCallback( 'input' ), $this->value );
+		} // custom method on field class level
+		else {
+			$this->value = $this->prepareInputValue( $this->value );
+
 		}
 
 		// When viewing from the frontend, an optional method can be user for the output
@@ -310,19 +359,27 @@ abstract class Field {
 	}
 
 	/**
+	 * Before the value arrives the fields form
+	 * Each field must implement this method
+	 *
+	 * @param $val
+	 *
+	 * @return mixed
+	 */
+	abstract protected function prepareInputValue( $val );
+
+	/**
 	 * JSON Encode custom settings for the field
-	 * @TODO use JSONTransport
 	 * @since 1.0.0
 	 */
 	public function javascriptSettings() {
-		JSONBridge::getInstance()->registerData( 'Fields', $this->uniqueId, $this->cleanedArgs() );
 
+		JSONBridge::getInstance()->registerFieldArgs( $this->uniqueId, $this->cleanedArgs() );
 		$settings = $this->getArg( 'jSettings' );
-		if ( ! $settings ) {
+		if ( !$settings ) {
 			return;
 		}
 		JSONBridge::getInstance()->registerData( 'FieldsConfig', $this->uniqueId, $settings );
-//        printf('<script>var KB = KB || {}; KB.FieldConfig = KB.FieldConfig || {}; KB.FieldConfig["%s"] = %s;</script>', $this->uniqueId, json_encode($settings));
 
 	}
 
@@ -342,7 +399,7 @@ abstract class Field {
 	 */
 	public function label() {
 		$label = $this->getArg( 'label' );
-		if ( ! empty( $label ) ) {
+		if ( !empty( $label ) ) {
 			echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getFieldId()}'>{$this->getArg( 'label' )}</label>";
 		}
 
@@ -352,33 +409,30 @@ abstract class Field {
 	 * Getter for field data
 	 * Will call filter() if available
 	 * @TODO this method is used on several occasions
-	 * @TODO its pointless to run filter over and over again, actually the whole filter is pointless
+	 *
 	 * @param string $arrKey
 	 *
 	 * @return mixed|null returns null if data does not exist
 	 */
-	public function getValue( $arrKey = null ) {
+	public function getValue( $arrKey = null, $return = '' ) {
+
 		if ( $arrKey ) {
-			$data =  $this->getValueFromArray( $arrKey );
-			if ( $this->getArg( 'getCallback' ) ) {
-				$data = call_user_func( $this->getArg( 'getCallback' ), $this->value );
-			}
-			return $data;
+			$data = $this->getValueFromArray( $arrKey );
+		} else {
+			$data = $this->value;
 		}
 
-		if ( method_exists( $this, 'inputFilter' ) ) {
-			$data = $this->inputFilter( $this->value );
-
-			if ( $this->getArg( 'getCallback' ) ) {
-				$data = call_user_func( $this->getArg( 'getCallback' ), $this->value );
-			}
-
-			return $data;
+		if ( $this->getCallback( 'get' ) ) {
+			$data = call_user_func( $this->getCallback( 'get' ), $this->value );
 		}
 
-		return $this->value;
+		if ( is_null( $data ) ) {
+			$data = $return;
+		}
 
+		return $data;
 	}
+
 
 	/**
 	 * If field stores data in an associative array
@@ -390,27 +444,23 @@ abstract class Field {
 	 */
 	public function getValueFromArray( $arrKey ) {
 		if ( is_array( $this->value ) && isset( $this->value[ $arrKey ] ) ) {
-			if ( \method_exists( $this, 'inputFilter' ) ) {
-				return $this->inputFilter( $this->value[ $arrKey ] );
-			} else {
-				return $this->value[ $arrKey ];
-			}
+			return $this->value[ $arrKey ];
 		} else {
 			return null;
 		}
-
 	}
 
 	/**
 	 * Whenever setData got called, this runs
-	 * (upon field initialization, data fom _POSt or database set to field)
+	 * (upon field initialization, data from _POST or database set to field)
+	 *
 	 * @param $value
 	 *
 	 * @return mixed
 	 */
-	public function sanitize( $value ) {
-		if ( method_exists( $this, 'outputFilter' ) ) {
-			return $this->outputFilter( $value );
+	private function setDataToField( $value ) {
+		if ( method_exists( $this, 'setFilter' ) ) {
+			return $this->setFilter( $value );
 		} else {
 			return $value;
 		}
@@ -428,10 +478,10 @@ abstract class Field {
 			return false;
 		}
 
-		if ( is_array( $this->getValue() ) ) {
+		if ( is_array( $value ) ) {
 			$is_assoc = \Kontentblocks\Helper\is_assoc_array( $this->getValue() );
 
-			if ( ! $is_assoc ) {
+			if ( !$is_assoc ) {
 				foreach ( $this->getValue() as $item ) {
 
 					if ( is_array( $item ) && \Kontentblocks\Helper\is_assoc_array( $item ) ) {
@@ -461,7 +511,7 @@ abstract class Field {
 	 */
 	public function description() {
 		$description = $this->getArg( 'description' );
-		if ( ! empty( $description ) ) {
+		if ( !empty( $description ) ) {
 			echo "<p class='description kb-field--description'>{$this->getArg( 'description' )}</p>";
 		}
 
@@ -477,8 +527,8 @@ abstract class Field {
 	 */
 	public function _save( $keydata, $oldKeyData = null ) {
 		$data = $this->save( $keydata, $oldKeyData );
-		if ( $this->getArg( 'saveCallback' ) ) {
-			$data = call_user_func( $this->getArg( 'saveCallback' ), $keydata, $oldKeyData, $data );
+		if ( $this->getCallback( 'save' ) ) {
+			$data = call_user_func( $this->getCallback( 'save' ), $keydata, $oldKeyData, $data );
 		}
 
 		$this->handleConcatContent( $data );
@@ -505,14 +555,19 @@ abstract class Field {
 	}
 
 
+	/**
+	 * @param $data
+	 *
+	 * @return bool|false
+	 */
 	public function handleConcatContent( $data ) {
 		// if module is not supposed to have public data, don't concat
-		if ( ! method_exists( $this->module, 'isPublic' ) || ! $this->module->isPublic() ) {
+		if ( !method_exists( $this->module, 'isPublic' ) || !$this->module->isPublic() ) {
 			return false;
 		}
 
 		// if field is not set to concat, bail out
-		if ( ! $this->getArg( 'concat' ) ) {
+		if ( !$this->getArg( 'concat' ) ) {
 			return false;
 		}
 
@@ -526,15 +581,25 @@ abstract class Field {
 
 	}
 
+	/**
+	 * @param $module
+	 */
 	public function setModule( $module ) {
 		$this->module = $module;
 	}
 
 
-	public function getDefault( $key ) {
+	/**
+	 * Get a setting var from (late bound) static settings array
+	 *
+	 * @param $key
+	 *
+	 * @return bool|mixed
+	 */
+	public function getSetting( $key ) {
 
-		if ( isset( static::$defaults[ $key ] ) ) {
-			return static::$defaults[ $key ];
+		if ( isset( static::$settings[ $key ] ) ) {
+			return static::$settings[ $key ];
 		} else {
 			return false;
 		}
@@ -559,11 +624,31 @@ abstract class Field {
 	}
 
 	/**
+	 * Get callback from callbacks arg
+	 * @param $type
+	 *
+	 * @return null
+	 */
+	public function getCallback( $type ) {
+
+		$callbacks = $this->getArg( 'callbacks' );
+
+		if ( $callbacks ) {
+			if (isset($callbacks[$type]) && is_callable($callbacks[$type])){
+				return $callbacks[$type];
+			}
+		}
+
+		return null;
+
+	}
+
+	/**
 	 * Mainly used internally to specifiy the fields visibility
 	 * @return bool
 	 */
 	public function getDisplay() {
-		return $this->args['display'];
+		return filter_var( $this->args['display'], FILTER_VALIDATE_BOOLEAN );
 
 	}
 
@@ -592,7 +677,7 @@ abstract class Field {
 			$id = sanitize_title( $this->baseId . '_' . $this->key );
 		}
 
-		return $id;
+		return esc_attr( $id );
 
 	}
 
@@ -610,25 +695,28 @@ abstract class Field {
 	 */
 	public function getFieldName( $array = false, $akey = null, $multiple = false ) {
 		if ( $array === true && $akey !== null && $multiple ) {
-			return "{$this->baseId}[{$this->key}][{$akey}][]";
+			return esc_attr( "{$this->baseId}[{$this->key}][{$akey}][]" );
 		} elseif ( $array === true && $akey !== null ) {
-			return "{$this->baseId}[{$this->key}][{$akey}]";
+			return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" );
 		} else if ( is_bool( $array ) && $array === true ) {
-			return "{$this->baseId}[{$this->key}][]";
+			return esc_attr( "{$this->baseId}[{$this->key}][]" );
 		} else if ( is_string( $array ) && is_string( $akey ) && $multiple ) {
-			return "{$this->baseId}[{$this->key}][$array][$akey][]";
+			return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" );
 		} else if ( is_string( $array ) && is_string( $akey ) ) {
-			return "{$this->baseId}[{$this->key}][$array][$akey]";
+			return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey]" );
 		} else if ( is_string( $array ) ) {
-			return "{$this->baseId}[{$this->key}][$array]";
+			return esc_attr( "{$this->baseId}[{$this->key}][$array]" );
 		} else {
-			return "{$this->baseId}[{$this->key}]";
+			return esc_attr( "{$this->baseId}[{$this->key}]" );
 		}
 
 	}
 
+	/**
+	 * @return string|void
+	 */
 	public function getPlaceholder() {
-		return $this->getArg( 'placeholder' );
+		return esc_attr( $this->getArg( 'placeholder' ) );
 
 	}
 
@@ -640,7 +728,18 @@ abstract class Field {
 		if ( method_exists( $this, 'argsToJson' ) ) {
 			return $this->argsToJson();
 		} else {
-			return $this->args;
+			$args = $this->args;
+
+			// remove callback because of possible recursion, which will break json_encode
+			foreach ( array( 'inputCallback', 'outputCallback' ) as $unset ) {
+				if ( isset( $args[ $unset ] ) ) {
+					unset( $args[ $unset ] );
+				}
+			}
+
+			unset($args['callbacks']);
+
+			return $args;
 		}
 	}
 

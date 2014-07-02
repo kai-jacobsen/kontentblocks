@@ -14,7 +14,7 @@ class PanelFieldSection extends AbstractFieldSection {
 	 * @param string $id
 	 * @param $args
 	 * @param $envVars
-	 * @param Panel $Panel
+	 * @param \Kontentblocks\Panels\Panel $Panel
 	 *
 	 * @internal param array $areaContext
 	 * @TODO // revise envVars
@@ -24,21 +24,21 @@ class PanelFieldSection extends AbstractFieldSection {
 		$this->id      = $id;
 		$this->args    = $this->prepareArgs( $args );
 		$this->envVars = $envVars;
-		$this->module   = $Panel;
+		$this->Emitter = $Panel;
 
 	}
 
 
 	/**
 	 * Set visibility of field based on environment vars given by the Panel
-	 * Panels have no envVars yet
+	 * Panels have no envVars yet so all fields are visible
 	 *
 	 * @param Field $Field
 	 *
 	 * @return mixed
 	 */
 	public function markByEnvVar( Field $Field ) {
-		 $Field->setDisplay( true );
+		$Field->setDisplay( true );
 	}
 
 }

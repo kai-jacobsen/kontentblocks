@@ -80,7 +80,6 @@ KB.Gallery.ImageView = Backbone.View.extend({
         var name = this.createInputName(this.uid) + '[details][description]';
 
         if (!this.editorAdded) {
-            console.log(this);
             var req = KB.TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get('details').description, null, false, false);
             req.done(function (res) {
                 that.editorAdded = res;
@@ -127,7 +126,6 @@ KB.Gallery.ImageView = Backbone.View.extend({
         } else {
             var value = document.getElementById( this.uid + '_ededitor').value;
             value = value.replace(/<br\s*\/?>/mg,"\n");
-            console.log(value);
             ed.setContent(value);
             return value;
         }
