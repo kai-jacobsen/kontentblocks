@@ -9,6 +9,7 @@
 namespace Kontentblocks\Fields;
 
 
+use Exception;
 use Kontentblocks\Kontentblocks;
 
 abstract class AbstractFieldSection {
@@ -61,6 +62,7 @@ abstract class AbstractFieldSection {
 	 * @param string $key | Unique key
 	 * @param array $args | additional parameters, may differ by field type
 	 *
+	 * @throws \Exception
 	 * @return self Fluid layout
 	 * @todo check if field type exists
 	 */
@@ -69,9 +71,24 @@ abstract class AbstractFieldSection {
 			$Registry = FieldRegistry::getInstance();
 			$Field    = $Registry->getField( $type );
 
+			//check for special key syntax
+			if (preg_match("/^(.*?)::/i", $key, $out)){
+				if (is_array($out) && count($out) == 2){
+					$key = str_replace($out[0], '', $key);
+
+					if (isset($args['arrayKey']) && $args['arrayKey'] !== $out[1]){
+						throw new Exception('ArrayKey mismatch');
+					}
+
+					$args['arrayKey'] = $out[1];
+				}
+			}
+
 			$Field->setKey( $key );
 			$Field->setArgs( $args );
 			$Field->setType( $type );
+
+
 			$this->markByEnvVar( $Field );
 
 			if ( isset( $args['arrayKey'] ) ) {
@@ -85,6 +102,8 @@ abstract class AbstractFieldSection {
 		return $this;
 
 	}
+
+
 
 
 	/**

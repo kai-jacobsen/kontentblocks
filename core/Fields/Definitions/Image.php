@@ -3,6 +3,9 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Language\I18n;
+use Kontentblocks\Templating\FieldTemplate;
+use Kontentblocks\Utils\AttachmentHandler;
 
 /**
  * Single image insert/upload.
@@ -17,20 +20,15 @@ Class Image extends Field {
 	);
 
 	public function form() {
-		// image default value
-		$imageDefaults = array(
-			'id'      => null,
-			'title'   => '',
-			'caption' => ''
-		);
-		$value         = wp_parse_args( $this->getValue(), $imageDefaults );
+
+		$value = $this->getValue();
 		// using twig template for html output
-		$tpl = new \Kontentblocks\Templating\FieldTemplate(
+		$tpl = new FieldTemplate(
 			'image.twig', array(
 				'field' => $this,
 				'value' => $value,
-				'image' => new \Kontentblocks\Utils\AttachmentHandler( $value['id'] ),
-				'i18n'  => \Kontentblocks\Language\I18n::getPackages( 'Refields.image', 'Refields.common' )
+				'image' => new AttachmentHandler( $value['id'] ),
+				'i18n'  => I18n::getPackages( 'Refields.image', 'Refields.common' )
 			)
 		);
 		$tpl->render( true );
@@ -43,7 +41,21 @@ Class Image extends Field {
 	 * @return mixed
 	 */
 	protected function prepareInputValue( $val ) {
-		return $val;
+
+		// image default value
+		$imageDefaults = array(
+			'id'      => null,
+			'title'   => '',
+			'caption' => ''
+		);
+
+		$parsed = wp_parse_args( $val, $imageDefaults );
+
+		$parsed['id']      = ( !is_null( $parsed['id'] ) ) ? absint( $parsed['id'] ) : null;
+		$parsed['title']   = esc_html( $parsed['title'] );
+		$parsed['caption'] = esc_html( $parsed['caption'] );
+
+		return $parsed;
 	}
 
 }
