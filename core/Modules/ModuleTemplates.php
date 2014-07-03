@@ -93,12 +93,14 @@ class ModuleTemplates
         }
 
         foreach ($data as $tpl) {
-            $def = get_post_meta($tpl->ID, 'template', true);
+            $index = get_post_meta($tpl->ID, 'kb_kontentblocks', true);
+            $def = $index[$tpl->post_name];
             $def['templateObj'] = $tpl;
             $collect[$tpl->post_name] = $def;
         }
 
         $this->templates = array_filter($collect, function ($item) {
+                d($item);
             return !$item['master'];
         });
         $this->masterTemplates = array_filter($collect, function ($item) {

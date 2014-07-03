@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-02 */
+/*! Kontentblocks DevVersion 2014-07-03 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -782,12 +782,10 @@ KB.Fields.register("Link", function($) {
 }(jQuery));
 
 KB.Fields.register("TemplateSelect", function($) {
-    var view;
     return {
         init: function() {
-            $("body").on("change.template-select", ".kb-template-select", function() {
+            $("body").on("change", ".kb-template-select", function() {
                 if (KB.focusedModule) {
-                    console.log(KB.focusedModule);
                     KB.focusedModule.set("viewfile", $(this).val());
                     KB.focusedModule.view.trigger("template::changed");
                 }

@@ -48,6 +48,10 @@ Class Kontentblocks
 
     public function init()
     {
+
+
+
+
         define('KB_PLUGIN_URL', plugin_dir_url(__FILE__));
         define('KB_PLUGIN_PATH', plugin_dir_path(__FILE__));
         define('KB_TEMPLATE_URL', plugin_dir_url(__FILE__) . '/core/Modules/core-modules/');
@@ -117,6 +121,7 @@ Class Kontentblocks
     public function initInterface(){
 	    //@TODO move out of here
 	    remove_post_type_support('page', 'revisions');
+
 	    new EditScreen();
     }
 
@@ -211,6 +216,7 @@ Class Kontentblocks
                 FieldRegistry::getInstance()->add($file);
         }
     }
+
 
 }
 

@@ -4,35 +4,37 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\API\PostMetaAPI;
 
+/**
+ * Class ChangeArea
+ * Runs when module was dragged into different/new area
+ *
+ * @package Kontentblocks\Ajax
+ */
 class ChangeArea
 {
-    
-    protected $postID;
-    protected $dataHandler;
-    protected $newArea;
-    protected $instanceId;
 
 
-
-
-    public function __construct()
+    public static function run()
     {
-        $this->postID = $_POST['post_id'];
-        $this->newArea = $_POST['area_id'];
-        $this->newAreaContext = $_POST['context'];
-        $this->instanceId = $_POST['block_id'];
-        $this->Storage = \Kontentblocks\Helper\getStorage($this->postID);
-        $this->updateArea();
-        
-    }
+        check_ajax_referer('kb-update');
+        if (!current_user_can('edit_kontentblocks')){
+            wp_send_json_error();
+        }
 
-    public function updateArea()
-    {
-        $moduleDefinition = $this->Storage->getModuleDefinition($this->instanceId);
-        $moduleDefinition['area'] = $this->newArea;
-        $moduleDefinition['areaContext'] = $this->newAreaContext;
-        $update = $this->Storage->addToIndex($this->instanceId, $moduleDefinition);
+        $postID = filter_input(INPUT_POST,'post_id', FILTER_SANITIZE_NUMBER_INT);
+        $newArea = filter_input(INPUT_POST, 'area_id', FILTER_SANITIZE_STRING);
+        $newAreaContext = filter_input(INPUT_POST, 'context', FILTER_SANITIZE_STRING);
+        $instanceId = filter_input(INPUT_POST, 'block_id', FILTER_SANITIZE_STRING);
+        $Storage = \Kontentblocks\Helper\getStorage($postID);
+
+        $moduleDefinition = $Storage->getModuleDefinition($instanceId);
+        $moduleDefinition['area'] = $newArea;
+        $moduleDefinition['areaContext'] = $newAreaContext;
+        $update = $Storage->addToIndex($instanceId, $moduleDefinition);
+
         wp_send_json($update);
+
     }
+
 
 }

@@ -2,23 +2,30 @@
 
 namespace Kontentblocks\Ajax;
 
+/**
+ * Class RemoteGetEditor
+ * Return the markup for an built-in tinymce editor instance
+ * @package Kontentblocks\Ajax
+ */
 class RemoteGetEditor
 {
 
-    public function __construct()
+    public static function run()
     {
         // check nonce
-        check_ajax_referer('kb-read');
+        check_ajax_referer( 'kb-read' );
+        if (!current_user_can( 'edit_kontentblocks' )) {
+            wp_send_json_error();
+        }
 
-        $settings = array();
-        $settings[ 'textarea_name'] = $_POST['editorName'];
-	    $media = filter_var($_POST['args']['media_buttons'], FILTER_VALIDATE_BOOLEAN);
+        $settings                  = array();
+        $settings['textarea_name'] = $_POST['editorName'];
+        $media                     = filter_var( $_POST['args']['media_buttons'], FILTER_VALIDATE_BOOLEAN );
         $settings['media_buttons'] = $media;
         ob_start();
-//        wp_editor(stripslashes($_POST['editorContent']), $_POST['editorId'], $settings);
-	    kb_wp_editor($_POST['editorId'], $_POST['editorContent'], $_POST['editorName'], $media, $settings);
+        kb_wp_editor( $_POST['editorId'], $_POST['editorContent'], $_POST['editorName'], $media, $settings );
         $html = ob_get_clean();
-        wp_send_json($html);
+        wp_send_json( $html );
 
     }
 

@@ -3,8 +3,6 @@
 use Kontentblocks\Ajax\Frontend\FieldGetImage;
 use Kontentblocks\Ajax\GetSanitizedId;
 use Kontentblocks\Ajax\RemoteGetEditor;
-use Kontentblocks\Overlays\OnsiteEditModule;
-use Kontentblocks\Overlays\EditGlobalArea;
 use Kontentblocks\Ajax\SortModules;
 use Kontentblocks\Ajax\RemoveModules;
 use Kontentblocks\Ajax\ChangeModuleStatus;
@@ -17,30 +15,36 @@ use Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
 use Kontentblocks\Ajax\AfterAreaChange;
 
 /**
- * -----------------------------------------
- * Handle for the onsite Module edit overlay
- * -----------------------------------------
+ * Actual actions are wrapped in (static) classes to
+ * a) keeps things seperated
+ * b) let the autoloader handle file inclusion
  */
-function osEditModuleCb()
-{
-    new OnsiteEditModule();
 
-}
-
-add_action('wp_ajax_os-edit-module', 'osEditModuleCb');
-
-/**
- * -----------------------------------------
- * Handler for the globar Area edit overlay
- * -----------------------------------------
- */
-function editGlobalAreaCb()
-{
-    new EditGlobalArea();
-
-}
-
-add_action('wp_ajax_editGlobalArea', 'editGlobalAreaCb');
+///**
+// * -----------------------------------------
+// * Handle for the onsite Module edit overlay
+// * -----------------------------------------
+// */
+//function osEditModuleCb()
+//{
+//    new OnsiteEditModule();
+//
+//}
+//
+//add_action('wp_ajax_os-edit-module', 'osEditModuleCb');
+//
+///**
+// * -----------------------------------------
+// * Handler for the globar Area edit overlay
+// * -----------------------------------------
+// */
+//function editGlobalAreaCb()
+//{
+//    new EditGlobalArea();
+//
+//}
+//
+//add_action('wp_ajax_editGlobalArea', 'editGlobalAreaCb');
 
 /**
  * -----------------------------------------
@@ -53,7 +57,7 @@ function resortModulesCb()
 
 }
 
-add_action('wp_ajax_resortModules', 'resortModulesCb');
+add_action( 'wp_ajax_resortModules', 'resortModulesCb' );
 
 /**
  * -----------------------------------------
@@ -66,7 +70,7 @@ function removeModulesCb()
 
 }
 
-add_action('wp_ajax_removeModules', 'removeModulesCb');
+add_action( 'wp_ajax_removeModules', 'removeModulesCb' );
 
 /**
  * -----------------------------------------
@@ -75,11 +79,11 @@ add_action('wp_ajax_removeModules', 'removeModulesCb');
  */
 function changeModuleStatusCb()
 {
-    new ChangeModuleStatus();
+    ChangeModuleStatus::run();
 
 }
 
-add_action('wp_ajax_changeModuleStatus', 'changeModuleStatusCb');
+add_action( 'wp_ajax_changeModuleStatus', 'changeModuleStatusCb' );
 
 /**
  * -----------------------------------------
@@ -88,11 +92,11 @@ add_action('wp_ajax_changeModuleStatus', 'changeModuleStatusCb');
  */
 function changeAreaCb()
 {
-    new ChangeArea();
+    ChangeArea::run();
 
 }
 
-add_action('wp_ajax_changeArea', 'changeAreaCb');
+add_action( 'wp_ajax_changeArea', 'changeAreaCb' );
 
 /**
  * -----------------------------------------
@@ -105,7 +109,7 @@ function createNewModuleCb()
 
 }
 
-add_action('wp_ajax_createNewModule', 'createNewModuleCb');
+add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
 
 /**
  * -----------------------------------------
@@ -118,7 +122,7 @@ function duplicateModuleCb()
 
 }
 
-add_action('wp_ajax_duplicateModule', 'duplicateModuleCb');
+add_action( 'wp_ajax_duplicateModule', 'duplicateModuleCb' );
 
 /**
  * -----------------------------------------
@@ -127,11 +131,11 @@ add_action('wp_ajax_duplicateModule', 'duplicateModuleCb');
  */
 function afterAreaChangeCb()
 {
-    new AfterAreaChange();
+    AfterAreaChange::run();
 
 }
 
-add_action('wp_ajax_afterAreaChange', 'afterAreaChangeCb');
+add_action( 'wp_ajax_afterAreaChange', 'afterAreaChangeCb' );
 
 /**
  * -----------------------------------------
@@ -144,7 +148,7 @@ function saveInlineEditCb()
 
 }
 
-add_action('wp_ajax_saveInlineEdit', 'saveInlineEditCb');
+add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );
 
 /**
  * -----------------------------------------
@@ -157,7 +161,7 @@ function getModuleOptionsCb()
 
 }
 
-add_action('wp_ajax_getModuleOptions', 'getModuleOptionsCb');
+add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );
 
 /**
  * -----------------------------------------
@@ -170,7 +174,7 @@ function updateModuleOptionsCb()
 
 }
 
-add_action('wp_ajax_updateModuleOptions', 'updateModuleOptionsCb');
+add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );
 
 /**
  * -----------------------------------------
@@ -179,11 +183,11 @@ add_action('wp_ajax_updateModuleOptions', 'updateModuleOptionsCb');
  */
 function getSanitizedIdCb()
 {
-    new GetSanitizedId();
+    GetSanitizedId::run();
 
 }
 
-add_action('wp_ajax_getSanitizedId', 'getSanitizedIdCb');
+add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );
 
 
 /**
@@ -197,7 +201,7 @@ function fieldGetImageCb()
 
 }
 
-add_action('wp_ajax_fieldGetImage', 'fieldGetImageCb');
+add_action( 'wp_ajax_fieldGetImage', 'fieldGetImageCb' );
 
 
 /**
@@ -207,8 +211,8 @@ add_action('wp_ajax_fieldGetImage', 'fieldGetImageCb');
  */
 function getRemoteEditorCb()
 {
-    new RemoteGetEditor();
+    RemoteGetEditor::run();
 
 }
 
-add_action('wp_ajax_getRemoteEditor', 'getRemoteEditorCb');
+add_action( 'wp_ajax_getRemoteEditor', 'getRemoteEditorCb' );

@@ -273,3 +273,21 @@ function getTemplateFile()
     }
 
 }
+
+
+function enableXhprof(){
+    if (isset($_REQUEST['xhprof'])){
+        include '/usr/share/php/xhprof_lib/utils/xhprof_lib.php';
+        include '/usr/share/php/xhprof_lib/utils/xhprof_runs.php';
+        xhprof_enable(XHPROF_FLAGS_NO_BUILTINS + XHPROF_FLAGS_MEMORY);
+    }
+}
+
+function disableXhprf($app = 'Kontentblocks'){
+    if (isset($_REQUEST['xhprof'])){
+        $XHProfData = xhprof_disable();
+
+        $XHProfRuns = new \XHProfRuns_Default();
+        $XHProfRuns->save_run($XHProfData, $app);
+    }
+}

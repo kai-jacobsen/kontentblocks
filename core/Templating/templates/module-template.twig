@@ -1,7 +1,11 @@
 <div id="kontentblocks_stage" class="postbox">
     <h3>Module</h3>
-    <div class="inside">
-        {{ instance.options(instance.moduleData) }}
+
+    <div class="inside" id="{{ instance.instance_id }}">
+        <div class="kb-module--controls-inner">
+            {{ instance.options(instance.moduleData) }}
+
+        </div>
     </div>
 </div>
 

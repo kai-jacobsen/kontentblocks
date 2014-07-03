@@ -17,7 +17,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     initialize: function () {
         var that = this;
-
+        console.log(that);
         // Setup Elements
         this.$head = jQuery('.block-head', this.$el);
         this.$body = jQuery('.kb-module--body', this.$el);
@@ -79,7 +79,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     updateModuleForm: function () {
         KB.Ajax.send({
             action: 'afterAreaChange',
-            module: this.model.toJSON()
+            module: this.model.toJSON(),
+            _ajax_nonce: kontentblocks.nonces.read
         }, this.insertNewUpdateForm, this);
     },
     insertNewUpdateForm: function (response) {

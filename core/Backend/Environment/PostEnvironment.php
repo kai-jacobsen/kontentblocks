@@ -225,6 +225,7 @@ class PostEnvironment
     public function getModuleData($id)
     {
         $data = $this->Storage->getModuleData($id);
+
         if ($data !== NULL) {
             return $data;
         } else {

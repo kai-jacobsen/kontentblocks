@@ -2,42 +2,37 @@
 
 namespace Kontentblocks\Ajax;
 
+/**
+ * Class ChangeModuleStatus
+ * Runs when module status change
+ * @package Kontentblocks\Ajax
+ */
 class ChangeModuleStatus
 {
 
-    protected $postId;
-    protected $instance_id;
-    protected $dataHandler;
-
-    public function __construct()
+    public static function run()
     {
-        check_ajax_referer('kb-update');
+        check_ajax_referer( 'kb-update' );
 
-        $this->postId      = $_POST[ 'post_id' ];
-        $this->instance_id = $_POST[ 'module' ];
-        $this->Storage = \Kontentblocks\Helper\getStorage($this->postId);
+        $postId      = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $instance_id = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
+        $Storage     = \Kontentblocks\Helper\getStorage( $postId );
 
-        $this->changeStatus();
-        
-    }
+        $moduleDefinition = $Storage->getModuleDefinition( $instance_id );
+        if ($moduleDefinition) {
 
-    public function changeStatus()
-    {
-        
-        $moduleDefinition = $this->Storage->getModuleDefinition($this->instance_id);
-        if ($moduleDefinition){
-            
-            if ($moduleDefinition['state']['active'] != true){
+            // dont ask
+            if ($moduleDefinition['state']['active'] != true) {
                 $moduleDefinition['state']['active'] = true;
             } else {
                 $moduleDefinition['state']['active'] = false;
             }
-            
-            $update = $this->Storage->addToIndex($this->instance_id, $moduleDefinition);
-            wp_send_json($update);
+
+            $update = $Storage->addToIndex( $instance_id, $moduleDefinition );
+            wp_send_json( $update );
         }
-        
-        
+
     }
+
 
 }

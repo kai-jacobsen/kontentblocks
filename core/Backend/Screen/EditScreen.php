@@ -83,6 +83,7 @@ Class EditScreen {
 	 */
 	function userInterface() {
 
+
 		// bail if post type doesn't support kontentblocks
 		if ( !post_type_supports( $this->postData->get( 'postType' ), 'kontentblocks' ) ) {
 			return;
@@ -112,6 +113,7 @@ Class EditScreen {
 		$this->renderScreen();
 
 		echo "</div> <!--end ks -->";
+
 
 	}
 

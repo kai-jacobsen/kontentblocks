@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-02 */
+/*! Kontentblocks DevVersion 2014-07-03 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -546,6 +546,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     initialize: function() {
         var that = this;
+        console.log(that);
         this.$head = jQuery(".block-head", this.$el);
         this.$body = jQuery(".kb-module--body", this.$el);
         this.$inner = jQuery(".kb-module--controls-inner", this.$el);
@@ -601,7 +602,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     updateModuleForm: function() {
         KB.Ajax.send({
             action: "afterAreaChange",
-            module: this.model.toJSON()
+            module: this.model.toJSON(),
+            _ajax_nonce: kontentblocks.nonces.read
         }, this.insertNewUpdateForm, this);
     },
     insertNewUpdateForm: function(response) {

@@ -213,23 +213,18 @@ class ModuleStoragePostMeta {
 		if ( is_preview() ) {
 			$id = '_preview' . $id;
 		}
-
-		if ( isset( $this->modules[ $id ] ) ) {
+		if ( array_key_exists( $id, $this->modules ) ) {
 			return $this->modules[ $id ];
 		}
-
 		return null;
 	}
 
 	/**
 	 * Wrapper to save module data
 	 * Makes sure that the data is stored as hidden key
-	 * Makes sure that the data is stored as hidden key
-	 * Makes sure that the data is stored as hidden key
-	 * Makes sure that the data is stored as hidden key
-	 * Makes sure that the data is stored as hidden key
 	 * @todo: test if _ is given and don't prefix if so
 	 * @todo PMDataHandler should update
+	 *
 	 *
 	 * @param $id string $id
 	 * @param array|string $data array $data
@@ -237,7 +232,6 @@ class ModuleStoragePostMeta {
 	 * @return boolean | new
 	 */
 	public function saveModule( $id, $data = '' ) {
-
 		return $this->DataHandler->update( '_' . $id, $data );
 	}
 

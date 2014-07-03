@@ -2,74 +2,92 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
-use Kontentblocks\Modules\ModuleTemplates;
 
+/**
+ * Class GetSanitizedId
+ * Runs when a dynamic area or a template gets created
+ * checks if an id already exists
+ *
+ * @package Kontentblocks\Ajax
+ */
 class GetSanitizedId
 {
 
-    protected $postId;
-    protected $dataHandler;
-    protected $instanceId;
-
-    public function __construct()
+    public static function run()
     {
 
         // verify action
-        check_ajax_referer('kb-read');
+        check_ajax_referer( 'kb-read' );
+        if (!current_user_can( 'edit_kontentblocks' )) {
+            wp_send_json_error();
+        }
 
-        $value = filter_var($_POST['inputvalue'], FILTER_SANITIZE_STRING);
-        $checkmode = filter_var($_POST['checkmode'], FILTER_SANITIZE_STRING);
-        $check = true;
+        $value     = filter_var( $_POST['inputvalue'], FILTER_SANITIZE_STRING );
+        $checkmode = filter_var( $_POST['checkmode'], FILTER_SANITIZE_STRING );
+        $check     = true;
 
         switch ($checkmode) {
             case 'areas':
-                $check = $this->checkAreaExists(trim($value));
+                $check = self::checkAreaExists( trim( $value ) );
                 break;
             case 'templates':
-                $check = $this->checkTemplateExists(trim($value));
+                $check = self::checkTemplateExists( trim( $value ) );
                 break;
         }
 
-        wp_send_json($check);
+        wp_send_json( $check );
 
     }
 
-    private function checkAreaExists($ad)
+    /**
+     * @param $ad
+     *
+     * @return mixed|string
+     */
+    private static function checkAreaExists( $ad )
     {
-        $sane = sanitize_title($ad);
+        $sane = sanitize_title( $ad );
 
-        $posts = get_posts(array(
-            'post_type' => 'kb-dyar',
-            'posts_per_page' => 1,
-            'name' => $sane,
-            'suppress_filters' => false
-        ));
+        $posts = get_posts(
+            array(
+                'post_type'        => 'kb-dyar',
+                'posts_per_page'   => 1,
+                'name'             => $sane,
+                'suppress_filters' => false
+            )
+        );
 
-        if (!empty($posts)) {
+        if (!empty( $posts )) {
             return 'translate';
         }
 
-        return str_replace('-', '_', $sane);
+        return str_replace( '-', '_', $sane );
 
     }
 
-    private function checkTemplateExists($ad)
+    /**
+     * @param $ad
+     *
+     * @return mixed|string
+     */
+    private function checkTemplateExists( $ad )
     {
-        $sane = sanitize_title($ad);
+        $sane = sanitize_title( $ad );
 
-        $posts = get_posts(array(
-            'post_type' => 'kb-mdtpl',
-            'posts_per_page' => 1,
-            'name' => $sane,
-            'suppress_filters' => false
-        ));
+        $posts = get_posts(
+            array(
+                'post_type'        => 'kb-mdtpl',
+                'posts_per_page'   => 1,
+                'name'             => $sane,
+                'suppress_filters' => false
+            )
+        );
 
-        if (!empty($posts)) {
+        if (!empty( $posts )) {
             return 'translate';
         }
 
-        return str_replace('-', '_', $sane);
+        return str_replace( '-', '_', $sane );
 
     }
 
