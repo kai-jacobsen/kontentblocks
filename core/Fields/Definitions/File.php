@@ -22,9 +22,7 @@ Class File extends Field
     public function form()
     {
         // file default value
-        $fileDefaults = array(
-            'id' => null,
-        );
+
         $value        = wp_parse_args( $this->getValue(), $fileDefaults );
         // using twig template for html output
         $tpl          = new FieldTemplate(
@@ -54,6 +52,15 @@ Class File extends Field
 	 * @return mixed
 	 */
 	protected function prepareInputValue( $val ) {
-		return $val;
+
+		$fileDefaults = array(
+			'id' => null,
+		);
+
+		$parsed = wp_parse_args($val, $fileDefaults);
+		$parsed['id'] = (!is_null($parsed['id'])) ? absint($parsed['id']) : null;
+
+		return $parsed;
+
 	}
 }

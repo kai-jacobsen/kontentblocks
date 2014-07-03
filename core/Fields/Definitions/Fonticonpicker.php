@@ -21,27 +21,11 @@ Class Fonticonpicker extends Field
      */
     public function form()
     {
-
         $this->label();
         echo "<input class='kb-fonticonpicker' id='{$this->getFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
         $this->description();
-
     }
 
-	public function setFilter($v){
-		return $v;
-	}
-
-    /**
-     * Text Input filter
-     * @param string $value
-     * @return string filtered
-     */
-    public function getPublicFilter( $value )
-    {
-        return esc_textarea( $value );
-//	    return $value;
-    }
 
 	/**
 	 * @param $val
@@ -51,7 +35,5 @@ Class Fonticonpicker extends Field
 	protected function prepareInputValue( $val ) {
 		return $val;
 	}
-
-
 
 }
