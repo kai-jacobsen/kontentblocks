@@ -28,7 +28,7 @@ Class Kontentblocks
     const VERSION = '1.0.0alpha';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.12';
-    const CONTENTCONCAT = TRUE;
+    const CONTENTCONCAT = true;
 
 
     public $dev_mode = true;
@@ -50,36 +50,34 @@ Class Kontentblocks
     {
 
 
-
-
-        define('KB_PLUGIN_URL', plugin_dir_url(__FILE__));
-        define('KB_PLUGIN_PATH', plugin_dir_path(__FILE__));
-        define('KB_TEMPLATE_URL', plugin_dir_url(__FILE__) . '/core/Modules/core-modules/');
-        define('KB_TEMPLATE_PATH', plugin_dir_path(__FILE__) . 'core/Modules/core-modules/');
-        define('KB_REFIELD_JS', plugin_dir_url(__FILE__) . '/Definitions/js/');
+        define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+        define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/Core/' );
+        define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/Core/' );
+        define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . '/Definitions/js/' );
 
 
         // still there for historical reasons
-        define('KONTENTLOCK', false);
+        define( 'KONTENTLOCK', false );
 
         // Files used used on front and backend
-        include_once dirname(__FILE__) . '/Autoloader.php';
-        require_once dirname(__FILE__) . '/vendor/autoload.php';
-        require_once dirname(__FILE__) . '/kontentblocks.public-api.php';
-	    if (file_exists(dirname(__FILE__) . '/build/hash.php')){
-		    require_once(dirname(__FILE__) . '/build/hash.php');
-	    }
+        include_once dirname( __FILE__ ) . '/Autoloader.php';
+        require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
+        if (file_exists( dirname( __FILE__ ) . '/build/hash.php' )) {
+            require_once( dirname( __FILE__ ) . '/build/hash.php' );
+        }
 
 
-        include_once dirname(__FILE__) . '/core/Utils/helper.php';
-        include_once dirname(__FILE__) . '/core/Utils/helper.new.php';
+        include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
+        include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
 
         /* Include all necessary files on admin area */
         if (is_admin()) {
 
-            include_once dirname(__FILE__) . '/core/Utils/tables.php';
-            include_once dirname(__FILE__) . '/core/Hooks/setup.php';
-            require_once dirname(__FILE__) . '/includes/ajax-callback-handler.php';
+            include_once dirname( __FILE__ ) . '/core/Utils/tables.php';
+            include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
+            require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
 
             // @TODO stinks
             new Capabilities();
@@ -91,25 +89,25 @@ Class Kontentblocks
         Enqueues::getInstance();
 
         // enabled for 'page' by default
-        add_post_type_support('page', 'kontentblocks');
+        add_post_type_support( 'page', 'kontentblocks' );
         // load Templates automatically
-        add_action('areas_setup', array($this, 'loadModules'), 9);
+        add_action( 'areas_setup', array( $this, 'loadModules' ), 9 );
 
         // Load Plugins
-        add_action('init', array($this, 'loadExtensions'), 9);
+        add_action( 'init', array( $this, 'loadExtensions' ), 9 );
 
         // Load Fields
-        add_action('init', array($this, 'loadFields'), 9);
+        add_action( 'init', array( $this, 'loadFields' ), 9 );
 
-        add_action('init', array($this, 'initInterface'), 9);
+        add_action( 'init', array( $this, 'initInterface' ), 9 );
 
-        add_action('wp_head', array($this, 'livereload'));
+        add_action( 'wp_head', array( $this, 'livereload' ) );
 
-	    if (defined('WP_LOCAL_DEV') && WP_LOCAL_DEV){
-		    add_action('admin_head', array($this, 'livereload'));
-	    }
+        if (defined( 'WP_LOCAL_DEV' ) && WP_LOCAL_DEV) {
+            add_action( 'admin_head', array( $this, 'livereload' ) );
+        }
 
-        add_action('plugins_loaded', array($this, 'i18n'));
+        add_action( 'plugins_loaded', array( $this, 'i18n' ) );
 
     }
 
@@ -118,16 +116,17 @@ Class Kontentblocks
         echo '<script src="http://localhost:35729/livereload.js"></script>';
     }
 
-    public function initInterface(){
-	    //@TODO move out of here
-	    remove_post_type_support('page', 'revisions');
+    public function initInterface()
+    {
+        //@TODO move out of here
+        remove_post_type_support( 'page', 'revisions' );
 
-	    new EditScreen();
+        new EditScreen();
     }
 
     public function i18n()
     {
-        load_plugin_textdomain('Kontentblocks', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+        load_plugin_textdomain( 'Kontentblocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
         Language\I18n::getInstance();
 
     }
@@ -145,32 +144,32 @@ Class Kontentblocks
         $Registry = ModuleRegistry::getInstance();
 
         // add core modules path
-        $paths = array(KB_TEMPLATE_PATH);
+        $paths = array( KB_TEMPLATE_PATH );
         // deprecated
-        $paths = apply_filters('kb_add_template_path', $paths);
+        $paths = apply_filters( 'kb_add_template_path', $paths );
         // replacement for '_add_template_path'
-        $paths = apply_filters('kb_add_module_path', $paths);
+        $paths = apply_filters( 'kb_add_module_path', $paths );
         foreach ($paths as $path) {
-            $dirs = glob($path . 'Module*', GLOB_ONLYDIR);
-            if (!empty($dirs)) {
+            $dirs = glob( $path . 'Module*', GLOB_ONLYDIR );
+            if (!empty( $dirs )) {
                 foreach ($dirs as $subdir) {
-                    $files = glob($subdir . '/Module*.php');
+                    $files = glob( $subdir . '/Module*.php' );
                     foreach ($files as $template) {
-
-                        if (strpos(basename($template), '__') === false)
-
-                            $Registry->add($template);
+                        if (strpos( basename( $template ), '__' ) === false) {
+                            $Registry->add( $template );
+                        }
                     }
                 }
             }
-            $files = glob($path . '*.php');
+            $files = glob( $path . '*.php' );
             foreach ($files as $template) {
-                if (strpos(basename($template), '__') === false)
-                    $Registry->add($template);
+                if (strpos( basename( $template ), '__' ) === false)
+
+                    $Registry->add( $template );
             }
         }
 
-        do_action('kb_load_templates');
+        do_action( 'kb_load_templates' );
 
     }
 
@@ -181,29 +180,29 @@ Class Kontentblocks
     public function loadExtensions()
     {
 
-        $paths = array(kb_get_plugin_path());
-        $paths[] = plugin_dir_path(__FILE__) . '/helper/';
-        $paths = apply_filters('kb_add_plugin_path', $paths);
+        $paths   = array( kb_get_plugin_path() );
+        $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
+        $paths   = apply_filters( 'kb_add_plugin_path', $paths );
 
         foreach ($paths as $path) {
 
             //take care of dirs
-            foreach (glob($path . "*", GLOB_ONLYDIR) as $filename) {
-                $base = basename($filename);
-                if (file_exists(trailingslashit($filename) . $base . '.php')) {
-                    include_once($filename . $base . '.php');
+            foreach (glob( $path . "*", GLOB_ONLYDIR ) as $filename) {
+                $base = basename( $filename );
+                if (file_exists( trailingslashit( $filename ) . $base . '.php' )) {
+                    include_once( $filename . $base . '.php' );
 
                 }
             }
 
             // take care of files
-            $files = glob($path . '*.php');
+            $files = glob( $path . '*.php' );
             foreach ($files as $template) {
-                include_once($template);
+                include_once( $template );
             }
         }
 
-        do_action('kontentblocks_init');
+        do_action( 'kontentblocks_init' );
 
     }
 
@@ -212,8 +211,8 @@ Class Kontentblocks
      */
     public function loadFields()
     {
-            foreach (glob(KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php') as $file) {
-                FieldRegistry::getInstance()->add($file);
+        foreach (glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file) {
+            FieldRegistry::getInstance()->add( $file );
         }
     }
 

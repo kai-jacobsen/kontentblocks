@@ -20,7 +20,7 @@ class ModuleViewLoader {
 	 * found views
 	 * @var array
 	 */
-	protected $views;
+	public  $views;
 
 	/**
 	 * Flag views
@@ -123,8 +123,8 @@ class ModuleViewLoader {
 				return $setByModule;
 			}
 		} else {
-			$first = $this->views[0];
-
+            $keys = array_values($this->views);
+			$first = $keys[0];
 			return $first['file'];
 		}
 	}

@@ -101,7 +101,7 @@ class PanelFieldManager extends AbstractFieldManager {
 		$collect = array();
 		if ( !empty( $this->fieldsById ) ) {
 			foreach ( $this->fieldsById as $field ) {
-				$collect[ $field->getKey() ] = $field->getReturnObj();
+				$collect[ $field->getKey() ] = $field->getUserValue();
 			}
 
 			return $collect;

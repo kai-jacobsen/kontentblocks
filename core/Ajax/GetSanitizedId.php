@@ -70,7 +70,7 @@ class GetSanitizedId
      *
      * @return mixed|string
      */
-    private function checkTemplateExists( $ad )
+    private static function checkTemplateExists( $ad )
     {
         $sane = sanitize_title( $ad );
 
@@ -79,10 +79,10 @@ class GetSanitizedId
                 'post_type'        => 'kb-mdtpl',
                 'posts_per_page'   => 1,
                 'name'             => $sane,
-                'suppress_filters' => false
+                'suppress_filters' => false,
+                'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
             )
         );
-
         if (!empty( $posts )) {
             return 'translate';
         }

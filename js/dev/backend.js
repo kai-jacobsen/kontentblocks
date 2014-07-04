@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-03 */
+/*! Kontentblocks DevVersion 2014-07-04 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -270,8 +270,10 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             "class": module.get("settings").class,
             master: module.get("master"),
             master_id: module.get("master_id"),
+            parentId: module.get("master_id"),
             template: module.get("template"),
             templateObj: module.get("templateObj"),
+            viewfile: module.get("viewfile"),
             duplicate: module.get("duplicate"),
             areaContext: this.options.area.model.get("context"),
             area: this.options.area.model.get("id"),

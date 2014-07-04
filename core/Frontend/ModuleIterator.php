@@ -208,7 +208,6 @@ class ModuleIterator implements \Iterator, \Countable {
 		$collect = array();
 
 		foreach ( $modules as $id => $module ) {
-
 			// if module is a draft or marked as inactive
 			if ( $module['state']['draft'] || ! $module['state']['active'] ) {
 				continue;
@@ -219,8 +218,9 @@ class ModuleIterator implements \Iterator, \Countable {
 			 * --------------------
 			 */
 			// @TODO handle non existing templates better
-			// @TODO Move this to a filter inside the actual module!!!11!
 
+            // last call to change module args before the instance is instantiated
+            // MasterCoreModule will change this to rewrite properties to the original template module
 			$collect[ $id ] = apply_filters( 'kb_render_setup_module', $module );
 		}
 

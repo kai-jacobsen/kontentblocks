@@ -1,17 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kaiser
- * Date: 11.01.14
- * Time: 09:57
- */
-
 namespace Kontentblocks\Modules;
-
 
 use Kontentblocks\Backend\API\PluginDataAPI;
 use Kontentblocks\Language\I18n;
 
+/**
+ * Class ModuleTemplates
+ * Class is access point to templates
+ * @package Kontentblocks\Modules
+ */
 class ModuleTemplates
 {
 
@@ -21,6 +18,10 @@ class ModuleTemplates
 
     protected $API;
 
+    /**
+     * Singleton
+     * @return ModuleTemplates
+     */
     public static function getInstance()
     {
         if (null == self::$instance) {
@@ -29,6 +30,9 @@ class ModuleTemplates
         return self::$instance;
     }
 
+    /**
+     *
+     */
     public function __construct()
     {
         // gather important data
@@ -36,88 +40,80 @@ class ModuleTemplates
 
     }
 
-    public function getTemplate($id)
-    {
-        $this->API->setGroup('template');
-        if ($this->API->get($id)) {
-            return $this->API->get($id);
-        } else {
-            return false;
-        }
-    }
 
-    public function getModuleTemplate($id)
-    {
-        $this->API->setGroup('module');
-        if ($this->API->get($id)) {
-            return $this->API->get($id);
-        } else {
-            return false;
-        }
-    }
-
-    public function getTemplateData($id)
-    {
-        $this->API->setGroup('tpldata');
-        if ($this->API->get($id)) {
-            return $this->API->get($id);
-        } else {
-            return array();
-        }
-    }
-
-    public function templateExists($id)
+    /**
+     * Check if a specific template exists by id
+     *
+     * @param $id
+     *
+     * @return bool
+     */
+    public function templateExists( $id )
     {
         $all = $this->getAllTemplates();
 
-        if (array_key_exists($id, $all)) {
+        if (array_key_exists( $id, $all )) {
             return true;
         } else {
             return false;
         }
     }
 
+
+    /**
+     * Query templates post type and prepare data
+     * @return bool
+     */
     private function setup()
     {
         $collect = array();
 
-        $data = get_posts(array(
-            'post_type' => 'kb-mdtpl',
-            'posts_per_page' => -1,
-            'suppress_filters' => false
-        ));
+        $data = get_posts(
+            array(
+                'post_type'        => 'kb-mdtpl',
+                'posts_per_page'   => - 1,
+                'suppress_filters' => false
+            )
+        );
 
 
-        if (empty($data)) {
-            return;
+        if (empty( $data )) {
+            return false;
         }
 
         foreach ($data as $tpl) {
-            $index = get_post_meta($tpl->ID, 'kb_kontentblocks', true);
-            $def = $index[$tpl->post_name];
-            $def['templateObj'] = $tpl;
+            $index                    = get_post_meta( $tpl->ID, 'kb_kontentblocks', true );
+            $def                      = $index[$tpl->post_name];
+            $def['templateObj']       = $tpl;
             $collect[$tpl->post_name] = $def;
         }
 
-        $this->templates = array_filter($collect, function ($item) {
-                d($item);
-            return !$item['master'];
-        });
-        $this->masterTemplates = array_filter($collect, function ($item) {
-            return $item['master'];
-        });
+        $this->templates       = array_filter(
+            $collect,
+            function ( $item ) {
+                return !$item['master'];
+            }
+        );
+        $this->masterTemplates = array_filter(
+            $collect,
+            function ( $item ) {
+                return $item['master'];
+            }
+        );
 
-        if (empty($data)) {
+        if (empty( $data )) {
             return false;
         }
 
     }
 
+    /**
+     * Merge master and normal templates
+     * @return array
+     */
     public function getAllTemplates()
     {
-        return array_merge($this->templates, $this->masterTemplates);
+        return array_merge( $this->templates, $this->masterTemplates );
     }
-
-
 
 }

@@ -135,14 +135,15 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             'class': module.get('settings').class,
             master: module.get('master'),
             master_id: module.get('master_id'),
+            parentId: module.get('master_id'),
             template: module.get('template'),
             templateObj: module.get('templateObj'),
+            viewfile:module.get('viewfile'),
             duplicate: module.get('duplicate'),
             areaContext: this.options.area.model.get('context'),
             area: this.options.area.model.get('id'),
             _ajax_nonce: kontentblocks.nonces.create
         };
-
         this.close();
 
         KB.Ajax.send(data, this.success, this);

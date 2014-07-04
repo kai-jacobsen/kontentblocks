@@ -3,16 +3,16 @@
 namespace Kontentblocks\Backend\Dynamic;
 
 use Kontentblocks\Backend\API\PostMetaAPI;
-use Kontentblocks\Backend\Areas\Area;
-use Kontentblocks\Backend\Areas\AreaRegistry;
-use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
-use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreTemplate;
 use Kontentblocks\Utils\JSONBridge;
 
+/**
+ * Class ModuleTemplates
+ * @package Kontentblocks\Backend\Dynamic
+ */
 class ModuleTemplates
 {
 
@@ -77,6 +77,11 @@ class ModuleTemplates
 
     }
 
+    /**
+     * Handles which form to show
+     * either add new
+     * or the module form
+     */
     public function addForm()
     {
         global $post;
@@ -87,19 +92,28 @@ class ModuleTemplates
 
         $MetaData = new PostMetaAPI( $this->postId );
         $Storage  = new ModuleStoragePostMeta( $this->postId, $MetaData );
+
+        // on this screen we always deal with only one module
+        // instance_id equals post_name
         $template = $Storage->getModuleDefinition( $post->post_name );
 
-
-
+        // no template yet, create new
         if (empty( $template )) {
             $this->createForm();
         } else {
-            $this->ModuleTemplate( $template, $MetaData );
+            $this->moduleTemplate( $template, $MetaData );
         }
 
     }
 
-    protected function ModuleTemplate( $template, $MetaData )
+
+    /**
+     * Display method of the module
+     *
+     * @param $template
+     * @param $MetaData
+     */
+    protected function moduleTemplate( $template, $MetaData )
     {
         global $post;
 
@@ -121,12 +135,11 @@ class ModuleTemplates
         // create essential markup and render the module
         // infamous hidden editor hack
         \Kontentblocks\Helper\getHiddenEditor();
-
-
         $moduleData = $MetaData->get( '_' . $template['instance_id'] );
 
         // no data from db equals null, null is invalid
         // we can't pass null to the factory, if environment is null as well
+        // @TODO why not passing an Environment?
         if (empty( $moduleData )) {
             $moduleData = array();
         }
@@ -146,7 +159,6 @@ class ModuleTemplates
         if (isset( $_GET['return'] )) {
             echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
         }
-
         // To keep html out of php files as much as possible twig is used
         $FormNew = new CoreTemplate( 'module-template.twig', $templateData );
         $FormNew->render( true );
@@ -187,39 +199,52 @@ class ModuleTemplates
 
     }
 
+    /**
+     * Save handler, either creates a new module or just updates an exisiting
+     *
+     * @param int $postId
+     * @param array $postObj
+     */
     public function save( $postId, $postObj )
     {
-
+        // auth request
         if (!$this->auth( $postId )) {
             return false;
         }
+
         $MetaData = new PostMetaAPI( $postId );
         $Storage  = new ModuleStoragePostMeta( $postId, $MetaData );
 
         $tpl = $Storage->getModuleDefinition( $postObj->post_name );
 
+        // no template yet, create an new one
         if (!$tpl) {
             $this->createTemplate( $postId, $Storage );
         } else {
-
-            $id              = $tpl['instance_id'];
-            $data            = $_POST[$id];
-            $tpl['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+            // update existing
+            $id           = $tpl['instance_id'];
+            $data         = $_POST[$id];
             $existingData = $Storage->getModuleData( $id );
             $old          = ( empty( $existingData ) ) ? array() : $existingData;
 
             $moduleDef = ModuleFactory::parseModule( $tpl );
 
-            $Factory   = new ModuleFactory( $moduleDef['class'], $moduleDef, null, $old );
+            $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, null, $old );
             /** @var $Instance \Kontentblocks\Modules\Module */
             $Instance = $Factory->getModule();
             $new      = $Instance->save( $data, $old );
             $toSave   = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe( $new, $old );
+
+            // settings are not persistent, never
             unset( $tpl['settings'] );
+
+            // save viewfile if present
+            $tpl['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
             $Storage->saveModule( $id, $toSave );
             $Storage->reset();
-//            $Storage->addToIndex( $id, $tpl );
+
+            // return to original post if the edit request came from outside
             if (isset( $_POST['kb_return_to_post'] )) {
                 $url = get_edit_post_link( $_POST['kb_return_to_post'] );
                 wp_redirect( html_entity_decode( $url ) );
@@ -231,12 +256,17 @@ class ModuleTemplates
 
     }
 
+    /**
+     * Create a new template from form data
+     * @param $postId
+     * @param ModuleStoragePostMeta $Storage
+     */
     public function createTemplate( $postId, ModuleStoragePostMeta $Storage )
     {
 
         // no template data send
         if (empty( $_POST['new-template'] )) {
-            return false;
+            return;
         }
 
         // set defaults
@@ -263,25 +293,35 @@ class ModuleTemplates
         if (is_null( $definition )) {
             wp_die( 'Definition not found' );
         }
-
         //set individual module definition args for later reference
-        $definition['master']      = $data['master'];
-        $definition['master_id']   = $data['master_id'];
-        $definition['template']    = true;
-        $definition['instance_id'] = $data['id'];
-        $definition['class']       = $data['type'];
-        $definition['category']    = 'template';
-        $definition['area']        = 'template';
-        $definition['areaContext'] = 'normal';
+        $definition['master']      = $data['master']; // boolean indicates master status
+        $definition['master_id']   = $data['master_id']; // id of db post
+        $definition['parentId']    = $data['master_id']; // id of db post
+        $definition['template']    = true; // it's a template yes
+        $definition['instance_id'] = $data['id']; // equals post_name
+        $definition['class']       = $data['type']; // Module class
+        $definition['area']        = 'template'; // needs to be present
+        $definition['areaContext'] = 'template'; // needs to be present
 
         // settings are not persistent
         unset( $definition['settings'] );
 
+        // add to post meta kb_kontentblocks
         $Storage->addToIndex( $data['id'], $definition );
+        // single post meta entry, to make meta queries easier
         $Storage->getDataHandler()->update( 'master', $definition['master'] );
     }
 
 
+    /**
+     *
+     * Since all native wp controls are removed from this screen
+     * we need to manually save essential post data
+     * @param $data
+     * @param $postarr
+     *
+     * @return mixed
+     */
     public function postData( $data, $postarr )
     {
         // no template data send
@@ -295,6 +335,9 @@ class ModuleTemplates
         return $data;
     }
 
+    /**
+     * Register the template post type
+     */
     public function registerPostType()
     {
 
@@ -334,6 +377,12 @@ class ModuleTemplates
         remove_post_type_support( 'kb-mdtpl', 'title' );
     }
 
+    /**
+     * Modify template specific messages
+     * @param $messages
+     *
+     * @return mixed
+     */
     public function postTypeMessages( $messages )
     {
         $post             = get_post();
