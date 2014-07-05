@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Backend\API\PostMetaAPI,
+use Kontentblocks\Backend\API\PostMetaDataProvider,
     Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Backend\Areas\AreaRegistry;
 
@@ -102,6 +102,6 @@ function has_modules( $area_id, $post_id = null )
     }
     $post_id = (null === $post_id) ? $post->ID : $post_id;
 
-    $Meta = new PostMetaAPI( $post_id );
+    $Meta = new PostMetaDataProvider( $post_id );
     return $Meta->hasModules( $area_id );
 }

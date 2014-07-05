@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\API\PostMetaAPI,
+use Kontentblocks\Backend\DataProvider\PostMetaDataProvider,
     Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Utils\JSONBridge;

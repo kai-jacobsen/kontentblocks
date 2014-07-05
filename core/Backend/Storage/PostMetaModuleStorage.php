@@ -1,16 +1,16 @@
 <?php
 namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Backend\API\PostMetaAPI;
+use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 
 /**
- * Class ModuleStoragePostMeta
+ * Class PostMetaModuleStorage
  * Mid-level wrapper to underlying data handler
  *
  * @package Kontentblocks
  * @subpackage Backend
  */
-class ModuleStoragePostMeta
+class PostMetaModuleStorage
 {
     /**
      * current post id
@@ -28,7 +28,7 @@ class ModuleStoragePostMeta
 
     /**
      * Data Handler
-     * @var \Kontentblocks\Backend\API\PostMetaAPI
+     * @var \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
      * @since 1.0.0
      */
     protected $DataHandler;
@@ -45,12 +45,12 @@ class ModuleStoragePostMeta
      * Class constructor
      *
      * @param $post_id
-     * @param PostMetaAPI $DataHandler
+     * @param PostMetaDataProvider $DataHandler
      *
      * @throws \Exception
      * @since 1.0.0
      */
-    public function __construct( $post_id, PostMetaAPI $DataHandler = null )
+    public function __construct( $post_id, PostMetaDataProvider $DataHandler = null )
     {
         if (!isset( $post_id ) || $post_id === 0) {
             throw new \Exception( 'a valid post id must be provided' );
@@ -60,7 +60,7 @@ class ModuleStoragePostMeta
 
         // Late init data handler if not provided
         if (is_null( $DataHandler )) {
-            $this->DataHandler = new PostMetaAPI( $post_id );
+            $this->DataHandler = new PostMetaDataProvider( $post_id );
         } else {
             $this->DataHandler = $DataHandler;
         }
@@ -82,7 +82,7 @@ class ModuleStoragePostMeta
 
     /**
      * Getter for DataHandler
-     * @return PostMetaAPI
+     * @return PostMetaDataProvider
      */
     public function getDataHandler()
     {

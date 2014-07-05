@@ -171,7 +171,7 @@ class ModuleViewLoader {
 			return;
 		}
 		$postId = $module['post_id'];
-		/** @var \Kontentblocks\Backend\Storage\ModuleStoragePostMeta $Storage */
+		/** @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage $Storage */
 		$Storage           = \Kontentblocks\Helper\getStorage( $postId );
 		$index             = $Storage->getModuleDefinition( $module['instance_id'] );
 		$index['viewfile'] = $module['viewfile'];

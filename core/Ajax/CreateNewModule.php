@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\API\PostMetaAPI;
+use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 use Kontentblocks\Modules\ModuleFactory,
     Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Utils\JSONBridge;
@@ -217,7 +217,7 @@ class CreateNewModule
         //create data for templates
         if ($this->moduleArgs['template']) {
 
-            $PostMeta = new PostMetaAPI( $this->moduleArgs['master_id'] );
+            $PostMeta = new PostMetaDataProvider( $this->moduleArgs['master_id'] );
 
             $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateObj']['id'] );
             $update      = $this->environment->getStorage()->saveModule( $this->newInstanceID, $master_data );

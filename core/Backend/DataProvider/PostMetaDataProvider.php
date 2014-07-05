@@ -1,9 +1,9 @@
 <?php
 
-namespace Kontentblocks\Backend\API;
+namespace Kontentblocks\Backend\DataProvider;
 
 /**
- * Class PostMetaAPI
+ * Class PostMetaDataProvider
  * Wrapper to WordPress native post meta functions
  * This class has been stripped down to the essentials during development and has only the least necessary
  * methods available for the plugin to work.
@@ -12,7 +12,7 @@ namespace Kontentblocks\Backend\API;
  * @package Kontentblocks\Backend\Post
  * @since 1.0.0
  */
-class PostMetaAPI {
+class PostMetaDataProvider {
 
 	/**
 	 * Post ID to get meta from

@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\API\PostMetaAPI;
+use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 
 /**
  * Class ChangeArea

@@ -4,8 +4,8 @@ namespace Kontentblocks\Backend\Environment;
 
 use Kontentblocks\Abstracts\AbstractEnvironment,
     Kontentblocks\Backend\Areas\AreaRegistry,
-    Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
-use Kontentblocks\Backend\API\PostMetaAPI;
+    Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Modules\ModuleFactory;
 
@@ -21,12 +21,12 @@ class PostEnvironment
 {
 
     /**
-     * @var \Kontentblocks\Backend\API\PostMetaAPI
+     * @var \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
      */
     protected $MetaData;
 
     /**
-     * @var \Kontentblocks\Backend\Storage\ModuleStoragePostMeta
+     * @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage
      */
     protected $Storage;
 
@@ -67,8 +67,8 @@ class PostEnvironment
         }
         $this->postID = $postID;
 
-        $this->MetaData = new PostMetaAPI($postID);
-        $this->Storage = new ModuleStoragePostMeta($postID, $this->MetaData);
+        $this->MetaData = new PostMetaDataProvider($postID);
+        $this->Storage = new PostMetaModuleStorage($postID, $this->MetaData);
 
         $this->pageTemplate = $this->MetaData->getPageTemplate();
         $this->postType = $this->MetaData->getPostType();

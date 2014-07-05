@@ -1,7 +1,7 @@
 <?php
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\API\PluginDataAPI;
+use Kontentblocks\Backend\DataProvider\PluginDataAPI;
 use Kontentblocks\Language\I18n;
 
 /**

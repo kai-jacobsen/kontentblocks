@@ -2,8 +2,9 @@
 
 namespace Kontentblocks\Helper;
 
+use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Backend\Storage\ModuleStoragePostMeta;
+use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Modules\ModuleRegistry,
     Kontentblocks\Backend\Areas\AreaRegistry;
 
@@ -29,7 +30,7 @@ function getHiddenEditor()
 function getDataHandler($post_id = null)
 {
     if ($post_id && is_numeric($id) && $post_id !== -1) {
-        return new \Kontentblocks\Backend\API\PostMetaAPI($post_id);
+        return new PostMetaDataProvider($post_id);
     }
     return null;
 }
@@ -40,7 +41,7 @@ function getDataHandler($post_id = null)
 function getStorage($id = null)
 {
     if ($id && is_numeric($id) &&  $id != -1) {
-        return new ModuleStoragePostMeta($id);
+        return new PostMetaModuleStorage($id);
     }
     return null;
 
