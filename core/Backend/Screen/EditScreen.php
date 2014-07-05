@@ -35,14 +35,14 @@ Class EditScreen {
 	function __construct() {
 		global $pagenow;
 
-		$this->hooks = $this->setupPageHooks();
+		$this->hooks = $this->setupHooks();
 
 		if ( !in_array( $pagenow, $this->hooks ) ) {
 			return null;
 		}
 
         // prepare current posts data
-		add_action( 'add_meta_boxes', array( $this, 'preparePostData' ), 10 );
+		add_action( 'add_meta_boxes', array( $this, 'setupEnvironment' ), 10 );
 		// add UI
 		add_action( 'add_meta_boxes', array( $this, 'addUserInterface' ), 20, 2 );
 		// register save callback
@@ -58,7 +58,7 @@ Class EditScreen {
 	 * @uses \Kontentblocks\Backend\Environment\PostEnvironment
 	 * @since 1.0.0
 	 */
-	public function preparePostData() {
+	public function setupEnvironment() {
 		global $post;
 		$this->Environment = new PostEnvironment( $post->ID );
 
@@ -182,8 +182,8 @@ Class EditScreen {
 	 * @return array
 	 * @filter kb_page_hooks modify allowed page hooks
 	 */
-	private function setupPageHooks() {
-		return apply_filters( 'kb_page_hooks', array( 'post.php', 'post-new.php' ) );
+	private function setupHooks() {
+		return apply_filters( 'kb::setup.hooks', array( 'post.php', 'post-new.php' ) );
 
 	}
 

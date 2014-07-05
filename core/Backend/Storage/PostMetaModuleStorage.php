@@ -17,7 +17,7 @@ class PostMetaModuleStorage
      * @var int
      * @since 1.0.0
      */
-    protected $post_id;
+    protected $postId;
 
     /**
      * Module Index
@@ -55,7 +55,7 @@ class PostMetaModuleStorage
         if (!isset( $post_id ) || $post_id === 0) {
             throw new \Exception( 'a valid post id must be provided' );
         }
-        $this->post_id = $post_id;
+        $this->postId = $post_id;
         // Late init data handler if not provided
         if (is_null( $DataHandler )) {
             $this->DataProvider = new PostMetaDataProvider( $post_id );
@@ -340,7 +340,7 @@ class PostMetaModuleStorage
     public function backup()
     {
         return array(
-            'id'      => $this->post_id,
+            'id'      => $this->postId,
             'index'   => $this->getIndex(),
             'modules' => $this->getModules()
         );
