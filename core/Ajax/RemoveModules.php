@@ -8,28 +8,23 @@ use Kontentblocks\Backend\Storage\BackupManager;
 class RemoveModules
 {
 
-    protected $postId;
-    protected $module;
-    protected $dataHandler;
-
-    public function __construct()
+    public static function run()
     {
-        check_ajax_referer('kb-delete');
+        check_ajax_referer( 'kb-delete' );
 
+        if (!current_user_can('edit_kontentblocks')){
+            wp_send_json_error();
+        }
 
-        $this->postId = $_POST['post_id'];
-        $this->module = $_POST['module'];
-        $this->Storage = \Kontentblocks\Helper\getStorage($this->postId);
+        $postId  = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $module  = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
+        $Storage = \Kontentblocks\Helper\getStorage( $postId );
 
-        $this->remove();
+        $BackupManager = new BackupManager( $Storage );
+        $BackupManager->backup( "Before Module: {$module} was deleted" );
+        $update = $Storage->removeFromIndex( $module );
+        wp_send_json( $update );
     }
 
-    public function remove()
-    {
-        $BackupManager = new BackupManager($this->Storage);
-        $BackupManager->backup("Before Module: {$this->module} was deleted");
-        $update = $this->Storage->removeFromIndex($this->module);
-        wp_send_json($update);
-    }
 
 }

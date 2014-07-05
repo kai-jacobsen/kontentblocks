@@ -77,6 +77,7 @@ KB.IEdit.Image = (function ($) {
             path.push(data.arraykey);
             path.push(data.index);
             path.push(data.key);
+            console.log(KB.Util.cleanArray(path));
             KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join('.'), value);
 //            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
 //                moduleData[data.arraykey][data.index][data.key] = value;

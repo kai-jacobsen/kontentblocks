@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-04 */
+/*! Kontentblocks DevVersion 2014-07-05 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -167,6 +167,7 @@ KB.IEdit.Image = function($) {
             path.push(data.arraykey);
             path.push(data.index);
             path.push(data.key);
+            console.log(KB.Util.cleanArray(path));
             KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join("."), value);
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set("moduleData", moduleData);
@@ -817,12 +818,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.left = mSettings.controls.toolbar.left;
         }
         $controls.offset({
-            top: 40,
-            left: pos.left + 10,
+            top: 10,
+            left: pos.left - 70,
             zIndex: 999999
         });
         $controls.css({
-            top: 40 + "px",
+            top: 10 + "px",
             right: 0
         });
     },

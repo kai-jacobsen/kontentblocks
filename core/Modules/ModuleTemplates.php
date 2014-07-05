@@ -35,6 +35,7 @@ class ModuleTemplates
      */
     public function __construct()
     {
+
         // gather important data
         $this->setup();
 
@@ -80,7 +81,6 @@ class ModuleTemplates
         if (empty( $data )) {
             return false;
         }
-
         foreach ($data as $tpl) {
             $index                    = get_post_meta( $tpl->ID, 'kb_kontentblocks', true );
             $def                      = $index[$tpl->post_name];

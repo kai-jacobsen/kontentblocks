@@ -24,6 +24,7 @@ class PageSettings
 
     public static function save_page_template( $post_id )
     {
+
         if ( !empty( $_POST[ 'kb_page_template' ] ) ) {
             $page_template = $_POST[ 'kb_page_template' ];
             update_post_meta( $post_id, '_wp_page_template', $page_template );

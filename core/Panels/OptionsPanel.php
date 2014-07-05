@@ -120,7 +120,7 @@ abstract class OptionsPanel {
 	public function save() {
 
 		$old                = $this->setupData();
-		$this->FieldManager = new PanelFieldManager( $this->baseId, $this->data );
+		$this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
 
 		$new = $this->fields( $this->FieldManager )->save( $_POST[ $this->baseId ], $old );
 		update_option( $this->baseId, $new );

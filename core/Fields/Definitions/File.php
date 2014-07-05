@@ -21,46 +21,46 @@ Class File extends Field
 
     public function form()
     {
-        // file default value
-
-        $value        = wp_parse_args( $this->getValue(), $fileDefaults );
+        $id = $this->getValue('id');
         // using twig template for html output
-        $tpl          = new FieldTemplate(
+        $tpl = new FieldTemplate(
             'file.twig', array(
-            'field' => $this,
-            'value' => $value,
-            'i18n' => I18n::getPackages( 'Refields.file', 'Refields.common' ),
-            'file' => new AttachmentHandler( $value[ 'id' ] ),
-            'isEmpty' => (empty( $value[ 'id' ] )) ? 'kb-hide' : ''
+                'field'   => $this,
+                'value'   => $this->getValue(),
+                'i18n'    => I18n::getPackages( 'Refields.file', 'Refields.common' ),
+                'file'    => new AttachmentHandler( $this->getValue( 'id' ) ),
+                'isEmpty' => ( empty( $id ) ) ? 'kb-hide' : ''
             )
         );
         $tpl->render( true );
 
     }
 
-    public function setFilter($value){
+    public function setFilter( $value )
+    {
 
-        if ( !empty($value) && is_numeric(absint($value['id']))){
-            return wp_prepare_attachment_for_js($value['id']);
+        if (!empty( $value ) && is_numeric( absint( $value['id'] ) )) {
+            return wp_prepare_attachment_for_js( $value['id'] );
         }
         return $value;
     }
 
-	/**
-	 * @param $val
-	 *
-	 * @return mixed
-	 */
-	protected function prepareInputValue( $val ) {
+    /**
+     * @param $val
+     *
+     * @return mixed
+     */
+    protected function prepareInputValue( $val )
+    {
 
-		$fileDefaults = array(
-			'id' => null,
-		);
+        $fileDefaults = array(
+            'id' => null,
+        );
 
-		$parsed = wp_parse_args($val, $fileDefaults);
-		$parsed['id'] = (!is_null($parsed['id'])) ? absint($parsed['id']) : null;
+        $parsed       = wp_parse_args( $val, $fileDefaults );
+        $parsed['id'] = ( !is_null( $parsed['id'] ) ) ? absint( $parsed['id'] ) : null;
 
-		return $parsed;
+        return $parsed;
 
-	}
+    }
 }

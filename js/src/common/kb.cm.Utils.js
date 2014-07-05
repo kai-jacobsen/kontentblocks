@@ -31,7 +31,7 @@ KB.Util = function ($) {
             var newArray = new Array();
             for (var i = 0; i < actual.length; i++) {
 
-                if (!_.isUndefined(actual[i])) {
+                if (!_.isUndefined(actual[i]) && !_.isEmpty(actual[i])) {
                     newArray.push(actual[i]);
                 }
             }

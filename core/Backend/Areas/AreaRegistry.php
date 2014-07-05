@@ -140,7 +140,6 @@ class AreaRegistry
         } else {
             $this->rawAreas[$area['id']] = wp_parse_args($this->rawAreas[$area['id']], $area);
         }
-
         $this->preFilterAreas($this->rawAreas[$area['id']]);
     }
 
@@ -349,7 +348,6 @@ class AreaRegistry
             if (empty($area['context'])) {
                 $area['context'] = 'side';
             }
-
             if ((!empty($area['pageTemplates'])) && (!empty($area['postTypes']))) {
                 if (in_array($pageTemplate, $area['pageTemplates']) && in_array($postType, $area['postTypes'])) {
                     $areas[$area['id']] = $area;

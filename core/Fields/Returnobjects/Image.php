@@ -134,13 +134,11 @@ class Image extends AbstractEditableFieldReturn {
 		if ( $this->inlineEdit ) {
 			$this->addAttr( 'data-powertip', 'Click to change image' );
 		}
-
 		// adds necessary attributes to enable inline edit
 		$this->handleLoggedInUsers();
 		$this->prepareSrc();
 		$format = '<%1$s %3$s src="%2$s" >';
 		$this->toJSON();
-
 
 		return sprintf( $format, 'img', $this->src, $this->_renderAttributes() );
 

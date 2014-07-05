@@ -122,7 +122,6 @@ class CreateNewModule
             $proto                = ModuleRegistry::getInstance()->get( $this->type );
             $proto                = wp_parse_args( $this->moduleArgs, $proto );
             $proto['instance_id'] = $this->newInstanceID;
-
             return $proto;
         } else {
             wp_send_json_error( $this->type . ' does not exist' );
@@ -156,11 +155,7 @@ class CreateNewModule
     private function setupNewID()
     {
         $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
-        if ($this->post_id !== - 1) {
-            return $prefix . $this->post_id . '_' . $this->newCount;
-        } else {
-            return $prefix . 'kb-block-da' . $this->moduleArgs['area'] . '_' . $this->newCount;
-        }
+        return $prefix . $this->post_id . '_' . $this->newCount;
 
     }
 
@@ -201,6 +196,7 @@ class CreateNewModule
     {
         $toSave = $this->newModule;
 
+
         //dont save settings
         unset( $toSave['settings'] );
 
@@ -210,6 +206,7 @@ class CreateNewModule
             wp_send_json_error( 'Update to Index failed' );
         }
 
+        do_action( 'kb::create:module', $this->newModule, $this->environment );
     }
 
     /**
@@ -225,6 +222,7 @@ class CreateNewModule
             $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateObj']['id'] );
             $update      = $this->environment->getStorage()->saveModule( $this->newInstanceID, $master_data );
             $this->environment->getStorage()->reset();
+
             if (!$update) {
                 wp_send_json_error( 'Update not successful' );
             }

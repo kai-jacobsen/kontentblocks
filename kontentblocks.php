@@ -148,6 +148,8 @@ Class Kontentblocks
         // deprecated
         $paths = apply_filters( 'kb_add_template_path', $paths );
         // replacement for '_add_template_path'
+        $paths = apply_filters( 'kb::add.module.path', $paths );
+        // legacy
         $paths = apply_filters( 'kb_add_module_path', $paths );
         foreach ($paths as $path) {
             $dirs = glob( $path . 'Module*', GLOB_ONLYDIR );
@@ -169,7 +171,7 @@ Class Kontentblocks
             }
         }
 
-        do_action( 'kb_load_templates' );
+        do_action( 'kb::load:templates' );
 
     }
 
@@ -182,10 +184,9 @@ Class Kontentblocks
 
         $paths   = array( kb_get_plugin_path() );
         $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
-        $paths   = apply_filters( 'kb_add_plugin_path', $paths );
+        $paths   = apply_filters( 'kb::add.plugin.path', $paths );
 
         foreach ($paths as $path) {
-
             //take care of dirs
             foreach (glob( $path . "*", GLOB_ONLYDIR ) as $filename) {
                 $base = basename( $filename );
@@ -202,7 +203,7 @@ Class Kontentblocks
             }
         }
 
-        do_action( 'kontentblocks_init' );
+        do_action( 'kb::init' );
 
     }
 

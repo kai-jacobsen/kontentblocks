@@ -31,7 +31,6 @@ class ChangeArea
         $moduleDefinition['area'] = $newArea;
         $moduleDefinition['areaContext'] = $newAreaContext;
         $update = $Storage->addToIndex($instanceId, $moduleDefinition);
-
         wp_send_json($update);
 
     }

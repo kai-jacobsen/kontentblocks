@@ -34,4 +34,8 @@ Class Editor extends Field {
 	protected function prepareInputValue( $val ) {
 		return $val;
 	}
+
+    public function prepareOutputValue($val){
+        return apply_filters('the_content', $val);
+    }
 }

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-04 */
+/*! Kontentblocks DevVersion 2014-07-05 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -611,6 +611,7 @@ KB.Ui = function($) {
         changeArea: function(targetArea, module) {
             return KB.Ajax.send({
                 action: "changeArea",
+                _ajax_nonce: kontentblocks.nonces.update,
                 block_id: module.get("instance_id"),
                 area_id: targetArea.get("id"),
                 context: targetArea.get("context")
@@ -682,7 +683,7 @@ KB.Util = function($) {
         cleanArray: function(actual) {
             var newArray = new Array();
             for (var i = 0; i < actual.length; i++) {
-                if (!_.isUndefined(actual[i])) {
+                if (!_.isUndefined(actual[i]) && !_.isEmpty(actual[i])) {
                     newArray.push(actual[i]);
                 }
             }

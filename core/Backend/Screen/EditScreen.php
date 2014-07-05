@@ -41,7 +41,7 @@ Class EditScreen {
 			return null;
 		}
 
-		// prepare current posts data
+        // prepare current posts data
 		add_action( 'add_meta_boxes', array( $this, 'preparePostData' ), 10 );
 		// add UI
 		add_action( 'add_meta_boxes', array( $this, 'addUserInterface' ), 20, 2 );
@@ -88,7 +88,6 @@ Class EditScreen {
 		if ( !post_type_supports( $this->postData->get( 'postType' ), 'kontentblocks' ) ) {
 			return;
 		}
-
 		// the main wrapper for the interface
 		echo "<div class='clearfix' id='kontentblocks_stage'>";
 		echo "<div class='kb-whiteout' style='display: none;'></div>";
@@ -131,7 +130,8 @@ Class EditScreen {
 			$post_id = get_the_ID();
 		}
 
-		$Environment = \Kontentblocks\Helper\getEnvironment( $post_id );
+
+        $Environment = \Kontentblocks\Helper\getEnvironment( $post_id );
 		$Environment->save();
 
 	}

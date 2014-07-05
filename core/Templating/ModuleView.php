@@ -60,7 +60,7 @@ class ModuleView {
 		}
 
 		if ( $echo ) {
-			$this->engine->display( $this->tplFile, $this->data );
+            $this->engine->display( $this->tplFile, $this->data );
 		} else {
 			return $this->engine->render( $this->tplFile, $this->data );
 		}

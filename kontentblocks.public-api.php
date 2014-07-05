@@ -67,6 +67,7 @@ add_action( 'sidebar_areas', 'kb_render_area_sidebar', 10, 3 );
 function kb_render_area_sidebar( $id = null, $additionalArgs = array() )
 {
     global  $post;
+
     $post_id = (null === $id) ? $post->ID : $id;
     $areas   = get_post_meta( $post_id, 'active_sidebar_areas', true );
     if ( !empty( $areas ) ) {

@@ -62,7 +62,7 @@ class Twig
 
     public static function getDefaultPath()
     {
-        return apply_filters('kb_twig_def_path', get_template_directory() . '/module-templates/');
+        return apply_filters('kb_twig_def_path', get_stylesheet_directory() . '/module-templates/');
 
     }
 
@@ -79,11 +79,11 @@ class Twig
     public static function setPath($path)
     {
 
-	    if (!in_array($path, self::$paths)){
-		    self::$paths[] = $path;
-		    self::$loader->prependPath($path);
-
-	    }
+//	    if (!in_array($path, self::$paths)){
+//		    self::$paths[] = $path;
+//
+//        }
+        self::$loader->prependPath($path);
 
 
     }

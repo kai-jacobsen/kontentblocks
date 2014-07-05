@@ -45,14 +45,19 @@ class DynamicAreas {
 	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'registerPostType' ) );
-		add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
-		add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );
-		add_action( 'save_post', array( $this, 'save' ) );
-		add_action( 'wp_insert_post_data', array( $this, 'postData' ), 10, 2 );
-		add_filter( 'post_updated_messages', array( $this, 'postTypeMessages' ) );
-		add_filter( 'post_row_actions', array( $this, 'rowActions' ), 10, 2 );
-		add_action( 'admin_footer', array( $this, 'hackItAway' ), 99 );
-		add_filter( 'post_class', array( $this, 'addRowClass' ), 10, 3 );
+
+        if (is_admin()){
+
+            add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
+            add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );
+            add_action( 'save_post', array( $this, 'save' ) );
+            add_action( 'wp_insert_post_data', array( $this, 'postData' ), 10, 2 );
+            add_filter( 'post_updated_messages', array( $this, 'postTypeMessages' ) );
+            add_filter( 'post_row_actions', array( $this, 'rowActions' ), 10, 2 );
+            add_action( 'admin_footer', array( $this, 'hackItAway' ), 99 );
+            add_filter( 'post_class', array( $this, 'addRowClass' ), 10, 3 );
+        }
+
 	}
 
 	/**

@@ -125,8 +125,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 //        }
 
 //        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
-        $controls.offset({top:  40, left: pos.left + 10, zIndex: 999999});
-        $controls.css({'top': 40 + 'px', 'right':0});
+        $controls.offset({top:  10, left: pos.left - 70, zIndex: 999999});
+        $controls.css({'top': 10 + 'px', 'right':0});
     },
     // @TODO: old function updateModule() remove?
     updateModule: function () {

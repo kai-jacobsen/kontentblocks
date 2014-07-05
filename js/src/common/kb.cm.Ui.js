@@ -322,6 +322,7 @@ KB.Ui = function ($) {
         changeArea: function (targetArea, module) {
             return KB.Ajax.send({
                 action: 'changeArea',
+                _ajax_nonce: kontentblocks.nonces.update,
                 block_id: module.get('instance_id'),
                 area_id: targetArea.get('id'),
                 context: targetArea.get('context')
