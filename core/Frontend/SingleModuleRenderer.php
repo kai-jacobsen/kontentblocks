@@ -5,7 +5,7 @@ namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Utils\JSONBridge;
 
-class SingleModuleRender
+class SingleModuleRenderer
 {
 
 

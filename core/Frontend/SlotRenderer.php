@@ -23,10 +23,10 @@ namespace Kontentblocks\Frontend;
  * what kind and how many modules are present.
  *
  *
- * Class SlotRender
+ * Class SlotRenderer
  * @package Kontentblocks\Frontend
  */
-class SlotRender
+class SlotRenderer
 {
 
     /**

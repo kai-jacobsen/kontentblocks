@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Screen;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Fields\Definitions\DateTime;
 use Kontentblocks\Helper;
 
 /**
@@ -28,6 +29,7 @@ Class EditScreen {
 	 */
 	protected $Environment;
 
+    public $date;
 	/**
 	 * Add the main metabox to all given post types in the kb_register_kontentblocks function call
 	 *
@@ -40,7 +42,6 @@ Class EditScreen {
 		if ( !in_array( $pagenow, $this->hooks ) ) {
 			return null;
 		}
-
         // prepare current posts data
 		add_action( 'add_meta_boxes', array( $this, 'setupEnvironment' ), 10 );
 		// add UI

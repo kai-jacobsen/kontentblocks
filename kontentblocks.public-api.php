@@ -57,7 +57,7 @@ function kb_render_area( $area = 'kontentblocks', $id = NULL, $additionalArgs = 
 {
     global $post;
     $postId = (null === $id) ? $post->ID : $id;
-    $AreaRender = new Kontentblocks\Frontend\AreaRender($postId, $area, $additionalArgs);
+    $AreaRender = new Kontentblocks\Frontend\AreaRenderer($postId, $area, $additionalArgs);
     $AreaRender->render(true);
 }
 
@@ -72,7 +72,7 @@ function kb_render_area_sidebar( $id = null, $additionalArgs = array() )
     $areas   = get_post_meta( $post_id, 'active_sidebar_areas', true );
     if ( !empty( $areas ) ) {
         foreach ( $areas as $area ) {
-            $AreaRender = new Kontentblocks\Frontend\AreaRender($area, $area, $additionalArgs);
+            $AreaRender = new Kontentblocks\Frontend\AreaRenderer($area, $area, $additionalArgs);
             $AreaRender->render(true);
 
         }

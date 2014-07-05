@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Extensions;
 
-use Kontentblocks\Backend\Storage\BackupManager;
+use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Language\I18n;
 
 class LayoutConfigurations
@@ -171,7 +171,7 @@ class LayoutConfigurations
     private function _resetPostMeta($configuration, $post_id, $config)
     {
         $Storage = \Kontentblocks\Helper\getStorage($post_id);
-        $BackupManager = new BackupManager($Storage);
+        $BackupManager = new BackupDataStorage($Storage);
         $configurations = get_option('kb_layout_configurations');
 
         if (isset($configurations[$config][$configuration])) {

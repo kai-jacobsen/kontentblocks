@@ -72,8 +72,8 @@ class AreaRegistry
 
     public function __construct()
     {
-        $this->AreaDynamicManager = AreaDynamicManager::getInstance();
-        add_action('dynamic_areas_setup', array($this, 'init'));
+        $this->AreaDynamicManager = new AreaDynamicManager();
+        add_action( 'dynamic_areas_setup', array( $this, 'init' ) );
     }
 
     /**
@@ -88,27 +88,27 @@ class AreaRegistry
     {
         $areas = get_posts(
             array(
-                'post_type' => 'kb-dyar',
-                'posts_per_page' => -1,
+                'post_type'        => 'kb-dyar',
+                'posts_per_page'   => - 1,
                 'suppress_filters' => false
             )
         );
 
-        if (!empty($areas)) {
+        if (!empty( $areas )) {
             foreach ($areas as $areapost) {
-                $area = get_post_meta($areapost->ID, '_area', true);
+                $area              = get_post_meta( $areapost->ID, '_area', true );
                 $area['parent_id'] = $areapost->ID;
-                $dynamicAreas[] = $area;
+                $dynamicAreas[]    = $area;
             }
         }
 
-        if (!empty($dynamicAreas)) {
+        if (!empty( $dynamicAreas )) {
             foreach ($dynamicAreas as $area) {
-                $this->addArea($area, false);
+                $this->addArea( $area, false );
             }
         }
 
-        do_action('areas_setup');
+        do_action( 'areas_setup' );
     }
 
     /**
@@ -119,39 +119,42 @@ class AreaRegistry
      *
      * @param array $args
      * @param bool $manual
+     *
      * @return void
      * @since 1.0.0
      */
-    public function addArea($args, $manual = true)
+    public function addArea( $args, $manual = true )
     {
-        if (!empty($args['id'])) {
-            $args['id'] = sanitize_title($args['id']);
+        if (!empty( $args['id'] )) {
+            $args['id'] = sanitize_title( $args['id'] );
         }
 
         // merge defaults with provided args
-        $area = wp_parse_args($args, self::getDefaults($manual));
+        $area = wp_parse_args( $args, self::getDefaults( $manual ) );
 
         if ($area['dynamic'] === true && $manual) {
-            $this->AreaDynamicManager->add($area);
+            $this->AreaDynamicManager->add( $area );
         }
 
-        if (empty($this->rawAreas[$area['id']])) {
+        if (empty( $this->rawAreas[$area['id']] )) {
             $this->rawAreas[$area['id']] = $area;
         } else {
-            $this->rawAreas[$area['id']] = wp_parse_args($this->rawAreas[$area['id']], $area);
+            $this->rawAreas[$area['id']] = wp_parse_args( $this->rawAreas[$area['id']], $area );
         }
-        $this->preFilterAreas($this->rawAreas[$area['id']]);
+        $this->preFilterAreas( $this->rawAreas[$area['id']] );
     }
 
     /**
      * Returns an area from the registry by id
+     *
      * @param string $id
+     *
      * @return mixed null if area is not set | area array args if area is set
      * @since 1.0.0
      */
-    public function getArea($id)
+    public function getArea( $id )
     {
-        if (isset($this->rawAreas[$id])) {
+        if (isset( $this->rawAreas[$id] )) {
             return $this->rawAreas[$id];
         } else {
             return null;
@@ -161,23 +164,31 @@ class AreaRegistry
 
     /**
      * Retrieve all areas in given context
+     *
      * @param string $context
+     *
      * @return array
      * @since 1.0.0
      */
-    public function getAreasByContext($context)
+    public function getAreasByContext( $context )
     {
-        return array_filter($this->rawAreas, function ($area) use ($context) {
-            return ($area['context'] === $context);
-        });
+        return array_filter(
+            $this->rawAreas,
+            function ( $area ) use ( $context ) {
+                return ( $area['context'] === $context );
+            }
+        );
     }
 
 
-    public function getAreasByPageTemplate($tpl)
+    public function getAreasByPageTemplate( $tpl )
     {
-        return array_filter($this->rawAreas, function($area) use ($tpl){
-            return (in_array($tpl,$area['pageTemplates']));
-        });
+        return array_filter(
+            $this->rawAreas,
+            function ( $area ) use ( $tpl ) {
+                return ( in_array( $tpl, $area['pageTemplates'] ) );
+            }
+        );
     }
 
     /**
@@ -203,10 +214,12 @@ class AreaRegistry
 
     /**
      * Sort areas to common used collections
+     *
      * @param $area
+     *
      * @since 1.0.0
      */
-    public function preFilterAreas($area)
+    public function preFilterAreas( $area )
     {
         if ($area['dynamic'] === true
         ) {
@@ -232,37 +245,41 @@ class AreaRegistry
 
     /**
      * Registers an area template and adds it to the area templates array
+     *
      * @param array $args
+     *
      * @since 1.0.0
      */
-    public function addTemplate($args)
+    public function addTemplate( $args )
     {
 
         $defaults = array(
             'templateClass' => '',
-            'layout' => array(),
-            'cycle' => false,
-            'last-item' => false
+            'layout'        => array(),
+            'cycle'         => false,
+            'last-item'     => false
         );
 
-        if (!empty($args['id'])) {
-            $this->templates[$args['id']] = wp_parse_args($args, $defaults);
+        if (!empty( $args['id'] )) {
+            $this->templates[$args['id']] = wp_parse_args( $args, $defaults );
         }
 
     }
 
     /**
      * Get a template by id
+     *
      * @param string $id
+     *
      * @return null | array of params
      * @since 1.0.0
      */
-    public function getTemplate($id)
+    public function getTemplate( $id )
     {
-        if (isset($this->templates[$id])) {
+        if (isset( $this->templates[$id] )) {
             return $this->templates[$id];
         } else {
-            return NULL;
+            return null;
         }
 
     }
@@ -275,42 +292,43 @@ class AreaRegistry
      * A Module can be added to all registered areas by setting connect to 'any'
      * A Module can be added to all registered areas of an specific context by settint connect
      * to one or more of the following words : 'top', 'normal', 'side', 'bottom'
+     *
      * @param string $classname
      * @param array $args module args
      */
-    public function connect($classname, $args)
+    public function connect( $classname, $args )
     {
-        if (!empty($args['settings']['connect']) && $args['settings']['connect'] === 'any') {
+        if (!empty( $args['settings']['connect'] ) && $args['settings']['connect'] === 'any') {
 
             foreach ($this->rawAreas as $area_id => $area) {
-                if ($area['assignedModules'] === NULL || !in_array($classname, $area['assignedModules'])) {
+                if ($area['assignedModules'] === null || !in_array( $classname, $area['assignedModules'] )) {
                     $this->rawAreas[$area_id]['assignedModules'][] = $classname;
                 }
             }
-        } else if (!empty($args['settings']['connect']) and is_array($args['settings']['connect'])) {
+        } else if (!empty( $args['settings']['connect'] ) and is_array( $args['settings']['connect'] )) {
             $update = false;
 
             foreach ($args['settings']['connect'] as $id) {
                 // check for context
-                if (in_array($id, array('top', 'normal', 'side', 'bottom'))) {
-                    foreach ($this->getAreasByContext($id) as $connection) {
-                        $args['settings']['connect'] = array($connection['id']);
-                        $this->connect($classname, $args);
+                if (in_array( $id, array( 'top', 'normal', 'side', 'bottom' ) )) {
+                    foreach ($this->getAreasByContext( $id ) as $connection) {
+                        $args['settings']['connect'] = array( $connection['id'] );
+                        $this->connect( $classname, $args );
                     }
-                } else if (is_string($id) && (strpos($id, '.php') !== false || $id === 'default')) {
-                    foreach($this->getAreasByPageTemplate($id) as $tplcon){
-                        $args['settings']['connect'] = array($tplcon['id']);
-                        $this->connect($classname, $args);
+                } else if (is_string( $id ) && ( strpos( $id, '.php' ) !== false || $id === 'default' )) {
+                    foreach ($this->getAreasByPageTemplate( $id ) as $tplcon) {
+                        $args['settings']['connect'] = array( $tplcon['id'] );
+                        $this->connect( $classname, $args );
                     }
                 } else {
 
-                    if (empty($this->rawAreas[$id])) {
+                    if (empty( $this->rawAreas[$id] )) {
                         continue;
                     }
 
                     $area = $this->rawAreas[$id];
 
-                    if (!in_array($classname, $area['assignedModules'])) {
+                    if (!in_array( $classname, $area['assignedModules'] )) {
                         $area['assignedModules'][] = $classname;
                     }
                     $this->rawAreas[$id] = $area;
@@ -324,18 +342,20 @@ class AreaRegistry
      * This needs an instance of the PostEnvironment Class to provide
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
+     *
      * @param \Kontentblocks\Backend\Environment\PostEnvironment $postData
+     *
      * @return boolean
      * @since 1.0.0
      */
-    public function filterForPost(PostEnvironment $postData)
+    public function filterForPost( PostEnvironment $postData )
     {
 
-        $pageTemplate = $postData->get('pageTemplate');
-        $postType = $postData->get('postType');
+        $pageTemplate = $postData->get( 'pageTemplate' );
+        $postType     = $postData->get( 'postType' );
 
         // bail out if this is a redirect template
-        if (false !== strpos($pageTemplate, 'redirect')) {
+        if (false !== strpos( $pageTemplate, 'redirect' )) {
             return false;
         }
 
@@ -345,24 +365,24 @@ class AreaRegistry
         // loop through areas and find all which are attached to this post type and/or page template
         foreach ($this->rawAreas as $area) {
 
-            if (empty($area['context'])) {
+            if (empty( $area['context'] )) {
                 $area['context'] = 'side';
             }
-            if ((!empty($area['pageTemplates'])) && (!empty($area['postTypes']))) {
-                if (in_array($pageTemplate, $area['pageTemplates']) && in_array($postType, $area['postTypes'])) {
+            if (( !empty( $area['pageTemplates'] ) ) && ( !empty( $area['postTypes'] ) )) {
+                if (in_array( $pageTemplate, $area['pageTemplates'] ) && in_array( $postType, $area['postTypes'] )) {
                     $areas[$area['id']] = $area;
                 }
-            } elseif (!empty($area['pageTemplates'])) {
-                if (in_array($pageTemplate, $area['pageTemplates'])) {
+            } elseif (!empty( $area['pageTemplates'] )) {
+                if (in_array( $pageTemplate, $area['pageTemplates'] )) {
                     $areas[$area['id']] = $area;
                 }
-            } elseif (!empty($area['postTypes'])) {
-                if (in_array($postType, $area['postTypes'])) {
+            } elseif (!empty( $area['postTypes'] )) {
+                if (in_array( $postType, $area['postTypes'] )) {
                     $areas[$area['id']] = $area;
                 }
             }
         }
-        $sareas = self::orderBy($areas, 'order');
+        $sareas = self::orderBy( $areas, 'order' );
         return $sareas;
 
     }
@@ -373,14 +393,17 @@ class AreaRegistry
      *
      * @param array $areas
      * @param string $field
+     *
      * @return array
      * @since 1.0.0
      */
     private
-    function orderBy($areas, $field)
-    {
+    function orderBy(
+        $areas,
+        $field
+    ) {
         $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
-        uasort($areas, create_function('$a,$b', $code));
+        uasort( $areas, create_function( '$a,$b', $code ) );
         return $areas;
 
     }
@@ -389,38 +412,41 @@ class AreaRegistry
      * Normalize each area by passing it through this method
      *
      * @param bool $manual
+     *
      * @return array
      * @since 1.0.0
      */
-    public static function getDefaults($manual = true)
+    public static function getDefaults( $manual = true )
     {
         return array(
-            'id' => '', // unique id of area
-            'name' => '', // public shown name
-            'description' => '', // public description
-            'postTypes' => array(), // array of post types where this area is available to
-            'pageTemplates' => array(), // array of page template names where this area is available to
+            'id'              => '', // unique id of area
+            'name'            => '', // public shown name
+            'description'     => '', // public description
+            'postTypes'       => array(), // array of post types where this area is available to
+            'pageTemplates'   => array(), // array of page template names where this area is available to
             'assignedModules' => array(), // array of classnames
-            'layouts' => array(), // array of area template ids
-            'defaultTpl' => 'default', // default Tpl to use, if none is set
-            'dynamic' => false, // whether this is an dynamic area
-            'manual' => $manual, // true if set by code
-            'limit' => 0, // how many blocks are allowed
-            'order' => 0, // order index for sorting
-            'context' => 'normal', // location on the edit screen
+            'layouts'         => array(), // array of area template ids
+            'defaultTpl'      => 'default', // default Tpl to use, if none is set
+            'dynamic'         => false, // whether this is an dynamic area
+            'manual'          => $manual, // true if set by code
+            'limit'           => 0, // how many blocks are allowed
+            'order'           => 0, // order index for sorting
+            'context'         => 'normal', // location on the edit screen
         );
 
     }
 
     /**
      * Check if an area id already exists
+     *
      * @param string $id
+     *
      * @return bool
      * @since 1.0.0
      */
-    public function areaExists($id)
+    public function areaExists( $id )
     {
-        if (isset($this->rawAreas[$id])) {
+        if (isset( $this->rawAreas[$id] )) {
             return true;
         } else {
             return false;
@@ -429,13 +455,15 @@ class AreaRegistry
 
     /**
      * Check if area is dynamic
+     *
      * @param $id
+     *
      * @return mixed
      * @since 1.0.0
      */
-    public function isDynamic($id)
+    public function isDynamic( $id )
     {
-        $area = $this->getArea($id);
+        $area = $this->getArea( $id );
         return $area['dynamic'];
     }
 

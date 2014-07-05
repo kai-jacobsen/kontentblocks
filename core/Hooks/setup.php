@@ -5,7 +5,7 @@ namespace Kontentblocks\Hooks;
 /*
  * Add Plugin Theme Support
  */
-use Kontentblocks\Backend\Storage\BackupManager;
+use Kontentblocks\Backend\Storage\BackupDataStorage;
 add_theme_support('kontentblocks');
 
 
@@ -34,7 +34,7 @@ add_action('init', __NAMESPACE__ . '\remove_editor_support');
 
 function deleteBackup($post_id)
 {
-    BackupManager::deletePostCallback($post_id);
+    BackupDataStorage::deletePostCallback($post_id);
 }
 
 add_action('delete_post', __NAMESPACE__ . '\deleteBackup');

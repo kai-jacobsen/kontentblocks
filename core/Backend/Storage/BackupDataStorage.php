@@ -4,14 +4,14 @@
 namespace Kontentblocks\Backend\Storage;
 
 /**
- * Class BackupManager
+ * Class BackupDataStorage
  * @package Kontentblocks
  * @subpackage Backend
  * @since 1.0.0
  *
  * Interact with custom backup table
  */
-class BackupManager
+class BackupDataStorage
 {
     /**
      * Instance of an Storage Object
@@ -46,6 +46,10 @@ class BackupManager
         $this->Storage = $Storage;
     }
 
+    /**
+     * Remove backups for deleted posts
+     * @param $post_id
+     */
     public static function deletePostCallback($post_id)
     {
         global $wpdb;
@@ -101,14 +105,14 @@ class BackupManager
     /**
      * Query for existing backups
      * @param $id string post id or global area id
-     * @return object
+     * @return mixed
      */
     public function queryBackup($id)
     {
         global $wpdb;
 
         if (!current_user_can('edit_kontentblocks')) {
-            wp_die('Hackin?');
+            return false;
         }
 
         $prefix = $wpdb->prefix;
@@ -118,6 +122,7 @@ class BackupManager
             return $cache;
         } else {
 	        // @TODO Use $wpdb
+            // @TODO literal id isn't used anymore
             $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
             $result = $wpdb->get_row($sql);
             wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');

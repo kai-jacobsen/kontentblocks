@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
-use Kontentblocks\Backend\Storage\BackupManager;
+use Kontentblocks\Backend\Storage\BackupDataStorage;
 
 class RemoveModules
 {
@@ -20,7 +20,7 @@ class RemoveModules
         $module  = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
         $Storage = \Kontentblocks\Helper\getStorage( $postId );
 
-        $BackupManager = new BackupManager( $Storage );
+        $BackupManager = new BackupDataStorage( $Storage );
         $BackupManager->backup( "Before Module: {$module} was deleted" );
         $update = $Storage->removeFromIndex( $module );
         wp_send_json( $update );

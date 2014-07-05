@@ -3,7 +3,7 @@ namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Fields\FieldManagerPanels;
-use Kontentblocks\Frontend\SingleModuleRender;
+use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Modules\Module;
 
 /**
@@ -89,7 +89,7 @@ class ModulePanel {
 	public function  render() {
 		$this->setupData( get_the_ID() );
 		$this->Module = $this->setupModule( $this->moduleClass );
-		$Render       = new SingleModuleRender( $this->Module );
+		$Render       = new SingleModuleRenderer( $this->Module );
 		$Render->render();
 
 	}

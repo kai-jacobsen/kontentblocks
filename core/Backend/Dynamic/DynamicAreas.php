@@ -26,6 +26,7 @@ class DynamicAreas
      */
     protected $Storage;
 
+
     /**
      * Singleton Pattern
      */
@@ -48,7 +49,7 @@ class DynamicAreas
     {
         add_action( 'init', array( $this, 'registerPostType' ) );
 
-        if (is_admin() && current_user_can( 'edit_kontentblocks' )) {
+        if (is_admin()) {
 
             add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
             add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );

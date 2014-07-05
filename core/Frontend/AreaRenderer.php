@@ -5,16 +5,16 @@ namespace Kontentblocks\Frontend;
 use Kontentblocks\Utils\JSONBridge;
 
 /**
- * Class AreaRender
+ * Class AreaRenderer
  * Handles the frontend output for an area and containing modules
  *
  * Usage:
  * - simplified failsafe method: do_action('area', '## id of area ##', '## optional post id or null ##', $args)
- * - manual method: $Render = new \Kontentblocks\Frontend\AreaRender($id, $postId, $args);
+ * - manual method: $Render = new \Kontentblocks\Frontend\AreaRenderer($id, $postId, $args);
  *                  $Render->render($echo);
  * @package Kontentblocks\Render
  */
-class AreaRender {
+class AreaRenderer {
 
 	/**
 	 * @var AreaOutput

@@ -17,7 +17,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     initialize: function () {
         var that = this;
-        console.log(that);
         // Setup Elements
         this.$head = jQuery('.block-head', this.$el);
         this.$body = jQuery('.kb-module--body', this.$el);
@@ -41,13 +40,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             view.$el.fadeOut(500, function () {
                 view.$el.remove();
             });
-
         });
         this.listenTo(this, 'template::changed', function(){
-
                 that.clearFields();
                 that.updateModuleForm();
-                console.log('templateSwitch');
         });
 
 

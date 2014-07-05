@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Extensions;
 
-use Kontentblocks\Backend\Storage\BackupManager;
+use Kontentblocks\Backend\Storage\BackupDataStorage;
 
 class BackupInspect {
 
@@ -76,7 +76,7 @@ class BackupInspect {
 
 		$Storage = \Kontentblocks\Helper\getStorage( $post_id );
 
-		$BackupManager = new BackupManager( $Storage );
+		$BackupManager = new BackupDataStorage( $Storage );
 		$BackupManager->backup( 'before backup restore' );
 		$BackupManager->restoreBackup( $id );
 
@@ -91,7 +91,7 @@ class BackupInspect {
 		$post_id = $_REQUEST['post_id'];
 
 		$Storage       = \Kontentblocks\Helper\getStorage( $post_id );
-		$BackupManager = new BackupManager( $Storage );
+		$BackupManager = new BackupDataStorage( $Storage );
 		$backups       = $BackupManager->queryBackup( $post_id );
 
 		$return           = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();
@@ -118,7 +118,7 @@ class BackupInspect {
 				$response['kbHasNewBackups'] = false;
 			} else {
 
-				$BackupManager = new BackupManager( $Storage );
+				$BackupManager = new BackupDataStorage( $Storage );
 				$backups       = $BackupManager->queryBackup( $data['post_id'] );
 
 				$response['kbHasNewBackups'] = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();

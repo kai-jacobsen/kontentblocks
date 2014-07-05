@@ -3,7 +3,7 @@
 namespace Kontentblocks\Backend\Environment\Save;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Backend\Storage\BackupManager;
+use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Modules\ModuleFactory;
 
 /**
@@ -199,7 +199,7 @@ class SavePost {
 	private function createBackup() {
 		// Backup data, not for Previews
 		if ( !isset( $_POST['wp_preview'] ) ) {
-			$BackupManager = new BackupManager( $this->Environment->getStorage() );
+			$BackupManager = new BackupDataStorage( $this->Environment->getStorage() );
 			$BackupManager->backup( 'Before regular update' );
 		}
 	}
