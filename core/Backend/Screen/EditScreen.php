@@ -36,7 +36,6 @@ Class EditScreen {
 	 */
 	function __construct() {
 		global $pagenow;
-
 		$this->hooks = $this->setupHooks();
 
 		if ( !in_array( $pagenow, $this->hooks ) ) {

@@ -80,7 +80,7 @@ Class Kontentblocks
             Capabilities::setup();
         }
 
-        // Temporary
+
         DynamicAreas::getInstance();
         ModuleTemplates::getInstance();
         Enqueues::setup();
@@ -98,9 +98,9 @@ Class Kontentblocks
 
         add_action( 'init', array( $this, 'initInterface' ), 9 );
 
-        add_action( 'wp_head', array( $this, 'livereload' ) );
 
         if (defined( 'WP_LOCAL_DEV' ) && WP_LOCAL_DEV) {
+            add_action( 'wp_head', array( $this, 'livereload' ) );
             add_action( 'admin_head', array( $this, 'livereload' ) );
         }
 
@@ -115,9 +115,7 @@ Class Kontentblocks
 
     public function initInterface()
     {
-        //@TODO move out of here
         remove_post_type_support( 'page', 'revisions' );
-
         new EditScreen();
     }
 
