@@ -27,7 +27,7 @@ Class Kontentblocks
 
     const VERSION = '1.0.0alpha';
     const DEVMODE = true;
-    const TABLEVERSION = '1.0.12';
+    const TABLEVERSION = '1.0.13';
     const CONTENTCONCAT = true;
 
 
@@ -55,8 +55,6 @@ Class Kontentblocks
         define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/Core/' );
         define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/Core/' );
         define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . '/Definitions/js/' );
-
-
         // still there for historical reasons
         define( 'KONTENTLOCK', false );
 
@@ -68,9 +66,9 @@ Class Kontentblocks
             require_once( dirname( __FILE__ ) . '/build/hash.php' );
         }
 
-
         include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
         include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
+
 
         /* Include all necessary files on admin area */
         if (is_admin()) {
@@ -79,14 +77,13 @@ Class Kontentblocks
             include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
             require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
 
-            // @TODO stinks
-            new Capabilities();
+            Capabilities::setup();
         }
 
         // Temporary
         DynamicAreas::getInstance();
         ModuleTemplates::getInstance();
-        Enqueues::getInstance();
+        Enqueues::setup();
 
         // enabled for 'page' by default
         add_post_type_support( 'page', 'kontentblocks' );
