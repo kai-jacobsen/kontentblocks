@@ -23,7 +23,7 @@ class PostEnvironment
     /**
      * @var \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
      */
-    protected $MetaData;
+    protected $DataProvider;
 
     /**
      * @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage
@@ -67,11 +67,11 @@ class PostEnvironment
         }
         $this->postID = $postID;
 
-        $this->MetaData = new PostMetaDataProvider($postID);
-        $this->Storage = new PostMetaModuleStorage($postID, $this->MetaData);
+        $this->DataProvider = new PostMetaDataProvider($postID);
+        $this->Storage = new PostMetaModuleStorage($postID, $this->DataProvider);
 
-        $this->pageTemplate = $this->MetaData->getPageTemplate();
-        $this->postType = $this->MetaData->getPostType();
+        $this->pageTemplate = $this->DataProvider->getPageTemplate();
+        $this->postType = $this->DataProvider->getPostType();
 
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
@@ -97,9 +97,9 @@ class PostEnvironment
      * returns the PostMetaData instance
      * @return object
      */
-    public function getDataHandler()
+    public function getDataProvider()
     {
-        return $this->MetaData;
+        return $this->DataProvider;
     }
 
 
@@ -109,7 +109,7 @@ class PostEnvironment
 
     /**
      * Returns all modules set to this post
-     * @return type
+     * @return array
      */
     public function getAllModules()
     {
@@ -172,7 +172,7 @@ class PostEnvironment
     {
 
         if ($this->postType === 'kb-dyar'){
-            return array($this->MetaData->get('_area'));
+            return array($this->DataProvider->get('_area'));
         }
 
         $RegionRegistry = AreaRegistry::getInstance();
@@ -209,7 +209,7 @@ class PostEnvironment
      */
     public function getAreaSettings($id)
     {
-        $settings = $this->MetaData->get('kb_area_settings');
+        $settings = $this->DataProvider->get('kb_area_settings');
         if (!empty($settings[$id])) {
             return $settings[$id];
         }

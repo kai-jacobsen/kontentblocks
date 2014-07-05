@@ -26,7 +26,7 @@ Class EditScreen {
 	 * Post data Handler
 	 * @var \Kontentblocks\Backend\Environment\PostEnvironment
 	 */
-	protected $postData;
+	protected $Environment;
 
 	/**
 	 * Add the main metabox to all given post types in the kb_register_kontentblocks function call
@@ -60,7 +60,7 @@ Class EditScreen {
 	 */
 	public function preparePostData() {
 		global $post;
-		$this->postData = new PostEnvironment( $post->ID );
+		$this->Environment = new PostEnvironment( $post->ID );
 
 	}
 
@@ -85,7 +85,7 @@ Class EditScreen {
 
 
 		// bail if post type doesn't support kontentblocks
-		if ( !post_type_supports( $this->postData->get( 'postType' ), 'kontentblocks' ) ) {
+		if ( !post_type_supports( $this->Environment->get( 'postType' ), 'kontentblocks' ) ) {
 			return;
 		}
 		// the main wrapper for the interface
@@ -99,11 +99,11 @@ Class EditScreen {
 
 		// output hidden input field and set the base_id as reference for new modules
 		// this makes sure that new modules have a unique id
-		echo Helper\getbaseIdField( $this->postData->getAllModules() );
+		echo Helper\getbaseIdField( $this->Environment->getAllModules() );
 
 		// hackish way to keep functionality of dynamically create tinymce instances
-		if ( !post_type_supports( $this->postData->get( 'postType' ),
-				'editor' ) and !post_type_supports( $this->postData->get( 'postType' ), 'kb_content' )
+		if ( !post_type_supports( $this->Environment->get( 'postType' ),
+				'editor' ) and !post_type_supports( $this->Environment->get( 'postType' ), 'kb_content' )
 		) {
 			Helper\getHiddenEditor();
 		}
@@ -151,10 +151,10 @@ Class EditScreen {
 	 *
 	 */
 	public function renderScreen() {
-		if ( ( $this->postData->get( 'areas' ) === false ) ) {
+		if ( ( $this->Environment->get( 'areas' ) === false ) ) {
 			return;
 		}
-		$ScreenManager = new ScreenManager( $this->postData );
+		$ScreenManager = new ScreenManager( $this->Environment );
 		$ScreenManager->render();
 
 	}
@@ -168,8 +168,8 @@ Class EditScreen {
 	public function toJSON() {
 		global $post;
 		$toJSON = array(
-			'page_template' => $this->postData->get( 'pageTemplate' ),
-			'post_type'     => $this->postData->get( 'postType' ),
+			'page_template' => $this->Environment->get( 'pageTemplate' ),
+			'post_type'     => $this->Environment->get( 'postType' ),
 			'post_id'       => $post->ID
 		);
 		echo "<script> var KB = KB || {}; KB.Screen =" . json_encode( $toJSON ) . "</script>";

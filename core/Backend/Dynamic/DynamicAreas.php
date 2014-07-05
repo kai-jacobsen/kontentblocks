@@ -96,7 +96,7 @@ class DynamicAreas {
 
 		$this->Storage = \Kontentblocks\Helper\getStorage( get_the_ID() );
 
-		$area = $this->Storage->getDataHandler()->get( '_area' );
+		$area = $this->Storage->getDataProvider()->get( '_area' );
 		$data = ( isset( $_POST['area'] ) ) ? $_POST['area'] : $area;
 
 		wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
@@ -149,8 +149,8 @@ class DynamicAreas {
 		);
 
 		$full = wp_parse_args( $data, AreaRegistry::getDefaults( false ) );
-		$this->Storage->getDataHandler()->update( '_area', $full );
-		$this->Storage->getDataHandler()->update( '_area_context', $full['context'] );
+		$this->Storage->getDataProvider()->update( '_area', $full );
+		$this->Storage->getDataProvider()->update( '_area_context', $full['context'] );
 
 
 	}

@@ -310,7 +310,7 @@ class ModuleTemplates
         // add to post meta kb_kontentblocks
         $Storage->addToIndex( $data['id'], $definition );
         // single post meta entry, to make meta queries easier
-        $Storage->getDataHandler()->update( 'master', $definition['master'] );
+        $Storage->getDataProvider()->update( 'master', $definition['master'] );
     }
 
 

@@ -31,7 +31,7 @@ class PostMetaModuleStorage
      * @var \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
      * @since 1.0.0
      */
-    protected $DataHandler;
+    protected $DataProvider;
 
     /**
      * modules to handle
@@ -45,7 +45,7 @@ class PostMetaModuleStorage
      * Class constructor
      *
      * @param $post_id
-     * @param PostMetaDataProvider $DataHandler
+     * @param \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
      *
      * @throws \Exception
      * @since 1.0.0
@@ -55,14 +55,12 @@ class PostMetaModuleStorage
         if (!isset( $post_id ) || $post_id === 0) {
             throw new \Exception( 'a valid post id must be provided' );
         }
-
         $this->post_id = $post_id;
-
         // Late init data handler if not provided
         if (is_null( $DataHandler )) {
-            $this->DataHandler = new PostMetaDataProvider( $post_id );
+            $this->DataProvider = new PostMetaDataProvider( $post_id );
         } else {
-            $this->DataHandler = $DataHandler;
+            $this->DataProvider = $DataHandler;
         }
         $this->setup();
 
@@ -84,9 +82,9 @@ class PostMetaModuleStorage
      * Getter for DataHandler
      * @return PostMetaDataProvider
      */
-    public function getDataHandler()
+    public function getDataProvider()
     {
-        return $this->DataHandler;
+        return $this->DataProvider;
     }
 
 
@@ -99,7 +97,7 @@ class PostMetaModuleStorage
      */
     public function saveIndex( $index )
     {
-        return $this->DataHandler->update( 'kb_kontentblocks', $index );
+        return $this->DataProvider->update( 'kb_kontentblocks', $index );
 
     }
 
@@ -136,7 +134,7 @@ class PostMetaModuleStorage
         if (isset( $this->index[$id] )) {
             unset( $this->index[$id] );
             if ($this->saveIndex( $this->index ) !== false) {
-                return $this->DataHandler->delete( '_' . $id );
+                return $this->DataProvider->delete( '_' . $id );
             }
         }
 
@@ -165,7 +163,7 @@ class PostMetaModuleStorage
      */
     public function reset()
     {
-        $this->getDataHandler()->_selfUpdate();
+        $this->getDataProvider()->_selfUpdate();
         $this->setup();
 
         return $this;
@@ -177,11 +175,11 @@ class PostMetaModuleStorage
      */
     private function setup()
     {
-        $index = $this->DataHandler->get( 'kb_kontentblocks' );
+        $index = $this->DataProvider->get( 'kb_kontentblocks' );
         if (empty( $index )) {
             return false;
         }
-        $this->index   = $this->DataHandler->get( 'kb_kontentblocks' );
+        $this->index   = $this->DataProvider->get( 'kb_kontentblocks' );
         $this->modules = $this->setupModuleData();
 
         return $this;
@@ -197,7 +195,7 @@ class PostMetaModuleStorage
     private function setupModuleData()
     {
         $collection = array();
-        $meta       = $this->DataHandler->getAll();
+        $meta       = $this->DataProvider->getAll();
         foreach ($this->index as $id => $data) {
             $collection['_' . $id]         = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : '';
@@ -245,7 +243,7 @@ class PostMetaModuleStorage
      */
     public function saveModule( $id, $data = '' )
     {
-        return $this->DataHandler->update( '_' . $id, $data );
+        return $this->DataProvider->update( '_' . $id, $data );
     }
 
     /**
@@ -274,7 +272,7 @@ class PostMetaModuleStorage
      */
     public function _updateIndex()
     {
-        return $this->DataHandler->update( 'kb_kontentblocks', $this->index );
+        return $this->DataProvider->update( 'kb_kontentblocks', $this->index );
 
     }
 
@@ -355,10 +353,10 @@ class PostMetaModuleStorage
     public function deleteAll()
     {
         foreach ($this->getIndex() as $k => $module) {
-            $this->DataHandler->delete( '_' . $k );
+            $this->DataProvider->delete( '_' . $k );
         }
 
-        return $this->DataHandler->delete( 'kb_kontentblocks' );
+        return $this->DataProvider->delete( 'kb_kontentblocks' );
     }
 
     /**
@@ -380,19 +378,19 @@ class PostMetaModuleStorage
         // delete old data
         if (!empty( $modules )) {
             foreach ($modules as $k => $value) {
-                $this->DataHandler->delete( $k );
+                $this->DataProvider->delete( $k );
 
             }
         }
-        $this->DataHandler->delete( 'kb_kontentblocks' );
+        $this->DataProvider->delete( 'kb_kontentblocks' );
 
         //set new old data from backup;
-        $this->DataHandler->update( 'kb_kontentblocks', $index );
+        $this->DataProvider->update( 'kb_kontentblocks', $index );
 
 
         if (!empty( $modules )) {
             foreach ($modules as $k => $value) {
-                $this->DataHandler->update( $k, $value );
+                $this->DataProvider->update( $k, $value );
             }
         }
     }

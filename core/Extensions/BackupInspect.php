@@ -114,7 +114,7 @@ class BackupInspect {
 			$Storage = \Kontentblocks\Helper\getStorage( $data['post_id'] );
 
 
-			if ( $data['kbBackupWatcher'] == $Storage->getDataHandler()->get( 'kb_last_backup' ) ) {
+			if ( $data['kbBackupWatcher'] == $Storage->getDataProvider()->get( 'kb_last_backup' ) ) {
 				$response['kbHasNewBackups'] = false;
 			} else {
 

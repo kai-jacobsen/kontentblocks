@@ -39,12 +39,11 @@ class ScreenManager {
 	protected $contextLayout;
 
 	/**
-	 * Final sorted assignment of areas to regions
-	 * TODO: Var name sucks
+	 * Final sorted assignment of areas to contexts
 	 * @var array
 	 * @since 1.0.0
 	 */
-	protected $regions;
+	protected $contexts;
 
 	/**
 	 * Indicates if sidebars exists or not
