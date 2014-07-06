@@ -9,6 +9,10 @@ use Kontentblocks\Templating\ModuleTemplate;
 use Kontentblocks\Templating\ModuleView;
 
 
+/**
+ * Class Module
+ * @package Kontentblocks\Modules
+ */
 abstract class Module
 {
 
@@ -60,6 +64,7 @@ abstract class Module
 
         $this->moduleData    = $data;
         $this->rawModuleData = $data;
+
         if (isset( $environment )) {
             $this->setEnvVarsFromEnvironment( $environment );
         }
@@ -70,7 +75,6 @@ abstract class Module
             $this->fields();
 
         }
-
 
     }
 
@@ -126,7 +130,6 @@ abstract class Module
     public function saveFields( $data, $old )
     {
         return $this->Fields->save( $data, $old );
-
     }
 
 
@@ -683,7 +686,7 @@ abstract class Module
      * @since 1.0.0
      * @return array
      */
-    public static function getDefaults()
+    public static function getDefaultSettings()
     {
 
         return array(

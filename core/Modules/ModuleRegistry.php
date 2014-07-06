@@ -2,12 +2,13 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\Areas\AreaRegistry,
-    Kontentblocks\Backend\Areas\Area;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Utils\JSONBridge;
 
-class ModuleRegistry
+/**
+ * Class ModuleRegistry
+ * @package Kontentblocks\Modules
+ */class ModuleRegistry
 {
 
     static $instance;
@@ -28,18 +29,26 @@ class ModuleRegistry
         add_action( 'admin_footer', array( $this, 'setupJSON' ), 8 );
     }
 
+    /**
+     * Add a module from loader by file
+     * Extends the loaded module defaults and adds path specific
+     * attributes
+     * @param $file
+     */
     public function add( $file )
     {
         // file should be the full path from the loader
         include_once( $file );
 
+        // extract class name from file
         $classname = str_replace( '.php', '', basename( $file ) );
+
         if (!isset( $this->modules[$classname] ) && property_exists( $classname, 'defaults' )) {
 
             // Defaults from the specific Module
             // contains id, name, public name etc..
             $moduleArgs       = array();
-            $args             = wp_parse_args( $classname::$defaults, Module::getDefaults() );
+            $args             = wp_parse_args( $classname::$defaults, Module::getDefaultSettings() );
             $args['class']    = $classname;
             $args['path']     = trailingslashit( dirname( $file ) );
             $args['uri']      = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
@@ -80,17 +89,19 @@ class ModuleRegistry
                 }
             }
 
-
-            // add missing args from general Defaults
+            // settings array
             $moduleArgs['settings'] = $args;
 
-            if (!isset( $moduleArgs['state'] )) {
-                $moduleArgs['state'] = Module::getDefaultState();
-            }
+            // state array
+            $moduleArgs['state'] = Module::getDefaultState();
+
             // Add module to registry
             $this->modules[$classname] = $moduleArgs;
+
             // Handle connection to regions
             AreaRegistry::getInstance()->connect( $classname, $moduleArgs );
+
+            // call static init method, if present
             if (method_exists( $classname, 'init' )) {
                 $classname::init( $moduleArgs );
             }
@@ -98,6 +109,12 @@ class ModuleRegistry
 
     }
 
+    /**
+     *
+     * @param $classname
+     *
+     * @return null
+     */
     public function get( $classname )
     {
         if (isset( $this->modules[$classname] )) {
@@ -110,119 +127,19 @@ class ModuleRegistry
     }
 
 
-
-    public function getAllModules( PostEnvironment $Environment )
-    {
-        if ($Environment->isPostContext()) {
-            return $this->modules;
-        } else {
-            return array_filter( $this->modules, array( $this, '_filterForGlobalArea' ) );
-        }
-
-    }
-
-    public function _filterForGlobalArea( $module )
-    {
-        if (isset( $module['settings']['globallyAvailable'] ) && $module['settings']['globallyAvailable'] === true) {
-            return $module;
-        }
-
-    }
-
-    public function getModuleTemplates()
-    {
-        return array_filter( $this->modules, array( $this, '_filterModuleTemplates' ) );
-
-    }
-
-    private function _filterModuleTemplates( $module )
-    {
-        if (isset( $module['settings']['asTemplate'] ) && $module['settings']['asTemplate'] == true) {
-
-            return $module;
-        }
-    }
-
     /**
-     * Get modules which are set to be available
-     * by an area.
-     *
-     * return array
-     *
-     * @param Area $area
-     * @param PostEnvironment $Environment
-     *
+     * Getter for all modules
      * @return array
      */
-    public function getValidModulesForArea( Area $area, PostEnvironment $Environment )
+    public function getAll()
     {
-        // declare array
-        $modules = $this->getAllModules( $Environment );
-
-        if (empty( $modules )) {
-            return false;
-        }
-
-        $validModules = array();
-
-        foreach ($modules as $module) {
-
-            // disabled modules are not added
-            if ($module['settings']['disabled']) {
-                continue;
-            }
-
-            // todo: possible a mistake
-            // hidden modules are not added
-            if ($module['settings']['hidden']) {
-                continue;
-            }
-
-            // shorthand category
-            $cat = $module['settings']['category'];
-
-            // Module has to be assigned to area, either by area definition or through module 'connect'
-            if (in_array( $module['settings']['class'], ( array ) $area->assignedModules )) {
-                $validModules[$module['settings']['class']] = $module;
-            }
-
-
-            // 'core' modules are assigned anyway
-            if ($cat == 'core') {
-                $validModules[$module['settings']['class']] = $module;
-            }
-
-        }
-        //sort alphabetically
-        usort( $validModules, array( $this, '_sort_by_name' ) );
-
-        return $validModules;
-
+        return $this->modules;
     }
-
 
 
     /**
-     * Usort callback to sort modules alphabetically by name
-     *
-     * @param array $a
-     * @param array $b
-     *
-     * @return int
+     * Make raw definitions available to js
      */
-    private function _sort_by_name( $a, $b )
-    {
-        $al = strtolower( $a['settings']['publicName'] );
-        $bl = strtolower( $b['settings']['publicName'] );
-
-        if ($al == $bl) {
-            return 0;
-        }
-
-        return ( $al > $bl ) ? + 1 : - 1;
-
-    }
-
     public function setupJSON()
     {
         foreach ($this->modules as $classname => $moduleArgs) {
@@ -263,26 +180,27 @@ class ModuleRegistry
      *
      * @param array $array1
      * @param array $array2
+     *
      * @return array
      * @author Daniel <daniel (at) danielsmedegaardbuus (dot) dk>
      * @author Gabriel Sobrinho <gabriel (dot) sobrinho (at) gmail (dot) com>
      * @author Anton Medvedev <anton (at) elfet (dot) ru>
      */
-    protected function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
+    protected function arrayMergeRecursiveDistinct( array &$array1, array &$array2 )
     {
         $merged = $array1;
 
         foreach ($array2 as $key => &$value) {
-            if (is_array($value) && isset ($merged[$key]) && is_array($merged[$key])) {
-                if (is_int($key)) {
-                    $merged[] = $this->arrayMergeRecursiveDistinct($merged[$key], $value);
+            if (is_array( $value ) && isset ( $merged[$key] ) && is_array( $merged[$key] )) {
+                if (is_int( $key )) {
+                    $merged[] = $this->arrayMergeRecursiveDistinct( $merged[$key], $value );
                 } else {
-                    $merged[$key] = $this->arrayMergeRecursiveDistinct($merged[$key], $value);
+                    $merged[$key] = $this->arrayMergeRecursiveDistinct( $merged[$key], $value );
                 }
             } else {
-                if (is_int($key)) {
+                if (is_int( $key )) {
                     $merged[] = $value;
-                } elseif (is_null($merged[$key])) {
+                } elseif (is_null( $merged[$key] )) {
                     $merged[$key] = $value;
                 }
             }

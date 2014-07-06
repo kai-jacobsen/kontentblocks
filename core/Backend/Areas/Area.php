@@ -2,9 +2,8 @@
 
 namespace Kontentblocks\Backend\Areas;
 
-use Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Backend\Areas\AreaSettingsMenu,
-    Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Templating\CoreTemplate;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\JSONBridge;
 
@@ -50,27 +49,29 @@ class Area
 
     /**
      * Class Constructor
+     *
      * @param array $area area settings array
      * @param \Kontentblocks\Backend\Environment\PostEnvironment $Environment
      * @param string $context
+     *
      * @throws \Exception
      */
-    function __construct($area, PostEnvironment $Environment, $context = 'normal')
+    function __construct( $area, PostEnvironment $Environment, $context = 'normal' )
     {
 
-        if (empty($area)) {
-            throw new \Exception('No Arguments for Area specified');
+        if (empty( $area )) {
+            throw new \Exception( 'No Arguments for Area specified' );
         }
 
         // setup localization string
         // TODO: Outsource all i18n strings to seperate file
         $this->l18n = array(
             // l18n
-            'add_block' => __('add module', 'kontentblocks'),
-            'add' => __('add', 'kontentblocks'),
-            'add_template' => __('add template', 'kontentblocks'),
-            'no_blocks' => __('Sorry, no Blocks available for this Area', 'kontentblocks'),
-            'modules' => __('Add new module', 'kontentblocks')
+            'add_block'    => __( 'add module', 'kontentblocks' ),
+            'add'          => __( 'add', 'kontentblocks' ),
+            'add_template' => __( 'add template', 'kontentblocks' ),
+            'no_blocks'    => __( 'Sorry, no Blocks available for this Area', 'kontentblocks' ),
+            'modules'      => __( 'Add new module', 'kontentblocks' )
         );
 
         // context in regards of position on the edit screen
@@ -80,14 +81,14 @@ class Area
         $this->Environment = $Environment;
 
         // batch setting of properties
-        $this->setupAreaProperties($area);
+        $this->setupAreaProperties( $area );
 
 
         //actual stored module for this area
-        $this->attachedModules = $this->Environment->getModulesForArea($this->id);
+        $this->attachedModules = $this->Environment->getModulesForArea( $this->id );
 
         // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu($this, $this->Environment);
+        $this->settingsMenu = new AreaSettingsMenu( $this, $this->Environment );
 
         $this->cats = self::setupCats();
     }
@@ -113,10 +114,10 @@ class Area
     public function header()
     {
         echo "<div id='{$this->id}-container' class='area-wrap clearfix cf'>";
-        $headerClass = ($this->context == 'side' or $this->context == 'normal') ? 'minimized reduced' : null;
+        $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
-        $Tpl = new CoreTemplate('Area-Header.twig', array('area' => $this, 'headerClass' => $headerClass));
-        $Tpl->render(true);
+        $Tpl = new CoreTemplate( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );
+        $Tpl->render( true );
 
     }
 
@@ -128,18 +129,19 @@ class Area
     {
         // list items for this area, block limit gets stored here
         echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
-        if (!empty($this->attachedModules)) {
+        if (!empty( $this->attachedModules )) {
             foreach ($this->attachedModules as $module) {
 
-                if (!class_exists($module['class'])) {
+                if (!class_exists( $module['class'] )) {
                     continue;
                 }
                 $module['areaContext'] = $this->context;
-                $module = apply_filters('kb_before_module_options', $module);
-                $Factory = new ModuleFactory($module['class'], $module, $this->Environment);
+                $module                = apply_filters( 'kb_before_module_options', $module );
+
+                $Factory  = new ModuleFactory( $module['class'], $module, $this->Environment );
                 $instance = $Factory->getModule();
                 $instance->renderOptions();
-                JSONBridge::getInstance()->registerModule($instance->toJSON());
+                JSONBridge::getInstance()->registerModule( $instance->toJSON() );
             }
         }
 
@@ -179,24 +181,26 @@ class Area
             return;
         }
         $area = array(
-            'id' => $this->id,
+            'id'              => $this->id,
             'assignedModules' => $this->assignedModules,
-            'limit' => absint($this->limit),
-            'context' => $this->context,
-	        'dynamic' => $this->dynamic
+            'limit'           => absint( $this->limit ),
+            'context'         => $this->context,
+            'dynamic'         => $this->dynamic
         );
 
-        JSONBridge::getInstance()->registerArea($area);
+        JSONBridge::getInstance()->registerArea( $area );
     }
 
     /**
      * Simple getter method to retrieve area properties
+     *
      * @param string $param | property key
+     *
      * @return mixed | value or false
      */
-    public function get($param)
+    public function get( $param )
     {
-        if (isset($this->$param)) {
+        if (isset( $this->$param )) {
             return $this->$param;
         } else {
             return false;
@@ -208,13 +212,14 @@ class Area
      * Simple setter method to batch set properties
      * Calls additional methods for each key, if available
      * to validate / sanitize input
+     *
      * @param array $args
      */
-    private function setupAreaProperties($args)
+    private function setupAreaProperties( $args )
     {
         foreach ($args as $key => $value) {
-            if (method_exists($this, $key)) {
-                $this->$key($value);
+            if (method_exists( $this, $key )) {
+                $this->$key( $value );
             } else {
                 $this->$key = $value;
             }
@@ -232,7 +237,7 @@ class Area
     private function getModuleLimitTag()
     {
         // prepare string
-        $limit = ($this->limit == '0') ? null : absint($this->limit);
+        $limit = ( $this->limit == '0' ) ? null : absint( $this->limit );
 
         if (null !== $limit) {
             echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
@@ -243,8 +248,8 @@ class Area
 
     private function menuLink()
     {
-        if (current_user_can('create_kontentblocks')) {
-            if (!empty($this->assignedModules)) {
+        if (current_user_can( 'create_kontentblocks' )) {
+            if (!empty( $this->assignedModules )) {
                 $out = " <div class='add-modules cantsort'></div>";
                 return $out;
             }
@@ -261,20 +266,20 @@ class Area
     {
         // defaults
         $cats = array(
-            'standard' => __('Standard', 'kontentblocks'),
+            'standard' => __( 'Standard', 'kontentblocks' ),
         );
 
-        $cats = apply_filters('kb_menu_cats', $cats);
+        $cats = apply_filters( 'kb_menu_cats', $cats );
 
 
-        $cats['media'] = __('Media', 'kontentblocks');
-        $cats['special'] = __('Spezial', 'kontentblocks');
+        $cats['media']   = __( 'Media', 'kontentblocks' );
+        $cats['special'] = __( 'Spezial', 'kontentblocks' );
 
-        $cats['core'] = __('System', 'kontentblocks');
-        $cats['template'] = __('Templates', 'kontentblocks');
+        $cats['core']     = __( 'System', 'kontentblocks' );
+        $cats['template'] = __( 'Templates', 'kontentblocks' );
 
-	    JSONBridge::getInstance()->registerData('ModuleCategories', null, $cats);
-	    return $cats;
+        JSONBridge::getInstance()->registerData( 'ModuleCategories', null, $cats );
+        return $cats;
 
 
     }

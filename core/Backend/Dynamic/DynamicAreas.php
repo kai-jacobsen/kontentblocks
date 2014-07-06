@@ -22,8 +22,6 @@ class DynamicAreas
     protected $Storage;
 
 
-
-
     /**
      * Class constructor
      * Add relevant Hooks
@@ -123,6 +121,10 @@ class DynamicAreas
 
     }
 
+    /**
+     *
+     * @param $postId
+     */
     protected function saveArea( $postId )
     {
         $this->Storage = \Kontentblocks\Helper\getStorage( $postId );

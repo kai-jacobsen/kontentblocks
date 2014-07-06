@@ -238,7 +238,7 @@ class ModulePanel {
 			'class'       => $module
 		);
 
-		$moduleArgs['settings']          = Module::getDefaults();
+		$moduleArgs['settings']          = Module::getDefaultSettings();
 		$moduleArgs['state']             = Module::getDefaultState();
 		$moduleArgs['state']['draft']    = false;
 		$moduleArgs['settings']['id']    = $this->baseId . '_static';

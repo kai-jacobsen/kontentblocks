@@ -51,6 +51,7 @@ class AreaRegistry
      */
     static $instance;
 
+
     protected $AreaDynamicManager;
 
     /**
@@ -70,6 +71,9 @@ class AreaRegistry
 
     }
 
+    /**
+     * Constructer
+     */
     public function __construct()
     {
         $this->AreaDynamicManager = new AreaDynamicManager();
@@ -181,6 +185,13 @@ class AreaRegistry
     }
 
 
+    /**
+     * Get area which were assigned to a page template
+     *
+     * @param $tpl
+     *
+     * @return array
+     */
     public function getAreasByPageTemplate( $tpl )
     {
         return array_filter(
@@ -306,7 +317,6 @@ class AreaRegistry
                 }
             }
         } else if (!empty( $args['settings']['connect'] ) and is_array( $args['settings']['connect'] )) {
-            $update = false;
 
             foreach ($args['settings']['connect'] as $id) {
                 // check for context
@@ -397,15 +407,11 @@ class AreaRegistry
      * @return array
      * @since 1.0.0
      */
-    private
-    function orderBy(
-        $areas,
-        $field
-    ) {
+    private function orderBy( $areas, $field )
+    {
         $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
         uasort( $areas, create_function( '$a,$b', $code ) );
         return $areas;
-
     }
 
     /**

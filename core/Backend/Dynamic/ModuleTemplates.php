@@ -69,7 +69,7 @@ class ModuleTemplates
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
 
-        $Storage  = new PostMetaModuleStorage( $post->ID);
+        $Storage = new PostMetaModuleStorage( $post->ID );
 
         // on this screen we always deal with only one module
         // instance_id equals post_name
@@ -79,7 +79,8 @@ class ModuleTemplates
         if (empty( $template )) {
             $this->createForm();
         } else {
-            $this->moduleTemplate( $template, $MetaData );
+            // @TODO stinky
+            $this->moduleTemplate( $template, $Storage->getDataProvider() );
         }
 
     }
@@ -228,16 +229,13 @@ class ModuleTemplates
                 wp_redirect( html_entity_decode( $url ) );
                 exit;
             }
-
         }
-
-
     }
 
     /**
      * Create a new template from form data
      *
-*@param $postId
+     * @param $postId
      * @param PostMetaModuleStorage $Storage
      */
     public function createTemplate( $postId, PostMetaModuleStorage $Storage )
@@ -296,6 +294,7 @@ class ModuleTemplates
      *
      * Since all native wp controls are removed from this screen
      * we need to manually save essential post data
+     *
      * @param $data
      * @param $postarr
      *
@@ -358,6 +357,7 @@ class ModuleTemplates
 
     /**
      * Modify template specific messages
+     *
      * @param $messages
      *
      * @return mixed
@@ -449,8 +449,11 @@ class ModuleTemplates
     private function prepareModulesforSelectbox( $postData )
     {
 
-        $type       = ( isset( $postData['type'] ) ) ? $postData['type'] : '';
-        $modules    = ModuleRegistry::getInstance()->getModuleTemplates();
+        $type    = ( isset( $postData['type'] ) ) ? $postData['type'] : '';
+        $modules =
+
+        $modules = $this->getTemplateables();
+
         $collection = array();
 
         if (!empty( $modules )) {
@@ -465,6 +468,25 @@ class ModuleTemplates
         }
 
         return $collection;
+
+    }
+
+
+    /**
+     * Filter all modules which may be created as a template
+     * @return array
+     */
+    public function getTemplateables()
+    {
+        return array_filter(
+            ModuleRegistry::getInstance()->getAll(),
+            function ( $module ) {
+                if (isset( $module['settings']['asTemplate'] ) && $module['settings']['asTemplate'] == true) {
+                    return true;
+                }
+                return false;
+            }
+        );
 
     }
 

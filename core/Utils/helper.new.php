@@ -141,39 +141,7 @@ function getPageTemplates()
 
 }
 
-function getAssignedModules($dataContainer)
-{
-    $modules = ModuleRegistry::getInstance()->getAllModules($dataContainer);
-    $collection = array();
 
-    foreach ($modules as $module) {
-        if (isset($module->settings['globallyAvailable']) && $module->settings['globallyAvailable'] === true) {
-            $collect = array(
-                'name' => $module->settings['publicName'],
-                'value' => get_class($module)
-            );
-            $collection[] = $collect;
-        }
-    }
-    return $collection;
-
-}
-
-function getAreaTemplates()
-{
-    $templates = AreaRegistry::getInstance()->getTemplates();
-    $collection = array();
-
-    foreach ($templates as $tpl) {
-        $collect = array(
-            'name' => $tpl['label'],
-            'value' => $tpl['id']
-        );
-        $collection[] = $collect;
-    }
-    return $collection;
-
-}
 
 function underscoreit($val)
 {
