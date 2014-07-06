@@ -44,23 +44,23 @@ class PostMetaModuleStorage
     /**
      * Class constructor
      *
-     * @param $post_id
+     * @param $postId
      * @param \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
      *
      * @throws \Exception
      * @since 1.0.0
      */
-    public function __construct( $post_id, PostMetaDataProvider $DataHandler = null )
+    public function __construct( $postId, PostMetaDataProvider $DataProvider = null )
     {
-        if (!isset( $post_id ) || $post_id === 0) {
+        if (!isset( $postId ) || $postId === 0) {
             throw new \Exception( 'a valid post id must be provided' );
         }
-        $this->postId = $post_id;
+        $this->postId = $postId;
         // Late init data handler if not provided
-        if (is_null( $DataHandler )) {
-            $this->DataProvider = new PostMetaDataProvider( $post_id );
+        if (is_null( $DataProvider )) {
+            $this->DataProvider = new PostMetaDataProvider( $postId );
         } else {
-            $this->DataProvider = $DataHandler;
+            $this->DataProvider = $DataProvider;
         }
         $this->setup();
 

@@ -9,13 +9,17 @@ class UpdateModuleOptions
 
     public function __construct()
     {
-        global $wp_embed;
+        global $wp_embed, $post;
         check_ajax_referer('kb-update');
+
+
 
 //        define('KB_FRONTEND_SAVE', true);
 
         $module = $_POST['module'];
         $data = $_POST['data'];
+        $post = get_post($module['post_id']);
+        setup_postdata($post);
         $update = (isset($_POST['editmode']) && $_POST['editmode'] === 'update') ? true : false;
         $refresh = (isset($_POST['refresh']) && $_POST['refresh'] === 'false' ) ? false : true;
         $parsed = array();

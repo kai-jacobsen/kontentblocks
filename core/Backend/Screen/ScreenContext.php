@@ -65,13 +65,13 @@ class ScreenContext
             throw new Exception('No Arguments specified for single Context');
         }
 
+        $this->ScreenManager = $ScreenManager;
         $this->id = $args['id'];
         $this->title = $args['title'];
         $this->description = $args['description'];
         $this->Environment = $ScreenManager->getEnvironment();
         $this->areas = $ScreenManager->getContextAreas($this->id);
         $this->editScreenHasSidebar = $ScreenManager->hasSidebar();
-        $this->ScreenManager = $ScreenManager;
     }
 
 

@@ -16,26 +16,6 @@ use Kontentblocks\Utils\JSONBridge;
 class ModuleTemplates
 {
 
-    /**
-     * Singleton Instance
-     * @var
-     */
-    protected static $instance;
-
-
-    /**
-     * Singleton Pattern
-     * @return self
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-
-    }
 
     /**
      * Class constructor
@@ -85,13 +65,11 @@ class ModuleTemplates
     public function addForm()
     {
         global $post;
-        $this->postId = $post->ID;
 
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
 
-        $MetaData = new PostMetaDataProvider( $this->postId );
-        $Storage  = new PostMetaModuleStorage( $this->postId, $MetaData );
+        $Storage  = new PostMetaModuleStorage( $post->ID);
 
         // on this screen we always deal with only one module
         // instance_id equals post_name

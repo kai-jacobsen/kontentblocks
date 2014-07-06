@@ -4,10 +4,10 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Areas\AreaRegistry,
 	Kontentblocks\Backend\Areas\Area;
-use Kontentblocks\Modules\Module;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\JSONBridge;
 
-class ModuleRegistry {
+class ModuleRegistry  {
 
 	static $instance;
 	public $modules = array();
@@ -30,7 +30,8 @@ class ModuleRegistry {
 		include_once( $file );
 
 		$classname = str_replace( '.php', '', basename( $file ) );
-		if ( !isset( $this->modules['classname'] ) && property_exists( $classname, 'defaults' ) ) {
+		if ( !isset( $this->modules[$classname] ) && property_exists( $classname, 'defaults' ) ) {
+
 
 			// Defaults from the specific Module
 			// contains id, name, public name etc..
@@ -79,6 +80,7 @@ class ModuleRegistry {
 				$classname::init( $moduleArgs );
 			}
 		}
+
 	}
 
 	public function get( $classname ) {
@@ -91,8 +93,8 @@ class ModuleRegistry {
 
 	}
 
-	public function getAllModules( AbstractEnvironment $dataContainer ) {
-		if ( $dataContainer->isPostContext() ) {
+	public function getAllModules( PostEnvironment $Environment ) {
+		if ( $Environment->isPostContext() ) {
 			return $this->modules;
 		} else {
 			return array_filter( $this->modules, array( $this, '_filterForGlobalArea' ) );
@@ -119,15 +121,20 @@ class ModuleRegistry {
 		}
 	}
 
-	/**
-	 * Get modules which are set to be available
-	 * by an area.
-	 *
-	 * return array
-	 */
-	public function getValidModulesForArea( Area $area, AbstractEnvironment $environment ) {
+    /**
+     * Get modules which are set to be available
+     * by an area.
+     *
+     * return array
+     *
+     * @param Area $area
+     * @param PostEnvironment $Environment
+     *
+     * @return array
+     */
+	public function getValidModulesForArea( Area $area, PostEnvironment $Environment ) {
 		// declare array
-		$modules = $this->getAllModules( $environment );
+		$modules = $this->getAllModules( $Environment );
 
 		if ( empty( $modules ) ) {
 			return false;

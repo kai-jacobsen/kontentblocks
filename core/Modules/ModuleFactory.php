@@ -27,7 +27,6 @@ class ModuleFactory
             $this->data = apply_filters( 'kb_modify_module_data', $data, $moduleArgs );
         }
 
-
         $this->environment = $environment;
 
     }

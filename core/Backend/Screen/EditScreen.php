@@ -29,10 +29,8 @@ Class EditScreen {
 	 */
 	protected $Environment;
 
-    public $date;
 	/**
 	 * Add the main metabox to all given post types in the kb_register_kontentblocks function call
-	 *
 	 */
 	function __construct() {
 		global $pagenow;
@@ -129,8 +127,6 @@ Class EditScreen {
 		if ( isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview' ) {
 			$post_id = get_the_ID();
 		}
-
-
         $Environment = \Kontentblocks\Helper\getEnvironment( $post_id );
 		$Environment->save();
 

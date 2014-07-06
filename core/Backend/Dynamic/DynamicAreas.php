@@ -15,11 +15,6 @@ use Kontentblocks\Templating\CoreTemplate;
 class DynamicAreas
 {
 
-    /**
-     * Singleton Instance
-     * @var
-     */
-    protected static $instance;
 
     /**
      * @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage
@@ -27,18 +22,7 @@ class DynamicAreas
     protected $Storage;
 
 
-    /**
-     * Singleton Pattern
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
 
-        return self::$instance;
-
-    }
 
     /**
      * Class constructor

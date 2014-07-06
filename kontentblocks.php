@@ -22,6 +22,10 @@ use Kontentblocks\Fields\FieldRegistry;
   License: GPL3
  */
 
+/**
+ * Class Kontentblocks
+ * @package Kontentblocks
+ */
 Class Kontentblocks
 {
 
@@ -34,9 +38,6 @@ Class Kontentblocks
     public $dev_mode = true;
     static $instance;
 
-    public $Capabilities;
-    public $ModuleRegistry;
-
     public static function getInstance()
     {
         if (null == self::$instance) {
@@ -48,8 +49,6 @@ Class Kontentblocks
 
     public function init()
     {
-
-
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
         define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/Core/' );
@@ -59,8 +58,8 @@ Class Kontentblocks
         define( 'KONTENTLOCK', false );
 
         // Files used used on front and backend
-        include_once dirname( __FILE__ ) . '/Autoloader.php';
         require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        include_once dirname( __FILE__ ) . '/Autoloader.php';
         require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
         if (file_exists( dirname( __FILE__ ) . '/build/hash.php' )) {
             require_once( dirname( __FILE__ ) . '/build/hash.php' );
@@ -80,14 +79,14 @@ Class Kontentblocks
             Capabilities::setup();
         }
 
-
-        DynamicAreas::getInstance();
-        ModuleTemplates::getInstance();
         Enqueues::setup();
+        new DynamicAreas();
+        new ModuleTemplates();
+
 
         // enabled for 'page' by default
         add_post_type_support( 'page', 'kontentblocks' );
-        // load Templates automatically
+        // load modules automatically
         add_action( 'areas_setup', array( $this, 'loadModules' ), 9 );
 
         // Load Plugins
@@ -165,8 +164,7 @@ Class Kontentblocks
                     $Registry->add( $template );
             }
         }
-
-        do_action( 'kb::load:templates' );
+            d($Registry);
 
     }
 
