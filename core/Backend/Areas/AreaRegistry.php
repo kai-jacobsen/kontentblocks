@@ -112,7 +112,7 @@ class AreaRegistry
             }
         }
 
-        do_action( 'areas_setup' );
+        do_action( 'kb::setup.areas' );
     }
 
     /**

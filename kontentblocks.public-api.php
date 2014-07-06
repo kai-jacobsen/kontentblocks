@@ -4,7 +4,7 @@ use Kontentblocks\Backend\API\PostMetaDataProvider,
     Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Backend\Areas\AreaRegistry;
 
-if ( !defined( 'ABSPATH' ) ) {
+if (!defined( 'ABSPATH' )) {
     die( 'Direct access not permitted.' );
 }
 
@@ -16,7 +16,7 @@ if ( !defined( 'ABSPATH' ) ) {
 function kb_register_area( $args )
 {
     $AreaRegistry = AreaRegistry::getInstance();
-    $AreaRegistry->addArea($args, true);
+    $AreaRegistry->addArea( $args, true );
 
 }
 
@@ -24,6 +24,7 @@ function kb_register_area( $args )
  * Used to register specific area templates, basically css classes to be used for a area
  *
  * @global object $Kontentblocks
+ *
  * @param array $args
  * @param string id | unique identifier string
  * @param string label
@@ -34,46 +35,44 @@ function kb_register_area_template( $args )
 {
     $defaults = array
     (
-        'id' => '',
-        'label' => '',
-        'layout' => array(),
+        'id'        => '',
+        'label'     => '',
+        'layout'    => array(),
         'last-item' => false,
         'thumbnail' => null,
-        'cycle' => false
+        'cycle'     => false
     );
 
-    $settings = wp_parse_args($args, $defaults);
+    $settings = wp_parse_args( $args, $defaults );
 
-    if (!empty($settings['id'])) {
-        AreaRegistry::getInstance()->addTemplate($settings);
+    if (!empty( $settings['id'] )) {
+        AreaRegistry::getInstance()->addTemplate( $settings );
     }
 
 }
 
 
-
 add_action( 'area', 'kb_render_area', 10, 3 );
-function kb_render_area( $area = 'kontentblocks', $id = NULL, $additionalArgs = null )
+function kb_render_area( $area = 'kontentblocks', $id = null, $additionalArgs = null )
 {
     global $post;
-    $postId = (null === $id) ? $post->ID : $id;
-    $AreaRender = new Kontentblocks\Frontend\AreaRenderer($postId, $area, $additionalArgs);
-    $AreaRender->render(true);
+    $postId     = ( null === $id ) ? $post->ID : $id;
+    $AreaRender = new Kontentblocks\Frontend\AreaRenderer( $postId, $area, $additionalArgs );
+    $AreaRender->render( true );
 }
-
 
 
 add_action( 'sidebar_areas', 'kb_render_area_sidebar', 10, 3 );
 function kb_render_area_sidebar( $id = null, $additionalArgs = array() )
 {
-    global  $post;
+    global $post;
 
-    $post_id = (null === $id) ? $post->ID : $id;
+    $post_id = ( null === $id ) ? $post->ID : $id;
     $areas   = get_post_meta( $post_id, 'active_sidebar_areas', true );
-    if ( !empty( $areas ) ) {
-        foreach ( $areas as $area ) {
-            $AreaRender = new Kontentblocks\Frontend\AreaRenderer($area, $area, $additionalArgs);
-            $AreaRender->render(true);
+    if (!empty( $areas )) {
+        foreach ($areas as $area) {
+            $AreaRender = new Kontentblocks\Frontend\AreaRenderer( $area, $area, $additionalArgs );
+            $AreaRender->render( true );
 
         }
     }
@@ -97,10 +96,10 @@ function kb_get_plugin_path()
 function has_modules( $area_id, $post_id = null )
 {
     global $post;
-    if ( $post === null && $post_id === null ) {
+    if ($post === null && $post_id === null) {
         return;
     }
-    $post_id = (null === $post_id) ? $post->ID : $post_id;
+    $post_id = ( null === $post_id ) ? $post->ID : $post_id;
 
     $Meta = new PostMetaDataProvider( $post_id );
     return $Meta->hasModules( $area_id );

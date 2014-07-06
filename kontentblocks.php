@@ -4,10 +4,10 @@ namespace Kontentblocks;
 
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\ModuleTemplates;
-use Kontentblocks\Backend\Screen\EditScreen,
-    Kontentblocks\Hooks\Enqueues,
-    Kontentblocks\Hooks\Capabilities,
-    Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Backend\Screen\EditScreen;
+use Kontentblocks\Hooks\Enqueues;
+use Kontentblocks\Hooks\Capabilities;
+use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Fields\FieldRegistry;
 
 /*
@@ -38,16 +38,8 @@ Class Kontentblocks
     public $dev_mode = true;
     static $instance;
 
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
-        return self::$instance;
 
-    }
-
-    public function init()
+    public function __construct()
     {
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
@@ -71,23 +63,24 @@ Class Kontentblocks
 
         /* Include all necessary files on admin area */
         if (is_admin()) {
-
             include_once dirname( __FILE__ ) . '/core/Utils/tables.php';
             include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
             require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
-
             Capabilities::setup();
+
+            // Menus
+            new DynamicAreas();
+            new ModuleTemplates();
         }
 
         Enqueues::setup();
-        new DynamicAreas();
-        new ModuleTemplates();
 
 
         // enabled for 'page' by default
         add_post_type_support( 'page', 'kontentblocks' );
-        // load modules automatically
-        add_action( 'areas_setup', array( $this, 'loadModules' ), 9 );
+
+        // load modules automatically, after dynamic areas were setup
+        add_action( 'kb::setup.area', array( $this, 'loadModules' ), 9 );
 
         // Load Plugins
         add_action( 'init', array( $this, 'loadExtensions' ), 9 );
@@ -159,9 +152,9 @@ Class Kontentblocks
             }
             $files = glob( $path . '*.php' );
             foreach ($files as $template) {
-                if (strpos( basename( $template ), '__' ) === false)
-
+                if (strpos( basename( $template ), '__' ) === false) {
                     $Registry->add( $template );
+                }
             }
         }
     }
@@ -214,5 +207,4 @@ Class Kontentblocks
 // end Kontentblocks
 
 // Fire it up
-Kontentblocks::getInstance()->init();
-
+new Kontentblocks();
