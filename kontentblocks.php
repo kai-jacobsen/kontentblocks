@@ -164,8 +164,6 @@ Class Kontentblocks
                     $Registry->add( $template );
             }
         }
-            d($Registry);
-
     }
 
     /**

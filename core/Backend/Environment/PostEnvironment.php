@@ -2,8 +2,7 @@
 
 namespace Kontentblocks\Backend\Environment;
 
-use Kontentblocks\Abstracts\AbstractEnvironment,
-    Kontentblocks\Backend\Areas\AreaRegistry,
+use Kontentblocks\Backend\Areas\AreaRegistry,
     Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 use Kontentblocks\Backend\Environment\Save\SavePost;
@@ -58,37 +57,38 @@ class PostEnvironment
 
     /**
      * Class constructor
+     *
      * @param $postID
      */
-    public function __construct($postID)
+    public function __construct( $postID )
     {
-        if (!isset($postID)) {
+        if (!isset( $postID )) {
             return false;
         }
         $this->postID = $postID;
 
-        $this->DataProvider = new PostMetaDataProvider($postID);
-        $this->Storage = new PostMetaModuleStorage($postID, $this->DataProvider);
+        $this->DataProvider = new PostMetaDataProvider( $postID );
+        $this->Storage      = new PostMetaModuleStorage( $postID, $this->DataProvider );
 
         $this->pageTemplate = $this->DataProvider->getPageTemplate();
-        $this->postType = $this->DataProvider->getPostType();
+        $this->postType     = $this->DataProvider->getPostType();
 
-        $this->modules = $this->setupModules();
+        $this->modules       = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
-        $this->areas = $this->findAreas();
+        $this->areas         = $this->findAreas();
 
     }
 
-    public function getId(){
+    public function getId()
+    {
         return $this->postID;
     }
 
     public function get( $param )
     {
-        if ( isset( $this->$param ) ) {
+        if (isset( $this->$param )) {
             return $this->$param;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -103,7 +103,8 @@ class PostEnvironment
     }
 
 
-    public function getStorage(){
+    public function getStorage()
+    {
         return $this->Storage;
     }
 
@@ -119,13 +120,15 @@ class PostEnvironment
 
     /**
      * returns module definitions sorted by areas
+     *
      * @param string $areaid
+     *
      * @return boolean
      */
-    public function getModulesForArea($areaid)
+    public function getModulesForArea( $areaid )
     {
         $byArea = $this->getSortedModules();
-        if (!empty($byArea[$areaid])) {
+        if (!empty( $byArea[$areaid] )) {
             return $byArea[$areaid];
         } else {
             return false;
@@ -140,7 +143,7 @@ class PostEnvironment
     public function getSortedModules()
     {
         $sorted = array();
-        if (is_array($this->modules)) {
+        if (is_array( $this->modules )) {
             foreach ($this->modules as $module) {
                 $sorted[$module['area']][$module['instance_id']] = $module;
             }
@@ -156,9 +159,9 @@ class PostEnvironment
     private function setupModules()
     {
         $collection = array();
-        $modules = $this->Storage->getIndex();
+        $modules    = $this->Storage->getIndex();
         foreach ($modules as $module) {
-            $collection[$module['instance_id']] = ModuleFactory::parseModule($module);
+            $collection[$module['instance_id']] = ModuleFactory::parseModule( $module );
         }
         return $collection;
 
@@ -171,25 +174,25 @@ class PostEnvironment
     public function findAreas()
     {
 
-        if ($this->postType === 'kb-dyar'){
-            return array($this->DataProvider->get('_area'));
+        if ($this->postType === 'kb-dyar') {
+            return array( $this->DataProvider->get( '_area' ) );
         }
 
         $RegionRegistry = AreaRegistry::getInstance();
-        return $RegionRegistry->filterForPost($this);
+        return $RegionRegistry->filterForPost( $this );
 
     }
 
-	/**
-	 * Get Area Definition
-	 *
-	 * @param array $area
-	 *
-	 * @return mixed
-	 */
-    public function getAreaDefinition($area)
+    /**
+     * Get Area Definition
+     *
+     * @param array $area
+     *
+     * @return mixed
+     */
+    public function getAreaDefinition( $area )
     {
-        if (isset($this->areas[$area])) {
+        if (isset( $this->areas[$area] )) {
             return $this->areas[$area];
         } else {
             return false;
@@ -198,19 +201,22 @@ class PostEnvironment
     }
 
 
-    public function getAreas(){
+    public function getAreas()
+    {
         return $this->areas;
     }
 
     /**
      * Get settings for given area
+     *
      * @param string $id
+     *
      * @return mixed
      */
-    public function getAreaSettings($id)
+    public function getAreaSettings( $id )
     {
-        $settings = $this->DataProvider->get('kb_area_settings');
-        if (!empty($settings[$id])) {
+        $settings = $this->DataProvider->get( 'kb_area_settings' );
+        if (!empty( $settings[$id] )) {
             return $settings[$id];
         }
         return false;
@@ -219,14 +225,16 @@ class PostEnvironment
     /**
      * Wrapper to low level handler method
      * returns instance data or an empty string
+     *
      * @param string $id
+     *
      * @return string
      */
-    public function getModuleData($id)
+    public function getModuleData( $id )
     {
-        $data = $this->Storage->getModuleData($id);
+        $data = $this->Storage->getModuleData( $id );
 
-        if ($data !== NULL) {
+        if ($data !== null) {
             return $data;
         } else {
             return array();
@@ -237,7 +245,7 @@ class PostEnvironment
 
     public function save()
     {
-        $SaveHandler = new SavePost($this);
+        $SaveHandler = new SavePost( $this );
         $SaveHandler->save();
     }
 

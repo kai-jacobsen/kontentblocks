@@ -15,7 +15,7 @@ class CreateNewModule
      * current post id
      * @var integer
      */
-    private $post_id = null;
+    private $postId = null;
 
     /**
      * $type
@@ -36,7 +36,7 @@ class CreateNewModule
      * holds the new id for the created module
      * @var string
      */
-    private $newId;
+    private $newInstanceID;
 
     /**
      * $new_module
@@ -94,7 +94,7 @@ class CreateNewModule
      */
     private function setupEnvironment()
     {
-        return \Kontentblocks\Helper\getEnvironment( $this->post_id );
+        return \Kontentblocks\Helper\getEnvironment( $this->postId );
 
     }
 
@@ -155,7 +155,7 @@ class CreateNewModule
     private function setupNewID()
     {
         $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
-        return $prefix . $this->post_id . '_' . $this->newCount;
+        return $prefix . $this->postId . '_' . $this->newCount;
 
     }
 
@@ -255,6 +255,9 @@ class CreateNewModule
 
     }
 
+    /**
+     * Data send from js module definition object
+     */
     private function setupRequestData()
     {
         global $post;
@@ -262,9 +265,10 @@ class CreateNewModule
 //            wp_send_json( wp_verify_nonce( $_POST[ 'nonce' ], '_kontentblocks_ajax_magic' ) );
 //        }
 
-        $this->post_id = filter_var( $_POST['post_id'] );
-        $post          = get_post( $this->post_id );
+        $this->postId = filter_var( $_POST['post_id'] );
+        $post          = get_post( $this->postId );
         setup_postdata( $post );
+
         $this->count = filter_var( $_POST['count'], FILTER_VALIDATE_INT );
         $this->type  = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
 
@@ -279,12 +283,7 @@ class CreateNewModule
             'viewfile'    => FILTER_SANITIZE_STRING
         );
 
-//        $metaArgs = array(
-//            'template' => FILTER_VALIDATE_BOOLEAN,
-//            'templateReference' => FILTER_SANITIZE_STRING
-//        );
 
-//        $this->metaArgs = filter_var_array($_POST, $metaArgs);
         $this->moduleArgs = filter_var_array( $_POST, $moduleArgs );
 
         if (isset( $_POST['templateObj'] )) {
