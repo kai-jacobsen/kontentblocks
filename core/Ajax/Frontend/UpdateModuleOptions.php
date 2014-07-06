@@ -2,7 +2,10 @@
 
 namespace Kontentblocks\Ajax\Frontend;
 
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 class UpdateModuleOptions
 {
@@ -25,13 +28,13 @@ class UpdateModuleOptions
         $parsed = array();
         parse_str($data, $parsed);
 //        $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment($module['post_id']);
-        $Environment = \Kontentblocks\Helper\getEnvironment($module['post_id']);
+        $Environment = new PostEnvironment($module['post_id']);
 
-        $Factory = new \Kontentblocks\Modules\ModuleFactory($module['class'], $module, $Environment);
+        $Factory = new ModuleFactory($module['class'], $module, $Environment);
         $instance = $Factory->getModule();
         $old = $Environment->getStorage()->getModuleData($module['instance_id']);
         $new = $instance->save($parsed[$instance->instance_id], $old);
-        $mergedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe($new, $old);
+        $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe($new, $old);
         if ($update) {
             $Environment->getStorage()->saveModule($instance->instance_id, wp_slash($mergedData));
         }

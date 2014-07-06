@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Frontend;
 
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\JSONBridge;
 
@@ -18,7 +19,7 @@ class GetModuleOptions
         }
 
         $module = $_POST[ 'module' ];
-        $Environment = \Kontentblocks\Helper\getEnvironment($module['post_id']);
+        $Environment = new PostEnvironment($module['post_id']);
         $Factory  = new ModuleFactory( $module['class'], $module, $Environment, $module['moduleData'] );
         $instance    = $Factory->getModule();
 

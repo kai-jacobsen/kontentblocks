@@ -4,6 +4,7 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Fields\FieldManagerPanels;
 use Kontentblocks\Fields\PanelFieldManager;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class StaticPanel
@@ -127,7 +128,7 @@ abstract class StaticPanel {
 	public function metaBox( $postObj ) {
 
 		if ( !post_type_supports( $postObj->post_type, 'editor' ) ) {
-			\Kontentblocks\Helper\getHiddenEditor();
+            Utilities::hiddenEditor();
 		}
 
 
@@ -157,7 +158,7 @@ abstract class StaticPanel {
 		}
 
 		if ( !post_type_supports( $postObj->post_type, 'editor' ) ) {
-			\Kontentblocks\Helper\getHiddenEditor();
+            Utilities::hiddenEditor();
 		}
 
 		$this->setupData( $postObj->ID );

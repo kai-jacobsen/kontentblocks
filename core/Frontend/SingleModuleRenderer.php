@@ -4,6 +4,7 @@ namespace Kontentblocks\Frontend;
 
 
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 class SingleModuleRenderer
 {
@@ -30,7 +31,7 @@ class SingleModuleRenderer
     private function setupArgs($args)
     {
         $defaults = array(
-            'context' => \Kontentblocks\Helper\getTemplateFile(),
+            'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
             'element' => 'div',
             'action' => null,

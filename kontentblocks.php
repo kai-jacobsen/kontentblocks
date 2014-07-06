@@ -1,15 +1,4 @@
 <?php
-
-namespace Kontentblocks;
-
-use Kontentblocks\Backend\Dynamic\DynamicAreas;
-use Kontentblocks\Backend\Dynamic\ModuleTemplates;
-use Kontentblocks\Backend\Screen\EditScreen;
-use Kontentblocks\Hooks\Enqueues;
-use Kontentblocks\Hooks\Capabilities;
-use Kontentblocks\Modules\ModuleRegistry;
-use Kontentblocks\Fields\FieldRegistry;
-
 /*
   Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
@@ -21,6 +10,17 @@ use Kontentblocks\Fields\FieldRegistry;
   Domain Path: /languages
   License: GPL3
  */
+
+namespace Kontentblocks;
+
+use Kontentblocks\Backend\Dynamic\DynamicAreas;
+use Kontentblocks\Backend\Dynamic\ModuleTemplates;
+use Kontentblocks\Backend\Screen\EditScreen;
+use Kontentblocks\Hooks\Enqueues;
+use Kontentblocks\Hooks\Capabilities;
+use Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Fields\FieldRegistry;
+
 
 /**
  * Class Kontentblocks
@@ -57,9 +57,6 @@ Class Kontentblocks
             require_once( dirname( __FILE__ ) . '/build/hash.php' );
         }
 
-        include_once dirname( __FILE__ ) . '/core/Utils/helper.php';
-        include_once dirname( __FILE__ ) . '/core/Utils/helper.new.php';
-
 
         /* Include all necessary files on admin area */
         if (is_admin()) {
@@ -68,19 +65,19 @@ Class Kontentblocks
             require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
             Capabilities::setup();
 
-            // Menus
-            new DynamicAreas();
-            new ModuleTemplates();
+
         }
 
+        // Menus
+        new DynamicAreas();
+        new ModuleTemplates();
         Enqueues::setup();
-
 
         // enabled for 'page' by default
         add_post_type_support( 'page', 'kontentblocks' );
 
         // load modules automatically, after dynamic areas were setup
-        add_action( 'kb::setup.area', array( $this, 'loadModules' ), 9 );
+        add_action( 'kb::setup.areas', array( $this, 'loadModules' ), 9 );
 
         // Load Plugins
         add_action( 'init', array( $this, 'loadExtensions' ), 9 );
@@ -127,9 +124,7 @@ Class Kontentblocks
      */
     public function loadModules()
     {
-
         $Registry = ModuleRegistry::getInstance();
-
         // add core modules path
         $paths = array( KB_TEMPLATE_PATH );
         // deprecated

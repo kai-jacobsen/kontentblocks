@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\JSONBridge;
 
 /**
@@ -61,7 +62,7 @@ class AreaRenderer {
 		}
 
 
-		$this->Environment = \Kontentblocks\Helper\getEnvironment( $postId );
+		$this->Environment = new PostEnvironment( $postId );
 		$modules           = $this->Environment->getModulesforArea( $area );
 
 

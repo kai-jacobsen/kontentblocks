@@ -4,8 +4,10 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\DataProvider\PostMetaDataProvider,
     Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 class DuplicateModule
 {
@@ -27,7 +29,7 @@ class DuplicateModule
         $this->instanceId = $_POST['module'];
         $this->class      = $_POST['class'];
 
-        $this->Environment = \Kontentblocks\Helper\getEnvironment( $this->postId );
+        $this->Environment = new PostEnvironment( $this->postId );
 
         $this->newInstanceId = $this->getNewInstanceId();
 
@@ -91,7 +93,7 @@ class DuplicateModule
 
     public function getNewInstanceId()
     {
-        $base   = \Kontentblocks\Helper\getHighestId( $this->Environment->getStorage()->getIndex() );
+        $base   = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() );
         $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
         if ($this->postId !== - 1) {
             return $prefix . $this->postId . '_' . ++$base;

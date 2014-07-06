@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Ajax;
 
+use Kontentblocks\Utils\Utilities;
+
 /**
  * Class RemoteGetEditor
  * Return the markup for an built-in tinymce editor instance
@@ -23,7 +25,7 @@ class RemoteGetEditor
         $media                     = filter_var( $_POST['args']['media_buttons'], FILTER_VALIDATE_BOOLEAN );
         $settings['media_buttons'] = $media;
         ob_start();
-        kb_wp_editor( $_POST['editorId'], $_POST['editorContent'], $_POST['editorName'], $media, $settings );
+        Utilities::editor( $_POST['editorId'], $_POST['editorContent'], $_POST['editorName'], $media, $settings );
         $html = ob_get_clean();
         wp_send_json( $html );
 

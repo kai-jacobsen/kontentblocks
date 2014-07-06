@@ -5,6 +5,7 @@ namespace Kontentblocks\Hooks;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\MobileDetect;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class Enqueues
@@ -219,7 +220,7 @@ class Enqueues
             );
             wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
 
-            \Kontentblocks\Helper\getHiddenEditor();
+            Utilities::hiddenEditor();
             wp_enqueue_media();
         }
         self::enqueueUserScripts();

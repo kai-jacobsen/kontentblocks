@@ -8,6 +8,7 @@ use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreTemplate;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ModuleTemplates
@@ -35,7 +36,7 @@ class ModuleTemplates
 
     public function addAdminMenu()
     {
-        if (!\Kontentblocks\Helper\adminMenuExists( 'Kontentblocks' )) {
+        if (!Utilities::adminMenuExists( 'Kontentblocks' )) {
             add_menu_page(
                 'kontentblocks',
                 'Kontentblocks',
@@ -113,7 +114,7 @@ class ModuleTemplates
         $moduleDef['area']        = 'module-template';
         // create essential markup and render the module
         // infamous hidden editor hack
-        \Kontentblocks\Helper\getHiddenEditor();
+        Utilities::hiddenEditor();
         $moduleData = $MetaData->get( '_' . $template['instance_id'] );
 
         // no data from db equals null, null is invalid
@@ -212,7 +213,7 @@ class ModuleTemplates
             /** @var $Instance \Kontentblocks\Modules\Module */
             $Instance = $Factory->getModule();
             $new      = $Instance->save( $data, $old );
-            $toSave   = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe( $new, $old );
+            $toSave   = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 
             // settings are not persistent, never
             unset( $tpl['settings'] );

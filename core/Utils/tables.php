@@ -4,12 +4,12 @@ namespace Kontentblocks\Tables;
 
 use Kontentblocks\Kontentblocks;
 
-add_action('plugins_loaded', '\Kontentblocks\Tables\init');
+add_action( 'plugins_loaded', '\Kontentblocks\Tables\init' );
 
 function init()
 {
 
-    $dbVersion = get_option('kb_dbVersion');
+    $dbVersion = get_option( 'kb_dbVersion' );
     if ($dbVersion !== Kontentblocks::TABLEVERSION) {
         global $wpdb;
 
@@ -24,8 +24,8 @@ function init()
   PRIMARY KEY  (id)
     );";
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
-        update_option("kb_dbVersion", Kontentblocks::TABLEVERSION);
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+        update_option( "kb_dbVersion", Kontentblocks::TABLEVERSION );
     }
 }

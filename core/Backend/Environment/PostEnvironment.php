@@ -77,6 +77,7 @@ class PostEnvironment
         $this->modulesByArea = $this->getSortedModules();
         $this->areas         = $this->findAreas();
 
+
     }
 
     public function getId()

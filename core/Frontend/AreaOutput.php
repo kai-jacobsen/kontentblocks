@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Frontend;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class AreaOutput
@@ -178,7 +179,7 @@ class AreaOutput
     private function _setupSettings( $args, $settings = null )
     {
         $defaults = array(
-            'context' => \Kontentblocks\Helper\getTemplateFile(),
+            'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
             'wrapperClass' => 'area',
             'useWrapper' => TRUE,

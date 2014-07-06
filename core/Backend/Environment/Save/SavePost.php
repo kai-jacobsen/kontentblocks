@@ -5,6 +5,7 @@ namespace Kontentblocks\Backend\Environment\Save;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class SavePost
@@ -96,7 +97,7 @@ class SavePost {
 					if ( $new === false ) {
 						$savedData = null;
 					} else {
-						$savedData = \Kontentblocks\Helper\arrayMergeRecursiveAsItShouldBe( $new, $old );
+						$savedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 					}
 				}
 				// if this is a preview, save temporary data for previews

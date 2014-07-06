@@ -5,6 +5,7 @@ namespace Kontentblocks\Fields;
 
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class Field
@@ -479,12 +480,12 @@ abstract class Field {
 		}
 
 		if ( is_array( $value ) ) {
-			$is_assoc = \Kontentblocks\Helper\is_assoc_array( $this->getValue() );
+			$is_assoc = Utilities::isAssocArray( $this->getValue() );
 
 			if ( !$is_assoc ) {
 				foreach ( $this->getValue() as $item ) {
 
-					if ( is_array( $item ) && \Kontentblocks\Helper\is_assoc_array( $item ) ) {
+					if ( is_array( $item ) && Utilities::isAssocArray( $item ) ) {
 						foreach ( $item as $ikey => $ival ) {
 							echo "<input type='hidden' name='{$this->getFieldName( true,
 								$ikey,

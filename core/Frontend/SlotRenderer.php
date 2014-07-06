@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Backend\Environment\PostEnvironment;
+
 /**
  * internal working name: SlotMachine
  * Experimental way to render modules manually for an given area
@@ -48,7 +50,7 @@ class SlotRenderer
 
 
         /** @var $Environment \Kontentblocks\Backend\Environment\PostEnvironment */
-        $Environment = \Kontentblocks\Helper\getEnvironment($postId);
+        $Environment = new PostEnvironment($postId);
         $modules = $Environment->getModulesForArea($area);
 
         $this->Iterator = new ModuleIterator($modules, $Environment);

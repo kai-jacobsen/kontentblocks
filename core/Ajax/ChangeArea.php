@@ -3,6 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
+use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 
 /**
  * Class ChangeArea
@@ -25,7 +26,7 @@ class ChangeArea
         $newArea = filter_input(INPUT_POST, 'area_id', FILTER_SANITIZE_STRING);
         $newAreaContext = filter_input(INPUT_POST, 'context', FILTER_SANITIZE_STRING);
         $instanceId = filter_input(INPUT_POST, 'block_id', FILTER_SANITIZE_STRING);
-        $Storage = \Kontentblocks\Helper\getStorage($postID);
+        $Storage = new PostMetaModuleStorage($postID);
 
         $moduleDefinition = $Storage->getModuleDefinition($instanceId);
         $moduleDefinition['area'] = $newArea;

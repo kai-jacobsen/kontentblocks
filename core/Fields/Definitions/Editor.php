@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Wordpress 'native' TinyMCE WYSIWYG Editor
@@ -22,7 +23,7 @@ Class Editor extends Field {
 		$value = $this->getValue();
 		$this->label();
 		$this->description();
-		kb_wp_editor( $id, $value, $name, $media );
+		Utilities::editor( $id, $value, $name, $media );
 	}
 
 
@@ -35,7 +36,11 @@ Class Editor extends Field {
 		return $val;
 	}
 
-    public function prepareOutputValue($val){
+    /**
+     * @param $val
+     *
+     * @return mixed|void
+     */public function prepareOutputValue($val){
         return apply_filters('the_content', $val);
     }
 }

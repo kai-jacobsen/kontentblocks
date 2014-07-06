@@ -3,6 +3,7 @@
 namespace Kontentblocks\Extensions;
 
 use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 
 class BackupInspect {
 
@@ -74,7 +75,7 @@ class BackupInspect {
 	 */
 	public function restoreBackup( $post_id, $id ) {
 
-		$Storage = \Kontentblocks\Helper\getStorage( $post_id );
+		$Storage = new PostMetaModuleStorage($post_id);
 
 		$BackupManager = new BackupDataStorage( $Storage );
 		$BackupManager->backup( 'before backup restore' );
@@ -88,11 +89,11 @@ class BackupInspect {
 	public function getBackups() {
 		check_ajax_referer( 'kb-read' );
 
-		$post_id = $_REQUEST['post_id'];
+		$postId = $_REQUEST['post_id'];
 
-		$Storage       = \Kontentblocks\Helper\getStorage( $post_id );
+		$Storage       = new PostMetaModuleStorage($postId);
 		$BackupManager = new BackupDataStorage( $Storage );
-		$backups       = $BackupManager->queryBackup( $post_id );
+		$backups       = $BackupManager->queryBackup( $postId );
 
 		$return           = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();
 		$this->backupData = $return;
@@ -111,7 +112,7 @@ class BackupInspect {
 	public function heartbeatReceive( $response, $data ) {
 		if ( isset( $data['kbBackupWatcher'] ) && $data['kbBackupWatcher'] != null ) {
 
-			$Storage = \Kontentblocks\Helper\getStorage( $data['post_id'] );
+			$Storage = new PostMetaModuleStorage($data['post_id']);
 
 
 			if ( $data['kbBackupWatcher'] == $Storage->getDataProvider()->get( 'kb_last_backup' ) ) {

@@ -4,8 +4,11 @@ namespace Kontentblocks\Backend\Dynamic;
 
 use Kontentblocks\Backend\Areas\Area;
 use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class DynamicAreas
@@ -53,7 +56,7 @@ class DynamicAreas
     public function addAdminMenu()
     {
 
-        if (!\Kontentblocks\Helper\adminMenuExists( 'Kontentblocks' )) {
+        if (!Utilities::adminMenuExists( 'Kontentblocks' )) {
             add_menu_page(
                 'kontentblocks',
                 'Kontentblocks',
@@ -85,7 +88,7 @@ class DynamicAreas
             return;
         }
 
-        $this->Storage = \Kontentblocks\Helper\getStorage( get_the_ID() );
+        $this->Storage = new PostMetaModuleStorage( get_the_ID() );
 
         $area = $this->Storage->getDataProvider()->get( '_area' );
         $data = ( isset( $_POST['area'] ) ) ? $_POST['area'] : $area;
@@ -109,12 +112,12 @@ class DynamicAreas
      */
     public function save( $postId )
     {
-        $this->postid = $postId;
+        $this->postId = $postId;
         if (!$this->auth()) {
             return;
         }
 
-        $Environment = \Kontentblocks\Helper\getEnvironment( $postId );
+        $Environment = new PostEnvironment( $postId );
         $Environment->save();
 
         $this->saveArea( $postId );
@@ -127,7 +130,7 @@ class DynamicAreas
      */
     protected function saveArea( $postId )
     {
-        $this->Storage = \Kontentblocks\Helper\getStorage( $postId );
+        $this->Storage = new PostMetaModuleStorage( $postId );
 
         $defaults = array(
             'name'          => null,
@@ -313,7 +316,7 @@ class DynamicAreas
     {
         $collect   = array();
         $postData  = ( isset( $data['postTypes'] ) ) ? ( $data['postTypes'] ) : array();
-        $postTypes = \Kontentblocks\Helper\getPostTypes();
+        $postTypes = Utilities::getPostTypes();
 
         foreach ($postTypes as $pt) {
             if (in_array( $pt['value'], $postData )) {
@@ -338,7 +341,7 @@ class DynamicAreas
     {
         $collect       = array();
         $postData      = ( isset( $data['pageTemplates'] ) ) ? ( $data['pageTemplates'] ) : array();
-        $pageTemplates = \Kontentblocks\Helper\getPageTemplates();
+        $pageTemplates = Utilities::getPageTemplates();
 
         foreach ($pageTemplates as $pt) {
             if (in_array( $pt['value'], $postData )) {
@@ -387,7 +390,7 @@ class DynamicAreas
      */
     private function renderArea( $area )
     {
-        $Environment = \Kontentblocks\Helper\getEnvironment( get_the_ID() );
+        $Environment = new PostEnvironment( get_the_ID() );
 
         $areaDef = AreaRegistry::getInstance()->getArea( $area['id'] );
 
@@ -397,9 +400,9 @@ class DynamicAreas
         print "<p class='description'>{$areaDef['description']}</p>";
 
         // The infamous hidden editor hack
-        \Kontentblocks\Helper\getHiddenEditor();
+        Utilities::hiddenEditor();
 
-        echo \Kontentblocks\Helper\getbaseIdField( $Environment->getStorage()->getIndex() );
+        echo Utilities::getBaseIdField( $Environment->getStorage()->getIndex() );
 
         $Area = new Area( $areaDef, $Environment, 'global' );
         $Area->build();
