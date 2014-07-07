@@ -2,11 +2,8 @@
 
 namespace Kontentblocks\Hooks;
 
-/*
- * Add Plugin Theme Support
- */
 use Kontentblocks\Backend\Storage\BackupDataStorage;
-add_theme_support('kontentblocks');
+
 
 
 /*

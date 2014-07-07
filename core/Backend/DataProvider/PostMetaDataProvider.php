@@ -45,6 +45,7 @@ class PostMetaDataProvider
         }
 
         $this->postId = $postId;
+        $this->_selfUpdate();
 
     }
 
@@ -120,32 +121,7 @@ class PostMetaDataProvider
     }
 
 
-    /**
-     * returns the page template if available
-     * returns 'default' if not. in order to normalize this module attribute
-     * If post type does not support page templates, it's still
-     * 'default' on the module
-     * @return string
-     * @since 1.0.0
-     */
-    public function getPageTemplate()
-    {
-        if (!empty( $this->meta['_wp_page_template'] )) {
-            return $this->meta['_wp_page_template'];
-        }
 
-        return 'default';
-
-    }
-
-    /**
-     * Get Post Type by postid
-     * @since 1.0.0
-     */
-    public function getPostType()
-    {
-        return get_post_type( $this->postId );
-    }
 
     /**
      * Gets all post meta for current post.
@@ -158,11 +134,10 @@ class PostMetaDataProvider
     {
         $this->meta = array_map(
             function ( $a ) {
-               return maybe_unserialize( $a[0] );
+                return maybe_unserialize( $a[0] );
             },
             get_post_custom( $this->postId )
         );
-
         return $this;
 
     }

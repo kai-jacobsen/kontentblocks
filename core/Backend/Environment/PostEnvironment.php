@@ -32,7 +32,7 @@ class PostEnvironment
     /**
      * @var int
      */
-    protected $postID;
+    protected $postId;
 
     /**
      * @var string
@@ -65,13 +65,13 @@ class PostEnvironment
         if (!isset( $postID )) {
             return false;
         }
-        $this->postID = $postID;
+        $this->postId = $postID;
 
         $this->DataProvider = new PostMetaDataProvider( $postID );
         $this->Storage      = new PostMetaModuleStorage( $postID, $this->DataProvider );
 
-        $this->pageTemplate = $this->DataProvider->getPageTemplate();
-        $this->postType     = $this->DataProvider->getPostType();
+        $this->pageTemplate = $this->getPageTemplate();
+        $this->postType     = $this->getPostType();
 
         $this->modules       = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
@@ -80,9 +80,13 @@ class PostEnvironment
 
     }
 
+    /**
+     * Return ID of current post
+     * @return int
+     */
     public function getId()
     {
-        return $this->postID;
+        return $this->postId;
     }
 
     public function get( $param )
@@ -104,6 +108,10 @@ class PostEnvironment
     }
 
 
+    /**
+     * Return this Storage Object
+     * @return PostMetaModuleStorage
+     */
     public function getStorage()
     {
         return $this->Storage;
@@ -120,7 +128,7 @@ class PostEnvironment
     }
 
     /**
-     * returns module definitions sorted by areas
+     * returns module definitions filtered by area
      *
      * @param string $areaid
      *
@@ -155,7 +163,7 @@ class PostEnvironment
 
     /**
      * prepares modules attached to this post
-     * @return type
+     * @return array
      */
     private function setupModules()
     {
@@ -174,20 +182,17 @@ class PostEnvironment
      */
     public function findAreas()
     {
-
         if ($this->postType === 'kb-dyar') {
             return array( $this->DataProvider->get( '_area' ) );
         }
-
         $RegionRegistry = AreaRegistry::getInstance();
         return $RegionRegistry->filterForPost( $this );
-
     }
 
     /**
      * Get Area Definition
      *
-     * @param array $area
+     * @param string $area
      *
      * @return mixed
      */
@@ -202,6 +207,10 @@ class PostEnvironment
     }
 
 
+    /**
+     * Get all post-specific areas
+     * @return array
+     */
     public function getAreas()
     {
         return $this->areas;
@@ -230,6 +239,7 @@ class PostEnvironment
      * @param string $id
      *
      * @return string
+     * @since 1.0.0
      */
     public function getModuleData( $id )
     {
@@ -244,10 +254,42 @@ class PostEnvironment
     }
 
 
+    /**
+     * Save callback handler
+     * @return void
+     * @since 1.0.0
+     */
     public function save()
     {
         $SaveHandler = new SavePost( $this );
         $SaveHandler->save();
+    }
+
+    /**
+     * returns the page template if available
+     * returns 'default' if not. in order to normalize the module property
+     * If post type does not support page templates, it's still
+     * 'default' on the module
+     * @return string
+     * @since 1.0.0
+     */
+    public function getPageTemplate()
+    {
+        if ($tpl = get_post_meta( $this->postId, '_wp_page_template' ) !== '') {
+            return $tpl;
+        }
+
+        return 'default';
+
+    }
+
+    /**
+     * Get Post Type by postid
+     * @since 1.0.0
+     */
+    public function getPostType()
+    {
+        return get_post_type( $this->postId );
     }
 
 }

@@ -41,42 +41,25 @@ Class Kontentblocks
 
     public function __construct()
     {
-        define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-        define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/Core/' );
-        define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/Core/' );
-        define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . '/Definitions/js/' );
-        // still there for historical reasons
-        define( 'KONTENTLOCK', false );
+        self::bootstrap();
 
-        // Files used used on front and backend
-        require_once dirname( __FILE__ ) . '/vendor/autoload.php';
-        include_once dirname( __FILE__ ) . '/Autoloader.php';
-        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
-        if (file_exists( dirname( __FILE__ ) . '/build/hash.php' )) {
-            require_once( dirname( __FILE__ ) . '/build/hash.php' );
-        }
+        // Setup capabilities
+        // @TODO move to activation hook
+        Capabilities::setup();
 
 
-        /* Include all necessary files on admin area */
-        if (is_admin()) {
-            include_once dirname( __FILE__ ) . '/core/Utils/tables.php';
-            include_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
-            require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
-            Capabilities::setup();
-
-
-        }
-
-        // Menus
-        new DynamicAreas();
-        new ModuleTemplates();
+        // Enqueues of front and backend scripts and styles is handled here
         Enqueues::setup();
+
+        // add Kontentblocks theme support
+        add_theme_support( 'kontentblocks' );
 
         // enabled for 'page' by default
         add_post_type_support( 'page', 'kontentblocks' );
+        remove_post_type_support( 'page', 'revisions' );
 
-        // load modules automatically, after dynamic areas were setup
+        // load modules automatically, after dynamic areas were setup,
+        // dynamic areas are on init/initInterface hook
         add_action( 'kb::setup.areas', array( $this, 'loadModules' ), 9 );
 
         // Load Plugins
@@ -97,14 +80,34 @@ Class Kontentblocks
 
     }
 
+    /**
+     * Add livereload script
+     * Only loaded if WP_LOCAL_DEV is true
+     */
     public function livereload()
     {
         echo '<script src="http://localhost:35729/livereload.js"></script>';
     }
 
+    /**
+     *
+     */
     public function initInterface()
     {
-        remove_post_type_support( 'page', 'revisions' );
+        /*
+         * ----------------
+         * Admin menus & custom post types
+         * ----------------
+         */
+        // global areas post type and menu page management
+        new DynamicAreas();
+        // global templates post type and menu management
+        new ModuleTemplates();
+
+        /*
+         * Main post edit screen handler
+         * Post type must support 'kontentblocks"
+         */
         new EditScreen();
     }
 
@@ -196,6 +199,41 @@ Class Kontentblocks
         }
     }
 
+
+    /**
+     * Define constants and require additional files
+     */
+    private static function bootstrap()
+    {
+        define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+        define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/Core/' );
+        define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/Core/' );
+        define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . '/Definitions/js/' );
+        // still there for historical reasons
+        define( 'KONTENTLOCK', false );
+
+        // Composer autoloader
+        require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        // Kontentblocks autloader
+        require_once dirname( __FILE__ ) . '/Autoloader.php';
+        // Public API
+        require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
+
+        // File gets created during build process and contains one function
+        // to get the current git hash or a random hast during development
+        // hash is used to invalidate local storage data
+        if (file_exists( dirname( __FILE__ ) . '/build/hash.php' )) {
+            require_once( dirname( __FILE__ ) . '/build/hash.php' );
+        }
+
+        /* Include all necessary files on admin area */
+        if (is_admin()) {
+            require_once dirname( __FILE__ ) . '/core/Utils/tables.php';
+            require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
+            require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
+        }
+    }
 
 }
 
