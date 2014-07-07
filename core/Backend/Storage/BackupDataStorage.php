@@ -212,6 +212,10 @@ class BackupDataStorage
         return $wpdb->update($wpdb->prefix . "kb_backups", $data, array('id' => $this->package->id));
     }
 
+    /**
+     * Restoring the data must be handled by the Storage
+     * @param $id
+     */
     public function restoreBackup($id)
     {
         $this->Storage->restoreBackup($this->getBucket($id));

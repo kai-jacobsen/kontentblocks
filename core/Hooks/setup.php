@@ -4,8 +4,6 @@ namespace Kontentblocks\Hooks;
 
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 
-
-
 /*
  * Remove Editor from built-in Post Types, Kontentblocks will handle this instead.
  * above action will remove submit button from media upload as well
@@ -35,19 +33,3 @@ function deleteBackup($post_id)
 }
 
 add_action('delete_post', __NAMESPACE__ . '\deleteBackup');
-
-/*
- * Media Library Fix
- *  re-adds the submit button to the media upload
- *  @todo Outdated
- */
-
-function readd_submit_button($args)
-{
-    $args['send'] = true;
-    return $args;
-
-}
-
-add_filter('get_media_item_args', __NAMESPACE__ . '\readd_submit_button', 99, 1);
-
