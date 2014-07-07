@@ -37,7 +37,7 @@ class PanelFieldSection extends AbstractFieldSection {
 	 *
 	 * @return mixed
 	 */
-	public function markByEnvVar( Field $Field ) {
+	public function markVisibility( Field $Field ) {
 		$Field->setDisplay( true );
 	}
 

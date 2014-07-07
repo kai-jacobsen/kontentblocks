@@ -46,9 +46,9 @@ class FieldManager extends AbstractFieldManager
     public function addGroup( $id, $args = array() )
     {
         if ( !$this->idExists( $id ) ) {
-            $this->structure[ $id ] = new FieldSection( $id, $args, $this->Module->envVars, $this->Module );
+            $this->Structure[ $id ] = new FieldSection( $id, $args, $this->Module->envVars, $this->Module );
         }
-        return $this->structure[ $id ];
+        return $this->Structure[ $id ];
 
     }
 
@@ -67,7 +67,7 @@ class FieldManager extends AbstractFieldManager
      */
     public function renderFields()
     {
-        $Renderer = new FieldRenderTabs( $this->structure );
+        $Renderer = new FieldRenderTabs( $this->Structure );
         $Renderer->render( $this->baseId, $this->data );
 
     }

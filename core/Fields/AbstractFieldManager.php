@@ -1,14 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kaiser
- * Date: 27.06.14
- * Time: 16:18
- */
-
 namespace Kontentblocks\Fields;
 
-
+/**
+ * Class AbstractFieldManager
+ * @package Kontentblocks\Fields
+ */
 abstract class AbstractFieldManager {
 
 
@@ -68,19 +64,19 @@ abstract class AbstractFieldManager {
 	 */
 	public function idExists( $id ) {
 		// TODO Test for right inheritance / abstract class
-		return ( isset( $this->structure[ $id ] ) );
+		return ( isset( $this->Structure[ $id ] ) );
 
 	}
 
 	/**
-	 * Extract single fields from structure object
+	 * Extract single fields from Structure object
 	 * and stores them in one single flat array
 	 * @return array
 	 * @since 1.0.0
 	 */
 	public function collectAllFields() {
 		$collect = array();
-		foreach ( $this->structure as $def ) {
+		foreach ( $this->Structure as $def ) {
 			$collect = $collect + $def->getFields();
 		}
 
@@ -128,7 +124,7 @@ abstract class AbstractFieldManager {
 	 */
 	public function save( $data, $oldData ) {
 		$collection = array();
-		foreach ( $this->structure as $definition ) {
+		foreach ( $this->Structure as $definition ) {
 
 			$return     = ( $definition->save( $data, $oldData ) );
 			$collection = $collection + $return;

@@ -49,7 +49,7 @@ class FieldSection extends AbstractFieldSection {
 	 *
 	 * @return void
 	 */
-	public function markByEnvVar( Field $field ) {
+	public function markVisibility( Field $field ) {
 		$areaContext  = $this->envVars['areaContext'];
 		$postType     = $this->envVars['postType'];
 		$pageTemplate = $this->envVars['pageTemplate'];
