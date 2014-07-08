@@ -37,9 +37,7 @@ use Kontentblocks\Utils\JSONBridge;
      */
     public function add( $file )
     {
-        // file should be the full path from the loader
-        include_once( $file );
-
+        include $file;
         // extract class name from file
         $classname = str_replace( '.php', '', basename( $file ) );
 
@@ -117,6 +115,7 @@ use Kontentblocks\Utils\JSONBridge;
      */
     public function get( $classname )
     {
+
         if (isset( $this->modules[$classname] )) {
             return $this->modules[$classname];
         } else {

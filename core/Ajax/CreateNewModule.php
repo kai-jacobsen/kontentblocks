@@ -100,6 +100,7 @@ class CreateNewModule
      */
     private function setupModuleArgs()
     {
+
         // Get Prototype from registry
         if (class_exists( $this->type )) {
             $proto                = ModuleRegistry::getInstance()->get( $this->type );

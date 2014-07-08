@@ -137,10 +137,10 @@ Class Kontentblocks
         // legacy
         $paths = apply_filters( 'kb_add_module_path', $paths );
         foreach ($paths as $path) {
-            $dirs = glob( $path . 'Module*', GLOB_ONLYDIR );
+            $dirs = glob( $path . '[mM]odule*', GLOB_ONLYDIR );
             if (!empty( $dirs )) {
                 foreach ($dirs as $subdir) {
-                    $files = glob( $subdir . '/Module*.php' );
+                    $files = glob( $subdir . '/[mM]odule*.php' );
                     foreach ($files as $template) {
                         if (strpos( basename( $template ), '__' ) === false) {
                             $Registry->add( $template );

@@ -241,10 +241,9 @@ abstract class StaticPanel {
 	public function setup( $postId ) {
 		$this->setupData( $postId );
 		$this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
+        $this->fields( $this->FieldManager )->setup( $this->data );
 
-		$this->fields( $this->FieldManager )->setup( $this->data );
-
-		return $this;
+        return $this;
 
 	}
 

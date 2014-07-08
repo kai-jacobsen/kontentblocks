@@ -47,16 +47,16 @@ class PanelFieldManager extends AbstractFieldManager {
 	 */
 	public function addGroup( $id, $args = array() ) {
 		if ( !$this->idExists( $id ) ) {
-			$this->structure[ $id ] = new PanelFieldSection( $id, $args, false, $this->Panel );
+			$this->Structure[ $id ] = new PanelFieldSection( $id, $args, false, $this->Panel );
 		}
 
-		return $this->structure[ $id ];
+		return $this->Structure[ $id ];
 
 	}
 
 	public function save( $data, $oldData ) {
 		$collection = array();
-		foreach ( $this->structure as $definition ) {
+		foreach ( $this->Structure as $definition ) {
 			$return     = ( $definition->save( $data, $oldData ) );
 			$collection = $collection + $return;
 		}
@@ -76,7 +76,7 @@ class PanelFieldManager extends AbstractFieldManager {
 	 * @return void
 	 */
 	public function renderFields() {
-		$Renderer = new FieldRenderTabs( $this->structure );
+		$Renderer = new FieldRenderTabs( $this->Structure );
 		$Renderer->render( $this->baseId, $this->data );
 	}
 
