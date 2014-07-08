@@ -46,7 +46,6 @@ class PostMetaDataProvider
 
         $this->postId = $postId;
         $this->_selfUpdate();
-
     }
 
     /**
@@ -132,6 +131,7 @@ class PostMetaDataProvider
      */
     private function _getPostCustom()
     {
+
         $this->meta = array_map(
             function ( $a ) {
                 return maybe_unserialize( $a[0] );

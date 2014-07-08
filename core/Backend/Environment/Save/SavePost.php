@@ -30,12 +30,10 @@ class SavePost {
 	public function save() {
 
 		// mic check one two, one two
-		if ( !$this->auth() ) {
+		if ( $this->auth() === false ) {
 			return false;
 		}
-
 		$this->index = $this->Environment->getStorage()->getIndex();
-
 		$areas = $this->Environment->getAreas();
 		// Bail out if no areas are set
 		if ( empty( $areas ) ) {
@@ -61,7 +59,6 @@ class SavePost {
 				}
 				//hack
 				$id = null;
-
 				// new data from $_POST
 				//TODO: filter incoming data
 				$data = ( !empty( $_POST[ $module['instance_id'] ] ) ) ? $_POST[ $module['instance_id'] ] : null;
@@ -187,6 +184,10 @@ class SavePost {
 		if ( get_post_type( $this->postid ) == 'revision' && !isset( $_POST['wp-preview'] ) ) {
 			return false;
 		}
+
+        if ($this->Environment->getPostType() == 'revision'){
+            return false;
+        }
 
 
 		// checks passed
