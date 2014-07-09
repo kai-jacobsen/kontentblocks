@@ -122,6 +122,8 @@ class DynamicAreas
 
         $this->saveArea( $postId );
 
+
+
     }
 
     /**
@@ -273,6 +275,7 @@ class DynamicAreas
         if (empty( $_POST )) {
             return false;
         }
+
         // no area data send
         if (empty( $_POST['area'] )) {
             return false;
@@ -289,7 +292,7 @@ class DynamicAreas
         }
 
         // Check permissions
-        if (!current_user_can( 'edit_post', $this->postid )) {
+        if (!current_user_can( 'edit_post', $this->postId )) {
             return false;
         }
 
@@ -297,7 +300,7 @@ class DynamicAreas
             return false;
         }
 
-        if (get_post_type( $this->postid ) == 'revision' && !isset( $_POST['wp-preview'] )) {
+        if (get_post_type( $this->postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
             return false;
         }
 

@@ -64,7 +64,6 @@ abstract class Module
 
         $this->moduleData    = $data;
         $this->rawModuleData = $data;
-
         if (isset( $environment )) {
             $this->setEnvVarsFromEnvironment( $environment );
         }
@@ -445,12 +444,11 @@ abstract class Module
             array(
                 'postType'     => $environment->get( 'postType' ),
                 'pageTemplate' => $environment->get( 'pageTemplate' ),
-                'postId'       => absint( $environment->get( 'postID' ) ),
+                'postId'       => absint( $environment->get( 'postId' ) ),
                 'areaContext'  => $this->getAreaContext(),
                 'area'         => $this->area
             )
         );
-
     }
 
     /**

@@ -41,8 +41,8 @@ Class Kontentblocks
 
     public function __construct()
     {
-        self::bootstrap();
 
+        self::bootstrap();
         // Setup capabilities
         // @TODO move to activation hook
         Capabilities::setup();
@@ -231,8 +231,9 @@ Class Kontentblocks
         if (is_admin()) {
             require_once dirname( __FILE__ ) . '/core/Utils/tables.php';
             require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
-            require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
         }
+        require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
+
     }
 
 }

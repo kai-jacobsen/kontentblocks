@@ -187,6 +187,7 @@ class ModuleTemplates
     public function save( $postId, $postObj )
     {
         // auth request
+
         if (!$this->auth( $postId )) {
             return false;
         }

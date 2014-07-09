@@ -42,6 +42,7 @@ Class EditScreen
         if (!in_array( $pagenow, $this->hooks )) {
             return null;
         }
+
         // prepare current posts data
         add_action( 'add_meta_boxes', array( $this, 'setupEnvironment' ), 10 );
         // add UI
@@ -136,6 +137,7 @@ Class EditScreen
         if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
             $post_id = get_the_ID();
         }
+
         $Environment = new PostEnvironment( $post_id );
         $Environment->save();
 

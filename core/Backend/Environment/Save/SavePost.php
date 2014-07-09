@@ -35,7 +35,8 @@ class SavePost {
 		}
 		$this->index = $this->Environment->getStorage()->getIndex();
 		$areas = $this->Environment->getAreas();
-		// Bail out if no areas are set
+
+        // Bail out if no areas are set
 		if ( empty( $areas ) ) {
 			return false;
 		}
@@ -53,7 +54,8 @@ class SavePost {
 				continue;
 			}
 
-			foreach ( $modules as $module ) {
+
+            foreach ( $modules as $module ) {
 				if ( !class_exists( $module['class'] ) ) {
 					continue;
 				}
@@ -141,7 +143,6 @@ class SavePost {
 		$module['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 		$module['overrides']['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module['overrides']['name'];
 		$module['state']['draft']    = false;
-
 		return $module;
 	}
 

@@ -120,8 +120,6 @@ class PostMetaDataProvider
     }
 
 
-
-
     /**
      * Gets all post meta for current post.
      * Setup the Object.
@@ -131,13 +129,17 @@ class PostMetaDataProvider
      */
     private function _getPostCustom()
     {
+        $meta = get_post_custom( $this->postId );
 
-        $this->meta = array_map(
-            function ( $a ) {
-                return maybe_unserialize( $a[0] );
-            },
-            get_post_custom( $this->postId )
-        );
+        if (!empty( $meta ) && is_array($meta)) {
+            $this->meta = array_map(
+                function ( $a ) {
+                    return maybe_unserialize( $a[0] );
+                }, $meta);
+        } else {
+            $this->meta = array();
+        }
+
         return $this;
 
     }

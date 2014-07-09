@@ -66,7 +66,8 @@ add_action( 'wp_ajax_resortModules', 'resortModulesCb' );
  */
 function removeModulesCb()
 {
-    new RemoveModules();
+
+    RemoveModules::run();
 
 }
 
