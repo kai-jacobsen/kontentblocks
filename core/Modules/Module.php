@@ -44,6 +44,8 @@ abstract class Module
     public $rawModuleData;
 
     protected $View;
+
+
     protected $ViewLoader;
 
     /**
@@ -134,10 +136,6 @@ abstract class Module
 
     /**
      * Wrapper to actual render method.
-     *
-     * It's possible to call this with custom data
-     *
-     * @param null $data
      *
      * @return mixed
      */
@@ -577,6 +575,12 @@ abstract class Module
             return null;
         }
 
+    }
+
+
+    public function getModuleId()
+    {
+        return $this->instance_id;
     }
 
     /**
