@@ -119,7 +119,7 @@ class AreaRenderer {
 
 			$output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
 
-			$output .= $module->module( $module->moduleData );
+			$output .= $module->module( );
 
 			$output .= $this->afterModule( $this->_afterModule( $module ), $module );
 		}

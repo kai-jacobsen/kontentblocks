@@ -44,7 +44,7 @@ class UpdateModuleOptions
         $instance->moduleData = $mergedData;
         $return = array(
 //            'html' => wp_kses_post($wp_embed->autoembed($instance->module($mergedData))),
-            'html' => $instance->module($mergedData),
+            'html' => $instance->module(),
             'newModuleData' => $mergedData
         );
 

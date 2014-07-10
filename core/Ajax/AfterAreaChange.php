@@ -37,7 +37,7 @@ class AfterAreaChange
         $instance    = $Factory->getModule();
         ob_start();
 
-        $instance->options( $instance->moduleData );
+        $instance->options();
         $html   = ob_get_clean();
         $return = array(
             'html' => stripslashes_deep( $html ),

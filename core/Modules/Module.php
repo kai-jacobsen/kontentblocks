@@ -83,7 +83,7 @@ abstract class Module
      * gets called by ui display callback
      *
      */
-    public function options( $data )
+    public function options()
     {
         if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->ViewLoader = ModuleViewsRegistry::getInstance()->getViewLoader( $this );
@@ -141,11 +141,9 @@ abstract class Module
      *
      * @return mixed
      */
-    final public function module( $data = null )
+    final public function module()
     {
-        if (is_null( $data ) && !is_null( $this->moduleData )) {
-            $data = $this->moduleData;
-        }
+        $data = $this->moduleData;
         if (isset( $this->Fields )) {
             $this->_setupFieldData();
         }
@@ -160,14 +158,14 @@ abstract class Module
             }
         }
 
-        return $this->render( $data );
+        return $this->render();
 
     }
 
     /**
      * Has no default output yet, and must be overwritten
      */
-    public abstract function render( $data );
+    public abstract function render();
 
 
     /**

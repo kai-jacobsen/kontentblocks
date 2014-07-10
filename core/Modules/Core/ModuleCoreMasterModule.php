@@ -71,7 +71,7 @@ class ModuleCoreMasterModule extends Module
 
     }
 
-    public function options( $data )
+    public function options()
     {
         $masterId   = $this->parentId;
         $translated = false;
@@ -110,7 +110,7 @@ class ModuleCoreMasterModule extends Module
      * Output is mapped back to the original module class which was set
      * when the master template was created
      */
-    public function render( $data )
+    public function render()
     {
     }
 
