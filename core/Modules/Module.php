@@ -535,6 +535,27 @@ abstract class Module
     }
 
     /**
+     * @param null $key
+     * @param string $return
+     * @param null $arrayKey
+     *
+     * @return bool|string
+     */
+    public function getValue( $key = null, $return = '', $arrayKey = null )
+    {
+        if (empty( $this->moduleData ) or empty( $key )) {
+            return false;
+        }
+
+        if (!is_null( $arrayKey )) {
+            return ( !empty( $this->moduleData[$arrayKey][$key] ) ) ? $this->moduleData[$arrayKey][$key] : $return;
+        }
+
+        return ( !empty( $this->moduleData[$key] ) ) ? $this->moduleData[$key] : $return;
+
+    }
+
+    /**
      * Get value from unprepared / unfiltered original module data
      *
      * @param string $key

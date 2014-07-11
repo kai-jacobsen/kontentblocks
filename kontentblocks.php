@@ -219,6 +219,7 @@ Class Kontentblocks
         require_once dirname( __FILE__ ) . '/Autoloader.php';
         // Public API
         require_once dirname( __FILE__ ) . '/kontentblocks.public-api.php';
+        require_once dirname( __FILE__ ) . '/api.php';
 
         // File gets created during build process and contains one function
         // to get the current git hash or a random hast during development
@@ -236,9 +237,25 @@ Class Kontentblocks
 
     }
 
+    public static function onDeactivation()
+    {
+        delete_transient( 'kb_last_backup' );
+        delete_option( 'kb_dbVersion' );
+    }
+
+    public static function onUnistall()
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . "kb_backups";
+        $wpdb->query( "DROP TABLE IF EXISTS $table" );
+    }
+
 }
 
 // end Kontentblocks
 
 // Fire it up
 new Kontentblocks();
+
+register_deactivation_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onDeactivation' ) );
+register_uninstall_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onUninstall' ) );

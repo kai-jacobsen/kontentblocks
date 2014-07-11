@@ -15,10 +15,11 @@ if (!defined( 'ABSPATH' )) {
  */
 function kb_register_area( $args )
 {
-    $AreaRegistry = AreaRegistry::getInstance();
-    $AreaRegistry->addArea( $args, true );
+
+    \Kontentblocks\registerArea($args);
 
 }
+
 
 /**
  * Used to register specific area templates, basically css classes to be used for a area
