@@ -10,7 +10,7 @@ namespace Kontentblocks\Backend\DataProvider;
  * @package Kontentblocks\Backend\Post
  * @since 1.0.0
  */
-class PostMetaDataProvider
+class PostMetaDataProvider implements DataProviderInterface
 {
 
     /**
@@ -22,7 +22,6 @@ class PostMetaDataProvider
 
     /**
      * 'cached' meta data
-     * @TODO unnecessary
      * @var array
      * @since 1.0.0
      */
@@ -73,7 +72,6 @@ class PostMetaDataProvider
      */
     public function update( $key, $value )
     {
-
         return update_post_meta( $this->postId, $key, $value );
     }
 
