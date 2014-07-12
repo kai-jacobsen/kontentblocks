@@ -15,9 +15,7 @@ if (!defined( 'ABSPATH' )) {
  */
 function kb_register_area( $args )
 {
-    $AreaRegistry = AreaRegistry::getInstance();
-    $AreaRegistry->addArea( $args, true );
-
+    Kontentblocks\registerArea($args);
 }
 
 /**
