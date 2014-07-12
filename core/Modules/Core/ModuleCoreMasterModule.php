@@ -1,9 +1,9 @@
 <?php
 
 
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreTemplate;
 
 /**
@@ -13,13 +13,13 @@ class ModuleCoreMasterModule extends Module
 {
 
     public static $defaults = array(
-        'publicName'        => 'Master Module',
-        'id'                => 'core-master-module',
-        'description'       => 'Handles reference to master templates',
+        'publicName' => 'Master Module',
+        'id' => 'core-master-module',
+        'description' => 'Handles reference to master templates',
         'globallyAvailable' => false,
-        'asTemplate'        => false,
-        'master'            => true,
-        'hidden'            => true,
+        'asTemplate' => false,
+        'master' => true,
+        'hidden' => true,
     );
 
     public static function init()
@@ -44,13 +44,13 @@ class ModuleCoreMasterModule extends Module
             return $module;
         }
 
-        $masterId  = $module['parentId'];
-        $icl       = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
+        $masterId = $module['parentId'];
+        $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
         $duplicate = !empty( $icl );
 
 
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-            $iclId      = icl_object_id( $masterId, 'kb-mdtpl' );
+            $iclId = icl_object_id( $masterId, 'kb-mdtpl' );
             $translated = ( $iclId !== $masterId );
 
             if ($translated) {
@@ -60,9 +60,9 @@ class ModuleCoreMasterModule extends Module
         }
 
         if (is_null( $masterId )) {
-            $module['state']['draft']  = true;
+            $module['state']['draft'] = true;
             $module['state']['active'] = false;
-            $module['state']['valid']  = false;
+            $module['state']['valid'] = false;
         } else {
             $module['state']['valid'] = true;
         }
@@ -73,13 +73,13 @@ class ModuleCoreMasterModule extends Module
 
     public function options()
     {
-        $masterId   = $this->parentId;
+        $masterId = $this->parentId;
         $translated = false;
-        $icl        = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
-        $duplicate  = !empty( $icl );
+        $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
+        $duplicate = !empty( $icl );
 
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-            $iclId      = icl_object_id( $masterId, 'kb-mdtpl' );
+            $iclId = icl_object_id( $masterId, 'kb-mdtpl' );
             $translated = ( $iclId !== $masterId );
 
             if ($translated) {
@@ -90,12 +90,12 @@ class ModuleCoreMasterModule extends Module
 
 
         $templateData = array(
-            'valid'      => $this->state['valid'],
-            'editUrl'    => html_entity_decode( get_edit_post_link( $masterId ) . '&amp;return=' . get_the_ID() ),
+            'valid' => $this->state['valid'],
+            'editUrl' => html_entity_decode( get_edit_post_link( $masterId ) . '&amp;return=' . get_the_ID() ),
             'translated' => $translated,
-            'duplicate'  => $duplicate,
-            'module'     => $this,
-            'i18n'       => I18n::getInstance()->getPackage( 'CoreModules.master' )
+            'duplicate' => $duplicate,
+            'module' => $this,
+            'i18n' => I18n::getInstance()->getPackage( 'CoreModules.master' )
         );
 
         $tpl = ( isset( $this->state['valid'] ) && $this->state['valid'] ) ? 'master-module-valid.twig' : 'master-module-invalid.twig';
@@ -124,14 +124,17 @@ class ModuleCoreMasterModule extends Module
      */
     public static function setupModule( $module )
     {
+        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
+        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
+
         if ($module['master']) {
-            $masterId  = $module['parentId']; // post id of the template
-            $icl       = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
+            $masterId = $module['parentId']; // post id of the template
+            $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
             $duplicate = ( !empty( $icl ) );
 
 
             if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-                $iclId      = icl_object_id( $masterId, 'kb-mdtpl' );
+                $iclId = icl_object_id( $masterId, 'kb-mdtpl' );
                 $translated = ( $iclId !== $masterId );
                 if ($translated) {
                     $masterId = $iclId;
@@ -139,10 +142,10 @@ class ModuleCoreMasterModule extends Module
             }
 
             // original template module definition
-            $index    = get_post_meta( $masterId, 'kb_kontentblocks', true );
+            $index = get_post_meta( $masterId, 'kb_kontentblocks', true );
             $template = $index[$module['templateObj']['id']];
             // actual module definition
-            $originalDefiniton = ModuleRegistry::getInstance()->get( $template['class'] );
+            $originalDefiniton = $ModuleRegistry->get( $template['class'] );
 
             // $module is actually the Master_Module, we need to override everything to the actual module
             $glued = wp_parse_args( $template, $originalDefiniton );
@@ -154,7 +157,7 @@ class ModuleCoreMasterModule extends Module
             unset( $glued['areaContext'] );
             unset( $glued['area'] );
             // finally
-            $final             = wp_parse_args( $glued, $module );
+            $final = wp_parse_args( $glued, $module );
             $final['parentId'] = $masterId;
             return $final;
         }
@@ -162,11 +165,16 @@ class ModuleCoreMasterModule extends Module
         return $module;
     }
 
+    /**
+     * @param $module
+     * @param $moduleDef
+     * @return mixed
+     */
     public static function setupModuleData( $module, $moduleDef )
     {
         if ($moduleDef['master']) {
             $masterId = $moduleDef['parentId'];
-            $tplId    = $moduleDef['templateObj']['id'];
+            $tplId = $moduleDef['templateObj']['id'];
 
             $data = get_post_meta( $masterId, '_' . $tplId, true );
             return $data;

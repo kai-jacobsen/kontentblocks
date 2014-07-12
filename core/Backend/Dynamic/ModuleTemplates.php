@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Dynamic;
 
 use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreTemplate;
@@ -110,7 +111,7 @@ class ModuleTemplates
         $moduleDef = ModuleFactory::parseModule( $template );
         //set area context on init
         $moduleDef['areaContext'] = $context;
-        $moduleDef['area']        = 'module-template';
+        $moduleDef['area'] = 'module-template';
         // create essential markup and render the module
         // infamous hidden editor hack
         Utilities::hiddenEditor();
@@ -131,7 +132,7 @@ class ModuleTemplates
 
         // Data for twig
         $templateData = array(
-            'nonce'    => wp_create_nonce( 'update-template' ),
+            'nonce' => wp_create_nonce( 'update-template' ),
             'instance' => $Instance
         );
 
@@ -166,9 +167,9 @@ class ModuleTemplates
         // Data for twig
         $templateData = array(
             'modules' => $this->prepareModulesforSelectbox( $postData ),
-            'nonce'   => wp_create_nonce( 'new-template' ),
-            'data'    => $postData,
-            'master'  => ( isset( $postData['master'] ) ) ? 'checked="checked"' : ''
+            'nonce' => wp_create_nonce( 'new-template' ),
+            'data' => $postData,
+            'master' => ( isset( $postData['master'] ) ) ? 'checked="checked"' : ''
         );
 
         // To keep html out of php files as much as possible twig is used
@@ -193,7 +194,7 @@ class ModuleTemplates
         }
 
         $MetaData = new PostMetaDataProvider( $postId );
-        $Storage  = new PostMetaModuleStorage( $postId, $MetaData );
+        $Storage = new PostMetaModuleStorage( $postId, $MetaData );
 
         $tpl = $Storage->getModuleDefinition( $postObj->post_name );
 
@@ -202,18 +203,18 @@ class ModuleTemplates
             $this->createTemplate( $postId, $Storage );
         } else {
             // update existing
-            $id           = $tpl['instance_id'];
-            $data         = $_POST[$id];
+            $id = $tpl['instance_id'];
+            $data = $_POST[$id];
             $existingData = $Storage->getModuleData( $id );
-            $old          = ( empty( $existingData ) ) ? array() : $existingData;
+            $old = ( empty( $existingData ) ) ? array() : $existingData;
 
             $moduleDef = ModuleFactory::parseModule( $tpl );
 
             $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, null, $old );
             /** @var $Instance \Kontentblocks\Modules\Module */
             $Instance = $Factory->getModule();
-            $new      = $Instance->save( $data, $old );
-            $toSave   = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
+            $new = $Instance->save( $data, $old );
+            $toSave = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 
             // settings are not persistent, never
             unset( $tpl['settings'] );
@@ -242,6 +243,10 @@ class ModuleTemplates
     public function createTemplate( $postId, PostMetaModuleStorage $Storage )
     {
 
+
+        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
+        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
+
         // no template data send
         if (empty( $_POST['new-template'] )) {
             return;
@@ -249,10 +254,10 @@ class ModuleTemplates
 
         // set defaults
         $defaults = array(
-            'master'    => false,
-            'name'      => null,
-            'id'        => null,
-            'type'      => null,
+            'master' => false,
+            'name' => null,
+            'id' => null,
+            'type' => null,
             'master_id' => $postId
         );
         // parse $_POST data
@@ -266,19 +271,19 @@ class ModuleTemplates
             wp_die( 'Missing arguments' );
         }
 
-        $definition = ModuleRegistry::getInstance()->get( $data['type'] );
+        $definition = $ModuleRegistry->get( $data['type'] );
 
         if (is_null( $definition )) {
             wp_die( 'Definition not found' );
         }
         //set individual module definition args for later reference
-        $definition['master']      = $data['master']; // boolean indicates master status
-        $definition['master_id']   = $data['master_id']; // id of db post
-        $definition['parentId']    = $data['master_id']; // id of db post
-        $definition['template']    = true; // it's a template yes
+        $definition['master'] = $data['master']; // boolean indicates master status
+        $definition['master_id'] = $data['master_id']; // id of db post
+        $definition['parentId'] = $data['master_id']; // id of db post
+        $definition['template'] = true; // it's a template yes
         $definition['instance_id'] = $data['id']; // equals post_name
-        $definition['class']       = $data['type']; // Module class
-        $definition['area']        = 'template'; // needs to be present
+        $definition['class'] = $data['type']; // Module class
+        $definition['area'] = 'template'; // needs to be present
         $definition['areaContext'] = 'template'; // needs to be present
 
         // settings are not persistent
@@ -309,7 +314,7 @@ class ModuleTemplates
         }
 
         $data['post_title'] = filter_var( $_POST['new-template']['name'], FILTER_SANITIZE_STRING );
-        $data['post_name']  = filter_var( $_POST['new-template']['id'], FILTER_SANITIZE_STRING );
+        $data['post_name'] = filter_var( $_POST['new-template']['id'], FILTER_SANITIZE_STRING );
 
         return $data;
     }
@@ -321,34 +326,34 @@ class ModuleTemplates
     {
 
         $labels = array(
-            'name'               => _x( 'Module Templates', 'post type general name', 'Kontentblocks' ),
-            'singular_name'      => _x( 'Module Template', 'post type singular name', 'Kontentblocks' ),
-            'menu_name'          => _x( 'Module Templates', 'admin menu', 'Kontentblocks' ),
-            'name_admin_bar'     => _x( 'Module Templates', 'add new on admin bar', 'Kontentblocks' ),
-            'add_new'            => _x( 'Add New', 'book', 'Kontentblocks' ),
-            'add_new_item'       => __( 'Add New Module Template', 'Kontentblocks' ),
-            'new_item'           => __( 'New Module Template', 'Kontentblocks' ),
-            'edit_item'          => __( 'Edit Module Template', 'Kontentblocks' ),
-            'view_item'          => __( 'View Module Template', 'Kontentblocks' ),
-            'all_items'          => __( 'All Module Templates', 'Kontentblocks' ),
-            'search_items'       => __( 'Search Module Templates', 'Kontentblocks' ),
-            'parent_item_colon'  => __( 'Parent Module Template:', 'Kontentblocks' ),
-            'not_found'          => __( 'No Module Templates found.', 'Kontentblocks' ),
+            'name' => _x( 'Module Templates', 'post type general name', 'Kontentblocks' ),
+            'singular_name' => _x( 'Module Template', 'post type singular name', 'Kontentblocks' ),
+            'menu_name' => _x( 'Module Templates', 'admin menu', 'Kontentblocks' ),
+            'name_admin_bar' => _x( 'Module Templates', 'add new on admin bar', 'Kontentblocks' ),
+            'add_new' => _x( 'Add New', 'book', 'Kontentblocks' ),
+            'add_new_item' => __( 'Add New Module Template', 'Kontentblocks' ),
+            'new_item' => __( 'New Module Template', 'Kontentblocks' ),
+            'edit_item' => __( 'Edit Module Template', 'Kontentblocks' ),
+            'view_item' => __( 'View Module Template', 'Kontentblocks' ),
+            'all_items' => __( 'All Module Templates', 'Kontentblocks' ),
+            'search_items' => __( 'Search Module Templates', 'Kontentblocks' ),
+            'parent_item_colon' => __( 'Parent Module Template:', 'Kontentblocks' ),
+            'not_found' => __( 'No Module Templates found.', 'Kontentblocks' ),
             'not_found_in_trash' => __( 'No Module Templates found in Trash.', 'Kontentblocks' ),
         );
 
         $args = array(
-            'labels'             => $labels,
-            'public'             => false,
+            'labels' => $labels,
+            'public' => false,
             'publicly_queryable' => false,
-            'show_ui'            => true,
-            'show_in_menu'       => false,
-            'query_var'          => true,
-            'capability_type'    => 'post',
-            'has_archive'        => false,
-            'hierarchical'       => false,
-            'menu_position'      => 999,
-            'supports'           => null
+            'show_ui' => true,
+            'show_in_menu' => false,
+            'query_var' => true,
+            'capability_type' => 'post',
+            'has_archive' => false,
+            'hierarchical' => false,
+            'menu_position' => 999,
+            'supports' => null
         );
 
         register_post_type( 'kb-mdtpl', $args );
@@ -365,28 +370,28 @@ class ModuleTemplates
      */
     public function postTypeMessages( $messages )
     {
-        $post             = get_post();
-        $post_type        = get_post_type( $post );
+        $post = get_post();
+        $post_type = get_post_type( $post );
         $post_type_object = get_post_type_object( $post_type );
 
         $messages['kb-mdtpl'] = array(
-            0  => '', // Unused. Messages start at index 1.
-            1  => __( 'Module Template updated.', 'Kontentblocks' ),
-            2  => __( 'Custom field updated.', 'Kontentblocks' ), // not used
-            3  => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
-            4  => __( 'Module Template updated.', 'Kontentblocks' ),
+            0 => '', // Unused. Messages start at index 1.
+            1 => __( 'Module Template updated.', 'Kontentblocks' ),
+            2 => __( 'Custom field updated.', 'Kontentblocks' ), // not used
+            3 => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
+            4 => __( 'Module Template updated.', 'Kontentblocks' ),
             /* translators: %s: date and time of the revision */
-            5  => isset( $_GET['revision'] ) ? sprintf(
+            5 => isset( $_GET['revision'] ) ? sprintf(
                 __(
                     'Module Template restored to revision from %s',
                     'Kontentblocks'
                 ),
                 wp_post_revision_title( (int) $_GET['revision'], false )
             ) : false,
-            6  => __( 'Module Template published.', 'Kontentblocks' ),
-            7  => __( 'Module Template saved.', 'Kontentblocks' ),
-            8  => __( 'Module Template submitted.', 'Kontentblocks' ),
-            9  => sprintf(
+            6 => __( 'Module Template published.', 'Kontentblocks' ),
+            7 => __( 'Module Template saved.', 'Kontentblocks' ),
+            8 => __( 'Module Template submitted.', 'Kontentblocks' ),
+            9 => sprintf(
                 __( 'Module Template scheduled for: <strong>%1$s</strong>.', 'Kontentblocks' ),
                 // translators: Publish box date format, see http://php.net/date
                 date_i18n( __( 'M j, Y @ G:i', 'Kontentblocks' ), strtotime( $post->post_date ) )
@@ -450,7 +455,7 @@ class ModuleTemplates
     private function prepareModulesforSelectbox( $postData )
     {
 
-        $type    = ( isset( $postData['type'] ) ) ? $postData['type'] : '';
+        $type = ( isset( $postData['type'] ) ) ? $postData['type'] : '';
         $modules =
 
         $modules = $this->getTemplateables();
@@ -460,8 +465,8 @@ class ModuleTemplates
         if (!empty( $modules )) {
             foreach ($modules as $module) {
                 $collection[] = array(
-                    'name'     => $module['settings']['name'],
-                    'class'    => $module['settings']['class'],
+                    'name' => $module['settings']['name'],
+                    'class' => $module['settings']['class'],
                     'selected' => ( $module['settings']['class'] === $type ) ? 'selected="selected"' : ''
                 );
             }
@@ -479,8 +484,13 @@ class ModuleTemplates
      */
     public function getTemplateables()
     {
+
+
+        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
+        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
+
         return array_filter(
-            ModuleRegistry::getInstance()->getAll(),
+            $ModuleRegistry->getAll(),
             function ( $module ) {
                 if (isset( $module['settings']['asTemplate'] ) && $module['settings']['asTemplate'] == true) {
                     return true;

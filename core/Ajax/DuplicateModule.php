@@ -2,13 +2,17 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\DataProvider\PostMetaDataProvider,
-    Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
+/**
+ * Class DuplicateModule
+ * @package Kontentblocks\Ajax
+ */
 class DuplicateModule
 {
 
@@ -16,6 +20,19 @@ class DuplicateModule
     protected $dataHandler;
     protected $instanceId;
 
+    /**
+     * @var ModuleRegistry
+     */
+    protected $ModuleRegistry;
+
+    /**
+     * @var PostEnvironment
+     */
+    protected $Environment;
+
+    /**
+     *
+     */
     public function __construct()
     {
         // verify action
@@ -25,11 +42,13 @@ class DuplicateModule
             wp_send_json_error();
         }
 
-        $this->postId     = $_POST['post_id'];
+        $this->postId = $_POST['post_id'];
         $this->instanceId = $_POST['module'];
-        $this->class      = $_POST['class'];
+        $this->class = $_POST['class'];
 
         $this->Environment = new PostEnvironment( $this->postId );
+
+        $this->ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 
         $this->newInstanceId = $this->getNewInstanceId();
 
@@ -44,15 +63,15 @@ class DuplicateModule
         // @TODO: what why?!??!
         global $post;
         $tempPost = $post;
-        $post     = get_post( $this->postId );
+        $post = get_post( $this->postId );
 
-        $stored                             = $this->Environment->getStorage()->getModuleDefinition(
+        $stored = $this->Environment->getStorage()->getModuleDefinition(
             $this->instanceId
         );
-        $moduleDefinition                   = ModuleFactory::parseModule( $stored );
+        $moduleDefinition = ModuleFactory::parseModule( $stored );
         $moduleDefinition['state']['draft'] = true;
-        $moduleDefinition['instance_id']    = $this->newInstanceId;
-        $toIndex                            = $moduleDefinition;
+        $moduleDefinition['instance_id'] = $this->newInstanceId;
+        $toIndex = $moduleDefinition;
         unset( $toIndex['settings'] );
 
         $update = $this->Environment->getStorage()->addToIndex( $toIndex['instance_id'], $toIndex );
@@ -67,7 +86,7 @@ class DuplicateModule
             $this->Environment->getStorage()->reset();
             $moduleDefinition = apply_filters( 'kb_before_module_options', $moduleDefinition );
 
-            $Factory     = new ModuleFactory( $this->class, $moduleDefinition, $this->Environment );
+            $Factory = new ModuleFactory( $this->class, $moduleDefinition, $this->Environment );
             $newInstance = $Factory->getModule();
 
 
@@ -77,11 +96,11 @@ class DuplicateModule
 
             $response = array
             (
-                'id'     => $this->newInstanceId,
+                'id' => $this->newInstanceId,
                 'module' => $moduleDefinition,
-                'name'   => $newInstance->settings['publicName'],
-                'html'   => $html,
-                'json'   => JSONBridge::getInstance()->getJSON(),
+                'name' => $newInstance->settings['publicName'],
+                'html' => $html,
+                'json' => JSONBridge::getInstance()->getJSON(),
 
             );
 
@@ -91,14 +110,17 @@ class DuplicateModule
 
     }
 
+    /**
+     * @return string
+     */
     public function getNewInstanceId()
     {
-        $base   = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() );
+        $base = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() );
         $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
         if ($this->postId !== - 1) {
-            return $prefix . $this->postId . '_' . ++$base;
+            return $prefix . $this->postId . '_' . ++ $base;
         } else {
-            return $prefix . 'kb-block-da' . $this->moduleArgs['area'] . '_' . ++$base;
+            return $prefix . 'kb-block-da' . $this->moduleArgs['area'] . '_' . ++ $base;
         }
 
     }

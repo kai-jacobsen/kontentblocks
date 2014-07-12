@@ -1,97 +1,129 @@
 <?php
 namespace Kontentblocks\Templating;
 
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\ImageResize;
+use Pimple\Container;
 use Twig_SimpleFunction;
 
+/**
+ * Class Twig
+ * @package Kontentblocks\Templating
+ */
 class Twig
 {
 
-    private static $loader = null;
-    private static $environment = null;
+    protected static $paths = array();
 
-	protected static $paths = array();
 
-    public static function getInstance()
+    /**
+     * @param $Kontentblocks
+     * @return \Twig_Loader_Filesystem
+     */
+    public static function setupLoader( $Kontentblocks )
+    {
+        $paths[] = apply_filters( 'kb_twig_def_path', get_template_directory() . '/module-templates/' );
+        if (is_child_theme()) {
+            $paths = apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
+        }
+        $Loader = new \Twig_Loader_Filesystem( $paths );
+        return $Loader;
+
+    }
+
+    /**
+     *
+     * @param Container $Services
+     * @return \Twig_Environment
+     */
+    public static function setupEnvironment( Container $Services )
     {
 
-        if (self::$loader === null) {
-            self::$loader = new \Twig_Loader_Filesystem(self::getDefaultPath());
-        }
-
-        if (self::$environment === null) {
-            self::$environment = new \Twig_Environment(
-                self::$loader, array(
-                'cache' => apply_filters('kb_twig_cache_path', WP_CONTENT_DIR . '/twigcache/'),
+        $Environment = new \Twig_Environment(
+            $Services['templating.twig.loader'],
+            array(
+                'cache' => apply_filters( 'kb:twig.cachepath', WP_CONTENT_DIR . '/twigcache/' ),
                 'auto_reload' => TRUE,
                 'debug' => TRUE
-            ));
-            self::$environment->addExtension(new \Twig_Extension_Debug());
+            )
+        );
 
-	        // Filters & Functions
+        $Environment->addExtension( new \Twig_Extension_Debug() );
+        $Environment->enableDebug();
 
-            $getPermalink = new Twig_SimpleFunction('get_permalink', function ($id) {
-                return get_permalink($id);
-            });
+        $Environment->registerUndefinedFunctionCallback( array( __CLASS__, 'undefinedFunctions' ) );
+        $Environment->registerUndefinedFilterCallback( array( __CLASS__, 'undefinedFilters' ) );
 
-            self::$environment->addFunction($getPermalink);
+        self::addCustomFunctions( $Environment );
 
+        return $Environment;
+    }
 
-            $getImage = new Twig_SimpleFunction('getImage', function ($id, $width = null, $height = null, $crop = true, $single = true, $upscale = true) {
-                return ImageResize::getInstance()->process($id, $width, $height, $crop, $single, $upscale);
+    /**
+     * @author Rarst | https://github.com/Rarst/meadow/
+     * @param $func
+     * @return bool|\Twig_SimpleFunction
+     */
+    public static function undefinedFunctions( $func )
+    {
+        if (function_exists( $func )) {
+            return new \Twig_SimpleFunction(
+                $func,
+                function () use ( $func ) {
 
-            });
-            self::$environment->addFunction($getImage);
+                    ob_start();
+                    $return = call_user_func_array( $func, func_get_args() );
+                    $echo = ob_get_clean();
 
-            $wpNavMenu = new Twig_SimpleFunction('wp_nav_menu', function ($args) {
-                $args['echo'] = false;
-                return wp_nav_menu($args);
-            });
-            self::$environment->addFunction($wpNavMenu);
-
-	        $applyContent = new \Twig_SimpleFilter('wf_content', function($string){
-		        return apply_filters('content', $string);
-	        });
-			self::$environment->addFilter($applyContent);
+                    return empty( $echo ) ? $return : $echo;
+                },
+                array( 'is_safe' => array( 'all' ) )
+            );
         }
 
-
-        return self::$environment;
-
+        return false;
     }
 
-    public static function getDefaultPath()
+    /**
+     * @author Rarst | https://github.com/Rarst/meadow/
+     * @param $filter
+     * @return \Twig_SimpleFilter
+     */
+    public static function undefinedFilters( $filter )
     {
-        return apply_filters('kb_twig_def_path', get_stylesheet_directory() . '/module-templates/');
+        return new \Twig_SimpleFilter(
+            $filter,
+            function () use ( $filter ) {
 
+                return apply_filters( $filter, func_get_arg( 0 ) );
+            },
+            array( 'is_safe' => array( 'all' ) )
+        );
     }
 
-    protected function __construct()
+    /**
+     * @param \Twig_Environment $Environment
+     */
+    private static function addCustomFunctions( \Twig_Environment $Environment )
     {
+        $getImage = new Twig_SimpleFunction(
+            'getImage',
+            function ( $id, $width = null, $height = null, $crop = true, $single = true, $upscale = true ) {
+                return ImageResize::getInstance()->process( $id, $width, $height, $crop, $single, $upscale );
 
+            }
+        );
+        $Environment->addFunction( $getImage );
     }
 
-    private function __clone()
+    /**
+     * Will prepend the path to the Loaders paths
+     * @param $path
+     */
+    public static function setPath( $path )
     {
-
-    }
-
-    public static function setPath($path)
-    {
-
-//	    if (!in_array($path, self::$paths)){
-//		    self::$paths[] = $path;
-//
-//        }
-        self::$loader->prependPath($path);
+        Kontentblocks::getService( 'templating.twig.loader' )->prependPath( $path );
 
 
     }
-
-    public static function resetPath()
-    {
-        self::$loader->setPaths(self::getDefaultPath());
-
-    }
-
 }

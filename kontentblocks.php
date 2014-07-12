@@ -13,6 +13,7 @@
 
 namespace Kontentblocks;
 
+use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\ModuleTemplates;
 use Kontentblocks\Backend\Screen\EditScreen;
@@ -20,6 +21,9 @@ use Kontentblocks\Hooks\Enqueues;
 use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Fields\FieldRegistry;
+use Kontentblocks\Modules\ModuleViewsRegistry;
+use Kontentblocks\Templating\Twig;
+use Pimple;
 
 
 /**
@@ -34,15 +38,30 @@ Class Kontentblocks
     const TABLEVERSION = '1.0.13';
     const CONTENTCONCAT = true;
 
+    public $Services;
 
     public $dev_mode = true;
     static $instance;
 
+    public static function getInstance()
+    {
+        static $instance = null;
+        if (null === $instance) {
+            $instance = new static();
+        }
 
+        return $instance;
+    }
+
+    /**
+     *
+     */
     public function __construct()
     {
-
         self::bootstrap();
+
+        $this->Services = new Pimple\Container();
+
         // Setup capabilities
         // @TODO move to activation hook
         Capabilities::setup();
@@ -51,12 +70,11 @@ Class Kontentblocks
         // Enqueues of front and backend scripts and styles is handled here
         Enqueues::setup();
 
+        $this->setupTemplating();
+        $this->setupRegistries();
+
         // add Kontentblocks theme support
         add_theme_support( 'kontentblocks' );
-
-        // enabled for 'page' by default
-        add_post_type_support( 'page', 'kontentblocks' );
-        remove_post_type_support( 'page', 'revisions' );
 
         // load modules automatically, after dynamic areas were setup,
         // dynamic areas are on init/initInterface hook
@@ -127,7 +145,9 @@ Class Kontentblocks
      */
     public function loadModules()
     {
-        $Registry = ModuleRegistry::getInstance();
+
+        /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
+        $Registry = $this->Services['registry.modules'];
         // add core modules path
         $paths = array( KB_TEMPLATE_PATH );
         // deprecated
@@ -164,9 +184,9 @@ Class Kontentblocks
     public function loadExtensions()
     {
 
-        $paths   = array( kb_get_plugin_path() );
+        $paths = array( kb_get_plugin_path() );
         $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
-        $paths   = apply_filters( 'kb::add.plugin.path', $paths );
+        $paths = apply_filters( 'kb::add.plugin.path', $paths );
 
         foreach ($paths as $path) {
             //take care of dirs
@@ -237,6 +257,21 @@ Class Kontentblocks
 
     }
 
+    public static function onActivation()
+    {
+
+        if (!is_dir( get_template_directory() . '/module-templates' )) {
+            mkdir( get_template_directory() . '/module-templates', 0775, true );
+        }
+
+        if (is_child_theme()) {
+            if (!is_dir( get_stylesheet_directory() . '/module-templates' )) {
+                mkdir( get_stylesheet_directory() . '/module-templates', 0775, true );
+            }
+        }
+
+    }
+
     public static function onDeactivation()
     {
         delete_transient( 'kb_last_backup' );
@@ -250,12 +285,52 @@ Class Kontentblocks
         $wpdb->query( "DROP TABLE IF EXISTS $table" );
     }
 
+    private function setupTemplating()
+    {
+        // pimpled
+        $this->Services['templating.twig.loader'] = function ( $container ) {
+            return Twig::setupLoader( $container );
+        };
+
+        $this->Services['templating.twig'] = function ( $container ) {
+            return Twig::setupEnvironment( $container );
+        };
+    }
+
+    private function setupRegistries()
+    {
+        $this->Services['registry.modules'] = function ( $Services ) {
+            return new ModuleRegistry( $Services );
+        };
+        $this->Services['registry.areas'] = function ( $Services ) {
+            return new AreaRegistry( $Services );
+        };
+        $this->Services['registry.moduleViews'] = function ( $Services ) {
+            return new ModuleViewsRegistry( $Services );
+        };
+        $this->Services['registry.fields'] = function ( $Services ) {
+            return new FieldRegistry( $Services );
+        };
+    }
+
+    public static function getService( $service )
+    {
+        return Kontentblocks::getInstance()->Services[$service];
+    }
+
+    public static function addService( $service, $callable )
+    {
+        Kontentblocks::getInstance()->Services[$service] = $callable;
+    }
+
+
 }
 
 // end Kontentblocks
 
 // Fire it up
-new Kontentblocks();
+Kontentblocks::getInstance();
 
+register_activation_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onActivation' ) );
 register_deactivation_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onDeactivation' ) );
 register_uninstall_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onUninstall' ) );

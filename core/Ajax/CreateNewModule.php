@@ -4,12 +4,20 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Modules\ModuleFactory,
-    Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Kontentblocks;
+use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\JSONBridge;
 
+/**
+ * Class CreateNewModule
+ * @package Kontentblocks\Ajax
+ */
 class CreateNewModule
 {
+    /**
+     * @var \Kontentblocks\Modules\ModuleRegistry
+     */
+    protected $ModuleRegistry;
 
     /**
      * $post_id
@@ -49,6 +57,9 @@ class CreateNewModule
 
     private $moduleArgs;
 
+    /**
+     *
+     */
     public function __construct()
     {
         if (!defined( 'KB_GENERATE' )) {
@@ -65,6 +76,8 @@ class CreateNewModule
 
         // Setup Data Handler
         $this->Environment = new PostEnvironment( $this->postId );
+
+        $this->ModuleRegistry = Kontentblocks::getService('registry.modules');
 
         // Setup new Count var
         $this->newCount = $this->_updateCount();
@@ -103,7 +116,7 @@ class CreateNewModule
 
         // Get Prototype from registry
         if (class_exists( $this->type )) {
-            $proto                = ModuleRegistry::getInstance()->get( $this->type );
+            $proto                = $this->ModuleRegistry->get( $this->type );
             $proto                = wp_parse_args( $this->moduleArgs, $proto );
             $proto['instance_id'] = $this->newInstanceID;
             return $proto;

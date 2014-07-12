@@ -5,6 +5,7 @@ namespace Kontentblocks\Modules;
 use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\FieldManager;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\ModuleTemplate;
 use Kontentblocks\Templating\ModuleView;
 
@@ -43,10 +44,25 @@ abstract class Module
      */
     public $rawModuleData;
 
+    /**
+     * @var \Kontentblocks\Templating\ModuleView
+     */
     protected $View;
 
-
+    /**
+     * @var \Kontentblocks\Modules\ModuleViewLoader
+     */
     protected $ViewLoader;
+
+    /**
+     * @var array hold informations about the draft|active state
+     */
+    protected $state;
+
+    /**
+     * @var string
+     */
+    public $instance_id;
 
     /**
      * II. Constructor
@@ -64,7 +80,7 @@ abstract class Module
         // batch setup
         $this->set( $args );
 
-        $this->moduleData    = $data;
+        $this->moduleData = $data;
         $this->rawModuleData = $data;
         if (isset( $environment )) {
             $this->setEnvVarsFromEnvironment( $environment );
@@ -88,7 +104,8 @@ abstract class Module
     public function options()
     {
         if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
-            $this->ViewLoader = ModuleViewsRegistry::getInstance()->getViewLoader( $this );
+
+            $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
             echo $this->ViewLoader->render();
         }
 
@@ -179,7 +196,7 @@ abstract class Module
         foreach ($this->moduleData as $key => $v) {
 
             /** @var \Kontentblocks\Fields\Field $field */
-            $field                  = $this->Fields->getFieldByKey( $key );
+            $field = $this->Fields->getFieldByKey( $key );
             $this->moduleData[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
 
         }
@@ -236,7 +253,7 @@ abstract class Module
 
         // additional classes to set for the item
         $disabledclass = ( $this->settings['disabled'] ) ? 'disabled' : null;
-        $uidisabled    = ( $this->settings['disabled'] ) ? 'ui-state-disabled' : null;
+        $uidisabled = ( $this->settings['disabled'] ) ? 'ui-state-disabled' : null;
 
         //$locked = ( $this->locked == 'false' || empty($this->locked) ) ? 'unlocked' : 'locked';
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
@@ -276,9 +293,9 @@ abstract class Module
             $out = $lockedmsg;
         } else {
 
-            $description       = ( !empty( $this->settings['description'] ) ) ? __(
-                                                                                    '<strong><em>Beschreibung:</em> </strong>'
-                                                                                ) . $this->settings['description'] : '';
+            $description = ( !empty( $this->settings['description'] ) ) ? __(
+                                                                              '<strong><em>Beschreibung:</em> </strong>'
+                                                                          ) . $this->settings['description'] : '';
             $l18n_draft_status = ( $this->state['draft'] === true ) ? '<p class="kb_draft">' . __(
                     'This Module is a draft and won\'t be public until you publish or update the post',
                     'kontentblocks'
@@ -438,11 +455,11 @@ abstract class Module
         $this->envVars = wp_parse_args(
             $this->envVars,
             array(
-                'postType'     => $environment->get( 'postType' ),
+                'postType' => $environment->get( 'postType' ),
                 'pageTemplate' => $environment->get( 'pageTemplate' ),
-                'postId'       => absint( $environment->get( 'postId' ) ),
-                'areaContext'  => $this->getAreaContext(),
-                'area'         => $this->area
+                'postId' => absint( $environment->get( 'postId' ) ),
+                'areaContext' => $this->getAreaContext(),
+                'area' => $this->area
             )
         );
     }
@@ -490,10 +507,10 @@ abstract class Module
             class_alias( 'Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
         }
         if ($this->getSetting( 'useViewLoader' ) && is_null( $this->View )) {
-            $tpl    = $this->getViewfile();
+            $tpl = $this->getViewfile();
             $Loader = ModuleViewsRegistry::getInstance()->getViewLoader( $this );
-            $T      = new ModuleView( $this );
-            $full   = $Loader->getTemplateByName( $tpl );
+            $T = new ModuleView( $this );
+            $full = $Loader->getTemplateByName( $tpl );
             if (isset( $full['fragment'] )) {
                 $T->setTplFile( $full['fragment'] );
                 $T->setPath( $full['basedir'] );
@@ -677,25 +694,25 @@ abstract class Module
     {
         // todo only used on frontend
         $toJSON = array(
-            'envVars'     => $this->envVars,
-            'settings'    => $this->settings,
-            'state'       => $this->state,
+            'envVars' => $this->envVars,
+            'settings' => $this->settings,
+            'state' => $this->state,
             'instance_id' => $this->instance_id,
-            'moduleData'  => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
-            'area'        => $this->area,
-            'post_id'     => $this->envVars['postId'],
+            'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
+            'area' => $this->area,
+            'post_id' => $this->envVars['postId'],
             'areaContext' => $this->areaContext,
-            'viewfile'    => $this->getViewfile(),
-            'class'       => get_class( $this ),
-            'inDynamic'   => AreaRegistry::getInstance()->isDynamic( $this->area ),
-            'uri'         => $this->getUri()
+            'viewfile' => $this->getViewfile(),
+            'class' => get_class( $this ),
+            'inDynamic' => AreaRegistry::getInstance()->isDynamic( $this->area ),
+            'uri' => $this->getUri()
         );
         // only for master templates
         if (isset( $this->master ) && $this->master) {
-            $toJSON['master']    = true;
+            $toJSON['master'] = true;
             $toJSON['master_id'] = $this->master_id;
-            $toJSON['parentId']  = $this->master_id;
-            $toJSON['post_id']   = $this->master_id;
+            $toJSON['parentId'] = $this->master_id;
+            $toJSON['post_id'] = $this->master_id;
         }
 
         return $toJSON;
@@ -711,20 +728,20 @@ abstract class Module
     {
 
         return array(
-            'disabled'         => false,
-            'publicName'       => 'Module Name Missing',
-            'name'             => '',
-            'wrap'             => true,
-            'wrapperClasses'   => '',
-            'description'      => '',
-            'connect'          => 'any',
-            'hidden'           => false,
-            'predefined'       => false,
+            'disabled' => false,
+            'publicName' => 'Module Name Missing',
+            'name' => '',
+            'wrap' => true,
+            'wrapperClasses' => '',
+            'description' => '',
+            'connect' => 'any',
+            'hidden' => false,
+            'predefined' => false,
             'inGlobalSidebars' => false,
-            'inGlobalAreas'    => false,
-            'asTemplate'       => true,
-            'category'         => 'standard',
-            'useViewLoader'    => false
+            'inGlobalAreas' => false,
+            'asTemplate' => true,
+            'category' => 'standard',
+            'useViewLoader' => false
         );
 
     }
@@ -738,7 +755,7 @@ abstract class Module
     {
         return array(
             'active' => true,
-            'draft'  => true
+            'draft' => true
         );
 
     }

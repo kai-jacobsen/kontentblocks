@@ -4,15 +4,22 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Utils\JSONBridge;
+use Pimple\Container;
 
 /**
  * Class ModuleRegistry
  * @package Kontentblocks\Modules
- */class ModuleRegistry
+ */
+class ModuleRegistry
 {
 
     static $instance;
     public $modules = array();
+
+    /**
+     * @var Container
+     */
+    private $Services;
 
     public static function getInstance()
     {
@@ -24,8 +31,13 @@ use Kontentblocks\Utils\JSONBridge;
 
     }
 
-    private function __construct()
+    /**
+     * Constructor
+     * @param Container $Services
+     */
+    public function __construct( Container $Services )
     {
+        $this->Services = $Services;
         add_action( 'admin_footer', array( $this, 'setupJSON' ), 8 );
     }
 
@@ -45,11 +57,11 @@ use Kontentblocks\Utils\JSONBridge;
 
             // Defaults from the specific Module
             // contains id, name, public name etc..
-            $moduleArgs       = array();
-            $args             = wp_parse_args( $classname::$defaults, Module::getDefaultSettings() );
-            $args['class']    = $classname;
-            $args['path']     = trailingslashit( dirname( $file ) );
-            $args['uri']      = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
+            $moduleArgs = array();
+            $args = wp_parse_args( $classname::$defaults, Module::getDefaultSettings() );
+            $args['class'] = $classname;
+            $args['path'] = trailingslashit( dirname( $file ) );
+            $args['uri'] = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
             $args['helpfile'] = false;
 
 
@@ -97,7 +109,10 @@ use Kontentblocks\Utils\JSONBridge;
             $this->modules[$classname] = $moduleArgs;
 
             // Handle connection to regions
-            AreaRegistry::getInstance()->connect( $classname, $moduleArgs );
+
+            /** @var \Kontentblocks\Backend\Areas\AreaRegistry $AreaRegistry */
+            $AreaRegistry = $this->Services['registry.areas'];
+            $AreaRegistry->connect( $classname, $moduleArgs );
 
             // call static init method, if present
             if (method_exists( $classname, 'init' )) {
@@ -147,8 +162,8 @@ use Kontentblocks\Utils\JSONBridge;
 
         // Extra Module Templates
         foreach (ModuleTemplates::getInstance()->getAllTemplates() as $name => $moduleArgs) {
-            $moduleClass                   = $moduleArgs['class'];
-            $clone                         = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
+            $moduleClass = $moduleArgs['class'];
+            $clone = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
             $clone['settings']['category'] = 'template';
             JSONBridge::getInstance()->registerData( 'ModuleDefinitions', $name, $clone );
         }

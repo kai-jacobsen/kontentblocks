@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Templating;
 
+use Kontentblocks\Kontentblocks;
+
 class CoreTemplate {
 
 	protected $data;
@@ -14,7 +16,7 @@ class CoreTemplate {
 		$this->data    = $data;
 		$this->tplFile = ( $tpl !== false ) ? $tpl : null;
 		$this->path    = KB_PLUGIN_PATH . 'core/Templating/templates/';
-		$this->engine  = Twig::getInstance();
+		$this->engine  = Kontentblocks::getService('templating.twig');
 
 		//initial path
 		$this->setPath( $this->path );

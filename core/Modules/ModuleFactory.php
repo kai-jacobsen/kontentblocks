@@ -2,6 +2,12 @@
 
 namespace Kontentblocks\Modules;
 
+use Kontentblocks\Kontentblocks;
+
+/**
+ * Class ModuleFactory
+ * @package Kontentblocks\Modules
+ */
 class ModuleFactory
 {
 
@@ -10,12 +16,13 @@ class ModuleFactory
 
     public function __construct( $class, $moduleArgs, $environment = null, $data = null )
     {
+
         if (!isset( $moduleArgs ) or !isset( $class )) {
             throw new \Exception( 'This is not a valid Module' );
         }
 
         $this->class = $class;
-        $this->args  = self::parseModule( $moduleArgs );
+        $this->args = self::parseModule( $moduleArgs );
 
         if ($data === null) {
             $this->data = apply_filters(
@@ -36,8 +43,8 @@ class ModuleFactory
 
         $preparedArgs = $this->prepareArgs( $this->args );
 
-        $module    = apply_filters( 'kb_modify_block', $preparedArgs );
-        $module    = apply_filters( "kb_modify_block_{$preparedArgs['settings']['id']}", $preparedArgs );
+        $module = apply_filters( 'kb_modify_block', $preparedArgs );
+        $module = apply_filters( "kb_modify_block_{$preparedArgs['settings']['id']}", $preparedArgs );
         $classname = $this->class;
         // new instance
         if (class_exists( $classname )) {
@@ -61,7 +68,10 @@ class ModuleFactory
      */
     public static function parseModule( $module )
     {
-        return wp_parse_args( $module, ModuleRegistry::getInstance()->get( $module['class'] ) );
+
+        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
+        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
+        return wp_parse_args( $module, $ModuleRegistry->get( $module['class'] ) );
     }
 
     private function prepareArgs( $args )

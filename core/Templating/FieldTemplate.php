@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Templating;
 
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 
 class FieldTemplate
@@ -20,7 +21,7 @@ class FieldTemplate
         $this->I18n    = I18n::getInstance();
         $this->tplFile = ($tpl !== false) ? $tpl : null;
         $this->path    = KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/';
-        $this->engine  = Twig::getInstance();
+        $this->engine  = Kontentblocks::getService('templating.twig');
 
     }
 
