@@ -1,7 +1,7 @@
 {
     "name": "ungestaltbar/kontentblocks",
-    "description": "Whoooo!",
-    "keywords": ["wordpress", "plugin", "kontenblocks"],
+    "description": "WordPress Plugin. Tries to shorten the gap between design constrains, developer effeciency and users flexibility to edit and control content.",
+    "keywords": ["wordpress", "plugin", "kontenblocks", "content management"],
     "homepage": "http://kontentblocks.de",
     "license": "GPL",
     "authors": [
