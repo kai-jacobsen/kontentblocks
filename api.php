@@ -10,4 +10,5 @@ use Kontentblocks\Backend\Areas\AreaRegistry;
 function registerArea($args){
     $AreaRegistry = AreaRegistry::getInstance();
     $AreaRegistry->addArea( $args, true );
+
 }

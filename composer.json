@@ -16,7 +16,7 @@
         "php": ">=5.3.2",
         "twig/twig": "1.*",
         "pimple/pimple": "~2.1",
-        "mobiledetect/mobiledetectlib": "@dev"
+        "mobiledetect/mobiledetectlib": "dev-master"
     }
 }
 

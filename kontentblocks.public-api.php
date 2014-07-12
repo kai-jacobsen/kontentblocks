@@ -15,9 +15,7 @@ if (!defined( 'ABSPATH' )) {
  */
 function kb_register_area( $args )
 {
-
-    \Kontentblocks\registerArea($args);
-
+    Kontentblocks\registerArea($args);
 }
 
 
