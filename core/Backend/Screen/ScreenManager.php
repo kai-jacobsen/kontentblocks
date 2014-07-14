@@ -79,6 +79,7 @@ class ScreenManager {
 	 * @since 1.0.0
 	 */
 	public function render() {
+
 		foreach ( $this->contextLayout as $contextId => $args ) {
 			// delegate the actual output to ScreenContext
 			$context = new ScreenContext( $args, $this );

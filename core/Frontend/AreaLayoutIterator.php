@@ -3,7 +3,7 @@
 namespace Kontentblocks\Frontend;
 
 use Exception;
-use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Kontentblocks;
 
 /**
  * Class AreaLayoutIterator
@@ -65,7 +65,7 @@ class AreaLayoutIterator implements \Iterator
     {
         // setup the area template
         // area templates are part of the area Registry
-        $this->_setup(AreaRegistry::getInstance()->getTemplate($id));
+        $this->_setup(Kontentblocks::getService('registry.areas')->getTemplate($id));
 
     }
 

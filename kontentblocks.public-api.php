@@ -1,8 +1,8 @@
 <?php
 
-use Kontentblocks\Backend\API\PostMetaDataProvider,
-    Kontentblocks\Fields\FieldRegistry;
-use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
+use Kontentblocks\Frontend\AreaRenderer;
+use Kontentblocks\Kontentblocks;
 
 if (!defined( 'ABSPATH' )) {
     die( 'Direct access not permitted.' );
@@ -15,7 +15,7 @@ if (!defined( 'ABSPATH' )) {
  */
 function kb_register_area( $args )
 {
-    Kontentblocks\registerArea($args);
+    \Kontentblocks\registerArea($args);
 }
 
 
@@ -45,7 +45,7 @@ function kb_register_area_template( $args )
     $settings = wp_parse_args( $args, $defaults );
 
     if (!empty( $settings['id'] )) {
-        AreaRegistry::getInstance()->addTemplate( $settings );
+        Kontentblocks::getService('registry.areas')->addTemplate( $settings );
     }
 
 }
@@ -56,7 +56,7 @@ function kb_render_area( $area = 'kontentblocks', $id = null, $additionalArgs = 
 {
     global $post;
     $postId     = ( null === $id ) ? $post->ID : $id;
-    $AreaRender = new Kontentblocks\Frontend\AreaRenderer( $postId, $area, $additionalArgs );
+    $AreaRender = new AreaRenderer( $postId, $area, $additionalArgs );
     $AreaRender->render( true );
 }
 
@@ -70,7 +70,7 @@ function kb_render_area_sidebar( $id = null, $additionalArgs = array() )
     $areas   = get_post_meta( $post_id, 'active_sidebar_areas', true );
     if (!empty( $areas )) {
         foreach ($areas as $area) {
-            $AreaRender = new Kontentblocks\Frontend\AreaRenderer( $area, $area, $additionalArgs );
+            $AreaRender = new AreaRenderer( $area, $area, $additionalArgs );
             $AreaRender->render( true );
 
         }

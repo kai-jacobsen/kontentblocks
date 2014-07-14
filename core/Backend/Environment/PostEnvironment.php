@@ -2,10 +2,10 @@
 
 namespace Kontentblocks\Backend\Environment;
 
-use Kontentblocks\Backend\Areas\AreaRegistry,
-    Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
 use Kontentblocks\Backend\Environment\Save\SavePost;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 
 
@@ -68,14 +68,14 @@ class PostEnvironment
         $this->postId = $postID;
 
         $this->DataProvider = new PostMetaDataProvider( $postID );
-        $this->Storage      = new PostMetaModuleStorage( $postID, $this->DataProvider );
+        $this->Storage = new PostMetaModuleStorage( $postID, $this->DataProvider );
 
         $this->pageTemplate = $this->getPageTemplate();
-        $this->postType     = $this->getPostType();
+        $this->postType = $this->getPostType();
 
-        $this->modules       = $this->setupModules();
+        $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
-        $this->areas         = $this->findAreas();
+        $this->areas = $this->findAreas();
 
 
     }
@@ -168,7 +168,7 @@ class PostEnvironment
     private function setupModules()
     {
         $collection = array();
-        $modules    = $this->Storage->getIndex();
+        $modules = $this->Storage->getIndex();
         foreach ($modules as $module) {
             $collection[$module['instance_id']] = ModuleFactory::parseModule( $module );
         }
@@ -185,8 +185,9 @@ class PostEnvironment
         if ($this->postType === 'kb-dyar') {
             return array( $this->DataProvider->get( '_area' ) );
         }
-        $RegionRegistry = AreaRegistry::getInstance();
-        return $RegionRegistry->filterForPost( $this );
+        /** @var \Kontentblocks\Backend\Areas\AreaRegistry $AreaRegistry */
+        $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
+        return $AreaRegistry->filterForPost( $this );
     }
 
     /**

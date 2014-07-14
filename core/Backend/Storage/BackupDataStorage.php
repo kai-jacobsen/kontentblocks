@@ -123,7 +123,7 @@ class BackupDataStorage
         } else {
 	        // @TODO Use $wpdb
             // @TODO literal id isn't used anymore
-            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}' OR literal_id = '{$id}'";
+            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}'";
             $result = $wpdb->get_row($sql);
             wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');
             return $result;
@@ -162,8 +162,7 @@ class BackupDataStorage
             'created' => date("Y-m-d H:i:s", time()),
             'updated' => date("Y-m-d H:i:s", time()),
             'value' => base64_encode(serialize($insert)),
-            'post_id' => (is_numeric($this->backupData['id'])) ? $this->backupData['id'] : -1,
-            'literal_id' => (!is_numeric($this->backupData['id'])) ? $this->backupData['id'] : NULL
+            'post_id' => (is_numeric($this->backupData['id'])) ? $this->backupData['id'] : -1
         );
 
         //set reference

@@ -6,12 +6,18 @@ use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Language\I18n;
 
+/**
+ * Class LayoutConfigurations
+ * @package Kontentblocks\Extensions
+ */
 class LayoutConfigurations
 {
 
+    /**
+     *
+     */
     public function __construct()
     {
-        add_action( 'init', array( $this, 'postTypeSupport' ) );
         add_action( 'add_meta_boxes', array( $this, 'metaBox' ) );
         add_action( 'wp_ajax_get_layout_configurations', array( $this, 'getConfigurations' ) );
         add_action( 'wp_ajax_set_layout_configuration', array( $this, 'setConfiguration' ) );
@@ -26,7 +32,7 @@ class LayoutConfigurations
 
         $i18n = I18n::getPackage( 'Extensions.layoutConfigs' );
 
-        if (post_type_supports( $screen->post_type, 'layout-configurations' )) {
+        if (post_type_supports( $screen->post_type, 'kontentblocks:layouts' )) {
             add_meta_box(
                 'kb-mb-layout-configurations',
                 $i18n['title'],
@@ -43,12 +49,6 @@ class LayoutConfigurations
     public function controls()
     {
         echo "<div id='kb-layout-configurations'></div>";
-    }
-
-    public function postTypeSupport()
-    {
-        add_post_type_support( 'page', 'layout-configurations' );
-
     }
 
     public function getConfigurations()

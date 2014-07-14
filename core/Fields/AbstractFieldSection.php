@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields;
 
 use Exception;
+use Kontentblocks\Kontentblocks;
 
 /**
  * Class AbstractFieldSection
@@ -67,8 +68,10 @@ abstract class AbstractFieldSection
     public function addField( $type, $key, $args )
     {
         if (!$this->fieldExists( $key )) {
-            $Registry = FieldRegistry::getInstance();
-            $Field    = $Registry->getField( $type );
+
+            /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
+            $Registry = Kontentblocks::getService( 'registry.fields' );
+            $Field = $Registry->getField( $type );
 
             //check for special key syntax
             if (preg_match( "/^(.*?)::/i", $key, $out )) {

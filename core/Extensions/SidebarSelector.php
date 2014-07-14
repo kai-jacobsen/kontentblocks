@@ -2,10 +2,12 @@
 
 namespace Kontentblocks\Extensions;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
-use Kontentblocks\Backend\Environment\PostEnvironment,
-    Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Kontentblocks;
 
+/**
+ * Class SidebarSelector
+ * @package Kontentblocks\Extensions
+ */
 class SidebarSelector
 {
 
@@ -146,7 +148,7 @@ class SidebarSelector
     public function _setupAreas( $areas )
     {
 
-        $merged = array_merge($areas, AreaRegistry::getInstance()->getGlobalSidebars());
+        $merged = array_merge($areas, Kontentblocks::getService('registry.areas')->getGlobalSidebars());
         $this->areas = array_filter($merged, function($area){
             return ($area['context'] === 'side');
         });
@@ -271,13 +273,5 @@ class SidebarSelector
         return $return;
 
     }
-
-}
-
-add_action( 'init', '\Kontentblocks\Extensions\add_selector_meta_box', 900 );
-
-function add_selector_meta_box()
-{
-    new SidebarSelector();
 
 }

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreTemplate;
 
 /**
@@ -43,9 +44,9 @@ class ModuleViewLoader
      */
     public function __construct( Module $Module )
     {
-        $this->ViewFilesystem = ModuleViewsRegistry::getInstance()->getViewFileSystem( $Module );
-        $this->Module         = $Module;
-        $this->views          = $this->ViewFilesystem->getTemplatesforContext( $Module->getAreaContext() );
+        $this->ViewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $Module );
+        $this->Module = $Module;
+        $this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->getAreaContext() );
         if (count( $this->views ) > 1) {
             $this->hasViews = true;
         }
@@ -108,7 +109,7 @@ class ModuleViewLoader
 
         foreach ($this->views as $item) {
             $item['selected'] = ( $item['filteredfile'] === $selected ) ? "selected='selected'" : '';
-            $prepared[]       = $item;
+            $prepared[] = $item;
         }
 
         return $prepared;
@@ -132,7 +133,7 @@ class ModuleViewLoader
                 return $setByModule;
             }
         } else {
-            $keys  = array_values( $this->views );
+            $keys = array_values( $this->views );
             $first = $keys[0];
             return $first['file'];
         }
@@ -184,8 +185,8 @@ class ModuleViewLoader
         }
         $postId = $module['post_id'];
         /** @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage $Storage */
-        $Storage           = new PostMetaModuleStorage( $postId );
-        $index             = $Storage->getModuleDefinition( $module['instance_id'] );
+        $Storage = new PostMetaModuleStorage( $postId );
+        $index = $Storage->getModuleDefinition( $module['instance_id'] );
         $index['viewfile'] = $module['viewfile'];
         $Storage->addToIndex( $module['instance_id'], $index );
     }

@@ -15,7 +15,7 @@ class Capabilities
      *
      * @return void
      */
-    public static function setup()
+    public static function  setup()
     {
         $options = get_site_option( 'kb.capabilities' );
 

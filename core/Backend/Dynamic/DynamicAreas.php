@@ -7,6 +7,7 @@ use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreTemplate;
 use Kontentblocks\Utils\Utilities;
 
@@ -123,7 +124,6 @@ class DynamicAreas
         $this->saveArea( $postId );
 
 
-
     }
 
     /**
@@ -135,24 +135,24 @@ class DynamicAreas
         $this->Storage = new PostMetaModuleStorage( $postId );
 
         $defaults = array(
-            'name'          => null,
-            'id'            => null,
-            'description'   => '',
-            'postTypes'     => array(),
+            'name' => null,
+            'id' => null,
+            'description' => '',
+            'postTypes' => array(),
             'pageTemplates' => array(),
         );
 
         $newArea = wp_parse_args( $_POST['area'], $defaults );
 
         $data = array(
-            'name'          => filter_var( $newArea['name'], FILTER_SANITIZE_STRING ),
-            'id'            => filter_var( $newArea['id'], FILTER_SANITIZE_STRING ),
-            'description'   => filter_var( $newArea['description'], FILTER_SANITIZE_STRING ),
-            'postTypes'     => $newArea['postTypes'],
+            'name' => filter_var( $newArea['name'], FILTER_SANITIZE_STRING ),
+            'id' => filter_var( $newArea['id'], FILTER_SANITIZE_STRING ),
+            'description' => filter_var( $newArea['description'], FILTER_SANITIZE_STRING ),
+            'postTypes' => $newArea['postTypes'],
             'pageTemplates' => $newArea['pageTemplates'],
-            'dynamic'       => true,
-            'context'       => $newArea['context'],
-            'manual'        => filter_var( $newArea['manual'], FILTER_VALIDATE_BOOLEAN )
+            'dynamic' => true,
+            'context' => $newArea['context'],
+            'manual' => filter_var( $newArea['manual'], FILTER_VALIDATE_BOOLEAN )
         );
 
         $full = wp_parse_args( $data, AreaRegistry::getDefaults( false ) );
@@ -179,7 +179,7 @@ class DynamicAreas
         $area = $_POST['area'];
 
         $data['post_title'] = $area['name'];
-        $data['post_name']  = $area['id'];
+        $data['post_name'] = $area['id'];
 
         return $data;
     }
@@ -191,34 +191,34 @@ class DynamicAreas
     {
 
         $labels = array(
-            'name'               => _x( 'Areas', 'post type general name', 'Kontentblocks' ),
-            'singular_name'      => _x( 'Area', 'post type singular name', 'Kontentblocks' ),
-            'menu_name'          => _x( 'Areas', 'admin menu', 'Kontentblocks' ),
-            'name_admin_bar'     => _x( 'Areas', 'add new on admin bar', 'Kontentblocks' ),
-            'add_new'            => _x( 'Add New', 'book', 'Kontentblocks' ),
-            'add_new_item'       => __( 'Add New Area', 'Kontentblocks' ),
-            'new_item'           => __( 'New Area', 'Kontentblocks' ),
-            'edit_item'          => __( 'Edit Area', 'Kontentblocks' ),
-            'view_item'          => __( 'View Area', 'Kontentblocks' ),
-            'all_items'          => __( 'All Areas', 'Kontentblocks' ),
-            'search_items'       => __( 'Search Areas', 'Kontentblocks' ),
-            'parent_item_colon'  => __( 'Parent Area:', 'Kontentblocks' ),
-            'not_found'          => __( 'No Areas found.', 'Kontentblocks' ),
+            'name' => _x( 'Areas', 'post type general name', 'Kontentblocks' ),
+            'singular_name' => _x( 'Area', 'post type singular name', 'Kontentblocks' ),
+            'menu_name' => _x( 'Areas', 'admin menu', 'Kontentblocks' ),
+            'name_admin_bar' => _x( 'Areas', 'add new on admin bar', 'Kontentblocks' ),
+            'add_new' => _x( 'Add New', 'book', 'Kontentblocks' ),
+            'add_new_item' => __( 'Add New Area', 'Kontentblocks' ),
+            'new_item' => __( 'New Area', 'Kontentblocks' ),
+            'edit_item' => __( 'Edit Area', 'Kontentblocks' ),
+            'view_item' => __( 'View Area', 'Kontentblocks' ),
+            'all_items' => __( 'All Areas', 'Kontentblocks' ),
+            'search_items' => __( 'Search Areas', 'Kontentblocks' ),
+            'parent_item_colon' => __( 'Parent Area:', 'Kontentblocks' ),
+            'not_found' => __( 'No Areas found.', 'Kontentblocks' ),
             'not_found_in_trash' => __( 'No Areas found in Trash.', 'Kontentblocks' ),
         );
 
         $args = array(
-            'labels'             => $labels,
-            'public'             => false,
+            'labels' => $labels,
+            'public' => false,
             'publicly_queryable' => true,
-            'show_ui'            => true,
-            'show_in_menu'       => false,
-            'query_var'          => true,
-            'capability_type'    => 'post',
-            'has_archive'        => false,
-            'hierarchical'       => false,
-            'menu_position'      => 999,
-            'supports'           => null
+            'show_ui' => true,
+            'show_in_menu' => false,
+            'query_var' => true,
+            'capability_type' => 'post',
+            'has_archive' => false,
+            'hierarchical' => false,
+            'menu_position' => 999,
+            'supports' => null
         );
 
         register_post_type( 'kb-dyar', $args );
@@ -234,25 +234,25 @@ class DynamicAreas
      */
     public function postTypeMessages( $messages )
     {
-        $post             = get_post();
-        $post_type        = get_post_type( $post );
+        $post = get_post();
+        $post_type = get_post_type( $post );
         $post_type_object = get_post_type_object( $post_type );
 
         $messages['kb-dyar'] = array(
-            0  => '', // Unused. Messages start at index 1.
-            1  => __( 'Area updated.', 'Kontentblocks' ),
-            2  => __( 'Custom field updated.', 'Kontentblocks' ), // not used
-            3  => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
-            4  => __( 'Area updated.', 'Kontentblocks' ),
+            0 => '', // Unused. Messages start at index 1.
+            1 => __( 'Area updated.', 'Kontentblocks' ),
+            2 => __( 'Custom field updated.', 'Kontentblocks' ), // not used
+            3 => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
+            4 => __( 'Area updated.', 'Kontentblocks' ),
             /* translators: %s: date and time of the revision */
-            5  => isset( $_GET['revision'] ) ? sprintf(
+            5 => isset( $_GET['revision'] ) ? sprintf(
                 __( 'Area restored to revision from %s', 'Kontentblocks' ),
                 wp_post_revision_title( (int) $_GET['revision'], false )
             ) : false,
-            6  => __( 'Area published.', 'Kontentblocks' ),
-            7  => __( 'Area saved.', 'Kontentblocks' ),
-            8  => __( 'Area submitted.', 'Kontentblocks' ),
-            9  => sprintf(
+            6 => __( 'Area published.', 'Kontentblocks' ),
+            7 => __( 'Area saved.', 'Kontentblocks' ),
+            8 => __( 'Area submitted.', 'Kontentblocks' ),
+            9 => sprintf(
                 __( 'Area scheduled for: <strong>%1$s</strong>.', 'Kontentblocks' ),
                 // translators: Publish box date format, see http://php.net/date
                 date_i18n( __( 'M j, Y @ G:i', 'Kontentblocks' ), strtotime( $post->post_date ) )
@@ -317,8 +317,8 @@ class DynamicAreas
      */
     private function preparedPostTypes( $data )
     {
-        $collect   = array();
-        $postData  = ( isset( $data['postTypes'] ) ) ? ( $data['postTypes'] ) : array();
+        $collect = array();
+        $postData = ( isset( $data['postTypes'] ) ) ? ( $data['postTypes'] ) : array();
         $postTypes = Utilities::getPostTypes();
 
         foreach ($postTypes as $pt) {
@@ -342,8 +342,8 @@ class DynamicAreas
      */
     private function preparedPageTemplates( $data )
     {
-        $collect       = array();
-        $postData      = ( isset( $data['pageTemplates'] ) ) ? ( $data['pageTemplates'] ) : array();
+        $collect = array();
+        $postData = ( isset( $data['pageTemplates'] ) ) ? ( $data['pageTemplates'] ) : array();
         $pageTemplates = Utilities::getPageTemplates();
 
         foreach ($pageTemplates as $pt) {
@@ -367,19 +367,19 @@ class DynamicAreas
     {
 
         $templateData = array(
-            'editMode'            => ( !empty( $data ) ),
-            'basename'            => 'area',
+            'editMode' => ( !empty( $data ) ),
+            'basename' => 'area',
             'renderContextSelect' => true,
-            'contexts'            => ScreenManager::getDefaultContextLayout(),
-            'postTypes'           => $this->preparedPostTypes( $data ),
-            'pageTemplates'       => $this->preparedPageTemplates( $data ),
-            'description'         => ( !empty( $data['description'] ) ) ?
+            'contexts' => ScreenManager::getDefaultContextLayout(),
+            'postTypes' => $this->preparedPostTypes( $data ),
+            'pageTemplates' => $this->preparedPageTemplates( $data ),
+            'description' => ( !empty( $data['description'] ) ) ?
                 $data['description'] :
                 '',
-            'areaContext'         => $data['context'],
-            'name'                => $data['name'],
-            'id'                  => $data['id'],
-            'manual'              => ( isset( $data['manual'] ) ) ? $data['manual'] : false
+            'areaContext' => $data['context'],
+            'name' => $data['name'],
+            'id' => $data['id'],
+            'manual' => ( isset( $data['manual'] ) ) ? $data['manual'] : false
         );
 
         $Form = new CoreTemplate( 'new-area-form.twig', $templateData );
@@ -395,7 +395,9 @@ class DynamicAreas
     {
         $Environment = new PostEnvironment( get_the_ID() );
 
-        $areaDef = AreaRegistry::getInstance()->getArea( $area['id'] );
+        /** @var \Kontentblocks\Backend\Areas\AreaRegistry $Registry */
+        $Registry = Kontentblocks::getService( 'registry.areas' );
+        $areaDef = $Registry->getArea( $area['id'] );
 
 
         print "<div class='postbox'>";

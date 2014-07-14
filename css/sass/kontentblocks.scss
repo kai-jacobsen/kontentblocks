@@ -73,6 +73,7 @@
 @import "partials/_extensions/sidebar-selector";
 @import "partials/_extensions/layout-configurations";
 @import "partials/_extensions/template-selector";
+@import "partials/_extensions/redirect";
 
 /* --------------------------
 // WP Admin Menu Options
@@ -473,18 +474,7 @@ textarea.quicktags {
 
 /* Redirect */
 
-.redirect-wrapper {
 
-}
-
-.redirect-wrapper input[type=radio] {
-  float: left;
-
-  width: 16px;
-  height: 16px;
-  display: block;
-  margin-right: 16px;
-}
 
 .wp-editor-area {
   /*height: 500px;*/

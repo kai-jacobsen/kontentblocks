@@ -2,46 +2,43 @@
 
 namespace Kontentblocks\Extensions;
 
+use Kontentblocks\Kontentblocks;
+
 /**
- * Extension Name:	Page Template: Redirect
- * Description:		This extensions provides an virtual page template called 'redirect' which provides
- * 					the ability to set a native page as a redirect switch either to child pages or a
- * 					provided external link.
- * Version:			.5
- * Author:			Kai Jacobsen
- * Author URI:		http://ungestaltbar.de
- * Licence:			CC-BY-SA
-
+ * Extension Name:    Page Template: Redirect
+ * Description:        This extensions provides an virtual page template called 'redirect' which provides
+ *                    the ability to set a native page as a redirect switch either to child pages or a
+ *                    provided external link.
+ * Version:            .5
+ * Author:            Kai Jacobsen
  * Changelog
- *
- * 0.5
- * - First working version
-
- * Dependency
- * This extension needs following extensions to be available
- * - ReFrame.Class.Template_Meta_Box.php
- * - ReFrame.Class.Template_Loader_Enhanced.php
  */
 final class TemplateRedirect
 {
 
     private $defaults;
 
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        add_action( 'add_meta_boxes_page', array( $this, 'edit_form_hook' ) );
-        //add_filter('fwk_add_page_template', array( $this, 'add_template'),10,1);
+        add_action( 'add_meta_boxes_page', array( $this, 'form' ) );
         add_action( 'save_post', array( $this, 'save' ), 1 );
         add_action( 'template_redirect', array( $this, 'redirect' ) );
 
-        $this->defaults = $this->setup_defaults();
+        $this->defaults = $this->setupDefaults();
 
     }
 
-    private function setup_defaults()
+    /**
+     * @return array
+     */
+    private function setupDefaults()
     {
         $defaults = array
-            (
+        (
             'method' => 'childpage',
             'target' => __return_null(),
             'redirect_target_free' => ''
@@ -54,18 +51,16 @@ final class TemplateRedirect
     /**
      * Render Options Form
      */
-    public function edit_form_hook()
+    public function form()
     {
-
         global $post;
 
         $template = get_post_meta( $post->ID, '_wp_page_template', true );
 
-        if ( $template == 'redirect.php' ) {
-            add_action( 'edit_form_after_title', array( $this, 'redirect_controls' ), 9 );
+        if ($template == 'redirect.php') {
+            add_action( 'edit_form_after_title', array( $this, 'controls' ), 9 );
             add_action( 'save_post', array( $this, 'save' ) );
-
-            $this->remove_meta_boxes();
+            $this->removeMetaBoxes();
         }
 
     }
@@ -73,16 +68,17 @@ final class TemplateRedirect
     /**
      * Markup for Options Form
      */
-    public function redirect_controls()
+    public function controls()
     {
-        global $post, $Kontentfields;
+        global $post;
         $out = "<div class='redirect-controls'>";
 
+        $out .= "<div class='redirect-title'><h2>Setup Redirect</h2></div>";
         $children = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'page' ) );
-        $method   = (!empty( $children )) ? 'childpage' : 'freelink';
+        $method = ( !empty( $children ) ) ? 'childpage' : 'freelink';
 
         $defaults = array
-            (
+        (
             'method' => $method,
             'target' => __return_null(),
             'redirect_target_free' => ''
@@ -90,23 +86,21 @@ final class TemplateRedirect
 
 
         $data = wp_parse_args( get_post_meta( $post->ID, '_redirect', true ), $defaults );
-
-        $method = $data[ 'method' ];
-        $target = $data[ 'target' ];
-
+        $method = $data['method'];
+        $target = $data['target'];
 
 
         $childselect = checked( $method, 'childpage', false );
 
-        if ( !empty( $children ) ) {
-            $out .= "<div class='redirect-wrapper'>";
-            $out .= "<input type='radio' {$childselect} name='redirect[redirect_method]' value='childpage' >";
-            $out .= "<p class='description'>Weiterleitung auf untergeordnete Seite:</p>";
+        if (!empty( $children )) {
+            $out .= "<div class='redirect-wrapper redirect--childpage'>";
+            $out .= "<label><input type='radio' {$childselect} name='redirect[redirect_method]' value='childpage' >";
+            $out .= "Weiterleitung auf untergeordnete Seite:</label>";
             $out .= "<select name='redirect[redirect_target]'>";
-            foreach ( $children as $child ) {
+            foreach ($children as $child) {
 
                 $permalink = get_permalink( $child->ID );
-                $selected  = selected( $target, $permalink, false );
+                $selected = selected( $target, $permalink, false );
                 $out .= "<option {$selected} value='{$permalink}'>{$child->post_title}</option>";
             }
             $out .= "</select>";
@@ -115,14 +109,26 @@ final class TemplateRedirect
 
         $freeselect = checked( $method, 'freelink', false );
 
-        $out .= "<div class='redirect-wrapper'>";
-        $out .= "<input type='radio' {$freeselect} name='redirect[redirect_method]' value='freelink' >";
-        $out .= "<p>Weiterleitung auf benutzerdefinierten Link ( intern / extern )</p>";
+        $out .= "<div class='redirect-wrapper redirect--free-target'>";
+        $out .= "<label><input type='radio' {$freeselect} name='redirect[redirect_method]' value='freelink' >";
+        $out .= "Weiterleitung auf benutzerdefinierten Link ( intern / extern )</label>";
         echo $out;
 
-        $Kontentfields->setup( 'null', 'redirect', $data );
-        $Kontentfields->field( 'link', 'redirect_target_free' );
-        $Kontentfields->done();
+
+        /** @var \Kontentblocks\Fields\FieldRegistry $FieldRegistry */
+        $FieldRegistry = Kontentblocks::getService('registry.fields');
+        $Field = $FieldRegistry->getField('link');
+        $Field->setBaseId('redirect');
+        $Field->setKey('redirect_target_free');
+        $Field->setType('link');
+        $Field->setData($data['redirect_target_free']);
+        $Field->setArgs(array('label' => 'Link to page'));
+        $Field->setDisplay(true);
+        $Field->build();
+
+//        $Kontentfields->setup( 'null', 'redirect', $data );
+//        $Kontentfields->field( 'link', 'redirect_target_free' );
+//        $Kontentfields->done();
 
 
         $out = "</div>";
@@ -132,58 +138,48 @@ final class TemplateRedirect
 
     }
 
-    /**
-     * Add (virtual) redirect page template
-     */
-    public function add_template( $templates )
-    {
-        $templates[ 'Weiterleitung' ] = 'redirect';
-
-        return $templates;
-
-    }
 
     /**
      * Remove all Meta Boxes which are not necessary for a redirect template
      */
-    public function remove_meta_boxes()
+    public function removeMetaBoxes()
     {
         remove_meta_box( 'commentstatusdiv', 'page', 'advanced' );
         remove_meta_box( 'commentsdiv', 'page', 'advanced' );
-
+        remove_post_type_support('page', 'kontentblocks');
     }
 
     /**
      * Save Redirect Options
+     * @param int $post_id
      */
     public function save( $post_id )
     {
 
-
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        if (defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) {
             return;
+        }
 
-        if ( empty( $_POST[ 'post_type' ] ) )
+        if (empty( $_POST['post_type'] )) {
             return;
+        }
 
         // Check permissions
-        if ( 'page' == $_POST[ 'post_type' ] ) {
-            if ( !current_user_can( 'edit_page', $post_id ) )
+        if ('page' == $_POST['post_type']) {
+            if (!current_user_can( 'edit_page', $post_id )) {
                 return;
-        }
-        else {
-            if ( !current_user_can( 'edit_post', $post_id ) )
+            }
+        } else {
+            if (!current_user_can( 'edit_post', $post_id )) {
                 return;
+            }
         }
 
-        /* if (empty($_POST) or !isset($_POST['redirect']))
-          return; */
+        $data = ( !empty( $_POST['redirect'] ) ) ? $_POST['redirect'] : '';
 
-        $data = (!empty( $_POST[ 'redirect' ] )) ? $_POST[ 'redirect' ] : '';
-
-        $method   = (!empty( $data[ 'redirect_method' ] )) ? $data[ 'redirect_method' ] : null;
-        $target   = (!empty( $data[ 'redirect_target' ] )) ? $data[ 'redirect_target' ] : '';
-        $freelink = (!empty( $data[ 'redirect_target_free' ] )) ? $data[ 'redirect_target_free' ] : '';
+        $method = ( !empty( $data['redirect_method'] ) ) ? $data['redirect_method'] : null;
+        $target = ( !empty( $data['redirect_target'] ) ) ? $data['redirect_target'] : '';
+        $freelink = ( !empty( $data['redirect_target_free'] ) ) ? $data['redirect_target_free'] : '';
 
         $save = array(
             'method' => $method,
@@ -191,7 +187,7 @@ final class TemplateRedirect
             'redirect_target_free' => $freelink
         );
 
-        if ( $save ) {
+        if ($save) {
             update_post_meta( $post_id, '_redirect', $save );
         }
 
@@ -206,26 +202,29 @@ final class TemplateRedirect
     {
         global $post;
 
-        if ( empty( $post ) )
+        if (empty( $post )) {
             return;
+        }
 
         $template = get_post_meta( $post->ID, '_wp_page_template', true );
 
-        if ( $template == 'redirect.php' ) {
+        if ($template == 'redirect.php') {
             $data = get_post_meta( $post->ID, '_redirect', true );
 
-            if ( empty( $data ) )
+            if (empty( $data )) {
                 return;
+            }
 
-            $method = (!empty( $data[ 'method' ] )) ? $data[ 'method' ] : '';
+            $method = ( !empty( $data['method'] ) ) ? $data['method'] : '';
 
-            if ( $method == 'childpage' )
-                $target = $data[ 'target' ];
+            if ($method == 'childpage') {
+                $target = $data['target'];
+            }
 
-            if ( $method == 'freelink' )
-                $target = $data[ 'redirect_target_free' ];
-
-            if ( !empty( $target ) ) {
+            if ($method == 'freelink') {
+                $target = $data['redirect_target_free']['link'];
+            }
+            if (!empty( $target )) {
                 wp_redirect( $target );
                 exit;
             }
@@ -236,10 +235,3 @@ final class TemplateRedirect
 }
 
 // end class
-
-add_action( 'init', '\Kontentblocks\Extensions\init_template_redirect' );
-
-function init_template_redirect()
-{
-    new \Kontentblocks\Extensions\TemplateRedirect();
-}

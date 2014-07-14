@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields;
 
+use Pimple\Container;
+
 /**
  *
  * Class FieldRegistry
@@ -21,6 +23,7 @@ class FieldRegistry
      * @var array
      */
     protected $fields;
+    protected $Services;
 
     public static function getInstance()
     {
@@ -31,6 +34,15 @@ class FieldRegistry
         return self::$instance;
     }
 
+
+    /**
+     * @param Container $Services
+     */
+    public function __construct( Container $Services )
+    {
+        $this->Services = $Services;
+    }
+
     /**
      * Register field
      * @param string $id
@@ -38,7 +50,7 @@ class FieldRegistry
      * @return $this
      * @since 1.0.0
      */
-    public function registerField($id, $class)
+    public function registerField( $id, $class )
     {
         $this->fields[$id] = $class;
         return $this;
@@ -54,21 +66,21 @@ class FieldRegistry
      * @return $this
      * @since 1.0.0
      */
-    public function add($file)
+    public function add( $file )
     {
-        include_once($file);
-        $classname = '\Kontentblocks\Fields\Definitions\\' . str_replace('.php', '', basename($file));
+        include_once( $file );
+        $classname = '\Kontentblocks\Fields\Definitions\\' . str_replace( '.php', '', basename( $file ) );
 
-        if (!is_subclass_of($classname, '\Kontentblocks\Fields\Field')){
-            throw new \Exception('Field MUST extend Kontentblocks Field Class');
+        if (!is_subclass_of( $classname, '\Kontentblocks\Fields\Field' )) {
+            throw new \Exception( 'Field MUST extend Kontentblocks Field Class' );
         }
 
 
-        if (!isset($this->fields['classname']) && property_exists($classname, 'settings')) {
+        if (!isset( $this->fields['classname'] ) && property_exists( $classname, 'settings' )) {
             // Defaults from the field
             $args = $classname::$settings;
-            if (!empty($args['type']) && !isset($this->fields[$args['type']])) {
-                $this->registerField($args['type'], $classname);
+            if (!empty( $args['type'] ) && !isset( $this->fields[$args['type']] )) {
+                $this->registerField( $args['type'], $classname );
             }
         }
         return $this;
@@ -80,9 +92,9 @@ class FieldRegistry
      * @return Field | bool
      * @since 1.0.0
      */
-    public function getField($id)
+    public function getField( $id )
     {
-        if (isset($this->fields[$id])) {
+        if (isset( $this->fields[$id] )) {
             return new $this->fields[$id];
         } else {
             return FALSE;

@@ -2,13 +2,12 @@
 
 namespace Kontentblocks;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
-
 /**
  * @param $args
  */
 function registerArea($args){
-    $AreaRegistry = AreaRegistry::getInstance();
+    /** @var \Kontentblocks\Backend\Areas\AreaRegistry $AreaRegistry */
+    $AreaRegistry = Kontentblocks::getService('registry.areas');
     $AreaRegistry->addArea( $args, true );
 
 }

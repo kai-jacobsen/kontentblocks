@@ -12,8 +12,10 @@ use Pimple\Container;
  */
 class ModuleRegistry
 {
-
-    static $instance;
+    /**
+     * Collection of Module definitions
+     * @var array
+     */
     public $modules = array();
 
     /**
@@ -21,18 +23,9 @@ class ModuleRegistry
      */
     private $Services;
 
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-
-    }
-
     /**
      * Constructor
+     * Gets instantiated by pimple once
      * @param Container $Services
      */
     public function __construct( Container $Services )

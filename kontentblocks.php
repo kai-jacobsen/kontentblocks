@@ -62,31 +62,22 @@ Class Kontentblocks
 
         $this->Services = new Pimple\Container();
 
-        // Setup capabilities
-        // @TODO move to activation hook
-        Capabilities::setup();
-
-
-        // Enqueues of front and backend scripts and styles is handled here
-        Enqueues::setup();
-
         $this->setupTemplating();
         $this->setupRegistries();
-
-        // add Kontentblocks theme support
-        add_theme_support( 'kontentblocks' );
 
         // load modules automatically, after dynamic areas were setup,
         // dynamic areas are on init/initInterface hook
         add_action( 'kb::setup.areas', array( $this, 'loadModules' ), 9 );
 
-        // Load Plugins
-        add_action( 'init', array( $this, 'loadExtensions' ), 9 );
-
-        // Load Fields
-        add_action( 'init', array( $this, 'loadFields' ), 9 );
-
-        add_action( 'init', array( $this, 'initInterface' ), 9 );
+        add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
+//
+//        // Load Plugins
+//        add_action( 'init', array( $this, 'loadExtensions' ), 9 );
+//
+//        // Load Fields
+//        add_action( 'init', array( $this, 'loadFields' ), 9 );
+//
+//        add_action( 'init', array( $this, 'initInterface' ), 9 );
 
 
         if (defined( 'WP_LOCAL_DEV' ) && WP_LOCAL_DEV) {
@@ -95,6 +86,37 @@ Class Kontentblocks
         }
 
         add_action( 'plugins_loaded', array( $this, 'i18n' ) );
+
+    }
+
+    public function setup()
+    {
+        require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
+
+        if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
+            include_once( get_template_directory() . '/kontentblocks.php' );
+        }
+
+        if (is_child_theme() && file_exists( get_stylesheet_directory() . '/kontentblocks.php' )) {
+            include_once( get_stylesheet_directory() . '/kontentblocks.php' );
+        }
+
+        if (current_theme_supports( 'kontentblocks' )) {
+
+            // Enqueues of front and backend scripts and styles is handled here
+            // earliest hook: init
+            Enqueues::setup();
+
+            $this->loadExtensions();
+            $this->loadFields();
+            $this->initInterface();
+
+            // enabled for 'page' by default
+            add_post_type_support( 'page', 'kontentblocks' );
+            remove_post_type_support( 'page', 'revisions' );
+            do_action( 'kb:init' );
+
+        }
 
     }
 
@@ -112,6 +134,7 @@ Class Kontentblocks
      */
     public function initInterface()
     {
+
         /*
          * ----------------
          * Admin menus & custom post types
@@ -145,7 +168,6 @@ Class Kontentblocks
      */
     public function loadModules()
     {
-
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
         $Registry = $this->Services['registry.modules'];
         // add core modules path
@@ -184,26 +206,27 @@ Class Kontentblocks
     public function loadExtensions()
     {
 
-        $paths = array( kb_get_plugin_path() );
-        $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
-        $paths = apply_filters( 'kb::add.plugin.path', $paths );
-
-        foreach ($paths as $path) {
-            //take care of dirs
-            foreach (glob( $path . "*", GLOB_ONLYDIR ) as $filename) {
-                $base = basename( $filename );
-                if (file_exists( trailingslashit( $filename ) . $base . '.php' )) {
-                    include_once( $filename . $base . '.php' );
-
-                }
-            }
-
-            // take care of files
-            $files = glob( $path . '*.php' );
-            foreach ($files as $template) {
-                include_once( $template );
-            }
-        }
+        include_once 'core/Extensions/ExtensionsBootstrap.php';
+//        $paths = array( kb_get_plugin_path() );
+//        $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
+//        $paths = apply_filters( 'kb::add.plugin.path', $paths );
+//
+//        foreach ($paths as $path) {
+//            //take care of dirs
+//            foreach (glob( $path . "*", GLOB_ONLYDIR ) as $filename) {
+//                $base = basename( $filename );
+//                if (file_exists( trailingslashit( $filename ) . $base . '.php' )) {
+//                    include_once( $filename . $base . '.php' );
+//
+//                }
+//            }
+//
+//            // take care of files
+//            $files = glob( $path . '*.php' );
+//            foreach ($files as $template) {
+//                include_once( $template );
+//            }
+//        }
 
         do_action( 'kb::init' );
 
@@ -215,7 +238,7 @@ Class Kontentblocks
     public function loadFields()
     {
         foreach (glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file) {
-            FieldRegistry::getInstance()->add( $file );
+            $this->Services['registry.fields']->add( $file );
         }
     }
 
@@ -233,8 +256,10 @@ Class Kontentblocks
         // still there for historical reasons
         define( 'KONTENTLOCK', false );
 
-        // Composer autoloader
-        require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        // Composer autoloader, depends on composer setup
+        if (file_exists( dirname( __FILE__ ) ) . '/vendor/autoload.php') {
+            require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        }
         // Kontentblocks autloader
         require_once dirname( __FILE__ ) . '/Autoloader.php';
         // Public API
@@ -242,8 +267,8 @@ Class Kontentblocks
         require_once dirname( __FILE__ ) . '/api.php';
 
         // File gets created during build process and contains one function
-        // to get the current git hash or a random hast during development
-        // hash is used to invalidate local storage data
+        // to get the current git hash or a random hash during development
+        // hash is used to invalidate the local storage data
         if (file_exists( dirname( __FILE__ ) . '/build/hash.php' )) {
             require_once( dirname( __FILE__ ) . '/build/hash.php' );
         }
@@ -251,7 +276,6 @@ Class Kontentblocks
         /* Include all necessary files on admin area */
         if (is_admin()) {
             require_once dirname( __FILE__ ) . '/core/Utils/tables.php';
-            require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
         }
         require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
 
@@ -269,6 +293,8 @@ Class Kontentblocks
                 mkdir( get_stylesheet_directory() . '/module-templates', 0775, true );
             }
         }
+
+        Capabilities::setup();
 
     }
 

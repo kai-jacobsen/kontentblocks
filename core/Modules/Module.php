@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\FieldManager;
 use Kontentblocks\Kontentblocks;
@@ -57,7 +56,7 @@ abstract class Module
     /**
      * @var array hold informations about the draft|active state
      */
-    protected $state;
+    public $state;
 
     /**
      * @var string
@@ -208,182 +207,11 @@ abstract class Module
      */
     public function renderOptions()
     {
-        // open tag for block list item
-        echo $this->_openListItem();
 
-        //markup for block header
-        echo $this->header();
-
-        // inner block open
-        echo $this->_openInner();
-
-
-        // if disabled don't output, just show disabled message
-        if ($this->settings['disabled']) {
-            echo "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
-        } else {
-            // output the form fields for this module
-            if (isset( $this->Fields )) {
-                $this->Fields->data = $this->moduleData;
-            }
-            $this->options( $this->moduleData );
-        }
-
-        // essentially calls wp actions
-        $this->footer();
-
-        echo $this->_closeInner();
-
-        echo $this->_closeListItem();
-
-        if (method_exists( $this, 'adminEnqueue' )) {
-            $this->adminEnqueue();
-        }
-
-
+        $Node = new ModuleHTMLNode( $this );
+        $Node->build();
     }
 
-    private function _openListItem()
-    {
-        // extract the block id number
-        $count = strrchr( $this->instance_id, "_" );
-
-        // classname
-        $classname = get_class( $this );
-
-        // additional classes to set for the item
-        $disabledclass = ( $this->settings['disabled'] ) ? 'disabled' : null;
-        $uidisabled = ( $this->settings['disabled'] ) ? 'ui-state-disabled' : null;
-
-        //$locked = ( $this->locked == 'false' || empty($this->locked) ) ? 'unlocked' : 'locked';
-        //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
-        $unsortable = ( ( isset( $this->unsortable ) and $this->unsortable ) == '1' ) ? 'cantsort' : null;
-
-        // Block List Item
-        return "<li id='{$this->instance_id}' rel='{$this->instance_id}{$count}' data-blockclass='{$classname}' class='{$this->settings['id']} kb_wrapper kb_block {$this->getStatusClass(
-        )} {$disabledclass} {$uidisabled} {$unsortable}'>
-		<input type='hidden' name='{$this->instance_id}[areaContext]' value='$this->areaContext' />
-		";
-
-    }
-
-
-    /**
-     * The closing li tag
-     * @return string
-     */
-    private function _closeListItem()
-    {
-        return "</li>";
-
-    }
-
-    /**
-     * Outputs everything inside the module
-     * @TODO clean up module header from legacy code
-     */
-
-    private function _openInner()
-    {
-        $lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
-
-        // markup for each block
-        $out = "<div style='display:none;' class='kb_inner kb-module--body'>";
-        if ($lockedmsg && KONTENTLOCK) {
-            $out = $lockedmsg;
-        } else {
-
-            $description = ( !empty( $this->settings['description'] ) ) ? __(
-                                                                              '<strong><em>Beschreibung:</em> </strong>'
-                                                                          ) . $this->settings['description'] : '';
-            $l18n_draft_status = ( $this->state['draft'] === true ) ? '<p class="kb_draft">' . __(
-                    'This Module is a draft and won\'t be public until you publish or update the post',
-                    'kontentblocks'
-                ) . '</p>' : '';
-
-            $out .= "<div class='kb_block_title'>";
-
-            if (!empty( $description )) {
-                // $out .= "<p class='description'>{$description}</p>";
-            }
-            $out .= "		<div class='block-notice hide'>
-							<p>Es wurden Veränderungen vorgenommen. <input type='submit' class='button-primary' value='Aktualisieren' /></p>
-						</div>
-						{$l18n_draft_status}
-					</div>";
-            $out .= "<div class='kb-module--controls-inner'>";
-
-        }
-
-        return $out;
-
-    }
-
-
-    /**
-     * Lost in outer div space
-     * @return string
-     */
-    private function _closeInner()
-    {
-        return "</div></div>";
-    }
-
-    /**
-     * Create Markup for module header
-     */
-    private function header()
-    {
-        $html = '';
-
-        //open header
-        $html .= "<div rel='{$this->instance_id}' class='block-head clearfix edit kb-title'>";
-
-
-        $html .= "<div class='kb-move'></div>";
-        // toggle button
-        $html .= "<div class='kb-toggle'></div>";
-        $html .= "<div class='kb-fullscreen'></div>";
-
-//        $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
-
-        // locked icon
-        if (!$this->settings['disabled'] && KONTENTLOCK) {
-            $html .= "<div class='kb-lock {$this->locked}'></div>";
-        }
-
-        // disabled icon
-        if ($this->settings['disabled']) {
-            $html .= "<div class='kb-disabled-icon'></div>";
-        }
-
-        // name
-        $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->instance_id}[moduleName]' value='" . esc_attr(
-                $this->getModuleName()
-            ) . "' /></div>";
-
-        // original name
-        $html .= "<div class='kb-sub-name'>{$this->getSetting( 'publicName' )}</div>";
-
-        $html .= "</div>";
-
-        // Open the drop down menu
-        $html .= "<div class='menu-wrap'></div>";
-
-
-        return $html;
-
-    }
-
-    /**
-     *  Some hooks for your pleasure
-     */
-    public function footer()
-    {
-        do_action( "block_footer_{$this->settings['id']}" );
-        do_action( 'block_footer', $this );
-
-    }
 
     /**
      * Generic set method to add module properties
@@ -476,7 +304,9 @@ abstract class Module
         if (isset( $this->viewfile )) {
             return $this->viewfile;
         } else {
-            $Loader = ModuleViewsRegistry::getInstance()->getViewLoader( $this );
+            /** @var \Kontentblocks\Modules\ModuleViewsRegistry $Registry */
+            $Registry = Kontentblocks::getService( 'registry.moduleViews' );
+            $Loader = $Registry->getViewLoader( $this );
             return $Loader->findDefaultTemplate();
         }
 
@@ -508,7 +338,9 @@ abstract class Module
         }
         if ($this->getSetting( 'useViewLoader' ) && is_null( $this->View )) {
             $tpl = $this->getViewfile();
-            $Loader = ModuleViewsRegistry::getInstance()->getViewLoader( $this );
+            /** @var \Kontentblocks\Modules\ModuleViewsRegistry $Registry */
+            $Registry = Kontentblocks::getService( 'registry.moduleViews' );
+            $Loader = $Registry->getViewLoader( $this );
             $T = new ModuleView( $this );
             $full = $Loader->getTemplateByName( $tpl );
             if (isset( $full['fragment'] )) {
@@ -704,7 +536,7 @@ abstract class Module
             'areaContext' => $this->areaContext,
             'viewfile' => $this->getViewfile(),
             'class' => get_class( $this ),
-            'inDynamic' => AreaRegistry::getInstance()->isDynamic( $this->area ),
+            'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->area ),
             'uri' => $this->getUri()
         );
         // only for master templates

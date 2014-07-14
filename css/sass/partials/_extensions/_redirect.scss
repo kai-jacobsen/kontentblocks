@@ -1,0 +1,53 @@
+.redirect-controls{
+  border: 1px solid #ccc;
+  background: #fff;
+
+  .redirect-title{
+    background: #f9f9f9;
+    padding: 10px 0;
+
+  }
+
+  h2{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 10px !important;
+  }
+
+  .redirect-wrapper input[type=radio] {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+  }
+
+  .redirect-wrapper{
+    padding: 15px 10px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+
+    label{
+      margin-right: 15px;
+
+    }
+
+    &.redirect--free-target{
+      border-top: 0;
+
+      .kb-field-wrapper{
+        padding: 0;
+        margin-top: 10px;
+      }
+
+      .kb-field{
+        padding: 0;
+        border-bottom: 0;
+
+        .kb_label{
+          display: none;
+        }
+      }
+    }
+  }
+}

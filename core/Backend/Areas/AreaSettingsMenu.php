@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Kontentblocks;
 
 
 /**
@@ -151,7 +152,7 @@ class AreaSettingsMenu
      */
     public function _getAssignedTemplates()
     {
-        $registeredAreaTemplates = AreaRegistry::getInstance()->getTemplates();
+        $registeredAreaTemplates = Kontentblocks::getService('registry.areas')->getTemplates();
         $collect = array();
         if (!empty($this->areaTemplates)) {
             foreach ($this->areaTemplates as $tplid) {

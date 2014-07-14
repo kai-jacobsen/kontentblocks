@@ -2,21 +2,40 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Interfaces\InterfaceFieldReturn;
+use Kontentblocks\Kontentblocks;
 
 
+/**
+ * Class AbstractEditableFieldReturn
+ * @package Kontentblocks\Fields\Returnobjects
+ */
 abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 
-	public $value;
+    /**
+     * @var mixed
+     */
+    public $value;
 
-	public $moduleId;
+    /**
+     * @var string
+     */
+    public $moduleId;
 
-	public $key;
+    /**
+     * @var string
+     */
+    public $key;
 
-	public $arrayKey;
+    /**
+     * @var string
+     */
+    public $arrayKey;
 
-	public $index = null;
+    /**
+     * @var mixed
+     */
+    public $index;
 
 	/**
 	 * Set of css classes to add to the el
@@ -32,11 +51,27 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	 */
 	protected $attributes = array();
 
-	protected $inlineEdit = true;
+    /**
+     * @var bool
+     */
+    protected $inlineEdit = true;
 
-	protected $uniqueId;
+    /**
+     * @var string
+     */
+    protected $uniqueId;
 
-	public function __construct( $value, $field ) {
+    /**
+     * @var \Kontentblocks\Fields\FieldRegistry
+     */
+    private $Registry;
+
+    /**
+     * @param $value
+     * @param $field
+     */
+    public function __construct( $value, $field ) {
+        $this->Registry = Kontentblocks::getService('registry.fields');
 		$this->setValue( $value );
 		$this->setupFromField( $field );
 		$this->uniqueId = $this->createUniqueId();
@@ -163,8 +198,9 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 	 * @param $field
 	 */
 	private function setupFromField( $field ) {
+
 		if ( is_array( $field ) ) {
-			$Dummy = FieldRegistry::getInstance()->getField( $field['type'] );
+			$Dummy = $this->Registry->getField( $field['type'] );
 			$Dummy->setKey( $field['key'] );
 			$Dummy->setArgs( array(
 				'arrayKey' => $field['arrayKey'],

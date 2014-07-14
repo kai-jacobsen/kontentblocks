@@ -3,23 +3,23 @@
 namespace Kontentblocks\Modules;
 
 
+/**
+ * Class ModuleViewsRegistry
+ *
+ * @package Kontentblocks\Modules
+ */
 class ModuleViewsRegistry
 {
 
-    static $instance;
     protected $views = array();
     protected $loaders = array();
 
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
 
-        return self::$instance;
-
-    }
-
+    /**
+     * Get a Module specific View Filesystem instance
+     * @param Module $Module
+     * @return ModuleViewFilesystem
+     */
     public function getViewFileSystem( Module $Module )
     {
         $classname = get_class( $Module );

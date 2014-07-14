@@ -5,6 +5,7 @@ namespace Kontentblocks\Backend\Screen;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\Definitions\DateTime;
 use Kontentblocks\Helper;
+use Kontentblocks\Templating\CoreTemplate;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -87,7 +88,7 @@ Class EditScreen
      */
     function userInterface()
     {
-
+        $blogId = get_current_blog_id();
 
         // bail if post type doesn't support kontentblocks
         if (!post_type_supports( $this->Environment->get( 'postType' ), 'kontentblocks' )) {
@@ -105,7 +106,7 @@ Class EditScreen
         // output hidden input field and set the base_id as reference for new modules
         // this makes sure that new modules have a unique id
         echo Utilities::getBaseIdField( $this->Environment->getAllModules() );
-
+        echo "<input type='hidden' name='blog_id' value='{$blogId}'>";
         // hackish way to keep functionality of dynamically create tinymce instances
         if (!post_type_supports(
                 $this->Environment->get( 'postType' ),
@@ -159,9 +160,13 @@ Class EditScreen
      */
     public function renderScreen()
     {
-        if (( $this->Environment->get( 'areas' ) === false )) {
+        $areas = $this->Environment->get( 'areas' );
+
+        if (!$areas || empty( $areas )) {
+            $this->handleEmptyAreas();
             return;
         }
+
         $ScreenManager = new ScreenManager( $this->Environment );
         $ScreenManager->render();
 
@@ -178,8 +183,8 @@ Class EditScreen
         global $post;
         $toJSON = array(
             'page_template' => $this->Environment->get( 'pageTemplate' ),
-            'post_type'     => $this->Environment->get( 'postType' ),
-            'post_id'       => $post->ID
+            'post_type' => $this->Environment->get( 'postType' ),
+            'post_id' => $post->ID
         );
         echo "<script> var KB = KB || {}; KB.Screen =" . json_encode( $toJSON ) . "</script>";
 
@@ -195,6 +200,15 @@ Class EditScreen
     {
         return apply_filters( 'kb::setup.hooks', array( 'post.php', 'post-new.php' ) );
 
+    }
+
+    private function handleEmptyAreas()
+    {
+        global $current_user;
+        if (current_user_can( 'manage_kontentblocks' )) {
+            $tpl = new CoreTemplate('no-areas.twig');
+            $tpl->render(true);
+        }
     }
 
 }
