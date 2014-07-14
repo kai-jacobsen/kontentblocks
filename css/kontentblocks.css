@@ -240,6 +240,24 @@
   background: #333;
 }
 
+/*------------------------------------*\
+    TinyMCE hard styles
+\*------------------------------------*/
+/* line 60, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+#onsite-form .wp-editor-wrap * {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+/* line 64, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+#onsite-form .mce-widget {
+  text-transform: none !important;
+}
+/* line 68, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+#onsite-form .mce-widget button:hover {
+  background: transparent !important;
+}
+
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
 .kb_inactive, .deactivated {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";

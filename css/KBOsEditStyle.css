@@ -647,35 +647,38 @@ body.onsite-editing #onsite-modal {
   text-align: left;
   padding-right: 5px;
   max-width: 24%;
+  font-size: 13px !important;
 }
 
-/* line 157, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 158, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .link-search-field {
   float: left;
   width: 250px;
   max-width: 70%;
+  font-size: 13px !important;
+  padding: 5px !important;
 }
 
-/* line 163, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 166, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .link-search-wrapper {
   margin: 5px 0 9px;
   display: block;
   overflow: hidden;
 }
 
-/* line 169, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 172, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .link-search-wrapper span {
   float: left;
   margin-top: 4px;
 }
 
-/* line 174, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 177, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .link-search-wrapper .spinner {
   display: none;
   vertical-align: text-bottom;
 }
 
-/* line 179, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 182, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .link-target {
   padding: 3px 0 0;
   white-space: nowrap;
@@ -683,13 +686,13 @@ body.onsite-editing #onsite-modal {
   text-overflow: ellipsis;
 }
 
-/* line 186, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 189, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .link-target label {
   max-width: 70%;
   text-align: left;
 }
 
-/* line 191, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 194, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .query-results {
   border: 1px #dfdfdf solid;
   margin: 0;
@@ -702,7 +705,7 @@ body.onsite-editing #onsite-modal {
   top: 205px;
 }
 
-/* line 204, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 207, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link li,
 #wp-link .query-notice {
   clear: both;
@@ -715,48 +718,48 @@ body.onsite-editing #onsite-modal {
   font-size: 12px !important;
 }
 
-/* line 215, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 218, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link li:hover {
   background: #eaf2fa;
   color: #151515;
 }
 
-/* line 220, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 223, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link li.unselectable {
   border-bottom: 1px solid #dfdfdf;
 }
 
-/* line 224, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 227, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link li.unselectable:hover {
   background: #fff;
   cursor: auto;
   color: #333;
 }
 
-/* line 230, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 233, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link li.selected {
   background: #ddd;
   color: #333;
 }
 
-/* line 235, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 238, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link li.selected .item-title {
   font-weight: bold;
 }
 
-/* line 239, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 242, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link li:last-child {
   border: none;
 }
 
-/* line 243, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 246, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .item-title {
   display: inline-block;
   width: 80%;
   width: calc(100% - 68px);
 }
 
-/* line 249, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 252, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .item-info {
   text-transform: uppercase;
   color: #666;
@@ -766,30 +769,30 @@ body.onsite-editing #onsite-modal {
   top: 5px;
 }
 
-/* line 259, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 262, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link #search-results,
 #wp-link #search-panel {
   display: none;
 }
 
-/* line 263, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 266, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link-wrap.search-panel-visible #search-panel {
   display: block;
 }
 
-/* line 267, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 270, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .river-waiting {
   display: none;
   padding: 10px 0;
 }
 
-/* line 272, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 275, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .river-waiting .spinner {
   margin: 0 auto;
   display: block;
 }
 
-/* line 277, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 280, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link .submitbox {
   padding: 8px 16px;
   background: #fcfcfc;
@@ -800,52 +803,58 @@ body.onsite-editing #onsite-modal {
   right: 0;
 }
 
-/* line 287, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 290, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link-cancel {
   line-height: 25px;
 }
+/* line 293, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+#wp-link-cancel a {
+  color: #333 !important;
+  font-size: 13px !important;
+}
 
-/* line 291, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 299, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link-update {
   line-height: 23px;
   float: right;
 }
 
-/* line 296, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 304, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link-submit {
   float: right;
   margin-bottom: 0;
+  font-weight: normal !important;
 }
 
 @media screen and (max-width: 782px) {
-  /* line 302, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 311, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap {
     height: 280px;
     margin-top: -140px;
   }
 
-  /* line 307, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 316, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap.search-panel-visible .query-results {
     top: 235px;
   }
 
-  /* line 311, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 320, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #link-selector {
     padding: 0 16px 60px;
   }
 
-  /* line 315, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 324, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap.search-panel-visible #link-selector {
     bottom: 52px;
   }
 
-  /* line 319, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 328, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-cancel {
     line-height: 32px;
   }
 }
 @media screen and (max-width: 520px) {
-  /* line 325, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 334, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap {
     width: auto;
     margin-left: 0;
@@ -855,12 +864,12 @@ body.onsite-editing #onsite-modal {
   }
 }
 @media screen and (max-height: 520px) {
-  /* line 335, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 344, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap {
     transition: none;
   }
 
-  /* line 339, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 348, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap.search-panel-visible {
     height: auto;
     margin-top: 0;
@@ -868,18 +877,18 @@ body.onsite-editing #onsite-modal {
     bottom: 10px;
   }
 
-  /* line 346, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 355, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   .search-panel-visible #link-selector {
     overflow: auto;
   }
 
-  /* line 350, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 359, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   .search-panel-visible #search-panel .query-results {
     position: static;
   }
 }
 @media screen and (max-height: 290px) {
-  /* line 356, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 365, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap {
     height: auto;
     margin-top: 0;
@@ -887,30 +896,30 @@ body.onsite-editing #onsite-modal {
     bottom: 10px;
   }
 
-  /* line 363, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 372, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #link-selector {
     overflow: auto;
     height: calc(100% - 92px);
     padding-bottom: 2px;
   }
 
-  /* line 369, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 378, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #search-panel .query-results {
     position: static;
   }
 }
-/* line 374, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 383, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link-wrap.kb-customized {
   height: 600px;
   margin-top: -300px;
 }
-/* line 378, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+/* line 387, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
 #wp-link-wrap.kb-customized .query-results {
   top: 370px;
 }
 
 @media screen and (max-height: 520px) {
-  /* line 384, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
+  /* line 393, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_onsite/_wplinkdialog.scss */
   #wp-link-wrap.kb-customized {
     margin-top: 0;
     height: auto;

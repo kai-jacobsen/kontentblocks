@@ -152,12 +152,15 @@
   text-align: left;
   padding-right: 5px;
   max-width: 24%;
+  font-size: 13px !important;
 }
 
 #wp-link .link-search-field {
   float: left;
   width: 250px;
   max-width: 70%;
+  font-size: 13px !important;
+  padding: 5px !important;
 }
 
 #wp-link .link-search-wrapper {
@@ -286,6 +289,11 @@
 
 #wp-link-cancel {
   line-height: 25px;
+
+  a{
+    color: #333 !important;
+    font-size: 13px !important;
+  }
 }
 
 #wp-link-update {
@@ -296,6 +304,7 @@
 #wp-link-submit {
   float: right;
   margin-bottom: 0;
+  font-weight: normal !important;
 }
 
 @media screen and ( max-width: 782px ) {

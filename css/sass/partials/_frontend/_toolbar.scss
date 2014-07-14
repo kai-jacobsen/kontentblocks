@@ -48,3 +48,27 @@
   }
 
 }
+
+/*------------------------------------*\
+    TinyMCE hard styles
+\*------------------------------------*/
+
+#onsite-form{
+
+
+
+  .wp-editor-wrap * {
+    @include box-sizing(content-box);
+  }
+
+  .mce-widget{
+
+    text-transform: none !important;
+
+    button:hover{
+      background: transparent !important;
+    }
+
+  }
+
+}
