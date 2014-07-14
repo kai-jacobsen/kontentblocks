@@ -46,7 +46,7 @@ class DuplicateModule
         $this->instanceId = $_POST['module'];
         $this->class = $_POST['class'];
 
-        $this->Environment = new PostEnvironment( $this->postId );
+        $this->Environment = Utilities::getEnvironment( $this->postId );
 
         $this->ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 

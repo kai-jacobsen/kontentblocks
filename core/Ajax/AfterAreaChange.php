@@ -5,6 +5,7 @@ namespace Kontentblocks\Ajax;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Runs after a module was dragged into a different area
@@ -32,7 +33,7 @@ class AfterAreaChange
         }
         
         $data        = $_POST;
-        $Environment = new PostEnvironment( $data['post_id'] );
+        $Environment = Utilities::getEnvironment( $data['post_id'] );
         $Factory     = new ModuleFactory( $data['module']['class'], $data['module'], $Environment );
         $instance    = $Factory->getModule();
         ob_start();

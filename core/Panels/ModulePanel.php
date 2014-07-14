@@ -259,7 +259,7 @@ class ModulePanel
         $moduleArgs['settings']['id']    = $this->baseId . '_static';
         $moduleArgs['settings']['class'] = $module;
         $moduleArgs                      = wp_parse_args( $defaults, $moduleArgs );
-        $Environment                     = new PostEnvironment( get_the_ID() );
+        $Environment                     = Utilities::getEnvironment( get_the_ID() );
 
         return new $module( $moduleArgs, $this->data, $Environment );
 

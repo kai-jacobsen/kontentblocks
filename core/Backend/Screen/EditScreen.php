@@ -64,7 +64,7 @@ Class EditScreen
     public function setupEnvironment()
     {
         global $post;
-        $this->Environment = new PostEnvironment( $post->ID );
+        $this->Environment = Utilities::getEnvironment( $post->ID );
 
     }
 
@@ -139,7 +139,7 @@ Class EditScreen
             $post_id = get_the_ID();
         }
 
-        $Environment = new PostEnvironment( $post_id );
+        $Environment = Utilities::getEnvironment( $post_id );
         $Environment->save();
 
     }

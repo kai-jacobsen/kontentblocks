@@ -118,7 +118,7 @@ class DynamicAreas
             return;
         }
 
-        $Environment = new PostEnvironment( $postId );
+        $Environment = Utilities::getEnvironment( $postId );
         $Environment->save();
 
         $this->saveArea( $postId );
@@ -392,7 +392,7 @@ class DynamicAreas
      */
     private function renderArea( $area )
     {
-        $Environment = new PostEnvironment( get_the_ID() );
+        $Environment = Utilities::getEnvironment( get_the_ID() );
         $blogId = get_current_blog_id();
 
         /** @var \Kontentblocks\Backend\Areas\AreaRegistry $Registry */

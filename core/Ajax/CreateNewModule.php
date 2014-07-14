@@ -7,6 +7,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class CreateNewModule
@@ -75,7 +76,7 @@ class CreateNewModule
         $this->setupRequestData();
 
         // Setup Data Handler
-        $this->Environment = new PostEnvironment( $this->postId );
+        $this->Environment = Utilities::getEnvironment( $this->postId );
 
         $this->ModuleRegistry = Kontentblocks::getService('registry.modules');
 

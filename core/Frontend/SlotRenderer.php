@@ -50,7 +50,7 @@ class SlotRenderer
 
 
         /** @var $Environment \Kontentblocks\Backend\Environment\PostEnvironment */
-        $Environment = new PostEnvironment($postId);
+        $Environment = Utilities::getEnvironment($postId);
         $modules = $Environment->getModulesForArea($area);
 
         $this->Iterator = new ModuleIterator($modules, $Environment);

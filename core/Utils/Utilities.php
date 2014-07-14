@@ -2,6 +2,10 @@
 
 namespace Kontentblocks\Utils;
 
+use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Kontentblocks;
+
 
 /**
  * Class Utilities
@@ -9,6 +13,27 @@ namespace Kontentblocks\Utils;
  */
 class Utilities
 {
+
+    /**
+     * Get environment
+     */
+    public static function getEnvironment($id = null)
+    {
+        global $post;
+
+        if ($id && is_numeric($id) && $id !== -1) {
+            return new PostEnvironment($id);
+        } else {
+            $Registry = Kontentblocks::getService('registry.areas');
+            $area = $Registry->getArea($id);
+            if (isset($area['parent_id'])){
+                return new PostEnvironment($area['parent_id']);
+            } else {
+                return new PostEnvironment($post->ID);
+            }
+        }
+
+    }
 
     static public function editor( $id, $data, $name = null, $media = true, $args = array() )
     {

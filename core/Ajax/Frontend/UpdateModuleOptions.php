@@ -28,7 +28,7 @@ class UpdateModuleOptions
         $parsed = array();
         parse_str($data, $parsed);
 //        $Environment = new \Kontentblocks\Backend\Environment\PostEnvironment($module['post_id']);
-        $Environment = new PostEnvironment($module['post_id']);
+        $Environment = Utilities::getEnvironment($module['post_id']);
 
         $Factory = new ModuleFactory($module['class'], $module, $Environment);
         $instance = $Factory->getModule();
