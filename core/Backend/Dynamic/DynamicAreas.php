@@ -303,7 +303,6 @@ class DynamicAreas
         if (get_post_type( $this->postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
             return false;
         }
-
         // checks passed
         return true;
     }
@@ -394,6 +393,7 @@ class DynamicAreas
     private function renderArea( $area )
     {
         $Environment = new PostEnvironment( get_the_ID() );
+        $blogId = get_current_blog_id();
 
         /** @var \Kontentblocks\Backend\Areas\AreaRegistry $Registry */
         $Registry = Kontentblocks::getService( 'registry.areas' );
@@ -408,6 +408,7 @@ class DynamicAreas
         Utilities::hiddenEditor();
 
         echo Utilities::getBaseIdField( $Environment->getStorage()->getIndex() );
+        echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
 
         $Area = new Area( $areaDef, $Environment, 'global' );
         $Area->build();

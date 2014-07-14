@@ -31,11 +31,11 @@ class SavePost
      */
     public function save()
     {
-
         // mic check one two, one two
         if ($this->auth() === false) {
             return false;
         }
+
         $this->index = $this->Environment->getStorage()->getIndex();
         $areas = $this->Environment->getAreas();
 
