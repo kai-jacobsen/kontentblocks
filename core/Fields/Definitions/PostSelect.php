@@ -10,7 +10,7 @@ use Kontentblocks\Fields\Field;
 Class PostSelect extends Field {
 
 	public static $settings = array(
-		'type' => 'postSelect'
+		'type' => 'postselect'
 	);
 
 	/**
