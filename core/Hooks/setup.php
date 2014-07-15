@@ -26,8 +26,6 @@ function remove_editor_support()
             remove_post_type_support( 'post', 'editor' );
         }
     }
-
-
 }
 
 add_action( 'init', __NAMESPACE__ . '\remove_editor_support', 12 );
