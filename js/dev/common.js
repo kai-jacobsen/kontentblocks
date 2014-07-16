@@ -696,7 +696,7 @@ KB.ViewsCollection = function() {
     this.views = {};
     this.lastViewAdded = null;
     this.add = function(id, view) {
-        if (this.views[id]) {
+        if (!this.views[id]) {
             this.views[id] = view;
             KB.trigger("kb:" + view.model.get("class") + ":added", view);
             this.lastViewAdded = view;
@@ -719,6 +719,7 @@ KB.ViewsCollection = function() {
     this.remove = function(id) {
         var view = this.get(id);
         this.trigger("kb:backend::viewDeleted", view);
+        view.removeControls();
         delete this.views[id];
     };
     this.get = function(id) {

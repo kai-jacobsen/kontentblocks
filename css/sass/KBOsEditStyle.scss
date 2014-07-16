@@ -116,7 +116,7 @@ body.onsite-editing {
 
   .os-edit-container > .os-edit-wrapper {
     display: block;
-    opacity: 1;
+    opacity: .4;
   }
 
   .os-edit-container {
@@ -129,25 +129,15 @@ body.onsite-editing {
     padding: 0 !important;
     line-height: 1 !important;
 
-    li {
-      display: block;
-    }
 
   }
 
-  .os-edit-wrapper a:hover {
-    opacity: 1;
-    color: #333;
-  }
+
 
   .master a.os-edit-block span {
     background-color: $orange;
   }
 
-  a.os-description {
-    background: url('info.png') no-repeat;
-    display: none;
-  }
 
   .hide {
     display: none;
@@ -488,19 +478,21 @@ body.onsite-editing {
 @import "partials/_onsite/wplinkdialog";
 
 .editable:hover {
-  outline: 1px dashed #ccc;
-  outline: 1px dashed currentcolor;
+  outline: 1px solid #ccc;
+  outline: 1px solid currentcolor;
+  background-color: rgba(233, 228, 39, 0.10);
 }
 
 .editable-image:hover{
-  outline: 1px dashed #ccc;
-  outline: 1px dashed currentcolor;
+  outline: 1px solid #ccc;
+  outline: 1px solid currentcolor;
 
 }
 
 .editable-gallery-image:hover{
-  outline: 1px dashed #ccc;
-  outline: 1px dashed currentcolor;
+  outline: 1px solid #ccc;
+  outline: 1px solid currentcolor;
+  background-color: rgba(233, 228, 39, 0.20);
 
 }
 

@@ -57,6 +57,33 @@ KB.App = (function ($) {
 
         // get the UI on track
         KB.Ui.init();
+        KB.Events.trigger('KB::ready');
+
+        jQuery('.koolkip').powerTip({
+            placement: 'ne',
+            followMouse: true,
+            fadeInTime: 0,
+            fadeOutTime: 0
+        });
+
+
+    }
+
+    function shutdown() {
+        var model;
+
+        jQuery.powerTip.destroy('.koolkip');
+
+        _.each(KB.Modules.toArray(), function(item){
+            KB.Modules.remove(item);
+        });
+
+        jQuery('.editable').each(function (i, el) {
+            tinymce.remove('#' + el.id);
+        });
+
+        jQuery('body').off('click', '.editable-image');
+        jQuery('body').off('click', '.editable-link');
     }
 
     /**
@@ -73,7 +100,7 @@ KB.App = (function ($) {
      */
     function addViews() {
 
-        if (KB.appData.config.preview){
+        if (KB.appData.config.preview) {
             return false;
         }
 
@@ -144,7 +171,8 @@ KB.App = (function ($) {
 
     // revealing module pattern
     return {
-        init: init
+        init: init,
+        shutdown: shutdown
     };
 
 }(jQuery));
@@ -153,33 +181,33 @@ KB.App = (function ($) {
 KB.App.init();
 
 
-jQuery(document).ready(function(){
+jQuery(document).ready(function () {
 
-    if (KB.appData && KB.appData.config.frontend){
+    if (KB.appData && KB.appData.config.frontend) {
         _K.info('Frontend Modules Ready Event fired');
         KB.Views.Modules.readyOnFront();
-        KB.Events.trigger('KB::ready');
     }
 
-    jQuery('.koolkip').powerTip({
-        placement: 'ne',
-        followMouse: true,
-        fadeInTime: 0,
-        fadeOutTime:0
-    });
 
-    KB.on('kb:frontendModalUpdated', function(){
+//    jQuery('.koolkip').powerTip({
+//        placement: 'ne',
+//        followMouse: true,
+//        fadeInTime: 0,
+//        fadeOutTime:0
+//    });
+
+    KB.on('kb:frontendModalUpdated', function () {
         jQuery('.koolkip').powerTip({
             placement: 'ne',
             followMouse: true,
             fadeInTime: 0,
-            fadeOutTime:0
+            fadeOutTime: 0
         });
     });
 
-    jQuery( window )
-        .on( 'resize DOMNodeInserted', function() {
+    jQuery(window)
+        .on('resize DOMNodeInserted', function () {
 //            jQuery( '.mce-text' ).removeAttr( 'style' );
-        } );
+        });
 
 });

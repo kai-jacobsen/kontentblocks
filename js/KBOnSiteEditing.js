@@ -3,6 +3,7 @@ var KBOnSiteEditing;
 (function($) {
 
     KBOnSiteEditing = {
+        _active : false,
         init: function() {
         var that = this;
             $('#wpadminbar').on('click', 'li.os-edit a', function(e) {
@@ -35,13 +36,16 @@ var KBOnSiteEditing;
         },
         control: function(caller)
         {
+            this._active = !this._active;
             $(caller).parent('li').toggleClass('os-edit-off');
             $('body').toggleClass('onsite-editing');
-
             $('.kooltip').powerTip('show');
 
-            $('.editable').each(function(i, el){
-            });
+            if (this._active){
+                KB.App.init();
+            } else {
+                KB.App.shutdown();
+            }
 
         },
         refresh: function(result) {
@@ -63,7 +67,6 @@ var KBOnSiteEditing;
                 callbacks[callback]();
             }
 
-            vex.close(openedModal.data().vex.id);
         },
         addCallback: function(id, callback)
         {

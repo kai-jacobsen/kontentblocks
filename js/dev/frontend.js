@@ -842,6 +842,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             }
         });
     },
+    removeControls: function() {
+        this.undelegateEvents();
+        jQuery(".os-edit-wrapper", this.$el).remove();
+    },
     updateModule: function() {
         var that = this;
         var moduleData = {};
@@ -933,6 +937,25 @@ KB.App = function($) {
         KB.Modules.on("remove", removeModule);
         addViews();
         KB.Ui.init();
+        KB.Events.trigger("KB::ready");
+        jQuery(".koolkip").powerTip({
+            placement: "ne",
+            followMouse: true,
+            fadeInTime: 0,
+            fadeOutTime: 0
+        });
+    }
+    function shutdown() {
+        var model;
+        jQuery.powerTip.destroy(".koolkip");
+        _.each(KB.Modules.toArray(), function(item) {
+            KB.Modules.remove(item);
+        });
+        jQuery(".editable").each(function(i, el) {
+            tinymce.remove("#" + el.id);
+        });
+        jQuery("body").off("click", ".editable-image");
+        jQuery("body").off("click", ".editable-link");
     }
     function addViews() {
         if (KB.appData.config.preview) {
@@ -966,7 +989,8 @@ KB.App = function($) {
         KB.Views.Modules.remove(model.get("instance_id"));
     }
     return {
-        init: init
+        init: init,
+        shutdown: shutdown
     };
 }(jQuery);
 
@@ -976,14 +1000,7 @@ jQuery(document).ready(function() {
     if (KB.appData && KB.appData.config.frontend) {
         _K.info("Frontend Modules Ready Event fired");
         KB.Views.Modules.readyOnFront();
-        KB.Events.trigger("KB::ready");
     }
-    jQuery(".koolkip").powerTip({
-        placement: "ne",
-        followMouse: true,
-        fadeInTime: 0,
-        fadeOutTime: 0
-    });
     KB.on("kb:frontendModalUpdated", function() {
         jQuery(".koolkip").powerTip({
             placement: "ne",

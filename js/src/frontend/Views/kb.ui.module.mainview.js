@@ -48,7 +48,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function () {
-
         if (jQuery('> .os-edit-wrapper', this.$el).length > 0){
             return;
         }
@@ -134,6 +133,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             }
 
         });
+    },
+    removeControls: function(){
+        this.undelegateEvents();
+        jQuery('.os-edit-wrapper', this.$el).remove();
     },
     // @TODO: old function updateModule() remove?
     updateModule: function () {
