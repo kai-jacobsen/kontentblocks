@@ -937,7 +937,6 @@ KB.App = function($) {
         KB.Modules.on("remove", removeModule);
         addViews();
         KB.Ui.init();
-        KB.Events.trigger("KB::ready");
         jQuery(".koolkip").powerTip({
             placement: "ne",
             followMouse: true,
@@ -1001,6 +1000,7 @@ jQuery(document).ready(function() {
         _K.info("Frontend Modules Ready Event fired");
         KB.Views.Modules.readyOnFront();
     }
+    KB.Events.trigger("KB::ready");
     KB.on("kb:frontendModalUpdated", function() {
         jQuery(".koolkip").powerTip({
             placement: "ne",

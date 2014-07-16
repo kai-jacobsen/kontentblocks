@@ -57,7 +57,6 @@ KB.App = (function ($) {
 
         // get the UI on track
         KB.Ui.init();
-        KB.Events.trigger('KB::ready');
 
         jQuery('.koolkip').powerTip({
             placement: 'ne',
@@ -187,6 +186,8 @@ jQuery(document).ready(function () {
         _K.info('Frontend Modules Ready Event fired');
         KB.Views.Modules.readyOnFront();
     }
+
+    KB.Events.trigger('KB::ready');
 
 
 //    jQuery('.koolkip').powerTip({
