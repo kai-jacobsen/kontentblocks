@@ -22,11 +22,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.render();
         this.setControlsPosition();
 
-        //@TODO events:replace with new handler
-        jQuery(window).on('kontentblocks::ajaxUpdate', function () {
-            that.setControlsPosition();
-        });
-
         this.listenTo(KB.Events, 'KB::ajax-update', this.setControlsPosition);
 
     },
@@ -53,7 +48,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function () {
-        _K.log('render callled');
+
+        if (jQuery('> .os-edit-wrapper', this.$el).length > 0){
+            return;
+        }
         var settings = this.model.get('settings');
         if (settings.controls && settings.controls.hide){
             return;
@@ -165,7 +163,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.model.view.render();
                 that.model.view.trigger('kb:moduleUpdated');
                 // @TODO events:replace
-                jQuery(window).trigger('kontentblocks::ajaxUpdate');
                 KB.Events.trigger('KB::ajax-update');
 
                 KB.Notice.notice('Module saved successfully', 'success');

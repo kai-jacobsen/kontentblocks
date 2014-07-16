@@ -670,7 +670,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.model.view.delegateEvents();
                 that.model.view.trigger("kb:moduleUpdated");
                 that.view.trigger("kb:frontend::viewUpdated");
-                jQuery(window).trigger("kontentblocks::ajaxUpdate");
+                KB.Events.trigger("KB::ajax-update");
                 KB.trigger("kb:frontendModalUpdated");
                 setTimeout(function() {
                     jQuery(".editable", that.options.view.$el).each(function(i, el) {
@@ -741,9 +741,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.view = this;
         this.render();
         this.setControlsPosition();
-        jQuery(window).on("kontentblocks::ajaxUpdate", function() {
-            that.setControlsPosition();
-        });
         this.listenTo(KB.Events, "KB::ajax-update", this.setControlsPosition);
     },
     getDirty: function() {
@@ -767,7 +764,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function() {
-        _K.log("render callled");
+        if (jQuery("> .os-edit-wrapper", this.$el).length > 0) {
+            return;
+        }
         var settings = this.model.get("settings");
         if (settings.controls && settings.controls.hide) {
             return;
@@ -868,7 +867,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.model.set("moduleData", res.newModuleData);
                 that.model.view.render();
                 that.model.view.trigger("kb:moduleUpdated");
-                jQuery(window).trigger("kontentblocks::ajaxUpdate");
                 KB.Events.trigger("KB::ajax-update");
                 KB.Notice.notice("Module saved successfully", "success");
                 that.$el.removeClass("isDirty");
