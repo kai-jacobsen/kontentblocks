@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-05 */
+/*! Kontentblocks DevVersion 2014-07-16 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -674,7 +674,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 KB.trigger("kb:frontendModalUpdated");
                 setTimeout(function() {
                     jQuery(".editable", that.options.view.$el).each(function(i, el) {
-                        console.log(jQuery(el));
                         KB.IEdit.Text(el);
                     });
                 }, 400);
@@ -768,6 +767,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function() {
+        _K.log("render callled");
         var settings = this.model.get("settings");
         if (settings.controls && settings.controls.hide) {
             return;
@@ -810,21 +810,37 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         });
     },
     setControlsPosition: function() {
+        var that = this;
         var mSettings = this.model.get("settings");
+        var overlaps = jQuery(".os-edit-wrapper").overlaps();
         var $controls = jQuery(".os-controls", this.$el);
+        jQuery(".os-controls", this.$el).hover(function() {
+            that.$el.addClass("hovered");
+        }, function() {
+            that.$el.removeClass("hovered");
+        });
         var pos = this.$el.offset();
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
         $controls.offset({
-            top: 10,
-            left: pos.left - 70,
+            top: -20,
+            left: pos.left + 0,
             zIndex: 999999
         });
         $controls.css({
-            top: 10 + "px",
+            top: -20 + "px",
             right: 0
+        });
+        _.each(overlaps, function(el, i) {
+            if (i === 0) {} else {
+                var $el = jQuery(el);
+                var topP = $el.offset();
+                jQuery($el).offset({
+                    left: topP.left + 50
+                });
+            }
         });
     },
     updateModule: function() {

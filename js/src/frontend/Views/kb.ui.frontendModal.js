@@ -248,9 +248,16 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: 'json',
             success: function (res) {
 
+
+
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
                     tinymce.remove('#' + el.id);
                 });
+
+//                _.each(jQuery('.module', that.options.view.$el), function(el){
+//                    KB.Views.Modules.remove(el.id);
+//                });
+
                 that.options.view.$el.html(res.html);
                 that.model.set('moduleData', res.newModuleData);
                 that.model.view.render();
@@ -262,7 +269,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
                 setTimeout(function(){
                     jQuery('.editable', that.options.view.$el).each(function (i, el) {
-                        console.log(jQuery(el));
                         KB.IEdit.Text(el);
                     });
                 },400);

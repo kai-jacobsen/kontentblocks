@@ -8,7 +8,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
     initialize: function () {
         var that = this;
-
         if (!KB.Checks.userCan('edit_kontentblocks')) {
             return;
         }
@@ -54,6 +53,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function () {
+        _K.log('render callled');
         var settings = this.model.get('settings');
         if (settings.controls && settings.controls.hide){
             return;
@@ -104,29 +104,38 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     setControlsPosition: function () {
 
+        var that = this;
         var mSettings = this.model.get('settings');
-
+        var overlaps = jQuery('.os-edit-wrapper').overlaps();
         var $controls = jQuery('.os-controls', this.$el);
+
+        jQuery('.os-controls', this.$el).hover(function(){
+            that.$el.addClass('hovered');
+        }, function(){
+            that.$el.removeClass('hovered');
+        });
+
         var pos = this.$el.offset();
 
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
-//
-//        console.log(pos);
-//
-//        if (pos.top > 100) {
-//            pos.top = pos.top - 70;
-//        }
-//
-//        if (pos.left > 100){
-//            pos.left = pos.left;
-//        }
 
-//        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
-        $controls.offset({top:  10, left: pos.left - 70, zIndex: 999999});
-        $controls.css({'top': 10 + 'px', 'right':0});
+        $controls.offset({top:  -20, left: pos.left + 0, zIndex: 999999});
+        $controls.css({'top': -20 + 'px', 'right':0});
+
+        _.each(overlaps, function(el, i){
+            if (i === 0){
+
+            } else {
+                var $el = jQuery(el);
+                var topP = $el.offset();
+
+                jQuery($el).offset({left: topP.left +50});
+            }
+
+        });
     },
     // @TODO: old function updateModule() remove?
     updateModule: function () {

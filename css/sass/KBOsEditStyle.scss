@@ -9,15 +9,17 @@
   list-style: none !important;
   margin: 0 !important;
   padding: 0 !important;
+  font-size: 0;
 
   li {
     display: inline-block;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 }
 
 .module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
-  opacity: 1;
-
+  opacity: 0.5;
 }
 
 .isDirty {
@@ -32,20 +34,21 @@
 
 .os-edit-wrapper {
   position: absolute;
-  background: transparent;
-  min-height: 40px;
-  width: 60px;
+  width: 42px;
   opacity: 0;
   @include transition(all .3s linear);
-  z-index: 9969;
+  @include border-radius(3px);
 
-  .kb-module-edit{
-//    border-bottom: 1px solid #ccc;
-  }
+  z-index: 9969;
 
   span.os-action {
     font-size: 11px !important;
     display: none;
+  }
+
+  .dashicons{
+    height: 14px;
+    width: 14px;
   }
 
   &.master-module a {
@@ -63,19 +66,21 @@
     margin: 0px 0px;
     font-size: 22px !important;
     padding: 2px;
+    background: #333;
     color: #fff;
-    text-decoration: none;
+    border: none !important;
+    text-decoration: none !important;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
 //    background-color: rgba(255,255,255,.8);
-    opacity: .5;
+    opacity: .3;
 
     &.kb-nbb {
-      border-bottom: none !important;
+//      border-bottom: none !important;
     }
 
     &.kb-nbt {
-      border-top: none !important;
+//      border-top: none !important;
     }
 
     &.kb-module-dirty-state {
@@ -85,9 +90,8 @@
     }
 
     span {
-      font-size: 23px !important;
-      line-height: 23px;
-      text-shadow: 1px 1px 1px #333;
+      font-size: 12px !important;
+      line-height: 12px;
       display: block;
     }
 
@@ -98,6 +102,10 @@
     }
   }
 
+}
+
+.module.hovered{
+  outline: 1px solid #ccc;
 }
 
 body.onsite-editing {

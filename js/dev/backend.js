@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-05 */
+/*! Kontentblocks DevVersion 2014-07-16 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -548,7 +548,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     initialize: function() {
         var that = this;
-        console.log(that);
         this.$head = jQuery(".block-head", this.$el);
         this.$body = jQuery(".kb-module--body", this.$el);
         this.$inner = jQuery(".kb-module--controls-inner", this.$el);
@@ -572,7 +571,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.listenTo(this, "template::changed", function() {
             that.clearFields();
             that.updateModuleForm();
-            console.log("templateSwitch");
         });
     },
     setupDefaultMenuItems: function() {

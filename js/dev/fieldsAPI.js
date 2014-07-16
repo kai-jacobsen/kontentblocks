@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-05 */
+/*! Kontentblocks DevVersion 2014-07-16 */
 KB.FieldsAPI = function() {
     return {
         fields: {},

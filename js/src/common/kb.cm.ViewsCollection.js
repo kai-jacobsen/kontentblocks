@@ -6,9 +6,12 @@ KB.ViewsCollection = function () {
     this.views = {};
     this.lastViewAdded = null;
     this.add = function (id, view) {
-        this.views[id] = view;
-        KB.trigger('kb:'+view.model.get('class')+':added', view);
-        this.lastViewAdded = view;
+        if (this.views[id]){
+            this.views[id] = view;
+            KB.trigger('kb:'+view.model.get('class')+':added', view);
+            this.lastViewAdded = view;
+        }
+
     };
 
     this.ready = function () {
