@@ -40,14 +40,14 @@ KB.Areas = new Backbone.Collection([], {
  * Use events on the backbone items instead
  * handle UI specific actions
  */
-KB.App = (function ($) {
+KB.App = function ($) {
 
     function init() {
         // create toolbar container for tinymce inline editors
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
         $toolbar.hide();
 
-        // Register basic events
+        // Register events on collections
         KB.Modules.on('add', createModuleViews);
         KB.Areas.on('add', createAreaViews);
         KB.Modules.on('remove', removeModule);
@@ -73,7 +73,7 @@ KB.App = (function ($) {
 
         jQuery.powerTip.destroy('.koolkip');
 
-        _.each(KB.Modules.toArray(), function(item){
+        _.each(KB.Modules.toArray(), function (item) {
             KB.Modules.remove(item);
         });
 
@@ -174,7 +174,7 @@ KB.App = (function ($) {
         shutdown: shutdown
     };
 
-}(jQuery));
+}(jQuery);
 
 // get started
 KB.App.init();
@@ -190,12 +190,12 @@ jQuery(document).ready(function () {
     KB.Events.trigger('KB::ready');
 
 
-//    jQuery('.koolkip').powerTip({
-//        placement: 'ne',
-//        followMouse: true,
-//        fadeInTime: 0,
-//        fadeOutTime:0
-//    });
+    jQuery('.koolkip').powerTip({
+        placement: 'ne',
+        followMouse: true,
+        fadeInTime: 0,
+        fadeOutTime: 0
+    });
 
     KB.on('kb:frontendModalUpdated', function () {
         jQuery('.koolkip').powerTip({

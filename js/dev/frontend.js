@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-16 */
+/*! Kontentblocks DevVersion 2014-07-17 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -504,6 +504,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.serialize(false);
             that.render();
         });
+        this.listenTo(this.view, "kb:moduleUpdated", function() {
+            that.$el.removeClass("isDirty");
+            that.reload(that.view);
+        });
         this.listenTo(KB, "frontend::recalibrate", this.recalibrate);
         this.listenTo(KB.Events, "KB::edit-modal-refresh", this.recalibrate);
         this.listenTo(this, "recalibrate", this.recalibrate);
@@ -546,7 +550,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.render();
     },
     test: function() {
-        _K.info("Test Debug: Module Data changed");
+        this.reload(this.view);
     },
     events: {
         keyup: "delayInput",
@@ -730,29 +734,18 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 });
 
 KB.Backbone.ModuleView = Backbone.View.extend({
+    attachedFields: [],
     initialize: function() {
-        var that = this;
         if (!KB.Checks.userCan("edit_kontentblocks")) {
             return;
         }
-        this.attachedFields = [];
-        this.model.bind("save", this.model.save);
-        this.listenTo(this.model, "change", this.modelChange);
         this.model.view = this;
+        this.listenTo(this.model, "change", this.modelChange);
+        this.model.bind("save", this.model.save);
         this.render();
         this.setControlsPosition();
         this.listenTo(KB.Events, "KB::ajax-update", this.setControlsPosition);
     },
-    getDirty: function() {
-        this.$el.addClass("isDirty");
-    },
-    getClean: function() {
-        this.$el.removeClass("isDirty");
-    },
-    modelChange: function() {
-        this.getDirty();
-    },
-    save: function() {},
     events: {
         "click a.os-edit-block": "openOptions",
         "click .editable": "reloadModal",
@@ -869,8 +862,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 }
                 tinymce.triggerSave();
                 that.model.set("moduleData", res.newModuleData);
-                that.model.view.render();
-                that.model.view.trigger("kb:moduleUpdated");
+                console.log(that);
+                that.render();
+                that.trigger("kb:moduleUpdated");
                 KB.Events.trigger("KB::ajax-update");
                 KB.Notice.notice("Module saved successfully", "success");
                 that.$el.removeClass("isDirty");
@@ -907,7 +901,17 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     clearFields: function() {
         _K.info("Attached Fields were reset to empty object");
         this.attachedFields = {};
-    }
+    },
+    getDirty: function() {
+        this.$el.addClass("isDirty");
+    },
+    getClean: function() {
+        this.$el.removeClass("isDirty");
+    },
+    modelChange: function() {
+        this.getDirty();
+    },
+    save: function() {}
 });
 
 KB.currentModule = {};
@@ -1001,6 +1005,12 @@ jQuery(document).ready(function() {
         KB.Views.Modules.readyOnFront();
     }
     KB.Events.trigger("KB::ready");
+    jQuery(".koolkip").powerTip({
+        placement: "ne",
+        followMouse: true,
+        fadeInTime: 0,
+        fadeOutTime: 0
+    });
     KB.on("kb:frontendModalUpdated", function() {
         jQuery(".koolkip").powerTip({
             placement: "ne",

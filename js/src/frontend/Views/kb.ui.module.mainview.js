@@ -6,36 +6,26 @@
  */
 KB.Backbone.ModuleView = Backbone.View.extend({
 
+    attachedFields: [],
     initialize: function () {
-        var that = this;
+
+        // don't init if cap is missing for current user
         if (!KB.Checks.userCan('edit_kontentblocks')) {
             return;
         }
-        this.attachedFields = [];
+        // attach this view to the model
+        this.model.view = this;
+
+        // observe model changes
+        this.listenTo(this.model, 'change', this.modelChange);
 
         // @TODO events:investigate
         this.model.bind('save', this.model.save);
 
-        this.listenTo(this.model, 'change', this.modelChange);
-
-        this.model.view = this;
         this.render();
         this.setControlsPosition();
-
         this.listenTo(KB.Events, 'KB::ajax-update', this.setControlsPosition);
 
-    },
-    getDirty: function () {
-        this.$el.addClass('isDirty');
-    },
-    getClean: function () {
-        this.$el.removeClass('isDirty');
-    },
-    modelChange: function () {
-        this.getDirty();
-    },
-    save: function () {
-        // TODO utilize this for saving instead of handling this by the modal view
     },
     events: {
         "click a.os-edit-block": "openOptions",
@@ -48,14 +38,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function () {
-        if (jQuery('> .os-edit-wrapper', this.$el).length > 0){
+        if (jQuery('> .os-edit-wrapper', this.$el).length > 0) {
             return;
         }
         var settings = this.model.get('settings');
-        if (settings.controls && settings.controls.hide){
+        if (settings.controls && settings.controls.hide) {
             return;
         }
-            this.$el.append(KB.Templates.render('frontend/module-controls', {
+        this.$el.append(KB.Templates.render('frontend/module-controls', {
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
         }));
@@ -106,9 +96,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var overlaps = jQuery('.os-edit-wrapper').overlaps();
         var $controls = jQuery('.os-controls', this.$el);
 
-        jQuery('.os-controls', this.$el).hover(function(){
+        jQuery('.os-controls', this.$el).hover(function () {
             that.$el.addClass('hovered');
-        }, function(){
+        }, function () {
             that.$el.removeClass('hovered');
         });
 
@@ -119,22 +109,22 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.left = mSettings.controls.toolbar.left;
         }
 
-        $controls.offset({top:  -20, left: pos.left + 0, zIndex: 999999});
-        $controls.css({'top': -20 + 'px', 'right':0});
+        $controls.offset({top: -20, left: pos.left + 0, zIndex: 999999});
+        $controls.css({'top': -20 + 'px', 'right': 0});
 
-        _.each(overlaps, function(el, i){
-            if (i === 0){
+        _.each(overlaps, function (el, i) {
+            if (i === 0) {
 
             } else {
                 var $el = jQuery(el);
                 var topP = $el.offset();
 
-                jQuery($el).offset({left: topP.left +50});
+                jQuery($el).offset({left: topP.left + 50});
             }
 
         });
     },
-    removeControls: function(){
+    removeControls: function () {
         this.undelegateEvents();
         jQuery('.os-edit-wrapper', this.$el).remove();
     },
@@ -163,11 +153,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 }
                 tinymce.triggerSave();
                 that.model.set('moduleData', res.newModuleData);
-                that.model.view.render();
-                that.model.view.trigger('kb:moduleUpdated');
+                console.log(that);
+                that.render();
+                that.trigger('kb:moduleUpdated');
                 // @TODO events:replace
                 KB.Events.trigger('KB::ajax-update');
-
                 KB.Notice.notice('Module saved successfully', 'success');
                 that.$el.removeClass('isDirty');
             },
@@ -205,5 +195,17 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     clearFields: function () {
         _K.info('Attached Fields were reset to empty object');
         this.attachedFields = {};
-    }
+    },
+    getDirty: function () {
+        this.$el.addClass('isDirty');
+    },
+    getClean: function () {
+        this.$el.removeClass('isDirty');
+    },
+    modelChange: function () {
+        this.getDirty();
+    },
+    save: function () {
+        // TODO utilize this for saving instead of handling this by the modal view
+    },
 });

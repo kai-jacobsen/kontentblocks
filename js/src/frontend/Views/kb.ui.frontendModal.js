@@ -17,9 +17,14 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.view = options.view;
         this.model.on('change', this.test, this);
 
-        this.listenTo(this.view, 'template::changed', function(){
+        this.listenTo(this.view, 'template::changed', function () {
             that.serialize(false);
             that.render();
+        });
+
+        this.listenTo(this.view, 'kb:moduleUpdated', function(){
+            that.$el.removeClass('isDirty');
+            that.reload(that.view);
         });
 
         // @TODO events:make useless
@@ -31,7 +36,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         // @TODO events:make useless
         this.listenTo(this, 'recalibrate', this.recalibrate);
         // add form skeleton to modal
-        jQuery(KB.Templates.render('frontend/module-edit-form', {model: this.model.toJSON(), i18n:KB.i18n.jsFrontend})).appendTo(this.$el);
+        jQuery(KB.Templates.render('frontend/module-edit-form', {
+            model: this.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
+        })).appendTo(this.$el);
 
         // cache elements
         this.$form = jQuery('#onsite-form', this.$el);
@@ -64,9 +72,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
         // handle dynamically loaded tinymce instances
         // TODO find better context
-        this.listenTo(KB.Events, 'KB::tinymce.new-editor', function(ed){
+        this.listenTo(KB.Events, 'KB::tinymce.new-editor', function (ed) {
             // live setting
-            if (ed.settings && ed.settings.kblive){
+            if (ed.settings && ed.settings.kblive) {
                 that.attachEditorEvents(ed);
             }
         });
@@ -88,7 +96,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
 
     test: function () {
-        _K.info('Test Debug: Module Data changed');
+        this.reload(this.view);
     },
 // TODO move above event listeners here
     events: {
@@ -147,9 +155,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.view.trigger('kb:frontend::viewLoaded', localView);
                 _K.info('Frontend Modal opened with view of:' + that.view.model.get('instance_id'));
 
-                setTimeout(function(){
+                setTimeout(function () {
                     KB.Fields.trigger('frontUpdate', localView);
-                },500);
+                }, 500);
 
                 // Make the modal fit
                 setTimeout(function () {
@@ -227,7 +235,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
     initScrollbars: function (height) {
         jQuery('.nano', this.$el).height(height);
-        jQuery('.nano').nanoScroller({ preventPageScrolling: true });
+        jQuery('.nano').nanoScroller({preventPageScrolling: true});
         _K.info('Nano Scrollbars (re)initialized!');
     },
 // Serialize current form fields and send it to the server
@@ -247,9 +255,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             success: function (res) {
-
-
-
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
                     tinymce.remove('#' + el.id);
                 });
@@ -267,12 +272,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 KB.Events.trigger('KB::ajax-update');
                 KB.trigger('kb:frontendModalUpdated');
 
-                setTimeout(function(){
+                setTimeout(function () {
                     jQuery('.editable', that.options.view.$el).each(function (i, el) {
                         KB.IEdit.Text(el);
                     });
-                },400);
-
+                }, 400);
 
                 if (save) {
                     KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
