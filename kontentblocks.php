@@ -263,8 +263,8 @@ Class Kontentblocks
         // Kontentblocks autloader
         require_once dirname( __FILE__ ) . '/Autoloader.php';
         // Public API
-        require_once dirname( __FILE__ ) . '/wp-api.php';
-        require_once dirname( __FILE__ ) . '/kb-api.php';
+        require_once dirname( __FILE__ ) . '/includes/wp-api.php';
+        require_once dirname( __FILE__ ) . '/includes/kb-api.php';
 
         // File gets created during build process and contains one function
         // to get the current git hash or a random hash during development
