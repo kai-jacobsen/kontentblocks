@@ -14,6 +14,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     initialize: function (options) {
         var that = this;
         this.options = options;
+        // the actual frontend module view
         this.view = options.view;
         this.model.on('change', this.test, this);
 
@@ -22,7 +23,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.render();
         });
 
-        this.listenTo(this.view, 'kb:moduleUpdated', function(){
+        this.listenTo(this.view, 'kb:moduleUpdated', function () {
             that.$el.removeClass('isDirty');
             that.reload(that.view);
         });

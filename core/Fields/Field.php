@@ -532,8 +532,6 @@ abstract class Field {
 			$data = call_user_func( $this->getCallback( 'save' ), $keydata, $oldKeyData, $data );
 		}
 
-		$this->handleConcatContent( $data );
-
 		return $data;
 
 	}
@@ -556,31 +554,7 @@ abstract class Field {
 	}
 
 
-	/**
-	 * @param $data
-	 *
-	 * @return bool|false
-	 */
-	public function handleConcatContent( $data ) {
-		// if module is not supposed to have public data, don't concat
-		if ( !method_exists( $this->module, 'isPublic' ) || !$this->module->isPublic() ) {
-			return false;
-		}
 
-		// if field is not set to concat, bail out
-		if ( !$this->getArg( 'concat' ) ) {
-			return false;
-		}
-
-		// Field might modify the concat string before it gets added
-		if ( method_exists( $this, 'concat' ) ) {
-			return ConcatContent::getInstance()->addString( $this->concat( $data ) );
-		}
-
-		// add the plain data to officer Con Tencat
-		return ConcatContent::getInstance()->addString( $data );
-
-	}
 
 	/**
 	 * @param $module
