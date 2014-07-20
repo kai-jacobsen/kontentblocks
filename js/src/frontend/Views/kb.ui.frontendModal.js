@@ -25,7 +25,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
         this.listenTo(this.view, 'kb:moduleUpdated', function () {
             that.$el.removeClass('isDirty');
-            that.reload(that.view);
+//            that.reload(that.view);
         });
 
         // @TODO events:make useless
@@ -97,7 +97,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
 
     test: function () {
-        this.reload(this.view);
+//        this.reload(this.view);
     },
 // TODO move above event listeners here
     events: {
@@ -175,6 +175,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
 
     reload: function (moduleView) {
+        _K.log('Frontend Modal reload');
         this.unload();
         if (this.model && (this.model.get('instance_id') === moduleView.model.get('instance_id'))) {
             return false;
@@ -256,6 +257,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             success: function (res) {
+
                 jQuery('.editable', that.options.view.$el).each(function (i, el) {
                     tinymce.remove('#' + el.id);
                 });
@@ -272,6 +274,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.view.trigger('kb:frontend::viewUpdated');
                 KB.Events.trigger('KB::ajax-update');
                 KB.trigger('kb:frontendModalUpdated');
+
+                jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.options.view);
 
                 setTimeout(function () {
                     jQuery('.editable', that.options.view.$el).each(function (i, el) {

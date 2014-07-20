@@ -17,15 +17,15 @@
   .fullscreen--description-wrapper{
     position: relative;
     z-index: 53;
-    top: 25px;
-    left: 45px;
+    top: 5px;
+    left: 50px;
   }
 
   .fullscreen--title-wrapper{
     position: relative;
     z-index: 50;
     left: 45px;
-    top:40px;
+    top:20px;
 
     h2{
       font-family: 'open sans';
@@ -39,7 +39,7 @@
       height: 15px;
       display: block;
       position: absolute;
-      top: -30px;
+      top: -10px;
       left: -35px;
       z-index: 52;
       font-family: 'genericons';
@@ -73,6 +73,9 @@
     }
   }
 
+  .kb-module--body{
+    border: none;
+  }
 
 
 }

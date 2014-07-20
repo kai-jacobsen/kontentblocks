@@ -161,7 +161,6 @@ Class EditScreen
     public function renderScreen()
     {
         $areas = $this->Environment->get( 'areas' );
-
         if (!$areas || empty( $areas )) {
             $this->handleEmptyAreas();
             return;

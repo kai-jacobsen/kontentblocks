@@ -135,7 +135,6 @@ class AreaRegistry
 
         // merge defaults with provided args
         $area = wp_parse_args( $args, self::getDefaults( $manual ) );
-
         if ($area['dynamic'] === true && $manual) {
             $this->AreaDynamicManager->add( $area );
         }
@@ -361,8 +360,8 @@ class AreaRegistry
     public function filterForPost( PostEnvironment $postData )
     {
 
-        $pageTemplate = $postData->get( 'pageTemplate' );
-        $postType     = $postData->get( 'postType' );
+        $pageTemplate = $postData->getPageTemplate();
+        $postType     = $postData->getPostType();
 
         // bail out if this is a redirect template
         if (false !== strpos( $pageTemplate, 'redirect' )) {

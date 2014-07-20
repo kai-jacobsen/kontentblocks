@@ -277,7 +277,9 @@ class PostEnvironment
      */
     public function getPageTemplate()
     {
-        if ($tpl = get_post_meta( $this->postId, '_wp_page_template' ) !== '') {
+        $tpl = get_post_meta( $this->postId, '_wp_page_template', true );
+
+        if ($tpl !== '') {
             return $tpl;
         }
 

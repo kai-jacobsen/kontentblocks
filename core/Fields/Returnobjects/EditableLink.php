@@ -3,7 +3,10 @@
 namespace Kontentblocks\Fields\Returnobjects;
 
 
-
+/**
+ * Class EditableLink
+ * @package Kontentblocks\Fields\Returnobjects
+ */
 class EditableLink extends AbstractEditableFieldReturn {
 
 	protected $target;
@@ -22,7 +25,6 @@ class EditableLink extends AbstractEditableFieldReturn {
 
 		if ( is_user_logged_in() ) {
 			return sprintf( $format, 'a', $this->value['linktext'], $this->_renderAttributes(), $this->uniqueId, $this->href );
-
 		} else {
 			return sprintf( $format, $this->el, $filtered, $this->_renderAttributes() );
 

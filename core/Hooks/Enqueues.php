@@ -31,15 +31,16 @@ class Enqueues
         add_action( 'kb_enqueue_admin_script', array( __CLASS__, 'adminEnqueue' ) );
 
         // Frontend Enqueueing
-        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'userEnqueue' ), 9 );
+        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'coreStylesEnqueue' ), 9 );
+        add_action( 'wp_footer', array( __CLASS__, 'UserEnqueue' ), 9 );
 
     }
 
 
     public static function registerScripts()
     {
-        $folder      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? 'dev' : 'dist';
-        $suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+        $folder = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? 'dev' : 'dist';
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
         $dependecies = array(
             'jquery',
             'jquery-ui-core',
@@ -189,6 +190,16 @@ class Enqueues
 
     }
 
+    public static function coreStylesEnqueue()
+    {
+        if (is_user_logged_in() && !is_admin()) {
+            wp_enqueue_style( 'wp-color-picker' );
+            wp_enqueue_style( 'kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css' );
+            wp_enqueue_style( 'kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
+            self::enqueueStyles();
+        }
+    }
+
     // Front End editing
     public static function userEnqueue()
     {
@@ -203,20 +214,17 @@ class Enqueues
             wp_enqueue_script( 'kb-frontend' );
             wp_enqueue_script( 'kb-onsite-editing' );
             wp_enqueue_script( 'kb-refields' );
-            wp_enqueue_style( 'wp-color-picker' );
             wp_enqueue_script( 'heartbeat' );
 
-            wp_enqueue_style( 'kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css' );
-            wp_enqueue_style( 'kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
-            self::enqueueStyles();
+
             wp_localize_script( 'kb-common', 'kontentblocks', self::localize() );
 
             wp_enqueue_script( 'wp-iris' );
             wp_enqueue_script( 'wp-color-picker' );
             $colorpicker_l10n = array(
-                'clear'         => __( 'Clear' ),
+                'clear' => __( 'Clear' ),
                 'defaultString' => __( 'Default' ),
-                'pick'          => __( 'Select Color' )
+                'pick' => __( 'Select Color' )
             );
             wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
 
@@ -232,17 +240,17 @@ class Enqueues
     {
         global $post;
         $screen = ( function_exists( 'get_current_screen' ) ) ? get_current_screen() : null;
-        $data   = array(
+        $data = array(
             'frontend' => !is_admin(),
-            'preview'  => is_preview(),
+            'preview' => is_preview(),
             'loggedIn' => is_user_logged_in(),
-            'user'     => wp_get_current_user(),
+            'user' => wp_get_current_user(),
             'ajax_url' => ( is_user_logged_in() ) ? admin_url( 'admin-ajax.php' ) : null,
-            'url'      => ( is_user_logged_in() ) ? KB_PLUGIN_URL : null,
-            'post'     => ( $post && is_user_logged_in() ) ? $post : null,
-            'screen'   => $screen,
-            'dev'      => Kontentblocks::DEVMODE,
-            'version'  => Kontentblocks::VERSION,
+            'url' => ( is_user_logged_in() ) ? KB_PLUGIN_URL : null,
+            'post' => ( $post && is_user_logged_in() ) ? $post : null,
+            'screen' => $screen,
+            'dev' => Kontentblocks::DEVMODE,
+            'version' => Kontentblocks::VERSION,
             'isMobile' => MobileDetect::getInstance()->isMobile()
         );
 
@@ -258,7 +266,7 @@ class Enqueues
         //Caps for the current user as global js object
 
         $current_user = wp_get_current_user();
-        $roles        = $current_user->roles;
+        $roles = $current_user->roles;
 
         // get caps from options
         $option = get_site_option( 'kb.capabilities' );
@@ -286,17 +294,17 @@ class Enqueues
         // Setup the global js object base
         return array
         (
-            'caps'   => $caps,
+            'caps' => $caps,
             'config' => array(
-                'url'  => KB_PLUGIN_URL,
-                'dev'  => Kontentblocks::DEVMODE,
+                'url' => KB_PLUGIN_URL,
+                'dev' => Kontentblocks::DEVMODE,
                 'hash' => $hash,
             ),
             'nonces' => array(
                 'update' => wp_create_nonce( 'kb-update' ),
                 'create' => wp_create_nonce( 'kb-create' ),
                 'delete' => wp_create_nonce( 'kb-delete' ),
-                'read'   => wp_create_nonce( 'kb-read' ),
+                'read' => wp_create_nonce( 'kb-read' ),
             )
         );
 
@@ -316,11 +324,11 @@ class Enqueues
     public static function addScript( $args, $where = 'both' )
     {
         $defaults = array(
-            'handle'  => null,
-            'src'     => null,
-            'deps'    => array(),
+            'handle' => null,
+            'src' => null,
+            'deps' => array(),
             'version' => Kontentblocks::VERSION,
-            'footer'  => true
+            'footer' => true
         );
 
         $def = wp_parse_args( $args, $defaults );
@@ -332,7 +340,7 @@ class Enqueues
 
             case 'both':
                 self::$adminScripts[$args['handle']] = $def;
-                self::$userScripts[$args['handle']]  = $def;
+                self::$userScripts[$args['handle']] = $def;
                 break;
             case 'user':
                 self::$userScripts[$args['handle']] = $def;

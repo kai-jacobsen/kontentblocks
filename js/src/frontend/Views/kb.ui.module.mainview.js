@@ -8,7 +8,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
     attachedFields: [],
     initialize: function () {
-
+        var that = this;
         // don't init if cap is missing for current user
         if (!KB.Checks.userCan('edit_kontentblocks')) {
             return;
@@ -25,7 +25,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.render();
         this.setControlsPosition();
         this.listenTo(KB.Events, 'KB::ajax-update', this.setControlsPosition);
-
+        jQuery(window).on('resize', function(){
+            that.setControlsPosition();
+        });
     },
     events: {
         "click a.os-edit-block": "openOptions",
@@ -109,8 +111,17 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.left = mSettings.controls.toolbar.left;
         }
 
+
+
         $controls.offset({top: -20, left: pos.left + 0, zIndex: 999999});
         $controls.css({'top': -20 + 'px', 'right': 0});
+
+        if (mSettings.controls && mSettings.controls.el){
+            var wrapEl = mSettings.controls.el;
+            var $wrapEl = jQuery(wrapEl, this.$el).offset();
+            $controls.css('position', 'fixed');
+            $controls.offset($wrapEl);
+        }
 
         _.each(overlaps, function (el, i) {
             if (i === 0) {

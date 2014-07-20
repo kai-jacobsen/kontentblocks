@@ -78,24 +78,22 @@ class Element extends AbstractEditableFieldReturn {
 	 * @since 1.0.0
 	 */
 	public function html() {
-		$this->addClass( 'koolkip' );
-		$this->addAttr( 'data-powertip', 'This text has inline edit support!' );
-		$this->handleLoggedInUsers();
-		$this->toJSON();
+        $this->handleLoggedInUsers();
 
-		$format         = '<%1$s id="%4$s" %3$s>%2$s</%1$s>';
+        $format         = '<%1$s id="%4$s" %3$s>%2$s</%1$s>';
 		$formatWithLink = '<%1$s id="%4$s" %3$s><a href="%5$s">%2$s</a></%1$s>';
 
 
 		if ( !in_array( $this->el, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) ) ) {
-			$filtered = apply_filters( 'the_content', $this->value );
+			$filtered = $this->value;
 		} else {
 			$filtered = $this->value;
 		}
 
 		if ( is_user_logged_in() ) {
 			if ( !$this->hasLink ) {
-				return sprintf( $format, $this->el, $filtered, $this->_renderAttributes(), $this->uniqueId );
+
+                return sprintf( $format, $this->el, $filtered, $this->_renderAttributes(), $this->uniqueId );
 			} else if ( $this->hasLink ) {
 				return sprintf(
 					$formatWithLink,
@@ -109,17 +107,20 @@ class Element extends AbstractEditableFieldReturn {
 		} else {
 			if ( !$this->hasLink ) {
 				$format = '<%1$s %3$s>%2$s</%1$s>';
-
 				return sprintf( $format, $this->el, $filtered, $this->_renderAttributes() );
 			} else if ( $this->hasLink ) {
 				$format = '<%1$s %3$s><a href="%4$s">%2$s</a></%1$s>';
-
 				return sprintf( $format, $this->el, $filtered, $this->_renderAttributes(), $this->target );
 			}
 		}
 
 	}
 
+
+    public function handleLoggedInUsers(){
+        parent::handleLoggedInUsers();
+        $this->toJSON();
+    }
 
 	/**
 	 * Different classes for Headlines and the rest

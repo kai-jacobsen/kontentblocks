@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-18 */
+/*! Kontentblocks DevVersion 2014-07-20 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -344,6 +344,7 @@ KB.IEdit.Text = function(el) {
         inline: true,
         plugins: "textcolor, wplink",
         statusbar: false,
+        preview_styles: false,
         setup: function(ed) {
             ed.on("init", function() {
                 var data = jQuery(ed.bodyElement).data();
@@ -506,7 +507,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
         this.listenTo(this.view, "kb:moduleUpdated", function() {
             that.$el.removeClass("isDirty");
-            that.reload(that.view);
         });
         this.listenTo(KB, "frontend::recalibrate", this.recalibrate);
         this.listenTo(KB.Events, "KB::edit-modal-refresh", this.recalibrate);
@@ -549,9 +549,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         jQuery("body").append(this.$el);
         this.render();
     },
-    test: function() {
-        this.reload(this.view);
-    },
+    test: function() {},
     events: {
         keyup: "delayInput",
         "click a.close-controls": "destroy",
@@ -610,6 +608,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
     },
     reload: function(moduleView) {
+        _K.log("Frontend Modal reload");
         this.unload();
         if (this.model && this.model.get("instance_id") === moduleView.model.get("instance_id")) {
             return false;
@@ -676,6 +675,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.view.trigger("kb:frontend::viewUpdated");
                 KB.Events.trigger("KB::ajax-update");
                 KB.trigger("kb:frontendModalUpdated");
+                jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.options.view);
                 setTimeout(function() {
                     jQuery(".editable", that.options.view.$el).each(function(i, el) {
                         KB.IEdit.Text(el);
@@ -736,6 +736,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 KB.Backbone.ModuleView = Backbone.View.extend({
     attachedFields: [],
     initialize: function() {
+        var that = this;
         if (!KB.Checks.userCan("edit_kontentblocks")) {
             return;
         }
@@ -745,6 +746,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.render();
         this.setControlsPosition();
         this.listenTo(KB.Events, "KB::ajax-update", this.setControlsPosition);
+        jQuery(window).on("resize", function() {
+            that.setControlsPosition();
+        });
     },
     events: {
         "click a.os-edit-block": "openOptions",
@@ -825,6 +829,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             top: -20 + "px",
             right: 0
         });
+        if (mSettings.controls && mSettings.controls.el) {
+            var wrapEl = mSettings.controls.el;
+            var $wrapEl = jQuery(wrapEl, this.$el).offset();
+            $controls.css("position", "fixed");
+            $controls.offset($wrapEl);
+        }
         _.each(overlaps, function(el, i) {
             if (i === 0) {} else {
                 var $el = jQuery(el);

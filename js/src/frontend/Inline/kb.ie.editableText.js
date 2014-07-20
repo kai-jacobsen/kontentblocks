@@ -29,6 +29,7 @@ KB.IEdit.Text = function (el) {
         inline: true,
         plugins: 'textcolor, wplink',
         statusbar: false,
+        preview_styles:false,
         setup: function (ed) {
 
             ed.on('init', function () {

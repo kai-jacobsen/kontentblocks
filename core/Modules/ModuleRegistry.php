@@ -45,7 +45,6 @@ class ModuleRegistry
         include $file;
         // extract class name from file
         $classname = str_replace( '.php', '', basename( $file ) );
-
         if (!isset( $this->modules[$classname] ) && property_exists( $classname, 'defaults' )) {
 
             // Defaults from the specific Module
