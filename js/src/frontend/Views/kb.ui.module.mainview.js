@@ -107,8 +107,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var pos = this.$el.offset();
 
         if (mSettings.controls && mSettings.controls.toolbar) {
-            pos.top = mSettings.controls.toolbar.top;
-            pos.left = mSettings.controls.toolbar.left;
+            var off = {};
+            off.top = mSettings.controls.toolbar.top;
+            off.left = mSettings.controls.toolbar.left;
         }
 
 
@@ -119,6 +120,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         if (mSettings.controls && mSettings.controls.el){
             var wrapEl = mSettings.controls.el;
             var $wrapEl = jQuery(wrapEl, this.$el).offset();
+            console.log($wrapEl);
             $controls.css('position', 'fixed');
             $controls.offset($wrapEl);
         }

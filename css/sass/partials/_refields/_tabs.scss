@@ -25,6 +25,7 @@
         top:2px;
         font-weight:100;
         font-size: 13px;
+        border: none;
         &:focus, &:active{
           border: none;
           outline: none;
@@ -32,6 +33,7 @@
 
         &:hover{
           color: #666;
+          border: none;
         }
       }
 

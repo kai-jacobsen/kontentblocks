@@ -4,9 +4,20 @@
   top: 0px;
   width: 100%;
   left: 0;
-  background-color: #333;
+  background-color: #222;
   z-index: 999999;
   height: 35px;
+
+  #wp-fullscreen-buttons .mce-btn:hover,
+  .mce-toolbar .mce-btn-group .mce-btn:hover,
+  #wp-fullscreen-buttons .mce-btn:focus,
+  .mce-toolbar .mce-btn-group .mce-btn:focus,
+  .qt-fullscreen:hover,
+  .qt-fullscreen:focus{
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
 
   .mce-ico{
     color: #fff;
@@ -30,7 +41,7 @@
   }
 
   .mce-menubtn{
-    background: #333;
+    background: #222;
     border: transparent;
   }
 
@@ -39,11 +50,11 @@
   }
 
   .mce-panel{
-    background: #333;
+    background: #222;
     color: #f2f2f2;
 
     .mce-menu-item{
-      background: #333;
+      background: #222;
     }
   }
 

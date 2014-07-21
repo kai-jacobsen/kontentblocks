@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-20 */
+/*! Kontentblocks DevVersion 2014-07-21 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -547,6 +547,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.serialize(false);
         });
         jQuery("body").append(this.$el);
+        this.$el.hide();
         this.render();
     },
     test: function() {},
@@ -564,7 +565,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
     render: function() {
         var that = this;
-        this.$el.show();
         this.applyControlsSettings(this.$el);
         KB.lastAddedModule = {
             view: that
@@ -583,6 +583,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.view.clearFields();
                 that.$inner.attr("id", that.view.model.get("instance_id"));
                 that.$inner.append(res.html);
+                that.$el.fadeTo(750, .1);
                 if (res.json) {
                     var merged = _.extend(KB.payload, res.json);
                     KB.payload = merged;
@@ -600,6 +601,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 }, 500);
                 setTimeout(function() {
                     that.recalibrate();
+                    that.$el.fadeTo(300, 1);
                 }, 600);
             },
             error: function() {
@@ -608,6 +610,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
     },
     reload: function(moduleView) {
+        var that = this;
         _K.log("Frontend Modal reload");
         this.unload();
         if (this.model && this.model.get("instance_id") === moduleView.model.get("instance_id")) {
@@ -616,7 +619,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.model = moduleView.model;
         this.options.view = moduleView;
         this.view = moduleView;
-        this.render();
+        this.$el.fadeTo(250, .1, function() {
+            that.render();
+        });
     },
     unset: function() {
         this.model = null;
@@ -648,9 +653,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
         _K.info("Nano Scrollbars (re)initialized!");
     },
-    serialize: function(save) {
+    serialize: function(mode, showNotice) {
         _K.info("Frontend Modal called serialize function. Savemode", save);
         var that = this;
+        var save = mode || false;
+        var notice = showNotice !== false;
         tinymce.triggerSave();
         jQuery.ajax({
             url: ajaxurl,
@@ -667,27 +674,34 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 jQuery(".editable", that.options.view.$el).each(function(i, el) {
                     tinymce.remove("#" + el.id);
                 });
+                var height = that.options.view.$el.height();
+                that.options.view.$el.height(height);
                 that.options.view.$el.html(res.html);
+                that.options.view.$el.css("height", "auto");
                 that.model.set("moduleData", res.newModuleData);
-                that.model.view.render();
+                jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.options.view);
                 that.model.view.delegateEvents();
                 that.model.view.trigger("kb:moduleUpdated");
                 that.view.trigger("kb:frontend::viewUpdated");
                 KB.Events.trigger("KB::ajax-update");
                 KB.trigger("kb:frontendModalUpdated");
-                jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.options.view);
                 setTimeout(function() {
                     jQuery(".editable", that.options.view.$el).each(function(i, el) {
                         KB.IEdit.Text(el);
                     });
+                    that.model.view.render();
                 }, 400);
                 if (save) {
-                    KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
+                    if (notice) {
+                        KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
+                    }
                     that.$el.removeClass("isDirty");
                     that.model.view.getClean();
                     that.trigger("kb:frontend-save");
                 } else {
-                    KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
+                    if (notice) {
+                        KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
+                    }
                     that.$el.addClass("isDirty");
                 }
                 _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
@@ -704,8 +718,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         }
         this.options.timerId = setTimeout(function() {
             that.options.timerId = null;
-            that.serialize();
-        }, 500);
+            that.serialize(false, false);
+        }, 750);
     },
     attachEditorEvents: function(ed) {
         var that = this;
@@ -714,10 +728,13 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
     },
     destroy: function() {
-        this.unload();
-        this.unbind();
-        this.remove();
-        KB.FrontendEditModal = null;
+        var that = this;
+        this.$el.fadeTo(500, 0, function() {
+            that.unload();
+            that.unbind();
+            that.remove();
+            KB.FrontendEditModal = null;
+        });
     },
     unload: function() {
         this.unset();
@@ -817,8 +834,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         });
         var pos = this.$el.offset();
         if (mSettings.controls && mSettings.controls.toolbar) {
-            pos.top = mSettings.controls.toolbar.top;
-            pos.left = mSettings.controls.toolbar.left;
+            var off = {};
+            off.top = mSettings.controls.toolbar.top;
+            off.left = mSettings.controls.toolbar.left;
         }
         $controls.offset({
             top: -20,
@@ -832,6 +850,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         if (mSettings.controls && mSettings.controls.el) {
             var wrapEl = mSettings.controls.el;
             var $wrapEl = jQuery(wrapEl, this.$el).offset();
+            console.log($wrapEl);
             $controls.css("position", "fixed");
             $controls.offset($wrapEl);
         }

@@ -17,19 +17,19 @@ class Utilities
     /**
      * Get environment
      */
-    public static function getEnvironment($id = null)
+    public static function getEnvironment( $id = null )
     {
         global $post;
 
-        if ($id && is_numeric($id) && $id !== -1) {
-            return new PostEnvironment($id);
+        if ($id && is_numeric( $id ) && $id !== - 1) {
+            return new PostEnvironment( $id );
         } else {
-            $Registry = Kontentblocks::getService('registry.areas');
-            $area = $Registry->getArea($id);
-            if (isset($area['parent_id'])){
-                return new PostEnvironment($area['parent_id']);
+            $Registry = Kontentblocks::getService( 'registry.areas' );
+            $area = $Registry->getArea( $id );
+            if (isset( $area['parent_id'] )) {
+                return new PostEnvironment( $area['parent_id'] );
             } else {
-                return new PostEnvironment($post->ID);
+                return new PostEnvironment( $post->ID );
             }
         }
 
@@ -38,7 +38,7 @@ class Utilities
     static public function editor( $id, $data, $name = null, $media = true, $args = array() )
     {
 
-        $plugins  = array_unique(
+        $plugins = array_unique(
             apply_filters(
                 'tiny_mce_plugins',
                 array(
@@ -50,6 +50,7 @@ class Utilities
                     'textcolor',
                     'fullscreen',
                     'wordpress',
+                    'wpautoresize',
                     'wpeditimage',
                     'wpgallery',
                     'wplink',
@@ -59,32 +60,36 @@ class Utilities
             )
         );
         $settings = array(
-            'wpautop'          => true,
+            'wpautop' => true,
             // use wpautop?
-            'media_buttons'    => false,
+            'media_buttons' => false,
             // show insert/upload button(s)
-            'textarea_name'    => $name,
+            'textarea_name' => $name,
             // set the textarea name to something different, square brackets [] can be used here
-            'tabindex'         => '',
-            'editor_css'       => '',
+            'tabindex' => '',
+            'editor_css' => '',
             'drag_drop_upload' => true,
-            'editor_class'     => 'kb_editor_textarea',
+            'editor_class' => 'kb_editor_textarea',
             // add extra class(es) to the editor textarea
-            'teeny'            => false,
+            'teeny' => false,
             // output the minimal editor config used in Press This
-            'dfw'              => false,
+            'dfw' => false,
             // replace the default fullscreen with DFW (needs specific DOM elements and css)
-            'tinymce'          => array(
-                'height'              => '250px',
-                'resize'              => 'vertical',
+            'tinymce' => array(
+                'height' => '350px',
+                'editor_height' => '350',
+                'autoresize_min_height' => '200',
+                'autoresize_max_height' => '600',
+                'resize' => 'vertical',
                 'paste_remove_styles' => true,
-                'menubar'             => false,
-                'preview_styles'      => 'font-family font-size font-weight font-style text-decoration text-transform',
-                'plugins'             => implode( ',', $plugins )
+                'menubar' => false,
+                'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
+                'plugins' => implode( ',', $plugins ),
+                'wp_autoresize_on' => true
 
             ),
             // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
-            'quicktags'        => true
+            'quicktags' => true
         );
 
         if (!empty( $args )) {
@@ -112,35 +117,34 @@ class Utilities
     }
 
 
-
     /**
      * Merge arrays as it should be
      * @param array $new
      * @param array $old
      * @return array
      */
-    public static function arrayMergeRecursiveAsItShouldBe($new, $old)
+    public static function arrayMergeRecursiveAsItShouldBe( $new, $old )
     {
         $merged = $new;
-        if (is_array($old)) {
+        if (is_array( $old )) {
             foreach ($old as $key => $val) {
-                if (is_array($old[$key])) {
-                    if (array_key_exists($key,$merged) && isset($merged[$key]) && $merged[$key] !== NULL) {
+                if (is_array( $old[$key] )) {
+                    if (array_key_exists( $key, $merged ) && isset( $merged[$key] ) && $merged[$key] !== NULL) {
                         // key exists and is not null, dig further into the array until actual values are reached
-                        $merged[$key] = self::arrayMergeRecursiveAsItShouldBe($merged[$key], $old[$key]);
-                    } elseif (array_key_exists($key,$merged) && $merged[$key] === NULL) {
+                        $merged[$key] = self::arrayMergeRecursiveAsItShouldBe( $merged[$key], $old[$key] );
+                    } elseif (array_key_exists( $key, $merged ) && $merged[$key] === NULL) {
                         // explicit set the new value to NULL
-                        unset($merged[$key]);
+                        unset( $merged[$key] );
                     } else {
                         // preserve the old value
-                        $merged[$key] = self::arrayMergeRecursiveAsItShouldBe($old[$key], $old[$key]);
+                        $merged[$key] = self::arrayMergeRecursiveAsItShouldBe( $old[$key], $old[$key] );
                     }
                 } else {
-                    if (array_key_exists($key,$merged) && $merged[$key] === NULL) {
+                    if (array_key_exists( $key, $merged ) && $merged[$key] === NULL) {
                         // key was set to null on purpose, and gets removed finally
-                        unset($merged[$key]);
+                        unset( $merged[$key] );
 
-                    } elseif (!isset($merged[$key])) {
+                    } elseif (!isset( $merged[$key] )) {
                         // there is something missing in current(new) data, add it
                         $merged[$key] = $val;
                     }
@@ -180,9 +184,9 @@ class Utilities
         $collect = '';
         if (!empty( $index )) {
             foreach ($index as $module) {
-                $module    = maybe_unserialize( $module );
-                $count     = strrchr( $module['instance_id'], "_" );
-                $id        = str_replace( '_', '', $count );
+                $module = maybe_unserialize( $module );
+                $count = strrchr( $module['instance_id'], "_" );
+                $id = str_replace( '_', '', $count );
                 $collect[] = $id;
             }
         }
@@ -192,12 +196,12 @@ class Utilities
 
     public static function getPostTypes()
     {
-        $postTypes  = get_post_types( array( 'public' => true ), 'objects', 'and' );
+        $postTypes = get_post_types( array( 'public' => true ), 'objects', 'and' );
         $collection = array();
 
         foreach ($postTypes as $pt) {
-            $collect      = array(
-                'name'  => $pt->labels->name,
+            $collect = array(
+                'name' => $pt->labels->name,
                 'value' => $pt->name
             );
             $collection[] = $collect;
@@ -210,13 +214,13 @@ class Utilities
     public static function getPageTemplates()
     {
 
-        $page_templates                       = get_page_templates();
+        $page_templates = get_page_templates();
         $page_templates['Default (page.php)'] = 'default';
-        $collection                           = array();
+        $collection = array();
 
         foreach ($page_templates as $template => $filename) {
-            $collect      = array(
-                'name'  => $template,
+            $collect = array(
+                'name' => $template,
                 'value' => $filename
             );
             $collection[] = $collect;
@@ -247,10 +251,11 @@ class Utilities
     /**
      * Check if a top level admin menu exists
      */
-    public static function adminMenuExists($id){
+    public static function adminMenuExists( $id )
+    {
         global $menu;
-        foreach($menu as $item) {
-            if(strtolower($item[0]) == strtolower($id)) {
+        foreach ($menu as $item) {
+            if (strtolower( $item[0] ) == strtolower( $id )) {
                 return true;
             }
         }
@@ -262,15 +267,12 @@ class Utilities
      * @param array $array
      * @return bool
      */
-    public static function isAssocArray($array)
+    public static function isAssocArray( $array )
     {
-        $array = array_keys($array);
-        return ($array !== array_keys($array));
+        $array = array_keys( $array );
+        return ( $array !== array_keys( $array ) );
 
     }
-
-
-
 
 
     public static function  enableXhprof()

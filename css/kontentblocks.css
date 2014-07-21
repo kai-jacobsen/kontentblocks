@@ -200,24 +200,36 @@
   top: 0px;
   width: 100%;
   left: 0;
-  background-color: #333;
+  background-color: #222;
   z-index: 999999;
   height: 35px;
 }
-/* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 16, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar #wp-fullscreen-buttons .mce-btn:hover,
+#kb-toolbar .mce-toolbar .mce-btn-group .mce-btn:hover,
+#kb-toolbar #wp-fullscreen-buttons .mce-btn:focus,
+#kb-toolbar .mce-toolbar .mce-btn-group .mce-btn:focus,
+#kb-toolbar .qt-fullscreen:hover,
+#kb-toolbar .qt-fullscreen:focus {
+  background: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: none;
+}
+/* line 22, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-ico {
   color: #fff;
 }
-/* line 15, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-toolbar-grp {
   background-color: #333;
   min-width: 650px;
 }
-/* line 20, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 31, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-i-kbcancleinline {
   font-family: 'dashicons';
 }
-/* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-i-kbcancleinline:before {
   content: "\f335";
   font-family: 'dashicons';
@@ -225,39 +237,39 @@
   height: 15px;
   font-size: 22px;
 }
-/* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-menubtn {
-  background: #333;
+  background: #222;
   border: transparent;
 }
-/* line 37, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-menubtn span {
   color: #fff;
 }
-/* line 41, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-panel {
-  background: #333;
+  background: #222;
   color: #f2f2f2;
 }
-/* line 45, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 56, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-panel .mce-menu-item {
-  background: #333;
+  background: #222;
 }
 
 /*------------------------------------*\
     TinyMCE hard styles
 \*------------------------------------*/
-/* line 60, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .wp-editor-wrap * {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
-/* line 64, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 75, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .mce-widget {
   text-transform: none !important;
 }
-/* line 68, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .mce-widget button:hover {
   background: transparent !important;
 }
@@ -3135,27 +3147,29 @@ button.Zebra_DatePicker_Icon_Inside {
   top: 2px;
   font-weight: 100;
   font-size: 13px;
+  border: none;
 }
-/* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 29, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li a:focus, .kb-field--tabs ul.ui-tabs-nav li a:active {
   border: none;
   outline: none;
 }
-/* line 33, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li a:hover {
   color: #666;
+  border: none;
 }
-/* line 38, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li.ui-tabs-active {
   background-color: #fff;
   border-right: 1px solid #eee;
 }
-/* line 42, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li.ui-tabs-active a {
   color: #000;
   font-weight: 500;
 }
-/* line 50, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs .ui-widget-content {
   padding: 0px;
 }

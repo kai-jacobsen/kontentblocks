@@ -90,7 +90,6 @@ class FlexibleFieldsFactory {
 			}
 			$items[] = $item;
 		}
-		d( $items );
 
 		return $items;
 	}
