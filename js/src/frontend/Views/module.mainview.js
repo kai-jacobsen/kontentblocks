@@ -23,34 +23,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.bind('save', this.model.save);
 
         this.render();
-        this.setControlsPosition();
-        this.listenTo(KB.Events, 'KB::ajax-update', this.setControlsPosition);
-        jQuery(window).on('resize', function(){
-            that.setControlsPosition();
-        });
+
+        KB.ModuleNav.attach(this);
     },
     events: {
         "click a.os-edit-block": "openOptions",
         "click .editable": "reloadModal",
         "click .kb-js-inline-update": "updateModule",
-        "click .kb-js-open-layout-controls": "openLayoutControls",
         "hover": "setActive"
     },
     setActive: function () {
         KB.currentModule = this;
     },
     render: function () {
-        if (jQuery('> .os-edit-wrapper', this.$el).length > 0) {
-            return;
-        }
-        var settings = this.model.get('settings');
-        if (settings.controls && settings.controls.hide) {
-            return;
-        }
-        this.$el.append(KB.Templates.render('frontend/module-controls', {
-            model: this.model.toJSON(),
-            i18n: KB.i18n.jsFrontend
-        }));
     },
     openOptions: function () {
 
@@ -75,71 +60,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.CurrentModel = this.model;
         KB.focusedModule = this.model;
 
-    },
-    openLayoutControls: function () {
-
-        // only one instance
-        if (KB.OpenedLayoutControls) {
-            KB.OpenedLayoutControls.destroy();
-        }
-
-        KB.OpenedLayoutControls = new KB.ModuleLayoutControls({
-            tagName: 'div',
-            id: 'slider-unique',
-            className: 'slider-controls-wrapper',
-            model: this.model,
-            parent: this
-        });
-    },
-    setControlsPosition: function () {
-
-        var that = this;
-        var mSettings = this.model.get('settings');
-        var overlaps = jQuery('.os-edit-wrapper').overlaps();
-        var $controls = jQuery('.os-controls', this.$el);
-
-        jQuery('.os-controls', this.$el).hover(function () {
-            that.$el.addClass('hovered');
-        }, function () {
-            that.$el.removeClass('hovered');
-        });
-
-        var pos = this.$el.offset();
-
-        if (mSettings.controls && mSettings.controls.toolbar) {
-            var off = {};
-            off.top = mSettings.controls.toolbar.top;
-            off.left = mSettings.controls.toolbar.left;
-        }
-
-
-
-        $controls.offset({top: -20, left: pos.left + 0, zIndex: 999999});
-        $controls.css({'top': -20 + 'px', 'right': 0});
-
-        if (mSettings.controls && mSettings.controls.el){
-            var wrapEl = mSettings.controls.el;
-            var $wrapEl = jQuery(wrapEl, this.$el).offset();
-            console.log($wrapEl);
-            $controls.css('position', 'fixed');
-            $controls.offset($wrapEl);
-        }
-
-        _.each(overlaps, function (el, i) {
-            if (i === 0) {
-
-            } else {
-                var $el = jQuery(el);
-                var topP = $el.offset();
-
-                jQuery($el).offset({left: topP.left + 50});
-            }
-
-        });
-    },
-    removeControls: function () {
-        this.undelegateEvents();
-        jQuery('.os-edit-wrapper', this.$el).remove();
     },
     // @TODO: old function updateModule() remove?
     updateModule: function () {
@@ -211,9 +131,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     getDirty: function () {
         this.$el.addClass('isDirty');
+        this.controlView.$el.addClass('isDirty');
     },
     getClean: function () {
         this.$el.removeClass('isDirty');
+        this.controlView.$el.removeClass('isDirty');
     },
     modelChange: function () {
         this.getDirty();

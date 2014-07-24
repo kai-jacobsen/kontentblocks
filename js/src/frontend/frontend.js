@@ -47,6 +47,8 @@ KB.App = function ($) {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
         $toolbar.hide();
 
+        KB.ModuleNav = new KB.Backbone.ModuleNavView();
+
         // Register events on collections
         KB.Modules.on('add', createModuleViews);
         KB.Areas.on('add', createAreaViews);
