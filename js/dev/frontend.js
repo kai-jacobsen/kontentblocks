@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-24 */
+/*! Kontentblocks DevVersion 2014-07-25 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -825,10 +825,8 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
         jQuery(window).scroll(function() {
             if (that.model.$el.visible(true, true)) {
                 that.$el.addClass("in-viewport");
-                that.$el.fadeTo(350, 1);
             } else {
                 that.$el.removeClass("in-viewport");
-                that.$el.fadeTo(350, .7);
             }
         });
         this.model.$el.on("mouseenter", function() {
@@ -842,7 +840,7 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
         mouseenter: "over",
         mouseleave: "out",
         click: "scrollTo",
-        "click .kb-module-nav-item--edit": "openControls",
+        "click .kb-module-nav-item__edit": "openControls",
         "click .kb-js-inline-update": "inlineUpdate"
     },
     render: function() {
@@ -875,11 +873,22 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
     tagName: "div",
     className: "kb-module-nav-container",
     initialize: function() {
+        this.show = _.isNull(KB.Util.stex.get("kb-nav-show")) ? true : KB.Util.stex.get("kb-nav-show");
         this.render();
     },
+    events: {
+        "click .kb-nav-toggle": "toggleView",
+        "mouseenter .kb-nav-toggle": "over",
+        "mouseleave .kb-nav-toggle": "out"
+    },
     render: function() {
+        console.log(this.show);
         this.$el.appendTo("body");
         this.$list = jQuery("<ul></ul>").appendTo(this.$el);
+        this.$toggle = jQuery('<div class="kb-nav-toggle genericon genericon-menu"></div>').appendTo(this.$el);
+        if (this.show) {
+            this.$el.addClass("kb-nav-show");
+        }
     },
     attach: function(moduleView) {
         moduleView.ModuleNav = this;
@@ -890,6 +899,23 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
             model: moduleView
         });
         this.$list.append(Item.render());
+    },
+    toggleView: function() {
+        this.$el.toggleClass("kb-nav-show");
+        this.$el.removeClass("kb-nav-show-partly");
+        var show = !this.show;
+        this.show = show;
+        KB.Util.stex.set("kb-nav-show", show, 10 * 60 * 1e3);
+    },
+    over: function() {
+        if (!this.show) {
+            this.$el.addClass("kb-nav-show-partly");
+        }
+    },
+    out: function() {
+        if (!this.show) {
+            this.$el.removeClass("kb-nav-show-partly");
+        }
     }
 });
 

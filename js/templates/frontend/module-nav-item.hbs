@@ -1,14 +1,14 @@
 <li class="kb-module-nav-item">
-    <div class="kb-module-nav-item--wrapper">
-        <div class="kb-module-nav-item--name">{{{ view.settings.name }}}</div>
-        <div class="kb-module-nav-item--id">{{{ view.instance_id }}}</div>
+    <div class="kb-module-nav-item__wrapper">
+        <div class="kb-module-nav-item__name">{{{ view.settings.name }}}</div>
+        <div class="kb-module-nav-item__id">{{{ view.instance_id }}}</div>
     </div>
-    <div class="kb-module-nav-item--actions">
-        <a class='kb-module-nav-item--edit koolkip' title='edit' data-powertip="Edit {{ view.overrides.name }}"
+    <div class="kb-module-nav-item__actions">
+        <a class='kb-module-nav-item__edit koolkip' title='edit' data-powertip="Edit {{ view.overrides.name }}"
            data='{{ view.instance_id }}'
            data-url='{{ view.editURL }}'><span class="dashicons dashicons-edit"></span><span
                 class="os-action">{{ i18n.moduleControls.controlsEdit }}</span></a>
-        <a class='kb-module-nav-item--id kb-js-inline-update'><span
+        <a class='kb-module-nav-item__id kb-js-inline-update'><span
                 class="dashicons dashicons-update"></span><span
                 class="os-action">{{ i18n.moduleControls.controlsUpdate }}</span></a>
     </div>
