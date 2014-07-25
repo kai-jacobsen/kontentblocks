@@ -9,6 +9,7 @@
   border: 1px solid #ccc;
   z-index: 10000;
   @include box-sizing(border-box);
+  @include box-shadow(1px 1px 8px 4px #333);
 
   ul {
     margin: 0 !important;

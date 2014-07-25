@@ -287,13 +287,15 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  -webkit-box-shadow: 1px 1px 8px 4px #333333;
+  box-shadow: 1px 1px 8px 4px #333333;
 }
-/* line 13, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 14, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul {
   margin: 0 !important;
   padding: 0 !important;
 }
-/* line 18, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 19, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li {
   border-bottom: 1px solid #ccc;
   padding: 4px;
@@ -305,65 +307,65 @@
   -webkit-transition: background 0.3s linear;
   transition: background 0.3s linear;
 }
-/* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 29, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li.in-viewport {
   border-left-color: green;
 }
-/* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 33, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li.in-viewport-active {
   background: #444;
 }
-/* line 37, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 38, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li.isDirty .kb-js-inline-update span {
   color: red;
 }
-/* line 42, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li span {
   margin: 0;
   padding: 0;
 }
-/* line 47, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li div.kb-module-nav-item--name {
   color: #fff;
   font-size: 13px;
   line-height: 150%;
 }
-/* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 54, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li div.kb-module-nav-item--id {
   color: #ccc;
   font-size: 11px;
   line-height: 100%;
 }
-/* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 62, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item--wrapper {
   width: 150px;
   float: left;
 }
-/* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 67, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item--actions {
   width: 50px;
   position: absolute;
   right: 0;
   top: 8px;
 }
-/* line 72, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 73, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item--actions a {
   color: #ccc !important;
   border-bottom: none;
   line-height: 100%;
 }
-/* line 77, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 78, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item--actions a:hover {
   border: 0;
 }
-/* line 81, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 82, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item--actions a .dashicons {
   font-size: 16px !important;
   width: 16px !important;
   height: 16px !important;
 }
 
-/* line 94, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 95, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 body.admin-bar .kb-module-nav-container {
   top: 40px;
 }

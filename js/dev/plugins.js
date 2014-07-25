@@ -3324,256 +3324,6 @@ var Handlebars = function() {
     };
 })(jQuery);
 
-(function(c) {
-    var S = 0, J = function() {
-        var c = navigator.userAgent, a = /msie\s\d+/i;
-        return 0 < c.search(a) ? (c = a.exec(c).toString(), c = c.split(" ")[1], 9 > c ? !0 : !1) : !1;
-    }(), E;
-    try {
-        document.createEvent("TouchEvent"), E = !0;
-    } catch (da) {
-        E = !1;
-    }
-    var I = {
-        init: function(m) {
-            var a = c.extend({
-                min: 10,
-                max: 100,
-                from: null,
-                to: null,
-                type: "single",
-                step: 1,
-                prefix: "",
-                postfix: "",
-                hasGrid: !1,
-                hideText: !1,
-                prettify: !0,
-                onChange: null,
-                onFinish: null
-            }, m), r = '<span class="irs">', r = r + '<span class="irs-line"><span class="irs-line-left"></span><span class="irs-line-mid"></span><span class="irs-line-right"></span></span>', r = r + '<span class="irs-min">0</span><span class="irs-max">1</span>', r = r + '<span class="irs-from">0</span><span class="irs-to">0</span><span class="irs-single">0</span>', r = r + "</span>", r = r + '<span class="irs-grid"></span>', F = '<span class="irs-diapason"></span>', F = F + '<span class="irs-slider from"></span>', F = F + '<span class="irs-slider to"></span>';
-            return this.each(function() {
-                var e = c(this);
-                if (!e.data("isActive")) {
-                    e.data("isActive", !0);
-                    S++;
-                    this.pluginCount = S;
-                    "number" !== typeof a.from && (a.from = a.min);
-                    "number" !== typeof a.to && (a.to = a.max);
-                    e.attr("value") && (a.min = parseInt(e.attr("value").split(";")[0], 10), a.max = parseInt(e.attr("value").split(";")[1], 10));
-                    "number" === typeof e.data("from") && (a.from = parseInt(e.data("from"), 10));
-                    "number" === typeof e.data("to") && (a.to = parseInt(e.data("to"), 10));
-                    e.data("step") && (a.step = parseFloat(e.data("step")));
-                    e.data("type") && (a.type = e.data("type"));
-                    e.data("prefix") && (a.prefix = e.data("prefix"));
-                    e.data("postfix") && (a.postfix = e.data("postfix"));
-                    e.data("hasgrid") && (a.hasGrid = e.data("hasgrid"));
-                    e.data("hidetext") && (a.hideText = e.data("hidetext"));
-                    e.data("prettify") && (a.prettify = e.data("prettify"));
-                    a.from < a.min && (a.from = a.min);
-                    a.to > a.max && (a.to = a.max);
-                    "double" === a.type && (a.from > a.to && (a.from = a.to), a.to < a.from && (a.to = a.from));
-                    var m = function(b) {
-                        b = b.toString();
-                        a.prettify && (b = b.replace(/(\d{1,3}(?=(?:\d\d\d)+(?!\d)))/g, "$1 "));
-                        return b;
-                    }, I = '<span class="irs" id="irs-' + this.pluginCount + '"></span>';
-                    e[0].style.display = "none";
-                    e.before(I);
-                    var w = c("#irs-" + this.pluginCount), T = c(document.body), U = c(window), f, B, C, x, y, t, z, n, s, u, P, V, q = !1, v = !1, W = !0, g = {}, Q = 0, K = 0, L = 0, k = 0, A = 0, G = 0, R = 0, M = 0, N = 0, X = 0, p = 0;
-                    parseInt(a.step, 10) !== parseFloat(a.step) && (p = a.step.toString().split(".")[1], 
-                    p = Math.pow(10, p.length));
-                    this.updateData = function(b) {
-                        a = c.extend(a, b);
-                        w.find("*").off();
-                        w.html("");
-                        Y();
-                    };
-                    this.removeSlider = function() {
-                        w.find("*").off();
-                        w.html("").remove();
-                        e.data("isActive", !1);
-                        e.show();
-                    };
-                    var Y = function() {
-                        w.html(r);
-                        f = w.find(".irs");
-                        B = f.find(".irs-min");
-                        C = f.find(".irs-max");
-                        x = f.find(".irs-from");
-                        y = f.find(".irs-to");
-                        t = f.find(".irs-single");
-                        V = w.find(".irs-grid");
-                        a.hideText ? (B[0].style.display = "none", C[0].style.display = "none", x[0].style.display = "none", 
-                        y[0].style.display = "none", t[0].style.display = "none") : (B.html(a.prefix + m(a.min) + a.postfix), 
-                        C.html(a.prefix + m(a.max) + a.postfix));
-                        K = B.outerWidth();
-                        L = C.outerWidth();
-                        if ("single" === a.type) {
-                            if (f.append('<span class="irs-slider single"></span>'), z = f.find(".single"), 
-                            z.on("mousedown", function(a) {
-                                a.preventDefault();
-                                a.stopPropagation();
-                                D(a, c(this), null);
-                                v = q = !0;
-                                J && c("*").prop("unselectable", !0);
-                            }), E) z.on("touchstart", function(a) {
-                                a.preventDefault();
-                                a.stopPropagation();
-                                D(a.originalEvent.touches[0], c(this), null);
-                                v = q = !0;
-                            });
-                        } else "double" === a.type && (f.append(F), n = f.find(".from"), s = f.find(".to"), 
-                        P = f.find(".irs-diapason"), H(), n.on("mousedown", function(a) {
-                            a.preventDefault();
-                            a.stopPropagation();
-                            c(this).addClass("last");
-                            s.removeClass("last");
-                            D(a, c(this), "from");
-                            v = q = !0;
-                            J && c("*").prop("unselectable", !0);
-                        }), s.on("mousedown", function(a) {
-                            a.preventDefault();
-                            a.stopPropagation();
-                            c(this).addClass("last");
-                            n.removeClass("last");
-                            D(a, c(this), "to");
-                            v = q = !0;
-                            J && c("*").prop("unselectable", !0);
-                        }), E && (n.on("touchstart", function(a) {
-                            a.preventDefault();
-                            a.stopPropagation();
-                            c(this).addClass("last");
-                            s.removeClass("last");
-                            D(a.originalEvent.touches[0], c(this), "from");
-                            v = q = !0;
-                        }), s.on("touchstart", function(a) {
-                            a.preventDefault();
-                            a.stopPropagation();
-                            c(this).addClass("last");
-                            n.removeClass("last");
-                            D(a.originalEvent.touches[0], c(this), "to");
-                            v = q = !0;
-                        })), a.to === a.max && n.addClass("last"));
-                        T.on("mouseup", function() {
-                            q && (q = v = !1, u.removeAttr("id"), u = null, "double" === a.type && H(), O(), 
-                            J && c("*").prop("unselectable", !1));
-                        });
-                        T.on("mousemove", function(a) {
-                            q && (Q = a.pageX, Z());
-                        });
-                        E && (U.on("touchend", function() {
-                            q && (q = v = !1, u.removeAttr("id"), u = null, "double" === a.type && H(), O());
-                        }), U.on("touchmove", function(a) {
-                            q && (Q = a.originalEvent.touches[0].pageX, Z());
-                        }));
-                        $();
-                        ba();
-                        a.hasGrid && ca();
-                    }, $ = function() {
-                        k = f.width();
-                        G = z ? z.width() : n.width();
-                        A = k - G;
-                    }, D = function(b, d, l) {
-                        $();
-                        W = !1;
-                        u = d;
-                        u.attr("id", "irs-active-slider");
-                        d = u.offset().left;
-                        X = d + (b.pageX - d) - u.position().left;
-                        "single" === a.type ? R = f.width() - G : "double" === a.type && ("from" === l ? (M = 0, 
-                        N = parseInt(s.css("left"), 10)) : (M = parseInt(n.css("left"), 10), N = f.width() - G));
-                    }, H = function() {
-                        var a = n.width(), d = parseInt(n[0].style.left, 10) || n.position().left, l = (parseInt(s[0].style.left, 10) || s.position().left) - d;
-                        P[0].style.left = d + a / 2 + "px";
-                        P[0].style.width = l + "px";
-                    }, Z = function() {
-                        var b = Math.round(Q - X);
-                        "single" === a.type ? (0 > b && (b = 0), b > R && (b = R), O()) : "double" === a.type && (b < M && (b = M), 
-                        b > N && (b = N), O(), H());
-                        u[0].style.left = b + "px";
-                    }, O = function() {
-                        var b = {
-                            fromNumber: 0,
-                            toNumber: 0,
-                            fromPers: 0,
-                            toPers: 0,
-                            fromX: 0,
-                            toX: 0
-                        }, d = a.max - a.min, l;
-                        "single" === a.type ? (b.fromX = parseInt(z[0].style.left, 10) || z.position().left, 
-                        b.fromPers = 100 * (b.fromX / A), l = d / 100 * b.fromPers + parseInt(a.min, 10), 
-                        b.fromNumber = Math.round(l / a.step) * a.step, p && (b.fromNumber = parseInt(b.fromNumber * p, 10) / p)) : "double" === a.type && (b.fromX = parseInt(n[0].style.left, 10) || n.position().left, 
-                        b.fromPers = 100 * (b.fromX / A), l = d / 100 * b.fromPers + parseInt(a.min, 10), 
-                        b.fromNumber = Math.round(l / a.step) * a.step, b.toX = parseInt(s[0].style.left, 10) || s.position().left, 
-                        b.toPers = 100 * (b.toX / A), d = d / 100 * b.toPers + parseInt(a.min, 10), b.toNumber = Math.round(d / a.step) * a.step, 
-                        p && (b.fromNumber = parseInt(b.fromNumber * p, 10) / p, b.toNumber = parseInt(b.toNumber * p, 10) / p));
-                        g = b;
-                        aa();
-                    }, ba = function() {
-                        var b = {
-                            fromNumber: a.from,
-                            toNumber: a.to,
-                            fromPers: 0,
-                            toPers: 0,
-                            fromX: 0,
-                            toX: 0
-                        }, d = a.max - a.min;
-                        "single" === a.type ? (b.fromPers = 100 * ((b.fromNumber - a.min) / d), b.fromX = Math.round(A / 100 * b.fromPers), 
-                        z[0].style.left = b.fromX + "px") : "double" === a.type && (b.fromPers = 100 * ((b.fromNumber - a.min) / d), 
-                        b.fromX = Math.round(A / 100 * b.fromPers), n[0].style.left = b.fromX + "px", b.toPers = 100 * ((b.toNumber - a.min) / d), 
-                        b.toX = Math.round(A / 100 * b.toPers), s[0].style.left = b.toX + "px", H());
-                        g = b;
-                        aa();
-                    }, aa = function() {
-                        var b, d, l, c, f, h;
-                        h = G / 2;
-                        "single" === a.type ? (a.hideText || (x[0].style.display = "none", y[0].style.display = "none", 
-                        l = a.prefix + m(g.fromNumber) + a.postfix, t.html(l), f = t.outerWidth(), h = g.fromX - f / 2 + h, 
-                        0 > h && (h = 0), h > k - f && (h = k - f), t[0].style.left = h + "px", B[0].style.display = h < K ? "none" : "block", 
-                        C[0].style.display = h + f > k - L ? "none" : "block"), e.attr("value", parseInt(g.fromNumber, 10))) : "double" === a.type && (a.hideText || (b = a.prefix + m(g.fromNumber) + a.postfix, 
-                        d = a.prefix + m(g.toNumber) + a.postfix, l = g.fromNumber != g.toNumber ? a.prefix + m(g.fromNumber) + " — " + a.prefix + m(g.toNumber) + a.postfix : a.prefix + m(g.fromNumber) + a.postfix, 
-                        x.html(b), y.html(d), t.html(l), b = x.outerWidth(), d = g.fromX - b / 2 + h, 0 > d && (d = 0), 
-                        d > k - b && (d = k - b), x[0].style.left = d + "px", l = y.outerWidth(), c = g.toX - l / 2 + h, 
-                        0 > c && (c = 0), c > k - l && (c = k - l), y[0].style.left = c + "px", f = t.outerWidth(), 
-                        h = g.fromX + (g.toX - g.fromX) / 2 - f / 2 + h, 0 > h && (h = 0), h > k - f && (h = k - f), 
-                        t[0].style.left = h + "px", d + b < c ? (t[0].style.display = "none", x[0].style.display = "block", 
-                        y[0].style.display = "block") : (t[0].style.display = "block", x[0].style.display = "none", 
-                        y[0].style.display = "none"), B[0].style.display = h < K || d < K ? "none" : "block", 
-                        C[0].style.display = h + f > k - L || c + l > k - L ? "none" : "block"), e.attr("value", parseInt(g.fromNumber, 10) + ";" + parseInt(g.toNumber, 10)));
-                        "function" === typeof a.onChange && a.onChange.call(this, g);
-                        "function" !== typeof a.onFinish || v || W || a.onFinish.call(this, g);
-                    }, ca = function() {
-                        w.addClass("irs-with-grid");
-                        var b, d = "", c = 0, c = 0, e = "";
-                        for (b = 0; 20 >= b; b++) c = Math.floor(k / 20 * b), c >= k && (c = k - 1), e += '<span class="irs-grid-pol small" style="left: ' + c + 'px;"></span>';
-                        for (b = 0; 4 >= b; b++) c = Math.floor(k / 4 * b), c >= k && (c = k - 1), e += '<span class="irs-grid-pol" style="left: ' + c + 'px;"></span>', 
-                        p ? (d = a.min + (a.max - a.min) / 4 * b, d = d / a.step * a.step, d = parseInt(d * p, 10) / p) : (d = Math.round(a.min + (a.max - a.min) / 4 * b), 
-                        d = Math.round(d / a.step) * a.step, d = m(d)), 0 === b ? e += '<span class="irs-grid-text" style="left: ' + c + 'px; text-align: left;">' + d + "</span>" : 4 === b ? (c -= 100, 
-                        e += '<span class="irs-grid-text" style="left: ' + c + 'px; text-align: right;">' + d + "</span>") : (c -= 50, 
-                        e += '<span class="irs-grid-text" style="left: ' + c + 'px;">' + d + "</span>");
-                        V.html(e);
-                    };
-                    Y();
-                }
-            });
-        },
-        update: function(c) {
-            return this.each(function() {
-                this.updateData(c);
-            });
-        },
-        remove: function() {
-            return this.each(function() {
-                this.removeSlider();
-            });
-        }
-    };
-    c.fn.ionRangeSlider = function(m) {
-        if (I[m]) return I[m].apply(this, Array.prototype.slice.call(arguments, 1));
-        if ("object" !== typeof m && m) c.error("Method " + m + " does not exist for jQuery.ionRangeSlider"); else return I.init.apply(this, arguments);
-    };
-})(jQuery);
-
 (function($) {
     "use strict";
     var default_options = {
@@ -5441,6 +5191,272 @@ Date.patterns = {
         var x1 = dims1[1], y1 = dims1[0], w1 = dims1[2], h1 = dims1[3], x2 = dims2[1], y2 = dims2[0], w2 = dims2[2], h2 = dims2[3];
         return !(y2 + h2 <= y1 || y1 + h1 <= y2 || x2 + w2 <= x1 || x1 + w1 <= x2);
     }
+});
+
+(function(root, factory) {
+    if (typeof exports == "object") module.exports = factory(); else if (typeof define == "function" && define.amd) define(factory); else root.Spinner = factory();
+})(this, function() {
+    "use strict";
+    var prefixes = [ "webkit", "Moz", "ms", "O" ], animations = {}, useCssAnimations;
+    function createEl(tag, prop) {
+        var el = document.createElement(tag || "div"), n;
+        for (n in prop) el[n] = prop[n];
+        return el;
+    }
+    function ins(parent) {
+        for (var i = 1, n = arguments.length; i < n; i++) parent.appendChild(arguments[i]);
+        return parent;
+    }
+    var sheet = function() {
+        var el = createEl("style", {
+            type: "text/css"
+        });
+        ins(document.getElementsByTagName("head")[0], el);
+        return el.sheet || el.styleSheet;
+    }();
+    function addAnimation(alpha, trail, i, lines) {
+        var name = [ "opacity", trail, ~~(alpha * 100), i, lines ].join("-"), start = .01 + i / lines * 100, z = Math.max(1 - (1 - alpha) / trail * (100 - start), alpha), prefix = useCssAnimations.substring(0, useCssAnimations.indexOf("Animation")).toLowerCase(), pre = prefix && "-" + prefix + "-" || "";
+        if (!animations[name]) {
+            sheet.insertRule("@" + pre + "keyframes " + name + "{" + "0%{opacity:" + z + "}" + start + "%{opacity:" + alpha + "}" + (start + .01) + "%{opacity:1}" + (start + trail) % 100 + "%{opacity:" + alpha + "}" + "100%{opacity:" + z + "}" + "}", sheet.cssRules.length);
+            animations[name] = 1;
+        }
+        return name;
+    }
+    function vendor(el, prop) {
+        var s = el.style, pp, i;
+        prop = prop.charAt(0).toUpperCase() + prop.slice(1);
+        for (i = 0; i < prefixes.length; i++) {
+            pp = prefixes[i] + prop;
+            if (s[pp] !== undefined) return pp;
+        }
+        if (s[prop] !== undefined) return prop;
+    }
+    function css(el, prop) {
+        for (var n in prop) el.style[vendor(el, n) || n] = prop[n];
+        return el;
+    }
+    function merge(obj) {
+        for (var i = 1; i < arguments.length; i++) {
+            var def = arguments[i];
+            for (var n in def) if (obj[n] === undefined) obj[n] = def[n];
+        }
+        return obj;
+    }
+    function pos(el) {
+        var o = {
+            x: el.offsetLeft,
+            y: el.offsetTop
+        };
+        while (el = el.offsetParent) o.x += el.offsetLeft, o.y += el.offsetTop;
+        return o;
+    }
+    function getColor(color, idx) {
+        return typeof color == "string" ? color : color[idx % color.length];
+    }
+    var defaults = {
+        lines: 12,
+        length: 7,
+        width: 5,
+        radius: 10,
+        rotate: 0,
+        corners: 1,
+        color: "#000",
+        direction: 1,
+        speed: 1,
+        trail: 100,
+        opacity: 1 / 4,
+        fps: 20,
+        zIndex: 2e9,
+        className: "spinner",
+        top: "50%",
+        left: "50%",
+        position: "absolute"
+    };
+    function Spinner(o) {
+        this.opts = merge(o || {}, Spinner.defaults, defaults);
+    }
+    Spinner.defaults = {};
+    merge(Spinner.prototype, {
+        spin: function(target) {
+            this.stop();
+            var self = this, o = self.opts, el = self.el = css(createEl(0, {
+                className: o.className
+            }), {
+                position: o.position,
+                width: 0,
+                zIndex: o.zIndex
+            }), mid = o.radius + o.length + o.width;
+            css(el, {
+                left: o.left,
+                top: o.top
+            });
+            if (target) {
+                target.insertBefore(el, target.firstChild || null);
+            }
+            el.setAttribute("role", "progressbar");
+            self.lines(el, self.opts);
+            if (!useCssAnimations) {
+                var i = 0, start = (o.lines - 1) * (1 - o.direction) / 2, alpha, fps = o.fps, f = fps / o.speed, ostep = (1 - o.opacity) / (f * o.trail / 100), astep = f / o.lines;
+                (function anim() {
+                    i++;
+                    for (var j = 0; j < o.lines; j++) {
+                        alpha = Math.max(1 - (i + (o.lines - j) * astep) % f * ostep, o.opacity);
+                        self.opacity(el, j * o.direction + start, alpha, o);
+                    }
+                    self.timeout = self.el && setTimeout(anim, ~~(1e3 / fps));
+                })();
+            }
+            return self;
+        },
+        stop: function() {
+            var el = this.el;
+            if (el) {
+                clearTimeout(this.timeout);
+                if (el.parentNode) el.parentNode.removeChild(el);
+                this.el = undefined;
+            }
+            return this;
+        },
+        lines: function(el, o) {
+            var i = 0, start = (o.lines - 1) * (1 - o.direction) / 2, seg;
+            function fill(color, shadow) {
+                return css(createEl(), {
+                    position: "absolute",
+                    width: o.length + o.width + "px",
+                    height: o.width + "px",
+                    background: color,
+                    boxShadow: shadow,
+                    transformOrigin: "left",
+                    transform: "rotate(" + ~~(360 / o.lines * i + o.rotate) + "deg) translate(" + o.radius + "px" + ",0)",
+                    borderRadius: (o.corners * o.width >> 1) + "px"
+                });
+            }
+            for (;i < o.lines; i++) {
+                seg = css(createEl(), {
+                    position: "absolute",
+                    top: 1 + ~(o.width / 2) + "px",
+                    transform: o.hwaccel ? "translate3d(0,0,0)" : "",
+                    opacity: o.opacity,
+                    animation: useCssAnimations && addAnimation(o.opacity, o.trail, start + i * o.direction, o.lines) + " " + 1 / o.speed + "s linear infinite"
+                });
+                if (o.shadow) ins(seg, css(fill("#000", "0 0 4px " + "#000"), {
+                    top: 2 + "px"
+                }));
+                ins(el, ins(seg, fill(getColor(o.color, i), "0 0 1px rgba(0,0,0,.1)")));
+            }
+            return el;
+        },
+        opacity: function(el, i, val) {
+            if (i < el.childNodes.length) el.childNodes[i].style.opacity = val;
+        }
+    });
+    function initVML() {
+        function vml(tag, attr) {
+            return createEl("<" + tag + ' xmlns="urn:schemas-microsoft.com:vml" class="spin-vml">', attr);
+        }
+        sheet.addRule(".spin-vml", "behavior:url(#default#VML)");
+        Spinner.prototype.lines = function(el, o) {
+            var r = o.length + o.width, s = 2 * r;
+            function grp() {
+                return css(vml("group", {
+                    coordsize: s + " " + s,
+                    coordorigin: -r + " " + -r
+                }), {
+                    width: s,
+                    height: s
+                });
+            }
+            var margin = -(o.width + o.length) * 2 + "px", g = css(grp(), {
+                position: "absolute",
+                top: margin,
+                left: margin
+            }), i;
+            function seg(i, dx, filter) {
+                ins(g, ins(css(grp(), {
+                    rotation: 360 / o.lines * i + "deg",
+                    left: ~~dx
+                }), ins(css(vml("roundrect", {
+                    arcsize: o.corners
+                }), {
+                    width: r,
+                    height: o.width,
+                    left: o.radius,
+                    top: -o.width >> 1,
+                    filter: filter
+                }), vml("fill", {
+                    color: getColor(o.color, i),
+                    opacity: o.opacity
+                }), vml("stroke", {
+                    opacity: 0
+                }))));
+            }
+            if (o.shadow) for (i = 1; i <= o.lines; i++) seg(i, -2, "progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow=1,shadowopacity=.3)");
+            for (i = 1; i <= o.lines; i++) seg(i);
+            return ins(el, g);
+        };
+        Spinner.prototype.opacity = function(el, i, val, o) {
+            var c = el.firstChild;
+            o = o.shadow && o.lines || 0;
+            if (c && i + o < c.childNodes.length) {
+                c = c.childNodes[i + o];
+                c = c && c.firstChild;
+                c = c && c.firstChild;
+                if (c) c.opacity = val;
+            }
+        };
+    }
+    var probe = css(createEl("group"), {
+        behavior: "url(#default#VML)"
+    });
+    if (!vendor(probe, "transform") && probe.adj) initVML(); else useCssAnimations = vendor(probe, "animation");
+    return Spinner;
+});
+
+(function(factory) {
+    if (typeof exports == "object") {
+        factory(require("jquery"), require("spin"));
+    } else if (typeof define == "function" && define.amd) {
+        define([ "jquery", "spin" ], factory);
+    } else {
+        if (!window.Spinner) throw new Error("Spin.js not present");
+        factory(window.jQuery, window.Spinner);
+    }
+})(function($, Spinner) {
+    $.fn.spin = function(opts, color) {
+        return this.each(function() {
+            var $this = $(this), data = $this.data();
+            if (data.spinner) {
+                data.spinner.stop();
+                delete data.spinner;
+            }
+            if (opts !== false) {
+                opts = $.extend({
+                    color: color || $this.css("color")
+                }, $.fn.spin.presets[opts] || opts);
+                data.spinner = new Spinner(opts).spin(this);
+            }
+        });
+    };
+    $.fn.spin.presets = {
+        tiny: {
+            lines: 8,
+            length: 2,
+            width: 2,
+            radius: 3
+        },
+        small: {
+            lines: 8,
+            length: 4,
+            width: 3,
+            radius: 5
+        },
+        large: {
+            lines: 10,
+            length: 8,
+            width: 4,
+            radius: 8
+        }
+    };
 });
 
 (function($) {

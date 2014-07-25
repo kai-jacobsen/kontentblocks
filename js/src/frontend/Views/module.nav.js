@@ -44,7 +44,8 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
     out: function(){
         this.model.$el.removeClass('kb-nav-active');
     },
-    openControls: function(){
+    openControls: function(e){
+        e.stopPropagation();
         this.model.openOptions();
     },
     inlineUpdate:function(){
@@ -54,7 +55,7 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
     scrollTo: function(){
         var that = this;
         jQuery('html, body').animate({
-            scrollTop: that.model.$el.offset().top
+            scrollTop: that.model.$el.offset().top - 100
         }, 750);
     }
 

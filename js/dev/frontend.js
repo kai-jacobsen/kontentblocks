@@ -167,11 +167,9 @@ KB.IEdit.Image = function($) {
             path.push(data.arraykey);
             path.push(data.index);
             path.push(data.key);
-            console.log(KB.Util.cleanArray(path));
             KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join("."), value);
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set("moduleData", moduleData);
-            console.log(moduleData);
             jQuery.ajax({
                 url: ajaxurl,
                 data: {
@@ -856,7 +854,8 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
     out: function() {
         this.model.$el.removeClass("kb-nav-active");
     },
-    openControls: function() {
+    openControls: function(e) {
+        e.stopPropagation();
         this.model.openOptions();
     },
     inlineUpdate: function() {
@@ -866,7 +865,7 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
     scrollTo: function() {
         var that = this;
         jQuery("html, body").animate({
-            scrollTop: that.model.$el.offset().top
+            scrollTop: that.model.$el.offset().top - 100
         }, 750);
     }
 });
