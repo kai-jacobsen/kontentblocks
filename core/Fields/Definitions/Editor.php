@@ -33,7 +33,7 @@ Class Editor extends Field {
 	 * @return mixed
 	 */
 	protected function prepareInputValue( $val ) {
-		return $val;
+		return stripslashes_deep($val);
 	}
 
     /**

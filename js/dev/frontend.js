@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-25 */
+/*! Kontentblocks DevVersion 2014-07-26 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -221,6 +221,7 @@ KB.IEdit.Link = function($) {
                 e.stopPropagation();
                 if (e.ctrlKey) {
                     e.preventDefault();
+                    e.stopPropagation();
                     that.$anchor = $(this);
                     that.open();
                 }
@@ -275,7 +276,6 @@ KB.IEdit.Link = function($) {
             var mId = data.module;
             var moduleData = KB.Modules.get(mId).get("moduleData");
             var lData = {};
-            console.log(data, moduleData);
             if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
                 lData = moduleData[data.arraykey][data.index][data.key];
             } else if (!_.isEmpty(data.index)) {
@@ -941,6 +941,7 @@ KB.App = function($) {
     function init() {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
         $toolbar.hide();
+        console.log("set");
         KB.ModuleNav = new KB.Backbone.ModuleNavView();
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);
@@ -1026,6 +1027,7 @@ jQuery(document).ready(function() {
         });
     });
     jQuery(window).on("resize DOMNodeInserted", function() {});
+    setUserSetting("editor", "tinymce");
 });
 
 KB.Events.on("KB::ready", function() {

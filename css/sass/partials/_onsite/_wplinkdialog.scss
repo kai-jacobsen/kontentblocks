@@ -381,11 +381,11 @@
 }
 
 #wp-link-wrap.kb-customized{
-  height: 600px;
-  margin-top: -300px;
+  height: 600px !important;
+  margin-top: -300px !important;
 
   .query-results{
-    top:370px;
+    top:280px;
   }
 }
 

@@ -26,7 +26,7 @@ class RemoteGetEditor
         $settings['media_buttons'] = $media;
         ob_start();
         Utilities::editor( $_POST['editorId'], $_POST['editorContent'], $_POST['editorName'], $media, $settings );
-        $html = ob_get_clean();
+        $html = stripslashes_deep(ob_get_clean());
         wp_send_json( $html );
 
     }

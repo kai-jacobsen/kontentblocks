@@ -117,6 +117,12 @@
   font-size: 13px;
 }
 
+/* line 89, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_common.scss */
+#kontentblocks_stage a:focus {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen {
   min-height: 750px;

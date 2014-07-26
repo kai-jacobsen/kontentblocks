@@ -12,6 +12,7 @@ KB.IEdit.Link = (function ($) {
                 e.stopPropagation();
                 if (e.ctrlKey){
                     e.preventDefault();
+                    e.stopPropagation();
                     that.$anchor = $(this);
                     that.open();
                 }
@@ -93,7 +94,6 @@ KB.IEdit.Link = (function ($) {
             var mId = data.module; // module id
             var moduleData = KB.Modules.get(mId).get('moduleData'); // module model data
             var lData = {};
-            console.log(data, moduleData);
             if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
                lData = moduleData[data.arraykey][data.index][data.key];
             } else if (!_.isEmpty(data.index)) {

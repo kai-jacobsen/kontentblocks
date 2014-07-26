@@ -48,7 +48,6 @@ Class FlexibleFields extends Field
      */
     public function save( $new, $old )
     {
-
         $Registry = Kontentblocks::getService( 'registry.fields' );
 
         if (is_null( $new )) {
@@ -100,8 +99,6 @@ Class FlexibleFields extends Field
         if (is_array( $value )) {
             $forJSON = array_values( $value );
         }
-
-
         // run data through fields output method to retrieve optional filtered data
         if (!empty( $forJSON )) {
             foreach ($value as &$item) {

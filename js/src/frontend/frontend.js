@@ -46,7 +46,7 @@ KB.App = function ($) {
         // create toolbar container for tinymce inline editors
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
         $toolbar.hide();
-
+        console.log('set');
         KB.ModuleNav = new KB.Backbone.ModuleNavView();
 
         // Register events on collections
@@ -212,5 +212,8 @@ jQuery(document).ready(function () {
         .on('resize DOMNodeInserted', function () {
 //            jQuery( '.mce-text' ).removeAttr( 'style' );
         });
+
+    setUserSetting( 'editor', 'tinymce' );
+
 
 });
