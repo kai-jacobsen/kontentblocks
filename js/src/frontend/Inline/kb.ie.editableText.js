@@ -14,8 +14,8 @@ KB.IEdit.Text = function (el) {
     //@TODO needs API
 
 
-    if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]){
-        settings = (KB.payload.FrontSettings[el.id].tinymce) ? KB.payload.FrontSettings[el.id].tinymce : {} ;
+    if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]) {
+        settings = (KB.payload.FrontSettings[el.id].tinymce) ? KB.payload.FrontSettings[el.id].tinymce : {};
     }
 
     // defaults
@@ -29,7 +29,7 @@ KB.IEdit.Text = function (el) {
         inline: true,
         plugins: 'textcolor, wplink',
         statusbar: false,
-        preview_styles:false,
+        preview_styles: false,
         setup: function (ed) {
 
             ed.on('init', function () {
@@ -43,7 +43,7 @@ KB.IEdit.Text = function (el) {
                 };
                 ed.module.view.$el.addClass('inline-editing-active');
 
-                jQuery('body').on('click','.mce-listbox', function(){
+                jQuery('body').on('click', '.mce-listbox', function () {
                     jQuery('.mce-stack-layout-item span').removeAttr('style');
                 });
 
@@ -51,7 +51,7 @@ KB.IEdit.Text = function (el) {
 
             });
 
-            ed.on('click', function(e){
+            ed.on('click', function (e) {
                 e.stopPropagation();
             });
 
@@ -59,7 +59,6 @@ KB.IEdit.Text = function (el) {
                 jQuery('#kb-toolbar').show();
                 ed.module.view.$el.addClass('inline-edit-active');
             });
-
 
             ed.on('change', function (e) {
                 _K.info('Got Dirty');
@@ -104,7 +103,7 @@ KB.IEdit.Text = function (el) {
         }
     };
 
-    defaults = _.extend(defaults,settings);
+    defaults = _.extend(defaults, settings);
 
     tinymce.init(_.defaults(defaults, {
         selector: '#' + el.id

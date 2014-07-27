@@ -34,7 +34,7 @@ KB.ViewsCollection = function () {
     this.remove = function (id) {
         var view = this.get(id);
         this.trigger('kb:backend::viewDeleted', view);
-        view.removeControls();
+//        view.removeControls();
         delete this.views[id];
     };
 

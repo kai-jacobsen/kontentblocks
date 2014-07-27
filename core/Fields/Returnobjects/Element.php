@@ -85,7 +85,7 @@ class Element extends AbstractEditableFieldReturn {
 
 
 		if ( !in_array( $this->el, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) ) ) {
-			$filtered = $this->value;
+			$filtered = apply_filters('the_content', $this->value);
 		} else {
 			$filtered = $this->value;
 		}

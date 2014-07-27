@@ -172,6 +172,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn {
 				$this->addAttr( 'data-index', $this->index );
 			}
 			$this->addAttr( 'data-uid', $this->uniqueId );
+
 		}
 	}
 
