@@ -75,7 +75,6 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
         'mouseleave .kb-nav-toggle' : 'out'
     },
     render: function () {
-        console.log(this.show);
         this.$el.appendTo('body');
         this.$list = jQuery('<ul></ul>').appendTo(this.$el);
         this.$toggle = jQuery('<div class="kb-nav-toggle genericon genericon-menu"></div>').appendTo(this.$el);

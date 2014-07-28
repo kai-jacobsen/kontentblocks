@@ -94,7 +94,6 @@ KB.IEdit.Link = (function ($) {
             var mId = data.module; // module id
             var moduleData = KB.Modules.get(mId).get('moduleData'); // module model data
             var lData = {};
-            console.log('moduleData', moduleData);
             lData = KB.Util.getIndex(moduleData, data.kpath);
 
             $href.val(lData.link);

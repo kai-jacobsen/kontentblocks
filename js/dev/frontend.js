@@ -109,7 +109,6 @@ KB.IEdit.Image = function($) {
         remove: ".kb-js-reset-file",
         img: null,
         init: function() {
-            console.log(this);
             var that = this;
             var $body = $("body");
             $body.on("click", this.selector, function(e) {
@@ -273,7 +272,6 @@ KB.IEdit.Link = function($) {
             var mId = data.module;
             var moduleData = KB.Modules.get(mId).get("moduleData");
             var lData = {};
-            console.log("moduleData", moduleData);
             lData = KB.Util.getIndex(moduleData, data.kpath);
             $href.val(lData.link);
             $title.val(lData.title);
@@ -753,7 +751,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 }
                 tinymce.triggerSave();
                 that.model.set("moduleData", res.newModuleData);
-                console.log(that);
                 that.render();
                 that.trigger("kb:moduleUpdated");
                 KB.Events.trigger("KB::ajax-update");
@@ -875,7 +872,6 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
         "mouseleave .kb-nav-toggle": "out"
     },
     render: function() {
-        console.log(this.show);
         this.$el.appendTo("body");
         this.$list = jQuery("<ul></ul>").appendTo(this.$el);
         this.$toggle = jQuery('<div class="kb-nav-toggle genericon genericon-menu"></div>').appendTo(this.$el);
@@ -934,7 +930,6 @@ KB.App = function($) {
     function init() {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
         $toolbar.hide();
-        console.log("set");
         KB.ModuleNav = new KB.Backbone.ModuleNavView();
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);

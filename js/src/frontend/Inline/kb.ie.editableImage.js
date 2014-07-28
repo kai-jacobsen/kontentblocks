@@ -7,7 +7,6 @@ KB.IEdit.Image = (function ($) {
         remove: '.kb-js-reset-file',
         img: null,
         init: function () {
-            console.log(this);
             var that = this;
             var $body = $('body');
             $body.on('click', this.selector, function (e) {

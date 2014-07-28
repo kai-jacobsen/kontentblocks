@@ -86,7 +86,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 }
                 tinymce.triggerSave();
                 that.model.set('moduleData', res.newModuleData);
-                console.log(that);
                 that.render();
                 that.trigger('kb:moduleUpdated');
                 // @TODO events:replace
