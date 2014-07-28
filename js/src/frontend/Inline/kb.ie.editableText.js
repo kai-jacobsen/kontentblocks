@@ -6,14 +6,13 @@
  */
 KB.IEdit.Text = function (el) {
     var settings;
+
     if (_.isUndefined(el)) {
         return false;
     }
 
     // get settings from payload
     //@TODO needs API
-
-
     if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]) {
         settings = (KB.payload.FrontSettings[el.id].tinymce) ? KB.payload.FrontSettings[el.id].tinymce : {};
     }
@@ -35,17 +34,14 @@ KB.IEdit.Text = function (el) {
             ed.on('init', function () {
                 var data = jQuery(ed.bodyElement).data();
                 var module = data.module;
+                ed.kfilter = (data.filter && data.filter === 'content') ? true : false;
                 ed.module = KB.Modules.get(module);
-                ed.kbDataRef = {
-                    key: data.key,
-                    index: data.index,
-                    arrayKey: data.arraykey
-                };
-                ed.module.view.$el.addClass('inline-editing-active');
+                ed.kpath = data.kpath;
+                ed.module.view.$el.addClass('inline-editor-attached');
 
-                jQuery('body').on('click', '.mce-listbox', function () {
-                    jQuery('.mce-stack-layout-item span').removeAttr('style');
-                });
+//                jQuery('body').on('click', '.mce-listbox', function () {
+//                    jQuery('.mce-stack-layout-item span').removeAttr('style');
+//                });
 
                 KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
 
@@ -56,6 +52,9 @@ KB.IEdit.Text = function (el) {
             });
 
             ed.on('focus', function (e) {
+                var con = KB.Util.getIndex(ed.module.get('moduleData'), ed.kpath);
+                ed.previousContent = ed.getContent();
+                ed.setContent(switchEditors.wpautop(con));
                 jQuery('#kb-toolbar').show();
                 ed.module.view.$el.addClass('inline-edit-active');
             });
@@ -81,22 +80,42 @@ KB.IEdit.Text = function (el) {
             ed.on('blur', function () {
                 ed.module.view.$el.removeClass('inline-edit-active');
                 jQuery('#kb-toolbar').hide();
-                var data = ed.kbDataRef;
-                var value = ed.getContent();
-
+                var value = switchEditors._wp_Nop(ed.getContent());
                 var moduleData = _.clone(ed.module.get('moduleData'));
-                if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.index][data.key] = value;
-                } else if (!_.isUndefined(data.index)) {
-                    moduleData[data.index][data.key] = value;
-                } else if (!_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.key] = value;
-                } else {
-                    moduleData[data.key] = value;
-                }
+                var path = ed.kpath;
+                KB.Util.setIndex(moduleData, path, value);
+
+                // && ed.kfilter set
                 if (ed.isDirty()) {
-                    ed.module.trigger('change');
-                    ed.module.set('moduleData', moduleData);
+
+                    if (ed.kfilter) {
+                        jQuery.ajax({
+                            url: ajaxurl,
+                            data: {
+                                action: 'applyContentFilter',
+                                data: value.replace(/\'/g, '%27'),
+                                module: ed.module.toJSON(),
+                                _ajax_nonce: kontentblocks.nonces.read
+                            },
+                            type: 'POST',
+                            dataType: 'html',
+                            success: function (res) {
+                                ed.setContent(res);
+                                ed.module.trigger('change');
+                                ed.module.set('moduleData', moduleData);
+                            },
+                            error: function () {
+                                ed.module.trigger('change');
+                                ed.module.set('moduleData', moduleData);
+                            }
+                        });
+                    } else {
+
+                    }
+
+
+                } else {
+                    ed.setContent(ed.previousContent);
                 }
 
             });

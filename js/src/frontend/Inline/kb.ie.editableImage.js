@@ -72,12 +72,13 @@ KB.IEdit.Image = (function ($) {
             var mId = data.module;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get('moduleData'));
+            var path = data.kpath;
+            KB.Util.setIndex(moduleData, path, value);
 
-            var path = [];
-            path.push(data.arraykey);
-            path.push(data.index);
-            path.push(data.key);
-            KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join('.'), value);
+//            var path = [];
+//            path.push(data.arraykey);
+//            path.push(data.index);
+//            path.push(data.key);
 //            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
 //                moduleData[data.arraykey][data.index][data.key] = value;
 //            } else if (!_.isEmpty(data.index)) {
@@ -111,7 +112,7 @@ KB.IEdit.Image = (function ($) {
                 }
             });
         },
-        prepareValue: function(attachment){
+        prepareValue: function (attachment) {
             return {
                 id: attachment.get('id'),
                 title: attachment.get('title'),

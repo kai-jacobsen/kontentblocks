@@ -1,5 +1,6 @@
 <?php
 
+use Kontentblocks\Ajax\Frontend\ApplyContentFilter;
 use Kontentblocks\Ajax\Frontend\FieldGetImage;
 use Kontentblocks\Ajax\GetSanitizedId;
 use Kontentblocks\Ajax\RemoteGetEditor;
@@ -217,3 +218,15 @@ function getRemoteEditorCb()
 }
 
 add_action( 'wp_ajax_getRemoteEditor', 'getRemoteEditorCb' );
+
+/**
+ * -----------------------------------------
+ * Apply content filter
+ * -----------------------------------------
+ */
+function applyContentFilter()
+{
+    ApplyContentFilter::run();
+}
+
+add_action( 'wp_ajax_applyContentFilter', 'applyContentFilter' );

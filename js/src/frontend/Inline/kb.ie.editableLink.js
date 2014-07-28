@@ -5,12 +5,12 @@ KB.IEdit.Link = (function ($) {
         selector: '.editable-link',
         oWpLink: null,
         $anchor: null,
-        init: function(){
+        init: function () {
             var that = this;
             $body = $('body');
-            $body.on('click', this.selector, function(e){
+            $body.on('click', this.selector, function (e) {
                 e.stopPropagation();
-                if (e.ctrlKey){
+                if (e.ctrlKey) {
                     e.preventDefault();
                     e.stopPropagation();
                     that.$anchor = $(this);
@@ -18,14 +18,14 @@ KB.IEdit.Link = (function ($) {
                 }
             });
 
-            $body.on('click', '#wp-link-close', function(){
+            $body.on('click', '#wp-link-close', function () {
                 that.close();
             });
         },
-        open: function(){
+        open: function () {
             var that = this;
 
-            if (!window.wpLink){
+            if (!window.wpLink) {
                 return false;
             }
 
@@ -56,7 +56,7 @@ KB.IEdit.Link = (function ($) {
                 // get contents of dialog
                 attrs = wpLink.getAttrs();
 
-                if ($linktext){
+                if ($linktext) {
                     attrs.linktext = $('input', $linktext).val();
                 }
 
@@ -76,16 +76,16 @@ KB.IEdit.Link = (function ($) {
             };
 
         },
-        addLinktextField: function(){
-           $form = $('form#wp-link');
-           $linkTarget = $('.link-target', $form);
+        addLinktextField: function () {
+            $form = $('form#wp-link');
+            $linkTarget = $('.link-target', $form);
 
-           $linktext = $('<div><label><span>LinkText</span><input type="text" value="hello" name="linktext" ></label></div>').insertBefore($linkTarget);
+            $linktext = $('<div><label><span>LinkText</span><input type="text" value="hello" name="linktext" ></label></div>').insertBefore($linkTarget);
         },
-        customizeDialog: function(){
+        customizeDialog: function () {
             $('#wp-link-wrap').addClass('kb-customized');
         },
-        setValues: function(){
+        setValues: function () {
             $href = $('#url-field', $form);
             $title = $('#link-title-field', $form);
             //$linktext already set
@@ -94,35 +94,29 @@ KB.IEdit.Link = (function ($) {
             var mId = data.module; // module id
             var moduleData = KB.Modules.get(mId).get('moduleData'); // module model data
             var lData = {};
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-               lData = moduleData[data.arraykey][data.index][data.key];
-            } else if (!_.isEmpty(data.index)) {
-                lData = moduleData[data.index][data.key];
-            } else if (!_.isEmpty(data.arraykey)) {
-                lData = moduleData[data.arraykey][data.key];
-            } else {
-                lData = moduleData[data.key];
-            }
+            console.log('moduleData', moduleData);
+            lData = KB.Util.getIndex(moduleData, data.kpath);
+
             $href.val(lData.link);
             $title.val(lData.title);
             $linktext.find('input').val(lData.linktext);
 
-            if (lData.target === '_blank'){
+            if (lData.target === '_blank') {
                 $('#link-target-checkbox').prop('checked', true);
             }
 
         },
-        close: function(){
+        close: function () {
             // restore the original functions to wpLink
             wpLink.isMCE = this.restore_isMce;
             wpLink.htmlUpdate = this.restore_htmlUpdate;
             wpLink.close = this.restore_close;
             $linktext.remove();
         },
-        updateModel: function(attrs){
+        updateModel: function (attrs) {
+
             var data = this.$anchor.data();
             var mId = data.module; // module id
-            var fkey = data.fieldKey; // primary key
             var cModule = KB.Modules.get(mId); // module model
 
             var value = {
@@ -134,16 +128,8 @@ KB.IEdit.Link = (function ($) {
 
             // clone model data
             var moduleData = _.clone(cModule.get('moduleData'));
-
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isEmpty(data.index)) {
-                moduleData[data.index][data.key] = value;
-            } else if (!_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.key] = value;
-            } else {
-                moduleData[data.key] = value;
-            }
+            var path = data.kpath;
+            KB.Util.setIndex(moduleData, path, value);
 
             // set data back on module model
             cModule.set('moduleData', moduleData);

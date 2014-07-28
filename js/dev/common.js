@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-26 */
+/*! Kontentblocks DevVersion 2014-07-28 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -679,6 +679,20 @@ KB.Util = function($) {
         },
         setIndex: function(obj, is, value) {
             if (typeof is == "string") return this.setIndex(obj, is.split("."), value); else if (is.length == 1 && value !== undefined) return obj[is[0]] = value; else if (is.length == 0) return obj; else return this.setIndex(obj[is[0]], is.slice(1), value);
+        },
+        getIndex: function(obj, s) {
+            s = s.replace(/\[(\w+)\]/g, ".$1");
+            s = s.replace(/^\./, "");
+            var a = s.split(".");
+            while (a.length) {
+                var n = a.shift();
+                if (n in obj) {
+                    obj = obj[n];
+                } else {
+                    return;
+                }
+            }
+            return obj;
         },
         cleanArray: function(actual) {
             var newArray = new Array();

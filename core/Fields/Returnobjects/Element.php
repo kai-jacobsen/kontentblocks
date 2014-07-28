@@ -27,8 +27,10 @@ class Element extends AbstractEditableFieldReturn {
 	 */
 	protected $attributes = array();
 
-
-	protected $field;
+    /**
+     * @var \Kontentblocks\Fields\Field
+     */
+    protected $field;
 
 
 	/**
@@ -79,7 +81,6 @@ class Element extends AbstractEditableFieldReturn {
 	 */
 	public function html() {
         $this->handleLoggedInUsers();
-
         $format         = '<%1$s id="%4$s" %3$s>%2$s</%1$s>';
 		$formatWithLink = '<%1$s id="%4$s" %3$s><a href="%5$s">%2$s</a></%1$s>';
 
@@ -119,6 +120,11 @@ class Element extends AbstractEditableFieldReturn {
 
     public function handleLoggedInUsers(){
         parent::handleLoggedInUsers();
+
+        if ($this->field->getArg('the_content') === true){
+            $this->addAttr('data-filter', 'content');
+        }
+
         $this->toJSON();
     }
 

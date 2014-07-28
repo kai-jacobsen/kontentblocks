@@ -213,6 +213,7 @@ jQuery(document).ready(function () {
 //            jQuery( '.mce-text' ).removeAttr( 'style' );
         });
 
+    // force user cookie to tinymce
     setUserSetting( 'editor', 'tinymce' );
 
 

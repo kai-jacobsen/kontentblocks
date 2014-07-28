@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-26 */
+/*! Kontentblocks DevVersion 2014-07-28 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -163,11 +163,8 @@ KB.IEdit.Image = function($) {
             var mId = data.module;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get("moduleData"));
-            var path = [];
-            path.push(data.arraykey);
-            path.push(data.index);
-            path.push(data.key);
-            KB.Util.setIndex(moduleData, KB.Util.cleanArray(path).join("."), value);
+            var path = data.kpath;
+            KB.Util.setIndex(moduleData, path, value);
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set("moduleData", moduleData);
             jQuery.ajax({
@@ -276,15 +273,8 @@ KB.IEdit.Link = function($) {
             var mId = data.module;
             var moduleData = KB.Modules.get(mId).get("moduleData");
             var lData = {};
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                lData = moduleData[data.arraykey][data.index][data.key];
-            } else if (!_.isEmpty(data.index)) {
-                lData = moduleData[data.index][data.key];
-            } else if (!_.isEmpty(data.arraykey)) {
-                lData = moduleData[data.arraykey][data.key];
-            } else {
-                lData = moduleData[data.key];
-            }
+            console.log("moduleData", moduleData);
+            lData = KB.Util.getIndex(moduleData, data.kpath);
             $href.val(lData.link);
             $title.val(lData.title);
             $linktext.find("input").val(lData.linktext);
@@ -301,7 +291,6 @@ KB.IEdit.Link = function($) {
         updateModel: function(attrs) {
             var data = this.$anchor.data();
             var mId = data.module;
-            var fkey = data.fieldKey;
             var cModule = KB.Modules.get(mId);
             var value = {
                 link: attrs.href,
@@ -310,15 +299,8 @@ KB.IEdit.Link = function($) {
                 linktext: attrs.linktext
             };
             var moduleData = _.clone(cModule.get("moduleData"));
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isEmpty(data.index)) {
-                moduleData[data.index][data.key] = value;
-            } else if (!_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.key] = value;
-            } else {
-                moduleData[data.key] = value;
-            }
+            var path = data.kpath;
+            KB.Util.setIndex(moduleData, path, value);
             cModule.set("moduleData", moduleData);
         }
     };
@@ -347,22 +329,19 @@ KB.IEdit.Text = function(el) {
             ed.on("init", function() {
                 var data = jQuery(ed.bodyElement).data();
                 var module = data.module;
+                ed.kfilter = data.filter && data.filter === "content" ? true : false;
                 ed.module = KB.Modules.get(module);
-                ed.kbDataRef = {
-                    key: data.key,
-                    index: data.index,
-                    arrayKey: data.arraykey
-                };
-                ed.module.view.$el.addClass("inline-editing-active");
-                jQuery("body").on("click", ".mce-listbox", function() {
-                    jQuery(".mce-stack-layout-item span").removeAttr("style");
-                });
+                ed.kpath = data.kpath;
+                ed.module.view.$el.addClass("inline-editor-attached");
                 KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
             });
             ed.on("click", function(e) {
                 e.stopPropagation();
             });
             ed.on("focus", function(e) {
+                var con = KB.Util.getIndex(ed.module.get("moduleData"), ed.kpath);
+                ed.previousContent = ed.getContent();
+                ed.setContent(switchEditors.wpautop(con));
                 jQuery("#kb-toolbar").show();
                 ed.module.view.$el.addClass("inline-edit-active");
             });
@@ -385,21 +364,35 @@ KB.IEdit.Text = function(el) {
             ed.on("blur", function() {
                 ed.module.view.$el.removeClass("inline-edit-active");
                 jQuery("#kb-toolbar").hide();
-                var data = ed.kbDataRef;
-                var value = ed.getContent();
+                var value = switchEditors._wp_Nop(ed.getContent());
                 var moduleData = _.clone(ed.module.get("moduleData"));
-                if (!_.isUndefined(data.index) && !_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.index][data.key] = value;
-                } else if (!_.isUndefined(data.index)) {
-                    moduleData[data.index][data.key] = value;
-                } else if (!_.isUndefined(data.arrayKey)) {
-                    moduleData[data.arrayKey][data.key] = value;
-                } else {
-                    moduleData[data.key] = value;
-                }
+                var path = ed.kpath;
+                KB.Util.setIndex(moduleData, path, value);
                 if (ed.isDirty()) {
-                    ed.module.trigger("change");
-                    ed.module.set("moduleData", moduleData);
+                    if (ed.kfilter) {
+                        jQuery.ajax({
+                            url: ajaxurl,
+                            data: {
+                                action: "applyContentFilter",
+                                data: value.replace(/\'/g, "%27"),
+                                module: ed.module.toJSON(),
+                                _ajax_nonce: kontentblocks.nonces.read
+                            },
+                            type: "POST",
+                            dataType: "html",
+                            success: function(res) {
+                                ed.setContent(res);
+                                ed.module.trigger("change");
+                                ed.module.set("moduleData", moduleData);
+                            },
+                            error: function() {
+                                ed.module.trigger("change");
+                                ed.module.set("moduleData", moduleData);
+                            }
+                        });
+                    } else {}
+                } else {
+                    ed.setContent(ed.previousContent);
                 }
             });
         }

@@ -35,7 +35,7 @@ class Utilities
 
     }
 
-    static public function editor( $id, $data, $name = null, $media = true, $args = array() )
+    static public function editor( $id, $data, $name = null, $media = false, $args = array() )
     {
 
         $plugins = array_unique(
@@ -62,7 +62,7 @@ class Utilities
         $settings = array(
             'wpautop' => true,
             // use wpautop?
-            'media_buttons' => false,
+            'media_buttons' => $media,
             // show insert/upload button(s)
             'textarea_name' => $name,
             // set the textarea name to something different, square brackets [] can be used here
