@@ -69,26 +69,26 @@ class ModuleTemplates
     {
         $collect = array();
 
+        //@TODO add caching
         $data = get_posts(
             array(
-                'post_type'        => 'kb-mdtpl',
-                'posts_per_page'   => - 1,
+                'post_type' => 'kb-mdtpl',
+                'posts_per_page' => - 1,
                 'suppress_filters' => false
             )
         );
-
 
         if (empty( $data )) {
             return false;
         }
         foreach ($data as $tpl) {
-            $index                    = get_post_meta( $tpl->ID, 'kb_kontentblocks', true );
-            $def                      = $index[$tpl->post_name];
-            $def['templateObj']       = $tpl;
+            $index = get_post_meta( $tpl->ID, 'kb_kontentblocks', true );
+            $def = $index[$tpl->post_name];
+            $def['templateObj'] = $tpl;
             $collect[$tpl->post_name] = $def;
         }
 
-        $this->templates       = array_filter(
+        $this->templates = array_filter(
             $collect,
             function ( $item ) {
                 return !$item['master'];

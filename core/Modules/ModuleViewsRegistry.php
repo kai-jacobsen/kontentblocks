@@ -28,12 +28,17 @@ class ModuleViewsRegistry
             return $this->views[$classname];
         }
 
-        $FileSystem              = new ModuleViewFilesystem( $Module );
+        $FileSystem = new ModuleViewFilesystem( $Module );
         $this->views[$classname] = $FileSystem;
         return $FileSystem;
 
     }
 
+    /**
+     *
+     * @param Module $Module
+     * @return ModuleViewLoader
+     */
     public function getViewLoader( Module $Module )
     {
         $classname = get_class( $Module );
@@ -41,7 +46,7 @@ class ModuleViewsRegistry
             return $this->loaders[$classname];
         }
 
-        $ViewLoader                = new ModuleViewLoader( $Module );
+        $ViewLoader = new ModuleViewLoader( $Module );
         $this->loaders[$classname] = $ViewLoader;
         return $ViewLoader;
 

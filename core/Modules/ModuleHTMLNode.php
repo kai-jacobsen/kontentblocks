@@ -32,13 +32,13 @@ class ModuleHTMLNode
     {
 
         // open tag for block list item
-        echo $this->_openListItem();
+        echo $this->openListItem();
 
         //markup for block header
         echo $this->header();
 
         // inner block open
-        echo $this->_openInner();
+        echo $this->openInner();
 
 
         // if disabled don't output, just show disabled message
@@ -55,9 +55,9 @@ class ModuleHTMLNode
         // essentially calls wp actions
         $this->footer();
 
-        echo $this->_closeInner();
+        echo $this->closeInner();
 
-        echo $this->_closeListItem();
+        echo $this->closeListItem();
 
         if (method_exists( $this->Module, 'adminEnqueue' )) {
             $this->Module->adminEnqueue();
@@ -67,7 +67,11 @@ class ModuleHTMLNode
     }
 
 
-    private function _openListItem()
+    /**
+     * Main html element
+     * @return string
+     */
+    private function openListItem()
     {
         // extract the block id number
         $count = strrchr( $this->Module->getModuleId(), "_" );
@@ -85,8 +89,9 @@ class ModuleHTMLNode
 
         // Block List Item
         return "<li id='{$this->Module->getModuleId()}' rel='{$this->Module->getModuleId(
-        )}{$count}' data-blockclass='{$classname}' class='{$this->Module->getSetting('id')} kb_wrapper kb_block {$this->Module->getStatusClass(
-        )} {$disabledclass} {$uidisabled} {$unsortable}'>
+        )}{$count}' data-blockclass='{$classname}' class='{$this->Module->getSetting(
+            'id'
+        )} kb_wrapper kb_block {$this->Module->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
 		<input type='hidden' name='{$this->Module->getModuleId()}[areaContext]' value='{$this->Module->areaContext}' />
 		";
 
@@ -97,7 +102,7 @@ class ModuleHTMLNode
      * The closing li tag
      * @return string
      */
-    private function _closeListItem()
+    private function closeListItem()
     {
         return "</li>";
 
@@ -108,7 +113,7 @@ class ModuleHTMLNode
      * @TODO clean up module header from legacy code
      */
 
-    private function _openInner()
+    private function openInner()
     {
         $lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
 
@@ -148,7 +153,7 @@ class ModuleHTMLNode
      * Lost in outer div space
      * @return string
      */
-    private function _closeInner()
+    private function closeInner()
     {
         return "</div></div>";
     }
@@ -205,8 +210,8 @@ class ModuleHTMLNode
      */
     public function footer()
     {
-        do_action( "block_footer_{$this->Module->getSetting( 'id' )}" );
-        do_action( 'block_footer', $this->Module );
+        do_action( "kb:module.footer-{$this->Module->getSetting( 'id' )}" );
+        do_action( 'kb:module.footer', $this->Module );
 
     }
 } 
