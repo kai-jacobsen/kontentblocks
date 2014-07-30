@@ -3,7 +3,7 @@
 namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\JSONBridge;
 
@@ -116,7 +116,7 @@ class Area
         echo "<div id='{$this->id}-container' class='area-wrap clearfix cf'>";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
-        $Tpl = new CoreTemplate( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );
+        $Tpl = new CoreView( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );
         $Tpl->render( true );
 
     }

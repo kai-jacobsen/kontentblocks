@@ -4,7 +4,7 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Templating\CoreView;
 
 /**
  * Class ModuleViewLoader
@@ -50,7 +50,6 @@ class ModuleViewLoader
         if (count( $this->views ) > 1) {
             $this->hasViews = true;
         }
-
         /**
          * register handler to save the user choice when the frontend edit module saves
          */
@@ -65,7 +64,7 @@ class ModuleViewLoader
     {
 
         if ($this->hasViews()) {
-            $tpl = new CoreTemplate(
+            $tpl = new CoreView(
                 'view-selector.twig',
                 array( 'templates' => $this->prepareTemplates(), 'module' => $this->Module )
             );

@@ -17,10 +17,9 @@ class Twig
 
 
     /**
-     * @param $Kontentblocks
      * @return \Twig_Loader_Filesystem
      */
-    public static function setupLoader( $Kontentblocks )
+    public static function setupLoader()
     {
         $paths[] = apply_filters( 'kb_twig_def_path', get_template_directory() . '/module-templates/' );
         if (is_child_theme()) {
@@ -110,7 +109,6 @@ class Twig
             'getImage',
             function ( $id, $width = null, $height = null, $crop = true, $single = true, $upscale = true ) {
                 return ImageResize::getInstance()->process( $id, $width, $height, $crop, $single, $upscale );
-
             }
         );
         $Environment->addFunction( $getImage );
@@ -123,7 +121,5 @@ class Twig
     public static function setPath( $path )
     {
         Kontentblocks::getService( 'templating.twig.loader' )->prependPath( $path );
-
-
     }
 }

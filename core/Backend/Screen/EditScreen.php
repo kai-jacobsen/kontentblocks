@@ -5,7 +5,7 @@ namespace Kontentblocks\Backend\Screen;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\Definitions\DateTime;
 use Kontentblocks\Helper;
-use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -205,7 +205,7 @@ Class EditScreen
     {
         global $current_user;
         if (current_user_can( 'manage_kontentblocks' )) {
-            $tpl = new CoreTemplate('no-areas.twig');
+            $tpl = new CoreView('no-areas.twig');
             $tpl->render(true);
         }
     }

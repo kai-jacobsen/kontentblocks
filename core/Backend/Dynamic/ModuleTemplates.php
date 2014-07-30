@@ -7,7 +7,7 @@ use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
-use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
@@ -140,7 +140,7 @@ class ModuleTemplates
             echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
         }
         // To keep html out of php files as much as possible twig is used
-        $FormNew = new CoreTemplate( 'module-template.twig', $templateData );
+        $FormNew = new CoreView( 'module-template.twig', $templateData );
         $FormNew->render( true );
 
 
@@ -174,7 +174,7 @@ class ModuleTemplates
 
         // To keep html out of php files as much as possible twig is used
         // Good thing about twig is it handles unset vars gracefully
-        $FormNew = new CoreTemplate( 'add-new-form.twig', $templateData );
+        $FormNew = new CoreView( 'add-new-form.twig', $templateData );
         $FormNew->render( true );
 
     }

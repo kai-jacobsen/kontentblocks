@@ -17,6 +17,35 @@ abstract class Module
 {
 
     /**
+     * @var string
+     */
+    public $areaContext;
+
+    /**
+     * area id where module is attached
+     * @var string
+     */
+    public $area;
+
+    /**
+     * If ViewLoader is used, holds the twig template file name
+     * @var string
+     */
+    public $viewfile;
+
+    /**
+     * Indicates if this module is a master module
+     * @var bool
+     */
+    public $master;
+
+    /**
+     * in case of a template, it's the id of the template post object
+     * @var int
+     */
+    public $parentId;
+
+    /**
      * Environment vars
      *
      * @var array
@@ -64,25 +93,25 @@ abstract class Module
     public $instance_id;
 
     /**
-     * II. Constructor
+     * Constructor
      *
      * @param null $args
      * @param array $data
-     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
+     * @param PostEnvironment $Environment
      *
      * @internal param string $id identifier
      * @internal param string $name default name, can be individual overwritten
      * @internal param array $block_settings
      */
-    function __construct( $args = null, $data = array(), PostEnvironment $environment = null )
+    function __construct( $args = null, $data = array(), PostEnvironment $Environment = null )
     {
         // batch setup
         $this->set( $args );
 
-        $this->moduleData = $data;
-        $this->rawModuleData = $data;
-        if (isset( $environment )) {
-            $this->setEnvVarsFromEnvironment( $environment );
+        $this->setModuleData( $data );
+
+        if (isset( $Environment )) {
+            $this->setEnvVarsFromEnvironment( $Environment );
         }
 
 
@@ -92,6 +121,15 @@ abstract class Module
 
         }
 
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setModuleData( $data = array() )
+    {
+        $this->moduleData = $data;
+        $this->rawModuleData = $data;
     }
 
     /**
@@ -105,9 +143,11 @@ abstract class Module
         if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
 
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
+            // render view select field
             echo $this->ViewLoader->render();
         }
 
+        // render fields if set
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
             $this->Fields->renderFields();
         }
@@ -127,13 +167,10 @@ abstract class Module
      */
     public function save( $data, $old )
     {
-
         if (isset( $this->Fields )) {
             return $this->saveFields( $data, $old );
         }
-
         return $data;
-
     }
 
     /**
@@ -159,7 +196,7 @@ abstract class Module
     {
         $data = $this->moduleData;
         if (isset( $this->Fields )) {
-            $this->_setupFieldData();
+            $this->setupFieldData();
         }
 
         $this->View = $this->getView();
@@ -186,7 +223,7 @@ abstract class Module
      * Pass the raw module data to the fields, where the data
      * may be modified, depends on field configuration
      */
-    public function _setupFieldData()
+    public function setupFieldData()
     {
         if (empty( $this->moduleData ) || !is_array( $this->moduleData )) {
             return;
@@ -223,7 +260,6 @@ abstract class Module
     {
         if (!is_array( $args )) {
             _doing_it_wrong( 'set() on block instance', '$args must be an array of key/value pairs', '1.0.0' );
-
             return false;
         }
 
@@ -276,16 +312,16 @@ abstract class Module
      * If an Environment is given, add from that
      * and further extend envVars
      *
-     * @param $environment
+     * @param $Environment
      */
-    public function setEnvVarsfromEnvironment( $environment )
+    public function setEnvVarsfromEnvironment( PostEnvironment $Environment )
     {
         $this->envVars = wp_parse_args(
             $this->envVars,
             array(
-                'postType' => $environment->get( 'postType' ),
-                'pageTemplate' => $environment->get( 'pageTemplate' ),
-                'postId' => absint( $environment->get( 'postId' ) ),
+                'postType' => $Environment->get( 'postType' ),
+                'pageTemplate' => $Environment->get( 'pageTemplate' ),
+                'postId' => absint( $Environment->get( 'postId' ) ),
                 'areaContext' => $this->getAreaContext(),
                 'area' => $this->area
             )

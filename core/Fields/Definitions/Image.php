@@ -4,7 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Language\I18n;
-use Kontentblocks\Templating\FieldTemplate;
+use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\AttachmentHandler;
 
 /**
@@ -23,7 +23,7 @@ Class Image extends Field {
 
 		$value = $this->getValue();
 		// using twig template for html output
-		$tpl = new FieldTemplate(
+		$tpl = new FieldView(
 			'image.twig', array(
 				'field' => $this,
 				'value' => $value,

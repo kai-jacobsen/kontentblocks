@@ -120,7 +120,7 @@ add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
  */
 function duplicateModuleCb()
 {
-    new DuplicateModule();
+    DuplicateModule::run();
 
 }
 
@@ -159,7 +159,7 @@ add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );
  */
 function getModuleOptionsCb()
 {
-    new GetModuleOptions();
+    GetModuleOptions::run();
 
 }
 
@@ -172,7 +172,7 @@ add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );
  */
 function updateModuleOptionsCb()
 {
-    new UpdateModuleOptions();
+    UpdateModuleOptions::run();
 
 }
 

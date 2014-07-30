@@ -5,7 +5,7 @@ namespace Kontentblocks\Templating;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 
-class FieldTemplate
+class FieldView
 {
 
     protected $data;

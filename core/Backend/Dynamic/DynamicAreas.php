@@ -8,7 +8,7 @@ use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -381,7 +381,7 @@ class DynamicAreas
             'manual' => ( isset( $data['manual'] ) ) ? $data['manual'] : false
         );
 
-        $Form = new CoreTemplate( 'new-area-form.twig', $templateData );
+        $Form = new CoreView( 'new-area-form.twig', $templateData );
         $Form->render( true );
     }
 

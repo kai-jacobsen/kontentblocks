@@ -4,7 +4,7 @@
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Templating\CoreTemplate;
+use Kontentblocks\Templating\CoreView;
 
 /**
  * Class ModuleCoreMasterModule
@@ -100,7 +100,7 @@ class ModuleCoreMasterModule extends Module
 
         $tpl = ( isset( $this->state['valid'] ) && $this->state['valid'] ) ? 'master-module-valid.twig' : 'master-module-invalid.twig';
 
-        $Tpl = new CoreTemplate( $tpl, $templateData );
+        $Tpl = new CoreView( $tpl, $templateData );
         $Tpl->render( true );
 
     }
