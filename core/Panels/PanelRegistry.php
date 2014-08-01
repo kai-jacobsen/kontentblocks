@@ -2,6 +2,10 @@
 
 namespace Kontentblocks\Panels;
 
+/**
+ * Class PanelRegistry
+ * @package Kontentblocks\Panels
+ */
 class PanelRegistry
 {
 
@@ -35,6 +39,7 @@ class PanelRegistry
      */
     public function add( $id, $args )
     {
+
         if (!isset( $this->panels[$id] )) {
             if (isset( $args['moduleClass'] ) && class_exists( $args['moduleClass'] )) {
                 $this->panels[$id] = new ModulePanel( $args );
@@ -51,6 +56,10 @@ class PanelRegistry
         }
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function get( $id )
     {
         if (isset( $this->panels[$id] )) {

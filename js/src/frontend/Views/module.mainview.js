@@ -23,7 +23,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.bind('save', this.model.save);
 
         this.render();
-
         KB.ModuleNav.attach(this);
     },
     events: {

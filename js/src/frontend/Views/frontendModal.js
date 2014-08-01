@@ -141,7 +141,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.$inner.attr('id', that.view.model.get('instance_id'));
                 // append the html to the inner form container
                 that.$inner.append(res.html);
-                that.$el.fadeTo(750, 0.1);
+                that.$el.fadeTo(300, 0.1);
 
                 // (Re)Init UI widgets
                 // TODO find better method for this
@@ -166,10 +166,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 // Make the modal fit
                 setTimeout(function () {
                     that.recalibrate();
-                    that.$el.fadeTo(300, 1);
+
 
                 }, 600);
-
+                that.$el.fadeTo(300, 1);
 
             },
             error: function () {

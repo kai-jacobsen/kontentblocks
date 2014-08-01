@@ -123,7 +123,6 @@ KB.IEdit.Text = function (el) {
     };
 
     defaults = _.extend(defaults, settings);
-
     tinymce.init(_.defaults(defaults, {
         selector: '#' + el.id
     }));

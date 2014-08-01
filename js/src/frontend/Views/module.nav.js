@@ -2,6 +2,7 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
 
     initialize: function () {
         var that = this;
+        // this.model refers to the moduleView
         this.el = KB.Templates.render('frontend/module-nav-item', {
             view: this.model.model.toJSON()
         });
@@ -48,7 +49,8 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
         e.stopPropagation();
         this.model.openOptions();
     },
-    inlineUpdate:function(){
+    inlineUpdate:function(e){
+        e.stopPropagation();
         this.model.updateModule();
         this.model.getClean();
     },
@@ -66,6 +68,7 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
     tagName: 'div',
     className: 'kb-module-nav-container',
     initialize: function () {
+        // get or set show state to local storage
         this.show = _.isNull(KB.Util.stex.get('kb-nav-show')) ? true : KB.Util.stex.get('kb-nav-show');
         this.render();
     },

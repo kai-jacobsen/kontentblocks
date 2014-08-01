@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-28 */
+/*! Kontentblocks DevVersion 2014-07-30 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -518,7 +518,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.view.clearFields();
                 that.$inner.attr("id", that.view.model.get("instance_id"));
                 that.$inner.append(res.html);
-                that.$el.fadeTo(750, .1);
+                that.$el.fadeTo(300, .1);
                 if (res.json) {
                     var merged = _.extend(KB.payload, res.json);
                     KB.payload = merged;
@@ -536,8 +536,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 }, 500);
                 setTimeout(function() {
                     that.recalibrate();
-                    that.$el.fadeTo(300, 1);
                 }, 600);
+                that.$el.fadeTo(300, 1);
             },
             error: function() {
                 console.log("e");
@@ -846,7 +846,8 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
         e.stopPropagation();
         this.model.openOptions();
     },
-    inlineUpdate: function() {
+    inlineUpdate: function(e) {
+        e.stopPropagation();
         this.model.updateModule();
         this.model.getClean();
     },

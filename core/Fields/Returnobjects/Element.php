@@ -143,7 +143,7 @@ class Element extends AbstractEditableFieldReturn {
 		}
 
 		if ( in_array( $this->el, $text ) ) {
-			$this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
+			$this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
 
 			return 'editable';
 		}

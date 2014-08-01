@@ -41,9 +41,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 view.$el.remove();
             });
         });
-        this.listenTo(this, 'template::changed', function(){
-                that.clearFields();
-                that.updateModuleForm();
+        this.listenTo(this, 'template::changed', function () {
+            that.clearFields();
+            that.updateModuleForm();
         });
 
 
@@ -85,11 +85,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         } else {
             this.$inner.html('empty');
         }
-        if (response.json.Fields){
+        if (response.json.Fields) {
             KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         }
         // re-init UI listeners
-        // @todo there is a better way
         KB.Ui.repaint(this.$el);
         KB.Fields.trigger('update');
         this.trigger('kb:backend::viewUpdated');

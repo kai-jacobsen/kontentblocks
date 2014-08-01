@@ -28,7 +28,7 @@ class PanelFieldManager extends AbstractFieldManager
      * Array of Field groups
      * @var array
      */
-    protected $Structure = array();
+    public  $Structure = array();
 
     /**
      * Constructor

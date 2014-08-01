@@ -5,6 +5,8 @@ namespace Kontentblocks\Panels;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ModulePanel
@@ -12,7 +14,7 @@ use Kontentblocks\Modules\Module;
  * Used on posts (any post type) and behaves / can be used like a regular module
  * @package Kontentblocks\Panels
  */
-class ModulePanel
+class ModulePanel extends AbstractPanel
 {
 
     /**
@@ -27,7 +29,7 @@ class ModulePanel
      */
     protected $moduleClass;
 
-    /*
+    /**
      * Module Instance
      * @var \Kontentblocks\Modules\StaticModule
      */
@@ -69,8 +71,15 @@ class ModulePanel
      */
     protected $data;
 
+    /**
+     * @var bool
+     */
     protected $saveAsSingle;
 
+    /**
+     * @param $args
+     * @throws \Exception
+     */
     public function __construct( $args )
     {
         $args = $this->parseDefaults( $args );
@@ -88,23 +97,31 @@ class ModulePanel
     }
 
 
-    public function  render()
+    /**
+     *
+     */
+    public function render()
     {
         $this->setupData( get_the_ID() );
         $this->Module = $this->setupModule( $this->moduleClass );
-        $Render       = new SingleModuleRenderer( $this->Module );
+        $Render = new SingleModuleRenderer( $this->Module );
         $Render->render();
 
     }
 
-    private function parseDefaults( $args )
+    /**
+     * Make sure some meaningful defaults are set
+     * @param $args
+     * @return mixed
+     */
+    public function parseDefaults( $args )
     {
         $defaults = array(
-            'baseId'       => null,
-            'moduleClass'  => null,
-            'metaBox'      => false,
-            'hook'         => 'edit_form_after_title',
-            'postTypes'    => array(),
+            'baseId' => null,
+            'moduleClass' => null,
+            'metaBox' => false,
+            'hook' => 'edit_form_after_title',
+            'postTypes' => array(),
             'pageTemplate' => array( 'default' )
         );
 
@@ -112,62 +129,11 @@ class ModulePanel
     }
 
 
-    private function setupArgs( $args )
-    {
-        foreach ($args as $k => $v) {
-            if (method_exists( $this, "set" . strtoupper( $k ) )) {
-                $method = "set" . strtoupper( $k );
-                $this->$method( $v );
-            } else {
-                $this->$k = $v;
-            }
-        }
-    }
-
-    private function setupHooks()
-    {
-        foreach ($this->postTypes as $pt) {
-
-            if ($pt === 'page' && !empty( $this->pageTemplates )) {
-                $tpl = get_post_meta( '_wp_page_template' );
-                if (empty( $tpl ) || !in_array( $tpl, $this->pageTemplates )) {
-                    continue;
-                }
-            }
-
-            if ($this->metaBox) {
-                add_action( "add_meta_boxes_{$pt}", array( $this, 'metaBox' ), 10, 1 );
-            } else {
-                add_action( $this->hook, array( $this, 'form' ) );
-            }
-            add_action( "save_post", array( $this, 'save' ), 10, 1 );
-        }
-    }
-
-    public function metaBox( $postObj )
-    {
-
-        $defaults = array(
-            'title'        => 'No Title provided',
-            'context'      => 'advanced',
-            'priority'     => 'high',
-            'saveAsSingle' => false
-        );
-
-        $mb = wp_parse_args( $this->metaBox, $defaults );
-
-        if ($this->metaBox) {
-            add_meta_box(
-                $this->baseId,
-                $mb['title'],
-                array( $this, 'form' ),
-                $postObj->post_type,
-                $mb['context'],
-                $mb['priority']
-            );
-        }
-    }
-
+    /**
+     * Render backend form
+     * @param $postObj
+     * @return mixed
+     */
     public function form( $postObj )
     {
 
@@ -183,14 +149,19 @@ class ModulePanel
         $this->afterForm();
     }
 
+    /**
+     * Save form
+     * @param $postId
+     * @return mixed
+     */
     public function save( $postId )
     {
         if (empty( $_POST[$this->baseId] )) {
             return;
         }
         $this->Module = $this->setupModule( $this->moduleClass );
-        $old          = $this->setupData( $postId );
-        $new          = $this->Module->save( $_POST[$this->baseId], $old );
+        $old = $this->setupData( $postId );
+        $new = $this->Module->save( $_POST[$this->baseId], $old );
         update_post_meta( $postId, '_' . $this->baseId, $new );
 
         if ($this->saveAsSingle) {
@@ -217,26 +188,6 @@ class ModulePanel
         echo "</div></div></div>";
     }
 
-    /**
-     * @TODO: REVISE POST ID
-     *
-     * @param $postId
-     *
-     * @return mixed
-     */
-    private function setupData( $postId )
-    {
-        if (is_object( $postId )) {
-            $id = $postId->ID;
-        } else {
-            $id = $postId;
-        }
-
-        $this->data = get_post_meta( $id, '_' . $this->baseId, true );
-
-        return $this->data;
-    }
-
 
     /**
      * @TODO Too hacky, works as proof
@@ -248,20 +199,31 @@ class ModulePanel
         $defaults = array(
             'instance_id' => $this->baseId,
             'areaContext' => 'static',
-            'post_id'     => get_the_ID(),
-            'area'        => 'static',
-            'class'       => $module
+            'post_id' => get_the_ID(),
+            'area' => 'static',
+            'class' => $module
         );
 
-        $moduleArgs['settings']          = Module::getDefaultSettings();
-        $moduleArgs['state']             = Module::getDefaultState();
-        $moduleArgs['state']['draft']    = false;
-        $moduleArgs['settings']['id']    = $this->baseId . '_static';
+        $moduleArgs['settings'] = Module::getDefaultSettings();
+        $moduleArgs['state'] = Module::getDefaultState();
+        $moduleArgs['state']['draft'] = false;
+        $moduleArgs['settings']['id'] = $this->baseId . '_static';
         $moduleArgs['settings']['class'] = $module;
-        $moduleArgs                      = wp_parse_args( $defaults, $moduleArgs );
-        $Environment                     = Utilities::getEnvironment( get_the_ID() );
+        $moduleArgs = wp_parse_args( $defaults, $moduleArgs );
+        $Environment = Utilities::getEnvironment( get_the_ID() );
 
-        return new $module( $moduleArgs, $this->data, $Environment );
+        $Factory = new ModuleFactory( $module, $moduleArgs, $Environment, $this->data );
+        return $Factory->getModule();
 
+    }
+
+    /**
+     * Prepare and return data for user usage
+     * @param null $postId
+     * @return mixed
+     */
+    public function getData( $postId = null )
+    {
+        // TODO: Implement getData() method.
     }
 }
