@@ -35,8 +35,17 @@ class Utilities
 
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @param null $name
+     * @param bool $media
+     * @param array $args
+     */
     static public function editor( $id, $data, $name = null, $media = false, $args = array() )
     {
+        global $wp_version;
+
 
         $plugins = array_unique(
             apply_filters(
@@ -50,7 +59,6 @@ class Utilities
                     'textcolor',
                     'fullscreen',
                     'wordpress',
-                    'wpautoresize',
                     'wpeditimage',
                     'wpgallery',
                     'wplink',
@@ -59,6 +67,11 @@ class Utilities
                 )
             )
         );
+
+        if( version_compare( $wp_version, '4.0', '>=') ) {
+            $plugins[] = 'wpautoresize';
+        }
+
         $settings = array(
             'wpautop' => true,
             // use wpautop?

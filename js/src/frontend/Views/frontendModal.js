@@ -146,8 +146,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 // (Re)Init UI widgets
                 // TODO find better method for this
                 if (res.json) {
-                    var merged = _.extend(KB.payload, res.json);
-                    KB.payload = merged;
+                    KB.payload = _.extend(KB.payload, res.json);
                 }
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();
@@ -296,6 +295,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                         KB.IEdit.Text(el);
                     });
                     that.model.view.render();
+                    that.model.view.setControlsPosition();
+
 
                 }, 400);
 

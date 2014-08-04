@@ -131,7 +131,7 @@ abstract class OptionsPanel extends AbstractPanel
 
     }
 
-    public function save($postId)
+    public function save( $postId )
     {
 
         $old = $this->setupData();
@@ -154,7 +154,7 @@ abstract class OptionsPanel extends AbstractPanel
      *
      * @return mixed
      */
-    protected  function setupData()
+    protected function setupData()
     {
         if (is_null( $this->data )) {
             $this->data = get_option( $this->baseId, array() );
@@ -165,7 +165,7 @@ abstract class OptionsPanel extends AbstractPanel
 
     abstract public function fields( PanelFieldManager $fieldManager );
 
-    public function form($postobj = null)
+    public function form( $postobj = null )
     {
         do_action( 'kb_enqueue_admin_script' );
 
@@ -232,7 +232,7 @@ abstract class OptionsPanel extends AbstractPanel
      * @return array
      * @TODO __Revise__
      */
-    public function getData($postid = null)
+    public function getData( $postid = null )
     {
         return $this->FieldManager->prepareDataAndGet();
     }

@@ -23,7 +23,18 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.bind('save', this.model.save);
 
         this.render();
-        KB.ModuleNav.attach(this);
+        if (KB.appData.config.useModuleNav){
+            KB.ModuleNav.attach(this);
+        }
+
+        this.setControlsPosition();
+
+        //@TODO events:replace with new handler
+        jQuery(window).on('kontentblocks::ajaxUpdate', function () {
+            that.setControlsPosition();
+        });
+
+
     },
     events: {
         "click a.os-edit-block": "openOptions",
@@ -35,6 +46,41 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function () {
+        var settings = this.model.get('settings');
+        if (settings.controls && settings.controls.hide){
+            return;
+        }
+        this.$el.append(KB.Templates.render('frontend/module-controls', {
+            model: this.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
+        }));
+    },
+    setControlsPosition: function () {
+
+        var mSettings = this.model.get('settings');
+
+        var $controls = jQuery('.os-controls', this.$el);
+        var pos = this.$el.offset();
+
+        if (mSettings.controls && mSettings.controls.toolbar) {
+            pos.top = mSettings.controls.toolbar.top;
+            pos.left = mSettings.controls.toolbar.left;
+        }
+
+//
+//        console.log(pos);
+//
+//        if (pos.top > 100) {
+//            pos.top = pos.top - 70;
+//        }
+//
+//        if (pos.left > 100){
+//            pos.left = pos.left;
+//        }
+
+//        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
+//        $controls.offset({top:  10, left: pos.left, zIndex: 999999});
+        $controls.css({'top': 10 + 'px', 'left':0});
     },
     openOptions: function () {
 
@@ -129,16 +175,22 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     getDirty: function () {
         this.$el.addClass('isDirty');
-        this.controlView.$el.addClass('isDirty');
+        // reminder: controlView is the nav item
+        if (KB.appData.config.useModuleNav){
+            this.controlView.$el.addClass('isDirty');
+        }
     },
     getClean: function () {
         this.$el.removeClass('isDirty');
-        this.controlView.$el.removeClass('isDirty');
+        // reminder: controlView is the nav item
+        if (KB.appData.config.useModuleNav){
+            this.controlView.$el.removeClass('isDirty');
+        }
     },
     modelChange: function () {
         this.getDirty();
     },
     save: function () {
         // TODO utilize this for saving instead of handling this by the modal view
-    },
+    }
 });

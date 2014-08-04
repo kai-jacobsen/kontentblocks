@@ -22,6 +22,7 @@ use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Modules\ModuleViewsRegistry;
+use Kontentblocks\Panels\PanelRegistry;
 use Kontentblocks\Templating\Twig;
 use Pimple;
 
@@ -337,6 +338,9 @@ Class Kontentblocks
         $this->Services['registry.fields'] = function ( $Services ) {
             return new FieldRegistry( $Services );
         };
+        $this->Services['registry.panels'] = function ( $Services ) {
+            return new PanelRegistry( $Services );
+        };
     }
 
     public static function getService( $service )
@@ -356,7 +360,6 @@ Class Kontentblocks
 
 // Fire it up
 Kontentblocks::getInstance();
-
 register_activation_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onActivation' ) );
 register_deactivation_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onDeactivation' ) );
 register_uninstall_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onUninstall' ) );
