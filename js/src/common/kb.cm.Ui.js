@@ -127,7 +127,8 @@ KB.Ui = function ($) {
         },
         initToggleBoxes: function () {
             $('.kb-togglebox-header').on('click', function () {
-                $(this).next('div').slideToggle().toggleClass('kb-toggle-open').end().toggleClass('kb-toggle-open');
+                console.log('cliky');
+                $(this).next('div').slideToggle();
             });
 
             $('.kb_fieldtoggles div:first-child').trigger('click');

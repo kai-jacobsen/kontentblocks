@@ -6,60 +6,66 @@ namespace Kontentblocks\Fields;
  * Alternate way to organize fields
  * Instantiated by:
  * @see Kontentblocks\Fields\FieldManager::render()
- * 
+ *
  * @package Fields
  * @since 1.0.0
  */
-class FieldRenderToggles
+class FieldRendererToggles implements InterfaceFieldRenderer
 {
 
     /**
      * Array of sections to render
-     * @var array 
+     * @var array
      */
     protected $structure;
 
     /**
      * Unique identifier inherited by module
-     * @var string 
+     * @var string
      */
     protected $baseId;
 
     /**
      * Instance data from module
      * Gets passed through to section handler
-     * @var array 
+     * @var array
      */
     protected $data;
 
     /**
      * Length of sections array
-     * @var int 
+     * @var int
      */
     protected $length;
 
-    /**
-     * Constructor
-     * @param type $structure
-     */
-    public function __construct( $structure )
-    {
-        $this->structure = $structure;
-        $this->length    = count( $this->structure );
-
-    }
 
     /**
      * Wrapper to render method
      * @param $baseId
      * @param $data
+     * @return mixed|void
      */
     public function render( $baseId, $data )
     {
+        if (!is_array( $this->structure )) {
+            return;
+        }
+
         $this->baseId = $baseId;
-        $this->data   = $data;
+        $this->data = $data;
 
         $this->renderTogglebox();
+
+    }
+
+    /**
+     * @param $structure
+     * @return mixed|void
+     */
+    public function setStructure( $structure )
+    {
+        $this->structure = $structure;
+        $this->length = count( $this->structure );
 
     }
 
@@ -68,11 +74,11 @@ class FieldRenderToggles
      */
     public function renderTogglebox()
     {
-        if ( $this->length > 1 ) {
+        if ($this->length > 1) {
             $this->_before();
-
-            foreach ( $this->structure as  $section ) {
-                if ( $section->getNumberOfVisibleFields() > 0 ) {
+            /** @var \Kontentblocks\Fields\FieldSection $section */
+            foreach ($this->structure as $section) {
+                if ($section->getNumberOfVisibleFields() > 0) {
                     echo "<div class='kb-togglebox-header'><h3>{$section->getLabel()}</h3></div>";
                     echo "<div class='kb-togglebox-box' id='toggle-{$section->getID()}'>";
                     $section->render( $this->baseId, $this->data );
@@ -80,9 +86,8 @@ class FieldRenderToggles
                 }
             }
             $this->_before();
-        }
-        else {
-            foreach ( $this->structure as $section ) {
+        } else {
+            foreach ($this->structure as $section) {
                 $section->render( $this->baseId, $this->data );
             }
         }

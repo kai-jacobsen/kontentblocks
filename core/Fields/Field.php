@@ -618,6 +618,25 @@ abstract class Field {
 
 	}
 
+    /**
+     * Get condition from condition arg
+     * @param string $type
+     *
+     * @return null
+     */
+    public function getCondition( $type ) {
+
+        $conditions = $this->getArg( 'conditions' );
+        if ( $conditions ) {
+            if (isset($conditions[$type]) && is_string($conditions[$type])){
+                return $conditions[$type];
+            }
+        }
+
+        return false;
+
+    }
+
 	/**
 	 * Mainly used internally to specifiy the fields visibility
 	 * @return bool

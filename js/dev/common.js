@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-30 */
+/*! Kontentblocks DevVersion 2014-08-01 */
 var KB = KB || {};
 
 KB.Backbone = {};
@@ -495,7 +495,8 @@ KB.Ui = function($) {
         },
         initToggleBoxes: function() {
             $(".kb-togglebox-header").on("click", function() {
-                $(this).next("div").slideToggle().toggleClass("kb-toggle-open").end().toggleClass("kb-toggle-open");
+                console.log("cliky");
+                $(this).next("div").slideToggle();
             });
             $(".kb_fieldtoggles div:first-child").trigger("click");
         },
