@@ -77,6 +77,7 @@ abstract class StaticPanel extends AbstractPanel
 
     /**
      * @param $postId
+     * @return mixed|void
      */
     public function save( $postId )
     {
@@ -146,7 +147,6 @@ abstract class StaticPanel extends AbstractPanel
      */
     public function getData( $postId = null )
     {
-
         if (!$this->FieldManager) {
             $this->setup( $postId );
         }

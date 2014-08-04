@@ -186,7 +186,7 @@ abstract class AbstractPanel
             $id = $postId;
         }
 
-        $this->data = get_post_meta( $id, '_' . $this->baseId, true );
+        $this->data = get_post_meta( $id, $this->baseId, true );
         return $this->data;
     }
 
