@@ -152,9 +152,10 @@ abstract class OptionsPanel extends AbstractPanel
      *
      * @internal param $postId
      *
+     * @param null $postId
      * @return mixed
      */
-    protected function setupData()
+    protected function setupData( $postId = null )
     {
         if (is_null( $this->data )) {
             $this->data = get_option( $this->baseId, array() );

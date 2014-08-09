@@ -134,7 +134,7 @@ class Element extends AbstractEditableFieldReturn {
 	 */
 	public function getEditableClass() {
 		$titles = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
-		$text   = array( 'div', 'p', 'span', 'article', 'section' );
+		$text   = array( 'div', 'p', 'span', 'article', 'section', 'blockquote' );
 
 		if ( in_array( $this->el, $titles ) ) {
 			$this->tinymce['toolbar'] = "kbcancleinline | undo redo | bold forecolor italic | alignleft aligncenter alignright alignjustify";

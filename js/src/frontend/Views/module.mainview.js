@@ -126,13 +126,15 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             success: function (res) {
+
                 if (refresh) {
                     that.$el.html(res.html);
                 }
+
                 tinymce.triggerSave();
                 that.model.set('moduleData', res.newModuleData);
                 that.render();
-                that.trigger('kb:moduleUpdated');
+                that.trigger('KB::module-updated');
                 // @TODO events:replace
                 KB.Events.trigger('KB::ajax-update');
                 KB.Notice.notice('Module saved successfully', 'success');

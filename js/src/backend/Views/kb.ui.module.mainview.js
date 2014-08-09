@@ -36,17 +36,17 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.view = this;
         // Setup View
         this.setupDefaultMenuItems();
-        KB.Views.Modules.on('kb:backend::viewDeleted', function (view) {
+        KB.Views.Modules.on('KB::backend.module.view.deleted', function (view) {
             view.$el.fadeOut(500, function () {
                 view.$el.remove();
             });
         });
-        this.listenTo(this, 'template::changed', function () {
+
+
+        this.listenTo(this, 'KB::backend.module.viewfile.changed', function () {
             that.clearFields();
             that.updateModuleForm();
         });
-
-
     },
     // setup default actions for modules
     // duplicate | delete | change active status

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-04 */
+/*! Kontentblocks DevVersion 2014-08-08 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -563,12 +563,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         this.model.view = this;
         this.setupDefaultMenuItems();
-        KB.Views.Modules.on("kb:backend::viewDeleted", function(view) {
+        KB.Views.Modules.on("KB::backend.module.view.deleted", function(view) {
             view.$el.fadeOut(500, function() {
                 view.$el.remove();
             });
         });
-        this.listenTo(this, "template::changed", function() {
+        this.listenTo(this, "KB::backend.module.viewfile.changed", function() {
             that.clearFields();
             that.updateModuleForm();
         });
