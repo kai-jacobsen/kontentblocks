@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-07-28 */
+/*! Kontentblocks DevVersion 2014-08-11 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
