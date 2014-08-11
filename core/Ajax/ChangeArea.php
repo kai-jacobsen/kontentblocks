@@ -8,6 +8,7 @@ use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 /**
  * Class ChangeArea
  * Runs when module was dragged into different/new area
+ * and stores the new area to the module
  *
  * @package Kontentblocks\Ajax
  */

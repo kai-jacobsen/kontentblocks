@@ -58,10 +58,10 @@ class AreaDynamicManager
 
     public function synchronize()
     {
-        do_action( 'dynamic_areas_setup' );
         if (!is_admin()) {
             return;
         }
+        do_action( 'kb::areas.dynamic.setup' );
 
         $this->setupDiff();
         $this->maybeCreateAreas();
@@ -73,9 +73,9 @@ class AreaDynamicManager
     {
         foreach ($this->newAreas as $area) {
             $post = array(
-                'post_type'   => 'kb-dyar',
-                'post_title'  => $area['name'],
-                'post_name'   => $area['id'],
+                'post_type' => 'kb-dyar',
+                'post_title' => $area['name'],
+                'post_name' => $area['id'],
                 'post_status' => 'publish'
             );
 
@@ -107,7 +107,7 @@ class AreaDynamicManager
                 $posts = get_posts(
                     array(
                         'post_type' => 'kb-dyar',
-                        'name'      => $id
+                        'name' => $id
                     )
                 );
 
@@ -136,10 +136,10 @@ class AreaDynamicManager
         if (!$trans) {
             $areas = get_posts(
                 array(
-                    'post_type'      => 'kb-dyar',
+                    'post_type' => 'kb-dyar',
                     'posts_per_page' => - 1,
-                    'post_status'    => 'publish',
-                    'meta_key'       => '_kb_added_by_code'
+                    'post_status' => 'publish',
+                    'meta_key' => '_kb_added_by_code'
                 )
             );
             $trans = array_map(
@@ -159,7 +159,7 @@ class AreaDynamicManager
 
         foreach ($trans as $id) {
             if (!isset( $this->areas[$id] )) {
-                $this->isDirty           = true;
+                $this->isDirty = true;
                 $this->removedAreas[$id] = $id;
             }
         }

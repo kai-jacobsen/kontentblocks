@@ -1,5 +1,8 @@
+/**
+ * Single module nav item
+ * model refers to the parent view and is an actual Backbone View
+ */
 KB.Backbone.ModuleNavItem = Backbone.View.extend({
-
     initialize: function () {
         var that = this;
         // this.model refers to the moduleView
@@ -103,7 +106,7 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
         this.$el.removeClass('kb-nav-show-partly');
         var show = !this.show;
         this.show = show;
-        KB.Util.stex.set('kb-nav-show', show, 10 * 60 * 1000);
+        KB.Util.stex.set('kb-nav-show', show, 60 * 60 * 1000 * 24);
     },
     over: function () {
         if (!this.show) {
@@ -114,7 +117,6 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
         if (!this.show) {
             this.$el.removeClass('kb-nav-show-partly');
         }
-
     }
 
 

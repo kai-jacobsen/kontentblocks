@@ -105,8 +105,8 @@ class ScreenContext
         $side = $this->editScreenHasSidebar ? 'has-sidebar' : 'no-sidebar';
 
         echo "<div id='context_{$this->id}' class='area-{$this->id} kb-context-container {$side}'>
-                    <div class='context-inner area-holder context-box'>
-                    <div class='context-header'>
+                    <div class='kb-context__inner'>
+                    <div class='kb-context__header'>
                         <h2>{$this->title}</h2>
                             <p class='description'>{$this->description}</p>
                     </div>";

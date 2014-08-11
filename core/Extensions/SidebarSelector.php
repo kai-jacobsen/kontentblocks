@@ -174,7 +174,7 @@ class SidebarSelector
 					<p class='description'>Eine kurze Erklärung hierzu.</p>
 				</div>
 				<div class='area_sidebars {$hide}'>
-					<div class='context-box area-context'>
+					<div class='area-context'>
 				<div class='active_dynamic_areas_wrapper'>
                 <input type='hidden' name='kb_sidebar_selector' value='true' />
 				<input type='hidden' name='_sidebars_updated' value='" . time() . "' />

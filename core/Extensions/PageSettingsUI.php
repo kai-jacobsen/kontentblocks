@@ -66,7 +66,7 @@ class PageSettingsUI
 
         $i18n = I18n::getPackage( 'ExtPageSettings' );
 
-        echo "<div class='page-template-wrapper context-area'>";
+        echo "<div class='page-template-wrapper kb-context__container'>";
         echo "<div class='context-header'><h2>{$i18n['pageSettings']}</h2></div>";
         $post_type_object = get_post_type_object( $post->post_type );
         if ($post_type_object->hierarchical) {

@@ -12,15 +12,15 @@
   @include box-shadow(1px 1px 3px #999);
   @include transition(all .3s linear);
 
-  &.kb-nav-show{
+  &.kb-nav-show {
     left: 0;
   }
 
-  &.kb-nav-show-partly{
-    left:-190px;
+  &.kb-nav-show-partly {
+    left: -190px;
   }
 
-  .kb-nav-toggle{
+  .kb-nav-toggle {
     position: absolute;
     right: -25px;
     top: -1px;
@@ -30,17 +30,17 @@
     padding-top: 4px;
     background: #444;
     border: 1px solid lighten(#444, 20%);
-    border-left: 1px solid #ccc;
+    border-left: 1px solid #cccccc;
     z-index: 9999;
     cursor: pointer;
     color: #ccc;
     @include transition(color .3s linear);
 
-    &:hover{
+    &:hover {
       color: #fff;
     }
 
-    .genericon:before{
+    .genericon:before {
       padding-left: 4px;
       text-align: center;
     }
@@ -62,7 +62,7 @@
     @include transition(background .3s linear);
     opacity: .5;
 
-    &:last-child{
+    &:last-child {
       border-bottom: none;
     }
 
@@ -75,8 +75,8 @@
       background: #444;
     }
 
-    &.isDirty{
-      .kb-js-inline-update span{
+    &.isDirty {
+      .kb-js-inline-update span {
         color: red;
       }
     }
@@ -136,5 +136,11 @@ body.admin-bar {
   .kb-module-nav-container {
     top: 32px;
   }
+
+}
+
+.module.kb-nav-active {
+  opacity: .7;
+  position: relative;
 
 }

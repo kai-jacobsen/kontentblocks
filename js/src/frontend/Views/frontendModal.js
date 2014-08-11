@@ -120,7 +120,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
 
     test: function () {
-//        this.reload(this.view);
+        _K.log('Model:change event fired');
     },
     /**
      * Events

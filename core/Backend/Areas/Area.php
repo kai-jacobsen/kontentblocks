@@ -10,7 +10,7 @@ use Kontentblocks\Utils\JSONBridge;
 /**
  * Area
  * Class description:
- * Creates the area output on the backend only.
+ * Backend handler of areas logic and markup
  * @package Kontentblocks
  * @subpackage Areas
  * @since 1.0.0
@@ -28,7 +28,7 @@ class Area
     public $context;
 
     /**
-     * Environment for data handling
+     * Environment
      *
      * @var \Kontentblocks\Backend\Environment\PostEnvironment
      */
@@ -63,17 +63,6 @@ class Area
             throw new \Exception( 'No Arguments for Area specified' );
         }
 
-        // setup localization string
-        // TODO: Outsource all i18n strings to seperate file
-        $this->l18n = array(
-            // l18n
-            'add_block'    => __( 'add module', 'kontentblocks' ),
-            'add'          => __( 'add', 'kontentblocks' ),
-            'add_template' => __( 'add template', 'kontentblocks' ),
-            'no_blocks'    => __( 'Sorry, no Blocks available for this Area', 'kontentblocks' ),
-            'modules'      => __( 'Add new module', 'kontentblocks' )
-        );
-
         // context in regards of position on the edit screen
         $this->context = $context;
 
@@ -82,7 +71,6 @@ class Area
 
         // batch setting of properties
         $this->setupAreaProperties( $area );
-
 
         //actual stored module for this area
         $this->attachedModules = $this->Environment->getModulesForArea( $this->id );
@@ -113,7 +101,7 @@ class Area
      */
     public function header()
     {
-        echo "<div id='{$this->id}-container' class='area-wrap clearfix cf'>";
+        echo "<div id='{$this->id}-container' class='kb-area__wrap clearfix cf'>";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
         $Tpl = new CoreView( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );

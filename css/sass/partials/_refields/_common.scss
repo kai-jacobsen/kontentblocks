@@ -5,7 +5,7 @@
 
 .kb-field {
   background-color: #fff;
-  padding: 20px 20px 25px 20px;
+  padding: 20px 20px 25px 12px;
   border-bottom: 1px solid #f2f2f2;
   text-align: left !important;
 
@@ -13,14 +13,13 @@
   input[type=text]{
     text-align: left;
     height: 30px;
-    padding: 0;
     line-height: 22px;
     border: 1px solid #dadada;
     font-size:14px;
     background: #fcfcfc;
-    box-shadow: none;
+    box-shadow: none !important;
     width:40%;
-    padding: 0 10px;
+    padding: 0 10px !important;
     @include transition(width .2s ease-out);
 
     &.large{
