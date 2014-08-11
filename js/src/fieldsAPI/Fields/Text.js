@@ -2,7 +2,7 @@ KB.FieldsAPI.Text = KB.FieldsAPI.Field.extend({
 
     templatePath: 'fields/Text',
     defaults: {
-        std: 'some textvalue',
+        std: '',
         label: 'Field label',
         description: 'A description',
         value: '',

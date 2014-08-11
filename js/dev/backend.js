@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-08 */
+/*! Kontentblocks DevVersion 2014-08-10 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -541,10 +541,17 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click.kb2 .kb-toggle": "setOpenStatus",
         mouseenter: "setFocusedModule",
         dblclick: "fullscreen",
-        "click .kb-fullscreen": "fullscreen"
+        "click .kb-fullscreen": "fullscreen",
+        "change .kb-template-select": "viewfileChange"
     },
     setFocusedModule: function() {
         KB.focusedModule = this.model;
+    },
+    viewfileChange: function(e) {
+        this.model.set("viewfile", e.currentTarget.value);
+        this.clearFields();
+        this.updateModuleForm();
+        this.trigger("KB::backend.module.viewfile.changed");
     },
     initialize: function() {
         var that = this;
@@ -568,10 +575,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 view.$el.remove();
             });
         });
-        this.listenTo(this, "KB::backend.module.viewfile.changed", function() {
-            that.clearFields();
-            that.updateModuleForm();
-        });
+        this.listenTo(this, "KB::backend.module.viewfile.changed", function(e) {});
     },
     setupDefaultMenuItems: function() {
         this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({

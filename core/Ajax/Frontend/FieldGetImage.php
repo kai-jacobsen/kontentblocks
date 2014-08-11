@@ -15,7 +15,7 @@ class FieldGetImage
 
         $args = $_GET['args'];
         $width = ( !isset( $args['width'] ) ) ? 150 : $args['width'];
-        $height = ( !isset( $args['height'] ) ) ? null : $args['width'];
+        $height = ( !isset( $args['height'] ) ) ? null : $args['height'];
 
         $id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT );
 

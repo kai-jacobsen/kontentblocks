@@ -10,7 +10,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     $formContent: null,
     // timer handle for delayed keyup events
     timerId: null,
-    // init
+    /**
+     * Init method
+     * @TODO clean up and seperate concerns
+     * @param options
+     */
     initialize: function (options) {
         /*
          -------------------------------------------
@@ -22,7 +26,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
         // the actual frontend module view
         this.frontendView = options.view;
-
         /*
          -------------------------------------------
          Events
@@ -109,7 +112,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 //        load the form
         this.render();
     },
-
+    /**
+     * Callback handler for update events triggered from module controls
+     */
     frontendViewUpdated: function () {
         this.$el.removeClass('isDirty');
     },
@@ -117,24 +122,43 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     test: function () {
 //        this.reload(this.view);
     },
-// TODO move above event listeners here
+    /**
+     * Events
+     * @TODO move appropiate events from init to this object
+     */
     events: {
         'keyup': 'delayInput',
         'click a.close-controls': 'destroy',
         'click a.kb-save-form': 'update',
-        'click a.kb-preview-form': 'preview'
+        'click a.kb-preview-form': 'preview',
+        'change .kb-template-select': 'viewfileChange'
     },
+
+    /**
+     * Calls serialize in preview mode
+     * No data gets saved
+     */
     preview: function () {
         this.serialize(false);
     },
+    /**
+     * Wrapper to serialize()
+     * Calls serialize in save mode
+     */
     update: function () {
         this.serialize(true);
     },
+    /**
+     * Main render method of the modal content
+     * @TODO seperate concerns
+     */
     render: function () {
         var that = this;
 
         // apply settings for the modal from the active module, if any
         this.applyControlsSettings(this.$el);
+
+        this.updateViewClassTo = false;
 
         // update global reference var
         // @Todo not very clever
@@ -291,6 +315,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         }
         _K.info('Frontend Modal resizing done!');
     },
+    /**
+     * (Re) Init Nano scrollbars
+     * @param height
+     */
     initScrollbars: function (height) {
         jQuery('.nano', this.$el).height(height);
         jQuery('.nano').nanoScroller({preventPageScrolling: true});
@@ -303,11 +331,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
      * @param showNotice show update notice or don't
      */
     serialize: function (mode, showNotice) {
-        _K.info('Frontend Modal called serialize function. Savemode:', mode);
         var that = this,
             save = mode || false,
             notice = (showNotice !== false),
             height;
+
+        _K.info('Frontend Modal called serialize function. Savemode:', mode);
 
         tinymce.triggerSave();
 
@@ -324,15 +353,21 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             dataType: 'json',
             success: function (res) {
 
+                // remove attached inline editors from module
                 jQuery('.editable', that.frontendView.$el).each(function (i, el) {
                     tinymce.remove('#' + el.id);
                 });
 
+                // cache module container height
                 height = that.frontendView.$el.height();
 
-//                that.frontendView.$el.height(height);
+                // change the container class if viewfile changed
+                if (that.updateViewClassTo !== false) {
+                    that.updateContainerClass(that.updateViewClassTo);
+                }
+
+                // replace module html with new html
                 that.frontendView.$el.html(res.html);
-//                that.frontendView.$el.css('height', null);
 
                 that.model.set('moduleData', res.newModuleData);
                 jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.frontendView);
@@ -342,6 +377,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
                 KB.trigger('kb:frontendModalUpdated');
 
+                // (re)attach inline editors and handle module controls
+                // delay action to be safe
+                // @TODO seperate
                 setTimeout(function () {
                     jQuery('.editable', that.options.view.$el).each(function (i, el) {
                         KB.IEdit.Text(el);
@@ -350,6 +388,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     that.frontendView.setControlsPosition();
                 }, 400);
 
+                //
                 if (save) {
                     if (notice) {
                         KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
@@ -364,25 +403,49 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     that.$el.addClass('isDirty');
 
                 }
-
                 _K.info('Frontend Modal saved data for:' + that.model.get('instance_id'));
-
             },
             error: function () {
-                console.log('e');
+                _K.error('serialize | FrontendModal | Ajax error');
             }
         });
     },
+    /**
+     * Callback handler when the viewfile select field triggers change
+     * @param e $ event
+     */
+    viewfileChange: function (e) {
 
+        this.updateViewClassTo = {
+            current: this.frontendView.model.get('viewfile'),
+            target: e.currentTarget.value
+        };
+        this.frontendView.model.set('viewfile', e.currentTarget.value);
+    },
+    /**
+     * Update modules element class to new view to
+     * respect view dependent styles on the fly
+     * @param viewfile string
+     */
+    updateContainerClass: function (viewfile) {
 
-    // delay keyup events and only fire the last
+        if (!viewfile || !viewfile.current || !viewfile.target) {
+            _K.error('updateContainerClass | frontendModal | paramater exception');
+        }
+
+        this.frontendView.$el.removeClass(this._classifyView(viewfile.current));
+        this.frontendView.$el.addClass(this._classifyView(viewfile.target));
+        this.updateViewClassTo = false;
+    },
+    /**
+     * Delay key up events on form inputs
+     * only fires the last event after 750ms
+     */
     delayInput: function () {
         var that = this;
-
         if (this.options.timerId) {
             clearTimeout(this.options.timerId);
         }
-
         this.options.timerId = setTimeout(function () {
             that.options.timerId = null;
             that.serialize(false, false);
@@ -395,6 +458,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             that.delayInput();
         });
     },
+    /**
+     * Destroy and remove the modal
+     */
     destroy: function () {
         var that = this;
         this.$el.fadeTo(500, 0, function () {
@@ -405,6 +471,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         });
 
     },
+    /**
+     * Unload() should handle removal of attached functionalities
+     */
     unload: function () {
         this.unset();
         jQuery('.wp-editor-area', this.$el).each(function (i, item) {
@@ -413,13 +482,25 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
 
     },
-// Modules can pass special settings to manipulate the modal
-// By now it's limited to the width
-// Maybe extended as usecases arise
+    /**
+     * Modules can pass special settings to manipulate the modal
+     * By now it's limited to the width
+     * Maybe extended as usecases arise
+     * @param $el
+     */
     applyControlsSettings: function ($el) {
         var settings = this.model.get('settings');
         if (settings.controls && settings.controls.width) {
             $el.css('width', settings.controls.width + 'px');
         }
+    },
+    /**
+     * Helper method to create a element class from viewfile
+     * @param str
+     * @returns {string}
+     * @private
+     */
+    _classifyView: function (str) {
+        return 'view-' + str.replace('.twig', '');
     }
 });

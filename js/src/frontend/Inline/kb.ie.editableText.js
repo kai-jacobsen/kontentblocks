@@ -127,12 +127,13 @@ KB.IEdit.Text = function (el) {
                                 ed.module.set('moduleData', moduleData);
                             },
                             error: function () {
-                                ed.module.trigger('change');
-                                ed.module.set('moduleData', moduleData);
+//                                ed.module.trigger('change');
+//                                ed.module.set('moduleData', moduleData);
                             }
                         });
                     } else {
-
+                        ed.module.trigger('change');
+                        ed.module.set('moduleData', moduleData);
                     }
 
 

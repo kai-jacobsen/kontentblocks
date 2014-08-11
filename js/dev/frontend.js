@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-08 */
+/*! Kontentblocks DevVersion 2014-08-10 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -399,12 +399,12 @@ KB.IEdit.Text = function(el) {
                                 ed.module.trigger("change");
                                 ed.module.set("moduleData", moduleData);
                             },
-                            error: function() {
-                                ed.module.trigger("change");
-                                ed.module.set("moduleData", moduleData);
-                            }
+                            error: function() {}
                         });
-                    } else {}
+                    } else {
+                        ed.module.trigger("change");
+                        ed.module.set("moduleData", moduleData);
+                    }
                 } else {
                     ed.setContent(ed.previousContent);
                 }
@@ -507,7 +507,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         keyup: "delayInput",
         "click a.close-controls": "destroy",
         "click a.kb-save-form": "update",
-        "click a.kb-preview-form": "preview"
+        "click a.kb-preview-form": "preview",
+        "change .kb-template-select": "viewfileChange"
     },
     preview: function() {
         this.serialize(false);
@@ -518,6 +519,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     render: function() {
         var that = this;
         this.applyControlsSettings(this.$el);
+        this.updateViewClassTo = false;
         KB.lastAddedModule = {
             view: that
         };
@@ -605,8 +607,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         _K.info("Nano Scrollbars (re)initialized!");
     },
     serialize: function(mode, showNotice) {
-        _K.info("Frontend Modal called serialize function. Savemode:", mode);
         var that = this, save = mode || false, notice = showNotice !== false, height;
+        _K.info("Frontend Modal called serialize function. Savemode:", mode);
         tinymce.triggerSave();
         jQuery.ajax({
             url: ajaxurl,
@@ -624,6 +626,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     tinymce.remove("#" + el.id);
                 });
                 height = that.frontendView.$el.height();
+                if (that.updateViewClassTo !== false) {
+                    that.updateContainerClass(that.updateViewClassTo);
+                }
                 that.frontendView.$el.html(res.html);
                 that.model.set("moduleData", res.newModuleData);
                 jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.frontendView);
@@ -654,9 +659,24 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
             },
             error: function() {
-                console.log("e");
+                _K.error("serialize | FrontendModal | Ajax error");
             }
         });
+    },
+    viewfileChange: function(e) {
+        this.updateViewClassTo = {
+            current: this.frontendView.model.get("viewfile"),
+            target: e.currentTarget.value
+        };
+        this.frontendView.model.set("viewfile", e.currentTarget.value);
+    },
+    updateContainerClass: function(viewfile) {
+        if (!viewfile || !viewfile.current || !viewfile.target) {
+            _K.error("updateContainerClass | frontendModal | paramater exception");
+        }
+        this.frontendView.$el.removeClass(this._classifyView(viewfile.current));
+        this.frontendView.$el.addClass(this._classifyView(viewfile.target));
+        this.updateViewClassTo = false;
     },
     delayInput: function() {
         var that = this;
@@ -694,6 +714,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         if (settings.controls && settings.controls.width) {
             $el.css("width", settings.controls.width + "px");
         }
+    },
+    _classifyView: function(str) {
+        return "view-" + str.replace(".twig", "");
     }
 });
 

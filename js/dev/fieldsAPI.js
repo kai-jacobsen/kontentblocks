@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-08 */
+/*! Kontentblocks DevVersion 2014-08-10 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -196,7 +196,7 @@ KB.FieldsAPI.register("link", KB.FieldsAPI.Link);
 KB.FieldsAPI.Text = KB.FieldsAPI.Field.extend({
     templatePath: "fields/Text",
     defaults: {
-        std: "some textvalue",
+        std: "",
         label: "Field label",
         description: "A description",
         value: "",

@@ -168,5 +168,6 @@ class Element extends AbstractEditableFieldReturn {
 		if (is_string($this->value)){
 			return $this->value;
 		}
+        return '';
 	}
 }
