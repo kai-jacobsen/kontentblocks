@@ -57,25 +57,25 @@ class AreaSettingsMenu
 
     /**
      * Environment for data handling
-     * @var object \Kontentblocks\Admin\Environment\PostEnvironment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      * @since 1.0.0
      */
-    protected $environment;
+    protected $Environment;
 
 
     /**
      * Class Constuctor
      * @param \Kontentblocks\Backend\Areas\Area $area
-     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $Environment
      * @since 1.0.0
      */
-    public function __construct(Area $area, PostEnvironment $environment)
+    public function __construct( Area $area, PostEnvironment $Environment )
     {
         $this->defaults = $this->getDefaults();
-        $this->id = $area->get('id');
-        $this->areaTemplates = $area->get('layouts');
-        $this->defaultTpl = $area->get('defaultLayout');
-        $this->environment = $environment;
+        $this->id = $area->get( 'id' );
+        $this->areaTemplates = $area->get( 'layouts' );
+        $this->defaultTpl = $area->get( 'defaultLayout' );
+        $this->Environment = $Environment;
 
     }
 
@@ -89,9 +89,9 @@ class AreaSettingsMenu
     {
         $areaTemplates = $this->_getAssignedTemplates();
         // Markup and fields markup
-        if (!empty($areaTemplates)) {
-            $data = $this->environment->getAreaSettings($this->id);
-            $custom = (isset($data['custom'])) ? $data['custom'] : '';
+        if (!empty( $areaTemplates )) {
+            $data = $this->Environment->getAreaSettings( $this->id );
+            $custom = ( isset( $data['custom'] ) ) ? $data['custom'] : '';
 
             echo "
             <a class='js-area-settings-opener' href='javascript:;'>l</a>    
@@ -101,7 +101,7 @@ class AreaSettingsMenu
             <ul class='kb-area-templates'>";
 
             foreach ($areaTemplates as $tpl) {
-                $this->_areaTemplateItem($tpl, $data);
+                $this->_areaTemplateItem( $tpl, $data );
             }
 
             echo "	
@@ -121,15 +121,15 @@ class AreaSettingsMenu
      * TODO: Twig it!
      * @since 1.0.0
      */
-    private function _areaTemplateItem($tpl, $data)
+    private function _areaTemplateItem( $tpl, $data )
     {
 
 //        $imageurl = KB_PLUGIN_URL . 'css/area_tpls/';
 //        $image    = (!empty( $tpl[ 'thumbnail' ] ) ) ? $imageurl . $tpl[ 'thumbnail' ] : $imageurl . 'area-tpl-default.png';
-        $tplid = $this->getSelectedTemplate($tpl, $data);
-        $checked = checked($tpl['id'], $tplid, false);
+        $tplid = $this->getSelectedTemplate( $tpl, $data );
+        $checked = checked( $tpl['id'], $tplid, false );
 
-        $forceby = (!empty($tpl['force_by'])) ? 'data-force="' . implode(' ', $tpl['force_by']) . '"' : null;
+        $forceby = ( !empty( $tpl['force_by'] ) ) ? 'data-force="' . implode( ' ', $tpl['force_by'] ) . '"' : null;
 
         $html = "<li class='area_template'>";
 
@@ -152,11 +152,11 @@ class AreaSettingsMenu
      */
     public function _getAssignedTemplates()
     {
-        $registeredAreaTemplates = Kontentblocks::getService('registry.areas')->getTemplates();
+        $registeredAreaTemplates = Kontentblocks::getService( 'registry.areas' )->getTemplates();
         $collect = array();
-        if (!empty($this->areaTemplates)) {
+        if (!empty( $this->areaTemplates )) {
             foreach ($this->areaTemplates as $tplid) {
-                if (!empty($registeredAreaTemplates[$tplid])) {
+                if (!empty( $registeredAreaTemplates[$tplid] )) {
                     $collect[$tplid] = $registeredAreaTemplates[$tplid];
                 }
             }
@@ -191,15 +191,18 @@ class AreaSettingsMenu
      * the default template, else the saved data
      * @param string $tpl
      * @param array $data saved area settings data
-     * @return type
+     * @return string
      * @since 1.0.0
      */
-    public function getSelectedTemplate($tpl, $data)
+    public function getSelectedTemplate( $tpl, $data )
     {
-        if (empty($data['area_template'])) {
-            $tpl = (!empty($this->defaultTpl) && in_array($this->defaultTpl, $this->areaTemplates)) ? $this->defaultTpl : 'default';
+        if (empty( $data['area_template'] )) {
+            $tpl = ( !empty( $this->defaultTpl ) && in_array(
+                    $this->defaultTpl,
+                    $this->areaTemplates
+                ) ) ? $this->defaultTpl : 'default';
         } else {
-            $tpl = (!empty($data['area_template'])) ? $data['area_template'] : 'default';
+            $tpl = ( !empty( $data['area_template'] ) ) ? $data['area_template'] : 'default';
         }
 
         return $tpl;

@@ -19,7 +19,6 @@ use Kontentblocks\Utils\Utilities;
 class DynamicAreas
 {
 
-
     /**
      * @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage
      */
@@ -53,6 +52,8 @@ class DynamicAreas
      * Add menu entry
      * Add "Kontentblocks" main menu item if it does not exists
      * else add as sub menu item
+     * @since 1.0.0
+     * @return void
      */
     public function addAdminMenu()
     {
@@ -80,6 +81,8 @@ class DynamicAreas
 
     /**
      * Add new / create new form
+     * @since 1.0.0
+     * @return void
      */
     public function addForm()
     {
@@ -110,11 +113,12 @@ class DynamicAreas
      * Save
      *
      * @param $postId
+     * @since 1.0.0
+     * @return void
      */
     public function save( $postId )
     {
-        $this->postId = $postId;
-        if (!$this->auth()) {
+        if (!$this->auth( $postId )) {
             return;
         }
 
@@ -122,13 +126,14 @@ class DynamicAreas
         $Environment->save();
 
         $this->saveArea( $postId );
-
-
     }
 
     /**
+     * save modules of the area
      *
      * @param $postId
+     * @since 1.0.0
+     * @return void
      */
     protected function saveArea( $postId )
     {
@@ -159,7 +164,6 @@ class DynamicAreas
         $this->Storage->getDataProvider()->update( '_area', $full );
         $this->Storage->getDataProvider()->update( '_area_context', $full['context'] );
 
-
     }
 
     /**
@@ -168,7 +172,7 @@ class DynamicAreas
      * @param $data
      * @param $postarr
      *
-     * @return mixed
+     * @return array
      */
     public function postData( $data, $postarr )
     {
@@ -186,6 +190,8 @@ class DynamicAreas
 
     /**
      * Register Areas post type
+     * @since 1.0.0
+     * @return void
      */
     public function registerPostType()
     {
@@ -228,8 +234,10 @@ class DynamicAreas
     }
 
     /**
+     *
      * @param $messages
      *
+     * @since 1.0.0
      * @return mixed
      */
     public function postTypeMessages( $messages )
@@ -260,15 +268,16 @@ class DynamicAreas
             10 => __( 'Area draft updated.', 'Kontentblocks' ),
         );
 
-
         return $messages;
     }
 
     /**
-     * Various checks
+     * Various checks to verify save action
+     * @param int $postId
+     * @since 1.0.0
      * @return bool
      */
-    private function auth()
+    private function auth( $postId )
     {
         // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
@@ -292,7 +301,7 @@ class DynamicAreas
         }
 
         // Check permissions
-        if (!current_user_can( 'edit_post', $this->postId )) {
+        if (!current_user_can( 'edit_post', $postId )) {
             return false;
         }
 
@@ -300,7 +309,7 @@ class DynamicAreas
             return false;
         }
 
-        if (get_post_type( $this->postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
+        if (get_post_type( $postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
             return false;
         }
         // checks passed
@@ -308,10 +317,10 @@ class DynamicAreas
     }
 
     /**
-     * Helper Method: marks checked post types
-     *
+     * Helper Method: marks checked post types for the create form
      * @param array $data
      *
+     * @since 1.0.0
      * @return array
      */
     private function preparedPostTypes( $data )
@@ -337,6 +346,7 @@ class DynamicAreas
      *
      * @param array $data
      *
+     * @since 1.0.0
      * @return array
      */
     private function preparedPageTemplates( $data )
@@ -361,6 +371,8 @@ class DynamicAreas
      * 'Create Area' form, handled by twig template
      *
      * @param $data
+     * @since 1.0.0
+     * @return void
      */
     private function settingsForm( $data )
     {
@@ -389,6 +401,8 @@ class DynamicAreas
      * Display method
      *
      * @param $area
+     * @since 1.0.0
+     * @return void
      */
     private function renderArea( $area )
     {
@@ -423,19 +437,17 @@ class DynamicAreas
      * @param array $actions
      * @param object $post
      *
+     * @since 1.0.0
      * @return array
      */
     public function rowActions( $actions, $post )
     {
         if ($post->post_type === 'kb-dyar') {
-
             $meta = get_post_meta( $post->ID, '_area', true );
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $actions['trash'] = "<span class='kb-js-predefined-area'>Area is predefined</span>";
             }
-
         }
-
         return $actions;
     }
 
@@ -448,6 +460,7 @@ class DynamicAreas
      * @param $class
      * @param $post_id
      *
+     * @since 1.0.0
      * @return array
      */
     public function addRowClass( $classes, $class, $post_id )
@@ -467,6 +480,9 @@ class DynamicAreas
     /**
      * Use the added class from addRowClass disable the checkbox
      * Disabled checkbox on edit screen for predefined areas
+     *
+     * @since 1.0.0
+     * @return void
      */
     public function hackItAway()
     {

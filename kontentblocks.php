@@ -69,7 +69,6 @@ Class Kontentblocks
         // load modules automatically, after dynamic areas were setup,
         // dynamic areas are on init/initInterface hook
         add_action( 'kb::setup.areas', array( $this, 'loadModules' ), 9 );
-
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
 //
 //        // Load Plugins
@@ -169,6 +168,7 @@ Class Kontentblocks
      */
     public function loadModules()
     {
+        d($this);
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
         $Registry = $this->Services['registry.modules'];
         // add core modules path

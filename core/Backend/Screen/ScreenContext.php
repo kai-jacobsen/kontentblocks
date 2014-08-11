@@ -134,7 +134,6 @@ class ScreenContext
             // @TODO toJSON needs to be replaced
             // render modules for the area
             $area->render();
-
             // @TODO temporary fix
             $area->toJSON();
             //render area footer

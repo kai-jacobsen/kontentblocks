@@ -35,6 +35,12 @@ class ModuleTemplates
     }
 
 
+    /**
+     * Add admin menu entry
+     *
+     * @since 1.0.0
+     * @return void
+     */
     public function addAdminMenu()
     {
         if (!Utilities::adminMenuExists( 'Kontentblocks' )) {
@@ -63,6 +69,8 @@ class ModuleTemplates
      * Handles which form to show
      * either add new
      * or the module form
+     * @since 1.0.0
+     * @return void
      */
     public function addForm()
     {
@@ -80,7 +88,6 @@ class ModuleTemplates
         if (empty( $template )) {
             $this->createForm();
         } else {
-            // @TODO stinky
             $this->moduleTemplate( $template, $Storage->getDataProvider() );
         }
 
@@ -88,10 +95,12 @@ class ModuleTemplates
 
 
     /**
-     * Display method of the module
+     * Display form of the module
      *
      * @param $template
      * @param $MetaData
+     * @since 1.0.0
+     * @retutn void
      */
     protected function moduleTemplate( $template, $MetaData )
     {
@@ -147,7 +156,10 @@ class ModuleTemplates
     }
 
     /**
-     * @TODO: remove $_POST data reference
+     * Form for creating new template
+     *
+     * @since 1.0.0
+     * @return void
      */
     protected function createForm()
     {
@@ -184,6 +196,8 @@ class ModuleTemplates
      *
      * @param int $postId
      * @param array $postObj
+     * @since 1.0.0
+     * @return bool|void
      */
     public function save( $postId, $postObj )
     {
@@ -239,11 +253,11 @@ class ModuleTemplates
      *
      * @param $postId
      * @param PostMetaModuleStorage $Storage
+     * @since 1.0.0
+     * @return void
      */
     public function createTemplate( $postId, PostMetaModuleStorage $Storage )
     {
-
-
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 
@@ -304,6 +318,7 @@ class ModuleTemplates
      * @param $data
      * @param $postarr
      *
+     * @since 1.0.0
      * @return mixed
      */
     public function postData( $data, $postarr )
@@ -321,6 +336,9 @@ class ModuleTemplates
 
     /**
      * Register the template post type
+     *
+     * @since 1.0.0
+     * @return void
      */
     public function registerPostType()
     {
@@ -366,6 +384,7 @@ class ModuleTemplates
      *
      * @param $messages
      *
+     * @since 1.0.0
      * @return mixed
      */
     public function postTypeMessages( $messages )
@@ -407,6 +426,7 @@ class ModuleTemplates
      *
      * @param $postId
      *
+     * @since 1.0.0
      * @return bool
      */
     private function auth( $postId )
@@ -450,6 +470,7 @@ class ModuleTemplates
      *
      * @param array $postData potential incomplete form data
      *
+     * @since 1.0.0
      * @return array
      */
     private function prepareModulesforSelectbox( $postData )
@@ -480,6 +501,7 @@ class ModuleTemplates
 
     /**
      * Filter all modules which may be created as a template
+     * @since 1.0.0
      * @return array
      */
     public function getTemplateables()
