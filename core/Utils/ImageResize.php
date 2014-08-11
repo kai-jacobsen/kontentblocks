@@ -203,6 +203,7 @@ namespace Kontentblocks\Utils {
 
 
 namespace {
+
     if (!function_exists('aq_resize')) {
 
         /**

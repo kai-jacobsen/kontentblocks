@@ -28,7 +28,7 @@ class PanelFieldManager extends AbstractFieldManager
      * Array of Field groups
      * @var array
      */
-    protected $Structure = array();
+    public  $Structure = array();
 
     /**
      * Constructor
@@ -98,7 +98,7 @@ class PanelFieldManager extends AbstractFieldManager
      */
     public function renderFields()
     {
-        $Renderer = new FieldRenderTabs( $this->Structure );
+        $Renderer = new FieldRendererTabs( $this->Structure );
         $Renderer->render( $this->baseId, $this->data );
     }
 

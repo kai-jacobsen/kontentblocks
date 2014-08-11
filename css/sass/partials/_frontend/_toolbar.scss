@@ -19,6 +19,11 @@
     border: none;
   }
 
+  .mce-toolbar .mce-btn-group .mce-btn.mce-active{
+    background: #333 !important;
+    border-color: #444;
+  }
+
   .mce-ico{
     color: #fff;
   }

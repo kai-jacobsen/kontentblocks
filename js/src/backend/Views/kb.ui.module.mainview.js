@@ -10,10 +10,18 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         'click.kb2 .kb-toggle': 'setOpenStatus',
         'mouseenter': 'setFocusedModule',
         'dblclick': 'fullscreen',
-        'click .kb-fullscreen': 'fullscreen'
+        'click .kb-fullscreen': 'fullscreen',
+        'change .kb-template-select': 'viewfileChange'
+
     },
     setFocusedModule: function () {
         KB.focusedModule = this.model;
+    },
+    viewfileChange: function (e) {
+        this.model.set('viewfile', e.currentTarget.value);
+        this.clearFields();
+        this.updateModuleForm();
+        this.trigger('KB::backend.module.viewfile.changed');
     },
     initialize: function () {
         var that = this;
@@ -36,17 +44,16 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.model.view = this;
         // Setup View
         this.setupDefaultMenuItems();
-        KB.Views.Modules.on('kb:backend::viewDeleted', function (view) {
+        KB.Views.Modules.on('KB::backend.module.view.deleted', function (view) {
             view.$el.fadeOut(500, function () {
                 view.$el.remove();
             });
         });
-        this.listenTo(this, 'template::changed', function(){
-                that.clearFields();
-                that.updateModuleForm();
+
+
+        this.listenTo(this, 'KB::backend.module.viewfile.changed', function (e) {
+
         });
-
-
     },
     // setup default actions for modules
     // duplicate | delete | change active status
@@ -85,11 +92,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         } else {
             this.$inner.html('empty');
         }
-        if (response.json.Fields){
+        if (response.json.Fields) {
             KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
         }
         // re-init UI listeners
-        // @todo there is a better way
         KB.Ui.repaint(this.$el);
         KB.Fields.trigger('update');
         this.trigger('kb:backend::viewUpdated');

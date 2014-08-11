@@ -2,6 +2,7 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
 
     initialize: function () {
         var that = this;
+        // this.model refers to the moduleView
         this.el = KB.Templates.render('frontend/module-nav-item', {
             view: this.model.model.toJSON()
         });
@@ -9,21 +10,21 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
 
         this.model.controlView = this;
 
-        jQuery(window).scroll(function(){
-            if (that.model.$el.visible(true,true)){
+        jQuery(window).scroll(function () {
+            if (that.model.$el.visible(true, true)) {
                 that.$el.addClass('in-viewport');
-//                that.$el.show(250);
+                that.$el.show(250);
             } else {
                 that.$el.removeClass('in-viewport');
-//                that.$el.hide(250);
+                that.$el.hide(250);
             }
         });
 
-        this.model.$el.on('mouseenter', function(){
+        this.model.$el.on('mouseenter', function () {
             that.$el.addClass('in-viewport-active');
         });
 
-        this.model.$el.on('mouseleave', function(){
+        this.model.$el.on('mouseleave', function () {
             that.$el.removeClass('in-viewport-active');
         });
 
@@ -41,18 +42,19 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
     over: function () {
         this.model.$el.addClass('kb-nav-active');
     },
-    out: function(){
+    out: function () {
         this.model.$el.removeClass('kb-nav-active');
     },
-    openControls: function(e){
+    openControls: function (e) {
         e.stopPropagation();
         this.model.openOptions();
     },
-    inlineUpdate:function(){
+    inlineUpdate: function (e) {
+        e.stopPropagation();
         this.model.updateModule();
         this.model.getClean();
     },
-    scrollTo: function(){
+    scrollTo: function () {
         var that = this;
         jQuery('html, body').animate({
             scrollTop: that.model.$el.offset().top - 100
@@ -66,20 +68,21 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
     tagName: 'div',
     className: 'kb-module-nav-container',
     initialize: function () {
+        // get or set show state to local storage
         this.show = _.isNull(KB.Util.stex.get('kb-nav-show')) ? true : KB.Util.stex.get('kb-nav-show');
         this.render();
     },
-    events:{
-        'click .kb-nav-toggle' : 'toggleView',
+    events: {
+        'click .kb-nav-toggle': 'toggleView',
         'mouseenter .kb-nav-toggle': 'over',
-        'mouseleave .kb-nav-toggle' : 'out'
+        'mouseleave .kb-nav-toggle': 'out'
     },
     render: function () {
         this.$el.appendTo('body');
         this.$list = jQuery('<ul></ul>').appendTo(this.$el);
         this.$toggle = jQuery('<div class="kb-nav-toggle genericon genericon-menu"></div>').appendTo(this.$el);
 
-        if (this.show){
+        if (this.show) {
             this.$el.addClass('kb-nav-show');
         }
 
@@ -95,20 +98,20 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
 
         this.$list.append(Item.render());
     },
-    toggleView: function(){
+    toggleView: function () {
         this.$el.toggleClass('kb-nav-show');
         this.$el.removeClass('kb-nav-show-partly');
         var show = !this.show;
         this.show = show;
-        KB.Util.stex.set('kb-nav-show', show, 10*60*1000);
+        KB.Util.stex.set('kb-nav-show', show, 10 * 60 * 1000);
     },
-    over: function(){
-        if (!this.show){
+    over: function () {
+        if (!this.show) {
             this.$el.addClass('kb-nav-show-partly');
         }
     },
-    out: function(){
-        if (!this.show){
+    out: function () {
+        if (!this.show) {
             this.$el.removeClass('kb-nav-show-partly');
         }
 

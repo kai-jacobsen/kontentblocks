@@ -134,7 +134,7 @@ class Element extends AbstractEditableFieldReturn {
 	 */
 	public function getEditableClass() {
 		$titles = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
-		$text   = array( 'div', 'p', 'span', 'article', 'section' );
+		$text   = array( 'div', 'p', 'span', 'article', 'section', 'blockquote' );
 
 		if ( in_array( $this->el, $titles ) ) {
 			$this->tinymce['toolbar'] = "kbcancleinline | undo redo | bold forecolor italic | alignleft aligncenter alignright alignjustify";
@@ -143,7 +143,7 @@ class Element extends AbstractEditableFieldReturn {
 		}
 
 		if ( in_array( $this->el, $text ) ) {
-			$this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
+			$this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
 
 			return 'editable';
 		}
@@ -168,5 +168,6 @@ class Element extends AbstractEditableFieldReturn {
 		if (is_string($this->value)){
 			return $this->value;
 		}
+        return '';
 	}
 }

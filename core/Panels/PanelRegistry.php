@@ -2,6 +2,10 @@
 
 namespace Kontentblocks\Panels;
 
+/**
+ * Class PanelRegistry
+ * @package Kontentblocks\Panels
+ */
 class PanelRegistry
 {
 
@@ -35,15 +39,14 @@ class PanelRegistry
      */
     public function add( $id, $args )
     {
-        if (!isset( $this->panels[$id] )) {
-            if (isset( $args['moduleClass'] ) && class_exists( $args['moduleClass'] )) {
-                $this->panels[$id] = new ModulePanel( $args );
-            } elseif (isset( $args['formClass'] ) && class_exists( $args['formClass'] )) {
-                $this->panels[$id] = new $args['formClass']( $args );
-            } else {
-                throw new \Exception( 'No valid Class given' );
-            }
 
+        if (!isset( $this->panels[$id] )) {
+            $Reflect = new \ReflectionClass( $args['class'] );
+            if ($Reflect->getParentClass() === 'Kontentblocks\Modules\StaticModule') {
+                $this->panels[$id] = new ModulePanel( $args );
+            } else {
+                $this->panels[$id] = new $args['class']( $args );
+            }
         } else {
             throw new \Exception(
                 'Error while adding panel to registry. Either a Panel with the same ID exist or the class does not exist'
@@ -51,6 +54,10 @@ class PanelRegistry
         }
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function get( $id )
     {
         if (isset( $this->panels[$id] )) {

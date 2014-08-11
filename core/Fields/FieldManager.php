@@ -21,6 +21,8 @@ namespace Kontentblocks\Fields;
 class FieldManager extends AbstractFieldManager
 {
 
+    protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
+
     /**
      * Constructor
      * @param Kontentblocks\Modules\Module
@@ -30,8 +32,8 @@ class FieldManager extends AbstractFieldManager
     {
         //TODO Check module consistency
         $this->baseId = $Module->instance_id;
-        $this->data     = $Module->moduleData;
-        $this->Module   = $Module;
+        $this->data = $Module->moduleData;
+        $this->Module = $Module;
     }
 
     /**
@@ -45,13 +47,12 @@ class FieldManager extends AbstractFieldManager
      */
     public function addGroup( $id, $args = array() )
     {
-        if ( !$this->idExists( $id ) ) {
-            $this->Structure[ $id ] = new FieldSection( $id, $args, $this->Module->envVars, $this->Module );
+        if (!$this->idExists( $id )) {
+            $this->Structure[$id] = new FieldSection( $id, $args, $this->Module->envVars, $this->Module );
         }
-        return $this->Structure[ $id ];
+        return $this->Structure[$id];
 
     }
-
 
 
     /**
@@ -67,9 +68,20 @@ class FieldManager extends AbstractFieldManager
      */
     public function renderFields()
     {
-        $Renderer = new FieldRenderTabs( $this->Structure );
+        $Renderer = new $this->renderEngineClass;
+        $Renderer->setStructure( $this->Structure );
         $Renderer->render( $this->baseId, $this->data );
 
     }
 
+
+    /**
+     *
+     * @param $class
+     */
+    public function setRenderEngineClass( $class )
+    {
+        //@TODO verify against abstract/interface
+        $this->renderEngineClass = $class;
+    }
 }

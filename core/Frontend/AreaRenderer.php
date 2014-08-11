@@ -209,6 +209,10 @@ class AreaRenderer {
 
 		$classes[] = $module->settings['id'];
 
+        if (isset($module->viewfile)){
+            $classes[] = 'view-' . str_replace('.twig','',$module->viewfile);
+        }
+
 		if ( $this->position === 1 ) {
 			$classes[] = 'first-module';
 		}

@@ -2,6 +2,10 @@
 
 namespace Kontentblocks\Modules;
 
+/**
+ * Class StaticModule
+ * @package Kontentblocks\Modules
+ */
 abstract class StaticModule extends Module
 {
 

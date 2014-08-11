@@ -223,19 +223,24 @@
   border: none;
 }
 /* line 22, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+#kb-toolbar .mce-toolbar .mce-btn-group .mce-btn.mce-active {
+  background: #333 !important;
+  border-color: #444;
+}
+/* line 27, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-ico {
   color: #fff;
 }
-/* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 31, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-toolbar-grp {
   background-color: #333;
   min-width: 650px;
 }
-/* line 31, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-i-kbcancleinline {
   font-family: 'dashicons';
 }
-/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 39, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-i-kbcancleinline:before {
   content: "\f335";
   font-family: 'dashicons';
@@ -243,21 +248,21 @@
   height: 15px;
   font-size: 22px;
 }
-/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-menubtn {
   background: #222;
   border: transparent;
 }
-/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-menubtn span {
   color: #fff;
 }
-/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 57, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-panel {
   background: #222;
   color: #f2f2f2;
 }
-/* line 56, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #kb-toolbar .mce-panel .mce-menu-item {
   background: #222;
 }
@@ -265,17 +270,17 @@
 /*------------------------------------*\
     TinyMCE hard styles
 \*------------------------------------*/
-/* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 76, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .wp-editor-wrap * {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
-/* line 75, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 80, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .mce-widget {
   text-transform: none !important;
 }
-/* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 84, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .mce-widget button:hover {
   background: transparent !important;
 }
@@ -1498,8 +1503,8 @@ h5.kb_properties_title {
   background-color: #333;
   background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
-  display: none;
-  padding: 0px 6px;
+  display: block;
+  padding: 0px 6px !important;
   position: absolute;
   white-space: nowrap;
   z-index: 2147483647;

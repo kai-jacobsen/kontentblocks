@@ -50,7 +50,9 @@ class Enqueues
             'jquery-ui-draggable',
             'backbone',
             'underscore',
-            'wp-color-picker'
+            'wp-color-picker',
+            'editor',
+            'quicktags'
         );
         // Plugins
         wp_register_script(
@@ -251,7 +253,8 @@ class Enqueues
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION,
-            'isMobile' => MobileDetect::getInstance()->isMobile()
+            'isMobile' => MobileDetect::getInstance()->isMobile(),
+            'useModuleNav' => apply_filters('kb:config.module-nav', true)
         );
 
         if (is_preview()) {
@@ -306,6 +309,7 @@ class Enqueues
                 'delete' => wp_create_nonce( 'kb-delete' ),
                 'read' => wp_create_nonce( 'kb-read' ),
             )
+
         );
 
     }

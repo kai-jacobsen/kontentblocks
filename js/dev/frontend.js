@@ -326,12 +326,20 @@ KB.IEdit.Text = function(el) {
         setup: function(ed) {
             ed.on("init", function() {
                 var data = jQuery(ed.bodyElement).data();
-                var module = data.module;
+                var module = data.module, cleaned, $placeholder;
                 ed.kfilter = data.filter && data.filter === "content" ? true : false;
                 ed.module = KB.Modules.get(module);
                 ed.kpath = data.kpath;
                 ed.module.view.$el.addClass("inline-editor-attached");
+                $placeholder = jQuery("<span class='kb-text-placeholder'>Your voice is missing</span>");
                 KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
+                cleaned = ed.getContent().replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
+                if (cleaned === "") {
+                    ed.setContent($placeholder.html());
+                    ed.placeholder = true;
+                } else {
+                    ed.placeholder = false;
+                }
             });
             ed.on("click", function(e) {
                 e.stopPropagation();
@@ -339,9 +347,12 @@ KB.IEdit.Text = function(el) {
             ed.on("focus", function(e) {
                 var con = KB.Util.getIndex(ed.module.get("moduleData"), ed.kpath);
                 ed.previousContent = ed.getContent();
-                ed.setContent(switchEditors.wpautop(con));
+                if (ed.kfilter) {
+                    ed.setContent(switchEditors.wpautop(con));
+                }
                 jQuery("#kb-toolbar").show();
                 ed.module.view.$el.addClass("inline-edit-active");
+                if (ed.placeholder !== false) {}
             });
             ed.on("change", function(e) {
                 _K.info("Got Dirty");
@@ -360,13 +371,18 @@ KB.IEdit.Text = function(el) {
                 }
             });
             ed.on("blur", function() {
+                var content;
                 ed.module.view.$el.removeClass("inline-edit-active");
                 jQuery("#kb-toolbar").hide();
-                var value = switchEditors._wp_Nop(ed.getContent());
-                var moduleData = _.clone(ed.module.get("moduleData"));
+                content = ed.getContent();
+                if (ed.kfilter) {
+                    content = switchEditors._wp_Nop(ed.getContent());
+                }
+                var moduleData = ed.module.get("moduleData");
                 var path = ed.kpath;
-                KB.Util.setIndex(moduleData, path, value);
+                KB.Util.setIndex(moduleData, path, content);
                 if (ed.isDirty()) {
+                    ed.placeholder = false;
                     if (ed.kfilter) {
                         jQuery.ajax({
                             url: ajaxurl,
@@ -383,12 +399,12 @@ KB.IEdit.Text = function(el) {
                                 ed.module.trigger("change");
                                 ed.module.set("moduleData", moduleData);
                             },
-                            error: function() {
-                                ed.module.trigger("change");
-                                ed.module.set("moduleData", moduleData);
-                            }
+                            error: function() {}
                         });
-                    } else {}
+                    } else {
+                        ed.module.trigger("change");
+                        ed.module.set("moduleData", moduleData);
+                    }
                 } else {
                     ed.setContent(ed.previousContent);
                 }
@@ -432,17 +448,15 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     $formContent: null,
     timerId: null,
     initialize: function(options) {
-        var that = this;
+        var self = this;
         this.options = options;
-        this.view = options.view;
+        this.frontendView = options.view;
         this.model.on("change", this.test, this);
-        this.listenTo(this.view, "template::changed", function() {
-            that.serialize(false);
-            that.render();
+        this.listenTo(this.frontendView, "KB::frontend.module.viewfile.changed", function() {
+            self.serialize(false);
+            self.render();
         });
-        this.listenTo(this.view, "kb:moduleUpdated", function() {
-            that.$el.removeClass("isDirty");
-        });
+        this.listenTo(this.frontendView, "KB::module-updated", this.frontendViewUpdated);
         this.listenTo(KB, "frontend::recalibrate", this.recalibrate);
         this.listenTo(KB.Events, "KB::edit-modal-refresh", this.recalibrate);
         this.listenTo(this, "recalibrate", this.recalibrate);
@@ -458,11 +472,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             containment: "window",
             stop: function(eve, ui) {
                 KB.OSConfig.wrapPosition = ui.position;
-                that.recalibrate(ui.position);
+                self.recalibrate(ui.position);
             }
         });
         jQuery(window).on("resize", function() {
-            that.recalibrate();
+            self.recalibrate();
         });
         if (KB.OSConfig.wrapPosition) {
             this.$el.css({
@@ -472,25 +486,29 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         }
         this.listenTo(KB.Events, "KB::tinymce.new-editor", function(ed) {
             if (ed.settings && ed.settings.kblive) {
-                that.attachEditorEvents(ed);
+                self.attachEditorEvents(ed);
             }
         });
         jQuery(document).on("KB:osUpdate", function() {
-            that.serialize(false);
+            self.serialize(false);
         });
         jQuery(document).on("change", ".kb-observe", function() {
-            that.serialize(false);
+            self.serialize(false);
         });
         jQuery("body").append(this.$el);
         this.$el.hide();
         this.render();
+    },
+    frontendViewUpdated: function() {
+        this.$el.removeClass("isDirty");
     },
     test: function() {},
     events: {
         keyup: "delayInput",
         "click a.close-controls": "destroy",
         "click a.kb-save-form": "update",
-        "click a.kb-preview-form": "preview"
+        "click a.kb-preview-form": "preview",
+        "change .kb-template-select": "viewfileChange"
     },
     preview: function() {
         this.serialize(false);
@@ -501,6 +519,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     render: function() {
         var that = this;
         this.applyControlsSettings(this.$el);
+        this.updateViewClassTo = false;
         KB.lastAddedModule = {
             view: that
         };
@@ -514,30 +533,25 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             type: "POST",
             dataType: "json",
             success: function(res) {
+                that.$el.fadeTo(300, .1);
                 that.$inner.empty();
-                that.view.clearFields();
-                that.$inner.attr("id", that.view.model.get("instance_id"));
+                that.frontendView.clearFields();
+                that.$inner.attr("id", that.model.get("instance_id"));
                 that.$inner.append(res.html);
-                that.$el.fadeTo(750, .1);
                 if (res.json) {
-                    var merged = _.extend(KB.payload, res.json);
-                    KB.payload = merged;
+                    KB.payload = _.extend(KB.payload, res.json);
                 }
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();
                 KB.TinyMCE.addEditor();
-                var localView = _.clone(that.view);
-                localView.$el = that.$inner;
-                localView.parentView = that.view;
-                that.view.trigger("kb:frontend::viewLoaded", localView);
-                _K.info("Frontend Modal opened with view of:" + that.view.model.get("instance_id"));
+                _K.info("Frontend Modal opened with view of:" + that.model.get("instance_id"));
                 setTimeout(function() {
-                    KB.Fields.trigger("frontUpdate", localView);
+                    KB.Fields.trigger("frontUpdate", that.frontendView);
                 }, 500);
                 setTimeout(function() {
                     that.recalibrate();
-                    that.$el.fadeTo(300, 1);
                 }, 600);
+                that.$el.fadeTo(300, 1);
             },
             error: function() {
                 console.log("e");
@@ -546,14 +560,18 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     },
     reload: function(moduleView) {
         var that = this;
-        _K.log("Frontend Modal reload");
-        this.unload();
+        if (!moduleView) {
+            _K.log("FrontendModal::reload.no view argument given");
+        }
+        _K.log("FrontendModal::reload.run");
         if (this.model && this.model.get("instance_id") === moduleView.model.get("instance_id")) {
+            _K.log("FrontendModal::reload.Requested Module is already loaded. Aborting.");
             return false;
         }
+        this.unload();
         this.model = moduleView.model;
         this.options.view = moduleView;
-        this.view = moduleView;
+        this.frontendView = moduleView;
         this.$el.fadeTo(250, .1, function() {
             that.render();
         });
@@ -561,9 +579,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     unset: function() {
         this.model = null;
         this.options.view = null;
-        this.view.attachedFields = {};
+        this.frontendView.attachedFields = {};
     },
-    recalibrate: function(pos) {
+    recalibrate: function() {
         var winH, conH, position, winDiff;
         winH = jQuery(window).height() - 40;
         conH = jQuery(".os-content-inner").height();
@@ -589,10 +607,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         _K.info("Nano Scrollbars (re)initialized!");
     },
     serialize: function(mode, showNotice) {
-        _K.info("Frontend Modal called serialize function. Savemode", save);
-        var that = this;
-        var save = mode || false;
-        var notice = showNotice !== false;
+        var that = this, save = mode || false, notice = showNotice !== false, height;
+        _K.info("Frontend Modal called serialize function. Savemode:", mode);
         tinymce.triggerSave();
         jQuery.ajax({
             url: ajaxurl,
@@ -606,32 +622,33 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             type: "POST",
             dataType: "json",
             success: function(res) {
-                jQuery(".editable", that.options.view.$el).each(function(i, el) {
+                jQuery(".editable", that.frontendView.$el).each(function(i, el) {
                     tinymce.remove("#" + el.id);
                 });
-                var height = that.options.view.$el.height();
-                that.options.view.$el.height(height);
-                that.options.view.$el.html(res.html);
-                that.options.view.$el.css("height", "auto");
+                height = that.frontendView.$el.height();
+                if (that.updateViewClassTo !== false) {
+                    that.updateContainerClass(that.updateViewClassTo);
+                }
+                that.frontendView.$el.html(res.html);
                 that.model.set("moduleData", res.newModuleData);
-                jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.options.view);
-                that.model.view.delegateEvents();
-                that.model.view.trigger("kb:moduleUpdated");
-                that.view.trigger("kb:frontend::viewUpdated");
+                jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.frontendView);
+                that.frontendView.delegateEvents();
+                that.frontendView.trigger("kb:frontend::viewUpdated");
                 KB.Events.trigger("KB::ajax-update");
                 KB.trigger("kb:frontendModalUpdated");
                 setTimeout(function() {
                     jQuery(".editable", that.options.view.$el).each(function(i, el) {
                         KB.IEdit.Text(el);
                     });
-                    that.model.view.render();
+                    that.frontendView.render();
+                    that.frontendView.setControlsPosition();
                 }, 400);
                 if (save) {
                     if (notice) {
                         KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
                     }
                     that.$el.removeClass("isDirty");
-                    that.model.view.getClean();
+                    that.frontendView.getClean();
                     that.trigger("kb:frontend-save");
                 } else {
                     if (notice) {
@@ -642,9 +659,24 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
             },
             error: function() {
-                console.log("e");
+                _K.error("serialize | FrontendModal | Ajax error");
             }
         });
+    },
+    viewfileChange: function(e) {
+        this.updateViewClassTo = {
+            current: this.frontendView.model.get("viewfile"),
+            target: e.currentTarget.value
+        };
+        this.frontendView.model.set("viewfile", e.currentTarget.value);
+    },
+    updateContainerClass: function(viewfile) {
+        if (!viewfile || !viewfile.current || !viewfile.target) {
+            _K.error("updateContainerClass | frontendModal | paramater exception");
+        }
+        this.frontendView.$el.removeClass(this._classifyView(viewfile.current));
+        this.frontendView.$el.addClass(this._classifyView(viewfile.target));
+        this.updateViewClassTo = false;
     },
     delayInput: function() {
         var that = this;
@@ -682,6 +714,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         if (settings.controls && settings.controls.width) {
             $el.css("width", settings.controls.width + "px");
         }
+    },
+    _classifyView: function(str) {
+        return "view-" + str.replace(".twig", "");
     }
 });
 
@@ -696,7 +731,13 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.listenTo(this.model, "change", this.modelChange);
         this.model.bind("save", this.model.save);
         this.render();
-        KB.ModuleNav.attach(this);
+        if (KB.appData.config.useModuleNav) {
+            KB.ModuleNav.attach(this);
+        }
+        this.setControlsPosition();
+        jQuery(window).on("kontentblocks::ajaxUpdate", function() {
+            that.setControlsPosition();
+        });
     },
     events: {
         "click a.os-edit-block": "openOptions",
@@ -707,7 +748,29 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     setActive: function() {
         KB.currentModule = this;
     },
-    render: function() {},
+    render: function() {
+        var settings = this.model.get("settings");
+        if (settings.controls && settings.controls.hide) {
+            return;
+        }
+        this.$el.append(KB.Templates.render("frontend/module-controls", {
+            model: this.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
+        }));
+    },
+    setControlsPosition: function() {
+        var mSettings = this.model.get("settings");
+        var $controls = jQuery(".os-controls", this.$el);
+        var pos = this.$el.offset();
+        if (mSettings.controls && mSettings.controls.toolbar) {
+            pos.top = mSettings.controls.toolbar.top;
+            pos.left = mSettings.controls.toolbar.left;
+        }
+        $controls.css({
+            top: 10 + "px",
+            left: 0
+        });
+    },
     openOptions: function() {
         if (KB.FrontendEditModal) {
             this.reloadModal();
@@ -752,7 +815,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 tinymce.triggerSave();
                 that.model.set("moduleData", res.newModuleData);
                 that.render();
-                that.trigger("kb:moduleUpdated");
+                that.trigger("KB::module-updated");
                 KB.Events.trigger("KB::ajax-update");
                 KB.Notice.notice("Module saved successfully", "success");
                 that.$el.removeClass("isDirty");
@@ -792,11 +855,15 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     getDirty: function() {
         this.$el.addClass("isDirty");
-        this.controlView.$el.addClass("isDirty");
+        if (KB.appData.config.useModuleNav) {
+            this.controlView.$el.addClass("isDirty");
+        }
     },
     getClean: function() {
         this.$el.removeClass("isDirty");
-        this.controlView.$el.removeClass("isDirty");
+        if (KB.appData.config.useModuleNav) {
+            this.controlView.$el.removeClass("isDirty");
+        }
     },
     modelChange: function() {
         this.getDirty();
@@ -815,8 +882,10 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
         jQuery(window).scroll(function() {
             if (that.model.$el.visible(true, true)) {
                 that.$el.addClass("in-viewport");
+                that.$el.show(250);
             } else {
                 that.$el.removeClass("in-viewport");
+                that.$el.hide(250);
             }
         });
         this.model.$el.on("mouseenter", function() {
@@ -846,7 +915,8 @@ KB.Backbone.ModuleNavItem = Backbone.View.extend({
         e.stopPropagation();
         this.model.openOptions();
     },
-    inlineUpdate: function() {
+    inlineUpdate: function(e) {
+        e.stopPropagation();
         this.model.updateModule();
         this.model.getClean();
     },
@@ -930,7 +1000,9 @@ KB.App = function($) {
     function init() {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
         $toolbar.hide();
-        KB.ModuleNav = new KB.Backbone.ModuleNavView();
+        if (KB.appData.config.useModuleNav) {
+            KB.ModuleNav = new KB.Backbone.ModuleNavView();
+        }
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);
         KB.Modules.on("remove", removeModule);

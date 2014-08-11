@@ -74,19 +74,6 @@ KB.IEdit.Image = (function ($) {
             var path = data.kpath;
             KB.Util.setIndex(moduleData, path, value);
 
-//            var path = [];
-//            path.push(data.arraykey);
-//            path.push(data.index);
-//            path.push(data.key);
-//            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-//                moduleData[data.arraykey][data.index][data.key] = value;
-//            } else if (!_.isEmpty(data.index)) {
-//                moduleData[data.key][data.index] = value;
-//            } else if (!_.isEmpty(data.arraykey)) {
-//                moduleData[data.arraykey][data.key] = value;
-//            } else {
-//                moduleData[data.key] = value;
-//            }
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set('moduleData', moduleData);
 

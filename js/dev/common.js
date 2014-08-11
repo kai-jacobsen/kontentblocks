@@ -495,7 +495,8 @@ KB.Ui = function($) {
         },
         initToggleBoxes: function() {
             $(".kb-togglebox-header").on("click", function() {
-                $(this).next("div").slideToggle().toggleClass("kb-toggle-open").end().toggleClass("kb-toggle-open");
+                console.log("cliky");
+                $(this).next("div").slideToggle();
             });
             $(".kb_fieldtoggles div:first-child").trigger("click");
         },
@@ -732,7 +733,7 @@ KB.ViewsCollection = function() {
     };
     this.remove = function(id) {
         var view = this.get(id);
-        this.trigger("kb:backend::viewDeleted", view);
+        this.trigger("KB::backend.module.view.deleted", view);
         delete this.views[id];
     };
     this.get = function(id) {

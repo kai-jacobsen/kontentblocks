@@ -13,7 +13,7 @@ use Kontentblocks\Utils\Utilities;
  *
  * @package Kontentblocks\Panels
  */
-abstract class OptionsPanel
+abstract class OptionsPanel extends AbstractPanel
 {
 
     /**
@@ -38,6 +38,13 @@ abstract class OptionsPanel
      */
     protected $data = null;
 
+    /**
+     * Class constructor
+     *
+     * @param array $args
+     *
+     * @throws \Exception
+     */
     public function __construct( $args )
     {
         $args = $this->parseDefaults( $args );
@@ -53,17 +60,17 @@ abstract class OptionsPanel
         add_action( 'admin_menu', array( $this, 'setupMenu' ) );
     }
 
-    private function parseDefaults( $args )
+    public function parseDefaults( $args )
     {
         $defaults = array(
             'baseId' => null,
-            'menu'   => false
+            'menu' => false
         );
 
         return wp_parse_args( $args, $defaults );
     }
 
-    private function setupArgs( $args )
+    public function setupArgs( $args )
     {
         foreach ($args as $k => $v) {
             if (method_exists( $this, "set" . strtoupper( $k ) )) {
@@ -124,10 +131,10 @@ abstract class OptionsPanel
 
     }
 
-    public function save()
+    public function save( $postId )
     {
 
-        $old                = $this->setupData();
+        $old = $this->setupData();
         $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
 
         $new = $this->fields( $this->FieldManager )->save( $_POST[$this->baseId], $old );
@@ -145,9 +152,10 @@ abstract class OptionsPanel
      *
      * @internal param $postId
      *
+     * @param null $postId
      * @return mixed
      */
-    private function setupData()
+    protected function setupData( $postId = null )
     {
         if (is_null( $this->data )) {
             $this->data = get_option( $this->baseId, array() );
@@ -158,7 +166,7 @@ abstract class OptionsPanel
 
     abstract public function fields( PanelFieldManager $fieldManager );
 
-    public function form()
+    public function form( $postobj = null )
     {
         do_action( 'kb_enqueue_admin_script' );
 
@@ -225,7 +233,7 @@ abstract class OptionsPanel
      * @return array
      * @TODO __Revise__
      */
-    public function getData()
+    public function getData( $postid = null )
     {
         return $this->FieldManager->prepareDataAndGet();
     }

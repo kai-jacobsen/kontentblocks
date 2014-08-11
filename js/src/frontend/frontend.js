@@ -46,7 +46,9 @@ KB.App = function ($) {
         // create toolbar container for tinymce inline editors
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
         $toolbar.hide();
-        KB.ModuleNav = new KB.Backbone.ModuleNavView();
+        if (KB.appData.config.useModuleNav) {
+            KB.ModuleNav = new KB.Backbone.ModuleNavView();
+        }
 
         // Register events on collections
         KB.Modules.on('add', createModuleViews);
@@ -213,7 +215,7 @@ jQuery(document).ready(function () {
         });
 
     // force user cookie to tinymce
-    setUserSetting( 'editor', 'tinymce' );
+    setUserSetting('editor', 'tinymce');
 
 
 });

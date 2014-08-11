@@ -33,17 +33,27 @@ KB.IEdit.Text = function (el) {
 
             ed.on('init', function () {
                 var data = jQuery(ed.bodyElement).data();
-                var module = data.module;
+                var module = data.module, cleaned, $placeholder;
                 ed.kfilter = (data.filter && data.filter === 'content') ? true : false;
                 ed.module = KB.Modules.get(module);
                 ed.kpath = data.kpath;
                 ed.module.view.$el.addClass('inline-editor-attached');
 
-//                jQuery('body').on('click', '.mce-listbox', function () {
-//                    jQuery('.mce-stack-layout-item span').removeAttr('style');
-//                });
+                $placeholder = jQuery("<span class='kb-text-placeholder'>Your voice is missing</span>");
 
                 KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
+
+                // placeholder
+                cleaned = ed.getContent().replace(/\s/g, '')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/<br>/g, '')
+                    .replace(/<p><\/p>/g, '');
+                if (cleaned === '') {
+                    ed.setContent($placeholder.html());
+                    ed.placeholder = true;
+                } else {
+                    ed.placeholder = false;
+                }
 
             });
 
@@ -54,9 +64,17 @@ KB.IEdit.Text = function (el) {
             ed.on('focus', function (e) {
                 var con = KB.Util.getIndex(ed.module.get('moduleData'), ed.kpath);
                 ed.previousContent = ed.getContent();
-                ed.setContent(switchEditors.wpautop(con));
+
+                if (ed.kfilter){
+                    ed.setContent(switchEditors.wpautop(con));
+                }
+
                 jQuery('#kb-toolbar').show();
                 ed.module.view.$el.addClass('inline-edit-active');
+
+                if (ed.placeholder !== false) {
+//                    ed.setContent('');
+                }
             });
 
             ed.on('change', function (e) {
@@ -78,16 +96,20 @@ KB.IEdit.Text = function (el) {
             });
 
             ed.on('blur', function () {
+                var content;
                 ed.module.view.$el.removeClass('inline-edit-active');
                 jQuery('#kb-toolbar').hide();
-                var value = switchEditors._wp_Nop(ed.getContent());
-                var moduleData = _.clone(ed.module.get('moduleData'));
-                var path = ed.kpath;
-                KB.Util.setIndex(moduleData, path, value);
+                content = ed.getContent();
+                if (ed.kfilter) {
+                    content = switchEditors._wp_Nop(ed.getContent());
+                }
 
+                var moduleData = ed.module.get('moduleData');
+                var path = ed.kpath;
+                KB.Util.setIndex(moduleData, path, content);
                 // && ed.kfilter set
                 if (ed.isDirty()) {
-
+                    ed.placeholder = false;
                     if (ed.kfilter) {
                         jQuery.ajax({
                             url: ajaxurl,
@@ -105,12 +127,13 @@ KB.IEdit.Text = function (el) {
                                 ed.module.set('moduleData', moduleData);
                             },
                             error: function () {
-                                ed.module.trigger('change');
-                                ed.module.set('moduleData', moduleData);
+//                                ed.module.trigger('change');
+//                                ed.module.set('moduleData', moduleData);
                             }
                         });
                     } else {
-
+                        ed.module.trigger('change');
+                        ed.module.set('moduleData', moduleData);
                     }
 
 
@@ -123,7 +146,6 @@ KB.IEdit.Text = function (el) {
     };
 
     defaults = _.extend(defaults, settings);
-
     tinymce.init(_.defaults(defaults, {
         selector: '#' + el.id
     }));

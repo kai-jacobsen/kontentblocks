@@ -199,7 +199,7 @@ add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );
  */
 function fieldGetImageCb()
 {
-    new FieldGetImage();
+    FieldGetImage::run();
 
 }
 

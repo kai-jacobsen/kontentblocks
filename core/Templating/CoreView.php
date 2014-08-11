@@ -79,6 +79,7 @@ class CoreView
      */
     public function setPath( $path )
     {
+        $this->path = $path;
         Twig::setPath( $path );
     }
 
