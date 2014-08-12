@@ -2755,10 +2755,10 @@ h5.kb_properties_title {
 }
 
 /* line 193, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
-.area-holder, .context-area {
+.kb-context-container {
   margin-bottom: 20px;
   padding: 0px;
-  background: #f9f9f9;
+  background: #fff;
   -webkit-box-shadow: 0px 1px 1px #fff;
   box-shadow: 0px 1px 1px #fff;
   border: 1px solid #ccc;

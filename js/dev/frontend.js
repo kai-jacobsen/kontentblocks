@@ -502,7 +502,9 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     frontendViewUpdated: function() {
         this.$el.removeClass("isDirty");
     },
-    test: function() {},
+    test: function() {
+        _K.log("Model:change event fired");
+    },
     events: {
         keyup: "delayInput",
         "click a.close-controls": "destroy",
@@ -964,7 +966,7 @@ KB.Backbone.ModuleNavView = Backbone.View.extend({
         this.$el.removeClass("kb-nav-show-partly");
         var show = !this.show;
         this.show = show;
-        KB.Util.stex.set("kb-nav-show", show, 10 * 60 * 1e3);
+        KB.Util.stex.set("kb-nav-show", show, 60 * 60 * 1e3 * 24);
     },
     over: function() {
         if (!this.show) {

@@ -168,7 +168,6 @@ Class Kontentblocks
      */
     public function loadModules()
     {
-        d($this);
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
         $Registry = $this->Services['registry.modules'];
         // add core modules path
