@@ -172,7 +172,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             data: {
                 action: 'getModuleOptions',
                 module: that.model.toJSON(),
-                _ajax_nonce: kontentblocks.nonces.read
+                _ajax_nonce: KB.Config.getNonce('read')
             },
             type: 'POST',
             dataType: 'json',
@@ -347,7 +347,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 data: that.$form.serialize().replace(/\'/g, '%27'),
                 module: that.model.toJSON(),
                 editmode: (save) ? 'update' : 'preview',
-                _ajax_nonce: kontentblocks.nonces.update
+                _ajax_nonce: KB.Config.getNonce('update')
             },
             type: 'POST',
             dataType: 'json',

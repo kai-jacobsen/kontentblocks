@@ -1,6 +1,6 @@
-KB.Checks = (function($) {
+KB.Checks = (function ($) {
     return {
-        blockLimit: function(areamodel) {
+        blockLimit: function (areamodel) {
             var limit = areamodel.get('limit');
             // todo potentially wrong, yeah it's wrong
             var children = $('#' + areamodel.get('id') + ' li.kb_block').length;
@@ -11,16 +11,9 @@ KB.Checks = (function($) {
 
             return true;
         },
-        userCan: function(cap) {
-            var check = $.inArray(cap, kontentblocks.caps);
-            if (check !== -1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        userCan: function (cap) {
+            var check = $.inArray(cap, KB.Config.get('caps'));
+            return check !== -1;
         }
     };
 }(jQuery));

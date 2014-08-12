@@ -1,5 +1,7 @@
-/*! Kontentblocks DevVersion 2014-08-11 */
+/*! Kontentblocks DevVersion 2014-08-12 */
 var KB = KB || {};
+
+KB.Config = {};
 
 KB.Backbone = {};
 
@@ -18,6 +20,39 @@ KB.Events = {};
 _.extend(KB, Backbone.Events);
 
 _.extend(KB.Events, Backbone.Events);
+
+KB.Config = function($) {
+    var config = KB.appData.config;
+    return {
+        get: function(key) {
+            if (!key) {
+                return config;
+            }
+            if (config[key]) {
+                return config[key];
+            }
+            return null;
+        },
+        getNonce: function(mode) {
+            var modes = [ "update", "create", "delete", "read" ];
+            if (_.indexOf(modes, mode) !== -1) {
+                return config.nonces[mode];
+            } else {
+                _K.error("Invalid nonce requested in kb.cm.Config.js");
+                return null;
+            }
+        },
+        inDevMode: function() {
+            return config.env.dev;
+        },
+        getRootURL: function() {
+            return config.env.url;
+        },
+        getHash: function() {
+            return config.env.hash;
+        }
+    };
+}(jQuery);
 
 KB.Ajax = function($) {
     return {
@@ -67,12 +102,8 @@ KB.Checks = function($) {
             return true;
         },
         userCan: function(cap) {
-            var check = $.inArray(cap, kontentblocks.caps);
-            if (check !== -1) {
-                return true;
-            } else {
-                return false;
-            }
+            var check = $.inArray(cap, KB.Config.get("caps"));
+            return check !== -1;
         }
     };
 }(jQuery);
@@ -125,7 +156,7 @@ var _K = Logger.get("_K");
 
 _K.setLevel(_K.INFO);
 
-if (!kontentblocks.config.dev) {
+if (!KB.Config.inDevMode()) {
     _K.setLevel(Logger.OFF);
 }
 
@@ -187,7 +218,7 @@ KB.Menus = function($) {
                 inputvalue: el.value,
                 checkmode: mode,
                 action: "getSanitizedId",
-                _ajax_nonce: kontentblocks.nonces.read
+                _ajax_nonce: KB.Config.getNonce("read")
             }, this.insertId, this);
         },
         insertId: function(res) {
@@ -278,8 +309,8 @@ KB.Templates = function($) {
     function render(tmpl_name, tmpl_data) {
         var tmpl_string;
         if (!tmpl_cache[tmpl_name]) {
-            var tmpl_dir = kontentblocks.config.url + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + kontentblocks.config.hash;
+            var tmpl_dir = KB.Config.getRootURL() + "js/templates";
+            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + KB.Config.getHash();
             var pat = /^https?:\/\//i;
             if (pat.test(tmpl_name)) {
                 tmpl_url = tmpl_name;
@@ -400,7 +431,7 @@ KB.TinyMCE = function($) {
                 editorName: name,
                 post_id: pid,
                 editorContent: editorContent,
-                _ajax_nonce: kontentblocks.nonces.read,
+                _ajax_nonce: KB.Config.getNonce("read"),
                 args: {
                     media_buttons: media
                 }
@@ -590,7 +621,7 @@ KB.Ui = function($) {
             });
         },
         flushLocalStorage: function() {
-            var hash = kontentblocks.config.hash;
+            var hash = KB.Config.get("env").hash;
             if (store.get("kbhash") !== hash) {
                 store.clear();
                 store.set("kbhash", hash);
@@ -606,13 +637,13 @@ KB.Ui = function($) {
             return KB.Ajax.send({
                 action: "resortModules",
                 data: serializedData,
-                _ajax_nonce: kontentblocks.nonces.update
+                _ajax_nonce: KB.Config.getNonce("update")
             });
         },
         changeArea: function(targetArea, module) {
             return KB.Ajax.send({
                 action: "changeArea",
-                _ajax_nonce: kontentblocks.nonces.update,
+                _ajax_nonce: KB.Config.getNonce("update"),
                 block_id: module.get("instance_id"),
                 area_id: targetArea.get("id"),
                 context: targetArea.get("context")

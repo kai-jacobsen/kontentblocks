@@ -83,7 +83,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.Ajax.send({
             action: 'afterAreaChange',
             module: this.model.toJSON(),
-            _ajax_nonce: kontentblocks.nonces.read
+            _ajax_nonce: KB.Config.getNonce('read')
         }, this.insertNewUpdateForm, this);
     },
     insertNewUpdateForm: function (response) {

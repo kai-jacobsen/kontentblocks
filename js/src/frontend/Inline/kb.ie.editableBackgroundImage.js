@@ -90,7 +90,7 @@ KB.IEdit.BackgroundImage = (function ($) {
                     action: 'fieldGetImage',
                     args: settings,
                     id: id,
-                    _ajax_nonce: kontentblocks.nonces.get
+                    _ajax_nonce: KB.Config.getNonce('read')
                 },
                 type: 'GET',
                 dataType: 'json',

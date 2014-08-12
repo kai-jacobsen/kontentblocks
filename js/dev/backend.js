@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-11 */
+/*! Kontentblocks DevVersion 2014-08-12 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -44,6 +44,10 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
 });
 
 KB.Backbone.AreaModel = Backbone.Model.extend({
+    idAttribute: "id"
+});
+
+KB.Backbone.ContextModel = Backbone.Model.extend({
     idAttribute: "id"
 });
 
@@ -277,7 +281,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             duplicate: module.get("duplicate"),
             areaContext: this.options.area.model.get("context"),
             area: this.options.area.model.get("id"),
-            _ajax_nonce: kontentblocks.nonces.create
+            _ajax_nonce: KB.Config.getNonce("create")
         };
         this.close();
         KB.Ajax.send(data, this.success, this);
@@ -386,7 +390,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     yes: function() {
         KB.Ajax.send({
             action: "removeModules",
-            _ajax_nonce: kontentblocks.nonces.delete,
+            _ajax_nonce: KB.Config.getNonce("delete"),
             module: this.model.get("instance_id")
         }, this.success, this);
     },
@@ -409,7 +413,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
             action: "duplicateModule",
             module: this.model.get("instance_id"),
             areaContext: this.model.area.get("context"),
-            _ajax_nonce: kontentblocks.nonces.create,
+            _ajax_nonce: KB.Config.getNonce("delete"),
             "class": this.model.get("class")
         }, this.success, this);
     },
@@ -459,7 +463,7 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
         KB.Ajax.send({
             action: "changeModuleStatus",
             module: this.model.get("instance_id"),
-            _ajax_nonce: kontentblocks.nonces.update
+            _ajax_nonce: KB.Config.getNonce("delete")
         }, this.success, this);
     },
     isValid: function() {
@@ -607,7 +611,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.Ajax.send({
             action: "afterAreaChange",
             module: this.model.toJSON(),
-            _ajax_nonce: kontentblocks.nonces.read
+            _ajax_nonce: KB.Config.getNonce("read")
         }, this.insertNewUpdateForm, this);
     },
     insertNewUpdateForm: function(response) {

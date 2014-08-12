@@ -107,7 +107,7 @@ KB.App = (function ($) {
 
 
     /**
-     *
+     * Create Area Views
      * @param area Backbone Model
      * @returns void
      */
@@ -117,6 +117,7 @@ KB.App = (function ($) {
             el: '#' + area.get('id') + '-container'
         }));
     }
+
 
     /**
      * Removes a view from the collection.

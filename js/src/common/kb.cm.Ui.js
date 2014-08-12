@@ -288,7 +288,7 @@ KB.Ui = function ($) {
             });
         },
         flushLocalStorage: function(){
-            var hash = kontentblocks.config.hash;
+            var hash = KB.Config.get('env').hash;
             if (store.get('kbhash') !== hash){
                 store.clear();
                 store.set('kbhash', hash)
@@ -311,7 +311,7 @@ KB.Ui = function ($) {
             return KB.Ajax.send({
                 action: 'resortModules',
                 data: serializedData,
-                _ajax_nonce: kontentblocks.nonces.update
+                _ajax_nonce: KB.Config.getNonce('update')
             });
         },
         /**
@@ -323,7 +323,7 @@ KB.Ui = function ($) {
         changeArea: function (targetArea, module) {
             return KB.Ajax.send({
                 action: 'changeArea',
-                _ajax_nonce: kontentblocks.nonces.update,
+                _ajax_nonce: KB.Config.getNonce('update'),
                 block_id: module.get('instance_id'),
                 area_id: targetArea.get('id'),
                 context: targetArea.get('context')

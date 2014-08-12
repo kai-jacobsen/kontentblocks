@@ -111,7 +111,7 @@ KB.TinyMCE = (function ($) {
                 editorName: name,
                 post_id: pid,
                 editorContent: editorContent,
-                _ajax_nonce: kontentblocks.nonces.read,
+                _ajax_nonce: KB.Config.getNonce('read'),
                 args: {
                     media_buttons: media
                 }

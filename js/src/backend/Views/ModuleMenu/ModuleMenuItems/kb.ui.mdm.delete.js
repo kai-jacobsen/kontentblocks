@@ -21,7 +21,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     yes: function() {
         KB.Ajax.send({
             action: 'removeModules',
-            _ajax_nonce: kontentblocks.nonces.delete,
+            _ajax_nonce: KB.Config.getNonce('delete'),
             module: this.model.get('instance_id')
         }, this.success, this);
     },
