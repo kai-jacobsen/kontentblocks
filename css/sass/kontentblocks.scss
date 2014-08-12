@@ -1,6 +1,8 @@
 @import "compass/css3";
 @import "partials/_base";
 
+
+
 #kb_select {
   margin-bottom: 12px;
 }
@@ -48,6 +50,7 @@
 /* --------------------------
 // Areas realted styling
 -----------------------------*/
+@import "partials/_areas/contexts";
 @import "partials/_areas/area-styles";
 @import "partials/_areas/area-settings";
 
