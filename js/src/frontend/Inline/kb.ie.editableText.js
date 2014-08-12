@@ -117,7 +117,7 @@ KB.IEdit.Text = function (el) {
                                 action: 'applyContentFilter',
                                 data: value.replace(/\'/g, '%27'),
                                 module: ed.module.toJSON(),
-                                _ajax_nonce: kontentblocks.nonces.read
+                                _ajax_nonce: KB.Config.getNonce('read')
                             },
                             type: 'POST',
                             dataType: 'html',

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-10 */
+/*! Kontentblocks DevVersion 2014-08-12 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -141,7 +141,7 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
                     action: "fieldGetImage",
                     args: args,
                     id: value.id,
-                    _ajax_nonce: kontentblocks.nonces.get
+                    _ajax_nonce: KB.Config.getNonce("read")
                 },
                 type: "GET",
                 dataType: "json",

@@ -121,7 +121,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 module: that.model.toJSON(),
                 editmode: 'update',
                 refresh: refresh,
-                _ajax_nonce: kontentblocks.nonces.update
+                _ajax_nonce: KB.Config.getNonce('update')
             },
             type: 'POST',
             dataType: 'json',

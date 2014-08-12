@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-10 */
+/*! Kontentblocks DevVersion 2014-08-12 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),
@@ -33,7 +33,7 @@
             var that = this;
             KB.Ajax.send({
                 action: "get_layout_configurations",
-                _ajax_nonce: kontentblocks.nonces.read,
+                _ajax_nonce: KB.Config.getNonce("read"),
                 data: {
                     areaConfig: this.areaConfig
                 }
@@ -51,7 +51,7 @@
             }
             KB.Ajax.send({
                 action: "set_layout_configuration",
-                _ajax_nonce: kontentblocks.nonces.update,
+                _ajax_nonce: KB.Config.getNonce("update"),
                 data: {
                     areaConfig: this.areaConfig,
                     name: value
@@ -71,7 +71,7 @@
             }
             KB.Ajax.send({
                 action: "delete_layout_configuration",
-                _ajax_nonce: kontentblocks.nonces.delete,
+                _ajax_nonce: KB.Config.getNonce("delete"),
                 data: {
                     areaConfig: this.areaConfig,
                     name: value
@@ -214,7 +214,7 @@ KB.Ext.Backup = function($) {
             var that = this;
             KB.Ajax.send({
                 action: "get_backups",
-                _ajax_nonce: kontentblocks.nonces.read
+                _ajax_nonce: KB.Config.getNonce("read")
             }, function(response) {
                 that.items = response;
                 that.renderList(response);

@@ -8,7 +8,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
             action: 'duplicateModule',
             module: this.model.get('instance_id'),
             areaContext: this.model.area.get('context'),
-            _ajax_nonce: kontentblocks.nonces.create,
+            _ajax_nonce: KB.Config.getNonce('delete'),
             'class': this.model.get('class')
         }, this.success, this);
 

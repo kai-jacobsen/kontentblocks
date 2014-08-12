@@ -40,7 +40,7 @@
             KB.Ajax.send(
                 {
                     action: 'get_layout_configurations',
-                    _ajax_nonce: kontentblocks.nonces.read,
+                    _ajax_nonce: KB.Config.getNonce('read'),
                     data: {
                         areaConfig: this.areaConfig,
                     }
@@ -64,7 +64,7 @@
             (
                 {
                     action: 'set_layout_configuration',
-                    _ajax_nonce: kontentblocks.nonces.update,
+                    _ajax_nonce: KB.Config.getNonce('update'),
                     data: {
                         areaConfig: this.areaConfig,
                         name: value,
@@ -89,7 +89,7 @@
             KB.Ajax.send(
                 {
                     action: 'delete_layout_configuration',
-                    _ajax_nonce: kontentblocks.nonces.delete,
+                    _ajax_nonce: KB.Config.getNonce('delete'),
                     data: {
                         areaConfig: this.areaConfig,
                         name: value,

@@ -37,7 +37,7 @@ KB.Ext.Backup = (function($) {
             KB.Ajax.send(
                     {
                         action: 'get_backups',
-                        _ajax_nonce: kontentblocks.nonces.read
+                        _ajax_nonce: KB.Config.getNonce('read')
                     },
             function(response)
             {

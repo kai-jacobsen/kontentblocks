@@ -1,7 +1,5 @@
 module.exports = function (grunt) {
 
-    var clean = false;
-
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -63,7 +61,7 @@ module.exports = function (grunt) {
                 nonull: true
             },
             common: {
-                src: ['js/src/common/kb.cm.Namespaces.js','js/src/common/**/*.js'],
+                src: ['js/src/common/kb.cm.Namespaces.js','js/src/common/kb.cm.Config.js','js/src/common/**/*.js'],
                 dest: 'js/tmp/common.concat.js',
                 nonull: true
             },
@@ -155,10 +153,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-rsync-2');
     grunt.loadNpmTasks('grunt-exec');
+
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass','clean', 'jshint', 'bash']);
+    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass','clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
     grunt.registerTask('hint', ['jshint']);
-    grunt.registerTask('dev', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'bash']);
+    grunt.registerTask('dev', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'exec:removeHash', 'exec:createDevId']);
     grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
 };

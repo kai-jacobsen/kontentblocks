@@ -142,7 +142,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             duplicate: module.get('duplicate'),
             areaContext: this.options.area.model.get('context'),
             area: this.options.area.model.get('id'),
-            _ajax_nonce: kontentblocks.nonces.create
+            _ajax_nonce: KB.Config.getNonce('create')
         };
         this.close();
 

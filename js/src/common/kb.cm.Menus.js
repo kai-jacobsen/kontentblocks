@@ -15,7 +15,7 @@ KB.Menus = (function ($) {
                 inputvalue: el.value,
                 checkmode: mode,
                 action: 'getSanitizedId',
-                _ajax_nonce: kontentblocks.nonces.read
+                _ajax_nonce: KB.Config.getNonce('read')
             }, this.insertId, this);
         },
 

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-10 */
+/*! Kontentblocks DevVersion 2014-08-12 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -79,7 +79,7 @@ KB.IEdit.BackgroundImage = function($) {
                     action: "fieldGetImage",
                     args: settings,
                     id: id,
-                    _ajax_nonce: kontentblocks.nonces.get
+                    _ajax_nonce: KB.Config.getNonce("read")
                 },
                 type: "GET",
                 dataType: "json",
@@ -172,7 +172,7 @@ KB.IEdit.Image = function($) {
                     action: "fieldGetImage",
                     args: settings,
                     id: id,
-                    _ajax_nonce: kontentblocks.nonces.get
+                    _ajax_nonce: KB.Config.getNonce("read")
                 },
                 type: "GET",
                 dataType: "json",
@@ -390,7 +390,7 @@ KB.IEdit.Text = function(el) {
                                 action: "applyContentFilter",
                                 data: value.replace(/\'/g, "%27"),
                                 module: ed.module.toJSON(),
-                                _ajax_nonce: kontentblocks.nonces.read
+                                _ajax_nonce: KB.Config.getNonce("read")
                             },
                             type: "POST",
                             dataType: "html",
@@ -528,7 +528,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             data: {
                 action: "getModuleOptions",
                 module: that.model.toJSON(),
-                _ajax_nonce: kontentblocks.nonces.read
+                _ajax_nonce: KB.Config.getNonce("read")
             },
             type: "POST",
             dataType: "json",
@@ -617,7 +617,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 data: that.$form.serialize().replace(/\'/g, "%27"),
                 module: that.model.toJSON(),
                 editmode: save ? "update" : "preview",
-                _ajax_nonce: kontentblocks.nonces.update
+                _ajax_nonce: KB.Config.getNonce("update")
             },
             type: "POST",
             dataType: "json",
@@ -804,7 +804,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 module: that.model.toJSON(),
                 editmode: "update",
                 refresh: refresh,
-                _ajax_nonce: kontentblocks.nonces.update
+                _ajax_nonce: KB.Config.getNonce("update")
             },
             type: "POST",
             dataType: "json",

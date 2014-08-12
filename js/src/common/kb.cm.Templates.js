@@ -10,9 +10,9 @@ KB.Templates = (function ($) {
     function render(tmpl_name, tmpl_data) {
         var tmpl_string;
         if (!tmpl_cache[tmpl_name]) {
-            var tmpl_dir = kontentblocks.config.url + 'js/templates';
+            var tmpl_dir = KB.Config.getRootURL() + 'js/templates';
 
-            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.hbs?'+ kontentblocks.config.hash;
+            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.hbs?'+ KB.Config.getHash();
 
             // if a full url is given, tmpl_url will be overwritten
             var pat = /^https?:\/\//i;

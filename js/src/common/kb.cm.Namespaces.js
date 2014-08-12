@@ -1,4 +1,5 @@
 var KB = KB || {};
+KB.Config = {};
 KB.Backbone = {};
 KB.Fields = {};
 KB.Utils = {};

@@ -175,8 +175,9 @@ class Enqueues
             wp_enqueue_script( 'heartbeat' );
 
             // add Kontentblocks l18n strings
-            $localize = self::localize();
-            wp_localize_script( 'kb-common', 'kontentblocks', $localize );
+//            $localize = self::localize();
+//            wp_localize_script( 'kb-common', 'kontentblocks', $localize );
+
         }
 
         wp_enqueue_style( 'wp-color-picker' );
@@ -219,7 +220,7 @@ class Enqueues
             wp_enqueue_script( 'heartbeat' );
 
 
-            wp_localize_script( 'kb-common', 'kontentblocks', self::localize() );
+//            wp_localize_script( 'kb-common', 'kontentblocks', self::localize() );
 
             wp_enqueue_script( 'wp-iris' );
             wp_enqueue_script( 'wp-color-picker' );
@@ -261,9 +262,15 @@ class Enqueues
             $data['loggedIn'] = false;
         }
 
+        $data = array_merge($data, self::localize());
+
         JSONBridge::getInstance()->registerPublicData( 'config', null, $data );
     }
 
+    /**
+     *
+     * @return array
+     */
     private static function localize()
     {
         //Caps for the current user as global js object
@@ -289,7 +296,7 @@ class Enqueues
             }
         }
 
-        $hash = 'kb-master-replacement';
+        $hash = uniqid('kb', true);
 
         if (function_exists( 'getGitHash' )) {
             $hash = getGitHash();
@@ -298,7 +305,7 @@ class Enqueues
         return array
         (
             'caps' => $caps,
-            'config' => array(
+            'env' => array(
                 'url' => KB_PLUGIN_URL,
                 'dev' => Kontentblocks::DEVMODE,
                 'hash' => $hash,
@@ -309,9 +316,7 @@ class Enqueues
                 'delete' => wp_create_nonce( 'kb-delete' ),
                 'read' => wp_create_nonce( 'kb-read' ),
             )
-
         );
-
     }
 
 

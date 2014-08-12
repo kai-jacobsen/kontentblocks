@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Backend\Screen;
 
+use Exception;
 use Kontentblocks\Backend\Areas\Area;
 
 /**
