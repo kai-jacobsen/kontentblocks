@@ -169,7 +169,7 @@ class SidebarSelector
         $hide = (count( $this->postSidebars ) > 0 ) ? '' : 'hide';
 
         return "
-				<div class='context-header orange {$hide}'>
+				<div style='margin-top:20px;' class='kb-context__header orange {$hide}'>
 					<h2>globale Sidebars</h2>
 					<p class='description'>Eine kurze Erklärung hierzu.</p>
 				</div>

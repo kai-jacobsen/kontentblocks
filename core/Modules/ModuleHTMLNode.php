@@ -77,7 +77,7 @@ class ModuleHTMLNode
         $count = strrchr( $this->Module->getModuleId(), "_" );
 
         // classname
-        $classname = get_class( $this );
+        $classname = get_class( $this->Module );
 
         // additional classes to set for the item
         $disabledclass = ( $this->Module->getSetting( 'disabled' ) ) ? 'disabled' : null;
@@ -89,9 +89,9 @@ class ModuleHTMLNode
 
         // Block List Item
         return "<li id='{$this->Module->getModuleId()}' rel='{$this->Module->getModuleId(
-        )}{$count}' data-blockclass='{$classname}' class='{$this->Module->getSetting(
+        )}{$count}' data-moduleclass='{$classname}' class='{$this->Module->getSetting(
             'id'
-        )} kb_wrapper kb_block {$this->Module->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
+        )} kb-module__wrapper kb-module {$this->Module->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
 		<input type='hidden' name='{$this->Module->getModuleId()}[areaContext]' value='{$this->Module->areaContext}' />
 		";
 
@@ -118,7 +118,7 @@ class ModuleHTMLNode
         $lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
 
         // markup for each block
-        $out = "<div style='display:none;' class='kb_inner kb-module--body'>";
+        $out = "<div style='display:none;' class='kb_inner kb-module__body'>";
         if ($lockedmsg && KONTENTLOCK) {
             $out = $lockedmsg;
         } else {
@@ -132,15 +132,15 @@ class ModuleHTMLNode
                     'kontentblocks'
                 ) . '</p>' : '';
 
-            $out .= "<div class='kb_block_title'>";
+            $out .= "<div class='kb-module__title'>";
 
 
-            $out .= "		<div class='block-notice hide'>
+            $out .= "		<div class='kb-module__notice hide'>
 							<p>Es wurden Veränderungen vorgenommen. <input type='submit' class='button-primary' value='Aktualisieren' /></p>
 						</div>
 						{$l18n_draft_status}
 					</div>";
-            $out .= "<div class='kb-module--controls-inner'>";
+            $out .= "<div class='kb-module__controls-inner'>";
 
         }
 
@@ -166,7 +166,7 @@ class ModuleHTMLNode
         $html = '';
 
         //open header
-        $html .= "<div rel='{$this->Module->getModuleId()}' class='block-head clearfix edit kb-title'>";
+        $html .= "<div rel='{$this->Module->getModuleId()}' class='kb-module__header clearfix edit kb-title'>";
 
 
         $html .= "<div class='kb-move'></div>";

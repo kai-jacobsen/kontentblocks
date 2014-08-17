@@ -14,6 +14,7 @@ use Kontentblocks\Ajax\DuplicateModule;
 use Kontentblocks\Ajax\Frontend\GetModuleOptions;
 use Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
 use Kontentblocks\Ajax\AfterAreaChange;
+use Kontentblocks\Ajax\UpdateModuleData;
 
 /**
  * Actual actions are wrapped in (static) classes to
@@ -177,6 +178,19 @@ function updateModuleOptionsCb()
 }
 
 add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );
+
+/**
+ * -----------------------------------------
+ * Handler backend async saving
+ * -----------------------------------------
+ */
+function updateModuleDataCb()
+{
+    UpdateModuleData::run();
+
+}
+
+add_action( 'wp_ajax_updateModuleData', 'updateModuleDataCb' );
 
 /**
  * -----------------------------------------

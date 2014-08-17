@@ -79,7 +79,6 @@ class ModuleIterator implements \Iterator, \Countable {
 	 */
 	public function current() {
 		$this->currentModuleObject = $this->getModule();
-
 		return $this->currentModuleObject;
 
 	}

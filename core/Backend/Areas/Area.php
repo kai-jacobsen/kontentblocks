@@ -21,6 +21,26 @@ class Area
 {
 
     /**
+     * Unique id of the area
+     * @var string
+     */
+    public $id;
+
+    /**
+     * Max number of modules allowed
+     * @var int
+     */
+    public $limit;
+
+
+    /**
+     * Not bound to a certain post type
+     * = global
+     * @var bool
+     */
+    public $dynamic;
+
+    /**
      * Location on the edit screen
      * Valid locations are: top | normal | side | bottom
      * @var string
@@ -116,7 +136,7 @@ class Area
     public function render()
     {
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb_connect kb_sortable kb_area_list_item kb-area'>";
+        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty( $this->attachedModules )) {
             foreach ($this->attachedModules as $module) {
 
@@ -124,9 +144,9 @@ class Area
                     continue;
                 }
                 $module['areaContext'] = $this->context;
-                $module                = apply_filters( 'kb_before_module_options', $module );
+                $module = apply_filters( 'kb_before_module_options', $module );
 
-                $Factory  = new ModuleFactory( $module['class'], $module, $this->Environment );
+                $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
                 $instance = $Factory->getModule();
                 $instance->renderOptions();
                 JSONBridge::getInstance()->registerModule( $instance->toJSON() );
@@ -169,11 +189,11 @@ class Area
             return;
         }
         $area = array(
-            'id'              => $this->id,
+            'id' => $this->id,
             'assignedModules' => $this->assignedModules,
-            'limit'           => absint( $this->limit ),
-            'context'         => $this->context,
-            'dynamic'         => $this->dynamic
+            'limit' => absint( $this->limit ),
+            'context' => $this->context,
+            'dynamic' => $this->dynamic
         );
 
         JSONBridge::getInstance()->registerArea( $area );
@@ -184,7 +204,7 @@ class Area
      *
      * @param string $param | property key
      *
-     * @return mixed | value or false
+     * @return mixed
      */
     public function get( $param )
     {
@@ -234,6 +254,10 @@ class Area
     }
 
 
+    /**
+     *
+     * @return bool|string
+     */
     private function menuLink()
     {
         if (current_user_can( 'create_kontentblocks' )) {
@@ -258,17 +282,13 @@ class Area
         );
 
         $cats = apply_filters( 'kb_menu_cats', $cats );
-
-
-        $cats['media']   = __( 'Media', 'kontentblocks' );
+        $cats['media'] = __( 'Media', 'kontentblocks' );
         $cats['special'] = __( 'Spezial', 'kontentblocks' );
 
-        $cats['core']     = __( 'System', 'kontentblocks' );
+        $cats['core'] = __( 'System', 'kontentblocks' );
         $cats['template'] = __( 'Templates', 'kontentblocks' );
 
         JSONBridge::getInstance()->registerData( 'ModuleCategories', null, $cats );
         return $cats;
-
-
     }
 }

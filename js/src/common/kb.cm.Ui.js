@@ -27,6 +27,7 @@ KB.Ui = function ($) {
             this.initToggleBoxes();
             this.flexContext();
             this.flushLocalStorage();
+
             // set the global activeField variable dynamically
             // legacy
             $body.on('mousedown', '.kb_field', function (e) {
@@ -35,7 +36,7 @@ KB.Ui = function ($) {
 
             // set the global activeBlock variable dynamically
             // legacy
-            $body.on('mousedown', '.kb_block', function (e) {
+            $body.on('mousedown', '.kb-module', function (e) {
                 activeBlock = this.id;
             });
 
@@ -45,7 +46,7 @@ KB.Ui = function ($) {
                 _K.info('Current Field Id set to:', KB.currentFieldId);
             });
 
-            $body.on('mouseenter', '.kb_area_list_item li', function(){
+            $body.on('mouseenter', '.kb-area__list-item li', function(){
                KB.currentModuleId = this.id;
             });
 
@@ -183,15 +184,15 @@ KB.Ui = function ($) {
             }
 
             function numberOfModulesInArea(id) {
-                return $('#' + id + ' li.kb_block').length;
+                return $('#' + id + ' li.kb-module').length;
             }
 
             // handles sorting of the blocks.
-            $('.kb_sortable', $context).sortable({
+            $('.kb-module-ui__sortable', $context).sortable({
                 //settings
                 placeholder: "ui-state-highlight",
                 ghost: true,
-                connectWith: ".kb_connect",
+                connectWith: ".kb-module-ui__sortable--connect",
                 handle: '.kb-move',
                 cancel: 'li.disabled, li.cantsort',
                 tolerance: 'pointer',
@@ -210,7 +211,7 @@ KB.Ui = function ($) {
                     // close open modules, sorting on open container
                     // doesn't work very well
                     $('.kb-open').toggleClass('kb-open');
-                    $('.kb-module--body').hide();
+                    $('.kb-module__body').hide();
 
                     // tinyMCE doesn't like to be moved in the DOM
                     KB.TinyMCE.removeEditors();
@@ -302,7 +303,7 @@ KB.Ui = function ($) {
         resort: function (sender) {
             // serialize data
             var serializedData = {};
-            $('.kb_sortable').each(function () {
+            $('.kb-module-ui__sortable').each(function () {
                 serializedData[this.id] = $('#' + this.id).sortable('serialize', {
                     attribute: 'rel'
                 });
@@ -341,7 +342,7 @@ KB.Ui = function ($) {
                     KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
                 }
                 else {
-                    $(this).parent().nextAll('.kb-module--body:first').slideToggle('fast', function () {
+                    $(this).parent().nextAll('.kb-module__body:first').slideToggle('fast', function () {
                         $('body').trigger('module::opened');
                     });
                     $('#' + activeBlock).toggleClass('kb-open', 1000);

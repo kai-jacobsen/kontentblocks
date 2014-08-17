@@ -36,8 +36,17 @@ KB.TinyMCE = (function ($) {
                 settings.height = 350;
                 settings.setup = function (ed) {
                     ed.on('init', function () {
-                        jQuery(document).trigger('newEditor', ed);
+                        KB.Events.trigger('KB::tinymce.new-editor', ed);
                     });
+                    ed.on('change', function(){
+                        var $module, moduleView;
+                        if (!ed.module){
+                            $module = jQuery(ed.editorContainer).closest('.kb-module');
+                            ed.module = KB.Views.Modules.get($module.attr('id'))
+                        }
+                        ed.module.$el.trigger('tinymce.change');
+                    });
+
                 };
 
                 var ed = tinymce.init(settings);
@@ -58,7 +67,6 @@ KB.TinyMCE = (function ($) {
             // find all editors and init
             $('.wp-editor-area', $el).each(function () {
                 var id = this.id;
-
                 // add new editor id to settings
                 settings.elements = id;
                 settings.selector = '#'+id;
@@ -68,6 +76,14 @@ KB.TinyMCE = (function ($) {
                 settings.setup = function (ed) {
                     ed.on('init', function () {
                         KB.Events.trigger('KB::tinymce.new-editor', ed);
+                    });
+                    ed.on('change', function(){
+                        var $module, moduleView;
+                        if (!ed.module){
+                            $module = jQuery(ed.editorContainer).closest('.kb-module');
+                            ed.module = KB.Views.Modules.get($module.attr('id'))
+                        }
+                        ed.module.$el.trigger('tinymce.change');
                     });
                 };
                 var ed = tinymce.init(settings);

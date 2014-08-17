@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-12 */
+/*! Kontentblocks DevVersion 2014-08-17 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -95,7 +95,7 @@ KB.Checks = function($) {
     return {
         blockLimit: function(areamodel) {
             var limit = areamodel.get("limit");
-            var children = $("#" + areamodel.get("id") + " li.kb_block").length;
+            var children = $("#" + areamodel.get("id") + " li.kb-module").length;
             if (limit !== 0 && children === limit) {
                 return false;
             }
@@ -374,7 +374,15 @@ KB.TinyMCE = function($) {
                 settings.height = 350;
                 settings.setup = function(ed) {
                     ed.on("init", function() {
-                        jQuery(document).trigger("newEditor", ed);
+                        KB.Events.trigger("KB::tinymce.new-editor", ed);
+                    });
+                    ed.on("change", function() {
+                        var $module, moduleView;
+                        if (!ed.module) {
+                            $module = jQuery(ed.editorContainer).closest(".kb-module");
+                            ed.module = KB.Views.Modules.get($module.attr("id"));
+                        }
+                        ed.module.$el.trigger("tinymce.change");
                     });
                 };
                 var ed = tinymce.init(settings);
@@ -397,6 +405,14 @@ KB.TinyMCE = function($) {
                 settings.setup = function(ed) {
                     ed.on("init", function() {
                         KB.Events.trigger("KB::tinymce.new-editor", ed);
+                    });
+                    ed.on("change", function() {
+                        var $module, moduleView;
+                        if (!ed.module) {
+                            $module = jQuery(ed.editorContainer).closest(".kb-module");
+                            ed.module = KB.Views.Modules.get($module.attr("id"));
+                        }
+                        ed.module.$el.trigger("tinymce.change");
                     });
                 };
                 var ed = tinymce.init(settings);
@@ -457,14 +473,14 @@ KB.Ui = function($) {
             $body.on("mousedown", ".kb_field", function(e) {
                 activeField = this;
             });
-            $body.on("mousedown", ".kb_block", function(e) {
+            $body.on("mousedown", ".kb-module", function(e) {
                 activeBlock = this.id;
             });
             $body.on("mouseenter", ".kb-js-field-identifier", function() {
                 KB.currentFieldId = this.id;
                 _K.info("Current Field Id set to:", KB.currentFieldId);
             });
-            $body.on("mouseenter", ".kb_area_list_item li", function() {
+            $body.on("mouseenter", ".kb-area__list-item li", function() {
                 KB.currentModuleId = this.id;
             });
             jQuery(document).ajaxComplete(function(e, o, settings) {
@@ -554,12 +570,12 @@ KB.Ui = function($) {
                 });
             }
             function numberOfModulesInArea(id) {
-                return $("#" + id + " li.kb_block").length;
+                return $("#" + id + " li.kb-module").length;
             }
-            $(".kb_sortable", $context).sortable({
+            $(".kb-module-ui__sortable", $context).sortable({
                 placeholder: "ui-state-highlight",
                 ghost: true,
-                connectWith: ".kb_connect",
+                connectWith: ".kb-module-ui__sortable--connect",
                 handle: ".kb-move",
                 cancel: "li.disabled, li.cantsort",
                 tolerance: "pointer",
@@ -572,7 +588,7 @@ KB.Ui = function($) {
                     areaOver = KB.currentArea;
                     $(KB).trigger("kb:sortable::start");
                     $(".kb-open").toggleClass("kb-open");
-                    $(".kb-module--body").hide();
+                    $(".kb-module__body").hide();
                     KB.TinyMCE.removeEditors();
                     $(document).trigger("kb_sortable_start", [ event, ui ]);
                 },
@@ -629,7 +645,7 @@ KB.Ui = function($) {
         },
         resort: function(sender) {
             var serializedData = {};
-            $(".kb_sortable").each(function() {
+            $(".kb-module-ui__sortable").each(function() {
                 serializedData[this.id] = $("#" + this.id).sortable("serialize", {
                     attribute: "rel"
                 });
@@ -658,7 +674,7 @@ KB.Ui = function($) {
                 if (KB.isLocked() && !KB.userCan("lock_kontentblocks")) {
                     KB.notice(kontentblocks.l18n.gen_no_permission, "alert");
                 } else {
-                    $(this).parent().nextAll(".kb-module--body:first").slideToggle("fast", function() {
+                    $(this).parent().nextAll(".kb-module__body:first").slideToggle("fast", function() {
                         $("body").trigger("module::opened");
                     });
                     $("#" + activeBlock).toggleClass("kb-open", 1e3);

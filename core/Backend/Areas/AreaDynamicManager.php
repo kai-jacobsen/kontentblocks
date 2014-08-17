@@ -58,10 +58,12 @@ class AreaDynamicManager
 
     public function synchronize()
     {
+        // @TODO un-weird
+        do_action( 'kb::areas.dynamic.setup' );
+
         if (!is_admin()) {
             return;
         }
-        do_action( 'kb::areas.dynamic.setup' );
 
         $this->setupDiff();
         $this->maybeCreateAreas();
@@ -69,6 +71,9 @@ class AreaDynamicManager
     }
 
 
+    /**
+     *
+     */
     private function maybeCreateAreas()
     {
         foreach ($this->newAreas as $area) {

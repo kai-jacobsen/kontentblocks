@@ -3,7 +3,7 @@ KB.Checks = (function ($) {
         blockLimit: function (areamodel) {
             var limit = areamodel.get('limit');
             // todo potentially wrong, yeah it's wrong
-            var children = $('#' + areamodel.get('id') + ' li.kb_block').length;
+            var children = $('#' + areamodel.get('id') + ' li.kb-module').length;
 
             if (limit !== 0 && children === limit) {
                 return false;

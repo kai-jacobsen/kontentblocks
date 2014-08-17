@@ -65,8 +65,6 @@ class AreaRenderer {
 
 		$this->Environment = Utilities::getEnvironment($postId);
 		$modules           = $this->Environment->getModulesforArea( $area );
-
-
 		if ( ! $modules ) {
 			return;
 		} else {
@@ -100,7 +98,6 @@ class AreaRenderer {
 		 */
 		// Iterate over modules (ModuleIterator)
 		foreach ( $this->modules as $module ) {
-
 
 			if ( is_null( $module ) ) {
 				continue;

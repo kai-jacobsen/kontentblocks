@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-12 */
+/*! Kontentblocks DevVersion 2014-08-17 */
 !function(a, b) {
     "use strict";
     var c, d = a.document;
@@ -5192,6 +5192,126 @@ Date.patterns = {
         return !(y2 + h2 <= y1 || y1 + h1 <= y2 || x2 + w2 <= x1 || x1 + w1 <= x2);
     }
 });
+
+(function($) {
+    "use strict";
+    $.fn.serializeJSON = function(options) {
+        var serializedObject, formAsArray, keys, value, f, opts;
+        f = $.serializeJSON;
+        formAsArray = this.serializeArray();
+        opts = f.optsWithDefaults(options);
+        serializedObject = {};
+        $.each(formAsArray, function(i, input) {
+            keys = f.splitInputNameIntoKeysArray(input.name);
+            value = f.parseValue(input.value, opts);
+            if (opts.parseWithFunction) value = opts.parseWithFunction(value);
+            f.deepSet(serializedObject, keys, value, opts);
+        });
+        return serializedObject;
+    };
+    $.serializeJSON = {
+        defaultOptions: {
+            parseNumbers: false,
+            parseBooleans: false,
+            parseNulls: false,
+            parseAll: false,
+            parseWithFunction: null,
+            useIntKeysAsArrayIndex: false
+        },
+        optsWithDefaults: function(options) {
+            var f, parseAll;
+            if (options == null) options = {};
+            f = $.serializeJSON;
+            parseAll = f.optWithDefaults("parseAll", options);
+            return {
+                parseNumbers: parseAll || f.optWithDefaults("parseNumbers", options),
+                parseBooleans: parseAll || f.optWithDefaults("parseBooleans", options),
+                parseNulls: parseAll || f.optWithDefaults("parseNulls", options),
+                parseWithFunction: f.optWithDefaults("parseWithFunction", options),
+                useIntKeysAsArrayIndex: f.optWithDefaults("useIntKeysAsArrayIndex", options)
+            };
+        },
+        optWithDefaults: function(key, options) {
+            return options[key] !== false && (options[key] || $.serializeJSON.defaultOptions[key]);
+        },
+        parseValue: function(str, opts) {
+            var value, f;
+            f = $.serializeJSON;
+            if (opts.parseNumbers && f.isNumeric(str)) return Number(str);
+            if (opts.parseBooleans && (str === "true" || str === "false")) return str === "true";
+            if (opts.parseNulls && str == "null") return null;
+            return str;
+        },
+        isObject: function(obj) {
+            return obj === Object(obj);
+        },
+        isUndefined: function(obj) {
+            return obj === void 0;
+        },
+        isValidArrayIndex: function(val) {
+            return /^[0-9]+$/.test(String(val));
+        },
+        isNumeric: function(obj) {
+            return obj - parseFloat(obj) >= 0;
+        },
+        splitInputNameIntoKeysArray: function(name) {
+            var keys, last, f;
+            f = $.serializeJSON;
+            if (f.isUndefined(name)) {
+                throw new Error("ArgumentError: param 'name' expected to be a string, found undefined");
+            }
+            keys = $.map(name.split("["), function(key) {
+                last = key[key.length - 1];
+                return last === "]" ? key.substring(0, key.length - 1) : key;
+            });
+            if (keys[0] === "") {
+                keys.shift();
+            }
+            return keys;
+        },
+        deepSet: function(o, keys, value, opts) {
+            var key, nextKey, tail, lastIdx, lastVal, f;
+            if (opts == null) opts = {};
+            f = $.serializeJSON;
+            if (f.isUndefined(o)) {
+                throw new Error("ArgumentError: param 'o' expected to be an object or array, found undefined");
+            }
+            if (!keys || keys.length === 0) {
+                throw new Error("ArgumentError: param 'keys' expected to be an array with least one element");
+            }
+            key = keys[0];
+            if (keys.length === 1) {
+                if (key === "") {
+                    o.push(value);
+                } else {
+                    o[key] = value;
+                }
+            } else {
+                nextKey = keys[1];
+                if (key === "") {
+                    lastIdx = o.length - 1;
+                    lastVal = o[lastIdx];
+                    if (f.isObject(lastVal) && (f.isUndefined(lastVal[nextKey]) || keys.length > 2)) {
+                        key = lastIdx;
+                    } else {
+                        key = lastIdx + 1;
+                    }
+                }
+                if (f.isUndefined(o[key])) {
+                    if (nextKey === "") {
+                        o[key] = [];
+                    } else if (opts.useIntKeysAsArrayIndex && f.isValidArrayIndex(nextKey)) {
+                        o[key] = [];
+                    } else {
+                        o[key] = {};
+                    }
+                }
+                tail = keys.slice(1);
+                f.deepSet(o[key], tail, value, opts);
+            }
+        }
+    };
+})(window.jQuery || window.Zepto || window.$);
 
 (function(root, factory) {
     if (typeof exports == "object") module.exports = factory(); else if (typeof define == "function" && define.amd) define(factory); else root.Spinner = factory();

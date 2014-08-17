@@ -13,7 +13,7 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
         KB.Ajax.send({
             action: 'changeModuleStatus',
             module: this.model.get('instance_id'),
-            _ajax_nonce: KB.Config.getNonce('delete')
+            _ajax_nonce: KB.Config.getNonce('update')
         }, this.success, this);
 
     },
