@@ -94,6 +94,7 @@ Class Kontentblocks
         require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
 
         if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
+            add_theme_support('kontentblocks');
             include_once( get_template_directory() . '/kontentblocks.php' );
         }
 
@@ -115,7 +116,6 @@ Class Kontentblocks
             add_post_type_support( 'page', 'kontentblocks' );
             remove_post_type_support( 'page', 'revisions' );
             do_action( 'kb:init' );
-
         }
 
     }

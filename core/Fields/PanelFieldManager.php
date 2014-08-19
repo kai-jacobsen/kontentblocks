@@ -98,8 +98,8 @@ class PanelFieldManager extends AbstractFieldManager
      */
     public function renderFields()
     {
-        $Renderer = new FieldRendererTabs( $this->Structure );
-        $Renderer->render( $this->baseId, $this->data );
+        $Renderer = new FieldRendererTabs();
+        $Renderer->setStructure($this->Structure)->render( $this->baseId, $this->data );
     }
 
 

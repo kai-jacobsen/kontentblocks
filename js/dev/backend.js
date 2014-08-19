@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-17 */
+/*! Kontentblocks DevVersion 2014-08-18 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -378,7 +378,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         click: "deleteModule"
     },
     deleteModule: function() {
-        KB.Notice.confirm("Really?", this.yes, this.no);
+        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no);
     },
     isValid: function() {
         if (!this.model.get("predefined") && !this.model.get("disabled") && KB.Checks.userCan("delete_kontentblocks")) {
@@ -413,7 +413,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
             action: "duplicateModule",
             module: this.model.get("instance_id"),
             areaContext: this.model.area.get("context"),
-            _ajax_nonce: KB.Config.getNonce("delete"),
+            _ajax_nonce: KB.Config.getNonce("create"),
             "class": this.model.get("class")
         }, this.success, this);
     },
@@ -478,14 +478,17 @@ KB.Backbone.ModuleSave = KB.Backbone.ModuleMenuItemView.extend({
         this.$el.removeClass("is-dirty");
     },
     isValid: function() {
-        if (!this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks")) {
-            return true;
-        } else {
+        if (this.model.get("master")) {
             return false;
         }
+        if (!this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks")) {
+            return true;
+        }
+        return false;
     },
     success: function(res) {
-        console.log(res);
+        this.parentView.model.set("moduleData", res.newModuleData);
+        console.log(this.parentView.model);
         KB.Notice.notice("Data saved", "success");
     }
 });

@@ -1,0 +1,27 @@
+.alertify-confirm {
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  width: 400px;
+  margin-left: -200px;
+
+  .alertify-message{
+    font-size: 1.2em;
+  }
+
+  .alertify-button{
+    background-image: none;
+    text-shadow: 0;
+  }
+
+  .alertify-button-ok{
+    background-color: rgba(132, 255, 131, 0.60);
+    color: #222;
+    text-shadow: none;
+  }
+
+}
+
+.alertify-cover{
+  opacity: 0.8;
+  background-color: #222;
+}

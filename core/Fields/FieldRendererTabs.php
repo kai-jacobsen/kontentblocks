@@ -43,6 +43,7 @@ class FieldRendererTabs implements InterfaceFieldRenderer
     public function setStructure( $structure )
     {
         $this->structure = $structure;
+        return $this;
     }
 
     /**

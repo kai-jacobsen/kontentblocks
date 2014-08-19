@@ -47,6 +47,13 @@
 @import "partials/_vendor/_jq.datetimepicker";
 @import "partials/_vendor/_jq.iconpicker";
 
+
+/*------------------------------------*\
+    Plugins, custom overrides
+\*------------------------------------*/
+
+@import "partials/_plugins/alertify-customs";
+
 /* --------------------------
 // Areas realted styling
 -----------------------------*/

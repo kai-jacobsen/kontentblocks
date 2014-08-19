@@ -2,6 +2,8 @@
 
 use Kontentblocks\Ajax\Frontend\ApplyContentFilter;
 use Kontentblocks\Ajax\Frontend\FieldGetImage;
+use Kontentblocks\Ajax\Frontend\GetModuleOptions;
+use Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
 use Kontentblocks\Ajax\GetSanitizedId;
 use Kontentblocks\Ajax\RemoteGetEditor;
 use Kontentblocks\Ajax\SortModules;
@@ -11,8 +13,6 @@ use Kontentblocks\Ajax\ChangeArea;
 use Kontentblocks\Ajax\Frontend\SaveInlineEdit;
 use Kontentblocks\Ajax\CreateNewModule;
 use Kontentblocks\Ajax\DuplicateModule;
-use Kontentblocks\Ajax\Frontend\GetModuleOptions;
-use Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
 use Kontentblocks\Ajax\AfterAreaChange;
 use Kontentblocks\Ajax\UpdateModuleData;
 
