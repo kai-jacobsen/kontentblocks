@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Modules;
 
+use Kontentblocks\Language\I18n;
+
 
 /**
  * Class ModuleHTMLNode
@@ -116,6 +118,7 @@ class ModuleHTMLNode
     private function openInner()
     {
         $lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
+        $i18n = I18n::getPackage('Modules');
 
         // markup for each block
         $out = "<div style='display:none;' class='kb_inner kb-module__body'>";
@@ -124,13 +127,8 @@ class ModuleHTMLNode
         } else {
 
             $descSetting = $this->Module->getSetting( 'description' );
-            $description = ( !empty( $descSetting ) ) ? __(
-                                                            '<strong><em>Beschreibung:</em> </strong>'
-                                                        ) . $descSetting : '';
-            $l18n_draft_status = ( $this->Module->state['draft'] === true ) ? '<p class="kb_draft">' . __(
-                    'This Module is a draft and won\'t be public until you publish or update the post',
-                    'kontentblocks'
-                ) . '</p>' : '';
+            $description = ( !empty( $descSetting ) ) ? $i18n['common']['description'] . $descSetting : '';
+            $l18n_draft_status = ( $this->Module->state['draft'] === true ) ? '<p class="kb_draft">' . $i18n['notices']['draft'] . '</p>' : '';
 
             $out .= "<div class='kb-module__title'>";
 
@@ -169,10 +167,13 @@ class ModuleHTMLNode
         $html .= "<div rel='{$this->Module->getModuleId()}' class='kb-module__header clearfix edit kb-title'>";
 
 
-        $html .= "<div class='kb-move'></div>";
-        // toggle button
-        $html .= "<div class='kb-toggle'></div>";
-        $html .= "<div class='kb-fullscreen'></div>";
+        if (current_user_can( 'edit_kontentblocks' )) {
+            $html .= "<div class='kb-move'></div>";
+            // toggle button
+            $html .= "<div class='kb-toggle'></div>";
+
+            $html .= "<div class='kb-fullscreen'></div>";
+        }
 
 //        $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
 

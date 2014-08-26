@@ -95,7 +95,7 @@ class ModuleCoreMasterModule extends Module
             'translated' => $translated,
             'duplicate' => $duplicate,
             'module' => $this,
-            'i18n' => I18n::getInstance()->getPackage( 'CoreModules.master' )
+            'i18n' => I18n::getInstance()->getPackage( 'Modules.master' )
         );
 
         $tpl = ( isset( $this->state['valid'] ) && $this->state['valid'] ) ? 'master-module-valid.twig' : 'master-module-invalid.twig';

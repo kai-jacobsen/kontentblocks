@@ -15,7 +15,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.addControls();
     },
     addControls: function () {
-        this.controlsContainer.append(KB.Templates.render('backend/area-add-module', {}));
+        this.controlsContainer.append(KB.Templates.render('backend/area-add-module', {i18n : KB.i18n}));
     },
     openModuleBrowser: function (e) {
         e.preventDefault();

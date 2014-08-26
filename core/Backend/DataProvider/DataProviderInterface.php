@@ -3,7 +3,7 @@ namespace Kontentblocks\Backend\DataProvider;
 
 /**
  * Interface DataProviderInterface
- * @package Kontentblocks\Backend\DataProvider
+ * @package Kontentblocks\Backend\DataHandler
  */
 interface DataProviderInterface
 {
@@ -17,5 +17,7 @@ interface DataProviderInterface
     public function add( $key, $value );
 
     public function delete( $key );
+
+    public function reset();
 
 } 

@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Backend\DataProvider;
 
+use Kontentblocks\Kontentblocks;
+
 /**
  * Class PostMetaDataProvider
  * Wrapper to WordPress native post meta functions
@@ -42,7 +44,8 @@ class PostMetaDataProvider implements DataProviderInterface
         }
 
         $this->postId = $postId;
-        $this->_selfUpdate();
+        $this->reset();
+
     }
 
     /**
@@ -72,6 +75,10 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function update( $key, $value )
     {
+        if (Kontentblocks::DEVMODE){
+            $Logger = Kontentblocks::getService('utility.logger');
+            $Logger->addInfo('Update meta data', array('key' => $key));
+        }
         return update_post_meta( $this->postId, $key, $value );
     }
 
@@ -146,7 +153,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * @return self
      * @since 1.0.0
      */
-    public function _selfUpdate()
+    public function reset()
     {
         $this->_getPostCustom();
 
@@ -164,3 +171,4 @@ class PostMetaDataProvider implements DataProviderInterface
     }
 
 }
+

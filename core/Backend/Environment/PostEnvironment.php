@@ -3,7 +3,7 @@
 namespace Kontentblocks\Backend\Environment;
 
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
-use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
+use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
@@ -20,7 +20,7 @@ class PostEnvironment
 {
 
     /**
-     * @var \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
+     * @var \Kontentblocks\Backend\DataProvider\DataHandler
      */
     protected $DataProvider;
 
@@ -67,7 +67,7 @@ class PostEnvironment
         }
         $this->postId = $postID;
 
-        $this->DataProvider = new PostMetaDataProvider( $postID );
+        $this->DataProvider = new DataHandler( $postID );
         $this->Storage = new PostMetaModuleStorage( $postID, $this->DataProvider );
 
         $this->pageTemplate = $this->getPageTemplate();

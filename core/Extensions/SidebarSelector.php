@@ -3,6 +3,7 @@
 namespace Kontentblocks\Extensions;
 
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Language\I18n;
 
 /**
  * Class SidebarSelector
@@ -167,11 +168,12 @@ class SidebarSelector
         // all areas
         // remove box if there are no areas to chose from
         $hide = (count( $this->postSidebars ) > 0 ) ? '' : 'hide';
+        $i18n = I18n::getPackage('Extensions');
 
         return "
 				<div style='margin-top:20px;' class='kb-context__header orange {$hide}'>
-					<h2>globale Sidebars</h2>
-					<p class='description'>Eine kurze Erklärung hierzu.</p>
+					<h2>{$i18n['sidebarSelector']['title']}</h2>
+					<p class='description'>{$i18n['sidebarSelector']['description']}</p>
 				</div>
 				<div class='area_sidebars {$hide}'>
 					<div class='area-context'>

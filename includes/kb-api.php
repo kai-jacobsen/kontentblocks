@@ -2,7 +2,7 @@
 
 namespace Kontentblocks;
 
-use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
+use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Frontend\AreaRenderer;
 

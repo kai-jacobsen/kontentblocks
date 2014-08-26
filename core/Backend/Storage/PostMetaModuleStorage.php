@@ -1,7 +1,7 @@
 <?php
 namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
+use Kontentblocks\Backend\DataProvider\DataHandler;
 
 /**
  * Class PostMetaModuleStorage
@@ -28,7 +28,7 @@ class PostMetaModuleStorage
 
     /**
      * Data Handler
-     * @var \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
+     * @var \Kontentblocks\Backend\DataProvider\DataHandler
      * @since 1.0.0
      */
     protected $DataProvider;
@@ -45,12 +45,12 @@ class PostMetaModuleStorage
      * Class constructor
      *
      * @param $postId
-     * @param \Kontentblocks\Backend\DataProvider\PostMetaDataProvider
+     * @param \Kontentblocks\Backend\DataHandler\DataHandler
      *
      * @throws \Exception
      * @since 1.0.0
      */
-    public function __construct( $postId, PostMetaDataProvider $DataProvider = null )
+    public function __construct( $postId, DataHandler $DataProvider = null )
     {
         if (!isset( $postId ) || $postId === 0) {
             throw new \Exception( 'a valid post id must be provided' );
@@ -58,7 +58,7 @@ class PostMetaModuleStorage
         $this->postId = $postId;
         // Late init data handler if not provided
         if (is_null( $DataProvider )) {
-            $this->DataProvider = new PostMetaDataProvider( $postId );
+            $this->DataProvider = new DataHandler( $postId );
         } else {
             $this->DataProvider = $DataProvider;
         }
@@ -80,7 +80,7 @@ class PostMetaModuleStorage
 
     /**
      * Getter for DataHandler
-     * @return PostMetaDataProvider
+     * @return DataHandler
      */
     public function getDataProvider()
     {
@@ -163,7 +163,7 @@ class PostMetaModuleStorage
      */
     public function reset()
     {
-        $this->getDataProvider()->_selfUpdate();
+        $this->getDataProvider()->reset();
         $this->setup();
 
         return $this;
@@ -175,11 +175,11 @@ class PostMetaModuleStorage
      */
     private function setup()
     {
-        $index = $this->DataProvider->get( 'kb_kontentblocks' );
-        if (empty( $index )) {
+        $this->index = $this->DataProvider->get( 'kb_kontentblocks' );
+
+        if (empty( $this->index )) {
             return false;
         }
-        $this->index   = $this->DataProvider->get( 'kb_kontentblocks' );
         $this->modules = $this->setupModuleData();
 
         return $this;

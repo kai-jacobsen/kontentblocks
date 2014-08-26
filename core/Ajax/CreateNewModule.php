@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
+use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
@@ -214,7 +214,7 @@ class CreateNewModule
         //create data for templates
         if ($this->moduleArgs['template']) {
 
-            $PostMeta = new PostMetaDataProvider( $this->moduleArgs['master_id'] );
+            $PostMeta = new DataHandler( $this->moduleArgs['master_id'] );
 
             $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateObj']['id'] );
             $update      = $this->Environment->getStorage()->saveModule( $this->newInstanceID, $master_data );

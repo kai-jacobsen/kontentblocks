@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-18 */
+/*! Kontentblocks DevVersion 2014-08-25 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -557,7 +557,9 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.addControls();
     },
     addControls: function() {
-        this.controlsContainer.append(KB.Templates.render("backend/area-add-module", {}));
+        this.controlsContainer.append(KB.Templates.render("backend/area-add-module", {
+            i18n: KB.i18n
+        }));
     },
     openModuleBrowser: function(e) {
         e.preventDefault();

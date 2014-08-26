@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Backend\DataProvider\PostMetaDataProvider;
+use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Frontend\AreaRenderer;
 use Kontentblocks\Kontentblocks;
 

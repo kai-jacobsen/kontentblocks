@@ -24,6 +24,8 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Modules\ModuleViewsRegistry;
 use Kontentblocks\Panels\PanelRegistry;
 use Kontentblocks\Templating\Twig;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Pimple;
 
 
@@ -65,6 +67,7 @@ Class Kontentblocks
 
         $this->setupTemplating();
         $this->setupRegistries();
+        $this->setupUtilities();
 
         // load modules automatically, after dynamic areas were setup,
         // dynamic areas are on init/initInterface hook
@@ -168,6 +171,8 @@ Class Kontentblocks
      */
     public function loadModules()
     {
+        Capabilities::setup();
+
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
         $Registry = $this->Services['registry.modules'];
         // add core modules path
@@ -323,6 +328,15 @@ Class Kontentblocks
         };
     }
 
+    private function setupUtilities(){
+        $this->Services['utility.logger'] = function($container){
+            $path = KB_PLUGIN_PATH . '/logs/debug.log';
+            $Logger = new Logger('kontentblocks');
+            $Logger->pushHandler(new StreamHandler($path));
+            return $Logger;
+        };
+    }
+
     private function setupRegistries()
     {
         $this->Services['registry.modules'] = function ( $Services ) {
@@ -340,6 +354,7 @@ Class Kontentblocks
         $this->Services['registry.panels'] = function ( $Services ) {
             return new PanelRegistry( $Services );
         };
+
     }
 
     public static function getService( $service )
