@@ -7,7 +7,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.area = this.options.area;
 
 
-
         this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
             model: KB.Backbone.ModuleDefinition,
             area: this.options.area
@@ -57,10 +56,10 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     },
     toggleViewMode: function () {
         jQuery('.module-browser-wrapper', this.$el).toggleClass('module-browser--list-view module-browser--excerpt-view');
-        var abbr = 'mdb_'+this.area.model.get('id')+'_state';
+        var abbr = 'mdb_' + this.area.model.get('id') + '_state';
         var curr = store.get(abbr);
 
-        if (curr == 'module-browser--list-view'){
+        if (curr == 'module-browser--list-view') {
             store.set(abbr, 'module-browser--excerpt-view');
         } else {
             store.set(abbr, 'module-browser--list-view');
@@ -73,11 +72,11 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     render: function () {
         this.open();
     },
-    getViewMode: function(){
+    getViewMode: function () {
 
-        var abbr = 'mdb_'+this.area.model.get('id')+'_state';
+        var abbr = 'mdb_' + this.area.model.get('id') + '_state';
 
-        if (store.get(abbr)){
+        if (store.get(abbr)) {
             return store.get(abbr);
         } else {
             store.set(abbr, 'module-browser--list-view');
@@ -117,6 +116,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     },
     // create module action
     createModule: function (module) {
+        var Area, data;
         // check if capability is right for this action
         if (KB.Checks.userCan('create_kontentblocks')) {
         } else {
@@ -124,13 +124,13 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         }
 
         // check if block limit isn't reached
-        var Area = KB.Areas.get(this.options.area.model.get('id'));
+        Area = KB.Areas.get(this.options.area.model.get('id'));
         if (!KB.Checks.blockLimit(Area)) {
             KB.Notice.notice('Limit for this area reached', 'error');
             return false;
         }
         // prepare data to send
-        var data = {
+        data = {
             action: 'createNewModule',
             'class': module.get('settings').class,
             master: module.get('master'),
@@ -138,7 +138,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             parentId: module.get('master_id'),
             template: module.get('template'),
             templateObj: module.get('templateObj'),
-            viewfile:module.get('viewfile'),
+            viewfile: module.get('viewfile'),
             duplicate: module.get('duplicate'),
             areaContext: this.options.area.model.get('context'),
             area: this.options.area.model.get('id'),
@@ -151,10 +151,12 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     // create module success callback
     // TODO Re-initialize ui components
     success: function (data) {
+        var model;
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
-        KB.Modules.add(KB.lastAddedModule);
-        _K.info('new module created');
+        model = KB.Modules.add(KB.lastAddedModule);
+        this.options.area.addModuleView(model.view);
+        _K.info('new module created', {view: model.view});
 
 
         this.parseAdditionalJSON(data.json);

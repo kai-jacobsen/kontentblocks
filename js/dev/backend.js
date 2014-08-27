@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-25 */
+/*! Kontentblocks DevVersion 2014-08-27 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -53,21 +53,31 @@ KB.Backbone.ContextModel = Backbone.Model.extend({
 
 KB.Backbone.ModuleModel = Backbone.Model.extend({
     idAttribute: "instance_id",
-    destroy: function() {
-        var that = this;
-        KB.Ajax.send({
-            action: "removeModules",
-            instance_id: that.get("instance_id")
-        }, that.destroyed);
+    initialize: function() {
+        this.listenTo(this, "change:area", this.subscribeToArea);
+        this.listenTo(this, "change:area", this.areaChanged);
     },
-    destroyed: function() {},
+    destroy: function() {
+        this.unsubscribeFromArea();
+        this.stopListening();
+    },
     setArea: function(area) {
-        this.area = area;
+        this.set("area", area);
     },
     areaChanged: function() {
         var envVars = this.get("envVars");
         envVars.areaContext = this.get("areaContext");
         this.view.updateModuleForm();
+    },
+    subscribeToArea: function(model, value) {
+        var area;
+        area = KB.Areas.get(value);
+        area.view.addModuleView(model.view);
+    },
+    unsubscribeFromArea: function() {
+        var area;
+        area = KB.Areas.get(this.get("area"));
+        area.view.removeModule(this);
     }
 });
 
@@ -261,15 +271,16 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.subviews.ModuleDescription.update();
     },
     createModule: function(module) {
+        var Area, data;
         if (KB.Checks.userCan("create_kontentblocks")) {} else {
             KB.Notice.notice("You're not allowed to do this", "error");
         }
-        var Area = KB.Areas.get(this.options.area.model.get("id"));
+        Area = KB.Areas.get(this.options.area.model.get("id"));
         if (!KB.Checks.blockLimit(Area)) {
             KB.Notice.notice("Limit for this area reached", "error");
             return false;
         }
-        var data = {
+        data = {
             action: "createNewModule",
             "class": module.get("settings").class,
             master: module.get("master"),
@@ -287,10 +298,14 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         KB.Ajax.send(data, this.success, this);
     },
     success: function(data) {
+        var model;
         this.options.area.modulesList.append(data.html);
         KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
-        KB.Modules.add(KB.lastAddedModule);
-        _K.info("new module created");
+        model = KB.Modules.add(KB.lastAddedModule);
+        this.options.area.addModuleView(model.view);
+        _K.info("new module created", {
+            view: model.view
+        });
         this.parseAdditionalJSON(data.json);
         KB.TinyMCE.addEditor();
         KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
@@ -400,6 +415,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     success: function() {
         KB.Modules.remove(this.model);
         wp.heartbeat.interval("fast", 2);
+        this.model.destroy();
     }
 });
 
@@ -542,9 +558,13 @@ KB.Backbone.ModuleMenuView = Backbone.View.extend({
 
 KB.Backbone.AreaView = Backbone.View.extend({
     initialize: function() {
+        this.attachedModuleViews = {};
         this.controlsContainer = jQuery(".add-modules", this.$el);
         this.settingsContainer = jQuery(".kb-area-settings-wrapper", this.$el);
         this.modulesList = jQuery("#" + this.model.get("id"), this.$el);
+        this.$placeholder = jQuery(KB.Templates.render("backend/area-item-placeholder", {
+            i18n: KB.i18n
+        }));
         this.model.view = this;
         this.render();
     },
@@ -555,6 +575,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
     },
     render: function() {
         this.addControls();
+        this.ui();
     },
     addControls: function() {
         this.controlsContainer.append(KB.Templates.render("backend/area-add-module", {
@@ -577,6 +598,34 @@ KB.Backbone.AreaView = Backbone.View.extend({
     },
     setActive: function() {
         KB.currentArea = this.model;
+    },
+    addModuleView: function(moduleView) {
+        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
+        this.listenTo(moduleView.model, "change:area", this.removeModule);
+        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
+        this.ui();
+    },
+    removeModule: function(model) {
+        var id;
+        id = model.id;
+        if (this.attachedModuleViews[id]) {
+            delete this.attachedModuleViews[id];
+            _K.info("Module:" + id + " was removed from area:" + this.model.id);
+            this.stopListening(model, "change:area", this.removeModule);
+        }
+        this.ui();
+    },
+    ui: function() {
+        var size;
+        size = _.size(this.attachedModuleViews);
+        if (size === 0) {
+            this.renderPlaceholder();
+        } else {
+            this.$placeholder.remove();
+        }
+    },
+    renderPlaceholder: function() {
+        this.modulesList.before(this.$placeholder);
     }
 });
 
@@ -784,13 +833,13 @@ KB.App = function($) {
             KB.Areas.add(new KB.Backbone.AreaModel(area));
         });
         _.each(KB.payload.Modules, function(module) {
-            KB.Modules.add(module);
+            var m = KB.Modules.add(module);
+            var areaView = KB.Areas.get(module.area).view;
+            areaView.addModuleView(m.view);
         });
     }
     function createModuleViews(module) {
         _K.info("ModuleViews: new added");
-        module.setArea(KB.Areas.get(module.get("area")));
-        module.bind("change:area", module.areaChanged);
         KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
             model: module,
             el: "#" + module.get("instance_id")

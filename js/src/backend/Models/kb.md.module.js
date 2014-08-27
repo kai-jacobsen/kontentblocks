@@ -1,22 +1,30 @@
 KB.Backbone.ModuleModel = Backbone.Model.extend({
 	idAttribute: 'instance_id',
-    destroy: function() {
-        var that = this;
-        KB.Ajax.send({
-            action: 'removeModules',
-            instance_id: that.get('instance_id')
-        }, that.destroyed);
+    initialize:function(){
+        this.listenTo(this, 'change:area', this.subscribeToArea);
+        this.listenTo(this, 'change:area', this.areaChanged);
     },
-    destroyed: function() {
-
+    destroy: function() {
+        this.unsubscribeFromArea();
+        this.stopListening(); // remove all listeners
     },
     setArea: function(area){
-        this.area = area;
+        this.set('area', area);
     },
     areaChanged: function() {
         // @see backend::views:ModuleView.js
         var envVars = this.get('envVars');
         envVars.areaContext = this.get('areaContext');
         this.view.updateModuleForm();
-   }
+   },
+    subscribeToArea: function(model, value){
+        var area;
+        area = KB.Areas.get(value);
+        area.view.addModuleView(model.view);
+    },
+    unsubscribeFromArea: function(){
+        var area;
+        area = KB.Areas.get(this.get('area'));
+        area.view.removeModule(this);
+    }
 });

@@ -50,7 +50,6 @@ KB.App = (function ($) {
 
         // Create views
         addViews();
-
         // get the UI on track
         KB.Ui.init();
     }
@@ -76,7 +75,10 @@ KB.App = (function ($) {
 
         // create models from already attached modules
         _.each(KB.payload.Modules, function (module) {
-            KB.Modules.add(module);
+            var m = KB.Modules.add(module);
+            var areaView = KB.Areas.get(module.area).view;
+            areaView.addModuleView(m.view);
+
         });
 
     }
@@ -86,16 +88,15 @@ KB.App = (function ($) {
      * Create views for modules and add them
      * to the custom collection
      * @param module Backbone Model
-     * @returns void
+     * @returns view
      */
     function createModuleViews(module) {
         _K.info('ModuleViews: new added');
         // assign the full corresponding area model to the module model
-        module.setArea(KB.Areas.get(module.get('area')));
-        module.bind('change:area', module.areaChanged);
+        //module.set('area', KB.Areas.get(module.get('area')));
 
         // create view
-        KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
+       KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
         }));

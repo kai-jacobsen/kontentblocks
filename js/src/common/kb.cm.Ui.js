@@ -307,6 +307,7 @@ KB.Ui = function ($) {
                 serializedData[this.id] = $('#' + this.id).sortable('serialize', {
                     attribute: 'rel'
                 });
+                console.log(serializedData);
             });
 
             return KB.Ajax.send({
@@ -333,7 +334,6 @@ KB.Ui = function ($) {
         triggerAreaChange: function (newArea, module) {
             module.set('areaContext', newArea.get('context'));
             module.set('area', newArea.get('id'));
-
         },
         toggleModule: function () {
 

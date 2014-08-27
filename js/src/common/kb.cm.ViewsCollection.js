@@ -11,6 +11,7 @@ KB.ViewsCollection = function () {
             KB.trigger('kb:'+view.model.get('class')+':added', view);
             this.lastViewAdded = view;
         }
+        return view;
 
     };
 

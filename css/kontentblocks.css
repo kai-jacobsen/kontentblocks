@@ -2912,6 +2912,22 @@ h5.kb_properties_title {
   top: 2px;
 }
 
+/* line 278, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+.kb-area__item-placeholder {
+  background: #f2f2f2;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+  color: #999;
+  padding: 10px 10px;
+  margin: 5px 30px;
+  -webkit-transition: color 0.25s linear;
+  transition: color 0.25s linear;
+}
+/* line 287, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+.kb-area__item-placeholder:hover {
+  color: #333;
+}
+
 /*------------------------------------*\
     ..for the area settings toggle
     box on the post edit screen
