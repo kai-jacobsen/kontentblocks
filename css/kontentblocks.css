@@ -127,7 +127,7 @@
 #kontentblocks_stage.fullscreen {
   min-height: 750px;
 }
-/* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .kb-whiteout {
   position: absolute;
   top: 0px;
@@ -138,27 +138,27 @@
   display: block !important;
   z-index: 49;
 }
-/* line 17, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 16, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen--description-wrapper {
   position: relative;
   z-index: 53;
   top: 5px;
   left: 50px;
 }
-/* line 24, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen--title-wrapper {
   position: relative;
   z-index: 50;
   left: 45px;
   top: 20px;
 }
-/* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 29, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen--title-wrapper h2 {
   font-family: 'open sans';
   font-weight: 100;
   font-size: 30px;
 }
-/* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 35, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen--title-wrapper .fullscreen--close:before {
   content: '\f406';
   width: 15px;
@@ -173,7 +173,7 @@
   cursor: pointer;
   color: #999;
 }
-/* line 54, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen-module {
   position: absolute;
   left: 15px;
@@ -183,19 +183,23 @@
   padding: 0;
   border: none;
 }
-/* line 63, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen-module .kb-module__header {
   display: none;
 }
-/* line 67, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 65, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen-module .menu-wrap {
+  top: -70px;
+}
+/* line 68, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+#kontentblocks_stage.fullscreen .fullscreen-module .menu-wrap .kb-duplicate, #kontentblocks_stage.fullscreen .fullscreen-module .menu-wrap .kb-delete {
   display: none;
 }
-/* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 74, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .fullscreen-module .kb-module--inner {
   border: none;
 }
-/* line 76, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
+/* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
 #kontentblocks_stage.fullscreen .kb-module__body {
   border: none;
 }

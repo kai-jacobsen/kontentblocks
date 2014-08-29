@@ -66,7 +66,6 @@ class PostEnvironment
             return false;
         }
         $this->postId = $postID;
-
         $this->DataProvider = new DataHandler( $postID );
         $this->Storage = new PostMetaModuleStorage( $postID, $this->DataProvider );
 

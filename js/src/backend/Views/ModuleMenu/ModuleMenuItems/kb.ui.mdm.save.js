@@ -36,16 +36,16 @@ KB.Backbone.ModuleSave = KB.Backbone.ModuleMenuItemView.extend({
             return false;
         }
 
-        if (!this.model.get('disabled') &&
-                KB.Checks.userCan('edit_kontentblocks')) {
-            return true;
-        }
+        return !this.model.get('disabled') &&
+        KB.Checks.userCan('edit_kontentblocks');
 
-        return false;
     },
     success: function(res){
+
+        if (!res || !res.newModuleData){
+            _K.error('Failed to save module data.');
+        }
         this.parentView.model.set('moduleData', res.newModuleData);
-        console.log(this.parentView.model);
         KB.Notice.notice('Data saved', 'success');
     }
 });

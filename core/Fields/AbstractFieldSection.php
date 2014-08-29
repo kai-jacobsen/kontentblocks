@@ -72,6 +72,11 @@ abstract class AbstractFieldSection
             /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
             $Registry = Kontentblocks::getService( 'registry.fields' );
             $Field = $Registry->getField( $type );
+
+            if (!$Field){
+                throw new Exception("Field of type: $type does not exist");
+            }
+
             //check for special key syntax
             if (preg_match( "/^(.*?)::/i", $key, $out )) {
                 if (is_array( $out ) && count( $out ) == 2) {

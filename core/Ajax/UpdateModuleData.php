@@ -10,28 +10,37 @@ use Kontentblocks\Utils\Utilities;
 /**
  *
  * Class UpdateModuleData
+ *
+ * Handle async data saving from backend edit screens for a single module
+ *
  * @package Kontentblocks\Ajax\Frontend
+ * @since 1.0.0
  */
 class UpdateModuleData
 {
 
+    /**
+     * Sends new module data as json formatted object
+     *
+     * @return void
+     * @since 1.0.0
+     */
     public static function run()
     {
         global $post;
         check_ajax_referer( 'kb-update' );
 
-
         $module = $_POST['module'];
         $data = $_POST['data'];
+        $postId = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
 
         // setup global post
-        $post = get_post( $module['post_id'] );
+        $post = get_post( $postId );
         setup_postdata( $post );
 
         // parse urlencoded form query string
 
-        $Environment = Utilities::getEnvironment( $module['post_id'] );
-
+        $Environment = Utilities::getEnvironment( $postId );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $Module = $Factory->getModule();
 

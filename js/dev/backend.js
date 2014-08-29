@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-27 */
+/*! Kontentblocks DevVersion 2014-08-29 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -497,14 +497,13 @@ KB.Backbone.ModuleSave = KB.Backbone.ModuleMenuItemView.extend({
         if (this.model.get("master")) {
             return false;
         }
-        if (!this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks")) {
-            return true;
-        }
-        return false;
+        return !this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks");
     },
     success: function(res) {
+        if (!res || !res.newModuleData) {
+            _K.error("Failed to save module data.");
+        }
         this.parentView.model.set("moduleData", res.newModuleData);
-        console.log(this.parentView.model);
         KB.Notice.notice("Data saved", "success");
     }
 });

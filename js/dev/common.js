@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-27 */
+/*! Kontentblocks DevVersion 2014-08-29 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -549,7 +549,7 @@ KB.Ui = function($) {
         },
         initSortable: function($cntxt) {
             var $context = $cntxt || jQuery("body");
-            var currentModule, areaOver;
+            var currentModule, areaOver, prevAreaOver;
             var validModule = false;
             var that = this;
             function isValidModule() {
@@ -649,7 +649,6 @@ KB.Ui = function($) {
                 serializedData[this.id] = $("#" + this.id).sortable("serialize", {
                     attribute: "rel"
                 });
-                console.log(serializedData);
             });
             return KB.Ajax.send({
                 action: "resortModules",

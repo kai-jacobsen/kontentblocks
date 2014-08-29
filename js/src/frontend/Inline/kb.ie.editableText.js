@@ -65,7 +65,7 @@ KB.IEdit.Text = function (el) {
                 var con = KB.Util.getIndex(ed.module.get('moduleData'), ed.kpath);
                 ed.previousContent = ed.getContent();
 
-                if (ed.kfilter){
+                if (ed.kfilter) {
                     ed.setContent(switchEditors.wpautop(con));
                 }
 
@@ -96,16 +96,15 @@ KB.IEdit.Text = function (el) {
             });
 
             ed.on('blur', function () {
-                var content;
+                var content, moduleData, path;
                 ed.module.view.$el.removeClass('inline-edit-active');
                 jQuery('#kb-toolbar').hide();
                 content = ed.getContent();
                 if (ed.kfilter) {
                     content = switchEditors._wp_Nop(ed.getContent());
                 }
-
-                var moduleData = ed.module.get('moduleData');
-                var path = ed.kpath;
+                moduleData = ed.module.get('moduleData');
+                path = ed.kpath;
                 KB.Util.setIndex(moduleData, path, content);
                 // && ed.kfilter set
                 if (ed.isDirty()) {
@@ -135,8 +134,6 @@ KB.IEdit.Text = function (el) {
                         ed.module.trigger('change');
                         ed.module.set('moduleData', moduleData);
                     }
-
-
                 } else {
                     ed.setContent(ed.previousContent);
                 }

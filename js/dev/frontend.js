@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-27 */
+/*! Kontentblocks DevVersion 2014-08-29 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -371,15 +371,15 @@ KB.IEdit.Text = function(el) {
                 }
             });
             ed.on("blur", function() {
-                var content;
+                var content, moduleData, path;
                 ed.module.view.$el.removeClass("inline-edit-active");
                 jQuery("#kb-toolbar").hide();
                 content = ed.getContent();
                 if (ed.kfilter) {
                     content = switchEditors._wp_Nop(ed.getContent());
                 }
-                var moduleData = ed.module.get("moduleData");
-                var path = ed.kpath;
+                moduleData = ed.module.get("moduleData");
+                path = ed.kpath;
                 KB.Util.setIndex(moduleData, path, content);
                 if (ed.isDirty()) {
                     ed.placeholder = false;

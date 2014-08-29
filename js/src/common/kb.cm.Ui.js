@@ -136,7 +136,7 @@ KB.Ui = function ($) {
         },
         initSortable: function ($cntxt) {
             var $context = $cntxt || jQuery('body');
-            var currentModule, areaOver;
+            var currentModule, areaOver, prevAreaOver;
             var validModule = false;
 
             var that = this;
@@ -307,7 +307,6 @@ KB.Ui = function ($) {
                 serializedData[this.id] = $('#' + this.id).sortable('serialize', {
                     attribute: 'rel'
                 });
-                console.log(serializedData);
             });
 
             return KB.Ajax.send({

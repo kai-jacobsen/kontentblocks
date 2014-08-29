@@ -16,6 +16,14 @@ class Utilities
 
     /**
      * Get environment
+     *
+     * $id may be a valid post ID or an dynamic area identifier (string)
+     * in case of the latter, the post ID of the d. area is looked up
+     * on the fly.
+     *
+     * @param mixed $id
+     * @since 1.0.0
+     * @return \Kontentblocks\Backend\Environment\PostEnvironment
      */
     public static function getEnvironment( $id = null )
     {
@@ -36,16 +44,15 @@ class Utilities
     }
 
     /**
-     * @param $id
-     * @param $data
+     * @param string $id editors unique id
+     * @param string $data | initial content of the editor
      * @param null $name
-     * @param bool $media
-     * @param array $args
+     * @param bool $media | whether to render media buttons or not
+     * @param array $args | additional args
      */
     static public function editor( $id, $data, $name = null, $media = false, $args = array() )
     {
         global $wp_version;
-
 
         $plugins = array_unique(
             apply_filters(
@@ -68,7 +75,10 @@ class Utilities
             )
         );
 
-        if( version_compare( $wp_version, '4.0', '>=') ) {
+        /*
+         * autoresize behaviour is new from version 4
+         */
+        if (version_compare( $wp_version, '4.0', '>=' )) {
             $plugins[] = 'wpautoresize';
         }
 
@@ -114,7 +124,8 @@ class Utilities
     }
 
     /**
-     *
+     * a hidden editor instance to make sure that wp related tinymce
+     * js environment and files are correctly setup
      */
     public static function hiddenEditor()
     {
@@ -126,12 +137,16 @@ class Utilities
             echo '</div>';
         }
 
+        // make sure to no call this twice
         $kbHiddenEditorCalled = true;
     }
 
 
     /**
-     * Merge arrays as it should be
+     * Recursivly merge associative arrays
+     * Keys which are excplicit set to null get removed from the result
+     * Keys not present in $new, but available in $old will be taken from $old
+     *
      * @param array $new
      * @param array $old
      * @return array
@@ -207,6 +222,11 @@ class Utilities
 
     }
 
+    /**
+     * Wrapper to wp get_post_types
+     * returns all public post types as object
+     * @return array
+     */
     public static function getPostTypes()
     {
         $postTypes = get_post_types( array( 'public' => true ), 'objects', 'and' );
@@ -224,6 +244,11 @@ class Utilities
     }
 
 
+    /**
+     * Wrapper to wp get_page_remplates
+     * Internal use only
+     * @return array
+     */
     public static function getPageTemplates()
     {
 
@@ -245,6 +270,7 @@ class Utilities
 
     /**
      * Evaluate the current template file if possible
+     * read template as file in the wp template hierachy
      * @return string
      * @since 1.0.0
      */
@@ -263,6 +289,9 @@ class Utilities
 
     /**
      * Check if a top level admin menu exists
+     * (not reliable in all situations)
+     * @param string $id menu identifier
+     * @return bool
      */
     public static function adminMenuExists( $id )
     {
@@ -288,24 +317,36 @@ class Utilities
     }
 
 
+    /**
+     * Internal debugging shortcut helper for Xhprof
+     */
     public static function  enableXhprof()
     {
-        if (isset( $_REQUEST['xhprof'] ) && function_exists( 'xhprof_enable' )) {
-            include '/usr/share/php/xhprof_lib/utils/xhprof_lib.php';
-            include '/usr/share/php/xhprof_lib/utils/xhprof_runs.php';
-            xhprof_enable( XHPROF_FLAGS_NO_BUILTINS + XHPROF_FLAGS_MEMORY );
+        if (function_exists( 'xhprof_enable' )) {
+
+            if (isset( $_REQUEST['xhprof'] )) {
+                include '/usr/share/php/xhprof_lib/utils/xhprof_lib.php';
+                include '/usr/share/php/xhprof_lib/utils/xhprof_runs.php';
+                xhprof_enable( XHPROF_FLAGS_NO_BUILTINS + XHPROF_FLAGS_MEMORY );
+            }
         }
     }
 
+    /**
+     * Internal debugging shortcut helper for Xhprof
+     * @param string $app Xhprof group id
+     */
     public static function disableXhprf( $app = 'Kontentblocks' )
     {
-        if (isset( $_REQUEST['xhprof'] ) && function_exists( 'xhprof_disable' )) {
-            $XHProfData = xhprof_disable();
+        if (function_exists( 'xhprof_disable' )) {
 
-            $XHProfRuns = new \XHProfRuns_Default();
-            $XHProfRuns->save_run( $XHProfData, $app );
+            if (isset( $_REQUEST['xhprof'] )) {
+                $XHProfData = xhprof_disable();
+
+                $XHProfRuns = new \XHProfRuns_Default();
+                $XHProfRuns->save_run( $XHProfData, $app );
+            }
         }
+
     }
-
-
-} 
+}

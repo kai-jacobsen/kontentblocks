@@ -52,7 +52,6 @@ KB.Util = function ($) {
             }
             return newArray;
         }
-
     }
 
 }(jQuery);
