@@ -224,7 +224,7 @@ abstract class OptionsPanel extends AbstractPanel
         $this->setupData( $this->baseId );
 
         if (is_null( $this->FieldManager )) {
-            $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data );
+            $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
         }
 
         $this->fields( $this->FieldManager )->setup( $this->data );
