@@ -39,7 +39,11 @@ Class Textarea extends Field {
 	}
 
 	public function prepareOutputValue($val){
-		return wp_kses_post($val);
+        if (!$this->getArg('safe', false)){
+            return wp_kses_post($val);
+        } else {
+            return $val;
+        }
 	}
 
 }
