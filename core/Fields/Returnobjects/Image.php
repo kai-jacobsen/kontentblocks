@@ -343,6 +343,6 @@ class Image extends AbstractEditableFieldReturn implements \JsonSerializable {
      */
     function jsonSerialize()
     {
-        // TODO: Implement jsonSerialize() method.
+       return array();
     }
 }
