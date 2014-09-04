@@ -59,7 +59,6 @@ abstract class StaticPanel extends AbstractPanel
     public function form( $postObj )
     {
 
-        d($this);
         if (!in_array( $postObj->post_type, $this->postTypes )) {
             return;
         }
