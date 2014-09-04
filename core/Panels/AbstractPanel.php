@@ -107,10 +107,12 @@ abstract class AbstractPanel
             // check for page templates resp. for the a _wp_page_template meta key
             if (!empty( $this->pageTemplates )) {
                 $tpl = get_post_meta( '_wp_page_template' );
-                if (empty( $tpl ) || !in_array( $tpl, $this->pageTemplates )) {
+                if (empty( $tpl ) || !in_array( $tpl, $this->pageTemplates ) || $tpl !== 'default') {
                     continue;
                 }
             }
+
+
 
             // either add the form as meta box or to custom hook
             if (is_array( $this->metaBox )) {
