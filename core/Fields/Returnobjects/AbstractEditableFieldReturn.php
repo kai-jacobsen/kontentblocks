@@ -11,7 +11,7 @@ use Kontentblocks\Kontentblocks;
  * Class AbstractEditableFieldReturn
  * @package Kontentblocks\Fields\Returnobjects
  */
-abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn, JsonSerializable
+abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 {
 
     /**
@@ -320,12 +320,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn, Json
 
     abstract function prepare();
 
-    public function jsonSerialize() {
-        $data = array();
-        // Represent your object using a nested array or stdClass,
-        // in the way you want it arranged in your API
-        return $data;
-    }
+
 
 
 }
