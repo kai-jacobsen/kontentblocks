@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
+use JsonSerializable;
 use Kontentblocks\Interfaces\InterfaceFieldReturn;
 use Kontentblocks\Kontentblocks;
 
@@ -10,7 +11,7 @@ use Kontentblocks\Kontentblocks;
  * Class AbstractEditableFieldReturn
  * @package Kontentblocks\Fields\Returnobjects
  */
-abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
+abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn, JsonSerializable
 {
 
     /**
@@ -318,6 +319,13 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     protected
 
     abstract function prepare();
+
+    public function jsonSerialize() {
+        $data = array();
+        // Represent your object using a nested array or stdClass,
+        // in the way you want it arranged in your API
+        return $data;
+    }
 
 
 }
