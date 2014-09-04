@@ -131,7 +131,12 @@ abstract class OptionsPanel extends AbstractPanel
 
     }
 
-    public function save( $postId )
+    /**
+     * Post Id not needed in this context
+     * @param null $postId
+     * @return mixed|void
+     */
+    public function save($postId = null)
     {
 
         $old = $this->setupData();
@@ -219,7 +224,7 @@ abstract class OptionsPanel extends AbstractPanel
         $this->setupData( $this->baseId );
 
         if (is_null( $this->FieldManager )) {
-            $this->FieldManager = new FieldManagerPanels( $this->baseId, $this->data );
+            $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data );
         }
 
         $this->fields( $this->FieldManager )->setup( $this->data );

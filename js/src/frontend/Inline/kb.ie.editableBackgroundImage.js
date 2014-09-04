@@ -71,17 +71,11 @@ KB.IEdit.BackgroundImage = (function ($) {
             var mId = data.module;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get('moduleData'));
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isEmpty(data.index)) {
-                moduleData[data.index][data.key] = value;
-            } else if (!_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.key] = value;
-            } else {
-                moduleData[data.key] = value;
-            }
-
+            var path = data.kpath;
             var settings = KB.payload.FrontSettings[data.uid];
+
+            // all modifications to moduleData will happen on the original object
+            KB.Util.setIndex(moduleData, path, value);
             cModule.set('moduleData', moduleData);
 
             jQuery.ajax({
@@ -118,5 +112,4 @@ KB.IEdit.BackgroundImage = (function ($) {
 
 }
 (jQuery)
-)
-;
+);

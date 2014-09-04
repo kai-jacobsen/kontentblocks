@@ -23,7 +23,7 @@ class Twig
     {
         $paths[] = apply_filters( 'kb_twig_def_path', get_template_directory() . '/module-templates/' );
         if (is_child_theme()) {
-            $paths = apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
+            $paths[] = apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
         }
         $Loader = new \Twig_Loader_Filesystem( $paths );
         return $Loader;

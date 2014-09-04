@@ -30,7 +30,7 @@ class UpdateModuleData
         global $post;
         check_ajax_referer( 'kb-update' );
 
-        $module = $_POST['module'];
+        $moduleSettings = $_POST['module'];
         $data = $_POST['data'];
         $postId = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -38,14 +38,12 @@ class UpdateModuleData
         $post = get_post( $postId );
         setup_postdata( $post );
 
-        // parse urlencoded form query string
-
         $Environment = Utilities::getEnvironment( $postId );
-        $Factory = new ModuleFactory( $module['class'], $module, $Environment );
+        $Factory = new ModuleFactory( $moduleSettings['class'], $moduleSettings, $Environment );
         $Module = $Factory->getModule();
 
         // gather data
-        $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
+        $old = $Environment->getStorage()->getModuleData( $moduleSettings['instance_id'] );
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 
@@ -59,7 +57,7 @@ class UpdateModuleData
             'newModuleData' => $mergedData
         );
 
-        do_action( 'kb_save_backend_module', $module );
+        do_action( 'kb_save_backend_module', $moduleSettings, $Module );
         wp_send_json( $return );
     }
 

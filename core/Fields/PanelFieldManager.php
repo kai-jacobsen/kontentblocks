@@ -28,7 +28,9 @@ class PanelFieldManager extends AbstractFieldManager
      * Array of Field groups
      * @var array
      */
-    public  $Structure = array();
+    public $Structure = array();
+
+    public $preparedFields = array();
 
     /**
      * Constructor
@@ -99,7 +101,7 @@ class PanelFieldManager extends AbstractFieldManager
     public function renderFields()
     {
         $Renderer = new FieldRendererTabs();
-        $Renderer->setStructure($this->Structure)->render( $this->baseId, $this->data );
+        $Renderer->setStructure( $this->Structure )->render( $this->baseId, $this->data );
     }
 
 
@@ -126,16 +128,18 @@ class PanelFieldManager extends AbstractFieldManager
      */
     public function prepareDataAndGet()
     {
-        $collect = array();
+
         if (!empty( $this->fieldsById )) {
-            /** @var \Kontentblocks\Fields\Field $Field */
-            foreach ($this->fieldsById as $Field) {
-                $collect[$Field->getKey()] = $Field->getUserValue();
+
+            if (empty( $this->preparedFields )) {
+                /** @var \Kontentblocks\Fields\Field $Field */
+                foreach ($this->fieldsById as $Field) {
+                    $this->preparedFields[$Field->getKey()] = $Field->getUserValue();
+                }
             }
 
-            return $collect;
+            return $this->preparedFields;
         }
-
         return $this->data;
     }
 }

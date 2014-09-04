@@ -72,7 +72,9 @@ KB.IEdit.Image = (function ($) {
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get('moduleData'));
             var path = data.kpath;
+
             KB.Util.setIndex(moduleData, path, value);
+
 
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set('moduleData', moduleData);

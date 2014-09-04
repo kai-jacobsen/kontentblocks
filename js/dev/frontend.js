@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-08-29 */
+/*! Kontentblocks DevVersion 2014-09-03 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -62,16 +62,9 @@ KB.IEdit.BackgroundImage = function($) {
             var mId = data.module;
             var cModule = KB.Modules.get(mId);
             var moduleData = _.clone(cModule.get("moduleData"));
-            if (!_.isEmpty(data.index) && !_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.index][data.key] = value;
-            } else if (!_.isEmpty(data.index)) {
-                moduleData[data.index][data.key] = value;
-            } else if (!_.isEmpty(data.arraykey)) {
-                moduleData[data.arraykey][data.key] = value;
-            } else {
-                moduleData[data.key] = value;
-            }
+            var path = data.kpath;
             var settings = KB.payload.FrontSettings[data.uid];
+            KB.Util.setIndex(moduleData, path, value);
             cModule.set("moduleData", moduleData);
             jQuery.ajax({
                 url: ajaxurl,

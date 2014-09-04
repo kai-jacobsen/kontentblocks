@@ -63,7 +63,7 @@ class FieldSection extends AbstractFieldSection {
 		if ( $this->Emitter->getSetting( 'useViewLoader' ) ) {
 			$moduleTemplate = $this->Emitter->getViewfile();
 			if ( $Field->getCondition( 'viewfile' ) && !in_array( $moduleTemplate, (array) $Field->getCondition( 'viewfile' ) ) ) {
-				$Field->setDisplay( false );
+                $Field->setDisplay( false );
                 $this->_decreaseVisibleFields();
 
 				return;
