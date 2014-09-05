@@ -94,7 +94,7 @@ class FieldArray
     /**
      * @param Module $Module
      */
-    public function setModule( Module $Module )
+    public function setModule( $Module )
     {
         $this->Module = $Module;
     }
