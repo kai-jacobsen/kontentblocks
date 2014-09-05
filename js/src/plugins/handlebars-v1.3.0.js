@@ -25,7 +25,7 @@
  @license
  */
 /* exported Handlebars */
-var Handlebars = (function() {
+var HandlebarsKB = (function() {
 // handlebars/safe-string.js
     var __module4__ = (function() {
         "use strict";
@@ -519,10 +519,10 @@ var Handlebars = (function() {
             return hb;
         };
 
-        var Handlebars = create();
-        Handlebars.create = create;
+        var HandlebarsKB = create();
+        HandlebarsKB.create = create;
 
-        __exports__ = Handlebars;
+        __exports__ = HandlebarsKB;
         return __exports__;
     })(__module2__, __module4__, __module5__, __module3__, __module6__);
 
@@ -765,7 +765,7 @@ var Handlebars = (function() {
         var __exports__;
         /* jshint ignore:start */
         /* Jison generated parser */
-        var handlebars = (function(){
+        var handlebarsKB = (function(){
             var parser = {trace: function trace() { },
                 yy: {},
                 symbols_: {"error":2,"root":3,"statements":4,"EOF":5,"program":6,"simpleInverse":7,"statement":8,"openInverse":9,"closeBlock":10,"openBlock":11,"mustache":12,"partial":13,"CONTENT":14,"COMMENT":15,"OPEN_BLOCK":16,"sexpr":17,"CLOSE":18,"OPEN_INVERSE":19,"OPEN_ENDBLOCK":20,"path":21,"OPEN":22,"OPEN_UNESCAPED":23,"CLOSE_UNESCAPED":24,"OPEN_PARTIAL":25,"partialName":26,"partial_option0":27,"sexpr_repetition0":28,"sexpr_option0":29,"dataName":30,"param":31,"STRING":32,"INTEGER":33,"BOOLEAN":34,"OPEN_SEXPR":35,"CLOSE_SEXPR":36,"hash":37,"hash_repetition_plus0":38,"hashSegment":39,"ID":40,"EQUALS":41,"DATA":42,"pathSegments":43,"SEP":44,"$accept":0,"$end":1},
@@ -1814,7 +1814,7 @@ var Handlebars = (function() {
                 return this.quotedString("");
             },
 
-            namespace: "Handlebars",
+            namespace: "HandlebarsKB",
             // END PUBLIC API
 
             compile: function(environment, options, context, asObject) {
@@ -1926,7 +1926,7 @@ var Handlebars = (function() {
                     this.pushSource("return buffer;");
                 }
 
-                var params = this.isChild ? ["depth0", "data"] : ["Handlebars", "depth0", "helpers", "partials", "data"];
+                var params = this.isChild ? ["depth0", "data"] : ["HandlebarsKB", "depth0", "helpers", "partials", "data"];
 
                 for(var i=0, l=this.environment.depths.list.length; i<l; i++) {
                     params.push("depth" + this.environment.depths.list[i]);
@@ -2704,7 +2704,7 @@ var Handlebars = (function() {
         "use strict";
         var __exports__;
         /*globals Handlebars: true */
-        var Handlebars = __dependency1__;
+        var HandlebarsKB = __dependency1__;
 
         // Compiler imports
         var AST = __dependency2__;
@@ -2715,7 +2715,7 @@ var Handlebars = (function() {
         var precompile = __dependency4__.precompile;
         var JavaScriptCompiler = __dependency5__;
 
-        var _create = Handlebars.create;
+        var _create = HandlebarsKB.create;
         var create = function() {
             var hb = _create();
 
@@ -2735,10 +2735,10 @@ var Handlebars = (function() {
             return hb;
         };
 
-        Handlebars = create();
-        Handlebars.create = create;
+        HandlebarsKB = create();
+        HandlebarsKB.create = create;
 
-        __exports__ = Handlebars;
+        __exports__ = HandlebarsKB;
         return __exports__;
     })(__module1__, __module7__, __module8__, __module10__, __module11__);
 

@@ -2,6 +2,9 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Modules\Module;
+use Reframe\Kontentblocks\Kontentblocks;
+
 /**
  * FieldManager
  * Purpose of this class:
@@ -21,6 +24,9 @@ namespace Kontentblocks\Fields;
 class FieldManager extends AbstractFieldManager
 {
 
+    /**
+     * @var \Kontentblocks\Fields\FieldRendererTabs
+     */
     protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
 
     /**
@@ -28,9 +34,8 @@ class FieldManager extends AbstractFieldManager
      * @param Kontentblocks\Modules\Module
      * @since 1.0.0
      */
-    public function __construct( $Module )
+    public function __construct( Module $Module )
     {
-        //TODO Check module consistency
         $this->baseId = $Module->instance_id;
         $this->data = $Module->moduleData;
         $this->Module = $Module;
@@ -76,7 +81,7 @@ class FieldManager extends AbstractFieldManager
 
 
     /**
-     *
+     * set Class which handles form creation for fields
      * @param $class
      */
     public function setRenderEngineClass( $class )

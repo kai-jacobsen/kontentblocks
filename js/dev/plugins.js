@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-03 */
+/*! Kontentblocks DevVersion 2014-09-05 */
 !function(a, b) {
     "use strict";
     var c, d = a.document;
@@ -292,7 +292,7 @@
     });
 })(jQuery);
 
-var Handlebars = function() {
+var HandlebarsKB = function() {
     var __module4__ = function() {
         "use strict";
         var __exports__;
@@ -717,9 +717,9 @@ var Handlebars = function() {
             };
             return hb;
         };
-        var Handlebars = create();
-        Handlebars.create = create;
-        __exports__ = Handlebars;
+        var HandlebarsKB = create();
+        HandlebarsKB.create = create;
+        __exports__ = HandlebarsKB;
         return __exports__;
     }(__module2__, __module4__, __module5__, __module3__, __module6__);
     var __module7__ = function(__dependency1__) {
@@ -897,7 +897,7 @@ var Handlebars = function() {
     var __module9__ = function() {
         "use strict";
         var __exports__;
-        var handlebars = function() {
+        var handlebarsKB = function() {
             var parser = {
                 trace: function trace() {},
                 yy: {},
@@ -2673,7 +2673,7 @@ var Handlebars = function() {
             initializeBuffer: function() {
                 return this.quotedString("");
             },
-            namespace: "Handlebars",
+            namespace: "HandlebarsKB",
             compile: function(environment, options, context, asObject) {
                 this.environment = environment;
                 this.options = options || {};
@@ -2758,7 +2758,7 @@ var Handlebars = function() {
                 if (!this.environment.isSimple) {
                     this.pushSource("return buffer;");
                 }
-                var params = this.isChild ? [ "depth0", "data" ] : [ "Handlebars", "depth0", "helpers", "partials", "data" ];
+                var params = this.isChild ? [ "depth0", "data" ] : [ "HandlebarsKB", "depth0", "helpers", "partials", "data" ];
                 for (var i = 0, l = this.environment.depths.list.length; i < l; i++) {
                     params.push("depth" + this.environment.depths.list[i]);
                 }
@@ -3215,7 +3215,7 @@ var Handlebars = function() {
     var __module0__ = function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__) {
         "use strict";
         var __exports__;
-        var Handlebars = __dependency1__;
+        var HandlebarsKB = __dependency1__;
         var AST = __dependency2__;
         var Parser = __dependency3__.parser;
         var parse = __dependency3__.parse;
@@ -3223,7 +3223,7 @@ var Handlebars = function() {
         var compile = __dependency4__.compile;
         var precompile = __dependency4__.precompile;
         var JavaScriptCompiler = __dependency5__;
-        var _create = Handlebars.create;
+        var _create = HandlebarsKB.create;
         var create = function() {
             var hb = _create();
             hb.compile = function(input, options) {
@@ -3239,9 +3239,9 @@ var Handlebars = function() {
             hb.parse = parse;
             return hb;
         };
-        Handlebars = create();
-        Handlebars.create = create;
-        __exports__ = Handlebars;
+        HandlebarsKB = create();
+        HandlebarsKB.create = create;
+        __exports__ = HandlebarsKB;
         return __exports__;
     }(__module1__, __module7__, __module8__, __module10__, __module11__);
     return __module0__;

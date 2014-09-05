@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-03 */
+/*! Kontentblocks DevVersion 2014-09-05 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -798,7 +798,7 @@ KB.ViewsCollection = function() {
 
 _.extend(KB.ViewsCollection.prototype, Backbone.Events);
 
-Handlebars.registerHelper("debug", function(optionalValue) {
+HandlebarsKB.registerHelper("debug", function(optionalValue) {
     console.log("Current Context");
     console.log("====================");
     console.log(this);
@@ -809,6 +809,6 @@ Handlebars.registerHelper("debug", function(optionalValue) {
     }
 });
 
-Handlebars.registerHelper("fieldName", function(base, index, key) {
+HandlebarsKB.registerHelper("fieldName", function(base, index, key) {
     return base + "[" + index + "][" + key + "]";
 });
