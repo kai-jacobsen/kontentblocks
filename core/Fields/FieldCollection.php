@@ -1,17 +1,21 @@
 <?php
 
-namespace Kontentblocks\Fields\Returnobjects;
+namespace Kontentblocks\Fields;
 
 /**
  * @todo: finish
  */
-class ArrayFieldReturn {
+class FieldCollection {
 
 	protected $fields;
 	public $value;
 
 
-	public function __construct( $fields ) {
+    /**
+     *
+     * @param $fields
+     */
+    public function __construct( $fields ) {
 		$this->fields = $fields;
 		$this->setupFields();
 	}
@@ -19,7 +23,8 @@ class ArrayFieldReturn {
 	public function setupFields() {
 		$collect = array();
 
-		foreach ( $this->fields as $field ) {
+        /** @var Field $field */
+        foreach ( $this->fields as $field ) {
 			$fieldkey                    = $field->getKey();
 			$this->$fieldkey             = $field->getUserValue();
 			$collect[ $field->getKey() ] = $field->getUserValue();
@@ -27,11 +32,18 @@ class ArrayFieldReturn {
 		$this->value = $collect;
 	}
 
-	public function get( $key ) {
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function get( $key ) {
 		return $this->$key;
 	}
 
-	public function getItems() {
+    /**
+     * @return mixed
+     */
+    public function getItems() {
 		return $this->value;
 	}
 

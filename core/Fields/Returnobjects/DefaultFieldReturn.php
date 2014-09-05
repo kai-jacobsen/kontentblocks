@@ -7,21 +7,29 @@ namespace Kontentblocks\Fields\Returnobjects;
  * @package Kontentblocks\Fields\Returnobjects
  * @since 1.0.0
  */
-class DefaultFieldReturn {
+class DefaultFieldReturn
+{
 
-	/**
-	 * Field value
-	 * @var mixed
-	 */
-	protected $value;
+    /**
+     * Field value
+     * @var mixed
+     */
+    protected $value;
 
-	public function __contruct( $value ) {
-		$this->value = $value;
-	}
+    /**
+     * @param $value
+     */
+    public function __contruct( $value )
+    {
+        $this->value = $value;
+    }
 
-	public function __toString() {
-		d($this);
-		return $this->value;
-	}
+    /**
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return $this->value;
+    }
 
 }
