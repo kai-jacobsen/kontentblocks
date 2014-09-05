@@ -33,7 +33,7 @@ KB.Templates = (function ($) {
                     }
                 });
             }
-            tmpl_cache[tmpl_name] = Handlebars.compile(tmpl_string);
+            tmpl_cache[tmpl_name] = HandlebarsKB.compile(tmpl_string);
         }
         return tmpl_cache[tmpl_name](tmpl_data);
     }
