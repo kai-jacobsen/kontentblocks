@@ -2231,7 +2231,7 @@ var HandlebarsKB = function() {
             parser.Parser = Parser;
             return new Parser();
         }();
-        __exports__ = handlebars;
+        __exports__ = handlebarsKB;
         return __exports__;
     }();
     var __module8__ = function(__dependency1__, __dependency2__) {

@@ -1250,7 +1250,7 @@ var HandlebarsKB = (function() {
             parser.lexer = lexer;
             function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Parser;
             return new Parser;
-        })();__exports__ = handlebars;
+        })();__exports__ = handlebarsKB;
         /* jshint ignore:end */
         return __exports__;
     })();
