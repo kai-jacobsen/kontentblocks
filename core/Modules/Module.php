@@ -337,7 +337,7 @@ abstract class Module
     public function getViewfile()
     {
         // a viewfile was already set
-        if (isset( $this->viewfile )) {
+        if (isset( $this->viewfile ) && !empty($this->viewfile)) {
             return $this->viewfile;
         } else {
             /** @var \Kontentblocks\Modules\ModuleViewsRegistry $Registry */

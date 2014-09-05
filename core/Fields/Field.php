@@ -200,6 +200,13 @@ abstract class Field
 
     /**
      * Get a special object for the field type if field has one set
+     * getValue will look for the 'get' callback on the field
+     * prepareOutput will look for the 'output' callback on the field
+     *
+     * getValue runs in different contexts (front and backend), it should be used
+     * to modify, sanitize, etc.. the data which is expected from the field
+     *
+     * prepareOutput runs when data is setup for the frontend output of a module
      * @TODO Kind of Registry for Return Objects
      * @TODO Overall logic is fuxxed up
      * @since 1.0.0
@@ -243,8 +250,6 @@ abstract class Field
      */
     public function prepareOutput( $value )
     {
-
-
         // custom method on field instance level wins over class method
         if ($this->getCallback( 'output' )) {
             return call_user_func( $this->getCallback( 'output' ), $value );
@@ -353,7 +358,7 @@ abstract class Field
 
         }
 
-        // When viewing from the frontend, an optional method can be user for the output
+        // When viewing from the frontend, an optional method can be used for the output
         if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this, 'frontsideForm' )) {
             $this->frontsideForm();
         } else {
@@ -390,6 +395,7 @@ abstract class Field
     {
 
         JSONBridge::getInstance()->registerFieldArgs( $this->uniqueId, $this->cleanedArgs() );
+
         $settings = $this->getArg( 'jSettings' );
         if (!$settings) {
             return;
@@ -603,7 +609,7 @@ abstract class Field
         if (isset( static::$settings[$key] )) {
             return static::$settings[$key];
         } else {
-            return false;
+            return null;
         }
 
     }
@@ -659,7 +665,7 @@ abstract class Field
         $conditions = $this->getArg( 'conditions' );
         if ($conditions) {
 //            if (isset($conditions[$type]) && is_string($conditions[$type])){
-            if (isset( $conditions[$type] )){
+            if (isset( $conditions[$type] )) {
                 return $conditions[$type];
             }
         }

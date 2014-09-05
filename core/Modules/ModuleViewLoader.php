@@ -47,7 +47,7 @@ class ModuleViewLoader
         $this->ViewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $Module );
         $this->Module = $Module;
         $this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->getAreaContext() );
-        if (count( $this->views ) > 1) {
+        if (count( $this->views ) > 0) {
             $this->hasViews = true;
         }
         /**
@@ -80,6 +80,14 @@ class ModuleViewLoader
                 return "<input type='hidden' name='{$this->Module->instance_id}[viewfile]' value='{$tpl['filteredfile']}' >";
             }
         }
+    }
+
+    public function getViews()
+    {
+        if ($this->hasViews()){
+            return $this->views;
+        }
+        return array();
     }
 
 
