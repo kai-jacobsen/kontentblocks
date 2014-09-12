@@ -254,7 +254,7 @@ class Enqueues
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION,
-            'isMobile' => MobileDetect::getInstance()->isMobile(),
+            'isMobile' => Kontentblocks::getService('utility.mobileDetect')->isMobile(),
             'useModuleNav' => apply_filters('kb:config.module-nav', true)
         );
 
