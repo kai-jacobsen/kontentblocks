@@ -53,7 +53,6 @@ Class EditScreen
         add_action( 'save_post', array( $this, 'save' ), 10, 2 );
         // expose data to the document
         add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
-        $Schlogger = Kontentblocks::getService('utility.logger');
 
     }
 
