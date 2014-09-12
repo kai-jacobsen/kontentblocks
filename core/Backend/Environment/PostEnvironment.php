@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Backend\Environment;
 
+use JsonSerializable;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Backend\Environment\Save\SavePost;
@@ -16,13 +17,13 @@ use Kontentblocks\Modules\ModuleFactory;
  * @subpackage Post
  * @since 1.0.0
  */
-class PostEnvironment
+class PostEnvironment implements JsonSerializable
 {
 
     /**
      * @var \Kontentblocks\Backend\DataProvider\DataHandler
      */
-    protected $DataProvider;
+    protected $DataHandler;
 
     /**
      * @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage
@@ -66,8 +67,8 @@ class PostEnvironment
             return false;
         }
         $this->postId = $postID;
-        $this->DataProvider = new DataHandler( $postID );
-        $this->Storage = new PostMetaModuleStorage( $postID, $this->DataProvider );
+        $this->DataHandler = new DataHandler( $postID );
+        $this->Storage = new PostMetaModuleStorage( $postID, $this->DataHandler );
 
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
@@ -75,8 +76,6 @@ class PostEnvironment
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
         $this->areas = $this->findAreas();
-
-
     }
 
     /**
@@ -101,9 +100,9 @@ class PostEnvironment
      * returns the PostMetaData instance
      * @return object
      */
-    public function getDataProvider()
+    public function getDataHandler()
     {
-        return $this->DataProvider;
+        return $this->DataHandler;
     }
 
 
@@ -182,7 +181,7 @@ class PostEnvironment
     public function findAreas()
     {
         if ($this->postType === 'kb-dyar') {
-            return array( $this->DataProvider->get( '_area' ) );
+            return array( $this->DataHandler->get( '_area' ) );
         }
         /** @var \Kontentblocks\Backend\Areas\AreaRegistry $AreaRegistry */
         $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
@@ -225,7 +224,7 @@ class PostEnvironment
      */
     public function getAreaSettings( $id )
     {
-        $settings = $this->DataProvider->get( 'kb_area_settings' );
+        $settings = $this->DataHandler->get( 'kb_area_settings' );
         if (!empty( $settings[$id] )) {
             return $settings[$id];
         }
@@ -261,7 +260,6 @@ class PostEnvironment
      */
     public function save()
     {
-
         $SaveHandler = new SavePost( $this );
         $SaveHandler->save();
     }
@@ -295,4 +293,20 @@ class PostEnvironment
         return get_post_type( $this->postId );
     }
 
+
+    /**
+     * (PHP 5 &gt;= 5.4.0)<br/>
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     */
+    function jsonSerialize()
+    {
+        return array(
+            'postId' => absint($this->postId),
+            'pageTemplate' => $this->getPageTemplate(),
+            'postType' => $this->getPostType(),
+        );
+    }
 }

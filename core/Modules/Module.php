@@ -5,6 +5,7 @@ namespace Kontentblocks\Modules;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Fields\FieldManager;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Templating\ModuleTemplate;
 use Kontentblocks\Templating\ModuleView;
 
@@ -150,6 +151,8 @@ abstract class Module
         // render fields if set
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
             $this->Fields->renderFields();
+        } else{
+            $this->renderEmptyOptions();
         }
 
         return false;
@@ -669,6 +672,12 @@ abstract class Module
             return $this->settings['name'];
         }
 
+    }
+
+    private function renderEmptyOptions()
+    {
+        $tpl = new CoreView('no-module-options.twig');
+        echo $tpl->render(false);
     }
 
 }

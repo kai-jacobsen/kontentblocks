@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-05 */
+/*! Kontentblocks DevVersion 2014-09-07 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),
@@ -202,7 +202,7 @@ KB.Ext.Backup = function($) {
             }
             $(document).on("heartbeat-send", function(e, data) {
                 data.kbBackupWatcher = that.lastItem;
-                data.post_id = KB.Screen.post_id;
+                data.post_id = KB.Environment.postId;
             });
             $(document).on("heartbeat-tick", function(e, data) {
                 if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {

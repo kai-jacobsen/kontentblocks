@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-05 */
+/*! Kontentblocks DevVersion 2014-09-07 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -549,7 +549,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.$el.fadeTo(300, 1);
             },
             error: function() {
-                console.log("e");
+                KB.Notice.notice("There went something wrong", "error");
             }
         });
     },
@@ -816,7 +816,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.$el.removeClass("isDirty");
             },
             error: function() {
-                console.log("e");
+                KB.Notice.notice("There went something wrong", "error");
             }
         });
     },
@@ -1047,7 +1047,7 @@ KB.App = function($) {
     function createAreaViews(area) {
         KB.Views.Areas.add(area.get("id"), new KB.Backbone.AreaView({
             model: area,
-            el: "#" + area.get("id") + "-container"
+            el: "#" + area.get("id")
         }));
     }
     function removeModule(model) {

@@ -1,60 +1,64 @@
 KB.Templates = (function ($) {
 
-    var tmpl_cache = {};
-    var hlpf_cache = {};
+    var templateCache = {};
+    var helpfileCache = {};
 
     function getTmplCache() {
-        return tmpl_cache;
+        return templateCache;
     }
 
-    function render(tmpl_name, tmpl_data) {
-        var tmpl_string;
-        if (!tmpl_cache[tmpl_name]) {
-            var tmpl_dir = KB.Config.getRootURL() + 'js/templates';
+    function render(tplName, tplData) {
+        var tplString;
+        if (!templateCache[tplName]) {
+            var tplDir = KB.Config.getRootURL() + 'js/templates';
+            var tplUrl = tplDir + '/' + tplName + '.hbs?' + KB.Config.getHash();
 
-            var tmpl_url = tmpl_dir + '/' + tmpl_name + '.hbs?'+ KB.Config.getHash();
-
-            // if a full url is given, tmpl_url will be overwritten
+            // if a full url is given, tplUrl will be overwritten
             var pat = /^https?:\/\//i;
-            if (pat.test(tmpl_name)) {
-                tmpl_url = tmpl_name;
+            if (pat.test(tplName)) {
+                tplUrl = tplName;
             }
 
-            if (KB.Util.stex.get(tmpl_url)) {
-                tmpl_string = KB.Util.stex.get(tmpl_url);
+            // read from local storage if available
+            if (KB.Util.stex.get(tplUrl)) {
+                tplString = KB.Util.stex.get(tplUrl);
             } else {
+                // load fresh file
                 $.ajax({
-                    url: tmpl_url,
+                    url: tplUrl,
                     method: 'GET',
                     async: false,
                     success: function (data) {
-                        tmpl_string = data;
-                        KB.Util.stex.set(tmpl_url, tmpl_string, 2 * 1000 * 60);
+                        tplString = data;
+                        KB.Util.stex.set(tplUrl, tplString, 2 * 1000 * 60);
                     }
                 });
             }
-            tmpl_cache[tmpl_name] = HandlebarsKB.compile(tmpl_string);
+            templateCache[tplName] = HandlebarsKB.compile(tplString);
         }
-        return tmpl_cache[tmpl_name](tmpl_data);
+        return templateCache[tplName](tplData);
     }
 
-    function helpfile(hlpf_url) {
-        if (!hlpf_cache[hlpf_url]) {
+    /*
+     * Deprecated
+     */
+    function helpfile(helpfileUrl) {
+        if (!helpfileCache[helpfileUrl]) {
 
-            var hlpf_string;
+            var helpfileString;
             $.ajax({
-                url: hlpf_url,
+                url: helpfileUrl,
                 method: 'GET',
                 async: false,
                 dataType: 'html',
                 success: function (data) {
-                    hlpf_string = data;
+                    helpfileString = data;
                 }
             });
 
-            hlpf_cache[hlpf_url] = hlpf_url;
+            helpfileCache[helpfileUrl] = helpfileUrl;
         }
-        return hlpf_cache[hlpf_url];
+        return helpfileCache[helpfileUrl];
     };
 
     return {

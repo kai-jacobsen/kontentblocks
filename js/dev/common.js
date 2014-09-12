@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-05 */
+/*! Kontentblocks DevVersion 2014-09-07 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -57,7 +57,7 @@ KB.Config = function($) {
 KB.Ajax = function($) {
     return {
         send: function(data, callback, scope) {
-            var pid = KB.Screen && KB.Screen.post_id ? KB.Screen.post_id : false;
+            var pid = KB.Environment && KB.Environment.postId ? KB.Environment.postId : false;
             var sned = _.extend({
                 supplemental: data.supplemental || {},
                 count: parseInt($("#kb_all_blocks").val(), 10),
@@ -301,52 +301,52 @@ KB.Payload = function($) {
 }(jQuery);
 
 KB.Templates = function($) {
-    var tmpl_cache = {};
-    var hlpf_cache = {};
+    var templateCache = {};
+    var helpfileCache = {};
     function getTmplCache() {
-        return tmpl_cache;
+        return templateCache;
     }
-    function render(tmpl_name, tmpl_data) {
-        var tmpl_string;
-        if (!tmpl_cache[tmpl_name]) {
-            var tmpl_dir = KB.Config.getRootURL() + "js/templates";
-            var tmpl_url = tmpl_dir + "/" + tmpl_name + ".hbs?" + KB.Config.getHash();
+    function render(tplName, tplData) {
+        var tplString;
+        if (!templateCache[tplName]) {
+            var tplDir = KB.Config.getRootURL() + "js/templates";
+            var tplUrl = tplDir + "/" + tplName + ".hbs?" + KB.Config.getHash();
             var pat = /^https?:\/\//i;
-            if (pat.test(tmpl_name)) {
-                tmpl_url = tmpl_name;
+            if (pat.test(tplName)) {
+                tplUrl = tplName;
             }
-            if (KB.Util.stex.get(tmpl_url)) {
-                tmpl_string = KB.Util.stex.get(tmpl_url);
+            if (KB.Util.stex.get(tplUrl)) {
+                tplString = KB.Util.stex.get(tplUrl);
             } else {
                 $.ajax({
-                    url: tmpl_url,
+                    url: tplUrl,
                     method: "GET",
                     async: false,
                     success: function(data) {
-                        tmpl_string = data;
-                        KB.Util.stex.set(tmpl_url, tmpl_string, 2 * 1e3 * 60);
+                        tplString = data;
+                        KB.Util.stex.set(tplUrl, tplString, 2 * 1e3 * 60);
                     }
                 });
             }
-            tmpl_cache[tmpl_name] = HandlebarsKB.compile(tmpl_string);
+            templateCache[tplName] = HandlebarsKB.compile(tplString);
         }
-        return tmpl_cache[tmpl_name](tmpl_data);
+        return templateCache[tplName](tplData);
     }
-    function helpfile(hlpf_url) {
-        if (!hlpf_cache[hlpf_url]) {
-            var hlpf_string;
+    function helpfile(helpfileUrl) {
+        if (!helpfileCache[helpfileUrl]) {
+            var helpfileString;
             $.ajax({
-                url: hlpf_url,
+                url: helpfileUrl,
                 method: "GET",
                 async: false,
                 dataType: "html",
                 success: function(data) {
-                    hlpf_string = data;
+                    helpfileString = data;
                 }
             });
-            hlpf_cache[hlpf_url] = hlpf_url;
+            helpfileCache[helpfileUrl] = helpfileUrl;
         }
-        return hlpf_cache[hlpf_url];
+        return helpfileCache[helpfileUrl];
     }
     return {
         render: render,
@@ -542,7 +542,6 @@ KB.Ui = function($) {
         },
         initToggleBoxes: function() {
             $(".kb-togglebox-header").on("click", function() {
-                console.log("cliky");
                 $(this).next("div").slideToggle();
             });
             $(".kb_fieldtoggles div:first-child").trigger("click");

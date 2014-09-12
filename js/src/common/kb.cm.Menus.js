@@ -1,4 +1,7 @@
-KB.Menus = (function ($) {
+/**
+ * UI scripts for admin menu entries "Areas" and "Templates"
+ */
+KB.Menus = function ($) {
 
     return {
         loadingContainer: null,
@@ -18,9 +21,7 @@ KB.Menus = (function ($) {
                 _ajax_nonce: KB.Config.getNonce('read')
             }, this.insertId, this);
         },
-
         insertId: function (res) {
-
             if (res === 'translate') {
                 this.initiatorEl.addClass()
                 $('.kb-js-area-id').val('Please chose a different name');
@@ -29,9 +30,7 @@ KB.Menus = (function ($) {
                 $('.kb-js-area-id').val(res);
                 this.enableSendButton();
             }
-
             this.loadingContainer.removeClass('loading');
-
         },
         disableSendButton: function () {
             this.$sendButton.attr('disabled', 'disabled').val('Disabled');
@@ -40,10 +39,5 @@ KB.Menus = (function ($) {
             this.$sendButton.attr('disabled', false).val('Create');
 
         }
-
     }
-
-
-}
-    (jQuery)
-    )
+}(jQuery);

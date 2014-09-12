@@ -13,6 +13,7 @@
 
 namespace Kontentblocks;
 
+use Detection\MobileDetect;
 use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\ModuleTemplates;
@@ -335,6 +336,10 @@ Class Kontentblocks
             $Logger->pushHandler(new StreamHandler($path));
             return $Logger;
         };
+
+        $this->Services['utility.mobileDetect'] = function($container){
+            return new MobileDetect();
+        };
     }
 
     private function setupRegistries()
@@ -366,8 +371,6 @@ Class Kontentblocks
     {
         Kontentblocks::getInstance()->Services[$service] = $callable;
     }
-
-
 }
 
 // end Kontentblocks

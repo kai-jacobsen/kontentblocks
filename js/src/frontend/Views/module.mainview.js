@@ -141,7 +141,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 that.$el.removeClass('isDirty');
             },
             error: function () {
-                console.log('e');
+                KB.Notice.notice('There went something wrong', 'error');
+
             }
         });
     },

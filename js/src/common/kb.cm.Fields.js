@@ -11,8 +11,6 @@ _.extend(KB.Fields, {
     addEvent: function () {
         this.listenTo(KB, 'kb:ready', this.init);
         this.listenTo(this, 'newModule', this.newModule);
-
-
     },
     register: function (id, object) {
         // Backbone Events for field object
@@ -20,7 +18,6 @@ _.extend(KB.Fields, {
         this.fields[id] = object;
 
     },
-
     init: function () {
         var that = this;
         _.each(_.toArray(this.fields), function (object) {
@@ -37,7 +34,6 @@ _.extend(KB.Fields, {
         });
 
     },
-
     newModule:function(object){
         _K.info('new Module added for Fields');
         var that = this;

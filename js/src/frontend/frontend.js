@@ -156,8 +156,9 @@ KB.App = function ($) {
     function createAreaViews(area) {
         KB.Views.Areas.add(area.get('id'), new KB.Backbone.AreaView({
             model: area,
-            el: '#' + area.get('id') + '-container'
+            el: '#' + area.get('id')
         }));
+
     }
 
     /**

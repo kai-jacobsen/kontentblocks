@@ -181,13 +181,13 @@ Class EditScreen
      */
     public function toJSON()
     {
-        global $post;
-        $toJSON = array(
-            'page_template' => $this->Environment->get( 'pageTemplate' ),
-            'post_type' => $this->Environment->get( 'postType' ),
-            'post_id' => $post->ID
-        );
-        echo "<script> var KB = KB || {}; KB.Screen =" . json_encode( $toJSON ) . "</script>";
+//        global $post;
+//        $toJSON = array(
+//            'page_template' => $this->Environment->get( 'pageTemplate' ),
+//            'post_type' => $this->Environment->get( 'postType' ),
+//            'post_id' => $post->ID
+//        );
+        echo "<script> var KB = KB || {}; KB.Environment =" . json_encode( $this->Environment ) . "</script>";
 
     }
 

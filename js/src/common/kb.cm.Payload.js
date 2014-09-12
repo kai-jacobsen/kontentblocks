@@ -1,7 +1,5 @@
 KB.Payload = (function ($) {
-
     return {
-
         getFieldData: function (type, moduleId, key, arrayKey) {
             var typeData;
             if (this._typeExists(type)) {
@@ -35,7 +33,6 @@ KB.Payload = (function ($) {
                 // key given and present
                 return typeData[moduleId][key];
             }
-
             return [];
         },
         _typeExists: function (type) {
@@ -54,6 +51,4 @@ KB.Payload = (function ($) {
         }
 
     }
-
-
 })(jQuery);

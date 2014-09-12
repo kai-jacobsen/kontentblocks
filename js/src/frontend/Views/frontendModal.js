@@ -218,8 +218,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
             },
             error: function () {
-                // TODO Error handling
-                console.log('e');
+                KB.Notice.notice('There went something wrong', 'error');
             }
         });
     },

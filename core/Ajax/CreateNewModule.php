@@ -263,6 +263,7 @@ class CreateNewModule
 //        }
 
         $this->postId = filter_var( $_POST['post_id'] );
+
         $post         = get_post( $this->postId );
         setup_postdata( $post );
 

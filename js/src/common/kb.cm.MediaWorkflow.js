@@ -48,13 +48,11 @@ KB.Utils.MediaWorkflow = function (args) {
      * ->this<- is set to the modal
      */
     function select(){
-
         if (options.select === false){
             alert('No callback given');
         }
         options.select(this);
     }
-
     init(args);
 };
 

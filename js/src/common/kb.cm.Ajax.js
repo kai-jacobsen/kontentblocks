@@ -2,7 +2,7 @@ KB.Ajax = (function ($) {
 
     return {
         send: function (data, callback, scope) {
-            var pid = (KB.Screen && KB.Screen.post_id) ? KB.Screen.post_id : false;
+            var pid = (KB.Environment && KB.Environment.postId) ? KB.Environment.postId : false;
             var sned = _.extend({
                 supplemental: data.supplemental || {},
                 count: parseInt($('#kb_all_blocks').val(), 10),

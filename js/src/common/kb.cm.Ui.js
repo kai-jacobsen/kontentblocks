@@ -128,7 +128,6 @@ KB.Ui = function ($) {
         },
         initToggleBoxes: function () {
             $('.kb-togglebox-header').on('click', function () {
-                console.log('cliky');
                 $(this).next('div').slideToggle();
             });
 

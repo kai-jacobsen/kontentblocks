@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-05 */
+/*! Kontentblocks DevVersion 2014-09-07 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -246,7 +246,6 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
     initialSetup: function() {
         var that = this;
         var payload = KB.Payload.getFieldData("flexfields", this.params.moduleView.model.get("instance_id"), this.params.key, this.params.arrayKey) || [];
-        console.log(payload);
         _.each(payload, function(item) {
             var model = new Backbone.Model(item);
             var Item = new KB.FlexibleFields.Item({

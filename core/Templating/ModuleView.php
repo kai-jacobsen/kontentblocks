@@ -45,7 +45,6 @@ class ModuleView
     {
 
 
-
         if (!isset( $module ) || !is_object( $module )) {
             throw new \Exception( 'Module is not set' );
         }
@@ -60,12 +59,11 @@ class ModuleView
         $this->tplFile = ( $tpl !== false ) ? $tpl : get_class( $module ) . '.twig';
 
 
-        $this->engine = Kontentblocks::getService('templating.twig');
+        $this->engine = Kontentblocks::getService( 'templating.twig' );
     }
 
     public function render( $echo = false )
     {
-
         if (empty( $this->tplFile )) {
             return false; //@TODO template missing
         }
@@ -126,7 +124,7 @@ class ModuleView
             );
         }
 
-        $data['utils'] = $this->setupUtilities();
+        $data['_utils'] = $this->setupUtilities();
 
         return $data;
 
@@ -135,7 +133,7 @@ class ModuleView
     private function setupUtilities()
     {
         return array(
-            'MobileDetect' => MobileDetect::getInstance()
+            'MobileDetect' => Kontentblocks::getService('utility.mobileDetect')
         );
     }
 
