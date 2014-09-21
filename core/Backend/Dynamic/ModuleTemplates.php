@@ -26,6 +26,7 @@ class ModuleTemplates
      */
     public function __construct()
     {
+
         add_action( 'init', array( $this, 'registerPostType' ) );
         add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
         add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );

@@ -103,11 +103,11 @@ Class Kontentblocks
         }
 
         if (is_child_theme() && file_exists( get_stylesheet_directory() . '/kontentblocks.php' )) {
+            add_theme_support('kontentblocks');
             include_once( get_stylesheet_directory() . '/kontentblocks.php' );
         }
 
         if (current_theme_supports( 'kontentblocks' )) {
-
             // Enqueues of front and backend scripts and styles is handled here
             // earliest hook: init
             Enqueues::setup();
@@ -332,6 +332,7 @@ Class Kontentblocks
     private function setupUtilities(){
         $this->Services['utility.logger'] = function($container){
             $path = KB_PLUGIN_PATH . '/logs/debug.log';
+
             $Logger = new Logger('kontentblocks');
             $Logger->pushHandler(new StreamHandler($path));
             return $Logger;
