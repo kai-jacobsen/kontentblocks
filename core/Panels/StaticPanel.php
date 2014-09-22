@@ -152,4 +152,23 @@ abstract class StaticPanel extends AbstractPanel
         }
         return $this->FieldManager->prepareDataAndGet();
     }
+
+
+    /**
+     * Get specific key value from data
+     * Setup data, if not already done
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     */
+    public function getKey( $key = null, $default = null )
+    {
+        $data = $this->getData();
+
+        if (isset( $data[$key] )) {
+            return $data[$key];
+        }
+
+        return $default;
+    }
 }

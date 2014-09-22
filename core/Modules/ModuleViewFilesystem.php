@@ -14,7 +14,6 @@ class ModuleViewFilesystem
     public function __construct( Module $Module )
     {
 
-
         $this->isChildTheme = is_child_theme();
         $this->views = $this->setupViews( $Module );
 
@@ -55,7 +54,6 @@ class ModuleViewFilesystem
         );
 
         $merged = array_merge( $childTemplates, $parentTemplates, $moduleTemplates );
-
 
         return $this->prepareFiles( $this->unify( $merged ) );
     }

@@ -5,6 +5,7 @@ namespace Kontentblocks;
 use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Frontend\AreaRenderer;
+use Kontentblocks\Kontentblocks;
 
 /**
  * Register Area
@@ -95,4 +96,22 @@ function hasModules( $area, $id )
 
     $Meta = new PostMetaModuleStorage( $post_id );
     return $Meta->hasModules( $area );
+}
+
+function getPanel( $id = null )
+{
+    /** @var \Kontentblocks\Panels\PanelRegistry $Registry */
+    $Registry = Kontentblocks::getService( 'registry.panels' );
+    /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
+    $Panel = $Registry->get( $id );
+
+    if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
+        return $Panel;
+    } else {
+        return new \WP_Error(
+            'Kontentblocks',
+            'Panel with requested id does not exist.',
+            array( 'request' => $id, 'line' => __LINE__, 'file' => __FILE__ )
+        );
+    }
 }

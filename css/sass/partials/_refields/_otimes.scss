@@ -1,0 +1,37 @@
+.otimes-field--stage{
+
+  .otimes-table{
+    table-layout: fixed;
+
+    .oday{
+      font-weight: bold;
+    }
+
+    .oday-open, .oday-close{
+      width: 100px;
+      padding: 0 8px;
+    }
+
+    .oday-til{
+      color: #ccc;
+    }
+
+    tr .oday-split{
+      display: none;
+    }
+  }
+
+  .otimes-table.split{
+
+    tr .oday-split{
+      display: table-cell;
+    }
+
+  }
+
+  input.kb-ot-timepicker{
+    width: 100%;
+  }
+
+
+}

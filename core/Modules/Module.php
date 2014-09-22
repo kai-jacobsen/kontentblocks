@@ -339,6 +339,9 @@ abstract class Module
      */
     public function getViewfile()
     {
+        if (!$this->getSetting('useViewLoader')){
+            return '';
+        }
         // a viewfile was already set
         if (isset( $this->viewfile ) && !empty($this->viewfile)) {
             return $this->viewfile;

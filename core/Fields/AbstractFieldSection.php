@@ -190,6 +190,10 @@ abstract class AbstractFieldSection
     {
         $collect = array();
 
+        if (!is_array($this->Fields)){
+            return $oldData;
+        }
+
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->Fields as $field) {
             $field->setModule( $this->Emitter );

@@ -98,6 +98,15 @@ abstract class AbstractPanel
     abstract public function getData( $postId = null );
 
     /**
+     * Get specific key value from data
+     * Setup data, if not already done
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     */
+    abstract public function getKey($key = null, $default = null);
+
+    /**
      * Setup wordpress hooks
      */
     public function setupHooks()

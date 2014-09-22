@@ -25,6 +25,8 @@ abstract class OptionsPanel extends AbstractPanel
 
     protected $menu;
 
+    protected $menuUri;
+
 
     /**
      * Custom Field Manager Instance for Panels
@@ -70,6 +72,11 @@ abstract class OptionsPanel extends AbstractPanel
         return wp_parse_args( $args, $defaults );
     }
 
+    /**
+     * Auto setup args to class properties
+     * and look for optional method for each arg
+     * @param $args
+     */
     public function setupArgs( $args )
     {
         foreach ($args as $k => $v) {
@@ -101,6 +108,9 @@ abstract class OptionsPanel extends AbstractPanel
                         'form'
                     )
                 );
+
+                $this->menuUri = admin_url( 'admin.php?page=' . $this->menu['slug'] );
+
                 break;
 
             case 'submenu':
@@ -112,9 +122,12 @@ abstract class OptionsPanel extends AbstractPanel
                     $this->menu['slug'],
                     array( $this, 'form' )
                 );
-                break;
+                $this->menuUri = admin_url( 'admin.php?page=' . $this->menu['slug'] );
 
+                break;
         }
+
+
     }
 
 
@@ -136,7 +149,7 @@ abstract class OptionsPanel extends AbstractPanel
      * @param null $postId
      * @return mixed|void
      */
-    public function save($postId = null)
+    public function save( $postId = null )
     {
 
         $old = $this->setupData();
@@ -240,6 +253,37 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function getData( $postid = null )
     {
+        if (is_null( $this->FieldManager )) {
+            $this->setup();
+        }
+
         return $this->FieldManager->prepareDataAndGet();
+    }
+
+
+    /**
+     * Get specific key value from data
+     * Setup data, if not already done
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     */
+    public function getKey( $key = null, $default = null )
+    {
+        $data = $this->getData();
+
+        if (isset( $data[$key] )) {
+            return $data[$key];
+        }
+
+        return $default;
+
+    }
+
+    public function getMenuLink()
+    {
+        if (current_user_can('edit_kontentblocks')){
+            return $this->menuUri;
+        }
     }
 }

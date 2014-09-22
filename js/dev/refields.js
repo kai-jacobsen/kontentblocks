@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-07 */
+/*! Kontentblocks DevVersion 2014-09-21 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -776,6 +776,30 @@ KB.Fields.register("Link", function($) {
         },
         updateFront: function() {
             this.init();
+        }
+    };
+}(jQuery));
+
+KB.Fields.register("FlexibleFields", function($) {
+    return {
+        init: function(modalView) {
+            $(".otimes-field--stage", $("body")).each(function(index, el) {
+                var $el = $(el);
+                $(".kb-ot-timepicker", $el).datetimepicker({
+                    datepicker: false,
+                    format: "H:i",
+                    validateOnBlur: false
+                });
+            });
+            $(".js-oday-activate-split").on("click", function() {
+                $(this).parent().find("table").toggleClass("split");
+            });
+        },
+        update: function() {
+            this.init();
+        },
+        frontUpdate: function(modalView) {
+            this.init(modalView);
         }
     };
 }(jQuery));

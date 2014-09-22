@@ -735,6 +735,8 @@ abstract class Field
             return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" );
         } else if (is_bool( $array ) && $array === true) {
             return esc_attr( "{$this->baseId}[{$this->key}][]" );
+        } else if (is_string( $array ) && is_string( $akey ) && is_string($multiple)) {
+            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][$multiple]" );
         } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
             return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" );
         } else if (is_string( $array ) && is_string( $akey )) {

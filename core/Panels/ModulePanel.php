@@ -226,4 +226,15 @@ class ModulePanel extends AbstractPanel
     {
         // TODO: Implement getData() method.
     }
+
+    /**
+     * Get specific key value from data
+     * Setup data, if not already done
+     * @param null $key
+     * @return mixed
+     */
+    public function getKey( $key = null )
+    {
+        // TODO: Implement getKey() method.
+    }
 }
