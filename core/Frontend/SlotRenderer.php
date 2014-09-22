@@ -80,7 +80,7 @@ class SlotRenderer
             printf('<%3$s id="%1$s" class="%2$s">', $module->instance_id, 'os-edit-container', $module->getSetting('element'));
 
             echo $module->module();
-            echo "</{$module->getSetting('element')}>";
+            echo sprintf( "</%s>", $module->getSetting('element') )
 
             $module->toJSON();
 
