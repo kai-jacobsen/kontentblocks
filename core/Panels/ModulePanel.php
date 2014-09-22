@@ -233,7 +233,7 @@ class ModulePanel extends AbstractPanel
      * @param null $key
      * @return mixed
      */
-    public function getKey( $key = null )
+    public function getKey( $key = null, $default = null )
     {
         // TODO: Implement getKey() method.
     }

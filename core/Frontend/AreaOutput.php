@@ -182,8 +182,8 @@ class AreaOutput
             'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
             'wrapperClass' => 'area',
-            'useWrapper' => TRUE,
-            'element' => 'div',
+            'useWrapper' => true,
+            'element' => apply_filters('kb.area.settings.element', 'div'),
             'mergeRepeating' => false,
             'action' => null,
             'area_template' => 'default'

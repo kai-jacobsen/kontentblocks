@@ -4,6 +4,7 @@ namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
@@ -137,7 +138,7 @@ class AreaRenderer {
 
 	}
 
-	public function beforeModule( $classes, $module ) {
+	public function beforeModule( $classes, Module $module ) {
 
 
 		$layout = $this->AreaOutput->getCurrentLayoutClasses();
@@ -148,7 +149,7 @@ class AreaRenderer {
 				implode( ' ', $classes ),
 				implode( ' ', $layout ) );
 		} else {
-			return sprintf( '<div id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ) );
+			return sprintf( '<%3$s id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ), $module->getSetting('element') );
 
 		}
 

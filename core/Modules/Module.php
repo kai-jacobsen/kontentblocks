@@ -607,6 +607,7 @@ abstract class Module
             'name' => '',
             'wrap' => true,
             'wrapperClasses' => '',
+            'element' => apply_filters('kb.module.settings.element', 'div'),
             'description' => '',
             'connect' => 'any',
             'hidden' => false,
