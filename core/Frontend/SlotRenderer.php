@@ -77,10 +77,10 @@ class SlotRenderer
 
         $module = $this->Iterator->setPosition($pos);
         if (!is_null($module)) {
-            printf('<div id="%1$s" class="%2$s">', $module->instance_id, 'os-edit-container');
+            printf('<%3$s id="%1$s" class="%2$s">', $module->instance_id, 'os-edit-container', $module->getSetting('element'));
 
             echo $module->module();
-            echo "</div>";
+            echo "</{$module->getSetting('element')}>";
 
             $module->toJSON();
 

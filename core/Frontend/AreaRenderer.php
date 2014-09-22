@@ -160,9 +160,9 @@ class AreaRenderer {
 
 		$layout = $this->AreaOutput->getCurrentLayoutClasses();
 		if ( ! empty( $layout ) ) {
-			return "</div></div>";
+			return "</div></{$module->getSetting('element')}>";
 		} else {
-			return "</div>";
+			return "</$module->getSetting('element')>";
 
 		}
 
