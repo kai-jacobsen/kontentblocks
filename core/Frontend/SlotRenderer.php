@@ -42,18 +42,18 @@ class SlotRenderer
      * @param $area
      * @param $postId
      */
-    public function __construct($area, $postId)
+    public function __construct( $area, $postId )
     {
-        if (!isset($area) || !isset($postId)) {
+        if (!isset( $area ) || !isset( $postId )) {
             return;
         }
 
 
         /** @var $Environment \Kontentblocks\Backend\Environment\PostEnvironment */
-        $Environment = Utilities::getEnvironment($postId);
-        $modules = $Environment->getModulesForArea($area);
+        $Environment = Utilities::getEnvironment( $postId );
+        $modules = $Environment->getModulesForArea( $area );
 
-        $this->Iterator = new ModuleIterator($modules, $Environment);
+        $this->Iterator = new ModuleIterator( $modules, $Environment );
     }
 
     /**
@@ -62,7 +62,7 @@ class SlotRenderer
      */
     public function next()
     {
-        $this->slot($this->position + 1);
+        $this->slot( $this->position + 1 );
     }
 
     /**
@@ -71,16 +71,21 @@ class SlotRenderer
      * @since 1.0.0
      * @TODO complete printf
      */
-    public function slot($pos)
+    public function slot( $pos )
     {
         $this->position = $pos;
 
-        $module = $this->Iterator->setPosition($pos);
-        if (!is_null($module)) {
-            printf('<%3$s id="%1$s" class="%2$s">', $module->instance_id, 'os-edit-container', $module->getSetting('element'));
+        $module = $this->Iterator->setPosition( $pos );
+        if (!is_null( $module )) {
+            printf(
+                '<%3$s id="%1$s" class="%2$s">',
+                $module->getId(),
+                'os-edit-container',
+                $module->getSetting( 'element' )
+            );
 
             echo $module->module();
-            echo sprintf( "</%s>", $module->getSetting('element') )
+            echo sprintf( "</%s>", $module->getSetting( 'element' ) );
 
             $module->toJSON();
 

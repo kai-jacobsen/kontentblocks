@@ -80,7 +80,11 @@ class AreaRenderer {
 
 	}
 
-	public function render( $echo ) {
+    /**
+     * @param $echo
+     * @return string
+     */
+    public function render( $echo ) {
 		if ( ! $this->_validate() ) {
 			return false;
 		}
@@ -138,24 +142,34 @@ class AreaRenderer {
 
 	}
 
-	public function beforeModule( $classes, Module $module ) {
+    /**
+     * @param $classes
+     * @param Module $module
+     * @return string
+     */
+    public function beforeModule( $classes, Module $module ) {
 
 
 		$layout = $this->AreaOutput->getCurrentLayoutClasses();
 
 		if ( ! empty( $layout ) ) {
 			return sprintf( '<div class="wrap %3$s"><div id="%1$s" class="%2$s">',
-				$module->instance_id,
+				$module->getId(),
 				implode( ' ', $classes ),
 				implode( ' ', $layout ) );
 		} else {
-			return sprintf( '<%3$s id="%1$s" class="%2$s">', $module->instance_id, implode( ' ', $classes ), $module->getSetting('element') );
+			return sprintf( '<%3$s id="%1$s" class="%2$s">', $module->getId(), implode( ' ', $classes ), $module->getSetting('element') );
 
 		}
 
 	}
 
-	public function afterModule( $_after, $module ) {
+    /**
+     * @param $_after
+     * @param $module
+     * @return string
+     */
+    public function afterModule( $_after, $module ) {
 		JSONBridge::getInstance()->registerModule( $module->toJSON() );
 
 		$layout = $this->AreaOutput->getCurrentLayoutClasses();

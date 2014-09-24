@@ -22,7 +22,7 @@ class SingleModuleRenderer
         $addArgs = $this->setupArgs($args);
 
         $this->Module->_addAreaAttributes($addArgs);
-        printf('<%3$s id="%1$s" class="%2$s">', $this->Module->instance_id, 'os-edit-container module', $addArgs['element']);
+        printf('<%3$s id="%1$s" class="%2$s">', $this->Module->getId(), 'os-edit-container module', $addArgs['element']);
         echo $this->Module->module();
         echo "</{$addArgs['element']}>";
         JSONBridge::getInstance()->registerModule($this->Module->toJSON());

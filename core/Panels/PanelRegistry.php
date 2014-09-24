@@ -42,7 +42,7 @@ class PanelRegistry
 
         if (!isset( $this->panels[$id] )) {
             $Reflect = new \ReflectionClass( $args['class'] );
-            if ($Reflect->getParentClass() === 'Kontentblocks\Modules\StaticModule') {
+            if ($Reflect->getParentClass()->name === 'Kontentblocks\Modules\StaticModule') {
                 $this->panels[$id] = new ModulePanel( $args );
             } else {
                 $this->panels[$id] = new $args['class']( $args );

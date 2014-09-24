@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-21 */
+/*! Kontentblocks DevVersion 2014-09-23 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -698,7 +698,7 @@ KB.Fields.register("Image", function($) {
                         action: "fieldGetImage",
                         args: args,
                         id: attachment.get("id"),
-                        _ajax_nonce: kontentblocks.nonces.get
+                        _ajax_nonce: KB.Config.getNonce("read")
                     },
                     type: "GET",
                     dataType: "json",

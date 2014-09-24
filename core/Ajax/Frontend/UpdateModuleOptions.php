@@ -45,11 +45,11 @@ class UpdateModuleOptions
 
         // gather data
         $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
-        $new = $Module->save( $parsed[$Module->instance_id], $old );
+        $new = $Module->save( $parsed[$Module->getId()], $old );
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 
         if ($update) {
-            $Environment->getStorage()->saveModule( $Module->instance_id, wp_slash( $mergedData ) );
+            $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
         }
 
         $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );

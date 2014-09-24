@@ -151,7 +151,7 @@ abstract class Module
         // render fields if set
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
             $this->Fields->renderFields();
-        } else{
+        } else {
             $this->renderEmptyOptions();
         }
 
@@ -339,11 +339,11 @@ abstract class Module
      */
     public function getViewfile()
     {
-        if (!$this->getSetting('useViewLoader')){
+        if (!$this->getSetting( 'useViewLoader' )) {
             return '';
         }
         // a viewfile was already set
-        if (isset( $this->viewfile ) && !empty($this->viewfile)) {
+        if (isset( $this->viewfile ) && !empty( $this->viewfile )) {
             return $this->viewfile;
         } else {
             /** @var \Kontentblocks\Modules\ModuleViewsRegistry $Registry */
@@ -367,6 +367,15 @@ abstract class Module
         $this->viewfile = $file;
     }
 
+
+    public function getId()
+    {
+        if (!isset($this->instance_id)){
+            throw new \Exception('Module has no id assigned, and there really is no reason why this could be. So something is broken');
+        }
+
+        return $this->instance_id;
+    }
 
     /**
      * Setup a prepared Twig template instance if viewLoader is used
@@ -607,7 +616,7 @@ abstract class Module
             'name' => '',
             'wrap' => true,
             'wrapperClasses' => '',
-            'element' => apply_filters('kb.module.settings.element', 'div'),
+            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
             'description' => '',
             'connect' => 'any',
             'hidden' => false,
@@ -680,8 +689,8 @@ abstract class Module
 
     private function renderEmptyOptions()
     {
-        $tpl = new CoreView('no-module-options.twig');
-        echo $tpl->render(false);
+        $tpl = new CoreView( 'no-module-options.twig' );
+        echo $tpl->render( false );
     }
 
 }

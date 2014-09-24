@@ -47,7 +47,7 @@ class UpdateModuleData
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 
-        $Environment->getStorage()->saveModule( $Module->instance_id, wp_slash( $mergedData ) );
+        $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
 
         $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
 

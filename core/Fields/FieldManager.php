@@ -36,7 +36,7 @@ class FieldManager extends AbstractFieldManager
      */
     public function __construct( Module $Module )
     {
-        $this->baseId = $Module->instance_id;
+        $this->baseId = $Module->getId();
         $this->data = $Module->moduleData;
         $this->Module = $Module;
     }

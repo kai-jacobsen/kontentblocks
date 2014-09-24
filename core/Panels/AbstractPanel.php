@@ -64,6 +64,7 @@ abstract class AbstractPanel
             throw new \Exception( 'MUST provide a base id' );
         }
 
+
         // mumbo jumbo
         $this->setupArgs( $args );
         $this->setupHooks();
