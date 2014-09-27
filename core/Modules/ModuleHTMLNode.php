@@ -125,13 +125,11 @@ class ModuleHTMLNode
         if ($lockedmsg && KONTENTLOCK) {
             $out = $lockedmsg;
         } else {
-
             $descSetting = $this->Module->getSetting( 'description' );
             $description = ( !empty( $descSetting ) ) ? $i18n['common']['description'] . $descSetting : '';
             $l18n_draft_status = ( $this->Module->state['draft'] === true ) ? '<p class="kb_draft">' . $i18n['notices']['draft'] . '</p>' : '';
 
             $out .= "<div class='kb-module__title'>";
-
 
             $out .= "		<div class='kb-module__notice hide'>
 							<p>Es wurden Veränderungen vorgenommen. <input type='submit' class='button-primary' value='Aktualisieren' /></p>
@@ -139,6 +137,7 @@ class ModuleHTMLNode
 						{$l18n_draft_status}
 					</div>";
             $out .= "<div class='kb-module__controls-inner'>";
+
 
         }
 
@@ -211,8 +210,8 @@ class ModuleHTMLNode
      */
     public function footer()
     {
-        do_action( "kb:module.footer-{$this->Module->getSetting( 'id' )}" );
-        do_action( 'kb:module.footer', $this->Module );
+        do_action( "kb.module.footer-{$this->Module->getSetting( 'id' )}", $this->Module );
+        do_action( 'kb.module.footer', $this->Module );
 
     }
 } 

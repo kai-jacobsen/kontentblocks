@@ -1,4 +1,4 @@
-KB.Fields.register('FlexibleFields', (function ($) {
+KB.Fields.register('OpeningTimes', (function ($) {
     return {
         init: function (modalView) {
             // find all instances on load

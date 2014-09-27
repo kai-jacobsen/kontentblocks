@@ -142,7 +142,6 @@ abstract class Module
     public function options()
     {
         if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
-
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
             // render view select field
             echo $this->ViewLoader->render();
@@ -339,9 +338,10 @@ abstract class Module
      */
     public function getViewfile()
     {
-        if (!$this->getSetting( 'useViewLoader' )) {
+        if (!filter_var($this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN)) {
             return '';
         }
+
         // a viewfile was already set
         if (isset( $this->viewfile ) && !empty( $this->viewfile )) {
             return $this->viewfile;
@@ -370,8 +370,10 @@ abstract class Module
 
     public function getId()
     {
-        if (!isset($this->instance_id)){
-            throw new \Exception('Module has no id assigned, and there really is no reason why this could be. So something is broken');
+        if (!isset( $this->instance_id )) {
+            throw new \Exception(
+                'Module has no id assigned, and there really is no reason why this could be. So something is broken'
+            );
         }
 
         return $this->instance_id;

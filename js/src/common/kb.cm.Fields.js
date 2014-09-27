@@ -20,10 +20,12 @@ _.extend(KB.Fields, {
     },
     init: function () {
         var that = this;
-        _.each(_.toArray(this.fields), function (object) {
+
+        _.each(this.fields, function (object) {
             // call init method if available
+
             if (object.hasOwnProperty('init')) {
-                object.init();
+                object.init.call(object);
             }
 
             // call field objects init method on 'update' event

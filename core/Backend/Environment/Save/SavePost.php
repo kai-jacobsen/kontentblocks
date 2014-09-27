@@ -111,6 +111,8 @@ class SavePost
                         $this->Environment->getStorage()->saveModule( $module['instance_id'], $savedData );
                         delete_post_meta( $this->postid, '_preview_' . $module['instance_id'] );
                     }
+
+                    do_action( 'kb.module.save', $instance, $savedData );
                 }
 
 
@@ -170,7 +172,7 @@ class SavePost
         } else {
             $blogIdSubmit = filter_input( INPUT_POST, 'blog_id', FILTER_SANITIZE_NUMBER_INT );
             $blogIdCurrent = get_current_blog_id();
-            if ((int)$blogIdSubmit !== (int)$blogIdCurrent) {
+            if ((int) $blogIdSubmit !== (int) $blogIdCurrent) {
                 return false;
             }
         }

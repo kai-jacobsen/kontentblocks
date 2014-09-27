@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-23 */
+/*! Kontentblocks DevVersion 2014-09-27 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -738,7 +738,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click a.os-edit-block": "openOptions",
         "click .editable": "reloadModal",
         "click .kb-js-inline-update": "updateModule",
-        hover: "setActive"
+        "hover.first": "setActive",
+        "hover.second": "setControlsPosition"
     },
     setActive: function() {
         KB.currentModule = this;
@@ -748,12 +749,16 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         if (settings.controls && settings.controls.hide) {
             return;
         }
+        if (jQuery(".os-controls", this.$el).length > 0) {
+            return;
+        }
         this.$el.append(KB.Templates.render("frontend/module-controls", {
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
         }));
     },
     setControlsPosition: function() {
+        var elpostop = 0;
         var mSettings = this.model.get("settings");
         var $controls = jQuery(".os-controls", this.$el);
         var pos = this.$el.offset();
@@ -761,8 +766,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
+        if (this.$el.css("overflow") !== "hidden") {
+            elpostop = -20;
+        }
+        if (pos.top < 20) {
+            elpostop = 0;
+        }
         $controls.css({
-            top: 10 + "px",
+            top: elpostop + "px",
             left: 0
         });
     },

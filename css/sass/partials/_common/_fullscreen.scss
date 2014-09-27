@@ -17,13 +17,13 @@
     position: relative;
     z-index: 53;
     top: 5px;
-    left: 50px;
+    left: 35px;
   }
 
   .fullscreen--title-wrapper {
     position: relative;
     z-index: 50;
-    left: 45px;
+    left: 32px;
     top: 20px;
 
     h2 {
@@ -34,17 +34,19 @@
 
     .fullscreen--close:before {
       content: '\f406';
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 17px;
       display: block;
       position: absolute;
-      top: -10px;
-      left: -35px;
+      top: -20px;
+      left: -32px;
       z-index: 52;
       font-family: 'genericons';
-      font-size: 16px;
+      font-size: 12px;
       cursor: pointer;
-      color: #999;
+      color: #000;
+      background: #eee;
+      padding: 5px;
     }
 
   }

@@ -26,7 +26,7 @@
 
 /* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
-  opacity: 0.5;
+  opacity: 1;
 }
 
 /* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */

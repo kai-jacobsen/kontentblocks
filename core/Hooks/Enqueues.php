@@ -28,7 +28,7 @@ class Enqueues
         add_action( 'admin_print_styles-post.php', array( __CLASS__, 'adminEnqueue' ), 30 );
         add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'adminEnqueue' ), 30 );
 
-        add_action( 'kb_enqueue_admin_script', array( __CLASS__, 'adminEnqueue' ) );
+        add_action( 'kb.do.enqueue.admin.files', array( __CLASS__, 'adminEnqueue' ) );
 
         // Frontend Enqueueing
         add_action( 'wp_enqueue_scripts', array( __CLASS__, 'coreStylesEnqueue' ), 9 );
@@ -189,7 +189,7 @@ class Enqueues
         }
 
         self::enqueueAdminScripts();
-        do_action( 'kb_enqueue_files' );
+        do_action( 'kb.enqueue.admin.files' );
 
     }
 

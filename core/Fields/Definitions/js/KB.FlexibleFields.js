@@ -32,7 +32,6 @@ KB.Fields.register('FlexibleFields', (function ($) {
 KB.FlexibleFields = {};
 
 KB.FlexibleFields.Controller = Backbone.View.extend({
-
     initialize: function (params) {
         this.params = params;
         this.fieldArgs = KB.Payload.getFieldArgs(params.fid);

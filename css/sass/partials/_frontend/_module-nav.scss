@@ -1,36 +1,36 @@
 
 .kb-module-nav-container {
   position: fixed;
-  top: 5px;
-  left: -200px;
+  top: 45px;
+  right: -200px;
   min-height: 40px;
   width: 200px;
   background: #333;
-  border: 1px solid #ccc;
+//  border: 1px solid #ccc;
   z-index: 10000;
   @include box-sizing(border-box);
-  @include box-shadow(1px 1px 3px #999);
+//  @include box-shadow(1px 1px 3px #999);
   @include transition(all .3s linear);
 
   &.kb-nav-show {
-    left: 0;
+    right: 0;
   }
 
   &.kb-nav-show-partly {
-    left: -190px;
+    right: -190px;
   }
 
   .kb-nav-toggle {
     position: absolute;
-    right: -25px;
+    left: -25px;
     top: -1px;
     width: 25px;
     height: 25px;
     padding-left: 4px;
     padding-top: 4px;
     background: #444;
-    border: 1px solid lighten(#444, 20%);
-    border-left: 1px solid #cccccc;
+//    border: 1px solid lighten(#444, 20%);
+//    border-left: 1px solid #cccccc;
     z-index: 9999;
     cursor: pointer;
     color: #ccc;
@@ -52,7 +52,7 @@
   }
 
   ul li {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #444;
     padding: 4px;
     background: transparent;
     border-left: 6px solid #005580;

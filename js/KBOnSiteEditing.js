@@ -1,32 +1,34 @@
 var KBOnSiteEditing;
 
-(function($) {
+(function ($) {
 
     KBOnSiteEditing = {
-        _active : false,
-        init: function() {
-        var that = this;
-            $('#wpadminbar').on('click', 'li.os-edit a', function(e) {
+        _active: false,
+        init: function () {
+            var that = this;
+            $body = $('body');
+
+            $('#wpadminbar').on('click', 'li.os-edit a', function (e) {
                 e.preventDefault();
             });
 
+            $body.addClass('kb-os-layout-bars');
 
-            $('body').on('click', 'a.os-edit-block', function() {
+            $body.on('click', 'a.os-edit-block', function () {
                 container = $(this).closest('.os-edit-container');
             });
 
             // Heartbeat send data
-            $(document).on('heartbeat-send', function(e, data){
+            $(document).on('heartbeat-send', function (e, data) {
                 var id = KB.appData.config.post.ID
                 data.kbEditWatcher = id; // actual user
             });
 
-            $(document).on('heartbeat-tick', function(e, data){
+            $(document).on('heartbeat-tick', function (e, data) {
                 // check response
             });
 
-            $('body').on('mousedown', 'textarea', function()
-            {
+            $body.on('mousedown', 'textarea', function () {
                 wpActiveEditor = $(this).attr('id');
             });
 
@@ -34,23 +36,22 @@ var KBOnSiteEditing;
             $this = this;
 
         },
-        control: function(caller)
-        {
+        control: function (caller) {
             this._active = !this._active;
             $(caller).parent('li').toggleClass('os-edit-off');
             $('body').toggleClass('onsite-editing');
             $('.kooltip').powerTip('show');
 
-            if (this._active){
+            if (this._active) {
                 KB.App.init();
             } else {
                 KB.App.shutdown();
             }
 
         },
-        refresh: function(result) {
+        refresh: function (result) {
 
-            $(container).fadeTo(350, 0, function() {
+            $(container).fadeTo(350, 0, function () {
                 $(this).empty().append(result.output);
                 $(this).fadeTo(350, 1);
                 KBOnSiteEditing.shutdown(result.callback);
@@ -58,18 +59,15 @@ var KBOnSiteEditing;
 
 
         },
-        shutdown: function(callback)
-        {
+        shutdown: function (callback) {
             $(window).trigger('os_refresh');
 
-            if (callbacks[callback])
-            {
+            if (callbacks[callback]) {
                 callbacks[callback]();
             }
 
         },
-        addCallback: function(id, callback)
-        {
+        addCallback: function (id, callback) {
             var identifier = id;
             callbacks[identifier] = callback;
         }
@@ -80,7 +78,7 @@ var KBOnSiteEditing;
 })(jQuery);
 
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 
     KBOnSiteEditing.init();
 

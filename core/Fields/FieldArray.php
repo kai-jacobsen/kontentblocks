@@ -177,14 +177,13 @@ class FieldArray
      * Part of the backend form rendering process
      *
      * @param array $data
-     * @TODO set field Std Data instead of empty string
      * @since 1.0.0
      */
     public function setData( $data )
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $fielddata = ( !empty( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : '';
+            $fielddata = ( !empty( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : $field->getArg('std', '');
             $field->setData( $fielddata );
         }
     }
@@ -195,7 +194,7 @@ class FieldArray
      */
     public function getArg( $arg, $default = false )
     {
-        throw new \Exception( 'getArg must NOT be called on FieldArrayCollection' );
+        return '';
     }
 
     /**

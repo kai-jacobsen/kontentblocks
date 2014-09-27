@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-23 */
+/*! Kontentblocks DevVersion 2014-09-27 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -780,7 +780,7 @@ KB.Fields.register("Link", function($) {
     };
 }(jQuery));
 
-KB.Fields.register("FlexibleFields", function($) {
+KB.Fields.register("OpeningTimes", function($) {
     return {
         init: function(modalView) {
             $(".otimes-field--stage", $("body")).each(function(index, el) {

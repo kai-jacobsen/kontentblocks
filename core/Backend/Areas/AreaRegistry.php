@@ -77,7 +77,7 @@ class AreaRegistry
     public function __construct()
     {
         $this->AreaDynamicManager = new AreaDynamicManager();
-        add_action( 'kb::areas.dynamic.setup', array( $this, 'init' ) );
+        add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
     }
 
     /**
@@ -111,7 +111,9 @@ class AreaRegistry
                 $this->addArea( $area, false );
             }
         }
+        // @TODO deprecate
         do_action( 'kb::setup.areas' );
+        do_action( 'kb.areas.setup' );
     }
 
     /**

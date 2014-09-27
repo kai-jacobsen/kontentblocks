@@ -1,0 +1,14 @@
+.kb-os-layout-bars{
+
+  // wrap
+  .os-controls{
+    width: 100%;
+    height: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #eee;
+    position: absolute;
+    @include border-radius(0)
+
+  }
+
+}

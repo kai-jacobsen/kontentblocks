@@ -26,6 +26,7 @@
 -----------------------------*/
 @import "partials/_frontend/toolbar";
 @import "partials/_frontend/module-nav";
+@import "partials/_frontend/os-layout-bars";
 
 /* --------------------------
 // Block Styles Backend UI
@@ -347,16 +348,29 @@ li.gallery-item textarea:focus {
 ----------------------*/
 @import "partials/kontentfields-new";
 .kb_draft {
+  position: relative;
+  left: -1px;
+  top: -1px;
   padding: 5px 0 5px 20px;
-  border-left: 2px solid $orange;
+  border-left: 0px solid #222;
   margin-left: 0px;
-  font-weight: 300;
-  background: #fff;
-  border-bottom: 1px solid #fcfcfc;
+  font-weight: 400;
+  background: $orange;
+  border-bottom: 1px solid #fafafa;
   font-style: italic;
-  color: #333;
+  color: #fff;
   margin-bottom: 0;
   margin-top: 0;
+}
+
+.fullscreen .kb_draft{
+  margin-left: 20px;
+  background-color: transparent;
+  border-left: 0px solid $orange;
+  border-bottom: 0;
+  color: #999;
+  padding-left: 0;
+
 }
 
 .kb_loading {

@@ -151,13 +151,11 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function save( $postId = null )
     {
-
         $old = $this->setupData();
         $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
 
         $new = $this->fields( $this->FieldManager )->save( $_POST[$this->baseId], $old );
         update_option( $this->baseId, $new );
-
         $location = add_query_arg( array( 'message' => '1' ) );
 
         wp_redirect( $location );
@@ -186,7 +184,8 @@ abstract class OptionsPanel extends AbstractPanel
 
     public function form( $postobj = null )
     {
-        do_action( 'kb_enqueue_admin_script' );
+        // @TODO what? deprecate, replace
+        do_action( 'kb.do.enqueue.admin.files' );
 
         if (!current_user_can( 'edit_kontentblocks' )) {
             return false;

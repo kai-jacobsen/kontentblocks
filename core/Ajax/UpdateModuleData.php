@@ -57,7 +57,9 @@ class UpdateModuleData
             'newModuleData' => $mergedData
         );
 
+        // @TODO deprecate
         do_action( 'kb_save_backend_module', $moduleSettings, $Module );
+        do_action( 'kb.module.save', $Module, $mergedData );
         wp_send_json( $return );
     }
 

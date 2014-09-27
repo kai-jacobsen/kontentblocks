@@ -56,11 +56,14 @@ class UpdateModuleOptions
 
         $Module->setModuleData( $mergedData );
 
+        do_action( 'kb.module.save', $Module, $mergedData );
+
         $return = array(
             'html' => $Module->module(),
             'newModuleData' => $mergedData
         );
 
+        // @TODO depreacate
         do_action( 'kb_save_frontend_module', $module, $update );
         wp_send_json( $return );
     }

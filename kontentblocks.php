@@ -72,7 +72,7 @@ Class Kontentblocks
 
         // load modules automatically, after dynamic areas were setup,
         // dynamic areas are on init/initInterface hook
-        add_action( 'kb::setup.areas', array( $this, 'loadModules' ), 9 );
+        add_action( 'kb.areas.dynamic.setup', array( $this, 'loadModules' ), 9 );
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
 //
 //        // Load Plugins
@@ -119,7 +119,9 @@ Class Kontentblocks
             // enabled for 'page' by default
             add_post_type_support( 'page', 'kontentblocks' );
             remove_post_type_support( 'page', 'revisions' );
+            // @TODO deprecate
             do_action( 'kb:init' );
+            do_action( 'kb.init' );
         }
 
     }
@@ -181,9 +183,14 @@ Class Kontentblocks
         // deprecated
         $paths = apply_filters( 'kb_add_template_path', $paths );
         // replacement for '_add_template_path'
+        // @TODO deprecate
         $paths = apply_filters( 'kb::add.module.path', $paths );
+        $paths = apply_filters( 'kb.module.paths', $paths );
         // legacy
         $paths = apply_filters( 'kb_add_module_path', $paths );
+
+        $paths = array_unique($paths);
+
         foreach ($paths as $path) {
             $dirs = glob( $path . '[mM]odule*', GLOB_ONLYDIR );
             if (!empty( $dirs )) {
@@ -233,8 +240,6 @@ Class Kontentblocks
 //                include_once( $template );
 //            }
 //        }
-
-        do_action( 'kb::init' );
 
     }
 

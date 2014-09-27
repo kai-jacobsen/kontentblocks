@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-23 */
+/*! Kontentblocks DevVersion 2014-09-27 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -122,9 +122,9 @@ _.extend(KB.Fields, {
     },
     init: function() {
         var that = this;
-        _.each(_.toArray(this.fields), function(object) {
+        _.each(this.fields, function(object) {
             if (object.hasOwnProperty("init")) {
-                object.init();
+                object.init.call(object);
             }
             object.listenTo(that, "update", object.update);
             object.listenTo(that, "frontUpdate", object.frontUpdate);
@@ -410,6 +410,7 @@ KB.TinyMCE = function($) {
                         var $module, moduleView;
                         if (!ed.module) {
                             $module = jQuery(ed.editorContainer).closest(".kb-module");
+                            console.log(ed);
                             ed.module = KB.Views.Modules.get($module.attr("id"));
                         }
                         ed.module.$el.trigger("tinymce.change");

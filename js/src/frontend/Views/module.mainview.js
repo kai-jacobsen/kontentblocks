@@ -40,7 +40,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click a.os-edit-block": "openOptions",
         "click .editable": "reloadModal",
         "click .kb-js-inline-update": "updateModule",
-        "hover": "setActive"
+        "hover.first": "setActive",
+        "hover.second": "setControlsPosition"
     },
     setActive: function () {
         KB.currentModule = this;
@@ -50,6 +51,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         if (settings.controls && settings.controls.hide){
             return;
         }
+
+        if (jQuery('.os-controls', this.$el).length > 0){
+            return;
+        }
+
         this.$el.append(KB.Templates.render('frontend/module-controls', {
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
@@ -57,6 +63,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     setControlsPosition: function () {
 
+        var elpostop = 0;
         var mSettings = this.model.get('settings');
 
         var $controls = jQuery('.os-controls', this.$el);
@@ -66,6 +73,16 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
+
+        if (this.$el.css('overflow') !== 'hidden'){
+            elpostop = -20;
+        }
+
+        if (pos.top < 20){
+            elpostop = 0;
+        }
+
+        //console.log(pos);
 
 //
 //        console.log(pos);
@@ -80,7 +97,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
 //        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
 //        $controls.offset({top:  10, left: pos.left, zIndex: 999999});
-        $controls.css({'top': 10 + 'px', 'left':0});
+
+
+        $controls.css({'top': elpostop + 'px', 'left':0});
     },
     openOptions: function () {
 

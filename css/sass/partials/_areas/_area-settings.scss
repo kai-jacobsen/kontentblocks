@@ -8,11 +8,18 @@
   padding-left: 0px;
   width: 35px;
   height: 35px;
-  background: image-url('icon-cog-small.png') center;
+  background: image-url('icon-cog-small.png') center no-repeat;
   text-indent: -9999px;
-  background-repeat: no-repeat;
   position: absolute;
   left: 0;
+  opacity: 0.4;
+
+}
+
+.kb-area__wrap:hover{
+  .js-area-settings-opener{
+    opacity: 1;
+  }
 }
 
 .kb-area-settings-wrapper {

@@ -7,12 +7,12 @@ namespace Kontentblocks\Extensions;
  */
 
 if (current_theme_supports( 'kontentblocks:page-settings' )) {
-    add_action( 'kb:init', array( '\Kontentblocks\Extensions\PageSettingsUI', 'init' ) );
+    add_action( 'kb.init', array( '\Kontentblocks\Extensions\PageSettingsUI', 'init' ) );
 }
 
 if (current_theme_supports( 'kontentblocks:redirect-template' )) {
     add_action(
-        'kb:init',
+        'kb.init',
         function () {
             new TemplateRedirect();
         }
@@ -21,7 +21,7 @@ if (current_theme_supports( 'kontentblocks:redirect-template' )) {
 
 if (current_theme_supports( 'kontentblocks:backups-ui' )) {
     add_action(
-        'kb:init',
+        'kb.init',
         function () {
             $support = get_theme_support( 'kontentblocks:backups-ui' );
             if (is_array( $support )) {
@@ -36,7 +36,7 @@ if (current_theme_supports( 'kontentblocks:backups-ui' )) {
 
 if (current_theme_supports( 'kontentblocks:layouts' )) {
     add_action(
-        'kb:init',
+        'kb.init',
         function () {
             $support = get_theme_support( 'kontentblocks:layouts' );
             if (is_array( $support )) {

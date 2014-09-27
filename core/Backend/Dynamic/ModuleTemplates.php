@@ -304,6 +304,9 @@ class ModuleTemplates
         // settings are not persistent
         unset( $definition['settings'] );
 
+        do_action( 'kb::create:module', $definition );
+
+
         // add to post meta kb_kontentblocks
         $Storage->addToIndex( $data['id'], $definition );
         // single post meta entry, to make meta queries easier

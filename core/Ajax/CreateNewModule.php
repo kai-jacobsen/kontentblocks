@@ -78,7 +78,7 @@ class CreateNewModule
         // Setup Data Handler
         $this->Environment = Utilities::getEnvironment( $this->postId );
 
-        $this->ModuleRegistry = Kontentblocks::getService('registry.modules');
+        $this->ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 
         // Setup new Count var
         $this->newCount = $this->_updateCount();
@@ -117,8 +117,8 @@ class CreateNewModule
 
         // Get Prototype from registry
         if (class_exists( $this->type )) {
-            $proto                = $this->ModuleRegistry->get( $this->type );
-            $proto                = wp_parse_args( $this->moduleArgs, $proto );
+            $proto = $this->ModuleRegistry->get( $this->type );
+            $proto = wp_parse_args( $this->moduleArgs, $proto );
             $proto['instance_id'] = $this->newInstanceID;
             return $proto;
         } else {
@@ -203,7 +203,9 @@ class CreateNewModule
             wp_send_json_error( 'Update to Index failed' );
         }
 
+        // @TODO deprecate
         do_action( 'kb::create:module', $this->newModule, $this->Environment );
+        do_action( 'kb.module.create', $this->newModule );
     }
 
     /**
@@ -217,7 +219,7 @@ class CreateNewModule
             $PostMeta = new DataHandler( $this->moduleArgs['master_id'] );
 
             $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateObj']['id'] );
-            $update      = $this->Environment->getStorage()->saveModule( $this->newInstanceID, $master_data );
+            $update = $this->Environment->getStorage()->saveModule( $this->newInstanceID, $master_data );
             $this->Environment->getStorage()->reset();
 
             if (!$update) {
@@ -238,14 +240,14 @@ class CreateNewModule
         $this->newInstance = $this->createModuleInstance();
 
         $this->newInstance->renderOptions();
-        $html     = ob_get_clean();
+        $html = ob_get_clean();
         $response = array
         (
-            'id'     => $this->newInstanceID,
+            'id' => $this->newInstanceID,
             'module' => $this->newModule,
-            'name'   => $this->newInstance->settings['publicName'],
-            'json'   => JSONBridge::getInstance()->getJSON(),
-            'html'   => $html
+            'name' => $this->newInstance->settings['publicName'],
+            'json' => JSONBridge::getInstance()->getJSON(),
+            'html' => $html
         );
 
         wp_send_json( $response );
@@ -264,21 +266,21 @@ class CreateNewModule
 
         $this->postId = filter_var( $_POST['post_id'] );
 
-        $post         = get_post( $this->postId );
+        $post = get_post( $this->postId );
         setup_postdata( $post );
 
         $this->count = filter_var( $_POST['count'], FILTER_VALIDATE_INT );
-        $this->type  = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
+        $this->type = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
 
         $moduleArgs = array(
-            'area'        => FILTER_SANITIZE_STRING,
-            'master'      => FILTER_VALIDATE_BOOLEAN,
+            'area' => FILTER_SANITIZE_STRING,
+            'master' => FILTER_VALIDATE_BOOLEAN,
             'areaContext' => FILTER_SANITIZE_STRING,
-            'template'    => FILTER_VALIDATE_BOOLEAN,
-            'class'       => FILTER_SANITIZE_STRING,
-            'master_id'   => FILTER_SANITIZE_NUMBER_INT,
-            'parentId'    => FILTER_SANITIZE_NUMBER_INT,
-            'viewfile'    => FILTER_SANITIZE_STRING
+            'template' => FILTER_VALIDATE_BOOLEAN,
+            'class' => FILTER_SANITIZE_STRING,
+            'master_id' => FILTER_SANITIZE_NUMBER_INT,
+            'parentId' => FILTER_SANITIZE_NUMBER_INT,
+            'viewfile' => FILTER_SANITIZE_STRING
         );
 
 
@@ -286,14 +288,14 @@ class CreateNewModule
 
         if (isset( $_POST['templateObj'] )) {
             $this->moduleArgs['templateObj']['name'] = $_POST['templateObj']['post_title'];
-            $this->moduleArgs['templateObj']['id']   = $_POST['templateObj']['post_name'];
+            $this->moduleArgs['templateObj']['id'] = $_POST['templateObj']['post_name'];
         }
 
     }
 
     public function createModuleInstance()
     {
-        $module  = apply_filters( 'kb_before_module_options', $this->newModule );
+        $module = apply_filters( 'kb_before_module_options', $this->newModule );
         $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
         return $Factory->getModule();
 

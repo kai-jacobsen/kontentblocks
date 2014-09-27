@@ -81,6 +81,7 @@ KB.TinyMCE = (function ($) {
                         var $module, moduleView;
                         if (!ed.module){
                             $module = jQuery(ed.editorContainer).closest('.kb-module');
+                            console.log(ed);
                             ed.module = KB.Views.Modules.get($module.attr('id'))
                         }
                         ed.module.$el.trigger('tinymce.change');

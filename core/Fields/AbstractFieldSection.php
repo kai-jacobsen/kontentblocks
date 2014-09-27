@@ -73,8 +73,8 @@ abstract class AbstractFieldSection
             $Registry = Kontentblocks::getService( 'registry.fields' );
             $Field = $Registry->getField( $type );
 
-            if (!$Field){
-                throw new Exception("Field of type: $type does not exist");
+            if (!$Field) {
+                throw new Exception( "Field of type: $type does not exist" );
             }
 
             //check for special key syntax
@@ -83,11 +83,17 @@ abstract class AbstractFieldSection
                     $key = str_replace( $out[0], '', $key );
 
                     if (isset( $args['arrayKey'] ) && $args['arrayKey'] !== $out[1]) {
-                        throw new Exception( 'ArrayKey mismatch' );
+                        throw new Exception(
+                            'ArrayKey mismatch. Field key has :: syntax and arrayKey arg is set, but differs'
+                        );
                     }
 
                     $args['arrayKey'] = $out[1];
                 }
+            }
+
+            if (!isset( $args['priority'] )) {
+                $args['priority'] = 10;
             }
 
             $Field->setKey( $key );
@@ -104,6 +110,7 @@ abstract class AbstractFieldSection
                 $this->Fields[$key] = $Field;
             }
             $this->_increaseVisibleFields();
+            $this->orderFields();
         }
 
         return $this;
@@ -149,12 +156,19 @@ abstract class AbstractFieldSection
         foreach ($this->Fields as $field) {
             // TODO: Keep an eye on it
 
-            if (isset( $data[$field->getKey()] )) {
-                $fielddata = ( is_array( $data ) && !is_null( $data[$field->getKey()] ) ) ? $data[$field->getKey(
-                )] : $this->getFieldStd( $field );
+
+            if (!is_a( $field, '\Kontentblocks\Fields\FieldArray' )) {
+                if (isset( $data[$field->getKey()] )) {
+                    $fielddata = ( is_array( $data ) && !is_null( $data[$field->getKey()] ) ) ? $data[$field->getKey(
+                    )] : $this->getFieldStd( $field );
+                } else {
+                    $fielddata = $this->getFieldStd( $field );
+                }
             } else {
-                $fielddata = $this->getFieldStd( $field );
+                $fielddata = ( isset( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : array();
             }
+
+
             $field->setBaseId( $moduleId );
             $field->setData( $fielddata );
 
@@ -190,7 +204,7 @@ abstract class AbstractFieldSection
     {
         $collect = array();
 
-        if (!is_array($this->Fields)){
+        if (!is_array( $this->Fields )) {
             return $oldData;
         }
 
@@ -300,6 +314,13 @@ abstract class AbstractFieldSection
     public function getNumberOfVisibleFields()
     {
         return $this->numberOfVisibleFields;
+
+    }
+
+    private function orderFields()
+    {
+        $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
+        uasort( $this->Fields, create_function( '$a,$b', $code ) );
 
     }
 } 

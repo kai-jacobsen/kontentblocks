@@ -68,7 +68,6 @@ class ModuleViewLoader
                 'view-selector.twig',
                 array( 'templates' => $this->prepareTemplates(), 'module' => $this->Module )
             );
-
             return $tpl->render();
         } else {
             $tpl = $this->getSingleTemplate();

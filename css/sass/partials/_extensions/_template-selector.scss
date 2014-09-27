@@ -1,8 +1,11 @@
 .kb-template-selector--wrapper{
-  padding: 1px 1px;
-  background: #fafafa;
-  border-bottom: 1px solid #ccc;
+  padding: 8px 8px;
+//  background: #fafafa;
+//  border-bottom: 1px solid #ccc;
   overflow: hidden;
+  position: absolute;
+  right: 8px;
+  top: 8px;
 
   .kb-selectbox{
     float: right;

@@ -115,6 +115,8 @@ KB.Gallery.ImageView = Backbone.View.extend({
         this.$el.appendTo(this._placeholder).unwrap();
         this.$el.removeClass('kb-gallery--active-item').removeClass('kb_field');
         jQuery('#wpwrap').removeClass('module-browser-open');
+
+
     },
     getEditorContent: function(ed){
 
