@@ -39,6 +39,8 @@ abstract class AbstractFieldSection
         'title' => 'Fieldgrouptitle'
     );
 
+    private $priorityCount = 10;
+
     /**
      * Counter for actual fields to render
      * @var int
@@ -93,7 +95,8 @@ abstract class AbstractFieldSection
             }
 
             if (!isset( $args['priority'] )) {
-                $args['priority'] = 10;
+                $args['priority'] = $this->priorityCount;
+                $this->priorityCount += 5;
             }
 
             $Field->setKey( $key );

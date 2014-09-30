@@ -18,7 +18,6 @@ class EditableLink extends AbstractEditableFieldReturn {
 	}
 
 	function html() {
-		$this->addClass( 'koolkip' );
 		$this->addAttr( 'data-powertip', 'Hold Strg/Cmd Key and click to open link dialog' );
 		$this->handleLoggedInUsers();
 		$format         = '<%1$s href="%5$s" id="%4$s" %3$s>%2$s</%1$s>';

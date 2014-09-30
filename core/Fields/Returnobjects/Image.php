@@ -168,7 +168,6 @@ class Image extends AbstractEditableFieldReturn implements \JsonSerializable
      */
     public function background()
     {
-        $this->addClass( 'koolkip' );
         $this->addAttr( 'data-powertip', 'Click to change image' );
         $this->background = true;
         $this->handleLoggedInUsers();

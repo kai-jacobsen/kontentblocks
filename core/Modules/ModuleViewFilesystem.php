@@ -31,23 +31,22 @@ class ModuleViewFilesystem
         if ($this->isChildTheme) {
             $childTemplates = $this->cleanPath(
                 glob(
-                    trailingslashit( get_template_directory() ) . 'module-templates/' . $Module->getSetting(
+                    trailingslashit( get_stylesheet_directory() ) . 'module-templates/' . $Module->getSetting(
                         'id'
                     ) . '/*.twig'
                 ),
-                get_template_directory() . '/module-templates/'
+                get_stylesheet_directory() . '/module-templates/'
             );
         }
 
         $parentTemplates = $this->cleanPath(
             glob(
-                trailingslashit( get_stylesheet_directory() ) . 'module-templates/' . $Module->getSetting(
+                trailingslashit( get_template_directory() ) . 'module-templates/' . $Module->getSetting(
                     'id'
                 ) . '/*.twig'
             ),
-            get_stylesheet_directory() . '/module-templates/'
+            get_template_directory() . '/module-templates/'
         );
-
         $moduleTemplates = $this->cleanPath(
             glob( trailingslashit( $Module->getPath() ) . '*.twig' ),
             trailingslashit( $Module->getPath() )

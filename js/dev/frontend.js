@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-09-27 */
+/*! Kontentblocks DevVersion 2014-09-28 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -767,10 +767,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             pos.left = mSettings.controls.toolbar.left;
         }
         if (this.$el.css("overflow") !== "hidden") {
-            elpostop = -20;
+            elpostop = 10;
         }
         if (pos.top < 20) {
-            elpostop = 0;
+            elpostop = 10;
         }
         $controls.css({
             top: elpostop + "px",
@@ -1014,16 +1014,9 @@ KB.App = function($) {
         KB.Modules.on("remove", removeModule);
         addViews();
         KB.Ui.init();
-        jQuery(".koolkip").powerTip({
-            placement: "ne",
-            followMouse: true,
-            fadeInTime: 0,
-            fadeOutTime: 0
-        });
     }
     function shutdown() {
         var model;
-        jQuery.powerTip.destroy(".koolkip");
         _.each(KB.Modules.toArray(), function(item) {
             KB.Modules.remove(item);
         });
@@ -1078,20 +1071,6 @@ jQuery(document).ready(function() {
         KB.Views.Modules.readyOnFront();
     }
     KB.Events.trigger("KB::ready");
-    jQuery(".koolkip").powerTip({
-        placement: "ne",
-        followMouse: true,
-        fadeInTime: 0,
-        fadeOutTime: 0
-    });
-    KB.on("kb:frontendModalUpdated", function() {
-        jQuery(".koolkip").powerTip({
-            placement: "ne",
-            followMouse: true,
-            fadeInTime: 0,
-            fadeOutTime: 0
-        });
-    });
     jQuery(window).on("resize DOMNodeInserted", function() {});
     setUserSetting("editor", "tinymce");
 });

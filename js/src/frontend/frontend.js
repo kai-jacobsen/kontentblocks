@@ -61,20 +61,11 @@ KB.App = function ($) {
         // get the UI on track
         KB.Ui.init();
 
-        jQuery('.koolkip').powerTip({
-            placement: 'ne',
-            followMouse: true,
-            fadeInTime: 0,
-            fadeOutTime: 0
-        });
-
 
     }
 
     function shutdown() {
         var model;
-
-        jQuery.powerTip.destroy('.koolkip');
 
         _.each(KB.Modules.toArray(), function (item) {
             KB.Modules.remove(item);
@@ -192,23 +183,6 @@ jQuery(document).ready(function () {
     }
 
     KB.Events.trigger('KB::ready');
-
-
-    jQuery('.koolkip').powerTip({
-        placement: 'ne',
-        followMouse: true,
-        fadeInTime: 0,
-        fadeOutTime: 0
-    });
-
-    KB.on('kb:frontendModalUpdated', function () {
-        jQuery('.koolkip').powerTip({
-            placement: 'ne',
-            followMouse: true,
-            fadeInTime: 0,
-            fadeOutTime: 0
-        });
-    });
 
     jQuery(window)
         .on('resize DOMNodeInserted', function () {

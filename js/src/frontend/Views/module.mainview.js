@@ -75,11 +75,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
 
         if (this.$el.css('overflow') !== 'hidden'){
-            elpostop = -20;
+            elpostop = 10;
         }
 
         if (pos.top < 20){
-            elpostop = 0;
+            elpostop = 10;
         }
 
         //console.log(pos);
