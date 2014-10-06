@@ -74,6 +74,11 @@ abstract class Module
     public $rawModuleData;
 
     /**
+     * @var \Kontentblocks\Modules\ModuleModel
+     */
+    public $Model;
+
+    /**
      * @var \Kontentblocks\Templating\ModuleView
      */
     protected $View;
@@ -136,6 +141,7 @@ abstract class Module
     {
         $this->moduleData = $data;
         $this->rawModuleData = $data;
+        $this->Model = new ModuleModel( $data );
     }
 
     /**
@@ -232,18 +238,18 @@ abstract class Module
      */
     public function setupFieldData()
     {
+        // @TODO convert to model
         if (empty( $this->moduleData ) || !is_array( $this->moduleData )) {
             return;
         }
-        $this->Fields->setup( $this->moduleData );
-        foreach ($this->moduleData as $key => $v) {
 
+        $this->Fields->setup( $this->Model );
+        foreach ($this->Model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->Fields->getFieldByKey( $key );
-            $this->moduleData[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
+            $this->Model[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
 
         }
-
     }
 
     /**
