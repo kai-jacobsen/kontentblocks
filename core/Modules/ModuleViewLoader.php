@@ -74,7 +74,7 @@ class ModuleViewLoader
             if (is_null( $tpl )) {
                 return "<p class='notice kb-field'>No View available</p>";
             } else {
-                $this->Module->setViewFile( $tpl['filteredfile'] );
+                $this->Module->setViewfile( $tpl['filteredfile'] );
 
                 return "<input type='hidden' name='{$this->Module->instance_id}[viewfile]' value='{$tpl['filteredfile']}' >";
             }

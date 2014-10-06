@@ -119,7 +119,9 @@ class CreateNewModule
         if (class_exists( $this->type )) {
             $proto = $this->ModuleRegistry->get( $this->type );
             $proto = wp_parse_args( $this->moduleArgs, $proto );
+            // TODO Deprecate
             $proto['instance_id'] = $this->newInstanceID;
+            $proto['mid'] = $this->newInstanceID;
             return $proto;
         } else {
             wp_send_json_error( $this->type . ' does not exist' );
@@ -151,7 +153,7 @@ class CreateNewModule
      */
     private function setupNewID()
     {
-        $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
+        $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
         return $prefix . $this->postId . '_' . $this->newCount;
 
     }
@@ -215,7 +217,6 @@ class CreateNewModule
     {
         //create data for templates
         if ($this->moduleArgs['template']) {
-
             $PostMeta = new DataHandler( $this->moduleArgs['master_id'] );
 
             $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateObj']['id'] );

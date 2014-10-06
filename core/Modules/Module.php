@@ -94,6 +94,11 @@ abstract class Module
     public $instance_id;
 
     /**
+     * @var string
+     */
+    public $mid;
+
+    /**
      * Constructor
      *
      * @param null $args
@@ -260,6 +265,27 @@ abstract class Module
      */
     public function set( $args )
     {
+        $whitelist = array(
+            'areaContext',
+            'area',
+            'viewfile',
+            'master',
+            'parentId',
+            'envVars',
+            'settings',
+            'moduleData',
+            'rawModuleData',
+            'View',
+            'ViewLoader',
+            'state',
+            'instance_id',
+            'mid',
+            'template',
+            'class',
+            'master_id',
+            'overrides'
+        );
+
         if (!is_array( $args )) {
             _doing_it_wrong( 'set() on block instance', '$args must be an array of key/value pairs', '1.0.0' );
             return false;
@@ -269,10 +295,13 @@ abstract class Module
             if (method_exists( $this, 'set' . ucfirst( $k ) )) {
                 $this->{'set' . ucfirst( $k )}( $v );
             } else {
-                $this->$k = $v;
+                if (in_array( $k, $whitelist )) {
+                    $this->$k = $v;
+                } else {
+                    trigger_error( 'property not in whitelist', E_USER_NOTICE );
+                }
             }
         }
-
     }
 
     /**
@@ -338,7 +367,7 @@ abstract class Module
      */
     public function getViewfile()
     {
-        if (!filter_var($this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN)) {
+        if (!filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
             return '';
         }
 
@@ -362,17 +391,25 @@ abstract class Module
      * @since 1.0.0
      * @return void
      */
-    public function setViewFile( $file )
+    public function setViewfile( $file )
     {
+        if (is_null( $file )) {
+            $file = '';
+        }
         $this->viewfile = $file;
     }
 
 
+    /**
+     * Retireve unique module id
+     * @return string
+     * @throws \Exception
+     */
     public function getId()
     {
-        if (!isset( $this->instance_id )) {
+        if (!( $this->instance_id )) {
             throw new \Exception(
-                'Module has no id assigned, and there really is no reason why this could be. So something is broken'
+                'Module has no id assigned, and there really is no reason why this could be. The comittee assumes something is broken and stops the process.'
             );
         }
 
@@ -417,19 +454,19 @@ abstract class Module
      * Get value from prepared / after field setup / data
      *
      * @param string $key
-     * @param string $arrayKey
+     * @param string $offset
      * @param mixed $return
      *
      * @return mixed
      */
-    public function getData( $key = null, $arrayKey = null, $return = '' )
+    public function getData( $key = null, $offset = null, $return = '' )
     {
         if (empty( $this->moduleData ) or empty( $key )) {
             return false;
         }
 
-        if (!is_null( $arrayKey )) {
-            return ( !empty( $this->moduleData[$arrayKey][$key] ) ) ? $this->moduleData[$arrayKey][$key] : $return;
+        if (!is_null( $offset )) {
+            return ( !empty( $this->moduleData[$offset][$key] ) ) ? $this->moduleData[$offset][$key] : $return;
         }
 
         return ( !empty( $this->moduleData[$key] ) ) ? $this->moduleData[$key] : $return;
@@ -439,18 +476,18 @@ abstract class Module
     /**
      * @param null $key
      * @param string $return
-     * @param null $arrayKey
+     * @param null $offset
      *
      * @return bool|string
      */
-    public function getValue( $key = null, $return = '', $arrayKey = null )
+    public function getValue( $key = null, $return = '', $offset = null )
     {
         if (empty( $this->moduleData ) or empty( $key )) {
             return false;
         }
 
-        if (!is_null( $arrayKey )) {
-            return ( !empty( $this->moduleData[$arrayKey][$key] ) ) ? $this->moduleData[$arrayKey][$key] : $return;
+        if (!is_null( $offset )) {
+            return ( !empty( $this->moduleData[$offset][$key] ) ) ? $this->moduleData[$offset][$key] : $return;
         }
 
         return ( !empty( $this->moduleData[$key] ) ) ? $this->moduleData[$key] : $return;
@@ -461,20 +498,20 @@ abstract class Module
      * Get value from unprepared / unfiltered original module data
      *
      * @param string $key
-     * @param string $arrayKey
+     * @param string $offset
      * @param mixed $return
      *
      * @TODO arrayKey should be handled differently
      * @return bool|string
      */
-    public function getRawData( $key = null, $arrayKey = null, $return = '' )
+    public function getRawData( $key = null, $offset = null, $return = '' )
     {
         if (empty( $this->rawModuleData ) or empty( $key )) {
             return false;
         }
 
-        if (!is_null( $arrayKey )) {
-            return ( !empty( $this->rawModuleData[$arrayKey][$key] ) ) ? $this->rawModuleData[$arrayKey][$key] : $return;
+        if (!is_null( $offset )) {
+            return ( !empty( $this->rawModuleData[$offset][$key] ) ) ? $this->rawModuleData[$offset][$key] : $return;
         }
 
         return ( !empty( $this->rawModuleData[$key] ) ) ? $this->rawModuleData[$key] : $return;
@@ -486,21 +523,25 @@ abstract class Module
      * Get value from environment vars array
      *
      * @param $var string
-     *
+     * @param null $default
      * @since 1.0.0
      * @return mixed|null
      */
-    public function getEnvVar( $var )
+    public function getEnvVar( $var, $default = null )
     {
         if (isset( $this->envVars[$var] )) {
             return $this->envVars[$var];
         } else {
-            return null;
+            return $default;
         }
 
     }
 
 
+    /**
+     * Get unique instance id
+     * @return string
+     */
     public function getModuleId()
     {
         return $this->instance_id;
@@ -689,10 +730,19 @@ abstract class Module
 
     }
 
+    /**
+     * No fields an options method override fallback
+     * @since 1.0.0
+     */
     private function renderEmptyOptions()
     {
         $tpl = new CoreView( 'no-module-options.twig' );
         echo $tpl->render( false );
     }
 
+    /**
+     * Set Viewfile
+     */
+
 }
+

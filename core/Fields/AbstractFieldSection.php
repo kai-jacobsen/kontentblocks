@@ -131,7 +131,7 @@ abstract class AbstractFieldSection
     public function addArrayField( $field, $key, $args )
     {
         if (!$this->fieldExists( $args['arrayKey'] )) {
-            $FieldArray = $this->Fields[$args['arrayKey']] = new FieldArray( $args['arrayKey'] );
+            $FieldArray = $this->Fields[$args['arrayKey']] = new FieldSubGroup( $args['arrayKey'] );
         } else {
             $FieldArray = $this->Fields[$args['arrayKey']];
         }
@@ -160,7 +160,7 @@ abstract class AbstractFieldSection
             // TODO: Keep an eye on it
 
 
-            if (!is_a( $field, '\Kontentblocks\Fields\FieldArray' )) {
+            if (!is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' )) {
                 if (isset( $data[$field->getKey()] )) {
                     $fielddata = ( is_array( $data ) && !is_null( $data[$field->getKey()] ) ) ? $data[$field->getKey(
                     )] : $this->getFieldStd( $field );
@@ -219,7 +219,7 @@ abstract class AbstractFieldSection
                 $collect[$field->getKey()] = $field->_save( $data[$field->getKey()], $old );
             } else {
 
-                if (is_a( $field, '\Kontentblocks\Fields\FieldArray' ) || $field->getSetting( 'forceSave' )) {
+                if (is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' ) || $field->getSetting( 'forceSave' )) {
                     // calls save on field if key is not present
                     $collect[$field->getKey()] = $field->_save( null, $old );
                 }

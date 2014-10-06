@@ -5,11 +5,12 @@ namespace Kontentblocks\Fields;
 use Kontentblocks\Modules\Module;
 
 /**
- * Class FieldArray
- * To group a set of x field under one key
+ * Class FieldSubGroup
+ * To group a set of x fields under one key data-wise
+ * works like an adapter to a normal field
  * @package Kontentblocks\Fields
  */
-class FieldArray
+class FieldSubGroup
 {
 
     /**
@@ -183,7 +184,7 @@ class FieldArray
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $fielddata = ( !empty( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : $field->getArg('std', '');
+            $fielddata = ( !empty( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : $field->getArg( 'std', '' );
             $field->setData( $fielddata );
         }
     }
