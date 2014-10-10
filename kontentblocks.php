@@ -25,6 +25,8 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Modules\ModuleViewsRegistry;
 use Kontentblocks\Panels\PanelRegistry;
 use Kontentblocks\Templating\Twig;
+use Monolog\Handler\BrowserConsoleHandler;
+use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
@@ -41,6 +43,7 @@ Class Kontentblocks
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const CONTENTCONCAT = true;
+    const DEBUG = true;
 
     public $Services;
 
@@ -98,12 +101,12 @@ Class Kontentblocks
         require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
 
         if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
-            add_theme_support('kontentblocks');
+            add_theme_support( 'kontentblocks' );
             include_once( get_template_directory() . '/kontentblocks.php' );
         }
 
         if (is_child_theme() && file_exists( get_stylesheet_directory() . '/kontentblocks.php' )) {
-            add_theme_support('kontentblocks');
+            add_theme_support( 'kontentblocks' );
             include_once( get_stylesheet_directory() . '/kontentblocks.php' );
         }
 
@@ -189,7 +192,7 @@ Class Kontentblocks
         // legacy
         $paths = apply_filters( 'kb_add_module_path', $paths );
 
-        $paths = array_unique($paths);
+        $paths = array_unique( $paths );
 
         foreach ($paths as $path) {
             $dirs = glob( $path . '[mM]odule*', GLOB_ONLYDIR );
@@ -334,16 +337,24 @@ Class Kontentblocks
         };
     }
 
-    private function setupUtilities(){
-        $this->Services['utility.logger'] = function($container){
-            $path = KB_PLUGIN_PATH . '/logs/debug.log';
+    private function setupUtilities()
+    {
+        $this->Services['utility.logger'] = function ( $container ) {
+            $path = KB_PLUGIN_PATH . '/logs';
+            $Logger = new Logger( 'kontentblocks' );
+            if (Kontentblocks::DEBUG) {
+                $Logger->pushHandler( new BrowserConsoleHandler() );
+                if (is_dir( $path )) {
+                    $Logger->pushHandler( new StreamHandler( $path . '/debug.log' ) );
+                }
+            } else {
+                $Logger->pushHandler( new NullHandler() );
 
-            $Logger = new Logger('kontentblocks');
-            $Logger->pushHandler(new StreamHandler($path));
+            }
             return $Logger;
         };
 
-        $this->Services['utility.mobileDetect'] = function($container){
+        $this->Services['utility.mobileDetect'] = function ( $container ) {
             return new MobileDetect();
         };
     }

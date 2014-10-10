@@ -283,7 +283,11 @@ abstract class Module
             'template',
             'class',
             'master_id',
-            'overrides'
+            'post_id',
+            'overrides',
+            'inDynamic',
+            'uri',
+            'path'
         );
 
         if (!is_array( $args )) {
@@ -298,7 +302,7 @@ abstract class Module
                 if (in_array( $k, $whitelist )) {
                     $this->$k = $v;
                 } else {
-                    trigger_error( 'property not in whitelist', E_USER_NOTICE );
+                    trigger_error( 'property not in whitelist:' . $k, E_USER_NOTICE );
                 }
             }
         }

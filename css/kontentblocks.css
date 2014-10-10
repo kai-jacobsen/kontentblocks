@@ -2945,6 +2945,7 @@ h5.kb_properties_title {
 }
 /* line 14, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field input[type=text] {
+  display: inline-block;
   text-align: left;
   height: 30px;
   line-height: 22px;
@@ -2958,11 +2959,11 @@ h5.kb_properties_title {
   -webkit-transition: width 0.2s ease-out;
   transition: width 0.2s ease-out;
 }
-/* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+/* line 27, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field input[type=text].large {
   width: 100%;
 }
-/* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+/* line 33, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field select {
   min-width: 200px;
   max-width: 50%;
@@ -2972,12 +2973,12 @@ h5.kb_properties_title {
   margin: 0 !important;
 }
 
-/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+/* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field-wrapper {
   padding: 10px;
 }
 
-/* line 47, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field--reset {
   margin: 0;
   font-size: 12px;
