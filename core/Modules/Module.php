@@ -401,11 +401,8 @@ abstract class Module
      * @since 1.0.0
      * @return void
      */
-    public function setViewfile( $file )
+    public function setViewfile( $file = '' )
     {
-        if (is_null( $file )) {
-            $file = '';
-        }
         $this->viewfile = $file;
     }
 
@@ -417,13 +414,13 @@ abstract class Module
      */
     public function getId()
     {
-        if (!( $this->instance_id )) {
+        if (!( $this->mid )) {
             throw new \Exception(
                 'Module has no id assigned, and there really is no reason why this could be. The comittee assumes something is broken and stops the process.'
             );
         }
 
-        return $this->instance_id;
+        return $this->mid;
     }
 
     /**
@@ -633,7 +630,8 @@ abstract class Module
             'envVars' => $this->envVars,
             'settings' => $this->settings,
             'state' => $this->state,
-            'instance_id' => $this->instance_id,
+            'instance_id' => $this->getId(),
+            'mid' => $this->getId(),
             'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
@@ -751,8 +749,14 @@ abstract class Module
     }
 
     /**
-     * Set Viewfile
+     * Set instance_id and mid property
+     * (instance_id gets deprecated)
+     * @param string $id
      */
+    private function setInstance_id( $id )
+    {
+        $this->instance_id = $this->mid = $id;
+    }
 
 }
 

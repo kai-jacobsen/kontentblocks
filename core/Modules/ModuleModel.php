@@ -11,8 +11,6 @@ namespace Kontentblocks\Modules;
  */
 class ModuleModel implements \JsonSerializable, \ArrayAccess
 {
-
-
     /**
      * @var bool
      */
@@ -33,7 +31,6 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     *
      * @param $data
      */
     public function set( $data )
@@ -76,7 +73,10 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     function jsonSerialize()
     {
-        return get_object_vars( $this );
+        $vars = get_object_vars( $this );
+        unset( $vars['locked'] );
+        unset( $vars['initialized'] );
+        return $vars;
     }
 
     /**

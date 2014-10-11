@@ -131,7 +131,7 @@ abstract class AbstractFieldManager
     {
         $collection = array();
         foreach ($this->Structure as $definition) {
-            $return     = ( $definition->save( $data, $oldData ) );
+            $return = ( $definition->save( $data, $oldData ) );
             $collection = $collection + $return;
         }
 
