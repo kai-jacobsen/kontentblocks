@@ -75,10 +75,6 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function update( $key, $value )
     {
-        if (Kontentblocks::DEVMODE){
-            $Logger = Kontentblocks::getService('utility.logger');
-            $Logger->addInfo('Update meta data', array('key' => $key));
-        }
         return update_post_meta( $this->postId, $key, $value );
     }
 
