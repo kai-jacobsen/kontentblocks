@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-10-11 */
+/*! Kontentblocks DevVersion 2014-10-15 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -425,6 +425,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         click: "duplicateModule"
     },
     duplicateModule: function() {
+        console.log(this);
         KB.Ajax.send({
             action: "duplicateModule",
             module: this.model.get("instance_id"),
@@ -602,6 +603,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
         this.listenTo(moduleView.model, "change:area", this.removeModule);
         _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
+        moduleView.model.area = this.model;
         this.ui();
     },
     removeModule: function(model) {

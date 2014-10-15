@@ -153,12 +153,14 @@ class Image extends AbstractEditableFieldReturn implements \JsonSerializable
      * Returns just the source url without any further html added
      * @return string URL of image
      */
-    public function src()
+    public function src( $builtin = null )
     {
-        $this->prepareSrc();
+        $this->prepareSrc( $builtin );
         $this->toJSON();
 
         return $this->src;
+
+
     }
 
     /**
@@ -278,19 +280,32 @@ class Image extends AbstractEditableFieldReturn implements \JsonSerializable
      * Resize the image to the given size
      * @return array|bool|string
      */
-    protected function prepareSrc()
+    protected function prepareSrc( $builtin )
     {
-        if ($this->getValue( 'id' )) {
-            return $this->src = ImageResize::getInstance()->process(
-                $this->getValue( 'id' ),
-                $this->width, // width
-                $this->height, // height
-                $this->crop, // crop
-                true, // return single
-                $this->upscale
-            );
+
+        if (is_null( $builtin )) {
+            if ($this->getValue( 'id' )) {
+                return $this->src = ImageResize::getInstance()->process(
+                    $this->getValue( 'id' ),
+                    $this->width, // width
+                    $this->height, // height
+                    $this->crop, // crop
+                    true, // return single
+                    $this->upscale
+                );
+            }
         }
 
+        if ($this->getValue( 'id' )) {
+            $src = wp_get_attachment_image_src( $this->getValue( 'id' ), $builtin, false );
+
+            if ($src !== false) {
+                $this->width = $src[1];
+                $this->height = $src[2];
+                return $this->src = $src[0];
+            }
+
+        }
         return false;
     }
 

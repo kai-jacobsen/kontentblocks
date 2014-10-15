@@ -156,6 +156,7 @@ class Utilities
         $merged = $new;
         if (is_array( $old )) {
             foreach ($old as $key => $val) {
+
                 if (is_array( $old[$key] )) {
                     if (array_key_exists( $key, $merged ) && isset( $merged[$key] ) && $merged[$key] !== NULL) {
                         // key exists and is not null, dig further into the array until actual values are reached

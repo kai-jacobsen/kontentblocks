@@ -50,6 +50,7 @@ Class FlexibleFields extends Field
     {
         $Registry = Kontentblocks::getService( 'registry.fields' );
 
+
         if (is_null( $new )) {
             return $old;
         }
@@ -81,6 +82,8 @@ Class FlexibleFields extends Field
 
             }
         }
+
+
 
         return $new;
     }

@@ -35,6 +35,10 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     public function set( $data )
     {
+        if (!is_array($data)){
+            return;
+        }
+
         foreach ($data as $key => $v) {
             $this->$key = $v;
         }

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-10-11 */
+/*! Kontentblocks DevVersion 2014-10-15 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -304,8 +304,8 @@ KB.FlexibleFields.Item = Backbone.View.extend({
     },
     renderTabs: function($skeleton) {
         var that = this;
-        var tabNavEl = Handlebars.compile("<li><a href='#tab-{{ uid }}-{{ index }}'>{{ tab.label }}</a></li>");
-        var tabCon = Handlebars.compile("<div id='tab-{{ uid }}-{{ index }}'></div>");
+        var tabNavEl = HandlebarsKB.compile("<li><a href='#tab-{{ uid }}-{{ index }}'>{{ tab.label }}</a></li>");
+        var tabCon = HandlebarsKB.compile("<div id='tab-{{ uid }}-{{ index }}'></div>");
         _.each(this.config, function(tab, index) {
             jQuery(".flexible-field--tab-nav", $skeleton).append(tabNavEl({
                 uid: that.uid,

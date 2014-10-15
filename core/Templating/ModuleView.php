@@ -32,6 +32,8 @@ class ModuleView
      */
     protected $engine;
 
+
+
     /**
      * Class Constructor
      *
@@ -112,6 +114,10 @@ class ModuleView
 
         if (!is_array( $data )) {
             $data = array();
+        }
+
+        if (is_object($this->Module->getModel())){
+            $data['Model'] = $this->Module->getModel();
         }
 
         $data['module'] = $this->Module->toJSON();

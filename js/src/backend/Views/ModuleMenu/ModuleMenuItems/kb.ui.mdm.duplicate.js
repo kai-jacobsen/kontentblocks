@@ -4,6 +4,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         'click': 'duplicateModule'
     },
     duplicateModule: function () {
+        console.log(this);
         KB.Ajax.send({
             action: 'duplicateModule',
             module: this.model.get('instance_id'),

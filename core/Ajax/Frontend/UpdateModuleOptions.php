@@ -54,6 +54,7 @@ class UpdateModuleOptions
 
         $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
 
+
         $Module->setModuleData( $mergedData );
 
         do_action( 'kb.module.save', $Module, $mergedData );

@@ -3,6 +3,7 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     initialize:function(){
         this.listenTo(this, 'change:area', this.subscribeToArea);
         this.listenTo(this, 'change:area', this.areaChanged);
+
     },
     destroy: function() {
         this.unsubscribeFromArea();

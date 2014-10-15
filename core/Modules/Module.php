@@ -144,6 +144,11 @@ abstract class Module
         $this->Model = new ModuleModel( $data );
     }
 
+    public function getModel()
+    {
+        return $this->Model;
+    }
+
     /**
      * options()
      * Method for the backend display
