@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-10-15 */
+/*! Kontentblocks DevVersion 2014-10-19 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -425,7 +425,6 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         click: "duplicateModule"
     },
     duplicateModule: function() {
-        console.log(this);
         KB.Ajax.send({
             action: "duplicateModule",
             module: this.model.get("instance_id"),
@@ -448,6 +447,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         }
         this.parseAdditionalJSON(data.json);
         this.model.area.view.modulesList.append(data.html);
+        console.log(data);
         KB.Modules.add(data.module);
         var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
         jQuery("#kb_all_blocks").val(count);

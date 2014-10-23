@@ -90,6 +90,7 @@ class DuplicateModule
         $moduleDefinition = ModuleFactory::parseModule( $stored );
         $moduleDefinition['state']['draft'] = true;
         $moduleDefinition['instance_id'] = self::$newInstanceId;
+        $moduleDefinition['mid'] = self::$newInstanceId;
         $toIndex = $moduleDefinition;
 
         //remove settings are never stored

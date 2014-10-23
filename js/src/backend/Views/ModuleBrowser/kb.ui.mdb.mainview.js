@@ -158,9 +158,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.options.area.addModuleView(model.view);
         _K.info('new module created', {view: model.view});
 
-
         this.parseAdditionalJSON(data.json);
-
 
         KB.TinyMCE.addEditor();
         KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);

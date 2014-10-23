@@ -90,6 +90,11 @@ class FlexibleFieldsFactory
         foreach ($this->fieldData as $index => $data) {
             $item = array();
             foreach ($fields as $key => $conf) {
+
+                if (empty($data[$key])){
+                    $data[$key] = $conf['std'] || '';
+                }
+
                 $item[$key] = $this->getReturnObj( $conf['type'], $data[$key], $index, $key );
             }
             $items[] = $item;

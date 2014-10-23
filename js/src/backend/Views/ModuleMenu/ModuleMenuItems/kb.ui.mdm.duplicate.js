@@ -4,7 +4,6 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         'click': 'duplicateModule'
     },
     duplicateModule: function () {
-        console.log(this);
         KB.Ajax.send({
             action: 'duplicateModule',
             module: this.model.get('instance_id'),
@@ -30,7 +29,9 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         }
         this.parseAdditionalJSON(data.json);
         this.model.area.view.modulesList.append(data.html);
+        console.log(data);
         KB.Modules.add(data.module);
+
         // update the reference counter, used as base number
         // for new modules
         var count = parseInt(jQuery('#kb_all_blocks').val(), 10) + 1;

@@ -208,9 +208,10 @@ class ModuleIterator implements \Iterator, \Countable {
 
 		foreach ( $modules as $id => $module ) {
 			// if module is a draft or marked as inactive
-			if ( $module['state']['draft'] || ! $module['state']['active'] ) {
-				continue;
-			}
+            //@TODO was replaced woth Module->verify / $Module->isPublic in Renderer
+//			if ( $module['state']['draft'] || ! $module['state']['active'] ) {
+//				continue;
+//			}
 
 			/*
 			 * Master modules only
@@ -233,7 +234,6 @@ class ModuleIterator implements \Iterator, \Countable {
 	 *
 	 * @return array|mixed|null
 	 * @since 1.0.0
-	 * @TODO add filter and move master module stuff somewhere else
 	 */
 	private function getModuleData( $moduleDef ) {
 		return apply_filters( 'kb_setup_render_module_data',

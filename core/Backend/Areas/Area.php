@@ -145,7 +145,6 @@ class Area
                 }
                 $module['areaContext'] = $this->context;
                 $module = apply_filters( 'kb_before_module_options', $module );
-
                 $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
                 $instance = $Factory->getModule();
                 $instance->renderOptions();

@@ -6,6 +6,10 @@ namespace Kontentblocks\Frontend;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
+/**
+ * Class SingleModuleRenderer
+ * @package Kontentblocks\Frontend
+ */
 class SingleModuleRenderer
 {
 
@@ -13,12 +17,16 @@ class SingleModuleRenderer
     public function __construct($Module)
     {
         $this->Module = $Module;
-
-
     }
 
     public function render($args = array())
     {
+        if ( method_exists( $this->Module, 'verify' ) ) {
+            if ( ! $this->Module->verify( $this->Module->moduleData ) ) {
+                return false;
+            }
+        }
+
         $addArgs = $this->setupArgs($args);
 
         $this->Module->_addAreaAttributes($addArgs);

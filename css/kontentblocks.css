@@ -1306,9 +1306,10 @@ h5.kb_properties_title {
   -webkit-transition: .2s;
   transition: .2s;
   border-radius: 5px;
+  z-index: 20;
 }
 
-/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_nano.scss */
+/* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_nano.scss */
 .nano > .pane > .slider {
   background: #444;
   background: rgba(0, 0, 0, 0.5);
@@ -1317,7 +1318,7 @@ h5.kb_properties_title {
   border-radius: 3px;
 }
 
-/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_nano.scss */
+/* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_nano.scss */
 .nano:hover > .pane, .pane.active, .pane.flashed {
   visibility: visible\9;
   /* Target only IE7 and IE8 with this hack */

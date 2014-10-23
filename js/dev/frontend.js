@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-10-15 */
+/*! Kontentblocks DevVersion 2014-10-19 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -381,7 +381,7 @@ KB.IEdit.Text = function(el) {
                             url: ajaxurl,
                             data: {
                                 action: "applyContentFilter",
-                                data: value.replace(/\'/g, "%27"),
+                                data: content.replace(/\'/g, "%27"),
                                 module: ed.module.toJSON(),
                                 _ajax_nonce: KB.Config.getNonce("read")
                             },

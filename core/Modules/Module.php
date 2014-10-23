@@ -126,11 +126,13 @@ abstract class Module
         }
 
 
+
         if (method_exists( $this, 'fields' )) {
             $this->Fields = new FieldManager( $this );
             $this->fields();
 
         }
+
 
     }
 
@@ -231,6 +233,11 @@ abstract class Module
 
     }
 
+    public function verify()
+    {
+        return $this->isPublic();
+    }
+
     /**
      * Has no default output yet, and must be overwritten
      */
@@ -253,7 +260,7 @@ abstract class Module
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->Fields->getFieldByKey( $key );
             $this->Model[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
-
+            $this->moduleData[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
         }
     }
 
@@ -292,13 +299,15 @@ abstract class Module
             'instance_id',
             'mid',
             'template',
+            'templateObj',
             'class',
             'master_id',
             'post_id',
             'overrides',
             'inDynamic',
             'uri',
-            'path'
+            'path',
+            'open'
         );
 
         if (!is_array( $args )) {
@@ -317,6 +326,7 @@ abstract class Module
                 }
             }
         }
+
     }
 
     /**
@@ -640,7 +650,7 @@ abstract class Module
             'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
             'area' => $this->area,
             'post_id' => $this->envVars['postId'],
-            'areaContext' => $this->areaContext,
+            'areaContext' => $this->getAreaContext(),
             'viewfile' => $this->getViewfile(),
             'class' => get_class( $this ),
             'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->area ),
@@ -653,6 +663,7 @@ abstract class Module
             $toJSON['parentId'] = $this->master_id;
             $toJSON['post_id'] = $this->master_id;
         }
+
 
         return $toJSON;
 
@@ -760,7 +771,8 @@ abstract class Module
      */
     private function setInstance_id( $id )
     {
-        $this->instance_id = $this->mid = $id;
+        $this->instance_id = $id;
+        $this->mid = $id;
     }
 
 }
