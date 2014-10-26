@@ -42,7 +42,6 @@ Class Kontentblocks
     const VERSION = '1.0.0alpha';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
-    const CONTENTCONCAT = true;
     const DEBUG = true;
 
     public $Services;
