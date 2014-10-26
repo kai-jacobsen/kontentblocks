@@ -76,9 +76,8 @@ KB.App = (function ($) {
         // create models from already attached modules
         _.each(KB.payload.Modules, function (module) {
             var m = KB.Modules.add(module);
-            var areaView = KB.Areas.get(module.area).view;
+            var areaView = KB.Areas.get(m.get('envVars').area).view;
             areaView.addModuleView(m.view);
-
         });
 
     }

@@ -106,7 +106,6 @@ class ModuleTemplates
     protected function moduleTemplate( $template, $MetaData )
     {
         global $post;
-
         if (empty( $template )) {
             wp_die( 'no template arg provided' );
         }
@@ -130,11 +129,9 @@ class ModuleTemplates
         // no data from db equals null, null is invalid
         // we can't pass null to the factory, if environment is null as well
         // @TODO why not passing an Environment?
-        if (empty( $moduleData )) {
-            $moduleData = array();
-        }
+        $Environment = Utilities::getEnvironment($post->ID);
 
-        $Factory = new ModuleFactory( $moduleDef['settings']['class'], $moduleDef, null, $moduleData );
+        $Factory = new ModuleFactory( $moduleDef['settings']['class'], $moduleDef, $Environment );
         /** @var $Instance \Kontentblocks\Modules\Module */
         $Instance = $Factory->getModule();
         JSONBridge::getInstance()->registerModule( $Instance->toJSON() );
@@ -225,7 +222,7 @@ class ModuleTemplates
 
             $moduleDef = ModuleFactory::parseModule( $tpl );
 
-            $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, null, $old );
+            $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, Utilities::getEnvironment($postId) );
             /** @var $Instance \Kontentblocks\Modules\Module */
             $Instance = $Factory->getModule();
             $new = $Instance->save( $data, $old );

@@ -17,16 +17,6 @@ use Kontentblocks\Templating\ModuleView;
 abstract class Module
 {
 
-    /**
-     * @var string
-     */
-    public $areaContext;
-
-    /**
-     * area id where module is attached
-     * @var string
-     */
-    public $area;
 
     /**
      * If ViewLoader is used, holds the twig template file name
@@ -121,11 +111,7 @@ abstract class Module
 
         $this->setModuleData( $data );
 
-        if (isset( $Environment )) {
-            $this->setEnvVarsFromEnvironment( $Environment );
-        }
-
-
+        $this->setEnvVarsFromEnvironment( $Environment );
 
         if (method_exists( $this, 'fields' )) {
             $this->Fields = new FieldManager( $this );
@@ -146,9 +132,27 @@ abstract class Module
         $this->Model = new ModuleModel( $data );
     }
 
+    /**
+     * @return ModuleModel
+     */
     public function getModel()
     {
         return $this->Model;
+    }
+
+    /**
+     * @param string $area
+     */
+    public function setArea($area)
+    {
+        $this->setEnvVars(array('area' => $area));
+    }
+
+    /**
+     * @return string|false
+     */
+    public function getArea(){
+        return $this->getEnvVar('area', false);
     }
 
     /**
@@ -346,7 +350,7 @@ abstract class Module
      */
     public function setAreaContext( $areaContext )
     {
-        $this->areaContext = $areaContext;
+        $this->setEnvVars( array( 'areaContext' => $areaContext ) );
 
     }
 
@@ -356,11 +360,8 @@ abstract class Module
      */
     public function getAreaContext()
     {
-        if (isset( $this->areaContext )) {
-            return $this->areaContext;
-        } else {
-            return false;
-        }
+
+        return $this->getEnvVar( 'areaContext', false );
 
     }
 
@@ -379,7 +380,7 @@ abstract class Module
                 'pageTemplate' => $Environment->get( 'pageTemplate' ),
                 'postId' => absint( $Environment->get( 'postId' ) ),
                 'areaContext' => $this->getAreaContext(),
-                'area' => $this->area
+                'area' => $this->getArea()
             )
         );
     }
@@ -648,12 +649,12 @@ abstract class Module
             'instance_id' => $this->getId(),
             'mid' => $this->getId(),
             'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
-            'area' => $this->area,
+            'area' => $this->getArea(),
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->getAreaContext(),
             'viewfile' => $this->getViewfile(),
             'class' => get_class( $this ),
-            'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->area ),
+            'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->getArea() ),
             'uri' => $this->getUri()
         );
         // only for master templates

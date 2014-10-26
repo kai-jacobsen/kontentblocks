@@ -94,7 +94,7 @@ class ModuleHTMLNode
         )}{$count}' data-moduleclass='{$classname}' class='{$this->Module->getSetting(
             'id'
         )} kb-module__wrapper kb-module {$this->Module->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
-		<input type='hidden' name='{$this->Module->getModuleId()}[areaContext]' value='{$this->Module->areaContext}' />
+		<input type='hidden' name='{$this->Module->getModuleId()}[areaContext]' value='{$this->Module->getAreaContext()}' />
 		";
 
     }

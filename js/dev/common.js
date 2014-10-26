@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-10-19 */
+/*! Kontentblocks DevVersion 2014-10-24 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -665,9 +665,10 @@ KB.Ui = function($) {
                 context: targetArea.get("context")
             });
         },
-        triggerAreaChange: function(newArea, module) {
-            module.set("areaContext", newArea.get("context"));
-            module.set("area", newArea.get("id"));
+        triggerAreaChange: function(newArea, moduleModel) {
+            moduleModel.unsubscribeFromArea();
+            moduleModel.setEnvVar("areaContext", newArea.get("context"));
+            moduleModel.setEnvVar("area", newArea.get("id"));
         },
         toggleModule: function() {
             $("body").on("click", ".kb-toggle", function() {

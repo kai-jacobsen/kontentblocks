@@ -275,6 +275,7 @@ KB.Ui = function ($) {
                                 that.resort(ui.sender);
                             }).
                             done(function () {
+
                                 that.triggerAreaChange(areaOver, currentModule);
                                 $(KB).trigger('kb:sortable::update');
 
@@ -329,9 +330,10 @@ KB.Ui = function ($) {
                 context: targetArea.get('context')
             });
         },
-        triggerAreaChange: function (newArea, module) {
-            module.set('areaContext', newArea.get('context'));
-            module.set('area', newArea.get('id'));
+        triggerAreaChange: function (newArea, moduleModel) {
+            moduleModel.unsubscribeFromArea(); // remove from current area
+            moduleModel.setEnvVar('areaContext', newArea.get('context'));
+            moduleModel.setEnvVar('area', newArea.get('id'));
         },
         toggleModule: function () {
 

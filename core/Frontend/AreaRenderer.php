@@ -3,7 +3,6 @@
 namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
@@ -130,9 +129,6 @@ class AreaRenderer {
 		// close area wrapper
 		$output .= $this->AreaOutput->closeArea();
 
-        if (current_theme_supports('kontentblocks:area-concat')){
-            ConcatContent::getInstance()->addString(  wp_kses_post($output)  );
-        }
 
 		if ( $echo ) {
 			echo $output;

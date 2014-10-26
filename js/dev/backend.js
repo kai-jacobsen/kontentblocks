@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-10-19 */
+/*! Kontentblocks DevVersion 2014-10-24 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -54,30 +54,31 @@ KB.Backbone.ContextModel = Backbone.Model.extend({
 KB.Backbone.ModuleModel = Backbone.Model.extend({
     idAttribute: "instance_id",
     initialize: function() {
-        this.listenTo(this, "change:area", this.subscribeToArea);
-        this.listenTo(this, "change:area", this.areaChanged);
+        this.listenTo(this, "change:envVars", this.subscribeToArea);
+        this.listenTo(this, "change:envVars", this.areaChanged);
     },
     destroy: function() {
         this.unsubscribeFromArea();
         this.stopListening();
     },
     setArea: function(area) {
-        this.set("area", area);
+        this.setEnvVar("area", area);
     },
     areaChanged: function() {
-        var envVars = this.get("envVars");
-        envVars.areaContext = this.get("areaContext");
         this.view.updateModuleForm();
     },
     subscribeToArea: function(model, value) {
         var area;
-        area = KB.Areas.get(value);
+        area = KB.Areas.get(value.area);
         area.view.addModuleView(model.view);
     },
     unsubscribeFromArea: function() {
-        var area;
-        area = KB.Areas.get(this.get("area"));
-        area.view.removeModule(this);
+        this.areaView.removeModule(this);
+    },
+    setEnvVar: function(attr, value) {
+        var ev = _.clone(this.get("envVars"));
+        ev[attr] = value;
+        this.set("envVars", ev);
     }
 });
 
@@ -428,7 +429,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
         KB.Ajax.send({
             action: "duplicateModule",
             module: this.model.get("instance_id"),
-            areaContext: this.model.area.get("context"),
+            areaContext: this.model.areaView.model.get("context"),
             _ajax_nonce: KB.Config.getNonce("create"),
             "class": this.model.get("class")
         }, this.success, this);
@@ -446,8 +447,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
             return false;
         }
         this.parseAdditionalJSON(data.json);
-        this.model.area.view.modulesList.append(data.html);
-        console.log(data);
+        this.model.areaView.modulesList.append(data.html);
         KB.Modules.add(data.module);
         var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
         jQuery("#kb_all_blocks").val(count);
@@ -603,7 +603,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
         this.listenTo(moduleView.model, "change:area", this.removeModule);
         _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
-        moduleView.model.area = this.model;
+        moduleView.model.areaView = this;
         this.ui();
     },
     removeModule: function(model) {
@@ -771,6 +771,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         delete moduleData.viewfile;
         delete moduleData.moduleName;
         this.trigger("kb::module.data.updated");
+        console.log(moduleData);
         return moduleData;
     },
     addField: function(key, obj, arrayKey) {
@@ -835,7 +836,7 @@ KB.App = function($) {
         });
         _.each(KB.payload.Modules, function(module) {
             var m = KB.Modules.add(module);
-            var areaView = KB.Areas.get(module.area).view;
+            var areaView = KB.Areas.get(m.get("envVars").area).view;
             areaView.addModuleView(m.view);
         });
     }

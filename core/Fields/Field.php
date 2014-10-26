@@ -3,7 +3,6 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 

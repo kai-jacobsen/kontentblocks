@@ -146,7 +146,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var formData, moduleData;
         formData = jQuery('#post').serializeJSON();
         moduleData = formData[this.model.get('instance_id')];
-
         // remove supplemental data
         // @TODO check if this can be rafcatored to a subarray
         delete moduleData.areaContext;
@@ -154,7 +153,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         delete moduleData.moduleName;
 
         this.trigger('kb::module.data.updated');
-
+        console.log(moduleData);
         return moduleData;
     },
     addField: function (key, obj, arrayKey) {
