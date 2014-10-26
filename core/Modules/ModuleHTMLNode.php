@@ -51,7 +51,8 @@ class ModuleHTMLNode
             if (isset( $this->Fields )) {
                 $this->Fields->data = $this->Module->moduleData;
             }
-            $this->Module->options( $this->Module->moduleData );
+//            $this->Module->options( $this->Module->moduleData );
+            $this->Module->options();
         }
 
         // essentially calls wp actions
