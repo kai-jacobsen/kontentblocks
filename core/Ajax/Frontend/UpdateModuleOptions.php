@@ -48,6 +48,8 @@ class UpdateModuleOptions
         $new = $Module->save( $parsed[$Module->getId()], $old );
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 
+
+
         if ($update) {
             $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
         }
@@ -66,6 +68,11 @@ class UpdateModuleOptions
 
         // @TODO depreacate
         do_action( 'kb_save_frontend_module', $module, $update );
+
+        $url = add_query_arg('concat', 'true', get_permalink($module['post_id']));
+        wp_remote_get( $url, array('timeout' => 1) );
+
+
         wp_send_json( $return );
     }
 

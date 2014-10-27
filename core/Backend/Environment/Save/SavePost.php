@@ -27,6 +27,7 @@ class SavePost
     /**
      * Save method for post related modules
      * @todo split this in chunks
+     * @param $postid
      * @return false    if auth fails or areas are empty
      */
     public function save()
@@ -111,28 +112,31 @@ class SavePost
                         $this->Environment->getStorage()->saveModule( $module['instance_id'], $savedData );
                         delete_post_meta( $this->postid, '_preview_' . $module['instance_id'] );
                     }
-
                     do_action( 'kb.module.save', $instance, $savedData );
                 }
 
 
             }
-
-            // save area settings which are specific to this post (ID-wise)
-            if (!empty( $_POST['areas'] )) {
-
-                $collection = $this->Environment->getDataHandler()->get( 'kb_area_settings' );
-
-                $areasData = $_POST['areas'];
-
-                foreach ($areasData as $id) {
-                    if (!empty( $_POST[$id] )) {
-                        $collection[$id] = $_POST[$id];
-                    }
-                }
-                $this->Environment->getDataHandler()->update( 'kb_area_settings', $collection );
-            }
         }
+
+        $url = add_query_arg('concat', 'true', get_permalink($this->postid));
+        wp_remote_get( $url, array('timeout' => 1) );
+
+        // save area settings which are specific to this post (ID-wise)
+        if (!empty( $_POST['areas'] )) {
+
+            $collection = $this->Environment->getDataHandler()->get( 'kb_area_settings' );
+
+            $areasData = $_POST['areas'];
+
+            foreach ($areasData as $id) {
+                if (!empty( $_POST[$id] )) {
+                    $collection[$id] = $_POST[$id];
+                }
+            }
+            $this->Environment->getDataHandler()->update( 'kb_area_settings', $collection );
+        }
+
         // finally update the index
         $this->Environment->getStorage()->saveIndex( $this->index );
     }

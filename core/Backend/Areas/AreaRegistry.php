@@ -438,6 +438,7 @@ class AreaRegistry
             'limit'           => 0, // how many blocks are allowed
             'order'           => 0, // order index for sorting
             'context'         => 'normal', // location on the edit screen
+            'concat'          => false
         );
 
     }

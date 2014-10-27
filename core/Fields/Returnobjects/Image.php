@@ -141,7 +141,7 @@ class Image extends AbstractEditableFieldReturn implements \JsonSerializable
         }
         // adds necessary attributes to enable inline edit
         $this->handleLoggedInUsers();
-        $this->prepareSrc();
+        $this->prepareSrc(null);
         $format = '<%1$s %3$s src="%2$s" >';
         $this->toJSON();
 

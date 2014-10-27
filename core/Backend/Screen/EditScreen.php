@@ -44,7 +44,6 @@ Class EditScreen
         if (!in_array( $pagenow, $this->hooks )) {
             return null;
         }
-
         // prepare current posts data
         add_action( 'add_meta_boxes', array( $this, 'setupEnvironment' ), 10 );
         // add UI
