@@ -24,6 +24,7 @@ class RemoveModules
         $BackupManager = new BackupDataStorage( $Storage );
         $BackupManager->backup( "Before Module: {$module} was deleted" );
         $update = $Storage->removeFromIndex( $module );
+
         wp_send_json( $update );
     }
 

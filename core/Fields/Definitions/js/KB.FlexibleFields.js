@@ -104,7 +104,13 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
 
         KB.Ui.initTabs();
         this.$list.sortable({
-            handle: '.flexible-fields--js-drag-handle'
+            handle: '.flexible-fields--js-drag-handle',
+            start: function(){
+                KB.TinyMCE.removeEditors();
+            },
+            stop: function(){
+                KB.TinyMCE.restoreEditors();
+            }
         });
     }
 });

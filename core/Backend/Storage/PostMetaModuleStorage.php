@@ -79,6 +79,15 @@ class PostMetaModuleStorage
     }
 
     /**
+     * Getter for post id
+     * @return int
+     */
+    public function getPostId()
+    {
+        return $this->postId;
+    }
+
+    /**
      * Getter for DataHandler
      * @return DataHandler
      */
@@ -195,9 +204,9 @@ class PostMetaModuleStorage
     private function setupModuleData()
     {
         $collection = array();
-        $meta       = $this->DataProvider->getAll();
+        $meta = $this->DataProvider->getAll();
         foreach ($this->index as $id => $data) {
-            $collection['_' . $id]         = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
+            $collection['_' . $id] = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : '';
         }
 
@@ -294,9 +303,9 @@ class PostMetaModuleStorage
      * @param string $area
      * @return boolean
      */
-    public function hasModules($area)
+    public function hasModules( $area )
     {
-        if (!empty($this->index)) {
+        if (!empty( $this->index )) {
             foreach ($this->index as $module) {
                 if ($module['area'] === $area && $module['draft'] !== 'true' && $module['active'] !== false) {
                     return true;
@@ -340,8 +349,8 @@ class PostMetaModuleStorage
     public function backup()
     {
         return array(
-            'id'      => $this->postId,
-            'index'   => $this->getIndex(),
+            'id' => $this->postId,
+            'index' => $this->getIndex(),
             'modules' => $this->getModules()
         );
     }
@@ -372,7 +381,7 @@ class PostMetaModuleStorage
             return;
         }
 
-        $index   = $data['index'];
+        $index = $data['index'];
         $modules = $data['modules'];
 
         // delete old data
