@@ -237,9 +237,23 @@ abstract class Module
 
     }
 
+    /**
+     * Check if conditions are met to render the module on the frontend
+     *
+     * @return bool
+     */
     public function verify()
     {
         return $this->isPublic();
+    }
+
+    /**
+     * Check if the moduleOutput should be passed to the concat mechanism
+     * if enabled
+     * @return mixed|null
+     */
+    public function concat(){
+        return $this->getSetting('concat');
     }
 
     /**
@@ -693,7 +707,8 @@ abstract class Module
             'inGlobalAreas' => false,
             'asTemplate' => true,
             'category' => 'standard',
-            'useViewLoader' => false
+            'useViewLoader' => false,
+            'concat' => true
         );
 
     }

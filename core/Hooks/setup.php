@@ -17,7 +17,7 @@ function remove_editor_support()
 {
     if (current_theme_supports('kontentblocks')){
         // hidden for pages by default
-        if (apply_filters( 'kb_remove_editor_page', true )) {
+        if (apply_filters( 'kb_remove_editor_page', false )) {
             remove_post_type_support( 'page', 'editor' );
         }
 

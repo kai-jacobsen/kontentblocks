@@ -135,7 +135,9 @@ class AreaRenderer
         $output .= $this->AreaOutput->closeArea();
 
         if (current_theme_supports( 'kontentblocks:area-concat' ) && isset( $_GET['concat'] )) {
-            ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
+            if ($module->getSetting('concat')){
+                ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
+            }
         }
 
         if ($echo) {
