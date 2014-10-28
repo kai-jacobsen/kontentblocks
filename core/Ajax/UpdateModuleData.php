@@ -60,6 +60,10 @@ class UpdateModuleData
         // @TODO deprecate
         do_action( 'kb_save_backend_module', $moduleSettings, $Module );
         do_action( 'kb.module.save', $Module, $mergedData );
+
+        Utilities::remoteConcatGet($postId);
+
+
         wp_send_json( $return );
     }
 

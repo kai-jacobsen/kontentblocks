@@ -119,8 +119,7 @@ class SavePost
             }
         }
 
-        $url = add_query_arg('concat', 'true', get_permalink($this->postid));
-        wp_remote_get( $url, array('timeout' => 1) );
+        Utilities::remoteConcatGet($this->postid);
 
         // save area settings which are specific to this post (ID-wise)
         if (!empty( $_POST['areas'] )) {

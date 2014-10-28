@@ -69,9 +69,7 @@ class UpdateModuleOptions
         // @TODO depreacate
         do_action( 'kb_save_frontend_module', $module, $update );
 
-        $url = add_query_arg('concat', 'true', get_permalink($module['post_id']));
-        wp_remote_get( $url, array('timeout' => 1) );
-
+        Utilities::remoteConcatGet($module['$post_id']);
 
         wp_send_json( $return );
     }

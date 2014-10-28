@@ -5,7 +5,6 @@ namespace Kontentblocks\Hooks;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 
 
-
 /*
  * Remove Editor from built-in Post Types, Kontentblocks will handle this instead.
  * above action will remove submit button from media upload as well
@@ -15,7 +14,7 @@ use Kontentblocks\Backend\Storage\BackupDataStorage;
 
 function remove_editor_support()
 {
-    if (current_theme_supports('kontentblocks')){
+    if (current_theme_supports( 'kontentblocks' )) {
         // hidden for pages by default
         if (apply_filters( 'kb_remove_editor_page', false )) {
             remove_post_type_support( 'page', 'editor' );
@@ -40,3 +39,16 @@ function deleteBackup( $post_id )
 }
 
 add_action( 'delete_post', __NAMESPACE__ . '\deleteBackup' );
+
+
+/**
+ * Don't render shortcodes when in concat mode to preserve shortcodes
+ */
+function ignoreShortcodes()
+{
+    remove_all_shortcodes();
+}
+
+if (isset( $_GET['concat'] )) {
+    add_action( 'wp_head', __NAMESPACE__ . '\ignoreShortcodes' );
+}

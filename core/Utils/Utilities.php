@@ -350,4 +350,22 @@ class Utilities
         }
 
     }
+
+    /**
+     * Call the ghost to visit the url in concat mode
+     * @param null $id
+     */
+    public static function remoteConcatGet( $id = null )
+    {
+        if (is_null( $id )) {
+            return;
+        }
+
+        $url = add_query_arg( 'concat', 'true', get_permalink( $id ) );
+
+        if ($url !== false) {
+            wp_remote_get( $url, array( 'timeout' => 1 ) );
+        }
+    }
+
 }
