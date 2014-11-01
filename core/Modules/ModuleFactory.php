@@ -103,6 +103,7 @@ class ModuleFactory
                 $args['settings']['name'] = $args['overrides']['name'];
             }
         }
+
         return $args;
     }
 

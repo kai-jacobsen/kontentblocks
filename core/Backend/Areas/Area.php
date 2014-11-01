@@ -92,7 +92,7 @@ class Area
         // batch setting of properties
         $this->setupAreaProperties( $area );
 
-        //actual stored module for this area
+        //actual stored modules for this area
         $this->attachedModules = $this->Environment->getModulesForArea( $this->id );
 
         // custom settins for this area
@@ -179,7 +179,7 @@ class Area
 
     /**
      * toJSON
-     * make certain area properties are accessible by js frontend-only
+     * make certain area properties accessible by js frontend-only
      */
     public function toJSON()
     {

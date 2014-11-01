@@ -149,11 +149,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         // remove supplemental data
         // @TODO check if this can be rafcatored to a subarray
         delete moduleData.areaContext;
-        delete moduleData.viewfile;
+        //delete moduleData.viewfile;
         delete moduleData.moduleName;
 
         this.trigger('kb::module.data.updated');
-        console.log(moduleData);
         return moduleData;
     },
     addField: function (key, obj, arrayKey) {

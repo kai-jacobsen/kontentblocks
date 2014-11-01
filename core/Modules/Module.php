@@ -143,16 +143,17 @@ abstract class Module
     /**
      * @param string $area
      */
-    public function setArea($area)
+    public function setArea( $area )
     {
-        $this->setEnvVars(array('area' => $area));
+        $this->setEnvVars( array( 'area' => $area ) );
     }
 
     /**
      * @return string|false
      */
-    public function getArea(){
-        return $this->getEnvVar('area', false);
+    public function getArea()
+    {
+        return $this->getEnvVar( 'area', false );
     }
 
     /**
@@ -252,8 +253,9 @@ abstract class Module
      * if enabled
      * @return mixed|null
      */
-    public function concat(){
-        return $this->getSetting('concat');
+    public function concat()
+    {
+        return $this->getSetting( 'concat' );
     }
 
     /**
@@ -344,7 +346,6 @@ abstract class Module
                 }
             }
         }
-
     }
 
     /**
@@ -368,6 +369,15 @@ abstract class Module
 
     }
 
+    public function setMaster( $master )
+    {
+        if (is_null( $master )) {
+            $this->master = false;
+        }
+
+        $this->master = filter_var( $master, FILTER_VALIDATE_BOOLEAN );
+    }
+
     /**
      * Get area context of module
      * @return mixed
@@ -378,6 +388,7 @@ abstract class Module
         return $this->getEnvVar( 'areaContext', false );
 
     }
+
 
     /**
      * If an Environment is given, add from that
@@ -645,7 +656,6 @@ abstract class Module
         if ($this->getSetting( 'disabled' ) || $this->getSetting( 'hidden' )) {
             return false;
         }
-
         if (!$this->state['active'] || $this->state['draft']) {
             return false;
         }
@@ -727,20 +737,6 @@ abstract class Module
 
     }
 
-    /**
-     * Returns a string indicator for the current status
-     * @since 1.0.0
-     * @return string
-     */
-    public function getStatusClass()
-    {
-        if ($this->state['active']) {
-            return 'activated';
-        } else {
-            return 'deactivated';
-        }
-
-    }
 
     /**
      * Add area Attributes to env vars

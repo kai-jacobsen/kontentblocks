@@ -69,7 +69,7 @@ class UpdateModuleOptions
         // @TODO depreacate
         do_action( 'kb_save_frontend_module', $module, $update );
 
-        Utilities::remoteConcatGet($module['$post_id']);
+        Utilities::remoteConcatGet($module['post_id']);
 
         wp_send_json( $return );
     }

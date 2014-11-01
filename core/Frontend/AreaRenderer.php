@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Modules\Module;
@@ -123,6 +124,7 @@ class AreaRenderer
                 }
             }
 
+
             $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
 
             $moduleOutput = $module->module();
@@ -135,7 +137,7 @@ class AreaRenderer
         $output .= $this->AreaOutput->closeArea();
 
         if (current_theme_supports( 'kontentblocks:area-concat' ) && isset( $_GET['concat'] )) {
-            if ($module->getSetting('concat')){
+            if ($module->getSetting( 'concat' )) {
                 ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
             }
         }
