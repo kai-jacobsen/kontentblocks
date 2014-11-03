@@ -68,6 +68,7 @@ class AreaRenderer
         }
 
         $this->Environment = Utilities::getEnvironment( $postId );
+
         $modules = $this->Environment->getModulesforArea( $area );
         if (!$modules) {
             return;
@@ -75,12 +76,15 @@ class AreaRenderer
             $this->modules = new ModuleIterator( $modules, $this->Environment );
         }
 
+
         // setup AreaOutput
         $this->AreaOutput = new AreaOutput(
             $this->Environment->getAreaDefinition( $area ),
             $this->Environment->getAreaSettings( $area ),
             $additionalArgs
         );
+        d( $this->AreaOutput );
+
     }
 
     /**
@@ -118,10 +122,8 @@ class AreaRenderer
             $module->rawModuleData = $module->moduleData;
 
 
-            if (method_exists( $module, 'verify' )) {
-                if (!$module->verify( $module->moduleData )) {
-                    continue;
-                }
+            if (!$module->verify()) {
+                continue;
             }
 
 

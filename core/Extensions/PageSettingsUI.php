@@ -28,7 +28,6 @@ class PageSettingsUI
         if ($pagenow == 'post.php' or $pagenow == 'post-new.php') {
             add_action( 'add_meta_boxes_page', array( __CLASS__, 'ui' ) );
         }
-
     }
 
     /**
@@ -67,7 +66,8 @@ class PageSettingsUI
         $i18n = I18n::getPackage( 'ExtPageSettings' );
 
         echo "<div class='page-template-wrapper kb-context__container'>";
-        echo "<div class='context-header'><h2>{$i18n['pageSettings']}</h2></div>";
+        echo "<div class='kb-context__inner'>";
+        echo "<div class='kb-context__header'><h2>{$i18n['pageSettings']}</h2></div>";
         $post_type_object = get_post_type_object( $post->post_type );
         if ($post_type_object->hierarchical) {
             $dropdown_args = array
@@ -114,6 +114,7 @@ class PageSettingsUI
         ?>
         <?php
 
+        echo "</div>";
         echo "</div>";
 
     }

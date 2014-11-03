@@ -162,7 +162,7 @@ abstract class Module
      * gets called by ui display callback
      *
      */
-    public function options()
+    public function form()
     {
         if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
@@ -174,7 +174,7 @@ abstract class Module
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
             $this->Fields->renderFields();
         } else {
-            $this->renderEmptyOptions();
+            $this->renderEmptyForm();
         }
 
         return false;
@@ -287,7 +287,7 @@ abstract class Module
     /**
      * Creates a complete list item for the area
      */
-    public function renderOptions()
+    public function renderForm()
     {
 
         $Node = new ModuleHTMLNode( $this );
@@ -663,7 +663,7 @@ abstract class Module
         return true;
     }
 
-    public function toJSON()
+    final public function toJSON()
     {
         // todo only used on frontend
         $toJSON = array(
@@ -770,7 +770,7 @@ abstract class Module
      * No fields an options method override fallback
      * @since 1.0.0
      */
-    private function renderEmptyOptions()
+    private function renderEmptyForm()
     {
         $tpl = new CoreView( 'no-module-options.twig' );
         echo $tpl->render( false );

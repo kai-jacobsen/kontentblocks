@@ -1,11 +1,13 @@
 .alertify-confirm {
-  border: 1px solid #ccc;
-  background: #f9f9f9;
+  background: #fff;
   width: 400px;
   margin-left: -200px;
+  border: none;
 
   .alertify-message{
-    font-size: 1.2em;
+    font-size: 1.1em;
+    font-family: Open-Sans, sans-serif;
+    font-weight: 100;
   }
 
   .alertify-button{
@@ -14,14 +16,47 @@
   }
 
   .alertify-button-ok{
-    background-color: rgba(132, 255, 131, 0.60);
+    background-color: transparent;
     color: #222;
     text-shadow: none;
+    padding: 5px 30px;
+    border: 1px solid #333;
+
+    &:hover{
+      background-color: rgb(40, 173, 81);
+      color: #fff;
+    }
+  }
+
+  .alertify-button-ok{
+    background-color: transparent;
+    color: #222;
+    text-shadow: none;
+    padding: 5px 30px;
+    border: 1px solid #333;
+
+    &:hover{
+      background-color: rgb(40, 173, 81);
+      color: #fff;
+    }
+  }
+
+  .alertify-button-cancel{
+    background-color: transparent;
+    color: #222;
+    text-shadow: none;
+    padding: 5px 30px;
+    border: 1px solid #333;
+
+    &:hover{
+      background-color: rgb(173, 52, 36);
+      color: #fff;
+    }
   }
 
 }
 
 .alertify-cover{
-  opacity: 0.8;
-  background-color: #222;
+  opacity: 0.95;
+  background-color: #000;
 }

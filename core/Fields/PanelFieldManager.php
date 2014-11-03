@@ -95,7 +95,7 @@ class PanelFieldManager extends AbstractFieldManager
      * defaults to tabs
      * called by Kontentblocks\Modules\Module::options()
      * if not overridden by extending class
-     * @see Kontentblocks\Modules\Module::options
+     * @see Kontentblocks\Modules\Module::form
      * @return void
      */
     public function renderFields()

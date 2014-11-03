@@ -358,7 +358,7 @@ KB.TinyMCE = function($) {
     return {
         removeEditors: function() {
             $(".wp-editor-area").each(function() {
-                if ($(this).attr("id") === "wp-content-wrap") {} else {
+                if ($(this).attr("id") === "wp-content-wrap" || $(this).attr("id") === "wp-ghosteditor-wrap") {} else {
                     var textarea = this.id;
                     tinyMCE.execCommand("mceRemoveEditor", false, textarea);
                 }
@@ -366,7 +366,7 @@ KB.TinyMCE = function($) {
         },
         restoreEditors: function() {
             $(".wp-editor-wrap").each(function() {
-                var settings = tinyMCEPreInit.mceInit.content;
+                var settings = tinyMCEPreInit.mceInit.ghosteditor;
                 var id = $(this).find("textarea").attr("id");
                 settings.elements = id;
                 settings.selector = "#" + id;
@@ -389,7 +389,7 @@ KB.TinyMCE = function($) {
             });
         },
         addEditor: function($el, quicktags, height, watch) {
-            var settings = tinyMCEPreInit.mceInit.content;
+            var settings = tinyMCEPreInit.mceInit.ghosteditor;
             var edHeight = height || 350;
             var live = _.isUndefined(watch) ? true : false;
             if (!$el) {
@@ -410,7 +410,6 @@ KB.TinyMCE = function($) {
                         var $module, moduleView;
                         if (!ed.module) {
                             $module = jQuery(ed.editorContainer).closest(".kb-module");
-                            console.log(ed);
                             ed.module = KB.Views.Modules.get($module.attr("id"));
                         }
                         ed.module.$el.trigger("tinymce.change");

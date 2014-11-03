@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kontentblocks 1.0.0\n"
-"POT-Creation-Date: 2014-09-21 20:57+0100\n"
-"PO-Revision-Date: 2014-09-21 21:02+0100\n"
+"POT-Creation-Date: 2014-11-02 12:31+0100\n"
+"PO-Revision-Date: 2014-11-02 12:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: Kai Jacobsen\n"
 "Language: Deutsch\n"
@@ -141,6 +141,11 @@ msgstr "Titel"
 #: ../core/./Language/packages/i18n_Areas.php:11
 msgid "add new module"
 msgstr "Neues Modul hinzufügen"
+
+#: ../core/Language/./packages/i18n_Areas.php:12
+#: ../core/./Language/packages/i18n_Areas.php:12
+msgid "Click to add a new module or drag an exisiting module here"
+msgstr "Klick hier, um ein neues Modul hinzuzufügen."
 
 #: ../core/Language/./packages/i18n_EditScreen.php:6
 #: ../core/./Language/packages/i18n_EditScreen.php:6
@@ -522,23 +527,23 @@ msgstr ""
 msgid "Module Template draft updated."
 msgstr ""
 
-#: ../core/./Backend/Areas/Area.php:281
+#: ../core/./Backend/Areas/Area.php:280
 msgid "Standard"
 msgstr ""
 
-#: ../core/./Backend/Areas/Area.php:285
+#: ../core/./Backend/Areas/Area.php:284
 msgid "Media"
 msgstr ""
 
-#: ../core/./Backend/Areas/Area.php:286
+#: ../core/./Backend/Areas/Area.php:285
 msgid "Spezial"
 msgstr ""
 
-#: ../core/./Backend/Areas/Area.php:288
+#: ../core/./Backend/Areas/Area.php:287
 msgid "System"
 msgstr ""
 
-#: ../core/./Backend/Areas/Area.php:289
+#: ../core/./Backend/Areas/Area.php:288
 msgid "Templates"
 msgstr "Vorlagen"
 

@@ -10,7 +10,7 @@
             'description' => __('Description:', 'Kontentblocks')
         ),
         'notices' => array(
-            'draft' => __('This module is not public until you save the current post')
+            'draft' => __('This module is not public until you save the current post', 'Kontentblocks')
         )
 
 ) );

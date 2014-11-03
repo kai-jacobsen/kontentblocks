@@ -52,7 +52,7 @@ class ModuleHTMLNode
                 $this->Fields->data = $this->Module->moduleData;
             }
 //            $this->Module->options( $this->Module->moduleData );
-            $this->Module->options();
+            $this->Module->form();
         }
 
         // essentially calls wp actions
