@@ -66,7 +66,7 @@ class FieldManager extends AbstractFieldManager
      * defaults to tabs
      * called by Kontentblocks\Modules\Module::options()
      * if not overridden b extending class
-     * @see Kontentblocks\Modules\Module::options
+     * @see Kontentblocks\Modules\Module::form
      * TODO: update when options() was renamed
      * @return void
      * @since 1.0.0

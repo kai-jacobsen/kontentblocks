@@ -113,7 +113,7 @@ class DuplicateModule
 
 
             ob_start();
-            $Module->renderOptions();
+            $Module->renderForm();
             $html = ob_get_clean();
 
             $response = array

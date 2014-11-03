@@ -146,7 +146,7 @@ class ModulePanel extends AbstractPanel
 
         $this->beforeForm();
 //        $this->Module->options( $this->data );
-        $this->Module->options();
+        $this->Module->form();
         $this->afterForm();
     }
 

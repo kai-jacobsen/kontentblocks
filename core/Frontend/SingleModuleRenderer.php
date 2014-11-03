@@ -14,29 +14,32 @@ class SingleModuleRenderer
 {
 
 
-    public function __construct($Module)
+    public function __construct( $Module )
     {
         $this->Module = $Module;
     }
 
-    public function render($args = array())
+    public function render( $args = array() )
     {
-        if ( method_exists( $this->Module, 'verify' ) ) {
-            if ( ! $this->Module->verify( $this->Module->moduleData ) ) {
-                return false;
-            }
+        if (!$this->Module->verify( )) {
+            return false;
         }
 
-        $addArgs = $this->setupArgs($args);
+        $addArgs = $this->setupArgs( $args );
 
-        $this->Module->_addAreaAttributes($addArgs);
-        printf('<%3$s id="%1$s" class="%2$s">', $this->Module->getId(), 'os-edit-container module', $addArgs['element']);
+        $this->Module->_addAreaAttributes( $addArgs );
+        printf(
+            '<%3$s id="%1$s" class="%2$s">',
+            $this->Module->getId(),
+            'os-edit-container module',
+            $addArgs['element']
+        );
         echo $this->Module->module();
         echo "</{$addArgs['element']}>";
-        JSONBridge::getInstance()->registerModule($this->Module->toJSON());
+        JSONBridge::getInstance()->registerModule( $this->Module->toJSON() );
     }
 
-    private function setupArgs($args)
+    private function setupArgs( $args )
     {
         $defaults = array(
             'context' => Utilities::getTemplateFile(),
@@ -46,7 +49,7 @@ class SingleModuleRenderer
             'area_template' => 'default'
         );
 
-        return wp_parse_args($args, $defaults);
+        return wp_parse_args( $args, $defaults );
     }
 
 

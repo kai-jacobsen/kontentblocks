@@ -34,7 +34,7 @@ class GetModuleOptions
 
         ob_start();
 //        $instance->options( $instance->moduleData );
-        $instance->options();
+        $instance->form();
         $html = ob_get_clean();
         $return = array(
             'html' => stripslashes_deep( $html ),

@@ -71,7 +71,7 @@ class ModuleCoreMasterModule extends Module
 
     }
 
-    public function options()
+    public function form()
     {
         $masterId = $this->parentId;
         $translated = false;

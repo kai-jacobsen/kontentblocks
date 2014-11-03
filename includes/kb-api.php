@@ -50,10 +50,10 @@ function registerAreaTemplate( $args )
  * @param int $id
  * @param array $additionalArgs
  */
-function renderSingleArea( $area, $id, $additionalArgs )
+function renderSingleArea( $area, $id = null, $additionalArgs )
 {
     global $post;
-    $postId = ( null === $id ) ? $post->ID : $id;
+    $postId = ( is_null($id) ) ? $post->ID : $id;
     $AreaRender = new AreaRenderer( $postId, $area, $additionalArgs );
     $AreaRender->render( true );
 }

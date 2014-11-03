@@ -4,7 +4,7 @@ KB.TinyMCE = (function ($) {
         removeEditors: function () {
             // do nothing if it is the native editor
             $('.wp-editor-area').each(function () {
-                if ($(this).attr('id') === 'wp-content-wrap') {
+                if ($(this).attr('id') === 'wp-content-wrap' || $(this).attr('id') === 'wp-ghosteditor-wrap' ) {
                     // do nothing
                 } else {
                     // get the id
@@ -26,7 +26,7 @@ KB.TinyMCE = (function ($) {
 //                if ($(this).hasClass('html-active')) {
 //                    $(this).removeClass('html-active').addClass('tmce-active');
 //                }
-                var settings = tinyMCEPreInit.mceInit.content;
+                var settings = tinyMCEPreInit.mceInit.ghosteditor;
                 var id = $(this).find('textarea').attr('id');
 
                 // add new editor id to settings
@@ -56,7 +56,7 @@ KB.TinyMCE = (function ($) {
             // get settings from native WP Editor
             // Editor may not be initialized and is not accessible through
             // the tinymce api, thats why we take the settings from preInit
-            var settings = tinyMCEPreInit.mceInit.content;
+            var settings = tinyMCEPreInit.mceInit.ghosteditor;
             var edHeight = height || 350;
             var live = (_.isUndefined(watch)) ? true : false;
             // if no $el, we assume it's in the last added module
@@ -81,7 +81,6 @@ KB.TinyMCE = (function ($) {
                         var $module, moduleView;
                         if (!ed.module){
                             $module = jQuery(ed.editorContainer).closest('.kb-module');
-                            console.log(ed);
                             ed.module = KB.Views.Modules.get($module.attr('id'))
                         }
                         ed.module.$el.trigger('tinymce.change');
