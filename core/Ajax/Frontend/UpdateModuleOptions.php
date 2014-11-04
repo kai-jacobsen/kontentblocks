@@ -48,8 +48,6 @@ class UpdateModuleOptions
         $new = $Module->save( $parsed[$Module->getId()], $old );
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
 
-
-
         if ($update) {
             $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
         }

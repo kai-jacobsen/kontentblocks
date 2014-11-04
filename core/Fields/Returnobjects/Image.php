@@ -136,9 +136,9 @@ class Image extends AbstractEditableFieldReturn implements \JsonSerializable
      */
     public function html()
     {
-        if ($this->inlineEdit) {
-            $this->addAttr( 'data-powertip', 'Click to change image' );
-        }
+//        if ($this->inlineEdit) {
+//            $this->addAttr( 'data-powertip', 'Click to change image' );
+//        }
         // adds necessary attributes to enable inline edit
         $this->handleLoggedInUsers();
         $this->prepareSrc(null);

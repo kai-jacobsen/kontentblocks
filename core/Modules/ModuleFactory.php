@@ -4,6 +4,7 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ModuleFactory
@@ -88,7 +89,7 @@ class ModuleFactory
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-        return wp_parse_args( $module, $ModuleRegistry->get( $module['class'] ) );
+        return Utilities::validateBoolRecursive(wp_parse_args( $module, $ModuleRegistry->get( $module['class'] ) ));
     }
 
     /**

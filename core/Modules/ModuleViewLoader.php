@@ -202,7 +202,6 @@ class ModuleViewLoader
     private function getSingleTemplate()
     {
         if (count( $this->views ) === 1) {
-
             return current(array_slice($this->views, -1));
         }
     }
