@@ -110,7 +110,7 @@ abstract class StaticPanel extends AbstractPanel
     {
         echo "<div class='postbox'>
                 <div class='kb-custom-wrapper'>
-                <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
+                <div class='inside'>";
     }
 
     /**

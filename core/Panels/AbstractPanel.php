@@ -105,7 +105,7 @@ abstract class AbstractPanel
      * @param null $default
      * @return mixed
      */
-    abstract public function getKey($key = null, $default = null);
+    abstract public function getKey( $key = null, $default = null );
 
     /**
      * Setup wordpress hooks
@@ -117,7 +117,7 @@ abstract class AbstractPanel
             // check for page templates resp. for the a _wp_page_template meta key
             if (!empty( $this->pageTemplates )) {
                 $tpl = get_post_meta( '_wp_page_template' );
-                if (!$tpl){
+                if (!$tpl) {
                     $tpl = 'default';
                 }
                 if (empty( $tpl ) || !in_array( $tpl, $this->pageTemplates )) {
@@ -126,9 +126,8 @@ abstract class AbstractPanel
             }
 
 
-
             // either add the form as meta box or to custom hook
-            if (is_array( $this->metaBox )) {
+            if (is_array( $this->metaBox ) || $this->metaBox) {
                 add_action( "add_meta_boxes_{$pt}", array( $this, 'metaBox' ), 10, 1 );
             } else {
                 add_action( $this->hook, array( $this, 'form' ) );
