@@ -5,11 +5,11 @@ namespace Kontentblocks\Fields\Returnobjects;
 use Kontentblocks\Fields\Definitions\FlexibleFields;
 
 /**
- * Class FlexibleFieldsReturnObject
+ * Class FlexibleFieldsReturn
  * @package Kontentblocks\Fields\Utilities
  * @since 1.0.0
  */
-class FlexibleFieldsReturnObject
+class FlexibleFieldsReturn
 {
 
     /**
@@ -25,7 +25,7 @@ class FlexibleFieldsReturnObject
     /**
      * @var string
      */
-    protected $arrayKey;
+    protected $key;
 
     /**
      * @var array data of this field from moduleData
@@ -48,7 +48,7 @@ class FlexibleFieldsReturnObject
     {
         $this->Field = $Field;
 
-        $this->arrayKey = $Field->getKey();
+        $this->key = $Field->getKey();
         $this->fieldData = $Field->getValue();
         $this->moduleId = $Field->parentModuleId;
         $this->config = $Field->getArg( 'config' );
@@ -116,7 +116,7 @@ class FlexibleFieldsReturnObject
             return false;
         }
 
-        if (!isset( $this->arrayKey )) {
+        if (!isset( $this->key )) {
             return false;
         }
 
@@ -155,7 +155,7 @@ class FlexibleFieldsReturnObject
      * @param $key string
      *
      * @since 1.0.0
-     * @return Element|Image
+     * @return EditableElement|EditableImage
      */
     private function getReturnObj( $type, $keydata, $index, $key )
     {
@@ -168,7 +168,7 @@ class FlexibleFieldsReturnObject
                     $keydata, array(
                         'instance_id' => $this->moduleId,
                         'key' => $key,
-                        'arrayKey' => $this->arrayKey,
+                        'arrayKey' => $this->key,
                         'index' => $index,
                         'type' => $type
                     )
@@ -181,7 +181,7 @@ class FlexibleFieldsReturnObject
                     $keydata, array(
                         'instance_id' => $this->moduleId,
                         'key' => $key,
-                        'arrayKey' => $this->arrayKey,
+                        'arrayKey' => $this->key,
                         'index' => $index,
                         'type' => $type
                     )
@@ -192,7 +192,7 @@ class FlexibleFieldsReturnObject
                     $keydata, array(
                         'instance_id' => $this->moduleId,
                         'key' => $key,
-                        'arrayKey' => $this->arrayKey,
+                        'arrayKey' => $this->key,
                         'index' => $index,
                         'type' => $type
                     )
@@ -201,6 +201,9 @@ class FlexibleFieldsReturnObject
         }
     }
 
+    /**
+     * @return array|bool
+     */
     public function __toArray()
     {
         return $this->getItems();
