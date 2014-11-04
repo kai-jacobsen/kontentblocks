@@ -8,7 +8,8 @@
             'title' => __( 'Title', 'Kontentblocks' ),
         ),
         'ui' => array(
-            'addNewModule' => __('add new module', 'Kontentblocks')
+            'addNewModule' => __('add new module', 'Kontentblocks'),
+            'clickToAdd' => __('Click to add a new module or drag an exisiting module here', 'Kontentblocks')
         )
     )
 );

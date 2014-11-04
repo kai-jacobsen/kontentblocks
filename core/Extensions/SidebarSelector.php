@@ -17,6 +17,9 @@ class SidebarSelector
     protected $postSidebars   = array();
     protected $activeSidebars = array();
 
+    /**
+     *
+     */
     function __construct()
     {
         $this->setupActions();
@@ -66,6 +69,11 @@ class SidebarSelector
             $this->data = __return_empty_array();
             $this->flag = false;
         }
+
+        if (empty($this->globalSidebars)){
+
+        }
+
         // init output
         $out = '';
 

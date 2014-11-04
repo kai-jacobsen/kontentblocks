@@ -41,13 +41,14 @@ class ModuleViewsRegistry
      */
     public function getViewLoader( Module $Module )
     {
-        $classname = get_class( $Module );
-        if (isset( $this->loaders[$classname] )) {
-            return $this->loaders[$classname];
+
+
+        if (isset( $this->loaders[$Module->getId()] )) {
+            return $this->loaders[$Module->getId()];
         }
 
         $ViewLoader = new ModuleViewLoader( $Module );
-        $this->loaders[$classname] = $ViewLoader;
+        $this->loaders[$Module->getId()] = $ViewLoader;
         return $ViewLoader;
 
     }

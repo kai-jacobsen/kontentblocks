@@ -173,7 +173,7 @@ class Image extends AbstractEditableFieldReturn implements \JsonSerializable
         $this->addAttr( 'data-powertip', 'Click to change image' );
         $this->background = true;
         $this->handleLoggedInUsers();
-        $this->prepareSrc();
+        $this->prepareSrc(null);
         $this->toJSON();
 
         $format = ' %2$s style="background-image: url(\'%1$s\');"';

@@ -71,7 +71,7 @@ class ModuleCoreMasterModule extends Module
 
     }
 
-    public function options()
+    public function form()
     {
         $masterId = $this->parentId;
         $translated = false;
@@ -172,7 +172,7 @@ class ModuleCoreMasterModule extends Module
      */
     public static function setupModuleData( $module, $moduleDef )
     {
-        if ($moduleDef['master']) {
+        if (filter_var($moduleDef['master'], FILTER_VALIDATE_BOOLEAN)) {
             $masterId = $moduleDef['parentId'];
             $tplId = $moduleDef['templateObj']['id'];
 

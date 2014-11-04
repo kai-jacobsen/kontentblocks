@@ -92,7 +92,7 @@ class Area
         // batch setting of properties
         $this->setupAreaProperties( $area );
 
-        //actual stored module for this area
+        //actual stored modules for this area
         $this->attachedModules = $this->Environment->getModulesForArea( $this->id );
 
         // custom settins for this area
@@ -147,7 +147,7 @@ class Area
                 $module = apply_filters( 'kb_before_module_options', $module );
                 $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
                 $instance = $Factory->getModule();
-                $instance->renderOptions();
+                $instance->renderForm();
                 JSONBridge::getInstance()->registerModule( $instance->toJSON() );
             }
         }
@@ -179,7 +179,7 @@ class Area
 
     /**
      * toJSON
-     * make certain area properties are accessible by js frontend-only
+     * make certain area properties accessible by js frontend-only
      */
     public function toJSON()
     {

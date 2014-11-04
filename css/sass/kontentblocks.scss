@@ -87,6 +87,7 @@
 @import "partials/_extensions/layout-configurations";
 @import "partials/_extensions/template-selector";
 @import "partials/_extensions/redirect";
+@import "partials/_extensions/page-settings";
 
 /* --------------------------
 // WP Admin Menu Options
@@ -461,6 +462,7 @@ input[type="checkbox"][checked] {
 #kontentblocks_stage {
   position: relative;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .active_dynamic_areas_wrapper h4, .dynamic-area-selector-wrapper h4 {

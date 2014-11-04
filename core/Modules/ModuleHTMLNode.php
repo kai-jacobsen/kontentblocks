@@ -52,7 +52,7 @@ class ModuleHTMLNode
                 $this->Fields->data = $this->Module->moduleData;
             }
 //            $this->Module->options( $this->Module->moduleData );
-            $this->Module->options();
+            $this->Module->form();
         }
 
         // essentially calls wp actions
@@ -94,7 +94,7 @@ class ModuleHTMLNode
         return "<li id='{$this->Module->getModuleId()}' rel='{$this->Module->getModuleId(
         )}{$count}' data-moduleclass='{$classname}' class='{$this->Module->getSetting(
             'id'
-        )} kb-module__wrapper kb-module {$this->Module->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
+        )} kb-module__wrapper kb-module {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
 		<input type='hidden' name='{$this->Module->getModuleId()}[areaContext]' value='{$this->Module->getAreaContext()}' />
 		";
 
@@ -213,6 +213,22 @@ class ModuleHTMLNode
     {
         do_action( "kb.module.footer-{$this->Module->getSetting( 'id' )}", $this->Module );
         do_action( 'kb.module.footer', $this->Module );
+
+    }
+
+
+    /**
+     * Returns a string indicator for the current status
+     * @since 1.0.0
+     * @return string
+     */
+    public function getStatusClass()
+    {
+        if ($this->Module->state['active']) {
+            return 'activated';
+        } else {
+            return 'deactivated';
+        }
 
     }
 } 

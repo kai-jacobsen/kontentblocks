@@ -2,6 +2,13 @@
 namespace Kontentblocks\Modules;
 
 
+/**
+ * Class ModuleViewFilesystem
+ *
+ *
+ *
+ * @package Kontentblocks\Modules
+ */
 class ModuleViewFilesystem
 {
 
@@ -53,7 +60,6 @@ class ModuleViewFilesystem
         );
 
         $merged = array_merge( $childTemplates, $parentTemplates, $moduleTemplates );
-
         return $this->prepareFiles( $this->unify( $merged ) );
     }
 
@@ -244,9 +250,11 @@ class ModuleViewFilesystem
             }
         );
 
+
         foreach ($filtered as $tpl) {
-            $collection[$tpl['filteredfile']] = $tpl;
+            $collection[$tpl['file']] = $tpl;
         }
+
 
         return $collection;
 

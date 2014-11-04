@@ -47,7 +47,7 @@ class ModuleViewLoader
         $this->ViewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $Module );
         $this->Module = $Module;
         $this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->getAreaContext() );
-        if (count( $this->views ) > 0) {
+        if (count( $this->views ) > 1) {
             $this->hasViews = true;
         }
         /**
@@ -83,10 +83,7 @@ class ModuleViewLoader
 
     public function getViews()
     {
-        if ($this->hasViews()){
-            return $this->views;
-        }
-        return array();
+        return $this->views;
     }
 
 
@@ -105,13 +102,14 @@ class ModuleViewLoader
      */
     private function prepareTemplates()
     {
-
         $prepared = array();
         $selected = $this->Module->getViewfile();
 
-        if (empty( $selected )) {
+
+        if (empty( $selected ) || !$this->isValidTemplate( $selected )) {
             $selected = $this->findDefaultTemplate();
         }
+
 
         foreach ($this->views as $item) {
             $item['selected'] = ( $item['filteredfile'] === $selected ) ? "selected='selected'" : '';
@@ -152,7 +150,7 @@ class ModuleViewLoader
      *
      * @return bool
      */
-    private function isValidTemplate( $setByModule )
+    public function isValidTemplate( $setByModule )
     {
 
         foreach ($this->views as $view) {
@@ -204,7 +202,8 @@ class ModuleViewLoader
     private function getSingleTemplate()
     {
         if (count( $this->views ) === 1) {
-            return array_pop( $this->views );
+
+            return current(array_slice($this->views, -1));
         }
     }
 } 

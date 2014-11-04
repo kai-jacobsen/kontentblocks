@@ -5,7 +5,6 @@ namespace Kontentblocks\Extensions;
 /**
  * Bootstrap, only if theme supports this feature
  */
-
 if (current_theme_supports( 'kontentblocks:page-settings' )) {
     add_action( 'kb.init', array( '\Kontentblocks\Extensions\PageSettingsUI', 'init' ) );
 }

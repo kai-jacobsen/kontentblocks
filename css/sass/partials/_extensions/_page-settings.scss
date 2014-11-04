@@ -1,0 +1,29 @@
+.page-template-wrapper{
+
+  margin-top: 15px;
+  overflow: hidden;
+  background-color: #fff;
+
+  &:after{
+    content: '';
+    clear: both;
+  }
+
+  select{
+    margin-left: 8px;
+  }
+
+}
+
+.reframe-select-parent {
+  display: inline-block;
+  margin-right: -1px;
+
+}
+
+.reframe-select-template {
+  display: inline-block;
+  label {
+    margin-right: 10px;
+  }
+}

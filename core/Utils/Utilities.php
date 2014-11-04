@@ -133,7 +133,7 @@ class Utilities
 
         if (!$kbHiddenEditorCalled) {
             echo "<div style='display: none;'>";
-            wp_editor( '', 'content' );
+            wp_editor( '', 'ghosteditor' );
             echo '</div>';
         }
 
@@ -366,6 +366,21 @@ class Utilities
         if ($url !== false) {
             wp_remote_get( $url, array( 'timeout' => 1 ) );
         }
+    }
+
+    public static function validateBoolRecursive($array)
+    {
+        foreach($array as $k => $v){
+
+            if (is_array($v)){
+                $array[$k] = self::validateBoolRecursive($v);
+            }
+
+            if ($v === 'true' || $v === 'false'){
+                $array[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
+            }
+        }
+        return $array;
     }
 
 }

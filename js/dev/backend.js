@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-03 */
+/*! Kontentblocks DevVersion 2014-11-04 */
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.area = options.area;
@@ -768,10 +768,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         formData = jQuery("#post").serializeJSON();
         moduleData = formData[this.model.get("instance_id")];
         delete moduleData.areaContext;
-        delete moduleData.viewfile;
         delete moduleData.moduleName;
         this.trigger("kb::module.data.updated");
-        console.log(moduleData);
         return moduleData;
     },
     addField: function(key, obj, arrayKey) {

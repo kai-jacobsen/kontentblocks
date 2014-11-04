@@ -153,7 +153,10 @@ class ScreenContext
     {
         echo "</div>"; // end inner
         // hook to add custom stuff after areas
+
         do_action("context_box_{$this->id}", $this->id, $this->ScreenManager);
+
+
         echo "</div>";
 
     }

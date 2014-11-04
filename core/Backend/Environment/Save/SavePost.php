@@ -84,7 +84,7 @@ class SavePost
                 // check for draft and set to false
                 // special block specific data
 
-                $module = $this->moduleOverrides( $module, $data, $instance );
+                $module = $this->moduleOverrides( $module, $data );
 
                 // create updated index
                 unset( $module['settings'] );
@@ -143,11 +143,10 @@ class SavePost
     /**
      * @param $module
      * @param $data
-     * @param $instance \Kontentblocks\Modules\Module
      *
      * @return mixed
      */
-    private function moduleOverrides( $module, $data, $instance )
+    protected function moduleOverrides( $module, $data )
     {
         $module['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
         $module['overrides']['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module['overrides']['name'];

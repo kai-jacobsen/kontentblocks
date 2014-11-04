@@ -13,7 +13,7 @@ class ApplyContentFilter
         check_ajax_referer('kb-read');
 
         global $post;
-        $content = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
+        $content = filter_input(INPUT_POST, 'data', FILTER_UNSAFE_RAW);
         $module = $_POST['module'];
 
         $post = get_post($module['post_id']);

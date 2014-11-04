@@ -106,6 +106,7 @@ abstract class Module
      */
     function __construct( $args = null, $data = array(), PostEnvironment $Environment = null )
     {
+
         // batch setup
         $this->set( $args );
 
@@ -113,12 +114,16 @@ abstract class Module
 
         $this->setEnvVarsFromEnvironment( $Environment );
 
+
+        if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
+            $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
+        }
+
+
         if (method_exists( $this, 'fields' )) {
             $this->Fields = new FieldManager( $this );
             $this->fields();
-
         }
-
 
     }
 
@@ -143,16 +148,17 @@ abstract class Module
     /**
      * @param string $area
      */
-    public function setArea($area)
+    public function setArea( $area )
     {
-        $this->setEnvVars(array('area' => $area));
+        $this->setEnvVars( array( 'area' => $area ) );
     }
 
     /**
      * @return string|false
      */
-    public function getArea(){
-        return $this->getEnvVar('area', false);
+    public function getArea()
+    {
+        return $this->getEnvVar( 'area', false );
     }
 
     /**
@@ -161,7 +167,7 @@ abstract class Module
      * gets called by ui display callback
      *
      */
-    public function options()
+    public function form()
     {
         if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
@@ -173,7 +179,7 @@ abstract class Module
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
             $this->Fields->renderFields();
         } else {
-            $this->renderEmptyOptions();
+            $this->renderEmptyForm();
         }
 
         return false;
@@ -252,8 +258,9 @@ abstract class Module
      * if enabled
      * @return mixed|null
      */
-    public function concat(){
-        return $this->getSetting('concat');
+    public function concat()
+    {
+        return $this->getSetting( 'concat' );
     }
 
     /**
@@ -285,7 +292,7 @@ abstract class Module
     /**
      * Creates a complete list item for the area
      */
-    public function renderOptions()
+    public function renderForm()
     {
 
         $Node = new ModuleHTMLNode( $this );
@@ -344,7 +351,6 @@ abstract class Module
                 }
             }
         }
-
     }
 
     /**
@@ -368,6 +374,15 @@ abstract class Module
 
     }
 
+    public function setMaster( $master )
+    {
+        if (is_null( $master )) {
+            $this->master = false;
+        }
+
+        $this->master = filter_var( $master, FILTER_VALIDATE_BOOLEAN );
+    }
+
     /**
      * Get area context of module
      * @return mixed
@@ -378,6 +393,7 @@ abstract class Module
         return $this->getEnvVar( 'areaContext', false );
 
     }
+
 
     /**
      * If an Environment is given, add from that
@@ -410,15 +426,14 @@ abstract class Module
         if (!filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
             return '';
         }
-
         // a viewfile was already set
-        if (isset( $this->viewfile ) && !empty( $this->viewfile )) {
+        if (isset( $this->viewfile ) && !empty( $this->viewfile ) && $this->ViewLoader->isValidTemplate(
+                $this->viewfile
+            )
+        ) {
             return $this->viewfile;
         } else {
-            /** @var \Kontentblocks\Modules\ModuleViewsRegistry $Registry */
-            $Registry = Kontentblocks::getService( 'registry.moduleViews' );
-            $Loader = $Registry->getViewLoader( $this );
-            return $Loader->findDefaultTemplate();
+            return $this->viewfile = $this->ViewLoader->findDefaultTemplate();
         }
 
     }
@@ -465,18 +480,14 @@ abstract class Module
         }
         if ($this->getSetting( 'useViewLoader' ) && is_null( $this->View )) {
             $tpl = $this->getViewfile();
-            /** @var \Kontentblocks\Modules\ModuleViewsRegistry $Registry */
-            $Registry = Kontentblocks::getService( 'registry.moduleViews' );
-            $Loader = $Registry->getViewLoader( $this );
             $T = new ModuleView( $this );
-            $full = $Loader->getTemplateByName( $tpl );
+            $full = $this->ViewLoader->getTemplateByName( $tpl );
             if (isset( $full['fragment'] )) {
                 $T->setTplFile( $full['fragment'] );
                 $T->setPath( $full['basedir'] );
             }
 
             $this->View = $T;
-
             return $this->View;
 
         } else if ($this->View) {
@@ -645,7 +656,6 @@ abstract class Module
         if ($this->getSetting( 'disabled' ) || $this->getSetting( 'hidden' )) {
             return false;
         }
-
         if (!$this->state['active'] || $this->state['draft']) {
             return false;
         }
@@ -653,7 +663,7 @@ abstract class Module
         return true;
     }
 
-    public function toJSON()
+    final public function toJSON()
     {
         // todo only used on frontend
         $toJSON = array(
@@ -727,20 +737,6 @@ abstract class Module
 
     }
 
-    /**
-     * Returns a string indicator for the current status
-     * @since 1.0.0
-     * @return string
-     */
-    public function getStatusClass()
-    {
-        if ($this->state['active']) {
-            return 'activated';
-        } else {
-            return 'deactivated';
-        }
-
-    }
 
     /**
      * Add area Attributes to env vars
@@ -774,7 +770,7 @@ abstract class Module
      * No fields an options method override fallback
      * @since 1.0.0
      */
-    private function renderEmptyOptions()
+    private function renderEmptyForm()
     {
         $tpl = new CoreView( 'no-module-options.twig' );
         echo $tpl->render( false );

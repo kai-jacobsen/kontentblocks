@@ -108,9 +108,11 @@ abstract class StaticPanel extends AbstractPanel
      */
     private function beforeForm()
     {
-        echo "<div class='postbox'>
+        $class = (is_array($this->metaBox)) ? 'kb-postbox' : '';
+
+        echo "<div class='postbox {$class}'>
                 <div class='kb-custom-wrapper'>
-                <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
+                <div class='inside'>";
     }
 
     /**

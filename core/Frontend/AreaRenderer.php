@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Modules\Module;
@@ -67,6 +68,8 @@ class AreaRenderer
         }
 
         $this->Environment = Utilities::getEnvironment( $postId );
+
+
         $modules = $this->Environment->getModulesforArea( $area );
         if (!$modules) {
             return;
@@ -74,12 +77,14 @@ class AreaRenderer
             $this->modules = new ModuleIterator( $modules, $this->Environment );
         }
 
+
         // setup AreaOutput
         $this->AreaOutput = new AreaOutput(
             $this->Environment->getAreaDefinition( $area ),
             $this->Environment->getAreaSettings( $area ),
             $additionalArgs
         );
+
     }
 
     /**
@@ -117,11 +122,10 @@ class AreaRenderer
             $module->rawModuleData = $module->moduleData;
 
 
-            if (method_exists( $module, 'verify' )) {
-                if (!$module->verify( $module->moduleData )) {
-                    continue;
-                }
+            if (!$module->verify()) {
+                continue;
             }
+
 
             $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
 
@@ -135,7 +139,7 @@ class AreaRenderer
         $output .= $this->AreaOutput->closeArea();
 
         if (current_theme_supports( 'kontentblocks:area-concat' ) && isset( $_GET['concat'] )) {
-            if ($module->getSetting('concat')){
+            if ($module->getSetting( 'concat' )) {
                 ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
             }
         }

@@ -2,3 +2,11 @@
   background-color: #fff;
   margin: 15px 0;
 }
+
+.kb-postbox.postbox{
+  border: none;
+
+  .inside{
+    padding: 0;
+  }
+}
