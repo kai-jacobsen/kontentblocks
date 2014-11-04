@@ -106,7 +106,6 @@ abstract class Module
      */
     function __construct( $args = null, $data = array(), PostEnvironment $Environment = null )
     {
-
         // batch setup
         $this->set( $args );
 
@@ -119,12 +118,10 @@ abstract class Module
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
 
-
         if (method_exists( $this, 'fields' )) {
             $this->Fields = new FieldManager( $this );
             $this->fields();
         }
-
     }
 
     /**
