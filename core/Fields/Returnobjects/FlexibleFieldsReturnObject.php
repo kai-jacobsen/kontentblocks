@@ -1,18 +1,15 @@
 <?php
 
-namespace Kontentblocks\Fields\Utilities;
+namespace Kontentblocks\Fields\Returnobjects;
 
 use Kontentblocks\Fields\Definitions\FlexibleFields;
-use Kontentblocks\Fields\Returnobjects\EditableLink;
-use Kontentblocks\Fields\Returnobjects\Element;
-use Kontentblocks\Fields\Returnobjects\Image;
 
 /**
- * Class FlexibleFieldsFactory
+ * Class FlexibleFieldsReturnObject
  * @package Kontentblocks\Fields\Utilities
  * @since 1.0.0
  */
-class FlexibleFieldsFactory
+class FlexibleFieldsReturnObject
 {
 
     /**
@@ -91,7 +88,7 @@ class FlexibleFieldsFactory
             $item = array();
             foreach ($fields as $key => $conf) {
 
-                if (empty($data[$key])){
+                if (empty( $data[$key] )) {
                     $data[$key] = $conf['std'] || '';
                 }
 
@@ -167,7 +164,7 @@ class FlexibleFieldsFactory
             case ( 'text' ):
             case ( 'editor' ):
             case ( 'textarea' ):
-                return new Element(
+                return new EditableElement(
                     $keydata, array(
                         'instance_id' => $this->moduleId,
                         'key' => $key,
@@ -191,7 +188,7 @@ class FlexibleFieldsFactory
                 );
 
             case ( 'image' ):
-                return new Image(
+                return new EditableImage(
                     $keydata, array(
                         'instance_id' => $this->moduleId,
                         'key' => $key,

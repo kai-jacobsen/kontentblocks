@@ -11,7 +11,7 @@ use Kontentblocks\Utils\JSONBridge;
  * A ReturnObject for images with 'inline' edit capabilities, which are optional
  * @package Kontentblocks\Fields\Returnobjects
  */
-class Image extends AbstractEditableFieldReturn implements \JsonSerializable
+class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializable
 {
 
     /**

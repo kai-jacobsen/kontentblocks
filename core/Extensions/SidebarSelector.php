@@ -259,6 +259,10 @@ class SidebarSelector
 
     }
 
+    /**
+     * @return string
+     *
+     */
     public function inactiveListItems()
     {
         $return = '';

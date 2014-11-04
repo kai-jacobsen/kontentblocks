@@ -18,7 +18,8 @@ Class FlexibleFields extends Field
     // Defaults
     public static $settings = array(
         'type' => 'flexfields',
-        'forceSave' => true
+        'forceSave' => true,
+        'returnObj' => 'FlexibleFieldsReturnObject'
     );
 
     /**

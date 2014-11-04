@@ -5,6 +5,7 @@ namespace Kontentblocks\Fields;
 
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
+use Kontentblocks\Fields\Returnobjects;
 
 /**
  * Class Field
@@ -216,7 +217,11 @@ abstract class Field
         $value = $this->prepareOutput( $this->getValue() );
         if ($this->getArg( 'returnObj' )) {
             $classname = $this->getArg( 'returnObj' );
-            // first try
+
+            // backwards compat
+            $classname = $this->aliasReturnObjectClass( $classname );
+
+            // first try with FQN
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
 
             if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
@@ -228,6 +233,11 @@ abstract class Field
                 $this->returnObj = new $classname( $value, $this );
             }
 
+            return $this->returnObj;
+
+        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg('returnObj') !== false ) {
+            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
+            $this->returnObj = new $classpath( $value, $this );
             return $this->returnObj;
         } else {
 //			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
@@ -734,7 +744,7 @@ abstract class Field
             return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" );
         } else if (is_bool( $array ) && $array === true) {
             return esc_attr( "{$this->baseId}[{$this->key}][]" );
-        } else if (is_string( $array ) && is_string( $akey ) && is_string($multiple)) {
+        } else if (is_string( $array ) && is_string( $akey ) && is_string( $multiple )) {
             return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][$multiple]" );
         } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
             return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" );
@@ -779,6 +789,22 @@ abstract class Field
 
             return $args;
         }
+    }
+
+    private function aliasReturnObjectClass( $classname )
+    {
+        switch ($classname) {
+
+            case 'Element':
+                return 'EditableElement';
+                break;
+
+            case 'Image':
+                return 'EditableImage';
+                break;
+        }
+
+        return $classname;
     }
 
 }

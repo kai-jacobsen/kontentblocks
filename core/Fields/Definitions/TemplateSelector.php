@@ -46,7 +46,4 @@ Class TemplateSelector extends Field
 	protected function prepareInputValue( $val ) {
 		return $val;
 	}
-
-
-
 }

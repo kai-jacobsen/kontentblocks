@@ -282,7 +282,7 @@ abstract class Module
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->Fields->getFieldByKey( $key );
             $this->Model[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
-            $this->moduleData[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
+            $this->moduleData[$key] = ( $field !== null ) ? $this->Model[$key] : $v;
         }
     }
 
