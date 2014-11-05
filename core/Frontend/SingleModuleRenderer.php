@@ -31,7 +31,7 @@ class SingleModuleRenderer
         printf(
             '<%3$s id="%1$s" class="%2$s">',
             $this->Module->getId(),
-            'os-edit-container module',
+            "os-edit-container module {$this->Module->getSetting('id')}",
             $addArgs['element']
         );
         echo $this->Module->module();

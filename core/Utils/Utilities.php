@@ -14,6 +14,8 @@ use Kontentblocks\Kontentblocks;
 class Utilities
 {
 
+    protected static $environments = array();
+
     /**
      * Get environment
      *
@@ -30,17 +32,29 @@ class Utilities
         global $post;
 
         if ($id && is_numeric( $id ) && $id !== - 1) {
-            return new PostEnvironment( $id );
+
+            if (isset( self::$environments[$id] )) {
+                return self::$environments[$id];
+            } else {
+                return self::$environments[$id] = new PostEnvironment( $id );
+            }
         } else {
             $Registry = Kontentblocks::getService( 'registry.areas' );
             $area = $Registry->getArea( $id );
             if (isset( $area['parent_id'] )) {
-                return new PostEnvironment( $area['parent_id'] );
+                if (isset( self::$environments[$area['parent_id']] )) {
+                    return self::$environments[$area['parent_id']];
+                } else {
+                    return self::$environments[$area['parent_id']] = new PostEnvironment( $area['parent_id'] );
+                }
             } else {
-                return new PostEnvironment( $post->ID );
+                if (isset( self::$environments[$post->ID] )) {
+                    return self::$environments[$post->ID];
+                } else {
+                    return self::$environments[$post->ID] = new PostEnvironment( $post->ID );
+                }
             }
         }
-
     }
 
     /**
@@ -219,7 +233,11 @@ class Utilities
                 $collect[] = $id;
             }
         }
-        return max( $collect );
+        if (empty( $collect )) {
+            return absint( 1 );
+        } else {
+            return absint( max( $collect ) );
+        }
 
     }
 
@@ -368,19 +386,42 @@ class Utilities
         }
     }
 
-    public static function validateBoolRecursive($array)
+    public static function validateBoolRecursive( $array )
     {
-        foreach($array as $k => $v){
+        foreach ($array as $k => $v) {
 
-            if (is_array($v)){
-                $array[$k] = self::validateBoolRecursive($v);
+            if (is_array( $v )) {
+                $array[$k] = self::validateBoolRecursive( $v );
             }
 
-            if ($v === 'true' || $v === 'false'){
-                $array[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
+            if ($v === 'true' || $v === 'false') {
+                $array[$k] = filter_var( $v, FILTER_VALIDATE_BOOLEAN );
             }
         }
         return $array;
     }
 
+
+    /**
+     * Filterable array of allowed cats
+     * uses @filter kb_menu_cats
+     * @return array $cats
+     */
+    public static function setupCats()
+    {
+        // defaults
+        $cats = array(
+            'standard' => __( 'Standard', 'kontentblocks' ),
+        );
+
+        $cats = apply_filters( 'kb_menu_cats', $cats );
+        $cats['media'] = __( 'Media', 'kontentblocks' );
+        $cats['special'] = __( 'Spezial', 'kontentblocks' );
+
+        $cats['core'] = __( 'System', 'kontentblocks' );
+        $cats['template'] = __( 'Templates', 'kontentblocks' );
+
+        JSONBridge::getInstance()->registerData( 'ModuleCategories', null, $cats );
+        return $cats;
+    }
 }

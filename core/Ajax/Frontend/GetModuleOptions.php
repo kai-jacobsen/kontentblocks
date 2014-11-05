@@ -29,7 +29,7 @@ class GetModuleOptions
         $module = $_POST['module'];
         /** @var PostEnvironment $Environment */
         $Environment = Utilities::getEnvironment( $module['post_id'] );
-        $Factory = new ModuleFactory( $module['class'], $module, $Environment, $module['moduleData'] );
+        $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $instance = $Factory->getModule();
 
         ob_start();

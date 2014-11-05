@@ -11,7 +11,7 @@ class EditableElement extends AbstractEditableFieldReturn {
 	 * @var string
 	 * @since 1.0.0
 	 */
-	protected $el;
+	protected $el = 'div';
 
 	/**
 	 * Set of css classes to add to the el

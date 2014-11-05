@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Area Registry
@@ -78,6 +79,9 @@ class AreaRegistry
     {
         $this->AreaDynamicManager = new AreaDynamicManager();
         add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
+        if (is_user_logged_in()) {
+            add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
+        }
     }
 
     /**
@@ -92,17 +96,17 @@ class AreaRegistry
     {
         $areas = get_posts(
             array(
-                'post_type'        => 'kb-dyar',
-                'posts_per_page'   => - 1,
+                'post_type' => 'kb-dyar',
+                'posts_per_page' => - 1,
                 'suppress_filters' => false
             )
         );
 
         if (!empty( $areas )) {
             foreach ($areas as $areapost) {
-                $area              = get_post_meta( $areapost->ID, '_area', true );
+                $area = get_post_meta( $areapost->ID, '_area', true );
                 $area['parent_id'] = $areapost->ID;
-                $dynamicAreas[]    = $area;
+                $dynamicAreas[] = $area;
             }
         }
 
@@ -266,9 +270,9 @@ class AreaRegistry
 
         $defaults = array(
             'templateClass' => '',
-            'layout'        => array(),
-            'cycle'         => false,
-            'last-item'     => false
+            'layout' => array(),
+            'cycle' => false,
+            'last-item' => false
         );
 
         if (!empty( $args['id'] )) {
@@ -362,7 +366,7 @@ class AreaRegistry
     {
 
         $pageTemplate = $postData->getPageTemplate();
-        $postType     = $postData->getPostType();
+        $postType = $postData->getPostType();
 
         // bail out if this is a redirect template
         if (false !== strpos( $pageTemplate, 'redirect' )) {
@@ -425,20 +429,20 @@ class AreaRegistry
     public static function getDefaults( $manual = true )
     {
         return array(
-            'id'              => '', // unique id of area
-            'name'            => '', // public shown name
-            'description'     => '', // public description
-            'postTypes'       => array(), // array of post types where this area is available to
-            'pageTemplates'   => array(), // array of page template names where this area is available to
+            'id' => '', // unique id of area
+            'name' => '', // public shown name
+            'description' => '', // public description
+            'postTypes' => array(), // array of post types where this area is available to
+            'pageTemplates' => array(), // array of page template names where this area is available to
             'assignedModules' => array(), // array of classnames
-            'layouts'         => array(), // array of area template ids
-            'defaultTpl'      => 'default', // default Tpl to use, if none is set
-            'dynamic'         => false, // whether this is an dynamic area
-            'manual'          => $manual, // true if set by code
-            'limit'           => 0, // how many blocks are allowed
-            'order'           => 0, // order index for sorting
-            'context'         => 'normal', // location on the edit screen
-            'concat'          => false
+            'layouts' => array(), // array of area template ids
+            'defaultTpl' => 'default', // default Tpl to use, if none is set
+            'dynamic' => false, // whether this is an dynamic area
+            'manual' => $manual, // true if set by code
+            'limit' => 0, // how many blocks are allowed
+            'order' => 0, // order index for sorting
+            'context' => 'normal', // location on the edit screen
+            'concat' => false
         );
 
     }
@@ -472,6 +476,11 @@ class AreaRegistry
     {
         $area = $this->getArea( $id );
         return $area['dynamic'];
+    }
+
+    public function setupJSON()
+    {
+        Utilities::setupCats();
     }
 
 }

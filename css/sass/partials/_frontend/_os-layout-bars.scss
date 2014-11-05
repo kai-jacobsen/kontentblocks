@@ -9,7 +9,7 @@
   }
 
   .os-edit-wrapper{
-    width: 100px;
+    width: 130px;
   }
 
   .os-edit-wrapper a {
@@ -21,13 +21,17 @@
   }
 
   .os-edit-wrapper a span {
-    font-size: 25px !important;
-    line-height: 25px !important;
+    font-size: 23px !important;
+    line-height: 23px !important;
   }
 
   .os-edit-wrapper .dashicons{
-    width: 25px;
-    height: 25px;
+    width: 23px;
+    height: 23px;
+  }
+
+  .kb-module-inline-move{
+    cursor: move;
   }
 }
 

@@ -228,6 +228,7 @@ abstract class Module
 
         $this->View = $this->getView();
 
+        // @TODO Remove concept, pointless
         if ($this->getEnvVar( 'action' )) {
             if (method_exists( $this, $this->getEnvVar( 'action' ) . 'Action' )) {
                 $method = $this->getEnvVar( 'action' ) . 'Action';
@@ -235,7 +236,6 @@ abstract class Module
                 return call_user_func( array( $this, $method ), $data );
             }
         }
-
         return $this->render();
 
     }
@@ -653,7 +653,11 @@ abstract class Module
         if ($this->getSetting( 'disabled' ) || $this->getSetting( 'hidden' )) {
             return false;
         }
-        if (!$this->state['active'] || $this->state['draft']) {
+        if (!$this->state['active']) {
+            return false;
+        }
+
+        if (!is_user_logged_in() && $this->state['draft']){
             return false;
         }
 

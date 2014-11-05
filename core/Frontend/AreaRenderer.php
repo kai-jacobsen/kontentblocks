@@ -71,11 +71,11 @@ class AreaRenderer
 
 
         $modules = $this->Environment->getModulesforArea( $area );
-        if (!$modules) {
-            return;
-        } else {
-            $this->modules = new ModuleIterator( $modules, $this->Environment );
-        }
+//        if (!$modules) {
+//            return;
+//        } else {
+        $this->modules = new ModuleIterator( $modules, $this->Environment );
+//        }
 
 
         // setup AreaOutput
@@ -105,7 +105,6 @@ class AreaRenderer
 
         // start area output & create opening wrapper
         $output .= $this->AreaOutput->openArea();
-
         /**
          * @var \Kontentblocks\Modules\Module $module
          */
@@ -121,12 +120,9 @@ class AreaRenderer
             // module->module will, depending on field configuration, modify moduleData
             $module->rawModuleData = $module->moduleData;
 
-
             if (!$module->verify()) {
                 continue;
             }
-
-
             $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
 
             $moduleOutput = $module->module();
@@ -184,18 +180,18 @@ class AreaRenderer
 
     /**
      * @param $_after
-     * @param $module
+     * @param $Module
      * @return string
      */
-    public function afterModule( $_after, $module )
+    public function afterModule( $_after, $Module )
     {
-        JSONBridge::getInstance()->registerModule( $module->toJSON() );
+        JSONBridge::getInstance()->registerModule( $Module->toJSON() );
 
         $layout = $this->AreaOutput->getCurrentLayoutClasses();
         if (!empty( $layout )) {
-            return "</div>" . sprintf( "</%s>", $module->getSetting( 'element' ) );
+            return "</div>" . sprintf( "</%s>", $Module->getSetting( 'element' ) );
         } else {
-            return sprintf( "</%s>", $module->getSetting( 'element' ) );
+            return sprintf( "</%s>", $Module->getSetting( 'element' ) );
 
         }
 

@@ -38,8 +38,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     events: {
         "click a.os-edit-block": "openOptions",
-        "click .editable": "reloadModal",
         "click .kb-js-inline-update": "updateModule",
+        "click .kb-js-inline-delete": "confirmDelete",
+        "click .editable": "reloadModal",
         "hover.first": "setActive",
         "hover.second": "setControlsPosition"
     },
@@ -62,20 +63,20 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }));
     },
     setControlsPosition: function () {
+        var elpostop, msettings, $controls, pos;
+        elpostop = 0;
+        mSettings = this.model.get('settings');
 
-        var elpostop = 0;
-        var mSettings = this.model.get('settings');
-
-        var $controls = jQuery('.os-controls', this.$el);
-        var pos = this.$el.offset();
+        $controls = jQuery('.os-controls', this.$el);
+        pos = this.$el.offset();
 
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
 
-        if (this.$el.css('overflow') !== 'hidden'){
-            elpostop = 10;
+        if (this.$el.css('overflow') !== 'hidden' && pos.top > 60){
+            elpostop = -30;
         }
 
         if (pos.top < 20){
@@ -165,7 +166,20 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             }
         });
     },
-
+    confirmDelete: function(){
+        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, null, this);
+    },
+    removeModule: function(){
+        KB.Ajax.send({
+            action: 'removeModules',
+            _ajax_nonce: KB.Config.getNonce('delete'),
+            module: this.model.get('instance_id')
+        }, this.afterRemoval, this);
+    },
+    afterRemoval: function(){
+        this.model.view.$el.remove();
+        KB.Modules.remove(this.model);
+    },
     addField: function (key, obj, arrayKey) {
         if (!_.isEmpty(arrayKey)) {
             this.attachedFields[arrayKey][key] = obj;

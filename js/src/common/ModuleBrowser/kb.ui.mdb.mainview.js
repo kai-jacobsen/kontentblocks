@@ -142,10 +142,10 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             duplicate: module.get('duplicate'),
             areaContext: this.options.area.model.get('context'),
             area: this.options.area.model.get('id'),
-            _ajax_nonce: KB.Config.getNonce('create')
+            _ajax_nonce: KB.Config.getNonce('create'),
+            frontend: KB.appData.config.frontend
         };
         this.close();
-
         KB.Ajax.send(data, this.success, this);
     },
     // create module success callback
@@ -166,8 +166,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
 
         // update the reference counter, used as base number
         // for new modules
-        var count = parseInt(jQuery('#kb_all_blocks').val(), 10) + 1;
-        jQuery('#kb_all_blocks').val(count);
+        KB.Environment.moduleCount++;
 
         // repaint
         // add module to collection
@@ -191,6 +190,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
                 fullDefs.push(module);
             }
         });
+
         return fullDefs;
     }
 });

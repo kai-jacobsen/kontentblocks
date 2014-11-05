@@ -7,7 +7,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
         'click': 'deleteModule'
     },
     deleteModule: function() {
-        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no);
+        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
     },
     isValid: function() {
         if (!this.model.get('predefined') &&

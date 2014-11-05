@@ -61,7 +61,6 @@ KB.App = function ($) {
         // get the UI on track
         KB.Ui.init();
 
-
     }
 
     function shutdown() {

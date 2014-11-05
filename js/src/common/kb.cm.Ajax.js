@@ -5,7 +5,7 @@ KB.Ajax = (function ($) {
             var pid = (KB.Environment && KB.Environment.postId) ? KB.Environment.postId : false;
             var sned = _.extend({
                 supplemental: data.supplemental || {},
-                count: parseInt($('#kb_all_blocks').val(), 10),
+                count: parseInt(KB.Environment.moduleCount, 10),
                 nonce: $('#_kontentblocks_ajax_nonce').val(),
                 post_id: pid,
                 kbajax: true

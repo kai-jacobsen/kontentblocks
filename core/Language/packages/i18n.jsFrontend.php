@@ -11,7 +11,8 @@
         'moduleControls' => array(
             'controlsChanged' => __('Data was changed', 'Kontentblocks'),
             'controlsEdit' => __('Edit', 'Kontentblocks'),
-            'controlsUpdate' => __('Save', 'Kontentblocks')
+            'controlsUpdate' => __('Save', 'Kontentblocks'),
+            'controlsTrash' => __('Trash', 'Kontentblocks')
         )
     )
 );

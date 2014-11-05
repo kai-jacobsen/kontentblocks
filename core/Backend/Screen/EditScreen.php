@@ -3,7 +3,6 @@
 namespace Kontentblocks\Backend\Screen;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Fields\Definitions\DateTime;
 use Kontentblocks\Helper;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -179,14 +178,7 @@ Class EditScreen
      */
     public function toJSON()
     {
-//        global $post;
-//        $toJSON = array(
-//            'page_template' => $this->Environment->get( 'pageTemplate' ),
-//            'post_type' => $this->Environment->get( 'postType' ),
-//            'post_id' => $post->ID
-//        );
-        echo "<script> var KB = KB || {}; KB.Environment =" . json_encode( $this->Environment ) . "</script>";
-
+        $this->Environment->toJSON();
     }
 
     /**
@@ -197,7 +189,7 @@ Class EditScreen
      */
     private function setupHooks()
     {
-        return apply_filters( 'kb::setup.hooks', array( 'post.php', 'post-new.php' ) );
+        return apply_filters( 'kb.setup.hooks', array( 'post.php', 'post-new.php' ) );
 
     }
 
@@ -205,8 +197,8 @@ Class EditScreen
     {
         global $current_user;
         if (current_user_can( 'manage_kontentblocks' )) {
-            $tpl = new CoreView('no-areas.twig');
-            $tpl->render(true);
+            $tpl = new CoreView( 'no-areas.twig' );
+            $tpl->render( true );
         }
     }
 

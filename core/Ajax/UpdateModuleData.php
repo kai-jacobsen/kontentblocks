@@ -46,13 +46,11 @@ class UpdateModuleData
         $old = $Environment->getStorage()->getModuleData( $moduleArgs['instance_id'] );
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
-
         $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
 
         $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
 
         $Module->setModuleData( $mergedData );
-
         unset( $moduleArgs['settings'] );
         unset( $moduleArgs['moduleData'] );
         $moduleArgs['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';

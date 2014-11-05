@@ -52,3 +52,12 @@ function ignoreShortcodes()
 if (isset( $_GET['concat'] )) {
     add_action( 'wp_head', __NAMESPACE__ . '\ignoreShortcodes' );
 }
+
+if (is_user_logged_in() && !is_admin()) {
+    add_action(
+        'kb.init',
+        function () {
+            new FrontendSetup();
+        }
+    );
+};

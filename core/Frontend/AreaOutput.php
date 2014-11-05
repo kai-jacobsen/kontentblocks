@@ -1,6 +1,7 @@
 <?php
 
 namespace Kontentblocks\Frontend;
+use Kontentblocks\Frontend\AreaLayoutIterator;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
@@ -105,8 +106,9 @@ class AreaOutput
             $this->id,
             $this->getLayoutId(),
             $this->getContext(),
-            $this->getSubcontext()
+            $this->getSubcontext(),
         );
+
 
         return implode( ' ', $classes );
 
@@ -160,7 +162,7 @@ class AreaOutput
         }
         if ( $this->settings[ 'area_template' ] !== 'default' ) {
             $this->hasLayout = true;
-            return new \Kontentblocks\Frontend\AreaLayoutIterator( $this->settings[ 'area_template' ] );
+            return new AreaLayoutIterator( $this->settings[ 'area_template' ] );
         }
 
         return false;

@@ -3,7 +3,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
     className: 'modules-list-item',
     initialize: function (options) {
         this.options = options || {};
-
         // shorthand to parent area
         this.area = options.browser.area;
 

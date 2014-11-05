@@ -56,7 +56,7 @@ KB.IEdit.Image = (function ($) {
             return this._frame;
         },
         ready: function () {
-            $('.media-modal').addClass(' smaller no-sidebar');
+            $('.media-modal').addClass('smaller no-sidebar');
         },
         select: function () {
             // this references _frame
@@ -75,10 +75,8 @@ KB.IEdit.Image = (function ($) {
 
             KB.Util.setIndex(moduleData, path, value);
 
-
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set('moduleData', moduleData);
-
 
             jQuery.ajax({
                 url: ajaxurl,

@@ -8,6 +8,7 @@ use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Utils\Utilities;
 
 
 /**
@@ -66,6 +67,8 @@ class PostEnvironment implements JsonSerializable
         if (!isset( $postID )) {
             return false;
         }
+
+
         $this->postId = $postID;
         $this->DataHandler = new DataHandler( $postID );
         $this->Storage = new PostMetaModuleStorage( $postID, $this->DataHandler );
@@ -76,6 +79,7 @@ class PostEnvironment implements JsonSerializable
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
         $this->areas = $this->findAreas();
+
     }
 
     /**
@@ -294,6 +298,11 @@ class PostEnvironment implements JsonSerializable
     }
 
 
+    public function getModuleCount()
+    {
+        return Utilities::getHighestId($this->getStorage()->getIndex());
+    }
+
     /**
      * (PHP 5 &gt;= 5.4.0)<br/>
      * Specify data which should be serialized to JSON
@@ -304,9 +313,15 @@ class PostEnvironment implements JsonSerializable
     function jsonSerialize()
     {
         return array(
-            'postId' => absint($this->postId),
+            'postId' => absint( $this->postId ),
             'pageTemplate' => $this->getPageTemplate(),
             'postType' => $this->getPostType(),
+            'moduleCount' => $this->getModuleCount()
         );
+    }
+
+    public function toJSON()
+    {
+        echo "<script> var KB = KB || {}; KB.Environment =" . json_encode( $this ) . "</script>";
     }
 }

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-04 */
+/*! Kontentblocks DevVersion 2014-11-05 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -141,7 +141,7 @@ KB.IEdit.Image = function($) {
             return this._frame;
         },
         ready: function() {
-            $(".media-modal").addClass(" smaller no-sidebar");
+            $(".media-modal").addClass("smaller no-sidebar");
         },
         select: function() {
             attachment = this.get("selection").first();
@@ -432,8 +432,75 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     }
 });
 
+KB.Backbone.ModuleBrowser.prototype.success = function(data) {
+    var model;
+    this.options.area.$el.append(data.html).removeClass("kb-area__empty");
+    KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
+    model = KB.Modules.add(KB.lastAddedModule);
+    _K.info("new module created", {
+        view: model.view
+    });
+    KB.TinyMCE.addEditor();
+    KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
+    KB.Views.Modules.lastViewAdded.$el.addClass("kb-open");
+    KB.Environment.moduleCount++;
+    KB.Views.Modules.lastViewAdded.openOptions();
+};
+
 KB.Backbone.AreaView = Backbone.View.extend({
-    initialize: function() {}
+    events: {
+        dblclick: "openModuleBrowser"
+    },
+    initialize: function() {
+        this.setupUi();
+    },
+    setupUi: function() {
+        var that = this;
+        var modules = this.$el.find(".module");
+        if (modules.length === 0) {
+            this.$el.addClass("kb-area__empty");
+        }
+        _.each(modules, function(item, index) {
+            jQuery(item).attr("rel", item.id + "_" + index);
+        });
+        this.$el.sortable({
+            handle: ".kb-module-inline-move",
+            items: ".module",
+            helper: "clone",
+            opacity: .5,
+            axis: "y",
+            delay: 150,
+            forceHelperSize: true,
+            forcePlaceholderSize: true,
+            placeholder: "kb-front-sortable-placeholder",
+            stop: function() {
+                var serializedData = {};
+                serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
+                    attribute: "rel"
+                });
+                return KB.Ajax.send({
+                    action: "resortModules",
+                    data: serializedData,
+                    _ajax_nonce: KB.Config.getNonce("update")
+                });
+            }
+        });
+    },
+    openModuleBrowser: function() {
+        if (!this.ModuleBrowser) {
+            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+                area: this
+            });
+        }
+        this.ModuleBrowser.render();
+    },
+    addModuleView: function(moduleView) {
+        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
+        this.listenTo(moduleView.model, "change:area", this.removeModule);
+        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
+        moduleView.model.areaView = this;
+        this.ui();
+    }
 });
 
 KB.Backbone.FrontendEditView = Backbone.View.extend({
@@ -736,8 +803,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     events: {
         "click a.os-edit-block": "openOptions",
-        "click .editable": "reloadModal",
         "click .kb-js-inline-update": "updateModule",
+        "click .kb-js-inline-delete": "confirmDelete",
+        "click .editable": "reloadModal",
         "hover.first": "setActive",
         "hover.second": "setControlsPosition"
     },
@@ -758,16 +826,17 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }));
     },
     setControlsPosition: function() {
-        var elpostop = 0;
-        var mSettings = this.model.get("settings");
-        var $controls = jQuery(".os-controls", this.$el);
-        var pos = this.$el.offset();
+        var elpostop, msettings, $controls, pos;
+        elpostop = 0;
+        mSettings = this.model.get("settings");
+        $controls = jQuery(".os-controls", this.$el);
+        pos = this.$el.offset();
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
-        if (this.$el.css("overflow") !== "hidden") {
-            elpostop = 10;
+        if (this.$el.css("overflow") !== "hidden" && pos.top > 60) {
+            elpostop = -30;
         }
         if (pos.top < 20) {
             elpostop = 10;
@@ -830,6 +899,20 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 KB.Notice.notice("There went something wrong", "error");
             }
         });
+    },
+    confirmDelete: function() {
+        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, null, this);
+    },
+    removeModule: function() {
+        KB.Ajax.send({
+            action: "removeModules",
+            _ajax_nonce: KB.Config.getNonce("delete"),
+            module: this.model.get("instance_id")
+        }, this.afterRemoval, this);
+    },
+    afterRemoval: function() {
+        this.model.view.$el.remove();
+        KB.Modules.remove(this.model);
     },
     addField: function(key, obj, arrayKey) {
         if (!_.isEmpty(arrayKey)) {

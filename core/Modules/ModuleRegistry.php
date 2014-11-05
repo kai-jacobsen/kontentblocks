@@ -32,6 +32,10 @@ class ModuleRegistry
     {
         $this->Services = $Services;
         add_action( 'admin_footer', array( $this, 'setupJSON' ), 8 );
+
+        if (is_user_logged_in()){
+            add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
+        }
     }
 
     /**

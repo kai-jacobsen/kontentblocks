@@ -6,6 +6,7 @@ use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Area
@@ -98,7 +99,7 @@ class Area
         // custom settins for this area
         $this->settingsMenu = new AreaSettingsMenu( $this, $this->Environment );
 
-        $this->cats = self::setupCats();
+        $this->cats = Utilities::setupCats();
     }
 
     /**
@@ -146,9 +147,9 @@ class Area
                 $module['areaContext'] = $this->context;
                 $module = apply_filters( 'kb_before_module_options', $module );
                 $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
-                $instance = $Factory->getModule();
-                $instance->renderForm();
-                JSONBridge::getInstance()->registerModule( $instance->toJSON() );
+                $Module = $Factory->getModule();
+                $Module->renderForm();
+                JSONBridge::getInstance()->registerModule( $Module->toJSON() );
             }
         }
 
@@ -268,26 +269,5 @@ class Area
         }
     }
 
-    /**
-     * Filterable array of allowed cats
-     * uses @filter kb_menu_cats
-     * @return array $cats
-     */
-    public static function setupCats()
-    {
-        // defaults
-        $cats = array(
-            'standard' => __( 'Standard', 'kontentblocks' ),
-        );
 
-        $cats = apply_filters( 'kb_menu_cats', $cats );
-        $cats['media'] = __( 'Media', 'kontentblocks' );
-        $cats['special'] = __( 'Spezial', 'kontentblocks' );
-
-        $cats['core'] = __( 'System', 'kontentblocks' );
-        $cats['template'] = __( 'Templates', 'kontentblocks' );
-
-        JSONBridge::getInstance()->registerData( 'ModuleCategories', null, $cats );
-        return $cats;
-    }
 }

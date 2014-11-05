@@ -4,6 +4,7 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\DataProvider\DataHandler;
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\JSONBridge;
@@ -57,6 +58,8 @@ class CreateNewModule
 
 
     private $moduleArgs;
+
+    private $frontend = false;
 
     /**
      *
@@ -240,7 +243,12 @@ class CreateNewModule
         // create the new module finally
         $this->newInstance = $this->createModuleInstance();
 
-        $this->newInstance->renderForm();
+        if ($this->frontend) {
+            $SingleRenderer = new SingleModuleRenderer( $this->newInstance );
+            $SingleRenderer->render();
+        } else {
+            $this->newInstance->renderForm();
+        }
         $html = ob_get_clean();
         $response = array
         (
@@ -267,6 +275,8 @@ class CreateNewModule
 
         $this->postId = filter_var( $_POST['post_id'] );
 
+        $this->frontend = filter_input( INPUT_POST, 'frontend', FILTER_VALIDATE_BOOLEAN );
+
         $post = get_post( $this->postId );
         setup_postdata( $post );
 
@@ -274,14 +284,15 @@ class CreateNewModule
         $this->type = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
 
         $moduleArgs = array(
-            'area' => FILTER_SANITIZE_STRING,
-            'master' => FILTER_VALIDATE_BOOLEAN,
-            'areaContext' => FILTER_SANITIZE_STRING,
-            'template' => FILTER_VALIDATE_BOOLEAN,
-            'class' => FILTER_SANITIZE_STRING,
-            'master_id' => FILTER_SANITIZE_NUMBER_INT,
-            'parentId' => FILTER_SANITIZE_NUMBER_INT,
-            'viewfile' => FILTER_SANITIZE_STRING
+            'area'          => FILTER_SANITIZE_STRING,
+            'master'        => FILTER_VALIDATE_BOOLEAN,
+            'areaContext'   => FILTER_SANITIZE_STRING,
+            'template'      => FILTER_VALIDATE_BOOLEAN,
+            'class'         => FILTER_SANITIZE_STRING,
+            'master_id'     => FILTER_SANITIZE_NUMBER_INT,
+            'parentId'      => FILTER_SANITIZE_NUMBER_INT,
+            'viewfile'      => FILTER_SANITIZE_STRING,
+            'post_id'       => FILTER_SANITIZE_NUMBER_INT
         );
 
 

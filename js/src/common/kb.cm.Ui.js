@@ -222,8 +222,6 @@ KB.Ui = function ($) {
                     that.isSorting = false;
                     $('#kontentblocks_stage').removeClass('kb-is-sorting');
 
-                    var serializedData = [];
-
                     // restore TinyMCE editors
                     KB.TinyMCE.restoreEditors();
 
