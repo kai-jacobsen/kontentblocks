@@ -3,6 +3,7 @@
 namespace Kontentblocks\Frontend;
 
 
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
@@ -14,14 +15,14 @@ class SingleModuleRenderer
 {
 
 
-    public function __construct( $Module )
+    public function __construct( Module $Module )
     {
         $this->Module = $Module;
     }
 
     public function render( $args = array() )
     {
-        if (!$this->Module->verify( )) {
+        if (!$this->Module->verify()) {
             return false;
         }
 
@@ -31,7 +32,7 @@ class SingleModuleRenderer
         printf(
             '<%3$s id="%1$s" class="%2$s">',
             $this->Module->getId(),
-            "os-edit-container module {$this->Module->getSetting('id')}",
+            $this->getModuleClasses(),
             $addArgs['element']
         );
         echo $this->Module->module();
@@ -50,6 +51,21 @@ class SingleModuleRenderer
         );
 
         return wp_parse_args( $args, $defaults );
+    }
+
+    private function getModuleClasses()
+    {
+        $draft = ($this->Module);
+
+        return implode(
+            ' ',
+            array(
+                'os-edit-container',
+                'module',
+                $this->Module->getSetting('id'),
+
+            )
+        );
     }
 
 

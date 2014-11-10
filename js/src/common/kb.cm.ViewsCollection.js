@@ -6,6 +6,8 @@ KB.ViewsCollection = function () {
     this.views = {};
     this.lastViewAdded = null;
     this.add = function (id, view) {
+
+
         if (!this.views[id]){
             this.views[id] = view;
             KB.trigger('kb:'+view.model.get('class')+':added', view);
@@ -33,8 +35,10 @@ KB.ViewsCollection = function () {
 
 
     this.remove = function (id) {
-        var view = this.get(id);
-        this.trigger('KB::backend.module.view.deleted', view);
+        var V = this.get(id);
+        V.Area.trigger('kb.module.deleted', V);
+        this.trigger('kb.modules.view.deleted', V);
+
 //        view.removeControls();
         delete this.views[id];
     };

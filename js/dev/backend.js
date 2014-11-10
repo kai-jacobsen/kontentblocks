@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-05 */
+/*! Kontentblocks DevVersion 2014-11-09 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -348,7 +348,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         this.model.view = this;
         this.setupDefaultMenuItems();
-        KB.Views.Modules.on("KB::backend.module.view.deleted", function(view) {
+        KB.Views.Modules.on("kb.modules.view.deleted", function(view) {
             view.$el.fadeOut(500, function() {
                 view.$el.remove();
             });

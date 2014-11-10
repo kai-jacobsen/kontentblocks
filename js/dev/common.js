@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-05 */
+/*! Kontentblocks DevVersion 2014-11-09 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -1105,8 +1105,9 @@ KB.ViewsCollection = function() {
         KB.trigger("kb:ready");
     };
     this.remove = function(id) {
-        var view = this.get(id);
-        this.trigger("KB::backend.module.view.deleted", view);
+        var V = this.get(id);
+        V.Area.trigger("kb.module.deleted", V);
+        this.trigger("kb.modules.view.deleted", V);
         delete this.views[id];
     };
     this.get = function(id) {

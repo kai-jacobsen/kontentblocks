@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -80,7 +81,7 @@ class AreaRegistry
         $this->AreaDynamicManager = new AreaDynamicManager();
         add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
         if (is_user_logged_in()) {
-            add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
+                add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
         }
     }
 
@@ -299,6 +300,21 @@ class AreaRegistry
 
     }
 
+
+    /**
+     * Check if a template exists by id
+     * @param $id
+     * @return bool
+     * @since 1.0.0
+     */
+    public function templateExists($id){
+        if (isset( $this->templates[$id] )) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Modules can connect themselves to an area by specifying the connect parameter
      * This method handles the connection by adding the modules classname to the
@@ -436,13 +452,14 @@ class AreaRegistry
             'pageTemplates' => array(), // array of page template names where this area is available to
             'assignedModules' => array(), // array of classnames
             'layouts' => array(), // array of area template ids
-            'defaultTpl' => 'default', // default Tpl to use, if none is set
+            'defaultLayout' => 'default', // default Tpl to use, if none is set
             'dynamic' => false, // whether this is an dynamic area
             'manual' => $manual, // true if set by code
             'limit' => 0, // how many blocks are allowed
             'order' => 0, // order index for sorting
             'context' => 'normal', // location on the edit screen
-            'concat' => false
+            'concat' => false,
+            'sortable' => false
         );
 
     }
@@ -481,6 +498,7 @@ class AreaRegistry
     public function setupJSON()
     {
         Utilities::setupCats();
+        JSONBridge::getInstance()->registerData('AreaTemplates', null, $this->templates);
     }
 
 }

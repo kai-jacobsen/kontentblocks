@@ -5,7 +5,8 @@
  * @type {*|void|Object}
  */
 KB.Backbone.ModuleView = Backbone.View.extend({
-
+    focus: false,
+    $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
     attachedFields: [],
     initialize: function () {
         var that = this;
@@ -20,10 +21,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.listenTo(this.model, 'change', this.modelChange);
 
         // @TODO events:investigate
-        this.model.bind('save', this.model.save);
+        //this.model.bind('save', this.model.save);
+        this.listenTo(this.model, 'save', this.model.save);
 
         this.render();
-        if (KB.appData.config.useModuleNav){
+
+        this.$el.data('ModuleView', this);
+
+        if (KB.appData.config.useModuleNav) {
             KB.ModuleNav.attach(this);
         }
 
@@ -33,27 +38,37 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         jQuery(window).on('kontentblocks::ajaxUpdate', function () {
             that.setControlsPosition();
         });
-
-
     },
     events: {
         "click a.os-edit-block": "openOptions",
+        "click .kb-module__placeholder": "openOptions",
+        "click .kb-module__dropzone": "setDropZone",
         "click .kb-js-inline-update": "updateModule",
         "click .kb-js-inline-delete": "confirmDelete",
         "click .editable": "reloadModal",
         "hover.first": "setActive",
         "hover.second": "setControlsPosition"
+        //"mouseenter.third": "insertDropZone"
+        //"mouseleave": "removeDropZone"
+
     },
     setActive: function () {
         KB.currentModule = this;
     },
     render: function () {
+        if (this.$el.hasClass('draft') && this.model.get('moduleData') === '') {
+            this.renderPlaceholder();
+        }
+        this.$el.attr('rel', this.model.get('mid') + '_' + _.uniqueId());
+
+
         var settings = this.model.get('settings');
-        if (settings.controls && settings.controls.hide){
+        if (settings.controls && settings.controls.hide) {
             return;
         }
 
-        if (jQuery('.os-controls', this.$el).length > 0){
+
+        if (jQuery('.os-controls', this.$el).length > 0) {
             return;
         }
 
@@ -61,46 +76,45 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
         }));
+
+
     },
     setControlsPosition: function () {
-        var elpostop, msettings, $controls, pos;
+        var elpostop, elposleft, mSettings, $controls, pos, height;
         elpostop = 0;
+        elposleft = 0;
+
         mSettings = this.model.get('settings');
 
         $controls = jQuery('.os-controls', this.$el);
         pos = this.$el.offset();
+        height = this.$el.height();
+
 
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
 
-        if (this.$el.css('overflow') !== 'hidden' && pos.top > 60){
-            elpostop = -30;
+        // small item with enough space above
+        // position is at top outside of the element (headlines etc)
+        if (this.$el.css('overflow') !== 'hidden' && pos.top > 60 && height < 119) {
+            elpostop = -25;
         }
 
-        if (pos.top < 20){
+        // enough space on the left side
+        // menu will be rendered vertically on the left
+        if (this.$el.css('overflow') !== 'hidden' && pos.left > 100 && height > 120 && this.$el.class) {
+            elpostop = 0;
+            elposleft = -30;
+            $controls.addClass('kb-module-nav__vertical');
+        }
+
+        if (pos.top < 20) {
             elpostop = 10;
         }
 
-        //console.log(pos);
-
-//
-//        console.log(pos);
-//
-//        if (pos.top > 100) {
-//            pos.top = pos.top - 70;
-//        }
-//
-//        if (pos.left > 100){
-//            pos.left = pos.left;
-//        }
-
-//        $controls.offset({top: pos.top + 40, left: pos.left + 10, zIndex: 999999});
-//        $controls.offset({top:  10, left: pos.left, zIndex: 999999});
-
-
-        $controls.css({'top': elpostop + 'px', 'left':0});
+        $controls.css({'top': elpostop + 'px', 'left': elposleft});
     },
     openOptions: function () {
 
@@ -125,6 +139,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.CurrentModel = this.model;
         KB.focusedModule = this.model;
 
+    },
+    insertDropZone: function () {
+        this.focus = true;
+        this.$el.append(this.$dropZone);
+    },
+    removeDropZone: function () {
+        this.focus = false;
+        this.$el.find('.kb-module__dropzone').remove();
+    },
+    setDropZone: function () {
+        var ModuleBrowser;
+        ModuleBrowser = this.Area.openModuleBrowser();
+        ModuleBrowser.dropZone = this;
     },
     // @TODO: old function updateModule() remove?
     updateModule: function () {
@@ -166,19 +193,29 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             }
         });
     },
-    confirmDelete: function(){
+    confirmDelete: function () {
         KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, null, this);
     },
-    removeModule: function(){
+    removeModule: function () {
         KB.Ajax.send({
             action: 'removeModules',
             _ajax_nonce: KB.Config.getNonce('delete'),
             module: this.model.get('instance_id')
         }, this.afterRemoval, this);
     },
-    afterRemoval: function(){
+    afterRemoval: function () {
         this.model.view.$el.remove();
+
+        // removes the model from model collection
+        // removal triggers remove on views collection
+        // views collection triggers kb.module.view.deleted
         KB.Modules.remove(this.model);
+    },
+
+    renderPlaceholder: function () {
+        this.$el.append(KB.Templates.render('frontend/module-placeholder', {
+            model: this.model.toJSON()
+        }));
     },
     addField: function (key, obj, arrayKey) {
         if (!_.isEmpty(arrayKey)) {
@@ -212,14 +249,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     getDirty: function () {
         this.$el.addClass('isDirty');
         // reminder: controlView is the nav item
-        if (KB.appData.config.useModuleNav){
+        if (KB.appData.config.useModuleNav) {
             this.controlView.$el.addClass('isDirty');
         }
     },
     getClean: function () {
         this.$el.removeClass('isDirty');
         // reminder: controlView is the nav item
-        if (KB.appData.config.useModuleNav){
+        if (KB.appData.config.useModuleNav) {
             this.controlView.$el.removeClass('isDirty');
         }
     },

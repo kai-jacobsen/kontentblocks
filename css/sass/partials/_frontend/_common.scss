@@ -6,3 +6,33 @@
 .kb-front-sortable-placeholder{
   background-color: yellow;
 }
+
+.kb-module__placeholder{
+  border: 1px dashed #ccc;
+  text-align: center;
+  padding: 8px;
+  color: #CCCCCC;
+  margin: 8px 0;
+
+  p{
+    margin: 0!important;
+    padding: 0!important;
+  }
+}
+
+.kb-module__dropzone{
+  text-align: center;
+  padding: 4px;
+  font-size: 11px !important;
+  margin: 8px 0;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+  position: absolute;
+  bottom: -15px;
+  background-color: #333 !important;
+  color: #fff !important;
+  width: 100px;
+  left: 50%;
+  margin-left: -50px;
+  @include border-radius(4px);
+}

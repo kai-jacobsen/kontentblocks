@@ -294,39 +294,45 @@
 /* line 2, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container {
   position: fixed;
-  top: 45px;
-  right: -200px;
+  bottom: -40px;
   min-height: 40px;
-  width: 200px;
-  background: #333;
-  z-index: 10000;
+  border-top: 1px #444 solid;
+  width: 100%;
+  background: #222;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #111111), color-stop(70%, #222222), color-stop(100%, #333333));
+  background-image: -webkit-linear-gradient(#111111, #222222 70%, #333333);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#111111), color-stop(70%, #222222), to(#333333));
+  background-image: linear-gradient(#111111, #222222 70%, #333333);
+  z-index: 4200;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   -webkit-transition: all 0.3s linear;
   transition: all 0.3s linear;
+  -webkit-box-shadow: 1px -2px 4px -1px #222222;
+  box-shadow: 1px -2px 4px -1px #222222;
 }
 /* line 15, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container.kb-nav-show {
-  right: 0;
+  bottom: 0;
 }
 /* line 19, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container.kb-nav-show-partly {
-  right: -190px;
+  bottom: -20px;
 }
 /* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-nav-toggle {
   position: absolute;
-  left: -25px;
-  top: 0px;
+  right: 0;
+  top: -25px;
   width: 25px;
   height: 25px;
-  padding-left: 4px;
+  padding-left: 7px;
   padding-top: 4px;
-  background: #333;
+  background: #222;
   z-index: 9999;
   cursor: pointer;
-  color: #999;
+  color: #ccc;
   -webkit-transition: color 0.3s linear;
   transition: color 0.3s linear;
 }
@@ -336,7 +342,7 @@
 }
 /* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-nav-toggle .genericon:before {
-  padding-left: 4px;
+  padding-left: 8px;
   text-align: center;
 }
 /* line 49, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
@@ -346,10 +352,10 @@
 }
 /* line 54, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li {
-  border-bottom: 1px solid #444;
   padding: 4px;
+  padding-left: 10px;
   background: transparent;
-  border-left: 6px solid #005580;
+  border-left: 1px solid #005580;
   cursor: pointer;
   overflow: hidden;
   position: relative;
@@ -357,82 +363,84 @@
   transition: background 0.3s linear;
   opacity: .5;
   font-family: 'Open-Sans', sans-serif !important;
+  width: 170px !important;
+  display: block;
+  float: left;
 }
-/* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 69, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li:last-child {
   border-bottom: none;
 }
-/* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 73, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li.in-viewport {
   border-left-color: green;
   opacity: 1;
 }
-/* line 75, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 78, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li.in-viewport-active {
   background: #444;
 }
-/* line 80, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 83, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li.isDirty .kb-js-inline-update span {
   color: red;
 }
-/* line 85, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 88, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li span {
   margin: 0;
   padding: 0;
 }
-/* line 90, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 93, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li div.kb-module-nav-item__name {
   color: #fff;
-  font-size: 13px;
+  font-size: 12px !important;
   line-height: 150%;
 }
-/* line 96, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 99, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container ul li div.kb-module-nav-item__id {
   color: #ccc;
   font-size: 11px;
   line-height: 100%;
 }
-/* line 104, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 107, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item__wrapper {
-  width: 150px;
+  width: 80%;
   float: left;
-}
-/* line 109, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
-.kb-module-nav-container .kb-module-nav-item__actions {
-  width: 50px;
-  position: absolute;
-  right: 0;
-  top: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 /* line 115, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+.kb-module-nav-container .kb-module-nav-item__actions {
+  width: 30px;
+  position: absolute;
+  right: 0;
+  top: 4px;
+}
+/* line 121, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item__actions a {
   color: #ccc !important;
   border-bottom: none;
   line-height: 100%;
+  display: block;
 }
-/* line 120, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 127, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item__actions a:hover {
   border: 0;
 }
-/* line 124, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 131, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .kb-module-nav-container .kb-module-nav-item__actions a .dashicons {
   font-size: 16px !important;
   width: 16px !important;
   height: 16px !important;
 }
 
-/* line 137, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
-body.admin-bar .kb-module-nav-container {
-  top: 32px;
-}
-
-/* line 143, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
+/* line 150, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-nav.scss */
 .module.kb-nav-active {
   opacity: .7;
   position: relative;
 }
 
-/* line 4, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
+/* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
 .kb-os-layout-bars .controls-wrap {
   width: 100%;
   height: 20px;
@@ -440,11 +448,11 @@ body.admin-bar .kb-module-nav-container {
   -o-border-radius: 0;
   border-radius: 0;
 }
-/* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
+/* line 13, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
 .kb-os-layout-bars .os-edit-wrapper {
   width: 130px;
 }
-/* line 15, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
+/* line 17, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
 .kb-os-layout-bars .os-edit-wrapper a {
   text-shadow: 1px 1px 1px #333 !important;
   background-color: #333;
@@ -452,19 +460,26 @@ body.admin-bar .kb-module-nav-container {
   -o-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
+/* line 25, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
 .kb-os-layout-bars .os-edit-wrapper a span {
-  font-size: 23px !important;
-  line-height: 23px !important;
+  font-size: 18px !important;
+  line-height: 18px !important;
 }
-/* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
+/* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
 .kb-os-layout-bars .os-edit-wrapper .dashicons {
-  width: 23px;
-  height: 23px;
+  width: 18px;
+  height: 18px;
 }
-/* line 33, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
+/* line 35, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
 .kb-os-layout-bars .kb-module-inline-move {
   cursor: move;
+}
+
+/* line 42, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
+.kb-module-nav__vertical .controls-wrap li {
+  display: block;
+  margin-bottom: 1px !important;
+  width: auto;
 }
 
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_media-overlay.scss */
@@ -523,6 +538,39 @@ body.admin-bar .kb-module-nav-container {
 /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
 .kb-front-sortable-placeholder {
   background-color: yellow;
+}
+
+/* line 10, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+.kb-module__placeholder {
+  border: 1px dashed #ccc;
+  text-align: center;
+  padding: 8px;
+  color: #CCCCCC;
+  margin: 8px 0;
+}
+/* line 17, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+.kb-module__placeholder p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+.kb-module__dropzone {
+  text-align: center;
+  padding: 4px;
+  font-size: 11px !important;
+  margin: 8px 0;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+  position: absolute;
+  bottom: -15px;
+  background-color: #333 !important;
+  color: #fff !important;
+  width: 100px;
+  left: 50%;
+  margin-left: -50px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
 }
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */

@@ -1,3 +1,5 @@
+$icon-size : 18px;
+
 .kb-os-layout-bars {
 
   // wrap
@@ -21,13 +23,13 @@
   }
 
   .os-edit-wrapper a span {
-    font-size: 23px !important;
-    line-height: 23px !important;
+    font-size: $icon-size !important;
+    line-height: $icon-size !important;
   }
 
   .os-edit-wrapper .dashicons{
-    width: 23px;
-    height: 23px;
+    width: $icon-size;
+    height: $icon-size;
   }
 
   .kb-module-inline-move{
@@ -36,3 +38,10 @@
 }
 
 
+.kb-module-nav__vertical {
+  .controls-wrap li {
+    display: block;
+    margin-bottom: 1px !important;
+    width: auto;
+  }
+}

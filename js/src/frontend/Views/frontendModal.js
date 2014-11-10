@@ -319,7 +319,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
      * @param height
      */
     initScrollbars: function (height) {
-        jQuery('.nano', this.$el).height(height);
+        jQuery('.nano', this.$el).height(height+20);
         jQuery('.nano').nanoScroller({preventPageScrolling: true});
         _K.info('Nano Scrollbars (re)initialized!');
     },
@@ -338,7 +338,6 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         _K.info('Frontend Modal called serialize function. Savemode:', mode);
 
         tinymce.triggerSave();
-
         jQuery.ajax({
             url: ajaxurl,
             data: {

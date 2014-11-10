@@ -1,7 +1,9 @@
 <?php
 
 namespace Kontentblocks\Frontend;
+
 use Kontentblocks\Frontend\AreaLayoutIterator;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
@@ -38,7 +40,7 @@ class AreaOutput
      * @var bool|AreaLayoutIterator
      * @since 1.0.0
      */
-    public $layout;
+    public $Layout;
 
     /**
      * specific area settings as set and saved on the edit screen
@@ -65,10 +67,12 @@ class AreaOutput
      */
     public function __construct( $areaAttrs, $areaSettings, $additionalArgs )
     {
-        JSONBridge::getInstance()->registerArea($areaAttrs);
-        $this->id       = $areaAttrs[ 'id' ];
+        $this->id = $areaAttrs['id'];
+        $this->attr = $areaAttrs;
         $this->settings = $this->_setupSettings( $additionalArgs, $areaSettings );
-        $this->layout = $this->_setupLayout();
+        $this->Layout = $this->_setupLayout();
+
+        $this->toJSON();
     }
 
     /**
@@ -78,7 +82,12 @@ class AreaOutput
      */
     public function openArea()
     {
-        return sprintf( '<%1$s id="%2$s" class="%3$s">', $this->settings[ 'element' ], $this->id, $this->getWrapperClasses() );
+        return sprintf(
+            '<%1$s id="%2$s" class="%3$s">',
+            $this->settings['element'],
+            $this->id,
+            $this->getWrapperClasses()
+        );
 
     }
 
@@ -90,7 +99,7 @@ class AreaOutput
     public function closeArea()
     {
 
-        return sprintf( "</%s>", $this->settings[ 'element' ] );
+        return sprintf( "</%s>", $this->settings['element'] );
 
     }
 
@@ -102,7 +111,7 @@ class AreaOutput
     public function getWrapperClasses()
     {
         $classes = array(
-            $this->settings[ 'wrapperClass' ],
+            $this->settings['wrapperClass'],
             $this->id,
             $this->getLayoutId(),
             $this->getContext(),
@@ -121,7 +130,7 @@ class AreaOutput
      */
     public function getContext()
     {
-        return $this->getSetting('context');
+        return $this->getSetting( 'context' );
 
     }
 
@@ -132,7 +141,7 @@ class AreaOutput
      */
     public function getSubcontext()
     {
-        return $this->getSetting('subcontext');
+        return $this->getSetting( 'subcontext' );
 
     }
 
@@ -144,7 +153,7 @@ class AreaOutput
      */
     public function getSetting( $setting )
     {
-        if (isset($this->settings[$setting])){
+        if (isset( $this->settings[$setting] )) {
             return $this->settings[$setting];
         }
     }
@@ -157,12 +166,23 @@ class AreaOutput
      */
     private function _setupLayout()
     {
-        if ( !empty( $this->settings[ 'custom' ] ) ) {
-            return $this->_setupCustomLayout( $this->settings[ 'custom' ] );
-        }
-        if ( $this->settings[ 'area_template' ] !== 'default' ) {
+        /** @var \Kontentblocks\Backend\Areas\AreaRegistry $registry */
+        $Registry = Kontentblocks::getService( 'registry.areas' );
+
+        $sLayout = $this->settings['layout'];
+
+        if ($sLayout !== 'default' && !empty($sLayout) ) {
             $this->hasLayout = true;
-            return new AreaLayoutIterator( $this->settings[ 'area_template' ] );
+            return new AreaLayoutIterator( $this->settings['layout'] );
+        }
+
+        if ($this->attr['defaultLayout'] !== 'default' && empty($sLayout)) {
+            if ($Registry->templateExists( $this->attr['defaultLayout'] )) {
+                $this->settings['layout'] = $this->attr['defaultLayout'];
+                $this->hasLayout = true;
+
+                return new AreaLayoutIterator( $this->attr['defaultLayout'] );
+            }
         }
 
         return false;
@@ -180,18 +200,19 @@ class AreaOutput
      */
     private function _setupSettings( $args, $settings = null )
     {
+        // @TODO move to better context
         $defaults = array(
             'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
             'wrapperClass' => 'area',
             'useWrapper' => true,
-            'element' => apply_filters('kb.area.settings.element', 'div'),
+            'element' => apply_filters( 'kb.area.settings.element', 'div' ),
             'mergeRepeating' => false,
             'action' => null,
-            'area_template' => 'default'
+            'layout' => ''
         );
 
-        if ( $settings ) {
+        if ($settings) {
             $defaults = wp_parse_args( $settings, $defaults );
         }
 
@@ -208,10 +229,9 @@ class AreaOutput
      */
     public function getLayoutId()
     {
-        if ( $this->hasLayout ) {
-            return implode(' ', $this->layout->getLayoutClass());
-        }
-        else {
+        if ($this->hasLayout) {
+            return implode( ' ', $this->Layout->getLayoutClass() );
+        } else {
             return null;
         }
 
@@ -223,16 +243,14 @@ class AreaOutput
      */
     public function getCurrentLayoutClasses()
     {
-        if ( $this->hasLayout ) {
-            $classes = $this->layout->getCurrentLayoutClasses();
-            if ( is_array( $classes ) ) {
+        if ($this->hasLayout) {
+            $classes = $this->Layout->getCurrentLayoutClasses();
+            if (is_array( $classes )) {
                 return $classes;
-            }
-            else {
+            } else {
                 return explode( ' ', $classes );
             }
-        }
-        else {
+        } else {
             return array();
         }
 
@@ -243,8 +261,8 @@ class AreaOutput
      */
     public function nextLayout()
     {
-        if ( $this->hasLayout ) {
-            $this->layout->next();
+        if ($this->hasLayout) {
+            $this->Layout->next();
         }
 
     }
@@ -255,12 +273,19 @@ class AreaOutput
     public function getPublicAttributes()
     {
         return array(
-            'context' => $this->settings[ 'context' ],
-            'subcontext' => $this->settings[ 'subcontext' ],
-            'area_template' => $this->settings[ 'area_template' ],
-            'action' => $this->settings[ 'action' ],
+            'context' => $this->settings['context'],
+            'subcontext' => $this->settings['subcontext'],
+            'area_template' => $this->settings['layout'],
+            'action' => $this->settings['action'],
             'area_id' => $this->id
         );
+
+    }
+
+    public function toJSON()
+    {
+        $this->attr['settings'] = $this->settings;
+        JSONBridge::getInstance()->registerArea( $this->attr );
 
     }
 

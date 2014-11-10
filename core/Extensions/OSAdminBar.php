@@ -24,7 +24,7 @@ function hbreceived($response, $data){
     $check = false;
 
     if (isset($data['kbEditWatcher'])){
-
+        wp_send_json($data['kbEditWatcher']);
         $user = wp_check_post_lock($data['kbEditWatcher']);
         if ($user !== false){
             $user = array(

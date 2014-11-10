@@ -156,12 +156,11 @@ class AreaRenderer
     public function beforeModule( $classes, Module $module )
     {
 
-
         $layout = $this->AreaOutput->getCurrentLayoutClasses();
 
         if (!empty( $layout )) {
             return sprintf(
-                '<div class="wrap %3$s"><div id="%1$s" class="%2$s">',
+                '<div class="kb-wrap %3$s"><div id="%1$s" class="%2$s">',
                 $module->getId(),
                 implode( ' ', $classes ),
                 implode( ' ', $layout )
@@ -200,10 +199,7 @@ class AreaRenderer
 
     public function _beforeModule( $module )
     {
-
-
         $module->_addAreaAttributes( $this->AreaOutput->getPublicAttributes() );
-        $layoutClasses = $this->AreaOutput->getCurrentLayoutClasses();
         $moduleClasses = $this->modules->getCurrentModuleClasses();
         $additionalClasses = $this->getAdditionalClasses( $module );
 
@@ -254,6 +250,10 @@ class AreaRenderer
 
         if (is_user_logged_in()) {
             $classes[] = 'os-edit-container';
+
+            if ($module->getState('draft')){
+                $classes[] = 'draft';
+             }
         }
 
         if ($this->previousModule === $module->settings['id']) {

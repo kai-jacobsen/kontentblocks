@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-05 */
+/*! Kontentblocks DevVersion 2014-11-09 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -434,17 +434,174 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
 
 KB.Backbone.ModuleBrowser.prototype.success = function(data) {
     var model;
-    this.options.area.$el.append(data.html).removeClass("kb-area__empty");
+    if (this.dropZone) {
+        this.dropZone.$el.after(data.html);
+        this.dropZone.removeDropZone();
+    } else {
+        this.options.area.$el.append(data.html).removeClass("kb-area__empty");
+    }
     KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
     model = KB.Modules.add(KB.lastAddedModule);
     _K.info("new module created", {
         view: model.view
     });
+    this.parseAdditionalJSON(data.json);
     KB.TinyMCE.addEditor();
     KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
-    KB.Views.Modules.lastViewAdded.$el.addClass("kb-open");
     KB.Environment.moduleCount++;
-    KB.Views.Modules.lastViewAdded.openOptions();
+    console.log(this.options.area);
+    this.options.area.trigger("kb.module.created");
+    setTimeout(function() {
+        model.view.openOptions();
+        model.view.renderPlaceholder();
+    }, 300);
+};
+
+(function(close) {
+    KB.Backbone.ModuleBrowser.prototype.close = function() {
+        delete this.dropZone;
+        close.call(this);
+    };
+})(KB.Backbone.ModuleBrowser.prototype.close);
+
+KB.Backbone.AreaLayoutView = Backbone.View.extend({
+    hasLayout: false,
+    LayoutIterator: null,
+    initialize: function(options) {
+        this.AreaView = options.AreaView;
+        this.listenTo(this.AreaView, "kb.module.created", this.handleModuleCreated);
+        this.listenTo(this.AreaView, "kb.module.deleted", this.handleModuleDeleted);
+        this.LayoutIterator = this.setupLayout();
+        this.renderPlaceholder();
+        if (_.isNull(this.LayoutIterator)) {
+            return false;
+        }
+    },
+    setupLayout: function() {
+        var at, coll;
+        coll = KB.payload.AreaTemplates || {};
+        at = this.model.get("layout");
+        if (at === "default") {
+            return null;
+        }
+        if (coll[at]) {
+            this.hasLayout = true;
+            return new KB.LayoutIterator(coll[at], this.AreaView);
+        }
+    },
+    unwrap: function() {
+        _.each(this.AreaView.getAttachedModules(), function(ModuleView) {
+            ModuleView.$el.unwrap();
+        });
+    },
+    render: function(e, ui) {
+        this.LayoutIterator.applyLayout(ui);
+    },
+    applyClasses: function() {
+        var prev = null;
+        var $modules = this.AreaView.$el.find(".module");
+        $modules.removeClass("first-module last-module repeater");
+        for (var i = 0; i < $modules.length; i++) {
+            var View = jQuery($modules[i]).data("ModuleView");
+            if (i === 0) {
+                View.$el.addClass("first-module");
+            }
+            if (i === $modules.length - 1) {
+                View.$el.addClass("last-module");
+            }
+            if (View.model.get("settings").id === prev) {
+                View.$el.addClass("repeater");
+            }
+            prev = View.model.get("settings").id;
+        }
+    },
+    handleModuleCreated: function() {
+        this.applyClasses();
+        if (this.LayoutIterator) {
+            this.LayoutIterator.applyLayout();
+        }
+    },
+    handleModuleDeleted: function() {
+        this.applyClasses();
+        this.renderPlaceholder();
+        if (this.LayoutIterator) {
+            this.LayoutIterator.applyLayout();
+        }
+    },
+    renderPlaceholder: function() {
+        if (this.AreaView.getNumberOfModules() === 0) {
+            this.AreaView.$el.addClass("kb-area__empty");
+        }
+    }
+});
+
+KB.LayoutIterator = function(layout, AreaView) {
+    this.AreaView = AreaView;
+    this.raw = layout;
+    this.position = 0;
+    this.maxNum = layout.layout.length;
+    this.current = 0;
+    this.id = layout.id;
+    this.label = layout.label;
+    this.lastItem = layout["last-item"];
+    this.cycle = layout.cycle || false;
+    this.layout = layout.layout;
+    this.tplClass = layout.templateClass;
+    this.setPosition = function(pos) {
+        this.position = pos % this.maxNum;
+        this.setCurrent();
+    };
+    this.getPosition = function() {
+        return this.position;
+    };
+    this.getLayout = function(pos) {
+        if (pos && this.cycle) {
+            return this.layout[pos % this.maxNum];
+        }
+        if (pos && !this.cycle) {
+            if (pos > this.maxNum - 1) {
+                return this.layout[this.maxNum - 1];
+            } else {
+                return this.layout[pos];
+            }
+        }
+    };
+    this.next = function() {
+        if (this.position === this.maxNum - 1 && this.cycle) {
+            this.position = 0;
+        } else if (this.position === this.maxNum - 1 && !this.cycle) {
+            this.position = this.maxNum - 1;
+        } else {
+            this.position++;
+        }
+        this.setCurrent();
+    };
+    this.setCurrent = function() {
+        this.current = this.layout[this.position];
+    };
+    this.getCurrent = function() {
+        return this.current;
+    };
+    this.applyLayout = function(ui) {
+        var Iterator = this;
+        Iterator.setPosition(0);
+        _.each(this.AreaView.$el.find('.module:not(".ignore")'), function(ModuleEl) {
+            var $el = jQuery(ModuleEl);
+            var $wrap = $el.parent(".kb-wrap");
+            if ($wrap.length === 0) {
+                $wrapEl = jQuery('<div class="kb-wrap ' + Iterator.getCurrent().classes + '"></div>');
+                $el.wrap($wrapEl);
+            } else {
+                $wrap.removeClass();
+                $wrap.addClass("kb-wrap " + Iterator.getCurrent().classes);
+            }
+            if (ui) {
+                ui.placeholder.addClass("kb-front-sortable-placeholder");
+            }
+            Iterator.next();
+        });
+    };
+    this.setCurrent();
 };
 
 KB.Backbone.AreaView = Backbone.View.extend({
@@ -452,39 +609,23 @@ KB.Backbone.AreaView = Backbone.View.extend({
         dblclick: "openModuleBrowser"
     },
     initialize: function() {
-        this.setupUi();
+        this.attachedModuleViews = {};
+        this.settings = this.model.get("settings");
+        this.listenToOnce(KB.Events, "KB::frontend-init", this.setupUi);
+        this.listenTo(this, "kb.module.deleted", this.removeModule);
     },
     setupUi: function() {
         var that = this;
-        var modules = this.$el.find(".module");
-        if (modules.length === 0) {
-            this.$el.addClass("kb-area__empty");
+        this.Layout = new KB.Backbone.AreaLayoutView({
+            model: new Backbone.Model(this.settings),
+            AreaView: this
+        });
+        if (this.model.get("sortable")) {
+            this.setupSortables();
+            _K.info("Area sortable initialized");
+        } else {
+            _K.info("Area sortable skipped");
         }
-        _.each(modules, function(item, index) {
-            jQuery(item).attr("rel", item.id + "_" + index);
-        });
-        this.$el.sortable({
-            handle: ".kb-module-inline-move",
-            items: ".module",
-            helper: "clone",
-            opacity: .5,
-            axis: "y",
-            delay: 150,
-            forceHelperSize: true,
-            forcePlaceholderSize: true,
-            placeholder: "kb-front-sortable-placeholder",
-            stop: function() {
-                var serializedData = {};
-                serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
-                    attribute: "rel"
-                });
-                return KB.Ajax.send({
-                    action: "resortModules",
-                    data: serializedData,
-                    _ajax_nonce: KB.Config.getNonce("update")
-                });
-            }
-        });
     },
     openModuleBrowser: function() {
         if (!this.ModuleBrowser) {
@@ -493,13 +634,88 @@ KB.Backbone.AreaView = Backbone.View.extend({
             });
         }
         this.ModuleBrowser.render();
+        return this.ModuleBrowser;
     },
     addModuleView: function(moduleView) {
         this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
         this.listenTo(moduleView.model, "change:area", this.removeModule);
         _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
-        moduleView.model.areaView = this;
-        this.ui();
+        moduleView.Area = this;
+    },
+    getNumberOfModules: function() {
+        return _.size(this.attachedModuleViews);
+    },
+    getAttachedModules: function() {
+        return this.attachedModuleViews;
+    },
+    setupSortables: function() {
+        var that = this;
+        if (this.Layout.hasLayout) {
+            this.$el.sortable({
+                handle: ".kb-module-inline-move",
+                items: ".kb-wrap",
+                helper: "original",
+                opacity: .5,
+                delay: 150,
+                placeholder: "kb-front-sortable-placeholder",
+                revert: true,
+                start: function(e, ui) {
+                    ui.placeholder.attr("class", ui.helper.attr("class"));
+                    ui.placeholder.addClass("kb-front-sortable-placeholder");
+                    ui.placeholder.append("<div class='module kb-dummy'></div>");
+                    jQuery(".module", ui.helper).addClass("ignore");
+                },
+                stop: function(e, ui) {
+                    var serializedData = {};
+                    serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
+                        attribute: "rel"
+                    });
+                    jQuery(".ignore", ui.helper).removeClass("ignore");
+                    return KB.Ajax.send({
+                        action: "resortModules",
+                        data: serializedData,
+                        _ajax_nonce: KB.Config.getNonce("update")
+                    }, function() {
+                        KB.Notice.notice("Order was updated successfully", "success");
+                        that.Layout.applyClasses();
+                        that.Layout.render();
+                    }, that);
+                },
+                change: function(e, ui) {
+                    that.Layout.render(e, ui);
+                }
+            });
+        } else {
+            this.$el.sortable({
+                handle: ".kb-module-inline-move",
+                items: ".module",
+                helper: "original",
+                opacity: .5,
+                delay: 150,
+                placeholder: "kb-front-sortable-placeholder",
+                revert: true,
+                stop: function() {
+                    var serializedData = {};
+                    serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
+                        attribute: "rel"
+                    });
+                    return KB.Ajax.send({
+                        action: "resortModules",
+                        data: serializedData,
+                        _ajax_nonce: KB.Config.getNonce("update")
+                    }, function() {
+                        KB.Notice.notice("Order was updated successfully", "success");
+                        that.Layout.orderClass();
+                    }, that);
+                }
+            });
+        }
+    },
+    removeModule: function(ModuleView) {
+        var id = ModuleView.model.get("mid");
+        if (this.attachedModuleViews[id]) {
+            delete this.attachedModuleViews[id];
+        }
     }
 });
 
@@ -662,7 +878,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         _K.info("Frontend Modal resizing done!");
     },
     initScrollbars: function(height) {
-        jQuery(".nano", this.$el).height(height);
+        jQuery(".nano", this.$el).height(height + 20);
         jQuery(".nano").nanoScroller({
             preventPageScrolling: true
         });
@@ -783,6 +999,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 });
 
 KB.Backbone.ModuleView = Backbone.View.extend({
+    focus: false,
+    $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
     attachedFields: [],
     initialize: function() {
         var that = this;
@@ -791,8 +1009,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         this.model.view = this;
         this.listenTo(this.model, "change", this.modelChange);
-        this.model.bind("save", this.model.save);
+        this.listenTo(this.model, "save", this.model.save);
         this.render();
+        this.$el.data("ModuleView", this);
         if (KB.appData.config.useModuleNav) {
             KB.ModuleNav.attach(this);
         }
@@ -803,6 +1022,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     events: {
         "click a.os-edit-block": "openOptions",
+        "click .kb-module__placeholder": "openOptions",
+        "click .kb-module__dropzone": "setDropZone",
         "click .kb-js-inline-update": "updateModule",
         "click .kb-js-inline-delete": "confirmDelete",
         "click .editable": "reloadModal",
@@ -813,6 +1034,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function() {
+        if (this.$el.hasClass("draft") && this.model.get("moduleData") === "") {
+            this.renderPlaceholder();
+        }
+        this.$el.attr("rel", this.model.get("mid") + "_" + _.uniqueId());
         var settings = this.model.get("settings");
         if (settings.controls && settings.controls.hide) {
             return;
@@ -826,24 +1051,31 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }));
     },
     setControlsPosition: function() {
-        var elpostop, msettings, $controls, pos;
+        var elpostop, elposleft, mSettings, $controls, pos, height;
         elpostop = 0;
+        elposleft = 0;
         mSettings = this.model.get("settings");
         $controls = jQuery(".os-controls", this.$el);
         pos = this.$el.offset();
+        height = this.$el.height();
         if (mSettings.controls && mSettings.controls.toolbar) {
             pos.top = mSettings.controls.toolbar.top;
             pos.left = mSettings.controls.toolbar.left;
         }
-        if (this.$el.css("overflow") !== "hidden" && pos.top > 60) {
-            elpostop = -30;
+        if (this.$el.css("overflow") !== "hidden" && pos.top > 60 && height < 119) {
+            elpostop = -25;
+        }
+        if (this.$el.css("overflow") !== "hidden" && pos.left > 100 && height > 120 && this.$el.class) {
+            elpostop = 0;
+            elposleft = -30;
+            $controls.addClass("kb-module-nav__vertical");
         }
         if (pos.top < 20) {
             elpostop = 10;
         }
         $controls.css({
             top: elpostop + "px",
-            left: 0
+            left: elposleft
         });
     },
     openOptions: function() {
@@ -865,6 +1097,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         KB.CurrentModel = this.model;
         KB.focusedModule = this.model;
+    },
+    insertDropZone: function() {
+        this.focus = true;
+        this.$el.append(this.$dropZone);
+    },
+    removeDropZone: function() {
+        this.focus = false;
+        this.$el.find(".kb-module__dropzone").remove();
+    },
+    setDropZone: function() {
+        var ModuleBrowser;
+        ModuleBrowser = this.Area.openModuleBrowser();
+        ModuleBrowser.dropZone = this;
     },
     updateModule: function() {
         var that = this;
@@ -913,6 +1158,11 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     afterRemoval: function() {
         this.model.view.$el.remove();
         KB.Modules.remove(this.model);
+    },
+    renderPlaceholder: function() {
+        this.$el.append(KB.Templates.render("frontend/module-placeholder", {
+            model: this.model.toJSON()
+        }));
     },
     addField: function(key, obj, arrayKey) {
         if (!_.isEmpty(arrayKey)) {
@@ -1123,12 +1373,16 @@ KB.App = function($) {
         KB.Events.trigger("KB::frontend-init");
     }
     function createModuleViews(module) {
+        var View;
         module.setArea(KB.Areas.get(module.get("area")));
         module.bind("change:area", module.areaChanged);
-        KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
+        View = KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
             model: module,
             el: "#" + module.get("instance_id")
         }));
+        View.$el.data("ModuleView", View);
+        var Area = KB.Views.Areas.get(module.get("area"));
+        Area.addModuleView(View);
         KB.Ui.initTabs();
     }
     function createAreaViews(area) {

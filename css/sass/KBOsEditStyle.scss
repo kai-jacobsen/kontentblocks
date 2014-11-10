@@ -27,7 +27,7 @@
     display: block !important;
   }
 
-  .kb-module-inline-update{
+  .kb-module-inline-update {
     color: #cc0000;
   }
 }
@@ -46,7 +46,7 @@
     display: none;
   }
 
-  .dashicons{
+  .dashicons {
     height: 14px;
     width: 14px;
   }
@@ -72,15 +72,15 @@
     text-decoration: none !important;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
-//    background-color: rgba(255,255,255,.8);
+    //    background-color: rgba(255,255,255,.8);
     opacity: .3;
 
     &.kb-nbb {
-//      border-bottom: none !important;
+      //      border-bottom: none !important;
     }
 
     &.kb-nbt {
-//      border-top: none !important;
+      //      border-top: none !important;
     }
 
     &.kb-module-dirty-state {
@@ -104,7 +104,7 @@
 
 }
 
-.module.hovered{
+.module.hovered {
   outline: 1px solid #ccc;
 }
 
@@ -141,7 +141,7 @@ body.onsite-editing {
   #onsite-modal {
     padding: 0;
     z-index: 9999;
-
+    min-height: 150px;
   }
 
 }
@@ -280,7 +280,7 @@ body.onsite-editing {
   opacity: 1;
   z-index: 2101;
 
-  h1,h2,h3,h4,h5,h6{
+  h1, h2, h3, h4, h5, h6 {
     font-family: Open-Sans, sans-serif !important;
   }
 
@@ -482,28 +482,29 @@ body.onsite-editing {
   background-color: rgba(233, 228, 39, 0.10);
 }
 
-.editable-image:hover{
+.editable-image:hover {
   outline: 1px solid #ccc;
   outline: 1px solid currentcolor;
 
 }
 
-.editable-gallery-image:hover{
+.editable-gallery-image:hover {
   outline: 1px solid #ccc;
   outline: 1px solid currentcolor;
   background-color: rgba(233, 228, 39, 0.20);
 
 }
 
-.editable-link:hover{
+.editable-link:hover {
   outline: 1px dashed #ccc;
   outline: 1px dashed currentcolor;
 
 }
+
 //.inline-edit-active .controls-wrap {
 //  display: none;
 //}
 
-#onsite-modal .wp-picker-container *{
+#onsite-modal .wp-picker-container * {
   @include box-sizing(content-box);
 }

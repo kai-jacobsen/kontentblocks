@@ -147,6 +147,7 @@ body.onsite-editing .hide {
 body.onsite-editing #onsite-modal {
   padding: 0;
   z-index: 9999;
+  min-height: 150px;
 }
 
 /* line 150, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
@@ -954,7 +955,7 @@ body.onsite-editing #onsite-modal {
   outline: 1px dashed currentcolor;
 }
 
-/* line 507, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+/* line 508, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 #onsite-modal .wp-picker-container * {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;

@@ -53,7 +53,7 @@ class AreaSettingsMenu
      * @var string
      * @since 1.0.0
      */
-    protected $defaultTpl;
+    protected $defaultLayout;
 
     /**
      * Environment for data handling
@@ -74,7 +74,7 @@ class AreaSettingsMenu
         $this->defaults = $this->getDefaults();
         $this->id = $area->get( 'id' );
         $this->areaTemplates = $area->get( 'layouts' );
-        $this->defaultTpl = $area->get( 'defaultLayout' );
+        $this->defaultLayout = $area->get( 'defaultLayout' );
         $this->Environment = $Environment;
 
     }
@@ -91,7 +91,6 @@ class AreaSettingsMenu
         // Markup and fields markup
         if (!empty( $areaTemplates )) {
             $data = $this->Environment->getAreaSettings( $this->id );
-            $custom = ( isset( $data['custom'] ) ) ? $data['custom'] : '';
 
             echo "
             <a class='js-area-settings-opener' href='javascript:;'>l</a>    
@@ -106,8 +105,6 @@ class AreaSettingsMenu
 
             echo "	
             </ul>
-            <h4>Custom Layout</h4>
-            <div><input name='{$this->id}[custom]' value='{$custom}' /></div>
             </div></div>";
         }
 
@@ -134,7 +131,7 @@ class AreaSettingsMenu
         $html = "<li class='area_template'>";
 
         $html .= "<div class='area-tpl-item' {$forceby}>
-				<input type='radio' name='{$this->id}[area_template]' id='{$tpl['id']}' value='{$tpl['id']}' {$checked} >
+				<input type='radio' name='{$this->id}[layout]' id='{$tpl['id']}' value='{$tpl['id']}' {$checked} >
 				<label for='{$tpl['id']}'>{$tpl['label']}</label>
 				</div>";
 
@@ -177,8 +174,7 @@ class AreaSettingsMenu
     private function getDefaults()
     {
         $defaults = array(
-            'area_template' => '',
-            'custom' => ''
+            'layout' => ''
         );
         return $defaults;
 
@@ -196,13 +192,13 @@ class AreaSettingsMenu
      */
     public function getSelectedTemplate( $tpl, $data )
     {
-        if (empty( $data['area_template'] )) {
-            $tpl = ( !empty( $this->defaultTpl ) && in_array(
-                    $this->defaultTpl,
+        if (empty( $data['layout'] )) {
+            $tpl = ( !empty( $this->defaultLayout ) && in_array(
+                    $this->defaultLayout,
                     $this->areaTemplates
-                ) ) ? $this->defaultTpl : 'default';
+                ) ) ? $this->defaultLayout : 'default';
         } else {
-            $tpl = ( !empty( $data['area_template'] ) ) ? $data['area_template'] : 'default';
+            $tpl = ( !empty( $data['layout'] ) ) ? $data['layout'] : 'default';
         }
 
         return $tpl;

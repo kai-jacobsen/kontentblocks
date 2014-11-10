@@ -584,6 +584,26 @@ abstract class Module
 
 
     /**
+     * Get from state array or complete array
+     * @param null|string $key
+     * @since 1.0.0
+     * @return array|mixed|null
+     */
+    public function getState( $key = null )
+    {
+        if (!is_null( $key ) && !in_array( $key, array( 'active', 'draft' ) )) {
+            return null;
+        }
+
+        if (is_null( $key )) {
+            return $this->state;
+        }
+
+        return filter_var( $this->state[$key], FILTER_VALIDATE_BOOLEAN );
+    }
+
+
+    /**
      * Get unique instance id
      * @return string
      */
@@ -657,7 +677,7 @@ abstract class Module
             return false;
         }
 
-        if (!is_user_logged_in() && $this->state['draft']){
+        if (!is_user_logged_in() && $this->state['draft']) {
             return false;
         }
 

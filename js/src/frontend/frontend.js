@@ -96,6 +96,8 @@ KB.App = function ($) {
             return false;
         }
 
+
+
         // iterate over raw areas
         _.each(KB.payload.Areas, function (area) {
             // create new area model
@@ -106,6 +108,7 @@ KB.App = function ($) {
         _.each(KB.payload.Modules, function (module) {
             KB.Modules.add(module);
         });
+
         // @TODO events:refactor
         KB.trigger('kb:moduleControlsAdded');
 
@@ -121,17 +124,22 @@ KB.App = function ($) {
      * @returns void
      */
     function createModuleViews(module) {
-
+        var View;
         // assign the full corresponding area model to the module model
         module.setArea(KB.Areas.get(module.get('area')));
         module.bind('change:area', module.areaChanged);
 
         // create view
-        KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
+        View = KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
         }));
 
+        View.$el.data('ModuleView', View);
+        //assign area view to module view
+        var Area = KB.Views.Areas.get(module.get('area'));
+
+        Area.addModuleView(View);
         // re-init tabs
         // TODO: don't re-init globally
         KB.Ui.initTabs();
