@@ -21,11 +21,11 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
          Assignments
          -------------------------------------------
          */
-        var self = this;
+        var that = this;
         this.options = options;
 
         // the actual frontend module view
-        this.frontendView = options.view;
+        this.ModuleView = options.view;
         /*
          -------------------------------------------
          Events
@@ -35,13 +35,13 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.model.on('change', this.test, this);
 
         // currently not used, change is triggered manually
-        this.listenTo(this.frontendView, 'KB::frontend.module.viewfile.changed', function () {
-            self.serialize(false);
-            self.render();
+        this.listenTo(this.ModuleView, 'KB::frontend.module.viewfile.changed', function () {
+            that.serialize(false);
+            that.render();
         });
 
         // when update gets called from module controls, notify this view
-        this.listenTo(this.frontendView, 'KB::module-updated', this.frontendViewUpdated);
+        this.listenTo(this.ModuleView, 'KB::module-updated', this.frontendViewUpdated);
 
         // @TODO events:make useless
         this.listenTo(KB, 'frontend::recalibrate', this.recalibrate);
@@ -70,13 +70,13 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             stop: function (eve, ui) {
                 KB.OSConfig.wrapPosition = ui.position;
                 // fit modal to window in size and position
-                self.recalibrate(ui.position);
+                that.recalibrate(ui.position);
             }
         });
 
         // Attach resize event handler
         jQuery(window).on('resize', function () {
-            self.recalibrate();
+            that.recalibrate();
         });
 
         // restore position if saved coordinates are around
@@ -92,18 +92,18 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         this.listenTo(KB.Events, 'KB::tinymce.new-editor', function (ed) {
             // live setting
             if (ed.settings && ed.settings.kblive) {
-                self.attachEditorEvents(ed);
+                that.attachEditorEvents(ed);
             }
         });
 
         // attach generic event listener for serialization
         jQuery(document).on('KB:osUpdate', function () {
-            self.serialize(false);
+            that.serialize(false);
         });
 
         // attach event listeners on observable input fields
         jQuery(document).on('change', '.kb-observe', function () {
-            self.serialize(false);
+            that.serialize(false);
         });
 
         // append modal to body
@@ -181,8 +181,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 that.$el.fadeTo(300, 0.1);
                 // clear form content
                 that.$inner.empty();
-                // clear fields on frontendView
-                that.frontendView.clearFields();
+                // clear fields on ModuleView
+                that.ModuleView.clearFields();
                 // set id to module id
                 that.$inner.attr('id', that.model.get('instance_id'));
                 // append the html to the inner form container
@@ -205,7 +205,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
 
                 // delayed fields update
                 setTimeout(function () {
-                    KB.Fields.trigger('frontUpdate', that.frontendView);
+                    KB.Fields.trigger('frontUpdate', that.ModuleView);
                 }, 500);
 
                 // delayed recalibration
@@ -250,8 +250,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         // renew options
         this.options.view = moduleView;
 
-        // renew reference to frontendView
-        this.frontendView = moduleView;
+        // renew reference to ModuleView
+        this.ModuleView = moduleView;
 
         // indicate working state
         this.$el.fadeTo(250, 0.1, function () {
@@ -265,7 +265,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     unset: function () {
         this.model = null;
         this.options.view = null;
-        this.frontendView.attachedFields = {};
+        this.ModuleView.attachedFields = {};
     },
 
 
@@ -352,12 +352,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             success: function (res) {
 
                 // remove attached inline editors from module
-                jQuery('.editable', that.frontendView.$el).each(function (i, el) {
+                jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
                     tinymce.remove('#' + el.id);
                 });
 
                 // cache module container height
-                height = that.frontendView.$el.height();
+                height = that.ModuleView.$el.height();
 
                 // change the container class if viewfile changed
                 if (that.updateViewClassTo !== false) {
@@ -365,12 +365,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                 }
 
                 // replace module html with new html
-                that.frontendView.$el.html(res.html);
+                that.ModuleView.$el.html(res.html);
 
                 that.model.set('moduleData', res.newModuleData);
-                jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.frontendView);
-                that.frontendView.delegateEvents();
-                that.frontendView.trigger('kb:frontend::viewUpdated');
+                jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.ModuleView);
+                that.ModuleView.delegateEvents();
+                that.ModuleView.trigger('kb:frontend::viewUpdated');
                 KB.Events.trigger('KB::ajax-update');
 
                 KB.trigger('kb:frontendModalUpdated');
@@ -382,8 +382,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                     jQuery('.editable', that.options.view.$el).each(function (i, el) {
                         KB.IEdit.Text(el);
                     });
-                    that.frontendView.render();
-                    that.frontendView.setControlsPosition();
+                    that.ModuleView.render();
+                    that.ModuleView.setControlsPosition();
                 }, 400);
 
                 //
@@ -392,7 +392,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
                         KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
                     }
                     that.$el.removeClass('isDirty');
-                    that.frontendView.getClean();
+                    that.ModuleView.getClean();
                     that.trigger('kb:frontend-save');
                 } else {
                     if (notice) {
@@ -415,10 +415,10 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
     viewfileChange: function (e) {
 
         this.updateViewClassTo = {
-            current: this.frontendView.model.get('viewfile'),
+            current: this.ModuleView.model.get('viewfile'),
             target: e.currentTarget.value
         };
-        this.frontendView.model.set('viewfile', e.currentTarget.value);
+        this.ModuleView.model.set('viewfile', e.currentTarget.value);
     },
     /**
      * Update modules element class to new view to
@@ -431,8 +431,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
             _K.error('updateContainerClass | frontendModal | paramater exception');
         }
 
-        this.frontendView.$el.removeClass(this._classifyView(viewfile.current));
-        this.frontendView.$el.addClass(this._classifyView(viewfile.target));
+        this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));
+        this.ModuleView.$el.addClass(this._classifyView(viewfile.target));
         this.updateViewClassTo = false;
     },
     /**
@@ -490,6 +490,12 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         var settings = this.model.get('settings');
         if (settings.controls && settings.controls.width) {
             $el.css('width', settings.controls.width + 'px');
+        }
+
+        if (settings.controls && settings.controls.fullscreen){
+            $el.width('100%').height('100%').addClass('fullscreen');
+        } else{
+            $el.height('').removeClass('fullscreen');
         }
     },
     /**
