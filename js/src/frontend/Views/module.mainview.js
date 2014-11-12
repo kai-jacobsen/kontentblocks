@@ -22,14 +22,13 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
         // @TODO events:investigate
         //this.model.bind('save', this.model.save);
-        this.listenTo(this.model, 'save', this.model.save);
 
+        this.listenTo(this.model, 'save', this.model.save);
+        this.$el.data('ModuleView', this);
         this.render();
 
-        this.$el.data('ModuleView', this);
-
         if (KB.appData.config.useModuleNav) {
-            KB.ModuleNav.attach(this);
+            KB.Menubar.attachModuleView(this);
         }
 
         this.setControlsPosition();
@@ -119,26 +118,25 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     openOptions: function () {
 
         // There can and should always be only a single instance of the modal
-        if (KB.FrontendEditModal) {
+        if (KB.EditModalModules) {
             this.reloadModal();
-            return false;
+            return this;
         }
-        KB.FrontendEditModal = new KB.Backbone.FrontendEditView({
-            tagName: 'div',
-            id: 'onsite-modal',
+        KB.EditModalModules = new KB.Backbone.EditModalModules({
             model: this.model,
             view: this
         });
 
         KB.focusedModule = this.model;
+        return this;
     },
     reloadModal: function () {
-        if (KB.FrontendEditModal) {
-            KB.FrontendEditModal.reload(this);
+        if (KB.EditModalModules) {
+            KB.EditModalModules.reload(this);
         }
         KB.CurrentModel = this.model;
         KB.focusedModule = this.model;
-
+        return this;
     },
     insertDropZone: function () {
         this.focus = true;
@@ -250,14 +248,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.$el.addClass('isDirty');
         // reminder: controlView is the nav item
         if (KB.appData.config.useModuleNav) {
-            this.controlView.$el.addClass('isDirty');
+            this.Menubar.$el.addClass('isDirty');
         }
     },
     getClean: function () {
         this.$el.removeClass('isDirty');
         // reminder: controlView is the nav item
         if (KB.appData.config.useModuleNav) {
-            this.controlView.$el.removeClass('isDirty');
+            this.Menubar.$el.removeClass('isDirty');
         }
     },
     modelChange: function () {

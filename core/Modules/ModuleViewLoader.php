@@ -129,17 +129,19 @@ class ModuleViewLoader
      */
     public function findDefaultTemplate()
     {
-
+        $keys = array_values( $this->views );
         if (method_exists( $this->Module, 'defaultView' )) {
             $setByModule = $this->Module->defaultView();
 
             if (!empty( $setByModule ) && $this->isValidTemplate( $setByModule )) {
                 return $setByModule;
             }
-        } else {
-            $keys = array_values( $this->views );
+        } elseif (isset($keys[0])) {
+
             $first = $keys[0];
             return $first['file'];
+        } else {
+            return null;
         }
     }
 

@@ -1,0 +1,48 @@
+#kb-area-modal {
+
+  width: 200px;
+  position: fixed;
+  z-index: 1999;
+  @include transition(all .1s linear);
+
+  ul {
+    background-color: #111;
+    list-style: none;
+    padding: 0 0 8px 0 !important;
+    margin: 0 !important;
+
+    li {
+      color: #ccc !important;
+      font-size: 13px !important;
+      cursor: pointer;
+      padding: 5px 10px !important;
+      line-height: 35px;
+
+      .kb-area-layout-thumbnail {
+        width: 35px;
+        height: 35px;
+        border: 1px solid #ccc;
+        display: inline-block;
+        margin-right: 8px;
+        vertical-align: middle;
+
+        img {
+          max-width: 100%;
+        }
+      }
+
+      &:hover, &.kb-active-area-layout {
+        background-color: #333 !important;
+      }
+    }
+  }
+
+  .close-controls {
+    color: #fff !important;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+  }
+}
+

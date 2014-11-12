@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-10 */
+/*! Kontentblocks DevVersion 2014-11-12 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -383,7 +383,12 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
 KB.Ajax = function($) {
     return {
         send: function(data, callback, scope) {
-            var pid = KB.Environment && KB.Environment.postId ? KB.Environment.postId : false;
+            var pid;
+            if (data.postId) {
+                pid = data.postId;
+            } else {
+                pid = KB.Environment && KB.Environment.postId ? KB.Environment.postId : false;
+            }
             var sned = _.extend({
                 supplemental: data.supplemental || {},
                 count: parseInt(KB.Environment.moduleCount, 10),
@@ -1083,11 +1088,13 @@ KB.ViewsCollection = function() {
     this.views = {};
     this.lastViewAdded = null;
     this.add = function(id, view) {
+        console.log("add", id);
         if (!this.views[id]) {
             this.views[id] = view;
             KB.trigger("kb:" + view.model.get("class") + ":added", view);
             this.lastViewAdded = view;
         }
+        console.log(this);
         return view;
     };
     this.ready = function() {
@@ -1106,6 +1113,7 @@ KB.ViewsCollection = function() {
     };
     this.remove = function(id) {
         var V = this.get(id);
+        console.log("remove", V);
         V.Area.trigger("kb.module.deleted", V);
         this.trigger("kb.modules.view.deleted", V);
         delete this.views[id];

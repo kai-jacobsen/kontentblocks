@@ -1,0 +1,8 @@
+<li class="{{ item.currentClass }}" data-item='{{ item.id }}'>
+    <div class='kb-area-layout-thumbnail'>
+        {{#if item.thumbnail}}
+            <img src='{{ item.thumbnail }}'>
+        {{/if}}
+    </div>
+    {{ item.label }}
+</li>

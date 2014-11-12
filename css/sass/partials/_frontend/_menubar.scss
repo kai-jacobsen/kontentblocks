@@ -1,5 +1,5 @@
 
-.kb-module-nav-container {
+.kb-menubar-container {
   position: fixed;
   bottom: -40px;
   min-height: 40px;
@@ -10,31 +10,34 @@
   z-index: 4200;
   @include box-sizing(border-box);
   @include transition(all .3s linear);
-  @include box-shadow(1px -2px 4px -1px #222);
+//  @include box-shadow(1px -2px 4px -1px #222);
 
-  &.kb-nav-show {
+  &.kb-menubar-show {
     bottom: 0;
   }
 
-  &.kb-nav-show-partly {
+  &.kb-menubar-show-partly {
     bottom: -20px;
   }
 
-  .kb-nav-toggle {
+  .kb-menubar-toggle {
     position: absolute;
     right: 0;
-    top: -25px;
+    top: -30px;
     width: 25px;
     height: 25px;
     padding-left: 7px;
     padding-top: 4px;
-    background: #222;
+    background: #111;
     //    border: 1px solid lighten(#444, 20%);
     //    border-left: 1px solid #cccccc;
     z-index: 9999;
     cursor: pointer;
     color: #ccc;
     @include transition(color .3s linear);
+    border-top: 1px #444 solid;
+    border-left: 1px #444 solid;
+
 
     &:hover {
       color: #fff;
@@ -90,13 +93,13 @@
       padding: 0;
     }
 
-    div.kb-module-nav-item__name {
+    div.kb-menubar-item__name {
       color: #fff;
       font-size: 12px !important;
       line-height: 150%;
     }
 
-    div.kb-module-nav-item__id {
+    div.kb-menubar-item__id {
       color: #ccc;
       font-size: 11px;
       line-height: 100%;
@@ -104,7 +107,7 @@
 
   }
 
-  .kb-module-nav-item__wrapper {
+  .kb-menubar-item__wrapper {
     width: 80%;
     float: left;
     overflow: hidden;
@@ -112,7 +115,7 @@
     text-overflow: ellipsis;
   }
 
-  .kb-module-nav-item__actions {
+  .kb-menubar-item__actions {
     width: 30px;
     position: absolute;
     right: 0;
@@ -147,8 +150,36 @@
 //
 //}
 
-.module.kb-nav-active {
+.module.kb-menubar-active {
   opacity: .7;
   position: relative;
 
+}
+
+
+.kb-menubar-tab{
+  position: absolute;
+  color: #666;
+  top: -25px;
+  border-top: 1px #444 solid;
+  border-right: 1px #444 solid;
+  background-color: #111;
+  height: 25px;
+  padding: 4px 8px;
+  @include box-sizing(border-box);
+  font-size: 12px;
+  cursor: pointer;
+
+  &.kb-tab-active{
+    color: #666;
+  }
+}
+
+.kb-menubar-tab__modules{
+  left: 0;
+  padding-right: 15px;
+}
+
+.kb-menubar-tab__areas{
+  left: 75px;
 }

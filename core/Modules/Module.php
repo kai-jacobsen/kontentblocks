@@ -686,7 +686,7 @@ abstract class Module
 
     final public function toJSON()
     {
-        // todo only used on frontend
+
         $toJSON = array(
             'envVars' => $this->envVars,
             'settings' => $this->settings,
@@ -708,6 +708,7 @@ abstract class Module
             $toJSON['master_id'] = $this->master_id;
             $toJSON['parentId'] = $this->master_id;
             $toJSON['post_id'] = $this->master_id;
+            $toJSON['templateObj'] = $this->templateObj;
         }
 
 

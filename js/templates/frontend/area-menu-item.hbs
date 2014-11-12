@@ -1,0 +1,15 @@
+<li class="kb-menubar-item in-viewport">
+    <div class="kb-menubar-item__wrapper">
+        <div class="kb-menubar-item__name">{{{ view.name }}}</div>
+        <div class="kb-menubar-item__id">{{{ view.description }}}</div>
+    </div>
+    <div class="kb-menubar-item__actions">
+        <a class='kb-menubar-item__edit' title='edit'
+           data-areaid='{{ view.id }}'
+           ><span class="dashicons dashicons-edit"></span><span
+                class="os-action">{{ i18n.moduleControls.controlsEdit }}</span></a>
+        <!--<a class='kb-menubar-item__id kb-js-inline-update'><span-->
+                <!--class="dashicons dashicons-update"></span><span-->
+                <!--class="os-action">{{ i18n.moduleControls.controlsUpdate }}</span></a>-->
+    </div>
+</li>

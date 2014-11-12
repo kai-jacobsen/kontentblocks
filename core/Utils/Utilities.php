@@ -168,6 +168,11 @@ class Utilities
     public static function arrayMergeRecursiveAsItShouldBe( $new, $old )
     {
         $merged = $new;
+
+        if (!is_array($merged)){
+            return $old;
+        }
+
         if (is_array( $old )) {
             foreach ($old as $key => $val) {
 

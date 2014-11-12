@@ -25,13 +25,11 @@ class GetModuleOptions
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
-
         $module = $_POST['module'];
         /** @var PostEnvironment $Environment */
         $Environment = Utilities::getEnvironment( $module['post_id'] );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $instance = $Factory->getModule();
-
         ob_start();
 //        $instance->options( $instance->moduleData );
         $instance->form();

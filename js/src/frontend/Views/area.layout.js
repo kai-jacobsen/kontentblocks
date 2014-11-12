@@ -6,7 +6,10 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
         this.AreaView = options.AreaView;
         this.listenTo(this.AreaView, 'kb.module.created', this.handleModuleCreated);
         this.listenTo(this.AreaView, 'kb.module.deleted', this.handleModuleDeleted);
-        this.LayoutIterator = this.setupLayout();
+
+        this.listenTo(this.model, 'change:layout', this.handleLayoutChange);
+
+        this.setupLayout();
 
         this.renderPlaceholder();
         /*
@@ -21,19 +24,23 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
     },
     /**
      * Setup the Layout Iterator
-     * @returns KB.LayoutIterator | null
+     * @returns this
      */
-    setupLayout: function () {
+    setupLayout: function (layout) {
         var at, coll;
         coll = KB.payload.AreaTemplates || {};
-        at = this.model.get('layout');
+        at = layout || this.model.get('layout');
         if (at === 'default') {
+            this.hasLayout = false;
             return null;
         }
 
         if (coll[at]) {
             this.hasLayout = true;
-            return new KB.LayoutIterator(coll[at], this.AreaView);
+            this.LayoutIterator = new KB.LayoutIterator(coll[at], this.AreaView);
+            return this;
+        } else {
+            this.hasLayout = false;
         }
     },
     unwrap: function () {
@@ -42,18 +49,23 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
         });
     },
     render: function (e, ui) {
-        // testing only
-        //this.LayoutIterator.setPosition(this.AreaView.getNumberOfModules());
-        this.LayoutIterator.applyLayout(ui);
+        if (this.hasLayout) {
+            this.LayoutIterator.applyLayout(ui);
+        } else {
+            this.unwrap();
+        }
     },
     applyClasses: function () {
 
         var prev = null;
         var $modules = this.AreaView.$el.find('.module');
         $modules.removeClass('first-module last-module repeater');
-
         for (var i = 0; i < $modules.length; i++) {
             var View = jQuery($modules[i]).data('ModuleView');
+            if (_.isUndefined(View)) {
+                continue;
+            }
+
             if (i === 0) {
                 View.$el.addClass('first-module');
             }
@@ -68,12 +80,16 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
 
             prev = View.model.get('settings').id;
 
-        }
+            var $parent = View.$el.parent();
 
+            if ($parent.hasClass('kb-wrap')) {
+                $parent.attr('rel', View.$el.attr('rel'));
+            }
+
+        }
     },
     handleModuleCreated: function () {
         this.applyClasses();
-
         if (this.LayoutIterator) {
             this.LayoutIterator.applyLayout();
         }
@@ -86,10 +102,18 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
             this.LayoutIterator.applyLayout();
         }
     },
+    handleLayoutChange: function () {
+        this.setupLayout();
+        this.AreaView.setupSortables();
+        this.render();
+        this.saveLayout();
+    },
     renderPlaceholder: function () {
         if (this.AreaView.getNumberOfModules() === 0) {
             this.AreaView.$el.addClass('kb-area__empty');
         }
-
+    },
+    saveLayout: function () {
+        console.log(this);
     }
 });

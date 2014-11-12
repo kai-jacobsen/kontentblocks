@@ -3,7 +3,9 @@
  * and loads when the user clicks on "edit" while in frontend editing mode
  * @type {*|void|Object}
  */
-KB.Backbone.FrontendEditView = Backbone.View.extend({
+KB.Backbone.EditModalModules = Backbone.View.extend({
+    tagName: 'div',
+    id: 'onsite-modal',
     // cache for the outer form jQuery object
     $form: null,
     // cache for the inner form jQuery object
@@ -153,7 +155,7 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
      * @TODO seperate concerns
      */
     render: function () {
-        var that = this;
+        var that = this, json;
 
         // apply settings for the modal from the active module, if any
         this.applyControlsSettings(this.$el);
@@ -165,6 +167,8 @@ KB.Backbone.FrontendEditView = Backbone.View.extend({
         KB.lastAddedModule = {
             view: that
         };
+
+        json = this.model.toJSON();
 
         // get the form
         jQuery.ajax({

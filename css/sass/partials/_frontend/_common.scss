@@ -3,9 +3,6 @@
   background-color: #f2f2f2;
   border: 1px dashed #ccc;
 }
-.kb-front-sortable-placeholder{
-  background-color: yellow;
-}
 
 .kb-module__placeholder{
   border: 1px dashed #ccc;
@@ -35,4 +32,12 @@
   left: 50%;
   margin-left: -50px;
   @include border-radius(4px);
+}
+
+.kb-front-sortable-placeholder{
+  background-color: #f9f9f9 !important;
+}
+
+.kb-menubar-area-active{
+  outline: 1px dotted #ccc;
 }

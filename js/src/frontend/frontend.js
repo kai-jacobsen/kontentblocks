@@ -47,7 +47,7 @@ KB.App = function ($) {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
         $toolbar.hide();
         if (KB.appData.config.useModuleNav) {
-            KB.ModuleNav = new KB.Backbone.ModuleNavView();
+            KB.Menubar = new KB.Backbone.MenubarView();
         }
 
         // Register events on collections

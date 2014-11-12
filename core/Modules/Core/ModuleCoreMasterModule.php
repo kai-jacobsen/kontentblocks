@@ -175,7 +175,6 @@ class ModuleCoreMasterModule extends Module
         if (filter_var($moduleDef['master'], FILTER_VALIDATE_BOOLEAN)) {
             $masterId = $moduleDef['parentId'];
             $tplId = $moduleDef['templateObj']['id'];
-
             $data = get_post_meta( $masterId, '_' . $tplId, true );
             return $data;
         }

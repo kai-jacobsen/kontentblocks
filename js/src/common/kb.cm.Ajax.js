@@ -2,7 +2,15 @@ KB.Ajax = (function ($) {
 
     return {
         send: function (data, callback, scope) {
-            var pid = (KB.Environment && KB.Environment.postId) ? KB.Environment.postId : false;
+            // @todo
+            var pid;
+
+            if (data.postId){
+                pid = data.postId;
+            } else{
+                pid = (KB.Environment && KB.Environment.postId) ? KB.Environment.postId : false;
+            }
+
             var sned = _.extend({
                 supplemental: data.supplemental || {},
                 count: parseInt(KB.Environment.moduleCount, 10),

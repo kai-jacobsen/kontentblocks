@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-10 */
+/*! Kontentblocks DevVersion 2014-11-12 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -278,6 +278,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.listenTo(moduleView.model, "change:area", this.removeModule);
         _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
         moduleView.model.areaView = this;
+        moduleView.Area = this;
         this.ui();
     },
     removeModule: function(model) {

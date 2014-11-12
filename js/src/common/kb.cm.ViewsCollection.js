@@ -7,12 +7,13 @@ KB.ViewsCollection = function () {
     this.lastViewAdded = null;
     this.add = function (id, view) {
 
-
+        console.log('add',id);
         if (!this.views[id]){
             this.views[id] = view;
             KB.trigger('kb:'+view.model.get('class')+':added', view);
             this.lastViewAdded = view;
         }
+        console.log(this);
         return view;
 
     };
@@ -36,6 +37,8 @@ KB.ViewsCollection = function () {
 
     this.remove = function (id) {
         var V = this.get(id);
+        console.log('remove', V);
+
         V.Area.trigger('kb.module.deleted', V);
         this.trigger('kb.modules.view.deleted', V);
 

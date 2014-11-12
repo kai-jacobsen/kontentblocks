@@ -1,9 +1,9 @@
 <div id="kontentblocks_stage" class="postbox">
     <h3>Module</h3>
 
-    <div class="inside" id="{{ instance.instance_id }}">
+    <div class="inside" id="kb-{{ instance.instance_id }}">
         <div class="kb-module__controls-inner">
-            {{ instance.options(instance.moduleData) }}
+            {{ instance.form() }}
 
         </div>
     </div>

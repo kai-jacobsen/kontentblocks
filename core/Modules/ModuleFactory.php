@@ -42,10 +42,10 @@ class ModuleFactory
         $this->class = $class;
 
         $this->args = self::parseModule( $moduleArgs );
-
         if ($data === null) {
             $this->data = apply_filters(
-                'kb_modify_module_data',
+//                'kb_modify_module_data',
+                'kb_setup_render_module_data',
                 $Environment->getModuleData( $moduleArgs['instance_id'] ),
                 $moduleArgs
             );
@@ -89,7 +89,7 @@ class ModuleFactory
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-        return Utilities::validateBoolRecursive(wp_parse_args( $module, $ModuleRegistry->get( $module['class'] ) ));
+        return Utilities::validateBoolRecursive( wp_parse_args( $module, $ModuleRegistry->get( $module['class'] ) ) );
     }
 
     /**

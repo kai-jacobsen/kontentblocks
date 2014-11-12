@@ -9,6 +9,9 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.listenToOnce(KB.Events, 'KB::frontend-init', this.setupUi);
         this.listenTo(this, 'kb.module.deleted', this.removeModule);
 
+        if (KB.appData.config.useModuleNav) {
+            KB.Menubar.attachAreaView(this);
+        }
     },
     setupUi: function () {
         var that = this;
@@ -18,7 +21,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
             AreaView: this
         });
 
-
         // Sortable
         if (this.model.get('sortable')) {
             this.setupSortables();
@@ -27,7 +29,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
             _K.info('Area sortable skipped');
 
         }
-
     },
     openModuleBrowser: function () {
         if (!this.ModuleBrowser) {
@@ -88,11 +89,11 @@ KB.Backbone.AreaView = Backbone.View.extend({
                             _ajax_nonce: KB.Config.getNonce('update')
                         }, function () {
                             KB.Notice.notice('Order was updated successfully', 'success');
-                            that.Layout.applyClasses();
                             that.Layout.render();
                         }, that);
                     },
                     change: function (e, ui) {
+                        that.Layout.applyClasses();
                         that.Layout.render(e, ui);
                     }
                 });
@@ -122,13 +123,18 @@ KB.Backbone.AreaView = Backbone.View.extend({
                             _ajax_nonce: KB.Config.getNonce('update')
                         }, function () {
                             KB.Notice.notice('Order was updated successfully', 'success');
-                            that.Layout.orderClass();
                         }, that);
+                    },
+                    change: function(){
+                        that.Layout.applyClasses();
                     }
                 });
         }
 
 
+    },
+    changeLayout: function(l){
+        this.Layout.model.set('layout', l);
     },
     removeModule: function (ModuleView) {
         var id = ModuleView.model.get('mid');
