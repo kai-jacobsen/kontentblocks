@@ -68,6 +68,8 @@ class ModuleFactory
 
         $module = apply_filters( 'kb_modify_block', $preparedArgs );
         $module = apply_filters( "kb_modify_block_{$preparedArgs['settings']['id']}", $preparedArgs );
+
+        $module = apply_filters( 'kb.modify.module.parameters', $preparedArgs);
         // new instance
         if (class_exists( $this->class )) {
             /** @var \Kontentblocks\Modules\Module $instance */

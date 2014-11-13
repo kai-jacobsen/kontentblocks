@@ -3,6 +3,7 @@
 use Kontentblocks\Ajax\Frontend\ApplyContentFilter;
 use Kontentblocks\Ajax\Frontend\FieldGetImage;
 use Kontentblocks\Ajax\Frontend\GetModuleOptions;
+use Kontentblocks\Ajax\Frontend\SaveAreaLayout;
 use Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
 use Kontentblocks\Ajax\GetSanitizedId;
 use Kontentblocks\Ajax\RemoteGetEditor;
@@ -244,3 +245,16 @@ function applyContentFilter()
 }
 
 add_action( 'wp_ajax_applyContentFilter', 'applyContentFilter' );
+
+
+/**
+ * -----------------------------------------
+ * Save area layout from frontend
+ * -----------------------------------------
+ */
+function saveAreaLayout()
+{
+    SaveAreaLayout::run();
+}
+
+add_action( 'wp_ajax_saveAreaLayout', 'saveAreaLayout' );

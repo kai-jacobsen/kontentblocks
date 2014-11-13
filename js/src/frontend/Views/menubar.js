@@ -44,10 +44,10 @@ KB.Backbone.ModuleMenuItem = Backbone.View.extend({
         return this.$el;
     },
     over: function () {
-        this.parentView.$el.addClass('kb-nav-active');
+        this.parentView.$el.addClass('kb-menubar-active');
     },
     out: function () {
-        this.parentView.$el.removeClass('kb-nav-active');
+        this.parentView.$el.removeClass('kb-menubar-active');
     },
     openControls: function (e) {
         e.stopPropagation();
@@ -76,7 +76,8 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
     events: {
         'mouseenter': 'over',
         'mouseleave': 'out',
-        'click .kb-menubar-item__edit': 'openAreaSettings'
+        'click .kb-menubar-item__edit': 'openAreaSettings',
+        'click .kb-menubar-item__update': 'updateAreaSettings'
     },
     initialize: function () {
         this.parentView = this.model;
@@ -100,7 +101,6 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
 
     },
     openAreaSettings: function (e) {
-
         if (KB.EditModalAreas) {
             KB.EditModalAreas.
                 setArea(this.model).
@@ -115,6 +115,21 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
             AreaView: this.model
         });
 
+    },
+    updateAreaSettings: function () {
+        KB.Ajax.send({
+            action: 'saveAreaLayout',
+            area: this.model.model.toJSON(),
+            layout: this.model.Layout.model.get('layout'),
+            _ajax_nonce: KB.Config.getNonce('update')
+        }, this.updateSuccess, this);
+    },
+    updateSuccess: function (res) {
+        if (res.status === 200) {
+            KB.Notice.notice(res.response, 'success');
+        } else {
+            KB.Notice.notice('That did not work', 'error');
+        }
     }
 
 });
@@ -136,10 +151,10 @@ KB.Backbone.MenubarView = Backbone.View.extend({
         this.render();
     },
     events: {
-        'click .kb-nav-toggle': 'toggleView',
-        'mouseenter .kb-nav-toggle': 'over',
-        'mouseleave .kb-nav-toggle': 'out',
-        'click .kb-menubar-tab': 'switch'
+        'click .kb-menubar-toggle': 'toggleView',
+        'mouseenter .kb-menubar-toggle': 'over',
+        'mouseleave .kb-menubar-toggle': 'out',
+        'click .kb-menubar-tab': 'switchTabs'
     },
     render: function () {
         this.$el.appendTo('body');
@@ -188,7 +203,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
             this.$el.removeClass('kb-menubar-show-partly');
         }
     },
-    switch: function (e) {
+    switchTabs: function (e) {
         var $targetEl, targetList;
         $targetEl = jQuery(e.currentTarget);
         jQuery('.kb-tab-active').removeClass('kb-tab-active');

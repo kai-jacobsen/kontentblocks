@@ -268,7 +268,7 @@ body.onsite-editing #onsite-modal {
   position: fixed;
   top: 40px;
   right: 40px;
-  box-shadow: 1px 1px 40px #333;
+  box-shadow: 1px 1px 5px #333;
   border-bottom: 1px solid #aaa;
   border-right: 1px solid #aaa;
   overflow: auto;

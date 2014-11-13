@@ -106,14 +106,10 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
         this.setupLayout();
         this.AreaView.setupSortables();
         this.render();
-        this.saveLayout();
     },
     renderPlaceholder: function () {
         if (this.AreaView.getNumberOfModules() === 0) {
             this.AreaView.$el.addClass('kb-area__empty');
         }
-    },
-    saveLayout: function () {
-        console.log(this);
     }
 });

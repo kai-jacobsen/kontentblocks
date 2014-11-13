@@ -458,7 +458,7 @@
 }
 /* line 173, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
 .kb-menubar-tab.kb-tab-active {
-  color: #666;
+  color: #fff;
 }
 
 /* line 178, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
@@ -469,7 +469,7 @@
 
 /* line 183, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
 .kb-menubar-tab__areas {
-  left: 75px;
+  left: 69px;
 }
 
 /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */

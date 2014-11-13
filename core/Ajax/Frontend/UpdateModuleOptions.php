@@ -40,20 +40,23 @@ class UpdateModuleOptions
 
         $Environment = Utilities::getEnvironment( $module['post_id'] );
 
+        $newData = $parsed[$module['instance_id']];
+
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $Module = $Factory->getModule();
 
+        // master module will change instance id to correct template id
+        $module = apply_filters('kb.modify.module.save', $module);
+
         // gather data
         $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
-        $new = $Module->save( $parsed[$Module->getId()], $old );
+        $new = $Module->save( $newData, $old );
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
-
         if ($update) {
-            $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
+            $Environment->getStorage()->saveModule( $module['instance_id'], wp_slash( $mergedData ) );
         }
 
         $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
-
 
         $Module->setModuleData( $mergedData );
 
@@ -67,7 +70,7 @@ class UpdateModuleOptions
         // @TODO depreacate
         do_action( 'kb_save_frontend_module', $module, $update );
 
-        Utilities::remoteConcatGet($module['post_id']);
+        Utilities::remoteConcatGet( $module['post_id'] );
 
         wp_send_json( $return );
     }

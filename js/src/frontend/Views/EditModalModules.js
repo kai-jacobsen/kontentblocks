@@ -469,7 +469,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             that.unload();
             that.unbind();
             that.remove();
-            KB.FrontendEditModal = null;
+            KB.EditModalModules = null;
         });
 
     },

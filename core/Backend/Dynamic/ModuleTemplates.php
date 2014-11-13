@@ -129,7 +129,7 @@ class ModuleTemplates
         // no data from db equals null, null is invalid
         // we can't pass null to the factory, if environment is null as well
         // @TODO why not passing an Environment?
-        $Environment = Utilities::getEnvironment($post->ID);
+        $Environment = Utilities::getEnvironment( $post->ID );
 
         $Factory = new ModuleFactory( $moduleDef['settings']['class'], $moduleDef, $Environment );
         /** @var $Instance \Kontentblocks\Modules\Module */
@@ -222,7 +222,7 @@ class ModuleTemplates
 
             $moduleDef = ModuleFactory::parseModule( $tpl );
 
-            $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, Utilities::getEnvironment($postId) );
+            $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, Utilities::getEnvironment( $postId ) );
             /** @var $Instance \Kontentblocks\Modules\Module */
             $Instance = $Factory->getModule();
             $new = $Instance->save( $data, $old );
@@ -297,7 +297,10 @@ class ModuleTemplates
         $definition['class'] = $data['type']; // Module class
         $definition['area'] = 'template'; // needs to be present
         $definition['areaContext'] = 'template'; // needs to be present
-
+        $definition['templateObj'] = array(
+            'id' => $data['id'],
+            'name' => $data['name']
+        );
         // settings are not persistent
         unset( $definition['settings'] );
 

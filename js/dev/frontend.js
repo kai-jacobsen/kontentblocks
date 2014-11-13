@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-12 */
+/*! Kontentblocks DevVersion 2014-11-13 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -814,7 +814,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             that.unload();
             that.unbind();
             that.remove();
-            KB.FrontendEditModal = null;
+            KB.EditModalModules = null;
         });
     },
     unload: function() {
@@ -923,15 +923,11 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
         this.setupLayout();
         this.AreaView.setupSortables();
         this.render();
-        this.saveLayout();
     },
     renderPlaceholder: function() {
         if (this.AreaView.getNumberOfModules() === 0) {
             this.AreaView.$el.addClass("kb-area__empty");
         }
-    },
-    saveLayout: function() {
-        console.log(this);
     }
 });
 
@@ -1163,10 +1159,10 @@ KB.Backbone.ModuleMenuItem = Backbone.View.extend({
         return this.$el;
     },
     over: function() {
-        this.parentView.$el.addClass("kb-nav-active");
+        this.parentView.$el.addClass("kb-menubar-active");
     },
     out: function() {
-        this.parentView.$el.removeClass("kb-nav-active");
+        this.parentView.$el.removeClass("kb-menubar-active");
     },
     openControls: function(e) {
         e.stopPropagation();
@@ -1189,7 +1185,8 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
     events: {
         mouseenter: "over",
         mouseleave: "out",
-        "click .kb-menubar-item__edit": "openAreaSettings"
+        "click .kb-menubar-item__edit": "openAreaSettings",
+        "click .kb-menubar-item__update": "updateAreaSettings"
     },
     initialize: function() {
         this.parentView = this.model;
@@ -1219,6 +1216,21 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
             target: e.currentTarget,
             AreaView: this.model
         });
+    },
+    updateAreaSettings: function() {
+        KB.Ajax.send({
+            action: "saveAreaLayout",
+            area: this.model.model.toJSON(),
+            layout: this.model.Layout.model.get("layout"),
+            _ajax_nonce: KB.Config.getNonce("update")
+        }, this.updateSuccess, this);
+    },
+    updateSuccess: function(res) {
+        if (res.status === 200) {
+            KB.Notice.notice(res.response, "success");
+        } else {
+            KB.Notice.notice("That did not work", "error");
+        }
     }
 });
 
@@ -1234,10 +1246,10 @@ KB.Backbone.MenubarView = Backbone.View.extend({
         this.render();
     },
     events: {
-        "click .kb-nav-toggle": "toggleView",
-        "mouseenter .kb-nav-toggle": "over",
-        "mouseleave .kb-nav-toggle": "out",
-        "click .kb-menubar-tab": "switch"
+        "click .kb-menubar-toggle": "toggleView",
+        "mouseenter .kb-menubar-toggle": "over",
+        "mouseleave .kb-menubar-toggle": "out",
+        "click .kb-menubar-tab": "switchTabs"
     },
     render: function() {
         this.$el.appendTo("body");
@@ -1285,7 +1297,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
             this.$el.removeClass("kb-menubar-show-partly");
         }
     },
-    "switch": function(e) {
+    switchTabs: function(e) {
         var $targetEl, targetList;
         $targetEl = jQuery(e.currentTarget);
         jQuery(".kb-tab-active").removeClass("kb-tab-active");

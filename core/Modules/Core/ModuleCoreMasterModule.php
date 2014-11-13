@@ -31,6 +31,11 @@ class ModuleCoreMasterModule extends Module
         add_filter( 'kb_before_module_options', array( __CLASS__, 'validateModule' ) );
 
 
+        // runs on the getModule() method of the factory, right b4 module instantiation
+//        add_filter( 'kb.modify.module.parameters', array( __CLASS__, 'setTemplateId' ) );
+
+        add_filter('kb.modify.module.save', array(__CLASS__, 'setTemplateId'));
+
         // runs on module setup of the module iterator
         add_filter( 'kb_render_setup_module', array( __CLASS__, 'setupModule' ) );
 
@@ -48,7 +53,6 @@ class ModuleCoreMasterModule extends Module
         $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
         $duplicate = !empty( $icl );
 
-
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
             $iclId = icl_object_id( $masterId, 'kb-mdtpl' );
             $translated = ( $iclId !== $masterId );
@@ -59,20 +63,21 @@ class ModuleCoreMasterModule extends Module
 
         }
 
+
         if (is_null( $masterId )) {
             $module['state']['draft'] = true;
             $module['state']['active'] = false;
             $module['state']['valid'] = false;
         } else {
-            $module['state']['valid'] = true;
+            $module['state']['valid'] = ( get_post_status( $masterId ) === 'trash' ) ? false : true;
         }
-
         return $module;
 
     }
 
     public function form()
     {
+
         $masterId = $this->parentId;
         $translated = false;
         $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
@@ -127,7 +132,7 @@ class ModuleCoreMasterModule extends Module
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 
-        if ($module['master'] && isset($module['parentId'])) {
+        if ($module['master'] && isset( $module['parentId'] )) {
             $masterId = $module['parentId']; // post id of the template
             $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
             $duplicate = ( !empty( $icl ) );
@@ -172,7 +177,7 @@ class ModuleCoreMasterModule extends Module
      */
     public static function setupModuleData( $module, $moduleDef )
     {
-        if (filter_var($moduleDef['master'], FILTER_VALIDATE_BOOLEAN)) {
+        if (isset( $moduleDef['master'] ) && filter_var( $moduleDef['master'], FILTER_VALIDATE_BOOLEAN )) {
             $masterId = $moduleDef['parentId'];
             $tplId = $moduleDef['templateObj']['id'];
             $data = get_post_meta( $masterId, '_' . $tplId, true );
@@ -194,6 +199,23 @@ class ModuleCoreMasterModule extends Module
             $moduleArgs['class'] = 'ModuleCoreMasterModule';
         }
         return $moduleArgs;
+    }
+
+    /**
+     * When creating the instance, the mid must be set to the orginal master id
+     * @todo will cause trouble when a master template is added twice
+     * @param $args
+     * @return mixed
+     */
+    public static function setTemplateId( $args )
+    {
+        if ($args['master']) {
+            if (isset( $args['templateObj'] )) {
+                $args['instance_id'] = $args['templateObj']['id'];
+                $args['mid'] = $args['templateObj']['id'];
+            }
+        }
+        return $args;
     }
 
     // Nothing to save here

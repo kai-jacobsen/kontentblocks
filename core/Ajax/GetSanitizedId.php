@@ -46,7 +46,7 @@ class GetSanitizedId
      */
     private static function checkAreaExists( $ad )
     {
-        $sane = sanitize_title( $ad );
+        $sane = sanitize_title( 'kb_da_' . $ad );
 
         $posts = get_posts(
             array(
@@ -72,7 +72,7 @@ class GetSanitizedId
      */
     private static function checkTemplateExists( $ad )
     {
-        $sane = sanitize_title( $ad );
+        $sane = sanitize_title( 'kb_tpl_' . $ad );
 
         $posts = get_posts(
             array(
