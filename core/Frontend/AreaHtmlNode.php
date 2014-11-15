@@ -8,10 +8,10 @@ use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class AreaOutput
+ * Class AreaHtmlNode
  * @package Kontentblocks\Frontend
  */
-class AreaOutput
+class AreaHtmlNode
 {
 
     /**
@@ -58,6 +58,24 @@ class AreaOutput
     protected $hasLayout = false;
 
     /**
+     * Number of modules in this area
+     * @var int
+     */
+    protected $moduleCount = 0;
+
+    /**
+     * Internal counter
+     * @var int
+     */
+    protected $position = 0;
+
+    /**
+     * Flag whether all modules were rendered
+     * @var bool
+     */
+    protected $done = false;
+
+    /**
      * Class Constructor
      *
      * @param $areaAttrs array area parameter from definition
@@ -69,11 +87,12 @@ class AreaOutput
     {
         $this->id = $areaAttrs['id'];
         $this->attr = $areaAttrs;
-        $this->settings = $this->_setupSettings( $additionalArgs, $areaSettings );
-        $this->Layout = $this->_setupLayout();
+        $this->settings = $this->setupSettings( $additionalArgs, $areaSettings );
+        $this->Layout = $this->setupLayout();
 
         $this->toJSON();
     }
+
 
     /**
      * create the wrappers opening markup
@@ -88,7 +107,6 @@ class AreaOutput
             $this->id,
             $this->getWrapperClasses()
         );
-
     }
 
     /**
@@ -98,9 +116,7 @@ class AreaOutput
      */
     public function closeArea()
     {
-
         return sprintf( "</%s>", $this->settings['element'] );
-
     }
 
     /**
@@ -117,10 +133,7 @@ class AreaOutput
             $this->getContext(),
             $this->getSubcontext(),
         );
-
-
         return implode( ' ', $classes );
-
     }
 
     /**
@@ -164,19 +177,19 @@ class AreaOutput
      * @return bool|AreaLayoutIterator
      * @since 1.0.0
      */
-    private function _setupLayout()
+    private function setupLayout()
     {
         /** @var \Kontentblocks\Backend\Areas\AreaRegistry $registry */
         $Registry = Kontentblocks::getService( 'registry.areas' );
 
         $sLayout = $this->settings['layout'];
 
-        if ($sLayout !== 'default' && !empty($sLayout) ) {
+        if ($sLayout !== 'default' && !empty( $sLayout )) {
             $this->hasLayout = true;
             return new AreaLayoutIterator( $this->settings['layout'] );
         }
 
-        if ($this->attr['defaultLayout'] !== 'default' && empty($sLayout)) {
+        if ($this->attr['defaultLayout'] !== 'default' && empty( $sLayout )) {
             if ($Registry->templateExists( $this->attr['defaultLayout'] )) {
                 $this->settings['layout'] = $this->attr['defaultLayout'];
                 $this->hasLayout = true;
@@ -198,7 +211,7 @@ class AreaOutput
      * @return array
      * @since 1.0.0
      */
-    private function _setupSettings( $args, $settings = null )
+    private function setupSettings( $args, $settings = null )
     {
         // @TODO move to better context
         $defaults = array(
@@ -280,6 +293,64 @@ class AreaOutput
             'area_id' => $this->id
         );
 
+    }
+
+
+    /**
+     * Logic to create the outer wrapper if layout has one set
+     * @return string
+     */
+    public function openLayoutWrapper()
+    {
+        if ($this->hasLayout) {
+            $format = '<%1$s class="%2$s kb-outer-wrap">';
+            if ($this->Layout->hasWrap() && $this->position === 0) {
+                $wrap = $this->Layout->getWrap();
+                return sprintf( $format, $wrap['tag'], $wrap['class'] );
+            }
+
+            if ($this->Layout->hasWrap() && $this->Layout->hasCycled( false )) {
+                $wrap = $this->Layout->getWrap();
+                return sprintf( $format, $wrap['tag'], $wrap['class'] );
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Logic to close the outer wrapper if layout has one set
+     * @return string
+     */
+    public function closeLayoutWrapper()
+    {
+
+        $this->position ++;
+
+        if ($this->position === $this->moduleCount) {
+            $this->done = true;
+        }
+
+        if ($this->hasLayout) {
+            if ($this->Layout->hasWrap() && $this->done) {
+                $wrap = $this->Layout->getWrap();
+                $format = '</%1$s>';
+                return sprintf( $format, $wrap['tag'] );
+            }
+
+            if ($this->Layout->hasWrap() && $this->Layout->hasCycled()) {
+                $wrap = $this->Layout->getWrap();
+                $format = '</%1$s>';
+                return sprintf( $format, $wrap['tag'] );
+            }
+        }
+
+
+        return '';
+    }
+
+    public function setModuleCount( $count = 0 )
+    {
+        $this->moduleCount = $count;
     }
 
     public function toJSON()

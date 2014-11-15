@@ -23,9 +23,9 @@ class AreaRenderer
 {
 
     /**
-     * @var AreaOutput
+     * @var AreaHtmlNode
      */
-    protected $AreaOutput;
+    protected $AreaHtmlNode;
 
     /**
      * @var \Kontentblocks\Backend\Environment\PostEnvironment
@@ -78,8 +78,8 @@ class AreaRenderer
 //        }
 
 
-        // setup AreaOutput
-        $this->AreaOutput = new AreaOutput(
+        // setup AreaHtmlNode
+        $this->AreaHtmlNode = new AreaHtmlNode(
             $this->Environment->getAreaDefinition( $area ),
             $this->Environment->getAreaSettings( $area ),
             $additionalArgs
@@ -88,6 +88,7 @@ class AreaRenderer
     }
 
     /**
+     * Main render method
      * @param $echo
      * @return string
      */
@@ -101,38 +102,45 @@ class AreaRenderer
         // Output starts here
         // ----------------------------
 
+        $this->AreaHtmlNode->setModuleCount( count( $this->modules ) );
+
         $output = '';
 
         // start area output & create opening wrapper
-        $output .= $this->AreaOutput->openArea();
+        $output .= $this->AreaHtmlNode->openArea();
+
         /**
          * @var \Kontentblocks\Modules\Module $module
          */
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
 
-            if (is_null( $module )) {
+            if (!is_a( $module, '\Kontentblocks\Modules\Module' )) {
                 continue;
             }
 
-            // TODO whoooo bad
             // quick fix to test onsite editing
             // module->module will, depending on field configuration, modify moduleData
-            $module->rawModuleData = $module->moduleData;
+            // $module->rawModuleData = $module->moduleData;
 
             if (!$module->verify()) {
                 continue;
             }
+
+            $output .= $this->AreaHtmlNode->openLayoutWrapper();
+
             $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
 
             $moduleOutput = $module->module();
 
             $output .= $moduleOutput;
             $output .= $this->afterModule( $this->_afterModule( $module ), $module );
+
+            $output .= $this->AreaHtmlNode->closeLayoutWrapper();
         }
 
         // close area wrapper
-        $output .= $this->AreaOutput->closeArea();
+        $output .= $this->AreaHtmlNode->closeArea();
 
         if (current_theme_supports( 'kontentblocks:area-concat' ) && isset( $_GET['concat'] )) {
             if ($module->getSetting( 'concat' )) {
@@ -149,6 +157,7 @@ class AreaRenderer
     }
 
     /**
+     *
      * @param $classes
      * @param Module $module
      * @return string
@@ -156,7 +165,7 @@ class AreaRenderer
     public function beforeModule( $classes, Module $module )
     {
 
-        $layout = $this->AreaOutput->getCurrentLayoutClasses();
+        $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
 
         if (!empty( $layout )) {
             return sprintf(
@@ -186,7 +195,7 @@ class AreaRenderer
     {
         JSONBridge::getInstance()->registerModule( $Module->toJSON() );
 
-        $layout = $this->AreaOutput->getCurrentLayoutClasses();
+        $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
         if (!empty( $layout )) {
             return "</div>" . sprintf( "</%s>", $Module->getSetting( 'element' ) );
         } else {
@@ -199,7 +208,7 @@ class AreaRenderer
 
     public function _beforeModule( $module )
     {
-        $module->_addAreaAttributes( $this->AreaOutput->getPublicAttributes() );
+        $module->_addAreaAttributes( $this->AreaHtmlNode->getPublicAttributes() );
         $moduleClasses = $this->modules->getCurrentModuleClasses();
         $additionalClasses = $this->getAdditionalClasses( $module );
 
@@ -216,24 +225,22 @@ class AreaRenderer
     {
         $this->previousModule = $module->settings['id'];
         $this->position ++;
-        $this->AreaOutput->nextLayout();
-
+        $this->AreaHtmlNode->nextLayout();
+        return true;
     }
 
     public function _validate()
     {
-        if (!isset( $this->AreaOutput )) {
+        if (!isset( $this->AreaHtmlNode )) {
             return false;
         }
 
         return true;
-
     }
 
     public function getAdditionalClasses( $module )
     {
         $classes = array();
-
         $classes[] = $module->settings['id'];
 
         if (isset( $module->viewfile )) {
@@ -251,9 +258,9 @@ class AreaRenderer
         if (is_user_logged_in()) {
             $classes[] = 'os-edit-container';
 
-            if ($module->getState('draft')){
+            if ($module->getState( 'draft' )) {
                 $classes[] = 'draft';
-             }
+            }
         }
 
         if ($this->previousModule === $module->settings['id']) {
@@ -263,7 +270,7 @@ class AreaRenderer
             $this->repeating = false;
         }
 
-        if ($this->repeating && $this->AreaOutput->getSetting( 'mergeRepeating' )) {
+        if ($this->repeating && $this->AreaHtmlNode->getSetting( 'mergeRepeating' )) {
             $classes[] = 'module-merged';
         } else {
             $classes[] = 'module';

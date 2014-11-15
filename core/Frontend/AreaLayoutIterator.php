@@ -49,11 +49,28 @@ class AreaLayoutIterator implements \Iterator
     protected $cycle;
 
     /**
+     * Flag whether iterator cycled
+     * @var bool
+     */
+    protected $cycled = false;
+
+    /**
      * Classes to add to the area which uses this layout
      * @var array
      */
     protected $templateClass;
 
+    /**
+     * Additional outer wrapper (before every loop)
+     * @var bool
+     */
+    protected $wrap;
+
+    /**
+     * Indicates whether iterator was "started"
+     * @var bool
+     */
+    protected $iterates;
 
     /**
      * Class constructor
@@ -61,11 +78,11 @@ class AreaLayoutIterator implements \Iterator
      * @param $id
      * @since 1.0.0
      */
-    public function __construct($id)
+    public function __construct( $id )
     {
         // setup the area template
         // area templates are part of the area Registry
-        $this->_setup(Kontentblocks::getService('registry.areas')->getTemplate($id));
+        $this->_setup( Kontentblocks::getService( 'registry.areas' )->getTemplate( $id ) );
 
     }
 
@@ -77,7 +94,6 @@ class AreaLayoutIterator implements \Iterator
     public function rewind()
     {
         $this->position = 0;
-
     }
 
     /**
@@ -125,7 +141,8 @@ class AreaLayoutIterator implements \Iterator
     {
         // if the layout should cycle and we are at the end, rewind
         // else proceed and increase position
-        if ($this->cycle && $this->position === count($this->layout) - 1) {
+        if ($this->cycle && $this->position === count( $this->layout ) - 1) {
+            $this->cycled = true;
             $this->rewind();
             return;
         }
@@ -133,10 +150,11 @@ class AreaLayoutIterator implements \Iterator
         // if the layout should NOT cycle and we hit the last position
         // stay at position, don't rewind, don't increase
         // keep increasing until last position is reached
-        if (!$this->cycle && $this->position === count($this->layout) - 1) {
+        if (!$this->cycle && $this->position === count( $this->layout ) - 1) {
             return;
         }
-        ++$this->position;
+
+        ++ $this->position;
 
     }
 
@@ -148,8 +166,7 @@ class AreaLayoutIterator implements \Iterator
      */
     public function valid()
     {
-        return isset($this->layout[$this->position]);
-
+        return isset( $this->layout[$this->position] );
     }
 
     /**
@@ -159,10 +176,10 @@ class AreaLayoutIterator implements \Iterator
      * @throws Exception
      * @since 1.0.0
      */
-    private function _setup($args)
+    private function _setup( $args )
     {
         if (!$args) {
-            throw new \Exception('No area template definition given');
+            throw new \Exception( 'No area template definition given' );
         }
 
         $this->id = $args['id'];
@@ -170,6 +187,7 @@ class AreaLayoutIterator implements \Iterator
         $this->lastItem = $args['last-item'];
         $this->cycle = $args['cycle'];
         $this->templateClass = $args['templateClass'];
+        $this->wrap = $args['wrap'];
 
     }
 
@@ -181,13 +199,40 @@ class AreaLayoutIterator implements \Iterator
      */
     public function getLayoutClass()
     {
-
         $classes[] = 'layout-' . $this->id;
-
-        if (!empty($this->templateClass)) {
-            $classes = array_merge($classes, $this->templateClass);
+        if (!empty( $this->templateClass )) {
+            $classes = array_merge( $classes, $this->templateClass );
         }
         return $classes;
+    }
+
+    /**
+     * Check if outter wrapper is assigned
+     * @return bool
+     */
+    public function hasWrap()
+    {
+        return is_array( $this->wrap );
+    }
+
+
+    public function hasCycled($flag = true){
+
+        if ($this->cycled){
+            $this->cycled = $flag;
+            return true;
+        } else {
+            return $this->cycled;
+        }
+    }
+
+    /**
+     * Getter for wrap property
+     * @return bool
+     */
+    public function getWrap()
+    {
+        return $this->wrap;
     }
 
 }

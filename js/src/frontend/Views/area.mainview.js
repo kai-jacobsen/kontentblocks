@@ -72,6 +72,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                         ui.placeholder.append("<div class='module kb-dummy'></div>");
 
                         jQuery('.module', ui.helper).addClass('ignore');
+                        ui.helper.addClass('ignore');
                     },
                     stop: function (e, ui) {
                         var serializedData = {};

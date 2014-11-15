@@ -17,7 +17,9 @@ KB.LayoutIterator = function (layout, AreaView) {
     this.lastItem = layout['last-item'];
     this.cycle = layout.cycle || false;
     this.layout = layout.layout;
+    this.wrap = layout.wrap || wrap;
     this.tplClass = layout.templateClass;
+
 
     /*
      * ------------------------
@@ -69,10 +71,29 @@ KB.LayoutIterator = function (layout, AreaView) {
         return this.current;
     };
 
+    this.hasWrap = function(){
+        if (this.wrap !== false){
+            return true;
+        }else{
+            return false;
+        }
+    };
+
     this.applyLayout = function (ui) {
         var Iterator = this;
+        var modules = this.AreaView.$el.find('.module:not(".ignore")');
+        var wraps = [];
         Iterator.setPosition(0);
-        _.each(this.AreaView.$el.find('.module:not(".ignore")'), function (ModuleEl) {
+
+        // unwrap to rewrap
+        if (this.hasWrap()){
+            var outer = jQuery('.kb-outer-wrap');
+            outer.each(function(item, i){
+                jQuery('.kb-wrap:first-child', item).unwrap();
+            });
+        }
+
+        _.each(modules, function (ModuleEl) {
             var $el = jQuery(ModuleEl);
             var $wrap = $el.parent('.kb-wrap');
             if ($wrap.length === 0) {
@@ -83,26 +104,20 @@ KB.LayoutIterator = function (layout, AreaView) {
                 $wrap.addClass('kb-wrap ' + Iterator.getCurrent().classes);
             }
 
-            if (ui){
+            if (ui) {
                 ui.placeholder.addClass('kb-front-sortable-placeholder');
             }
 
-            //
-            //if (ui) {
-            //    var all = Iterator.AreaView.$el.find('.kb-wrap, .kb-front-sortable-placeholder');
-            //    var $ph = jQuery('.kb-front-sortable-placeholder');
-            //    var index = all.index($ph);
-            //
-            //    if (index > (Iterator.maxNum - 1)) {
-            //        index = (Iterator.maxNum - 1);
-            //    }
-            //
-            //    $ph.removeClass();
-            //    $ph.addClass('kb-front-sortable-placeholder ' + Iterator.getLayout(index).classes);
-            //}
-
             Iterator.next();
         });
+
+        wraps = jQuery('.kb-wrap:not(".ignore")');
+
+        for(var i = 0; i < wraps.length; i+=this.maxNum) {
+            wraps.slice(i, i+this.maxNum).wrapAll("<div class='kb-outer-wrap " + this.wrap.class + "'></div>");
+            //console.log(wraps.slice(i, i+this.maxNum));
+        }
+
     };
 
 

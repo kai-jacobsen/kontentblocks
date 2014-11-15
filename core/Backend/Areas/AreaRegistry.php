@@ -81,7 +81,7 @@ class AreaRegistry
         $this->AreaDynamicManager = new AreaDynamicManager();
         add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
         if (is_user_logged_in()) {
-                add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
+            add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
         }
     }
 
@@ -273,7 +273,8 @@ class AreaRegistry
             'templateClass' => '',
             'layout' => array(),
             'cycle' => false,
-            'last-item' => false
+            'last-item' => false,
+            'wrap' => false
         );
 
         if (!empty( $args['id'] )) {
@@ -307,7 +308,8 @@ class AreaRegistry
      * @return bool
      * @since 1.0.0
      */
-    public function templateExists($id){
+    public function templateExists( $id )
+    {
         if (isset( $this->templates[$id] )) {
             return true;
         } else {
@@ -498,7 +500,7 @@ class AreaRegistry
     public function setupJSON()
     {
         Utilities::setupCats();
-        JSONBridge::getInstance()->registerData('AreaTemplates', null, $this->templates);
+        JSONBridge::getInstance()->registerData( 'AreaTemplates', null, $this->templates );
     }
 
 }

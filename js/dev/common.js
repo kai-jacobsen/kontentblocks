@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-13 */
+/*! Kontentblocks DevVersion 2014-11-15 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -1088,13 +1088,11 @@ KB.ViewsCollection = function() {
     this.views = {};
     this.lastViewAdded = null;
     this.add = function(id, view) {
-        console.log("add", id);
         if (!this.views[id]) {
             this.views[id] = view;
             KB.trigger("kb:" + view.model.get("class") + ":added", view);
             this.lastViewAdded = view;
         }
-        console.log(this);
         return view;
     };
     this.ready = function() {
@@ -1113,7 +1111,6 @@ KB.ViewsCollection = function() {
     };
     this.remove = function(id) {
         var V = this.get(id);
-        console.log("remove", V);
         V.Area.trigger("kb.module.deleted", V);
         this.trigger("kb.modules.view.deleted", V);
         delete this.views[id];

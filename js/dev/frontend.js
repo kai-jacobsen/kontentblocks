@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-13 */
+/*! Kontentblocks DevVersion 2014-11-15 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -942,6 +942,7 @@ KB.LayoutIterator = function(layout, AreaView) {
     this.lastItem = layout["last-item"];
     this.cycle = layout.cycle || false;
     this.layout = layout.layout;
+    this.wrap = layout.wrap || wrap;
     this.tplClass = layout.templateClass;
     this.setPosition = function(pos) {
         this.position = pos % this.maxNum;
@@ -978,10 +979,25 @@ KB.LayoutIterator = function(layout, AreaView) {
     this.getCurrent = function() {
         return this.current;
     };
+    this.hasWrap = function() {
+        if (this.wrap !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    };
     this.applyLayout = function(ui) {
         var Iterator = this;
+        var modules = this.AreaView.$el.find('.module:not(".ignore")');
+        var wraps = [];
         Iterator.setPosition(0);
-        _.each(this.AreaView.$el.find('.module:not(".ignore")'), function(ModuleEl) {
+        if (this.hasWrap()) {
+            var outer = jQuery(".kb-outer-wrap");
+            outer.each(function(item, i) {
+                jQuery(".kb-wrap:first-child", item).unwrap();
+            });
+        }
+        _.each(modules, function(ModuleEl) {
             var $el = jQuery(ModuleEl);
             var $wrap = $el.parent(".kb-wrap");
             if ($wrap.length === 0) {
@@ -996,6 +1012,10 @@ KB.LayoutIterator = function(layout, AreaView) {
             }
             Iterator.next();
         });
+        wraps = jQuery('.kb-wrap:not(".ignore")');
+        for (var i = 0; i < wraps.length; i += this.maxNum) {
+            wraps.slice(i, i + this.maxNum).wrapAll("<div class='kb-outer-wrap " + this.wrap.class + "'></div>");
+        }
     };
     this.setCurrent();
 };
@@ -1063,6 +1083,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     ui.placeholder.addClass("kb-front-sortable-placeholder");
                     ui.placeholder.append("<div class='module kb-dummy'></div>");
                     jQuery(".module", ui.helper).addClass("ignore");
+                    ui.helper.addClass("ignore");
                 },
                 stop: function(e, ui) {
                     var serializedData = {};

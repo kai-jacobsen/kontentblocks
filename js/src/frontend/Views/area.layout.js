@@ -1,5 +1,4 @@
 KB.Backbone.AreaLayoutView = Backbone.View.extend({
-
     hasLayout: false,
     LayoutIterator: null,
     initialize: function (options) {
