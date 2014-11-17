@@ -106,7 +106,7 @@ class DuplicateModule
             $moduleDefinition['areaContext'] = filter_var( $_POST['areaContext'], FILTER_SANITIZE_STRING );
 
             self::$Environment->getStorage()->reset();
-            $moduleDefinition = apply_filters( 'kb_before_module_options', $moduleDefinition );
+            $moduleDefinition = apply_filters( 'kb.module.before.factory', $moduleDefinition );
 
             $Factory = new ModuleFactory( self::$class, $moduleDefinition, self::$Environment );
             $Module = $Factory->getModule();

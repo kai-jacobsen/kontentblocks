@@ -24,25 +24,32 @@ class ModuleCoreMasterModule extends Module
 
     public static function init()
     {
-        // runs on module creation
-        add_filter( 'kb_intercept_module_args', array( __CLASS__, 'manipulateModuleArgs' ) );
+        // runs only once on module creation and sets the original class reference to this class
+        // to create the correct backend form
+        add_filter( 'kb.intercept.creation.args', array( __CLASS__, 'manipulateModuleArgs' ) );
 
-        // runs on module creation
-        add_filter( 'kb_before_module_options', array( __CLASS__, 'validateModule' ) );
+        // runs whenever a module parameter array is passed to the factory
+        add_filter( 'kb.module.before.factory', array( __CLASS__, 'validateModule' ) );
 
+        // runs when the frontend modal updates form data and changes the mid to the original
+        // template id
+        add_filter( 'kb.modify.module.save', array( __CLASS__, 'setTemplateId' ) );
 
-        // runs on the getModule() method of the factory, right b4 module instantiation
-//        add_filter( 'kb.modify.module.parameters', array( __CLASS__, 'setTemplateId' ) );
+        // runs on module setup of the module iterator. change module parameter before
+        // frontend output here
+        add_filter( 'kb.before.frontend.setup', array( __CLASS__, 'setupModule' ) );
 
-        add_filter('kb.modify.module.save', array(__CLASS__, 'setTemplateId'));
-
-        // runs on module setup of the module iterator
-        add_filter( 'kb_render_setup_module', array( __CLASS__, 'setupModule' ) );
-
-        // runs before module get passed to the factory in module iterator frontend output
-        add_filter( 'kb_setup_render_module_data', array( __CLASS__, 'setupModuleData' ), 10, 2 );
+        // runs inside of the module factory, before module data is set to the module instance
+        add_filter( 'kb.module.factory.data', array( __CLASS__, 'setupModuleData' ), 10, 2 );
     }
 
+    /**
+     * Only for this Core Module
+     * Verifies that the original template still exists
+     *
+     * @param $module
+     * @return mixed
+     */
     public static function validateModule( $module )
     {
         if (!isset( $module['parentId'] )) {
@@ -75,6 +82,10 @@ class ModuleCoreMasterModule extends Module
 
     }
 
+    /**
+     * Module Form
+     * @return bool|void
+     */
     public function form()
     {
 
@@ -92,7 +103,6 @@ class ModuleCoreMasterModule extends Module
             }
 
         }
-
 
         $templateData = array(
             'valid' => $this->state['valid'],
@@ -117,6 +127,7 @@ class ModuleCoreMasterModule extends Module
      */
     public function render()
     {
+
     }
 
 
@@ -197,19 +208,19 @@ class ModuleCoreMasterModule extends Module
     {
         if ($moduleArgs['master']) {
             $moduleArgs['class'] = 'ModuleCoreMasterModule';
+
         }
         return $moduleArgs;
     }
 
     /**
      * When creating the instance, the mid must be set to the orginal master id
-     * @todo will cause trouble when a master template is added twice
      * @param $args
      * @return mixed
      */
     public static function setTemplateId( $args )
     {
-        if ($args['master']) {
+        if (isset( $args['master'] ) && $args['master']) {
             if (isset( $args['templateObj'] )) {
                 $args['instance_id'] = $args['templateObj']['id'];
                 $args['mid'] = $args['templateObj']['id'];

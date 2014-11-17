@@ -26,6 +26,7 @@ class GetModuleOptions
             define( 'KB_ONSITE_ACTIVE', true );
         }
         $module = $_POST['module'];
+        $module = apply_filters('kb.module.before.factory', $module);
         /** @var PostEnvironment $Environment */
         $Environment = Utilities::getEnvironment( $module['post_id'] );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );

@@ -44,14 +44,14 @@ class ModuleFactory
         $this->args = self::parseModule( $moduleArgs );
         if ($data === null) {
             $this->data = apply_filters(
-//                'kb_modify_module_data',
-                'kb_setup_render_module_data',
+                'kb.module.factory.data',
                 $Environment->getModuleData( $moduleArgs['instance_id'] ),
                 $moduleArgs
             );
-        } else {
-            $this->data = apply_filters( 'kb_modify_module_data', $data, $moduleArgs );
         }
+//        else {
+//            $this->data = apply_filters( 'kb_modify_module_data', $data, $moduleArgs );
+//        }
 
         $this->environment = $Environment;
 

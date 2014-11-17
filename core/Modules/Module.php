@@ -227,7 +227,6 @@ abstract class Module
         }
 
         $this->View = $this->getView();
-
         // @TODO Remove concept, pointless
         if ($this->getEnvVar( 'action' )) {
             if (method_exists( $this, $this->getEnvVar( 'action' ) . 'Action' )) {
@@ -693,7 +692,8 @@ abstract class Module
             'state' => $this->state,
             'instance_id' => $this->getId(),
             'mid' => $this->getId(),
-            'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
+            'moduleData' => $this->rawModuleData,
+//            'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
             'area' => $this->getArea(),
             'post_id' => $this->envVars['postId'],
             'areaContext' => $this->getAreaContext(),

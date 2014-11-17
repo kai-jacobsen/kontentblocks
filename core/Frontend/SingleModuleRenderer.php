@@ -55,15 +55,14 @@ class SingleModuleRenderer
 
     private function getModuleClasses()
     {
-        $draft = ($this->Module);
+        $draft = ( $this->Module );
 
         return implode(
             ' ',
             array(
                 'os-edit-container',
                 'module',
-                $this->Module->getSetting('id'),
-
+                $this->Module->getSetting( 'id' ),
             )
         );
     }

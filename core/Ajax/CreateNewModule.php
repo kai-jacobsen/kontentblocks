@@ -90,7 +90,9 @@ class CreateNewModule
         $this->newInstanceID = $this->setupNewID();
 
         // override class if master
-        $this->overrideModuleClassEventually();
+        if (!$this->frontend) {
+            $this->overrideModuleClassEventually();
+        }
 
         // handle override from template
         $this->templateOverride();
@@ -105,7 +107,7 @@ class CreateNewModule
     private function overrideModuleClassEventually()
     {
         // Override Class / type if this originates from a master template
-        $this->moduleArgs = apply_filters( 'kb_intercept_module_args', $this->moduleArgs );
+        $this->moduleArgs = apply_filters( 'kb.intercept.creation.args', $this->moduleArgs );
     }
 
     /**
@@ -284,15 +286,15 @@ class CreateNewModule
         $this->type = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
 
         $moduleArgs = array(
-            'area'          => FILTER_SANITIZE_STRING,
-            'master'        => FILTER_VALIDATE_BOOLEAN,
-            'areaContext'   => FILTER_SANITIZE_STRING,
-            'template'      => FILTER_VALIDATE_BOOLEAN,
-            'class'         => FILTER_SANITIZE_STRING,
-            'master_id'     => FILTER_SANITIZE_NUMBER_INT,
-            'parentId'      => FILTER_SANITIZE_NUMBER_INT,
-            'viewfile'      => FILTER_SANITIZE_STRING,
-            'post_id'       => FILTER_SANITIZE_NUMBER_INT
+            'area' => FILTER_SANITIZE_STRING,
+            'master' => FILTER_VALIDATE_BOOLEAN,
+            'areaContext' => FILTER_SANITIZE_STRING,
+            'template' => FILTER_VALIDATE_BOOLEAN,
+            'class' => FILTER_SANITIZE_STRING,
+            'master_id' => FILTER_SANITIZE_NUMBER_INT,
+            'parentId' => FILTER_SANITIZE_NUMBER_INT,
+            'viewfile' => FILTER_SANITIZE_STRING,
+            'post_id' => FILTER_SANITIZE_NUMBER_INT
         );
 
 
@@ -303,11 +305,16 @@ class CreateNewModule
             $this->moduleArgs['templateObj']['id'] = $_POST['templateObj']['post_name'];
         }
 
+
+        if (!empty( $this->moduleArgs['parentId'] ) && $this->moduleArgs['master']) {
+            $this->moduleArgs['post_id'] = $this->moduleArgs['parentId'];
+        }
+
     }
 
     public function createModuleInstance()
     {
-        $module = apply_filters( 'kb_before_module_options', $this->newModule );
+        $module = apply_filters( 'kb.module.before.factory', $this->newModule );
         $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
         return $Factory->getModule();
 

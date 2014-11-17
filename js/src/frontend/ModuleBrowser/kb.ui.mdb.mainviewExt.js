@@ -25,7 +25,6 @@ KB.Backbone.ModuleBrowser.prototype.success = function (data) {
     // for new modules
     KB.Environment.moduleCount++;
 
-    console.log(this.options.area);
     this.options.area.trigger('kb.module.created');
 
     setTimeout(function () {

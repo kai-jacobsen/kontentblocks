@@ -101,7 +101,8 @@ class ModuleIterator implements \Iterator, \Countable
         }
 
         $Factory = new ModuleFactory(
-            $moduleDef['class'], $moduleDef, $this->Environment, $this->getModuleData( $moduleDef )
+//            $moduleDef['class'], $moduleDef, $this->Environment, $this->getModuleData( $moduleDef )
+            $moduleDef['class'], $moduleDef, $this->Environment
         );
 
         return $Factory->getModule();
@@ -238,27 +239,27 @@ class ModuleIterator implements \Iterator, \Countable
 
             // last call to change module args before the instance is instantiated
             // MasterCoreModule will change this to rewrite properties to the original template module
-            $collect[$id] = apply_filters( 'kb_render_setup_module', $module );
+            $collect[$id] = apply_filters( 'kb.before.frontend.setup', $module );
         }
 
         return $collect;
     }
-
-    /**
-     * Get the data for the current a module
-     *
-     * @param $moduleDef
-     *
-     * @return array|mixed|null
-     * @since 1.0.0
-     */
-    private function getModuleData( $moduleDef )
-    {
-        return apply_filters(
-            'kb_setup_render_module_data',
-            $this->Environment->getModuleData( $this->key() ),
-            $moduleDef
-        );
-    }
+//
+//    /**
+//     * Get the data for the current a module
+//     *
+//     * @param $moduleDef
+//     *
+//     * @return array|mixed|null
+//     * @since 1.0.0
+//     */
+//    private function getModuleData( $moduleDef )
+//    {
+//        return apply_filters(
+//            'kb.before.frontend.setup.data',
+//            $this->Environment->getModuleData( $this->key() ),
+//            $moduleDef
+//        );
+//    }
 
 }

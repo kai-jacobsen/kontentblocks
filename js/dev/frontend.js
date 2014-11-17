@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-15 */
+/*! Kontentblocks DevVersion 2014-11-16 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -449,7 +449,6 @@ KB.Backbone.ModuleBrowser.prototype.success = function(data) {
     KB.TinyMCE.addEditor();
     KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
     KB.Environment.moduleCount++;
-    console.log(this.options.area);
     this.options.area.trigger("kb.module.created");
     setTimeout(function() {
         model.view.openOptions();
@@ -935,18 +934,18 @@ KB.LayoutIterator = function(layout, AreaView) {
     this.AreaView = AreaView;
     this.raw = layout;
     this.position = 0;
+    this.current = null;
     this.maxNum = layout.layout.length;
-    this.current = 0;
     this.id = layout.id;
     this.label = layout.label;
     this.lastItem = layout["last-item"];
     this.cycle = layout.cycle || false;
     this.layout = layout.layout;
-    this.wrap = layout.wrap || wrap;
-    this.tplClass = layout.templateClass;
+    this.wrap = layout.wrap || false;
     this.setPosition = function(pos) {
         this.position = pos % this.maxNum;
         this.setCurrent();
+        return this.position;
     };
     this.getPosition = function() {
         return this.position;
@@ -980,23 +979,17 @@ KB.LayoutIterator = function(layout, AreaView) {
         return this.current;
     };
     this.hasWrap = function() {
-        if (this.wrap !== false) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.wrap !== false;
     };
     this.applyLayout = function(ui) {
         var Iterator = this;
         var modules = this.AreaView.$el.find('.module:not(".ignore")');
         var wraps = [];
+        var $outer = jQuery(".kb-outer-wrap");
         Iterator.setPosition(0);
-        if (this.hasWrap()) {
-            var outer = jQuery(".kb-outer-wrap");
-            outer.each(function(item, i) {
-                jQuery(".kb-wrap:first-child", item).unwrap();
-            });
-        }
+        $outer.each(function(item, i) {
+            jQuery(".kb-wrap:first-child", item).unwrap();
+        });
         _.each(modules, function(ModuleEl) {
             var $el = jQuery(ModuleEl);
             var $wrap = $el.parent(".kb-wrap");
@@ -1012,9 +1005,11 @@ KB.LayoutIterator = function(layout, AreaView) {
             }
             Iterator.next();
         });
-        wraps = jQuery('.kb-wrap:not(".ignore")');
-        for (var i = 0; i < wraps.length; i += this.maxNum) {
-            wraps.slice(i, i + this.maxNum).wrapAll("<div class='kb-outer-wrap " + this.wrap.class + "'></div>");
+        if (this.hasWrap()) {
+            wraps = jQuery('.kb-wrap:not(".ignore")');
+            for (var i = 0; i < wraps.length; i += this.maxNum) {
+                wraps.slice(i, i + this.maxNum).wrapAll("<div class='kb-outer-wrap " + this.wrap.class + "'></div>");
+            }
         }
     };
     this.setCurrent();

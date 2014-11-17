@@ -126,7 +126,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                             KB.Notice.notice('Order was updated successfully', 'success');
                         }, that);
                     },
-                    change: function(){
+                    change: function () {
                         that.Layout.applyClasses();
                     }
                 });
@@ -134,12 +134,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
 
 
     },
-    changeLayout: function(l){
+    changeLayout: function (l) {
         this.Layout.model.set('layout', l);
     },
     removeModule: function (ModuleView) {
         var id = ModuleView.model.get('mid');
-        if (this.attachedModuleViews[id]){
+        if (this.attachedModuleViews[id]) {
             delete this.attachedModuleViews[id];
         }
     }

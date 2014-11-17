@@ -46,7 +46,7 @@ class UpdateModuleOptions
         $Module = $Factory->getModule();
 
         // master module will change instance id to correct template id
-        $module = apply_filters('kb.modify.module.save', $module);
+        $module = apply_filters( 'kb.modify.module.save', $module );
 
         // gather data
         $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
@@ -56,7 +56,7 @@ class UpdateModuleOptions
             $Environment->getStorage()->saveModule( $module['instance_id'], wp_slash( $mergedData ) );
         }
 
-        $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
+//        $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
 
         $Module->setModuleData( $mergedData );
 
