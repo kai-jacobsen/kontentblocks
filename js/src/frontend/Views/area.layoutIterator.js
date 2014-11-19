@@ -7,7 +7,7 @@ KB.LayoutIterator = function (layout, AreaView) {
      */
 
     /**
-     * Parent Area Nackbone View
+     * Parent Area Backbone View
      */
     this.AreaView = AreaView;
 
@@ -169,7 +169,6 @@ KB.LayoutIterator = function (layout, AreaView) {
         var modules = this.AreaView.$el.find('.module:not(".ignore")');
         var wraps = [];
         var $outer = jQuery('.kb-outer-wrap');
-
         // reset Iterator to 0
         Iterator.setPosition(0);
 
@@ -192,6 +191,8 @@ KB.LayoutIterator = function (layout, AreaView) {
                 $wrap.removeClass();
                 $wrap.addClass('kb-wrap ' + Iterator.getCurrent().classes);
             }
+
+            console.log(Iterator.getCurrent().classes);
 
             // if ui is present re-add sortable class
             if (ui) {

@@ -232,15 +232,16 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
      * @param moduleView
      * @returns {boolean}
      */
-    reload: function (moduleView) {
-        var that = this;
+    reload: function (moduleView, force) {
+        var that = this, forced = false;
+        forced = force || false;
 
         if (!moduleView) {
             _K.log('FrontendModal::reload.no view argument given');
         }
         _K.log('FrontendModal::reload.run');
         // if the current loaded module equals the requested bail out
-        if (this.model && (this.model.get('instance_id') === moduleView.model.get('instance_id'))) {
+        if (this.model && (this.model.get('instance_id') === moduleView.model.get('instance_id')) && !forced) {
             _K.log('FrontendModal::reload.Requested Module is already loaded. Aborting.');
             return false;
         }
@@ -323,7 +324,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
      * @param height
      */
     initScrollbars: function (height) {
-        jQuery('.nano', this.$el).height(height+20);
+        jQuery('.nano', this.$el).height(height + 20);
         jQuery('.nano').nanoScroller({preventPageScrolling: true});
         _K.info('Nano Scrollbars (re)initialized!');
     },
@@ -496,9 +497,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             $el.css('width', settings.controls.width + 'px');
         }
 
-        if (settings.controls && settings.controls.fullscreen){
+        if (settings.controls && settings.controls.fullscreen) {
             $el.width('100%').height('100%').addClass('fullscreen');
-        } else{
+        } else {
             $el.height('').removeClass('fullscreen');
         }
     },

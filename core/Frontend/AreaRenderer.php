@@ -169,7 +169,7 @@ class AreaRenderer
 
         if (!empty( $layout )) {
             return sprintf(
-                '<div class="kb-wrap %3$s"><div id="%1$s" class="%2$s">',
+                '<div class="kb-wrap %3$s"><div  id="%1$s" class="%2$s">',
                 $module->getId(),
                 implode( ' ', $classes ),
                 implode( ' ', $layout )
@@ -272,6 +272,7 @@ class AreaRenderer
 
         if ($this->repeating && $this->AreaHtmlNode->getSetting( 'mergeRepeating' )) {
             $classes[] = 'module-merged';
+            $classes[] = 'module';
         } else {
             $classes[] = 'module';
         }

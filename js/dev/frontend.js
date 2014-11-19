@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-17 */
+/*! Kontentblocks DevVersion 2014-11-19 */
 KB.IEdit.BackgroundImage = function($) {
     var self, attachment;
     self = {
@@ -671,13 +671,14 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             }
         });
     },
-    reload: function(moduleView) {
-        var that = this;
+    reload: function(moduleView, force) {
+        var that = this, forced = false;
+        forced = force || false;
         if (!moduleView) {
             _K.log("FrontendModal::reload.no view argument given");
         }
         _K.log("FrontendModal::reload.run");
-        if (this.model && this.model.get("instance_id") === moduleView.model.get("instance_id")) {
+        if (this.model && this.model.get("instance_id") === moduleView.model.get("instance_id") && !forced) {
             _K.log("FrontendModal::reload.Requested Module is already loaded. Aborting.");
             return false;
         }
@@ -1000,6 +1001,7 @@ KB.LayoutIterator = function(layout, AreaView) {
                 $wrap.removeClass();
                 $wrap.addClass("kb-wrap " + Iterator.getCurrent().classes);
             }
+            console.log(Iterator.getCurrent().classes);
             if (ui) {
                 ui.placeholder.addClass("kb-front-sortable-placeholder");
             }
@@ -1016,6 +1018,7 @@ KB.LayoutIterator = function(layout, AreaView) {
 };
 
 KB.Backbone.AreaView = Backbone.View.extend({
+    isSorting: false,
     events: {
         dblclick: "openModuleBrowser"
     },
@@ -1072,8 +1075,8 @@ KB.Backbone.AreaView = Backbone.View.extend({
                 opacity: .5,
                 delay: 150,
                 placeholder: "kb-front-sortable-placeholder",
-                revert: true,
                 start: function(e, ui) {
+                    that.isSorting = true;
                     ui.placeholder.attr("class", ui.helper.attr("class"));
                     ui.placeholder.addClass("kb-front-sortable-placeholder");
                     ui.placeholder.append("<div class='module kb-dummy'></div>");
@@ -1082,6 +1085,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                 },
                 stop: function(e, ui) {
                     var serializedData = {};
+                    that.isSorting = false;
                     serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
                         attribute: "rel"
                     });
@@ -1108,9 +1112,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
                 opacity: .5,
                 delay: 150,
                 placeholder: "kb-front-sortable-placeholder",
-                revert: true,
+                start: function() {
+                    that.isSorting = true;
+                },
                 stop: function() {
                     var serializedData = {};
+                    that.isSorting = false;
                     serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
                         attribute: "rel"
                     });
@@ -1341,6 +1348,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
         this.model.view = this;
         this.listenTo(this.model, "change", this.modelChange);
+        this.listenTo(this.model, "change:viewfile", this.viewfileUpdate);
         this.listenTo(this.model, "save", this.model.save);
         this.$el.data("ModuleView", this);
         this.render();
@@ -1422,9 +1430,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.focusedModule = this.model;
         return this;
     },
-    reloadModal: function() {
+    reloadModal: function(force) {
         if (KB.EditModalModules) {
-            KB.EditModalModules.reload(this);
+            KB.EditModalModules.reload(this, force);
         }
         KB.CurrentModel = this.model;
         KB.focusedModule = this.model;
@@ -1538,6 +1546,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     modelChange: function() {
         this.getDirty();
+    },
+    viewfileUpdate: function() {
+        _K.log("Reload model after viewfile change");
+        this.reloadModal(true);
     },
     save: function() {}
 });

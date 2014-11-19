@@ -19,7 +19,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
         // observe model changes
         this.listenTo(this.model, 'change', this.modelChange);
-
+        this.listenTo(this.model, 'change:viewfile', this.viewfileUpdate);
         // @TODO events:investigate
         //this.model.bind('save', this.model.save);
 
@@ -130,9 +130,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.focusedModule = this.model;
         return this;
     },
-    reloadModal: function () {
+    reloadModal: function (force) {
+
         if (KB.EditModalModules) {
-            KB.EditModalModules.reload(this);
+            KB.EditModalModules.reload(this, force);
         }
         KB.CurrentModel = this.model;
         KB.focusedModule = this.model;
@@ -260,6 +261,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     modelChange: function () {
         this.getDirty();
+    },
+    viewfileUpdate: function(){
+        _K.log('Reload model after viewfile change');
+        this.reloadModal(true);
     },
     save: function () {
         // TODO utilize this for saving instead of handling this by the modal view

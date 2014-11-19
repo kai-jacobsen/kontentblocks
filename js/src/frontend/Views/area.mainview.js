@@ -1,4 +1,5 @@
 KB.Backbone.AreaView = Backbone.View.extend({
+    isSorting: false,
     events: {
         'dblclick': 'openModuleBrowser'
     },
@@ -64,9 +65,9 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     opacity: 0.5,
                     delay: 150,
                     placeholder: "kb-front-sortable-placeholder",
-                    revert: true,
                     start: function (e, ui) {
                         //ui.placeholder.width('100%');
+                        that.isSorting = true;
                         ui.placeholder.attr('class', ui.helper.attr('class'));
                         ui.placeholder.addClass('kb-front-sortable-placeholder');
                         ui.placeholder.append("<div class='module kb-dummy'></div>");
@@ -76,7 +77,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     },
                     stop: function (e, ui) {
                         var serializedData = {};
-
+                        that.isSorting = false;
                         serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
                             attribute: 'rel'
                         });
@@ -110,9 +111,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     //forceHelperSize: true,
                     //forcePlaceholderSize: true,
                     placeholder: "kb-front-sortable-placeholder",
-                    revert: true,
+                    start: function(){
+                        that.isSorting = true;
+                    },
                     stop: function () {
                         var serializedData = {};
+                        that.isSorting = false;
 
                         serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
                             attribute: 'rel'
