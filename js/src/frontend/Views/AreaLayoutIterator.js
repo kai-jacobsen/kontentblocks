@@ -173,7 +173,7 @@ KB.LayoutIterator = function (layout, AreaView) {
         Iterator.setPosition(0);
 
         // unwrap the outer wrap if it exists
-        $outer.each(function (item, i) {
+        $outer.each(function (item) {
             jQuery('.kb-wrap:first-child', item).unwrap();
         });
 

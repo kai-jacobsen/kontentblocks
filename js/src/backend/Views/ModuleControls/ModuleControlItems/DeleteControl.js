@@ -1,4 +1,4 @@
-KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleDelete = KB.Backbone.Backend.ModuleMenuItemView.extend({
     className: 'kb-delete block-menu-icon',
     initialize: function() {
         _.bindAll(this, "yes", "no");

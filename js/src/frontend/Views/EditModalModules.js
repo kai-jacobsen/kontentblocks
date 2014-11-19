@@ -355,6 +355,13 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             success: function (res) {
+                var $controls;
+
+                $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
+
+                if ($controls.length > 0){
+                    $controls.detach();
+                }
 
                 // remove attached inline editors from module
                 jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
@@ -406,6 +413,13 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     that.$el.addClass('isDirty');
 
                 }
+
+                if ($controls.length > 0){
+                    that.ModuleView.$el.append($controls);
+                }
+
+                that.ModuleView.trigger('kb.view.module.HTMLChanged');
+
                 _K.info('Frontend Modal saved data for:' + that.model.get('instance_id'));
             },
             error: function () {

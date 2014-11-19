@@ -61,22 +61,22 @@ module.exports = function (grunt) {
                 nonull: true
             },
             common: {
-                src: ['js/src/common/kb.cm.Namespaces.js','js/src/common/kb.cm.Config.js','js/src/common/**/*.js'],
+                src: ['js/src/common/kb.cm.Namespaces.js', 'js/src/common/kb.cm.Config.js', 'js/src/common/**/*.js'],
                 dest: 'js/tmp/common.concat.js',
                 nonull: true
             },
             frontend: {
-                src: ['js/src/frontend/**/*.js', 'js/src/frontend/frontend.js'],
+                src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
                 dest: 'js/tmp/frontend.concat.js',
                 nonull: true
             },
             backend: {
-                src: ['js/src/backend/**/*.js', 'js/src/backend/backend.js'],
+                src: ['js/src/backend/Models/**/*.js', 'js/src/backend/Views/**/*.js', 'js/src/backend/BackendController.js'],
                 dest: 'js/tmp/backend.concat.js',
                 nonull: true
             },
             fieldsAPI: {
-                src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/_Field.js' ,  'js/src/fieldsAPI/Fields/**/*.js'],
+                src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/_Field.js', 'js/src/fieldsAPI/Fields/**/*.js'],
                 dest: 'js/tmp/fieldsAPI.concat.js'
             }
         },
@@ -112,7 +112,11 @@ module.exports = function (grunt) {
         jshint: {
             src: ['js/src/frontend/**/*.js', 'js/src/backend/**/*.js'],
             options: {
+                reporter: require('jshint-log-reporter'),
+                reporterOutput: '_jshint.log',
                 force: true,
+                unused: true,
+                browser: true,
                 globals: {
                     jQuery: true,
                     _: true,
@@ -135,7 +139,7 @@ module.exports = function (grunt) {
             createId: {
                 command: './build/githash.sh > build/hash.php'
             },
-            createDevId:{
+            createDevId: {
                 command: './build/devhash.sh > build/hash.php'
 
             }
@@ -155,7 +159,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-exec');
 
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass','clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
+    grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
     grunt.registerTask('hint', ['jshint']);
     grunt.registerTask('dev', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'exec:removeHash', 'exec:createDevId']);
     grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);

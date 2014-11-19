@@ -1,4 +1,4 @@
-KB.Backbone.AreaView = Backbone.View.extend({
+KB.Backbone.Backend.AreaView = Backbone.View.extend({
     initialize: function () {
         this.attachedModuleViews = {};
         this.controlsContainer = jQuery('.add-modules', this.$el);

@@ -15,8 +15,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
         }
     },
     setupUi: function () {
-        var that = this;
-
         this.Layout = new KB.Backbone.AreaLayoutView({
             model: new Backbone.Model(this.settings),
             AreaView: this
@@ -44,8 +42,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.attachedModuleViews[moduleView.model.get('instance_id')] = moduleView; // add module
         this.listenTo(moduleView.model, 'change:area', this.removeModule); // add listener
         _K.info('Module:' + moduleView.model.id + ' was added to area:' + this.model.id);
-        //moduleView.model.area = this.model;
-        moduleView.Area = this;
     },
 
     getNumberOfModules: function () {
@@ -111,7 +107,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     //forceHelperSize: true,
                     //forcePlaceholderSize: true,
                     placeholder: "kb-front-sortable-placeholder",
-                    start: function(){
+                    start: function () {
                         that.isSorting = true;
                     },
                     stop: function () {

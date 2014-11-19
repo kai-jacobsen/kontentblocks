@@ -28,7 +28,7 @@ KB.IEdit.Image = (function ($) {
 
         },
         renderControls: function () {
-            $(this.selector).each(function (index, obj) {
+            $(this.selector).each(function () {
                 $('body').on('mouseover', '.editable-image', function () {
                     $(this).css('cursor', 'pointer');
                 });

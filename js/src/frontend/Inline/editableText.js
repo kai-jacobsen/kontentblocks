@@ -61,7 +61,7 @@ KB.IEdit.Text = function (el) {
                 e.stopPropagation();
             });
 
-            ed.on('focus', function (e) {
+            ed.on('focus', function () {
                 var con = KB.Util.getIndex(ed.module.get('moduleData'), ed.kpath);
                 ed.previousContent = ed.getContent();
                 if (ed.kfilter) {
@@ -76,13 +76,13 @@ KB.IEdit.Text = function (el) {
                 }
             });
 
-            ed.on('change', function (e) {
+            ed.on('change', function () {
                 _K.info('Got Dirty');
             });
 
             ed.addButton('kbcancleinline', {
                 title: 'Stop inline Edit',
-                onClick: function (ed) {
+                onClick: function () {
                     if (tinymce.activeEditor.isDirty()) {
                         tinymce.activeEditor.module.view.getDirty();
                     }

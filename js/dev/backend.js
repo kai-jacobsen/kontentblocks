@@ -7,6 +7,19 @@ KB.Backbone.ContextModel = Backbone.Model.extend({
     idAttribute: "id"
 });
 
+KB.Backbone.ModuleDefinition = Backbone.Model.extend({
+    initialize: function() {
+        var that = this;
+        this.id = function() {
+            if (that.get("settings").category === "template") {
+                return that.get("instance_id");
+            } else {
+                return that.get("settings").class;
+            }
+        }();
+    }
+});
+
 KB.Backbone.ModuleModel = Backbone.Model.extend({
     idAttribute: "instance_id",
     initialize: function() {
@@ -38,199 +51,7 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     }
 });
 
-KB.Backbone.ModuleDefinition = Backbone.Model.extend({
-    initialize: function() {
-        var that = this;
-        this.id = function() {
-            if (that.get("settings").category === "template") {
-                return that.get("instance_id");
-            } else {
-                return that.get("settings").class;
-            }
-        }();
-    }
-});
-
-KB.Backbone.ModuleMenuItemView = Backbone.View.extend({
-    tagName: "div",
-    className: "",
-    isValid: function() {
-        return true;
-    }
-});
-
-KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
-    className: "kb-delete block-menu-icon",
-    initialize: function() {
-        _.bindAll(this, "yes", "no");
-    },
-    events: {
-        click: "deleteModule"
-    },
-    deleteModule: function() {
-        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
-    },
-    isValid: function() {
-        if (!this.model.get("predefined") && !this.model.get("disabled") && KB.Checks.userCan("delete_kontentblocks")) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    yes: function() {
-        KB.Ajax.send({
-            action: "removeModules",
-            _ajax_nonce: KB.Config.getNonce("delete"),
-            module: this.model.get("instance_id")
-        }, this.success, this);
-    },
-    no: function() {
-        return false;
-    },
-    success: function() {
-        KB.Modules.remove(this.model);
-        wp.heartbeat.interval("fast", 2);
-        this.model.destroy();
-    }
-});
-
-KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
-    className: "kb-duplicate block-menu-icon",
-    events: {
-        click: "duplicateModule"
-    },
-    duplicateModule: function() {
-        KB.Ajax.send({
-            action: "duplicateModule",
-            module: this.model.get("instance_id"),
-            areaContext: this.model.areaView.model.get("context"),
-            _ajax_nonce: KB.Config.getNonce("create"),
-            "class": this.model.get("class")
-        }, this.success, this);
-    },
-    isValid: function() {
-        if (!this.model.get("predefined") && !this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks")) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    success: function(data) {
-        if (data === -1) {
-            KB.Notice.notice("Request Error", "error");
-            return false;
-        }
-        this.parseAdditionalJSON(data.json);
-        this.model.areaView.modulesList.append(data.html);
-        KB.Modules.add(data.module);
-        var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
-        jQuery("#kb_all_blocks").val(count);
-        KB.Notice.notice("Module Duplicated", "success");
-        KB.Ui.repaint("#" + data.module.instance_id);
-        KB.Fields.trigger("update");
-    },
-    parseAdditionalJSON: function(json) {
-        if (!KB.payload.Fields) {
-            KB.payload.Fields = {};
-        }
-        _.extend(KB.payload.Fields, json.Fields);
-        if (!KB.payload.fieldData) {
-            KB.payload.fieldData = {};
-        }
-        _.extend(KB.payload.fieldData, json.fieldData);
-    }
-});
-
-KB.Backbone.ModuleSave = KB.Backbone.ModuleMenuItemView.extend({
-    initialize: function(options) {
-        var that = this;
-        this.options = options || {};
-        this.parentView = options.parent;
-        this.listenTo(this.parentView, "kb::module.input.changed", this.getDirty);
-        this.listenTo(this.parentView, "kb::module.data.updated", this.getClean);
-    },
-    className: "kb-save block-menu-icon",
-    events: {
-        click: "saveData"
-    },
-    saveData: function() {
-        tinyMCE.triggerSave();
-        KB.Ajax.send({
-            action: "updateModuleData",
-            module: this.model.toJSON(),
-            data: this.parentView.serialize(),
-            _ajax_nonce: KB.Config.getNonce("update")
-        }, this.success, this);
-    },
-    getDirty: function() {
-        this.$el.addClass("is-dirty");
-    },
-    getClean: function() {
-        this.$el.removeClass("is-dirty");
-    },
-    isValid: function() {
-        if (this.model.get("master")) {
-            return false;
-        }
-        return !this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks");
-    },
-    success: function(res) {
-        if (!res || !res.newModuleData) {
-            _K.error("Failed to save module data.");
-        }
-        this.parentView.model.set("moduleData", res.newModuleData);
-        KB.Notice.notice("Data saved", "success");
-    }
-});
-
-KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
-    initialize: function(options) {
-        var that = this;
-        this.options = options || {};
-    },
-    className: "module-status block-menu-icon",
-    events: {
-        click: "changeStatus"
-    },
-    changeStatus: function() {
-        KB.Ajax.send({
-            action: "changeModuleStatus",
-            module: this.model.get("instance_id"),
-            _ajax_nonce: KB.Config.getNonce("update")
-        }, this.success, this);
-    },
-    isValid: function() {
-        if (!this.model.get("disabled") && KB.Checks.userCan("deactivate_kontentblocks")) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    success: function() {
-        this.options.parent.$head.toggleClass("module-inactive");
-        this.options.parent.$el.toggleClass("activated deactivated");
-        KB.Notice.notice("Status changed", "success");
-    }
-});
-
-KB.Backbone.ModuleMenuView = Backbone.View.extend({
-    $menuWrap: null,
-    $menuList: null,
-    initialize: function() {
-        this.$menuWrap = jQuery(".menu-wrap", this.$el);
-        this.$menuWrap.append(KB.Templates.render("backend/module-menu", {}));
-        this.$menuList = jQuery(".module-actions", this.$menuWrap);
-    },
-    addItem: function(view, model) {
-        if (view.isValid && view.isValid() === true) {
-            var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
-            var $menuItem = $liItem.append(view.el);
-            this.$menuList.append($menuItem);
-        }
-    }
-});
-
-KB.Backbone.AreaView = Backbone.View.extend({
+KB.Backbone.Backend.AreaView = Backbone.View.extend({
     initialize: function() {
         this.attachedModuleViews = {};
         this.controlsContainer = jQuery(".add-modules", this.$el);
@@ -305,11 +126,188 @@ KB.Backbone.AreaView = Backbone.View.extend({
     }
 });
 
-KB.Backbone.ModuleView = Backbone.View.extend({
-    $head: null,
-    $body: null,
-    ModuleMenu: null,
-    instanceId: null,
+KB.Backbone.Backend.ModuleControlsView = Backbone.View.extend({
+    $menuWrap: {},
+    $menuList: {},
+    initialize: function() {
+        this.$menuWrap = jQuery(".menu-wrap", this.$el);
+        this.$menuWrap.append(KB.Templates.render("backend/module-menu", {}));
+        this.$menuList = jQuery(".module-actions", this.$menuWrap);
+    },
+    addItem: function(view) {
+        if (view.isValid && view.isValid() === true) {
+            var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
+            var $menuItem = $liItem.append(view.el);
+            this.$menuList.append($menuItem);
+        }
+    }
+});
+
+KB.Backbone.Backend.ModuleMenuItemView = Backbone.View.extend({
+    tagName: "div",
+    className: "",
+    isValid: function() {
+        return true;
+    }
+});
+
+KB.Backbone.Backend.ModuleDelete = KB.Backbone.Backend.ModuleMenuItemView.extend({
+    className: "kb-delete block-menu-icon",
+    initialize: function() {
+        _.bindAll(this, "yes", "no");
+    },
+    events: {
+        click: "deleteModule"
+    },
+    deleteModule: function() {
+        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+    },
+    isValid: function() {
+        if (!this.model.get("predefined") && !this.model.get("disabled") && KB.Checks.userCan("delete_kontentblocks")) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    yes: function() {
+        KB.Ajax.send({
+            action: "removeModules",
+            _ajax_nonce: KB.Config.getNonce("delete"),
+            module: this.model.get("instance_id")
+        }, this.success, this);
+    },
+    no: function() {
+        return false;
+    },
+    success: function() {
+        KB.Modules.remove(this.model);
+        wp.heartbeat.interval("fast", 2);
+        this.model.destroy();
+    }
+});
+
+KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.extend({
+    className: "kb-duplicate block-menu-icon",
+    events: {
+        click: "duplicateModule"
+    },
+    duplicateModule: function() {
+        KB.Ajax.send({
+            action: "duplicateModule",
+            module: this.model.get("instance_id"),
+            areaContext: this.model.areaView.model.get("context"),
+            _ajax_nonce: KB.Config.getNonce("create"),
+            "class": this.model.get("class")
+        }, this.success, this);
+    },
+    isValid: function() {
+        if (!this.model.get("predefined") && !this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks")) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    success: function(data) {
+        if (data === -1) {
+            KB.Notice.notice("Request Error", "error");
+            return false;
+        }
+        this.parseAdditionalJSON(data.json);
+        this.model.areaView.modulesList.append(data.html);
+        KB.Modules.add(data.module);
+        var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
+        jQuery("#kb_all_blocks").val(count);
+        KB.Notice.notice("Module Duplicated", "success");
+        KB.Ui.repaint("#" + data.module.instance_id);
+        KB.Fields.trigger("update");
+    },
+    parseAdditionalJSON: function(json) {
+        if (!KB.payload.Fields) {
+            KB.payload.Fields = {};
+        }
+        _.extend(KB.payload.Fields, json.Fields);
+        if (!KB.payload.fieldData) {
+            KB.payload.fieldData = {};
+        }
+        _.extend(KB.payload.fieldData, json.fieldData);
+    }
+});
+
+KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.parentView = options.parent;
+        this.listenTo(this.parentView, "kb::module.input.changed", this.getDirty);
+        this.listenTo(this.parentView, "kb::module.data.updated", this.getClean);
+    },
+    className: "kb-save block-menu-icon",
+    events: {
+        click: "saveData"
+    },
+    saveData: function() {
+        tinyMCE.triggerSave();
+        KB.Ajax.send({
+            action: "updateModuleData",
+            module: this.model.toJSON(),
+            data: this.parentView.serialize(),
+            _ajax_nonce: KB.Config.getNonce("update")
+        }, this.success, this);
+    },
+    getDirty: function() {
+        this.$el.addClass("is-dirty");
+    },
+    getClean: function() {
+        this.$el.removeClass("is-dirty");
+    },
+    isValid: function() {
+        if (this.model.get("master")) {
+            return false;
+        }
+        return !this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks");
+    },
+    success: function(res) {
+        if (!res || !res.newModuleData) {
+            _K.error("Failed to save module data.");
+        }
+        this.parentView.model.set("moduleData", res.newModuleData);
+        KB.Notice.notice("Data saved", "success");
+    }
+});
+
+KB.Backbone.Backend.ModuleStatus = KB.Backbone.Backend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+    },
+    className: "module-status block-menu-icon",
+    events: {
+        click: "changeStatus"
+    },
+    changeStatus: function() {
+        KB.Ajax.send({
+            action: "changeModuleStatus",
+            module: this.model.get("instance_id"),
+            _ajax_nonce: KB.Config.getNonce("update")
+        }, this.success, this);
+    },
+    isValid: function() {
+        if (!this.model.get("disabled") && KB.Checks.userCan("deactivate_kontentblocks")) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    success: function() {
+        this.options.parent.$head.toggleClass("module-inactive");
+        this.options.parent.$el.toggleClass("activated deactivated");
+        KB.Notice.notice("Status changed", "success");
+    }
+});
+
+KB.Backbone.Backend.ModuleView = Backbone.View.extend({
+    $head: {},
+    $body: {},
+    ModuleMenu: {},
+    instanceId: "",
     events: {
         "click.kb1 .kb-toggle": "toggleBody",
         "click.kb2 .kb-toggle": "setOpenStatus",
@@ -333,13 +331,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.trigger("KB::backend.module.viewfile.changed");
     },
     initialize: function() {
-        var that = this;
         this.$head = jQuery(".kb-module__header", this.$el);
         this.$body = jQuery(".kb-module__body", this.$el);
         this.$inner = jQuery(".kb-module__controls-inner", this.$el);
         this.attachedFields = {};
         this.instanceId = this.model.get("instance_id");
-        this.ModuleMenu = new KB.Backbone.ModuleMenuView({
+        this.ModuleMenu = new KB.Backbone.Backend.ModuleControlsView({
             el: this.$el,
             parent: this
         });
@@ -354,22 +351,21 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 view.$el.remove();
             });
         });
-        this.listenTo(this, "KB::backend.module.viewfile.changed", function(e) {});
     },
     setupDefaultMenuItems: function() {
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleSave({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleSave({
             model: this.model,
             parent: this
         }));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDuplicate({
             model: this.model,
             parent: this
         }));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDelete({
             model: this.model,
             parent: this
         }));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleStatus({
             model: this.model,
             parent: this
         }));
@@ -429,7 +425,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }, 750);
     },
     closeFullscreen: function() {
-        var that = this;
         var $stage = jQuery("#kontentblocks_stage");
         $stage.removeClass("fullscreen");
         clearInterval(this.sizeTimer);
@@ -495,7 +490,7 @@ KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
 });
 
-KB.App = function($) {
+KB.App = function() {
     function init() {
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);
@@ -515,14 +510,14 @@ KB.App = function($) {
     }
     function createModuleViews(module) {
         _K.info("ModuleViews: new added");
-        KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
+        KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.Backend.ModuleView({
             model: module,
             el: "#" + module.get("instance_id")
         }));
         KB.Ui.initTabs();
     }
     function createAreaViews(area) {
-        KB.Views.Areas.add(area.get("id"), new KB.Backbone.AreaView({
+        KB.Views.Areas.add(area.get("id"), new KB.Backbone.Backend.AreaView({
             model: area,
             el: "#" + area.get("id") + "-container"
         }));

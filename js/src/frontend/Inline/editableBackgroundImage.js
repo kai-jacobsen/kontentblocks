@@ -24,7 +24,7 @@ KB.IEdit.BackgroundImage = (function ($) {
             this.renderControls();
         },
         renderControls: function () {
-            $(this.selector).each(function (index, obj) {
+            $(this.selector).each(function () {
                 $('body').on('mouseover', '.editable-bg-image', function () {
                     $(this).css('cursor', 'pointer');
                 });

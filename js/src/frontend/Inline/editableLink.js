@@ -47,8 +47,8 @@ KB.IEdit.Link = (function ($) {
 
             // magic happens here,override the original function
             wpLink.htmlUpdate = function () {
-                var attrs, html, start, end, cursor,
-                    textarea = wpLink.textarea, result;
+                var attrs,
+                    textarea = wpLink.textarea;
 
                 if (!textarea)
                     return;

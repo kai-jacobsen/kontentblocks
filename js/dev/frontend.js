@@ -1,415 +1,4 @@
 /*! Kontentblocks DevVersion 2014-11-19 */
-KB.IEdit.BackgroundImage = function($) {
-    var self, attachment;
-    self = {
-        selector: ".editable-bg-image",
-        remove: ".kb-js-reset-file",
-        img: null,
-        init: function() {
-            var that = this;
-            $("body").on("click", this.selector, function(e) {
-                e.preventDefault();
-                that.img = $(this);
-                that.parent = KB.currentModule;
-                that.frame().open();
-            });
-            $("body").on("click", this.remove, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.resetFields();
-            });
-            this.renderControls();
-        },
-        renderControls: function() {
-            $(this.selector).each(function(index, obj) {
-                $("body").on("mouseover", ".editable-bg-image", function() {
-                    $(this).css("cursor", "pointer");
-                });
-            });
-        },
-        frame: function() {
-            if (this._frame) return this._frame;
-            this._frame = wp.media({
-                title: "Change background image",
-                button: {
-                    text: "Insert"
-                },
-                multiple: false,
-                library: {
-                    type: "image"
-                }
-            });
-            this._frame.on("ready", this.ready);
-            this._frame.state("library").on("select", this.select);
-            return this._frame;
-        },
-        ready: function() {
-            $(".media-modal").addClass(" smaller no-sidebar");
-        },
-        select: function() {
-            attachment = this.get("selection").first();
-            self.handleAttachment(attachment);
-        },
-        handleAttachment: function(attachment) {
-            var that = this;
-            var id = attachment.get("id");
-            var value = {
-                id: id,
-                title: attachment.get("title"),
-                caption: attachment.get("caption")
-            };
-            var data = this.img.data();
-            var mId = data.module;
-            var cModule = KB.Modules.get(mId);
-            var moduleData = _.clone(cModule.get("moduleData"));
-            var path = data.kpath;
-            var settings = KB.payload.FrontSettings[data.uid];
-            KB.Util.setIndex(moduleData, path, value);
-            cModule.set("moduleData", moduleData);
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    action: "fieldGetImage",
-                    args: settings,
-                    id: id,
-                    _ajax_nonce: KB.Config.getNonce("read")
-                },
-                type: "GET",
-                dataType: "json",
-                success: function(res) {
-                    that.img.css("backgroundImage", "url('" + res + "')");
-                    that.parent.$el.addClass("isDirty");
-                },
-                error: function() {}
-            });
-        },
-        resetFields: function() {
-            $(".kb-file-attachment-id", this.container).val("");
-            this.container.hide(750);
-            $(this.remove, activeField).hide();
-        },
-        update: function() {
-            this.init();
-        }
-    };
-    return self;
-}(jQuery);
-
-KB.IEdit.Image = function($) {
-    var self, attachment;
-    self = {
-        selector: ".editable-image",
-        remove: ".kb-js-reset-file",
-        img: null,
-        init: function() {
-            var that = this;
-            var $body = $("body");
-            $body.on("click", this.selector, function(e) {
-                e.preventDefault();
-                that.img = $(this);
-                that.parent = KB.currentModule;
-                that.frame().open();
-            });
-            $body.on("click", this.remove, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.resetFields();
-            });
-            this.renderControls();
-        },
-        renderControls: function() {
-            $(this.selector).each(function(index, obj) {
-                $("body").on("mouseover", ".editable-image", function() {
-                    $(this).css("cursor", "pointer");
-                });
-            });
-        },
-        frame: function() {
-            if (this._frame) return this._frame;
-            this._frame = wp.media({
-                title: KB.i18n.Refields.file.modalTitle,
-                button: {
-                    text: KB.i18n.Refields.common.select
-                },
-                multiple: false,
-                library: {
-                    type: "image"
-                }
-            });
-            this._frame.on("ready", this.ready);
-            this._frame.state("library").on("select", this.select);
-            return this._frame;
-        },
-        ready: function() {
-            $(".media-modal").addClass("smaller no-sidebar");
-        },
-        select: function() {
-            attachment = this.get("selection").first();
-            self.handleAttachment(attachment);
-        },
-        handleAttachment: function(attachment) {
-            var that = this;
-            var id = attachment.get("id");
-            var value = this.prepareValue(attachment);
-            var data = this.img.data();
-            var mId = data.module;
-            var cModule = KB.Modules.get(mId);
-            var moduleData = _.clone(cModule.get("moduleData"));
-            var path = data.kpath;
-            KB.Util.setIndex(moduleData, path, value);
-            var settings = KB.payload.FrontSettings[data.uid];
-            cModule.set("moduleData", moduleData);
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    action: "fieldGetImage",
-                    args: settings,
-                    id: id,
-                    _ajax_nonce: KB.Config.getNonce("read")
-                },
-                type: "GET",
-                dataType: "json",
-                success: function(res) {
-                    that.img.attr("src", res);
-                    that.parent.$el.addClass("isDirty");
-                },
-                error: function() {}
-            });
-        },
-        prepareValue: function(attachment) {
-            return {
-                id: attachment.get("id"),
-                title: attachment.get("title"),
-                caption: attachment.get("caption")
-            };
-        },
-        resetFields: function() {
-            $(".kb-file-attachment-id", this.container).val("");
-            this.container.hide(750);
-            $(this.remove, activeField).hide();
-        },
-        update: function() {
-            this.init();
-        }
-    };
-    return self;
-}(jQuery);
-
-_.extend(KB.IEdit.Image, Backbone.Events);
-
-KB.IEdit.Link = function($) {
-    var $form, $linkTarget, $linktext, $body, $href, $title;
-    return {
-        selector: ".editable-link",
-        oWpLink: null,
-        $anchor: null,
-        init: function() {
-            var that = this;
-            $body = $("body");
-            $body.on("click", this.selector, function(e) {
-                e.stopPropagation();
-                if (e.ctrlKey) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    that.$anchor = $(this);
-                    that.open();
-                }
-            });
-            $body.on("click", "#wp-link-close", function() {
-                that.close();
-            });
-        },
-        open: function() {
-            var that = this;
-            if (!window.wpLink) {
-                return false;
-            }
-            this.restore_htmlUpdate = wpLink.htmlUpdate;
-            this.restore_isMce = wpLink.isMCE;
-            this.restore_close = wpLink.close;
-            wpLink.isMCE = function() {
-                return false;
-            };
-            wpLink.open();
-            this.addLinktextField();
-            this.customizeDialog();
-            this.setValues();
-            wpLink.htmlUpdate = function() {
-                var attrs, html, start, end, cursor, textarea = wpLink.textarea, result;
-                if (!textarea) return;
-                attrs = wpLink.getAttrs();
-                if ($linktext) {
-                    attrs.linktext = $("input", $linktext).val();
-                }
-                if (!attrs.href || attrs.href == "http://") return;
-                that.$anchor.attr("href", attrs.href);
-                that.$anchor.html(attrs.linktext);
-                that.$anchor.attr("target", attrs.target);
-                that.updateModel(attrs);
-                that.close();
-                wpLink.close();
-            };
-        },
-        addLinktextField: function() {
-            $form = $("form#wp-link");
-            $linkTarget = $(".link-target", $form);
-            $linktext = $('<div><label><span>LinkText</span><input type="text" value="hello" name="linktext" ></label></div>').insertBefore($linkTarget);
-        },
-        customizeDialog: function() {
-            $("#wp-link-wrap").addClass("kb-customized");
-        },
-        setValues: function() {
-            $href = $("#url-field", $form);
-            $title = $("#link-title-field", $form);
-            var data = this.$anchor.data();
-            var mId = data.module;
-            var moduleData = KB.Modules.get(mId).get("moduleData");
-            var lData = {};
-            lData = KB.Util.getIndex(moduleData, data.kpath);
-            $href.val(lData.link);
-            $title.val(lData.title);
-            $linktext.find("input").val(lData.linktext);
-            if (lData.target === "_blank") {
-                $("#link-target-checkbox").prop("checked", true);
-            }
-        },
-        close: function() {
-            wpLink.isMCE = this.restore_isMce;
-            wpLink.htmlUpdate = this.restore_htmlUpdate;
-            wpLink.close = this.restore_close;
-            $linktext.remove();
-        },
-        updateModel: function(attrs) {
-            var data = this.$anchor.data();
-            var mId = data.module;
-            var cModule = KB.Modules.get(mId);
-            var value = {
-                link: attrs.href,
-                title: attrs.title,
-                target: attrs.target,
-                linktext: attrs.linktext
-            };
-            var moduleData = _.clone(cModule.get("moduleData"));
-            var path = data.kpath;
-            KB.Util.setIndex(moduleData, path, value);
-            cModule.set("moduleData", moduleData);
-        }
-    };
-}(jQuery);
-
-KB.IEdit.Text = function(el) {
-    var settings;
-    if (_.isUndefined(el)) {
-        return false;
-    }
-    if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]) {
-        settings = KB.payload.FrontSettings[el.id].tinymce ? KB.payload.FrontSettings[el.id].tinymce : {};
-    }
-    var defaults = {
-        theme: "modern",
-        skin: false,
-        menubar: false,
-        add_unload_trigger: false,
-        fixed_toolbar_container: "#kb-toolbar",
-        schema: "html5",
-        inline: true,
-        plugins: "textcolor, wplink",
-        statusbar: false,
-        preview_styles: false,
-        setup: function(ed) {
-            ed.on("init", function() {
-                var data = jQuery(ed.bodyElement).data();
-                var module = data.module, cleaned, $placeholder;
-                ed.kfilter = data.filter && data.filter === "content" ? true : false;
-                ed.module = KB.Modules.get(module);
-                ed.kpath = data.kpath;
-                ed.module.view.$el.addClass("inline-editor-attached");
-                $placeholder = jQuery("<span class='kb-text-placeholder'>Your voice is missing</span>");
-                KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
-                cleaned = ed.getContent().replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
-                if (cleaned === "") {
-                    ed.setContent($placeholder.html());
-                    ed.placeholder = true;
-                } else {
-                    ed.placeholder = false;
-                }
-            });
-            ed.on("click", function(e) {
-                e.stopPropagation();
-            });
-            ed.on("focus", function(e) {
-                var con = KB.Util.getIndex(ed.module.get("moduleData"), ed.kpath);
-                ed.previousContent = ed.getContent();
-                if (ed.kfilter) {
-                    ed.setContent(switchEditors.wpautop(con));
-                }
-                jQuery("#kb-toolbar").show();
-                ed.module.view.$el.addClass("inline-edit-active");
-                if (ed.placeholder !== false) {}
-            });
-            ed.on("change", function(e) {
-                _K.info("Got Dirty");
-            });
-            ed.addButton("kbcancleinline", {
-                title: "Stop inline Edit",
-                onClick: function(ed) {
-                    if (tinymce.activeEditor.isDirty()) {
-                        tinymce.activeEditor.module.view.getDirty();
-                    }
-                    tinymce.activeEditor.fire("blur");
-                    tinymce.activeEditor = null;
-                    tinymce.focusedEditor = null;
-                    document.activeElement.blur();
-                    jQuery("#kb-toolbar").hide();
-                }
-            });
-            ed.on("blur", function() {
-                var content, moduleData, path;
-                ed.module.view.$el.removeClass("inline-edit-active");
-                jQuery("#kb-toolbar").hide();
-                content = ed.getContent();
-                if (ed.kfilter) {
-                    content = switchEditors._wp_Nop(ed.getContent());
-                }
-                moduleData = ed.module.get("moduleData");
-                path = ed.kpath;
-                KB.Util.setIndex(moduleData, path, content);
-                if (ed.isDirty()) {
-                    ed.placeholder = false;
-                    if (ed.kfilter) {
-                        jQuery.ajax({
-                            url: ajaxurl,
-                            data: {
-                                action: "applyContentFilter",
-                                data: content.replace(/\'/g, "%27"),
-                                module: ed.module.toJSON(),
-                                _ajax_nonce: KB.Config.getNonce("read")
-                            },
-                            type: "POST",
-                            dataType: "html",
-                            success: function(res) {
-                                ed.setContent(res);
-                                ed.module.trigger("change");
-                                ed.module.set("moduleData", moduleData);
-                            },
-                            error: function() {}
-                        });
-                    } else {
-                        ed.module.trigger("change");
-                        ed.module.set("moduleData", moduleData);
-                    }
-                } else {
-                    ed.setContent(ed.previousContent);
-                }
-            });
-        }
-    };
-    defaults = _.extend(defaults, settings);
-    tinymce.init(_.defaults(defaults, {
-        selector: "#" + el.id
-    }));
-};
-
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -432,36 +21,306 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     }
 });
 
-KB.Backbone.ModuleBrowser.prototype.success = function(data) {
-    var model;
-    if (this.dropZone) {
-        this.dropZone.$el.after(data.html);
-        this.dropZone.removeDropZone();
-    } else {
-        this.options.area.$el.append(data.html).removeClass("kb-area__empty");
+KB.Backbone.AreaLayoutView = Backbone.View.extend({
+    hasLayout: false,
+    LayoutIterator: {},
+    initialize: function(options) {
+        this.AreaView = options.AreaView;
+        this.listenTo(this.AreaView, "kb.module.created", this.handleModuleCreated);
+        this.listenTo(this.AreaView, "kb.module.deleted", this.handleModuleDeleted);
+        this.listenTo(this.model, "change:layout", this.handleLayoutChange);
+        this.setupLayout();
+        this.renderPlaceholder();
+    },
+    setupLayout: function(layout) {
+        var at, collection;
+        collection = KB.payload.AreaTemplates || {};
+        at = layout || this.model.get("layout");
+        if (at === "default") {
+            this.hasLayout = false;
+            return null;
+        }
+        if (collection[at]) {
+            this.hasLayout = true;
+            this.LayoutIterator = new KB.LayoutIterator(collection[at], this.AreaView);
+        } else {
+            this.hasLayout = false;
+        }
+    },
+    unwrap: function() {
+        _.each(this.AreaView.getAttachedModules(), function(ModuleView) {
+            ModuleView.$el.unwrap();
+        });
+    },
+    render: function(ui) {
+        if (this.hasLayout) {
+            this.LayoutIterator.applyLayout(ui);
+        } else {
+            this.unwrap();
+        }
+    },
+    applyClasses: function() {
+        var $parent, prev;
+        var $modules = this.AreaView.$el.find(".module");
+        $modules.removeClass("first-module last-module repeater");
+        for (var i = 0; i < $modules.length; i++) {
+            var View = jQuery($modules[i]).data("ModuleView");
+            if (_.isUndefined(View)) {
+                continue;
+            }
+            if (i === 0) {
+                View.$el.addClass("first-module");
+            }
+            if (i === $modules.length - 1) {
+                View.$el.addClass("last-module");
+            }
+            if (prev && View.model.get("settings").id === prev) {
+                View.$el.addClass("repeater");
+            }
+            prev = View.model.get("settings").id;
+            $parent = View.$el.parent();
+            if ($parent.hasClass("kb-wrap")) {
+                $parent.attr("rel", View.$el.attr("rel"));
+            }
+        }
+    },
+    handleModuleCreated: function() {
+        this.applyClasses();
+        if (this.LayoutIterator) {
+            this.LayoutIterator.applyLayout();
+        }
+    },
+    handleModuleDeleted: function() {
+        this.applyClasses();
+        this.renderPlaceholder();
+        if (this.LayoutIterator) {
+            this.LayoutIterator.applyLayout();
+        }
+    },
+    handleLayoutChange: function() {
+        this.setupLayout();
+        this.AreaView.setupSortables();
+        this.render(null);
+    },
+    renderPlaceholder: function() {
+        if (this.AreaView.getNumberOfModules() === 0) {
+            this.AreaView.$el.addClass("kb-area__empty");
+        }
     }
-    KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
-    model = KB.Modules.add(KB.lastAddedModule);
-    _K.info("new module created", {
-        view: model.view
-    });
-    this.parseAdditionalJSON(data.json);
-    KB.TinyMCE.addEditor();
-    KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
-    KB.Environment.moduleCount++;
-    this.options.area.trigger("kb.module.created");
-    setTimeout(function() {
-        model.view.openOptions();
-        model.view.renderPlaceholder();
-    }, 300);
+});
+
+KB.LayoutIterator = function(layout, AreaView) {
+    this.AreaView = AreaView;
+    this.raw = layout;
+    this.position = 0;
+    this.current = null;
+    this.maxNum = layout.layout.length;
+    this.id = layout.id;
+    this.label = layout.label;
+    this.lastItem = layout["last-item"];
+    this.cycle = layout.cycle || false;
+    this.layout = layout.layout;
+    this.wrap = layout.wrap || false;
+    this.setPosition = function(pos) {
+        this.position = pos % this.maxNum;
+        this.setCurrent();
+        return this.position;
+    };
+    this.getPosition = function() {
+        return this.position;
+    };
+    this.getLayout = function(pos) {
+        if (pos && this.cycle) {
+            return this.layout[pos % this.maxNum];
+        }
+        if (pos && !this.cycle) {
+            if (pos > this.maxNum - 1) {
+                return this.layout[this.maxNum - 1];
+            } else {
+                return this.layout[pos];
+            }
+        }
+    };
+    this.next = function() {
+        if (this.position === this.maxNum - 1 && this.cycle) {
+            this.position = 0;
+        } else if (this.position === this.maxNum - 1 && !this.cycle) {
+            this.position = this.maxNum - 1;
+        } else {
+            this.position++;
+        }
+        this.setCurrent();
+    };
+    this.setCurrent = function() {
+        this.current = this.layout[this.position];
+    };
+    this.getCurrent = function() {
+        return this.current;
+    };
+    this.hasWrap = function() {
+        return this.wrap !== false;
+    };
+    this.applyLayout = function(ui) {
+        var Iterator = this;
+        var modules = this.AreaView.$el.find('.module:not(".ignore")');
+        var wraps = [];
+        var $outer = jQuery(".kb-outer-wrap");
+        Iterator.setPosition(0);
+        $outer.each(function(item) {
+            jQuery(".kb-wrap:first-child", item).unwrap();
+        });
+        _.each(modules, function(ModuleEl) {
+            var $el = jQuery(ModuleEl);
+            var $wrap = $el.parent(".kb-wrap");
+            if ($wrap.length === 0) {
+                $wrapEl = jQuery('<div class="kb-wrap ' + Iterator.getCurrent().classes + '"></div>');
+                $el.wrap($wrapEl);
+            } else {
+                $wrap.removeClass();
+                $wrap.addClass("kb-wrap " + Iterator.getCurrent().classes);
+            }
+            console.log(Iterator.getCurrent().classes);
+            if (ui) {
+                ui.placeholder.addClass("kb-front-sortable-placeholder");
+            }
+            Iterator.next();
+        });
+        if (this.hasWrap()) {
+            wraps = jQuery('.kb-wrap:not(".ignore")');
+            for (var i = 0; i < wraps.length; i += this.maxNum) {
+                wraps.slice(i, i + this.maxNum).wrapAll("<div class='kb-outer-wrap " + this.wrap.class + "'></div>");
+            }
+        }
+    };
+    this.setCurrent();
 };
 
-(function(close) {
-    KB.Backbone.ModuleBrowser.prototype.close = function() {
-        delete this.dropZone;
-        close.call(this);
-    };
-})(KB.Backbone.ModuleBrowser.prototype.close);
+KB.Backbone.AreaView = Backbone.View.extend({
+    isSorting: false,
+    events: {
+        dblclick: "openModuleBrowser"
+    },
+    initialize: function() {
+        this.attachedModuleViews = {};
+        this.settings = this.model.get("settings");
+        this.listenToOnce(KB.Events, "KB::frontend-init", this.setupUi);
+        this.listenTo(this, "kb.module.deleted", this.removeModule);
+        if (KB.appData.config.useModuleNav) {
+            KB.Menubar.attachAreaView(this);
+        }
+    },
+    setupUi: function() {
+        this.Layout = new KB.Backbone.AreaLayoutView({
+            model: new Backbone.Model(this.settings),
+            AreaView: this
+        });
+        if (this.model.get("sortable")) {
+            this.setupSortables();
+            _K.info("Area sortable initialized");
+        } else {
+            _K.info("Area sortable skipped");
+        }
+    },
+    openModuleBrowser: function() {
+        if (!this.ModuleBrowser) {
+            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+                area: this
+            });
+        }
+        this.ModuleBrowser.render();
+        return this.ModuleBrowser;
+    },
+    addModuleView: function(moduleView) {
+        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
+        this.listenTo(moduleView.model, "change:area", this.removeModule);
+        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
+    },
+    getNumberOfModules: function() {
+        return _.size(this.attachedModuleViews);
+    },
+    getAttachedModules: function() {
+        return this.attachedModuleViews;
+    },
+    setupSortables: function() {
+        var that = this;
+        if (this.Layout.hasLayout) {
+            this.$el.sortable({
+                handle: ".kb-module-inline-move",
+                items: ".kb-wrap",
+                helper: "original",
+                opacity: .5,
+                delay: 150,
+                placeholder: "kb-front-sortable-placeholder",
+                start: function(e, ui) {
+                    that.isSorting = true;
+                    ui.placeholder.attr("class", ui.helper.attr("class"));
+                    ui.placeholder.addClass("kb-front-sortable-placeholder");
+                    ui.placeholder.append("<div class='module kb-dummy'></div>");
+                    jQuery(".module", ui.helper).addClass("ignore");
+                    ui.helper.addClass("ignore");
+                },
+                stop: function(e, ui) {
+                    var serializedData = {};
+                    that.isSorting = false;
+                    serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
+                        attribute: "rel"
+                    });
+                    jQuery(".ignore", ui.helper).removeClass("ignore");
+                    return KB.Ajax.send({
+                        action: "resortModules",
+                        data: serializedData,
+                        _ajax_nonce: KB.Config.getNonce("update")
+                    }, function() {
+                        KB.Notice.notice("Order was updated successfully", "success");
+                        that.Layout.render();
+                    }, that);
+                },
+                change: function(e, ui) {
+                    that.Layout.applyClasses();
+                    that.Layout.render(e, ui);
+                }
+            });
+        } else {
+            this.$el.sortable({
+                handle: ".kb-module-inline-move",
+                items: ".module",
+                helper: "original",
+                opacity: .5,
+                delay: 150,
+                placeholder: "kb-front-sortable-placeholder",
+                start: function() {
+                    that.isSorting = true;
+                },
+                stop: function() {
+                    var serializedData = {};
+                    that.isSorting = false;
+                    serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
+                        attribute: "rel"
+                    });
+                    return KB.Ajax.send({
+                        action: "resortModules",
+                        data: serializedData,
+                        _ajax_nonce: KB.Config.getNonce("update")
+                    }, function() {
+                        KB.Notice.notice("Order was updated successfully", "success");
+                    }, that);
+                },
+                change: function() {
+                    that.Layout.applyClasses();
+                }
+            });
+        }
+    },
+    changeLayout: function(l) {
+        this.Layout.model.set("layout", l);
+    },
+    removeModule: function(ModuleView) {
+        var id = ModuleView.model.get("mid");
+        if (this.attachedModuleViews[id]) {
+            delete this.attachedModuleViews[id];
+        }
+    }
+});
 
 KB.Backbone.EditModalAreas = Backbone.View.extend({
     tagName: "div",
@@ -736,6 +595,11 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             type: "POST",
             dataType: "json",
             success: function(res) {
+                var $controls;
+                $controls = jQuery(".kb-module-controls", that.ModuleView.$el);
+                if ($controls.length > 0) {
+                    $controls.detach();
+                }
                 jQuery(".editable", that.ModuleView.$el).each(function(i, el) {
                     tinymce.remove("#" + el.id);
                 });
@@ -770,6 +634,10 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     }
                     that.$el.addClass("isDirty");
                 }
+                if ($controls.length > 0) {
+                    that.ModuleView.$el.append($controls);
+                }
+                that.ModuleView.trigger("kb.view.module.HTMLChanged");
                 _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
             },
             error: function() {
@@ -836,313 +704,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     _classifyView: function(str) {
         return "view-" + str.replace(".twig", "");
-    }
-});
-
-KB.Backbone.AreaLayoutView = Backbone.View.extend({
-    hasLayout: false,
-    LayoutIterator: null,
-    initialize: function(options) {
-        this.AreaView = options.AreaView;
-        this.listenTo(this.AreaView, "kb.module.created", this.handleModuleCreated);
-        this.listenTo(this.AreaView, "kb.module.deleted", this.handleModuleDeleted);
-        this.listenTo(this.model, "change:layout", this.handleLayoutChange);
-        this.setupLayout();
-        this.renderPlaceholder();
-        if (_.isNull(this.LayoutIterator)) {
-            return false;
-        }
-    },
-    setupLayout: function(layout) {
-        var at, coll;
-        coll = KB.payload.AreaTemplates || {};
-        at = layout || this.model.get("layout");
-        if (at === "default") {
-            this.hasLayout = false;
-            return null;
-        }
-        if (coll[at]) {
-            this.hasLayout = true;
-            this.LayoutIterator = new KB.LayoutIterator(coll[at], this.AreaView);
-            return this;
-        } else {
-            this.hasLayout = false;
-        }
-    },
-    unwrap: function() {
-        _.each(this.AreaView.getAttachedModules(), function(ModuleView) {
-            ModuleView.$el.unwrap();
-        });
-    },
-    render: function(e, ui) {
-        if (this.hasLayout) {
-            this.LayoutIterator.applyLayout(ui);
-        } else {
-            this.unwrap();
-        }
-    },
-    applyClasses: function() {
-        var prev = null;
-        var $modules = this.AreaView.$el.find(".module");
-        $modules.removeClass("first-module last-module repeater");
-        for (var i = 0; i < $modules.length; i++) {
-            var View = jQuery($modules[i]).data("ModuleView");
-            if (_.isUndefined(View)) {
-                continue;
-            }
-            if (i === 0) {
-                View.$el.addClass("first-module");
-            }
-            if (i === $modules.length - 1) {
-                View.$el.addClass("last-module");
-            }
-            if (View.model.get("settings").id === prev) {
-                View.$el.addClass("repeater");
-            }
-            prev = View.model.get("settings").id;
-            var $parent = View.$el.parent();
-            if ($parent.hasClass("kb-wrap")) {
-                $parent.attr("rel", View.$el.attr("rel"));
-            }
-        }
-    },
-    handleModuleCreated: function() {
-        this.applyClasses();
-        if (this.LayoutIterator) {
-            this.LayoutIterator.applyLayout();
-        }
-    },
-    handleModuleDeleted: function() {
-        this.applyClasses();
-        this.renderPlaceholder();
-        if (this.LayoutIterator) {
-            this.LayoutIterator.applyLayout();
-        }
-    },
-    handleLayoutChange: function() {
-        this.setupLayout();
-        this.AreaView.setupSortables();
-        this.render();
-    },
-    renderPlaceholder: function() {
-        if (this.AreaView.getNumberOfModules() === 0) {
-            this.AreaView.$el.addClass("kb-area__empty");
-        }
-    }
-});
-
-KB.LayoutIterator = function(layout, AreaView) {
-    this.AreaView = AreaView;
-    this.raw = layout;
-    this.position = 0;
-    this.current = null;
-    this.maxNum = layout.layout.length;
-    this.id = layout.id;
-    this.label = layout.label;
-    this.lastItem = layout["last-item"];
-    this.cycle = layout.cycle || false;
-    this.layout = layout.layout;
-    this.wrap = layout.wrap || false;
-    this.setPosition = function(pos) {
-        this.position = pos % this.maxNum;
-        this.setCurrent();
-        return this.position;
-    };
-    this.getPosition = function() {
-        return this.position;
-    };
-    this.getLayout = function(pos) {
-        if (pos && this.cycle) {
-            return this.layout[pos % this.maxNum];
-        }
-        if (pos && !this.cycle) {
-            if (pos > this.maxNum - 1) {
-                return this.layout[this.maxNum - 1];
-            } else {
-                return this.layout[pos];
-            }
-        }
-    };
-    this.next = function() {
-        if (this.position === this.maxNum - 1 && this.cycle) {
-            this.position = 0;
-        } else if (this.position === this.maxNum - 1 && !this.cycle) {
-            this.position = this.maxNum - 1;
-        } else {
-            this.position++;
-        }
-        this.setCurrent();
-    };
-    this.setCurrent = function() {
-        this.current = this.layout[this.position];
-    };
-    this.getCurrent = function() {
-        return this.current;
-    };
-    this.hasWrap = function() {
-        return this.wrap !== false;
-    };
-    this.applyLayout = function(ui) {
-        var Iterator = this;
-        var modules = this.AreaView.$el.find('.module:not(".ignore")');
-        var wraps = [];
-        var $outer = jQuery(".kb-outer-wrap");
-        Iterator.setPosition(0);
-        $outer.each(function(item, i) {
-            jQuery(".kb-wrap:first-child", item).unwrap();
-        });
-        _.each(modules, function(ModuleEl) {
-            var $el = jQuery(ModuleEl);
-            var $wrap = $el.parent(".kb-wrap");
-            if ($wrap.length === 0) {
-                $wrapEl = jQuery('<div class="kb-wrap ' + Iterator.getCurrent().classes + '"></div>');
-                $el.wrap($wrapEl);
-            } else {
-                $wrap.removeClass();
-                $wrap.addClass("kb-wrap " + Iterator.getCurrent().classes);
-            }
-            console.log(Iterator.getCurrent().classes);
-            if (ui) {
-                ui.placeholder.addClass("kb-front-sortable-placeholder");
-            }
-            Iterator.next();
-        });
-        if (this.hasWrap()) {
-            wraps = jQuery('.kb-wrap:not(".ignore")');
-            for (var i = 0; i < wraps.length; i += this.maxNum) {
-                wraps.slice(i, i + this.maxNum).wrapAll("<div class='kb-outer-wrap " + this.wrap.class + "'></div>");
-            }
-        }
-    };
-    this.setCurrent();
-};
-
-KB.Backbone.AreaView = Backbone.View.extend({
-    isSorting: false,
-    events: {
-        dblclick: "openModuleBrowser"
-    },
-    initialize: function() {
-        this.attachedModuleViews = {};
-        this.settings = this.model.get("settings");
-        this.listenToOnce(KB.Events, "KB::frontend-init", this.setupUi);
-        this.listenTo(this, "kb.module.deleted", this.removeModule);
-        if (KB.appData.config.useModuleNav) {
-            KB.Menubar.attachAreaView(this);
-        }
-    },
-    setupUi: function() {
-        var that = this;
-        this.Layout = new KB.Backbone.AreaLayoutView({
-            model: new Backbone.Model(this.settings),
-            AreaView: this
-        });
-        if (this.model.get("sortable")) {
-            this.setupSortables();
-            _K.info("Area sortable initialized");
-        } else {
-            _K.info("Area sortable skipped");
-        }
-    },
-    openModuleBrowser: function() {
-        if (!this.ModuleBrowser) {
-            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
-                area: this
-            });
-        }
-        this.ModuleBrowser.render();
-        return this.ModuleBrowser;
-    },
-    addModuleView: function(moduleView) {
-        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
-        this.listenTo(moduleView.model, "change:area", this.removeModule);
-        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
-        moduleView.Area = this;
-    },
-    getNumberOfModules: function() {
-        return _.size(this.attachedModuleViews);
-    },
-    getAttachedModules: function() {
-        return this.attachedModuleViews;
-    },
-    setupSortables: function() {
-        var that = this;
-        if (this.Layout.hasLayout) {
-            this.$el.sortable({
-                handle: ".kb-module-inline-move",
-                items: ".kb-wrap",
-                helper: "original",
-                opacity: .5,
-                delay: 150,
-                placeholder: "kb-front-sortable-placeholder",
-                start: function(e, ui) {
-                    that.isSorting = true;
-                    ui.placeholder.attr("class", ui.helper.attr("class"));
-                    ui.placeholder.addClass("kb-front-sortable-placeholder");
-                    ui.placeholder.append("<div class='module kb-dummy'></div>");
-                    jQuery(".module", ui.helper).addClass("ignore");
-                    ui.helper.addClass("ignore");
-                },
-                stop: function(e, ui) {
-                    var serializedData = {};
-                    that.isSorting = false;
-                    serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
-                        attribute: "rel"
-                    });
-                    jQuery(".ignore", ui.helper).removeClass("ignore");
-                    return KB.Ajax.send({
-                        action: "resortModules",
-                        data: serializedData,
-                        _ajax_nonce: KB.Config.getNonce("update")
-                    }, function() {
-                        KB.Notice.notice("Order was updated successfully", "success");
-                        that.Layout.render();
-                    }, that);
-                },
-                change: function(e, ui) {
-                    that.Layout.applyClasses();
-                    that.Layout.render(e, ui);
-                }
-            });
-        } else {
-            this.$el.sortable({
-                handle: ".kb-module-inline-move",
-                items: ".module",
-                helper: "original",
-                opacity: .5,
-                delay: 150,
-                placeholder: "kb-front-sortable-placeholder",
-                start: function() {
-                    that.isSorting = true;
-                },
-                stop: function() {
-                    var serializedData = {};
-                    that.isSorting = false;
-                    serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
-                        attribute: "rel"
-                    });
-                    return KB.Ajax.send({
-                        action: "resortModules",
-                        data: serializedData,
-                        _ajax_nonce: KB.Config.getNonce("update")
-                    }, function() {
-                        KB.Notice.notice("Order was updated successfully", "success");
-                    }, that);
-                },
-                change: function() {
-                    that.Layout.applyClasses();
-                }
-            });
-        }
-    },
-    changeLayout: function(l) {
-        this.Layout.model.set("layout", l);
-    },
-    removeModule: function(ModuleView) {
-        var id = ModuleView.model.get("mid");
-        if (this.attachedModuleViews[id]) {
-            delete this.attachedModuleViews[id];
-        }
     }
 });
 
@@ -1337,15 +898,185 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     }
 });
 
+KB.Backbone.Frontend.ModuleMenuItemView = Backbone.View.extend({
+    tagName: "a",
+    isValid: function() {
+        return true;
+    }
+});
+
+KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-trash"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsDelete + "</span>");
+    },
+    className: "kb-module-inline-delete kb-nbt kb-nbb kb-js-inline-delete",
+    events: {
+        click: "confirmRemoval"
+    },
+    confirmRemoval: function() {
+        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
+    },
+    removeModule: function() {
+        KB.Ajax.send({
+            action: "removeModules",
+            _ajax_nonce: KB.Config.getNonce("delete"),
+            module: this.model.get("instance_id")
+        }, this.afterRemoval, this);
+    },
+    afterRemoval: function() {
+        this.Parent.$el.remove();
+        KB.Modules.remove(this.model);
+    },
+    cancelRemoval: function() {
+        return false;
+    },
+    isValid: function() {
+        return KB.Checks.userCan("delete_kontentblocks");
+    }
+});
+
+KB.Backbone.Frontend.ModuleEdit = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-edit"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsEdit + "</span>");
+    },
+    className: "os-edit-block kb-module-edit",
+    events: {
+        click: "openControls"
+    },
+    openControls: function() {
+        if (KB.EditModalModules) {
+            this.Parent.reloadModal();
+            return this;
+        }
+        KB.EditModalModules = new KB.Backbone.EditModalModules({
+            model: this.model,
+            view: this.Parent
+        });
+        KB.focusedModule = this.model;
+        return this;
+    },
+    isValid: function() {
+        return KB.Checks.userCan("edit_kontentblocks");
+    },
+    success: function() {}
+});
+
+KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-menu"></span><span class="os-action"></span>');
+    },
+    className: "kb-module-inline-move kb-nbt kb-nbb",
+    isValid: function() {
+        return KB.Checks.userCan("edit_kontentblocks") && this.Parent.Area.model.get("sortable");
+    }
+});
+
+KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-update"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsUpdate + "</span>");
+    },
+    className: "kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update",
+    events: {
+        click: "update"
+    },
+    update: function() {
+        var that = this;
+        var moduleData = {};
+        var refresh = false;
+        moduleData[that.model.get("instance_id")] = that.model.get("moduleData");
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                action: "updateModuleOptions",
+                data: jQuery.param(moduleData).replace(/\'/g, "%27"),
+                module: that.model.toJSON(),
+                editmode: "update",
+                refresh: refresh,
+                _ajax_nonce: KB.Config.getNonce("update")
+            },
+            type: "POST",
+            dataType: "json",
+            success: function(res) {
+                if (refresh) {
+                    that.$el.html(res.html);
+                }
+                tinymce.triggerSave();
+                that.model.set("moduleData", res.newModuleData);
+                that.Parent.render();
+                that.Parent.trigger("KB::module-updated");
+                KB.Events.trigger("KB::ajax-update");
+                KB.Notice.notice("Module saved successfully", "success");
+                that.Parent.$el.removeClass("isDirty");
+            },
+            error: function() {
+                KB.Notice.notice("There went something wrong", "error");
+            }
+        });
+    },
+    isValid: function() {
+        return KB.Checks.userCan("edit_kontentblocks");
+    }
+});
+
+KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
+    ModuleView: null,
+    $menuList: null,
+    initialize: function(options) {
+        this.ModuleView = options.ModuleView;
+        this.renderControls();
+        this.addItem(new KB.Backbone.Frontend.ModuleEdit({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.addItem(new KB.Backbone.Frontend.ModuleUpdate({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.addItem(new KB.Backbone.Frontend.ModuleDelete({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.addItem(new KB.Backbone.Frontend.ModuleMove({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+    },
+    renderControls: function() {
+        this.ModuleView.$el.append(KB.Templates.render("frontend/module-controls", {
+            model: this.ModuleView.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
+        }));
+        this.$el = jQuery(".kb-module-controls", this.ModuleView.$el);
+        this.$menuList = jQuery('<ul class="controls-wrap"></ul>').appendTo(this.$el);
+    },
+    addItem: function(view) {
+        if (view.isValid && view.isValid() === true) {
+            var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
+            var $menuItem = $liItem.append(view.el);
+            this.$menuList.append($menuItem);
+        }
+    }
+});
+
 KB.Backbone.ModuleView = Backbone.View.extend({
     focus: false,
     $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
     attachedFields: [],
-    initialize: function() {
+    initialize: function(options) {
         var that = this;
         if (!KB.Checks.userCan("edit_kontentblocks")) {
+            _K.log("Permission insufficient");
             return;
         }
+        this.Area = options.Area;
         this.model.view = this;
         this.listenTo(this.model, "change", this.modelChange);
         this.listenTo(this.model, "change:viewfile", this.viewfileUpdate);
@@ -1356,15 +1087,16 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             KB.Menubar.attachModuleView(this);
         }
         this.setControlsPosition();
+        this.Controls = new KB.Backbone.Frontend.ModuleControlsView({
+            ModuleView: this
+        });
         jQuery(window).on("kontentblocks::ajaxUpdate", function() {
             that.setControlsPosition();
         });
     },
     events: {
-        "click a.os-edit-block": "openOptions",
         "click .kb-module__placeholder": "openOptions",
         "click .kb-module__dropzone": "setDropZone",
-        "click .kb-js-inline-update": "updateModule",
         "click .kb-js-inline-delete": "confirmDelete",
         "click .editable": "reloadModal",
         "hover.first": "setActive",
@@ -1374,21 +1106,18 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function() {
+        var settings;
         if (this.$el.hasClass("draft") && this.model.get("moduleData") === "") {
             this.renderPlaceholder();
         }
         this.$el.attr("rel", this.model.get("mid") + "_" + _.uniqueId());
-        var settings = this.model.get("settings");
+        settings = this.model.get("settings");
         if (settings.controls && settings.controls.hide) {
             return;
         }
         if (jQuery(".os-controls", this.$el).length > 0) {
             return;
         }
-        this.$el.append(KB.Templates.render("frontend/module-controls", {
-            model: this.model.toJSON(),
-            i18n: KB.i18n.jsFrontend
-        }));
     },
     setControlsPosition: function() {
         var elpostop, elposleft, mSettings, $controls, pos, height;
@@ -1418,18 +1147,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             left: elposleft
         });
     },
-    openOptions: function() {
-        if (KB.EditModalModules) {
-            this.reloadModal();
-            return this;
-        }
-        KB.EditModalModules = new KB.Backbone.EditModalModules({
-            model: this.model,
-            view: this
-        });
-        KB.focusedModule = this.model;
-        return this;
-    },
     reloadModal: function(force) {
         if (KB.EditModalModules) {
             KB.EditModalModules.reload(this, force);
@@ -1450,54 +1167,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var ModuleBrowser;
         ModuleBrowser = this.Area.openModuleBrowser();
         ModuleBrowser.dropZone = this;
-    },
-    updateModule: function() {
-        var that = this;
-        var moduleData = {};
-        var refresh = false;
-        moduleData[that.model.get("instance_id")] = that.model.get("moduleData");
-        jQuery.ajax({
-            url: ajaxurl,
-            data: {
-                action: "updateModuleOptions",
-                data: jQuery.param(moduleData).replace(/\'/g, "%27"),
-                module: that.model.toJSON(),
-                editmode: "update",
-                refresh: refresh,
-                _ajax_nonce: KB.Config.getNonce("update")
-            },
-            type: "POST",
-            dataType: "json",
-            success: function(res) {
-                if (refresh) {
-                    that.$el.html(res.html);
-                }
-                tinymce.triggerSave();
-                that.model.set("moduleData", res.newModuleData);
-                that.render();
-                that.trigger("KB::module-updated");
-                KB.Events.trigger("KB::ajax-update");
-                KB.Notice.notice("Module saved successfully", "success");
-                that.$el.removeClass("isDirty");
-            },
-            error: function() {
-                KB.Notice.notice("There went something wrong", "error");
-            }
-        });
-    },
-    confirmDelete: function() {
-        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, null, this);
-    },
-    removeModule: function() {
-        KB.Ajax.send({
-            action: "removeModules",
-            _ajax_nonce: KB.Config.getNonce("delete"),
-            module: this.model.get("instance_id")
-        }, this.afterRemoval, this);
-    },
-    afterRemoval: function() {
-        this.model.view.$el.remove();
-        KB.Modules.remove(this.model);
     },
     renderPlaceholder: function() {
         this.$el.append(KB.Templates.render("frontend/module-placeholder", {
@@ -1554,6 +1223,463 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     save: function() {}
 });
 
+KB.Backbone.ModuleBrowser.prototype.success = function(data) {
+    var model;
+    if (this.dropZone) {
+        this.dropZone.$el.after(data.html);
+        this.dropZone.removeDropZone();
+    } else {
+        this.options.area.$el.append(data.html).removeClass("kb-area__empty");
+    }
+    KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
+    model = KB.Modules.add(KB.lastAddedModule);
+    _K.info("new module created", {
+        view: model.view
+    });
+    this.parseAdditionalJSON(data.json);
+    KB.TinyMCE.addEditor();
+    KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
+    KB.Environment.moduleCount++;
+    this.options.area.trigger("kb.module.created");
+    setTimeout(function() {
+        model.view.openOptions();
+        model.view.renderPlaceholder();
+    }, 300);
+};
+
+(function(close) {
+    KB.Backbone.ModuleBrowser.prototype.close = function() {
+        delete this.dropZone;
+        close.call(this);
+    };
+})(KB.Backbone.ModuleBrowser.prototype.close);
+
+KB.IEdit.BackgroundImage = function($) {
+    var self, attachment;
+    self = {
+        selector: ".editable-bg-image",
+        remove: ".kb-js-reset-file",
+        img: null,
+        init: function() {
+            var that = this;
+            $("body").on("click", this.selector, function(e) {
+                e.preventDefault();
+                that.img = $(this);
+                that.parent = KB.currentModule;
+                that.frame().open();
+            });
+            $("body").on("click", this.remove, function(e) {
+                e.preventDefault();
+                that.container = $(".kb-field-file-wrapper", activeField);
+                that.resetFields();
+            });
+            this.renderControls();
+        },
+        renderControls: function() {
+            $(this.selector).each(function() {
+                $("body").on("mouseover", ".editable-bg-image", function() {
+                    $(this).css("cursor", "pointer");
+                });
+            });
+        },
+        frame: function() {
+            if (this._frame) return this._frame;
+            this._frame = wp.media({
+                title: "Change background image",
+                button: {
+                    text: "Insert"
+                },
+                multiple: false,
+                library: {
+                    type: "image"
+                }
+            });
+            this._frame.on("ready", this.ready);
+            this._frame.state("library").on("select", this.select);
+            return this._frame;
+        },
+        ready: function() {
+            $(".media-modal").addClass(" smaller no-sidebar");
+        },
+        select: function() {
+            attachment = this.get("selection").first();
+            self.handleAttachment(attachment);
+        },
+        handleAttachment: function(attachment) {
+            var that = this;
+            var id = attachment.get("id");
+            var value = {
+                id: id,
+                title: attachment.get("title"),
+                caption: attachment.get("caption")
+            };
+            var data = this.img.data();
+            var mId = data.module;
+            var cModule = KB.Modules.get(mId);
+            var moduleData = _.clone(cModule.get("moduleData"));
+            var path = data.kpath;
+            var settings = KB.payload.FrontSettings[data.uid];
+            KB.Util.setIndex(moduleData, path, value);
+            cModule.set("moduleData", moduleData);
+            jQuery.ajax({
+                url: ajaxurl,
+                data: {
+                    action: "fieldGetImage",
+                    args: settings,
+                    id: id,
+                    _ajax_nonce: KB.Config.getNonce("read")
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(res) {
+                    that.img.css("backgroundImage", "url('" + res + "')");
+                    that.parent.$el.addClass("isDirty");
+                },
+                error: function() {}
+            });
+        },
+        resetFields: function() {
+            $(".kb-file-attachment-id", this.container).val("");
+            this.container.hide(750);
+            $(this.remove, activeField).hide();
+        },
+        update: function() {
+            this.init();
+        }
+    };
+    return self;
+}(jQuery);
+
+KB.IEdit.Image = function($) {
+    var self, attachment;
+    self = {
+        selector: ".editable-image",
+        remove: ".kb-js-reset-file",
+        img: null,
+        init: function() {
+            var that = this;
+            var $body = $("body");
+            $body.on("click", this.selector, function(e) {
+                e.preventDefault();
+                that.img = $(this);
+                that.parent = KB.currentModule;
+                that.frame().open();
+            });
+            $body.on("click", this.remove, function(e) {
+                e.preventDefault();
+                that.container = $(".kb-field-file-wrapper", activeField);
+                that.resetFields();
+            });
+            this.renderControls();
+        },
+        renderControls: function() {
+            $(this.selector).each(function() {
+                $("body").on("mouseover", ".editable-image", function() {
+                    $(this).css("cursor", "pointer");
+                });
+            });
+        },
+        frame: function() {
+            if (this._frame) return this._frame;
+            this._frame = wp.media({
+                title: KB.i18n.Refields.file.modalTitle,
+                button: {
+                    text: KB.i18n.Refields.common.select
+                },
+                multiple: false,
+                library: {
+                    type: "image"
+                }
+            });
+            this._frame.on("ready", this.ready);
+            this._frame.state("library").on("select", this.select);
+            return this._frame;
+        },
+        ready: function() {
+            $(".media-modal").addClass("smaller no-sidebar");
+        },
+        select: function() {
+            attachment = this.get("selection").first();
+            self.handleAttachment(attachment);
+        },
+        handleAttachment: function(attachment) {
+            var that = this;
+            var id = attachment.get("id");
+            var value = this.prepareValue(attachment);
+            var data = this.img.data();
+            var mId = data.module;
+            var cModule = KB.Modules.get(mId);
+            var moduleData = _.clone(cModule.get("moduleData"));
+            var path = data.kpath;
+            KB.Util.setIndex(moduleData, path, value);
+            var settings = KB.payload.FrontSettings[data.uid];
+            cModule.set("moduleData", moduleData);
+            jQuery.ajax({
+                url: ajaxurl,
+                data: {
+                    action: "fieldGetImage",
+                    args: settings,
+                    id: id,
+                    _ajax_nonce: KB.Config.getNonce("read")
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(res) {
+                    that.img.attr("src", res);
+                    that.parent.$el.addClass("isDirty");
+                },
+                error: function() {}
+            });
+        },
+        prepareValue: function(attachment) {
+            return {
+                id: attachment.get("id"),
+                title: attachment.get("title"),
+                caption: attachment.get("caption")
+            };
+        },
+        resetFields: function() {
+            $(".kb-file-attachment-id", this.container).val("");
+            this.container.hide(750);
+            $(this.remove, activeField).hide();
+        },
+        update: function() {
+            this.init();
+        }
+    };
+    return self;
+}(jQuery);
+
+_.extend(KB.IEdit.Image, Backbone.Events);
+
+KB.IEdit.Link = function($) {
+    var $form, $linkTarget, $linktext, $body, $href, $title;
+    return {
+        selector: ".editable-link",
+        oWpLink: null,
+        $anchor: null,
+        init: function() {
+            var that = this;
+            $body = $("body");
+            $body.on("click", this.selector, function(e) {
+                e.stopPropagation();
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    that.$anchor = $(this);
+                    that.open();
+                }
+            });
+            $body.on("click", "#wp-link-close", function() {
+                that.close();
+            });
+        },
+        open: function() {
+            var that = this;
+            if (!window.wpLink) {
+                return false;
+            }
+            this.restore_htmlUpdate = wpLink.htmlUpdate;
+            this.restore_isMce = wpLink.isMCE;
+            this.restore_close = wpLink.close;
+            wpLink.isMCE = function() {
+                return false;
+            };
+            wpLink.open();
+            this.addLinktextField();
+            this.customizeDialog();
+            this.setValues();
+            wpLink.htmlUpdate = function() {
+                var attrs, textarea = wpLink.textarea;
+                if (!textarea) return;
+                attrs = wpLink.getAttrs();
+                if ($linktext) {
+                    attrs.linktext = $("input", $linktext).val();
+                }
+                if (!attrs.href || attrs.href == "http://") return;
+                that.$anchor.attr("href", attrs.href);
+                that.$anchor.html(attrs.linktext);
+                that.$anchor.attr("target", attrs.target);
+                that.updateModel(attrs);
+                that.close();
+                wpLink.close();
+            };
+        },
+        addLinktextField: function() {
+            $form = $("form#wp-link");
+            $linkTarget = $(".link-target", $form);
+            $linktext = $('<div><label><span>LinkText</span><input type="text" value="hello" name="linktext" ></label></div>').insertBefore($linkTarget);
+        },
+        customizeDialog: function() {
+            $("#wp-link-wrap").addClass("kb-customized");
+        },
+        setValues: function() {
+            $href = $("#url-field", $form);
+            $title = $("#link-title-field", $form);
+            var data = this.$anchor.data();
+            var mId = data.module;
+            var moduleData = KB.Modules.get(mId).get("moduleData");
+            var lData = {};
+            lData = KB.Util.getIndex(moduleData, data.kpath);
+            $href.val(lData.link);
+            $title.val(lData.title);
+            $linktext.find("input").val(lData.linktext);
+            if (lData.target === "_blank") {
+                $("#link-target-checkbox").prop("checked", true);
+            }
+        },
+        close: function() {
+            wpLink.isMCE = this.restore_isMce;
+            wpLink.htmlUpdate = this.restore_htmlUpdate;
+            wpLink.close = this.restore_close;
+            $linktext.remove();
+        },
+        updateModel: function(attrs) {
+            var data = this.$anchor.data();
+            var mId = data.module;
+            var cModule = KB.Modules.get(mId);
+            var value = {
+                link: attrs.href,
+                title: attrs.title,
+                target: attrs.target,
+                linktext: attrs.linktext
+            };
+            var moduleData = _.clone(cModule.get("moduleData"));
+            var path = data.kpath;
+            KB.Util.setIndex(moduleData, path, value);
+            cModule.set("moduleData", moduleData);
+        }
+    };
+}(jQuery);
+
+KB.IEdit.Text = function(el) {
+    var settings;
+    if (_.isUndefined(el)) {
+        return false;
+    }
+    if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]) {
+        settings = KB.payload.FrontSettings[el.id].tinymce ? KB.payload.FrontSettings[el.id].tinymce : {};
+    }
+    var defaults = {
+        theme: "modern",
+        skin: false,
+        menubar: false,
+        add_unload_trigger: false,
+        fixed_toolbar_container: "#kb-toolbar",
+        schema: "html5",
+        inline: true,
+        plugins: "textcolor, wplink",
+        statusbar: false,
+        preview_styles: false,
+        setup: function(ed) {
+            ed.on("init", function() {
+                var data = jQuery(ed.bodyElement).data();
+                var module = data.module, cleaned, $placeholder;
+                ed.kfilter = data.filter && data.filter === "content" ? true : false;
+                ed.module = KB.Modules.get(module);
+                ed.kpath = data.kpath;
+                ed.module.view.$el.addClass("inline-editor-attached");
+                $placeholder = jQuery("<span class='kb-text-placeholder'>Your voice is missing</span>");
+                KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
+                cleaned = ed.getContent().replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
+                if (cleaned === "") {
+                    ed.setContent($placeholder.html());
+                    ed.placeholder = true;
+                } else {
+                    ed.placeholder = false;
+                }
+            });
+            ed.on("click", function(e) {
+                e.stopPropagation();
+            });
+            ed.on("focus", function() {
+                var con = KB.Util.getIndex(ed.module.get("moduleData"), ed.kpath);
+                ed.previousContent = ed.getContent();
+                if (ed.kfilter) {
+                    ed.setContent(switchEditors.wpautop(con));
+                }
+                jQuery("#kb-toolbar").show();
+                ed.module.view.$el.addClass("inline-edit-active");
+                if (ed.placeholder !== false) {}
+            });
+            ed.on("change", function() {
+                _K.info("Got Dirty");
+            });
+            ed.addButton("kbcancleinline", {
+                title: "Stop inline Edit",
+                onClick: function() {
+                    if (tinymce.activeEditor.isDirty()) {
+                        tinymce.activeEditor.module.view.getDirty();
+                    }
+                    tinymce.activeEditor.fire("blur");
+                    tinymce.activeEditor = null;
+                    tinymce.focusedEditor = null;
+                    document.activeElement.blur();
+                    jQuery("#kb-toolbar").hide();
+                }
+            });
+            ed.on("blur", function() {
+                var content, moduleData, path;
+                ed.module.view.$el.removeClass("inline-edit-active");
+                jQuery("#kb-toolbar").hide();
+                content = ed.getContent();
+                if (ed.kfilter) {
+                    content = switchEditors._wp_Nop(ed.getContent());
+                }
+                moduleData = ed.module.get("moduleData");
+                path = ed.kpath;
+                KB.Util.setIndex(moduleData, path, content);
+                if (ed.isDirty()) {
+                    ed.placeholder = false;
+                    if (ed.kfilter) {
+                        jQuery.ajax({
+                            url: ajaxurl,
+                            data: {
+                                action: "applyContentFilter",
+                                data: content.replace(/\'/g, "%27"),
+                                module: ed.module.toJSON(),
+                                _ajax_nonce: KB.Config.getNonce("read")
+                            },
+                            type: "POST",
+                            dataType: "html",
+                            success: function(res) {
+                                ed.setContent(res);
+                                ed.module.trigger("change");
+                                ed.module.set("moduleData", moduleData);
+                            },
+                            error: function() {}
+                        });
+                    } else {
+                        ed.module.trigger("change");
+                        ed.module.set("moduleData", moduleData);
+                    }
+                } else {
+                    ed.setContent(ed.previousContent);
+                }
+            });
+        }
+    };
+    defaults = _.extend(defaults, settings);
+    tinymce.init(_.defaults(defaults, {
+        selector: "#" + el.id
+    }));
+};
+
+KB.Events.on("KB::ready", function() {
+    if (!KB.Checks.userCan("edit_kontentblocks")) {
+        return false;
+    }
+    jQuery(".editable").each(function(i, item) {
+        if (!KB.Checks.userCan("edit_kontentblocks")) {
+            return;
+        }
+        KB.IEdit.Text(item);
+    });
+    KB.IEdit.Image.init();
+    KB.IEdit.BackgroundImage.init();
+    KB.IEdit.Link.init();
+});
+
 KB.currentModule = {};
 
 KB.currentArea = {};
@@ -1572,7 +1698,7 @@ KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
 });
 
-KB.App = function($) {
+KB.App = function() {
     function init() {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
         $toolbar.hide();
@@ -1586,7 +1712,6 @@ KB.App = function($) {
         KB.Ui.init();
     }
     function shutdown() {
-        var model;
         _.each(KB.Modules.toArray(), function(item) {
             KB.Modules.remove(item);
         });
@@ -1613,12 +1738,13 @@ KB.App = function($) {
         var View;
         module.setArea(KB.Areas.get(module.get("area")));
         module.bind("change:area", module.areaChanged);
+        var Area = KB.Views.Areas.get(module.get("area"));
         View = KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
             model: module,
-            el: "#" + module.get("instance_id")
+            el: "#" + module.get("instance_id"),
+            Area: Area
         }));
         View.$el.data("ModuleView", View);
-        var Area = KB.Views.Areas.get(module.get("area"));
         Area.addModuleView(View);
         KB.Ui.initTabs();
     }
@@ -1647,19 +1773,4 @@ jQuery(document).ready(function() {
     KB.Events.trigger("KB::ready");
     jQuery(window).on("resize DOMNodeInserted", function() {});
     setUserSetting("editor", "tinymce");
-});
-
-KB.Events.on("KB::ready", function() {
-    if (!KB.Checks.userCan("edit_kontentblocks")) {
-        return false;
-    }
-    jQuery(".editable").each(function(i, item) {
-        if (!KB.Checks.userCan("edit_kontentblocks")) {
-            return;
-        }
-        KB.IEdit.Text(item);
-    });
-    KB.IEdit.Image.init();
-    KB.IEdit.BackgroundImage.init();
-    KB.IEdit.Link.init();
 });

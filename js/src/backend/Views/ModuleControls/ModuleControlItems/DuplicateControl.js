@@ -1,4 +1,4 @@
-KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.extend({
     className: 'kb-duplicate block-menu-icon',
     events: {
         'click': 'duplicateModule'
