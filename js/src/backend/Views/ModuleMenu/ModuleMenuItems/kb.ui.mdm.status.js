@@ -1,8 +1,6 @@
-KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleStatus = KB.Backbone.Backend.ModuleMenuItemView.extend({
     initialize: function(options){
-        var that = this;
         this.options = options || {};
-
     },
     className: 'module-status block-menu-icon',
     events: {
@@ -18,7 +16,6 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
 
     },
     isValid: function() {
-
         if (!this.model.get('disabled') &&
                 KB.Checks.userCan('deactivate_kontentblocks')) {
             return true;

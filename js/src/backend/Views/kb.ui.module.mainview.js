@@ -12,14 +12,14 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         'dblclick': 'fullscreen',
         'click .kb-fullscreen': 'fullscreen',
         'change .kb-template-select': 'viewfileChange',
-        'change input,textarea,select' : 'handleChange',
-        'tinymce.change' : 'handleChange'
+        'change input,textarea,select': 'handleChange',
+        'tinymce.change': 'handleChange'
 
     },
     setFocusedModule: function () {
         KB.focusedModule = this.model;
     },
-    handleChange: function(){
+    handleChange: function () {
         this.trigger('kb::module.input.changed', this);
     },
     viewfileChange: function (e) {
@@ -37,7 +37,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.attachedFields = {};
         this.instanceId = this.model.get('instance_id');
         // create new module actions menu
-        this.ModuleMenu = new KB.Backbone.ModuleMenuView({
+        this.ModuleMenu = new KB.Backbone.Backend.ModuleMenuView({
             el: this.$el,
             parent: this
         });
@@ -64,10 +64,10 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     // duplicate | delete | change active status
     setupDefaultMenuItems: function () {
         // actual action is handled by individual files
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleSave({model: this.model, parent: this}));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({model: this.model, parent: this}));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({model: this.model, parent: this}));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleSave({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDuplicate({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDelete({model: this.model, parent: this}));
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleStatus({model: this.model, parent: this}));
     },
     // show/hide handler
     toggleBody: function (speed) {
@@ -142,7 +142,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         $stage.css('height', '100%');
     },
 
-    serialize: function(){
+    serialize: function () {
         var formData, moduleData;
         formData = jQuery('#post').serializeJSON();
         moduleData = formData[this.model.get('instance_id')];

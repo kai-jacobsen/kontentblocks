@@ -2,7 +2,7 @@
  * Creates the individual module-actions menu
  * like: duplicate, delete, status
  */
-KB.Backbone.ModuleMenuView = Backbone.View.extend({
+KB.Backbone.Backend.ModuleMenuView = Backbone.View.extend({
     $menuWrap: null, // wrap container jQuery element
     $menuList: null, // ul item
 

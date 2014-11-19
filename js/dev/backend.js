@@ -51,7 +51,7 @@ KB.Backbone.ModuleDefinition = Backbone.Model.extend({
     }
 });
 
-KB.Backbone.ModuleMenuItemView = Backbone.View.extend({
+KB.Backbone.Backend.ModuleMenuItemView = Backbone.View.extend({
     tagName: "div",
     className: "",
     isValid: function() {
@@ -59,7 +59,7 @@ KB.Backbone.ModuleMenuItemView = Backbone.View.extend({
     }
 });
 
-KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleDelete = KB.Backbone.Backend.ModuleMenuItemView.extend({
     className: "kb-delete block-menu-icon",
     initialize: function() {
         _.bindAll(this, "yes", "no");
@@ -94,7 +94,7 @@ KB.Backbone.ModuleDelete = KB.Backbone.ModuleMenuItemView.extend({
     }
 });
 
-KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.extend({
     className: "kb-duplicate block-menu-icon",
     events: {
         click: "duplicateModule"
@@ -141,7 +141,7 @@ KB.Backbone.ModuleDuplicate = KB.Backbone.ModuleMenuItemView.extend({
     }
 });
 
-KB.Backbone.ModuleSave = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
     initialize: function(options) {
         var that = this;
         this.options = options || {};
@@ -183,9 +183,8 @@ KB.Backbone.ModuleSave = KB.Backbone.ModuleMenuItemView.extend({
     }
 });
 
-KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleStatus = KB.Backbone.Backend.ModuleMenuItemView.extend({
     initialize: function(options) {
-        var that = this;
         this.options = options || {};
     },
     className: "module-status block-menu-icon",
@@ -213,7 +212,7 @@ KB.Backbone.ModuleStatus = KB.Backbone.ModuleMenuItemView.extend({
     }
 });
 
-KB.Backbone.ModuleMenuView = Backbone.View.extend({
+KB.Backbone.Backend.ModuleMenuView = Backbone.View.extend({
     $menuWrap: null,
     $menuList: null,
     initialize: function() {
@@ -339,7 +338,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.$inner = jQuery(".kb-module__controls-inner", this.$el);
         this.attachedFields = {};
         this.instanceId = this.model.get("instance_id");
-        this.ModuleMenu = new KB.Backbone.ModuleMenuView({
+        this.ModuleMenu = new KB.Backbone.Backend.ModuleMenuView({
             el: this.$el,
             parent: this
         });
@@ -357,19 +356,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.listenTo(this, "KB::backend.module.viewfile.changed", function(e) {});
     },
     setupDefaultMenuItems: function() {
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleSave({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleSave({
             model: this.model,
             parent: this
         }));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDuplicate({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDuplicate({
             model: this.model,
             parent: this
         }));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleDelete({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDelete({
             model: this.model,
             parent: this
         }));
-        this.ModuleMenu.addItem(new KB.Backbone.ModuleStatus({
+        this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleStatus({
             model: this.model,
             parent: this
         }));

@@ -736,6 +736,11 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             type: "POST",
             dataType: "json",
             success: function(res) {
+                var $controls, $cloned;
+                $controls = jQuery(".kb-module-controls", that.ModuleView.$el);
+                if ($controls.length > 0) {
+                    $controls.detach();
+                }
                 jQuery(".editable", that.ModuleView.$el).each(function(i, el) {
                     tinymce.remove("#" + el.id);
                 });
@@ -770,6 +775,10 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     }
                     that.$el.addClass("isDirty");
                 }
+                if ($controls.length > 0) {
+                    that.ModuleView.$el.append($controls);
+                }
+                that.ModuleView.trigger("kb.view.module.HTMLChanged");
                 _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
             },
             error: function() {
@@ -836,6 +845,174 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     _classifyView: function(str) {
         return "view-" + str.replace(".twig", "");
+    }
+});
+
+KB.Backbone.Frontend.ModuleMenuItemView = Backbone.View.extend({
+    tagName: "a",
+    isValid: function() {
+        return true;
+    }
+});
+
+KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-trash"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsDelete + "</span>");
+    },
+    className: "kb-module-inline-delete kb-nbt kb-nbb kb-js-inline-delete",
+    events: {
+        click: "confirmRemoval"
+    },
+    confirmRemoval: function() {
+        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
+    },
+    removeModule: function() {
+        KB.Ajax.send({
+            action: "removeModules",
+            _ajax_nonce: KB.Config.getNonce("delete"),
+            module: this.model.get("instance_id")
+        }, this.afterRemoval, this);
+    },
+    afterRemoval: function() {
+        this.Parent.$el.remove();
+        KB.Modules.remove(this.model);
+    },
+    cancelRemoval: function() {
+        return false;
+    },
+    isValid: function() {
+        return KB.Checks.userCan("delete_kontentblocks");
+    }
+});
+
+KB.Backbone.Frontend.ModuleEdit = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-edit"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsEdit + "</span>");
+    },
+    className: "os-edit-block kb-module-edit",
+    events: {
+        click: "openControls"
+    },
+    openControls: function() {
+        if (KB.EditModalModules) {
+            this.Parent.reloadModal();
+            return this;
+        }
+        KB.EditModalModules = new KB.Backbone.EditModalModules({
+            model: this.model,
+            view: this.Parent
+        });
+        KB.focusedModule = this.model;
+        return this;
+    },
+    isValid: function() {
+        return KB.Checks.userCan("edit_kontentblocks");
+    },
+    success: function() {}
+});
+
+KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-menu"></span><span class="os-action"></span>');
+    },
+    className: "kb-module-inline-move kb-nbt kb-nbb",
+    isValid: function() {
+        return KB.Checks.userCan("edit_kontentblocks") && this.Parent.Area.model.get("sortable");
+    }
+});
+
+KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+    initialize: function(options) {
+        this.options = options || {};
+        this.Parent = options.parent;
+        this.$el.append('<span class="dashicons dashicons-update"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsUpdate + "</span>");
+    },
+    className: "kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update",
+    events: {
+        click: "update"
+    },
+    update: function() {
+        var that = this;
+        var moduleData = {};
+        var refresh = false;
+        moduleData[that.model.get("instance_id")] = that.model.get("moduleData");
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                action: "updateModuleOptions",
+                data: jQuery.param(moduleData).replace(/\'/g, "%27"),
+                module: that.model.toJSON(),
+                editmode: "update",
+                refresh: refresh,
+                _ajax_nonce: KB.Config.getNonce("update")
+            },
+            type: "POST",
+            dataType: "json",
+            success: function(res) {
+                if (refresh) {
+                    that.$el.html(res.html);
+                }
+                tinymce.triggerSave();
+                that.model.set("moduleData", res.newModuleData);
+                that.Parent.render();
+                that.Parent.trigger("KB::module-updated");
+                KB.Events.trigger("KB::ajax-update");
+                KB.Notice.notice("Module saved successfully", "success");
+                that.Parent.$el.removeClass("isDirty");
+            },
+            error: function() {
+                KB.Notice.notice("There went something wrong", "error");
+            }
+        });
+    },
+    isValid: function() {
+        return KB.Checks.userCan("edit_kontentblocks");
+    }
+});
+
+KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
+    ModuleView: null,
+    $menuList: null,
+    initialize: function(options) {
+        this.ModuleView = options.ModuleView;
+        this.renderControls();
+        this.addItem(new KB.Backbone.Frontend.ModuleEdit({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.addItem(new KB.Backbone.Frontend.ModuleUpdate({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.addItem(new KB.Backbone.Frontend.ModuleDelete({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.addItem(new KB.Backbone.Frontend.ModuleMove({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+    },
+    renderControls: function() {
+        this.ModuleView.$el.append(KB.Templates.render("frontend/module-controls", {
+            model: this.ModuleView.model.toJSON(),
+            i18n: KB.i18n.jsFrontend
+        }));
+        this.$el = jQuery(".kb-module-controls", this.ModuleView.$el);
+        this.$menuList = jQuery('<ul class="controls-wrap"></ul>').appendTo(this.$el);
+    },
+    addItem: function(view) {
+        if (view.isValid && view.isValid() === true) {
+            var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
+            var $menuItem = $liItem.append(view.el);
+            this.$menuList.append($menuItem);
+        }
     }
 });
 
@@ -1057,7 +1234,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
         this.listenTo(moduleView.model, "change:area", this.removeModule);
         _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
-        moduleView.Area = this;
     },
     getNumberOfModules: function() {
         return _.size(this.attachedModuleViews);
@@ -1341,11 +1517,13 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     focus: false,
     $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
     attachedFields: [],
-    initialize: function() {
+    initialize: function(options) {
         var that = this;
         if (!KB.Checks.userCan("edit_kontentblocks")) {
+            _K.log("Permission insufficient");
             return;
         }
+        this.Area = options.Area;
         this.model.view = this;
         this.listenTo(this.model, "change", this.modelChange);
         this.listenTo(this.model, "change:viewfile", this.viewfileUpdate);
@@ -1356,15 +1534,16 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             KB.Menubar.attachModuleView(this);
         }
         this.setControlsPosition();
+        this.Controls = new KB.Backbone.Frontend.ModuleControlsView({
+            ModuleView: this
+        });
         jQuery(window).on("kontentblocks::ajaxUpdate", function() {
             that.setControlsPosition();
         });
     },
     events: {
-        "click a.os-edit-block": "openOptions",
         "click .kb-module__placeholder": "openOptions",
         "click .kb-module__dropzone": "setDropZone",
-        "click .kb-js-inline-update": "updateModule",
         "click .kb-js-inline-delete": "confirmDelete",
         "click .editable": "reloadModal",
         "hover.first": "setActive",
@@ -1374,21 +1553,18 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         KB.currentModule = this;
     },
     render: function() {
+        var settings;
         if (this.$el.hasClass("draft") && this.model.get("moduleData") === "") {
             this.renderPlaceholder();
         }
         this.$el.attr("rel", this.model.get("mid") + "_" + _.uniqueId());
-        var settings = this.model.get("settings");
+        settings = this.model.get("settings");
         if (settings.controls && settings.controls.hide) {
             return;
         }
         if (jQuery(".os-controls", this.$el).length > 0) {
             return;
         }
-        this.$el.append(KB.Templates.render("frontend/module-controls", {
-            model: this.model.toJSON(),
-            i18n: KB.i18n.jsFrontend
-        }));
     },
     setControlsPosition: function() {
         var elpostop, elposleft, mSettings, $controls, pos, height;
@@ -1418,18 +1594,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             left: elposleft
         });
     },
-    openOptions: function() {
-        if (KB.EditModalModules) {
-            this.reloadModal();
-            return this;
-        }
-        KB.EditModalModules = new KB.Backbone.EditModalModules({
-            model: this.model,
-            view: this
-        });
-        KB.focusedModule = this.model;
-        return this;
-    },
     reloadModal: function(force) {
         if (KB.EditModalModules) {
             KB.EditModalModules.reload(this, force);
@@ -1450,54 +1614,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         var ModuleBrowser;
         ModuleBrowser = this.Area.openModuleBrowser();
         ModuleBrowser.dropZone = this;
-    },
-    updateModule: function() {
-        var that = this;
-        var moduleData = {};
-        var refresh = false;
-        moduleData[that.model.get("instance_id")] = that.model.get("moduleData");
-        jQuery.ajax({
-            url: ajaxurl,
-            data: {
-                action: "updateModuleOptions",
-                data: jQuery.param(moduleData).replace(/\'/g, "%27"),
-                module: that.model.toJSON(),
-                editmode: "update",
-                refresh: refresh,
-                _ajax_nonce: KB.Config.getNonce("update")
-            },
-            type: "POST",
-            dataType: "json",
-            success: function(res) {
-                if (refresh) {
-                    that.$el.html(res.html);
-                }
-                tinymce.triggerSave();
-                that.model.set("moduleData", res.newModuleData);
-                that.render();
-                that.trigger("KB::module-updated");
-                KB.Events.trigger("KB::ajax-update");
-                KB.Notice.notice("Module saved successfully", "success");
-                that.$el.removeClass("isDirty");
-            },
-            error: function() {
-                KB.Notice.notice("There went something wrong", "error");
-            }
-        });
-    },
-    confirmDelete: function() {
-        KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, null, this);
-    },
-    removeModule: function() {
-        KB.Ajax.send({
-            action: "removeModules",
-            _ajax_nonce: KB.Config.getNonce("delete"),
-            module: this.model.get("instance_id")
-        }, this.afterRemoval, this);
-    },
-    afterRemoval: function() {
-        this.model.view.$el.remove();
-        KB.Modules.remove(this.model);
     },
     renderPlaceholder: function() {
         this.$el.append(KB.Templates.render("frontend/module-placeholder", {
@@ -1613,12 +1729,13 @@ KB.App = function($) {
         var View;
         module.setArea(KB.Areas.get(module.get("area")));
         module.bind("change:area", module.areaChanged);
+        var Area = KB.Views.Areas.get(module.get("area"));
         View = KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
             model: module,
-            el: "#" + module.get("instance_id")
+            el: "#" + module.get("instance_id"),
+            Area: Area
         }));
         View.$el.data("ModuleView", View);
-        var Area = KB.Views.Areas.get(module.get("area"));
         Area.addModuleView(View);
         KB.Ui.initTabs();
     }

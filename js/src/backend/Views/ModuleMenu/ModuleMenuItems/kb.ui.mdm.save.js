@@ -1,4 +1,4 @@
-KB.Backbone.ModuleSave = KB.Backbone.ModuleMenuItemView.extend({
+KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
     initialize: function(options){
         var that = this;
         this.options = options || {};

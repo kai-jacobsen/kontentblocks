@@ -44,8 +44,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.attachedModuleViews[moduleView.model.get('instance_id')] = moduleView; // add module
         this.listenTo(moduleView.model, 'change:area', this.removeModule); // add listener
         _K.info('Module:' + moduleView.model.id + ' was added to area:' + this.model.id);
-        //moduleView.model.area = this.model;
-        moduleView.Area = this;
     },
 
     getNumberOfModules: function () {

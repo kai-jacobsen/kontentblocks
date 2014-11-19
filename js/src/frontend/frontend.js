@@ -128,16 +128,17 @@ KB.App = function ($) {
         // assign the full corresponding area model to the module model
         module.setArea(KB.Areas.get(module.get('area')));
         module.bind('change:area', module.areaChanged);
-
+        var Area = KB.Views.Areas.get(module.get('area'));
         // create view
         View = KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
             model: module,
-            el: '#' + module.get('instance_id')
+            el: '#' + module.get('instance_id'),
+            Area: Area
         }));
 
         View.$el.data('ModuleView', View);
         //assign area view to module view
-        var Area = KB.Views.Areas.get(module.get('area'));
+
 
         Area.addModuleView(View);
         // re-init tabs
