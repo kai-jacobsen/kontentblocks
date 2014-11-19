@@ -40,7 +40,7 @@ KB.Areas = new Backbone.Collection([], {
  * Use events on the backbone items instead
  * handle UI specific actions
  */
-KB.App = function ($) {
+KB.App = function () {
 
     function init() {
         // create toolbar container for tinymce inline editors
@@ -64,8 +64,6 @@ KB.App = function ($) {
     }
 
     function shutdown() {
-        var model;
-
         _.each(KB.Modules.toArray(), function (item) {
             KB.Modules.remove(item);
         });

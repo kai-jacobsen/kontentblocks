@@ -1,8 +1,8 @@
-KB.Backbone.ModuleView = Backbone.View.extend({
-    $head: null, // header jQuery element
-    $body: null, // module inner jQuery element
-    ModuleMenu: null, // Module action like delete, hide etc...
-    instanceId: null,
+KB.Backbone.Backend.ModuleView = Backbone.View.extend({
+    $head: {}, // header jQuery element
+    $body: {}, // module inner jQuery element
+    ModuleMenu: {}, // Module action like delete, hide etc...
+    instanceId: '',
     events: {
         // show/hide module inner
         // actual module actions are outsourced to individual files
@@ -29,7 +29,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.trigger('KB::backend.module.viewfile.changed');
     },
     initialize: function () {
-        var that = this;
         // Setup Elements
         this.$head = jQuery('.kb-module__header', this.$el);
         this.$body = jQuery('.kb-module__body', this.$el);
@@ -37,7 +36,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.attachedFields = {};
         this.instanceId = this.model.get('instance_id');
         // create new module actions menu
-        this.ModuleMenu = new KB.Backbone.Backend.ModuleMenuView({
+        this.ModuleMenu = new KB.Backbone.Backend.ModuleControlsView({
             el: this.$el,
             parent: this
         });
@@ -53,11 +52,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             view.$el.fadeOut(500, function () {
                 view.$el.remove();
             });
-        });
-
-
-        this.listenTo(this, 'KB::backend.module.viewfile.changed', function (e) {
-
         });
     },
     // setup default actions for modules
@@ -132,7 +126,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
     },
     closeFullscreen: function () {
-        var that = this;
         var $stage = jQuery('#kontentblocks_stage');
         $stage.removeClass('fullscreen');
         clearInterval(this.sizeTimer);

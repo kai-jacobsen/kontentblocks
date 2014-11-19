@@ -1,29 +1,62 @@
 /*! Kontentblocks DevVersion 2014-11-19 */
-var KB = KB || {};
+KB.Ajax = function($) {
+    return {
+        send: function(data, callback, scope) {
+            var pid;
+            if (data.postId) {
+                pid = data.postId;
+            } else {
+                pid = KB.Environment && KB.Environment.postId ? KB.Environment.postId : false;
+            }
+            var sned = _.extend({
+                supplemental: data.supplemental || {},
+                count: parseInt(KB.Environment.moduleCount, 10),
+                nonce: $("#_kontentblocks_ajax_nonce").val(),
+                post_id: pid,
+                kbajax: true
+            }, data);
+            $("#publish").attr("disabled", "disabled");
+            return $.ajax({
+                url: ajaxurl,
+                data: sned,
+                type: "POST",
+                dataType: "json",
+                success: function(data) {
+                    if (data) {
+                        if (scope && callback) {
+                            callback.call(scope, data);
+                        } else if (callback) {
+                            callback(data);
+                        }
+                    }
+                },
+                error: function() {
+                    KB.notice("<p>Generic Ajax Error</p>", "error");
+                },
+                complete: function() {
+                    $("#publish").removeAttr("disabled");
+                }
+            });
+        }
+    };
+}(jQuery);
 
-KB.Config = {};
-
-KB.Backbone = {
-    Backend: {},
-    Frontend: {},
-    Shared: {}
-};
-
-KB.Fields = {};
-
-KB.Utils = {};
-
-KB.Ext = {};
-
-KB.OSConfig = {};
-
-KB.IEdit = {};
-
-KB.Events = {};
-
-_.extend(KB, Backbone.Events);
-
-_.extend(KB.Events, Backbone.Events);
+KB.Checks = function($) {
+    return {
+        blockLimit: function(areamodel) {
+            var limit = areamodel.get("limit");
+            var children = $("#" + areamodel.get("id") + " li.kb-module").length;
+            if (limit !== 0 && children === limit) {
+                return false;
+            }
+            return true;
+        },
+        userCan: function(cap) {
+            var check = $.inArray(cap, KB.Config.get("caps"));
+            return check !== -1;
+        }
+    };
+}(jQuery);
 
 KB.Config = function($) {
     var config = KB.appData.config;
@@ -54,6 +87,138 @@ KB.Config = function($) {
         },
         getHash: function() {
             return config.env.hash;
+        }
+    };
+}(jQuery);
+
+_.extend(KB.Fields, Backbone.Events);
+
+_.extend(KB.Fields, {
+    fields: {},
+    addEvent: function() {
+        this.listenTo(KB, "kb:ready", this.init);
+        this.listenTo(this, "newModule", this.newModule);
+    },
+    register: function(id, object) {
+        _.extend(object, Backbone.Events);
+        this.fields[id] = object;
+    },
+    init: function() {
+        var that = this;
+        _.each(this.fields, function(object) {
+            if (object.hasOwnProperty("init")) {
+                object.init.call(object);
+            }
+            object.listenTo(that, "update", object.update);
+            object.listenTo(that, "frontUpdate", object.frontUpdate);
+        });
+    },
+    newModule: function(object) {
+        _K.info("new Module added for Fields");
+        var that = this;
+        object.listenTo(this, "update", object.update);
+        object.listenTo(this, "frontUpdate", object.frontUpdate);
+        setTimeout(function() {
+            that.trigger("update");
+        }, 750);
+    },
+    get: function(id) {
+        if (this.fields[id]) {
+            return this.fields[id];
+        } else {
+            return null;
+        }
+    }
+});
+
+KB.Fields.addEvent();
+
+Logger.useDefaults();
+
+var _K = Logger.get("_K");
+
+_K.setLevel(_K.INFO);
+
+if (!KB.Config.inDevMode()) {
+    _K.setLevel(Logger.OFF);
+}
+
+KB.Utils.MediaWorkflow = function(args) {
+    var _frame, options;
+    var defaults = {
+        buttontext: "Buttontext",
+        multiple: false,
+        type: "image",
+        title: "",
+        select: false,
+        ready: false
+    };
+    function frame() {
+        if (_frame) return _frame;
+        _frame = wp.media({
+            title: options.title,
+            button: {
+                text: options.buttontext
+            },
+            multiple: options.multiple,
+            library: {
+                type: options.type
+            }
+        });
+        _frame.on("ready", ready);
+        _frame.state("library").on("select", select);
+        return _frame;
+    }
+    function init(args) {
+        if (_.isUndefined(args)) {
+            options = _.extend(defaults, {});
+        } else {
+            options = _.extend(defaults, args);
+        }
+        frame().open();
+    }
+    function ready() {}
+    function select() {
+        if (options.select === false) {
+            alert("No callback given");
+        }
+        options.select(this);
+    }
+    init(args);
+};
+
+KB.Menus = function($) {
+    return {
+        loadingContainer: null,
+        initiatorEl: null,
+        sendButton: null,
+        createSanitizedId: function(el, mode) {
+            this.initiatorEl = $(el);
+            this.loadingContainer = this.initiatorEl.closest(".kb-menu-field").addClass("loading");
+            this.$sendButton = $("#kb-submit");
+            this.disableSendButton();
+            KB.Ajax.send({
+                inputvalue: el.value,
+                checkmode: mode,
+                action: "getSanitizedId",
+                _ajax_nonce: KB.Config.getNonce("read")
+            }, this.insertId, this);
+        },
+        insertId: function(res) {
+            if (res === "translate") {
+                this.initiatorEl.addClass();
+                $(".kb-js-area-id").val("Please chose a different name");
+            } else {
+                $(".kb-js-area-id").val(res);
+                this.enableSendButton();
+            }
+            this.loadingContainer.removeClass("loading");
+        },
+        disableSendButton: function() {
+            this.$sendButton.attr("disabled", "disabled").val("Disabled");
+        },
+        enableSendButton: function() {
+            this.$sendButton.attr("disabled", false).val("Create");
         }
     };
 }(jQuery);
@@ -309,7 +474,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     success: function(data) {
         var model;
         this.options.area.modulesList.append(data.html);
-        KB.lastAddedModule = new KB.Backbone.ModuleModel(data.module);
+        KB.lastAddedModule = new KB.Backbone.Backend.ModuleModel(data.module);
         model = KB.Modules.add(KB.lastAddedModule);
         this.options.area.addModuleView(model.view);
         _K.info("new module created", {
@@ -384,196 +549,31 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
     }
 });
 
-KB.Ajax = function($) {
-    return {
-        send: function(data, callback, scope) {
-            var pid;
-            if (data.postId) {
-                pid = data.postId;
-            } else {
-                pid = KB.Environment && KB.Environment.postId ? KB.Environment.postId : false;
-            }
-            var sned = _.extend({
-                supplemental: data.supplemental || {},
-                count: parseInt(KB.Environment.moduleCount, 10),
-                nonce: $("#_kontentblocks_ajax_nonce").val(),
-                post_id: pid,
-                kbajax: true
-            }, data);
-            $("#publish").attr("disabled", "disabled");
-            return $.ajax({
-                url: ajaxurl,
-                data: sned,
-                type: "POST",
-                dataType: "json",
-                success: function(data) {
-                    if (data) {
-                        if (scope && callback) {
-                            callback.call(scope, data);
-                        } else if (callback) {
-                            callback(data);
-                        }
-                    }
-                },
-                error: function() {
-                    KB.notice("<p>Generic Ajax Error</p>", "error");
-                },
-                complete: function() {
-                    $("#publish").removeAttr("disabled");
-                }
-            });
-        }
-    };
-}(jQuery);
+var KB = KB || {};
 
-KB.Checks = function($) {
-    return {
-        blockLimit: function(areamodel) {
-            var limit = areamodel.get("limit");
-            var children = $("#" + areamodel.get("id") + " li.kb-module").length;
-            if (limit !== 0 && children === limit) {
-                return false;
-            }
-            return true;
-        },
-        userCan: function(cap) {
-            var check = $.inArray(cap, KB.Config.get("caps"));
-            return check !== -1;
-        }
-    };
-}(jQuery);
+KB.Config = {};
 
-_.extend(KB.Fields, Backbone.Events);
-
-_.extend(KB.Fields, {
-    fields: {},
-    addEvent: function() {
-        this.listenTo(KB, "kb:ready", this.init);
-        this.listenTo(this, "newModule", this.newModule);
-    },
-    register: function(id, object) {
-        _.extend(object, Backbone.Events);
-        this.fields[id] = object;
-    },
-    init: function() {
-        var that = this;
-        _.each(this.fields, function(object) {
-            if (object.hasOwnProperty("init")) {
-                object.init.call(object);
-            }
-            object.listenTo(that, "update", object.update);
-            object.listenTo(that, "frontUpdate", object.frontUpdate);
-        });
-    },
-    newModule: function(object) {
-        _K.info("new Module added for Fields");
-        var that = this;
-        object.listenTo(this, "update", object.update);
-        object.listenTo(this, "frontUpdate", object.frontUpdate);
-        setTimeout(function() {
-            that.trigger("update");
-        }, 750);
-    },
-    get: function(id) {
-        if (this.fields[id]) {
-            return this.fields[id];
-        } else {
-            return null;
-        }
-    }
-});
-
-KB.Fields.addEvent();
-
-Logger.useDefaults();
-
-var _K = Logger.get("_K");
-
-_K.setLevel(_K.INFO);
-
-if (!KB.Config.inDevMode()) {
-    _K.setLevel(Logger.OFF);
-}
-
-KB.Utils.MediaWorkflow = function(args) {
-    var _frame, options;
-    var defaults = {
-        buttontext: "Buttontext",
-        multiple: false,
-        type: "image",
-        title: "",
-        select: false,
-        ready: false
-    };
-    function frame() {
-        if (_frame) return _frame;
-        _frame = wp.media({
-            title: options.title,
-            button: {
-                text: options.buttontext
-            },
-            multiple: options.multiple,
-            library: {
-                type: options.type
-            }
-        });
-        _frame.on("ready", ready);
-        _frame.state("library").on("select", select);
-        return _frame;
-    }
-    function init(args) {
-        if (_.isUndefined(args)) {
-            options = _.extend(defaults, {});
-        } else {
-            options = _.extend(defaults, args);
-        }
-        frame().open();
-    }
-    function ready() {}
-    function select() {
-        if (options.select === false) {
-            alert("No callback given");
-        }
-        options.select(this);
-    }
-    init(args);
+KB.Backbone = {
+    Backend: {},
+    Frontend: {},
+    Shared: {}
 };
 
-KB.Menus = function($) {
-    return {
-        loadingContainer: null,
-        initiatorEl: null,
-        sendButton: null,
-        createSanitizedId: function(el, mode) {
-            this.initiatorEl = $(el);
-            this.loadingContainer = this.initiatorEl.closest(".kb-menu-field").addClass("loading");
-            this.$sendButton = $("#kb-submit");
-            this.disableSendButton();
-            KB.Ajax.send({
-                inputvalue: el.value,
-                checkmode: mode,
-                action: "getSanitizedId",
-                _ajax_nonce: KB.Config.getNonce("read")
-            }, this.insertId, this);
-        },
-        insertId: function(res) {
-            if (res === "translate") {
-                this.initiatorEl.addClass();
-                $(".kb-js-area-id").val("Please chose a different name");
-            } else {
-                $(".kb-js-area-id").val(res);
-                this.enableSendButton();
-            }
-            this.loadingContainer.removeClass("loading");
-        },
-        disableSendButton: function() {
-            this.$sendButton.attr("disabled", "disabled").val("Disabled");
-        },
-        enableSendButton: function() {
-            this.$sendButton.attr("disabled", false).val("Create");
-        }
-    };
-}(jQuery);
+KB.Fields = {};
+
+KB.Utils = {};
+
+KB.Ext = {};
+
+KB.OSConfig = {};
+
+KB.IEdit = {};
+
+KB.Events = {};
+
+_.extend(KB, Backbone.Events);
+
+_.extend(KB.Events, Backbone.Events);
 
 KB.Notice = function($) {
     "use strict";

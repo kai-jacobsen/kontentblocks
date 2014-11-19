@@ -355,7 +355,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             type: 'POST',
             dataType: 'json',
             success: function (res) {
-                var $controls, $cloned;
+                var $controls;
 
                 $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
 

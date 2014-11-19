@@ -15,8 +15,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
         }
     },
     setupUi: function () {
-        var that = this;
-
         this.Layout = new KB.Backbone.AreaLayoutView({
             model: new Backbone.Model(this.settings),
             AreaView: this
@@ -109,7 +107,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     //forceHelperSize: true,
                     //forcePlaceholderSize: true,
                     placeholder: "kb-front-sortable-placeholder",
-                    start: function(){
+                    start: function () {
                         that.isSorting = true;
                     },
                     stop: function () {

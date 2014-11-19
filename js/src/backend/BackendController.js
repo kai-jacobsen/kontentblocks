@@ -40,7 +40,7 @@ KB.Areas = new Backbone.Collection([], {
  * Use events on the backbone items instead
  * handle UI specific actions
  */
-KB.App = (function ($) {
+KB.App = (function () {
 
     function init() {
         // Register basic events
@@ -95,7 +95,7 @@ KB.App = (function ($) {
         //module.set('area', KB.Areas.get(module.get('area')));
 
         // create view
-       KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
+       KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.Backend.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
         }));
@@ -112,7 +112,7 @@ KB.App = (function ($) {
      * @returns void
      */
     function createAreaViews(area) {
-        KB.Views.Areas.add(area.get('id'), new KB.Backbone.AreaView({
+        KB.Views.Areas.add(area.get('id'), new KB.Backbone.Backend.AreaView({
             model: area,
             el: '#' + area.get('id') + '-container'
         }));

@@ -7,6 +7,19 @@ KB.Backbone.ContextModel = Backbone.Model.extend({
     idAttribute: "id"
 });
 
+KB.Backbone.ModuleDefinition = Backbone.Model.extend({
+    initialize: function() {
+        var that = this;
+        this.id = function() {
+            if (that.get("settings").category === "template") {
+                return that.get("instance_id");
+            } else {
+                return that.get("settings").class;
+            }
+        }();
+    }
+});
+
 KB.Backbone.ModuleModel = Backbone.Model.extend({
     idAttribute: "instance_id",
     initialize: function() {
@@ -38,16 +51,95 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     }
 });
 
-KB.Backbone.ModuleDefinition = Backbone.Model.extend({
+KB.Backbone.Backend.AreaView = Backbone.View.extend({
     initialize: function() {
-        var that = this;
-        this.id = function() {
-            if (that.get("settings").category === "template") {
-                return that.get("instance_id");
-            } else {
-                return that.get("settings").class;
-            }
-        }();
+        this.attachedModuleViews = {};
+        this.controlsContainer = jQuery(".add-modules", this.$el);
+        this.settingsContainer = jQuery(".kb-area-settings-wrapper", this.$el);
+        this.modulesList = jQuery("#" + this.model.get("id"), this.$el);
+        this.$placeholder = jQuery(KB.Templates.render("backend/area-item-placeholder", {
+            i18n: KB.i18n
+        }));
+        this.model.view = this;
+        this.render();
+    },
+    events: {
+        "click .modules-link": "openModuleBrowser",
+        "click .js-area-settings-opener": "toggleSettings",
+        mouseenter: "setActive"
+    },
+    render: function() {
+        this.addControls();
+        this.ui();
+    },
+    addControls: function() {
+        this.controlsContainer.append(KB.Templates.render("backend/area-add-module", {
+            i18n: KB.i18n
+        }));
+    },
+    openModuleBrowser: function(e) {
+        e.preventDefault();
+        if (!this.ModuleBrowser) {
+            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+                area: this
+            });
+        }
+        this.ModuleBrowser.render();
+    },
+    toggleSettings: function(e) {
+        e.preventDefault();
+        this.settingsContainer.slideToggle().toggleClass("open");
+        KB.currentArea = this.model;
+    },
+    setActive: function() {
+        KB.currentArea = this.model;
+    },
+    addModuleView: function(moduleView) {
+        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
+        this.listenTo(moduleView.model, "change:area", this.removeModule);
+        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
+        moduleView.model.areaView = this;
+        moduleView.Area = this;
+        this.ui();
+    },
+    removeModule: function(model) {
+        var id;
+        id = model.id;
+        if (this.attachedModuleViews[id]) {
+            delete this.attachedModuleViews[id];
+            _K.info("Module:" + id + " was removed from area:" + this.model.id);
+            this.stopListening(model, "change:area", this.removeModule);
+        }
+        this.ui();
+    },
+    ui: function() {
+        var size;
+        size = _.size(this.attachedModuleViews);
+        if (size === 0) {
+            this.renderPlaceholder();
+        } else {
+            this.$placeholder.remove();
+        }
+    },
+    renderPlaceholder: function() {
+        this.modulesList.before(this.$placeholder);
+    }
+});
+
+KB.Backbone.Backend.ModuleControlsView = Backbone.View.extend({
+    $menuWrap: {},
+    $menuList: {},
+    initialize: function() {
+        this.$menuWrap = jQuery(".menu-wrap", this.$el);
+        this.$menuWrap.append(KB.Templates.render("backend/module-menu", {}));
+        this.$menuList = jQuery(".module-actions", this.$menuWrap);
+    },
+    addItem: function(view) {
+        if (view.isValid && view.isValid() === true) {
+            var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
+            var $menuItem = $liItem.append(view.el);
+            this.$menuList.append($menuItem);
+        }
     }
 });
 
@@ -143,7 +235,6 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
 
 KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
     initialize: function(options) {
-        var that = this;
         this.options = options || {};
         this.parentView = options.parent;
         this.listenTo(this.parentView, "kb::module.input.changed", this.getDirty);
@@ -212,103 +303,11 @@ KB.Backbone.Backend.ModuleStatus = KB.Backbone.Backend.ModuleMenuItemView.extend
     }
 });
 
-KB.Backbone.Backend.ModuleMenuView = Backbone.View.extend({
-    $menuWrap: null,
-    $menuList: null,
-    initialize: function() {
-        this.$menuWrap = jQuery(".menu-wrap", this.$el);
-        this.$menuWrap.append(KB.Templates.render("backend/module-menu", {}));
-        this.$menuList = jQuery(".module-actions", this.$menuWrap);
-    },
-    addItem: function(view, model) {
-        if (view.isValid && view.isValid() === true) {
-            var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
-            var $menuItem = $liItem.append(view.el);
-            this.$menuList.append($menuItem);
-        }
-    }
-});
-
-KB.Backbone.AreaView = Backbone.View.extend({
-    initialize: function() {
-        this.attachedModuleViews = {};
-        this.controlsContainer = jQuery(".add-modules", this.$el);
-        this.settingsContainer = jQuery(".kb-area-settings-wrapper", this.$el);
-        this.modulesList = jQuery("#" + this.model.get("id"), this.$el);
-        this.$placeholder = jQuery(KB.Templates.render("backend/area-item-placeholder", {
-            i18n: KB.i18n
-        }));
-        this.model.view = this;
-        this.render();
-    },
-    events: {
-        "click .modules-link": "openModuleBrowser",
-        "click .js-area-settings-opener": "toggleSettings",
-        mouseenter: "setActive"
-    },
-    render: function() {
-        this.addControls();
-        this.ui();
-    },
-    addControls: function() {
-        this.controlsContainer.append(KB.Templates.render("backend/area-add-module", {
-            i18n: KB.i18n
-        }));
-    },
-    openModuleBrowser: function(e) {
-        e.preventDefault();
-        if (!this.ModuleBrowser) {
-            this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
-                area: this
-            });
-        }
-        this.ModuleBrowser.render();
-    },
-    toggleSettings: function(e) {
-        e.preventDefault();
-        this.settingsContainer.slideToggle().toggleClass("open");
-        KB.currentArea = this.model;
-    },
-    setActive: function() {
-        KB.currentArea = this.model;
-    },
-    addModuleView: function(moduleView) {
-        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
-        this.listenTo(moduleView.model, "change:area", this.removeModule);
-        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
-        moduleView.model.areaView = this;
-        moduleView.Area = this;
-        this.ui();
-    },
-    removeModule: function(model) {
-        var id;
-        id = model.id;
-        if (this.attachedModuleViews[id]) {
-            delete this.attachedModuleViews[id];
-            _K.info("Module:" + id + " was removed from area:" + this.model.id);
-            this.stopListening(model, "change:area", this.removeModule);
-        }
-        this.ui();
-    },
-    ui: function() {
-        var size;
-        size = _.size(this.attachedModuleViews);
-        if (size === 0) {
-            this.renderPlaceholder();
-        } else {
-            this.$placeholder.remove();
-        }
-    },
-    renderPlaceholder: function() {
-        this.modulesList.before(this.$placeholder);
-    }
-});
-
-KB.Backbone.ModuleView = Backbone.View.extend({
-    $head: null,
-    $body: null,
-    ModuleMenu: null,
-    instanceId: null,
+KB.Backbone.Backend.ModuleView = Backbone.View.extend({
+    $head: {},
+    $body: {},
+    ModuleMenu: {},
+    instanceId: "",
     events: {
         "click.kb1 .kb-toggle": "toggleBody",
         "click.kb2 .kb-toggle": "setOpenStatus",
@@ -332,13 +331,12 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.trigger("KB::backend.module.viewfile.changed");
     },
     initialize: function() {
-        var that = this;
         this.$head = jQuery(".kb-module__header", this.$el);
         this.$body = jQuery(".kb-module__body", this.$el);
         this.$inner = jQuery(".kb-module__controls-inner", this.$el);
         this.attachedFields = {};
         this.instanceId = this.model.get("instance_id");
-        this.ModuleMenu = new KB.Backbone.Backend.ModuleMenuView({
+        this.ModuleMenu = new KB.Backbone.Backend.ModuleControlsView({
             el: this.$el,
             parent: this
         });
@@ -353,7 +351,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
                 view.$el.remove();
             });
         });
-        this.listenTo(this, "KB::backend.module.viewfile.changed", function(e) {});
     },
     setupDefaultMenuItems: function() {
         this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleSave({
@@ -428,7 +425,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }, 750);
     },
     closeFullscreen: function() {
-        var that = this;
         var $stage = jQuery("#kontentblocks_stage");
         $stage.removeClass("fullscreen");
         clearInterval(this.sizeTimer);
@@ -494,7 +490,7 @@ KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
 });
 
-KB.App = function($) {
+KB.App = function() {
     function init() {
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);
@@ -514,14 +510,14 @@ KB.App = function($) {
     }
     function createModuleViews(module) {
         _K.info("ModuleViews: new added");
-        KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
+        KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.Backend.ModuleView({
             model: module,
             el: "#" + module.get("instance_id")
         }));
         KB.Ui.initTabs();
     }
     function createAreaViews(area) {
-        KB.Views.Areas.add(area.get("id"), new KB.Backbone.AreaView({
+        KB.Views.Areas.add(area.get("id"), new KB.Backbone.Backend.AreaView({
             model: area,
             el: "#" + area.get("id") + "-container"
         }));
