@@ -146,6 +146,10 @@ body.onsite-editing {
 
 }
 
+#onsite-form{
+//  @include transition(height .3s linear);
+}
+
 #wp-toolbar {
   .os-edit {
     background: $lightblue;
@@ -273,9 +277,8 @@ body.onsite-editing {
   position: fixed;
   top: 40px;
   right: 40px;
-  box-shadow: 1px 1px 5px #333;
-  border-bottom: 1px solid #aaa;
-  border-right: 1px solid #aaa;
+  @include box-shadow(1px 1px 8px #ccc);
+  border: 1px solid #aaa;
   overflow: auto;
   opacity: 1;
   z-index: 2101;
@@ -291,12 +294,13 @@ body.onsite-editing {
     height: 30px;
     line-height: 30px;
     cursor: move;
-    background: #333;
-    color: #fcfcfc;
-    text-shadow: 0 0 1px #000;
+    background: #f2f2f2;
+    color: #666;
+    text-shadow: 0 0 1px #fff;
     font-weight: 100;
     box-sizing: border-box;
-    text-align: center;
+    text-align: left;
+    border-bottom: 1px solid #aaa;
   }
 
   .os-controls-meta {
@@ -305,11 +309,12 @@ body.onsite-editing {
 
   a.close-controls {
     position: absolute;
-    top: 4px;
+    top: 5px;
     right: 3px;
-    color: #fff;
+    color: #666;
     font-size: 18px;
     cursor: pointer;
+    font-weight: 100;
     @include transition(all .3s ease-in-out);
 
     &:hover {
@@ -320,45 +325,46 @@ body.onsite-editing {
   a.kb-save-form {
     position: relative;
     height: 30px;
-    font-size: 13px;
+    font-size: 11px !important;
     padding: 0px 12px;
     line-height: 30px;
     float: left;
     display: block;
     min-width: 50px;
     text-decoration: none;
-    border: none;
+    border-right: 1px solid #ccc;
+
 
     .dashicons {
-      font-size: 13px;
+      font-size: 11px;
       text-decoration: none;
       position: relative;
       top: 10px;
-      left: -8px;
+      left: 0px;
     }
 
   }
 
   .kb-button-primary {
-    color: #fff;
-    background-color: $lightblue;
+    color: #666;
+//    background-color: $lightblue;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
 
     &:hover {
-      background-color: red;
+      background-color: #fff;
       text-decoration: none;
     }
   }
 
   .kb-button-secondary {
-    color: #fff;
-    background-color: $orange;
+    color: #666;
+//    background-color: $orange;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
 
     &:hover {
-      background-color: green;
+      background-color: #fff;
       text-decoration: none;
     }
   }
@@ -366,18 +372,18 @@ body.onsite-editing {
   .kb-controls--buttons-wrap {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 25px;
   }
 
   a.kb-preview-form {
     height: 30px;
-    font-size: 13px;
+    font-size: 11px !important;
     padding: 0px 12px;
     line-height: 30px;
     float: left;
     display: block;
     text-decoration: none;
-    border: none;
+    border-right: 1px solid #ccc;
   }
 
   .kb_fieldtabs ul.ui-tabs-nav {
@@ -395,7 +401,7 @@ body.onsite-editing {
 
     label {
       font-size: 12px !important;
-      color: #333 !important;
+      color: #999 !important;
     }
 
     input[type=button], .button {

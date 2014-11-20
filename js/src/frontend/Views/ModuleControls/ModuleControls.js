@@ -12,10 +12,10 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
         this.ModuleView = options.ModuleView;
         this.renderControls();
 
-        this.addItem(new KB.Backbone.Frontend.ModuleEdit({model: this.ModuleView.model, parent: this.ModuleView}));
-        this.addItem(new KB.Backbone.Frontend.ModuleUpdate({model: this.ModuleView.model, parent: this.ModuleView}));
-        this.addItem(new KB.Backbone.Frontend.ModuleDelete({model: this.ModuleView.model, parent: this.ModuleView}));
-        this.addItem(new KB.Backbone.Frontend.ModuleMove({model: this.ModuleView.model, parent: this.ModuleView}));
+        this.EditControl = this.addItem(new KB.Backbone.Frontend.ModuleEdit({model: this.ModuleView.model, parent: this.ModuleView}));
+        this.UpdateControl = this.addItem(new KB.Backbone.Frontend.ModuleUpdate({model: this.ModuleView.model, parent: this.ModuleView}));
+        this.DeleteControl = this.addItem(new KB.Backbone.Frontend.ModuleDelete({model: this.ModuleView.model, parent: this.ModuleView}));
+        this.MoveControl = this.addItem(new KB.Backbone.Frontend.ModuleMove({model: this.ModuleView.model, parent: this.ModuleView}));
 
     },
 
@@ -41,6 +41,7 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
             var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
             var $menuItem = $liItem.append(view.el);
             this.$menuList.append($menuItem);
+            return view;
         }
     }
 

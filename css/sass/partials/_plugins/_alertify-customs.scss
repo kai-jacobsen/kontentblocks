@@ -5,7 +5,7 @@
   border: none;
 
   .alertify-message{
-    font-size: 1.1em;
+    font-size: 14px !important;
     font-family: Open-Sans, sans-serif;
     font-weight: 100;
   }
@@ -13,6 +13,8 @@
   .alertify-button{
     background-image: none;
     text-shadow: 0;
+    font-size: 14px !important;
+
   }
 
   .alertify-button-ok{

@@ -46,8 +46,8 @@ KB.Ui = function ($) {
                 _K.info('Current Field Id set to:', KB.currentFieldId);
             });
 
-            $body.on('mouseenter', '.kb-area__list-item li', function(){
-               KB.currentModuleId = this.id;
+            $body.on('mouseenter', '.kb-area__list-item li', function () {
+                KB.currentModuleId = this.id;
             });
 
             // Bind AjaxComplete, restoring TinyMCE after global MEtaBox reordering
@@ -66,11 +66,6 @@ KB.Ui = function ($) {
             var normal = $('.area-normal');
             var stage = $('#kontentblocks_stage');
             var that = this;
-
-//            stage.hoverIntent(function () {
-//                side.removeClass('active-context non-active-context');
-//                normal.removeClass('non-active-context');
-//            })
 
             jQuery('body').on('mouseover', '.kb_module--body', function () {
                 var $con = $(this).closest('.kb-context-container');
@@ -108,16 +103,11 @@ KB.Ui = function ($) {
             var selector = $('.kb_fieldtabs', $context);
             selector.tabs({
                 activate: function () {
-//                       var $window = $(window).height();
-//                        $('.content').height($window - 250);
-                    // re-init nano scroller
                     $('.nano').nanoScroller();
-//                    $('body').trigger('kontentblocks::tabsChange');
                     KB.Events.trigger('KB::ui-tabs-change');
                     KB.Events.trigger('KB::edit-modal-refresh');
                 }
             });
-
             selector.each(function () {
                 // hide tab navigation if only one tab exists
                 var length = $('.ui-tabs-nav li', $(this)).length;
@@ -286,9 +276,9 @@ KB.Ui = function ($) {
                 }
             });
         },
-        flushLocalStorage: function(){
+        flushLocalStorage: function () {
             var hash = KB.Config.get('env').hash;
-            if (store.get('kbhash') !== hash){
+            if (store.get('kbhash') !== hash) {
                 store.clear();
                 store.set('kbhash', hash)
             }

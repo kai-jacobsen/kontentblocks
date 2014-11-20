@@ -1,7 +1,5 @@
 KB.Backbone.AreaLayoutView = Backbone.View.extend({
     hasLayout: false, // flag if layout is assigned
-    LayoutIterator: {}, // holds the Iterator object, if available
-
     initialize: function (options) {
         // parent area view is passed via options
         this.AreaView = options.AreaView;

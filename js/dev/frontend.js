@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-19 */
+/*! Kontentblocks DevVersion 2014-11-20 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -13,9 +13,7 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
         }, that.destroyed);
     },
     destroyed: function() {},
-    setArea: function(area) {
-        this.area = area;
-    },
+    setArea: function(area) {},
     areaChanged: function() {
         this.view.updateModuleForm();
     }
@@ -23,7 +21,6 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
 
 KB.Backbone.AreaLayoutView = Backbone.View.extend({
     hasLayout: false,
-    LayoutIterator: {},
     initialize: function(options) {
         this.AreaView = options.AreaView;
         this.listenTo(this.AreaView, "kb.module.created", this.handleModuleCreated);
@@ -355,6 +352,8 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
     },
     layoutSelect: function(e) {
         var $li = jQuery(e.currentTarget);
+        this.$el.find(".kb-active-area-layout").removeClass();
+        $li.addClass("kb-active-area-layout");
         this.AreaView.changeLayout($li.data("item"));
     },
     setModel: function(model) {
@@ -369,7 +368,7 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
         this.$target = jQuery(target);
     },
     close: function() {
-        this.$el.fadeOut(250);
+        this.$el.hide();
     },
     setOptions: function() {
         var options = "";
@@ -404,7 +403,7 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
         var lh = this.$el.outerHeight();
         pos.top = pos.top - lh;
         this.$el.offset({
-            top: pos.top,
+            top: pos.top - 27,
             left: pos.left
         });
     }
@@ -505,7 +504,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             type: "POST",
             dataType: "json",
             success: function(res) {
-                that.$el.fadeTo(300, .1);
                 that.$inner.empty();
                 that.ModuleView.clearFields();
                 that.$inner.attr("id", that.model.get("instance_id"));
@@ -521,9 +519,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     KB.Fields.trigger("frontUpdate", that.ModuleView);
                 }, 500);
                 setTimeout(function() {
+                    that.$el.show();
                     that.recalibrate();
-                }, 600);
-                that.$el.fadeTo(300, 1);
+                }, 550);
             },
             error: function() {
                 KB.Notice.notice("There went something wrong", "error");
@@ -545,9 +543,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.model = moduleView.model;
         this.options.view = moduleView;
         this.ModuleView = moduleView;
-        this.$el.fadeTo(250, .1, function() {
-            that.render();
-        });
+        that.render();
     },
     unset: function() {
         this.model = null;
@@ -823,10 +819,11 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     tagName: "div",
     className: "kb-menubar-container",
     initialize: function() {
+        this.$title = jQuery('<div class="kb-module-controls__title"><span class="kb-brand">Kontentblocks</span> </div>').appendTo(this.$el);
         this.show = _.isNull(KB.Util.stex.get("kb-nav-show")) ? true : KB.Util.stex.get("kb-nav-show");
         this.$toggle = jQuery('<div class="kb-menubar-toggle genericon genericon-menu"></div>').appendTo(this.$el);
-        this.$modulesTab = jQuery('<div data-list="modules" class="kb-menubar-tab kb-menubar-tab__modules kb-tab-active">Modules</div>').appendTo(this.$el);
-        this.$areasTab = jQuery('<div data-list="areas" class="kb-menubar-tab kb-menubar-tab__areas">Areas</div>').appendTo(this.$el);
+        this.$modulesTab = jQuery('<div data-list="modules" class="kb-menubar-tab kb-menubar-tab__modules kb-tab-active">Modules</div>').appendTo(this.$title);
+        this.$areasTab = jQuery('<div data-list="areas" class="kb-menubar-tab kb-menubar-tab__areas">Areas</div>').appendTo(this.$title);
         this.render();
     },
     events: {
@@ -1032,19 +1029,19 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
     initialize: function(options) {
         this.ModuleView = options.ModuleView;
         this.renderControls();
-        this.addItem(new KB.Backbone.Frontend.ModuleEdit({
+        this.EditControl = this.addItem(new KB.Backbone.Frontend.ModuleEdit({
             model: this.ModuleView.model,
             parent: this.ModuleView
         }));
-        this.addItem(new KB.Backbone.Frontend.ModuleUpdate({
+        this.UpdateControl = this.addItem(new KB.Backbone.Frontend.ModuleUpdate({
             model: this.ModuleView.model,
             parent: this.ModuleView
         }));
-        this.addItem(new KB.Backbone.Frontend.ModuleDelete({
+        this.DeleteControl = this.addItem(new KB.Backbone.Frontend.ModuleDelete({
             model: this.ModuleView.model,
             parent: this.ModuleView
         }));
-        this.addItem(new KB.Backbone.Frontend.ModuleMove({
+        this.MoveControl = this.addItem(new KB.Backbone.Frontend.ModuleMove({
             model: this.ModuleView.model,
             parent: this.ModuleView
         }));
@@ -1062,6 +1059,7 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
             var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
             var $menuItem = $liItem.append(view.el);
             this.$menuList.append($menuItem);
+            return view;
         }
     }
 });
@@ -1101,6 +1099,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click .editable": "reloadModal",
         "hover.first": "setActive",
         "hover.second": "setControlsPosition"
+    },
+    openOptions: function() {
+        this.Controls.EditControl.openControls();
     },
     setActive: function() {
         KB.currentModule = this;
@@ -1734,28 +1735,28 @@ KB.App = function() {
         KB.trigger("kb:moduleControlsAdded");
         KB.Events.trigger("KB::frontend-init");
     }
-    function createModuleViews(module) {
-        var View;
-        module.setArea(KB.Areas.get(module.get("area")));
-        module.bind("change:area", module.areaChanged);
-        var Area = KB.Views.Areas.get(module.get("area"));
-        View = KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.ModuleView({
-            model: module,
-            el: "#" + module.get("instance_id"),
+    function createModuleViews(ModuleModel) {
+        var ModuleView, Area;
+        ModuleModel.setArea(KB.Areas.get(ModuleModel.get("area")));
+        ModuleModel.bind("change:area", ModuleModel.areaChanged);
+        Area = KB.Views.Areas.get(ModuleModel.get("area"));
+        ModuleView = KB.Views.Modules.add(ModuleModel.get("instance_id"), new KB.Backbone.ModuleView({
+            model: ModuleModel,
+            el: "#" + ModuleModel.get("instance_id"),
             Area: Area
         }));
-        View.$el.data("ModuleView", View);
-        Area.addModuleView(View);
+        ModuleView.$el.data("ModuleView", ModuleView);
+        Area.addModuleView(ModuleView);
         KB.Ui.initTabs();
     }
-    function createAreaViews(area) {
-        KB.Views.Areas.add(area.get("id"), new KB.Backbone.AreaView({
-            model: area,
-            el: "#" + area.get("id")
+    function createAreaViews(AreaModel) {
+        KB.Views.Areas.add(AreaModel.get("id"), new KB.Backbone.AreaView({
+            model: AreaModel,
+            el: "#" + AreaModel.get("id")
         }));
     }
-    function removeModule(model) {
-        KB.Views.Modules.remove(model.get("instance_id"));
+    function removeModule(ModuleModel) {
+        KB.Views.Modules.remove(ModuleModel.get("instance_id"));
     }
     return {
         init: init,
@@ -1767,10 +1768,9 @@ KB.App.init();
 
 jQuery(document).ready(function() {
     if (KB.appData && KB.appData.config.frontend) {
-        _K.info("Frontend Modules Ready Event fired");
         KB.Views.Modules.readyOnFront();
+        _K.info("Frontend Modules Ready Event fired");
     }
     KB.Events.trigger("KB::ready");
-    jQuery(window).on("resize DOMNodeInserted", function() {});
     setUserSetting("editor", "tinymce");
 });

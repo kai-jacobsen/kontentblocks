@@ -182,7 +182,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             dataType: 'json',
             success: function (res) {
                 // indicate working state
-                that.$el.fadeTo(300, 0.1);
+                //that.$el.fadeTo(300, 0.1);
                 // clear form content
                 that.$inner.empty();
                 // clear fields on ModuleView
@@ -214,11 +214,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
                 // delayed recalibration
                 setTimeout(function () {
+                    that.$el.show();
                     that.recalibrate();
-                }, 600);
+                }, 550);
 
                 // back to visibilitiy
-                that.$el.fadeTo(300, 1);
+                //that.$el.fadeTo(300, 1);
 
             },
             error: function () {
@@ -259,9 +260,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.ModuleView = moduleView;
 
         // indicate working state
-        this.$el.fadeTo(250, 0.1, function () {
             that.render();
-        });
     },
 
     /**

@@ -12,7 +12,7 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
 
     },
     setArea: function(area){
-        this.area = area;
+        //this.area = area;
     },
     areaChanged: function() {
         // @see backend::views:ModuleView.js

@@ -38,6 +38,10 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
     },
     layoutSelect: function (e) {
         var $li = jQuery(e.currentTarget);
+
+        this.$el.find('.kb-active-area-layout').removeClass();
+
+        $li.addClass('kb-active-area-layout');
         this.AreaView.changeLayout($li.data('item'));
     },
     setModel: function (model) {
@@ -52,7 +56,7 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
         this.$target = jQuery(target);
     },
     close: function () {
-        this.$el.fadeOut(250);
+        this.$el.hide();
     },
     setOptions: function () {
         var options = '';
@@ -91,7 +95,7 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
         var pos = this.$target.offset();
         var lh = this.$el.outerHeight();
         pos.top = pos.top - lh;
-        this.$el.offset({top: pos.top, left: pos.left});
+        this.$el.offset({top: pos.top - 27, left: pos.left});
     }
 
 });

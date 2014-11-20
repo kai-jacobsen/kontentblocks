@@ -46,6 +46,8 @@ KB.App = function () {
         // create toolbar container for tinymce inline editors
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
         $toolbar.hide();
+
+        // create Menubar singleton
         if (KB.appData.config.useModuleNav) {
             KB.Menubar = new KB.Backbone.MenubarView();
         }
@@ -95,7 +97,6 @@ KB.App = function () {
         }
 
 
-
         // iterate over raw areas
         _.each(KB.payload.Areas, function (area) {
             // create new area model
@@ -118,42 +119,40 @@ KB.App = function () {
     /**
      * Create views for modules and add them
      * to the custom collection
-     * @param module Backbone Model
+     * @param ModuleModel Backbone Model
      * @returns void
      */
-    function createModuleViews(module) {
-        var View;
+    function createModuleViews(ModuleModel) {
+        var ModuleView, Area;
         // assign the full corresponding area model to the module model
-        module.setArea(KB.Areas.get(module.get('area')));
-        module.bind('change:area', module.areaChanged);
-        var Area = KB.Views.Areas.get(module.get('area'));
+        ModuleModel.setArea(KB.Areas.get(ModuleModel.get('area')));
+        ModuleModel.bind('change:area', ModuleModel.areaChanged);
+        Area = KB.Views.Areas.get(ModuleModel.get('area'));
         // create view
-        View = KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.ModuleView({
-            model: module,
-            el: '#' + module.get('instance_id'),
+        ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
+            model: ModuleModel,
+            el: '#' + ModuleModel.get('instance_id'),
             Area: Area
         }));
 
-        View.$el.data('ModuleView', View);
+        ModuleView.$el.data('ModuleView', ModuleView);
         //assign area view to module view
 
+        Area.addModuleView(ModuleView);
 
-        Area.addModuleView(View);
-        // re-init tabs
-        // TODO: don't re-init globally
         KB.Ui.initTabs();
     }
 
 
     /**
      *
-     * @param area Backbone Model
+     * @param AreaModel Backbone Model
      * @returns void
      */
-    function createAreaViews(area) {
-        KB.Views.Areas.add(area.get('id'), new KB.Backbone.AreaView({
-            model: area,
-            el: '#' + area.get('id')
+    function createAreaViews(AreaModel) {
+        KB.Views.Areas.add(AreaModel.get('id'), new KB.Backbone.AreaView({
+            model: AreaModel,
+            el: '#' + AreaModel.get('id')
         }));
 
     }
@@ -161,11 +160,11 @@ KB.App = function () {
     /**
      * Removes a view from the collection.
      * The collection will destroy corresponding views
-     * @param model Backbone Model
+     * @param ModuleModel Backbone Model
      * @returns void
      */
-    function removeModule(model) {
-        KB.Views.Modules.remove(model.get('instance_id'));
+    function removeModule(ModuleModel) {
+        KB.Views.Modules.remove(ModuleModel.get('instance_id'));
     }
 
 
@@ -182,21 +181,15 @@ KB.App.init();
 
 
 jQuery(document).ready(function () {
-
     if (KB.appData && KB.appData.config.frontend) {
-        _K.info('Frontend Modules Ready Event fired');
         KB.Views.Modules.readyOnFront();
+        _K.info('Frontend Modules Ready Event fired');
+
     }
-
+    // general ready event
     KB.Events.trigger('KB::ready');
-
-    jQuery(window)
-        .on('resize DOMNodeInserted', function () {
-//            jQuery( '.mce-text' ).removeAttr( 'style' );
-        });
-
     // force user cookie to tinymce
+    // wp native js function
     setUserSetting('editor', 'tinymce');
-
 
 });

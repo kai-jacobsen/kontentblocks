@@ -1,4 +1,30 @@
-/*! Kontentblocks DevVersion 2014-11-19 */
+/*! Kontentblocks DevVersion 2014-11-20 */
+var KB = KB || {};
+
+KB.Config = {};
+
+KB.Backbone = {
+    Backend: {},
+    Frontend: {},
+    Shared: {}
+};
+
+KB.Fields = {};
+
+KB.Utils = {};
+
+KB.Ext = {};
+
+KB.OSConfig = {};
+
+KB.IEdit = {};
+
+KB.Events = {};
+
+_.extend(KB, Backbone.Events);
+
+_.extend(KB.Events, Backbone.Events);
+
 KB.Ajax = function($) {
     return {
         send: function(data, callback, scope) {
@@ -549,32 +575,6 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
     }
 });
 
-var KB = KB || {};
-
-KB.Config = {};
-
-KB.Backbone = {
-    Backend: {},
-    Frontend: {},
-    Shared: {}
-};
-
-KB.Fields = {};
-
-KB.Utils = {};
-
-KB.Ext = {};
-
-KB.OSConfig = {};
-
-KB.IEdit = {};
-
-KB.Events = {};
-
-_.extend(KB, Backbone.Events);
-
-_.extend(KB.Events, Backbone.Events);
-
 KB.Notice = function($) {
     "use strict";
     return {
@@ -724,6 +724,9 @@ KB.TinyMCE = function($) {
             });
         },
         addEditor: function($el, quicktags, height, watch) {
+            if (_.isUndefined(tinyMCEPreInit)) {
+                return;
+            }
             var settings = tinyMCEPreInit.mceInit.ghosteditor;
             var edHeight = height || 350;
             var live = _.isUndefined(watch) ? true : false;

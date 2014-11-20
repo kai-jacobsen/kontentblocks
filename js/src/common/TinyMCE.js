@@ -56,6 +56,11 @@ KB.TinyMCE = (function ($) {
             // get settings from native WP Editor
             // Editor may not be initialized and is not accessible through
             // the tinymce api, thats why we take the settings from preInit
+
+            if (_.isUndefined(tinyMCEPreInit)){
+                return;
+            }
+
             var settings = tinyMCEPreInit.mceInit.ghosteditor;
             var edHeight = height || 350;
             var live = (_.isUndefined(watch)) ? true : false;
