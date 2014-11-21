@@ -36,7 +36,7 @@ _.extend(KB.Fields, {
         });
 
     },
-    newModule:function(object){
+    newModule: function (object) {
         _K.info('new Module added for Fields');
         var that = this;
         // call field objects init method on 'update' event
@@ -44,9 +44,9 @@ _.extend(KB.Fields, {
         object.listenTo(this, 'update', object.update);
         object.listenTo(this, 'frontUpdate', object.frontUpdate);
 
-        setTimeout(function(){
+        setTimeout(function () {
             that.trigger('update');
-        },750);
+        }, 750);
     },
 
     /**

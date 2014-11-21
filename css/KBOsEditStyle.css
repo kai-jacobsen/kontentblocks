@@ -30,12 +30,12 @@
 }
 
 /* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
-.isDirty .kb-module-dirty-state {
+.isDirty .os-edit-wrapper .kb-module-dirty-state {
   display: block !important;
 }
 /* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
-.isDirty .kb-module-inline-update {
-  color: #cc0000;
+.isDirty .os-edit-wrapper .kb-module-inline-update {
+  color: #cc0000 !important;
 }
 
 /* line 35, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
@@ -52,7 +52,7 @@
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
-  z-index: 9969;
+  z-index: 1990;
 }
 /* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .os-edit-wrapper span.os-action {

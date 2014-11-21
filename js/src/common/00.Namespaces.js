@@ -3,7 +3,7 @@ KB.Config = {};
 KB.Backbone = {
     Backend: {},
     Frontend: {},
-    Shared:{}
+    Shared: {}
 };
 KB.Fields = {};
 KB.Utils = {};
@@ -13,4 +13,4 @@ KB.IEdit = {};
 KB.Events = {};
 
 _.extend(KB, Backbone.Events);
-_.extend(KB.Events, Backbone.Events );
+_.extend(KB.Events, Backbone.Events);

@@ -2,7 +2,7 @@
  * Copyright (c) 2011-2014 Felix Gnass
  * Licensed under the MIT license
  */
-(function(root, factory) {
+(function (root, factory) {
 
     /* CommonJS */
     if (typeof exports == 'object')  module.exports = factory()
@@ -13,22 +13,20 @@
     /* Browser global */
     else root.Spinner = factory()
 }
-(this, function() {
+(this, function () {
     "use strict";
 
-    var prefixes = ['webkit', 'Moz', 'ms', 'O'] /* Vendor prefixes */
-        , animations = {} /* Animation rules keyed by their name */
-        , useCssAnimations /* Whether to use CSS animations or setTimeout */
+    var prefixes = ['webkit', 'Moz', 'ms', 'O'] /* Vendor prefixes */, animations = {} /* Animation rules keyed by their name */, useCssAnimations
+    /* Whether to use CSS animations or setTimeout */
 
     /**
      * Utility function to create elements. If no tag name is given,
      * a DIV is created. Optionally properties can be passed.
      */
     function createEl(tag, prop) {
-        var el = document.createElement(tag || 'div')
-            , n
+        var el = document.createElement(tag || 'div'), n
 
-        for(n in prop) el[n] = prop[n]
+        for (n in prop) el[n] = prop[n]
         return el
     }
 
@@ -36,7 +34,7 @@
      * Appends children and returns the parent.
      */
     function ins(parent /* child1, child2, ...*/) {
-        for (var i=1, n=arguments.length; i<n; i++)
+        for (var i = 1, n = arguments.length; i < n; i++)
             parent.appendChild(arguments[i])
 
         return parent
@@ -45,8 +43,8 @@
     /**
      * Insert a new stylesheet to hold the @keyframe or VML rules.
      */
-    var sheet = (function() {
-        var el = createEl('style', {type : 'text/css'})
+    var sheet = (function () {
+        var el = createEl('style', {type: 'text/css'})
         ins(document.getElementsByTagName('head')[0], el)
         return el.sheet || el.styleSheet
     }())
@@ -57,19 +55,15 @@
      * we create separate rules for each line/segment.
      */
     function addAnimation(alpha, trail, i, lines) {
-        var name = ['opacity', trail, ~~(alpha*100), i, lines].join('-')
-            , start = 0.01 + i/lines * 100
-            , z = Math.max(1 - (1-alpha) / trail * (100-start), alpha)
-            , prefix = useCssAnimations.substring(0, useCssAnimations.indexOf('Animation')).toLowerCase()
-            , pre = prefix && '-' + prefix + '-' || ''
+        var name = ['opacity', trail, ~~(alpha * 100), i, lines].join('-'), start = 0.01 + i / lines * 100, z = Math.max(1 - (1 - alpha) / trail * (100 - start), alpha), prefix = useCssAnimations.substring(0, useCssAnimations.indexOf('Animation')).toLowerCase(), pre = prefix && '-' + prefix + '-' || ''
 
         if (!animations[name]) {
             sheet.insertRule(
                 '@' + pre + 'keyframes ' + name + '{' +
                 '0%{opacity:' + z + '}' +
                 start + '%{opacity:' + alpha + '}' +
-                (start+0.01) + '%{opacity:1}' +
-                (start+trail) % 100 + '%{opacity:' + alpha + '}' +
+                (start + 0.01) + '%{opacity:1}' +
+                (start + trail) % 100 + '%{opacity:' + alpha + '}' +
                 '100%{opacity:' + z + '}' +
                 '}', sheet.cssRules.length)
 
@@ -83,16 +77,14 @@
      * Tries various vendor prefixes and returns the first supported property.
      */
     function vendor(el, prop) {
-        var s = el.style
-            , pp
-            , i
+        var s = el.style, pp, i
 
         prop = prop.charAt(0).toUpperCase() + prop.slice(1)
-        for(i=0; i<prefixes.length; i++) {
-            pp = prefixes[i]+prop
-            if(s[pp] !== undefined) return pp
+        for (i = 0; i < prefixes.length; i++) {
+            pp = prefixes[i] + prop
+            if (s[pp] !== undefined) return pp
         }
-        if(s[prop] !== undefined) return prop
+        if (s[prop] !== undefined) return prop
     }
 
     /**
@@ -100,7 +92,7 @@
      */
     function css(el, prop) {
         for (var n in prop)
-            el.style[vendor(el, n)||n] = prop[n]
+            el.style[vendor(el, n) || n] = prop[n]
 
         return el
     }
@@ -109,7 +101,7 @@
      * Fills in default values.
      */
     function merge(obj) {
-        for (var i=1; i < arguments.length; i++) {
+        for (var i = 1; i < arguments.length; i++) {
             var def = arguments[i]
             for (var n in def)
                 if (obj[n] === undefined) obj[n] = def[n]
@@ -121,9 +113,9 @@
      * Returns the absolute page-offset of the given element.
      */
     function pos(el) {
-        var o = { x:el.offsetLeft, y:el.offsetTop }
-        while((el = el.offsetParent))
-            o.x+=el.offsetLeft, o.y+=el.offsetTop
+        var o = {x: el.offsetLeft, y: el.offsetTop}
+        while ((el = el.offsetParent))
+            o.x += el.offsetLeft, o.y += el.offsetTop
 
         return o
     }
@@ -148,7 +140,7 @@
         direction: 1,         // 1: clockwise, -1: counterclockwise
         speed: 1,             // Rounds per second
         trail: 100,           // Afterglow percentage
-        opacity: 1/4,         // Opacity of the lines
+        opacity: 1 / 4,         // Opacity of the lines
         fps: 20,              // Frames per second when using setTimeout()
         zIndex: 2e9,          // Use a high z-index by default
         className: 'spinner', // CSS class to assign to the element
@@ -172,13 +164,14 @@
          * spinning, it is automatically removed from its previous target b calling
          * stop() internally.
          */
-        spin: function(target) {
+        spin: function (target) {
             this.stop()
 
-            var self = this
-                , o = self.opts
-                , el = self.el = css(createEl(0, {className: o.className}), {position: o.position, width: 0, zIndex: o.zIndex})
-                , mid = o.radius+o.length+o.width
+            var self = this, o = self.opts, el = self.el = css(createEl(0, {className: o.className}), {
+                    position: o.position,
+                    width: 0,
+                    zIndex: o.zIndex
+                }), mid = o.radius + o.length + o.width
 
             css(el, {
                 left: o.left,
@@ -186,7 +179,7 @@
             })
 
             if (target) {
-                target.insertBefore(el, target.firstChild||null)
+                target.insertBefore(el, target.firstChild || null)
             }
 
             el.setAttribute('role', 'progressbar')
@@ -194,22 +187,17 @@
 
             if (!useCssAnimations) {
                 // No CSS animation support, use setTimeout() instead
-                var i = 0
-                    , start = (o.lines - 1) * (1 - o.direction) / 2
-                    , alpha
-                    , fps = o.fps
-                    , f = fps/o.speed
-                    , ostep = (1-o.opacity) / (f*o.trail / 100)
-                    , astep = f/o.lines
+                var i = 0, start = (o.lines - 1) * (1 - o.direction) / 2, alpha, fps = o.fps, f = fps / o.speed, ostep = (1 - o.opacity) / (f * o.trail / 100), astep = f / o.lines
 
-                    ;(function anim() {
+                    ;
+                (function anim() {
                     i++;
                     for (var j = 0; j < o.lines; j++) {
                         alpha = Math.max(1 - (i + (o.lines - j) * astep) % f * ostep, o.opacity)
 
                         self.opacity(el, j * o.direction + start, alpha, o)
                     }
-                    self.timeout = self.el && setTimeout(anim, ~~(1000/fps))
+                    self.timeout = self.el && setTimeout(anim, ~~(1000 / fps))
                 })()
             }
             return self
@@ -218,7 +206,7 @@
         /**
          * Stops and removes the Spinner.
          */
-        stop: function() {
+        stop: function () {
             var el = this.el
             if (el) {
                 clearTimeout(this.timeout)
@@ -232,34 +220,32 @@
          * Internal method that draws the individual lines. Will be overwritten
          * in VML fallback mode below.
          */
-        lines: function(el, o) {
-            var i = 0
-                , start = (o.lines - 1) * (1 - o.direction) / 2
-                , seg
+        lines: function (el, o) {
+            var i = 0, start = (o.lines - 1) * (1 - o.direction) / 2, seg
 
             function fill(color, shadow) {
                 return css(createEl(), {
                     position: 'absolute',
-                    width: (o.length+o.width) + 'px',
+                    width: (o.length + o.width) + 'px',
                     height: o.width + 'px',
                     background: color,
                     boxShadow: shadow,
                     transformOrigin: 'left',
-                    transform: 'rotate(' + ~~(360/o.lines*i+o.rotate) + 'deg) translate(' + o.radius+'px' +',0)',
-                    borderRadius: (o.corners * o.width>>1) + 'px'
+                    transform: 'rotate(' + ~~(360 / o.lines * i + o.rotate) + 'deg) translate(' + o.radius + 'px' + ',0)',
+                    borderRadius: (o.corners * o.width >> 1) + 'px'
                 })
             }
 
             for (; i < o.lines; i++) {
                 seg = css(createEl(), {
                     position: 'absolute',
-                    top: 1+~(o.width/2) + 'px',
+                    top: 1 + ~(o.width / 2) + 'px',
                     transform: o.hwaccel ? 'translate3d(0,0,0)' : '',
                     opacity: o.opacity,
-                    animation: useCssAnimations && addAnimation(o.opacity, o.trail, start + i * o.direction, o.lines) + ' ' + 1/o.speed + 's linear infinite'
+                    animation: useCssAnimations && addAnimation(o.opacity, o.trail, start + i * o.direction, o.lines) + ' ' + 1 / o.speed + 's linear infinite'
                 })
 
-                if (o.shadow) ins(seg, css(fill('#000', '0 0 4px ' + '#000'), {top: 2+'px'}))
+                if (o.shadow) ins(seg, css(fill('#000', '0 0 4px ' + '#000'), {top: 2 + 'px'}))
                 ins(el, ins(seg, fill(getColor(o.color, i), '0 0 1px rgba(0,0,0,.1)')))
             }
             return el
@@ -269,7 +255,7 @@
          * Internal method that adjusts the opacity of a single line.
          * Will be overwritten in VML fallback mode below.
          */
-        opacity: function(el, i, val) {
+        opacity: function (el, i, val) {
             if (i < el.childNodes.length) el.childNodes[i].style.opacity = val
         }
 
@@ -286,9 +272,8 @@
         // No CSS transforms but VML support, add a CSS rule for VML elements:
         sheet.addRule('.spin-vml', 'behavior:url(#default#VML)')
 
-        Spinner.prototype.lines = function(el, o) {
-            var r = o.length+o.width
-                , s = 2*r
+        Spinner.prototype.lines = function (el, o) {
+            var r = o.length + o.width, s = 2 * r
 
             function grp() {
                 return css(
@@ -296,13 +281,15 @@
                         coordsize: s + ' ' + s,
                         coordorigin: -r + ' ' + -r
                     }),
-                    { width: s, height: s }
+                    {width: s, height: s}
                 )
             }
 
-            var margin = -(o.width+o.length)*2 + 'px'
-                , g = css(grp(), {position: 'absolute', top: margin, left: margin})
-                , i
+            var margin = -(o.width + o.length) * 2 + 'px', g = css(grp(), {
+                    position: 'absolute',
+                    top: margin,
+                    left: margin
+                }), i
 
             function seg(i, dx, filter) {
                 ins(g,
@@ -311,7 +298,7 @@
                                 width: r,
                                 height: o.width,
                                 left: o.radius,
-                                top: -o.width>>1,
+                                top: -o.width >> 1,
                                 filter: filter
                             }),
                             vml('fill', {color: getColor(o.color, i), opacity: o.opacity}),
@@ -329,11 +316,13 @@
             return ins(el, g)
         }
 
-        Spinner.prototype.opacity = function(el, i, val, o) {
+        Spinner.prototype.opacity = function (el, i, val, o) {
             var c = el.firstChild
             o = o.shadow && o.lines || 0
-            if (c && i+o < c.childNodes.length) {
-                c = c.childNodes[i+o]; c = c && c.firstChild; c = c && c.firstChild
+            if (c && i + o < c.childNodes.length) {
+                c = c.childNodes[i + o];
+                c = c && c.firstChild;
+                c = c && c.firstChild
                 if (c) c.opacity = val
             }
         }
@@ -383,7 +372,7 @@
 
  */
 
-(function(factory) {
+(function (factory) {
 
     if (typeof exports == 'object') {
         // CommonJS
@@ -399,11 +388,11 @@
         factory(window.jQuery, window.Spinner)
     }
 
-}(function($, Spinner) {
+}(function ($, Spinner) {
 
-    $.fn.spin = function(opts, color) {
+    $.fn.spin = function (opts, color) {
 
-        return this.each(function() {
+        return this.each(function () {
             var $this = $(this),
                 data = $this.data();
 
@@ -413,7 +402,7 @@
             }
             if (opts !== false) {
                 opts = $.extend(
-                    { color: color || $this.css('color') },
+                    {color: color || $this.css('color')},
                     $.fn.spin.presets[opts] || opts
                 )
                 data.spinner = new Spinner(opts).spin(this)
@@ -422,9 +411,9 @@
     }
 
     $.fn.spin.presets = {
-        tiny: { lines: 8, length: 2, width: 2, radius: 3 },
-        small: { lines: 8, length: 4, width: 3, radius: 5 },
-        large: { lines: 10, length: 8, width: 4, radius: 8 }
+        tiny: {lines: 8, length: 2, width: 2, radius: 3},
+        small: {lines: 8, length: 4, width: 3, radius: 5},
+        large: {lines: 10, length: 8, width: 4, radius: 8}
     }
 
 }));

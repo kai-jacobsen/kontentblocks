@@ -1,8 +1,8 @@
 KB.AreaSelector = (function ($) {
 
 
-    return{
-        $stage : null,
+    return {
+        $stage: null,
         areaToEdit: null,
         $editWrap: null,
         init: function () {

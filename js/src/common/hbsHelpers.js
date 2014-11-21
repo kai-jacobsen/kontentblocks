@@ -1,4 +1,4 @@
-HandlebarsKB.registerHelper("debug", function(optionalValue) {
+HandlebarsKB.registerHelper("debug", function (optionalValue) {
     console.log("Current Context");
     console.log("====================");
     console.log(this);
@@ -9,6 +9,6 @@ HandlebarsKB.registerHelper("debug", function(optionalValue) {
     }
 });
 
-HandlebarsKB.registerHelper("fieldName", function(base, index, key){
+HandlebarsKB.registerHelper("fieldName", function (base, index, key) {
     return base + "[" + index + "][" + key + "]";
 });

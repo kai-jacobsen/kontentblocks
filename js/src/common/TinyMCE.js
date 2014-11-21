@@ -4,7 +4,7 @@ KB.TinyMCE = (function ($) {
         removeEditors: function () {
             // do nothing if it is the native editor
             $('.wp-editor-area').each(function () {
-                if ($(this).attr('id') === 'wp-content-wrap' || $(this).attr('id') === 'wp-ghosteditor-wrap' ) {
+                if ($(this).attr('id') === 'wp-content-wrap' || $(this).attr('id') === 'wp-ghosteditor-wrap') {
                     // do nothing
                 } else {
                     // get the id
@@ -31,16 +31,16 @@ KB.TinyMCE = (function ($) {
 
                 // add new editor id to settings
                 settings.elements = id;
-                settings.selector = '#'+id;
+                settings.selector = '#' + id;
                 settings.id = id;
                 settings.height = 350;
                 settings.setup = function (ed) {
                     ed.on('init', function () {
                         KB.Events.trigger('KB::tinymce.new-editor', ed);
                     });
-                    ed.on('change', function(){
+                    ed.on('change', function () {
                         var $module, moduleView;
-                        if (!ed.module){
+                        if (!ed.module) {
                             $module = jQuery(ed.editorContainer).closest('.kb-module');
                             ed.module = KB.Views.Modules.get($module.attr('id'))
                         }
@@ -57,7 +57,7 @@ KB.TinyMCE = (function ($) {
             // Editor may not be initialized and is not accessible through
             // the tinymce api, thats why we take the settings from preInit
 
-            if (_.isUndefined(tinyMCEPreInit)){
+            if (_.isUndefined(tinyMCEPreInit)) {
                 return;
             }
 
@@ -74,7 +74,7 @@ KB.TinyMCE = (function ($) {
                 var id = this.id;
                 // add new editor id to settings
                 settings.elements = id;
-                settings.selector = '#'+id;
+                settings.selector = '#' + id;
                 settings.id = id;
                 settings.kblive = live;
                 settings.height = edHeight;
@@ -82,9 +82,9 @@ KB.TinyMCE = (function ($) {
                     ed.on('init', function () {
                         KB.Events.trigger('KB::tinymce.new-editor', ed);
                     });
-                    ed.on('change', function(){
+                    ed.on('change', function () {
                         var $module, moduleView;
-                        if (!ed.module){
+                        if (!ed.module) {
                             $module = jQuery(ed.editorContainer).closest('.kb-module');
                             ed.module = KB.Views.Modules.get($module.attr('id'))
                         }
@@ -93,7 +93,7 @@ KB.TinyMCE = (function ($) {
                 };
                 var ed = tinymce.init(settings);
 
-                if (!tinyMCEPreInit.mceInit[id]){
+                if (!tinyMCEPreInit.mceInit[id]) {
                     tinyMCEPreInit.mceInit[id] = settings;
                 }
 
@@ -106,7 +106,7 @@ KB.TinyMCE = (function ($) {
                 };
                 var qts = jQuery('#qt_' + id + '_toolbar');
 
-                if (!qts.length){
+                if (!qts.length) {
                     new QTags(qtsettings);
                 }
 
@@ -137,10 +137,10 @@ KB.TinyMCE = (function ($) {
                     media_buttons: media
                 }
 
-            }, function(data){
+            }, function (data) {
                 $el.empty().append(data);
                 this.addEditor($el, null, 150, watch);
-            },this);
+            }, this);
 
         }
 

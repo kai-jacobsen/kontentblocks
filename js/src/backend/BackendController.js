@@ -95,7 +95,7 @@ KB.App = (function () {
         //module.set('area', KB.Areas.get(module.get('area')));
 
         // create view
-       KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.Backend.ModuleView({
+        KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.Backend.ModuleView({
             model: module,
             el: '#' + module.get('instance_id')
         }));

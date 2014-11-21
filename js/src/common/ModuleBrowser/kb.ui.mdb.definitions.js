@@ -1,6 +1,6 @@
 KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
 
-    initialize: function(models, options){
+    initialize: function (models, options) {
         this.area = options.area;
     },
     setup: function () {
@@ -8,27 +8,27 @@ KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
         this.sortToCategories();
         return this;
     },
-    getModules: function(id){
+    getModules: function (id) {
         return this.categories[id].modules;
     },
     sortToCategories: function () {
         var that = this;
         _.each(this.models, function (model) {
 
-            if (!that.validateVisibility(model)){
-                    return;
+            if (!that.validateVisibility(model)) {
+                return;
             }
 
             var cat = (_.isUndefined(model.get('settings').category)) ? 'standard' : model.get('settings').category;
             that.categories[cat].modules.push(model);
         });
     },
-    validateVisibility: function(m){
-        if (m.get('settings').hidden){
+    validateVisibility: function (m) {
+        if (m.get('settings').hidden) {
             return false;
         }
 
-        if (m.get('settings').disabled){
+        if (m.get('settings').disabled) {
             return false;
         }
 

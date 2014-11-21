@@ -22,13 +22,13 @@
   opacity: 1;
 }
 
-.isDirty {
+.isDirty  .os-edit-wrapper  {
   .kb-module-dirty-state {
     display: block !important;
   }
 
   .kb-module-inline-update {
-    color: #cc0000;
+    color: #cc0000 !important;
   }
 }
 
@@ -39,7 +39,7 @@
   @include transition(all .3s linear);
   @include border-radius(3px);
 
-  z-index: 9969;
+  z-index: 1990;
 
   span.os-action {
     font-size: 11px !important;

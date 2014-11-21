@@ -12,10 +12,22 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
         this.ModuleView = options.ModuleView;
         this.renderControls();
 
-        this.EditControl = this.addItem(new KB.Backbone.Frontend.ModuleEdit({model: this.ModuleView.model, parent: this.ModuleView}));
-        this.UpdateControl = this.addItem(new KB.Backbone.Frontend.ModuleUpdate({model: this.ModuleView.model, parent: this.ModuleView}));
-        this.DeleteControl = this.addItem(new KB.Backbone.Frontend.ModuleDelete({model: this.ModuleView.model, parent: this.ModuleView}));
-        this.MoveControl = this.addItem(new KB.Backbone.Frontend.ModuleMove({model: this.ModuleView.model, parent: this.ModuleView}));
+        this.EditControl = this.addItem(new KB.Backbone.Frontend.ModuleEdit({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.UpdateControl = this.addItem(new KB.Backbone.Frontend.ModuleUpdate({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.DeleteControl = this.addItem(new KB.Backbone.Frontend.ModuleDelete({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
+        this.MoveControl = this.addItem(new KB.Backbone.Frontend.ModuleMove({
+            model: this.ModuleView.model,
+            parent: this.ModuleView
+        }));
 
     },
 

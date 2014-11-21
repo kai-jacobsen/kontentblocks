@@ -8,8 +8,13 @@ KB.FieldsAPI.Textarea = KB.FieldsAPI.Field.extend({
     },
 
     templatePath: 'fields/Textarea',
-    render: function(index){
-        return KB.Templates.render(this.templatePath, {config: this.config, baseId: this.baseId, index:index, model: this.model.toJSON()});
+    render: function (index) {
+        return KB.Templates.render(this.templatePath, {
+            config: this.config,
+            baseId: this.baseId,
+            index: index,
+            model: this.model.toJSON()
+        });
     }
 });
 

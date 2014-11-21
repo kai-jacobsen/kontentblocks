@@ -59,7 +59,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         //"mouseleave": "removeDropZone"
 
     },
-    openOptions: function(){
+    openOptions: function () {
         this.Controls.EditControl.openControls();
     },
     setActive: function () {

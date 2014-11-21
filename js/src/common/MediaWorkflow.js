@@ -2,12 +2,12 @@ KB.Utils.MediaWorkflow = function (args) {
     var _frame, options;
 
     var defaults = {
-        buttontext : 'Buttontext',
+        buttontext: 'Buttontext',
         multiple: false,
         type: 'image',
         title: '',
         select: false,
-        ready:false
+        ready: false
     }
 
     function frame() {
@@ -32,7 +32,7 @@ KB.Utils.MediaWorkflow = function (args) {
 
     function init(args) {
 
-        if (_.isUndefined(args)){
+        if (_.isUndefined(args)) {
             options = _.extend(defaults, {});
         } else {
             options = _.extend(defaults, args);
@@ -41,18 +41,19 @@ KB.Utils.MediaWorkflow = function (args) {
     }
 
 
-    function ready(){
+    function ready() {
     }
 
     /**
      * ->this<- is set to the modal
      */
-    function select(){
-        if (options.select === false){
+    function select() {
+        if (options.select === false) {
             alert('No callback given');
         }
         options.select(this);
     }
+
     init(args);
 };
 

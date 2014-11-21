@@ -139,7 +139,6 @@ KB.App = function () {
         //assign area view to module view
 
         Area.addModuleView(ModuleView);
-
         KB.Ui.initTabs();
     }
 
@@ -184,7 +183,7 @@ jQuery(document).ready(function () {
     if (KB.appData && KB.appData.config.frontend) {
         KB.Views.Modules.readyOnFront();
         _K.info('Frontend Modules Ready Event fired');
-
+        _KS.info('Frontend welcomes you');
     }
     // general ready event
     KB.Events.trigger('KB::ready');

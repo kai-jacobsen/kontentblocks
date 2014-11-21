@@ -1,12 +1,12 @@
 KB.Backbone.Backend.ModuleStatus = KB.Backbone.Backend.ModuleMenuItemView.extend({
-    initialize: function(options){
+    initialize: function (options) {
         this.options = options || {};
     },
     className: 'module-status block-menu-icon',
     events: {
         'click': 'changeStatus'
     },
-    changeStatus: function() {
+    changeStatus: function () {
 
         KB.Ajax.send({
             action: 'changeModuleStatus',
@@ -15,15 +15,15 @@ KB.Backbone.Backend.ModuleStatus = KB.Backbone.Backend.ModuleMenuItemView.extend
         }, this.success, this);
 
     },
-    isValid: function() {
+    isValid: function () {
         if (!this.model.get('disabled') &&
-                KB.Checks.userCan('deactivate_kontentblocks')) {
+            KB.Checks.userCan('deactivate_kontentblocks')) {
             return true;
         } else {
             return false;
         }
     },
-    success: function(){
+    success: function () {
         this.options.parent.$head.toggleClass('module-inactive');
         this.options.parent.$el.toggleClass('activated deactivated');
         KB.Notice.notice('Status changed', 'success');

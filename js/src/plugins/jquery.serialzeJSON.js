@@ -41,38 +41,46 @@
         },
 
         // Merge options with defaults to get {parseNumbers, parseBoolens, parseNulls, useIntKeysAsArrayIndex}
-        optsWithDefaults: function(options) {
+        optsWithDefaults: function (options) {
             var f, parseAll;
             if (options == null) options = {}; // arg default value = {}
             f = $.serializeJSON;
             parseAll = f.optWithDefaults('parseAll', options);
             return {
-                parseNumbers:  parseAll || f.optWithDefaults('parseNumbers',  options),
+                parseNumbers: parseAll || f.optWithDefaults('parseNumbers', options),
                 parseBooleans: parseAll || f.optWithDefaults('parseBooleans', options),
-                parseNulls:    parseAll || f.optWithDefaults('parseNulls',    options),
-                parseWithFunction:         f.optWithDefaults('parseWithFunction', options),
-                useIntKeysAsArrayIndex:    f.optWithDefaults('useIntKeysAsArrayIndex', options)
+                parseNulls: parseAll || f.optWithDefaults('parseNulls', options),
+                parseWithFunction: f.optWithDefaults('parseWithFunction', options),
+                useIntKeysAsArrayIndex: f.optWithDefaults('useIntKeysAsArrayIndex', options)
             }
         },
 
-        optWithDefaults: function(key, options) {
+        optWithDefaults: function (key, options) {
             return (options[key] !== false) && (options[key] || $.serializeJSON.defaultOptions[key]);
         },
 
         // Convert the string to a number, boolean or null, depending on the enable option and the string format.
-        parseValue: function(str, opts) {
+        parseValue: function (str, opts) {
             var value, f;
             f = $.serializeJSON;
-            if (opts.parseNumbers  && f.isNumeric(str)) return Number(str); // number
+            if (opts.parseNumbers && f.isNumeric(str)) return Number(str); // number
             if (opts.parseBooleans && (str === "true" || str === "false")) return str === "true"; // boolean
-            if (opts.parseNulls    && str == "null") return null; // null
+            if (opts.parseNulls && str == "null") return null; // null
             return str; // otherwise, keep same string
         },
 
-        isObject:          function(obj) { return obj === Object(obj); }, // is this variable an object?
-        isUndefined:       function(obj) { return obj === void 0; }, // safe check for undefined values
-        isValidArrayIndex: function(val) { return /^[0-9]+$/.test(String(val)); }, // 1,2,3,4 ... are valid array indexes
-        isNumeric:         function(obj) { return obj - parseFloat(obj) >= 0; }, // taken from jQuery.isNumeric implementation. Not using jQuery.isNumeric to support old jQuery and Zepto versions
+        isObject: function (obj) {
+            return obj === Object(obj);
+        }, // is this variable an object?
+        isUndefined: function (obj) {
+            return obj === void 0;
+        }, // safe check for undefined values
+        isValidArrayIndex: function (val) {
+            return /^[0-9]+$/.test(String(val));
+        }, // 1,2,3,4 ... are valid array indexes
+        isNumeric: function (obj) {
+            return obj - parseFloat(obj) >= 0;
+        }, // taken from jQuery.isNumeric implementation. Not using jQuery.isNumeric to support old jQuery and Zepto versions
 
         // Split the input name in programatically readable keys
         // "foo"              => ['foo']
@@ -83,12 +91,16 @@
         splitInputNameIntoKeysArray: function (name) {
             var keys, last, f;
             f = $.serializeJSON;
-            if (f.isUndefined(name)) { throw new Error("ArgumentError: param 'name' expected to be a string, found undefined"); }
+            if (f.isUndefined(name)) {
+                throw new Error("ArgumentError: param 'name' expected to be a string, found undefined");
+            }
             keys = $.map(name.split('['), function (key) {
                 last = key[key.length - 1];
                 return last === ']' ? key.substring(0, key.length - 1) : key;
             });
-            if (keys[0] === '') { keys.shift(); } // "[foo][inn]" should be same as "foo[inn]"
+            if (keys[0] === '') {
+                keys.shift();
+            } // "[foo][inn]" should be same as "foo[inn]"
             return keys;
         },
 
@@ -113,8 +125,12 @@
             var key, nextKey, tail, lastIdx, lastVal, f;
             if (opts == null) opts = {};
             f = $.serializeJSON;
-            if (f.isUndefined(o)) { throw new Error("ArgumentError: param 'o' expected to be an object or array, found undefined"); }
-            if (!keys || keys.length === 0) { throw new Error("ArgumentError: param 'keys' expected to be an array with least one element"); }
+            if (f.isUndefined(o)) {
+                throw new Error("ArgumentError: param 'o' expected to be an object or array, found undefined");
+            }
+            if (!keys || keys.length === 0) {
+                throw new Error("ArgumentError: param 'keys' expected to be an array with least one element");
+            }
 
             key = keys[0];
 

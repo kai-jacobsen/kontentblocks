@@ -1,5 +1,5 @@
 KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
-    initialize: function(options){
+    initialize: function (options) {
         this.options = options || {};
         this.parentView = options.parent;
 
@@ -11,7 +11,7 @@ KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
     events: {
         'click': 'saveData'
     },
-    saveData: function() {
+    saveData: function () {
 
         tinyMCE.triggerSave();
 
@@ -23,15 +23,15 @@ KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
         }, this.success, this);
 
     },
-    getDirty: function(){
+    getDirty: function () {
         this.$el.addClass('is-dirty');
     },
-    getClean: function(){
+    getClean: function () {
         this.$el.removeClass('is-dirty');
     },
-    isValid: function() {
+    isValid: function () {
 
-        if (this.model.get('master')){
+        if (this.model.get('master')) {
             return false;
         }
 
@@ -39,9 +39,9 @@ KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
         KB.Checks.userCan('edit_kontentblocks');
 
     },
-    success: function(res){
+    success: function (res) {
 
-        if (!res || !res.newModuleData){
+        if (!res || !res.newModuleData) {
             _K.error('Failed to save module data.');
         }
         this.parentView.model.set('moduleData', res.newModuleData);

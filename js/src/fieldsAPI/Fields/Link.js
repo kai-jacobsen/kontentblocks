@@ -19,7 +19,8 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
                 baseId: this.baseId,
                 index: index,
                 i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
-                model: this.model.toJSON()});
+                model: this.model.toJSON()
+            });
     }
 });
 

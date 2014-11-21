@@ -7,7 +7,7 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
         var that = this;
         this.$el.empty();
 
-        if (this.model.get('template')){
+        if (this.model.get('template')) {
             this.$el.html(KB.Templates.render('backend/modulebrowser/module-template-description', {module: this.model.toJSON()}));
         } else {
             this.$el.html(KB.Templates.render('backend/modulebrowser/module-description', {module: this.model.toJSON()}));

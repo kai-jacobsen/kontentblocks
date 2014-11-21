@@ -1,7 +1,7 @@
 KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
 
     item: Backbone.View.extend({
-        initialize: function(options){
+        initialize: function (options) {
             this.options = options || {};
         },
         tagName: 'li',
@@ -22,7 +22,7 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
                 return false;
             }
 
-            if (this.options.parent.catSet === false){
+            if (this.options.parent.catSet === false) {
                 this.options.parent.catSet = true;
                 this.options.browser.update(this.model);
                 this.$el.addClass('active');
@@ -40,7 +40,7 @@ KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
 
         _.each(this.options.cats, function (cat) {
             var model = new Backbone.Model(cat);
-            new that.item({parent: that, model: model, browser:that.options.browser}).render();
+            new that.item({parent: that, model: model, browser: that.options.browser}).render();
         });
 
     }

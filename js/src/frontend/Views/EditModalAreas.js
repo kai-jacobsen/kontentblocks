@@ -79,9 +79,9 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
         var stored = this.model.get('settings').layout;
         return _.map(layouts, function (l) {
             if (that.LayoutDefs[l]) {
-                var def =  that.LayoutDefs[l];
+                var def = that.LayoutDefs[l];
 
-                if (def.id === stored){
+                if (def.id === stored) {
                     def.currentClass = 'kb-active-area-layout';
                 } else {
                     def.currentClass = '';
@@ -93,6 +93,7 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
     },
     reposition: function () {
         var pos = this.$target.offset();
+        console.log(pos);
         var lh = this.$el.outerHeight();
         pos.top = pos.top - lh;
         this.$el.offset({top: pos.top - 27, left: pos.left});

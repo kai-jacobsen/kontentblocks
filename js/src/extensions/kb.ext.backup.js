@@ -1,12 +1,12 @@
-KB.Ext.Backup = (function($) {
+KB.Ext.Backup = (function ($) {
 
     return {
         el: $('#backup-inspect'),
         lastItem: null,
         firstRun: true,
-        init: function() {
+        init: function () {
 
-            if (KB.appData.config.frontend){
+            if (KB.appData.config.frontend) {
                 _K.info('Backup Inspect stopped');
                 return false;
             }
@@ -19,38 +19,37 @@ KB.Ext.Backup = (function($) {
             }
 
             // Heartbeat send data
-            $(document).on('heartbeat-send', function(e, data){
+            $(document).on('heartbeat-send', function (e, data) {
                 data.kbBackupWatcher = that.lastItem;
                 data.post_id = KB.Environment.postId;
             });
 
             // Heartbeat receive data
-            $(document).on('heartbeat-tick', function(e, data){
-                if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)){
-                   that.renderList(data.kbHasNewBackups);
+            $(document).on('heartbeat-tick', function (e, data) {
+                if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {
+                    that.renderList(data.kbHasNewBackups);
                 }
             })
         },
-        update: function() {
+        update: function () {
             var that = this;
 
             KB.Ajax.send(
-                    {
-                        action: 'get_backups',
-                        _ajax_nonce: KB.Config.getNonce('read')
-                    },
-            function(response)
-            {
-                that.items = response;
-                that.renderList(response);
-            });
+                {
+                    action: 'get_backups',
+                    _ajax_nonce: KB.Config.getNonce('read')
+                },
+                function (response) {
+                    that.items = response;
+                    that.renderList(response);
+                });
 
         },
-        renderList: function(items) {
+        renderList: function (items) {
             var that = this;
             this.listEl.empty();
 
-            _.each(items, function(item, key) {
+            _.each(items, function (item, key) {
                 that.lastItem = key;
                 that.listEl.append(_.template("\
                 <li>\n\
@@ -66,22 +65,21 @@ KB.Ext.Backup = (function($) {
             });
             _K.info('Backup Inspect::FirstRun:', this.firstRun);
             // no notice on first run
-            if (!this.firstRun){
+            if (!this.firstRun) {
                 KB.Notice.notice('<p>' + KB.i18n.Extensions.backups.newBackupcreated + '</p>', 'success');
             }
             this.firstRun = false;
 
-            this.listEl.on('click', '.js-restore', function(e) {
+            this.listEl.on('click', '.js-restore', function (e) {
                 var id = $(this).parent().attr('data-id');
                 that.restore(id);
             })
         },
-        restore: function(id) {
+        restore: function (id) {
             var that = this;
             var location = window.location.href + '&restore_backup=' + id + '&post_id=' + $('#post_ID').val();
             window.location = location;
         }
-
 
 
     };

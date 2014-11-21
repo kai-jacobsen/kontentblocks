@@ -1,4 +1,8 @@
 
+.kb-menubar-container * {
+  @include box-sizing(border-box);
+}
+
 .kb-menubar-container {
   position: fixed;
   bottom: -40px;
@@ -8,11 +12,11 @@
   width: 100%;
   background: #f2f2f2;
   @include background-image(linear-gradient(#f9f9f9, #f5f5f5 70%, #f2f2f2));
-  z-index: 4200;
+  z-index: 1995;
   @include box-sizing(border-box);
   @include transition(all .3s linear);
 
-  .kb-brand{
+  .kb-brand {
     font-size: 11px !important;
     color: #999 !important;
     position: absolute !important;
@@ -31,10 +35,10 @@
   .kb-menubar-toggle {
     position: absolute;
     right: 8px;
-    top: -30px;
+    top: -25px;
     width: 25px;
     height: 25px;
-    padding-left: 7px;
+    padding-left: 4px;
     padding-top: 4px;
     background: #eaeaea;
     z-index: 9999;
@@ -44,7 +48,6 @@
     border-top: 1px #aaa solid;
     border-left: 1px #aaa solid;
     border-right: 1px #aaa solid;
-
 
     &:hover {
       color: #666;
@@ -69,15 +72,16 @@
     cursor: pointer;
     overflow: hidden;
     position: relative;
-    @include transition(background .3s linear);
+    @include transition(all .3s linear);
     opacity: .5;
     font-family: 'Open-Sans', sans-serif !important;
-    width: 150px !important;
+    width: 110px !important;
     display: block;
     float: left;
 
-    &:hover{
+    &:hover {
       background-color: #eaeaea !important;
+      width: 150px !important;
     }
 
     &:last-child {
@@ -131,12 +135,14 @@
     position: absolute;
     right: 0;
     top: 4px;
+    display: none;
 
     a {
       color: #666 !important;
       border-bottom: none;
       line-height: 100%;
       display: block;
+      text-decoration: none !important;
 
       &:hover {
         border: 0;
@@ -168,14 +174,13 @@
 
 }
 
-
-.kb-module-controls__title{
+.kb-module-controls__title {
   background-color: #eaeaea;
   overflow: hidden;
   border-bottom: 1px solid #aaa;
 }
 
-.kb-menubar-tab{
+.kb-menubar-tab {
   color: #666;
   top: -25px;
   display: block;
@@ -185,19 +190,25 @@
   padding: 4px 8px;
   @include box-sizing(border-box);
   font-size: 12px;
+  vertical-align: middle;
+  line-height: 18px!important;
   cursor: pointer;
 
-  &.kb-tab-active{
+  &.kb-tab-active {
     color: #333;
     font-weight: 700;
   }
 }
 
-.kb-menubar-tab__modules{
+.kb-menubar-tab__modules {
   left: 0;
   padding-right: 15px;
 }
 
-.kb-menubar-tab__areas{
+.kb-menubar-tab__areas {
   left: 69px;
+}
+
+.kb-menubar-container ul li:hover .kb-menubar-item__actions{
+  display: block;
 }

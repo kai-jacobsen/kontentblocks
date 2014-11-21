@@ -3,7 +3,7 @@
     var LayoutConfigurations = {
         el: $('#kb-layout-configurations'),
         init: function () {
-            if (KB.appData.config.frontend){
+            if (KB.appData.config.frontend) {
                 _K.info('Layout Configurations stopped');
                 return false;
             }
@@ -27,7 +27,7 @@
             this.update();
         },
         _selectContainer: function () {
-            return $("<div class='select-container clearfix'>" + KB.i18n.Extensions.layoutConfigs.info  + "</div>").appendTo(this.el);
+            return $("<div class='select-container clearfix'>" + KB.i18n.Extensions.layoutConfigs.info + "</div>").appendTo(this.el);
         },
         _createSelectMenu: function () {
             $('<select name="kb-layout-configuration"></select>').appendTo(this.selectContainer);
@@ -105,10 +105,12 @@
             var that = this;
             that.selectMenuEl.empty();
             _.each(data, function (item, key, s) {
-                that.selectMenuEl.append(_.template("<option value='<%= data.key %>'><%= data.name %></option>", {data: {
-                    key: key,
-                    name: item.name
-                }}));
+                that.selectMenuEl.append(_.template("<option value='<%= data.key %>'><%= data.name %></option>", {
+                    data: {
+                        key: key,
+                        name: item.name
+                    }
+                }));
             });
         },
         _areaConfig: function () {

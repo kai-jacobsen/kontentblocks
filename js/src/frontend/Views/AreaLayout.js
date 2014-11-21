@@ -56,6 +56,13 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
         _.each(this.AreaView.getAttachedModules(), function (ModuleView) {
             ModuleView.$el.unwrap();
         });
+
+        var $outer = jQuery('.kb-outer-wrap', this.AreaView.$el);
+
+        // unwrap the outer wrap if it exists
+        $outer.each(function (item) {
+            jQuery('.kb-wrap:first-child', item).unwrap();
+        });
     },
     /**
      * either apply layout or do nothing

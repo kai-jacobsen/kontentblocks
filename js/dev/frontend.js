@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-20 */
+/*! Kontentblocks DevVersion 2014-11-21 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -47,6 +47,10 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
     unwrap: function() {
         _.each(this.AreaView.getAttachedModules(), function(ModuleView) {
             ModuleView.$el.unwrap();
+        });
+        var $outer = jQuery(".kb-outer-wrap", this.AreaView.$el);
+        $outer.each(function(item) {
+            jQuery(".kb-wrap:first-child", item).unwrap();
         });
     },
     render: function(ui) {
@@ -256,7 +260,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     jQuery(".module", ui.helper).addClass("ignore");
                     ui.helper.addClass("ignore");
                 },
-                stop: function(e, ui) {
+                beforeStop: function(e, ui) {
                     var serializedData = {};
                     that.isSorting = false;
                     serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
@@ -269,12 +273,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
                         _ajax_nonce: KB.Config.getNonce("update")
                     }, function() {
                         KB.Notice.notice("Order was updated successfully", "success");
-                        that.Layout.render();
+                        that.Layout.render(ui);
                     }, that);
                 },
                 change: function(e, ui) {
                     that.Layout.applyClasses();
-                    that.Layout.render(e, ui);
+                    that.Layout.render(ui);
                 }
             });
         } else {
@@ -288,7 +292,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                 start: function() {
                     that.isSorting = true;
                 },
-                stop: function() {
+                beforeStop: function() {
                     var serializedData = {};
                     that.isSorting = false;
                     serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
@@ -400,6 +404,7 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
     },
     reposition: function() {
         var pos = this.$target.offset();
+        console.log(pos);
         var lh = this.$el.outerHeight();
         pos.top = pos.top - lh;
         this.$el.offset({
@@ -428,6 +433,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.listenTo(KB, "frontend::recalibrate", this.recalibrate);
         this.listenTo(KB.Events, "KB::edit-modal-refresh", this.recalibrate);
         this.listenTo(this, "recalibrate", this.recalibrate);
+        this.listenTo(this, "kb.module.view.delete", this.handleModuleDelete);
         jQuery(KB.Templates.render("frontend/module-edit-form", {
             model: this.model.toJSON(),
             i18n: KB.i18n.jsFrontend
@@ -494,6 +500,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             view: that
         };
         json = this.model.toJSON();
+        _KS.info("Frontend modal retrieves data from the server");
         jQuery.ajax({
             url: ajaxurl,
             data: {
@@ -515,6 +522,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 KB.Ui.initToggleBoxes();
                 KB.TinyMCE.addEditor();
                 _K.info("Frontend Modal opened with view of:" + that.model.get("instance_id"));
+                _KS.info("Frontend modal done.");
                 setTimeout(function() {
                     KB.Fields.trigger("frontUpdate", that.ModuleView);
                 }, 500);
@@ -700,6 +708,13 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     _classifyView: function(str) {
         return "view-" + str.replace(".twig", "");
+    },
+    handleModuleDelete: function(eData) {
+        var View = eData.View;
+        if (View.cid === this.ModuleView.cid) {
+            _KS.info("Modal was closed because the active module was deleted.");
+            this.destroy();
+        }
     }
 });
 
@@ -819,11 +834,14 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     tagName: "div",
     className: "kb-menubar-container",
     initialize: function() {
-        this.$title = jQuery('<div class="kb-module-controls__title"><span class="kb-brand">Kontentblocks</span> </div>').appendTo(this.$el);
+        this.$title = jQuery('<div class="kb-module-controls__title"> </div>').appendTo(this.$el);
         this.show = _.isNull(KB.Util.stex.get("kb-nav-show")) ? true : KB.Util.stex.get("kb-nav-show");
         this.$toggle = jQuery('<div class="kb-menubar-toggle genericon genericon-menu"></div>').appendTo(this.$el);
         this.$modulesTab = jQuery('<div data-list="modules" class="kb-menubar-tab kb-menubar-tab__modules kb-tab-active">Modules</div>').appendTo(this.$title);
         this.$areasTab = jQuery('<div data-list="areas" class="kb-menubar-tab kb-menubar-tab__areas">Areas</div>').appendTo(this.$title);
+        this.StatusBar = new KB.Backbone.Frontend.StatusBar({
+            el: this.$title
+        });
         this.render();
     },
     events: {
@@ -923,6 +941,11 @@ KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.exte
         }, this.afterRemoval, this);
     },
     afterRemoval: function() {
+        if (KB.EditModalModules) {
+            KB.EditModalModules.trigger("kb.module.view.delete", {
+                View: this.Parent
+            });
+        }
         this.Parent.$el.remove();
         KB.Modules.remove(this.model);
     },
@@ -1770,6 +1793,7 @@ jQuery(document).ready(function() {
     if (KB.appData && KB.appData.config.frontend) {
         KB.Views.Modules.readyOnFront();
         _K.info("Frontend Modules Ready Event fired");
+        _KS.info("Frontend welcomes you");
     }
     KB.Events.trigger("KB::ready");
     setUserSetting("editor", "tinymce");

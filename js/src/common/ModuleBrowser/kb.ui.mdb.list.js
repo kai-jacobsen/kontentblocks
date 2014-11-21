@@ -55,7 +55,11 @@ KB.Backbone.ModuleBrowserModulesList = Backbone.View.extend({
         var first = false;
         this.$el.empty();
         _.each(this.modules, function (module) {
-            that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that, browser: that.options.browser});
+            that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({
+                model: module,
+                parent: that,
+                browser: that.options.browser
+            });
 
 //            if (!that.subviews[module.cid]) {
 //                console.log('create new view li');

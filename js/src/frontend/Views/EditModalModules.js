@@ -54,6 +54,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         // @TODO events:make useless
         this.listenTo(this, 'recalibrate', this.recalibrate);
 
+        this.listenTo(this, 'kb.module.view.delete', this.handleModuleDelete);
+
         // add form skeleton to modal
         jQuery(KB.Templates.render('frontend/module-edit-form', {
             model: this.model.toJSON(),
@@ -170,6 +172,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
         json = this.model.toJSON();
 
+        _KS.info('Frontend modal retrieves data from the server');
+
         // get the form
         jQuery.ajax({
             url: ajaxurl,
@@ -206,6 +210,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
 
                 _K.info('Frontend Modal opened with view of:' + that.model.get('instance_id'));
+                _KS.info('Frontend modal done.');
 
                 // delayed fields update
                 setTimeout(function () {
@@ -260,7 +265,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.ModuleView = moduleView;
 
         // indicate working state
-            that.render();
+        that.render();
     },
 
     /**
@@ -358,7 +363,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
                 $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
 
-                if ($controls.length > 0){
+                if ($controls.length > 0) {
                     $controls.detach();
                 }
 
@@ -413,7 +418,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
                 }
 
-                if ($controls.length > 0){
+                if ($controls.length > 0) {
                     that.ModuleView.$el.append($controls);
                 }
 
@@ -524,5 +529,14 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
      */
     _classifyView: function (str) {
         return 'view-' + str.replace('.twig', '');
+    },
+
+    handleModuleDelete: function (eData) {
+        var View = eData.View;
+        if (View.cid === this.ModuleView.cid) {
+            _KS.info('Modal was closed because the active module was deleted.');
+            this.destroy();
+        }
+
     }
 });

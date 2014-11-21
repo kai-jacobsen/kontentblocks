@@ -71,7 +71,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                         jQuery('.module', ui.helper).addClass('ignore');
                         ui.helper.addClass('ignore');
                     },
-                    stop: function (e, ui) {
+                    beforeStop: function (e, ui) {
                         var serializedData = {};
                         that.isSorting = false;
                         serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
@@ -87,12 +87,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
                             _ajax_nonce: KB.Config.getNonce('update')
                         }, function () {
                             KB.Notice.notice('Order was updated successfully', 'success');
-                            that.Layout.render();
+                            that.Layout.render(ui);
                         }, that);
                     },
                     change: function (e, ui) {
                         that.Layout.applyClasses();
-                        that.Layout.render(e, ui);
+                        that.Layout.render(ui);
                     }
                 });
         } else {
@@ -110,7 +110,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     start: function () {
                         that.isSorting = true;
                     },
-                    stop: function () {
+                    beforeStop: function () {
                         var serializedData = {};
                         that.isSorting = false;
 

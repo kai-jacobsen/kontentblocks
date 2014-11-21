@@ -10,7 +10,12 @@ KB.FieldsAPI.Text = KB.FieldsAPI.Field.extend({
     },
 
     render: function (index) {
-        return KB.Templates.render(this.templatePath, {config: this.config, baseId: this.baseId, index: index, model: this.model.toJSON()});
+        return KB.Templates.render(this.templatePath, {
+            config: this.config,
+            baseId: this.baseId,
+            index: index,
+            model: this.model.toJSON()
+        });
     }
 });
 

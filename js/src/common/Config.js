@@ -33,13 +33,13 @@ KB.Config = (function ($) {
                 return null;
             }
         },
-        inDevMode: function(){
+        inDevMode: function () {
             return config.env.dev;
         },
-        getRootURL: function(){
+        getRootURL: function () {
             return config.env.url;
         },
-        getHash: function(){
+        getHash: function () {
             return config.env.hash;
         }
 

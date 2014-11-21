@@ -14,27 +14,29 @@
     }
 }(function ($) {
 
-    $.fn.overlaps = function(selector) {
+    $.fn.overlaps = function (selector) {
         return this.pushStack(filterOverlaps(this, selector && $(selector)));
     };
 
     function filterOverlaps(collection1, collection2) {
-        var dims1  = getDims(collection1),
-            dims2  = !collection2 ? dims1 : getDims(collection2),
-            stack  = [],
+        var dims1 = getDims(collection1),
+            dims2 = !collection2 ? dims1 : getDims(collection2),
+            stack = [],
             index1 = 0,
             index2 = 0,
             length1 = dims1.length,
             length2 = !collection2 ? dims1.length : dims2.length;
 
-        if (!collection2) { collection2 = collection1; }
+        if (!collection2) {
+            collection2 = collection1;
+        }
 
         for (; index1 < length1; index1++) {
             for (index2 = 0; index2 < length2; index2++) {
                 if (collection1[index1] === collection2[index2]) {
                     continue;
                 } else if (checkOverlap(dims1[index1], dims2[index2])) {
-                    stack.push( (length1 > length2) ?
+                    stack.push((length1 > length2) ?
                         collection1[index1] :
                         collection2[index2]);
                 }

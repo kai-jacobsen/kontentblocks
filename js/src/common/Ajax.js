@@ -5,9 +5,9 @@ KB.Ajax = (function ($) {
             // @todo
             var pid;
 
-            if (data.postId){
+            if (data.postId) {
                 pid = data.postId;
-            } else{
+            } else {
                 pid = (KB.Environment && KB.Environment.postId) ? KB.Environment.postId : false;
             }
 

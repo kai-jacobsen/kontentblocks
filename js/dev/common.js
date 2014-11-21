@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-20 */
+/*! Kontentblocks DevVersion 2014-11-21 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -163,11 +163,23 @@ Logger.useDefaults();
 
 var _K = Logger.get("_K");
 
+var _KS = Logger.get("_KS");
+
 _K.setLevel(_K.INFO);
+
+_KS.setLevel(_KS.INFO);
 
 if (!KB.Config.inDevMode()) {
     _K.setLevel(Logger.OFF);
 }
+
+Logger.setHandler(function(messages, context) {
+    if (KB.Menubar && context.level.value === 2 && context.name === "_KS") {
+        if (messages[0]) {
+            KB.Menubar.StatusBar.setMsg(messages[0]);
+        }
+    }
+});
 
 KB.Utils.MediaWorkflow = function(args) {
     var _frame, options;
@@ -634,6 +646,51 @@ KB.Payload = function($) {
         }
     };
 }(jQuery);
+
+KB.Backbone.Frontend.StatusBar = Backbone.View.extend({
+    messages: [],
+    className: "kb-statusbar kb-brand",
+    initialize: function() {
+        this.$statusbar = jQuery('<span class="kb-brand kb-status-bar">Kontentblocks</span>').appendTo(this.$el);
+        this.interval(this.handleMsg, 500, 1e4);
+    },
+    reset: function() {
+        this.$statusbar.text("kontentblocks");
+    },
+    setMsg: function(msg) {
+        var that = this;
+        this.messages.push(msg);
+    },
+    printMsg: function(msg) {
+        var that = this;
+        this.$statusbar.fadeTo(50, 0, function() {
+            that.$statusbar.text(msg);
+            that.$statusbar.fadeTo(50, 1);
+        });
+    },
+    handleMsg: function() {
+        if (this.messages.length > 0) {
+            this.printMsg(this.messages.shift());
+        }
+    },
+    interval: function(func, wait, times) {
+        var that = this;
+        var interv = function(w, t) {
+            return function() {
+                if (typeof t === "undefined" || t-- > 0) {
+                    setTimeout(interv, w);
+                    try {
+                        func.call(that);
+                    } catch (e) {
+                        t = 0;
+                        throw e.toString();
+                    }
+                }
+            };
+        }(wait, times);
+        setTimeout(interv, wait);
+    }
+});
 
 KB.Templates = function($) {
     var templateCache = {};

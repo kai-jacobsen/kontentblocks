@@ -51,9 +51,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         'click .module-browser--switch__list-view': 'toggleViewMode',
         'click .module-browser--switch__excerpt-view': 'toggleViewMode'
     },
-    subviews: {
-
-    },
+    subviews: {},
     toggleViewMode: function () {
         jQuery('.module-browser-wrapper', this.$el).toggleClass('module-browser--list-view module-browser--excerpt-view');
         var abbr = 'mdb_' + this.area.model.get('id') + '_state';

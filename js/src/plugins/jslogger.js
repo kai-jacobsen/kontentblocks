@@ -10,7 +10,7 @@
     "use strict";
 
     // Top level module for the global, static logger instance.
-    var Logger = { };
+    var Logger = {};
 
     // For those that are at home that are keeping score.
     Logger.VERSION = "0.9.2";
@@ -22,8 +22,8 @@
     var contextualLoggersByNameMap = {};
 
     // Polyfill for ES5's Function.bind.
-    var bind = function(scope, func) {
-        return function() {
+    var bind = function (scope, func) {
+        return function () {
             return func.apply(scope, arguments);
         };
     };
@@ -42,8 +42,8 @@
     };
 
     // Helper to define a logging level object; helps with optimisation.
-    var defineLogLevel = function(value, name) {
-        return { value: value, name: name };
+    var defineLogLevel = function (value, name) {
+        return {value: value, name: name};
     };
 
     // Predefined logging levels.
@@ -55,7 +55,7 @@
 
     // Inner class which performs the bulk of the work; ContextualLogger instances can be configured independently
     // of each other.
-    var ContextualLogger = function(defaultContext) {
+    var ContextualLogger = function (defaultContext) {
         this.context = defaultContext;
         this.setLevel(defaultContext.filterLevel);
         this.log = this.info;  // Convenience alias.
@@ -63,7 +63,7 @@
 
     ContextualLogger.prototype = {
         // Changes the current logging level for the logging instance.
-        setLevel: function(newLevel) {
+        setLevel: function (newLevel) {
             // Ensure the supplied Level object looks valid.
             if (newLevel && "value" in newLevel) {
                 this.context.filterLevel = newLevel;
@@ -95,16 +95,16 @@
         // Invokes the logger callback if it's not being filtered.
         invoke: function (level, msgArgs) {
             if (logHandler && this.enabledFor(level)) {
-                logHandler(msgArgs, merge({ level: level }, this.context));
+                logHandler(msgArgs, merge({level: level}, this.context));
             }
         }
     };
 
     // Protected instance which all calls to the to level `Logger` module will be routed through.
-    var globalLogger = new ContextualLogger({ filterLevel: Logger.OFF });
+    var globalLogger = new ContextualLogger({filterLevel: Logger.OFF});
 
     // Configure the global Logger instance.
-    (function() {
+    (function () {
         // Shortcut for optimisers.
         var L = Logger;
 
@@ -127,7 +127,7 @@
 
     // Sets the global logging filter level which applies to *all* previously registred, and future Logger instances.
     // (note that named loggers (retrieved via `Logger.get`) can be configured indendently if required).
-    Logger.setLevel = function(level) {
+    Logger.setLevel = function (level) {
         // Set the globalLogger's level.
         globalLogger.setLevel(level);
 
@@ -144,18 +144,18 @@
     Logger.get = function (name) {
         // All logger instances are cached so they can be configured ahead of use.
         return contextualLoggersByNameMap[name] ||
-            (contextualLoggersByNameMap[name] = new ContextualLogger(merge({ name: name }, globalLogger.context)));
+        (contextualLoggersByNameMap[name] = new ContextualLogger(merge({name: name}, globalLogger.context)));
     };
 
     // Configure and example a Default implementation which writes to the `window.console` (if present).
-    Logger.useDefaults = function(defaultLevel) {
+    Logger.useDefaults = function (defaultLevel) {
         // Check for the presence of a logger.
         if (!("console" in window)) {
             return;
         }
 
         Logger.setLevel(defaultLevel || Logger.DEBUG);
-        Logger.setHandler(function(messages, context) {
+        Logger.setHandler(function (messages, context) {
             var console = window.console;
             var hdlr = console.log;
 
