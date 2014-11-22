@@ -1,7 +1,7 @@
 <?php
 // This file gets automatically generated when grunt rebuilds js/css
 // either returns the current git hash or a random string
-// this will make sure that the localStorage gets invalidated upon changes
+// this will invalidate the local storage upon changes
 function getGitHash(){
-	return "546f102f55759";
+	return "bc7c9f3d4aff62884cc3fc237082c94749f91605";
 };

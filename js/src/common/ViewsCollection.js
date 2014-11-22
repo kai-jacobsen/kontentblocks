@@ -3,57 +3,57 @@
  No magic here
  */
 KB.ViewsCollection = function () {
-    this.views = {};
-    this.lastViewAdded = null;
-    this.add = function (id, view) {
+  this.views = {};
+  this.lastViewAdded = null;
+  this.add = function (id, view) {
 
-        if (!this.views[id]) {
-            this.views[id] = view;
-            KB.trigger('kb:' + view.model.get('class') + ':added', view);
-            this.lastViewAdded = view;
-        }
-        return view;
+    if (!this.views[id]) {
+      this.views[id] = view;
+      KB.trigger('kb:' + view.model.get('class') + ':added', view);
+      this.lastViewAdded = view;
+    }
+    return view;
 
-    };
+  };
 
-    this.ready = function () {
-        _.each(this.views, function (view) {
-            view.trigger('kb:' + view.model.get('class'), view);
-            KB.trigger('kb:' + view.model.get('class') + ':loaded', view);
-        });
-        KB.trigger('kb:ready');
-    };
+  this.ready = function () {
+    _.each(this.views, function (view) {
+      view.trigger('kb:' + view.model.get('class'), view);
+      KB.trigger('kb:' + view.model.get('class') + ':loaded', view);
+    });
+    KB.trigger('kb:ready');
+  };
 
-    this.readyOnFront = function () {
-        _.each(this.views, function (view) {
-            view.trigger('kb:' + view.model.get('class'), view);
-            KB.trigger('kb:' + view.model.get('class') + ':loadedOnFront', view);
-        });
-        KB.trigger('kb:ready');
-    };
+  this.readyOnFront = function () {
+    _.each(this.views, function (view) {
+      view.trigger('kb:' + view.model.get('class'), view);
+      KB.trigger('kb:' + view.model.get('class') + ':loadedOnFront', view);
+    });
+    KB.trigger('kb:ready');
+  };
 
 
-    this.remove = function (id) {
-        var V = this.get(id);
+  this.remove = function (id) {
+    var V = this.get(id);
 
-        V.Area.trigger('kb.module.deleted', V);
-        this.trigger('kb.modules.view.deleted', V);
+    V.Area.trigger('kb.module.deleted', V);
+    this.trigger('kb.modules.view.deleted', V);
 
 //        view.removeControls();
-        delete this.views[id];
-    };
+    delete this.views[id];
+  };
 
-    this.get = function (id) {
-        if (this.views[id]) {
-            return this.views[id];
-        }
-    };
+  this.get = function (id) {
+    if (this.views[id]) {
+      return this.views[id];
+    }
+  };
 
-    this.filterByModelAttr = function (attr, value) {
-        return _.filter(this.views, function (view) {
-            return (view.model.get(attr)) === value;
-        });
-    };
+  this.filterByModelAttr = function (attr, value) {
+    return _.filter(this.views, function (view) {
+      return (view.model.get(attr)) === value;
+    });
+  };
 
 };
 

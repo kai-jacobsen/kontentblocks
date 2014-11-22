@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-21 */
+/*! Kontentblocks DevVersion 2014-11-22 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -173,11 +173,27 @@ if (!KB.Config.inDevMode()) {
     _K.setLevel(Logger.OFF);
 }
 
+console.log(_K);
+
 Logger.setHandler(function(messages, context) {
     if (KB.Menubar && context.level.value === 2 && context.name === "_KS") {
         if (messages[0]) {
             KB.Menubar.StatusBar.setMsg(messages[0]);
         }
+    } else {
+        var console = window.console;
+        var hdlr = console.log;
+        if (context.name) {
+            messages[0] = "[" + context.name + "] " + messages[0];
+        }
+        if (context.level === Logger.WARN && console.warn) {
+            hdlr = console.warn;
+        } else if (context.level === Logger.ERROR && console.error) {
+            hdlr = console.error;
+        } else if (context.level === Logger.INFO && console.info) {
+            hdlr = console.info;
+        }
+        hdlr.apply(console, messages);
     }
 });
 
@@ -512,14 +528,13 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     success: function(data) {
         var model;
         this.options.area.modulesList.append(data.html);
-        KB.lastAddedModule = new KB.Backbone.Backend.ModuleModel(data.module);
-        model = KB.Modules.add(KB.lastAddedModule);
+        model = KB.Modules.add(new KB.Backbone.Backend.ModuleModel(data.module));
         this.options.area.addModuleView(model.view);
         _K.info("new module created", {
             view: model.view
         });
         this.parseAdditionalJSON(data.json);
-        KB.TinyMCE.addEditor();
+        KB.TinyMCE.addEditor(model.view.$el);
         KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
         KB.Views.Modules.lastViewAdded.$el.addClass("kb-open");
         KB.Environment.moduleCount++;
@@ -781,15 +796,16 @@ KB.TinyMCE = function($) {
             });
         },
         addEditor: function($el, quicktags, height, watch) {
+            if (!$el) {
+                _K.error("No scope element ($el) provided");
+                return false;
+            }
             if (_.isUndefined(tinyMCEPreInit)) {
-                return;
+                return false;
             }
             var settings = tinyMCEPreInit.mceInit.ghosteditor;
             var edHeight = height || 350;
             var live = _.isUndefined(watch) ? true : false;
-            if (!$el) {
-                $el = KB.lastAddedModule.view.$el;
-            }
             $(".wp-editor-area", $el).each(function() {
                 var id = this.id;
                 settings.elements = id;

@@ -1,9 +1,9 @@
 var KB = KB || {};
 KB.Config = {};
 KB.Backbone = {
-    Backend: {},
-    Frontend: {},
-    Shared: {}
+  Backend: {},
+  Frontend: {},
+  Shared: {}
 };
 KB.Fields = {};
 KB.Utils = {};
