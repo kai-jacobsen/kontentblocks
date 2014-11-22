@@ -10,9 +10,9 @@ KB.currentArea = {};
  * simple getter/setter access point to views
  */
 KB.Views = {
-    Modules: new KB.ViewsCollection(),
-    Areas: new KB.ViewsCollection(),
-    Context: new KB.ViewsCollection()
+  Modules: new KB.ViewsCollection(),
+  Areas: new KB.ViewsCollection(),
+  Context: new KB.ViewsCollection()
 };
 
 /*
@@ -20,7 +20,7 @@ KB.Views = {
  * Get by 'instance_id'
  */
 KB.Modules = new Backbone.Collection([], {
-    model: KB.Backbone.ModuleModel
+  model: KB.Backbone.ModuleModel
 });
 
 /*
@@ -28,7 +28,7 @@ KB.Modules = new Backbone.Collection([], {
  *  Get by 'id'
  */
 KB.Areas = new Backbone.Collection([], {
-    model: KB.Backbone.AreaModel
+  model: KB.Backbone.AreaModel
 });
 
 /*
@@ -42,136 +42,138 @@ KB.Areas = new Backbone.Collection([], {
  */
 KB.App = function () {
 
-    function init() {
-        // create toolbar container for tinymce inline editors
-        var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
-        $toolbar.hide();
+  function init() {
+    // create toolbar container for tinymce inline editors
+    var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
+    $toolbar.hide();
 
-        // create Menubar singleton
-        if (KB.appData.config.useModuleNav) {
-            KB.Menubar = new KB.Backbone.MenubarView();
-        }
-
-        // Register events on collections
-        KB.Modules.on('add', createModuleViews);
-        KB.Areas.on('add', createAreaViews);
-        KB.Modules.on('remove', removeModule);
-
-        // Create views
-        addViews();
-
-        // get the UI on track
-        KB.Ui.init();
-
+    // create Menubar singleton
+    if (KB.appData.config.useModuleNav) {
+      KB.Menubar = new KB.Backbone.MenubarView();
     }
 
-    function shutdown() {
-        _.each(KB.Modules.toArray(), function (item) {
-            KB.Modules.remove(item);
-        });
+    KB.EditModalModules = new KB.Backbone.EditModalModules({});
 
-        jQuery('.editable').each(function (i, el) {
-            tinymce.remove('#' + el.id);
-        });
+    // Register events on collections
+    KB.Modules.on('add', createModuleViews);
+    KB.Areas.on('add', createAreaViews);
+    KB.Modules.on('remove', removeModule);
 
-        jQuery('body').off('click', '.editable-image');
-        jQuery('body').off('click', '.editable-link');
-    }
+    // Create views
+    addViews();
 
-    /**
-     * Iterate through raw areas as they were
-     * output by toJSON() method on each area upon
-     * server side page creation
-     *
-     * Modules are taken from the raw areas and
-     * collected seperatly in their own collection
-     *
-     * View generation is handled by the 'add' event callback
-     * as registered above
-     * @returns void
-     */
-    function addViews() {
+    // get the UI on track
+    KB.Ui.init();
 
-        if (KB.appData.config.preview) {
-            return false;
-        }
+  }
 
+  function shutdown() {
+    _.each(KB.Modules.toArray(), function (item) {
+      KB.Modules.remove(item);
+    });
 
-        // iterate over raw areas
-        _.each(KB.payload.Areas, function (area) {
-            // create new area model
-            KB.Areas.add(new KB.Backbone.AreaModel(area));
-        });
+    jQuery('.editable').each(function (i, el) {
+      tinymce.remove('#' + el.id);
+    });
 
-        // create models from already attached modules
-        _.each(KB.payload.Modules, function (module) {
-            KB.Modules.add(module);
-        });
+    jQuery('body').off('click', '.editable-image');
+    jQuery('body').off('click', '.editable-link');
+  }
 
-        // @TODO events:refactor
-        KB.trigger('kb:moduleControlsAdded');
+  /**
+   * Iterate through raw areas as they were
+   * output by toJSON() method on each area upon
+   * server side page creation
+   *
+   * Modules are taken from the raw areas and
+   * collected seperatly in their own collection
+   *
+   * View generation is handled by the 'add' event callback
+   * as registered above
+   * @returns void
+   */
+  function addViews() {
 
-        // new event
-        KB.Events.trigger('KB::frontend-init');
+    if (KB.appData.config.preview) {
+      return false;
     }
 
 
-    /**
-     * Create views for modules and add them
-     * to the custom collection
-     * @param ModuleModel Backbone Model
-     * @returns void
-     */
-    function createModuleViews(ModuleModel) {
-        var ModuleView, Area;
-        // assign the full corresponding area model to the module model
-        ModuleModel.setArea(KB.Areas.get(ModuleModel.get('area')));
-        ModuleModel.bind('change:area', ModuleModel.areaChanged);
-        Area = KB.Views.Areas.get(ModuleModel.get('area'));
-        // create view
-        ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
-            model: ModuleModel,
-            el: '#' + ModuleModel.get('instance_id'),
-            Area: Area
-        }));
+    // iterate over raw areas
+    _.each(KB.payload.Areas, function (area) {
+      // create new area model
+      KB.Areas.add(new KB.Backbone.AreaModel(area));
+    });
 
-        ModuleView.$el.data('ModuleView', ModuleView);
-        //assign area view to module view
+    // create models from already attached modules
+    _.each(KB.payload.Modules, function (module) {
+      KB.Modules.add(module);
+    });
 
-        Area.addModuleView(ModuleView);
-        KB.Ui.initTabs();
-    }
+    // @TODO events:refactor
+    KB.trigger('kb:moduleControlsAdded');
+
+    // new event
+    KB.Events.trigger('KB::frontend-init');
+  }
 
 
-    /**
-     *
-     * @param AreaModel Backbone Model
-     * @returns void
-     */
-    function createAreaViews(AreaModel) {
-        KB.Views.Areas.add(AreaModel.get('id'), new KB.Backbone.AreaView({
-            model: AreaModel,
-            el: '#' + AreaModel.get('id')
-        }));
+  /**
+   * Create views for modules and add them
+   * to the custom collection
+   * @param ModuleModel Backbone Model
+   * @returns void
+   */
+  function createModuleViews(ModuleModel) {
+    var ModuleView, Area;
+    // assign the full corresponding area model to the module model
+    ModuleModel.setArea(KB.Areas.get(ModuleModel.get('area')));
+    ModuleModel.bind('change:area', ModuleModel.areaChanged);
+    Area = KB.Views.Areas.get(ModuleModel.get('area'));
+    // create view
+    ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
+      model: ModuleModel,
+      el: '#' + ModuleModel.get('instance_id'),
+      Area: Area
+    }));
 
-    }
+    ModuleView.$el.data('ModuleView', ModuleView);
+    //assign area view to module view
 
-    /**
-     * Removes a view from the collection.
-     * The collection will destroy corresponding views
-     * @param ModuleModel Backbone Model
-     * @returns void
-     */
-    function removeModule(ModuleModel) {
-        KB.Views.Modules.remove(ModuleModel.get('instance_id'));
-    }
+    Area.addModuleView(ModuleView);
+    KB.Ui.initTabs();
+  }
 
 
-    // revealing module pattern
-    return {
-        init: init,
-        shutdown: shutdown
-    };
+  /**
+   *
+   * @param AreaModel Backbone Model
+   * @returns void
+   */
+  function createAreaViews(AreaModel) {
+    KB.Views.Areas.add(AreaModel.get('id'), new KB.Backbone.AreaView({
+      model: AreaModel,
+      el: '#' + AreaModel.get('id')
+    }));
+
+  }
+
+  /**
+   * Removes a view from the collection.
+   * The collection will destroy corresponding views
+   * @param ModuleModel Backbone Model
+   * @returns void
+   */
+  function removeModule(ModuleModel) {
+    KB.Views.Modules.remove(ModuleModel.get('instance_id'));
+  }
+
+
+  // revealing module pattern
+  return {
+    init: init,
+    shutdown: shutdown
+  };
 
 }(jQuery);
 
@@ -180,15 +182,15 @@ KB.App.init();
 
 
 jQuery(document).ready(function () {
-    if (KB.appData && KB.appData.config.frontend) {
-        KB.Views.Modules.readyOnFront();
-        _K.info('Frontend Modules Ready Event fired');
-        _KS.info('Frontend welcomes you');
-    }
-    // general ready event
-    KB.Events.trigger('KB::ready');
-    // force user cookie to tinymce
-    // wp native js function
-    setUserSetting('editor', 'tinymce');
+  if (KB.appData && KB.appData.config.frontend) {
+    KB.Views.Modules.readyOnFront();
+    _K.info('Frontend Modules Ready Event fired');
+    _KS.info('Frontend welcomes you');
+  }
+  // general ready event
+  KB.Events.trigger('KB::ready');
+  // force user cookie to tinymce
+  // wp native js function
+  setUserSetting('editor', 'tinymce');
 
 });

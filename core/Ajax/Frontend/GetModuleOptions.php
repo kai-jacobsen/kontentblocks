@@ -25,11 +25,28 @@ class GetModuleOptions
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
-        $module = $_POST['module'];
+        $overloadData = filter_input( INPUT_POST, 'overloadData', FILTER_VALIDATE_BOOLEAN );
+        $module = filter_input( INPUT_POST, 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE );
+
+        if (is_null($module)){
+            wp_send_json_error('module is null');
+        }
+
+        if ($overloadData) {
+            $moduleData = filter_input(
+                INPUT_POST,
+                'moduleData',
+                FILTER_DEFAULT,
+                FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE
+            );
+        } else {
+            $moduleData = null;
+        }
+
         $module = apply_filters( 'kb.module.before.factory', $module );
         /** @var PostEnvironment $Environment */
         $Environment = Utilities::getEnvironment( $module['post_id'] );
-        $Factory = new ModuleFactory( $module['class'], $module, $Environment );
+        $Factory = new ModuleFactory( $module['class'], $module, $Environment, $moduleData );
         $instance = $Factory->getModule();
         ob_start();
         $instance->form();
