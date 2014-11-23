@@ -9,6 +9,7 @@ KB.IEdit.Image = (function ($) {
     init: function () {
       var that = this;
       var $body = $('body');
+
       $body.on('click', this.selector, function (e) {
         e.preventDefault();
         that.img = $(this);
@@ -118,7 +119,6 @@ KB.IEdit.Image = (function ($) {
 
   return self;
 
-}
-(jQuery));
+}(jQuery));
 _.extend(KB.IEdit.Image, Backbone.Events);
 

@@ -9,7 +9,6 @@ KB.Backbone.Frontend.StatusBar = Backbone.View.extend({
     this.$statusbar.text('kontentblocks');
   },
   setMsg: function (msg) {
-    var that = this;
     this.messages.push(msg);
   },
   printMsg: function (msg) {
@@ -40,7 +39,6 @@ KB.Backbone.Frontend.StatusBar = Backbone.View.extend({
         }
       };
     }(wait, times);
-
     setTimeout(interv, wait);
   }
 });
