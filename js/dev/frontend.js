@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-22 */
+/*! Kontentblocks DevVersion 2014-11-23 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -470,7 +470,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.ModuleView = ModuleView;
         this.model = ModuleView.model;
         this.attach();
-        this.reload(this.ModuleView, force);
+        this.render();
         return this;
     },
     attach: function() {
@@ -480,7 +480,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             that.serialize(false, true);
             that.render();
         });
-        this.listenTo(this.model, "change:moduleData", function() {
+        this.listenTo(this.model, "kb.frontend.module.inlineUpdate", function() {
             that.render(true);
             that.$el.addClass("isDirty");
         });
@@ -488,18 +488,18 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     detach: function() {
         this.stopListening(this.ModuleView);
+        this.stopListening(this.model);
         this.ModuleView.attachedFields = {};
+        delete this.ModuleView;
     },
     destroy: function() {
         var that = this;
-        this.$el.fadeTo(500, 0, function() {
-            that.detach();
-            jQuery(".wp-editor-area", this.$el).each(function(i, item) {
-                tinymce.remove("#" + item.id);
-            });
-            that.unbind();
-            that.$el.detach();
+        that.detach();
+        jQuery(".wp-editor-area", this.$el).each(function(i, item) {
+            tinymce.remove("#" + item.id);
         });
+        that.unbind();
+        that.$el.detach();
     },
     setupWindow: function() {
         this.$el.appendTo("body").show();
@@ -513,13 +513,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     frontendViewUpdated: function() {
         this.$el.removeClass("isDirty");
         this.render();
-    },
-    reload: function(moduleView, force) {
-        var that = this;
-        if (!moduleView) {
-            _K.log("FrontendModal::reload.no view argument given");
-        }
-        that.render();
     },
     preview: function() {
         this.serialize(false, false);
@@ -595,9 +588,10 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         _K.info("Frontend Modal resizing done!");
     },
     initScrollbars: function(height) {
-        jQuery(".nano", this.$el).height(height + 20);
-        jQuery(".nano").nanoScroller({
-            preventPageScrolling: true
+        jQuery(".kb-nano", this.$el).height(height + 20);
+        jQuery(".kb-nano").nanoScroller({
+            preventPageScrolling: true,
+            contentClass: "kb-nano-content"
         });
         _K.info("Nano Scrollbars (re)initialized!");
     },
@@ -1343,6 +1337,7 @@ KB.IEdit.BackgroundImage = function($) {
             var settings = KB.payload.FrontSettings[data.uid];
             KB.Util.setIndex(moduleData, path, value);
             cModule.set("moduleData", moduleData);
+            cModule.trigger("kb.frontend.module.inlineUpdate");
             jQuery.ajax({
                 url: ajaxurl,
                 data: {
@@ -1436,6 +1431,7 @@ KB.IEdit.Image = function($) {
             KB.Util.setIndex(moduleData, path, value);
             var settings = KB.payload.FrontSettings[data.uid];
             cModule.set("moduleData", moduleData);
+            cModule.trigger("kb.frontend.module.inlineUpdate");
             jQuery.ajax({
                 url: ajaxurl,
                 data: {
@@ -1570,6 +1566,7 @@ KB.IEdit.Link = function($) {
             var path = data.kpath;
             KB.Util.setIndex(moduleData, path, value);
             cModule.set("moduleData", moduleData);
+            cModule.trigger("kb.frontend.module.inlineUpdate");
         }
     };
 }(jQuery);
@@ -1666,14 +1663,14 @@ KB.IEdit.Text = function(el) {
                             dataType: "html",
                             success: function(res) {
                                 ed.setContent(res);
-                                ed.module.trigger("change");
                                 ed.module.set("moduleData", moduleData);
+                                ed.module.trigger("kb.frontend.module.inlineUpdate");
                             },
                             error: function() {}
                         });
                     } else {
-                        ed.module.trigger("change");
                         ed.module.set("moduleData", moduleData);
+                        ed.module.trigger("kb.frontend.module.inlineUpdate");
                     }
                 } else {
                     ed.setContent(ed.previousContent);

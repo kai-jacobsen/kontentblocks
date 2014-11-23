@@ -77,6 +77,7 @@ KB.IEdit.BackgroundImage = (function ($) {
       // all modifications to moduleData will happen on the original object
       KB.Util.setIndex(moduleData, path, value);
       cModule.set('moduleData', moduleData);
+      cModule.trigger('kb.frontend.module.inlineUpdate');
 
       jQuery.ajax({
         url: ajaxurl,

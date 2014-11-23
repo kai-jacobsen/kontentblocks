@@ -132,6 +132,8 @@ KB.IEdit.Link = (function ($) {
 
       // set data back on module model
       cModule.set('moduleData', moduleData);
+      cModule.trigger('kb.frontend.module.inlineUpdate');
+
     }
   };
 

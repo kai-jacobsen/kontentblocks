@@ -77,6 +77,7 @@ KB.IEdit.Image = (function ($) {
 
       var settings = KB.payload.FrontSettings[data.uid];
       cModule.set('moduleData', moduleData);
+      cModule.trigger('kb.frontend.module.inlineUpdate');
 
       jQuery.ajax({
         url: ajaxurl,

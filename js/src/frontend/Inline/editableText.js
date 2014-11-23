@@ -121,8 +121,8 @@ KB.IEdit.Text = function (el) {
               dataType: 'html',
               success: function (res) {
                 ed.setContent(res);
-                ed.module.trigger('change');
                 ed.module.set('moduleData', moduleData);
+                ed.module.trigger('kb.frontend.module.inlineUpdate');
               },
               error: function () {
 //                                ed.module.trigger('change');
@@ -130,8 +130,8 @@ KB.IEdit.Text = function (el) {
               }
             });
           } else {
-            ed.module.trigger('change');
             ed.module.set('moduleData', moduleData);
+            ed.module.trigger('kb.frontend.module.inlineUpdate');
           }
         } else {
           ed.setContent(ed.previousContent);

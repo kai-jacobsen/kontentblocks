@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-22 */
+/*! Kontentblocks DevVersion 2014-11-23 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -939,7 +939,9 @@ KB.Ui = function($) {
             var selector = $(".kb_fieldtabs", $context);
             selector.tabs({
                 activate: function() {
-                    $(".nano").nanoScroller();
+                    $(".kb-nano").nanoScroller({
+                        contentClass: "kb-nano-content"
+                    });
                     KB.Events.trigger("KB::ui-tabs-change");
                     KB.Events.trigger("KB::edit-modal-refresh");
                 }

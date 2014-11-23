@@ -91,7 +91,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     this.model = ModuleView.model;
 
     this.attach();
-    this.reload(this.ModuleView, force);
+    this.render();
 
     return this;
   },
@@ -111,7 +111,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       that.render();
     });
 
-    this.listenTo(this.model, 'change:moduleData', function () {
+    this.listenTo(this.model, 'kb.frontend.module.inlineUpdate', function () {
       that.render(true);
       that.$el.addClass('isDirty');
     });
@@ -121,7 +121,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
   detach: function () {
     // reset listeners and ModuleView
     this.stopListening(this.ModuleView);
+    this.stopListening(this.model);
     this.ModuleView.attachedFields = {};
+    delete this.ModuleView;
   },
 
   /**
@@ -129,15 +131,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    */
   destroy: function () {
     var that = this;
-    this.$el.fadeTo(500, 0, function () {
-      that.detach();
-      jQuery('.wp-editor-area', this.$el).each(function (i, item) {
-        tinymce.remove('#' + item.id);
-      });
-      that.unbind();
-      that.$el.detach();
+    that.detach();
+    jQuery('.wp-editor-area', this.$el).each(function (i, item) {
+      tinymce.remove('#' + item.id);
     });
-
+    that.unbind();
+    that.$el.detach();
   },
 
   /**
@@ -160,27 +159,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
   frontendViewUpdated: function () {
     this.$el.removeClass('isDirty');
     this.render();
-  },
-
-  /**
-   * This function reloads this frontend edit modal with the data from the given module
-   * @param moduleView
-   * @returns {boolean}
-   */
-  reload: function (moduleView, force) {
-    var that = this;
-
-    if (!moduleView) {
-      _K.log('FrontendModal::reload.no view argument given');
-    }
-    // if the current loaded module equals the requested bail out
-    //if (this.model && (this.model.get('instance_id') === moduleView.model.get('instance_id')) && !forced) {
-    //    _K.log('FrontendModal::reload.Requested Module is already loaded. Aborting.');
-    //    return false;
-    //}
-
-    // indicate working state
-    that.render();
   },
 
 
@@ -206,15 +184,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     var that = this,
       json;
 
-
     _KS.info('Frontend modal retrieves data from the server');
     overloadData = !_.isUndefined(overloadData);
     json = this.model.toJSON();
 
-
     // apply settings for the modal from the active module, if any
     this.applyControlsSettings(this.$el);
-
     this.updateViewClassTo = false;
 
     // get the form
@@ -272,9 +247,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
           that.recalibrate();
           that.LoadingAnimation.hide();
         }, 550);
-
-        // back to visibilitiy
-        //that.$el.fadeTo(300, 1);
 
       },
       error: function () {
@@ -334,8 +306,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    * @param height
    */
   initScrollbars: function (height) {
-    jQuery('.nano', this.$el).height(height + 20);
-    jQuery('.nano').nanoScroller({preventPageScrolling: true});
+    jQuery('.kb-nano', this.$el).height(height + 20);
+    jQuery('.kb-nano').nanoScroller({preventPageScrolling: true, contentClass: 'kb-nano-content'});
     _K.info('Nano Scrollbars (re)initialized!');
   },
 
