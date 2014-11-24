@@ -58,7 +58,7 @@ class ModuleView implements \JsonSerializable
 
         // if no tpl is given, set a default
         // @TODO Kinda useless, things should break in that case
-        $this->tplFile = ( $tpl !== false ) ? $tpl : get_class( $module ) . '.twig';
+        $this->tplFile = ( $tpl !== false ) ? $tpl : null;
 
 
         $this->engine = Kontentblocks::getService( 'templating.twig' );

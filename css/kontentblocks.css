@@ -511,6 +511,20 @@
   display: block;
 }
 
+/* line 216, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
+#aToolTip {
+  position: absolute;
+  display: none;
+  z-index: 50000;
+}
+
+/* line 222, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
+#aToolTip .aToolTipContent {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
 /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
 .kb-os-layout-bars .controls-wrap {
   width: 100%;
@@ -4157,8 +4171,8 @@ button.Zebra_DatePicker_Icon_Inside {
 /* line 96, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .module-browser-header ul {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 /* line 103, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .module-browser-header .cat-item {
@@ -4215,17 +4229,24 @@ button.Zebra_DatePicker_Icon_Inside {
 }
 
 /* line 155, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
-.modules-list, .module-description {
-  margin: 0;
-  padding: 0 0 72px;
+.modules-list {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
 
-/* line 160, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 161, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+.modules-list, .module-description {
+  margin: 0 !important;
+  padding: 0 0 72px !important;
+}
+
+/* line 166, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .module-description {
   padding-left: 15px;
 }
 
-/* line 164, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 170, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item {
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #fff;
@@ -4233,12 +4254,12 @@ button.Zebra_DatePicker_Icon_Inside {
   padding: 4px 0 !important;
   margin: 0 !important;
 }
-/* line 171, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 177, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item:hover {
   background-color: #fff;
   cursor: pointer;
 }
-/* line 176, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 182, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item .dashicons-plus {
   position: absolute;
   left: 0px;
@@ -4250,12 +4271,12 @@ button.Zebra_DatePicker_Icon_Inside {
   transition: all 0.3s ease-in-out;
   z-index: 595;
 }
-/* line 186, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 192, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item .dashicons-plus:hover {
   background-color: #0074a2;
   color: #fff;
 }
-/* line 192, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 198, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item h4 {
   display: inline-block;
   font-size: 14px !important;
@@ -4263,7 +4284,7 @@ button.Zebra_DatePicker_Icon_Inside {
   margin: 0 !important;
   padding-left: 40px !important;
 }
-/* line 200, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
+/* line 206, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .modules-list-item p {
   padding-top: 0 !important;
   margin: 0 !important;

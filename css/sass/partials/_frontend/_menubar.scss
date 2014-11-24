@@ -212,3 +212,16 @@
 .kb-menubar-container ul li:hover .kb-menubar-item__actions{
   display: block;
 }
+
+#aToolTip {
+  position: absolute;
+  display: none;
+  z-index: 50000;
+}
+
+#aToolTip .aToolTipContent {
+  position:relative;
+  margin:0;
+  padding:0;
+}
+

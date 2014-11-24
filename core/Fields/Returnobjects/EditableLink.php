@@ -13,6 +13,11 @@ class EditableLink extends AbstractEditableFieldReturn {
 	protected $href;
 
 
+    /**
+     * @var string
+     */
+    public $helptext = 'Hold Strg/Cmd and click to edit the link';
+
 	function getEditableClass() {
 		return "editable-link";
 	}

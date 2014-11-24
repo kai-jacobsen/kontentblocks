@@ -6,7 +6,7 @@ use Kontentblocks\Utils\ImageResize;
 use Kontentblocks\Utils\JSONBridge;
 
 /**
- * Class Image
+ * Class EditableImage
  *
  * A ReturnObject for images with 'inline' edit capabilities, which are optional
  * @package Kontentblocks\Fields\Returnobjects
@@ -68,6 +68,10 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     protected $crop = true;
 
+    /**
+     * @var string
+     */
+    public $helptext = 'Click to chose a different image';
 
     /**
      *
@@ -136,12 +140,10 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function html()
     {
-//        if ($this->inlineEdit) {
-//            $this->addAttr( 'data-powertip', 'Click to change image' );
-//        }
+
         // adds necessary attributes to enable inline edit
         $this->handleLoggedInUsers();
-        $this->prepareSrc(null);
+        $this->prepareSrc( null );
         $format = '<%1$s %3$s src="%2$s" >';
         $this->toJSON();
 
@@ -170,10 +172,11 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function background()
     {
-        $this->addAttr( 'data-powertip', 'Click to change image' );
+
+
         $this->background = true;
         $this->handleLoggedInUsers();
-        $this->prepareSrc(null);
+        $this->prepareSrc( null );
         $this->toJSON();
 
         $format = ' %2$s style="background-image: url(\'%1$s\');"';

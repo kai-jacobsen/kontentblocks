@@ -63,6 +63,11 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      */
     protected $uniqueId;
 
+    /**
+     * @var string
+     */
+    public $helptext = '';
+
 
     /**
      * @param $value
@@ -171,6 +176,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
             $this->addAttr( 'data-module', $this->moduleId );
             $this->addAttr( 'data-uid', $this->uniqueId );
             $this->addAttr( 'data-kpath', $this->createPath() );
+            $this->addAttr( 'data-kb-help', $this->helptext);
         }
     }
 

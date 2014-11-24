@@ -282,7 +282,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     // if the modal overlaps the height of the window
     // calculate possible height and set
     // nanoScroller needs an re-init after every change
-    // TODO change nanoScroller default selectors / css to custom in order to avoid theme conflicts
     if (winDiff > 0) {
       this.initScrollbars(conH - (winDiff + 30));
     }

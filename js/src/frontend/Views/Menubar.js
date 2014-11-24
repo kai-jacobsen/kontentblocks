@@ -145,6 +145,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
   initialize: function () {
     // get or set show state to local storage
     this.$title = jQuery('<div class="kb-module-controls__title"> </div>').appendTo(this.$el);
+    this.$helpbox = jQuery('<div class="kb-menubar-helpbox"></div>').appendTo(this.$el);
     this.show = _.isNull(KB.Util.stex.get('kb-nav-show')) ? true : KB.Util.stex.get('kb-nav-show');
     this.$toggle = jQuery('<div class="kb-menubar-toggle genericon genericon-menu"></div>').appendTo(this.$el);
     this.$modulesTab = jQuery('<div data-list="modules" class="kb-menubar-tab kb-menubar-tab__modules kb-tab-active">Modules</div>').appendTo(this.$title);
@@ -153,6 +154,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     this.StatusBar = new KB.Backbone.Frontend.StatusBar({
       el: this.$title
     });
+
 
     this.render();
   },

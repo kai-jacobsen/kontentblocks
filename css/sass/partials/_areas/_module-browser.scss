@@ -95,8 +95,8 @@
 
   ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   /*li*/
@@ -152,9 +152,15 @@
 
 }
 
+.modules-list{
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
 .modules-list, .module-description {
-  margin: 0;
-  padding: 0 0 72px;
+  margin: 0 !important;
+  padding: 0 0 72px !important;
 }
 
 .module-description{
