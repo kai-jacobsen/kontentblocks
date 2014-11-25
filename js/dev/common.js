@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-23 */
+/*! Kontentblocks DevVersion 2014-11-25 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -172,8 +172,6 @@ _KS.setLevel(_KS.INFO);
 if (!KB.Config.inDevMode()) {
     _K.setLevel(Logger.OFF);
 }
-
-console.log(_K);
 
 Logger.setHandler(function(messages, context) {
     if (KB.Menubar && context.level.value === 2 && context.name === "_KS") {
@@ -479,8 +477,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     open: function() {
         this.$el.appendTo("body");
         jQuery("#wpwrap").addClass("module-browser-open");
-        jQuery(".nano").nanoScroller({
-            flash: true
+        jQuery(".kb-nano").nanoScroller({
+            flash: true,
+            contentClass: "kb-nano-content"
         });
     },
     close: function() {
@@ -941,8 +940,7 @@ KB.Ui = function($) {
                     $(".kb-nano").nanoScroller({
                         contentClass: "kb-nano-content"
                     });
-                    KB.Events.trigger("KB::ui-tabs-change");
-                    KB.Events.trigger("KB::edit-modal-refresh");
+                    KB.Events.trigger("kb.modal.refresh");
                 }
             });
             selector.each(function() {

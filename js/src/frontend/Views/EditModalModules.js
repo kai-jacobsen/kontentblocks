@@ -2,6 +2,7 @@
  * This is the modal which wraps the modules input form
  * and loads when the user clicks on "edit" while in frontend editing mode
  * @type {*|void|Object}
+ *
  */
 KB.Backbone.EditModalModules = Backbone.View.extend({
   tagName: 'div',
@@ -40,7 +41,10 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     });
 
     // use this event to refresh the modal on demand
-    this.listenTo(KB.Events, 'KB::edit-modal-refresh', this.recalibrate);
+    this.listenTo(KB.Events, 'kb.modal.refresh', this.recalibrate);
+
+    // use this event to tigger preview
+    this.listenTo(KB.Events, 'kb.modal.preview', this.preview);
 
     // Attach resize event handler
     jQuery(window).on('resize', function () {

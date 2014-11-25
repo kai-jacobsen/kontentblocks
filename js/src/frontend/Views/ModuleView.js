@@ -138,7 +138,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     KB.focusedModule = this.model;
     return this;
   },
-  insertDropZone: function () {
+    insertDropZone: function () {
     this.focus = true;
     this.$el.append(this.$dropZone);
   },

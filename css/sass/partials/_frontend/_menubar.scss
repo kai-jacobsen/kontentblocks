@@ -38,7 +38,33 @@
     top: -25px;
     width: 25px;
     height: 25px;
-    padding-left: 4px;
+    padding-left: 0px;
+    padding-top: 4px;
+    background: #eaeaea;
+    z-index: 9999;
+    cursor: pointer;
+    color: #666;
+    @include transition(all .3s linear);
+    border-top: 1px #aaa solid;
+    border-left: 1px #aaa solid;
+    border-right: 1px #aaa solid;
+
+    &:hover {
+      color: #666;
+    }
+
+    .genericon:before {
+      text-align: center;
+    }
+  }
+
+  .kb-menubar-add_module {
+    position: absolute;
+    right: 35px;
+    top: -25px;
+    width: 25px;
+    height: 25px;
+    padding-left: 0px;
     padding-top: 4px;
     background: #eaeaea;
     z-index: 9999;
@@ -54,7 +80,6 @@
     }
 
     .genericon:before {
-      padding-left: 8px;
       text-align: center;
     }
   }
@@ -191,7 +216,7 @@
   @include box-sizing(border-box);
   font-size: 12px;
   vertical-align: middle;
-  line-height: 18px!important;
+  line-height: 18px !important;
   cursor: pointer;
 
   &.kb-tab-active {
@@ -209,19 +234,7 @@
   left: 69px;
 }
 
-.kb-menubar-container ul li:hover .kb-menubar-item__actions{
+.kb-menubar-container ul li:hover .kb-menubar-item__actions {
   display: block;
-}
-
-#aToolTip {
-  position: absolute;
-  display: none;
-  z-index: 50000;
-}
-
-#aToolTip .aToolTipContent {
-  position:relative;
-  margin:0;
-  padding:0;
 }
 

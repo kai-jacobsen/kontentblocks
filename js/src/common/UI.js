@@ -104,8 +104,7 @@ KB.Ui = function ($) {
       selector.tabs({
         activate: function () {
           $('.kb-nano').nanoScroller({ contentClass: 'kb-nano-content' });
-          KB.Events.trigger('KB::ui-tabs-change');
-          KB.Events.trigger('KB::edit-modal-refresh');
+          KB.Events.trigger('kb.modal.refresh');
         }
       });
       selector.each(function () {

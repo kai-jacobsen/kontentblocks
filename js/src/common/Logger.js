@@ -6,7 +6,6 @@ _KS.setLevel(_KS.INFO);
 if (!KB.Config.inDevMode()) {
   _K.setLevel(Logger.OFF);
 }
-console.log(_K);
 Logger.setHandler(function (messages, context) {
   // is Menubar exists and log message is of type INFO
   if (KB.Menubar && context.level.value === 2 && context.name === '_KS') {

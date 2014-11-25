@@ -1,11 +1,12 @@
 /**
  * Single module nav item
  * model refers to the parent view and is an actual Backbone View
+ * @TODO implement layout update event when new module was added
  */
 KB.Backbone.ModuleMenuItem = Backbone.View.extend({
   initialize: function () {
     var that = this;
-    this.parentView = this.model;
+    this.parentView = this.model; // alias model to parentView
     // this.model refers to the moduleView
     this.el = KB.Templates.render('frontend/module-menu-item', {
       view: this.parentView.model.toJSON()
@@ -67,6 +68,10 @@ KB.Backbone.ModuleMenuItem = Backbone.View.extend({
 
 });
 
+// ===================================================================
+
+// ===================================================================
+
 /**
  * Single area item
  * model refers to the parent view and is an actual Backbone View
@@ -103,16 +108,16 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
   openAreaSettings: function (e) {
     if (KB.EditModalAreas) {
       KB.EditModalAreas.
-        setArea(this.model).
-        setModel(this.model.model);
+        setArea(this.parentView).
+        setModel(this.parentView.model);
       KB.EditModalAreas.render();
       return this;
     }
 
     KB.EditModalAreas = new KB.Backbone.EditModalAreas({
-      model: this.model.model,
+      model: this.parentView.model,
       target: e.currentTarget,
-      AreaView: this.model
+      AreaView: this.parentView
     });
 
   },
@@ -135,6 +140,10 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
 });
 
 
+// ===================================================================
+
+// ===================================================================
+
 /**
  * Main view/controller for the bottom menubar
  */
@@ -143,11 +152,14 @@ KB.Backbone.MenubarView = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-menubar-container',
   initialize: function () {
+
+    this.AreaViews = {};
+
     // get or set show state to local storage
     this.$title = jQuery('<div class="kb-module-controls__title"> </div>').appendTo(this.$el);
-    this.$helpbox = jQuery('<div class="kb-menubar-helpbox"></div>').appendTo(this.$el);
-    this.show = _.isNull(KB.Util.stex.get('kb-nav-show')) ? true : KB.Util.stex.get('kb-nav-show');
+    this.show = _.isNull(KB.Util.stex.get('kb-menubar-show')) ? true : KB.Util.stex.get('kb-menubar-show');
     this.$toggle = jQuery('<div class="kb-menubar-toggle genericon genericon-menu"></div>').appendTo(this.$el);
+    //this.$addModule = jQuery('<div class="kb-menubar-add_module genericon genericon-plus" style="display: none;"></div>').appendTo(this.$el);
     this.$modulesTab = jQuery('<div data-list="modules" class="kb-menubar-tab kb-menubar-tab__modules kb-tab-active">Modules</div>').appendTo(this.$title);
     this.$areasTab = jQuery('<div data-list="areas" class="kb-menubar-tab kb-menubar-tab__areas">Areas</div>').appendTo(this.$title);
 
@@ -160,6 +172,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
   },
   events: {
     'click .kb-menubar-toggle': 'toggleView',
+    'click .kb-menubar-add_module': 'renderDropzones',
     'mouseenter .kb-menubar-toggle': 'over',
     'mouseleave .kb-menubar-toggle': 'out',
     'click .kb-menubar-tab': 'switchTabs'
@@ -187,6 +200,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
   attachAreaView: function (areaView) {
     areaView.Menubar = this;
     this.renderAreaViewItem(areaView);
+    this.AreaViews[areaView.model.get('id')] = areaView;
   },
   renderAreaViewItem: function (areaView) {
     var Item = new KB.Backbone.AreaNavItem({
@@ -200,6 +214,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     var show = !this.show;
     this.show = show;
     KB.Util.stex.set('kb-menubar-show', show, 60 * 60 * 1000 * 24);
+
   },
   over: function () {
     if (!this.show) {

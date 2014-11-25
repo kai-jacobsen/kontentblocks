@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-23 */
+/*! Kontentblocks DevVersion 2014-11-25 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -720,7 +720,7 @@ KB.Fields.register("Image", function($) {
             this.$id.val(attachment.get("id"));
             this.$title.val(attachment.get("title"));
             this.$description.val(attachment.get("caption"));
-            $(document).trigger("KB:osUpdate");
+            KB.Events.trigger("kb.modal.preview", this);
         },
         resetInputs: function() {
             this.$container.empty();
