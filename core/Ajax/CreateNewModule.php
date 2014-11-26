@@ -210,6 +210,7 @@ class CreateNewModule
             wp_send_json_error( 'Update to Index failed' );
         }
 
+
         // @TODO deprecate
         do_action( 'kb::create:module', $this->newModule, $this->Environment );
         do_action( 'kb.module.create', $this->newModule );
@@ -244,6 +245,7 @@ class CreateNewModule
 
         // create the new module finally
         $this->newInstance = $this->createModuleInstance();
+
 
         if ($this->frontend) {
             $SingleRenderer = new SingleModuleRenderer( $this->newInstance );

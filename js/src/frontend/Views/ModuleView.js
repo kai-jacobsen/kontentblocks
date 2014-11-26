@@ -40,11 +40,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     this.Controls = new KB.Backbone.Frontend.ModuleControlsView({
       ModuleView: this
     });
-
-    //@TODO events:replace with new handler
-    jQuery(window).on('kontentblocks::ajaxUpdate', function () {
-      that.setControlsPosition();
-    });
   },
   events: {
     "click .kb-module__placeholder": "openOptions",
@@ -138,7 +133,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     KB.focusedModule = this.model;
     return this;
   },
-    insertDropZone: function () {
+  insertDropZone: function () {
     this.focus = true;
     this.$el.append(this.$dropZone);
   },

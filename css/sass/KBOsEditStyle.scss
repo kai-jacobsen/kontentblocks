@@ -15,7 +15,18 @@
     display: inline-block;
     padding: 0 !important;
     margin: 0 !important;
+
+    span.kb-module__draft-notice {
+      font-size: 11px !important;
+      display: block;
+      width: 100%;
+      background-color: red !important;
+
+    }
+
   }
+
+
 }
 
 .module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {

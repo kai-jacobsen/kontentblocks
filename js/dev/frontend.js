@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-25 */
+/*! Kontentblocks DevVersion 2014-11-26 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -180,7 +180,6 @@ KB.LayoutIterator = function(layout, AreaView) {
                 $wrap.removeClass();
                 $wrap.addClass("kb-wrap " + Iterator.getCurrent().classes);
             }
-            console.log(Iterator.getCurrent().classes);
             if (ui) {
                 ui.placeholder.addClass("kb-front-sortable-placeholder");
             }
@@ -1112,9 +1111,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.setControlsPosition();
         this.Controls = new KB.Backbone.Frontend.ModuleControlsView({
             ModuleView: this
-        });
-        jQuery(window).on("kontentblocks::ajaxUpdate", function() {
-            that.setControlsPosition();
         });
     },
     events: {
