@@ -5,6 +5,8 @@
   position: relative;
 }
 
+
+
 .controls-wrap {
   list-style: none !important;
   margin: 0 !important;
@@ -159,6 +161,13 @@ body.onsite-editing {
 
 #onsite-form{
 //  @include transition(height .3s linear);
+}
+
+.kb-modal__draft-notice{
+  padding: 4px !important;
+  color: #333!important;
+  font-size: 11px!important;
+  background-color: orange;
 }
 
 #wp-toolbar {

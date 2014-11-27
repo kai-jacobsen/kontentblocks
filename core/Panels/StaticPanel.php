@@ -1,7 +1,7 @@
 <?php
 namespace Kontentblocks\Panels;
 
-use Kontentblocks\Fields\PanelFieldManager;
+use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -13,7 +13,7 @@ abstract class StaticPanel extends AbstractPanel
 
     /**
      * Custom Field Manager Instance
-     * @var PanelFieldManager
+     * @var PanelFieldController
      */
     protected $FieldManager;
 
@@ -45,10 +45,10 @@ abstract class StaticPanel extends AbstractPanel
 
     /**
      * Fields to render, must be provided by child class
-     * @param PanelFieldManager $FieldManager
+     * @param PanelFieldController $FieldManager
      * @return mixed
      */
-    abstract public function fields( PanelFieldManager $FieldManager );
+    abstract public function fields( PanelFieldController $FieldManager );
 
 
     /**
@@ -68,7 +68,7 @@ abstract class StaticPanel extends AbstractPanel
         }
 
         $this->setupData( $postObj->ID );
-        $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
+        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $this->beforeForm();
         $this->fields( $this->FieldManager )->renderFields();
@@ -87,7 +87,7 @@ abstract class StaticPanel extends AbstractPanel
         }
 
         $old = $this->setupData( $postId );
-        $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
+        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $new = $this->fields( $this->FieldManager )->save( $_POST[$this->baseId], $old );
         update_post_meta( $postId, $this->baseId, $new );
@@ -136,7 +136,7 @@ abstract class StaticPanel extends AbstractPanel
     public function setup( $postId )
     {
         $this->setupData( $postId );
-        $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
+        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
         $this->fields( $this->FieldManager )->setup( $this->data );
 
         return $this;

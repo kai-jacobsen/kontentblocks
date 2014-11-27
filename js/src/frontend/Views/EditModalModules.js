@@ -25,6 +25,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     this.$formContent = jQuery('#onsite-content', this.$el);
     this.$inner = jQuery('.os-content-inner', this.$formContent);
     this.$title = jQuery('.controls-title', this.$el);
+    this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
     this.LoadingAnimation = new KB.Backbone.Shared.LoadingAnimation({
       el: this.$form
     });
@@ -82,9 +83,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
   openView: function (ModuleView, force) {
 
-    force = (_.isUndefined(force)) ? false : true;
-
     this.setupWindow();
+
+    force = (_.isUndefined(force)) ? false : true;
 
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
       _K.log('Module View already set');
@@ -155,6 +156,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         left: KB.OSConfig.wrapPosition.left
       });
     }
+
+
   },
 
   /**
@@ -192,6 +195,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     overloadData = !_.isUndefined(overloadData);
     json = this.model.toJSON();
 
+
+
     // apply settings for the modal from the active module, if any
     this.applyControlsSettings(this.$el);
     this.updateViewClassTo = false;
@@ -222,6 +227,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         that.$inner.attr('id', that.model.get('instance_id'));
         // append the html to the inner form container
         that.$inner.append(res.html);
+
+        if (that.model.get('state').draft){
+          that.$draft.show();
+        } else {
+          that.$draft.hide();
+        }
 
         // @TODO Move
         // ----------------------------------------------

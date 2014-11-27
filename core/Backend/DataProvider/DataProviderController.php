@@ -3,7 +3,11 @@
 namespace Kontentblocks\Backend\DataProvider;
 
 
-class DataHandler implements DataProviderInterface
+/**
+ * Class DataProviderController
+ * @package Kontentblocks\Backend\DataProvider
+ */
+class DataProviderController implements DataProviderInterface
 {
 
     /**

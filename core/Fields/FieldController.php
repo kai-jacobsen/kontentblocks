@@ -6,7 +6,7 @@ use Kontentblocks\Modules\Module;
 use Reframe\Kontentblocks\Kontentblocks;
 
 /**
- * FieldManager
+ * FieldController
  * Purpose of this class:
  * Connecting fields to a module and offering an API to interact with
  * fields and the underlying structure.
@@ -21,7 +21,7 @@ use Reframe\Kontentblocks\Kontentblocks;
  * @see Kontentblocks\Modules\Module::__cosntruct()
  * @param \Kontentblocks\Modules\Module
  */
-class FieldManager extends AbstractFieldManager
+class FieldController extends AbstractFieldController
 {
 
     /**

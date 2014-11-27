@@ -2,14 +2,14 @@
 
 namespace Kontentblocks\Ajax\Frontend;
 
-use Kontentblocks\Backend\DataProvider\DataHandler;
+use Kontentblocks\Backend\DataProvider\DataProviderController;
 
 class SaveInlineEdit
 {
     public function __construct()
     {   
         $data = $_POST['data'];
-        $Handler = new DataHandler($data['postId']);
+        $Handler = new DataProviderController($data['postId']);
         
         $old = $Handler->getModuleData('_' . $data['module']);
         

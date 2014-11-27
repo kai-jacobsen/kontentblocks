@@ -3,7 +3,7 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Fields\FieldManager;
+use Kontentblocks\Fields\FieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Templating\ModuleTemplate;
@@ -119,7 +119,7 @@ abstract class Module
         }
 
         if (method_exists( $this, 'fields' )) {
-            $this->Fields = new FieldManager( $this );
+            $this->Fields = new FieldController( $this );
             $this->fields();
         }
     }

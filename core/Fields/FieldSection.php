@@ -10,7 +10,7 @@ use Kontentblocks\Modules\Module;
  * This serves as a collection handler for fields and offers
  * methods to interact with registered fields.
  *
- * Gets instantiated by Kontentblocks\Fields\FieldManager when
+ * Gets instantiated by Kontentblocks\Fields\FieldController when
  * addGroup() is called
  *
  * @see Kontentblocks\Fields\FieldManager::addSection()

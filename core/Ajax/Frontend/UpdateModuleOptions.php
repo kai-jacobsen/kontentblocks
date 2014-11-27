@@ -51,6 +51,7 @@ class UpdateModuleOptions
         // gather data
         $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
         $new = $Module->save( $newData, $old );
+
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
         if ($update) {
             $Environment->getStorage()->saveModule( $module['instance_id'], wp_slash( $mergedData ) );
