@@ -182,6 +182,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    */
   update: function () {
     this.serialize(true, true);
+    this.switchDraftOff();
   },
   /**
    * Main render method of the modal content
@@ -196,7 +197,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     json = this.model.toJSON();
 
 
-
     // apply settings for the modal from the active module, if any
     this.applyControlsSettings(this.$el);
     this.updateViewClassTo = false;
@@ -205,7 +205,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     jQuery.ajax({
       url: ajaxurl,
       data: {
-        action: 'getModuleOptions',
+        action: 'getModuleForm',
         module: json,
         moduleData: json.moduleData,
         overloadData: overloadData,
@@ -228,7 +228,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         // append the html to the inner form container
         that.$inner.append(res.html);
 
-        if (that.model.get('state').draft){
+        if (that.model.get('state').draft) {
           that.$draft.show();
         } else {
           that.$draft.hide();
@@ -343,7 +343,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     jQuery.ajax({
       url: ajaxurl,
       data: {
-        action: 'updateModuleOptions',
+        action: 'updateModule',
         data: that.$form.serialize().replace(/\'/g, '%27'),
         module: that.model.toJSON(),
         editmode: (save) ? 'update' : 'preview',
@@ -501,5 +501,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    */
   _classifyView: function (str) {
     return 'view-' + str.replace('.twig', '');
+  },
+  switchDraftOff: function () {
+
+    if (this.model.get('state').draft) {
+
+    }
+
   }
 });

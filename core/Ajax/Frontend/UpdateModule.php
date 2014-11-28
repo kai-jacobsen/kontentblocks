@@ -9,10 +9,10 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  *
- * Class UpdateModuleOptions
+ * Class UpdateModule
  * @package Kontentblocks\Ajax\Frontend
  */
-class UpdateModuleOptions
+class UpdateModule
 {
 
     public static function run()
@@ -53,11 +53,10 @@ class UpdateModuleOptions
         $new = $Module->save( $newData, $old );
 
         $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
+
         if ($update) {
             $Environment->getStorage()->saveModule( $module['instance_id'], wp_slash( $mergedData ) );
         }
-
-//        $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
 
         $Module->setModuleData( $mergedData );
 
@@ -70,9 +69,7 @@ class UpdateModuleOptions
 
         // @TODO depreacate
         do_action( 'kb_save_frontend_module', $module, $update );
-
         Utilities::remoteConcatGet( $module['post_id'] );
-
         wp_send_json( $return );
     }
 

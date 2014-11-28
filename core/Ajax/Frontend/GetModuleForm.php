@@ -8,10 +8,10 @@ use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class GetModuleOptions
+ * Class GetModuleForm
  * @package Kontentblocks\Ajax\Frontend
  */
-class GetModuleOptions
+class GetModuleForm
 {
 
     /**

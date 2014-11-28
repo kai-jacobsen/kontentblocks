@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-26 */
+/*! Kontentblocks DevVersion 2014-11-27 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -520,6 +520,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     update: function() {
         this.serialize(true, true);
+        this.switchDraftOff();
     },
     render: function(overloadData) {
         var that = this, json;
@@ -531,7 +532,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         jQuery.ajax({
             url: ajaxurl,
             data: {
-                action: "getModuleOptions",
+                action: "getModuleForm",
                 module: json,
                 moduleData: json.moduleData,
                 overloadData: overloadData,
@@ -609,7 +610,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         jQuery.ajax({
             url: ajaxurl,
             data: {
-                action: "updateModuleOptions",
+                action: "updateModule",
                 data: that.$form.serialize().replace(/\'/g, "%27"),
                 module: that.model.toJSON(),
                 editmode: save ? "update" : "preview",
@@ -713,6 +714,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     _classifyView: function(str) {
         return "view-" + str.replace(".twig", "");
+    },
+    switchDraftOff: function() {
+        if (this.model.get("state").draft) {}
     }
 });
 
