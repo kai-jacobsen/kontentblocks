@@ -192,7 +192,6 @@ KB.LayoutIterator = function (layout, AreaView) {
         $wrap.addClass('kb-wrap ' + Iterator.getCurrent().classes);
       }
 
-      console.log(Iterator.getCurrent().classes);
 
       // if ui is present re-add sortable class
       if (ui) {

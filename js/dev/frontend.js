@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-24 */
+/*! Kontentblocks DevVersion 2014-11-28 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -88,14 +88,14 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
     handleModuleCreated: function() {
         this.applyClasses();
         if (this.LayoutIterator) {
-            this.LayoutIterator.applyLayout();
+            this.LayoutIterator.applyLayout(null);
         }
     },
     handleModuleDeleted: function() {
         this.applyClasses();
         this.renderPlaceholder();
         if (this.LayoutIterator) {
-            this.LayoutIterator.applyLayout();
+            this.LayoutIterator.applyLayout(null);
         }
     },
     handleLayoutChange: function() {
@@ -180,7 +180,6 @@ KB.LayoutIterator = function(layout, AreaView) {
                 $wrap.removeClass();
                 $wrap.addClass("kb-wrap " + Iterator.getCurrent().classes);
             }
-            console.log(Iterator.getCurrent().classes);
             if (ui) {
                 ui.placeholder.addClass("kb-front-sortable-placeholder");
             }
@@ -428,6 +427,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.$formContent = jQuery("#onsite-content", this.$el);
         this.$inner = jQuery(".os-content-inner", this.$formContent);
         this.$title = jQuery(".controls-title", this.$el);
+        this.$draft = jQuery(".kb-modal__draft-notice", this.$el);
         this.LoadingAnimation = new KB.Backbone.Shared.LoadingAnimation({
             el: this.$form
         });
@@ -439,7 +439,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 that.recalibrate(ui.position);
             }
         });
-        this.listenTo(KB.Events, "KB::edit-modal-refresh", this.recalibrate);
+        this.listenTo(KB.Events, "kb.modal.refresh", this.recalibrate);
+        this.listenTo(KB.Events, "kb.modal.preview", this.preview);
         jQuery(window).on("resize", function() {
             that.recalibrate();
         });
@@ -461,8 +462,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         "change .kb-template-select": "viewfileChange"
     },
     openView: function(ModuleView, force) {
-        force = _.isUndefined(force) ? false : true;
         this.setupWindow();
+        force = _.isUndefined(force) ? false : true;
         if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
             _K.log("Module View already set");
             return this;
@@ -519,6 +520,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     update: function() {
         this.serialize(true, true);
+        this.switchDraftOff();
     },
     render: function(overloadData) {
         var that = this, json;
@@ -530,7 +532,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         jQuery.ajax({
             url: ajaxurl,
             data: {
-                action: "getModuleOptions",
+                action: "getModuleForm",
                 module: json,
                 moduleData: json.moduleData,
                 overloadData: overloadData,
@@ -546,6 +548,11 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 that.ModuleView.clearFields();
                 that.$inner.attr("id", that.model.get("instance_id"));
                 that.$inner.append(res.html);
+                if (that.model.get("state").draft) {
+                    that.$draft.show();
+                } else {
+                    that.$draft.hide();
+                }
                 if (res.json) {
                     KB.payload = _.extend(KB.payload, res.json);
                 }
@@ -603,7 +610,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         jQuery.ajax({
             url: ajaxurl,
             data: {
-                action: "updateModuleOptions",
+                action: "updateModule",
                 data: that.$form.serialize().replace(/\'/g, "%27"),
                 module: that.model.toJSON(),
                 editmode: save ? "update" : "preview",
@@ -707,6 +714,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     _classifyView: function(str) {
         return "view-" + str.replace(".twig", "");
+    },
+    switchDraftOff: function() {
+        if (this.model.get("state").draft) {}
     }
 });
 
@@ -811,14 +821,14 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
     },
     openAreaSettings: function(e) {
         if (KB.EditModalAreas) {
-            KB.EditModalAreas.setArea(this.model).setModel(this.model.model);
+            KB.EditModalAreas.setArea(this.parentView).setModel(this.parentView.model);
             KB.EditModalAreas.render();
             return this;
         }
         KB.EditModalAreas = new KB.Backbone.EditModalAreas({
-            model: this.model.model,
+            model: this.parentView.model,
             target: e.currentTarget,
-            AreaView: this.model
+            AreaView: this.parentView
         });
     },
     updateAreaSettings: function() {
@@ -843,9 +853,9 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     tagName: "div",
     className: "kb-menubar-container",
     initialize: function() {
+        this.AreaViews = {};
         this.$title = jQuery('<div class="kb-module-controls__title"> </div>').appendTo(this.$el);
-        this.$helpbox = jQuery('<div class="kb-menubar-helpbox"></div>').appendTo(this.$el);
-        this.show = _.isNull(KB.Util.stex.get("kb-nav-show")) ? true : KB.Util.stex.get("kb-nav-show");
+        this.show = _.isNull(KB.Util.stex.get("kb-menubar-show")) ? true : KB.Util.stex.get("kb-menubar-show");
         this.$toggle = jQuery('<div class="kb-menubar-toggle genericon genericon-menu"></div>').appendTo(this.$el);
         this.$modulesTab = jQuery('<div data-list="modules" class="kb-menubar-tab kb-menubar-tab__modules kb-tab-active">Modules</div>').appendTo(this.$title);
         this.$areasTab = jQuery('<div data-list="areas" class="kb-menubar-tab kb-menubar-tab__areas">Areas</div>').appendTo(this.$title);
@@ -856,6 +866,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     },
     events: {
         "click .kb-menubar-toggle": "toggleView",
+        "click .kb-menubar-add_module": "renderDropzones",
         "mouseenter .kb-menubar-toggle": "over",
         "mouseleave .kb-menubar-toggle": "out",
         "click .kb-menubar-tab": "switchTabs"
@@ -882,6 +893,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     attachAreaView: function(areaView) {
         areaView.Menubar = this;
         this.renderAreaViewItem(areaView);
+        this.AreaViews[areaView.model.get("id")] = areaView;
     },
     renderAreaViewItem: function(areaView) {
         var Item = new KB.Backbone.AreaNavItem({
@@ -952,6 +964,7 @@ KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.exte
     },
     afterRemoval: function() {
         this.Parent.trigger("kb.module.view.delete");
+        this.Parent.$el.parent(".kb-wrap").remove();
         this.Parent.$el.remove();
         KB.Modules.remove(this.model);
     },
@@ -1108,9 +1121,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         this.setControlsPosition();
         this.Controls = new KB.Backbone.Frontend.ModuleControlsView({
             ModuleView: this
-        });
-        jQuery(window).on("kontentblocks::ajaxUpdate", function() {
-            that.setControlsPosition();
         });
     },
     events: {

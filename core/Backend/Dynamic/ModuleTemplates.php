@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Backend\Dynamic;
 
-use Kontentblocks\Backend\DataProvider\DataHandler;
+use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
@@ -205,7 +205,7 @@ class ModuleTemplates
             return false;
         }
 
-        $MetaData = new DataHandler( $postId );
+        $MetaData = new DataProviderController( $postId );
         $Storage = new PostMetaModuleStorage( $postId, $MetaData );
 
         $tpl = $Storage->getModuleDefinition( $postObj->post_name );

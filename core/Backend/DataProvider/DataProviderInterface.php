@@ -3,7 +3,7 @@ namespace Kontentblocks\Backend\DataProvider;
 
 /**
  * Interface DataProviderInterface
- * @package Kontentblocks\Backend\DataHandler
+ * @package Kontentblocks\Backend\DataProviderController
  */
 interface DataProviderInterface
 {

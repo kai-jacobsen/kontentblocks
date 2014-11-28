@@ -2,7 +2,7 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Fields\PanelFieldManager;
+use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -30,7 +30,7 @@ abstract class OptionsPanel extends AbstractPanel
 
     /**
      * Custom Field Manager Instance for Panels
-     * @var PanelFieldManager
+     * @var PanelFieldController
      */
     protected $FieldManager;
 
@@ -152,7 +152,7 @@ abstract class OptionsPanel extends AbstractPanel
     public function save( $postId = null )
     {
         $old = $this->setupData();
-        $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
+        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $new = $this->fields( $this->FieldManager )->save( $_POST[$this->baseId], $old );
         update_option( $this->baseId, $new );
@@ -180,7 +180,7 @@ abstract class OptionsPanel extends AbstractPanel
         return $this->data;
     }
 
-    abstract public function fields( PanelFieldManager $fieldManager );
+    abstract public function fields( PanelFieldController $fieldManager );
 
     public function form( $postobj = null )
     {
@@ -194,7 +194,7 @@ abstract class OptionsPanel extends AbstractPanel
         Utilities::hiddenEditor();
 
         $this->setupData( $this->baseId );
-        $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
+        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
         $this->beforeForm();
         $this->fields( $this->FieldManager )->renderFields();
         $this->afterForm();
@@ -236,7 +236,7 @@ abstract class OptionsPanel extends AbstractPanel
         $this->setupData( $this->baseId );
 
         if (is_null( $this->FieldManager )) {
-            $this->FieldManager = new PanelFieldManager( $this->baseId, $this->data, $this );
+            $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
         }
 
         $this->fields( $this->FieldManager )->setup( $this->data );

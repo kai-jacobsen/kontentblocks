@@ -124,7 +124,7 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
   handleModuleCreated: function () {
     this.applyClasses();
     if (this.LayoutIterator) {
-      this.LayoutIterator.applyLayout();
+      this.LayoutIterator.applyLayout(null);
     }
   },
   /**
@@ -134,7 +134,7 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
     this.applyClasses();
     this.renderPlaceholder();
     if (this.LayoutIterator) {
-      this.LayoutIterator.applyLayout();
+      this.LayoutIterator.applyLayout(null);
     }
   },
   /**

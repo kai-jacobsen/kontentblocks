@@ -61,7 +61,7 @@ class ModulePanel extends AbstractPanel
 
     /**
      * Custom Field Manager Instance
-     * @var \Kontentblocks\Fields\PanelFieldManager
+     * @var \Kontentblocks\Fields\PanelFieldController
      */
     protected $FieldManager;
 

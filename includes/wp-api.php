@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Backend\DataProvider\DataHandler;
+use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Frontend\AreaRenderer;
 use Kontentblocks\Kontentblocks;
 

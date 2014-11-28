@@ -1,7 +1,7 @@
 <?php
 namespace Kontentblocks\Backend\Storage;
 
-use Kontentblocks\Backend\DataProvider\DataHandler;
+use Kontentblocks\Backend\DataProvider\DataProviderController;
 
 /**
  * Class PostMetaModuleStorage
@@ -28,7 +28,7 @@ class PostMetaModuleStorage
 
     /**
      * Data Handler
-     * @var \Kontentblocks\Backend\DataProvider\DataHandler
+     * @var \Kontentblocks\Backend\DataProvider\DataProviderController
      * @since 1.0.0
      */
     protected $DataProvider;
@@ -45,12 +45,12 @@ class PostMetaModuleStorage
      * Class constructor
      *
      * @param $postId
-     * @param \Kontentblocks\Backend\DataHandler\DataHandler
+     * @param \Kontentblocks\Backend\DataProvider\DataProviderController
      *
      * @throws \Exception
      * @since 1.0.0
      */
-    public function __construct( $postId, DataHandler $DataProvider = null )
+    public function __construct( $postId, DataProviderController $DataProvider = null )
     {
         if (!isset( $postId ) || $postId === 0) {
             throw new \Exception( 'a valid post id must be provided' );
@@ -58,7 +58,7 @@ class PostMetaModuleStorage
         $this->postId = $postId;
         // Late init data handler if not provided
         if (is_null( $DataProvider )) {
-            $this->DataProvider = new DataHandler( $postId );
+            $this->DataProvider = new DataProviderController( $postId );
         } else {
             $this->DataProvider = $DataProvider;
         }
@@ -88,8 +88,8 @@ class PostMetaModuleStorage
     }
 
     /**
-     * Getter for DataHandler
-     * @return DataHandler
+     * Getter for DataProviderController
+     * @return DataProviderController
      */
     public function getDataProvider()
     {

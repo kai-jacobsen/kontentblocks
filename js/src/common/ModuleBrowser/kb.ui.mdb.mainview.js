@@ -87,7 +87,10 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     this.$el.appendTo('body');
     // add class to root element of wp admin screen
     jQuery('#wpwrap').addClass('module-browser-open');
-    jQuery('.nano').nanoScroller({flash: true});
+    jQuery('.kb-nano').nanoScroller({
+      flash: true,
+      contentClass: 'kb-nano-content'
+    });
   },
   // close the browser
   // TODO clean up and remove all references & bindings

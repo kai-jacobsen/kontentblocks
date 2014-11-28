@@ -2,6 +2,7 @@
  * This is the modal which wraps the modules input form
  * and loads when the user clicks on "edit" while in frontend editing mode
  * @type {*|void|Object}
+ *
  */
 KB.Backbone.EditModalModules = Backbone.View.extend({
   tagName: 'div',
@@ -24,6 +25,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     this.$formContent = jQuery('#onsite-content', this.$el);
     this.$inner = jQuery('.os-content-inner', this.$formContent);
     this.$title = jQuery('.controls-title', this.$el);
+    this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
     this.LoadingAnimation = new KB.Backbone.Shared.LoadingAnimation({
       el: this.$form
     });
@@ -40,7 +42,10 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     });
 
     // use this event to refresh the modal on demand
-    this.listenTo(KB.Events, 'KB::edit-modal-refresh', this.recalibrate);
+    this.listenTo(KB.Events, 'kb.modal.refresh', this.recalibrate);
+
+    // use this event to tigger preview
+    this.listenTo(KB.Events, 'kb.modal.preview', this.preview);
 
     // Attach resize event handler
     jQuery(window).on('resize', function () {
@@ -78,9 +83,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
   openView: function (ModuleView, force) {
 
-    force = (_.isUndefined(force)) ? false : true;
-
     this.setupWindow();
+
+    force = (_.isUndefined(force)) ? false : true;
 
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
       _K.log('Module View already set');
@@ -151,6 +156,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         left: KB.OSConfig.wrapPosition.left
       });
     }
+
+
   },
 
   /**
@@ -175,6 +182,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    */
   update: function () {
     this.serialize(true, true);
+    this.switchDraftOff();
   },
   /**
    * Main render method of the modal content
@@ -188,6 +196,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     overloadData = !_.isUndefined(overloadData);
     json = this.model.toJSON();
 
+
     // apply settings for the modal from the active module, if any
     this.applyControlsSettings(this.$el);
     this.updateViewClassTo = false;
@@ -196,7 +205,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     jQuery.ajax({
       url: ajaxurl,
       data: {
-        action: 'getModuleOptions',
+        action: 'getModuleForm',
         module: json,
         moduleData: json.moduleData,
         overloadData: overloadData,
@@ -218,6 +227,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         that.$inner.attr('id', that.model.get('instance_id'));
         // append the html to the inner form container
         that.$inner.append(res.html);
+
+        if (that.model.get('state').draft) {
+          that.$draft.show();
+        } else {
+          that.$draft.hide();
+        }
 
         // @TODO Move
         // ----------------------------------------------
@@ -328,7 +343,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     jQuery.ajax({
       url: ajaxurl,
       data: {
-        action: 'updateModuleOptions',
+        action: 'updateModule',
         data: that.$form.serialize().replace(/\'/g, '%27'),
         module: that.model.toJSON(),
         editmode: (save) ? 'update' : 'preview',
@@ -486,5 +501,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    */
   _classifyView: function (str) {
     return 'view-' + str.replace('.twig', '');
+  },
+  switchDraftOff: function () {
+
+    if (this.model.get('state').draft) {
+
+    }
+
   }
 });

@@ -29,6 +29,7 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
       parent: this.ModuleView
     }));
 
+
   },
 
   renderControls: function () {

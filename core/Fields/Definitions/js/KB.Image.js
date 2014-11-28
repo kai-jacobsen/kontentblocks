@@ -110,7 +110,7 @@ KB.Fields.register('Image', (function ($) {
             this.$id.val(attachment.get('id'));
             this.$title.val(attachment.get('title'));
             this.$description.val(attachment.get('caption'));
-            $(document).trigger('KB:osUpdate');
+            KB.Events.trigger('kb.modal.preview', this);
 
         },
         resetInputs: function(){

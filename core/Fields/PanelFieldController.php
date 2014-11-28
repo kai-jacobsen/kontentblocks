@@ -8,7 +8,7 @@ namespace Kontentblocks\Fields;
  * Use ReFields outside of module context
  * WIP
  */
-class PanelFieldManager extends AbstractFieldManager
+class PanelFieldController extends AbstractFieldController
 {
 
     /**

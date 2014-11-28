@@ -2,10 +2,10 @@
 namespace Kontentblocks\Fields;
 
 /**
- * Class AbstractFieldManager
+ * Class AbstractFieldController
  * @package Kontentblocks\Fields
  */
-abstract class AbstractFieldManager
+abstract class AbstractFieldController
 {
 
 

@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\DataProvider\DataHandler;
+use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
 

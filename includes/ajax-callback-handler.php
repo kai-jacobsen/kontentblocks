@@ -1,21 +1,6 @@
 <?php
 
-use Kontentblocks\Ajax\Frontend\ApplyContentFilter;
-use Kontentblocks\Ajax\Frontend\FieldGetImage;
-use Kontentblocks\Ajax\Frontend\GetModuleOptions;
-use Kontentblocks\Ajax\Frontend\SaveAreaLayout;
-use Kontentblocks\Ajax\Frontend\UpdateModuleOptions;
-use Kontentblocks\Ajax\GetSanitizedId;
-use Kontentblocks\Ajax\RemoteGetEditor;
-use Kontentblocks\Ajax\SortModules;
-use Kontentblocks\Ajax\RemoveModules;
-use Kontentblocks\Ajax\ChangeModuleStatus;
-use Kontentblocks\Ajax\ChangeArea;
-use Kontentblocks\Ajax\Frontend\SaveInlineEdit;
 use Kontentblocks\Ajax\CreateNewModule;
-use Kontentblocks\Ajax\DuplicateModule;
-use Kontentblocks\Ajax\AfterAreaChange;
-use Kontentblocks\Ajax\UpdateModuleData;
 
 /**
  * Actual actions are wrapped in (static) classes to
@@ -23,84 +8,37 @@ use Kontentblocks\Ajax\UpdateModuleData;
  * b) let the autoloader handle file inclusion
  */
 
-///**
-// * -----------------------------------------
-// * Handle for the onsite Module edit overlay
-// * -----------------------------------------
-// */
-//function osEditModuleCb()
-//{
-//    new OnsiteEditModule();
-//
-//}
-//
-//add_action('wp_ajax_os-edit-module', 'osEditModuleCb');
-//
-///**
-// * -----------------------------------------
-// * Handler for the globar Area edit overlay
-// * -----------------------------------------
-// */
-//function editGlobalAreaCb()
-//{
-//    new EditGlobalArea();
-//
-//}
-//
-//add_action('wp_ajax_editGlobalArea', 'editGlobalAreaCb');
-
 /**
  * -----------------------------------------
  * Handler for resorting modules
  * -----------------------------------------
  */
-function resortModulesCb()
-{
-    new SortModules();
 
-}
-
-add_action( 'wp_ajax_resortModules', 'resortModulesCb' );
+add_action( 'wp_ajax_resortModules', array( 'Kontentblocks\Ajax\SortModules', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler for removing modules
  * -----------------------------------------
  */
-function removeModulesCb()
-{
 
-    RemoveModules::run();
-
-}
-
-add_action( 'wp_ajax_removeModules', 'removeModulesCb' );
+add_action( 'wp_ajax_removeModules', array( 'Kontentblocks\Ajax\RemoveModules', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler for changing module visiblity
  * -----------------------------------------
  */
-function changeModuleStatusCb()
-{
-    ChangeModuleStatus::run();
 
-}
-
-add_action( 'wp_ajax_changeModuleStatus', 'changeModuleStatusCb' );
+add_action( 'wp_ajax_changeModuleStatus', array( 'Kontentblocks\Ajax\ChangeModuleStatus', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler for changing module visiblity
  * -----------------------------------------
  */
-function changeAreaCb()
-{
-    ChangeArea::run();
 
-}
-
-add_action( 'wp_ajax_changeArea', 'changeAreaCb' );
+add_action( 'wp_ajax_changeArea', array( 'Kontentblocks\Ajax\ChangeArea', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -120,91 +58,53 @@ add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
  * Handler for creating new modules
  * -----------------------------------------
  */
-function duplicateModuleCb()
-{
-    DuplicateModule::run();
-
-}
-
-add_action( 'wp_ajax_duplicateModule', 'duplicateModuleCb' );
+add_action( 'wp_ajax_duplicateModule', array( 'Kontentblocks\Ajax\DuplicateModule', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler onsite saving
  * -----------------------------------------
  */
-function afterAreaChangeCb()
-{
-    AfterAreaChange::run();
-
-}
-
-add_action( 'wp_ajax_afterAreaChange', 'afterAreaChangeCb' );
+add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\AfterAreaChange', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler for saving frontend inline edit
  * -----------------------------------------
  */
-function saveInlineEditCb()
-{
-    new SaveInlineEdit();
 
-}
-
-add_action( 'wp_ajax_saveInlineEdit', 'saveInlineEditCb' );
+add_action( 'wp_ajax_saveInlineEdit', array( 'Kontentblocks\Ajax\Frontend\SaveInlineEdit', 'run' ) );
 
 /**
  * -----------------------------------------
- * Handler onsite editing
+ * Handler onsite editing module form
  * -----------------------------------------
  */
-function getModuleOptionsCb()
-{
-    GetModuleOptions::run();
 
-}
-
-add_action( 'wp_ajax_getModuleOptions', 'getModuleOptionsCb' );
+add_action( 'wp_ajax_getModuleForm', array( 'Kontentblocks\Ajax\Frontend\GetModuleForm', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler onsite saving
  * -----------------------------------------
  */
-function updateModuleOptionsCb()
-{
-    UpdateModuleOptions::run();
 
-}
-
-add_action( 'wp_ajax_updateModuleOptions', 'updateModuleOptionsCb' );
+add_action( 'wp_ajax_updateModule', array( 'Kontentblocks\Ajax\Frontend\UpdateModule', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler backend async saving
  * -----------------------------------------
  */
-function updateModuleDataCb()
-{
-    UpdateModuleData::run();
-
-}
-
-add_action( 'wp_ajax_updateModuleData', 'updateModuleDataCb' );
+add_action( 'wp_ajax_updateModuleData', array( 'Kontentblocks\Ajax\UpdateModuleData', 'run' ) );
 
 /**
  * -----------------------------------------
  * Get sanitized Id
  * -----------------------------------------
  */
-function getSanitizedIdCb()
-{
-    GetSanitizedId::run();
 
-}
-
-add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );
+add_action( 'wp_ajax_getSanitizedId', array( 'Kontentblocks\Ajax\GetSanitizedId', 'run' ) );
 
 
 /**
@@ -212,13 +112,7 @@ add_action( 'wp_ajax_getSanitizedId', 'getSanitizedIdCb' );
  * Frontend get resized image
  * -----------------------------------------
  */
-function fieldGetImageCb()
-{
-    FieldGetImage::run();
-
-}
-
-add_action( 'wp_ajax_fieldGetImage', 'fieldGetImageCb' );
+add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Frontend\FieldGetImage', 'run' ) );
 
 
 /**
@@ -226,25 +120,16 @@ add_action( 'wp_ajax_fieldGetImage', 'fieldGetImageCb' );
  * Get remote editor markup
  * -----------------------------------------
  */
-function getRemoteEditorCb()
-{
-    RemoteGetEditor::run();
 
-}
-
-add_action( 'wp_ajax_getRemoteEditor', 'getRemoteEditorCb' );
+add_action( 'wp_ajax_getRemoteEditor', array( 'Kontentblocks\Ajax\RemoteGetEditor', 'run' ) );
 
 /**
  * -----------------------------------------
  * Apply content filter
  * -----------------------------------------
  */
-function applyContentFilter()
-{
-    ApplyContentFilter::run();
-}
 
-add_action( 'wp_ajax_applyContentFilter', 'applyContentFilter' );
+add_action( 'wp_ajax_applyContentFilter', array( 'Kontentblocks\Ajax\Frontend\ApplyContentFilter', 'run' ) );
 
 
 /**
@@ -252,9 +137,4 @@ add_action( 'wp_ajax_applyContentFilter', 'applyContentFilter' );
  * Save area layout from frontend
  * -----------------------------------------
  */
-function saveAreaLayout()
-{
-    SaveAreaLayout::run();
-}
-
-add_action( 'wp_ajax_saveAreaLayout', 'saveAreaLayout' );
+add_action( 'wp_ajax_saveAreaLayout', array( 'Kontentblocks\Ajax\Frontend\SaveAreaLayout', 'run' ) );

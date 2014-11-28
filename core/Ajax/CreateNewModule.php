@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\DataProvider\DataHandler;
+use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Kontentblocks;
@@ -210,6 +210,7 @@ class CreateNewModule
             wp_send_json_error( 'Update to Index failed' );
         }
 
+
         // @TODO deprecate
         do_action( 'kb::create:module', $this->newModule, $this->Environment );
         do_action( 'kb.module.create', $this->newModule );
@@ -222,7 +223,7 @@ class CreateNewModule
     {
         //create data for templates
         if ($this->moduleArgs['template']) {
-            $PostMeta = new DataHandler( $this->moduleArgs['master_id'] );
+            $PostMeta = new DataProviderController( $this->moduleArgs['master_id'] );
 
             $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateObj']['id'] );
             $update = $this->Environment->getStorage()->saveModule( $this->newInstanceID, $master_data );
@@ -244,6 +245,7 @@ class CreateNewModule
 
         // create the new module finally
         $this->newInstance = $this->createModuleInstance();
+
 
         if ($this->frontend) {
             $SingleRenderer = new SingleModuleRenderer( $this->newInstance );

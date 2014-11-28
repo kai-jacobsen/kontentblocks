@@ -5,6 +5,8 @@
   position: relative;
 }
 
+
+
 .controls-wrap {
   list-style: none !important;
   margin: 0 !important;
@@ -15,7 +17,18 @@
     display: inline-block;
     padding: 0 !important;
     margin: 0 !important;
+
+    span.kb-module__draft-notice {
+      font-size: 11px !important;
+      display: block;
+      width: 100%;
+      background-color: red !important;
+
+    }
+
   }
+
+
 }
 
 .module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
@@ -148,6 +161,13 @@ body.onsite-editing {
 
 #onsite-form{
 //  @include transition(height .3s linear);
+}
+
+.kb-modal__draft-notice{
+  padding: 4px !important;
+  color: #333!important;
+  font-size: 11px!important;
+  background-color: orange;
 }
 
 #wp-toolbar {
