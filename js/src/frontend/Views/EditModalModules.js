@@ -229,7 +229,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         that.$inner.append(res.html);
 
         if (that.model.get('state').draft) {
-          that.$draft.show();
+          that.$draft.show(150);
         } else {
           that.$draft.hide();
         }
@@ -504,9 +504,20 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
   },
   switchDraftOff: function () {
 
-    if (this.model.get('state').draft) {
+    var json = this.model.toJSON();
+    var that = this;
 
+    if (!this.model.get('state').draft) {
+      return;
     }
 
+    // get the form
+    KB.Ajax.send({
+      action: 'undraftModule',
+      mid: json.instance_id,
+      _ajax_nonce: KB.Config.getNonce('update')
+    }, function (res) {
+      that.$draft.hide(150);
+    }, this);
   }
 });

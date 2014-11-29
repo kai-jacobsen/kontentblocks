@@ -3,7 +3,7 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Frontend\AreaRenderer;
 use Kontentblocks\Kontentblocks;
 
@@ -94,7 +94,7 @@ function hasModules( $area, $id )
     }
     $post_id = ( null === $id ) ? $post->ID : $id;
 
-    $Meta = new PostMetaModuleStorage( $post_id );
+    $Meta = new ModuleStorage( $post_id );
     return $Meta->hasModules( $area );
 }
 

@@ -34,7 +34,7 @@ class BackupDataStorage
     /**
      * Class Constructor
      * An Storageobject must be given
-     * @param PostMetaModuleStorage $Storage
+     * @param ModuleStorage $Storage
      * @throws \BadFunctionCallException
      */
     public function __construct($Storage)

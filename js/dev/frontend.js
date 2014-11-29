@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-28 */
+/*! Kontentblocks DevVersion 2014-11-29 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -549,7 +549,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 that.$inner.attr("id", that.model.get("instance_id"));
                 that.$inner.append(res.html);
                 if (that.model.get("state").draft) {
-                    that.$draft.show();
+                    that.$draft.show(150);
                 } else {
                     that.$draft.hide();
                 }
@@ -716,7 +716,18 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         return "view-" + str.replace(".twig", "");
     },
     switchDraftOff: function() {
-        if (this.model.get("state").draft) {}
+        var json = this.model.toJSON();
+        var that = this;
+        if (!this.model.get("state").draft) {
+            return;
+        }
+        KB.Ajax.send({
+            action: "undraftModule",
+            mid: json.instance_id,
+            _ajax_nonce: KB.Config.getNonce("update")
+        }, function(res) {
+            that.$draft.hide(150);
+        }, this);
     }
 });
 

@@ -3,7 +3,7 @@
 namespace Kontentblocks\Backend\Environment;
 
 use JsonSerializable;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
@@ -27,7 +27,7 @@ class PostEnvironment implements JsonSerializable
     protected $DataHandler;
 
     /**
-     * @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage
+     * @var \Kontentblocks\Backend\Storage\ModuleStorage
      */
     protected $Storage;
 
@@ -71,7 +71,7 @@ class PostEnvironment implements JsonSerializable
 
         $this->postId = $postID;
         $this->DataHandler = new DataProviderController( $postID );
-        $this->Storage = new PostMetaModuleStorage( $postID, $this->DataHandler );
+        $this->Storage = new ModuleStorage( $postID, $this->DataHandler );
 
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
@@ -112,7 +112,7 @@ class PostEnvironment implements JsonSerializable
 
     /**
      * Return this Storage Object
-     * @return PostMetaModuleStorage
+     * @return ModuleStorage
      */
     public function getStorage()
     {

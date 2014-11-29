@@ -6,7 +6,7 @@ use Kontentblocks\Backend\Areas\Area;
 use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Screen\ScreenManager;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
@@ -20,7 +20,7 @@ class DynamicAreas
 {
 
     /**
-     * @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage
+     * @var \Kontentblocks\Backend\Storage\ModuleStorage
      */
     protected $Storage;
 
@@ -92,7 +92,7 @@ class DynamicAreas
             return;
         }
 
-        $this->Storage = new PostMetaModuleStorage( get_the_ID() );
+        $this->Storage = new ModuleStorage( get_the_ID() );
 
         $area = $this->Storage->getDataProvider()->get( '_area' );
         $data = ( isset( $_POST['area'] ) ) ? $_POST['area'] : $area;
@@ -137,7 +137,7 @@ class DynamicAreas
      */
     protected function saveArea( $postId )
     {
-        $this->Storage = new PostMetaModuleStorage( $postId );
+        $this->Storage = new ModuleStorage( $postId );
 
         $defaults = array(
             'name' => null,

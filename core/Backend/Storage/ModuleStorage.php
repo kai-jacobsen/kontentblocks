@@ -4,13 +4,13 @@ namespace Kontentblocks\Backend\Storage;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 
 /**
- * Class PostMetaModuleStorage
+ * Class ModuleStorage
  * Mid-level wrapper to underlying data handler
  *
  * @package Kontentblocks
  * @subpackage Backend
  */
-class PostMetaModuleStorage
+class ModuleStorage
 {
     /**
      * current post id
@@ -153,7 +153,6 @@ class PostMetaModuleStorage
      * Returns the module definition from index by instance id
      *
      * @param string $id
-     *
      * @return boolean
      */
     public function getModuleDefinition( $id )
@@ -164,6 +163,18 @@ class PostMetaModuleStorage
             return false;
         }
 
+    }
+
+
+    /**
+     * Set new module definition to index
+     * @param $id
+     * @param $module
+     * @return mixed
+     */
+    public function setModuleDefinition( $id, $module )
+    {
+        return $this->index[$id] = $module;
     }
 
     /**

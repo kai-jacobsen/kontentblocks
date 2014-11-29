@@ -138,3 +138,11 @@ add_action( 'wp_ajax_applyContentFilter', array( 'Kontentblocks\Ajax\Frontend\Ap
  * -----------------------------------------
  */
 add_action( 'wp_ajax_saveAreaLayout', array( 'Kontentblocks\Ajax\Frontend\SaveAreaLayout', 'run' ) );
+
+
+/**
+ * -----------------------------------------
+ * Undraft module from frontend
+ * -----------------------------------------
+ */
+add_action( 'wp_ajax_undraftModule', array( 'Kontentblocks\Ajax\Frontend\UndraftModule', 'run' ) );

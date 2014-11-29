@@ -3,7 +3,7 @@
 namespace Kontentblocks\Backend\Dynamic;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleRegistry;
@@ -80,7 +80,7 @@ class ModuleTemplates
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
 
-        $Storage = new PostMetaModuleStorage( $post->ID );
+        $Storage = new ModuleStorage( $post->ID );
 
         // on this screen we always deal with only one module
         // instance_id equals post_name
@@ -206,7 +206,7 @@ class ModuleTemplates
         }
 
         $MetaData = new DataProviderController( $postId );
-        $Storage = new PostMetaModuleStorage( $postId, $MetaData );
+        $Storage = new ModuleStorage( $postId, $MetaData );
 
         $tpl = $Storage->getModuleDefinition( $postObj->post_name );
 
@@ -250,11 +250,11 @@ class ModuleTemplates
      * Create a new template from form data
      *
      * @param $postId
-     * @param PostMetaModuleStorage $Storage
+     * @param ModuleStorage $Storage
      * @since 1.0.0
      * @return void
      */
-    public function createTemplate( $postId, PostMetaModuleStorage $Storage )
+    public function createTemplate( $postId, ModuleStorage $Storage )
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );

@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 
 /**
  * Class ChangeModuleStatus
@@ -18,7 +18,7 @@ class ChangeModuleStatus
 
         $postId      = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
         $instance_id = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
-        $Storage     = new PostMetaModuleStorage($postId);
+        $Storage     = new ModuleStorage($postId);
 
         $moduleDefinition = $Storage->getModuleDefinition( $instance_id );
         if ($moduleDefinition) {

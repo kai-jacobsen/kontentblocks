@@ -4,7 +4,7 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 
 class RemoveModules
 {
@@ -19,7 +19,7 @@ class RemoveModules
 
         $postId  = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
         $module  = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
-        $Storage = new PostMetaModuleStorage( $postId );
+        $Storage = new ModuleStorage( $postId );
 
         $BackupManager = new BackupDataStorage( $Storage );
         $BackupManager->backup( "Before Module: {$module} was deleted" );

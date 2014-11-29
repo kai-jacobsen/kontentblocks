@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 
@@ -190,8 +190,8 @@ class ModuleViewLoader
             return;
         }
         $postId = $module['post_id'];
-        /** @var \Kontentblocks\Backend\Storage\PostMetaModuleStorage $Storage */
-        $Storage = new PostMetaModuleStorage( $postId );
+        /** @var \Kontentblocks\Backend\Storage\ModuleStorage $Storage */
+        $Storage = new ModuleStorage( $postId );
         $index = $Storage->getModuleDefinition( $module['instance_id'] );
         $index['viewfile'] = $module['viewfile'];
         $Storage->addToIndex( $module['instance_id'], $index );

@@ -3,7 +3,7 @@
 namespace Kontentblocks\Extensions;
 
 use Kontentblocks\Backend\Storage\BackupDataStorage;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 
 /**
  * Class BackupInspect
@@ -77,7 +77,7 @@ class BackupInspect
     public function restoreBackup( $post_id, $id )
     {
 
-        $Storage = new PostMetaModuleStorage( $post_id );
+        $Storage = new ModuleStorage( $post_id );
 
         $BackupManager = new BackupDataStorage( $Storage );
         $BackupManager->backup( 'before backup restore' );
@@ -94,7 +94,7 @@ class BackupInspect
 
         $postId = $_REQUEST['post_id'];
 
-        $Storage = new PostMetaModuleStorage( $postId );
+        $Storage = new ModuleStorage( $postId );
         $BackupManager = new BackupDataStorage( $Storage );
         $backups = $BackupManager->queryBackup( $postId );
 
@@ -116,7 +116,7 @@ class BackupInspect
     {
         if (isset( $data['kbBackupWatcher'] ) && $data['kbBackupWatcher'] != null) {
 
-            $Storage = new PostMetaModuleStorage( $data['post_id'] );
+            $Storage = new ModuleStorage( $data['post_id'] );
 
 
             if ($data['kbBackupWatcher'] == $Storage->getDataProvider()->get( 'kb_last_backup' )) {

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-28 */
+/*! Kontentblocks DevVersion 2014-11-29 */
 !function(a, b) {
     "use strict";
     var c, d = a.document;
@@ -3650,7 +3650,7 @@ var HandlebarsKB = function() {
                         input.on("keydown.xdsoft", function(event) {
                             var val = this.value, key = event.which;
                             switch (true) {
-                              case key >= KEY0 && key <= KEY9 || key >= _KEY0 && key <= _KEY9 || key == BACKSPACE || key == DEL:
+                              case key >= KEY0 && key <= KEY9 || key >= _KEY0 && key <= _KEY9 || (key == BACKSPACE || key == DEL):
                                 var pos = getCaretPos(this), digit = key != BACKSPACE && key != DEL ? String.fromCharCode(_KEY0 <= key && key <= _KEY9 ? key - KEY0 : key) : "_";
                                 if ((key == BACKSPACE || key == DEL) && pos) {
                                     pos--;
@@ -3960,7 +3960,7 @@ var HandlebarsKB = function() {
                 currentTime.setFullYear($this.data("year"));
                 datetimepicker.trigger("select.xdsoft", [ currentTime ]);
                 input.val(_xdsoft_datetime.str());
-                if ((timerclick > 1 || options.closeOnDateSelect === true || options.closeOnDateSelect === 0 && !options.timepicker) && !options.inline) {
+                if ((timerclick > 1 || (options.closeOnDateSelect === true || options.closeOnDateSelect === 0 && !options.timepicker)) && !options.inline) {
                     datetimepicker.trigger("close.xdsoft");
                 }
                 if (options.onSelectDate && options.onSelectDate.call) {

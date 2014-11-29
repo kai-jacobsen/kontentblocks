@@ -3,7 +3,7 @@
 namespace Kontentblocks\Extensions;
 
 use Kontentblocks\Backend\Storage\BackupDataStorage;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Language\I18n;
 
 /**
@@ -180,7 +180,7 @@ class LayoutConfigurations
 
     private function _resetPostMeta( $configuration, $postId, $config )
     {
-        $Storage        = new PostMetaModuleStorage( $postId );
+        $Storage        = new ModuleStorage( $postId );
         $BackupManager  = new BackupDataStorage( $Storage );
         $configurations = get_option( 'kb_layout_configurations' );
 

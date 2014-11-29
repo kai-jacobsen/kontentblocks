@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax;
 
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 
 class SortModules
 {
@@ -19,7 +19,7 @@ class SortModules
         // setup properties
         $postId = $_POST['post_id'];
         $data = $_POST['data'];
-        $Storage = new PostMetaModuleStorage($postId);
+        $Storage = new ModuleStorage($postId);
         $old = $Storage->getIndex();
 
         // action

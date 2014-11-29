@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
-use Kontentblocks\Backend\Storage\PostMetaModuleStorage;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 
 /**
  * Class ChangeArea
@@ -27,7 +27,7 @@ class ChangeArea
         $newArea = filter_input(INPUT_POST, 'area_id', FILTER_SANITIZE_STRING);
         $newAreaContext = filter_input(INPUT_POST, 'context', FILTER_SANITIZE_STRING);
         $instanceId = filter_input(INPUT_POST, 'block_id', FILTER_SANITIZE_STRING);
-        $Storage = new PostMetaModuleStorage($postID);
+        $Storage = new ModuleStorage($postID);
 
         $moduleDefinition = $Storage->getModuleDefinition($instanceId);
         $moduleDefinition['area'] = $newArea;
