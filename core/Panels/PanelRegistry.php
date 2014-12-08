@@ -22,7 +22,7 @@ class PanelRegistry
      */
     public static function getInstance()
     {
-            if (null == self::$instance) {
+        if (null == self::$instance) {
             self::$instance = new self;
         }
 
@@ -39,7 +39,6 @@ class PanelRegistry
      */
     public function add( $id, $args )
     {
-
         if (!isset( $this->panels[$id] )) {
             $Reflect = new \ReflectionClass( $args['class'] );
             if ($Reflect->getParentClass()->name === 'Kontentblocks\Modules\StaticModule') {

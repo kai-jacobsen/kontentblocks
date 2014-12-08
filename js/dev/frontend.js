@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-11-29 */
+/*! Kontentblocks DevVersion 2014-12-08 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -1038,7 +1038,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
         jQuery.ajax({
             url: ajaxurl,
             data: {
-                action: "updateModuleOptions",
+                action: "updateModule",
                 data: jQuery.param(moduleData).replace(/\'/g, "%27"),
                 module: that.model.toJSON(),
                 editmode: "update",
@@ -1620,7 +1620,7 @@ KB.IEdit.Text = function(el) {
                 ed.module = KB.Modules.get(module);
                 ed.kpath = data.kpath;
                 ed.module.view.$el.addClass("inline-editor-attached");
-                $placeholder = jQuery("<span class='kb-text-placeholder'>Your voice is missing</span>");
+                $placeholder = jQuery("<span class='kb-editable-text-placeholder'>Start typing here</span>");
                 KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
                 cleaned = ed.getContent().replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
                 if (cleaned === "") {

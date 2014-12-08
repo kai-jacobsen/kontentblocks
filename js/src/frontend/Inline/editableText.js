@@ -39,7 +39,7 @@ KB.IEdit.Text = function (el) {
         ed.kpath = data.kpath;
         ed.module.view.$el.addClass('inline-editor-attached');
 
-        $placeholder = jQuery("<span class='kb-text-placeholder'>Your voice is missing</span>");
+        $placeholder = jQuery("<span class='kb-editable-text-placeholder'>Start typing here</span>");
 
         KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
 

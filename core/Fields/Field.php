@@ -300,7 +300,7 @@ abstract class Field
     public function build()
     {
         // nobody knows
-        $this->uniqueId = uniqid();
+//        $this->uniqueId = uniqid();
 
         // optional call to simplify enqueueing
         if (method_exists( $this, 'enqueue' )) {
