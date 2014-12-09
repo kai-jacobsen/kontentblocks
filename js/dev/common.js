@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-08 */
+/*! Kontentblocks DevVersion 2014-12-09 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -918,6 +918,18 @@ KB.Ui = function($) {
                 }
                 side.addClass("active-context").removeClass("non-active-context");
                 normal.addClass("non-active-context");
+            });
+            side.on("mouseenter", ".kb-open .kb-module__controls-inner", function() {
+                if (side.hasClass("non-active-context")) {
+                    side.addClass("active-context").removeClass("non-active-context");
+                    normal.addClass("non-active-context").removeClass("active-context");
+                }
+            });
+            normal.on("mouseenter", ".kb-open .kb-module__controls-inner", function() {
+                if (normal.hasClass("non-active-context")) {
+                    normal.addClass("active-context").removeClass("non-active-context");
+                    side.addClass("non-active-context").removeClass("active-context");
+                }
             });
             normal.on("click", ".kb-toggle", function() {
                 if (that.isSorting) {

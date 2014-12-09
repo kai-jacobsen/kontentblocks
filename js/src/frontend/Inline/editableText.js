@@ -72,7 +72,7 @@ KB.IEdit.Text = function (el) {
         ed.module.view.$el.addClass('inline-edit-active');
 
         if (ed.placeholder !== false) {
-//                    ed.setContent('');
+                    ed.setContent('');
         }
       });
 

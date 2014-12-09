@@ -10,6 +10,14 @@ KB.IEdit.Image = (function ($) {
       var that = this;
       var $body = $('body');
 
+      jQuery(this.selector).each(function (i, el) {
+        var $l = jQuery(el);
+        var midref = $l.data('module');
+        if (midref) {
+          $l.data('ModuleView', KB.Views.Modules.get(midref));
+        }
+      });
+
       $body.on('click', this.selector, function (e) {
         e.preventDefault();
         that.img = $(this);

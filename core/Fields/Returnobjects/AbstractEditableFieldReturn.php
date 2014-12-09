@@ -78,7 +78,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 //        $this->Registry = Kontentblocks::getService( 'registry.fields' );
         $this->setValue( $value );
         $this->setupFromField( $field );
-        $this->uniqueId = $this->createUniqueId();
+        $this->uniqueId = $field->createUID();
         $this->prepare();
     }
 
@@ -265,21 +265,21 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
     }
 
-    protected
-    function createUniqueId()
-    {
-
-        $uid = '';
-        $uid .= 'kb_';
-        $uid .= $this->field->getBaseId();
-        $uid .= $this->field->getKey();
-        if ($this->field->getArg( 'index' )) {
-            $uid .= $this->field->getArg( 'index' );
-        }
-
-        return $uid;
-
-    }
+//    protected
+//    function createUniqueId()
+//    {
+//
+//        $uid = '';
+//        $uid .= 'kb_';
+//        $uid .= $this->field->getBaseId();
+//        $uid .= $this->field->getKey();
+//        if ($this->field->getArg( 'index' )) {
+//            $uid .= $this->field->getArg( 'index' );
+//        }
+//
+//        return $uid;
+//
+//    }
 
 
     /**

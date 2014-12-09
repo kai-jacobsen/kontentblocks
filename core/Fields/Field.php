@@ -300,7 +300,8 @@ abstract class Field
     public function build()
     {
         // nobody knows
-        $this->uniqueId = uniqid();
+//        $this->uniqueId = uniqid();
+        $this->uniqueId = $this->createUID();
 
         // optional call to simplify enqueueing
         if (method_exists( $this, 'enqueue' )) {
@@ -805,6 +806,12 @@ abstract class Field
         }
 
         return $classname;
+    }
+
+    public function createUID()
+    {
+        $base  = $this->baseId . $this->key;
+        return 'kb-' . hash('crc32', $base);
     }
 
 }

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-08 */
+/*! Kontentblocks DevVersion 2014-12-09 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -1038,7 +1038,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
         jQuery.ajax({
             url: ajaxurl,
             data: {
-                action: "updateModule",
+                action: "updateModuled",
                 data: jQuery.param(moduleData).replace(/\'/g, "%27"),
                 module: that.model.toJSON(),
                 editmode: "update",
@@ -1398,6 +1398,13 @@ KB.IEdit.Image = function($) {
         init: function() {
             var that = this;
             var $body = $("body");
+            jQuery(this.selector).each(function(i, el) {
+                var $l = jQuery(el);
+                var midref = $l.data("module");
+                if (midref) {
+                    $l.data("ModuleView", KB.Views.Modules.get(midref));
+                }
+            });
             $body.on("click", this.selector, function(e) {
                 e.preventDefault();
                 that.img = $(this);
@@ -1641,7 +1648,9 @@ KB.IEdit.Text = function(el) {
                 }
                 jQuery("#kb-toolbar").show();
                 ed.module.view.$el.addClass("inline-edit-active");
-                if (ed.placeholder !== false) {}
+                if (ed.placeholder !== false) {
+                    ed.setContent("");
+                }
             });
             ed.on("change", function() {
                 _K.info("Got Dirty");
