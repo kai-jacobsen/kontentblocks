@@ -11,9 +11,12 @@ KB.currentArea = {};
  */
 KB.Views = {
   Modules: new KB.ViewsCollection(),
+  bModules: new KB.Backbone.Frontend.ModuleViewsCollection([]),
   Areas: new KB.ViewsCollection(),
   Context: new KB.ViewsCollection()
 };
+
+
 
 /*
  * All Modules are collected here
@@ -141,6 +144,14 @@ KB.App = function () {
     //assign area view to module view
 
     Area.addModuleView(ModuleView);
+
+    var peter = KB.Views.bModules.add(new KB.Backbone.ModuleView({
+      model: ModuleModel,
+      el: '#' + ModuleModel.get('instance_id'),
+      Area: Area
+    }));
+    console.log(peter);
+
     KB.Ui.initTabs();
   }
 

@@ -31,15 +31,16 @@ class AfterAreaChange
         if (!current_user_can( 'edit_kontentblocks' )) {
             wp_send_json_error();
         }
-        
-        $data        = $_POST;
-        $Environment = Utilities::getEnvironment( $data['post_id'] );
-        $Factory     = new ModuleFactory( $data['module']['class'], $data['module'], $Environment );
-        $instance    = $Factory->getModule();
+
+        $post_id = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $module = filter_input( INPUT_POST, 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $Environment = Utilities::getEnvironment( $post_id );
+        $Factory = new ModuleFactory( $module['class'], $module, $Environment );
+        $instance = $Factory->getModule();
         ob_start();
 
         $instance->form();
-        $html   = ob_get_clean();
+        $html = ob_get_clean();
         $return = array(
             'html' => stripslashes_deep( $html ),
             'json' => stripslashes_deep( JSONBridge::getInstance()->getJSON() )
@@ -49,7 +50,6 @@ class AfterAreaChange
 //        if ( empty( $html ) ) {
 //            wp_send_json( \Kontentblocks\Helper\noOptionsMessage() );
 //        }
-
         wp_send_json( $return );
     }
 }

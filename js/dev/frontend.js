@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-09 */
+/*! Kontentblocks DevVersion 2014-12-13 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -1262,6 +1262,15 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     save: function() {}
 });
 
+KB.Backbone.Frontend.ModuleViewsCollection = Backbone.Collection.extend({
+    initialize: function() {
+        this.listenTo(this, "add", this.added);
+    },
+    added: function(View) {
+        return View;
+    }
+});
+
 KB.Backbone.ModuleBrowser.prototype.success = function(data) {
     var model;
     if (this.dropZone) {
@@ -1736,6 +1745,7 @@ KB.currentArea = {};
 
 KB.Views = {
     Modules: new KB.ViewsCollection(),
+    bModules: new KB.Backbone.Frontend.ModuleViewsCollection([]),
     Areas: new KB.ViewsCollection(),
     Context: new KB.ViewsCollection()
 };
@@ -1797,6 +1807,12 @@ KB.App = function() {
         }));
         ModuleView.$el.data("ModuleView", ModuleView);
         Area.addModuleView(ModuleView);
+        var peter = KB.Views.bModules.add(new KB.Backbone.ModuleView({
+            model: ModuleModel,
+            el: "#" + ModuleModel.get("instance_id"),
+            Area: Area
+        }));
+        console.log(peter);
         KB.Ui.initTabs();
     }
     function createAreaViews(AreaModel) {

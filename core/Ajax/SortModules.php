@@ -4,34 +4,39 @@ namespace Kontentblocks\Ajax;
 
 use Kontentblocks\Backend\Storage\ModuleStorage;
 
+/**
+ * Class SortModules
+ * @package Kontentblocks\Ajax
+ */
 class SortModules
 {
 
-    public function __construct()
+    public static function run()
     {
         // check nonce
-        check_ajax_referer('kb-update');
+        check_ajax_referer( 'kb-update' );
 
         // bail if essentials are missing
-        if (!isset($_POST['data']) || !is_array($_POST['data']))
-            wp_send_json_error('No valid data sent');
+        if (!isset( $_POST['data'] ) || !is_array( $_POST['data'] )) {
+            wp_send_json_error( 'No valid data sent' );
+        }
 
         // setup properties
         $postId = $_POST['post_id'];
         $data = $_POST['data'];
-        $Storage = new ModuleStorage($postId);
+        $Storage = new ModuleStorage( $postId );
         $old = $Storage->getIndex();
 
         // action
         $new = array();
         foreach ($data as $area => $string) {
 
-            parse_str($string, $result);
+            parse_str( $string, $result );
 
             foreach ($result as $k => $v) {
                 foreach ($old as $id => $module) {
                     if ($id === $k) {
-                        unset($old[$k]);
+                        unset( $old[$k] );
                     }
 
                     if ($module['area'] === $area && $module['instance_id'] === $k):
@@ -41,11 +46,11 @@ class SortModules
             }
         }
 
-        $save = array_merge($old, $new);
-        $update = $Storage->saveIndex($save);
+        $save = array_merge( $old, $new );
+        $update = $Storage->saveIndex( $save );
 
         if ($update) {
-            wp_send_json($update);
+            wp_send_json( $update );
         } else {
             wp_send_json_error();
         }

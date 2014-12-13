@@ -61,12 +61,12 @@ module.exports = function (grunt) {
         nonull: true
       },
       common: {
-        src: ['js/src/common/kb.cm.Namespaces.js', 'js/src/common/kb.cm.Config.js', 'js/src/common/**/*.js'],
+        src: ['js/src/common/_Namespaces.js', 'js/src/common/kb.cm.Config.js', 'js/src/common/**/*.js'],
         dest: 'js/tmp/common.concat.js',
         nonull: true
       },
       frontend: {
-        src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
+        src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js','js/src/frontend/Collections/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
         dest: 'js/tmp/frontend.concat.js',
         nonull: true
       },
