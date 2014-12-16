@@ -95,6 +95,9 @@ abstract class Field
      */
     public function setKey( $key )
     {
+        if (!empty( $this->key )) {
+            throw new \LogicException( '$key was already set and can not be overridden' );
+        }
         $this->key = $key;
     }
 
@@ -235,7 +238,7 @@ abstract class Field
 
             return $this->returnObj;
 
-        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg('returnObj') !== false ) {
+        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj' ) !== false) {
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
             $this->returnObj = new $classpath( $value, $this );
             return $this->returnObj;
@@ -651,6 +654,12 @@ abstract class Field
     public function getCallback( $type )
     {
 
+        $allowed = array( 'output', 'input', 'get', 'save' );
+
+        if (!in_array( $type, $allowed )) {
+            return null;
+        }
+
         $callbacks = $this->getArg( 'callbacks' );
 
         if ($callbacks) {
@@ -810,8 +819,8 @@ abstract class Field
 
     public function createUID()
     {
-        $base  = $this->baseId . $this->key;
-        return 'kb-' . hash('crc32', $base);
+        $base = $this->baseId . $this->key;
+        return 'kb-' . hash( 'crc32', $base );
     }
 
 }
