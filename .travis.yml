@@ -19,6 +19,10 @@ before_script:
   - cd ..
   - cp -r "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
   - cd /tmp/wordpress/
+  - mkdir -p wordpress-tests-lib
+  - cd wordpress-tests-lib/
+  - svn co --quiet http://develop.svn.wordpress.org/trunk/tests/phpunit/includes/
+  - cd /tmp/wordpress/
   - cp wp-tests-config-sample.php wp-tests-config.php
   - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
   - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
