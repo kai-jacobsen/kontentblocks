@@ -6,7 +6,7 @@ sudo: false
 
 env:
   - WP_VERSION=master WP_MULTISITE=0
-
+  - CODECLIMATE_REPO_TOKEN=7f1b407be97ef1daa00d48b2ff2237ba79752c18d8cf8bdb887b780db2d7a384
 matrix:
   include:
     - php: '5.5'
@@ -28,4 +28,5 @@ before_script:
   - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 script:
   - phpunit -c phpunit.xml
-  - CODECLIMATE_REPO_TOKEN=7f1b407be97ef1daa00d48b2ff2237ba79752c18d8cf8bdb887b780db2d7a384 ./vendor/bin/test-reporter
+  - php vendor/bin/test-reporter --stdout > codeclimate.json
+    - 'curl -X POST -d @codeclimate.json -H "Content-Type: application/json" -H "User-Agent: Code Climate (PHP Test Reporter v1.0.1-dev)"  https://codeclimate.com/test_reports'
