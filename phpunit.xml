@@ -11,4 +11,8 @@
 			<directory suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
+	<logging>
+		<!-- and this is where your report will be written -->
+		<log type="coverage-clover" target="build/clover.xml"/>
+	</logging>
 </phpunit>
