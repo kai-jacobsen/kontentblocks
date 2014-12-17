@@ -1,11 +1,11 @@
 <?php
 
-$_tests_dir = getenv( 'WP_TESTS_DIR' );
+$_tests_dir = getenv( 'WP_DEVELOP_DIR' );
 if (!$_tests_dir) {
     $_tests_dir = '/tmp/wordpress/wordpress-tests-lib';
 }
 
-require_once $_tests_dir . '/functions.php';
+require_once $_tests_dir . '/tests/phpunit/includes/functions.php';
 
 function _manually_load_plugin()
 {
