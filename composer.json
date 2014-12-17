@@ -21,7 +21,7 @@
     "composer/installers": "~1.0",
     "php": ">=5.4",
     "twig/twig": "1.*",
-    "pimple/pimple": "~2.*",
+    "pimple/pimple": "~2.1",
     "mobiledetect/mobiledetectlib": "2.8.*",
     "monolog/monolog": "1.*"
   },
