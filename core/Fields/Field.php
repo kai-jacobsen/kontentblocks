@@ -20,13 +20,20 @@ abstract class Field
      * @var string
      * @since 1.0.0
      */
-    protected $baseId;
+    protected $baseNameId;
+
+    /**
+     * Unique 'named' field id
+     * @var string
+     */
+    protected $fieldId;
 
     /**
      * Unique id generated on run time
      * @var string
      */
     protected $uniqueId;
+
 
     /**
      * Shared/common arguments are
@@ -86,6 +93,24 @@ abstract class Field
      */
     public $parentModuleId;
 
+
+    /**
+     * Constructor
+     * @param string $key unique storage key
+     * @param string $baseNameId used to generate the name attribute, might be array [ ] as well
+     * @param string $fid unique field id,
+     */
+    public function __construct( $key, $baseNameId, $fid )
+    {
+        if (!isset( $key, $baseNameId, $fid )) {
+            throw new \BadMethodCallException( 'Missing arguments for new Field' );
+        }
+
+        $this->setKey( $key );
+        $this->setBaseNameId( $baseNameId );
+        $this->setFieldId( $fid );
+    }
+
     /**
      * set storage key
      *
@@ -136,25 +161,34 @@ abstract class Field
      *
      * @since 1.0.0
      */
-    public function setBaseId( $id, $array = false )
+    public function setBaseNameId( $id, $array = false )
     {
         if (!$array) {
-            $this->baseId = $id;
+            $this->baseNameId = $id;
         } else {
-            $this->baseId = $id . '[' . $array . ']';
+            $this->baseNameId = $id . '[' . $array . ']';
         }
         // set parent module id which equals given id
         $this->parentModuleId = $id;
 
     }
 
+    /**
+     * Unique Field id setter
+     * @param string $id
+     */
+    public function setFieldId( $id )
+    {
+        $this->fieldId = $id;
+    }
+
 
     /**
      * @return string
      */
-    public function getBaseId()
+    public function getBaseNameId()
     {
-        return $this->parentModuleId;
+        return $this->baseNameId;
     }
 
     /**
@@ -725,9 +759,9 @@ abstract class Field
             } else {
                 $number = $rnd;
             }
-            $id = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
+            $id = sanitize_title( $this->baseNameId . '_' . $this->key . '_' . $number );
         } else {
-            $id = sanitize_title( $this->baseId . '_' . $this->key );
+            $id = sanitize_title( $this->baseNameId . '_' . $this->key );
         }
 
         return esc_attr( $id );
@@ -749,21 +783,21 @@ abstract class Field
     public function getFieldName( $array = false, $akey = null, $multiple = false )
     {
         if ($array === true && $akey !== null && $multiple) {
-            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}][]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}][{$akey}][]" );
         } elseif ($array === true && $akey !== null) {
-            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}][{$akey}]" );
         } else if (is_bool( $array ) && $array === true) {
-            return esc_attr( "{$this->baseId}[{$this->key}][]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}][]" );
         } else if (is_string( $array ) && is_string( $akey ) && is_string( $multiple )) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][$multiple]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}][$array][$akey][$multiple]" );
         } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}][$array][$akey][]" );
         } else if (is_string( $array ) && is_string( $akey )) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}][$array][$akey]" );
         } else if (is_string( $array )) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}][$array]" );
         } else {
-            return esc_attr( "{$this->baseId}[{$this->key}]" );
+            return esc_attr( "{$this->baseNameId}[{$this->key}]" );
         }
 
     }
@@ -819,7 +853,7 @@ abstract class Field
 
     public function createUID()
     {
-        $base = $this->baseId . $this->key;
+        $base = $this->baseNameId . $this->key;
         return 'kb-' . hash( 'crc32', $base );
     }
 

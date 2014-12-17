@@ -168,7 +168,7 @@ class FieldSubGroup
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $field->setBaseId( $baseId, $this->key );
+            $field->setBaseNameId( $baseId, $this->key );
         }
     }
 

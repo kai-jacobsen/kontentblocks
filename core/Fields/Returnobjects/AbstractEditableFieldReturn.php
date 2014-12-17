@@ -247,7 +247,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
                     'index' => ( $field['index'] ) ? $field['index'] : null
                 )
             );
-            $Dummy->setBaseId( $field['instance_id'] );
+            $Dummy->setBaseNameId( $field['instance_id'] );
             $Dummy->setType( $field['type'] );
             $Dummy->setData( $this->getValue() );
             $field = $this->field = $Dummy;

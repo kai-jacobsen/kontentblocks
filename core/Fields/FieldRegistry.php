@@ -97,7 +97,7 @@ class FieldRegistry
         if (isset( $this->fields[$id] )) {
             return new $this->fields[$id];
         } else {
-            return FALSE;
+            return false;
         }
     }
 

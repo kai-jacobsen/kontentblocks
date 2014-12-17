@@ -172,7 +172,7 @@ abstract class AbstractFieldSection
             }
 
 
-            $field->setBaseId( $moduleId );
+            $field->setBaseNameId( $moduleId );
             $field->setData( $fielddata );
 
             // Build field form
