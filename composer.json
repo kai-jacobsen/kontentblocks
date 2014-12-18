@@ -1,24 +1,32 @@
 {
-    "name": "jcbsn/kontentblocks",
-    "description": "WordPress Plugin. Shortens the gap between design constrains, developer efficiency, users flexibility and ease of use to create, edit and control content for both parties.",
-    "keywords": ["wordpress", "plugin", "kontenblocks", "content management"],
-    "homepage": "http://kontentblocks.de",
-    "license": "GPL",
-    "authors": [
-        {
-            "name": "Kai Jacobsen",
-            "email": "ungestaltbar@gmail.com",
-            "homepage": "http://jcbsn.de"
-        }
-    ],
-    "type": "wordpress-plugin",
-    "require": {
-        "composer/installers": "~1.0",
-        "php": ">=5.3.2",
-        "twig/twig": "1.*",
-        "pimple/pimple": "~2.1",
-        "mobiledetect/mobiledetectlib": "2.8.*",
-        "monolog/monolog": "1.*"
+  "name": "jcbsn/kontentblocks",
+  "description": "WordPress Plugin. Shortens the gap between design constrains, developer efficiency, users flexibility and ease of use to create, edit and control content for both parties.",
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "kontenblocks",
+    "content management"
+  ],
+  "homepage": "http://kontentblocks.de",
+  "license": "GPL",
+  "authors": [
+    {
+      "name": "Kai Jacobsen",
+      "email": "ungestaltbar@gmail.com",
+      "homepage": "http://jcbsn.de"
     }
+  ],
+  "type": "wordpress-plugin",
+  "require": {
+    "composer/installers": "~1.0",
+    "php": ">=5.4",
+    "twig/twig": "1.*",
+    "pimple/pimple": "~2.1",
+    "mobiledetect/mobiledetectlib": "2.8.*",
+    "monolog/monolog": "1.*"
+  },
+  "require-dev": {
+    "codeclimate/php-test-reporter": "dev-master"
+  }
 }
 
