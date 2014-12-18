@@ -35,11 +35,9 @@
     },
     update: function () {
       var that = this;
-
-
       KB.Ajax.send(
         {
-          action: 'get_layout_configurations',
+          action: 'getLayoutConfig',
           _ajax_nonce: KB.Config.getNonce('read'),
           data: {
             areaConfig: this.areaConfig,
@@ -63,11 +61,11 @@
       KB.Ajax.send
       (
         {
-          action: 'set_layout_configuration',
+          action: 'setLayoutConfig',
           _ajax_nonce: KB.Config.getNonce('update'),
           data: {
             areaConfig: this.areaConfig,
-            name: value,
+            name: value
           }
         },
         function (response) {
@@ -88,11 +86,11 @@
 
       KB.Ajax.send(
         {
-          action: 'delete_layout_configuration',
+          action: 'deleteLayoutConfig',
           _ajax_nonce: KB.Config.getNonce('delete'),
           data: {
             areaConfig: this.areaConfig,
-            name: value,
+            name: value
           }
         },
         function (response) {
