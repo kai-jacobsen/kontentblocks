@@ -4,6 +4,7 @@ KB.Fields.register('FlexibleFields', (function ($) {
             // find all instances on load
             $('.flexible-fields--stage', $('body')).each(function (index, el) {
                 var view = modalView || KB.Views.Modules.get($(el).data('module'));
+                console.log($(el).data('module'));
                 var key = $(el).data('fieldkey');
                 var arrayKey = $(el).data('arraykey');
                 var fid = $(el).closest('.kb-js-field-identifier').attr('id');

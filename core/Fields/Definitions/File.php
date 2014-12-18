@@ -36,9 +36,15 @@ Class File extends Field
 
     }
 
-    public function setFilter( $value )
+    /**
+     * Runs when data is set to the field
+     * since we only store an id we gather more informations to work with
+     * instead of saving details
+     * @param $value
+     * @return array
+     */
+    public function inputFilter( $value )
     {
-
         if (!empty( $value ) && is_numeric( absint( $value['id'] ) )) {
             return wp_prepare_attachment_for_js( $value['id'] );
         }
@@ -50,7 +56,7 @@ Class File extends Field
      *
      * @return mixed
      */
-    protected function prepareInputValue( $val )
+    protected function prepareFormValue( $val )
     {
 
         $fileDefaults = array(

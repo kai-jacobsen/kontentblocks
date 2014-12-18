@@ -25,7 +25,7 @@ Class AreaSelect extends Field {
         $Registry = Kontentblocks::getService('registry.areas');
         $areas = $Registry->getGlobalAreas();
 		$this->label();
-        print "<select id='{$this->getFieldId()}' name='{$this->getFieldName()}'>";
+        print "<select id='{$this->getInputFieldId()}' name='{$this->getFieldName()}'>";
 
         if ( $this->getArg( 'empty', true ) ) {
             print "<option value='' name=''>Bitte wählen</option>";
@@ -58,11 +58,9 @@ Class AreaSelect extends Field {
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
 		return $val;
 
 	}
-
-
 
 }

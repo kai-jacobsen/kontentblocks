@@ -21,6 +21,6 @@ interface InterfaceFieldRenderer
      * Render structure
      * @return mixed
      */
-    public function render( $baseId, $data );
+    public function render( $data );
 
 }

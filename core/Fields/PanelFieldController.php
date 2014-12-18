@@ -37,9 +37,7 @@ class PanelFieldController extends AbstractFieldController
      *
      * @param $id
      * @param array $data
-     *
-     * @internal param object $module
-     * @return self
+     * @param $Panel
      */
     public function __construct( $id, $data = array(), $Panel )
     {
@@ -84,7 +82,6 @@ class PanelFieldController extends AbstractFieldController
             $return = ( $definition->save( $data, $oldData ) );
             $collection = $collection + $return;
         }
-
         return $collection;
 
     }
@@ -100,8 +97,8 @@ class PanelFieldController extends AbstractFieldController
      */
     public function renderFields()
     {
-        $Renderer = new FieldRendererTabs();
-        $Renderer->setStructure( $this->Structure )->render( $this->baseId, $this->data );
+        $Renderer = new FieldRendererTabs($this->baseId, $this->Structure);
+        $Renderer->render( $this->data );
     }
 
 

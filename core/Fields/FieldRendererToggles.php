@@ -39,21 +39,27 @@ class FieldRendererToggles implements InterfaceFieldRenderer
     protected $length;
 
 
+    public function __construct( $baseId, $structure = null )
+    {
+        $this->baseId = $baseId;
+
+        if (!is_null( $structure )) {
+            $this->setStructure( $structure );
+        }
+
+    }
+
     /**
      * Wrapper to render method
-     * @param $baseId
      * @param $data
      * @return mixed|void
      */
-    public function render( $baseId, $data )
+    public function render( $data )
     {
         if (!is_array( $this->structure )) {
             return;
         }
-
-        $this->baseId = $baseId;
         $this->data = $data;
-
         $this->renderTogglebox();
 
     }
@@ -81,14 +87,14 @@ class FieldRendererToggles implements InterfaceFieldRenderer
                 if ($section->getNumberOfVisibleFields() > 0) {
                     echo "<div class='kb-togglebox-header'><h3>{$section->getLabel()}</h3></div>";
                     echo "<div class='kb-togglebox-box' id='toggle-{$section->getID()}'>";
-                    $section->render( $this->baseId, $this->data );
+                    $section->render( $this->data );
                     echo "</div>";
                 }
             }
             $this->_before();
         } else {
             foreach ($this->structure as $section) {
-                $section->render( $this->baseId, $this->data );
+                $section->render( $this->data );
             }
         }
 

@@ -88,14 +88,19 @@ class FieldRegistry
 
     /**
      * Get field by id
-     * @param string $id
-     * @return Field | bool
+     * @param $type
+     * @param $baseId
+     * @param $subkey
+     * @param $key
+     * @param array $args
+     * @param null $data
+     * @return bool|Field
      * @since 1.0.0
      */
-    public function getField( $id )
+    public function getField( $type, $baseId, $subkey, $key, $args = array(), $data = null )
     {
-        if (isset( $this->fields[$id] )) {
-            return new $this->fields[$id];
+        if (isset( $this->fields[$type])) {
+            return new $this->fields[$type]($baseId, $subkey, $key, $args, $data);
         } else {
             return false;
         }

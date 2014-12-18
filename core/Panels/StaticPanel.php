@@ -15,7 +15,7 @@ abstract class StaticPanel extends AbstractPanel
      * Custom Field Manager Instance
      * @var PanelFieldController
      */
-    protected $FieldManager;
+    protected $FieldController;
 
     /**
      * Flag indicates if data should be stored as single key => value pairs
@@ -68,10 +68,10 @@ abstract class StaticPanel extends AbstractPanel
         }
 
         $this->setupData( $postObj->ID );
-        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $this->beforeForm();
-        $this->fields( $this->FieldManager )->renderFields();
+        $this->fields( $this->FieldController )->renderFields();
         $this->afterForm();
     }
 
@@ -87,9 +87,9 @@ abstract class StaticPanel extends AbstractPanel
         }
 
         $old = $this->setupData( $postId );
-        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
-        $new = $this->fields( $this->FieldManager )->save( $_POST[$this->baseId], $old );
+        $new = $this->fields( $this->FieldController )->save( $_POST[$this->baseId], $old );
         update_post_meta( $postId, $this->baseId, $new );
 
         if ($this->saveAsSingle) {
@@ -136,8 +136,8 @@ abstract class StaticPanel extends AbstractPanel
     public function setup( $postId )
     {
         $this->setupData( $postId );
-        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
-        $this->fields( $this->FieldManager )->setup( $this->data );
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->fields( $this->FieldController )->setup( $this->data );
 
         return $this;
 
@@ -149,10 +149,10 @@ abstract class StaticPanel extends AbstractPanel
      */
     public function getData( $postId = null )
     {
-        if (!$this->FieldManager) {
+        if (!$this->FieldController) {
             $this->setup( $postId );
         }
-        return $this->FieldManager->prepareDataAndGet();
+        return $this->FieldController->prepareDataAndGet();
     }
 
 

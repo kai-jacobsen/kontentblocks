@@ -14,9 +14,8 @@ class PanelFieldSection extends AbstractFieldSection {
 	 * @param string $id
 	 * @param $args
 	 * @param $envVars
-	 * @param \Kontentblocks\Panels\Panel $Panel
+	 * @param \Kontentblocks\Panels\AbstractPanel $Panel
 	 *
-	 * @internal param array $areaContext
 	 * @TODO // revise envVars
 	 * @return \Kontentblocks\Fields\PanelFieldSection
 	 */
@@ -24,8 +23,8 @@ class PanelFieldSection extends AbstractFieldSection {
 		$this->id      = $id;
 		$this->args    = $this->prepareArgs( $args );
 		$this->envVars = $envVars;
-		$this->Emitter = $Panel;
-
+		$this->Module = $Panel;
+		$this->baseId = $Panel->getBaseId();
 	}
 
 

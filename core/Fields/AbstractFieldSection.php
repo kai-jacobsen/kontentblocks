@@ -28,7 +28,7 @@ abstract class AbstractFieldSection
      * Can be a module or a panel
      * @var object
      */
-    protected $Emitter;
+    protected $Module;
 
     /**
      * Preset defaults
@@ -38,6 +38,12 @@ abstract class AbstractFieldSection
         'label' => 'Fieldgroup',
         'title' => 'Fieldgrouptitle'
     );
+
+    /**
+     * Baseid, as passed to fields
+     * @var string
+     */
+    public $baseId;
 
     private $priorityCount = 10;
 
@@ -69,15 +75,9 @@ abstract class AbstractFieldSection
      */
     public function addField( $type, $key, $args )
     {
+        $subkey = null;
+
         if (!$this->fieldExists( $key )) {
-
-            /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
-            $Registry = Kontentblocks::getService( 'registry.fields' );
-            $Field = $Registry->getField( $type );
-
-            if (!$Field) {
-                throw new Exception( "Field of type: $type does not exist" );
-            }
 
             //check for special key syntax
             if (preg_match( "/^(.*?)::/i", $key, $out )) {
@@ -90,18 +90,23 @@ abstract class AbstractFieldSection
                         );
                     }
 
-                    $args['arrayKey'] = $out[1];
+                    $args['arrayKey'] = $subkey = $out[1];
                 }
             }
+
 
             if (!isset( $args['priority'] )) {
                 $args['priority'] = $this->priorityCount;
                 $this->priorityCount += 5;
             }
 
-            $Field->setKey( $key );
-            $Field->setArgs( $args );
-            $Field->setType( $type );
+            /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
+            $Registry = Kontentblocks::getService( 'registry.fields' );
+            $Field = $Registry->getField( $type, $this->baseId, $subkey, $key, $args );
+
+            if (!$Field) {
+                throw new Exception( "Field of type: $type does not exist" );
+            }
 
             // conditional check of field visibility
             $this->markVisibility( $Field );
@@ -149,7 +154,7 @@ abstract class AbstractFieldSection
      * TODO: Change moduleId zo baseId for consistency
      * TODO: Check if possible / Refactor to set properties earlier
      */
-    public function render( $moduleId, $data )
+    public function render( $data )
     {
         if (empty( $this->Fields )) {
             return;
@@ -171,8 +176,6 @@ abstract class AbstractFieldSection
                 $fielddata = ( isset( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : array();
             }
 
-
-            $field->setBaseNameId( $moduleId );
             $field->setData( $fielddata );
 
             // Build field form
@@ -213,7 +216,7 @@ abstract class AbstractFieldSection
 
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->Fields as $field) {
-            $field->setModule( $this->Emitter );
+            $field->setModule( $this->Module );
             $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
             if (isset( $data[$field->getKey()] )) {
                 $collect[$field->getKey()] = $field->_save( $data[$field->getKey()], $old );

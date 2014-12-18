@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-16 */
+/*! Kontentblocks DevVersion 2014-12-18 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -527,7 +527,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     success: function(data) {
         var model;
         this.options.area.modulesList.append(data.html);
-        model = KB.Modules.add(new KB.Backbone.Backend.ModuleModel(data.module));
+        model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
         this.options.area.addModuleView(model.view);
         _K.info("new module created", {
             view: model.view
@@ -948,10 +948,11 @@ KB.Ui = function($) {
             var $context = $cntxt || jQuery("body");
             var selector = $(".kb_fieldtabs", $context);
             selector.tabs({
-                activate: function() {
+                activate: function(e, ui) {
                     $(".kb-nano").nanoScroller({
                         contentClass: "kb-nano-content"
                     });
+                    console.log(ui);
                     KB.Events.trigger("kb.modal.refresh");
                 }
             });

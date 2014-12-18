@@ -117,8 +117,9 @@ KB.Ui = function ($) {
       var $context = $cntxt || jQuery('body');
       var selector = $('.kb_fieldtabs', $context);
       selector.tabs({
-        activate: function () {
+        activate: function (e, ui) {
           $('.kb-nano').nanoScroller({ contentClass: 'kb-nano-content' });
+          console.log(ui);
           KB.Events.trigger('kb.modal.refresh');
         }
       });

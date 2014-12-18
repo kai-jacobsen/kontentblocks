@@ -26,7 +26,7 @@ Class Checkbox extends Field
     {
         $checked = checked( $this->getValue(), true, false );
         $this->label();
-        echo "<label><input type='checkbox' id='{$this->getFieldId()}' name='{$this->getFieldName()}'  {$checked} /> {$this->getArg( 'text', 'Please label this checkbox' )}</label>";
+        echo "<label><input type='checkbox' id='{$this->getInputFieldId()}' name='{$this->getFieldName()}'  {$checked} /> {$this->getArg( 'text', 'Please label this checkbox' )}</label>";
         $this->description();
 
     }
@@ -70,7 +70,7 @@ Class Checkbox extends Field
      * @param mixed $var value as saved
      * @return bool
      */
-    protected  function prepareInputValue( $val )
+    protected  function prepareFormValue( $val )
     {
         return filter_var( $val, FILTER_VALIDATE_BOOLEAN );
     }

@@ -47,7 +47,7 @@ Class Callback extends Field
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
 		return $val;
 	}
 }

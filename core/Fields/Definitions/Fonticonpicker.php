@@ -22,7 +22,7 @@ Class Fonticonpicker extends Field
     public function form()
     {
         $this->label();
-        echo "<input class='kb-fonticonpicker' id='{$this->getFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
+        echo "<input class='kb-fonticonpicker' id='{$this->getInputFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
         $this->description();
     }
 
@@ -32,7 +32,7 @@ Class Fonticonpicker extends Field
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
 		return $val;
 	}
 

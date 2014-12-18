@@ -26,7 +26,7 @@ Class CheckboxSet extends Field {
 	 */
 	public function form() {
 		$options = $this->getArg( 'options', array() );
-		$data    = $this->prepareInputValue( $this->getValue() );
+		$data    = $this->prepareFormValue( $this->getValue() );
 
 		$this->label();
 
@@ -37,7 +37,7 @@ Class CheckboxSet extends Field {
 			}
 
 			$checked = ( $item['value'] === $data[ $item['key'] ] ) ? 'checked="checked"' : '';
-			echo "<div class='kb-checkboxset-item'><label><input type='checkbox' id='{$this->getFieldId()}' name='{$this->getFieldName( true,
+			echo "<div class='kb-checkboxset-item'><label><input type='checkbox' id='{$this->getInputFieldId()}' name='{$this->getFieldName( true,
 				$item['key'],
 				false )}' value='{$item['value']}'  {$checked} /> {$item['label']}</label></div>";
 		}
@@ -114,7 +114,7 @@ Class CheckboxSet extends Field {
 
 	}
 
-	protected function prepareInputValue( $value ) {
+	protected function prepareFormValue( $value ) {
 
 		if ( !is_array( $value ) ) {
 			return array();

@@ -2,23 +2,24 @@
 
 namespace core\Fields;
 
+use ReflectionClass;
+
 class FieldTest extends \WP_UnitTestCase
 {
 
     /**
      * @var \Kontentblocks\Fields\Field
      */
-    public $Field;
+    public $TestField;
 
     public function setUp()
     {
         parent::setUp();
 
         $Registry = \Kontentblocks\Kontentblocks::getService( 'registry.fields' );
-        $this->Field = $Registry->getField( 'text' );
-        $this->Field->setKey( 'testkey' );
-        $this->Field->setData( 'Testvalue' );
-        $this->Field->setArgs(
+        $this->TestField = $Registry->getField( 'text', 'dummyid', 'dummysubkey', 'okey' );
+        $this->TestField->setData( 'Testvalue' );
+        $this->TestField->setArgs(
             array(
                 'label' => 'Testlabel',
                 'description' => 'Testdescription',
@@ -31,35 +32,46 @@ class FieldTest extends \WP_UnitTestCase
 
     }
 
+
     /**
      * getKey() should return the set key unmodified
      */
     public function testGetKey()
     {
-        $key = $this->Field->getKey();
-        $this->assertEquals( $key, 'testkey' );
+        $key = $this->TestField->getKey();
+        $this->assertEquals( $key, 'okey' );
     }
 
     /**
-     * setkey() must raise an Exception if key was already set
-     * key was already set in setUp method
+     * getBaseId()
+     * return whatever string was set
      */
-    public function testSetKeyWhenKeyAlreadySet()
+    public function testGetBaseId()
     {
-        $this->setExpectedException( 'LogicException' );
-        $this->Field->setKey( 'overwrite' );
+        $id = $this->TestField->getBaseId();
+        $this->assertEquals( $id, 'dummyid[dummysubkey]' );
+    }
+
+    /**
+     * getInputFieldId();
+     * return whatever id was set
+     */
+    public function testGetFieldId()
+    {
+        $fid = $this->TestField->getFieldId();
+        $this->assertEquals( $fid, 'dummyid' );
     }
 
 
     public function testValidCallback()
     {
-        $this->assertEquals( is_callable( $this->Field->getCallback( 'output' ) ), true );
+        $this->assertEquals( is_callable( $this->TestField->getCallback( 'output' ) ), true );
     }
 
     public function testInvalidCallback()
     {
-        $this->assertEquals( $this->Field->getCallback( 'input' ), null );
-        $this->assertEquals( $this->Field->getCallback( 'invalidType' ), null );
+        $this->assertEquals( $this->TestField->getCallback( 'input' ), null );
+        $this->assertEquals( $this->TestField->getCallback( 'invalidType' ), null );
     }
 
     /*

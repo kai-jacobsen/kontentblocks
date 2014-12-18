@@ -204,4 +204,9 @@ abstract class AbstractPanel
         return $this->data;
     }
 
+    public function getBaseId()
+    {
+        return $this->baseId;
+    }
+
 } 

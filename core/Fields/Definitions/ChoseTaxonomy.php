@@ -50,7 +50,7 @@ Class ChoseTaxonomy extends Field {
 
 		$this->label();
 
-		print "<select id='{$this->getFieldId()}' name='{$this->getFieldName()}'>";
+		print "<select id='{$this->getInputFieldId()}' name='{$this->getFieldName()}'>";
 
 		// display 'chose ...' message as first entry
 		if ( $this->getArg( 'empty', true ) ) {
@@ -73,7 +73,7 @@ Class ChoseTaxonomy extends Field {
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
 		return $val;
 	}
 }

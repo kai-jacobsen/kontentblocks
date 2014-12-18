@@ -22,7 +22,7 @@ Class TemplateSelector extends Field
     {
         $this->label();
         $type = $this->getArg( 'type', 'text' );
-        echo "<input type='{$type}' id='{$this->getFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
+        echo "<input type='{$type}' id='{$this->getInputFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
         $this->description();
 
     }
@@ -43,7 +43,7 @@ Class TemplateSelector extends Field
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
 		return $val;
 	}
 }

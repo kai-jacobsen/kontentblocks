@@ -28,9 +28,9 @@ Class FlexibleFields extends Field
     public function form()
     {
         $this->label();
-        echo "<div id='{$this->getFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg(
+        echo "<div id='{$this->getInputFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg(
             'arrayKey'
-        )}' data-module='{$this->parentModuleId}' class='flexible-fields--stage'></div>";
+        )}' data-module='{$this->getFieldId()}' class='flexible-fields--stage'></div>";
         $this->description();
 
     }
@@ -95,7 +95,7 @@ Class FlexibleFields extends Field
      *
      * @return mixed
      */
-    protected function prepareInputValue( $value )
+    protected function prepareFormValue( $value )
     {
 
         $forJSON = array();
@@ -110,7 +110,7 @@ Class FlexibleFields extends Field
                     foreach ($item['_mapping'] as $key => $type) {
                         /** @var \Kontentblocks\Fields\Field $fieldInstance */
                         $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField( $type );
-                        $item[$key] = $fieldInstance->prepareInputValue( $item[$key] );
+                        $item[$key] = $fieldInstance->prepareFormValue( $item[$key] );
                     }
                 }
             }
@@ -118,7 +118,7 @@ Class FlexibleFields extends Field
 
         $Bridge = JSONBridge::getInstance();
         $Bridge->registerFieldData(
-            $this->parentModuleId,
+            $this->getFieldId(),
             $this->type,
             $forJSON,
             $this->getKey(),

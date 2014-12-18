@@ -11,25 +11,33 @@ use Kontentblocks\Fields\Returnobjects;
  * Class Field
  * @package Kontentblocks\Fields
  * @since 1.0.0
+ *
+ * Note: Three components, one optional, to build the input name attribute
+ * 1. baseId, most likely equals a modules id
+ * 2. subkey, if fields are grouped resp. nested under one subkey in $POST data(see class FieldSubGroup)
+ * 3. key, the actual storage key in the $POST data
  */
 abstract class Field
 {
 
     /**
      * Base id/key for the field
+     * may get modified if a subkey is present
      * @var string
      * @since 1.0.0
      */
-    protected $baseNameId;
+    protected $baseId;
 
     /**
      * Unique 'named' field id
+     * will and should equal the original baseId, without subkey applied
      * @var string
      */
     protected $fieldId;
 
     /**
      * Unique id generated on run time
+     * prim. used on frontend to map data around
      * @var string
      */
     protected $uniqueId;
@@ -89,6 +97,7 @@ abstract class Field
     protected $module;
 
     /**
+     * @remove exchange with fieldId
      * @var string module instance_id
      */
     public $parentModuleId;
@@ -96,33 +105,37 @@ abstract class Field
 
     /**
      * Constructor
+     * @param string $baseId
+     * @param null|string $subkey
      * @param string $key unique storage key
-     * @param string $baseNameId used to generate the name attribute, might be array [ ] as well
-     * @param string $fid unique field id,
+     * @param array $args
+     * @param mixed $data
      */
-    public function __construct( $key, $baseNameId, $fid )
+    public function __construct( $baseId, $subkey = null, $key, $args = array(), $data = null )
     {
-        if (!isset( $key, $baseNameId, $fid )) {
+        if (!isset( $key, $baseId )) {
             throw new \BadMethodCallException( 'Missing arguments for new Field' );
         }
-
         $this->setKey( $key );
-        $this->setBaseNameId( $baseNameId );
-        $this->setFieldId( $fid );
+        $this->setBaseId( $baseId, $subkey );
+        $this->setFieldId( $baseId );
+        $this->setType( static::$settings['type'] );
+        //@TODO think about setting default args from extending class
+        $this->setArgs( $args );
+
+        if (!is_null( $data )) {
+            $this->setData( $data );
+        }
     }
 
     /**
      * set storage key
-     *
      * @param string $key
      *
      * @since 1.0.0
      */
-    public function setKey( $key )
+    private function setKey( $key )
     {
-        if (!empty( $this->key )) {
-            throw new \LogicException( '$key was already set and can not be overridden' );
-        }
         $this->key = $key;
     }
 
@@ -147,7 +160,6 @@ abstract class Field
     public function setArgs( $args )
     {
         $this->args = $args;
-
     }
 
     /**
@@ -157,21 +169,27 @@ abstract class Field
      * optional as array
      *
      * @param $id
-     * @param bool $array
+     * @param string $subkey
      *
      * @since 1.0.0
      */
-    public function setBaseNameId( $id, $array = false )
+    public function setBaseId( $id, $subkey )
     {
-        if (!$array) {
-            $this->baseNameId = $id;
+        if (!$subkey) {
+            $this->baseId = $id;
         } else {
-            $this->baseNameId = $id . '[' . $array . ']';
+            $this->baseId = $id . '[' . $subkey . ']';
         }
-        // set parent module id which equals given id
-        $this->parentModuleId = $id;
-
     }
+
+    /**
+     * @return string
+     */
+    public function getBaseId()
+    {
+        return $this->baseId;
+    }
+
 
     /**
      * Unique Field id setter
@@ -186,9 +204,9 @@ abstract class Field
     /**
      * @return string
      */
-    public function getBaseNameId()
+    public function getFieldId()
     {
-        return $this->baseNameId;
+        return $this->fieldId;
     }
 
     /**
@@ -196,6 +214,7 @@ abstract class Field
      * Data from _POST[{baseid}[$this->key]]
      * Runs each time when data is set to the field
      * Frontend/Backend
+     * (upon field initialization, data from _POST or database set to field)
      *
      * @param mixed $data
      *
@@ -203,7 +222,11 @@ abstract class Field
      */
     public function setData( $data )
     {
-        $this->value = $this->setDataToField( $data );
+        if (method_exists( $this, 'inputFilter' )) {
+            $this->value = $this->inputFilter( $data );
+        } else {
+            $this->value = $data;
+        }
     }
 
     /**
@@ -217,7 +240,6 @@ abstract class Field
     public function setType( $type )
     {
         $this->type = $type;
-
     }
 
     /**
@@ -226,7 +248,6 @@ abstract class Field
      * @param mixed $data fields assigned value
      * @param string $moduleId
      *
-     * @TODO Investigate the difference between parentModule and parentModuleId, set above
      * @since 1.0.0
      */
     public function setup( $data, $moduleId )
@@ -390,7 +411,6 @@ abstract class Field
     {
         /*
          * optional method to render something before the field
-         * @TODO replace with wp hook
          */
         if (method_exists( $this, 'preForm' )) {
             $this->preForm();
@@ -401,8 +421,7 @@ abstract class Field
             $this->value = call_user_func( $this->getCallback( 'input' ), $this->value );
         } // custom method on field class level
         else {
-            $this->value = $this->prepareInputValue( $this->value );
-
+            $this->value = $this->prepareFormValue( $this->value );
         }
 
         // When viewing from the frontend, an optional method can be used for the output
@@ -432,7 +451,7 @@ abstract class Field
      *
      * @return mixed
      */
-    abstract protected function prepareInputValue( $val );
+    abstract protected function prepareFormValue( $val );
 
     /**
      * JSON Encode custom settings for the field
@@ -470,7 +489,8 @@ abstract class Field
     {
         $label = $this->getArg( 'label' );
         if (!empty( $label )) {
-            echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getFieldId()}'>{$this->getArg(
+            echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getInputFieldId(
+            )}'>{$this->getArg(
                 'label'
             )}</label>";
         }
@@ -488,7 +508,6 @@ abstract class Field
      */
     public function getValue( $arrKey = null, $return = '' )
     {
-
         if ($arrKey) {
             $data = $this->getValueFromArray( $arrKey );
         } else {
@@ -521,23 +540,6 @@ abstract class Field
             return $this->value[$arrKey];
         } else {
             return null;
-        }
-    }
-
-    /**
-     * Whenever setData got called, this runs
-     * (upon field initialization, data from _POST or database set to field)
-     *
-     * @param $value
-     *
-     * @return mixed
-     */
-    private function setDataToField( $value )
-    {
-        if (method_exists( $this, 'setFilter' )) {
-            return $this->setFilter( $value );
-        } else {
-            return $value;
         }
     }
 
@@ -751,7 +753,7 @@ abstract class Field
     /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
      * */
-    public function getFieldId( $rnd = false )
+    public function getInputFieldId( $rnd = false )
     {
         if ($rnd) {
             if (is_bool( $rnd )) {
@@ -759,9 +761,9 @@ abstract class Field
             } else {
                 $number = $rnd;
             }
-            $id = sanitize_title( $this->baseNameId . '_' . $this->key . '_' . $number );
+            $id = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
         } else {
-            $id = sanitize_title( $this->baseNameId . '_' . $this->key );
+            $id = sanitize_title( $this->baseId . '_' . $this->key );
         }
 
         return esc_attr( $id );
@@ -777,27 +779,26 @@ abstract class Field
      * @param bool $akey - if true add ['$akey'] to the key
      * @param bool $multiple
      *
-     * @internal param string $key - base key for the input field
      * @return string
      */
     public function getFieldName( $array = false, $akey = null, $multiple = false )
     {
         if ($array === true && $akey !== null && $multiple) {
-            return esc_attr( "{$this->baseNameId}[{$this->key}][{$akey}][]" );
+            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}][]" );
         } elseif ($array === true && $akey !== null) {
-            return esc_attr( "{$this->baseNameId}[{$this->key}][{$akey}]" );
+            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" );
         } else if (is_bool( $array ) && $array === true) {
-            return esc_attr( "{$this->baseNameId}[{$this->key}][]" );
+            return esc_attr( "{$this->baseId}[{$this->key}][]" );
         } else if (is_string( $array ) && is_string( $akey ) && is_string( $multiple )) {
-            return esc_attr( "{$this->baseNameId}[{$this->key}][$array][$akey][$multiple]" );
+            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][$multiple]" );
         } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
-            return esc_attr( "{$this->baseNameId}[{$this->key}][$array][$akey][]" );
+            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" );
         } else if (is_string( $array ) && is_string( $akey )) {
-            return esc_attr( "{$this->baseNameId}[{$this->key}][$array][$akey]" );
+            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey]" );
         } else if (is_string( $array )) {
-            return esc_attr( "{$this->baseNameId}[{$this->key}][$array]" );
+            return esc_attr( "{$this->baseId}[{$this->key}][$array]" );
         } else {
-            return esc_attr( "{$this->baseNameId}[{$this->key}]" );
+            return esc_attr( "{$this->baseId}[{$this->key}]" );
         }
 
     }
@@ -853,7 +854,7 @@ abstract class Field
 
     public function createUID()
     {
-        $base = $this->baseNameId . $this->key;
+        $base = $this->baseId . $this->key;
         return 'kb-' . hash( 'crc32', $base );
     }
 

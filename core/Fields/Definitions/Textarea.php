@@ -22,7 +22,7 @@ Class Textarea extends Field {
 	 */
 	public function form() {
 		$this->label();
-		echo "<textarea id='{$this->getFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'>{$this->getValue()}</textarea>";
+		echo "<textarea id='{$this->getInputFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'>{$this->getValue()}</textarea>";
 		$this->description();
 
 	}
@@ -34,7 +34,7 @@ Class Textarea extends Field {
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
 		return esc_textarea($val);
 	}
 

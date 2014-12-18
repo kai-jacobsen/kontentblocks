@@ -36,6 +36,16 @@ class FieldRendererTabs implements InterfaceFieldRenderer
     protected $data;
 
 
+    public function __construct( $baseId, $structure = null )
+    {
+        $this->baseId = $baseId;
+
+        if (!is_null( $structure )) {
+            $this->setStructure( $structure );
+        }
+
+    }
+
     /**
      * @param $structure
      * @return mixed|void
@@ -52,13 +62,12 @@ class FieldRendererTabs implements InterfaceFieldRenderer
      * @param $data
      * @return mixed|void
      */
-    public function render( $baseId, $data )
+    public function render( $data )
     {
         if (!is_array( $this->structure )) {
             return;
         }
 
-        $this->baseId = $baseId;
         $this->data = $data;
 
         $this->tabNavigation();
@@ -94,10 +103,10 @@ class FieldRendererTabs implements InterfaceFieldRenderer
         foreach ($this->structure as $section) {
             if ($section->getNumberOfVisibleFields() > 0) {
                 echo "<div id='tab-{$section->getID()}'>";
-                $section->render( $this->baseId, $this->data );
+                $section->render( $this->data );
                 echo "</div>";
             } else {
-                $section->render( $this->baseId, $this->data );
+                $section->render( $this->data );
             }
         }
         echo "</div>";

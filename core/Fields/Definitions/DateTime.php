@@ -23,7 +23,7 @@ Class DateTime extends Field
     public function form()
     {
         $this->label();
-        echo "<input type='text' id='{$this->getFieldId()}' name='{$this->getFieldName( 'human' )}' value='{$this->getValue( 'human' )}' class='kb-datetimepicker' >";
+        echo "<input type='text' id='{$this->getInputFieldId()}' name='{$this->getFieldName( 'human' )}' value='{$this->getValue( 'human' )}' class='kb-datetimepicker' >";
         echo "<input type='hidden' name='{$this->getFieldName( 'unix' )}' value='{$this->getValue( 'unix' )}' class='kb-datetimepicker--js-unix' >";
         echo "<input type='hidden' name='{$this->getFieldName( 'sql' )}' value='{$this->getValue( 'sql' )}' class='kb-datetimepicker--js-sql' >";
 
@@ -41,7 +41,7 @@ Class DateTime extends Field
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
 		return $val;
 	}
 }

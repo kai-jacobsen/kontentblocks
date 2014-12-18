@@ -6,7 +6,7 @@ use Kontentblocks\Modules\Module;
 use Reframe\Kontentblocks\Kontentblocks;
 
 /**
- * FieldController
+ * ModuleFieldController
  * Purpose of this class:
  * Connecting fields to a module and offering an API to interact with
  * fields and the underlying structure.
@@ -21,7 +21,7 @@ use Reframe\Kontentblocks\Kontentblocks;
  * @see Kontentblocks\Modules\Module::__cosntruct()
  * @param \Kontentblocks\Modules\Module
  */
-class FieldController extends AbstractFieldController
+class ModuleFieldController extends AbstractFieldController
 {
 
     /**
@@ -31,7 +31,7 @@ class FieldController extends AbstractFieldController
 
     /**
      * Constructor
-     * @param Kontentblocks\Modules\Module
+     * @param \Kontentblocks\Modules\Module
      * @since 1.0.0
      */
     public function __construct( Module $Module )
@@ -53,7 +53,13 @@ class FieldController extends AbstractFieldController
     public function addGroup( $id, $args = array() )
     {
         if (!$this->idExists( $id )) {
-            $this->Structure[$id] = new FieldSection( $id, $args, $this->Module->envVars, $this->Module );
+            $this->Structure[$id] = new FieldSection(
+                $id,
+                $args,
+                $this->Module->envVars,
+                $this->Module,
+                $this->Module->getModuleId()
+            );
         }
         return $this->Structure[$id];
 
@@ -73,10 +79,8 @@ class FieldController extends AbstractFieldController
      */
     public function renderFields()
     {
-        $Renderer = new $this->renderEngineClass;
-        $Renderer->setStructure( $this->Structure );
-        $Renderer->render( $this->baseId, $this->data );
-
+        $Renderer = new $this->renderEngineClass( $this->baseId, $this->Structure );
+        $Renderer->render( $this->data );
     }
 
 

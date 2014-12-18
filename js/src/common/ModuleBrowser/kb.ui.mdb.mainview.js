@@ -154,7 +154,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
   success: function (data) {
     var model;
     this.options.area.modulesList.append(data.html);
-    model = KB.Modules.add(new KB.Backbone.Backend.ModuleModel(data.module));
+    model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
     this.options.area.addModuleView(model.view);
     _K.info('new module created', {view: model.view});
 

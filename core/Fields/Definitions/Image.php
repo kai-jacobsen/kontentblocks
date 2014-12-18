@@ -40,7 +40,8 @@ Class Image extends Field {
 	 *
 	 * @return mixed
 	 */
-	protected function prepareInputValue( $val ) {
+	protected function prepareFormValue( $val ) {
+
 
 		// image default value
 		$imageDefaults = array(
@@ -56,6 +57,7 @@ Class Image extends Field {
 		$parsed['caption'] = esc_html( $parsed['caption'] );
 
 		return $parsed;
+
 	}
 
 }

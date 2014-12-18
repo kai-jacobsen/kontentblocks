@@ -10,7 +10,7 @@ use Kontentblocks\Modules\Module;
  * This serves as a collection handler for fields and offers
  * methods to interact with registered fields.
  *
- * Gets instantiated by Kontentblocks\Fields\FieldController when
+ * Gets instantiated by Kontentblocks\Fields\ModuleFieldController when
  * addGroup() is called
  *
  * @see Kontentblocks\Fields\FieldManager::addSection()
@@ -21,6 +21,13 @@ use Kontentblocks\Modules\Module;
 class FieldSection extends AbstractFieldSection
 {
 
+    /**
+     * Section id
+     * @var string
+     */
+    public $id;
+
+
 
     /**
      * Constructor
@@ -30,17 +37,16 @@ class FieldSection extends AbstractFieldSection
      * @param $envVars
      * @param Module $module
      *
-     * @internal param array $areaContext
      * @return \Kontentblocks\Fields\FieldSection
      */
-    public function __construct( $id, $args, $envVars, $module )
+    public function __construct( $id, $args, $envVars, $module, $baseid )
     {
 
         $this->id = $id;
         $this->args = $this->prepareArgs( $args );
         $this->envVars = $envVars;
-        $this->Emitter = $module;
-
+        $this->Module = $module;
+        $this->baseId = $baseid;
     }
 
     /**
@@ -60,8 +66,8 @@ class FieldSection extends AbstractFieldSection
         $postType = $this->envVars['postType'];
         $pageTemplate = $this->envVars['pageTemplate'];
 
-        if ($this->Emitter->getSetting( 'useViewLoader' )) {
-            $moduleTemplate = $this->Emitter->getViewfile();
+        if ($this->Module->getSetting( 'useViewLoader' )) {
+            $moduleTemplate = $this->Module->getViewfile();
             if ($Field->getCondition( 'viewfile' ) && !in_array(
                     $moduleTemplate,
                     (array) $Field->getCondition( 'viewfile' )

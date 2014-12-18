@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Fields\Returnobjects\FieldCollection;
 use Kontentblocks\Modules\Module;
 
 /**
@@ -34,7 +35,7 @@ class FieldSubGroup
     protected $baseId;
 
     /**
-     * @var FieldCollection
+     * @var Returnobjects\FieldCollection
      * @since 1.0.0
      */
     protected $returnObj;
@@ -168,7 +169,7 @@ class FieldSubGroup
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $field->setBaseNameId( $baseId, $this->key );
+            $field->setBaseId( $baseId, $this->key );
         }
     }
 

@@ -21,7 +21,7 @@ Class Editor extends Field
     {
         $media = $this->getArg( 'media' );
         $name = $this->getFieldName( $this->getArg( 'array' ) );
-        $id = $this->getFieldId( true );
+        $id = $this->getInputFieldId( true );
         $value = $this->getValue();
         $this->label();
         $this->description();
@@ -34,7 +34,7 @@ Class Editor extends Field
      *
      * @return mixed
      */
-    protected function prepareInputValue( $val )
+    protected function prepareFormValue( $val )
     {
         return stripslashes_deep( $val );
     }
