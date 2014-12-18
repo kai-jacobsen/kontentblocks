@@ -1435,7 +1435,9 @@ KB.IEdit.Image = function($) {
             });
         },
         frame: function() {
-            if (this._frame) return this._frame;
+            if (this._frame) {
+                return this._frame;
+            }
             this._frame = wp.media({
                 title: KB.i18n.Refields.file.modalTitle,
                 button: {
