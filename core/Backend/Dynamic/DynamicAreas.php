@@ -35,7 +35,6 @@ class DynamicAreas
         add_action( 'init', array( $this, 'registerPostType' ) );
 
         if (is_admin()) {
-
             add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
             add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );
             add_action( 'save_post', array( $this, 'save' ) );
@@ -95,7 +94,8 @@ class DynamicAreas
         $this->Storage = new ModuleStorage( get_the_ID() );
 
         $area = $this->Storage->getDataProvider()->get( '_area' );
-        $data = ( isset( $_POST['area'] ) ) ? $_POST['area'] : $area;
+        $payload = filter_input( INPUT_POST, 'area', FILTER_DEFAULT );
+        $data = ( isset( $payload ) ) ? $payload : $area;
 
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
