@@ -96,36 +96,11 @@ class DuplicateModule
         //remove settings are never stored
         unset( $toIndex['settings'] );
 
-        $update = self::$Environment->getStorage()->addToIndex( $toIndex['instance_id'], $toIndex );
+        $update = self::$Environment->getStorage()->addToIndex( self::$newInstanceId, $toIndex );
         if ($update !== true) {
             wp_send_json_error( 'Update failed' );
         } else {
-            $original = self::$Environment->getStorage()->getModuleData( self::$instanceId );
-            self::$Environment->getStorage()->saveModule( self::$newInstanceId, $original );
-
-            $moduleDefinition['areaContext'] = filter_var( $_POST['areaContext'], FILTER_SANITIZE_STRING );
-
-            self::$Environment->getStorage()->reset();
-            $moduleDefinition = apply_filters( 'kb.module.before.factory', $moduleDefinition );
-
-            $Factory = new ModuleFactory( self::$class, $moduleDefinition, self::$Environment );
-            $Module = $Factory->getModule();
-
-
-            ob_start();
-            $Module->renderForm();
-            $html = ob_get_clean();
-
-            $response = array
-            (
-                'id' => self::$newInstanceId,
-                'module' => $moduleDefinition,
-                'name' => $Module->settings['publicName'],
-                'html' => $html,
-                'json' => JSONBridge::getInstance()->getJSON(),
-
-            );
-            wp_send_json( $response );
+            self::doDuplication($moduleDefinition);
         }
 
     }
@@ -139,6 +114,37 @@ class DuplicateModule
         $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
         return $prefix . self::$postId . '_' . ++ $base;
 
+    }
+
+
+    private static function doDuplication($moduleDefinition)
+    {
+        $original = self::$Environment->getStorage()->getModuleData( self::$instanceId );
+        self::$Environment->getStorage()->saveModule( self::$newInstanceId, $original );
+
+        $moduleDefinition['areaContext'] = filter_var( $_POST['areaContext'], FILTER_SANITIZE_STRING );
+
+        self::$Environment->getStorage()->reset();
+        $moduleDefinition = apply_filters( 'kb.module.before.factory', $moduleDefinition );
+
+        $Factory = new ModuleFactory( self::$class, $moduleDefinition, self::$Environment );
+        $Module = $Factory->getModule();
+
+
+        ob_start();
+        $Module->renderForm();
+        $html = ob_get_clean();
+
+        $response = array
+        (
+            'id' => self::$newInstanceId,
+            'module' => $moduleDefinition,
+            'name' => $Module->settings['publicName'],
+            'html' => $html,
+            'json' => JSONBridge::getInstance()->getJSON(),
+
+        );
+        wp_send_json( $response );
     }
 
 }
