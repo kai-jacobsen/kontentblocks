@@ -114,7 +114,7 @@ Class CheckboxSet extends Field {
 
 	}
 
-	protected function prepareFormValue( $value ) {
+	public function prepareFormValue( $value ) {
 
 		if ( !is_array( $value ) ) {
 			return array();

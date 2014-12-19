@@ -40,7 +40,7 @@ Class Image extends Field {
 	 *
 	 * @return mixed
 	 */
-	protected function prepareFormValue( $val ) {
+	public function prepareFormValue( $val ) {
 
 
 		// image default value

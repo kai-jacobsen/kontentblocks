@@ -41,7 +41,7 @@ Class Color extends Field {
 	 *
 	 * @return null|string
 	 */
-	protected function prepareFormValue( $color ) {
+	public function prepareFormValue( $color ) {
 		if ( '' === $color ) {
 			return '';
 		}

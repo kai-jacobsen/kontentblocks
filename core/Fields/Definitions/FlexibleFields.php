@@ -97,7 +97,7 @@ Class FlexibleFields extends Field
      *
      * @return mixed
      */
-    protected function prepareFormValue( $value )
+    public function prepareFormValue( $value )
     {
 
         $forJSON = array();

@@ -40,7 +40,7 @@ abstract class Field
      * prim. used on frontend to map data around
      * @var string
      */
-    protected $uniqueId;
+    public $uniqueId;
 
 
     /**
@@ -59,7 +59,7 @@ abstract class Field
      * @var mixed
      * @since 1.0.0
      */
-    protected $value;
+    public $value;
 
     /**
      * key
@@ -108,10 +108,8 @@ abstract class Field
      * @param string $baseId
      * @param null|string $subkey
      * @param string $key unique storage key
-     * @param array $args
-     * @param mixed $data
      */
-    public function __construct( $baseId, $subkey = null, $key, $args = array(), $data = null )
+    public function __construct( $baseId, $subkey = null, $key )
     {
         if (!isset( $key, $baseId )) {
             throw new \BadMethodCallException( 'Missing arguments for new Field' );
@@ -119,13 +117,9 @@ abstract class Field
         $this->setKey( $key );
         $this->setBaseId( $baseId, $subkey );
         $this->setFieldId( $baseId );
-        $this->setType( static::$settings['type'] );
-        //@TODO think about setting default args from extending class
-        $this->setArgs( $args );
 
-        if (!is_null( $data )) {
-            $this->setData( $data );
-        }
+        $this->type = static::$settings['type'];
+        //@TODO think about setting default args from extending class
     }
 
     /**
@@ -229,30 +223,16 @@ abstract class Field
         }
     }
 
-    /**
-     * Type of field as set upon field registration
-     * like: 'text', 'checkbox' etc..
-     *
-     * @param string $type
-     *
-     * @since 1.0.0
-     */
-    public function setType( $type )
-    {
-        $this->type = $type;
-    }
 
     /**
      * Setup method
      *
      * @param mixed $data fields assigned value
-     * @param string $moduleId
      *
      * @since 1.0.0
      */
-    public function setup( $data, $moduleId )
+    public function setup( $data )
     {
-        $this->parentModuleId = $moduleId;
         $this->setData( $data );
     }
 
@@ -357,89 +337,11 @@ abstract class Field
      */
     public function build()
     {
-        // nobody knows
-//        $this->uniqueId = uniqid();
+
         $this->uniqueId = $this->createUID();
 
-        // optional call to simplify enqueueing
-        if (method_exists( $this, 'enqueue' )) {
-            $this->enqueue();
-        }
-
-        // A Field might not be present, i.e. if it's not set to
-        // the current context
-        // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
-        if (!$this->getDisplay()) {
-            if ($this->getSetting( 'renderHidden' )) {
-                $this->renderHidden();
-            } else {
-                return;
-            }
-            // Full markup
-        } else {
-            $this->header();
-            $this->body();
-            $this->footer();
-        }
-
-    }
-
-    /**
-     * Header wrap markup
-     * @TODO Let twig kick in
-     * @since 1.0.0
-     */
-    public function header()
-    {
-
-        echo '<div class="kb-field-wrapper kb-js-field-identifier" id=' . esc_attr( $this->uniqueId ) . '>'
-             . '<div class="kb-field-header">';
-        if (!empty( $this->args['title'] )) {
-            echo "<h4>" . esc_html( $this->args['title'] ) . "</h4>";
-        }
-        echo '</div>';
-        echo "<div class='kb_field kb-field kb-field--{$this->type} kb-field--reset clearfix'>";
-
-    }
-
-    /**
-     * Field body markup
-     * This method calls the actual form() method.
-     * @since 1.0.0
-     */
-    public function body()
-    {
-        /*
-         * optional method to render something before the field
-         */
-        if (method_exists( $this, 'preForm' )) {
-            $this->preForm();
-        }
-
-        // custom method on field instance level wins over class method
-        if ($this->getCallback( 'input' )) {
-            $this->value = call_user_func( $this->getCallback( 'input' ), $this->value );
-        } // custom method on field class level
-        else {
-            $this->value = $this->prepareFormValue( $this->value );
-        }
-
-        // When viewing from the frontend, an optional method can be used for the output
-        if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this, 'frontsideForm' )) {
-            $this->frontsideForm();
-        } else {
-            $this->form();
-        }
-
-        // some fields (colorpicker etc) might have some individual settings
-        $this->javascriptSettings();
-        /*
-         * optional call after the body
-         * @TODO replace with wp hook
-         */
-        if (method_exists( $this, 'postForm' )) {
-            $this->postForm();
-        }
+        // handles the form output
+        $FormNode = new FieldFormHtmlNode( $this );
 
     }
 
@@ -451,7 +353,7 @@ abstract class Field
      *
      * @return mixed
      */
-    abstract protected function prepareFormValue( $val );
+    abstract public function prepareFormValue( $val );
 
     /**
      * JSON Encode custom settings for the field
@@ -470,16 +372,6 @@ abstract class Field
 
     }
 
-    /**
-     * Footer
-     * @todo add wp hook
-     * @since 1.0.0
-     */
-    public function footer()
-    {
-        echo "</div></div>";
-
-    }
 
     /**
      * Helper Method to create a complete label tag
@@ -543,46 +435,6 @@ abstract class Field
         }
     }
 
-
-    /**
-     * Handles the generation of hidden input fields with the correct data
-     * @return bool false if there is no data to render
-     * @since 1.0.0
-     */
-    public function renderHidden()
-    {
-        $value = $this->getValue();
-        if (empty( $value )) {
-            return false;
-        }
-
-        if (is_array( $value )) {
-            $is_assoc = Utilities::isAssocArray( $this->getValue() );
-
-            if (!$is_assoc) {
-                foreach ($this->getValue() as $item) {
-
-                    if (is_array( $item ) && Utilities::isAssocArray( $item )) {
-                        foreach ($item as $ikey => $ival) {
-                            echo "<input type='hidden' name='{$this->getFieldName(
-                                true,
-                                $ikey,
-                                true
-                            )}' value='{$ival}' >";
-                        }
-                    } else {
-                        echo "<input type='hidden' name='{$this->getFieldName( true )}' value='{$item}' >";
-                    }
-                }
-            } else {
-                foreach ($this->value as $k => $v) {
-                    echo "<input type='hidden' name='{$this->getFieldName( true, $k )}' value='{$v}' >";
-                }
-            }
-        } else {
-            echo "<input type='hidden' name='{$this->getFieldName()}' value='{$this->getValue()}' >";
-        }
-    }
 
     /**
      * Renders description markup
@@ -757,7 +609,7 @@ abstract class Field
      */
     public function getInputFieldId( $rnd = false )
     {
-        $number = ($rnd) ? uniqid() : '';
+        $number = ( $rnd ) ? uniqid() : '';
         $idAttr = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
         return esc_attr( $idAttr );
     }

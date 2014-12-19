@@ -49,7 +49,7 @@ abstract class AbstractFieldController
         }
         foreach ($this->fieldsById as $field) {
             $data = ( isset( $instanceData[$field->getKey()] ) ) ? $instanceData[$field->getKey()] : '';
-            $field->setup( $data, $this->baseId );
+            $field->setup( $data );
         }
 
     }

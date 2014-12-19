@@ -80,7 +80,7 @@ class FieldSubGroup
      *
      * @since 1.0.0
      */
-    public function setup( $instanceData, $baseId )
+    public function setup( $instanceData )
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
@@ -89,7 +89,7 @@ class FieldSubGroup
                 'std',
                 ''
             );
-            $field->setup( $fielddata, $baseId );
+            $field->setup( $fielddata);
         }
     }
 

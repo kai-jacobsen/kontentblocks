@@ -63,7 +63,7 @@ Class PostSelect extends Field {
 	 *
 	 * @return int post ID
 	 */
-	protected function prepareFormValue( $val ) {
+	public function prepareFormValue( $val ) {
 		return absint( $val );
 	}
 

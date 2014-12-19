@@ -51,7 +51,7 @@ Class Link extends Field {
 	 *
 	 * @return array
 	 */
-	protected function prepareFormValue( $val ) {
+	public function prepareFormValue( $val ) {
 		$defaults = array(
 			'link'      => '',
 			'linktext'  => '',

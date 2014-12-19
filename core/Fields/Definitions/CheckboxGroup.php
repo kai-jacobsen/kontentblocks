@@ -47,7 +47,7 @@ Class CheckboxGroup extends Field {
 	 *
 	 * @return array
 	 */
-	protected function prepareFormValue( $val ) {
+	public function prepareFormValue( $val ) {
 		if ( !is_array( $val ) ) {
 			return array();
 		}

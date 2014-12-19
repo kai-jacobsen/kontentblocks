@@ -50,7 +50,7 @@ Class Select extends Field {
 	 *
 	 * @return mixed
 	 */
-	protected function prepareFormValue( $val ) {
+	public function prepareFormValue( $val ) {
 		if ( is_numeric( $val ) ) {
 			return filter_var( $val, FILTER_SANITIZE_NUMBER_INT );
 		} else if ( is_string( $val ) ) {

@@ -252,7 +252,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
         }
 
         if (is_object( $field )) {
-            $this->moduleId = $field->parentModuleId;
+            $this->moduleId = $field->getBaseId();
             $this->key = $field->getKey();
             $this->arrayKey = $field->getArg( 'arrayKey' );
             $this->index = $field->getArg( 'index' );
