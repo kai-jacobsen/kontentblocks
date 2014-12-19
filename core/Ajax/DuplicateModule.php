@@ -117,6 +117,10 @@ class DuplicateModule
     }
 
 
+    /**
+     * Actual duplication
+     * @param $moduleDefinition
+     */
     private static function doDuplication($moduleDefinition)
     {
         $original = self::$Environment->getStorage()->getModuleData( self::$instanceId );
