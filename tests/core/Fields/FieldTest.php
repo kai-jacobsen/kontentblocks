@@ -74,6 +74,26 @@ class FieldTest extends \WP_UnitTestCase
         $this->assertEquals( $this->TestField->getCallback( 'invalidType' ), null );
     }
 
+
+    public function testGetFieldName()
+    {
+        $this->assertEquals( $this->TestField->getFieldName(), 'dummyid[dummysubkey][okey]' );
+        $this->assertEquals( $this->TestField->getFieldName( true ), 'dummyid[dummysubkey][okey][]' );
+        $this->assertEquals( $this->TestField->getFieldName( 'key1', true ), 'dummyid[dummysubkey][okey][key1][]' );
+        $this->assertEquals(
+            $this->TestField->getFieldName( 'key1', 'key2' ),
+            'dummyid[dummysubkey][okey][key1][key2]'
+        );
+        $this->assertEquals(
+            $this->TestField->getFieldName( 'key1', 'key2', true ),
+            'dummyid[dummysubkey][okey][key1][key2][]'
+        );
+        $this->assertEquals(
+            $this->TestField->getFieldName( 'key1', true, 'key3' ),
+            'dummyid[dummysubkey][okey][key1][][key3]'
+        );
+    }
+
     /*
      * ----------------------------------
      * Helper

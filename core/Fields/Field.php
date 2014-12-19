@@ -761,12 +761,12 @@ abstract class Field
             } else {
                 $number = $rnd;
             }
-            $id = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
+            $idAttr = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
         } else {
-            $id = sanitize_title( $this->baseId . '_' . $this->key );
+            $idAttr = sanitize_title( $this->baseId . '_' . $this->key );
         }
 
-        return esc_attr( $id );
+        return esc_attr( $idAttr );
 
     }
 
@@ -781,26 +781,55 @@ abstract class Field
      *
      * @return string
      */
-    public function getFieldName( $array = false, $akey = null, $multiple = false )
+    public function getFieldName( $array = null, $akey = null, $multiple = null )
     {
-        if ($array === true && $akey !== null && $multiple) {
-            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}][]" );
-        } elseif ($array === true && $akey !== null) {
-            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" );
-        } else if (is_bool( $array ) && $array === true) {
-            return esc_attr( "{$this->baseId}[{$this->key}][]" );
-        } else if (is_string( $array ) && is_string( $akey ) && is_string( $multiple )) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][$multiple]" );
-        } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" );
-        } else if (is_string( $array ) && is_string( $akey )) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey]" );
-        } else if (is_string( $array )) {
-            return esc_attr( "{$this->baseId}[{$this->key}][$array]" );
-        } else {
-            return esc_attr( "{$this->baseId}[{$this->key}]" );
+
+        $base = "{$this->baseId}[$this->key]";
+
+        $array = $this->evaluateFieldNameParam( $array );
+        $akey = $this->evaluateFieldNameParam( $akey );
+        $multiple = $this->evaluateFieldNameParam( $multiple );
+
+        return $base . $array . $akey . $multiple;
+
+
+    }
+
+//    public function altGetFieldName( $array = false, $akey = null, $multiple = false )
+//    {
+//        if ($array === true && $akey !== null && $multiple) {
+//            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}][]" ); //baseid[key][akey][]
+//        } elseif ($array === true && $akey !== null) {
+//            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" ); //baseid[key][akey]
+//        } else if (is_bool( $array ) && $array === true) {
+//            return esc_attr( "{$this->baseId}[{$this->key}][]" ); //baseid[key][]
+//        } else if (is_string( $array ) && is_string( $akey ) && is_string( $multiple )) {
+//            return esc_attr(
+//                "{$this->baseId}[{$this->key}][$array][$akey][$multiple]"
+//            ); // baseid[key][akey1][akey2][akey3]
+//        } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
+//            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" ); // baseid[key][akey1][akey2][]
+//        } else if (is_string( $array ) && is_string( $akey )) {
+//            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey]" ); // baseid[key][akey1][akey2]
+//        } else if (is_string( $array )) {
+//            return esc_attr( "{$this->baseId}[{$this->key}][$array]" ); //baseid[key][akey]
+//        } else {
+//            return esc_attr( "{$this->baseId}[{$this->key}]" ); //baseid[key]
+//        }
+//    }
+
+
+    private function evaluateFieldNameParam( $param )
+    {
+        if (is_bool( $param ) && $param === true) {
+            return '[]';
         }
 
+        if (is_string( $param ) && !empty( $param )) {
+            return "[$param]";
+        }
+
+        return '';
     }
 
     /**
