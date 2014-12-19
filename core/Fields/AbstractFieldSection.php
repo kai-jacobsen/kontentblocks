@@ -102,8 +102,8 @@ abstract class AbstractFieldSection
 
             /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
             $Registry = Kontentblocks::getService( 'registry.fields' );
-            $Field = $Registry->getField( $type, $this->baseId, $subkey, $key, $args );
-
+            $Field = $Registry->getField( $type, $this->baseId, $subkey, $key );
+            $Field->setArgs( $args );
             if (!$Field) {
                 throw new Exception( "Field of type: $type does not exist" );
             }

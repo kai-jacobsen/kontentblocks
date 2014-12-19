@@ -752,22 +752,14 @@ abstract class Field
 
     /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
-     * */
+     * @param bool $rnd
+     * @return string|void
+     */
     public function getInputFieldId( $rnd = false )
     {
-        if ($rnd) {
-            if (is_bool( $rnd )) {
-                $number = uniqid( 'kbf' );
-            } else {
-                $number = $rnd;
-            }
-            $idAttr = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
-        } else {
-            $idAttr = sanitize_title( $this->baseId . '_' . $this->key );
-        }
-
+        $number = ($rnd) ? uniqid() : '';
+        $idAttr = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
         return esc_attr( $idAttr );
-
     }
 
     /**
@@ -790,34 +782,10 @@ abstract class Field
         $akey = $this->evaluateFieldNameParam( $akey );
         $multiple = $this->evaluateFieldNameParam( $multiple );
 
-        return $base . $array . $akey . $multiple;
+        return esc_attr( $base . $array . $akey . $multiple );
 
 
     }
-
-//    public function altGetFieldName( $array = false, $akey = null, $multiple = false )
-//    {
-//        if ($array === true && $akey !== null && $multiple) {
-//            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}][]" ); //baseid[key][akey][]
-//        } elseif ($array === true && $akey !== null) {
-//            return esc_attr( "{$this->baseId}[{$this->key}][{$akey}]" ); //baseid[key][akey]
-//        } else if (is_bool( $array ) && $array === true) {
-//            return esc_attr( "{$this->baseId}[{$this->key}][]" ); //baseid[key][]
-//        } else if (is_string( $array ) && is_string( $akey ) && is_string( $multiple )) {
-//            return esc_attr(
-//                "{$this->baseId}[{$this->key}][$array][$akey][$multiple]"
-//            ); // baseid[key][akey1][akey2][akey3]
-//        } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
-//            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey][]" ); // baseid[key][akey1][akey2][]
-//        } else if (is_string( $array ) && is_string( $akey )) {
-//            return esc_attr( "{$this->baseId}[{$this->key}][$array][$akey]" ); // baseid[key][akey1][akey2]
-//        } else if (is_string( $array )) {
-//            return esc_attr( "{$this->baseId}[{$this->key}][$array]" ); //baseid[key][akey]
-//        } else {
-//            return esc_attr( "{$this->baseId}[{$this->key}]" ); //baseid[key]
-//        }
-//    }
-
 
     private function evaluateFieldNameParam( $param )
     {
@@ -851,16 +819,7 @@ abstract class Field
             return $this->argsToJson();
         } else {
             $args = $this->args;
-
-            // remove callback because of possible recursion, which will break json_encode
-            foreach (array( 'inputCallback', 'outputCallback' ) as $unset) {
-                if (isset( $args[$unset] )) {
-                    unset( $args[$unset] );
-                }
-            }
-
             unset( $args['callbacks'] );
-
             return $args;
         }
     }
@@ -881,7 +840,7 @@ abstract class Field
         return $classname;
     }
 
-    public function createUID()
+    private function createUID()
     {
         $base = $this->baseId . $this->key;
         return 'kb-' . hash( 'crc32', $base );

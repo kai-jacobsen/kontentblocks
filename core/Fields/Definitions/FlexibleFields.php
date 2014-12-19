@@ -49,8 +49,6 @@ Class FlexibleFields extends Field
      */
     public function save( $new, $old )
     {
-        $Registry = Kontentblocks::getService( 'registry.fields' );
-
 
         if (is_null( $new )) {
             return $old;
@@ -73,7 +71,12 @@ Class FlexibleFields extends Field
 
                 foreach ($field['_mapping'] as $key => $type) {
                     /** @var \Kontentblocks\Fields\Field $fieldInstance */
-                    $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField( $type );
+                    $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField(
+                        $type,
+                        $field['_uid'],
+                        null,
+                        $field[$key]
+                    );
                     $field[$key] = $fieldInstance->save( $field[$key], $old );
                 }
 
@@ -83,7 +86,6 @@ Class FlexibleFields extends Field
 
             }
         }
-
 
 
         return $new;
@@ -109,7 +111,12 @@ Class FlexibleFields extends Field
                 if (isset( $item['_mapping'] )) {
                     foreach ($item['_mapping'] as $key => $type) {
                         /** @var \Kontentblocks\Fields\Field $fieldInstance */
-                        $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField( $type );
+                        $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField(
+                            $type,
+                            $this->getFieldId(),
+                            null,
+                            $item[$key]
+                        );
                         $item[$key] = $fieldInstance->prepareFormValue( $item[$key] );
                     }
                 }

@@ -1737,15 +1737,6 @@ h5.kb_properties_title {
   opacity: 0.99;
 }
 
-/* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
-.alertify,
-.alertify-show,
-.alertify-log {
-  -webkit-transition: all 500ms linear;
-  transition: all 500ms linear;
-  /* easeOutBack */
-}
-
 /* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
 .alertify-hide {
   -webkit-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);

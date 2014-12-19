@@ -239,16 +239,13 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
             /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
             $Registry = Kontentblocks::getService( 'registry.fields' );
-            $Dummy = $Registry->getField( $field['type'] );
-            $Dummy->setKey( $field['key'] );
+            $Dummy = $Registry->getField( $field['type'], $field['instance_id'], $field['arrayKey'], $field['key'] );
             $Dummy->setArgs(
                 array(
                     'arrayKey' => $field['arrayKey'],
                     'index' => ( $field['index'] ) ? $field['index'] : null
                 )
             );
-            $Dummy->setBaseId( $field['instance_id'] );
-            $Dummy->setType( $field['type'] );
             $Dummy->setData( $this->getValue() );
             $field = $this->field = $Dummy;
 

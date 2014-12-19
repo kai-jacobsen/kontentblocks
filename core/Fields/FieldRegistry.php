@@ -92,15 +92,13 @@ class FieldRegistry
      * @param $baseId
      * @param $subkey
      * @param $key
-     * @param array $args
-     * @param null $data
      * @return bool|Field
      * @since 1.0.0
      */
-    public function getField( $type, $baseId, $subkey, $key, $args = array(), $data = null )
+    public function getField( $type, $baseId, $subkey, $key )
     {
-        if (isset( $this->fields[$type])) {
-            return new $this->fields[$type]($baseId, $subkey, $key, $args, $data);
+        if (isset( $this->fields[$type] )) {
+            return new $this->fields[$type]( $baseId, $subkey, $key );
         } else {
             return false;
         }
