@@ -342,6 +342,7 @@ abstract class Field
 
         // handles the form output
         $FormNode = new FieldFormHtmlNode( $this );
+        $FormNode->build();
 
     }
 
@@ -377,7 +378,7 @@ abstract class Field
      * Helper Method to create a complete label tag
      * @since 1.0.0
      */
-    public function label()
+    protected function label()
     {
         $label = $this->getArg( 'label' );
         if (!empty( $label )) {
@@ -395,13 +396,15 @@ abstract class Field
      * @TODO this method is used on several occasions
      *
      * @param string $arrKey
-     *
+     * @param string $return
      * @return mixed|null returns null if data does not exist
      */
     public function getValue( $arrKey = null, $return = '' )
     {
-        if ($arrKey) {
-            $data = $this->getValueFromArray( $arrKey );
+        $data = null;
+
+        if ($arrKey && is_array( $this->value ) && isset( $this->value[$arrKey] )) {
+            $data = $this->value[$arrKey];
         } else {
             $data = $this->value;
         }
@@ -419,29 +422,11 @@ abstract class Field
 
 
     /**
-     * If field stores data in an associative array
-     *
-     * @param string $arrKey
-     *
-     * @return mixed|null returns null if key does not exist
-     * @since 1.0.0
-     */
-    public function getValueFromArray( $arrKey )
-    {
-        if (is_array( $this->value ) && isset( $this->value[$arrKey] )) {
-            return $this->value[$arrKey];
-        } else {
-            return null;
-        }
-    }
-
-
-    /**
      * Renders description markup
      * Get description if available
      * @since 1.0.0
      */
-    public function description()
+    protected function description()
     {
         $description = $this->getArg( 'description' );
         if (!empty( $description )) {
@@ -541,7 +526,6 @@ abstract class Field
      */
     public function getCallback( $type )
     {
-
         $allowed = array( 'output', 'input', 'get', 'save' );
 
         if (!in_array( $type, $allowed )) {
@@ -555,9 +539,7 @@ abstract class Field
                 return $callbacks[$type];
             }
         }
-
         return null;
-
     }
 
     /**
@@ -568,7 +550,6 @@ abstract class Field
      */
     public function getCondition( $type )
     {
-
         $conditions = $this->getArg( 'conditions' );
         if ($conditions) {
 //            if (isset($conditions[$type]) && is_string($conditions[$type])){
@@ -576,9 +557,7 @@ abstract class Field
                 return $conditions[$type];
             }
         }
-
         return false;
-
     }
 
     /**
@@ -607,7 +586,7 @@ abstract class Field
      * @param bool $rnd
      * @return string|void
      */
-    public function getInputFieldId( $rnd = false )
+    protected function getInputFieldId( $rnd = false )
     {
         $number = ( $rnd ) ? uniqid() : '';
         $idAttr = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
@@ -653,9 +632,10 @@ abstract class Field
     }
 
     /**
+     * Shortcut method to placeholder arg
      * @return string|void
      */
-    public function getPlaceholder()
+    protected function getPlaceholder()
     {
         return esc_attr( $this->getArg( 'placeholder' ) );
 

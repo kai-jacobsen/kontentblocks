@@ -18,6 +18,9 @@ class FieldFormHtmlNode
      */
     private $Field;
 
+    /**
+     * @param Field $Field
+     */
     public function __construct( Field $Field )
     {
         $this->Field = $Field;
@@ -27,19 +30,6 @@ class FieldFormHtmlNode
             $Field->enqueue();
         }
 
-        // A Field might not be present, i.e. if it's not set to
-        // the current context
-        // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
-        if (!$Field->getDisplay()) {
-            if ($Field->getSetting( 'renderHidden' )) {
-                $this->renderHidden();
-            }
-            // Full markup
-        } else {
-            $this->header();
-            $this->body();
-            $this->footer();
-        }
     }
 
 
@@ -86,7 +76,6 @@ class FieldFormHtmlNode
 
     /**
      * Header wrap markup
-     * @TODO Let twig kick in
      * @since 1.0.0
      */
     public function header()
@@ -139,7 +128,6 @@ class FieldFormHtmlNode
         $this->Field->javascriptSettings();
         /*
          * optional call after the body
-         * @TODO replace with wp hook
          */
         if (method_exists( $this->Field, 'postForm' )) {
             $this->Field->postForm();
@@ -148,14 +136,33 @@ class FieldFormHtmlNode
     }
 
     /**
-     * Footer
-     * @todo add wp hook
+     * Footer, close wrapper
      * @since 1.0.0
      */
     public function footer()
     {
         echo "</div></div>";
 
+    }
+
+    /**
+     * Render form segments or hidden
+     */
+    public function build()
+    {
+        // A Field might not be present, i.e. if it's not set to
+        // the current context
+        // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
+        if (!$this->Field->getDisplay()) {
+            if ($this->Field->getSetting( 'renderHidden' )) {
+                $this->renderHidden();
+            }
+            // Full markup
+        } else {
+            $this->header();
+            $this->body();
+            $this->footer();
+        }
     }
 
 }

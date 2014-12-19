@@ -94,6 +94,38 @@ class FieldTest extends \WP_UnitTestCase
         );
     }
 
+    /**
+     * crreateUID should always return the same
+     */
+    public function testCreateUID()
+    {
+        $id1 = $this->TestField->createUID();
+        $id2 = $this->TestField->createUID();
+
+        $this->assertEquals( $id1, $id2 );
+    }
+
+    public function testGetSetting()
+    {
+        // valid setting
+        $this->assertEquals( $this->TestField->getSetting( 'type' ), 'text' );
+        // invalid setting
+        $this->assertEquals( $this->TestField->getSetting( 'invalid' ), null );
+
+    }
+
+    public function testGetArg()
+    {
+        // existing arg
+        $this->assertEquals( $this->TestField->getArg( 'label' ), 'Testlabel' );
+
+        // non existing, with default parameter
+        $this->assertEquals( $this->TestField->getArg( 'something', 'default' ), 'default' );
+
+    }
+
+
+
     /*
      * ----------------------------------
      * Helper
