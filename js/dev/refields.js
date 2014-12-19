@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-18 */
+/*! Kontentblocks DevVersion 2014-12-19 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {

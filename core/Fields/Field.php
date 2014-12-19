@@ -692,7 +692,7 @@ abstract class Field
         return $classname;
     }
 
-    private function createUID()
+    public function createUID()
     {
         $base = $this->baseId . $this->key;
         return 'kb-' . hash( 'crc32', $base );

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-18 */
+/*! Kontentblocks DevVersion 2014-12-19 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -1809,12 +1809,6 @@ KB.App = function() {
         }));
         ModuleView.$el.data("ModuleView", ModuleView);
         Area.addModuleView(ModuleView);
-        var peter = KB.Views.bModules.add(new KB.Backbone.ModuleView({
-            model: ModuleModel,
-            el: "#" + ModuleModel.get("instance_id"),
-            Area: Area
-        }));
-        console.log(peter);
         KB.Ui.initTabs();
     }
     function createAreaViews(AreaModel) {

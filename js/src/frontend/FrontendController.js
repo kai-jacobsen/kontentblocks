@@ -145,12 +145,11 @@ KB.App = function () {
 
     Area.addModuleView(ModuleView);
 
-    var peter = KB.Views.bModules.add(new KB.Backbone.ModuleView({
-      model: ModuleModel,
-      el: '#' + ModuleModel.get('instance_id'),
-      Area: Area
-    }));
-    console.log(peter);
+    //var peter = KB.Views.bModules.add(new KB.Backbone.ModuleView({
+    //  model: ModuleModel,
+    //  el: '#' + ModuleModel.get('instance_id'),
+    //  Area: Area
+    //}));
 
     KB.Ui.initTabs();
   }
