@@ -185,7 +185,7 @@ abstract class Field
     /**
      * @return string
      */
-    private function getBaseId()
+    public function getBaseId()
     {
         return $this->baseId;
     }
@@ -195,7 +195,7 @@ abstract class Field
      * Unique Field id setter
      * @param string $id
      */
-    private function setFieldId( $id )
+    public function setFieldId( $id )
     {
         $this->fieldId = $id;
     }
