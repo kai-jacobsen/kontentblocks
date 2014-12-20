@@ -56,22 +56,6 @@ class AreaRegistry
 
     protected $AreaDynamicManager;
 
-    /**
-     * Singleton Pattern
-     * Get the Instance of the Area Directory
-     * original instantiated on plugin startup
-     * @return object | Area directory instance
-     * @since 1.0.0
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-
-    }
 
     /**
      * Constructer
