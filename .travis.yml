@@ -29,10 +29,8 @@ before_script:
   - sed -i "s/yourpasswordhere//" wp-tests-config.php
   - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
   - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
-  - npm install
 
 script:
-  - grunt
   - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
   - php vendor/bin/test-reporter --stdout > codeclimate.json
   - 'curl -X POST -d @codeclimate.json -H "Content-Type: application/json" -H "User-Agent: Code Climate (PHP Test Reporter v1.0.1-dev)"  https://codeclimate.com/test_reports'
