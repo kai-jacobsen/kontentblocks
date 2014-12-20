@@ -165,11 +165,11 @@ class Utilities
      * @param array $old
      * @return array
      */
-    public static function arrayMergeRecursiveAsItShouldBe( $new, $old )
+    public static function arrayMergeRecursive( $new, $old )
     {
         $merged = $new;
 
-        if (!is_array($merged)){
+        if (!is_array( $merged )) {
             return $old;
         }
 
@@ -179,13 +179,13 @@ class Utilities
                 if (is_array( $old[$key] )) {
                     if (array_key_exists( $key, $merged ) && isset( $merged[$key] ) && $merged[$key] !== NULL) {
                         // key exists and is not null, dig further into the array until actual values are reached
-                        $merged[$key] = self::arrayMergeRecursiveAsItShouldBe( $merged[$key], $old[$key] );
+                        $merged[$key] = self::arrayMergeRecursive( $merged[$key], $old[$key] );
                     } elseif (array_key_exists( $key, $merged ) && $merged[$key] === NULL) {
                         // explicit set the new value to NULL
                         unset( $merged[$key] );
                     } else {
                         // preserve the old value
-                        $merged[$key] = self::arrayMergeRecursiveAsItShouldBe( $old[$key], $old[$key] );
+                        $merged[$key] = self::arrayMergeRecursive( $old[$key], $old[$key] );
                     }
                 } else {
                     if (array_key_exists( $key, $merged ) && $merged[$key] === NULL) {

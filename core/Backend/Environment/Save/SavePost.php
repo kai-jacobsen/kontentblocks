@@ -100,7 +100,7 @@ class SavePost
                     if ($new === false) {
                         $savedData = null;
                     } else {
-                        $savedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
+                        $savedData = Utilities::arrayMergeRecursive( $new, $old );
                     }
                 }
                 // if this is a preview, save temporary data for previews

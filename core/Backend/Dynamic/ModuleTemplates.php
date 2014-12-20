@@ -226,7 +226,7 @@ class ModuleTemplates
             /** @var $Instance \Kontentblocks\Modules\Module */
             $Instance = $Factory->getModule();
             $new = $Instance->save( $data, $old );
-            $toSave = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
+            $toSave = Utilities::arrayMergeRecursive( $new, $old );
 
             // settings are not persistent, never
             unset( $tpl['settings'] );

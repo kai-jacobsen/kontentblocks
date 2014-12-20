@@ -344,7 +344,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       url: ajaxurl,
       data: {
         action: 'updateModule',
-        data: that.$form.serialize().replace(/\'/g, '%27'),
+        data: that.$form.serializeJSON(),
+        //data: that.$form.serialize().replace(/\'/g, '%27'),
         module: that.model.toJSON(),
         editmode: (save) ? 'update' : 'preview',
         _ajax_nonce: KB.Config.getNonce('update')

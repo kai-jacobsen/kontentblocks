@@ -24,23 +24,24 @@ class UpdateModule
 //        define('KB_FRONTEND_SAVE', true);
 
         $module = $_POST['module'];
-        $data = $_POST['data'];
+        $data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
+        if (is_null( $data )) {
+            wp_send_json_error();
+        }
+
+        $postId = filter_var( $module['post_id'], FILTER_VALIDATE_INT );
+        $editmode = filter_input( INPUT_POST, 'editmode', FILTER_SANITIZE_STRING );
+        $update = ( isset( $editmode ) && $editmode === 'update' ) ? true : false;
         // setup global post
-        $post = get_post( $module['post_id'] );
+        $post = get_post( $postId );
         setup_postdata( $post );
 
         // flags
-        $update = ( isset( $_POST['editmode'] ) && $_POST['editmode'] === 'update' ) ? true : false;
-        $refresh = ( isset( $_POST['refresh'] ) && $_POST['refresh'] === 'false' ) ? false : true;
-
-        // parse urlencoded form query string
-        $parsed = array();
-        parse_str( $data, $parsed );
 
         $Environment = Utilities::getEnvironment( $module['post_id'] );
 
-        $newData = $parsed[$module['instance_id']];
+        $newData = $data[$module['instance_id']];
 
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $Module = $Factory->getModule();
@@ -52,7 +53,7 @@ class UpdateModule
         $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
         $new = $Module->save( $newData, $old );
 
-        $mergedData = Utilities::arrayMergeRecursiveAsItShouldBe( $new, $old );
+        $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         if ($update) {
             $Environment->getStorage()->saveModule( $module['instance_id'], wp_slash( $mergedData ) );
