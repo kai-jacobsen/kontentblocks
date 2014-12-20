@@ -76,8 +76,6 @@ class FieldSubGroup
      * Wrapper to each fields setup method
      *
      * @param array $instanceData
-     * @param string $baseId
-     *
      * @since 1.0.0
      */
     public function setup( $instanceData )
@@ -89,7 +87,7 @@ class FieldSubGroup
                 'std',
                 ''
             );
-            $field->setup( $fielddata);
+            $field->setData( $fielddata);
         }
     }
 

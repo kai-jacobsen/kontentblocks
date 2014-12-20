@@ -7,10 +7,10 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Handles form creation (backend) and such
- * Class FieldFormHtmlNode
+ * Class FieldForm
  * @package Kontentblocks\Fields
  */
-class FieldFormHtmlNode
+class FieldForm
 {
 
     /**

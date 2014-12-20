@@ -47,9 +47,10 @@ abstract class AbstractFieldController
         if (empty( $this->fieldsById )) {
             $this->fieldsById = $this->collectAllFields();
         }
+        /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
             $data = ( isset( $instanceData[$field->getKey()] ) ) ? $instanceData[$field->getKey()] : '';
-            $field->setup( $data );
+            $field->setData( $data );
         }
 
     }

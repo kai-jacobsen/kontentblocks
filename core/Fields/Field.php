@@ -44,11 +44,6 @@ abstract class Field
 
 
     /**
-     * Shared/common arguments are
-     * - label string
-     * - description string
-     * - areaContext array of contexts
-     * @TODO What else
      * @var array additional arguments
      * @since 1.0.0
      */
@@ -114,24 +109,18 @@ abstract class Field
         if (!isset( $key, $baseId )) {
             throw new \BadMethodCallException( 'Missing arguments for new Field' );
         }
-        $this->setKey( $key );
+        $this->key = $key;
+        $this->fieldId = $baseId;
         $this->setBaseId( $baseId, $subkey );
-        $this->setFieldId( $baseId );
 
         $this->type = static::$settings['type'];
         //@TODO think about setting default args from extending class
     }
 
-    /**
-     * set storage key
-     * @param string $key
-     *
-     * @since 1.0.0
+    /* ---------------------------------------------
+     * Common Methods
+     * ---------------------------------------------
      */
-    private function setKey( $key )
-    {
-        $this->key = $key;
-    }
 
     /**
      * get storage key
@@ -141,20 +130,17 @@ abstract class Field
     public function getKey()
     {
         return $this->key;
-
     }
 
     /**
      * Field parameters array
-     *
      * @param array $args
-     *
      * @since 1.0.0
      * @return bool
      */
     public function setArgs( $args )
     {
-        if (is_array($args) && !empty($args)){
+        if (is_array( $args ) && !empty( $args )) {
             $this->args = $args;
             return true;
         }
@@ -192,16 +178,6 @@ abstract class Field
 
 
     /**
-     * Unique Field id setter
-     * @param string $id
-     */
-    public function setFieldId( $id )
-    {
-        $this->fieldId = $id;
-    }
-
-
-    /**
      * @return string
      */
     public function getFieldId()
@@ -228,17 +204,101 @@ abstract class Field
         }
     }
 
+    /**
+     * Get a setting var from (late bound) static settings array
+     *
+     * @param $key
+     *
+     * @return bool|mixed
+     */
+    public function getSetting( $key )
+    {
+        if (isset( static::$settings[$key] )) {
+            return static::$settings[$key];
+        } else {
+            return null;
+        }
+    }
 
     /**
-     * Setup method
+     * Wrapper method to get a single arg from the args array
      *
-     * @param mixed $data fields assigned value
+     * @param string $arg argument to retrieve
+     * @param mixed $default return value if arg is not set
      *
-     * @since 1.0.0
+     * @return mixed arg value
      */
-    public function setup( $data )
+    public function getArg( $arg, $default = false )
     {
-        $this->setData( $data );
+        if (isset( $this->args[$arg] )) {
+            return $this->args[$arg];
+        } else {
+            return $default;
+        }
+
+    }
+
+    /**
+     * Get callback from callbacks arg
+     * @param $type
+     *
+     * @return null
+     */
+    public function getCallback( $type )
+    {
+        $allowed = array( 'output', 'input', 'get', 'save' );
+
+        if (!in_array( $type, $allowed )) {
+            return null;
+        }
+
+        $callbacks = $this->getArg( 'callbacks' );
+
+        if ($callbacks) {
+            if (isset( $callbacks[$type] ) && is_callable( $callbacks[$type] )) {
+                return $callbacks[$type];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get condition from condition arg
+     * @param string $type
+     *
+     * @return null
+     */
+    public function getCondition( $type )
+    {
+        $conditions = $this->getArg( 'conditions' );
+        if ($conditions) {
+//            if (isset($conditions[$type]) && is_string($conditions[$type])){
+            if (isset( $conditions[$type] )) {
+                return $conditions[$type];
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Mainly used internally to specifiy the fields visibility
+     * @return bool
+     */
+    public function getDisplay()
+    {
+        return filter_var( $this->args['display'], FILTER_VALIDATE_BOOLEAN );
+
+    }
+
+    /**
+     * Set fields visibility
+     *
+     * @param $bool
+     */
+    public function setDisplay( $bool )
+    {
+        $this->args['display'] = $bool;
+
     }
 
     /**
@@ -344,9 +404,8 @@ abstract class Field
     {
 
         $this->uniqueId = $this->createUID();
-
         // handles the form output
-        $FormNode = new FieldFormHtmlNode( $this );
+        $FormNode = new FieldForm( $this );
         $FormNode->build();
 
     }
@@ -392,7 +451,6 @@ abstract class Field
                 'label'
             )}</label>";
         }
-
     }
 
     /**
@@ -488,105 +546,6 @@ abstract class Field
 
 
     /**
-     * Get a setting var from (late bound) static settings array
-     *
-     * @param $key
-     *
-     * @return bool|mixed
-     */
-    public function getSetting( $key )
-    {
-
-        if (isset( static::$settings[$key] )) {
-            return static::$settings[$key];
-        } else {
-            return null;
-        }
-
-    }
-
-    /**
-     * Wrapper method to get a single arg from the args array
-     *
-     * @param string $arg argument to retrieve
-     * @param mixed $default return value if arg is not set
-     *
-     * @return mixed arg value
-     */
-    public function getArg( $arg, $default = false )
-    {
-        if (isset( $this->args[$arg] )) {
-            return $this->args[$arg];
-        } else {
-            return $default;
-        }
-
-    }
-
-    /**
-     * Get callback from callbacks arg
-     * @param $type
-     *
-     * @return null
-     */
-    public function getCallback( $type )
-    {
-        $allowed = array( 'output', 'input', 'get', 'save' );
-
-        if (!in_array( $type, $allowed )) {
-            return null;
-        }
-
-        $callbacks = $this->getArg( 'callbacks' );
-
-        if ($callbacks) {
-            if (isset( $callbacks[$type] ) && is_callable( $callbacks[$type] )) {
-                return $callbacks[$type];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Get condition from condition arg
-     * @param string $type
-     *
-     * @return null
-     */
-    public function getCondition( $type )
-    {
-        $conditions = $this->getArg( 'conditions' );
-        if ($conditions) {
-//            if (isset($conditions[$type]) && is_string($conditions[$type])){
-            if (isset( $conditions[$type] )) {
-                return $conditions[$type];
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Mainly used internally to specifiy the fields visibility
-     * @return bool
-     */
-    public function getDisplay()
-    {
-        return filter_var( $this->args['display'], FILTER_VALIDATE_BOOLEAN );
-
-    }
-
-    /**
-     * Set fields visibility
-     *
-     * @param $bool
-     */
-    public function setDisplay( $bool )
-    {
-        $this->args['display'] = $bool;
-
-    }
-
-    /**
      * Helper to generate a unique id to be used with labels and inputs, basically.
      * @param bool $rnd
      * @return string|void
@@ -617,7 +576,7 @@ abstract class Field
         $akey = $this->evaluateFieldNameParam( $akey );
         $multiple = $this->evaluateFieldNameParam( $multiple );
 
-        return esc_attr( $base  . $array . $akey . $multiple );
+        return esc_attr( $base . $array . $akey . $multiple );
 
 
     }
@@ -660,6 +619,11 @@ abstract class Field
         }
     }
 
+    /**
+     * For backwards compat reasons
+     * @param $classname
+     * @return string
+     */
     private function aliasReturnObjectClass( $classname )
     {
         switch ($classname) {
@@ -681,5 +645,4 @@ abstract class Field
         $base = $this->baseId . $this->key;
         return 'kb-' . hash( 'crc32', $base );
     }
-
 }
