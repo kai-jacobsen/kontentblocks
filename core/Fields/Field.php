@@ -150,10 +150,16 @@ abstract class Field
      * @param array $args
      *
      * @since 1.0.0
+     * @return bool
      */
     public function setArgs( $args )
     {
-        $this->args = $args;
+        if (is_array($args) && !empty($args)){
+            $this->args = $args;
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -179,7 +185,7 @@ abstract class Field
     /**
      * @return string
      */
-    public function getBaseId()
+    private function getBaseId()
     {
         return $this->baseId;
     }
@@ -189,7 +195,7 @@ abstract class Field
      * Unique Field id setter
      * @param string $id
      */
-    public function setFieldId( $id )
+    private function setFieldId( $id )
     {
         $this->fieldId = $id;
     }
@@ -208,7 +214,6 @@ abstract class Field
      * Data from _POST[{baseid}[$this->key]]
      * Runs each time when data is set to the field
      * Frontend/Backend
-     * (upon field initialization, data from _POST or database set to field)
      *
      * @param mixed $data
      *
@@ -607,13 +612,11 @@ abstract class Field
     public function getFieldName( $array = null, $akey = null, $multiple = null )
     {
 
-        $base = "{$this->baseId}[$this->key]";
-
         $array = $this->evaluateFieldNameParam( $array );
         $akey = $this->evaluateFieldNameParam( $akey );
         $multiple = $this->evaluateFieldNameParam( $multiple );
 
-        return esc_attr( $base . $array . $akey . $multiple );
+        return esc_attr( $this->getBaseId() . $array . $akey . $multiple );
 
 
     }

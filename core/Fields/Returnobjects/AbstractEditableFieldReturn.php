@@ -252,7 +252,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
         }
 
         if (is_object( $field )) {
-            $this->moduleId = $field->getBaseId();
+            $this->moduleId = $field->getFieldId();
             $this->key = $field->getKey();
             $this->arrayKey = $field->getArg( 'arrayKey' );
             $this->index = $field->getArg( 'index' );
@@ -268,7 +268,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 //
 //        $uid = '';
 //        $uid .= 'kb_';
-//        $uid .= $this->field->getBaseId();
+//        $uid .= $this->field->getFieldId();
 //        $uid .= $this->field->getKey();
 //        if ($this->field->getArg( 'index' )) {
 //            $uid .= $this->field->getArg( 'index' );

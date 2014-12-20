@@ -53,6 +53,15 @@ class FieldTest extends \WP_UnitTestCase
     }
 
     /**
+     *
+     */
+    public function testSetBaseId()
+    {
+        $this->TestField->setBaseId( 'changedid', 'sub' );
+        $this->assertEquals( $this->TestField->getBaseId(), 'changedid[sub]' );
+    }
+
+    /**
      * getInputFieldId();
      * return whatever id was set
      */
@@ -74,28 +83,34 @@ class FieldTest extends \WP_UnitTestCase
         $this->assertEquals( $this->TestField->getCallback( 'invalidType' ), null );
     }
 
-
-    public function testGetFieldName()
+    /**
+     * @dataProvider providerTestGetFieldName
+     * @param mixed $seg1
+     * @param mixed $seg2
+     * @param mixed $seg3
+     * @param string $expected
+     */
+    public function testGetFieldName( $seg1, $seg2, $seg3, $expected )
     {
-        $this->assertEquals( $this->TestField->getFieldName(), 'dummyid[dummysubkey][okey]' );
-        $this->assertEquals( $this->TestField->getFieldName( true ), 'dummyid[dummysubkey][okey][]' );
-        $this->assertEquals( $this->TestField->getFieldName( 'key1', true ), 'dummyid[dummysubkey][okey][key1][]' );
-        $this->assertEquals(
-            $this->TestField->getFieldName( 'key1', 'key2' ),
-            'dummyid[dummysubkey][okey][key1][key2]'
-        );
-        $this->assertEquals(
-            $this->TestField->getFieldName( 'key1', 'key2', true ),
-            'dummyid[dummysubkey][okey][key1][key2][]'
-        );
-        $this->assertEquals(
-            $this->TestField->getFieldName( 'key1', true, 'key3' ),
-            'dummyid[dummysubkey][okey][key1][][key3]'
+
+        $this->assertEquals( $this->TestField->getFieldName( $seg1, $seg2, $seg3 ), $expected );
+
+    }
+
+    public function providerTestGetFieldName()
+    {
+        return array(
+            array( null, null, null, 'dummyid[dummysubkey][okey]' ),
+            array( true, null, null, 'dummyid[dummysubkey][okey][]' ),
+            array( 'key1', true, null, 'dummyid[dummysubkey][okey][key1][]' ),
+            array( 'key1', 'key2', null, 'dummyid[dummysubkey][okey][key1][key2]' ),
+            array( 'key1', 'key2', true, 'dummyid[dummysubkey][okey][key1][key2][]' ),
+            array( 'key1', true, 'key3', 'dummyid[dummysubkey][okey][key1][][key3]' )
         );
     }
 
     /**
-     * crreateUID should always return the same
+     * createUID should always return the same
      */
     public function testCreateUID()
     {
@@ -124,6 +139,11 @@ class FieldTest extends \WP_UnitTestCase
 
     }
 
+    public function testSetArgs()
+    {
+        $this->assertTrue($this->TestField->setArgs(array('label' => 'Another')));
+        $this->assertFalse($this->TestField->setArgs(array()));
+    }
 
 
     /*
@@ -136,6 +156,11 @@ class FieldTest extends \WP_UnitTestCase
     public function outputCallback( $value )
     {
         return $value;
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
 }

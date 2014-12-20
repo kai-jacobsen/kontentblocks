@@ -50,7 +50,7 @@ class FlexibleFieldsReturn
 
         $this->key = $Field->getKey();
         $this->fieldData = $Field->getValue();
-        $this->moduleId = $Field->getBaseId();
+        $this->moduleId = $Field->getFieldId();
         $this->config = $Field->getArg( 'config' );
     }
 
