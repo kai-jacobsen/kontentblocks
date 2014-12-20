@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 use Kontentblocks\Utils\JSONBridge;
 
 /**
@@ -22,14 +23,15 @@ Class Gallery extends Field
 
     /**
      * Form
+     * @param FieldForm $Form
      */
-    public function form()
+    public function form( FieldForm $Form )
     {
-        $this->label();
-        echo "<div id='{$this->getInputFieldId()}' data-fieldkey='{$this->getKey()}' data-arraykey='{$this->getArg(
+        $Form->label();
+        echo "<div id='{$Form->getInputFieldId()}' data-fieldkey='{$this->getKey()}' data-arraykey='{$this->getArg(
             'arrayKey'
         )}' data-module='{$this->getFieldId()}' class='kb-gallery--stage'></div>";
-        $this->description();
+        $Form->description();
 
     }
 

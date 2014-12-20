@@ -28,7 +28,6 @@ class FieldSection extends AbstractFieldSection
     public $id;
 
 
-
     /**
      * Constructor
      *

@@ -83,31 +83,7 @@ class FieldTest extends \WP_UnitTestCase
         $this->assertEquals( $this->TestField->getCallback( 'invalidType' ), null );
     }
 
-    /**
-     * @dataProvider providerTestGetFieldName
-     * @param mixed $seg1
-     * @param mixed $seg2
-     * @param mixed $seg3
-     * @param string $expected
-     */
-    public function testGetFieldName( $seg1, $seg2, $seg3, $expected )
-    {
 
-        $this->assertEquals( $this->TestField->getFieldName( $seg1, $seg2, $seg3 ), $expected );
-
-    }
-
-    public function providerTestGetFieldName()
-    {
-        return array(
-            array( null, null, null, 'dummyid[dummysubkey][okey]' ),
-            array( true, null, null, 'dummyid[dummysubkey][okey][]' ),
-            array( 'key1', true, null, 'dummyid[dummysubkey][okey][key1][]' ),
-            array( 'key1', 'key2', null, 'dummyid[dummysubkey][okey][key1][key2]' ),
-            array( 'key1', 'key2', true, 'dummyid[dummysubkey][okey][key1][key2][]' ),
-            array( 'key1', true, 'key3', 'dummyid[dummysubkey][okey][key1][][key3]' )
-        );
-    }
 
     /**
      * createUID should always return the same

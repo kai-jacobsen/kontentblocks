@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 
 /**
  * Single checkbox renders to boolean true or false
@@ -21,14 +22,15 @@ Class Checkbox extends Field
 
     /**
      * Checkbox Form HTML
+     * @param FieldForm $Form
      */
-    public function form()
+    public function form( FieldForm $Form )
     {
         $checked = checked( $this->getValue(), true, false );
-        $this->label();
-        echo "<label><input type='checkbox' id='{$this->getInputFieldId()}' name='{$this->getFieldName(
+        $Form->label();
+        echo "<label><input type='checkbox' id='{$Form->getInputFieldId()}' name='{$Form->getFieldName(
         )}'  {$checked} /> {$this->getArg( 'text', 'Please label this checkbox' )}</label>";
-        $this->description();
+        $Form->description();
 
     }
 
@@ -66,7 +68,7 @@ Class Checkbox extends Field
     /**
      * Custom retrieve filter when called for frontend
      * Makes sure that value is a true boolean
-     * @param mixed $var value as saved
+     * @param $val
      * @return bool
      */
     public function prepareFormValue( $val )

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONBridge;
 
@@ -24,14 +25,15 @@ Class FlexibleFields extends Field
 
     /**
      * Form
+     * @param FieldForm $Form
      */
-    public function form()
+    public function form( FieldForm $Form )
     {
-        $this->label();
-        echo "<div id='{$this->getInputFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg(
+        $Form->label();
+        echo "<div id='{$Form->getInputFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg(
             'arrayKey'
         )}' data-module='{$this->getFieldId()}' class='flexible-fields--stage'></div>";
-        $this->description();
+        $Form->description();
 
     }
 

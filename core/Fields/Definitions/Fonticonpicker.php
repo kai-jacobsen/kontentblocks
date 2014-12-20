@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 
 /**
  * Fonticonpicker
@@ -18,22 +19,25 @@ Class Fonticonpicker extends Field
 
     /**
      * Form
+     * @param FieldForm $Form
      */
-    public function form()
+    public function form( FieldForm $Form )
     {
-        $this->label();
-        echo "<input class='kb-fonticonpicker' id='{$this->getInputFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
-        $this->description();
+        $Form->label();
+        echo "<input class='kb-fonticonpicker' id='{$Form->getInputFieldId()}' name='{$Form->getFieldName(
+        )}' placeholder='{$Form->getPlaceholder()}'  value='{$this->getValue()}' />";
+        $Form->description();
     }
 
 
-	/**
-	 * @param $val
-	 *
-	 * @return mixed
-	 */
-	public function prepareFormValue( $val ) {
-		return $val;
-	}
+    /**
+     * @param $val
+     *
+     * @return mixed
+     */
+    public function prepareFormValue( $val )
+    {
+        return $val;
+    }
 
 }

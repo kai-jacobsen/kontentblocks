@@ -1,4 +1,4 @@
-{{ field.label() }}
+{{ form.label() }}
 <div class='kb-field-image-wrapper'>
     <div class='kb-js-add-image kb-field-image-container'>
 
@@ -16,10 +16,11 @@
 
         <div class="kb-js-image-meta-wrapper">
             <label>{{ i18n.title }} </label>
-            <input class='kb-js-image-title kb-observe' type="text" name='{{ field.getFieldName( 'details', 'title') }}'
+            <input class='kb-js-image-title kb-observe' type="text" name='{{ form.getFieldName( 'details', 'title') }}'
                    value='{{ value.details.title }}'>
             <label>{{ i18n.description }}</label>
-            <input class='kb-js-image-description kb-observe' type="text" name='{{ field.getFieldName( 'details', 'description') }}'
+            <input class='kb-js-image-description kb-observe' type="text"
+                   name='{{ form.getFieldName( 'details', 'description') }}'
                    value='{{ value.details.description }}'>
         </div>
         {% if (field.getArg('hideMeta') == true) %}
@@ -29,7 +30,8 @@
     <div class="kb-field-image--footer">
         <a class="button kb-js-reset-image">Reset</a>
     </div>
-    <input class='kb-js-image-id' type='hidden' name='{{ field.getFieldName( 'id' ) }}' value='{{ value.id }}'>
-    <input class='kb-js-image-alt' type='hidden' name='{{ field.getFieldName( 'details', 'id' ) }}' value='{{ value.details.alt }}'>
+    <input class='kb-js-image-id' type='hidden' name='{{ form.getFieldName( 'id' ) }}' value='{{ value.id }}'>
+    <input class='kb-js-image-alt' type='hidden' name='{{ form.getFieldName( 'details', 'id' ) }}'
+           value='{{ value.details.alt }}'>
 </div>
-{{ field.description() }}
+{{ form.description() }}

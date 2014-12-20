@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
@@ -25,22 +26,24 @@ Class OpeningTimes extends Field
 
     /**
      * Form
+     * @param FieldForm $Form
      */
-    public function form()
+    public function form( FieldForm $Form )
     {
-        $this->label();
-        echo "<div id='{$this->getInputFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg(
+        $Form->label();
+        echo "<div id='{$Form->getInputFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg(
             'arrayKey'
         )}' data-module='{$this->getFieldId()}' class='opening-times--stage'></div>";
-        $this->description();
+        $Form->description();
 
 
         // using twig template for html output
         $tpl = new FieldView(
             'otimes.twig', array(
-                'field'   => $this,
-                'value'   => $this->getValue(),
-                'i18n'    => I18n::getPackages( 'Refields.openingTimes', 'Refields.common' )
+                'field' => $this,
+                'form' => $Form,
+                'value' => $this->getValue(),
+                'i18n' => I18n::getPackages( 'Refields.openingTimes', 'Refields.common' )
             )
         );
         $tpl->render( true );

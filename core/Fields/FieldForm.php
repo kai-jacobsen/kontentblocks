@@ -34,6 +34,98 @@ class FieldForm
 
 
     /**
+     * Helper to generate a unique id to be used with labels and inputs, basically.
+     * @param bool $rnd
+     * @return string|void
+     */
+    public function getInputFieldId( $rnd = false )
+    {
+        $number = ( $rnd ) ? uniqid() : '';
+        $idAttr = sanitize_title( $this->Field->getBaseId() . '_' . $this->Field->getKey() . '_' . $number );
+        return esc_attr( $idAttr );
+    }
+
+    /**
+     * Helper to generate input names and connect them to the current module
+     * This method has options to generate a name, name[] or name['key'] and probably some
+     * more hidden possibilities :)
+     *
+     * @param bool $array - if true add [] to the key
+     * @param bool $akey - if true add ['$akey'] to the key
+     * @param bool $multiple
+     *
+     * @return string
+     */
+    public function getFieldName( $array = null, $akey = null, $multiple = null )
+    {
+
+        $base = $this->Field->getBaseId() . '[' . $this->Field->getKey() . ']';
+        $array = $this->evaluateFieldNameParam( $array );
+        $akey = $this->evaluateFieldNameParam( $akey );
+        $multiple = $this->evaluateFieldNameParam( $multiple );
+
+        return esc_attr( $base . $array . $akey . $multiple );
+
+    }
+
+    /**
+     * @param mixed $param
+     * @return string
+     */
+    private function evaluateFieldNameParam( $param )
+    {
+        if (is_bool( $param ) && $param === true) {
+            return '[]';
+        }
+
+        if (is_string( $param ) && !empty( $param )) {
+            return "[$param]";
+        }
+
+        return '';
+    }
+
+    /**
+     * Shortcut method to placeholder arg
+     * @return string|void
+     */
+    public function getPlaceholder()
+    {
+        return esc_attr( $this->Field->getArg( 'placeholder', '' ) );
+
+    }
+
+    /**
+     * Renders description markup
+     * Get description if available
+     * @since 1.0.0
+     */
+    public function description()
+    {
+        $description = $this->Field->getArg( 'description' );
+        if (!empty( $description )) {
+            echo "<p class='description kb-field--description'>{$this->Field->getArg( 'description' )}</p>";
+        }
+
+    }
+
+
+    /**
+     * Helper Method to create a complete label tag
+     * @since 1.0.0
+     */
+    public function label()
+    {
+        $label = $this->Field->getArg( 'label' );
+        if (!empty( $label )) {
+            echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getInputFieldId(
+            )}'>{$this->Field->getArg(
+                'label'
+            )}</label>";
+        }
+    }
+
+    /**
      * Handles the generation of hidden input fields with the correct data
      * @return bool false if there is no data to render
      * @since 1.0.0
@@ -119,9 +211,9 @@ class FieldForm
 
         // When viewing from the frontend, an optional method can be used for the output
         if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->Field, 'frontsideForm' )) {
-            $this->Field->frontsideForm();
+            $this->Field->frontsideForm( $this );
         } else {
-            $this->Field->form();
+            $this->Field->form( $this );
         }
 
         // some fields (colorpicker etc) might have some individual settings

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 
 /**
  *
@@ -17,13 +18,15 @@ Class TemplateSelector extends Field
 
     /**
      * Form
+     * @param FieldForm $Form
      */
-    public function form()
+    public function form( FieldForm $Form )
     {
-        $this->label();
+        $Form->label();
         $type = $this->getArg( 'type', 'text' );
-        echo "<input type='{$type}' id='{$this->getInputFieldId()}' name='{$this->getFieldName()}' placeholder='{$this->getPlaceholder()}'  value='{$this->getValue()}' />";
-        $this->description();
+        echo "<input type='{$type}' id='{$Form->getInputFieldId()}' name='{$Form->getFieldName(
+        )}' placeholder='{$Form->getPlaceholder()}'  value='{$this->getValue()}' />";
+        $Form->description();
 
     }
 
@@ -35,15 +38,16 @@ Class TemplateSelector extends Field
     public function getPublicFilter( $value )
     {
 //        return esc_attr( $value );
-	    return $value;
+        return $value;
     }
 
-	/**
-	 * @param $val
-	 *
-	 * @return mixed
-	 */
-	public function prepareFormValue( $val ) {
-		return $val;
-	}
+    /**
+     * @param $val
+     *
+     * @return mixed
+     */
+    public function prepareFormValue( $val )
+    {
+        return $val;
+    }
 }

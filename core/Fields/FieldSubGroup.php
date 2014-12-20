@@ -87,7 +87,7 @@ class FieldSubGroup
                 'std',
                 ''
             );
-            $field->setData( $fielddata);
+            $field->setData( $fielddata );
         }
     }
 

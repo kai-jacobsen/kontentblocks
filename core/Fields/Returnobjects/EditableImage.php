@@ -382,7 +382,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     function jsonSerialize()
     {
         return array(
-            'id' => wp_prepare_attachment_for_js(absint($this->getValue('id')))
+            'id' => wp_prepare_attachment_for_js( absint( $this->getValue( 'id' ) ) )
         );
     }
 }

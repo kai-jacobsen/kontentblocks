@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 
 /**
  * Custom callback for field content
@@ -20,34 +21,36 @@ Class Callback extends Field
 
     /**
      * Form
+     * @param FieldForm $Form
      */
-    public function form()
+    public function form( FieldForm $Form )
     {
-        if (!$this->getArg('callback')) {
+        if (!$this->getArg( 'callback' )) {
             echo "<p>No Callback specified</p>";
         }
 
-        call_user_func_array($this->getArg('callback'), $this->getArg('args', array()));
+        call_user_func_array( $this->getArg( 'callback' ), $this->getArg( 'args', array() ) );
 
     }
 
-	/**
-	 * Prevent recursion in json_encode of field args
-	 * @return array
-	 */
-	public function argsToJson()
+    /**
+     * Prevent recursion in json_encode of field args
+     * @return array
+     */
+    public function argsToJson()
     {
         $args = $this->args;
-        unset($args['callback']);
+        unset( $args['callback'] );
         return $args;
     }
 
-	/**
-	 * @param $val
-	 *
-	 * @return mixed
-	 */
-	public function prepareFormValue( $val ) {
-		return $val;
-	}
+    /**
+     * @param $val
+     *
+     * @return mixed
+     */
+    public function prepareFormValue( $val )
+    {
+        return $val;
+    }
 }

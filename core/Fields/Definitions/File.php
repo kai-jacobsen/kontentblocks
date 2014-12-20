@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\AttachmentHandler;
@@ -19,16 +20,20 @@ Class File extends Field
         'type' => 'file'
     );
 
-    public function form()
+    /**
+     * @param FieldForm $Form
+     */
+    public function form( FieldForm $Form )
     {
-        $id = $this->getValue('id');
+        $id = $this->getValue( 'id' );
         // using twig template for html output
         $tpl = new FieldView(
             'file.twig', array(
-                'field'   => $this,
-                'value'   => $this->getValue(),
-                'i18n'    => I18n::getPackages( 'Refields.file', 'Refields.common' ),
-                'file'    => new AttachmentHandler( $this->getValue( 'id' ) ),
+                'field' => $this,
+                'form' => $Form,
+                'value' => $this->getValue(),
+                'i18n' => I18n::getPackages( 'Refields.file', 'Refields.common' ),
+                'file' => new AttachmentHandler( $this->getValue( 'id' ) ),
                 'isEmpty' => ( empty( $id ) ) ? 'kb-hide' : ''
             )
         );
@@ -63,7 +68,7 @@ Class File extends Field
             'id' => null,
         );
 
-        $parsed       = wp_parse_args( $val, $fileDefaults );
+        $parsed = wp_parse_args( $val, $fileDefaults );
         $parsed['id'] = ( !is_null( $parsed['id'] ) ) ? absint( $parsed['id'] ) : null;
 
         return $parsed;

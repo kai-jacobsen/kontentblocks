@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -17,14 +18,17 @@ Class Editor extends Field
         'type' => 'editor'
     );
 
-    public function form()
+    /**
+     * @param FieldForm $Form
+     */
+    public function form( FieldForm $Form )
     {
         $media = $this->getArg( 'media' );
-        $name = $this->getFieldName( $this->getArg( 'array' ) );
-        $id = $this->getInputFieldId( true );
+        $name = $Form->getFieldName( $this->getArg( 'array' ) );
+        $id = $Form->getInputFieldId( true );
         $value = $this->getValue();
-        $this->label();
-        $this->description();
+        $Form->label();
+        $Form->description();
         Utilities::editor( $id, $value, $name, $media );
     }
 

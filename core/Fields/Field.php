@@ -389,9 +389,9 @@ abstract class Field
      * Any markup should be echoed, not returned
      * Must be overridden by the individual field class
      * @since 1.0.0
-     * @return void
+     * @param FieldForm $Form
      */
-    public abstract function form();
+    public abstract function form( FieldForm $Form );
 
     /**
      * Build the whole field, including surrounding wrapper
@@ -405,8 +405,8 @@ abstract class Field
 
         $this->uniqueId = $this->createUID();
         // handles the form output
-        $FormNode = new FieldForm( $this );
-        $FormNode->build();
+        $Form = new FieldForm( $this );
+        $Form->build();
 
     }
 
@@ -438,20 +438,7 @@ abstract class Field
     }
 
 
-    /**
-     * Helper Method to create a complete label tag
-     * @since 1.0.0
-     */
-    protected function label()
-    {
-        $label = $this->getArg( 'label' );
-        if (!empty( $label )) {
-            echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getInputFieldId(
-            )}'>{$this->getArg(
-                'label'
-            )}</label>";
-        }
-    }
+
 
     /**
      * Getter for field data
@@ -484,19 +471,6 @@ abstract class Field
     }
 
 
-    /**
-     * Renders description markup
-     * Get description if available
-     * @since 1.0.0
-     */
-    protected function description()
-    {
-        $description = $this->getArg( 'description' );
-        if (!empty( $description )) {
-            echo "<p class='description kb-field--description'>{$this->getArg( 'description' )}</p>";
-        }
-
-    }
 
     /**
      * Wrapper to the actual save method
@@ -544,65 +518,6 @@ abstract class Field
         $this->module = $module;
     }
 
-
-    /**
-     * Helper to generate a unique id to be used with labels and inputs, basically.
-     * @param bool $rnd
-     * @return string|void
-     */
-    protected function getInputFieldId( $rnd = false )
-    {
-        $number = ( $rnd ) ? uniqid() : '';
-        $idAttr = sanitize_title( $this->baseId . '_' . $this->key . '_' . $number );
-        return esc_attr( $idAttr );
-    }
-
-    /**
-     * Helper to generate input names and connect them to the current module
-     * This method has options to generate a name, name[] or name['key'] and probably some
-     * more hidden possibilities :)
-     *
-     * @param bool $array - if true add [] to the key
-     * @param bool $akey - if true add ['$akey'] to the key
-     * @param bool $multiple
-     *
-     * @return string
-     */
-    public function getFieldName( $array = null, $akey = null, $multiple = null )
-    {
-
-        $base = $this->getBaseId() . '[' . $this->getKey() . ']';
-        $array = $this->evaluateFieldNameParam( $array );
-        $akey = $this->evaluateFieldNameParam( $akey );
-        $multiple = $this->evaluateFieldNameParam( $multiple );
-
-        return esc_attr( $base . $array . $akey . $multiple );
-
-
-    }
-
-    private function evaluateFieldNameParam( $param )
-    {
-        if (is_bool( $param ) && $param === true) {
-            return '[]';
-        }
-
-        if (is_string( $param ) && !empty( $param )) {
-            return "[$param]";
-        }
-
-        return '';
-    }
-
-    /**
-     * Shortcut method to placeholder arg
-     * @return string|void
-     */
-    protected function getPlaceholder()
-    {
-        return esc_attr( $this->getArg( 'placeholder' ) );
-
-    }
 
     /**
      * Prepare Args for JSON

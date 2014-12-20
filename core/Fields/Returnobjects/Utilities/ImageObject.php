@@ -9,190 +9,212 @@ use Kontentblocks\Utils\ImageResize;
  * @property mixed classes
  * @package Kontentblocks\Fields
  */
-class ImageObject {
+class ImageObject
+{
 
-	public $attachment;
+    public $attachment;
 
-	public $classes = array();
+    public $classes = array();
 
-	protected $width = 150;
+    protected $width = 150;
 
-	protected $height = 150;
-	protected $attributes = array();
-	protected $src;
-	protected $upscale;
-	protected $crop;
+    protected $height = 150;
+    protected $attributes = array();
+    protected $src;
+    protected $upscale;
+    protected $crop;
 
-	/**
-	 * @param mixed $att Attachment ID
-	 *
-	 * @since 1.0.0
-	 */
-	public function __construct( $att ) {
+    /**
+     * @param mixed $att Attachment ID
+     *
+     * @since 1.0.0
+     */
+    public function __construct( $att )
+    {
 
-		if ( !isset( $att ) ) {
-			throw new \BadFunctionCallException( 'Missing attachment' );
-		}
+        if (!isset( $att )) {
+            throw new \BadFunctionCallException( 'Missing attachment' );
+        }
 
-		$this->attachment = $this->prepareAttachment( $att );
+        $this->attachment = $this->prepareAttachment( $att );
 
-		if ( is_null( $this->attachment ) ) {
-			throw new \UnexpectedValueException( "Image object could not be created. Either the attachment type is not an image or the input value was wrong0" );
-		}
-	}
+        if (is_null( $this->attachment )) {
+            throw new \UnexpectedValueException(
+                "Image object could not be created. Either the attachment type is not an image or the input value was wrong0"
+            );
+        }
+    }
 
-	/**
-	 * Given attachment may be a full attachment array from wp_prepare_attachment_for_js
-	 * or just an id, which get converted to such an array
-	 *
-	 * @param $att
-	 *
-	 * @return array|null
-	 */
-	private function prepareAttachment( $att ) {
-		$attachment = null;
+    /**
+     * Given attachment may be a full attachment array from wp_prepare_attachment_for_js
+     * or just an id, which get converted to such an array
+     *
+     * @param $att
+     *
+     * @return array|null
+     */
+    private function prepareAttachment( $att )
+    {
+        $attachment = null;
 
-		if ( ( is_string( $att ) && is_numeric( $att ) ) || is_int( $att ) ) {
-			$attachment = wp_prepare_attachment_for_js( $att );
-		} else if ( is_array( $att ) ) {
-			// check for keys
-			$keys = array_keys( $att );
-			if (
-				in_array( 'id', $keys ) &&
-				in_array( 'filename', $keys ) &&
-				in_array( 'uploadedTo', $keys ) &&
-				in_array( 'type', $keys ) &&
-				$att['type'] === 'image'
-			) {
-				$attachment = $att;
-			}
-		}
+        if (( is_string( $att ) && is_numeric( $att ) ) || is_int( $att )) {
+            $attachment = wp_prepare_attachment_for_js( $att );
+        } else if (is_array( $att )) {
+            // check for keys
+            $keys = array_keys( $att );
+            if (
+                in_array( 'id', $keys ) &&
+                in_array( 'filename', $keys ) &&
+                in_array( 'uploadedTo', $keys ) &&
+                in_array( 'type', $keys ) &&
+                $att['type'] === 'image'
+            ) {
+                $attachment = $att;
+            }
+        }
 
-		return $attachment;
-	}
+        return $attachment;
+    }
 
-	public function addClass( $class ) {
+    public function addClass( $class )
+    {
 
-		if ( is_array( $class ) ) {
-			$this->classes = array_merge( $this->classes, $class );
-		} else {
-			$this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
+        if (is_array( $class )) {
+            $this->classes = array_merge( $this->classes, $class );
+        } else {
+            $this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
 
-		}
+        }
 
-		return $this;
+        return $this;
 
-	}
+    }
 
-	public function removeClass( $class ) {
-		$key = array_search( $class, $this->classes );
-		if ( $key ) {
-			unset( $this->classes[ $key ] );
-		}
-
-
-		return $this;
-	}
-
-	public function addAttr( $attr, $value = '' ) {
-		if ( is_array( $attr ) ) {
-			$this->attributes = array_merge( $this->attributes, $attr );
-		} else {
-			$this->attributes[ $attr ] = $value;
-		}
-
-		return $this;
-
-	}
+    public function removeClass( $class )
+    {
+        $key = array_search( $class, $this->classes );
+        if ($key) {
+            unset( $this->classes[$key] );
+        }
 
 
-	public function html() {
-		$this->prepareSrc();
-		$format = '<%1$s %3$s src="%2$s" >';
+        return $this;
+    }
 
-		return sprintf( $format, 'img', $this->src, $this->_renderAttributes() );
+    public function addAttr( $attr, $value = '' )
+    {
+        if (is_array( $attr )) {
+            $this->attributes = array_merge( $this->attributes, $attr );
+        } else {
+            $this->attributes[$attr] = $value;
+        }
 
-	}
+        return $this;
 
-	public function src() {
-		$this->prepareSrc();
+    }
 
-		return $this->src;
-	}
 
-	public function background() {
-		$this->background = true;
-		$this->prepareSrc();
+    public function html()
+    {
+        $this->prepareSrc();
+        $format = '<%1$s %3$s src="%2$s" >';
 
-		$format = ' %2$s style="background-image: url(\'%1$s\');"';
+        return sprintf( $format, 'img', $this->src, $this->_renderAttributes() );
 
-		return sprintf( $format, $this->src, $this->_renderAttributes() );
-	}
+    }
 
-	private function _cleanSpaces( $string ) {
-		return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
+    public function src()
+    {
+        $this->prepareSrc();
 
-	}
+        return $this->src;
+    }
 
-	private function _renderAttributes() {
-		$return = "class='{$this->_classList()}' ";
-		$return .= $this->_attributesList();
+    public function background()
+    {
+        $this->background = true;
+        $this->prepareSrc();
 
-		return trim( $return );
+        $format = ' %2$s style="background-image: url(\'%1$s\');"';
 
-	}
+        return sprintf( $format, $this->src, $this->_renderAttributes() );
+    }
 
-	private function _classList() {
-		return trim( implode( ' ', $this->classes ) );
+    private function _cleanSpaces( $string )
+    {
+        return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
 
-	}
+    }
 
-	public function size( $w = null, $h = null ) {
-		$this->width  = $w;
-		$this->height = $h;
+    private function _renderAttributes()
+    {
+        $return = "class='{$this->_classList()}' ";
+        $return .= $this->_attributesList();
 
-		return $this;
-	}
+        return trim( $return );
 
-	public function upscale() {
-		$this->upscale = true;
+    }
 
-		return $this;
-	}
+    private function _classList()
+    {
+        return trim( implode( ' ', $this->classes ) );
 
-	public function crop( $crop ) {
-		$this->crop = $crop;
+    }
 
-		return $this;
-	}
+    public function size( $w = null, $h = null )
+    {
+        $this->width = $w;
+        $this->height = $h;
 
-	private function _attributesList() {
-		$returnstr = '';
-		foreach ( $this->attributes as $attr => $value ) {
-			$returnstr .= "{$attr}='{$value}' ";
-		}
+        return $this;
+    }
 
-		return trim( $returnstr );
+    public function upscale()
+    {
+        $this->upscale = true;
 
-	}
+        return $this;
+    }
 
-	private function prepareSrc() {
-		if ( $this->attachment['id'] ) {
-			return $this->src = ImageResize::getInstance()->process( $this->attachment['id'],
-				$this->width,
-				$this->height,
-				$this->crop,
-				true,
-				$this->upscale );
-		}
+    public function crop( $crop )
+    {
+        $this->crop = $crop;
 
-		return false;
-	}
+        return $this;
+    }
 
-	public function meta( $field ) {
-		if ( isset( $this->attachment[ $field ] ) ) {
-			return $this->attachment[ $field ];
-		}
-	}
+    private function _attributesList()
+    {
+        $returnstr = '';
+        foreach ($this->attributes as $attr => $value) {
+            $returnstr .= "{$attr}='{$value}' ";
+        }
+
+        return trim( $returnstr );
+
+    }
+
+    private function prepareSrc()
+    {
+        if ($this->attachment['id']) {
+            return $this->src = ImageResize::getInstance()->process(
+                $this->attachment['id'],
+                $this->width,
+                $this->height,
+                $this->crop,
+                true,
+                $this->upscale
+            );
+        }
+
+        return false;
+    }
+
+    public function meta( $field )
+    {
+        if (isset( $this->attachment[$field] )) {
+            return $this->attachment[$field];
+        }
+    }
 
 }

@@ -3,76 +3,85 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldForm;
 
 /**
  * Prebuild select field to chose one entry from a given post type
  */
-Class PostSelect extends Field {
+Class PostSelect extends Field
+{
 
-	public static $settings = array(
-		'type' => 'postselect'
-	);
+    public static $settings = array(
+        'type' => 'postselect'
+    );
 
-	/**
-	 * Select field form html
-	 */
-	public function form() {
-		$pt = $this->getArg( 'type', 'post' );
+    /**
+     * Select field form html
+     * @param FieldForm $Form
+     */
+    public function form( FieldForm $Form )
+    {
+        $pt = $this->getArg( 'type', 'post' );
 
-		$posts = $this->getPosts( $pt );
+        $posts = $this->getPosts( $pt );
 
-		$this->label();
+        $Form->label();
 
 
-		print "<select id='{$this->getInputFieldId()}' name='{$this->getFieldName()}'>";
+        print "<select id='{$Form->getInputFieldId()}' name='{$Form->getFieldName()}'>";
 
-		if ( $this->getArg( 'empty', true ) ) {
-			print "<option value='' name=''>Bitte wählen</option>";
-		}
-		if ( !empty( $posts ) ) {
-			foreach ( $posts as $o ) {
-				$selected = selected( $this->getValue(), $o->ID, false );
-				print "<option {$selected} value='{$o->ID}'>{$o->post_title}</option>";
-			}
-		}
+        if ($this->getArg( 'empty', true )) {
+            print "<option value='' name=''>Bitte wählen</option>";
+        }
+        if (!empty( $posts )) {
+            foreach ($posts as $o) {
+                $selected = selected( $this->getValue(), $o->ID, false );
+                print "<option {$selected} value='{$o->ID}'>{$o->post_title}</option>";
+            }
+        }
 
-		print "</select>";
+        print "</select>";
 
-		$this->description();
+        $Form->description();
 
-	}
+    }
 
-	/**
-	 * Get posts to populate the select field
-	 *
-	 * @param $pt
-	 *
-	 * @return array
-	 */
-	private function getPosts( $pt ) {
-		return get_posts( array(
-			'post_type'      => $pt,
-			'posts_per_page' => - 1,
-			'order_by'       => 'title',
-			'post_status'    => 'any'
-		) );
-	}
+    /**
+     * Get posts to populate the select field
+     *
+     * @param $pt
+     *
+     * @return array
+     */
+    private function getPosts( $pt )
+    {
+        return get_posts(
+            array(
+                'post_type' => $pt,
+                'posts_per_page' => - 1,
+                'order_by' => 'title',
+                'post_status' => 'any'
+            )
+        );
+    }
 
-	/**
-	 * @param $val
-	 *
-	 * @return int post ID
-	 */
-	public function prepareFormValue( $val ) {
-		return absint( $val );
-	}
+    /**
+     * @param $val
+     *
+     * @return int post ID
+     */
+    public function prepareFormValue( $val )
+    {
+        return absint( $val );
+    }
 
-	/**
-	 * @param $val
-	 *
-	 * @return int post ID
-	 */
-	public function prepareOutputValue( $val ) {
-		return absint( $val );
-	}
+    /**
+     * @param $val
+     *
+     * @return int post ID
+     */
+    public function prepareOutputValue( $val )
+    {
+        return absint( $val );
+    }
 }
