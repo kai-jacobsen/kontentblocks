@@ -612,11 +612,12 @@ abstract class Field
     public function getFieldName( $array = null, $akey = null, $multiple = null )
     {
 
+        $base = $this->getBaseId() . '[' . $this->getKey() . ']';
         $array = $this->evaluateFieldNameParam( $array );
         $akey = $this->evaluateFieldNameParam( $akey );
         $multiple = $this->evaluateFieldNameParam( $multiple );
 
-        return esc_attr( $this->getBaseId() . $array . $akey . $multiple );
+        return esc_attr( $base  . $array . $akey . $multiple );
 
 
     }
