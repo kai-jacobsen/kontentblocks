@@ -50,7 +50,7 @@ abstract class AbstractFieldController
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
             $data = ( isset( $instanceData[$field->getKey()] ) ) ? $instanceData[$field->getKey()] : '';
-            $field->setData( $data );
+            $field->setValue( $data );
         }
 
     }

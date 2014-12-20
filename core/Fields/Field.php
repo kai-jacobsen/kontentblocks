@@ -141,7 +141,7 @@ abstract class Field
     public function setArgs( $args )
     {
         if (is_array( $args ) && !empty( $args )) {
-            $this->args = $args;
+            $this->args = wp_parse_args( $args, $this->args );
             return true;
         }
 
@@ -159,7 +159,7 @@ abstract class Field
      *
      * @since 1.0.0
      */
-    public function setBaseId( $id, $subkey )
+    public function setBaseId( $id, $subkey = null )
     {
         if (!$subkey) {
             $this->baseId = $id;
@@ -195,7 +195,7 @@ abstract class Field
      *
      * @since 1.0.0
      */
-    public function setData( $data )
+    public function setValue( $data )
     {
         if (method_exists( $this, 'inputFilter' )) {
             $this->value = $this->inputFilter( $data );
@@ -318,6 +318,7 @@ abstract class Field
     public function getUserValue()
     {
         $value = $this->prepareOutput( $this->getValue() );
+
         if ($this->getArg( 'returnObj' )) {
             $classname = $this->getArg( 'returnObj' );
 
@@ -360,7 +361,7 @@ abstract class Field
      *
      * @return mixed
      */
-    public function prepareOutput( $value )
+    private function prepareOutput( $value )
     {
         // custom method on field instance level wins over class method
         if ($this->getCallback( 'output' )) {
@@ -438,8 +439,6 @@ abstract class Field
     }
 
 
-
-
     /**
      * Getter for field data
      * Will call filter() if available
@@ -469,7 +468,6 @@ abstract class Field
 
         return $data;
     }
-
 
 
     /**

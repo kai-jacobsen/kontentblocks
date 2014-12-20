@@ -26,7 +26,8 @@
     "monolog/monolog": "1.*"
   },
   "require-dev": {
-    "codeclimate/php-test-reporter": "dev-master"
+    "codeclimate/php-test-reporter": "dev-master",
+    "phpunit/phpunit": "4.4.0"
   }
 }
 

@@ -87,7 +87,7 @@ class FieldSubGroup
                 'std',
                 ''
             );
-            $field->setData( $fielddata );
+            $field->setValue( $fielddata );
         }
     }
 
@@ -172,7 +172,7 @@ class FieldSubGroup
     }
 
     /**
-     * Pass through of section handler setData() on field call
+     * Pass through of section handler setValue() on field call
      * Ensures each child field receives its corresponding data
      * Part of the backend form rendering process
      *
@@ -184,7 +184,7 @@ class FieldSubGroup
         /** @var Field $field */
         foreach ($this->fields as $field) {
             $fielddata = ( !empty( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : $field->getArg( 'std', '' );
-            $field->setData( $fielddata );
+            $field->setValue( $fielddata );
         }
     }
 

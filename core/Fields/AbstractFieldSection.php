@@ -176,7 +176,7 @@ abstract class AbstractFieldSection
                 $fielddata = ( isset( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : array();
             }
 
-            $field->setData( $fielddata );
+            $field->setValue( $fielddata );
 
             // Build field form
             $field->build();

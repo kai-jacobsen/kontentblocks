@@ -118,7 +118,7 @@ final class TemplateRedirect
         /** @var \Kontentblocks\Fields\FieldRegistry $FieldRegistry */
         $FieldRegistry = Kontentblocks::getService('registry.fields');
         $Field = $FieldRegistry->getField('link', 'redirect', null, 'redirect_target_free');
-        $Field->setData($data['redirect_target_free']);
+        $Field->setValue($data['redirect_target_free']);
         $Field->setArgs(array('label' => 'Link to page'));
         $Field->setDisplay(true);
         $Field->build();
