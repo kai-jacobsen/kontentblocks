@@ -32,7 +32,7 @@ class FieldTest extends \WP_UnitTestCase
                     'input' => array( $this, 'invalid' )
                 ),
                 'conditions' => array(
-                    'viewfile' => array('test.tpl')
+                    'viewfile' => array( 'test.tpl' )
                 )
             )
         );
@@ -52,6 +52,23 @@ class FieldTest extends \WP_UnitTestCase
 
     }
 
+    public function testGetUserValueWithReturnObject()
+    {
+        // output callback calls strtoupper
+        $this->TestField->setArgs( array( 'returnObj' => 'EditableElement' ) );
+        $this->assertEquals( $this->TestField->getUserValue(), 'TESTVALUE' );
+        $this->assertEquals(
+            is_a( $this->TestField->getUserValue(), '\Kontentblocks\Fields\Returnobjects\EditableElement' ),
+            true
+        );
+    }
+
+    public function testGetUserValueInvalidReturnObject()
+    {
+        $this->TestField->setArgs(array('returnObj' => 'InvalidObject'));
+        $this->setExpectedException('Exception');
+        $this->TestField->getUserValue();
+    }
 
     /**
      * getKey() should return the set key unmodified
@@ -103,14 +120,14 @@ class FieldTest extends \WP_UnitTestCase
 
     public function testValidCondition()
     {
-        $viewfiles = $this->TestField->getCondition('viewfile');
-        $this->assertContains('test.tpl', $viewfiles);
+        $viewfiles = $this->TestField->getCondition( 'viewfile' );
+        $this->assertContains( 'test.tpl', $viewfiles );
 
     }
 
     public function testInvalidCondition()
     {
-        $this->assertFalse($this->TestField->getCondition('notSet'));
+        $this->assertFalse( $this->TestField->getCondition( 'notSet' ) );
     }
 
 
@@ -156,6 +173,18 @@ class FieldTest extends \WP_UnitTestCase
         $this->assertTrue( $this->TestField->setArgs( array( 'label' => 'Another' ) ) );
         $this->assertEquals( $this->TestField->getArg( 'label' ), 'Another' );
         $this->assertFalse( $this->TestField->setArgs( array() ) );
+    }
+
+    public function testGetDisplay()
+    {
+        $this->assertTrue( $this->TestField->getDisplay() );
+    }
+
+    public function testSetDisplay()
+    {
+        $this->TestField->setDisplay( 'false' );
+        $this->assertFalse( $this->TestField->getDisplay() );
+
     }
 
 

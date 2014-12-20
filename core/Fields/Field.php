@@ -286,7 +286,7 @@ abstract class Field
      */
     public function getDisplay()
     {
-        return filter_var( $this->args['display'], FILTER_VALIDATE_BOOLEAN );
+        return filter_var( $this->getArg('display', true), FILTER_VALIDATE_BOOLEAN );
 
     }
 
@@ -297,8 +297,7 @@ abstract class Field
      */
     public function setDisplay( $bool )
     {
-        $this->args['display'] = $bool;
-
+        $this->setArgs(array('display' => filter_var($bool, FILTER_VALIDATE_BOOLEAN)));
     }
 
     /**
@@ -335,6 +334,10 @@ abstract class Field
             // second try
             if (class_exists( $classname )) {
                 $this->returnObj = new $classname( $value, $this );
+            }
+
+            if (is_null($this->returnObj)){
+                throw new \Exception( 'requested Return Object does not exist');
             }
 
             return $this->returnObj;
@@ -507,14 +510,14 @@ abstract class Field
 
     }
 
-
-    /**
-     * @param $module
-     */
-    public function setModule( $module )
-    {
-        $this->module = $module;
-    }
+//
+//    /**
+//     * @param $module
+//     */
+//    public function setModule( $module )
+//    {
+//        $this->module = $module;
+//    }
 
 
     /**
