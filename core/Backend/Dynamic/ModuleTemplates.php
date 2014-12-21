@@ -215,9 +215,9 @@ class ModuleTemplates
             $this->createTemplate( $postId, $Storage );
         } else {
             // update existing
-            $id = $tpl['instance_id'];
-            $data = $_POST[$id];
-            $existingData = $Storage->getModuleData( $id );
+            $mid = $tpl['instance_id'];
+            $data = $_POST[$mid];
+            $existingData = $Storage->getModuleData( $mid );
             $old = ( empty( $existingData ) ) ? array() : $existingData;
 
             $moduleDef = ModuleFactory::parseModule( $tpl );
@@ -234,7 +234,7 @@ class ModuleTemplates
             // save viewfile if present
             $tpl['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
-            $Storage->saveModule( $id, $toSave );
+            $Storage->saveModule( $mid, $toSave );
             $Storage->reset();
 
             // return to original post if the edit request came from outside
@@ -325,10 +325,13 @@ class ModuleTemplates
      * @since 1.0.0
      * @return mixed
      */
-    public function postData( $data, $postarr )
+    public function postData( $data )
     {
+
+        $title = filter_var( $_POST['new-template']['name'], FILTER_SANITIZE_STRING );
+        $slug = filter_var( $_POST['new-template']['id'], FILTER_SANITIZE_STRING );
         // no template data send
-        if (empty( $_POST['new-template'] )) {
+        if (!isset( $title, $slug )) {
             return $data;
         }
 
@@ -394,8 +397,6 @@ class ModuleTemplates
     public function postTypeMessages( $messages )
     {
         $post = get_post();
-        $post_type = get_post_type( $post );
-        $post_type_object = get_post_type_object( $post_type );
 
         $messages['kb-mdtpl'] = array(
             0 => '', // Unused. Messages start at index 1.
@@ -440,7 +441,6 @@ class ModuleTemplates
         if (empty( $_POST )) {
             return false;
         }
-
 
         if (defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) {
             return false;

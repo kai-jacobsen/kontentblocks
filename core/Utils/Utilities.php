@@ -429,4 +429,6 @@ class Utilities
         JSONBridge::getInstance()->registerData( 'ModuleCategories', null, $cats );
         return $cats;
     }
+
+
 }

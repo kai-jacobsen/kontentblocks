@@ -243,8 +243,6 @@ class DynamicAreas
     public function postTypeMessages( $messages )
     {
         $post = get_post();
-        $post_type = get_post_type( $post );
-        $post_type_object = get_post_type_object( $post_type );
 
         $messages['kb-dyar'] = array(
             0 => '', // Unused. Messages start at index 1.

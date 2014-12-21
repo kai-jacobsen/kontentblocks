@@ -476,14 +476,14 @@ abstract class Module
         }
         if ($this->getSetting( 'useViewLoader' ) && is_null( $this->View )) {
             $tpl = $this->getViewfile();
-            $T = new ModuleView( $this );
+            $ModuleView = new ModuleView( $this );
             $full = $this->ViewLoader->getTemplateByName( $tpl );
             if (isset( $full['fragment'] )) {
-                $T->setTplFile( $full['fragment'] );
-                $T->setPath( $full['basedir'] );
+                $ModuleView->setTplFile( $full['fragment'] );
+                $ModuleView->setPath( $full['basedir'] );
             }
 
-            $this->View = $T;
+            $this->View = $ModuleView;
             return $this->View;
 
         } else if ($this->View) {
