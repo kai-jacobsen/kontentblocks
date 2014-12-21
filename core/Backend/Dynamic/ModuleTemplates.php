@@ -320,13 +320,16 @@ class ModuleTemplates
      * we need to manually save essential post data
      *
      * @param $data
-     * @param $postarr
+     * @param $post
+     * @return mixed
      *
      * @since 1.0.0
-     * @return mixed
      */
-    public function postData( $data )
+    public function postData( $data, $post )
     {
+        if ($post['post_type'] !== 'kb_mdtpl') {
+            return $data;
+        }
 
         $title = filter_var( $_POST['new-template']['name'], FILTER_SANITIZE_STRING );
         $slug = filter_var( $_POST['new-template']['id'], FILTER_SANITIZE_STRING );
