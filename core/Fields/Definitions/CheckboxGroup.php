@@ -81,10 +81,20 @@ Class CheckboxGroup extends Field
         if (is_null( $fielddata )) {
             return null;
         }
-
         return $fielddata;
+    }
 
-
+    /**
+     * @param FieldForm $Form
+     */
+    public function renderHidden( FieldForm $Form )
+    {
+        $value = $this->getValue();
+        if (is_array( $value ) && !empty( $value )) {
+            foreach ($value as $item) {
+                echo "<input type='hidden' name='{$Form->getFieldName( true )}' value='{$item}' >";
+            }
+        }
     }
 
 }

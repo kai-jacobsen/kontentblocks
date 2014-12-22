@@ -85,6 +85,7 @@ class Utilities
                     'wplink',
                     'wpdialogs',
                     'wpview',
+                    'wpfullscreen'
                 )
             )
         );
@@ -429,4 +430,6 @@ class Utilities
         JSONBridge::getInstance()->registerData( 'ModuleCategories', null, $cats );
         return $cats;
     }
+
+
 }

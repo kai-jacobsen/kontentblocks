@@ -65,8 +65,8 @@ class FieldTest extends \WP_UnitTestCase
 
     public function testGetUserValueInvalidReturnObject()
     {
-        $this->TestField->setArgs(array('returnObj' => 'InvalidObject'));
-        $this->setExpectedException('Exception');
+        $this->TestField->setArgs( array( 'returnObj' => 'InvalidObject' ) );
+        $this->setExpectedException( 'Exception' );
         $this->TestField->getUserValue();
     }
 

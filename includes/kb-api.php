@@ -106,7 +106,7 @@ function getPanel( $id = null )
     /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
     $Panel = $Registry->get( $id );
     if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
-        return $Panel;
+        return $Panel->setup();
     } else {
         return new \WP_Error(
             'Kontentblocks',

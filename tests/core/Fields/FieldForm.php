@@ -3,7 +3,7 @@
 namespace core\Fields;
 
 
-class FieldForm
+class FieldForm extends \WP_UnitTestCase
 {
 
     public $TestField;
@@ -14,11 +14,12 @@ class FieldForm
     {
         $Registry = \Kontentblocks\Kontentblocks::getService( 'registry.fields' );
         $this->TestField = $Registry->getField( 'text', 'dummyid', 'dummysubkey', 'okey' );
-        $this->TestField->setData( 'Testvalue' );
+        $this->TestField->setValue( 'Testvalue' );
         $this->TestField->setArgs(
             array(
                 'label' => 'Testlabel',
                 'description' => 'Testdescription',
+                'placeholder' => 'Placeholder',
                 'callbacks' => array(
                     'output' => array( $this, 'outputCallback' ),
                     'input' => array( $this, 'invalid' )
@@ -27,7 +28,7 @@ class FieldForm
         );
 
 
-        $this->TestForm = new \Kontentblocks\Fields\FieldForm($this->TestField);
+        $this->TestForm = new \Kontentblocks\Fields\FieldForm( $this->TestField );
 
     }
 
@@ -56,5 +57,18 @@ class FieldForm
             array( 'key1', true, 'key3', 'dummyid[dummysubkey][okey][key1][][key3]' )
         );
     }
+
+    public function testGetPlaceholder()
+    {
+        $this->assertEquals( $this->TestForm->getPlaceholder( 'Placeholder' ), 'Placeholder' );
+    }
+
+    public function testGetInputFieldid()
+    {
+        $this->assertEquals( $this->TestForm->getInputFieldId(), 'dummyid_okey' );
+
+    }
+
+
 
 }

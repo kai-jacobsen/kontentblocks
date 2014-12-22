@@ -113,7 +113,7 @@ KB.IEdit.Text = function (el) {
               url: ajaxurl,
               data: {
                 action: 'applyContentFilter',
-                data: content.replace(/\'/g, '%27'),
+                data: content,
                 module: ed.module.toJSON(),
                 _ajax_nonce: KB.Config.getNonce('read')
               },

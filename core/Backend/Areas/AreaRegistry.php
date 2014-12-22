@@ -56,22 +56,6 @@ class AreaRegistry
 
     protected $AreaDynamicManager;
 
-    /**
-     * Singleton Pattern
-     * Get the Instance of the Area Directory
-     * original instantiated on plugin startup
-     * @return object | Area directory instance
-     * @since 1.0.0
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-
-    }
 
     /**
      * Constructer
@@ -331,6 +315,9 @@ class AreaRegistry
      */
     public function connect( $classname, $args )
     {
+
+
+
         if (!empty( $args['settings']['connect'] ) && $args['settings']['connect'] === 'any') {
 
             foreach ($this->rawAreas as $area_id => $area) {
@@ -339,7 +326,6 @@ class AreaRegistry
                 }
             }
         } else if (!empty( $args['settings']['connect'] ) and is_array( $args['settings']['connect'] )) {
-
             foreach ($args['settings']['connect'] as $id) {
                 // check for context
                 if (in_array( $id, array( 'top', 'normal', 'side', 'bottom' ) )) {
@@ -353,7 +339,6 @@ class AreaRegistry
                         $this->connect( $classname, $args );
                     }
                 } else {
-
                     if (empty( $this->rawAreas[$id] )) {
                         continue;
                     }

@@ -2,9 +2,7 @@
 
 namespace Kontentblocks\Ajax\Frontend;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -15,6 +13,9 @@ use Kontentblocks\Utils\Utilities;
 class UpdateModule
 {
 
+    /**
+     *
+     */
     public static function run()
     {
         global $post;
@@ -23,31 +24,23 @@ class UpdateModule
 
 //        define('KB_FRONTEND_SAVE', true);
 
-        $module = $_POST['module'];
-        $data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $postdata = self::setupPostData();
 
-        if (is_null( $data )) {
-            wp_send_json_error();
-        }
-
-        $postId = filter_var( $module['post_id'], FILTER_VALIDATE_INT );
-        $editmode = filter_input( INPUT_POST, 'editmode', FILTER_SANITIZE_STRING );
-        $update = ( isset( $editmode ) && $editmode === 'update' ) ? true : false;
         // setup global post
-        $post = get_post( $postId );
+        $post = get_post( $postdata->postId );
         setup_postdata( $post );
 
         // flags
 
-        $Environment = Utilities::getEnvironment( $module['post_id'] );
+        $Environment = Utilities::getEnvironment( $postdata->postId );
 
-        $newData = $data[$module['instance_id']];
+        $newData = $postdata->data[$postdata->module['instance_id']];
 
-        $Factory = new ModuleFactory( $module['class'], $module, $Environment );
+        $Factory = new ModuleFactory( $postdata->module['class'], $postdata->module, $Environment );
         $Module = $Factory->getModule();
 
         // master module will change instance id to correct template id
-        $module = apply_filters( 'kb.modify.module.save', $module );
+        $module = apply_filters( 'kb.modify.module.save', $postdata->module );
 
         // gather data
         $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
@@ -55,7 +48,7 @@ class UpdateModule
 
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
-        if ($update) {
+        if ($postdata->update) {
             $Environment->getStorage()->saveModule( $module['instance_id'], wp_slash( $mergedData ) );
         }
 
@@ -69,9 +62,21 @@ class UpdateModule
         );
 
         // @TODO depreacate
-        do_action( 'kb_save_frontend_module', $module, $update );
+        do_action( 'kb_save_frontend_module', $module, $postdata->update );
         Utilities::remoteConcatGet( $module['post_id'] );
         wp_send_json( $return );
+    }
+
+    private static function setupPostData()
+    {
+        $stdClass = new \stdClass();
+        $stdClass->data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->module = filter_input( INPUT_POST, 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->postId = filter_var( $stdClass->module['post_id'], FILTER_VALIDATE_INT );
+        $stdClass->editmode = filter_input( INPUT_POST, 'editmode', FILTER_SANITIZE_STRING );
+        $stdClass->update = ( isset( $stdClass->editmode ) && $stdClass->editmode === 'update' ) ? true : false;
+
+        return $stdClass;
     }
 
 }

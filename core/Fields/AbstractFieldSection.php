@@ -216,7 +216,6 @@ abstract class AbstractFieldSection
 
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->Fields as $field) {
-            $field->setModule( $this->Module );
             $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
             if (isset( $data[$field->getKey()] )) {
                 $collect[$field->getKey()] = $field->_save( $data[$field->getKey()], $old );

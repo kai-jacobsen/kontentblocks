@@ -18,7 +18,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
       url: ajaxurl,
       data: {
         action: 'updateModule',
-        data: jQuery.param(moduleData).replace(/\'/g, '%27'),
+        data: moduleData,
         module: that.model.toJSON(),
         editmode: 'update',
         refresh: refresh,

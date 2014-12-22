@@ -86,4 +86,12 @@ Class Checkbox extends Field
         return filter_var( $val, FILTER_VALIDATE_BOOLEAN );
     }
 
+    /**
+     * @param FieldForm $Form
+     */
+    public function renderHidden(FieldForm $Form)
+    {
+        echo "<input type='hidden' name='{$Form->getFieldName()}' value='{$this->getValue()}' >";
+    }
+
 }

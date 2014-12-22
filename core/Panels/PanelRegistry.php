@@ -17,17 +17,7 @@ class PanelRegistry
      */
     public $panels = array();
 
-    /**
-     * @return PanelRegistry
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
 
-        return self::$instance;
-    }
 
     /**
      * Add a Panel

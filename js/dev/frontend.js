@@ -1039,7 +1039,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
             url: ajaxurl,
             data: {
                 action: "updateModule",
-                data: jQuery.param(moduleData).replace(/\'/g, "%27"),
+                data: moduleData,
                 module: that.model.toJSON(),
                 editmode: "update",
                 refresh: refresh,
@@ -1697,7 +1697,7 @@ KB.IEdit.Text = function(el) {
                             url: ajaxurl,
                             data: {
                                 action: "applyContentFilter",
-                                data: content.replace(/\'/g, "%27"),
+                                data: content,
                                 module: ed.module.toJSON(),
                                 _ajax_nonce: KB.Config.getNonce("read")
                             },

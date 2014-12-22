@@ -238,9 +238,8 @@ abstract class OptionsPanel extends AbstractPanel
         if (is_null( $this->FieldManager )) {
             $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
         }
-
         $this->fields( $this->FieldManager )->setup( $this->data );
-
+        $this->data = $this->getData();
         return $this;
 
     }
@@ -281,7 +280,7 @@ abstract class OptionsPanel extends AbstractPanel
 
     public function getMenuLink()
     {
-        if (current_user_can('edit_kontentblocks')){
+        if (current_user_can( 'edit_kontentblocks' )) {
             return $this->menuUri;
         }
     }
