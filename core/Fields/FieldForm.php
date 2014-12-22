@@ -41,7 +41,7 @@ class FieldForm
     public function getInputFieldId( $rnd = false )
     {
         $number = ( $rnd ) ? '_' . uniqid() : '';
-        $idAttr = sanitize_title( $this->Field->getFieldId() . '_' . $this->Field->getKey()  . $number );
+        $idAttr = sanitize_title( $this->Field->getFieldId() . '_' . $this->Field->getKey() . $number );
         return esc_attr( $idAttr );
     }
 
@@ -58,36 +58,14 @@ class FieldForm
      */
     public function getFieldName( $array = null, $akey = null, $multiple = null )
     {
-
         $base = $this->Field->getBaseId() . '[' . $this->Field->getKey() . ']';
         $array = $this->evaluateFieldNameParam( $array );
         $akey = $this->evaluateFieldNameParam( $akey );
         $multiple = $this->evaluateFieldNameParam( $multiple );
 
         return esc_attr( $base . $array . $akey . $multiple );
-
     }
 
-    public function getOldFieldName( $array = false, $akey = null, $multiple = false )
-    {
-        if ($array === true && $akey !== null && $multiple) {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}][{$akey}][]" );
-        } elseif ($array === true && $akey !== null) {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}][{$akey}]" );
-        } else if (is_bool( $array ) && $array === true) {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}][]" );
-        } else if (is_string( $array ) && is_string( $akey ) && is_string( $multiple )) {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}][$array][$akey][$multiple]" );
-        } else if (is_string( $array ) && is_string( $akey ) && $multiple) {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}][$array][$akey][]" );
-        } else if (is_string( $array ) && is_string( $akey )) {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}][$array][$akey]" );
-        } else if (is_string( $array )) {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}][$array]" );
-        } else {
-            return esc_attr( "{$this->Field->getBaseId()}[{$this->Field->getKey()}]" );
-        }
-    }
 
     /**
      * @param mixed $param
@@ -125,7 +103,7 @@ class FieldForm
     {
         $description = $this->Field->getArg( 'description' );
         if (!empty( $description )) {
-            echo "<p class='description kb-field--description'>{$this->Field->getArg( 'description' )}</p>";
+            echo "<p class='description kb-field--description'>{$description}</p>";
         }
 
     }
@@ -143,56 +121,6 @@ class FieldForm
             )}'>{$this->Field->getArg(
                 'label'
             )}</label>";
-        }
-    }
-
-    /**
-     * Handles the generation of hidden input fields with the correct data
-     * @return bool false if there is no data to render
-     * @since 1.0.0
-     */
-    public function renderHidden()
-    {
-        $value = $this->Field->getValue();
-        if (empty( $value )) {
-            return false;
-        }
-
-        if (is_array( $value )) {
-            $is_assoc = Utilities::isAssocArray( $value );
-
-            if (!$is_assoc) { // index array
-                foreach ($value as $item) {
-                    if (is_array( $item ) && Utilities::isAssocArray( $item )) {
-                        foreach ($item as $ikey => $ival) {
-                            echo "<input type='hidden' name='{$this->getFieldName(
-                                $ikey,
-                                true,
-                                null
-                            )}' value='{$ival}' >";
-                        }
-                    } else {
-                        foreach ($item as $singleItem){
-                            echo "<input type='hidden' name='{$this->getFieldName( true )}' value='{$singleItem}' >";
-                        }
-                    }
-                }
-            } else {
-                foreach ($value as $k => $v) {
-                    if (is_array($v) && Utilities::isAssocArray($v)){
-                        foreach($v as $kk => $kv){
-                            echo "<input type='hidden' name='{$this->getFieldName( $k, $kk )}' value='{$kv}' >";
-                        }
-                    } else {
-                        foreach($v as  $vvv){
-                            echo "<input type='hidden' name='{$this->getFieldName( $k, true )}' value='{$vvv}' >";
-                        }
-
-                    }
-                }
-            }
-        } else {
-            echo "<input type='hidden' name='{$this->getOldFieldName()}' value='{$value}' >";
         }
     }
 
@@ -277,8 +205,8 @@ class FieldForm
         // the current context
         // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
         if (!$this->Field->getDisplay()) {
-            if ($this->Field->getSetting( 'renderHidden' ) && method_exists($this->Field, 'renderHidden')) {
-                $this->Field->renderHidden($this);
+            if ($this->Field->getSetting( 'renderHidden' ) && method_exists( $this->Field, 'renderHidden' )) {
+                $this->Field->renderHidden( $this );
             }
             // Full markup
         } else {

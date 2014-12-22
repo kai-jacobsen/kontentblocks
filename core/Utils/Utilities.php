@@ -85,6 +85,7 @@ class Utilities
                     'wplink',
                     'wpdialogs',
                     'wpview',
+                    'wpfullscreen'
                 )
             )
         );

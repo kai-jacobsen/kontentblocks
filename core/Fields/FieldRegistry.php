@@ -25,14 +25,6 @@ class FieldRegistry
     protected $fields;
     protected $Services;
 
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-    }
 
 
     /**
