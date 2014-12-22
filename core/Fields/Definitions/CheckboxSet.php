@@ -36,18 +36,24 @@ Class CheckboxSet extends Field
 
         foreach ($options as $item) {
 
+
             if (!isset( $item['key'] ) OR !isset( $item['label'] ) OR !isset( $item['value'] )) {
                 throw new Exception(
                     'Provide valid checkbox items. Check your code. Either a key, value or label is missing'
                 );
             }
 
+            if (!isset( $data[$item['key']] )) {
+                echo "<p>Incompatible dataset</p>";
+                $data[$item['key']] = false;
+            }
+
             $checked = ( $item['value'] === $data[$item['key']] ) ? 'checked="checked"' : '';
             echo "<div class='kb-checkboxset-item'><label><input type='checkbox' id='{$Form->getInputFieldId(
             )}' name='{$Form->getFieldName(
-                true,
                 $item['key'],
-                false
+                null,
+                null
             )}' value='{$item['value']}'  {$checked} /> {$item['label']}</label></div>";
         }
 
@@ -136,4 +142,26 @@ Class CheckboxSet extends Field
 
     }
 
+    /**
+     * @param FieldForm $Form
+     */
+    public function renderHidden( FieldForm $Form )
+    {
+        $value = $this->getValue();
+        $options = $this->getArg( 'options', array() );
+
+        foreach ($options as $item) {
+            if (!$this->validateItem($item)) {
+                continue;
+            }
+            echo "<input type='hidden' name='{$Form->getFieldName($item['key'])}' value='{$value[$item['key']]}' >";
+        }
+
+    }
+
+    private function validateItem( $item )
+    {
+        return isset( $item['key'], $item['label'], $item['value'] );
+
+    }
 }

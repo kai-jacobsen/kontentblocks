@@ -313,6 +313,7 @@ abstract class Field
      * @TODO Overall logic is fuxxed up
      * @since 1.0.0
      * @return object
+     * @throws \Exception
      */
     public function getUserValue()
     {
