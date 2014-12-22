@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Actions\Ajax;
+namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
