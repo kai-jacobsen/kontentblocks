@@ -3702,13 +3702,18 @@ button.Zebra_DatePicker_Icon_Inside {
   zoom: 1;
 }
 /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+.kb-field--tabs a:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+/* line 10, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav {
   margin-bottom: 0px;
   margin-left: 0px;
   padding: 10px 0 0 0;
   overflow: hidden;
 }
-/* line 12, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 16, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li {
   padding: 8px 0px 5px 0px;
   background: #fff;
@@ -3717,7 +3722,7 @@ button.Zebra_DatePicker_Icon_Inside {
   position: relative;
   top: 0px;
 }
-/* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 25, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li a {
   padding: 2px 22px;
   text-decoration: none;
@@ -3727,27 +3732,27 @@ button.Zebra_DatePicker_Icon_Inside {
   font-size: 13px;
   border: none;
 }
-/* line 29, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 33, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li a:focus, .kb-field--tabs ul.ui-tabs-nav li a:active {
   border: none;
   outline: none;
 }
-/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 38, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li a:hover {
   color: #666;
   border: none;
 }
-/* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li.ui-tabs-active {
   background-color: #fff;
-  border-right: 1px solid #eee;
 }
-/* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs ul.ui-tabs-nav li.ui-tabs-active a {
   color: #000;
   font-weight: 500;
+  border-bottom: 1px solid #222;
 }
-/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
+/* line 57, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
 .kb-field--tabs .ui-widget-content {
   padding: 0px;
 }

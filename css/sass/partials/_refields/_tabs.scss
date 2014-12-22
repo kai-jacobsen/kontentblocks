@@ -3,6 +3,10 @@
   position: relative;
   zoom: 1;
 
+  a:focus{
+    box-shadow: none;
+  }
+
   ul.ui-tabs-nav{
     margin-bottom: 0px;
     margin-left: 0px;
@@ -39,11 +43,12 @@
 
       &.ui-tabs-active{
         background-color: #fff;
-        border-right: 1px solid #eee;
+//        border-right: 1px solid #eee;
 
         a{
           color: #000;
           font-weight: 500;
+          border-bottom: 1px solid #222;
         }
       }
     }
