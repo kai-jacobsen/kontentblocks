@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-20 */
+/*! Kontentblocks DevVersion 2014-12-22 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
