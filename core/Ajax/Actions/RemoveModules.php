@@ -1,30 +1,29 @@
 <?php
 
-namespace Kontentblocks\Ajax;
+namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Common\Data\DataInputInterface;
 
 class RemoveModules
 {
 
-    public static function run()
+    public static function run( DataInputInterface $Request )
     {
-        check_ajax_referer( 'kb-delete' );
 
         if (!current_user_can( 'edit_kontentblocks' )) {
             wp_send_json_error();
         }
 
-        $postId  = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $module  = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
+        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $module = $Request->getFiltered( 'module', FILTER_SANITIZE_STRING );
         $Storage = new ModuleStorage( $postId );
 
         $BackupManager = new BackupDataStorage( $Storage );
         $BackupManager->backup( "Before Module: {$module} was deleted" );
         $update = $Storage->removeFromIndex( $module );
-
         wp_send_json( $update );
     }
 

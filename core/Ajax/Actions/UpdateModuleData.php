@@ -1,10 +1,8 @@
 <?php
 
-namespace Kontentblocks\Ajax;
+namespace Kontentblocks\Actions\Ajax;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**

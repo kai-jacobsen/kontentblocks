@@ -3,8 +3,7 @@
 namespace Kontentblocks\Backend\Areas;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Language\I18n;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -485,7 +484,7 @@ class AreaRegistry
     public function setupJSON()
     {
         Utilities::setupCats();
-        JSONBridge::getInstance()->registerData( 'AreaTemplates', null, $this->templates );
+        Kontentblocks::getService('utility.jsontransport')->registerData( 'AreaTemplates', null, $this->templates );
     }
 
 }

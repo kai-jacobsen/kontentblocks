@@ -1,5 +1,7 @@
 <?php
 
+use Kontentblocks\Kontentblocks;
+
 $_tests_dir = getenv( 'WP_DEVELOP_DIR' );
 if (!$_tests_dir) {
     $_tests_dir = '/tmp/wordpress/wordpress-tests-lib';
@@ -12,7 +14,7 @@ function _manually_load_plugin()
     require dirname( __FILE__ ) . '/../kontentblocks.php';
     add_theme_support( 'kontentblocks' );
     $dbVersion = get_option( 'kb_dbVersion' );
-    if ($dbVersion !== \Kontentblocks\Kontentblocks::TABLEVERSION) {
+    if ($dbVersion !== Kontentblocks::TABLEVERSION) {
         global $wpdb;
 
         $backups = $wpdb->prefix . "kb_backups";
@@ -29,7 +31,7 @@ function _manually_load_plugin()
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
 
-        update_option( "kb_dbVersion", \Kontentblocks\Kontentblocks::TABLEVERSION );
+        update_option( "kb_dbVersion", Kontentblocks::TABLEVERSION );
     }
 
 

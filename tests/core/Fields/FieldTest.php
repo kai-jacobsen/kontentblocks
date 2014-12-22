@@ -2,6 +2,7 @@
 
 namespace core\Fields;
 
+use Kontentblocks\Kontentblocks;
 use ReflectionClass;
 
 /**
@@ -20,7 +21,7 @@ class FieldTest extends \WP_UnitTestCase
     {
         parent::setUp();
 
-        $Registry = \Kontentblocks\Kontentblocks::getService( 'registry.fields' );
+        $Registry = Kontentblocks::getService( 'registry.fields' );
         $this->TestField = $Registry->getField( 'text', 'dummyid', 'dummysubkey', 'okey' );
         $this->TestField->setValue( 'Testvalue' );
         $this->TestField->setArgs(

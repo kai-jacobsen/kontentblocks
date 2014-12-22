@@ -3,8 +3,9 @@
 namespace Kontentblocks\Frontend;
 
 
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -37,7 +38,7 @@ class SingleModuleRenderer
         );
         echo $this->Module->module();
         echo "</{$addArgs['element']}>";
-        JSONBridge::getInstance()->registerModule( $this->Module->toJSON() );
+        Kontentblocks::getService('utility.jsontransport')->registerModule( $this->Module->toJSON() );
     }
 
     private function setupArgs( $args )

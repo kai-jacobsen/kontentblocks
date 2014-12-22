@@ -5,7 +5,7 @@ namespace Kontentblocks\Fields\Definitions;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldForm;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 
 /**
  * Flexible Fields
@@ -125,7 +125,7 @@ Class FlexibleFields extends Field
             }
         }
 
-        $Bridge = JSONBridge::getInstance();
+        $Bridge = Kontentblocks::getService('utility.jsontransport');
         $Bridge->registerFieldData(
             $this->getFieldId(),
             $this->type,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Ajax\Frontend;
+namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Backend\Areas\AreaSettingsModel;
 

@@ -2,10 +2,10 @@
 
 namespace Kontentblocks\Backend\Areas;
 
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -149,7 +149,7 @@ class Area
                 $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
                 $Module = $Factory->getModule();
                 $Module->renderForm();
-                JSONBridge::getInstance()->registerModule( $Module->toJSON() );
+                Kontentblocks::getService('utility.jsontransport')->registerModule( $Module->toJSON() );
             }
         }
 
@@ -196,7 +196,7 @@ class Area
             'dynamic' => $this->dynamic
         );
 
-        JSONBridge::getInstance()->registerArea( $area );
+        Kontentblocks::getService('utility.jsontransport')->registerArea( $area );
     }
 
     /**

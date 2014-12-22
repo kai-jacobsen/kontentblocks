@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks\Ajax\Frontend;
+namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -53,7 +53,7 @@ class GetModuleForm
         $html = ob_get_clean();
         $return = array(
             'html' => stripslashes_deep( $html ),
-            'json' => stripslashes_deep( JSONBridge::getInstance()->getJSON() )
+            'json' => stripslashes_deep( Kontentblocks::getService('utility.jsontransport')->getJSON() )
         );
         wp_send_json( $return );
     }

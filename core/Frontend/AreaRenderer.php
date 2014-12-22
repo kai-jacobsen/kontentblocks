@@ -5,8 +5,9 @@ namespace Kontentblocks\Frontend;
 use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -193,7 +194,7 @@ class AreaRenderer
      */
     public function afterModule( $_after, $Module )
     {
-        JSONBridge::getInstance()->registerModule( $Module->toJSON() );
+        Kontentblocks::getService('utility.jsontransport')->registerModule( $Module->toJSON() );
 
         $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
         if (!empty( $layout )) {

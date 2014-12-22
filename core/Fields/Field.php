@@ -3,7 +3,8 @@
 
 namespace Kontentblocks\Fields;
 
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 use Kontentblocks\Fields\Returnobjects;
 
@@ -432,13 +433,13 @@ abstract class Field
     public function javascriptSettings()
     {
 
-        JSONBridge::getInstance()->registerFieldArgs( $this->uniqueId, $this->cleanedArgs() );
+        Kontentblocks::getService('utility.jsontransport')->registerFieldArgs( $this->uniqueId, $this->cleanedArgs() );
 
         $settings = $this->getArg( 'jSettings' );
         if (!$settings) {
             return;
         }
-        JSONBridge::getInstance()->registerData( 'FieldsConfig', $this->uniqueId, $settings );
+        Kontentblocks::getService('utility.jsontransport')->registerData( 'FieldsConfig', $this->uniqueId, $settings );
 
     }
 

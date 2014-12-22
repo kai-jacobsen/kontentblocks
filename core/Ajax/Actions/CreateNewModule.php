@@ -1,13 +1,11 @@
 <?php
 
-namespace Kontentblocks\Ajax;
+namespace Kontentblocks\Actions\Ajax;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
-use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -259,7 +257,7 @@ class CreateNewModule
             'id' => $this->newInstanceID,
             'module' => $this->newModule,
             'name' => $this->newInstance->settings['publicName'],
-            'json' => JSONBridge::getInstance()->getJSON(),
+            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON(),
             'html' => $html
         );
 

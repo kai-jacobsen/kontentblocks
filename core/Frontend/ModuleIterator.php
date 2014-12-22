@@ -4,7 +4,7 @@ namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 
 /**
  * Class ModuleIterator

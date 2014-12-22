@@ -14,6 +14,7 @@
 namespace Kontentblocks;
 
 use Detection\MobileDetect;
+use Kontentblocks\Ajax\AjaxCallbackHandler;
 use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\ModuleTemplates;
@@ -25,6 +26,7 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Modules\ModuleViewsRegistry;
 use Kontentblocks\Panels\PanelRegistry;
 use Kontentblocks\Templating\Twig;
+use Kontentblocks\Utils\JSONTransport;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
@@ -84,6 +86,8 @@ Class Kontentblocks
 //        add_action( 'init', array( $this, 'loadFields' ), 9 );
 //
 //        add_action( 'init', array( $this, 'initInterface' ), 9 );
+
+        $AjaxHandler = $this->Services['utility.ajaxhandler'];
 
 
         if (defined( 'WP_LOCAL_DEV' ) && WP_LOCAL_DEV) {
@@ -355,6 +359,14 @@ Class Kontentblocks
 
         $this->Services['utility.mobileDetect'] = function ( $container ) {
             return new MobileDetect();
+        };
+
+        $this->Services['utility.jsontransport'] = function ($container){
+            return new JSONTransport();
+        };
+
+        $this->Services['utility.ajaxhandler'] = function ($container){
+            return new AjaxCallbackHandler();
         };
     }
 

@@ -4,7 +4,8 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldForm;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\JSONTransport;
 
 /**
  * Simple text input field
@@ -55,7 +56,7 @@ Class Gallery extends Field
 
             $forJSON = array_values( $data['images'] );
         }
-        $Bridge = JSONBridge::getInstance();
+        $Bridge = Kontentblocks::getService('utility.jsontransport');
         $Bridge->registerFieldData(
             $this->getFieldId(),
             $this->type,

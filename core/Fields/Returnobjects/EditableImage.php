@@ -2,8 +2,9 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\ImageResize;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 
 /**
  * Class EditableImage
@@ -343,7 +344,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             'upscale' => $this->upscale
 
         );
-        JSONBridge::getInstance()->registerData( 'FrontSettings', $this->uniqueId, $json );
+        Kontentblocks::getService('utility.jsontransport')->registerData( 'FrontSettings', $this->uniqueId, $json );
     }
 
 

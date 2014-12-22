@@ -1,6 +1,6 @@
 <?php
 
-use Kontentblocks\Ajax\CreateNewModule;
+use Kontentblocks\Ajax\Actions\CreateNewModule;
 
 /**
  * Actual actions are wrapped in (static) classes to
@@ -14,7 +14,14 @@ use Kontentblocks\Ajax\CreateNewModule;
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_resortModules', array( 'Kontentblocks\Ajax\SortModules', 'run' ) );
+//add_action(
+//    'wp_ajax_resortModules',
+//    function () {
+//        check_ajax_referer( 'kb-update' );
+//        $Request = new \Kontentblocks\Common\Data\PostInputData( $_POST );
+//        Kontentblocks\Ajax\Actions\SortModules::run( $Request );
+//    }
+//);
 
 /**
  * -----------------------------------------
@@ -22,7 +29,15 @@ add_action( 'wp_ajax_resortModules', array( 'Kontentblocks\Ajax\SortModules', 'r
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_removeModules', array( 'Kontentblocks\Ajax\RemoveModules', 'run' ) );
+add_action(
+    'wp_ajax_removeModules',
+    function () {
+        check_ajax_referer( 'kb-delete' );
+        $Request = new \Kontentblocks\Common\Data\PostInputData( $_POST );
+        Kontentblocks\Ajax\Actions\RemoveModules::run( $Request );
+    }
+);
+
 
 /**
  * -----------------------------------------
@@ -30,7 +45,7 @@ add_action( 'wp_ajax_removeModules', array( 'Kontentblocks\Ajax\RemoveModules', 
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_changeModuleStatus', array( 'Kontentblocks\Ajax\ChangeModuleStatus', 'run' ) );
+add_action( 'wp_ajax_changeModuleStatus', array( 'Kontentblocks\Ajax\Actions\ChangeModuleStatus', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -38,7 +53,7 @@ add_action( 'wp_ajax_changeModuleStatus', array( 'Kontentblocks\Ajax\ChangeModul
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_changeArea', array( 'Kontentblocks\Ajax\ChangeArea', 'run' ) );
+add_action( 'wp_ajax_changeArea', array( 'Kontentblocks\Ajax\Actions\ChangeArea', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -58,14 +73,14 @@ add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
  * Handler for creating new modules
  * -----------------------------------------
  */
-add_action( 'wp_ajax_duplicateModule', array( 'Kontentblocks\Ajax\DuplicateModule', 'run' ) );
+add_action( 'wp_ajax_duplicateModule', array( 'Kontentblocks\Ajax\Actions\DuplicateModule', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler onsite saving
  * -----------------------------------------
  */
-add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\AfterAreaChange', 'run' ) );
+add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -73,7 +88,7 @@ add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\AfterAreaChang
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_saveInlineEdit', array( 'Kontentblocks\Ajax\Frontend\SaveInlineEdit', 'run' ) );
+add_action( 'wp_ajax_saveInlineEdit', array( 'Kontentblocks\Ajax\Actions\Frontend\SaveInlineEdit', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -81,7 +96,7 @@ add_action( 'wp_ajax_saveInlineEdit', array( 'Kontentblocks\Ajax\Frontend\SaveIn
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_getModuleForm', array( 'Kontentblocks\Ajax\Frontend\GetModuleForm', 'run' ) );
+add_action( 'wp_ajax_getModuleForm', array( 'Kontentblocks\Ajax\Actions\Frontend\GetModuleForm', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -89,14 +104,14 @@ add_action( 'wp_ajax_getModuleForm', array( 'Kontentblocks\Ajax\Frontend\GetModu
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_updateModule', array( 'Kontentblocks\Ajax\Frontend\UpdateModule', 'run' ) );
+add_action( 'wp_ajax_updateModule', array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateModule', 'run' ) );
 
 /**
  * -----------------------------------------
  * Handler backend async saving
  * -----------------------------------------
  */
-add_action( 'wp_ajax_updateModuleData', array( 'Kontentblocks\Ajax\UpdateModuleData', 'run' ) );
+add_action( 'wp_ajax_updateModuleData', array( 'Kontentblocks\Ajax\Actions\UpdateModuleData', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -104,7 +119,7 @@ add_action( 'wp_ajax_updateModuleData', array( 'Kontentblocks\Ajax\UpdateModuleD
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_getSanitizedId', array( 'Kontentblocks\Ajax\GetSanitizedId', 'run' ) );
+add_action( 'wp_ajax_getSanitizedId', array( 'Kontentblocks\Ajax\Actions\GetSanitizedId', 'run' ) );
 
 
 /**
@@ -112,7 +127,7 @@ add_action( 'wp_ajax_getSanitizedId', array( 'Kontentblocks\Ajax\GetSanitizedId'
  * Frontend get resized image
  * -----------------------------------------
  */
-add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Frontend\FieldGetImage', 'run' ) );
+add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' ) );
 
 
 /**
@@ -121,7 +136,7 @@ add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Frontend\FieldGe
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_getRemoteEditor', array( 'Kontentblocks\Ajax\RemoteGetEditor', 'run' ) );
+add_action( 'wp_ajax_getRemoteEditor', array( 'Kontentblocks\Ajax\Actions\Actions\RemoteGetEditor', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -129,7 +144,7 @@ add_action( 'wp_ajax_getRemoteEditor', array( 'Kontentblocks\Ajax\RemoteGetEdito
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_applyContentFilter', array( 'Kontentblocks\Ajax\Frontend\ApplyContentFilter', 'run' ) );
+add_action( 'wp_ajax_applyContentFilter', array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' ) );
 
 
 /**
@@ -137,7 +152,7 @@ add_action( 'wp_ajax_applyContentFilter', array( 'Kontentblocks\Ajax\Frontend\Ap
  * Save area layout from frontend
  * -----------------------------------------
  */
-add_action( 'wp_ajax_saveAreaLayout', array( 'Kontentblocks\Ajax\Frontend\SaveAreaLayout', 'run' ) );
+add_action( 'wp_ajax_saveAreaLayout', array( 'Kontentblocks\Ajax\Actions\Frontend\SaveAreaLayout', 'run' ) );
 
 
 /**
@@ -145,4 +160,4 @@ add_action( 'wp_ajax_saveAreaLayout', array( 'Kontentblocks\Ajax\Frontend\SaveAr
  * Undraft module from frontend
  * -----------------------------------------
  */
-add_action( 'wp_ajax_undraftModule', array( 'Kontentblocks\Ajax\Frontend\UndraftModule', 'run' ) );
+add_action( 'wp_ajax_undraftModule', array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' ) );

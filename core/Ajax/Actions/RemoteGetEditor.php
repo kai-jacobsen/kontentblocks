@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Ajax;
+namespace Kontentblocks\Actions\Ajax;
 
 use Kontentblocks\Utils\Utilities;
 

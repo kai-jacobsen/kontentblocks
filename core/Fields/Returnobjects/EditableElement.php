@@ -2,7 +2,8 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\JSONTransport;
 
 class EditableElement extends AbstractEditableFieldReturn
 {
@@ -163,7 +164,7 @@ class EditableElement extends AbstractEditableFieldReturn
         $json = array(
             'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce )
         );
-        JSONBridge::getInstance()->registerData( 'FrontSettings', $this->uniqueId, $json );
+        Kontentblocks::getService('utility.jsontransport')->registerData( 'FrontSettings', $this->uniqueId, $json );
     }
 
 

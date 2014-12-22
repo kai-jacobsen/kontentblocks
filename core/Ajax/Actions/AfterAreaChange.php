@@ -1,10 +1,9 @@
 <?php
 
-namespace Kontentblocks\Ajax;
+namespace Kontentblocks\Actions\Ajax;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -43,7 +42,7 @@ class AfterAreaChange
         $html = ob_get_clean();
         $return = array(
             'html' => stripslashes_deep( $html ),
-            'json' => stripslashes_deep( JSONBridge::getInstance()->getJSON() )
+            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
         );
 
         // @TODO handle empty options meaningful

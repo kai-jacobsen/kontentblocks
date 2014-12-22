@@ -3,7 +3,8 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Areas\AreaRegistry;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\JSONTransport;
 use Pimple\Container;
 
 /**
@@ -153,7 +154,7 @@ class ModuleRegistry
     public function setupJSON()
     {
         foreach ($this->modules as $classname => $moduleArgs) {
-            JSONBridge::getInstance()->registerData( 'ModuleDefinitions', $classname, $moduleArgs );
+            Kontentblocks::getService('utility.jsontransport')->registerData( 'ModuleDefinitions', $classname, $moduleArgs );
         }
 
         // Extra Module Templates
@@ -161,7 +162,7 @@ class ModuleRegistry
             $moduleClass = $moduleArgs['class'];
             $clone = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
             $clone['settings']['category'] = 'template';
-            JSONBridge::getInstance()->registerData( 'ModuleDefinitions', $name, $clone );
+            Kontentblocks::getService('utility.jsontransport')->registerData( 'ModuleDefinitions', $name, $clone );
         }
     }
 

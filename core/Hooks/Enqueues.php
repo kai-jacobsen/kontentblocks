@@ -3,7 +3,7 @@
 namespace Kontentblocks\Hooks;
 
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\MobileDetect;
 use Kontentblocks\Utils\Utilities;
 
@@ -264,7 +264,7 @@ class Enqueues
 
         $data = array_merge($data, self::localize());
 
-        JSONBridge::getInstance()->registerPublicData( 'config', null, $data );
+        Kontentblocks::getService('utility.jsontransport')->registerPublicData( 'config', null, $data );
     }
 
     /**

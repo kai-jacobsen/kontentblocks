@@ -6,9 +6,7 @@ use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Templating\CoreView;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -134,7 +132,7 @@ class ModuleTemplates
         $Factory = new ModuleFactory( $moduleDef['settings']['class'], $moduleDef, $Environment );
         /** @var $Instance \Kontentblocks\Modules\Module */
         $Instance = $Factory->getModule();
-        JSONBridge::getInstance()->registerModule( $Instance->toJSON() );
+        Kontentblocks::getService('utility.jsontransport')->registerModule( $Instance->toJSON() );
 
 
         // Data for twig

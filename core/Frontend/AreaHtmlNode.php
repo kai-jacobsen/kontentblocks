@@ -4,7 +4,7 @@ namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Frontend\AreaLayoutIterator;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -356,7 +356,7 @@ class AreaHtmlNode
     public function toJSON()
     {
         $this->attr['settings'] = $this->settings;
-        JSONBridge::getInstance()->registerArea( $this->attr );
+        Kontentblocks::getService('utility.jsontransport')->registerArea( $this->attr );
 
     }
 

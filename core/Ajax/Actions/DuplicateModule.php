@@ -1,12 +1,11 @@
 <?php
 
-namespace Kontentblocks\Ajax;
+namespace Kontentblocks\Actions\Ajax;
 
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRegistry;
-use Kontentblocks\Utils\JSONBridge;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -145,7 +144,7 @@ class DuplicateModule
             'module' => $moduleDefinition,
             'name' => $Module->settings['publicName'],
             'html' => $html,
-            'json' => JSONBridge::getInstance()->getJSON(),
+            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON(),
 
         );
         wp_send_json( $response );

@@ -7,7 +7,7 @@ use Kontentblocks\Fields\FieldForm;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
-use Kontentblocks\Utils\JSONBridge;
+use Kontentblocks\Utils\JSONTransport;
 
 /**
  * Opening Times
@@ -96,7 +96,7 @@ Class OpeningTimes extends Field
             }
         }
 
-        $Bridge = JSONBridge::getInstance();
+        $Bridge = Kontentblocks::getService('utility.jsontransport');
         $Bridge->registerFieldData(
             $this->getFieldId(),
             $this->type,

@@ -3,15 +3,12 @@
 namespace Kontentblocks\Utils;
 
 /**
- * Class JSONBridge
- *
+ * Class JSONTransport
  * Collect specific or arbitrary data arrays during run time
- *
  * output as json_encoded strings in wp_footer resp. admin_footer()
- *
  * @package Kontentblocks\Utils
  */
-class JSONBridge
+class JSONTransport
 {
 
     protected $data = array();
@@ -21,27 +18,6 @@ class JSONBridge
     protected $fieldData = array();
     protected $Fields = array();
 
-    /**
-     * @var \Kontentblocks\Utils\JSONBridge
-     */
-    protected static $instance;
-
-    /**
-     * Singleton Pattern
-     * original instantiated on plugin startup
-     *
-     * @since 1.0.0
-     * @return object self
-     */
-    public static function getInstance()
-    {
-        if (null == self::$instance) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-
-    }
 
     /**
      * Class constructor
@@ -52,7 +28,7 @@ class JSONBridge
      * @action wp_print_footer_script
      * @action admin_footer
      */
-    private function __construct()
+    public function __construct()
     {
 
         if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {

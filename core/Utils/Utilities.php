@@ -427,7 +427,7 @@ class Utilities
         $cats['core'] = __( 'System', 'kontentblocks' );
         $cats['template'] = __( 'Templates', 'kontentblocks' );
 
-        JSONBridge::getInstance()->registerData( 'ModuleCategories', null, $cats );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleCategories', null, $cats );
         return $cats;
     }
 

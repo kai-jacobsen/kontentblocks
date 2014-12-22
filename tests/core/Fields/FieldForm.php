@@ -3,7 +3,9 @@
 namespace core\Fields;
 
 
-class FieldForm extends \WP_UnitTestCase
+use Kontentblocks\Kontentblocks;
+
+class FieldFormTest extends \WP_UnitTestCase
 {
 
     public $TestField;
@@ -12,7 +14,7 @@ class FieldForm extends \WP_UnitTestCase
 
     public function setUp()
     {
-        $Registry = \Kontentblocks\Kontentblocks::getService( 'registry.fields' );
+        $Registry = Kontentblocks::getService( 'registry.fields' );
         $this->TestField = $Registry->getField( 'text', 'dummyid', 'dummysubkey', 'okey' );
         $this->TestField->setValue( 'Testvalue' );
         $this->TestField->setArgs(
