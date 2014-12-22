@@ -18,7 +18,6 @@
   ],
   "type": "wordpress-plugin",
   "require": {
-    "composer/installers": "~1.0",
     "php": ">=5.4",
     "twig/twig": "1.*",
     "pimple/pimple": "~2.1",
@@ -26,8 +25,7 @@
     "monolog/monolog": "1.*"
   },
   "require-dev": {
-    "codeclimate/php-test-reporter": "dev-master",
-    "phpmd/phpmd" : "@stable"
+    "codeclimate/php-test-reporter": "dev-master"
   }
 }
 
