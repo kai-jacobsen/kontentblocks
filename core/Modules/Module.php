@@ -301,6 +301,7 @@ abstract class Module
      * if a set*PropertyName* method exist, it gets called
      *
      * @param $args
+     * @return bool
      */
     public function set( $args )
     {

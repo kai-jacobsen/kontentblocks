@@ -6,7 +6,7 @@ use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\DataInputInterface;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\RequestWrapper;
 
 /**
@@ -17,7 +17,7 @@ class SortModules
 {
     static $nonce = 'kb-update';
 
-    public static function run( DataInputInterface $Request )
+    public static function run( ValueStorageInterface $Request )
     {
 
 

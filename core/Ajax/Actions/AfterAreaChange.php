@@ -2,6 +2,9 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\Utilities;
@@ -20,20 +23,25 @@ use Kontentblocks\Utils\Utilities;
 class AfterAreaChange
 {
 
+    static $nonce = 'kb-read';
+
+
     /**
      * Get going
+     * @param ValueStorageInterface $Request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run()
+    public static function run( ValueStorageInterface $Request )
     {
 
-        check_ajax_referer( 'kb-read' );
         if (!current_user_can( 'edit_kontentblocks' )) {
-            wp_send_json_error();
+            return new AjaxErrorResponse( 'Your user role does not have enough permissions for this action' );
         }
 
-        $post_id = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $module = filter_input( INPUT_POST, 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $Environment = Utilities::getEnvironment( $post_id );
+        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+        $Environment = Utilities::getEnvironment( $postId );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $instance = $Factory->getModule();
         ob_start();
@@ -49,6 +57,6 @@ class AfterAreaChange
 //        if ( empty( $html ) ) {
 //            wp_send_json( \Kontentblocks\Helper\noOptionsMessage() );
 //        }
-        wp_send_json( $return );
+        return new AjaxSuccessResponse( 'Area changed', $return );
     }
 }

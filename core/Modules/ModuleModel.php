@@ -35,7 +35,7 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     public function set( $data )
     {
-        if (!is_array($data)){
+        if (!is_array( $data )) {
             return;
         }
 

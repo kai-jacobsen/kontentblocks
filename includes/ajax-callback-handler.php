@@ -18,7 +18,7 @@ use Kontentblocks\Ajax\Actions\CreateNewModule;
 //    'wp_ajax_resortModules',
 //    function () {
 //        check_ajax_referer( 'kb-update' );
-//        $Request = new \Kontentblocks\Common\Data\GenericData( $_POST );
+//        $Request = new \Kontentblocks\Common\Data\ValueStorage( $_POST );
 //        Kontentblocks\Ajax\Actions\SortModules::run( $Request );
 //    }
 //);
@@ -33,7 +33,7 @@ add_action(
     'wp_ajax_removeModules',
     function () {
         check_ajax_referer( 'kb-delete' );
-        $Request = new \Kontentblocks\Common\Data\GenericData( $_POST );
+        $Request = new \Kontentblocks\Common\Data\ValueStorage( $_POST );
         Kontentblocks\Ajax\Actions\RemoveModules::run( $Request );
     }
 );
@@ -80,7 +80,7 @@ add_action( 'wp_ajax_duplicateModule', array( 'Kontentblocks\Ajax\Actions\Duplic
  * Handler onsite saving
  * -----------------------------------------
  */
-add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ) );
+//add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ) );
 
 /**
  * -----------------------------------------

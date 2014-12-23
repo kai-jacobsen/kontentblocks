@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 
-use Kontentblocks\Common\Data\GenericData;
+use Kontentblocks\Common\Data\ValueStorage;
 
 class AjaxCallbackHandler
 {
@@ -43,7 +43,8 @@ class AjaxCallbackHandler
         return apply_filters(
             'kb.ajax.core.actions',
             array(
-                'resortModules' => array( '\Kontentblocks\Ajax\Actions\SortModules', 'run' )
+                'resortModules' => array( '\Kontentblocks\Ajax\Actions\SortModules', 'run' ),
+                'afterAreaChange' => array( '\Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' )
             )
         );
     }
@@ -66,7 +67,7 @@ class AjaxCallbackHandler
                 'wp_ajax_' . $action,
                 function () use ( $callback ) {
                     if ($this->verify( $callback )) {
-                        call_user_func( $callback, new GenericData($_POST) );
+                        call_user_func( $callback, new ValueStorage($_POST) );
                     }
                 }
             );

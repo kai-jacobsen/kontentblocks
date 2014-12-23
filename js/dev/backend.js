@@ -390,13 +390,13 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
         }, this.insertNewUpdateForm, this);
     },
     insertNewUpdateForm: function(response) {
-        if (response !== "") {
-            this.$inner.html(response.html);
+        if (response.success) {
+            this.$inner.html(response.data.html);
         } else {
             this.$inner.html("empty");
         }
-        if (response.json.Fields) {
-            KB.payload.Fields = _.extend(KB.payload.Fields, response.json.Fields);
+        if (response.data.json.Fields) {
+            KB.payload.Fields = _.extend(KB.payload.Fields, response.data.json.Fields);
         }
         KB.Ui.repaint(this.$el);
         KB.Fields.trigger("update");
