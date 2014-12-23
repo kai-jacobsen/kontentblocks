@@ -5,12 +5,12 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Common\Data\DataInputInterface;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 
 class RemoveModules
 {
 
-    public static function run( DataInputInterface $Request )
+    public static function run( ValueStorageInterface $Request )
     {
 
         if (!current_user_can( 'edit_kontentblocks' )) {

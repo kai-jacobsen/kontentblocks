@@ -1,7 +1,7 @@
 <?php
 namespace core\Ajax\Actions;
 
-use Kontentblocks\Common\Data\GenericData;
+use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 
 /**
@@ -30,7 +30,7 @@ class ResortModulesTest extends \WP_UnitTestCase
     public function testRunInvalidData()
     {
 
-        $res = \Kontentblocks\Ajax\Actions\SortModules::run( new GenericData() );
+        $res = \Kontentblocks\Ajax\Actions\SortModules::run( new ValueStorage() );
         $this->assertFalse( $res->getStatus() );
     }
 
@@ -44,7 +44,7 @@ class ResortModulesTest extends \WP_UnitTestCase
             'post_id' => '1'
         );
 
-        $res = \Kontentblocks\Ajax\Actions\SortModules::run( new GenericData( $data ) );
+        $res = \Kontentblocks\Ajax\Actions\SortModules::run( new ValueStorage( $data ) );
         $this->assertTrue( $res->getStatus() );
     }
 

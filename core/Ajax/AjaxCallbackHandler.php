@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 
-use Kontentblocks\Common\Data\GenericData;
+use Kontentblocks\Common\Data\ValueStorage;
 
 class AjaxCallbackHandler
 {
@@ -66,7 +66,7 @@ class AjaxCallbackHandler
                 'wp_ajax_' . $action,
                 function () use ( $callback ) {
                     if ($this->verify( $callback )) {
-                        call_user_func( $callback, new GenericData($_POST) );
+                        call_user_func( $callback, new ValueStorage($_POST) );
                     }
                 }
             );
