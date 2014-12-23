@@ -43,7 +43,8 @@ class AjaxCallbackHandler
         return apply_filters(
             'kb.ajax.core.actions',
             array(
-                'resortModules' => array( '\Kontentblocks\Ajax\Actions\SortModules', 'run' )
+                'resortModules' => array( '\Kontentblocks\Ajax\Actions\SortModules', 'run' ),
+                'afterAreaChange' => array( '\Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' )
             )
         );
     }

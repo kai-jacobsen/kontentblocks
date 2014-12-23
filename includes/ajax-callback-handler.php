@@ -80,7 +80,7 @@ add_action( 'wp_ajax_duplicateModule', array( 'Kontentblocks\Ajax\Actions\Duplic
  * Handler onsite saving
  * -----------------------------------------
  */
-add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ) );
+//add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ) );
 
 /**
  * -----------------------------------------

@@ -292,6 +292,7 @@ class ModuleTemplates
         $definition['parentId'] = $data['master_id']; // id of db post
         $definition['template'] = true; // it's a template yes
         $definition['instance_id'] = $data['id']; // equals post_name
+        $definition['mid'] = $data['id']; // equals post_name
         $definition['class'] = $data['type']; // Module class
         $definition['area'] = 'template'; // needs to be present
         $definition['areaContext'] = 'template'; // needs to be present
