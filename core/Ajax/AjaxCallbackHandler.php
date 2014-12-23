@@ -3,7 +3,7 @@
 namespace Kontentblocks\Ajax;
 
 
-use Kontentblocks\Common\Data\PostInputData;
+use Kontentblocks\Common\Data\GenericData;
 
 class AjaxCallbackHandler
 {
@@ -65,11 +65,28 @@ class AjaxCallbackHandler
             add_action(
                 'wp_ajax_' . $action,
                 function () use ( $callback ) {
-                    call_user_func( $callback, new PostInputData() );
+                    if ($this->verify( $callback )) {
+                        call_user_func( $callback, new GenericData($_POST) );
+                    }
                 }
             );
         }
     }
 
+    private function verify( $callback )
+    {
+
+        if (!property_exists( $callback[0], 'nonce' )) {
+            return new AjaxErrorResponse( 'static nonce property not set on class' );
+        }
+        $nonce = $callback[0]::$nonce;
+        $check = check_ajax_referer( $nonce, null, false );
+
+        if (!$check) {
+            return new AjaxErrorResponse( 'Nonce verification failed', array( 'nonce' => $nonce, 'check' => $check ) );
+        }
+
+        return true;
+    }
 
 }

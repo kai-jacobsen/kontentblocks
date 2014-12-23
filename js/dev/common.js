@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-22 */
+/*! Kontentblocks DevVersion 2014-12-23 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -1037,9 +1037,14 @@ KB.Ui = function($) {
                         return false;
                     }
                     if (this === ui.item.parent("ul")[0] && !ui.sender) {
-                        $.when(that.resort(ui.sender)).done(function() {
-                            $(KB).trigger("kb:sortable::update");
-                            KB.Notice.notice("Order was updated successfully", "success");
+                        $.when(that.resort(ui.sender)).done(function(res) {
+                            if (res.success) {
+                                $(KB).trigger("kb:sortable::update");
+                                KB.Notice.notice(res.message, "success");
+                            } else {
+                                KB.Notice.notice(res.message, "error");
+                                return false;
+                            }
                         });
                     } else if (ui.sender) {
                         if (ui.item.parent("ul")[0].id === ui.sender.attr("id")) {

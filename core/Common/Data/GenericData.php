@@ -3,20 +3,20 @@
 namespace Kontentblocks\Common\Data;
 
 /**
- * Class PostInputData
+ * Class GenericData
  * @package Kontentblocks\Common\Data
  */
-class PostInputData implements DataInputInterface
+class GenericData implements DataInputInterface
 {
 
     private $data = array();
 
     /**
-     *
+     * @param array $postdata
      */
-    public function __construct()
+    public function __construct($postdata = array())
     {
-        $this->data = $_POST;
+        $this->data = $postdata;
     }
 
     /**

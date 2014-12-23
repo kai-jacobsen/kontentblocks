@@ -86,15 +86,15 @@ KB.Ui = function ($) {
         normal.addClass('non-active-context');
       });
 
-      side.on('mouseenter', '.kb-open .kb-module__controls-inner', function(){
-          if (side.hasClass('non-active-context')){
-            side.addClass('active-context').removeClass('non-active-context');
-            normal.addClass('non-active-context').removeClass('active-context');
-          }
+      side.on('mouseenter', '.kb-open .kb-module__controls-inner', function () {
+        if (side.hasClass('non-active-context')) {
+          side.addClass('active-context').removeClass('non-active-context');
+          normal.addClass('non-active-context').removeClass('active-context');
+        }
       });
 
-      normal.on('mouseenter', '.kb-open .kb-module__controls-inner', function(){
-        if (normal.hasClass('non-active-context')){
+      normal.on('mouseenter', '.kb-open .kb-module__controls-inner', function () {
+        if (normal.hasClass('non-active-context')) {
           normal.addClass('active-context').removeClass('non-active-context');
           side.addClass('non-active-context').removeClass('active-context');
         }
@@ -118,7 +118,7 @@ KB.Ui = function ($) {
       var selector = $('.kb_fieldtabs', $context);
       selector.tabs({
         activate: function (e, ui) {
-          $('.kb-nano').nanoScroller({ contentClass: 'kb-nano-content' });
+          $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
           console.log(ui);
           KB.Events.trigger('kb.modal.refresh');
         }
@@ -153,7 +153,7 @@ KB.Ui = function ($) {
        * of the area
        */
       function
-        isValidModule() {
+      isValidModule() {
 
         var limit = areaOver.get('limit');
         var nom = numberOfModulesInArea(areaOver.get('id'));
@@ -260,17 +260,20 @@ KB.Ui = function ($) {
           // this makes sure that the right action(s) are only done once
           if (this === ui.item.parent('ul')[0] && !ui.sender) {
             // function call applies when target area == origin
-            $.when(that.resort(ui.sender)).done(function () {
-              $(KB).trigger('kb:sortable::update');
-              KB.Notice.notice('Order was updated successfully', 'success');
+            $.when(that.resort(ui.sender)).done(function (res) {
+              if (res.success) {
+                $(KB).trigger('kb:sortable::update');
+                KB.Notice.notice(res.message, 'success');
+              } else {
+                KB.Notice.notice(res.message, 'error');
+                return false;
+              }
             });
           } else if (ui.sender) {
-
             // do nothing if the receiver rejected the request
             if (ui.item.parent('ul')[0].id === ui.sender.attr('id')) {
               return false;
             }
-
             // function call applies when target area != origin
             // chain reordering and change of area
             $.when(that.changeArea(areaOver, currentModule)).
@@ -278,10 +281,8 @@ KB.Ui = function ($) {
                 that.resort(ui.sender);
               }).
               done(function () {
-
                 that.triggerAreaChange(areaOver, currentModule);
                 $(KB).trigger('kb:sortable::update');
-
                 // force recreation of any attached fields
                 currentModule.view.clearFields();
                 KB.Notice.notice('Area change and order were updated successfully', 'success');

@@ -18,7 +18,7 @@ use Kontentblocks\Ajax\Actions\CreateNewModule;
 //    'wp_ajax_resortModules',
 //    function () {
 //        check_ajax_referer( 'kb-update' );
-//        $Request = new \Kontentblocks\Common\Data\PostInputData( $_POST );
+//        $Request = new \Kontentblocks\Common\Data\GenericData( $_POST );
 //        Kontentblocks\Ajax\Actions\SortModules::run( $Request );
 //    }
 //);
@@ -33,7 +33,7 @@ add_action(
     'wp_ajax_removeModules',
     function () {
         check_ajax_referer( 'kb-delete' );
-        $Request = new \Kontentblocks\Common\Data\PostInputData( $_POST );
+        $Request = new \Kontentblocks\Common\Data\GenericData( $_POST );
         Kontentblocks\Ajax\Actions\RemoveModules::run( $Request );
     }
 );

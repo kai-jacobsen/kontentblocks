@@ -2,6 +2,9 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\DataInputInterface;
 use Kontentblocks\Utils\RequestWrapper;
@@ -12,21 +15,23 @@ use Kontentblocks\Utils\RequestWrapper;
  */
 class SortModules
 {
+    static $nonce = 'kb-update';
 
     public static function run( DataInputInterface $Request )
     {
 
-        $data = $Request->getFiltered( 'data', FILTER_REQUIRE_ARRAY );
+
+        $data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         // bail if essentials are missing
         if (!isset( $data ) || !is_array( $data )) {
-            wp_send_json_error( 'No valid data sent' );
+            return new AjaxErrorResponse( 'No valid data sent', $data );
         }
 
         // setup properties
         $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
         $Storage = new ModuleStorage( $postId );
         $old = $Storage->getIndex();
-        wp_send_json($postId);
+
         // action
         $new = array();
         foreach ($data as $area => $string) {
@@ -41,13 +46,13 @@ class SortModules
                     endif;
                 }
             }
-        }
+        };
         $save = array_merge( $old, $new );
         $update = $Storage->saveIndex( $save );
-        if ($update) {
-            wp_send_json( $update );
+        if ($update || count( $Storage ) > 1) {
+            return new AjaxSuccessResponse( 'Modules successfully resorted', $save );
         } else {
-            wp_send_json_error();
+            return new AjaxErrorResponse( ' Resorting failed', array( 'updateMsg' => $update ) );
         }
     }
 
