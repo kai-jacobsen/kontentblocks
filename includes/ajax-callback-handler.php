@@ -8,20 +8,7 @@ use Kontentblocks\Ajax\Actions\CreateNewModule;
  * b) let the autoloader handle file inclusion
  */
 
-/**
- * -----------------------------------------
- * Handler for resorting modules
- * -----------------------------------------
- */
 
-//add_action(
-//    'wp_ajax_resortModules',
-//    function () {
-//        check_ajax_referer( 'kb-update' );
-//        $Request = new \Kontentblocks\Common\Data\ValueStorage( $_POST );
-//        Kontentblocks\Ajax\Actions\SortModules::run( $Request );
-//    }
-//);
 
 /**
  * -----------------------------------------
@@ -75,12 +62,6 @@ add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
  */
 add_action( 'wp_ajax_duplicateModule', array( 'Kontentblocks\Ajax\Actions\DuplicateModule', 'run' ) );
 
-/**
- * -----------------------------------------
- * Handler onsite saving
- * -----------------------------------------
- */
-//add_action( 'wp_ajax_afterAreaChange', array( 'Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ) );
 
 /**
  * -----------------------------------------
@@ -130,13 +111,6 @@ add_action( 'wp_ajax_getSanitizedId', array( 'Kontentblocks\Ajax\Actions\GetSani
 add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' ) );
 
 
-/**
- * -----------------------------------------
- * Get remote editor markup
- * -----------------------------------------
- */
-
-add_action( 'wp_ajax_getRemoteEditor', array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' ) );
 
 /**
  * -----------------------------------------

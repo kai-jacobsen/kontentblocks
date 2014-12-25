@@ -19,8 +19,8 @@ KB.TinyMCE = (function ($) {
           return;
         } else {
           textarea.val(switchEditors.wpautop(textarea.val()));
-          //tinyMCE.execCommand('mceAddEditor', true, id);
-          tinymce.init(tinyMCEPreInit.mceInit[id]);
+          tinyMCE.execCommand('mceAddEditor', true, id);
+          //tinymce.init(tinyMCEPreInit.mceInit[id]);
           switchEditors.go(id, 'tmce');
         }
 
@@ -114,10 +114,13 @@ KB.TinyMCE = (function ($) {
         args: {
           media_buttons: media
         }
-
-      }, function (data) {
-        $el.empty().append(data);
-        this.addEditor($el, null, 150, watch);
+      }, function (response) {
+        if (response.success) {
+          $el.empty().append(response.data.html);
+          this.addEditor($el, null, 150, watch);
+        } else {
+          _K.info('Editor markup could not be retrieved from the server');
+        }
       }, this);
 
     }

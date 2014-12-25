@@ -44,7 +44,8 @@ class AjaxCallbackHandler
             'kb.ajax.core.actions',
             array(
                 'resortModules' => array( '\Kontentblocks\Ajax\Actions\SortModules', 'run' ),
-                'afterAreaChange' => array( '\Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' )
+                'afterAreaChange' => array( '\Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ),
+                'getRemoteEditor' => array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' )
             )
         );
     }
