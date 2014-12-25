@@ -13,12 +13,15 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
     /**
      * @param string $message
      * @param array $data
+     * @param bool $send
      */
-    public function __construct( $message = '', $data = array() )
+    public function __construct( $message = '', $data = array(), $send = false )
     {
         $this->message = $message;
         $this->data = $data;
-        wp_send_json($this);
+        if ($send) {
+            $this->sendJson();
+        }
     }
 
     public function getMessage()
@@ -29,6 +32,11 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
     public function getData()
     {
         return $this->data;
+    }
+
+    public function sendJson()
+    {
+        wp_send_json( $this );
     }
 
     /**

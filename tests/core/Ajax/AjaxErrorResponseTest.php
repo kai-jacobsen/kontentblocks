@@ -1,13 +1,13 @@
 <?php
 namespace core\Ajax;
 
-use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Ajax\AjaxErrorResponse;
 
 /**
  * Class AjaxCallbackHandlerTest
  * @package core\Ajax
  */
-class AjaxSuccessResponseTest extends \WP_UnitTestCase
+class AjaxErrorResponseTest extends \WP_UnitTestCase
 {
 
     public $Response;
@@ -16,7 +16,7 @@ class AjaxSuccessResponseTest extends \WP_UnitTestCase
     {
         parent::setUp();
 
-        $this->Response = new AjaxSuccessResponse(
+        $this->Response = new AjaxErrorResponse(
             'Success message', array(
                 'data' => 'Some string'
             )
@@ -30,7 +30,7 @@ class AjaxSuccessResponseTest extends \WP_UnitTestCase
 
     public function testGetStatus()
     {
-        $this->assertTrue( $this->Response->getStatus() );
+        $this->assertFalse( $this->Response->getStatus() );
     }
 
     public function testGetData()
