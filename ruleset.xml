@@ -30,6 +30,5 @@
     </rule>
     <rule ref="rulesets/controversial.xml/Superglobals"/>
     <rule ref="rulesets/design.xml/ExitExpression"/>
-    <rule ref="rulesets/naming.xml/ShortVariable"/>
     <rule ref="rulesets/unusedcode.xml"/>
 </ruleset>

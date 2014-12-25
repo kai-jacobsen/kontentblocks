@@ -2,10 +2,11 @@
 
 namespace Kontentblocks\Backend\Dynamic;
 
-use Kontentblocks\Backend\DataProvider\DataProviderController;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
 
@@ -29,7 +30,7 @@ class ModuleTemplates
         add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
         add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );
         add_action( 'save_post', array( $this, 'save' ), 11, 2 );
-        add_action( 'wp_insert_post_data', array( $this, 'postData' ), 10, 2 );
+        add_filter( 'wp_insert_post_data', array( $this, 'postData' ), 10, 2 );
         add_filter( 'post_updated_messages', array( $this, 'postTypeMessages' ) );
     }
 
@@ -77,7 +78,6 @@ class ModuleTemplates
 
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
-
         $Storage = new ModuleStorage( $post->ID );
 
         // on this screen we always deal with only one module
@@ -122,17 +122,15 @@ class ModuleTemplates
         // create essential markup and render the module
         // infamous hidden editor hack
         Utilities::hiddenEditor();
-        $moduleData = $MetaData->get( '_' . $template['instance_id'] );
 
         // no data from db equals null, null is invalid
         // we can't pass null to the factory, if environment is null as well
-        // @TODO why not passing an Environment?
         $Environment = Utilities::getEnvironment( $post->ID );
 
         $Factory = new ModuleFactory( $moduleDef['settings']['class'], $moduleDef, $Environment );
         /** @var $Instance \Kontentblocks\Modules\Module */
         $Instance = $Factory->getModule();
-        Kontentblocks::getService('utility.jsontransport')->registerModule( $Instance->toJSON() );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Instance->toJSON() );
 
 
         // Data for twig
@@ -202,15 +200,12 @@ class ModuleTemplates
         if (!$this->auth( $postId )) {
             return false;
         }
-
-        $MetaData = new DataProviderController( $postId );
-        $Storage = new ModuleStorage( $postId, $MetaData );
-
+        $Environment = Utilities::getEnvironment( $postId );
+        $Storage = $Environment->getStorage();
         $tpl = $Storage->getModuleDefinition( $postObj->post_name );
-
         // no template yet, create an new one
         if (!$tpl) {
-            $this->createTemplate( $postId, $Storage );
+            $this->createTemplate( $postId, $Environment );
         } else {
             // update existing
             $mid = $tpl['instance_id'];
@@ -252,7 +247,7 @@ class ModuleTemplates
      * @since 1.0.0
      * @return void
      */
-    public function createTemplate( $postId, ModuleStorage $Storage )
+    public function createTemplate( $postId, PostEnvironment $Environment )
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
@@ -265,6 +260,10 @@ class ModuleTemplates
         // set defaults
         $defaults = array(
             'master' => false,
+            'masterObj' => array(
+                'parentId' => $postId,
+                'master_id' => $postId
+            ),
             'name' => null,
             'id' => null,
             'type' => null,
@@ -274,7 +273,8 @@ class ModuleTemplates
         $data = wp_parse_args( $_POST['new-template'], $defaults );
 
         // convert checkbox input to boolean
-        $data['master'] = ( $data['master'] === '1' ) ? true : false;
+//        $data['master'] = ( $data['master'] === '1' ) ? true : false;
+        $data['master'] = filter_var( $data['master'], FILTER_VALIDATE_BOOLEAN );
 
         // 3 good reasons to stop
         if (is_null( $data['id'] ) || is_null( $data['name'] || is_null( $data['type'] ) )) {
@@ -283,33 +283,39 @@ class ModuleTemplates
 
         $definition = $ModuleRegistry->get( $data['type'] );
 
+
         if (is_null( $definition )) {
             wp_die( 'Definition not found' );
         }
-        //set individual module definition args for later reference
-        $definition['master'] = $data['master']; // boolean indicates master status
-        $definition['master_id'] = $data['master_id']; // id of db post
-        $definition['parentId'] = $data['master_id']; // id of db post
-        $definition['template'] = true; // it's a template yes
-        $definition['instance_id'] = $data['id']; // equals post_name
-        $definition['mid'] = $data['id']; // equals post_name
-        $definition['class'] = $data['type']; // Module class
-        $definition['area'] = 'template'; // needs to be present
-        $definition['areaContext'] = 'template'; // needs to be present
-        $definition['templateObj'] = array(
-            'id' => $data['id'],
-            'name' => $data['name']
-        );
-        // settings are not persistent
-        unset( $definition['settings'] );
 
+        $workshop = new ModuleWorkshop(
+            $Environment, array(
+
+                'master' => $data['master'],
+                'masterObj' => array(
+                    'parentId' => $data['master_id'],
+                    'master_id' => $data['master_id']
+                ),
+                'template' => true,
+                'templateObj' => array(
+                    'id' => $data['id'],
+                    'name' => $data['name']
+                ),
+                'area' => 'template',
+                'areaContext' => 'template',
+                'class' => $data['type'],
+                'mid' => $data['id']
+            )
+        );
+
+
+        $definition = $workshop->getDefinitionArray();
         do_action( 'kb::create:module', $definition );
 
-
         // add to post meta kb_kontentblocks
-        $Storage->addToIndex( $data['id'], $definition );
+        $Environment->getStorage()->addToIndex( $data['id'], $definition );
         // single post meta entry, to make meta queries easier
-        $Storage->getDataProvider()->update( 'master', $definition['master'] );
+        $Environment->getStorage()->getDataProvider()->update( 'master', $definition['master'] );
     }
 
 
@@ -326,9 +332,15 @@ class ModuleTemplates
      */
     public function postData( $data, $post )
     {
-        if ($post['post_type'] !== 'kb_mdtpl') {
+
+        if ($post['post_type'] !== 'kb-mdtpl') {
             return $data;
         }
+
+        if (!isset($_POST['new-template'])){
+            return $data;
+        }
+
 
         $title = filter_var( $_POST['new-template']['name'], FILTER_SANITIZE_STRING );
         $slug = filter_var( $_POST['new-template']['id'], FILTER_SANITIZE_STRING );
@@ -337,8 +349,8 @@ class ModuleTemplates
             return $data;
         }
 
-        $data['post_title'] = filter_var( $_POST['new-template']['name'], FILTER_SANITIZE_STRING );
-        $data['post_name'] = filter_var( $_POST['new-template']['id'], FILTER_SANITIZE_STRING );
+        $data['post_title'] = $title;
+        $data['post_name'] = $slug;
 
         return $data;
     }

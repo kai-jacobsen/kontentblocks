@@ -136,7 +136,7 @@ add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Actions\Frontend
  * -----------------------------------------
  */
 
-add_action( 'wp_ajax_getRemoteEditor', array( 'Kontentblocks\Ajax\Actions\Actions\RemoteGetEditor', 'run' ) );
+add_action( 'wp_ajax_getRemoteEditor', array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' ) );
 
 /**
  * -----------------------------------------

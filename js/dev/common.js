@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-23 */
+/*! Kontentblocks DevVersion 2014-12-25 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -763,34 +763,24 @@ KB.TinyMCE = function($) {
     return {
         removeEditors: function() {
             $(".wp-editor-area").each(function() {
-                if ($(this).attr("id") === "wp-content-wrap" || $(this).attr("id") === "wp-ghosteditor-wrap") {} else {
+                if ($(this).attr("id") === "wp-content-wrap" || $(this).attr("id") === "ghosteditor") {} else {
                     var textarea = this.id;
-                    tinyMCE.execCommand("mceRemoveEditor", false, textarea);
+                    tinyMCE.execCommand("mceRemoveEditor", true, textarea);
                 }
             });
         },
         restoreEditors: function() {
+            console.clear();
             $(".wp-editor-wrap").each(function() {
-                var settings = tinyMCEPreInit.mceInit.ghosteditor;
                 var id = $(this).find("textarea").attr("id");
-                settings.elements = id;
-                settings.selector = "#" + id;
-                settings.id = id;
-                settings.height = 350;
-                settings.setup = function(ed) {
-                    ed.on("init", function() {
-                        KB.Events.trigger("KB::tinymce.new-editor", ed);
-                    });
-                    ed.on("change", function() {
-                        var $module, moduleView;
-                        if (!ed.module) {
-                            $module = jQuery(ed.editorContainer).closest(".kb-module");
-                            ed.module = KB.Views.Modules.get($module.attr("id"));
-                        }
-                        ed.module.$el.trigger("tinymce.change");
-                    });
-                };
-                var ed = tinymce.init(settings);
+                var textarea = $(this).find("textarea");
+                if (id === "ghosteditor") {
+                    return;
+                } else {
+                    textarea.val(switchEditors.wpautop(textarea.val()));
+                    tinymce.init(tinyMCEPreInit.mceInit[id]);
+                    switchEditors.go(id, "tmce");
+                }
             });
         },
         addEditor: function($el, quicktags, height, watch) {
@@ -801,16 +791,17 @@ KB.TinyMCE = function($) {
             if (_.isUndefined(tinyMCEPreInit)) {
                 return false;
             }
-            var settings = tinyMCEPreInit.mceInit.ghosteditor;
             var edHeight = height || 350;
             var live = _.isUndefined(watch) ? true : false;
             $(".wp-editor-area", $el).each(function() {
                 var id = this.id;
+                var settings = _.clone(tinyMCEPreInit.mceInit.ghosteditor);
                 settings.elements = id;
                 settings.selector = "#" + id;
                 settings.id = id;
                 settings.kblive = live;
                 settings.height = edHeight;
+                settings.remove_linebreaks = false;
                 settings.setup = function(ed) {
                     ed.on("init", function() {
                         KB.Events.trigger("KB::tinymce.new-editor", ed);
@@ -824,7 +815,7 @@ KB.TinyMCE = function($) {
                         ed.module.$el.trigger("tinymce.change");
                     });
                 };
-                var ed = tinymce.init(settings);
+                tinymce.init(settings);
                 if (!tinyMCEPreInit.mceInit[id]) {
                     tinyMCEPreInit.mceInit[id] = settings;
                 }

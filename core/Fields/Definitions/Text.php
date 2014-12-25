@@ -58,6 +58,4 @@ Class Text extends Field
 
     }
 
-
-
 }

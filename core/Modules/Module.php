@@ -322,6 +322,7 @@ abstract class Module
             'mid',
             'template',
             'templateObj',
+            'masterObj',
             'class',
             'master_id',
             'post_id',
@@ -706,9 +707,9 @@ abstract class Module
         // only for master templates
         if (isset( $this->master ) && $this->master) {
             $toJSON['master'] = true;
-            $toJSON['master_id'] = $this->master_id;
-            $toJSON['parentId'] = $this->master_id;
-            $toJSON['post_id'] = $this->master_id;
+            $toJSON['master_id'] = $this->masterObj['parentId'];
+            $toJSON['parentId'] = $this->masterObj['parentId'];
+            $toJSON['post_id'] = $this->masterObj['parentId'];
             $toJSON['templateObj'] = $this->templateObj;
         }
 

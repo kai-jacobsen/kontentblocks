@@ -1,62 +1,36 @@
 KB.TinyMCE = (function ($) {
-
   return {
     removeEditors: function () {
       // do nothing if it is the native editor
       $('.wp-editor-area').each(function () {
-        if ($(this).attr('id') === 'wp-content-wrap' || $(this).attr('id') === 'wp-ghosteditor-wrap') {
-          // do nothing
+        if ($(this).attr('id') === 'wp-content-wrap' || $(this).attr('id') === 'ghosteditor') {
         } else {
-          // get the id
           var textarea = this.id;
-          // remove controls
-          tinyMCE.execCommand('mceRemoveEditor', false, textarea);
+          tinyMCE.execCommand('mceRemoveEditor', true, textarea);
         }
       });
     },
     restoreEditors: function () {
+      console.clear();
       $('.wp-editor-wrap').each(function () {
-//                // find all textareas with tinymce support
-//                var textarea = $(this).find('textarea').attr('id');
-//                // add controls back
-//                tinyMCE.execCommand('mceAddEditor', false, textarea);
-//                //
-//                // if instance was in html mode, we have to switch manually back to visual mode
-//                // will look ugly otherwise, and don't see an alternative
-//                if ($(this).hasClass('html-active')) {
-//                    $(this).removeClass('html-active').addClass('tmce-active');
-//                }
-        var settings = tinyMCEPreInit.mceInit.ghosteditor;
         var id = $(this).find('textarea').attr('id');
+        var textarea = $(this).find('textarea');
 
-        // add new editor id to settings
-        settings.elements = id;
-        settings.selector = '#' + id;
-        settings.id = id;
-        settings.height = 350;
-        settings.setup = function (ed) {
-          ed.on('init', function () {
-            KB.Events.trigger('KB::tinymce.new-editor', ed);
-          });
-          ed.on('change', function () {
-            var $module, moduleView;
-            if (!ed.module) {
-              $module = jQuery(ed.editorContainer).closest('.kb-module');
-              ed.module = KB.Views.Modules.get($module.attr('id'))
-            }
-            ed.module.$el.trigger('tinymce.change');
-          });
+        if (id === 'ghosteditor') {
+          return;
+        } else {
+          textarea.val(switchEditors.wpautop(textarea.val()));
+          //tinyMCE.execCommand('mceAddEditor', true, id);
+          tinymce.init(tinyMCEPreInit.mceInit[id]);
+          switchEditors.go(id, 'tmce');
+        }
 
-        };
-
-        var ed = tinymce.init(settings);
       });
     },
     addEditor: function ($el, quicktags, height, watch) {
       // get settings from native WP Editor
       // Editor may not be initialized and is not accessible through
       // the tinymce api, thats why we take the settings from preInit
-
       if (!$el) {
         _K.error('No scope element ($el) provided');
         return false;
@@ -66,7 +40,7 @@ KB.TinyMCE = (function ($) {
         return false;
       }
 
-      var settings = tinyMCEPreInit.mceInit.ghosteditor;
+
       var edHeight = height || 350;
       var live = (_.isUndefined(watch)) ? true : false;
       // if no $el, we assume it's in the last added module
@@ -75,12 +49,14 @@ KB.TinyMCE = (function ($) {
       // find all editors and init
       $('.wp-editor-area', $el).each(function () {
         var id = this.id;
+        var settings = _.clone(tinyMCEPreInit.mceInit.ghosteditor);
         // add new editor id to settings
         settings.elements = id;
         settings.selector = '#' + id;
         settings.id = id;
         settings.kblive = live;
         settings.height = edHeight;
+        settings.remove_linebreaks = false;
         settings.setup = function (ed) {
           ed.on('init', function () {
             KB.Events.trigger('KB::tinymce.new-editor', ed);
@@ -89,13 +65,13 @@ KB.TinyMCE = (function ($) {
             var $module, moduleView;
             if (!ed.module) {
               $module = jQuery(ed.editorContainer).closest('.kb-module');
-              ed.module = KB.Views.Modules.get($module.attr('id'))
+              ed.module = KB.Views.Modules.get($module.attr('id'));
             }
             ed.module.$el.trigger('tinymce.change');
+
           });
         };
-        var ed = tinymce.init(settings);
-
+        tinymce.init(settings);
         if (!tinyMCEPreInit.mceInit[id]) {
           tinyMCEPreInit.mceInit[id] = settings;
         }

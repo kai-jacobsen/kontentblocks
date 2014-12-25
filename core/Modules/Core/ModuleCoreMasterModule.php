@@ -189,7 +189,7 @@ class ModuleCoreMasterModule extends Module
     public static function setupModuleData( $module, $moduleDef )
     {
         if (isset( $moduleDef['master'] ) && filter_var( $moduleDef['master'], FILTER_VALIDATE_BOOLEAN )) {
-            $masterId = $moduleDef['parentId'];
+            $masterId = $moduleDef['masterObj']['parentId'];
             $tplId = $moduleDef['templateObj']['id'];
             $data = get_post_meta( $masterId, '_' . $tplId, true );
             return $data;

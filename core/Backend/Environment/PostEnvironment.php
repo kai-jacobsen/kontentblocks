@@ -300,7 +300,7 @@ class PostEnvironment implements JsonSerializable
 
     public function getModuleCount()
     {
-        return Utilities::getHighestId($this->getStorage()->getIndex());
+        return Utilities::getHighestId( $this->getStorage()->getIndex() );
     }
 
     /**

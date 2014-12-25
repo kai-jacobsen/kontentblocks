@@ -98,7 +98,7 @@ class Utilities
         }
 
         $settings = array(
-            'wpautop' => true,
+            'wpautop' => false,
             // use wpautop?
             'media_buttons' => $media,
             // show insert/upload button(s)
