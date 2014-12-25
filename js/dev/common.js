@@ -770,7 +770,6 @@ KB.TinyMCE = function($) {
             });
         },
         restoreEditors: function() {
-            console.clear();
             $(".wp-editor-wrap").each(function() {
                 var id = $(this).find("textarea").attr("id");
                 var textarea = $(this).find("textarea");
