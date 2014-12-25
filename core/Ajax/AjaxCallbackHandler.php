@@ -32,6 +32,11 @@ class AjaxCallbackHandler
         return $this;
     }
 
+    public function actionExists( $action )
+    {
+        return isset( $this->actions[$action] );
+    }
+
     /**
      * Core Actions
      *
@@ -68,7 +73,7 @@ class AjaxCallbackHandler
                 'wp_ajax_' . $action,
                 function () use ( $callback ) {
                     if ($this->verify( $callback )) {
-                        call_user_func( $callback, new ValueStorage($_POST) );
+                        call_user_func( $callback, new ValueStorage( $_POST ) );
                     }
                 }
             );

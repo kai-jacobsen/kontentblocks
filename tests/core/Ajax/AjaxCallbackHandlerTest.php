@@ -22,6 +22,11 @@ class AjaxCallbackHandlerTest extends \WP_UnitTestCase
         $Handler = Kontentblocks::getService( 'utility.ajaxhandler' );
 
         $Handler->registerAction( 'myAction', array( $this, 'testCallback' ) );
+        $Handler->registerAction( 'anotherAction', array( $this, 'anotherTestCallback' ) );
+
+        $this->assertTrue( $Handler->actionExists( 'myAction' ) );
+        $this->assertTrue( $Handler->actionExists( 'anotherAction' ) );
+        $this->assertFalse( $Handler->actionExists( 'nonExisitingAction' ) );
     }
 
     /**
