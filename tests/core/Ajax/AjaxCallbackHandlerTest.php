@@ -1,5 +1,5 @@
 <?php
-namespace core\Ajax;
+namespace Kontentblocks\tests\core\Ajax;
 
 use Kontentblocks\Kontentblocks;
 
@@ -10,9 +10,14 @@ use Kontentblocks\Kontentblocks;
 class AjaxCallbackHandlerTest extends \WP_UnitTestCase
 {
 
+    protected $userId;
+
     public function setUp()
     {
         parent::setUp();
+        $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
+        wp_set_current_user( $this->userId );
+
     }
 
 
@@ -53,6 +58,8 @@ class AjaxCallbackHandlerTest extends \WP_UnitTestCase
     public function tearDown()
     {
         parent::tearDown();
+        wp_set_current_user( 0 );
+
     }
 
 

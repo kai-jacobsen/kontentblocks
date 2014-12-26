@@ -15,7 +15,7 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
      * @param array $data
      * @param bool $send
      */
-    public function __construct( $message = '', $data = array(), $send = false )
+    public function __construct( $message = '', $data = array(), $send = true )
     {
         $this->message = $message;
         $this->data = $data;

@@ -7,12 +7,15 @@ if (!$_tests_dir) {
     $_tests_dir = '/tmp/wordpress/wordpress-tests-lib';
 }
 
+define('TESTS_DIR', dirname(__FILE__));
+
 require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin()
 {
     require dirname( __FILE__ ) . '/../kontentblocks.php';
     add_theme_support( 'kontentblocks' );
+
     $dbVersion = get_option( 'kb_dbVersion' );
     if ($dbVersion !== Kontentblocks::TABLEVERSION) {
         global $wpdb;
@@ -30,9 +33,10 @@ function _manually_load_plugin()
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
-
         update_option( "kb_dbVersion", Kontentblocks::TABLEVERSION );
     }
+
+
 
 
 }

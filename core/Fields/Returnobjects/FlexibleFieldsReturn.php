@@ -201,12 +201,5 @@ class FlexibleFieldsReturn
         }
     }
 
-    /**
-     * @return array|bool
-     */
-    public function __toArray()
-    {
-        return $this->getItems();
-    }
 
 }

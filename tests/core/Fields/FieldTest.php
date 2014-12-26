@@ -1,6 +1,6 @@
 <?php
 
-namespace core\Fields;
+namespace Kontentblocks\tests\core\Fields;
 
 use Kontentblocks\Kontentblocks;
 use ReflectionClass;

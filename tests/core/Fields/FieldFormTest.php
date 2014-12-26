@@ -1,6 +1,6 @@
 <?php
 
-namespace core\Fields;
+namespace Kontentblocks\tests\core\Fields;
 
 
 use Kontentblocks\Kontentblocks;
@@ -70,7 +70,5 @@ class FieldFormTest extends \WP_UnitTestCase
         $this->assertEquals( $this->TestForm->getInputFieldId(), 'dummyid_okey' );
 
     }
-
-
 
 }

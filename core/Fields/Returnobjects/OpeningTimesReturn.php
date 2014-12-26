@@ -160,16 +160,5 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
         );
     }
 
-    /**
-     * Return original data
-     * @return array
-     */
-    public function __toArray()
-    {
-        if ($this->validate()) {
-            return $this->prepared;
-        } else {
-            return $this->getValue();
-        }
-    }
+
 }

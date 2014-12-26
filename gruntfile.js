@@ -114,6 +114,10 @@ module.exports = function (grunt) {
       css: {
         files: ['css/*.css'],
         tasks: []
+      },
+      clover: {
+        files: ['build/logs/clover.xml'],
+        tasks: ['exec:report']
       }
     },
     clean: ["js/tmp"],
@@ -149,7 +153,12 @@ module.exports = function (grunt) {
       },
       createDevId: {
         command: './build/devhash.sh > build/hash.php'
-
+      },
+      report: {
+        command: './build/report.sh',
+        options: {
+          message: 'Report sent to codeclimate'
+        }
       }
     }
   });

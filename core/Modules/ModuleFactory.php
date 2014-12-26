@@ -41,7 +41,7 @@ class ModuleFactory
 
         $this->class = $class;
 
-        $this->args = self::parseModule( $moduleArgs );
+        $this->args = self::parseModuleSettings( $moduleArgs );
         if ($data === null) {
             $this->data = apply_filters(
                 'kb.module.factory.data',
@@ -86,7 +86,7 @@ class ModuleFactory
      *
      * @return array
      */
-    public static function parseModule( $module )
+    public static function parseModuleSettings( $module )
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );

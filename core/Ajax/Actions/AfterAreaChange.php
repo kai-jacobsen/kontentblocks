@@ -41,6 +41,7 @@ class AfterAreaChange
         $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
         $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
+
         $Environment = Utilities::getEnvironment( $postId );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $instance = $Factory->getModule();

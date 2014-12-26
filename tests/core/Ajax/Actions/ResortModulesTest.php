@@ -1,8 +1,7 @@
 <?php
-namespace core\Ajax\Actions;
+namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Common\Data\ValueStorage;
-use Kontentblocks\Kontentblocks;
 
 /**
  * Class ResortModulesTest
@@ -13,7 +12,7 @@ class ResortModulesTest extends \WP_UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        define( 'DOING_AJAX', TRUE );
+        (!defined('DOING_AJAX')) ? define( 'DOING_AJAX', TRUE ) : null;
         add_filter(
             'wp_die_ajax_handler',
             array( __CLASS__, 'dump' ),
@@ -29,7 +28,6 @@ class ResortModulesTest extends \WP_UnitTestCase
 
     public function testRunInvalidData()
     {
-
         $res = \Kontentblocks\Ajax\Actions\SortModules::run( new ValueStorage() );
         $this->assertFalse( $res->getStatus() );
     }

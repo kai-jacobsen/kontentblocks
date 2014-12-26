@@ -115,7 +115,7 @@ class ModuleTemplates
 
 
         // get non persistent module settings
-        $moduleDef = ModuleFactory::parseModule( $template );
+        $moduleDef = ModuleFactory::parseModuleSettings( $template );
         //set area context on init
         $moduleDef['areaContext'] = $context;
         $moduleDef['area'] = 'module-template';
@@ -213,7 +213,7 @@ class ModuleTemplates
             $existingData = $Storage->getModuleData( $mid );
             $old = ( empty( $existingData ) ) ? array() : $existingData;
 
-            $moduleDef = ModuleFactory::parseModule( $tpl );
+            $moduleDef = ModuleFactory::parseModuleSettings( $tpl );
 
             $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, Utilities::getEnvironment( $postId ) );
             /** @var $Instance \Kontentblocks\Modules\Module */

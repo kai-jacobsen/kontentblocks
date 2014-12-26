@@ -63,13 +63,6 @@ class ModuleViewFilesystem
         return $this->prepareFiles( $this->unify( $merged ) );
     }
 
-    /**
-     * @return array
-     */
-    public function __toArray()
-    {
-        return $this->views;
-    }
 
     /**
      * @return array

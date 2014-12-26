@@ -4,6 +4,7 @@ namespace Kontentblocks\Ajax;
 
 
 use Kontentblocks\Common\Data\ValueStorage;
+use Kontentblocks\tests\core\Ajax\AjaxErrorResponseTest;
 
 class AjaxCallbackHandler
 {
@@ -82,6 +83,10 @@ class AjaxCallbackHandler
 
     private function verify( $callback )
     {
+
+        if (!is_user_logged_in()){
+            return new AjaxErrorResponse('Log in!');
+        }
 
         if (!property_exists( $callback[0], 'nonce' )) {
             return new AjaxErrorResponse( 'static nonce property not set on class' );

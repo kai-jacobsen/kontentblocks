@@ -37,8 +37,8 @@ class RemoteGetEditor
 
         return new AjaxSuccessResponse(
             'Editor markup retrieved', array(
-            'html' => $html
-        )
+                'html' => $html
+            )
         );
 
     }

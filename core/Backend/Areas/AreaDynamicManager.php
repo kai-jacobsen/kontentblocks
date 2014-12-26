@@ -58,9 +58,9 @@ class AreaDynamicManager
 
     public function synchronize()
     {
+
         // @TODO un-weird
         do_action( 'kb.areas.dynamic.setup' );
-
         if (!is_admin()) {
             return;
         }

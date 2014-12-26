@@ -86,7 +86,7 @@ class DuplicateModule
             self::$instanceId
         );
 
-        $moduleDefinition = ModuleFactory::parseModule( $stored );
+        $moduleDefinition = ModuleFactory::parseModuleSettings( $stored );
         $moduleDefinition['state']['draft'] = true;
         $moduleDefinition['instance_id'] = self::$newInstanceId;
         $moduleDefinition['mid'] = self::$newInstanceId;

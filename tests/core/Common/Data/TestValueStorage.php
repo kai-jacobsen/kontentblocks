@@ -1,9 +1,9 @@
 <?php
 
-namespace core\Fields;
-
+namespace Kontentblocks\tests\core\Common\Data;
 
 use Kontentblocks\Common\Data\ValueStorage;
+
 
 /**
  * Class TestPostInputData

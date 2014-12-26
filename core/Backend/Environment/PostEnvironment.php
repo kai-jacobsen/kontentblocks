@@ -172,7 +172,7 @@ class PostEnvironment implements JsonSerializable
         $collection = array();
         $modules = $this->Storage->getIndex();
         foreach ($modules as $module) {
-            $collection[$module['instance_id']] = ModuleFactory::parseModule( $module );
+            $collection[$module['instance_id']] = ModuleFactory::parseModuleSettings( $module );
         }
         return $collection;
 

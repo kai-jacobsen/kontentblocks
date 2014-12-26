@@ -29,8 +29,6 @@ class ModuleWorkshop
     {
         $this->Environment = $Environment;
         $this->moduleArgs = $this->setupModuleArgs( $args );
-
-
     }
 
     /**
@@ -45,6 +43,7 @@ class ModuleWorkshop
         }
 
         if (!class_exists( $this->moduleArgs['class'] )) {
+
             return false;
         }
 

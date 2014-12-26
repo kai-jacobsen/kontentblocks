@@ -1,5 +1,5 @@
 <?php
-namespace core\Ajax;
+namespace Kontentblocks\tests\core\Ajax;
 
 use Kontentblocks\Ajax\AjaxErrorResponse;
 

@@ -78,22 +78,9 @@ Class Kontentblocks
         // dynamic areas are on init/initInterface hook
         add_action( 'kb.areas.dynamic.setup', array( $this, 'loadModules' ), 9 );
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
-//
-//        // Load Plugins
-//        add_action( 'init', array( $this, 'loadExtensions' ), 9 );
-//
-//        // Load Fields
-//        add_action( 'init', array( $this, 'loadFields' ), 9 );
-//
-//        add_action( 'init', array( $this, 'initInterface' ), 9 );
 
         $AjaxHandler = $this->Services['utility.ajaxhandler'];
 
-
-        if (defined( 'WP_LOCAL_DEV' ) && WP_LOCAL_DEV) {
-            add_action( 'wp_head', array( $this, 'livereload' ) );
-            add_action( 'admin_head', array( $this, 'livereload' ) );
-        }
 
         add_action( 'plugins_loaded', array( $this, 'i18n' ) );
 
@@ -132,14 +119,7 @@ Class Kontentblocks
 
     }
 
-    /**
-     * Add livereload script
-     * Only loaded if WP_LOCAL_DEV is true
-     */
-    public function livereload()
-    {
-        echo '<script src="http://localhost:35729/livereload.js"></script>';
-    }
+
 
     /**
      *
