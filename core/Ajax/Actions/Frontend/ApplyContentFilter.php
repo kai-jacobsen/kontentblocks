@@ -2,23 +2,29 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Common\Data\ValueStorageInterface;
+
 /**
  * Class ApplyContentFilter
  * @package Kontentblocks\Ajax\Frontend
  */
 class ApplyContentFilter
 {
-    public static function run()
+    static $nonce = 'kb-read';
+
+    public static function run( ValueStorageInterface $Request )
     {
-        check_ajax_referer('kb-read');
-
         global $post;
-        $content = filter_input(INPUT_POST, 'data', FILTER_UNSAFE_RAW);
-        $module = $_POST['module'];
-
-        $post = get_post($module['post_id']);
-        setup_postdata($post);
-        echo apply_filters('the_content', $content);
-        exit;
+        $content = $Request->get( 'content' );
+        $postId = $Request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $post = get_post( $postId );
+        setup_postdata( $post );
+        $html = apply_filters( 'the_content', $content );
+        return new AjaxSuccessResponse(
+            'Content filter apllied', array(
+                'content' => $html
+            )
+        );
     }
 }

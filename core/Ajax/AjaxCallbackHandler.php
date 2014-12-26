@@ -53,7 +53,8 @@ class AjaxCallbackHandler
                 'afterAreaChange' => array( '\Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ),
                 'getRemoteEditor' => array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' ),
                 'changeArea' => array( 'Kontentblocks\Ajax\Actions\ChangeArea', 'run' ),
-                'undraftModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' )
+                'undraftModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' ),
+                'applyContentFilter' => array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' )
             )
         );
     }

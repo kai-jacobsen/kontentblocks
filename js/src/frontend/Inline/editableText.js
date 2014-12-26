@@ -113,14 +113,14 @@ KB.IEdit.Text = function (el) {
               url: ajaxurl,
               data: {
                 action: 'applyContentFilter',
-                data: content,
-                module: ed.module.toJSON(),
+                content: content,
+                postId: ed.module.toJSON().post_id,
                 _ajax_nonce: KB.Config.getNonce('read')
               },
               type: 'POST',
-              dataType: 'html',
+              dataType: 'json',
               success: function (res) {
-                ed.setContent(res);
+                ed.setContent(res.data.content);
                 ed.module.set('moduleData', moduleData);
                 ed.module.trigger('kb.frontend.module.inlineUpdate');
               },
