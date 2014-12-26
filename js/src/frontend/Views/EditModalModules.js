@@ -518,7 +518,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       mid: json.instance_id,
       _ajax_nonce: KB.Config.getNonce('update')
     }, function (res) {
-      that.$draft.hide(150);
+      if (res.success){
+        that.$draft.hide(150);
+      }
     }, this);
   }
 });
