@@ -51,7 +51,8 @@ class AjaxCallbackHandler
             array(
                 'resortModules' => array( '\Kontentblocks\Ajax\Actions\SortModules', 'run' ),
                 'afterAreaChange' => array( '\Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ),
-                'getRemoteEditor' => array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' )
+                'getRemoteEditor' => array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' ),
+                'changeArea' => array( 'Kontentblocks\Ajax\Actions\ChangeArea', 'run' )
             )
         );
     }

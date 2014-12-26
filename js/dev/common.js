@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-25 */
+/*! Kontentblocks DevVersion 2014-12-26 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -1044,7 +1044,8 @@ KB.Ui = function($) {
                         if (ui.item.parent("ul")[0].id === ui.sender.attr("id")) {
                             return false;
                         }
-                        $.when(that.changeArea(areaOver, currentModule)).then(function() {
+                        $.when(that.changeArea(areaOver, currentModule)).then(function(res) {
+                            console.log(res);
                             that.resort(ui.sender);
                         }).done(function() {
                             that.triggerAreaChange(areaOver, currentModule);
@@ -1080,7 +1081,7 @@ KB.Ui = function($) {
             return KB.Ajax.send({
                 action: "changeArea",
                 _ajax_nonce: KB.Config.getNonce("update"),
-                block_id: module.get("instance_id"),
+                mid: module.get("instance_id"),
                 area_id: targetArea.get("id"),
                 context: targetArea.get("context")
             });

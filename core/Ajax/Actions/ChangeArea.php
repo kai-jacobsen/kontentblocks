@@ -2,8 +2,10 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Backend\DataProvider\DataProviderController;
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 
 /**
  * Class ChangeArea
@@ -15,25 +17,34 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 class ChangeArea
 {
 
+    static $nonce = 'kb-update';
 
-    public static function run()
+    /**
+     * @param ValueStorageInterface $Request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
+     */
+    public static function run( ValueStorageInterface $Request )
     {
-        check_ajax_referer('kb-update');
-        if (!current_user_can('edit_kontentblocks')){
-            wp_send_json_error();
+        if (!current_user_can( 'edit_kontentblocks' )) {
+            return new AjaxErrorResponse( 'insufficient permissions' );
         }
 
-        $postID = filter_input(INPUT_POST,'post_id', FILTER_SANITIZE_NUMBER_INT);
-        $newArea = filter_input(INPUT_POST, 'area_id', FILTER_SANITIZE_STRING);
-        $newAreaContext = filter_input(INPUT_POST, 'context', FILTER_SANITIZE_STRING);
-        $instanceId = filter_input(INPUT_POST, 'block_id', FILTER_SANITIZE_STRING);
-        $Storage = new ModuleStorage($postID);
+        $postID = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $newArea = $Request->getFiltered( 'area_id', FILTER_SANITIZE_STRING );
+        $newAreaContext = $Request->getFiltered( 'context', FILTER_SANITIZE_STRING );
+        $instanceId = $Request->getFiltered( 'mid', FILTER_SANITIZE_STRING );
+        $Storage = new ModuleStorage( $postID );
 
-        $moduleDefinition = $Storage->getModuleDefinition($instanceId);
+        $moduleDefinition = $Storage->getModuleDefinition( $instanceId );
         $moduleDefinition['area'] = $newArea;
         $moduleDefinition['areaContext'] = $newAreaContext;
-        $update = $Storage->addToIndex($instanceId, $moduleDefinition);
-        wp_send_json($update);
+        $update = $Storage->addToIndex( $instanceId, $moduleDefinition );
+
+        if ($update) {
+            return new AjaxSuccessResponse( 'Area changed', array( 'update' => $update ) );
+        } else {
+            return new AjaxErrorResponse( 'AddToIndex failed to update', array( 'update' => $update ) );
+        }
     }
 
 

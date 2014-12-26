@@ -2,16 +2,18 @@
 
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
-use Kontentblocks\Ajax\Actions\RemoteGetEditor;
+use Kontentblocks\Ajax\Actions\ChangeArea;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
+use Kontentblocks\Modules\ModuleWorkshop;
 
 
 /**
  * Class AfterAreaChangeTest
  */
-class RemoteGetEditorTest extends \WP_UnitTestCase
+class AreaChangeTest extends \WP_UnitTestCase
 {
-
     protected $userId;
 
     public static function setUpBeforeClass()
@@ -37,19 +39,31 @@ class RemoteGetEditorTest extends \WP_UnitTestCase
 
     public function testRun()
     {
+        $post = $this->factory->post->create();
 
-        $data = array(
-            'editorId' => 'test_editor',
-            'editorName' => 'test_editor_name',
-            'editorContent' => 'Hello World!111!',
-            'args' => array(
-                'media_buttons' => false
+        $workshop = new ModuleWorkshop(
+            new PostEnvironment( $post ), array(
+                'class' => 'ModuleText'
             )
         );
 
-        $Response = RemoteGetEditor::run( new ValueStorage( $data ) );
+        $workshop->create();
+        $module = $workshop->getDefinitionArray();
+
+        $data = array(
+            'post_id' => $post,
+            'area_id' => 'dump',
+            'context' => 'dump',
+            'mid' => $module['mid']
+        );
+
+        $Request = new ValueStorage( $data );
+        $Response = ChangeArea::run( $Request );
         $this->assertTrue( $Response->getStatus() );
-        $this->assertContains( 'Hello World!111!', $Response->getData()['html'] );
+        $Storage = new ModuleStorage( $post );
+        $def = $Storage->getModuleDefinition( $module['mid'] );
+        $this->assertEquals( $def['area'], $data['area_id'] );
+
     }
 
 

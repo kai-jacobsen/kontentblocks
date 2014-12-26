@@ -277,7 +277,8 @@ KB.Ui = function ($) {
             // function call applies when target area != origin
             // chain reordering and change of area
             $.when(that.changeArea(areaOver, currentModule)).
-              then(function () {
+              then(function (res) {
+                console.log(res);
                 that.resort(ui.sender);
               }).
               done(function () {
@@ -329,7 +330,7 @@ KB.Ui = function ($) {
       return KB.Ajax.send({
         action: 'changeArea',
         _ajax_nonce: KB.Config.getNonce('update'),
-        block_id: module.get('instance_id'),
+        mid: module.get('instance_id'),
         area_id: targetArea.get('id'),
         context: targetArea.get('context')
       });
