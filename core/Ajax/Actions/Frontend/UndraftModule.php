@@ -2,7 +2,10 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 
 /**
  * Class FieldGetImage
@@ -10,15 +13,16 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
  */
 class UndraftModule
 {
-    public static function run()
+    static $nonce = 'kb-update';
+
+    public static function run( ValueStorageInterface $Request )
     {
-        check_ajax_referer( 'kb-update' );
 
-        $mid = filter_input( INPUT_POST, 'mid', FILTER_SANITIZE_STRING );
-        $post_id = filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
+        $mid = $Request->getFiltered( 'mid', FILTER_SANITIZE_STRING );
+        $post_id = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
 
-        if (empty( $mid ) || !is_int( $post_id )) {
-            wp_send_json_error( 'No valid module id passed' );
+        if (empty( $mid ) || !is_int( absint( $post_id ) )) {
+            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $mid, 'post_id' => $post_id ) );
         }
 
         $Storage = new ModuleStorage( $post_id, null );
@@ -28,8 +32,8 @@ class UndraftModule
             $module['state']['draft'] = false;
         }
 
-        $update = $Storage->addToIndex( $mid, $module );
+        $Storage->addToIndex( $mid, $module );
 
-        wp_send_json_success();
+        return new AjaxSuccessResponse( 'Module published', array( 'module' => $module ) );
     }
 }

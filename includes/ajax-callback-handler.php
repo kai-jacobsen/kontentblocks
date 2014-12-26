@@ -120,10 +120,3 @@ add_action( 'wp_ajax_applyContentFilter', array( 'Kontentblocks\Ajax\Actions\Fro
  */
 add_action( 'wp_ajax_saveAreaLayout', array( 'Kontentblocks\Ajax\Actions\Frontend\SaveAreaLayout', 'run' ) );
 
-
-/**
- * -----------------------------------------
- * Undraft module from frontend
- * -----------------------------------------
- */
-add_action( 'wp_ajax_undraftModule', array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' ) );

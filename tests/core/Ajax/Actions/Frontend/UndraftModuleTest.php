@@ -1,8 +1,9 @@
 <?php
 
-namespace Kontentblocks\tests\core\Ajax\Actions;
+namespace Kontentblocks\tests\core\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\Actions\ChangeArea;
+use Kontentblocks\Ajax\Actions\Frontend\UndraftModule;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
@@ -12,7 +13,7 @@ use Kontentblocks\Modules\ModuleWorkshop;
 /**
  * Class AfterAreaChangeTest
  */
-class AreaChangeTest extends \WP_UnitTestCase
+class UndraftModuleTest extends \WP_UnitTestCase
 {
     protected $userId;
 
@@ -52,17 +53,15 @@ class AreaChangeTest extends \WP_UnitTestCase
 
         $data = array(
             'post_id' => $post,
-            'area_id' => 'dump',
-            'context' => 'dump',
             'mid' => $module['mid']
         );
 
         $Request = new ValueStorage( $data );
-        $Response = ChangeArea::run( $Request );
+        $Response = UndraftModule::run( $Request );
         $this->assertTrue( $Response->getStatus() );
         $Storage = new ModuleStorage( $post );
         $def = $Storage->getModuleDefinition( $module['mid'] );
-        $this->assertEquals( $def['area'], $data['area_id'] );
+        $this->assertFalse( $def['state']['draft'] );
     }
 
 
