@@ -63,7 +63,6 @@ add_action( 'wp_ajax_updateModuleData', array( 'Kontentblocks\Ajax\Actions\Updat
 add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' ) );
 
 
-
 /**
  * -----------------------------------------
  * Save area layout from frontend
