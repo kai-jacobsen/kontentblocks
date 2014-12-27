@@ -10,20 +10,6 @@ use Kontentblocks\Ajax\Actions\CreateNewModule;
 
 
 
-/**
- * -----------------------------------------
- * Handler for removing modules
- * -----------------------------------------
- */
-
-add_action(
-    'wp_ajax_removeModules',
-    function () {
-        check_ajax_referer( 'kb-delete' );
-        $Request = new \Kontentblocks\Common\Data\ValueStorage( $_POST );
-        Kontentblocks\Ajax\Actions\RemoveModules::run( $Request );
-    }
-);
 
 
 /**
@@ -102,15 +88,6 @@ add_action( 'wp_ajax_getSanitizedId', array( 'Kontentblocks\Ajax\Actions\GetSani
  */
 add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' ) );
 
-
-
-/**
- * -----------------------------------------
- * Apply content filter
- * -----------------------------------------
- */
-
-add_action( 'wp_ajax_applyContentFilter', array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' ) );
 
 
 /**

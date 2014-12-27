@@ -44,7 +44,7 @@ class ApplyContentFilterTest extends \WP_UnitTestCase
         $this->assertTrue( $Response->getStatus() );
 
         $filtered = $Response->getData()['content'];
-        $this->assertContains('<p>Hello World</p>', $filtered );
+        $this->assertContains( '<p>Hello World</p>', $filtered );
     }
 
 

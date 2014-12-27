@@ -27,9 +27,14 @@ KB.Backbone.Backend.ModuleDelete = KB.Backbone.Backend.ModuleMenuItemView.extend
   no: function () {
     return false;
   },
-  success: function () {
-    KB.Modules.remove(this.model);
-    wp.heartbeat.interval('fast', 2);
-    this.model.destroy();
+  success: function (res) {
+    if (res.success){
+      KB.Modules.remove(this.model);
+      wp.heartbeat.interval('fast', 2);
+      this.model.destroy();
+    } else{
+      KB.Notice.notice('Error while removing a module', 'error');
+    }
+
   }
 });

@@ -54,7 +54,8 @@ class AjaxCallbackHandler
                 'getRemoteEditor' => array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' ),
                 'changeArea' => array( 'Kontentblocks\Ajax\Actions\ChangeArea', 'run' ),
                 'undraftModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' ),
-                'applyContentFilter' => array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' )
+                'applyContentFilter' => array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' ),
+                'removeModules' => array('Kontentblocks\Ajax\Actions\RemoveModules', 'run')
             )
         );
     }

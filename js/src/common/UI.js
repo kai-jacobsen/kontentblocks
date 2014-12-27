@@ -278,8 +278,11 @@ KB.Ui = function ($) {
             // chain reordering and change of area
             $.when(that.changeArea(areaOver, currentModule)).
               then(function (res) {
-                console.log(res);
-                that.resort(ui.sender);
+                if (res.success){
+                  that.resort(ui.sender);
+                } else {
+                  return false;
+                }
               }).
               done(function () {
                 that.triggerAreaChange(areaOver, currentModule);

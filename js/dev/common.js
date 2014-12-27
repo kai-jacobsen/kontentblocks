@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-26 */
+/*! Kontentblocks DevVersion 2014-12-27 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -1045,8 +1045,11 @@ KB.Ui = function($) {
                             return false;
                         }
                         $.when(that.changeArea(areaOver, currentModule)).then(function(res) {
-                            console.log(res);
-                            that.resort(ui.sender);
+                            if (res.success) {
+                                that.resort(ui.sender);
+                            } else {
+                                return false;
+                            }
                         }).done(function() {
                             that.triggerAreaChange(areaOver, currentModule);
                             $(KB).trigger("kb:sortable::update");
