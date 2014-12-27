@@ -2,7 +2,10 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 
 /**
  * Class ChangeModuleStatus
@@ -11,16 +14,16 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
  */
 class ChangeModuleStatus
 {
+    static $nonce = 'kb-update';
 
-    public static function run()
+    public static function run( ValueStorageInterface $Request )
     {
-        check_ajax_referer( 'kb-update' );
 
-        $postId      = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $instance_id = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
-        $Storage     = new ModuleStorage($postId);
+        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $mid = $Request->getFiltered( 'module', FILTER_SANITIZE_STRING );
+        $Storage = new ModuleStorage( $postId );
 
-        $moduleDefinition = $Storage->getModuleDefinition( $instance_id );
+        $moduleDefinition = $Storage->getModuleDefinition( $mid );
         if ($moduleDefinition) {
 
             // dont ask
@@ -30,10 +33,19 @@ class ChangeModuleStatus
                 $moduleDefinition['state']['active'] = false;
             }
 
-            $update = $Storage->addToIndex( $instance_id, $moduleDefinition );
-            wp_send_json( $update );
+            $update = $Storage->addToIndex( $mid, $moduleDefinition );
+            return new AjaxSuccessResponse(
+                'Status changed', array(
+                    'update' => $update
+                )
+            );
+        } else {
+            return new AjaxErrorResponse(
+                'Status change failed', array(
+                    'moduleDef' => $moduleDefinition
+                )
+            );
         }
-
     }
 
 

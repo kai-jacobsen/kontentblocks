@@ -12,13 +12,6 @@ use Kontentblocks\Ajax\Actions\CreateNewModule;
 
 
 
-/**
- * -----------------------------------------
- * Handler for changing module visiblity
- * -----------------------------------------
- */
-
-add_action( 'wp_ajax_changeModuleStatus', array( 'Kontentblocks\Ajax\Actions\ChangeModuleStatus', 'run' ) );
 
 /**
  * -----------------------------------------
