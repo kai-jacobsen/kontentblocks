@@ -2,10 +2,14 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRegistry;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -14,6 +18,8 @@ use Kontentblocks\Utils\Utilities;
  */
 class DuplicateModule
 {
+
+    public static $nonce = 'kb-create';
 
     /**
      * @var int
@@ -43,35 +49,24 @@ class DuplicateModule
     private static $class;
 
     /**
-     * id of the new module
-     * @var string
-     */
-    private static $newInstanceId;
-
-    /**
      *
      */
-    public static function run()
+    public static function run( ValueStorageInterface $Request )
     {
-        // verify action
-        check_ajax_referer( 'kb-create' );
 
         if (!current_user_can( 'create_kontentblocks' )) {
-            wp_send_json_error();
+            return new AjaxErrorResponse( 'insufficient permissions' );
         }
 
-        self::$postId = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        self::$instanceId = filter_input( INPUT_POST, 'module', FILTER_SANITIZE_STRING );
-        self::$class = filter_input( INPUT_POST, 'class', FILTER_SANITIZE_STRING );
+        self::$postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        self::$instanceId = $Request->getFiltered( 'module', FILTER_SANITIZE_STRING );
+        self::$class = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
         self::$Environment = Utilities::getEnvironment( self::$postId );
 
         self::$ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 
-        self::$newInstanceId = self::createNewInstanceId();
-
-        self::duplicate();
-
+        return self::duplicate();
     }
 
 
@@ -86,68 +81,63 @@ class DuplicateModule
             self::$instanceId
         );
 
-        $moduleDefinition = ModuleFactory::parseModuleSettings( $stored );
-        $moduleDefinition['state']['draft'] = true;
-        $moduleDefinition['instance_id'] = self::$newInstanceId;
-        $moduleDefinition['mid'] = self::$newInstanceId;
-        $toIndex = $moduleDefinition;
+        $Workshop = new ModuleWorkshop(
+            self::$Environment, array(
+                'state' => array(
+                    'draft' => true,
+                    'active' => true
+                ),
+                'class' => self::$class,
+                'area' => $stored['area'],
+                'areaContext' => $stored['areaContext']
+            )
+        );
 
-        //remove settings are never stored
-        unset( $toIndex['settings'] );
+        $moduleDefinition = wp_parse_args( $Workshop->getDefinitionArray(), $stored );
 
-        $update = self::$Environment->getStorage()->addToIndex( self::$newInstanceId, $toIndex );
+        $update = self::$Environment->getStorage()->addToIndex( $moduleDefinition['mid'], $moduleDefinition );
         if ($update !== true) {
-            wp_send_json_error( 'Update failed' );
+            return new AjaxErrorResponse(
+                'Duplication failed due to update error', array(
+                    'update' => $update,
+                    'modDef' => $moduleDefinition,
+                    'workshop' => $Workshop->getDefinitionArray()
+                )
+            );
         } else {
-            self::doDuplication($moduleDefinition);
+            return self::doDuplication( $moduleDefinition );
         }
-
     }
-
-    /**
-     * @return string
-     */
-    private static function createNewInstanceId()
-    {
-        $base = Utilities::getHighestId( self::$Environment->getStorage()->getIndex() );
-        $prefix = apply_filters( 'kb_post_module_prefix', 'module_' );
-        return $prefix . self::$postId . '_' . ++ $base;
-
-    }
-
 
     /**
      * Actual duplication
      * @param $moduleDefinition
+     * @return AjaxSuccessResponse
      */
-    private static function doDuplication($moduleDefinition)
+    private static function doDuplication( $moduleDefinition )
     {
-        $original = self::$Environment->getStorage()->getModuleData( self::$instanceId );
-        self::$Environment->getStorage()->saveModule( self::$newInstanceId, $original );
-
-        $moduleDefinition['areaContext'] = filter_var( $_POST['areaContext'], FILTER_SANITIZE_STRING );
+        $originalData = self::$Environment->getStorage()->getModuleData( self::$instanceId );
+        self::$Environment->getStorage()->saveModule( $moduleDefinition['mid'], $originalData );
 
         self::$Environment->getStorage()->reset();
         $moduleDefinition = apply_filters( 'kb.module.before.factory', $moduleDefinition );
 
         $Factory = new ModuleFactory( self::$class, $moduleDefinition, self::$Environment );
         $Module = $Factory->getModule();
-
-
         ob_start();
         $Module->renderForm();
         $html = ob_get_clean();
 
         $response = array
         (
-            'id' => self::$newInstanceId,
+            'id' => $moduleDefinition['mid'],
             'module' => $moduleDefinition,
             'name' => $Module->settings['publicName'],
             'html' => $html,
-            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON(),
+            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
 
         );
-        wp_send_json( $response );
+        return new AjaxSuccessResponse( 'Module successfully duplicated', $response );
     }
 
 }

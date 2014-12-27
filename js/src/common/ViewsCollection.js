@@ -35,7 +35,6 @@ KB.ViewsCollection = function () {
 
   this.remove = function (id) {
     var V = this.get(id);
-
     V.Area.trigger('kb.module.deleted', V);
     this.trigger('kb.modules.view.deleted', V);
 

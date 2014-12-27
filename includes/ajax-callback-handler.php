@@ -9,10 +9,6 @@ use Kontentblocks\Ajax\Actions\CreateNewModule;
  */
 
 
-
-
-
-
 /**
  * -----------------------------------------
  * Handler for creating new modules
@@ -25,13 +21,6 @@ function createNewModuleCb()
 }
 
 add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
-
-/**
- * -----------------------------------------
- * Handler for creating new modules
- * -----------------------------------------
- */
-add_action( 'wp_ajax_duplicateModule', array( 'Kontentblocks\Ajax\Actions\DuplicateModule', 'run' ) );
 
 
 /**

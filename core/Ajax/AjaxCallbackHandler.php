@@ -57,7 +57,8 @@ class AjaxCallbackHandler
                 'applyContentFilter' => array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' ),
                 'removeModules' => array('Kontentblocks\Ajax\Actions\RemoveModules', 'run'),
                 'changeModuleStatus' => array( 'Kontentblocks\Ajax\Actions\ChangeModuleStatus', 'run' ),
-                'getSanitizedId' => array( 'Kontentblocks\Ajax\Actions\GetSanitizedId', 'run' )
+                'getSanitizedId' => array( 'Kontentblocks\Ajax\Actions\GetSanitizedId', 'run' ),
+                'duplicateModule' => array( 'Kontentblocks\Ajax\Actions\DuplicateModule', 'run' )
             )
         );
     }

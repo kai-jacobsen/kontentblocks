@@ -211,18 +211,20 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
             return false;
         }
     },
-    success: function(data) {
-        if (data === -1) {
+    success: function(res) {
+        if (!res.success) {
             KB.Notice.notice("Request Error", "error");
             return false;
         }
-        this.parseAdditionalJSON(data.json);
-        this.model.areaView.modulesList.append(data.html);
-        KB.Modules.add(data.module);
+        this.parseAdditionalJSON(res.data.json);
+        this.model.areaView.modulesList.append(res.data.html);
+        KB.Modules.add(res.data.module);
+        var ModuleView = KB.Views.Modules.get(res.data.id);
+        this.model.areaView.addModuleView(ModuleView);
         var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
         jQuery("#kb_all_blocks").val(count);
         KB.Notice.notice("Module Duplicated", "success");
-        KB.Ui.repaint("#" + data.module.instance_id);
+        KB.Ui.repaint("#" + res.data.module.mid);
         KB.Fields.trigger("update");
     },
     parseAdditionalJSON: function(json) {
