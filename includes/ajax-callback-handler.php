@@ -65,14 +65,6 @@ add_action( 'wp_ajax_updateModule', array( 'Kontentblocks\Ajax\Actions\Frontend\
  */
 add_action( 'wp_ajax_updateModuleData', array( 'Kontentblocks\Ajax\Actions\UpdateModuleData', 'run' ) );
 
-/**
- * -----------------------------------------
- * Get sanitized Id
- * -----------------------------------------
- */
-
-add_action( 'wp_ajax_getSanitizedId', array( 'Kontentblocks\Ajax\Actions\GetSanitizedId', 'run' ) );
-
 
 /**
  * -----------------------------------------

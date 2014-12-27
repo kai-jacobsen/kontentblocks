@@ -7,9 +7,10 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
 
+
 /**
- * Class ResortModulesTest
- * @package core\Ajax
+ * Class RemoveModulesTest
+ * @package Kontentblocks\tests\core\Ajax\Actions
  */
 class RemoveModulesTest extends \WP_UnitTestCase
 {

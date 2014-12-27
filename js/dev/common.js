@@ -257,11 +257,11 @@ KB.Menus = function($) {
             }, this.insertId, this);
         },
         insertId: function(res) {
-            if (res === "translate") {
+            if (!res.success) {
                 this.initiatorEl.addClass();
                 $(".kb-js-area-id").val("Please chose a different name");
             } else {
-                $(".kb-js-area-id").val(res);
+                $(".kb-js-area-id").val(res.data.id);
                 this.enableSendButton();
             }
             this.loadingContainer.removeClass("loading");

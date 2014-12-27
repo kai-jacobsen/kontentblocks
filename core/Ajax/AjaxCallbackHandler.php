@@ -56,7 +56,8 @@ class AjaxCallbackHandler
                 'undraftModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' ),
                 'applyContentFilter' => array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' ),
                 'removeModules' => array('Kontentblocks\Ajax\Actions\RemoveModules', 'run'),
-                'changeModuleStatus' => array( 'Kontentblocks\Ajax\Actions\ChangeModuleStatus', 'run' )
+                'changeModuleStatus' => array( 'Kontentblocks\Ajax\Actions\ChangeModuleStatus', 'run' ),
+                'getSanitizedId' => array( 'Kontentblocks\Ajax\Actions\GetSanitizedId', 'run' )
             )
         );
     }

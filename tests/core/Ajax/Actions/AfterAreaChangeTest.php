@@ -8,8 +8,10 @@ use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 
+
 /**
  * Class AfterAreaChangeTest
+ * @package Kontentblocks\tests\core\Ajax\Actions
  */
 class AfterAreaChangeTest extends \WP_UnitTestCase
 {

@@ -2,6 +2,10 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Common\Data\ValueStorageInterface;
+
 
 /**
  * Class GetSanitizedId
@@ -13,18 +17,18 @@ namespace Kontentblocks\Ajax\Actions;
 class GetSanitizedId
 {
 
-    public static function run()
-    {
+    static $nonce = 'kb-read';
 
+    public static function run( ValueStorageInterface $Request )
+    {
         // verify action
-        check_ajax_referer( 'kb-read' );
         if (!current_user_can( 'edit_kontentblocks' )) {
-            wp_send_json_error();
+            return new AjaxErrorResponse( 'insufficient permissions' );
         }
 
-        $value     = filter_var( $_POST['inputvalue'], FILTER_SANITIZE_STRING );
-        $checkmode = filter_var( $_POST['checkmode'], FILTER_SANITIZE_STRING );
-        $check     = true;
+        $value = $Request->getFiltered( 'inputvalue', FILTER_SANITIZE_STRING );
+        $checkmode = $Request->getFiltered( 'checkmode', FILTER_SANITIZE_STRING );
+        $check = false;
 
         switch ($checkmode) {
             case 'areas':
@@ -35,7 +39,15 @@ class GetSanitizedId
                 break;
         }
 
-        wp_send_json( $check );
+        if (is_string( $check )) {
+            return new AjaxSuccessResponse(
+                'ID is valid', array(
+                    'id' => $check
+                )
+            );
+        } else {
+            return new AjaxErrorResponse( 'ID already esists' );
+        }
 
     }
 
@@ -47,20 +59,19 @@ class GetSanitizedId
     private static function checkAreaExists( $ad )
     {
         $sane = sanitize_title( 'kb_da_' . $ad );
-
+        $sane = str_replace( '-', '_', $sane );
         $posts = get_posts(
             array(
-                'post_type'        => 'kb-dyar',
-                'posts_per_page'   => 1,
-                'name'             => $sane,
+                'post_type' => 'kb-dyar',
+                'posts_per_page' => 1,
+                'name' => $sane,
                 'suppress_filters' => false
             )
         );
 
         if (!empty( $posts )) {
-            return 'translate';
+            return false;
         }
-
         return str_replace( '-', '_', $sane );
 
     }
@@ -73,20 +84,29 @@ class GetSanitizedId
     private static function checkTemplateExists( $ad )
     {
         $sane = sanitize_title( 'kb_tpl_' . $ad );
+        $sane = str_replace( '-', '_', $sane );
 
         $posts = get_posts(
             array(
-                'post_type'        => 'kb-mdtpl',
-                'posts_per_page'   => 1,
-                'name'             => $sane,
+                'post_type' => 'kb-mdtpl',
+                'posts_per_page' => 1,
+                'name' => $sane,
                 'suppress_filters' => false,
-                'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash')
+                'post_status' => array(
+                    'publish',
+                    'pending',
+                    'draft',
+                    'auto-draft',
+                    'future',
+                    'private',
+                    'inherit',
+                    'trash'
+                )
             )
         );
         if (!empty( $posts )) {
-            return 'translate';
+            return false;
         }
-
         return str_replace( '-', '_', $sane );
 
     }

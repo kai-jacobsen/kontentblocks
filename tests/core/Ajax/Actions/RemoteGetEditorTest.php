@@ -7,7 +7,8 @@ use Kontentblocks\Common\Data\ValueStorage;
 
 
 /**
- * Class AfterAreaChangeTest
+ * Class RemoteGetEditorTest
+ * @package Kontentblocks\tests\core\Ajax\Actions
  */
 class RemoteGetEditorTest extends \WP_UnitTestCase
 {

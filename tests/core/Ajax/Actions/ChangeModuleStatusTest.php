@@ -11,7 +11,8 @@ use Kontentblocks\Modules\ModuleWorkshop;
 
 
 /**
- * Class AfterAreaChangeTest
+ * Class ChangeModuleStatusTest
+ * @package Kontentblocks\tests\core\Ajax\Actions
  */
 class ChangeModuleStatusTest extends \WP_UnitTestCase
 {

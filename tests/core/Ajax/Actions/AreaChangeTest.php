@@ -10,7 +10,8 @@ use Kontentblocks\Modules\ModuleWorkshop;
 
 
 /**
- * Class AfterAreaChangeTest
+ * Class AreaChangeTest
+ * @package Kontentblocks\tests\core\Ajax\Actions
  */
 class AreaChangeTest extends \WP_UnitTestCase
 {

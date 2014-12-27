@@ -92,7 +92,6 @@ class DynamicAreas
         }
 
         $this->Storage = new ModuleStorage( get_the_ID() );
-
         $area = $this->Storage->getDataProvider()->get( '_area' );
         $payload = filter_input( INPUT_POST, 'area', FILTER_DEFAULT );
         $data = ( isset( $payload ) ) ? $payload : $area;
