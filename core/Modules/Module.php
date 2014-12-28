@@ -782,7 +782,7 @@ abstract class Module
      */
     public function getModuleName()
     {
-        if (isset( $this->overrides )) {
+        if (is_array( $this->overrides ) && isset( $this->overrides['name'] )) {
             return $this->overrides['name'];
         } else {
             return $this->settings['name'];

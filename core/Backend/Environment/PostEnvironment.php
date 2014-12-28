@@ -246,6 +246,7 @@ class PostEnvironment implements JsonSerializable
      */
     public function getModuleData( $id )
     {
+        $this->Storage->reset();
         $data = $this->Storage->getModuleData( $id );
 
         if ($data !== null) {

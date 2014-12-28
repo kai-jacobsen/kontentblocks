@@ -153,7 +153,7 @@ class ModuleStorage implements \Countable
      * Returns the module definition from index by instance id
      *
      * @param string $id
-     * @return boolean
+     * @return array|boolean
      */
     public function getModuleDefinition( $id )
     {
@@ -235,7 +235,6 @@ class ModuleStorage implements \Countable
      */
     public function getModuleData( $id )
     {
-
         if ($id[0] !== '_') {
             $id = '_' . $id;
         }
@@ -426,8 +425,8 @@ class ModuleStorage implements \Countable
      */
     public function count()
     {
-        if (is_array($this->index)){
-            return count($this->index);
+        if (is_array( $this->index )) {
+            return count( $this->index );
         }
 
         return 0;

@@ -83,29 +83,30 @@ class DuplicateModule
 
         $Workshop = new ModuleWorkshop(
             self::$Environment, array(
-                'state' => array(
-                    'draft' => true,
-                    'active' => true
-                ),
-                'class' => self::$class,
-                'area' => $stored['area'],
-                'areaContext' => $stored['areaContext']
-            )
+            'state' => array(
+                'draft' => true,
+                'active' => true
+            ),
+            'class' => self::$class,
+            'area' => $stored['area'],
+            'areaContext' => $stored['areaContext']
+        ), $stored
         );
 
-        $moduleDefinition = wp_parse_args( $Workshop->getDefinitionArray(), $stored );
 
-        $update = self::$Environment->getStorage()->addToIndex( $moduleDefinition['mid'], $moduleDefinition );
+        $update = self::$Environment->getStorage()->addToIndex(
+            $Workshop->getNewId(),
+            $Workshop->getDefinitionArray()
+        );
         if ($update !== true) {
             return new AjaxErrorResponse(
                 'Duplication failed due to update error', array(
                     'update' => $update,
-                    'modDef' => $moduleDefinition,
-                    'workshop' => $Workshop->getDefinitionArray()
+                    'modDef' => $Workshop->getDefinitionArray()
                 )
             );
         } else {
-            return self::doDuplication( $moduleDefinition );
+            return self::doDuplication( $Workshop->getDefinitionArray() );
         }
     }
 

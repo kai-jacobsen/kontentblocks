@@ -45,7 +45,7 @@ class ModuleFactory
         if ($data === null) {
             $this->data = apply_filters(
                 'kb.module.factory.data',
-                $Environment->getModuleData( $moduleArgs['instance_id'] ),
+                $Environment->getModuleData( $moduleArgs['mid'] ),
                 $moduleArgs
             );
         } else {

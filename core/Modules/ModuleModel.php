@@ -14,12 +14,12 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
     /**
      * @var bool
      */
-    protected $initialized = false;
+    protected $_initialized = false;
 
     /**
      * @var bool
      */
-    protected $locked = false;
+    protected $_locked = false;
 
     /**
      * @param array $data
@@ -27,7 +27,7 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
     public function __construct( $data = array() )
     {
         $this->set( $data );
-        $this->initialized = true;
+        $this->_initialized = true;
     }
 
     /**
@@ -78,8 +78,8 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
     function jsonSerialize()
     {
         $vars = get_object_vars( $this );
-        unset( $vars['locked'] );
-        unset( $vars['initialized'] );
+        unset( $vars['_locked'] );
+        unset( $vars['_initialized'] );
         return $vars;
     }
 
@@ -128,7 +128,7 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     public function offsetSet( $offset, $value )
     {
-        if (!$this->locked) {
+        if (!$this->_locked) {
             $this->$offset = $value;
         } else {
             trigger_error( 'Module Model is locked', E_USER_WARNING );
@@ -146,7 +146,7 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     public function offsetUnset( $offset )
     {
-        if (!$this->locked) {
+        if (!$this->_locked) {
             unset( $this->$offset );
         } else {
             trigger_error( ' Module Model is locked', E_USER_WARNING );
@@ -159,7 +159,7 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     public function lock()
     {
-        $this->locked = true;
+        $this->_locked = true;
     }
 
     /**
@@ -168,6 +168,6 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     public function unlock()
     {
-        $this->locked = false;
+        $this->_locked = false;
     }
 }

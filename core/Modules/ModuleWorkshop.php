@@ -16,19 +16,51 @@ use Kontentblocks\Utils\Utilities;
  */
 class ModuleWorkshop
 {
+    /**
+     * @var PostEnvironment
+     */
+    private $Environment;
 
-    protected $Environment;
-    protected $moduleArgs;
+    /**
+     * @var array
+     */
+    private $moduleArgs;
+
+    /**
+     * @var string
+     */
+    private $newId;
+
+    /**
+     * @var array
+     */
+    private $newData;
+
+    /**
+     * @var \Kontentblocks\Modules\Module
+     */
+    private $Module;
+
+    /**
+     * @var bool
+     */
+    private $locked = false;
+
+    /**
+     * @var bool
+     */
+    private $valid = false;
 
     /**
      * Setup module args and class properties
      * @param PostEnvironment $Environment
      * @param array $args
      */
-    public function __construct( PostEnvironment $Environment, $args = array() )
+    public function __construct( PostEnvironment $Environment, $args = array(), $oldArgs = array() )
     {
         $this->Environment = $Environment;
-        $this->moduleArgs = $this->setupModuleArgs( $args );
+        $this->moduleArgs = $this->setupModuleArgs( $args, $oldArgs );
+        $this->valid = $this->validate();
     }
 
     /**
@@ -38,16 +70,11 @@ class ModuleWorkshop
      */
     public function getDefinitionArray()
     {
-        if (is_null( $this->moduleArgs['class'] )) {
-            return false;
+        if ($this->isValid()) {
+            return $this->moduleArgs;
         }
 
-        if (!class_exists( $this->moduleArgs['class'] )) {
-
-            return false;
-        }
-
-        return $this->moduleArgs;
+        return false;
     }
 
     /**
@@ -56,9 +83,85 @@ class ModuleWorkshop
      */
     public function create()
     {
-        if (is_array( $this->getDefinitionArray() )) {
-            return $this->Environment->getStorage()->addToIndex( $this->createModuleId(), $this->moduleArgs );
+        if (is_array( $this->getDefinitionArray() ) && !$this->isLocked()) {
+            $update = $this->Environment->getStorage()->addToIndex( $this->createModuleId(), $this->moduleArgs );
+            if (!is_null( $this->newData )) {
+                $this->Environment->getStorage()->saveModule( $this->getNewId(), $this->newData );
+            }
+
+            if ($update) {
+                $this->locked = true;
+                return true;
+            }
         }
+        return false;
+    }
+
+
+    /**
+     *
+     * @return bool|Module|null
+     */
+    public function createAndGet()
+    {
+        if ($this->isValid() && $this->create()) {
+            return $this->getModule();
+        }
+        return false;
+    }
+
+    /**
+     * @return Module|null
+     */
+    public function getModule()
+    {
+        if ($this->isValid()) {
+            $Factory = new ModuleFactory(
+                $this->getDefinitionArray()['class'],
+                $this->getDefinitionArray(),
+                $this->Environment
+            );
+            return $this->Module = $Factory->getModule();
+        }
+        return false;
+    }
+
+    /**
+     * @param $data
+     * @return bool|\Kontentblocks\Backend\Storage\new|null
+     */
+    public function setData( $data )
+    {
+        if (!is_null( $data ) && $this->isValid()) {
+            $this->newData = $data;
+        }
+        return null;
+    }
+
+    /**
+     * Return new module id
+     * @return mixed
+     */
+    public function getNewId()
+    {
+        return $this->newId;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function isLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->valid;
     }
 
     /**
@@ -66,9 +169,10 @@ class ModuleWorkshop
      * @param $args
      * @return array
      */
-    private function setupModuleArgs( $args )
+    private function setupModuleArgs( $args, $oldargs )
     {
-        $mid = ( isset( $args['mid'] ) ) ? $args['mid'] : $this->createModuleId();
+        $this->newId = $mid = ( isset( $args['mid'] ) ) ? sanitize_key( $args['mid'] ) : $this->createModuleId();
+
         $defaults = array(
             // id
             'instance_id' => $mid,
@@ -77,14 +181,14 @@ class ModuleWorkshop
             'template' => false,
             'master' => false,
             'templateObj' => array(
-                'id' => null,
-                'name' => null,
+                'id' => '',
+                'name' => '',
             ),
             'masterObj' => array(
-                'parentId' => null
+                'parentId' => ''
             ),
             // generic
-            'class' => null,
+            'class' => '',
             'overrides' => array(
                 'name' => null
             ),
@@ -98,7 +202,13 @@ class ModuleWorkshop
             )
         );
 
-        return wp_parse_args( $args, $defaults );
+
+        if (!empty( $oldargs )) {
+            $newArgs = Utilities::arrayMergeRecursive( $args, $oldargs );
+            return Utilities::arrayMergeRecursive( $newArgs, $defaults );
+        } else {
+            return Utilities::arrayMergeRecursive( $args, $defaults );
+        }
     }
 
     /**
@@ -109,6 +219,19 @@ class ModuleWorkshop
         $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
         $count = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() ) + 1;
         return $prefix . $this->Environment->getId() . '_' . $count;
+    }
+
+    private function validate()
+    {
+        if (is_null( $this->moduleArgs['class'] )) {
+            return false;
+        }
+
+        if (!class_exists( $this->moduleArgs['class'] )) {
+            return false;
+        }
+
+        return true;
     }
 
 }
