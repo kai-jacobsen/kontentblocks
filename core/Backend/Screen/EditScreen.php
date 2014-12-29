@@ -2,9 +2,7 @@
 
 namespace Kontentblocks\Backend\Screen;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Helper;
-use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
 
@@ -33,29 +31,23 @@ Class EditScreen
     function __construct()
     {
         global $pagenow;
-        $this->hooks = $this->setupHooks();
-
-        if (!in_array( $pagenow, $this->hooks )) {
-            return null;
+        if (in_array( $pagenow, $this->setupHooks() )) {
+            // add UI
+            add_action( 'edit_form_after_editor', array( $this, 'renderUserInterface' ), 10 );
+            // register save callback
+            add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+            // expose data to the document
+            add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
         }
-        // add UI
-        add_action( 'add_meta_boxes', array( $this, 'addUserInterface' ), 20, 2 );
-        // register save callback
-        add_action( 'save_post', array( $this, 'save' ), 10, 2 );
-        // expose data to the document
-        add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
-
     }
 
-
     /**
-     * main hook to add the interface
-     * @since 1.0.0
-     *
+     * Callback for 'edit_form_after_editor'
+     * @param $post
      */
-    function addUserInterface()
+    public function renderUserInterface( $post )
     {
-        add_action( 'edit_form_after_editor', array( $this, 'userInterface' ), 10 );
+        echo $this->userInterface($post);
     }
 
     /**
@@ -64,44 +56,41 @@ Class EditScreen
      * Adds some generic but important meta informations in hidden fields
      * calls renderScreen
      * @since 1.0.0
-     * @param $postType
      * @param $post
      * @return null
      */
-    function userInterface( $postType, $post )
+    public function userInterface( $post )
     {
-        $blogId = get_current_blog_id();
         $Environment = Utilities::getEnvironment( $post->ID );
         // bail if post type doesn't support kontentblocks
         if (!post_type_supports( $Environment->get( 'postType' ), 'kontentblocks' )) {
             return null;
         }
-        // the main wrapper for the interface
-        echo "<div class='clearfix' id='kontentblocks_stage'>";
-        echo "<div class='kb-whiteout' style='display: none;'></div>";
-        echo "<div class='fullscreen--title-wrapper' style='display: none;'></div>";
-        echo "<div class='fullscreen--description-wrapper' style='display: none;'></div>";
-        // Use nonce for verification
-        wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
-        wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
-
-        // output hidden input field and set the base_id as reference for new modules
-        // this makes sure that new modules have a unique id
-        echo Utilities::getBaseIdField( $Environment->getAllModules() );
-        echo "<input type='hidden' name='blog_id' value='{$blogId}'>";
-        // hackish way to keep functionality of dynamically create tinymce instances
-        if (!post_type_supports(
-                $Environment->get( 'postType' ),
-                'editor'
-            ) and !post_type_supports( $Environment->get( 'postType' ), 'kb_content' )
-        ) {
+        if (!post_type_supports( $Environment->get( 'postType' ), 'editor' )) {
             Utilities::hiddenEditor();
         }
 
-        // tada
-        $this->renderScreen( $Environment );
-        echo "</div> <!--end ks -->";
+        $hasAreas = true;
+        $areas = $Environment->get( 'areas' );
+        if (!$areas || empty( $areas )) {
+            $hasAreas = false;
+        }
 
+        $View = new CoreView(
+            '/edit-screen/user-interface.twig', array(
+                'ScreenManager' => new ScreenManager( $Environment ),
+                'hasAreas' => $hasAreas,
+                'noAreas' => $this->handleEmptyAreas(),
+                'blogId' => get_current_blog_id(),
+                'baseField' => Utilities::getBaseIdField( $Environment->getAllModules() ),
+                'nonces' => array(
+                    'save' => wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename', true, false ),
+                    'ajax' => wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce', true, false )
+                )
+            )
+        );
+
+        return $View->render( false );
 
     }
 
@@ -130,27 +119,6 @@ Class EditScreen
 
 
     /**
-     * Render
-     * Create a new Screen Manager which will handle the several sections
-     * True edit screen layout starts here
-     * @uses Kontentblocks\Backend\Screen\ScreenManager
-     * @return void
-     * @since 1.0.0
-     *
-     */
-    public function renderScreen( $Environment )
-    {
-        $areas = $Environment->get( 'areas' );
-        if (!$areas || empty( $areas )) {
-            $this->handleEmptyAreas();
-            return;
-        }
-
-        $ScreenManager = new ScreenManager( $Environment );
-        $ScreenManager->render();
-    }
-
-    /**
      * toJSON
      * Make certain properties available throughout the frontend
      * @since 1.0.0
@@ -158,7 +126,8 @@ Class EditScreen
      */
     public function toJSON()
     {
-        $this->Environment->toJSON();
+
+        Utilities::getEnvironment(get_the_ID())->toJSON();
     }
 
     /**
@@ -175,11 +144,11 @@ Class EditScreen
 
     private function handleEmptyAreas()
     {
-        global $current_user;
         if (current_user_can( 'manage_kontentblocks' )) {
             $tpl = new CoreView( 'no-areas.twig' );
-            $tpl->render( true );
+            return $tpl->render( false );
         }
+        return '';
     }
 
 }

@@ -1,0 +1,15 @@
+<div class='clearfix' id='kontentblocks-core-ui'>
+    <div class='kb-whiteout' style='display: none;'></div>
+    <div class='fullscreen--title-wrapper' style='display: none;'></div>
+    <div class='fullscreen--description-wrapper' style='display: none;'></div>
+    {{ nonces.save | raw }}
+    {{ nonces.ajax | raw }}
+    {{ baseField | raw }}
+    <input type='hidden' name='blog_id' value='{{ blogId }}'>
+
+    {% if hasAreas == false %}
+        {{ noAreas | raw }}
+    {% endif %}
+
+    {{ ScreenManager.render() | raw }}
+</div> <!--end ks -->

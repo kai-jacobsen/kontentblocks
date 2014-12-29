@@ -103,7 +103,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
   fullscreen: function () {
     var that = this;
     this.sizeTimer = null;
-    var $stage = jQuery('#kontentblocks_stage');
+    var $stage = jQuery('#kontentblocks-core-ui');
     $stage.addClass('fullscreen');
     var $title = jQuery('.fullscreen--title-wrapper', $stage);
     var $description = jQuery('.fullscreen--description-wrapper', $stage);
@@ -126,7 +126,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
 
   },
   closeFullscreen: function () {
-    var $stage = jQuery('#kontentblocks_stage');
+    var $stage = jQuery('#kontentblocks-core-ui');
     $stage.removeClass('fullscreen');
     clearInterval(this.sizeTimer);
     this.$el.removeClass('fullscreen-module');

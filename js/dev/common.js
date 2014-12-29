@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-28 */
+/*! Kontentblocks DevVersion 2014-12-29 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -896,7 +896,7 @@ KB.Ui = function($) {
         flexContext: function() {
             var side = $(".area-side");
             var normal = $(".area-normal");
-            var stage = $("#kontentblocks_stage");
+            var stage = $("#kontentblocks-core-ui");
             var that = this;
             jQuery("body").on("mouseover", ".kb_module--body", function() {
                 var $con = $(this).closest(".kb-context-container");
@@ -999,7 +999,7 @@ KB.Ui = function($) {
                 revert: 350,
                 start: function(event, ui) {
                     that.isSorting = true;
-                    $("#kontentblocks_stage").addClass("kb-is-sorting");
+                    $("#kontentblocks-core-ui").addClass("kb-is-sorting");
                     currentModule = KB.Modules.get(ui.item.attr("id"));
                     areaOver = KB.currentArea;
                     $(KB).trigger("kb:sortable::start");
@@ -1010,7 +1010,7 @@ KB.Ui = function($) {
                 },
                 stop: function(event, ui) {
                     that.isSorting = false;
-                    $("#kontentblocks_stage").removeClass("kb-is-sorting");
+                    $("#kontentblocks-core-ui").removeClass("kb-is-sorting");
                     KB.TinyMCE.restoreEditors();
                     $(document).trigger("kb_sortable_stop", [ event, ui ]);
                     if (currentModule.get("open")) {
