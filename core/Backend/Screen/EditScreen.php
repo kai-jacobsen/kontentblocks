@@ -26,11 +26,6 @@ Class EditScreen
      */
     protected $hooks;
 
-    /**
-     * Post data Handler
-     * @var \Kontentblocks\Backend\Environment\PostEnvironment
-     */
-    protected $Environment;
 
     /**
      * Add the main metabox to all given post types in the kb_register_kontentblocks function call
@@ -43,8 +38,6 @@ Class EditScreen
         if (!in_array( $pagenow, $this->hooks )) {
             return null;
         }
-        // prepare current posts data
-        add_action( 'add_meta_boxes', array( $this, 'setupEnvironment' ), 10 );
         // add UI
         add_action( 'add_meta_boxes', array( $this, 'addUserInterface' ), 20, 2 );
         // register save callback
@@ -54,18 +47,6 @@ Class EditScreen
 
     }
 
-    /**
-     * setup post specific data used throughout the script
-     * @global \WP_Post $post
-     * @uses \Kontentblocks\Backend\Environment\PostEnvironment
-     * @since 1.0.0
-     */
-    public function setupEnvironment()
-    {
-        global $post;
-        $this->Environment = Utilities::getEnvironment( $post->ID );
-
-    }
 
     /**
      * main hook to add the interface
@@ -83,15 +64,17 @@ Class EditScreen
      * Adds some generic but important meta informations in hidden fields
      * calls renderScreen
      * @since 1.0.0
-     * @return void
+     * @param $postType
+     * @param $post
+     * @return null
      */
-    function userInterface()
+    function userInterface( $postType, $post )
     {
         $blogId = get_current_blog_id();
-
+        $Environment = Utilities::getEnvironment( $post->ID );
         // bail if post type doesn't support kontentblocks
-        if (!post_type_supports( $this->Environment->get( 'postType' ), 'kontentblocks' )) {
-            return;
+        if (!post_type_supports( $Environment->get( 'postType' ), 'kontentblocks' )) {
+            return null;
         }
         // the main wrapper for the interface
         echo "<div class='clearfix' id='kontentblocks_stage'>";
@@ -104,20 +87,19 @@ Class EditScreen
 
         // output hidden input field and set the base_id as reference for new modules
         // this makes sure that new modules have a unique id
-        echo Utilities::getBaseIdField( $this->Environment->getAllModules() );
+        echo Utilities::getBaseIdField( $Environment->getAllModules() );
         echo "<input type='hidden' name='blog_id' value='{$blogId}'>";
         // hackish way to keep functionality of dynamically create tinymce instances
         if (!post_type_supports(
-                $this->Environment->get( 'postType' ),
+                $Environment->get( 'postType' ),
                 'editor'
-            ) and !post_type_supports( $this->Environment->get( 'postType' ), 'kb_content' )
+            ) and !post_type_supports( $Environment->get( 'postType' ), 'kb_content' )
         ) {
             Utilities::hiddenEditor();
         }
 
         // tada
-        $this->renderScreen();
-
+        $this->renderScreen( $Environment );
         echo "</div> <!--end ks -->";
 
 
@@ -140,7 +122,6 @@ Class EditScreen
 
         $Environment = Utilities::getEnvironment( $post_id );
         $Environment->save();
-
     }
 
     # ------------------------------------------------
@@ -157,17 +138,16 @@ Class EditScreen
      * @since 1.0.0
      *
      */
-    public function renderScreen()
+    public function renderScreen( $Environment )
     {
-        $areas = $this->Environment->get( 'areas' );
+        $areas = $Environment->get( 'areas' );
         if (!$areas || empty( $areas )) {
             $this->handleEmptyAreas();
             return;
         }
 
-        $ScreenManager = new ScreenManager( $this->Environment );
+        $ScreenManager = new ScreenManager( $Environment );
         $ScreenManager->render();
-
     }
 
     /**

@@ -1,15 +1,14 @@
 <?php
 
-namespace Kontentblocks\tests\core\Common\Data;
+namespace Kontentblocks\tests\core\Modules;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
 
 
 /**
- * Class TestPostInputData
- * @package core\Fields
+ * Class ModuleWorkshopTest
+ * @package Kontentblocks\tests\core\Modules
  */
 class ModuleWorkshopTest extends \WP_UnitTestCase
 {
@@ -37,16 +36,17 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
         $this->assertTrue( $update );
     }
 
-    public function testCreateisLocked(){
+    public function testCreateisLocked()
+    {
         $Workshop = $this->getWorkshop();
         $first = $Workshop->create();
         $second = $Workshop->create();
 
-        $this->assertTrue($first);
-        $this->assertFalse($second);
+        $this->assertTrue( $first );
+        $this->assertFalse( $second );
 
         $third = $Workshop->createAndGet();
-        $this->assertFalse($third);
+        $this->assertFalse( $third );
 
         $Module = $Workshop->getModule();
         $this->assertInstanceOf( '\Kontentblocks\Modules\Module', $Module );
