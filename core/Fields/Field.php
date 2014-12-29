@@ -4,6 +4,7 @@
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 use Kontentblocks\Fields\Returnobjects;
@@ -287,7 +288,7 @@ abstract class Field
      */
     public function getDisplay()
     {
-        return filter_var( $this->getArg('display', true), FILTER_VALIDATE_BOOLEAN );
+        return filter_var( $this->getArg( 'display', true ), FILTER_VALIDATE_BOOLEAN );
 
     }
 
@@ -298,7 +299,7 @@ abstract class Field
      */
     public function setDisplay( $bool )
     {
-        $this->setArgs(array('display' => filter_var($bool, FILTER_VALIDATE_BOOLEAN)));
+        $this->setArgs( array( 'display' => filter_var( $bool, FILTER_VALIDATE_BOOLEAN ) ) );
     }
 
     /**
@@ -338,8 +339,8 @@ abstract class Field
                 $this->returnObj = new $classname( $value, $this );
             }
 
-            if (is_null($this->returnObj)){
-                throw new \Exception( 'requested Return Object does not exist');
+            if (is_null( $this->returnObj )) {
+                throw new \Exception( 'requested Return Object does not exist' );
             }
 
             return $this->returnObj;
@@ -397,7 +398,28 @@ abstract class Field
      * @since 1.0.0
      * @param FieldForm $Form
      */
-    public abstract function form( FieldForm $Form );
+    public function form( FieldForm $Form )
+    {
+        $type = $this->type;
+        $tpl = $this->getArg( 'template', 'default' );
+
+        $data = array(
+            'Form' => $Form,
+            'Field' => $this
+        );
+
+        /**
+         * Field may alter the injected data array
+         */
+        if (method_exists( $this, 'prepareTemplateData' )) {
+            $data = $this->prepareTemplateData( $data );
+        }
+
+        $View = new FieldView(
+            $type . '/' . $tpl . '.twig', $data
+        );
+        $View->render( true );
+    }
 
     /**
      * Build the whole field, including surrounding wrapper
@@ -433,13 +455,20 @@ abstract class Field
     public function javascriptSettings()
     {
 
-        Kontentblocks::getService('utility.jsontransport')->registerFieldArgs( $this->uniqueId, $this->cleanedArgs() );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
+            $this->uniqueId,
+            $this->cleanedArgs()
+        );
 
         $settings = $this->getArg( 'jSettings' );
         if (!$settings) {
             return;
         }
-        Kontentblocks::getService('utility.jsontransport')->registerData( 'FieldsConfig', $this->uniqueId, $settings );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerData(
+            'FieldsConfig',
+            $this->uniqueId,
+            $settings
+        );
 
     }
 

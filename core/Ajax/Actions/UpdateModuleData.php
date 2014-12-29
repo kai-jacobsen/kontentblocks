@@ -28,7 +28,7 @@ class UpdateModuleData
         global $post;
         check_ajax_referer( 'kb-update' );
 
-        $moduleArgs = Utilities::validateBoolRecursive($_POST['module']);
+        $moduleArgs = Utilities::validateBoolRecursive( $_POST['module'] );
         $data = $_POST['data'];
         $postId = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
 
@@ -45,14 +45,13 @@ class UpdateModuleData
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
         $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
-
         $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
-
         $Module->setModuleData( $mergedData );
         unset( $moduleArgs['settings'] );
         unset( $moduleArgs['moduleData'] );
         $moduleArgs['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
+        $Environment->getStorage()->reset();
         $comp = $Environment->getStorage()->getModuleDefinition( $Module->getId() );
         $moduleArgs = wp_parse_args( $moduleArgs, $comp );
         $Environment->getStorage()->addToIndex( $Module->getId(), $moduleArgs );

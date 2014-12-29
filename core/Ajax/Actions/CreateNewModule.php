@@ -310,6 +310,8 @@ class CreateNewModule
             $this->moduleArgs['post_id'] = $this->moduleArgs['parentId'];
         }
 
+        $this->moduleArgs['overrides'] = array();
+
     }
 
     public function createModuleInstance()
