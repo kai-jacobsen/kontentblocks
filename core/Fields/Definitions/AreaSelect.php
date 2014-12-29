@@ -18,32 +18,14 @@ Class AreaSelect extends Field
         'type' => 'areaselect'
     );
 
-    /**
-     * Form
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
 
+    public function prepareTemplateData( $data )
+    {
         /** @var \Kontentblocks\Backend\Areas\AreaRegistry $Registry */
         $Registry = Kontentblocks::getService( 'registry.areas' );
-        $areas = $Registry->getGlobalAreas();
-        $Form->label();
-        print "<select id='{$Form->getInputFieldId()}' name='{$Form->getFieldName()}'>";
+        $data['areas'] = $Registry->getGlobalAreas();
 
-        if ($this->getArg( 'empty', true )) {
-            print "<option value='' name=''>Bitte wählen</option>";
-        }
-        if (!empty( $areas )) {
-            foreach ($areas as $o) {
-                $selected = selected( $this->getValue(), $o['id'], false );
-                print "<option {$selected} value='{$o['id']}'>{$o['name']}</option>";
-            }
-        }
-
-        print "</select>";
-        $Form->description();
-
+        return $data;
     }
 
     /**

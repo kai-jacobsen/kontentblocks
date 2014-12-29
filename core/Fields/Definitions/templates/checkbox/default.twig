@@ -1,0 +1,5 @@
+{{ Form.label() }}
+<label><input type='checkbox' id='{{ Form.getInputFieldId() }}'
+              name='{{ Form.getFieldName() }}'  {{ checked(Field.getValue(), true, false) }} /> {{ Field.getArg( 'text', 'Please label this checkbox' ) }}
+</label>
+{{ Form.description() }}

@@ -20,19 +20,6 @@ Class Checkbox extends Field
         'returnObj' => false
     );
 
-    /**
-     * Checkbox Form HTML
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
-        $checked = checked( $this->getValue(), true, false );
-        $Form->label();
-        echo "<label><input type='checkbox' id='{$Form->getInputFieldId()}' name='{$Form->getFieldName(
-        )}'  {$checked} /> {$this->getArg( 'text', 'Please label this checkbox' )}</label>";
-        $Form->description();
-
-    }
 
     /**
      * Custom save filter

@@ -117,7 +117,7 @@ class FieldForm
     {
         $label = $this->Field->getArg( 'label' );
         if (!empty( $label )) {
-            echo "<label class='kb_label heading kb-field--label-heading' for='{$this->getInputFieldId(
+            return "<label class='kb_label heading kb-field--label-heading' for='{$this->getInputFieldId(
             )}'>{$this->Field->getArg(
                 'label'
             )}</label>";

@@ -1,0 +1,16 @@
+{{ Form.label() }}
+
+<select id='{{ Form.getInputFieldId }}' name='{{ Form.getFieldName() }}'>
+
+    {% if Field.getArg('empty', true) %}
+        <option value='' name=''>Bitte wählen</option>
+    {% endif %}
+
+    {% if areas %}
+        {% for o in areas %}
+            <option {{ selected(Field.getValue, o.id) }} value="{{ o.id }}">{{ o.name }}</option>
+        {% endfor %}
+    {% endif %}
+
+</select>
+{{ Form.description() }}

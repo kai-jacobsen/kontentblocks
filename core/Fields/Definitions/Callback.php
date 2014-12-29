@@ -19,19 +19,7 @@ Class Callback extends Field
         'returnObj' => false
     );
 
-    /**
-     * Form
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
-        if (!$this->getArg( 'callback' )) {
-            echo "<p>No Callback specified</p>";
-        }
 
-        call_user_func_array( $this->getArg( 'callback' ), $this->getArg( 'args', array() ) );
-
-    }
 
     /**
      * Prevent recursion in json_encode of field args
