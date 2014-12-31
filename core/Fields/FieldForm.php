@@ -135,17 +135,13 @@ class FieldForm
      */
     public function header()
     {
-
-        $title = $this->Field->getArg( 'title' );
-
-        echo '<div class="kb-field-wrapper kb-js-field-identifier" id=' . esc_attr( $this->Field->uniqueId ) . '>'
-             . '<div class="kb-field-header">';
-        if (!empty( $title )) {
-            echo "<h4>" . esc_html( $title ) . "</h4>";
-        }
-        echo '</div>';
-        echo "<div class='kb_field kb-field kb-field--{$this->Field->getSetting( 'type' )} kb-field--reset clearfix'>";
-
+        $View = new FieldView(
+            '_partials/header.twig', array(
+                'Field' => $this->Field,
+                'Form' => $this
+            )
+        );
+        return $View->render();
     }
 
     /**
@@ -155,13 +151,13 @@ class FieldForm
      */
     public function body()
     {
-
+        $out = '';
         $value = $this->Field->getValue();
         /*
          * optional method to render something before the field
          */
         if (method_exists( $this->Field, 'preForm' )) {
-            $this->Field->preForm();
+            $out .= $this->Field->preForm();
         }
 
         // custom method on field instance level wins over class method
@@ -174,9 +170,9 @@ class FieldForm
 
         // When viewing from the frontend, an optional method can be used for the output
         if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->Field, 'frontsideForm' )) {
-            $this->Field->frontsideForm( $this );
+            $out .= $this->Field->frontsideForm( $this );
         } else {
-            $this->Field->form( $this );
+            $out .= $this->Field->form( $this );
         }
 
         // some fields (colorpicker etc) might have some individual settings
@@ -185,9 +181,10 @@ class FieldForm
          * optional call after the body
          */
         if (method_exists( $this->Field, 'postForm' )) {
-            $this->Field->postForm();
+            $out .=$this->Field->postForm();
         }
 
+        return $out;
     }
 
     /**
@@ -196,7 +193,13 @@ class FieldForm
      */
     public function footer()
     {
-        echo "</div></div>";
+        $View = new FieldView(
+            '_partials/footer.twig', array(
+                'Field' => $this->Field,
+                'Form' => $this
+            )
+        );
+        return $View->render();
 
     }
 
@@ -205,19 +208,21 @@ class FieldForm
      */
     public function build()
     {
+        $out = '';
         // A Field might not be present, i.e. if it's not set to
         // the current context
         // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
         if (!$this->Field->getDisplay()) {
             if ($this->Field->getSetting( 'renderHidden' ) && method_exists( $this->Field, 'renderHidden' )) {
-                $this->Field->renderHidden( $this );
+                return $this->Field->renderHidden( $this );
             }
             // Full markup
         } else {
-            $this->header();
-            $this->body();
-            $this->footer();
+            $out .= $this->header();
+            $out .= $this->body();
+            $out .= $this->footer();
         }
+        return $out;
     }
 
 }

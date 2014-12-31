@@ -422,7 +422,7 @@ abstract class Field
         $View = new FieldView(
             $type . '/' . $tpl . '.twig', $data
         );
-        $View->render( true );
+        return $View->render( false );
     }
 
     /**
@@ -430,16 +430,22 @@ abstract class Field
      * and optional 'hooks"
      * @TODO add some wp hooks here?
      * @since 1.0.0
-     * @return void
+     * @param bool $echo
+     * @return string $out
      */
-    public function build()
+    public function build( $echo = true )
     {
 
         $this->uniqueId = $this->createUID();
         // handles the form output
         $Form = new FieldForm( $this );
-        $Form->build();
+        $out = $Form->build();
 
+        if ($echo) {
+            echo $out;
+        }
+
+        return $out;
     }
 
     /**
