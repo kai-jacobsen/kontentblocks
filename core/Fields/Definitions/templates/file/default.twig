@@ -1,5 +1,6 @@
 <div class='kb-field-file-wrapper {{ isEmpty }}'>
-    {{ form.label() }}
+    {{ Form.getLabel() }}
+    {{ Form.getDescription() }}
     <table>
         <tbody>
         <tr>
@@ -21,7 +22,7 @@
         </tbody>
     </table>
     <input type="hidden" class="kb-file-attachment-id" value="{{ file.getAttr('id') }}"
-           name="{{ form.getFieldName('id') }}">
+           name="{{ Form.getFieldName('id') }}">
 </div>
 <a class="button primary kb-js-add-file">{{ i18n.selectFile }}</a>
 <a class="kb-js-reset-file {{ isEmpty }}">{{ i18n.remove }}</a>

@@ -315,8 +315,12 @@ Class Kontentblocks
             return Twig::setupLoader( $container );
         };
 
-        $this->Services['templating.twig'] = function ( $container ) {
+        $this->Services['templating.twig.public'] = function ( $container ) {
             return Twig::setupEnvironment( $container );
+        };
+
+        $this->Services['templating.twig.fields'] = function ( $container ) {
+            return Twig::setupEnvironment( $container, false );
         };
     }
 

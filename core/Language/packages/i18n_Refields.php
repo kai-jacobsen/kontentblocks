@@ -32,14 +32,14 @@
             'description' => __( 'Description', 'Kontentblocks' )
         ),
         // Field:: choseTaxonomy
-        'choseTaxonomy' => array(
+        'chosetaxonomy' => array(
             'noTaxonomySet' => __( 'Please provide a Taxonomy identifier', 'Kontentblocks' ),
             'noTaxonomyFound' => __( 'There is no such Taxonomy registered', 'Kontentblocks' ),
             'emptyTaxonomySelect' => __( 'Please chose', 'Kontentblocks' ),
             'invalidTaxonomyField' => __( 'Please use either name,id or slug as field', 'Kontentblocks' )
         ),
         // Field::otimes
-        'openingTimes' => array(
+        'otimes' => array(
             'and' => __( 'and', 'Kontentblocks' ),
             'until' => __( 'until', 'Kontentblocks' ),
             'mon' => array(

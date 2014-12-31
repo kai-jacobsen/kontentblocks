@@ -17,30 +17,11 @@ Class SidebarSelect extends Field
         'type' => 'sidebarselect'
     );
 
-    /**
-     * Form
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
+    public function prepareTemplateData( $data )
     {
-
         global $wp_registered_sidebars;
-        $Form->label();
-        print "<select id='{$Form->getInputFieldId()}' name='{$Form->getFieldName()}'>";
-
-        if ($this->getArg( 'empty', true )) {
-            print "<option value='' name=''>Bitte wählen</option>";
-        }
-        if (!empty( $wp_registered_sidebars )) {
-            foreach ($wp_registered_sidebars as $o) {
-                $selected = selected( $this->getValue(), $o['id'], false );
-                print "<option {$selected} value='{$o['id']}'>{$o['name']}</option>";
-            }
-        }
-
-        print "</select>";
-        $Form->description();
-
+        $data['sidebars'] = $wp_registered_sidebars;
+        return $data;
     }
 
     /**

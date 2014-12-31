@@ -17,17 +17,7 @@ Class Fonticonpicker extends Field
         'type' => 'fonticonpicker'
     );
 
-    /**
-     * Form
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
-        $Form->label();
-        echo "<input class='kb-fonticonpicker' id='{$Form->getInputFieldId()}' name='{$Form->getFieldName(
-        )}' placeholder='{$Form->getPlaceholder()}'  value='{$this->getValue()}' />";
-        $Form->description();
-    }
+
 
 
     /**

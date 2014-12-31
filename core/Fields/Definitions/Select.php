@@ -15,39 +15,6 @@ Class Select extends Field
         'type' => 'select'
     );
 
-    /**
-     * Select field form html
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
-        $options = $this->getArg( 'options' );
-        if (!$options) {
-            echo __( 'Please set options to show', 'Kontentblocks' );
-
-            return;
-        }
-
-        $Form->label();
-
-        print "<select id='{$Form->getInputFieldId()}' name='{$Form->getFieldName()}'>";
-
-        if ($this->getArg( 'empty', true )) {
-            print "<option value='' name=''>Bitte wählen</option>";
-        }
-        if (!empty( $options )) {
-
-            foreach ($options as $o) {
-                $selected = selected( $this->getValue(), $o['value'], false );
-                print "<option {$selected} value='" . esc_attr( $o['value'] ) . "'>{$o['name']}</option>";
-            }
-        }
-
-        print "</select>";
-
-        $Form->description();
-
-    }
 
     /**
      * @param $val

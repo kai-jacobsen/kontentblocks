@@ -22,44 +22,6 @@ Class CheckboxSet extends Field
         'forceSave' => true
     );
 
-    /**
-     * Checkboxset form html
-     * @param FieldForm $Form
-     * @throws Exception
-     */
-    public function form( FieldForm $Form )
-    {
-        $options = $this->getArg( 'options', array() );
-        $data = $this->prepareFormValue( $this->getValue() );
-
-        $Form->label();
-
-        foreach ($options as $item) {
-
-
-            if (!isset( $item['key'] ) OR !isset( $item['label'] ) OR !isset( $item['value'] )) {
-                throw new Exception(
-                    'Provide valid checkbox items. Check your code. Either a key, value or label is missing'
-                );
-            }
-
-            if (!isset( $data[$item['key']] )) {
-                echo "<p>Incompatible dataset</p>";
-                $data[$item['key']] = false;
-            }
-
-            $checked = ( $item['value'] === $data[$item['key']] ) ? 'checked="checked"' : '';
-            echo "<div class='kb-checkboxset-item'><label><input type='checkbox' id='{$Form->getInputFieldId(
-            )}' name='{$Form->getFieldName(
-                $item['key'],
-                null,
-                null
-            )}' value='{$item['value']}'  {$checked} /> {$item['label']}</label></div>";
-        }
-
-        $Form->description();
-
-    }
 
     /**
      * Custom save filter

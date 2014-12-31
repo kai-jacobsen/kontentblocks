@@ -20,21 +20,6 @@ Class Text extends Field
         'type' => 'text'
     );
 
-//    /**
-//     * Form
-//     * @param FieldForm $Form
-//     */
-//    public function form( FieldForm $Form )
-//    {
-//
-//        $Form->label();
-//        $type = $this->getArg( 'type', 'text' );
-//        echo "<input type='{$type}' id='{$Form->getInputFieldId()}' name='{$Form->getFieldName(
-//        )}' placeholder='{$Form->getPlaceholder()}'  value='{$this->getValue()}' />";
-//        $Form->description();
-//
-//    }
-
     /**
      * When this data is retrieved
      * @param $val

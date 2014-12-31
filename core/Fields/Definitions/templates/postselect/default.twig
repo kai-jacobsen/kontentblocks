@@ -1,0 +1,13 @@
+{{ Form.getLabel() }}
+<select id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
+    {% if Field.getArg('empty', true) %}
+        <option value='' name=''>Bitte wählen</option>
+    {% endif %}
+
+    {% for o in posts %}
+        <option {% if (Field.getValue() == o.ID) %} selected="selected" {% endif %}
+                value='{{ o.ID }}'>{{ o.post_title }}</option>
+    {% endfor %}
+</select>
+
+{{ Form.getDescription() }}

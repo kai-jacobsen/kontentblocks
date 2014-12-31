@@ -21,25 +21,11 @@ Class Image extends Field
         'returnObj' => 'Image'
     );
 
-    /**
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
+
+    public function prepareTemplateData( $data )
     {
-
-        $value = $this->getValue();
-        // using twig template for html output
-        $tpl = new FieldView(
-            'image.twig', array(
-                'field' => $this,
-                'form' => $Form,
-                'value' => $value,
-                'image' => new AttachmentHandler( $value['id'] ),
-                'i18n' => I18n::getPackages( 'Refields.image', 'Refields.common' )
-            )
-        );
-        $tpl->render( true );
-
+        $data['image'] = new AttachmentHandler($this->getValue('id'));
+        return $data;
     }
 
     /**

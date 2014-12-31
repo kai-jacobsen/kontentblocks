@@ -23,19 +23,6 @@ Class FlexibleFields extends Field
         'returnObj' => 'FlexibleFieldsReturn'
     );
 
-    /**
-     * Form
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
-        $Form->label();
-        echo "<div id='{$Form->getInputFieldId()}' data-fieldkey='{$this->key}' data-arraykey='{$this->getArg(
-            'arrayKey'
-        )}' data-module='{$this->getFieldId()}' class='flexible-fields--stage'></div>";
-        $Form->description();
-
-    }
 
 
     /**

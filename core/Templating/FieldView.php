@@ -21,7 +21,7 @@ class FieldView
         $this->I18n    = I18n::getInstance();
         $this->tplFile = ($tpl !== false) ? $tpl : null;
         $this->path    = KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/';
-        $this->engine  = Kontentblocks::getService('templating.twig');
+        $this->engine  = Kontentblocks::getService('templating.twig.fields');
 
     }
 

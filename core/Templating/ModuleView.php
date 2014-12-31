@@ -33,7 +33,6 @@ class ModuleView implements \JsonSerializable
     protected $engine;
 
 
-
     /**
      * Class Constructor
      *
@@ -61,7 +60,7 @@ class ModuleView implements \JsonSerializable
         $this->tplFile = ( $tpl !== false ) ? $tpl : null;
 
 
-        $this->engine = Kontentblocks::getService( 'templating.twig' );
+        $this->engine = Kontentblocks::getService( 'templating.twig.public' );
     }
 
     public function render( $echo = false )
@@ -116,7 +115,7 @@ class ModuleView implements \JsonSerializable
             $data = array();
         }
 
-        if (is_object($this->Module->getModel())){
+        if (is_object( $this->Module->getModel() )) {
             $data['Model'] = $this->Module->getModel();
         }
 
@@ -139,7 +138,7 @@ class ModuleView implements \JsonSerializable
     private function setupUtilities()
     {
         return array(
-            'MobileDetect' => Kontentblocks::getService('utility.mobileDetect')
+            'MobileDetect' => Kontentblocks::getService( 'utility.mobileDetect' )
         );
     }
 

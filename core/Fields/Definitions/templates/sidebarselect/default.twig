@@ -1,0 +1,11 @@
+{{ Form.getLabel() }}
+<select id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
+    {% if (Field.getArg('empty', true)) %}
+        <option value='' name=''>Bitte wählen</option>
+    {% endif %}
+
+    {% for o in sidebars %}
+    <option {% if (Field.getValue() == o.id) %} selected="selected" {% endif %} value='{{ o.id }}'>{{ o.name }}</option>
+    {% endfor %}
+</select>
+{{ Form.getDescription() }}

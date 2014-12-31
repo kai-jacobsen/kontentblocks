@@ -22,19 +22,6 @@ Class Gallery extends Field
         'returnObj' => 'Gallery'
     );
 
-    /**
-     * Form
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
-        $Form->label();
-        echo "<div id='{$Form->getInputFieldId()}' data-fieldkey='{$this->getKey()}' data-arraykey='{$this->getArg(
-            'arrayKey'
-        )}' data-module='{$this->getFieldId()}' class='kb-gallery--stage'></div>";
-        $Form->description();
-
-    }
 
     /**
      * Runs when data is set to the field
@@ -56,7 +43,7 @@ Class Gallery extends Field
 
             $forJSON = array_values( $data['images'] );
         }
-        $Bridge = Kontentblocks::getService('utility.jsontransport');
+        $Bridge = Kontentblocks::getService( 'utility.jsontransport' );
         $Bridge->registerFieldData(
             $this->getFieldId(),
             $this->type,
@@ -92,7 +79,7 @@ Class Gallery extends Field
 
             }
         }
-        if (is_array( $old['images'] )) {
+        if (isset( $old['images'] ) && is_array( $old['images'] )) {
             foreach ($old['images'] as $k => $v) {
                 if (!array_key_exists( $k, $data['images'] )) {
                     $data['images'][$k] = null;

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields;
 
 
+use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -77,7 +78,7 @@ class FieldForm
             return '[]';
         }
 
-        if (is_string( $param ) && !empty( $param )) {
+        if (is_string( $param )) {
             return "[$param]";
         }
 
@@ -99,12 +100,15 @@ class FieldForm
      * Get description if available
      * @since 1.0.0
      */
-    public function description()
+    public function getDescription()
     {
-        $description = $this->Field->getArg( 'description' );
-        if (!empty( $description )) {
-            echo "<p class='description kb-field--description'>{$description}</p>";
-        }
+        $View = new FieldView(
+            '_partials/description.twig', array(
+                'Field' => $this->Field,
+                'Form' => $this
+            )
+        );
+        return $View->render();
 
     }
 
@@ -113,15 +117,15 @@ class FieldForm
      * Helper Method to create a complete label tag
      * @since 1.0.0
      */
-    public function label()
+    public function getLabel()
     {
-        $label = $this->Field->getArg( 'label' );
-        if (!empty( $label )) {
-            return "<label class='kb_label heading kb-field--label-heading' for='{$this->getInputFieldId(
-            )}'>{$this->Field->getArg(
-                'label'
-            )}</label>";
-        }
+        $View = new FieldView(
+            '_partials/label.twig', array(
+                'Field' => $this->Field,
+                'Form' => $this
+            )
+        );
+        return $View->render();
     }
 
 

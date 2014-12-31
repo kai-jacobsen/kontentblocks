@@ -15,35 +15,12 @@ Class PostSelect extends Field
         'type' => 'postselect'
     );
 
-    /**
-     * Select field form html
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
+
+    public function prepareTemplateData( $data )
     {
         $pt = $this->getArg( 'type', 'post' );
-
-        $posts = $this->getPosts( $pt );
-
-        $Form->label();
-
-
-        print "<select id='{$Form->getInputFieldId()}' name='{$Form->getFieldName()}'>";
-
-        if ($this->getArg( 'empty', true )) {
-            print "<option value='' name=''>Bitte wählen</option>";
-        }
-        if (!empty( $posts )) {
-            foreach ($posts as $o) {
-                $selected = selected( $this->getValue(), $o->ID, false );
-                print "<option {$selected} value='{$o->ID}'>{$o->post_title}</option>";
-            }
-        }
-
-        print "</select>";
-
-        $Form->description();
-
+        $data['posts'] = $this->getPosts( $pt );
+        return $data;
     }
 
     /**

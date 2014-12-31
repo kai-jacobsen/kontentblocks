@@ -18,18 +18,18 @@ Class Editor extends Field
         'type' => 'editor'
     );
 
-    /**
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
+
+    public function prepareTemplateData( $data )
     {
         $media = $this->getArg( 'media' );
-        $name = $Form->getFieldName( $this->getArg( 'array' ) );
-        $id = $Form->getInputFieldId( true );
+        $name = $data['Form']->getFieldName();
+        $editorId = $data['Form']->getInputFieldId( true );
         $value = $this->getValue();
-        $Form->label();
-        $Form->description();
-        Utilities::editor( $id, $value, $name, $media );
+        ob_start();
+        Utilities::editor( $editorId, $value, $name, $media );
+        $editorHTML = ob_get_clean();
+        $data['editorHTML'] = $editorHTML;
+        return $data;
     }
 
 
@@ -40,6 +40,9 @@ Class Editor extends Field
      */
     public function prepareFormValue( $val )
     {
+        if (is_array( $val )) {
+            $val = '';
+        }
         return stripslashes_deep( $val );
     }
 

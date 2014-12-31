@@ -19,19 +19,6 @@ Class Textarea extends Field
         'type' => 'textarea'
     );
 
-    /**
-     * Form
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
-    {
-        $Form->label();
-        echo "<textarea id='{$Form->getInputFieldId()}' name='{$Form->getFieldName(
-        )}' placeholder='{$Form->getPlaceholder()}'>{$this->getValue()}</textarea>";
-        $Form->description();
-
-    }
-
 
     /**
      * @param $val

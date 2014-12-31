@@ -36,18 +36,26 @@ class Twig
     /**
      *
      * @param Container $Services
+     * @param bool $public
      * @return \Twig_Environment
      */
-    public static function setupEnvironment( Container $Services )
+    public static function setupEnvironment( Container $Services, $public = true )
     {
+
+        $args = array(
+            'cache' => apply_filters( 'kb:twig.cachepath', WP_CONTENT_DIR . '/twigcache/' ),
+            'auto_reload' => TRUE,
+            'debug' => TRUE
+        );
+
+        if (!$public) {
+            $args['cache'] = false;
+            $args['autoescape'] = false;
+        }
 
         $Environment = new \Twig_Environment(
             $Services['templating.twig.loader'],
-            array(
-                'cache' => apply_filters( 'kb:twig.cachepath', WP_CONTENT_DIR . '/twigcache/' ),
-                'auto_reload' => TRUE,
-                'debug' => TRUE
-            )
+            $args
         );
 
         $Environment->addExtension( new \Twig_Extension_Debug() );
@@ -72,11 +80,9 @@ class Twig
             return new \Twig_SimpleFunction(
                 $func,
                 function () use ( $func ) {
-
                     ob_start();
                     $return = call_user_func_array( $func, func_get_args() );
                     $echo = ob_get_clean();
-
                     return empty( $echo ) ? $return : $echo;
                 },
                 array( 'is_safe' => array( 'all' ) )

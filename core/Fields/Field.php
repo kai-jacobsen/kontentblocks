@@ -4,6 +4,7 @@
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
@@ -108,9 +109,10 @@ abstract class Field
      */
     public function __construct( $baseId, $subkey = null, $key )
     {
-        if (!isset( $key, $baseId )) {
-            throw new \BadMethodCallException( 'Missing arguments for new Field' );
-        }
+
+//        if (!isset( $key, $baseId )) {
+//            throw new \BadMethodCallException( 'Missing arguments for new Field' );
+//        }
         $this->key = $key;
         $this->fieldId = $baseId;
         $this->setBaseId( $baseId, $subkey );
@@ -405,7 +407,9 @@ abstract class Field
 
         $data = array(
             'Form' => $Form,
-            'Field' => $this
+            'Field' => $this,
+            'value' => $this->getValue(),
+            'i18n' => I18n::getPackages( 'Refields.common', "Refields.{$type}" )
         );
 
         /**
@@ -484,23 +488,21 @@ abstract class Field
      */
     public function getValue( $arrKey = null, $return = '' )
     {
-        $data = null;
-
-        if ($arrKey && is_array( $this->value ) && isset( $this->value[$arrKey] )) {
-            $data = $this->value[$arrKey];
-        } else {
-            $data = $this->value;
-        }
+        $data = $this->value;
 
         if ($this->getCallback( 'get' )) {
             $data = call_user_func( $this->getCallback( 'get' ), $this->value );
         }
 
-        if (is_null( $data )) {
-            $data = $return;
+        if (is_null( $arrKey ) && !is_null( $data )) {
+            return $data;
         }
 
-        return $data;
+        if (!is_null( $arrKey ) && is_array( $data ) && isset( $data[$arrKey] )) {
+            return $data[$arrKey];
+        }
+
+        return $return;
     }
 
 

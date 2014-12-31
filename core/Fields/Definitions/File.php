@@ -20,25 +20,12 @@ Class File extends Field
         'type' => 'file'
     );
 
-    /**
-     * @param FieldForm $Form
-     */
-    public function form( FieldForm $Form )
+    public function prepareTemplateData( $data )
     {
-        $id = $this->getValue( 'id' );
-        // using twig template for html output
-        $tpl = new FieldView(
-            'file.twig', array(
-                'field' => $this,
-                'form' => $Form,
-                'value' => $this->getValue(),
-                'i18n' => I18n::getPackages( 'Refields.file', 'Refields.common' ),
-                'file' => new AttachmentHandler( $this->getValue( 'id' ) ),
-                'isEmpty' => ( empty( $id ) ) ? 'kb-hide' : ''
-            )
-        );
-        $tpl->render( true );
-
+        $fileid = $this->getValue( 'id', '' );
+        $data['isEmpty'] = ( empty( $fileid ) ) ? 'kb-hide' : '';
+        $data['file'] = new AttachmentHandler( $fileid );
+        return $data;
     }
 
     /**
@@ -50,7 +37,7 @@ Class File extends Field
      */
     public function inputFilter( $value )
     {
-        if (!empty( $value ) && is_numeric( absint( $value['id'] ) )) {
+        if (isset( $value['id'] ) && is_numeric( absint( $value['id'] ) )) {
             return wp_prepare_attachment_for_js( $value['id'] );
         }
         return $value;
