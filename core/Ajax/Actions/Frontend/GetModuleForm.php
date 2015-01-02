@@ -48,9 +48,8 @@ class GetModuleForm
         $Environment = Utilities::getEnvironment( $module['post_id'] );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment, $moduleData );
         $instance = $Factory->getModule();
-        ob_start();
-        $instance->form();
-        $html = ob_get_clean();
+
+        $html = $instance->form();
         $return = array(
             'html' => stripslashes_deep( $html ),
             'json' => stripslashes_deep( Kontentblocks::getService('utility.jsontransport')->getJSON() )
