@@ -73,14 +73,13 @@ class ModuleFieldController extends AbstractFieldController
      * called by Kontentblocks\Modules\Module::options()
      * if not overridden b extending class
      * @see Kontentblocks\Modules\Module::form
-     * TODO: update when options() was renamed
      * @return void
      * @since 1.0.0
      */
     public function renderFields()
     {
         $Renderer = new $this->renderEngineClass( $this->baseId, $this->Structure );
-        $Renderer->render( $this->data );
+        return $Renderer->render( $this->data );
     }
 
 

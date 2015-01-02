@@ -156,7 +156,6 @@ class ScreenContext
 
         do_action("context_box_{$this->id}", $this->id, $this->ScreenManager);
 
-
         echo "</div>";
 
     }

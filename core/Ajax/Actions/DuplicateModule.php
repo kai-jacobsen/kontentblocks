@@ -80,7 +80,6 @@ class DuplicateModule
         $stored = self::$Environment->getStorage()->getModuleDefinition(
             self::$instanceId
         );
-
         $Workshop = new ModuleWorkshop(
             self::$Environment, array(
             'state' => array(
@@ -92,7 +91,6 @@ class DuplicateModule
             'areaContext' => $stored['areaContext']
         ), $stored
         );
-
 
         $update = self::$Environment->getStorage()->addToIndex(
             $Workshop->getNewId(),
@@ -125,9 +123,7 @@ class DuplicateModule
 
         $Factory = new ModuleFactory( self::$class, $moduleDefinition, self::$Environment );
         $Module = $Factory->getModule();
-        ob_start();
-        $Module->renderForm();
-        $html = ob_get_clean();
+        $html = $Module->renderForm();
 
         $response = array
         (

@@ -142,7 +142,6 @@ class ModuleCoreMasterModule extends Module
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-
         if ($module['master'] && isset( $module['parentId'] )) {
             $masterId = $module['parentId']; // post id of the template
             $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );

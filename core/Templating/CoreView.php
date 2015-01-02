@@ -46,7 +46,7 @@ class CoreView
         $this->path = KB_PLUGIN_PATH . 'core/Templating/templates/';
 
         /** @var \Kontentblocks\Templating\Twig $engine */
-        $this->engine = Kontentblocks::getService( 'templating.twig.public' );
+        $this->engine = Kontentblocks::getService( 'templating.twig.fields' );
 
         //initial path
         $this->setPath( $this->path );

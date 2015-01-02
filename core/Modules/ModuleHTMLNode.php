@@ -30,43 +30,43 @@ class ModuleHTMLNode
         $this->Module = $Module;
     }
 
+    /**
+     * @return mixed|string|void
+     */
     public function build()
     {
 
+        $concat = '';
+
         // open tag for block list item
-        echo $this->openListItem();
+        $concat .= $this->openListItem();
 
         //markup for block header
-        echo $this->header();
+        $concat .= $this->header();
 
         // inner block open
-        echo $this->openInner();
+        $concat .= $this->openInner();
 
 
         // if disabled don't output, just show disabled message
         if ($this->Module->getSetting( 'disabled' )) {
-            echo "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
+            $concat .= "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         } else {
-            // output the form fields for this module
-            if (isset( $this->Fields )) {
-                $this->Fields->data = $this->Module->moduleData;
-            }
-//            $this->Module->options( $this->Module->moduleData );
-            $this->Module->form();
+            $concat .= $this->Module->form();
         }
 
-        // essentially calls wp actions
-        $this->footer();
+        $concat = apply_filters( "kb.module.footer-{$this->Module->getSetting( 'id' )}", $concat, $this->Module );
+        $concat = apply_filters( 'kb.module.footer', $concat, $this->Module );
 
-        echo $this->closeInner();
+        $concat .= $this->closeInner();
 
-        echo $this->closeListItem();
+        $concat .= $this->closeListItem();
 
         if (method_exists( $this->Module, 'adminEnqueue' )) {
             $this->Module->adminEnqueue();
         }
 
-
+        return $concat;
     }
 
 
@@ -119,7 +119,7 @@ class ModuleHTMLNode
     private function openInner()
     {
         $lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
-        $i18n = I18n::getPackage('Modules');
+        $i18n = I18n::getPackage( 'Modules' );
 
         // markup for each block
         $out = "<div style='display:none;' class='kb_inner kb-module__body'>";
@@ -203,16 +203,6 @@ class ModuleHTMLNode
 
 
         return $html;
-
-    }
-
-    /**
-     *  Some hooks for your pleasure
-     */
-    public function footer()
-    {
-        do_action( "kb.module.footer-{$this->Module->getSetting( 'id' )}", $this->Module );
-        do_action( 'kb.module.footer', $this->Module );
 
     }
 

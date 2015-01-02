@@ -166,20 +166,22 @@ abstract class Module
      */
     public function form()
     {
+        $concat = '';
+
         if (filter_var( $this->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
             // render view select field
-            echo $this->ViewLoader->render();
+            $concat .= $this->ViewLoader->render();
         }
 
         // render fields if set
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
-            $this->Fields->renderFields();
+            $concat .= $this->Fields->renderFields();
         } else {
-            $this->renderEmptyForm();
+            $concat .= $this->renderEmptyForm();
         }
 
-        return false;
+        return $concat;
     }
 
     /**
@@ -290,9 +292,8 @@ abstract class Module
      */
     public function renderForm()
     {
-
         $Node = new ModuleHTMLNode( $this );
-        $Node->build();
+        return $Node->build();
     }
 
 
@@ -782,7 +783,7 @@ abstract class Module
      */
     public function getModuleName()
     {
-        if (is_array( $this->overrides ) && array_key_exists('name',  $this->overrides )) {
+        if (is_array( $this->overrides ) && array_key_exists( 'name', $this->overrides )) {
             return $this->overrides['name'];
         } else {
             return $this->settings['name'];

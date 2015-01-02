@@ -148,7 +148,8 @@ class Area
                 $module = apply_filters( 'kb.module.before.factory', $module );
                 $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
                 $Module = $Factory->getModule();
-                $Module->renderForm();
+                echo $Module->renderForm();
+
                 Kontentblocks::getService('utility.jsontransport')->registerModule( $Module->toJSON() );
             }
         }

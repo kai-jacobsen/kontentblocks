@@ -249,7 +249,7 @@ class CreateNewModule
             $SingleRenderer = new SingleModuleRenderer( $this->newInstance );
             $SingleRenderer->render();
         } else {
-            $this->newInstance->renderForm();
+            echo $this->newInstance->renderForm();
         }
         $html = ob_get_clean();
         $response = array

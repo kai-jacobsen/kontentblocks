@@ -171,8 +171,14 @@ class ModuleWorkshop
      */
     private function setupModuleArgs( $args, $oldargs )
     {
-        $this->newId = $mid = ( isset( $args['mid'] ) ) ? sanitize_key( $args['mid'] ) : $this->createModuleId();
+        if ($oldargs){
+            unset($oldargs['instance_id']);
+            unset($oldargs['mid']);
+        }
 
+        $args = wp_parse_args($args, $oldargs);
+
+        $this->newId = $mid = ( isset( $args['mid'] ) ) ? sanitize_key( $args['mid'] ) : $this->createModuleId();
         $defaults = array(
             // id
             'instance_id' => $mid,
@@ -202,13 +208,7 @@ class ModuleWorkshop
             )
         );
 
-
-        if (!empty( $oldargs )) {
-            $newArgs = Utilities::arrayMergeRecursive( $args, $oldargs );
-            return Utilities::arrayMergeRecursive( $newArgs, $defaults );
-        } else {
-            return Utilities::arrayMergeRecursive( $args, $defaults );
-        }
+        return wp_parse_args($args, $defaults);
     }
 
     /**
@@ -217,6 +217,7 @@ class ModuleWorkshop
     private function createModuleId()
     {
         $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
+        $this->Environment->getStorage()->reset();
         $count = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() ) + 1;
         return $prefix . $this->Environment->getId() . '_' . $count;
     }

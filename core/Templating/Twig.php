@@ -49,7 +49,7 @@ class Twig
         );
 
         if (!$public) {
-            $args['cache'] = false;
+            $args['cache'] = trailingslashit(KB_PLUGIN_PATH) . 'cache/';
             $args['autoescape'] = false;
         }
 
