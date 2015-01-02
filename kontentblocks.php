@@ -120,7 +120,6 @@ Class Kontentblocks
     }
 
 
-
     /**
      *
      */
@@ -204,29 +203,7 @@ Class Kontentblocks
      */
     public function loadExtensions()
     {
-
         include_once 'core/Extensions/ExtensionsBootstrap.php';
-//        $paths = array( kb_get_plugin_path() );
-//        $paths[] = plugin_dir_path( __FILE__ ) . '/helper/';
-//        $paths = apply_filters( 'kb::add.plugin.path', $paths );
-//
-//        foreach ($paths as $path) {
-//            //take care of dirs
-//            foreach (glob( $path . "*", GLOB_ONLYDIR ) as $filename) {
-//                $base = basename( $filename );
-//                if (file_exists( trailingslashit( $filename ) . $base . '.php' )) {
-//                    include_once( $filename . $base . '.php' );
-//
-//                }
-//            }
-//
-//            // take care of files
-//            $files = glob( $path . '*.php' );
-//            foreach ($files as $template) {
-//                include_once( $template );
-//            }
-//        }
-
     }
 
     /**
@@ -270,7 +247,6 @@ Class Kontentblocks
             require_once( dirname( __FILE__ ) . '/build/hash.php' );
         }
 
-        /* Include all necessary files on admin area */
         if (is_admin()) {
             require_once dirname( __FILE__ ) . '/core/Utils/tables.php';
         }
@@ -345,11 +321,11 @@ Class Kontentblocks
             return new MobileDetect();
         };
 
-        $this->Services['utility.jsontransport'] = function ($container){
+        $this->Services['utility.jsontransport'] = function ( $container ) {
             return new JSONTransport();
         };
 
-        $this->Services['utility.ajaxhandler'] = function ($container){
+        $this->Services['utility.ajaxhandler'] = function ( $container ) {
             return new AjaxCallbackHandler();
         };
     }

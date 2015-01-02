@@ -45,10 +45,7 @@ class AfterAreaChange
         $Environment = Utilities::getEnvironment( $postId );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment );
         $instance = $Factory->getModule();
-        ob_start();
-
-        $instance->form();
-        $html = ob_get_clean();
+        $html = $instance->form();
         $return = array(
             'html' => stripslashes_deep( $html ),
             'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )

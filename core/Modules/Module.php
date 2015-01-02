@@ -695,6 +695,7 @@ abstract class Module
             'state' => $this->state,
             'instance_id' => $this->getId(),
             'mid' => $this->getId(),
+            'envVars' => $this->envVars,
             'moduleData' => $this->rawModuleData,
 //            'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->settings ),
             'area' => $this->getArea(),

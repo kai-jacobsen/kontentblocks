@@ -35,7 +35,6 @@ class UpdateModule
         $Environment = Utilities::getEnvironment( $postdata->postId );
 
         $newData = $postdata->data[$postdata->module['instance_id']];
-
         $Factory = new ModuleFactory( $postdata->module['class'], $postdata->module, $Environment );
         $Module = $Factory->getModule();
 
