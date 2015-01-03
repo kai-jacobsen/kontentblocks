@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2014-12-29 */
+/*! Kontentblocks DevVersion 2015-01-03 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -299,6 +299,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     });
                     return KB.Ajax.send({
                         action: "resortModules",
+                        postId: that.model.get("envVars").postId,
                         data: serializedData,
                         _ajax_nonce: KB.Config.getNonce("update")
                     }, function() {

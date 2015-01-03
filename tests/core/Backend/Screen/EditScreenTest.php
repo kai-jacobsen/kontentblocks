@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\tests\core\Backend\Screen;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Screen\EditScreen;
 use Kontentblocks\Modules\ModuleWorkshop;
 

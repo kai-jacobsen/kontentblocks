@@ -2,9 +2,9 @@
 
 namespace Kontentblocks\Backend\Dynamic;
 
-use Kontentblocks\Backend\Areas\Area;
-use Kontentblocks\Backend\Areas\AreaRegistry;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Areas\AreaBackendHTML;
+use Kontentblocks\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
@@ -143,7 +143,7 @@ class DynamicAreas
             'id' => null,
             'description' => '',
             'postTypes' => array(),
-            'pageTemplates' => array(),
+            'pageTemplates' => array()
         );
 
         $newArea = wp_parse_args( $_POST['area'], $defaults );
@@ -156,7 +156,9 @@ class DynamicAreas
             'pageTemplates' => $newArea['pageTemplates'],
             'dynamic' => true,
             'context' => $newArea['context'],
-            'manual' => filter_var( $newArea['manual'], FILTER_VALIDATE_BOOLEAN )
+            'manual' => filter_var( $newArea['manual'], FILTER_VALIDATE_BOOLEAN ),
+            'sortable' => true
+
         );
 
         $full = wp_parse_args( $data, AreaRegistry::getDefaults( false ) );
@@ -388,6 +390,7 @@ class DynamicAreas
             'areaContext' => $data['context'],
             'name' => $data['name'],
             'id' => $data['id'],
+            'sortable' => true,
             'manual' => ( isset( $data['manual'] ) ) ? $data['manual'] : false
         );
 
@@ -407,7 +410,7 @@ class DynamicAreas
         $Environment = Utilities::getEnvironment( get_the_ID() );
         $blogId = get_current_blog_id();
 
-        /** @var \Kontentblocks\Backend\Areas\AreaRegistry $Registry */
+        /** @var \Kontentblocks\Areas\AreaRegistry $Registry */
         $Registry = Kontentblocks::getService( 'registry.areas' );
         $areaDef = $Registry->getArea( $area['id'] );
 
@@ -422,7 +425,7 @@ class DynamicAreas
         echo Utilities::getBaseIdField( $Environment->getStorage()->getIndex() );
         echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
 
-        $Area = new Area( $areaDef, $Environment, 'global' );
+        $Area = new AreaBackendHTML( $areaDef, $Environment, 'global' );
         $Area->build();
 
         print "</div>";

@@ -18,7 +18,7 @@ use Kontentblocks\Utils\Utilities;
  * @subpackage Post
  * @since 1.0.0
  */
-class PostEnvironment implements JsonSerializable
+class Environment implements JsonSerializable
 {
 
     /**
@@ -35,6 +35,11 @@ class PostEnvironment implements JsonSerializable
      * @var int
      */
     protected $postId;
+
+    /**
+     * @var int
+     */
+    protected $altPostId;
 
     /**
      * @var string
@@ -62,12 +67,14 @@ class PostEnvironment implements JsonSerializable
      *
      * @param $postID
      */
-    public function __construct( $postID )
+    public function __construct( $postID, $altPostId = null )
     {
-        if (!isset( $postID )) {
-            return false;
-        }
 
+        if (!is_null($altPostId)){
+            $this->altPostId = $altPostId;
+        } else {
+            $this->altPostId = $postID;
+        }
 
         $this->postId = $postID;
         $this->DataHandler = new DataProviderController( $postID );
@@ -79,7 +86,6 @@ class PostEnvironment implements JsonSerializable
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
         $this->areas = $this->findAreas();
-
     }
 
     /**
@@ -138,6 +144,7 @@ class PostEnvironment implements JsonSerializable
      */
     public function getModulesForArea( $areaid )
     {
+
         $byArea = $this->getSortedModules();
         if (!empty( $byArea[$areaid] )) {
             return $byArea[$areaid];
@@ -185,9 +192,10 @@ class PostEnvironment implements JsonSerializable
     public function findAreas()
     {
         if ($this->postType === 'kb-dyar') {
-            return array( $this->DataHandler->get( '_area' ) );
+            $def = $this->DataHandler->get( '_area' );
+            return array( $def['id'] => $def );
         }
-        /** @var \Kontentblocks\Backend\Areas\AreaRegistry $AreaRegistry */
+        /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
         $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
         return $AreaRegistry->filterForPost( $this );
     }
@@ -279,7 +287,7 @@ class PostEnvironment implements JsonSerializable
      */
     public function getPageTemplate()
     {
-        $tpl = get_post_meta( $this->postId, '_wp_page_template', true );
+        $tpl = get_post_meta( $this->altPostId, '_wp_page_template', true );
 
         if ($tpl !== '') {
             return $tpl;
@@ -295,7 +303,7 @@ class PostEnvironment implements JsonSerializable
      */
     public function getPostType()
     {
-        return get_post_type( $this->postId );
+        return get_post_type( $this->altPostId );
     }
 
 

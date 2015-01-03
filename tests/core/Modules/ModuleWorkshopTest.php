@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\tests\core\Modules;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Modules\ModuleWorkshop;
 
 
@@ -90,7 +90,7 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
             )
         );
 
-        return new ModuleWorkshop( new PostEnvironment( 1 ), $args, $oldargs );
+        return new ModuleWorkshop( new Environment( 1 ), $args, $oldargs );
     }
 
 }

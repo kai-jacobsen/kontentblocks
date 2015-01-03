@@ -3,7 +3,7 @@
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\AfterAreaChange;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -44,7 +44,7 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
     {
         $post = $this->factory->post->create();
         $workshop = new ModuleWorkshop(
-            new PostEnvironment( $post ), array(
+            new Environment( $post ), array(
                 'class' => 'ModuleText'
             )
         );

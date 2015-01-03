@@ -3,7 +3,7 @@
 namespace Kontentblocks\Modules;
 
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -17,7 +17,7 @@ use Kontentblocks\Utils\Utilities;
 class ModuleWorkshop
 {
     /**
-     * @var PostEnvironment
+     * @var Environment
      */
     private $Environment;
 
@@ -53,10 +53,10 @@ class ModuleWorkshop
 
     /**
      * Setup module args and class properties
-     * @param PostEnvironment $Environment
+     * @param Environment $Environment
      * @param array $args
      */
-    public function __construct( PostEnvironment $Environment, $args = array(), $oldArgs = array() )
+    public function __construct( Environment $Environment, $args = array(), $oldArgs = array() )
     {
         $this->Environment = $Environment;
         $this->moduleArgs = $this->setupModuleArgs( $args, $oldArgs );

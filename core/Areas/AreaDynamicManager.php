@@ -1,12 +1,12 @@
 <?php
 
-namespace Kontentblocks\Backend\Areas;
+namespace Kontentblocks\Areas;
 
 /**
  * Handles creation and removal of manually added dynamic areas
  *
  * Class AreaDynamicManager
- * @package Kontentblocks\Backend\Areas
+ * @package Kontentblocks\Areas
  */
 class AreaDynamicManager
 {
@@ -58,15 +58,14 @@ class AreaDynamicManager
 
     public function synchronize()
     {
-        // @TODO un-weird
-        do_action( 'kb.areas.dynamic.setup' );
-        if (!is_admin()) {
-            return;
+        if (is_admin()) {
+            $this->setupDiff();
+            $this->maybeCreateAreas();
+            $this->maybeRemoveAreas();
         }
 
-        $this->setupDiff();
-        $this->maybeCreateAreas();
-        $this->maybeRemoveAreas();
+
+        do_action( 'kb.areas.dynamic.setup' );
     }
 
 

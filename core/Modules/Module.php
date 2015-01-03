@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Fields\ModuleFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -98,13 +98,13 @@ abstract class Module
      *
      * @param null $args
      * @param array $data
-     * @param PostEnvironment $Environment
+     * @param Environment $Environment
      *
      * @internal param string $id identifier
      * @internal param string $name default name, can be individual overwritten
      * @internal param array $block_settings
      */
-    function __construct( $args = null, $data = array(), PostEnvironment $Environment = null )
+    function __construct( $args = null, $data = array(), Environment $Environment = null )
     {
         // batch setup
         $this->set( $args );
@@ -400,7 +400,7 @@ abstract class Module
      *
      * @param $Environment
      */
-    public function setEnvVarsfromEnvironment( PostEnvironment $Environment )
+    public function setEnvVarsfromEnvironment( Environment $Environment )
     {
         $this->envVars = wp_parse_args(
             $this->envVars,

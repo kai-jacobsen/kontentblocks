@@ -2,7 +2,7 @@
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\RemoveModules;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -41,7 +41,7 @@ class RemoveModulesTest extends \WP_UnitTestCase
         $post = $this->factory->post->create();
 
         $workshop = new ModuleWorkshop(
-            new PostEnvironment( $post ), array(
+            new Environment( $post ), array(
                 'class' => 'ModuleText'
             )
         );

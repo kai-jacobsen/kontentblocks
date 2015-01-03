@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Frontend;
 
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Frontend\AreaLayoutIterator;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONTransport;
@@ -78,18 +79,21 @@ class AreaHtmlNode
     /**
      * Class Constructor
      *
-     * @param $areaAttrs array area parameter from definition
-     * @param $areaSettings array individual data stored
+     * @param AreaRenderer $AreaRenderer
+     * @param Environment $Environment
      * @param $additionalArgs array comes from the render function call
      * @since 1.0.0
      */
-    public function __construct( $areaAttrs, $areaSettings, $additionalArgs )
+    public function __construct( AreaRenderer $AreaRenderer, Environment $Environment, $additionalArgs )
     {
-        $this->id = $areaAttrs['id'];
-        $this->attr = $areaAttrs;
-        $this->settings = $this->setupSettings( $additionalArgs, $areaSettings );
+        $this->Environment = $Environment;
+        $this->attr = $Environment->getAreaDefinition( $AreaRenderer->areaId );
+        $this->id = $this->attr['id'];
+        $this->settings = $this->setupSettings(
+            $additionalArgs,
+            $Environment->getAreaSettings( $AreaRenderer->areaId )
+        );
         $this->Layout = $this->setupLayout();
-
         $this->toJSON();
     }
 
@@ -179,7 +183,7 @@ class AreaHtmlNode
      */
     private function setupLayout()
     {
-        /** @var \Kontentblocks\Backend\Areas\AreaRegistry $registry */
+        /** @var \Kontentblocks\Areas\AreaRegistry $registry */
         $Registry = Kontentblocks::getService( 'registry.areas' );
 
         $sLayout = $this->settings['layout'];
@@ -356,7 +360,8 @@ class AreaHtmlNode
     public function toJSON()
     {
         $this->attr['settings'] = $this->settings;
-        Kontentblocks::getService('utility.jsontransport')->registerArea( $this->attr );
+        $this->attr['envVars'] = $this->Environment;
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->attr );
 
     }
 

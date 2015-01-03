@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONTransport;
 use Pimple\Container;
@@ -107,7 +107,7 @@ class ModuleRegistry
 
             // Handle connection to regions
 
-            /** @var \Kontentblocks\Backend\Areas\AreaRegistry $AreaRegistry */
+            /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
             $AreaRegistry = $this->Services['registry.areas'];
             $AreaRegistry->connect( $classname, $moduleArgs );
 

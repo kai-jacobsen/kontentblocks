@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Frontend;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 
 /**
  * internal working name: SlotMachine
@@ -49,7 +49,7 @@ class SlotRenderer
         }
 
 
-        /** @var $Environment \Kontentblocks\Backend\Environment\PostEnvironment */
+        /** @var $Environment \Kontentblocks\Backend\Environment\Environment */
         $Environment = Utilities::getEnvironment( $postId );
         $modules = $Environment->getModulesForArea( $area );
 

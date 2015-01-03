@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
 
 
@@ -23,39 +23,22 @@ class Utilities
      * in case of the latter, the post ID of the d. area is looked up
      * on the fly.
      *
-     * @param mixed $id
+     * @param mixed $postId
+     * @param null $actualPostId
+     * @return Environment
      * @since 1.0.0
-     * @return \Kontentblocks\Backend\Environment\PostEnvironment
      */
-    public static function getEnvironment( $id = null )
+    public static function getEnvironment( $postId = null, $actualPostId = null )
     {
-        global $post;
-
-        if ($id && is_numeric( $id ) && $id !== - 1) {
-
-            if (isset( self::$environments[$id] )) {
-                return self::$environments[$id];
+        if ($postId && is_numeric( $postId ) && $postId !== - 1) {
+            if (isset( self::$environments[$postId] )) {
+                return self::$environments[$postId];
             } else {
-                return self::$environments[$id] = new PostEnvironment( $id );
-            }
-        } else {
-            $Registry = Kontentblocks::getService( 'registry.areas' );
-            $area = $Registry->getArea( $id );
-            if (isset( $area['parent_id'] )) {
-                if (isset( self::$environments[$area['parent_id']] )) {
-                    return self::$environments[$area['parent_id']];
-                } else {
-                    return self::$environments[$area['parent_id']] = new PostEnvironment( $area['parent_id'] );
-                }
-            } else {
-                if (isset( self::$environments[$post->ID] )) {
-                    return self::$environments[$post->ID];
-                } else {
-                    return self::$environments[$post->ID] = new PostEnvironment( $post->ID );
-                }
+                return self::$environments[$postId] = new Environment( $postId, $actualPostId );
             }
         }
     }
+
 
     /**
      * @param string $id editors unique id

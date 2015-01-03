@@ -3,7 +3,7 @@
 namespace Kontentblocks\Backend\Screen;
 
 use Exception;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 
 class ScreenManager {
 
@@ -24,7 +24,7 @@ class ScreenManager {
 
 	/**
 	 * Environment Instance
-	 * @var \Kontentblocks\Backend\Environment\PostEnvironment
+	 * @var \Kontentblocks\Backend\Environment\Environment
 	 * @since 1.0.0
 	 */
 	protected $Environment;
@@ -55,11 +55,11 @@ class ScreenManager {
 	/**
 	 * Class Constructor
 	 *
-	 * @param PostEnvironment $Environment
+	 * @param Environment $Environment
 	 *
 	 * @throws \Exception
 	 */
-	public function __construct( PostEnvironment $Environment ) {
+	public function __construct( Environment $Environment ) {
 		// setup raw areas
 		$this->rawAreas = $Environment->get( 'areas' );
 		// set this environment
@@ -150,7 +150,7 @@ class ScreenManager {
 
 	/**
 	 * Getter for Environment instance
-	 * @return PostEnvironment
+	 * @return Environment
 	 * @since 1.0.0
 	 */
 	public function getEnvironment() {

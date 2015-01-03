@@ -1,9 +1,10 @@
 <?php
 
-namespace Kontentblocks\Backend\Areas;
+namespace Kontentblocks\Areas;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -62,6 +63,7 @@ class AreaRegistry
     public function __construct()
     {
         $this->AreaDynamicManager = new AreaDynamicManager();
+
         add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
         if (is_user_logged_in()) {
             add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
@@ -86,7 +88,6 @@ class AreaRegistry
             )
         );
 
-
         if (!empty( $areas )) {
             foreach ($areas as $areapost) {
                 $area = $areapost->_area;
@@ -95,14 +96,14 @@ class AreaRegistry
             }
         }
 
-
         if (!empty( $dynamicAreas )) {
             foreach ($dynamicAreas as $area) {
                 $this->addArea( $area, false );
             }
         }
-        // @TODO deprecate
-        do_action( 'kb::setup.areas' );
+
+        _K::info( 'Dynamic areas queried and setup' );
+
         do_action( 'kb.areas.setup' );
     }
 
@@ -226,9 +227,10 @@ class AreaRegistry
         ) {
             if ($area['context'] === 'side') {
                 $this->globalSidebars[$area['id']] = $area;
-            } else {
-                $this->globalAreas[$area['id']] = $area;
             }
+
+            $this->globalAreas[$area['id']] = $area;
+
         }
     }
 
@@ -354,28 +356,27 @@ class AreaRegistry
 
     /**
      * Filters registered areas by post settings
-     * This needs an instance of the PostEnvironment Class to provide
+     * This needs an instance of the Environment Class to provide
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
      *
-     * @param \Kontentblocks\Backend\Environment\PostEnvironment $postData
+     * @param \Kontentblocks\Backend\Environment\Environment $postData
      *
      * @return boolean
      * @since 1.0.0
      */
-    public function filterForPost( PostEnvironment $postData )
+    public function filterForPost( Environment $postData )
     {
 
         $pageTemplate = $postData->getPageTemplate();
         $postType = $postData->getPostType();
+        $areas = array();
 
         // bail out if this is a redirect template
         if (false !== strpos( $pageTemplate, 'redirect' )) {
             return false;
         }
 
-        //declare var
-        $areas = array();
 
         // loop through areas and find all which are attached to this post type and/or page template
         foreach ($this->rawAreas as $area) {
@@ -483,7 +484,7 @@ class AreaRegistry
     public function setupJSON()
     {
         Utilities::setupCats();
-        Kontentblocks::getService('utility.jsontransport')->registerData( 'AreaTemplates', null, $this->templates );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'AreaTemplates', null, $this->templates );
     }
 
 }

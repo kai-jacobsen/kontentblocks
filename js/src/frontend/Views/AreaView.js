@@ -80,7 +80,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
 
             jQuery('.ignore', ui.helper).removeClass('ignore');
 
-
             return KB.Ajax.send({
               action: 'resortModules',
               data: serializedData,
@@ -113,13 +112,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
           beforeStop: function () {
             var serializedData = {};
             that.isSorting = false;
-
             serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
               attribute: 'rel'
             });
-
             return KB.Ajax.send({
               action: 'resortModules',
+              postId: that.model.get('envVars').postId,
               data: serializedData,
               _ajax_nonce: KB.Config.getNonce('update')
             }, function () {

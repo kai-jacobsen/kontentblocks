@@ -1,8 +1,8 @@
 <?php
 
-namespace Kontentblocks\Backend\Areas;
+namespace Kontentblocks\Areas;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
 
 
@@ -57,7 +57,7 @@ class AreaSettingsMenu
 
     /**
      * Environment for data handling
-     * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     * @var \Kontentblocks\Backend\Environment\Environment
      * @since 1.0.0
      */
     protected $Environment;
@@ -65,11 +65,11 @@ class AreaSettingsMenu
 
     /**
      * Class Constuctor
-     * @param \Kontentblocks\Backend\Areas\Area $area
-     * @param \Kontentblocks\Backend\Environment\PostEnvironment $Environment
+     * @param \Kontentblocks\Areas\AreaBackendHTML $area
+     * @param \Kontentblocks\Backend\Environment\Environment $Environment
      * @since 1.0.0
      */
-    public function __construct( Area $area, PostEnvironment $Environment )
+    public function __construct( AreaBackendHTML $area, Environment $Environment )
     {
         $this->defaults = $this->getDefaults();
         $this->id = $area->get( 'id' );

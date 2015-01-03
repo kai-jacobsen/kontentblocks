@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Screen;
 
 use Kontentblocks\Helper;
 use Kontentblocks\Templating\CoreView;
+use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -48,6 +49,7 @@ Class EditScreen
     public function renderUserInterface( $post )
     {
         echo $this->userInterface($post);
+        _K::info('user interfaced rendered for a post type');
     }
 
     /**

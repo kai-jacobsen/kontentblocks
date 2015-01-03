@@ -6,7 +6,7 @@ use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -27,7 +27,7 @@ class DuplicateModule
     private static $postId;
 
     /**
-     * @var PostEnvironment
+     * @var Environment
      */
     private static $Environment;
 

@@ -6,6 +6,7 @@ use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Frontend\AreaRenderer;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Register Area
@@ -53,8 +54,19 @@ function registerAreaTemplate( $args )
 function renderSingleArea( $area, $id = null, $additionalArgs )
 {
     global $post;
-    $postId = ( is_null($id) ) ? $post->ID : $id;
-    $AreaRender = new AreaRenderer( $postId, $area, $additionalArgs );
+    $postId = ( is_null( $id ) ) ? $post->ID : $id;
+
+    /** @var \Kontentblocks\Areas\AreaRegistry $Registry */
+    $Registry = Kontentblocks::getService( 'registry.areas' );
+    if ($Registry->isDynamic( $area )) {
+        $areaDef = $Registry->getArea( $area );
+        $Environment = Utilities::getEnvironment( $areaDef['parent_id'], $postId );
+    } else {
+        $Environment = Utilities::getEnvironment( $postId );
+
+    }
+
+    $AreaRender = new AreaRenderer( $Environment, $area, $additionalArgs );
     $AreaRender->render( true );
 }
 
@@ -72,9 +84,8 @@ function renderSideAreas( $id, $additionalArgs )
     $areas = get_post_meta( $post_id, 'active_sidebar_areas', true );
     if (!empty( $areas )) {
         foreach ($areas as $area) {
-            $AreaRender = new AreaRenderer( $area, $area, $additionalArgs );
-            $AreaRender->render( true );
 
+            renderSingleArea( $area, $post_id, $additionalArgs );
         }
     }
 }

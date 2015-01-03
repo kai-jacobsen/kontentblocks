@@ -58,6 +58,7 @@
                     <input type="hidden" name="{{ basename }}[context]" value="side">
                 {% endif %}
 
+
                 <h3>Post Types</h3>
 
                 <div class="kb-menu-field-section">
@@ -69,7 +70,6 @@
                     <div class="kb-menu-field-section_inputs">
                         {% for postType in postTypes %}
                             <div class="kb-menu-field">
-
                                 <label><input {{ postType.checked }} type="checkbox" name="{{ basename }}[postTypes][]"
                                                                      value="{{ postType.value }}">{{ postType.name }}
                                 </label>

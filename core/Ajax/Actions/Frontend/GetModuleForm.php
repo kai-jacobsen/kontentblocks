@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\Utilities;
@@ -44,7 +44,7 @@ class GetModuleForm
         }
 
         $module = apply_filters( 'kb.module.before.factory', $module );
-        /** @var PostEnvironment $Environment */
+        /** @var Environment $Environment */
         $Environment = Utilities::getEnvironment( $module['post_id'] );
         $Factory = new ModuleFactory( $module['class'], $module, $Environment, $moduleData );
         $instance = $Factory->getModule();

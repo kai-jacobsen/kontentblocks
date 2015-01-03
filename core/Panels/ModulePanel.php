@@ -2,7 +2,7 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Modules\ModuleFactory;

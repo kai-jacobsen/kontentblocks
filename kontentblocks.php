@@ -15,7 +15,7 @@ namespace Kontentblocks;
 
 use Detection\MobileDetect;
 use Kontentblocks\Ajax\AjaxCallbackHandler;
-use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\ModuleTemplates;
 use Kontentblocks\Backend\Screen\EditScreen;
@@ -26,6 +26,7 @@ use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Modules\ModuleViewsRegistry;
 use Kontentblocks\Panels\PanelRegistry;
 use Kontentblocks\Templating\Twig;
+use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\JSONTransport;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\NullHandler;
@@ -50,6 +51,8 @@ Class Kontentblocks
 
     public $dev_mode = true;
     static $instance;
+    static $AjaxHandler;
+    static $Logger;
 
     public static function getInstance()
     {
@@ -74,19 +77,16 @@ Class Kontentblocks
         $this->setupRegistries();
         $this->setupUtilities();
 
-
-
         // load modules automatically, after dynamic areas were setup,
         // dynamic areas are on init/initInterface hook
-        add_action( 'kb.areas.dynamic.setup', array( $this, 'loadModules' ), 9 );
+        add_action( 'kb.areas.setup', array( $this, 'loadModules' ), 9 );
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
-        add_action( 'plugins_loaded', array( $this, 'i18n' ) );
-
     }
 
     public function setup()
     {
         require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
+        Capabilities::setup();
 
         if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
             add_theme_support( 'kontentblocks' );
@@ -98,11 +98,14 @@ Class Kontentblocks
             include_once( get_stylesheet_directory() . '/kontentblocks.php' );
         }
 
+
+        _K::info( 'kontentblocks.php loading stage' );
+
         if (current_theme_supports( 'kontentblocks' )) {
             // Enqueues of front and backend scripts and styles is handled here
             // earliest hook: init
             Enqueues::setup();
-
+            $this->i18n();
             $this->loadExtensions();
             $this->loadFields();
             $this->initInterface();
@@ -110,9 +113,6 @@ Class Kontentblocks
             // enabled for 'page' by default
             add_post_type_support( 'page', 'kontentblocks' );
             remove_post_type_support( 'page', 'revisions' );
-            // @TODO deprecate
-            do_action( 'kb:init' );
-            do_action( 'kb.init' );
         }
 
     }
@@ -123,7 +123,6 @@ Class Kontentblocks
      */
     public function initInterface()
     {
-
         /*
          * ----------------
          * Admin menus & custom post types
@@ -133,12 +132,12 @@ Class Kontentblocks
         new DynamicAreas();
         // global templates post type and menu management
         new ModuleTemplates();
-
         /*
          * Main post edit screen handler
          * Post type must support 'kontentblocks"
          */
         new EditScreen();
+
     }
 
     public function i18n()
@@ -157,7 +156,6 @@ Class Kontentblocks
      */
     public function loadModules()
     {
-        Capabilities::setup();
 
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
         $Registry = $this->Services['registry.modules'];
@@ -185,6 +183,12 @@ Class Kontentblocks
                 }
             }
         }
+        _K::info( 'Modules loaded' );
+
+
+        do_action( 'kb.init' );
+        _K::info( 'kb.init called' );
+
     }
 
     /**
@@ -204,6 +208,8 @@ Class Kontentblocks
         foreach (glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file) {
             $this->Services['registry.fields']->add( $file );
         }
+
+        _K::info('Fields loaded');
     }
 
 
@@ -295,9 +301,9 @@ Class Kontentblocks
         $this->Services['utility.logger'] = function ( $container ) {
             $path = KB_PLUGIN_PATH . '/logs';
             $Logger = new Logger( 'kontentblocks' );
-            if (Kontentblocks::DEBUG) {
+            if (Kontentblocks::DEBUG && is_user_logged_in()) {
                 $Logger->pushHandler( new BrowserConsoleHandler() );
-                $Logger->addInfo('Monolog up and running');
+                $Logger->addInfo( 'Monolog up and running' );
                 if (is_dir( $path )) {
                     $Logger->pushHandler( new StreamHandler( $path . '/debug.log' ) );
                 }
@@ -318,6 +324,10 @@ Class Kontentblocks
         $this->Services['utility.ajaxhandler'] = function ( $container ) {
             return new AjaxCallbackHandler();
         };
+
+
+        self::$AjaxHandler = $this->Services['utility.ajaxhandler'];
+        self::$Logger = $this->Services['utility.logger'];
 
     }
 
@@ -355,7 +365,14 @@ Class Kontentblocks
 // end Kontentblocks
 
 // Fire it up
-Kontentblocks::getInstance();
+add_action(
+    'plugins_loaded',
+    function () {
+        Kontentblocks::getInstance();
+    },
+    5
+);
+
 register_activation_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onActivation' ) );
 register_deactivation_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onDeactivation' ) );
 register_uninstall_hook( __FILE__, array( '\Kontentblocks\Kontentblocks', 'onUninstall' ) );

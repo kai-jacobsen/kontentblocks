@@ -1,11 +1,11 @@
 <?php
 
-namespace Kontentblocks\Backend\Areas;
+namespace Kontentblocks\Areas;
 
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Templating\CoreView;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -18,7 +18,7 @@ use Kontentblocks\Utils\Utilities;
  *
  *
  */
-class Area
+class AreaBackendHTML
 {
 
     /**
@@ -51,7 +51,7 @@ class Area
     /**
      * Environment
      *
-     * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     * @var \Kontentblocks\Backend\Environment\Environment
      */
     protected $Environment;
 
@@ -64,7 +64,7 @@ class Area
 
     /**
      * Settings menu object
-     * @var \Kontentblocks\Backend\Areas\AreaSettingsMenu
+     * @var \Kontentblocks\Areas\AreaSettingsMenu
      */
     protected $settingsMenu;
 
@@ -72,12 +72,12 @@ class Area
      * Class Constructor
      *
      * @param array $area area settings array
-     * @param \Kontentblocks\Backend\Environment\PostEnvironment $Environment
+     * @param \Kontentblocks\Backend\Environment\Environment $Environment
      * @param string $context
      *
      * @throws \Exception
      */
-    function __construct( $area, PostEnvironment $Environment, $context = 'normal' )
+    function __construct( $area, Environment $Environment, $context = 'normal' )
     {
 
         if (empty( $area )) {
@@ -92,7 +92,6 @@ class Area
 
         // batch setting of properties
         $this->setupAreaProperties( $area );
-
         //actual stored modules for this area
         $this->attachedModules = $this->Environment->getModulesForArea( $this->id );
 

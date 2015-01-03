@@ -3,7 +3,7 @@
 namespace Kontentblocks\Backend\Screen;
 
 use Exception;
-use Kontentblocks\Backend\Areas\Area;
+use Kontentblocks\Areas\AreaBackendHTML;
 
 /**
  * Class ScreenContext
@@ -129,7 +129,7 @@ class ScreenContext
             }
 
             // Setup new Area
-            $area = new Area($args, $this->Environment, $this->id);
+            $area = new AreaBackendHTML($args, $this->Environment, $this->id);
             // do area header markup
             $area->header();
             // @TODO toJSON needs to be replaced

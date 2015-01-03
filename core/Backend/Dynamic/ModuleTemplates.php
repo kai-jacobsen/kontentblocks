@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Backend\Dynamic;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
@@ -247,7 +247,7 @@ class ModuleTemplates
      * @since 1.0.0
      * @return void
      */
-    public function createTemplate( $postId, PostEnvironment $Environment )
+    public function createTemplate( $postId, Environment $Environment )
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );

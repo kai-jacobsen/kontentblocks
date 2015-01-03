@@ -4,7 +4,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions\Frontend;
 
 use Kontentblocks\Ajax\Actions\ChangeArea;
 use Kontentblocks\Ajax\Actions\Frontend\UndraftModule;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -43,7 +43,7 @@ class UndraftModuleTest extends \WP_UnitTestCase
         $post = $this->factory->post->create();
 
         $workshop = new ModuleWorkshop(
-            new PostEnvironment( $post ), array(
+            new Environment( $post ), array(
                 'class' => 'ModuleText'
             )
         );

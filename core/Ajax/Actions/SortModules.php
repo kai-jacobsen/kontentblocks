@@ -20,7 +20,6 @@ class SortModules
     public static function run( ValueStorageInterface $Request )
     {
 
-
         $data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         // bail if essentials are missing
         if (!isset( $data ) || !is_array( $data )) {

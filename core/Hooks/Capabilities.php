@@ -20,7 +20,6 @@ class Capabilities
         $options = get_site_option( 'kb.capabilities.setup' );
         if (empty( $options )) {
             update_site_option( 'kb.capabilities.setup', time() );
-
             foreach (self::defaultCapabilities() as $role => $set) {
                 $role = get_role( $role );
                 foreach ($set as $cap) {

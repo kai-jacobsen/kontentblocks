@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -28,11 +28,11 @@ class ModuleFactory
     /**
      * @param $class
      * @param $moduleArgs
-     * @param PostEnvironment $Environment
+     * @param Environment $Environment
      * @param null $data
      * @throws \Exception
      */
-    public function __construct( $class, $moduleArgs, PostEnvironment $Environment = null, $data = null )
+    public function __construct( $class, $moduleArgs, Environment $Environment = null, $data = null )
     {
 
         if (!isset( $moduleArgs ) or !isset( $class )) {

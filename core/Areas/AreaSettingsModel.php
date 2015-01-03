@@ -1,11 +1,11 @@
 <?php
 
-namespace Kontentblocks\Backend\Areas;
+namespace Kontentblocks\Areas;
 
 
 /**
  * Class AreaSettingsModel
- * @package Kontentblocks\Backend\Areas
+ * @package Kontentblocks\Areas
  */
 class AreaSettingsModel implements \JsonSerializable
 {

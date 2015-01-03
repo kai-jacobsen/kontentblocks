@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Frontend;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
-use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
@@ -23,13 +23,17 @@ use Kontentblocks\Utils\Utilities;
 class AreaRenderer
 {
 
+    public $areaId;
+
+    public $postId;
+
     /**
      * @var AreaHtmlNode
      */
     protected $AreaHtmlNode;
 
     /**
-     * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     * @var \Kontentblocks\Backend\Environment\Environment
      */
     protected $Environment;
 
@@ -62,27 +66,20 @@ class AreaRenderer
      * @param $area string area id
      * @param $additionalArgs array
      */
-    public function __construct( $postId, $area, $additionalArgs )
+    public function __construct( Environment $Environment, $area, $additionalArgs )
     {
-        if (!isset( $postId ) || !isset( $area )) {
+        if (!isset( $Environment ) || !isset( $area )) {
             return;
         }
-
-        $this->Environment = Utilities::getEnvironment( $postId );
-
-
+        $this->areaId = $area;
+        $this->postId = $Environment->getId();
+        $this->Environment = $Environment;
         $modules = $this->Environment->getModulesforArea( $area );
-//        if (!$modules) {
-//            return;
-//        } else {
         $this->modules = new ModuleIterator( $modules, $this->Environment );
-//        }
-
-
         // setup AreaHtmlNode
         $this->AreaHtmlNode = new AreaHtmlNode(
-            $this->Environment->getAreaDefinition( $area ),
-            $this->Environment->getAreaSettings( $area ),
+            $this,
+            $Environment,
             $additionalArgs
         );
 
@@ -194,7 +191,7 @@ class AreaRenderer
      */
     public function afterModule( $_after, $Module )
     {
-        Kontentblocks::getService('utility.jsontransport')->registerModule( $Module->toJSON() );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
 
         $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
         if (!empty( $layout )) {

@@ -52,7 +52,7 @@ class ModuleIterator implements \Iterator, \Countable
     /**
      * Environment object
      *
-     * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     * @var \Kontentblocks\Backend\Environment\Environment
      * @since 1.0.0
      */
     protected $Environment;
@@ -101,7 +101,6 @@ class ModuleIterator implements \Iterator, \Countable
         }
 
         $Factory = new ModuleFactory(
-//            $moduleDef['class'], $moduleDef, $this->Environment, $this->getModuleData( $moduleDef )
             $moduleDef['class'], $moduleDef, $this->Environment
         );
 
