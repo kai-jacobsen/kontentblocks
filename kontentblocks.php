@@ -69,19 +69,17 @@ Class Kontentblocks
         self::bootstrap();
 
         $this->Services = new Pimple\Container();
-
+        // setups services
         $this->setupTemplating();
         $this->setupRegistries();
         $this->setupUtilities();
+
+
 
         // load modules automatically, after dynamic areas were setup,
         // dynamic areas are on init/initInterface hook
         add_action( 'kb.areas.dynamic.setup', array( $this, 'loadModules' ), 9 );
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
-
-        $AjaxHandler = $this->Services['utility.ajaxhandler'];
-
-
         add_action( 'plugins_loaded', array( $this, 'i18n' ) );
 
     }
@@ -165,15 +163,7 @@ Class Kontentblocks
         $Registry = $this->Services['registry.modules'];
         // add core modules path
         $paths = array( KB_TEMPLATE_PATH );
-        // deprecated
-        $paths = apply_filters( 'kb_add_template_path', $paths );
-        // replacement for '_add_template_path'
-        // @TODO deprecate
-        $paths = apply_filters( 'kb::add.module.path', $paths );
         $paths = apply_filters( 'kb.module.paths', $paths );
-        // legacy
-        $paths = apply_filters( 'kb_add_module_path', $paths );
-
         $paths = array_unique( $paths );
 
         foreach ($paths as $path) {
@@ -307,12 +297,12 @@ Class Kontentblocks
             $Logger = new Logger( 'kontentblocks' );
             if (Kontentblocks::DEBUG) {
                 $Logger->pushHandler( new BrowserConsoleHandler() );
+                $Logger->addInfo('Monolog up and running');
                 if (is_dir( $path )) {
                     $Logger->pushHandler( new StreamHandler( $path . '/debug.log' ) );
                 }
             } else {
                 $Logger->pushHandler( new NullHandler() );
-
             }
             return $Logger;
         };
@@ -328,6 +318,7 @@ Class Kontentblocks
         $this->Services['utility.ajaxhandler'] = function ( $container ) {
             return new AjaxCallbackHandler();
         };
+
     }
 
     private function setupRegistries()

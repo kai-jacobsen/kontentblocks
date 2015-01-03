@@ -86,13 +86,15 @@ class AreaRegistry
             )
         );
 
+
         if (!empty( $areas )) {
             foreach ($areas as $areapost) {
-                $area = get_post_meta( $areapost->ID, '_area', true );
+                $area = $areapost->_area;
                 $area['parent_id'] = $areapost->ID;
                 $dynamicAreas[] = $area;
             }
         }
+
 
         if (!empty( $dynamicAreas )) {
             foreach ($dynamicAreas as $area) {
@@ -314,9 +316,6 @@ class AreaRegistry
      */
     public function connect( $classname, $args )
     {
-
-
-
         if (!empty( $args['settings']['connect'] ) && $args['settings']['connect'] === 'any') {
 
             foreach ($this->rawAreas as $area_id => $area) {
