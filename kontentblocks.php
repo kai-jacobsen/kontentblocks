@@ -89,15 +89,16 @@ Class Kontentblocks
         if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
             add_theme_support( 'kontentblocks' );
             include_once( get_template_directory() . '/kontentblocks.php' );
+            _K::info( 'kontentblocks.php loaded from main theme' );
+
         }
 
         if (is_child_theme() && file_exists( get_stylesheet_directory() . '/kontentblocks.php' )) {
             add_theme_support( 'kontentblocks' );
             include_once( get_stylesheet_directory() . '/kontentblocks.php' );
+            _K::info( 'kontentblocks.php loaded from childtheme' );
         }
 
-
-        _K::info( 'kontentblocks.php loading stage' );
 
         if (current_theme_supports( 'kontentblocks' )) {
             // Enqueues of front and backend scripts and styles is handled here
@@ -185,7 +186,7 @@ Class Kontentblocks
 
 
         do_action( 'kb.init' );
-        _K::info( 'kb.init called' );
+        _K::info( 'kb.init action fired. We\'re good to go.' );
 
     }
 
@@ -301,7 +302,9 @@ Class Kontentblocks
             $Logger = new Logger( 'kontentblocks' );
             if (Kontentblocks::DEBUG && is_user_logged_in()) {
                 $Logger->pushHandler( new BrowserConsoleHandler() );
-                $Logger->addInfo( 'Monolog up and running' );
+                $Logger->addInfo(
+                    'Hey there! Kontentblocks is running in dev mode but don\'t worry. Have a great day'
+                );
                 if (is_dir( $path ) && Kontentblocks::DEBUG_LOG) {
                     $Logger->pushHandler( new StreamHandler( $path . '/debug.log' ) );
                 }
@@ -322,11 +325,7 @@ Class Kontentblocks
         $this->Services['utility.ajaxhandler'] = function ( $container ) {
             return new AjaxCallbackHandler();
         };
-
-
         self::$AjaxHandler = $this->Services['utility.ajaxhandler'];
-        self::$Logger = $this->Services['utility.logger'];
-
     }
 
     private function setupRegistries()

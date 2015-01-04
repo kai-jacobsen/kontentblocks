@@ -8,12 +8,15 @@
 
 namespace Kontentblocks\Ajax;
 
+use Kontentblocks\Utils\_K;
+
 
 /**
  * Class AjaxSuccessResponse
  * @package Kontentblocks\Ajax
  */
-class AjaxSuccessResponse extends AbstractAjaxResponse{
+class AjaxSuccessResponse extends AbstractAjaxResponse
+{
 
     /**
      * (PHP 5 &gt;= 5.4.0)<br/>

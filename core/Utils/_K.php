@@ -15,26 +15,26 @@ class _K
     public static function info( $msg )
     {
         $msg = self::currentAction() . $msg;
-        Kontentblocks::getService( 'utility.logger' )->addInfo( $msg );
+        return Kontentblocks::getService( 'utility.logger' )->addInfo( $msg );
     }
 
     public static function warning( $msg )
     {
         $msg = self::currentAction() . $msg;
-        Kontentblocks::getService( 'utility.logger' )->addWarning( $msg );
+        return Kontentblocks::getService( 'utility.logger' )->addWarning( $msg );
     }
 
     public static function error( $msg )
     {
         $msg = self::currentAction() . $msg;
-        Kontentblocks::getService( 'utility.logger' )->addError( $msg );
+        return Kontentblocks::getService( 'utility.logger' )->addError( $msg );
     }
 
     private static function currentAction()
     {
         $bt = debug_backtrace();
         $inf = $bt[1];
-        $str = '(' . basename($inf['file']) .  '::' . $inf['line'] . ')' . current_action() . ': ';
+        $str = '(' . basename( $inf['file'] ) . '::' . $inf['line'] . ')' . current_action() . ': ';
         return $str;
     }
 }

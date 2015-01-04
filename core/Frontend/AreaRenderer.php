@@ -3,6 +3,7 @@
 namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Kontentblocks;
@@ -27,6 +28,8 @@ class AreaRenderer
      * @var AreaHtmlNode
      */
     protected $AreaHtmlNode;
+
+    public $areaId;
 
     /**
      * @var \Kontentblocks\Backend\Environment\PostEnvironment
@@ -58,24 +61,24 @@ class AreaRenderer
     /**
      * Class constructor
      *
-     * @param $postId int
+     * @param Environment $Environment
      * @param $area string area id
      * @param $additionalArgs array
      */
-    public function __construct( $postId, $area, $additionalArgs )
+    public function __construct( Environment $Environment, $area, $additionalArgs )
     {
-        if (!isset( $postId ) || !isset( $area )) {
+        if (!isset( $Environment ) || !isset( $area )) {
             return;
         }
-        $this->Environment = Utilities::getEnvironment( $postId );
-
+        $this->areaId = $area;
+        $this->Environment = $Environment;
         $modules = $this->Environment->getModulesforArea( $area );
         $this->modules = new ModuleIterator( $modules, $this->Environment );
 
         // setup AreaHtmlNode
         $this->AreaHtmlNode = new AreaHtmlNode(
-            $this->Environment->getAreaDefinition( $area ),
-            $this->Environment->getAreaSettings( $area ),
+            $this,
+            $Environment,
             $additionalArgs
         );
     }

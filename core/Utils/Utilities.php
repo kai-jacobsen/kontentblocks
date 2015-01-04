@@ -19,22 +19,24 @@ class Utilities
     /**
      * Get environment
      *
-     * $id may be a valid post ID or an dynamic area identifier (string)
-     * in case of the latter, the post ID of the d. area is looked up
-     * on the fly.
+     * $storageId is most likely the ID of the current post
+     * but can vary if a different storage logic applies.
+     * $actualPostId may be equal to storageId in most cases and should be a valid post ID
      *
-     * @param mixed $postId
+     * @param mixed $storageId
      * @param null $actualPostId
      * @return Environment
      * @since 1.0.0
      */
-    public static function getEnvironment( $postId = null, $actualPostId = null )
+    public static function getEnvironment( $storageId = null, $actualPostId = null )
     {
-        if ($postId && is_numeric( $postId ) && $postId !== - 1) {
-            if (isset( self::$environments[$postId] )) {
-                return self::$environments[$postId];
+        if ($storageId && is_numeric( $storageId ) && $storageId !== - 1) {
+            if (isset( self::$environments[$storageId] )) {
+                return self::$environments[$storageId];
             } else {
-                return self::$environments[$postId] = new Environment( $postId, $actualPostId );
+                $realId = (is_null($actualPostId)) ? $storageId : $actualPostId;
+                $Post = get_post( $realId );
+                return self::$environments[$storageId] = new Environment( $storageId, $Post );
             }
         }
     }

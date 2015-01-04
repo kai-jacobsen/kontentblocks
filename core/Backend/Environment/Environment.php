@@ -34,12 +34,12 @@ class Environment implements JsonSerializable
     /**
      * @var int
      */
-    protected $postId;
+    protected $storageId;
 
     /**
      * @var int
      */
-    protected $altPostId;
+    protected $postObj;
 
     /**
      * @var string
@@ -68,16 +68,11 @@ class Environment implements JsonSerializable
      * @param $storageId
      * @param null $postId
      */
-    public function __construct( $storageId, $postId = null )
+    public function __construct( $storageId, \WP_Post $postObj )
     {
+        $this->postObj = $postObj;
 
-        if (!is_null( $postId )) {
-            $this->altPostId = $postId;
-        } else {
-            $this->altPostId = $storageId;
-        }
-
-        $this->postId = $storageId;
+        $this->storageId = $storageId;
         $this->DataHandler = new DataProviderController( $storageId );
         $this->Storage = new ModuleStorage( $storageId, $this->DataHandler );
 
@@ -95,7 +90,7 @@ class Environment implements JsonSerializable
      */
     public function getId()
     {
-        return $this->postId;
+        return $this->storageId;
     }
 
     public function get( $param )
@@ -288,7 +283,7 @@ class Environment implements JsonSerializable
      */
     public function getPageTemplate()
     {
-        $tpl = get_post_meta( $this->altPostId, '_wp_page_template', true );
+        $tpl = get_post_meta( $this->postObj->ID, '_wp_page_template', true );
 
         if ($tpl !== '') {
             return $tpl;
@@ -304,7 +299,7 @@ class Environment implements JsonSerializable
      */
     public function getPostType()
     {
-        return get_post_type( $this->altPostId );
+        return  $this->postObj->post_type;
     }
 
 
@@ -323,7 +318,7 @@ class Environment implements JsonSerializable
     function jsonSerialize()
     {
         return array(
-            'postId' => absint( $this->postId ),
+            'postId' => absint( $this->storageId ),
             'pageTemplate' => $this->getPageTemplate(),
             'postType' => $this->getPostType(),
             'moduleCount' => $this->getModuleCount()
