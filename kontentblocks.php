@@ -46,13 +46,12 @@ Class Kontentblocks
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;
+    const DEBUG_LOG = false;
 
     public $Services;
 
-    public $dev_mode = true;
     static $instance;
     static $AjaxHandler;
-    static $Logger;
 
     public static function getInstance()
     {
@@ -60,7 +59,6 @@ Class Kontentblocks
         if (null === $instance) {
             $instance = new static();
         }
-
         return $instance;
     }
 
@@ -72,12 +70,12 @@ Class Kontentblocks
         self::bootstrap();
 
         $this->Services = new Pimple\Container();
-        // setups services
+        // setup services
         $this->setupTemplating();
         $this->setupRegistries();
         $this->setupUtilities();
 
-        // load modules automatically, after dynamic areas were setup,
+        // load modules automatically, after areas were setup,
         // dynamic areas are on init/initInterface hook
         add_action( 'kb.areas.setup', array( $this, 'loadModules' ), 9 );
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
@@ -304,7 +302,7 @@ Class Kontentblocks
             if (Kontentblocks::DEBUG && is_user_logged_in()) {
                 $Logger->pushHandler( new BrowserConsoleHandler() );
                 $Logger->addInfo( 'Monolog up and running' );
-                if (is_dir( $path )) {
+                if (is_dir( $path ) && Kontentblocks::DEBUG_LOG) {
                     $Logger->pushHandler( new StreamHandler( $path . '/debug.log' ) );
                 }
             } else {

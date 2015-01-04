@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Frontend;
 
-use Kontentblocks\Areas\AreaRegistry;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Areas\AreaRegistry;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
@@ -23,17 +23,13 @@ use Kontentblocks\Utils\Utilities;
 class AreaRenderer
 {
 
-    public $areaId;
-
-    public $postId;
-
     /**
      * @var AreaHtmlNode
      */
     protected $AreaHtmlNode;
 
     /**
-     * @var \Kontentblocks\Backend\Environment\Environment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      */
     protected $Environment;
 
@@ -66,23 +62,22 @@ class AreaRenderer
      * @param $area string area id
      * @param $additionalArgs array
      */
-    public function __construct( Environment $Environment, $area, $additionalArgs )
+    public function __construct( $postId, $area, $additionalArgs )
     {
-        if (!isset( $Environment ) || !isset( $area )) {
+        if (!isset( $postId ) || !isset( $area )) {
             return;
         }
-        $this->areaId = $area;
-        $this->postId = $Environment->getId();
-        $this->Environment = $Environment;
+        $this->Environment = Utilities::getEnvironment( $postId );
+
         $modules = $this->Environment->getModulesforArea( $area );
         $this->modules = new ModuleIterator( $modules, $this->Environment );
+
         // setup AreaHtmlNode
         $this->AreaHtmlNode = new AreaHtmlNode(
-            $this,
-            $Environment,
+            $this->Environment->getAreaDefinition( $area ),
+            $this->Environment->getAreaSettings( $area ),
             $additionalArgs
         );
-
     }
 
     /**
@@ -126,14 +121,10 @@ class AreaRenderer
             }
 
             $output .= $this->AreaHtmlNode->openLayoutWrapper();
-
             $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
-
             $moduleOutput = $module->module();
-
             $output .= $moduleOutput;
             $output .= $this->afterModule( $this->_afterModule( $module ), $module );
-
             $output .= $this->AreaHtmlNode->closeLayoutWrapper();
         }
 

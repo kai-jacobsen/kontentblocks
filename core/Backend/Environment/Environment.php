@@ -65,20 +65,21 @@ class Environment implements JsonSerializable
     /**
      * Class constructor
      *
-     * @param $postID
+     * @param $storageId
+     * @param null $postId
      */
-    public function __construct( $postID, $altPostId = null )
+    public function __construct( $storageId, $postId = null )
     {
 
-        if (!is_null($altPostId)){
-            $this->altPostId = $altPostId;
+        if (!is_null( $postId )) {
+            $this->altPostId = $postId;
         } else {
-            $this->altPostId = $postID;
+            $this->altPostId = $storageId;
         }
 
-        $this->postId = $postID;
-        $this->DataHandler = new DataProviderController( $postID );
-        $this->Storage = new ModuleStorage( $postID, $this->DataHandler );
+        $this->postId = $storageId;
+        $this->DataHandler = new DataProviderController( $storageId );
+        $this->Storage = new ModuleStorage( $storageId, $this->DataHandler );
 
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
