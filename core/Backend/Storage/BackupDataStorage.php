@@ -167,7 +167,7 @@ class BackupDataStorage
 
         //set reference
 //        $this->Storage->getDataProvider()->update('kb_last_backup', $now);
-        update_post_meta($this->Storage->getPostId(), 'kb_last_backup', $now);
+        update_post_meta($this->Storage->getStorageId(), 'kb_last_backup', $now);
         wp_cache_delete('kb_backups_'.$data['post_id'], 'kontentblocks');
         return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
     }
@@ -205,7 +205,7 @@ class BackupDataStorage
             'value' => base64_encode(serialize($existingData))
         );
 //        $this->Storage->getDataProvider()->update('kb_last_backup', $now);
-        update_post_meta($this->Storage->getPostId(), 'kb_last_backup', $now);
+        update_post_meta($this->Storage->getStorageId(), 'kb_last_backup', $now);
 
         wp_cache_delete('kb_backups_'.$this->backupData['id'], 'kontentblocks');
 

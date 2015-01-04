@@ -207,7 +207,7 @@ Class Kontentblocks
             $this->Services['registry.fields']->add( $file );
         }
 
-        _K::info('Fields loaded');
+        _K::info( 'Fields loaded' );
     }
 
 

@@ -32,18 +32,18 @@ class PostMetaDataProvider implements DataProviderInterface
     /**
      * Class constructor
      *
-     * @param $postId
+     * @param $storageId
      *
      * @throws \Exception
      * @since 1.0.0
      */
-    public function __construct( $postId )
+    public function __construct( $storageId )
     {
-        if (!isset( $postId ) || $postId === 0) {
+        if (!isset( $storageId ) || $storageId === 0) {
             throw new \Exception( 'a valid post id must be provided' );
         }
 
-        $this->postId = $postId;
+        $this->postId = $storageId;
         $this->reset();
 
     }

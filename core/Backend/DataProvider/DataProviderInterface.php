@@ -8,7 +8,7 @@ namespace Kontentblocks\Backend\DataProvider;
 interface DataProviderInterface
 {
 
-    public function __construct( $postId );
+    public function __construct( $storageId );
 
     public function get( $key );
 

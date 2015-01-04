@@ -17,7 +17,7 @@ class ModuleStorage implements \Countable
      * @var int
      * @since 1.0.0
      */
-    protected $postId;
+    protected $storageId;
 
     /**
      * Module Index
@@ -55,7 +55,7 @@ class ModuleStorage implements \Countable
         if (!isset( $postId ) || $postId === 0) {
             throw new \Exception( 'a valid post id must be provided' );
         }
-        $this->postId = $postId;
+        $this->storageId = $postId;
         // Late init data handler if not provided
         if (is_null( $DataProvider )) {
             $this->DataProvider = new DataProviderController( $postId );
@@ -82,9 +82,9 @@ class ModuleStorage implements \Countable
      * Getter for post id
      * @return int
      */
-    public function getPostId()
+    public function getStorageId()
     {
-        return $this->postId;
+        return $this->storageId;
     }
 
     /**
@@ -359,7 +359,7 @@ class ModuleStorage implements \Countable
     public function backup()
     {
         return array(
-            'id' => $this->postId,
+            'id' => $this->storageId,
             'index' => $this->getIndex(),
             'modules' => $this->getModules()
         );
