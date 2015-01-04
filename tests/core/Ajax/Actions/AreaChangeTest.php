@@ -40,10 +40,10 @@ class AreaChangeTest extends \WP_UnitTestCase
 
     public function testRun()
     {
-        $post = $this->factory->post->create();
+        $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new Environment( $post ), array(
+            new Environment( $post->ID, $post ), array(
                 'class' => 'ModuleText'
             )
         );
@@ -52,7 +52,7 @@ class AreaChangeTest extends \WP_UnitTestCase
         $module = $workshop->getDefinitionArray();
 
         $data = array(
-            'post_id' => $post,
+            'post_id' => $post->ID,
             'area_id' => 'dump',
             'context' => 'dump',
             'mid' => $module['mid']
@@ -61,7 +61,7 @@ class AreaChangeTest extends \WP_UnitTestCase
         $Request = new ValueStorage( $data );
         $Response = ChangeArea::run( $Request );
         $this->assertTrue( $Response->getStatus() );
-        $Storage = new ModuleStorage( $post );
+        $Storage = new ModuleStorage( $post->ID );
         $def = $Storage->getModuleDefinition( $module['mid'] );
         $this->assertEquals( $def['area'], $data['area_id'] );
     }

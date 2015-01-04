@@ -36,6 +36,22 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
         $this->assertTrue( $update );
     }
 
+    public function testOldIdIsUnset()
+    {
+        $Workshop = $this->getWorkshop();
+        $id = $Workshop->getNewId();
+        $this->assertNotEquals( $id, 'some_old_id' );
+    }
+
+    public function testSetId()
+    {
+        $Workshop = $this->getWorkshop(array(
+            'mid' => 'set_new_id'
+        ));
+
+        $this->assertEquals('set_new_id', $Workshop->getNewId());
+    }
+
     public function testCreateisLocked()
     {
         $Workshop = $this->getWorkshop();
@@ -75,10 +91,11 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
     }
 
 
-    private function getWorkshop()
+    private function getWorkshop( $cArgs = array() )
     {
         $oldargs = array(
             'class' => 'ModuleText',
+            'mid' => 'some_old_id',
             'overrides' => array(
                 'name' => 'Oldname'
             )
@@ -90,7 +107,10 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
             )
         );
 
-        return new ModuleWorkshop( new Environment( 1 ), $args, $oldargs );
+        $args = wp_parse_args( $cArgs, $args );
+
+        $post = $this->factory->post->create_and_get();
+        return new ModuleWorkshop( new Environment( $post->ID, $post ), $args, $oldargs );
     }
 
 }

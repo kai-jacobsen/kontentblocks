@@ -40,10 +40,10 @@ class UndraftModuleTest extends \WP_UnitTestCase
 
     public function testRun()
     {
-        $post = $this->factory->post->create();
+        $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new Environment( $post ), array(
+            new Environment( $post->ID, $post ), array(
                 'class' => 'ModuleText'
             )
         );
@@ -52,14 +52,14 @@ class UndraftModuleTest extends \WP_UnitTestCase
         $module = $workshop->getDefinitionArray();
 
         $data = array(
-            'post_id' => $post,
+            'post_id' => $post->ID,
             'mid' => $module['mid']
         );
 
         $Request = new ValueStorage( $data );
         $Response = UndraftModule::run( $Request );
         $this->assertTrue( $Response->getStatus() );
-        $Storage = new ModuleStorage( $post );
+        $Storage = new ModuleStorage( $post->ID );
         $def = $Storage->getModuleDefinition( $module['mid'] );
         $this->assertFalse( $def['state']['draft'] );
     }

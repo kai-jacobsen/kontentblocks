@@ -39,10 +39,10 @@ class DuplicateModuleTest extends \WP_UnitTestCase
 
     public function testRun()
     {
-        $post = $this->factory->post->create();
+        $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new Environment( $post ), array(
+            new Environment( $post->ID, $post ), array(
                 'class' => 'ModuleText'
             )
         );
@@ -51,7 +51,7 @@ class DuplicateModuleTest extends \WP_UnitTestCase
         $module = $workshop->getDefinitionArray();
 
         $data = array(
-            'post_id' => $post,
+            'post_id' => $post->ID,
             'module' => $module['mid'],
             'class' => $module['class']
         );
