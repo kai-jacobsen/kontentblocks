@@ -171,12 +171,12 @@ class ModuleWorkshop
      */
     private function setupModuleArgs( $args, $oldargs )
     {
-        if ($oldargs){
-            unset($oldargs['instance_id']);
-            unset($oldargs['mid']);
+        if ($oldargs) {
+            unset( $oldargs['instance_id'] );
+            unset( $oldargs['mid'] );
         }
 
-        $args = wp_parse_args($args, $oldargs);
+        $args = wp_parse_args( $args, $oldargs );
 
         $this->newId = $mid = ( isset( $args['mid'] ) ) ? sanitize_key( $args['mid'] ) : $this->createModuleId();
         $defaults = array(
@@ -208,7 +208,7 @@ class ModuleWorkshop
             )
         );
 
-        return wp_parse_args($args, $defaults);
+        return wp_parse_args( $args, $defaults );
     }
 
     /**

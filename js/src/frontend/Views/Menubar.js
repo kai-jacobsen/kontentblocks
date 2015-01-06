@@ -56,7 +56,7 @@ KB.Backbone.ModuleMenuItem = Backbone.View.extend({
   },
   inlineUpdate: function (e) {
     e.stopPropagation();
-    this.parentView.updateModule();
+    this.parentView.Controls.UpdateControl.update();
     this.parentView.getClean();
   },
   scrollTo: function () {

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-04 */
+/*! Kontentblocks DevVersion 2015-01-06 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -798,7 +798,7 @@ KB.Backbone.ModuleMenuItem = Backbone.View.extend({
     },
     inlineUpdate: function(e) {
         e.stopPropagation();
-        this.parentView.updateModule();
+        this.parentView.Controls.UpdateControl.update();
         this.parentView.getClean();
     },
     scrollTo: function() {

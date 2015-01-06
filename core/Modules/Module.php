@@ -407,7 +407,7 @@ abstract class Module
             array(
                 'postType' => $Environment->get( 'postType' ),
                 'pageTemplate' => $Environment->get( 'pageTemplate' ),
-                'postId' => absint( $Environment->get( 'postId' ) ),
+                'postId' => absint( $Environment->getId() ),
                 'areaContext' => $this->getAreaContext(),
                 'area' => $this->getArea()
             )

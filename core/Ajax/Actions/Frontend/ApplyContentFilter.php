@@ -16,7 +16,7 @@ class ApplyContentFilter
     public static function run( ValueStorageInterface $Request )
     {
         global $post;
-        $content = $Request->get( 'content' );
+        $content = wp_unslash($Request->get( 'content' ));
         $postId = $Request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
         $post = get_post( $postId );
         setup_postdata( $post );
