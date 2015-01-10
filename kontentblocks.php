@@ -33,6 +33,7 @@ use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple;
+use Reframe\Autoloader;
 
 
 /**
@@ -262,7 +263,9 @@ Class Kontentblocks
             }
         }
 
+        include_once 'Autoloader.php';
         Capabilities::setup();
+
 
     }
 
