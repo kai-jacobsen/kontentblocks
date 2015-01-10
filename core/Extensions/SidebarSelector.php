@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Extensions;
 
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 
@@ -49,17 +50,16 @@ class SidebarSelector
      * TODO:: resort global sidebars and post sidebars to own arrays
      */
 
-    function metaBox( $context, $ScreenManager )
+    function metaBox( $context, Environment $Environment )
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
-        $pdc     = $ScreenManager->getEnvironment();
+        $pdc     = $Environment;
 
-        if (!$pdc->get('areas')){
+        if (!$pdc->getAreas()){
             return false;
         }
 
-        $Screen  = $ScreenManager;
-        $this->_setupAreas( $Screen->getRawAreas() );
+        $this->_setupAreas( $pdc->get('areas') );
         // saved sidebar settings
         if ( $post_id ) {
             $this->activeSidebars = get_post_meta( $post_id, 'active_sidebar_areas', true );

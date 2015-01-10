@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Screen;
 
 use Exception;
 use Kontentblocks\Areas\AreaBackendHTML;
+use Kontentblocks\Backend\Environment\Environment;
 
 /**
  * Class ScreenContext
@@ -56,23 +57,24 @@ class ScreenContext
     /**
      * Class constructor
      * @param $args
-     * @param ScreenManager $ScreenManager
+     * @param $areas
+     * @param Environment $Environment
+     * @param bool $sidebars
      * @throws Exception
      * @since 1.0.0
      */
-    public function __construct($args, ScreenManager $ScreenManager)
+    public function __construct( $args, $areas, Environment $Environment, $sidebars = false )
     {
-        if (empty($args)) {
-            throw new Exception('No Arguments specified for single Context');
+        if (empty( $args )) {
+            throw new Exception( 'No Arguments specified for single Context' );
         }
 
-        $this->ScreenManager = $ScreenManager;
         $this->id = $args['id'];
         $this->title = $args['title'];
         $this->description = $args['description'];
-        $this->Environment = $ScreenManager->getEnvironment();
-        $this->areas = $ScreenManager->getContextAreas($this->id);
-        $this->editScreenHasSidebar = $ScreenManager->hasSidebar();
+        $this->Environment = $Environment;
+        $this->areas = $areas;
+        $this->editScreenHasSidebar = $sidebars;
     }
 
 
@@ -83,7 +85,7 @@ class ScreenContext
      */
     public function render()
     {
-        if (!empty($this->areas)) {
+        if (!empty( $this->areas )) {
             // print outer wrapper markup
             $this->openContext();
             //render actual areas
@@ -92,7 +94,7 @@ class ScreenContext
             $this->closeContext();
         } else {
             // call the hook anyway
-            do_action("context_box_{$this->id}", $this->id, $this->ScreenManager);
+            do_action( "context_box_{$this->id}", $this->id, $this->Environment );
         }
 
     }
@@ -129,7 +131,7 @@ class ScreenContext
             }
 
             // Setup new Area
-            $area = new AreaBackendHTML($args, $this->Environment, $this->id);
+            $area = new AreaBackendHTML( $args, $this->Environment, $this->id );
             // do area header markup
             $area->header();
             // @TODO toJSON needs to be replaced
@@ -153,21 +155,10 @@ class ScreenContext
     {
         echo "</div>"; // end inner
         // hook to add custom stuff after areas
-
-        do_action("context_box_{$this->id}", $this->id, $this->ScreenManager);
-
+        do_action( "context_box_{$this->id}", $this->id, $this->Environment );
         echo "</div>";
 
     }
 
-    /**
-     * Getter for Screen Manager
-     * @return ScreenManager
-     * @since 1.0.0
-     */
-    public function getScreenManager()
-    {
-        return $this->ScreenManager;
-    }
 
 }
