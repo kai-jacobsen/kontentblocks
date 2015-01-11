@@ -69,7 +69,7 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function getLayout( $area )
     {
-        if (isset($this->settings[$area])){
+        if (isset( $this->settings[$area] )) {
             return $this->settings[$area]['layout'];
         } else {
             return false;

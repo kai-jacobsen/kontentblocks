@@ -3,84 +3,107 @@
 namespace Kontentblocks\Areas;
 
 
+/**
+ * Class Area
+ * @package Kontentblocks\Areas
+ */
 class Area
 {
 
     /**
+     * area identifier
      * @var string
      */
     public $id;
 
     /**
+     * area human readable name
      * @var string
      */
     public $name;
 
     /**
+     * optional description
      * @var string
      */
     public $description;
 
     /**
+     * post types filter
      * @var array
      */
     public $postTypes;
 
     /**
+     * page templates filter
      * @var array
      */
     public $pageTemplates;
 
     /**
+     * modules available in this area
      * @var array
      */
     public $assignedModules;
 
     /**
+     * layouts set to this area
      * @var array
      */
     public $layouts;
 
     /**
+     * default layout if not otherwise stored
      * @var string
      */
     public $defaultLayout;
 
     /**
+     * whether created sitewide or not
      * @var bool
      */
     public $dynamic;
 
     /**
+     * created programmatically or not
      * @var bool
      */
     public $manual;
 
     /**
+     * number of allowed modules
      * @var int
      */
     public $limit;
 
     /**
+     * order index
      * @var int
      */
     public $order;
 
     /**
+     * screen context
      * @var string
      */
     public $context;
 
     /**
+     * concat public to post_content or not
      * @var bool
      */
     public $concat;
 
     /**
+     * sortable on frontend
      * @var bool
      */
     public $sortable;
 
+    /**
+     * Construct and setup properties
+     * @param $properties
+     */
     public function __construct( $properties )
     {
 
@@ -93,6 +116,30 @@ class Area
                 $this->$k = $v;
             }
         }
+    }
+
+    /**
+     * Get property
+     * @param string $prop
+     * @return mixed|null
+     */
+    public function get( $prop )
+    {
+        if (property_exists( $this, $prop )) {
+            return $this->$prop;
+        }
+
+        return null;
+    }
+
+    /**
+     * Set property
+     * @param string $prop
+     * @param mixed $value
+     */
+    public function set( $prop, $value )
+    {
+        $this->$prop = $value;
     }
 
 
@@ -111,9 +158,7 @@ class Area
 
     /**
      * Normalize each area by passing it through this method
-     *
      * @param bool $manual
-     *
      * @return array
      * @since 1.0.0
      */
