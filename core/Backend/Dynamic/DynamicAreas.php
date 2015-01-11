@@ -416,8 +416,8 @@ class DynamicAreas
 
 
         print "<div class='postbox'>";
-        print "<h3>{$areaDef['name']}</h3>";
-        print "<p class='description'>{$areaDef['description']}</p>";
+        print "<h3>{$areaDef->name}</h3>";
+        print "<p class='description'>{$areaDef->description}</p>";
 
         // The infamous hidden editor hack
         Utilities::hiddenEditor();

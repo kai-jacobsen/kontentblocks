@@ -88,7 +88,7 @@ class AreaHtmlNode
     {
         $this->Environment = $Environment;
         $this->attr = $Environment->getAreaDefinition( $AreaRenderer->areaId );
-        $this->id = $this->attr['id'];
+        $this->id = $this->attr->id;
         $this->settings = $this->setupSettings(
             $additionalArgs,
             $Environment->getAreaSettings( $AreaRenderer->areaId )
@@ -193,12 +193,12 @@ class AreaHtmlNode
             return new AreaLayoutIterator( $this->settings['layout'] );
         }
 
-        if ($this->attr['defaultLayout'] !== 'default' && empty( $sLayout )) {
-            if ($Registry->templateExists( $this->attr['defaultLayout'] )) {
-                $this->settings['layout'] = $this->attr['defaultLayout'];
+        if ($this->attr->defaultLayout !== 'default' && empty( $sLayout )) {
+            if ($Registry->templateExists( $this->defaultLayout )) {
+                $this->settings['layout'] = $this->attr->defaultLayout;
                 $this->hasLayout = true;
 
-                return new AreaLayoutIterator( $this->attr['defaultLayout'] );
+                return new AreaLayoutIterator( $this->attr->defaultLayout );
             }
         }
 
@@ -359,8 +359,8 @@ class AreaHtmlNode
 
     public function toJSON()
     {
-        $this->attr['settings'] = $this->settings;
-        $this->attr['envVars'] = $this->Environment;
+        $this->attr->settings = $this->settings;
+        $this->attr->envVars = $this->Environment;
         Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->attr );
 
     }

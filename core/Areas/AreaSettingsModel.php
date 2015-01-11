@@ -25,7 +25,6 @@ class AreaSettingsModel implements \JsonSerializable
     {
 
         $this->postId = $postId;
-
         $this->setupSettings();
 
     }

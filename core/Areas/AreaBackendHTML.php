@@ -22,24 +22,9 @@ class AreaBackendHTML
 {
 
     /**
-     * Unique id of the area
-     * @var string
+     * @var Area
      */
-    public $id;
-
-    /**
-     * Max number of modules allowed
-     * @var int
-     */
-    public $limit;
-
-
-    /**
-     * Not bound to a certain post type
-     * = global
-     * @var bool
-     */
-    public $dynamic;
+    public $Area;
 
     /**
      * Location on the edit screen
@@ -71,32 +56,29 @@ class AreaBackendHTML
     /**
      * Class Constructor
      *
-     * @param array $area area settings array
+     * @param Area $Area
      * @param \Kontentblocks\Backend\Environment\Environment $Environment
      * @param string $context
      *
      * @throws \Exception
      */
-    function __construct( $area, Environment $Environment, $context = 'normal' )
+    function __construct( Area $Area, Environment $Environment, $context = 'normal' )
     {
-
-        if (empty( $area )) {
-            throw new \Exception( 'No Arguments for Area specified' );
-        }
 
         // context in regards of position on the edit screen
         $this->context = $context;
+
+        $this->Area = $Area;
 
         // environment
         $this->Environment = $Environment;
 
         // batch setting of properties
-        $this->setupAreaProperties( $area );
         //actual stored modules for this area
-        $this->attachedModules = $this->Environment->getModulesForArea( $this->id );
+        $this->attachedModules = $this->Environment->getModulesForArea( $Area->id );
 
         // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu( $this, $this->Environment );
+        $this->settingsMenu = new AreaSettingsMenu( $this->Area, $this->Environment );
 
         $this->cats = Utilities::setupCats();
     }
@@ -121,10 +103,10 @@ class AreaBackendHTML
      */
     public function header()
     {
-        echo "<div id='{$this->id}-container' class='kb-area__wrap clearfix cf'>";
+        echo "<div id='{$this->Area->id}-container' class='kb-area__wrap clearfix cf'>";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
-        $Tpl = new CoreView( 'Area-Header.twig', array( 'area' => $this, 'headerClass' => $headerClass ) );
+        $Tpl = new CoreView( 'Area-Header.twig', array( 'area' => $this->Area, 'headerClass' => $headerClass ) );
         $Tpl->render( true );
 
     }
@@ -136,7 +118,7 @@ class AreaBackendHTML
     public function render()
     {
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' id='{$this->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
+        echo "<ul style='' data-context='{$this->context}' id='{$this->Area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty( $this->attachedModules )) {
             foreach ($this->attachedModules as $module) {
 
@@ -149,7 +131,7 @@ class AreaBackendHTML
                 $Module = $Factory->getModule();
                 echo $Module->renderForm();
 
-                Kontentblocks::getService('utility.jsontransport')->registerModule( $Module->toJSON() );
+                Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
             }
         }
 
@@ -189,50 +171,14 @@ class AreaBackendHTML
             return;
         }
         $area = array(
-            'id' => $this->id,
-            'assignedModules' => $this->assignedModules,
-            'limit' => absint( $this->limit ),
+            'id' => $this->Area->id,
+            'assignedModules' => $this->Area->assignedModules,
+            'limit' => absint( $this->Area->limit ),
             'context' => $this->context,
-            'dynamic' => $this->dynamic
+            'dynamic' => $this->Area->dynamic
         );
 
-        Kontentblocks::getService('utility.jsontransport')->registerArea( $area );
-    }
-
-    /**
-     * Simple getter method to retrieve area properties
-     *
-     * @param string $param | property key
-     *
-     * @return mixed
-     */
-    public function get( $param )
-    {
-        if (isset( $this->$param )) {
-            return $this->$param;
-        } else {
-            return false;
-        }
-
-    }
-
-    /**
-     * Simple setter method to batch set properties
-     * Calls additional methods for each key, if available
-     * to validate / sanitize input
-     *
-     * @param array $args
-     */
-    private function setupAreaProperties( $args )
-    {
-        foreach ($args as $key => $value) {
-            if (method_exists( $this, $key )) {
-                $this->$key( $value );
-            } else {
-                $this->$key = $value;
-            }
-        }
-
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $area );
     }
 
 
@@ -245,7 +191,7 @@ class AreaBackendHTML
     private function getModuleLimitTag()
     {
         // prepare string
-        $limit = ( $this->limit == '0' ) ? null : absint( $this->limit );
+        $limit = ( $this->Area->limit == '0' ) ? null : absint( $this->Area->limit );
 
         if (null !== $limit) {
             echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
@@ -261,7 +207,7 @@ class AreaBackendHTML
     private function menuLink()
     {
         if (current_user_can( 'create_kontentblocks' )) {
-            if (!empty( $this->assignedModules )) {
+            if (!empty( $this->Area->assignedModules )) {
                 $out = " <div class='add-modules cantsort'></div>";
                 return $out;
             }

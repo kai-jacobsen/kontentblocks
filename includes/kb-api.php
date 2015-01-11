@@ -14,7 +14,7 @@ use Kontentblocks\Utils\Utilities;
  */
 function registerArea( $args )
 {
-    /** @var \Kontentblocks\Backend\Areas\AreaRegistry $AreaRegistry */
+    /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
     $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
     $AreaRegistry->addArea( $args, true );
 
@@ -60,7 +60,7 @@ function renderSingleArea( $area, $id = null, $additionalArgs )
     $Registry = Kontentblocks::getService( 'registry.areas' );
     if ($Registry->isDynamic( $area )) {
         $areaDef = $Registry->getArea( $area );
-        $Environment = Utilities::getEnvironment( $areaDef['parent_id'], $postId );
+        $Environment = Utilities::getEnvironment( $areaDef->parent_id, $postId );
     } else {
         $Environment = Utilities::getEnvironment( $postId );
 
@@ -84,7 +84,6 @@ function renderSideAreas( $id, $additionalArgs )
     $areas = get_post_meta( $post_id, 'active_sidebar_areas', true );
     if (!empty( $areas )) {
         foreach ($areas as $area) {
-
             renderSingleArea( $area, $post_id, $additionalArgs );
         }
     }

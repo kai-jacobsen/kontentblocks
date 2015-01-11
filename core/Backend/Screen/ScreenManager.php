@@ -111,8 +111,8 @@ class ScreenManager
         }
 
         foreach ($this->areas as $area) {
-            if (!$area['dynamic']) {
-                $areas[$area['context']][$area['id']] = $area;
+            if (!$area->dynamic) {
+                $areas[$area->context][$area->id] = $area;
             }
         }
 

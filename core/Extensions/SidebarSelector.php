@@ -159,14 +159,14 @@ class SidebarSelector
 
         $merged = array_merge($areas, Kontentblocks::getService('registry.areas')->getGlobalSidebars());
         $this->areas = array_filter($merged, function($area){
-            return ($area['context'] === 'side');
+            return ($area->context === 'side');
         });
         foreach ( $this->areas as $args ) {
-            if ( $args[ 'dynamic' ] == true ) {
-                $this->globalSidebars[ $args[ 'id' ] ] = $args;
+            if ( $args->dynamic == true ) {
+                $this->globalSidebars[ $args->id ] = $args;
             }
             else {
-                $this->postSidebars[ $args[ 'id' ] ] = $args;
+                $this->postSidebars[ $args->id ] = $args;
             }
         }
     }
@@ -231,14 +231,14 @@ class SidebarSelector
 
             $areaDefinition = $this->areas[ $area ];
 
-            $return .= "<li class='dynamic-area-active' id='{$areaDefinition[ 'id' ]}' name='{$areaDefinition[ 'id' ]}'>{$areaDefinition[ 'name' ]}";
-            if ( true == $areaDefinition[ 'dynamic' ] ) {
-                $editUrl = get_edit_post_link($areaDefinition['parent_id']).'&redirect=true';
-                $return .= "<span><a href='{$editUrl}' class='kb-js-edit-sidebar' data-area='{$areaDefinition['id']}'>edit</a></span>";
+            $return .= "<li class='dynamic-area-active' id='{$areaDefinition->id}' name='{$areaDefinition->id}'>{$areaDefinition->name}";
+            if ( true == $areaDefinition->dynamic ) {
+                $editUrl = get_edit_post_link($areaDefinition->parent_id).'&redirect=true';
+                $return .= "<span><a href='{$editUrl}' class='kb-js-edit-sidebar' data-area='{$areaDefinition->id}'>edit</a></span>";
             }
-            $return .= "<input id='{$areaDefinition[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$areaDefinition[ 'id' ]}' /></li>";
+            $return .= "<input id='{$areaDefinition->id}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$areaDefinition->id}' /></li>";
             //unset from dynamic areas
-            unset( $this->areas[ $areaDefinition[ 'id' ] ] );
+            unset( $this->areas[ $areaDefinition->id ] );
         }
         return $return;
 

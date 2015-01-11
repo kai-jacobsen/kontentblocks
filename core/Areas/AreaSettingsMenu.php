@@ -65,16 +65,16 @@ class AreaSettingsMenu
 
     /**
      * Class Constuctor
-     * @param \Kontentblocks\Areas\AreaBackendHTML $area
+     * @param Area $Area
      * @param \Kontentblocks\Backend\Environment\Environment $Environment
      * @since 1.0.0
      */
-    public function __construct( AreaBackendHTML $area, Environment $Environment )
+    public function __construct( Area $Area, Environment $Environment )
     {
         $this->defaults = $this->getDefaults();
-        $this->id = $area->get( 'id' );
-        $this->areaTemplates = $area->get( 'layouts' );
-        $this->defaultLayout = $area->get( 'defaultLayout' );
+        $this->id = $Area->id;
+        $this->areaTemplates = $Area->layouts;
+        $this->defaultLayout = $Area->defaultLayout;
         $this->Environment = $Environment;
 
     }

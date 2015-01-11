@@ -48,7 +48,6 @@ class ScreenContext
      * Does only account for non-dynamic sidebar areas
      * Dynamic areas are treated differently
      * String: 'has-sidebar' or 'no-sidebar'
-     * @TODO non-intuitive and semantically wrong to return a string
      * @var string
      * @since 1.0.0
      */
@@ -122,14 +121,11 @@ class ScreenContext
      */
     public function renderAreas()
     {
-
         foreach ($this->areas as $args) {
-
             // exclude dynamic areas
-            if ($args['dynamic']) {
+            if ($args->dynamic) {
                 continue;
             }
-
             // Setup new Area
             $area = new AreaBackendHTML( $args, $this->Environment, $this->id );
             // do area header markup
@@ -141,10 +137,7 @@ class ScreenContext
             $area->toJSON();
             //render area footer
             $area->footer();
-
-
         }
-
     }
 
     /**

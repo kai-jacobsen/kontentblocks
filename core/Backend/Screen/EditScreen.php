@@ -48,8 +48,8 @@ Class EditScreen
      */
     public function renderUserInterface( $post )
     {
-        echo $this->userInterface($post);
-        _K::info('user interfaced rendered for a post type');
+        echo $this->userInterface( $post );
+        _K::info( 'user interfaced rendered for a post type' );
     }
 
     /**
@@ -128,8 +128,7 @@ Class EditScreen
      */
     public function toJSON()
     {
-
-        Utilities::getEnvironment(get_the_ID())->toJSON();
+        Utilities::getEnvironment( get_the_ID() )->toJSON();
     }
 
     /**
