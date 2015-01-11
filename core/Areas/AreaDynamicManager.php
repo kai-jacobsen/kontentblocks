@@ -63,8 +63,6 @@ class AreaDynamicManager
             $this->maybeCreateAreas();
             $this->maybeRemoveAreas();
         }
-
-
         do_action( 'kb.areas.dynamic.setup' );
     }
 
@@ -81,7 +79,6 @@ class AreaDynamicManager
                 'post_name' => $area['id'],
                 'post_status' => 'publish'
             );
-
             $id = wp_insert_post( $post );
 
             if ($id) {

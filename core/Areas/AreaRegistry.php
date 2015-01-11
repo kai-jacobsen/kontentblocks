@@ -126,7 +126,7 @@ class AreaRegistry
             $args['id'] = sanitize_title( $args['id'] );
         }
 
-        $Area = new Area( $args );
+        $Area = new AreaProperties( $args );
 
         // merge defaults with provided args
         if ($Area->dynamic === true && $manual) {
@@ -321,7 +321,7 @@ class AreaRegistry
         $setting = $args['settings']['connect'];
 
         if (!empty( $setting ) && $setting === 'any') {
-            /** @var \Kontentblocks\Areas\Area $Area */
+            /** @var \Kontentblocks\Areas\AreaProperties $Area */
             foreach ($this->areas as $Area) {
                 $Area->connect( $classname );
             }
@@ -342,7 +342,7 @@ class AreaRegistry
                     if (empty( $this->areas[$id] )) {
                         continue;
                     }
-                    /** @var \Kontentblocks\Areas\Area $Area */
+                    /** @var \Kontentblocks\Areas\AreaProperties $Area */
                     $Area = $this->areas[$id];
                     $Area->connect( $classname );
                 }
@@ -375,7 +375,7 @@ class AreaRegistry
 
 
         // loop through areas and find all which are attached to this post type and/or page template
-        /** @var \Kontentblocks\Areas\Area $area */
+        /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($this->areas as $area) {
 
             if (empty( $area->context )) {

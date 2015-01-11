@@ -7,7 +7,7 @@ namespace Kontentblocks\Areas;
  * Class Area
  * @package Kontentblocks\Areas
  */
-class Area
+class AreaProperties
 {
 
     /**

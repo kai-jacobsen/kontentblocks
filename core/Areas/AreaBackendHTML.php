@@ -22,7 +22,7 @@ class AreaBackendHTML
 {
 
     /**
-     * @var Area
+     * @var AreaProperties
      */
     public $Area;
 
@@ -56,13 +56,13 @@ class AreaBackendHTML
     /**
      * Class Constructor
      *
-     * @param Area $Area
+     * @param AreaProperties $Area
      * @param \Kontentblocks\Backend\Environment\Environment $Environment
      * @param string $context
      *
      * @throws \Exception
      */
-    function __construct( Area $Area, Environment $Environment, $context = 'normal' )
+    function __construct( AreaProperties $Area, Environment $Environment, $context = 'normal' )
     {
 
         // context in regards of position on the edit screen

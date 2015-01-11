@@ -65,11 +65,11 @@ class AreaSettingsMenu
 
     /**
      * Class Constuctor
-     * @param Area $Area
+     * @param AreaProperties $Area
      * @param \Kontentblocks\Backend\Environment\Environment $Environment
      * @since 1.0.0
      */
-    public function __construct( Area $Area, Environment $Environment )
+    public function __construct( AreaProperties $Area, Environment $Environment )
     {
         $this->defaults = $this->getDefaults();
         $this->id = $Area->id;
