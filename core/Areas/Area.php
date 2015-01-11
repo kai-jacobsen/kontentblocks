@@ -107,7 +107,7 @@ class Area
     public function __construct( $properties )
     {
 
-        $properties = wp_parse_args( $properties, $this->getDefaults() );
+        $properties = wp_parse_args( $properties, self::getDefaults() );
 
         foreach ($properties as $k => $v) {
             if (method_exists( $this, 'set' . ucfirst( $k ) )) {
@@ -162,7 +162,7 @@ class Area
      * @return array
      * @since 1.0.0
      */
-    private function getDefaults( $manual = true )
+    public static function getDefaults( $manual = true )
     {
         return array(
             'id' => '', // unique id of area

@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Backend\Dynamic;
 
+use Kontentblocks\Areas\Area;
 use Kontentblocks\Areas\AreaBackendHTML;
 use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\Environment;
@@ -161,7 +162,7 @@ class DynamicAreas
 
         );
 
-        $full = wp_parse_args( $data, AreaRegistry::getDefaults( false ) );
+        $full = wp_parse_args( $data, Area::getDefaults( false ) );
         $this->Storage->getDataProvider()->update( '_area', $full );
         $this->Storage->getDataProvider()->update( '_area_context', $full['context'] );
 

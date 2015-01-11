@@ -418,50 +418,16 @@ class AreaRegistry
     }
 
     /**
-     * Normalize each area by passing it through this method
-     *
-     * @param bool $manual
-     *
-     * @return array
-     * @since 1.0.0
-     */
-    public static function getDefaults( $manual = true )
-    {
-        return array(
-            'id' => '', // unique id of area
-            'name' => '', // public shown name
-            'description' => '', // public description
-            'postTypes' => array(), // array of post types where this area is available to
-            'pageTemplates' => array(), // array of page template names where this area is available to
-            'assignedModules' => array(), // array of classnames
-            'layouts' => array(), // array of area template ids
-            'defaultLayout' => 'default', // default Tpl to use, if none is set
-            'dynamic' => false, // whether this is an dynamic area
-            'manual' => $manual, // true if set by code
-            'limit' => 0, // how many blocks are allowed
-            'order' => 0, // order index for sorting
-            'context' => 'normal', // location on the edit screen
-            'concat' => false,
-            'sortable' => false
-        );
-
-    }
-
-    /**
      * Check if an area id already exists
      *
-     * @param string $id
-     *
+     * @param $areaId
      * @return bool
+     *
      * @since 1.0.0
      */
-    public function areaExists( $id )
+    public function areaExists( $areaId )
     {
-        if (isset( $this->areas[$id] )) {
-            return true;
-        } else {
-            return false;
-        }
+        return isset( $this->areas[$areaId] );
     }
 
     /**
