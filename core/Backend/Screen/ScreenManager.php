@@ -17,13 +17,6 @@ class ScreenManager
     protected $areas;
 
     /**
-     * TODO: What is this?
-     * @var array
-     * @since 1.0.0
-     */
-    protected $postAreas;
-
-    /**
      * Environment Instance
      * @var \Kontentblocks\Backend\Environment\Environment
      * @since 1.0.0
@@ -72,7 +65,7 @@ class ScreenManager
         $this->contexts = $this->areasSortedByContext( $this->areas );
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
-        $this->hasSidebar = $this->evaluateLayout();
+        $this->hasSidebar = !empty( $this->contexts['side'] );
     }
 
 
@@ -123,29 +116,18 @@ class ScreenManager
     /**
      * Getter to retrieve areas by context id
      *
-     * @param $id
+     * @param $contextId
      *
      * @return array
      * @since 1.0.0
      */
-    public function getContextAreas( $id )
+    public function getContextAreas( $contextId )
     {
-        if (isset( $this->contexts[$id] )) {
-            return $this->contexts[$id];
+        if (isset( $this->contexts[$contextId] )) {
+            return $this->contexts[$contextId];
         } else {
             return array();
         }
-
-    }
-
-    /**
-     * Getter for available areas on post
-     * @return array
-     * @since 1.0.0
-     */
-    public function getPostAreas()
-    {
-        return $this->postAreas;
 
     }
 
@@ -208,16 +190,6 @@ class ScreenManager
 
     }
 
-    /**
-     * Test if sidebars are available
-     * @return bool
-     * @since 1.0.0
-     */
-    public function evaluateLayout()
-    {
-        return ( !empty( $this->contexts['side'] ) );
-
-    }
 
     /**
      * Get sidebar indicator flag

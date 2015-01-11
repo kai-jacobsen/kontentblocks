@@ -8,6 +8,7 @@ use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleProperties;
 use Kontentblocks\Utils\Utilities;
 
 
@@ -66,13 +67,14 @@ class Environment implements JsonSerializable
      * Class constructor
      *
      * @param $storageId
-     * @param null $postId
+     * @param \WP_Post $postObj
      */
     public function __construct( $storageId, \WP_Post $postObj )
     {
         $this->postObj = $postObj;
 
         $this->storageId = $storageId;
+
         $this->DataHandler = new DataProviderController( $storageId );
         $this->Storage = new ModuleStorage( $storageId, $this->DataHandler );
 
@@ -85,7 +87,8 @@ class Environment implements JsonSerializable
     }
 
     /**
-     * Return ID of current post
+     * Return ID for the current storage entity
+     * (most likely equals post id)
      * @return int
      */
     public function getId()
@@ -93,6 +96,11 @@ class Environment implements JsonSerializable
         return $this->storageId;
     }
 
+    /**
+     * get arbitrary property
+     * @param string $param
+     * @return mixed
+     */
     public function get( $param )
     {
         if (isset( $this->$param )) {
@@ -135,19 +143,16 @@ class Environment implements JsonSerializable
      * returns module definitions filtered by area
      *
      * @param string $areaid
-     *
-     * @return boolean
+     * @return mixed
      */
     public function getModulesForArea( $areaid )
     {
-
         $byArea = $this->getSortedModules();
         if (!empty( $byArea[$areaid] )) {
             return $byArea[$areaid];
         } else {
             return false;
         }
-
     }
 
     /**
@@ -176,7 +181,7 @@ class Environment implements JsonSerializable
         $modules = $this->Storage->getIndex();
         foreach ($modules as $module) {
             $collection[$module['instance_id']] = ModuleFactory::parseModuleSettings( $module );
-        }
+            }
         return $collection;
 
     }
@@ -299,7 +304,7 @@ class Environment implements JsonSerializable
      */
     public function getPostType()
     {
-        return  $this->postObj->post_type;
+        return $this->postObj->post_type;
     }
 
 
