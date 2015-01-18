@@ -181,7 +181,7 @@ class Environment implements JsonSerializable
         $modules = $this->Storage->getIndex();
         foreach ($modules as $module) {
             $collection[$module['instance_id']] = ModuleFactory::parseModuleSettings( $module );
-            }
+        }
         return $collection;
 
     }
