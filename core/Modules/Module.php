@@ -542,31 +542,6 @@ abstract class Module
     }
 
     /**
-     * Get value from unprepared / unfiltered original module data
-     *
-     * @param string $key
-     * @param string $offset
-     * @param mixed $return
-     *
-     * @TODO arrayKey should be handled differently
-     * @return bool|string
-     */
-    public function getRawData( $key = null, $offset = null, $return = '' )
-    {
-        if (empty( $this->rawModuleData ) or empty( $key )) {
-            return false;
-        }
-
-        if (!is_null( $offset )) {
-            return ( !empty( $this->rawModuleData[$offset][$key] ) ) ? $this->rawModuleData[$offset][$key] : $return;
-        }
-
-        return ( !empty( $this->rawModuleData[$key] ) ) ? $this->rawModuleData[$key] : $return;
-
-    }
-
-
-    /**
      * Get value from environment vars array
      *
      * @param $var string
