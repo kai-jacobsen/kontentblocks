@@ -183,4 +183,9 @@ class AreaProperties
         );
     }
 
+    public function __toString()
+    {
+        return $this->id;
+    }
+
 }
