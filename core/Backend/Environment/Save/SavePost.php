@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Environment\Save;
 
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
+use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\Utilities;
 
@@ -49,92 +50,14 @@ class SavePost
         $this->createBackup();
 
         foreach ($areas as $area) {
-
-            /** @var $modules array */
-            $modules = $this->Environment->getModulesforArea( $area['id'] );
-            $savedData = null;
-
-            if (empty( $modules )) {
+            if (!$this->saveByArea( $area )) {
                 continue;
             }
-
-
-            foreach ($modules as $module) {
-                if (!class_exists( $module['class'] )) {
-                    continue;
-                }
-                //hack
-                $id = null;
-                // new data from $_POST
-                //TODO: filter incoming data
-                $data = ( !empty( $_POST[$module['instance_id']] ) ) ? $_POST[$module['instance_id']] : null;
-                /** @var $old array() */
-                $old = $this->Environment->getStorage()->getModuleData( $module['instance_id'] );
-
-                // create Module instance
-
-                $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
-
-                /** @var $instance \Kontentblocks\Modules\Module */
-                $instance = $Factory->getModule();
-
-                // Set the 'old' data to the module
-                $instance->moduleData = $old;
-
-                // check for draft and set to false
-                // special block specific data
-
-                $module = $this->moduleOverrides( $module, $data );
-
-                // create updated index
-                unset( $module['settings'] );
-                $this->index[$module['instance_id']] = $module;
-                // call save method on block
-                // ignore the existence
-
-                if ($data === null) {
-                    $new = $old;
-                } else {
-                    $new = $instance->save( $data, $old );
-
-                    if ($new === false) {
-                        $savedData = null;
-                    } else {
-                        $savedData = Utilities::arrayMergeRecursive( $new, $old );
-                    }
-                }
-                // if this is a preview, save temporary data for previews
-                if (!is_null( $savedData )) {
-                    if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
-                        update_post_meta( $this->postid, '_preview_' . $module['instance_id'], $savedData );
-                    } // save real data
-                    else {
-                        $this->Environment->getStorage()->saveModule( $module['instance_id'], $savedData );
-                        delete_post_meta( $this->postid, '_preview_' . $module['instance_id'] );
-                    }
-                    do_action( 'kb.module.save', $instance, $savedData );
-                }
-
-
-            }
         }
 
-        Utilities::remoteConcatGet($this->postid);
+        Utilities::remoteConcatGet( $this->postid );
 
-        // save area settings which are specific to this post (ID-wise)
-        if (!empty( $_POST['areas'] )) {
-
-            $collection = $this->Environment->getDataHandler()->get( 'kb_area_settings' );
-
-            $areasData = $_POST['areas'];
-
-            foreach ($areasData as $id) {
-                if (!empty( $_POST[$id] )) {
-                    $collection[$id] = $_POST[$id];
-                }
-            }
-            $this->Environment->getDataHandler()->update( 'kb_area_settings', $collection );
-        }
+        $this->saveAreaSettings();
 
         // finally update the index
         $this->Environment->getStorage()->saveIndex( $this->index );
@@ -161,25 +84,25 @@ class SavePost
      */
     private function auth()
     {
-
-
+        $Postdata = new ValueStorage( $_POST );
+        $all = $Postdata->export();
         // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
-        if (empty( $_POST )) {
+        if (empty( $all )) {
             return false;
         }
 
-        if (empty( $_POST['blog_id'] )) {
+        if (is_null( $Postdata->getFiltered( 'blog_id', FILTER_VALIDATE_INT ) )) {
             return false;
         } else {
-            $blogIdSubmit = filter_input( INPUT_POST, 'blog_id', FILTER_SANITIZE_NUMBER_INT );
+            $blogIdSubmit = $Postdata->getFiltered( 'blog_id', FILTER_SANITIZE_NUMBER_INT );
             $blogIdCurrent = get_current_blog_id();
             if ((int) $blogIdSubmit !== (int) $blogIdCurrent) {
                 return false;
             }
         }
 
-        if (empty( $_POST['kb_noncename'] )) {
+        if (is_null( $Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ) )) {
             return false;
         }
 
@@ -189,7 +112,11 @@ class SavePost
 
         // verify this came from the our screen and with proper authorization,
         // because save_post can be triggered at other times
-        if (!wp_verify_nonce( $_POST['kb_noncename'], 'kontentblocks_save_post' )) {
+        if (!wp_verify_nonce(
+            $Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ),
+            'kontentblocks_save_post'
+        )
+        ) {
             return false;
         }
 
@@ -202,7 +129,7 @@ class SavePost
             return false;
         }
 
-        if (get_post_type( $this->postid ) == 'revision' && !isset( $_POST['wp-preview'] )) {
+        if (get_post_type( $this->postid ) == 'revision' && !is_null( $Postdata->get( 'wp-preview' ) )) {
             return false;
         }
 
@@ -227,5 +154,99 @@ class SavePost
         }
     }
 
+    /**
+     *
+     * @param $area
+     * @return bool
+     */
+    private function saveByArea( $area )
+    {
 
+        /** @var $modules array */
+        $modules = $this->Environment->getModulesforArea( $area->id );
+        $savedData = null;
+
+        if (empty( $modules )) {
+            return false;
+        }
+
+
+        foreach ($modules as $module) {
+            if (!class_exists( $module['class'] )) {
+                return false;
+            }
+            //hack
+            $id = null;
+            // new data from $_POST
+            //TODO: filter incoming data
+            $data = ( !empty( $_POST[$module['instance_id']] ) ) ? $_POST[$module['instance_id']] : null;
+            /** @var $old array() */
+            $old = $this->Environment->getStorage()->getModuleData( $module['instance_id'] );
+
+            // create Module instance
+
+            $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
+
+            /** @var $instance \Kontentblocks\Modules\Module */
+            $instance = $Factory->getModule();
+
+            // Set the 'old' data to the module
+            $instance->moduleData = $old;
+
+            // check for draft and set to false
+            // special block specific data
+
+            $module = $this->moduleOverrides( $module, $data );
+
+            // create updated index
+            unset( $module['settings'] );
+            $this->index[$module['instance_id']] = $module;
+            // call save method on block
+            // ignore the existence
+
+            if ($data === null) {
+                $new = $old;
+            } else {
+                $new = $instance->save( $data, $old );
+
+                if ($new === false) {
+                    $savedData = null;
+                } else {
+                    $savedData = Utilities::arrayMergeRecursive( $new, $old );
+                }
+            }
+            // if this is a preview, save temporary data for previews
+            if (!is_null( $savedData )) {
+                if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
+                    update_post_meta( $this->postid, '_preview_' . $module['instance_id'], $savedData );
+                } // save real data
+                else {
+                    $this->Environment->getStorage()->saveModule( $module['instance_id'], $savedData );
+                    delete_post_meta( $this->postid, '_preview_' . $module['instance_id'] );
+                }
+                do_action( 'kb.module.save', $instance, $savedData );
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     */
+    private function saveAreaSettings()
+    {
+        $postareas = filter_input( INPUT_POST, 'areas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        // save area settings which are specific to this post (ID-wise)
+        if (!empty( $postareas )) {
+            $collection = $this->Environment->getDataHandler()->get( 'kb_area_settings' );
+            foreach ($postareas as $id) {
+                $areaid = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
+                if (!empty( $areaid )) {
+                    $collection[$id] = $areaid;
+                }
+            }
+            $this->Environment->getDataHandler()->update( 'kb_area_settings', $collection );
+        }
+    }
 }
