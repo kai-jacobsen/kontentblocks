@@ -4,6 +4,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\AfterAreaChange;
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -44,7 +45,7 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
     {
         $post = $this->factory->post->create_and_get();
         $workshop = new ModuleWorkshop(
-            new Environment( $post->ID, $post ), array(
+            new ModuleStorage( $post->ID ), array(
                 'class' => 'ModuleText'
             )
         );

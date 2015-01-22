@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\tests\core\Modules;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
 
 
@@ -110,7 +110,7 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
         $args = wp_parse_args( $cArgs, $args );
 
         $post = $this->factory->post->create_and_get();
-        return new ModuleWorkshop( new Environment( $post->ID, $post ), $args, $oldargs );
+        return new ModuleWorkshop( new ModuleStorage( $post->ID ), $args, $oldargs );
     }
 
 }

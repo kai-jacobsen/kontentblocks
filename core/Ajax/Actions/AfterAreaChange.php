@@ -4,6 +4,7 @@ namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
@@ -42,8 +43,7 @@ class AfterAreaChange
         $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 
-        $Environment = Utilities::getEnvironment( $postId );
-        $Factory = new ModuleFactory( $module['class'], $module, $Environment );
+        $Factory = new ModuleFactory( $module['class'], $module, new ModuleStorage($postId) );
         $instance = $Factory->getModule();
         $html = $instance->form();
         $return = array(

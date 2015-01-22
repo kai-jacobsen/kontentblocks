@@ -27,9 +27,11 @@ class ModuleRepository
         $index = $this->ModuleStorage->getIndex();
         if (is_array( $index )) {
             foreach ($index as $module) {
-                array_push( $this->Modules, new ModuleProperties( $module ) );
+                $Ws = new ModuleWorkshop($this->ModuleStorage, $module);
+                array_push( $this->Modules, $Ws->getPropertiesObject() );
             }
         }
     }
+
 
 }

@@ -41,7 +41,7 @@ class RemoveModulesTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new Environment( $post->ID, $post ), array(
+            new ModuleStorage( $post->ID ), array(
                 'class' => 'ModuleText'
             )
         );

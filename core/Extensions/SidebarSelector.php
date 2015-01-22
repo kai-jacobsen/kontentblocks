@@ -196,20 +196,20 @@ class SidebarSelector
     {
         $return = '';
         foreach ( $this->postSidebars as $area ) {
-            if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] or $area[ 'dynamic' ] ) {
+            if ( isset( $area->public ) and !$area->public or $area->dynamic ) {
                 continue;
             }
             // TODO: Check $disabled = (true == $area[ 'dynamic' ]) ? '' : 'ui-state-disabled';
-            $return .= "<li class='dynamic-area-active' id='{$area[ 'id' ]}' name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
+            $return .= "<li class='dynamic-area-active' id='{$area->id}' name='{$area->id}'>{$area->name}";
 
-            if ( true == $area[ 'dynamic' ] ) {
-                $editUrl = get_edit_post_link($area['parent_id']).'&redirect=true';
-                $return .= "<span><a href='{$editUrl}' class='kb-js-edit-sidebar' data-area='{$area['id']}'>edit</a></span>";
+            if ( true == $area->dynamic ) {
+                $editUrl = get_edit_post_link($area->parent_id).'&redirect=true';
+                $return .= "<span><a href='{$editUrl}' class='kb-js-edit-sidebar' data-area='{$area->id}'>edit</a></span>";
             }
-            $return .= "<input id='{$area[ 'id' ]}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area[ 'id' ]}' /></li>";
+            $return .= "<input id='{$area->id}_hidden' type='hidden' name='active_sidebar_areas[]' value='{$area->id}' /></li>";
 
             //remove area from collection
-            unset( $this->areas[ $area[ 'id' ] ] );
+            unset( $this->areas[ $area->id ] );
         }
         return $return;
 
@@ -268,14 +268,14 @@ class SidebarSelector
         $return = '';
         if ( !empty( $this->areas ) ) {
             foreach ( $this->areas as $area ) {
-                if ( isset( $area[ 'public' ] ) and !$area[ 'public' ] ) {
+                if ( isset( $area->public ) and !$area->public ) {
                     continue;
                 }
-                $return .= "<li id='{$area[ 'id' ]}'  name='{$area[ 'id' ]}'>{$area[ 'name' ]}";
+                $return .= "<li id='{$area->id}'  name='{$area->id}'>{$area->name}";
 
-                if ( true === $area[ 'dynamic' ] ) {
-                    $editUrl = get_edit_post_link($area['parent_id']).'&redirect=true';
-                    $return .= "<span><a class='kb-js-edit-sidebar' href='{$editUrl}' data-area='{$area['id']}'>edit</a></span>";
+                if ( true === $area->public ) {
+                    $editUrl = get_edit_post_link($area->parent_id).'&redirect=true';
+                    $return .= "<span><a class='kb-js-edit-sidebar' href='{$editUrl}' data-area='{$area->id}'>edit</a></span>";
                 }
 
                 $return .= "</li>";

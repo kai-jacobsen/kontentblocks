@@ -4,6 +4,7 @@ namespace Kontentblocks\Modules;
 
 
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -19,12 +20,12 @@ class ModuleWorkshop
     /**
      * @var Environment
      */
-    private $Environment;
+    private $Storage;
 
     /**
      * @var array
      */
-    private $moduleArgs;
+    private $moduleattrs;
 
     /**
      * @var string
@@ -52,14 +53,15 @@ class ModuleWorkshop
     private $valid = false;
 
     /**
-     * Setup module args and class properties
-     * @param Environment $Environment
-     * @param array $args
+     * Setup module attrs and class properties
+     * @param ModuleStorage $Storage
+     * @param array $attrs
      */
-    public function __construct( Environment $Environment, $args = array(), $oldArgs = array() )
+    public function __construct( ModuleStorage $Storage, $attrs = array(), $oldattrs = array() )
     {
-        $this->Environment = $Environment;
-        $this->moduleArgs = $this->setupModuleArgs( $args, $oldArgs );
+        $this->Storage = $Storage;
+
+        $this->moduleattrs = $this->setupModuleattrs( $attrs, $oldattrs );
         $this->valid = $this->validate();
     }
 
@@ -71,9 +73,20 @@ class ModuleWorkshop
     public function getDefinitionArray()
     {
         if ($this->isValid()) {
-            return $this->moduleArgs;
+            return $this->moduleattrs;
         }
+        return false;
+    }
 
+    /**
+     * Create a new Module Properties object
+     * @return bool|ModuleProperties
+     */
+    public function getPropertiesObject()
+    {
+        if ($this->isValid()) {
+            return new ModuleProperties( $this->getDefinitionArray() );
+        }
         return false;
     }
 
@@ -84,9 +97,9 @@ class ModuleWorkshop
     public function create()
     {
         if (is_array( $this->getDefinitionArray() ) && !$this->isLocked()) {
-            $update = $this->Environment->getStorage()->addToIndex( $this->createModuleId(), $this->moduleArgs );
+            $update = $this->Storage->addToIndex( $this->createModuleId(), $this->moduleattrs );
             if (!is_null( $this->newData )) {
-                $this->Environment->getStorage()->saveModule( $this->getNewId(), $this->newData );
+                $this->Storage->saveModule( $this->getNewId(), $this->newData );
             }
 
             if ($update) {
@@ -119,7 +132,7 @@ class ModuleWorkshop
             $Factory = new ModuleFactory(
                 $this->getDefinitionArray()['class'],
                 $this->getDefinitionArray(),
-                $this->Environment
+                $this->Storage
             );
             return $this->Module = $Factory->getModule();
         }
@@ -166,32 +179,87 @@ class ModuleWorkshop
 
     /**
      * Parse provided attributes with defaults
-     * @param $args
+     * @param $attrs
      * @return array
      */
-    private function setupModuleArgs( $args, $oldargs )
+    private function setupModuleattrs( $attrs, $oldattrs )
     {
-        if ($oldargs) {
-            unset( $oldargs['instance_id'] );
-            unset( $oldargs['mid'] );
+        if ($oldattrs) {
+            unset( $oldattrs['instance_id'] );
+            unset( $oldattrs['mid'] );
+        }
+        $attrs = $this->handleLegacyattrs( wp_parse_args( $attrs, $oldattrs ) );
+        $this->newId = $mid = ( isset( $attrs['mid'] ) ) ? $attrs['mid'] : $this->createModuleId();
+        $attrs['mid'] = $attrs['instance_id'] = $mid;
+        $attrs['post_id'] = $this->Storage->getStorageId();
+        $attrs = wp_parse_args( $attrs, $this->getDefaults() );
+
+        return $this->clean( $attrs );
+    }
+
+    /**
+     * crreate a new module id, based on the storage id and the current index
+     * @return string
+     */
+    private function createModuleId()
+    {
+        $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
+        $this->Storage->reset();
+        $count = Utilities::getHighestId( $this->Storage->getIndex() ) + 1;
+        return $prefix . $this->Storage->getStorageId() . '_' . $count;
+    }
+
+    /**
+     * Validate that there is the module class
+     * @return bool
+     */
+    private function validate()
+    {
+        if (is_null( $this->moduleattrs['class'] )) {
+            return false;
         }
 
-        $args = wp_parse_args( $args, $oldargs );
+        if (!class_exists( $this->moduleattrs['class'] )) {
+            return false;
+        }
 
-        $this->newId = $mid = ( isset( $args['mid'] ) ) ? sanitize_key( $args['mid'] ) : $this->createModuleId();
-        $defaults = array(
+        return true;
+    }
+
+    /**
+     * Remap old structure to new
+     * @param $attrs
+     * @return mixed
+     */
+    private function handleLegacyattrs( $attrs )
+    {
+        if (array_key_exists( 'master_id', $attrs )) {
+            $attrs['masterRef'] = array(
+                'parentId' => $attrs['master_id']
+            );
+        }
+        return $attrs;
+    }
+
+    /**
+     * Persistent module attributes
+     * @return array
+     */
+    private function getDefaults()
+    {
+        return array(
             // id
-            'instance_id' => $mid,
-            'mid' => $mid,
+            'instance_id' => '',
+            'mid' => '',
             // template
             'template' => false,
             'master' => false,
-            'templateObj' => array(
-                'id' => '',
-                'name' => '',
+            'templateRef' => array(
+                'id' => null,
+                'name' => null,
             ),
-            'masterObj' => array(
-                'parentId' => ''
+            'masterRef' => array(
+                'parentId' => null
             ),
             // generic
             'class' => '',
@@ -199,40 +267,31 @@ class ModuleWorkshop
                 'name' => null
             ),
             // environmental
-            'post_id' => $this->Environment->getId(),
+            'post_id' => null,
             'area' => 'undefined',
             'areaContext' => 'undefined',
             'state' => array(
                 'draft' => true,
                 'active' => true
-            )
+            ),
+            'viewfile' => ''
         );
-
-        return wp_parse_args( $args, $defaults );
     }
 
     /**
-     * @return string
+     * Remove attrs which are not in the defaults array
+     * So there is no way to have arbitrary data stored in the index
+     * @param $attrs
+     * @return mixed
      */
-    private function createModuleId()
+    private function clean( $attrs )
     {
-        $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
-        $this->Environment->getStorage()->reset();
-        $count = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() ) + 1;
-        return $prefix . $this->Environment->getId() . '_' . $count;
-    }
-
-    private function validate()
-    {
-        if (is_null( $this->moduleArgs['class'] )) {
-            return false;
+        foreach ($attrs as $k => $v) {
+            if (!in_array( $k, array_keys( $this->getDefaults() ) )) {
+                unset( $attrs[$k] );
+            }
         }
-
-        if (!class_exists( $this->moduleArgs['class'] )) {
-            return false;
-        }
-
-        return true;
+        return $attrs;
     }
 
 }

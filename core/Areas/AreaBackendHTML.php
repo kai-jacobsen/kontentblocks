@@ -170,15 +170,7 @@ class AreaBackendHTML
         if (!is_user_logged_in()) {
             return;
         }
-        $area = array(
-            'id' => $this->Area->id,
-            'assignedModules' => $this->Area->assignedModules,
-            'limit' => absint( $this->Area->limit ),
-            'context' => $this->context,
-            'dynamic' => $this->Area->dynamic
-        );
-
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $area );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->Area );
     }
 
 

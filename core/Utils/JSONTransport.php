@@ -172,7 +172,6 @@ class JSONTransport
     public function registerArea( $area )
     {
         $this->areas[$area->id] = $area;
-
         return $this;
     }
 
