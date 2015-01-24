@@ -138,7 +138,8 @@ class JSONTransport
      */
     public function registerModule( $module )
     {
-        $this->modules[$module['instance_id']] = $module;
+        d($module);
+        $this->modules[$module['mid']] = $module;
 
         return $this;
     }

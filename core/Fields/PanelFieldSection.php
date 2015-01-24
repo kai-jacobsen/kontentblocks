@@ -20,11 +20,10 @@ class PanelFieldSection extends AbstractFieldSection
      * @TODO // revise envVars
      * @return \Kontentblocks\Fields\PanelFieldSection
      */
-    public function __construct( $id, $args, $envVars, $Panel )
+    public function __construct( $id, $args, $Panel )
     {
         $this->id = $id;
         $this->args = $this->prepareArgs( $args );
-        $this->envVars = $envVars;
         $this->Module = $Panel;
         $this->baseId = $Panel->getBaseId();
     }

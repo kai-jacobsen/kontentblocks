@@ -142,8 +142,8 @@ class ModuleCoreMasterModule extends Module
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-        if ($module['master'] && isset( $module['parentId'] )) {
-            $masterId = $module['parentId']; // post id of the template
+        if ($module->Properties->master && isset( $module->Properties->masterRef['parentId'] )) {
+            $masterId = $module->Properties->masterRef['parentId']; // post id of the template
             $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
             $duplicate = ( !empty( $icl ) );
 
@@ -158,7 +158,7 @@ class ModuleCoreMasterModule extends Module
 
             // original template module definition
             $index = get_post_meta( $masterId, 'kb_kontentblocks', true );
-            $template = $index[$module['templateObj']['id']];
+            $template = $index[$module->templateRef['id']];
             // actual module definition
             $originalDefiniton = $ModuleRegistry->get( $template['class'] );
 
@@ -182,14 +182,14 @@ class ModuleCoreMasterModule extends Module
 
     /**
      * @param $module
-     * @param $moduleDef
+     * @param $Properties
      * @return mixed
      */
-    public static function setupModuleData( $module, $moduleDef )
+    public static function setupModuleData( $module, $Properties )
     {
-        if (isset( $moduleDef['master'] ) && filter_var( $moduleDef['master'], FILTER_VALIDATE_BOOLEAN )) {
-            $masterId = $moduleDef['masterObj']['parentId'];
-            $tplId = $moduleDef['templateObj']['id'];
+        if (isset( $Properties->master ) && filter_var( $Properties->master, FILTER_VALIDATE_BOOLEAN )) {
+            $masterId = $Properties->masterRef['parentId'];
+            $tplId = $Properties->templateRef['id'];
             $data = get_post_meta( $masterId, '_' . $tplId, true );
             return $data;
         }
@@ -214,18 +214,16 @@ class ModuleCoreMasterModule extends Module
 
     /**
      * When creating the instance, the mid must be set to the orginal master id
-     * @param $args
+     * @param Module $Module
      * @return mixed
      */
-    public static function setTemplateId( $args )
+    public static function setTemplateId( Module $Module )
     {
-        if (isset( $args['master'] ) && $args['master']) {
-            if (isset( $args['templateObj'] )) {
-                $args['instance_id'] = $args['templateObj']['id'];
-                $args['mid'] = $args['templateObj']['id'];
+        if (isset( $Module->Properties->master ) && $Module->Properties->master) {
+            if (isset( $Module->Properties->templateRef )) {
+                $Module->Properties->setId($Module->Properties->templateRef['id']);
             }
         }
-        return $args;
     }
 
     // Nothing to save here

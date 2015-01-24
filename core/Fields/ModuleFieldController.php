@@ -56,9 +56,8 @@ class ModuleFieldController extends AbstractFieldController
             $this->Structure[$id] = new FieldSection(
                 $id,
                 $args,
-                $this->Module->envVars,
                 $this->Module,
-                $this->Module->getModuleId()
+                $this->Module->getId()
             );
         }
         return $this->Structure[$id];
@@ -73,7 +72,7 @@ class ModuleFieldController extends AbstractFieldController
      * called by Kontentblocks\Modules\Module::options()
      * if not overridden b extending class
      * @see Kontentblocks\Modules\Module::form
-     * @return void
+     * @return string
      * @since 1.0.0
      */
     public function renderFields()

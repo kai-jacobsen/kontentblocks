@@ -32,7 +32,7 @@ class AreaRenderer
     public $areaId;
 
     /**
-     * @var \Kontentblocks\Backend\Environment\PostEnvironment
+     * @var \Kontentblocks\Backend\Environment\Environment
      */
     protected $Environment;
 
@@ -171,7 +171,7 @@ class AreaRenderer
                 '<%3$s id="%1$s" class="%2$s">',
                 $module->getId(),
                 implode( ' ', $classes ),
-                $module->getSetting( 'element' )
+                $module->Properties->getSetting( 'element' )
             );
 
         }
@@ -183,39 +183,39 @@ class AreaRenderer
      * @param $Module
      * @return string
      */
-    public function afterModule( $_after, $Module )
+    public function afterModule( $_after, Module $Module )
     {
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
 
         $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
         if (!empty( $layout )) {
-            return "</div>" . sprintf( "</%s>", $Module->getSetting( 'element' ) );
+            return "</div>" . sprintf( "</%s>", $Module->Properties->getSetting( 'element' ) );
         } else {
-            return sprintf( "</%s>", $Module->getSetting( 'element' ) );
+            return sprintf( "</%s>", $Module->Properties->getSetting( 'element' ) );
 
         }
 
 
     }
 
-    public function _beforeModule( $module )
+    public function _beforeModule( Module $Module )
     {
-        $module->_addAreaAttributes( $this->AreaHtmlNode->getPublicAttributes() );
+        $Module->Context->set( $this->AreaHtmlNode->getPublicAttributes() );
         $moduleClasses = $this->modules->getCurrentModuleClasses();
-        $additionalClasses = $this->getAdditionalClasses( $module );
+        $additionalClasses = $this->getAdditionalClasses( $Module );
 
         $mergedClasses = array_merge( $moduleClasses, $additionalClasses );
-        if (method_exists( $module, 'preRender' )) {
-            $module->preRender();
+        if (method_exists( $Module, 'preRender' )) {
+            $Module->preRender();
         }
 
+        d($Module);
         return $mergedClasses;
-
     }
 
-    public function _afterModule( $module )
+    public function _afterModule( Module $Module )
     {
-        $this->previousModule = $module->settings['id'];
+        $this->previousModule = $Module->Properties->getSetting( 'id' );
         $this->position ++;
         $this->AreaHtmlNode->nextLayout();
         return true;
@@ -230,13 +230,14 @@ class AreaRenderer
         return true;
     }
 
-    public function getAdditionalClasses( $module )
+    public function getAdditionalClasses( Module $Module )
     {
         $classes = array();
-        $classes[] = $module->settings['id'];
+        $classes[] = $Module->Properties->getSetting( 'id' );
+        $viewfile = $Module->getViewfile();
 
-        if (isset( $module->viewfile )) {
-            $classes[] = 'view-' . str_replace( '.twig', '', $module->viewfile );
+        if (!empty( $viewfile )) {
+            $classes[] = 'view-' . str_replace( '.twig', '', $viewfile );
         }
 
         if ($this->position === 1) {
@@ -250,12 +251,12 @@ class AreaRenderer
         if (is_user_logged_in()) {
             $classes[] = 'os-edit-container';
 
-            if ($module->getState( 'draft' )) {
+            if ($Module->Properties->getState( 'draft' )) {
                 $classes[] = 'draft';
             }
         }
 
-        if ($this->previousModule === $module->settings['id']) {
+        if ($this->previousModule === $Module->Properties->getSetting( 'id' )) {
             $classes[] = 'repeater';
             $this->repeating = true;
         } else {

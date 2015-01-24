@@ -292,9 +292,9 @@ class AreaHtmlNode
         return array(
             'context' => $this->settings['context'],
             'subcontext' => $this->settings['subcontext'],
-            'area_template' => $this->settings['layout'],
+            'areaTemplate' => $this->settings['layout'],
             'action' => $this->settings['action'],
-            'area_id' => $this->id
+            'areaId' => $this->id
         );
 
     }

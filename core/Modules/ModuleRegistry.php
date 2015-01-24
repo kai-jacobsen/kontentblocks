@@ -100,7 +100,7 @@ class ModuleRegistry
             $moduleArgs['settings'] = $args;
 
             // state array
-            $moduleArgs['state'] = Module::getDefaultState();
+//            $moduleArgs['state'] = Module::getDefaultState();
 
             // Add module to registry
             $this->modules[$classname] = $moduleArgs;

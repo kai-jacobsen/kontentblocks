@@ -38,12 +38,11 @@ class FieldSection extends AbstractFieldSection
      *
      * @return \Kontentblocks\Fields\FieldSection
      */
-    public function __construct( $id, $args, $envVars, $module, $baseid )
+    public function __construct( $id, $args, $module, $baseid )
     {
 
         $this->id = $id;
         $this->args = $this->prepareArgs( $args );
-        $this->envVars = $envVars;
         $this->Module = $module;
         $this->baseId = $baseid;
     }
@@ -60,12 +59,10 @@ class FieldSection extends AbstractFieldSection
     {
 
         $Field->setDisplay( true );
-
-        $areaContext = $this->envVars['areaContext'];
-        $postType = $this->envVars['postType'];
-        $pageTemplate = $this->envVars['pageTemplate'];
-
-        if ($this->Module->getSetting( 'useViewLoader' )) {
+        $areaContext = $this->Module->Context->get( 'areaContext' );
+        $postType = $this->Module->Context->get( 'postType' );
+        $pageTemplate = $this->Module->Context->get( 'pageTemplate' );
+        if ($this->Module->Properties->getSetting( 'useViewLoader' )) {
             $moduleTemplate = $this->Module->getViewfile();
             if ($Field->getCondition( 'viewfile' ) && !in_array(
                     $moduleTemplate,

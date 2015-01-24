@@ -3,6 +3,7 @@
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
 use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -34,21 +35,21 @@ class UpdateModule
 
         $Environment = Utilities::getEnvironment( $postdata->postId );
 
-        $newData = $postdata->data[$postdata->module['instance_id']];
-        $Factory = new ModuleFactory( $postdata->module['class'], $postdata->module, $Environment );
-        $Module = $Factory->getModule();
+        $newData = $postdata->data[$postdata->module['mid']];
+        $Workshop = new ModuleWorkshop($Environment, $postdata->module);
+        $Module = $Workshop->getModule();
 
         // master module will change instance id to correct template id
-        $module = apply_filters( 'kb.modify.module.save', $postdata->module );
+        apply_filters( 'kb.modify.module.save', $Module );
 
         // gather data
-        $old = $Environment->getStorage()->getModuleData( $module['instance_id'] );
+        $old = $Environment->getStorage()->getModuleData( $Module->getId() );
         $new = $Module->save( $newData, $old );
 
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         if ($postdata->update) {
-            $Environment->getStorage()->saveModule( $module['instance_id'], wp_slash( $mergedData ) );
+            $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
         }
 
         $Module->setModuleData( $mergedData );
@@ -61,8 +62,8 @@ class UpdateModule
         );
 
         // @TODO depreacate
-        do_action( 'kb_save_frontend_module', $module, $postdata->update );
-        Utilities::remoteConcatGet( $module['post_id'] );
+        do_action( 'kb_save_frontend_module', $Module, $postdata->update );
+        Utilities::remoteConcatGet( $Module->Properties->post_id );
         wp_send_json( $return );
     }
 

@@ -38,7 +38,7 @@ class ModuleViewFilesystem
         if ($this->isChildTheme) {
             $childTemplates = $this->cleanPath(
                 glob(
-                    trailingslashit( get_stylesheet_directory() ) . 'module-templates/' . $Module->getSetting(
+                    trailingslashit( get_stylesheet_directory() ) . 'module-templates/' . $Module->Properties->getSetting(
                         'id'
                     ) . '/*.twig'
                 ),
@@ -48,15 +48,15 @@ class ModuleViewFilesystem
 
         $parentTemplates = $this->cleanPath(
             glob(
-                trailingslashit( get_template_directory() ) . 'module-templates/' . $Module->getSetting(
+                trailingslashit( get_template_directory() ) . 'module-templates/' . $Module->Properties->getSetting(
                     'id'
                 ) . '/*.twig'
             ),
             get_template_directory() . '/module-templates/'
         );
         $moduleTemplates = $this->cleanPath(
-            glob( trailingslashit( $Module->getPath() ) . '*.twig' ),
-            trailingslashit( $Module->getPath() )
+            glob( trailingslashit( $Module->Properties->getSetting( 'path' ) ) . '*.twig' ),
+            trailingslashit( $Module->Properties->getSetting( 'path' ) )
         );
 
         $merged = array_merge( $childTemplates, $parentTemplates, $moduleTemplates );

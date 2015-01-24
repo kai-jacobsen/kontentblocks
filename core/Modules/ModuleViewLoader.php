@@ -46,7 +46,7 @@ class ModuleViewLoader
     {
         $this->ViewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $Module );
         $this->Module = $Module;
-        $this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->getAreaContext() );
+        $this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->Properties->areaContext );
         if (count( $this->views ) > 1) {
             $this->hasViews = true;
         }
@@ -66,7 +66,7 @@ class ModuleViewLoader
         if ($this->hasViews()) {
             $tpl = new CoreView(
                 'view-selector.twig',
-                array( 'templates' => $this->prepareTemplates(), 'module' => $this->Module )
+                array( 'templates' => $this->prepareTemplates(), 'module' => $this->Module->Properties )
             );
             return $tpl->render();
         } else {
@@ -74,9 +74,9 @@ class ModuleViewLoader
             if (is_null( $tpl )) {
                 return "<p class='notice kb-field'>No View available</p>";
             } else {
-                $this->Module->setViewfile( $tpl['filteredfile'] );
+                $this->Module->Properties->viewfile = $tpl['filteredfile'];
 
-                return "<input type='hidden' name='{$this->Module->instance_id}[viewfile]' value='{$tpl['filteredfile']}' >";
+                return "<input type='hidden' name='{$this->Module->Properties->mid}[viewfile]' value='{$tpl['filteredfile']}' >";
             }
         }
     }
@@ -103,7 +103,7 @@ class ModuleViewLoader
     private function prepareTemplates()
     {
         $prepared = array();
-        $selected = $this->Module->getViewfile();
+        $selected = $this->Module->Properties->viewfile;
 
 
         if (empty( $selected ) || !$this->isValidTemplate( $selected )) {
@@ -136,7 +136,7 @@ class ModuleViewLoader
             if (!empty( $setByModule ) && $this->isValidTemplate( $setByModule )) {
                 return $setByModule;
             }
-        } elseif (isset($keys[0])) {
+        } elseif (isset( $keys[0] )) {
 
             $first = $keys[0];
             return $first['file'];
@@ -183,18 +183,19 @@ class ModuleViewLoader
      *
      * @param $module
      */
-    public function frontendSave( $module )
+    public function frontendSave( Module $module )
     {
 
-        if (!isset( $module['viewfile'] ) || empty( $module['viewfile'] )) {
+        $viewfile = $module->getViewfile();
+        if (empty( $viewfile )) {
             return;
         }
-        $postId = $module['post_id'];
+        $postId = $module->Properties->post_id;
         /** @var \Kontentblocks\Backend\Storage\ModuleStorage $Storage */
         $Storage = new ModuleStorage( $postId );
-        $index = $Storage->getModuleDefinition( $module['instance_id'] );
-        $index['viewfile'] = $module['viewfile'];
-        $Storage->addToIndex( $module['instance_id'], $index );
+        $index = $Storage->getModuleDefinition( $module->getId() );
+        $index['viewfile'] = $viewfile;
+        $Storage->addToIndex( $module->getId(), $index );
     }
 
     /**
@@ -204,7 +205,7 @@ class ModuleViewLoader
     private function getSingleTemplate()
     {
         if (count( $this->views ) === 1) {
-            return current(array_slice($this->views, -1));
+            return current( array_slice( $this->views, - 1 ) );
         }
     }
 } 

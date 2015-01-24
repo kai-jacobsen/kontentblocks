@@ -2,7 +2,9 @@
 
 namespace Kontentblocks\Modules;
 
+
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -14,46 +16,45 @@ class ModuleFactory
 {
 
     /**
-     * Set of complete module args
-     * @var array
+     * @var ModuleProperties
      */
-    protected $args;
+    protected $ModuleProperties;
 
     /**
-     * Classname of the module
-     * @var string
+     * @var array|mixed|void
      */
-    protected $class;
+    protected $data = array();
 
     /**
-     * @param $class
-     * @param $moduleArgs
+     * @var ModuleStorage
+     */
+    protected $Environment;
+
+    /**
+     * @param ModuleProperties $Properties
      * @param Environment $Environment
      * @param null $data
      * @throws \Exception
      */
-    public function __construct( $class, $moduleArgs, Environment $Environment = null, $data = null )
+    public function __construct( ModuleProperties $Properties, Environment $Environment, $data = null )
     {
 
-        if (!isset( $moduleArgs ) or !isset( $class )) {
-            throw new \Exception( 'This is not a valid Module' );
+        if (empty( $Properties->class ) || !class_exists( $Properties->class )) {
+            throw new \BadMethodCallException( 'Invalid Module passed to Factory' );
         }
 
-        $this->class = $class;
+        $this->Environment = $Environment;
+        $this->ModuleProperties = $Properties;
 
-        $this->args = self::parseModuleSettings( $moduleArgs );
         if ($data === null) {
             $this->data = apply_filters(
                 'kb.module.factory.data',
-                $Environment->getModuleData( $moduleArgs['mid'] ),
-                $moduleArgs
+                $Environment->getModuleData( $Properties->mid ),
+                $Properties
             );
         } else {
-            $this->data = apply_filters( 'kb.module.factory.data', $data, $moduleArgs );
+            $this->data = apply_filters( 'kb.module.factory.data', $data, $Properties );
         }
-
-        $this->environment = $Environment;
-
     }
 
     /**
@@ -63,50 +64,31 @@ class ModuleFactory
     public function getModule()
     {
 
-        $preparedArgs = $this->prepareArgs( $this->args );
+        $this->handleOverrides( $this->ModuleProperties );
 
-        $module = apply_filters( 'kb_modify_block', $preparedArgs );
-        $module = apply_filters( "kb_modify_block_{$preparedArgs['settings']['id']}", $preparedArgs );
+        $module = apply_filters( 'kb_modify_block', $this->ModuleProperties );
+        $module = apply_filters( "kb_modify_block_{$this->ModuleProperties->settings['id']}", $this->ModuleProperties );
 
-        $module = apply_filters( 'kb.modify.module.parameters', $preparedArgs );
+        $module = apply_filters( 'kb.modify.module.parameters', $this->ModuleProperties );
         // new instance
-        if (class_exists( $this->class )) {
-            /** @var \Kontentblocks\Modules\Module $instance */
-            $instance = new $this->class( $module, $this->data, $this->environment );
-            return $instance;
-        }
-
-        return null;
+        /** @var \Kontentblocks\Modules\Module $instance */
+        $instance = new $this->ModuleProperties->class( $this->ModuleProperties, $this->data, $this->Environment );
+        return $instance;
 
     }
 
-    /**
-     * Add missing args from defaults
-     * @param $module
-     *
-     * @return array
-     */
-    public static function parseModuleSettings( $module )
-    {
-        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
-        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-        return Utilities::validateBoolRecursive( wp_parse_args( $module, $ModuleRegistry->get( $module['class'] ) ) );
-    }
 
     /**
      * Instance specific data
-     * @param $args
+     * @param ModuleProperties $Properties passed by reference
      * @return mixed
      */
-    private function prepareArgs( $args )
+    private function handleOverrides( ModuleProperties $Properties )
     {
-        if (isset( $args['overrides'] )) {
-            if (!empty( $args['overrides']['name'] )) {
-                $args['settings']['name'] = $args['overrides']['name'];
+        if (isset( $Properties->overrides )) {
+            if (!empty( $Properties->overrides['name'] )) {
+                $Properties->settings['name'] = $Properties->overrides['name'];
             }
         }
-
-        return $args;
     }
-
 }

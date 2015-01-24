@@ -59,7 +59,7 @@ class PanelFieldController extends AbstractFieldController
     public function addGroup( $id, $args = array() )
     {
         if (!$this->idExists( $id )) {
-            $this->Structure[$id] = new PanelFieldSection( $id, $args, false, $this->Panel );
+            $this->Structure[$id] = new PanelFieldSection( $id, $args, $this->Panel );
         }
 
         return $this->Structure[$id];

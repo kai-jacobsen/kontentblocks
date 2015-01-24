@@ -69,6 +69,7 @@ class ModuleIterator implements \Iterator, \Countable
     {
         $this->modules = $this->setupModules( $modules );
         $this->Environment = $Environment;
+
     }
 
     /**
@@ -87,25 +88,14 @@ class ModuleIterator implements \Iterator, \Countable
     }
 
     /**
-     * Factory Wrapper
+     * Module getter
      *
      * @return \Kontentblocks\Modules\Module
      * @since 1.0.0
      */
     protected function getModule()
     {
-        $moduleDef = $this->modules[$this->key()];
-
-        if (!class_exists( $moduleDef['class'] )) {
-            return null;
-        }
-
-        $Factory = new ModuleFactory(
-            $moduleDef['class'], $moduleDef, $this->Environment
-        );
-
-        return $Factory->getModule();
-
+        return $this->modules[$this->key()];
     }
 
     /**
@@ -163,7 +153,7 @@ class ModuleIterator implements \Iterator, \Countable
      */
     public function getCurrentModuleClasses()
     {
-        $settings = $this->currentModuleObject->settings;
+        $settings = $this->currentModuleObject->Properties->settings;
         if (is_array( $settings['wrapperClasses'] )) {
             return $settings['wrapperClasses'];
         } else {

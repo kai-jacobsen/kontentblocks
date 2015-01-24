@@ -9,6 +9,7 @@ use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleProperties;
+use Kontentblocks\Modules\ModuleRepository;
 use Kontentblocks\Utils\Utilities;
 
 
@@ -31,6 +32,11 @@ class Environment implements JsonSerializable
      * @var \Kontentblocks\Backend\Storage\ModuleStorage
      */
     protected $Storage;
+
+    /**
+     * @var ModuleRepository
+     */
+    protected $ModuleRepository;
 
     /**
      * @var int
@@ -77,6 +83,7 @@ class Environment implements JsonSerializable
 
         $this->DataHandler = new DataProviderController( $storageId );
         $this->Storage = new ModuleStorage( $storageId, $this->DataHandler );
+        $this->ModuleRepository = new ModuleRepository( $this );
 
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
@@ -163,12 +170,12 @@ class Environment implements JsonSerializable
     {
         $sorted = array();
         if (is_array( $this->modules )) {
+            /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->modules as $module) {
-                $sorted[$module['area']][$module['instance_id']] = $module;
+                $sorted[$module->Properties->area->id][$module->getId()] = $module;
             }
             return $sorted;
         }
-
     }
 
     /**
@@ -177,12 +184,7 @@ class Environment implements JsonSerializable
      */
     private function setupModules()
     {
-        $collection = array();
-        $modules = $this->Storage->getIndex();
-        foreach ($modules as $module) {
-            $collection[$module['instance_id']] = ModuleFactory::parseModuleSettings( $module );
-        }
-        return $collection;
+        return $this->ModuleRepository->getModules();
 
     }
 
@@ -304,6 +306,7 @@ class Environment implements JsonSerializable
      */
     public function getPostType()
     {
+        get_post_type();
         return $this->postObj->post_type;
     }
 

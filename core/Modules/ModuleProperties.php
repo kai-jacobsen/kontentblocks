@@ -60,6 +60,18 @@ class ModuleProperties
     public $master_id;
 
     /**
+     * template reference data
+     * @var array
+     */
+    public $templateRef;
+
+    /**
+     * master reference data like parentId
+     * @var array
+     */
+    public $masterRef;
+
+    /**
      * id of 'parent' post | kb_dyar posttype
      * @var int
      */
@@ -116,6 +128,52 @@ class ModuleProperties
     }
 
 
+    /*
+     * ------------------------------------
+     * Public getter
+     * ------------------------------------
+     */
+
+    /**
+     * Get a single module setting
+     * @param $var string setting key
+     * @return mixed|null
+     */
+    public function getSetting( $var )
+    {
+        if (isset( $this->settings[$var] )) {
+            return $this->settings[$var];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get a single module setting
+     * @param $var string setting key
+     * @return mixed|null
+     */
+    public function getState( $var )
+    {
+        if (isset( $this->state[$var] )) {
+            return $this->state[$var];
+        } else {
+            return null;
+        }
+    }
+
+    /*
+     * ------------------------------------
+     * Public setter
+     * ------------------------------------
+     */
+
+    public function setId( $mid )
+    {
+        $this->instance_id = $mid;
+        $this->mid = $mid;
+    }
+
     /**
      * Add missing args from defaults
      * @param $properties
@@ -143,8 +201,8 @@ class ModuleProperties
     private function setArea( $var )
     {
         /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
-        $AreaRegistry = Kontentblocks::getService('registry.areas');
-        return $AreaRegistry->getArea($var);
+        $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
+        return $AreaRegistry->getArea( $var );
 
     }
 }
