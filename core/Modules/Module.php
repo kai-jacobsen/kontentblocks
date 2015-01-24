@@ -106,6 +106,15 @@ abstract class Module
      */
 
     /**
+     * Creates a complete list item for the area
+     */
+    public function renderForm()
+    {
+        $Node = new ModuleHTMLNode( $this );
+        return $Node->build();
+    }
+
+    /**
      * options()
      * Method for the backend display
      * gets called by ui display callback

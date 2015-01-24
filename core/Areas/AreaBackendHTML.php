@@ -3,6 +3,7 @@
 namespace Kontentblocks\Areas;
 
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Backend\Environment\Environment;
@@ -120,17 +121,12 @@ class AreaBackendHTML
         // list items for this area, block limit gets stored here
         echo "<ul style='' data-context='{$this->context}' id='{$this->Area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty( $this->attachedModules )) {
-            foreach ($this->attachedModules as $module) {
+            /** @var \Kontentblocks\Modules\Module $Module */
+            foreach ($this->attachedModules as $Module) {
 
-                if (!class_exists( $module['class'] )) {
-                    continue;
-                }
-                $module['areaContext'] = $this->context;
-                $module = apply_filters( 'kb.module.before.factory', $module );
-                $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
-                $Module = $Factory->getModule();
+                $Module->Properties->areaContext = $this->context;
+                $Module = apply_filters( 'kb.module.before.factory', $Module );
                 echo $Module->renderForm();
-
                 Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
             }
         }

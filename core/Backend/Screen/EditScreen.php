@@ -84,7 +84,7 @@ Class EditScreen
                 'hasAreas' => $hasAreas,
                 'noAreas' => $this->handleEmptyAreas(),
                 'blogId' => get_current_blog_id(),
-                'baseField' => Utilities::getBaseIdField( $Environment->getAllModules() ),
+//                'baseField' => Utilities::getBaseIdField( $Environment->getAllModules() ),
                 'nonces' => array(
                     'save' => wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename', true, false ),
                     'ajax' => wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce', true, false )

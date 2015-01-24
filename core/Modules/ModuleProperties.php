@@ -52,12 +52,6 @@ class ModuleProperties
      */
     public $class;
 
-    /**
-     * id of 'parent' post | kb_dyar posttype
-     * @deprecated
-     * @var int
-     */
-    public $master_id;
 
     /**
      * template reference data
@@ -70,12 +64,6 @@ class ModuleProperties
      * @var array
      */
     public $masterRef;
-
-    /**
-     * id of 'parent' post | kb_dyar posttype
-     * @var int
-     */
-    public $parentId;
 
     /**
      * assigned viewfile
@@ -204,5 +192,15 @@ class ModuleProperties
         $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
         return $AreaRegistry->getArea( $var );
 
+    }
+
+    public function export()
+    {
+        $vars = get_object_vars($this);
+        $vars['area'] = $this->area->id;
+        // settings are not persistent
+        unset($vars['settings']);
+
+        return $vars;
     }
 }

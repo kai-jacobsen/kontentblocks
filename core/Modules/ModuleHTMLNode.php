@@ -17,7 +17,7 @@ class ModuleHTMLNode
 
     /**
      * Parent Module instance
-     * @var Module
+     * @var \Kontentblocks\Modules\Module
      */
     protected $Module;
 
@@ -49,13 +49,17 @@ class ModuleHTMLNode
 
 
         // if disabled don't output, just show disabled message
-        if ($this->Module->getSetting( 'disabled' )) {
+        if ($this->Module->Properties->getSetting( 'disabled' )) {
             $concat .= "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         } else {
             $concat .= $this->Module->form();
         }
 
-        $concat = apply_filters( "kb.module.footer-{$this->Module->getSetting( 'id' )}", $concat, $this->Module );
+        $concat = apply_filters(
+            "kb.module.footer-{$this->Module->Properties->getSetting( 'id' )}",
+            $concat,
+            $this->Module
+        );
         $concat = apply_filters( 'kb.module.footer', $concat, $this->Module );
 
         $concat .= $this->closeInner();
@@ -77,25 +81,26 @@ class ModuleHTMLNode
     private function openListItem()
     {
         // extract the block id number
-        $count = strrchr( $this->Module->getModuleId(), "_" );
+        $count = strrchr( $this->Module->getId(), "_" );
 
         // classname
         $classname = get_class( $this->Module );
 
         // additional classes to set for the item
-        $disabledclass = ( $this->Module->getSetting( 'disabled' ) ) ? 'disabled' : null;
-        $uidisabled = ( $this->Module->getSetting( 'disabled' ) ) ? 'ui-state-disabled' : null;
+        $disabledclass = ( $this->Module->Properties->getSetting( 'disabled' ) ) ? 'disabled' : null;
+        $uidisabled = ( $this->Module->Properties->getSetting( 'disabled' ) ) ? 'ui-state-disabled' : null;
 
         //$locked = ( $this->locked == 'false' || empty($this->locked) ) ? 'unlocked' : 'locked';
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
         $unsortable = ( ( isset( $this->unsortable ) and $this->unsortable ) == '1' ) ? 'cantsort' : null;
 
         // Block List Item
-        return "<li id='{$this->Module->getModuleId()}' rel='{$this->Module->getModuleId(
-        )}{$count}' data-moduleclass='{$classname}' class='{$this->Module->getSetting(
+        return "<li id='{$this->Module->getId()}' rel='{$this->Module->getId(
+        )}{$count}' data-moduleclass='{$classname}' class='{$this->Module->Properties->getSetting(
             'id'
         )} kb-module__wrapper kb-module {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
-		<input type='hidden' name='{$this->Module->getModuleId()}[areaContext]' value='{$this->Module->getAreaContext()}' />
+		<input type='hidden' name='{$this->Module->getId(
+        )}[areaContext]' value='{$this->Module->Properties->areaContext}' />
 		";
 
     }
@@ -126,9 +131,9 @@ class ModuleHTMLNode
         if ($lockedmsg && KONTENTLOCK) {
             $out = $lockedmsg;
         } else {
-            $descSetting = $this->Module->getSetting( 'description' );
+            $descSetting = $this->Module->Properties->getSetting( 'description' );
             $description = ( !empty( $descSetting ) ) ? $i18n['common']['description'] . $descSetting : '';
-            $l18n_draft_status = ( $this->Module->state['draft'] === true ) ? '<p class="kb_draft">' . $i18n['notices']['draft'] . '</p>' : '';
+            $l18n_draft_status = ( $this->Module->Properties->state['draft'] === true ) ? '<p class="kb_draft">' . $i18n['notices']['draft'] . '</p>' : '';
 
             $out .= "<div class='kb-module__title'>";
 
@@ -164,7 +169,7 @@ class ModuleHTMLNode
         $html = '';
 
         //open header
-        $html .= "<div rel='{$this->Module->getModuleId()}' class='kb-module__header clearfix edit kb-title'>";
+        $html .= "<div rel='{$this->Module->getId()}' class='kb-module__header clearfix edit kb-title'>";
 
 
         if (current_user_can( 'edit_kontentblocks' )) {
@@ -178,23 +183,23 @@ class ModuleHTMLNode
 //        $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
 
         // locked icon
-        if (!$this->Module->getSetting( 'disabled' ) && KONTENTLOCK) {
+        if (!$this->Module->Properties->getSetting( 'disabled' ) && KONTENTLOCK) {
             $html .= "<div class='kb-lock {$this->locked}'></div>";
         }
 
         // disabled icon
-        if ($this->Module->getSetting( 'disabled' )) {
+        if ($this->Module->Properties->getSetting( 'disabled' )) {
             $html .= "<div class='kb-disabled-icon'></div>";
         }
 
         // name
-        $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->Module->getModuleId(
+        $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->Module->getId(
             )}[moduleName]' value='" . esc_attr(
-                     $this->Module->getModuleName()
+                     $this->Module->Properties->getSetting('name')
                  ) . "' /></div>";
 
         // original name
-        $html .= "<div class='kb-sub-name'>{$this->Module->getSetting( 'publicName' )}</div>";
+        $html .= "<div class='kb-sub-name'>{$this->Module->Properties->getSetting( 'publicName' )}</div>";
 
         $html .= "</div>";
 
@@ -214,7 +219,7 @@ class ModuleHTMLNode
      */
     public function getStatusClass()
     {
-        if ($this->Module->state['active']) {
+        if ($this->Module->Properties->state['active']) {
             return 'activated';
         } else {
             return 'deactivated';

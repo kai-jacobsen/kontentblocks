@@ -33,7 +33,6 @@ class FieldSection extends AbstractFieldSection
      *
      * @param string $id
      * @param $args
-     * @param $envVars
      * @param Module $module
      *
      * @return \Kontentblocks\Fields\FieldSection

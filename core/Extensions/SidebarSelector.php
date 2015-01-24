@@ -273,7 +273,7 @@ class SidebarSelector
                 }
                 $return .= "<li id='{$area->id}'  name='{$area->id}'>{$area->name}";
 
-                if ( true === $area->public ) {
+                if ( isset($area->public) && $area->public ) {
                     $editUrl = get_edit_post_link($area->parent_id).'&redirect=true';
                     $return .= "<span><a class='kb-js-edit-sidebar' href='{$editUrl}' data-area='{$area->id}'>edit</a></span>";
                 }

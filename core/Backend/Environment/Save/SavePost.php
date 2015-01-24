@@ -71,9 +71,9 @@ class SavePost
      */
     protected function moduleOverrides( $module, $data )
     {
-        $module['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-        $module['overrides']['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module['overrides']['name'];
-        $module['state']['draft'] = false;
+        $module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+        $module->Properties->overrides['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module->Properties->getSetting('name');
+        $module->Properties->state['draft'] = false;
         return $module;
     }
 
@@ -171,27 +171,18 @@ class SavePost
         }
 
 
+        /** @var \Kontentblocks\Modules\Module $module */
         foreach ($modules as $module) {
-            if (!class_exists( $module['class'] )) {
-                return false;
-            }
+
             //hack
             $id = null;
             // new data from $_POST
             //TODO: filter incoming data
-            $data = ( !empty( $_POST[$module['instance_id']] ) ) ? $_POST[$module['instance_id']] : null;
+            $data = ( !empty( $_POST[$module->getId()] ) ) ? $_POST[$module->getId()] : null;
             /** @var $old array() */
-            $old = $this->Environment->getStorage()->getModuleData( $module['instance_id'] );
+            $old = $this->Environment->getStorage()->getModuleData( $module->getId() );
 
-            // create Module instance
-
-            $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
-
-            /** @var $instance \Kontentblocks\Modules\Module */
-            $instance = $Factory->getModule();
-
-            // Set the 'old' data to the module
-            $instance->moduleData = $old;
+            $module->setModuleData( $old );
 
             // check for draft and set to false
             // special block specific data
@@ -199,15 +190,14 @@ class SavePost
             $module = $this->moduleOverrides( $module, $data );
 
             // create updated index
-            unset( $module['settings'] );
-            $this->index[$module['instance_id']] = $module;
+            $this->index[$module->getId()] = $module->Properties->export();
             // call save method on block
             // ignore the existence
 
             if ($data === null) {
                 $new = $old;
             } else {
-                $new = $instance->save( $data, $old );
+                $new = $module->save( $data, $old );
 
                 if ($new === false) {
                     $savedData = null;
@@ -218,13 +208,13 @@ class SavePost
             // if this is a preview, save temporary data for previews
             if (!is_null( $savedData )) {
                 if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
-                    update_post_meta( $this->postid, '_preview_' . $module['instance_id'], $savedData );
+                    update_post_meta( $this->postid, '_preview_' . $module->getId(), $savedData );
                 } // save real data
                 else {
-                    $this->Environment->getStorage()->saveModule( $module['instance_id'], $savedData );
-                    delete_post_meta( $this->postid, '_preview_' . $module['instance_id'] );
+                    $this->Environment->getStorage()->saveModule( $module->getId(), $savedData );
+                    delete_post_meta( $this->postid, '_preview_' . $module->getId() );
                 }
-                do_action( 'kb.module.save', $instance, $savedData );
+                do_action( 'kb.module.save', $module, $savedData );
             }
         }
 

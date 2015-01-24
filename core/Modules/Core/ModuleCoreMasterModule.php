@@ -47,38 +47,40 @@ class ModuleCoreMasterModule extends Module
      * Only for this Core Module
      * Verifies that the original template still exists
      *
-     * @param $module
+     * @param $Module
      * @return mixed
      */
-    public static function validateModule( $module )
+    public static function validateModule( Module $Module )
     {
-        if (!isset( $module['parentId'] )) {
-            return $module;
+
+        $parentId = $Module->Properties->masterRef['parentId'];
+
+        if (empty( $parentId )) {
+            return $Module;
         }
 
-        $masterId = $module['parentId'];
         $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
         $duplicate = !empty( $icl );
 
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-            $iclId = icl_object_id( $masterId, 'kb-mdtpl' );
-            $translated = ( $iclId !== $masterId );
+            $iclId = icl_object_id( $parentId, 'kb-mdtpl' );
+            $translated = ( $iclId !== $parentId );
 
             if ($translated) {
-                $masterId = $iclId;
+                $parentId = $iclId;
             }
 
         }
 
 
-        if (is_null( $masterId )) {
-            $module['state']['draft'] = true;
-            $module['state']['active'] = false;
-            $module['state']['valid'] = false;
+        if (is_null( $parentId )) {
+            $Module->Properties->state['draft'] = true;
+            $Module->Properties->state['active'] = false;
+            $Module->Properties->state['valid'] = false;
         } else {
-            $module['state']['valid'] = ( get_post_status( $masterId ) === 'trash' ) ? false : true;
+            $Module->Properties->state['valid'] = ( get_post_status( $parentId ) === 'trash' ) ? false : true;
         }
-        return $module;
+        return $Module;
 
     }
 
@@ -221,7 +223,7 @@ class ModuleCoreMasterModule extends Module
     {
         if (isset( $Module->Properties->master ) && $Module->Properties->master) {
             if (isset( $Module->Properties->templateRef )) {
-                $Module->Properties->setId($Module->Properties->templateRef['id']);
+                $Module->Properties->setId( $Module->Properties->templateRef['id'] );
             }
         }
     }
