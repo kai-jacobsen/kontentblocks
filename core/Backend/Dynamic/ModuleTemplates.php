@@ -5,7 +5,6 @@ namespace Kontentblocks\Backend\Dynamic;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
@@ -27,6 +26,7 @@ class ModuleTemplates
     {
 
         add_action( 'init', array( $this, 'registerPostType' ) );
+        add_action( 'init', array( $this, 'registerPseudoArea' ) );
         add_action( 'admin_menu', array( $this, 'addAdminMenu' ), 19 );
         add_action( 'edit_form_after_title', array( $this, 'addForm' ), 1 );
         add_action( 'save_post', array( $this, 'save' ), 11, 2 );
@@ -80,7 +80,8 @@ class ModuleTemplates
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
         $Storage = new ModuleStorage( $post->ID );
 
-        // on this screen we always deal with only one module
+        // on this screen we always deal with only
+        // one module
         // instance_id equals post_name
         $template = $Storage->getModuleDefinition( $post->post_name );
         // no template yet, create new
@@ -97,11 +98,10 @@ class ModuleTemplates
      * Display form of the module
      *
      * @param $template
-     * @param $MetaData
      * @since 1.0.0
      * @retutn void
      */
-    protected function moduleTemplate( $template, $MetaData )
+    protected function moduleTemplate( $template )
     {
         global $post;
         if (empty( $template )) {
@@ -113,30 +113,19 @@ class ModuleTemplates
         // TODO Explanation text for non-developers on page
         $context = ( isset( $_GET['area-context'] ) ) ? $_GET['area-context'] : 'normal';
 
-
-        // get non persistent module settings
-        $moduleDef = ModuleFactory::parseModuleSettings( $template );
         //set area context on init
-        $moduleDef['areaContext'] = $context;
-        $moduleDef['area'] = 'module-template';
+        $template['areaContext'] = $context;
+        $template['area'] = 'module-template';
         // create essential markup and render the module
         // infamous hidden editor hack
         Utilities::hiddenEditor();
-
-        // no data from db equals null, null is invalid
-        // we can't pass null to the factory, if environment is null as well
         $Environment = Utilities::getEnvironment( $post->ID );
-
-        $Factory = new ModuleFactory( $moduleDef['settings']['class'], $moduleDef, $Environment );
-        /** @var $Instance \Kontentblocks\Modules\Module */
-        $Instance = $Factory->getModule();
-        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Instance->toJSON() );
-
-
+        $Module = $Environment->getModuleById($template['mid']);
+        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig
         $templateData = array(
             'nonce' => wp_create_nonce( 'update-template' ),
-            'instance' => $Instance
+            'instance' => $Module
         );
 
         if (isset( $_GET['return'] )) {
@@ -162,6 +151,7 @@ class ModuleTemplates
         if ($screen->post_type !== 'kb-mdtpl') {
             return;
         }
+
 
         /*
          * Form validation happens on the frontend
@@ -196,39 +186,28 @@ class ModuleTemplates
     public function save( $postId, $postObj )
     {
         // auth request
-
         if (!$this->auth( $postId )) {
             return false;
         }
+
         $Environment = Utilities::getEnvironment( $postId );
-        $Storage = $Environment->getStorage();
-        $tpl = $Storage->getModuleDefinition( $postObj->post_name );
+
+        $Module = $Environment->getModuleById( $postObj->post_name );
         // no template yet, create an new one
-        if (!$tpl) {
+        if (!$Module) {
             $this->createTemplate( $postId, $Environment );
         } else {
             // update existing
-            $mid = $tpl['instance_id'];
-            $data = $_POST[$mid];
-            $existingData = $Storage->getModuleData( $mid );
-            $old = ( empty( $existingData ) ) ? array() : $existingData;
-
-            $moduleDef = ModuleFactory::parseModuleSettings( $tpl );
-
-            $Factory = new ModuleFactory( $moduleDef['class'], $moduleDef, Utilities::getEnvironment( $postId ) );
-            /** @var $Instance \Kontentblocks\Modules\Module */
-            $Instance = $Factory->getModule();
-            $new = $Instance->save( $data, $old );
+            $old = $Module->Model->getOriginalData();
+            $data = $_POST[$Module->Properties->mid];
+            $new = $Module->save( $data, $old );
             $toSave = Utilities::arrayMergeRecursive( $new, $old );
-
-            // settings are not persistent, never
-            unset( $tpl['settings'] );
-
             // save viewfile if present
-            $tpl['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+            $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
-            $Storage->saveModule( $mid, $toSave );
-            $Storage->reset();
+            $Environment->getStorage()->saveModule( $Module->getId(), $toSave );
+            $Environment->getStorage()->reset();
+            $Environment->getStorage()->addToIndex( $Module->getId(), $Module->Properties->export() );
 
             // return to original post if the edit request came from outside
             if (isset( $_POST['kb_return_to_post'] )) {
@@ -237,6 +216,7 @@ class ModuleTemplates
                 exit;
             }
         }
+
     }
 
     /**
@@ -260,14 +240,13 @@ class ModuleTemplates
         // set defaults
         $defaults = array(
             'master' => false,
-            'masterObj' => array(
+            'masterRef' => array(
                 'parentId' => $postId,
-                'master_id' => $postId
             ),
+            'template' => true,
             'name' => null,
             'id' => null,
             'type' => null,
-            'master_id' => $postId
         );
         // parse $_POST data
         $data = wp_parse_args( $_POST['new-template'], $defaults );
@@ -281,28 +260,19 @@ class ModuleTemplates
             wp_die( 'Missing arguments' );
         }
 
-        $definition = $ModuleRegistry->get( $data['type'] );
-
-
-        if (is_null( $definition )) {
-            wp_die( 'Definition not found' );
-        }
-
         $workshop = new ModuleWorkshop(
             $Environment, array(
-
                 'master' => $data['master'],
-                'masterObj' => array(
-                    'parentId' => $data['master_id'],
-                    'master_id' => $data['master_id']
+                'masterRef' => array(
+                    'parentId' => $postId,
                 ),
                 'template' => true,
-                'templateObj' => array(
+                'templateRef' => array(
                     'id' => $data['id'],
                     'name' => $data['name']
                 ),
-                'area' => 'template',
-                'areaContext' => 'template',
+                'area' => 'module-template',
+                'areaContext' => 'normal',
                 'class' => $data['type'],
                 'mid' => $data['id']
             )
@@ -310,7 +280,7 @@ class ModuleTemplates
 
 
         $definition = $workshop->getDefinitionArray();
-        do_action( 'kb::create:module', $definition );
+        do_action( 'kb.create:module', $definition );
 
         // add to post meta kb_kontentblocks
         $Environment->getStorage()->addToIndex( $data['id'], $definition );
@@ -337,7 +307,7 @@ class ModuleTemplates
             return $data;
         }
 
-        if (!isset($_POST['new-template'])){
+        if (!isset( $_POST['new-template'] )) {
             return $data;
         }
 
@@ -384,7 +354,7 @@ class ModuleTemplates
         $args = array(
             'labels' => $labels,
             'public' => false,
-            'publicly_queryable' => false,
+            'publicly_queryable' => true,
             'show_ui' => true,
             'show_in_menu' => false,
             'query_var' => true,
@@ -541,5 +511,15 @@ class ModuleTemplates
 
     }
 
+    public function registerPseudoArea()
+    {
+        \Kontentblocks\registerArea(
+            array(
+                'id' => 'module-template',
+                'internal' => true,
+                'dynamic' => true
+            )
+        );
+    }
 
 }

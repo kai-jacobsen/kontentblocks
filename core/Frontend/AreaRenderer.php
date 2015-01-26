@@ -209,7 +209,6 @@ class AreaRenderer
             $Module->preRender();
         }
 
-        d($Module);
         return $mergedClasses;
     }
 

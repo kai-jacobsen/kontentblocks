@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
-use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -30,43 +30,34 @@ class UpdateModuleData
 
         $moduleArgs = Utilities::validateBoolRecursive( $_POST['module'] );
         $data = $_POST['data'];
-        $postId = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $postId = filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
 
         // setup global post
         $post = get_post( $postId );
         setup_postdata( $post );
 
         $Environment = Utilities::getEnvironment( $postId );
-        $Factory = new ModuleFactory( $moduleArgs['class'], $moduleArgs, $Environment );
-        $Module = $Factory->getModule();
+        $Module = $Environment->getModuleById(filter_var($moduleArgs['mid'], FILTER_SANITIZE_STRING));
 
         // gather data
-        $old = $Environment->getStorage()->getModuleData( $moduleArgs['instance_id'] );
+        $old = $Module->Model->export();
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
         $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
-        $mergedData = apply_filters( 'kb_modify_module_data', $mergedData, $Module->settings );
-        $Module->setModuleData( $mergedData );
-        unset( $moduleArgs['settings'] );
-        unset( $moduleArgs['moduleData'] );
-        $moduleArgs['viewfile'] = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+        $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $Module );
+        $Module->Model->set($mergedData);
+        $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
         $Environment->getStorage()->reset();
-        $comp = $Environment->getStorage()->getModuleDefinition( $Module->getId() );
-        $moduleArgs = wp_parse_args( $moduleArgs, $comp );
-        $Environment->getStorage()->addToIndex( $Module->getId(), $moduleArgs );
+        $Environment->getStorage()->addToIndex( $Module->getId(), $Module->Properties->export() );
 
         $return = array(
             'newModuleData' => $mergedData
         );
-
-        // @TODO deprecate
-        do_action( 'kb_save_backend_module', $moduleArgs, $Module );
         do_action( 'kb.module.save', $Module, $mergedData );
-
         Utilities::remoteConcatGet( $postId );
 
-        wp_send_json( $return );
+        new AjaxSuccessResponse('Module data updated.', $return);
     }
 
 }

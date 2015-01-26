@@ -28,6 +28,10 @@ class AreaChangeTest extends \WP_UnitTestCase
 
         \Kontentblocks\Hooks\Capabilities::setup();
 
+    \Kontentblocks\registerArea(array(
+        'id' => 'dump'
+    ));
+
     }
 
     public function setUp()
@@ -43,7 +47,7 @@ class AreaChangeTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new ModuleStorage( $post->ID ), array(
+            new Environment( $post->ID, $post ), array(
                 'class' => 'ModuleText'
             )
         );
@@ -54,7 +58,7 @@ class AreaChangeTest extends \WP_UnitTestCase
         $data = array(
             'post_id' => $post->ID,
             'area_id' => 'dump',
-            'context' => 'dump',
+            'areaContext' => 'dump',
             'mid' => $module['mid']
         );
 

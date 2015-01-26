@@ -5,7 +5,6 @@ namespace Kontentblocks\Backend\Environment\Save;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Common\Data\ValueStorage;
-use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\Utilities;
 
 /**

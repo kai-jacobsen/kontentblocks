@@ -37,7 +37,7 @@ class ModuleFieldController extends AbstractFieldController
     public function __construct( Module $Module )
     {
         $this->baseId = $Module->getId();
-        $this->data = $Module->moduleData;
+        $this->data = $Module->Model->getOriginalData();
         $this->Module = $Module;
     }
 

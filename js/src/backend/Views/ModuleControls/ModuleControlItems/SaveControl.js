@@ -41,7 +41,7 @@ KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
   },
   success: function (res) {
 
-    if (!res || !res.newModuleData) {
+    if (!res || !res.data.newModuleData) {
       _K.error('Failed to save module data.');
     }
     this.parentView.model.set('moduleData', res.newModuleData);

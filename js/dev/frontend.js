@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-22 */
+/*! Kontentblocks DevVersion 2015-01-26 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -548,14 +548,14 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 that.$inner.empty();
                 that.ModuleView.clearFields();
                 that.$inner.attr("id", that.model.get("instance_id"));
-                that.$inner.append(res.html);
+                that.$inner.append(res.data.html);
                 if (that.model.get("state").draft) {
                     that.$draft.show(150);
                 } else {
                     that.$draft.hide();
                 }
                 if (res.json) {
-                    KB.payload = _.extend(KB.payload, res.json);
+                    KB.payload = _.extend(KB.payload, res.data.json);
                 }
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();

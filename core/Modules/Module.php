@@ -56,19 +56,6 @@ abstract class Module
      */
     public $Context;
 
-    /**
-     * legacy, equals data in Model
-     * @var array
-     */
-    public $moduleData;
-
-    /**
-     * will be unchanged after initial set
-     * @TODO move to model
-     * @var array
-     */
-    public $rawModuleData;
-
 
     /**
      * @param ModuleProperties $Properties
@@ -160,7 +147,6 @@ abstract class Module
         if (isset( $this->Fields )) {
             $this->setupFieldData();
         }
-
         $this->View = $this->getView();
 
         return $this->render();
@@ -233,8 +219,6 @@ abstract class Module
      */
     public function setModuleData( $data = array() )
     {
-        $this->moduleData = $data;
-        $this->rawModuleData = $data;
         $this->Model = new ModuleModel( $data );
     }
 
@@ -271,18 +255,15 @@ abstract class Module
      */
     private function setupFieldData()
     {
-        // @TODO convert to model
-        if (empty( $this->moduleData ) || !is_array( $this->moduleData )) {
-            return;
+        if ($this->Model->hasData()) {
+            $this->Fields->setup( $this->Model );
+            foreach ($this->Model as $key => $v) {
+                /** @var \Kontentblocks\Fields\Field $field */
+                $field = $this->Fields->getFieldByKey( $key );
+                $this->Model[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
+            }
         }
 
-        $this->Fields->setup( $this->Model );
-        foreach ($this->Model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->Fields->getFieldByKey( $key );
-            $this->Model[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
-            $this->moduleData[$key] = ( $field !== null ) ? $this->Model[$key] : $v;
-        }
     }
 
     /**
@@ -347,8 +328,11 @@ abstract class Module
             'state' => $this->Properties->state,
             'instance_id' => $this->getId(),
             'mid' => $this->getId(),
-            'moduleData' => $this->rawModuleData,
-            'moduleData' => apply_filters( 'kb_modify_module_data', $this->rawModuleData, $this->Properties->settings ),
+            'moduleData' => apply_filters(
+                'kb.module.modify.data',
+                $this->Model->getOriginalData(),
+                $this
+            ),
             'area' => $this->Properties->area->id,
             'post_id' => $this->Properties->post_id,
             'areaContext' => $this->Properties->areaContext,
@@ -400,5 +384,6 @@ abstract class Module
         );
 
     }
+
 
 }

@@ -2,9 +2,8 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -28,8 +27,8 @@ class GetModuleForm
         $overloadData = filter_input( INPUT_POST, 'overloadData', FILTER_VALIDATE_BOOLEAN );
         $module = filter_input( INPUT_POST, 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE );
 
-        if (is_null($module)){
-            wp_send_json_error('module is null');
+        if (is_null( $module )) {
+            wp_send_json_error( 'module is null' );
         }
 
         if ($overloadData) {
@@ -43,18 +42,15 @@ class GetModuleForm
             $moduleData = null;
         }
 
-        $module = apply_filters( 'kb.module.before.factory', $module );
-        /** @var Environment $Environment */
         $Environment = Utilities::getEnvironment( $module['post_id'] );
-        $Factory = new ModuleFactory( $module['class'], $module, $Environment, $moduleData );
-        $instance = $Factory->getModule();
-
-        $html = $instance->form();
+        $Module = $Environment->getModuleById( $module['mid'] );
+        $Module = apply_filters( 'kb.module.before.factory', $Module );
+        $html = $Module->form();
         $return = array(
             'html' => stripslashes_deep( $html ),
-            'json' => stripslashes_deep( Kontentblocks::getService('utility.jsontransport')->getJSON() )
+            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
         );
-        wp_send_json( $return );
-    }
 
+        new AjaxSuccessResponse('serving module form', $return);
+    }
 }

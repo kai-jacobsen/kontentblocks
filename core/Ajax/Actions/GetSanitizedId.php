@@ -32,10 +32,10 @@ class GetSanitizedId
 
         switch ($checkmode) {
             case 'areas':
-                $check = self::checkAreaExists( trim( $value ) );
+                $check = self::checkExistence( trim( $value ), 'kb-dyar', 'kb_da_' );
                 break;
             case 'templates':
-                $check = self::checkTemplateExists( trim( $value ) );
+                $check = self::checkExistence( trim( $value ), 'kb-mdtpl', 'kb_tpl_' );
                 break;
         }
 
@@ -52,63 +52,25 @@ class GetSanitizedId
     }
 
     /**
-     * @param $ad
-     *
-     * @return mixed|string
+     * @param string $input
+     * @param string $postType
+     * @param string $prefix
+     * @return bool|mixed|string
      */
-    private static function checkAreaExists( $ad )
+    private static function checkExistence( $input, $postType, $prefix )
     {
-        $sane = sanitize_title( 'kb_da_' . $ad );
+        global $wpdb;
+        $sane = sanitize_title( $prefix . $input );
         $sane = str_replace( '-', '_', $sane );
-        $posts = get_posts(
-            array(
-                'post_type' => 'kb-dyar',
-                'posts_per_page' => 1,
-                'name' => $sane,
-                'suppress_filters' => false
-            )
+
+        $posts = $wpdb->get_results(
+            "SELECT * FROM $wpdb->posts WHERE post_type = '$postType' AND post_name = '$sane' LIMIT 1"
         );
 
         if (!empty( $posts )) {
             return false;
         }
-        return str_replace( '-', '_', $sane );
-
-    }
-
-    /**
-     * @param $ad
-     *
-     * @return mixed|string
-     */
-    private static function checkTemplateExists( $ad )
-    {
-        $sane = sanitize_title( 'kb_tpl_' . $ad );
-        $sane = str_replace( '-', '_', $sane );
-
-        $posts = get_posts(
-            array(
-                'post_type' => 'kb-mdtpl',
-                'posts_per_page' => 1,
-                'name' => $sane,
-                'suppress_filters' => false,
-                'post_status' => array(
-                    'publish',
-                    'pending',
-                    'draft',
-                    'auto-draft',
-                    'future',
-                    'private',
-                    'inherit',
-                    'trash'
-                )
-            )
-        );
-        if (!empty( $posts )) {
-            return false;
-        }
-        return str_replace( '-', '_', $sane );
-
+        return $sane;
     }
 
 }

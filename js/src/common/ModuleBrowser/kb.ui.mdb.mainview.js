@@ -36,7 +36,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
 
     // bind to navigation views custom change event
     this.listenTo(this.subviews.Navigation, 'browser:change', this.update);
-    this.listenTo(this.subviews.ModulesList, 'createModule', this.createModule);
+    //this.listenTo(this.subviews.ModulesList, 'createModule', this.createModule);
 //        this.subviews.Navigation.bind('browser:change', _.bind(this.update, this));
   },
   // element tag
@@ -135,12 +135,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
       action: 'createNewModule',
       'class': module.get('settings').class,
       master: module.get('master'),
-      master_id: module.get('master_id'),
-      parentId: module.get('master_id'),
+      masterRef: module.get('masterRef'),
       template: module.get('template'),
-      templateObj: module.get('templateObj'),
-      viewfile: module.get('viewfile'),
-      duplicate: module.get('duplicate'),
+      templateRef: module.get('templateRef'),
       areaContext: this.options.area.model.get('context'),
       area: this.options.area.model.get('id'),
       _ajax_nonce: KB.Config.getNonce('create'),
@@ -182,7 +179,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
   prepareAssignedModules: function () {
     var assignedModules = this.area.model.get('assignedModules');
     var fullDefs = [];
-
     // @TODO a module class which was assigned to an area is not necessarily present
 
     _.each(KB.payload.ModuleDefinitions, function (module) {

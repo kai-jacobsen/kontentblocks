@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-22 */
+/*! Kontentblocks DevVersion 2015-01-26 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -327,6 +327,7 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
     update: function() {
         var that = this;
         this.$el.empty();
+        console.log(this.model);
         if (this.model.get("template")) {
             this.$el.html(KB.Templates.render("backend/modulebrowser/module-template-description", {
                 module: this.model.toJSON()
@@ -441,7 +442,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             browser: this
         });
         this.listenTo(this.subviews.Navigation, "browser:change", this.update);
-        this.listenTo(this.subviews.ModulesList, "createModule", this.createModule);
     },
     tagName: "div",
     id: "module-browser",
@@ -510,12 +510,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             action: "createNewModule",
             "class": module.get("settings").class,
             master: module.get("master"),
-            master_id: module.get("master_id"),
-            parentId: module.get("master_id"),
+            masterRef: module.get("masterRef"),
             template: module.get("template"),
-            templateObj: module.get("templateObj"),
-            viewfile: module.get("viewfile"),
-            duplicate: module.get("duplicate"),
+            templateRef: module.get("templateRef"),
             areaContext: this.options.area.model.get("context"),
             area: this.options.area.model.get("id"),
             _ajax_nonce: KB.Config.getNonce("create"),

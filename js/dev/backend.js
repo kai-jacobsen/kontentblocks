@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-22 */
+/*! Kontentblocks DevVersion 2015-01-26 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -212,6 +212,7 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
         }
     },
     success: function(res) {
+        var m;
         if (!res.success) {
             KB.Notice.notice("Request Error", "error");
             return false;
@@ -272,7 +273,7 @@ KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
         return !this.model.get("disabled") && KB.Checks.userCan("edit_kontentblocks");
     },
     success: function(res) {
-        if (!res || !res.newModuleData) {
+        if (!res || !res.data.newModuleData) {
             _K.error("Failed to save module data.");
         }
         this.parentView.model.set("moduleData", res.newModuleData);
@@ -510,7 +511,7 @@ KB.App = function() {
         });
         _.each(KB.payload.Modules, function(module) {
             var m = KB.Modules.add(module);
-            var areaView = KB.Areas.get(m.get("envVars").area);
+            var areaView = KB.Areas.get(m.get("envVars").areaId);
             if (areaView && areaView.view) {
                 areaView.view.addModuleView(m.view);
             }

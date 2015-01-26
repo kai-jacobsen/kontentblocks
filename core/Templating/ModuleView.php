@@ -3,6 +3,7 @@ namespace Kontentblocks\Templating;
 
 use Exception;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\MobileDetect;
 
 /**
@@ -42,7 +43,7 @@ class ModuleView implements \JsonSerializable
      *
      * @throws Exception
      */
-    public function __construct( $module, $tpl = null, $addData = array() )
+    public function __construct( Module $module, $tpl = null, $addData = array() )
     {
 
 
@@ -53,7 +54,7 @@ class ModuleView implements \JsonSerializable
         $this->Module = $module;
 
         // merge module data and additional injected data
-        $this->data = $this->_setupData( $module->moduleData, $addData );
+        $this->data = $this->_setupData( $module->Model->export(), $addData );
 
         // if no tpl is given, set a default
         // @TODO Kinda useless, things should break in that case

@@ -91,7 +91,7 @@ class ModuleCoreMasterModule extends Module
     public function form()
     {
 
-        $masterId = $this->parentId;
+        $masterId = $this->Properties->masterRef['parentId'];
         $translated = false;
         $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
         $duplicate = !empty( $icl );
@@ -107,7 +107,7 @@ class ModuleCoreMasterModule extends Module
         }
 
         $templateData = array(
-            'valid' => $this->state['valid'],
+            'valid' => $this->Properties->state['valid'],
             'editUrl' => html_entity_decode( get_edit_post_link( $masterId ) . '&amp;return=' . get_the_ID() ),
             'translated' => $translated,
             'duplicate' => $duplicate,
@@ -115,10 +115,10 @@ class ModuleCoreMasterModule extends Module
             'i18n' => I18n::getInstance()->getPackage( 'Modules.master' )
         );
 
-        $tpl = ( isset( $this->state['valid'] ) && $this->state['valid'] ) ? 'master-module-valid.twig' : 'master-module-invalid.twig';
+        $tpl = ( isset( $this->Properties->state['valid'] ) && $this->Properties->state['valid'] ) ? 'master-module-valid.twig' : 'master-module-invalid.twig';
 
         $Tpl = new CoreView( $tpl, $templateData );
-        $Tpl->render( true );
+        return $Tpl->render( );
 
     }
 
@@ -160,7 +160,7 @@ class ModuleCoreMasterModule extends Module
 
             // original template module definition
             $index = get_post_meta( $masterId, 'kb_kontentblocks', true );
-            $template = $index[$module->templateRef['id']];
+            $template = $index[$module->Properties->templateRef['id']];
             // actual module definition
             $originalDefiniton = $ModuleRegistry->get( $template['class'] );
 
@@ -183,19 +183,19 @@ class ModuleCoreMasterModule extends Module
     }
 
     /**
-     * @param $module
+     * @param $data
      * @param $Properties
      * @return mixed
      */
-    public static function setupModuleData( $module, $Properties )
+    public static function setupModuleData( $data, $Properties )
     {
-        if (isset( $Properties->master ) && filter_var( $Properties->master, FILTER_VALIDATE_BOOLEAN )) {
+        if (filter_var( $Properties->master, FILTER_VALIDATE_BOOLEAN ) && !empty($Properties->masterRef['parentId'])) {
             $masterId = $Properties->masterRef['parentId'];
             $tplId = $Properties->templateRef['id'];
             $data = get_post_meta( $masterId, '_' . $tplId, true );
             return $data;
         }
-        return $module;
+        return $data;
     }
 
     /**

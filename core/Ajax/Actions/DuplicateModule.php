@@ -5,10 +5,8 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
@@ -30,11 +28,6 @@ class DuplicateModule
      * @var Environment
      */
     private static $Environment;
-
-    /**
-     * @var ModuleRegistry
-     */
-    private static $ModuleRegistry;
 
     /**
      * ID of original module
@@ -63,13 +56,13 @@ class DuplicateModule
         self::$class = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
         self::$Environment = Utilities::getEnvironment( self::$postId );
-
-        self::$ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-
         return self::duplicate();
     }
 
 
+    /**
+     * @return AjaxErrorResponse|AjaxSuccessResponse
+     */
     private static function duplicate()
     {
         global $post;
@@ -89,7 +82,7 @@ class DuplicateModule
             'class' => self::$class,
             'area' => $stored['area'],
             'areaContext' => $stored['areaContext']
-        ), $stored
+        ), $stored //  inherit from original
         );
 
         $update = self::$Environment->getStorage()->addToIndex(
@@ -104,32 +97,31 @@ class DuplicateModule
                 )
             );
         } else {
-            return self::doDuplication( $Workshop->getDefinitionArray() );
+            return self::doDuplication( $Workshop );
         }
     }
 
     /**
      * Actual duplication
-     * @param $moduleDefinition
+     * @param $ModuleWorkshop
      * @return AjaxSuccessResponse
      */
-    private static function doDuplication( $moduleDefinition )
+    private static function doDuplication( ModuleWorkshop $ModuleWorkshop )
     {
         $originalData = self::$Environment->getStorage()->getModuleData( self::$instanceId );
-        self::$Environment->getStorage()->saveModule( $moduleDefinition['mid'], $originalData );
+        self::$Environment->getStorage()->saveModule( $ModuleWorkshop->getPropertiesObject()->mid, $originalData );
 
         self::$Environment->getStorage()->reset();
-        $moduleDefinition = apply_filters( 'kb.module.before.factory', $moduleDefinition );
 
-        $Factory = new ModuleFactory( self::$class, $moduleDefinition, self::$Environment );
-        $Module = $Factory->getModule();
+        $Module = $ModuleWorkshop->getModule();
+
+        apply_filters( 'kb.module.before.factory', $Module );
         $html = $Module->renderForm();
-
         $response = array
         (
-            'id' => $moduleDefinition['mid'],
-            'module' => $moduleDefinition,
-            'name' => $Module->settings['publicName'],
+            'id' => $ModuleWorkshop->getPropertiesObject()->mid,
+            'module' => $ModuleWorkshop->getPropertiesObject(),
+            'name' => $Module->Properties->getSetting( 'publicName' ),
             'html' => $html,
             'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
 

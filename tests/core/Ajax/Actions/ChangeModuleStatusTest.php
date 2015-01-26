@@ -44,7 +44,7 @@ class ChangeModuleStatusTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new ModuleStorage( $post->ID ), array(
+            new Environment( $post->ID, $post ), array(
                 'class' => 'ModuleText'
             )
         );

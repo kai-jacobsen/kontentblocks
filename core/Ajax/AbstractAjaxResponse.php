@@ -21,6 +21,8 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
         $this->data = $data;
         if ($send) {
             $this->sendJson();
+        } else {
+            return $this;
         }
     }
 

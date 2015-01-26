@@ -5,7 +5,7 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -14,53 +14,46 @@ use Kontentblocks\Utils\Utilities;
  */
 class CreateNewModule
 {
-    /**
-     * @var \Kontentblocks\Modules\ModuleRegistry
-     */
-    protected $ModuleRegistry;
 
     /**
-     * $post_id
-     * current post id
+     * ID of the origin post
      * @var integer
      */
-    private $postId = null;
+    private $postId;
 
     /**
-     * $type
-     * type of module
-     * @var string
+     * Master indicator
+     * @var bool
      */
-    private $type = null;
+    private $master = false;
 
     /**
-     * $count
-     * current module count
-     * @var integer
+     * Template indicator
+     * @var bool
      */
-    private $newCount = null;
-
-    /**
-     * $new_id
-     * holds the new id for the created module
-     * @var string
-     */
-    private $newInstanceID;
+    private $template = false;
 
     /**
      * $new_module
      * Array of data for the new module
-     * @var array
+     * @var \Kontentblocks\Modules\Module
      */
     private $newModule;
 
-
+    /**
+     * collected module args
+     * @var array
+     */
     private $moduleArgs;
 
+    /**
+     * Context indicator
+     * @var bool
+     */
     private $frontend = false;
 
     /**
-     *
+     * Get things going
      */
     public function __construct()
     {
@@ -79,98 +72,41 @@ class CreateNewModule
         // Setup Data Handler
         $this->Environment = Utilities::getEnvironment( $this->postId );
 
-        $this->ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-
-        // Setup new Count var
-        $this->newCount = $this->_updateCount();
-
-        // new instance id
-        $this->newInstanceID = $this->setupNewID();
-
         // override class if master
         if (!$this->frontend) {
             $this->overrideModuleClassEventually();
         }
 
+
         // handle override from template
         $this->templateOverride();
 
-        // Setup module args
-        $this->newModule = $this->setupModuleArgs();
+        $Workshop = new ModuleWorkshop( $this->Environment, $this->moduleArgs );
+        $this->newModule = $Workshop->getModule();
         $this->updateData();
 
     }
 
-
+    /**
+     * Internale core master module will rewrite the classname to itself
+     * if master = true
+     *
+     */
     private function overrideModuleClassEventually()
     {
         // Override Class / type if this originates from a master template
         $this->moduleArgs = apply_filters( 'kb.intercept.creation.args', $this->moduleArgs );
     }
 
-    /**
-     * Setup Module
-     *
-     * instantiate the module and setup
-     * @global $Kontentblocks
-     * @return array|null
-     */
-    private function setupModuleArgs()
-    {
-
-        // Get Prototype from registry
-        if (class_exists( $this->type )) {
-            $proto = $this->ModuleRegistry->get( $this->type );
-            $proto = wp_parse_args( $this->moduleArgs, $proto );
-            // TODO Deprecate
-            $proto['instance_id'] = $this->newInstanceID;
-            $proto['mid'] = $this->newInstanceID;
-            return $proto;
-        } else {
-            wp_send_json_error( $this->type . ' does not exist' );
-        }
-    }
 
     /**
-     * Update Count
-     *
-     * Set the counter as reference for the new module id
-     * counting doesn't start with zero
-     */
-    private function _updateCount()
-    {
-        $count = $this->count;
-
-        if ($count != 0) {
-            return $count + 1;
-        } else {
-            return 1;
-        }
-
-    }
-
-    /**
-     * Set new Module id
-     *
-     * Unique id for new module
-     */
-    private function setupNewID()
-    {
-        $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
-        return $prefix . $this->postId . '_' . $this->newCount;
-
-    }
-
-    /**
-     * Prepare new Module
+     * Set the module name to the name of the template
      */
     private function templateOverride()
     {
-
         if ($this->moduleArgs['template']) {
-            $this->moduleArgs['overrides']['name'] = $this->moduleArgs['templateObj']['name'];
+            $this->moduleArgs['overrides']['name'] = $this->moduleArgs['templateRef']['name'];
         }
-
     }
 
     /**
@@ -182,11 +118,8 @@ class CreateNewModule
 
         //save module to reference array
         $this->saveNewModule();
-
         // handle template generation
         $this->handleTemplates();
-
-
         $this->render();
 
     }
@@ -196,22 +129,19 @@ class CreateNewModule
      */
     private function saveNewModule()
     {
-        $toSave = $this->newModule;
-
-
-        //dont save settings
-        unset( $toSave['settings'] );
+        $toSave = $this->newModule->Properties->export();
 
         // add new block and update
-        $update = $this->Environment->getStorage()->addToIndex( $this->newInstanceID, $toSave );
+        $update = $this->Environment->getStorage()->addToIndex( $this->newModule->getId(), $toSave );
         if ($update === false) {
             wp_send_json_error( 'Update to Index failed' );
         }
 
-
-        // @TODO deprecate
-        do_action( 'kb::create:module', $this->newModule, $this->Environment );
-        do_action( 'kb.module.create', $this->newModule );
+        /**
+         * Action kb.module.create
+         * @Param array attributes of new module
+         */
+        do_action( 'kb.module.create', $this->newModule->Properties->export() );
     }
 
     /**
@@ -220,11 +150,11 @@ class CreateNewModule
     private function handleTemplates()
     {
         //create data for templates
-        if ($this->moduleArgs['template']) {
-            $PostMeta = new DataProviderController( $this->moduleArgs['master_id'] );
+        if ($this->template) {
+            $PostMeta = new DataProviderController( $this->newModule->Properties->masterRef['parentId'] );
 
-            $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateObj']['id'] );
-            $update = $this->Environment->getStorage()->saveModule( $this->newInstanceID, $master_data );
+            $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateRef']['id'] );
+            $update = $this->Environment->getStorage()->saveModule( $this->newModule->getId(), $master_data );
             $this->Environment->getStorage()->reset();
 
             if (!$update) {
@@ -239,25 +169,22 @@ class CreateNewModule
      */
     private function render()
     {
+
         ob_start();
 
-        // create the new module finally
-        $this->newInstance = $this->createModuleInstance();
-
-
         if ($this->frontend) {
-            $SingleRenderer = new SingleModuleRenderer( $this->newInstance );
+            $SingleRenderer = new SingleModuleRenderer( $this->newModule );
             $SingleRenderer->render();
         } else {
-            echo $this->newInstance->renderForm();
+            echo $this->newModule->renderForm();
         }
         $html = ob_get_clean();
         $response = array
         (
-            'id' => $this->newInstanceID,
-            'module' => $this->newModule,
-            'name' => $this->newInstance->settings['publicName'],
-            'json' => Kontentblocks::getService('utility.jsontransport')->getJSON(),
+            'id' => $this->newModule->getId(),
+            'module' => $this->newModule->Properties->export(),
+            'name' => $this->newModule->Properties->getSetting( 'publicName' ),
+            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
             'html' => $html
         );
 
@@ -271,55 +198,38 @@ class CreateNewModule
     private function setupRequestData()
     {
         global $post;
-//        if ( !wp_verify_nonce( $_POST[ 'nonce' ], '_kontentblocks_ajax_magic' ) ) {
-//            wp_send_json( wp_verify_nonce( $_POST[ 'nonce' ], '_kontentblocks_ajax_magic' ) );
-//        }
 
-        $this->postId = filter_var( $_POST['post_id'] );
-
+        $this->postId = filter_var( $_POST['post_id'], FILTER_SANITIZE_NUMBER_INT );
         $this->frontend = filter_input( INPUT_POST, 'frontend', FILTER_VALIDATE_BOOLEAN );
 
         $post = get_post( $this->postId );
         setup_postdata( $post );
 
-        $this->count = filter_var( $_POST['count'], FILTER_VALIDATE_INT );
-        $this->type = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
+        $this->moduleArgs['class'] = $this->classname = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
 
-        $moduleArgs = array(
-            'area' => FILTER_SANITIZE_STRING,
-            'master' => FILTER_VALIDATE_BOOLEAN,
-            'areaContext' => FILTER_SANITIZE_STRING,
-            'template' => FILTER_VALIDATE_BOOLEAN,
-            'class' => FILTER_SANITIZE_STRING,
-            'master_id' => FILTER_SANITIZE_NUMBER_INT,
-            'parentId' => FILTER_SANITIZE_NUMBER_INT,
-            'viewfile' => FILTER_SANITIZE_STRING,
-            'post_id' => FILTER_SANITIZE_NUMBER_INT
-        );
-
-
-        $this->moduleArgs = filter_var_array( $_POST, $moduleArgs );
-
-        if (isset( $_POST['templateObj'] )) {
-            $this->moduleArgs['templateObj']['name'] = $_POST['templateObj']['post_title'];
-            $this->moduleArgs['templateObj']['id'] = $_POST['templateObj']['post_name'];
+        if (isset( $_POST['templateRef'] )) {
+            $this->moduleArgs['templateRef']['name'] = $_POST['templateRef']['post_title'];
+            $this->moduleArgs['templateRef']['id'] = $_POST['templateRef']['post_name'];
         }
 
-
-        if (!empty( $this->moduleArgs['parentId'] ) && $this->moduleArgs['master']) {
-            $this->moduleArgs['post_id'] = $this->moduleArgs['parentId'];
+        if (filter_input( INPUT_POST, 'master', FILTER_VALIDATE_BOOLEAN )) {
+            $this->moduleArgs['post_id'] = absint( $_POST['masterRef']['parentId'] );
+            $this->moduleArgs['masterRef']['parentId'] = absint( $_POST['masterRef']['parentId'] );
         }
 
-        $this->moduleArgs['overrides'] = array();
+        $this->moduleArgs['area'] = filter_input( INPUT_POST, 'area', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['areaContext'] = filter_input( INPUT_POST, 'areaContext', FILTER_SANITIZE_STRING );
 
-    }
+        $this->moduleArgs['master'] = filter_input( INPUT_POST, 'master', FILTER_VALIDATE_BOOLEAN );
+        $this->moduleArgs['template'] = filter_input( INPUT_POST, 'template', FILTER_VALIDATE_BOOLEAN );
 
-    public function createModuleInstance()
-    {
-        $module = apply_filters( 'kb.module.before.factory', $this->newModule );
-        $Factory = new ModuleFactory( $module['class'], $module, $this->Environment );
-        return $Factory->getModule();
+        if ($this->moduleArgs['master']) {
+            $this->master = true;
+        }
 
+        if ($this->moduleArgs['template']) {
+            $this->template = true;
+        }
     }
 
 }

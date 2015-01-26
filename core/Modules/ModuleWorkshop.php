@@ -203,8 +203,8 @@ class ModuleWorkshop
     private function createModuleId()
     {
         $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
-        $this->Environment->reset();
-        $count = Utilities::getHighestId( $this->Environment->getIndex() ) + 1;
+        $this->Environment->getStorage()->reset();
+        $count = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() ) + 1;
         return $prefix . $this->Environment->getId() . '_' . $count;
     }
 
@@ -285,7 +285,7 @@ class ModuleWorkshop
      */
     private function clean( $attrs )
     {
-        foreach ($attrs as $k => $v) {
+        foreach (array_keys( $attrs ) as $k) {
             if (!in_array( $k, array_keys( $this->getDefaults() ) )) {
                 unset( $attrs[$k] );
             }

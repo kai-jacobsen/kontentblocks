@@ -226,7 +226,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         // set id to module id
         that.$inner.attr('id', that.model.get('instance_id'));
         // append the html to the inner form container
-        that.$inner.append(res.html);
+        that.$inner.append(res.data.html);
 
         if (that.model.get('state').draft) {
           that.$draft.show(150);
@@ -239,7 +239,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         // (Re)Init UI widgets
         // TODO find better method for this
         if (res.json) {
-          KB.payload = _.extend(KB.payload, res.json);
+          KB.payload = _.extend(KB.payload, res.data.json);
         }
         KB.Ui.initTabs();
         KB.Ui.initToggleBoxes();

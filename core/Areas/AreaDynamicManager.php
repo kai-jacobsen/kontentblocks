@@ -53,7 +53,7 @@ class AreaDynamicManager
      */
     public function add( $area )
     {
-        $this->areas[$area['id']] = $area;
+        $this->areas[$area->id] = $area;
     }
 
     public function synchronize()

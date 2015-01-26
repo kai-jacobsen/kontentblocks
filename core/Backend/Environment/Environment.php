@@ -7,8 +7,6 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Modules\ModuleFactory;
-use Kontentblocks\Modules\ModuleProperties;
 use Kontentblocks\Modules\ModuleRepository;
 use Kontentblocks\Utils\Utilities;
 
@@ -78,7 +76,6 @@ class Environment implements JsonSerializable
     public function __construct( $storageId, \WP_Post $postObj )
     {
         $this->postObj = $postObj;
-
         $this->storageId = $storageId;
 
         $this->DataHandler = new DataProviderController( $storageId );
@@ -143,7 +140,14 @@ class Environment implements JsonSerializable
     public function getAllModules()
     {
         return $this->modules;
+    }
 
+    /**
+     * @param $mid
+     * @return \Kontentblocks\Modules\Module|null
+     */
+    public function getModuleById($mid){
+        return $this->ModuleRepository->getModuleObject($mid);
     }
 
     /**
@@ -185,7 +189,6 @@ class Environment implements JsonSerializable
     private function setupModules()
     {
         return $this->ModuleRepository->getModules();
-
     }
 
     /**

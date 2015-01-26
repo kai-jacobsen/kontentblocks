@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\tests\core\Modules;
 
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
 
@@ -12,6 +13,22 @@ use Kontentblocks\Modules\ModuleWorkshop;
  */
 class ModuleWorkshopTest extends \WP_UnitTestCase
 {
+
+    public static function setUpBeforeClass()
+    {
+        ( !defined( 'DOING_AJAX' ) ) ? define( 'DOING_AJAX', TRUE ) : null;
+        add_filter(
+            'wp_die_ajax_handler',
+            array( __CLASS__, 'dump' ),
+            99
+        );
+        \Kontentblocks\Hooks\Capabilities::setup();
+
+        \Kontentblocks\registerArea(array(
+            'id' => 'dump'
+        ));
+
+    }
 
 
     public function setUp()
@@ -27,7 +44,7 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
         // test recursive merge
         $this->assertEquals( 'Newname', $merged['overrides']['name'] );
         // test defaults
-        $this->assertEquals( 'undefined', $merged['area'] );
+        $this->assertEquals( 'dump', $merged['area'] );
     }
 
     public function testCreate()
@@ -81,7 +98,7 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
 
         $Module = $Workshop->createAndGet();
         $this->assertInstanceOf( '\Kontentblocks\Modules\Module', $Module );
-        $this->assertEquals( 'Lorem Ipsum', $Module->getData( 'content' ) );
+        $this->assertEquals( 'Lorem Ipsum', $Module->Model->get( 'content' ) );
     }
 
 
@@ -104,13 +121,14 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
             'class' => 'ModuleText',
             'overrides' => array(
                 'name' => 'Newname'
-            )
+            ),
+            'area' => 'dump'
         );
 
         $args = wp_parse_args( $cArgs, $args );
 
         $post = $this->factory->post->create_and_get();
-        return new ModuleWorkshop( new ModuleStorage( $post->ID ), $args, $oldargs );
+        return new ModuleWorkshop( new Environment( $post->ID, $post ), $args, $oldargs );
     }
 
 }

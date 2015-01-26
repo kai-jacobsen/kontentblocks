@@ -3,8 +3,6 @@
 namespace Kontentblocks\Areas;
 
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Modules\Module;
-use Kontentblocks\Modules\ModuleFactory;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Utils\Utilities;

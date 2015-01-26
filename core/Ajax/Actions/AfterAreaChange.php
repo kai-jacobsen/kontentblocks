@@ -4,10 +4,9 @@ namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
-use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Modules\ModuleFactory;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -43,9 +42,9 @@ class AfterAreaChange
         $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 
-        $Factory = new ModuleFactory( $module['class'], $module, new ModuleStorage($postId) );
-        $instance = $Factory->getModule();
-        $html = $instance->form();
+        $Workshop = new ModuleWorkshop(Utilities::getEnvironment($postId),$module);
+        $Module = $Workshop->getModule();
+        $html = $Module->form();
         $return = array(
             'html' => stripslashes_deep( $html ),
             'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )

@@ -26,6 +26,10 @@ class DuplicateModuleTest extends \WP_UnitTestCase
         );
         \Kontentblocks\Hooks\Capabilities::setup();
 
+        \Kontentblocks\registerArea(array(
+            'id' => 'dump'
+        ));
+
     }
 
     public function setUp()
@@ -42,8 +46,9 @@ class DuplicateModuleTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new ModuleStorage( $post->ID ), array(
-                'class' => 'ModuleText'
+            new Environment( $post->ID, $post ), array(
+                'class' => 'ModuleText',
+                'area' => 'dump'
             )
         );
 

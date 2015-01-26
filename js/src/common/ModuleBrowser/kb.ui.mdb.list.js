@@ -11,7 +11,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
   },
   // render list
   render: function (el) {
-
     if (this.model.get('template')) {
       this.$el.html(KB.Templates.render('backend/modulebrowser/module-template-list-item', {module: this.model.toJSON()}));
     } else {
@@ -28,7 +27,6 @@ KB.Backbone.ModuleBrowserListItem = Backbone.View.extend({
   },
   createModule: function () {
     this.options.browser.createModule(this.model);
-
   },
   close: function () {
     this.remove();

@@ -22,7 +22,7 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
     }
   },
   success: function (res) {
-
+    var m;
     if (!res.success) {
       KB.Notice.notice('Request Error', 'error');
       return false;
@@ -30,7 +30,6 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
     this.parseAdditionalJSON(res.data.json);
     this.model.areaView.modulesList.append(res.data.html);
     KB.Modules.add(res.data.module);
-
     var ModuleView = KB.Views.Modules.get(res.data.id);
     this.model.areaView.addModuleView(ModuleView);
     // update the reference counter, used as base number

@@ -49,7 +49,7 @@ class ModuleRepository
     /**
      * Get PropertiesObject from collection by id
      * @param $id
-     * @return null|ModuleProperties
+     * @return null|Module
      */
     public function getModuleObject( $id )
     {

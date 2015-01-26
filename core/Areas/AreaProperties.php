@@ -179,7 +179,8 @@ class AreaProperties
             'order' => 0, // order index for sorting
             'context' => 'normal', // location on the edit screen
             'concat' => false,
-            'sortable' => false
+            'sortable' => false,
+            'internal' => false
         );
     }
 

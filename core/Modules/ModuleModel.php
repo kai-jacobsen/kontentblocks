@@ -22,10 +22,17 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
     protected $_locked = false;
 
     /**
+     *
+     * @var array
+     */
+    private $_originalData = array();
+
+    /**
      * @param array $data
      */
     public function __construct( $data = array() )
     {
+        $this->_originalData = $data;
         $this->set( $data );
         $this->_initialized = true;
     }
@@ -42,6 +49,8 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
         foreach ($data as $key => $v) {
             $this->$key = $v;
         }
+
+        wp_parse_args( $this->_originalData, $data );
     }
 
     public function get( $offset, $default = '', $group = null )
@@ -68,6 +77,11 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
         return $default;
     }
 
+    public function getOriginalData()
+    {
+        return $this->_originalData;
+    }
+
     /**
      * (PHP 5 &gt;= 5.4.0)<br/>
      * Specify data which should be serialized to JSON
@@ -75,12 +89,22 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $vars = get_object_vars( $this );
         unset( $vars['_locked'] );
         unset( $vars['_initialized'] );
+        unset( $vars['_originalData'] );
         return $vars;
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function export()
+    {
+        return $this->jsonSerialize();
     }
 
     /**
@@ -169,5 +193,10 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
     public function unlock()
     {
         $this->_locked = false;
+    }
+
+    public function hasData()
+    {
+        return $this->_initialized;
     }
 }

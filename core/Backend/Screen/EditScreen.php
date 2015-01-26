@@ -100,8 +100,6 @@ Class EditScreen
      * Handles the saving of modules and supplemental data
      *
      * @param int $post_id The current post id
-     *
-     * @return void
      * @since 1.0.0
      */
     function save( $post_id )
