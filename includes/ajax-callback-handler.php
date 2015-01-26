@@ -47,12 +47,6 @@ add_action( 'wp_ajax_getModuleForm', array( 'Kontentblocks\Ajax\Actions\Frontend
 
 add_action( 'wp_ajax_updateModule', array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateModule', 'run' ) );
 
-/**
- * -----------------------------------------
- * Handler backend async saving
- * -----------------------------------------
- */
-add_action( 'wp_ajax_updateModuleData', array( 'Kontentblocks\Ajax\Actions\UpdateModuleData', 'run' ) );
 
 
 /**

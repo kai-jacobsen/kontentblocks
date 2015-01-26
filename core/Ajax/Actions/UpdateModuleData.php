@@ -3,6 +3,7 @@
 namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -16,21 +17,21 @@ use Kontentblocks\Utils\Utilities;
  */
 class UpdateModuleData
 {
+    static $nonce = 'kb-update';
 
     /**
      * Sends new module data as json formatted object
      *
-     * @return void
+     * @param ValueStorageInterface $Request
      * @since 1.0.0
      */
-    public static function run()
+    public static function run( ValueStorageInterface $Request )
     {
         global $post;
-        check_ajax_referer( 'kb-update' );
 
-        $moduleArgs = Utilities::validateBoolRecursive( $_POST['module'] );
-        $data = $_POST['data'];
-        $postId = filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
+        $moduleArgs = Utilities::validateBoolRecursive( $Request->get('module'));
+        $data = $Request->get('data');
+        $postId = $Request->getFiltered('post_id', FILTER_VALIDATE_INT);
 
         // setup global post
         $post = get_post( $postId );
@@ -57,7 +58,7 @@ class UpdateModuleData
         do_action( 'kb.module.save', $Module, $mergedData );
         Utilities::remoteConcatGet( $postId );
 
-        new AjaxSuccessResponse('Module data updated.', $return);
+        return new AjaxSuccessResponse('Module data updated.', $return);
     }
 
 }
