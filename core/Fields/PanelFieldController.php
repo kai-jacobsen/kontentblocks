@@ -98,7 +98,7 @@ class PanelFieldController extends AbstractFieldController
     public function renderFields()
     {
         $Renderer = new FieldRendererTabs( $this->baseId, $this->Structure );
-        $Renderer->render( $this->data );
+        return $Renderer->render( $this->data );
     }
 
 

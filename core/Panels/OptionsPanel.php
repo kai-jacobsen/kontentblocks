@@ -126,8 +126,6 @@ abstract class OptionsPanel extends AbstractPanel
 
                 break;
         }
-
-
     }
 
 
@@ -195,8 +193,9 @@ abstract class OptionsPanel extends AbstractPanel
 
         $this->setupData( $this->baseId );
         $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
+
         $this->beforeForm();
-        $this->fields( $this->FieldManager )->renderFields();
+        echo $this->fields( $this->FieldManager )->renderFields();
         $this->afterForm();
     }
 

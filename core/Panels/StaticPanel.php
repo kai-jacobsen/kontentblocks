@@ -71,7 +71,7 @@ abstract class StaticPanel extends AbstractPanel
         $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $this->beforeForm();
-        $this->fields( $this->FieldController )->renderFields();
+        echo $this->fields( $this->FieldController )->renderFields();
         $this->afterForm();
     }
 
