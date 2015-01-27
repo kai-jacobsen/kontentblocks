@@ -20,7 +20,7 @@
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveParameterList">
         <properties>
-            <property name="minimum" value="5"/>
+            <property name="minimum" value="3"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessivePublicCount">

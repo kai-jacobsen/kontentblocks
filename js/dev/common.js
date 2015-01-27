@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-26 */
+/*! Kontentblocks DevVersion 2015-01-27 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -521,8 +521,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         this.close();
         KB.Ajax.send(data, this.success, this);
     },
-    success: function(data) {
-        var model;
+    success: function(res) {
+        var model, data;
+        data = res.data;
         this.options.area.modulesList.append(data.html);
         model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
         this.options.area.addModuleView(model.view);

@@ -180,9 +180,9 @@ class BackupDataStorage
     {
         global $wpdb;
 
-        if (!current_user_can('edit_kontentblocks')) {
-            wp_die('Hackin?');
-        }
+//        if (!current_user_can('edit_kontentblocks')) {
+//            wp_die('Hackin?');
+//        }
 
         $existingData = unserialize(base64_decode($this->package->value));
         $user = wp_get_current_user();

@@ -9,18 +9,7 @@ use Kontentblocks\Ajax\Actions\CreateNewModule;
  */
 
 
-/**
- * -----------------------------------------
- * Handler for creating new modules
- * -----------------------------------------
- */
-function createNewModuleCb()
-{
-    $createNewModule = new CreateNewModule();
 
-}
-
-add_action( 'wp_ajax_createNewModule', 'createNewModuleCb' );
 
 
 /**

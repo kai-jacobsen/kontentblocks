@@ -148,8 +148,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
   },
   // create module success callback
   // TODO Re-initialize ui components
-  success: function (data) {
-    var model;
+  success: function (res) {
+    var model, data;
+    data = res.data;
     this.options.area.modulesList.append(data.html);
     model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
     this.options.area.addModuleView(model.view);

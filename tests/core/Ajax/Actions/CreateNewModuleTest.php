@@ -1,24 +1,21 @@
 <?php
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
-use Kontentblocks\Ajax\Actions\DuplicateModule;
-use Kontentblocks\Ajax\Actions\RemoveModules;
+use Kontentblocks\Ajax\Actions\CreateNewModule;
 use Kontentblocks\Ajax\Actions\UpdateModuleData;
 use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
 
 
 /**
- * Class UpdateModuleDataTest
+ * Class CreateNewModuleTest
  * @package Kontentblocks\tests\core\Ajax\Actions
  */
-class UpdateModuleDataTest extends \WP_UnitTestCase
+class CreateNewModuleTest extends \WP_UnitTestCase
 {
 
     public $userId;
-
 
     public static function setUpBeforeClass()
     {
@@ -35,6 +32,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
                 'id' => 'dump'
             )
         );
+
     }
 
     public function setUp()
@@ -42,6 +40,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
         parent::setUp();
         $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
         wp_set_current_user( $this->userId );
+
     }
 
 
@@ -52,33 +51,15 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
         $workshop = new ModuleWorkshop(
             new Environment( $post->ID, $post ), array(
                 'class' => 'ModuleText',
-                'area' => 'dump'
+                'area' => 'dump',
+                'areaContext' => 'normal'
             )
         );
 
-        $workshop->setData(
-            array(
-                'demotest' => 'Original string'
-            )
-        );
+        $requestdata = $workshop->getDefinitionArray();
 
-        $workshop->create();
-
-        $data = array(
-            'post_id' => $post->ID,
-            'module' => $workshop->getDefinitionArray(),
-            'data' => array(
-                'demotest' => 'Manipulated string'
-            )
-        );
-
-        $Response = UpdateModuleData::run( new ValueStorage( $data ) );
-        $this->assertTrue( $Response->getStatus() );
-
-        $Environment = new Environment( $post->ID, $post );
-        $module = $Environment->getModuleById( $workshop->getNewId() );
-
-        $this->assertEquals( $data['data']['demotest'], $module->Model->get( 'demotest' ) );
+        $Response = CreateNewModule::run( new ValueStorage($requestdata));
+        $this->assertTrue($Response->getStatus());
     }
 
 
@@ -92,6 +73,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
     {
         parent::tearDown();
         wp_set_current_user( 0 );
+
     }
 
 

@@ -55,11 +55,12 @@ class AjaxCallbackHandler
                 'changeArea' => array( 'Kontentblocks\Ajax\Actions\ChangeArea', 'run' ),
                 'undraftModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' ),
                 'applyContentFilter' => array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' ),
-                'removeModules' => array('Kontentblocks\Ajax\Actions\RemoveModules', 'run'),
+                'removeModules' => array( 'Kontentblocks\Ajax\Actions\RemoveModules', 'run' ),
                 'changeModuleStatus' => array( 'Kontentblocks\Ajax\Actions\ChangeModuleStatus', 'run' ),
                 'getSanitizedId' => array( 'Kontentblocks\Ajax\Actions\GetSanitizedId', 'run' ),
                 'duplicateModule' => array( 'Kontentblocks\Ajax\Actions\DuplicateModule', 'run' ),
-                'updateModuleData' => array( 'Kontentblocks\Ajax\Actions\UpdateModuleData', 'run' )
+                'updateModuleData' => array( 'Kontentblocks\Ajax\Actions\UpdateModuleData', 'run' ),
+                'createNewModule' => array( 'Kontentblocks\Ajax\Actions\CreateNewModule', 'run' )
             )
         );
     }
@@ -75,6 +76,9 @@ class AjaxCallbackHandler
         }
     }
 
+    /**
+     *
+     */
     public function setupHooks()
     {
         foreach ($this->actions as $action => $callback) {
@@ -89,11 +93,15 @@ class AjaxCallbackHandler
         }
     }
 
+    /**
+     * @param $callback
+     * @return bool|AjaxErrorResponse
+     */
     private function verify( $callback )
     {
 
-        if (!is_user_logged_in()){
-            return new AjaxErrorResponse('Log in!');
+        if (!is_user_logged_in()) {
+            return new AjaxErrorResponse( 'Log in!' );
         }
 
         if (!property_exists( $callback[0], 'nonce' )) {

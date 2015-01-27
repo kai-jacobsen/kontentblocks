@@ -129,6 +129,7 @@ class AreaDynamicManager
         }
     }
 
+
     public function setupDiff()
     {
         $trans = get_transient( 'kb_dynamic_areas' );

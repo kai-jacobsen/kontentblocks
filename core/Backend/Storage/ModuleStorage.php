@@ -99,10 +99,8 @@ class ModuleStorage implements \Countable
 
     /**
      * Saves the main index array to postmeta
-     *
      * @param array $index
-     *
-     * @return type
+     * @return bool
      */
     public function saveIndex( $index )
     {
@@ -125,8 +123,7 @@ class ModuleStorage implements \Countable
         if (!$this->getModuleData( $id )) {
             $this->saveModule( $id, '' );
         }
-
-        return $this->_updateIndex();
+        return $this->saveIndex( $this->index );
 
     }
 
@@ -134,16 +131,15 @@ class ModuleStorage implements \Countable
      * Remove a module from the index
      * @todo this->saveIndex > updateIndex
      *
-     * @param $id string
-     *
+     * @param $mid string
      * @return bool
      */
-    public function removeFromIndex( $id )
+    public function removeFromIndex( $mid )
     {
-        if (isset( $this->index[$id] )) {
-            unset( $this->index[$id] );
+        if (isset( $this->index[$mid] )) {
+            unset( $this->index[$mid] );
             if ($this->saveIndex( $this->index ) !== false) {
-                return $this->DataProvider->delete( '_' . $id );
+                return $this->DataProvider->delete( '_' . $mid );
             }
         }
 
@@ -167,19 +163,8 @@ class ModuleStorage implements \Countable
 
 
     /**
-     * Set new module definition to index
-     * @param $id
-     * @param $module
-     * @return mixed
-     */
-    public function setModuleDefinition( $id, $module )
-    {
-        return $this->index[$id] = $module;
-    }
-
-    /**
      * This will reload the post meta data and re-init this object
-     * @return $this
+     * @return ModuleStorage
      */
     public function reset()
     {
@@ -191,7 +176,7 @@ class ModuleStorage implements \Countable
 
     /**
      * Setup Kontentblocks Data for post
-     * @return self
+     * @return ModuleStorage
      */
     private function setup()
     {
@@ -216,7 +201,7 @@ class ModuleStorage implements \Countable
     {
         $collection = array();
         $meta = $this->DataProvider->getAll();
-        foreach ($this->index as $id => $data) {
+        foreach (array_keys( $this->index ) as $id) {
             $collection['_' . $id] = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : '';
         }
@@ -229,21 +214,19 @@ class ModuleStorage implements \Countable
      * Get module data by instance_id if available
      * Make sure that the given id is prefixed for hidden keys
      *
-     * @param string $id
+     * @param string $mid
      *
      * @return array|string|null
      */
-    public function getModuleData( $id )
+    public function getModuleData( $mid )
     {
-        if ($id[0] !== '_') {
-            $id = '_' . $id;
-        }
+        $mid = $this->underscorePrefix( $mid );
 
         if (is_preview()) {
-            $id = '_preview' . $id;
+            $mid = '_preview' . $mid;
         }
-        if (isset( $this->modules[$id] )) {
-            return $this->modules[$id];
+        if (isset( $this->modules[$mid] )) {
+            return $this->modules[$mid];
         }
         return null;
     }
@@ -292,6 +275,7 @@ class ModuleStorage implements \Countable
     public function _updateIndex()
     {
         return $this->DataProvider->update( 'kb_kontentblocks', $this->index );
+
 
     }
 
@@ -430,5 +414,13 @@ class ModuleStorage implements \Countable
         }
 
         return 0;
+    }
+
+    private function underscorePrefix( $string )
+    {
+        if ($string[0] !== '_') {
+            $string = '_' . $string;
+        }
+        return $string;
     }
 }

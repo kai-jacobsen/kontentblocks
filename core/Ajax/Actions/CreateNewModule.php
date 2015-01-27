@@ -2,7 +2,10 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -14,6 +17,8 @@ use Kontentblocks\Utils\Utilities;
  */
 class CreateNewModule
 {
+
+    public static $nonce = 'kb-create';
 
     /**
      * ID of the origin post
@@ -52,22 +57,34 @@ class CreateNewModule
      */
     private $frontend = false;
 
+
+    /**
+     * Required by AjaxCallbackHandler
+     * @param ValueStorageInterface $Request
+     * @return CreateNewModule
+     */
+    public static function run( ValueStorageInterface $Request )
+    {
+        $Instance = new CreateNewModule();
+        return $Instance->create( $Request );
+    }
+
     /**
      * Get things going
+     * @param ValueStorageInterface $Request
+     * @return AjaxSuccessResponse
      */
-    public function __construct()
+    public function create( ValueStorageInterface $Request )
     {
         if (!defined( 'KB_GENERATE' )) {
             define( 'KB_GENERATE', true );
         }
 
-        check_ajax_referer( 'kb-create' );
-
         // ------------------------------------
         // The Program
         // ------------------------------------
         // Setup Data from $_POST
-        $this->setupRequestData();
+        $this->setupRequestData( $Request );
 
         // Setup Data Handler
         $this->Environment = Utilities::getEnvironment( $this->postId );
@@ -84,6 +101,8 @@ class CreateNewModule
         $Workshop = new ModuleWorkshop( $this->Environment, $this->moduleArgs );
         $this->newModule = $Workshop->getModule();
         $this->updateData();
+
+        return $this->render();
 
     }
 
@@ -120,7 +139,6 @@ class CreateNewModule
         $this->saveNewModule();
         // handle template generation
         $this->handleTemplates();
-        $this->render();
 
     }
 
@@ -134,7 +152,7 @@ class CreateNewModule
         // add new block and update
         $update = $this->Environment->getStorage()->addToIndex( $this->newModule->getId(), $toSave );
         if ($update === false) {
-            wp_send_json_error( 'Update to Index failed' );
+            return new AjaxErrorResponse( 'Failed to store new module in index', array( 'updateStatus' => $update ) );
         }
 
         /**
@@ -158,10 +176,9 @@ class CreateNewModule
             $this->Environment->getStorage()->reset();
 
             if (!$update) {
-                wp_send_json_error( 'Update not successful' );
+                return new AjaxErrorResponse( 'Failed to create from Template', array( 'updateStatus' => $update ) );
             }
         }
-
     }
 
     /**
@@ -188,40 +205,42 @@ class CreateNewModule
             'html' => $html
         );
 
-        wp_send_json( $response );
+        return new AjaxSuccessResponse( 'Module created', $response );
 
     }
 
     /**
      * Data send from js module definition object
+     * @param ValueStorageInterface $Request
      */
-    private function setupRequestData()
+    private function setupRequestData( ValueStorageInterface $Request )
     {
         global $post;
 
-        $this->postId = filter_var( $_POST['post_id'], FILTER_SANITIZE_NUMBER_INT );
-        $this->frontend = filter_input( INPUT_POST, 'frontend', FILTER_VALIDATE_BOOLEAN );
+        $this->postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $this->frontend = $Request->getFiltered( 'frontend', FILTER_VALIDATE_BOOLEAN );
 
         $post = get_post( $this->postId );
         setup_postdata( $post );
 
-        $this->moduleArgs['class'] = $this->classname = filter_var( $_POST['class'], FILTER_SANITIZE_STRING );
+        $this->moduleArgs['class'] = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
-        if (isset( $_POST['templateRef'] )) {
-            $this->moduleArgs['templateRef']['name'] = $_POST['templateRef']['post_title'];
-            $this->moduleArgs['templateRef']['id'] = $_POST['templateRef']['post_name'];
+
+        if (!is_array( $Request->get( 'templateRef' ) )) {
+            $this->moduleArgs['templateRef']['name'] = $Request->get( 'templateRef' )['post_title'];
+            $this->moduleArgs['templateRef']['id'] = $Request->get( 'templateRef' )['post_name'];
         }
 
-        if (filter_input( INPUT_POST, 'master', FILTER_VALIDATE_BOOLEAN )) {
-            $this->moduleArgs['post_id'] = absint( $_POST['masterRef']['parentId'] );
-            $this->moduleArgs['masterRef']['parentId'] = absint( $_POST['masterRef']['parentId'] );
+        if ($Request->getFiltered( 'master', FILTER_VALIDATE_BOOLEAN )) {
+            $this->moduleArgs['post_id'] = absint( $Request->get( 'masterRef' )['parentId'] );
+            $this->moduleArgs['masterRef']['parentId'] = absint( $Request->get( 'masterRef' )['parentId'] );
         }
 
-        $this->moduleArgs['area'] = filter_input( INPUT_POST, 'area', FILTER_SANITIZE_STRING );
-        $this->moduleArgs['areaContext'] = filter_input( INPUT_POST, 'areaContext', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['area'] = $Request->getFiltered( 'area', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['areaContext'] = $Request->getFiltered( 'areaContext', FILTER_SANITIZE_STRING );
 
-        $this->moduleArgs['master'] = filter_input( INPUT_POST, 'master', FILTER_VALIDATE_BOOLEAN );
-        $this->moduleArgs['template'] = filter_input( INPUT_POST, 'template', FILTER_VALIDATE_BOOLEAN );
+        $this->moduleArgs['master'] = $Request->getFiltered( 'master', FILTER_VALIDATE_BOOLEAN );
+        $this->moduleArgs['template'] = $Request->getFiltered( 'template', FILTER_VALIDATE_BOOLEAN );
 
         if ($this->moduleArgs['master']) {
             $this->master = true;
