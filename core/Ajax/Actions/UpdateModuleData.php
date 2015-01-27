@@ -24,6 +24,7 @@ class UpdateModuleData
      *
      * @param ValueStorageInterface $Request
      * @since 1.0.0
+     * @return AjaxSuccessResponse
      */
     public static function run( ValueStorageInterface $Request )
     {
