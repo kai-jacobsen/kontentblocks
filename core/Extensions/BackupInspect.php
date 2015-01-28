@@ -118,21 +118,17 @@ class BackupInspect
 
             $Storage = new ModuleStorage( $data['post_id'] );
 
-
-            if ($data['kbBackupWatcher'] == $Storage->getDataProvider()->get( 'kb_last_backup' )) {
+            if ($data['kbBackupWatcher'] == get_post_meta( $data['post_id'], 'kb_last_backup', true )) {
                 $response['kbHasNewBackups'] = false;
             } else {
-
                 $BackupManager = new BackupDataStorage( $Storage );
                 $backups = $BackupManager->queryBackup( $data['post_id'] );
-
+                $response['hmm'] = get_post_meta( $data['post_id'], 'kb_last_backup', true );
                 $response['kbHasNewBackups'] = ( !empty( $backups ) ) ? unserialize(
                     base64_decode( $backups->value )
                 ) : array();
             }
         }
-
-
         return $response;
     }
 

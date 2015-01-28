@@ -47,7 +47,7 @@ class GetModuleForm
         $Module = apply_filters( 'kb.module.before.factory', $Module );
         $html = $Module->form();
         $return = array(
-            'html' => stripslashes_deep( $html ),
+            'html' =>  $html,
             'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
         );
 

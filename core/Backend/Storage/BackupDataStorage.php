@@ -37,12 +37,8 @@ class BackupDataStorage
      * @param ModuleStorage $Storage
      * @throws \BadFunctionCallException
      */
-    public function __construct($Storage)
+    public function __construct( ModuleStorage $Storage )
     {
-        if (!$Storage) {
-            throw new \BadFunctionCallException('A Storage Object must be given');
-        }
-
         $this->Storage = $Storage;
     }
 
@@ -50,10 +46,10 @@ class BackupDataStorage
      * Remove backups for deleted posts
      * @param $post_id
      */
-    public static function deletePostCallback($post_id)
+    public static function deletePostCallback( $post_id )
     {
         global $wpdb;
-        $wpdb->delete($wpdb->prefix . "kb_backups", array('post_id' => $post_id));
+        $wpdb->delete( $wpdb->prefix . "kb_backups", array( 'post_id' => $post_id ) );
     }
 
     /**
@@ -61,7 +57,7 @@ class BackupDataStorage
      * Gets the backup data from the Storage object
      * @param $logmsg string supplemental information for the specific backup
      */
-    public function backup($logmsg = '')
+    public function backup( $logmsg = '' )
     {
         $this->backupData = $this->Storage->backup();
         $this->msg = $logmsg;
@@ -73,7 +69,7 @@ class BackupDataStorage
      * This methods checks if there is existing data
      * and calls submethods accordingly
      */
-    public function save()
+    private function save()
     {
         // query database for backup data, if not already done
         if (!$this->package) {
@@ -82,7 +78,7 @@ class BackupDataStorage
 
         // If there is no data yet, insert new backup
         // else update existing data
-        if (empty($this->package)) {
+        if (empty( $this->package )) {
             $this->insertBackup();
         } else {
             $this->updateBackup();
@@ -95,37 +91,33 @@ class BackupDataStorage
      */
     public function getPackage()
     {
-        $id = $this->backupData['id'];
-
-        return $this->queryBackup($id);
-
+        $backupid = $this->backupData['id'];
+        return $this->queryBackup( $backupid );
 
     }
 
     /**
      * Query for existing backups
-     * @param $id string post id or global area id
+     * @param $backupid string post id or global area id
      * @return mixed
      */
-    public function queryBackup($id)
+    public function queryBackup( $backupid )
     {
         global $wpdb;
 
-        if (!current_user_can('edit_kontentblocks')) {
+        if (!current_user_can( 'edit_posts' )) {
             return false;
         }
 
         $prefix = $wpdb->prefix;
 
-        $cache = wp_cache_get('kb_backups_'.$id, 'kontentblocks');
+        $cache = wp_cache_get( 'kb_backups_' . $backupid, 'kontentblocks' );
         if ($cache !== false) {
             return $cache;
         } else {
-	        // @TODO Use $wpdb
-            // @TODO literal id isn't used anymore
-            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$id}'";
-            $result = $wpdb->get_row($sql);
-            wp_cache_set('kb_backups_'.$id, $result, 'kontentblocks');
+            $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$backupid}'";
+            $result = $wpdb->get_row( $sql );
+            wp_cache_set( 'kb_backups_' . $backupid, $result, 'kontentblocks' );
             return $result;
         }
 
@@ -137,11 +129,11 @@ class BackupDataStorage
      * Creates a new database entry
      * @todo nonces
      */
-    public function insertBackup()
+    private function insertBackup()
     {
         global $wpdb;
 
-        if (!current_user_can('edit_kontentblocks')) {
+        if (!current_user_can( 'edit_posts' )) {
             return false;
         }
 
@@ -159,32 +151,27 @@ class BackupDataStorage
 
 
         $data = array(
-            'created' => date("Y-m-d H:i:s", time()),
-            'updated' => date("Y-m-d H:i:s", time()),
-            'value' => base64_encode(serialize($insert)),
-            'post_id' => (is_numeric($this->backupData['id'])) ? $this->backupData['id'] : -1
+            'created' => date( "Y-m-d H:i:s", time() ),
+            'updated' => date( "Y-m-d H:i:s", time() ),
+            'value' => base64_encode( serialize( $insert ) ),
+            'post_id' => ( is_numeric( $this->backupData['id'] ) ) ? $this->backupData['id'] : - 1
         );
 
         //set reference
-//        $this->Storage->getDataProvider()->update('kb_last_backup', $now);
-        update_post_meta($this->Storage->getStorageId(), 'kb_last_backup', $now);
-        wp_cache_delete('kb_backups_'.$data['post_id'], 'kontentblocks');
-        return $wpdb->insert($wpdb->prefix . "kb_backups", $data);
+        update_post_meta( $this->Storage->getStorageId(), 'kb_last_backup', $now );
+        wp_cache_delete( 'kb_backups_' . $data['post_id'], 'kontentblocks' );
+        return $wpdb->insert( $wpdb->prefix . "kb_backups", $data );
     }
 
     /**
      * Update Backup
      * updates existing data with
      */
-    public function updateBackup()
+    private function updateBackup()
     {
         global $wpdb;
 
-//        if (!current_user_can('edit_kontentblocks')) {
-//            wp_die('Hackin?');
-//        }
-
-        $existingData = unserialize(base64_decode($this->package->value));
+        $existingData = unserialize( base64_decode( $this->package->value ) );
         $user = wp_get_current_user();
 
         $value = array(
@@ -197,28 +184,28 @@ class BackupDataStorage
         $existingData[$now]['msg'] = $this->msg . ' (by ' . $user->user_login . ')';
 
         // truncate, never more than 8 backups
-        $backupLimit = apply_filters('kb_backups_to_keep', 8);
-        $existingData = array_slice($existingData, -$backupLimit, $backupLimit, true);
+        $backupLimit = apply_filters( 'kb_backups_to_keep', 8 );
+        $existingData = array_slice( $existingData, - $backupLimit, $backupLimit, true );
 
         $data = array(
-            'updated' => date("Y-m-d H:i:s", time()),
-            'value' => base64_encode(serialize($existingData))
+            'updated' => date( "Y-m-d H:i:s", time() ),
+            'value' => base64_encode( serialize( $existingData ) )
         );
 //        $this->Storage->getDataProvider()->update('kb_last_backup', $now);
-        update_post_meta($this->Storage->getStorageId(), 'kb_last_backup', $now);
+        update_post_meta( $this->Storage->getStorageId(), 'kb_last_backup', $now );
 
-        wp_cache_delete('kb_backups_'.$this->backupData['id'], 'kontentblocks');
+        wp_cache_delete( 'kb_backups_' . $this->backupData['id'], 'kontentblocks' );
 
-        return $wpdb->update($wpdb->prefix . "kb_backups", $data, array('id' => $this->package->id));
+        return $wpdb->update( $wpdb->prefix . "kb_backups", $data, array( 'id' => $this->package->id ) );
     }
 
     /**
      * Restoring the data must be handled by the Storage
      * @param $id
      */
-    public function restoreBackup($id)
+    public function restoreBackup( $id )
     {
-        $this->Storage->restoreBackup($this->getBucket($id));
+        $this->Storage->restoreBackup( $this->getBucket( $id ) );
 
     }
 
@@ -227,24 +214,24 @@ class BackupDataStorage
      * @param $id string
      * @return mixed array of data or NULL
      */
-    public function getBucket($id)
+    public function getBucket( $id )
     {
 
         if (!$this->package) {
             $this->package = $this->getPackage();
         }
 
-        $backupData = unserialize(base64_decode($this->package->value));
-        if (isset($backupData[$id])) {
+        $backupData = unserialize( base64_decode( $this->package->value ) );
+        if (isset( $backupData[$id] )) {
             return $backupData[$id]['data'];
         } else {
             return NULL;
         }
     }
 
-    public function setTransient($timestamp)
+    public function setTransient( $timestamp )
     {
-        set_transient('kb_last_backup', $timestamp);
+        set_transient( 'kb_last_backup', $timestamp );
 
     }
 

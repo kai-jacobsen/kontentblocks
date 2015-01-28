@@ -204,11 +204,12 @@ class SavePost
             // if this is a preview, save temporary data for previews
             if (!is_null( $savedData )) {
                 if ($this->Postdata->get('wp-preview') && $this->Postdata->get('wp-preview') === 'dopreview') {
-                    update_post_meta( $this->postid, '_preview_' . $module->getId(), $savedData );
+                    $this->Environment->getDataHandler()->update('_preview_' . $module->getId(), $savedData);
                 } // save real data
                 else {
                     $this->Environment->getStorage()->saveModule( $module->getId(), $savedData );
-                    delete_post_meta( $this->postid, '_preview_' . $module->getId() );
+                    $this->Environment->getDataHandler()->delete('_preview_' . $module->getId());
+
                 }
                 do_action( 'kb.module.save', $module, $savedData );
             }

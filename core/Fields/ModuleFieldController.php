@@ -29,6 +29,8 @@ class ModuleFieldController extends AbstractFieldController
      */
     protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
 
+    public $Structure;
+
     /**
      * Constructor
      * @param \Kontentblocks\Modules\Module

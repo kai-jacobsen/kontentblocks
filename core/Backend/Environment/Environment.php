@@ -116,7 +116,7 @@ class Environment implements JsonSerializable
 
     /**
      * returns the PostMetaData instance
-     * @return object
+     * @return DataProviderController
      */
     public function getDataHandler()
     {

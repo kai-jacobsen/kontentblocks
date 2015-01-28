@@ -62,17 +62,15 @@ class AreaRenderer
      * Class constructor
      *
      * @param Environment $Environment
-     * @param $area string area id
+     * @param $areaId string area id
      * @param $additionalArgs array
      */
-    public function __construct( Environment $Environment, $area, $additionalArgs )
+    public function __construct( Environment $Environment, $areaId, $additionalArgs )
     {
-        if (!isset( $Environment ) || !isset( $area )) {
-            return;
-        }
-        $this->areaId = $area;
+
+        $this->areaId = $areaId;
         $this->Environment = $Environment;
-        $modules = $this->Environment->getModulesforArea( $area );
+        $modules = $this->Environment->getModulesforArea( $areaId );
         $this->modules = new ModuleIterator( $modules, $this->Environment );
 
         // setup AreaHtmlNode
@@ -94,14 +92,8 @@ class AreaRenderer
             return false;
         }
 
-        // ----------------------------
-        // Output starts here
-        // ----------------------------
-
         $this->AreaHtmlNode->setModuleCount( count( $this->modules ) );
-
         $output = '';
-
         // start area output & create opening wrapper
         $output .= $this->AreaHtmlNode->openArea();
 
@@ -111,41 +103,36 @@ class AreaRenderer
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
 
-            if (!is_a( $module, '\Kontentblocks\Modules\Module' )) {
+            if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verify()) {
                 continue;
             }
-
-            // quick fix to test onsite editing
-            // module->module will, depending on field configuration, modify moduleData
-            // $module->rawModuleData = $module->moduleData;
-
-            if (!$module->verify()) {
-                continue;
-            }
-
+            $moduleOutput = $module->module();
             $output .= $this->AreaHtmlNode->openLayoutWrapper();
             $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
-            $moduleOutput = $module->module();
             $output .= $moduleOutput;
             $output .= $this->afterModule( $this->_afterModule( $module ), $module );
             $output .= $this->AreaHtmlNode->closeLayoutWrapper();
+
+            if (current_theme_supports( 'kontentblocks:area-concat' ) && filter_input(
+                    INPUT_GET,
+                    'concat',
+                    FILTER_SANITIZE_STRING
+                )
+            ) {
+                if ($module->Properties->getSetting( 'concat' )) {
+                    ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
+                }
+            }
         }
 
         // close area wrapper
         $output .= $this->AreaHtmlNode->closeArea();
-
-        if (current_theme_supports( 'kontentblocks:area-concat' ) && isset( $_GET['concat'] )) {
-            if ($module->getSetting( 'concat' )) {
-                ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
-            }
-        }
 
         if ($echo) {
             echo $output;
         } else {
             return $output;
         }
-
     }
 
     /**
