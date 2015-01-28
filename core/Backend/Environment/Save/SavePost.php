@@ -17,17 +17,22 @@ class SavePost
     protected $Environment;
     protected $index = null;
 
+    /**
+     * @var ValueStorage
+     */
+    private $Postdata;
+
     public function __construct( Environment $Environment )
     {
         $this->Environment = $Environment;
         $this->postid = $Environment->getId();
+        $this->Postdata = new ValueStorage($_POST);
     }
 
 
     /**
      * Save method for post related modules
      * @todo split this in chunks
-     * @param $postid
      * @return false    if auth fails or areas are empty
      */
     public function save()
@@ -83,25 +88,24 @@ class SavePost
      */
     private function auth()
     {
-        $Postdata = new ValueStorage( $_POST );
-        $all = $Postdata->export();
+        $all = $this->Postdata->export();
         // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
         if (empty( $all )) {
             return false;
         }
 
-        if (is_null( $Postdata->getFiltered( 'blog_id', FILTER_VALIDATE_INT ) )) {
+        if (is_null( $this->Postdata->getFiltered( 'blog_id', FILTER_VALIDATE_INT ) )) {
             return false;
         } else {
-            $blogIdSubmit = $Postdata->getFiltered( 'blog_id', FILTER_SANITIZE_NUMBER_INT );
+            $blogIdSubmit = $this->Postdata->getFiltered( 'blog_id', FILTER_SANITIZE_NUMBER_INT );
             $blogIdCurrent = get_current_blog_id();
             if ((int) $blogIdSubmit !== (int) $blogIdCurrent) {
                 return false;
             }
         }
 
-        if (is_null( $Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ) )) {
+        if (is_null( $this->Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ) )) {
             return false;
         }
 
@@ -112,7 +116,7 @@ class SavePost
         // verify this came from the our screen and with proper authorization,
         // because save_post can be triggered at other times
         if (!wp_verify_nonce(
-            $Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ),
+            $this->Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ),
             'kontentblocks_save_post'
         )
         ) {
@@ -128,7 +132,7 @@ class SavePost
             return false;
         }
 
-        if (get_post_type( $this->postid ) == 'revision' && !is_null( $Postdata->get( 'wp-preview' ) )) {
+        if (get_post_type( $this->postid ) == 'revision' && !is_null( $this->Postdata->get( 'wp-preview' ) )) {
             return false;
         }
 
@@ -147,7 +151,7 @@ class SavePost
     private function createBackup()
     {
         // Backup data, not for Previews
-        if (!isset( $_POST['wp_preview'] )) {
+        if (!isset( $_POST['wp-preview'] )) {
             $BackupManager = new BackupDataStorage( $this->Environment->getStorage() );
             $BackupManager->backup( 'Before regular update' );
         }
@@ -173,31 +177,24 @@ class SavePost
         /** @var \Kontentblocks\Modules\Module $module */
         foreach ($modules as $module) {
 
-            //hack
-            $id = null;
             // new data from $_POST
             //TODO: filter incoming data
-            $data = ( !empty( $_POST[$module->getId()] ) ) ? $_POST[$module->getId()] : null;
+            $data = $this->Postdata->get($module->getId());
             /** @var $old array() */
             $old = $this->Environment->getStorage()->getModuleData( $module->getId() );
-
             $module->setModuleData( $old );
-
             // check for draft and set to false
             // special block specific data
-
             $module = $this->moduleOverrides( $module, $data );
-
             // create updated index
             $this->index[$module->getId()] = $module->Properties->export();
             // call save method on block
             // ignore the existence
 
             if ($data === null) {
-                $new = $old;
+                $savedData = $old;
             } else {
                 $new = $module->save( $data, $old );
-
                 if ($new === false) {
                     $savedData = null;
                 } else {
@@ -206,7 +203,7 @@ class SavePost
             }
             // if this is a preview, save temporary data for previews
             if (!is_null( $savedData )) {
-                if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
+                if ($this->Postdata->get('wp-preview') && $this->Postdata->get('wp-preview') === 'dopreview') {
                     update_post_meta( $this->postid, '_preview_' . $module->getId(), $savedData );
                 } // save real data
                 else {
@@ -229,10 +226,10 @@ class SavePost
         // save area settings which are specific to this post (ID-wise)
         if (!empty( $postareas )) {
             $collection = $this->Environment->getDataHandler()->get( 'kb_area_settings' );
-            foreach ($postareas as $id) {
+            foreach ($postareas as $areaId) {
                 $areaid = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
                 if (!empty( $areaid )) {
-                    $collection[$id] = $areaid;
+                    $collection[$areaId] = $areaid;
                 }
             }
             $this->Environment->getDataHandler()->update( 'kb_area_settings', $collection );
