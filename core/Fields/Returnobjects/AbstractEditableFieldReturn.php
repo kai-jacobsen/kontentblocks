@@ -3,7 +3,6 @@
 namespace Kontentblocks\Fields\Returnobjects;
 
 use JsonSerializable;
-use Kontentblocks\Interfaces\InterfaceFieldReturn;
 use Kontentblocks\Kontentblocks;
 
 

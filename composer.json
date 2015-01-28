@@ -8,7 +8,7 @@
     "content management"
   ],
   "homepage": "http://kontentblocks.de",
-  "license": "GPL",
+  "license":  "GPL-3.0",
   "authors": [
     {
       "name": "Kai Jacobsen",
