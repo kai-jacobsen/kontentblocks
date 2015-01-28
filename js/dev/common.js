@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-26 */
+/*! Kontentblocks DevVersion 2015-01-27 */
 var KB = KB || {};
 
 KB.Config = {};

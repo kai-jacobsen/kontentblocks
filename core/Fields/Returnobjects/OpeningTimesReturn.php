@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Interfaces\InterfaceFieldReturn;
+use Kontentblocks\Fields\InterfaceFieldReturn;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
 

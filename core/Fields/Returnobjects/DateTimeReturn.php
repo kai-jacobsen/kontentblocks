@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Interfaces\InterfaceFieldReturn;
+use Kontentblocks\Fields\InterfaceFieldReturn;
 
 /**
  * Class DateTime

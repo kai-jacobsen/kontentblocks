@@ -83,7 +83,7 @@ abstract class Field
 
     /**
      * Return Object
-     * @var \Kontentblocks\Interfaces\InterfaceFieldReturn
+     * @var \Kontentblocks\Fields\InterfaceFieldReturn
      * @TODO Concept is WIP
      *
      */

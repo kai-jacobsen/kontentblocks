@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Interfaces;
+namespace Kontentblocks\Fields\Returnobjects;
 
 interface InterfaceFieldReturn
 {
