@@ -51,7 +51,6 @@ class ModuleRegistry
         // extract class name from file
         $classname = str_replace( '.php', '', basename( $file ) );
         if (!isset( $this->modules[$classname] ) && property_exists( $classname, 'defaults' )) {
-
             // Defaults from the specific Module
             // contains id, name, public name etc..
             $moduleArgs = array();
@@ -72,7 +71,6 @@ class ModuleRegistry
             $this->modules[$classname] = $moduleArgs;
 
             // Handle connection to regions
-
             /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
             $AreaRegistry = $this->Services['registry.areas'];
             $AreaRegistry->connect( $classname, $moduleArgs );

@@ -5,6 +5,8 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -140,7 +142,7 @@ class ModuleWorkshop
 
     /**
      * @param $data
-     * @return bool|\Kontentblocks\Backend\Storage\new|null
+     * @return bool|\Kontentblocks\Backend\Storage\|null
      */
     public function setData( $data )
     {
@@ -215,12 +217,16 @@ class ModuleWorkshop
     private function validate()
     {
         if (is_null( $this->moduleattrs['class'] )) {
+            _K::error('Workshop class parameter is null');
             return false;
         }
 
+
         if (!class_exists( $this->moduleattrs['class'] )) {
+            _K::error($this->moduleattrs['class'] . ' not found.');
             return false;
         }
+
 
         return true;
     }
@@ -237,6 +243,11 @@ class ModuleWorkshop
                 'parentId' => $attrs['master_id']
             );
         }
+
+        if (array_key_exists('instance_id', $attrs)){
+            $attrs['mid'] = $attrs['instance_id'];
+        }
+
         return $attrs;
     }
 

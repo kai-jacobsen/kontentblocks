@@ -179,7 +179,7 @@ class FieldSubGroup
      * @param array $data
      * @since 1.0.0
      */
-    public function setData( $data )
+    public function setValue( $data )
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
