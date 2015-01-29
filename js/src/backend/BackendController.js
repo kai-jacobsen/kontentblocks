@@ -151,3 +151,17 @@ jQuery(document).ready(function () {
   }
 
 });
+
+//jQuery(document).on('heartbeat-send', function (e, data) {
+//  if (data.wp_autosave){
+//    var $form = jQuery('#post');
+//
+//    if ($form.length > 0){
+//      var formData = $form.JSONserialize();
+//      var modules = jQuery('.module');
+//      console.log(formData, modules);
+//
+//    }
+//
+//  }
+//});

@@ -34,7 +34,7 @@ class ModuleRegistry
         $this->Services = $Services;
         add_action( 'admin_footer', array( $this, 'setupJSON' ), 8 );
 
-        if (is_user_logged_in()){
+        if (is_user_logged_in()) {
             add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
         }
     }
@@ -61,46 +61,12 @@ class ModuleRegistry
             $args['uri'] = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
             $args['helpfile'] = false;
 
-
             if (is_admin()) {
-                // setup helpfile
-                $locale = get_locale();
-                if (file_exists( trailingslashit( $args['path'] ) . $classname . '_' . $locale . '.hbs' )) {
-                    $args['helpfile'] = content_url(
-                                            str_replace(
-                                                WP_CONTENT_DIR,
-                                                '',
-                                                $args['path']
-                                            )
-                                        ) . $classname . '_' . $locale . '.hbs';
-                }
-
-                if (file_exists( trailingslashit( $args['path'] ) . $classname . '.jpg' )) {
-                    $args['poster'] = content_url(
-                                          str_replace(
-                                              WP_CONTENT_DIR,
-                                              '',
-                                              $args['path']
-                                          )
-                                      ) . $classname . '.jpg';
-                }
-
-                if (file_exists( trailingslashit( $args['path'] ) . $classname . '.png' )) {
-                    $args['poster'] = content_url(
-                                          str_replace(
-                                              WP_CONTENT_DIR,
-                                              '',
-                                              $args['path']
-                                          )
-                                      ) . $classname . '.png';
-                }
+                $args = $this->setupFilePaths( $args, $classname );
             }
 
             // settings array
             $moduleArgs['settings'] = $args;
-
-            // state array
-//            $moduleArgs['state'] = Module::getDefaultState();
 
             // Add module to registry
             $this->modules[$classname] = $moduleArgs;
@@ -116,7 +82,6 @@ class ModuleRegistry
                 $classname::init( $moduleArgs );
             }
         }
-
     }
 
     /**
@@ -127,14 +92,12 @@ class ModuleRegistry
      */
     public function get( $classname )
     {
-
         if (isset( $this->modules[$classname] )) {
             return $this->modules[$classname];
         } else {
             return null;
             //return new \Exception( 'Cannot get module from collection' );
         }
-
     }
 
 
@@ -154,7 +117,11 @@ class ModuleRegistry
     public function setupJSON()
     {
         foreach ($this->modules as $classname => $moduleArgs) {
-            Kontentblocks::getService('utility.jsontransport')->registerData( 'ModuleDefinitions', $classname, $moduleArgs );
+            Kontentblocks::getService( 'utility.jsontransport' )->registerData(
+                'ModuleDefinitions',
+                $classname,
+                $moduleArgs
+            );
         }
 
         // Extra Module Templates
@@ -162,7 +129,7 @@ class ModuleRegistry
             $moduleClass = $moduleArgs['class'];
             $clone = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
             $clone['settings']['category'] = 'template';
-            Kontentblocks::getService('utility.jsontransport')->registerData( 'ModuleDefinitions', $name, $clone );
+            Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleDefinitions', $name, $clone );
         }
     }
 
@@ -218,5 +185,42 @@ class ModuleRegistry
         }
 
         return $merged;
+    }
+
+    private function setupFilePaths( $args, $classname )
+    {
+        // setup helpfile
+        $locale = get_locale();
+        if (file_exists( trailingslashit( $args['path'] ) . $classname . '_' . $locale . '.hbs' )) {
+            $args['helpfile'] = content_url(
+                                    str_replace(
+                                        WP_CONTENT_DIR,
+                                        '',
+                                        $args['path']
+                                    )
+                                ) . $classname . '_' . $locale . '.hbs';
+        }
+
+        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.jpg' )) {
+            $args['poster'] = content_url(
+                                  str_replace(
+                                      WP_CONTENT_DIR,
+                                      '',
+                                      $args['path']
+                                  )
+                              ) . $classname . '.jpg';
+        }
+
+        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.png' )) {
+            $args['poster'] = content_url(
+                                  str_replace(
+                                      WP_CONTENT_DIR,
+                                      '',
+                                      $args['path']
+                                  )
+                              ) . $classname . '.png';
+        }
+
+        return $args;
     }
 }

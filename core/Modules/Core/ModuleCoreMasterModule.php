@@ -72,7 +72,6 @@ class ModuleCoreMasterModule extends Module
 
         }
 
-
         if (is_null( $parentId )) {
             $Module->Properties->state['draft'] = true;
             $Module->Properties->state['active'] = false;
@@ -81,7 +80,6 @@ class ModuleCoreMasterModule extends Module
             $Module->Properties->state['valid'] = ( get_post_status( $parentId ) === 'trash' ) ? false : true;
         }
         return $Module;
-
     }
 
     /**
@@ -118,7 +116,7 @@ class ModuleCoreMasterModule extends Module
         $tpl = ( isset( $this->Properties->state['valid'] ) && $this->Properties->state['valid'] ) ? 'master-module-valid.twig' : 'master-module-invalid.twig';
 
         $Tpl = new CoreView( $tpl, $templateData );
-        return $Tpl->render( );
+        return $Tpl->render();
 
     }
 
@@ -189,7 +187,11 @@ class ModuleCoreMasterModule extends Module
      */
     public static function setupModuleData( $data, $Properties )
     {
-        if (filter_var( $Properties->master, FILTER_VALIDATE_BOOLEAN ) && !empty($Properties->masterRef['parentId'])) {
+        if (filter_var(
+                $Properties->master,
+                FILTER_VALIDATE_BOOLEAN
+            ) && !empty( $Properties->masterRef['parentId'] )
+        ) {
             $masterId = $Properties->masterRef['parentId'];
             $tplId = $Properties->templateRef['id'];
             $data = get_post_meta( $masterId, '_' . $tplId, true );
@@ -228,10 +230,14 @@ class ModuleCoreMasterModule extends Module
         }
     }
 
-    // Nothing to save here
+    /**
+     * @param array $data actual $_POST data for this module
+     * @param array $old previous data or empty
+     * @return array
+     */
     public function save( $data, $old )
     {
-        return;
+        return $old;
     }
 
 

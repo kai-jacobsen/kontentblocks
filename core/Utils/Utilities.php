@@ -34,7 +34,7 @@ class Utilities
             if (isset( self::$environments[$storageId] )) {
                 return self::$environments[$storageId];
             } else {
-                $realId = (is_null($actualPostId)) ? $storageId : $actualPostId;
+                $realId = ( is_null( $actualPostId ) ) ? $storageId : $actualPostId;
                 $Post = get_post( $realId );
                 return self::$environments[$storageId] = new Environment( $storageId, $Post );
             }
@@ -334,7 +334,7 @@ class Utilities
     {
         if (function_exists( 'xhprof_enable' )) {
 
-            if (isset( $_REQUEST['xhprof'] )) {
+            if (filter_input( INPUT_GET, 'xhprof', FILTER_SANITIZE_STRING )) {
                 include '/usr/share/php/xhprof_lib/utils/xhprof_lib.php';
                 include '/usr/share/php/xhprof_lib/utils/xhprof_runs.php';
                 xhprof_enable( XHPROF_FLAGS_NO_BUILTINS + XHPROF_FLAGS_MEMORY );
@@ -350,7 +350,7 @@ class Utilities
     {
         if (function_exists( 'xhprof_disable' )) {
 
-            if (isset( $_REQUEST['xhprof'] )) {
+            if (filter_input( INPUT_GET, 'xhprof', FILTER_SANITIZE_STRING )) {
                 $XHProfData = xhprof_disable();
 
                 $XHProfRuns = new \XHProfRuns_Default();
@@ -362,18 +362,18 @@ class Utilities
 
     /**
      * Call the ghost to visit the url in concat mode
-     * @param null $id
+     * @param null $postId
      */
-    public static function remoteConcatGet( $id = null )
+    public static function remoteConcatGet( $postId = null )
     {
-        if (is_null( $id )) {
+        if (is_null( $postId )) {
             return;
         }
 
-        $url = add_query_arg( 'concat', 'true', get_permalink( $id ) );
+        $url = add_query_arg( 'concat', 'true', get_permalink( $postId ) );
 
         if ($url !== false) {
-            wp_remote_get( $url, array( 'timeout' => 1 ) );
+            wp_remote_get( $url, array( 'timeout' => 2 ) );
         }
     }
 
