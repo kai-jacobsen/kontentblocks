@@ -188,7 +188,7 @@ class AreaRegistry
         return array_filter(
             $this->areas,
             function ( $area ) use ( $tpl ) {
-                return ( in_array( $tpl, $area['pageTemplates'] ) );
+                return ( in_array( $tpl, $area->pageTemplates ) );
             }
         );
     }
@@ -335,7 +335,7 @@ class AreaRegistry
                     }
                 } else if (is_string( $id ) && ( strpos( $id, '.php' ) !== false || $id === 'default' )) {
                     foreach ($this->getAreasByPageTemplate( $id ) as $tplcon) {
-                        $args['settings']['connect'] = array( $tplcon['id'] );
+                        $args['settings']['connect'] = array( $tplcon->id );
                         $this->connect( $classname, $args );
                     }
                 } else {

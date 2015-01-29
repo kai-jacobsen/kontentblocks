@@ -109,14 +109,14 @@ function hasModules( $area, $id )
 }
 
 
-function getPanel( $id = null )
+function getPanel( $id = null, $post_id = null )
 {
     /** @var \Kontentblocks\Panels\PanelRegistry $Registry */
     $Registry = Kontentblocks::getService( 'registry.panels' );
     /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
     $Panel = $Registry->get( $id );
     if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
-        return $Panel->setup();
+        return $Panel->setup($post_id);
     } else {
         return new \WP_Error(
             'Kontentblocks',

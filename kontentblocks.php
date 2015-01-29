@@ -163,7 +163,6 @@ Class Kontentblocks
         $paths = array( KB_TEMPLATE_PATH );
         $paths = apply_filters( 'kb.module.paths', $paths );
         $paths = array_unique( $paths );
-
         foreach ($paths as $path) {
             $dirs = glob( $path . '[mM]odule*', GLOB_ONLYDIR );
             if (!empty( $dirs )) {
