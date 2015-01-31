@@ -103,24 +103,23 @@ abstract class AbstractFieldSection
             /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
             $Registry = Kontentblocks::getService( 'registry.fields' );
             $Field = $Registry->getField( $type, $this->baseId, $subkey, $key );
-            $Field->setArgs( $args );
             if (!$Field) {
                 throw new Exception( "Field of type: $type does not exist" );
-            }
-
-            // conditional check of field visibility
-            $this->markVisibility( $Field );
-
-            // Fields with same arrayKey gets grouped into own collection
-            if (isset( $args['arrayKey'] )) {
-                $this->addArrayField( $Field, $key, $args );
             } else {
-                $this->Fields[$key] = $Field;
-            }
-            $this->_increaseVisibleFields();
-            $this->orderFields();
-        }
+                $Field->setArgs( $args );
+                // conditional check of field visibility
+                $this->markVisibility( $Field );
 
+                // Fields with same arrayKey gets grouped into own collection
+                if (isset( $args['arrayKey'] )) {
+                    $this->addArrayField( $Field, $key, $args );
+                } else {
+                    $this->Fields[$key] = $Field;
+                }
+                $this->_increaseVisibleFields();
+                $this->orderFields();
+            }
+        }
         return $this;
 
     }
