@@ -15,7 +15,7 @@ abstract class StaticPanel extends AbstractPanel
      * Custom Field Manager Instance
      * @var PanelFieldController
      */
-    protected $FieldController;
+    public $FieldController;
 
     /**
      * Flag indicates if data should be stored as single key => value pairs

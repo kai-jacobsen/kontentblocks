@@ -2,7 +2,7 @@
 /*
   Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
-  Description: Modularize content
+  Description: Content modularization framework
   Version: 1.0.0-alpha
   Author: Kai Jacobsen
   Author URI: http://kontentblocks.de
@@ -184,7 +184,6 @@ Class Kontentblocks
         }
         _K::info( 'Modules loaded' );
 
-
         do_action( 'kb.init' );
         _K::info( 'kb.init action fired. We\'re good to go.' );
 
@@ -230,7 +229,7 @@ Class Kontentblocks
             require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         }
         // Kontentblocks autloader
-        require_once dirname( __FILE__ ) . '/Autoloader.php';
+//        require_once dirname( __FILE__ ) . '/Autoloader.php';
         // Public API
         require_once dirname( __FILE__ ) . '/includes/wp-api.php';
         require_once dirname( __FILE__ ) . '/includes/kb-api.php';
@@ -301,12 +300,17 @@ Class Kontentblocks
     {
         $this->Services['utility.logger'] = function ( $container ) {
             $path = KB_PLUGIN_PATH . '/logs';
+
+            $ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
             $Logger = new Logger( 'kontentblocks' );
             if (Kontentblocks::DEBUG && is_user_logged_in()) {
-                $Logger->pushHandler( new BrowserConsoleHandler() );
-                $Logger->addInfo(
-                    'Hey there! Kontentblocks is running in dev mode but don\'t worry. Have a great day'
-                );
+                if (!$ajax) {
+                    $Logger->pushHandler( new BrowserConsoleHandler() );
+                    $Logger->addInfo(
+                        'Hey there! Kontentblocks is running in dev mode but don\'t worry. Have a great day'
+                    );
+                }
+
                 if (is_dir( $path ) && Kontentblocks::DEBUG_LOG) {
                     $Logger->pushHandler( new StreamHandler( $path . '/debug.log' ) );
                 }

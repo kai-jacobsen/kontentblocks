@@ -32,7 +32,7 @@ abstract class OptionsPanel extends AbstractPanel
      * Custom Field Manager Instance for Panels
      * @var PanelFieldController
      */
-    protected $FieldManager;
+    public $FieldController;
 
     /**
      * Form data
@@ -150,9 +150,9 @@ abstract class OptionsPanel extends AbstractPanel
     public function save( $postId = null )
     {
         $old = $this->setupData();
-        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
-        $new = $this->fields( $this->FieldManager )->save( $_POST[$this->baseId], $old );
+        $new = $this->fields( $this->FieldController )->save( $_POST[$this->baseId], $old );
         update_option( $this->baseId, $new );
         $location = add_query_arg( array( 'message' => '1' ) );
 
@@ -192,10 +192,10 @@ abstract class OptionsPanel extends AbstractPanel
         Utilities::hiddenEditor();
 
         $this->setupData( $this->baseId );
-        $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $this->beforeForm();
-        echo $this->fields( $this->FieldManager )->renderFields();
+        echo $this->fields( $this->FieldController )->renderFields();
         $this->afterForm();
     }
 
@@ -234,10 +234,10 @@ abstract class OptionsPanel extends AbstractPanel
     {
         $this->setupData( $this->baseId );
 
-        if (is_null( $this->FieldManager )) {
-            $this->FieldManager = new PanelFieldController( $this->baseId, $this->data, $this );
+        if (is_null( $this->FieldController )) {
+            $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
         }
-        $this->fields( $this->FieldManager )->setup( $this->data );
+        $this->fields( $this->FieldController )->setup( $this->data );
         $this->data = $this->getData();
         return $this;
 
@@ -250,11 +250,11 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function getData( $postid = null )
     {
-        if (is_null( $this->FieldManager )) {
+        if (is_null( $this->FieldController )) {
             $this->setup();
         }
 
-        return $this->FieldManager->prepareDataAndGet();
+        return $this->FieldController->prepareDataAndGet();
     }
 
 

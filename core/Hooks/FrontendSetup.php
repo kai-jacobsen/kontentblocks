@@ -29,7 +29,10 @@ class FrontendSetup
     public function setup()
     {
         $this->postId = get_the_ID();
-        $Environment = Utilities::getEnvironment($this->postId);
-        $Environment->toJSON();
+        if ($this->postId){
+            $Environment = Utilities::getEnvironment($this->postId);
+            $Environment->toJSON();
+        }
+
     }
 }

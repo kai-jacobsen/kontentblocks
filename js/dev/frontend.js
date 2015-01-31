@@ -1019,6 +1019,9 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
     },
     className: "kb-module-inline-move kb-nbt kb-nbb",
     isValid: function() {
+        if (!this.Parent.Area) {
+            return false;
+        }
         return KB.Checks.userCan("edit_kontentblocks") && this.Parent.Area.model.get("sortable");
     }
 });
@@ -1802,16 +1805,18 @@ KB.App = function() {
     }
     function createModuleViews(ModuleModel) {
         var ModuleView, Area;
-        ModuleModel.setArea(KB.Areas.get(ModuleModel.get("area")));
-        ModuleModel.bind("change:area", ModuleModel.areaChanged);
-        Area = KB.Views.Areas.get(ModuleModel.get("area"));
+        Area = KB.Areas.get(ModuleModel.get("area")) || null;
+        if (Area !== null) {
+            ModuleModel.setArea(Area);
+            ModuleModel.bind("change:area", ModuleModel.areaChanged);
+            Area.addModuleView(ModuleView);
+        }
         ModuleView = KB.Views.Modules.add(ModuleModel.get("instance_id"), new KB.Backbone.ModuleView({
             model: ModuleModel,
             el: "#" + ModuleModel.get("instance_id"),
             Area: Area
         }));
         ModuleView.$el.data("ModuleView", ModuleView);
-        Area.addModuleView(ModuleView);
         KB.Ui.initTabs();
     }
     function createAreaViews(AreaModel) {

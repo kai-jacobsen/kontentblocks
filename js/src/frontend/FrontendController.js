@@ -17,7 +17,6 @@ KB.Views = {
 };
 
 
-
 /*
  * All Modules are collected here
  * Get by 'instance_id'
@@ -129,10 +128,15 @@ KB.App = function () {
    */
   function createModuleViews(ModuleModel) {
     var ModuleView, Area;
+
+    Area = KB.Areas.get(ModuleModel.get('area')) || null;
     // assign the full corresponding area model to the module model
-    ModuleModel.setArea(KB.Areas.get(ModuleModel.get('area')));
-    ModuleModel.bind('change:area', ModuleModel.areaChanged);
-    Area = KB.Views.Areas.get(ModuleModel.get('area'));
+    if (Area !== null){
+      ModuleModel.setArea(Area);
+      ModuleModel.bind('change:area', ModuleModel.areaChanged);
+      Area.addModuleView(ModuleView);
+
+    }
     // create view
     ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
       model: ModuleModel,
@@ -143,7 +147,6 @@ KB.App = function () {
     ModuleView.$el.data('ModuleView', ModuleView);
     //assign area view to module view
 
-    Area.addModuleView(ModuleView);
 
     //var peter = KB.Views.bModules.add(new KB.Backbone.ModuleView({
     //  model: ModuleModel,

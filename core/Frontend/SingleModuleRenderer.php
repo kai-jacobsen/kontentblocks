@@ -15,30 +15,33 @@ use Kontentblocks\Utils\Utilities;
 class SingleModuleRenderer
 {
 
+    public $addArgs;
 
-    public function __construct( Module $Module )
+    /**
+     * @param Module $Module
+     */
+    public function __construct( Module $Module, $args = array() )
     {
         $this->Module = $Module;
+        $this->addArgs = $this->setupArgs( $args );
     }
 
-    public function render( $args = array() )
+    public function render()
     {
         if (!$this->Module->verify()) {
             return false;
         }
+        $this->Module->Context->set( $this->addArgs );
 
-        $addArgs = $this->setupArgs( $args );
-
-        $this->Module->_addAreaAttributes( $addArgs );
         printf(
             '<%3$s id="%1$s" class="%2$s">',
             $this->Module->getId(),
             $this->getModuleClasses(),
-            $addArgs['element']
+            $this->addArgs['element']
         );
         echo $this->Module->module();
-        echo "</{$addArgs['element']}>";
-        Kontentblocks::getService('utility.jsontransport')->registerModule( $this->Module->toJSON() );
+        echo "</{$this->addArgs['element']}>";
+        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $this->Module->toJSON() );
     }
 
     private function setupArgs( $args )
@@ -46,7 +49,7 @@ class SingleModuleRenderer
         $defaults = array(
             'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
-            'element' => 'div',
+            'element' => $this->Module->Properties->getSetting( 'element' ),
             'action' => null,
             'area_template' => 'default'
         );
@@ -56,14 +59,13 @@ class SingleModuleRenderer
 
     private function getModuleClasses()
     {
-        $draft = ( $this->Module );
-
         return implode(
             ' ',
             array(
                 'os-edit-container',
                 'module',
-                $this->Module->getSetting( 'id' ),
+                'single-module',
+                $this->Module->Properties->getSetting( 'id' ),
             )
         );
     }

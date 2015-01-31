@@ -16,6 +16,12 @@
       "homepage": "http://jcbsn.de"
     }
   ],
+  "autoload": {
+    "psr-4": {
+
+      "Kontentblocks\\": "core"
+    }
+  },
   "type": "wordpress-plugin",
   "require": {
     "php": ">=5.4",
