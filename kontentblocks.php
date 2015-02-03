@@ -218,9 +218,9 @@ Class Kontentblocks
     {
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . '/core/Modules/Core/' );
+        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . 'core/Modules/Core/' );
         define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/Core/' );
-        define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . '/Definitions/js/' );
+        define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . 'core/Fields/Definitions/js/' );
         // still there for historical reasons
         define( 'KONTENTLOCK', false );
 

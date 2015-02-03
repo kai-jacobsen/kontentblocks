@@ -15,6 +15,7 @@ class JSONTransport
     protected $publicData = array();
     protected $modules = array();
     protected $areas = array();
+    protected $panels = array();
     protected $fieldData = array();
     protected $Fields = array();
 
@@ -176,6 +177,20 @@ class JSONTransport
     }
 
     /**
+     * Register panel definition
+     *
+     * @param array $panel
+     *
+     * @since 1.0.0
+     * @return object $this
+     */
+    public function registerPanel( $panel )
+    {
+        $this->panels[$panel['baseId']] = $panel;
+        return $this;
+    }
+
+    /**
      * Output collected data in footer
      *
      * @since 1.0.0
@@ -187,6 +202,8 @@ class JSONTransport
         $this->data['Areas'] = $this->areas;
         $this->data['fieldData'] = $this->fieldData;
         $this->data['Fields'] = $this->Fields;
+        $this->data['Panels'] = $this->panels;
+
         $json = json_encode( $this->data );
 
         print "<script>var KB = KB || {}; KB.payload = {}; KB.payload =  {$json};</script>";
@@ -219,6 +236,7 @@ class JSONTransport
         $this->data['Areas'] = $this->areas;
         $this->data['fieldData'] = $this->fieldData;
         $this->data['Fields'] = $this->Fields;
+        $this->data['Panels'] = $this->panels;
 
         return $this->data;
     }

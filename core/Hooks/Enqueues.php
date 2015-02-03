@@ -254,17 +254,17 @@ class Enqueues
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION,
-            'isMobile' => Kontentblocks::getService('utility.mobileDetect')->isMobile(),
-            'useModuleNav' => apply_filters('kb:config.module-nav', true)
+            'isMobile' => Kontentblocks::getService( 'utility.mobileDetect' )->isMobile(),
+            'useModuleNav' => apply_filters( 'kb:config.module-nav', true )
         );
 
         if (is_preview()) {
             $data['loggedIn'] = false;
         }
 
-        $data = array_merge($data, self::localize());
+        $data = array_merge( $data, self::localize() );
 
-        Kontentblocks::getService('utility.jsontransport')->registerPublicData( 'config', null, $data );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerPublicData( 'config', null, $data );
     }
 
     /**
@@ -296,7 +296,7 @@ class Enqueues
             }
         }
 
-        $hash = uniqid('kb', true);
+        $hash = uniqid( 'kb', true );
 
         if (function_exists( 'getGitHash' )) {
             $hash = getGitHash();
@@ -306,7 +306,8 @@ class Enqueues
         (
             'caps' => $caps,
             'env' => array(
-                'url' => KB_PLUGIN_URL,
+                'rootUrl' => KB_PLUGIN_URL,
+                'fieldJsUrl' => KB_REFIELD_JS,
                 'dev' => Kontentblocks::DEVMODE,
                 'hash' => $hash,
             ),

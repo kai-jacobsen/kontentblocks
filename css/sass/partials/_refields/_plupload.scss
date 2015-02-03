@@ -1,0 +1,80 @@
+.kb-plupload__file-list {
+  list-style: none;
+  box-sizing: border-box;
+  margin-left: -20px;
+
+  .kb-plupload__file-item {
+    box-sizing: border-box;
+    width: 23%;
+    display: block;
+    float: left;
+    margin-left: 2%;
+    border: #ccc 1px solid;
+    position: relative;
+    min-height: 150px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+
+    canvas {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+    }
+  }
+
+  .kb-plupload__file-item-header {
+    background: #f2f2f2;
+    padding: 6px;
+    min-height: 40px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .kb-plupload__file-progress {
+    padding: 3px;
+    height: auto;
+    position: relative;
+
+    span.kb-plupload__file-percent {
+      color: #fff;
+      display: block;
+      position: absolute;
+      z-index: 10;
+      line-height: 20px;
+
+    }
+
+    span.kb-plupload__file-percent-bar {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: #cc003b;
+      z-index: 1;
+    }
+  }
+
+  .kb-plupload__image-wrap {
+    text-align: center;
+    line-height: 0;
+
+    img{
+      padding: 5px;
+      background: #fff;
+    }
+  }
+}
+
+.kb-image-details{
+
+  .setting.align, .setting.size, .setting.link-to{
+    display: none;
+  }
+
+  .advanced-settings{
+    .advanced-link{
+      display: none;
+    }
+  }
+
+}

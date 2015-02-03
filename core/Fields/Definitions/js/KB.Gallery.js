@@ -6,14 +6,16 @@ KB.Fields.register('Gallery', (function ($) {
     init: function (modalView) {
       // find all instances on load
       $('.kb-gallery--stage', $('body')).each(function (index, el) {
-        var view = modalView || KB.Views.Modules.get($(el).data('module'));
+        var fid = $(el).closest('.kb-js-field-identifier').attr('id');
+        var baseId = KB.payload.Fields[fid].baseId;
+        var view = modalView || KB.Views.Modules.get($(el).data('module')) || new KB.FieldCollection();
         var key = $(el).data('fieldkey');
         var arrayKey = $(el).data('arraykey');
-        var fid = $(el).closest('.kb-js-field-identifier').attr('id');
+
         if (!view.hasField(key, arrayKey)) {
 
           var obj = new KB.Gallery.Controller({
-            moduleView: view,
+            baseId: baseId,
             fid: fid,
             key: key,
             arrayKey: arrayKey,
@@ -164,7 +166,7 @@ KB.Gallery.Controller = Backbone.View.extend({
   initialize: function (params) {
     this.params = params;
     this.fieldArgs = KB.Payload.getFieldArgs(params.fid);
-    this.parentModuleId = params.moduleView.model.get('instance_id');
+    this.parentModuleId = params.baseId;
     this._frame = null; // media modal instance
     this.subviews = []; // image items
     this._initialized = false; // init flag to prevent multiple inits

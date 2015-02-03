@@ -91,9 +91,7 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
       view: this.parentView.model.toJSON()
     });
     this.$el = jQuery(this.el);
-
     this.parentView.controlView = this;
-
   },
   render: function () {
     return this.$el;
@@ -136,7 +134,6 @@ KB.Backbone.AreaNavItem = Backbone.View.extend({
       KB.Notice.notice('That did not work', 'error');
     }
   }
-
 });
 
 
@@ -151,10 +148,9 @@ KB.Backbone.MenubarView = Backbone.View.extend({
   subviews: [],
   tagName: 'div',
   className: 'kb-menubar-container',
+  invisible: true,
   initialize: function () {
-
     this.AreaViews = {};
-
     // get or set show state to local storage
     this.$title = jQuery('<div class="kb-module-controls__title"> </div>').appendTo(this.$el);
     this.show = _.isNull(KB.Util.stex.get('kb-menubar-show')) ? true : KB.Util.stex.get('kb-menubar-show');
@@ -166,8 +162,6 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     this.StatusBar = new KB.Backbone.Frontend.StatusBar({
       el: this.$title
     });
-
-
     this.render();
   },
   events: {
@@ -185,7 +179,6 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     if (this.show) {
       this.$el.addClass('kb-menubar-show');
     }
-
   },
   attachModuleView: function (moduleView) {
     moduleView.Menubar = this;
@@ -214,7 +207,6 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     var show = !this.show;
     this.show = show;
     KB.Util.stex.set('kb-menubar-show', show, 60 * 60 * 1000 * 24);
-
   },
   over: function () {
     if (!this.show) {
@@ -242,6 +234,4 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     }
     jQuery(window).trigger('scroll');
   }
-
-
 });

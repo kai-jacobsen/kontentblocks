@@ -37,7 +37,10 @@ KB.Config = (function ($) {
       return config.env.dev;
     },
     getRootURL: function () {
-      return config.env.url;
+      return config.env.rootUrl;
+    },
+    getFieldJsUrl: function () {
+      return config.env.fieldJsUrl;
     },
     getHash: function () {
       return config.env.hash;

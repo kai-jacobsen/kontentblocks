@@ -3,6 +3,7 @@ namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Fields\PanelFieldController;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -195,7 +196,7 @@ abstract class OptionsPanel extends AbstractPanel
         $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $this->beforeForm();
-        echo $this->fields( $this->FieldController )->renderFields();
+        $this->fields( $this->FieldController )->renderFields();
         $this->afterForm();
     }
 
@@ -239,6 +240,8 @@ abstract class OptionsPanel extends AbstractPanel
         }
         $this->fields( $this->FieldController )->setup( $this->data );
         $this->data = $this->getData();
+        $this->toJSON();
+
         return $this;
 
     }
@@ -283,4 +286,13 @@ abstract class OptionsPanel extends AbstractPanel
             return $this->menuUri;
         }
     }
+
+    public function toJSON()
+    {
+        $args = array(
+            'baseId' => $this->getBaseId()
+        );
+        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
+    }
+
 }

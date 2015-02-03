@@ -9,8 +9,9 @@ KB.Templates = (function ($) {
 
   function render(tplName, tplData) {
     var tplString;
+    tplData = tplData || {};
     if (!templateCache[tplName]) {
-      var tplDir = KB.Config.getRootURL() + 'js/templates';
+      tplDir = KB.Config.getRootURL() + 'js/templates';
       var tplUrl = tplDir + '/' + tplName + '.hbs?' + KB.Config.getHash();
 
       // if a full url is given, tplUrl will be overwritten
@@ -38,6 +39,7 @@ KB.Templates = (function ($) {
     }
     return templateCache[tplName](tplData);
   }
+
 
   /*
    * Deprecated

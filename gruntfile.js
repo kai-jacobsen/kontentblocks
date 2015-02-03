@@ -118,6 +118,10 @@ module.exports = function (grunt) {
       clover: {
         files: ['build/logs/clover.xml'],
         tasks: ['exec:report']
+      },
+      hbs: {
+        files: ['core/Fields/**/*.hbs'],
+        tasks: ['exec:removeHash', 'exec:createDevId']
       }
     },
     clean: ["js/tmp"],

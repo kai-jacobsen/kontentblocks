@@ -89,7 +89,6 @@ abstract class AbstractFieldSection
                             'ArrayKey mismatch. Field key has :: syntax and arrayKey arg is set, but differs'
                         );
                     }
-
                     $args['arrayKey'] = $subkey = $out[1];
                 }
             }

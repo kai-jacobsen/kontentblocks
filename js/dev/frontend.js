@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-29 */
+/*! Kontentblocks DevVersion 2015-02-03 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -866,6 +866,7 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     subviews: [],
     tagName: "div",
     className: "kb-menubar-container",
+    invisible: true,
     initialize: function() {
         this.AreaViews = {};
         this.$title = jQuery('<div class="kb-module-controls__title"> </div>').appendTo(this.$el);

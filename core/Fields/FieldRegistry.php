@@ -73,6 +73,12 @@ class FieldRegistry
             $args = $classname::$settings;
             if (!empty( $args['type'] ) && !isset( $this->fields[$args['type']] )) {
                 $this->registerField( $args['type'], $classname );
+
+                // call static init method, if present
+                if (method_exists( $classname, 'init' )) {
+                    $classname::init();
+                }
+
             }
         }
         return $this;

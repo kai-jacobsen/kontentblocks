@@ -1,0 +1,15 @@
+<div id="{{ Field.uniqueId }}-plupload__container"
+     data-fieldkey="{{ Field.getKey() }}"
+     data-arraykey='{{ Field.getArg('arrayKey') }}'
+     class="kb-plupload--stage hide-if-no-js">
+    <div id="{{ Field.uniqueId }}-plupload__drag-drop-area">
+        <div class="drag-drop-inside">
+            <p class="drag-drop-info">Drop files here</p>
+
+            <p>or select files</p>
+
+            <p class="drag-drop-buttons"><input id="{{ Field.uniqueId }}-plupload-browse-button" type="button" value="select"
+                                                class="button"/></p>
+        </div>
+    </div>
+</div>

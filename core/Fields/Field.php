@@ -465,9 +465,10 @@ abstract class Field
     public function javascriptSettings()
     {
 
+        $args = $this->cleanedArgs();
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
             $this->uniqueId,
-            $this->cleanedArgs()
+            $this->augmentArgs($args)
         );
 
         $settings = $this->getArg( 'jSettings' );
@@ -599,5 +600,13 @@ abstract class Field
     {
         $base = $this->baseId . $this->key;
         return 'kb-' . hash( 'crc32', $base );
+    }
+
+    private function augmentArgs($args)
+    {
+        $args['baseId'] = $this->getBaseId();
+        $args['fieldkey'] = $this->getKey();
+        $args['arrayKey'] = $this->getArg('arrayKey', null);
+        return $args;
     }
 }

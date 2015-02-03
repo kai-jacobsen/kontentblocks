@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-29 */
+/*! Kontentblocks DevVersion 2015-02-03 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -109,13 +109,48 @@ KB.Config = function($) {
             return config.env.dev;
         },
         getRootURL: function() {
-            return config.env.url;
+            return config.env.rootUrl;
+        },
+        getFieldJsUrl: function() {
+            return config.env.fieldJsUrl;
         },
         getHash: function() {
             return config.env.hash;
         }
     };
 }(jQuery);
+
+KB.FieldCollection = Backbone.View.extend({
+    attachedFields: [],
+    addField: function(key, obj, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            this.attachedFields[arrayKey][key] = obj;
+        } else {
+            this.attachedFields[key] = obj;
+        }
+    },
+    hasField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            if (!this.attachedFields[arrayKey]) {
+                this.attachedFields[arrayKey] = {};
+            }
+            return key in this.attachedFields[arrayKey];
+        } else {
+            return key in this.attachedFields;
+        }
+    },
+    getField: function(key, arrayKey) {
+        if (!_.isEmpty(arrayKey)) {
+            return this.attachedFields[arrayKey][key];
+        } else {
+            return this.attachedFields[key];
+        }
+    },
+    clearFields: function() {
+        _K.info("Attached Fields were reset to empty object");
+        this.attachedFields = {};
+    }
+});
 
 _.extend(KB.Fields, Backbone.Events);
 
@@ -711,8 +746,9 @@ KB.Templates = function($) {
     }
     function render(tplName, tplData) {
         var tplString;
+        tplData = tplData || {};
         if (!templateCache[tplName]) {
-            var tplDir = KB.Config.getRootURL() + "js/templates";
+            tplDir = KB.Config.getRootURL() + "js/templates";
             var tplUrl = tplDir + "/" + tplName + ".hbs?" + KB.Config.getHash();
             var pat = /^https?:\/\//i;
             if (pat.test(tplName)) {
@@ -1235,4 +1271,14 @@ HandlebarsKB.registerHelper("debug", function(optionalValue) {
 
 HandlebarsKB.registerHelper("fieldName", function(base, index, key) {
     return base + "[" + index + "][" + key + "]";
+});
+
+HandlebarsKB.registerHelper("trimString", function(passedString, length) {
+    length = length || 50;
+    var overlength = passedString.length > length;
+    var theString = passedString.substring(0, length);
+    if (overlength) {
+        theString = theString + "…";
+    }
+    return new HandlebarsKB.SafeString(theString);
 });
