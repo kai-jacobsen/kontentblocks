@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-01-29 */
+/*! Kontentblocks DevVersion 2015-02-04 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -1022,7 +1022,8 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
         if (!this.Parent.Area) {
             return false;
         }
-        return KB.Checks.userCan("edit_kontentblocks") && this.Parent.Area.model.get("sortable");
+        console.log(this);
+        return KB.Checks.userCan("edit_kontentblocks") && this.Parent.Area.get("sortable");
     }
 });
 
@@ -1809,7 +1810,6 @@ KB.App = function() {
         if (Area !== null) {
             ModuleModel.setArea(Area);
             ModuleModel.bind("change:area", ModuleModel.areaChanged);
-            Area.addModuleView(ModuleView);
         }
         ModuleView = KB.Views.Modules.add(ModuleModel.get("instance_id"), new KB.Backbone.ModuleView({
             model: ModuleModel,
