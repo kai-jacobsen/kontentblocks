@@ -134,8 +134,6 @@ KB.App = function () {
     if (Area !== null){
       ModuleModel.setArea(Area);
       ModuleModel.bind('change:area', ModuleModel.areaChanged);
-      Area.addModuleView(ModuleView);
-
     }
     // create view
     ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
