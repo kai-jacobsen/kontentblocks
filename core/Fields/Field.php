@@ -3,11 +3,10 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Common\Exportable;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
-use Kontentblocks\Utils\JSONTransport;
-use Kontentblocks\Utils\Utilities;
 use Kontentblocks\Fields\Returnobjects;
 
 /**
@@ -20,7 +19,7 @@ use Kontentblocks\Fields\Returnobjects;
  * 2. subkey, if fields are grouped resp. nested under one subkey in $POST data(see class FieldSubGroup)
  * 3. key, the actual storage key in the $POST data
  */
-abstract class Field
+abstract class Field implements Exportable
 {
 
     /**
@@ -399,6 +398,7 @@ abstract class Field
      * Must be overridden by the individual field class
      * @since 1.0.0
      * @param FieldForm $Form
+     * @return bool
      */
     public function form( FieldForm $Form )
     {
@@ -550,16 +550,6 @@ abstract class Field
 
     }
 
-//
-//    /**
-//     * @param $module
-//     */
-//    public function setModule( $module )
-//    {
-//        $this->module = $module;
-//    }
-
-
     /**
      * Prepare Args for JSON
      * @TODO hacky
@@ -610,13 +600,14 @@ abstract class Field
         return $args;
     }
 
-    public function export(&$collection)
+    public function export( &$collection )
     {
 
         $concatKey = ( $this->getArg( 'arrayKey' ) ) ? $this->getArg( 'arrayKey' ) . '.' . $this->getKey(
             ) : $this->getKey();
 
-        $notated = ( $this->getArg( 'arrayKey' ) ) ? '[' . $this->getArg( 'arrayKey' ) . '][' . $this->getKey() . ']' : $this->getKey();
+        $notated = ( $this->getArg( 'arrayKey' ) ) ? '[' . $this->getArg( 'arrayKey' ) . '][' . $this->getKey(
+            ) . ']' : $this->getKey();
 
         $collection[$notated] = array(
             'key' => $this->getKey(),
@@ -624,6 +615,7 @@ abstract class Field
             'cKey' => $concatKey,
             'nKey' => $notated,
             'type' => $this->type,
+            'std' => $this->getArg( 'std', '' ),
             'args' => $this->cleanedArgs()
         );
     }

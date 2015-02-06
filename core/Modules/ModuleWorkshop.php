@@ -311,8 +311,7 @@ class ModuleWorkshop
 
     private function prepareFromModule()
     {
-        $fModule = new $this->moduleattrs['class']($this->getPropertiesObject(), null, $this->Environment);
-
+        $fModule = new $this->moduleattrs['class']( $this->getPropertiesObject(), null, $this->Environment );
         if (!$fModule->Fields && !method_exists( $this->Module, 'defaultData' )) {
             return '';
         }
@@ -320,11 +319,11 @@ class ModuleWorkshop
         if ($fModule->Fields) {
             $data = array();
             $config = $fModule->Fields->export();
-            foreach (array_values($config) as $attrs) {
+            foreach (array_values( $config ) as $attrs) {
                 if ($attrs['arrayKey']) {
-                    $data[$attrs['arrayKey']][$attrs['key']] = '';
+                    $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
                 } else {
-                    $data[$attrs['key']] = '';
+                    $data[$attrs['key']] = $attrs['std'];
                 }
             }
             return $data;
