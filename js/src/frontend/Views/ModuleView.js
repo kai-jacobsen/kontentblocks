@@ -16,8 +16,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
       return;
     }
 
-    this.Area = options.Area;
-
+    this.Area = options.Area; //model
+    this.Area.View.addModuleView(this);
     // attach this view to the model
     this.model.view = this;
 

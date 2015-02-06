@@ -176,6 +176,13 @@ class JSONTransport
         return $this;
     }
 
+    public function registerAreas( $areas )
+    {
+        foreach ($areas as $area) {
+            $this->registerArea( $area );
+        }
+    }
+
     /**
      * Register panel definition
      *

@@ -10,7 +10,6 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
     if (!this.Parent.Area){
       return false;
     }
-    console.log(this);
     return KB.Checks.userCan('edit_kontentblocks') && this.Parent.Area.get('sortable');
   }
 });

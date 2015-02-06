@@ -1,6 +1,19 @@
 KB.currentModule = {};
 KB.currentArea = {};
 
+/*
+Notepad:
+
+create Area model from payload
+create module models from payload
+
+add models to generic collection
+add triggers view creation
+
+
+ */
+
+
 // ---------------
 // Collections
 // ---------------
@@ -11,7 +24,6 @@ KB.currentArea = {};
  */
 KB.Views = {
   Modules: new KB.ViewsCollection(),
-  bModules: new KB.Backbone.Frontend.ModuleViewsCollection([]),
   Areas: new KB.ViewsCollection(),
   Context: new KB.ViewsCollection()
 };
@@ -54,6 +66,7 @@ KB.App = function () {
       KB.Menubar = new KB.Backbone.MenubarView();
     }
 
+    // init the edit modal
     KB.EditModalModules = new KB.Backbone.EditModalModules({});
 
     // Register events on collections
@@ -104,7 +117,7 @@ KB.App = function () {
     // iterate over raw areas
     _.each(KB.payload.Areas, function (area) {
       // create new area model
-      KB.Areas.add(new KB.Backbone.AreaModel(area));
+      KB.Areas.add(area);
     });
 
     // create models from already attached modules
@@ -127,31 +140,22 @@ KB.App = function () {
    * @returns void
    */
   function createModuleViews(ModuleModel) {
-    var ModuleView, Area;
+    var ModuleView, AreaModel;
 
-    Area = KB.Areas.get(ModuleModel.get('area')) || null;
+    AreaModel = KB.Areas.get(ModuleModel.get('area')) || null;
     // assign the full corresponding area model to the module model
-    if (Area !== null){
-      ModuleModel.setArea(Area);
+    if (AreaModel !== null){
+      ModuleModel.setArea(AreaModel);
       ModuleModel.bind('change:area', ModuleModel.areaChanged);
     }
     // create view
     ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
       model: ModuleModel,
       el: '#' + ModuleModel.get('instance_id'),
-      Area: Area
+      Area: AreaModel
     }));
 
     ModuleView.$el.data('ModuleView', ModuleView);
-    //assign area view to module view
-
-
-    //var peter = KB.Views.bModules.add(new KB.Backbone.ModuleView({
-    //  model: ModuleModel,
-    //  el: '#' + ModuleModel.get('instance_id'),
-    //  Area: Area
-    //}));
-
     KB.Ui.initTabs();
   }
 

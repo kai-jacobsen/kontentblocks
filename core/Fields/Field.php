@@ -468,7 +468,7 @@ abstract class Field
         $args = $this->cleanedArgs();
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
             $this->uniqueId,
-            $this->augmentArgs($args)
+            $this->augmentArgs( $args )
         );
 
         $settings = $this->getArg( 'jSettings' );
@@ -602,11 +602,29 @@ abstract class Field
         return 'kb-' . hash( 'crc32', $base );
     }
 
-    private function augmentArgs($args)
+    private function augmentArgs( $args )
     {
         $args['baseId'] = $this->getBaseId();
         $args['fieldkey'] = $this->getKey();
-        $args['arrayKey'] = $this->getArg('arrayKey', null);
+        $args['arrayKey'] = $this->getArg( 'arrayKey', null );
         return $args;
+    }
+
+    public function export(&$collection)
+    {
+
+        $concatKey = ( $this->getArg( 'arrayKey' ) ) ? $this->getArg( 'arrayKey' ) . '.' . $this->getKey(
+            ) : $this->getKey();
+
+        $notated = ( $this->getArg( 'arrayKey' ) ) ? '[' . $this->getArg( 'arrayKey' ) . '][' . $this->getKey() . ']' : $this->getKey();
+
+        $collection[$notated] = array(
+            'key' => $this->getKey(),
+            'arrayKey' => $this->getArg( 'arrayKey' ),
+            'cKey' => $concatKey,
+            'nKey' => $notated,
+            'type' => $this->type,
+            'args' => $this->cleanedArgs()
+        );
     }
 }

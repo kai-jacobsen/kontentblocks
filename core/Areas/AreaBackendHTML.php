@@ -90,7 +90,6 @@ class AreaBackendHTML
     {
         $this->header();
         $this->render();
-        $this->toJSON();
         $this->footer();
     }
 
@@ -154,18 +153,7 @@ class AreaBackendHTML
      * ################################################
      */
 
-    /**
-     * toJSON
-     * make certain area properties accessible by js frontend-only
-     */
-    public function toJSON()
-    {
 
-        if (!is_user_logged_in()) {
-            return;
-        }
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->Area );
-    }
 
 
     /**

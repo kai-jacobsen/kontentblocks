@@ -9,7 +9,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
     this.settings = this.model.get('settings');
     this.listenToOnce(KB.Events, 'KB::frontend-init', this.setupUi);
     this.listenTo(this, 'kb.module.deleted', this.removeModule);
-
+    this.model.View = this;
     if (KB.appData.config.useModuleNav) {
       KB.Menubar.attachAreaView(this);
     }

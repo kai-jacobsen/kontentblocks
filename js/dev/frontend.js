@@ -1,5 +1,8 @@
-/*! Kontentblocks DevVersion 2015-02-04 */
+/*! Kontentblocks DevVersion 2015-02-06 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
+    defaults: {
+        id: "generic"
+    },
     idAttribute: "id"
 });
 
@@ -205,6 +208,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.settings = this.model.get("settings");
         this.listenToOnce(KB.Events, "KB::frontend-init", this.setupUi);
         this.listenTo(this, "kb.module.deleted", this.removeModule);
+        this.model.View = this;
         if (KB.appData.config.useModuleNav) {
             KB.Menubar.attachAreaView(this);
         }
@@ -906,6 +910,9 @@ KB.Backbone.MenubarView = Backbone.View.extend({
         this.$modulesList.append(Item.render());
     },
     attachAreaView: function(areaView) {
+        if (areaView.model.get("internal")) {
+            return;
+        }
         areaView.Menubar = this;
         this.renderAreaViewItem(areaView);
         this.AreaViews[areaView.model.get("id")] = areaView;
@@ -1023,7 +1030,6 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
         if (!this.Parent.Area) {
             return false;
         }
-        console.log(this);
         return KB.Checks.userCan("edit_kontentblocks") && this.Parent.Area.get("sortable");
     }
 });
@@ -1129,6 +1135,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             return;
         }
         this.Area = options.Area;
+        this.Area.View.addModuleView(this);
         this.model.view = this;
         this.listenTo(this.model, "change", this.modelChange);
         this.listenTo(this.model, "save", this.model.save);
@@ -1275,6 +1282,7 @@ KB.Backbone.Frontend.ModuleViewsCollection = Backbone.Collection.extend({
         this.listenTo(this, "add", this.added);
     },
     added: function(View) {
+        console.log("added");
         return View;
     }
 });
@@ -1755,7 +1763,6 @@ KB.currentArea = {};
 
 KB.Views = {
     Modules: new KB.ViewsCollection(),
-    bModules: new KB.Backbone.Frontend.ModuleViewsCollection([]),
     Areas: new KB.ViewsCollection(),
     Context: new KB.ViewsCollection()
 };
@@ -1797,7 +1804,7 @@ KB.App = function() {
             return false;
         }
         _.each(KB.payload.Areas, function(area) {
-            KB.Areas.add(new KB.Backbone.AreaModel(area));
+            KB.Areas.add(area);
         });
         _.each(KB.payload.Modules, function(module) {
             KB.Modules.add(module);
@@ -1806,16 +1813,16 @@ KB.App = function() {
         KB.Events.trigger("KB::frontend-init");
     }
     function createModuleViews(ModuleModel) {
-        var ModuleView, Area;
-        Area = KB.Areas.get(ModuleModel.get("area")) || null;
-        if (Area !== null) {
-            ModuleModel.setArea(Area);
+        var ModuleView, AreaModel;
+        AreaModel = KB.Areas.get(ModuleModel.get("area")) || null;
+        if (AreaModel !== null) {
+            ModuleModel.setArea(AreaModel);
             ModuleModel.bind("change:area", ModuleModel.areaChanged);
         }
         ModuleView = KB.Views.Modules.add(ModuleModel.get("instance_id"), new KB.Backbone.ModuleView({
             model: ModuleModel,
             el: "#" + ModuleModel.get("instance_id"),
-            Area: Area
+            Area: AreaModel
         }));
         ModuleView.$el.data("ModuleView", ModuleView);
         KB.Ui.initTabs();

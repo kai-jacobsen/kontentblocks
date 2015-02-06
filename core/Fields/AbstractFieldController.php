@@ -11,7 +11,7 @@ abstract class AbstractFieldController
 
     /**
      * Collection of added Sections / Fields ...
-     * @var object
+     * @var array
      * @since 1.0.0
      */
     public $Structure;
@@ -144,4 +144,12 @@ abstract class AbstractFieldController
 
     abstract public function addGroup( $id, $args = array() );
 
-} 
+    public function export()
+    {
+        $collection = array();
+        foreach ($this->Structure as $Section){
+            $Section->export($collection);
+        }
+        return $collection;
+    }
+}

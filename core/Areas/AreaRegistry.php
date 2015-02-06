@@ -68,6 +68,8 @@ class AreaRegistry
         if (is_user_logged_in()) {
             add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
         }
+
+        $this->addMockArea();
     }
 
     /**
@@ -448,6 +450,20 @@ class AreaRegistry
     {
         Utilities::setupCats();
         Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'AreaTemplates', null, $this->templates );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->getArea('_internal') );
+
+
+    }
+
+    private function addMockArea()
+    {
+        $this->addArea(
+            array(
+                'id' => '_internal',
+                'internal' => true,
+                'context' => 'normal'
+            )
+        );
     }
 
 }

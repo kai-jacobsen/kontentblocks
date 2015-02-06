@@ -17,6 +17,8 @@ class SingleModuleRenderer
 
     public $addArgs;
 
+    public $classes;
+
     /**
      * @param Module $Module
      */
@@ -24,6 +26,18 @@ class SingleModuleRenderer
     {
         $this->Module = $Module;
         $this->addArgs = $this->setupArgs( $args );
+        $this->classes = $this->setupClasses();
+        $this->Module->Context->set( $this->addArgs );
+        // @TODO other properties?
+        if (isset( $this->addArgs['areaContext'] )) {
+            $this->Module->Context->areaContext = $this->addArgs['areaContext'];
+            $this->Module->Properties->areaContext = $this->addArgs['areaContext'];
+
+        }
+
+        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
+
+
     }
 
     public function render()
@@ -31,17 +45,27 @@ class SingleModuleRenderer
         if (!$this->Module->verify()) {
             return false;
         }
-        $this->Module->Context->set( $this->addArgs );
 
-        printf(
+        $out = '';
+        $out .= $this->beforeModule();
+        $out .= $this->Module->module();
+        $out .= $this->afterModule();
+        return $out;
+    }
+
+    public function beforeModule()
+    {
+        return sprintf(
             '<%3$s id="%1$s" class="%2$s">',
             $this->Module->getId(),
             $this->getModuleClasses(),
             $this->addArgs['element']
         );
-        echo $this->Module->module();
-        echo "</{$this->addArgs['element']}>";
-        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $this->Module->toJSON() );
+    }
+
+    public function afterModule()
+    {
+        return sprintf( '</%s>', $this->addArgs['element'] );
     }
 
     private function setupArgs( $args )
@@ -57,18 +81,44 @@ class SingleModuleRenderer
         return wp_parse_args( $args, $defaults );
     }
 
+    /**
+     * @return string
+     */
     private function getModuleClasses()
     {
-        return implode(
-            ' ',
+        return implode( ' ', array_unique( $this->classes ) );
+    }
+
+    /**
+     * @return Module
+     */
+    public function getModule()
+    {
+        return $this->Module;
+    }
+
+    /**
+     * @return string
+     */
+    private function setupClasses()
+    {
+        return
             array(
                 'os-edit-container',
                 'module',
                 'single-module',
                 $this->Module->Properties->getSetting( 'id' ),
-            )
-        );
+
+            );
     }
 
+    /**
+     * @return SingleModuleRenderer
+     */
+    public function addClasses( $classes )
+    {
+        $this->classes = array_merge( $this->classes, $classes );
+        return $this;
+    }
 
 }

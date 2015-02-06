@@ -58,6 +58,8 @@ class AreaRenderer
      */
     private $repeating;
 
+    private $ModuleRenderer;
+
     /**
      * Class constructor
      *
@@ -98,19 +100,21 @@ class AreaRenderer
         $output .= $this->AreaHtmlNode->openArea();
 
         /**
-         * @var \Kontentblocks\Modules\Module $module
+         * @var \Kontentblocks\Modules\Module $Module
          */
         // Iterate over modules (ModuleIterator)
-        foreach ($this->modules as $module) {
+        foreach ($this->modules as $Module) {
 
-            if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verify()) {
+            $this->ModuleRenderer = new SingleModuleRenderer($Module, $this->AreaHtmlNode->getPublicAttributes());
+
+            if (!is_a( $Module, '\Kontentblocks\Modules\Module' ) || !$Module->verify()) {
                 continue;
             }
-            $moduleOutput = $module->module();
+            $moduleOutput = $Module->module();
             $output .= $this->AreaHtmlNode->openLayoutWrapper();
-            $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
+            $output .= $this->beforeModule( $this->_beforeModule( $Module ), $Module );
             $output .= $moduleOutput;
-            $output .= $this->afterModule( $this->_afterModule( $module ), $module );
+            $output .= $this->afterModule( $this->_afterModule( $Module ), $Module );
             $output .= $this->AreaHtmlNode->closeLayoutWrapper();
 
             if (current_theme_supports( 'kontentblocks:area-concat' ) && filter_input(
@@ -119,7 +123,7 @@ class AreaRenderer
                     FILTER_SANITIZE_STRING
                 )
             ) {
-                if ($module->Properties->getSetting( 'concat' )) {
+                if ($Module->Properties->getSetting( 'concat' )) {
                     ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
                 }
             }
@@ -127,6 +131,8 @@ class AreaRenderer
 
         // close area wrapper
         $output .= $this->AreaHtmlNode->closeArea();
+
+
 
         if ($echo) {
             echo $output;
@@ -146,21 +152,15 @@ class AreaRenderer
 
         $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
 
+
         if (!empty( $layout )) {
             return sprintf(
-                '<div class="kb-wrap %3$s"><div  id="%1$s" class="%2$s">',
-                $module->getId(),
-                implode( ' ', $classes ),
+                '<div class="kb-wrap %2$s">%2$s',
+                $this->ModuleRenderer->beforeModule(),
                 implode( ' ', $layout )
             );
         } else {
-            return sprintf(
-                '<%3$s id="%1$s" class="%2$s">',
-                $module->getId(),
-                implode( ' ', $classes ),
-                $module->Properties->getSetting( 'element' )
-            );
-
+            return $this->ModuleRenderer->beforeModule();
         }
 
     }
@@ -172,22 +172,17 @@ class AreaRenderer
      */
     public function afterModule( $_after, Module $Module )
     {
-        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
-
         $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
         if (!empty( $layout )) {
-            return "</div>" . sprintf( "</%s>", $Module->Properties->getSetting( 'element' ) );
+            return "</div>" . sprintf( "</%s>", $this->ModuleRenderer->afterModule() );
         } else {
-            return sprintf( "</%s>", $Module->Properties->getSetting( 'element' ) );
+            return $this->ModuleRenderer->afterModule();
 
         }
-
-
     }
 
     public function _beforeModule( Module $Module )
     {
-        $Module->Context->set( $this->AreaHtmlNode->getPublicAttributes() );
         $moduleClasses = $this->modules->getCurrentModuleClasses();
         $additionalClasses = $this->getAdditionalClasses( $Module );
 

@@ -190,7 +190,19 @@ class ModuleProperties
     {
         /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
         $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
-        return $AreaRegistry->getArea( $var );
+        $Area = $AreaRegistry->getArea( $var );
+
+        if (is_null($Area)){
+            $Area = $AreaRegistry->getArea( '_internal' );
+        }
+        /**
+         * toJSON
+         * make certain area properties accessible by js frontend-only
+         */
+        if (is_user_logged_in()) {
+            Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $Area );
+        }
+        return $Area;
 
     }
 

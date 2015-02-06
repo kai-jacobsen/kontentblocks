@@ -191,6 +191,9 @@ KB.Backbone.MenubarView = Backbone.View.extend({
     this.$modulesList.append(Item.render());
   },
   attachAreaView: function (areaView) {
+    if (areaView.model.get('internal')){
+      return;
+    }
     areaView.Menubar = this;
     this.renderAreaViewItem(areaView);
     this.AreaViews[areaView.model.get('id')] = areaView;

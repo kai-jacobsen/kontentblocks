@@ -30,7 +30,6 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
         if (refresh) {
           that.$el.html(res.html);
         }
-
         tinymce.triggerSave();
         that.model.set('moduleData', res.newModuleData);
         that.Parent.render();

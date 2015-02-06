@@ -102,7 +102,10 @@ class ModuleWorkshop
             $update = $this->Environment->getStorage()->addToIndex( $this->createModuleId(), $this->moduleattrs );
             if (!is_null( $this->newData )) {
                 $this->Environment->getStorage()->saveModule( $this->getNewId(), $this->newData );
+            } else {
+                $this->Environment->getStorage()->saveModule( $this->getNewId(), $this->prepareFromModule() );
             }
+
 
             if ($update) {
                 $this->locked = true;
@@ -119,6 +122,8 @@ class ModuleWorkshop
      */
     public function createAndGet()
     {
+
+
         if ($this->isValid() && $this->create()) {
             return $this->getModule();
         }
@@ -217,13 +222,13 @@ class ModuleWorkshop
     private function validate()
     {
         if (is_null( $this->moduleattrs['class'] )) {
-            _K::error('Workshop class parameter is null');
+            _K::error( 'Workshop class parameter is null' );
             return false;
         }
 
 
         if (!class_exists( $this->moduleattrs['class'] )) {
-            _K::error($this->moduleattrs['class'] . ' not found.');
+            _K::error( $this->moduleattrs['class'] . ' not found.' );
             return false;
         }
 
@@ -244,7 +249,7 @@ class ModuleWorkshop
             );
         }
 
-        if (array_key_exists('instance_id', $attrs)){
+        if (array_key_exists( 'instance_id', $attrs )) {
             $attrs['mid'] = $attrs['instance_id'];
         }
 
@@ -302,6 +307,33 @@ class ModuleWorkshop
             }
         }
         return $attrs;
+    }
+
+    private function prepareFromModule()
+    {
+        $fModule = new $this->moduleattrs['class']($this->getPropertiesObject(), null, $this->Environment);
+
+        if (!$fModule->Fields && !method_exists( $this->Module, 'defaultData' )) {
+            return '';
+        }
+
+        if ($fModule->Fields) {
+            $data = array();
+            $config = $fModule->Fields->export();
+            foreach (array_values($config) as $attrs) {
+                if ($attrs['arrayKey']) {
+                    $data[$attrs['arrayKey']][$attrs['key']] = '';
+                } else {
+                    $data[$attrs['key']] = '';
+                }
+            }
+            return $data;
+        }
+
+        if (method_exists( $fModule, 'defaultData' )) {
+            return $fModule->defaultData();
+        }
+
     }
 
 }

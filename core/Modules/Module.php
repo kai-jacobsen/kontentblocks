@@ -148,7 +148,6 @@ abstract class Module
             $this->setupFieldData();
         }
         $this->View = $this->getView();
-
         return $this->render();
 
     }

@@ -44,13 +44,11 @@ class UpdateModule
         // gather data
         $old = $Environment->getStorage()->getModuleData( $Module->getId() );
         $new = $Module->save( $newData, $old );
-
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         if ($postdata->update) {
             $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
         }
-
         $Module->setModuleData( $mergedData );
 
         do_action( 'kb.module.save', $Module, $mergedData );

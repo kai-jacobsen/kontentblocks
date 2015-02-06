@@ -234,7 +234,6 @@ class ModuleViewFilesystem
      */
     public function getTemplatesforContext( $areaContext )
     {
-
         $collection = array();
         $filtered = array_filter(
             $this->views,

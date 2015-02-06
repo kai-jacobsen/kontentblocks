@@ -42,10 +42,9 @@ class ModuleFactory
         if (empty( $Properties->class ) || !class_exists( $Properties->class )) {
             throw new \BadMethodCallException( 'Invalid Module passed to Factory' );
         }
-
         $this->Environment = $Environment;
-        $this->ModuleProperties = $Properties;
 
+        $this->ModuleProperties = $Properties;
         if ($data === null) {
             $this->data = apply_filters(
                 'kb.module.factory.data',

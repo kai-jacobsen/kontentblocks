@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Common\Exportable;
 use Kontentblocks\Fields\Returnobjects\FieldCollection;
 use Kontentblocks\Modules\Module;
 
@@ -11,7 +12,7 @@ use Kontentblocks\Modules\Module;
  * works like an adapter to a normal field
  * @package Kontentblocks\Fields
  */
-class FieldSubGroup
+class FieldSubGroup implements Exportable
 {
 
     /**
@@ -114,7 +115,6 @@ class FieldSubGroup
         /** @var Field $field */
         foreach ($this->fields as $field) {
 
-            $field->setModule( $this->Module );
             $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
 
             if (isset( $data[$field->getKey()] )) {
@@ -247,4 +247,10 @@ class FieldSubGroup
 
     }
 
+    public function export(&$collection)
+    {
+        foreach ($this->fields as $Field){
+            $Field->export($collection);
+        }
+    }
 }

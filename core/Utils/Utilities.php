@@ -154,7 +154,6 @@ class Utilities
     public static function arrayMergeRecursive( $new, $old )
     {
         $merged = $new;
-
         if (!is_array( $merged )) {
             return $old;
         }

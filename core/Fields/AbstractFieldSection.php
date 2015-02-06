@@ -3,13 +3,14 @@
 namespace Kontentblocks\Fields;
 
 use Exception;
+use Kontentblocks\Common\Exportable;
 use Kontentblocks\Kontentblocks;
 
 /**
  * Class AbstractFieldSection
  * @package Kontentblocks\Fields
  */
-abstract class AbstractFieldSection
+abstract class AbstractFieldSection implements Exportable
 {
 
     /**
@@ -324,6 +325,14 @@ abstract class AbstractFieldSection
     {
         $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
         uasort( $this->Fields, create_function( '$a,$b', $code ) );
+
+    }
+
+    public function export( &$collection )
+    {
+        foreach ($this->Fields as $Field) {
+            $Field->export( $collection );
+        }
 
     }
 } 
