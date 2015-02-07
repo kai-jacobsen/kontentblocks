@@ -4,7 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Exception;
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldForm;
+use Kontentblocks\Fields\FieldFormController;
 
 /**
  * Checkboxset
@@ -105,9 +105,9 @@ Class CheckboxSet extends Field
     }
 
     /**
-     * @param FieldForm $Form
+     * @param FieldFormController $Form
      */
-    public function renderHidden( FieldForm $Form )
+    public function renderHidden( FieldFormController $Form )
     {
         $value = $this->getValue();
         $options = $this->getArg( 'options', array() );

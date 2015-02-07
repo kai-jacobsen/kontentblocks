@@ -205,7 +205,6 @@ class ModuleStorage implements \Countable
             $collection['_' . $id] = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : '';
         }
-
         return $collection;
 
     }

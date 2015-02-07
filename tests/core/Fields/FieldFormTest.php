@@ -30,7 +30,7 @@ class FieldFormTest extends \WP_UnitTestCase
         );
 
 
-        $this->TestForm = new \Kontentblocks\Fields\FieldForm( $this->TestField );
+        $this->TestForm = new \Kontentblocks\Fields\FieldFormController( $this->TestField );
 
     }
 

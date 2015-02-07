@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldForm;
+use Kontentblocks\Fields\FieldFormController;
 
 /**
  * Simple text input field

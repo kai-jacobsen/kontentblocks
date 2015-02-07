@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldForm;
+use Kontentblocks\Fields\FieldFormController;
 
 /**
  * Single checkbox renders to boolean true or false
@@ -74,9 +74,9 @@ Class Checkbox extends Field
     }
 
     /**
-     * @param FieldForm $Form
+     * @param FieldFormController $Form
      */
-    public function renderHidden( FieldForm $Form )
+    public function renderHidden( FieldFormController $Form )
     {
         echo "<input type='hidden' name='{$Form->getFieldName()}' value='{$this->getValue()}' >";
     }

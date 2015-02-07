@@ -52,7 +52,6 @@ class UpdateModuleData
 
         $Environment->getStorage()->reset();
         $Environment->getStorage()->addToIndex( $Module->getId(), $Module->Properties->export() );
-
         $return = array(
             'newModuleData' => $mergedData
         );

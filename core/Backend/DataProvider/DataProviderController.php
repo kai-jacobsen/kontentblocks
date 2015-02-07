@@ -67,7 +67,6 @@ class DataProviderController implements DataProviderInterface
         foreach ($this->Listeners as $Listener) {
             $Listener->update( $key, $value );
         }
-
         return $this->DataProvider->update( $key, $value );
     }
 
