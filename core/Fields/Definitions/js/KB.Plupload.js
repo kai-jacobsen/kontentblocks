@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 KB.Fields.register('Plupload', (function ($) {
   return {
   init: function (modalView) {
@@ -173,7 +166,6 @@ KB.Plupload.UploadFileView = Backbone.View.extend({
       metadata: mo.toJSON(),
       state: 'kb-image-details'
     });
-    console.log(data, this.kbFrame);
     this.kbFrame.open();
   }
 });
