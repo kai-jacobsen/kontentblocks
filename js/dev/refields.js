@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-06 */
+/*! Kontentblocks DevVersion 2015-02-07 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -946,7 +946,6 @@ KB.Plupload.UploadFileView = Backbone.View.extend({
             metadata: mo.toJSON(),
             state: "kb-image-details"
         });
-        console.log(data, this.kbFrame);
         this.kbFrame.open();
     }
 });
