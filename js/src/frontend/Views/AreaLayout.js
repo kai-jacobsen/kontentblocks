@@ -107,7 +107,6 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
       // cache for next iteration for comparison
       prev = View.model.get('settings').id;
 
-
       /**
        * copy rel attribute to wrapper, which is the actual sortable element
        */

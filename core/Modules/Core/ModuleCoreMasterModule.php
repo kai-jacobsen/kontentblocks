@@ -20,6 +20,7 @@ class ModuleCoreMasterModule extends Module
         'asTemplate' => false,
         'master' => true,
         'hidden' => true,
+        'category' => 'core'
     );
 
     public static function init()

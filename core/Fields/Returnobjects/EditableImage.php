@@ -348,9 +348,9 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     }
 
 
-    protected function prepare()
+    public function prepare()
     {
-        // TODO: Implement prepare() method.
+        return $this;
     }
 
     /**

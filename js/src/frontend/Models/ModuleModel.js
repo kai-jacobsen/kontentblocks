@@ -8,8 +8,8 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
       instance_id: that.get('instance_id')
     }, that.destroyed);
   },
-  destroyed: function () {
-
+  dispose: function(){
+      this.stopListening()
   },
   setArea: function (area) {
     //this.area = area;

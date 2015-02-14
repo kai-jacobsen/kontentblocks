@@ -173,9 +173,16 @@ KB.LayoutIterator = function (layout, AreaView) {
     Iterator.setPosition(0);
 
     // unwrap the outer wrap if it exists
-    $outer.each(function (item) {
-      jQuery('.kb-wrap:first-child', item).unwrap();
+    //$outer.each(function (item, el) {
+    //  jQuery('.kb-wrap', jQuery(el)).unwrap();
+    //});
+
+    jQuery('.kb-wrap').each(function (item, el){
+      if ( jQuery(el).parent().hasClass('kb-outer-wrap') ) {
+        jQuery(el).unwrap();
+      }
     });
+
 
     /**
      * Iterate over all modules, add wrapper if doesn't exist yet
@@ -185,16 +192,15 @@ KB.LayoutIterator = function (layout, AreaView) {
       var $el = jQuery(ModuleEl);
       var $wrap = $el.parent('.kb-wrap');
       if ($wrap.length === 0) {
-        $wrapEl = jQuery('<div class="kb-wrap ' + Iterator.getCurrent().classes + '"></div>');
+        var $wrapEl = jQuery('<div class="kb-wrap ' + Iterator.getCurrent().classes + '"></div>');
         $el.wrap($wrapEl);
       } else {
         $wrap.removeClass();
         $wrap.addClass('kb-wrap ' + Iterator.getCurrent().classes);
       }
 
-
       // if ui is present re-add sortable class
-      if (ui) {
+      if (ui && ui.placeholder) {
         ui.placeholder.addClass('kb-front-sortable-placeholder');
       }
 

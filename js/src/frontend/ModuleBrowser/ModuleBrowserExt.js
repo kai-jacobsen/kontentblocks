@@ -1,34 +1,31 @@
 /**
  * Override module browser success method
  */
-KB.Backbone.ModuleBrowser.prototype.success = function (data) {
+KB.Backbone.ModuleBrowser.prototype.success = function (res) {
   var model;
+  console.log('succ');
 
   if (this.dropZone) {
-    this.dropZone.$el.after(data.html);
+    this.dropZone.$el.after(res.data.html);
     this.dropZone.removeDropZone();
   } else {
-    this.options.area.$el.append(data.html).removeClass('kb-area__empty');
+    this.options.area.$el.append(res.data.html).removeClass('kb-area__empty');
   }
 
-  model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
+
+  model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
 
   //this.options.area.addModuleView(model.view);
   _K.info('new module created', {view: model.view});
 
-  this.parseAdditionalJSON(data.json);
+  this.parseAdditionalJSON(res.data.json);
   KB.TinyMCE.addEditor(model.view.$el);
   KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
-
-  // update the reference counter, used as base number
-  // for new modules
-  KB.Environment.moduleCount++;
 
   this.options.area.trigger('kb.module.created');
 
   setTimeout(function () {
     model.view.openOptions();
-    model.view.renderPlaceholder();
   }, 300);
 
   // repaint

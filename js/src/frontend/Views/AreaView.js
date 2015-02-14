@@ -7,12 +7,10 @@ KB.Backbone.AreaView = Backbone.View.extend({
     this.attachedModuleViews = {};
     //shorthand area settings from model
     this.settings = this.model.get('settings');
-    this.listenToOnce(KB.Events, 'KB::frontend-init', this.setupUi);
+    this.listenToOnce(KB.Events, 'KB.frontend.init', this.setupUi);
     this.listenTo(this, 'kb.module.deleted', this.removeModule);
     this.model.View = this;
-    if (KB.appData.config.useModuleNav) {
-      KB.Menubar.attachAreaView(this);
-    }
+
   },
   setupUi: function () {
     this.Layout = new KB.Backbone.AreaLayoutView({
@@ -42,6 +40,11 @@ KB.Backbone.AreaView = Backbone.View.extend({
     this.attachedModuleViews[moduleView.model.get('instance_id')] = moduleView; // add module
     this.listenTo(moduleView.model, 'change:area', this.removeModule); // add listener
     _K.info('Module:' + moduleView.model.id + ' was added to area:' + this.model.id);
+
+    if (this.getNumberOfModules() > 0){
+      this.$el.removeClass('kb-area__empty');
+    }
+    this.trigger('kb.module.created', moduleView);
   },
 
   getNumberOfModules: function () {
@@ -57,19 +60,33 @@ KB.Backbone.AreaView = Backbone.View.extend({
         {
           handle: ".kb-module-inline-move",
           items: ".kb-wrap",
-          helper: 'original',
+          helper: "clone",
           opacity: 0.5,
+          forcePlaceholderSize: true,
           delay: 150,
           placeholder: "kb-front-sortable-placeholder",
           start: function (e, ui) {
             //ui.placeholder.width('100%');
             that.isSorting = true;
+
+            if (ui.helper.hasClass('ui-draggable-dragging')){
+              ui.helper.addClass('kb-wrap');
+            }
+
             ui.placeholder.attr('class', ui.helper.attr('class'));
             ui.placeholder.addClass('kb-front-sortable-placeholder');
             ui.placeholder.append("<div class='module kb-dummy'></div>");
-
             jQuery('.module', ui.helper).addClass('ignore');
             ui.helper.addClass('ignore');
+            that.Layout.applyClasses();
+            that.Layout.render(ui);
+          },
+          receive: function (e, ui) {
+            // model is set in the sidebar areaList single module item
+            var module = ui.item.data('module');
+            // callback is handled by that view object
+            that.isSorting = false;
+            module.create(ui);
           },
           beforeStop: function (e, ui) {
             var serializedData = {};
@@ -92,6 +109,10 @@ KB.Backbone.AreaView = Backbone.View.extend({
           change: function (e, ui) {
             that.Layout.applyClasses();
             that.Layout.render(ui);
+          },
+          over: function(ui){
+            that.Layout.applyClasses();
+            that.Layout.render(ui);
           }
         });
     } else {
@@ -99,9 +120,20 @@ KB.Backbone.AreaView = Backbone.View.extend({
         {
           handle: ".kb-module-inline-move",
           items: ".module",
-          helper: 'original',
-          opacity: 0.5,
-          //axis: "y",
+          helper: "clone",
+          //helper: function(){
+          //  //return jQuery('.kb-sidebar-drop-helper');
+          //},
+          //out:function(e, ui){
+          //    ui.helper[0].detach();
+          //},
+          //appendTo: document.body,
+          //opacity: 0.5,
+          cursorAt: {
+            top: 5,
+            left: 5
+          },
+          ////axis: "y",
           delay: 150,
           //forceHelperSize: true,
           //forcePlaceholderSize: true,
@@ -109,37 +141,55 @@ KB.Backbone.AreaView = Backbone.View.extend({
           start: function () {
             that.isSorting = true;
           },
-          beforeStop: function () {
-            var serializedData = {};
+          receive: function (e, ui) {
+            // model is set in the sidebar areaList single module item
+            var module = ui.item.data('module');
+            // callback is handled by that view object
             that.isSorting = false;
-            serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
-              attribute: 'rel'
-            });
-            return KB.Ajax.send({
-              action: 'resortModules',
-              postId: that.model.get('envVars').postId,
-              data: serializedData,
-              _ajax_nonce: KB.Config.getNonce('update')
-            }, function () {
-              KB.Notice.notice('Order was updated successfully', 'success');
-            }, that);
+            module.create(ui);
+          },
+          stop: function () {
+            if (that.isSorting) {
+              that.isSorting = false;
+              that.resort(that.model)
+            }
           },
           change: function () {
             that.Layout.applyClasses();
           }
         });
     }
-
-
   },
   changeLayout: function (l) {
     this.Layout.model.set('layout', l);
-  },
+    this.$el.sortable('destroy');
+    this.setupSortables();
+  }
+  ,
   removeModule: function (ModuleView) {
     var id = ModuleView.model.get('mid');
     if (this.attachedModuleViews[id]) {
       delete this.attachedModuleViews[id];
     }
+    _K.info('Module:' + ModuleView.model.id + ' was removed from area:' + this.model.id);
+    if (this.getNumberOfModules() < 0){
+      this.$el.addClass('kb-area__empty');
+    }
+  },
+  resort: function (area) {
+    var serializedData = {};
+    serializedData[area.get('id')] = area.View.$el.sortable('serialize', {
+      attribute: 'rel'
+    });
+
+    return KB.Ajax.send({
+      action: 'resortModules',
+      postId: area.get('envVars').postId,
+      data: serializedData,
+      _ajax_nonce: KB.Config.getNonce('update')
+    }, function () {
+      KB.Notice.notice('Order was updated successfully', 'success');
+    }, null);
   }
 
 });

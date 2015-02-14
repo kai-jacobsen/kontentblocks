@@ -86,7 +86,7 @@ abstract class Field implements Exportable
      * @TODO Concept is WIP
      *
      */
-    public $returnObj;
+    private $returnObj;
 
     /**
      * @var \Kontentblocks\Modules\Module
@@ -322,9 +322,9 @@ abstract class Field implements Exportable
     {
         $value = $this->prepareOutput( $this->getValue() );
 
+
         if ($this->getArg( 'returnObj' )) {
             $classname = $this->getArg( 'returnObj' );
-
             // backwards compat
             $classname = $this->aliasReturnObjectClass( $classname );
 
@@ -344,12 +344,12 @@ abstract class Field implements Exportable
                 throw new \Exception( 'requested Return Object does not exist' );
             }
 
-            return $this->returnObj;
+            return $this->returnObj->prepare();
 
         } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj' ) !== false) {
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
             $this->returnObj = new $classpath( $value, $this );
-            return $this->returnObj;
+            return $this->returnObj->prepare();
         } else {
 //			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
 //			return $this->returnObj;

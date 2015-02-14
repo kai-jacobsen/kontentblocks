@@ -61,7 +61,6 @@ namespace Kontentblocks\Utils {
             public function process( $attachment, $width = null, $height = null, $crop = null, $single = true, $upscale = false ) {
                 // Validate inputs.
                 if ( ! $attachment || ( ! $width && ! $height ) ) return false;
-
                 // $attachment may be a url or an id
 
                 if (is_numeric($attachment)){
@@ -71,7 +70,6 @@ namespace Kontentblocks\Utils {
                 }
                 // Caipt'n, ready to hook.
                 if ( true === $upscale ) add_filter( 'image_resize_dimensions', array($this, 'upscale'), 10, 6 );
-
                 // Define upload path & dir.
                 $upload_info = wp_upload_dir();
                 $upload_dir = $upload_info['basedir'];
@@ -93,6 +91,7 @@ namespace Kontentblocks\Utils {
                 // Check if $img_url is local.
                 if ( false === strpos( $url, $upload_url ) ) return false;
 
+
                 // Define path of image.
                 $rel_path = str_replace( $upload_url, '', $url );
                 $img_path = $upload_dir . $rel_path;
@@ -100,11 +99,12 @@ namespace Kontentblocks\Utils {
                 // Check if img path exists, and is an image indeed.
                 if ( ! file_exists( $img_path ) or ! getimagesize( $img_path ) ) return false;
 
+
+
                 // Get image info.
                 $info = pathinfo( $img_path );
                 $ext = $info['extension'];
                 list( $orig_w, $orig_h ) = getimagesize( $img_path );
-
                 // Get image size after cropping.
                 $dims = image_resize_dimensions( $orig_w, $orig_h, $width, $height, $crop );
                 $dst_w = $dims[4];
@@ -127,6 +127,7 @@ namespace Kontentblocks\Utils {
                     }
                     // Else check if cache exists.
                     elseif ( file_exists( $destfilename ) && getimagesize( $destfilename ) ) {
+
                         $img_url = "{$upload_url}{$dst_rel_path}-{$suffix}.{$ext}";
                     }
                     // Else, we resize the image and return the new resized image url.
@@ -134,8 +135,10 @@ namespace Kontentblocks\Utils {
 
                         $editor = wp_get_image_editor( $img_path );
 
-                        if ( is_wp_error( $editor ) || is_wp_error( $editor->resize( $width, $height, $crop ) ) )
+                        if ( is_wp_error( $editor ) || is_wp_error( $editor->resize( $width, $height, $crop ) ) ){
+
                             return false;
+                        }
 
                         $resized_file = $editor->save();
 
@@ -143,6 +146,7 @@ namespace Kontentblocks\Utils {
                             $resized_rel_path = str_replace( $upload_dir, '', $resized_file['path'] );
                             $img_url = $upload_url . $resized_rel_path;
                         } else {
+
                             return false;
                         }
 

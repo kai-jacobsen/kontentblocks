@@ -2,13 +2,13 @@ KB.currentModule = {};
 KB.currentArea = {};
 
 /*
-Notepad:
+ Notepad:
 
-create Area model from payload
-create module models from payload
+ create Area model from payload
+ create module models from payload
 
-add models to generic collection
-add triggers view creation
+ add models to generic collection
+ add triggers view creation
 
 
  */
@@ -61,9 +61,9 @@ KB.App = function () {
     var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
     $toolbar.hide();
 
-    // create Menubar singleton
+    // create Sidebar singleton
     if (KB.appData.config.useModuleNav) {
-      KB.Menubar = new KB.Backbone.MenubarView();
+      KB.Sidebar = new KB.Backbone.SidebarView();
     }
 
     // init the edit modal
@@ -129,7 +129,7 @@ KB.App = function () {
     KB.trigger('kb:moduleControlsAdded');
 
     // new event
-    KB.Events.trigger('KB::frontend-init');
+    KB.Events.trigger('KB.frontend.init');
   }
 
 
@@ -144,7 +144,7 @@ KB.App = function () {
 
     AreaModel = KB.Areas.get(ModuleModel.get('area')) || null;
     // assign the full corresponding area model to the module model
-    if (AreaModel !== null){
+    if (AreaModel !== null) {
       ModuleModel.setArea(AreaModel);
       ModuleModel.bind('change:area', ModuleModel.areaChanged);
     }
@@ -180,6 +180,7 @@ KB.App = function () {
    * @returns void
    */
   function removeModule(ModuleModel) {
+    ModuleModel.dispose();
     KB.Views.Modules.remove(ModuleModel.get('instance_id'));
   }
 

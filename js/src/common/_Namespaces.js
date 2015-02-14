@@ -3,7 +3,11 @@ KB.Config = {};
 KB.Backbone = {
   Backend: {},
   Frontend: {},
-  Shared: {}
+  Shared: {},
+  Sidebar: {
+    AreaOverview: {},
+    AreaDetails: {}
+  }
 };
 KB.Fields = {};
 KB.Utils = {};

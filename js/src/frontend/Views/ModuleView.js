@@ -15,7 +15,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
       _K.log('Permission insufficient');
       return;
     }
-
     this.Area = options.Area; //model
     this.Area.View.addModuleView(this);
     // attach this view to the model
@@ -30,10 +29,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
     // init render
     this.render();
-
-    if (KB.appData.config.useModuleNav) {
-      KB.Menubar.attachModuleView(this);
-    }
 
     this.setControlsPosition();
 
@@ -183,22 +178,19 @@ KB.Backbone.ModuleView = Backbone.View.extend({
   },
   getDirty: function () {
     this.$el.addClass('isDirty');
-    // reminder: controlView is the nav item
-    if (KB.appData.config.useModuleNav) {
-      this.Menubar.$el.addClass('isDirty');
-    }
   },
   getClean: function () {
     this.$el.removeClass('isDirty');
-    // reminder: controlView is the nav item
-    if (KB.appData.config.useModuleNav) {
-      this.Menubar.$el.removeClass('isDirty');
-    }
   },
   modelChange: function () {
     this.getDirty();
   },
   save: function () {
     // TODO utilize this for saving instead of handling this by the modal view
+  },
+  dispose: function(){
+    delete this.model.view;
+    this.stopListening();
+    this.remove();
   }
 });

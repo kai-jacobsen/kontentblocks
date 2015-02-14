@@ -206,12 +206,14 @@ class ModuleProperties
 
     }
 
-    public function export()
+    public function export($keepSettings = false)
     {
         $vars = get_object_vars($this);
         $vars['area'] = $this->area->id;
         // settings are not persistent
-        unset($vars['settings']);
+        if(!$keepSettings){
+            unset($vars['settings']);
+        }
 
         return $vars;
     }

@@ -168,9 +168,9 @@ class EditableElement extends AbstractEditableFieldReturn
     }
 
 
-    protected function prepare()
+    public function prepare()
     {
-        // TODO: Implement prepare() method.
+        return $this;
     }
 
     public function __toString()

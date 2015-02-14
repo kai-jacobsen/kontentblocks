@@ -296,7 +296,8 @@ body.onsite-editing {
   background: #fff;
   position: fixed;
   top: 40px;
-  right: 40px;
+  right: 0px;
+//  bottom: 30px;
   @include box-shadow(1px 1px 8px #ccc);
   border: 1px solid #aaa;
   overflow: auto;
@@ -422,6 +423,7 @@ body.onsite-editing {
     label {
       font-size: 12px !important;
       color: #999 !important;
+      font-family: 'Open Sans' !important;
     }
 
     input[type=button], .button {

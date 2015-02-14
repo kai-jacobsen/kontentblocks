@@ -99,7 +99,7 @@ class CreateNewModule
         $this->templateOverride();
 
         $Workshop = new ModuleWorkshop( $this->Environment, $this->moduleArgs );
-        $this->newModule = $Workshop->getModule();
+        $this->newModule = $Workshop->createAndGet();
         $this->updateData();
 
         return $this->render();
@@ -136,7 +136,7 @@ class CreateNewModule
     {
 
         //save module to reference array
-        $this->saveNewModule();
+//        $this->saveNewModule();
         // handle template generation
         $this->handleTemplates();
 
@@ -191,7 +191,7 @@ class CreateNewModule
 
         if ($this->frontend) {
             $SingleRenderer = new SingleModuleRenderer( $this->newModule );
-            $SingleRenderer->render();
+            echo $SingleRenderer->render();
         } else {
             echo $this->newModule->renderForm();
         }
@@ -199,7 +199,7 @@ class CreateNewModule
         $response = array
         (
             'id' => $this->newModule->getId(),
-            'module' => $this->newModule->Properties->export(),
+            'module' => $this->newModule->Properties->export(true),
             'name' => $this->newModule->Properties->getSetting( 'publicName' ),
             'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
             'html' => $html

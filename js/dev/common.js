@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-07 */
+/*! Kontentblocks DevVersion 2015-02-14 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -6,7 +6,11 @@ KB.Config = {};
 KB.Backbone = {
     Backend: {},
     Frontend: {},
-    Shared: {}
+    Shared: {},
+    Sidebar: {
+        AreaOverview: {},
+        AreaDetails: {}
+    }
 };
 
 KB.Fields = {};
@@ -27,8 +31,9 @@ _.extend(KB.Events, Backbone.Events);
 
 KB.Ajax = function($) {
     return {
-        send: function(data, callback, scope) {
+        send: function(data, callback, scope, options) {
             var pid;
+            var addPayload = options || {};
             if (data.postId) {
                 pid = data.postId;
             } else {
@@ -50,9 +55,9 @@ KB.Ajax = function($) {
                 success: function(data) {
                     if (data) {
                         if (scope && callback) {
-                            callback.call(scope, data);
+                            callback.call(scope, data, addPayload);
                         } else if (callback) {
-                            callback(data);
+                            callback(data, addPayload);
                         }
                     }
                 },
@@ -1209,6 +1214,14 @@ KB.Util = function($) {
                 }
             }
             return newArray;
+        },
+        sleep: function(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if (new Date().getTime() - start > milliseconds) {
+                    break;
+                }
+            }
         }
     };
 }(jQuery);
@@ -1220,6 +1233,7 @@ KB.ViewsCollection = function() {
         if (!this.views[id]) {
             this.views[id] = view;
             KB.trigger("kb:" + view.model.get("class") + ":added", view);
+            this.trigger("view:add", view);
             this.lastViewAdded = view;
         }
         return view;
@@ -1240,9 +1254,11 @@ KB.ViewsCollection = function() {
     };
     this.remove = function(id) {
         var V = this.get(id);
-        V.Area.trigger("kb.module.deleted", V);
+        V.Area.View.trigger("kb.module.deleted", V);
         this.trigger("kb.modules.view.deleted", V);
         delete this.views[id];
+        V.dispose();
+        delete V;
     };
     this.get = function(id) {
         if (this.views[id]) {

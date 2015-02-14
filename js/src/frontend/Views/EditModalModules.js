@@ -310,8 +310,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
     // be aware of WP admin bar
     // TODO maybe check if admin bar is around
-    if (position.top < 40) {
-      this.$el.css('top', '40px');
+    if (position.top < 35) {
+      this.$el.css('top', '35px');
     }
     _K.info('Frontend Modal resizing done!');
   },
@@ -354,18 +354,14 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       dataType: 'json',
       success: function (res) {
         var $controls;
-
         $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
-
         if ($controls.length > 0) {
           $controls.detach();
         }
-
         // remove attached inline editors from module
         jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
           tinymce.remove('#' + el.id);
         });
-
         // cache module container height
         height = that.ModuleView.$el.height();
 
@@ -378,6 +374,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         that.ModuleView.$el.html(res.html);
 
         that.model.set('moduleData', res.newModuleData);
+        if (save) {
+          that.model.trigger('saved');
+        }
         jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.ModuleView);
         that.ModuleView.delegateEvents();
         that.ModuleView.trigger('kb:frontend::viewUpdated');
@@ -518,7 +517,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       mid: json.instance_id,
       _ajax_nonce: KB.Config.getNonce('update')
     }, function (res) {
-      if (res.success){
+      if (res.success) {
         that.$draft.hide(150);
       }
     }, this);

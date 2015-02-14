@@ -48,6 +48,7 @@ class Enqueues
             'jquery-ui-sortable',
             'jquery-ui-mouse',
             'jquery-ui-draggable',
+            'jquery-ui-droppable',
             'backbone',
             'underscore',
             'wp-color-picker',
@@ -149,6 +150,14 @@ class Enqueues
             true
         );
 
+        // wp.media Extensions
+        wp_register_script(
+            'kb-media-ext',
+            KB_PLUGIN_URL . '/js/' . $folder . '/mediaExt' . $suffix . '.js',
+            array(),
+            false,
+            true
+        );
         self::customScripts();
     }
 
@@ -232,7 +241,8 @@ class Enqueues
             wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
 
             Utilities::hiddenEditor();
-            wp_enqueue_media();
+            wp_enqueue_script( 'kb-media-ext' );
+
         }
         self::enqueueUserScripts();
 

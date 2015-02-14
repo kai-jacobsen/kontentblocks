@@ -100,6 +100,7 @@ KB.IEdit.Image = (function ($) {
         type: 'GET',
         dataType: 'json',
         success: function (res) {
+          console.log(res);
           that.img.attr('src', res);
           that.parent.$el.addClass('isDirty');
 

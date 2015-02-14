@@ -1,0 +1,14 @@
+<div class="kb-sidebar-item__wrapper">
+    <div class="kb-sidebar-item__name">{{{ view.settings.name }}}</div>
+    <div class="kb-sidebar-item__id">{{{ view.settings.id }}}</div>
+</div>
+<div class="kb-sidebar-item__actions">
+    <a class='kb-sidebar-item__edit' title='edit'
+       data='{{ view.instance_id }}' data-url='{{ view.editURL }}'>
+        <span class="dashicons dashicons-edit"></span>
+        <span class="os-action">{{ i18n.moduleControls.controlsEdit }}</span></a>
+    <a class='kb-sidebar__module-update kb-js-inline-update'><span
+            class="dashicons dashicons-update"></span></a>
+    <a class='kb-sidebar__module-update kb-js-inline-delete'><span
+            class="dashicons dashicons-trash"></span></a>
+</div>
