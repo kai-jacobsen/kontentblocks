@@ -3,7 +3,8 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
   className: 'kb-sidebar-area-details__templates',
   LayoutDefs: KB.payload.AreaTemplates || {},
   events: {
-    'click li': 'layoutSelect'},
+    'click li': 'layoutSelect'
+  },
   initialize: function (options) {
     this.controller = options.controller;
     this.sidebarController = options.SidebarController;

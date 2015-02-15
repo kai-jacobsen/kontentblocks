@@ -108,7 +108,7 @@ module.exports = function (grunt) {
         livereload: true
       },
       js: {
-        files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js'],
+        files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js', 'js/**/*.hbs'],
         //tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint', 'bash']
         //tasks: ['concat', 'uglify:dev', 'clean', 'jshint', 'bash']
         tasks: ['dev']

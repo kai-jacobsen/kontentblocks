@@ -15,7 +15,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     this.renderCategories();
   },
   events: {
-    'click .kb-sidebar-area-details__cog' : 'toggle'
+    'click .kb-sidebar-area-details__cog': 'toggle'
   },
   render: function () {
     return this.$el;
@@ -34,7 +34,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
       that.$el.append(catView.render());
     });
   },
-  toggle: function(e){
+  toggle: function (e) {
     this.$settingsContainer.slideToggle();
   }
 });

@@ -209,4 +209,11 @@ jQuery(document).ready(function () {
   // wp native js function
   setUserSetting('editor', 'tinymce');
 
+  jQuery('body').on('click', '.cbutton', function(e){
+    jQuery(this).addClass('cbutton--click');
+    jQuery(e.currentTarget).one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function () {
+      e.currentTarget.classList.remove('cbutton--click');
+    });
+  });
+
 });

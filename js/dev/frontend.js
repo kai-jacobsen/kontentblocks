@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-14 */
+/*! Kontentblocks DevVersion 2015-02-15 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -1065,7 +1065,7 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
     initialize: function(options) {
         this.options = options || {};
         this.Parent = options.parent;
-        this.$el.append('<span class="dashicons dashicons-menu"></span><span class="os-action"></span>');
+        this.$el.append('<span class="genericon genericon-draggable"></span><span class="os-action"></span>');
     },
     className: "kb-module-inline-move kb-nbt kb-nbb",
     isValid: function() {
@@ -1334,7 +1334,11 @@ KB.Backbone.SidebarView = Backbone.View.extend({
         "click .kb-js-sidebar-nav-back": "rootView"
     },
     render: function() {
-        this.$el = jQuery('<div class="kb-sidebar-wrap"></div>').appendTo("body");
+        this.$el = jQuery('<div class="kb-sidebar-wrap" style="display: none;"></div>').appendTo("body");
+        this.$toggle = jQuery('<div class="kb-sidebar-wrap--toggle cbutton cbutto-effect--boris"></div>').appendTo("body");
+        this.Header = new KB.Backbone.Sidebar.Header({});
+        this.$el.append(this.Header.render());
+        this.$container = jQuery('<div class="kb-sidebar-wrap__container"></div>').appendTo(this.$el);
         this.setLayout();
     },
     bindHandlers: function() {
@@ -1342,10 +1346,17 @@ KB.Backbone.SidebarView = Backbone.View.extend({
         jQuery(window).resize(function() {
             that.setLayout();
         });
+        this.$toggle.on("click", function() {
+            that.toggleSidebar();
+        });
     },
     setLayout: function() {
         var h = jQuery(window).height();
         this.$el.height(h);
+        var ls = KB.Util.stex.get("kb-sidebar-visible");
+        if (ls) {
+            this.toggleSidebar();
+        }
     },
     setView: function(View) {
         if (this.currentView) {
@@ -1353,7 +1364,7 @@ KB.Backbone.SidebarView = Backbone.View.extend({
         }
         this.currentView = View;
         this.viewStack.push(View);
-        this.$el.html(View.render());
+        this.$container.html(View.render());
         this.handleNavigationControls();
     },
     prevView: function() {
@@ -1368,10 +1379,16 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     },
     handleNavigationControls: function() {
         if (this.viewStack.length >= 2) {
-            this.$navControls.prependTo(this.$el);
+            this.$navControls.prependTo(this.$container);
         } else {
             this.$navControls.detach();
         }
+    },
+    toggleSidebar: function() {
+        this.visible = !this.visible;
+        this.$el.fadeToggle();
+        jQuery("body").toggleClass("kb-sidebar-visible");
+        KB.Util.stex.set("kb-sidebar-visible", this.visible, 1e3 * 60 * 60);
     }
 });
 
@@ -1788,6 +1805,17 @@ KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
         this.remove();
         delete this.model;
         delete this.parentView;
+    }
+});
+
+KB.Backbone.Sidebar.Header = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__header",
+    initialize: function() {
+        this.$el.append(KB.Templates.render("frontend/sidebar/sidebar-header", {}));
+    },
+    render: function() {
+        return this.$el;
     }
 });
 
@@ -2367,4 +2395,10 @@ jQuery(document).ready(function() {
     }
     KB.Events.trigger("KB::ready");
     setUserSetting("editor", "tinymce");
+    jQuery("body").on("click", ".cbutton", function(e) {
+        jQuery(this).addClass("cbutton--click");
+        jQuery(e.currentTarget).one("webkitAnimationEnd oanimationend msAnimationEnd animationend", function() {
+            e.currentTarget.classList.remove("cbutton--click");
+        });
+    });
 });

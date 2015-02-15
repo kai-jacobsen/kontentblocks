@@ -5,7 +5,7 @@
 }
 
 .kb-module__placeholder{
-  border: 1px dashed #ccc;
+  border: 5px dashed #ccc;
   text-align: center;
   padding: 8px;
   color: #CCCCCC;
@@ -36,9 +36,11 @@
 
 .kb-front-sortable-placeholder{
   background-color: #f9f9f9 !important;
-  width: 300px;
-  height: 50px;
+  width: 100%;
+  max-height: 50px !important;
   visibility: visible;
+  margin: 10px 0;
+  padding: 0;
 }
 
 .kb-menubar-area-active{

@@ -14,15 +14,42 @@ body.admin-bar .kb-sidebar-wrap {
   font-family: 'Open Sans';
 }
 
+.kb-sidebar-wrap--toggle {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  background-color: #3b5963;
+  left: 0;
+  bottom: 0;
+  border-top-right-radius: 30px;
+  box-shadow: 1px 1px 3px #333;
+
+  &::before {
+    content: '\f445';
+    position: absolute;
+    color: #fff;
+    font-family: 'genericons' !important;
+    font-size: 20px;
+    top: 8px;
+    left: 7px;
+    font-weight: 100;
+    cursor: pointer;
+  }
+
+}
+
 .kb-sidebar__nav-controls {
   background-color: #444;
 
   .kb-sidebar__nav-button {
-    font-size: 13px;
     color: #fff;
     line-height: 145%;
-    padding: 8px;
+    padding: 4px 8px;
     cursor: pointer;
+    .dashicons {
+      font-size: 17px;
+      vertical-align: middle;
+    }
   }
 
 }
@@ -124,7 +151,7 @@ body.admin-bar .kb-sidebar-wrap {
 }
 
 .kb-in-sidebar-active {
-  outline: 2px dashed red;
+  outline: 1px dotted #333;
 
   &:hover {
     outline: none;
@@ -154,6 +181,7 @@ body.admin-bar .kb-sidebar-wrap {
     & > .dashicons {
       font-size: 18px;
     }
+
   }
   span {
     display: block;
@@ -161,13 +189,13 @@ body.admin-bar .kb-sidebar-wrap {
     font-weight: 100;
   }
 }
-.kb-sidebar-area-details__subheader{
+
+.kb-sidebar-area-details__subheader {
   font-size: 14px;
   padding: 4px 8px;
   background-color: darken(#3b5963, 10%);
   color: #fff;
 }
-
 
 .kb-sidebar-area-details__settings {
 
@@ -183,7 +211,7 @@ body.admin-bar .kb-sidebar-wrap {
       padding: 5px 8px 5px 35px;
       position: relative;
 
-      &.kb-active-area-layout{
+      &.kb-active-area-layout {
         font-weight: bold;
         background-color: #f2f2f2;
       }
@@ -208,10 +236,10 @@ body.admin-bar .kb-sidebar-wrap {
 .kb-sidebar__category-item {
 
   .kb-sidebar__category-item__title {
-    font-size: 15px;
+    font-size: 12px;
     background-color: #555;
     color: #fff;
-    padding: 8px;
+    padding: 4px 8px;
   }
 
   .kb-sidebar__category-item__module-list {
@@ -224,18 +252,18 @@ body.admin-bar .kb-sidebar-wrap {
       background-color: #fcfcfc;
       border-bottom: 1px solid #ccc;
       position: relative;
-      padding: 8px 8px 8px 35px;
+      padding: 8px 8px 8px 30px;
       cursor: move;
 
       &:before {
-        content: "\f333";
+        content: '\f436';
         display: block;
         position: absolute;
-        left: 10px;
-        top: 6px;
+        left: 5px;
+        top: 2px;
         color: #999;
-        font-size: 18px;
-        font-family: 'dashicons';
+        font-size: 25px;
+        font-family: 'genericons';
       }
     }
   }
@@ -247,4 +275,40 @@ body.admin-bar .kb-sidebar-wrap {
   opacity: 0.5;
   background-color: #f2f2f2;
   border: 1px dotted #333;
+}
+
+.cbutton {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.cbutton--effect-boris::after {
+  background: rgba(111, 148, 182, 0.1);
+}
+
+.cbutton--effect-boris.cbutton--click::after {
+  animation: anim-effect-boris 0.3s forwards;
+}
+
+@keyframes anim-effect-boris {
+  0% {
+    transform: scale3d(0.3, 0.3, 1);
+  }
+  25%, 50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale3d(1.2, 1.2, 1);
+  }
 }
