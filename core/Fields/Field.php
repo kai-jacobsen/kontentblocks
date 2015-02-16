@@ -462,25 +462,13 @@ abstract class Field implements Exportable
      * JSON Encode custom settings for the field
      * @since 1.0.0
      */
-    public function javascriptSettings()
+    public function toJson()
     {
-
         $args = $this->cleanedArgs();
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
             $this->uniqueId,
             $this->augmentArgs( $args )
         );
-
-        $settings = $this->getArg( 'jSettings' );
-        if (!$settings) {
-            return;
-        }
-        Kontentblocks::getService( 'utility.jsontransport' )->registerData(
-            'FieldsConfig',
-            $this->uniqueId,
-            $settings
-        );
-
     }
 
 
@@ -588,12 +576,16 @@ abstract class Field implements Exportable
 
     public function createUID()
     {
-        $base = $this->baseId . $this->key;
-        return 'kb-' . hash( 'crc32', $base );
+        if (is_null($this->uniqueId)){
+            $base = $this->baseId . $this->key;
+            $this->uniqueId = 'kb-' . hash( 'crc32', $base );
+        }
+        return $this->uniqueId;
     }
 
-    private function augmentArgs( $args )
+    public function augmentArgs( $args )
     {
+        $args['uid'] = $this->createUID();
         $args['baseId'] = $this->getBaseId();
         $args['fieldkey'] = $this->getKey();
         $args['arrayKey'] = $this->getArg( 'arrayKey', null );

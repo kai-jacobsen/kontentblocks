@@ -101,7 +101,7 @@ class AreaBackendHTML
      */
     public function header()
     {
-        echo "<div id='{$this->Area->id}-container' class='kb-area__wrap clearfix cf'>";
+        echo "<div id='{$this->Area->id}-container' class='kb-area__wrap klearfix cf'>";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
         $Tpl = new CoreView( 'Area-Header.twig', array( 'area' => $this->Area, 'headerClass' => $headerClass ) );

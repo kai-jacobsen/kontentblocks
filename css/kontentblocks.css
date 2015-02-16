@@ -1043,6 +1043,21 @@ body.admin-bar .kb-sidebar-wrap {
   outline: 1px dotted #ccc;
 }
 
+/* line 50, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+.kb-editable-text-placeholder {
+  background-color: #fcfcfc;
+  padding: 8px;
+  border: 1px dotted #ccc;
+  margin: 8px 0;
+  display: inline-block;
+  width: 100%;
+}
+
+/* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+img.kb-inline-imageedit-attached:hover {
+  cursor: pointer;
+}
+
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_modal.scss */
 #onsite-modal.fullscreen {
   left: 0 !important;

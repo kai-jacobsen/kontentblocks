@@ -175,6 +175,8 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
       KB.payload.Fields = {};
     }
     _.extend(KB.payload.Fields, json.Fields);
+    console.log(json);
+    KB.Payload.parseAdditionalJSON(json);
   },
   // helper method to convert list of assigned classnames to object with module definitions
   prepareAssignedModules: function () {

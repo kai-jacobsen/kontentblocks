@@ -176,7 +176,7 @@ class FieldForm
         }
 
         // some fields (colorpicker etc) might have some individual settings
-        $this->Field->javascriptSettings();
+        $this->Field->toJson();
         /*
          * optional call after the body
          */

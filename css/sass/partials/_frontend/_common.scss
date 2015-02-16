@@ -1,23 +1,23 @@
-.kb-area__empty{
+.kb-area__empty {
   min-height: 100px;
   background-color: #f2f2f2;
   border: 1px dashed #ccc;
 }
 
-.kb-module__placeholder{
+.kb-module__placeholder {
   border: 5px dashed #ccc;
   text-align: center;
   padding: 8px;
   color: #CCCCCC;
   margin: 8px 0;
 
-  p{
-    margin: 0!important;
-    padding: 0!important;
+  p {
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }
 
-.kb-module__dropzone{
+.kb-module__dropzone {
   text-align: center;
   padding: 4px;
   font-size: 11px !important;
@@ -34,7 +34,7 @@
   @include border-radius(4px);
 }
 
-.kb-front-sortable-placeholder{
+.kb-front-sortable-placeholder {
   background-color: #f9f9f9 !important;
   width: 100%;
   max-height: 50px !important;
@@ -43,6 +43,23 @@
   padding: 0;
 }
 
-.kb-menubar-area-active{
+.kb-menubar-area-active {
   outline: 1px dotted #ccc;
+}
+
+.kb-editable-text-placeholder {
+  background-color: #fcfcfc;
+  padding: 8px;
+  border: 1px dotted #ccc;
+  margin: 8px 0;
+  display: inline-block;
+  width: 100%;
+}
+
+img.kb-inline-imageedit-attached {
+
+  &:hover{
+    cursor: pointer;
+  }
+
 }

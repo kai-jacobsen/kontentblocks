@@ -1,5 +1,4 @@
 KB.Backbone.ModuleModel = Backbone.Model.extend({
-
   idAttribute: 'instance_id',
   destroy: function () {
     var that = this;
@@ -8,8 +7,8 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
       instance_id: that.get('instance_id')
     }, that.destroyed);
   },
-  dispose: function(){
-      this.stopListening()
+  dispose: function () {
+    this.stopListening()
   },
   setArea: function (area) {
     //this.area = area;
@@ -18,4 +17,5 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     // @see backend::views:ModuleView.js
     this.view.updateModuleForm();
   }
+
 });

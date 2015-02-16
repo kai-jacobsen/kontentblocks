@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-15 */
+/*! Kontentblocks DevVersion 2015-02-16 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -10,7 +10,8 @@ KB.Backbone = {
     Sidebar: {
         AreaOverview: {},
         AreaDetails: {}
-    }
+    },
+    Inline: {}
 };
 
 KB.Fields = {};
@@ -581,6 +582,8 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             KB.payload.Fields = {};
         }
         _.extend(KB.payload.Fields, json.Fields);
+        console.log(json);
+        KB.Payload.parseAdditionalJSON(json);
     },
     prepareAssignedModules: function() {
         var assignedModules = this.area.model.get("assignedModules");
@@ -694,6 +697,12 @@ KB.Payload = function($) {
                 }
             } else {
                 return null;
+            }
+        },
+        parseAdditionalJSON: function(json) {
+            console.log(_.toArray(json.Fields));
+            if (json && json.Fields) {
+                KB.FieldConfigs.add(_.toArray(json.Fields));
             }
         }
     };
@@ -1258,7 +1267,6 @@ KB.ViewsCollection = function() {
         this.trigger("kb.modules.view.deleted", V);
         delete this.views[id];
         V.dispose();
-        delete V;
     };
     this.get = function(id) {
         if (this.views[id]) {

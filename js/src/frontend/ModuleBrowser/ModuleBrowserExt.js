@@ -3,7 +3,6 @@
  */
 KB.Backbone.ModuleBrowser.prototype.success = function (res) {
   var model;
-  console.log('succ');
 
   if (this.dropZone) {
     this.dropZone.$el.after(res.data.html);
@@ -12,6 +11,7 @@ KB.Backbone.ModuleBrowser.prototype.success = function (res) {
     this.options.area.$el.append(res.data.html).removeClass('kb-area__empty');
   }
 
+  console.log(res.data.module);
 
   model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
 

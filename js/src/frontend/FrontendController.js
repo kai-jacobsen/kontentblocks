@@ -45,6 +45,8 @@ KB.Areas = new Backbone.Collection([], {
   model: KB.Backbone.AreaModel
 });
 
+
+
 /*
  * Init function
  * Register event listeners
@@ -76,6 +78,12 @@ KB.App = function () {
 
     // Create views
     addViews();
+
+
+    /*
+     * payload.Fields collection
+     */
+    KB.FieldConfigs = new KB.Backbone.Frontend.FieldConfigsCollection(_.toArray(KB.payload.Fields));
 
     // get the UI on track
     KB.Ui.init();

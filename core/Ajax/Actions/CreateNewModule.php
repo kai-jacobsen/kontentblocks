@@ -199,7 +199,7 @@ class CreateNewModule
         $response = array
         (
             'id' => $this->newModule->getId(),
-            'module' => $this->newModule->Properties->export(true),
+            'module' => $this->newModule->toJSON(),
             'name' => $this->newModule->Properties->getSetting( 'publicName' ),
             'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
             'html' => $html
