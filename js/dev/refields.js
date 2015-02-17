@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-16 */
+/*! Kontentblocks DevVersion 2015-02-17 */
 KB.Fields.register("Color", function($) {
     return {
         init: function() {
@@ -630,27 +630,6 @@ KB.Fields.register("GalleryRedux", function($) {
             function croppedCallback(attachment) {
                 jQuery(".kb-cropped-image").html('<img src="' + attachment.get("sizes").full.url + '">');
             }
-            var args = {
-                post__in: [ "388" ]
-            };
-            var query = wp.media.query(args);
-            var selection = new wp.media.model.Selection(query.models, {
-                props: query.props.toJSON(),
-                multiple: true
-            });
-            selection.more().done(function() {
-                selection.props.set({
-                    query: false
-                });
-                selection.unmirror();
-                selection.props.unset("orderby");
-            });
-            sesame = new wp.media.view.KBGallery({
-                state: "gallery-edit",
-                multiple: true,
-                selection: selection,
-                editing: true
-            });
         },
         update: function() {
             this.init();

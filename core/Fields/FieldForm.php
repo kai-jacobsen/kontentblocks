@@ -153,6 +153,7 @@ class FieldForm
     {
         $out = '';
         $value = $this->Field->getValue();
+
         /*
          * optional method to render something before the field
          */

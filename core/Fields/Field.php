@@ -576,8 +576,10 @@ abstract class Field implements Exportable
 
     public function createUID()
     {
-        if (is_null($this->uniqueId)){
-            $base = $this->baseId . $this->key;
+        $state = ( is_admin() ) ? 'frontend' : 'backend';
+
+        if (is_null( $this->uniqueId )) {
+            $base = $this->baseId . $this->key . $state;
             $this->uniqueId = 'kb-' . hash( 'crc32', $base );
         }
         return $this->uniqueId;
@@ -586,6 +588,7 @@ abstract class Field implements Exportable
     public function augmentArgs( $args )
     {
         $args['uid'] = $this->createUID();
+        $args['type'] = $this->type;
         $args['baseId'] = $this->getBaseId();
         $args['fieldkey'] = $this->getKey();
         $args['arrayKey'] = $this->getArg( 'arrayKey', null );

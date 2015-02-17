@@ -2,38 +2,73 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
   initialize: function () {
     this.$el.removeAttr('data-kbfuid');
     this.$el.addClass('kb-inline-imageedit-attached');
+    this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
+    console.log(this);
+    this.$el.css('min-height', '200px');
+    this.mode = this.model.get('mode');
+    this.defaultState = this.model.get('state') || 'replace-image';
   },
   events: {
     'click': 'openFrame'
   },
   openFrame: function () {
-
+    var that = this;
     if (this.frame) {
       return this.frame.open();
     }
 
-    this.frame = wp.media({
-      title: KB.i18n.Refields.file.modalTitle,
-      button: {
-        text: KB.i18n.Refields.common.select
-      },
-      multiple: false,
-      library: {
-        type: 'image'
-      },
-      ImageEditView: this
-    });
+    // we only want to query "our" image attachment
+    // value of post__in must be an array
+    var queryargs = {post__in: [this.model.get('id')]};
 
-    this.frame.on('ready', this.ready);
-    this.frame.state('library').on('select', this.select);
-    return this.frame.open();
+    wp.media.query(queryargs) // set the query
+      .more() // execute the query, this will return an deferred object
+      .done(function () { // attach callback, executes after the ajax call succeeded
+
+        // inside the callback 'this' refers to the result collection
+        // there should be only one model, assign it to a var
+        var attachment = that.attachment = this.first();
+
+        // this is a bit odd: if you want to access the 'sizes' in the modal
+        // and if you need access to the image editor / replace image function
+        // attachment_id must be set.
+        // see media-models.js, Line ~370 / PostImage
+        that.attachment.set('attachment_id', attachment.get('id'));
+
+        // create a frame, bind 'update' callback and open in one step
+        that.frame = wp.media({
+          frame: 'image', // alias for the ImageDetails frame
+          state: that.defaultState, // default state, makes sense
+          metadata: attachment.toJSON(), // the important bit, thats where the initial informations come from
+          imageEditView: that
+        }).on('update', function (attachmentObj) { // bind callback to 'update'
+          that.update(attachmentObj);
+        }).on('ready', function () {
+          that.ready();
+        }).on('replace', function () {
+          that.replace(that.frame.image.attachment);
+        }).on('select', function () {
+          alert('select');
+          //that.select();
+        }).open();
+      });
+
+    //this.frame.state('library').on('select', this.select);
+    //return this.frame.open();
   },
   ready: function () {
     jQuery('.media-modal').addClass('smaller no-sidebar');
   },
-  select: function () {
-    var attachment = this.get('selection').first();
-    this.frame.options.ImageEditView.handleAttachment(attachment);
+  replace: function (attachment) {
+    this.attachment = attachment;
+    this.handleAttachment(attachment);
+  },
+  update: function (attachmentObj) {
+    this.attachment.set(attachmentObj);
+    this.attachment.sync('update', this.attachment);
+    if(this.$caption.length > 0){
+      this.$caption.html(this.attachment.get('caption'));
+    }
   },
   handleAttachment: function (attachment) {
     var that = this;
@@ -45,9 +80,11 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     this.model.get('ModuleModel').set('moduleData', moduleData);
     this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
 
+
+
     var args = {
-      width : that.model.get('width'),
-      height : that.model.get('height'),
+      width: that.model.get('width'),
+      height: that.model.get('height'),
       crop: that.model.get('crop'),
       upscale: that.model.get('upscale')
     };
@@ -63,7 +100,11 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
       type: 'GET',
       dataType: 'json',
       success: function (res) {
-        that.$el.attr('src', res);
+        if (that.mode === 'simple') {
+          that.$el.attr('src', res);
+        } else if (that.mode === 'background') {
+          that.$el.css('backgroundImage', "url('" + res + "')");
+        }
         that.delegateEvents();
       },
       error: function () {
@@ -80,3 +121,40 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
   }
 
 });
+
+
+//// we only want to query "our" image attachment
+//// value of post__in must be an array
+//var queryargs = {post__in: [this.model.get('id')]};
+//
+//wp.media.query(queryargs) // set the query
+//  .more() // execute the query, this will return an deferred object
+//  .done(function () { // attach callback, executes after the ajax call succeeded
+//
+//    // inside the callback 'this' refers to the result collection
+//    // there should be only one model, assign it to a var
+//    var attachment = that.attachment = this.first();
+//
+//    // this is a bit odd: if you want to access the 'sizes' in the modal
+//    // and if you need access to the image editor / replace image function
+//    // attachment_id must be set.
+//    // see media-models.js, Line ~370 / PostImage
+//    that.attachment.set('attachment_id', attachment.get('id'));
+//
+//    // create a frame, bind 'update' callback and open in one step
+//    that.frame = wp.media({
+//      frame: 'image', // alias for the ImageDetails frame
+//      state: 'image-details', // default state, makes sense
+//      metadata: attachment.toJSON(), // the important bit, thats where the initial informations come from
+//      imageEditView: that
+//    }).on('update', function (attachmentObj) { // bind callback to 'update'
+//      that.update(attachmentObj);
+//    }).on('ready', function () {
+//      that.ready();
+//    }).on('replace', function () {
+//      that.replace(that.frame.image.attachment);
+//    }).on('select', function () {
+//      //alert('select');
+//      //that.select();
+//    }).open();
+//  });

@@ -1,10 +1,15 @@
-/*! Kontentblocks DevVersion 2015-02-16 */
+/*! Kontentblocks DevVersion 2015-02-17 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
 
 KB.Backbone.ContextModel = Backbone.Model.extend({
     idAttribute: "id"
+});
+
+KB.Backbone.Backend.FieldConfigModel = Backbone.Model.extend({
+    idAttribute: "uid",
+    initialize: function() {}
 });
 
 KB.Backbone.ModuleDefinition = Backbone.Model.extend({
@@ -479,6 +484,10 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
     }
 });
 
+KB.Backbone.Backend.FieldConfigsCollection = Backbone.Collection.extend({
+    model: KB.Backbone.Backend.FieldConfigModel
+});
+
 KB.currentModule = {};
 
 KB.currentArea = {};
@@ -503,6 +512,7 @@ KB.App = function() {
         KB.Areas.on("add", createAreaViews);
         KB.Modules.on("remove", removeModule);
         addViews();
+        KB.FieldConfigs = new KB.Backbone.Backend.FieldConfigsCollection(_.toArray(KB.payload.Fields));
         KB.Ui.init();
     }
     function addViews() {

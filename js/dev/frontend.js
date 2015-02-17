@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-16 */
+/*! Kontentblocks DevVersion 2015-02-17 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -1230,8 +1230,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click .kb-module__dropzone": "setDropZone",
         "click .kb-js-inline-delete": "confirmDelete",
         "click .editable": "reloadModal",
-        "hover.first": "setActive",
-        "hover.second": "setControlsPosition"
+        "mouseenter.first": "setActive",
+        "mouseenter.second": "setControlsPosition"
     },
     openOptions: function() {
         this.Controls.EditControl.openForm();
@@ -1902,35 +1902,55 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     initialize: function() {
         this.$el.removeAttr("data-kbfuid");
         this.$el.addClass("kb-inline-imageedit-attached");
+        this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
+        console.log(this);
+        this.$el.css("min-height", "200px");
+        this.mode = this.model.get("mode");
+        this.defaultState = this.model.get("state") || "replace-image";
     },
     events: {
         click: "openFrame"
     },
     openFrame: function() {
+        var that = this;
         if (this.frame) {
             return this.frame.open();
         }
-        this.frame = wp.media({
-            title: KB.i18n.Refields.file.modalTitle,
-            button: {
-                text: KB.i18n.Refields.common.select
-            },
-            multiple: false,
-            library: {
-                type: "image"
-            },
-            ImageEditView: this
+        var queryargs = {
+            post__in: [ this.model.get("id") ]
+        };
+        wp.media.query(queryargs).more().done(function() {
+            var attachment = that.attachment = this.first();
+            that.attachment.set("attachment_id", attachment.get("id"));
+            that.frame = wp.media({
+                frame: "image",
+                state: that.defaultState,
+                metadata: attachment.toJSON(),
+                imageEditView: that
+            }).on("update", function(attachmentObj) {
+                that.update(attachmentObj);
+            }).on("ready", function() {
+                that.ready();
+            }).on("replace", function() {
+                that.replace(that.frame.image.attachment);
+            }).on("select", function() {
+                alert("select");
+            }).open();
         });
-        this.frame.on("ready", this.ready);
-        this.frame.state("library").on("select", this.select);
-        return this.frame.open();
     },
     ready: function() {
         jQuery(".media-modal").addClass("smaller no-sidebar");
     },
-    select: function() {
-        var attachment = this.get("selection").first();
-        this.frame.options.ImageEditView.handleAttachment(attachment);
+    replace: function(attachment) {
+        this.attachment = attachment;
+        this.handleAttachment(attachment);
+    },
+    update: function(attachmentObj) {
+        this.attachment.set(attachmentObj);
+        this.attachment.sync("update", this.attachment);
+        if (this.$caption.length > 0) {
+            this.$caption.html(this.attachment.get("caption"));
+        }
     },
     handleAttachment: function(attachment) {
         var that = this;
@@ -1958,7 +1978,11 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
             type: "GET",
             dataType: "json",
             success: function(res) {
-                that.$el.attr("src", res);
+                if (that.mode === "simple") {
+                    that.$el.attr("src", res);
+                } else if (that.mode === "background") {
+                    that.$el.css("backgroundImage", "url('" + res + "')");
+                }
                 that.delegateEvents();
             },
             error: function() {}
@@ -2115,103 +2139,6 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
         return string.replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
     }
 });
-
-KB.IEdit.BackgroundImage = function($) {
-    var self, attachment;
-    self = {
-        selector: ".editable-bg-image",
-        remove: ".kb-js-reset-file",
-        img: null,
-        init: function() {
-            var that = this;
-            $("body").on("click", this.selector, function(e) {
-                e.preventDefault();
-                that.img = $(this);
-                that.parent = KB.currentModule;
-                that.frame().open();
-            });
-            $("body").on("click", this.remove, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.resetFields();
-            });
-            this.renderControls();
-        },
-        renderControls: function() {
-            $(this.selector).each(function() {
-                $("body").on("mouseover", ".editable-bg-image", function() {
-                    $(this).css("cursor", "pointer");
-                });
-            });
-        },
-        frame: function() {
-            if (this._frame) return this._frame;
-            this._frame = wp.media({
-                title: "Change background image",
-                button: {
-                    text: "Insert"
-                },
-                multiple: false,
-                library: {
-                    type: "image"
-                }
-            });
-            this._frame.on("ready", this.ready);
-            this._frame.state("library").on("select", this.select);
-            return this._frame;
-        },
-        ready: function() {
-            $(".media-modal").addClass(" smaller no-sidebar");
-        },
-        select: function() {
-            attachment = this.get("selection").first();
-            self.handleAttachment(attachment);
-        },
-        handleAttachment: function(attachment) {
-            var that = this;
-            var id = attachment.get("id");
-            var value = {
-                id: id,
-                title: attachment.get("title"),
-                caption: attachment.get("caption")
-            };
-            var data = this.img.data();
-            var mId = data.module;
-            var cModule = KB.Modules.get(mId);
-            var moduleData = _.clone(cModule.get("moduleData"));
-            var path = data.kpath;
-            var settings = KB.payload.FrontSettings[data.uid];
-            KB.Util.setIndex(moduleData, path, value);
-            cModule.set("moduleData", moduleData);
-            cModule.trigger("kb.frontend.module.inlineUpdate");
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    action: "fieldGetImage",
-                    args: settings,
-                    id: id,
-                    _ajax_nonce: KB.Config.getNonce("read")
-                },
-                type: "GET",
-                dataType: "json",
-                success: function(res) {
-                    that.img.css("backgroundImage", "url('" + res + "')");
-                    that.parent.$el.addClass("isDirty");
-                },
-                error: function() {}
-            });
-        },
-        resetFields: function() {
-            $(".kb-file-attachment-id", this.container).val("");
-            this.container.hide(750);
-            $(this.remove, activeField).hide();
-        },
-        update: function() {
-            this.init();
-        }
-    };
-    return self;
-}(jQuery);
 
 KB.IEdit.Link = function($) {
     var $form, $linkTarget, $linktext, $body, $href, $title;

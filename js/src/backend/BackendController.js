@@ -50,6 +50,14 @@ KB.App = (function () {
 
     // Create views
     addViews();
+
+
+    /*
+     * payload.Fields collection
+     */
+    KB.FieldConfigs = new KB.Backbone.Backend.FieldConfigsCollection(_.toArray(KB.payload.Fields));
+
+
     // get the UI on track
     KB.Ui.init();
   }

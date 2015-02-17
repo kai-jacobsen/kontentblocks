@@ -342,14 +342,24 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             'height' => $this->height,
             'crop' => $this->crop,
             'upscale' => $this->upscale,
+            'id' => $this->getValue( 'id' ),
             'type' => 'EditableImage',
             'kpath' => $this->createPath(),
             'tooltip' => $this->helptext,
-            'mode' => ($this->background) ? 'background' : 'simple'
+            'mode' => ( $this->background ) ? 'background' : 'simple',
+            'state' => $this->field->getArg( 'state', 'image-details' )
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
             $this->uniqueId,
             $this->field->augmentArgs( $json )
+        );
+
+        wp_enqueue_script(
+            'image-edit',
+            "/wp-admin/js/image-edit.min.js",
+            array( 'jquery', 'json2', 'imgareaselect' ),
+            false,
+            1
         );
     }
 
@@ -357,6 +367,11 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     public function prepare()
     {
         return $this;
+    }
+
+    public function getMetaLink($attr)
+    {
+        return 'data-' . $this->uniqueId . '-' . $attr;
     }
 
     /**

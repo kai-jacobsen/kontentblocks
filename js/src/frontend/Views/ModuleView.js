@@ -42,8 +42,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     //"click .kb-js-inline-update": "updateModule",
     "click .kb-js-inline-delete": "confirmDelete",
     "click .editable": "reloadModal",
-    "hover.first": "setActive",
-    "hover.second": "setControlsPosition"
+    "mouseenter.first": "setActive",
+    "mouseenter.second": "setControlsPosition"
     //"mouseenter.third": "insertDropZone"
     //"mouseleave": "removeDropZone"
 

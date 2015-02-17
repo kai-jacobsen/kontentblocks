@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-16 */
+/*! Kontentblocks DevVersion 2015-02-17 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -1263,6 +1263,7 @@ KB.ViewsCollection = function() {
     };
     this.remove = function(id) {
         var V = this.get(id);
+        console.log(V);
         V.Area.View.trigger("kb.module.deleted", V);
         this.trigger("kb.modules.view.deleted", V);
         delete this.views[id];

@@ -109,8 +109,8 @@ KB.Fields.register('Image', (function ($) {
         this.$container.html('<img src="' + src + '" >');
       }
       this.$id.val(attachment.get('id'));
-      this.$title.val(attachment.get('title'));
-      this.$description.val(attachment.get('caption'));
+      //this.$title.val(attachment.get('title'));
+      //this.$description.val(attachment.get('caption'));
       KB.Events.trigger('kb.modal.preview', this);
 
     },

@@ -5,6 +5,7 @@ namespace Kontentblocks\Backend\Screen;
 use Exception;
 use Kontentblocks\Areas\AreaBackendHTML;
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Kontentblocks;
 
 /**
  * Class ScreenContext
@@ -134,6 +135,10 @@ class ScreenContext
             $area->render();
             //render area footer
             $area->footer();
+
+            if (is_user_logged_in()) {
+                Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $args );
+            }
         }
     }
 

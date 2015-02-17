@@ -7,7 +7,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
-          mangle: false,
+          mangle: true,
           beautify: false,
           compress: true,
           drop_console: true
@@ -74,7 +74,7 @@ module.exports = function (grunt) {
         nonull: true
       },
       backend: {
-        src: ['js/src/backend/Models/**/*.js', 'js/src/backend/Views/**/*.js', 'js/src/backend/BackendController.js'],
+        src: ['js/src/backend/Models/**/*.js', 'js/src/backend/Views/**/*.js', 'js/src/backend/Collections/**/*.js', 'js/src/backend/BackendController.js'],
         dest: 'js/tmp/backend.concat.js',
         nonull: true
       },
