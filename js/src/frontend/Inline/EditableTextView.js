@@ -1,12 +1,19 @@
 KB.Backbone.Inline.EditableText = Backbone.View.extend({
   initialize: function () {
-    this.id = this.el.id;
-    this.$el.removeAttr('data-kbfuid');
+
     this.placeHolderSet = false;
     this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
     this.setupDefaults();
     this.maybeSetPlaceholder();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
+    this.render();
+  },
+  render: function(){
+    this.id = this.el.id;
+    this.$el.removeAttr('data-kbfuid');
+  },
+  derender: function(){
+    this.deactivate();
   },
   events: {
     'click': 'activate'
@@ -33,7 +40,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
           ed.module = that.model.get('ModuleModel');
           ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content') ? true : false;
           ed.kpath = that.model.get('kpath');
-          ed.module.view.$el.addClass('inline-editor-attached');
+          ed.module.View.$el.addClass('inline-editor-attached');
           KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
 
           ed.fire('focus');
@@ -58,7 +65,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
           }
 
           jQuery('#kb-toolbar').show();
-          ed.module.view.$el.addClass('inline-edit-active');
+          ed.module.View.$el.addClass('inline-edit-active');
 
           if (ed.placeholder !== false) {
             ed.setContent('');
@@ -66,14 +73,13 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
         });
 
         ed.on('change', function () {
-          _K.info('Got Dirty');
         });
 
         ed.addButton('kbcancleinline', {
           title: 'Stop inline Edit',
           onClick: function () {
             if (tinymce.activeEditor.isDirty()) {
-              tinymce.activeEditor.module.view.getDirty();
+              tinymce.activeEditor.module.View.getDirty();
             }
             tinymce.activeEditor.fire('blur');
             tinymce.activeEditor = null;
@@ -85,7 +91,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
 
         ed.on('blur', function () {
           var content, moduleData, path;
-          ed.module.view.$el.removeClass('inline-edit-active');
+          ed.module.View.$el.removeClass('inline-edit-active');
           jQuery('#kb-toolbar').hide();
           content = ed.getContent();
           if (ed.kfilter) {
@@ -111,8 +117,9 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
                 success: function (res) {
                   ed.setContent(res.data.content);
                   ed.module.set('moduleData', moduleData);
-                  ed.module.trigger('kb.frontend.module.inlineUpdate');
+                  //ed.module.trigger('kb.frontend.module.inlineUpdate');
                 },
+
                 error: function () {
 //                                ed.module.trigger('change');
 //                                ed.module.set('moduleData', moduleData);
@@ -120,7 +127,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
               });
             } else {
               ed.module.set('moduleData', moduleData);
-              ed.module.trigger('kb.frontend.module.inlineUpdate');
+              //ed.module.trigger('kb.frontend.module.inlineUpdate');
             }
           } else {
             ed.setContent(ed.previousContent);
@@ -144,7 +151,6 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
     }
   },
   deactivate: function () {
-    alert('deactivated');
     tinyMCE.execCommand('mceRemoveEditor', false, this.id);
     this.editor = null;
   },
@@ -164,3 +170,5 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
       .replace(/<p><\/p>/g, '');
   }
 });
+
+KB.Fields.registerObject('EditableText', KB.Backbone.Inline.EditableText);

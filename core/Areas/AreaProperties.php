@@ -118,6 +118,7 @@ class AreaProperties
         }
     }
 
+
     /**
      * Get property
      * @param string $prop

@@ -21,9 +21,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
     // Sortable
     if (this.model.get('sortable')) {
       this.setupSortables();
-      _K.info('Area sortable initialized');
     } else {
-      _K.info('Area sortable skipped');
 
     }
   },
@@ -36,15 +34,14 @@ KB.Backbone.AreaView = Backbone.View.extend({
     this.ModuleBrowser.render();
     return this.ModuleBrowser;
   },
-  addModuleView: function (moduleView) {
-    this.attachedModuleViews[moduleView.model.get('instance_id')] = moduleView; // add module
-    this.listenTo(moduleView.model, 'change:area', this.removeModule); // add listener
-    _K.info('Module:' + moduleView.model.id + ' was added to area:' + this.model.id);
+  attachModuleView: function (moduleModel) {
+    this.attachedModuleViews[moduleModel.get('mid')] = moduleModel; // add module
+    this.listenTo(moduleModel, 'change:area', this.removeModule); // add listener
 
     if (this.getNumberOfModules() > 0){
       this.$el.removeClass('kb-area__empty');
     }
-    this.trigger('kb.module.created', moduleView);
+    this.trigger('kb.module.created', moduleModel);
   },
 
   getNumberOfModules: function () {
@@ -171,7 +168,6 @@ KB.Backbone.AreaView = Backbone.View.extend({
     if (this.attachedModuleViews[id]) {
       delete this.attachedModuleViews[id];
     }
-    _K.info('Module:' + ModuleView.model.id + ' was removed from area:' + this.model.id);
     if (this.getNumberOfModules() < 0){
       this.$el.addClass('kb-area__empty');
     }

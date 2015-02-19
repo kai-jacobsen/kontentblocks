@@ -58,7 +58,7 @@ class Enqueues
         // Plugins
         wp_register_script(
             'kb-plugins',
-            KB_PLUGIN_URL . '/js/' . $folder . '/plugins' . $suffix . '.js',
+            KB_PLUGIN_URL . 'js/' . $folder . '/plugins' . $suffix . '.js',
             $dependecies,
             null,
             true
@@ -77,8 +77,26 @@ class Enqueues
         // Extensions
         wp_register_script(
             'kb-extensions',
-            KB_PLUGIN_URL . '/js/' . $folder . '/extensions' . $suffix . '.js',
+            KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
             array( 'kb-common' ),
+            null,
+            true
+        );
+
+        // FieldsAPI
+        wp_register_script(
+            'kb-fields-api',
+            KB_PLUGIN_URL . 'js/' . $folder . '/fieldsAPI' . $suffix . '.js',
+            array('kb-extensions'),
+            null,
+            true
+        );
+
+        // fields handler
+        wp_register_script(
+            'kb-refields',
+            KB_PLUGIN_URL . 'js/' . $folder . '/refields' . $suffix . '.js',
+            array( 'kb-fields-api' ),
             null,
             true
         );
@@ -87,8 +105,8 @@ class Enqueues
             // Backend 'controller'
             wp_register_script(
                 'kb-backend',
-                KB_PLUGIN_URL . '/js/' . $folder . '/backend' . $suffix . '.js',
-                array( 'kb-extensions' ),
+                KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
+                array( 'kb-refields' ),
                 null,
                 true
             );
@@ -97,7 +115,7 @@ class Enqueues
             wp_register_script(
                 'kb-frontend',
                 KB_PLUGIN_URL . 'js/' . $folder . '/frontend' . $suffix . '.js',
-                array( 'kb-extensions', ),
+                array( 'kb-refields', ),
                 null,
                 true
             );
@@ -114,23 +132,9 @@ class Enqueues
         );
 
 
-        // FieldsAPI
-        wp_register_script(
-            'kb-fields-api',
-            KB_PLUGIN_URL . 'js/' . $folder . '/fieldsAPI' . $suffix . '.js',
-            null,
-            null,
-            true
-        );
 
-        // fields handler
-        wp_register_script(
-            'kb-refields',
-            KB_PLUGIN_URL . '/js/' . $folder . '/refields' . $suffix . '.js',
-            array( 'kb-fields-api' ),
-            null,
-            true
-        );
+
+
 
         // WP iris // no dev version available in core
         wp_register_script(

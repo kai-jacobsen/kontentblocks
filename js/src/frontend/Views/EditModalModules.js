@@ -1,9 +1,14 @@
+KB.Backbone.ModalFieldCollection = Backbone.Collection.extend({
+  model: KB.Backbone.Common.FieldConfigModelModal,
+});
 /**
  * This is the modal which wraps the modules input form
  * and loads when the user clicks on "edit" while in frontend editing mode
  * @type {*|void|Object}
  *
  */
+
+
 KB.Backbone.EditModalModules = Backbone.View.extend({
   tagName: 'div',
   id: 'onsite-modal',
@@ -30,6 +35,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       el: this.$form
     });
 
+    this.FieldModels = new KB.Backbone.ModalFieldCollection();
+
     // init draggable container and store position in config var
     this.$el.css('position', 'fixed').draggable({
       handle: 'h2',
@@ -42,10 +49,10 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     });
 
     // use this event to refresh the modal on demand
-    this.listenTo(KB.Events, 'kb.modal.refresh', this.recalibrate);
+    this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
 
     // use this event to tigger preview
-    this.listenTo(KB.Events, 'kb.modal.preview', this.preview);
+    this.listenTo(KB.Events, 'modal.preview', this.preview);
 
     // Attach resize event handler
     jQuery(window).on('resize', function () {
@@ -81,19 +88,27 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     'change .kb-template-select': 'viewfileChange'
   },
 
+  /**
+   * Main method to open the modal
+   * If modal is already opened and ModuleView differs from active
+   * the modal reloads the view
+   * else it's a noop
+   * @param ModuleView Backbone View
+   * @param force
+   * @returns {KB.Backbone.EditModalModules}
+   */
   openView: function (ModuleView, force) {
 
     this.setupWindow();
-
-    force = (_.isUndefined(force)) ? false : true;
+    //force = (_.isUndefined(force)) ? false : true;
 
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
-      _K.log('Module View already set');
       return this;
     }
 
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
+    this.model.View = ModuleView;
 
     this.attach();
     this.render();
@@ -111,24 +126,39 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     //when update gets called from module controls, notify this view
     this.listenTo(this.ModuleView, 'kb.frontend.module.inline.saved', this.frontendViewUpdated);
 
+    /**
+     * when the viewfile select changed,
+     * reload to account for a different input form
+     */
     this.listenTo(this.model, 'change:viewfile', function () {
       that.serialize(false, true);
-      that.render();
+      that.reload();
     });
 
-    this.listenTo(this.model, 'kb.frontend.module.inlineUpdate', function () {
-      that.render(true);
-      that.$el.addClass('isDirty');
-    });
+    ///**
+    // * When save is clicked on the actual DOM View model
+    // * the modal needs to be reloaded in order to stay synced
+    // */
+    //this.listenTo(this.model, 'change:moduleData', function () {
+    //  that.reload();
+    //  that.$el.addClass('isDirty');
+    //});
 
-    this.listenTo(this.ModuleView, 'kb.module.view.delete', this.destroy);
+    this.listenTo(this.ModuleView.model, 'remove', this.destroy);
+  },
+  /**
+   * reload the modal
+   */
+  reload: function () {
+    this.render(true);
   },
   detach: function () {
     // reset listeners and ModuleView
+    this.FieldModels.reset();
     this.stopListening(this.ModuleView);
     this.stopListening(this.model);
-    this.ModuleView.attachedFields = {};
     delete this.ModuleView;
+    KB.Events.trigger('modal.close', this);
   },
 
   /**
@@ -141,6 +171,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       tinymce.remove('#' + item.id);
     });
     that.unbind();
+    that.initialized = false;
     that.$el.detach();
   },
 
@@ -165,7 +196,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    */
   frontendViewUpdated: function () {
     this.$el.removeClass('isDirty');
-    this.render();
+    this.reload();
   },
 
 
@@ -188,12 +219,15 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
    * Main render method of the modal content
    * @TODO seperate concerns
    */
-  render: function (overloadData) {
+  render: function (reload) {
     var that = this,
       json;
 
+    console.trace();
+
+
     _KS.info('Frontend modal retrieves data from the server');
-    overloadData = !_.isUndefined(overloadData);
+    //overloadData = !_.isUndefined(overloadData);
     json = this.model.toJSON();
 
 
@@ -208,7 +242,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         action: 'getModuleForm',
         module: json,
         moduleData: json.moduleData,
-        overloadData: overloadData,
+        //overloadData: overloadData,
         _ajax_nonce: KB.Config.getNonce('read')
       },
       type: 'POST',
@@ -238,18 +272,29 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         // ----------------------------------------------
         // (Re)Init UI widgets
         // TODO find better method for this
-        if (res.json) {
+        if (res.data.json) {
           KB.payload = _.extend(KB.payload, res.data.json);
+          //var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
+
+          if (res.data.json.Fields) {
+            that.FieldModels.add(_.toArray(res.data.json.Fields));
+          }
         }
         KB.Ui.initTabs();
         KB.Ui.initToggleBoxes();
         KB.TinyMCE.addEditor(that.$form);
         // -----------------------------------------------
 
-        _K.info('Frontend Modal opened with view of:' + that.model.get('instance_id'));
         _KS.info('Frontend modal done.');
 
         that.$title.text(that.model.get('settings').name);
+
+
+        if (reload) {
+          if (that.FieldModels.length > 0) {
+            KB.Events.trigger('modal.reload');
+          }
+        }
 
         // delayed fields update
         setTimeout(function () {
@@ -284,7 +329,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       winDiff;
 
     // get window height
-    winH = (jQuery(window).height()) - 40;
+    winH = (jQuery(window).height() - 16);
     // get height of modal contents
     conH = jQuery('.os-content-inner').height();
     //get position of modal
@@ -310,10 +355,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
     // be aware of WP admin bar
     // TODO maybe check if admin bar is around
-    if (position.top < 35) {
-      this.$el.css('top', '35px');
+    if (position.top < 32) {
+      this.$el.css('top', '32px');
     }
-    _K.info('Frontend Modal resizing done!');
   },
   /**
    * (Re) Init Nano scrollbars
@@ -322,7 +366,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
   initScrollbars: function (height) {
     jQuery('.kb-nano', this.$el).height(height + 20);
     jQuery('.kb-nano').nanoScroller({preventPageScrolling: true, contentClass: 'kb-nano-content'});
-    _K.info('Nano Scrollbars (re)initialized!');
   },
 
   /**
@@ -337,7 +380,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       height;
 
     this.LoadingAnimation.show(0.5);
-    _K.info('Frontend Modal called serialize function. Savemode:', mode);
 
     tinymce.triggerSave();
     jQuery.ajax({
@@ -365,6 +407,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         // cache module container height
         height = that.ModuleView.$el.height();
 
+        KB.Events.trigger('modal.serialize.before');
+
+
         // change the container class if viewfile changed
         if (that.updateViewClassTo !== false) {
           that.updateContainerClass(that.updateViewClassTo);
@@ -372,7 +417,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
         // replace module html with new html
         that.ModuleView.$el.html(res.html);
-
         that.model.set('moduleData', res.newModuleData);
         if (save) {
           that.model.trigger('saved');
@@ -383,7 +427,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         KB.Events.trigger('KB::ajax-update');
 
         KB.trigger('kb:frontendModalUpdated');
-
         // (re)attach inline editors and handle module controls
         // delay action to be safe
         // @TODO seperate
@@ -393,6 +436,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
           });
           that.ModuleView.render();
           that.ModuleView.setControlsPosition();
+          KB.Events.trigger('modal.serialize');
+
         }, 400);
 
         //
@@ -417,7 +462,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
         that.ModuleView.trigger('kb.view.module.HTMLChanged');
 
-        _K.info('Frontend Modal saved data for:' + that.model.get('instance_id'));
         that.LoadingAnimation.hide();
       },
       error: function () {

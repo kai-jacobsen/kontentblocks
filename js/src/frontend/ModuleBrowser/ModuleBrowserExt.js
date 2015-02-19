@@ -11,21 +11,19 @@ KB.Backbone.ModuleBrowser.prototype.success = function (res) {
     this.options.area.$el.append(res.data.html).removeClass('kb-area__empty');
   }
 
-  console.log(res.data.module);
 
   model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
 
   //this.options.area.addModuleView(model.view);
-  _K.info('new module created', {view: model.view});
 
   this.parseAdditionalJSON(res.data.json);
-  KB.TinyMCE.addEditor(model.view.$el);
+  KB.TinyMCE.addEditor(model.View.$el);
   KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
 
   this.options.area.trigger('kb.module.created');
 
   setTimeout(function () {
-    model.view.openOptions();
+    model.View.openOptions();
   }, 300);
 
   // repaint

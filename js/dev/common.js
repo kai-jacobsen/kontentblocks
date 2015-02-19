@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-17 */
+/*! Kontentblocks DevVersion 2015-02-19 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -7,6 +7,7 @@ KB.Backbone = {
     Backend: {},
     Frontend: {},
     Shared: {},
+    Common: {},
     Sidebar: {
         AreaOverview: {},
         AreaDetails: {}
@@ -153,8 +154,87 @@ KB.FieldCollection = Backbone.View.extend({
         }
     },
     clearFields: function() {
-        _K.info("Attached Fields were reset to empty object");
         this.attachedFields = {};
+    }
+});
+
+KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
+    idAttribute: "uid",
+    initialize: function() {
+        var module = this.get("fieldId"), Model;
+        if (module && (this.ModuleModel = KB.Modules.get(module)) && this.getType()) {
+            this.set("ModuleModel", this.ModuleModel);
+            this.setData();
+            this.bindHandlers();
+            this.setupType();
+        }
+    },
+    bindHandlers: function() {
+        this.listenToOnce(this.ModuleModel, "remove", this.remove);
+        this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
+    },
+    setupType: function() {
+        if (obj = this.getType()) {
+            this.FieldView = new obj({
+                el: this.getElement(),
+                model: this
+            });
+        }
+    },
+    getElement: function() {
+        return jQuery('*[data-kbfuid="' + this.get("uid") + '"]')[0];
+    },
+    getType: function() {
+        var type = this.get("type");
+        if (!KB.Checks.userCan("edit_kontentblocks")) {
+            return false;
+        }
+        var obj = KB.Fields.get(type);
+        if (obj && obj.prototype.hasOwnProperty("initialize")) {
+            return obj;
+        } else {
+            return false;
+        }
+    },
+    setData: function(Model) {
+        var ModuleModel = Model || this.get("ModuleModel");
+        this.set("value", KB.Util.getIndex(ModuleModel.get("moduleData"), this.get("kpath")));
+    },
+    remove: function() {
+        this.stopListening();
+        KB.FieldConfigs.remove(this);
+    },
+    rebind: function() {
+        if (this.FieldView) {
+            this.FieldView.setElement(this.getElement());
+            this.FieldView.render();
+        }
+    },
+    unbind: function() {
+        if (this.FieldView && this.FieldView.derender) {
+            this.FieldView.derender();
+        }
+    }
+});
+
+KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.extend({
+    initialize: function() {
+        KB.Backbone.Common.FieldConfigModel.prototype.initialize.call(this, arguments);
+    },
+    bindHandlers: function() {
+        this.listenToOnce(this.ModuleModel, "remove", this.remove);
+        this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
+        this.listenTo(KB.Events, "modal.reload", this.rebind);
+        this.listenTo(KB.Events, "modal.close", this.remove);
+    },
+    rebind: function() {
+        if (this.FieldView) {
+            this.FieldView.setElement(this.getElement());
+            this.FieldView.render();
+        }
+    },
+    getElement: function() {
+        return jQuery('*[data-kbfuid="' + this.get("uid") + '"]', KB.EditModalModules.$el)[0];
     }
 });
 
@@ -170,6 +250,10 @@ _.extend(KB.Fields, {
         _.extend(object, Backbone.Events);
         this.fields[id] = object;
     },
+    registerObject: function(id, object) {
+        _.extend(object, Backbone.Events);
+        this.fields[id] = object;
+    },
     init: function() {
         var that = this;
         _.each(this.fields, function(object) {
@@ -181,7 +265,6 @@ _.extend(KB.Fields, {
         });
     },
     newModule: function(object) {
-        _K.info("new Module added for Fields");
         var that = this;
         object.listenTo(this, "update", object.update);
         object.listenTo(this, "frontUpdate", object.frontUpdate);
@@ -199,6 +282,16 @@ _.extend(KB.Fields, {
 });
 
 KB.Fields.addEvent();
+
+KB.Backbone.Common.FieldConfigsCollection = Backbone.Collection.extend({
+    model: KB.Backbone.Common.FieldConfigModel,
+    initialize: function() {
+        this.listenTo(this, "add", this.log);
+    },
+    log: function(model) {
+        console.log("coll add", model);
+    }
+});
 
 Logger.useDefaults();
 
@@ -368,7 +461,6 @@ KB.Backbone.ModuleBrowserModuleDescription = Backbone.View.extend({
     update: function() {
         var that = this;
         this.$el.empty();
-        console.log(this.model);
         if (this.model.get("template")) {
             this.$el.html(KB.Templates.render("backend/modulebrowser/module-template-description", {
                 module: this.model.toJSON()
@@ -459,7 +551,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     initialize: function(options) {
         var that = this;
         this.options = options || {};
-        _K.info("module browser initialized");
         this.area = this.options.area;
         this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
             model: KB.Backbone.ModuleDefinition,
@@ -566,23 +657,18 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
         var model, data;
         data = res.data;
         this.options.area.modulesList.append(data.html);
-        model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
-        this.options.area.addModuleView(model.view);
-        _K.info("new module created", {
-            view: model.view
-        });
+        model = KB.Modules.add(data.module);
+        this.options.area.attachModuleView(model);
         this.parseAdditionalJSON(data.json);
-        KB.TinyMCE.addEditor(model.view.$el);
-        KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
-        KB.Views.Modules.lastViewAdded.$el.addClass("kb-open");
-        KB.Environment.moduleCount++;
+        KB.TinyMCE.addEditor(model.View.$el);
+        KB.Fields.trigger("newModule", model.View);
+        model.View.$el.addClass("kb-open");
     },
     parseAdditionalJSON: function(json) {
         if (!KB.payload.Fields) {
             KB.payload.Fields = {};
         }
         _.extend(KB.payload.Fields, json.Fields);
-        console.log(json);
         KB.Payload.parseAdditionalJSON(json);
     },
     prepareAssignedModules: function() {
@@ -700,10 +786,14 @@ KB.Payload = function($) {
             }
         },
         parseAdditionalJSON: function(json) {
-            console.log(_.toArray(json.Fields));
+            var ret;
+            ret = {
+                Fields: []
+            };
             if (json && json.Fields) {
-                KB.FieldConfigs.add(_.toArray(json.Fields));
+                ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
             }
+            return ret;
         }
     };
 }(jQuery);
@@ -929,7 +1019,6 @@ KB.Ui = function($) {
             });
             $body.on("mouseenter", ".kb-js-field-identifier", function() {
                 KB.currentFieldId = this.id;
-                _K.info("Current Field Id set to:", KB.currentFieldId);
             });
             $body.on("mouseenter", ".kb-area__list-item li", function() {
                 KB.currentModuleId = this.id;
@@ -994,8 +1083,7 @@ KB.Ui = function($) {
                     $(".kb-nano").nanoScroller({
                         contentClass: "kb-nano-content"
                     });
-                    console.log(ui);
-                    KB.Events.trigger("kb.modal.refresh");
+                    KB.Events.trigger("modal.recalibrate");
                 }
             });
             selector.each(function() {
@@ -1101,7 +1189,7 @@ KB.Ui = function($) {
                         }).done(function() {
                             that.triggerAreaChange(areaOver, currentModule);
                             $(KB).trigger("kb:sortable::update");
-                            currentModule.view.clearFields();
+                            currentModule.View.clearFields();
                             KB.Notice.notice("Area change and order were updated successfully", "success");
                         });
                     }
@@ -1263,8 +1351,7 @@ KB.ViewsCollection = function() {
     };
     this.remove = function(id) {
         var V = this.get(id);
-        console.log(V);
-        V.Area.View.trigger("kb.module.deleted", V);
+        V.model.Area.View.trigger("kb.module.deleted", V);
         this.trigger("kb.modules.view.deleted", V);
         delete this.views[id];
         V.dispose();

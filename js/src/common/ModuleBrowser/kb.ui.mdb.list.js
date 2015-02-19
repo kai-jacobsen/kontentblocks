@@ -59,10 +59,7 @@ KB.Backbone.ModuleBrowserModulesList = Backbone.View.extend({
         browser: that.options.browser
       });
 
-//            if (!that.subviews[module.cid]) {
-//                console.log('create new view li');
-//                that.subviews[module.cid] = new KB.Backbone.ModuleBrowserListItem({model: module, parent: that});
-//            }
+
       if (first === false) {
         that.options.browser.loadDetails(module);
         first = !first;

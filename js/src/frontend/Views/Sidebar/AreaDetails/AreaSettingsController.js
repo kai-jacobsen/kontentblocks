@@ -18,6 +18,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
     this.$el.find('.kb-active-area-layout').removeClass();
     $li.addClass('kb-active-area-layout');
     this.model.View.changeLayout($li.data('item'));
+    this.model.set('layout', $li.data('item'));
   },
   setOptions: function () {
     var options = '';

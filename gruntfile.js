@@ -49,7 +49,7 @@ module.exports = function (grunt) {
         seperator: ';'
       },
       refields: {
-        src: ['core/Fields/Definitions/js/**/*.js'],
+        src: ['core/Fields/Definitions/js/_FieldBaseView.js','core/Fields/Definitions/js/**/*.js'],
         dest: 'js/tmp/refields.concat.js',
         nonull: true
       },

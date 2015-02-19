@@ -6,10 +6,9 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
   },
   className: 'kb-module-inline-move kb-nbt kb-nbb',
   isValid: function () {
-
-    if (!this.Parent.Area){
+    if (!this.Parent.model.Area){
       return false;
     }
-    return KB.Checks.userCan('edit_kontentblocks') && this.Parent.Area.get('sortable');
+    return KB.Checks.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable');
   }
 });

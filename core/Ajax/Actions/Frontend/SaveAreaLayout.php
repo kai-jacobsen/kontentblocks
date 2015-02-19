@@ -20,7 +20,6 @@ class SaveAreaLayout
         $postId = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
         $layout = filter_input( INPUT_POST, 'layout', FILTER_SANITIZE_STRING );
         $settings = new AreaSettingsModel( $postId );
-
         if ($settings->getLayout( $area['id'] ) === $layout) {
             wp_send_json(
                 array(

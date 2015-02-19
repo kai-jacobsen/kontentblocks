@@ -50,11 +50,17 @@ KB.Payload = (function ($) {
       }
     },
     parseAdditionalJSON: function (json) {
+      var ret;
 
-      console.log(_.toArray(json.Fields));
+      ret = {
+        Fields: []
+      };
+
       if (json && json.Fields) {
-        KB.FieldConfigs.add(_.toArray(json.Fields));
+        ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
       }
+
+      return ret;
     }
   }
 })(jQuery);

@@ -26,7 +26,6 @@ KB.FieldCollection = Backbone.View.extend({
     }
   },
   clearFields: function () {
-    _K.info('Attached Fields were reset to empty object');
     this.attachedFields = {};
   }
 });

@@ -19,7 +19,6 @@ KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.exte
     }, this.afterRemoval, this);
   },
   afterRemoval: function () {
-    this.Parent.trigger('kb.module.view.delete');
     this.Parent.$el.parent('.kb-wrap').remove();
     this.trigger('remove');
     // removes the model from model collection

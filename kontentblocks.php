@@ -303,7 +303,7 @@ Class Kontentblocks
 
             $ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
             $Logger = new Logger( 'kontentblocks' );
-            if (Kontentblocks::DEBUG && is_user_logged_in()) {
+            if (Kontentblocks::DEBUG && is_user_logged_in() && apply_filters('kb.use.logger.console', false) ) {
                 if (!$ajax) {
                     $Logger->pushHandler( new BrowserConsoleHandler() );
                     $Logger->addInfo(

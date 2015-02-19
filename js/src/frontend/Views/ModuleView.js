@@ -7,23 +7,18 @@
 KB.Backbone.ModuleView = Backbone.View.extend({
   focus: false,
   $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
-  attachedFields: [],
-  initialize: function (options) {
+  attachedFields: {},
+  initialize: function () {
     var that = this;
     // don't init if cap is missing for current user
     if (!KB.Checks.userCan('edit_kontentblocks')) {
-      _K.log('Permission insufficient');
       return;
     }
-    this.Area = options.Area; //model
-    this.Area.View.addModuleView(this);
     // attach this view to the model
-    this.model.view = this;
+    this.model.View = this;
 
     // observe model changes
     this.listenTo(this.model, 'change', this.modelChange);
-    this.listenTo(this.model, 'save', this.model.save);
-
     // assign this view to the jQuery DOM Node
     this.$el.data('ModuleView', this);
 
@@ -147,12 +142,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
       model: this.model.toJSON()
     }));
   },
-  addField: function (key, obj, arrayKey) {
-    if (!_.isEmpty(arrayKey)) {
-      this.attachedFields[arrayKey][key] = obj;
-    } else {
-      this.attachedFields[key] = obj;
-    }
+  addField: function (obj) {
+    this.attachedFields[obj.cid] = obj;
   },
   hasField: function (key, arrayKey) {
     if (!_.isEmpty(arrayKey)) {
@@ -173,7 +164,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     }
   },
   clearFields: function () {
-    _K.info('Attached Fields were reset to empty object');
     this.attachedFields = {};
   },
   getDirty: function () {
@@ -188,8 +178,9 @@ KB.Backbone.ModuleView = Backbone.View.extend({
   save: function () {
     // TODO utilize this for saving instead of handling this by the modal view
   },
-  dispose: function(){
-    delete this.model.view;
+  dispose: function () {
+    console.log('dispose');
+    delete this.model.View;
     this.stopListening();
     this.remove();
   }

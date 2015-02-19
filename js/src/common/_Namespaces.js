@@ -4,6 +4,7 @@ KB.Backbone = {
   Backend: {},
   Frontend: {},
   Shared: {},
+  Common: {},
   Sidebar: {
     AreaOverview: {},
     AreaDetails: {}

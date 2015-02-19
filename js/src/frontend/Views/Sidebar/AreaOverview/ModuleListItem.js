@@ -4,7 +4,7 @@ KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
     // parent area list
     this.$parent = options.$parent;
     // the actual DOM View
-    this.parentView = this.model.view;
+    this.parentView = this.model.View;
     this.bindHandlers();
     this.render();
   },
@@ -17,8 +17,8 @@ KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
     'click .kb-js-inline-delete': 'inlineDelete'
   },
   bindHandlers: function () {
-    this.listenTo(this.parentView.model, 'change', this.getDirty);
-    this.listenTo(this.parentView.model, 'saved', this.getClean);
+    this.listenTo(this.model, 'change', this.getDirty);
+    this.listenTo(this.model, 'saved', this.getClean);
   },
   getDirty: function () {
     this.$el.addClass('kb-module-dirty');
@@ -31,6 +31,7 @@ KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
   },
   out: function () {
     this.parentView.$el.removeClass('kb-in-sidebar-active');
+
   },
   openControls: function (e) {
     e.stopPropagation();

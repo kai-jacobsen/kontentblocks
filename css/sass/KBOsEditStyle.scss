@@ -202,6 +202,7 @@ body.onsite-editing {
     font-family: 'Open Sans';
     font-size: 15px;
     border: 1px solid #f9f9f9;
+    border-top: 1px solid #333;
     border-right: 1px solid #aaa;
     border-bottom: none;
     cursor: move;
@@ -295,11 +296,11 @@ body.onsite-editing {
   width: 800px;
   background: #fff;
   position: fixed;
-  top: 40px;
+  top: 32px;
   right: 0px;
 //  bottom: 30px;
-  @include box-shadow(1px 1px 8px #ccc);
-  border: 1px solid #aaa;
+  @include box-shadow(1px 1px 8px #333);
+  border: 1px solid #222;
   overflow: auto;
   opacity: 1;
   z-index: 2101;
@@ -315,9 +316,8 @@ body.onsite-editing {
     height: 30px;
     line-height: 30px;
     cursor: move;
-    background: #f2f2f2;
-    color: #666;
-    text-shadow: 0 0 1px #fff;
+    background: #283c43; //#f2f2f2;
+    color: #fff;
     font-weight: 100;
     box-sizing: border-box;
     text-align: left;
@@ -332,14 +332,14 @@ body.onsite-editing {
     position: absolute;
     top: 5px;
     right: 3px;
-    color: #666;
+    color: #fff;
     font-size: 18px;
     cursor: pointer;
     font-weight: 100;
     @include transition(all .3s ease-in-out);
 
     &:hover {
-      color: $orange;
+      color: #283c43;
     }
   }
 
@@ -367,25 +367,25 @@ body.onsite-editing {
   }
 
   .kb-button-primary {
-    color: #666;
+    color: #fff;
 //    background-color: $lightblue;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
 
     &:hover {
-      background-color: #fff;
+      background-color: #283c43;
       text-decoration: none;
     }
   }
 
   .kb-button-secondary {
-    color: #666;
+    color: #fff;
 //    background-color: $orange;
     @include transition(all .3s ease-in-out);
     cursor: pointer;
 
     &:hover {
-      background-color: #fff;
+      background-color: #283c43;
       text-decoration: none;
     }
   }

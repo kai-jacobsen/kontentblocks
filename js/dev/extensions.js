@@ -1,13 +1,11 @@
-/*! Kontentblocks DevVersion 2015-02-17 */
+/*! Kontentblocks DevVersion 2015-02-19 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),
         init: function() {
             if (KB.appData.config.frontend) {
-                _K.info("Layout Configurations stopped");
                 return false;
             }
-            _K.info("Layout Configurations start up");
             if (this.el.length === 0) {
                 return false;
             }
@@ -157,7 +155,6 @@ KB.AreaSelector = function($) {
         $editWrap: null,
         init: function() {
             if (KB.appData.config.frontend) {
-                _K.info("Area Selector stopped");
                 return false;
             }
             this.sortable();
@@ -192,7 +189,6 @@ KB.Ext.Backup = function($) {
         firstRun: true,
         init: function() {
             if (KB.appData.config.frontend) {
-                _K.info("Backup Inspect stopped");
                 return false;
             }
             var that = this;
@@ -233,7 +229,6 @@ KB.Ext.Backup = function($) {
                     key: key
                 }));
             });
-            _K.info("Backup Inspect::FirstRun:", this.firstRun);
             if (!this.firstRun) {
                 KB.Notice.notice("<p>" + KB.i18n.Extensions.backups.newBackupcreated + "</p>", "success");
             }

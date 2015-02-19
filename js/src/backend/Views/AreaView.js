@@ -5,7 +5,11 @@ KB.Backbone.Backend.AreaView = Backbone.View.extend({
     this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
     this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
     this.$placeholder = jQuery(KB.Templates.render('backend/area-item-placeholder', {i18n: KB.i18n}));
-    this.model.view = this;
+    this.model.View = this;
+
+    this.listenTo(this, 'module:attached', this.ui);
+    this.listenTo(this, 'module:dettached', this.ui);
+
     this.render();
   },
   events: {
@@ -39,26 +43,19 @@ KB.Backbone.Backend.AreaView = Backbone.View.extend({
   setActive: function () {
     KB.currentArea = this.model;
   },
-  addModuleView: function (moduleView) {
-    this.attachedModuleViews[moduleView.model.get('instance_id')] = moduleView; // add module
-    this.listenTo(moduleView.model, 'change:area', this.removeModule); // add listener
-    _K.info('Module:' + moduleView.model.id + ' was added to area:' + this.model.id);
-    //moduleView.model.area = this.model;
-    //@TODO investigate model.areaView usage
-    moduleView.model.areaView = this;
-    moduleView.Area = this;
-    this.ui();
+  attachModuleView: function (ModuleModel) {
+    this.attachedModuleViews[ModuleModel.id] = ModuleModel.View; // add module
+    this.listenTo(ModuleModel, 'change:area', this.removeModule); // add listener
+    this.trigger('module:attached', ModuleModel);
   },
-  removeModule: function (model) {
+  removeModule: function (ModuleModel) {
     var id;
-    id = model.id;
+    id = ModuleModel.id;
     if (this.attachedModuleViews[id]) {
       delete this.attachedModuleViews[id]; // remove property
-      _K.info('Module:' + id + ' was removed from area:' + this.model.id);
-      this.stopListening(model, 'change:area', this.removeModule); // remove listener
+      this.stopListening(ModuleModel, 'change:area', this.removeModule); // remove listener
     }
-
-    this.ui();
+    this.trigger('module:dettached', ModuleModel);
   },
   ui: function () {
     var size;

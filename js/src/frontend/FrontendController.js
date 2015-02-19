@@ -46,7 +46,6 @@ KB.Areas = new Backbone.Collection([], {
 });
 
 
-
 /*
  * Init function
  * Register event listeners
@@ -83,8 +82,8 @@ KB.App = function () {
     /*
      * payload.Fields collection
      */
-    KB.FieldConfigs = new KB.Backbone.Frontend.FieldConfigsCollection(_.toArray(KB.payload.Fields));
-
+    KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
+    KB.FieldConfigs.add(_.toArray(KB.payload.Fields));
     // get the UI on track
     KB.Ui.init();
 
@@ -148,21 +147,12 @@ KB.App = function () {
    * @returns void
    */
   function createModuleViews(ModuleModel) {
-    var ModuleView, AreaModel;
-
-    AreaModel = KB.Areas.get(ModuleModel.get('area')) || null;
-    // assign the full corresponding area model to the module model
-    if (AreaModel !== null) {
-      ModuleModel.setArea(AreaModel);
-      ModuleModel.bind('change:area', ModuleModel.areaChanged);
-    }
+    var ModuleView;
     // create view
     ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
       model: ModuleModel,
-      el: '#' + ModuleModel.get('instance_id'),
-      Area: AreaModel
+      el: '#' + ModuleModel.get('instance_id')
     }));
-
     ModuleView.$el.data('ModuleView', ModuleView);
     KB.Ui.initTabs();
   }
@@ -208,7 +198,6 @@ KB.App.init();
 jQuery(document).ready(function () {
   if (KB.appData && KB.appData.config.frontend) {
     KB.Views.Modules.readyOnFront();
-    _K.info('Frontend Modules Ready Event fired');
     _KS.info('Frontend welcomes you');
   }
   // general ready event
@@ -217,10 +206,10 @@ jQuery(document).ready(function () {
   // wp native js function
   setUserSetting('editor', 'tinymce');
 
-  jQuery('body').on('click', '.cbutton', function(e){
-    jQuery(this).addClass('cbutton--click');
+  jQuery('body').on('click', '.kb-fx-button', function (e) {
+    jQuery(this).addClass('kb-fx-button--click');
     jQuery(e.currentTarget).one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function () {
-      e.currentTarget.classList.remove('cbutton--click');
+      e.currentTarget.classList.remove('kb-fx-button--click');
     });
   });
 

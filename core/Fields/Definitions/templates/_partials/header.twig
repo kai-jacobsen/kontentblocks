@@ -1,4 +1,4 @@
-<div class="kb-field-wrapper kb-js-field-identifier" id='{{ Field.uniqueId|escape('html_attr') }}'>
+<div class="kb-field-wrapper kb-js-field-identifier" data-kbfuid="{{ Field.uniqueId|escape('html_attr') }}" id='{{ Field.uniqueId|escape('html_attr') }}'>
     <div class="kb-field-header">
         {% if (Field.getArg('title')) %}
             <h4>{{ Field.getArg('title')|escape }}</h4>

@@ -1,15 +1,10 @@
-/*! Kontentblocks DevVersion 2015-02-17 */
+/*! Kontentblocks DevVersion 2015-02-19 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
 
 KB.Backbone.ContextModel = Backbone.Model.extend({
     idAttribute: "id"
-});
-
-KB.Backbone.Backend.FieldConfigModel = Backbone.Model.extend({
-    idAttribute: "uid",
-    initialize: function() {}
 });
 
 KB.Backbone.ModuleDefinition = Backbone.Model.extend({
@@ -26,10 +21,11 @@ KB.Backbone.ModuleDefinition = Backbone.Model.extend({
 });
 
 KB.Backbone.ModuleModel = Backbone.Model.extend({
-    idAttribute: "instance_id",
+    idAttribute: "mid",
     initialize: function() {
-        this.listenTo(this, "change:envVars", this.subscribeToArea);
+        this.listenToOnce(this, "change:envVars", this.subscribeToArea);
         this.listenTo(this, "change:envVars", this.areaChanged);
+        this.subscribeToArea();
     },
     destroy: function() {
         this.unsubscribeFromArea();
@@ -39,15 +35,17 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
         this.setEnvVar("area", area);
     },
     areaChanged: function() {
-        this.view.updateModuleForm();
+        this.View.updateModuleForm();
     },
-    subscribeToArea: function(model, value) {
-        var area;
-        area = KB.Areas.get(value.area);
-        area.view.addModuleView(model.view);
+    subscribeToArea: function(AreaModel) {
+        if (!AreaModel) {
+            AreaModel = KB.Areas.get(this.get("area"));
+        }
+        AreaModel.View.attachModuleView(this);
+        this.Area = AreaModel;
     },
     unsubscribeFromArea: function() {
-        this.areaView.removeModule(this);
+        this.Area.View.removeModule(this);
     },
     setEnvVar: function(attr, value) {
         var ev = _.clone(this.get("envVars"));
@@ -65,7 +63,9 @@ KB.Backbone.Backend.AreaView = Backbone.View.extend({
         this.$placeholder = jQuery(KB.Templates.render("backend/area-item-placeholder", {
             i18n: KB.i18n
         }));
-        this.model.view = this;
+        this.model.View = this;
+        this.listenTo(this, "module:attached", this.ui);
+        this.listenTo(this, "module:dettached", this.ui);
         this.render();
     },
     events: {
@@ -99,23 +99,19 @@ KB.Backbone.Backend.AreaView = Backbone.View.extend({
     setActive: function() {
         KB.currentArea = this.model;
     },
-    addModuleView: function(moduleView) {
-        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
-        this.listenTo(moduleView.model, "change:area", this.removeModule);
-        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
-        moduleView.model.areaView = this;
-        moduleView.Area = this;
-        this.ui();
+    attachModuleView: function(ModuleModel) {
+        this.attachedModuleViews[ModuleModel.id] = ModuleModel.View;
+        this.listenTo(ModuleModel, "change:area", this.removeModule);
+        this.trigger("module:attached", ModuleModel);
     },
-    removeModule: function(model) {
+    removeModule: function(ModuleModel) {
         var id;
-        id = model.id;
+        id = ModuleModel.id;
         if (this.attachedModuleViews[id]) {
             delete this.attachedModuleViews[id];
-            _K.info("Module:" + id + " was removed from area:" + this.model.id);
-            this.stopListening(model, "change:area", this.removeModule);
+            this.stopListening(ModuleModel, "change:area", this.removeModule);
         }
-        this.ui();
+        this.trigger("module:dettached", ModuleModel);
     },
     ui: function() {
         var size;
@@ -203,8 +199,8 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
     duplicateModule: function() {
         KB.Ajax.send({
             action: "duplicateModule",
-            module: this.model.get("instance_id"),
-            areaContext: this.model.areaView.model.get("context"),
+            module: this.model.get("mid"),
+            areaContext: this.model.Area.get("context"),
             _ajax_nonce: KB.Config.getNonce("create"),
             "class": this.model.get("class")
         }, this.success, this);
@@ -223,12 +219,9 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
             return false;
         }
         this.parseAdditionalJSON(res.data.json);
-        this.model.areaView.modulesList.append(res.data.html);
-        KB.Modules.add(res.data.module);
-        var ModuleView = KB.Views.Modules.get(res.data.id);
-        this.model.areaView.addModuleView(ModuleView);
-        var count = parseInt(jQuery("#kb_all_blocks").val(), 10) + 1;
-        jQuery("#kb_all_blocks").val(count);
+        this.model.Area.View.modulesList.append(res.data.html);
+        var ModuleModel = KB.Modules.add(res.data.module);
+        this.model.Area.View.attachModuleView(ModuleModel);
         KB.Notice.notice("Module Duplicated", "success");
         KB.Ui.repaint("#" + res.data.module.mid);
         KB.Fields.trigger("update");
@@ -242,6 +235,7 @@ KB.Backbone.Backend.ModuleDuplicate = KB.Backbone.Backend.ModuleMenuItemView.ext
             KB.payload.fieldData = {};
         }
         _.extend(KB.payload.fieldData, json.fieldData);
+        KB.Payload.parseAdditionalJSON(json);
     }
 });
 
@@ -281,7 +275,7 @@ KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
         if (!res || !res.data.newModuleData) {
             _K.error("Failed to save module data.");
         }
-        this.parentView.model.set("moduleData", res.newModuleData);
+        this.parentView.model.set("moduleData", res.data.newModuleData);
         KB.Notice.notice("Data saved", "success");
     }
 });
@@ -356,7 +350,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
             this.toggleBody();
             this.model.set("open", true);
         }
-        this.model.view = this;
+        this.model.View = this;
         this.setupDefaultMenuItems();
         KB.Views.Modules.on("kb.modules.view.deleted", function(view) {
             view.$el.fadeOut(500, function() {
@@ -479,13 +473,9 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
         }
     },
     clearFields: function() {
-        _K.info("Attached Fields were reset to empty object");
         this.attachedFields = {};
-    }
-});
-
-KB.Backbone.Backend.FieldConfigsCollection = Backbone.Collection.extend({
-    model: KB.Backbone.Backend.FieldConfigModel
+    },
+    dispose: function() {}
 });
 
 KB.currentModule = {};
@@ -512,26 +502,21 @@ KB.App = function() {
         KB.Areas.on("add", createAreaViews);
         KB.Modules.on("remove", removeModule);
         addViews();
-        KB.FieldConfigs = new KB.Backbone.Backend.FieldConfigsCollection(_.toArray(KB.payload.Fields));
+        KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection(_.toArray(KB.payload.Fields));
         KB.Ui.init();
     }
     function addViews() {
         _.each(KB.payload.Areas, function(area) {
-            KB.Areas.add(new KB.Backbone.AreaModel(area));
+            KB.Areas.add(area);
         });
         _.each(KB.payload.Modules, function(module) {
             var m = KB.Modules.add(module);
-            var areaView = KB.Areas.get(m.get("envVars").areaId);
-            if (areaView && areaView.view) {
-                areaView.view.addModuleView(m.view);
-            }
         });
     }
     function createModuleViews(module) {
-        _K.info("ModuleViews: new added");
-        KB.Views.Modules.add(module.get("instance_id"), new KB.Backbone.Backend.ModuleView({
+        KB.Views.Modules.add(module.get("mid"), new KB.Backbone.Backend.ModuleView({
             model: module,
-            el: "#" + module.get("instance_id")
+            el: "#" + module.get("mid")
         }));
         KB.Ui.initTabs();
     }
@@ -553,7 +538,6 @@ KB.App.init();
 
 jQuery(document).ready(function() {
     if (KB.appData && !KB.appData.config.frontend) {
-        _K.info("Backend Modules Ready Event fired");
         KB.Views.Modules.ready();
     }
 });

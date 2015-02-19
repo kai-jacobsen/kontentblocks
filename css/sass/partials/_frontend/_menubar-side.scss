@@ -181,8 +181,25 @@ body.admin-bar .kb-sidebar-wrap {
     & > .dashicons {
       font-size: 18px;
     }
-
   }
+
+  .kb-sidebar-area-details__update {
+    display: block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 35px;
+    top: 20px;
+    font-family: dashicons;
+    color: #fff;
+    font-weight: 100;
+    cursor: pointer;
+
+    & > .dashicons {
+      font-size: 18px;
+    }
+  }
+
   span {
     display: block;
     font-size: 12px;
@@ -277,7 +294,7 @@ body.admin-bar .kb-sidebar-wrap {
   border: 1px dotted #333;
 }
 
-.cbutton {
+.kb-fx-button {
   &::after {
     content: '';
     position: absolute;
@@ -292,11 +309,11 @@ body.admin-bar .kb-sidebar-wrap {
   }
 }
 
-.cbutton--effect-boris::after {
+.kb-fx-button--effect-boris::after {
   background: rgba(111, 148, 182, 0.1);
 }
 
-.cbutton--effect-boris.cbutton--click::after {
+.kb-fx-button--effect-boris.kb-fx-button--click::after {
   animation: anim-effect-boris 0.3s forwards;
 }
 

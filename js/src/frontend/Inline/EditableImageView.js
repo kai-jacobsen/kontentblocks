@@ -1,15 +1,17 @@
 KB.Backbone.Inline.EditableImage = Backbone.View.extend({
   initialize: function () {
-    this.$el.removeAttr('data-kbfuid');
-    this.$el.addClass('kb-inline-imageedit-attached');
-    this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
-    console.log(this);
-    this.$el.css('min-height', '200px');
     this.mode = this.model.get('mode');
     this.defaultState = this.model.get('state') || 'replace-image';
+    this.render();
   },
   events: {
     'click': 'openFrame'
+  },
+  render: function(){
+    this.$el.removeAttr('data-kbfuid');
+    this.$el.addClass('kb-inline-imageedit-attached');
+    this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
+    this.$el.css('min-height', '200px');
   },
   openFrame: function () {
     var that = this;
@@ -78,9 +80,7 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     var path = this.model.get('kpath');
     KB.Util.setIndex(moduleData, path, value);
     this.model.get('ModuleModel').set('moduleData', moduleData);
-    this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
-
-
+    //this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
 
     var args = {
       width: that.model.get('width'),
@@ -158,3 +158,5 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
 //      //that.select();
 //    }).open();
 //  });
+
+KB.Fields.registerObject('EditableImage', KB.Backbone.Inline.EditableImage);

@@ -3,7 +3,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
   initialize: function (options) {
     var that = this;
     this.options = options || {};
-    _K.info('module browser initialized');
     this.area = this.options.area;
 
 
@@ -152,19 +151,14 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     var model, data;
     data = res.data;
     this.options.area.modulesList.append(data.html);
-    model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
-    this.options.area.addModuleView(model.view);
-    _K.info('new module created', {view: model.view});
+    model = KB.Modules.add(data.module);
+    this.options.area.attachModuleView(model);
 
     this.parseAdditionalJSON(data.json);
 
-    KB.TinyMCE.addEditor(model.view.$el);
-    KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
-    KB.Views.Modules.lastViewAdded.$el.addClass('kb-open');
-
-    // update the reference counter, used as base number
-    // for new modules
-    KB.Environment.moduleCount++;
+    KB.TinyMCE.addEditor(model.View.$el);
+    KB.Fields.trigger('newModule', model.View);
+    model.View.$el.addClass('kb-open');
 
     // repaint
     // add module to collection
@@ -175,7 +169,6 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
       KB.payload.Fields = {};
     }
     _.extend(KB.payload.Fields, json.Fields);
-    console.log(json);
     KB.Payload.parseAdditionalJSON(json);
   },
   // helper method to convert list of assigned classnames to object with module definitions

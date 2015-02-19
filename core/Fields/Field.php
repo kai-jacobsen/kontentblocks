@@ -416,6 +416,7 @@ abstract class Field implements Exportable
          * Field may alter the injected data array
          */
         if (method_exists( $this, 'prepareTemplateData' )) {
+
             $data = $this->prepareTemplateData( $data );
         }
 
@@ -497,7 +498,7 @@ abstract class Field implements Exportable
             return $data[$arrKey];
         }
 
-        return $return;
+        return $this->getArg('std', $return);
     }
 
 
@@ -576,10 +577,10 @@ abstract class Field implements Exportable
 
     public function createUID()
     {
-        $state = ( is_admin() ) ? 'frontend' : 'backend';
+//        $state = ( is_admin() ) ? 'frontend' : 'backend';
 
         if (is_null( $this->uniqueId )) {
-            $base = $this->baseId . $this->key . $state;
+            $base = $this->baseId . $this->key;
             $this->uniqueId = 'kb-' . hash( 'crc32', $base );
         }
         return $this->uniqueId;
@@ -587,17 +588,20 @@ abstract class Field implements Exportable
 
     public function augmentArgs( $args )
     {
-        $args['uid'] = $this->createUID();
-        $args['type'] = $this->type;
-        $args['baseId'] = $this->getBaseId();
-        $args['fieldkey'] = $this->getKey();
-        $args['arrayKey'] = $this->getArg( 'arrayKey', null );
-        return $args;
+        $def = array();
+        $def['uid'] = $this->createUID();
+        $def['type'] = $this->type;
+        $def['baseId'] = $this->getBaseId();
+        $def['fieldId'] = $this->fieldId;
+        $def['fieldkey'] = $this->getKey();
+        $def['arrayKey'] = $this->getArg( 'arrayKey', null );
+        $def['kpath'] = $this->createPath();
+
+        return wp_parse_args( $args, $def );
     }
 
     public function export( &$collection )
     {
-
         $concatKey = ( $this->getArg( 'arrayKey' ) ) ? $this->getArg( 'arrayKey' ) . '.' . $this->getKey(
             ) : $this->getKey();
 
@@ -613,5 +617,19 @@ abstract class Field implements Exportable
             'std' => $this->getArg( 'std', '' ),
             'args' => $this->cleanedArgs()
         );
+    }
+
+    private function createPath()
+    {
+        $path = '';
+
+        if ( $this->getArg('arrayKey', false) ) {
+            $path .= $this->getArg('arrayKey') . '.';
+        }
+
+        $path .= $this->getKey();
+
+        return $path;
+
     }
 }
