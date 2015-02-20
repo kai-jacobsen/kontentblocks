@@ -13,6 +13,13 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
     this.$el.css('min-height', '200px');
   },
+  derender: function(){
+      console.log('derender image view');
+      if (this.frame){
+        this.frame.dispose();
+        this.frame = null;
+      }
+  },
   openFrame: function () {
     var that = this;
     if (this.frame) {
@@ -21,7 +28,7 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
 
     // we only want to query "our" image attachment
     // value of post__in must be an array
-    var queryargs = {post__in: [this.model.get('id')]};
+    var queryargs = {post__in: [this.model.get('value').id]};
 
     wp.media.query(queryargs) // set the query
       .more() // execute the query, this will return an deferred object

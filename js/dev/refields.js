@@ -1,31 +1,29 @@
-/*! Kontentblocks DevVersion 2015-02-19 */
+/*! Kontentblocks DevVersion 2015-02-20 */
 KB.Fields.BaseView = Backbone.View.extend({});
 
-KB.Fields.register("Color", function($) {
-    return {
-        init: function() {
-            $("body").on("mouseup", ".kb-field--color", function() {
-                setTimeout(function() {
-                    if (KB.FrontendEditModal) {
-                        KB.FrontendEditModal.recalibrate();
-                    }
-                }, 150);
-            });
-            $(".kb-color-picker").wpColorPicker({
-                change: function(event, ui) {},
-                clear: function() {
-                    pickColor("");
-                }
-            });
-        },
-        update: function() {
-            this.init();
-        },
-        frontUpdate: function(view) {
-            this.init();
-        }
-    };
-}(jQuery));
+KB.Fields.registerObject("color", KB.Fields.BaseView.extend({
+    initialize: function() {
+        this.render();
+    },
+    events: {
+        "mouseup .kb-field--color": "recalibrate"
+    },
+    render: function() {
+        jQuery(".kb-color-picker", this.$el).wpColorPicker({});
+        jQuery("body").on("click.wpcolorpicker", this.update);
+    },
+    derender: function() {
+        jQuery("body").off("click.wpcolorpicker", this.update);
+    },
+    update: function() {
+        KB.Events.trigger("modal.preview");
+    },
+    recalibrate: function() {
+        _.delay(function() {
+            KB.Events.trigger("modal.recalibrate");
+        }, 150);
+    }
+}));
 
 KB.Fields.register("Date", function($) {
     var settings = {};

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-19 */
+/*! Kontentblocks DevVersion 2015-02-20 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -172,6 +172,8 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     bindHandlers: function() {
         this.listenToOnce(this.ModuleModel, "remove", this.remove);
         this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
+        this.listenTo(this.ModuleModel, "modal.serialize", this.rebind);
+        this.listenTo(this.ModuleModel, "modal.serialize.before", this.unbind);
     },
     setupType: function() {
         if (obj = this.getType()) {

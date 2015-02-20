@@ -203,9 +203,6 @@ body.onsite-editing #onsite-modal {
   margin: 0;
   font-family: 'Open Sans';
   font-size: 15px;
-  border: 1px solid #f9f9f9;
-  border-top: 1px solid #333;
-  border-right: 1px solid #aaa;
   border-bottom: none;
   cursor: move;
 }
@@ -227,9 +224,6 @@ body.onsite-editing #onsite-modal {
 .os-controls-container .control-wrap {
   background: #fff;
   padding: 10px;
-  border: 1px solid #f9f9f9;
-  border-bottom: 1px solid #aaa;
-  border-right: 1px solid #aaa;
 }
 /* line 241, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .os-controls-container .control-wrap label {
@@ -284,10 +278,7 @@ body.onsite-editing #onsite-modal {
   position: fixed;
   top: 32px;
   right: 0px;
-  -webkit-box-shadow: 1px 1px 8px #333333;
-  -moz-box-shadow: 1px 1px 8px #333333;
-  box-shadow: 1px 1px 8px #333333;
-  border: 1px solid #222;
+  border: 1px solid #555;
   overflow: auto;
   opacity: 1;
   z-index: 2101;
@@ -301,7 +292,7 @@ body.onsite-editing #onsite-modal {
   font-size: 12px;
   margin: 0;
   padding: 0px 10px 0px 10px;
-  height: 30px;
+  height: 31px;
   line-height: 30px;
   cursor: move;
   background: #283c43;

@@ -55,14 +55,14 @@ body.admin-bar .kb-sidebar-wrap {
 }
 
 .kb-sidebar-areaview {
-  font-size: 16px;
+  font-size: 13px;
   background-color: #f2f2f2;
   border-bottom: 1px solid #ccc;
   @include transition(all .4s ease-out);
   position: relative;
 
   &.kb-sidebar-areaview--inactive {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .kb-sidebar__add-module {
@@ -124,12 +124,13 @@ body.admin-bar .kb-sidebar-wrap {
   position: relative;
 
   .kb-sidebar-item__name {
-    font-size: 15px;
+    font-size: 13px;
     line-height: 100%;
   }
 
   .kb-sidebar-item__id {
     font-size: 12px;
+    color: #999;
   }
 
 }
@@ -147,6 +148,11 @@ body.admin-bar .kb-sidebar-wrap {
       color: #ff4b66;
     }
 
+  }
+
+  .dashicons{
+    font-size: 16px;
+    width: 16px;
   }
 }
 
@@ -265,7 +271,7 @@ body.admin-bar .kb-sidebar-wrap {
     margin: 0;
 
     li.kb-sidebar-module {
-      font-size: 15px;
+      font-size: 14px;
       background-color: #fcfcfc;
       border-bottom: 1px solid #ccc;
       position: relative;

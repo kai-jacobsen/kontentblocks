@@ -2,7 +2,8 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__module-list',
   initialize: function (options) {
-    this.currentLayout = this.model.get('layout');;
+    this.currentLayout = this.model.get('layout');
+    ;
     this.controller = options.controller;
     this.sidebarController = options.sidebarController;
     this.categories = this.sidebarController.CategoryFilter.filter(this.model);
@@ -18,7 +19,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
   },
   events: {
     'click .kb-sidebar-area-details__cog': 'toggle',
-    'click .kb-sidebar-area-details__update' : 'updateAreaSettings'
+    'click .kb-sidebar-area-details__update': 'updateAreaSettings'
   },
   bindHandlers: function () {
     this.listenTo(this.model, 'change:layout', this.handleLayoutChange);
@@ -45,11 +46,11 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     this.$settingsContainer.slideToggle();
   },
   handleLayoutChange: function () {
-      if (this.model.get('layout') !== this.currentLayout){
-        this.$updateHandle.show();
-      } else {
-        this.$updateHandle.hide();
-      }
+    if (this.model.get('layout') !== this.currentLayout) {
+      this.$updateHandle.show();
+    } else {
+      this.$updateHandle.hide();
+    }
   },
   updateAreaSettings: function () {
     KB.Ajax.send({
@@ -60,10 +61,16 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     }, this.updateSuccess, this);
   },
   updateSuccess: function (res) {
-    if (res.status === 200) {
-      KB.Notice.notice(res.response, 'success');
+
+    if (res.success) {
+      KB.Notice.notice(res.message, 'success');
+      this.currentLayout = res.data.layout;
+      this.model.set('layout', res.data.layout);
+      this.handleLayoutChange();
     } else {
-      KB.Notice.notice('That did not work', 'error');
+      KB.Notice.notice(res.message, 'error');
+
     }
+
   }
 });

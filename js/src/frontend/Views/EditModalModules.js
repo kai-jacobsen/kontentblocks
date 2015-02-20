@@ -105,10 +105,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
       return this;
     }
-
+    //
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
-    this.model.View = ModuleView;
 
     this.attach();
     this.render();
@@ -181,12 +180,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
   setupWindow: function () {
     this.$el.appendTo('body').show();
 
-    if (KB.OSConfig.wrapPosition) {
-      this.$el.css({
-        top: KB.OSConfig.wrapPosition.top,
-        left: KB.OSConfig.wrapPosition.left
-      });
-    }
+    //if (KB.OSConfig.wrapPosition) {
+    //  this.$el.css({
+    //    top: KB.OSConfig.wrapPosition.top,
+    //    left: KB.OSConfig.wrapPosition.left
+    //  });
+    //}
 
 
   },
@@ -358,6 +357,13 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     if (position.top < 32) {
       this.$el.css('top', '32px');
     }
+
+    if (KB.Sidebar.visible){
+      var sw = KB.Sidebar.$el.width();
+      this.$el.css('left', sw + 'px');
+      this.$el.css('height', winH + 'px');
+    }
+
   },
   /**
    * (Re) Init Nano scrollbars
@@ -407,7 +413,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         // cache module container height
         height = that.ModuleView.$el.height();
 
-        KB.Events.trigger('modal.serialize.before');
+        that.ModuleView.model.trigger('modal.serialize.before');
 
 
         // change the container class if viewfile changed
@@ -436,7 +442,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
           });
           that.ModuleView.render();
           that.ModuleView.setControlsPosition();
-          KB.Events.trigger('modal.serialize');
+          that.ModuleView.model.trigger('modal.serialize');
 
         }, 400);
 

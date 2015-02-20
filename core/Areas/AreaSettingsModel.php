@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Areas;
 
+use Kontentblocks\Backend\DataProvider\DataProviderController;
+
 
 /**
  * Class AreaSettingsModel
@@ -10,11 +12,25 @@ namespace Kontentblocks\Areas;
 class AreaSettingsModel implements \JsonSerializable
 {
 
+    /**
+     * @var int
+     */
     protected $postId;
 
+    /**
+     * @var string
+     */
     protected $key = 'kb_area_settings';
 
+    /**
+     * @var array
+     */
     protected $settings = array();
+
+    /**
+     * @var DataProviderController
+     */
+    private $DataProvider;
 
     /**
      * Construct
@@ -25,8 +41,9 @@ class AreaSettingsModel implements \JsonSerializable
     {
 
         $this->postId = $postId;
-        $this->setupSettings();
+        $this->DataProvider = new DataProviderController( $postId );
 
+        $this->setupSettings();
     }
 
     /**
@@ -35,7 +52,8 @@ class AreaSettingsModel implements \JsonSerializable
      */
     private function setupSettings()
     {
-        $meta = get_post_meta( $this->postId, $this->key, true );
+
+        $meta = $this->DataProvider->get($this->key);
 
         if (!is_array( $meta )) {
             $meta = array();
@@ -82,7 +100,7 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function save()
     {
-        return update_post_meta( $this->postId, $this->key, $this->settings );
+        return $this->DataProvider->update( $this->key, $this->settings );
     }
 
     /**

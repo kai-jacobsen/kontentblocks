@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-19 */
+/*! Kontentblocks DevVersion 2015-02-20 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -510,7 +510,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         }
         this.ModuleView = ModuleView;
         this.model = ModuleView.model;
-        this.model.View = ModuleView;
         this.attach();
         this.render();
         return this;
@@ -546,12 +545,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     setupWindow: function() {
         this.$el.appendTo("body").show();
-        if (KB.OSConfig.wrapPosition) {
-            this.$el.css({
-                top: KB.OSConfig.wrapPosition.top,
-                left: KB.OSConfig.wrapPosition.left
-            });
-        }
     },
     frontendViewUpdated: function() {
         this.$el.removeClass("isDirty");
@@ -640,6 +633,11 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         if (position.top < 32) {
             this.$el.css("top", "32px");
         }
+        if (KB.Sidebar.visible) {
+            var sw = KB.Sidebar.$el.width();
+            this.$el.css("left", sw + "px");
+            this.$el.css("height", winH + "px");
+        }
     },
     initScrollbars: function(height) {
         jQuery(".kb-nano", this.$el).height(height + 20);
@@ -673,7 +671,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     tinymce.remove("#" + el.id);
                 });
                 height = that.ModuleView.$el.height();
-                KB.Events.trigger("modal.serialize.before");
+                that.ModuleView.model.trigger("modal.serialize.before");
                 if (that.updateViewClassTo !== false) {
                     that.updateContainerClass(that.updateViewClassTo);
                 }
@@ -693,7 +691,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     });
                     that.ModuleView.render();
                     that.ModuleView.setControlsPosition();
-                    KB.Events.trigger("modal.serialize");
+                    that.ModuleView.model.trigger("modal.serialize");
                 }, 400);
                 if (save) {
                     if (notice) {
@@ -1333,6 +1331,10 @@ KB.Backbone.SidebarView = Backbone.View.extend({
         this.$el.append(this.Header.render());
         this.$container = jQuery('<div class="kb-sidebar-wrap__container"></div>').appendTo(this.$el);
         this.setLayout();
+        var ls = KB.Util.stex.get("kb-sidebar-visible");
+        if (ls) {
+            this.toggleSidebar();
+        }
     },
     bindHandlers: function() {
         var that = this;
@@ -1346,10 +1348,6 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     setLayout: function() {
         var h = jQuery(window).height();
         this.$el.height(h);
-        var ls = KB.Util.stex.get("kb-sidebar-visible");
-        if (ls) {
-            this.toggleSidebar();
-        }
     },
     setView: function(View) {
         if (this.currentView) {
@@ -1447,10 +1445,13 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
         }, this.updateSuccess, this);
     },
     updateSuccess: function(res) {
-        if (res.status === 200) {
-            KB.Notice.notice(res.response, "success");
+        if (res.success) {
+            KB.Notice.notice(res.message, "success");
+            this.currentLayout = res.data.layout;
+            this.model.set("layout", res.data.layout);
+            this.handleLayoutChange();
         } else {
-            KB.Notice.notice("That did not work", "error");
+            KB.Notice.notice(res.message, "error");
         }
     }
 });
@@ -1891,13 +1892,20 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
         this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
         this.$el.css("min-height", "200px");
     },
+    derender: function() {
+        console.log("derender image view");
+        if (this.frame) {
+            this.frame.dispose();
+            this.frame = null;
+        }
+    },
     openFrame: function() {
         var that = this;
         if (this.frame) {
             return this.frame.open();
         }
         var queryargs = {
-            post__in: [ this.model.get("id") ]
+            post__in: [ this.model.get("value").id ]
         };
         wp.media.query(queryargs).more().done(function() {
             var attachment = that.attachment = this.first();

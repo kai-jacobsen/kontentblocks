@@ -2,7 +2,10 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxErrorResponse;
+use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 
 /**
  * Class SaveAreaLayout
@@ -10,32 +13,29 @@ use Kontentblocks\Areas\AreaSettingsModel;
  */
 class SaveAreaLayout
 {
+
+    static $nonce = 'kb-update';
+
     /**
-     *
+     * @param ValueStorageInterface $Request
      */
-    public static function run()
+    public static function run( ValueStorageInterface $Request )
     {
         check_ajax_referer( 'kb-update' );
-        $area = $_POST['area'];
-        $postId = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $layout = filter_input( INPUT_POST, 'layout', FILTER_SANITIZE_STRING );
+        $area = $Request->get('area');
+        $postId = $Request->getFiltered('post_id', FILTER_SANITIZE_NUMBER_INT);
+        $layout  = $Request->getFiltered('layout', FILTER_SANITIZE_STRING);
         $settings = new AreaSettingsModel( $postId );
         if ($settings->getLayout( $area['id'] ) === $layout) {
-            wp_send_json(
-                array(
-                    'status' => 200,
-                    'response' => 'Layout has not changed'
-                )
-            );
+            new AjaxErrorResponse('Layout has not changed', array(
+                'present' =>  $settings->getLayout( $area['id'] ),
+                'future' => $layout
+            ));
         }
-
-        $settings->setLayout( $area['id'], $layout )->save();
-
-        wp_send_json(
-            array(
-                'status' => 200,
-                'response' => 'Layout saved'
-            )
-        );
+        $update = $settings->setLayout( $area['id'], $layout )->save();
+        new AjaxSuccessResponse('Layout saved', array(
+            'update' => $update,
+            'layout' => $layout
+        ));
     }
 }

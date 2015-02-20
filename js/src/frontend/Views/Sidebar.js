@@ -23,6 +23,11 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     this.$el.append(this.Header.render());
     this.$container = jQuery('<div class="kb-sidebar-wrap__container"></div>').appendTo(this.$el);
     this.setLayout();
+
+    var ls = KB.Util.stex.get('kb-sidebar-visible');
+    if (ls){
+      this.toggleSidebar();
+    }
   },
   bindHandlers: function () {
     var that = this;
@@ -37,11 +42,6 @@ KB.Backbone.SidebarView = Backbone.View.extend({
   setLayout: function () {
     var h = jQuery(window).height();
     this.$el.height(h);
-
-    var ls = KB.Util.stex.get('kb-sidebar-visible');
-    if (ls){
-      this.toggleSidebar();
-    }
 
   },
   setView: function (View) {

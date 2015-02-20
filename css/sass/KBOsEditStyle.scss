@@ -201,9 +201,9 @@ body.onsite-editing {
     margin: 0;
     font-family: 'Open Sans';
     font-size: 15px;
-    border: 1px solid #f9f9f9;
-    border-top: 1px solid #333;
-    border-right: 1px solid #aaa;
+//    border: 1px solid #f9f9f9;
+//    border-top: 1px solid #333;
+//    border-left: 1px solid #aaa;
     border-bottom: none;
     cursor: move;
   }
@@ -234,9 +234,9 @@ body.onsite-editing {
   .control-wrap {
     background: #fff;
     padding: 10px;
-    border: 1px solid #f9f9f9;
-    border-bottom: 1px solid #aaa;
-    border-right: 1px solid #aaa;
+//    border: 1px solid #f9f9f9;
+//    border-bottom: 1px solid #aaa;
+//    border-right: 1px solid #aaa;
 
     label {
       font-family: 'Open Sans', sans-serif;
@@ -299,8 +299,8 @@ body.onsite-editing {
   top: 32px;
   right: 0px;
 //  bottom: 30px;
-  @include box-shadow(1px 1px 8px #333);
-  border: 1px solid #222;
+//  @include box-shadow(1px 1px 8px #333);
+  border: 1px solid #555;
   overflow: auto;
   opacity: 1;
   z-index: 2101;
@@ -313,7 +313,7 @@ body.onsite-editing {
     font-size: 12px;
     margin: 0;
     padding: 0px 10px 0px 10px;
-    height: 30px;
+    height: 31px;
     line-height: 30px;
     cursor: move;
     background: #283c43; //#f2f2f2;
