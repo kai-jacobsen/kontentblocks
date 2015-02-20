@@ -25,32 +25,27 @@ KB.Fields.registerObject("color", KB.Fields.BaseView.extend({
     }
 }));
 
-KB.Fields.register("Date", function($) {
-    var settings = {};
-    return {
-        defaults: {
+KB.Fields.registerObject("date", KB.Fields.BaseView.extend({
+    initialize: function() {
+        var that = this;
+        this.defaults = {
             format: "d M Y",
             offset: [ 0, 250 ],
             onSelect: function(selected, machine, Date, $el) {
-                $("#" + KB.currentFieldId).find(".kb-date-machine-format").val(machine);
-                $("#" + KB.currentFieldId).find(".kb-date-unix-format").val(Math.round(Date.getTime() / 1e3));
+                that.$machineIn.val(machine);
+                that.$unixIn.val(Math.round(Date.getTime() / 1e3));
             }
-        },
-        init: function() {
-            var that = this;
-            _.each($(".kb-datepicker"), function(item) {
-                var id = $(item).closest(".kb-field-wrapper").attr("id");
-                if (id && KB.payload.Fields[id].settings) {
-                    settings = KB.payload.Fields[id].settings || {};
-                }
-                $(item).Zebra_DatePicker(_.extend(that.defaults, settings));
-            });
-        },
-        update: function() {
-            this.init();
-        }
-    };
-}(jQuery));
+        };
+        this.settings = this.model.get("options") || {};
+        this.render();
+    },
+    render: function() {
+        this.$machineIn = this.$(".kb-date-machine-format", this.$el);
+        this.$unixIn = this.$(".kb-date-unix-format", this.$el);
+        this.$(".kb-datepicker").Zebra_DatePicker(_.extend(this.defaults, this.settings));
+    },
+    derender: function() {}
+}));
 
 KB.Fields.register("DateTime", function($) {
     var settings = {};

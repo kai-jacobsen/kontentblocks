@@ -49,7 +49,7 @@ class UpdateModule
         if ($postdata->update) {
             $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
         }
-        $Module->setModuleData( $newData );
+        $Module->setModuleData( $mergedData );
         do_action( 'kb.module.save', $Module, $mergedData );
 
         $return = array(
