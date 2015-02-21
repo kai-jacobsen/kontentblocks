@@ -17,6 +17,7 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
       this.templatePath, {
         config: this.config,
         baseId: this.baseId,
+        kbfuid: this.kbfuid(index),
         index: index,
         i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
         model: this.model.toJSON()

@@ -1,178 +1,28 @@
 /*! Kontentblocks DevVersion 2015-02-21 */
 KB.Fields.BaseView = Backbone.View.extend({});
 
-KB.Fields.registerObject("color", KB.Fields.BaseView.extend({
+KB.Fields.registerObject("flexfields", KB.Fields.BaseView.extend({
     initialize: function() {
         this.render();
     },
-    events: {
-        "mouseup .kb-field--color": "recalibrate"
-    },
     render: function() {
-        jQuery(".kb-color-picker", this.$el).wpColorPicker({});
-        jQuery("body").on("click.wpcolorpicker", this.update);
+        this.$stage = this.$(".flexible-fields--stage", this.$el);
+        this.createController();
     },
-    derender: function() {
-        jQuery("body").off("click.wpcolorpicker", this.update);
-    },
-    update: function() {
-        KB.Events.trigger("modal.preview");
-    },
-    recalibrate: function() {
-        _.delay(function() {
-            KB.Events.trigger("modal.recalibrate");
-        }, 150);
+    derender: function() {},
+    createController: function() {
+        if (this.FlexFieldsController) {
+            return this.FlexFieldsController.bootstrap.call(this.FlexFieldsController);
+        }
+        this.FlexFieldsController = new KB.FlexibleFields.Controller({
+            moduleView: this.model.get("ModuleModel").View,
+            fid: this.model.get("uid"),
+            key: this.model.get("fieldkey"),
+            arrayKey: this.model.get("arrayKey"),
+            el: this.$stage.get(0)
+        });
     }
 }));
-
-KB.Fields.registerObject("date", KB.Fields.BaseView.extend({
-    initialize: function() {
-        var that = this;
-        this.defaults = {
-            format: "d M Y",
-            offset: [ 0, 250 ],
-            onSelect: function(selected, machine, Date, $el) {
-                that.$machineIn.val(machine);
-                that.$unixIn.val(Math.round(Date.getTime() / 1e3));
-            }
-        };
-        this.settings = this.model.get("options") || {};
-        this.render();
-    },
-    render: function() {
-        this.$machineIn = this.$(".kb-date-machine-format", this.$el);
-        this.$unixIn = this.$(".kb-date-unix-format", this.$el);
-        this.$(".kb-datepicker").Zebra_DatePicker(_.extend(this.defaults, this.settings));
-    },
-    derender: function() {}
-}));
-
-KB.Fields.registerObject("datetime", KB.Fields.BaseView.extend({
-    initialize: function() {
-        var that = this;
-        this.defaults = {
-            format: "d.m.Y H:i",
-            inline: false,
-            mask: true,
-            lang: "de",
-            allowBlank: true,
-            onChangeDateTime: function(current, $input) {
-                that.$unixIn.val(current.dateFormat("unixtime"));
-                that.$sqlIn.val(current.dateFormat("Y-m-d H:i:s"));
-            }
-        };
-        this.setting = this.model.get("settings") || {};
-        this.render();
-    },
-    render: function() {
-        this.$unixIn = this.$(".kb-datetimepicker--js-unix", this.$el);
-        this.$sqlIn = this.$(".kb-datetimepicker--js-sql", this.$el);
-        this.$(".kb-datetimepicker").datetimepicker(_.extend(this.defaults, this.settings));
-    },
-    derender: function() {
-        this.$(".kb-datetimepicker").datetimepicker("destroy");
-    }
-}));
-
-KB.Fields.registerObject("file", KB.Fields.BaseView.extend({
-    initialize: function() {
-        this.render();
-    },
-    events: {
-        "click .kb-js-add-file": "openFrame",
-        "click .kb-js-reset-file": "reset"
-    },
-    render: function() {
-        this.$container = this.$(".kb-field-file-wrapper", this.$el);
-        this.$IdIn = this.$(".kb-file-attachment-id", this.$el);
-        this.$resetIn = this.$(".kb-js-reset-file", this.$el);
-        console.log(this);
-    },
-    derender: function() {
-        if (this.frame) {
-            this.frame.dispose();
-            this.frame = null;
-        }
-    },
-    openFrame: function() {
-        var that = this;
-        if (this.frame) {
-            return this.frame.open();
-        }
-        this.frame = wp.media({
-            title: KB.i18n.Refields.file.modalTitle,
-            button: {
-                text: KB.i18n.Refields.common.select
-            },
-            multiple: false,
-            library: {
-                type: ""
-            }
-        });
-        this.frame.on("ready", function() {
-            that.ready(this);
-        });
-        this.frame.state("library").on("select", function() {
-            that.select(this);
-        });
-        return this.frame.open();
-    },
-    ready: function(frame) {
-        this.$(".media-modal").addClass(" smaller no-sidebar");
-    },
-    select: function(frame) {
-        var attachment = frame.get("selection").first();
-        this.handleAttachment(attachment);
-    },
-    handleAttachment: function(attachment) {
-        console.log(this.$container);
-        this.$(".kb-file-filename", this.$container).html(attachment.get("filename"));
-        this.$(".kb-file-attachment-id", this.$container).val(attachment.get("id"));
-        this.$(".kb-file-title", this.$container).html(attachment.get("title"));
-        this.$(".kb-file-id", this.$container).html(attachment.get("id"));
-        this.$(".kb-file-editLink", this.$container).attr("href", attachment.get("editLink"));
-        this.$resetIn.show();
-        this.$container.show(450, function() {
-            KB.Events.trigger("modal.recalibrate");
-        });
-    },
-    reset: function() {
-        this.$IdIn.val("");
-        this.$container.hide(450);
-        this.$resetIn.hide();
-    }
-}));
-
-KB.Fields.register("FlexibleFields", function($) {
-    return {
-        init: function(modalView) {
-            $(".flexible-fields--stage", $("body")).each(function(index, el) {
-                var view = modalView || KB.Views.Modules.get($(el).data("module"));
-                var key = $(el).data("fieldkey");
-                var arrayKey = $(el).data("arraykey");
-                var fid = $(el).closest(".kb-js-field-identifier").attr("id");
-                if (!view.hasField(key, arrayKey)) {
-                    var obj = new KB.FlexibleFields.Controller({
-                        moduleView: view,
-                        fid: fid,
-                        key: key,
-                        arrayKey: arrayKey,
-                        el: el
-                    });
-                    view.addField(key, obj, arrayKey);
-                } else {
-                    view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
-                }
-            });
-        },
-        update: function() {
-            this.init();
-        },
-        frontUpdate: function(modalView) {
-            this.init(modalView);
-        }
-    };
-}(jQuery));
 
 KB.FlexibleFields = {};
 
@@ -282,7 +132,7 @@ KB.FlexibleFields.Item = Backbone.View.extend({
     },
     toggleItem: function() {
         jQuery(".flexible-fields--toggle-title", this.$el).next().slideToggle(250, function() {
-            KB.trigger("frontend::recalibrate");
+            KB.Events.trigger("modal.recalibrate");
         });
     },
     deleteItem: function() {
@@ -332,6 +182,7 @@ KB.FlexibleFields.Item = Backbone.View.extend({
             $con.append(fieldInstance.render(that.uid));
             $con.append('<input type="hidden" name="' + fieldInstance.baseId + "[" + that.uid + "][_mapping][" + fieldInstance.get("key") + ']" value="' + fieldInstance.get("type") + '" >');
             fieldInstance.$container = $con;
+            console.log(fieldInstance);
             if (fieldInstance.postRender) {
                 fieldInstance.postRender.call(fieldInstance);
             }
@@ -634,157 +485,6 @@ KB.Fields.register("GalleryRedux", function($) {
     };
 }(jQuery));
 
-KB.Fields.registerObject("image", KB.Fields.BaseView.extend({
-    initialize: function() {
-        this.defaultState = "replace-image";
-        this.defaultFrame = "image";
-        this.render();
-    },
-    events: {
-        "click .kb-js-add-image": "openFrame"
-    },
-    render: function() {
-        this.$reset = this.$el.find(".kb-js-reset-image");
-        this.$container = this.$el.find(".kb-field-image-container");
-        this.$saveId = this.$el.find(".kb-js-image-id");
-    },
-    openFrame: function() {
-        var that = this, metadata;
-        if (this.frame) {
-            this.frame.dispose();
-        }
-        var queryargs = {
-            post__in: [ this.model.get("value") ]
-        };
-        wp.media.query(queryargs).more().done(function() {
-            var attachment = that.attachment = this.first();
-            if (that.attachment) {
-                that.attachment.set("attachment_id", attachment.get("id"));
-                metadata = that.attachment.toJSON();
-            } else {
-                metadata = {};
-                that.defaultFrame = "select";
-                that.defaultState = "library";
-            }
-            that.frame = wp.media({
-                frame: that.defaultFrame,
-                state: that.defaultState,
-                metadata: metadata,
-                imageEditView: that,
-                library: {
-                    type: "image"
-                }
-            }).on("update", function(attachmentObj) {
-                that.update(attachmentObj);
-            }).on("ready", function() {
-                that.ready();
-            }).on("replace", function() {
-                that.replace(that.frame.image.attachment);
-            }).on("select", function(what) {
-                var attachment = this.get("library").get("selection").first();
-                that.replace(attachment);
-            }).open();
-        });
-    },
-    ready: function() {
-        jQuery(".media-modal").addClass("smaller no-sidebar");
-    },
-    replace: function(attachment) {
-        this.attachment = attachment;
-        this.handleAttachment(attachment);
-    },
-    update: function(attachmentObj) {
-        this.attachment.set(attachmentObj);
-        this.attachment.sync("update", this.attachment);
-    },
-    handleAttachment: function(attachment) {
-        var that = this;
-        var id = attachment.get("id");
-        var value = this.prepareValue(attachment);
-        var moduleData = _.clone(this.model.get("ModuleModel").get("moduleData"));
-        var path = this.model.get("kpath");
-        KB.Util.setIndex(moduleData, path, value);
-        this.model.get("ModuleModel").set("moduleData", moduleData);
-        var args = {
-            width: that.model.get("width") || null,
-            height: that.model.get("height") || null,
-            crop: that.model.get("crop") || true,
-            upscale: that.model.get("upscale") || false
-        };
-        if (!args.width || !args.height) {
-            var src = attachment.get("sizes").thumbnail ? attachment.get("sizes").thumbnail.url : attachment.get("sizes").full.url;
-            this.$container.html('<img src="' + src + '" >');
-        } else {
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    action: "fieldGetImage",
-                    args: args,
-                    id: id,
-                    _ajax_nonce: KB.Config.getNonce("read")
-                },
-                type: "GET",
-                dataType: "json",
-                success: function(res) {
-                    that.$container.html('<img src="' + res + '" >');
-                },
-                error: function() {}
-            });
-        }
-        this.$saveId.val(attachment.get("id"));
-        KB.Events.trigger("modal.preview");
-    },
-    prepareValue: function(attachment) {
-        return {
-            id: attachment.get("id"),
-            title: attachment.get("title"),
-            caption: attachment.get("caption"),
-            alt: attachment.get("alt")
-        };
-    }
-}));
-
-KB.Fields.registerObject("link", KB.Fields.BaseView.extend({
-    initialize: function() {
-        this.render();
-    },
-    events: {
-        "click .kb-js-add-link": "openModal"
-    },
-    render: function() {
-        this.$input = this.$(".kb-js-link-input", this.$el);
-    },
-    derender: function() {},
-    openModal: function() {
-        wpActiveEditor = this.$input.attr("id");
-        kb_restore_htmlUpdate = wpLink.htmlUpdate;
-        kb_restore_isMce = wpLink.isMCE;
-        wpLink.isMCE = this.isMCE;
-        wpLink.htmlUpdate = this.htmlUpdate;
-        wpLink.open();
-    },
-    htmlUpdate: function() {
-        var attrs, html, start, end, cursor, href, title, textarea = wpLink.textarea, result;
-        if (!textarea) return;
-        attrs = wpLink.getAttrs();
-        if (!attrs.href || attrs.href == "http://") return;
-        href = attrs.href;
-        title = attrs.title;
-        jQuery(textarea).empty();
-        textarea.value = href;
-        wpLink.close();
-        this.close();
-        textarea.focus();
-    },
-    isMCE: function() {
-        return false;
-    },
-    close: function() {
-        wpLink.isMCE = kb_restore_isMce;
-        wpLink.htmlUpdate = kb_restore_htmlUpdate;
-    }
-}));
-
 KB.Fields.register("OpeningTimes", function($) {
     return {
         init: function(modalView) {
@@ -1055,16 +755,295 @@ KB.Plupload.Controller = Backbone.View.extend({
     }
 });
 
-KB.Fields.register("TemplateSelect", function($) {
-    return {
-        init: function() {
-            $("body").on("change", ".kb-template-select", function() {
-                if (KB.focusedModule) {
-                    KB.focusedModule.set("viewfile", $(this).val());
-                    KB.focusedModule.view.trigger("template::changed");
+KB.Fields.registerObject("color", KB.Fields.BaseView.extend({
+    initialize: function() {
+        this.render();
+    },
+    events: {
+        "mouseup .kb-field--color": "recalibrate"
+    },
+    render: function() {
+        jQuery(".kb-color-picker", this.$el).wpColorPicker({});
+        jQuery("body").on("click.wpcolorpicker", this.update);
+    },
+    derender: function() {
+        jQuery("body").off("click.wpcolorpicker", this.update);
+    },
+    update: function() {
+        KB.Events.trigger("modal.preview");
+    },
+    recalibrate: function() {
+        _.delay(function() {
+            KB.Events.trigger("modal.recalibrate");
+        }, 150);
+    }
+}));
+
+KB.Fields.registerObject("date", KB.Fields.BaseView.extend({
+    initialize: function() {
+        var that = this;
+        this.defaults = {
+            format: "d M Y",
+            offset: [ 0, 250 ],
+            onSelect: function(selected, machine, Date, $el) {
+                that.$machineIn.val(machine);
+                that.$unixIn.val(Math.round(Date.getTime() / 1e3));
+            }
+        };
+        this.settings = this.model.get("options") || {};
+        this.render();
+    },
+    render: function() {
+        this.$machineIn = this.$(".kb-date-machine-format", this.$el);
+        this.$unixIn = this.$(".kb-date-unix-format", this.$el);
+        this.$(".kb-datepicker").Zebra_DatePicker(_.extend(this.defaults, this.settings));
+    },
+    derender: function() {}
+}));
+
+KB.Fields.registerObject("datetime", KB.Fields.BaseView.extend({
+    initialize: function() {
+        var that = this;
+        this.defaults = {
+            format: "d.m.Y H:i",
+            inline: false,
+            mask: true,
+            lang: "de",
+            allowBlank: true,
+            onChangeDateTime: function(current, $input) {
+                that.$unixIn.val(current.dateFormat("unixtime"));
+                that.$sqlIn.val(current.dateFormat("Y-m-d H:i:s"));
+            }
+        };
+        this.setting = this.model.get("settings") || {};
+        this.render();
+    },
+    render: function() {
+        this.$unixIn = this.$(".kb-datetimepicker--js-unix", this.$el);
+        this.$sqlIn = this.$(".kb-datetimepicker--js-sql", this.$el);
+        this.$(".kb-datetimepicker").datetimepicker(_.extend(this.defaults, this.settings));
+    },
+    derender: function() {
+        this.$(".kb-datetimepicker").datetimepicker("destroy");
+    }
+}));
+
+KB.Fields.registerObject("file", KB.Fields.BaseView.extend({
+    initialize: function() {
+        this.render();
+    },
+    events: {
+        "click .kb-js-add-file": "openFrame",
+        "click .kb-js-reset-file": "reset"
+    },
+    render: function() {
+        this.$container = this.$(".kb-field-file-wrapper", this.$el);
+        this.$IdIn = this.$(".kb-file-attachment-id", this.$el);
+        this.$resetIn = this.$(".kb-js-reset-file", this.$el);
+        console.log(this);
+    },
+    derender: function() {
+        if (this.frame) {
+            this.frame.dispose();
+            this.frame = null;
+        }
+    },
+    openFrame: function() {
+        var that = this;
+        if (this.frame) {
+            return this.frame.open();
+        }
+        this.frame = wp.media({
+            title: KB.i18n.Refields.file.modalTitle,
+            button: {
+                text: KB.i18n.Refields.common.select
+            },
+            multiple: false,
+            library: {
+                type: ""
+            }
+        });
+        this.frame.on("ready", function() {
+            that.ready(this);
+        });
+        this.frame.state("library").on("select", function() {
+            that.select(this);
+        });
+        return this.frame.open();
+    },
+    ready: function(frame) {
+        this.$(".media-modal").addClass(" smaller no-sidebar");
+    },
+    select: function(frame) {
+        var attachment = frame.get("selection").first();
+        this.handleAttachment(attachment);
+    },
+    handleAttachment: function(attachment) {
+        console.log(this.$container);
+        this.$(".kb-file-filename", this.$container).html(attachment.get("filename"));
+        this.$(".kb-file-attachment-id", this.$container).val(attachment.get("id"));
+        this.$(".kb-file-title", this.$container).html(attachment.get("title"));
+        this.$(".kb-file-id", this.$container).html(attachment.get("id"));
+        this.$(".kb-file-editLink", this.$container).attr("href", attachment.get("editLink"));
+        this.$resetIn.show();
+        this.$container.show(450, function() {
+            KB.Events.trigger("modal.recalibrate");
+        });
+    },
+    reset: function() {
+        this.$IdIn.val("");
+        this.$container.hide(450);
+        this.$resetIn.hide();
+    }
+}));
+
+KB.Fields.registerObject("image", KB.Fields.BaseView.extend({
+    initialize: function() {
+        this.defaultState = "replace-image";
+        this.defaultFrame = "image";
+        this.render();
+    },
+    events: {
+        "click .kb-js-add-image": "openFrame"
+    },
+    render: function() {
+        this.$reset = this.$el.find(".kb-js-reset-image");
+        this.$container = this.$el.find(".kb-field-image-container");
+        this.$saveId = this.$el.find(".kb-js-image-id");
+    },
+    openFrame: function() {
+        var that = this, metadata;
+        if (this.frame) {
+            this.frame.dispose();
+        }
+        var queryargs = {
+            post__in: [ this.model.get("value") ]
+        };
+        wp.media.query(queryargs).more().done(function() {
+            var attachment = that.attachment = this.first();
+            if (that.attachment) {
+                that.attachment.set("attachment_id", attachment.get("id"));
+                metadata = that.attachment.toJSON();
+            } else {
+                metadata = {};
+                that.defaultFrame = "select";
+                that.defaultState = "library";
+            }
+            that.frame = wp.media({
+                frame: that.defaultFrame,
+                state: that.defaultState,
+                metadata: metadata,
+                imageEditView: that,
+                library: {
+                    type: "image"
                 }
+            }).on("update", function(attachmentObj) {
+                that.update(attachmentObj);
+            }).on("ready", function() {
+                that.ready();
+            }).on("replace", function() {
+                that.replace(that.frame.image.attachment);
+            }).on("select", function(what) {
+                var attachment = this.get("library").get("selection").first();
+                that.replace(attachment);
+            }).open();
+        });
+    },
+    ready: function() {
+        jQuery(".media-modal").addClass("smaller no-sidebar");
+    },
+    replace: function(attachment) {
+        this.attachment = attachment;
+        this.handleAttachment(attachment);
+    },
+    update: function(attachmentObj) {
+        this.attachment.set(attachmentObj);
+        this.attachment.sync("update", this.attachment);
+    },
+    handleAttachment: function(attachment) {
+        var that = this;
+        var id = attachment.get("id");
+        var value = this.prepareValue(attachment);
+        var moduleData = _.clone(this.model.get("ModuleModel").get("moduleData"));
+        var path = this.model.get("kpath");
+        KB.Util.setIndex(moduleData, path, value);
+        this.model.get("ModuleModel").set("moduleData", moduleData);
+        var args = {
+            width: that.model.get("width") || null,
+            height: that.model.get("height") || null,
+            crop: that.model.get("crop") || true,
+            upscale: that.model.get("upscale") || false
+        };
+        if (!args.width || !args.height) {
+            var src = attachment.get("sizes").thumbnail ? attachment.get("sizes").thumbnail.url : attachment.get("sizes").full.url;
+            this.$container.html('<img src="' + src + '" >');
+        } else {
+            jQuery.ajax({
+                url: ajaxurl,
+                data: {
+                    action: "fieldGetImage",
+                    args: args,
+                    id: id,
+                    _ajax_nonce: KB.Config.getNonce("read")
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(res) {
+                    that.$container.html('<img src="' + res + '" >');
+                },
+                error: function() {}
             });
-        },
-        update: function() {}
-    };
-}(jQuery));
+        }
+        this.$saveId.val(attachment.get("id"));
+        KB.Events.trigger("modal.preview");
+    },
+    prepareValue: function(attachment) {
+        return {
+            id: attachment.get("id"),
+            title: attachment.get("title"),
+            caption: attachment.get("caption"),
+            alt: attachment.get("alt")
+        };
+    }
+}));
+
+KB.Fields.registerObject("link", KB.Fields.BaseView.extend({
+    initialize: function() {
+        this.render();
+    },
+    events: {
+        "click .kb-js-add-link": "openModal"
+    },
+    render: function() {
+        this.$input = this.$(".kb-js-link-input", this.$el);
+    },
+    derender: function() {},
+    openModal: function() {
+        wpActiveEditor = this.$input.attr("id");
+        kb_restore_htmlUpdate = wpLink.htmlUpdate;
+        kb_restore_isMce = wpLink.isMCE;
+        wpLink.isMCE = this.isMCE;
+        wpLink.htmlUpdate = this.htmlUpdate;
+        wpLink.open();
+    },
+    htmlUpdate: function() {
+        var attrs, html, start, end, cursor, href, title, textarea = wpLink.textarea, result;
+        if (!textarea) return;
+        attrs = wpLink.getAttrs();
+        if (!attrs.href || attrs.href == "http://") return;
+        href = attrs.href;
+        title = attrs.title;
+        jQuery(textarea).empty();
+        textarea.value = href;
+        wpLink.close();
+        this.close();
+        textarea.focus();
+    },
+    isMCE: function() {
+        return false;
+    },
+    close: function() {
+        wpLink.isMCE = kb_restore_isMce;
+        wpLink.htmlUpdate = kb_restore_htmlUpdate;
+    }
+}));

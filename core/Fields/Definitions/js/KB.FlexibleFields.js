@@ -1,37 +1,67 @@
-KB.Fields.register('FlexibleFields', (function ($) {
-  return {
-    init: function (modalView) {
-      // find all instances on load
-      $('.flexible-fields--stage', $('body')).each(function (index, el) {
-        var view = modalView || KB.Views.Modules.get($(el).data('module'));
-        var key = $(el).data('fieldkey');
-        var arrayKey = $(el).data('arraykey');
-        var fid = $(el).closest('.kb-js-field-identifier').attr('id');
+KB.Fields.registerObject('flexfields', KB.Fields.BaseView.extend({
+  initialize: function () {
+    this.render();
+  },
+  render: function () {
+    this.$stage = this.$('.flexible-fields--stage', this.$el);
+    this.createController();
 
-        // attach a new FF instance to the view
-        if (!view.hasField(key, arrayKey)) {
-          var obj = new KB.FlexibleFields.Controller({
-            moduleView: view,
-            fid: fid,
-            key: key,
-            arrayKey: arrayKey,
-            el: el
-          });
-          view.addField(key, obj, arrayKey);
-        } else {
-          view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
-        }
+  },
+  derender: function () {
 
-      });
-    },
-    update: function () {
-      this.init();
-    },
-    frontUpdate: function (modalView) {
-      this.init(modalView);
+  },
+  createController: function(){
+
+    if (this.FlexFieldsController){
+      return this.FlexFieldsController.bootstrap.call(this.FlexFieldsController);
     }
-  };
-}(jQuery)));
+
+    this.FlexFieldsController = new KB.FlexibleFields.Controller({
+      moduleView: this.model.get('ModuleModel').View,
+      fid: this.model.get('uid'),
+      key: this.model.get('fieldkey'),
+      arrayKey: this.model.get('arrayKey'),
+      el: this.$stage.get(0)
+    })
+  }
+}));
+
+//
+//KB.Fields.register('FlexibleFields', (function ($) {
+//
+//  return {
+//    init: function (modalView) {
+//      // find all instances on load
+//      $('.flexible-fields--stage', $('body')).each(function (index, el) {
+//        var view = modalView || KB.Views.Modules.get($(el).data('module'));
+//        var key = $(el).data('fieldkey');
+//        var arrayKey = $(el).data('arraykey');
+//        var fid = $(el).closest('.kb-js-field-identifier').attr('id');
+//
+//        // attach a new FF instance to the view
+//        if (!view.hasField(key, arrayKey)) {
+//          var obj = new KB.FlexibleFields.Controller({
+//            moduleView: view,
+//            fid: fid,
+//            key: key,
+//            arrayKey: arrayKey,
+//            el: el
+//          });
+//          view.addField(key, obj, arrayKey);
+//        } else {
+//          view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
+//        }
+//
+//      });
+//    },
+//    update: function () {
+//      this.init();
+//    },
+//    frontUpdate: function (modalView) {
+//      this.init(modalView);
+//    }
+//  };
+//}(jQuery)));
 
 
 // namespace
@@ -143,7 +173,7 @@ KB.FlexibleFields.Item = Backbone.View.extend({
   },
   toggleItem: function () {
     jQuery('.flexible-fields--toggle-title', this.$el).next().slideToggle(250, function () {
-      KB.trigger('frontend::recalibrate');
+      KB.Events.trigger('modal.recalibrate');
     });
   },
   deleteItem: function () {
@@ -191,6 +221,8 @@ KB.FlexibleFields.Item = Backbone.View.extend({
       $con.append(fieldInstance.render(that.uid));
       $con.append('<input type="hidden" name="' + fieldInstance.baseId + '[' + that.uid + '][_mapping][' + fieldInstance.get('key') + ']" value="' + fieldInstance.get('type') + '" >');
       fieldInstance.$container = $con;
+
+      console.log(fieldInstance);
 
       if (fieldInstance.postRender) {
         fieldInstance.postRender.call(fieldInstance);

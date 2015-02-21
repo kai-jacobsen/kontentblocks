@@ -42,6 +42,9 @@ KB.FieldsAPI.Field = Backbone.View.extend({
         } else {
             return this.config.moduleId + "[" + this.config.fieldKey + "]";
         }
+    },
+    kbfuid: function(index) {
+        return this.config.fieldId + index + this.config.type;
     }
 });
 
@@ -184,6 +187,7 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
         return KB.Templates.render(this.templatePath, {
             config: this.config,
             baseId: this.baseId,
+            kbfuid: this.kbfuid(index),
             index: index,
             i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
             model: this.model.toJSON()

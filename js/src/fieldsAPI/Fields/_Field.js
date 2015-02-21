@@ -27,5 +27,8 @@ KB.FieldsAPI.Field = Backbone.View.extend({
     } else {
       return this.config.moduleId + '[' + this.config.fieldKey + ']';
     }
+  },
+  kbfuid: function(index){
+    return this.config.fieldId + index + this.config.type;
   }
 });

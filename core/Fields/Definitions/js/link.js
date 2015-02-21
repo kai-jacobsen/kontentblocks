@@ -38,7 +38,7 @@ KB.Fields.registerObject('link', KB.Fields.BaseView.extend({
       return;
     // Build HTML
     href = attrs.href;
-    title = attrs.title;
+    title = attrs.title; // @TODO
 
     // Clear textarea
     jQuery(textarea).empty();
