@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-20 */
+/*! Kontentblocks DevVersion 2015-02-21 */
 KB.Fields.BaseView = Backbone.View.extend({});
 
 KB.Fields.registerObject("color", KB.Fields.BaseView.extend({
@@ -74,68 +74,74 @@ KB.Fields.registerObject("datetime", KB.Fields.BaseView.extend({
     }
 }));
 
-KB.Fields.register("File", function($) {
-    var self, attachment;
-    self = {
-        selector: ".kb-js-add-file",
-        remove: ".kb-js-reset-file",
-        container: null,
-        init: function() {
-            var that = this;
-            $("body").on("click", this.selector, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.frame().open();
-            });
-            $("body").on("click", this.remove, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.resetFields();
-            });
-        },
-        frame: function() {
-            if (this._frame) return this._frame;
-            this._frame = wp.media({
-                title: KB.i18n.Refields.file.modalTitle,
-                button: {
-                    text: KB.i18n.Refields.common.select
-                },
-                multiple: false,
-                library: {
-                    type: ""
-                }
-            });
-            this._frame.on("ready", this.ready);
-            this._frame.state("library").on("select", this.select);
-            return this._frame;
-        },
-        ready: function() {
-            $(".media-modal").addClass(" smaller no-sidebar");
-        },
-        select: function() {
-            attachment = this.get("selection").first();
-            self.handleAttachment(attachment);
-        },
-        handleAttachment: function(attachment) {
-            $(".kb-file-filename", this.container).html(attachment.get("filename"));
-            $(".kb-file-attachment-id", this.container).val(attachment.get("id"));
-            $(".kb-file-title", this.container).html(attachment.get("title"));
-            $(".kb-file-id", this.container).html(attachment.get("id"));
-            $(".kb-file-editLink", this.container).attr("href", attachment.get("editLink"));
-            $(this.remove, activeField).show();
-            this.container.show(750);
-        },
-        resetFields: function() {
-            $(".kb-file-attachment-id", this.container).val("");
-            this.container.hide(750);
-            $(this.remove, activeField).hide();
-        },
-        update: function() {
-            this.init();
+KB.Fields.registerObject("file", KB.Fields.BaseView.extend({
+    initialize: function() {
+        this.render();
+    },
+    events: {
+        "click .kb-js-add-file": "openFrame",
+        "click .kb-js-reset-file": "reset"
+    },
+    render: function() {
+        this.$container = this.$(".kb-field-file-wrapper", this.$el);
+        this.$IdIn = this.$(".kb-file-attachment-id", this.$el);
+        this.$resetIn = this.$(".kb-js-reset-file", this.$el);
+        console.log(this);
+    },
+    derender: function() {
+        if (this.frame) {
+            this.frame.dispose();
+            this.frame = null;
         }
-    };
-    return self;
-}(jQuery));
+    },
+    openFrame: function() {
+        var that = this;
+        if (this.frame) {
+            return this.frame.open();
+        }
+        this.frame = wp.media({
+            title: KB.i18n.Refields.file.modalTitle,
+            button: {
+                text: KB.i18n.Refields.common.select
+            },
+            multiple: false,
+            library: {
+                type: ""
+            }
+        });
+        this.frame.on("ready", function() {
+            that.ready(this);
+        });
+        this.frame.state("library").on("select", function() {
+            that.select(this);
+        });
+        return this.frame.open();
+    },
+    ready: function(frame) {
+        this.$(".media-modal").addClass(" smaller no-sidebar");
+    },
+    select: function(frame) {
+        var attachment = frame.get("selection").first();
+        this.handleAttachment(attachment);
+    },
+    handleAttachment: function(attachment) {
+        console.log(this.$container);
+        this.$(".kb-file-filename", this.$container).html(attachment.get("filename"));
+        this.$(".kb-file-attachment-id", this.$container).val(attachment.get("id"));
+        this.$(".kb-file-title", this.$container).html(attachment.get("title"));
+        this.$(".kb-file-id", this.$container).html(attachment.get("id"));
+        this.$(".kb-file-editLink", this.$container).attr("href", attachment.get("editLink"));
+        this.$resetIn.show();
+        this.$container.show(450, function() {
+            KB.Events.trigger("modal.recalibrate");
+        });
+    },
+    reset: function() {
+        this.$IdIn.val("");
+        this.$container.hide(450);
+        this.$resetIn.hide();
+    }
+}));
 
 KB.Fields.register("FlexibleFields", function($) {
     return {
@@ -738,53 +744,46 @@ KB.Fields.registerObject("image", KB.Fields.BaseView.extend({
     }
 }));
 
-KB.Fields.register("Link", function($) {
-    var self, restore_htmlUpdate, restore_isMce, title, href;
-    return {
-        $input: null,
-        init: function() {
-            var that = this;
-            $("body").on("click", ".kb-js-add-link", function(e) {
-                e.preventDefault();
-                that.$input = $(this).prev().attr("id");
-                that.open();
-            });
-        },
-        open: function(input) {
-            var that = this;
-            wpActiveEditor = this.$input;
-            wpLink.open();
-            restore_htmlUpdate = wpLink.htmlUpdate;
-            restore_isMce = wpLink.isMCE;
-            wpLink.isMCE = function() {
-                return false;
-            };
-            wpLink.htmlUpdate = function() {
-                var attrs, html, start, end, cursor, textarea = wpLink.textarea, result;
-                if (!textarea) return;
-                attrs = wpLink.getAttrs();
-                if (!attrs.href || attrs.href == "http://") return;
-                href = attrs.href;
-                title = attrs.title;
-                jQuery(textarea).empty();
-                textarea.value = href;
-                wpLink.close();
-                that.close();
-                textarea.focus();
-            };
-        },
-        close: function() {
-            wpLink.isMCE = restore_isMce;
-            wpLink.htmlUpdate = restore_htmlUpdate;
-        },
-        update: function() {
-            this.init();
-        },
-        updateFront: function() {
-            this.init();
-        }
-    };
-}(jQuery));
+KB.Fields.registerObject("link", KB.Fields.BaseView.extend({
+    initialize: function() {
+        this.render();
+    },
+    events: {
+        "click .kb-js-add-link": "openModal"
+    },
+    render: function() {
+        this.$input = this.$(".kb-js-link-input", this.$el);
+    },
+    derender: function() {},
+    openModal: function() {
+        wpActiveEditor = this.$input.attr("id");
+        kb_restore_htmlUpdate = wpLink.htmlUpdate;
+        kb_restore_isMce = wpLink.isMCE;
+        wpLink.isMCE = this.isMCE;
+        wpLink.htmlUpdate = this.htmlUpdate;
+        wpLink.open();
+    },
+    htmlUpdate: function() {
+        var attrs, html, start, end, cursor, href, title, textarea = wpLink.textarea, result;
+        if (!textarea) return;
+        attrs = wpLink.getAttrs();
+        if (!attrs.href || attrs.href == "http://") return;
+        href = attrs.href;
+        title = attrs.title;
+        jQuery(textarea).empty();
+        textarea.value = href;
+        wpLink.close();
+        this.close();
+        textarea.focus();
+    },
+    isMCE: function() {
+        return false;
+    },
+    close: function() {
+        wpLink.isMCE = kb_restore_isMce;
+        wpLink.htmlUpdate = kb_restore_htmlUpdate;
+    }
+}));
 
 KB.Fields.register("OpeningTimes", function($) {
     return {

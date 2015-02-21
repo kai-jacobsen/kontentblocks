@@ -1,74 +1,69 @@
-KB.Fields.register('File', (function ($) {
-
-  var self, attachment;
-
-  self = {
-    selector: '.kb-js-add-file',
-    remove: '.kb-js-reset-file',
-    container: null,
-    init: function () {
-      var that = this;
-      $('body').on('click', this.selector, function (e) {
-        e.preventDefault();
-        that.container = $('.kb-field-file-wrapper', activeField);
-        that.frame().open();
-      });
-
-      $('body').on('click', this.remove, function (e) {
-        e.preventDefault();
-        that.container = $('.kb-field-file-wrapper', activeField);
-        that.resetFields();
-      });
-
-    },
-    frame: function () {
-      if (this._frame)
-        return this._frame;
-
-      this._frame = wp.media({
-        title: KB.i18n.Refields.file.modalTitle,
-        button: {
-          text: KB.i18n.Refields.common.select
-        },
-        multiple: false,
-        library: {
-          type: ''
-        }
-      });
-
-      this._frame.on('ready', this.ready);
-
-      this._frame.state('library').on('select', this.select);
-
-      return this._frame;
-    },
-    ready: function () {
-      $('.media-modal').addClass(' smaller no-sidebar');
-    },
-    select: function () {
-      // this references _frame
-      attachment = this.get('selection').first();
-      self.handleAttachment(attachment);
-    },
-    handleAttachment: function (attachment) {
-      $('.kb-file-filename', this.container).html(attachment.get('filename'));
-      $('.kb-file-attachment-id', this.container).val(attachment.get('id'));
-      $('.kb-file-title', this.container).html(attachment.get('title'));
-      $('.kb-file-id', this.container).html(attachment.get('id'));
-      $('.kb-file-editLink', this.container).attr('href', attachment.get('editLink'));
-      $(this.remove, activeField).show();
-      this.container.show(750);
-    },
-    resetFields: function () {
-      $('.kb-file-attachment-id', this.container).val('');
-      this.container.hide(750);
-      $(this.remove, activeField).hide();
-    },
-    update: function () {
-      this.init();
+KB.Fields.registerObject('file', KB.Fields.BaseView.extend({
+  initialize: function () {
+    this.render();
+  },
+  events: {
+    'click .kb-js-add-file': 'openFrame',
+    'click .kb-js-reset-file': 'reset'
+  },
+  render: function () {
+    this.$container = this.$('.kb-field-file-wrapper', this.$el);
+    this.$IdIn = this.$('.kb-file-attachment-id', this.$el); // hidden input
+    this.$resetIn = this.$('.kb-js-reset-file', this.$el); // reset button
+    console.log(this);
+  },
+  derender: function () {
+    if (this.frame) {
+      this.frame.dispose();
+      this.frame = null;
     }
-  };
+  },
+  openFrame: function () {
+    var that = this;
+    if (this.frame){
+      return this.frame.open();
+    }
 
-  return self;
-
-}(jQuery)));
+    this.frame = wp.media({
+      title: KB.i18n.Refields.file.modalTitle,
+      button: {
+        text: KB.i18n.Refields.common.select
+      },
+      multiple: false,
+      library: {
+        type: ''
+      }
+    });
+    this.frame.on('ready', function(){
+      that.ready(this);
+    });
+    this.frame.state('library').on('select', function(){
+      that.select(this);
+    });
+    return this.frame.open();
+  },
+  ready: function (frame) {
+    this.$('.media-modal').addClass(' smaller no-sidebar');
+  },
+  select: function (frame) {
+    var attachment = frame.get('selection').first();
+    this.handleAttachment(attachment);
+  },
+  handleAttachment: function (attachment) {
+    console.log(this.$container);
+    this.$('.kb-file-filename', this.$container).html(attachment.get('filename'));
+    this.$('.kb-file-attachment-id', this.$container).val(attachment.get('id'));
+    this.$('.kb-file-title', this.$container).html(attachment.get('title'));
+    this.$('.kb-file-id', this.$container).html(attachment.get('id'));
+    this.$('.kb-file-editLink', this.$container).attr('href', attachment.get('editLink'));
+    this.$resetIn.show();
+    this.$container.show(450, function(){
+      KB.Events.trigger('modal.recalibrate');
+    });
+  },
+  reset: function () {
+    this.$IdIn.val('');
+    this.$container.hide(450);
+    this.$resetIn.hide();
+  }
+}));

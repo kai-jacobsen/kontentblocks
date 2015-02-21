@@ -1,75 +1,62 @@
-KB.Fields.register('Link', (function ($) {
+KB.Fields.registerObject('link', KB.Fields.BaseView.extend({
+  initialize: function(){
+    this.render();
+  },
+  events:{
+    'click .kb-js-add-link' : 'openModal'
+  },
+  render: function(){
+    this.$input = this.$('.kb-js-link-input', this.$el);
+  },
+  derender: function(){
 
-  var self, restore_htmlUpdate, restore_isMce, title, href;
+  },
+  openModal: function(){
+    wpActiveEditor = this.$input.attr('id');
 
-  return {
-    $input: null,
-    init: function () {
-      var that = this;
-      $('body').on('click', '.kb-js-add-link', function (e) {
-        e.preventDefault();
-        that.$input = $(this).prev().attr('id');
-        that.open();
-      });
-    },
-    open: function (input) {
-      var that = this;
-      // set activeEditor, in this case our textfield, dialog won't open if not set
-      wpActiveEditor = this.$input;
-      //open the dialog
-      wpLink.open();
+    // store the original function
+    kb_restore_htmlUpdate = wpLink.htmlUpdate;
+    kb_restore_isMce = wpLink.isMCE;
 
-      // store the original function
-      restore_htmlUpdate = wpLink.htmlUpdate;
-      restore_isMce = wpLink.isMCE;
+    wpLink.isMCE = this.isMCE;
+    wpLink.htmlUpdate = this.htmlUpdate;
+    wpLink.open();
 
-      // it's not tinymce, ovverride the original
-      wpLink.isMCE = function () {
-        return false;
-      };
+  },
+  htmlUpdate: function(){
+    var attrs, html, start, end, cursor, href,title,
+      textarea = wpLink.textarea, result;
 
+    if (!textarea)
+      return;
 
-      // magic happens here,override the original function
-      wpLink.htmlUpdate = function () {
-        var attrs, html, start, end, cursor,
-          textarea = wpLink.textarea, result;
+    // get contents of dialog
+    attrs = wpLink.getAttrs();
 
-        if (!textarea)
-          return;
+    // If there's no href, return.
+    if (!attrs.href || attrs.href == 'http://')
+      return;
+    // Build HTML
+    href = attrs.href;
+    title = attrs.title;
 
-        // get contents of dialog
-        attrs = wpLink.getAttrs();
+    // Clear textarea
+    jQuery(textarea).empty();
 
-        // If there's no href, return.
-        if (!attrs.href || attrs.href == 'http://')
-          return;
-        // Build HTML
-        href = attrs.href;
-        title = attrs.title;
-
-        // Clear textarea
-        jQuery(textarea).empty();
-
-        //Append the Url to the textarea
-        textarea.value = href;
-        //restore the original function
-        // close dialog and put the cursor inside the textarea
-        wpLink.close();
-        that.close();
-        textarea.focus();
-      }
-    },
-    close: function () {
+    //Append the Url to the textarea
+    textarea.value = href;
+    //restore the original function
+    // close dialog and put the cursor inside the textarea
+    wpLink.close();
+    this.close();
+    textarea.focus();
+  },
+  isMCE: function(){
+    return false;
+  },
+  close: function(){
       // restore the original functions to wpLink
-      wpLink.isMCE = restore_isMce;
-      wpLink.htmlUpdate = restore_htmlUpdate;
-    },
-    update: function () {
-      this.init();
-    },
-    updateFront: function () {
-      this.init();
-    }
+      wpLink.isMCE = kb_restore_isMce;
+      wpLink.htmlUpdate = kb_restore_htmlUpdate;
   }
-
-}(jQuery)));
+}));

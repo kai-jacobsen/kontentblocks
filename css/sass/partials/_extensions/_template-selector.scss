@@ -7,6 +7,7 @@
   right: 4px;
   top: 4px;
   z-index: 101;
+  font-family: 'Open Sans';
 
   .kb-selectbox{
     float: right;
@@ -24,10 +25,12 @@
   }
 
   select{
-    font-size: 11px;
+    font-size: 12px !important;
     width:150px;
-    height: 33px !important;
+    height: 30px !important;
     line-height: 100% !important;
+    font-family: 'Open Sans' !important;
+
   }
 
 }

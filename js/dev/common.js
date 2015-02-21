@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-20 */
+/*! Kontentblocks DevVersion 2015-02-21 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -233,6 +233,7 @@ KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.e
         if (this.FieldView) {
             this.FieldView.setElement(this.getElement());
             this.FieldView.render();
+            console.log("re-render");
         }
     },
     getElement: function() {

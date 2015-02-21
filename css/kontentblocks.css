@@ -1081,6 +1081,11 @@ img.kb-inline-imageedit-attached:hover {
   cursor: pointer;
 }
 
+/* line 67, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+.button.button-primary {
+  text-transform: none !important;
+}
+
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_modal.scss */
 #onsite-modal.fullscreen {
   left: 0 !important;
@@ -4902,30 +4907,32 @@ button.Zebra_DatePicker_Icon_Inside {
   right: 4px;
   top: 4px;
   z-index: 101;
+  font-family: 'Open Sans';
 }
-/* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
+/* line 12, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
 .kb-template-selector--wrapper .kb-selectbox {
   float: right;
   padding: 0;
   background: transparent;
   border-left: 0;
 }
-/* line 16, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
+/* line 17, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
 .kb-template-selector--wrapper .kb-selectbox label {
   color: #ccc;
   font-size: 11px;
 }
-/* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
+/* line 22, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
 .kb-template-selector--wrapper .kb-selectbox:focus {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-/* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
+/* line 27, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
 .kb-template-selector--wrapper select {
-  font-size: 11px;
+  font-size: 12px !important;
   width: 150px;
-  height: 33px !important;
+  height: 30px !important;
   line-height: 100% !important;
+  font-family: 'Open Sans' !important;
 }
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_redirect.scss */

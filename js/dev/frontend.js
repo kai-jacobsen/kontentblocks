@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-20 */
+/*! Kontentblocks DevVersion 2015-02-21 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"

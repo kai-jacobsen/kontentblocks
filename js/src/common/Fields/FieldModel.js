@@ -77,6 +77,7 @@ KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.e
     if (this.FieldView) {
       this.FieldView.setElement(this.getElement());
       this.FieldView.render();
+      console.log('re-render');
     }
   },
   getElement: function () {
