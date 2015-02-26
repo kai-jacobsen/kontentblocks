@@ -397,10 +397,10 @@ abstract class Field implements Exportable
      * Any markup should be echoed, not returned
      * Must be overridden by the individual field class
      * @since 1.0.0
-     * @param FieldForm $Form
+     * @param FieldFormController $Form
      * @return bool
      */
-    public function form( FieldForm $Form )
+    public function form( FieldFormController $Form )
     {
         $type = $this->type;
         $tpl = $this->getArg( 'template', 'default' );
@@ -439,7 +439,7 @@ abstract class Field implements Exportable
 
         $this->uniqueId = $this->createUID();
         // handles the form output
-        $Form = new FieldForm( $this );
+        $Form = new FieldFormController( $this );
         $out = $Form->build();
 
         if ($echo) {

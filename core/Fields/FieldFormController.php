@@ -4,14 +4,13 @@ namespace Kontentblocks\Fields;
 
 
 use Kontentblocks\Templating\FieldView;
-use Kontentblocks\Utils\Utilities;
 
 /**
  * Handles form creation (backend) and such
  * Class FieldForm
  * @package Kontentblocks\Fields
  */
-class FieldForm
+class FieldFormController
 {
 
     /**
