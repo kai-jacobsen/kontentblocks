@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-21 */
+/*! Kontentblocks DevVersion 2015-02-25 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
@@ -23,7 +23,6 @@ KB.Backbone.ModuleDefinition = Backbone.Model.extend({
 KB.Backbone.ModuleModel = Backbone.Model.extend({
     idAttribute: "mid",
     initialize: function() {
-        this.listenToOnce(this, "change:envVars", this.subscribeToArea);
         this.listenTo(this, "change:envVars", this.areaChanged);
         this.subscribeToArea();
     },
@@ -32,7 +31,13 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
         this.stopListening();
     },
     setArea: function(area) {
-        this.setEnvVar("area", area);
+        this.setEnvVar("area", area.get("id"));
+        this.set("area", area.get("id"));
+        this.setEnvVar("areaContext", area.get("areaContext"));
+        this.set("areaContext", area.get("areaContext"));
+        this.Area = area;
+        this.subscribeToArea(area);
+        this.areaChanged();
     },
     areaChanged: function() {
         this.View.updateModuleForm();
@@ -407,6 +412,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
         KB.Ui.repaint(this.$el);
         KB.Fields.trigger("update");
         this.trigger("kb:backend::viewUpdated");
+        this.model.trigger("after.change.area");
     },
     fullscreen: function() {
         var that = this;

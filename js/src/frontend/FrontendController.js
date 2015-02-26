@@ -149,11 +149,11 @@ KB.App = function () {
   function createModuleViews(ModuleModel) {
     var ModuleView;
     // create view
-    ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
+    ModuleView = KB.Views.Modules.add(ModuleModel.get('mid'), new KB.Backbone.ModuleView({
       model: ModuleModel,
-      el: '#' + ModuleModel.get('instance_id')
+      el: '#' + ModuleModel.get('mid')
     }));
-    ModuleView.$el.data('ModuleView', ModuleView);
+    //ModuleView.$el.data('ModuleView', ModuleView);
     KB.Ui.initTabs();
   }
 

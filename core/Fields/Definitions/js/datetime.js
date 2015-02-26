@@ -16,8 +16,8 @@ KB.Fields.registerObject('datetime', KB.Fields.BaseView.extend({
     this.render();
   },
   render: function () {
-    this.$unixIn = this.$('.kb-datetimepicker--js-unix', this.$el);
-    this.$sqlIn = this.$('.kb-datetimepicker--js-sql', this.$el);
+    this.$unixIn = this.$('.kb-datetimepicker--js-unix');
+    this.$sqlIn = this.$('.kb-datetimepicker--js-sql');
     this.$('.kb-datetimepicker').datetimepicker(_.extend(this.defaults, this.settings));
   },
   derender: function () {

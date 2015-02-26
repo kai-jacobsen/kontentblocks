@@ -53,7 +53,7 @@ class Enqueues
             'underscore',
             'wp-color-picker',
             'editor',
-            'quicktags'
+            'quicktags',
         );
         // Plugins
         wp_register_script(

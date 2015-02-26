@@ -1,7 +1,7 @@
 KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
-    var module = this.get('fieldId'), Model;
+    var module = this.get('fieldId');
     if (module && (this.ModuleModel = KB.Modules.get(module)) && this.getType()) {
       this.set('ModuleModel', this.ModuleModel);
       this.setData();
@@ -13,6 +13,8 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
     this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind);
+    this.listenTo(this.ModuleModel, 'change:area', this.unbind);
+    this.listenTo(this.ModuleModel, 'after.change.area', this.rebind);
     this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind);
   },
   setupType: function () {
@@ -33,9 +35,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     if (!KB.Checks.userCan('edit_kontentblocks')) {
       return false;
     }
-
     var obj = KB.Fields.get(type);
-
     if (obj && obj.prototype.hasOwnProperty('initialize')) {
       return obj;
     } else {
@@ -53,7 +53,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   rebind: function () {
     if (this.FieldView) {
       this.FieldView.setElement(this.getElement());
-      this.FieldView.render();
+      this.FieldView.rerender();
     }
   },
   unbind: function () {
@@ -76,8 +76,7 @@ KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.e
   rebind: function () {
     if (this.FieldView) {
       this.FieldView.setElement(this.getElement());
-      this.FieldView.render();
-      console.log('re-render');
+      this.FieldView.rerender();
     }
   },
   getElement: function () {

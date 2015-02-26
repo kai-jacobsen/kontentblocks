@@ -7,10 +7,9 @@ KB.Fields.registerObject('file', KB.Fields.BaseView.extend({
     'click .kb-js-reset-file': 'reset'
   },
   render: function () {
-    this.$container = this.$('.kb-field-file-wrapper', this.$el);
-    this.$IdIn = this.$('.kb-file-attachment-id', this.$el); // hidden input
-    this.$resetIn = this.$('.kb-js-reset-file', this.$el); // reset button
-    console.log(this);
+    this.$container = this.$('.kb-field-file-wrapper');
+    this.$IdIn = this.$('.kb-file-attachment-id'); // hidden input
+    this.$resetIn = this.$('.kb-js-reset-file'); // reset button
   },
   derender: function () {
     if (this.frame) {
@@ -50,7 +49,6 @@ KB.Fields.registerObject('file', KB.Fields.BaseView.extend({
     this.handleAttachment(attachment);
   },
   handleAttachment: function (attachment) {
-    console.log(this.$container);
     this.$('.kb-file-filename', this.$container).html(attachment.get('filename'));
     this.$('.kb-file-attachment-id', this.$container).val(attachment.get('id'));
     this.$('.kb-file-title', this.$container).html(attachment.get('title'));

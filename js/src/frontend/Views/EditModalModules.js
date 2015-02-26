@@ -124,7 +124,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
     //when update gets called from module controls, notify this view
     this.listenTo(this.ModuleView, 'kb.frontend.module.inline.saved', this.frontendViewUpdated);
-
+    this.listenTo(KB.Events, 'modal.refresh', this.reload);
     /**
      * when the viewfile select changed,
      * reload to account for a different input form
@@ -222,11 +222,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     var that = this,
       json;
 
-    console.trace();
-
 
     _KS.info('Frontend modal retrieves data from the server');
-    //overloadData = !_.isUndefined(overloadData);
     json = this.model.toJSON();
 
 

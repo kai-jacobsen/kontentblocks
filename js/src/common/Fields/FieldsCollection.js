@@ -4,6 +4,5 @@ KB.Backbone.Common.FieldConfigsCollection = Backbone.Collection.extend({
     this.listenTo(this, 'add', this.log);
   },
   log: function(model){
-    console.log('coll add',model);
   }
 });

@@ -21,7 +21,9 @@ KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
     this.listenTo(this.Areas, 'add', this.createAreaItem);
   },
   attachAreaView: function (view) {
-    this.Areas.add(view.model);
+    if (view.el){
+      this.Areas.add(view.model);
+    }
   },
   attachModuleView: function (view) {
     var AreaView = this.AreaViews[view.model.get('area')];

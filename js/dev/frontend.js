@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-21 */
+/*! Kontentblocks DevVersion 2015-02-25 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -517,6 +517,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     attach: function() {
         var that = this;
         this.listenTo(this.ModuleView, "kb.frontend.module.inline.saved", this.frontendViewUpdated);
+        this.listenTo(KB.Events, "modal.refresh", this.reload);
         this.listenTo(this.model, "change:viewfile", function() {
             that.serialize(false, true);
             that.reload();
@@ -559,7 +560,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     render: function(reload) {
         var that = this, json;
-        console.trace();
         _KS.info("Frontend modal retrieves data from the server");
         json = this.model.toJSON();
         this.applyControlsSettings(this.$el);
@@ -1300,7 +1300,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     },
     save: function() {},
     dispose: function() {
-        console.log("dispose");
         delete this.model.View;
         this.stopListening();
         this.remove();
@@ -1493,7 +1492,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
     },
     prepareLayouts: function(layouts) {
         var that = this;
-        var stored = this.model.get("settings").layout;
+        var stored = this.model.get("layout");
         return _.map(layouts, function(l) {
             if (that.LayoutDefs[l]) {
                 var def = that.LayoutDefs[l];
@@ -1730,7 +1729,9 @@ KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
         this.listenTo(this.Areas, "add", this.createAreaItem);
     },
     attachAreaView: function(view) {
-        this.Areas.add(view.model);
+        if (view.el) {
+            this.Areas.add(view.model);
+        }
     },
     attachModuleView: function(view) {
         var AreaView = this.AreaViews[view.model.get("area")];
@@ -1893,7 +1894,6 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
         this.$el.css("min-height", "200px");
     },
     derender: function() {
-        console.log("derender image view");
         if (this.frame) {
             this.frame.dispose();
             this.frame = null;
@@ -1948,6 +1948,7 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
         var path = this.model.get("kpath");
         KB.Util.setIndex(moduleData, path, value);
         this.model.get("ModuleModel").set("moduleData", moduleData);
+        KB.Events.trigger("modal.refresh");
         var args = {
             width: that.model.get("width"),
             height: that.model.get("height"),
@@ -2296,11 +2297,10 @@ KB.App = function() {
     }
     function createModuleViews(ModuleModel) {
         var ModuleView;
-        ModuleView = KB.Views.Modules.add(ModuleModel.get("instance_id"), new KB.Backbone.ModuleView({
+        ModuleView = KB.Views.Modules.add(ModuleModel.get("mid"), new KB.Backbone.ModuleView({
             model: ModuleModel,
-            el: "#" + ModuleModel.get("instance_id")
+            el: "#" + ModuleModel.get("mid")
         }));
-        ModuleView.$el.data("ModuleView", ModuleView);
         KB.Ui.initTabs();
     }
     function createAreaViews(AreaModel) {

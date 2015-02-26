@@ -6,7 +6,7 @@ KB.Fields.registerObject('color', KB.Fields.BaseView.extend({
     'mouseup .kb-field--color': 'recalibrate'
   },
   render: function () {
-    jQuery(".kb-color-picker", this.$el).wpColorPicker({});
+    this.$(".kb-color-picker").wpColorPicker({});
     jQuery('body').on('click.wpcolorpicker', this.update);
   },
   derender: function () {

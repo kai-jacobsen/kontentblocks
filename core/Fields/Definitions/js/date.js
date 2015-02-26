@@ -14,8 +14,8 @@ KB.Fields.registerObject('date', KB.Fields.BaseView.extend({
     this.render();
   },
   render: function () {
-    this.$machineIn = this.$('.kb-date-machine-format', this.$el);
-    this.$unixIn = this.$('.kb-date-unix-format', this.$el);
+    this.$machineIn = this.$('.kb-date-machine-format');
+    this.$unixIn = this.$('.kb-date-unix-format');
 
     this.$('.kb-datepicker').Zebra_DatePicker(_.extend(this.defaults, this.settings));
   },

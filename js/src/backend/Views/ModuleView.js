@@ -99,6 +99,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
     KB.Ui.repaint(this.$el);
     KB.Fields.trigger('update');
     this.trigger('kb:backend::viewUpdated');
+    this.model.trigger('after.change.area');
   },
   fullscreen: function () {
     var that = this;

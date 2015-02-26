@@ -6,7 +6,7 @@ KB.Fields.registerObject('link', KB.Fields.BaseView.extend({
     'click .kb-js-add-link' : 'openModal'
   },
   render: function(){
-    this.$input = this.$('.kb-js-link-input', this.$el);
+    this.$input = this.$('.kb-js-link-input');
   },
   derender: function(){
 

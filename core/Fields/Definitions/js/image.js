@@ -9,9 +9,9 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
     'click .kb-js-add-image': 'openFrame'
   },
   render: function(){
-    this.$reset = this.$el.find('.kb-js-reset-image');
-    this.$container = this.$el.find('.kb-field-image-container');
-    this.$saveId = this.$el.find('.kb-js-image-id');
+    this.$reset = this.$('.kb-js-reset-image');
+    this.$container = this.$('.kb-field-image-container');
+    this.$saveId = this.$('.kb-js-image-id');
   },
   openFrame: function () {
     var that = this, metadata;

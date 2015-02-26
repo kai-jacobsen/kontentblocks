@@ -231,7 +231,7 @@ KB.Ui = function ($) {
           // global trigger when sortable is done
           $(document).trigger('kb_sortable_stop', [event, ui]);
           if (currentModule.get('open')) {
-            currentModule.view.toggleBody(155);
+            currentModule.View.toggleBody(155);
           }
         },
         over: function (event, ui) {
@@ -339,8 +339,7 @@ KB.Ui = function ($) {
     },
     triggerAreaChange: function (newArea, moduleModel) {
       moduleModel.unsubscribeFromArea(); // remove from current area
-      moduleModel.setEnvVar('areaContext', newArea.get('context'));
-      moduleModel.setEnvVar('area', newArea.get('id'));
+      moduleModel.setArea(newArea);
     },
     toggleModule: function () {
 

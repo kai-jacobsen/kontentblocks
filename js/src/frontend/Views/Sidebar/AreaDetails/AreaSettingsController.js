@@ -35,7 +35,8 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
   },
   prepareLayouts: function (layouts) {
     var that = this;
-    var stored = this.model.get('settings').layout;
+
+    var stored = this.model.get('layout');
     return _.map(layouts, function (l) {
       if (that.LayoutDefs[l]) {
         var def = that.LayoutDefs[l];

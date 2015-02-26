@@ -174,6 +174,7 @@ class AreaProperties
             'assignedModules' => array(), // array of classnames
             'layouts' => array(), // array of area template ids
             'defaultLayout' => 'default', // default Tpl to use, if none is set
+            'layout' => 'default', // stored layout, overriden when storage object is available (later)
             'dynamic' => false, // whether this is an dynamic area
             'manual' => $manual, // true if set by code
             'limit' => 0, // how many blocks are allowed

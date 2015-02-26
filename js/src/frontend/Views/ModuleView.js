@@ -179,7 +179,6 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     // TODO utilize this for saving instead of handling this by the modal view
   },
   dispose: function () {
-    console.log('dispose');
     delete this.model.View;
     this.stopListening();
     this.remove();

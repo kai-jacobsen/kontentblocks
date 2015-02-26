@@ -1,7 +1,7 @@
 KB.Backbone.ModuleModel = Backbone.Model.extend({
   idAttribute: 'mid',
   initialize: function () {
-    this.listenToOnce(this, 'change:envVars', this.subscribeToArea);
+    //this.listenToOnce(this, 'change:envVars', this.subscribeToArea);
     this.listenTo(this, 'change:envVars', this.areaChanged);
     this.subscribeToArea();
   },
@@ -10,16 +10,20 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     this.stopListening(); // remove all listeners
   },
   setArea: function (area) {
-    this.setEnvVar('area', area);
+    this.setEnvVar('area', area.get('id'));
+    this.set('area', area.get('id'));
+    this.setEnvVar('areaContext', area.get('areaContext'));
+    this.set('areaContext', area.get('areaContext'));
+    this.Area = area;
+    this.subscribeToArea(area);
+    this.areaChanged();
   },
   areaChanged: function () {
     // @see backend::views:ModuleView.js
-    //var envVars = this.get('envVars');
-    //envVars.areaContext = this.get('areaContext');
     this.View.updateModuleForm();
   },
   subscribeToArea: function (AreaModel) {
-    if (!AreaModel){
+    if (!AreaModel) {
       AreaModel = KB.Areas.get(this.get('area'));
     }
     AreaModel.View.attachModuleView(this);

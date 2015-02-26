@@ -24,7 +24,6 @@ Class FlexibleFields extends Field
     );
 
 
-
     /**
      * To make sure that the saving routine doesn't preserve unset
      * items from the old data (which is its purpose)
@@ -39,6 +38,7 @@ Class FlexibleFields extends Field
     public function save( $new, $old )
     {
 
+
         if (is_null( $new )) {
             return $old;
         }
@@ -51,7 +51,6 @@ Class FlexibleFields extends Field
 
             }
         }
-
         if (is_array( $new )) {
             foreach ($new as &$field) {
                 if (is_null( $field )) {
@@ -75,8 +74,6 @@ Class FlexibleFields extends Field
 
             }
         }
-
-
         return $new;
     }
 
@@ -111,15 +108,15 @@ Class FlexibleFields extends Field
                 }
             }
         }
-
-        $Bridge = Kontentblocks::getService('utility.jsontransport');
-        $Bridge->registerFieldData(
-            $this->getFieldId(),
-            $this->type,
-            $forJSON,
-            $this->getKey(),
-            $this->getArg( 'arrayKey' )
-        );
+//
+//        $Bridge = Kontentblocks::getService('utility.jsontransport');
+//        $Bridge->registerFieldData(
+//            $this->getFieldId(),
+//            $this->type,
+//            $forJSON,
+//            $this->getKey(),
+//            $this->getArg( 'arrayKey' )
+//        );
 
         return $value;
     }

@@ -14,7 +14,6 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     this.$el.css('min-height', '200px');
   },
   derender: function(){
-      console.log('derender image view');
       if (this.frame){
         this.frame.dispose();
         this.frame = null;
@@ -88,7 +87,7 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     KB.Util.setIndex(moduleData, path, value);
     this.model.get('ModuleModel').set('moduleData', moduleData);
     //this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
-
+    KB.Events.trigger('modal.refresh');
     var args = {
       width: that.model.get('width'),
       height: that.model.get('height'),

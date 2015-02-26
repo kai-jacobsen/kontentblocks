@@ -1,34 +1,34 @@
-<div data-kbfuid="{{ kbfuid }}" class="kb-field kb-js-field kb-field--link field-api-link">
+<div data-kbfuid="{{ model.uid }}" class="kb-field kb-js-field kb-field--link field-api-link">
 
-    <label class="heading">{{ config.label }}</label>
-    <input
-            id="{{ index }}_link_input"
+    <label class="heading">{{ model.label }}</label>
+    <input class="kb-js-link-input"
+            id="{{ model.index }}_link_input"
             type="text"
-            name="{{ fieldName baseId index config.key }}[link]"
+            name="{{ fieldName model.baseId model.index model.primeKey }}[link]"
             value="{{ model.value.link }}">
     <a class='button kb-js-add-link'>Add Link</a>
 
-    {{#if config.linktext }}
-        <div class='kb-field--link-meta'><label for='{{ index }}-linktext'>{{ i18n.linktext }}</label><br>
+    {{#if model.linktext }}
+        <div class='kb-field--link-meta'><label for='{{ model.index }}-linktext'>{{ i18n.linktext }}</label><br>
             <input
                     type='text'
-                    name="{{ fieldName baseId index config.key }}[linktext]"
+                    name="{{ fieldName model.baseId model.index model.primeKey }}[linktext]"
                     class='kb-field--link-linktext'
-                    id='{{ index }}-linktext'
+                    id='{{ model.index }}-linktext'
                     value='{{ model.value.linktext }}'>
         </div>
     {{/if}}
 
-    {{#if config.linktitle }}
-        <div class='kb-field--link-meta'><label for='{{ index }}-linktitle'>{{ i18n.linktitle }}</label><br>
+    {{#if model.linktitle }}
+        <div class='kb-field--link-meta'><label for='{{ model.index }}-linktitle'>{{ i18n.linktitle }}</label><br>
             <input
                     type='text'
-                    name="{{ fieldName baseId index config.key }}[linktitle]"
+                    name="{{ fieldName model.baseId model.index model.primeKey }}[linktitle]"
                     class='kb-field--link-linktitle'
-                    id='{{ index }}-linktitle'
+                    id='{{ model.index }}-linktitle'
                     value='{{ model.value.linktitle }}'>
         </div>
     {{/if}}
-    <p class="description">{{ config.description }}</p>
+    <p class="description">{{ model.description }}</p>
 
 </div>

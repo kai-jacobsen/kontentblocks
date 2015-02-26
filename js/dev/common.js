@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-21 */
+/*! Kontentblocks DevVersion 2015-02-25 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -161,7 +161,7 @@ KB.FieldCollection = Backbone.View.extend({
 KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     idAttribute: "uid",
     initialize: function() {
-        var module = this.get("fieldId"), Model;
+        var module = this.get("fieldId");
         if (module && (this.ModuleModel = KB.Modules.get(module)) && this.getType()) {
             this.set("ModuleModel", this.ModuleModel);
             this.setData();
@@ -173,6 +173,8 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
         this.listenToOnce(this.ModuleModel, "remove", this.remove);
         this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
         this.listenTo(this.ModuleModel, "modal.serialize", this.rebind);
+        this.listenTo(this.ModuleModel, "change:area", this.unbind);
+        this.listenTo(this.ModuleModel, "after.change.area", this.rebind);
         this.listenTo(this.ModuleModel, "modal.serialize.before", this.unbind);
     },
     setupType: function() {
@@ -209,7 +211,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     rebind: function() {
         if (this.FieldView) {
             this.FieldView.setElement(this.getElement());
-            this.FieldView.render();
+            this.FieldView.rerender();
         }
     },
     unbind: function() {
@@ -232,8 +234,7 @@ KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.e
     rebind: function() {
         if (this.FieldView) {
             this.FieldView.setElement(this.getElement());
-            this.FieldView.render();
-            console.log("re-render");
+            this.FieldView.rerender();
         }
     },
     getElement: function() {
@@ -291,9 +292,7 @@ KB.Backbone.Common.FieldConfigsCollection = Backbone.Collection.extend({
     initialize: function() {
         this.listenTo(this, "add", this.log);
     },
-    log: function(model) {
-        console.log("coll add", model);
-    }
+    log: function(model) {}
 });
 
 Logger.useDefaults();
@@ -851,9 +850,11 @@ KB.Templates = function($) {
     function getTmplCache() {
         return templateCache;
     }
-    function render(tplName, tplData) {
-        var tplString;
+    function render(tplName, tplData, done, scope) {
+        var callback, tplString;
         tplData = tplData || {};
+        scope = scope || this;
+        callback = done || null;
         if (!templateCache[tplName]) {
             tplDir = KB.Config.getRootURL() + "js/templates";
             var tplUrl = tplDir + "/" + tplName + ".hbs?" + KB.Config.getHash();
@@ -863,6 +864,9 @@ KB.Templates = function($) {
             }
             if (KB.Util.stex.get(tplUrl)) {
                 tplString = KB.Util.stex.get(tplUrl);
+                if (callback) {
+                    callback.call(scope);
+                }
             } else {
                 $.ajax({
                     url: tplUrl,
@@ -871,6 +875,9 @@ KB.Templates = function($) {
                     success: function(data) {
                         tplString = data;
                         KB.Util.stex.set(tplUrl, tplString, 2 * 1e3 * 60);
+                        if (callback) {
+                            callback.call(scope);
+                        }
                     }
                 });
             }
@@ -935,6 +942,10 @@ KB.TinyMCE = function($) {
             var live = _.isUndefined(watch) ? true : false;
             $(".wp-editor-area", $el).each(function() {
                 var id = this.id;
+                var prev = tinyMCE.get(id);
+                if (prev) {
+                    tinyMCE.execCommand("mceRemoveEditor", null, id);
+                }
                 var settings = _.clone(tinyMCEPreInit.mceInit.ghosteditor);
                 settings.elements = id;
                 settings.selector = "#" + id;
@@ -1153,7 +1164,7 @@ KB.Ui = function($) {
                     KB.TinyMCE.restoreEditors();
                     $(document).trigger("kb_sortable_stop", [ event, ui ]);
                     if (currentModule.get("open")) {
-                        currentModule.view.toggleBody(155);
+                        currentModule.View.toggleBody(155);
                     }
                 },
                 over: function(event, ui) {
@@ -1230,8 +1241,7 @@ KB.Ui = function($) {
         },
         triggerAreaChange: function(newArea, moduleModel) {
             moduleModel.unsubscribeFromArea();
-            moduleModel.setEnvVar("areaContext", newArea.get("context"));
-            moduleModel.setEnvVar("area", newArea.get("id"));
+            moduleModel.setArea(newArea);
         },
         toggleModule: function() {
             $("body").on("click", ".kb-toggle", function() {
