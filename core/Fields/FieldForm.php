@@ -3,8 +3,8 @@
 namespace Kontentblocks\Fields;
 
 
-use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Handles form creation (backend) and such
@@ -173,45 +173,19 @@ class FieldForm
         if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->Field, 'frontsideForm' )) {
             $out .= $this->Field->frontsideForm( $this );
         } else {
-            $out .= $this->form( $this );
+            $out .= $this->Field->form( $this );
         }
 
+        // some fields (colorpicker etc) might have some individual settings
+        $this->Field->toJson();
+        /*
+         * optional call after the body
+         */
         if (method_exists( $this->Field, 'postForm' )) {
             $out .=$this->Field->postForm();
         }
 
         return $out;
-    }
-
-    /**
-     * The actual output method for the field markup
-     * @since 1.0.0
-     * @param FieldFormController $Form
-     * @return bool
-     */
-    public function form( FieldForm $Form )
-    {
-        $type = $this->Field->type;
-        $tpl = $this->Field->getArg( 'template', 'default' );
-        $data = array(
-            'Form' => $Form,
-            'Field' => $this->Field,
-            'value' => $this->Field->getValue(),
-            'i18n' => I18n::getPackages( 'Refields.common', "Refields.{$type}" )
-        );
-
-        /**
-         * Field may alter the injected data array
-         */
-        if (method_exists( $this->Field, 'prepareTemplateData' )) {
-            $data = $this->Field->prepareTemplateData( $data );
-        }
-
-        $View = new FieldView(
-            $type . '/' . $tpl . '.twig', $data
-        );
-
-        return $View->render( false );
     }
 
     /**
