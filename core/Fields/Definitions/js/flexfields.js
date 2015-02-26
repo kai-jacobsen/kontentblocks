@@ -141,7 +141,7 @@ KB.FlexibleFields.Controller = Backbone.View.extend({
           Controller: that,
           model: new Backbone.Model({
             _tab: {
-              title: index,
+              title: obj._tab.title,
               uid: index
             },
             value: new Backbone.Model(obj)

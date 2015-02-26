@@ -175,7 +175,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
             $this->addAttr( 'data-kbfuid', $this->uniqueId );
 //            $this->addAttr( 'data-module', $this->moduleId );
 //            $this->addAttr( 'data-uid', $this->uniqueId );
-//            $this->addAttr( 'data-kpath', $this->createPath() );
+//            $this->addAttr( 'data-kpath', $this->createKPath() );
 //            $this->addAttr( 'data-kb-help', $this->helptext );
         }
     }

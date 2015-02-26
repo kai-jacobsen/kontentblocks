@@ -394,8 +394,8 @@ abstract class Field implements Exportable
 
     /**
      * The actual output method for the field markup
-     * Any markup should be echoed, not returned
-     * Must be overridden by the individual field class
+     * Any markup should be returned
+     * Can be overridden by the individual field class
      * @since 1.0.0
      * @param FieldFormController $Form
      * @return bool
@@ -404,7 +404,6 @@ abstract class Field implements Exportable
     {
         $type = $this->type;
         $tpl = $this->getArg( 'template', 'default' );
-
         $data = array(
             'Form' => $Form,
             'Field' => $this,
@@ -416,7 +415,6 @@ abstract class Field implements Exportable
          * Field may alter the injected data array
          */
         if (method_exists( $this, 'prepareTemplateData' )) {
-
             $data = $this->prepareTemplateData( $data );
         }
 
@@ -429,7 +427,6 @@ abstract class Field implements Exportable
     /**
      * Build the whole field, including surrounding wrapper
      * and optional 'hooks"
-     * @TODO add some wp hooks here?
      * @since 1.0.0
      * @param bool $echo
      * @return string $out
@@ -498,7 +495,7 @@ abstract class Field implements Exportable
             return $data[$arrKey];
         }
 
-        return $this->getArg('std', $return);
+        return $this->getArg( 'std', $return );
     }
 
 
@@ -595,7 +592,7 @@ abstract class Field implements Exportable
         $def['fieldId'] = $this->fieldId;
         $def['fieldkey'] = $this->getKey();
         $def['arrayKey'] = $this->getArg( 'arrayKey', null );
-        $def['kpath'] = $this->createPath();
+        $def['kpath'] = $this->createKPath();
 
         return wp_parse_args( $args, $def );
     }
@@ -619,17 +616,18 @@ abstract class Field implements Exportable
         );
     }
 
-    private function createPath()
+    /**
+     * create the key for the value in dot notation
+     * used by js code to lookup data from moduleData
+     * @return string
+     */
+    private function createKPath()
     {
         $path = '';
-
-        if ( $this->getArg('arrayKey', false) ) {
-            $path .= $this->getArg('arrayKey') . '.';
+        if ($this->getArg( 'arrayKey', false )) {
+            $path .= $this->getArg( 'arrayKey' ) . '.';
         }
-
         $path .= $this->getKey();
-
         return $path;
-
     }
 }

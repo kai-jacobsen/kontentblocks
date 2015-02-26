@@ -189,7 +189,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-exec');
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
+  grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass:dist', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('dev', ['concat', 'uglify:dev', 'compass:dev', 'clean', 'exec:removeHash', 'exec:createDevId']);
   grunt.registerTask('cssdev', ['compass:dev', 'autoprefixer']);
