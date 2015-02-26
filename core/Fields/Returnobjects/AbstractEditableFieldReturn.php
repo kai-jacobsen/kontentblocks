@@ -65,7 +65,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     /**
      * @var string
      */
-    public $helptext = '';
+    public $helptext = 'Click to edit content';
 
 
     /**
@@ -170,12 +170,13 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     {
 
         if (is_user_logged_in() && $this->inlineEdit && current_user_can( 'edit_kontentblocks' )) {
-            $editableClass = $this->getEditableClass();
-            $this->addClass( $editableClass );
-            $this->addAttr( 'data-module', $this->moduleId );
-            $this->addAttr( 'data-uid', $this->uniqueId );
-            $this->addAttr( 'data-kpath', $this->createPath() );
-            $this->addAttr( 'data-kb-help', $this->helptext );
+//            $editableClass = $this->getEditableClass();
+//            $this->addClass( $editableClass );
+            $this->addAttr( 'data-kbfuid', $this->uniqueId );
+//            $this->addAttr( 'data-module', $this->moduleId );
+//            $this->addAttr( 'data-uid', $this->uniqueId );
+//            $this->addAttr( 'data-kpath', $this->createPath() );
+//            $this->addAttr( 'data-kb-help', $this->helptext );
         }
     }
 

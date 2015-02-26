@@ -105,7 +105,7 @@ class AreaRenderer
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $Module) {
 
-            $this->ModuleRenderer = new SingleModuleRenderer($Module, $this->AreaHtmlNode->getPublicAttributes());
+            $this->ModuleRenderer = new SingleModuleRenderer( $Module, $this->AreaHtmlNode->getPublicAttributes() );
 
             if (!is_a( $Module, '\Kontentblocks\Modules\Module' ) || !$Module->verify()) {
                 continue;
@@ -133,7 +133,6 @@ class AreaRenderer
         $output .= $this->AreaHtmlNode->closeArea();
 
 
-
         if ($echo) {
             echo $output;
         } else {
@@ -155,7 +154,7 @@ class AreaRenderer
 
         if (!empty( $layout )) {
             return sprintf(
-                '<div class="kb-wrap %2$s">%2$s',
+                '<div class="kb-wrap %2$s">%1$s',
                 $this->ModuleRenderer->beforeModule(),
                 implode( ' ', $layout )
             );
@@ -174,7 +173,7 @@ class AreaRenderer
     {
         $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
         if (!empty( $layout )) {
-            return "</div>" . sprintf( "</%s>", $this->ModuleRenderer->afterModule() );
+            return "</div>" . sprintf( "%s", $this->ModuleRenderer->afterModule() );
         } else {
             return $this->ModuleRenderer->afterModule();
 

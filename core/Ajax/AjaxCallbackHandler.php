@@ -60,7 +60,8 @@ class AjaxCallbackHandler
                 'getSanitizedId' => array( 'Kontentblocks\Ajax\Actions\GetSanitizedId', 'run' ),
                 'duplicateModule' => array( 'Kontentblocks\Ajax\Actions\DuplicateModule', 'run' ),
                 'updateModuleData' => array( 'Kontentblocks\Ajax\Actions\UpdateModuleData', 'run' ),
-                'createNewModule' => array( 'Kontentblocks\Ajax\Actions\CreateNewModule', 'run' )
+                'createNewModule' => array( 'Kontentblocks\Ajax\Actions\CreateNewModule', 'run' ),
+                'saveAreaLayout' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveAreaLayout', 'run' )
             )
         );
     }

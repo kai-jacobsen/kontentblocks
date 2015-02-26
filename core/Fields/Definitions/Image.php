@@ -18,15 +18,16 @@ Class Image extends Field
 
     public static $settings = array(
         'type' => 'image',
-        'returnObj' => 'Image'
+        'returnObj' => 'EditableImage'
     );
 
 
     public function prepareTemplateData( $data )
     {
-        $data['image'] = new AttachmentHandler($this->getValue('id'));
+        $data['image'] = new AttachmentHandler( $this->getValue('id') );
         return $data;
     }
+
 
     /**
      * @param $val
@@ -35,22 +36,7 @@ Class Image extends Field
      */
     public function prepareFormValue( $val )
     {
-
-
-        // image default value
-        $imageDefaults = array(
-            'id' => null,
-            'title' => '',
-            'caption' => ''
-        );
-
-        $parsed = wp_parse_args( $val, $imageDefaults );
-
-        $parsed['id'] = ( !is_null( $parsed['id'] ) ) ? absint( $parsed['id'] ) : null;
-        $parsed['title'] = esc_html( $parsed['title'] );
-        $parsed['caption'] = esc_html( $parsed['caption'] );
-
-        return $parsed;
+        return $val;
 
     }
 

@@ -46,10 +46,4 @@ add_action( 'wp_ajax_updateModule', array( 'Kontentblocks\Ajax\Actions\Frontend\
 add_action( 'wp_ajax_fieldGetImage', array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' ) );
 
 
-/**
- * -----------------------------------------
- * Save area layout from frontend
- * -----------------------------------------
- */
-add_action( 'wp_ajax_saveAreaLayout', array( 'Kontentblocks\Ajax\Actions\Frontend\SaveAreaLayout', 'run' ) );
 

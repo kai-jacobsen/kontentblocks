@@ -1,9 +1,11 @@
 KB.Ajax = (function ($) {
 
   return {
-    send: function (data, callback, scope) {
+    send: function (data, callback, scope, options) {
       // @todo
       var pid;
+
+      var addPayload = options || {};
 
       if (data.postId) {
         pid = data.postId;
@@ -29,9 +31,9 @@ KB.Ajax = (function ($) {
         success: function (data) {
           if (data) {
             if (scope && callback) {
-              callback.call(scope, data);
+              callback.call(scope, data, addPayload);
             } else if (callback) {
-              callback(data);
+              callback(data, addPayload);
             }
           }
         },

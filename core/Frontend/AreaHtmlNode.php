@@ -226,7 +226,7 @@ class AreaHtmlNode
             'element' => apply_filters( 'kb.area.settings.element', 'div' ),
             'mergeRepeating' => false,
             'action' => null,
-            'layout' => ''
+            'layout' => 'default'
         );
 
         if ($settings) {
@@ -361,6 +361,7 @@ class AreaHtmlNode
     {
         $this->attr->settings = $this->settings;
         $this->attr->envVars = $this->Environment;
+        $this->attr->layout = $this->settings['layout'];
         Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->attr );
 
     }

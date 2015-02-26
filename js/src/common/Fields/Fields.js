@@ -16,7 +16,10 @@ _.extend(KB.Fields, {
     // Backbone Events for field object
     _.extend(object, Backbone.Events);
     this.fields[id] = object;
-
+  },
+  registerObject: function(id, object){
+    _.extend(object, Backbone.Events);
+    this.fields[id] = object;
   },
   init: function () {
     var that = this;
@@ -37,7 +40,6 @@ _.extend(KB.Fields, {
 
   },
   newModule: function (object) {
-    _K.info('new Module added for Fields');
     var that = this;
     // call field objects init method on 'update' event
     // fails gracefully if there is no update method

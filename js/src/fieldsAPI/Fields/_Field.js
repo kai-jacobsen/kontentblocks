@@ -1,31 +1,43 @@
 KB.FieldsAPI.FieldStdModel = Backbone.Model.extend({});
 
 KB.FieldsAPI.Field = Backbone.View.extend({
-  initialize: function (config) {
+  initialize: function () {
     this.defaults = this.defaults || {};
-    this.config = _.defaults(config, this.defaults);
-    this.model = new KB.FieldsAPI.FieldStdModel({value: this.defaults.std});
-    this.model.view = this;
-    this.baseId = this.prepareBaseId();
-  },
-  get: function (key) {
-    if (!_.isUndefined(this.config[key])) {
-      return this.config[key];
-    } else {
-      return null;
-    }
-  },
-  set: function (key, value) {
-    this.config[key] = value;
+    this.extendModel();
   },
   setValue: function (val) {
     this.model.set('value', val);
   },
   prepareBaseId: function () {
-    if (!_.isEmpty(this.config.arrayKey)) {
-      return this.config.moduleId + '[' + this.config.arrayKey + ']' + '[' + this.config.fieldKey + ']';
+    if (!_.isEmpty(this.model.get('arrayKey'))) {
+      return this.model.get('fieldId') + '[' + this.model.get('arrayKey') + ']' + '[' + this.model.get('fieldKey') + ']';
     } else {
-      return this.config.moduleId + '[' + this.config.fieldKey + ']';
+      return this.model.get('fieldId') + '[' + this.model.get('fieldKey') + ']';
     }
+  },
+  prepareKpath: function(){
+    var concat = [];
+    if (this.model.get('arrayKey')){
+      concat.push(this.model.get('arrayKey'));
+    }
+
+    if (this.model.get('index')){
+      concat.push(this.model.get('index'));
+    }
+
+    if (this.model.get('fieldKey')){
+      concat.push(this.model.get('fieldKey'));
+    }
+
+    return concat.join('.');
+  },
+  extendModel: function(){
+    this.model.set(this.defaults);
+    this.model.set('baseId', this.prepareBaseId());
+    this.model.set('uid', this.kbfuid());
+    this.model.set('kpath', this.prepareKpath());
+  },
+  kbfuid: function(){
+    return this.model.get('fieldId') + this.model.get('index') + this.model.get('type');
   }
 });

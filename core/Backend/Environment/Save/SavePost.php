@@ -204,11 +204,11 @@ class SavePost
             // if this is a preview, save temporary data for previews
             if (!is_null( $savedData )) {
                 if ($this->Postdata->get('wp-preview') && $this->Postdata->get('wp-preview') === 'dopreview') {
-                    $this->Environment->getDataHandler()->update('_preview_' . $module->getId(), $savedData);
+                    $this->Environment->getDataProvider()->update('_preview_' . $module->getId(), $savedData);
                 } // save real data
                 else {
                     $this->Environment->getStorage()->saveModule( $module->getId(), $savedData );
-                    $this->Environment->getDataHandler()->delete('_preview_' . $module->getId());
+                    $this->Environment->getDataProvider()->delete('_preview_' . $module->getId());
 
                 }
                 do_action( 'kb.module.save', $module, $savedData );
@@ -226,14 +226,14 @@ class SavePost
         $postareas = filter_input( INPUT_POST, 'areas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         // save area settings which are specific to this post (ID-wise)
         if (!empty( $postareas )) {
-            $collection = $this->Environment->getDataHandler()->get( 'kb_area_settings' );
+            $collection = $this->Environment->getDataProvider()->get( 'kb_area_settings' );
             foreach ($postareas as $areaId) {
                 $areaid = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
                 if (!empty( $areaid )) {
                     $collection[$areaId] = $areaid;
                 }
             }
-            $this->Environment->getDataHandler()->update( 'kb_area_settings', $collection );
+            $this->Environment->getDataProvider()->update( 'kb_area_settings', $collection );
         }
     }
 }

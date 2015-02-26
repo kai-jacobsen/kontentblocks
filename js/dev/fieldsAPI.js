@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-07 */
+/*! Kontentblocks DevVersion 2015-02-25 */
 KB.FieldsAPI = function() {
     return {
         fields: {},
@@ -6,7 +6,9 @@ KB.FieldsAPI = function() {
             this.fields[id] = obj;
         },
         get: function(field) {
-            return new this.fields[field.type](field);
+            return new (this.fields[field.model.get("type")])({
+                model: new Backbone.Model(field.model.toJSON())
+            });
         }
     };
 }();
@@ -14,34 +16,41 @@ KB.FieldsAPI = function() {
 KB.FieldsAPI.FieldStdModel = Backbone.Model.extend({});
 
 KB.FieldsAPI.Field = Backbone.View.extend({
-    initialize: function(config) {
+    initialize: function() {
         this.defaults = this.defaults || {};
-        this.config = _.defaults(config, this.defaults);
-        this.model = new KB.FieldsAPI.FieldStdModel({
-            value: this.defaults.std
-        });
-        this.model.view = this;
-        this.baseId = this.prepareBaseId();
-    },
-    get: function(key) {
-        if (!_.isUndefined(this.config[key])) {
-            return this.config[key];
-        } else {
-            return null;
-        }
-    },
-    set: function(key, value) {
-        this.config[key] = value;
+        this.extendModel();
     },
     setValue: function(val) {
         this.model.set("value", val);
     },
     prepareBaseId: function() {
-        if (!_.isEmpty(this.config.arrayKey)) {
-            return this.config.moduleId + "[" + this.config.arrayKey + "]" + "[" + this.config.fieldKey + "]";
+        if (!_.isEmpty(this.model.get("arrayKey"))) {
+            return this.model.get("fieldId") + "[" + this.model.get("arrayKey") + "]" + "[" + this.model.get("fieldKey") + "]";
         } else {
-            return this.config.moduleId + "[" + this.config.fieldKey + "]";
+            return this.model.get("fieldId") + "[" + this.model.get("fieldKey") + "]";
         }
+    },
+    prepareKpath: function() {
+        var concat = [];
+        if (this.model.get("arrayKey")) {
+            concat.push(this.model.get("arrayKey"));
+        }
+        if (this.model.get("index")) {
+            concat.push(this.model.get("index"));
+        }
+        if (this.model.get("fieldKey")) {
+            concat.push(this.model.get("fieldKey"));
+        }
+        return concat.join(".");
+    },
+    extendModel: function() {
+        this.model.set(this.defaults);
+        this.model.set("baseId", this.prepareBaseId());
+        this.model.set("uid", this.kbfuid());
+        this.model.set("kpath", this.prepareKpath());
+    },
+    kbfuid: function() {
+        return this.model.get("fieldId") + this.model.get("index") + this.model.get("type");
     }
 });
 
@@ -71,8 +80,8 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
         });
     },
     postRender: function() {
-        var name = this.baseId + "[" + this.index + "]" + "[" + this.get("key") + "]";
-        var edId = this.get("moduleId") + "_" + this.get("key") + "_editor_" + this.index;
+        var name = this.model.get("baseId") + "[" + this.model.get("index") + "]" + "[" + this.model.get("primeKey") + "]";
+        var edId = this.model.get("fieldId") + "_" + this.model.get("fieldKey") + "_editor_" + this.model.get("index");
         this.$editorWrap = jQuery(".kb-ff-editor-wrapper", this.$container);
         KB.TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get("value"), 5, false);
     }
@@ -180,11 +189,8 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
         description: "",
         key: null
     },
-    render: function(index) {
+    render: function() {
         return KB.Templates.render(this.templatePath, {
-            config: this.config,
-            baseId: this.baseId,
-            index: index,
             i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
             model: this.model.toJSON()
         });

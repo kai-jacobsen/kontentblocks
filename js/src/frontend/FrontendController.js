@@ -2,13 +2,13 @@ KB.currentModule = {};
 KB.currentArea = {};
 
 /*
-Notepad:
+ Notepad:
 
-create Area model from payload
-create module models from payload
+ create Area model from payload
+ create module models from payload
 
-add models to generic collection
-add triggers view creation
+ add models to generic collection
+ add triggers view creation
 
 
  */
@@ -45,6 +45,7 @@ KB.Areas = new Backbone.Collection([], {
   model: KB.Backbone.AreaModel
 });
 
+
 /*
  * Init function
  * Register event listeners
@@ -61,9 +62,9 @@ KB.App = function () {
     var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
     $toolbar.hide();
 
-    // create Menubar singleton
+    // create Sidebar singleton
     if (KB.appData.config.useModuleNav) {
-      KB.Menubar = new KB.Backbone.MenubarView();
+      KB.Sidebar = new KB.Backbone.SidebarView();
     }
 
     // init the edit modal
@@ -77,6 +78,12 @@ KB.App = function () {
     // Create views
     addViews();
 
+
+    /*
+     * payload.Fields collection
+     */
+    KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
+    KB.FieldConfigs.add(_.toArray(KB.payload.Fields));
     // get the UI on track
     KB.Ui.init();
 
@@ -129,7 +136,7 @@ KB.App = function () {
     KB.trigger('kb:moduleControlsAdded');
 
     // new event
-    KB.Events.trigger('KB::frontend-init');
+    KB.Events.trigger('KB.frontend.init');
   }
 
 
@@ -140,22 +147,13 @@ KB.App = function () {
    * @returns void
    */
   function createModuleViews(ModuleModel) {
-    var ModuleView, AreaModel;
-
-    AreaModel = KB.Areas.get(ModuleModel.get('area')) || null;
-    // assign the full corresponding area model to the module model
-    if (AreaModel !== null){
-      ModuleModel.setArea(AreaModel);
-      ModuleModel.bind('change:area', ModuleModel.areaChanged);
-    }
+    var ModuleView;
     // create view
-    ModuleView = KB.Views.Modules.add(ModuleModel.get('instance_id'), new KB.Backbone.ModuleView({
+    ModuleView = KB.Views.Modules.add(ModuleModel.get('mid'), new KB.Backbone.ModuleView({
       model: ModuleModel,
-      el: '#' + ModuleModel.get('instance_id'),
-      Area: AreaModel
+      el: '#' + ModuleModel.get('mid')
     }));
-
-    ModuleView.$el.data('ModuleView', ModuleView);
+    //ModuleView.$el.data('ModuleView', ModuleView);
     KB.Ui.initTabs();
   }
 
@@ -180,6 +178,7 @@ KB.App = function () {
    * @returns void
    */
   function removeModule(ModuleModel) {
+    ModuleModel.dispose();
     KB.Views.Modules.remove(ModuleModel.get('instance_id'));
   }
 
@@ -199,7 +198,6 @@ KB.App.init();
 jQuery(document).ready(function () {
   if (KB.appData && KB.appData.config.frontend) {
     KB.Views.Modules.readyOnFront();
-    _K.info('Frontend Modules Ready Event fired');
     _KS.info('Frontend welcomes you');
   }
   // general ready event
@@ -207,5 +205,12 @@ jQuery(document).ready(function () {
   // force user cookie to tinymce
   // wp native js function
   setUserSetting('editor', 'tinymce');
+
+  jQuery('body').on('click', '.kb-fx-button', function (e) {
+    jQuery(this).addClass('kb-fx-button--click');
+    jQuery(e.currentTarget).one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function () {
+      e.currentTarget.classList.remove('kb-fx-button--click');
+    });
+  });
 
 });

@@ -169,7 +169,7 @@ class ModuleHTMLNode
         $html = '';
 
         //open header
-        $html .= "<div rel='{$this->Module->getId()}' class='kb-module__header clearfix edit kb-title'>";
+        $html .= "<div rel='{$this->Module->getId()}' class='kb-module__header klearfix edit kb-title'>";
 
 
         if (current_user_can( 'edit_kontentblocks' )) {

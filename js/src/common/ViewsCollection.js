@@ -6,10 +6,10 @@ KB.ViewsCollection = function () {
   this.views = {};
   this.lastViewAdded = null;
   this.add = function (id, view) {
-
     if (!this.views[id]) {
       this.views[id] = view;
       KB.trigger('kb:' + view.model.get('class') + ':added', view);
+      this.trigger('view:add', view);
       this.lastViewAdded = view;
     }
     return view;
@@ -35,11 +35,10 @@ KB.ViewsCollection = function () {
 
   this.remove = function (id) {
     var V = this.get(id);
-    V.Area.trigger('kb.module.deleted', V);
+    V.model.Area.View.trigger('kb.module.deleted', V);
     this.trigger('kb.modules.view.deleted', V);
-
-//        view.removeControls();
     delete this.views[id];
+    V.dispose();
   };
 
   this.get = function (id) {

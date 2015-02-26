@@ -25,9 +25,6 @@ class AttachmentHandler
             $this->file = wp_prepare_attachment_for_js( absint( $id ) );
             wp_cache_set( 'attachmentHandler' . $id, 'kontentblocks', 60 * 60 * 24 );
         }
-
-//        d($this);
-
     }
 
     /**

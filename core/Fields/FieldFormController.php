@@ -153,6 +153,7 @@ class FieldFormController
     {
         $out = '';
         $value = $this->Field->getValue();
+
         /*
          * optional method to render something before the field
          */
@@ -174,7 +175,6 @@ class FieldFormController
         } else {
             $out .= $this->form( $this );
         }
-
 
         if (method_exists( $this->Field, 'postForm' )) {
             $out .=$this->Field->postForm();

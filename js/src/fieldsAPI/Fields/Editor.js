@@ -25,10 +25,11 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
     });
   },
   postRender: function () {
-    var name = this.baseId + '[' + this.index + ']' + '[' + this.get('key') + ']';
-    var edId = this.get('moduleId') + '_' + this.get('key') + '_editor_' + this.index;
+    var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
+    var edId = this.model.get('fieldId') + '_' + this.model.get('fieldKey') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper', this.$container);
     KB.TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), 5, false);
+
   }
 
 });

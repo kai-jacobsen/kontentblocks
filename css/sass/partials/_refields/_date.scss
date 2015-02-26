@@ -9,6 +9,10 @@
 
 */
 
+.Zebra_DatePicker, .dp_header{
+  width:260px !important;
+}
+
 .Zebra_DatePicker *,
 .Zebra_DatePicker *:after,
 .Zebra_DatePicker *:before  { -moz-box-sizing: content-box !important; -webkit-box-sizing: content-box !important; box-sizing: content-box !important }

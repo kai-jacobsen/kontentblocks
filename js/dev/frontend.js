@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-07 */
+/*! Kontentblocks DevVersion 2015-02-25 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -7,18 +7,19 @@ KB.Backbone.AreaModel = Backbone.Model.extend({
 });
 
 KB.Backbone.ModuleModel = Backbone.Model.extend({
-    idAttribute: "instance_id",
-    destroy: function() {
-        var that = this;
-        KB.Ajax.send({
-            action: "removeModules",
-            instance_id: that.get("instance_id")
-        }, that.destroyed);
+    idAttribute: "mid",
+    initialize: function() {
+        this.subscribeToArea();
     },
-    destroyed: function() {},
-    setArea: function(area) {},
-    areaChanged: function() {
-        this.view.updateModuleForm();
+    subscribeToArea: function(AreaModel) {
+        if (!AreaModel) {
+            AreaModel = KB.Areas.get(this.get("area"));
+        }
+        AreaModel.View.attachModuleView(this);
+        this.Area = AreaModel;
+    },
+    dispose: function() {
+        this.stopListening();
     }
 });
 
@@ -48,8 +49,8 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
         }
     },
     unwrap: function() {
-        _.each(this.AreaView.getAttachedModules(), function(ModuleView) {
-            ModuleView.$el.unwrap();
+        _.each(this.AreaView.getAttachedModules(), function(ModuleModel) {
+            ModuleModel.View.$el.unwrap();
         });
         var $outer = jQuery(".kb-outer-wrap", this.AreaView.$el);
         $outer.each(function(item) {
@@ -170,20 +171,22 @@ KB.LayoutIterator = function(layout, AreaView) {
         var wraps = [];
         var $outer = jQuery(".kb-outer-wrap");
         Iterator.setPosition(0);
-        $outer.each(function(item) {
-            jQuery(".kb-wrap:first-child", item).unwrap();
+        jQuery(".kb-wrap").each(function(item, el) {
+            if (jQuery(el).parent().hasClass("kb-outer-wrap")) {
+                jQuery(el).unwrap();
+            }
         });
         _.each(modules, function(ModuleEl) {
             var $el = jQuery(ModuleEl);
             var $wrap = $el.parent(".kb-wrap");
             if ($wrap.length === 0) {
-                $wrapEl = jQuery('<div class="kb-wrap ' + Iterator.getCurrent().classes + '"></div>');
+                var $wrapEl = jQuery('<div class="kb-wrap ' + Iterator.getCurrent().classes + '"></div>');
                 $el.wrap($wrapEl);
             } else {
                 $wrap.removeClass();
                 $wrap.addClass("kb-wrap " + Iterator.getCurrent().classes);
             }
-            if (ui) {
+            if (ui && ui.placeholder) {
                 ui.placeholder.addClass("kb-front-sortable-placeholder");
             }
             Iterator.next();
@@ -206,12 +209,9 @@ KB.Backbone.AreaView = Backbone.View.extend({
     initialize: function() {
         this.attachedModuleViews = {};
         this.settings = this.model.get("settings");
-        this.listenToOnce(KB.Events, "KB::frontend-init", this.setupUi);
+        this.listenToOnce(KB.Events, "KB.frontend.init", this.setupUi);
         this.listenTo(this, "kb.module.deleted", this.removeModule);
         this.model.View = this;
-        if (KB.appData.config.useModuleNav) {
-            KB.Menubar.attachAreaView(this);
-        }
     },
     setupUi: function() {
         this.Layout = new KB.Backbone.AreaLayoutView({
@@ -220,10 +220,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
         });
         if (this.model.get("sortable")) {
             this.setupSortables();
-            _K.info("Area sortable initialized");
-        } else {
-            _K.info("Area sortable skipped");
-        }
+        } else {}
     },
     openModuleBrowser: function() {
         if (!this.ModuleBrowser) {
@@ -234,10 +231,13 @@ KB.Backbone.AreaView = Backbone.View.extend({
         this.ModuleBrowser.render();
         return this.ModuleBrowser;
     },
-    addModuleView: function(moduleView) {
-        this.attachedModuleViews[moduleView.model.get("instance_id")] = moduleView;
-        this.listenTo(moduleView.model, "change:area", this.removeModule);
-        _K.info("Module:" + moduleView.model.id + " was added to area:" + this.model.id);
+    attachModuleView: function(moduleModel) {
+        this.attachedModuleViews[moduleModel.get("mid")] = moduleModel;
+        this.listenTo(moduleModel, "change:area", this.removeModule);
+        if (this.getNumberOfModules() > 0) {
+            this.$el.removeClass("kb-area__empty");
+        }
+        this.trigger("kb.module.created", moduleModel);
     },
     getNumberOfModules: function() {
         return _.size(this.attachedModuleViews);
@@ -251,17 +251,28 @@ KB.Backbone.AreaView = Backbone.View.extend({
             this.$el.sortable({
                 handle: ".kb-module-inline-move",
                 items: ".kb-wrap",
-                helper: "original",
+                helper: "clone",
                 opacity: .5,
+                forcePlaceholderSize: true,
                 delay: 150,
                 placeholder: "kb-front-sortable-placeholder",
                 start: function(e, ui) {
                     that.isSorting = true;
+                    if (ui.helper.hasClass("ui-draggable-dragging")) {
+                        ui.helper.addClass("kb-wrap");
+                    }
                     ui.placeholder.attr("class", ui.helper.attr("class"));
                     ui.placeholder.addClass("kb-front-sortable-placeholder");
                     ui.placeholder.append("<div class='module kb-dummy'></div>");
                     jQuery(".module", ui.helper).addClass("ignore");
                     ui.helper.addClass("ignore");
+                    that.Layout.applyClasses();
+                    that.Layout.render(ui);
+                },
+                receive: function(e, ui) {
+                    var module = ui.item.data("module");
+                    that.isSorting = false;
+                    module.create(ui);
                 },
                 beforeStop: function(e, ui) {
                     var serializedData = {};
@@ -282,33 +293,36 @@ KB.Backbone.AreaView = Backbone.View.extend({
                 change: function(e, ui) {
                     that.Layout.applyClasses();
                     that.Layout.render(ui);
+                },
+                over: function(ui) {
+                    that.Layout.applyClasses();
+                    that.Layout.render(ui);
                 }
             });
         } else {
             this.$el.sortable({
                 handle: ".kb-module-inline-move",
                 items: ".module",
-                helper: "original",
-                opacity: .5,
+                helper: "clone",
+                cursorAt: {
+                    top: 5,
+                    left: 5
+                },
                 delay: 150,
                 placeholder: "kb-front-sortable-placeholder",
                 start: function() {
                     that.isSorting = true;
                 },
-                beforeStop: function() {
-                    var serializedData = {};
+                receive: function(e, ui) {
+                    var module = ui.item.data("module");
                     that.isSorting = false;
-                    serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
-                        attribute: "rel"
-                    });
-                    return KB.Ajax.send({
-                        action: "resortModules",
-                        postId: that.model.get("envVars").postId,
-                        data: serializedData,
-                        _ajax_nonce: KB.Config.getNonce("update")
-                    }, function() {
-                        KB.Notice.notice("Order was updated successfully", "success");
-                    }, that);
+                    module.create(ui);
+                },
+                stop: function() {
+                    if (that.isSorting) {
+                        that.isSorting = false;
+                        that.resort(that.model);
+                    }
                 },
                 change: function() {
                     that.Layout.applyClasses();
@@ -318,12 +332,31 @@ KB.Backbone.AreaView = Backbone.View.extend({
     },
     changeLayout: function(l) {
         this.Layout.model.set("layout", l);
+        this.$el.sortable("destroy");
+        this.setupSortables();
     },
     removeModule: function(ModuleView) {
         var id = ModuleView.model.get("mid");
         if (this.attachedModuleViews[id]) {
             delete this.attachedModuleViews[id];
         }
+        if (this.getNumberOfModules() < 0) {
+            this.$el.addClass("kb-area__empty");
+        }
+    },
+    resort: function(area) {
+        var serializedData = {};
+        serializedData[area.get("id")] = area.View.$el.sortable("serialize", {
+            attribute: "rel"
+        });
+        return KB.Ajax.send({
+            action: "resortModules",
+            postId: area.get("envVars").postId,
+            data: serializedData,
+            _ajax_nonce: KB.Config.getNonce("update")
+        }, function() {
+            KB.Notice.notice("Order was updated successfully", "success");
+        }, null);
     }
 });
 
@@ -408,7 +441,6 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
     },
     reposition: function() {
         var pos = this.$target.offset();
-        console.log(pos);
         var lh = this.$el.outerHeight();
         pos.top = pos.top - lh;
         this.$el.offset({
@@ -416,6 +448,10 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
             left: pos.left
         });
     }
+});
+
+KB.Backbone.ModalFieldCollection = Backbone.Collection.extend({
+    model: KB.Backbone.Common.FieldConfigModelModal
 });
 
 KB.Backbone.EditModalModules = Backbone.View.extend({
@@ -436,6 +472,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.LoadingAnimation = new KB.Backbone.Shared.LoadingAnimation({
             el: this.$form
         });
+        this.FieldModels = new KB.Backbone.ModalFieldCollection();
         this.$el.css("position", "fixed").draggable({
             handle: "h2",
             containment: "window",
@@ -444,8 +481,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 that.recalibrate(ui.position);
             }
         });
-        this.listenTo(KB.Events, "kb.modal.refresh", this.recalibrate);
-        this.listenTo(KB.Events, "kb.modal.preview", this.preview);
+        this.listenTo(KB.Events, "modal.recalibrate", this.recalibrate);
+        this.listenTo(KB.Events, "modal.preview", this.preview);
         jQuery(window).on("resize", function() {
             that.recalibrate();
         });
@@ -468,9 +505,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     openView: function(ModuleView, force) {
         this.setupWindow();
-        force = _.isUndefined(force) ? false : true;
         if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
-            _K.log("Module View already set");
             return this;
         }
         this.ModuleView = ModuleView;
@@ -482,21 +517,22 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     attach: function() {
         var that = this;
         this.listenTo(this.ModuleView, "kb.frontend.module.inline.saved", this.frontendViewUpdated);
+        this.listenTo(KB.Events, "modal.refresh", this.reload);
         this.listenTo(this.model, "change:viewfile", function() {
             that.serialize(false, true);
-            that.render();
+            that.reload();
         });
-        this.listenTo(this.model, "kb.frontend.module.inlineUpdate", function() {
-            that.render(true);
-            that.$el.addClass("isDirty");
-        });
-        this.listenTo(this.ModuleView, "kb.module.view.delete", this.destroy);
+        this.listenTo(this.ModuleView.model, "remove", this.destroy);
+    },
+    reload: function() {
+        this.render(true);
     },
     detach: function() {
+        this.FieldModels.reset();
         this.stopListening(this.ModuleView);
         this.stopListening(this.model);
-        this.ModuleView.attachedFields = {};
         delete this.ModuleView;
+        KB.Events.trigger("modal.close", this);
     },
     destroy: function() {
         var that = this;
@@ -505,20 +541,15 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             tinymce.remove("#" + item.id);
         });
         that.unbind();
+        that.initialized = false;
         that.$el.detach();
     },
     setupWindow: function() {
         this.$el.appendTo("body").show();
-        if (KB.OSConfig.wrapPosition) {
-            this.$el.css({
-                top: KB.OSConfig.wrapPosition.top,
-                left: KB.OSConfig.wrapPosition.left
-            });
-        }
     },
     frontendViewUpdated: function() {
         this.$el.removeClass("isDirty");
-        this.render();
+        this.reload();
     },
     preview: function() {
         this.serialize(false, false);
@@ -527,10 +558,9 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         this.serialize(true, true);
         this.switchDraftOff();
     },
-    render: function(overloadData) {
+    render: function(reload) {
         var that = this, json;
         _KS.info("Frontend modal retrieves data from the server");
-        overloadData = !_.isUndefined(overloadData);
         json = this.model.toJSON();
         this.applyControlsSettings(this.$el);
         this.updateViewClassTo = false;
@@ -540,7 +570,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 action: "getModuleForm",
                 module: json,
                 moduleData: json.moduleData,
-                overloadData: overloadData,
                 _ajax_nonce: KB.Config.getNonce("read")
             },
             type: "POST",
@@ -558,15 +587,22 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 } else {
                     that.$draft.hide();
                 }
-                if (res.json) {
+                if (res.data.json) {
                     KB.payload = _.extend(KB.payload, res.data.json);
+                    if (res.data.json.Fields) {
+                        that.FieldModels.add(_.toArray(res.data.json.Fields));
+                    }
                 }
                 KB.Ui.initTabs();
                 KB.Ui.initToggleBoxes();
                 KB.TinyMCE.addEditor(that.$form);
-                _K.info("Frontend Modal opened with view of:" + that.model.get("instance_id"));
                 _KS.info("Frontend modal done.");
                 that.$title.text(that.model.get("settings").name);
+                if (reload) {
+                    if (that.FieldModels.length > 0) {
+                        KB.Events.trigger("modal.reload");
+                    }
+                }
                 setTimeout(function() {
                     KB.Fields.trigger("frontUpdate", that.ModuleView);
                 }, 500);
@@ -583,7 +619,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     },
     recalibrate: function() {
         var winH, conH, position, winDiff;
-        winH = jQuery(window).height() - 40;
+        winH = jQuery(window).height() - 16;
         conH = jQuery(".os-content-inner").height();
         position = this.$el.position();
         winDiff = conH + position.top - winH;
@@ -594,10 +630,14 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         } else {
             this.initScrollbars(winH - position.top);
         }
-        if (position.top < 40) {
-            this.$el.css("top", "40px");
+        if (position.top < 32) {
+            this.$el.css("top", "32px");
         }
-        _K.info("Frontend Modal resizing done!");
+        if (KB.Sidebar.visible) {
+            var sw = KB.Sidebar.$el.width();
+            this.$el.css("left", sw + "px");
+            this.$el.css("height", winH + "px");
+        }
     },
     initScrollbars: function(height) {
         jQuery(".kb-nano", this.$el).height(height + 20);
@@ -605,12 +645,10 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             preventPageScrolling: true,
             contentClass: "kb-nano-content"
         });
-        _K.info("Nano Scrollbars (re)initialized!");
     },
     serialize: function(mode, showNotice) {
         var that = this, save = mode || false, notice = showNotice !== false, height;
         this.LoadingAnimation.show(.5);
-        _K.info("Frontend Modal called serialize function. Savemode:", mode);
         tinymce.triggerSave();
         jQuery.ajax({
             url: ajaxurl,
@@ -633,11 +671,15 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     tinymce.remove("#" + el.id);
                 });
                 height = that.ModuleView.$el.height();
+                that.ModuleView.model.trigger("modal.serialize.before");
                 if (that.updateViewClassTo !== false) {
                     that.updateContainerClass(that.updateViewClassTo);
                 }
                 that.ModuleView.$el.html(res.html);
                 that.model.set("moduleData", res.newModuleData);
+                if (save) {
+                    that.model.trigger("saved");
+                }
                 jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.ModuleView);
                 that.ModuleView.delegateEvents();
                 that.ModuleView.trigger("kb:frontend::viewUpdated");
@@ -649,6 +691,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     });
                     that.ModuleView.render();
                     that.ModuleView.setControlsPosition();
+                    that.ModuleView.model.trigger("modal.serialize");
                 }, 400);
                 if (save) {
                     if (notice) {
@@ -667,7 +710,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     that.ModuleView.$el.append($controls);
                 }
                 that.ModuleView.trigger("kb.view.module.HTMLChanged");
-                _K.info("Frontend Modal saved data for:" + that.model.get("instance_id"));
                 that.LoadingAnimation.hide();
             },
             error: function() {
@@ -985,9 +1027,8 @@ KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.exte
         }, this.afterRemoval, this);
     },
     afterRemoval: function() {
-        this.Parent.trigger("kb.module.view.delete");
         this.Parent.$el.parent(".kb-wrap").remove();
-        this.Parent.$el.remove();
+        this.trigger("remove");
         KB.Modules.remove(this.model);
     },
     cancelRemoval: function() {
@@ -1023,14 +1064,14 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
     initialize: function(options) {
         this.options = options || {};
         this.Parent = options.parent;
-        this.$el.append('<span class="dashicons dashicons-menu"></span><span class="os-action"></span>');
+        this.$el.append('<span class="genericon genericon-draggable"></span><span class="os-action"></span>');
     },
     className: "kb-module-inline-move kb-nbt kb-nbb",
     isValid: function() {
-        if (!this.Parent.Area) {
+        if (!this.Parent.model.Area) {
             return false;
         }
-        return KB.Checks.userCan("edit_kontentblocks") && this.Parent.Area.get("sortable");
+        return KB.Checks.userCan("edit_kontentblocks") && this.Parent.model.Area.get("sortable");
     }
 });
 
@@ -1069,6 +1110,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
                 that.model.set("moduleData", res.newModuleData);
                 that.Parent.render();
                 that.Parent.trigger("kb.frontend.module.inline.saved");
+                that.model.trigger("saved");
                 KB.Events.trigger("KB::ajax-update");
                 KB.Notice.notice("Module saved successfully", "success");
                 that.Parent.$el.removeClass("isDirty");
@@ -1127,23 +1169,16 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
 KB.Backbone.ModuleView = Backbone.View.extend({
     focus: false,
     $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
-    attachedFields: [],
-    initialize: function(options) {
+    attachedFields: {},
+    initialize: function() {
         var that = this;
         if (!KB.Checks.userCan("edit_kontentblocks")) {
-            _K.log("Permission insufficient");
             return;
         }
-        this.Area = options.Area;
-        this.Area.View.addModuleView(this);
-        this.model.view = this;
+        this.model.View = this;
         this.listenTo(this.model, "change", this.modelChange);
-        this.listenTo(this.model, "save", this.model.save);
         this.$el.data("ModuleView", this);
         this.render();
-        if (KB.appData.config.useModuleNav) {
-            KB.Menubar.attachModuleView(this);
-        }
         this.setControlsPosition();
         this.Controls = new KB.Backbone.Frontend.ModuleControlsView({
             ModuleView: this
@@ -1154,8 +1189,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         "click .kb-module__dropzone": "setDropZone",
         "click .kb-js-inline-delete": "confirmDelete",
         "click .editable": "reloadModal",
-        "hover.first": "setActive",
-        "hover.second": "setControlsPosition"
+        "mouseenter.first": "setActive",
+        "mouseenter.second": "setControlsPosition"
     },
     openOptions: function() {
         this.Controls.EditControl.openForm();
@@ -1231,12 +1266,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
             model: this.model.toJSON()
         }));
     },
-    addField: function(key, obj, arrayKey) {
-        if (!_.isEmpty(arrayKey)) {
-            this.attachedFields[arrayKey][key] = obj;
-        } else {
-            this.attachedFields[key] = obj;
-        }
+    addField: function(obj) {
+        this.attachedFields[obj.cid] = obj;
     },
     hasField: function(key, arrayKey) {
         if (!_.isEmpty(arrayKey)) {
@@ -1256,25 +1287,561 @@ KB.Backbone.ModuleView = Backbone.View.extend({
         }
     },
     clearFields: function() {
-        _K.info("Attached Fields were reset to empty object");
         this.attachedFields = {};
     },
     getDirty: function() {
         this.$el.addClass("isDirty");
-        if (KB.appData.config.useModuleNav) {
-            this.Menubar.$el.addClass("isDirty");
-        }
     },
     getClean: function() {
         this.$el.removeClass("isDirty");
-        if (KB.appData.config.useModuleNav) {
-            this.Menubar.$el.removeClass("isDirty");
-        }
     },
     modelChange: function() {
         this.getDirty();
     },
-    save: function() {}
+    save: function() {},
+    dispose: function() {
+        delete this.model.View;
+        this.stopListening();
+        this.remove();
+    }
+});
+
+KB.Backbone.SidebarView = Backbone.View.extend({
+    currentView: null,
+    viewStack: [],
+    initialize: function() {
+        this.render();
+        var controlsTpl = KB.Templates.render("frontend/sidebar/sidebar-nav", {});
+        this.$navControls = jQuery(controlsTpl);
+        this.bindHandlers();
+        this.AreaList = new KB.Backbone.Sidebar.AreaOverview.AreaOverviewController({
+            controller: this
+        });
+        this.CategoryFilter = new KB.Backbone.Sidebar.CategoryFilter();
+        this.setView(this.AreaList);
+    },
+    events: {
+        "click .kb-js-sidebar-nav-back": "rootView"
+    },
+    render: function() {
+        this.$el = jQuery('<div class="kb-sidebar-wrap" style="display: none;"></div>').appendTo("body");
+        this.$toggle = jQuery('<div class="kb-sidebar-wrap--toggle cbutton cbutto-effect--boris"></div>').appendTo("body");
+        this.Header = new KB.Backbone.Sidebar.Header({});
+        this.$el.append(this.Header.render());
+        this.$container = jQuery('<div class="kb-sidebar-wrap__container"></div>').appendTo(this.$el);
+        this.setLayout();
+        var ls = KB.Util.stex.get("kb-sidebar-visible");
+        if (ls) {
+            this.toggleSidebar();
+        }
+    },
+    bindHandlers: function() {
+        var that = this;
+        jQuery(window).resize(function() {
+            that.setLayout();
+        });
+        this.$toggle.on("click", function() {
+            that.toggleSidebar();
+        });
+    },
+    setLayout: function() {
+        var h = jQuery(window).height();
+        this.$el.height(h);
+    },
+    setView: function(View) {
+        if (this.currentView) {
+            this.currentView.$el.detach();
+        }
+        this.currentView = View;
+        this.viewStack.push(View);
+        this.$container.html(View.render());
+        this.handleNavigationControls();
+    },
+    prevView: function() {
+        var prev = this.viewStack.shift();
+        if (prev) {
+            this.setView(prev);
+        }
+    },
+    rootView: function() {
+        this.viewStack = [];
+        this.setView(this.AreaList);
+    },
+    handleNavigationControls: function() {
+        if (this.viewStack.length >= 2) {
+            this.$navControls.prependTo(this.$container);
+        } else {
+            this.$navControls.detach();
+        }
+    },
+    toggleSidebar: function() {
+        this.visible = !this.visible;
+        this.$el.fadeToggle();
+        jQuery("body").toggleClass("kb-sidebar-visible");
+        KB.Util.stex.set("kb-sidebar-visible", this.visible, 1e3 * 60 * 60);
+    }
+});
+
+KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__module-list",
+    initialize: function(options) {
+        this.currentLayout = this.model.get("layout");
+        this.controller = options.controller;
+        this.sidebarController = options.sidebarController;
+        this.categories = this.sidebarController.CategoryFilter.filter(this.model);
+        this.Settings = new KB.Backbone.Sidebar.AreaDetails.AreaSettings({
+            model: this.model,
+            controller: this,
+            sidebarController: this.sidebarController
+        });
+        this.renderHeader();
+        this.bindHandlers();
+        this.$settingsContainer.append(this.Settings.render());
+        this.renderCategories();
+    },
+    events: {
+        "click .kb-sidebar-area-details__cog": "toggle",
+        "click .kb-sidebar-area-details__update": "updateAreaSettings"
+    },
+    bindHandlers: function() {
+        this.listenTo(this.model, "change:layout", this.handleLayoutChange);
+    },
+    render: function() {
+        return this.$el;
+    },
+    renderHeader: function() {
+        this.$el.append(KB.Templates.render("frontend/sidebar/area-details-header", this.model.toJSON()));
+        this.$settingsContainer = this.$el.find(".kb-sidebar-area-details__settings");
+        this.$updateHandle = this.$el.find(".kb-sidebar-area-details__update").hide();
+    },
+    renderCategories: function() {
+        var that = this;
+        _.each(this.categories.toJSON(), function(cat, id) {
+            var catView = new KB.Backbone.Sidebar.AreaDetails.CategoryController({
+                model: new Backbone.Model(cat),
+                controller: that
+            });
+            that.$el.append(catView.render());
+        });
+    },
+    toggle: function() {
+        this.$settingsContainer.slideToggle();
+    },
+    handleLayoutChange: function() {
+        if (this.model.get("layout") !== this.currentLayout) {
+            this.$updateHandle.show();
+        } else {
+            this.$updateHandle.hide();
+        }
+    },
+    updateAreaSettings: function() {
+        KB.Ajax.send({
+            action: "saveAreaLayout",
+            area: this.model.toJSON(),
+            layout: this.model.get("layout"),
+            _ajax_nonce: KB.Config.getNonce("update")
+        }, this.updateSuccess, this);
+    },
+    updateSuccess: function(res) {
+        if (res.success) {
+            KB.Notice.notice(res.message, "success");
+            this.currentLayout = res.data.layout;
+            this.model.set("layout", res.data.layout);
+            this.handleLayoutChange();
+        } else {
+            KB.Notice.notice(res.message, "error");
+        }
+    }
+});
+
+KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
+    tagName: "ul",
+    className: "kb-sidebar-area-details__templates",
+    LayoutDefs: KB.payload.AreaTemplates || {},
+    events: {
+        "click li": "layoutSelect"
+    },
+    initialize: function(options) {
+        this.controller = options.controller;
+        this.sidebarController = options.SidebarController;
+        this.setOptions();
+    },
+    render: function() {
+        return this.$el;
+    },
+    layoutSelect: function(e) {
+        var $li = jQuery(e.currentTarget);
+        this.$el.find(".kb-active-area-layout").removeClass();
+        $li.addClass("kb-active-area-layout");
+        this.model.View.changeLayout($li.data("item"));
+        this.model.set("layout", $li.data("item"));
+    },
+    setOptions: function() {
+        var options = "";
+        var layouts = this.model.get("layouts");
+        if (layouts && layouts.length > 0) {
+            this.$el.prepend('<div class="kb-sidebar-area-details__subheader">Layouts</div>');
+            _.each(this.prepareLayouts(layouts), function(item) {
+                options += KB.Templates.render("frontend/area-layout-item", {
+                    item: item
+                });
+            });
+            this.$el.append(options);
+        }
+    },
+    prepareLayouts: function(layouts) {
+        var that = this;
+        var stored = this.model.get("layout");
+        return _.map(layouts, function(l) {
+            if (that.LayoutDefs[l]) {
+                var def = that.LayoutDefs[l];
+                if (def.id === stored) {
+                    def.currentClass = "kb-active-area-layout";
+                } else {
+                    def.currentClass = "";
+                }
+                return def;
+            }
+        });
+    }
+});
+
+KB.Backbone.Sidebar.AreaDetails.CategoryController = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__module-category",
+    initialize: function(options) {
+        this.controller = options.controller;
+        this.$el.append(KB.Templates.render("frontend/sidebar/category-list", this.model.toJSON()));
+        this.$list = this.$el.find("ul");
+        this.setupModuleItems();
+    },
+    render: function() {
+        return this.$el;
+    },
+    setupModuleItems: function() {
+        var that = this;
+        _.each(this.model.get("modules"), function(module) {
+            var view = new KB.Backbone.Sidebar.AreaDetails.ModuleDragItem({
+                model: new Backbone.Model(module),
+                listController: that.controller,
+                controller: that
+            });
+            that.$list.append(view.render());
+        });
+    }
+});
+
+KB.Backbone.Sidebar.CategoryFilter = Backbone.View.extend({
+    categories: KB.payload.ModuleCategories,
+    definitions: KB.payload.ModuleDefinitions,
+    initialize: function() {
+        this.setupSortTable();
+    },
+    filter: function(AreaModel) {
+        var that = this;
+        var sorted = this.setupSortTable();
+        var assigned = AreaModel.get("assignedModules");
+        _.each(this.definitions, function(def, name) {
+            if (_.indexOf(assigned, name) !== -1) {
+                sorted[def.settings.category].modules[name] = def;
+            }
+        });
+        return new Backbone.Model(this.removeEmptyCats(sorted));
+    },
+    setupSortTable: function() {
+        var coll = {};
+        _.each(this.categories, function(name, key) {
+            coll[key] = {
+                name: name,
+                id: key,
+                modules: {}
+            };
+        });
+        return coll;
+    },
+    removeEmptyCats: function(sorted) {
+        _.each(sorted, function(obj, id) {
+            if (_.isEmpty(obj.modules)) {
+                delete sorted[id];
+            }
+        });
+        if (sorted.core) {
+            delete sorted["core"];
+        }
+        return sorted;
+    }
+});
+
+KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
+    tagName: "li",
+    className: "kb-sidebar-module",
+    initialize: function(options) {
+        var that = this;
+        this.controller = options.controller;
+        this.listController = options.listController;
+        this.$el.append(KB.Templates.render("frontend/sidebar/category-module-item", this.model.toJSON()));
+        this.$dropHelper = jQuery("<div class='kb-sidebar-drop-helper ui-sortable-helper'></div>");
+        this.model.set("area", this.listController.model);
+        this.$el.draggable({
+            appendTo: that.listController.model.View.$el.selector,
+            revert: "invalid",
+            refreshPositions: true,
+            cursorAt: {
+                top: 5,
+                left: 5
+            },
+            stop: function() {
+                that.listController.model.View.$el.css("overflow", "");
+            },
+            helper: function() {
+                that.listController.model.View.$el.css("overflow", "hidden");
+                return that.$dropHelper;
+            },
+            drag: function() {
+                that.$dropHelper.css("zIndex", "10000");
+            },
+            connectToSortable: this.listController.model.View.$el.selector
+        }).data("module", this);
+    },
+    render: function() {
+        return this.$el;
+    },
+    create: function(ui) {
+        var Area, data, module;
+        if (KB.Checks.userCan("create_kontentblocks")) {} else {
+            KB.Notice.notice("You're not allowed to do this", "error");
+        }
+        Area = KB.Areas.get(this.model.get("area").get("id"));
+        if (!KB.Checks.blockLimit(Area)) {
+            KB.Notice.notice("Limit for this area reached", "error");
+            return false;
+        }
+        module = this.model;
+        data = {
+            action: "createNewModule",
+            "class": module.get("settings").class,
+            master: module.get("master"),
+            masterRef: module.get("masterRef"),
+            template: module.get("template"),
+            templateRef: module.get("templateRef"),
+            areaContext: Area.get("context"),
+            area: Area.get("id"),
+            _ajax_nonce: KB.Config.getNonce("create"),
+            frontend: KB.appData.config.frontend
+        };
+        KB.Ajax.send(data, this.success, this, {
+            ui: ui
+        });
+    },
+    success: function(res, payload) {
+        var that = this, model;
+        payload.ui.helper.replaceWith(res.data.html);
+        model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
+        KB.Backbone.AreaView.prototype.resort(this.model.get("area"));
+        KB.Payload.parseAdditionalJSON(res.data.json);
+    }
+});
+
+KB.Backbone.Sidebar.AreaOverview.AreaListItem = Backbone.View.extend({
+    tagName: "ul",
+    className: "kb-sidebar-areaview__modules-list",
+    ModuleViews: {},
+    initialize: function(options) {
+        this.Modules = new Backbone.Collection();
+        this.$parent = options.$el;
+        this.controller = options.controller;
+        this.sidebarController = options.sidebarController;
+        this.$toggleHandle = this.$parent.find(".kb-sidebar-areaview__title");
+        this.ModuleList = new KB.Backbone.Sidebar.AreaDetails.AreaDetailsController({
+            controller: options.controller,
+            sidebarController: options.sidebarController,
+            model: this.model
+        });
+        this.render();
+        this.bindHandlers();
+    },
+    render: function() {
+        this.$el.appendTo(this.$parent).hide();
+    },
+    bindHandlers: function() {
+        var that = this;
+        this.listenTo(this.Modules, "add", this.renderModuleItem);
+        this.$toggleHandle.on("click", function() {
+            that.controller.setActiveList(that);
+        });
+        this.$parent.on("click", ".kb-js-sidebar-add-module", function() {
+            that.sidebarController.setView(that.ModuleList);
+        });
+        this.listenToOnce(KB.Events, "KB.frontend.init", this.afterInit);
+    },
+    activate: function() {
+        this.$parent.removeClass("kb-sidebar-areaview--inactive");
+        this.model.View.$el.addClass("kb-in-sidebar-active");
+    },
+    deactivate: function() {
+        this.$parent.addClass("kb-sidebar-areaview--inactive");
+        this.model.View.$el.removeClass("kb-in-sidebar-active");
+    },
+    renderModuleItem: function(model) {
+        this.ModuleViews[model.id] = new KB.Backbone.Sidebar.AreaOverview.ModuleListItem({
+            $parent: this.$el,
+            model: model
+        });
+    },
+    attachModuleView: function(moduleView) {
+        this.Modules.add(moduleView.model);
+        this.listenToOnce(moduleView.model, "remove", this.removeModuleView);
+    },
+    removeModuleView: function(moduleModel) {
+        var sidebarView = this.ModuleViews[moduleModel.id];
+        this.Modules.remove(moduleModel);
+        delete this.ModuleViews[moduleModel.id];
+        sidebarView.dispose();
+    },
+    afterInit: function() {
+        if (this.Modules.models.length === 0 && this.model.View.$el.is(":visible")) {
+            this.$el.append(KB.Templates.render("frontend/sidebar/empty-area", {}));
+        }
+    }
+});
+
+KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar-main-panel",
+    Areas: new Backbone.Collection(),
+    AreaViews: {},
+    activeList: null,
+    events: {
+        "click .kb-sidebar-areaview__title": "toggleList"
+    },
+    initialize: function(options) {
+        this.sidebarController = options.controller;
+        this.render();
+        this.bindHandlers();
+    },
+    render: function() {
+        return this.$el;
+    },
+    bindHandlers: function() {
+        this.listenTo(KB.Views.Areas, "view:add", this.attachAreaView);
+        this.listenTo(KB.Views.Modules, "view:add", this.attachModuleView);
+        this.listenTo(this.Areas, "add", this.createAreaItem);
+    },
+    attachAreaView: function(view) {
+        if (view.el) {
+            this.Areas.add(view.model);
+        }
+    },
+    attachModuleView: function(view) {
+        var AreaView = this.AreaViews[view.model.get("area")];
+        if (AreaView) {
+            AreaView.attachModuleView(view);
+        }
+    },
+    createAreaItem: function(model) {
+        if (!model.get("internal")) {
+            var $item = jQuery(KB.Templates.render("frontend/sidebar/sidebar-area-view", model.toJSON())).appendTo(this.$el);
+            this.AreaViews[model.get("id")] = new KB.Backbone.Sidebar.AreaOverview.AreaListItem({
+                $el: $item,
+                controller: this,
+                sidebarController: this.sidebarController,
+                model: model
+            });
+        }
+    },
+    setActiveList: function(AreaView) {
+        if (!this.activeList || !this.activeList.cid) {
+            this.activeList = AreaView;
+            AreaView.$el.slideDown();
+            AreaView.activate();
+            return true;
+        }
+        if (this.activeList.cid === AreaView.cid) {
+            return false;
+        } else {
+            this.activeList.$el.slideUp();
+            this.activeList.deactivate();
+            this.activeList = null;
+            this.setActiveList(AreaView);
+        }
+    }
+});
+
+KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
+    tagName: "li",
+    initialize: function(options) {
+        this.$parent = options.$parent;
+        this.parentView = this.model.View;
+        this.bindHandlers();
+        this.render();
+    },
+    events: {
+        mouseenter: "over",
+        mouseleave: "out",
+        click: "scrollTo",
+        "click .kb-sidebar-item__edit": "openControls",
+        "click .kb-js-inline-update": "inlineUpdate",
+        "click .kb-js-inline-delete": "inlineDelete"
+    },
+    bindHandlers: function() {
+        this.listenTo(this.model, "change", this.getDirty);
+        this.listenTo(this.model, "saved", this.getClean);
+    },
+    getDirty: function() {
+        this.$el.addClass("kb-module-dirty");
+    },
+    getClean: function() {
+        this.$el.removeClass("kb-module-dirty");
+    },
+    over: function() {
+        this.parentView.$el.addClass("kb-in-sidebar-active");
+    },
+    out: function() {
+        this.parentView.$el.removeClass("kb-in-sidebar-active");
+    },
+    openControls: function(e) {
+        e.stopPropagation();
+        this.parentView.openOptions();
+    },
+    inlineUpdate: function(e) {
+        e.stopPropagation();
+        this.parentView.Controls.UpdateControl.update();
+        this.parentView.getClean();
+    },
+    inlineDelete: function(e) {
+        e.stopPropagation();
+        this.parentView.Controls.DeleteControl.confirmRemoval();
+    },
+    scrollTo: function() {
+        var that = this;
+        jQuery("html, body").animate({
+            scrollTop: that.parentView.$el.offset().top - 100
+        }, 750);
+    },
+    render: function() {
+        this.$el.append(KB.Templates.render("frontend/sidebar/module-view-item", {
+            view: this.model.toJSON()
+        }));
+        this.$el.appendTo(this.$parent);
+    },
+    dispose: function() {
+        this.stopListening();
+        this.remove();
+        delete this.model;
+        delete this.parentView;
+    }
+});
+
+KB.Backbone.Sidebar.Header = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__header",
+    initialize: function() {
+        this.$el.append(KB.Templates.render("frontend/sidebar/sidebar-header", {}));
+    },
+    render: function() {
+        return this.$el;
+    }
 });
 
 KB.Backbone.Frontend.ModuleViewsCollection = Backbone.Collection.extend({
@@ -1282,31 +1849,25 @@ KB.Backbone.Frontend.ModuleViewsCollection = Backbone.Collection.extend({
         this.listenTo(this, "add", this.added);
     },
     added: function(View) {
-        console.log("added");
         return View;
     }
 });
 
-KB.Backbone.ModuleBrowser.prototype.success = function(data) {
+KB.Backbone.ModuleBrowser.prototype.success = function(res) {
     var model;
     if (this.dropZone) {
-        this.dropZone.$el.after(data.html);
+        this.dropZone.$el.after(res.data.html);
         this.dropZone.removeDropZone();
     } else {
-        this.options.area.$el.append(data.html).removeClass("kb-area__empty");
+        this.options.area.$el.append(res.data.html).removeClass("kb-area__empty");
     }
-    model = KB.Modules.add(new KB.Backbone.ModuleModel(data.module));
-    _K.info("new module created", {
-        view: model.view
-    });
-    this.parseAdditionalJSON(data.json);
-    KB.TinyMCE.addEditor(model.view.$el);
+    model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
+    this.parseAdditionalJSON(res.data.json);
+    KB.TinyMCE.addEditor(model.View.$el);
     KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
-    KB.Environment.moduleCount++;
     this.options.area.trigger("kb.module.created");
     setTimeout(function() {
-        model.view.openOptions();
-        model.view.renderPlaceholder();
+        model.View.openOptions();
     }, 300);
 };
 
@@ -1317,214 +1878,260 @@ KB.Backbone.ModuleBrowser.prototype.success = function(data) {
     };
 })(KB.Backbone.ModuleBrowser.prototype.close);
 
-KB.IEdit.BackgroundImage = function($) {
-    var self, attachment;
-    self = {
-        selector: ".editable-bg-image",
-        remove: ".kb-js-reset-file",
-        img: null,
-        init: function() {
-            var that = this;
-            $("body").on("click", this.selector, function(e) {
-                e.preventDefault();
-                that.img = $(this);
-                that.parent = KB.currentModule;
-                that.frame().open();
-            });
-            $("body").on("click", this.remove, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.resetFields();
-            });
-            this.renderControls();
-        },
-        renderControls: function() {
-            $(this.selector).each(function() {
-                $("body").on("mouseover", ".editable-bg-image", function() {
-                    $(this).css("cursor", "pointer");
-                });
-            });
-        },
-        frame: function() {
-            if (this._frame) return this._frame;
-            this._frame = wp.media({
-                title: "Change background image",
-                button: {
-                    text: "Insert"
-                },
-                multiple: false,
-                library: {
-                    type: "image"
-                }
-            });
-            this._frame.on("ready", this.ready);
-            this._frame.state("library").on("select", this.select);
-            return this._frame;
-        },
-        ready: function() {
-            $(".media-modal").addClass(" smaller no-sidebar");
-        },
-        select: function() {
-            attachment = this.get("selection").first();
-            self.handleAttachment(attachment);
-        },
-        handleAttachment: function(attachment) {
-            var that = this;
-            var id = attachment.get("id");
-            var value = {
+KB.Backbone.Inline.EditableImage = Backbone.View.extend({
+    initialize: function() {
+        this.mode = this.model.get("mode");
+        this.defaultState = this.model.get("state") || "replace-image";
+        this.render();
+    },
+    events: {
+        click: "openFrame"
+    },
+    render: function() {
+        this.$el.removeAttr("data-kbfuid");
+        this.$el.addClass("kb-inline-imageedit-attached");
+        this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
+        this.$el.css("min-height", "200px");
+    },
+    derender: function() {
+        if (this.frame) {
+            this.frame.dispose();
+            this.frame = null;
+        }
+    },
+    openFrame: function() {
+        var that = this;
+        if (this.frame) {
+            return this.frame.open();
+        }
+        var queryargs = {
+            post__in: [ this.model.get("value").id ]
+        };
+        wp.media.query(queryargs).more().done(function() {
+            var attachment = that.attachment = this.first();
+            that.attachment.set("attachment_id", attachment.get("id"));
+            that.frame = wp.media({
+                frame: "image",
+                state: that.defaultState,
+                metadata: attachment.toJSON(),
+                imageEditView: that
+            }).on("update", function(attachmentObj) {
+                that.update(attachmentObj);
+            }).on("ready", function() {
+                that.ready();
+            }).on("replace", function() {
+                that.replace(that.frame.image.attachment);
+            }).on("select", function() {
+                alert("select");
+            }).open();
+        });
+    },
+    ready: function() {
+        jQuery(".media-modal").addClass("smaller no-sidebar");
+    },
+    replace: function(attachment) {
+        this.attachment = attachment;
+        this.handleAttachment(attachment);
+    },
+    update: function(attachmentObj) {
+        this.attachment.set(attachmentObj);
+        this.attachment.sync("update", this.attachment);
+        if (this.$caption.length > 0) {
+            this.$caption.html(this.attachment.get("caption"));
+        }
+    },
+    handleAttachment: function(attachment) {
+        var that = this;
+        var id = attachment.get("id");
+        var value = this.prepareValue(attachment);
+        var moduleData = _.clone(this.model.get("ModuleModel").get("moduleData"));
+        var path = this.model.get("kpath");
+        KB.Util.setIndex(moduleData, path, value);
+        this.model.get("ModuleModel").set("moduleData", moduleData);
+        KB.Events.trigger("modal.refresh");
+        var args = {
+            width: that.model.get("width"),
+            height: that.model.get("height"),
+            crop: that.model.get("crop"),
+            upscale: that.model.get("upscale")
+        };
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                action: "fieldGetImage",
+                args: args,
                 id: id,
-                title: attachment.get("title"),
-                caption: attachment.get("caption")
-            };
-            var data = this.img.data();
-            var mId = data.module;
-            var cModule = KB.Modules.get(mId);
-            var moduleData = _.clone(cModule.get("moduleData"));
-            var path = data.kpath;
-            var settings = KB.payload.FrontSettings[data.uid];
-            KB.Util.setIndex(moduleData, path, value);
-            cModule.set("moduleData", moduleData);
-            cModule.trigger("kb.frontend.module.inlineUpdate");
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    action: "fieldGetImage",
-                    args: settings,
-                    id: id,
-                    _ajax_nonce: KB.Config.getNonce("read")
-                },
-                type: "GET",
-                dataType: "json",
-                success: function(res) {
-                    that.img.css("backgroundImage", "url('" + res + "')");
-                    that.parent.$el.addClass("isDirty");
-                },
-                error: function() {}
-            });
-        },
-        resetFields: function() {
-            $(".kb-file-attachment-id", this.container).val("");
-            this.container.hide(750);
-            $(this.remove, activeField).hide();
-        },
-        update: function() {
-            this.init();
-        }
-    };
-    return self;
-}(jQuery);
-
-KB.IEdit.Image = function($) {
-    var self, attachment;
-    self = {
-        selector: ".editable-image",
-        remove: ".kb-js-reset-file",
-        img: null,
-        init: function() {
-            var that = this;
-            var $body = $("body");
-            jQuery(this.selector).each(function(i, el) {
-                var $l = jQuery(el);
-                var midref = $l.data("module");
-                if (midref) {
-                    $l.data("ModuleView", KB.Views.Modules.get(midref));
+                _ajax_nonce: KB.Config.getNonce("read")
+            },
+            type: "GET",
+            dataType: "json",
+            success: function(res) {
+                if (that.mode === "simple") {
+                    that.$el.attr("src", res);
+                } else if (that.mode === "background") {
+                    that.$el.css("backgroundImage", "url('" + res + "')");
                 }
-            });
-            $body.on("click", this.selector, function(e) {
-                e.preventDefault();
-                that.img = $(this);
-                that.parent = KB.currentModule;
-                that.frame().open();
-            });
-            $body.on("click", this.remove, function(e) {
-                e.preventDefault();
-                that.container = $(".kb-field-file-wrapper", activeField);
-                that.resetFields();
-            });
-            this.renderControls();
-        },
-        renderControls: function() {
-            $(this.selector).each(function() {
-                $("body").on("mouseover", ".editable-image", function() {
-                    $(this).css("cursor", "pointer");
+                that.delegateEvents();
+            },
+            error: function() {}
+        });
+    },
+    prepareValue: function(attachment) {
+        return {
+            id: attachment.get("id"),
+            title: attachment.get("title"),
+            caption: attachment.get("caption")
+        };
+    }
+});
+
+KB.Fields.registerObject("EditableImage", KB.Backbone.Inline.EditableImage);
+
+KB.Backbone.Inline.EditableText = Backbone.View.extend({
+    initialize: function() {
+        this.placeHolderSet = false;
+        this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
+        this.setupDefaults();
+        this.maybeSetPlaceholder();
+        this.listenToOnce(this.model.get("ModuleModel"), "remove", this.deactivate);
+        this.render();
+    },
+    render: function() {
+        this.id = this.el.id;
+        this.$el.removeAttr("data-kbfuid");
+    },
+    derender: function() {
+        this.deactivate();
+    },
+    events: {
+        click: "activate"
+    },
+    setupDefaults: function() {
+        var that = this;
+        var defaults = {
+            theme: "modern",
+            skin: false,
+            menubar: false,
+            add_unload_trigger: false,
+            fixed_toolbar_container: "#kb-toolbar",
+            schema: "html5",
+            inline: true,
+            plugins: "textcolor, wplink",
+            statusbar: false,
+            preview_styles: false,
+            setup: function(ed) {
+                ed.on("init", function() {
+                    var cleaned;
+                    that.editor = ed;
+                    ed.module = that.model.get("ModuleModel");
+                    ed.kfilter = that.model.get("filter") && that.model.get("filter") === "content" ? true : false;
+                    ed.kpath = that.model.get("kpath");
+                    ed.module.View.$el.addClass("inline-editor-attached");
+                    KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
+                    ed.fire("focus");
+                    ed.focus();
                 });
-            });
-        },
-        frame: function() {
-            if (this._frame) {
-                return this._frame;
+                ed.on("click", function(e) {
+                    e.stopPropagation();
+                });
+                ed.on("focus", function() {
+                    if (that.placeHolderSet) {
+                        that.$el.html("");
+                        that.placeHolderSet = false;
+                    }
+                    var con = KB.Util.getIndex(ed.module.get("moduleData"), ed.kpath);
+                    ed.previousContent = ed.getContent();
+                    if (ed.kfilter) {
+                        ed.setContent(switchEditors.wpautop(con));
+                    }
+                    jQuery("#kb-toolbar").show();
+                    ed.module.View.$el.addClass("inline-edit-active");
+                    if (ed.placeholder !== false) {
+                        ed.setContent("");
+                    }
+                });
+                ed.on("change", function() {});
+                ed.addButton("kbcancleinline", {
+                    title: "Stop inline Edit",
+                    onClick: function() {
+                        if (tinymce.activeEditor.isDirty()) {
+                            tinymce.activeEditor.module.View.getDirty();
+                        }
+                        tinymce.activeEditor.fire("blur");
+                        tinymce.activeEditor = null;
+                        tinymce.focusedEditor = null;
+                        document.activeElement.blur();
+                        jQuery("#kb-toolbar").hide();
+                    }
+                });
+                ed.on("blur", function() {
+                    var content, moduleData, path;
+                    ed.module.View.$el.removeClass("inline-edit-active");
+                    jQuery("#kb-toolbar").hide();
+                    content = ed.getContent();
+                    if (ed.kfilter) {
+                        content = switchEditors._wp_Nop(ed.getContent());
+                    }
+                    moduleData = _.clone(ed.module.get("moduleData"));
+                    path = ed.kpath;
+                    KB.Util.setIndex(moduleData, path, content);
+                    if (ed.isDirty()) {
+                        ed.placeholder = false;
+                        if (ed.kfilter) {
+                            jQuery.ajax({
+                                url: ajaxurl,
+                                data: {
+                                    action: "applyContentFilter",
+                                    content: content,
+                                    postId: ed.module.toJSON().post_id,
+                                    _ajax_nonce: KB.Config.getNonce("read")
+                                },
+                                type: "POST",
+                                dataType: "json",
+                                success: function(res) {
+                                    ed.setContent(res.data.content);
+                                    ed.module.set("moduleData", moduleData);
+                                },
+                                error: function() {}
+                            });
+                        } else {
+                            ed.module.set("moduleData", moduleData);
+                        }
+                    } else {
+                        ed.setContent(ed.previousContent);
+                    }
+                    that.maybeSetPlaceholder();
+                });
             }
-            this._frame = wp.media({
-                title: KB.i18n.Refields.file.modalTitle,
-                button: {
-                    text: KB.i18n.Refields.common.select
-                },
-                multiple: false,
-                library: {
-                    type: "image"
-                }
-            });
-            this._frame.on("ready", this.ready);
-            this._frame.state("library").on("select", this.select);
-            return this._frame;
-        },
-        ready: function() {
-            $(".media-modal").addClass("smaller no-sidebar");
-        },
-        select: function() {
-            attachment = this.get("selection").first();
-            self.handleAttachment(attachment);
-        },
-        handleAttachment: function(attachment) {
-            var that = this;
-            var id = attachment.get("id");
-            var value = this.prepareValue(attachment);
-            var data = this.img.data();
-            var mId = data.module;
-            var cModule = KB.Modules.get(mId);
-            var moduleData = _.clone(cModule.get("moduleData"));
-            var path = data.kpath;
-            KB.Util.setIndex(moduleData, path, value);
-            var settings = KB.payload.FrontSettings[data.uid];
-            cModule.set("moduleData", moduleData);
-            cModule.trigger("kb.frontend.module.inlineUpdate");
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    action: "fieldGetImage",
-                    args: settings,
-                    id: id,
-                    _ajax_nonce: KB.Config.getNonce("read")
-                },
-                type: "GET",
-                dataType: "json",
-                success: function(res) {
-                    that.img.attr("src", res);
-                    that.parent.$el.addClass("isDirty");
-                },
-                error: function() {}
-            });
-        },
-        prepareValue: function(attachment) {
-            return {
-                id: attachment.get("id"),
-                title: attachment.get("title"),
-                caption: attachment.get("caption")
-            };
-        },
-        resetFields: function() {
-            $(".kb-file-attachment-id", this.container).val("");
-            this.container.hide(750);
-            $(this.remove, activeField).hide();
-        },
-        update: function() {
-            this.init();
+        };
+        this.defaults = _.extend(defaults, this.settings);
+    },
+    activate: function(e) {
+        e.stopPropagation();
+        if (!this.editor) {
+            tinymce.init(_.defaults(this.defaults, {
+                selector: "#" + this.id
+            }));
         }
-    };
-    return self;
-}(jQuery);
+    },
+    deactivate: function() {
+        tinyMCE.execCommand("mceRemoveEditor", false, this.id);
+        this.editor = null;
+    },
+    maybeSetPlaceholder: function() {
+        var string = this.editor ? this.editor.getContent() : this.$el.html();
+        var content = this.cleanString(string);
+        if (_.isEmpty(content)) {
+            this.$el.html(this.placeholder);
+            this.placeHolderSet = true;
+        }
+    },
+    cleanString: function(string) {
+        return string.replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
+    }
+});
 
-_.extend(KB.IEdit.Image, Backbone.Events);
+KB.Fields.registerObject("EditableText", KB.Backbone.Inline.EditableText);
 
 KB.IEdit.Link = function($) {
     var $form, $linkTarget, $linktext, $body, $href, $title;
@@ -1627,133 +2234,7 @@ KB.IEdit.Link = function($) {
     };
 }(jQuery);
 
-KB.IEdit.Text = function(el) {
-    var settings;
-    if (_.isUndefined(el)) {
-        return false;
-    }
-    if (KB.payload.FrontSettings && KB.payload.FrontSettings[el.id]) {
-        settings = KB.payload.FrontSettings[el.id].tinymce ? KB.payload.FrontSettings[el.id].tinymce : {};
-    }
-    var defaults = {
-        theme: "modern",
-        skin: false,
-        menubar: false,
-        add_unload_trigger: false,
-        fixed_toolbar_container: "#kb-toolbar",
-        schema: "html5",
-        inline: true,
-        plugins: "textcolor, wplink",
-        statusbar: false,
-        preview_styles: false,
-        setup: function(ed) {
-            ed.on("init", function() {
-                var data = jQuery(ed.bodyElement).data();
-                var module = data.module, cleaned, $placeholder;
-                ed.kfilter = data.filter && data.filter === "content" ? true : false;
-                ed.module = KB.Modules.get(module);
-                ed.kpath = data.kpath;
-                ed.module.view.$el.addClass("inline-editor-attached");
-                $placeholder = jQuery("<span class='kb-editable-text-placeholder'>Start typing here</span>");
-                KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
-                cleaned = ed.getContent().replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
-                if (cleaned === "") {
-                    ed.setContent($placeholder.html());
-                    ed.placeholder = true;
-                } else {
-                    ed.placeholder = false;
-                }
-            });
-            ed.on("click", function(e) {
-                e.stopPropagation();
-            });
-            ed.on("focus", function() {
-                var con = KB.Util.getIndex(ed.module.get("moduleData"), ed.kpath);
-                ed.previousContent = ed.getContent();
-                if (ed.kfilter) {
-                    ed.setContent(switchEditors.wpautop(con));
-                }
-                jQuery("#kb-toolbar").show();
-                ed.module.view.$el.addClass("inline-edit-active");
-                if (ed.placeholder !== false) {
-                    ed.setContent("");
-                }
-            });
-            ed.on("change", function() {
-                _K.info("Got Dirty");
-            });
-            ed.addButton("kbcancleinline", {
-                title: "Stop inline Edit",
-                onClick: function() {
-                    if (tinymce.activeEditor.isDirty()) {
-                        tinymce.activeEditor.module.view.getDirty();
-                    }
-                    tinymce.activeEditor.fire("blur");
-                    tinymce.activeEditor = null;
-                    tinymce.focusedEditor = null;
-                    document.activeElement.blur();
-                    jQuery("#kb-toolbar").hide();
-                }
-            });
-            ed.on("blur", function() {
-                var content, moduleData, path;
-                ed.module.view.$el.removeClass("inline-edit-active");
-                jQuery("#kb-toolbar").hide();
-                content = ed.getContent();
-                if (ed.kfilter) {
-                    content = switchEditors._wp_Nop(ed.getContent());
-                }
-                moduleData = _.clone(ed.module.get("moduleData"));
-                path = ed.kpath;
-                KB.Util.setIndex(moduleData, path, content);
-                if (ed.isDirty()) {
-                    ed.placeholder = false;
-                    if (ed.kfilter) {
-                        jQuery.ajax({
-                            url: ajaxurl,
-                            data: {
-                                action: "applyContentFilter",
-                                content: content,
-                                postId: ed.module.toJSON().post_id,
-                                _ajax_nonce: KB.Config.getNonce("read")
-                            },
-                            type: "POST",
-                            dataType: "json",
-                            success: function(res) {
-                                ed.setContent(res.data.content);
-                                ed.module.set("moduleData", moduleData);
-                                ed.module.trigger("kb.frontend.module.inlineUpdate");
-                            },
-                            error: function() {}
-                        });
-                    } else {
-                        ed.module.set("moduleData", moduleData);
-                        ed.module.trigger("kb.frontend.module.inlineUpdate");
-                    }
-                } else {
-                    ed.setContent(ed.previousContent);
-                }
-            });
-        }
-    };
-    defaults = _.extend(defaults, settings);
-    tinymce.init(_.defaults(defaults, {
-        selector: "#" + el.id
-    }));
-};
-
 KB.Events.on("KB::ready", function() {
-    if (!KB.Checks.userCan("edit_kontentblocks")) {
-        return false;
-    }
-    jQuery(".editable").each(function(i, item) {
-        if (!KB.Checks.userCan("edit_kontentblocks")) {
-            return;
-        }
-        KB.IEdit.Text(item);
-    });
-    KB.IEdit.Image.init();
-    KB.IEdit.BackgroundImage.init();
     KB.IEdit.Link.init();
 });
 
@@ -1780,13 +2261,15 @@ KB.App = function() {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
         $toolbar.hide();
         if (KB.appData.config.useModuleNav) {
-            KB.Menubar = new KB.Backbone.MenubarView();
+            KB.Sidebar = new KB.Backbone.SidebarView();
         }
         KB.EditModalModules = new KB.Backbone.EditModalModules({});
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);
         KB.Modules.on("remove", removeModule);
         addViews();
+        KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
+        KB.FieldConfigs.add(_.toArray(KB.payload.Fields));
         KB.Ui.init();
     }
     function shutdown() {
@@ -1810,21 +2293,14 @@ KB.App = function() {
             KB.Modules.add(module);
         });
         KB.trigger("kb:moduleControlsAdded");
-        KB.Events.trigger("KB::frontend-init");
+        KB.Events.trigger("KB.frontend.init");
     }
     function createModuleViews(ModuleModel) {
-        var ModuleView, AreaModel;
-        AreaModel = KB.Areas.get(ModuleModel.get("area")) || null;
-        if (AreaModel !== null) {
-            ModuleModel.setArea(AreaModel);
-            ModuleModel.bind("change:area", ModuleModel.areaChanged);
-        }
-        ModuleView = KB.Views.Modules.add(ModuleModel.get("instance_id"), new KB.Backbone.ModuleView({
+        var ModuleView;
+        ModuleView = KB.Views.Modules.add(ModuleModel.get("mid"), new KB.Backbone.ModuleView({
             model: ModuleModel,
-            el: "#" + ModuleModel.get("instance_id"),
-            Area: AreaModel
+            el: "#" + ModuleModel.get("mid")
         }));
-        ModuleView.$el.data("ModuleView", ModuleView);
         KB.Ui.initTabs();
     }
     function createAreaViews(AreaModel) {
@@ -1834,6 +2310,7 @@ KB.App = function() {
         }));
     }
     function removeModule(ModuleModel) {
+        ModuleModel.dispose();
         KB.Views.Modules.remove(ModuleModel.get("instance_id"));
     }
     return {
@@ -1847,9 +2324,14 @@ KB.App.init();
 jQuery(document).ready(function() {
     if (KB.appData && KB.appData.config.frontend) {
         KB.Views.Modules.readyOnFront();
-        _K.info("Frontend Modules Ready Event fired");
         _KS.info("Frontend welcomes you");
     }
     KB.Events.trigger("KB::ready");
     setUserSetting("editor", "tinymce");
+    jQuery("body").on("click", ".kb-fx-button", function(e) {
+        jQuery(this).addClass("kb-fx-button--click");
+        jQuery(e.currentTarget).one("webkitAnimationEnd oanimationend msAnimationEnd animationend", function() {
+            e.currentTarget.classList.remove("kb-fx-button--click");
+        });
+    });
 });

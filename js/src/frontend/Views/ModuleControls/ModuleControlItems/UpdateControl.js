@@ -34,10 +34,11 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
         that.model.set('moduleData', res.newModuleData);
         that.Parent.render();
         that.Parent.trigger('kb.frontend.module.inline.saved');
+        that.model.trigger('saved');
         // @TODO events:replace
         KB.Events.trigger('KB::ajax-update');
         KB.Notice.notice('Module saved successfully', 'success');
-        that.Parent.$el.removeClass('isDirty');
+        that.Parent.$el.removeClass('isDirty'); // deprecate
       },
       error: function () {
         KB.Notice.notice('There went something wrong', 'error');

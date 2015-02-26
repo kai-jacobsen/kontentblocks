@@ -43,7 +43,6 @@ KB.Ui = function ($) {
       // set the current field id as reference
       $body.on('mouseenter', '.kb-js-field-identifier', function () {
         KB.currentFieldId = this.id;
-        _K.info('Current Field Id set to:', KB.currentFieldId);
       });
 
       $body.on('mouseenter', '.kb-area__list-item li', function () {
@@ -119,8 +118,7 @@ KB.Ui = function ($) {
       selector.tabs({
         activate: function (e, ui) {
           $('.kb-nano').nanoScroller({contentClass: 'kb-nano-content'});
-          console.log(ui);
-          KB.Events.trigger('kb.modal.refresh');
+          KB.Events.trigger('modal.recalibrate');
         }
       });
       selector.each(function () {
@@ -233,7 +231,7 @@ KB.Ui = function ($) {
           // global trigger when sortable is done
           $(document).trigger('kb_sortable_stop', [event, ui]);
           if (currentModule.get('open')) {
-            currentModule.view.toggleBody(155);
+            currentModule.View.toggleBody(155);
           }
         },
         over: function (event, ui) {
@@ -288,7 +286,8 @@ KB.Ui = function ($) {
                 that.triggerAreaChange(areaOver, currentModule);
                 $(KB).trigger('kb:sortable::update');
                 // force recreation of any attached fields
-                currentModule.view.clearFields();
+                currentModule.View.clearFields();
+
                 KB.Notice.notice('Area change and order were updated successfully', 'success');
 
               });
@@ -340,8 +339,7 @@ KB.Ui = function ($) {
     },
     triggerAreaChange: function (newArea, moduleModel) {
       moduleModel.unsubscribeFromArea(); // remove from current area
-      moduleModel.setEnvVar('areaContext', newArea.get('context'));
-      moduleModel.setEnvVar('area', newArea.get('id'));
+      moduleModel.setArea(newArea);
     },
     toggleModule: function () {
 

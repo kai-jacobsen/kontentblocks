@@ -26,6 +26,7 @@
 -----------------------------*/
 @import "partials/_frontend/toolbar";
 @import "partials/_frontend/menubar";
+@import "partials/_frontend/menubar-side";
 @import "partials/_frontend/os-layout-bars";
 @import "partials/_frontend/media-overlay";
 @import "partials/_frontend/common";
@@ -175,7 +176,7 @@
   border-right: 1px solid #ccc;
 }
 
-.clearfix:after {
+.klearfix:after {
   content: ".";
   display: block;
   clear: both;
@@ -184,15 +185,15 @@
   height: 0;
 }
 
-.clearfix {
+.klearfix {
   display: block;
 }
 
-html[xmlns] .clearfix {
+html[xmlns] .klearfix {
   display: block;
 }
 
-* html .clearfix {
+* html .klearfix {
   height: 1%;
 }
 

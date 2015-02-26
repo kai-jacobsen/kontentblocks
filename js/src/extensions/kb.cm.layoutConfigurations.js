@@ -4,11 +4,9 @@
     el: $('#kb-layout-configurations'),
     init: function () {
       if (KB.appData.config.frontend) {
-        _K.info('Layout Configurations stopped');
         return false;
       }
 
-      _K.info('Layout Configurations start up');
 
       if (this.el.length === 0) {
         return false;

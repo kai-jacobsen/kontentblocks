@@ -162,15 +162,19 @@ class EditableElement extends AbstractEditableFieldReturn
     {
 
         $json = array(
-            'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce )
+            'type' => 'EditableText',
+            'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce ),
+            'kpath' => $this->createPath(),
+            'tooltip' => $this->helptext,
+            'filter' => ($this->field->getArg( 'the_content',false)) ? 'content' : null
         );
-        Kontentblocks::getService('utility.jsontransport')->registerData( 'FrontSettings', $this->uniqueId, $json );
+        Kontentblocks::getService('utility.jsontransport')->registerFieldArgs( $this->uniqueId, $this->field->augmentArgs($json) );
     }
 
 
-    protected function prepare()
+    public function prepare()
     {
-        // TODO: Implement prepare() method.
+        return $this;
     }
 
     public function __toString()

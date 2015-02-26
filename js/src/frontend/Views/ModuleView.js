@@ -7,33 +7,23 @@
 KB.Backbone.ModuleView = Backbone.View.extend({
   focus: false,
   $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
-  attachedFields: [],
-  initialize: function (options) {
+  attachedFields: {},
+  initialize: function () {
     var that = this;
     // don't init if cap is missing for current user
     if (!KB.Checks.userCan('edit_kontentblocks')) {
-      _K.log('Permission insufficient');
       return;
     }
-
-    this.Area = options.Area; //model
-    this.Area.View.addModuleView(this);
     // attach this view to the model
-    this.model.view = this;
+    this.model.View = this;
 
     // observe model changes
     this.listenTo(this.model, 'change', this.modelChange);
-    this.listenTo(this.model, 'save', this.model.save);
-
     // assign this view to the jQuery DOM Node
     this.$el.data('ModuleView', this);
 
     // init render
     this.render();
-
-    if (KB.appData.config.useModuleNav) {
-      KB.Menubar.attachModuleView(this);
-    }
 
     this.setControlsPosition();
 
@@ -47,8 +37,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     //"click .kb-js-inline-update": "updateModule",
     "click .kb-js-inline-delete": "confirmDelete",
     "click .editable": "reloadModal",
-    "hover.first": "setActive",
-    "hover.second": "setControlsPosition"
+    "mouseenter.first": "setActive",
+    "mouseenter.second": "setControlsPosition"
     //"mouseenter.third": "insertDropZone"
     //"mouseleave": "removeDropZone"
 
@@ -152,12 +142,8 @@ KB.Backbone.ModuleView = Backbone.View.extend({
       model: this.model.toJSON()
     }));
   },
-  addField: function (key, obj, arrayKey) {
-    if (!_.isEmpty(arrayKey)) {
-      this.attachedFields[arrayKey][key] = obj;
-    } else {
-      this.attachedFields[key] = obj;
-    }
+  addField: function (obj) {
+    this.attachedFields[obj.cid] = obj;
   },
   hasField: function (key, arrayKey) {
     if (!_.isEmpty(arrayKey)) {
@@ -178,27 +164,23 @@ KB.Backbone.ModuleView = Backbone.View.extend({
     }
   },
   clearFields: function () {
-    _K.info('Attached Fields were reset to empty object');
     this.attachedFields = {};
   },
   getDirty: function () {
     this.$el.addClass('isDirty');
-    // reminder: controlView is the nav item
-    if (KB.appData.config.useModuleNav) {
-      this.Menubar.$el.addClass('isDirty');
-    }
   },
   getClean: function () {
     this.$el.removeClass('isDirty');
-    // reminder: controlView is the nav item
-    if (KB.appData.config.useModuleNav) {
-      this.Menubar.$el.removeClass('isDirty');
-    }
   },
   modelChange: function () {
     this.getDirty();
   },
   save: function () {
     // TODO utilize this for saving instead of handling this by the modal view
+  },
+  dispose: function () {
+    delete this.model.View;
+    this.stopListening();
+    this.remove();
   }
 });

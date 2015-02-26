@@ -45,7 +45,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
       this.model.set('open', true);
     }
     // set view on model for later reference
-    this.model.view = this;
+    this.model.View = this;
     // Setup View
     this.setupDefaultMenuItems();
     KB.Views.Modules.on('kb.modules.view.deleted', function (view) {
@@ -99,6 +99,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
     KB.Ui.repaint(this.$el);
     KB.Fields.trigger('update');
     this.trigger('kb:backend::viewUpdated');
+    this.model.trigger('after.change.area');
   },
   fullscreen: function () {
     var that = this;
@@ -174,8 +175,10 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
     }
   },
   clearFields: function () {
-    _K.info('Attached Fields were reset to empty object');
     this.attachedFields = {};
+  },
+  dispose: function(){
+
   }
 
 });

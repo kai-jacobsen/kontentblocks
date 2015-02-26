@@ -7,7 +7,6 @@ KB.AreaSelector = (function ($) {
     $editWrap: null,
     init: function () {
       if (KB.appData.config.frontend) {
-        _K.info('Area Selector stopped');
         return false;
       }
       this.sortable();

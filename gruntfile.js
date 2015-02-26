@@ -7,7 +7,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
-          mangle: false,
+          mangle: true,
           beautify: false,
           compress: true,
           drop_console: true
@@ -19,7 +19,9 @@ module.exports = function (grunt) {
           'js/dist/common.min.js': ['<%= concat.common.dest %>'],
           'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
           'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
-          'js/dist/fieldsAPI.min.js': ['<%= concat.fieldsAPI.dest %>']
+          'js/dist/fieldsAPI.min.js': ['<%= concat.fieldsAPI.dest %>'],
+          'js/dist/mediaExt.js': ['<%= concat.mediaExt.dest %>']
+
         }
       },
       dev: {
@@ -37,7 +39,8 @@ module.exports = function (grunt) {
           'js/dev/common.js': ['<%= concat.common.dest %>'],
           'js/dev/extensions.js': ['<%= concat.extensions.dest %>'],
           'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
-          'js/dev/fieldsAPI.js': ['<%= concat.fieldsAPI.dest %>']
+          'js/dev/fieldsAPI.js': ['<%= concat.fieldsAPI.dest %>'],
+          'js/dev/mediaExt.js': ['<%= concat.mediaExt.dest %>']
         }
       }
     },
@@ -46,7 +49,7 @@ module.exports = function (grunt) {
         seperator: ';'
       },
       refields: {
-        src: ['core/Fields/Definitions/js/**/*.js'],
+        src: ['core/Fields/Definitions/js/_FieldBaseView.js','core/Fields/Definitions/js/**/*.js'],
         dest: 'js/tmp/refields.concat.js',
         nonull: true
       },
@@ -66,18 +69,24 @@ module.exports = function (grunt) {
         nonull: true
       },
       frontend: {
-        src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js','js/src/frontend/Collections/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
+        src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js', 'js/src/frontend/Collections/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
         dest: 'js/tmp/frontend.concat.js',
         nonull: true
       },
       backend: {
-        src: ['js/src/backend/Models/**/*.js', 'js/src/backend/Views/**/*.js', 'js/src/backend/BackendController.js'],
+        src: ['js/src/backend/Models/**/*.js', 'js/src/backend/Views/**/*.js', 'js/src/backend/Collections/**/*.js', 'js/src/backend/BackendController.js'],
         dest: 'js/tmp/backend.concat.js',
         nonull: true
       },
       fieldsAPI: {
         src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/_Field.js', 'js/src/fieldsAPI/Fields/**/*.js'],
-        dest: 'js/tmp/fieldsAPI.concat.js'
+        dest: 'js/tmp/fieldsAPI.concat.js',
+        nonull: true
+      },
+      mediaExt: {
+        src: ['js/src/wpMediaExt/**/*.js'],
+        dest: 'js/tmp/wpMediaExt.concat.js',
+        nonull: true
       }
     },
     compass: {
@@ -99,7 +108,7 @@ module.exports = function (grunt) {
         livereload: true
       },
       js: {
-        files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js'],
+        files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js', 'js/**/*.hbs'],
         //tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint', 'bash']
         //tasks: ['concat', 'uglify:dev', 'clean', 'jshint', 'bash']
         tasks: ['dev']

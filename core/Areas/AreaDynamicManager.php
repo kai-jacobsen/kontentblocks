@@ -153,8 +153,8 @@ class AreaDynamicManager
         }
 
         foreach ($this->areas as $area) {
-            if (!in_array( $area['id'], $trans )) {
-                $this->newAreas[$area['id']] = $area;
+            if (!in_array( $area->id, $trans )) {
+                $this->newAreas[$area->id] = $area;
             }
         }
 

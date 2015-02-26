@@ -1,5 +1,4 @@
 KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
-
   templatePath: 'fields/Link',
   defaults: {
     std: {
@@ -11,13 +10,9 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
     description: '',
     key: null
   },
-
-  render: function (index) {
+  render: function () {
     return KB.Templates.render(
       this.templatePath, {
-        config: this.config,
-        baseId: this.baseId,
-        index: index,
         i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
         model: this.model.toJSON()
       });

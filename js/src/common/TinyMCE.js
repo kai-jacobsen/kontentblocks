@@ -40,6 +40,7 @@ KB.TinyMCE = (function ($) {
       }
 
 
+
       var edHeight = height || 350;
       var live = (_.isUndefined(watch)) ? true : false;
       // if no $el, we assume it's in the last added module
@@ -48,6 +49,14 @@ KB.TinyMCE = (function ($) {
       // find all editors and init
       $('.wp-editor-area', $el).each(function () {
         var id = this.id;
+
+
+        var prev = tinyMCE.get(id);
+        if (prev){
+          tinyMCE.execCommand('mceRemoveEditor', null, id);
+        }
+
+
         var settings = _.clone(tinyMCEPreInit.mceInit.ghosteditor);
         // add new editor id to settings
         settings.elements = id;
@@ -71,6 +80,7 @@ KB.TinyMCE = (function ($) {
           });
         };
         tinymce.init(settings);
+
         if (!tinyMCEPreInit.mceInit[id]) {
           tinyMCEPreInit.mceInit[id] = settings;
         }
@@ -87,8 +97,6 @@ KB.TinyMCE = (function ($) {
         if (!qts.length) {
           new QTags(qtsettings);
         }
-
-
       });
 
       setTimeout(function () {
@@ -104,6 +112,7 @@ KB.TinyMCE = (function ($) {
         var media = false;
       }
       var editorContent = content || '';
+
       return KB.Ajax.send({
         action: 'getRemoteEditor',
         editorId: id + '_ed',

@@ -28,9 +28,10 @@ class FieldCollection implements \ArrayAccess
 
         /** @var Field $field */
         foreach ($this->fields as $field) {
+            $value = $field->getUserValue();
             $fieldkey = $field->getKey();
-            $this->$fieldkey = $field->getUserValue();
-            $collect[$field->getKey()] = $field->getUserValue();
+            $this->$fieldkey = $value;
+            $collect[$field->getKey()] = $value;
         }
         $this->value = $collect;
     }

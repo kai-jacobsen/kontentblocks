@@ -48,7 +48,19 @@ KB.Payload = (function ($) {
       } else {
         return null;
       }
-    }
+    },
+    parseAdditionalJSON: function (json) {
+      var ret;
 
+      ret = {
+        Fields: []
+      };
+
+      if (json && json.Fields) {
+        ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
+      }
+
+      return ret;
+    }
   }
 })(jQuery);

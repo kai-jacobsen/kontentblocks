@@ -35,7 +35,9 @@ class SingleModuleRenderer
 
         }
 
-        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
+        if ($Module->verify()){
+            Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
+        }
 
 
     }

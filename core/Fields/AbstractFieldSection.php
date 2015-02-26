@@ -174,7 +174,6 @@ abstract class AbstractFieldSection implements Exportable
             } else {
                 $fielddata = ( isset( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : array();
             }
-
             $field->setValue( $fielddata );
 
             // Build field form

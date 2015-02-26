@@ -50,7 +50,6 @@ class UpdateModule
             $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
         }
         $Module->setModuleData( $mergedData );
-
         do_action( 'kb.module.save', $Module, $mergedData );
 
         $return = array(

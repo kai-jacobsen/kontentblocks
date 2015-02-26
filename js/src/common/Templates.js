@@ -7,9 +7,11 @@ KB.Templates = (function ($) {
     return templateCache;
   }
 
-  function render(tplName, tplData) {
-    var tplString;
+  function render(tplName, tplData, done, scope) {
+    var callback, tplString;
     tplData = tplData || {};
+    scope = scope || this;
+    callback = done || null;
     if (!templateCache[tplName]) {
       tplDir = KB.Config.getRootURL() + 'js/templates';
       var tplUrl = tplDir + '/' + tplName + '.hbs?' + KB.Config.getHash();
@@ -23,6 +25,9 @@ KB.Templates = (function ($) {
       // read from local storage if available
       if (KB.Util.stex.get(tplUrl)) {
         tplString = KB.Util.stex.get(tplUrl);
+        if (callback) {
+          callback.call(scope)
+        }
       } else {
         // load fresh file
         $.ajax({
@@ -32,6 +37,9 @@ KB.Templates = (function ($) {
           success: function (data) {
             tplString = data;
             KB.Util.stex.set(tplUrl, tplString, 2 * 1000 * 60);
+            if (callback) {
+              callback.call(scope)
+            }
           }
         });
       }

@@ -93,7 +93,6 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
   },
   reposition: function () {
     var pos = this.$target.offset();
-    console.log(pos);
     var lh = this.$el.outerHeight();
     pos.top = pos.top - lh;
     this.$el.offset({top: pos.top - 27, left: pos.left});

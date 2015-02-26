@@ -24,7 +24,7 @@ class Environment implements JsonSerializable
     /**
      * @var \Kontentblocks\Backend\DataProvider\DataProviderController
      */
-    protected $DataHandler;
+    protected $DataProvider;
 
     /**
      * @var \Kontentblocks\Backend\Storage\ModuleStorage
@@ -78,8 +78,8 @@ class Environment implements JsonSerializable
         $this->postObj = $postObj;
         $this->storageId = $storageId;
 
-        $this->DataHandler = new DataProviderController( $storageId );
-        $this->Storage = new ModuleStorage( $storageId, $this->DataHandler );
+        $this->DataProvider = new DataProviderController( $storageId );
+        $this->Storage = new ModuleStorage( $storageId, $this->DataProvider );
         $this->ModuleRepository = new ModuleRepository( $this );
 
         $this->pageTemplate = $this->getPageTemplate();
@@ -118,9 +118,9 @@ class Environment implements JsonSerializable
      * returns the PostMetaData instance
      * @return DataProviderController
      */
-    public function getDataHandler()
+    public function getDataProvider()
     {
-        return $this->DataHandler;
+        return $this->DataProvider;
     }
 
 
@@ -198,7 +198,7 @@ class Environment implements JsonSerializable
     public function findAreas()
     {
         if ($this->postType === 'kb-dyar') {
-            $def = $this->DataHandler->get( '_area' );
+            $def = $this->DataProvider->get( '_area' );
             return array( $def['id'] => $def );
         }
         /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
@@ -242,7 +242,7 @@ class Environment implements JsonSerializable
      */
     public function getAreaSettings( $id )
     {
-        $settings = $this->DataHandler->get( 'kb_area_settings' );
+        $settings = $this->DataProvider->get( 'kb_area_settings' );
         if (!empty( $settings[$id] )) {
             return $settings[$id];
         }

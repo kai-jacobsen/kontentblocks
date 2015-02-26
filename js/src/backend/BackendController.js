@@ -50,6 +50,14 @@ KB.App = (function () {
 
     // Create views
     addViews();
+
+
+    /*
+     * payload.Fields collection
+     */
+    KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection(_.toArray(KB.payload.Fields));
+
+
     // get the UI on track
     KB.Ui.init();
   }
@@ -70,17 +78,20 @@ KB.App = (function () {
     // iterate over raw areas
     _.each(KB.payload.Areas, function (area) {
       // create new area model
-      KB.Areas.add(new KB.Backbone.AreaModel(area));
+      KB.Areas.add(area);
     });
 
     // create models from already attached modules
     _.each(KB.payload.Modules, function (module) {
+      // adding to collection will automatically create the ModuleView
       var m = KB.Modules.add(module);
-      var areaView = KB.Areas.get(m.get('envVars').areaId);
-      if (areaView && areaView.view) {
-        areaView.view.addModuleView(m.view);
-      }
+      //
+      //var areaView = KB.Areas.get(m.get('envVars').areaId);
+      //if (areaView && areaView.view) {
+      //  areaView.view.addModuleView(m.view);
+      //}
     });
+
 
   }
 
@@ -92,14 +103,10 @@ KB.App = (function () {
    * @returns view
    */
   function createModuleViews(module) {
-    _K.info('ModuleViews: new added');
-    // assign the full corresponding area model to the module model
-    //module.set('area', KB.Areas.get(module.get('area')));
-
     // create view
-    KB.Views.Modules.add(module.get('instance_id'), new KB.Backbone.Backend.ModuleView({
+    KB.Views.Modules.add(module.get('mid'), new KB.Backbone.Backend.ModuleView({
       model: module,
-      el: '#' + module.get('instance_id')
+      el: '#' + module.get('mid')
     }));
 
     // re-init tabs
@@ -131,7 +138,6 @@ KB.App = (function () {
     KB.Views.Modules.remove(model.get('instance_id'));
   }
 
-
   // revealing module pattern
   return {
     init: init
@@ -146,7 +152,6 @@ KB.App.init();
 jQuery(document).ready(function () {
 
   if (KB.appData && !KB.appData.config.frontend) {
-    _K.info('Backend Modules Ready Event fired');
     KB.Views.Modules.ready();
   }
 

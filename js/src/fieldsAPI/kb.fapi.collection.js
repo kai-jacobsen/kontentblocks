@@ -7,7 +7,7 @@ KB.FieldsAPI = (function () {
       this.fields[id] = obj;
     },
     get: function (field) {
-      return new this.fields[field.type](field);
+      return new this.fields[field.model.get('type')]({model: new Backbone.Model(field.model.toJSON())});
     }
 
   }
