@@ -70,7 +70,7 @@ abstract class Field implements Exportable
      * @var string
      * @since 1.0.0
      */
-    public $type;
+    protected $type;
 
     /**
      * Path to field definition
@@ -393,6 +393,40 @@ abstract class Field implements Exportable
 
 
     /**
+     * The actual output method for the field markup
+     * Any markup should be echoed, not returned
+     * Must be overridden by the individual field class
+     * @since 1.0.0
+     * @param FieldForm $Form
+     * @return bool
+     */
+    public function form( FieldForm $Form )
+    {
+        $type = $this->type;
+        $tpl = $this->getArg( 'template', 'default' );
+
+        $data = array(
+            'Form' => $Form,
+            'Field' => $this,
+            'value' => $this->getValue(),
+            'i18n' => I18n::getPackages( 'Refields.common', "Refields.{$type}" )
+        );
+
+        /**
+         * Field may alter the injected data array
+         */
+        if (method_exists( $this, 'prepareTemplateData' )) {
+
+            $data = $this->prepareTemplateData( $data );
+        }
+
+        $View = new FieldView(
+            $type . '/' . $tpl . '.twig', $data
+        );
+        return $View->render( false );
+    }
+
+    /**
      * Build the whole field, including surrounding wrapper
      * and optional 'hooks"
      * @TODO add some wp hooks here?
@@ -403,11 +437,9 @@ abstract class Field implements Exportable
     public function build( $echo = true )
     {
 
-        $this->toJSON();
-
         $this->uniqueId = $this->createUID();
         // handles the form output
-        $Form = new FieldFormController( $this );
+        $Form = new FieldForm( $this );
         $out = $Form->build();
 
         if ($echo) {
@@ -431,8 +463,7 @@ abstract class Field implements Exportable
      * JSON Encode custom settings for the field
      * @since 1.0.0
      */
-    public function toJSON()
-
+    public function toJson()
     {
         $args = $this->cleanedArgs();
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
@@ -454,6 +485,7 @@ abstract class Field implements Exportable
     public function getValue( $arrKey = null, $return = '' )
     {
         $data = $this->value;
+
         if ($this->getCallback( 'get' )) {
             $data = call_user_func( $this->getCallback( 'get' ), $this->value );
         }

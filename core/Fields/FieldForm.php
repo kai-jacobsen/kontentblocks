@@ -11,7 +11,7 @@ use Kontentblocks\Templating\FieldView;
  * Class FieldForm
  * @package Kontentblocks\Fields
  */
-class FieldFormController
+class FieldForm
 {
 
     /**
@@ -189,7 +189,7 @@ class FieldFormController
      * @param FieldFormController $Form
      * @return bool
      */
-    public function form( FieldFormController $Form )
+    public function form( FieldForm $Form )
     {
         $type = $this->Field->type;
         $tpl = $this->Field->getArg( 'template', 'default' );
