@@ -560,7 +560,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     // get the form
     KB.Ajax.send({
       action: 'undraftModule',
-      mid: json.instance_id,
+      mid: json.mid,
       _ajax_nonce: KB.Config.getNonce('update')
     }, function (res) {
       if (res.success) {

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-27 */
+/*! Kontentblocks DevVersion 2015-02-28 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -768,7 +768,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         }
         KB.Ajax.send({
             action: "undraftModule",
-            mid: json.instance_id,
+            mid: json.mid,
             _ajax_nonce: KB.Config.getNonce("update")
         }, function(res) {
             if (res.success) {
@@ -1087,7 +1087,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
         var that = this;
         var moduleData = {};
         var refresh = false;
-        moduleData[that.model.get("instance_id")] = that.model.get("moduleData");
+        moduleData[that.model.get("mid")] = that.model.get("moduleData");
         jQuery.ajax({
             url: ajaxurl,
             data: {

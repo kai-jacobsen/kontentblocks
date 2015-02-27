@@ -2,7 +2,7 @@
     <div class="kb-selectbox">
         <label>
             Modultemplate
-            <select class="kb-template-select" data-kb-rel="{{ module.instance_id }}" name="{{ module.instance_id }}[viewfile]">
+            <select class="kb-template-select" data-kb-rel="{{ module.mid }}" name="{{ module.mid }}[viewfile]">
                 {% for template in templates %}
                     <option {{ template.selected }} value="{{ template.filteredfile }}">{{ template.nicename }}</option>
                 {% endfor %}

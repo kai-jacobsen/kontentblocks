@@ -12,7 +12,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
     var that = this;
     var moduleData = {};
     var refresh = false;
-    moduleData[that.model.get('instance_id')] = that.model.get('moduleData');
+    moduleData[that.model.get('mid')] = that.model.get('moduleData');
     jQuery.ajax({
       url: ajaxurl,
       data: {
