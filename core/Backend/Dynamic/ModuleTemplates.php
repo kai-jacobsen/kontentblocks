@@ -79,7 +79,6 @@ class ModuleTemplates
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
         $Storage = new ModuleStorage( $post->ID );
-
         // on this screen we always deal with only
         // one module
         // instance_id equals post_name
@@ -121,6 +120,7 @@ class ModuleTemplates
         Utilities::hiddenEditor();
         $Environment = Utilities::getEnvironment( $post->ID );
         $Module = $Environment->getModuleById($template['mid']);
+
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig
         $templateData = array(
@@ -191,7 +191,6 @@ class ModuleTemplates
         }
 
         $Environment = Utilities::getEnvironment( $postId );
-
         $Module = $Environment->getModuleById( $postObj->post_name );
         // no template yet, create an new one
         if (!$Module) {
@@ -199,16 +198,14 @@ class ModuleTemplates
         } else {
             // update existing
             $old = $Module->Model->getOriginalData();
-            $data = $_POST[$Module->Properties->mid];
+            $data = $_POST[$Module->getId()];
             $new = $Module->save( $data, $old );
             $toSave = Utilities::arrayMergeRecursive( $new, $old );
             // save viewfile if present
             $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-
             $Environment->getStorage()->saveModule( $Module->getId(), $toSave );
             $Environment->getStorage()->reset();
             $Environment->getStorage()->addToIndex( $Module->getId(), $Module->Properties->export() );
-
             // return to original post if the edit request came from outside
             if (isset( $_POST['kb_return_to_post'] )) {
                 $url = get_edit_post_link( $_POST['kb_return_to_post'] );
@@ -223,9 +220,9 @@ class ModuleTemplates
      * Create a new template from form data
      *
      * @param $postId
-     * @param ModuleStorage $Storage
+     * @param Environment $Environment
+     * @internal param ModuleStorage $Storage
      * @since 1.0.0
-     * @return void
      */
     public function createTemplate( $postId, Environment $Environment )
     {
@@ -252,7 +249,6 @@ class ModuleTemplates
         $data = wp_parse_args( $_POST['new-template'], $defaults );
 
         // convert checkbox input to boolean
-//        $data['master'] = ( $data['master'] === '1' ) ? true : false;
         $data['master'] = filter_var( $data['master'], FILTER_VALIDATE_BOOLEAN );
 
         // 3 good reasons to stop
@@ -285,7 +281,7 @@ class ModuleTemplates
         // add to post meta kb_kontentblocks
         $Environment->getStorage()->addToIndex( $data['id'], $definition );
         // single post meta entry, to make meta queries easier
-        $Environment->getStorage()->getDataProvider()->update( 'master', $definition['master'] );
+//        $Environment->getStorage()->getDataProvider()->update( 'master', $definition['master'] );
     }
 
 

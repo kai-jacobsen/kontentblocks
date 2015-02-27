@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-26 */
+/*! Kontentblocks DevVersion 2015-02-27 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -281,6 +281,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
                         attribute: "rel"
                     });
                     jQuery(".ignore", ui.helper).removeClass("ignore");
+                    that.Layout.applyClasses();
                     return KB.Ajax.send({
                         action: "resortModules",
                         data: serializedData,
@@ -667,9 +668,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 if ($controls.length > 0) {
                     $controls.detach();
                 }
-                jQuery(".editable", that.ModuleView.$el).each(function(i, el) {
-                    tinymce.remove("#" + el.id);
-                });
                 height = that.ModuleView.$el.height();
                 that.ModuleView.model.trigger("modal.serialize.before");
                 if (that.updateViewClassTo !== false) {
@@ -1893,6 +1891,9 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
         this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
         this.$el.css("min-height", "200px");
     },
+    rerender: function() {
+        this.render();
+    },
     derender: function() {
         if (this.frame) {
             this.frame.dispose();
@@ -2002,6 +2003,9 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
     },
     derender: function() {
         this.deactivate();
+    },
+    rerender: function() {
+        this.render();
     },
     events: {
         click: "activate"

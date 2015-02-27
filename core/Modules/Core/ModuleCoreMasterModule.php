@@ -1,6 +1,7 @@
 <?php
 
 
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\Module;
@@ -195,7 +196,8 @@ class ModuleCoreMasterModule extends Module
         ) {
             $masterId = $Properties->masterRef['parentId'];
             $tplId = $Properties->templateRef['id'];
-            $data = get_post_meta( $masterId, '_' . $tplId, true );
+            $Storage = new ModuleStorage($masterId);
+            $data = $Storage->getModuleData($tplId);
             return $data;
         }
         return $data;

@@ -164,7 +164,7 @@ class DynamicAreas
 
         $full = wp_parse_args( $data, AreaProperties::getDefaults( false ) );
         $this->Storage->getDataProvider()->update( '_area', $full );
-        $this->Storage->getDataProvider()->update( '_area_context', $full['context'] );
+//        $this->Storage->getDataProvider()->update( '_area_context', $full['context'] );
 
     }
 
@@ -415,6 +415,7 @@ class DynamicAreas
         $Registry = Kontentblocks::getService( 'registry.areas' );
         $areaDef = $Registry->getArea( $area['id'] );
 
+        Kontentblocks::getService('utility.jsontransport')->registerArea($areaDef);
 
         print "<div class='postbox'>";
         print "<h3>{$areaDef->name}</h3>";
@@ -445,7 +446,8 @@ class DynamicAreas
     public function rowActions( $actions, $post )
     {
         if ($post->post_type === 'kb-dyar') {
-            $meta = get_post_meta( $post->ID, '_area', true );
+            $Storage = new ModuleStorage($post->ID);
+            $meta = $Storage->getDataProvider()->get('_area');
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $actions['trash'] = "<span class='kb-js-predefined-area'>Area is predefined</span>";
             }
@@ -470,7 +472,8 @@ class DynamicAreas
         $screen = get_current_screen();
         if (isset( $screen->post_type ) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
 
-            $meta = get_post_meta( $post_id, '_area', true );
+            $Storage = new ModuleStorage($post_id);
+            $meta = $Storage->getDataProvider()->get('_area');
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $classes[] = ' kb-is-dynamic-area';
             }

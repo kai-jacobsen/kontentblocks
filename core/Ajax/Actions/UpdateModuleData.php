@@ -45,7 +45,7 @@ class UpdateModuleData
         $old = $Module->Model->export();
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
-        $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
+        $Environment->getStorage()->saveModule( $Module->getId(),  $mergedData  );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $Module );
         $Module->Model->set($mergedData);
         $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';

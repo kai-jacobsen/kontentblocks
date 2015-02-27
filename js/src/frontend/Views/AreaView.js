@@ -93,6 +93,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
             });
 
             jQuery('.ignore', ui.helper).removeClass('ignore');
+            that.Layout.applyClasses();
 
             return KB.Ajax.send({
               action: 'resortModules',

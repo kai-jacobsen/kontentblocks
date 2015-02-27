@@ -53,6 +53,12 @@ class AreaBackendHTML
     protected $settingsMenu;
 
     /**
+     * Categories
+     * @var array
+     */
+    protected $cats;
+
+    /**
      * Class Constructor
      *
      * @param AreaProperties $Area
@@ -127,7 +133,6 @@ class AreaBackendHTML
                 Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
             }
         }
-
         echo "</ul>";
 
         // @TODO move to js

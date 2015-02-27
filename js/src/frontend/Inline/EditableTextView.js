@@ -15,6 +15,9 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
   derender: function(){
     this.deactivate();
   },
+  rerender: function(){
+    this.render();
+  },
   events: {
     'click': 'activate'
   },

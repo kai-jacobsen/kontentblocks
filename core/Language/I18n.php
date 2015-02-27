@@ -41,8 +41,8 @@ class I18n
      */
     private function __construct()
     {
-        add_action('wp_footer', array($this, 'toJSON'));
-        add_action('admin_footer', array($this, 'toJSON'));
+        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+        add_action( 'admin_footer', array( $this, 'toJSON' ) );
         self::loadPackages();
 
     }
@@ -52,8 +52,8 @@ class I18n
      */
     private static function loadPackages()
     {
-        $path = dirname(__FILE__);
-        $files = glob($path . '/packages/*.php');
+        $path = dirname( __FILE__ );
+        $files = glob( $path . '/packages/*.php' );
 
         foreach ($files as $file) {
             include_once $file;
@@ -66,23 +66,23 @@ class I18n
      * @param $context string I18n-namespace
      * @param $strings array of translatable string
      */
-    public static function addPackage($context, $strings)
+    public static function addPackage( $context, $strings )
     {
-        if (!isset(self::$packages[$context])) {
+        if (!isset( self::$packages[$context] )) {
             self::$packages[$context] = $strings;
         }
 
     }
 
 
-    public static function getPackage($context)
+    public static function getPackage( $context )
     {
-        $path = explode('.', $context);
+        $path = explode( '.', $context );
         $result = NULL;
 
         foreach ($path as $pk) {
 
-            $result = self::_getSubpackage($result, $pk);
+            $result = self::_getSubpackage( $result, $pk );
         }
         return $result;
 
@@ -93,20 +93,20 @@ class I18n
         $return = array();
         if (func_num_args() > 0) {
             foreach (func_get_args() as $arg) {
-                $return += self::getPackage($arg);
+                $return += self::getPackage( $arg );
             }
         }
         return $return;
 
     }
 
-    private static function _getSubpackage($result, $context)
+    private static function _getSubpackage( $result, $context )
     {
-        if (is_null($result)) {
+        if (is_null( $result )) {
             $result = self::$packages;
         }
 
-        if (isset($result[$context])) {
+        if (isset( $result[$context] )) {
             return $result[$context];
         }
         return array();
@@ -116,7 +116,7 @@ class I18n
     public static function toJSON()
     {
         if (is_user_logged_in()) {
-            $json = json_encode(self::$packages);
+            $json = json_encode( self::$packages );
             echo "<script>var KB = KB || {}; KB.i18n = {$json};</script>";
         }
 
@@ -124,44 +124,39 @@ class I18n
 
     public static function getActiveLanguage()
     {
-
-
+        global $sitepress;
         $wpmlActive = self::wpmlActive();
-
         if ($wpmlActive) {
-            global $sitepress;
             return $sitepress->get_current_language();
         } else {
             return self::get2CharLocale();
         }
-
-
     }
 
 
     public static function wpmlActive()
     {
-        if (!function_exists('is_plugin_active')) {
-            include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+        if (!function_exists( 'is_plugin_active' )) {
+            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         }
 
-        return is_plugin_active('sitepress-multilingual-cms/sitepress.php');
+        return is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' );
 
     }
 
     public static function get2CharLocale()
     {
-        $locale = explode('_', get_locale());
+        $locale = explode( '_', get_locale() );
         return $locale[0];
     }
 
     public static function getDefaultLanguageCode()
     {
-        if (self::wpmlActive()){
-            global $sitepress;
+        global $sitepress;
+        if (self::wpmlActive()) {
             return $sitepress->get_default_language();
         } else {
-           return self::get2CharLocale();
+            return self::get2CharLocale();
         }
     }
 
@@ -169,7 +164,7 @@ class I18n
     {
         global $sitepress;
 
-        if (is_object($sitepress) && self::wpmlActive()){
+        if (is_object( $sitepress ) && self::wpmlActive()) {
             return $sitepress->get_active_languages();
         }
 

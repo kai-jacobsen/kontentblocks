@@ -26,7 +26,7 @@ class SavePost
     {
         $this->Environment = $Environment;
         $this->postid = $Environment->getId();
-        $this->Postdata = new ValueStorage($_POST);
+        $this->Postdata = new ValueStorage( $_POST );
     }
 
 
@@ -76,7 +76,9 @@ class SavePost
     protected function moduleOverrides( $module, $data )
     {
         $module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-        $module->Properties->overrides['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module->Properties->getSetting('name');
+        $module->Properties->overrides['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module->Properties->getSetting(
+            'name'
+        );
         $module->Properties->state['draft'] = false;
         return $module;
     }
@@ -179,8 +181,8 @@ class SavePost
 
             // new data from $_POST
             //TODO: filter incoming data
-            $data = $this->Postdata->get($module->getId());
-            /** @var $old array() */
+            $data = $this->Postdata->get( $module->getId() );
+            /** @var $old array */
             $old = $this->Environment->getStorage()->getModuleData( $module->getId() );
             $module->setModuleData( $old );
             // check for draft and set to false
@@ -203,12 +205,12 @@ class SavePost
             }
             // if this is a preview, save temporary data for previews
             if (!is_null( $savedData )) {
-                if ($this->Postdata->get('wp-preview') && $this->Postdata->get('wp-preview') === 'dopreview') {
-                    $this->Environment->getDataProvider()->update('_preview_' . $module->getId(), $savedData);
+                if ($this->Postdata->get( 'wp-preview' ) && $this->Postdata->get( 'wp-preview' ) === 'dopreview') {
+                    $this->Environment->getDataProvider()->update( '_preview_' . $module->getId(), $savedData );
                 } // save real data
                 else {
                     $this->Environment->getStorage()->saveModule( $module->getId(), $savedData );
-                    $this->Environment->getDataProvider()->delete('_preview_' . $module->getId());
+                    $this->Environment->getDataProvider()->delete( '_preview_' . $module->getId() );
 
                 }
                 do_action( 'kb.module.save', $module, $savedData );

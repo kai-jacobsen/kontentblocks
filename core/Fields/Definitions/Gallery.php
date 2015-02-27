@@ -43,14 +43,14 @@ Class Gallery extends Field
 
             $forJSON = array_values( $data['images'] );
         }
-        $Bridge = Kontentblocks::getService( 'utility.jsontransport' );
-        $Bridge->registerFieldData(
-            $this->getFieldId(),
-            $this->type,
-            $forJSON,
-            $this->getKey(),
-            $this->getArg( 'arrayKey' )
-        );
+//        $Bridge = Kontentblocks::getService( 'utility.jsontransport' );
+//        $Bridge->registerFieldData(
+//            $this->getFieldId(),
+//            $this->type,
+//            $forJSON,
+//            $this->getKey(),
+//            $this->getArg( 'arrayKey' )
+//        );
         return $data;
 
     }

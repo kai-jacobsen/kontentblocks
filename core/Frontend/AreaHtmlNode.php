@@ -363,7 +363,6 @@ class AreaHtmlNode
         $this->attr->envVars = $this->Environment;
         $this->attr->layout = $this->settings['layout'];
         Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->attr );
-
     }
 
 }

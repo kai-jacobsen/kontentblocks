@@ -78,10 +78,11 @@ class Environment implements JsonSerializable
         $this->postObj = $postObj;
         $this->storageId = $storageId;
 
+
+
         $this->DataProvider = new DataProviderController( $storageId );
         $this->Storage = new ModuleStorage( $storageId, $this->DataProvider );
         $this->ModuleRepository = new ModuleRepository( $this );
-
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
 
@@ -197,10 +198,6 @@ class Environment implements JsonSerializable
      */
     public function findAreas()
     {
-        if ($this->postType === 'kb-dyar') {
-            $def = $this->DataProvider->get( '_area' );
-            return array( $def['id'] => $def );
-        }
         /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
         $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
         return $AreaRegistry->filterForPost( $this );
@@ -262,7 +259,6 @@ class Environment implements JsonSerializable
     {
         $this->Storage->reset();
         $data = $this->Storage->getModuleData( $id );
-
         if ($data !== null) {
             return $data;
         } else {

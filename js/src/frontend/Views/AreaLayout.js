@@ -115,6 +115,13 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
         $parent.attr('rel', View.$el.attr('rel'));
       }
 
+      //jQuery('.kb-outer-wrap').each(function (i, el) {
+      //  if (jQuery(el).children().length > 0) {
+      //    jQuery(el.remove());
+      //    console.log('removed empty wrap');
+      //  }
+      //});
+
     }
   },
   /**

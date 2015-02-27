@@ -43,7 +43,6 @@ class ModuleFactory
             throw new \BadMethodCallException( 'Invalid Module passed to Factory' );
         }
         $this->Environment = $Environment;
-
         $this->ModuleProperties = $Properties;
         if ($data === null) {
             $this->data = apply_filters(

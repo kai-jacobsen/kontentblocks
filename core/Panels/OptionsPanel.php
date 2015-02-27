@@ -195,9 +195,11 @@ abstract class OptionsPanel extends AbstractPanel
         $this->setupData( $this->baseId );
         $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
-        $this->beforeForm();
-        $this->fields( $this->FieldController )->renderFields();
-        $this->afterForm();
+        echo $this->beforeForm();
+        echo $this->fields( $this->FieldController )->renderFields();
+        echo $this->afterForm();
+        $this->toJSON();
+
     }
 
     /**
@@ -205,13 +207,14 @@ abstract class OptionsPanel extends AbstractPanel
      */
     private function beforeForm()
     {
-
-        echo "<div class='wrap'>";
-        echo "<h2>{$this->menu['title']}</h2>";
-        echo "<form method='post' action=''>";
-        echo "<div class='postbox'>
+        $out = '';
+        $out .= "<div class='wrap'>";
+        $out .= "<h2>{$this->menu['title']}</h2>";
+        $out .= "<form method='post' action=''>";
+        $out .= "<div class='postbox'>
                 <div class='kb-custom-wrapper'>
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
+        return $out;
     }
 
     /**
@@ -219,11 +222,14 @@ abstract class OptionsPanel extends AbstractPanel
      */
     private function afterForm()
     {
-        echo "<input type='hidden' name='{$this->menu['slug']}_save' value='true' >";
-        echo "</div></div></div>";
-        echo "<input type='submit' class='button-primary' value='Save'>";
-        echo "</form>";
-        echo "</div>";
+        $out = '';
+        $out .= "<input type='hidden' name='{$this->menu['slug']}_save' value='true' >";
+        $out .= "</div></div></div>";
+        $out .= "<input type='submit' class='button-primary' value='Save'>";
+        $out .= "</form>";
+        $out .= "</div>";
+
+        return $out;
     }
 
     /**
@@ -290,9 +296,12 @@ abstract class OptionsPanel extends AbstractPanel
     public function toJSON()
     {
         $args = array(
-            'baseId' => $this->getBaseId()
+            'baseId' => $this->getBaseId(),
+            'mid' => $this->getBaseId(),
+            'moduleData' => $this->data,
+            'area' => '_internal'
         );
-        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
+        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }
 
 }

@@ -2,14 +2,10 @@
 
 namespace Kontentblocks\Frontend;
 
-use Kontentblocks\Backend\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
-use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Utils\JSONTransport;
-use Kontentblocks\Utils\Utilities;
 
 /**
  * Class AreaRenderer

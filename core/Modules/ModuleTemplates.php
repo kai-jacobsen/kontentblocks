@@ -2,6 +2,7 @@
 namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\DataProvider\PluginDataAPI;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Language\I18n;
 
 /**
@@ -81,7 +82,8 @@ class ModuleTemplates
             return false;
         }
         foreach ($data as $tpl) {
-            $index = get_post_meta( $tpl->ID, 'kb_kontentblocks', true );
+            $Storage = new ModuleStorage($tpl->ID);
+            $index = $Storage->getIndex();
             $def = $index[$tpl->post_name];
             $def['templateRef'] = $tpl;
             $collect[$tpl->post_name] = $def;

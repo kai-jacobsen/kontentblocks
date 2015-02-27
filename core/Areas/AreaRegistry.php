@@ -3,6 +3,7 @@
 namespace Kontentblocks\Areas;
 
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
@@ -57,6 +58,8 @@ class AreaRegistry
     protected $AreaDynamicManager;
 
 
+    protected $reserved = array();
+
     /**
      * Constructer
      */
@@ -92,7 +95,8 @@ class AreaRegistry
 
         if (!empty( $areas )) {
             foreach ($areas as $areapost) {
-                $area = $areapost->_area;
+                $Storage = new ModuleStorage( $areapost->ID );
+                $area = $Storage->getDataProvider()->get( '_area' );
                 $area['parent_id'] = $areapost->ID;
                 $dynamicAreas[] = $area;
             }
@@ -129,7 +133,6 @@ class AreaRegistry
         }
 
         $Area = new AreaProperties( $args );
-
         // merge defaults with provided args
         if ($Area->dynamic === true && $manual) {
             $this->AreaDynamicManager->add( $Area );
@@ -152,6 +155,7 @@ class AreaRegistry
     public function getArea( $id )
     {
         if (isset( $this->areas[$id] )) {
+            array_push( $this->reserved, $id );
             return $this->areas[$id];
         } else {
             return null;
@@ -375,6 +379,10 @@ class AreaRegistry
             return false;
         }
 
+        if ($postType === 'kb-dyar'){
+            return $this->getGlobalAreas();
+        }
+
 
         // loop through areas and find all which are attached to this post type and/or page template
         /** @var \Kontentblocks\Areas\AreaProperties $area */
@@ -450,7 +458,7 @@ class AreaRegistry
     {
         Utilities::setupCats();
         Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'AreaTemplates', null, $this->templates );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->getArea('_internal') );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->getArea( '_internal' ) );
 
 
     }

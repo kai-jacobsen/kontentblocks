@@ -76,7 +76,7 @@ class FieldRendererToggles implements InterfaceFieldRenderer
     }
 
     /**
-     * @var $section \Kontentblocks\Fields\FieldSection;
+     * @var $section \Kontentblocks\Fields\FieldSection
      */
     public function renderTogglebox()
     {

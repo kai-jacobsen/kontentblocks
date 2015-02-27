@@ -13,6 +13,9 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
     this.$el.css('min-height', '200px');
   },
+  rerender: function(){
+    this.render();
+  },
   derender: function(){
       if (this.frame){
         this.frame.dispose();
@@ -28,7 +31,6 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     // we only want to query "our" image attachment
     // value of post__in must be an array
     var queryargs = {post__in: [this.model.get('value').id]};
-
     wp.media.query(queryargs) // set the query
       .more() // execute the query, this will return an deferred object
       .done(function () { // attach callback, executes after the ajax call succeeded
@@ -42,7 +44,6 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
         // attachment_id must be set.
         // see media-models.js, Line ~370 / PostImage
         that.attachment.set('attachment_id', attachment.get('id'));
-
         // create a frame, bind 'update' callback and open in one step
         that.frame = wp.media({
           frame: 'image', // alias for the ImageDetails frame

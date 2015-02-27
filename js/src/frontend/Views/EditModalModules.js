@@ -404,12 +404,11 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
           $controls.detach();
         }
         // remove attached inline editors from module
-        jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
-          tinymce.remove('#' + el.id);
-        });
+        //jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
+        //  tinymce.remove('#' + el.id);
+        //});
         // cache module container height
         height = that.ModuleView.$el.height();
-
         that.ModuleView.model.trigger('modal.serialize.before');
 
 

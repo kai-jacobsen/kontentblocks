@@ -144,7 +144,7 @@ class AreaSettingsMenu
     /**
      * Get actual Template settings array for registered templates
      * verifies that a template actually exists
-     * @return array or null
+     * @return array
      * @since 1.0.0
      */
     public function _getAssignedTemplates()
@@ -159,7 +159,7 @@ class AreaSettingsMenu
             }
             return $collect;
         } else {
-            return null;
+            return array();
         }
 
     }

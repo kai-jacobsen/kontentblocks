@@ -85,7 +85,7 @@ class PostMetaDataProvider implements DataProviderInterface
      *
      * @param id string Key
      *
-     * @return null
+     * @return mixed|null
      * @since 1.0.0
      */
     public function get( $key )

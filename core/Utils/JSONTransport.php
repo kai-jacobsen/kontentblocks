@@ -84,30 +84,30 @@ class JSONTransport
         return $this;
     }
 
-    /**
-     * Register data of a field
-     *
-     * @param string $modid should be the module instance_id
-     * @param string $type field type
-     * @param mixed $data
-     * @param string $key key of field
-     * @param $arrayKey
-     *
-     * @since 1.0.0
-     * @return object $this
-     */
-    public function registerFieldData( $modid, $type, $data, $key, $arrayKey )
-    {
-
-        if (!empty( $arrayKey )) {
-            $this->fieldData[$type][$modid][$arrayKey][$key] = $data;
-        } else {
-            $this->fieldData[$type][$modid][$key] = $data;
-
-        }
-
-        return $this;
-    }
+//    /**
+//     * Register data of a field
+//     *
+//     * @param string $modid should be the module instance_id
+//     * @param string $type field type
+//     * @param mixed $data
+//     * @param string $key key of field
+//     * @param $arrayKey
+//     *
+//     * @since 1.0.0
+//     * @return object $this
+//     */
+//    public function registerFieldData( $modid, $type, $data, $key, $arrayKey )
+//    {
+//
+//        if (!empty( $arrayKey )) {
+//            $this->fieldData[$type][$modid][$arrayKey][$key] = $data;
+//        } else {
+//            $this->fieldData[$type][$modid][$key] = $data;
+//
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * Register only setting args of module fields
