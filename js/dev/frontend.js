@@ -673,8 +673,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 if (that.updateViewClassTo !== false) {
                     that.updateContainerClass(that.updateViewClassTo);
                 }
-                that.ModuleView.$el.html(res.html);
-                that.model.set("moduleData", res.newModuleData);
+                that.ModuleView.$el.html(res.data.html);
+                that.model.set("moduleData", res.data.newModuleData);
                 if (save) {
                     that.model.trigger("saved");
                 }
@@ -2260,6 +2260,8 @@ KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
 });
 
+KB.ObjectProxy = new Backbone.Collection();
+
 KB.App = function() {
     function init() {
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
@@ -2291,10 +2293,10 @@ KB.App = function() {
             return false;
         }
         _.each(KB.payload.Areas, function(area) {
-            KB.Areas.add(area);
+            KB.ObjectProxy.add(KB.Areas.add(area));
         });
         _.each(KB.payload.Modules, function(module) {
-            KB.Modules.add(module);
+            KB.ObjectProxy.add(KB.Modules.add(module));
         });
         KB.trigger("kb:moduleControlsAdded");
         KB.Events.trigger("KB.frontend.init");

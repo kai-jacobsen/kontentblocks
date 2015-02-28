@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
@@ -13,18 +15,17 @@ use Kontentblocks\Utils\Utilities;
 class UpdateModule
 {
 
+    static $nonce = 'kb-update';
+
+
     /**
-     *
+     * @param ValueStorageInterface $Request
      */
-    public static function run()
+    public static function run( ValueStorageInterface $Request )
     {
         global $post;
-        check_ajax_referer( 'kb-update' );
 
-
-//        define('KB_FRONTEND_SAVE', true);
-
-        $postdata = self::setupPostData();
+        $postdata = self::setupPostData( $Request );
 
         // setup global post
         $post = get_post( $postdata->postId );
@@ -35,7 +36,7 @@ class UpdateModule
         $Environment = Utilities::getEnvironment( $postdata->postId );
 
         $newData = $postdata->data[$postdata->module['mid']];
-        $Workshop = new ModuleWorkshop($Environment, $postdata->module);
+        $Workshop = new ModuleWorkshop( $Environment, $postdata->module );
         $Module = $Workshop->getModule();
 
         // master module will change instance id to correct template id
@@ -57,21 +58,23 @@ class UpdateModule
             'newModuleData' => $mergedData
         );
 
-        // @TODO depreacate
-        do_action( 'kb_save_frontend_module', $Module, $postdata->update );
+        do_action( 'kb.save.frontend.module', $Module, $postdata->update );
         Utilities::remoteConcatGet( $Module->Properties->post_id );
-        wp_send_json( $return );
+        return new AjaxSuccessResponse( 'Module updated', $return );
     }
 
-    private static function setupPostData()
+    /**
+     * @param ValueStorageInterface $Request
+     * @return \stdClass
+     */
+    private static function setupPostData( ValueStorageInterface $Request )
     {
         $stdClass = new \stdClass();
-        $stdClass->data = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->module = filter_input( INPUT_POST, 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $stdClass->postId = filter_var( $stdClass->module['post_id'], FILTER_VALIDATE_INT );
-        $stdClass->editmode = filter_input( INPUT_POST, 'editmode', FILTER_SANITIZE_STRING );
+        $stdClass->editmode = $Request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );
         $stdClass->update = ( isset( $stdClass->editmode ) && $stdClass->editmode === 'update' ) ? true : false;
-
         return $stdClass;
     }
 

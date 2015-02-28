@@ -45,6 +45,7 @@ KB.Areas = new Backbone.Collection([], {
   model: KB.Backbone.AreaModel
 });
 
+KB.ObjectProxy = new Backbone.Collection();
 
 /*
  * Init function
@@ -124,12 +125,12 @@ KB.App = function () {
     // iterate over raw areas
     _.each(KB.payload.Areas, function (area) {
       // create new area model
-      KB.Areas.add(area);
+      KB.ObjectProxy.add(KB.Areas.add(area));
     });
 
     // create models from already attached modules
     _.each(KB.payload.Modules, function (module) {
-      KB.Modules.add(module);
+      KB.ObjectProxy.add(KB.Modules.add(module));
     });
 
     // @TODO events:refactor

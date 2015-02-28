@@ -8,7 +8,7 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 
 /**
- * Class FieldGetImage
+ * Class UndraftModule
  * @package Kontentblocks\Ajax\Frontend
  */
 class UndraftModule

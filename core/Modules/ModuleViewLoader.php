@@ -53,7 +53,7 @@ class ModuleViewLoader
         /**
          * register handler to save the user choice when the frontend edit module saves
          */
-        add_action( 'kb_save_frontend_module', array( $this, 'frontendSave' ) );
+        add_action( 'kb.save.frontend.module', array( $this, 'frontendSave' ) );
     }
 
     /**
