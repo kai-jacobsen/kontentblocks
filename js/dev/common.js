@@ -162,7 +162,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     idAttribute: "uid",
     initialize: function() {
         var module = this.get("fieldId");
-        if (module && (this.ModuleModel = KB.Modules.get(module)) && this.getType()) {
+        if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) {
             this.set("ModuleModel", this.ModuleModel);
             this.setData();
             this.bindHandlers();
@@ -288,11 +288,7 @@ _.extend(KB.Fields, {
 KB.Fields.addEvent();
 
 KB.Backbone.Common.FieldConfigsCollection = Backbone.Collection.extend({
-    model: KB.Backbone.Common.FieldConfigModel,
-    initialize: function() {
-        this.listenTo(this, "add", this.log);
-    },
-    log: function(model) {}
+    model: KB.Backbone.Common.FieldConfigModel
 });
 
 Logger.useDefaults();

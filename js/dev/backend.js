@@ -61,6 +61,10 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     }
 });
 
+KB.Backbone.PanelModel = Backbone.Model.extend({
+    idAttribute: "baseId"
+});
+
 KB.Backbone.Backend.AreaView = Backbone.View.extend({
     initialize: function() {
         this.attachedModuleViews = {};
@@ -487,6 +491,12 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
     dispose: function() {}
 });
 
+KB.Backbone.Backend.PanelView = Backbone.View.extend({
+    initialize: function() {
+        this.model.View = this;
+    }
+});
+
 KB.currentModule = {};
 
 KB.currentArea = {};
@@ -494,7 +504,8 @@ KB.currentArea = {};
 KB.Views = {
     Modules: new KB.ViewsCollection(),
     Areas: new KB.ViewsCollection(),
-    Context: new KB.ViewsCollection()
+    Context: new KB.ViewsCollection(),
+    Panels: new KB.ViewsCollection()
 };
 
 KB.Modules = new Backbone.Collection([], {
@@ -504,6 +515,12 @@ KB.Modules = new Backbone.Collection([], {
 KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
 });
+
+KB.Panels = new Backbone.Collection([], {
+    model: KB.Backbone.PanelModel
+});
+
+KB.ObjectProxy = new Backbone.Collection();
 
 KB.App = function() {
     function init() {
@@ -516,14 +533,13 @@ KB.App = function() {
     }
     function addViews() {
         _.each(KB.payload.Areas, function(area) {
-            KB.Areas.add(area);
+            KB.ObjectProxy.add(KB.Areas.add(area));
         });
         _.each(KB.payload.Modules, function(module) {
-            var m = KB.Modules.add(module);
+            KB.ObjectProxy.add(KB.Modules.add(module));
         });
         _.each(KB.payload.Panels, function(panel) {
-            panel.isPanel = true;
-            KB.Modules.add(panel);
+            KB.ObjectProxy.add(KB.Panels.add(panel));
         });
     }
     function createModuleViews(module) {

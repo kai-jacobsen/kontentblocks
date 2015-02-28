@@ -13,7 +13,8 @@ KB.currentArea = {};
 KB.Views = {
   Modules: new KB.ViewsCollection(),
   Areas: new KB.ViewsCollection(),
-  Context: new KB.ViewsCollection()
+  Context: new KB.ViewsCollection(),
+  Panels: new KB.ViewsCollection()
 };
 /*
  * All Modules are collected here
@@ -31,6 +32,12 @@ KB.Areas = new Backbone.Collection([], {
   model: KB.Backbone.AreaModel
 });
 
+KB.Panels = new Backbone.Collection([], {
+  model: KB.Backbone.PanelModel
+});
+
+KB.ObjectProxy = new Backbone.Collection();
+
 /*
  * Init function
  * Register event listeners
@@ -41,7 +48,6 @@ KB.Areas = new Backbone.Collection([], {
  * handle UI specific actions
  */
 KB.App = (function () {
-
   function init() {
     // Register basic events
     KB.Modules.on('add', createModuleViews);
@@ -78,23 +84,17 @@ KB.App = (function () {
     // iterate over raw areas
     _.each(KB.payload.Areas, function (area) {
       // create new area model
-      KB.Areas.add(area);
+      KB.ObjectProxy.add(KB.Areas.add(area));
     });
 
     // create models from already attached modules
     _.each(KB.payload.Modules, function (module) {
       // adding to collection will automatically create the ModuleView
-      var m = KB.Modules.add(module);
-      //
-      //var areaView = KB.Areas.get(m.get('envVars').areaId);
-      //if (areaView && areaView.view) {
-      //  areaView.view.addModuleView(m.view);
-      //}
+      KB.ObjectProxy.add(KB.Modules.add(module));
     });
 
     _.each(KB.payload.Panels, function (panel) {
-      panel.isPanel = true;
-      KB.Panels.add(panel);
+      KB.ObjectProxy.add(KB.Panels.add(panel));
     });
 
 
