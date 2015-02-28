@@ -26,8 +26,10 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     if (!AreaModel) {
       AreaModel = KB.Areas.get(this.get('area'));
     }
-    AreaModel.View.attachModuleView(this);
-    this.Area = AreaModel;
+    if (AreaModel){
+      AreaModel.View.attachModuleView(this);
+      this.Area = AreaModel;
+    }
   },
   unsubscribeFromArea: function () {
     this.Area.View.removeModule(this);

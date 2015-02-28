@@ -20,7 +20,7 @@ KB.Ext.Backup = (function ($) {
       // Heartbeat send data
       $(document).on('heartbeat-send', function (e, data) {
         data.kbBackupWatcher = that.lastItem;
-        data.post_id = KB.Environment.postId;
+        data.post_id = KB.Environment.postId || 0;
       });
 
       // Heartbeat receive data

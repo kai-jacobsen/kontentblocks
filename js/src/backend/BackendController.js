@@ -25,7 +25,7 @@ KB.Modules = new Backbone.Collection([], {
 
 /*
  *  All Areas are collected in this Backbone Collection
- *  Get by 'instance_id'
+ *  Get by 'mid'
  */
 KB.Areas = new Backbone.Collection([], {
   model: KB.Backbone.AreaModel
@@ -90,6 +90,11 @@ KB.App = (function () {
       //if (areaView && areaView.view) {
       //  areaView.view.addModuleView(m.view);
       //}
+    });
+
+    _.each(KB.payload.Panels, function (panel) {
+      panel.isPanel = true;
+      KB.Panels.add(panel);
     });
 
 

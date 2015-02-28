@@ -29,6 +29,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
     this.trigger('KB::backend.module.viewfile.changed');
   },
   initialize: function () {
+    console.log(this);
     // Setup Elements
     this.$head = jQuery('.kb-module__header', this.$el);
     this.$body = jQuery('.kb-module__body', this.$el);

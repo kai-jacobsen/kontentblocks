@@ -46,8 +46,10 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
         if (!AreaModel) {
             AreaModel = KB.Areas.get(this.get("area"));
         }
-        AreaModel.View.attachModuleView(this);
-        this.Area = AreaModel;
+        if (AreaModel) {
+            AreaModel.View.attachModuleView(this);
+            this.Area = AreaModel;
+        }
     },
     unsubscribeFromArea: function() {
         this.Area.View.removeModule(this);
@@ -342,6 +344,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
         this.trigger("KB::backend.module.viewfile.changed");
     },
     initialize: function() {
+        console.log(this);
         this.$head = jQuery(".kb-module__header", this.$el);
         this.$body = jQuery(".kb-module__body", this.$el);
         this.$inner = jQuery(".kb-module__controls-inner", this.$el);
@@ -517,6 +520,10 @@ KB.App = function() {
         });
         _.each(KB.payload.Modules, function(module) {
             var m = KB.Modules.add(module);
+        });
+        _.each(KB.payload.Panels, function(panel) {
+            panel.isPanel = true;
+            KB.Modules.add(panel);
         });
     }
     function createModuleViews(module) {

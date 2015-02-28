@@ -198,7 +198,7 @@ KB.Ext.Backup = function($) {
             }
             $(document).on("heartbeat-send", function(e, data) {
                 data.kbBackupWatcher = that.lastItem;
-                data.post_id = KB.Environment.postId;
+                data.post_id = KB.Environment.postId || 0;
             });
             $(document).on("heartbeat-tick", function(e, data) {
                 if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {
