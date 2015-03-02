@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
@@ -14,7 +15,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
  *
  * @package Kontentblocks\Ajax
  */
-class ChangeArea
+class ChangeArea implements AjaxActionInterface
 {
 
     static $nonce = 'kb-update';

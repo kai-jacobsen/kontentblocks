@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 
@@ -12,7 +13,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
  * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Frontend
  */
-class ApplyContentFilter
+class ApplyContentFilter implements AjaxActionInterface
 {
     static $nonce = 'kb-read';
 

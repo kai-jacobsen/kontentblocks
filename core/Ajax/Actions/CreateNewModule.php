@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
@@ -15,7 +16,7 @@ use Kontentblocks\Utils\Utilities;
  * Class CreateNewModule
  * @package Kontentblocks\Ajax
  */
-class CreateNewModule
+class CreateNewModule implements AjaxActionInterface
 {
 
     public static $nonce = 'kb-create';

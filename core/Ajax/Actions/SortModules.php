@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
@@ -13,7 +14,7 @@ use Kontentblocks\Utils\RequestWrapper;
  * Class SortModules
  * @package Kontentblocks\Ajax
  */
-class SortModules
+class SortModules implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 

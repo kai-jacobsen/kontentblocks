@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
@@ -14,7 +15,7 @@ use Kontentblocks\Utils\Utilities;
  * Class DuplicateModule
  * @package Kontentblocks\Ajax
  */
-class DuplicateModule
+class DuplicateModule implements AjaxActionInterface
 {
 
     public static $nonce = 'kb-create';

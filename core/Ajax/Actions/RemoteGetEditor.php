@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
@@ -12,7 +13,7 @@ use Kontentblocks\Utils\Utilities;
  * Return the markup for an built-in tinymce editor instance
  * @package Kontentblocks\Ajax
  */
-class RemoteGetEditor
+class RemoteGetEditor implements AjaxActionInterface
 {
 
     static $nonce = 'kb-read';

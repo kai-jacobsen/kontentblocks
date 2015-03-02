@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\ImageResize;
@@ -12,7 +13,7 @@ use Kontentblocks\Utils\ImageResize;
  * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Frontend
  */
-class FieldGetImage
+class FieldGetImage implements AjaxActionInterface
 {
     static $nonce = 'kb-read';
 

@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
@@ -13,7 +14,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
  * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Frontend
  */
-class SaveAreaLayout
+class SaveAreaLayout implements AjaxActionInterface
 {
 
     static $nonce = 'kb-update';

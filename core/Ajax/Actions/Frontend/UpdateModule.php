@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -12,7 +13,7 @@ use Kontentblocks\Utils\Utilities;
  * Class UpdateModule
  * @package Kontentblocks\Ajax\Frontend
  */
-class UpdateModule
+class UpdateModule implements AjaxActionInterface
 {
 
     static $nonce = 'kb-update';

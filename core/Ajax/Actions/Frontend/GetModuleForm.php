@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
@@ -14,7 +15,7 @@ use Kontentblocks\Utils\Utilities;
  * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Frontend
  */
-class GetModuleForm
+class GetModuleForm implements AjaxActionInterface
 {
     static $nonce = 'kb-read';
 

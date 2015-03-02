@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
@@ -11,7 +12,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
  * Class UndraftModule
  * @package Kontentblocks\Ajax\Frontend
  */
-class UndraftModule
+class UndraftModule implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
