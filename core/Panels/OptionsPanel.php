@@ -2,6 +2,8 @@
 namespace Kontentblocks\Panels;
 
 
+use Kontentblocks\Ajax\Actions\DuplicateModule;
+use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -28,7 +30,7 @@ abstract class OptionsPanel extends AbstractPanel
 
     protected $menuUri;
 
-
+    public $DataProvider;
     /**
      * Custom Field Manager Instance for Panels
      * @var PanelFieldController
@@ -56,8 +58,8 @@ abstract class OptionsPanel extends AbstractPanel
             throw new \Exception( 'MUST provide a base id' );
         }
 
-        // mumbo jumbo
         $this->setupArgs( $args );
+        $this->DataProvider = new SerOptionsDataProvider( $this->baseId );
 
         add_action( 'admin_init', array( $this, 'observeSaveRequest' ) );
         add_action( 'admin_menu', array( $this, 'setupMenu' ) );
@@ -152,14 +154,12 @@ abstract class OptionsPanel extends AbstractPanel
     {
         $old = $this->setupData();
         $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-
         $new = $this->fields( $this->FieldController )->save( $_POST[$this->baseId], $old );
-        update_option( $this->baseId, $new );
+        $merged = Utilities::arrayMergeRecursive( $new, $old );
+        $this->DataProvider->set( $merged )->save();
         $location = add_query_arg( array( 'message' => '1' ) );
-
         wp_redirect( $location );
         exit;
-
     }
 
     /**
@@ -192,8 +192,7 @@ abstract class OptionsPanel extends AbstractPanel
 
         Utilities::hiddenEditor();
 
-        $this->setupData( $this->baseId );
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->DataProvider->export(), $this );
 
         echo $this->beforeForm();
         echo $this->fields( $this->FieldController )->renderFields();
@@ -239,12 +238,11 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function setup()
     {
-        $this->setupData( $this->baseId );
 
         if (is_null( $this->FieldController )) {
             $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
         }
-        $this->fields( $this->FieldController )->setup( $this->data );
+        $this->fields( $this->FieldController )->setup( $this->DataProvider->export() );
         $this->data = $this->getData();
         $this->toJSON();
 
@@ -298,7 +296,7 @@ abstract class OptionsPanel extends AbstractPanel
         $args = array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
-            'moduleData' => $this->data,
+            'moduleData' => $this->DataProvider->export(),
             'area' => '_internal'
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
