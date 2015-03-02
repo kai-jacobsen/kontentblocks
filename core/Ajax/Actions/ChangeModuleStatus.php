@@ -11,6 +11,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
 /**
  * Class ChangeModuleStatus
  * Runs when module status change
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class ChangeModuleStatus implements AjaxActionInterface

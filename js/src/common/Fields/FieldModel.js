@@ -51,7 +51,6 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     if (this.get('ModuleModel')) {
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       KB.Util.setIndex(cdata, this.get('kpath'), this.get('value'));
-      console.log(cdata);
       this.get('ModuleModel').set('moduleData', cdata, {silent: true});
     }
   },

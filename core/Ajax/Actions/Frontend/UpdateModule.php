@@ -21,6 +21,7 @@ class UpdateModule implements AjaxActionInterface
 
     /**
      * @param ValueStorageInterface $Request
+     * @return AjaxSuccessResponse
      */
     public static function run( ValueStorageInterface $Request )
     {

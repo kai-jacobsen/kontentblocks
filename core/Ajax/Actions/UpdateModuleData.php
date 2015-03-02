@@ -13,6 +13,7 @@ use Kontentblocks\Utils\Utilities;
  *
  * Handle async data saving from backend edit screens for a single module
  *
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Frontend
  * @since 1.0.0
  */

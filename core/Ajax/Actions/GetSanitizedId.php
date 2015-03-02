@@ -13,6 +13,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
  * Runs when a dynamic area or a template gets created
  * checks if an id already exists
  *
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class GetSanitizedId implements AjaxActionInterface

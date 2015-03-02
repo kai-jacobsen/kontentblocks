@@ -13,6 +13,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
  * Runs when module was dragged into different/new area
  * and stores the new area to the module
  *
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class ChangeArea implements AjaxActionInterface

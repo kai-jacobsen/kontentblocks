@@ -9,6 +9,11 @@ use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 
+/**
+ * Class RemoveModules
+ * @author Kai Jacobsen
+ * @package Kontentblocks\Ajax\Actions
+ */
 class RemoveModules implements AjaxActionInterface
 {
     static $nonce = 'kb-delete';

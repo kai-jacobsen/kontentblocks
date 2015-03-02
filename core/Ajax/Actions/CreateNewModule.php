@@ -14,6 +14,7 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Class CreateNewModule
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class CreateNewModule implements AjaxActionInterface

@@ -16,9 +16,8 @@ use Kontentblocks\Utils\Utilities;
  *
  * Gets the module options form for new/changed conditions
  *
- *
- *
  * Class AfterAreaChange
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class AfterAreaChange implements AjaxActionInterface

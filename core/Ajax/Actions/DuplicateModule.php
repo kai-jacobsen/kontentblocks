@@ -13,6 +13,7 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Class DuplicateModule
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class DuplicateModule implements AjaxActionInterface

@@ -11,6 +11,7 @@ use Kontentblocks\Utils\Utilities;
 /**
  * Class RemoteGetEditor
  * Return the markup for an built-in tinymce editor instance
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class RemoteGetEditor implements AjaxActionInterface

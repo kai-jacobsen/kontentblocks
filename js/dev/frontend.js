@@ -1105,7 +1105,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
                     that.$el.html(res.html);
                 }
                 tinymce.triggerSave();
-                that.model.set("moduleData", res.newModuleData);
+                that.model.set("moduleData", res.data.newModuleData);
                 that.Parent.render();
                 that.Parent.trigger("kb.frontend.module.inline.saved");
                 that.model.trigger("saved");

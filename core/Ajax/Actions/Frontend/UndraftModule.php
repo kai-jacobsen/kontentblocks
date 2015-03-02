@@ -10,6 +10,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
 
 /**
  * Class UndraftModule
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Frontend
  */
 class UndraftModule implements AjaxActionInterface

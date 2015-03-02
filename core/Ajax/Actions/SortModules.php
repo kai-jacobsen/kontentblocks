@@ -12,6 +12,7 @@ use Kontentblocks\Utils\RequestWrapper;
 
 /**
  * Class SortModules
+ * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
 class SortModules implements AjaxActionInterface
