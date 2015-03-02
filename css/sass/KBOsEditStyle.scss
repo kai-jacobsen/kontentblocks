@@ -50,7 +50,7 @@
   width: 42px;
   opacity: 0;
   @include transition(all .3s linear);
-  @include border-radius(3px);
+//  @include border-radius(3px);
 
   z-index: 1990;
 
@@ -105,7 +105,7 @@
     span {
       font-size: 12px !important;
       line-height: 12px;
-      display: block;
+      display: inline-block;
     }
 
     &:hover {

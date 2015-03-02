@@ -12,6 +12,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
+    this.listenTo(this, 'change:value', this.upstreamData);
     this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind);
     this.listenTo(this.ModuleModel, 'change:area', this.unbind);
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind);
@@ -45,6 +46,14 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   setData: function (Model) {
     var ModuleModel = Model || this.get('ModuleModel');
     this.set('value', KB.Util.getIndex(ModuleModel.get('moduleData'), this.get('kpath')));
+  },
+  upstreamData: function () {
+    if (this.get('ModuleModel')) {
+      var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
+      KB.Util.setIndex(cdata, this.get('kpath'), this.get('value'));
+      console.log(cdata);
+      this.get('ModuleModel').set('moduleData', cdata, {silent: true});
+    }
   },
   remove: function () {
     this.stopListening();

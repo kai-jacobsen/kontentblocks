@@ -6,12 +6,16 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
     this.render();
   },
   events: {
-    'click .kb-js-add-image': 'openFrame'
+    'click .kb-js-add-image': 'openFrame',
+    'click .kb-js-reset-image': 'resetImage'
   },
-  render: function(){
+  render: function () {
     this.$reset = this.$('.kb-js-reset-image');
     this.$container = this.$('.kb-field-image-container');
     this.$saveId = this.$('.kb-js-image-id');
+  },
+  editImage: function () {
+    this.openFrame(true);
   },
   openFrame: function () {
     var that = this, metadata;
@@ -21,27 +25,35 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
 
     // we only want to query "our" image attachment
     // value of post__in must be an array
-    var queryargs = {post__in: [this.model.get('value')]};
+
+    var queryargs = {};
+
+    if (this.model.get('value').id !== '') {
+      queryargs.post__in = [this.model.get('value').id];
+    }
 
     wp.media.query(queryargs) // set the query
       .more() // execute the query, this will return an deferred object
       .done(function () { // attach callback, executes after the ajax call succeeded
-
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
-        var attachment = that.attachment = this.first();
-
+        var attachment = this.first();
+        that.attachment = attachment;
         // this is a bit odd: if you want to access the 'sizes' in the modal
         // and if you need access to the image editor / replace image function
+
         // attachment_id must be set.
         // see media-models.js, Line ~370 / PostImage
-        if (that.attachment){
-          that.attachment.set('attachment_id', attachment.get('id'));
+        if (attachment) {
+          attachment.set('attachment_id', attachment.get('id'));
           metadata = that.attachment.toJSON();
+
+
         } else {
           metadata = {};
           that.defaultFrame = 'select';
           that.defaultState = 'library';
+
         }
 
         // create a frame, bind 'update' callback and open in one step
@@ -127,5 +139,10 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
       caption: attachment.get('caption'),
       alt: attachment.get('alt')
     };
+  },
+  resetImage: function () {
+    this.$container.html('');
+    this.$saveId.val('');
+    this.model.set('value', {id: null});
   }
 }));

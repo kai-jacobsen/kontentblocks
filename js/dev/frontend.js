@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-28 */
+/*! Kontentblocks DevVersion 2015-03-02 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -1041,7 +1041,7 @@ KB.Backbone.Frontend.ModuleEdit = KB.Backbone.Frontend.ModuleMenuItemView.extend
     initialize: function(options) {
         this.options = options || {};
         this.Parent = options.parent;
-        this.$el.append('<span class="dashicons dashicons-edit"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsEdit + "</span>");
+        this.$el.append('<span class="dashicons dashicons-edit"></span>');
     },
     className: "os-edit-block kb-module-edit",
     events: {
@@ -1964,13 +1964,13 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
                 id: id,
                 _ajax_nonce: KB.Config.getNonce("read")
             },
-            type: "GET",
+            type: "POST",
             dataType: "json",
             success: function(res) {
                 if (that.mode === "simple") {
-                    that.$el.attr("src", res);
+                    that.$el.attr("src", res.data.src);
                 } else if (that.mode === "background") {
-                    that.$el.css("backgroundImage", "url('" + res + "')");
+                    that.$el.css("backgroundImage", "url('" + res.data.src + "')");
                 }
                 that.delegateEvents();
             },

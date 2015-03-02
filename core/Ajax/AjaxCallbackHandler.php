@@ -63,7 +63,8 @@ class AjaxCallbackHandler
                 'createNewModule' => array( 'Kontentblocks\Ajax\Actions\CreateNewModule', 'run' ),
                 'saveAreaLayout' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveAreaLayout', 'run' ),
                 'getModuleForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\GetModuleForm', 'run' ),
-                'updateModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateModule', 'run' )
+                'updateModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateModule', 'run' ),
+                'fieldGetImage' => array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' )
 
             )
         );

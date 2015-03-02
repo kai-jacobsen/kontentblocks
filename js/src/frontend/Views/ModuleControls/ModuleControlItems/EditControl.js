@@ -2,7 +2,7 @@ KB.Backbone.Frontend.ModuleEdit = KB.Backbone.Frontend.ModuleMenuItemView.extend
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
-    this.$el.append('<span class="dashicons dashicons-edit"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsEdit + '</span>');
+    this.$el.append('<span class="dashicons dashicons-edit"></span>');
   },
   className: 'os-edit-block kb-module-edit',
   events: {

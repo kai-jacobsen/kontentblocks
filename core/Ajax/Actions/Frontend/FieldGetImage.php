@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Ajax\Actions\Frontend;
 
+use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Utils\ImageResize;
 
 /**
@@ -12,20 +14,32 @@ use Kontentblocks\Utils\ImageResize;
  */
 class FieldGetImage
 {
+    static $nonce = 'kb-read';
+
     /**
-     *
+     * @param ValueStorageInterface $Request
+     * @return AjaxSuccessResponse
      */
-    public static function run()
+    public static function run( ValueStorageInterface $Request )
     {
-        $args = $_GET['args'];
+        $args = $Request->get( 'args' );
         $width = ( !isset( $args['width'] ) ) ? 150 : $args['width'];
         $height = ( !isset( $args['height'] ) ) ? null : $args['height'];
         $upscale = filter_var( $args['upscale'], FILTER_VALIDATE_BOOLEAN );
+        $attachmentid = $Request->getFiltered( 'id', FILTER_SANITIZE_NUMBER_INT );
 
-        $attachmentid = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT );
 
-        wp_send_json(
-            ImageResize::getInstance()->process( $attachmentid, $width, $height, $args['crop'], true, $upscale )
+        return new AjaxSuccessResponse(
+            'Image resized', array(
+                'src' => ImageResize::getInstance()->process(
+                    $attachmentid,
+                    $width,
+                    $height,
+                    $args['crop'],
+                    true,
+                    $upscale
+                )
+            )
         );
     }
 }

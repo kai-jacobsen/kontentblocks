@@ -244,7 +244,6 @@ Class Kontentblocks
         if (is_admin()) {
             require_once dirname( __FILE__ ) . '/core/Utils/tables.php';
         }
-        require_once dirname( __FILE__ ) . '/includes/ajax-callback-handler.php';
 
     }
 

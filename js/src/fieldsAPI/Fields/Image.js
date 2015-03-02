@@ -69,13 +69,13 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
           id: value.id,
           _ajax_nonce: KB.Config.getNonce('read')
         },
-        type: "GET",
+        type: "POST",
         dataType: "json",
         async: false,
         success: function (res) {
-          KB.Util.stex.set('img' + value.id + 'x' + args.width + 'x' + args.height, res, 60 * 1000 * 60);
+          KB.Util.stex.set('img' + value.id + 'x' + args.width + 'x' + args.height, res.data.src, 60 * 1000 * 60);
           var attrs = that.model.get('value');
-          attrs.url = res;
+          attrs.url = res.data.src;
         },
         error: function () {
           _K.error('Unable to get image');

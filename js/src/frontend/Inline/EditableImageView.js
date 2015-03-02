@@ -104,13 +104,13 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
         id: id,
         _ajax_nonce: KB.Config.getNonce('read')
       },
-      type: 'GET',
+      type: 'POST',
       dataType: 'json',
       success: function (res) {
         if (that.mode === 'simple') {
-          that.$el.attr('src', res);
+          that.$el.attr('src', res.data.src);
         } else if (that.mode === 'background') {
-          that.$el.css('backgroundImage', "url('" + res + "')");
+          that.$el.css('backgroundImage', "url('" + res.data.src + "')");
         }
         that.delegateEvents();
       },

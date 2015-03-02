@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-02-28 */
+/*! Kontentblocks DevVersion 2015-03-02 */
 KB.Fields.BaseView = Backbone.View.extend({
     rerender: function() {
         this.render();
@@ -925,25 +925,31 @@ KB.Fields.registerObject("image", KB.Fields.BaseView.extend({
         this.render();
     },
     events: {
-        "click .kb-js-add-image": "openFrame"
+        "click .kb-js-add-image": "openFrame",
+        "click .kb-js-reset-image": "resetImage"
     },
     render: function() {
         this.$reset = this.$(".kb-js-reset-image");
         this.$container = this.$(".kb-field-image-container");
         this.$saveId = this.$(".kb-js-image-id");
     },
+    editImage: function() {
+        this.openFrame(true);
+    },
     openFrame: function() {
         var that = this, metadata;
         if (this.frame) {
             this.frame.dispose();
         }
-        var queryargs = {
-            post__in: [ this.model.get("value") ]
-        };
+        var queryargs = {};
+        if (this.model.get("value").id !== "") {
+            queryargs.post__in = [ this.model.get("value").id ];
+        }
         wp.media.query(queryargs).more().done(function() {
-            var attachment = that.attachment = this.first();
-            if (that.attachment) {
-                that.attachment.set("attachment_id", attachment.get("id"));
+            var attachment = this.first();
+            that.attachment = attachment;
+            if (attachment) {
+                attachment.set("attachment_id", attachment.get("id"));
                 metadata = that.attachment.toJSON();
             } else {
                 metadata = {};
@@ -1025,6 +1031,13 @@ KB.Fields.registerObject("image", KB.Fields.BaseView.extend({
             caption: attachment.get("caption"),
             alt: attachment.get("alt")
         };
+    },
+    resetImage: function() {
+        this.$container.html("");
+        this.$saveId.val("");
+        this.model.set("value", {
+            id: null
+        });
     }
 }));
 
