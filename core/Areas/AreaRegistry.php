@@ -15,6 +15,8 @@ use Kontentblocks\Utils\Utilities;
  * Collects all registered area templates
  * Handles the connection Module > Area
  * @since 1.0.0
+ * @package Kontentblocks/Areas
+ * @author Kai Jacobsen
  */
 class AreaRegistry
 {
@@ -48,13 +50,8 @@ class AreaRegistry
     protected $templates = array();
 
     /**
-     * this instance
-     * @var object self
-     * @since 1.0.0
+     * @var AreaDynamicManager
      */
-    static $instance;
-
-
     protected $AreaDynamicManager;
 
 
@@ -67,10 +64,10 @@ class AreaRegistry
     {
         $this->AreaDynamicManager = new AreaDynamicManager();
 
+        // action is triggerd by AreaDynamicManager setup
+        // to make sure external areas are properly setup
         add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
-        if (is_user_logged_in()) {
-            add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
-        }
+        add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
 
         $this->addMockArea();
     }
@@ -115,7 +112,7 @@ class AreaRegistry
 
     /**
      * Adds an area to the registry
-     * Merges default arguments with provided arguments
+     * Merges default paramswith provided params
      * $Manual indicates if the area has been registered by code (true) or
      * was added through the admin interface (false)
      *
@@ -362,16 +359,15 @@ class AreaRegistry
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
      *
-     * @param \Kontentblocks\Backend\Environment\Environment $postData
+     * @param \Kontentblocks\Backend\Environment\Environment $Environment
      *
      * @return boolean
-     * @since 1.0.0
      */
-    public function filterForPost( Environment $postData )
+    public function filterForPost( Environment $Environment )
     {
 
-        $pageTemplate = $postData->getPageTemplate();
-        $postType = $postData->getPostType();
+        $pageTemplate = $Environment->getPageTemplate();
+        $postType = $Environment->getPostType();
         $areas = array();
 
         // bail out if this is a redirect template
@@ -379,7 +375,7 @@ class AreaRegistry
             return false;
         }
 
-        if ($postType === 'kb-dyar'){
+        if ($postType === 'kb-dyar') {
             return $this->getGlobalAreas();
         }
 
@@ -413,12 +409,9 @@ class AreaRegistry
     /**
      * Private helper method to order the areas array by a specified field
      * i.e. order
-     *
      * @param array $areas
      * @param string $field
-     *
      * @return array
-     * @since 1.0.0
      */
     private function orderBy( $areas, $field )
     {
@@ -432,8 +425,6 @@ class AreaRegistry
      *
      * @param $areaId
      * @return bool
-     *
-     * @since 1.0.0
      */
     public function areaExists( $areaId )
     {
@@ -442,11 +433,8 @@ class AreaRegistry
 
     /**
      * Check if area is dynamic
-     *
      * @param $id
-     *
      * @return mixed
-     * @since 1.0.0
      */
     public function isDynamic( $id )
     {
@@ -454,6 +442,10 @@ class AreaRegistry
         return $area->dynamic;
     }
 
+    /**
+     * register area templates to frontend access
+     * register dummy area for frontend access
+     */
     public function setupJSON()
     {
         Utilities::setupCats();
@@ -463,6 +455,14 @@ class AreaRegistry
 
     }
 
+    /**
+     * Even if an area is not an actual requirement for the
+     * consitency of a module, most frontend related code expects
+     * at least an area model for internal control purposes.
+     * If a module is not attached to a valid area, it's internally added
+     * to a dummy area, which is created here.
+     * This dummy area is ignored from any UI and does not exist publicly.
+     */
     private function addMockArea()
     {
         $this->addArea(

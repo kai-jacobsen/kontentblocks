@@ -232,7 +232,6 @@ class BackupDataStorage
     public function setTransient( $timestamp )
     {
         set_transient( 'kb_last_backup', $timestamp );
-
     }
 
 }

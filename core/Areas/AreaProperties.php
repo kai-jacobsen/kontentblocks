@@ -4,7 +4,9 @@ namespace Kontentblocks\Areas;
 
 
 /**
- * Class Area
+ * Class AreaProperties
+ *
+ * @author Kai Jacobsen
  * @package Kontentblocks\Areas
  */
 class AreaProperties

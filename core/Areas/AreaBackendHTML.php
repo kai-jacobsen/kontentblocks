@@ -11,11 +11,9 @@ use Kontentblocks\Utils\Utilities;
  * Area
  * Class description:
  * Backend handler of areas logic and markup
- * @package Kontentblocks
- * @subpackage Areas
+ * @package Kontentblocks/Areas
+ * @author Kai Jacobsen
  * @since 1.0.0
- *
- *
  */
 class AreaBackendHTML
 {
@@ -157,8 +155,6 @@ class AreaBackendHTML
      * Helper Methods beyond this point
      * ################################################
      */
-
-
 
 
     /**

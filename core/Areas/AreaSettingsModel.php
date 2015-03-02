@@ -53,7 +53,7 @@ class AreaSettingsModel implements \JsonSerializable
     private function setupSettings()
     {
 
-        $meta = $this->DataProvider->get($this->key);
+        $meta = $this->DataProvider->get( $this->key );
 
         if (!is_array( $meta )) {
             $meta = array();

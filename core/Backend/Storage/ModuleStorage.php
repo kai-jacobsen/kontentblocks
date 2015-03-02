@@ -5,7 +5,7 @@ use Kontentblocks\Backend\DataProvider\DataProviderController;
 
 /**
  * Class ModuleStorage
- * Mid-level wrapper to underlying data handler
+ * Mid-level wrapper to underlying data handler to handle module related data
  *
  * @package Kontentblocks
  * @subpackage Backend
@@ -15,28 +15,24 @@ class ModuleStorage implements \Countable
     /**
      * current post id
      * @var int
-     * @since 1.0.0
      */
     protected $storageId;
 
     /**
      * Module Index
      * @var array
-     * @since 1.0.0
      */
     protected $index;
 
     /**
      * Data Handler
      * @var \Kontentblocks\Backend\DataProvider\DataProviderController
-     * @since 1.0.0
      */
     protected $DataProvider;
 
     /**
      * modules to handle
      * @var array
-     * @since 1.0.0
      */
     protected $modules;
 
@@ -46,9 +42,7 @@ class ModuleStorage implements \Countable
      *
      * @param $postId
      * @param \Kontentblocks\Backend\DataProvider\DataProviderController
-     *
      * @throws \Exception
-     * @since 1.0.0
      */
     public function __construct( $postId, DataProviderController $DataProvider = null )
     {
@@ -234,13 +228,10 @@ class ModuleStorage implements \Countable
      * Wrapper to save module data
      * Makes sure that the data is stored as hidden key
      * @todo: test if _ is given and don't prefix if so
-     * @todo PMDataHandler should update
-     *
-     *
      * @param $id string $id
      * @param array|string $data array $data
      *
-     * @return boolean | new
+     * @return bool
      */
     public function saveModule( $id, $data = '' )
     {
@@ -265,17 +256,11 @@ class ModuleStorage implements \Countable
 
     /**
      * Wrapper to update the index meta data
-     * @Todo PMDataHandler should update
-     *
-     * @since 1.0.0
      * @return bool
-     *
      */
     public function _updateIndex()
     {
         return $this->DataProvider->update( 'kb_kontentblocks', $this->index );
-
-
     }
 
     /**
@@ -286,7 +271,6 @@ class ModuleStorage implements \Countable
     public function getModules()
     {
         return $this->modules;
-
     }
 
 
@@ -310,8 +294,7 @@ class ModuleStorage implements \Countable
 
     /**
      * Returns an array with the instance_id as key
-     * @return type
-     * @since 1.0.0
+     * @return array
      */
     public function cleanIndex()
     {
@@ -336,8 +319,6 @@ class ModuleStorage implements \Countable
     /**
      * Prepare and return the data to backup
      * @return array
-     * @TODO: add filter
-     * @since 1.0.0
      */
     public function backup()
     {
@@ -350,7 +331,7 @@ class ModuleStorage implements \Countable
 
     /**
      * Delete all module-related data
-     * @since 1.0.0
+     * @TODO use array_keys
      */
     public function deleteAll()
     {
@@ -363,10 +344,7 @@ class ModuleStorage implements \Countable
 
     /**
      * Handle data restore
-     *
      * @param $data
-     *
-     * @since 1.0.0
      */
     public function restoreBackup( $data )
     {
@@ -415,6 +393,12 @@ class ModuleStorage implements \Countable
         return 0;
     }
 
+    /**
+     * Test if first char is an underscore
+     * KB meta data should be hidden from custom fields meta box
+     * @param $string
+     * @return string
+     */
     private function underscorePrefix( $string )
     {
         if ($string[0] !== '_') {
