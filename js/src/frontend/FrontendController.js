@@ -130,7 +130,7 @@ KB.App = function () {
 
     // create models from already attached modules
     _.each(KB.payload.Modules, function (module) {
-      KB.ObjectProxy.add(KB.Modules.add(module));
+      KB.Modules.add(module);
     });
 
     // @TODO events:refactor
@@ -149,6 +149,8 @@ KB.App = function () {
    */
   function createModuleViews(ModuleModel) {
     var ModuleView;
+
+    KB.ObjectProxy.add(ModuleModel);
     // create view
     ModuleView = KB.Views.Modules.add(ModuleModel.get('mid'), new KB.Backbone.ModuleView({
       model: ModuleModel,

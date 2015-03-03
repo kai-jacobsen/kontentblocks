@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-02 */
+/*! Kontentblocks DevVersion 2015-03-03 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -275,13 +275,15 @@ KB.Backbone.AreaView = Backbone.View.extend({
                     module.create(ui);
                 },
                 beforeStop: function(e, ui) {
+                    that.Layout.applyClasses();
+                    jQuery(".ignore", ui.helper).removeClass("ignore");
+                },
+                stop: function(e, ui) {
                     var serializedData = {};
                     that.isSorting = false;
                     serializedData[that.model.get("id")] = that.$el.sortable("serialize", {
                         attribute: "rel"
                     });
-                    jQuery(".ignore", ui.helper).removeClass("ignore");
-                    that.Layout.applyClasses();
                     return KB.Ajax.send({
                         action: "resortModules",
                         data: serializedData,
@@ -1636,8 +1638,11 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
         var that = this, model;
         payload.ui.helper.replaceWith(res.data.html);
         model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
+        model.Area.View.Layout.applyClasses();
         KB.Backbone.AreaView.prototype.resort(this.model.get("area"));
-        KB.Payload.parseAdditionalJSON(res.data.json);
+        setTimeout(function() {
+            KB.Payload.parseAdditionalJSON(res.data.json);
+        }, 250);
     }
 });
 
@@ -2296,13 +2301,14 @@ KB.App = function() {
             KB.ObjectProxy.add(KB.Areas.add(area));
         });
         _.each(KB.payload.Modules, function(module) {
-            KB.ObjectProxy.add(KB.Modules.add(module));
+            KB.Modules.add(module);
         });
         KB.trigger("kb:moduleControlsAdded");
         KB.Events.trigger("KB.frontend.init");
     }
     function createModuleViews(ModuleModel) {
         var ModuleView;
+        KB.ObjectProxy.add(ModuleModel);
         ModuleView = KB.Views.Modules.add(ModuleModel.get("mid"), new KB.Backbone.ModuleView({
             model: ModuleModel,
             el: "#" + ModuleModel.get("mid")

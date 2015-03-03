@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-02 */
+/*! Kontentblocks DevVersion 2015-03-03 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -162,6 +162,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     idAttribute: "uid",
     initialize: function() {
         var module = this.get("fieldId");
+        console.log("module:", module);
         if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) {
             this.set("ModuleModel", this.ModuleModel);
             this.setData();

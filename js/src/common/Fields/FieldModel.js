@@ -2,6 +2,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
     var module = this.get('fieldId');
+    console.log('module:', module);
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) {
       this.set('ModuleModel', this.ModuleModel);
       this.setData();

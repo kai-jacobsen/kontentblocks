@@ -86,15 +86,15 @@ KB.Backbone.AreaView = Backbone.View.extend({
             module.create(ui);
           },
           beforeStop: function (e, ui) {
+            that.Layout.applyClasses();
+            jQuery('.ignore', ui.helper).removeClass('ignore');
+          },
+          stop: function(e, ui){
             var serializedData = {};
             that.isSorting = false;
             serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
               attribute: 'rel'
             });
-
-            jQuery('.ignore', ui.helper).removeClass('ignore');
-            that.Layout.applyClasses();
-
             return KB.Ajax.send({
               action: 'resortModules',
               data: serializedData,

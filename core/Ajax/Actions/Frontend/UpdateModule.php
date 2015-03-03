@@ -50,7 +50,7 @@ class UpdateModule implements AjaxActionInterface
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         if ($postdata->update) {
-            $Environment->getStorage()->saveModule( $Module->getId(), wp_slash( $mergedData ) );
+            $Environment->getStorage()->saveModule( $Module->getId(), $mergedData  );
         }
         $Module->setModuleData( $mergedData );
         do_action( 'kb.module.save', $Module, $mergedData );

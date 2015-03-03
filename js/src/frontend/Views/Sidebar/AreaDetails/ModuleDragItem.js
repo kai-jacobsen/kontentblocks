@@ -75,7 +75,11 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
     payload.ui.helper.replaceWith(res.data.html);
     model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
     //this.model.get('area').View.attachModuleView(model.view);
+    // @TODO important stopped here
+    model.Area.View.Layout.applyClasses();
     KB.Backbone.AreaView.prototype.resort(this.model.get('area'));
-    KB.Payload.parseAdditionalJSON(res.data.json);
+    setTimeout(function(){
+      KB.Payload.parseAdditionalJSON(res.data.json);
+    },250);
   }
 });
