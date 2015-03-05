@@ -134,6 +134,8 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       that.reload();
     });
 
+    this.listenTo(this.model, 'data.updated', this.preview);
+
     ///**
     // * When save is clicked on the actual DOM View model
     // * the modal needs to be reloaded in order to stay synced

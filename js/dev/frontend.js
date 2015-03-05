@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-03 */
+/*! Kontentblocks DevVersion 2015-03-05 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -20,6 +20,17 @@ KB.Backbone.ModuleModel = Backbone.Model.extend({
     },
     dispose: function() {
         this.stopListening();
+    }
+});
+
+KB.Backbone.PanelModel = Backbone.Model.extend({
+    idAttribute: "baseId",
+    initialize: function() {
+        this.type = "panel";
+        this.listenTo(this, "change:moduleData", this.change);
+    },
+    change: function() {
+        console.log("change", this);
     }
 });
 
@@ -525,6 +536,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             that.serialize(false, true);
             that.reload();
         });
+        this.listenTo(this.model, "data.updated", this.preview);
         this.listenTo(this.ModuleView.model, "remove", this.destroy);
     },
     reload: function() {
@@ -1311,17 +1323,25 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     viewStack: [],
     initialize: function() {
         this.render();
+        this.states = {};
         var controlsTpl = KB.Templates.render("frontend/sidebar/sidebar-nav", {});
         this.$navControls = jQuery(controlsTpl);
         this.bindHandlers();
-        this.AreaList = new KB.Backbone.Sidebar.AreaOverview.AreaOverviewController({
+        this.states["AreaList"] = new KB.Backbone.Sidebar.AreaOverview.AreaOverviewController({
+            controller: this
+        });
+        this.states["PanelList"] = new KB.Backbone.Sidebar.PanelOverview.PanelOverviewController({
             controller: this
         });
         this.CategoryFilter = new KB.Backbone.Sidebar.CategoryFilter();
-        this.setView(this.AreaList);
+        this.RootView = new KB.Backbone.Sidebar.RootView({
+            controller: this
+        });
+        this.setView(this.RootView);
     },
     events: {
-        "click .kb-js-sidebar-nav-back": "rootView"
+        "click .kb-js-sidebar-nav-back": "rootView",
+        "click [data-kb-action]": "actionHandler"
     },
     render: function() {
         this.$el = jQuery('<div class="kb-sidebar-wrap" style="display: none;"></div>').appendTo("body");
@@ -1329,6 +1349,7 @@ KB.Backbone.SidebarView = Backbone.View.extend({
         this.Header = new KB.Backbone.Sidebar.Header({});
         this.$el.append(this.Header.render());
         this.$container = jQuery('<div class="kb-sidebar-wrap__container"></div>').appendTo(this.$el);
+        this.$extension = jQuery('<div class="kb-sidebar-extension" style="display: none;"></div>').appendTo(this.$el);
         this.setLayout();
         var ls = KB.Util.stex.get("kb-sidebar-visible");
         if (ls) {
@@ -1346,7 +1367,23 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     },
     setLayout: function() {
         var h = jQuery(window).height();
+        var w = this.$el.width();
         this.$el.height(h);
+        this.$extension.height(h);
+    },
+    setExtendedView: function(View) {
+        if (this.currentExtendedView) {
+            this.currentExtendedView.$el.detach();
+        }
+        this.currentExtendedView = View;
+        this.$extension.html(View.render());
+        this.$extension.show();
+    },
+    closeExtendedView: function() {
+        this.currentExtendedView.$el.detach();
+        this.currentExtendedView = null;
+        this.$extension.html("");
+        this.$extension.hide();
     },
     setView: function(View) {
         if (this.currentView) {
@@ -1365,7 +1402,7 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     },
     rootView: function() {
         this.viewStack = [];
-        this.setView(this.AreaList);
+        this.setView(this.RootView);
     },
     handleNavigationControls: function() {
         if (this.viewStack.length >= 2) {
@@ -1379,6 +1416,12 @@ KB.Backbone.SidebarView = Backbone.View.extend({
         this.$el.fadeToggle();
         jQuery("body").toggleClass("kb-sidebar-visible");
         KB.Util.stex.set("kb-sidebar-visible", this.visible, 1e3 * 60 * 60);
+    },
+    actionHandler: function(event) {
+        var action = jQuery(event.currentTarget).data("kb-action");
+        if (action && this.states[action]) {
+            this.setView(this.states[action]);
+        }
     }
 });
 
@@ -1401,8 +1444,8 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
         this.renderCategories();
     },
     events: {
-        "click .kb-sidebar-area-details__cog": "toggle",
-        "click .kb-sidebar-area-details__update": "updateAreaSettings"
+        "click .kb-sidebar-action--cog": "toggle",
+        "click .kb-sidebar-action--update": "updateAreaSettings"
     },
     bindHandlers: function() {
         this.listenTo(this.model, "change:layout", this.handleLayoutChange);
@@ -1413,7 +1456,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     renderHeader: function() {
         this.$el.append(KB.Templates.render("frontend/sidebar/area-details-header", this.model.toJSON()));
         this.$settingsContainer = this.$el.find(".kb-sidebar-area-details__settings");
-        this.$updateHandle = this.$el.find(".kb-sidebar-area-details__update").hide();
+        this.$updateHandle = this.$el.find(".kb-sidebar-action--update").hide();
     },
     renderCategories: function() {
         var that = this;
@@ -1481,7 +1524,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
         var options = "";
         var layouts = this.model.get("layouts");
         if (layouts && layouts.length > 0) {
-            this.$el.prepend('<div class="kb-sidebar-area-details__subheader">Layouts</div>');
+            this.$el.prepend('<div class="kb-sidebar__subheader">Layouts</div>');
             _.each(this.prepareLayouts(layouts), function(item) {
                 options += KB.Templates.render("frontend/area-layout-item", {
                     item: item
@@ -1768,6 +1811,12 @@ KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
             this.activeList = null;
             this.setActiveList(AreaView);
         }
+    },
+    renderRootItem: function() {
+        return this.sidebarController.$container.append(KB.Templates.render("frontend/sidebar/root-item", {
+            text: "Areas",
+            id: "AreaList"
+        }));
     }
 });
 
@@ -1836,6 +1885,147 @@ KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
     }
 });
 
+KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__option-panel-wrap",
+    initialize: function(options) {
+        this.Controller = options.controller;
+        this.parentView = options.parentView;
+        this.$el.append(KB.Templates.render("frontend/sidebar/option-panel-details", this.model.toJSON()));
+        this.$form = this.$(".kb-sidebar__form-container");
+    },
+    events: {
+        "click .kb-sidebar-action--update": "save",
+        "click .kb-sidebar-action--close": "close"
+    },
+    render: function() {
+        this.loadForm();
+        return this.$el;
+    },
+    save: function() {
+        var that = this;
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                action: "saveOptionPanelForm",
+                data: that.$form.serializeJSON(),
+                panel: that.model.toJSON(),
+                _ajax_nonce: KB.Config.getNonce("update")
+            },
+            type: "POST",
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+            },
+            error: function() {}
+        });
+    },
+    loadForm: function() {
+        var that = this;
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                action: "getOptionPanelForm",
+                panel: that.model.toJSON(),
+                _ajax_nonce: KB.Config.getNonce("read")
+            },
+            type: "POST",
+            dataType: "json",
+            success: function(res) {
+                that.model.trigger("modal.serialize.before");
+                that.$form.html(res.data.html);
+                KB.Payload.parseAdditionalJSON(res.data.json);
+                that.model.trigger("modal.serialize");
+                KB.Ui.initTabs(that.$el);
+            },
+            error: function() {}
+        });
+    },
+    close: function() {
+        this.model.trigger("modal.serialize.before");
+        this.parentView.closeDetails();
+    }
+});
+
+KB.Backbone.OptionPanelView = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__panel-item",
+    initialize: function(options) {
+        this.$parent = options.$parent;
+        this.Controller = options.controller;
+        this.render();
+    },
+    events: {
+        click: "setupFormView"
+    },
+    render: function() {
+        this.$el.append(KB.Templates.render("frontend/sidebar/panel-list-item", this.model.toJSON()));
+        return this.$parent.append(this.$el);
+    },
+    setupFormView: function() {
+        this.FormView = new KB.Backbone.Sidebar.OptionsPanelFormView({
+            model: this.model,
+            controller: this.Controller,
+            parentView: this
+        });
+        this.Controller.sidebarController.setExtendedView(this.FormView);
+    },
+    closeDetails: function() {
+        this.Controller.sidebarController.closeExtendedView();
+    }
+});
+
+KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar-main-panel panel-view",
+    Panels: new Backbone.Collection(),
+    PanelViews: {
+        option: {},
+        page: {}
+    },
+    activeList: null,
+    initialize: function(options) {
+        this.sidebarController = options.controller;
+        this.render();
+        this.bindHandlers();
+    },
+    render: function() {
+        return this.$el;
+    },
+    bindHandlers: function() {
+        this.listenTo(KB.Panels, "add", this.createPanelItem);
+    },
+    createPanelItem: function(model) {
+        if (!model.get("args").frontend) {
+            return;
+        }
+        if (model.get("type") && model.get("type") === "option") {
+            this.PanelViews.option[model.get("baseId")] = new KB.Backbone.OptionPanelView({
+                model: model,
+                $parent: this.$el,
+                controller: this
+            });
+        }
+    },
+    renderRootItem: function() {
+        return this.sidebarController.$container.append(KB.Templates.render("frontend/sidebar/root-item", {
+            text: "Panels",
+            id: "PanelList"
+        }));
+    }
+});
+
+KB.Backbone.Sidebar.RootView = Backbone.View.extend({
+    initialize: function(options) {
+        this.Controller = options.controller;
+    },
+    render: function() {
+        _.each(this.Controller.states, function(state) {
+            state.renderRootItem();
+        });
+    }
+});
+
 KB.Backbone.Sidebar.Header = Backbone.View.extend({
     tagName: "div",
     className: "kb-sidebar__header",
@@ -1885,13 +2075,11 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     initialize: function() {
         this.mode = this.model.get("mode");
         this.defaultState = this.model.get("state") || "replace-image";
-        this.render();
     },
     events: {
         click: "openFrame"
     },
     render: function() {
-        this.$el.removeAttr("data-kbfuid");
         this.$el.addClass("kb-inline-imageedit-attached");
         this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
         this.$el.css("min-height", "200px");
@@ -2004,7 +2192,6 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
     },
     render: function() {
         this.id = this.el.id;
-        this.$el.removeAttr("data-kbfuid");
     },
     derender: function() {
         this.deactivate();
@@ -2254,7 +2441,8 @@ KB.currentArea = {};
 KB.Views = {
     Modules: new KB.ViewsCollection(),
     Areas: new KB.ViewsCollection(),
-    Context: new KB.ViewsCollection()
+    Context: new KB.ViewsCollection(),
+    Panels: new KB.ViewsCollection()
 };
 
 KB.Modules = new Backbone.Collection([], {
@@ -2263,6 +2451,10 @@ KB.Modules = new Backbone.Collection([], {
 
 KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
+});
+
+KB.Panels = new Backbone.Collection([], {
+    model: KB.Backbone.PanelModel
 });
 
 KB.ObjectProxy = new Backbone.Collection();
@@ -2278,6 +2470,7 @@ KB.App = function() {
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);
         KB.Modules.on("remove", removeModule);
+        KB.Panels.on("add", createPanelViews);
         addViews();
         KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
         KB.FieldConfigs.add(_.toArray(KB.payload.Fields));
@@ -2303,6 +2496,9 @@ KB.App = function() {
         _.each(KB.payload.Modules, function(module) {
             KB.Modules.add(module);
         });
+        _.each(KB.payload.Panels, function(panel) {
+            KB.Panels.add(panel);
+        });
         KB.trigger("kb:moduleControlsAdded");
         KB.Events.trigger("KB.frontend.init");
     }
@@ -2314,6 +2510,10 @@ KB.App = function() {
             el: "#" + ModuleModel.get("mid")
         }));
         KB.Ui.initTabs();
+    }
+    function createPanelViews(PanelModel) {
+        console.log(PanelModel);
+        KB.ObjectProxy.add(PanelModel);
     }
     function createAreaViews(AreaModel) {
         KB.Views.Areas.add(AreaModel.get("id"), new KB.Backbone.AreaView({

@@ -21,7 +21,7 @@ KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
     this.listenTo(this.Areas, 'add', this.createAreaItem);
   },
   attachAreaView: function (view) {
-    if (view.el){
+    if (view.el) {
       this.Areas.add(view.model);
     }
   },
@@ -61,5 +61,11 @@ KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
       this.setActiveList(AreaView);
     }
 
+  },
+  renderRootItem: function () {
+    return this.sidebarController.$container.append(KB.Templates.render('frontend/sidebar/root-item', {
+      text: 'Areas',
+      id: 'AreaList'
+    }))
   }
 });

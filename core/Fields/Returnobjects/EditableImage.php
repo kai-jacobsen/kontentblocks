@@ -141,7 +141,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function html()
     {
-
         // adds necessary attributes to enable inline edit
         $this->handleLoggedInUsers();
         $this->prepareSrc( null );

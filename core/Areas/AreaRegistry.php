@@ -94,11 +94,12 @@ class AreaRegistry
             foreach ($areas as $areapost) {
                 $Storage = new ModuleStorage( $areapost->ID );
                 $area = $Storage->getDataProvider()->get( '_area' );
-                $area['parent_id'] = $areapost->ID;
+                var_dump($area);
+
+                $area->parentId = $areapost->ID;
                 $dynamicAreas[] = $area;
             }
         }
-
         if (!empty( $dynamicAreas )) {
             foreach ($dynamicAreas as $area) {
                 $this->addArea( $area, false );
@@ -112,7 +113,7 @@ class AreaRegistry
 
     /**
      * Adds an area to the registry
-     * Merges default paramswith provided params
+     * Merges default params with provided params
      * $Manual indicates if the area has been registered by code (true) or
      * was added through the admin interface (false)
      *
@@ -124,7 +125,6 @@ class AreaRegistry
      */
     public function addArea( $args, $manual = true )
     {
-
         if (!empty( $args['id'] )) {
             $args['id'] = sanitize_title( $args['id'] );
         }

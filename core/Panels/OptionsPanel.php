@@ -25,12 +25,14 @@ abstract class OptionsPanel extends AbstractPanel
      */
     protected $baseId;
 
+    protected $args;
 
     protected $menu;
 
     protected $menuUri;
 
     public $DataProvider;
+
     /**
      * Custom Field Manager Instance for Panels
      * @var PanelFieldController
@@ -52,24 +54,25 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function __construct( $args )
     {
-        $args = $this->parseDefaults( $args );
+        $this->args = $this->parseDefaults( $args );
 
         if (is_null( $args['baseId'] )) {
             throw new \Exception( 'MUST provide a base id' );
         }
-
         $this->setupArgs( $args );
-        $this->DataProvider = new SerOptionsDataProvider( $this->baseId );
 
         add_action( 'admin_init', array( $this, 'observeSaveRequest' ) );
         add_action( 'admin_menu', array( $this, 'setupMenu' ) );
+        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+
     }
 
     public function parseDefaults( $args )
     {
         $defaults = array(
             'baseId' => null,
-            'menu' => false
+            'menu' => false,
+            'frontend' => false
         );
 
         return wp_parse_args( $args, $defaults );
@@ -162,6 +165,11 @@ abstract class OptionsPanel extends AbstractPanel
         exit;
     }
 
+    public function setData( $data )
+    {
+        $this->data = $data;
+    }
+
     /**
      * Setup panel related meta data
      *
@@ -170,12 +178,12 @@ abstract class OptionsPanel extends AbstractPanel
      * @param null $postId
      * @return mixed
      */
-    protected function setupData( $postId = null )
+    public function setupData( $postId = null )
     {
         if (is_null( $this->data )) {
-            $this->data = get_option( $this->baseId, array() );
+            $this->DataProvider = new SerOptionsDataProvider( $this->baseId );
+            $this->data = $this->DataProvider->export();
         }
-
         return $this->data;
     }
 
@@ -192,13 +200,17 @@ abstract class OptionsPanel extends AbstractPanel
 
         Utilities::hiddenEditor();
 
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->DataProvider->export(), $this );
 
         echo $this->beforeForm();
-        echo $this->fields( $this->FieldController )->renderFields();
+        echo $this->renderFields();
         echo $this->afterForm();
-        $this->toJSON();
 
+    }
+
+    public function renderFields()
+    {
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
+        return $this->fields( $this->FieldController )->renderFields();
     }
 
     /**
@@ -234,18 +246,11 @@ abstract class OptionsPanel extends AbstractPanel
     /**
      * Manually set up fielddata
      * Makes it possible to get the Panel from the registry, and use it as data container
-     * @return $this
+     * @return OptionsPanel
      */
     public function setup()
     {
-
-        if (is_null( $this->FieldController )) {
-            $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-        }
-        $this->fields( $this->FieldController )->setup( $this->DataProvider->export() );
-        $this->data = $this->getData();
-        $this->toJSON();
-
+//        $this->toJSON();
         return $this;
 
     }
@@ -258,9 +263,9 @@ abstract class OptionsPanel extends AbstractPanel
     public function getData( $postid = null )
     {
         if (is_null( $this->FieldController )) {
-            $this->setup();
+            $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
+            $this->fields( $this->FieldController )->setup( $this->setupData() );
         }
-
         return $this->FieldController->prepareDataAndGet();
     }
 
@@ -281,7 +286,6 @@ abstract class OptionsPanel extends AbstractPanel
         }
 
         return $default;
-
     }
 
     public function getMenuLink()
@@ -296,8 +300,10 @@ abstract class OptionsPanel extends AbstractPanel
         $args = array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
-            'moduleData' => $this->DataProvider->export(),
-            'area' => '_internal'
+            'moduleData' => $this->setupData(),
+            'area' => '_internal',
+            'type' => 'option',
+            'args' => $this->args
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }

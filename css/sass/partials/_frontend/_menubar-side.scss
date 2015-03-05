@@ -1,4 +1,4 @@
-body.admin-bar .kb-sidebar-wrap {
+body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   top: 32px;
 }
 
@@ -14,29 +14,7 @@ body.admin-bar .kb-sidebar-wrap {
   font-family: 'Open Sans';
 }
 
-.kb-sidebar-wrap--toggle {
-  position: fixed;
-  width: 40px;
-  height: 40px;
-  background-color: #3b5963;
-  left: 0;
-  bottom: 0;
-  border-top-right-radius: 30px;
-  box-shadow: 1px 1px 3px #333;
 
-  &::before {
-    content: '\f445';
-    position: absolute;
-    color: #fff;
-    font-family: 'genericons' !important;
-    font-size: 20px;
-    top: 8px;
-    left: 7px;
-    font-weight: 100;
-    cursor: pointer;
-  }
-
-}
 
 .kb-sidebar__nav-controls {
   background-color: #444;
@@ -172,40 +150,6 @@ body.admin-bar .kb-sidebar-wrap {
   padding: 6px 8px;
   position: relative;
 
-  .kb-sidebar-area-details__cog {
-    display: block;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    right: 10px;
-    top: 20px;
-    font-family: dashicons;
-    color: #fff;
-    font-weight: 100;
-    cursor: pointer;
-
-    & > .dashicons {
-      font-size: 18px;
-    }
-  }
-
-  .kb-sidebar-area-details__update {
-    display: block;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    right: 35px;
-    top: 20px;
-    font-family: dashicons;
-    color: #fff;
-    font-weight: 100;
-    cursor: pointer;
-
-    & > .dashicons {
-      font-size: 18px;
-    }
-  }
-
   span {
     display: block;
     font-size: 12px;
@@ -213,7 +157,54 @@ body.admin-bar .kb-sidebar-wrap {
   }
 }
 
-.kb-sidebar-area-details__subheader {
+.kb-sidebar-action--cog {
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 5px;
+  top: 5px;
+  font-family: dashicons;
+  color: #fff;
+  font-weight: 100;
+  cursor: pointer;
+
+  & > .dashicons {
+    font-size: 18px;
+  }
+}
+
+.kb-sidebar-action--update {
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 30px;
+  top: 5px;
+  font-family: dashicons;
+  color: #fff;
+  font-weight: 100;
+  cursor: pointer;
+
+  & > .dashicons {
+    font-size: 18px;
+  }
+}
+
+.kb-sidebar-action--close{
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  font-family: genericons;
+  font-size: 12px !important;
+  right: 5px;
+  top: 9px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.kb-sidebar__subheader {
   font-size: 14px;
   padding: 4px 8px;
   background-color: darken(#3b5963, 10%);
@@ -256,6 +247,24 @@ body.admin-bar .kb-sidebar-wrap {
   }
 }
 
+.kb-sidebar__item{
+  padding: 10px;
+  font-size: 13px !important;
+  background-color: #fcfcfc;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.kb-sidebar__item--root{
+  .dashicons{
+    position: absolute;
+    right: 8px;
+  }
+}
+
+/*------------------------------------*\
+    Category Items / part of Area Details
+\*------------------------------------*/
 .kb-sidebar__category-item {
 
   .kb-sidebar__category-item__title {
@@ -292,6 +301,10 @@ body.admin-bar .kb-sidebar-wrap {
   }
 }
 
+
+/*------------------------------------*\
+    Drag & Drop Helper
+\*------------------------------------*/
 .kb-sidebar-drop-helper, .ui-draggable-dragging {
   width: 300px;
   height: 50px;
@@ -300,6 +313,54 @@ body.admin-bar .kb-sidebar-wrap {
   border: 1px dotted #333;
 }
 
+
+
+/*------------------------------------*\
+    Panel Details / Overlay
+\*------------------------------------*/
+
+.kb-sidebar-extension{
+  width: 450px;
+  background-color: #fff;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  box-shadow: 0px 1px 8px #333;
+  font-family: 'Open Sans';
+}
+
+
+/*------------------------------------*\
+    Toggle Icon
+\*------------------------------------*/
+
+.kb-sidebar-wrap--toggle {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  background-color: #3b5963;
+  left: 0;
+  bottom: 0;
+  border-top-right-radius: 30px;
+  box-shadow: 1px 1px 3px #333;
+
+  &::before {
+    content: '\f445';
+    position: absolute;
+    color: #fff;
+    font-family: 'genericons' !important;
+    font-size: 20px;
+    top: 8px;
+    left: 7px;
+    font-weight: 100;
+    cursor: pointer;
+  }
+
+}
+
+/*------------------------------------*\
+    FX
+\*------------------------------------*/
 .kb-fx-button {
   &::after {
     content: '';

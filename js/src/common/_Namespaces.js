@@ -7,7 +7,8 @@ KB.Backbone = {
   Common: {},
   Sidebar: {
     AreaOverview: {},
-    AreaDetails: {}
+    AreaDetails: {},
+    PanelOverview: {}
   },
   Inline: {}
 };

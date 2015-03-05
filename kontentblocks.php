@@ -229,7 +229,6 @@ Class Kontentblocks
             require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         }
         // Kontentblocks autloader
-//        require_once dirname( __FILE__ ) . '/Autoloader.php';
         // Public API
         require_once dirname( __FILE__ ) . '/includes/wp-api.php';
         require_once dirname( __FILE__ ) . '/includes/kb-api.php';
@@ -250,6 +249,10 @@ Class Kontentblocks
     public static function onActivation()
     {
 
+        if (file_exists( dirname( __FILE__ ) ) . '/vendor/autoload.php') {
+            require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        }
+
         if (!is_dir( get_template_directory() . '/module-templates' )) {
             mkdir( get_template_directory() . '/module-templates', 0775, true );
         }
@@ -260,7 +263,7 @@ Class Kontentblocks
             }
         }
 
-        include_once 'Autoloader.php';
+
         Capabilities::setup();
 
 

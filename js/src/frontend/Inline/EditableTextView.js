@@ -10,7 +10,6 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
   },
   render: function(){
     this.id = this.el.id;
-    this.$el.removeAttr('data-kbfuid');
   },
   derender: function(){
     this.deactivate();

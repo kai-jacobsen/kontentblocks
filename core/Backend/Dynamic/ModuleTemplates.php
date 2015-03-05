@@ -513,7 +513,7 @@ class ModuleTemplates
             array(
                 'id' => 'module-template',
                 'internal' => true,
-                'dynamic' => true
+                'dynamic' => false
             )
         );
     }

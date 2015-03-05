@@ -24,7 +24,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
     var options = '';
     var layouts = this.model.get('layouts');
     if (layouts && layouts.length > 0) {
-      this.$el.prepend('<div class="kb-sidebar-area-details__subheader">Layouts</div>');
+      this.$el.prepend('<div class="kb-sidebar__subheader">Layouts</div>');
       _.each(this.prepareLayouts(layouts), function (item) {
         options += KB.Templates.render('frontend/area-layout-item', {
           item: item

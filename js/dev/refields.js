@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-03 */
+/*! Kontentblocks DevVersion 2015-03-05 */
 KB.Fields.BaseView = Backbone.View.extend({
     rerender: function() {
         this.render();
@@ -1013,16 +1013,16 @@ KB.Fields.registerObject("image", KB.Fields.BaseView.extend({
                     id: id,
                     _ajax_nonce: KB.Config.getNonce("read")
                 },
-                type: "GET",
+                type: "POST",
                 dataType: "json",
                 success: function(res) {
-                    that.$container.html('<img src="' + res + '" >');
+                    that.$container.html('<img src="' + res.data.src + '" >');
                 },
                 error: function() {}
             });
         }
         this.$saveId.val(attachment.get("id"));
-        KB.Events.trigger("modal.preview");
+        this.model.get("ModuleModel").trigger("data.updated");
     },
     prepareValue: function(attachment) {
         return {

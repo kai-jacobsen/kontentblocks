@@ -2,7 +2,6 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
     var module = this.get('fieldId');
-    console.log('module:', module);
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) {
       this.set('ModuleModel', this.ModuleModel);
       this.setData();
@@ -20,7 +19,6 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind);
   },
   setupType: function () {
-
     if (obj = this.getType()) {
       this.FieldView = new obj({
         el: this.getElement(),
@@ -33,6 +31,13 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   },
   getType: function () {
     var type = this.get('type');
+    if (this.ModuleModel.type === 'panel' && type === 'EditableImage'){
+      return false;
+    }
+
+    if (this.ModuleModel.type === 'panel' && type === 'EditableText'){
+      return false;
+    }
 
     if (!KB.Checks.userCan('edit_kontentblocks')) {
       return false;

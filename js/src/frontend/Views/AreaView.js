@@ -38,7 +38,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
     this.attachedModuleViews[moduleModel.get('mid')] = moduleModel; // add module
     this.listenTo(moduleModel, 'change:area', this.removeModule); // add listener
 
-    if (this.getNumberOfModules() > 0){
+    if (this.getNumberOfModules() > 0) {
       this.$el.removeClass('kb-area__empty');
     }
     this.trigger('kb.module.created', moduleModel);
@@ -66,7 +66,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
             //ui.placeholder.width('100%');
             that.isSorting = true;
 
-            if (ui.helper.hasClass('ui-draggable-dragging')){
+            if (ui.helper.hasClass('ui-draggable-dragging')) {
               ui.helper.addClass('kb-wrap');
             }
 
@@ -89,7 +89,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
             that.Layout.applyClasses();
             jQuery('.ignore', ui.helper).removeClass('ignore');
           },
-          stop: function(e, ui){
+          stop: function (e, ui) {
             var serializedData = {};
             that.isSorting = false;
             serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
@@ -108,7 +108,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
             that.Layout.applyClasses();
             that.Layout.render(ui);
           },
-          over: function(ui){
+          over: function (ui) {
             that.Layout.applyClasses();
             that.Layout.render(ui);
           }
@@ -169,7 +169,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
     if (this.attachedModuleViews[id]) {
       delete this.attachedModuleViews[id];
     }
-    if (this.getNumberOfModules() < 0){
+    if (this.getNumberOfModules() < 0) {
       this.$el.addClass('kb-area__empty');
     }
   },

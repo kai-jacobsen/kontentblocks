@@ -119,10 +119,10 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
           id: id,
           _ajax_nonce: KB.Config.getNonce('read')
         },
-        type: 'GET',
+        type: 'POST',
         dataType: 'json',
         success: function (res) {
-          that.$container.html('<img src="' + res + '" >');
+          that.$container.html('<img src="' + res.data.src + '" >');
         },
         error: function () {
 
@@ -130,7 +130,8 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
       });
     }
     this.$saveId.val(attachment.get('id'));
-    KB.Events.trigger('modal.preview');
+    //KB.Events.trigger('modal.preview');
+    this.model.get('ModuleModel').trigger('data.updated');
   },
   prepareValue: function (attachment) {
     return {

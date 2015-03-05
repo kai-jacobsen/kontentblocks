@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-03 */
+/*! Kontentblocks DevVersion 2015-03-05 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -10,7 +10,8 @@ KB.Backbone = {
     Common: {},
     Sidebar: {
         AreaOverview: {},
-        AreaDetails: {}
+        AreaDetails: {},
+        PanelOverview: {}
     },
     Inline: {}
 };
@@ -162,7 +163,6 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     idAttribute: "uid",
     initialize: function() {
         var module = this.get("fieldId");
-        console.log("module:", module);
         if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) {
             this.set("ModuleModel", this.ModuleModel);
             this.setData();
@@ -192,6 +192,12 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     },
     getType: function() {
         var type = this.get("type");
+        if (this.ModuleModel.type === "panel" && type === "EditableImage") {
+            return false;
+        }
+        if (this.ModuleModel.type === "panel" && type === "EditableText") {
+            return false;
+        }
         if (!KB.Checks.userCan("edit_kontentblocks")) {
             return false;
         }

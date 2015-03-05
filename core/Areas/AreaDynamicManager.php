@@ -79,8 +79,8 @@ class AreaDynamicManager
         foreach ($this->newAreas as $area) {
             $post = array(
                 'post_type' => 'kb-dyar',
-                'post_title' => $area['name'],
-                'post_name' => $area['id'],
+                'post_title' => $area->name,
+                'post_name' => $area->id,
                 'post_status' => 'publish'
             );
             $id = wp_insert_post( $post );
@@ -99,7 +99,7 @@ class AreaDynamicManager
                 $trans = array();
             }
 
-            $trans[] = $area['id'];
+            $trans[] = $area->id;
             set_transient( 'kb_dynamic_areas', $trans, 60 * 60 );
 
         }

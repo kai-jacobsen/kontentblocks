@@ -18,8 +18,8 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     this.renderCategories();
   },
   events: {
-    'click .kb-sidebar-area-details__cog': 'toggle',
-    'click .kb-sidebar-area-details__update': 'updateAreaSettings'
+    'click .kb-sidebar-action--cog': 'toggle',
+    'click .kb-sidebar-action--update': 'updateAreaSettings'
   },
   bindHandlers: function () {
     this.listenTo(this.model, 'change:layout', this.handleLayoutChange);
@@ -30,7 +30,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
   renderHeader: function () {
     this.$el.append(KB.Templates.render('frontend/sidebar/area-details-header', this.model.toJSON()));
     this.$settingsContainer = this.$el.find('.kb-sidebar-area-details__settings');
-    this.$updateHandle = this.$el.find('.kb-sidebar-area-details__update').hide();
+    this.$updateHandle = this.$el.find('.kb-sidebar-action--update').hide();
   },
   renderCategories: function () {
     var that = this;

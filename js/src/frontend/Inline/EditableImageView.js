@@ -2,13 +2,11 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
   initialize: function () {
     this.mode = this.model.get('mode');
     this.defaultState = this.model.get('state') || 'replace-image';
-    this.render();
   },
   events: {
     'click': 'openFrame'
   },
   render: function(){
-    this.$el.removeAttr('data-kbfuid');
     this.$el.addClass('kb-inline-imageedit-attached');
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
     this.$el.css('min-height', '200px');

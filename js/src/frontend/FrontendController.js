@@ -25,7 +25,8 @@ KB.currentArea = {};
 KB.Views = {
   Modules: new KB.ViewsCollection(),
   Areas: new KB.ViewsCollection(),
-  Context: new KB.ViewsCollection()
+  Context: new KB.ViewsCollection(),
+  Panels: new KB.ViewsCollection()
 };
 
 
@@ -43,6 +44,10 @@ KB.Modules = new Backbone.Collection([], {
  */
 KB.Areas = new Backbone.Collection([], {
   model: KB.Backbone.AreaModel
+});
+
+KB.Panels = new Backbone.Collection([], {
+  model: KB.Backbone.PanelModel
 });
 
 KB.ObjectProxy = new Backbone.Collection();
@@ -75,7 +80,7 @@ KB.App = function () {
     KB.Modules.on('add', createModuleViews);
     KB.Areas.on('add', createAreaViews);
     KB.Modules.on('remove', removeModule);
-
+    KB.Panels.on('add', createPanelViews);
     // Create views
     addViews();
 
@@ -133,6 +138,11 @@ KB.App = function () {
       KB.Modules.add(module);
     });
 
+    // create models from already attached modules
+    _.each(KB.payload.Panels, function (panel) {
+      KB.Panels.add(panel);
+    });
+
     // @TODO events:refactor
     KB.trigger('kb:moduleControlsAdded');
 
@@ -158,6 +168,13 @@ KB.App = function () {
     }));
     //ModuleView.$el.data('ModuleView', ModuleView);
     KB.Ui.initTabs();
+  }
+
+  function createPanelViews(PanelModel) {
+    console.log(PanelModel);
+    KB.ObjectProxy.add(PanelModel);
+    // no related frontend view
+    // leave this out for now
   }
 
 
