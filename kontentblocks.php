@@ -43,7 +43,7 @@ use Reframe\Autoloader;
 Class Kontentblocks
 {
 
-    const VERSION = '1.0.0alpha';
+    const VERSION = '0.1.0';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;
@@ -225,7 +225,7 @@ Class Kontentblocks
         define( 'KONTENTLOCK', false );
 
         // Composer autoloader, depends on composer setup
-        if (file_exists( dirname( __FILE__ ) ) . '/vendor/autoload.php') {
+        if (file_exists( dirname( __FILE__ )  . '/vendor/autoload.php')) {
             require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         }
         // Kontentblocks autloader
@@ -248,8 +248,7 @@ Class Kontentblocks
 
     public static function onActivation()
     {
-
-        if (file_exists( dirname( __FILE__ ) ) . '/vendor/autoload.php') {
+        if (file_exists( dirname( __FILE__ ) . '/vendor/autoload.php')) {
             require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         }
 
