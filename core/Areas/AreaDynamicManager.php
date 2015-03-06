@@ -76,6 +76,7 @@ class AreaDynamicManager
      */
     private function maybeCreateAreas()
     {
+        /** @var AreaProperties $area */
         foreach ($this->newAreas as $area) {
             $post = array(
                 'post_type' => 'kb-dyar',
@@ -87,7 +88,7 @@ class AreaDynamicManager
 
             if ($id) {
                 $Storage = new PostMetaDataProvider( $id );
-                $Storage->add( '_area', $area );
+                $Storage->add( '_area', get_object_vars($area) );
                 // custom meta data which is specific to wp database structure/queries
                 // not exactly area related data
                 update_post_meta( $id, '_kb_added_by_code', '1' );
@@ -140,6 +141,7 @@ class AreaDynamicManager
      */
     public function setupDiff()
     {
+        delete_transient('kb_dynamic_areas');
         $trans = get_transient( 'kb_dynamic_areas' );
         if (!$trans) {
             $areas = get_posts(

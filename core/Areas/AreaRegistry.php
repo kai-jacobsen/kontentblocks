@@ -94,9 +94,7 @@ class AreaRegistry
             foreach ($areas as $areapost) {
                 $Storage = new ModuleStorage( $areapost->ID );
                 $area = $Storage->getDataProvider()->get( '_area' );
-                var_dump($area);
-
-                $area->parentId = $areapost->ID;
+                $area['parent_id'] = $areapost->ID;
                 $dynamicAreas[] = $area;
             }
         }
