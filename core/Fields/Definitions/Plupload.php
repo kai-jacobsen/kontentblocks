@@ -22,7 +22,7 @@ Class Plupload extends Field
 
     public static function init()
     {
-        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueueScripts' ) );
+//        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueueScripts' ) );
         add_action( 'wp_ajax_plupload_upload', array( __CLASS__, 'handleUpload' ) );
     }
 

@@ -20,7 +20,7 @@ module.exports = function (grunt) {
           'js/dist/extensions.min.js': ['<%= concat.extensions.dest %>'],
           'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
           'js/dist/fieldsAPI.min.js': ['<%= concat.fieldsAPI.dest %>'],
-          'js/dist/mediaExt.js': ['<%= concat.mediaExt.dest %>']
+          'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>']
 
         }
       },
