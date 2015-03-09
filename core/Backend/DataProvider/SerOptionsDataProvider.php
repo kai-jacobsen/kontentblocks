@@ -27,7 +27,7 @@ class SerOptionsDataProvider implements DataProviderInterface
     public function __construct( $storageId )
     {
         $this->storageId = $storageId;
-        $this->data = get_option( $storageId );
+        $this->data = get_option( $storageId, [] );
     }
 
     /**

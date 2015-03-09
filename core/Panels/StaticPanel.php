@@ -2,6 +2,7 @@
 namespace Kontentblocks\Panels;
 
 use Kontentblocks\Fields\PanelFieldController;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -25,6 +26,13 @@ abstract class StaticPanel extends AbstractPanel
     protected $saveAsSingle = false;
 
 
+    public function __construct($args){
+
+        parent::__construct($args);
+        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+
+    }
+
     /**
      * Extend arg with defaults
      * @param $args
@@ -37,6 +45,7 @@ abstract class StaticPanel extends AbstractPanel
             'metaBox' => false,
             'hook' => 'edit_form_after_title',
             'postTypes' => array(),
+            'frontend' => true,
             'pageTemplates' => array( 'default' )
         );
 
@@ -73,6 +82,8 @@ abstract class StaticPanel extends AbstractPanel
         $this->beforeForm();
         echo $this->fields( $this->FieldController )->renderFields();
         $this->afterForm();
+        $this->toJSON();
+
     }
 
     /**
@@ -172,5 +183,19 @@ abstract class StaticPanel extends AbstractPanel
         }
 
         return $default;
+    }
+
+    public function toJSON()
+    {
+        $args = array(
+            'baseId' => $this->getBaseId(),
+            'mid' => $this->getBaseId(),
+            'moduleData' => $this->getData(),
+            'area' => '_internal',
+            'type' => 'static',
+            'args' => $this->args,
+            'postId' => get_the_ID(),
+        );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }
 }

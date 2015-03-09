@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-05 */
+/*! Kontentblocks DevVersion 2015-03-08 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -209,6 +209,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
         }
     },
     setData: function(Model) {
+        console.log(Model);
         var ModuleModel = Model || this.get("ModuleModel");
         this.set("value", KB.Util.getIndex(ModuleModel.get("moduleData"), this.get("kpath")));
     },

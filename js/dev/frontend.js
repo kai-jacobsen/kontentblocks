@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-05 */
+/*! Kontentblocks DevVersion 2015-03-08 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -2000,6 +2000,13 @@ KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend
             return;
         }
         if (model.get("type") && model.get("type") === "option") {
+            this.PanelViews.option[model.get("baseId")] = new KB.Backbone.OptionPanelView({
+                model: model,
+                $parent: this.$el,
+                controller: this
+            });
+        }
+        if (model.get("type") && model.get("type") === "static") {
             this.PanelViews.option[model.get("baseId")] = new KB.Backbone.OptionPanelView({
                 model: model,
                 $parent: this.$el,

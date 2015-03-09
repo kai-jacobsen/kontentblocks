@@ -11,6 +11,9 @@ use Kontentblocks\Utils\Utilities;
  */
 abstract class AbstractPanel
 {
+
+    protected $args;
+
     /**
      * Key / base id
      * @var string
@@ -58,16 +61,16 @@ abstract class AbstractPanel
      */
     public function __construct( $args )
     {
-        $args = $this->parseDefaults( $args );
+        $this->args = $this->parseDefaults( $args );
 
         if (is_null( $args['baseId'] )) {
             throw new \Exception( 'MUST provide a base id' );
         }
 
-
         // mumbo jumbo
         $this->setupArgs( $args );
         $this->setupHooks();
+
     }
 
     /**
@@ -113,7 +116,6 @@ abstract class AbstractPanel
     public function setupHooks()
     {
         foreach ($this->postTypes as $pt) {
-
             // check for page templates resp. for the a _wp_page_template meta key
             if (!empty( $this->pageTemplates )) {
                 $tpl = get_post_meta( '_wp_page_template' );
@@ -124,7 +126,6 @@ abstract class AbstractPanel
                     continue;
                 }
             }
-
 
             // either add the form as meta box or to custom hook
             if (is_array( $this->metaBox ) || $this->metaBox) {

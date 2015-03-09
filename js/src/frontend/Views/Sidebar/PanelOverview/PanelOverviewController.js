@@ -32,6 +32,14 @@ KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend
         controller: this
       })
     }
+
+    //if (model.get('type') && model.get('type') === 'static') {
+    //  this.PanelViews.option[model.get('baseId')] = new KB.Backbone.OptionPanelView({
+    //    model: model,
+    //    $parent: this.$el,
+    //    controller: this
+    //  })
+    //}
   },
   renderRootItem: function () {
     return this.sidebarController.$container.append(KB.Templates.render('frontend/sidebar/root-item', {
