@@ -17,28 +17,21 @@ class FieldView
     public function __construct( $tpl = false, $data = null )
     {
 
-        $this->data    = $data;
-        $this->I18n    = I18n::getInstance();
-        $this->tplFile = ($tpl !== false) ? $tpl : null;
-        $this->path    = KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/';
-        $this->engine  = Kontentblocks::getService('templating.twig.fields');
+        $this->data = $data;
+        $this->I18n = I18n::getInstance();
+        $this->tplFile = ( $tpl !== false ) ? $tpl : null;
+        $this->path = KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/';
+        $this->engine = Kontentblocks::getService( 'templating.twig.fields' );
 
     }
 
     public function render( $echo = false )
     {
-        $this->setPath($this->path);
+        $this->setPath( $this->path );
 
-        if ( !is_file( trailingslashit( $this->path ) . $this->tplFile ) ) {
-            echo "<script>console.log('template {$this->tplFile} missing');</script>";
-            return false;
-        }
-
-
-        if ( $echo ) {
+        if ($echo) {
             $this->engine->display( $this->tplFile, $this->data );
-        }
-        else {
+        } else {
             return $this->engine->render( $this->tplFile, $this->data );
         }
 
