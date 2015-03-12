@@ -22,12 +22,13 @@ class Twig
     public static function setupLoader()
     {
         $paths = array();
-        if (is_file( get_template_directory() . '/module-templates/' )) {
+        if (is_dir( get_template_directory() . '/module-templates/' )) {
             $paths[] = apply_filters( 'kb_twig_def_path', get_template_directory() . '/module-templates/' );
         }
-        if (is_child_theme() && is_file( get_stylesheet_directory() . '/module-templates/' )) {
+        if (is_child_theme() && is_dir( get_stylesheet_directory() . '/module-templates/' )) {
             $paths[] = apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
         }
+        $paths = apply_filters( 'kb.templating.paths', $paths );
         $Loader = new \Twig_Loader_Filesystem( $paths );
         return $Loader;
 
@@ -49,7 +50,7 @@ class Twig
         );
 
         if (!$public) {
-            $args['cache'] = trailingslashit(KB_PLUGIN_PATH) . 'cache/';
+            $args['cache'] = trailingslashit( KB_PLUGIN_PATH ) . 'cache/';
             $args['autoescape'] = false;
         }
 
