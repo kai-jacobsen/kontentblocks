@@ -54,7 +54,11 @@ function registerAreaTemplate( $args )
 function renderSingleArea( $area, $id = null, $additionalArgs )
 {
     global $post;
-    $postId = ( is_null( $id ) ) ? $post->ID : $id;
+    $postId = ( is_null( $id ) && !is_null( $post ) ) ? $post->ID : $id;
+
+    if (is_null($postId)){
+        return;
+    }
 
     /** @var \Kontentblocks\Areas\AreaRegistry $Registry */
     $Registry = Kontentblocks::getService( 'registry.areas' );
@@ -116,7 +120,7 @@ function getPanel( $id = null, $post_id = null )
     /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
     $Panel = $Registry->get( $id );
     if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
-        return $Panel->setup($post_id);
+        return $Panel->setup( $post_id );
     } else {
         return new \WP_Error(
             'Kontentblocks',
