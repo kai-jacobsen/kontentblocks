@@ -163,7 +163,13 @@ abstract class StaticPanel extends AbstractPanel
         if (!$this->FieldController) {
             $this->setup( $postId );
         }
-        return $this->FieldController->prepareDataAndGet();
+
+        $data = $this->FieldController->prepareDataAndGet();
+
+        if (!is_array($data)){
+            return array();
+        }
+        return $data;
     }
 
 

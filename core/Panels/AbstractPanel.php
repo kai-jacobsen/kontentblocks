@@ -68,7 +68,7 @@ abstract class AbstractPanel
         }
 
         // mumbo jumbo
-        $this->setupArgs( $args );
+        $this->setupArgs( $this->args );
         $this->setupHooks();
 
     }
