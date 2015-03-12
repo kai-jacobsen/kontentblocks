@@ -344,6 +344,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   bottom: 0;
   border-top-right-radius: 30px;
   box-shadow: 1px 1px 3px #333;
+  z-index: 2999;
 
   &::before {
     content: '\f445';
