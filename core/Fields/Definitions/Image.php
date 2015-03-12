@@ -36,6 +36,12 @@ Class Image extends Field
      */
     public function prepareFormValue( $val )
     {
+        if (empty($val)){
+            return array(
+                'id' => null
+            );
+        }
+
         return $val;
 
     }
