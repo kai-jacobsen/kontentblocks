@@ -22,11 +22,12 @@ Class Editor extends Field
     public function prepareTemplateData( $data )
     {
         $media = $this->getArg( 'media' );
+        $args = $this->getArg('args', array());
         $name = $data['Form']->getFieldName();
         $editorId = $data['Form']->getInputFieldId( true );
         $value = $this->getValue();
         ob_start();
-        Utilities::editor( $editorId, $value, $name, $media );
+        Utilities::editor( $editorId, $value, $name, $media, $args );
         $editorHTML = ob_get_clean();
         $data['editorHTML'] = $editorHTML;
         return $data;

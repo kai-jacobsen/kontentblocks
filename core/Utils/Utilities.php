@@ -116,7 +116,7 @@ class Utilities
         );
 
         if (!empty( $args )) {
-            $settings = wp_parse_args( $args, $settings );
+            $settings = Utilities::arrayMergeRecursive($args, $settings);
         }
 
         wp_editor( $data, $id . 'editor', $settings );
