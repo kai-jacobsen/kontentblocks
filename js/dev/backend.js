@@ -414,7 +414,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
             this.$inner.html("empty");
         }
         if (response.data.json.Fields) {
-            KB.payload.Fields = _.extend(KB.payload.Fields, response.data.json.Fields);
+            KB.payload.Fields = _.extend(KB.Payload.getPayload("Fields"), response.data.json.Fields);
         }
         KB.Ui.repaint(this.$el);
         KB.Fields.trigger("update");
@@ -528,17 +528,17 @@ KB.App = function() {
         KB.Areas.on("add", createAreaViews);
         KB.Modules.on("remove", removeModule);
         addViews();
-        KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection(_.toArray(KB.payload.Fields));
+        KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection(_.toArray(KB.Payload.getPayload("Fields")));
         KB.Ui.init();
     }
     function addViews() {
-        _.each(KB.payload.Areas, function(area) {
+        _.each(KB.Payload.getPayload("Areas"), function(area) {
             KB.ObjectProxy.add(KB.Areas.add(area));
         });
-        _.each(KB.payload.Modules, function(module) {
+        _.each(KB.Payload.getPayload("Modules"), function(module) {
             KB.ObjectProxy.add(KB.Modules.add(module));
         });
-        _.each(KB.payload.Panels, function(panel) {
+        _.each(KB.Payload.getPayload("Panels"), function(panel) {
             KB.ObjectProxy.add(KB.Panels.add(panel));
         });
     }

@@ -1576,8 +1576,8 @@ KB.Backbone.Sidebar.AreaDetails.CategoryController = Backbone.View.extend({
 });
 
 KB.Backbone.Sidebar.CategoryFilter = Backbone.View.extend({
-    categories: KB.payload.ModuleCategories,
-    definitions: KB.payload.ModuleDefinitions,
+    categories: KB.Payload.getPayload("ModuleCategories"),
+    definitions: KB.payload.getPayload("ModuleDefinitions"),
     initialize: function() {
         this.setupSortTable();
     },
@@ -2473,7 +2473,7 @@ KB.App = function() {
         KB.Panels.on("add", createPanelViews);
         addViews();
         KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
-        KB.FieldConfigs.add(_.toArray(KB.payload.Fields));
+        KB.FieldConfigs.add(_.toArray(KB.Payload.getPayload("Fields")));
         KB.Ui.init();
     }
     function shutdown() {
@@ -2490,13 +2490,13 @@ KB.App = function() {
         if (KB.appData.config.preview) {
             return false;
         }
-        _.each(KB.payload.Areas, function(area) {
+        _.each(KB.Payload.getPayload("Areas"), function(area) {
             KB.ObjectProxy.add(KB.Areas.add(area));
         });
-        _.each(KB.payload.Modules, function(module) {
+        _.each(KB.Payload.getPayload("Modules"), function(module) {
             KB.Modules.add(module);
         });
-        _.each(KB.payload.Panels, function(panel) {
+        _.each(KB.Payload.getPayload("Panels"), function(panel) {
             KB.Panels.add(panel);
         });
         KB.trigger("kb:moduleControlsAdded");

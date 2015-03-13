@@ -94,7 +94,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
       this.$inner.html('empty');
     }
     if (response.data.json.Fields) {
-      KB.payload.Fields = _.extend(KB.payload.Fields, response.data.json.Fields);
+      KB.payload.Fields = _.extend(KB.Payload.getPayload('Fields'), response.data.json.Fields);
     }
     // re-init UI listeners
     KB.Ui.repaint(this.$el);

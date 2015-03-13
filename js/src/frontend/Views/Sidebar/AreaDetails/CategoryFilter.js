@@ -1,6 +1,6 @@
 KB.Backbone.Sidebar.CategoryFilter = Backbone.View.extend({
-  categories: KB.payload.ModuleCategories,
-  definitions: KB.payload.ModuleDefinitions,
+  categories: KB.Payload.getPayload('ModuleCategories'),
+  definitions: KB.payload.getPayload('ModuleDefinitions'),
   initialize: function () {
     this.setupSortTable();
   },

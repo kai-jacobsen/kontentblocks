@@ -89,7 +89,7 @@ KB.App = function () {
      * payload.Fields collection
      */
     KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
-    KB.FieldConfigs.add(_.toArray(KB.payload.Fields));
+    KB.FieldConfigs.add(_.toArray(KB.Payload.getPayload('Fields')));
     // get the UI on track
     KB.Ui.init();
 
@@ -128,18 +128,18 @@ KB.App = function () {
 
 
     // iterate over raw areas
-    _.each(KB.payload.Areas, function (area) {
+    _.each(KB.Payload.getPayload('Areas'), function (area) {
       // create new area model
       KB.ObjectProxy.add(KB.Areas.add(area));
     });
 
     // create models from already attached modules
-    _.each(KB.payload.Modules, function (module) {
+    _.each(KB.Payload.getPayload('Modules'), function (module) {
       KB.Modules.add(module);
     });
 
     // create models from already attached modules
-    _.each(KB.payload.Panels, function (panel) {
+    _.each(KB.Payload.getPayload('Panels'), function (panel) {
       KB.Panels.add(panel);
     });
 
