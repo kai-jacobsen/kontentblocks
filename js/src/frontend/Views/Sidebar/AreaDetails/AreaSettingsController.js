@@ -1,7 +1,7 @@
 KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
   tagName: 'ul',
   className: 'kb-sidebar-area-details__templates',
-  LayoutDefs: KB.payload.AreaTemplates || {},
+  LayoutDefs: KB.Payload.getPayload('AreaTemplates') || {},
   events: {
     'click li': 'layoutSelect'
   },
