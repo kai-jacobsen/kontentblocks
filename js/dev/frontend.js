@@ -380,7 +380,7 @@ KB.Backbone.EditModalAreas = Backbone.View.extend({
     $target: null,
     $layoutList: null,
     AreaView: null,
-    LayoutDefs: KB.payload.AreaTemplates || {},
+    LayoutDefs: KB.Payload.getPayload("AreaTemplates") || {},
     events: {
         "click li": "layoutSelect",
         "click .close-controls": "close"
