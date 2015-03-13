@@ -46,7 +46,7 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
     },
     setupLayout: function(layout) {
         var at, collection;
-        collection = KB.payload.AreaTemplates || {};
+        collection = KB.Payload.getPayload("AreaTemplates") || {};
         at = layout || this.model.get("layout");
         if (at === "default") {
             this.hasLayout = false;

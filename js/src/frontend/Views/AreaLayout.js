@@ -22,7 +22,7 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
   setupLayout: function (layout) {
     var at, collection;
 
-    collection = KB.payload.AreaTemplates || {}; // assign payload layout collection
+    collection = KB.Payload.getPayload('AreaTemplates') || {}; // assign payload layout collection
 
     /*
      either a layout is passed or we get it from the model

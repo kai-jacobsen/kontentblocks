@@ -61,6 +61,14 @@ KB.Payload = (function ($) {
       }
 
       return ret;
+    },
+    getPayload: function(key){
+      if (KB && KB.payload){
+        if (KB.payload[key]){
+          return KB.payload[key];
+        }
+      }
+      return {};
     }
   }
 })(jQuery);
