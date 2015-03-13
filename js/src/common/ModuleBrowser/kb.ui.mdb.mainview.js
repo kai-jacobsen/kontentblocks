@@ -177,7 +177,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     var fullDefs = [];
     // @TODO a module class which was assigned to an area is not necessarily present
 
-    _.each(KB.payload.ModuleDefinitions, function (module) {
+    _.each(KB.Payload.getPayload('ModuleDefinitions'), function (module) {
       if (_.indexOf(assignedModules, module.settings.class) !== -1) {
         fullDefs.push(module);
       }

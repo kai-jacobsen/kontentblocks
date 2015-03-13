@@ -690,7 +690,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     prepareAssignedModules: function() {
         var assignedModules = this.area.model.get("assignedModules");
         var fullDefs = [];
-        _.each(KB.payload.ModuleDefinitions, function(module) {
+        _.each(KB.Payload.getPayload("ModuleDefinitions"), function(module) {
             if (_.indexOf(assignedModules, module.settings.class) !== -1) {
                 fullDefs.push(module);
             }

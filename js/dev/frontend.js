@@ -1577,7 +1577,7 @@ KB.Backbone.Sidebar.AreaDetails.CategoryController = Backbone.View.extend({
 
 KB.Backbone.Sidebar.CategoryFilter = Backbone.View.extend({
     categories: KB.Payload.getPayload("ModuleCategories"),
-    definitions: KB.payload.getPayload("ModuleDefinitions"),
+    definitions: KB.Payload.getPayload("ModuleDefinitions"),
     initialize: function() {
         this.setupSortTable();
     },
