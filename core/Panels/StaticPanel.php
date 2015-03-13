@@ -149,7 +149,6 @@ abstract class StaticPanel extends AbstractPanel
         $this->setupData( $postId );
         $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
         $this->fields( $this->FieldController )->setup( $this->data );
-
         return $this;
 
     }

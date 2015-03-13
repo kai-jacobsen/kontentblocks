@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-12 */
+/*! Kontentblocks DevVersion 2015-03-13 */
 KB.Fields.BaseView = Backbone.View.extend({
     rerender: function() {
         this.render();
@@ -455,6 +455,14 @@ KB.Plupload.UploadFileView = Backbone.View.extend({
 
 KB.Plupload.ImageFileView = KB.Plupload.UploadFileView.extend({
     template: "file-image.hbs"
+});
+
+KB.Plupload.PdfFileView = KB.Plupload.UploadFileView.extend({
+    template: "file-pdf.hbs"
+});
+
+KB.Plupload.GenericFileView = KB.Plupload.UploadFileView.extend({
+    template: "file-generic.hbs"
 });
 
 KB.Plupload.VideoFileView = KB.Plupload.UploadFileView.extend({

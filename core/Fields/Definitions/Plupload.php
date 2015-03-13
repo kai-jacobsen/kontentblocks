@@ -105,8 +105,8 @@ Class Plupload extends Field
         } else {
             return new AjaxErrorResponse(
                 'Attachment not generated due to error', array(
-                'error' => $attachmentId
-            )
+                    'error' => $attachmentId
+                )
             );
         }
     }
@@ -123,6 +123,7 @@ Class Plupload extends Field
         $val
     )
     {
+        $this->enqueueScripts();
         return $val;
     }
 

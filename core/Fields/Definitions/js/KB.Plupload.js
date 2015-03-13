@@ -1,11 +1,9 @@
 KB.Fields.register('Plupload', (function ($) {
   return {
   init: function (modalView) {
-
     if (!wp || !wp.media) {
       return;
     }
-
 
     wp.media.controller.KBImageDetails = wp.media.controller.State.extend({
       defaults: _.defaults({
@@ -174,6 +172,14 @@ KB.Plupload.ImageFileView = KB.Plupload.UploadFileView.extend({
   template: 'file-image.hbs'
 });
 
+KB.Plupload.PdfFileView = KB.Plupload.UploadFileView.extend({
+  template: 'file-pdf.hbs'
+});
+
+KB.Plupload.GenericFileView = KB.Plupload.UploadFileView.extend({
+  template: 'file-generic.hbs'
+});
+
 KB.Plupload.VideoFileView = KB.Plupload.UploadFileView.extend({
   template: 'file-video.hbs',
   openDetails: function(){
@@ -203,7 +209,6 @@ KB.Plupload.FileRenderer = Backbone.View.extend({
   },
   addView: function (model) {
     var type = this.detectViewType(model);
-
     var FileView = new type({model: model});
     this.$el.append(FileView.render());
 
