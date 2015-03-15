@@ -249,7 +249,7 @@ abstract class Field implements Exportable
      */
     public function getCallback( $type )
     {
-        $allowed = array( 'output', 'input', 'get', 'save' );
+        $allowed = array( 'before.render', 'output', 'input', 'get', 'save' );
 
         if (!in_array( $type, $allowed )) {
             return null;
@@ -415,6 +415,10 @@ abstract class Field implements Exportable
          */
         if (method_exists( $this, 'prepareTemplateData' )) {
             $data = $this->prepareTemplateData( $data );
+        }
+
+        if ($this->getCallback('before.render')){
+            $data = call_user_func($this->getCallback('before.render'), $data);
         }
 
         $View = new FieldView(

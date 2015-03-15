@@ -7,7 +7,7 @@ KB.Fields.register('Gallery', (function ($) {
       // find all instances on load
       $('.kb-gallery--stage', $('body')).each(function (index, el) {
         var fid = $(el).closest('.kb-js-field-identifier').attr('id');
-        var baseId = KB.payload.Fields[fid].baseId;
+        var baseId = KB.Payload.getPayload('Fields')[fid].baseId;
         var view = modalView || KB.Views.Modules.get($(el).data('module')) || new KB.FieldCollection();
         var key = $(el).data('fieldkey');
         var arrayKey = $(el).data('arraykey');
