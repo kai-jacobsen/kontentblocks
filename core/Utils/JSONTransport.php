@@ -32,7 +32,7 @@ class JSONTransport
     public function __construct()
     {
 
-        if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {
+        if (is_user_logged_in()) {
             add_action( 'wp_print_footer_scripts', array( $this, 'printJSON' ), 9 );
             add_action( 'admin_footer', array( $this, 'printJSON' ), 9 );
         }
