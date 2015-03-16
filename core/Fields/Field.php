@@ -80,6 +80,10 @@ abstract class Field implements Exportable
      */
     protected $path;
 
+
+    protected $userValue;
+
+
     /**
      * Return Object
      * @var \Kontentblocks\Fields\InterfaceFieldReturn
@@ -320,6 +324,11 @@ abstract class Field implements Exportable
      */
     public function getUserValue()
     {
+
+        if (!is_null( $this->userValue )) {
+            return $this->userValue;
+        }
+
         $value = $this->prepareOutput( $this->getValue() );
 
         if ($this->getArg( 'returnObj' )) {
@@ -343,16 +352,18 @@ abstract class Field implements Exportable
                 throw new \Exception( 'requested Return Object does not exist' );
             }
 
-            return $this->returnObj->prepare();
+            $this->userValue = $this->returnObj;
+            return $this->userValue;
 
         } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj' ) !== false) {
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
             $this->returnObj = new $classpath( $value, $this );
-            return $this->returnObj->prepare();
+            $this->userValue = $this->returnObj;
+            return $this->userValue;
         } else {
 //			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
 //			return $this->returnObj;
-            return $value;
+            return $this->userValue = $value;
         }
 
     }
@@ -417,8 +428,8 @@ abstract class Field implements Exportable
             $data = $this->prepareTemplateData( $data );
         }
 
-        if ($this->getCallback('before.render')){
-            $data = call_user_func($this->getCallback('before.render'), $data);
+        if ($this->getCallback( 'before.render' )) {
+            $data = call_user_func( $this->getCallback( 'before.render' ), $data );
         }
 
         $View = new FieldView(
