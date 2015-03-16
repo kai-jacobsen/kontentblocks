@@ -150,6 +150,7 @@ class ModuleView implements \JsonSerializable
             return false;
         }
 
+        $this->Module->Model->set($data);
         $this->data = wp_parse_args( $data, $this->data );
 
         return true;
