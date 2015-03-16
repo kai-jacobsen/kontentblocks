@@ -4,7 +4,6 @@ namespace Kontentblocks\Fields\Returnobjects;
 
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\ImageResize;
-use Kontentblocks\Utils\JSONTransport;
 
 /**
  * Class EditableImage
@@ -14,18 +13,19 @@ use Kontentblocks\Utils\JSONTransport;
  */
 class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializable
 {
+    public $attachment;
 
     /**
      * Width
      * @var int
      */
-    protected $width = 150;
+    public $width = 150;
 
     /**
      * Height
      * @var int
      */
-    protected $height = 150;
+    public $height = 150;
 
     /**
      * ImageResize upscale flag
@@ -238,6 +238,17 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
         return $this;
     }
 
+    public function nsize( $size )
+    {
+        if (!is_null( $this->attachment )) {
+            if (isset( $this->attachment['sizes'] ) && !empty( $this->attachment['sizes'][$size] )) {
+                $def = $this->attachment['sizes'][$size];
+                return $this->size($def['width'], $def['height']);
+            }
+        }
+        return $this->size();
+    }
+
     /**
      * Set flag for image resizer upscale parameter
      * @return $this
@@ -365,10 +376,14 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
 
     public function prepare()
     {
+        $id = $this->getValue( 'id' );
+        if (!empty( $id )) {
+            $this->attachment = wp_prepare_attachment_for_js( $id );
+        }
         return $this;
     }
 
-    public function getMetaLink($attr)
+    public function getMetaLink( $attr )
     {
         return 'data-' . $this->uniqueId . '-' . $attr;
     }
