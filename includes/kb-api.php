@@ -56,7 +56,7 @@ function renderSingleArea( $area, $id = null, $additionalArgs )
     global $post;
     $postId = ( is_null( $id ) && !is_null( $post ) ) ? $post->ID : $id;
 
-    if (is_null($postId)){
+    if (is_null( $postId )) {
         return;
     }
 
@@ -68,6 +68,10 @@ function renderSingleArea( $area, $id = null, $additionalArgs )
     } else {
         $Environment = Utilities::getEnvironment( $postId );
 
+    }
+
+    if (!$Environment->getAreaDefinition( $area )) {
+        return '';
     }
 
     $AreaRender = new AreaRenderer( $Environment, $area, $additionalArgs );
