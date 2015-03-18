@@ -110,10 +110,11 @@ function hasModules( $area, $id )
     if ($post === null && $id === null) {
         return false;
     }
-    $post_id = ( null === $id ) ? $post->ID : $id;
 
-    $Meta = new ModuleStorage( $post_id );
-    return $Meta->hasModules( $area );
+    $E = Utilities::getEnvironment( $id );
+    $areas = $E->getModulesForArea( $area );
+
+    return !empty( $areas );
 }
 
 
