@@ -49,7 +49,7 @@ Class Plupload extends Field
                 'filters' => array(
                     array(
                         'title' => __( 'Allowed Image Files' ),
-                        'extensions' => 'jpg,gif,png,mp4,pdf'
+                        'extensions' => 'jpg,gif,png,mp4,pdf,mov,xls,doc,ppt,docx,xlsx'
                     )
                 ),
                 'multipart' => true,
