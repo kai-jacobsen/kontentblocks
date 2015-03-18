@@ -13,6 +13,7 @@ KB.Fields.registerObject('link', KB.Fields.BaseView.extend({
   },
   openModal: function(){
     wpActiveEditor = this.$input.attr('id');
+    jQuery('#wp-link-wrap').addClass('kb-customized');
 
     // store the original function
     kb_restore_htmlUpdate = wpLink.htmlUpdate;

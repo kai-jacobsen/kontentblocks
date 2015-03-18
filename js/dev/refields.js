@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-13 */
+/*! Kontentblocks DevVersion 2015-03-18 */
 KB.Fields.BaseView = Backbone.View.extend({
     rerender: function() {
         this.render();
@@ -28,7 +28,7 @@ KB.Fields.register("Gallery", function($) {
         init: function(modalView) {
             $(".kb-gallery--stage", $("body")).each(function(index, el) {
                 var fid = $(el).closest(".kb-js-field-identifier").attr("id");
-                var baseId = KB.payload.Fields[fid].baseId;
+                var baseId = KB.Payload.getPayload("Fields")[fid].baseId;
                 var view = modalView || KB.Views.Modules.get($(el).data("module")) || new KB.FieldCollection();
                 var key = $(el).data("fieldkey");
                 var arrayKey = $(el).data("arraykey");
@@ -1062,6 +1062,7 @@ KB.Fields.registerObject("link", KB.Fields.BaseView.extend({
     derender: function() {},
     openModal: function() {
         wpActiveEditor = this.$input.attr("id");
+        jQuery("#wp-link-wrap").addClass("kb-customized");
         kb_restore_htmlUpdate = wpLink.htmlUpdate;
         kb_restore_isMce = wpLink.isMCE;
         wpLink.isMCE = this.isMCE;

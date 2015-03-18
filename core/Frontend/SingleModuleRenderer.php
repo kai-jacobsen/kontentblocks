@@ -110,6 +110,7 @@ class SingleModuleRenderer
                 'module',
                 'single-module',
                 $this->Module->Properties->getSetting( 'id' ),
+                'view-' . str_replace('.twig', '', $this->Module->Properties->viewfile)
 
             );
     }
