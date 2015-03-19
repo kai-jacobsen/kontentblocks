@@ -220,12 +220,8 @@ class Enqueues
     public static function userEnqueue()
     {
 
-//        if (!isset($_GET['kbedit'])){
-//            return;
-//        }
-
         self::appConfig();
-        if (is_user_logged_in() && !is_admin()) {
+        if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentblocks')) {
 
             wp_enqueue_script( 'kb-frontend' );
             wp_enqueue_script( 'kb-onsite-editing' );

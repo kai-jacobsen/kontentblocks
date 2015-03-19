@@ -284,7 +284,7 @@ class ModuleStorage implements \Countable
     {
         if (!empty( $this->index )) {
             foreach ($this->index as $module) {
-                if ($module['area'] === $area && $module['draft'] !== 'true' && $module['active'] !== false) {
+                if ($module->area->id === $area && $module['draft'] !== 'true' && $module['active'] !== false) {
                     return true;
                 }
             }
