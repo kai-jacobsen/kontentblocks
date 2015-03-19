@@ -133,9 +133,7 @@ class AreaRegistry
             $this->AreaDynamicManager->add( $Area );
         }
 
-        if (empty( $this->areas[$Area->id] )) {
-            $this->areas[$Area->id] = $Area;
-        }
+        $this->areas[$Area->id] = $Area;
         $this->preFilterAreas( $this->areas[$Area->id] );
     }
 
