@@ -41,8 +41,10 @@ class I18n
      */
     private function __construct()
     {
-        add_action( 'wp_footer', array( $this, 'toJSON' ) );
-        add_action( 'admin_footer', array( $this, 'toJSON' ) );
+        if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {
+            add_action( 'wp_footer', array( $this, 'toJSON' ) );
+            add_action( 'admin_footer', array( $this, 'toJSON' ) );
+        };
         self::loadPackages();
 
     }

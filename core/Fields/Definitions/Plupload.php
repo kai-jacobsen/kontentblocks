@@ -26,6 +26,11 @@ Class Plupload extends Field
         add_action( 'wp_ajax_plupload_upload', array( __CLASS__, 'handleUpload' ) );
     }
 
+    public function enqueue()
+    {
+        self::enqueueScripts();
+    }
+
     public static function enqueueScripts()
     {
         global $post;
@@ -118,12 +123,8 @@ Class Plupload extends Field
      *
      * @return string
      */
-    public
-    function prepareOutputValue(
-        $val
-    )
+    public function prepareOutputValue( $val )
     {
-        $this->enqueueScripts();
         return $val;
     }
 
@@ -133,13 +134,9 @@ Class Plupload extends Field
      *
      * @return mixed
      */
-    public
-    function prepareFormValue(
-        $val
-    )
+    public function prepareFormValue( $val )
     {
         return $val;
-
     }
 
 }

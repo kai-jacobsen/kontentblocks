@@ -25,10 +25,7 @@ class FieldFormController
     {
         $this->Field = $Field;
 
-        // optional call to simplify enqueueing
-        if (method_exists( $Field, 'enqueue' )) {
-            $Field->enqueue();
-        }
+
 
     }
 
@@ -158,6 +155,11 @@ class FieldFormController
          */
         if (method_exists( $this->Field, 'preForm' )) {
             $out .= $this->Field->preForm();
+        }
+
+        // optional call to simplify enqueueing
+        if (method_exists( $this->Field, 'enqueue' )) {
+            $this->Field->enqueue();
         }
 
         // custom method on field instance level wins over class method
