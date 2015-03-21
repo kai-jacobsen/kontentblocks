@@ -50,7 +50,6 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     }
   },
   setData: function (Model) {
-    console.log(Model);
     var ModuleModel = Model || this.get('ModuleModel');
     this.set('value', KB.Util.getIndex(ModuleModel.get('moduleData'), this.get('kpath')));
   },

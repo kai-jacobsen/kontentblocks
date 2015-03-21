@@ -28,7 +28,7 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        console.log(res);
+        //console.log(res);
       },
       error: function () {
       }

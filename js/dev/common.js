@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-19 */
+/*! Kontentblocks DevVersion 2015-03-21 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -209,7 +209,6 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
         }
     },
     setData: function(Model) {
-        console.log(Model);
         var ModuleModel = Model || this.get("ModuleModel");
         this.set("value", KB.Util.getIndex(ModuleModel.get("moduleData"), this.get("kpath")));
     },
@@ -666,6 +665,9 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
             _ajax_nonce: KB.Config.getNonce("create"),
             frontend: KB.appData.config.frontend
         };
+        if (this.options.area.model.get("parent_id")) {
+            data.postId = this.options.area.model.get("parent_id");
+        }
         this.close();
         KB.Ajax.send(data, this.success, this);
     },

@@ -19,15 +19,11 @@ KB.Backbone.ModuleBrowser.prototype.success = function (res) {
   this.parseAdditionalJSON(res.data.json);
   KB.TinyMCE.addEditor(model.View.$el);
   KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
-
   this.options.area.trigger('kb.module.created');
-
   setTimeout(function () {
     model.View.openOptions();
   }, 300);
 
-  // repaint
-  // add module to collection
 };
 
 /**

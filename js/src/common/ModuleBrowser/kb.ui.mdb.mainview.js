@@ -142,6 +142,11 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
       _ajax_nonce: KB.Config.getNonce('create'),
       frontend: KB.appData.config.frontend
     };
+
+    if (this.options.area.model.get('parent_id')){
+      data.postId = this.options.area.model.get('parent_id');
+    }
+
     this.close();
     KB.Ajax.send(data, this.success, this);
   },

@@ -64,12 +64,12 @@
     width: 14px;
   }
 
-  &.master-module a {
-    background-color: $orange;
+  &.master-module {
+    border-left: 3px solid $orange;
   }
 
-  &.dynamic-module a {
-    background-color: $lightblue;
+  &.dynamic-module {
+    border-left: 3px solid $lightblue;
   }
 
   a {

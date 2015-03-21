@@ -171,7 +171,6 @@ KB.App = function () {
   }
 
   function createPanelViews(PanelModel) {
-    console.log(PanelModel);
     KB.ObjectProxy.add(PanelModel);
     // no related frontend view
     // leave this out for now

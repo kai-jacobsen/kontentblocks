@@ -68,6 +68,11 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
       _ajax_nonce: KB.Config.getNonce('create'),
       frontend: KB.appData.config.frontend
     };
+
+    if (this.model.get('area').get('parent_id')){
+      data.postId = this.model.get('area').get('parent_id');
+    }
+
     KB.Ajax.send(data, this.success, this, {ui: ui});
   },
   success: function (res, payload) {

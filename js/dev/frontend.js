@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-19 */
+/*! Kontentblocks DevVersion 2015-03-21 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -29,9 +29,7 @@ KB.Backbone.PanelModel = Backbone.Model.extend({
         this.type = "panel";
         this.listenTo(this, "change:moduleData", this.change);
     },
-    change: function() {
-        console.log("change", this);
-    }
+    change: function() {}
 });
 
 KB.Backbone.AreaLayoutView = Backbone.View.extend({
@@ -1673,6 +1671,9 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
             _ajax_nonce: KB.Config.getNonce("create"),
             frontend: KB.appData.config.frontend
         };
+        if (this.model.get("area").get("parent_id")) {
+            data.postId = this.model.get("area").get("parent_id");
+        }
         KB.Ajax.send(data, this.success, this, {
             ui: ui
         });
@@ -1914,9 +1915,7 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
             },
             type: "POST",
             dataType: "json",
-            success: function(res) {
-                console.log(res);
-            },
+            success: function(res) {},
             error: function() {}
         });
     },
@@ -2242,7 +2241,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
                     }
                     jQuery("#kb-toolbar").show();
                     ed.module.View.$el.addClass("inline-edit-active");
-                    if (ed.placeholder !== false) {
+                    if (that.placeHolderSet) {
                         ed.setContent("");
                     }
                 });
@@ -2512,7 +2511,6 @@ KB.App = function() {
         KB.Ui.initTabs();
     }
     function createPanelViews(PanelModel) {
-        console.log(PanelModel);
         KB.ObjectProxy.add(PanelModel);
     }
     function createAreaViews(AreaModel) {
