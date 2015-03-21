@@ -427,7 +427,7 @@ class DynamicAreas
         echo Utilities::getBaseIdField( $Environment->getStorage()->getIndex() );
         echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
 
-        $Area = new AreaBackendHTML( $areaDef, $Environment, 'global' );
+        $Area = new AreaBackendHTML( $areaDef, $Environment );
         $Area->build();
 
         print "</div>";

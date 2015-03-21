@@ -46,10 +46,12 @@ class ModuleViewLoader
     {
         $this->ViewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $Module );
         $this->Module = $Module;
+
         $this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->Properties->areaContext );
         if (count( $this->views ) > 1) {
             $this->hasViews = true;
         }
+
         /**
          * register handler to save the user choice when the frontend edit module saves
          */
@@ -62,8 +64,7 @@ class ModuleViewLoader
      */
     public function render()
     {
-
-        if ($this->hasViews()) {
+        if ($this->hasViews()){
             $tpl = new CoreView(
                 'view-selector.twig',
                 array( 'templates' => $this->prepareTemplates(), 'module' => $this->Module->Properties )
@@ -103,16 +104,15 @@ class ModuleViewLoader
     private function prepareTemplates()
     {
         $prepared = array();
+
         $selected = $this->Module->Properties->viewfile;
-
-
         if (empty( $selected ) || !$this->isValidTemplate( $selected )) {
             $selected = $this->findDefaultTemplate();
         }
 
 
         foreach ($this->views as $item) {
-            $item['selected'] = ( $item['filteredfile'] === $selected ) ? "selected='selected'" : '';
+            $item['selected'] = ( $item['fragment'] === $selected ) ? "selected='selected'" : '';
             $prepared[] = $item;
         }
 

@@ -38,7 +38,9 @@ class ModuleViewFilesystem
         if ($this->isChildTheme) {
             $childTemplates = $this->cleanPath(
                 glob(
-                    trailingslashit( get_stylesheet_directory() ) . 'module-templates/' . $Module->Properties->getSetting(
+                    trailingslashit(
+                        get_stylesheet_directory()
+                    ) . 'module-templates/' . $Module->Properties->getSetting(
                         'id'
                     ) . '/*.twig'
                 ),
@@ -246,7 +248,6 @@ class ModuleViewFilesystem
         foreach ($filtered as $tpl) {
             $collection[$tpl['file']] = $tpl;
         }
-
 
         return $collection;
 

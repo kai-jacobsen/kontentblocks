@@ -31,11 +31,11 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
   },
   getType: function () {
     var type = this.get('type');
-    if (this.ModuleModel.type === 'panel' && type === 'EditableImage'){
+    if (this.ModuleModel.type === 'panel' && type === 'EditableImage') {
       return false;
     }
 
-    if (this.ModuleModel.type === 'panel' && type === 'EditableText'){
+    if (this.ModuleModel.type === 'panel' && type === 'EditableText') {
       return false;
     }
 
@@ -88,6 +88,7 @@ KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.e
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
   rebind: function () {
+    console.log(this.FieldView);
     if (this.FieldView) {
       this.FieldView.setElement(this.getElement());
       this.FieldView.rerender();

@@ -79,7 +79,6 @@ class Environment implements JsonSerializable
         $this->storageId = $storageId;
 
 
-
         $this->DataProvider = new DataProviderController( $storageId );
         $this->Storage = new ModuleStorage( $storageId, $this->DataProvider );
         $this->ModuleRepository = new ModuleRepository( $this );

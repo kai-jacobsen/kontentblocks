@@ -228,7 +228,6 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     _KS.info('Frontend modal retrieves data from the server');
     json = this.model.toJSON();
 
-
     // apply settings for the modal from the active module, if any
     this.applyControlsSettings(this.$el);
     this.updateViewClassTo = false;
@@ -559,10 +558,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       return;
     }
 
+
     // get the form
     KB.Ajax.send({
       action: 'undraftModule',
       mid: json.mid,
+      postId: this.model.get('post_id'),
       _ajax_nonce: KB.Config.getNonce('update')
     }, function (res) {
       if (res.success) {

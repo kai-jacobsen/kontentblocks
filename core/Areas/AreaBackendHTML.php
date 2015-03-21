@@ -125,7 +125,6 @@ class AreaBackendHTML
             /** @var \Kontentblocks\Modules\Module $Module */
             foreach ($this->attachedModules as $Module) {
 
-                $Module->Properties->areaContext = $this->context;
                 $Module = apply_filters( 'kb.module.before.factory', $Module );
                 echo $Module->renderForm();
                 Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );

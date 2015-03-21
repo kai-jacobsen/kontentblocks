@@ -589,7 +589,7 @@ abstract class Field implements Exportable
     public function createUID()
     {
 
-        $state = ( is_admin() ) ? 'frontend' : 'backend';
+        $state = ( is_admin() ) ? 'frontend' : 'frontend';
         if (is_null( $this->uniqueId )) {
             $base = $this->baseId . $this->key . $state;
             $this->uniqueId = 'kb-' . hash( 'crc32', $base );

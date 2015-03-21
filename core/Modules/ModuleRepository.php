@@ -33,7 +33,7 @@ class ModuleRepository
         if (is_array( $index )) {
             foreach ($index as $module) {
                 $Ws = new ModuleWorkshop( $this->Environment, $module );
-                if ($Ws->isValid()){
+                if ($Ws->isValid()) {
                     $this->Modules[$Ws->getNewId()] = $Ws->getModule();
                 }
             }

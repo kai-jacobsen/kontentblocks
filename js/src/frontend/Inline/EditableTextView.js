@@ -1,6 +1,5 @@
 KB.Backbone.Inline.EditableText = Backbone.View.extend({
   initialize: function () {
-
     this.placeHolderSet = false;
     this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
     this.setupDefaults();
@@ -9,7 +8,9 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
     this.render();
   },
   render: function () {
-    this.id = this.el.id;
+    if (this.el.id){
+      this.id = this.el.id;
+    }
   },
   derender: function () {
     this.deactivate();

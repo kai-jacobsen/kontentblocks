@@ -70,7 +70,7 @@ class ModuleFactory
         $module = apply_filters( 'kb.modify.module.parameters', $this->ModuleProperties );
         // new instance
         /** @var \Kontentblocks\Modules\Module $instance */
-        $instance = new $this->ModuleProperties->class( $this->ModuleProperties, $this->data, $this->Environment );
+        $instance = new $this->ModuleProperties->class( $module, $this->data, $this->Environment );
         return $instance;
 
     }

@@ -71,11 +71,9 @@ abstract class Module
         $this->setModuleData( $data );
 //        $this->setEnvVarsFromEnvironment( $Environment );
 
-
         if (filter_var( $this->Properties->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
-
 
         // magically setup fields
         if (method_exists( $this, 'fields' )) {
@@ -113,7 +111,7 @@ abstract class Module
 
         if (!is_null( $this->ViewLoader )) {
             // render view select field
-            $concat .= $this->ViewLoader->render();
+            $concat .= $this->ViewLoader->render($this->Properties);
         }
 
         // render fields if set
@@ -275,6 +273,7 @@ abstract class Module
         if (!class_exists( 'Kontentblocks\Templating\ModuleTemplate' )) {
             class_alias( 'Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
         }
+
         if ($this->Properties->getSetting( 'useViewLoader' ) && is_null( $this->View )) {
             $tpl = $this->getViewfile();
             $ModuleView = new ModuleView( $this );
@@ -320,7 +319,6 @@ abstract class Module
 
     final public function toJSON()
     {
-
         $toJSON = array(
             'envVars' => $this->Context,
             'settings' => $this->Properties->settings,
@@ -348,7 +346,6 @@ abstract class Module
 //            $toJSON['post_id'] = $this->masterObj['parentId'];
 //            $toJSON['templateObj'] = $this->templateObj;
 //        }
-
         $toJSON = wp_parse_args( $toJSON, $this->Properties );
         return $toJSON;
 

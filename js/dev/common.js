@@ -249,6 +249,7 @@ KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.e
         this.listenTo(KB.Events, "modal.close", this.remove);
     },
     rebind: function() {
+        console.log(this.FieldView);
         if (this.FieldView) {
             this.FieldView.setElement(this.getElement());
             this.FieldView.rerender();

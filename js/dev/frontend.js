@@ -781,6 +781,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         KB.Ajax.send({
             action: "undraftModule",
             mid: json.mid,
+            postId: this.model.get("post_id"),
             _ajax_nonce: KB.Config.getNonce("update")
         }, function(res) {
             if (res.success) {
@@ -2190,7 +2191,9 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
         this.render();
     },
     render: function() {
-        this.id = this.el.id;
+        if (this.el.id) {
+            this.id = this.el.id;
+        }
     },
     derender: function() {
         this.deactivate();

@@ -62,7 +62,6 @@ class ModuleWorkshop
     public function __construct( Environment $Environment, $attrs = array(), $oldattrs = array() )
     {
         $this->Environment = $Environment;
-
         $this->moduleattrs = $this->setupModuleattrs( $attrs, $oldattrs );
         $this->valid = $this->validate();
     }
@@ -77,6 +76,7 @@ class ModuleWorkshop
         if ($this->isValid()) {
             return $this->moduleattrs;
         }
+
         return false;
     }
 
@@ -198,6 +198,7 @@ class ModuleWorkshop
         $this->newId = $mid = ( isset( $attrs['mid'] ) ) ? $attrs['mid'] : $this->createModuleId();
         $attrs['mid'] = $attrs['instance_id'] = $mid;
         $attrs['post_id'] = $this->Environment->getId();
+
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
 
         return $this->clean( $attrs );

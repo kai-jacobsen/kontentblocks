@@ -23,10 +23,9 @@ class ModuleViewsRegistry
     public function getViewFileSystem( Module $Module )
     {
         $classname = get_class( $Module );
-
-        if (isset( $this->views[$classname] )) {
-            return $this->views[$classname];
-        }
+//        if (isset( $this->views[$classname] )) {
+//            return $this->views[$classname];
+//        }
 
         $FileSystem = new ModuleViewFilesystem( $Module );
         $this->views[$classname] = $FileSystem;
@@ -39,16 +38,15 @@ class ModuleViewsRegistry
      * @param Module $Module
      * @return ModuleViewLoader
      */
-    public function getViewLoader( Module $Module )
+    public function getViewLoader( Module &$Module )
     {
-
-
-        if (isset( $this->loaders[$Module->getId()] )) {
-            return $this->loaders[$Module->getId()];
-        }
-
+//        $hash = spl_object_hash($Module);
+//
+//        if (isset( $this->loaders[$hash] )) {
+//            return $this->loaders[$hash];
+//        }
         $ViewLoader = new ModuleViewLoader( $Module );
-        $this->loaders[$Module->getId()] = $ViewLoader;
+//        $this->loaders[$hash] = $ViewLoader;
         return $ViewLoader;
 
     }
