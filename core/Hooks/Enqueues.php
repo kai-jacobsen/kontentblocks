@@ -209,7 +209,7 @@ class Enqueues
 
     public static function coreStylesEnqueue()
     {
-        if (is_user_logged_in() && !is_admin()) {
+        if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentnblocks')) {
             wp_enqueue_style( 'wp-color-picker' );
             wp_enqueue_style( 'kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css' );
             wp_enqueue_style( 'kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
