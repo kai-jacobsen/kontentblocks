@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-03-21 */
+/*! Kontentblocks DevVersion 2015-03-22 */
 var KB = KB || {};
 
 KB.Config = {};
@@ -209,8 +209,18 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
         }
     },
     setData: function(Model) {
-        var ModuleModel = Model || this.get("ModuleModel");
-        this.set("value", KB.Util.getIndex(ModuleModel.get("moduleData"), this.get("kpath")));
+        var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
+        ModuleModel = Model || this.get("ModuleModel");
+        fieldData = KB.Payload.getPayload("fieldData");
+        if (fieldData[this.get("type")]) {
+            typeData = fieldData[this.get("type")];
+            if (typeData[this.get("fieldId")]) {
+                obj = typeData[this.get("fieldId")];
+                addData = KB.Util.getIndex(obj, this.get("kpath"));
+            }
+        }
+        mData = KB.Util.getIndex(ModuleModel.get("moduleData"), this.get("kpath"));
+        this.set("value", _.extend(mData, addData));
     },
     upstreamData: function() {
         if (this.get("ModuleModel")) {
@@ -249,7 +259,6 @@ KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.e
         this.listenTo(KB.Events, "modal.close", this.remove);
     },
     rebind: function() {
-        console.log(this.FieldView);
         if (this.FieldView) {
             this.FieldView.setElement(this.getElement());
             this.FieldView.rerender();
@@ -1336,7 +1345,7 @@ KB.Util = function($) {
                 if (n in obj) {
                     obj = obj[n];
                 } else {
-                    return;
+                    return {};
                 }
             }
             return obj;

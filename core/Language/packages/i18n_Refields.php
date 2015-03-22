@@ -29,7 +29,9 @@
         'image' => array(
             'caption' => __( 'Caption', 'Kontentblocks' ),
             'modalTitle' => __( 'Select an image or upload a new one', 'Kontentblocks' ),
-            'description' => __( 'Description', 'Kontentblocks' )
+            'modalHelpTitle' => __('Hold STRG/CMD to select multiple images', 'Kontentblocks'),
+            'description' => __( 'Description', 'Kontentblocks' ),
+            'addButton' => __('add images', 'Kontentblocks')
         ),
         // Field:: choseTaxonomy
         'chosetaxonomy' => array(

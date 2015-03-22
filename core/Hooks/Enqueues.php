@@ -158,7 +158,7 @@ class Enqueues
         wp_register_script(
             'kb-media-ext',
             KB_PLUGIN_URL . '/js/' . $folder . '/mediaExt' . $suffix . '.js',
-            array(),
+            array('media-views'),
             false,
             true
         );
@@ -186,6 +186,7 @@ class Enqueues
             wp_enqueue_script( 'kb-backend' );
             wp_enqueue_script( 'kb-refields' );
             wp_enqueue_script( 'heartbeat' );
+            wp_enqueue_script( 'kb-media-ext' );
 
             // add Kontentblocks l18n strings
 //            $localize = self::localize();

@@ -36,7 +36,7 @@ KB.Util = function ($) {
         if (n in obj) {
           obj = obj[n];
         } else {
-          return;
+          return {};
         }
       }
       return obj;

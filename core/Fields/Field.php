@@ -324,13 +324,10 @@ abstract class Field implements Exportable
      */
     public function getUserValue()
     {
-
         if (!is_null( $this->userValue )) {
             return $this->userValue;
         }
-
         $value = $this->prepareOutput( $this->getValue() );
-
         if ($this->getArg( 'returnObj' )) {
             $classname = $this->getArg( 'returnObj' );
             // backwards compat

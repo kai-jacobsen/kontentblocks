@@ -11,7 +11,7 @@
   width: 800px;
   height: 65%;
   z-index: 299;
-  box-shadow: 1px 1px 30px #333;
+  box-shadow: 1px 3px 4px #999;
 
 }
 
@@ -22,7 +22,7 @@
     position: absolute;
     right: 8px;
     top: 12px;
-    color: #fff;
+    color: #333;
     cursor: pointer;
     z-index: 59;
     font-size: 12px;
@@ -46,14 +46,14 @@
 
   &.module-browser--excerpt-view {
     .module-browser--switch__excerpt-view {
-      color: #fff;
+      color: #333;
     }
   }
 
   &.module-browser--list-view {
 
     .module-browser--switch__list-view {
-      color: #fff;
+      color: #333;
     }
 
     .module-browser__right-column {
@@ -70,14 +70,15 @@
 
 .module-browser-header {
   height: 36px;
-  background: #333;
+  background: #fff;
   position: relative;
   z-index: 99;
   padding-left: 0px;
+  border-bottom: 1px solid #ccc;
 
   .dashicons {
     position: absolute;
-    color: #ccc;
+    color: #333;
     top: 11px;
     font-size: 16px;
     cursor: pointer;
@@ -101,7 +102,7 @@
   /*li*/
   .cat-item {
     display: inline-block;
-    color: #fff;
+    color: #333;
     height: 36px;
     padding: 6px 10px;
     line-height: 24px;
@@ -111,6 +112,7 @@
 
     &.active {
       background-color: $lightblue;
+      color: #fff;
     }
   }
 }
@@ -156,6 +158,7 @@
   margin: 0 !important;
   padding: 0 !important;
   list-style: none !important;
+  background: darken(#fafafa, 5%);
 }
 
 .modules-list, .module-description {
@@ -163,16 +166,16 @@
   padding: 0 0 72px !important;
 }
 
-.module-description{
+.module-description h3{
   padding-left:15px;
 }
 
 .modules-list-item {
   border-bottom: 1px solid #ccc;
-  border-top: 1px solid #fff;
   position: relative;
   padding: 4px 0 !important;
   margin: 0 !important;
+  background-color: #fafafa;
 
   &:hover {
     background-color: #fff;

@@ -1,5 +1,5 @@
 (function (wp, $) {
-
+  console.log('hello');
   if (!wp || !wp.media) {
     return;
   }

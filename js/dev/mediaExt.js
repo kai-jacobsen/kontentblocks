@@ -1,5 +1,6 @@
-/*! Kontentblocks DevVersion 2015-03-21 */
+/*! Kontentblocks DevVersion 2015-03-22 */
 (function(wp, $) {
+    console.log("hello");
     if (!wp || !wp.media) {
         return;
     }

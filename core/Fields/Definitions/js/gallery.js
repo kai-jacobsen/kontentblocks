@@ -1,48 +1,77 @@
-/**
- * Bootstrap everything
- */
-KB.Fields.register('Gallery', (function ($) {
-  return {
-    init: function (modalView) {
-      // find all instances on load
-      $('.kb-gallery--stage', $('body')).each(function (index, el) {
-        var fid = $(el).closest('.kb-js-field-identifier').attr('id');
-        var baseId = KB.Payload.getPayload('Fields')[fid].baseId;
-        var view = modalView || KB.Views.Modules.get($(el).data('module')) || new KB.FieldCollection();
-        var key = $(el).data('fieldkey');
-        var arrayKey = $(el).data('arraykey');
-
-        if (!view.hasField(key, arrayKey)) {
-
-          var obj = new KB.Gallery.Controller({
-            baseId: baseId,
-            fid: fid,
-            key: key,
-            arrayKey: arrayKey,
-            el: el
-          });
-          view.addField(key, obj, arrayKey);
-        } else {
-          view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
-        }
-
-        // attach a new FF instance to the view
-//                if (!view[key]) {
-//                    view[key] = new KB.Gallery.Controller({moduleView: view, fid: fid, key: key, el: el});
-//                } else {
-//                    view[key].bootstrap.call(view[key]);
-//                }
-
-      });
-    },
-    update: function () {
-      this.init();
-    },
-    frontUpdate: function (modalView) {
-      this.init(modalView);
+KB.Fields.registerObject('gallery', KB.Fields.BaseView.extend({
+  initialize: function () {
+    this.render();
+  },
+  render: function () {
+    this.$stage = this.$('.kb-gallery--stage');
+    this.createController();
+  },
+  derender: function () {
+    this.GalleryController.dispose();
+  },
+  rerender: function () {
+    this.derender();
+    this.render();
+  },
+  createController: function () {
+    if (!this.GalleryController) {
+      return this.GalleryController = new KB.Gallery.Controller({
+        el: this.$stage.get(0),
+        model: this.model
+      })
     }
-  };
-}(jQuery)));
+    console.log(this);
+    this.GalleryController.setElement(this.$stage.get(0));
+    return this.GalleryController.render();
+  }
+}));
+
+///**
+// * Bootstrap everything
+// */
+//KB.Fields.register('Gallery', (function ($) {
+//  return {
+//    init: function (modalView) {
+//      // find all instances on load
+//      $('.kb-gallery--stage', $('body')).each(function (index, el) {
+//        var fid = $(el).closest('.kb-js-field-identifier').attr('id');
+//        var baseId = KB.Payload.getPayload('Fields')[fid].baseId;
+//        var view = modalView || KB.Views.Modules.get($(el).data('module')) || new KB.FieldCollection();
+//
+//        var key = $(el).data('fieldkey');
+//        var arrayKey = $(el).data('arraykey');
+//
+//        if (!view.hasField(key, arrayKey)) {
+//
+//          var obj = new KB.Gallery.Controller({
+//            baseId: baseId,
+//            fid: fid,
+//            key: key,
+//            arrayKey: arrayKey,
+//            el: el
+//          });
+//          view.addField(key, obj, arrayKey);
+//        } else {
+//          view.getField(key, arrayKey).bootstrap.call(view.getField(key, arrayKey));
+//        }
+//
+//        // attach a new FF instance to the view
+////                if (!view[key]) {
+////                    view[key] = new KB.Gallery.Controller({moduleView: view, fid: fid, key: key, el: el});
+////                } else {
+////                    view[key].bootstrap.call(view[key]);
+////                }
+//
+//      });
+//    },
+//    update: function () {
+//      this.init();
+//    },
+//    frontUpdate: function (modalView) {
+//      this.init(modalView);
+//    }
+//  };
+//}(jQuery)));
 
 /*
  * namespace declaration
@@ -53,12 +82,10 @@ KB.Gallery = {};
  * Single Gallery Image View
  */
 KB.Gallery.ImageView = Backbone.View.extend({
-
-
   tagName: 'div',
   className: 'kb-gallery--image-wrapper',
-  initialize: function (args) {
-    this.parentView = args.parentView;
+  initialize: function (options) {
+    this.Controller = options.Controller;
     this.uid = this.model.get('uid') || _.uniqueId('kbg');
     this.editorAdded = false;
     this._remove = false;
@@ -117,8 +144,6 @@ KB.Gallery.ImageView = Backbone.View.extend({
     this.$el.appendTo(this._placeholder).unwrap();
     this.$el.removeClass('kb-gallery--active-item').removeClass('kb_field');
     jQuery('#wpwrap').removeClass('module-browser-open');
-
-
   },
   getEditorContent: function (ed) {
 
@@ -146,13 +171,13 @@ KB.Gallery.ImageView = Backbone.View.extend({
     }));
   },
   createInputName: function (uid) {
-    return this.createBaseId() + '[' + this.parentView.params.key + ']' + '[images]' + '[' + uid + ']';
+    return this.createBaseId() + '[' + this.Controller.model.get('fieldkey') + ']' + '[images]' + '[' + uid + ']';
   },
   createBaseId: function () {
-    if (!_.isEmpty(this.parentView.params.arrayKey)) {
-      return this.parentView.parentModuleId + '[' + this.parentView.params.arrayKey + ']';
+    if (!_.isEmpty(this.Controller.model.get('arrayKey'))) {
+      return this.Controller.model.get('baseId') + '[' + this.Controller.model.get('arrayKey') + ']';
     } else {
-      return this.parentView.parentModuleId;
+      return this.Controller.model.get('baseId');
     }
   }
 
@@ -164,37 +189,25 @@ KB.Gallery.ImageView = Backbone.View.extend({
  */
 KB.Gallery.Controller = Backbone.View.extend({
   initialize: function (params) {
-    this.params = params;
-    this.fieldArgs = KB.Payload.getFieldArgs(params.fid);
-    this.parentModuleId = params.baseId;
     this._frame = null; // media modal instance
     this.subviews = []; // image items
-    this._initialized = false; // init flag to prevent multiple inits
-    this.bootstrap(); // run forrest run
     if (KB.FrontendEditModal) {
       this.listenTo(KB.FrontendEditModal, 'kb:frontend-save', this.frontendSave);
     }
+    this.setupElements();
+    this.initialSetup();
+    _K.log('Fields: Gallery instance created and initialized');
 
   },
   events: {
     'click .kb-gallery--js-add-images': 'addImages'
-  },
-  bootstrap: function () {
-    if (!this._initialized) {
-      this.setupElements();
-      this.initialSetup();
-      this._initialized = true;
-      _K.log('Fields: Gallery instance created and initialized');
-    } else {
-      _K.log('Fields: Gallery instance was already initialized. Doing nothing.')
-    }
   },
   setupElements: function () {
     // Add list element dynamically
     this.$list = jQuery('<div class="kb-gallery--item-list"></div>').appendTo(this.$el);
     this.$list.sortable({revert: true, delay: 300});
     // add button dynamically
-    this.$addButton = jQuery('<a class="button button-primary kb-gallery--js-add-images">Add Images</a>').appendTo(this.$el);
+    this.$addButton = jQuery('<a class="button button-primary kb-gallery--js-add-images">' + KB.i18n.Refields.image.addButton +'</a>').appendTo(this.$el);
 
   },
   addImages: function () {
@@ -215,7 +228,7 @@ KB.Gallery.Controller = Backbone.View.extend({
 
     this._frame = wp.media({
       // Custom attributes
-      title: KB.i18n.Refields.image.modalTitle,
+      title: KB.i18n.Refields.image.modalHelpTitle,
       button: {
         text: KB.i18n.Refields.common.select
       },
@@ -251,7 +264,7 @@ KB.Gallery.Controller = Backbone.View.extend({
         id: image.get('id')
       };
       var model = new Backbone.Model(attr);
-      var imageView = new KB.Gallery.ImageView({model: model, parentView: that});
+      var imageView = new KB.Gallery.ImageView({model: model, Controller: that});
       that.subviews.push = imageView;
       that.$list.append(imageView.render());
 
@@ -263,11 +276,12 @@ KB.Gallery.Controller = Backbone.View.extend({
   },
   initialSetup: function () {
     var that = this;
-    var data = KB.Payload.getFieldData('gallery', this.parentModuleId, this.params.key, this.params.arrayKey);
-    if (data.length > 0) {
+    var data = this.model.get('value').images || {};
+
+    if (_.toArray(data).length > 0) {
       _.each(data, function (image) {
         var model = new Backbone.Model(image);
-        var imageView = new KB.Gallery.ImageView({model: model, parentView: that});
+        var imageView = new KB.Gallery.ImageView({model: model, Controller: that});
         that.subviews.push(imageView);
         that.$list.append(imageView.render());
       })
@@ -284,7 +298,5 @@ KB.Gallery.Controller = Backbone.View.extend({
       });
 
     }
-
-
   }
 });

@@ -77,14 +77,13 @@
   transform: translate(-50%, 0%);
   z-index: 8888;
   width: 90%;
-  height: 500px;
   max-height: 500px;
-  min-height: 400px;
-  background-color: #fff;
+  min-height: 350px;
+  background-color: #f9f9f9;
   border: 1px solid #ccc;
   //  overflow: hidden;
-  max-width: 1200px;
-  @include box-shadow(1px 1px 4px #333);
+  max-width: 800px;
+  @include box-shadow(1px 1px 4px #999);
 
   .kb-field{
     background: transparent;
@@ -92,19 +91,18 @@
   }
 
   .kb-gallery--left-column {
-    width: 50%;
+    width: 70%;
     float: left;
     display: block;
     background: #f9f9f9;
     height: 100%;
     padding: 16px;
-    border-right: 1px solid #333;
   }
 
   .kb-gallery--right-column {
     display: block;
     background: #f9f9f9;
-    width: 50%;
+    width: 30%;
     height: 100%;
     float: left;
     position: relative;
@@ -130,16 +128,11 @@
 
   .kb-gallery--js-meta-close {
     position: absolute;
-    right: 20px;
-    top: 10px;
+    right: 10px;
+    top: 7px;
     cursor: pointer;
     z-index: 9999;
-
-    &:hover {
-      -webkit-transform: scale(1.5);
-      @include transition(all .3s linear);
-    }
-
+    font-size: 14px !important;
   }
 
   .kb-gallery--tabs-nav li:first-child a {
@@ -161,15 +154,17 @@
   }
 
   .kb-gallery--header {
-    background: transparent;
+    background: #fff;
     z-index: 99;
     position: relative;
-    border-bottom: 0;
+    border-bottom: 1px solid #ccc;
     padding: 5px 10px;
 
     h3 {
       margin: 0;
-      font-size: 18px;
+      font-size: 14px;
+      font-family: Open-Sans, sans-serif !important;
+
     }
   }
 
