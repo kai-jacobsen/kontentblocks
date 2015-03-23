@@ -20,7 +20,6 @@ KB.Fields.registerObject('gallery', KB.Fields.BaseView.extend({
         model: this.model
       })
     }
-    console.log(this);
     this.GalleryController.setElement(this.$stage.get(0));
     return this.GalleryController.render();
   }
