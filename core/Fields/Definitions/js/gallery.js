@@ -190,9 +190,7 @@ KB.Gallery.Controller = Backbone.View.extend({
   initialize: function (params) {
     this._frame = null; // media modal instance
     this.subviews = []; // image items
-    if (KB.FrontendEditModal) {
-      this.listenTo(KB.FrontendEditModal, 'kb:frontend-save', this.frontendSave);
-    }
+    this.listenTo(KB.Events, 'modal.saved', this.frontendSave);
     this.setupElements();
     this.initialSetup();
     _K.log('Fields: Gallery instance created and initialized');
@@ -264,13 +262,11 @@ KB.Gallery.Controller = Backbone.View.extend({
       };
       var model = new Backbone.Model(attr);
       var imageView = new KB.Gallery.ImageView({model: model, Controller: that});
-      that.subviews.push = imageView;
+      that.subviews.push(imageView);
       that.$list.append(imageView.render());
-
-      if (KB.FrontendEditModal) {
-        KB.FrontendEditModal.trigger('recalibrate');
-      }
-
+      setTimeout(function(){
+        KB.Events.trigger('modal.recalibrate');
+      }, 250);
     })
   },
   initialSetup: function () {
@@ -288,6 +284,7 @@ KB.Gallery.Controller = Backbone.View.extend({
   },
   frontendSave: function () {
     var that = this;
+    console.log(this);
     if (this.subviews.length > 0) {
       _.each(this.subviews, function (m, i) {
         if (m._remove) {

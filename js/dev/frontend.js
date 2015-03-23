@@ -689,6 +689,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                 that.model.set("moduleData", res.data.newModuleData);
                 if (save) {
                     that.model.trigger("saved");
+                    KB.Events.trigger("modal.saved");
                 }
                 jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.ModuleView);
                 that.ModuleView.delegateEvents();
