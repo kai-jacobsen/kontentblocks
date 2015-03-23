@@ -318,6 +318,12 @@ KB.Backbone.Common.FieldConfigsCollection = Backbone.Collection.extend({
     model: KB.Backbone.Common.FieldConfigModel
 });
 
+if (Function.prototype.bind && window.console && typeof console.log == "object") {
+    [ "log", "info", "warn", "error", "assert", "dir", "clear", "profile", "profileEnd" ].forEach(function(method) {
+        console[method] = this.bind(console[method], console);
+    }, Function.prototype.call);
+}
+
 Logger.useDefaults();
 
 var _K = Logger.get("_K");
