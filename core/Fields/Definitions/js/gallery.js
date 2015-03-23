@@ -284,7 +284,6 @@ KB.Gallery.Controller = Backbone.View.extend({
   },
   frontendSave: function () {
     var that = this;
-    console.log(this);
     if (this.subviews.length > 0) {
       _.each(this.subviews, function (m, i) {
         if (m._remove) {

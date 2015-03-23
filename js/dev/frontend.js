@@ -686,7 +686,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
                     that.updateContainerClass(that.updateViewClassTo);
                 }
                 that.ModuleView.$el.html(res.data.html);
-                that.model.set("moduleData", res.data.newModuleData);
+                that.ModuleView.model.set("moduleData", res.data.newModuleData);
                 if (save) {
                     that.model.trigger("saved");
                     KB.Events.trigger("modal.saved");
