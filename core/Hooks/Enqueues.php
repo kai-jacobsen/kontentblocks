@@ -209,7 +209,7 @@ class Enqueues
 
     public static function coreStylesEnqueue()
     {
-        if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentnblocks')) {
+        if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentblocks')) {
             wp_enqueue_style( 'wp-color-picker' );
             wp_enqueue_style( 'kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css' );
             wp_enqueue_style( 'kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
@@ -222,7 +222,7 @@ class Enqueues
     {
 
         self::appConfig();
-        if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentblocks')) {
+        if (is_user_logged_in() && !is_admin() ) {
 
             wp_enqueue_script( 'kb-frontend' );
             wp_enqueue_script( 'kb-onsite-editing' );
