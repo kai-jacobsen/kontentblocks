@@ -20,6 +20,7 @@ Logger.setHandler(function (messages, context) {
     if (messages[0]) {
       KB.Menubar.StatusBar.setMsg(messages[0]);
     }
+
   } else {
     var console = window.console;
     var hdlr = console.log;
