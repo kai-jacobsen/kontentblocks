@@ -69,7 +69,10 @@ abstract class AbstractPanel
 
         // mumbo jumbo
         $this->setupArgs( $this->args );
-        $this->setupHooks();
+
+        add_action('add_meta_boxes', function(){
+            $this->setupHooks();
+        });
 
     }
 
@@ -118,7 +121,7 @@ abstract class AbstractPanel
         foreach ($this->postTypes as $pt) {
             // check for page templates resp. for the a _wp_page_template meta key
             if (!empty( $this->pageTemplates )) {
-                $tpl = get_post_meta( '_wp_page_template' );
+                $tpl = get_post_meta( get_the_ID(), '_wp_page_template', true );
                 if (!$tpl) {
                     $tpl = 'default';
                 }
