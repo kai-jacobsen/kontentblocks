@@ -18,7 +18,7 @@ class FrontendSetup
      */
     public function __construct()
     {
-        if (is_user_logged_in()) {
+        if (is_user_logged_in() && current_user_can('edit_kontentblocks')) {
             add_action( 'wp_footer', array( $this, 'setup' ) );
         }
     }

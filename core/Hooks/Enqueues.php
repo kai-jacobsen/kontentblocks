@@ -31,9 +31,11 @@ class Enqueues
         add_action( 'kb.do.enqueue.admin.files', array( __CLASS__, 'adminEnqueue' ) );
 
         // Frontend Enqueueing
-        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'coreStylesEnqueue' ), 9 );
-        add_action( 'wp_footer', array( __CLASS__, 'UserEnqueue' ), 9 );
+        if (!is_admin() && current_user_can( 'edit_kontentblocks' ) && is_user_logged_in()) {
+            add_action( 'wp_enqueue_scripts', array( __CLASS__, 'coreStylesEnqueue' ), 9 );
+            add_action( 'wp_footer', array( __CLASS__, 'UserEnqueue' ), 9 );
 
+        }
     }
 
 
@@ -87,7 +89,7 @@ class Enqueues
         wp_register_script(
             'kb-fields-api',
             KB_PLUGIN_URL . 'js/' . $folder . '/fieldsAPI' . $suffix . '.js',
-            array('kb-extensions'),
+            array( 'kb-extensions' ),
             null,
             true
         );
@@ -132,10 +134,6 @@ class Enqueues
         );
 
 
-
-
-
-
         // WP iris // no dev version available in core
         wp_register_script(
             'wp-iris',
@@ -158,7 +156,7 @@ class Enqueues
         wp_register_script(
             'kb-media-ext',
             KB_PLUGIN_URL . '/js/' . $folder . '/mediaExt' . $suffix . '.js',
-            array('media-views'),
+            array( 'media-views' ),
             false,
             true
         );
@@ -209,7 +207,7 @@ class Enqueues
 
     public static function coreStylesEnqueue()
     {
-        if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentblocks')) {
+        if (is_user_logged_in() && !is_admin() && current_user_can( 'edit_kontentblocks' )) {
             wp_enqueue_style( 'wp-color-picker' );
             wp_enqueue_style( 'kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css' );
             wp_enqueue_style( 'kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
@@ -222,7 +220,7 @@ class Enqueues
     {
 
         self::appConfig();
-        if (is_user_logged_in() && !is_admin() ) {
+        if (is_user_logged_in() && !is_admin()) {
 
             wp_enqueue_script( 'kb-frontend' );
             wp_enqueue_script( 'kb-onsite-editing' );

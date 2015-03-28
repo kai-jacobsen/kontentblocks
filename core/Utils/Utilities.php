@@ -362,9 +362,14 @@ class Utilities
     /**
      * Call the ghost to visit the url in concat mode
      * @param null $postId
+     * @return null|void
      */
     public static function remoteConcatGet( $postId = null )
     {
+        if (apply_filters('kb.remote.concat.get', false)){
+            return null;
+        }
+
         if (is_null( $postId )) {
             return;
         }
