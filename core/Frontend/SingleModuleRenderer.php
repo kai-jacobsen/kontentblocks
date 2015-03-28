@@ -35,7 +35,7 @@ class SingleModuleRenderer
 
         }
 
-        if ($Module->verify()){
+        if ($Module->verify()) {
             Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         }
 
@@ -75,7 +75,9 @@ class SingleModuleRenderer
         $defaults = array(
             'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
-            'element' => $this->Module->Properties->getSetting( 'element' ),
+            'element' => ( isset( $args['moduleElement'] ) ) ? $args['moduleElement'] : $this->Module->Properties->getSetting(
+                'element'
+            ),
             'action' => null,
             'area_template' => 'default'
         );
@@ -110,7 +112,7 @@ class SingleModuleRenderer
                 'module',
                 'single-module',
                 $this->Module->Properties->getSetting( 'id' ),
-                'view-' . str_replace('.twig', '', $this->Module->Properties->viewfile)
+                'view-' . str_replace( '.twig', '', $this->Module->Properties->viewfile )
 
             );
     }

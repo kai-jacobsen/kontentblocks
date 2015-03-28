@@ -226,7 +226,8 @@ class AreaHtmlNode
             'element' => apply_filters( 'kb.area.settings.element', 'div' ),
             'mergeRepeating' => false,
             'action' => null,
-            'layout' => 'default'
+            'layout' => 'default',
+            'moduleElement' => null
         );
 
         if ($settings) {
@@ -294,7 +295,8 @@ class AreaHtmlNode
             'subcontext' => $this->settings['subcontext'],
             'areaTemplate' => $this->settings['layout'],
             'action' => $this->settings['action'],
-            'areaId' => $this->id
+            'areaId' => $this->id,
+            'moduleElement' => $this->settings['moduleElement']
         );
 
     }
