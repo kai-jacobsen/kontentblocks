@@ -136,7 +136,7 @@ abstract class AbstractPanel
             } else {
                 add_action( $this->hook, array( $this, 'form' ) );
             }
-            add_action( "save_post", array( $this, 'save' ), 10, 1 );
+//            add_action( "save_post", array( $this, 'save' ), 10, 1 );
         }
     }
 
