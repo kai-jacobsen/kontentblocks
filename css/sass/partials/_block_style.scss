@@ -37,7 +37,7 @@ h2.kb-title {
   }
 
   &.kb-open .kb-module__header {
-    @include box-shadow(1px 1px 1px #fff);
+    box-shadow:1px 1px 1px #fff;
   }
 
   &.kb_inactive {
@@ -362,7 +362,7 @@ h5.kb_properties_title {
       float: left;
       cursor: pointer;
       margin-bottom: 0;
-      @include transition(all .3s linear);
+      transition:all .3s linear;
       /*background-position: 0 0px !important;*/
 
       &:hover {

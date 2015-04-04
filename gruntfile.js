@@ -103,6 +103,34 @@ module.exports = function (grunt) {
         }
       }
     },
+    sass: {
+      dist: {
+        options: {                       // Target options
+          outputStyle: 'compressed',
+          //includePaths: ['bower_components/foundation/scss'],
+          sourceMap: false,
+          sourceComments: false
+        },
+        files: {                         // Dictionary of files
+          'css/kontentblocks.css': 'css/sass/kontentblocks.scss',
+          'css/KBOsEditStyle.css': 'css/sass/KBOsEditStyle.scss',
+          'css/OSinlinestyles.css': 'css/sass/OSinlinestyles.scss'
+        }
+      },
+      dev: {
+        options: {                       // Target options
+          outputStyle: 'expanded',
+          //includePaths: ['bower_components/foundation/scss'],
+          sourceMap: false,
+          sourceComments: true
+        },
+        files: {                         // Dictionary of files
+          'css/kontentblocks.css': 'css/sass/kontentblocks.scss',
+          'css/KBOsEditStyle.css': 'css/sass/KBOsEditStyle.scss',
+          'css/OSinlinestyles.css': 'css/sass/OSinlinestyles.scss'
+        }
+      }
+    },
     watch: {
       options: {
         livereload: true
@@ -180,19 +208,19 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-rsync-2');
   grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-sass');
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'compass:dist', 'autoprefixer', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
+  grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'sass:dist', 'autoprefixer', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('dev', ['concat', 'uglify:dev', 'compass:dev', 'clean', 'exec:removeHash', 'exec:createDevId']);
-  grunt.registerTask('cssdev', ['compass:dev', 'autoprefixer']);
+  grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
 };

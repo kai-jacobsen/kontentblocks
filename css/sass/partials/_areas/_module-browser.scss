@@ -16,7 +16,7 @@
 }
 
 .module-browser-wrapper * {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   position: relative;
   .close-browser {
     position: absolute;
@@ -31,7 +31,7 @@
 }
 
 #wpwrap {
-  @include transition(all .8s ease-in-out);
+  transition: all .8s ease-in-out;
 }
 
 #wpwrap.module-browser-open {
@@ -118,7 +118,7 @@
 }
 
 .module-browser__left-column {
-  @include box-sizing('border-box');
+  box-sizing: border-box;
   width: 280px;
   display: block;
   float: left;
@@ -128,7 +128,7 @@
   padding-top: 36px;
   padding-bottom: 36px;
   background-color: #f9f9f9;
-  @include transition(all .2s linear);
+  transition: all .2s linear;
 }
 
 .module-browser__right-column {
@@ -139,7 +139,7 @@
   padding-top: 36px;
   padding-right: 10px;
   float: left;
-  @include transition(all .2s linear);
+  transition:all .2s linear;
 
   .module-browser--poster-wrap {
 
@@ -189,7 +189,7 @@
     width: 32px;
     height: 101%;
     line-height: 32px;
-    @include transition(all .3s ease-in-out);
+    transition:all .3s ease-in-out;
     z-index: 595;
 
     &:hover {

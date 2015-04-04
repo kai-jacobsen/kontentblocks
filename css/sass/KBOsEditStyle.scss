@@ -1,4 +1,3 @@
-@import "compass/css3";
 @import "partials/_base";
 
 .os-edit-container {
@@ -49,7 +48,7 @@
   position: absolute;
   width: 42px;
   opacity: 0;
-  @include transition(all .3s linear);
+  transition:all .3s linear;
 //  @include border-radius(3px);
 
   z-index: 1990;
@@ -83,7 +82,7 @@
     color: #fff;
     border: none !important;
     text-decoration: none !important;
-    @include transition(all .3s ease-in-out);
+    transition:all .3s ease-in-out;
     cursor: pointer;
     //    background-color: rgba(255,255,255,.8);
     opacity: .3;
@@ -280,7 +279,7 @@ body.onsite-editing {
 
 // experiments
 #onsite-modal * {
-  @include box-sizing(border-box);
+  box-sizing:border-box;
 }
 
 //#onsite-modal .kb-field *, #onsite-modal .kb-template-selector--wrapper * {
@@ -336,7 +335,7 @@ body.onsite-editing {
     font-size: 18px;
     cursor: pointer;
     font-weight: 100;
-    @include transition(all .3s ease-in-out);
+  transition:all .3s ease-in-out;
 
     &:hover {
       color: #283c43;
@@ -369,7 +368,7 @@ body.onsite-editing {
   .kb-button-primary {
     color: #fff;
 //    background-color: $lightblue;
-    @include transition(all .3s ease-in-out);
+    transition:all .3s ease-in-out;
     cursor: pointer;
 
     &:hover {
@@ -381,7 +380,7 @@ body.onsite-editing {
   .kb-button-secondary {
     color: #fff;
 //    background-color: $orange;
-    @include transition(all .3s ease-in-out);
+    transition:all .3s ease-in-out;
     cursor: pointer;
 
     &:hover {
@@ -534,5 +533,5 @@ body.onsite-editing {
 //}
 
 #onsite-modal .wp-picker-container * {
-  @include box-sizing(content-box);
+  box-sizing: content-box;
 }

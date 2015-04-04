@@ -170,22 +170,14 @@
   // min-height: 180px;
   margin-bottom: 20px;
   padding: 0px;
-  // border: 1px solid #f2f2f2;
-  //  background: #fff;
   box-shadow: 0px 1px 1px #fff;
-  //  border: 1px solid #ccc;
-  //  border-bottom: 1px solid #aaa;
-  //  border-right: 1px solid #aaa;
-  //@include box-shadow(0px 1px 4px #cccccc);
 
 }
 
 .kb-context__inner {
   background-color: #fff;
   border: 1px solid #e5e5e5;
-//  border-bottom: 1px solid #aaa;
-//  border-right: 1px solid #aaa;
-  @include box-shadow(0 1px 1px rgba(0,0,0,0.04));
+  box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 }
 
 .block_limit {
@@ -279,7 +271,7 @@
   color: #999;
   padding: 10px 10px;
   margin: 5px 30px;
-  @include transition(color .25s linear);
+  transition:color .25s linear;
 
   &:hover {
     color: #333;

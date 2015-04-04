@@ -27,7 +27,7 @@
     width:60%;
     min-width: 150px !important;
     padding: 0 10px !important;
-    @include transition(width .2s ease-out);
+    transition:width .2s ease-out;
 
     &.large{
       width: 90%;

@@ -169,7 +169,7 @@ body.on-site-editing {
     margin: 0 4px;
 
     &.kb-current-template-language{
-      @include opacity(.3);
+      opacity:0.3;
     }
 
     a {

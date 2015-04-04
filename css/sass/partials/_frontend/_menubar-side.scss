@@ -37,7 +37,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   font-size: 13px;
   background-color: #f2f2f2;
   border-bottom: 1px solid #ccc;
-  @include transition(all .4s ease-out);
+  transition:all .4s ease-out;
   position: relative;
 
   &.kb-sidebar-areaview--inactive {
@@ -50,7 +50,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
     top: 10px;
     cursor: pointer;
     opacity: 0.5;
-    @include transition(opacity .3s ease-out);
+    transition: opacity .3s ease-out;
     &:hover {
       opacity: 1;
     }
@@ -85,7 +85,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
       padding: 5px 10px 5px 20px;
       background-color: #f9f9f9;
       position: relative;
-      @include transition(background .3s ease-in);
+      transition: background .3s ease-in;
 
       &:hover {
         background-color: #f6f6f6;

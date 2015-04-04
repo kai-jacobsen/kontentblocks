@@ -1,7 +1,7 @@
 .kb-gallery--stage {
 
   .kb-gallery--image-wrapper {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
     display: inline-block;
     width: 150px;
     margin-right: 15px;
@@ -59,12 +59,11 @@
 }
 
 .kb-gallery--active-item * {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
 }
 
 .kb-js--remote-editor * {
-  @include box-sizing(content-box);
-
+  box-sizing: border-box;
 }
 
 .kb-gallery--active-item {
@@ -83,7 +82,7 @@
   border: 1px solid #ccc;
   //  overflow: hidden;
   max-width: 800px;
-  @include box-shadow(1px 1px 4px #999);
+  box-shadow:1px 1px 4px #999;
 
   .kb-field{
     background: transparent;

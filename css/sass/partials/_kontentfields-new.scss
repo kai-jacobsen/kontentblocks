@@ -55,7 +55,7 @@
     }
 
     textarea:focus{
-        @include box-shadow(1px 1px 8px $lightblue);
+        box-shadow:1px 1px 8px $lightblue;
     }
 
     p.description{
@@ -100,7 +100,7 @@ Field Tabs
         margin: 0 !important;
         padding: 0 !important;
         color: #fff !important;
-        @include text-shadow(1px 1px 1px #999);
+        text-shadow:1px 1px 1px #999;
     }
 
     p.description {

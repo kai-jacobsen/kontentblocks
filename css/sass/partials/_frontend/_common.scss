@@ -31,7 +31,7 @@
   width: 100px;
   left: 50%;
   margin-left: -50px;
-  @include border-radius(4px);
+  border-radius: 4px;
 }
 
 .kb-front-sortable-placeholder {

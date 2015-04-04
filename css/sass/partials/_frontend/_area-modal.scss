@@ -3,7 +3,7 @@
   width: 200px;
   position: fixed;
   z-index: 1999;
-  @include transition(all .1s linear);
+  transition:all .1s linear;
 
   ul {
     background-color: #eaeaea;
