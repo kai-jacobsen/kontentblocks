@@ -20,7 +20,6 @@ KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend
     this.listenTo(KB.Panels, 'add', this.createPanelItem);
   },
   createPanelItem: function (model) {
-
     if (!model.get('args').frontend) {
       return;
     }
@@ -33,13 +32,13 @@ KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend
       })
     }
 
-    //if (model.get('type') && model.get('type') === 'static') {
-    //  this.PanelViews.option[model.get('baseId')] = new KB.Backbone.OptionPanelView({
-    //    model: model,
-    //    $parent: this.$el,
-    //    controller: this
-    //  })
-    //}
+    if (model.get('type') && model.get('type') === 'static') {
+      this.PanelViews.option[model.get('baseId')] = new KB.Backbone.OptionPanelView({
+        model: model,
+        $parent: this.$el,
+        controller: this
+      })
+    }
   },
   renderRootItem: function () {
     return this.sidebarController.$container.append(KB.Templates.render('frontend/sidebar/root-item', {
