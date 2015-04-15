@@ -208,6 +208,11 @@ abstract class AbstractPanel
         return $this->data;
     }
 
+    public function setData( $data )
+    {
+        $this->data = $data;
+    }
+
     public function getBaseId()
     {
         return $this->baseId;

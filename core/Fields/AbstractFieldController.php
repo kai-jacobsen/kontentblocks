@@ -84,7 +84,6 @@ abstract class AbstractFieldController
         foreach ($this->Structure as $def) {
             $collect = $collect + $def->getFields();
         }
-
         return $collect;
 
     }

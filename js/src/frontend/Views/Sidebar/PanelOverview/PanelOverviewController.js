@@ -33,7 +33,7 @@ KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend
     }
 
     if (model.get('type') && model.get('type') === 'static') {
-      this.PanelViews.option[model.get('baseId')] = new KB.Backbone.OptionPanelView({
+      this.PanelViews.option[model.get('baseId')] = new KB.Backbone.StaticPanelView({
         model: model,
         $parent: this.$el,
         controller: this

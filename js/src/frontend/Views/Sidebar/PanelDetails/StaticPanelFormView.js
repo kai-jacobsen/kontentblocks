@@ -1,10 +1,10 @@
-KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
+KB.Backbone.Sidebar.StaticPanelFormView = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__option-panel-wrap',
   initialize: function(options){
     this.Controller = options.controller;
     this.parentView = options.parentView;
-    this.$el.append(KB.Templates.render('frontend/sidebar/option-panel-details', {name:this.model.get('args').menu.name}));
+    this.$el.append(KB.Templates.render('frontend/sidebar/option-panel-details', {name: this.model.get('args').name}));
     this.$form = this.$('.kb-sidebar__form-container');
   },
   events:{
@@ -20,7 +20,7 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
     jQuery.ajax({
       url: ajaxurl,
       data: {
-        action: 'saveOptionPanelForm',
+        action: 'saveStaticPanelForm',
         data: that.$form.serializeJSON(),
         panel: that.model.toJSON(),
         _ajax_nonce: KB.Config.getNonce('update')
@@ -28,7 +28,7 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        //console.log(res);
+        console.log(res);
       },
       error: function () {
       }
@@ -40,7 +40,7 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
     jQuery.ajax({
       url: ajaxurl,
       data: {
-        action: 'getOptionPanelForm',
+        action: 'getStaticPanelForm',
         panel: that.model.toJSON(),
         //overloadData: overloadData,
         _ajax_nonce: KB.Config.getNonce('read')

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-04-13 */
+/*! Kontentblocks DevVersion 2015-04-15 */
 !function(a, b) {
     "use strict";
     var c, d = a.document;

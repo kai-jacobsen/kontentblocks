@@ -17,7 +17,7 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
   editImage: function () {
     this.openFrame(true);
   },
-  openFrame: function () {
+  openFrame: function (editmode) {
     var that = this, metadata;
     if (this.frame) {
       this.frame.dispose();
@@ -47,13 +47,10 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
         if (attachment) {
           attachment.set('attachment_id', attachment.get('id'));
           metadata = that.attachment.toJSON();
-
-
         } else {
           metadata = {};
           that.defaultFrame = 'select';
           that.defaultState = 'library';
-
         }
 
         // create a frame, bind 'update' callback and open in one step
@@ -79,7 +76,7 @@ KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
       });
   },
   ready: function () {
-    jQuery('.media-modal').addClass('smaller no-sidebar');
+    jQuery('.media-modal').addClass('smaller');
   },
   replace: function (attachment) {
     this.attachment = attachment;

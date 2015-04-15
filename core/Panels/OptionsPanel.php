@@ -165,10 +165,6 @@ abstract class OptionsPanel extends AbstractPanel
         exit;
     }
 
-    public function setData( $data )
-    {
-        $this->data = $data;
-    }
 
     /**
      * Setup panel related meta data

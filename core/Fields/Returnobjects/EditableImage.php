@@ -296,7 +296,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     protected function prepareSrc( $builtin )
     {
-
         if (is_null( $builtin )) {
             if ($this->getValue( 'id' )) {
                 return $this->src = ImageResize::getInstance()->process(

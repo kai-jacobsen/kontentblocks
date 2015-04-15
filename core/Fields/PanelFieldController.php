@@ -127,14 +127,12 @@ class PanelFieldController extends AbstractFieldController
     {
 
         if (!empty( $this->fieldsById )) {
-
             if (empty( $this->preparedFields )) {
                 /** @var \Kontentblocks\Fields\Field $Field */
                 foreach ($this->fieldsById as $Field) {
                     $this->preparedFields[$Field->getKey()] = $Field->getUserValue();
                 }
             }
-
             return $this->preparedFields;
         }
         return $this->data;

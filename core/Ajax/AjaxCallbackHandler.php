@@ -66,7 +66,9 @@ class AjaxCallbackHandler
                 'updateModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateModule', 'run' ),
                 'fieldGetImage' => array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' ),
                 'getOptionPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\GetOptionPanelForm', 'run'),
-                'saveOptionPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\SaveOptionPanelForm', 'run')
+                'getStaticPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\GetStaticPanelForm', 'run'),
+                'saveOptionPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\SaveOptionPanelForm', 'run'),
+                'saveStaticPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\SaveStaticPanelForm', 'run')
 
             )
         );
@@ -93,7 +95,7 @@ class AjaxCallbackHandler
                 'wp_ajax_' . $action,
                 function () use ( $callback ) {
                     if ($this->verify( $callback )) {
-                        call_user_func( $callback, new ValueStorage( $_POST ) );
+                          call_user_func( $callback, new ValueStorage( $_POST ) );
                     }
                 }
             );

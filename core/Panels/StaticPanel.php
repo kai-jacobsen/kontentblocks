@@ -18,6 +18,10 @@ abstract class StaticPanel extends AbstractPanel
      */
     public $FieldController;
 
+
+
+    public $postId;
+
     /**
      * Flag indicates if data should be stored as single key => value pairs
      * in the meta table
@@ -26,9 +30,10 @@ abstract class StaticPanel extends AbstractPanel
     protected $saveAsSingle = false;
 
 
-    public function __construct($args){
+    public function __construct( $args )
+    {
 
-        parent::__construct($args);
+        parent::__construct( $args );
         add_action( 'wp_footer', array( $this, 'toJSON' ) );
 
     }
@@ -80,10 +85,19 @@ abstract class StaticPanel extends AbstractPanel
         $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
 
         $this->beforeForm();
-        echo $this->fields( $this->FieldController )->renderFields();
+        echo $this->renderFields();
         $this->afterForm();
         $this->toJSON();
 
+    }
+
+
+
+
+    public function renderFields()
+    {
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData( $this->postId ), $this );
+        return $this->fields( $this->FieldController )->renderFields();
     }
 
     /**
@@ -119,7 +133,7 @@ abstract class StaticPanel extends AbstractPanel
      */
     private function beforeForm()
     {
-        $class = (is_array($this->metaBox)) ? 'kb-postbox' : '';
+        $class = ( is_array( $this->metaBox ) ) ? 'kb-postbox' : '';
 
         echo "<div class='postbox {$class}'>
                 <div class='kb-custom-wrapper'>
@@ -146,6 +160,7 @@ abstract class StaticPanel extends AbstractPanel
      */
     public function setup( $postId )
     {
+        $this->postId = $postId;
         $this->setupData( $postId );
         $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
         $this->fields( $this->FieldController )->setup( $this->data );
@@ -165,7 +180,7 @@ abstract class StaticPanel extends AbstractPanel
 
         $data = $this->FieldController->prepareDataAndGet();
 
-        if (!is_array($data)){
+        if (!is_array( $data )) {
             return array();
         }
         return $data;

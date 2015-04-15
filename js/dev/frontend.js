@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-04-13 */
+/*! Kontentblocks DevVersion 2015-04-15 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -1894,7 +1894,9 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
     initialize: function(options) {
         this.Controller = options.controller;
         this.parentView = options.parentView;
-        this.$el.append(KB.Templates.render("frontend/sidebar/option-panel-details", this.model.toJSON()));
+        this.$el.append(KB.Templates.render("frontend/sidebar/option-panel-details", {
+            name: this.model.get("args").menu.name
+        }));
         this.$form = this.$(".kb-sidebar__form-container");
     },
     events: {
@@ -1948,6 +1950,70 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
     }
 });
 
+KB.Backbone.Sidebar.StaticPanelFormView = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__option-panel-wrap",
+    initialize: function(options) {
+        this.Controller = options.controller;
+        this.parentView = options.parentView;
+        this.$el.append(KB.Templates.render("frontend/sidebar/option-panel-details", {
+            name: this.model.get("args").name
+        }));
+        this.$form = this.$(".kb-sidebar__form-container");
+    },
+    events: {
+        "click .kb-sidebar-action--update": "save",
+        "click .kb-sidebar-action--close": "close"
+    },
+    render: function() {
+        this.loadForm();
+        return this.$el;
+    },
+    save: function() {
+        var that = this;
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                action: "saveStaticPanelForm",
+                data: that.$form.serializeJSON(),
+                panel: that.model.toJSON(),
+                _ajax_nonce: KB.Config.getNonce("update")
+            },
+            type: "POST",
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+            },
+            error: function() {}
+        });
+    },
+    loadForm: function() {
+        var that = this;
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                action: "getStaticPanelForm",
+                panel: that.model.toJSON(),
+                _ajax_nonce: KB.Config.getNonce("read")
+            },
+            type: "POST",
+            dataType: "json",
+            success: function(res) {
+                that.model.trigger("modal.serialize.before");
+                that.$form.html(res.data.html);
+                KB.Payload.parseAdditionalJSON(res.data.json);
+                that.model.trigger("modal.serialize");
+                KB.Ui.initTabs(that.$el);
+            },
+            error: function() {}
+        });
+    },
+    close: function() {
+        this.model.trigger("modal.serialize.before");
+        this.parentView.closeDetails();
+    }
+});
+
 KB.Backbone.OptionPanelView = Backbone.View.extend({
     tagName: "div",
     className: "kb-sidebar__panel-item",
@@ -1960,7 +2026,9 @@ KB.Backbone.OptionPanelView = Backbone.View.extend({
         click: "setupFormView"
     },
     render: function() {
-        this.$el.append(KB.Templates.render("frontend/sidebar/panel-list-item", this.model.toJSON()));
+        this.$el.append(KB.Templates.render("frontend/sidebar/panel-list-item", {
+            name: this.model.get("args").menu.name
+        }));
         return this.$parent.append(this.$el);
     },
     setupFormView: function() {
@@ -2008,7 +2076,7 @@ KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend
             });
         }
         if (model.get("type") && model.get("type") === "static") {
-            this.PanelViews.option[model.get("baseId")] = new KB.Backbone.OptionPanelView({
+            this.PanelViews.option[model.get("baseId")] = new KB.Backbone.StaticPanelView({
                 model: model,
                 $parent: this.$el,
                 controller: this
@@ -2020,6 +2088,36 @@ KB.Backbone.Sidebar.PanelOverview.PanelOverviewController = Backbone.View.extend
             text: "Panels",
             id: "PanelList"
         }));
+    }
+});
+
+KB.Backbone.StaticPanelView = Backbone.View.extend({
+    tagName: "div",
+    className: "kb-sidebar__panel-item",
+    initialize: function(options) {
+        this.$parent = options.$parent;
+        this.Controller = options.controller;
+        this.render();
+    },
+    events: {
+        click: "setupFormView"
+    },
+    render: function() {
+        this.$el.append(KB.Templates.render("frontend/sidebar/panel-list-item", {
+            name: this.model.get("args").name
+        }));
+        return this.$parent.append(this.$el);
+    },
+    setupFormView: function() {
+        this.FormView = new KB.Backbone.Sidebar.StaticPanelFormView({
+            model: this.model,
+            controller: this.Controller,
+            parentView: this
+        });
+        this.Controller.sidebarController.setExtendedView(this.FormView);
+    },
+    closeDetails: function() {
+        this.Controller.sidebarController.closeExtendedView();
     }
 });
 

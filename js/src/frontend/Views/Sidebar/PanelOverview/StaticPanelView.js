@@ -1,4 +1,4 @@
-KB.Backbone.OptionPanelView = Backbone.View.extend({
+KB.Backbone.StaticPanelView = Backbone.View.extend({
 
   tagName: 'div',
   className: 'kb-sidebar__panel-item',
@@ -9,21 +9,21 @@ KB.Backbone.OptionPanelView = Backbone.View.extend({
     this.render();
   },
   events: {
-    'click': 'setupFormView'
+    'click' : 'setupFormView'
   },
   render: function () {
-    this.$el.append(KB.Templates.render('frontend/sidebar/panel-list-item', {name: this.model.get('args').menu.name}));
+    this.$el.append(KB.Templates.render('frontend/sidebar/panel-list-item', { name: this.model.get('args').name} ));
     return this.$parent.append(this.$el);
   },
-  setupFormView: function () {
-    this.FormView = new KB.Backbone.Sidebar.OptionsPanelFormView({
+  setupFormView: function(){
+    this.FormView = new KB.Backbone.Sidebar.StaticPanelFormView({
       model: this.model,
       controller: this.Controller,
       parentView: this
     });
     this.Controller.sidebarController.setExtendedView(this.FormView);
   },
-  closeDetails: function () {
+  closeDetails: function(){
     this.Controller.sidebarController.closeExtendedView();
   }
 });
