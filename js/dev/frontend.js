@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-04-15 */
+/*! Kontentblocks DevVersion 2015-05-04 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -2291,6 +2291,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
     initialize: function() {
         this.placeHolderSet = false;
         this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
+        this.settings = this.model.get("tinymce");
         this.setupDefaults();
         this.maybeSetPlaceholder();
         this.listenToOnce(this.model.get("ModuleModel"), "remove", this.deactivate);
@@ -2325,7 +2326,6 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
             preview_styles: false,
             setup: function(ed) {
                 ed.on("init", function() {
-                    var cleaned;
                     that.editor = ed;
                     ed.module = that.model.get("ModuleModel");
                     ed.kfilter = that.model.get("filter") && that.model.get("filter") === "content" ? true : false;
@@ -2395,6 +2395,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
                                 success: function(res) {
                                     ed.setContent(res.data.content);
                                     ed.module.set("moduleData", moduleData);
+                                    twttr.widgets.load();
                                 },
                                 error: function() {}
                             });
@@ -2408,6 +2409,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
                 });
             }
         };
+        console.log(this.settings);
         this.defaults = _.extend(defaults, this.settings);
     },
     activate: function(e) {
@@ -2569,6 +2571,9 @@ KB.ObjectProxy = new Backbone.Collection();
 
 KB.App = function() {
     function init() {
+        if (!KB.appData.config.initFrontend) {
+            return;
+        }
         var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
         $toolbar.hide();
         if (KB.appData.config.useModuleNav) {

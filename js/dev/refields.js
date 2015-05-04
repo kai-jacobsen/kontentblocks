@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-04-15 */
+/*! Kontentblocks DevVersion 2015-05-04 */
 KB.Fields.BaseView = Backbone.View.extend({
     rerender: function() {
         this.render();

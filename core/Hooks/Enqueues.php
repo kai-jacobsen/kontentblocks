@@ -264,7 +264,8 @@ class Enqueues
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION,
             'isMobile' => Kontentblocks::getService( 'utility.mobileDetect' )->isMobile(),
-            'useModuleNav' => apply_filters( 'kb:config.module-nav', true )
+            'useModuleNav' => apply_filters( 'kb:config.module-nav', true ),
+            'initFrontend' => apply_filters('kb.config.initFrontend', true)
         );
 
         if (is_preview()) {

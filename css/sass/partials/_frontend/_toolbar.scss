@@ -71,21 +71,31 @@
 \*------------------------------------*/
 
 #onsite-form{
-
-
-
   .wp-editor-wrap * {
     box-sizing: content-box;
   }
-
   .mce-widget{
-
     text-transform: none !important;
-
     button:hover{
       background: transparent !important;
     }
-
   }
+}
 
+.mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout{
+  width: auto !important;
+}
+
+.mce-stack-layout-item, .mce-container-body{
+  display: inline-block !important;
+}
+
+.mce-tooltip{
+  font-family: 'Open-Sans', sans-serif !important;
+}
+
+.mce-widget.mce-btn{
+  button:hover{
+    background-color: #ffffff !important;
+  }
 }

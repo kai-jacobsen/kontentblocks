@@ -2,13 +2,14 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
   initialize: function () {
     this.placeHolderSet = false;
     this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
+    this.settings = this.model.get('tinymce');
     this.setupDefaults();
     this.maybeSetPlaceholder();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
     this.render();
   },
   render: function () {
-    if (this.el.id){
+    if (this.el.id) {
       this.id = this.el.id;
     }
   },
@@ -38,7 +39,6 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
 
       setup: function (ed) {
         ed.on('init', function () {
-          var cleaned;
           that.editor = ed;
           ed.module = that.model.get('ModuleModel');
           ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content') ? true : false;
@@ -119,6 +119,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
                   ed.setContent(res.data.content);
                   ed.module.set('moduleData', moduleData);
                   //ed.module.trigger('kb.frontend.module.inlineUpdate');
+                  twttr.widgets.load();
                 },
 
                 error: function () {
@@ -138,9 +139,8 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
         });
       }
     };
-
+    console.log(this.settings);
     this.defaults = _.extend(defaults, this.settings);
-
 
   },
   activate: function (e) {

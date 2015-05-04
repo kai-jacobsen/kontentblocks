@@ -89,7 +89,6 @@ class EditableElement extends AbstractEditableFieldReturn
         $format = '<%1$s id="%4$s" %3$s>%2$s</%1$s>';
         $formatWithLink = '<%1$s id="%4$s" %3$s><a href="%5$s">%2$s</a></%1$s>';
 
-
         if (!in_array( $this->el, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) )) {
             $filtered = apply_filters( 'the_content', $this->value );
         } else {
@@ -145,13 +144,11 @@ class EditableElement extends AbstractEditableFieldReturn
 
         if (in_array( $this->el, $titles )) {
             $this->tinymce['toolbar'] = "kbcancleinline | undo redo | bold forecolor italic | alignleft aligncenter alignright alignjustify";
-
             return 'editable';
         }
 
         if (in_array( $this->el, $text )) {
-            $this->tinymce['toolbar'] = " kbcancleinline | undo redo | formatselect forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  image     | print preview media";
-
+            $this->tinymce['toolbar'] = "alignleft aligncenter alignright alignjustify";
             return 'editable';
         }
 
@@ -160,8 +157,8 @@ class EditableElement extends AbstractEditableFieldReturn
 
     public function toJSON()
     {
-
         $json = array(
+            'editableSubType' => $this->getEditableClass(),
             'type' => 'EditableText',
             'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce ),
             'kpath' => $this->createPath(),

@@ -64,9 +64,15 @@ KB.ObjectProxy = new Backbone.Collection();
 KB.App = function () {
 
   function init() {
+    if (!KB.appData.config.initFrontend){
+      return;
+    }
+
     // create toolbar container for tinymce inline editors
     var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
     $toolbar.hide();
+
+
 
     // create Sidebar singleton
     if (KB.appData.config.useModuleNav) {
