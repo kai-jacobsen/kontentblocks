@@ -105,6 +105,7 @@
 
 /* line 89, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_common.scss */
 #kontentblocks-core-ui a:focus {
+  -webkit-box-shadow: none !important;
   box-shadow: none !important; }
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_fullscreen.scss */
@@ -193,6 +194,7 @@
   /* line 17, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar #wp-fullscreen-buttons .mce-btn:hover, #kb-toolbar .mce-toolbar .mce-btn-group .mce-btn:hover, #kb-toolbar #wp-fullscreen-buttons .mce-btn:focus, #kb-toolbar .mce-toolbar .mce-btn-group .mce-btn:focus, #kb-toolbar .qt-fullscreen:hover, #kb-toolbar .qt-fullscreen:focus, #kb-toolbar button {
     background: transparent;
+    -webkit-box-shadow: none;
     box-shadow: none;
     border: none; }
   /* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
@@ -236,6 +238,8 @@
 \*------------------------------------*/
 /* line 74, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .wp-editor-wrap * {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
   box-sizing: content-box; }
 /* line 77, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .mce-widget {
@@ -244,24 +248,10 @@
   #onsite-form .mce-widget button:hover {
     background: transparent !important; }
 
-/* line 85, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
-.mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout {
-  width: auto !important; }
-
-/* line 89, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
-.mce-stack-layout-item, .mce-container-body {
-  display: inline-block !important; }
-
-/* line 93, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
-.mce-tooltip {
-  font-family: 'Open-Sans', sans-serif !important; }
-
-/* line 98, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
-.mce-widget.mce-btn button:hover {
-  background-color: #ffffff !important; }
-
 /* line 2, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
 .kb-menubar-container * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
 /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
@@ -274,7 +264,10 @@
   width: 100%;
   background: #f2f2f2;
   z-index: 1995;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
+  -webkit-transition: all .3s linear;
   transition: all .3s linear; }
   /* line 18, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
   .kb-menubar-container .kb-brand {
@@ -302,6 +295,7 @@
     z-index: 9999;
     cursor: pointer;
     color: #666;
+    -webkit-transition: all .3s linear;
     transition: all .3s linear;
     border-top: 1px #aaa solid;
     border-left: 1px #aaa solid;
@@ -325,6 +319,7 @@
     z-index: 9999;
     cursor: pointer;
     color: #666;
+    -webkit-transition: color .3s linear;
     transition: color .3s linear;
     border-top: 1px #aaa solid;
     border-left: 1px #aaa solid;
@@ -348,6 +343,7 @@
     cursor: pointer;
     overflow: hidden;
     position: relative;
+    -webkit-transition: all .3s linear;
     transition: all .3s linear;
     opacity: .5;
     font-family: 'Open-Sans', sans-serif !important;
@@ -436,6 +432,8 @@
   border-right: 1px #aaaaaa solid;
   height: 25px;
   padding: 4px 8px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 12px;
   vertical-align: middle;
@@ -472,6 +470,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   position: fixed;
   left: 0;
   top: 0;
+  -webkit-box-shadow: 0px 1px 8px #333;
   box-shadow: 0px 1px 8px #333;
   font-family: 'Open Sans';
   z-index: 2000; }
@@ -495,6 +494,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   font-size: 13px;
   background-color: #f2f2f2;
   border-bottom: 1px solid #ccc;
+  -webkit-transition: all .4s ease-out;
   transition: all .4s ease-out;
   position: relative; }
   /* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
@@ -507,6 +507,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
     top: 10px;
     cursor: pointer;
     opacity: 0.5;
+    -webkit-transition: opacity .3s ease-out;
     transition: opacity .3s ease-out; }
     /* line 54, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
     .kb-sidebar-areaview .kb-sidebar__add-module:hover {
@@ -539,6 +540,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
       padding: 5px 10px 5px 20px;
       background-color: #f9f9f9;
       position: relative;
+      -webkit-transition: background .3s ease-in;
       transition: background .3s ease-in; }
       /* line 90, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
       .kb-sidebar-areaview ul li:hover {
@@ -745,6 +747,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   height: 100%;
   position: fixed;
   top: 0;
+  -webkit-box-shadow: 0px 1px 8px #333;
   box-shadow: 0px 1px 8px #333;
   font-family: 'Open Sans'; }
 
@@ -760,6 +763,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   left: 0;
   bottom: 0;
   border-top-right-radius: 30px;
+  -webkit-box-shadow: 1px 1px 3px #333;
   box-shadow: 1px 1px 3px #333;
   z-index: 2999; }
   /* line 349, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
@@ -796,11 +800,13 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
 
 /* line 385, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
 .kb-fx-button--effect-boris.kb-fx-button--click::after {
+  -webkit-animation: anim-effect-boris 0.3s forwards;
   animation: anim-effect-boris 0.3s forwards; }
 
-@keyframes anim-effect-boris {
+@-webkit-keyframes anim-effect-boris {
   /* line 390, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
   0% {
+    -webkit-transform: scale3d(0.3, 0.3, 1);
     transform: scale3d(0.3, 0.3, 1); }
 
   /* line 393, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
@@ -810,6 +816,25 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   /* line 396, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
   100% {
     opacity: 0;
+    -webkit-transform: scale3d(1.2, 1.2, 1);
+    transform: scale3d(1.2, 1.2, 1); } }
+
+@keyframes anim-effect-boris {
+  /* line 390, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
+  0% {
+    -webkit-transform: scale3d(0.3, 0.3, 1);
+    -ms-transform: scale3d(0.3, 0.3, 1);
+    transform: scale3d(0.3, 0.3, 1); }
+
+  /* line 393, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
+  25%, 50% {
+    opacity: 1; }
+
+  /* line 396, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar-side.scss */
+  100% {
+    opacity: 0;
+    -webkit-transform: scale3d(1.2, 1.2, 1);
+    -ms-transform: scale3d(1.2, 1.2, 1);
     transform: scale3d(1.2, 1.2, 1); } }
 
 /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_os-layout-bars.scss */
@@ -881,6 +906,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   padding: 2px;
   width: 30px;
   height: 30px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   background-color: #000;
   background-color: rgba(0, 0, 0, 0.9);
@@ -966,6 +992,7 @@ img.kb-inline-imageedit-attached:hover {
   width: 200px;
   position: fixed;
   z-index: 1999;
+  -webkit-transition: all .1s linear;
   transition: all .1s linear; }
   /* line 8, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_area-modal.scss */
   #kb-area-modal ul {
@@ -1027,6 +1054,7 @@ img.kb-inline-imageedit-attached:hover {
     border: 1px solid #aaa;
     top: 50%;
     left: 50%;
+    -webkit-animation: loader 4s infinite ease;
     animation: loader 4s infinite ease; }
   /* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   .kb-loading-overlay .kb-loading-loader-inner {
@@ -1038,46 +1066,118 @@ img.kb-inline-imageedit-attached:hover {
     top: 25%;
     left: 25%; }
 
-@keyframes loader {
+@-webkit-keyframes loader {
   /* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   0% {
+    -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
 
   /* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   25% {
+    -webkit-transform: rotate(180deg);
     transform: rotate(180deg); }
 
   /* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   50% {
+    -webkit-transform: rotate(180deg);
     transform: rotate(180deg); }
 
   /* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   75% {
+    -webkit-transform: rotate(360deg);
     transform: rotate(360deg); }
 
   /* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes loader {
+  /* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg); }
+
+  /* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  25% {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg); }
+
+  /* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  50% {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg); }
+
+  /* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  75% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg); }
+
+  /* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@-webkit-keyframes loader-inner {
+  /* line 58, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+
+  /* line 62, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  27% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg); }
+
+  /* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  51% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg); }
+
+  /* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  78% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); }
+
+  /* line 74, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
+  100% {
+    -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
 
 @keyframes loader-inner {
   /* line 58, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
     transform: rotate(0deg); }
 
   /* line 62, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   27% {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
     transform: rotate(180deg); }
 
   /* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   51% {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
     transform: rotate(180deg); }
 
   /* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   78% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
     transform: rotate(360deg); }
 
   /* line 74, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_loading-overlay.scss */
   100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
     transform: rotate(360deg); } }
 
 /* --------------------------
@@ -1099,14 +1199,11 @@ img.kb-inline-imageedit-attached:hover {
 
 /* line 15, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
 h2.kb-title {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   border-radius: 4px;
   background: #eaeaea;
   border: 1px solid #ccc;
   padding-left: 20px !important;
   -webkit-box-shadow: 1px solid #fff;
-  -moz-box-shadow: 1px solid #fff;
   box-shadow: 1px solid #fff; }
 
 /* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
@@ -1121,6 +1218,7 @@ h2.kb-title {
     position: relative; }
   /* line 39, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
   .kb-module.kb-open .kb-module__header {
+    -webkit-box-shadow: 1px 1px 1px #fff;
     box-shadow: 1px 1px 1px #fff; }
   /* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
   .kb-module.kb_inactive {
@@ -1213,8 +1311,6 @@ h5.kb_properties_title {
 .kb_properties {
   background: #fff;
   padding: 10px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
   border-radius: 8px;
   clear: both; }
 
@@ -1226,6 +1322,7 @@ h5.kb_properties_title {
   background: #f9f9f9;
   font-size: 12px;
   border: 0;
+  -webkit-box-shadow: none;
   box-shadow: none; }
 
 /* line 160, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
@@ -1244,8 +1341,6 @@ h5.kb_properties_title {
 
 /* line 174, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
 .kb-module__header {
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
   border-radius: 2px;
   border: 1px solid #f2f2f2;
   border-bottom: 1px solid #eee;
@@ -1294,6 +1389,7 @@ h5.kb_properties_title {
   height: 35px;
   float: left;
   cursor: pointer;
+  -webkit-box-shadow: none;
   box-shadow: none; }
   /* line 234, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
   .kb-fullscreen:hover {
@@ -1420,6 +1516,7 @@ h5.kb_properties_title {
       float: left;
       cursor: pointer;
       margin-bottom: 0;
+      -webkit-transition: all .3s linear;
       transition: all .3s linear;
       /*background-position: 0 0px !important;*/ }
       /* line 368, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_block_style.scss */
@@ -1783,11 +1880,7 @@ h5.kb_properties_title {
   /* Target only IE7 and IE8 with this hack */
   opacity: .01;
   -webkit-transition: .2s;
-  -moz-transition: .2s;
-  -o-transition: .2s;
   transition: .2s;
-  -moz-border-radius: 1px;
-  -webkit-border-radius: 1px;
   border-radius: 1px;
   z-index: 20; }
 
@@ -1797,8 +1890,6 @@ h5.kb_properties_title {
   background: rgba(234, 234, 234, 0.5);
   position: relative;
   margin: 0 1px;
-  -moz-border-radius: 1px;
-  -webkit-border-radius: 1px;
   border-radius: 1px; }
 
 /* line 60, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_nano.scss */
@@ -1810,18 +1901,12 @@ h5.kb_properties_title {
 /* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
 .alertify-hide {
   -webkit-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  -moz-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  -ms-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  -o-transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   transition: all 250ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   /* easeInBack */ }
 
 /* line 19, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
 .alertify-log-hide {
   -webkit-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  -moz-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  -ms-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  -o-transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   transition: all 500ms cubic-bezier(0.6, -0.28, 0.735, 0.045);
   /* easeInBack */ }
 
@@ -1854,9 +1939,7 @@ h5.kb_properties_title {
 /* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
 .alertify-hidden {
   -webkit-transform: translate(0, -15px);
-  -moz-transform: translate(0, -15px);
   -ms-transform: translate(0, -15px);
-  -o-transform: translate(0, -15px);
   transform: translate(0, -15px);
   opacity: 0;
   display: none; }
@@ -1895,9 +1978,7 @@ h5.kb_properties_title {
 /* line 94, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
 .alertify-log-hide {
   -webkit-transform: translate(300px, 0);
-  -moz-transform: translate(300px, 0);
   -ms-transform: translate(300px, 0);
-  -o-transform: translate(300px, 0);
   transform: translate(300px, 0);
   opacity: 0; }
 
@@ -1967,8 +2048,6 @@ h5.kb_properties_title {
   border-right: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
   -webkit-background-clip: padding;
-  /* Safari 4? Chrome 6? */
-  -moz-background-clip: padding;
   /* Firefox 3.6 */
   background-clip: padding-box;
   /* Firefox 4, Safari 5, Opera 10, IE 9 */ }
@@ -1988,9 +2067,7 @@ h5.kb_properties_title {
   text-decoration: none;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
   background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
-  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
-  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
-  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.3)), to(rgba(255, 255, 255, 0)));
   background-image: linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0)); }
 
 /* line 202, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
@@ -2040,6 +2117,7 @@ h5.kb_properties_title {
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.datetimepicker.scss */
 .xdsoft_datetimepicker {
+  -webkit-box-shadow: 0px 5px 15px -5px rgba(0, 0, 0, 0.506);
   box-shadow: 0px 5px 15px -5px rgba(0, 0, 0, 0.506);
   background: #FFFFFF;
   border-bottom: 1px solid #BBBBBB;
@@ -2055,6 +2133,7 @@ h5.kb_properties_title {
   position: absolute;
   z-index: 9999;
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   display: none; }
 
@@ -2095,11 +2174,13 @@ h5.kb_properties_title {
 .xdsoft_datetimepicker.xdsoft_inline {
   display: inline-block;
   position: static;
+  -webkit-box-shadow: none;
   box-shadow: none; }
 
 /* line 51, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.datetimepicker.scss */
 .xdsoft_datetimepicker * {
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0px;
   margin: 0px; }
@@ -2269,6 +2350,7 @@ h5.kb_properties_title {
 /* line 199, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.datetimepicker.scss */
 .xdsoft_datetimepicker .xdsoft_label > .xdsoft_select > div > .xdsoft_option.xdsoft_current {
   background: #33AAFF;
+  -webkit-box-shadow: #178FE5 0px 1px 3px 0px inset;
   box-shadow: #178FE5 0px 1px 3px 0px inset;
   color: #fff;
   font-weight: 700; }
@@ -2324,6 +2406,7 @@ h5.kb_properties_title {
 /* line 247, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.datetimepicker.scss */
 .xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_default, .xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_current, .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box > div > div.xdsoft_current {
   background: #33AAFF;
+  -webkit-box-shadow: #178FE5 0px 1px 3px 0px inset;
   box-shadow: #178FE5 0px 1px 3px 0px inset;
   color: #fff;
   font-weight: 700; }
@@ -2340,12 +2423,14 @@ h5.kb_properties_title {
 .xdsoft_datetimepicker .xdsoft_calendar td:hover, .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box > div > div:hover {
   color: #fff !important;
   background: #ff8000 !important;
+  -webkit-box-shadow: none !important;
   box-shadow: none !important; }
 
 /* line 268, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.datetimepicker.scss */
 .xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_disabled:hover, .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box > div > div.xdsoft_disabled:hover {
   color: inherit	!important;
   background: inherit !important;
+  -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important; }
 
 /* line 273, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.datetimepicker.scss */
@@ -2500,10 +2585,6 @@ h5.kb_properties_title {
 /* Search input placeholder */
 /* line 105, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
 .icons-selector input::-webkit-input-placeholder {
-  text-transform: uppercase; }
-
-/* line 106, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
-.icons-selector input:-moz-placeholder {
   text-transform: uppercase; }
 
 /* line 107, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
@@ -2662,85 +2743,45 @@ h5.kb_properties_title {
 
 /* line 227, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
 .icons-selector .fip-icon-spin3 {
-  -moz-animation: spin 2s infinite linear;
-  -o-animation: spin 2s infinite linear;
   -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
   display: inline-block; }
 
-@-moz-keyframes spin {
-  /* line 235, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
-  0% {
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg); }
-
-  /* line 242, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
-  100% {
-    -moz-transform: rotate(359deg);
-    -o-transform: rotate(359deg);
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg); } }
-
 @-webkit-keyframes spin {
   /* line 250, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
   0% {
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
 
   /* line 257, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
   100% {
-    -moz-transform: rotate(359deg);
-    -o-transform: rotate(359deg);
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg); } }
-
-@-o-keyframes spin {
-  /* line 265, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
-  0% {
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg); }
-
-  /* line 272, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
-  100% {
-    -moz-transform: rotate(359deg);
-    -o-transform: rotate(359deg);
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 @-ms-keyframes spin {
   /* line 280, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
   0% {
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
     transform: rotate(0deg); }
 
   /* line 287, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
   100% {
-    -moz-transform: rotate(359deg);
-    -o-transform: rotate(359deg);
     -webkit-transform: rotate(359deg);
+    -ms-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 @keyframes spin {
   /* line 295, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
   0% {
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
     transform: rotate(0deg); }
 
   /* line 302, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
   100% {
-    -moz-transform: rotate(359deg);
-    -o-transform: rotate(359deg);
     -webkit-transform: rotate(359deg);
+    -ms-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 /*------------------------------------*\
@@ -2790,7 +2831,6 @@ h5.kb_properties_title {
 /* IconPicker Popup */
 /* line 349, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
 .fip-grey.icons-selector .selector-popup {
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
   border: 1px solid #E5E5E5; }
@@ -2800,7 +2840,6 @@ h5.kb_properties_title {
 .fip-grey.icons-selector .selector-search input[type="text"], .fip-grey.icons-selector .selector-category select {
   border: 1px solid #EDEDED;
   color: #404040;
-  -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
   outline: none; }
@@ -2808,10 +2847,6 @@ h5.kb_properties_title {
 /* Search input placeholder */
 /* line 366, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
 .fip-grey.icons-selector input::-webkit-input-placeholder {
-  color: #ddd; }
-
-/* line 367, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
-.fip-grey.icons-selector input:-moz-placeholder {
   color: #ddd; }
 
 /* line 368, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_jq.iconpicker.scss */
@@ -2940,17 +2975,15 @@ h5.kb_properties_title {
 .hint:before, .hint:after, [data-hint]:before, [data-hint]:after {
   position: absolute;
   -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   visibility: hidden;
   opacity: 0;
   z-index: 1000000;
   pointer-events: none;
   -webkit-transition: .3s ease;
-  -moz-transition: .3s ease;
   transition: .3s ease;
   -webkit-transition-delay: 0ms;
-  -moz-transition-delay: 0ms;
   transition-delay: 0ms; }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
@@ -2961,7 +2994,6 @@ h5.kb_properties_title {
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint:hover:before, .hint:hover:after, [data-hint]:hover:before, [data-hint]:hover:after {
   -webkit-transition-delay: 100ms;
-  -moz-transition-delay: 100ms;
   transition-delay: 100ms; }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
@@ -3014,7 +3046,7 @@ h5.kb_properties_title {
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--top:hover:after, .hint--top:hover:before, .hint--top:focus:after, .hint--top:focus:before {
   -webkit-transform: translateY(-8px);
-  -moz-transform: translateY(-8px);
+  -ms-transform: translateY(-8px);
   transform: translateY(-8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
@@ -3033,7 +3065,7 @@ h5.kb_properties_title {
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--bottom:hover:after, .hint--bottom:hover:before, .hint--bottom:focus:after, .hint--bottom:focus:before {
   -webkit-transform: translateY(8px);
-  -moz-transform: translateY(8px);
+  -ms-transform: translateY(8px);
   transform: translateY(8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
@@ -3053,7 +3085,7 @@ h5.kb_properties_title {
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--right:hover:after, .hint--right:hover:before, .hint--right:focus:after, .hint--right:focus:before {
   -webkit-transform: translateX(8px);
-  -moz-transform: translateX(8px);
+  -ms-transform: translateX(8px);
   transform: translateX(8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
@@ -3073,12 +3105,13 @@ h5.kb_properties_title {
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--left:hover:after, .hint--left:hover:before, .hint--left:focus:after, .hint--left:focus:before {
   -webkit-transform: translateX(-8px);
-  -moz-transform: translateX(-8px);
+  -ms-transform: translateX(-8px);
   transform: translateX(-8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint:after, [data-hint]:after {
   text-shadow: 0 -1px 0 #000;
+  -webkit-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
@@ -3173,25 +3206,25 @@ h5.kb_properties_title {
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--always.hint--top:after, .hint--always.hint--top:before {
   -webkit-transform: translateY(-8px);
-  -moz-transform: translateY(-8px);
+  -ms-transform: translateY(-8px);
   transform: translateY(-8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--always.hint--bottom:after, .hint--always.hint--bottom:before {
   -webkit-transform: translateY(8px);
-  -moz-transform: translateY(8px);
+  -ms-transform: translateY(8px);
   transform: translateY(8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--always.hint--left:after, .hint--always.hint--left:before {
   -webkit-transform: translateX(-8px);
-  -moz-transform: translateX(-8px);
+  -ms-transform: translateX(-8px);
   transform: translateX(-8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--always.hint--right:after, .hint--always.hint--right:before {
   -webkit-transform: translateX(8px);
-  -moz-transform: translateX(8px);
+  -ms-transform: translateX(8px);
   transform: translateX(8px); }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
@@ -3201,13 +3234,11 @@ h5.kb_properties_title {
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--no-animate:before, .hint--no-animate:after {
   -webkit-transition-duration: 0ms;
-  -moz-transition-duration: 0ms;
   transition-duration: 0ms; }
 
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_plugins/_hint.scss */
 .hint--bounce:before, .hint--bounce:after {
   -webkit-transition: opacity .3s ease, visibility .3s ease, -webkit-transform .3s cubic-bezier(0.71, 1.7, .77, 1.24);
-  -moz-transition: opacity .3s ease, visibility .3s ease, -moz-transform .3s cubic-bezier(0.71, 1.7, .77, 1.24);
   transition: opacity .3s ease, visibility .3s ease, transform .3s cubic-bezier(0.71, 1.7, .77, 1.24); }
 
 /* --------------------------
@@ -3297,7 +3328,6 @@ h5.kb_properties_title {
   z-index: 5050;
   display: none;
   -webkit-box-shadow: 1px 1px 6px #333;
-  -moz-box-shadow: 1px 1px 6px #333;
   box-shadow: 1px 1px 6px #333;
   -webkit-border-bottom-right-radius: 8px;
   -webkit-border-bottom-left-radius: 8px;
@@ -3398,12 +3428,14 @@ h5.kb_properties_title {
 .kb-context-container {
   margin-bottom: 20px;
   padding: 0px;
+  -webkit-box-shadow: 0px 1px 1px #fff;
   box-shadow: 0px 1px 1px #fff; }
 
 /* line 177, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
 .kb-context__inner {
   background-color: #fff;
   border: 1px solid #e5e5e5;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04); }
 
 /* line 183, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
@@ -3447,6 +3479,7 @@ h5.kb_properties_title {
   color: #999;
   padding: 10px 10px;
   margin: 5px 30px;
+  -webkit-transition: color .25s linear;
   transition: color .25s linear; }
   /* line 276, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
   .kb-area__item-placeholder:hover {
@@ -3476,6 +3509,7 @@ h5.kb_properties_title {
 .kb-area-settings-wrapper {
   overflow: hidden;
   background: whitesmoke;
+  -webkit-box-shadow: inset -1px 1px 12px #aaa;
   box-shadow: inset -1px 1px 12px #aaa;
   border-bottom: 1px solid #aaa; }
 
@@ -3516,10 +3550,12 @@ h5.kb_properties_title {
     border: 1px solid #dadada;
     font-size: 14px;
     background: #f2f2f2 !important;
+    -webkit-box-shadow: none !important;
     box-shadow: none !important;
     width: 60%;
     min-width: 150px !important;
     padding: 0 10px !important;
+    -webkit-transition: width .2s ease-out;
     transition: width .2s ease-out; }
     /* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
     .kb-field input[type=text].large {
@@ -3612,8 +3648,6 @@ h5.kb_properties_title {
 
 /* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_date.scss */
 .Zebra_DatePicker, .Zebra_DatePicker .dp_header .dp_hover, .Zebra_DatePicker .dp_footer .dp_hover {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
   border-radius: 5px; }
 
 /* = HEADER
@@ -3821,6 +3855,7 @@ button.Zebra_DatePicker_Icon_Inside {
   zoom: 1; }
   /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
   .kb-field--tabs a:focus {
+    -webkit-box-shadow: none;
     box-shadow: none; }
   /* line 10, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_tabs.scss */
   .kb-field--tabs ul.ui-tabs-nav {
@@ -3912,6 +3947,7 @@ button.Zebra_DatePicker_Icon_Inside {
     /* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
     .flexible-fields--toggle-title input[type="text"]:focus {
       background-color: #fff !important;
+      -webkit-box-shadow: none;
       box-shadow: none; }
   /* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
   .flexible-fields--toggle-title .flexible-fields--js-toggle {
@@ -3959,6 +3995,8 @@ button.Zebra_DatePicker_Icon_Inside {
 
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--stage .kb-gallery--image-wrapper {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
   width: 150px;
@@ -4005,10 +4043,14 @@ button.Zebra_DatePicker_Icon_Inside {
 
 /* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-gallery--active-item * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
 /* line 65, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
 .kb-js--remote-editor * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
 /* line 69, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
@@ -4017,7 +4059,6 @@ button.Zebra_DatePicker_Icon_Inside {
   top: 10%;
   left: 50%;
   -webkit-transform: translate(-50%, 0%);
-  -moz-transform: translate(-50%, 0%);
   -ms-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
   z-index: 8888;
@@ -4027,6 +4068,7 @@ button.Zebra_DatePicker_Icon_Inside {
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   max-width: 800px;
+  -webkit-box-shadow: 1px 1px 4px #999;
   box-shadow: 1px 1px 4px #999; }
   /* line 87, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_gallery.scss */
   .kb-gallery--active-item .kb-field {
@@ -4123,10 +4165,14 @@ button.Zebra_DatePicker_Icon_Inside {
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_plupload.scss */
 .kb-plupload__file-list {
   list-style: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin-left: -20px; }
   /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_plupload.scss */
   .kb-plupload__file-list .kb-plupload__file-item {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 23%;
     display: block;
@@ -4191,6 +4237,7 @@ button.Zebra_DatePicker_Icon_Inside {
 /* line 7, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_global-area-edit.scss */
 .global-area-edit .area-holder {
   border: 0;
+  -webkit-box-shadow: 0;
   box-shadow: 0;
   background: #fff; }
 /* line 13, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_global-area-edit.scss */
@@ -4210,16 +4257,18 @@ button.Zebra_DatePicker_Icon_Inside {
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: 800px;
   height: 65%;
   z-index: 299;
+  -webkit-box-shadow: 1px 3px 4px #999;
   box-shadow: 1px 3px 4px #999; }
 
 /* line 18, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .module-browser-wrapper * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   position: relative; }
   /* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
@@ -4234,10 +4283,12 @@ button.Zebra_DatePicker_Icon_Inside {
 
 /* line 33, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 #wpwrap {
+  -webkit-transition: all .8s ease-in-out;
   transition: all .8s ease-in-out; }
 
 /* line 37, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 #wpwrap.module-browser-open {
+  -webkit-filter: blur(2px);
   filter: blur(2px);
   pointer-events: none; }
 
@@ -4304,6 +4355,8 @@ button.Zebra_DatePicker_Icon_Inside {
 
 /* line 120, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
 .module-browser__left-column {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 280px;
   display: block;
@@ -4314,6 +4367,7 @@ button.Zebra_DatePicker_Icon_Inside {
   padding-top: 36px;
   padding-bottom: 36px;
   background-color: #f9f9f9;
+  -webkit-transition: all .2s linear;
   transition: all .2s linear; }
 
 /* line 134, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
@@ -4324,6 +4378,7 @@ button.Zebra_DatePicker_Icon_Inside {
   padding-top: 36px;
   padding-right: 10px;
   float: left;
+  -webkit-transition: all .2s linear;
   transition: all .2s linear; }
   /* line 144, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
   .module-browser__right-column .module-browser--poster-wrap {
@@ -4368,6 +4423,7 @@ button.Zebra_DatePicker_Icon_Inside {
     width: 32px;
     height: 101%;
     line-height: 32px;
+    -webkit-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
     z-index: 595; }
     /* line 195, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
@@ -4484,6 +4540,7 @@ button.Zebra_DatePicker_Icon_Inside {
       font-size: 11px; }
     /* line 22, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
     .kb-template-selector--wrapper .kb-selectbox:focus {
+      -webkit-box-shadow: none;
       box-shadow: none; }
   /* line 27, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_template-selector.scss */
   .kb-template-selector--wrapper select {
@@ -4586,6 +4643,7 @@ button.Zebra_DatePicker_Icon_Inside {
 /* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_options/_page.scss */
 .os-wrapper .area-holder {
   border: none;
+  -webkit-box-shadow: none;
   box-shadow: none; }
 
 /*
@@ -4745,8 +4803,6 @@ body.post-type-kb-dyar .kb_area_head.clearfix {
   padding: 9px;
   background: #fff;
   border: 1px solid #ccc;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
   border-radius: 8px;
   margin-right: 15px;
   margin-bottom: 15px; }
@@ -4919,15 +4975,12 @@ li.gallery-item {
   background: white;
   /* Old browsers */
   background: -webkit-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
-  background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
-  background: -o-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
-  background: -ms-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f7f7f7));
   background: linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0);
   /* IE6-9 */
   -webkit-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
-  -moz-box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
   box-shadow: 1px 1px 1px #fff, 1px 1px 8px #333;
   float: left;
   padding: 8px;
@@ -4993,6 +5046,7 @@ li.gallery-item textarea:focus {
     min-width: 200px; }
   /* line 57, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_kontentfields-new.scss */
   .kb_field textarea:focus {
+    -webkit-box-shadow: 1px 1px 8px #0074a2;
     box-shadow: 1px 1px 8px #0074a2; }
   /* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_kontentfields-new.scss */
   .kb_field p.description {
@@ -5075,7 +5129,7 @@ input[type="checkbox"][checked] {
 
 /* line 403, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/kontentblocks.scss */
 .kb-module {
-  -webkit-transition: box-shadow .3s linear; }
+  -webkit-transition: -webkit-box-shadow .3s linear; }
 
 /* line 420, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/kontentblocks.scss */
 .area_template {
@@ -5111,6 +5165,7 @@ input[type="checkbox"][checked] {
   float: none;
   z-index: 4500;
   right: 0px;
+  -webkit-box-shadow: 1px 1px 6px #666;
   box-shadow: 1px 1px 6px #666; }
 
 /* line 460, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/kontentblocks.scss */
@@ -5120,6 +5175,7 @@ input[type="checkbox"][checked] {
   float: none;
   z-index: 4500;
   left: 0px;
+  -webkit-box-shadow: 1px 1px 6px #666;
   box-shadow: 1px 1px 6px #666; }
 
 /* line 469, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/kontentblocks.scss */
