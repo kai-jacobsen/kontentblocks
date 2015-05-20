@@ -31,7 +31,8 @@ class Enqueues
         add_action( 'kb.do.enqueue.admin.files', array( __CLASS__, 'adminEnqueue' ) );
 
         // Frontend Enqueueing
-        if (!is_admin() && current_user_can( 'edit_kontentblocks' ) && is_user_logged_in()) {
+        $filter = apply_filters('kb.config.initFrontend', true);
+        if (!is_admin() && current_user_can( 'edit_kontentblocks' ) && is_user_logged_in() && $filter) {
             add_action( 'wp_enqueue_scripts', array( __CLASS__, 'coreStylesEnqueue' ), 9 );
             add_action( 'wp_footer', array( __CLASS__, 'UserEnqueue' ), 9 );
 

@@ -435,7 +435,13 @@ class AreaRegistry
     public function isDynamic( $id )
     {
         $area = $this->getArea( $id );
-        return $area->dynamic;
+
+        if (is_object($area)){
+            return $area->dynamic;
+        }
+
+        return false;
+
     }
 
     /**
