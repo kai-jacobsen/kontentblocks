@@ -25,8 +25,8 @@ KB.currentArea = {};
 KB.Views = {
   Modules: new KB.ViewsCollection(),
   Areas: new KB.ViewsCollection(),
-  Context: new KB.ViewsCollection(),
-  Panels: new KB.ViewsCollection()
+  Context: new KB.ViewsCollection()
+  //Panels: new KB.ViewsCollection()
 };
 
 
@@ -46,9 +46,9 @@ KB.Areas = new Backbone.Collection([], {
   model: KB.Backbone.AreaModel
 });
 
-KB.Panels = new Backbone.Collection([], {
-  model: KB.Backbone.PanelModel
-});
+//KB.Panels = new Backbone.Collection([], {
+//  model: KB.Backbone.PanelModel
+//});
 
 KB.ObjectProxy = new Backbone.Collection();
 
@@ -64,14 +64,13 @@ KB.ObjectProxy = new Backbone.Collection();
 KB.App = function () {
 
   function init() {
-    if (!KB.appData.config.initFrontend){
+    if (!KB.appData.config.initFrontend) {
       return;
     }
 
     // create toolbar container for tinymce inline editors
     var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
     $toolbar.hide();
-
 
 
     // create Sidebar singleton
@@ -86,7 +85,7 @@ KB.App = function () {
     KB.Modules.on('add', createModuleViews);
     KB.Areas.on('add', createAreaViews);
     KB.Modules.on('remove', removeModule);
-    KB.Panels.on('add', createPanelViews);
+    //KB.Panels.on('add', createPanelViews);
     // Create views
     addViews();
 
@@ -124,7 +123,7 @@ KB.App = function () {
    *
    * View generation is handled by the 'add' event callback
    * as registered above
-   * @returns void
+   * @returns mixed
    */
   function addViews() {
 
@@ -145,9 +144,9 @@ KB.App = function () {
     });
 
     // create models from already attached modules
-    _.each(KB.Payload.getPayload('Panels'), function (panel) {
-      KB.Panels.add(panel);
-    });
+    //_.each(KB.Payload.getPayload('Panels'), function (panel) {
+    //  KB.Panels.add(panel);
+    //});
 
     // @TODO events:refactor
     KB.trigger('kb:moduleControlsAdded');

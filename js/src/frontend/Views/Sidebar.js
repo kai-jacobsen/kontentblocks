@@ -12,9 +12,9 @@ KB.Backbone.SidebarView = Backbone.View.extend({
       controller: this
     });
 
-    this.states['PanelList'] = new KB.Backbone.Sidebar.PanelOverview.PanelOverviewController({
-      controller: this
-    });
+    //this.states['PanelList'] = new KB.Backbone.Sidebar.PanelOverview.PanelOverviewController({
+    //  controller: this
+    //});
 
     // utility
     this.CategoryFilter = new KB.Backbone.Sidebar.CategoryFilter();

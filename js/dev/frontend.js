@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-05-20 */
+/*! Kontentblocks DevVersion 2015-05-29 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     defaults: {
         id: "generic"
@@ -1330,9 +1330,6 @@ KB.Backbone.SidebarView = Backbone.View.extend({
         this.states["AreaList"] = new KB.Backbone.Sidebar.AreaOverview.AreaOverviewController({
             controller: this
         });
-        this.states["PanelList"] = new KB.Backbone.Sidebar.PanelOverview.PanelOverviewController({
-            controller: this
-        });
         this.CategoryFilter = new KB.Backbone.Sidebar.CategoryFilter();
         this.RootView = new KB.Backbone.Sidebar.RootView({
             controller: this
@@ -2551,8 +2548,7 @@ KB.currentArea = {};
 KB.Views = {
     Modules: new KB.ViewsCollection(),
     Areas: new KB.ViewsCollection(),
-    Context: new KB.ViewsCollection(),
-    Panels: new KB.ViewsCollection()
+    Context: new KB.ViewsCollection()
 };
 
 KB.Modules = new Backbone.Collection([], {
@@ -2561,10 +2557,6 @@ KB.Modules = new Backbone.Collection([], {
 
 KB.Areas = new Backbone.Collection([], {
     model: KB.Backbone.AreaModel
-});
-
-KB.Panels = new Backbone.Collection([], {
-    model: KB.Backbone.PanelModel
 });
 
 KB.ObjectProxy = new Backbone.Collection();
@@ -2583,7 +2575,6 @@ KB.App = function() {
         KB.Modules.on("add", createModuleViews);
         KB.Areas.on("add", createAreaViews);
         KB.Modules.on("remove", removeModule);
-        KB.Panels.on("add", createPanelViews);
         addViews();
         KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
         KB.FieldConfigs.add(_.toArray(KB.Payload.getPayload("Fields")));
@@ -2608,9 +2599,6 @@ KB.App = function() {
         });
         _.each(KB.Payload.getPayload("Modules"), function(module) {
             KB.Modules.add(module);
-        });
-        _.each(KB.Payload.getPayload("Panels"), function(panel) {
-            KB.Panels.add(panel);
         });
         KB.trigger("kb:moduleControlsAdded");
         KB.Events.trigger("KB.frontend.init");
