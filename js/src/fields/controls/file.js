@@ -1,4 +1,5 @@
-KB.Fields.registerObject('file', KB.Fields.BaseView.extend({
+var BaseView = require('../FieldBaseView');
+KB.Fields.registerObject('file', BaseView.extend({
   initialize: function () {
     this.render();
   },

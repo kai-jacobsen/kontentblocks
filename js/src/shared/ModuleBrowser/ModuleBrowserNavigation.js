@@ -1,4 +1,5 @@
-KB.Backbone.ModuleBrowserNavigation = Backbone.View.extend({
+//KB.Backbone.ModuleBrowserNavigation
+module.exports = Backbone.View.extend({
 
   item: Backbone.View.extend({
     initialize: function (options) {

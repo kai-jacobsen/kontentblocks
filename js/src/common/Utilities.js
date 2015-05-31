@@ -1,5 +1,4 @@
-KB.Util = function ($) {
-
+var Utilities = function ($) {
   return {
     // store with expiration
     stex: {
@@ -63,3 +62,4 @@ KB.Util = function ($) {
   }
 
 }(jQuery);
+module.exports = Utilities;

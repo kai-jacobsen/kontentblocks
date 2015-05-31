@@ -1,4 +1,5 @@
-KB.Backbone.ModulesDefinitionsCollection = Backbone.Collection.extend({
+//KB.Backbone.ModulesDefinitionsCollection
+module.exports = Backbone.Collection.extend({
 
   initialize: function (models, options) {
     this.area = options.area;

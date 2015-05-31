@@ -1,4 +1,7 @@
-KB.Backbone.Sidebar.StaticPanelFormView = Backbone.View.extend({
+//KB.Backbone.Sidebar.StaticPanelFormView
+var Config = require('common/Config');
+
+module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__option-panel-wrap',
   initialize: function(options){
@@ -23,7 +26,7 @@ KB.Backbone.Sidebar.StaticPanelFormView = Backbone.View.extend({
         action: 'saveStaticPanelForm',
         data: that.$form.serializeJSON(),
         panel: that.model.toJSON(),
-        _ajax_nonce: KB.Config.getNonce('update')
+        _ajax_nonce: Config.getNonce('update')
       },
       type: 'POST',
       dataType: 'json',
@@ -43,7 +46,7 @@ KB.Backbone.Sidebar.StaticPanelFormView = Backbone.View.extend({
         action: 'getStaticPanelForm',
         panel: that.model.toJSON(),
         //overloadData: overloadData,
-        _ajax_nonce: KB.Config.getNonce('read')
+        _ajax_nonce: Config.getNonce('read')
       },
       type: 'POST',
       dataType: 'json',

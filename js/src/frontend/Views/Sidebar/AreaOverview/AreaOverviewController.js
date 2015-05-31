@@ -1,4 +1,7 @@
-KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
+//KB.Backbone.Sidebar.AreaOverview.AreaOverviewController
+var Templates = require('common/Templates');
+var AreaListItem = require('frontend/Views/Sidebar/AreaOverview/AreaListItem');
+module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar-main-panel',
   Areas: new Backbone.Collection(), // Area models
@@ -33,8 +36,8 @@ KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
   },
   createAreaItem: function (model) {
     if (!model.get('internal')) {
-      var $item = jQuery(KB.Templates.render('frontend/sidebar/sidebar-area-view', model.toJSON())).appendTo(this.$el);
-      this.AreaViews[model.get('id')] = new KB.Backbone.Sidebar.AreaOverview.AreaListItem({
+      var $item = jQuery(Templates.render('frontend/sidebar/sidebar-area-view', model.toJSON())).appendTo(this.$el);
+      this.AreaViews[model.get('id')] = new AreaListItem({
         $el: $item,
         controller: this,
         sidebarController: this.sidebarController,
@@ -63,7 +66,7 @@ KB.Backbone.Sidebar.AreaOverview.AreaOverviewController = Backbone.View.extend({
 
   },
   renderRootItem: function () {
-    return this.sidebarController.$container.append(KB.Templates.render('frontend/sidebar/root-item', {
+    return this.sidebarController.$container.append(Templates.render('frontend/sidebar/root-item', {
       text: 'Areas',
       id: 'AreaList'
     }))

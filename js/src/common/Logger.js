@@ -1,6 +1,7 @@
-if (Function.prototype.bind && window.console && typeof console.log == "object"){
+var Config = require('common/Config');
+if (Function.prototype.bind && window.console && typeof console.log == "object") {
   [
-    "log","info","warn","error","assert","dir","clear","profile","profileEnd"
+    "log", "info", "warn", "error", "assert", "dir", "clear", "profile", "profileEnd"
   ].forEach(function (method) {
       console[method] = this.bind(console[method], console);
     }, Function.prototype.call);
@@ -11,7 +12,7 @@ var _K = Logger.get('_K');
 var _KS = Logger.get('_KS'); // status bar only
 _K.setLevel(_K.INFO);
 _KS.setLevel(_KS.INFO);
-if (!KB.Config.inDevMode()) {
+if (!Config.inDevMode()) {
   _K.setLevel(Logger.OFF);
 }
 Logger.setHandler(function (messages, context) {
@@ -20,7 +21,6 @@ Logger.setHandler(function (messages, context) {
     if (messages[0]) {
       KB.Menubar.StatusBar.setMsg(messages[0]);
     }
-
   } else {
     var console = window.console;
     var hdlr = console.log;
@@ -38,8 +38,11 @@ Logger.setHandler(function (messages, context) {
     } else if (context.level === Logger.INFO && console.info) {
       hdlr = console.info;
     }
-
     hdlr.apply(console, messages);
   }
 });
 
+module.exports = {
+  Debug: _K,
+  User: _KS
+};

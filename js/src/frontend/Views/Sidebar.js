@@ -1,14 +1,21 @@
-KB.Backbone.SidebarView = Backbone.View.extend({
+// KB.Backbone.SidebarView
+var Templates = require('common/Templates');
+var AreaOverview = require('frontend/Views/Sidebar/AreaOverview/AreaOverviewController');
+var CategoryFilter = require('frontend/Views/Sidebar/AreaDetails/CategoryFilter');
+var SidebarHeader = require('frontend/Views/Sidebar/SidebarHeader');
+var Utilities = require('common/Utilities');
+//var RootView = require('frontend/Views/Sidebar/RootView');
+module.exports = Backbone.View.extend({
   currentView: null,
   viewStack: [],
   initialize: function () {
     this.render();
     this.states = {};
-    var controlsTpl = KB.Templates.render('frontend/sidebar/sidebar-nav', {});
+    var controlsTpl = Templates.render('frontend/sidebar/sidebar-nav', {});
     this.$navControls = jQuery(controlsTpl);
     this.bindHandlers();
 
-    this.states['AreaList'] = new KB.Backbone.Sidebar.AreaOverview.AreaOverviewController({
+    this.states['AreaList'] = new AreaOverview({
       controller: this
     });
 
@@ -17,14 +24,15 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     //});
 
     // utility
-    this.CategoryFilter = new KB.Backbone.Sidebar.CategoryFilter();
+    this.CategoryFilter = new CategoryFilter();
     //this.setView(this.AreaList);
     //this.setView(this.PanelList);
 
-    this.RootView = new KB.Backbone.Sidebar.RootView({
-      controller: this
-    });
-    this.setView(this.RootView);
+    //this.RootView = new RootView({
+    //  controller: this
+    //});
+    //this.setView(this.RootView);
+    this.setView(this.states['AreaList']);
   },
   events: {
     'click .kb-js-sidebar-nav-back': 'rootView',
@@ -33,13 +41,13 @@ KB.Backbone.SidebarView = Backbone.View.extend({
   render: function () {
     this.$el = jQuery('<div class="kb-sidebar-wrap" style="display: none;"></div>').appendTo('body');
     this.$toggle = jQuery('<div class="kb-sidebar-wrap--toggle cbutton cbutto-effect--boris"></div>').appendTo('body');
-    this.Header = new KB.Backbone.Sidebar.Header({});
+    this.Header = new SidebarHeader({});
     this.$el.append(this.Header.render());
     this.$container = jQuery('<div class="kb-sidebar-wrap__container"></div>').appendTo(this.$el);
     this.$extension = jQuery('<div class="kb-sidebar-extension" style="display: none;"></div>').appendTo(this.$el);
     this.setLayout();
 
-    var ls = KB.Util.stex.get('kb-sidebar-visible');
+    var ls = Utilities.stex.get('kb-sidebar-visible');
     if (ls) {
       this.toggleSidebar();
     }
@@ -91,7 +99,7 @@ KB.Backbone.SidebarView = Backbone.View.extend({
   },
   rootView: function () {
     this.viewStack = [];
-    this.setView(this.RootView);
+    this.setView(this.states['AreaList']);
   },
   handleNavigationControls: function () {
     if (this.viewStack.length >= 2) {
@@ -104,13 +112,12 @@ KB.Backbone.SidebarView = Backbone.View.extend({
     this.visible = !this.visible;
     this.$el.fadeToggle();
     jQuery('body').toggleClass('kb-sidebar-visible');
-    KB.Util.stex.set('kb-sidebar-visible', this.visible, 1000 * 60 * 60);
+    Utilities.stex.set('kb-sidebar-visible', this.visible, 1000 * 60 * 60);
   },
   actionHandler: function (event) {
     var action = jQuery(event.currentTarget).data('kb-action');
     if (action && this.states[action]) {
       this.setView(this.states[action]);
     }
-
   }
 });

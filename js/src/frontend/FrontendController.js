@@ -1,3 +1,8 @@
+var KB = window.KB || {};
+KB.Events = {};
+_.extend(KB, Backbone.Events);
+_.extend(KB.Events, Backbone.Events);
+
 KB.currentModule = {};
 KB.currentArea = {};
 
@@ -13,29 +18,41 @@ KB.currentArea = {};
 
  */
 
+// requires
+var ViewsCollection = require('common/ViewsCollection');
+var EditModalModules = require('frontend/Views/EditModalModules');
+var SidebarView = require('frontend/Views/Sidebar');
+var FieldConfigsCollection = require('fields/FieldsConfigsCollection');
+var Payload = require('common/Payload');
+var ModuleModel = require('frontend/Models/ModuleModel');
+var AreaModel = require('frontend/Models/AreaModel');
+var Ui = require('common/UI');
+var Logger = require('common/Logger');
+
 
 // ---------------
 // Collections
 // ---------------
+
 
 /*
  * Views, not a Backbone collection
  * simple getter/setter access point to views
  */
 KB.Views = {
-  Modules: new KB.ViewsCollection(),
-  Areas: new KB.ViewsCollection(),
-  Context: new KB.ViewsCollection()
+  Modules: new ViewsCollection(),
+  Areas: new ViewsCollection(),
+  Context: new ViewsCollection()
   //Panels: new KB.ViewsCollection()
 };
 
 
 /*
  * All Modules are collected here
- * Get by 'instance_id'
+ * Get by 'mid'
  */
 KB.Modules = new Backbone.Collection([], {
-  model: KB.Backbone.ModuleModel
+  model: ModuleModel
 });
 
 /*
@@ -43,14 +60,18 @@ KB.Modules = new Backbone.Collection([], {
  *  Get by 'id'
  */
 KB.Areas = new Backbone.Collection([], {
-  model: KB.Backbone.AreaModel
+  model: AreaModel
 });
+
+/*
+ * All objects are collected in one collection, regardless of type
+ * tis provides an central access point to objects
+ */
+KB.ObjectProxy = new Backbone.Collection();
 
 //KB.Panels = new Backbone.Collection([], {
 //  model: KB.Backbone.PanelModel
 //});
-
-KB.ObjectProxy = new Backbone.Collection();
 
 /*
  * Init function
@@ -68,18 +89,18 @@ KB.App = function () {
       return;
     }
 
+
     // create toolbar container for tinymce inline editors
     var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
     $toolbar.hide();
 
-
     // create Sidebar singleton
     if (KB.appData.config.useModuleNav) {
-      KB.Sidebar = new KB.Backbone.SidebarView();
+      KB.Sidebar = new SidebarView();
     }
 
     // init the edit modal
-    KB.EditModalModules = new KB.Backbone.EditModalModules({});
+    KB.EditModalModules = new EditModalModules({});
 
     // Register events on collections
     KB.Modules.on('add', createModuleViews);
@@ -93,10 +114,10 @@ KB.App = function () {
     /*
      * payload.Fields collection
      */
-    KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection();
-    KB.FieldConfigs.add(_.toArray(KB.Payload.getPayload('Fields')));
+    KB.FieldConfigs = new FieldConfigsCollection();
+    KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
     // get the UI on track
-    KB.Ui.init();
+    Ui.init();
 
   }
 
@@ -133,18 +154,18 @@ KB.App = function () {
 
 
     // iterate over raw areas
-    _.each(KB.Payload.getPayload('Areas'), function (area) {
+    _.each(Payload.getPayload('Areas'), function (area) {
       // create new area model
       KB.ObjectProxy.add(KB.Areas.add(area));
     });
 
     // create models from already attached modules
-    _.each(KB.Payload.getPayload('Modules'), function (module) {
+    _.each(Payload.getPayload('Modules'), function (module) {
       KB.Modules.add(module);
     });
 
     // create models from already attached modules
-    //_.each(KB.Payload.getPayload('Panels'), function (panel) {
+    //_.each(Payload.getPayload('Panels'), function (panel) {
     //  KB.Panels.add(panel);
     //});
 
@@ -163,23 +184,23 @@ KB.App = function () {
    * @returns void
    */
   function createModuleViews(ModuleModel) {
-    var ModuleView;
-
+    var Module;
     KB.ObjectProxy.add(ModuleModel);
     // create view
-    ModuleView = KB.Views.Modules.add(ModuleModel.get('mid'), new KB.Backbone.ModuleView({
+    var ModuleView = require('./Views/ModuleView');
+    Module = KB.Views.Modules.add(ModuleModel.get('mid'), new ModuleView({
       model: ModuleModel,
       el: '#' + ModuleModel.get('mid')
     }));
     //ModuleView.$el.data('ModuleView', ModuleView);
-    KB.Ui.initTabs();
+    Ui.initTabs();
   }
 
-  function createPanelViews(PanelModel) {
-    KB.ObjectProxy.add(PanelModel);
-    // no related frontend view
-    // leave this out for now
-  }
+  //function createPanelViews(PanelModel) {
+  //  KB.ObjectProxy.add(PanelModel);
+  //  // no related frontend view
+  //  // leave this out for now
+  //}
 
 
   /**
@@ -188,7 +209,8 @@ KB.App = function () {
    * @returns void
    */
   function createAreaViews(AreaModel) {
-    KB.Views.Areas.add(AreaModel.get('id'), new KB.Backbone.AreaView({
+    var AreaView = require('./Views/AreaView');
+    KB.Views.Areas.add(AreaModel.get('id'), new AreaView({
       model: AreaModel,
       el: '#' + AreaModel.get('id')
     }));
@@ -222,7 +244,7 @@ KB.App.init();
 jQuery(document).ready(function () {
   if (KB.appData && KB.appData.config.frontend) {
     KB.Views.Modules.readyOnFront();
-    _KS.info('Frontend welcomes you');
+    Logger.User.info('Frontend welcomes you');
   }
   // general ready event
   KB.Events.trigger('KB::ready');

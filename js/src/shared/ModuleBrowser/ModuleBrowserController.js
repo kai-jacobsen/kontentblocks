@@ -1,33 +1,41 @@
 // TODO Proper cleanup
-KB.Backbone.ModuleBrowser = Backbone.View.extend({
+//KB.Backbone.ModuleBrowser
+var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
+var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');
+var ModuleBrowserDescription = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
+var ModuleBrowserNavigation = require('shared/ModuleBrowser/ModuleBrowserNavigation');
+var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
+var Templates = require('common/Templates');
+var Checks = require('common/Checks');
+module.exports = Backbone.View.extend({
   initialize: function (options) {
     var that = this;
     this.options = options || {};
     this.area = this.options.area;
 
 
-    this.modulesDefinitions = new KB.Backbone.ModulesDefinitionsCollection(this.prepareAssignedModules(), {
-      model: KB.Backbone.ModuleDefinition,
+    this.modulesDefinitions = new ModuleDefinitions(this.prepareAssignedModules(), {
+      model: ModuleDefModel,
       area: this.options.area
     }).setup();
 
     var viewMode = this.getViewMode();
     // render and append the skeleton markup to the browsers root element
-    this.$el.append(KB.Templates.render('backend/modulebrowser/module-browser', {viewMode: viewMode}));
+    this.$el.append(Templates.render('backend/modulebrowser/module-browser', {viewMode: viewMode}));
 
     // render the list sub view
-    this.subviews.ModulesList = new KB.Backbone.ModuleBrowserModulesList({
+    this.subviews.ModulesList = new ModuleBrowserList({
       el: jQuery('.modules-list', this.$el),
       browser: this
     });
 
     // render description sub view
-    this.subviews.ModuleDescription = new KB.Backbone.ModuleBrowserModuleDescription({
+    this.subviews.ModuleDescription = new ModuleBrowserDescription({
       el: jQuery('.module-description', this.$el),
       browser: this
     });
     // render tab navigation subview
-    this.subviews.Navigation = new KB.Backbone.ModuleBrowserNavigation({
+    this.subviews.Navigation = new ModuleBrowserNavigation({
       el: jQuery('.module-categories', this.$el),
       cats: this.modulesDefinitions.categories,
       browser: this
@@ -118,14 +126,14 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
   createModule: function (module) {
     var Area, data;
     // check if capability is right for this action
-    if (KB.Checks.userCan('create_kontentblocks')) {
+    if (Checks.userCan('create_kontentblocks')) {
     } else {
       KB.Notice.notice('You\'re not allowed to do this', 'error');
     }
 
     // check if block limit isn't reached
     Area = KB.Areas.get(this.options.area.model.get('id'));
-    if (!KB.Checks.blockLimit(Area)) {
+    if (!Checks.blockLimit(Area)) {
       KB.Notice.notice('Limit for this area reached', 'error');
       return false;
     }
@@ -158,9 +166,7 @@ KB.Backbone.ModuleBrowser = Backbone.View.extend({
     this.options.area.modulesList.append(data.html);
     model = KB.Modules.add(data.module);
     this.options.area.attachModuleView(model);
-
     this.parseAdditionalJSON(data.json);
-
     KB.TinyMCE.addEditor(model.View.$el);
     KB.Fields.trigger('newModule', model.View);
     model.View.$el.addClass('kb-open');

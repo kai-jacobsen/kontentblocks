@@ -1,4 +1,10 @@
-KB.Backbone.AreaView = Backbone.View.extend({
+//KB.Backbone.AreaView
+var AreaLayout = require('frontend/Views/AreaLayout');
+var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
+var Config = require('common/Config');
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+module.exports = Backbone.View.extend({
   isSorting: false,
   events: {
     'dblclick': 'openModuleBrowser'
@@ -13,7 +19,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
 
   },
   setupUi: function () {
-    this.Layout = new KB.Backbone.AreaLayoutView({
+    this.Layout = new AreaLayout({
       model: new Backbone.Model(this.settings),
       AreaView: this
     });
@@ -27,7 +33,7 @@ KB.Backbone.AreaView = Backbone.View.extend({
   },
   openModuleBrowser: function () {
     if (!this.ModuleBrowser) {
-      this.ModuleBrowser = new KB.Backbone.ModuleBrowser({
+      this.ModuleBrowser = new ModuleBrowser({
         area: this
       });
     }
@@ -95,12 +101,12 @@ KB.Backbone.AreaView = Backbone.View.extend({
             serializedData[that.model.get('id')] = that.$el.sortable('serialize', {
               attribute: 'rel'
             });
-            return KB.Ajax.send({
+            return Ajax.send({
               action: 'resortModules',
               data: serializedData,
-              _ajax_nonce: KB.Config.getNonce('update')
+              _ajax_nonce: Config.getNonce('update')
             }, function () {
-              KB.Notice.notice('Order was updated successfully', 'success');
+              Notice.notice('Order was updated successfully', 'success');
               that.Layout.render(ui);
             }, that);
           },
@@ -179,13 +185,13 @@ KB.Backbone.AreaView = Backbone.View.extend({
       attribute: 'rel'
     });
 
-    return KB.Ajax.send({
+    return Ajax.send({
       action: 'resortModules',
       postId: area.get('envVars').postId,
       data: serializedData,
-      _ajax_nonce: KB.Config.getNonce('update')
+      _ajax_nonce: Config.getNonce('update')
     }, function () {
-      KB.Notice.notice('Order was updated successfully', 'success');
+      Notice.notice('Order was updated successfully', 'success');
     }, null);
   }
 

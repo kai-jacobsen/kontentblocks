@@ -1,4 +1,7 @@
-KB.Backbone.Inline.EditableText = Backbone.View.extend({
+//KB.Backbone.Inline.EditableText
+var Utilities = require('common/Utilities');
+var Config = require('common/Config');
+var EditableText = Backbone.View.extend({
   initialize: function () {
     this.placeHolderSet = false;
     this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
@@ -100,7 +103,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
           }
           moduleData = _.clone(ed.module.get('moduleData'));
           path = ed.kpath;
-          KB.Util.setIndex(moduleData, path, content);
+          Utilities.setIndex(moduleData, path, content);
           // && ed.kfilter set
           if (ed.isDirty()) {
             ed.placeholder = false;
@@ -111,7 +114,7 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
                   action: 'applyContentFilter',
                   content: content,
                   postId: ed.module.toJSON().post_id,
-                  _ajax_nonce: KB.Config.getNonce('read')
+                  _ajax_nonce: Config.getNonce('read')
                 },
                 type: 'POST',
                 dataType: 'json',
@@ -172,4 +175,5 @@ KB.Backbone.Inline.EditableText = Backbone.View.extend({
   }
 });
 
-KB.Fields.registerObject('EditableText', KB.Backbone.Inline.EditableText);
+KB.Fields.registerObject('EditableText', EditableText);
+module.exports = EditableText;

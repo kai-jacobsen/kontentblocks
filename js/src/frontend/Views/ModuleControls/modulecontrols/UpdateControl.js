@@ -1,4 +1,10 @@
-KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+//KB.Backbone.Frontend.ModuleUpdate
+var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
+var Check = require('common/Checks');
+var Config = require('common/Config');
+var Notice = require('common/Notice');
+
+module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
@@ -21,7 +27,7 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
         module: that.model.toJSON(),
         editmode: 'update',
         refresh: refresh,
-        _ajax_nonce: KB.Config.getNonce('update')
+        _ajax_nonce: Config.getNonce('update')
       },
       type: 'POST',
       dataType: 'json',
@@ -37,15 +43,15 @@ KB.Backbone.Frontend.ModuleUpdate = KB.Backbone.Frontend.ModuleMenuItemView.exte
         that.model.trigger('saved');
         // @TODO events:replace
         KB.Events.trigger('KB::ajax-update');
-        KB.Notice.notice('Module saved successfully', 'success');
+        Notice.notice('Module saved successfully', 'success');
         that.Parent.$el.removeClass('isDirty'); // deprecate
       },
       error: function () {
-        KB.Notice.notice('There went something wrong', 'error');
+        Notice.notice('There went something wrong', 'error');
       }
     });
   },
   isValid: function () {
-    return KB.Checks.userCan('edit_kontentblocks');
+    return Check.userCan('edit_kontentblocks');
   }
 });

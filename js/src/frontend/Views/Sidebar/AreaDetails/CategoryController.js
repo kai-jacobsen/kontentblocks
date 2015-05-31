@@ -1,10 +1,13 @@
-KB.Backbone.Sidebar.AreaDetails.CategoryController = Backbone.View.extend({
+//KB.Backbone.Sidebar.AreaDetails.CategoryController
+var Templates = require('common/Templates');
+var ModuleDragItem = require('frontend/Views/Sidebar/AreaDetails/ModuleDragItem');
+module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__module-category',
   initialize: function (options) {
     // ModuleListController
     this.controller = options.controller;
-    this.$el.append(KB.Templates.render('frontend/sidebar/category-list', this.model.toJSON()));
+    this.$el.append(Templates.render('frontend/sidebar/category-list', this.model.toJSON()));
     this.$list = this.$el.find('ul');
     this.setupModuleItems();
   },
@@ -14,7 +17,7 @@ KB.Backbone.Sidebar.AreaDetails.CategoryController = Backbone.View.extend({
   setupModuleItems: function () {
     var that = this;
     _.each(this.model.get('modules'), function(module){
-        var view = new KB.Backbone.Sidebar.AreaDetails.ModuleDragItem({
+        var view = new ModuleDragItem({
           model: new Backbone.Model(module),
           listController: that.controller,
           controller: that

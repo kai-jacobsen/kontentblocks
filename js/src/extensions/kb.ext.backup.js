@@ -1,3 +1,5 @@
+var KB = window.KB || {};
+KB.Ext = KB.Ext || {};
 KB.Ext.Backup = (function ($) {
 
   return {

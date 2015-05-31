@@ -1,5 +1,5 @@
-KB.Fields.registerObject('date', KB.Fields.BaseView.extend({
-
+var BaseView = require('../FieldBaseView');
+KB.Fields.registerObject('date', BaseView.extend({
   initialize: function () {
     var that = this;
     this.defaults = {

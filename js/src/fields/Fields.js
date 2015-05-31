@@ -1,7 +1,8 @@
+var Fields = {};
 // include Backbone events handler
-_.extend(KB.Fields, Backbone.Events);
+_.extend(Fields, Backbone.Events);
 // include custom functions
-_.extend(KB.Fields, {
+_.extend(Fields, {
   fields: {}, // 'collection' of fields
   /**
    * Register a fieldtype
@@ -26,7 +27,6 @@ _.extend(KB.Fields, {
 
     _.each(this.fields, function (object) {
       // call init method if available
-
       if (object.hasOwnProperty('init')) {
         object.init.call(object);
       }
@@ -64,4 +64,5 @@ _.extend(KB.Fields, {
     }
   }
 });
-KB.Fields.addEvent();
+Fields.addEvent();
+module.exports = Fields;

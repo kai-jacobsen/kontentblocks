@@ -3,16 +3,18 @@
   "author": "Kai Jacobsen",
   "version": "0.0.1",
   "devDependencies": {
+    "browserify-alias-grunt": "^0.1.0",
     "grunt": "~0.4.1",
     "grunt-autoprefixer": "~0.6.4",
+    "grunt-browserify": "^3.6.0",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-sass": "~0.18.0",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "~0.5.0",
     "grunt-exec": "^0.4.5",
     "grunt-notify": "^0.4.1",
+    "grunt-sass": "~0.18.0",
     "jshint-log-reporter": "^1.0.8"
   }
 }

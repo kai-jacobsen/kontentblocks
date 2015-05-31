@@ -1,4 +1,5 @@
-KB.Fields.registerObject('image', KB.Fields.BaseView.extend({
+var BaseView = require('../FieldBaseView');
+KB.Fields.registerObject('image', BaseView.extend({
   initialize: function () {
 
     this.defaultState = 'replace-image';

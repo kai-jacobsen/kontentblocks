@@ -1,4 +1,7 @@
-KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
+//KB.Backbone.Common.FieldConfigModel
+var Checks = require('common/Checks');
+var Utilities = require('common/Utilities');
+module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
     var module = this.get('fieldId');
@@ -39,7 +42,7 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
       return false;
     }
 
-    if (!KB.Checks.userCan('edit_kontentblocks')) {
+    if (!Checks.userCan('edit_kontentblocks')) {
       return false;
     }
     var obj = KB.Fields.get(type);
@@ -60,13 +63,13 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
         addData = KB.Util.getIndex(obj, this.get('kpath'));
       }
     }
-    mData = KB.Util.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
+    mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
     this.set('value', _.extend(mData, addData));
   },
   upstreamData: function () {
     if (this.get('ModuleModel')) {
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
-      KB.Util.setIndex(cdata, this.get('kpath'), this.get('value'));
+      Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       this.get('ModuleModel').set('moduleData', cdata, {silent: true});
     }
   },
@@ -84,26 +87,5 @@ KB.Backbone.Common.FieldConfigModel = Backbone.Model.extend({
     if (this.FieldView && this.FieldView.derender) {
       this.FieldView.derender();
     }
-  }
-});
-
-KB.Backbone.Common.FieldConfigModelModal = KB.Backbone.Common.FieldConfigModel.extend({
-  initialize: function () {
-    KB.Backbone.Common.FieldConfigModel.prototype.initialize.call(this, arguments);
-  },
-  bindHandlers: function () {
-    this.listenToOnce(this.ModuleModel, 'remove', this.remove);
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
-    this.listenTo(KB.Events, 'modal.reload', this.rebind);
-    this.listenTo(KB.Events, 'modal.close', this.remove);
-  },
-  rebind: function () {
-    if (this.FieldView) {
-      this.FieldView.setElement(this.getElement());
-      this.FieldView.rerender();
-    }
-  },
-  getElement: function () {
-    return jQuery('*[data-kbfuid="' + this.get('uid') + '"]', KB.EditModalModules.$el)[0];
   }
 });

@@ -1,4 +1,7 @@
-KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+//KB.Backbone.Frontend.ModuleMove
+var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
+var Check = require('common/Checks');
+module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
@@ -9,6 +12,6 @@ KB.Backbone.Frontend.ModuleMove = KB.Backbone.Frontend.ModuleMenuItemView.extend
     if (!this.Parent.model.Area){
       return false;
     }
-    return KB.Checks.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable');
+    return Check.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable');
   }
 });

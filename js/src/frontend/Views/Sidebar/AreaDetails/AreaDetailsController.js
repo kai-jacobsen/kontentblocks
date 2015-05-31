@@ -1,4 +1,12 @@
-KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
+//KB.Backbone.Sidebar.AreaDetails.AreaDetailsController
+var Templates = require('common/Templates');
+var CategoryController = require('frontend/Views/Sidebar/AreaDetails/CategoryController');
+var AreaSettings = require('frontend/Views/Sidebar/AreaDetails/AreaSettingsController');
+var Config = require('common/Config');
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+
+module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__module-list',
   initialize: function (options) {
@@ -7,7 +15,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     this.controller = options.controller;
     this.sidebarController = options.sidebarController;
     this.categories = this.sidebarController.CategoryFilter.filter(this.model);
-    this.Settings = new KB.Backbone.Sidebar.AreaDetails.AreaSettings({
+    this.Settings = new AreaSettings({
       model: this.model,
       controller: this,
       sidebarController: this.sidebarController
@@ -28,14 +36,14 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     return this.$el;
   },
   renderHeader: function () {
-    this.$el.append(KB.Templates.render('frontend/sidebar/area-details-header', this.model.toJSON()));
+    this.$el.append(Templates.render('frontend/sidebar/area-details-header', this.model.toJSON()));
     this.$settingsContainer = this.$el.find('.kb-sidebar-area-details__settings');
     this.$updateHandle = this.$el.find('.kb-sidebar-action--update').hide();
   },
   renderCategories: function () {
     var that = this;
     _.each(this.categories.toJSON(), function (cat, id) {
-      var catView = new KB.Backbone.Sidebar.AreaDetails.CategoryController({
+      var catView = new CategoryController({
         model: new Backbone.Model(cat),
         controller: that
       });
@@ -53,22 +61,22 @@ KB.Backbone.Sidebar.AreaDetails.AreaDetailsController = Backbone.View.extend({
     }
   },
   updateAreaSettings: function () {
-    KB.Ajax.send({
+    Ajax.send({
       action: 'saveAreaLayout',
       area: this.model.toJSON(),
       layout: this.model.get('layout'),
-      _ajax_nonce: KB.Config.getNonce('update')
+      _ajax_nonce: Config.getNonce('update')
     }, this.updateSuccess, this);
   },
   updateSuccess: function (res) {
 
     if (res.success) {
-      KB.Notice.notice(res.message, 'success');
+      Notice.notice(res.message, 'success');
       this.currentLayout = res.data.layout;
       this.model.set('layout', res.data.layout);
       this.handleLayoutChange();
     } else {
-      KB.Notice.notice(res.message, 'error');
+      Notice.notice(res.message, 'error');
 
     }
 

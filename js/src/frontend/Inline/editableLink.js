@@ -1,4 +1,6 @@
-KB.IEdit.Link = (function ($) {
+//KB.IEdit.Link
+var Utilities = require('common/Utilities');
+var EditableLink = (function ($) {
   var $form, $linkTarget, $linktext, $body, $href, $title;
 
   return {
@@ -94,7 +96,7 @@ KB.IEdit.Link = (function ($) {
       var mId = data.module; // module id
       var moduleData = KB.Modules.get(mId).get('moduleData'); // module model data
       var lData = {};
-      lData = KB.Util.getIndex(moduleData, data.kpath);
+      lData = Utilities.getIndex(moduleData, data.kpath);
 
       $href.val(lData.link);
       $title.val(lData.title);
@@ -128,7 +130,7 @@ KB.IEdit.Link = (function ($) {
       // clone model data
       var moduleData = _.clone(cModule.get('moduleData'));
       var path = data.kpath;
-      KB.Util.setIndex(moduleData, path, value);
+      Utilities.setIndex(moduleData, path, value);
 
       // set data back on module model
       cModule.set('moduleData', moduleData);
@@ -138,3 +140,4 @@ KB.IEdit.Link = (function ($) {
   };
 
 })(jQuery);
+module.exports = EditableLink;

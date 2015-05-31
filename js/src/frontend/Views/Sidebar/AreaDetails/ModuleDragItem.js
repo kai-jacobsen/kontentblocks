@@ -1,4 +1,14 @@
-KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
+//KB.Backbone.Sidebar.AreaDetails.ModuleDragItem
+var Templates = require('common/Templates');
+var Payload = require('common/Payload');
+var Notice = require('common/Notice');
+var Config = require('common/Config');
+var Checks = require('common/Checks');
+var ModuleModel = require('frontend/Models/ModuleModel');
+var AreaView = require('frontend/Views/AreaView');
+var Ajax = require('common/Ajax');
+
+module.exports = Backbone.View.extend({
   tagName: 'li',
   className: 'kb-sidebar-module',
   initialize: function (options) {
@@ -7,7 +17,7 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
     this.controller = options.controller;
     // ModuleListController
     this.listController = options.listController;
-    this.$el.append(KB.Templates.render('frontend/sidebar/category-module-item', this.model.toJSON()));
+    this.$el.append(Templates.render('frontend/sidebar/category-module-item', this.model.toJSON()));
     this.$dropHelper = jQuery("<div class='kb-sidebar-drop-helper ui-sortable-helper'></div>");
     // set Area model
     this.model.set('area', this.listController.model);
@@ -20,15 +30,15 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
         top: 5,
         left: 5
       },
-      stop: function(){
+      stop: function () {
         that.listController.model.View.$el.css('overflow', '');
 
       },
-      helper: function(){
+      helper: function () {
         that.listController.model.View.$el.css('overflow', 'hidden');
         return that.$dropHelper;
       },
-      drag:function(){
+      drag: function () {
         that.$dropHelper.css('zIndex', '10000');
       },
       connectToSortable: this.listController.model.View.$el.selector
@@ -44,14 +54,14 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
   create: function (ui) {
     var Area, data, module;
     // check if capability is right for this action
-    if (KB.Checks.userCan('create_kontentblocks')) {
+    if (Checks.userCan('create_kontentblocks')) {
     } else {
-      KB.Notice.notice('You\'re not allowed to do this', 'error');
+      Notice.notice('You\'re not allowed to do this', 'error');
     }
     // check if block limit isn't reached
     Area = KB.Areas.get(this.model.get('area').get('id'));
-    if (!KB.Checks.blockLimit(Area)) {
-      KB.Notice.notice('Limit for this area reached', 'error');
+    if (!Checks.blockLimit(Area)) {
+      Notice.notice('Limit for this area reached', 'error');
       return false;
     }
     module = this.model;
@@ -65,26 +75,25 @@ KB.Backbone.Sidebar.AreaDetails.ModuleDragItem = Backbone.View.extend({
       templateRef: module.get('templateRef'),
       areaContext: Area.get('context'),
       area: Area.get('id'),
-      _ajax_nonce: KB.Config.getNonce('create'),
+      _ajax_nonce: Config.getNonce('create'),
       frontend: KB.appData.config.frontend
     };
 
-    if (this.model.get('area').get('parent_id')){
+    if (this.model.get('area').get('parent_id')) {
       data.postId = this.model.get('area').get('parent_id');
     }
 
-    KB.Ajax.send(data, this.success, this, {ui: ui});
+    Ajax.send(data, this.success, this, {ui: ui});
   },
   success: function (res, payload) {
     var that = this, model;
     payload.ui.helper.replaceWith(res.data.html);
-    model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
-    //this.model.get('area').View.attachModuleView(model.view);
+    model = KB.Modules.add(new ModuleModel(res.data.module));
     // @TODO important stopped here
     model.Area.View.Layout.applyClasses();
-    KB.Backbone.AreaView.prototype.resort(this.model.get('area'));
-    setTimeout(function(){
-      KB.Payload.parseAdditionalJSON(res.data.json);
-    },250);
+    AreaView.prototype.resort(this.model.get('area'));
+    setTimeout(function () {
+      Payload.parseAdditionalJSON(res.data.json);
+    }, 250);
   }
 });

@@ -1,4 +1,5 @@
-KB.Fields.registerObject('flexfields', KB.Fields.BaseView.extend({
+var BaseView = require('../FieldBaseView');
+KB.Fields.registerObject('flexfields', BaseView.extend({
   initialize: function () {
     this.render();
   },

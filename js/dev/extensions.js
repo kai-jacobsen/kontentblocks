@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-05-29 */
+/*! Kontentblocks DevVersion 2015-05-31 */
 (function($) {
     var LayoutConfigurations = {
         el: $("#kb-layout-configurations"),
@@ -181,6 +181,10 @@ KB.AreaSelector = function($) {
         }
     };
 }(jQuery).init();
+
+var KB = window.KB || {};
+
+KB.Ext = KB.Ext || {};
 
 KB.Ext.Backup = function($) {
     return {

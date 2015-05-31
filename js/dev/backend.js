@@ -1,23 +1,10 @@
-/*! Kontentblocks DevVersion 2015-05-29 */
+/*! Kontentblocks DevVersion 2015-05-31 */
 KB.Backbone.AreaModel = Backbone.Model.extend({
     idAttribute: "id"
 });
 
 KB.Backbone.ContextModel = Backbone.Model.extend({
     idAttribute: "id"
-});
-
-KB.Backbone.ModuleDefinition = Backbone.Model.extend({
-    initialize: function() {
-        var that = this;
-        this.id = function() {
-            if (that.get("settings").category === "template") {
-                return that.get("instance_id");
-            } else {
-                return that.get("settings").class;
-            }
-        }();
-    }
 });
 
 KB.Backbone.ModuleModel = Backbone.Model.extend({

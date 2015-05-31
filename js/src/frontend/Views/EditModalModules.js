@@ -1,15 +1,21 @@
-KB.Backbone.ModalFieldCollection = Backbone.Collection.extend({
-  model: KB.Backbone.Common.FieldConfigModelModal,
-});
+var Templates = require('common/Templates');
+var Logger = require('common/Logger');
+var ModalFieldCollection = require('frontend/Collections/ModalFieldCollection');
+var LoadingAnimation = require('frontend/Views/LoadingAnimation');
+var Config = require('common/Config');
+var Ui = require('common/UI');
+var TinyMCE = require('common/TinyMCE');
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+
 /**
  * This is the modal which wraps the modules input form
  * and loads when the user clicks on "edit" while in frontend editing mode
  * @type {*|void|Object}
  *
  */
-
-
-KB.Backbone.EditModalModules = Backbone.View.extend({
+//KB.Backbone.EditModalModules
+module.exports = Backbone.View.extend({
   tagName: 'div',
   id: 'onsite-modal',
   timerId: null,
@@ -20,7 +26,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     var that = this;
 
     // add form skeleton to modal
-    jQuery(KB.Templates.render('frontend/module-edit-form', {
+    jQuery(Templates.render('frontend/module-edit-form', {
       model: {},
       i18n: KB.i18n.jsFrontend
     })).appendTo(this.$el);
@@ -31,11 +37,11 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
     this.$inner = jQuery('.os-content-inner', this.$formContent);
     this.$title = jQuery('.controls-title', this.$el);
     this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
-    this.LoadingAnimation = new KB.Backbone.Shared.LoadingAnimation({
+    this.LoadingAnimation = new LoadingAnimation({
       el: this.$form
     });
 
-    this.FieldModels = new KB.Backbone.ModalFieldCollection();
+    this.FieldModels = new ModalFieldCollection();
 
     // init draggable container and store position in config var
     this.$el.css('position', 'fixed').draggable({
@@ -225,7 +231,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
       json;
 
 
-    _KS.info('Frontend modal retrieves data from the server');
+    Logger.User.info('Frontend modal retrieves data from the server');
     json = this.model.toJSON();
 
     // apply settings for the modal from the active module, if any
@@ -240,7 +246,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         module: json,
         moduleData: json.moduleData,
         //overloadData: overloadData,
-        _ajax_nonce: KB.Config.getNonce('read')
+        _ajax_nonce: Config.getNonce('read')
       },
       type: 'POST',
       dataType: 'json',
@@ -277,12 +283,12 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
             that.FieldModels.add(_.toArray(res.data.json.Fields));
           }
         }
-        KB.Ui.initTabs();
-        KB.Ui.initToggleBoxes();
-        KB.TinyMCE.addEditor(that.$form);
+        Ui.initTabs();
+        Ui.initToggleBoxes();
+        TinyMCE.addEditor(that.$form);
         // -----------------------------------------------
 
-        _KS.info('Frontend modal done.');
+        Logger.User.info('Frontend modal done.');
 
         that.$title.text(that.model.get('settings').name);
 
@@ -307,7 +313,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
       },
       error: function () {
-        KB.Notice.notice('There went something wrong', 'error');
+        Notice.notice('There went something wrong', 'error');
       }
     });
   },
@@ -394,7 +400,7 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         //data: that.$form.serialize().replace(/\'/g, '%27'),
         module: that.model.toJSON(),
         editmode: (save) ? 'update' : 'preview',
-        _ajax_nonce: KB.Config.getNonce('update')
+        _ajax_nonce: Config.getNonce('update')
       },
       type: 'POST',
       dataType: 'json',
@@ -447,14 +453,14 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
         //
         if (save) {
           if (notice) {
-            KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
+            Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
           }
           that.$el.removeClass('isDirty');
           that.ModuleView.getClean();
           that.trigger('kb:frontend-save');
         } else {
           if (notice) {
-            KB.Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
+            Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
           }
           that.$el.addClass('isDirty');
 
@@ -561,11 +567,11 @@ KB.Backbone.EditModalModules = Backbone.View.extend({
 
 
     // get the form
-    KB.Ajax.send({
+    Ajax.send({
       action: 'undraftModule',
       mid: json.mid,
       postId: this.model.get('post_id'),
-      _ajax_nonce: KB.Config.getNonce('update')
+      _ajax_nonce: Config.getNonce('update')
     }, function (res) {
       if (res.success) {
         that.$draft.hide(150);

@@ -69,19 +69,19 @@ class Enqueues
 
 
         // Common & Util. Functions
-        wp_register_script(
-            'kb-common',
-            KB_PLUGIN_URL . 'js/' . $folder . '/common' . $suffix . '.js',
-            array( 'kb-plugins' ),
-            null,
-            true
-        );
+//        wp_register_script(
+//            'kb-common',
+//            KB_PLUGIN_URL . 'js/' . $folder . '/common' . $suffix . '.js',
+//            array( 'kb-plugins' ),
+//            null,
+//            true
+//        );
 
         // Extensions
         wp_register_script(
             'kb-extensions',
             KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
-            array( 'kb-common' ),
+            array( 'kb-plugins' ),
             null,
             true
         );

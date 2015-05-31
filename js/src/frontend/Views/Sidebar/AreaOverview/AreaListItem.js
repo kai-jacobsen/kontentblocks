@@ -1,4 +1,8 @@
-KB.Backbone.Sidebar.AreaOverview.AreaListItem = Backbone.View.extend({
+//KB.Backbone.Sidebar.AreaOverview.AreaListItem
+var Templates = require('common/Templates');
+var ModuleListItem = require('frontend/Views/Sidebar/AreaOverview/ModuleListItem');
+var AreaDetailsController = require('frontend/Views/Sidebar/AreaDetails/AreaDetailsController');
+module.exports = Backbone.View.extend({
   tagName: 'ul',
   className: 'kb-sidebar-areaview__modules-list',
   ModuleViews: {},
@@ -8,7 +12,7 @@ KB.Backbone.Sidebar.AreaOverview.AreaListItem = Backbone.View.extend({
     this.controller = options.controller;
     this.sidebarController = options.sidebarController;
     this.$toggleHandle = this.$parent.find('.kb-sidebar-areaview__title');
-    this.ModuleList = new KB.Backbone.Sidebar.AreaDetails.AreaDetailsController({
+    this.ModuleList = new AreaDetailsController({
       controller: options.controller,
       sidebarController: options.sidebarController,
       model: this.model
@@ -42,7 +46,7 @@ KB.Backbone.Sidebar.AreaOverview.AreaListItem = Backbone.View.extend({
 
   },
   renderModuleItem: function (model) {
-    this.ModuleViews[model.id] = new KB.Backbone.Sidebar.AreaOverview.ModuleListItem({
+    this.ModuleViews[model.id] = new ModuleListItem({
       $parent: this.$el,
       model: model
     });
@@ -69,7 +73,7 @@ KB.Backbone.Sidebar.AreaOverview.AreaListItem = Backbone.View.extend({
   },
   afterInit: function () {
     if (this.Modules.models.length === 0 && this.model.View.$el.is(":visible")) {
-      this.$el.append(KB.Templates.render('frontend/sidebar/empty-area', {}));
+      this.$el.append(Templates.render('frontend/sidebar/empty-area', {}));
     }
   }
 });

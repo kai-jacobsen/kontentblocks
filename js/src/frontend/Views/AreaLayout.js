@@ -1,4 +1,6 @@
-KB.Backbone.AreaLayoutView = Backbone.View.extend({
+//KB.Backbone.AreaLayoutView
+var Payload = require('common/Payload');
+module.exports = Backbone.View.extend({
   hasLayout: false, // flag if layout is assigned
   initialize: function (options) {
     // parent area view is passed via options
@@ -22,7 +24,7 @@ KB.Backbone.AreaLayoutView = Backbone.View.extend({
   setupLayout: function (layout) {
     var at, collection;
 
-    collection = KB.Payload.getPayload('AreaTemplates') || {}; // assign payload layout collection
+    collection = Payload.getPayload('AreaTemplates') || {}; // assign payload layout collection
 
     /*
      either a layout is passed or we get it from the model

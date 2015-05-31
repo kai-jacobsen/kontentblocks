@@ -56,3 +56,4 @@ KB.ViewsCollection = function () {
 };
 
 _.extend(KB.ViewsCollection.prototype, Backbone.Events);
+module.exports = KB.ViewsCollection;

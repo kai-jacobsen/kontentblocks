@@ -1,4 +1,7 @@
-KB.Backbone.Frontend.ModuleEdit = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+//KB.Backbone.Frontend.ModuleEdit
+var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
+var Check = require('common/Checks');
+module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
@@ -14,7 +17,7 @@ KB.Backbone.Frontend.ModuleEdit = KB.Backbone.Frontend.ModuleMenuItemView.extend
     return this;
   },
   isValid: function () {
-    return KB.Checks.userCan('edit_kontentblocks');
+    return Check.userCan('edit_kontentblocks');
   },
   success: function () {
 

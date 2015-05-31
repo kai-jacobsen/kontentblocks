@@ -1,9 +1,10 @@
-KB.Backbone.ModuleDefinition = Backbone.Model.extend({
+//KB.Backbone.ModuleDefinition
+module.exports = Backbone.Model.extend({
   initialize: function () {
     var that = this;
     this.id = (function () {
       if (that.get('settings').category === 'template') {
-        return that.get('instance_id');
+        return that.get('mid');
       } else {
         return that.get('settings').class;
       }

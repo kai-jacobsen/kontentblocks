@@ -1,5 +1,7 @@
-KB.Fields.registerObject('color', KB.Fields.BaseView.extend({
+var BaseView = require('../FieldBaseView');
+KB.Fields.registerObject('color', BaseView.extend({
   initialize: function () {
+    console.log('test');
     this.render();
   },
   events: {

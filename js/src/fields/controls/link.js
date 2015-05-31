@@ -1,4 +1,5 @@
-KB.Fields.registerObject('link', KB.Fields.BaseView.extend({
+var BaseView = require('../FieldBaseView');
+KB.Fields.registerObject('link', BaseView.extend({
   initialize: function(){
     this.render();
   },

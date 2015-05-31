@@ -2,7 +2,13 @@
  * Creates the individual module-actions controls
  * like: sortable, delete, update
  */
-KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
+//KB.Backbone.Frontend.ModuleControlsView
+var ModuleEdit = require('./modulecontrols/EditControl');
+var ModuleUpdate = require('./modulecontrols/UpdateControl');
+var ModuleDelete = require('./modulecontrols/DeleteControl');
+var ModuleMove = require('./modulecontrols/MoveControl');
+var Templates = require('common/Templates');
+module.exports = Backbone.View.extend({
 
   ModuleView: null,
   $menuList: null, // ul item
@@ -12,19 +18,19 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
     this.ModuleView = options.ModuleView;
     this.renderControls();
 
-    this.EditControl = this.addItem(new KB.Backbone.Frontend.ModuleEdit({
+    this.EditControl = this.addItem(new ModuleEdit({
       model: this.ModuleView.model,
       parent: this.ModuleView
     }));
-    this.UpdateControl = this.addItem(new KB.Backbone.Frontend.ModuleUpdate({
+    this.UpdateControl = this.addItem(new ModuleUpdate({
       model: this.ModuleView.model,
       parent: this.ModuleView
     }));
-    this.DeleteControl = this.addItem(new KB.Backbone.Frontend.ModuleDelete({
+    this.DeleteControl = this.addItem(new ModuleDelete({
       model: this.ModuleView.model,
       parent: this.ModuleView
     }));
-    this.MoveControl = this.addItem(new KB.Backbone.Frontend.ModuleMove({
+    this.MoveControl = this.addItem(new ModuleMove({
       model: this.ModuleView.model,
       parent: this.ModuleView
     }));
@@ -34,7 +40,7 @@ KB.Backbone.Frontend.ModuleControlsView = Backbone.View.extend({
 
   renderControls: function () {
     // append wrapper element
-    this.ModuleView.$el.append(KB.Templates.render('frontend/module-controls', {
+    this.ModuleView.$el.append(Templates.render('frontend/module-controls', {
       model: this.ModuleView.model.toJSON(),
       i18n: KB.i18n.jsFrontend
     }));

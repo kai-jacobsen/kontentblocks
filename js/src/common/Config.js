@@ -1,4 +1,4 @@
-KB.Config = (function ($) {
+var Config = (function ($) {
   var config = KB.appData.config;
   return {
     /**
@@ -49,3 +49,4 @@ KB.Config = (function ($) {
 
   }
 })(jQuery);
+module.exports = Config;

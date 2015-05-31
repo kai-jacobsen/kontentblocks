@@ -1,4 +1,5 @@
-KB.Fields.registerObject('gallery', KB.Fields.BaseView.extend({
+var BaseView = require('../FieldBaseView');
+KB.Fields.registerObject('gallery', BaseView.extend({
   initialize: function () {
     this.render();
   },

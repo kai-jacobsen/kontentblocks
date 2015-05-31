@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
 
+  var alias = require("browserify-alias-grunt");
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -33,9 +34,9 @@ module.exports = function (grunt) {
           drop_console: false
         },
         files: {
-          'js/dev/frontend.js': ['<%= concat.frontend.dest %>'],
+          'js/dev/frontend.js': ['<%= browserify.frontend.dest %>'],
           'js/dev/backend.js': ['<%= concat.backend.dest %>'],
-          'js/dev/refields.js': ['<%= concat.refields.dest %>'],
+          'js/dev/refields.js': ['<%= browserify.refields.dest %>'],
           'js/dev/common.js': ['<%= concat.common.dest %>'],
           'js/dev/extensions.js': ['<%= concat.extensions.dest %>'],
           'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
@@ -48,11 +49,11 @@ module.exports = function (grunt) {
       options: {
         seperator: ';'
       },
-      refields: {
-        src: ['core/Fields/Definitions/js/_FieldBaseView.js','core/Fields/Definitions/js/**/*.js'],
-        dest: 'js/tmp/refields.concat.js',
-        nonull: true
-      },
+      //refields: {
+      //  src: ['js/src/Fields/_FieldBaseView.js', 'js/src/Fields/controls/**/*.js'],
+      //  dest: 'js/tmp/refields.concat.js',
+      //  nonull: true
+      //},
       extensions: {
         src: ['js/src/extensions/**/*.js'],
         dest: 'js/tmp/extensions.concat.js',
@@ -68,11 +69,11 @@ module.exports = function (grunt) {
         dest: 'js/tmp/common.concat.js',
         nonull: true
       },
-      frontend: {
-        src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js', 'js/src/frontend/Collections/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
-        dest: 'js/tmp/frontend.concat.js',
-        nonull: true
-      },
+      //frontend: {
+      //  src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js', 'js/src/frontend/Collections/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
+      //  dest: 'js/tmp/frontend.concat.js',
+      //  nonull: true
+      //},
       backend: {
         src: ['js/src/backend/Models/**/*.js', 'js/src/backend/Views/**/*.js', 'js/src/backend/Collections/**/*.js', 'js/src/backend/BackendController.js'],
         dest: 'js/tmp/backend.concat.js',
@@ -101,6 +102,27 @@ module.exports = function (grunt) {
           config: 'css/config-dev.rb',
           basePath: 'css/'
         }
+      }
+    },
+    browserify: {
+      options : {
+        alias: alias.map(grunt, {
+
+          // alias all js files in the 'app' directory
+          cwd: "js/src",
+          src: ["**/*.js"],
+          dest: ""
+        })
+      },
+      frontend: {
+        // A single entry point for our app
+        src: 'js/src/frontend/FrontendController.js',
+        // Compile to a single file to add a script tag for in your HTML
+        dest: 'js/tmp/frontend.concat.js'
+      },
+      refields: {
+        src: 'js/src/fields/RefieldsController.js',
+        dest: 'js/tmp/refields.concat.js'
       }
     },
     sass: {
@@ -215,11 +237,13 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-rsync-2');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-browserify');
+
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'uglify:dist', 'uglify:dev', 'sass:dist', 'autoprefixer', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
+  grunt.registerTask('default', ['concat','browserify', 'uglify:dist', 'uglify:dev', 'sass:dist', 'autoprefixer', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('hint', ['jshint']);
-  grunt.registerTask('dev', ['concat', 'uglify:dev', 'sass:dev', 'clean', 'exec:removeHash', 'exec:createDevId']);
+  grunt.registerTask('dev', ['concat', 'browserify', 'uglify:dev', 'sass:dev', 'clean', 'exec:removeHash', 'exec:createDevId']);
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 

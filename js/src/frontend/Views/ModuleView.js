@@ -4,14 +4,18 @@
  * TODO: Don't rely on containers to position the controls and calculate position dynamically
  * @type {*|void|Object}
  */
-KB.Backbone.ModuleView = Backbone.View.extend({
+//KB.Backbone.ModuleView
+var Templates = require('common/Templates');
+var ModuleControlsView = require('frontend/Views/ModuleControls/ModuleControls');
+var Check = require('common/Checks');
+module.exports = Backbone.View.extend({
   focus: false,
   $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
   attachedFields: {},
   initialize: function () {
     var that = this;
     // don't init if cap is missing for current user
-    if (!KB.Checks.userCan('edit_kontentblocks')) {
+    if (!Check.userCan('edit_kontentblocks')) {
       return;
     }
     // attach this view to the model
@@ -27,7 +31,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
 
     this.setControlsPosition();
 
-    this.Controls = new KB.Backbone.Frontend.ModuleControlsView({
+    this.Controls = new ModuleControlsView({
       ModuleView: this
     });
   },
@@ -138,7 +142,7 @@ KB.Backbone.ModuleView = Backbone.View.extend({
   },
 
   renderPlaceholder: function () {
-    this.$el.append(KB.Templates.render('frontend/module-placeholder', {
+    this.$el.append(Templates.render('frontend/module-placeholder', {
       model: this.model.toJSON()
     }));
   },

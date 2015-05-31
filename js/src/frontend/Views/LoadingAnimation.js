@@ -1,4 +1,6 @@
-KB.Backbone.Shared.LoadingAnimation = Backbone.View.extend({
+//KB.Backbone.Shared.LoadingAnimation
+module.exports = Backbone.View.extend({
+
   $overlay: jQuery('<div class="kb-loading-overlay" style="display: none;"><span class="kb-loading-loader"><span class="kb-loading-loader-inner"></span></span></div>'),
 
   initialize: function () {

@@ -1,5 +1,7 @@
-KB.Templates = (function ($) {
-
+//KB.Templates
+var Config = require('common/Config');
+var Utilities = require('common/Utilities');
+var Templates = (function () {
   var templateCache = {};
   var helpfileCache = {};
 
@@ -13,8 +15,8 @@ KB.Templates = (function ($) {
     scope = scope || this;
     callback = done || null;
     if (!templateCache[tplName]) {
-      tplDir = KB.Config.getRootURL() + 'js/templates';
-      var tplUrl = tplDir + '/' + tplName + '.hbs?' + KB.Config.getHash();
+      var tplDir = Config.getRootURL() + 'js/templates';
+      var tplUrl = tplDir + '/' + tplName + '.hbs?' + Config.getHash();
 
       // if a full url is given, tplUrl will be overwritten
       var pat = /^https?:\/\//i;
@@ -23,20 +25,20 @@ KB.Templates = (function ($) {
       }
 
       // read from local storage if available
-      if (KB.Util.stex.get(tplUrl)) {
-        tplString = KB.Util.stex.get(tplUrl);
+      if (Utilities.stex.get(tplUrl)) {
+        tplString = Utilities.stex.get(tplUrl);
         if (callback) {
           callback.call(scope)
         }
       } else {
         // load fresh file
-        $.ajax({
+        jQuery.ajax({
           url: tplUrl,
           method: 'GET',
           async: false,
           success: function (data) {
             tplString = data;
-            KB.Util.stex.set(tplUrl, tplString, 2 * 1000 * 60);
+            Utilities.stex.set(tplUrl, tplString, 2 * 1000 * 60);
             if (callback) {
               callback.call(scope)
             }
@@ -56,7 +58,7 @@ KB.Templates = (function ($) {
     if (!helpfileCache[helpfileUrl]) {
 
       var helpfileString;
-      $.ajax({
+      jQuery.ajax({
         url: helpfileUrl,
         method: 'GET',
         async: false,
@@ -69,10 +71,11 @@ KB.Templates = (function ($) {
       helpfileCache[helpfileUrl] = helpfileUrl;
     }
     return helpfileCache[helpfileUrl];
-  };
+  }
 
   return {
     render: render,
     helpfile: helpfile
   };
-}(jQuery));
+}());
+module.exports = Templates;

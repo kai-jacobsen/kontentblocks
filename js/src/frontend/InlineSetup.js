@@ -2,5 +2,6 @@
 KB.Events.on('KB::ready', function () {
   //KB.IEdit.Image.init();
   //KB.IEdit.BackgroundImage.init();
-  KB.IEdit.Link.init();
+  var EditableLink = require('frontend/Inline/editableLink');
+  EditableLink.init();
 });

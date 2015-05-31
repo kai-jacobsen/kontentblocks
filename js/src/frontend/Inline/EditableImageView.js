@@ -1,4 +1,7 @@
-KB.Backbone.Inline.EditableImage = Backbone.View.extend({
+//KB.Backbone.Inline.EditableImage
+var Config = require('common/Config');
+var Utilities = require('common/Utilities');
+var EditableImage = Backbone.View.extend({
   initialize: function () {
     this.mode = this.model.get('mode');
     this.defaultState = this.model.get('state') || 'replace-image';
@@ -83,7 +86,7 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
     var value = this.prepareValue(attachment);
     var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
     var path = this.model.get('kpath');
-    KB.Util.setIndex(moduleData, path, value);
+    Utilities.setIndex(moduleData, path, value);
     this.model.get('ModuleModel').set('moduleData', moduleData);
     //this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
     KB.Events.trigger('modal.refresh');
@@ -100,7 +103,7 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
         action: 'fieldGetImage',
         args: args,
         id: id,
-        _ajax_nonce: KB.Config.getNonce('read')
+        _ajax_nonce: Config.getNonce('read')
       },
       type: 'POST',
       dataType: 'json',
@@ -164,4 +167,5 @@ KB.Backbone.Inline.EditableImage = Backbone.View.extend({
 //    }).open();
 //  });
 
-KB.Fields.registerObject('EditableImage', KB.Backbone.Inline.EditableImage);
+KB.Fields.registerObject('EditableImage', EditableImage);
+module.exports = EditableImage;

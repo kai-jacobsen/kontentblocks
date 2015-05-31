@@ -1,4 +1,12 @@
-KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.extend({
+//KB.Backbone.Frontend.ModuleDelete
+var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
+var Check = require('common/Checks');
+var Config = require('common/Config');
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+
+
+module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
@@ -9,12 +17,12 @@ KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.exte
     'click': 'confirmRemoval'
   },
   confirmRemoval: function () {
-    KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
+    Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
   },
   removeModule: function () {
-    KB.Ajax.send({
+    Ajax.send({
       action: 'removeModules',
-      _ajax_nonce: KB.Config.getNonce('delete'),
+      _ajax_nonce: Config.getNonce('delete'),
       module: this.model.get('instance_id')
     }, this.afterRemoval, this);
   },
@@ -30,6 +38,6 @@ KB.Backbone.Frontend.ModuleDelete = KB.Backbone.Frontend.ModuleMenuItemView.exte
     return false;
   },
   isValid: function () {
-    return KB.Checks.userCan('delete_kontentblocks');
+    return Check.userCan('delete_kontentblocks');
   }
 });

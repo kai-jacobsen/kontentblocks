@@ -784,19 +784,3 @@ body.onsite-editing #onsite-modal {
 /* line 535, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 #onsite-modal .wp-picker-container * {
   box-sizing: content-box; }
-
-/* line 539, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
-.mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout {
-  width: auto !important; }
-
-/* line 543, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
-.mce-stack-layout-item, .mce-container-body {
-  display: inline-block !important; }
-
-/* line 547, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
-.mce-tooltip {
-  font-family: 'Open-Sans', sans-serif !important; }
-
-/* line 552, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
-.mce-widget.mce-btn button:hover {
-  background-color: #ffffff !important; }

@@ -1,7 +1,10 @@
-KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
+//KB.Backbone.Sidebar.AreaDetails.AreaSettings
+var Templates = require('common/Templates');
+var Payload = require('common/Payload');
+module.exports = Backbone.View.extend({
   tagName: 'ul',
   className: 'kb-sidebar-area-details__templates',
-  LayoutDefs: KB.Payload.getPayload('AreaTemplates') || {},
+  LayoutDefs: Payload.getPayload('AreaTemplates') || {},
   events: {
     'click li': 'layoutSelect'
   },
@@ -26,7 +29,7 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
     if (layouts && layouts.length > 0) {
       this.$el.prepend('<div class="kb-sidebar__subheader">Layouts</div>');
       _.each(this.prepareLayouts(layouts), function (item) {
-        options += KB.Templates.render('frontend/area-layout-item', {
+        options += Templates.render('frontend/area-layout-item', {
           item: item
         });
       });
@@ -49,5 +52,4 @@ KB.Backbone.Sidebar.AreaDetails.AreaSettings = Backbone.View.extend({
       }
     });
   }
-
 });

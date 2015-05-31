@@ -1,4 +1,6 @@
-KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
+//KB.Backbone.Sidebar.AreaOverview.ModuleListItem
+var Templates = require('common/Templates');
+module.exports = Backbone.View.extend({
   tagName: 'li',
   initialize: function (options) {
     // parent area list
@@ -53,7 +55,7 @@ KB.Backbone.Sidebar.AreaOverview.ModuleListItem = Backbone.View.extend({
     }, 750);
   },
   render: function () {
-    this.$el.append(KB.Templates.render('frontend/sidebar/module-view-item', {view: this.model.toJSON()}));
+    this.$el.append(Templates.render('frontend/sidebar/module-view-item', {view: this.model.toJSON()}));
     this.$el.appendTo(this.$parent);
   },
   dispose: function(){
