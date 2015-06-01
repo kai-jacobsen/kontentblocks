@@ -32,11 +32,11 @@ module.exports = Backbone.View.extend({
     //  controller: this
     //});
     //this.setView(this.RootView);
-    this.setView(this.states['AreaList']);
+    this.setView(this.states['AreaList']); // init Areas list view
   },
   events: {
-    'click .kb-js-sidebar-nav-back': 'rootView',
-    'click [data-kb-action]': 'actionHandler'
+    'click .kb-js-sidebar-nav-back': 'rootView', // back to level 0
+    'click [data-kb-action]': 'actionHandler' // event proxy
   },
   render: function () {
     this.$el = jQuery('<div class="kb-sidebar-wrap" style="display: none;"></div>').appendTo('body');
@@ -98,8 +98,8 @@ module.exports = Backbone.View.extend({
     }
   },
   rootView: function () {
-    this.viewStack = [];
-    this.setView(this.states['AreaList']);
+    this.viewStack = []; // empty stack
+    this.setView(this.states['AreaList']); // set level 0 view
   },
   handleNavigationControls: function () {
     if (this.viewStack.length >= 2) {

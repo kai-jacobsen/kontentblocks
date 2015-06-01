@@ -90,6 +90,7 @@ KB.App = function () {
     }
 
 
+
     // create toolbar container for tinymce inline editors
     var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
     $toolbar.hide();
@@ -114,6 +115,7 @@ KB.App = function () {
     /*
      * payload.Fields collection
      */
+    require('./InlineSetup');
     KB.FieldConfigs = new FieldConfigsCollection();
     KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
     // get the UI on track
@@ -240,12 +242,13 @@ KB.App = function () {
 // get started
 KB.App.init();
 
-
 jQuery(document).ready(function () {
   if (KB.appData && KB.appData.config.frontend) {
     KB.Views.Modules.readyOnFront();
     Logger.User.info('Frontend welcomes you');
+    jQuery('body').addClass('kontentblocks-ready');
   }
+
   // general ready event
   KB.Events.trigger('KB::ready');
   // force user cookie to tinymce

@@ -1,4 +1,7 @@
 //KB.TinyMCE
+var Ajax = require('common/Ajax');
+var Logger = require('common/Logger');
+var Config = require('common/Config');
 module.exports =
 {
   removeEditors: function () {
@@ -32,7 +35,7 @@ module.exports =
     // Editor may not be initialized and is not accessible through
     // the tinymce api, thats why we take the settings from preInit
     if (!$el) {
-      _K.error('No scope element ($el) provided');
+      Logger.Debug.error('No scope element ($el) provided');
       return false;
     }
 
@@ -113,13 +116,13 @@ module.exports =
     }
     var editorContent = content || '';
 
-    return KB.Ajax.send({
+    return Ajax.send({
       action: 'getRemoteEditor',
       editorId: id + '_ed',
       editorName: name,
       post_id: pid,
       editorContent: editorContent,
-      _ajax_nonce: KB.Config.getNonce('read'),
+      _ajax_nonce: Config.getNonce('read'),
       args: {
         media_buttons: media
       }
@@ -128,7 +131,7 @@ module.exports =
         $el.empty().append(response.data.html);
         this.addEditor($el, null, 150, watch);
       } else {
-        _K.info('Editor markup could not be retrieved from the server');
+        Logger.Debug.info('Editor markup could not be retrieved from the server');
       }
     }, this);
 

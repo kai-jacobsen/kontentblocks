@@ -13,6 +13,7 @@
  */
 var $ = jQuery;
 var Config = require('common/Config');
+var Ajax = require('common/Ajax');
 var Ui = {
   // sorting indication
   isSorting: false,
@@ -315,7 +316,7 @@ var Ui = {
       });
     });
 
-    return KB.Ajax.send({
+    return Ajax.send({
       action: 'resortModules',
       data: serializedData,
       _ajax_nonce: Config.getNonce('update')
@@ -328,7 +329,7 @@ var Ui = {
    * @returns {jqXHR}
    */
   changeArea: function (targetArea, module) {
-    return KB.Ajax.send({
+    return Ajax.send({
       action: 'changeArea',
       _ajax_nonce: Config.getNonce('update'),
       mid: module.get('instance_id'),

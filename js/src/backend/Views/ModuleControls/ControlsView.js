@@ -3,13 +3,13 @@
  * like: duplicate, delete, status
  */
 //KB.Backbone.Backend.ModuleControlsView
+var Templates = require('common/Templates');
 module.exports = Backbone.View.extend({
   $menuWrap: {}, // wrap container jQuery element
   $menuList: {}, // ul item
-
   initialize: function () {
     this.$menuWrap = jQuery('.menu-wrap', this.$el); //set outer element
-    this.$menuWrap.append(KB.Templates.render('backend/module-menu', {})); // render template
+    this.$menuWrap.append(Templates.render('backend/module-menu', {})); // render template
     this.$menuList = jQuery('.module-actions', this.$menuWrap);
   },
   /**

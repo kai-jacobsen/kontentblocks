@@ -1,4 +1,13 @@
 //KB.Backbone.Backend.ModuleView
+var ModuleControlsView = require('backend/Views/ModuleControls/ControlsView');
+var DeleteControl = require('backend/Views/ModuleControls/controls/DeleteControl');
+var DuplicateControl = require('backend/Views/ModuleControls/controls/DuplicateControl');
+var SaveControl = require('backend/Views/ModuleControls/controls/SaveControl');
+var StatusControl = require('backend/Views/ModuleControls/controls/StatusControl');
+var Checks = require('common/Checks');
+var Ajax = require('common/Ajax');
+var UI = require('common/UI');
+var Payload = require('common/Payload');
 module.exports = Backbone.View.extend({
   $head: {}, // header jQuery element
   $body: {}, // module inner jQuery element
@@ -37,7 +46,7 @@ module.exports = Backbone.View.extend({
     this.attachedFields = {};
     this.instanceId = this.model.get('instance_id');
     // create new module actions menu
-    this.ModuleMenu = new KB.Backbone.Backend.ModuleControlsView({
+    this.ModuleMenu = new ModuleControlsView({
       el: this.$el,
       parent: this
     });
@@ -59,15 +68,15 @@ module.exports = Backbone.View.extend({
   // duplicate | delete | change active status
   setupDefaultMenuItems: function () {
     // actual action is handled by individual files
-    this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleSave({model: this.model, parent: this}));
-    this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDuplicate({model: this.model, parent: this}));
-    this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDelete({model: this.model, parent: this}));
-    this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleStatus({model: this.model, parent: this}));
+    this.ModuleMenu.addItem(new SaveControl({model: this.model, parent: this}));
+    this.ModuleMenu.addItem(new DuplicateControl({model: this.model, parent: this}));
+    this.ModuleMenu.addItem(new DeleteControl({model: this.model, parent: this}));
+    this.ModuleMenu.addItem(new StatusControl({model: this.model, parent: this}));
   },
   // show/hide handler
   toggleBody: function (speed) {
     var duration = speed || 400;
-    if (KB.Checks.userCan('edit_kontentblocks')) {
+    if (Checks.userCan('edit_kontentblocks')) {
       this.$body.slideToggle(duration);
       this.$el.toggleClass('kb-open');
       // set current module to prime object property
@@ -81,10 +90,10 @@ module.exports = Backbone.View.extend({
   },
   // get called when a module was dragged to a different area / area context
   updateModuleForm: function () {
-    KB.Ajax.send({
+    Ajax.send({
       action: 'afterAreaChange',
       module: this.model.toJSON(),
-      _ajax_nonce: KB.Config.getNonce('read')
+      _ajax_nonce: Config.getNonce('read')
     }, this.insertNewUpdateForm, this);
   },
   insertNewUpdateForm: function (response) {
@@ -94,10 +103,10 @@ module.exports = Backbone.View.extend({
       this.$inner.html('empty');
     }
     if (response.data.json.Fields) {
-      KB.payload.Fields = _.extend(KB.Payload.getPayload('Fields'), response.data.json.Fields);
+      KB.payload.Fields = _.extend(Payload.getPayload('Fields'), response.data.json.Fields);
     }
     // re-init UI listeners
-    KB.Ui.repaint(this.$el);
+    Ui.repaint(this.$el);
     KB.Fields.trigger('update');
     this.trigger('kb:backend::viewUpdated');
     this.model.trigger('after.change.area');

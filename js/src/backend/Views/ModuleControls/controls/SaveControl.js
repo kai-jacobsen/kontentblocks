@@ -1,5 +1,12 @@
 //KB.Backbone.Backend.ModuleSave
-module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
+var BaseView = require('backend/Views/ModuleControls/controls/BaseView');
+var Checks = require('common/Checks');
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+var Config = require('common/Config');
+var UI = require('common/UI');
+var Payload = require('common/Payload');
+module.exports = BaseView.extend({
   initialize: function (options) {
     this.options = options || {};
     this.parentView = options.parent;
@@ -16,11 +23,11 @@ module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
 
     tinyMCE.triggerSave();
 
-    KB.Ajax.send({
+    Ajax.send({
       action: 'updateModuleData',
       module: this.model.toJSON(),
       data: this.parentView.serialize(),
-      _ajax_nonce: KB.Config.getNonce('update')
+      _ajax_nonce: Config.getNonce('update')
     }, this.success, this);
 
   },
@@ -31,13 +38,12 @@ module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
     this.$el.removeClass('is-dirty');
   },
   isValid: function () {
-
     if (this.model.get('master')) {
       return false;
     }
 
     return !this.model.get('disabled') &&
-    KB.Checks.userCan('edit_kontentblocks');
+      Checks.userCan('edit_kontentblocks');
 
   },
   success: function (res) {
@@ -46,6 +52,6 @@ module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
       _K.error('Failed to save module data.');
     }
     this.parentView.model.set('moduleData', res.data.newModuleData);
-    KB.Notice.notice('Data saved', 'success');
+    Notice.notice('Data saved', 'success');
   }
 });

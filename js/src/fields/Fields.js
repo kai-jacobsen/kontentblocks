@@ -14,10 +14,12 @@ _.extend(Fields, {
     this.listenTo(this, 'newModule', this.newModule);
   },
   register: function (id, object) {
+    console.log(id);
     _.extend(object, Backbone.Events);
     this.fields[id] = object;
   },
   registerObject: function (id, object) {
+    console.log(id);
     _.extend(object, Backbone.Events);
     this.fields[id] = object;
   },

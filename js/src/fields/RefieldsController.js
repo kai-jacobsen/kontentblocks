@@ -1,4 +1,3 @@
-
 KB.Fields = require('./Fields');
 
 // load controls by require

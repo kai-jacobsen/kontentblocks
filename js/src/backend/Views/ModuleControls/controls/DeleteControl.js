@@ -1,5 +1,11 @@
 //KB.Backbone.Backend.ModuleDelete
-module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
+var BaseView = require('backend/Views/ModuleControls/controls/BaseView');
+var Checks = require('common/Checks');
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+var Config = require('common/Config');
+
+module.exports = BaseView.extend({
   className: 'kb-delete block-menu-icon',
   initialize: function () {
     _.bindAll(this, "yes", "no");
@@ -8,20 +14,20 @@ module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
     'click': 'deleteModule'
   },
   deleteModule: function () {
-    KB.Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+    Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
   },
   isValid: function () {
     if (!this.model.get('predefined') && !this.model.get('disabled') &&
-      KB.Checks.userCan('delete_kontentblocks')) {
+      Checks.userCan('delete_kontentblocks')) {
       return true;
     } else {
       return false;
     }
   },
   yes: function () {
-    KB.Ajax.send({
+    Ajax.send({
       action: 'removeModules',
-      _ajax_nonce: KB.Config.getNonce('delete'),
+      _ajax_nonce: Config.getNonce('delete'),
       module: this.model.get('instance_id')
     }, this.success, this);
   },
@@ -34,7 +40,7 @@ module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
       wp.heartbeat.interval('fast', 2);
       this.model.destroy();
     } else{
-      KB.Notice.notice('Error while removing a module', 'error');
+      Notice.notice('Error while removing a module', 'error');
     }
 
   }

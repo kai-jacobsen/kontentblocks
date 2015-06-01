@@ -784,3 +784,16 @@ body.onsite-editing #onsite-modal {
 /* line 535, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 #onsite-modal .wp-picker-container * {
   box-sizing: content-box; }
+
+/* line 540, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+body.kontentblocks-ready .mce-toolbar-grp.mce-container, body.kontentblocks-ready .mce-container-body.mce-stack-layout {
+  width: auto !important; }
+/* line 544, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+body.kontentblocks-ready .mce-stack-layout-item, body.kontentblocks-ready .mce-container-body {
+  display: inline-block !important; }
+/* line 548, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+body.kontentblocks-ready .mce-tooltip {
+  font-family: 'Open-Sans', sans-serif !important; }
+/* line 553, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
+body.kontentblocks-ready .mce-widget.mce-btn button:hover {
+  background-color: #ffffff !important; }

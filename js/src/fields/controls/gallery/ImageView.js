@@ -4,6 +4,7 @@
 //KB.Gallery.ImageView
 var TinyMCE = require('common/TinyMCE');
 var UI = require('common/UI');
+var Templates = require('common/Templates');
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-gallery--image-wrapper',
@@ -24,7 +25,7 @@ module.exports = Backbone.View.extend({
     this.$el.addClass('kb-gallery--active-item kb_field').appendTo('body');
     jQuery('#wpwrap').addClass('module-browser-open');
     this.handleEditor();
-    KB.Ui.initTabs();
+    UI.initTabs();
   },
   handleEditor: function () {
     var that = this;
@@ -69,7 +70,6 @@ module.exports = Backbone.View.extend({
     jQuery('#wpwrap').removeClass('module-browser-open');
   },
   getEditorContent: function (ed) {
-
     var $wrap = jQuery('#wp-' + this.uid + '_ededitor-wrap');
     var isTinyMCE = $wrap.hasClass('tmce-active');
 
@@ -86,7 +86,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.uid);
     var item = this.model.toJSON();
-    return this.$el.append(KB.Templates.render('fields/Gallery/single-image', {
+    return this.$el.append(Templates.render('fields/Gallery/single-image', {
       image: item,
       id: item.id,
       inputName: inputName,

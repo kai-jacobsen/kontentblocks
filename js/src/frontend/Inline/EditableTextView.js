@@ -46,10 +46,8 @@ var EditableText = Backbone.View.extend({
           ed.module = that.model.get('ModuleModel');
           ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content') ? true : false;
           ed.kpath = that.model.get('kpath');
-
           ed.module.View.$el.addClass('inline-editor-attached');
           KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
-
           ed.fire('focus');
           ed.focus();
         });
@@ -63,7 +61,7 @@ var EditableText = Backbone.View.extend({
             that.$el.html('');
             that.placeHolderSet = false;
           }
-          var con = KB.Util.getIndex(ed.module.get('moduleData'), ed.kpath);
+          var con = Utilities.getIndex(ed.module.get('moduleData'), ed.kpath);
           ed.previousContent = ed.getContent();
           if (ed.kfilter) {
             ed.setContent(switchEditors.wpautop(con));
@@ -122,7 +120,9 @@ var EditableText = Backbone.View.extend({
                   ed.setContent(res.data.content);
                   ed.module.set('moduleData', moduleData);
                   //ed.module.trigger('kb.frontend.module.inlineUpdate');
-                  twttr.widgets.load();
+                  if (window.twttr){
+                    window.twttr.widgets.load();
+                  }
                 },
 
                 error: function () {
@@ -142,9 +142,7 @@ var EditableText = Backbone.View.extend({
         });
       }
     };
-    console.log(this.settings);
     this.defaults = _.extend(defaults, this.settings);
-
   },
   activate: function (e) {
     e.stopPropagation();
@@ -175,5 +173,4 @@ var EditableText = Backbone.View.extend({
   }
 });
 
-KB.Fields.registerObject('EditableText', EditableText);
 module.exports = EditableText;

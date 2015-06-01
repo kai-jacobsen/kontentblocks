@@ -16,6 +16,7 @@ module.exports = Backbone.View.extend({
     this.bindHandlers();
   },
   render: function () {
+    // this.$el is the main wrapper for the area overview list
     return this.$el;
   },
   bindHandlers: function () {
@@ -24,7 +25,7 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.Areas, 'add', this.createAreaItem);
   },
   attachAreaView: function (view) {
-    if (view.el) {
+    if (view.el) { // make sure the area is present in the DOM
       this.Areas.add(view.model);
     }
   },
@@ -35,7 +36,8 @@ module.exports = Backbone.View.extend({
     }
   },
   createAreaItem: function (model) {
-    if (!model.get('internal')) {
+    // render area item skeleton markup for each area
+    if (!model.get('internal')) { // ignore internal system areas
       var $item = jQuery(Templates.render('frontend/sidebar/sidebar-area-view', model.toJSON())).appendTo(this.$el);
       this.AreaViews[model.get('id')] = new AreaListItem({
         $el: $item,
@@ -46,7 +48,6 @@ module.exports = Backbone.View.extend({
     }
   },
   setActiveList: function (AreaView) {
-
     // is null
     if (!this.activeList || !this.activeList.cid) {
       this.activeList = AreaView;
@@ -54,7 +55,6 @@ module.exports = Backbone.View.extend({
       AreaView.activate();
       return true;
     }
-
     if (this.activeList.cid === AreaView.cid) {
       return false;
     } else {

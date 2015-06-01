@@ -1,5 +1,10 @@
 //KB.Backbone.Backend.ModuleStatus
-module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
+var BaseView = require('backend/Views/ModuleControls/controls/BaseView');
+var Checks = require('common/Checks');
+var Config = require('common/Config');
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+module.exports = BaseView.extend({
   initialize: function (options) {
     this.options = options || {};
   },
@@ -9,16 +14,16 @@ module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
   },
   changeStatus: function () {
 
-    KB.Ajax.send({
+    Ajax.send({
       action: 'changeModuleStatus',
       module: this.model.get('instance_id'),
-      _ajax_nonce: KB.Config.getNonce('update')
+      _ajax_nonce: Config.getNonce('update')
     }, this.success, this);
 
   },
   isValid: function () {
     if (!this.model.get('disabled') &&
-      KB.Checks.userCan('deactivate_kontentblocks')) {
+      Checks.userCan('deactivate_kontentblocks')) {
       return true;
     } else {
       return false;
@@ -27,6 +32,6 @@ module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
   success: function () {
     this.options.parent.$head.toggleClass('module-inactive');
     this.options.parent.$el.toggleClass('activated deactivated');
-    KB.Notice.notice('Status changed', 'success');
+    Notice.notice('Status changed', 'success');
   }
 });

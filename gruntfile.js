@@ -16,7 +16,6 @@ module.exports = function (grunt) {
           'js/dist/frontend.min.js': ['<%= browserify.frontend.dest %>'],
           'js/dist/backend.min.js': ['<%= browserify.backend.dest %>'],
           'js/dist/refields.min.js': ['<%= browserify.refields.dest %>'],
-          //'js/dist/common.min.js': ['<%= concat.common.dest %>'],
           'js/dist/extensions.min.js': ['<%= browserify.extensions.dest %>'],
           'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
           'js/dist/fieldsAPI.min.js': ['<%= concat.fieldsAPI.dest %>'],
@@ -36,7 +35,6 @@ module.exports = function (grunt) {
           'js/dev/frontend.js': ['<%= browserify.frontend.dest %>'],
           'js/dev/backend.js': ['<%= browserify.backend.dest %>'],
           'js/dev/refields.js': ['<%= browserify.refields.dest %>'],
-          //'js/dev/common.js': ['<%= concat.common.dest %>'],
           'js/dev/extensions.js': ['<%= browserify.extensions.dest %>'],
           'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
           'js/dev/fieldsAPI.js': ['<%= concat.fieldsAPI.dest %>'],
@@ -48,36 +46,11 @@ module.exports = function (grunt) {
       options: {
         seperator: ';'
       },
-      //refields: {
-      //  src: ['js/src/Fields/_FieldBaseView.js', 'js/src/Fields/controls/**/*.js'],
-      //  dest: 'js/tmp/refields.concat.js',
-      //  nonull: true
-      //},
-      //extensions: {
-      //  src: ['js/src/extensions/**/*.js'],
-      //  dest: 'js/tmp/extensions.concat.js',
-      //  nonull: true
-      //},
       plugins: {
         src: ['js/src/plugins/**/*.js'],
         dest: 'js/tmp/plugins.concat.js',
         nonull: true
       },
-      //common: {
-      //  src: ['js/src/common/_Namespaces.js', 'js/src/common/kb.cm.Config.js', 'js/src/common/**/*.js'],
-      //  dest: 'js/tmp/common.concat.js',
-      //  nonull: true
-      //},
-      //frontend: {
-      //  src: ['js/src/frontend/Models/**/*.js', 'js/src/frontend/Views/**/*.js', 'js/src/frontend/Collections/**/*.js', 'js/src/frontend/ModuleBrowser/**/*.js', 'js/src/frontend/Inline/**/*.js', 'js/src/frontend/InlineSetup.js', 'js/src/frontend/FrontendController.js'],
-      //  dest: 'js/tmp/frontend.concat.js',
-      //  nonull: true
-      //},
-      //backend: {
-      //  src: ['js/src/backend/Models/**/*.js', 'js/src/backend/Views/**/*.js', 'js/src/backend/Collections/**/*.js', 'js/src/backend/BackendController.js'],
-      //  dest: 'js/tmp/backend.concat.js',
-      //  nonull: true
-      //},
       fieldsAPI: {
         src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/_Field.js', 'js/src/fieldsAPI/Fields/**/*.js'],
         dest: 'js/tmp/fieldsAPI.concat.js',
@@ -143,11 +116,21 @@ module.exports = function (grunt) {
       options: {
         livereload: true
       },
-      js: {
-        files: ['js/src/**/**/*.js', 'js/src/**/*.js', 'core/Fields/Definitions/**/*.js', 'js/**/*.hbs'],
-        //tasks: ['concat', 'uglify:dist', 'uglify:dev', 'clean', 'jshint', 'bash']
-        //tasks: ['concat', 'uglify:dev', 'clean', 'jshint', 'bash']
-        tasks: ['dev']
+      backend: {
+        files: ['js/src/backend/**/*.js', 'js/src/shared/**/*.js','js/src/common/**/*.js', 'js/**/*.hbs'],
+        tasks: ['jsbackend']
+      },
+      frontend: {
+        files: ['js/src/frontend/**/*.js', 'js/src/shared/**/*.js','js/src/common/**/*.js', 'js/**/*.hbs'],
+        tasks: ['jsfrontend']
+      },
+      refields: {
+        files: ['js/src/fields/**/*.js', 'js/src/shared/**/*.js','js/src/common/**/*.js', 'js/**/*.hbs'],
+        tasks: ['jsrefields']
+      },
+      plugins: {
+        files: ['js/src/plugins/**/*.js'],
+        tasks: ['jsplugins']
       },
       sass: {
         options: {
@@ -228,9 +211,13 @@ module.exports = function (grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['concat', 'browserify', 'uglify:dist', 'uglify:dev', 'sass:dist', 'autoprefixer', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
-  grunt.registerTask('hint', ['jshint']);
-  grunt.registerTask('dev', ['concat', 'browserify', 'uglify:dev', 'sass:dev', 'clean', 'exec:removeHash', 'exec:createDevId']);
+
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
+
+  grunt.registerTask('jsfrontend', ['browserify:frontend', 'uglify:dev', 'clean', 'jshint', 'bash']);
+  grunt.registerTask('jsbackend', ['browserify:backend', 'uglify:dev', 'clean', 'jshint', 'bash']);
+  grunt.registerTask('jsrefields', ['browserify:refields', 'uglify:dev', 'clean', 'jshint', 'bash']);
+  grunt.registerTask('jsplugins', ['uglify:dev', 'clean', 'jshint', 'bash']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
 };

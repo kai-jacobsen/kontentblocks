@@ -24,6 +24,48 @@
     return s;
 })({
     1: [ function(require, module, exports) {
+        module.exports = {
+            send: function(data, callback, scope, options) {
+                var pid;
+                var addPayload = options || {};
+                if (data.postId) {
+                    pid = data.postId;
+                } else {
+                    pid = KB.Environment && KB.Environment.postId ? KB.Environment.postId : false;
+                }
+                var sned = _.extend({
+                    supplemental: data.supplemental || {},
+                    count: parseInt(KB.Environment.moduleCount, 10),
+                    nonce: jQuery("#_kontentblocks_ajax_nonce").val(),
+                    post_id: pid,
+                    kbajax: true
+                }, data);
+                jQuery("#publish").attr("disabled", "disabled");
+                return jQuery.ajax({
+                    url: ajaxurl,
+                    data: sned,
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data) {
+                            if (scope && callback) {
+                                callback.call(scope, data, addPayload);
+                            } else if (callback) {
+                                callback(data, addPayload);
+                            }
+                        }
+                    },
+                    error: function() {
+                        KB.notice("<p>Generic Ajax Error</p>", "error");
+                    },
+                    complete: function() {
+                        jQuery("#publish").removeAttr("disabled");
+                    }
+                });
+            }
+        };
+    }, {} ],
+    2: [ function(require, module, exports) {
         var Config = function($) {
             var config = KB.appData.config;
             return {
@@ -61,7 +103,7 @@
         }(jQuery);
         module.exports = Config;
     }, {} ],
-    2: [ function(require, module, exports) {
+    3: [ function(require, module, exports) {
         var Config = require("common/Config");
         if (Function.prototype.bind && window.console && typeof console.log == "object") {
             [ "log", "info", "warn", "error", "assert", "dir", "clear", "profile", "profileEnd" ].forEach(function(method) {
@@ -102,9 +144,9 @@
             User: _KS
         };
     }, {
-        "common/Config": 1
+        "common/Config": 2
     } ],
-    3: [ function(require, module, exports) {
+    4: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var Templates = function() {
@@ -171,10 +213,13 @@
         }();
         module.exports = Templates;
     }, {
-        "common/Config": 1,
-        "common/Utilities": 6
+        "common/Config": 2,
+        "common/Utilities": 7
     } ],
-    4: [ function(require, module, exports) {
+    5: [ function(require, module, exports) {
+        var Ajax = require("common/Ajax");
+        var Logger = require("common/Logger");
+        var Config = require("common/Config");
         module.exports = {
             removeEditors: function() {
                 jQuery(".wp-editor-area").each(function() {
@@ -199,7 +244,7 @@
             },
             addEditor: function($el, quicktags, height, watch) {
                 if (!$el) {
-                    _K.error("No scope element ($el) provided");
+                    Logger.Debug.error("No scope element ($el) provided");
                     return false;
                 }
                 if (_.isUndefined(tinyMCEPreInit)) {
@@ -259,13 +304,13 @@
                     var media = false;
                 }
                 var editorContent = content || "";
-                return KB.Ajax.send({
+                return Ajax.send({
                     action: "getRemoteEditor",
                     editorId: id + "_ed",
                     editorName: name,
                     post_id: pid,
                     editorContent: editorContent,
-                    _ajax_nonce: KB.Config.getNonce("read"),
+                    _ajax_nonce: Config.getNonce("read"),
                     args: {
                         media_buttons: media
                     }
@@ -274,15 +319,20 @@
                         $el.empty().append(response.data.html);
                         this.addEditor($el, null, 150, watch);
                     } else {
-                        _K.info("Editor markup could not be retrieved from the server");
+                        Logger.Debug.info("Editor markup could not be retrieved from the server");
                     }
                 }, this);
             }
         };
-    }, {} ],
-    5: [ function(require, module, exports) {
+    }, {
+        "common/Ajax": 1,
+        "common/Config": 2,
+        "common/Logger": 3
+    } ],
+    6: [ function(require, module, exports) {
         var $ = jQuery;
         var Config = require("common/Config");
+        var Ajax = require("common/Ajax");
         var Ui = {
             isSorting: false,
             init: function() {
@@ -492,14 +542,14 @@
                         attribute: "rel"
                     });
                 });
-                return KB.Ajax.send({
+                return Ajax.send({
                     action: "resortModules",
                     data: serializedData,
                     _ajax_nonce: Config.getNonce("update")
                 });
             },
             changeArea: function(targetArea, module) {
-                return KB.Ajax.send({
+                return Ajax.send({
                     action: "changeArea",
                     _ajax_nonce: Config.getNonce("update"),
                     mid: module.get("instance_id"),
@@ -545,9 +595,10 @@
         Ui.init();
         module.exports = Ui;
     }, {
-        "common/Config": 1
+        "common/Ajax": 1,
+        "common/Config": 2
     } ],
-    6: [ function(require, module, exports) {
+    7: [ function(require, module, exports) {
         var Utilities = function($) {
             return {
                 stex: {
@@ -607,14 +658,14 @@
         }(jQuery);
         module.exports = Utilities;
     }, {} ],
-    7: [ function(require, module, exports) {
+    8: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             rerender: function() {
                 this.render();
             }
         });
     }, {} ],
-    8: [ function(require, module, exports) {
+    9: [ function(require, module, exports) {
         var Fields = {};
         _.extend(Fields, Backbone.Events);
         _.extend(Fields, {
@@ -624,10 +675,12 @@
                 this.listenTo(this, "newModule", this.newModule);
             },
             register: function(id, object) {
+                console.log(id);
                 _.extend(object, Backbone.Events);
                 this.fields[id] = object;
             },
             registerObject: function(id, object) {
+                console.log(id);
                 _.extend(object, Backbone.Events);
                 this.fields[id] = object;
             },
@@ -660,7 +713,7 @@
         Fields.addEvent();
         module.exports = Fields;
     }, {} ],
-    9: [ function(require, module, exports) {
+    10: [ function(require, module, exports) {
         KB.Fields = require("./Fields");
         require("./controls/color.js");
         require("./controls/date.js");
@@ -671,17 +724,17 @@
         require("./controls/image.js");
         require("./controls/link.js");
     }, {
-        "./Fields": 8,
-        "./controls/color.js": 10,
-        "./controls/date.js": 11,
-        "./controls/datetime.js": 12,
-        "./controls/file.js": 13,
-        "./controls/flexfields.js": 14,
-        "./controls/gallery.js": 15,
-        "./controls/image.js": 18,
-        "./controls/link.js": 19
+        "./Fields": 9,
+        "./controls/color.js": 11,
+        "./controls/date.js": 12,
+        "./controls/datetime.js": 13,
+        "./controls/file.js": 14,
+        "./controls/flexfields.js": 15,
+        "./controls/gallery.js": 16,
+        "./controls/image.js": 19,
+        "./controls/link.js": 20
     } ],
-    10: [ function(require, module, exports) {
+    11: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("color", BaseView.extend({
             initialize: function() {
@@ -708,9 +761,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 7
+        "../FieldBaseView": 8
     } ],
-    11: [ function(require, module, exports) {
+    12: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("date", BaseView.extend({
             initialize: function() {
@@ -734,9 +787,9 @@
             derender: function() {}
         }));
     }, {
-        "../FieldBaseView": 7
+        "../FieldBaseView": 8
     } ],
-    12: [ function(require, module, exports) {
+    13: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("datetime", BaseView.extend({
             initialize: function() {
@@ -765,9 +818,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 7
+        "../FieldBaseView": 8
     } ],
-    13: [ function(require, module, exports) {
+    14: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("file", BaseView.extend({
             initialize: function() {
@@ -836,9 +889,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 7
+        "../FieldBaseView": 8
     } ],
-    14: [ function(require, module, exports) {
+    15: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         var Templates = require("common/Templates");
         KB.Fields.registerObject("flexfields", BaseView.extend({
@@ -868,10 +921,10 @@
             }
         }));
     }, {
-        "../FieldBaseView": 7,
-        "common/Templates": 3
+        "../FieldBaseView": 8,
+        "common/Templates": 4
     } ],
-    15: [ function(require, module, exports) {
+    16: [ function(require, module, exports) {
         var BaseView = require("fields/FieldBaseView");
         var GalleryController = require("./gallery/GalleryController");
         KB.Fields.registerObject("gallery", BaseView.extend({
@@ -901,10 +954,10 @@
             }
         }));
     }, {
-        "./gallery/GalleryController": 16,
-        "fields/FieldBaseView": 7
+        "./gallery/GalleryController": 17,
+        "fields/FieldBaseView": 8
     } ],
-    16: [ function(require, module, exports) {
+    17: [ function(require, module, exports) {
         var Logger = require("common/Logger");
         var ImageView = require("./ImageView");
         module.exports = Backbone.View.extend({
@@ -1015,12 +1068,13 @@
             }
         });
     }, {
-        "./ImageView": 17,
-        "common/Logger": 2
+        "./ImageView": 18,
+        "common/Logger": 3
     } ],
-    17: [ function(require, module, exports) {
+    18: [ function(require, module, exports) {
         var TinyMCE = require("common/TinyMCE");
         var UI = require("common/UI");
+        var Templates = require("common/Templates");
         module.exports = Backbone.View.extend({
             tagName: "div",
             className: "kb-gallery--image-wrapper",
@@ -1041,7 +1095,7 @@
                 this.$el.addClass("kb-gallery--active-item kb_field").appendTo("body");
                 jQuery("#wpwrap").addClass("module-browser-open");
                 this.handleEditor();
-                KB.Ui.initTabs();
+                UI.initTabs();
             },
             handleEditor: function() {
                 var that = this;
@@ -1096,7 +1150,7 @@
             render: function() {
                 var inputName = this.createInputName(this.uid);
                 var item = this.model.toJSON();
-                return this.$el.append(KB.Templates.render("fields/Gallery/single-image", {
+                return this.$el.append(Templates.render("fields/Gallery/single-image", {
                     image: item,
                     id: item.id,
                     inputName: inputName,
@@ -1115,10 +1169,11 @@
             }
         });
     }, {
-        "common/TinyMCE": 4,
-        "common/UI": 5
+        "common/Templates": 4,
+        "common/TinyMCE": 5,
+        "common/UI": 6
     } ],
-    18: [ function(require, module, exports) {
+    19: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("image", BaseView.extend({
             initialize: function() {
@@ -1243,9 +1298,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 7
+        "../FieldBaseView": 8
     } ],
-    19: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("link", BaseView.extend({
             initialize: function() {
@@ -1289,6 +1344,6 @@
             }
         }));
     }, {
-        "../FieldBaseView": 7
+        "../FieldBaseView": 8
     } ]
-}, {}, [ 9 ]);
+}, {}, [ 10 ]);

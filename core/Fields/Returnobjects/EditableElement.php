@@ -5,6 +5,10 @@ namespace Kontentblocks\Fields\Returnobjects;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONTransport;
 
+/**
+ * Class EditableElement
+ * @package Kontentblocks\Fields\Returnobjects
+ */
 class EditableElement extends AbstractEditableFieldReturn
 {
 
@@ -73,7 +77,6 @@ class EditableElement extends AbstractEditableFieldReturn
     public function el( $el )
     {
         $this->el = $el;
-
         return $this;
 
     }
@@ -97,7 +100,6 @@ class EditableElement extends AbstractEditableFieldReturn
 
         if (is_user_logged_in()) {
             if (!$this->hasLink) {
-
                 return sprintf( $format, $this->el, $filtered, $this->_renderAttributes(), $this->uniqueId );
             } else if ($this->hasLink) {
                 return sprintf(
@@ -163,9 +165,12 @@ class EditableElement extends AbstractEditableFieldReturn
             'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce ),
             'kpath' => $this->createPath(),
             'tooltip' => $this->helptext,
-            'filter' => ($this->field->getArg( 'the_content',false)) ? 'content' : null
+            'filter' => ( $this->field->getArg( 'the_content', false ) ) ? 'content' : null
         );
-        Kontentblocks::getService('utility.jsontransport')->registerFieldArgs( $this->uniqueId, $this->field->augmentArgs($json) );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
+            $this->uniqueId,
+            $this->field->augmentArgs( $json )
+        );
     }
 
 

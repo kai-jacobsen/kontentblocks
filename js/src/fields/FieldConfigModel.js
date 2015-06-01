@@ -46,6 +46,7 @@ module.exports = Backbone.Model.extend({
     if (!Checks.userCan('edit_kontentblocks')) {
       return false;
     }
+
     var obj = KB.Fields.get(type);
     if (obj && obj.prototype.hasOwnProperty('initialize')) {
       return obj;

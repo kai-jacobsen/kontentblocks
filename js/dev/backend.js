@@ -107,11 +107,11 @@
         "backend/Models/ModuleModel": 3,
         "backend/Models/PanelModel": 4,
         "backend/Views/AreaView": 5,
-        "backend/Views/ModuleView": 6,
-        "common/Payload": 11,
-        "common/UI": 14,
-        "fields/FieldsConfigsCollection": 17,
-        "shared/ViewsCollection": 25
+        "backend/Views/ModuleView": 12,
+        "common/Payload": 18,
+        "common/UI": 21,
+        "fields/FieldsConfigsCollection": 24,
+        "shared/ViewsCollection": 32
     } ],
     2: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
@@ -241,10 +241,262 @@
             }
         });
     }, {
-        "common/Templates": 12,
-        "shared/ModuleBrowser/ModuleBrowserController": 18
+        "common/Templates": 19,
+        "shared/ModuleBrowser/ModuleBrowserController": 25
     } ],
     6: [ function(require, module, exports) {
+        var Templates = require("common/Templates");
+        module.exports = Backbone.View.extend({
+            $menuWrap: {},
+            $menuList: {},
+            initialize: function() {
+                this.$menuWrap = jQuery(".menu-wrap", this.$el);
+                this.$menuWrap.append(Templates.render("backend/module-menu", {}));
+                this.$menuList = jQuery(".module-actions", this.$menuWrap);
+            },
+            addItem: function(view) {
+                if (view.isValid && view.isValid() === true) {
+                    var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
+                    var $menuItem = $liItem.append(view.el);
+                    this.$menuList.append($menuItem);
+                }
+            }
+        });
+    }, {
+        "common/Templates": 19
+    } ],
+    7: [ function(require, module, exports) {
+        module.exports = Backbone.View.extend({
+            tagName: "div",
+            className: "",
+            isValid: function() {
+                return true;
+            }
+        });
+    }, {} ],
+    8: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+        var Checks = require("common/Checks");
+        var Notice = require("common/Notice");
+        var Ajax = require("common/Ajax");
+        var Config = require("common/Config");
+        module.exports = BaseView.extend({
+            className: "kb-delete block-menu-icon",
+            initialize: function() {
+                _.bindAll(this, "yes", "no");
+            },
+            events: {
+                click: "deleteModule"
+            },
+            deleteModule: function() {
+                Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+            },
+            isValid: function() {
+                if (!this.model.get("predefined") && !this.model.get("disabled") && Checks.userCan("delete_kontentblocks")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            yes: function() {
+                Ajax.send({
+                    action: "removeModules",
+                    _ajax_nonce: Config.getNonce("delete"),
+                    module: this.model.get("instance_id")
+                }, this.success, this);
+            },
+            no: function() {
+                return false;
+            },
+            success: function(res) {
+                if (res.success) {
+                    KB.Modules.remove(this.model);
+                    wp.heartbeat.interval("fast", 2);
+                    this.model.destroy();
+                } else {
+                    Notice.notice("Error while removing a module", "error");
+                }
+            }
+        });
+    }, {
+        "backend/Views/ModuleControls/controls/BaseView": 7,
+        "common/Ajax": 13,
+        "common/Checks": 14,
+        "common/Config": 15,
+        "common/Notice": 17
+    } ],
+    9: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+        var Checks = require("common/Checks");
+        var Notice = require("common/Notice");
+        var Ajax = require("common/Ajax");
+        var Config = require("common/Config");
+        var UI = require("common/UI");
+        var Payload = require("common/Payload");
+        module.exports = BaseView.extend({
+            className: "kb-duplicate block-menu-icon",
+            events: {
+                click: "duplicateModule"
+            },
+            duplicateModule: function() {
+                Ajax.send({
+                    action: "duplicateModule",
+                    module: this.model.get("mid"),
+                    areaContext: this.model.Area.get("context"),
+                    _ajax_nonce: Config.getNonce("create"),
+                    "class": this.model.get("class")
+                }, this.success, this);
+            },
+            isValid: function() {
+                if (!this.model.get("predefined") && !this.model.get("disabled") && Checks.userCan("edit_kontentblocks")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            success: function(res) {
+                var m;
+                if (!res.success) {
+                    Notice.notice("Request Error", "error");
+                    return false;
+                }
+                this.parseAdditionalJSON(res.data.json);
+                this.model.Area.View.modulesList.append(res.data.html);
+                var ModuleModel = KB.Modules.add(res.data.module);
+                this.model.Area.View.attachModuleView(ModuleModel);
+                Notice.notice("Module Duplicated", "success");
+                Ui.repaint("#" + res.data.module.mid);
+                KB.Fields.trigger("update");
+            },
+            parseAdditionalJSON: function(json) {
+                if (!KB.payload.Fields) {
+                    KB.payload.Fields = {};
+                }
+                _.extend(KB.payload.Fields, json.Fields);
+                if (!KB.payload.fieldData) {
+                    KB.payload.fieldData = {};
+                }
+                _.extend(KB.payload.fieldData, json.fieldData);
+                Payload.parseAdditionalJSON(json);
+            }
+        });
+    }, {
+        "backend/Views/ModuleControls/controls/BaseView": 7,
+        "common/Ajax": 13,
+        "common/Checks": 14,
+        "common/Config": 15,
+        "common/Notice": 17,
+        "common/Payload": 18,
+        "common/UI": 21
+    } ],
+    10: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+        var Checks = require("common/Checks");
+        var Notice = require("common/Notice");
+        var Ajax = require("common/Ajax");
+        var Config = require("common/Config");
+        var UI = require("common/UI");
+        var Payload = require("common/Payload");
+        module.exports = BaseView.extend({
+            initialize: function(options) {
+                this.options = options || {};
+                this.parentView = options.parent;
+                this.listenTo(this.parentView, "kb::module.input.changed", this.getDirty);
+                this.listenTo(this.parentView, "kb::module.data.updated", this.getClean);
+            },
+            className: "kb-save block-menu-icon",
+            events: {
+                click: "saveData"
+            },
+            saveData: function() {
+                tinyMCE.triggerSave();
+                Ajax.send({
+                    action: "updateModuleData",
+                    module: this.model.toJSON(),
+                    data: this.parentView.serialize(),
+                    _ajax_nonce: Config.getNonce("update")
+                }, this.success, this);
+            },
+            getDirty: function() {
+                this.$el.addClass("is-dirty");
+            },
+            getClean: function() {
+                this.$el.removeClass("is-dirty");
+            },
+            isValid: function() {
+                if (this.model.get("master")) {
+                    return false;
+                }
+                return !this.model.get("disabled") && Checks.userCan("edit_kontentblocks");
+            },
+            success: function(res) {
+                if (!res || !res.data.newModuleData) {
+                    _K.error("Failed to save module data.");
+                }
+                this.parentView.model.set("moduleData", res.data.newModuleData);
+                Notice.notice("Data saved", "success");
+            }
+        });
+    }, {
+        "backend/Views/ModuleControls/controls/BaseView": 7,
+        "common/Ajax": 13,
+        "common/Checks": 14,
+        "common/Config": 15,
+        "common/Notice": 17,
+        "common/Payload": 18,
+        "common/UI": 21
+    } ],
+    11: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+        var Checks = require("common/Checks");
+        var Config = require("common/Config");
+        var Notice = require("common/Notice");
+        var Ajax = require("common/Ajax");
+        module.exports = BaseView.extend({
+            initialize: function(options) {
+                this.options = options || {};
+            },
+            className: "module-status block-menu-icon",
+            events: {
+                click: "changeStatus"
+            },
+            changeStatus: function() {
+                Ajax.send({
+                    action: "changeModuleStatus",
+                    module: this.model.get("instance_id"),
+                    _ajax_nonce: Config.getNonce("update")
+                }, this.success, this);
+            },
+            isValid: function() {
+                if (!this.model.get("disabled") && Checks.userCan("deactivate_kontentblocks")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            success: function() {
+                this.options.parent.$head.toggleClass("module-inactive");
+                this.options.parent.$el.toggleClass("activated deactivated");
+                Notice.notice("Status changed", "success");
+            }
+        });
+    }, {
+        "backend/Views/ModuleControls/controls/BaseView": 7,
+        "common/Ajax": 13,
+        "common/Checks": 14,
+        "common/Config": 15,
+        "common/Notice": 17
+    } ],
+    12: [ function(require, module, exports) {
+        var ModuleControlsView = require("backend/Views/ModuleControls/ControlsView");
+        var DeleteControl = require("backend/Views/ModuleControls/controls/DeleteControl");
+        var DuplicateControl = require("backend/Views/ModuleControls/controls/DuplicateControl");
+        var SaveControl = require("backend/Views/ModuleControls/controls/SaveControl");
+        var StatusControl = require("backend/Views/ModuleControls/controls/StatusControl");
+        var Checks = require("common/Checks");
+        var Ajax = require("common/Ajax");
+        var UI = require("common/UI");
+        var Payload = require("common/Payload");
         module.exports = Backbone.View.extend({
             $head: {},
             $body: {},
@@ -278,7 +530,7 @@
                 this.$inner = jQuery(".kb-module__controls-inner", this.$el);
                 this.attachedFields = {};
                 this.instanceId = this.model.get("instance_id");
-                this.ModuleMenu = new KB.Backbone.Backend.ModuleControlsView({
+                this.ModuleMenu = new ModuleControlsView({
                     el: this.$el,
                     parent: this
                 });
@@ -295,26 +547,26 @@
                 });
             },
             setupDefaultMenuItems: function() {
-                this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleSave({
+                this.ModuleMenu.addItem(new SaveControl({
                     model: this.model,
                     parent: this
                 }));
-                this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDuplicate({
+                this.ModuleMenu.addItem(new DuplicateControl({
                     model: this.model,
                     parent: this
                 }));
-                this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleDelete({
+                this.ModuleMenu.addItem(new DeleteControl({
                     model: this.model,
                     parent: this
                 }));
-                this.ModuleMenu.addItem(new KB.Backbone.Backend.ModuleStatus({
+                this.ModuleMenu.addItem(new StatusControl({
                     model: this.model,
                     parent: this
                 }));
             },
             toggleBody: function(speed) {
                 var duration = speed || 400;
-                if (KB.Checks.userCan("edit_kontentblocks")) {
+                if (Checks.userCan("edit_kontentblocks")) {
                     this.$body.slideToggle(duration);
                     this.$el.toggleClass("kb-open");
                     KB.currentModule = this.model;
@@ -325,10 +577,10 @@
                 store.set(this.model.get("instance_id") + "_open", this.model.get("open"));
             },
             updateModuleForm: function() {
-                KB.Ajax.send({
+                Ajax.send({
                     action: "afterAreaChange",
                     module: this.model.toJSON(),
-                    _ajax_nonce: KB.Config.getNonce("read")
+                    _ajax_nonce: Config.getNonce("read")
                 }, this.insertNewUpdateForm, this);
             },
             insertNewUpdateForm: function(response) {
@@ -338,9 +590,9 @@
                     this.$inner.html("empty");
                 }
                 if (response.data.json.Fields) {
-                    KB.payload.Fields = _.extend(KB.Payload.getPayload("Fields"), response.data.json.Fields);
+                    KB.payload.Fields = _.extend(Payload.getPayload("Fields"), response.data.json.Fields);
                 }
-                KB.Ui.repaint(this.$el);
+                Ui.repaint(this.$el);
                 KB.Fields.trigger("update");
                 this.trigger("kb:backend::viewUpdated");
                 this.model.trigger("after.change.area");
@@ -414,8 +666,18 @@
             },
             dispose: function() {}
         });
-    }, {} ],
-    7: [ function(require, module, exports) {
+    }, {
+        "backend/Views/ModuleControls/ControlsView": 6,
+        "backend/Views/ModuleControls/controls/DeleteControl": 8,
+        "backend/Views/ModuleControls/controls/DuplicateControl": 9,
+        "backend/Views/ModuleControls/controls/SaveControl": 10,
+        "backend/Views/ModuleControls/controls/StatusControl": 11,
+        "common/Ajax": 13,
+        "common/Checks": 14,
+        "common/Payload": 18,
+        "common/UI": 21
+    } ],
+    13: [ function(require, module, exports) {
         module.exports = {
             send: function(data, callback, scope, options) {
                 var pid;
@@ -457,7 +719,7 @@
             }
         };
     }, {} ],
-    8: [ function(require, module, exports) {
+    14: [ function(require, module, exports) {
         var Config = require("common/Config");
         module.exports = {
             blockLimit: function(areamodel) {
@@ -471,9 +733,9 @@
             }
         };
     }, {
-        "common/Config": 9
+        "common/Config": 15
     } ],
-    9: [ function(require, module, exports) {
+    15: [ function(require, module, exports) {
         var Config = function($) {
             var config = KB.appData.config;
             return {
@@ -511,7 +773,50 @@
         }(jQuery);
         module.exports = Config;
     }, {} ],
-    10: [ function(require, module, exports) {
+    16: [ function(require, module, exports) {
+        var Config = require("common/Config");
+        if (Function.prototype.bind && window.console && typeof console.log == "object") {
+            [ "log", "info", "warn", "error", "assert", "dir", "clear", "profile", "profileEnd" ].forEach(function(method) {
+                console[method] = this.bind(console[method], console);
+            }, Function.prototype.call);
+        }
+        Logger.useDefaults();
+        var _K = Logger.get("_K");
+        var _KS = Logger.get("_KS");
+        _K.setLevel(_K.INFO);
+        _KS.setLevel(_KS.INFO);
+        if (!Config.inDevMode()) {
+            _K.setLevel(Logger.OFF);
+        }
+        Logger.setHandler(function(messages, context) {
+            if (KB.Menubar && context.level.value === 2 && context.name === "_KS") {
+                if (messages[0]) {
+                    KB.Menubar.StatusBar.setMsg(messages[0]);
+                }
+            } else {
+                var console = window.console;
+                var hdlr = console.log;
+                if (context.name) {
+                    messages[0] = "[" + context.name + "] " + messages[0];
+                }
+                if (context.level === Logger.WARN && console.warn) {
+                    hdlr = console.warn;
+                } else if (context.level === Logger.ERROR && console.error) {
+                    hdlr = console.error;
+                } else if (context.level === Logger.INFO && console.info) {
+                    hdlr = console.info;
+                }
+                hdlr.apply(console, messages);
+            }
+        });
+        module.exports = {
+            Debug: _K,
+            User: _KS
+        };
+    }, {
+        "common/Config": 15
+    } ],
+    17: [ function(require, module, exports) {
         "use strict";
         module.exports = {
             notice: function(msg, type) {
@@ -528,7 +833,7 @@
             }
         };
     }, {} ],
-    11: [ function(require, module, exports) {
+    18: [ function(require, module, exports) {
         module.exports = {
             getFieldData: function(type, moduleId, key, arrayKey) {
                 var typeData;
@@ -587,7 +892,7 @@
             }
         };
     }, {} ],
-    12: [ function(require, module, exports) {
+    19: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var Templates = function() {
@@ -654,10 +959,13 @@
         }();
         module.exports = Templates;
     }, {
-        "common/Config": 9,
-        "common/Utilities": 15
+        "common/Config": 15,
+        "common/Utilities": 22
     } ],
-    13: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
+        var Ajax = require("common/Ajax");
+        var Logger = require("common/Logger");
+        var Config = require("common/Config");
         module.exports = {
             removeEditors: function() {
                 jQuery(".wp-editor-area").each(function() {
@@ -682,7 +990,7 @@
             },
             addEditor: function($el, quicktags, height, watch) {
                 if (!$el) {
-                    _K.error("No scope element ($el) provided");
+                    Logger.Debug.error("No scope element ($el) provided");
                     return false;
                 }
                 if (_.isUndefined(tinyMCEPreInit)) {
@@ -742,13 +1050,13 @@
                     var media = false;
                 }
                 var editorContent = content || "";
-                return KB.Ajax.send({
+                return Ajax.send({
                     action: "getRemoteEditor",
                     editorId: id + "_ed",
                     editorName: name,
                     post_id: pid,
                     editorContent: editorContent,
-                    _ajax_nonce: KB.Config.getNonce("read"),
+                    _ajax_nonce: Config.getNonce("read"),
                     args: {
                         media_buttons: media
                     }
@@ -757,15 +1065,20 @@
                         $el.empty().append(response.data.html);
                         this.addEditor($el, null, 150, watch);
                     } else {
-                        _K.info("Editor markup could not be retrieved from the server");
+                        Logger.Debug.info("Editor markup could not be retrieved from the server");
                     }
                 }, this);
             }
         };
-    }, {} ],
-    14: [ function(require, module, exports) {
+    }, {
+        "common/Ajax": 13,
+        "common/Config": 15,
+        "common/Logger": 16
+    } ],
+    21: [ function(require, module, exports) {
         var $ = jQuery;
         var Config = require("common/Config");
+        var Ajax = require("common/Ajax");
         var Ui = {
             isSorting: false,
             init: function() {
@@ -975,14 +1288,14 @@
                         attribute: "rel"
                     });
                 });
-                return KB.Ajax.send({
+                return Ajax.send({
                     action: "resortModules",
                     data: serializedData,
                     _ajax_nonce: Config.getNonce("update")
                 });
             },
             changeArea: function(targetArea, module) {
-                return KB.Ajax.send({
+                return Ajax.send({
                     action: "changeArea",
                     _ajax_nonce: Config.getNonce("update"),
                     mid: module.get("instance_id"),
@@ -1028,9 +1341,10 @@
         Ui.init();
         module.exports = Ui;
     }, {
-        "common/Config": 9
+        "common/Ajax": 13,
+        "common/Config": 15
     } ],
-    15: [ function(require, module, exports) {
+    22: [ function(require, module, exports) {
         var Utilities = function($) {
             return {
                 stex: {
@@ -1090,7 +1404,7 @@
         }(jQuery);
         module.exports = Utilities;
     }, {} ],
-    16: [ function(require, module, exports) {
+    23: [ function(require, module, exports) {
         var Checks = require("common/Checks");
         var Utilities = require("common/Utilities");
         var Payload = require("common/Payload");
@@ -1183,19 +1497,19 @@
             }
         });
     }, {
-        "common/Checks": 8,
-        "common/Payload": 11,
-        "common/Utilities": 15
+        "common/Checks": 14,
+        "common/Payload": 18,
+        "common/Utilities": 22
     } ],
-    17: [ function(require, module, exports) {
+    24: [ function(require, module, exports) {
         var FieldConfigModel = require("./FieldConfigModel");
         module.exports = Backbone.Collection.extend({
             model: FieldConfigModel
         });
     }, {
-        "./FieldConfigModel": 16
+        "./FieldConfigModel": 23
     } ],
-    18: [ function(require, module, exports) {
+    25: [ function(require, module, exports) {
         var ModuleDefinitions = require("shared/ModuleBrowser/ModuleBrowserDefinitions");
         var ModuleDefModel = require("shared/ModuleBrowser/ModuleDefinitionModel");
         var ModuleBrowserDescription = require("shared/ModuleBrowser/ModuleBrowserDescriptions");
@@ -1348,20 +1662,20 @@
             }
         });
     }, {
-        "common/Ajax": 7,
-        "common/Checks": 8,
-        "common/Config": 9,
-        "common/Notice": 10,
-        "common/Payload": 11,
-        "common/Templates": 12,
-        "common/TinyMCE": 13,
-        "shared/ModuleBrowser/ModuleBrowserDefinitions": 19,
-        "shared/ModuleBrowser/ModuleBrowserDescriptions": 20,
-        "shared/ModuleBrowser/ModuleBrowserList": 21,
-        "shared/ModuleBrowser/ModuleBrowserNavigation": 23,
-        "shared/ModuleBrowser/ModuleDefinitionModel": 24
+        "common/Ajax": 13,
+        "common/Checks": 14,
+        "common/Config": 15,
+        "common/Notice": 17,
+        "common/Payload": 18,
+        "common/Templates": 19,
+        "common/TinyMCE": 20,
+        "shared/ModuleBrowser/ModuleBrowserDefinitions": 26,
+        "shared/ModuleBrowser/ModuleBrowserDescriptions": 27,
+        "shared/ModuleBrowser/ModuleBrowserList": 28,
+        "shared/ModuleBrowser/ModuleBrowserNavigation": 30,
+        "shared/ModuleBrowser/ModuleDefinitionModel": 31
     } ],
-    19: [ function(require, module, exports) {
+    26: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         module.exports = Backbone.Collection.extend({
             initialize: function(models, options) {
@@ -1407,9 +1721,9 @@
             }
         });
     }, {
-        "common/Payload": 11
+        "common/Payload": 18
     } ],
-    20: [ function(require, module, exports) {
+    27: [ function(require, module, exports) {
         var Templates = require("common/Templates");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
@@ -1442,9 +1756,9 @@
             close: function() {}
         });
     }, {
-        "common/Templates": 12
+        "common/Templates": 19
     } ],
-    21: [ function(require, module, exports) {
+    28: [ function(require, module, exports) {
         var ListItem = require("shared/ModuleBrowser/ModuleBrowserListItem");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
@@ -1475,9 +1789,9 @@
             }
         });
     }, {
-        "shared/ModuleBrowser/ModuleBrowserListItem": 22
+        "shared/ModuleBrowser/ModuleBrowserListItem": 29
     } ],
-    22: [ function(require, module, exports) {
+    29: [ function(require, module, exports) {
         var Templates = require("common/Templates");
         module.exports = Backbone.View.extend({
             tagName: "li",
@@ -1513,9 +1827,9 @@
             }
         });
     }, {
-        "common/Templates": 12
+        "common/Templates": 19
     } ],
-    23: [ function(require, module, exports) {
+    30: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             item: Backbone.View.extend({
                 initialize: function(options) {
@@ -1561,7 +1875,7 @@
             }
         });
     }, {} ],
-    24: [ function(require, module, exports) {
+    31: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             initialize: function() {
                 var that = this;
@@ -1575,7 +1889,7 @@
             }
         });
     }, {} ],
-    25: [ function(require, module, exports) {
+    32: [ function(require, module, exports) {
         KB.ViewsCollection = function() {
             this.views = {};
             this.lastViewAdded = null;
