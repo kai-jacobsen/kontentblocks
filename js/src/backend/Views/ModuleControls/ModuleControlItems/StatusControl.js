@@ -1,4 +1,5 @@
-KB.Backbone.Backend.ModuleStatus = KB.Backbone.Backend.ModuleMenuItemView.extend({
+//KB.Backbone.Backend.ModuleStatus
+module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
   initialize: function (options) {
     this.options = options || {};
   },

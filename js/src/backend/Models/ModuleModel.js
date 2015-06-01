@@ -1,4 +1,5 @@
-KB.Backbone.ModuleModel = Backbone.Model.extend({
+//KB.Backbone.ModuleModel
+module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   initialize: function () {
     //this.listenToOnce(this, 'change:envVars', this.subscribeToArea);

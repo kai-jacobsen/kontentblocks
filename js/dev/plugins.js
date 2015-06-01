@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-05-31 */
+/*! Kontentblocks DevVersion 2015-06-01 */
 !function(a) {
     "use strict";
     function b(a, b) {
@@ -4333,6 +4333,31 @@ var HandlebarsKB = function() {
     }(__module1__, __module7__, __module8__, __module10__, __module11__);
     return __module0__;
 }();
+
+HandlebarsKB.registerHelper("debug", function(optionalValue) {
+    console.log("Current Context");
+    console.log("====================");
+    console.log(this);
+    if (optionalValue) {
+        console.log("Value");
+        console.log("====================");
+        console.log(optionalValue);
+    }
+});
+
+HandlebarsKB.registerHelper("fieldName", function(base, index, key) {
+    return base + "[" + index + "][" + key + "]";
+});
+
+HandlebarsKB.registerHelper("trimString", function(passedString, length) {
+    length = length || 50;
+    var overlength = passedString.length > length;
+    var theString = passedString.substring(0, length);
+    if (overlength) {
+        theString = theString + "…";
+    }
+    return new HandlebarsKB.SafeString(theString);
+});
 
 (function($) {
     $.fn.hoverIntent = function(handlerIn, handlerOut, selector) {

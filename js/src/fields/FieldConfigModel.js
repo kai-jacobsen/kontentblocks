@@ -1,6 +1,7 @@
 //KB.Backbone.Common.FieldConfigModel
 var Checks = require('common/Checks');
 var Utilities = require('common/Utilities');
+var Payload = require('common/Payload');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
@@ -55,12 +56,12 @@ module.exports = Backbone.Model.extend({
   setData: function (Model) {
     var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
     ModuleModel = Model || this.get('ModuleModel');
-    fieldData = KB.Payload.getPayload('fieldData');
+    fieldData = Payload.getPayload('fieldData');
     if (fieldData[this.get('type')]) {
       typeData = fieldData[this.get('type')];
       if (typeData[this.get('fieldId')]) {
         obj = typeData[this.get('fieldId')];
-        addData = KB.Util.getIndex(obj, this.get('kpath'));
+        addData = Utilities.getIndex(obj, this.get('kpath'));
       }
     }
     mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));

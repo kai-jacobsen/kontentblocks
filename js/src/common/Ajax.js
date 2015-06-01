@@ -23,7 +23,7 @@ module.exports =
 
     jQuery('#publish').attr('disabled', 'disabled');
 
-    return $.ajax({
+    return jQuery.ajax({
       url: ajaxurl,
       data: sned,
       type: 'POST',

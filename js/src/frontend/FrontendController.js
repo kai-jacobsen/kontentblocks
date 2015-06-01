@@ -19,7 +19,7 @@ KB.currentArea = {};
  */
 
 // requires
-var ViewsCollection = require('common/ViewsCollection');
+var ViewsCollection = require('shared/ViewsCollection');
 var EditModalModules = require('frontend/Views/EditModalModules');
 var SidebarView = require('frontend/Views/Sidebar');
 var FieldConfigsCollection = require('fields/FieldsConfigsCollection');

@@ -1,4 +1,5 @@
-KB.Backbone.Backend.ModuleView = Backbone.View.extend({
+//KB.Backbone.Backend.ModuleView
+module.exports = Backbone.View.extend({
   $head: {}, // header jQuery element
   $body: {}, // module inner jQuery element
   ModuleMenu: {}, // Module action like delete, hide etc...
@@ -177,8 +178,7 @@ KB.Backbone.Backend.ModuleView = Backbone.View.extend({
   clearFields: function () {
     this.attachedFields = {};
   },
-  dispose: function(){
+  dispose: function () {
 
   }
-
 });

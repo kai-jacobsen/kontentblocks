@@ -1,4 +1,5 @@
-KB.Backbone.PanelModel = Backbone.Model.extend({
+//KB.Backbone.PanelModel
+module.exports = Backbone.Model.extend({
   idAttribute: 'baseId',
   initialize: function(){
     this.type = 'panel';

@@ -1,38 +1,32 @@
 /**
  * Override module browser success method
  */
-KB.Backbone.ModuleBrowser.prototype.success = function (res) {
-  var model;
+var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
+var TinyMCE = require('common/TinyMCE');
+module.exports = ModuleBrowser.extend({
+  success : function (res) {
+    var model;
+    if (this.dropZone) {
+      this.dropZone.$el.after(res.data.html);
+      this.dropZone.removeDropZone();
+    } else {
+      this.options.area.$el.append(res.data.html).removeClass('kb-area__empty');
+    }
+    model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
 
-  if (this.dropZone) {
-    this.dropZone.$el.after(res.data.html);
-    this.dropZone.removeDropZone();
-  } else {
-    this.options.area.$el.append(res.data.html).removeClass('kb-area__empty');
-  }
+    //this.options.area.addModuleView(model.view);
 
+    this.parseAdditionalJSON(res.data.json);
+    TinyMCE.addEditor(model.View.$el);
+    KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
+    this.options.area.trigger('kb.module.created');
+    setTimeout(function () {
+      model.View.openOptions();
+    }, 300);
 
-  model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
-
-  //this.options.area.addModuleView(model.view);
-
-  this.parseAdditionalJSON(res.data.json);
-  KB.TinyMCE.addEditor(model.View.$el);
-  KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
-  this.options.area.trigger('kb.module.created');
-  setTimeout(function () {
-    model.View.openOptions();
-  }, 300);
-
-};
-
-/**
- * 'extending' the original close method to remove dynamical set property 'dropZone'
- * see http://stackoverflow.com/questions/11381437/extending-prototype-function-without-overwriting-it
- */
-(function (close) {
-  KB.Backbone.ModuleBrowser.prototype.close = function () {
+  },
+  close: function(){
     delete this.dropZone;
-    close.call(this);
-  };
-}(KB.Backbone.ModuleBrowser.prototype.close));
+    ModuleBrowser.prototype.close.apply(this, arguments);
+  }
+});

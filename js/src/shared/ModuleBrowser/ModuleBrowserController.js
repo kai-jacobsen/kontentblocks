@@ -1,12 +1,19 @@
 // TODO Proper cleanup
 //KB.Backbone.ModuleBrowser
-var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
+var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDefinitions');
 var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');
 var ModuleBrowserDescription = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
 var ModuleBrowserNavigation = require('shared/ModuleBrowser/ModuleBrowserNavigation');
 var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
 var Templates = require('common/Templates');
 var Checks = require('common/Checks');
+var Notice = require('common/Notice');
+var Payload = require('common/Payload');
+var Ajax = require('common/Ajax');
+var TinyMCE = require('common/TinyMCE');
+var Config = require('common/Config');
+
+
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     var that = this;
@@ -28,6 +35,7 @@ module.exports = Backbone.View.extend({
       el: jQuery('.modules-list', this.$el),
       browser: this
     });
+    console.log(this);
 
     // render description sub view
     this.subviews.ModuleDescription = new ModuleBrowserDescription({
@@ -128,13 +136,13 @@ module.exports = Backbone.View.extend({
     // check if capability is right for this action
     if (Checks.userCan('create_kontentblocks')) {
     } else {
-      KB.Notice.notice('You\'re not allowed to do this', 'error');
+      Notice.notice('You\'re not allowed to do this', 'error');
     }
 
     // check if block limit isn't reached
     Area = KB.Areas.get(this.options.area.model.get('id'));
     if (!Checks.blockLimit(Area)) {
-      KB.Notice.notice('Limit for this area reached', 'error');
+      Notice.notice('Limit for this area reached', 'error');
       return false;
     }
     // prepare data to send
@@ -147,7 +155,7 @@ module.exports = Backbone.View.extend({
       templateRef: module.get('templateRef'),
       areaContext: this.options.area.model.get('context'),
       area: this.options.area.model.get('id'),
-      _ajax_nonce: KB.Config.getNonce('create'),
+      _ajax_nonce: Config.getNonce('create'),
       frontend: KB.appData.config.frontend
     };
 
@@ -156,7 +164,7 @@ module.exports = Backbone.View.extend({
     }
 
     this.close();
-    KB.Ajax.send(data, this.success, this);
+    Ajax.send(data, this.success, this);
   },
   // create module success callback
   // TODO Re-initialize ui components
@@ -167,7 +175,7 @@ module.exports = Backbone.View.extend({
     model = KB.Modules.add(data.module);
     this.options.area.attachModuleView(model);
     this.parseAdditionalJSON(data.json);
-    KB.TinyMCE.addEditor(model.View.$el);
+    TinyMCE.addEditor(model.View.$el);
     KB.Fields.trigger('newModule', model.View);
     model.View.$el.addClass('kb-open');
 
@@ -180,7 +188,7 @@ module.exports = Backbone.View.extend({
       KB.payload.Fields = {};
     }
     _.extend(KB.payload.Fields, json.Fields);
-    KB.Payload.parseAdditionalJSON(json);
+    Payload.parseAdditionalJSON(json);
   },
   // helper method to convert list of assigned classnames to object with module definitions
   prepareAssignedModules: function () {
@@ -188,7 +196,7 @@ module.exports = Backbone.View.extend({
     var fullDefs = [];
     // @TODO a module class which was assigned to an area is not necessarily present
 
-    _.each(KB.Payload.getPayload('ModuleDefinitions'), function (module) {
+    _.each(Payload.getPayload('ModuleDefinitions'), function (module) {
       if (_.indexOf(assignedModules, module.settings.class) !== -1) {
         fullDefs.push(module);
       }

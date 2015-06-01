@@ -1,7 +1,23 @@
-//_.extend(KB, Backbone.Events);
+var KB = window.KB || {};
+KB.Events = {};
+_.extend(KB, Backbone.Events);
+_.extend(KB.Events, Backbone.Events);
 
 KB.currentModule = {};
 KB.currentArea = {};
+
+// requires
+
+var ViewsCollection = require('shared/ViewsCollection');
+var FieldsConfigsCollection = require('fields/FieldsConfigsCollection');
+var Payload = require('common/Payload');
+var UI = require('common/UI');
+var ModuleView = require('backend/Views/ModuleView');
+var ModuleModel = require('backend/Models/ModuleModel');
+var AreaView = require('backend/Views/AreaView');
+var AreaModel = require('backend/Models/AreaModel');
+var PanelModel = require('backend/Models/PanelModel');
+
 // ---------------
 // Collections
 // ---------------
@@ -11,17 +27,17 @@ KB.currentArea = {};
  * simple getter/setter access point to views
  */
 KB.Views = {
-  Modules: new KB.ViewsCollection(),
-  Areas: new KB.ViewsCollection(),
-  Context: new KB.ViewsCollection(),
-  Panels: new KB.ViewsCollection()
+  Modules: new ViewsCollection(),
+  Areas: new ViewsCollection(),
+  Context: new ViewsCollection(),
+  Panels: new ViewsCollection()
 };
 /*
  * All Modules are collected here
  * Get by 'id'
  */
 KB.Modules = new Backbone.Collection([], {
-  model: KB.Backbone.ModuleModel
+  model: ModuleModel
 });
 
 /*
@@ -29,11 +45,11 @@ KB.Modules = new Backbone.Collection([], {
  *  Get by 'mid'
  */
 KB.Areas = new Backbone.Collection([], {
-  model: KB.Backbone.AreaModel
+  model: AreaModel
 });
 
 KB.Panels = new Backbone.Collection([], {
-  model: KB.Backbone.PanelModel
+  model: PanelModel
 });
 
 KB.ObjectProxy = new Backbone.Collection();
@@ -56,16 +72,14 @@ KB.App = (function () {
 
     // Create views
     addViews();
-
-
     /*
      * payload.Fields collection
      */
-    KB.FieldConfigs = new KB.Backbone.Common.FieldConfigsCollection(_.toArray(KB.Payload.getPayload('Fields')));
-
+    KB.FieldConfigs = new FieldsConfigsCollection(_.toArray(Payload.getPayload('Fields')));
 
     // get the UI on track
-    KB.Ui.init();
+    var UI = require('common/UI');
+    UI.init();
   }
 
   /**
@@ -82,22 +96,21 @@ KB.App = (function () {
    */
   function addViews() {
     // iterate over raw areas
-    _.each(KB.Payload.getPayload('Areas'), function (area) {
+
+    _.each(Payload.getPayload('Areas'), function (area) {
       // create new area model
       KB.ObjectProxy.add(KB.Areas.add(area));
     });
 
     // create models from already attached modules
-    _.each(KB.Payload.getPayload('Modules'), function (module) {
+    _.each(Payload.getPayload('Modules'), function (module) {
       // adding to collection will automatically create the ModuleView
       KB.ObjectProxy.add(KB.Modules.add(module));
     });
 
-    _.each(KB.Payload.getPayload('Panels'), function (panel) {
+    _.each(Payload.getPayload('Panels'), function (panel) {
       KB.ObjectProxy.add(KB.Panels.add(panel));
     });
-
-
   }
 
 
@@ -109,14 +122,14 @@ KB.App = (function () {
    */
   function createModuleViews(module) {
     // create view
-    KB.Views.Modules.add(module.get('mid'), new KB.Backbone.Backend.ModuleView({
+    KB.Views.Modules.add(module.get('mid'), new ModuleView({
       model: module,
       el: '#' + module.get('mid')
     }));
 
     // re-init tabs
     // TODO: don't re-init globally
-    KB.Ui.initTabs();
+    UI.initTabs();
   }
 
 
@@ -126,7 +139,7 @@ KB.App = (function () {
    * @returns void
    */
   function createAreaViews(area) {
-    KB.Views.Areas.add(area.get('id'), new KB.Backbone.Backend.AreaView({
+    KB.Views.Areas.add(area.get('id'), new AreaView({
       model: area,
       el: '#' + area.get('id') + '-container'
     }));
@@ -155,11 +168,9 @@ KB.App.init();
 
 
 jQuery(document).ready(function () {
-
   if (KB.appData && !KB.appData.config.frontend) {
     KB.Views.Modules.ready();
   }
-
 });
 
 //jQuery(document).on('heartbeat-send', function (e, data) {

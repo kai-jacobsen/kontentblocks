@@ -72,7 +72,7 @@
     text-decoration: none !important;
     transition: all .3s ease-in-out;
     cursor: pointer;
-    opacity: .3; }
+    opacity: .5; }
     /* line 98, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
     .os-edit-wrapper a.kb-module-dirty-state {
       background-color: red;

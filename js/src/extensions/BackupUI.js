@@ -1,9 +1,8 @@
-var KB = window.KB || {};
-KB.Ext = KB.Ext || {};
-KB.Ext.Backup = (function ($) {
-
-  return {
-    el: $('#backup-inspect'),
+var Ajax = require('common/Ajax');
+var Notice = require('common/Notice');
+var Config = require('common/Config');
+module.exports =  {
+    el: jQuery('#backup-inspect'),
     lastItem: null,
     firstRun: true,
     init: function () {
@@ -13,20 +12,20 @@ KB.Ext.Backup = (function ($) {
       }
 
       var that = this;
-      this.listEl = $('<ul></ul>').appendTo(this.el);
+      this.listEl = jQuery('<ul></ul>').appendTo(this.el);
       if (this.listEl.length > 0) {
         this.update();
 
       }
 
       // Heartbeat send data
-      $(document).on('heartbeat-send', function (e, data) {
+      jQuery(document).on('heartbeat-send', function (e, data) {
         data.kbBackupWatcher = that.lastItem;
         data.post_id = KB.Environment.postId || 0;
       });
 
       // Heartbeat receive data
-      $(document).on('heartbeat-tick', function (e, data) {
+      jQuery(document).on('heartbeat-tick', function (e, data) {
         if (data.kbHasNewBackups && _.isObject(data.kbHasNewBackups)) {
           that.renderList(data.kbHasNewBackups);
         }
@@ -34,11 +33,10 @@ KB.Ext.Backup = (function ($) {
     },
     update: function () {
       var that = this;
-
-      KB.Ajax.send(
+      Ajax.send(
         {
           action: 'get_backups',
-          _ajax_nonce: KB.Config.getNonce('read')
+          _ajax_nonce: Config.getNonce('read')
         },
         function (response) {
           that.items = response;
@@ -66,24 +64,18 @@ KB.Ext.Backup = (function ($) {
       });
       // no notice on first run
       if (!this.firstRun) {
-        KB.Notice.notice('<p>' + KB.i18n.Extensions.backups.newBackupcreated + '</p>', 'success');
+        Notice.notice('<p>' + KB.i18n.Extensions.backups.newBackupcreated + '</p>', 'success');
       }
       this.firstRun = false;
 
       this.listEl.on('click', '.js-restore', function (e) {
-        var id = $(this).parent().attr('data-id');
+        var id = jQuery(this).parent().attr('data-id');
         that.restore(id);
       })
     },
     restore: function (id) {
       var that = this;
-      var location = window.location.href + '&restore_backup=' + id + '&post_id=' + $('#post_ID').val();
+      var location = window.location.href + '&restore_backup=' + id + '&post_id=' + jQuery('#post_ID').val();
       window.location = location;
     }
-
-
   };
-
-
-}(jQuery));
-KB.Ext.Backup.init();

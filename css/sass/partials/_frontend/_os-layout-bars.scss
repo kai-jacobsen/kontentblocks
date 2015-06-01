@@ -1,21 +1,22 @@
-$icon-size : 18px;
+$icon-size: 20px;
 
 .kb-os-layout-bars {
 
   // wrap
   .controls-wrap {
     width: 100%;
-    height: 20px;
+    height: 24px;
     position: absolute;
     border: none !important;
-//    @include border-radius(0);
+    //    @include border-radius(0);
   }
 
-  .os-edit-wrapper{
+  .os-edit-wrapper {
     width: 100%;
-    height:26px;
-    border-bottom: 1px solid #ccc !important;
-    background-color: #fcfcfc;
+    height: 24px;
+    //    border-bottom: 1px solid #ccc !important;
+    //    background-color: #fcfcfc;
+    background-color: transparent;
 
   }
 
@@ -32,21 +33,20 @@ $icon-size : 18px;
     line-height: $icon-size !important;
   }
 
-  .os-edit-wrapper .dashicons{
+  .os-edit-wrapper .dashicons {
     width: $icon-size;
     height: $icon-size;
   }
 
-  .kb-module-inline-move{
+  .kb-module-inline-move {
     cursor: move;
 
   }
 
-  .kb-module-inline-delete{
+  .kb-module-inline-delete {
     cursor: not-allowed;
   }
 }
-
 
 .kb-module-nav__vertical {
   .controls-wrap li {

@@ -1,4 +1,5 @@
-KB.Backbone.Backend.ModuleSave = KB.Backbone.Backend.ModuleMenuItemView.extend({
+//KB.Backbone.Backend.ModuleSave
+module.exports = KB.Backbone.Backend.ModuleMenuItemView.extend({
   initialize: function (options) {
     this.options = options || {};
     this.parentView = options.parent;

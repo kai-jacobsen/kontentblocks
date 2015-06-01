@@ -1,6 +1,6 @@
 //KB.Backbone.AreaView
 var AreaLayout = require('frontend/Views/AreaLayout');
-var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
+var ModuleBrowser = require('frontend/ModuleBrowser/ModuleBrowserExt');
 var Config = require('common/Config');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
@@ -37,6 +37,7 @@ module.exports = Backbone.View.extend({
         area: this
       });
     }
+    console.log(this.ModuleBrowser);
     this.ModuleBrowser.render();
     return this.ModuleBrowser;
   },
