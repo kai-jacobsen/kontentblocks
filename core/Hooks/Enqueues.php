@@ -81,7 +81,7 @@ class Enqueues
         wp_register_script(
             'kb-extensions',
             KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
-            array( 'kb-plugins' ),
+            array( ),
             null,
             true
         );
@@ -90,7 +90,7 @@ class Enqueues
         wp_register_script(
             'kb-fields-api',
             KB_PLUGIN_URL . 'js/' . $folder . '/fieldsAPI' . $suffix . '.js',
-            array( 'kb-extensions' ),
+            array(),
             null,
             true
         );
@@ -109,7 +109,7 @@ class Enqueues
             wp_register_script(
                 'kb-backend',
                 KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
-                array( 'kb-refields' ),
+                array('kb-plugins', 'kb-refields' ),
                 null,
                 true
             );
@@ -118,7 +118,7 @@ class Enqueues
             wp_register_script(
                 'kb-frontend',
                 KB_PLUGIN_URL . 'js/' . $folder . '/frontend' . $suffix . '.js',
-                array( 'kb-refields', ),
+                array('kb-plugins', 'kb-refields' ),
                 null,
                 true
             );

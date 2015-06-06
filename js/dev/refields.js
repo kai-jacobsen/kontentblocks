@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-01 */
+/*! Kontentblocks DevVersion 2015-06-06 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -24,6 +24,7 @@
     return s;
 })({
     1: [ function(require, module, exports) {
+        var Notice = require("common/Notice");
         module.exports = {
             send: function(data, callback, scope, options) {
                 var pid;
@@ -35,7 +36,6 @@
                 }
                 var sned = _.extend({
                     supplemental: data.supplemental || {},
-                    count: parseInt(KB.Environment.moduleCount, 10),
                     nonce: jQuery("#_kontentblocks_ajax_nonce").val(),
                     post_id: pid,
                     kbajax: true
@@ -56,7 +56,7 @@
                         }
                     },
                     error: function() {
-                        KB.notice("<p>Generic Ajax Error</p>", "error");
+                        Notice.notice("<p>Generic Ajax Error</p>", "error");
                     },
                     complete: function() {
                         jQuery("#publish").removeAttr("disabled");
@@ -64,7 +64,9 @@
                 });
             }
         };
-    }, {} ],
+    }, {
+        "common/Notice": 4
+    } ],
     2: [ function(require, module, exports) {
         var Config = function($) {
             var config = KB.appData.config;
@@ -83,7 +85,7 @@
                     if (_.indexOf(modes, mode) !== -1) {
                         return config.nonces[mode];
                     } else {
-                        _K.error("Invalid nonce requested in kb.cm.Config.js");
+                        console.error("Invalid nonce requested in kb.cm.Config.js");
                         return null;
                     }
                 },
@@ -147,6 +149,25 @@
         "common/Config": 2
     } ],
     4: [ function(require, module, exports) {
+        "use strict";
+        module.exports = {
+            notice: function(msg, type, delay) {
+                var timeout = delay || 3;
+                window.alertify.notify(msg, type, timeout);
+            },
+            confirm: function(title, msg, yes, no, scope) {
+                var t = title || "Title";
+                window.alertify.confirm(t, msg, function(e) {
+                    if (e) {
+                        yes.call(scope);
+                    } else {
+                        no.call(scope);
+                    }
+                });
+            }
+        };
+    }, {} ],
+    5: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var Templates = function() {
@@ -214,9 +235,9 @@
         module.exports = Templates;
     }, {
         "common/Config": 2,
-        "common/Utilities": 7
+        "common/Utilities": 8
     } ],
-    5: [ function(require, module, exports) {
+    6: [ function(require, module, exports) {
         var Ajax = require("common/Ajax");
         var Logger = require("common/Logger");
         var Config = require("common/Config");
@@ -329,10 +350,12 @@
         "common/Config": 2,
         "common/Logger": 3
     } ],
-    6: [ function(require, module, exports) {
+    7: [ function(require, module, exports) {
         var $ = jQuery;
         var Config = require("common/Config");
         var Ajax = require("common/Ajax");
+        var TinyMCE = require("common/TinyMCE");
+        var Notice = require("common/Notice");
         var Ui = {
             isSorting: false,
             init: function() {
@@ -405,7 +428,7 @@
             repaint: function($el) {
                 this.initTabs();
                 this.initToggleBoxes();
-                KB.TinyMCE.addEditor($el);
+                TinyMCE.addEditor($el);
             },
             initTabs: function($cntxt) {
                 var $context = $cntxt || jQuery("body");
@@ -442,7 +465,7 @@
                     if (_.indexOf(areaOver.get("assignedModules"), currentModule.get("settings").class) === -1) {
                         return false;
                     } else if (limit !== 0 && limit <= nom - 1) {
-                        KB.Notice.notice("Not allowed here", "error");
+                        Notice.notice("Not allowed here", "error");
                         return false;
                     } else {
                         return true;
@@ -473,13 +496,13 @@
                         $(KB).trigger("kb:sortable::start");
                         $(".kb-open").toggleClass("kb-open");
                         $(".kb-module__body").hide();
-                        KB.TinyMCE.removeEditors();
+                        TinyMCE.removeEditors();
                         $(document).trigger("kb_sortable_start", [ event, ui ]);
                     },
                     stop: function(event, ui) {
                         that.isSorting = false;
                         $("#kontentblocks-core-ui").removeClass("kb-is-sorting");
-                        KB.TinyMCE.restoreEditors();
+                        TinyMCE.restoreEditors();
                         $(document).trigger("kb_sortable_stop", [ event, ui ]);
                         if (currentModule.get("open")) {
                             currentModule.View.toggleBody(155);
@@ -490,7 +513,7 @@
                     },
                     receive: function(event, ui) {
                         if (!isValidModule()) {
-                            KB.Notice.notice("Module not allowed in this area", "error");
+                            Notice.notice("Module not allowed in this area", "error");
                             $(ui.sender).sortable("cancel");
                         }
                     },
@@ -502,9 +525,9 @@
                             $.when(that.resort(ui.sender)).done(function(res) {
                                 if (res.success) {
                                     $(KB).trigger("kb:sortable::update");
-                                    KB.Notice.notice(res.message, "success");
+                                    Notice.notice(res.message, "success");
                                 } else {
-                                    KB.Notice.notice(res.message, "error");
+                                    Notice.notice(res.message, "error");
                                     return false;
                                 }
                             });
@@ -522,7 +545,7 @@
                                 that.triggerAreaChange(areaOver, currentModule);
                                 $(KB).trigger("kb:sortable::update");
                                 currentModule.View.clearFields();
-                                KB.Notice.notice("Area change and order were updated successfully", "success");
+                                Notice.notice("Area change and order were updated successfully", "success");
                             });
                         }
                     }
@@ -564,7 +587,7 @@
             toggleModule: function() {
                 $("body").on("click", ".kb-toggle", function() {
                     if (KB.isLocked() && !KB.userCan("lock_kontentblocks")) {
-                        KB.notice(kontentblocks.l18n.gen_no_permission, "alert");
+                        Notice.notice(kontentblocks.l18n.gen_no_permission, "alert");
                     } else {
                         $(this).parent().nextAll(".kb-module__body:first").slideToggle("fast", function() {
                             $("body").trigger("module::opened");
@@ -584,9 +607,9 @@
                     });
                     if (result.action === "meta-box-order") {
                         if (action === "restore") {
-                            KB.TinyMCE.restoreEditors();
+                            TinyMCE.restoreEditors();
                         } else if (action === "remove") {
-                            KB.TinyMCE.removeEditors();
+                            TinyMCE.removeEditors();
                         }
                     }
                 }
@@ -596,9 +619,11 @@
         module.exports = Ui;
     }, {
         "common/Ajax": 1,
-        "common/Config": 2
+        "common/Config": 2,
+        "common/Notice": 4,
+        "common/TinyMCE": 6
     } ],
-    7: [ function(require, module, exports) {
+    8: [ function(require, module, exports) {
         var Utilities = function($) {
             return {
                 stex: {
@@ -637,15 +662,6 @@
                     }
                     return obj;
                 },
-                cleanArray: function(actual) {
-                    var newArray = new Array();
-                    for (var i = 0; i < actual.length; i++) {
-                        if (!_.isUndefined(actual[i]) && !_.isEmpty(actual[i])) {
-                            newArray.push(actual[i]);
-                        }
-                    }
-                    return newArray;
-                },
                 sleep: function(milliseconds) {
                     var start = new Date().getTime();
                     for (var i = 0; i < 1e7; i++) {
@@ -658,14 +674,14 @@
         }(jQuery);
         module.exports = Utilities;
     }, {} ],
-    8: [ function(require, module, exports) {
+    9: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             rerender: function() {
                 this.render();
             }
         });
     }, {} ],
-    9: [ function(require, module, exports) {
+    10: [ function(require, module, exports) {
         var Fields = {};
         _.extend(Fields, Backbone.Events);
         _.extend(Fields, {
@@ -713,7 +729,7 @@
         Fields.addEvent();
         module.exports = Fields;
     }, {} ],
-    10: [ function(require, module, exports) {
+    11: [ function(require, module, exports) {
         KB.Fields = require("./Fields");
         require("./controls/color.js");
         require("./controls/date.js");
@@ -724,17 +740,17 @@
         require("./controls/image.js");
         require("./controls/link.js");
     }, {
-        "./Fields": 9,
-        "./controls/color.js": 11,
-        "./controls/date.js": 12,
-        "./controls/datetime.js": 13,
-        "./controls/file.js": 14,
-        "./controls/flexfields.js": 15,
-        "./controls/gallery.js": 16,
-        "./controls/image.js": 19,
-        "./controls/link.js": 20
+        "./Fields": 10,
+        "./controls/color.js": 12,
+        "./controls/date.js": 13,
+        "./controls/datetime.js": 14,
+        "./controls/file.js": 15,
+        "./controls/flexfields.js": 16,
+        "./controls/gallery.js": 17,
+        "./controls/image.js": 20,
+        "./controls/link.js": 21
     } ],
-    11: [ function(require, module, exports) {
+    12: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("color", BaseView.extend({
             initialize: function() {
@@ -761,9 +777,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 8
+        "../FieldBaseView": 9
     } ],
-    12: [ function(require, module, exports) {
+    13: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("date", BaseView.extend({
             initialize: function() {
@@ -787,9 +803,9 @@
             derender: function() {}
         }));
     }, {
-        "../FieldBaseView": 8
+        "../FieldBaseView": 9
     } ],
-    13: [ function(require, module, exports) {
+    14: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("datetime", BaseView.extend({
             initialize: function() {
@@ -818,9 +834,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 8
+        "../FieldBaseView": 9
     } ],
-    14: [ function(require, module, exports) {
+    15: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("file", BaseView.extend({
             initialize: function() {
@@ -889,11 +905,10 @@
             }
         }));
     }, {
-        "../FieldBaseView": 8
+        "../FieldBaseView": 9
     } ],
-    15: [ function(require, module, exports) {
+    16: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
-        var Templates = require("common/Templates");
         KB.Fields.registerObject("flexfields", BaseView.extend({
             initialize: function() {
                 this.render();
@@ -921,10 +936,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 8,
-        "common/Templates": 4
+        "../FieldBaseView": 9
     } ],
-    16: [ function(require, module, exports) {
+    17: [ function(require, module, exports) {
         var BaseView = require("fields/FieldBaseView");
         var GalleryController = require("./gallery/GalleryController");
         KB.Fields.registerObject("gallery", BaseView.extend({
@@ -954,10 +968,10 @@
             }
         }));
     }, {
-        "./gallery/GalleryController": 17,
-        "fields/FieldBaseView": 8
+        "./gallery/GalleryController": 18,
+        "fields/FieldBaseView": 9
     } ],
-    17: [ function(require, module, exports) {
+    18: [ function(require, module, exports) {
         var Logger = require("common/Logger");
         var ImageView = require("./ImageView");
         module.exports = Backbone.View.extend({
@@ -1068,10 +1082,10 @@
             }
         });
     }, {
-        "./ImageView": 18,
+        "./ImageView": 19,
         "common/Logger": 3
     } ],
-    18: [ function(require, module, exports) {
+    19: [ function(require, module, exports) {
         var TinyMCE = require("common/TinyMCE");
         var UI = require("common/UI");
         var Templates = require("common/Templates");
@@ -1099,7 +1113,7 @@
             },
             handleEditor: function() {
                 var that = this;
-                $re = jQuery(".kb-js--remote-editor", this.$el);
+                var $re = jQuery(".kb-js--remote-editor", this.$el);
                 var name = this.createInputName(this.uid) + "[details][description]";
                 if (!this.editorAdded) {
                     var req = TinyMCE.remoteGetEditor($re, name, this.uid, this.model.get("details").description, null, false, false);
@@ -1169,12 +1183,14 @@
             }
         });
     }, {
-        "common/Templates": 4,
-        "common/TinyMCE": 5,
-        "common/UI": 6
+        "common/Templates": 5,
+        "common/TinyMCE": 6,
+        "common/UI": 7
     } ],
-    19: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
+        var Utilities = require("common/Utilities");
+        var Config = require("common/Config");
         KB.Fields.registerObject("image", BaseView.extend({
             initialize: function() {
                 this.defaultState = "replace-image";
@@ -1250,7 +1266,7 @@
                 var value = this.prepareValue(attachment);
                 var moduleData = _.clone(this.model.get("ModuleModel").get("moduleData"));
                 var path = this.model.get("kpath");
-                KB.Util.setIndex(moduleData, path, value);
+                Utilities.setIndex(moduleData, path, value);
                 this.model.get("ModuleModel").set("moduleData", moduleData);
                 var args = {
                     width: that.model.get("width") || null,
@@ -1268,7 +1284,7 @@
                             action: "fieldGetImage",
                             args: args,
                             id: id,
-                            _ajax_nonce: KB.Config.getNonce("read")
+                            _ajax_nonce: Config.getNonce("read")
                         },
                         type: "POST",
                         dataType: "json",
@@ -1298,9 +1314,11 @@
             }
         }));
     }, {
-        "../FieldBaseView": 8
+        "../FieldBaseView": 9,
+        "common/Config": 2,
+        "common/Utilities": 8
     } ],
-    20: [ function(require, module, exports) {
+    21: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("link", BaseView.extend({
             initialize: function() {
@@ -1344,6 +1362,6 @@
             }
         }));
     }, {
-        "../FieldBaseView": 8
+        "../FieldBaseView": 9
     } ]
-}, {}, [ 10 ]);
+}, {}, [ 11 ]);

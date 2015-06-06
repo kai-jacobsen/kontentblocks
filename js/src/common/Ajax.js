@@ -1,10 +1,9 @@
 //KB.Ajax
+var Notice = require('common/Notice');
 module.exports =
 {
   send: function (data, callback, scope, options) {
-    // @todo
     var pid;
-
     var addPayload = options || {};
 
     if (data.postId) {
@@ -15,7 +14,7 @@ module.exports =
 
     var sned = _.extend({
       supplemental: data.supplemental || {},
-      count: parseInt(KB.Environment.moduleCount, 10),
+      //count: parseInt(KB.Environment.moduleCount, 10),
       nonce: jQuery('#_kontentblocks_ajax_nonce').val(),
       post_id: pid,
       kbajax: true
@@ -39,7 +38,7 @@ module.exports =
       },
       error: function () {
         // generic error message
-        KB.notice('<p>Generic Ajax Error</p>', 'error');
+        Notice.notice('<p>Generic Ajax Error</p>', 'error');
       },
       complete: function () {
         jQuery('#publish').removeAttr('disabled');

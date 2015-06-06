@@ -14,6 +14,8 @@
 var $ = jQuery;
 var Config = require('common/Config');
 var Ajax = require('common/Ajax');
+var TinyMCE = require('common/TinyMCE');
+var Notice = require('common/Notice');
 var Ui = {
   // sorting indication
   isSorting: false,
@@ -110,7 +112,7 @@ var Ui = {
   repaint: function ($el) {
     this.initTabs();
     this.initToggleBoxes();
-    KB.TinyMCE.addEditor($el);
+    TinyMCE.addEditor($el);
   },
   initTabs: function ($cntxt) {
     var $context = $cntxt || jQuery('body');
@@ -161,7 +163,7 @@ var Ui = {
           'assignedModules'), currentModule.get('settings').class) === -1) {
         return false;
       } else if (limit !== 0 && limit <= nom - 1) {
-        KB.Notice.notice(
+        Notice.notice(
           'Not allowed here', 'error');
         return false;
       } else {
@@ -216,7 +218,7 @@ var Ui = {
         $('.kb-module__body').hide();
 
         // tinyMCE doesn't like to be moved in the DOM
-        KB.TinyMCE.removeEditors();
+        TinyMCE.removeEditors();
 
         // Add a global trigger to sortable.start, maybe other Blocks might need it
         $(document).trigger('kb_sortable_start', [event, ui]);
@@ -226,7 +228,7 @@ var Ui = {
         $('#kontentblocks-core-ui').removeClass('kb-is-sorting');
 
         // restore TinyMCE editors
-        KB.TinyMCE.restoreEditors();
+        TinyMCE.restoreEditors();
 
         // global trigger when sortable is done
         $(document).trigger('kb_sortable_stop', [event, ui]);
@@ -242,7 +244,7 @@ var Ui = {
 
         if (!isValidModule()) {
           // inform the user
-          KB.Notice.notice('Module not allowed in this area', 'error');
+          Notice.notice('Module not allowed in this area', 'error');
           // cancel sorting
           $(ui.sender).sortable('cancel');
         }
@@ -261,9 +263,9 @@ var Ui = {
           $.when(that.resort(ui.sender)).done(function (res) {
             if (res.success) {
               $(KB).trigger('kb:sortable::update');
-              KB.Notice.notice(res.message, 'success');
+              Notice.notice(res.message, 'success');
             } else {
-              KB.Notice.notice(res.message, 'error');
+              Notice.notice(res.message, 'error');
               return false;
             }
           });
@@ -288,7 +290,7 @@ var Ui = {
               // force recreation of any attached fields
               currentModule.View.clearFields();
 
-              KB.Notice.notice('Area change and order were updated successfully', 'success');
+              Notice.notice('Area change and order were updated successfully', 'success');
 
             });
         }
@@ -345,7 +347,7 @@ var Ui = {
 
     $('body').on('click', '.kb-toggle', function () {
       if (KB.isLocked() && !KB.userCan('lock_kontentblocks')) {
-        KB.notice(kontentblocks.l18n.gen_no_permission, 'alert');
+        Notice.notice(kontentblocks.l18n.gen_no_permission, 'alert');
       }
       else {
         $(this).parent().nextAll('.kb-module__body:first').slideToggle('fast', function () {
@@ -367,10 +369,10 @@ var Ui = {
 
       if (result.action === 'meta-box-order') {
         if (action === 'restore') {
-          KB.TinyMCE.restoreEditors();
+          TinyMCE.restoreEditors();
         }
         else if (action === 'remove') {
-          KB.TinyMCE.removeEditors();
+          TinyMCE.removeEditors();
         }
       }
     }

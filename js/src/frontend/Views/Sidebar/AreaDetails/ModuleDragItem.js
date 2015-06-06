@@ -1,5 +1,4 @@
 //KB.Backbone.Sidebar.AreaDetails.ModuleDragItem
-var Templates = require('common/Templates');
 var Payload = require('common/Payload');
 var Notice = require('common/Notice');
 var Config = require('common/Config');
@@ -8,6 +7,7 @@ var ModuleModel = require('frontend/Models/ModuleModel');
 var AreaView = require('frontend/Views/AreaView');
 var Ajax = require('common/Ajax');
 
+var tplCategoryModuleItem = require('templates/frontend/sidebar/category-module-item.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'li',
   className: 'kb-sidebar-module',
@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
     this.controller = options.controller;
     // ModuleListController
     this.listController = options.listController;
-    this.$el.append(Templates.render('frontend/sidebar/category-module-item', this.model.toJSON()));
+    this.$el.append(tplCategoryModuleItem(this.model.toJSON()));
     this.$dropHelper = jQuery("<div class='kb-sidebar-drop-helper ui-sortable-helper'></div>");
     // set Area model
     this.model.set('area', this.listController.model);

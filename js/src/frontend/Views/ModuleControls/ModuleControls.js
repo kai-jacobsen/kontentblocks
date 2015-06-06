@@ -7,8 +7,10 @@ var ModuleEdit = require('./modulecontrols/EditControl');
 var ModuleUpdate = require('./modulecontrols/UpdateControl');
 var ModuleDelete = require('./modulecontrols/DeleteControl');
 var ModuleMove = require('./modulecontrols/MoveControl');
-var Templates = require('common/Templates');
+
+var tplModuleControls = require('templates/frontend/module-controls.hbs');
 module.exports = Backbone.View.extend({
+
 
   ModuleView: null,
   $menuList: null, // ul item
@@ -40,7 +42,7 @@ module.exports = Backbone.View.extend({
 
   renderControls: function () {
     // append wrapper element
-    this.ModuleView.$el.append(Templates.render('frontend/module-controls', {
+    this.ModuleView.$el.append(tplModuleControls({
       model: this.ModuleView.model.toJSON(),
       i18n: KB.i18n.jsFrontend
     }));

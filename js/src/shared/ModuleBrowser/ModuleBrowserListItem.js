@@ -1,10 +1,12 @@
 //KB.Backbone.ModuleBrowserListItem
-var Templates = require('common/Templates');
+var tplTemplateListItem = require('templates/backend/modulebrowser/module-template-list-item.hbs');
+var tplListItem = require('templates/backend/modulebrowser/module-list-item.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'li',
   className: 'modules-list-item',
   initialize: function (options) {
     this.options = options || {};
+    this.Browser = options.browser;
     // shorthand to parent area
     this.area = options.browser.area;
     // listen to browser close event
@@ -13,21 +15,25 @@ module.exports = Backbone.View.extend({
   // render list
   render: function (el) {
     if (this.model.get('template')) {
-      this.$el.html(Templates.render('backend/modulebrowser/module-template-list-item', {module: this.model.toJSON()}));
+      this.$el.html(tplTemplateListItem({module: this.model.toJSON()}));
     } else {
-      this.$el.html(Templates.render('backend/modulebrowser/module-list-item', {module: this.model.toJSON()}));
+      this.$el.html(tplListItem({module: this.model.toJSON()}));
     }
     el.append(this.$el);
   },
   events: {
-    'click': 'loadDetails',
+    'click': 'handleClick',
     'click .kb-js-create-module': 'createModule'
   },
-  loadDetails: function () {
-    this.options.browser.loadDetails(this.model);
+  handleClick: function () {
+    if (this.Browser.viewMode === 'list') {
+      this.createModule();
+    } else {
+      this.Browser.loadDetails(this.model);
+    }
   },
   createModule: function () {
-    this.options.browser.createModule(this.model);
+    this.Browser.createModule(this.model);
   },
   close: function () {
     this.remove();

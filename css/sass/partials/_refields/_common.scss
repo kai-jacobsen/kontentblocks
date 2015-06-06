@@ -8,38 +8,50 @@
 }
 
 .kb-field {
+  label.heading {
+    display: block;
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+    /* border-left: 2px solid #33b5e5; */
+    /* padding-left: 20px; */
+    /* margin-left: -20px; */
+    font-weight: 300;
+    font-size: 14px;
+    color: #333333;
+  }
+
   background-color: #fff;
   padding: 10px 10px 0px 12px;
-//  padding: 20px 20px 25px 12px;
-//  border-bottom: 1px solid #f2f2f2;
   text-align: left !important;
 
   // Text Input general
-  input[type=text]{
+  input[type=text] {
     display: inline-block;
     text-align: left;
     height: 30px;
     line-height: 22px;
-    border: 1px solid #dadada;
-    font-size:14px;
-    background: #f2f2f2 !important;
+    border: none;
+    border-bottom: 1px solid #dadada;
+    font-size: 14px;
+    background: transparent !important;
     box-shadow: none !important;
-    width:60%;
+    width: 60%;
     min-width: 150px !important;
     padding: 0 10px !important;
-    transition:width .2s ease-out;
+    transition: width .2s ease-out;
+    margin: 0;
 
-    &.large{
+    &.large {
       width: 90%;
     }
 
-    &:focus{
-      border: 1px solid darken(#f2f2f2,3%);
+    &:focus {
+      border-bottom: 1px solid $lightblue;
     }
   }
 
   // Select general
-  select{
+  select {
     min-width: 200px;
     max-width: 50%;
     height: 30px !important;
@@ -48,11 +60,33 @@
     margin: 0 !important;
   }
 
+  input[type=checkbox] {
+    margin-right: 3px;
+    line-height: 150%;
+  }
+
+  select {
+    min-width: 200px;
+  }
+
 }
 
-.kb-field-wrapper{
-  padding: 10px;
+.kb-field-wrapper {
+  padding: $halfpadding 0;
 
+  &.field-has-description {
+
+    label.heading {
+      margin-bottom: 0;
+    }
+
+    p.description {
+      font-size: 12px;
+      margin-bottom: 12px;
+      font-style: normal;
+      display: block;
+    }
+  }
 }
 
 .kb-field--reset {

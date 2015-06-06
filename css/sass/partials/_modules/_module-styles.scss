@@ -1,0 +1,91 @@
+/*------------------------------------*\
+    Module Body
+\*------------------------------------*/
+
+.kb-module__body {
+  padding: $fullpadding;
+  //  overflow: hidden;
+  background: #fff;
+  margin-left: 1px;
+  border: 1px solid #e6e6e6;
+}
+
+.kb-module__header {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 2px;
+  border: 1px solid #eee;
+  border-top-color: #f2f2f2;
+  border-left: 3px #92cd81;
+  height: 34px;
+  line-height: 35px;
+  position: relative;
+  //  text-shadow: 1px -1px 0 #333;
+  color: black;
+  width: 100%;
+  word-wrap: break-word;
+  /*cursor: move;*/
+  /*z-index: 3;*/
+  background-color: #f9f9f9;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  position: relative;
+  font-weight: 100;
+
+}
+
+.kb-module.kb_inactive .kb-module__header, .kb-module.deactivated .kb-module__header {
+  border-left: 3px solid red;
+}
+
+/*------------------------------------*\
+    Module Header and Controls
+\*------------------------------------*/
+
+.ui-wrap{
+  float: left;
+  overflow: hidden;
+}
+
+.ui-actions{
+  margin: 0;
+  font-size: 0;
+  padding: 0;
+  list-style: none;
+  display: inline-block;
+
+  li{
+    display: inline-block;
+    margin: 0;
+    cursor: pointer;
+    color: #999;
+    line-height: 35px;
+    &:hover {
+      color: #333;
+    }
+  }
+}
+
+.kb-move {
+  cursor: move;
+  color: #999;
+
+  &:before {
+    content: '\f436';
+    font-family: 'genericons';
+    font-size: 24px;
+  }
+}
+.kb-toggle {
+  &:hover {
+    color: #333;
+  }
+  position: relative;
+  top: -3px;
+
+  &:before {
+    content: '\f431';
+    font-family: "genericons";
+    position: relative;
+    font-size: 20px;
+  }
+}

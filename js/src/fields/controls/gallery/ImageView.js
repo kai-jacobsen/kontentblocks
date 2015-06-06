@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend({
   },
   handleEditor: function () {
     var that = this;
-    $re = jQuery('.kb-js--remote-editor', this.$el);
+    var $re = jQuery('.kb-js--remote-editor', this.$el);
     var name = this.createInputName(this.uid) + '[details][description]';
 
     if (!this.editorAdded) {

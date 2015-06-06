@@ -1,7 +1,8 @@
 var BaseView = require('../FieldBaseView');
+var Utilities = require('common/Utilities');
+var Config = require('common/Config');
 KB.Fields.registerObject('image', BaseView.extend({
   initialize: function () {
-
     this.defaultState = 'replace-image';
     this.defaultFrame = 'image';
     this.render();
@@ -96,7 +97,7 @@ KB.Fields.registerObject('image', BaseView.extend({
     var value = this.prepareValue(attachment);
     var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
     var path = this.model.get('kpath');
-    KB.Util.setIndex(moduleData, path, value);
+    Utilities.setIndex(moduleData, path, value);
     this.model.get('ModuleModel').set('moduleData', moduleData);
     var args = {
       width: that.model.get('width') || null,
@@ -115,7 +116,7 @@ KB.Fields.registerObject('image', BaseView.extend({
           action: 'fieldGetImage',
           args: args,
           id: id,
-          _ajax_nonce: KB.Config.getNonce('read')
+          _ajax_nonce: Config.getNonce('read')
         },
         type: 'POST',
         dataType: 'json',

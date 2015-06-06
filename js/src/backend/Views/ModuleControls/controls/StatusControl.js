@@ -1,5 +1,5 @@
 //KB.Backbone.Backend.ModuleStatus
-var BaseView = require('backend/Views/ModuleControls/controls/BaseView');
+var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
 var Config = require('common/Config');
 var Notice = require('common/Notice');

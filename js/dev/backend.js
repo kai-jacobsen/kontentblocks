@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-01 */
+/*! Kontentblocks DevVersion 2015-06-06 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -62,6 +62,7 @@
                 KB.Modules.on("remove", removeModule);
                 addViews();
                 KB.FieldConfigs = new FieldsConfigsCollection(_.toArray(Payload.getPayload("Fields")));
+                KB.Menus = require("backend/Menus");
                 var UI = require("common/UI");
                 UI.init();
             }
@@ -103,22 +104,63 @@
             }
         });
     }, {
-        "backend/Models/AreaModel": 2,
-        "backend/Models/ModuleModel": 3,
-        "backend/Models/PanelModel": 4,
-        "backend/Views/AreaView": 5,
-        "backend/Views/ModuleView": 12,
-        "common/Payload": 18,
-        "common/UI": 21,
-        "fields/FieldsConfigsCollection": 24,
-        "shared/ViewsCollection": 32
+        "backend/Menus": 2,
+        "backend/Models/AreaModel": 3,
+        "backend/Models/ModuleModel": 4,
+        "backend/Models/PanelModel": 5,
+        "backend/Views/AreaView": 6,
+        "backend/Views/ModuleView": 16,
+        "common/Payload": 22,
+        "common/UI": 25,
+        "fields/FieldsConfigsCollection": 28,
+        "shared/ViewsCollection": 36
     } ],
     2: [ function(require, module, exports) {
+        var Ajax = require("common/Ajax");
+        var Config = require("common/Config");
+        module.exports = {
+            loadingContainer: null,
+            initiatorEl: null,
+            sendButton: null,
+            createSanitizedId: function(el, mode) {
+                this.initiatorEl = jQuery(el);
+                this.loadingContainer = this.initiatorEl.closest(".kb-menu-field").addClass("loading");
+                this.$sendButton = jQuery("#kb-submit");
+                this.disableSendButton();
+                Ajax.send({
+                    inputvalue: el.value,
+                    checkmode: mode,
+                    action: "getSanitizedId",
+                    _ajax_nonce: Config.getNonce("read")
+                }, this.insertId, this);
+            },
+            insertId: function(res) {
+                if (!res.success) {
+                    this.initiatorEl.addClass();
+                    jQuery(".kb-js-area-id").val("Please chose a different name");
+                } else {
+                    jQuery(".kb-js-area-id").val(res.data.id);
+                    this.enableSendButton();
+                }
+                this.loadingContainer.removeClass("loading");
+            },
+            disableSendButton: function() {
+                this.$sendButton.attr("disabled", "disabled").val("Disabled");
+            },
+            enableSendButton: function() {
+                this.$sendButton.attr("disabled", false).val("Create");
+            }
+        };
+    }, {
+        "common/Ajax": 17,
+        "common/Config": 19
+    } ],
+    3: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             idAttribute: "id"
         });
     }, {} ],
-    3: [ function(require, module, exports) {
+    4: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             idAttribute: "mid",
             initialize: function() {
@@ -160,13 +202,14 @@
             }
         });
     }, {} ],
-    4: [ function(require, module, exports) {
+    5: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             idAttribute: "baseId"
         });
     }, {} ],
-    5: [ function(require, module, exports) {
-        var Templates = require("common/Templates");
+    6: [ function(require, module, exports) {
+        var tplAreaItemPlaceholer = require("templates/backend/area-item-placeholder.hbs");
+        var tplAreaAddModule = require("templates/backend/area-add-module.hbs");
         var ModuleBrowser = require("shared/ModuleBrowser/ModuleBrowserController");
         module.exports = Backbone.View.extend({
             initialize: function() {
@@ -174,7 +217,7 @@
                 this.controlsContainer = jQuery(".add-modules", this.$el);
                 this.settingsContainer = jQuery(".kb-area-settings-wrapper", this.$el);
                 this.modulesList = jQuery("#" + this.model.get("id"), this.$el);
-                this.$placeholder = jQuery(Templates.render("backend/area-item-placeholder", {
+                this.$placeholder = jQuery(tplAreaItemPlaceholer({
                     i18n: KB.i18n
                 }));
                 this.model.View = this;
@@ -192,7 +235,7 @@
                 this.ui();
             },
             addControls: function() {
-                this.controlsContainer.append(Templates.render("backend/area-add-module", {
+                this.controlsContainer.append(tplAreaAddModule({
                     i18n: KB.i18n
                 }));
             },
@@ -241,29 +284,9 @@
             }
         });
     }, {
-        "common/Templates": 19,
-        "shared/ModuleBrowser/ModuleBrowserController": 25
-    } ],
-    6: [ function(require, module, exports) {
-        var Templates = require("common/Templates");
-        module.exports = Backbone.View.extend({
-            $menuWrap: {},
-            $menuList: {},
-            initialize: function() {
-                this.$menuWrap = jQuery(".menu-wrap", this.$el);
-                this.$menuWrap.append(Templates.render("backend/module-menu", {}));
-                this.$menuList = jQuery(".module-actions", this.$menuWrap);
-            },
-            addItem: function(view) {
-                if (view.isValid && view.isValid() === true) {
-                    var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
-                    var $menuItem = $liItem.append(view.el);
-                    this.$menuList.append($menuItem);
-                }
-            }
-        });
-    }, {
-        "common/Templates": 19
+        "shared/ModuleBrowser/ModuleBrowserController": 29,
+        "templates/backend/area-add-module.hbs": 37,
+        "templates/backend/area-item-placeholder.hbs": 38
     } ],
     7: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
@@ -275,7 +298,28 @@
         });
     }, {} ],
     8: [ function(require, module, exports) {
-        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+        var tplModuleMenu = require("templates/backend/module-menu.hbs");
+        module.exports = Backbone.View.extend({
+            $menuWrap: {},
+            $menuList: {},
+            initialize: function() {
+                this.$menuWrap = jQuery(".menu-wrap", this.$el);
+                this.$menuWrap.append(tplModuleMenu({}));
+                this.$menuList = jQuery(".module-actions", this.$menuWrap);
+            },
+            addItem: function(view) {
+                if (view.isValid && view.isValid() === true) {
+                    var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
+                    var $menuItem = $liItem.append(view.el);
+                    this.$menuList.append($menuItem);
+                }
+            }
+        });
+    }, {
+        "templates/backend/module-menu.hbs": 39
+    } ],
+    9: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/BaseControlView");
         var Checks = require("common/Checks");
         var Notice = require("common/Notice");
         var Ajax = require("common/Ajax");
@@ -319,14 +363,14 @@
             }
         });
     }, {
-        "backend/Views/ModuleControls/controls/BaseView": 7,
-        "common/Ajax": 13,
-        "common/Checks": 14,
-        "common/Config": 15,
-        "common/Notice": 17
+        "backend/Views/BaseControlView": 7,
+        "common/Ajax": 17,
+        "common/Checks": 18,
+        "common/Config": 19,
+        "common/Notice": 21
     } ],
-    9: [ function(require, module, exports) {
-        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+    10: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/BaseControlView");
         var Checks = require("common/Checks");
         var Notice = require("common/Notice");
         var Ajax = require("common/Ajax");
@@ -381,16 +425,16 @@
             }
         });
     }, {
-        "backend/Views/ModuleControls/controls/BaseView": 7,
-        "common/Ajax": 13,
-        "common/Checks": 14,
-        "common/Config": 15,
-        "common/Notice": 17,
-        "common/Payload": 18,
-        "common/UI": 21
+        "backend/Views/BaseControlView": 7,
+        "common/Ajax": 17,
+        "common/Checks": 18,
+        "common/Config": 19,
+        "common/Notice": 21,
+        "common/Payload": 22,
+        "common/UI": 25
     } ],
-    10: [ function(require, module, exports) {
-        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+    11: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/BaseControlView");
         var Checks = require("common/Checks");
         var Notice = require("common/Notice");
         var Ajax = require("common/Ajax");
@@ -438,16 +482,16 @@
             }
         });
     }, {
-        "backend/Views/ModuleControls/controls/BaseView": 7,
-        "common/Ajax": 13,
-        "common/Checks": 14,
-        "common/Config": 15,
-        "common/Notice": 17,
-        "common/Payload": 18,
-        "common/UI": 21
+        "backend/Views/BaseControlView": 7,
+        "common/Ajax": 17,
+        "common/Checks": 18,
+        "common/Config": 19,
+        "common/Notice": 21,
+        "common/Payload": 22,
+        "common/UI": 25
     } ],
-    11: [ function(require, module, exports) {
-        var BaseView = require("backend/Views/ModuleControls/controls/BaseView");
+    12: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/BaseControlView");
         var Checks = require("common/Checks");
         var Config = require("common/Config");
         var Notice = require("common/Notice");
@@ -481,18 +525,96 @@
             }
         });
     }, {
-        "backend/Views/ModuleControls/controls/BaseView": 7,
-        "common/Ajax": 13,
-        "common/Checks": 14,
-        "common/Config": 15,
-        "common/Notice": 17
+        "backend/Views/BaseControlView": 7,
+        "common/Ajax": 17,
+        "common/Checks": 18,
+        "common/Config": 19,
+        "common/Notice": 21
     } ],
-    12: [ function(require, module, exports) {
+    13: [ function(require, module, exports) {
+        var ControlsView = require("backend/Views/ModuleControls/ControlsView");
+        var tplUiMenu = require("templates/backend/ui-menu.hbs");
+        module.exports = ControlsView.extend({
+            initialize: function() {
+                this.$menuWrap = jQuery(".ui-wrap", this.$el);
+                this.$menuWrap.append(tplUiMenu({}));
+                this.$menuList = jQuery(".ui-actions", this.$menuWrap);
+            }
+        });
+    }, {
+        "backend/Views/ModuleControls/ControlsView": 8,
+        "templates/backend/ui-menu.hbs": 46
+    } ],
+    14: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/BaseControlView");
+        var Checks = require("common/Checks");
+        module.exports = BaseView.extend({
+            initialize: function(options) {
+                this.options = options || {};
+            },
+            className: "ui-move kb-move block-menu-icon",
+            isValid: function() {
+                if (!this.model.get("disabled") && Checks.userCan("edit_kontentblocks")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+    }, {
+        "backend/Views/BaseControlView": 7,
+        "common/Checks": 18
+    } ],
+    15: [ function(require, module, exports) {
+        var BaseView = require("backend/Views/BaseControlView");
+        var Checks = require("common/Checks");
+        module.exports = BaseView.extend({
+            initialize: function(options) {
+                this.options = options || {};
+                this.parent = options.parent;
+                if (store.get(this.parent.model.get("instance_id") + "_open")) {
+                    this.toggleBody();
+                    this.parent.model.set("open", true);
+                }
+            },
+            events: {
+                click: "toggleBody"
+            },
+            className: "ui-toggle kb-toggle block-menu-icon",
+            isValid: function() {
+                if (!this.model.get("disabled") && Checks.userCan("edit_kontentblocks")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            toggleBody: function(speed) {
+                var duration = speed || 400;
+                if (Checks.userCan("edit_kontentblocks")) {
+                    this.parent.$body.slideToggle(duration);
+                    this.parent.$el.toggleClass("kb-open");
+                    KB.currentModule = this.model;
+                    this.setOpenStatus();
+                }
+            },
+            setOpenStatus: function() {
+                this.parent.model.set("open", !this.model.get("open"));
+                store.set(this.parent.model.get("mid") + "_open", this.parent.model.get("open"));
+            }
+        });
+    }, {
+        "backend/Views/BaseControlView": 7,
+        "common/Checks": 18
+    } ],
+    16: [ function(require, module, exports) {
         var ModuleControlsView = require("backend/Views/ModuleControls/ControlsView");
+        var ModuleUiView = require("backend/Views/ModuleUi/ModuleUiView");
         var DeleteControl = require("backend/Views/ModuleControls/controls/DeleteControl");
         var DuplicateControl = require("backend/Views/ModuleControls/controls/DuplicateControl");
         var SaveControl = require("backend/Views/ModuleControls/controls/SaveControl");
         var StatusControl = require("backend/Views/ModuleControls/controls/StatusControl");
+        var MoveControl = require("backend/Views/ModuleUi/controls/MoveControl");
+        var ToggleControl = require("backend/Views/ModuleUi/controls/ToggleControl");
         var Checks = require("common/Checks");
         var Ajax = require("common/Ajax");
         var UI = require("common/UI");
@@ -503,11 +625,7 @@
             ModuleMenu: {},
             instanceId: "",
             events: {
-                "click.kb1 .kb-toggle": "toggleBody",
-                "click.kb2 .kb-toggle": "setOpenStatus",
                 mouseenter: "setFocusedModule",
-                dblclick: "fullscreen",
-                "click .kb-fullscreen": "fullscreen",
                 "change .kb-template-select": "viewfileChange",
                 "change input,textarea,select": "handleChange",
                 "tinymce.change": "handleChange"
@@ -534,12 +652,13 @@
                     el: this.$el,
                     parent: this
                 });
-                if (store.get(this.instanceId + "_open")) {
-                    this.toggleBody();
-                    this.model.set("open", true);
-                }
+                this.ModuleUi = new ModuleUiView({
+                    el: this.$el,
+                    parent: this
+                });
                 this.model.View = this;
                 this.setupDefaultMenuItems();
+                this.setupDefaultUiItems();
                 KB.Views.Modules.on("kb.modules.view.deleted", function(view) {
                     view.$el.fadeOut(500, function() {
                         view.$el.remove();
@@ -564,17 +683,15 @@
                     parent: this
                 }));
             },
-            toggleBody: function(speed) {
-                var duration = speed || 400;
-                if (Checks.userCan("edit_kontentblocks")) {
-                    this.$body.slideToggle(duration);
-                    this.$el.toggleClass("kb-open");
-                    KB.currentModule = this.model;
-                }
-            },
-            setOpenStatus: function() {
-                this.model.set("open", !this.model.get("open"));
-                store.set(this.model.get("instance_id") + "_open", this.model.get("open"));
+            setupDefaultUiItems: function() {
+                this.ModuleUi.addItem(new MoveControl({
+                    model: this.model,
+                    parent: this
+                }));
+                this.ModuleUi.addItem(new ToggleControl({
+                    model: this.model,
+                    parent: this
+                }));
             },
             updateModuleForm: function() {
                 Ajax.send({
@@ -596,37 +713,6 @@
                 KB.Fields.trigger("update");
                 this.trigger("kb:backend::viewUpdated");
                 this.model.trigger("after.change.area");
-            },
-            fullscreen: function() {
-                var that = this;
-                this.sizeTimer = null;
-                var $stage = jQuery("#kontentblocks-core-ui");
-                $stage.addClass("fullscreen");
-                var $title = jQuery(".fullscreen--title-wrapper", $stage);
-                var $description = jQuery(".fullscreen--description-wrapper", $stage);
-                var titleVal = this.$el.find(".block-title").val();
-                $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + titleVal + "</h2>").show();
-                $description.empty().append("<p class='description'>" + this.model.get("settings").description + "</p>").show();
-                jQuery(".fullscreen--close").on("click", _.bind(this.closeFullscreen, this));
-                this.$el.addClass("fullscreen-module");
-                jQuery("#post-body").removeClass("columns-2").addClass("columns-1");
-                if (!this.model.get("open")) {
-                    this.setOpenStatus();
-                    this.toggleBody();
-                }
-                this.sizeTimer = setInterval(function() {
-                    var h = jQuery(".kb-module__controls-inner", that.$el).height() + 150;
-                    $stage.height(h);
-                }, 750);
-            },
-            closeFullscreen: function() {
-                var $stage = jQuery("#kontentblocks-core-ui");
-                $stage.removeClass("fullscreen");
-                clearInterval(this.sizeTimer);
-                this.$el.removeClass("fullscreen-module");
-                jQuery("#post-body").removeClass("columns-1").addClass("columns-2");
-                jQuery(".fullscreen--title-wrapper", $stage).hide();
-                $stage.css("height", "100%");
             },
             serialize: function() {
                 var formData, moduleData;
@@ -667,17 +753,21 @@
             dispose: function() {}
         });
     }, {
-        "backend/Views/ModuleControls/ControlsView": 6,
-        "backend/Views/ModuleControls/controls/DeleteControl": 8,
-        "backend/Views/ModuleControls/controls/DuplicateControl": 9,
-        "backend/Views/ModuleControls/controls/SaveControl": 10,
-        "backend/Views/ModuleControls/controls/StatusControl": 11,
-        "common/Ajax": 13,
-        "common/Checks": 14,
-        "common/Payload": 18,
-        "common/UI": 21
+        "backend/Views/ModuleControls/ControlsView": 8,
+        "backend/Views/ModuleControls/controls/DeleteControl": 9,
+        "backend/Views/ModuleControls/controls/DuplicateControl": 10,
+        "backend/Views/ModuleControls/controls/SaveControl": 11,
+        "backend/Views/ModuleControls/controls/StatusControl": 12,
+        "backend/Views/ModuleUi/ModuleUiView": 13,
+        "backend/Views/ModuleUi/controls/MoveControl": 14,
+        "backend/Views/ModuleUi/controls/ToggleControl": 15,
+        "common/Ajax": 17,
+        "common/Checks": 18,
+        "common/Payload": 22,
+        "common/UI": 25
     } ],
-    13: [ function(require, module, exports) {
+    17: [ function(require, module, exports) {
+        var Notice = require("common/Notice");
         module.exports = {
             send: function(data, callback, scope, options) {
                 var pid;
@@ -689,7 +779,6 @@
                 }
                 var sned = _.extend({
                     supplemental: data.supplemental || {},
-                    count: parseInt(KB.Environment.moduleCount, 10),
                     nonce: jQuery("#_kontentblocks_ajax_nonce").val(),
                     post_id: pid,
                     kbajax: true
@@ -710,7 +799,7 @@
                         }
                     },
                     error: function() {
-                        KB.notice("<p>Generic Ajax Error</p>", "error");
+                        Notice.notice("<p>Generic Ajax Error</p>", "error");
                     },
                     complete: function() {
                         jQuery("#publish").removeAttr("disabled");
@@ -718,13 +807,15 @@
                 });
             }
         };
-    }, {} ],
-    14: [ function(require, module, exports) {
+    }, {
+        "common/Notice": 21
+    } ],
+    18: [ function(require, module, exports) {
         var Config = require("common/Config");
         module.exports = {
             blockLimit: function(areamodel) {
                 var limit = areamodel.get("limit");
-                var children = $("#" + areamodel.get("id") + " li.kb-module").length;
+                var children = jQuery("#" + areamodel.get("id") + " li.kb-module").length;
                 return !(limit !== 0 && children === limit);
             },
             userCan: function(cap) {
@@ -733,9 +824,9 @@
             }
         };
     }, {
-        "common/Config": 15
+        "common/Config": 19
     } ],
-    15: [ function(require, module, exports) {
+    19: [ function(require, module, exports) {
         var Config = function($) {
             var config = KB.appData.config;
             return {
@@ -753,7 +844,7 @@
                     if (_.indexOf(modes, mode) !== -1) {
                         return config.nonces[mode];
                     } else {
-                        _K.error("Invalid nonce requested in kb.cm.Config.js");
+                        console.error("Invalid nonce requested in kb.cm.Config.js");
                         return null;
                     }
                 },
@@ -773,7 +864,7 @@
         }(jQuery);
         module.exports = Config;
     }, {} ],
-    16: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
         var Config = require("common/Config");
         if (Function.prototype.bind && window.console && typeof console.log == "object") {
             [ "log", "info", "warn", "error", "assert", "dir", "clear", "profile", "profileEnd" ].forEach(function(method) {
@@ -814,16 +905,18 @@
             User: _KS
         };
     }, {
-        "common/Config": 15
+        "common/Config": 19
     } ],
-    17: [ function(require, module, exports) {
+    21: [ function(require, module, exports) {
         "use strict";
         module.exports = {
-            notice: function(msg, type) {
-                window.alertify.notify(msg, type, 3);
+            notice: function(msg, type, delay) {
+                var timeout = delay || 3;
+                window.alertify.notify(msg, type, timeout);
             },
-            confirm: function(msg, yes, no, scope) {
-                window.alertify.confirm(msg, function(e) {
+            confirm: function(title, msg, yes, no, scope) {
+                var t = title || "Title";
+                window.alertify.confirm(t, msg, function(e) {
                     if (e) {
                         yes.call(scope);
                     } else {
@@ -833,7 +926,7 @@
             }
         };
     }, {} ],
-    18: [ function(require, module, exports) {
+    22: [ function(require, module, exports) {
         module.exports = {
             getFieldData: function(type, moduleId, key, arrayKey) {
                 var typeData;
@@ -892,7 +985,7 @@
             }
         };
     }, {} ],
-    19: [ function(require, module, exports) {
+    23: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var Templates = function() {
@@ -959,10 +1052,10 @@
         }();
         module.exports = Templates;
     }, {
-        "common/Config": 15,
-        "common/Utilities": 22
+        "common/Config": 19,
+        "common/Utilities": 26
     } ],
-    20: [ function(require, module, exports) {
+    24: [ function(require, module, exports) {
         var Ajax = require("common/Ajax");
         var Logger = require("common/Logger");
         var Config = require("common/Config");
@@ -1071,14 +1164,16 @@
             }
         };
     }, {
-        "common/Ajax": 13,
-        "common/Config": 15,
-        "common/Logger": 16
+        "common/Ajax": 17,
+        "common/Config": 19,
+        "common/Logger": 20
     } ],
-    21: [ function(require, module, exports) {
+    25: [ function(require, module, exports) {
         var $ = jQuery;
         var Config = require("common/Config");
         var Ajax = require("common/Ajax");
+        var TinyMCE = require("common/TinyMCE");
+        var Notice = require("common/Notice");
         var Ui = {
             isSorting: false,
             init: function() {
@@ -1151,7 +1246,7 @@
             repaint: function($el) {
                 this.initTabs();
                 this.initToggleBoxes();
-                KB.TinyMCE.addEditor($el);
+                TinyMCE.addEditor($el);
             },
             initTabs: function($cntxt) {
                 var $context = $cntxt || jQuery("body");
@@ -1188,7 +1283,7 @@
                     if (_.indexOf(areaOver.get("assignedModules"), currentModule.get("settings").class) === -1) {
                         return false;
                     } else if (limit !== 0 && limit <= nom - 1) {
-                        KB.Notice.notice("Not allowed here", "error");
+                        Notice.notice("Not allowed here", "error");
                         return false;
                     } else {
                         return true;
@@ -1219,13 +1314,13 @@
                         $(KB).trigger("kb:sortable::start");
                         $(".kb-open").toggleClass("kb-open");
                         $(".kb-module__body").hide();
-                        KB.TinyMCE.removeEditors();
+                        TinyMCE.removeEditors();
                         $(document).trigger("kb_sortable_start", [ event, ui ]);
                     },
                     stop: function(event, ui) {
                         that.isSorting = false;
                         $("#kontentblocks-core-ui").removeClass("kb-is-sorting");
-                        KB.TinyMCE.restoreEditors();
+                        TinyMCE.restoreEditors();
                         $(document).trigger("kb_sortable_stop", [ event, ui ]);
                         if (currentModule.get("open")) {
                             currentModule.View.toggleBody(155);
@@ -1236,7 +1331,7 @@
                     },
                     receive: function(event, ui) {
                         if (!isValidModule()) {
-                            KB.Notice.notice("Module not allowed in this area", "error");
+                            Notice.notice("Module not allowed in this area", "error");
                             $(ui.sender).sortable("cancel");
                         }
                     },
@@ -1248,9 +1343,9 @@
                             $.when(that.resort(ui.sender)).done(function(res) {
                                 if (res.success) {
                                     $(KB).trigger("kb:sortable::update");
-                                    KB.Notice.notice(res.message, "success");
+                                    Notice.notice(res.message, "success");
                                 } else {
-                                    KB.Notice.notice(res.message, "error");
+                                    Notice.notice(res.message, "error");
                                     return false;
                                 }
                             });
@@ -1268,7 +1363,7 @@
                                 that.triggerAreaChange(areaOver, currentModule);
                                 $(KB).trigger("kb:sortable::update");
                                 currentModule.View.clearFields();
-                                KB.Notice.notice("Area change and order were updated successfully", "success");
+                                Notice.notice("Area change and order were updated successfully", "success");
                             });
                         }
                     }
@@ -1310,7 +1405,7 @@
             toggleModule: function() {
                 $("body").on("click", ".kb-toggle", function() {
                     if (KB.isLocked() && !KB.userCan("lock_kontentblocks")) {
-                        KB.notice(kontentblocks.l18n.gen_no_permission, "alert");
+                        Notice.notice(kontentblocks.l18n.gen_no_permission, "alert");
                     } else {
                         $(this).parent().nextAll(".kb-module__body:first").slideToggle("fast", function() {
                             $("body").trigger("module::opened");
@@ -1330,9 +1425,9 @@
                     });
                     if (result.action === "meta-box-order") {
                         if (action === "restore") {
-                            KB.TinyMCE.restoreEditors();
+                            TinyMCE.restoreEditors();
                         } else if (action === "remove") {
-                            KB.TinyMCE.removeEditors();
+                            TinyMCE.removeEditors();
                         }
                     }
                 }
@@ -1341,10 +1436,12 @@
         Ui.init();
         module.exports = Ui;
     }, {
-        "common/Ajax": 13,
-        "common/Config": 15
+        "common/Ajax": 17,
+        "common/Config": 19,
+        "common/Notice": 21,
+        "common/TinyMCE": 24
     } ],
-    22: [ function(require, module, exports) {
+    26: [ function(require, module, exports) {
         var Utilities = function($) {
             return {
                 stex: {
@@ -1383,15 +1480,6 @@
                     }
                     return obj;
                 },
-                cleanArray: function(actual) {
-                    var newArray = new Array();
-                    for (var i = 0; i < actual.length; i++) {
-                        if (!_.isUndefined(actual[i]) && !_.isEmpty(actual[i])) {
-                            newArray.push(actual[i]);
-                        }
-                    }
-                    return newArray;
-                },
                 sleep: function(milliseconds) {
                     var start = new Date().getTime();
                     for (var i = 0; i < 1e7; i++) {
@@ -1404,7 +1492,7 @@
         }(jQuery);
         module.exports = Utilities;
     }, {} ],
-    23: [ function(require, module, exports) {
+    27: [ function(require, module, exports) {
         var Checks = require("common/Checks");
         var Utilities = require("common/Utilities");
         var Payload = require("common/Payload");
@@ -1497,49 +1585,48 @@
             }
         });
     }, {
-        "common/Checks": 14,
-        "common/Payload": 18,
-        "common/Utilities": 22
+        "common/Checks": 18,
+        "common/Payload": 22,
+        "common/Utilities": 26
     } ],
-    24: [ function(require, module, exports) {
+    28: [ function(require, module, exports) {
         var FieldConfigModel = require("./FieldConfigModel");
         module.exports = Backbone.Collection.extend({
             model: FieldConfigModel
         });
     }, {
-        "./FieldConfigModel": 23
+        "./FieldConfigModel": 27
     } ],
-    25: [ function(require, module, exports) {
+    29: [ function(require, module, exports) {
         var ModuleDefinitions = require("shared/ModuleBrowser/ModuleBrowserDefinitions");
         var ModuleDefModel = require("shared/ModuleBrowser/ModuleDefinitionModel");
         var ModuleBrowserDescription = require("shared/ModuleBrowser/ModuleBrowserDescriptions");
         var ModuleBrowserNavigation = require("shared/ModuleBrowser/ModuleBrowserNavigation");
         var ModuleBrowserList = require("shared/ModuleBrowser/ModuleBrowserList");
-        var Templates = require("common/Templates");
         var Checks = require("common/Checks");
         var Notice = require("common/Notice");
         var Payload = require("common/Payload");
         var Ajax = require("common/Ajax");
         var TinyMCE = require("common/TinyMCE");
         var Config = require("common/Config");
+        var tplModuleBrowser = require("templates/backend/modulebrowser/module-browser.hbs");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 var that = this;
                 this.options = options || {};
                 this.area = this.options.area;
+                this.viewMode = this.getViewMode();
                 this.modulesDefinitions = new ModuleDefinitions(this.prepareAssignedModules(), {
                     model: ModuleDefModel,
                     area: this.options.area
                 }).setup();
-                var viewMode = this.getViewMode();
-                this.$el.append(Templates.render("backend/modulebrowser/module-browser", {
-                    viewMode: viewMode
+                this.$el.append(tplModuleBrowser({
+                    viewMode: this.getViewModeClass()
                 }));
                 this.subviews.ModulesList = new ModuleBrowserList({
                     el: jQuery(".modules-list", this.$el),
                     browser: this
                 });
-                console.log(this);
                 this.subviews.ModuleDescription = new ModuleBrowserDescription({
                     el: jQuery(".module-description", this.$el),
                     browser: this
@@ -1564,10 +1651,12 @@
                 jQuery(".module-browser-wrapper", this.$el).toggleClass("module-browser--list-view module-browser--excerpt-view");
                 var abbr = "mdb_" + this.area.model.get("id") + "_state";
                 var curr = store.get(abbr);
-                if (curr == "module-browser--list-view") {
-                    store.set(abbr, "module-browser--excerpt-view");
+                if (curr == "list") {
+                    this.viewMode = "excerpt";
+                    store.set(abbr, "excerpt");
                 } else {
-                    store.set(abbr, "module-browser--list-view");
+                    this.viewMode = "list";
+                    store.set(abbr, "list");
                 }
             },
             render: function() {
@@ -1578,9 +1667,16 @@
                 if (store.get(abbr)) {
                     return store.get(abbr);
                 } else {
-                    store.set(abbr, "module-browser--list-view");
+                    store.set(abbr, "list");
                 }
-                return "module-browser--list-view";
+                return "list";
+            },
+            getViewModeClass: function() {
+                if (this.viewMode === "list") {
+                    return "module-browser--list-view";
+                } else {
+                    return "module-browser--excerpt-view";
+                }
             },
             open: function() {
                 this.$el.appendTo("body");
@@ -1662,20 +1758,20 @@
             }
         });
     }, {
-        "common/Ajax": 13,
-        "common/Checks": 14,
-        "common/Config": 15,
-        "common/Notice": 17,
-        "common/Payload": 18,
-        "common/Templates": 19,
-        "common/TinyMCE": 20,
-        "shared/ModuleBrowser/ModuleBrowserDefinitions": 26,
-        "shared/ModuleBrowser/ModuleBrowserDescriptions": 27,
-        "shared/ModuleBrowser/ModuleBrowserList": 28,
-        "shared/ModuleBrowser/ModuleBrowserNavigation": 30,
-        "shared/ModuleBrowser/ModuleDefinitionModel": 31
+        "common/Ajax": 17,
+        "common/Checks": 18,
+        "common/Config": 19,
+        "common/Notice": 21,
+        "common/Payload": 22,
+        "common/TinyMCE": 24,
+        "shared/ModuleBrowser/ModuleBrowserDefinitions": 30,
+        "shared/ModuleBrowser/ModuleBrowserDescriptions": 31,
+        "shared/ModuleBrowser/ModuleBrowserList": 32,
+        "shared/ModuleBrowser/ModuleBrowserNavigation": 34,
+        "shared/ModuleBrowser/ModuleDefinitionModel": 35,
+        "templates/backend/modulebrowser/module-browser.hbs": 40
     } ],
-    26: [ function(require, module, exports) {
+    30: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         module.exports = Backbone.Collection.extend({
             initialize: function(models, options) {
@@ -1721,10 +1817,13 @@
             }
         });
     }, {
-        "common/Payload": 18
+        "common/Payload": 22
     } ],
-    27: [ function(require, module, exports) {
+    31: [ function(require, module, exports) {
         var Templates = require("common/Templates");
+        var tplModuleTemplateDescription = require("templates/backend/modulebrowser/module-template-description.hbs");
+        var tplModuleDescription = require("templates/backend/modulebrowser/module-description.hbs");
+        var tplModulePoster = require("templates/backend/modulebrowser/poster.hbs");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.options = options || {};
@@ -1734,16 +1833,16 @@
                 var that = this;
                 this.$el.empty();
                 if (this.model.get("template")) {
-                    this.$el.html(Templates.render("backend/modulebrowser/module-template-description", {
+                    this.$el.html(tplModuleTemplateDescription({
                         module: this.model.toJSON()
                     }));
                 } else {
-                    this.$el.html(Templates.render("backend/modulebrowser/module-description", {
+                    this.$el.html(tplModuleDescription({
                         module: this.model.toJSON()
                     }));
                 }
                 if (this.model.get("settings").poster !== false) {
-                    this.$el.append(Templates.render("backend/modulebrowser/poster", {
+                    this.$el.append(tplModulePoster({
                         module: this.model.toJSON()
                     }));
                 }
@@ -1756,9 +1855,12 @@
             close: function() {}
         });
     }, {
-        "common/Templates": 19
+        "common/Templates": 23,
+        "templates/backend/modulebrowser/module-description.hbs": 41,
+        "templates/backend/modulebrowser/module-template-description.hbs": 43,
+        "templates/backend/modulebrowser/poster.hbs": 45
     } ],
-    28: [ function(require, module, exports) {
+    32: [ function(require, module, exports) {
         var ListItem = require("shared/ModuleBrowser/ModuleBrowserListItem");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
@@ -1789,47 +1891,54 @@
             }
         });
     }, {
-        "shared/ModuleBrowser/ModuleBrowserListItem": 29
+        "shared/ModuleBrowser/ModuleBrowserListItem": 33
     } ],
-    29: [ function(require, module, exports) {
-        var Templates = require("common/Templates");
+    33: [ function(require, module, exports) {
+        var tplTemplateListItem = require("templates/backend/modulebrowser/module-template-list-item.hbs");
+        var tplListItem = require("templates/backend/modulebrowser/module-list-item.hbs");
         module.exports = Backbone.View.extend({
             tagName: "li",
             className: "modules-list-item",
             initialize: function(options) {
                 this.options = options || {};
+                this.Browser = options.browser;
                 this.area = options.browser.area;
             },
             render: function(el) {
                 if (this.model.get("template")) {
-                    this.$el.html(Templates.render("backend/modulebrowser/module-template-list-item", {
+                    this.$el.html(tplTemplateListItem({
                         module: this.model.toJSON()
                     }));
                 } else {
-                    this.$el.html(Templates.render("backend/modulebrowser/module-list-item", {
+                    this.$el.html(tplListItem({
                         module: this.model.toJSON()
                     }));
                 }
                 el.append(this.$el);
             },
             events: {
-                click: "loadDetails",
+                click: "handleClick",
                 "click .kb-js-create-module": "createModule"
             },
-            loadDetails: function() {
-                this.options.browser.loadDetails(this.model);
+            handleClick: function() {
+                if (this.Browser.viewMode === "list") {
+                    this.createModule();
+                } else {
+                    this.Browser.loadDetails(this.model);
+                }
             },
             createModule: function() {
-                this.options.browser.createModule(this.model);
+                this.Browser.createModule(this.model);
             },
             close: function() {
                 this.remove();
             }
         });
     }, {
-        "common/Templates": 19
+        "templates/backend/modulebrowser/module-list-item.hbs": 42,
+        "templates/backend/modulebrowser/module-template-list-item.hbs": 44
     } ],
-    30: [ function(require, module, exports) {
+    34: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             item: Backbone.View.extend({
                 initialize: function(options) {
@@ -1875,7 +1984,7 @@
             }
         });
     }, {} ],
-    31: [ function(require, module, exports) {
+    35: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             initialize: function() {
                 var that = this;
@@ -1889,7 +1998,7 @@
             }
         });
     }, {} ],
-    32: [ function(require, module, exports) {
+    36: [ function(require, module, exports) {
         KB.ViewsCollection = function() {
             this.views = {};
             this.lastViewAdded = null;
@@ -1936,5 +2045,753 @@
         };
         _.extend(KB.ViewsCollection.prototype, Backbone.Events);
         module.exports = KB.ViewsCollection;
-    }, {} ]
+    }, {} ],
+    37: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1;
+                return '<a class="modal modules-link" href="">\n    ' + this.escapeExpression(this.lambda((stack1 = (stack1 = (stack1 = depth0 != null ? depth0.i18n : depth0) != null ? stack1.Areas : stack1) != null ? stack1.ui : stack1) != null ? stack1.addNewModule : stack1, depth0)) + "\n</a>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    38: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1;
+                return '<div class="kb-area__item-placeholder modules-link">\n    ' + this.escapeExpression(this.lambda((stack1 = (stack1 = (stack1 = depth0 != null ? depth0.i18n : depth0) != null ? stack1.Areas : stack1) != null ? stack1.ui : stack1) != null ? stack1.clickToAdd : stack1, depth0)) + "\n</div>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    39: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                return "<ul class='module-actions'></ul>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    40: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var helper;
+                return '<div class="module-browser-wrapper ' + this.escapeExpression((helper = (helper = helpers.viewMode || (depth0 != null ? depth0.viewMode : depth0)) != null ? helper : helpers.helperMissing, 
+                typeof helper === "function" ? helper.call(depth0, {
+                    name: "viewMode",
+                    hash: {},
+                    data: data
+                }) : helper)) + '">\n\n    <div class="module-browser-header module-categories">\n        <a class="genericon genericon-close-alt close-browser kb-button"></a>\n        <a class="dashicons dashicons-list-view module-browser--switch__list-view "></a>\n        <a class="dashicons dashicons-exerpt-view module-browser--switch__excerpt-view "></a>\n    </div>\n\n    <div class="module-browser__left-column kb-nano">\n        <ul class="modules-list kb-nano-content">\n\n        </ul>\n    </div>\n\n    <div class="module-browser__right-column kb-nano">\n        <div class="module-description kb-nano-content">\n\n        </div>\n    </div>\n</div>';
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    41: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1;
+                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.settings : stack1) != null ? stack1.publicName : stack1, depth0)) + "</h3>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    42: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1, alias1 = this.lambda, alias2 = this.escapeExpression;
+                return '<div class="dashicons dashicons-plus kb-js-create-module"></div>\n<h4>' + alias2(alias1((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.settings : stack1) != null ? stack1.publicName : stack1, depth0)) + '</h4>\n<p class="description">' + alias2(alias1((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.settings : stack1) != null ? stack1.description : stack1, depth0)) + "</p>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    43: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1;
+                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.templateRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h3>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    44: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1;
+                return '<div class="dashicons dashicons-plus kb-js-create-module"></div>\n<h4>' + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.templateRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h4>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    45: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1;
+                return '<div class="module-browser--poster-wrap">\n    <img src="' + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.settings : stack1) != null ? stack1.poster : stack1, depth0)) + '" >\n</div>';
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    46: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                return "<ul class='ui-actions'></ul>";
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 55
+    } ],
+    47: [ function(require, module, exports) {
+        "use strict";
+        var _interopRequireWildcard = function(obj) {
+            return obj && obj.__esModule ? obj : {
+                "default": obj
+            };
+        };
+        exports.__esModule = true;
+        var _import = require("./handlebars/base");
+        var base = _interopRequireWildcard(_import);
+        var _SafeString = require("./handlebars/safe-string");
+        var _SafeString2 = _interopRequireWildcard(_SafeString);
+        var _Exception = require("./handlebars/exception");
+        var _Exception2 = _interopRequireWildcard(_Exception);
+        var _import2 = require("./handlebars/utils");
+        var Utils = _interopRequireWildcard(_import2);
+        var _import3 = require("./handlebars/runtime");
+        var runtime = _interopRequireWildcard(_import3);
+        var _noConflict = require("./handlebars/no-conflict");
+        var _noConflict2 = _interopRequireWildcard(_noConflict);
+        function create() {
+            var hb = new base.HandlebarsEnvironment();
+            Utils.extend(hb, base);
+            hb.SafeString = _SafeString2["default"];
+            hb.Exception = _Exception2["default"];
+            hb.Utils = Utils;
+            hb.escapeExpression = Utils.escapeExpression;
+            hb.VM = runtime;
+            hb.template = function(spec) {
+                return runtime.template(spec, hb);
+            };
+            return hb;
+        }
+        var inst = create();
+        inst.create = create;
+        _noConflict2["default"](inst);
+        inst["default"] = inst;
+        exports["default"] = inst;
+        module.exports = exports["default"];
+    }, {
+        "./handlebars/base": 48,
+        "./handlebars/exception": 49,
+        "./handlebars/no-conflict": 50,
+        "./handlebars/runtime": 51,
+        "./handlebars/safe-string": 52,
+        "./handlebars/utils": 53
+    } ],
+    48: [ function(require, module, exports) {
+        "use strict";
+        var _interopRequireWildcard = function(obj) {
+            return obj && obj.__esModule ? obj : {
+                "default": obj
+            };
+        };
+        exports.__esModule = true;
+        exports.HandlebarsEnvironment = HandlebarsEnvironment;
+        exports.createFrame = createFrame;
+        var _import = require("./utils");
+        var Utils = _interopRequireWildcard(_import);
+        var _Exception = require("./exception");
+        var _Exception2 = _interopRequireWildcard(_Exception);
+        var VERSION = "3.0.1";
+        exports.VERSION = VERSION;
+        var COMPILER_REVISION = 6;
+        exports.COMPILER_REVISION = COMPILER_REVISION;
+        var REVISION_CHANGES = {
+            1: "<= 1.0.rc.2",
+            2: "== 1.0.0-rc.3",
+            3: "== 1.0.0-rc.4",
+            4: "== 1.x.x",
+            5: "== 2.0.0-alpha.x",
+            6: ">= 2.0.0-beta.1"
+        };
+        exports.REVISION_CHANGES = REVISION_CHANGES;
+        var isArray = Utils.isArray, isFunction = Utils.isFunction, toString = Utils.toString, objectType = "[object Object]";
+        function HandlebarsEnvironment(helpers, partials) {
+            this.helpers = helpers || {};
+            this.partials = partials || {};
+            registerDefaultHelpers(this);
+        }
+        HandlebarsEnvironment.prototype = {
+            constructor: HandlebarsEnvironment,
+            logger: logger,
+            log: log,
+            registerHelper: function registerHelper(name, fn) {
+                if (toString.call(name) === objectType) {
+                    if (fn) {
+                        throw new _Exception2["default"]("Arg not supported with multiple helpers");
+                    }
+                    Utils.extend(this.helpers, name);
+                } else {
+                    this.helpers[name] = fn;
+                }
+            },
+            unregisterHelper: function unregisterHelper(name) {
+                delete this.helpers[name];
+            },
+            registerPartial: function registerPartial(name, partial) {
+                if (toString.call(name) === objectType) {
+                    Utils.extend(this.partials, name);
+                } else {
+                    if (typeof partial === "undefined") {
+                        throw new _Exception2["default"]("Attempting to register a partial as undefined");
+                    }
+                    this.partials[name] = partial;
+                }
+            },
+            unregisterPartial: function unregisterPartial(name) {
+                delete this.partials[name];
+            }
+        };
+        function registerDefaultHelpers(instance) {
+            instance.registerHelper("helperMissing", function() {
+                if (arguments.length === 1) {
+                    return undefined;
+                } else {
+                    throw new _Exception2["default"]('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+                }
+            });
+            instance.registerHelper("blockHelperMissing", function(context, options) {
+                var inverse = options.inverse, fn = options.fn;
+                if (context === true) {
+                    return fn(this);
+                } else if (context === false || context == null) {
+                    return inverse(this);
+                } else if (isArray(context)) {
+                    if (context.length > 0) {
+                        if (options.ids) {
+                            options.ids = [ options.name ];
+                        }
+                        return instance.helpers.each(context, options);
+                    } else {
+                        return inverse(this);
+                    }
+                } else {
+                    if (options.data && options.ids) {
+                        var data = createFrame(options.data);
+                        data.contextPath = Utils.appendContextPath(options.data.contextPath, options.name);
+                        options = {
+                            data: data
+                        };
+                    }
+                    return fn(context, options);
+                }
+            });
+            instance.registerHelper("each", function(context, options) {
+                if (!options) {
+                    throw new _Exception2["default"]("Must pass iterator to #each");
+                }
+                var fn = options.fn, inverse = options.inverse, i = 0, ret = "", data = undefined, contextPath = undefined;
+                if (options.data && options.ids) {
+                    contextPath = Utils.appendContextPath(options.data.contextPath, options.ids[0]) + ".";
+                }
+                if (isFunction(context)) {
+                    context = context.call(this);
+                }
+                if (options.data) {
+                    data = createFrame(options.data);
+                }
+                function execIteration(field, index, last) {
+                    if (data) {
+                        data.key = field;
+                        data.index = index;
+                        data.first = index === 0;
+                        data.last = !!last;
+                        if (contextPath) {
+                            data.contextPath = contextPath + field;
+                        }
+                    }
+                    ret = ret + fn(context[field], {
+                        data: data,
+                        blockParams: Utils.blockParams([ context[field], field ], [ contextPath + field, null ])
+                    });
+                }
+                if (context && typeof context === "object") {
+                    if (isArray(context)) {
+                        for (var j = context.length; i < j; i++) {
+                            execIteration(i, i, i === context.length - 1);
+                        }
+                    } else {
+                        var priorKey = undefined;
+                        for (var key in context) {
+                            if (context.hasOwnProperty(key)) {
+                                if (priorKey) {
+                                    execIteration(priorKey, i - 1);
+                                }
+                                priorKey = key;
+                                i++;
+                            }
+                        }
+                        if (priorKey) {
+                            execIteration(priorKey, i - 1, true);
+                        }
+                    }
+                }
+                if (i === 0) {
+                    ret = inverse(this);
+                }
+                return ret;
+            });
+            instance.registerHelper("if", function(conditional, options) {
+                if (isFunction(conditional)) {
+                    conditional = conditional.call(this);
+                }
+                if (!options.hash.includeZero && !conditional || Utils.isEmpty(conditional)) {
+                    return options.inverse(this);
+                } else {
+                    return options.fn(this);
+                }
+            });
+            instance.registerHelper("unless", function(conditional, options) {
+                return instance.helpers["if"].call(this, conditional, {
+                    fn: options.inverse,
+                    inverse: options.fn,
+                    hash: options.hash
+                });
+            });
+            instance.registerHelper("with", function(context, options) {
+                if (isFunction(context)) {
+                    context = context.call(this);
+                }
+                var fn = options.fn;
+                if (!Utils.isEmpty(context)) {
+                    if (options.data && options.ids) {
+                        var data = createFrame(options.data);
+                        data.contextPath = Utils.appendContextPath(options.data.contextPath, options.ids[0]);
+                        options = {
+                            data: data
+                        };
+                    }
+                    return fn(context, options);
+                } else {
+                    return options.inverse(this);
+                }
+            });
+            instance.registerHelper("log", function(message, options) {
+                var level = options.data && options.data.level != null ? parseInt(options.data.level, 10) : 1;
+                instance.log(level, message);
+            });
+            instance.registerHelper("lookup", function(obj, field) {
+                return obj && obj[field];
+            });
+        }
+        var logger = {
+            methodMap: {
+                0: "debug",
+                1: "info",
+                2: "warn",
+                3: "error"
+            },
+            DEBUG: 0,
+            INFO: 1,
+            WARN: 2,
+            ERROR: 3,
+            level: 1,
+            log: function log(level, message) {
+                if (typeof console !== "undefined" && logger.level <= level) {
+                    var method = logger.methodMap[level];
+                    (console[method] || console.log).call(console, message);
+                }
+            }
+        };
+        exports.logger = logger;
+        var log = logger.log;
+        exports.log = log;
+        function createFrame(object) {
+            var frame = Utils.extend({}, object);
+            frame._parent = object;
+            return frame;
+        }
+    }, {
+        "./exception": 49,
+        "./utils": 53
+    } ],
+    49: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        var errorProps = [ "description", "fileName", "lineNumber", "message", "name", "number", "stack" ];
+        function Exception(message, node) {
+            var loc = node && node.loc, line = undefined, column = undefined;
+            if (loc) {
+                line = loc.start.line;
+                column = loc.start.column;
+                message += " - " + line + ":" + column;
+            }
+            var tmp = Error.prototype.constructor.call(this, message);
+            for (var idx = 0; idx < errorProps.length; idx++) {
+                this[errorProps[idx]] = tmp[errorProps[idx]];
+            }
+            if (Error.captureStackTrace) {
+                Error.captureStackTrace(this, Exception);
+            }
+            if (loc) {
+                this.lineNumber = line;
+                this.column = column;
+            }
+        }
+        Exception.prototype = new Error();
+        exports["default"] = Exception;
+        module.exports = exports["default"];
+    }, {} ],
+    50: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        exports["default"] = function(Handlebars) {
+            var root = typeof global !== "undefined" ? global : window, $Handlebars = root.Handlebars;
+            Handlebars.noConflict = function() {
+                if (root.Handlebars === Handlebars) {
+                    root.Handlebars = $Handlebars;
+                }
+            };
+        };
+        module.exports = exports["default"];
+    }, {} ],
+    51: [ function(require, module, exports) {
+        "use strict";
+        var _interopRequireWildcard = function(obj) {
+            return obj && obj.__esModule ? obj : {
+                "default": obj
+            };
+        };
+        exports.__esModule = true;
+        exports.checkRevision = checkRevision;
+        exports.template = template;
+        exports.wrapProgram = wrapProgram;
+        exports.resolvePartial = resolvePartial;
+        exports.invokePartial = invokePartial;
+        exports.noop = noop;
+        var _import = require("./utils");
+        var Utils = _interopRequireWildcard(_import);
+        var _Exception = require("./exception");
+        var _Exception2 = _interopRequireWildcard(_Exception);
+        var _COMPILER_REVISION$REVISION_CHANGES$createFrame = require("./base");
+        function checkRevision(compilerInfo) {
+            var compilerRevision = compilerInfo && compilerInfo[0] || 1, currentRevision = _COMPILER_REVISION$REVISION_CHANGES$createFrame.COMPILER_REVISION;
+            if (compilerRevision !== currentRevision) {
+                if (compilerRevision < currentRevision) {
+                    var runtimeVersions = _COMPILER_REVISION$REVISION_CHANGES$createFrame.REVISION_CHANGES[currentRevision], compilerVersions = _COMPILER_REVISION$REVISION_CHANGES$createFrame.REVISION_CHANGES[compilerRevision];
+                    throw new _Exception2["default"]("Template was precompiled with an older version of Handlebars than the current runtime. " + "Please update your precompiler to a newer version (" + runtimeVersions + ") or downgrade your runtime to an older version (" + compilerVersions + ").");
+                } else {
+                    throw new _Exception2["default"]("Template was precompiled with a newer version of Handlebars than the current runtime. " + "Please update your runtime to a newer version (" + compilerInfo[1] + ").");
+                }
+            }
+        }
+        function template(templateSpec, env) {
+            if (!env) {
+                throw new _Exception2["default"]("No environment passed to template");
+            }
+            if (!templateSpec || !templateSpec.main) {
+                throw new _Exception2["default"]("Unknown template object: " + typeof templateSpec);
+            }
+            env.VM.checkRevision(templateSpec.compiler);
+            function invokePartialWrapper(partial, context, options) {
+                if (options.hash) {
+                    context = Utils.extend({}, context, options.hash);
+                }
+                partial = env.VM.resolvePartial.call(this, partial, context, options);
+                var result = env.VM.invokePartial.call(this, partial, context, options);
+                if (result == null && env.compile) {
+                    options.partials[options.name] = env.compile(partial, templateSpec.compilerOptions, env);
+                    result = options.partials[options.name](context, options);
+                }
+                if (result != null) {
+                    if (options.indent) {
+                        var lines = result.split("\n");
+                        for (var i = 0, l = lines.length; i < l; i++) {
+                            if (!lines[i] && i + 1 === l) {
+                                break;
+                            }
+                            lines[i] = options.indent + lines[i];
+                        }
+                        result = lines.join("\n");
+                    }
+                    return result;
+                } else {
+                    throw new _Exception2["default"]("The partial " + options.name + " could not be compiled when running in runtime-only mode");
+                }
+            }
+            var container = {
+                strict: function strict(obj, name) {
+                    if (!(name in obj)) {
+                        throw new _Exception2["default"]('"' + name + '" not defined in ' + obj);
+                    }
+                    return obj[name];
+                },
+                lookup: function lookup(depths, name) {
+                    var len = depths.length;
+                    for (var i = 0; i < len; i++) {
+                        if (depths[i] && depths[i][name] != null) {
+                            return depths[i][name];
+                        }
+                    }
+                },
+                lambda: function lambda(current, context) {
+                    return typeof current === "function" ? current.call(context) : current;
+                },
+                escapeExpression: Utils.escapeExpression,
+                invokePartial: invokePartialWrapper,
+                fn: function fn(i) {
+                    return templateSpec[i];
+                },
+                programs: [],
+                program: function program(i, data, declaredBlockParams, blockParams, depths) {
+                    var programWrapper = this.programs[i], fn = this.fn(i);
+                    if (data || depths || blockParams || declaredBlockParams) {
+                        programWrapper = wrapProgram(this, i, fn, data, declaredBlockParams, blockParams, depths);
+                    } else if (!programWrapper) {
+                        programWrapper = this.programs[i] = wrapProgram(this, i, fn);
+                    }
+                    return programWrapper;
+                },
+                data: function data(value, depth) {
+                    while (value && depth--) {
+                        value = value._parent;
+                    }
+                    return value;
+                },
+                merge: function merge(param, common) {
+                    var obj = param || common;
+                    if (param && common && param !== common) {
+                        obj = Utils.extend({}, common, param);
+                    }
+                    return obj;
+                },
+                noop: env.VM.noop,
+                compilerInfo: templateSpec.compiler
+            };
+            function ret(context) {
+                var options = arguments[1] === undefined ? {} : arguments[1];
+                var data = options.data;
+                ret._setup(options);
+                if (!options.partial && templateSpec.useData) {
+                    data = initData(context, data);
+                }
+                var depths = undefined, blockParams = templateSpec.useBlockParams ? [] : undefined;
+                if (templateSpec.useDepths) {
+                    depths = options.depths ? [ context ].concat(options.depths) : [ context ];
+                }
+                return templateSpec.main.call(container, context, container.helpers, container.partials, data, blockParams, depths);
+            }
+            ret.isTop = true;
+            ret._setup = function(options) {
+                if (!options.partial) {
+                    container.helpers = container.merge(options.helpers, env.helpers);
+                    if (templateSpec.usePartial) {
+                        container.partials = container.merge(options.partials, env.partials);
+                    }
+                } else {
+                    container.helpers = options.helpers;
+                    container.partials = options.partials;
+                }
+            };
+            ret._child = function(i, data, blockParams, depths) {
+                if (templateSpec.useBlockParams && !blockParams) {
+                    throw new _Exception2["default"]("must pass block params");
+                }
+                if (templateSpec.useDepths && !depths) {
+                    throw new _Exception2["default"]("must pass parent depths");
+                }
+                return wrapProgram(container, i, templateSpec[i], data, 0, blockParams, depths);
+            };
+            return ret;
+        }
+        function wrapProgram(container, i, fn, data, declaredBlockParams, blockParams, depths) {
+            function prog(context) {
+                var options = arguments[1] === undefined ? {} : arguments[1];
+                return fn.call(container, context, container.helpers, container.partials, options.data || data, blockParams && [ options.blockParams ].concat(blockParams), depths && [ context ].concat(depths));
+            }
+            prog.program = i;
+            prog.depth = depths ? depths.length : 0;
+            prog.blockParams = declaredBlockParams || 0;
+            return prog;
+        }
+        function resolvePartial(partial, context, options) {
+            if (!partial) {
+                partial = options.partials[options.name];
+            } else if (!partial.call && !options.name) {
+                options.name = partial;
+                partial = options.partials[partial];
+            }
+            return partial;
+        }
+        function invokePartial(partial, context, options) {
+            options.partial = true;
+            if (partial === undefined) {
+                throw new _Exception2["default"]("The partial " + options.name + " could not be found");
+            } else if (partial instanceof Function) {
+                return partial(context, options);
+            }
+        }
+        function noop() {
+            return "";
+        }
+        function initData(context, data) {
+            if (!data || !("root" in data)) {
+                data = data ? _COMPILER_REVISION$REVISION_CHANGES$createFrame.createFrame(data) : {};
+                data.root = context;
+            }
+            return data;
+        }
+    }, {
+        "./base": 48,
+        "./exception": 49,
+        "./utils": 53
+    } ],
+    52: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        function SafeString(string) {
+            this.string = string;
+        }
+        SafeString.prototype.toString = SafeString.prototype.toHTML = function() {
+            return "" + this.string;
+        };
+        exports["default"] = SafeString;
+        module.exports = exports["default"];
+    }, {} ],
+    53: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        exports.extend = extend;
+        exports.indexOf = indexOf;
+        exports.escapeExpression = escapeExpression;
+        exports.isEmpty = isEmpty;
+        exports.blockParams = blockParams;
+        exports.appendContextPath = appendContextPath;
+        var escape = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#x27;",
+            "`": "&#x60;"
+        };
+        var badChars = /[&<>"'`]/g, possible = /[&<>"'`]/;
+        function escapeChar(chr) {
+            return escape[chr];
+        }
+        function extend(obj) {
+            for (var i = 1; i < arguments.length; i++) {
+                for (var key in arguments[i]) {
+                    if (Object.prototype.hasOwnProperty.call(arguments[i], key)) {
+                        obj[key] = arguments[i][key];
+                    }
+                }
+            }
+            return obj;
+        }
+        var toString = Object.prototype.toString;
+        exports.toString = toString;
+        var isFunction = function isFunction(value) {
+            return typeof value === "function";
+        };
+        if (isFunction(/x/)) {
+            exports.isFunction = isFunction = function(value) {
+                return typeof value === "function" && toString.call(value) === "[object Function]";
+            };
+        }
+        var isFunction;
+        exports.isFunction = isFunction;
+        var isArray = Array.isArray || function(value) {
+            return value && typeof value === "object" ? toString.call(value) === "[object Array]" : false;
+        };
+        exports.isArray = isArray;
+        function indexOf(array, value) {
+            for (var i = 0, len = array.length; i < len; i++) {
+                if (array[i] === value) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        function escapeExpression(string) {
+            if (typeof string !== "string") {
+                if (string && string.toHTML) {
+                    return string.toHTML();
+                } else if (string == null) {
+                    return "";
+                } else if (!string) {
+                    return string + "";
+                }
+                string = "" + string;
+            }
+            if (!possible.test(string)) {
+                return string;
+            }
+            return string.replace(badChars, escapeChar);
+        }
+        function isEmpty(value) {
+            if (!value && value !== 0) {
+                return true;
+            } else if (isArray(value) && value.length === 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function blockParams(params, ids) {
+            params.path = ids;
+            return params;
+        }
+        function appendContextPath(contextPath, id) {
+            return (contextPath ? contextPath + "." : "") + id;
+        }
+    }, {} ],
+    54: [ function(require, module, exports) {
+        module.exports = require("./dist/cjs/handlebars.runtime")["default"];
+    }, {
+        "./dist/cjs/handlebars.runtime": 47
+    } ],
+    55: [ function(require, module, exports) {
+        module.exports = require("handlebars/runtime")["default"];
+    }, {
+        "handlebars/runtime": 54
+    } ]
 }, {}, [ 1 ]);

@@ -1,9 +1,12 @@
 //KB.Backbone.Backend.ModuleView
 var ModuleControlsView = require('backend/Views/ModuleControls/ControlsView');
+var ModuleUiView = require('backend/Views/ModuleUi/ModuleUiView');
 var DeleteControl = require('backend/Views/ModuleControls/controls/DeleteControl');
 var DuplicateControl = require('backend/Views/ModuleControls/controls/DuplicateControl');
 var SaveControl = require('backend/Views/ModuleControls/controls/SaveControl');
 var StatusControl = require('backend/Views/ModuleControls/controls/StatusControl');
+var MoveControl = require('backend/Views/ModuleUi/controls/MoveControl');
+var ToggleControl = require('backend/Views/ModuleUi/controls/ToggleControl');
 var Checks = require('common/Checks');
 var Ajax = require('common/Ajax');
 var UI = require('common/UI');
@@ -16,11 +19,7 @@ module.exports = Backbone.View.extend({
   events: {
     // show/hide module inner
     // actual module actions are outsourced to individual files
-    'click.kb1 .kb-toggle': 'toggleBody',
-    'click.kb2 .kb-toggle': 'setOpenStatus',
     'mouseenter': 'setFocusedModule',
-    'dblclick': 'fullscreen',
-    'click .kb-fullscreen': 'fullscreen',
     'change .kb-template-select': 'viewfileChange',
     'change input,textarea,select': 'handleChange',
     'tinymce.change': 'handleChange'
@@ -50,14 +49,19 @@ module.exports = Backbone.View.extend({
       el: this.$el,
       parent: this
     });
-    if (store.get(this.instanceId + '_open')) {
-      this.toggleBody();
-      this.model.set('open', true);
-    }
+
+    this.ModuleUi = new ModuleUiView({
+      el: this.$el,
+      parent: this
+    });
+
+
     // set view on model for later reference
     this.model.View = this;
     // Setup View
     this.setupDefaultMenuItems();
+    this.setupDefaultUiItems();
+
     KB.Views.Modules.on('kb.modules.view.deleted', function (view) {
       view.$el.fadeOut(500, function () {
         view.$el.remove();
@@ -73,20 +77,9 @@ module.exports = Backbone.View.extend({
     this.ModuleMenu.addItem(new DeleteControl({model: this.model, parent: this}));
     this.ModuleMenu.addItem(new StatusControl({model: this.model, parent: this}));
   },
-  // show/hide handler
-  toggleBody: function (speed) {
-    var duration = speed || 400;
-    if (Checks.userCan('edit_kontentblocks')) {
-      this.$body.slideToggle(duration);
-      this.$el.toggleClass('kb-open');
-      // set current module to prime object property
-      KB.currentModule = this.model;
-//            this.setOpenStatus();
-    }
-  },
-  setOpenStatus: function () {
-    this.model.set('open', !this.model.get('open'));
-    store.set(this.model.get('instance_id') + '_open', this.model.get('open'));
+  setupDefaultUiItems: function () {
+    this.ModuleUi.addItem(new MoveControl({model: this.model, parent: this}));
+    this.ModuleUi.addItem(new ToggleControl({model: this.model, parent: this}));
   },
   // get called when a module was dragged to a different area / area context
   updateModuleForm: function () {
@@ -111,41 +104,6 @@ module.exports = Backbone.View.extend({
     this.trigger('kb:backend::viewUpdated');
     this.model.trigger('after.change.area');
   },
-  fullscreen: function () {
-    var that = this;
-    this.sizeTimer = null;
-    var $stage = jQuery('#kontentblocks-core-ui');
-    $stage.addClass('fullscreen');
-    var $title = jQuery('.fullscreen--title-wrapper', $stage);
-    var $description = jQuery('.fullscreen--description-wrapper', $stage);
-    var titleVal = this.$el.find('.block-title').val();
-    $title.empty().append("<span class='dashicon fullscreen--close'></span><h2>" + titleVal + "</h2>").show();
-    $description.empty().append("<p class='description'>" + this.model.get('settings').description + "</p>").show();
-    jQuery('.fullscreen--close').on('click', _.bind(this.closeFullscreen, this));
-    this.$el.addClass('fullscreen-module');
-    jQuery('#post-body').removeClass('columns-2').addClass('columns-1');
-
-    if (!this.model.get('open')) {
-      this.setOpenStatus();
-      this.toggleBody();
-    }
-
-    this.sizeTimer = setInterval(function () {
-      var h = jQuery('.kb-module__controls-inner', that.$el).height() + 150;
-      $stage.height(h);
-    }, 750);
-
-  },
-  closeFullscreen: function () {
-    var $stage = jQuery('#kontentblocks-core-ui');
-    $stage.removeClass('fullscreen');
-    clearInterval(this.sizeTimer);
-    this.$el.removeClass('fullscreen-module');
-    jQuery('#post-body').removeClass('columns-1').addClass('columns-2');
-    jQuery('.fullscreen--title-wrapper', $stage).hide();
-    $stage.css('height', '100%');
-  },
-
   serialize: function () {
     var formData, moduleData;
     formData = jQuery('#post').serializeJSON();

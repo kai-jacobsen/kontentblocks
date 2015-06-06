@@ -417,9 +417,9 @@ class DynamicAreas
 
         Kontentblocks::getService('utility.jsontransport')->registerArea($areaDef);
 
-        print "<div class='postbox'>";
-        print "<h3>{$areaDef->name}</h3>";
-        print "<p class='description'>{$areaDef->description}</p>";
+        print "<div class='postbox dynamic-area-wrap'>";
+        print "<div id='kontentblocks-core-ui'>";
+        print "<h3><span class='dashicons dashicons-list-view'></span>{$areaDef->name}  <span class='area-description'>{$areaDef->description}</span> </h3>";
 
         // The infamous hidden editor hack
         Utilities::hiddenEditor();
@@ -430,7 +430,7 @@ class DynamicAreas
         $Area = new AreaBackendHTML( $areaDef, $Environment );
         $Area->build();
 
-        print "</div>";
+        print "</div></div>";
 
     }
 

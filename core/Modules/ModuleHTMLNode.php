@@ -171,16 +171,8 @@ class ModuleHTMLNode
         //open header
         $html .= "<div rel='{$this->Module->getId()}' class='kb-module__header klearfix edit kb-title'>";
 
+        $html .= "<div class='ui-wrap'></div>";
 
-        if (current_user_can( 'edit_kontentblocks' )) {
-            $html .= "<div class='kb-move'></div>";
-            // toggle button
-            $html .= "<div class='kb-toggle'></div>";
-
-            $html .= "<div class='kb-fullscreen'></div>";
-        }
-
-//        $html .= "<div class='kb-inactive-indicator js-module-status'></div>";
 
         // locked icon
         if (!$this->Module->Properties->getSetting( 'disabled' ) && KONTENTLOCK) {
@@ -195,8 +187,8 @@ class ModuleHTMLNode
         // name
         $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->Module->getId(
             )}[moduleName]' value='" . esc_attr(
-                     $this->Module->Properties->getSetting('name')
-                 ) . "' /></div>";
+                $this->Module->Properties->getSetting( 'name' )
+            ) . "' /></div>";
 
         // original name
         $html .= "<div class='kb-sub-name'>{$this->Module->Properties->getSetting( 'publicName' )}</div>";

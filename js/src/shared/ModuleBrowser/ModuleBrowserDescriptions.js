@@ -1,5 +1,8 @@
 //KB.Backbone.ModuleBrowserModuleDescription
 var Templates = require('common/Templates');
+var tplModuleTemplateDescription = require('templates/backend/modulebrowser/module-template-description.hbs');
+var tplModuleDescription = require('templates/backend/modulebrowser/module-description.hbs');
+var tplModulePoster = require('templates/backend/modulebrowser/poster.hbs');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.options = options || {};
@@ -9,12 +12,12 @@ module.exports = Backbone.View.extend({
     var that = this;
     this.$el.empty();
     if (this.model.get('template')) {
-      this.$el.html(Templates.render('backend/modulebrowser/module-template-description', {module: this.model.toJSON()}));
+      this.$el.html(tplModuleTemplateDescription( {module: this.model.toJSON()}));
     } else {
-      this.$el.html(Templates.render('backend/modulebrowser/module-description', {module: this.model.toJSON()}));
+      this.$el.html(tplModuleDescription({module: this.model.toJSON()}));
     }
     if (this.model.get('settings').poster !== false) {
-      this.$el.append(Templates.render('backend/modulebrowser/poster', {module: this.model.toJSON()}));
+      this.$el.append(tplModulePoster({module: this.model.toJSON()}));
     }
     if (this.model.get('settings').helpfile !== false) {
       this.$el.append(Templates.render(this.model.get('settings').helpfile, {module: this.model.toJSON()}));

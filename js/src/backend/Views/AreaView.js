@@ -1,5 +1,6 @@
 //KB.Backbone.Backend.AreaView
-var Templates = require('common/Templates');
+var tplAreaItemPlaceholer = require('templates/backend/area-item-placeholder.hbs');
+var tplAreaAddModule = require('templates/backend/area-add-module.hbs');
 var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
 module.exports = Backbone.View.extend({
   initialize: function () {
@@ -7,7 +8,8 @@ module.exports = Backbone.View.extend({
     this.controlsContainer = jQuery('.add-modules', this.$el);
     this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
     this.modulesList = jQuery('#' + this.model.get('id'), this.$el);
-    this.$placeholder = jQuery(Templates.render('backend/area-item-placeholder', {i18n: KB.i18n}));
+
+    this.$placeholder = jQuery(tplAreaItemPlaceholer({i18n: KB.i18n}));
     this.model.View = this;
 
     this.listenTo(this, 'module:attached', this.ui);
@@ -25,7 +27,7 @@ module.exports = Backbone.View.extend({
     this.ui();
   },
   addControls: function () {
-    this.controlsContainer.append(Templates.render('backend/area-add-module', {i18n: KB.i18n}));
+    this.controlsContainer.append(tplAreaAddModule({i18n: KB.i18n}));
   },
   openModuleBrowser: function (e) {
     e.preventDefault();

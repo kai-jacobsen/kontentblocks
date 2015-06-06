@@ -1,5 +1,5 @@
-KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
 
+KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
   $editorWrap: null,
   templatePath: 'fields/Editor',
   defaults: {
@@ -29,9 +29,7 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
     var edId = this.model.get('fieldId') + '_' + this.model.get('fieldKey') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper', this.$container);
     KB.TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), 5, false);
-
   }
-
 });
 
 KB.FieldsAPI.register('editor', KB.FieldsAPI.Editor);

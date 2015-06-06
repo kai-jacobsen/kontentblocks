@@ -1,5 +1,5 @@
 //KB.Backbone.Backend.ModuleDuplicate
-var BaseView = require('backend/Views/ModuleControls/controls/BaseView');
+var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');

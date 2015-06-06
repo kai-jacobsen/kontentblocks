@@ -1,18 +1,15 @@
 #module-browser {
-
   background: #fff;
   position: fixed;
   left: 50%;
   top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: 800px;
   height: 65%;
   z-index: 299;
-  box-shadow: 1px 3px 4px #999;
-
+  padding: $fullpadding;
+  @extend .base-box-shadow;
+  @extend .base-box-border;
 }
 
 .module-browser-wrapper * {
@@ -74,7 +71,7 @@
   position: relative;
   z-index: 99;
   padding-left: 0px;
-  border-bottom: 1px solid #ccc;
+  margin-bottom: $halfpadding;
 
   .dashicons {
     position: absolute;
@@ -103,16 +100,16 @@
   .cat-item {
     display: inline-block;
     color: #333;
-    height: 36px;
-    padding: 6px 10px;
+    padding: 3px 10px;
     line-height: 24px;
     cursor: pointer;
     font-size: 13px !important;
     font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
 
     &.active {
+      font-weight: bold;
       background-color: $lightblue;
-      color: #fff;
+      color: $lightwhite;
     }
   }
 }
@@ -122,12 +119,10 @@
   width: 280px;
   display: block;
   float: left;
-  border-right: 1px solid #ccc;
   height: 100%;
   margin-top: 0px;
   padding-top: 36px;
   padding-bottom: 36px;
-  background-color: #f9f9f9;
   transition: all .2s linear;
 }
 
@@ -139,7 +134,7 @@
   padding-top: 36px;
   padding-right: 10px;
   float: left;
-  transition:all .2s linear;
+  transition: all .2s linear;
 
   .module-browser--poster-wrap {
 
@@ -158,7 +153,6 @@
   margin: 0 !important;
   padding: 0 !important;
   list-style: none !important;
-  background: darken(#fafafa, 5%);
 }
 
 .modules-list, .module-description {
@@ -173,29 +167,32 @@
 .modules-list-item {
   border-bottom: 1px solid #ccc;
   position: relative;
-  padding: 4px 0 !important;
+  padding: $halfpadding 0 !important;
   margin: 0 !important;
-  background-color: #fafafa;
 
   &:hover {
     background-color: #fff;
     cursor: pointer;
+
+    .dashicons-plus{
+        background-color: $lightblue;
+        color: #fff;
+    }
+
   }
 
   .dashicons-plus {
     position: absolute;
-    left: 0px;
-    top: -1px;
-    width: 32px;
-    height: 101%;
-    line-height: 32px;
-    transition:all .3s ease-in-out;
+    left: 0%;
+    top: 50%;
+    margin-top: -16px;
+    padding: 5px;
+    width: auto;
+    height: auto;
+    border-radius: 6px;
+    line-height: 1;
     z-index: 595;
-
-    &:hover {
-      background-color: $lightblue;
-      color: #fff;
-    }
+    transition: all .3s ease-in-out;
   }
 
   h4 {

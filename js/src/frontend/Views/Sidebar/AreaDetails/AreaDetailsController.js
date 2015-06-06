@@ -1,10 +1,11 @@
 //KB.Backbone.Sidebar.AreaDetails.AreaDetailsController
-var Templates = require('common/Templates');
 var CategoryController = require('frontend/Views/Sidebar/AreaDetails/CategoryController');
 var AreaSettings = require('frontend/Views/Sidebar/AreaDetails/AreaSettingsController');
 var Config = require('common/Config');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
+
+var tplAreaDetailsHeader = require('templates/frontend/sidebar/area-details-header.hbs');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',
@@ -36,7 +37,7 @@ module.exports = Backbone.View.extend({
     return this.$el;
   },
   renderHeader: function () {
-    this.$el.append(Templates.render('frontend/sidebar/area-details-header', this.model.toJSON()));
+    this.$el.append(tplAreaDetailsHeader(this.model.toJSON()));
     this.$settingsContainer = this.$el.find('.kb-sidebar-area-details__settings');
     this.$updateHandle = this.$el.find('.kb-sidebar-action--update').hide();
   },

@@ -5,9 +5,10 @@
  * @type {*|void|Object}
  */
 //KB.Backbone.ModuleView
-var Templates = require('common/Templates');
 var ModuleControlsView = require('frontend/Views/ModuleControls/ModuleControls');
 var Check = require('common/Checks');
+
+var tplModulePlaceholder = require('templates/frontend/module-placeholder.hbs');
 module.exports = Backbone.View.extend({
   focus: false,
   $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
@@ -142,7 +143,7 @@ module.exports = Backbone.View.extend({
   },
 
   renderPlaceholder: function () {
-    this.$el.append(Templates.render('frontend/module-placeholder', {
+    this.$el.append(tplModulePlaceholder({
       model: this.model.toJSON()
     }));
   },

@@ -1,9 +1,10 @@
 // KB.Backbone.SidebarView
-var Templates = require('common/Templates');
 var AreaOverview = require('frontend/Views/Sidebar/AreaOverview/AreaOverviewController');
 var CategoryFilter = require('frontend/Views/Sidebar/AreaDetails/CategoryFilter');
 var SidebarHeader = require('frontend/Views/Sidebar/SidebarHeader');
 var Utilities = require('common/Utilities');
+
+var tplSidebarNav = require('templates/frontend/sidebar/sidebar-nav.hbs');
 //var RootView = require('frontend/Views/Sidebar/RootView');
 module.exports = Backbone.View.extend({
   currentView: null,
@@ -11,7 +12,7 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     this.render();
     this.states = {};
-    var controlsTpl = Templates.render('frontend/sidebar/sidebar-nav', {});
+    var controlsTpl = tplSidebarNav({});
     this.$navControls = jQuery(controlsTpl);
     this.bindHandlers();
 

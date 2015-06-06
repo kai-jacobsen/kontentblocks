@@ -1,8 +1,19 @@
 @import url(assets/genericons/genericons.css);
 /* Colors */
-/* line 14, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 22, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .hide {
   display: none; }
+
+/*------------------------------------*\
+    base extends
+\*------------------------------------*/
+/* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+.base-box-shadow {
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12); }
+
+/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+.base-box-border {
+  border: 1px solid #747474; }
 
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .os-edit-container {

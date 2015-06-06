@@ -41,16 +41,16 @@ var Utilities = function ($) {
       return obj;
     },
     // deprecated in favor of kpath
-    cleanArray: function (actual) {
-      var newArray = new Array();
-      for (var i = 0; i < actual.length; i++) {
-
-        if (!_.isUndefined(actual[i]) && !_.isEmpty(actual[i])) {
-          newArray.push(actual[i]);
-        }
-      }
-      return newArray;
-    },
+    //cleanArray: function (actual) {
+    //  var newArray = new Array();
+    //  for (var i = 0; i < actual.length; i++) {
+    //
+    //    if (!_.isUndefined(actual[i]) && !_.isEmpty(actual[i])) {
+    //      newArray.push(actual[i]);
+    //    }
+    //  }
+    //  return newArray;
+    //},
     sleep: function (milliseconds) {
       var start = new Date().getTime();
       for (var i = 0; i < 1e7; i++) {

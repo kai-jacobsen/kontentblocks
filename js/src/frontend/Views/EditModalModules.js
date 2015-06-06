@@ -1,4 +1,3 @@
-var Templates = require('common/Templates');
 var Logger = require('common/Logger');
 var ModalFieldCollection = require('frontend/Collections/ModalFieldCollection');
 var LoadingAnimation = require('frontend/Views/LoadingAnimation');
@@ -8,6 +7,7 @@ var TinyMCE = require('common/TinyMCE');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
 
+var tplModuleEditForm = require('templates/frontend/module-edit-form.hbs');
 /**
  * This is the modal which wraps the modules input form
  * and loads when the user clicks on "edit" while in frontend editing mode
@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend({
     var that = this;
 
     // add form skeleton to modal
-    jQuery(Templates.render('frontend/module-edit-form', {
+    jQuery(tplModuleEditForm({
       model: {},
       i18n: KB.i18n.jsFrontend
     })).appendTo(this.$el);

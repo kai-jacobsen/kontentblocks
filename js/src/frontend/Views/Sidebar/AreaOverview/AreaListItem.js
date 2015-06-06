@@ -1,7 +1,7 @@
 //KB.Backbone.Sidebar.AreaOverview.AreaListItem
-var Templates = require('common/Templates');
 var ModuleListItem = require('frontend/Views/Sidebar/AreaOverview/ModuleListItem');
 var AreaDetailsController = require('frontend/Views/Sidebar/AreaDetails/AreaDetailsController');
+var tplEmptyArea = require('templates/frontend/sidebar/empty-area.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'ul',
   className: 'kb-sidebar-areaview__modules-list',
@@ -73,7 +73,7 @@ module.exports = Backbone.View.extend({
   },
   afterInit: function () {
     if (this.Modules.models.length === 0 && this.model.View.$el.is(":visible")) {
-      this.$el.append(Templates.render('frontend/sidebar/empty-area', {}));
+      this.$el.append(tplEmptyArea({}));
     }
   }
 });

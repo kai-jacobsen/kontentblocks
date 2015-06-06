@@ -1,0 +1,25 @@
+.postbox.dynamic-area-wrap{
+
+  padding: 24px;
+
+  h3{
+    margin-left: 5px !important;
+    padding: 12px 0 !important;
+
+    .dashicons{
+      margin-right: 12px;
+      color: $mediumgrey
+
+    }
+
+    .area-description{
+      color: $mediumgrey;
+      font-weight: 100;
+    }
+  }
+
+  .kb-area__list-item{
+    padding: 0;
+  }
+
+}

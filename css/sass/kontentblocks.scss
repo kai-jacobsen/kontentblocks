@@ -1,5 +1,6 @@
 //@import "compass/css3";
 @import "partials/_base";
+@import "partials/_common/vars";
 
 
 
@@ -21,6 +22,11 @@
 @import "partials/_common/common";
 @import "partials/_common/fullscreen";
 
+/*------------------------------------*\
+    Dynamic Backend Menus
+\*------------------------------------*/
+@import "partials/_dynamic-menus/menus";
+
 /* --------------------------
 // Frontend
 -----------------------------*/
@@ -41,6 +47,7 @@
 @import "partials/_block_style";
 @import "partials/_refields/_render-toggles";
 
+@import "partials/_modules/module-styles";
 @import "partials/_modules/master-module";
 
 /* --------------------------

@@ -4,6 +4,18 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
+      backend: {
+        options: {
+          banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
+          mangle: true,
+          beautify: false,
+          compress: true,
+          drop_console: true
+        },
+        files: {
+          'js/dist/backend.min.js': ['<%= browserify.backend.dest %>']
+        }
+      },
       dist: {
         options: {
           banner: '/*! <%= pkg.name %> ProdVersion <%= grunt.template.today("yyyy-mm-dd hh:mm") %> */\n',
@@ -65,7 +77,10 @@ module.exports = function (grunt) {
     browserify: {
       options: {
         browserifyOptions: {
-          paths: ["./js/src", "./node_modules"]
+          paths: ["./js/src"],
+          fast: true,
+          detectGlobals: false,
+          transform: ['hbsfy']
         }
       },
       frontend: {
@@ -214,9 +229,9 @@ module.exports = function (grunt) {
 
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
 
-  grunt.registerTask('jsfrontend', ['browserify:frontend', 'uglify:dev', 'clean', 'jshint', 'bash']);
-  grunt.registerTask('jsbackend', ['browserify:backend', 'uglify:dev', 'clean', 'jshint', 'bash']);
-  grunt.registerTask('jsrefields', ['browserify:refields', 'uglify:dev', 'clean', 'jshint', 'bash']);
+  grunt.registerTask('jsfrontend', ['browserify:frontend', 'uglify:dev', 'clean', 'bash']);
+  grunt.registerTask('jsbackend', ['browserify:backend', 'uglify:dev', 'clean', 'bash']);
+  grunt.registerTask('jsrefields', ['browserify:refields', 'uglify:dev', 'clean', 'bash']);
   grunt.registerTask('jsplugins', ['uglify:dev', 'clean', 'jshint', 'bash']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 

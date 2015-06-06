@@ -1,6 +1,6 @@
 //KB.Backbone.Sidebar.AreaDetails.AreaSettings
-var Templates = require('common/Templates');
 var Payload = require('common/Payload');
+var tplAreaLayoutItem = require('templates/frontend/area-layout-item.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'ul',
   className: 'kb-sidebar-area-details__templates',
@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend({
     if (layouts && layouts.length > 0) {
       this.$el.prepend('<div class="kb-sidebar__subheader">Layouts</div>');
       _.each(this.prepareLayouts(layouts), function (item) {
-        options += Templates.render('frontend/area-layout-item', {
+        options += tplAreaLayoutItem({
           item: item
         });
       });

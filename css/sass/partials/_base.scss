@@ -1,16 +1,36 @@
 /* Colors */
 
-$lightblue 	: #0074a2;
-$blue		: #002e3e;
-$orange		: #d54e21;
-$mid-grey	: #efefef;
-$dark-grey	: #333333;
-$grey		: #222222;
-$box-bg		: #f9f9f9;
+$mid-grey: #efefef;
+$dark-grey: #333333;
+$grey: #222222;
+$box-bg: #f9f9f9;
+
+$lowgrey : #747474;
+$lightgrey: #cecece;
+$lightwhite: #f9f9f9;
+$mediumgrey: #a5a5a5;
+$lightblue: #0074a2;
+$blue: #002e3e;
+$orange: #d54e21;
+
+$fullpadding: 24px;
+$halfpadding: 12px;
 
 // Genericons Include
 @import "assets/genericons/genericons.css";
 
-.hide{
-	display: none;
+.hide {
+  display: none;
+}
+
+/*------------------------------------*\
+    base extends
+\*------------------------------------*/
+
+.base-box-shadow{
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.base-box-border{
+  border: 1px solid $lowgrey;
 }

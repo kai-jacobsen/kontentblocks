@@ -29,7 +29,7 @@ var Config = (function ($) {
       if (_.indexOf(modes, mode) !== -1) {
         return config.nonces[mode];
       } else {
-        _K.error('Invalid nonce requested in kb.cm.Config.js');
+        console.error('Invalid nonce requested in kb.cm.Config.js');
         return null;
       }
     },

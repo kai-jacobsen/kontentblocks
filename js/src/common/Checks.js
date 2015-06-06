@@ -3,7 +3,7 @@ module.exports = {
   blockLimit: function (areamodel) {
     var limit = areamodel.get('limit');
     // todo potentially wrong, yeah it's wrong
-    var children = $('#' + areamodel.get('id') + ' li.kb-module').length;
+    var children = jQuery('#' + areamodel.get('id') + ' li.kb-module').length;
     return !(limit !== 0 && children === limit);
 
 

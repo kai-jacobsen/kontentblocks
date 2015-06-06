@@ -1,6 +1,7 @@
 //KB.Backbone.Sidebar.AreaOverview.AreaOverviewController
-var Templates = require('common/Templates');
 var AreaListItem = require('frontend/Views/Sidebar/AreaOverview/AreaListItem');
+var tplSidebarAreaView = require('templates/frontend/sidebar/sidebar-area-view.hbs');
+var tplRootItem = require('templates/frontend/sidebar/root-item.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar-main-panel',
@@ -38,7 +39,7 @@ module.exports = Backbone.View.extend({
   createAreaItem: function (model) {
     // render area item skeleton markup for each area
     if (!model.get('internal')) { // ignore internal system areas
-      var $item = jQuery(Templates.render('frontend/sidebar/sidebar-area-view', model.toJSON())).appendTo(this.$el);
+      var $item = jQuery(tplSidebarAreaView(model.toJSON())).appendTo(this.$el);
       this.AreaViews[model.get('id')] = new AreaListItem({
         $el: $item,
         controller: this,
@@ -66,7 +67,7 @@ module.exports = Backbone.View.extend({
 
   },
   renderRootItem: function () {
-    return this.sidebarController.$container.append(Templates.render('frontend/sidebar/root-item', {
+    return this.sidebarController.$container.append(tplRootItem({
       text: 'Areas',
       id: 'AreaList'
     }))

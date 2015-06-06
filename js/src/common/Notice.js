@@ -2,11 +2,13 @@
 //KB.Notice
 module.exports =
 {
-  notice: function (msg, type) {
-    window.alertify.notify(msg, type, 3);
+  notice: function (msg, type, delay) {
+    var timeout = delay || 3;
+    window.alertify.notify(msg, type, timeout);
   },
-  confirm: function (msg, yes, no, scope) {
-    window.alertify.confirm(msg, function (e) {
+  confirm: function (title, msg, yes, no, scope) {
+    var t = title || 'Title';
+    window.alertify.confirm(t, msg, function (e) {
       if (e) {
         yes.call(scope);
       } else {

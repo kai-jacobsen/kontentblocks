@@ -5,7 +5,6 @@ var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');
 var ModuleBrowserDescription = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
 var ModuleBrowserNavigation = require('shared/ModuleBrowser/ModuleBrowserNavigation');
 var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
-var Templates = require('common/Templates');
 var Checks = require('common/Checks');
 var Notice = require('common/Notice');
 var Payload = require('common/Payload');
@@ -13,29 +12,27 @@ var Ajax = require('common/Ajax');
 var TinyMCE = require('common/TinyMCE');
 var Config = require('common/Config');
 
+var tplModuleBrowser = require('templates/backend/modulebrowser/module-browser.hbs');
 
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     var that = this;
     this.options = options || {};
     this.area = this.options.area;
-
-
+    this.viewMode = this.getViewMode();
     this.modulesDefinitions = new ModuleDefinitions(this.prepareAssignedModules(), {
       model: ModuleDefModel,
       area: this.options.area
     }).setup();
 
-    var viewMode = this.getViewMode();
     // render and append the skeleton markup to the browsers root element
-    this.$el.append(Templates.render('backend/modulebrowser/module-browser', {viewMode: viewMode}));
+    this.$el.append(tplModuleBrowser({viewMode: this.getViewModeClass()}));
 
     // render the list sub view
     this.subviews.ModulesList = new ModuleBrowserList({
       el: jQuery('.modules-list', this.$el),
       browser: this
     });
-    console.log(this);
 
     // render description sub view
     this.subviews.ModuleDescription = new ModuleBrowserDescription({
@@ -71,11 +68,12 @@ module.exports = Backbone.View.extend({
     jQuery('.module-browser-wrapper', this.$el).toggleClass('module-browser--list-view module-browser--excerpt-view');
     var abbr = 'mdb_' + this.area.model.get('id') + '_state';
     var curr = store.get(abbr);
-
-    if (curr == 'module-browser--list-view') {
-      store.set(abbr, 'module-browser--excerpt-view');
+    if (curr == 'list') {
+      this.viewMode = 'excerpt';
+      store.set(abbr, 'excerpt');
     } else {
-      store.set(abbr, 'module-browser--list-view');
+      this.viewMode = 'list';
+      store.set(abbr, 'list');
     }
   },
 
@@ -88,14 +86,20 @@ module.exports = Backbone.View.extend({
   getViewMode: function () {
 
     var abbr = 'mdb_' + this.area.model.get('id') + '_state';
-
     if (store.get(abbr)) {
       return store.get(abbr);
     } else {
-      store.set(abbr, 'module-browser--list-view');
+      store.set(abbr, 'list');
     }
 
-    return 'module-browser--list-view';
+    return 'list';
+  },
+  getViewModeClass: function(){
+      if (this.viewMode === 'list'){
+        return 'module-browser--list-view';
+      } else {
+        return 'module-browser--excerpt-view';
+      }
   },
   open: function () {
     // render root element
@@ -159,7 +163,7 @@ module.exports = Backbone.View.extend({
       frontend: KB.appData.config.frontend
     };
 
-    if (this.options.area.model.get('parent_id')){
+    if (this.options.area.model.get('parent_id')) {
       data.postId = this.options.area.model.get('parent_id');
     }
 
