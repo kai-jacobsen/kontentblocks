@@ -1,7 +1,5 @@
 <div class="kb-field kb-js-field field-api-text">
-
-    <label class="heading">{{ config.label }}</label>
-    <input type="text" name="{{ fieldName baseId index config.key }}" value="{{ model.value }}" >
-    <p class="description">{{ config.description }}</p>
-
+    <label class="heading">{{ model.label }}</label>
+    <input type="text" name="{{ fieldName model.baseId model.index model.primeKey }}" value="{{ model.value }}" >
+    <p class="description">{{ model.description }}</p>
 </div>

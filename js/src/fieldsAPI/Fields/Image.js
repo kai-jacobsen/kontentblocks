@@ -1,8 +1,10 @@
-KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
-
+var BaseView = require('fieldsAPI/Fields/BaseView');
+module.exports = BaseView.extend({
   $currentWrapper: null,
   $currentFrame: null,
   templatePath: 'fields/Image',
+  template: require('templates/fields/Image.hbs'),
+  type: 'image',
   initialize: function (config) {
     var that = this;
     // call parent 'initialize' method to set the object up
@@ -33,7 +35,7 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
     key: null
   },
   render: function (index) {
-    return KB.Templates.render(this.templatePath, {
+    return this.template({
       config: this.config,
       baseId: this.baseId,
       index: index,
@@ -93,5 +95,3 @@ KB.FieldsAPI.Image = KB.FieldsAPI.Field.extend({
     }
   }
 });
-
-KB.FieldsAPI.register('image', KB.FieldsAPI.Image);

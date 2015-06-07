@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-06 */
+/*! Kontentblocks DevVersion 2015-06-07 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -729,7 +729,7 @@
                     var a = s.split(".");
                     while (a.length) {
                         var n = a.shift();
-                        if (n in obj) {
+                        if (_.isObject(obj) && n in obj) {
                             obj = obj[n];
                         } else {
                             return {};
@@ -768,10 +768,10 @@
                 this.listenToOnce(this.ModuleModel, "remove", this.remove);
                 this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
                 this.listenTo(this, "change:value", this.upstreamData);
+                this.listenTo(this.ModuleModel, "modal.serialize.before", this.unbind);
                 this.listenTo(this.ModuleModel, "modal.serialize", this.rebind);
                 this.listenTo(this.ModuleModel, "change:area", this.unbind);
                 this.listenTo(this.ModuleModel, "after.change.area", this.rebind);
-                this.listenTo(this.ModuleModel, "modal.serialize.before", this.unbind);
             },
             setupType: function() {
                 if (obj = this.getType()) {
@@ -786,11 +786,13 @@
             },
             getType: function() {
                 var type = this.get("type");
-                if (this.ModuleModel.type === "panel" && type === "EditableImage") {
-                    return false;
-                }
-                if (this.ModuleModel.type === "panel" && type === "EditableText") {
-                    return false;
+                if (this.ModuleModel) {
+                    if (this.ModuleModel.type === "panel" && type === "EditableImage") {
+                        return false;
+                    }
+                    if (this.ModuleModel.type === "panel" && type === "EditableText") {
+                        return false;
+                    }
                 }
                 if (!Checks.userCan("edit_kontentblocks")) {
                     return false;
@@ -1446,7 +1448,6 @@
                         area: this
                     });
                 }
-                console.log(this.ModuleBrowser);
                 this.ModuleBrowser.render();
                 return this.ModuleBrowser;
             },
@@ -3108,7 +3109,7 @@
                 var model, data;
                 data = res.data;
                 this.options.area.modulesList.append(data.html);
-                model = KB.Modules.add(data.module);
+                model = KB.ObjectProxy.add(KB.Modules.add(data.module));
                 this.options.area.attachModuleView(model);
                 this.parseAdditionalJSON(data.json);
                 TinyMCE.addEditor(model.View.$el);

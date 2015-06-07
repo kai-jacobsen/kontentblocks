@@ -10,6 +10,7 @@ var ToggleControl = require('backend/Views/ModuleUi/controls/ToggleControl');
 var Checks = require('common/Checks');
 var Ajax = require('common/Ajax');
 var UI = require('common/UI');
+var Config = require('common/Config');
 var Payload = require('common/Payload');
 module.exports = Backbone.View.extend({
   $head: {}, // header jQuery element
@@ -99,7 +100,7 @@ module.exports = Backbone.View.extend({
       KB.payload.Fields = _.extend(Payload.getPayload('Fields'), response.data.json.Fields);
     }
     // re-init UI listeners
-    Ui.repaint(this.$el);
+    UI.repaint(this.$el);
     KB.Fields.trigger('update');
     this.trigger('kb:backend::viewUpdated');
     this.model.trigger('after.change.area');

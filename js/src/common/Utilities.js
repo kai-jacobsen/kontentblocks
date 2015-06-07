@@ -32,7 +32,7 @@ var Utilities = function ($) {
       var a = s.split('.');
       while (a.length) {
         var n = a.shift();
-        if (n in obj) {
+        if (_.isObject(obj) && n in obj) {
           obj = obj[n];
         } else {
           return {};

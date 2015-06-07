@@ -1,7 +1,10 @@
-
-KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
+var TinyMCE = require('common/TinyMCE');
+var BaseView = require('fieldsAPI/Fields/BaseView');
+module.exports = BaseView.extend({
   $editorWrap: null,
   templatePath: 'fields/Editor',
+  template: require('templates/fields/Editor.hbs'),
+  type: 'editor',
   defaults: {
     std: 'some textvalue',
     label: 'Field label',
@@ -10,14 +13,14 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
     key: null
   },
   initialize: function (config) {
-    KB.FieldsAPI.Field.prototype.initialize.call(this, config);
+    BaseView.prototype.initialize.call(this, config);
   },
   setValue: function (value) {
     this.model.set('value', value);
   },
   render: function (index) {
     this.index = index;
-    return KB.Templates.render(this.templatePath, {
+    return this.template({
       config: this.config,
       baseId: this.baseId,
       index: index,
@@ -28,8 +31,6 @@ KB.FieldsAPI.Editor = KB.FieldsAPI.Field.extend({
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
     var edId = this.model.get('fieldId') + '_' + this.model.get('fieldKey') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper', this.$container);
-    KB.TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), 5, false);
+    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), 5, false);
   }
 });
-
-KB.FieldsAPI.register('editor', KB.FieldsAPI.Editor);

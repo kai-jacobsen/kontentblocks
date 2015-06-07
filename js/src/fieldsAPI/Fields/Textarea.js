@@ -1,24 +1,17 @@
-KB.FieldsAPI.Textarea = KB.FieldsAPI.Field.extend({
-
+var BaseView = require('fieldsAPI/Fields/BaseView');
+module.exports = BaseView.extend({
   defaults: {
     std: 'some textvalue',
     label: 'Field label',
     description: 'A description',
     key: null
   },
-
+  type: 'textarea',
   templatePath: 'fields/Textarea',
-  render: function (index) {
-    return KB.Templates.render(this.templatePath, {
-      config: this.config,
-      baseId: this.baseId,
-      index: index,
+  template: require('templates/fields/Textarea.hbs'),
+  render: function () {
+    return this.template({
       model: this.model.toJSON()
     });
   }
 });
-
-KB.FieldsAPI.register('textarea', KB.FieldsAPI.Textarea);
-
-
-

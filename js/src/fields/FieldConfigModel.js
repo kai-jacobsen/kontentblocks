@@ -5,48 +5,53 @@ var Payload = require('common/Payload');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
-    var module = this.get('fieldId');
-    if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) {
-      this.set('ModuleModel', this.ModuleModel);
-      this.setData();
-      this.bindHandlers();
-      this.setupType();
+
+    var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
+    if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
+      this.set('ModuleModel', this.ModuleModel); // assign the parent object model
+      this.setData(); // get data from the parent object and assign to this
+      this.bindHandlers(); // attach listeners
+      this.setupType(); // create the field view
     }
   },
   bindHandlers: function () {
-    this.listenToOnce(this.ModuleModel, 'remove', this.remove);
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
-    this.listenTo(this, 'change:value', this.upstreamData);
-    this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind);
-    this.listenTo(this.ModuleModel, 'change:area', this.unbind);
-    this.listenTo(this.ModuleModel, 'after.change.area', this.rebind);
-    this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind);
+    this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
+    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
+    this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes
+    this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind); // before the frontend modal reloads the parent obj
+    this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind); // frontend modal reloaded parent obj, reattach handlers
+    this.listenTo(this.ModuleModel, 'change:area', this.unbind); // parent obj was dragged to new area, detach handlers
+    this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
   },
   setupType: function () {
-    if (obj = this.getType()) {
-      this.FieldView = new obj({
-        el: this.getElement(),
+    if (obj = this.getType()) { // obj equals specific field view
+      this.FieldView = new obj({ // create new field view if it does not exist
+        el: this.getElement(), // get the root DOM element for this field
         model: this
       });
     }
   },
   getElement: function () {
-    return jQuery('*[data-kbfuid="' + this.get('uid') + '"]')[0];
+    return jQuery('*[data-kbfuid="' + this.get('uid') + '"]')[0]; // root DOM element by data attribute
   },
   getType: function () {
-    var type = this.get('type');
-    if (this.ModuleModel.type === 'panel' && type === 'EditableImage') {
-      return false;
+    var type = this.get('type'); // link, image, etc
+    if (this.ModuleModel) {
+      if (this.ModuleModel.type === 'panel' && type === 'EditableImage') {
+        return false;
+      }
+
+      if (this.ModuleModel.type === 'panel' && type === 'EditableText') {
+        return false;
+      }
     }
 
-    if (this.ModuleModel.type === 'panel' && type === 'EditableText') {
-      return false;
-    }
 
     if (!Checks.userCan('edit_kontentblocks')) {
       return false;
     }
 
+    // get the view object from KB.Fields collection
     var obj = KB.Fields.get(type);
     if (obj && obj.prototype.hasOwnProperty('initialize')) {
       return obj;
@@ -58,6 +63,8 @@ module.exports = Backbone.Model.extend({
     var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
     ModuleModel = Model || this.get('ModuleModel');
     fieldData = Payload.getPayload('fieldData');
+
+    // special field data may come from the server
     if (fieldData[this.get('type')]) {
       typeData = fieldData[this.get('type')];
       if (typeData[this.get('fieldId')]) {
@@ -65,8 +72,9 @@ module.exports = Backbone.Model.extend({
         addData = Utilities.getIndex(obj, this.get('kpath'));
       }
     }
+    // the parent obj data
     mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
-    this.set('value', _.extend(mData, addData));
+    this.set('value', _.extend(mData, addData)); // set merged data to this.value
   },
   upstreamData: function () {
     if (this.get('ModuleModel')) {
@@ -81,13 +89,13 @@ module.exports = Backbone.Model.extend({
   },
   rebind: function () {
     if (this.FieldView) {
-      this.FieldView.setElement(this.getElement());
-      this.FieldView.rerender();
+      this.FieldView.setElement(this.getElement()); // markup might have changed, reset the root element
+      this.FieldView.rerender(); // call rerender on the field
     }
   },
   unbind: function () {
     if (this.FieldView && this.FieldView.derender) {
-      this.FieldView.derender();
+      this.FieldView.derender(); // call derender
     }
   }
 });

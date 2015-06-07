@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-01 */
+/*! Kontentblocks DevVersion 2015-06-06 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -24,6 +24,7 @@
     return s;
 })({
     1: [ function(require, module, exports) {
+        var Notice = require("common/Notice");
         module.exports = {
             send: function(data, callback, scope, options) {
                 var pid;
@@ -35,7 +36,6 @@
                 }
                 var sned = _.extend({
                     supplemental: data.supplemental || {},
-                    count: parseInt(KB.Environment.moduleCount, 10),
                     nonce: jQuery("#_kontentblocks_ajax_nonce").val(),
                     post_id: pid,
                     kbajax: true
@@ -56,7 +56,7 @@
                         }
                     },
                     error: function() {
-                        KB.notice("<p>Generic Ajax Error</p>", "error");
+                        Notice.notice("<p>Generic Ajax Error</p>", "error");
                     },
                     complete: function() {
                         jQuery("#publish").removeAttr("disabled");
@@ -64,7 +64,9 @@
                 });
             }
         };
-    }, {} ],
+    }, {
+        "common/Notice": 4
+    } ],
     2: [ function(require, module, exports) {
         var Config = function($) {
             var config = KB.appData.config;
@@ -83,7 +85,7 @@
                     if (_.indexOf(modes, mode) !== -1) {
                         return config.nonces[mode];
                     } else {
-                        _K.error("Invalid nonce requested in kb.cm.Config.js");
+                        console.error("Invalid nonce requested in kb.cm.Config.js");
                         return null;
                     }
                 },
@@ -149,11 +151,13 @@
     4: [ function(require, module, exports) {
         "use strict";
         module.exports = {
-            notice: function(msg, type) {
-                window.alertify.notify(msg, type, 3);
+            notice: function(msg, type, delay) {
+                var timeout = delay || 3;
+                window.alertify.notify(msg, type, timeout);
             },
-            confirm: function(msg, yes, no, scope) {
-                window.alertify.confirm(msg, function(e) {
+            confirm: function(title, msg, yes, no, scope) {
+                var t = title || "Title";
+                window.alertify.confirm(t, msg, function(e) {
                     if (e) {
                         yes.call(scope);
                     } else {

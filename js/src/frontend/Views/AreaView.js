@@ -37,7 +37,6 @@ module.exports = Backbone.View.extend({
         area: this
       });
     }
-    console.log(this.ModuleBrowser);
     this.ModuleBrowser.render();
     return this.ModuleBrowser;
   },

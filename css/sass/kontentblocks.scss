@@ -573,6 +573,16 @@ textarea.quicktags {
     &.active-context {
       width: 65%;
     }
+
+    &.no-sidebar{
+      width: 100%;
+      float: none;
+
+      &.active-context{
+        width: 100%;
+      }
+    }
+
   }
   //    .area-side .kb-open {
   //        width: 750px;

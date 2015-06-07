@@ -14,12 +14,10 @@ _.extend(Fields, {
     this.listenTo(this, 'newModule', this.newModule);
   },
   register: function (id, object) {
-    console.log(id);
     _.extend(object, Backbone.Events);
     this.fields[id] = object;
   },
   registerObject: function (id, object) {
-    console.log(id);
     _.extend(object, Backbone.Events);
     this.fields[id] = object;
   },
@@ -36,12 +34,12 @@ _.extend(Fields, {
       object.listenTo(that, 'frontUpdate', object.frontUpdate);
     });
   },
-  newModule: function (object) {
+  newModule: function (ModuleView) {
     var that = this;
     // call field objects init method on 'update' event
     // fails gracefully if there is no update method
-    object.listenTo(this, 'update', object.update);
-    object.listenTo(this, 'frontUpdate', object.frontUpdate);
+    ModuleView.listenTo(this, 'update', ModuleView.update);
+    ModuleView.listenTo(this, 'frontUpdate', ModuleView.frontUpdate);
     setTimeout(function () {
       that.trigger('update');
     }, 750);

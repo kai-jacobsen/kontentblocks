@@ -176,7 +176,7 @@ module.exports = Backbone.View.extend({
     var model, data;
     data = res.data;
     this.options.area.modulesList.append(data.html);
-    model = KB.Modules.add(data.module);
+    model = KB.ObjectProxy.add(KB.Modules.add(data.module));
     this.options.area.attachModuleView(model);
     this.parseAdditionalJSON(data.json);
     TinyMCE.addEditor(model.View.$el);
@@ -192,7 +192,7 @@ module.exports = Backbone.View.extend({
       KB.payload.Fields = {};
     }
     _.extend(KB.payload.Fields, json.Fields);
-    Payload.parseAdditionalJSON(json);
+    Payload.parseAdditionalJSON(json); // this will add new fields to the FieldConfigs collection
   },
   // helper method to convert list of assigned classnames to object with module definitions
   prepareAssignedModules: function () {

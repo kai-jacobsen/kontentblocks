@@ -1,5 +1,8 @@
-KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
+var BaseView = require('fieldsAPI/Fields/BaseView');
+module.exports = BaseView.extend({
   templatePath: 'fields/Link',
+  template: require('templates/fields/Link.hbs'),
+  type: 'link',
   defaults: {
     std: {
       link: '',
@@ -10,16 +13,14 @@ KB.FieldsAPI.Link = KB.FieldsAPI.Field.extend({
     description: '',
     key: null
   },
+  //initialize:function(){
+    //var fc = KB.FieldConfigs.add(this.model.toJSON());
+    //BaseView.prototype.initialize.call(this, arguments);
+  //},
   render: function () {
-    return KB.Templates.render(
-      this.templatePath, {
-        i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
-        model: this.model.toJSON()
-      });
+    return this.template({
+      i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
+      model: this.model.toJSON()
+    });
   }
 });
-
-KB.FieldsAPI.register('link', KB.FieldsAPI.Link);
-
-
-

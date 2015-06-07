@@ -65,7 +65,7 @@ class ScreenManager
         $this->contexts = $this->areasSortedByContext( $this->areas );
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
-        $this->hasSidebar = !empty( $this->contexts['side'] );
+        $this->hasSidebar = (!empty( $this->contexts['side'] ) && !empty($this->contexts['normal']));
     }
 
 

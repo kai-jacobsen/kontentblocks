@@ -1,6 +1,4 @@
-KB.FieldsAPI.FieldStdModel = Backbone.Model.extend({});
-
-KB.FieldsAPI.Field = Backbone.View.extend({
+module.exports = Backbone.View.extend({
   initialize: function () {
     this.defaults = this.defaults || {};
     this.extendModel();
@@ -10,9 +8,9 @@ KB.FieldsAPI.Field = Backbone.View.extend({
   },
   prepareBaseId: function () {
     if (!_.isEmpty(this.model.get('arrayKey'))) {
-      return this.model.get('fieldId') + '[' + this.model.get('arrayKey') + ']' + '[' + this.model.get('fieldKey') + ']';
+      return this.model.get('fieldId') + '[' + this.model.get('arrayKey') + ']' + '[' + this.model.get('fieldkey') + ']';
     } else {
-      return this.model.get('fieldId') + '[' + this.model.get('fieldKey') + ']';
+      return this.model.get('fieldId') + '[' + this.model.get('fieldkey') + ']';
     }
   },
   prepareKpath: function(){
@@ -21,12 +19,12 @@ KB.FieldsAPI.Field = Backbone.View.extend({
       concat.push(this.model.get('arrayKey'));
     }
 
-    if (this.model.get('index')){
-      concat.push(this.model.get('index'));
+    if (this.model.get('fieldkey')){
+      concat.push(this.model.get('fieldkey'));
     }
 
-    if (this.model.get('fieldKey')){
-      concat.push(this.model.get('fieldKey'));
+    if (this.model.get('index')){
+      concat.push(this.model.get('index'));
     }
 
     return concat.join('.');
@@ -39,5 +37,8 @@ KB.FieldsAPI.Field = Backbone.View.extend({
   },
   kbfuid: function(){
     return this.model.get('fieldId') + this.model.get('index') + this.model.get('type');
+  },
+  setupDefaults: function(){
+    this.setValue(this.defaults.std);
   }
 });

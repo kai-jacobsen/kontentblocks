@@ -59,7 +59,6 @@ module.exports = {
     if (json && json.Fields) {
       ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
     }
-
     return ret;
   },
   getPayload: function (key) {

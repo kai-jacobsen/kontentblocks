@@ -1,4 +1,5 @@
 var BaseView = require('../FieldBaseView');
+var FlexfieldController = require('fields/controls/flexfields/FlexfieldsController');
 KB.Fields.registerObject('flexfields', BaseView.extend({
   initialize: function () {
     this.render();
@@ -16,12 +17,12 @@ KB.Fields.registerObject('flexfields', BaseView.extend({
   },
   createController: function () {
     if (!this.FlexFieldsController) {
-      return this.FlexFieldsController = new KB.FlexibleFields.Controller({
+      return this.FlexFieldsController = new FlexfieldController({
         el: this.$stage.get(0),
         model: this.model
       })
     }
-    this.FlexFieldsController.setElement(this.$stage.get(0));
-    return this.FlexFieldsController.render();
+    this.FlexFieldsController.setElement(this.$stage.get(0)); // root element equals stage element
+    return this.FlexFieldsController.render(); // init
   }
 }));

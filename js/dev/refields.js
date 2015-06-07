@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-06 */
+/*! Kontentblocks DevVersion 2015-06-07 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -654,7 +654,7 @@
                     var a = s.split(".");
                     while (a.length) {
                         var n = a.shift();
-                        if (n in obj) {
+                        if (_.isObject(obj) && n in obj) {
                             obj = obj[n];
                         } else {
                             return {};
@@ -691,12 +691,10 @@
                 this.listenTo(this, "newModule", this.newModule);
             },
             register: function(id, object) {
-                console.log(id);
                 _.extend(object, Backbone.Events);
                 this.fields[id] = object;
             },
             registerObject: function(id, object) {
-                console.log(id);
                 _.extend(object, Backbone.Events);
                 this.fields[id] = object;
             },
@@ -710,10 +708,10 @@
                     object.listenTo(that, "frontUpdate", object.frontUpdate);
                 });
             },
-            newModule: function(object) {
+            newModule: function(ModuleView) {
                 var that = this;
-                object.listenTo(this, "update", object.update);
-                object.listenTo(this, "frontUpdate", object.frontUpdate);
+                ModuleView.listenTo(this, "update", ModuleView.update);
+                ModuleView.listenTo(this, "frontUpdate", ModuleView.frontUpdate);
                 setTimeout(function() {
                     that.trigger("update");
                 }, 750);
@@ -746,9 +744,9 @@
         "./controls/datetime.js": 14,
         "./controls/file.js": 15,
         "./controls/flexfields.js": 16,
-        "./controls/gallery.js": 17,
-        "./controls/image.js": 20,
-        "./controls/link.js": 21
+        "./controls/gallery.js": 19,
+        "./controls/image.js": 22,
+        "./controls/link.js": 23
     } ],
     12: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
@@ -909,6 +907,7 @@
     } ],
     16: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
+        var FlexfieldController = require("fields/controls/flexfields/FlexfieldsController");
         KB.Fields.registerObject("flexfields", BaseView.extend({
             initialize: function() {
                 this.render();
@@ -926,7 +925,7 @@
             },
             createController: function() {
                 if (!this.FlexFieldsController) {
-                    return this.FlexFieldsController = new KB.FlexibleFields.Controller({
+                    return this.FlexFieldsController = new FlexfieldController({
                         el: this.$stage.get(0),
                         model: this.model
                     });
@@ -936,9 +935,218 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9
+        "../FieldBaseView": 9,
+        "fields/controls/flexfields/FlexfieldsController": 17
     } ],
     17: [ function(require, module, exports) {
+        var ItemView = require("fields/controls/flexfields/ItemView");
+        var TinyMCE = require("common/TinyMCE");
+        var UI = require("common/UI");
+        var Logger = require("common/Logger");
+        module.exports = Backbone.View.extend({
+            initialize: function() {
+                this.Tabs = this.setupConfig();
+                this.subviews = [];
+                this.setupElements();
+                this.initialSetup();
+                Logger.Debug.log("Fields: Flexfields instance created and initialized");
+            },
+            events: {
+                "click .kb-flexible-fields--js-add-item": "addItem"
+            },
+            initialSetup: function() {
+                var data, that = this;
+                data = this.model.get("value");
+                if (!_.isEmpty(data)) {
+                    _.each(data, function(dataobj, index) {
+                        var Item = new ItemView({
+                            Controller: that,
+                            model: new Backbone.Model({
+                                _tab: {
+                                    title: dataobj._tab.title,
+                                    uid: index
+                                },
+                                value: new Backbone.Model(dataobj)
+                            })
+                        });
+                        that.subviews.push(Item);
+                        that.$list.append(Item.render());
+                    });
+                }
+                UI.initTabs();
+                this.$list.sortable({
+                    handle: ".flexible-fields--js-drag-handle",
+                    start: function() {
+                        TinyMCE.removeEditors();
+                    },
+                    stop: function() {
+                        TinyMCE.restoreEditors();
+                    }
+                });
+                KB.Events.trigger("modal.recalibrate");
+                this._initialized = true;
+            },
+            render: function() {
+                this.setupElements();
+                this.initialSetup();
+            },
+            setupConfig: function() {
+                var that = this;
+                _.each(this.model.get("config"), function(tab) {
+                    if (!tab.fields) {
+                        return;
+                    }
+                    tab.fields = that.setupFields(tab.fields);
+                });
+                return this.model.get("config");
+            },
+            setupFields: function(fields) {
+                var that = this, sfields = {};
+                _.each(fields, function(field, key) {
+                    _.defaults(field, that.model.toJSON());
+                    field.index = null;
+                    field.kpath = null;
+                    field.primeKey = key;
+                    sfields[key] = new Backbone.View({
+                        Controller: that,
+                        el: that.el,
+                        model: new Backbone.Model(field)
+                    });
+                });
+                return sfields;
+            },
+            setupElements: function() {
+                this.$list = jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
+                this.$addButton = jQuery('<a class="button button-primary kb-flexible-fields--js-add-item">Add Item</a>').appendTo(this.$el);
+            },
+            addItem: function() {
+                var Item = new ItemView({
+                    Controller: this,
+                    model: new Backbone.Model({
+                        _tab: {
+                            title: _.uniqueId("ff"),
+                            uid: _.uniqueId("ff")
+                        }
+                    })
+                });
+                this.subviews.push(Item);
+                this.$list.append(Item.render());
+                UI.initTabs();
+                KB.Events.trigger("modal.recalibrate");
+            },
+            dispose: function() {
+                this.trigger("dispose");
+                this.subviews = [];
+            }
+        });
+    }, {
+        "common/Logger": 3,
+        "common/TinyMCE": 6,
+        "common/UI": 7,
+        "fields/controls/flexfields/ItemView": 18
+    } ],
+    18: [ function(require, module, exports) {
+        var Notice = require("common/Notice");
+        var tplSingleItem = require("templates/fields/FlexibleFields/single-item.hbs");
+        module.exports = Backbone.View.extend({
+            tagName: "li",
+            className: "kb-flexible-fields--item-wrapper",
+            initialize: function(options) {
+                this.Controller = options.Controller;
+                this.listenTo(this.Controller, "dispose", this.dispose);
+            },
+            events: {
+                "click .flexible-fields--js-toggle": "toggleItem",
+                "click .flexible-fields--js-trash": "deleteItem"
+            },
+            toggleItem: function() {
+                this.$(".flexible-fields--toggle-title").next().slideToggle(250, function() {
+                    KB.Events.trigger("modal.recalibrate");
+                });
+            },
+            deleteItem: function() {
+                this.$el.hide(250);
+                var inputName = this.createInputName(this.model.get("_tab").uid);
+                this.$el.append('<input type="hidden" name="' + inputName + '[delete]" value="' + this.model.get("_tab").uid + '" >');
+                Notice.notice("Please click update to save the changes", "success");
+            },
+            render: function() {
+                var inputName = this.createInputName(this.model.get("_tab").uid);
+                var item = this.model.toJSON();
+                var $skeleton = this.$el.append(tplSingleItem({
+                    item: item,
+                    inputName: inputName,
+                    uid: this.model.get("_tab").uid
+                }));
+                this.renderTabs($skeleton);
+                return $skeleton;
+            },
+            renderTabs: function($skeleton) {
+                var that = this;
+                var tabNavEl = HandlebarsKB.compile("<li><a href='#tab-{{ uid }}-{{ index }}'>{{ tab.label }}</a></li>");
+                var tabCon = HandlebarsKB.compile("<div id='tab-{{ uid }}-{{ index }}'></div>");
+                _.each(this.Controller.Tabs, function(tab, index) {
+                    jQuery(".flexible-field--tab-nav", $skeleton).append(tabNavEl({
+                        uid: that.model.get("_tab").uid,
+                        tab: tab,
+                        index: index
+                    }));
+                    var $tabsContainment = jQuery(".kb-field--tabs", $skeleton);
+                    var $con = jQuery(tabCon({
+                        uid: that.model.get("_tab").uid,
+                        index: index
+                    })).appendTo($tabsContainment);
+                    that.renderFields(tab, $con);
+                });
+            },
+            renderFields: function(tab, $con) {
+                var fieldInstance;
+                var that = this, data;
+                _.each(tab.fields, function(field) {
+                    field.model.set("index", that.model.get("_tab").uid);
+                    fieldInstance = KB.FieldsAPI.get(field);
+                    data = that.model.get("value");
+                    if (!_.isUndefined(data)) {
+                        fieldInstance.setValue(data.get(field.model.get("primeKey")));
+                    } else {
+                        fieldInstance.setupDefaults();
+                    }
+                    $con.append(fieldInstance.render(that.uid));
+                    $con.append('<input type="hidden" name="' + fieldInstance.model.get("baseId") + "[" + fieldInstance.model.get("index") + "][_mapping][" + fieldInstance.model.get("primeKey") + ']" value="' + fieldInstance.model.get("type") + '" >');
+                    fieldInstance.$container = $con;
+                    if (fieldInstance.postRender) {
+                        fieldInstance.postRender.call(fieldInstance);
+                    }
+                    if (that.Controller.model.FieldView) {
+                        that.addInstanceToCollection(fieldInstance);
+                    }
+                });
+            },
+            addInstanceToCollection: function(Instance) {
+                setTimeout(function() {
+                    KB.FieldConfigs.add(Instance.model.toJSON());
+                }, 150);
+            },
+            createInputName: function(uid) {
+                return this.createBaseId() + "[" + this.Controller.model.get("fieldkey") + "]" + "[" + uid + "]";
+            },
+            createBaseId: function() {
+                if (!_.isEmpty(this.Controller.model.get("arrayKey"))) {
+                    return this.Controller.model.get("fieldId") + "[" + this.Controller.model.get("arrayKey") + "]";
+                } else {
+                    return this.Controller.model.get("fieldId");
+                }
+            },
+            dispose: function() {
+                this.stopListening();
+                this.remove();
+            }
+        });
+    }, {
+        "common/Notice": 4,
+        "templates/fields/FlexibleFields/single-item.hbs": 24
+    } ],
+    19: [ function(require, module, exports) {
         var BaseView = require("fields/FieldBaseView");
         var GalleryController = require("./gallery/GalleryController");
         KB.Fields.registerObject("gallery", BaseView.extend({
@@ -968,10 +1176,10 @@
             }
         }));
     }, {
-        "./gallery/GalleryController": 18,
+        "./gallery/GalleryController": 20,
         "fields/FieldBaseView": 9
     } ],
-    18: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
         var Logger = require("common/Logger");
         var ImageView = require("./ImageView");
         module.exports = Backbone.View.extend({
@@ -1082,10 +1290,10 @@
             }
         });
     }, {
-        "./ImageView": 19,
+        "./ImageView": 21,
         "common/Logger": 3
     } ],
-    19: [ function(require, module, exports) {
+    21: [ function(require, module, exports) {
         var TinyMCE = require("common/TinyMCE");
         var UI = require("common/UI");
         var Templates = require("common/Templates");
@@ -1187,7 +1395,7 @@
         "common/TinyMCE": 6,
         "common/UI": 7
     } ],
-    20: [ function(require, module, exports) {
+    22: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         var Utilities = require("common/Utilities");
         var Config = require("common/Config");
@@ -1318,7 +1526,7 @@
         "common/Config": 2,
         "common/Utilities": 8
     } ],
-    21: [ function(require, module, exports) {
+    23: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("link", BaseView.extend({
             initialize: function() {
@@ -1363,5 +1571,648 @@
         }));
     }, {
         "../FieldBaseView": 9
+    } ],
+    24: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1, helper, alias1 = helpers.helperMissing, alias2 = "function", alias3 = this.escapeExpression;
+                return '<input type="hidden" name="' + alias3((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1, 
+                typeof helper === alias2 ? helper.call(depth0, {
+                    name: "inputName",
+                    hash: {},
+                    data: data
+                }) : helper)) + '[_uid]" value="' + alias3((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1, 
+                typeof helper === alias2 ? helper.call(depth0, {
+                    name: "uid",
+                    hash: {},
+                    data: data
+                }) : helper)) + '">\n<div class="flexible-fields--toggle-title">\n    <h3>\n        <span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span>\n        <span class="genericon genericon-expand flexible-fields--js-toggle"></span>\n        <span class="dashicons dashicons-trash flexible-fields--js-trash"></span>\n\n        <input type="text" value="' + alias3(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.item : depth0) != null ? stack1._tab : stack1) != null ? stack1.title : stack1, depth0)) + '" name="' + alias3((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1, 
+                typeof helper === alias2 ? helper.call(depth0, {
+                    name: "inputName",
+                    hash: {},
+                    data: data
+                }) : helper)) + '[_tab][title] ">\n    </h3>\n</div>\n<div class="flexible-fields--toggle-box kb-hide">\n    <div class="kb-field--tabs kb_fieldtabs">\n        <ul class="flexible-field--tab-nav">\n\n        </ul>\n    </div>\n\n</div>';
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 33
+    } ],
+    25: [ function(require, module, exports) {
+        "use strict";
+        var _interopRequireWildcard = function(obj) {
+            return obj && obj.__esModule ? obj : {
+                "default": obj
+            };
+        };
+        exports.__esModule = true;
+        var _import = require("./handlebars/base");
+        var base = _interopRequireWildcard(_import);
+        var _SafeString = require("./handlebars/safe-string");
+        var _SafeString2 = _interopRequireWildcard(_SafeString);
+        var _Exception = require("./handlebars/exception");
+        var _Exception2 = _interopRequireWildcard(_Exception);
+        var _import2 = require("./handlebars/utils");
+        var Utils = _interopRequireWildcard(_import2);
+        var _import3 = require("./handlebars/runtime");
+        var runtime = _interopRequireWildcard(_import3);
+        var _noConflict = require("./handlebars/no-conflict");
+        var _noConflict2 = _interopRequireWildcard(_noConflict);
+        function create() {
+            var hb = new base.HandlebarsEnvironment();
+            Utils.extend(hb, base);
+            hb.SafeString = _SafeString2["default"];
+            hb.Exception = _Exception2["default"];
+            hb.Utils = Utils;
+            hb.escapeExpression = Utils.escapeExpression;
+            hb.VM = runtime;
+            hb.template = function(spec) {
+                return runtime.template(spec, hb);
+            };
+            return hb;
+        }
+        var inst = create();
+        inst.create = create;
+        _noConflict2["default"](inst);
+        inst["default"] = inst;
+        exports["default"] = inst;
+        module.exports = exports["default"];
+    }, {
+        "./handlebars/base": 26,
+        "./handlebars/exception": 27,
+        "./handlebars/no-conflict": 28,
+        "./handlebars/runtime": 29,
+        "./handlebars/safe-string": 30,
+        "./handlebars/utils": 31
+    } ],
+    26: [ function(require, module, exports) {
+        "use strict";
+        var _interopRequireWildcard = function(obj) {
+            return obj && obj.__esModule ? obj : {
+                "default": obj
+            };
+        };
+        exports.__esModule = true;
+        exports.HandlebarsEnvironment = HandlebarsEnvironment;
+        exports.createFrame = createFrame;
+        var _import = require("./utils");
+        var Utils = _interopRequireWildcard(_import);
+        var _Exception = require("./exception");
+        var _Exception2 = _interopRequireWildcard(_Exception);
+        var VERSION = "3.0.1";
+        exports.VERSION = VERSION;
+        var COMPILER_REVISION = 6;
+        exports.COMPILER_REVISION = COMPILER_REVISION;
+        var REVISION_CHANGES = {
+            1: "<= 1.0.rc.2",
+            2: "== 1.0.0-rc.3",
+            3: "== 1.0.0-rc.4",
+            4: "== 1.x.x",
+            5: "== 2.0.0-alpha.x",
+            6: ">= 2.0.0-beta.1"
+        };
+        exports.REVISION_CHANGES = REVISION_CHANGES;
+        var isArray = Utils.isArray, isFunction = Utils.isFunction, toString = Utils.toString, objectType = "[object Object]";
+        function HandlebarsEnvironment(helpers, partials) {
+            this.helpers = helpers || {};
+            this.partials = partials || {};
+            registerDefaultHelpers(this);
+        }
+        HandlebarsEnvironment.prototype = {
+            constructor: HandlebarsEnvironment,
+            logger: logger,
+            log: log,
+            registerHelper: function registerHelper(name, fn) {
+                if (toString.call(name) === objectType) {
+                    if (fn) {
+                        throw new _Exception2["default"]("Arg not supported with multiple helpers");
+                    }
+                    Utils.extend(this.helpers, name);
+                } else {
+                    this.helpers[name] = fn;
+                }
+            },
+            unregisterHelper: function unregisterHelper(name) {
+                delete this.helpers[name];
+            },
+            registerPartial: function registerPartial(name, partial) {
+                if (toString.call(name) === objectType) {
+                    Utils.extend(this.partials, name);
+                } else {
+                    if (typeof partial === "undefined") {
+                        throw new _Exception2["default"]("Attempting to register a partial as undefined");
+                    }
+                    this.partials[name] = partial;
+                }
+            },
+            unregisterPartial: function unregisterPartial(name) {
+                delete this.partials[name];
+            }
+        };
+        function registerDefaultHelpers(instance) {
+            instance.registerHelper("helperMissing", function() {
+                if (arguments.length === 1) {
+                    return undefined;
+                } else {
+                    throw new _Exception2["default"]('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+                }
+            });
+            instance.registerHelper("blockHelperMissing", function(context, options) {
+                var inverse = options.inverse, fn = options.fn;
+                if (context === true) {
+                    return fn(this);
+                } else if (context === false || context == null) {
+                    return inverse(this);
+                } else if (isArray(context)) {
+                    if (context.length > 0) {
+                        if (options.ids) {
+                            options.ids = [ options.name ];
+                        }
+                        return instance.helpers.each(context, options);
+                    } else {
+                        return inverse(this);
+                    }
+                } else {
+                    if (options.data && options.ids) {
+                        var data = createFrame(options.data);
+                        data.contextPath = Utils.appendContextPath(options.data.contextPath, options.name);
+                        options = {
+                            data: data
+                        };
+                    }
+                    return fn(context, options);
+                }
+            });
+            instance.registerHelper("each", function(context, options) {
+                if (!options) {
+                    throw new _Exception2["default"]("Must pass iterator to #each");
+                }
+                var fn = options.fn, inverse = options.inverse, i = 0, ret = "", data = undefined, contextPath = undefined;
+                if (options.data && options.ids) {
+                    contextPath = Utils.appendContextPath(options.data.contextPath, options.ids[0]) + ".";
+                }
+                if (isFunction(context)) {
+                    context = context.call(this);
+                }
+                if (options.data) {
+                    data = createFrame(options.data);
+                }
+                function execIteration(field, index, last) {
+                    if (data) {
+                        data.key = field;
+                        data.index = index;
+                        data.first = index === 0;
+                        data.last = !!last;
+                        if (contextPath) {
+                            data.contextPath = contextPath + field;
+                        }
+                    }
+                    ret = ret + fn(context[field], {
+                        data: data,
+                        blockParams: Utils.blockParams([ context[field], field ], [ contextPath + field, null ])
+                    });
+                }
+                if (context && typeof context === "object") {
+                    if (isArray(context)) {
+                        for (var j = context.length; i < j; i++) {
+                            execIteration(i, i, i === context.length - 1);
+                        }
+                    } else {
+                        var priorKey = undefined;
+                        for (var key in context) {
+                            if (context.hasOwnProperty(key)) {
+                                if (priorKey) {
+                                    execIteration(priorKey, i - 1);
+                                }
+                                priorKey = key;
+                                i++;
+                            }
+                        }
+                        if (priorKey) {
+                            execIteration(priorKey, i - 1, true);
+                        }
+                    }
+                }
+                if (i === 0) {
+                    ret = inverse(this);
+                }
+                return ret;
+            });
+            instance.registerHelper("if", function(conditional, options) {
+                if (isFunction(conditional)) {
+                    conditional = conditional.call(this);
+                }
+                if (!options.hash.includeZero && !conditional || Utils.isEmpty(conditional)) {
+                    return options.inverse(this);
+                } else {
+                    return options.fn(this);
+                }
+            });
+            instance.registerHelper("unless", function(conditional, options) {
+                return instance.helpers["if"].call(this, conditional, {
+                    fn: options.inverse,
+                    inverse: options.fn,
+                    hash: options.hash
+                });
+            });
+            instance.registerHelper("with", function(context, options) {
+                if (isFunction(context)) {
+                    context = context.call(this);
+                }
+                var fn = options.fn;
+                if (!Utils.isEmpty(context)) {
+                    if (options.data && options.ids) {
+                        var data = createFrame(options.data);
+                        data.contextPath = Utils.appendContextPath(options.data.contextPath, options.ids[0]);
+                        options = {
+                            data: data
+                        };
+                    }
+                    return fn(context, options);
+                } else {
+                    return options.inverse(this);
+                }
+            });
+            instance.registerHelper("log", function(message, options) {
+                var level = options.data && options.data.level != null ? parseInt(options.data.level, 10) : 1;
+                instance.log(level, message);
+            });
+            instance.registerHelper("lookup", function(obj, field) {
+                return obj && obj[field];
+            });
+        }
+        var logger = {
+            methodMap: {
+                0: "debug",
+                1: "info",
+                2: "warn",
+                3: "error"
+            },
+            DEBUG: 0,
+            INFO: 1,
+            WARN: 2,
+            ERROR: 3,
+            level: 1,
+            log: function log(level, message) {
+                if (typeof console !== "undefined" && logger.level <= level) {
+                    var method = logger.methodMap[level];
+                    (console[method] || console.log).call(console, message);
+                }
+            }
+        };
+        exports.logger = logger;
+        var log = logger.log;
+        exports.log = log;
+        function createFrame(object) {
+            var frame = Utils.extend({}, object);
+            frame._parent = object;
+            return frame;
+        }
+    }, {
+        "./exception": 27,
+        "./utils": 31
+    } ],
+    27: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        var errorProps = [ "description", "fileName", "lineNumber", "message", "name", "number", "stack" ];
+        function Exception(message, node) {
+            var loc = node && node.loc, line = undefined, column = undefined;
+            if (loc) {
+                line = loc.start.line;
+                column = loc.start.column;
+                message += " - " + line + ":" + column;
+            }
+            var tmp = Error.prototype.constructor.call(this, message);
+            for (var idx = 0; idx < errorProps.length; idx++) {
+                this[errorProps[idx]] = tmp[errorProps[idx]];
+            }
+            if (Error.captureStackTrace) {
+                Error.captureStackTrace(this, Exception);
+            }
+            if (loc) {
+                this.lineNumber = line;
+                this.column = column;
+            }
+        }
+        Exception.prototype = new Error();
+        exports["default"] = Exception;
+        module.exports = exports["default"];
+    }, {} ],
+    28: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        exports["default"] = function(Handlebars) {
+            var root = typeof global !== "undefined" ? global : window, $Handlebars = root.Handlebars;
+            Handlebars.noConflict = function() {
+                if (root.Handlebars === Handlebars) {
+                    root.Handlebars = $Handlebars;
+                }
+            };
+        };
+        module.exports = exports["default"];
+    }, {} ],
+    29: [ function(require, module, exports) {
+        "use strict";
+        var _interopRequireWildcard = function(obj) {
+            return obj && obj.__esModule ? obj : {
+                "default": obj
+            };
+        };
+        exports.__esModule = true;
+        exports.checkRevision = checkRevision;
+        exports.template = template;
+        exports.wrapProgram = wrapProgram;
+        exports.resolvePartial = resolvePartial;
+        exports.invokePartial = invokePartial;
+        exports.noop = noop;
+        var _import = require("./utils");
+        var Utils = _interopRequireWildcard(_import);
+        var _Exception = require("./exception");
+        var _Exception2 = _interopRequireWildcard(_Exception);
+        var _COMPILER_REVISION$REVISION_CHANGES$createFrame = require("./base");
+        function checkRevision(compilerInfo) {
+            var compilerRevision = compilerInfo && compilerInfo[0] || 1, currentRevision = _COMPILER_REVISION$REVISION_CHANGES$createFrame.COMPILER_REVISION;
+            if (compilerRevision !== currentRevision) {
+                if (compilerRevision < currentRevision) {
+                    var runtimeVersions = _COMPILER_REVISION$REVISION_CHANGES$createFrame.REVISION_CHANGES[currentRevision], compilerVersions = _COMPILER_REVISION$REVISION_CHANGES$createFrame.REVISION_CHANGES[compilerRevision];
+                    throw new _Exception2["default"]("Template was precompiled with an older version of Handlebars than the current runtime. " + "Please update your precompiler to a newer version (" + runtimeVersions + ") or downgrade your runtime to an older version (" + compilerVersions + ").");
+                } else {
+                    throw new _Exception2["default"]("Template was precompiled with a newer version of Handlebars than the current runtime. " + "Please update your runtime to a newer version (" + compilerInfo[1] + ").");
+                }
+            }
+        }
+        function template(templateSpec, env) {
+            if (!env) {
+                throw new _Exception2["default"]("No environment passed to template");
+            }
+            if (!templateSpec || !templateSpec.main) {
+                throw new _Exception2["default"]("Unknown template object: " + typeof templateSpec);
+            }
+            env.VM.checkRevision(templateSpec.compiler);
+            function invokePartialWrapper(partial, context, options) {
+                if (options.hash) {
+                    context = Utils.extend({}, context, options.hash);
+                }
+                partial = env.VM.resolvePartial.call(this, partial, context, options);
+                var result = env.VM.invokePartial.call(this, partial, context, options);
+                if (result == null && env.compile) {
+                    options.partials[options.name] = env.compile(partial, templateSpec.compilerOptions, env);
+                    result = options.partials[options.name](context, options);
+                }
+                if (result != null) {
+                    if (options.indent) {
+                        var lines = result.split("\n");
+                        for (var i = 0, l = lines.length; i < l; i++) {
+                            if (!lines[i] && i + 1 === l) {
+                                break;
+                            }
+                            lines[i] = options.indent + lines[i];
+                        }
+                        result = lines.join("\n");
+                    }
+                    return result;
+                } else {
+                    throw new _Exception2["default"]("The partial " + options.name + " could not be compiled when running in runtime-only mode");
+                }
+            }
+            var container = {
+                strict: function strict(obj, name) {
+                    if (!(name in obj)) {
+                        throw new _Exception2["default"]('"' + name + '" not defined in ' + obj);
+                    }
+                    return obj[name];
+                },
+                lookup: function lookup(depths, name) {
+                    var len = depths.length;
+                    for (var i = 0; i < len; i++) {
+                        if (depths[i] && depths[i][name] != null) {
+                            return depths[i][name];
+                        }
+                    }
+                },
+                lambda: function lambda(current, context) {
+                    return typeof current === "function" ? current.call(context) : current;
+                },
+                escapeExpression: Utils.escapeExpression,
+                invokePartial: invokePartialWrapper,
+                fn: function fn(i) {
+                    return templateSpec[i];
+                },
+                programs: [],
+                program: function program(i, data, declaredBlockParams, blockParams, depths) {
+                    var programWrapper = this.programs[i], fn = this.fn(i);
+                    if (data || depths || blockParams || declaredBlockParams) {
+                        programWrapper = wrapProgram(this, i, fn, data, declaredBlockParams, blockParams, depths);
+                    } else if (!programWrapper) {
+                        programWrapper = this.programs[i] = wrapProgram(this, i, fn);
+                    }
+                    return programWrapper;
+                },
+                data: function data(value, depth) {
+                    while (value && depth--) {
+                        value = value._parent;
+                    }
+                    return value;
+                },
+                merge: function merge(param, common) {
+                    var obj = param || common;
+                    if (param && common && param !== common) {
+                        obj = Utils.extend({}, common, param);
+                    }
+                    return obj;
+                },
+                noop: env.VM.noop,
+                compilerInfo: templateSpec.compiler
+            };
+            function ret(context) {
+                var options = arguments[1] === undefined ? {} : arguments[1];
+                var data = options.data;
+                ret._setup(options);
+                if (!options.partial && templateSpec.useData) {
+                    data = initData(context, data);
+                }
+                var depths = undefined, blockParams = templateSpec.useBlockParams ? [] : undefined;
+                if (templateSpec.useDepths) {
+                    depths = options.depths ? [ context ].concat(options.depths) : [ context ];
+                }
+                return templateSpec.main.call(container, context, container.helpers, container.partials, data, blockParams, depths);
+            }
+            ret.isTop = true;
+            ret._setup = function(options) {
+                if (!options.partial) {
+                    container.helpers = container.merge(options.helpers, env.helpers);
+                    if (templateSpec.usePartial) {
+                        container.partials = container.merge(options.partials, env.partials);
+                    }
+                } else {
+                    container.helpers = options.helpers;
+                    container.partials = options.partials;
+                }
+            };
+            ret._child = function(i, data, blockParams, depths) {
+                if (templateSpec.useBlockParams && !blockParams) {
+                    throw new _Exception2["default"]("must pass block params");
+                }
+                if (templateSpec.useDepths && !depths) {
+                    throw new _Exception2["default"]("must pass parent depths");
+                }
+                return wrapProgram(container, i, templateSpec[i], data, 0, blockParams, depths);
+            };
+            return ret;
+        }
+        function wrapProgram(container, i, fn, data, declaredBlockParams, blockParams, depths) {
+            function prog(context) {
+                var options = arguments[1] === undefined ? {} : arguments[1];
+                return fn.call(container, context, container.helpers, container.partials, options.data || data, blockParams && [ options.blockParams ].concat(blockParams), depths && [ context ].concat(depths));
+            }
+            prog.program = i;
+            prog.depth = depths ? depths.length : 0;
+            prog.blockParams = declaredBlockParams || 0;
+            return prog;
+        }
+        function resolvePartial(partial, context, options) {
+            if (!partial) {
+                partial = options.partials[options.name];
+            } else if (!partial.call && !options.name) {
+                options.name = partial;
+                partial = options.partials[partial];
+            }
+            return partial;
+        }
+        function invokePartial(partial, context, options) {
+            options.partial = true;
+            if (partial === undefined) {
+                throw new _Exception2["default"]("The partial " + options.name + " could not be found");
+            } else if (partial instanceof Function) {
+                return partial(context, options);
+            }
+        }
+        function noop() {
+            return "";
+        }
+        function initData(context, data) {
+            if (!data || !("root" in data)) {
+                data = data ? _COMPILER_REVISION$REVISION_CHANGES$createFrame.createFrame(data) : {};
+                data.root = context;
+            }
+            return data;
+        }
+    }, {
+        "./base": 26,
+        "./exception": 27,
+        "./utils": 31
+    } ],
+    30: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        function SafeString(string) {
+            this.string = string;
+        }
+        SafeString.prototype.toString = SafeString.prototype.toHTML = function() {
+            return "" + this.string;
+        };
+        exports["default"] = SafeString;
+        module.exports = exports["default"];
+    }, {} ],
+    31: [ function(require, module, exports) {
+        "use strict";
+        exports.__esModule = true;
+        exports.extend = extend;
+        exports.indexOf = indexOf;
+        exports.escapeExpression = escapeExpression;
+        exports.isEmpty = isEmpty;
+        exports.blockParams = blockParams;
+        exports.appendContextPath = appendContextPath;
+        var escape = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#x27;",
+            "`": "&#x60;"
+        };
+        var badChars = /[&<>"'`]/g, possible = /[&<>"'`]/;
+        function escapeChar(chr) {
+            return escape[chr];
+        }
+        function extend(obj) {
+            for (var i = 1; i < arguments.length; i++) {
+                for (var key in arguments[i]) {
+                    if (Object.prototype.hasOwnProperty.call(arguments[i], key)) {
+                        obj[key] = arguments[i][key];
+                    }
+                }
+            }
+            return obj;
+        }
+        var toString = Object.prototype.toString;
+        exports.toString = toString;
+        var isFunction = function isFunction(value) {
+            return typeof value === "function";
+        };
+        if (isFunction(/x/)) {
+            exports.isFunction = isFunction = function(value) {
+                return typeof value === "function" && toString.call(value) === "[object Function]";
+            };
+        }
+        var isFunction;
+        exports.isFunction = isFunction;
+        var isArray = Array.isArray || function(value) {
+            return value && typeof value === "object" ? toString.call(value) === "[object Array]" : false;
+        };
+        exports.isArray = isArray;
+        function indexOf(array, value) {
+            for (var i = 0, len = array.length; i < len; i++) {
+                if (array[i] === value) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        function escapeExpression(string) {
+            if (typeof string !== "string") {
+                if (string && string.toHTML) {
+                    return string.toHTML();
+                } else if (string == null) {
+                    return "";
+                } else if (!string) {
+                    return string + "";
+                }
+                string = "" + string;
+            }
+            if (!possible.test(string)) {
+                return string;
+            }
+            return string.replace(badChars, escapeChar);
+        }
+        function isEmpty(value) {
+            if (!value && value !== 0) {
+                return true;
+            } else if (isArray(value) && value.length === 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function blockParams(params, ids) {
+            params.path = ids;
+            return params;
+        }
+        function appendContextPath(contextPath, id) {
+            return (contextPath ? contextPath + "." : "") + id;
+        }
+    }, {} ],
+    32: [ function(require, module, exports) {
+        module.exports = require("./dist/cjs/handlebars.runtime")["default"];
+    }, {
+        "./dist/cjs/handlebars.runtime": 25
+    } ],
+    33: [ function(require, module, exports) {
+        module.exports = require("handlebars/runtime")["default"];
+    }, {
+        "handlebars/runtime": 32
     } ]
 }, {}, [ 11 ]);

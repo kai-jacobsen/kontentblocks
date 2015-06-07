@@ -149,7 +149,9 @@ abstract class AbstractPanel
     {
 
         if (!post_type_supports( $postObj->post_type, 'editor' )) {
-            Utilities::hiddenEditor();
+            add_action('admin_footer', function(){
+               Utilities::hiddenEditor();
+            });
         }
 
         $defaults = array(

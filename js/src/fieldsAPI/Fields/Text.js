@@ -1,6 +1,8 @@
-KB.FieldsAPI.Text = KB.FieldsAPI.Field.extend({
-
+var BaseView = require('fieldsAPI/Fields/BaseView');
+module.exports = BaseView.extend({
   templatePath: 'fields/Text',
+  template: require('templates/fields/Text.hbs'),
+  type: 'text',
   defaults: {
     std: '',
     label: 'Field label',
@@ -8,18 +10,13 @@ KB.FieldsAPI.Text = KB.FieldsAPI.Field.extend({
     value: '',
     key: null
   },
-
-  render: function (index) {
-    return KB.Templates.render(this.templatePath, {
-      config: this.config,
-      baseId: this.baseId,
-      index: index,
+  render: function () {
+    return this.template({
       model: this.model.toJSON()
     });
   }
 });
 
-KB.FieldsAPI.register('text', KB.FieldsAPI.Text);
 
 
 

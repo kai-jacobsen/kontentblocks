@@ -52,7 +52,7 @@ class Utilities
     static public function editor( $id, $data, $name = null, $media = false, $args = array() )
     {
         global $wp_version;
-
+        wp_styles();
         $plugins = array_unique(
             apply_filters(
                 'tiny_mce_plugins',
@@ -116,7 +116,7 @@ class Utilities
         );
 
         if (!empty( $args )) {
-            $settings = Utilities::arrayMergeRecursive($args, $settings);
+            $settings = Utilities::arrayMergeRecursive( $args, $settings );
         }
 
         wp_editor( $data, $id . 'editor', $settings );
@@ -132,6 +132,7 @@ class Utilities
         global $kbHiddenEditorCalled;
 
         if (!$kbHiddenEditorCalled) {
+//            d(xdebug_get_function_stack());
             echo "<div style='display: none;'>";
             wp_editor( '', 'ghosteditor' );
             echo '</div>';
@@ -366,7 +367,7 @@ class Utilities
      */
     public static function remoteConcatGet( $postId = null )
     {
-        if (apply_filters('kb.remote.concat.get', false)){
+        if (apply_filters( 'kb.remote.concat.get', false )) {
             return null;
         }
 

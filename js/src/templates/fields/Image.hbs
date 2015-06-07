@@ -1,38 +1,37 @@
 <div class="kb_field kb-field kb-field--image kb-fieldapi-field">
-    <label class="heading">{{ config.label }}</label>
+    <label class="heading">{{ model.label }}</label>
 
     <div class='kb-field-image-wrapper'>
         <div class='kb-js-add-image kb-field-image-container'>
-
             {{#if model.value.url }}
                 <img src="{{{ model.value.url }}}">
             {{/if}}
-
         </div>
 
-        {{#if config.hideMeta }}
+        {{#if model.hideMeta }}
         <div style="display: none;">
         {{/if}}
 
-            <div class="kb-js-image-meta-wrapper">
-                <label>{{{ i18n.title }}}</label>
-                <input class='kb-js-image-title kb-observe' type="text"
-                       name='{{fieldName baseId index config.key }}[title]'
-                       value='{{{ model.value.title }}}'>
-                <label>{{{ i18n.caption }}}</label>
-                <input class='kb-js-image-caption kb-observe' type="text"
-                       name='{{ fieldName baseId index config.key }}[caption]'
-                       value='{{{ model.value.caption }}}'>
-            </div>
-        {{#if config.hideMeta }}
+        <div class="kb-js-image-meta-wrapper">
+            <label>{{{ i18n.title }}}</label>
+            <input class='kb-js-image-title kb-observe' type="text"
+                   name='{{fieldName model.baseId model.index model.preimeKey }}[title]'
+                   value='{{{ model.value.title }}}'>
+            <label>{{{ i18n.caption }}}</label>
+            <input class='kb-js-image-caption kb-observe' type="text"
+                   name='{{ fieldName model.baseId model.index model.primeKey }}[caption]'
+                   value='{{{ model.value.caption }}}'>
+        </div>
+        {{#if model.hideMeta }}
         </div>>
         {{/if}}
         <div class="kb-field-image--footer">
             <a class="button kb-js-reset-image">{{{ i18n.reset }}}</a>
         </div>
-        <input class='kb-js-image-id' type='hidden' name='{{ fieldName baseId index config.key }}[id]'
+        <input class='kb-js-image-id' type='hidden'
+               name='{{ model.fieldName model.baseId model.index model.primeKey }}[id]'
                value='{{{ model.value.id }}}'>
     </div>
-    <p class="description">{{ config.description }}</p>
+    <p class="description">{{ model.description }}</p>
 
 </div>
