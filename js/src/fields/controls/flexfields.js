@@ -19,7 +19,8 @@ KB.Fields.registerObject('flexfields', BaseView.extend({
     if (!this.FlexFieldsController) {
       return this.FlexFieldsController = new FlexfieldController({
         el: this.$stage.get(0),
-        model: this.model
+        model: this.model,
+        parentView: this
       })
     }
     this.FlexFieldsController.setElement(this.$stage.get(0)); // root element equals stage element

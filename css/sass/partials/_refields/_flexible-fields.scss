@@ -68,8 +68,14 @@
       color: #333;
     }
   }
-
 }
+
+.flexible-fields--section-box {
+  border: 1px solid $lightgrey;
+  padding: $halfpadding;
+}
+
+
 
 .os-content-inner {
   .flexible-fields--item-list {

@@ -89,3 +89,25 @@
     font-size: 20px;
   }
 }
+
+.kb-fullscreen {
+
+  color: #999;
+//  height: 35px;
+//  float: left;
+  //border-right: 1px solid #ccc;
+  cursor: pointer;
+
+  &:hover {
+    color: #333;
+  }
+
+  &:before {
+    content: '\f474';
+    font-family: 'genericons';
+    top: -5px;
+    position: relative;
+    font-size: 16px;
+
+  }
+}

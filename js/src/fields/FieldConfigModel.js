@@ -5,7 +5,6 @@ var Payload = require('common/Payload');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
-
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
       this.set('ModuleModel', this.ModuleModel); // assign the parent object model
@@ -87,7 +86,7 @@ module.exports = Backbone.Model.extend({
     this.stopListening();
     KB.FieldConfigs.remove(this);
   },
-  rebind: function () {
+  rebind: function () {11
     if (this.FieldView) {
       this.FieldView.setElement(this.getElement()); // markup might have changed, reset the root element
       this.FieldView.rerender(); // call rerender on the field

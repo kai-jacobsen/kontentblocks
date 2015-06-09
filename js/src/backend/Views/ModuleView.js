@@ -7,6 +7,7 @@ var SaveControl = require('backend/Views/ModuleControls/controls/SaveControl');
 var StatusControl = require('backend/Views/ModuleControls/controls/StatusControl');
 var MoveControl = require('backend/Views/ModuleUi/controls/MoveControl');
 var ToggleControl = require('backend/Views/ModuleUi/controls/ToggleControl');
+var FullscreenControl = require('backend/Views/ModuleUi/controls/FullscreenControl');
 var Checks = require('common/Checks');
 var Ajax = require('common/Ajax');
 var UI = require('common/UI');
@@ -81,6 +82,7 @@ module.exports = Backbone.View.extend({
   setupDefaultUiItems: function () {
     this.ModuleUi.addItem(new MoveControl({model: this.model, parent: this}));
     this.ModuleUi.addItem(new ToggleControl({model: this.model, parent: this}));
+    this.ModuleUi.addItem(new FullscreenControl({model: this.model, parent: this}));
   },
   // get called when a module was dragged to a different area / area context
   updateModuleForm: function () {

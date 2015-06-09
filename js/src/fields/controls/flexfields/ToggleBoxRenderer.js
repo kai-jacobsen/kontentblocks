@@ -1,6 +1,6 @@
 //KB.FlexibleFields.ItemView
 var Notice = require('common/Notice');
-var tplSingleItem = require('templates/fields/FlexibleFields/single-item.hbs');
+var tplSingleToggleBox = require('templates/fields/FlexibleFields/single-toggle-box.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'li',
   className: 'kb-flexible-fields--item-wrapper',
@@ -28,7 +28,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.model.get('_tab').uid);
     var item = this.model.toJSON(); // tab information and value hold by this.model
-    var $skeleton = this.$el.append(tplSingleItem({ // append the outer skeletion markup for the item / toggle head & body
+    var $skeleton = this.$el.append(tplSingleToggleBox({ // append the outer skeletion markup for the item / toggle head & body
       item: item,
       inputName: inputName,
       uid: this.model.get('_tab').uid
@@ -77,7 +77,7 @@ module.exports = Backbone.View.extend({
         fieldInstance.postRender.call(fieldInstance);
       }
 
-      if (that.Controller.model.FieldView) {
+      if (that.Controller.parentView) {
         that.addInstanceToCollection(fieldInstance);
       }
     });
