@@ -54,6 +54,7 @@ class Utilities
         global $wp_version;
 
         // introduced in 4.3
+        // necessary for wp_editor which expects $wp_styles to be setup ( state: 4.3alpha )
         if (function_exists('wp_styles')){
             wp_styles();
         }
