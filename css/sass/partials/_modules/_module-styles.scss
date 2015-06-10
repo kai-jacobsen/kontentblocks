@@ -41,6 +41,24 @@
     Module Header and Controls
 \*------------------------------------*/
 
+.kb-name .block-title {
+  border: none;
+  border-bottom: 1px solid $grey-500;
+  margin-left: 10px;
+
+  &:hover {
+  }
+
+  &:focus {
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    border-bottom: 1px solid $lightblue;
+
+
+  }
+}
+
 .ui-wrap {
   float: left;
   overflow: hidden;
