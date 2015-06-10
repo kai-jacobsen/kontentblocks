@@ -1,20 +1,32 @@
 @import url(assets/genericons/genericons.css);
 /* Colors */
-/* line 22, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .hide {
   display: none; }
 
 /*------------------------------------*\
     base extends
 \*------------------------------------*/
-/* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-box-shadow, .alertify-notifier .ajs-message, #module-browser {
   -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12); }
 
-/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-box-border, #module-browser {
-  border: 1px solid #747474; }
+  border: 1px solid #212121; }
+
+/* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_utilities.scss */
+.kbu-color-orange {
+  color: #FF9800; }
+
+/* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_utilities.scss */
+.kbu-color-green {
+  color: #009688; }
+
+/* line 9, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_utilities.scss */
+.kbu-color-red {
+  color: #F44336; }
 
 /* line 7, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/kontentblocks.scss */
 #kb_select {
@@ -548,7 +560,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   .kb-in-sidebar-active:before {
     content: '';
     position: absolute;
-    background-color: #0074a2;
+    background-color: #03A9F4;
     outline: 1px solid #333;
     opacity: .5;
     top: 0;
@@ -1477,7 +1489,7 @@ h5.kb_properties_title {
 \*------------------------------------*/
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
 .kb-module__body {
-  padding: 24px;
+  padding: 0 24px 24px;
   background: #fff;
   margin-left: 1px;
   border: 1px solid #e6e6e6; }
@@ -1541,34 +1553,56 @@ h5.kb_properties_title {
     font-family: 'genericons';
     font-size: 24px; }
 
-/* line 78, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+/* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
 .kb-toggle {
   position: relative;
   top: -3px; }
-  /* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+  /* line 80, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
   .kb-toggle:hover {
     color: #333; }
-  /* line 85, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+  /* line 86, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
   .kb-toggle:before {
     content: '\f431';
     font-family: "genericons";
     position: relative;
     font-size: 20px; }
 
-/* line 93, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+/* line 94, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+.kb-disabled {
+  position: relative;
+  top: 2px;
+  padding: 0 5px; }
+
+/* line 100, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
 .kb-fullscreen {
   color: #999;
   cursor: pointer; }
-  /* line 101, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+  /* line 108, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
   .kb-fullscreen:hover {
     color: #333; }
-  /* line 105, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+  /* line 112, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
   .kb-fullscreen:before {
     content: '\f474';
     font-family: 'genericons';
     top: -5px;
     position: relative;
     font-size: 16px; }
+
+/*------------------------------------*\
+    Status Bar
+\*------------------------------------*/
+/* line 126, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+.kb-module--status-bar {
+  padding: 12px 0; }
+  /* line 129, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+  .kb-module--status-bar .kb-module--status-label {
+    margin-right: 12px;
+    color: #9e9e9e;
+    font-style: italic; }
+  /* line 135, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_module-styles.scss */
+  .kb-module--status-bar .kb-module--status-draft {
+    color: #fff;
+    background-color: #FF9800; }
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_modules/_master-module.scss */
 .kb-edit-original {
@@ -4417,7 +4451,7 @@ h5.kb_properties_title {
       width: 90%; }
     /* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
     .kb-field input[type=text]:focus {
-      border-bottom: 1px solid #0074a2; }
+      border-bottom: 1px solid #03A9F4; }
   /* line 54, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field select {
     min-width: 200px;
@@ -5225,7 +5259,7 @@ button.Zebra_DatePicker_Icon_Inside {
     /* line 109, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
     .module-browser-header .cat-item.active {
       font-weight: bold;
-      background-color: #0074a2;
+      background-color: #03A9F4;
       color: #f9f9f9; }
 
 /* line 117, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
@@ -5288,7 +5322,7 @@ button.Zebra_DatePicker_Icon_Inside {
     cursor: pointer; }
     /* line 177, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
     .modules-list-item:hover .dashicons-plus {
-      background-color: #0074a2;
+      background-color: #03A9F4;
       color: #fff; }
   /* line 184, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_module-browser.scss */
   .modules-list-item .dashicons-plus {
@@ -5340,11 +5374,11 @@ button.Zebra_DatePicker_Icon_Inside {
     border: 1px solid #f2f2f2;
     border-bottom: 1px solid #aaa;
     border-right: 1px solid #aaa;
-    border-left: 4px solid #d54e21;
+    border-left: 4px solid #FF9800;
     -webkit-transition: border 1s linear; }
     /* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_sidebar-selector.scss */
     .area_sidebars .connect li.dynamic-area-active {
-      border-left: 4px solid #0074a2; }
+      border-left: 4px solid #03A9F4; }
       /* line 31, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_extensions/_sidebar-selector.scss */
       .area_sidebars .connect li.dynamic-area-active:hover span {
         display: inline; }
@@ -5913,7 +5947,7 @@ Field Tabs
 /* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_kontentfields-new.scss */
 .kb_group_header {
   padding: 20px;
-  background-color: #0074a2; }
+  background-color: #03A9F4; }
   /* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_kontentfields-new.scss */
   .kb_group_header h2 {
     margin: 0 !important;
@@ -5935,7 +5969,7 @@ Field Tabs
   border-left: 0px solid #222;
   margin-left: 0px;
   font-weight: 400;
-  background: #d54e21;
+  background: #FF9800;
   border-bottom: 1px solid #fafafa;
   font-style: italic;
   color: #fff;
@@ -5946,7 +5980,7 @@ Field Tabs
 .fullscreen .kb_draft {
   margin-left: 20px;
   background-color: transparent;
-  border-left: 0px solid #d54e21;
+  border-left: 0px solid #FF9800;
   border-bottom: 0;
   color: #999;
   padding-left: 0; }

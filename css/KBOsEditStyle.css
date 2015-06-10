@@ -1,19 +1,19 @@
 @import url(assets/genericons/genericons.css);
 /* Colors */
-/* line 22, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .hide {
   display: none; }
 
 /*------------------------------------*\
     base extends
 \*------------------------------------*/
-/* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-box-shadow {
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12); }
 
-/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-box-border {
-  border: 1px solid #747474; }
+  border: 1px solid #212121; }
 
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .os-edit-container {
@@ -65,10 +65,10 @@
     width: 14px; }
   /* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
   .os-edit-wrapper.master-module {
-    border-left: 3px solid #d54e21; }
+    border-left: 3px solid #FF9800; }
   /* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
   .os-edit-wrapper.dynamic-module {
-    border-left: 3px solid #0074a2; }
+    border-left: 3px solid #03A9F4; }
   /* line 74, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
   .os-edit-wrapper a {
     line-height: 18px !important;
@@ -122,7 +122,7 @@ body.onsite-editing .controls-wrap {
   line-height: 1 !important; }
 /* line 145, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 body.onsite-editing .master a.os-edit-block span {
-  background-color: #d54e21; }
+  background-color: #FF9800; }
 /* line 149, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 body.onsite-editing .hide {
   display: none; }
@@ -141,7 +141,7 @@ body.onsite-editing #onsite-modal {
 
 /* line 173, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 #wp-toolbar .os-edit {
-  background: #0074a2; }
+  background: #03A9F4; }
   /* line 176, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
   #wp-toolbar .os-edit.os-edit-off {
     background: none !important; }

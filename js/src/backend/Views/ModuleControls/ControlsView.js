@@ -26,6 +26,9 @@ module.exports = Backbone.View.extend({
       var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
       var $menuItem = $liItem.append(view.el);
       this.$menuList.append($menuItem);
+
+      view.render.call(view);
+
     }
   }
 });

@@ -15,7 +15,7 @@ use Kontentblocks\Utils\Utilities;
  *
  * @author Kai Jacobsen
  * @package Kontentblocks\Ajax\Frontend
- * @since 1.0.0
+ * @since 0.1.0
  */
 class UpdateModuleData implements AjaxActionInterface
 {
@@ -25,31 +25,31 @@ class UpdateModuleData implements AjaxActionInterface
      * Sends new module data as json formatted object
      *
      * @param ValueStorageInterface $Request
-     * @since 1.0.0
+     * @since 0.1.0
      * @return AjaxSuccessResponse
      */
     public static function run( ValueStorageInterface $Request )
     {
         global $post;
 
-        $moduleArgs = Utilities::validateBoolRecursive( $Request->get('module'));
-        $data = $Request->get('data');
-        $postId = $Request->getFiltered('post_id', FILTER_VALIDATE_INT);
+        $moduleArgs = Utilities::validateBoolRecursive( $Request->get( 'module' ) );
+        $data = $Request->get( 'data' );
+        $postId = $Request->getFiltered( 'post_id', FILTER_VALIDATE_INT );
 
         // setup global post
         $post = get_post( $postId );
         setup_postdata( $post );
 
         $Environment = Utilities::getEnvironment( $postId );
-        $Module = $Environment->getModuleById(filter_var($moduleArgs['mid'], FILTER_SANITIZE_STRING));
+        $Module = $Environment->getModuleById( filter_var( $moduleArgs['mid'], FILTER_SANITIZE_STRING ) );
 
         // gather data
         $old = $Module->Model->export();
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
-        $Environment->getStorage()->saveModule( $Module->getId(),  $mergedData  );
+        $Environment->getStorage()->saveModule( $Module->getId(), $mergedData );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $Module );
-        $Module->Model->set($mergedData);
+        $Module->Model->set( $mergedData );
         $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
         $Environment->getStorage()->reset();
@@ -60,7 +60,7 @@ class UpdateModuleData implements AjaxActionInterface
         do_action( 'kb.module.save', $Module, $mergedData );
         Utilities::remoteConcatGet( $postId );
 
-        return new AjaxSuccessResponse('Module data updated.', $return);
+        return new AjaxSuccessResponse( 'Module data updated.', $return );
     }
 
 }

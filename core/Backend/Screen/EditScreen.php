@@ -14,7 +14,7 @@ use Kontentblocks\Utils\Utilities;
  * Handles saving of areas while in post context
  * @package Kontentblocks
  * @subpackage Post
- * @since 1.0.0
+ * @since 0.1.0
  */
 Class EditScreen
 {
@@ -57,7 +57,7 @@ Class EditScreen
      * Prepares the outer html
      * Adds some generic but important meta informations in hidden fields
      * calls renderScreen
-     * @since 1.0.0
+     * @since 0.1.0
      * @param $post
      * @return null
      */
@@ -100,7 +100,7 @@ Class EditScreen
      * Handles the saving of modules and supplemental data
      *
      * @param int $post_id The current post id
-     * @since 1.0.0
+     * @since 0.1.0
      */
     function save( $post_id )
     {
@@ -121,7 +121,7 @@ Class EditScreen
     /**
      * toJSON
      * Make certain properties available throughout the frontend
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function toJSON()
@@ -131,7 +131,7 @@ Class EditScreen
 
     /**
      * Setup default whitelist of allowed wp backend page hooks
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      * @filter kb_page_hooks modify allowed page hooks
      */

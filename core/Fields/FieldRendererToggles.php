@@ -8,7 +8,7 @@ namespace Kontentblocks\Fields;
  * @see Kontentblocks\Fields\FieldManager::render()
  *
  * @package Fields
- * @since 1.0.0
+ * @since 0.1.0
  */
 class FieldRendererToggles implements InterfaceFieldRenderer
 {

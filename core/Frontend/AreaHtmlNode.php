@@ -18,28 +18,28 @@ class AreaHtmlNode
     /**
      * Area literal id
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $id;
 
     /**
      * placeholder format string for area wrapper before markup
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $beforeArea;
 
     /**
      * placeholder format string for area wrapper after markup
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $afterArea;
 
     /**
      * layout iterator if layout is not default
      * @var bool|AreaLayoutIterator
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public $Layout;
 
@@ -47,14 +47,14 @@ class AreaHtmlNode
      * specific area settings as set and saved on the edit screen
      * basically the area_template by now
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $settings;
 
     /**
      * Indicator of the existence of an area_template
      * @var bool
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $hasLayout = false;
 
@@ -82,7 +82,7 @@ class AreaHtmlNode
      * @param AreaRenderer $AreaRenderer
      * @param Environment $Environment
      * @param $additionalArgs array comes from the render function call
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct( AreaRenderer $AreaRenderer, Environment $Environment, $additionalArgs )
     {
@@ -101,7 +101,7 @@ class AreaHtmlNode
     /**
      * create the wrappers opening markup
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function openArea()
     {
@@ -116,7 +116,7 @@ class AreaHtmlNode
     /**
      * create the wrapper closing markup
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function closeArea()
     {
@@ -126,7 +126,7 @@ class AreaHtmlNode
     /**
      * Some css classes to add to the wrapper
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getWrapperClasses()
     {
@@ -143,7 +143,7 @@ class AreaHtmlNode
     /**
      * get 'context'
      * @return mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getContext()
     {
@@ -154,7 +154,7 @@ class AreaHtmlNode
     /**
      * get 'subcontext'
      * @return mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getSubcontext()
     {
@@ -166,7 +166,7 @@ class AreaHtmlNode
      * generic getter method to get settings
      * @param $setting
      * @return mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getSetting( $setting )
     {
@@ -179,7 +179,7 @@ class AreaHtmlNode
      * Evaluates if an area template is used
      *
      * @return bool|AreaLayoutIterator
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function setupLayout()
     {
@@ -213,7 +213,7 @@ class AreaHtmlNode
      * @param $args
      * @param null $settings
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function setupSettings( $args, $settings = null )
     {

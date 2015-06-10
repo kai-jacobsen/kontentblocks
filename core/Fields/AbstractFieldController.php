@@ -12,7 +12,7 @@ abstract class AbstractFieldController
     /**
      * Collection of added Sections / Fields ...
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public $Structure;
 
@@ -21,7 +21,7 @@ abstract class AbstractFieldController
      * Object to handle the section layout
      * e.g. defaults to tabs
      * @var object
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $Render;
 
@@ -29,7 +29,7 @@ abstract class AbstractFieldController
     /**
      * registered fields in one flat array
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $fieldsById;
 
@@ -39,7 +39,7 @@ abstract class AbstractFieldController
      *
      * @param array $instanceData
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function setup( $instanceData )
     {
@@ -63,7 +63,7 @@ abstract class AbstractFieldController
      * @param string $id
      *
      * @return object
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function idExists( $id )
     {
@@ -76,7 +76,7 @@ abstract class AbstractFieldController
      * Extract single fields from Structure object
      * and stores them in one single flat array
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function collectAllFields()
     {
@@ -96,7 +96,7 @@ abstract class AbstractFieldController
      * @param string $key
      *
      * @return mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getFieldByKey( $key, $fromArray = null )
     {
@@ -125,7 +125,7 @@ abstract class AbstractFieldController
      * @param $oldData
      *
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function save( $data, $oldData )
     {

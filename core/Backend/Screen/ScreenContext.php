@@ -10,7 +10,7 @@ use Kontentblocks\Kontentblocks;
 /**
  * Class ScreenContext
  * @package Kontentblocks\Backend\Screen
- * @since 1.0.0
+ * @since 0.1.0
  */
 class ScreenContext
 {
@@ -18,21 +18,21 @@ class ScreenContext
      * Literal identifier of this 'context'
      * current possible values: 'top', 'normal', 'side', 'bottom'
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $id;
 
     /**
      * Label for this context as printed in the context header
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $title;
 
     /**
      * Short description of the context
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $description;
 
@@ -40,7 +40,7 @@ class ScreenContext
      * Array of area definitions
      * Contains only areas which are set to this context
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $areas;
 
@@ -50,7 +50,7 @@ class ScreenContext
      * Dynamic areas are treated differently
      * String: 'has-sidebar' or 'no-sidebar'
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $editScreenHasSidebar;
 
@@ -61,7 +61,7 @@ class ScreenContext
      * @param Environment $Environment
      * @param bool $sidebars
      * @throws Exception
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct( $args, $areas, Environment $Environment, $sidebars = false )
     {
@@ -81,7 +81,7 @@ class ScreenContext
     /**
      * Wrapper to render the context to screen
      * @uses action context_box_{id}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function render()
     {
@@ -101,7 +101,7 @@ class ScreenContext
 
     /**
      * Print opening markup to the screen
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function openContext()
     {
@@ -118,7 +118,7 @@ class ScreenContext
 
     /**
      * Instantiate Areas and render each instance to the screen
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function renderAreas()
     {
@@ -144,7 +144,7 @@ class ScreenContext
 
     /**
      * Close container and call hook
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function closeContext()
     {

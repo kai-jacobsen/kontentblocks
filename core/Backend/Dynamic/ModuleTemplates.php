@@ -20,7 +20,7 @@ class ModuleTemplates
     /**
      * Class constructor
      * Add relevant Hooks
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct()
     {
@@ -38,7 +38,7 @@ class ModuleTemplates
     /**
      * Add admin menu entry
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function addAdminMenu()
@@ -69,7 +69,7 @@ class ModuleTemplates
      * Handles which form to show
      * either add new
      * or the module form
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function addForm()
@@ -97,7 +97,7 @@ class ModuleTemplates
      * Display form of the module
      *
      * @param $template
-     * @since 1.0.0
+     * @since 0.1.0
      * @retutn void
      */
     protected function moduleTemplate( $template )
@@ -141,7 +141,7 @@ class ModuleTemplates
     /**
      * Form for creating new template
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     protected function createForm()
@@ -180,7 +180,7 @@ class ModuleTemplates
      *
      * @param int $postId
      * @param array $postObj
-     * @since 1.0.0
+     * @since 0.1.0
      * @return bool|void
      */
     public function save( $postId, $postObj )
@@ -222,7 +222,7 @@ class ModuleTemplates
      * @param $postId
      * @param Environment $Environment
      * @internal param ModuleStorage $Storage
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function createTemplate( $postId, Environment $Environment )
     {
@@ -294,7 +294,7 @@ class ModuleTemplates
      * @param $post
      * @return mixed
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function postData( $data, $post )
     {
@@ -324,7 +324,7 @@ class ModuleTemplates
     /**
      * Register the template post type
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function registerPostType()
@@ -371,7 +371,7 @@ class ModuleTemplates
      *
      * @param $messages
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return mixed
      */
     public function postTypeMessages( $messages )
@@ -411,7 +411,7 @@ class ModuleTemplates
      *
      * @param $postId
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return bool
      */
     private function auth( $postId )
@@ -454,7 +454,7 @@ class ModuleTemplates
      *
      * @param array $postData potential incomplete form data
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     private function prepareModulesforSelectbox( $postData )
@@ -485,7 +485,7 @@ class ModuleTemplates
 
     /**
      * Filter all modules which may be created as a template
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     public function getTemplateables()

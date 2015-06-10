@@ -7,10 +7,6 @@ module.exports =  {
     firstRun: true,
     init: function () {
 
-      if (KB.appData.config.frontend) {
-        return false;
-      }
-
       var that = this;
       this.listEl = jQuery('<ul></ul>').appendTo(this.el);
       if (this.listEl.length > 0) {

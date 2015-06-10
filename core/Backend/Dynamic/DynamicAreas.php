@@ -29,7 +29,7 @@ class DynamicAreas
     /**
      * Class constructor
      * Add relevant Hooks
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct()
     {
@@ -52,7 +52,7 @@ class DynamicAreas
      * Add menu entry
      * Add "Kontentblocks" main menu item if it does not exists
      * else add as sub menu item
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function addAdminMenu()
@@ -81,7 +81,7 @@ class DynamicAreas
 
     /**
      * Add new / create new form
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function addForm()
@@ -113,7 +113,7 @@ class DynamicAreas
      * Save
      *
      * @param $postId
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function save( $postId )
@@ -132,7 +132,7 @@ class DynamicAreas
      * save modules of the area
      *
      * @param $postId
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     protected function saveArea( $postId )
@@ -192,7 +192,7 @@ class DynamicAreas
 
     /**
      * Register Areas post type
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function registerPostType()
@@ -240,7 +240,7 @@ class DynamicAreas
      *
      * @param $messages
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return mixed
      */
     public function postTypeMessages( $messages )
@@ -275,7 +275,7 @@ class DynamicAreas
     /**
      * Various checks to verify save action
      * @param int $postId
-     * @since 1.0.0
+     * @since 0.1.0
      * @return bool
      */
     private function auth( $postId )
@@ -321,7 +321,7 @@ class DynamicAreas
      * Helper Method: marks checked post types for the create form
      * @param array $data
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     private function preparedPostTypes( $data )
@@ -347,7 +347,7 @@ class DynamicAreas
      *
      * @param array $data
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     private function preparedPageTemplates( $data )
@@ -372,7 +372,7 @@ class DynamicAreas
      * 'Create Area' form, handled by twig template
      *
      * @param $data
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     private function settingsForm( $data )
@@ -403,7 +403,7 @@ class DynamicAreas
      * Display method
      *
      * @param $area
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     private function renderArea( $area )
@@ -440,7 +440,7 @@ class DynamicAreas
      * @param array $actions
      * @param object $post
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     public function rowActions( $actions, $post )
@@ -464,7 +464,7 @@ class DynamicAreas
      * @param $class
      * @param $post_id
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     public function addRowClass( $classes, $class, $post_id )
@@ -486,7 +486,7 @@ class DynamicAreas
      * Use the added class from addRowClass disable the checkbox
      * Disabled checkbox on edit screen for predefined areas
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function hackItAway()

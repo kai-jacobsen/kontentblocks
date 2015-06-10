@@ -1,6 +1,7 @@
 //KB.Backbone.Backend.ModuleView
 var ModuleControlsView = require('backend/Views/ModuleControls/ControlsView');
 var ModuleUiView = require('backend/Views/ModuleUi/ModuleUiView');
+var ModuleStatusBarView = require('backend/Views/ModuleStatusBar/ModuleStatusBarView');
 var DeleteControl = require('backend/Views/ModuleControls/controls/DeleteControl');
 var DuplicateControl = require('backend/Views/ModuleControls/controls/DuplicateControl');
 var SaveControl = require('backend/Views/ModuleControls/controls/SaveControl');
@@ -8,6 +9,11 @@ var StatusControl = require('backend/Views/ModuleControls/controls/StatusControl
 var MoveControl = require('backend/Views/ModuleUi/controls/MoveControl');
 var ToggleControl = require('backend/Views/ModuleUi/controls/ToggleControl');
 var FullscreenControl = require('backend/Views/ModuleUi/controls/FullscreenControl');
+var DisabledControl = require('backend/Views/ModuleUi/controls/DisabledControl');
+var DraftStatus = require('backend/Views/ModuleStatusBar/status/DraftStatus');
+var OriginalNameStatus = require('backend/Views/ModuleStatusBar/status/OriginalNameStatus');
+
+
 var Checks = require('common/Checks');
 var Ajax = require('common/Ajax');
 var UI = require('common/UI');
@@ -57,12 +63,18 @@ module.exports = Backbone.View.extend({
       parent: this
     });
 
+    this.ModuleStatusBar = new ModuleStatusBarView({
+      el: this.$el,
+      parent: this
+    });
+
 
     // set view on model for later reference
     this.model.View = this;
     // Setup View
     this.setupDefaultMenuItems();
     this.setupDefaultUiItems();
+    this.setupDefaultStatusItems();
 
     KB.Views.Modules.on('kb.modules.view.deleted', function (view) {
       view.$el.fadeOut(500, function () {
@@ -83,6 +95,11 @@ module.exports = Backbone.View.extend({
     this.ModuleUi.addItem(new MoveControl({model: this.model, parent: this}));
     this.ModuleUi.addItem(new ToggleControl({model: this.model, parent: this}));
     this.ModuleUi.addItem(new FullscreenControl({model: this.model, parent: this}));
+    this.ModuleUi.addItem(new DisabledControl({model: this.model, parent: this}));
+  },
+  setupDefaultStatusItems: function(){
+    this.ModuleStatusBar.addItem(new DraftStatus({model:this.model, parent:this}));
+    this.ModuleStatusBar.addItem(new OriginalNameStatus({model:this.model, parent:this}));
   },
   // get called when a module was dragged to a different area / area context
   updateModuleForm: function () {

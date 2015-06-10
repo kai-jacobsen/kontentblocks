@@ -10,7 +10,9 @@
             'description' => __('Description:', 'Kontentblocks')
         ),
         'notices' => array(
-            'draft' => __('This module is not public until you save the current post', 'Kontentblocks')
+            'draft' => __('Module will be published after updating the current post', 'Kontentblocks'),
+            'draft_short' => __('draft', 'Kontentblocks'),
+            'public_short' => __('Public', 'Kontentblocks')
         )
 
 ) );

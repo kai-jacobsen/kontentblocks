@@ -44,8 +44,11 @@ class ModuleHTMLNode
         //markup for block header
         $concat .= $this->header();
 
+
         // inner block open
-        $concat .= $this->openInner();
+        $concat .= $this->openModuleBody();
+
+        $concat .= $this->statusBar();
 
 
         // if disabled don't output, just show disabled message
@@ -55,6 +58,7 @@ class ModuleHTMLNode
             $concat .= $this->Module->form();
         }
 
+        // strings not appended because $concat is expected as return
         $concat = apply_filters(
             "kb.module.footer-{$this->Module->Properties->getSetting( 'id' )}",
             $concat,
@@ -62,7 +66,7 @@ class ModuleHTMLNode
         );
         $concat = apply_filters( 'kb.module.footer', $concat, $this->Module );
 
-        $concat .= $this->closeInner();
+        $concat .= $this->closeModuleBody();
 
         $concat .= $this->closeListItem();
 
@@ -90,7 +94,6 @@ class ModuleHTMLNode
         $disabledclass = ( $this->Module->Properties->getSetting( 'disabled' ) ) ? 'disabled' : null;
         $uidisabled = ( $this->Module->Properties->getSetting( 'disabled' ) ) ? 'ui-state-disabled' : null;
 
-        //$locked = ( $this->locked == 'false' || empty($this->locked) ) ? 'unlocked' : 'locked';
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
         $unsortable = ( ( isset( $this->unsortable ) and $this->unsortable ) == '1' ) ? 'cantsort' : null;
 
@@ -121,30 +124,15 @@ class ModuleHTMLNode
      * @TODO clean up module header from legacy code
      */
 
-    private function openInner()
+    private function openModuleBody()
     {
         $lockedmsg = ( !current_user_can( 'lock_kontentblocks' ) ) ? 'Content is locked' : null;
-        $i18n = I18n::getPackage( 'Modules' );
-
         // markup for each block
         $out = "<div style='display:none;' class='kb_inner kb-module__body'>";
         if ($lockedmsg && KONTENTLOCK) {
             $out = $lockedmsg;
         } else {
-            $descSetting = $this->Module->Properties->getSetting( 'description' );
-            $description = ( !empty( $descSetting ) ) ? $i18n['common']['description'] . $descSetting : '';
-            $l18n_draft_status = ( $this->Module->Properties->state['draft'] === true ) ? '<p class="kb_draft">' . $i18n['notices']['draft'] . '</p>' : '';
-
-            $out .= "<div class='kb-module__title'>";
-
-            $out .= "		<div class='kb-module__notice hide'>
-							<p>Es wurden Veränderungen vorgenommen. <input type='submit' class='button-primary' value='Aktualisieren' /></p>
-						</div>
-						{$l18n_draft_status}
-					</div>";
             $out .= "<div class='kb-module__controls-inner'>";
-
-
         }
 
         return $out;
@@ -156,9 +144,16 @@ class ModuleHTMLNode
      * Lost in outer div space
      * @return string
      */
-    private function closeInner()
+    private function closeModuleBody()
     {
         return "</div></div>";
+    }
+
+
+    private function statusBar()
+    {
+        // content moved to client side code
+        return "<div class='kb-module--status-bar'></div>";
     }
 
     /**
@@ -170,31 +165,13 @@ class ModuleHTMLNode
 
         //open header
         $html .= "<div rel='{$this->Module->getId()}' class='kb-module__header klearfix edit kb-title'>";
-
         $html .= "<div class='ui-wrap'></div>";
-
-
-        // locked icon
-        if (!$this->Module->Properties->getSetting( 'disabled' ) && KONTENTLOCK) {
-            $html .= "<div class='kb-lock {$this->locked}'></div>";
-        }
-
-        // disabled icon
-        if ($this->Module->Properties->getSetting( 'disabled' )) {
-            $html .= "<div class='kb-disabled-icon'></div>";
-        }
-
         // name
         $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->Module->getId(
             )}[moduleName]' value='" . esc_attr(
                 $this->Module->Properties->getSetting( 'name' )
             ) . "' /></div>";
-
-        // original name
-        $html .= "<div class='kb-sub-name'>{$this->Module->Properties->getSetting( 'publicName' )}</div>";
-
         $html .= "</div>";
-
         // Open the drop down menu
         $html .= "<div class='menu-wrap'></div>";
 
@@ -206,7 +183,7 @@ class ModuleHTMLNode
 
     /**
      * Returns a string indicator for the current status
-     * @since 1.0.0
+     * @since 0.1.0
      * @return string
      */
     public function getStatusClass()

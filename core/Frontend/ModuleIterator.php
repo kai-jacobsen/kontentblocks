@@ -16,7 +16,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Internal pointer
      *
      * @var int
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $position = 0;
 
@@ -25,7 +25,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Result, after filtering the input modules
      *
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $modules;
 
@@ -33,7 +33,7 @@ class ModuleIterator implements \Iterator, \Countable
      * The instance_id for the current position of the iterator
      *
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $currentModuleId;
 
@@ -41,7 +41,7 @@ class ModuleIterator implements \Iterator, \Countable
      * current positions module object
      *
      * @var \Kontentblocks\Modules\Module
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $currentModuleObject;
 
@@ -50,7 +50,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Environment object
      *
      * @var \Kontentblocks\Backend\Environment\Environment
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $Environment;
 
@@ -60,13 +60,12 @@ class ModuleIterator implements \Iterator, \Countable
      * @param $modules
      * @param $Environment
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct( $modules, $Environment )
     {
         $this->modules = $this->setupModules( $modules );
         $this->Environment = $Environment;
-
     }
 
     /**
@@ -75,7 +74,7 @@ class ModuleIterator implements \Iterator, \Countable
      * sets the internal currentModuleObject property
      *
      * @return \Kontentblocks\Modules\Module
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function current()
     {
@@ -88,7 +87,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Module getter
      *
      * @return \Kontentblocks\Modules\Module
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected function getModule()
     {
@@ -98,7 +97,7 @@ class ModuleIterator implements \Iterator, \Countable
     /**
      * Gets the current positions key
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function key()
     {
@@ -110,7 +109,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Advance to next item in array
      *
      * @return void
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function next()
     {
@@ -122,7 +121,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Reset iterator pointer
      *
      * @return void
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function rewind()
     {
@@ -134,7 +133,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Test if key exists
      *
      * @return bool
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function valid()
     {
@@ -145,7 +144,7 @@ class ModuleIterator implements \Iterator, \Countable
     /**
      * Get wrapperclasses for the module wrapper container div
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      * @TODO: probably not supposed to be here
      */
     public function getCurrentModuleClasses()
@@ -163,7 +162,7 @@ class ModuleIterator implements \Iterator, \Countable
      * Implementation of countable interface
      *
      * @return int
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function count()
     {
@@ -177,7 +176,7 @@ class ModuleIterator implements \Iterator, \Countable
      * @param $pos
      *
      * @return \Kontentblocks\Modules\Module
-     * @since 1.0.0
+     * @since 0.1.0
      * @TODO 'get' would be more appropriate
      */
     public function setPosition( $pos )
@@ -200,7 +199,7 @@ class ModuleIterator implements \Iterator, \Countable
      *
      * @return array
      * @filter kb_render_setup_module
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function setupModules( $modules )
     {
@@ -211,12 +210,6 @@ class ModuleIterator implements \Iterator, \Countable
         }
 
         foreach ($modules as $id => $module) {
-            // if module is a draft or marked as inactive
-            //@TODO was replaced woth Module->verify / $Module->isPublic in Renderer
-//			if ( $module['state']['draft'] || ! $module['state']['active'] ) {
-//				continue;
-//			}
-
             /*
              * Master modules only
              * --------------------
@@ -230,22 +223,5 @@ class ModuleIterator implements \Iterator, \Countable
 
         return $collect;
     }
-//
-//    /**
-//     * Get the data for the current a module
-//     *
-//     * @param $moduleDef
-//     *
-//     * @return array|mixed|null
-//     * @since 1.0.0
-//     */
-//    private function getModuleData( $moduleDef )
-//    {
-//        return apply_filters(
-//            'kb.before.frontend.setup.data',
-//            $this->Environment->getModuleData( $this->key() ),
-//            $moduleDef
-//        );
-//    }
 
 }

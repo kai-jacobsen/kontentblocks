@@ -77,7 +77,7 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
     /**
      * Returns the original field data
      * @return mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getValue()
     {

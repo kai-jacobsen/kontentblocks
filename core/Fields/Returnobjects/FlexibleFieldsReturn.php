@@ -7,7 +7,7 @@ use Kontentblocks\Fields\Definitions\FlexibleFields;
 /**
  * Class FlexibleFieldsReturn
  * @package Kontentblocks\Fields\Utilities
- * @since 1.0.0
+ * @since 0.1.0
  */
 class FlexibleFieldsReturn
 {
@@ -40,7 +40,7 @@ class FlexibleFieldsReturn
 
     /**
      * Class Constructor
-     * @since 1.0.0
+     * @since 0.1.0
      *
      * @param FlexibleFields $Field
      */
@@ -56,7 +56,7 @@ class FlexibleFieldsReturn
 
     /**
      * Get prepared saved items
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array|bool
      */
     public function getItems()
@@ -77,7 +77,7 @@ class FlexibleFieldsReturn
 
     /**
      * Iterate through fields and set up
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     public function setupItems()
@@ -102,7 +102,7 @@ class FlexibleFieldsReturn
 
     /**
      * Validate if all necessary props are set
-     * @since 1.0.0
+     * @since 0.1.0
      * @return bool
      */
     private function validate()
@@ -154,7 +154,7 @@ class FlexibleFieldsReturn
      * @param $index string
      * @param $key string
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return EditableElement|EditableImage
      */
     private function getReturnObj( $type, $keydata, $index, $key )

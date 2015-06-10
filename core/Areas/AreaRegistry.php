@@ -14,7 +14,7 @@ use Kontentblocks\Utils\Utilities;
  * Collects all registered areas
  * Collects all registered area templates
  * Handles the connection Module > Area
- * @since 1.0.0
+ * @since 0.1.0
  * @package Kontentblocks/Areas
  * @author Kai Jacobsen
  */
@@ -24,28 +24,28 @@ class AreaRegistry
     /**
      * All register areas
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $areas = array();
 
     /**
      * Global areas with context 'side' filtered
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $globalSidebars = array();
 
     /**
      * all global areas filtered
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $globalAreas = array();
 
     /**
      * area templates
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $templates = array();
 
@@ -78,7 +78,7 @@ class AreaRegistry
      * Adds those areas to the directory
      *
      * @return void
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function init()
     {
@@ -119,7 +119,7 @@ class AreaRegistry
      * @param bool $manual
      *
      * @return void
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function addArea( $args, $manual = true )
     {
@@ -143,7 +143,7 @@ class AreaRegistry
      * @param string $id
      *
      * @return mixed null if area is not set | area array args if area is set
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getArea( $id )
     {
@@ -162,7 +162,7 @@ class AreaRegistry
      * @param string $context
      *
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getAreasByContext( $context )
     {
@@ -195,7 +195,7 @@ class AreaRegistry
     /**
      * Getter for global sidebars
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getGlobalSidebars()
     {
@@ -205,7 +205,7 @@ class AreaRegistry
     /**
      * getter for global areas
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getGlobalAreas()
     {
@@ -218,7 +218,7 @@ class AreaRegistry
      *
      * @param $area
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function preFilterAreas( $area )
     {
@@ -237,7 +237,7 @@ class AreaRegistry
     /**
      * Returns all registered area templates
      * @return array of template definitions
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getTemplates()
     {
@@ -250,7 +250,7 @@ class AreaRegistry
      *
      * @param array $args
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function addTemplate( $args )
     {
@@ -275,7 +275,7 @@ class AreaRegistry
      * @param string $id
      *
      * @return null | array of params
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getTemplate( $id )
     {
@@ -292,7 +292,7 @@ class AreaRegistry
      * Check if a template exists by id
      * @param $id
      * @return bool
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function templateExists( $id )
     {

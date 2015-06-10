@@ -16,7 +16,7 @@ use Kontentblocks\Utils\Utilities;
  *
  * @package Kontentblocks
  * @subpackage Post
- * @since 1.0.0
+ * @since 0.1.0
  */
 class Environment implements JsonSerializable
 {
@@ -252,7 +252,7 @@ class Environment implements JsonSerializable
      * @param string $id
      *
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getModuleData( $id )
     {
@@ -270,7 +270,7 @@ class Environment implements JsonSerializable
     /**
      * Save callback handler
      * @return void
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function save()
     {
@@ -284,7 +284,7 @@ class Environment implements JsonSerializable
      * If post type does not support page templates, it's still
      * 'default' on the module
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getPageTemplate()
     {
@@ -300,7 +300,7 @@ class Environment implements JsonSerializable
 
     /**
      * Get Post Type by postid
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getPostType()
     {

@@ -103,7 +103,7 @@ abstract class Module
      * options()
      * Method for the backend display
      * gets called by ui display callback
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function form()
     {
@@ -126,7 +126,7 @@ abstract class Module
 
     /**
      * No fields an options method override fallback
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function renderEmptyForm()
     {
@@ -191,7 +191,7 @@ abstract class Module
     /**
      * Get public module name
      * @return mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getModuleName()
     {
@@ -266,7 +266,7 @@ abstract class Module
     /**
      * Setup a prepared Twig template instance if viewLoader is used
      * @return ModuleView|null
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function getView()
     {
@@ -354,7 +354,7 @@ abstract class Module
 
     /**
      * Module default settings array
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     public static function getDefaultSettings()

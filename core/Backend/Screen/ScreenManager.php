@@ -12,14 +12,14 @@ class ScreenManager
      * Raw areas are all areas which are available in the current environment
      * e.g. are assigned to current page template and/or post type
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $areas;
 
     /**
      * Environment Instance
      * @var \Kontentblocks\Backend\Environment\Environment
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $Environment;
 
@@ -28,21 +28,21 @@ class ScreenManager
      * A context does not get rendered if there are no areas
      * assigned to it.
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $contextLayout;
 
     /**
      * Final sorted assignment of areas to contexts
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $contexts;
 
     /**
      * Indicates if sidebars exists or not
      * @var boolean
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $hasSidebar;
 
@@ -71,7 +71,7 @@ class ScreenManager
 
     /**
      * Instantiate a context object for each context and render
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function render()
     {
@@ -93,7 +93,7 @@ class ScreenManager
      * Sort raw Area definitions to array
      * @throws Exception
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function areasSortedByContext()
     {
@@ -119,7 +119,7 @@ class ScreenManager
      * @param $contextId
      *
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getContextAreas( $contextId )
     {
@@ -134,7 +134,7 @@ class ScreenManager
     /**
      * Getter for all areas
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getAreas()
     {
@@ -145,7 +145,7 @@ class ScreenManager
     /**
      * Getter for Environment instance
      * @return Environment
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getEnvironment()
     {
@@ -158,7 +158,7 @@ class ScreenManager
      *
      * @return array default context layout
      * @filter kb_default_context_layout
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static function getDefaultContextLayout()
     {
@@ -194,7 +194,7 @@ class ScreenManager
     /**
      * Get sidebar indicator flag
      * @return bool
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function hasSidebar()
     {
