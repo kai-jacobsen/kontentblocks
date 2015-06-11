@@ -242,16 +242,22 @@
         var Logger = require("common/Logger");
         var Config = require("common/Config");
         module.exports = {
-            removeEditors: function() {
-                jQuery(".wp-editor-area").each(function() {
+            removeEditors: function($parent) {
+                if (!$parent) {
+                    $parent = jQuery("body");
+                }
+                jQuery(".wp-editor-area", $parent).each(function() {
                     if (jQuery(this).attr("id") === "wp-content-wrap" || jQuery(this).attr("id") === "ghosteditor") {} else {
                         var textarea = this.id;
                         tinyMCE.execCommand("mceRemoveEditor", true, textarea);
                     }
                 });
             },
-            restoreEditors: function() {
-                jQuery(".wp-editor-wrap").each(function() {
+            restoreEditors: function($parent) {
+                if (!$parent) {
+                    $parent = jQuery("body");
+                }
+                jQuery(".wp-editor-wrap", $parent).each(function() {
                     var id = jQuery(this).find("textarea").attr("id");
                     var textarea = jQuery(this).find("textarea");
                     if (id === "ghosteditor") {
@@ -744,9 +750,9 @@
         "./controls/datetime.js": 14,
         "./controls/file.js": 15,
         "./controls/flexfields.js": 16,
-        "./controls/gallery.js": 19,
-        "./controls/image.js": 22,
-        "./controls/link.js": 23
+        "./controls/gallery.js": 20,
+        "./controls/image.js": 23,
+        "./controls/link.js": 24
     } ],
     12: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
@@ -927,7 +933,8 @@
                 if (!this.FlexFieldsController) {
                     return this.FlexFieldsController = new FlexfieldController({
                         el: this.$stage.get(0),
-                        model: this.model
+                        model: this.model,
+                        parentView: this
                     });
                 }
                 this.FlexFieldsController.setElement(this.$stage.get(0));
@@ -939,14 +946,17 @@
         "fields/controls/flexfields/FlexfieldsController": 17
     } ],
     17: [ function(require, module, exports) {
-        var ItemView = require("fields/controls/flexfields/ItemView");
+        var ToggleBoxRenderer = require("fields/controls/flexfields/ToggleBoxRenderer");
+        var SectionBoxRenderer = require("fields/controls/flexfields/SectionBoxRenderer");
         var TinyMCE = require("common/TinyMCE");
         var UI = require("common/UI");
         var Logger = require("common/Logger");
         module.exports = Backbone.View.extend({
-            initialize: function() {
+            initialize: function(options) {
+                this.parentView = options.parentView;
                 this.Tabs = this.setupConfig();
                 this.subviews = [];
+                this.Renderer = this.model.get("renderer") == "sections" ? SectionBoxRenderer : ToggleBoxRenderer;
                 this.setupElements();
                 this.initialSetup();
                 Logger.Debug.log("Fields: Flexfields instance created and initialized");
@@ -959,7 +969,10 @@
                 data = this.model.get("value");
                 if (!_.isEmpty(data)) {
                     _.each(data, function(dataobj, index) {
-                        var Item = new ItemView({
+                        if (!dataobj) {
+                            return;
+                        }
+                        var Item = new that.Renderer({
                             Controller: that,
                             model: new Backbone.Model({
                                 _tab: {
@@ -1020,7 +1033,7 @@
                 this.$addButton = jQuery('<a class="button button-primary kb-flexible-fields--js-add-item">Add Item</a>').appendTo(this.$el);
             },
             addItem: function() {
-                var Item = new ItemView({
+                var Item = new this.Renderer({
                     Controller: this,
                     model: new Backbone.Model({
                         _tab: {
@@ -1043,11 +1056,50 @@
         "common/Logger": 3,
         "common/TinyMCE": 6,
         "common/UI": 7,
-        "fields/controls/flexfields/ItemView": 18
+        "fields/controls/flexfields/SectionBoxRenderer": 18,
+        "fields/controls/flexfields/ToggleBoxRenderer": 19
     } ],
     18: [ function(require, module, exports) {
+        var ToggleBoxRenderer = require("fields/controls/flexfields/ToggleBoxRenderer");
+        var tplSingleSectionBox = require("templates/fields/FlexibleFields/single-section-box.hbs");
+        module.exports = ToggleBoxRenderer.extend({
+            render: function() {
+                var inputName = this.createInputName(this.model.get("_tab").uid);
+                var item = this.model.toJSON();
+                var $skeleton = this.$el.append(tplSingleSectionBox({
+                    item: item,
+                    inputName: inputName,
+                    uid: this.model.get("_tab").uid
+                }));
+                this.renderTabs($skeleton);
+                return $skeleton;
+            },
+            renderTabs: function($skeleton) {
+                var that = this;
+                var tabNavEl = HandlebarsKB.compile("<li><a href='#tab-{{ uid }}-{{ index }}'>{{ tab.label }}</a></li>");
+                var tabCon = HandlebarsKB.compile("<div id='tab-{{ uid }}-{{ index }}'></div>");
+                _.each(this.Controller.Tabs, function(tab, index) {
+                    jQuery(".flexible-field--tab-nav", $skeleton).append(tabNavEl({
+                        uid: that.model.get("_tab").uid,
+                        tab: tab,
+                        index: index
+                    }));
+                    var $tabsContainment = jQuery(".kb-field--tabs", $skeleton);
+                    var $con = jQuery(tabCon({
+                        uid: that.model.get("_tab").uid,
+                        index: index
+                    })).appendTo($tabsContainment);
+                    that.renderFields(tab, $con);
+                });
+            }
+        });
+    }, {
+        "fields/controls/flexfields/ToggleBoxRenderer": 19,
+        "templates/fields/FlexibleFields/single-section-box.hbs": 25
+    } ],
+    19: [ function(require, module, exports) {
         var Notice = require("common/Notice");
-        var tplSingleItem = require("templates/fields/FlexibleFields/single-item.hbs");
+        var tplSingleToggleBox = require("templates/fields/FlexibleFields/single-toggle-box.hbs");
         module.exports = Backbone.View.extend({
             tagName: "li",
             className: "kb-flexible-fields--item-wrapper",
@@ -1073,7 +1125,7 @@
             render: function() {
                 var inputName = this.createInputName(this.model.get("_tab").uid);
                 var item = this.model.toJSON();
-                var $skeleton = this.$el.append(tplSingleItem({
+                var $skeleton = this.$el.append(tplSingleToggleBox({
                     item: item,
                     inputName: inputName,
                     uid: this.model.get("_tab").uid
@@ -1117,7 +1169,7 @@
                     if (fieldInstance.postRender) {
                         fieldInstance.postRender.call(fieldInstance);
                     }
-                    if (that.Controller.model.FieldView) {
+                    if (that.Controller.parentView) {
                         that.addInstanceToCollection(fieldInstance);
                     }
                 });
@@ -1144,9 +1196,9 @@
         });
     }, {
         "common/Notice": 4,
-        "templates/fields/FlexibleFields/single-item.hbs": 24
+        "templates/fields/FlexibleFields/single-toggle-box.hbs": 26
     } ],
-    19: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
         var BaseView = require("fields/FieldBaseView");
         var GalleryController = require("./gallery/GalleryController");
         KB.Fields.registerObject("gallery", BaseView.extend({
@@ -1176,10 +1228,10 @@
             }
         }));
     }, {
-        "./gallery/GalleryController": 20,
+        "./gallery/GalleryController": 21,
         "fields/FieldBaseView": 9
     } ],
-    20: [ function(require, module, exports) {
+    21: [ function(require, module, exports) {
         var Logger = require("common/Logger");
         var ImageView = require("./ImageView");
         module.exports = Backbone.View.extend({
@@ -1290,10 +1342,10 @@
             }
         });
     }, {
-        "./ImageView": 21,
+        "./ImageView": 22,
         "common/Logger": 3
     } ],
-    21: [ function(require, module, exports) {
+    22: [ function(require, module, exports) {
         var TinyMCE = require("common/TinyMCE");
         var UI = require("common/UI");
         var Templates = require("common/Templates");
@@ -1395,7 +1447,7 @@
         "common/TinyMCE": 6,
         "common/UI": 7
     } ],
-    22: [ function(require, module, exports) {
+    23: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         var Utilities = require("common/Utilities");
         var Config = require("common/Config");
@@ -1526,7 +1578,7 @@
         "common/Config": 2,
         "common/Utilities": 8
     } ],
-    23: [ function(require, module, exports) {
+    24: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("link", BaseView.extend({
             initialize: function() {
@@ -1572,7 +1624,35 @@
     }, {
         "../FieldBaseView": 9
     } ],
-    24: [ function(require, module, exports) {
+    25: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                var stack1, helper, alias1 = helpers.helperMissing, alias2 = "function", alias3 = this.escapeExpression;
+                return '<input type="hidden" name="' + alias3((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1, 
+                typeof helper === alias2 ? helper.call(depth0, {
+                    name: "inputName",
+                    hash: {},
+                    data: data
+                }) : helper)) + '[_uid]" value="' + alias3((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1, 
+                typeof helper === alias2 ? helper.call(depth0, {
+                    name: "uid",
+                    hash: {},
+                    data: data
+                }) : helper)) + '">\n<div class="flexible-fields--section-box">\n    <div class="flexible-fields--section-title">\n        <h3>\n            <span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span>\n            <span class="dashicons dashicons-trash flexible-fields--js-trash"></span>\n            <input type="text" value="' + alias3(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.item : depth0) != null ? stack1._tab : stack1) != null ? stack1.title : stack1, depth0)) + '" name="' + alias3((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1, 
+                typeof helper === alias2 ? helper.call(depth0, {
+                    name: "inputName",
+                    hash: {},
+                    data: data
+                }) : helper)) + '[_tab][title] ">\n        </h3>\n    </div>\n    <div class="kb-field--tabs kb_fieldtabs">\n        <ul class="flexible-field--tab-nav">\n\n        </ul>\n\n    </div>\n</div>';
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 35
+    } ],
+    26: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -1598,9 +1678,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 33
+        "hbsfy/runtime": 35
     } ],
-    25: [ function(require, module, exports) {
+    27: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -1640,14 +1720,14 @@
         exports["default"] = inst;
         module.exports = exports["default"];
     }, {
-        "./handlebars/base": 26,
-        "./handlebars/exception": 27,
-        "./handlebars/no-conflict": 28,
-        "./handlebars/runtime": 29,
-        "./handlebars/safe-string": 30,
-        "./handlebars/utils": 31
+        "./handlebars/base": 28,
+        "./handlebars/exception": 29,
+        "./handlebars/no-conflict": 30,
+        "./handlebars/runtime": 31,
+        "./handlebars/safe-string": 32,
+        "./handlebars/utils": 33
     } ],
-    26: [ function(require, module, exports) {
+    28: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -1871,10 +1951,10 @@
             return frame;
         }
     }, {
-        "./exception": 27,
-        "./utils": 31
+        "./exception": 29,
+        "./utils": 33
     } ],
-    27: [ function(require, module, exports) {
+    29: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         var errorProps = [ "description", "fileName", "lineNumber", "message", "name", "number", "stack" ];
@@ -1901,7 +1981,7 @@
         exports["default"] = Exception;
         module.exports = exports["default"];
     }, {} ],
-    28: [ function(require, module, exports) {
+    30: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports["default"] = function(Handlebars) {
@@ -1914,7 +1994,7 @@
         };
         module.exports = exports["default"];
     }, {} ],
-    29: [ function(require, module, exports) {
+    31: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -2101,11 +2181,11 @@
             return data;
         }
     }, {
-        "./base": 26,
-        "./exception": 27,
-        "./utils": 31
+        "./base": 28,
+        "./exception": 29,
+        "./utils": 33
     } ],
-    30: [ function(require, module, exports) {
+    32: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         function SafeString(string) {
@@ -2117,7 +2197,7 @@
         exports["default"] = SafeString;
         module.exports = exports["default"];
     }, {} ],
-    31: [ function(require, module, exports) {
+    33: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports.extend = extend;
@@ -2205,14 +2285,14 @@
             return (contextPath ? contextPath + "." : "") + id;
         }
     }, {} ],
-    32: [ function(require, module, exports) {
+    34: [ function(require, module, exports) {
         module.exports = require("./dist/cjs/handlebars.runtime")["default"];
     }, {
-        "./dist/cjs/handlebars.runtime": 25
+        "./dist/cjs/handlebars.runtime": 27
     } ],
-    33: [ function(require, module, exports) {
+    35: [ function(require, module, exports) {
         module.exports = require("handlebars/runtime")["default"];
     }, {
-        "handlebars/runtime": 32
+        "handlebars/runtime": 34
     } ]
 }, {}, [ 11 ]);

@@ -244,7 +244,7 @@ class ModuleStorage implements \Countable
      *
      * @param array $modules
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function saveModules( $modules )
     {
@@ -266,7 +266,7 @@ class ModuleStorage implements \Countable
     /**
      * Getter for modules
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getModules()
     {

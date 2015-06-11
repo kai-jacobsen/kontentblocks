@@ -41,14 +41,14 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     /**
      * Set of css classes to add to the el
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $classes = array();
 
     /**
      * Additional attribures
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $attributes = array();
 
@@ -87,7 +87,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @param string $class
      *
      * @return $this
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function addClass( $class )
     {
@@ -108,7 +108,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @param string $value
      *
      * @return $this
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function addAttr( $attr, $value = '' )
     {
@@ -130,7 +130,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @param $string
      *
      * @return string|void
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function _cleanSpaces( $string )
     {
@@ -282,7 +282,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     /**
      * Render classes and extra attributes
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected
     function _renderAttributes()
@@ -297,7 +297,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     /**
      * From array to string
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected
     function _classList()

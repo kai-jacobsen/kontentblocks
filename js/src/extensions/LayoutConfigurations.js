@@ -72,7 +72,7 @@ var LayoutConfigurations =
       function (response) {
         that.update();
         that.createInput.val('');
-        KB.notice('Saved', 'success');
+        Notice.notice('Saved', 'success');
       });
 
   },
@@ -85,7 +85,7 @@ var LayoutConfigurations =
       return false;
     }
 
-    KB.Ajax.send(
+    Ajax.send(
       {
         action: 'deleteLayoutConfig',
         _ajax_nonce: Config.getNonce('delete'),

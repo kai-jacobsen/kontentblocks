@@ -7,7 +7,7 @@ namespace Kontentblocks\Backend\Storage;
  * Class BackupDataStorage
  * @package Kontentblocks
  * @subpackage Backend
- * @since 1.0.0
+ * @since 0.1.0
  *
  * Interact with custom backup table
  */

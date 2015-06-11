@@ -7,7 +7,7 @@ module.exports = BaseView.extend({
   },
   className: 'ui-move kb-move block-menu-icon',
   isValid: function () {
-    if (!this.model.get('disabled') &&
+    if (!this.model.get('settings').disabled &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
     } else {

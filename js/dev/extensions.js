@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*! Kontentblocks DevVersion 2015-06-11 */
+=======
+/*! Kontentblocks DevVersion 2015-06-10 */
+>>>>>>> development
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -176,9 +180,6 @@
             lastItem: null,
             firstRun: true,
             init: function() {
-                if (KB.appData.config.frontend) {
-                    return false;
-                }
                 var that = this;
                 this.listEl = jQuery("<ul></ul>").appendTo(this.el);
                 if (this.listEl.length > 0) {
@@ -310,7 +311,7 @@
                 }, function(response) {
                     that.update();
                     that.createInput.val("");
-                    KB.notice("Saved", "success");
+                    Notice.notice("Saved", "success");
                 });
             },
             "delete": function() {
@@ -320,7 +321,7 @@
                     Notice.notice("Please chose a template to delete", "error");
                     return false;
                 }
-                KB.Ajax.send({
+                Ajax.send({
                     action: "deleteLayoutConfig",
                     _ajax_nonce: Config.getNonce("delete"),
                     data: {

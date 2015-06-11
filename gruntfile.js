@@ -239,6 +239,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('jsfrontend', ['browserify:frontend', 'uglify:dev', 'clean', 'bash']);
   grunt.registerTask('jsbackend', ['browserify:backend', 'uglify:dev', 'clean', 'bash']);
+  grunt.registerTask('jsextensions', ['browserify:extensions', 'uglify:dev', 'clean', 'bash']);
   grunt.registerTask('jsrefields', ['browserify:refields', 'uglify:dev', 'clean', 'bash']);
   grunt.registerTask('jsplugins', ['uglify:dev', 'clean', 'jshint', 'bash']);
   grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI','uglify:dev', 'clean', 'jshint', 'bash']);

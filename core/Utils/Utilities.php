@@ -26,7 +26,7 @@ class Utilities
      * @param mixed $storageId
      * @param null $actualPostId
      * @return Environment
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static function getEnvironment( $storageId = null, $actualPostId = null )
     {
@@ -287,7 +287,7 @@ class Utilities
      * Evaluate the current template file if possible
      * read template as file in the wp template hierachy
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static function getTemplateFile()
     {

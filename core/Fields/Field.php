@@ -12,7 +12,7 @@ use Kontentblocks\Fields\Returnobjects;
 /**
  * Class Field
  * @package Kontentblocks\Fields
- * @since 1.0.0
+ * @since 0.1.0
  *
  * Note: Three components, one optional, to build the input name attribute
  * 1. baseId, most likely equals a modules id
@@ -26,7 +26,7 @@ abstract class Field implements Exportable
      * Base id/key for the field
      * may get modified if a subkey is present
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $baseId;
 
@@ -47,28 +47,28 @@ abstract class Field implements Exportable
 
     /**
      * @var array additional arguments
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $args;
 
     /**
      * Actual data for field
      * @var mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public $value;
 
     /**
      * key
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $key;
 
     /**
      * Current field type
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $type;
 
@@ -76,7 +76,7 @@ abstract class Field implements Exportable
      * Path to field definition
      * @var string
      * @TODO really?
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $path;
 
@@ -132,7 +132,7 @@ abstract class Field implements Exportable
     /**
      * get storage key
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getKey()
     {
@@ -142,7 +142,7 @@ abstract class Field implements Exportable
     /**
      * Field parameters array
      * @param array $args
-     * @since 1.0.0
+     * @since 0.1.0
      * @return bool
      */
     public function setArgs( $args )
@@ -164,7 +164,7 @@ abstract class Field implements Exportable
      * @param $id
      * @param string $subkey
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function setBaseId( $id, $subkey = null )
     {
@@ -200,7 +200,7 @@ abstract class Field implements Exportable
      *
      * @param mixed $data
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function setValue( $data )
     {
@@ -318,7 +318,7 @@ abstract class Field implements Exportable
      * prepareOutput runs when data is setup for the frontend output of a module
      * @TODO Kind of Registry for Return Objects
      * @TODO Overall logic is fuxxed up
-     * @since 1.0.0
+     * @since 0.1.0
      * @return object
      * @throws \Exception
      */
@@ -403,7 +403,7 @@ abstract class Field implements Exportable
      * The actual output method for the field markup
      * Any markup should be returned
      * Can be overridden by the individual field class
-     * @since 1.0.0
+     * @since 0.1.0
      * @param FieldFormController $Form
      * @return bool
      */
@@ -438,7 +438,7 @@ abstract class Field implements Exportable
     /**
      * Build the whole field, including surrounding wrapper
      * and optional 'hooks"
-     * @since 1.0.0
+     * @since 0.1.0
      * @param bool $echo
      * @return string $out
      */
@@ -469,7 +469,7 @@ abstract class Field implements Exportable
 
     /**
      * JSON Encode custom settings for the field
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function toJson()
     {

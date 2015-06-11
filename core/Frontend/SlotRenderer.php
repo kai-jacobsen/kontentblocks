@@ -58,7 +58,7 @@ class SlotRenderer
 
     /**
      * Simply render the next module
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function next()
     {
@@ -68,7 +68,7 @@ class SlotRenderer
     /**
      * Actual method to handle the stuff
      * @param $pos
-     * @since 1.0.0
+     * @since 0.1.0
      * @TODO complete printf
      */
     public function slot( $pos )

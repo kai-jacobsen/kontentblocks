@@ -40,7 +40,7 @@ class FieldRegistry
      * @param string $id
      * @param object $class
      * @return $this
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function registerField( $id, $class )
     {
@@ -56,7 +56,7 @@ class FieldRegistry
      * @param $file
      * @throws \Exception
      * @return $this
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function add( $file )
     {
@@ -91,7 +91,7 @@ class FieldRegistry
      * @param $subkey
      * @param $key
      * @return bool|Field
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getField( $type, $baseId, $subkey, $key )
     {

@@ -34,7 +34,7 @@ class ModuleFieldController extends AbstractFieldController
     /**
      * Constructor
      * @param \Kontentblocks\Modules\Module
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct( Module $Module )
     {
@@ -49,7 +49,7 @@ class ModuleFieldController extends AbstractFieldController
      * @param array $args
      * @param Kontentblocks\Modules\Module
      * @return object
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function addGroup( $id, $args = array() )
     {
@@ -74,7 +74,7 @@ class ModuleFieldController extends AbstractFieldController
      * if not overridden b extending class
      * @see Kontentblocks\Modules\Module::form
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function renderFields()
     {

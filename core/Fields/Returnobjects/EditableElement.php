@@ -15,21 +15,21 @@ class EditableElement extends AbstractEditableFieldReturn
     /**
      * The wrapper element name to us
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $el = 'div';
 
     /**
      * Set of css classes to add to the el
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $classes = array();
 
     /**
      * Additional attribures
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $attributes = array();
 
@@ -72,7 +72,7 @@ class EditableElement extends AbstractEditableFieldReturn
      * @param string $el
      *
      * @return $this
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function el( $el )
     {
@@ -84,7 +84,7 @@ class EditableElement extends AbstractEditableFieldReturn
     /**
      * html output method
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function html()
     {

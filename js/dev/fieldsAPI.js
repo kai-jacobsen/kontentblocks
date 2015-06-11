@@ -172,16 +172,22 @@
         var Logger = require("common/Logger");
         var Config = require("common/Config");
         module.exports = {
-            removeEditors: function() {
-                jQuery(".wp-editor-area").each(function() {
+            removeEditors: function($parent) {
+                if (!$parent) {
+                    $parent = jQuery("body");
+                }
+                jQuery(".wp-editor-area", $parent).each(function() {
                     if (jQuery(this).attr("id") === "wp-content-wrap" || jQuery(this).attr("id") === "ghosteditor") {} else {
                         var textarea = this.id;
                         tinyMCE.execCommand("mceRemoveEditor", true, textarea);
                     }
                 });
             },
-            restoreEditors: function() {
-                jQuery(".wp-editor-wrap").each(function() {
+            restoreEditors: function($parent) {
+                if (!$parent) {
+                    $parent = jQuery("body");
+                }
+                jQuery(".wp-editor-wrap", $parent).each(function() {
                     var id = jQuery(this).find("textarea").attr("id");
                     var textarea = jQuery(this).find("textarea");
                     if (id === "ghosteditor") {

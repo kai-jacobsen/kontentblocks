@@ -10,7 +10,7 @@ use Kontentblocks\Kontentblocks;
  * This class has been stripped down to the essentials during development and has only the least necessary
  * methods available for the plugin to work.
  * @package Kontentblocks\Backend\Post
- * @since 1.0.0
+ * @since 0.1.0
  */
 class PostMetaDataProvider implements DataProviderInterface
 {
@@ -18,14 +18,14 @@ class PostMetaDataProvider implements DataProviderInterface
     /**
      * Post ID to get meta from
      * @var int
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $postId;
 
     /**
      * 'cached' meta data
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $meta = array();
 
@@ -35,7 +35,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * @param $storageId
      *
      * @throws \Exception
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct( $storageId )
     {
@@ -56,7 +56,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * @param $key
      * @param $value
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function add( $key, $value )
     {
@@ -70,7 +70,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * @param $value
      *
      * @return boolean
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function update( $key, $value )
     {
@@ -83,7 +83,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * @param id string Key
      *
      * @return mixed|null
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function get( $key )
     {
@@ -100,7 +100,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * @param $key
      *
      * @return bool
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function delete( $key )
     {
@@ -110,7 +110,7 @@ class PostMetaDataProvider implements DataProviderInterface
     /**
      * Returns all meta data for this postId
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getAll()
     {
@@ -123,7 +123,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * Setup the Object.
      * @todo account for multiple keys
      * @return self
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function _getPostCustom()
     {
@@ -146,7 +146,7 @@ class PostMetaDataProvider implements DataProviderInterface
      * Makes sure the object stays in line with actual meta data
      * Should be called after any meta data modification
      * @return self
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function reset()
     {
@@ -158,7 +158,7 @@ class PostMetaDataProvider implements DataProviderInterface
     /**
      * Getter for objects post id
      * @return int
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getPostId()
     {

@@ -3,7 +3,7 @@
 \*------------------------------------*/
 
 .kb-module__body {
-  padding: $fullpadding;
+  padding: 0 $fullpadding $fullpadding;
   //  overflow: hidden;
   background: #fff;
   margin-left: 1px;
@@ -41,19 +41,37 @@
     Module Header and Controls
 \*------------------------------------*/
 
-.ui-wrap{
+.kb-name .block-title {
+  border: none;
+  border-bottom: 1px solid $grey-500;
+  margin-left: 10px;
+
+  &:hover {
+  }
+
+  &:focus {
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    border-bottom: 1px solid $lightblue;
+
+
+  }
+}
+
+.ui-wrap {
   float: left;
   overflow: hidden;
 }
 
-.ui-actions{
+.ui-actions {
   margin: 0;
   font-size: 0;
   padding: 0;
   list-style: none;
   display: inline-block;
 
-  li{
+  li {
     display: inline-block;
     margin: 0;
     cursor: pointer;
@@ -75,6 +93,7 @@
     font-size: 24px;
   }
 }
+
 .kb-toggle {
   &:hover {
     color: #333;
@@ -87,5 +106,52 @@
     font-family: "genericons";
     position: relative;
     font-size: 20px;
+  }
+}
+
+.kb-disabled{
+  position: relative;
+  top: 2px;
+  padding: 0 5px;
+}
+
+.kb-fullscreen {
+
+  color: #999;
+  //  height: 35px;
+  //  float: left;
+  //border-right: 1px solid #ccc;
+  cursor: pointer;
+
+  &:hover {
+    color: #333;
+  }
+
+  &:before {
+    content: '\f474';
+    font-family: 'genericons';
+    top: -5px;
+    position: relative;
+    font-size: 16px;
+
+  }
+}
+
+/*------------------------------------*\
+    Status Bar
+\*------------------------------------*/
+
+.kb-module--status-bar {
+  padding: $halfpadding 0;
+
+  .kb-module--status-label{
+    margin-right: $halfpadding;
+    color: $grey-500;
+    font-style: italic;
+  }
+
+  .kb-module--status-draft {
+    color: #fff;
+    background-color: $orange;
   }
 }

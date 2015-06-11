@@ -18,7 +18,7 @@ namespace Kontentblocks\Backend\Environment\Save;
  * @package Kontentblocks
  * @subpackage Backend
  *
- * @since 1.0.0
+ * @since 0.1.0
  * @TODO Works currently only if save called from post edit screen
  */
 class ConcatContent {

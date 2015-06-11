@@ -30,35 +30,35 @@ class AreaSettingsMenu
     /**
      * Defualt available settings keys
      * @var array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $defaults;
 
     /**
      * ID of parent area
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $id;
 
     /**
      * Area templates which are set to be available by parent area
      * @var array area template definitions arrays
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $areaTemplates;
 
     /**
      * default template set to parent area, if set at all
      * @var string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $defaultLayout;
 
     /**
      * Environment for data handling
      * @var \Kontentblocks\Backend\Environment\Environment
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected $Environment;
 
@@ -67,7 +67,7 @@ class AreaSettingsMenu
      * Class Constuctor
      * @param AreaProperties $Area
      * @param \Kontentblocks\Backend\Environment\Environment $Environment
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct( AreaProperties $Area, Environment $Environment )
     {
@@ -83,7 +83,7 @@ class AreaSettingsMenu
      * Output method
      * renders the html for the menu
      * TODO: Could use a twig template
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function render()
     {
@@ -116,7 +116,7 @@ class AreaSettingsMenu
      * @param string $tpl item
      * @param string $data saved data
      * TODO: Twig it!
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function _areaTemplateItem( $tpl, $data )
     {
@@ -145,7 +145,7 @@ class AreaSettingsMenu
      * Get actual Template settings array for registered templates
      * verifies that a template actually exists
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function _getAssignedTemplates()
     {
@@ -169,7 +169,7 @@ class AreaSettingsMenu
      * Available settings keys should be set here
      * Simple for now, may get extended
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function getDefaults()
     {
@@ -188,7 +188,7 @@ class AreaSettingsMenu
      * @param string $tpl
      * @param array $data saved area settings data
      * @return string
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getSelectedTemplate( $tpl, $data )
     {

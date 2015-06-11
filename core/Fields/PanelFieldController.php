@@ -73,7 +73,7 @@ class PanelFieldController extends AbstractFieldController
      * @param $oldData
      *
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function save( $data, $oldData )
     {

@@ -25,7 +25,7 @@ class JSONTransport
      *
      * Register actions
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @action wp_print_footer_script
      * @action admin_footer
      */
@@ -47,7 +47,7 @@ class JSONTransport
      * @param string $key key of data entry
      * @param mixed $data value of data entry
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return object self
      */
     public function registerData( $group, $key, $data )
@@ -69,7 +69,7 @@ class JSONTransport
      * @param string $key key of data entry
      * @param mixed $data value of data entry
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return object $this
      */
     public function registerPublicData( $group, $key, $data )
@@ -92,7 +92,7 @@ class JSONTransport
      * @param string $key key of field
      * @param $arrayKey
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return object $this
      */
     public function registerFieldData( $modid, $type, $data, $key, $arrayKey )
@@ -133,7 +133,7 @@ class JSONTransport
      *
      * @param array $module module definition array
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return object $this
      */
     public function registerModule( $module )
@@ -147,7 +147,7 @@ class JSONTransport
      * Wrapper to register multiple modules at once
      * @param array $modules array of module definitions
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return false|void
      */
     public function registerModules( $modules )
@@ -166,7 +166,7 @@ class JSONTransport
      *
      * @param array $area
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return object $this
      */
     public function registerArea( $area )
@@ -187,7 +187,7 @@ class JSONTransport
      *
      * @param array $panel
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return object $this
      */
     public function registerPanel( $panel )
@@ -199,7 +199,7 @@ class JSONTransport
     /**
      * Output collected data in footer
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function printJSON()
@@ -218,7 +218,7 @@ class JSONTransport
     /**
      * Output public data
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return void
      */
     public function printPublicJSON()
@@ -233,7 +233,7 @@ class JSONTransport
      * Used during ajax calls
      * Result gets merged with existing data by the corresponding caller (javascript)
      *
-     * @since 1.0.0
+     * @since 0.1.0
      * @return array
      */
     public function getJSON()

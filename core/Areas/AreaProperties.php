@@ -163,7 +163,7 @@ class AreaProperties
      * Normalize each area by passing it through this method
      * @param bool $manual
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static function getDefaults( $manual = true )
     {

@@ -13,7 +13,7 @@ use Kontentblocks\Utils\Utilities;
  * Backend handler of areas logic and markup
  * @package Kontentblocks/Areas
  * @author Kai Jacobsen
- * @since 1.0.0
+ * @since 0.1.0
  */
 class AreaBackendHTML
 {
@@ -88,7 +88,7 @@ class AreaBackendHTML
 
     /**
      * Wrapper to build the area markup
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function build()
     {
@@ -159,7 +159,7 @@ class AreaBackendHTML
     /**
      * Get Markup for block limit indicator
      * 0 indicates unlimited and is the default setting
-     * @since 1.0.0
+     * @since 0.1.0
      */
 
     private function getModuleLimitTag()

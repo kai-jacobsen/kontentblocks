@@ -16,7 +16,7 @@ use Kontentblocks\Modules\Module;
  * @see Kontentblocks\Fields\FieldManager::addSection()
  * @package Fields
  * @package Fields
- * @since 1.0.0
+ * @since 0.1.0
  */
 class FieldSection extends AbstractFieldSection
 {

@@ -76,7 +76,7 @@ class AreaLayoutIterator implements \Iterator
      * Class constructor
      *
      * @param $id
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function __construct( $id )
     {
@@ -89,7 +89,7 @@ class AreaLayoutIterator implements \Iterator
     /**
      * Reset the internal pointer
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function rewind()
     {
@@ -101,7 +101,7 @@ class AreaLayoutIterator implements \Iterator
      * position of the dataset
      *
      * @return mixed
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function current()
     {
@@ -112,7 +112,7 @@ class AreaLayoutIterator implements \Iterator
      * Get the current wrapper classes
      *
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getCurrentLayoutClasses()
     {
@@ -124,7 +124,7 @@ class AreaLayoutIterator implements \Iterator
      * Get current position
      *
      * @return int
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function key()
     {
@@ -135,7 +135,7 @@ class AreaLayoutIterator implements \Iterator
     /**
      * Advance to the next position, eventually
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function next()
     {
@@ -162,7 +162,7 @@ class AreaLayoutIterator implements \Iterator
      * Test if index exists in array
      *
      * @return bool
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function valid()
     {
@@ -174,7 +174,7 @@ class AreaLayoutIterator implements \Iterator
      *
      * @param $args
      * @throws Exception
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private function _setup( $args )
     {
@@ -195,7 +195,7 @@ class AreaLayoutIterator implements \Iterator
      * Get classes specific to the template
      *
      * @return array
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public function getLayoutClass()
     {

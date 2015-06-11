@@ -109,7 +109,7 @@ class Enqueues
             wp_register_script(
                 'kb-backend',
                 KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
-                array('kb-plugins', 'kb-refields' ),
+                array('kb-plugins', 'kb-refields', 'kb-extensions' ),
                 null,
                 true
             );
