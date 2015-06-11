@@ -831,6 +831,7 @@
                     this.get("ModuleModel").set("moduleData", cdata, {
                         silent: true
                     });
+                    console.log(this);
                 }
             },
             remove: function() {

@@ -743,6 +743,7 @@
         require("./controls/gallery.js");
         require("./controls/image.js");
         require("./controls/link.js");
+        require("./controls/textarea.js");
     }, {
         "./Fields": 10,
         "./controls/color.js": 12,
@@ -752,7 +753,8 @@
         "./controls/flexfields.js": 16,
         "./controls/gallery.js": 20,
         "./controls/image.js": 23,
-        "./controls/link.js": 24
+        "./controls/link.js": 24,
+        "./controls/textarea.js": 25
     } ],
     12: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
@@ -1095,7 +1097,7 @@
         });
     }, {
         "fields/controls/flexfields/ToggleBoxRenderer": 19,
-        "templates/fields/FlexibleFields/single-section-box.hbs": 25
+        "templates/fields/FlexibleFields/single-section-box.hbs": 26
     } ],
     19: [ function(require, module, exports) {
         var Notice = require("common/Notice");
@@ -1196,7 +1198,7 @@
         });
     }, {
         "common/Notice": 4,
-        "templates/fields/FlexibleFields/single-toggle-box.hbs": 26
+        "templates/fields/FlexibleFields/single-toggle-box.hbs": 27
     } ],
     20: [ function(require, module, exports) {
         var BaseView = require("fields/FieldBaseView");
@@ -1625,6 +1627,27 @@
         "../FieldBaseView": 9
     } ],
     25: [ function(require, module, exports) {
+        var BaseView = require("../FieldBaseView");
+        KB.Fields.registerObject("textarea", BaseView.extend({
+            initialize: function() {
+                this.render();
+            },
+            render: function() {
+                var that = this;
+                this.$textarea = this.$("textarea");
+                this.$textarea.on("change", function() {
+                    that.update(that.$textarea.val());
+                });
+            },
+            derender: function() {},
+            update: function(val) {
+                this.model.set("value", val);
+            }
+        }));
+    }, {
+        "../FieldBaseView": 9
+    } ],
+    26: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -1650,9 +1673,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 35
+        "hbsfy/runtime": 36
     } ],
-    26: [ function(require, module, exports) {
+    27: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -1678,9 +1701,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 35
+        "hbsfy/runtime": 36
     } ],
-    27: [ function(require, module, exports) {
+    28: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -1720,14 +1743,14 @@
         exports["default"] = inst;
         module.exports = exports["default"];
     }, {
-        "./handlebars/base": 28,
-        "./handlebars/exception": 29,
-        "./handlebars/no-conflict": 30,
-        "./handlebars/runtime": 31,
-        "./handlebars/safe-string": 32,
-        "./handlebars/utils": 33
+        "./handlebars/base": 29,
+        "./handlebars/exception": 30,
+        "./handlebars/no-conflict": 31,
+        "./handlebars/runtime": 32,
+        "./handlebars/safe-string": 33,
+        "./handlebars/utils": 34
     } ],
-    28: [ function(require, module, exports) {
+    29: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -1951,10 +1974,10 @@
             return frame;
         }
     }, {
-        "./exception": 29,
-        "./utils": 33
+        "./exception": 30,
+        "./utils": 34
     } ],
-    29: [ function(require, module, exports) {
+    30: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         var errorProps = [ "description", "fileName", "lineNumber", "message", "name", "number", "stack" ];
@@ -1981,7 +2004,7 @@
         exports["default"] = Exception;
         module.exports = exports["default"];
     }, {} ],
-    30: [ function(require, module, exports) {
+    31: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports["default"] = function(Handlebars) {
@@ -1994,7 +2017,7 @@
         };
         module.exports = exports["default"];
     }, {} ],
-    31: [ function(require, module, exports) {
+    32: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -2181,11 +2204,11 @@
             return data;
         }
     }, {
-        "./base": 28,
-        "./exception": 29,
-        "./utils": 33
+        "./base": 29,
+        "./exception": 30,
+        "./utils": 34
     } ],
-    32: [ function(require, module, exports) {
+    33: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         function SafeString(string) {
@@ -2197,7 +2220,7 @@
         exports["default"] = SafeString;
         module.exports = exports["default"];
     }, {} ],
-    33: [ function(require, module, exports) {
+    34: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports.extend = extend;
@@ -2285,14 +2308,14 @@
             return (contextPath ? contextPath + "." : "") + id;
         }
     }, {} ],
-    34: [ function(require, module, exports) {
+    35: [ function(require, module, exports) {
         module.exports = require("./dist/cjs/handlebars.runtime")["default"];
     }, {
-        "./dist/cjs/handlebars.runtime": 27
+        "./dist/cjs/handlebars.runtime": 28
     } ],
-    35: [ function(require, module, exports) {
+    36: [ function(require, module, exports) {
         module.exports = require("handlebars/runtime")["default"];
     }, {
-        "handlebars/runtime": 34
+        "handlebars/runtime": 35
     } ]
 }, {}, [ 11 ]);

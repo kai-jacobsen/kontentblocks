@@ -137,6 +137,8 @@ module.exports = Backbone.View.extend({
     this.trigger('kb::module.data.updated');
     return moduleData;
   },
+  // deprecated
+  // -------------------------------------
   addField: function (key, obj, arrayKey) {
     if (!_.isEmpty(arrayKey)) {
       this.attachedFields[arrayKey][key] = obj;

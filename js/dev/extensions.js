@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /*! Kontentblocks DevVersion 2015-06-11 */
-=======
-/*! Kontentblocks DevVersion 2015-06-10 */
->>>>>>> development
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
