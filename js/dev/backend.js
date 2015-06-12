@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-10 */
+/*! Kontentblocks DevVersion 2015-06-11 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1757,6 +1757,7 @@
                     this.get("ModuleModel").set("moduleData", cdata, {
                         silent: true
                     });
+                    console.log(this);
                 }
             },
             remove: function() {

@@ -52,7 +52,13 @@ class Utilities
     static public function editor( $id, $data, $name = null, $media = false, $args = array() )
     {
         global $wp_version;
-        wp_styles();
+
+        // introduced in 4.3
+        // necessary for wp_editor which expects $wp_styles to be setup ( state: 4.3alpha )
+        if (function_exists('wp_styles')){
+            wp_styles();
+        }
+
         $plugins = array_unique(
             apply_filters(
                 'tiny_mce_plugins',
@@ -132,7 +138,6 @@ class Utilities
         global $kbHiddenEditorCalled;
 
         if (!$kbHiddenEditorCalled) {
-//            d(xdebug_get_function_stack());
             echo "<div style='display: none;'>";
             wp_editor( '', 'ghosteditor' );
             echo '</div>';

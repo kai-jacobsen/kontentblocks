@@ -9,3 +9,4 @@ require('./controls/flexfields.js');
 require('./controls/gallery.js');
 require('./controls/image.js');
 require('./controls/link.js');
+require('./controls/textarea.js');

@@ -75,11 +75,14 @@ module.exports = Backbone.Model.extend({
     mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
     this.set('value', _.extend(mData, addData)); // set merged data to this.value
   },
+  // this is an option and is currently not used for something critical
+  // demo implementation in textarea.js
   upstreamData: function () {
     if (this.get('ModuleModel')) {
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       this.get('ModuleModel').set('moduleData', cdata, {silent: true});
+      console.log(this);
     }
   },
   remove: function () {
