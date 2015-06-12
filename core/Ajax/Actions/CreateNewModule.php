@@ -97,8 +97,8 @@ class CreateNewModule implements AjaxActionInterface
         }
 
 
-        // handle override from template
-        $this->templateOverride();
+        // handle override from global modules
+        $this->gmoduleOverride();
 
         $Workshop = new ModuleWorkshop( $this->Environment, $this->moduleArgs );
         $this->newModule = $Workshop->createAndGet();
@@ -123,7 +123,7 @@ class CreateNewModule implements AjaxActionInterface
     /**
      * Set the module name to the name of the template
      */
-    private function templateOverride()
+    private function gmoduleOverride()
     {
         if ($this->moduleArgs['template']) {
             $this->moduleArgs['overrides']['name'] = $this->moduleArgs['templateRef']['name'];
@@ -191,11 +191,14 @@ class CreateNewModule implements AjaxActionInterface
 
         ob_start();
 
+        $Module = apply_filters( 'kb.module.before.factory', $this->newModule );
+
+
         if ($this->frontend) {
-            $SingleRenderer = new SingleModuleRenderer( $this->newModule );
+            $SingleRenderer = new SingleModuleRenderer( $Module );
             echo $SingleRenderer->render();
         } else {
-            echo $this->newModule->renderForm();
+            echo $Module->renderForm();
         }
         $html = ob_get_clean();
         $response = array
@@ -228,7 +231,7 @@ class CreateNewModule implements AjaxActionInterface
         $this->moduleArgs['class'] = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
 
-        if (!is_array( $Request->get( 'templateRef' ) )) {
+        if (is_array( $Request->get( 'templateRef' ) )) {
             $this->moduleArgs['templateRef']['name'] = $Request->get( 'templateRef' )['post_title'];
             $this->moduleArgs['templateRef']['id'] = $Request->get( 'templateRef' )['post_name'];
         }

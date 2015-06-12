@@ -13,7 +13,7 @@ use Kontentblocks\Utils\Utilities;
  * Class ModuleTemplates
  * @package Kontentblocks\Backend\Dynamic
  */
-class ModuleTemplates
+class GlobalModules
 {
 
 
@@ -56,8 +56,8 @@ class ModuleTemplates
 
         add_submenu_page(
             '/edit.php?post_type=kb-dyar',
-            'Templates',
-            'Templates',
+            'Global Modules',
+            'Global Modules',
             'manage_kontentblocks',
             '/edit.php?post_type=kb-mdtpl',
             false
@@ -87,7 +87,7 @@ class ModuleTemplates
         if (empty( $template )) {
             $this->createForm();
         } else {
-            $this->moduleTemplate( $template, $Storage->getDataProvider() );
+            $this->globalModule( $template, $Storage->getDataProvider() );
         }
 
     }
@@ -96,14 +96,14 @@ class ModuleTemplates
     /**
      * Display form of the module
      *
-     * @param $template
+     * @param $gmodule
      * @since 0.1.0
      * @retutn void
      */
-    protected function moduleTemplate( $template )
+    protected function globalModule( $gmodule )
     {
         global $post;
-        if (empty( $template )) {
+        if (empty( $gmodule )) {
             wp_die( 'no template arg provided' );
         }
         // TODO Include a public context switch
@@ -113,13 +113,13 @@ class ModuleTemplates
         $context = ( isset( $_GET['area-context'] ) ) ? $_GET['area-context'] : 'normal';
 
         //set area context on init
-        $template['areaContext'] = $context;
-        $template['area'] = 'module-template';
+        $gmodule['areaContext'] = $context;
+        $gmodule['area'] = 'global-module';
         // create essential markup and render the module
         // infamous hidden editor hack
         Utilities::hiddenEditor();
         $Environment = Utilities::getEnvironment( $post->ID );
-        $Module = $Environment->getModuleById($template['mid']);
+        $Module = $Environment->getModuleById( $gmodule['mid'] );
 
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig
@@ -158,19 +158,19 @@ class ModuleTemplates
          * if this fails for any reason, data is preserved anyway
          * for completeness
          */
-        $postData = ( !empty( $_POST['new-template'] ) ) ? $_POST['new-template'] : array();
+        $postData = ( !empty( $_POST['new-gmodule'] ) ) ? $_POST['new-gmodule'] : array();
 
         // Data for twig
         $templateData = array(
             'modules' => $this->prepareModulesforSelectbox( $postData ),
-            'nonce' => wp_create_nonce( 'new-template' ),
+            'nonce' => wp_create_nonce( 'new-gmodule' ),
             'data' => $postData,
             'master' => ( isset( $postData['master'] ) ) ? 'checked="checked"' : ''
         );
 
         // To keep html out of php files as much as possible twig is used
         // Good thing about twig is it handles unset vars gracefully
-        $FormNew = new CoreView( 'add-new-form.twig', $templateData );
+        $FormNew = new CoreView( 'global-modules/add-new.twig', $templateData );
         $FormNew->render( true );
 
     }
@@ -226,11 +226,9 @@ class ModuleTemplates
      */
     public function createTemplate( $postId, Environment $Environment )
     {
-        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
-        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 
         // no template data send
-        if (empty( $_POST['new-template'] )) {
+        if (empty( $_POST['new-gmodule'] )) {
             return;
         }
 
@@ -246,7 +244,7 @@ class ModuleTemplates
             'type' => null,
         );
         // parse $_POST data
-        $data = wp_parse_args( $_POST['new-template'], $defaults );
+        $data = wp_parse_args( $_POST['new-gmodule'], $defaults );
 
         // convert checkbox input to boolean
         $data['master'] = filter_var( $data['master'], FILTER_VALIDATE_BOOLEAN );
@@ -303,13 +301,13 @@ class ModuleTemplates
             return $data;
         }
 
-        if (!isset( $_POST['new-template'] )) {
+        if (!isset( $_POST['new-gmodule'] )) {
             return $data;
         }
 
 
-        $title = filter_var( $_POST['new-template']['name'], FILTER_SANITIZE_STRING );
-        $slug = filter_var( $_POST['new-template']['id'], FILTER_SANITIZE_STRING );
+        $title = filter_var( $_POST['new-gmodule']['name'], FILTER_SANITIZE_STRING );
+        $slug = filter_var( $_POST['new-gmodule']['id'], FILTER_SANITIZE_STRING );
         // no template data send
         if (!isset( $title, $slug )) {
             return $data;
@@ -331,20 +329,20 @@ class ModuleTemplates
     {
 
         $labels = array(
-            'name' => _x( 'Module Templates', 'post type general name', 'Kontentblocks' ),
-            'singular_name' => _x( 'Module Template', 'post type singular name', 'Kontentblocks' ),
-            'menu_name' => _x( 'Module Templates', 'admin menu', 'Kontentblocks' ),
-            'name_admin_bar' => _x( 'Module Templates', 'add new on admin bar', 'Kontentblocks' ),
-            'add_new' => _x( 'Add New', 'book', 'Kontentblocks' ),
-            'add_new_item' => __( 'Add New Module Template', 'Kontentblocks' ),
-            'new_item' => __( 'New Module Template', 'Kontentblocks' ),
-            'edit_item' => __( 'Edit Module Template', 'Kontentblocks' ),
-            'view_item' => __( 'View Module Template', 'Kontentblocks' ),
-            'all_items' => __( 'All Module Templates', 'Kontentblocks' ),
-            'search_items' => __( 'Search Module Templates', 'Kontentblocks' ),
-            'parent_item_colon' => __( 'Parent Module Template:', 'Kontentblocks' ),
-            'not_found' => __( 'No Module Templates found.', 'Kontentblocks' ),
-            'not_found_in_trash' => __( 'No Module Templates found in Trash.', 'Kontentblocks' ),
+            'name' => _x( 'Global Module', 'post type general name', 'Kontentblocks' ),
+            'singular_name' => _x( 'Global Module', 'post type singular name', 'Kontentblocks' ),
+            'menu_name' => _x( 'Global Modules', 'admin menu', 'Kontentblocks' ),
+            'name_admin_bar' => _x( 'Global Modules', 'add new on admin bar', 'Kontentblocks' ),
+            'add_new' => _x( 'add New', 'book', 'Kontentblocks' ),
+            'add_new_item' => __( 'add New global module', 'Kontentblocks' ),
+            'new_item' => __( 'new global module', 'Kontentblocks' ),
+            'edit_item' => __( 'edit global module', 'Kontentblocks' ),
+            'view_item' => __( 'view global module', 'Kontentblocks' ),
+            'all_items' => __( 'all global modules', 'Kontentblocks' ),
+            'search_items' => __( 'search global modules', 'Kontentblocks' ),
+            'parent_item_colon' => __( 'parent global modules:', 'Kontentblocks' ),
+            'not_found' => __( 'No global modules found.', 'Kontentblocks' ),
+            'not_found_in_trash' => __( 'No global modules found in Trash.', 'Kontentblocks' ),
         );
 
         $args = array(
@@ -380,27 +378,27 @@ class ModuleTemplates
 
         $messages['kb-mdtpl'] = array(
             0 => '', // Unused. Messages start at index 1.
-            1 => __( 'Module Template updated.', 'Kontentblocks' ),
+            1 => __( 'global modules updated.', 'Kontentblocks' ),
             2 => __( 'Custom field updated.', 'Kontentblocks' ), // not used
             3 => __( 'Custom field deleted.', 'Kontentblocks' ), // not used
-            4 => __( 'Module Template updated.', 'Kontentblocks' ),
+            4 => __( 'global modules updated.', 'Kontentblocks' ),
             /* translators: %s: date and time of the revision */
             5 => isset( $_GET['revision'] ) ? sprintf(
                 __(
-                    'Module Template restored to revision from %s',
+                    'global module restored to revision from %s',
                     'Kontentblocks'
                 ),
                 wp_post_revision_title( (int) $_GET['revision'], false )
             ) : false,
-            6 => __( 'Module Template published.', 'Kontentblocks' ),
-            7 => __( 'Module Template saved.', 'Kontentblocks' ),
-            8 => __( 'Module Template submitted.', 'Kontentblocks' ),
+            6 => __( 'global module published.', 'Kontentblocks' ),
+            7 => __( 'global module saved.', 'Kontentblocks' ),
+            8 => __( 'global module submitted.', 'Kontentblocks' ),
             9 => sprintf(
-                __( 'Module Template scheduled for: <strong>%1$s</strong>.', 'Kontentblocks' ),
+                __( 'global module scheduled for: <strong>%1$s</strong>.', 'Kontentblocks' ),
                 // translators: Publish box date format, see http://php.net/date
                 date_i18n( __( 'M j, Y @ G:i', 'Kontentblocks' ), strtotime( $post->post_date ) )
             ),
-            10 => __( 'Module Template draft updated.', 'Kontentblocks' ),
+            10 => __( 'global module draft updated.', 'Kontentblocks' ),
         );
 
         return $messages;
@@ -498,7 +496,7 @@ class ModuleTemplates
         return array_filter(
             $ModuleRegistry->getAll(),
             function ( $module ) {
-                if (isset( $module['settings']['asTemplate'] ) && $module['settings']['asTemplate'] == true) {
+                if (isset( $module['settings']['asGlobalModule'] ) && $module['settings']['asGlobalModule'] == true) {
                     return true;
                 }
                 return false;
@@ -511,7 +509,7 @@ class ModuleTemplates
     {
         \Kontentblocks\registerArea(
             array(
-                'id' => 'module-template',
+                'id' => 'global-module',
                 'internal' => true,
                 'dynamic' => false
             )

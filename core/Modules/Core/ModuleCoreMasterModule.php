@@ -18,7 +18,7 @@ class ModuleCoreMasterModule extends Module
         'id' => 'core-master-module',
         'description' => 'Handles reference to master templates',
         'globallyAvailable' => false,
-        'asTemplate' => false,
+        'asGlobalModule' => false,
         'master' => true,
         'hidden' => true,
         'category' => 'core'
@@ -73,7 +73,6 @@ class ModuleCoreMasterModule extends Module
             }
 
         }
-
         if (is_null( $parentId )) {
             $Module->Properties->state['draft'] = true;
             $Module->Properties->state['active'] = false;

@@ -17,7 +17,7 @@ use Detection\MobileDetect;
 use Kontentblocks\Ajax\AjaxCallbackHandler;
 use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
-use Kontentblocks\Backend\Dynamic\ModuleTemplates;
+use Kontentblocks\Backend\Dynamic\GlobalModules;
 use Kontentblocks\Backend\Screen\EditScreen;
 use Kontentblocks\Hooks\Enqueues;
 use Kontentblocks\Hooks\Capabilities;
@@ -131,7 +131,7 @@ Class Kontentblocks
         // global areas post type and menu page management
         new DynamicAreas();
         // global templates post type and menu management
-        new ModuleTemplates();
+        new GlobalModules();
         /*
          * Main post edit screen handler
          * Post type must support 'kontentblocks"

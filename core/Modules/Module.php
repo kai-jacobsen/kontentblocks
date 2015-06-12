@@ -373,7 +373,7 @@ abstract class Module
             'predefined' => false,
             'inGlobalSidebars' => false,
             'inGlobalAreas' => false,
-            'asTemplate' => true,
+            'asGlobalModule' => true,
             'category' => 'standard',
             'useViewLoader' => false,
             'concat' => true

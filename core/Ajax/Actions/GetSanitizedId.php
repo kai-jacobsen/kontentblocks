@@ -36,8 +36,8 @@ class GetSanitizedId implements AjaxActionInterface
             case 'areas':
                 $check = self::checkExistence( trim( $value ), 'kb-dyar', 'kb_da_' );
                 break;
-            case 'templates':
-                $check = self::checkExistence( trim( $value ), 'kb-mdtpl', 'kb_tpl_' );
+            case 'gmodules':
+                $check = self::checkExistence( trim( $value ), 'kb-mdtpl', 'kb_gm_' );
                 break;
         }
 
