@@ -10,18 +10,18 @@ use Kontentblocks\Language\I18n;
  * Class is access point to templates
  * @package Kontentblocks\Modules
  */
-class ModuleTemplates
+class GlobalModules
 {
 
     public static $instance;
-    protected $templates = array();
-    protected $masterTemplates = array();
+    protected $gmodules = array();
+    protected $masterGmodules = array();
 
     protected $API;
 
     /**
      * Singleton
-     * @return ModuleTemplates
+     * @return GlobalModules
      */
     public static function getInstance()
     {
@@ -50,9 +50,9 @@ class ModuleTemplates
      *
      * @return bool
      */
-    public function templateExists( $id )
+    public function gmodule( $id )
     {
-        $all = $this->getAllTemplates();
+        $all = $this->getAllGmodules();
 
         if (array_key_exists( $id, $all )) {
             return true;
@@ -82,20 +82,21 @@ class ModuleTemplates
             return false;
         }
         foreach ($data as $tpl) {
-            $Storage = new ModuleStorage($tpl->ID);
+            $Storage = new ModuleStorage( $tpl->ID );
             $index = $Storage->getIndex();
             $def = $index[$tpl->post_name];
-            $def['templateRef'] = $tpl;
+
+            $def['gmoduleRef'] = $tpl;
             $collect[$tpl->post_name] = $def;
         }
 
-        $this->templates = array_filter(
+        $this->gmodules = array_filter(
             $collect,
             function ( $item ) {
                 return !$item['master'];
             }
         );
-        $this->masterTemplates = array_filter(
+        $this->masterGmodules = array_filter(
             $collect,
             function ( $item ) {
                 return $item['master'];
@@ -109,12 +110,12 @@ class ModuleTemplates
     }
 
     /**
-     * Merge master and normal templates
+     * Merge master and normal gmodules
      * @return array
      */
-    public function getAllTemplates()
+    public function getAllGmodules()
     {
-        return array_merge( $this->templates, $this->masterTemplates );
+        return array_merge( $this->gmodules, $this->masterGmodules );
     }
 
 }

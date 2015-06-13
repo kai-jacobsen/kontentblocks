@@ -123,10 +123,11 @@ class ModuleRegistry
         }
 
         // Extra Module Templates
-        foreach (ModuleTemplates::getInstance()->getAllTemplates() as $name => $moduleArgs) {
+        foreach (GlobalModules::getInstance()->getAllGmodules() as $name => $moduleArgs) {
+
             $moduleClass = $moduleArgs['class'];
             $clone = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
-            $clone['settings']['category'] = 'template';
+            $clone['settings']['category'] = 'gmodule';
             Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleDefinitions', $name, $clone );
         }
     }

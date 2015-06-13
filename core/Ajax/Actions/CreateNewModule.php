@@ -38,7 +38,7 @@ class CreateNewModule implements AjaxActionInterface
      * Template indicator
      * @var bool
      */
-    private $template = false;
+    private $gmodule = false;
 
     /**
      * $new_module
@@ -116,6 +116,7 @@ class CreateNewModule implements AjaxActionInterface
     private function overrideModuleClassEventually()
     {
         // Override Class / type if this originates from a master template
+        // will set the origin class to internal core module
         $this->moduleArgs = apply_filters( 'kb.intercept.creation.args', $this->moduleArgs );
     }
 
@@ -125,8 +126,8 @@ class CreateNewModule implements AjaxActionInterface
      */
     private function gmoduleOverride()
     {
-        if ($this->moduleArgs['template']) {
-            $this->moduleArgs['overrides']['name'] = $this->moduleArgs['templateRef']['name'];
+        if ($this->moduleArgs['gmodule']) {
+            $this->moduleArgs['overrides']['name'] = $this->moduleArgs['gmoduleRef']['name'];
         }
     }
 
@@ -140,7 +141,7 @@ class CreateNewModule implements AjaxActionInterface
         //save module to reference array
 //        $this->saveNewModule();
         // handle template generation
-        $this->handleTemplates();
+        $this->handleGmodules();
 
     }
 
@@ -167,18 +168,20 @@ class CreateNewModule implements AjaxActionInterface
     /**
      * Handle generation from Template
      */
-    private function handleTemplates()
+    private function handleGmodules()
     {
         //create data for templates
-        if ($this->template) {
+        if ($this->gmodule) {
             $PostMeta = new DataProviderController( $this->newModule->Properties->masterRef['parentId'] );
 
-            $master_data = $PostMeta->get( '_' . $this->moduleArgs['templateRef']['id'] );
+            $master_data = $PostMeta->get( '_' . $this->moduleArgs['gmoduleRef']['id'] );
             $update = $this->Environment->getStorage()->saveModule( $this->newModule->getId(), $master_data );
             $this->Environment->getStorage()->reset();
 
             if (!$update) {
-                return new AjaxErrorResponse( 'Failed to create from Template', array( 'updateStatus' => $update ) );
+                return new AjaxErrorResponse(
+                    'Failed to create from global module', array( 'updateStatus' => $update )
+                );
             }
         }
     }
@@ -192,8 +195,6 @@ class CreateNewModule implements AjaxActionInterface
         ob_start();
 
         $Module = apply_filters( 'kb.module.before.factory', $this->newModule );
-
-
         if ($this->frontend) {
             $SingleRenderer = new SingleModuleRenderer( $Module );
             echo $SingleRenderer->render();
@@ -231,9 +232,9 @@ class CreateNewModule implements AjaxActionInterface
         $this->moduleArgs['class'] = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
 
-        if (is_array( $Request->get( 'templateRef' ) )) {
-            $this->moduleArgs['templateRef']['name'] = $Request->get( 'templateRef' )['post_title'];
-            $this->moduleArgs['templateRef']['id'] = $Request->get( 'templateRef' )['post_name'];
+        if (is_array( $Request->get( 'gmoduleRef' ) )) {
+            $this->moduleArgs['gmoduleRef']['name'] = $Request->get( 'gmoduleRef' )['post_title'];
+            $this->moduleArgs['gmoduleRef']['id'] = $Request->get( 'gmoduleRef' )['post_name'];
         }
 
         if ($Request->getFiltered( 'master', FILTER_VALIDATE_BOOLEAN )) {
@@ -245,14 +246,14 @@ class CreateNewModule implements AjaxActionInterface
         $this->moduleArgs['areaContext'] = $Request->getFiltered( 'areaContext', FILTER_SANITIZE_STRING );
 
         $this->moduleArgs['master'] = $Request->getFiltered( 'master', FILTER_VALIDATE_BOOLEAN );
-        $this->moduleArgs['template'] = $Request->getFiltered( 'template', FILTER_VALIDATE_BOOLEAN );
+        $this->moduleArgs['gmodule'] = $Request->getFiltered( 'gmodule', FILTER_VALIDATE_BOOLEAN );
 
         if ($this->moduleArgs['master']) {
             $this->master = true;
         }
 
-        if ($this->moduleArgs['template']) {
-            $this->template = true;
+        if ($this->moduleArgs['gmodule']) {
+            $this->gmodule = true;
         }
     }
 

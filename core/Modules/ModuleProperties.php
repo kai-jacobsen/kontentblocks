@@ -57,7 +57,7 @@ class ModuleProperties
      * template reference data
      * @var array
      */
-    public $templateRef;
+    public $gmoduleRef;
 
     /**
      * master reference data like parentId

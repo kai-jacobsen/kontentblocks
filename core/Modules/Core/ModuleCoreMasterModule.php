@@ -159,12 +159,12 @@ class ModuleCoreMasterModule extends Module
 
             // original template module definition
             $index = get_post_meta( $masterId, 'kb_kontentblocks', true );
-            $template = $index[$module->Properties->templateRef['id']];
+            $gmodule = $index[$module->Properties->gmoduleRef['id']];
             // actual module definition
-            $originalDefiniton = $ModuleRegistry->get( $template['class'] );
+            $originalDefiniton = $ModuleRegistry->get( $gmodule['class'] );
 
             // $module is actually the Master_Module, we need to override everything to the actual module
-            $glued = wp_parse_args( $template, $originalDefiniton );
+            $glued = wp_parse_args( $gmodule, $originalDefiniton );
 
             // $glued holds whatever was set to the original template + missing default values
             // now we need to override settings from the actual edit screen
@@ -194,7 +194,7 @@ class ModuleCoreMasterModule extends Module
             ) && !empty( $Properties->masterRef['parentId'] )
         ) {
             $masterId = $Properties->masterRef['parentId'];
-            $tplId = $Properties->templateRef['id'];
+            $tplId = $Properties->gmoduleRef['id'];
             $Storage = new ModuleStorage($masterId);
             $data = $Storage->getModuleData($tplId);
             return $data;
@@ -226,8 +226,8 @@ class ModuleCoreMasterModule extends Module
     public static function setTemplateId( Module $Module )
     {
         if (isset( $Module->Properties->master ) && $Module->Properties->master) {
-            if (isset( $Module->Properties->templateRef )) {
-                $Module->Properties->setId( $Module->Properties->templateRef['id'] );
+            if (isset( $Module->Properties->gmoduleRef )) {
+                $Module->Properties->setId( $Module->Properties->gmoduleRef['id'] );
             }
         }
     }

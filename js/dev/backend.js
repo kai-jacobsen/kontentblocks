@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-11 */
+/*! Kontentblocks DevVersion 2015-06-13 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1922,13 +1922,14 @@
                     Notice.notice("Limit for this area reached", "error");
                     return false;
                 }
+                console.log(module);
                 data = {
                     action: "createNewModule",
                     "class": module.get("settings").class,
                     master: module.get("master"),
                     masterRef: module.get("masterRef"),
-                    template: module.get("template"),
-                    templateRef: module.get("templateRef"),
+                    gmodule: module.get("gmodule"),
+                    gmoduleRef: module.get("gmoduleRef"),
                     areaContext: this.options.area.model.get("context"),
                     area: this.options.area.model.get("id"),
                     _ajax_nonce: Config.getNonce("create"),
@@ -2117,7 +2118,7 @@
                 this.area = options.browser.area;
             },
             render: function(el) {
-                if (this.model.get("template")) {
+                if (this.model.get("gmodule")) {
                     this.$el.html(tplTemplateListItem({
                         module: this.model.toJSON()
                     }));
@@ -2130,13 +2131,20 @@
             },
             events: {
                 click: "handleClick",
-                "click .kb-js-create-module": "createModule"
+                "click .kb-js-create-module": "handlePlusClick"
             },
             handleClick: function() {
                 if (this.Browser.viewMode === "list") {
                     this.createModule();
                 } else {
                     this.Browser.loadDetails(this.model);
+                }
+            },
+            handlePlusClick: function() {
+                if (this.Browser.viewMode === "list") {
+                    return false;
+                } else {
+                    this.createModule();
                 }
             },
             createModule: function() {
@@ -2358,7 +2366,7 @@
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
                 var stack1;
-                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.templateRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h3>";
+                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.gmoduleRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h3>";
             },
             useData: true
         });
@@ -2371,7 +2379,7 @@
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
                 var stack1;
-                return '<div class="dashicons dashicons-plus kb-js-create-module"></div>\n<h4>' + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.templateRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h4>";
+                return '<div class="dashicons dashicons-plus kb-js-create-module"></div>\n<h4>' + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.gmoduleRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h4>";
             },
             useData: true
         });

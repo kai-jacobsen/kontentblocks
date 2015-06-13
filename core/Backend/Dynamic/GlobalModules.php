@@ -10,7 +10,7 @@ use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class ModuleTemplates
+ * Class GlobalModules
  * @package Kontentblocks\Backend\Dynamic
  */
 class GlobalModules
@@ -112,14 +112,12 @@ class GlobalModules
         // TODO Explanation text for non-developers on page
         $context = ( isset( $_GET['area-context'] ) ) ? $_GET['area-context'] : 'normal';
 
-        //set area context on init
-        $gmodule['areaContext'] = $context;
-        $gmodule['area'] = 'global-module';
-        // create essential markup and render the module
         // infamous hidden editor hack
         Utilities::hiddenEditor();
         $Environment = Utilities::getEnvironment( $post->ID );
+
         $Module = $Environment->getModuleById( $gmodule['mid'] );
+        $Module->Properties->areaContext = $context;
 
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig
@@ -132,7 +130,7 @@ class GlobalModules
             echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
         }
         // To keep html out of php files as much as possible twig is used
-        $FormNew = new CoreView( 'module-template.twig', $templateData );
+        $FormNew = new CoreView( 'global-modules/edit-gmodule.twig', $templateData );
         $FormNew->render( true );
 
 
@@ -260,12 +258,12 @@ class GlobalModules
                 'masterRef' => array(
                     'parentId' => $postId,
                 ),
-                'template' => true,
-                'templateRef' => array(
+                'gmodule' => true,
+                'gmoduleRef' => array(
                     'id' => $data['id'],
                     'name' => $data['name']
                 ),
-                'area' => 'module-template',
+                'area' => 'global-module',
                 'areaContext' => 'normal',
                 'class' => $data['type'],
                 'mid' => $data['id']

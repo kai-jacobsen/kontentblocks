@@ -150,13 +150,15 @@ module.exports = Backbone.View.extend({
       return false;
     }
     // prepare data to send
+    console.log(module);
+
     data = {
       action: 'createNewModule',
       'class': module.get('settings').class,
       master: module.get('master'),
       masterRef: module.get('masterRef'),
-      template: module.get('template'),
-      templateRef: module.get('templateRef'),
+      gmodule: module.get('gmodule'),
+      gmoduleRef: module.get('gmoduleRef'),
       areaContext: this.options.area.model.get('context'),
       area: this.options.area.model.get('id'),
       _ajax_nonce: Config.getNonce('create'),

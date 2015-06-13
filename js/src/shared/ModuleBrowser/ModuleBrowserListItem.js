@@ -14,7 +14,7 @@ module.exports = Backbone.View.extend({
   },
   // render list
   render: function (el) {
-    if (this.model.get('template')) {
+    if (this.model.get('gmodule')) {
       this.$el.html(tplTemplateListItem({module: this.model.toJSON()}));
     } else {
       this.$el.html(tplListItem({module: this.model.toJSON()}));
@@ -23,13 +23,20 @@ module.exports = Backbone.View.extend({
   },
   events: {
     'click': 'handleClick',
-    'click .kb-js-create-module': 'createModule'
+    'click .kb-js-create-module': 'handlePlusClick'
   },
   handleClick: function () {
     if (this.Browser.viewMode === 'list') {
       this.createModule();
     } else {
       this.Browser.loadDetails(this.model);
+    }
+  },
+  handlePlusClick: function () {
+    if (this.Browser.viewMode === 'list') {
+      return false;
+    } else {
+      this.createModule();
     }
   },
   createModule: function () {

@@ -420,7 +420,7 @@ class Utilities
         $cats['special'] = __( 'Spezial', 'kontentblocks' );
 
         $cats['core'] = __( 'System', 'kontentblocks' );
-        $cats['template'] = __( 'Templates', 'kontentblocks' );
+        $cats['gmodule'] = __( 'Global Modules', 'kontentblocks' );
 
         Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleCategories', null, $cats );
         return $cats;

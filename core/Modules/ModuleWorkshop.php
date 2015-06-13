@@ -267,10 +267,10 @@ class ModuleWorkshop
             // id
             'instance_id' => '',
             'mid' => '',
-            // template
-            'template' => false,
+            // gmodule
+            'gmodule' => false,
             'master' => false,
-            'templateRef' => array(
+            'gmoduleRef' => array(
                 'id' => null,
                 'name' => null,
             ),
