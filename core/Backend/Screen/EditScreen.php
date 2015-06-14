@@ -27,7 +27,7 @@ Class EditScreen
 
 
     /**
-     * Add the main metabox to all given post types in the kb_register_kontentblocks function call
+     * Add the main metabox
      */
     function __construct()
     {

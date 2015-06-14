@@ -78,13 +78,11 @@ class Environment implements JsonSerializable
         $this->postObj = $postObj;
         $this->storageId = $storageId;
 
-
         $this->DataProvider = new DataProviderController( $storageId );
         $this->Storage = new ModuleStorage( $storageId, $this->DataProvider );
         $this->ModuleRepository = new ModuleRepository( $this );
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
-
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
         $this->areas = $this->findAreas();
