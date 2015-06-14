@@ -16,8 +16,8 @@ var tplModuleBrowser = require('templates/backend/modulebrowser/module-browser.h
 
 module.exports = Backbone.View.extend({
   initialize: function (options) {
-    var that = this;
     this.options = options || {};
+    this.isOpen = false;
     this.area = this.options.area;
     this.viewMode = this.getViewMode();
     this.modulesDefinitions = new ModuleDefinitions(this.prepareAssignedModules(), {
@@ -27,6 +27,8 @@ module.exports = Backbone.View.extend({
 
     // render and append the skeleton markup to the browsers root element
     this.$el.append(tplModuleBrowser({viewMode: this.getViewModeClass()}));
+
+    this.$backdrop = jQuery('<div class="kb-module-browser--backdrop"></div>');
 
     // render the list sub view
     this.subviews.ModulesList = new ModuleBrowserList({
@@ -50,6 +52,9 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.subviews.Navigation, 'browser:change', this.update);
     //this.listenTo(this.subviews.ModulesList, 'createModule', this.createModule);
 //        this.subviews.Navigation.bind('browser:change', _.bind(this.update, this));
+
+    this.bindHandlers();
+
   },
   // element tag
   tagName: 'div',
@@ -94,32 +99,58 @@ module.exports = Backbone.View.extend({
 
     return 'list';
   },
-  getViewModeClass: function(){
-      if (this.viewMode === 'list'){
-        return 'module-browser--list-view';
-      } else {
-        return 'module-browser--excerpt-view';
+  getViewModeClass: function () {
+    if (this.viewMode === 'list') {
+      return 'module-browser--list-view';
+    } else {
+      return 'module-browser--excerpt-view';
+    }
+  },
+  bindHandlers: function () {
+    var that = this;
+    jQuery('body').on('click', function (e) {
+      if (that.isOpen) {
+        if (jQuery(e.target).is('.kb-module-browser--backdrop')) {
+          that.close();
+        }
       }
+    });
+
+    jQuery(document).keydown(function (e) {
+      if (!that.isOpen) {
+        return;
+      }
+      switch (e.which) {
+        case 27:
+          that.close();
+          break;
+
+        default:
+          return; // exit this handler for other keys
+      }
+      e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
   },
   open: function () {
     // render root element
     this.$el.appendTo('body');
+    this.$backdrop.appendTo('body');
     // add class to root element of wp admin screen
     jQuery('#wpwrap').addClass('module-browser-open');
     jQuery('.kb-nano').nanoScroller({
       flash: true,
       contentClass: 'kb-nano-content'
     });
+    this.isOpen = true;
   },
   // close the browser
   // TODO clean up and remove all references & bindings
   close: function () {
     jQuery('#wpwrap').removeClass('module-browser-open');
     this.trigger('browser:close');
-//        this.unbind();
-//        this.remove();
+    this.$backdrop.detach();
     this.$el.detach();
-//        delete this.$el;
+    this.isOpen = false;
   },
   // update list view upon navigation
   update: function (model) {
@@ -150,8 +181,6 @@ module.exports = Backbone.View.extend({
       return false;
     }
     // prepare data to send
-    console.log(module);
-
     data = {
       action: 'createNewModule',
       'class': module.get('settings').class,

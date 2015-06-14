@@ -1824,8 +1824,8 @@
         var tplModuleBrowser = require("templates/backend/modulebrowser/module-browser.hbs");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
-                var that = this;
                 this.options = options || {};
+                this.isOpen = false;
                 this.area = this.options.area;
                 this.viewMode = this.getViewMode();
                 this.modulesDefinitions = new ModuleDefinitions(this.prepareAssignedModules(), {
@@ -1835,6 +1835,7 @@
                 this.$el.append(tplModuleBrowser({
                     viewMode: this.getViewModeClass()
                 }));
+                this.$backdrop = jQuery('<div class="kb-module-browser--backdrop"></div>');
                 this.subviews.ModulesList = new ModuleBrowserList({
                     el: jQuery(".modules-list", this.$el),
                     browser: this
@@ -1849,6 +1850,7 @@
                     browser: this
                 });
                 this.listenTo(this.subviews.Navigation, "browser:change", this.update);
+                this.bindHandlers();
             },
             tagName: "div",
             id: "module-browser",
@@ -1890,18 +1892,46 @@
                     return "module-browser--excerpt-view";
                 }
             },
+            bindHandlers: function() {
+                var that = this;
+                jQuery("body").on("click", function(e) {
+                    if (that.isOpen) {
+                        if (jQuery(e.target).is(".kb-module-browser--backdrop")) {
+                            that.close();
+                        }
+                    }
+                });
+                jQuery(document).keydown(function(e) {
+                    if (!that.isOpen) {
+                        return;
+                    }
+                    switch (e.which) {
+                      case 27:
+                        that.close();
+                        break;
+
+                      default:
+                        return;
+                    }
+                    e.preventDefault();
+                });
+            },
             open: function() {
                 this.$el.appendTo("body");
+                this.$backdrop.appendTo("body");
                 jQuery("#wpwrap").addClass("module-browser-open");
                 jQuery(".kb-nano").nanoScroller({
                     flash: true,
                     contentClass: "kb-nano-content"
                 });
+                this.isOpen = true;
             },
             close: function() {
                 jQuery("#wpwrap").removeClass("module-browser-open");
                 this.trigger("browser:close");
+                this.$backdrop.detach();
                 this.$el.detach();
+                this.isOpen = false;
             },
             update: function(model) {
                 var id = model.get("id");
@@ -1922,7 +1952,6 @@
                     Notice.notice("Limit for this area reached", "error");
                     return false;
                 }
-                console.log(module);
                 data = {
                     action: "createNewModule",
                     "class": module.get("settings").class,
