@@ -22,23 +22,24 @@ class CreateNewModule implements AjaxActionInterface
 
     public static $nonce = 'kb-create';
 
+    // equals either current pos object or the post object of the global module
+    protected $parentObject;
+
+
+    protected $Environment;
+
     /**
      * ID of the origin post
      * @var integer
      */
     private $postId;
 
-    /**
-     * Master indicator
-     * @var bool
-     */
-    private $master = false;
 
     /**
-     * Template indicator
+     * global module indicator
      * @var bool
      */
-    private $gmodule = false;
+    private $globalModule = false;
 
     /**
      * $new_module
@@ -102,7 +103,6 @@ class CreateNewModule implements AjaxActionInterface
 
         $Workshop = new ModuleWorkshop( $this->Environment, $this->moduleArgs );
         $this->newModule = $Workshop->createAndGet();
-        $this->updateData();
 
         return $this->render();
 
@@ -126,65 +126,11 @@ class CreateNewModule implements AjaxActionInterface
      */
     private function gmoduleOverride()
     {
-        if ($this->moduleArgs['gmodule']) {
-            $this->moduleArgs['overrides']['name'] = $this->moduleArgs['gmoduleRef']['name'];
+        if ($this->moduleArgs['globalModule']) {
+            $this->moduleArgs['overrides']['name'] = $this->parentObject['post_title'];
         }
     }
 
-    /**
-     * Update Data
-     * If something goes wrong each method might fire wp_send_json_error
-     */
-    private function updateData()
-    {
-
-        //save module to reference array
-//        $this->saveNewModule();
-        // handle template generation
-        $this->handleGmodules();
-
-    }
-
-    /**
-     * Save new module to post meta
-     */
-    private function saveNewModule()
-    {
-        $toSave = $this->newModule->Properties->export();
-
-        // add new block and update
-        $update = $this->Environment->getStorage()->addToIndex( $this->newModule->getId(), $toSave );
-        if ($update === false) {
-            return new AjaxErrorResponse( 'Failed to store new module in index', array( 'updateStatus' => $update ) );
-        }
-
-        /**
-         * Action kb.module.create
-         * @Param array attributes of new module
-         */
-        do_action( 'kb.module.create', $this->newModule->Properties->export() );
-    }
-
-    /**
-     * Handle generation from Template
-     */
-    private function handleGmodules()
-    {
-        //create data for templates
-        if ($this->gmodule) {
-            $PostMeta = new DataProviderController( $this->newModule->Properties->masterRef['parentId'] );
-
-            $master_data = $PostMeta->get( '_' . $this->moduleArgs['gmoduleRef']['id'] );
-            $update = $this->Environment->getStorage()->saveModule( $this->newModule->getId(), $master_data );
-            $this->Environment->getStorage()->reset();
-
-            if (!$update) {
-                return new AjaxErrorResponse(
-                    'Failed to create from global module', array( 'updateStatus' => $update )
-                );
-            }
-        }
-    }
 
     /**
      * Output result
@@ -232,29 +178,20 @@ class CreateNewModule implements AjaxActionInterface
         $this->moduleArgs['class'] = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
 
-        if (is_array( $Request->get( 'gmoduleRef' ) )) {
-            $this->moduleArgs['gmoduleRef']['name'] = $Request->get( 'gmoduleRef' )['post_title'];
-            $this->moduleArgs['gmoduleRef']['id'] = $Request->get( 'gmoduleRef' )['post_name'];
-        }
-
-        if ($Request->getFiltered( 'master', FILTER_VALIDATE_BOOLEAN )) {
-            $this->moduleArgs['post_id'] = absint( $Request->get( 'masterRef' )['parentId'] );
-            $this->moduleArgs['masterRef']['parentId'] = absint( $Request->get( 'masterRef' )['parentId'] );
+        if ($Request->getFiltered( 'globalModule', FILTER_VALIDATE_BOOLEAN )) {
+            $this->moduleArgs['post_id'] = absint( $Request->get( 'parentObjectId' ) );
         }
 
         $this->moduleArgs['area'] = $Request->getFiltered( 'area', FILTER_SANITIZE_STRING );
         $this->moduleArgs['areaContext'] = $Request->getFiltered( 'areaContext', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['parentObjectId'] = absint( $Request->get( 'parentObjectId' ) );
 
-        $this->moduleArgs['master'] = $Request->getFiltered( 'master', FILTER_VALIDATE_BOOLEAN );
-        $this->moduleArgs['gmodule'] = $Request->getFiltered( 'gmodule', FILTER_VALIDATE_BOOLEAN );
+        $this->moduleArgs['globalModule'] = $this->globalModule = $Request->getFiltered(
+            'globalModule',
+            FILTER_VALIDATE_BOOLEAN
+        );
 
-        if ($this->moduleArgs['master']) {
-            $this->master = true;
-        }
-
-        if ($this->moduleArgs['gmodule']) {
-            $this->gmodule = true;
-        }
+        $this->parentObject = $Request->get( 'parentObject' );
     }
 
 }

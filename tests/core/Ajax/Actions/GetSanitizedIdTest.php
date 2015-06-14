@@ -93,7 +93,7 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
     public function testRunWithExistingTemplate()
     {
         $this->factory->post->create(array(
-            'post_type' => 'kb-mdtpl',
+            'post_type' => 'kb-gmd',
             'post_name' => 'kb_tpl_my_perky_id'
         ));
 

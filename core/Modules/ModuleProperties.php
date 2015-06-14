@@ -30,40 +30,15 @@ class ModuleProperties
     public $area;
 
     /**
-     * is master modules
-     * @var bool
-     */
-    public $master;
-
-    /**
      * @var string
      */
     public $areaContext;
-
-    /**
-     * is template
-     * @var bool
-     */
-    public $template;
 
     /**
      * classname
      * @var string
      */
     public $class;
-
-
-    /**
-     * template reference data
-     * @var array
-     */
-    public $gmoduleRef;
-
-    /**
-     * master reference data like parentId
-     * @var array
-     */
-    public $masterRef;
 
     /**
      * assigned viewfile

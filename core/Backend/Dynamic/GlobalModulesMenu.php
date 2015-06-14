@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Dynamic;
 
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
+use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Templating\CoreView;
@@ -13,7 +14,7 @@ use Kontentblocks\Utils\Utilities;
  * Class GlobalModules
  * @package Kontentblocks\Backend\Dynamic
  */
-class GlobalModules
+class GlobalModulesMenu
 {
 
 
@@ -48,7 +49,7 @@ class GlobalModules
                 'kontentblocks',
                 'Kontentblocks',
                 'manage_kontentblocks',
-                '/edit.php?post_type=kb-mdtpl',
+                '/edit.php?post_type=kb-gmd',
                 false,
                 false
             );
@@ -59,7 +60,7 @@ class GlobalModules
             'Global Modules',
             'Global Modules',
             'manage_kontentblocks',
-            '/edit.php?post_type=kb-mdtpl',
+            '/edit.php?post_type=kb-gmd',
             false
         );
 
@@ -126,6 +127,7 @@ class GlobalModules
             'instance' => $Module
         );
 
+
         if (isset( $_GET['return'] )) {
             echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
         }
@@ -146,7 +148,7 @@ class GlobalModules
     {
 
         $screen = get_current_screen();
-        if ($screen->post_type !== 'kb-mdtpl') {
+        if ($screen->post_type !== 'kb-gmd') {
             return;
         }
 
@@ -162,8 +164,7 @@ class GlobalModules
         $templateData = array(
             'modules' => $this->prepareModulesforSelectbox( $postData ),
             'nonce' => wp_create_nonce( 'new-gmodule' ),
-            'data' => $postData,
-            'master' => ( isset( $postData['master'] ) ) ? 'checked="checked"' : ''
+            'data' => $postData
         );
 
         // To keep html out of php files as much as possible twig is used
@@ -192,7 +193,7 @@ class GlobalModules
         $Module = $Environment->getModuleById( $postObj->post_name );
         // no template yet, create an new one
         if (!$Module) {
-            $this->createTemplate( $postId, $Environment );
+            $this->createGlobalModule( $postId, $postObj, $Environment );
         } else {
             // update existing
             $old = $Module->Model->getOriginalData();
@@ -222,7 +223,7 @@ class GlobalModules
      * @internal param ModuleStorage $Storage
      * @since 0.1.0
      */
-    public function createTemplate( $postId, Environment $Environment )
+    public function createGlobalModule( $postId, \WP_Post $Post, Environment $Environment )
     {
 
         // no template data send
@@ -230,54 +231,44 @@ class GlobalModules
             return;
         }
 
+        $Value = new ValueStorage( $_POST );
+
         // set defaults
         $defaults = array(
-            'master' => false,
-            'masterRef' => array(
-                'parentId' => $postId,
-            ),
-            'template' => true,
-            'name' => null,
-            'id' => null,
-            'type' => null,
+            'globalModule' => true,
+            'parentObjectId' => $postId,
+            'name' => null, // equals post_title
+            'id' => null, // equals post_name
+            'type' => null, // module class
         );
         // parse $_POST data
-        $data = wp_parse_args( $_POST['new-gmodule'], $defaults );
+        $data = wp_parse_args( $Value->get( 'new-gmodule' ), $defaults );
 
-        // convert checkbox input to boolean
-        $data['master'] = filter_var( $data['master'], FILTER_VALIDATE_BOOLEAN );
-
-        // 3 good reasons to stop
-        if (is_null( $data['id'] ) || is_null( $data['name'] || is_null( $data['type'] ) )) {
+        // 2 good reasons to stop
+        if (is_null(
+            $Value->getFiltered( 'name', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) ||
+            is_null( $Value->getFiltered( 'type', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) )
+        )) {
             wp_die( 'Missing arguments' );
         }
 
         $workshop = new ModuleWorkshop(
             $Environment, array(
-                'master' => $data['master'],
-                'masterRef' => array(
-                    'parentId' => $postId,
-                ),
-                'gmodule' => true,
-                'gmoduleRef' => array(
-                    'id' => $data['id'],
-                    'name' => $data['name']
-                ),
+                'globalModule' => true,
+                'parentObjectId' => $postId,
                 'area' => 'global-module',
                 'areaContext' => 'normal',
                 'class' => $data['type'],
-                'mid' => $data['id']
+                'mid' => $Post->post_name
             )
         );
 
-
         $definition = $workshop->getDefinitionArray();
+
         do_action( 'kb.create:module', $definition );
 
         // add to post meta kb_kontentblocks
-        $Environment->getStorage()->addToIndex( $data['id'], $definition );
-        // single post meta entry, to make meta queries easier
-//        $Environment->getStorage()->getDataProvider()->update( 'master', $definition['master'] );
+        $Environment->getStorage()->addToIndex( $Post->post_name, $definition );
     }
 
 
@@ -295,7 +286,7 @@ class GlobalModules
     public function postData( $data, $post )
     {
 
-        if ($post['post_type'] !== 'kb-mdtpl') {
+        if ($post['post_type'] !== 'kb-gmd') {
             return $data;
         }
 
@@ -303,9 +294,15 @@ class GlobalModules
             return $data;
         }
 
-
         $title = filter_var( $_POST['new-gmodule']['name'], FILTER_SANITIZE_STRING );
-        $slug = filter_var( $_POST['new-gmodule']['id'], FILTER_SANITIZE_STRING );
+        $slug = wp_unique_post_slug(
+            sanitize_title( $title ),
+            $post['ID'],
+            $post['post_status'],
+            $post['post_type'],
+            0
+        );
+
         // no template data send
         if (!isset( $title, $slug )) {
             return $data;
@@ -357,9 +354,9 @@ class GlobalModules
             'supports' => null
         );
 
-        register_post_type( 'kb-mdtpl', $args );
-        remove_post_type_support( 'kb-mdtpl', 'editor' );
-        remove_post_type_support( 'kb-mdtpl', 'title' );
+        register_post_type( 'kb-gmd', $args );
+        remove_post_type_support( 'kb-gmd', 'editor' );
+        remove_post_type_support( 'kb-gmd', 'title' );
     }
 
     /**
@@ -374,7 +371,7 @@ class GlobalModules
     {
         $post = get_post();
 
-        $messages['kb-mdtpl'] = array(
+        $messages['kb-gmd'] = array(
             0 => '', // Unused. Messages start at index 1.
             1 => __( 'global modules updated.', 'Kontentblocks' ),
             2 => __( 'Custom field updated.', 'Kontentblocks' ), // not used

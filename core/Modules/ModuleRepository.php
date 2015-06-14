@@ -32,6 +32,9 @@ class ModuleRepository
         $index = $this->Environment->getStorage()->getIndex();
         if (is_array( $index )) {
             foreach ($index as $module) {
+                if (!is_admin()){
+                    $module = apply_filters( 'kb.before.frontend.setup', $module );
+                }
                 $Ws = new ModuleWorkshop( $this->Environment, $module );
                 if ($Ws->isValid()) {
                     $this->Modules[$Ws->getNewId()] = $Ws->getModule();

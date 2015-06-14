@@ -37,7 +37,7 @@ class GetSanitizedId implements AjaxActionInterface
                 $check = self::checkExistence( trim( $value ), 'kb-dyar', 'kb_da_' );
                 break;
             case 'gmodules':
-                $check = self::checkExistence( trim( $value ), 'kb-mdtpl', 'kb_gm_' );
+                $check = self::checkExistence( trim( $value ), 'kb-gmd', 'kb_gm_' );
                 break;
         }
 
@@ -61,6 +61,7 @@ class GetSanitizedId implements AjaxActionInterface
      */
     private static function checkExistence( $input, $postType, $prefix )
     {
+
         global $wpdb;
         $sane = sanitize_title( $prefix . $input );
         $sane = str_replace( '-', '_', $sane );

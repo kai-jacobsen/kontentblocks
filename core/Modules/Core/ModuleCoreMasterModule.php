@@ -55,7 +55,7 @@ class ModuleCoreMasterModule extends Module
     public static function validateModule( Module $Module )
     {
 
-        $parentId = $Module->Properties->masterRef['parentId'];
+        $parentId = $Module->Properties->parentObjectId;
 
         if (empty( $parentId )) {
             return $Module;
@@ -65,7 +65,7 @@ class ModuleCoreMasterModule extends Module
         $duplicate = !empty( $icl );
 
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-            $iclId = icl_object_id( $parentId, 'kb-mdtpl' );
+            $iclId = icl_object_id( $parentId, 'kb-gmd' );
             $translated = ( $iclId !== $parentId );
 
             if ($translated) {
@@ -90,13 +90,13 @@ class ModuleCoreMasterModule extends Module
     public function form()
     {
 
-        $masterId = $this->Properties->masterRef['parentId'];
+        $masterId = $this->Properties->parentObjectId;
         $translated = false;
         $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
         $duplicate = !empty( $icl );
 
         if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-            $iclId = icl_object_id( $masterId, 'kb-mdtpl' );
+            $iclId = icl_object_id( $masterId, 'kb-gmd' );
             $translated = ( $iclId !== $masterId );
 
             if ($translated) {
@@ -134,32 +134,29 @@ class ModuleCoreMasterModule extends Module
 
     /**
      * Prepare moduleArgs for frontend output
-     *
      * @param $module
-     *
      * @return array
      */
     public static function setupModule( $module )
     {
+
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
-        if ($module->Properties->master && isset( $module->Properties->masterRef['parentId'] )) {
-            $masterId = $module->Properties->masterRef['parentId']; // post id of the template
+        if ($module['globalModule'] && isset( $module['parentObjectId'] )) {
+            $parentObjectId = $module['parentObjectId']; // post id of the template
             $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
             $duplicate = ( !empty( $icl ) );
 
-
             if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-                $iclId = icl_object_id( $masterId, 'kb-mdtpl' );
-                $translated = ( $iclId !== $masterId );
+                $iclId = icl_object_id( $parentObjectId, 'kb-gmd' );
+                $translated = ( $iclId !== $parentObjectId );
                 if ($translated) {
-                    $masterId = $iclId;
+                    $parentObjectId = $iclId;
                 }
             }
-
             // original template module definition
-            $index = get_post_meta( $masterId, 'kb_kontentblocks', true );
-            $gmodule = $index[$module->Properties->gmoduleRef['id']];
+            $index = get_post_meta( $parentObjectId, 'kb_kontentblocks', true );
+            $gmodule = $index[$module['parentObject']->post_name];
             // actual module definition
             $originalDefiniton = $ModuleRegistry->get( $gmodule['class'] );
 
@@ -169,12 +166,12 @@ class ModuleCoreMasterModule extends Module
             // $glued holds whatever was set to the original template + missing default values
             // now we need to override settings from the actual edit screen
             unset( $glued['state'] );
-            unset( $glued['master_id'] );
             unset( $glued['areaContext'] );
             unset( $glued['area'] );
             // finally
-            $final = wp_parse_args( $glued, $module );
-            $final['parentId'] = $masterId;
+            $final = \Kontentblocks\Utils\Utilities::arrayMergeRecursive( $glued, $module );
+            $final['parentObjectId'] = $parentObjectId;
+            $final['post_id'] = $parentObjectId;
             return $final;
         }
 
@@ -189,14 +186,14 @@ class ModuleCoreMasterModule extends Module
     public static function setupModuleData( $data, $Properties )
     {
         if (filter_var(
-                $Properties->master,
+                $Properties->globalModule,
                 FILTER_VALIDATE_BOOLEAN
-            ) && !empty( $Properties->masterRef['parentId'] )
+            ) && !empty( $Properties->parentObjectId )
         ) {
-            $masterId = $Properties->masterRef['parentId'];
-            $tplId = $Properties->gmoduleRef['id'];
-            $Storage = new ModuleStorage($masterId);
-            $data = $Storage->getModuleData($tplId);
+            $masterId = $Properties->parentObjectId;
+            $tplId = $Properties->parentObject->post_name;
+            $Storage = new ModuleStorage( $masterId );
+            $data = $Storage->getModuleData( $tplId );
             return $data;
         }
         return $data;
@@ -211,9 +208,8 @@ class ModuleCoreMasterModule extends Module
      */
     public static function manipulateModuleArgs( $moduleArgs )
     {
-        if ($moduleArgs['master']) {
+        if ($moduleArgs['globalModule']) {
             $moduleArgs['class'] = 'ModuleCoreMasterModule';
-
         }
         return $moduleArgs;
     }
@@ -225,9 +221,9 @@ class ModuleCoreMasterModule extends Module
      */
     public static function setTemplateId( Module $Module )
     {
-        if (isset( $Module->Properties->master ) && $Module->Properties->master) {
-            if (isset( $Module->Properties->gmoduleRef )) {
-                $Module->Properties->setId( $Module->Properties->gmoduleRef['id'] );
+        if (isset( $Module->Properties->globalModule ) && $Module->Properties->globalModule) {
+            if (isset( $Module->Properties->parentObject )) {
+                $Module->Properties->setId( $Module->Properties->parentObject->post_name );
             }
         }
     }
@@ -241,6 +237,5 @@ class ModuleCoreMasterModule extends Module
     {
         return $old;
     }
-
 
 }

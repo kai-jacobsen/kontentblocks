@@ -15,7 +15,6 @@ class GlobalModules
 
     public static $instance;
     protected $gmodules = array();
-    protected $masterGmodules = array();
 
     protected $API;
 
@@ -71,7 +70,7 @@ class GlobalModules
         $collect = array();
         $data = get_posts(
             array(
-                'post_type' => 'kb-mdtpl',
+                'post_type' => 'kb-gmd',
                 'posts_per_page' => - 1,
                 'suppress_filters' => false,
                 'post_status' => 'publish'
@@ -81,41 +80,27 @@ class GlobalModules
         if (empty( $data )) {
             return false;
         }
-        foreach ($data as $tpl) {
-            $Storage = new ModuleStorage( $tpl->ID );
+        foreach ($data as $postObj) {
+            $Storage = new ModuleStorage( $postObj->ID );
             $index = $Storage->getIndex();
-            $def = $index[$tpl->post_name];
-
-            $def['gmoduleRef'] = $tpl;
-            $collect[$tpl->post_name] = $def;
+            $def = $index[$postObj->post_name];
+            $def['parentObject'] = $postObj;
+            $def['name'] = $postObj->post_title;
+            $collect[$postObj->post_name] = $def;
         }
-
-        $this->gmodules = array_filter(
-            $collect,
-            function ( $item ) {
-                return !$item['master'];
-            }
-        );
-        $this->masterGmodules = array_filter(
-            $collect,
-            function ( $item ) {
-                return $item['master'];
-            }
-        );
-
+        $this->gmodules = $collect;
         if (empty( $data )) {
             return false;
         }
-
     }
 
     /**
-     * Merge master and normal gmodules
+     * Return gmodules
      * @return array
      */
     public function getAllGmodules()
     {
-        return array_merge( $this->gmodules, $this->masterGmodules );
+        return $this->gmodules;
     }
 
 }

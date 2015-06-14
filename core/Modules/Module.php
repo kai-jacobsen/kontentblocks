@@ -338,14 +338,6 @@ abstract class Module
             'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->Properties->area->id ),
             'uri' => $this->Properties->getSetting( 'uri' )
         );
-        // only for master templates
-//        if (isset( $this->master ) && $this->master) {
-//            $toJSON['master'] = true;
-//            $toJSON['master_id'] = $this->masterObj['parentId'];
-//            $toJSON['parentId'] = $this->masterObj['parentId'];
-//            $toJSON['post_id'] = $this->masterObj['parentId'];
-//            $toJSON['templateObj'] = $this->templateObj;
-//        }
         $toJSON = wp_parse_args( $toJSON, $this->Properties );
         return $toJSON;
 

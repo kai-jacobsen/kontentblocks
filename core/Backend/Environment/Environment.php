@@ -100,6 +100,10 @@ class Environment implements JsonSerializable
         return $this->storageId;
     }
 
+    public function getPostObject(){
+        return $this->postObj;
+    }
+
     /**
      * get arbitrary property
      * @param string $param

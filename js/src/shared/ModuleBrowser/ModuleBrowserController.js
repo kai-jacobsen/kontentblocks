@@ -155,10 +155,9 @@ module.exports = Backbone.View.extend({
     data = {
       action: 'createNewModule',
       'class': module.get('settings').class,
-      master: module.get('master'),
-      masterRef: module.get('masterRef'),
-      gmodule: module.get('gmodule'),
-      gmoduleRef: module.get('gmoduleRef'),
+      globalModule: module.get('globalModule'),
+      parentObject: module.get('parentObject'),
+      parentObjectId: module.get('parentObjectId'),
       areaContext: this.options.area.model.get('context'),
       area: this.options.area.model.get('id'),
       _ajax_nonce: Config.getNonce('create'),

@@ -122,13 +122,12 @@ class ModuleRegistry
             );
         }
 
-        // Extra Module Templates
-        foreach (GlobalModules::getInstance()->getAllGmodules() as $name => $moduleArgs) {
-
+        // Extra global modules
+        foreach (GlobalModules::getInstance()->getAllGmodules() as $id => $moduleArgs) {
             $moduleClass = $moduleArgs['class'];
             $clone = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
             $clone['settings']['category'] = 'gmodule';
-            Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleDefinitions', $name, $clone );
+            Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleDefinitions', $id, $clone );
         }
     }
 

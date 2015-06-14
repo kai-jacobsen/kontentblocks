@@ -204,7 +204,6 @@ class ModuleIterator implements \Iterator, \Countable
     private function setupModules( $modules )
     {
         $collect = array();
-
         if (empty( $modules )) {
             return $collect;
         }
@@ -218,7 +217,7 @@ class ModuleIterator implements \Iterator, \Countable
 
             // last call to change module args before the instance is instantiated
             // MasterCoreModule will change this to rewrite properties to the original template module
-            $collect[$id] = apply_filters( 'kb.before.frontend.setup', $module );
+            $collect[$id] = $module;
         }
 
         return $collect;

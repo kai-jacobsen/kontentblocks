@@ -106,7 +106,6 @@ class ModuleWorkshop
                 $this->Environment->getStorage()->saveModule( $this->getNewId(), $this->prepareFromModule() );
             }
 
-
             if ($update) {
                 $this->locked = true;
                 return true;
@@ -122,8 +121,6 @@ class ModuleWorkshop
      */
     public function createAndGet()
     {
-
-
         if ($this->isValid() && $this->create()) {
             return $this->getModule();
         }
@@ -197,10 +194,16 @@ class ModuleWorkshop
         $attrs = $this->handleLegacyattrs( wp_parse_args( $attrs, $oldattrs ) );
         $this->newId = $mid = ( isset( $attrs['mid'] ) ) ? $attrs['mid'] : $this->createModuleId();
         $attrs['mid'] = $attrs['instance_id'] = $mid;
-        $attrs['post_id'] = $this->Environment->getId();
+
+        if (empty($attrs['post_id'])){
+            $attrs['post_id'] = $this->Environment->getId();
+        }
+
+//        $attrs['parentObject'] = ( is_numeric( $attrs['parentObjectId'] ) ) ? get_post(
+//            $attrs['parentObjectId']
+//        ) : $this->Environment->getPostObject();
 
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
-
         return $this->clean( $attrs );
     }
 
@@ -244,11 +247,6 @@ class ModuleWorkshop
      */
     private function handleLegacyattrs( $attrs )
     {
-        if (array_key_exists( 'master_id', $attrs )) {
-            $attrs['masterRef'] = array(
-                'parentId' => $attrs['master_id']
-            );
-        }
 
         if (array_key_exists( 'instance_id', $attrs )) {
             $attrs['mid'] = $attrs['instance_id'];
@@ -268,15 +266,9 @@ class ModuleWorkshop
             'instance_id' => '',
             'mid' => '',
             // gmodule
-            'gmodule' => false,
-            'master' => false,
-            'gmoduleRef' => array(
-                'id' => null,
-                'name' => null,
-            ),
-            'masterRef' => array(
-                'parentId' => null
-            ),
+            'globalModule' => false,
+            'parentObjectId' => null,
+            'parentObject' => null,
             // generic
             'class' => '',
             'overrides' => array(

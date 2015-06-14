@@ -70,7 +70,6 @@ class AreaRenderer
         $this->Environment = $Environment;
         $modules = $this->Environment->getModulesforArea( $areaId );
         $this->modules = new ModuleIterator( $modules, $this->Environment );
-
         // setup AreaHtmlNode
         $this->AreaHtmlNode = new AreaHtmlNode(
             $this,

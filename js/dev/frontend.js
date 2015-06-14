@@ -2733,10 +2733,8 @@
                 data = {
                     action: "createNewModule",
                     "class": module.get("settings").class,
-                    master: module.get("master"),
-                    masterRef: module.get("masterRef"),
-                    gmodule: module.get("gmodule"),
-                    gmoduleRef: module.get("gmoduleRef"),
+                    globalModule: module.get("globalModule"),
+                    parentObject: module.get("parentObject"),
                     areaContext: Area.get("context"),
                     area: Area.get("id"),
                     _ajax_nonce: Config.getNonce("create"),
@@ -3118,10 +3116,9 @@
                 data = {
                     action: "createNewModule",
                     "class": module.get("settings").class,
-                    master: module.get("master"),
-                    masterRef: module.get("masterRef"),
-                    gmodule: module.get("gmodule"),
-                    gmoduleRef: module.get("gmoduleRef"),
+                    globalModule: module.get("globalModule"),
+                    parentObject: module.get("parentObject"),
+                    parentObjectId: module.get("parentObjectId"),
                     areaContext: this.options.area.model.get("context"),
                     area: this.options.area.model.get("id"),
                     _ajax_nonce: Config.getNonce("create"),
@@ -3310,7 +3307,7 @@
                 this.area = options.browser.area;
             },
             render: function(el) {
-                if (this.model.get("gmodule")) {
+                if (this.model.get("globalModule")) {
                     this.$el.html(tplTemplateListItem({
                         module: this.model.toJSON()
                     }));
@@ -3508,7 +3505,7 @@
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
                 var stack1;
-                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.gmoduleRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h3>";
+                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.parentObject : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h3>";
             },
             useData: true
         });
@@ -3521,7 +3518,7 @@
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
                 var stack1;
-                return '<div class="dashicons dashicons-plus kb-js-create-module"></div>\n<h4>' + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.gmoduleRef : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h4>";
+                return '<div class="dashicons dashicons-plus kb-js-create-module"></div>\n<h4>' + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.parentObject : stack1) != null ? stack1.post_title : stack1, depth0)) + "</h4>";
             },
             useData: true
         });
@@ -3582,7 +3579,7 @@
                     fn: this.program(1, data, 0),
                     inverse: this.noop,
                     data: data
-                })) != null ? stack1 : "") + " " + ((stack1 = helpers["if"].call(depth0, (stack1 = depth0 != null ? depth0.model : depth0) != null ? stack1.master : stack1, {
+                })) != null ? stack1 : "") + " " + ((stack1 = helpers["if"].call(depth0, (stack1 = depth0 != null ? depth0.model : depth0) != null ? stack1.globalModule : stack1, {
                     name: "if",
                     hash: {},
                     fn: this.program(3, data, 0),
