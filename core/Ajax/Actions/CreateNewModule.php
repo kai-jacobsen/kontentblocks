@@ -177,11 +177,10 @@ class CreateNewModule implements AjaxActionInterface
 
         $this->moduleArgs['class'] = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
-
-        if ($Request->getFiltered( 'globalModule', FILTER_VALIDATE_BOOLEAN )) {
-            $this->moduleArgs['post_id'] = absint( $Request->get( 'parentObjectId' ) );
-        }
-
+//
+//        if ($Request->getFiltered( 'globalModule', FILTER_VALIDATE_BOOLEAN )) {
+//        }
+        $this->moduleArgs['post_id'] = absint( $this->postId );
         $this->moduleArgs['area'] = $Request->getFiltered( 'area', FILTER_SANITIZE_STRING );
         $this->moduleArgs['areaContext'] = $Request->getFiltered( 'areaContext', FILTER_SANITIZE_STRING );
         $this->moduleArgs['parentObjectId'] = absint( $Request->get( 'parentObjectId' ) );

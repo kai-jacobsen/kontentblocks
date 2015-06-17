@@ -1,0 +1,21 @@
+.global-module--attached{
+  padding: $fullpadding;
+
+  table{
+    table-layout: fixed;
+    width: 50%;
+  }
+
+  td, th{
+    border-bottom: 1px solid $grey-100;
+  }
+
+  thead th{
+    text-align: left;
+    padding: $halfpadding;
+  }
+
+  tbody td{
+    padding: $halfpadding;
+  }
+}

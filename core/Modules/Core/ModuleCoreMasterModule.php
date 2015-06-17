@@ -43,6 +43,36 @@ class ModuleCoreMasterModule extends Module
 
         // runs inside of the module factory, before module data is set to the module instance
         add_filter( 'kb.module.factory.data', array( __CLASS__, 'setupModuleData' ), 10, 2 );
+
+        add_action( 'kb.module.new', array( __CLASS__, 'addNewModule' ) );
+        add_action( 'kb.module.delete', array( __CLASS__, 'deleteModule' ) );
+    }
+
+    public static function addNewModule( Module $Module )
+    {
+        if ($Module->Properties->globalModule && $Module->Properties->parentObject) {
+            $parentId = $Module->Properties->parentObjectId;
+            $meta = get_post_meta( $parentId, '_kb_attached_to', true );
+            if (!is_array( $meta )) {
+                $meta = array();
+            }
+            $meta[$Module->getId()] = $Module->Properties->post_id;
+            update_post_meta( $parentId, '_kb_attached_to', $meta );
+        }
+    }
+
+    public static function deleteModule( Module $Module )
+    {
+        if ($Module->Properties->globalModule && $Module->Properties->parentObject) {
+            $parentId = $Module->Properties->parentObjectId;
+            $meta = get_post_meta( $parentId, '_kb_attached_to', true );
+            if (is_array( $meta ) && !empty( $meta )) {
+                if (isset( $meta[$Module->getId()] )) {
+                    unset( $meta[$Module->getId()] );
+                }
+            }
+            update_post_meta( $parentId, '_kb_attached_to', $meta );
+        }
     }
 
     /**

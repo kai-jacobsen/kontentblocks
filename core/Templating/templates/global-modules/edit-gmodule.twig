@@ -1,10 +1,33 @@
 <div id="kontentblocks-core-ui" class="postbox">
     <h3>Module</h3>
-    
+
     <div class="inside kb-module" id="{{ instance.mid }}">
         <div class="kb-module__controls-inner">
             {{ instance.form() }}
         </div>
+    </div>
+    <div class="global-module--attached">
+        <h3>Module is attached to following posts</h3>
+        <table>
+            <thead>
+            <tr>
+                <th width="10%">ID</th>
+                <th width="80%">title</th>
+                <th width="10%">action</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for post in attachedTo %}
+
+                <tr>
+                    <td>{{ post.ID }}</td>
+                    <td>{{ post.post_title }}</td>
+                    <td><a target="krosstab" href="{{ get_edit_post_link(post.ID) }}">view</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

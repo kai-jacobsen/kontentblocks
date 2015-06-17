@@ -107,6 +107,7 @@ class ModuleWorkshop
             }
 
             if ($update) {
+                do_action( 'kb.module.new', $this->getModule() );
                 $this->locked = true;
                 return true;
             }
@@ -195,13 +196,14 @@ class ModuleWorkshop
         $this->newId = $mid = ( isset( $attrs['mid'] ) ) ? $attrs['mid'] : $this->createModuleId();
         $attrs['mid'] = $attrs['instance_id'] = $mid;
 
-        if (empty($attrs['post_id'])){
+        if (empty( $attrs['post_id'] )) {
             $attrs['post_id'] = $this->Environment->getId();
         }
 
-//        $attrs['parentObject'] = ( is_numeric( $attrs['parentObjectId'] ) ) ? get_post(
-//            $attrs['parentObjectId']
-//        ) : $this->Environment->getPostObject();
+
+        $attrs['parentObject'] = ( is_numeric( $attrs['parentObjectId'] ) && $attrs['globalModule'] ) ? get_post(
+            $attrs['parentObjectId']
+        ) : null;
 
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
         return $this->clean( $attrs );

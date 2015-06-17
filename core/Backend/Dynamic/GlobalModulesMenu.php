@@ -124,7 +124,8 @@ class GlobalModulesMenu
         // Data for twig
         $templateData = array(
             'nonce' => wp_create_nonce( 'update-template' ),
-            'instance' => $Module
+            'instance' => $Module,
+            'attachedTo' => $this->prepareAttachedTo()
         );
 
 
@@ -509,6 +510,20 @@ class GlobalModulesMenu
                 'dynamic' => false
             )
         );
+    }
+
+    private function prepareAttachedTo()
+    {
+        $posts = [ ];
+        $meta = get_post_meta( get_the_ID(), '_kb_attached_to', true );
+        if (!is_array( $meta )) {
+            return $posts;
+        }
+        $unique = array_values( $meta );
+        if (!empty( $unique )) {
+            $posts = get_posts( array( 'include' => $unique, 'post_type' => 'any' ) );
+        }
+        return $posts;
     }
 
 }
