@@ -81,8 +81,10 @@ class GlobalModules
             return false;
         }
         foreach ($data as $postObj) {
+
             $Storage = new ModuleStorage( $postObj->ID );
             $index = $Storage->getIndex();
+
             $def = $index[$postObj->post_name];
             $def['parentObject'] = $postObj;
             $def['name'] = $postObj->post_title;

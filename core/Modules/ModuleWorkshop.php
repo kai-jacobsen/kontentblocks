@@ -200,8 +200,13 @@ class ModuleWorkshop
             $attrs['post_id'] = $this->Environment->getId();
         }
 
+        if (is_null( $attrs['parentObjectId'] ) || $attrs['parentObjectId'] === 0) {
+            $attrs['parentObjectId'] = $attrs['post_id'];
+        }
 
-        $attrs['parentObject'] = ( is_numeric( $attrs['parentObjectId'] ) && $attrs['globalModule'] ) ? get_post(
+        $attrs['parentObject'] = ( isset( $attrs['parentObject'] ) && is_numeric(
+                $attrs['parentObjectId']
+            ) && $attrs['globalModule'] ) ? get_post(
             $attrs['parentObjectId']
         ) : null;
 

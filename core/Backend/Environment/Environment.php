@@ -78,9 +78,9 @@ class Environment implements JsonSerializable
         $this->postObj = $postObj;
         $this->storageId = $storageId;
 
-        $this->DataProvider = new DataProviderController( $storageId );
-        $this->Storage = new ModuleStorage( $storageId, $this->DataProvider );
+        $this->Storage = new ModuleStorage( $storageId );
         $this->ModuleRepository = new ModuleRepository( $this );
+
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
         $this->modules = $this->setupModules();
@@ -98,7 +98,8 @@ class Environment implements JsonSerializable
         return $this->storageId;
     }
 
-    public function getPostObject(){
+    public function getPostObject()
+    {
         return $this->postObj;
     }
 
@@ -122,7 +123,7 @@ class Environment implements JsonSerializable
      */
     public function getDataProvider()
     {
-        return $this->DataProvider;
+        return $this->Storage->getDataProvider();
     }
 
 
@@ -148,8 +149,9 @@ class Environment implements JsonSerializable
      * @param $mid
      * @return \Kontentblocks\Modules\Module|null
      */
-    public function getModuleById($mid){
-        return $this->ModuleRepository->getModuleObject($mid);
+    public function getModuleById( $mid )
+    {
+        return $this->ModuleRepository->getModuleObject( $mid );
     }
 
     /**
@@ -240,7 +242,7 @@ class Environment implements JsonSerializable
      */
     public function getAreaSettings( $id )
     {
-        $settings = $this->DataProvider->get( 'kb_area_settings' );
+        $settings = $this->Storage->getDataProvider()->get( 'kb_area_settings' );
         if (!empty( $settings[$id] )) {
             return $settings[$id];
         }
@@ -311,6 +313,10 @@ class Environment implements JsonSerializable
     }
 
 
+    /**
+     * @return mixed
+     * @since 0.1.0
+     */
     public function getModuleCount()
     {
         return Utilities::getHighestId( $this->getStorage()->getIndex() );

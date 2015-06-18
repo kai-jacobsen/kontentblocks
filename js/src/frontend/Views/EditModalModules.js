@@ -570,7 +570,7 @@ module.exports = Backbone.View.extend({
     Ajax.send({
       action: 'undraftModule',
       mid: json.mid,
-      postId: this.model.get('post_id'),
+      postId: this.model.get('parentObjectId'),
       _ajax_nonce: Config.getNonce('update')
     }, function (res) {
       if (res.success) {

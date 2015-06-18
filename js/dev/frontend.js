@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-17 */
+/*! Kontentblocks DevVersion 2015-06-18 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1121,7 +1121,7 @@
                                         data: {
                                             action: "applyContentFilter",
                                             content: content,
-                                            postId: ed.module.toJSON().post_id,
+                                            postId: ed.module.toJSON().parentObjectId,
                                             _ajax_nonce: Config.getNonce("read")
                                         },
                                         type: "POST",
@@ -1942,7 +1942,7 @@
                 Ajax.send({
                     action: "undraftModule",
                     mid: json.mid,
-                    postId: this.model.get("post_id"),
+                    postId: this.model.get("parentObjectId"),
                     _ajax_nonce: Config.getNonce("update")
                 }, function(res) {
                     if (res.success) {

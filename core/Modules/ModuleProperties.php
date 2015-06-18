@@ -3,6 +3,8 @@
 namespace Kontentblocks\Modules;
 
 
+use AdamBrett\ShellWrapper\Command\Value;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -71,6 +73,16 @@ class ModuleProperties
      */
     public $mid;
 
+    /**
+     * @var ID of module attached to
+     */
+    public $parentObjectId;
+
+    /**
+     * @var Post object of module attached to
+     */
+    public $parentObject;
+
 
     public function __construct( $properties )
     {
@@ -90,6 +102,12 @@ class ModuleProperties
         }
     }
 
+
+    public function set( $prop, $value )
+    {
+        $this->setupProperties( array( $prop => $value ) );
+        return $this;
+    }
 
     /*
      * ------------------------------------
@@ -167,7 +185,7 @@ class ModuleProperties
         $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
         $Area = $AreaRegistry->getArea( $var );
 
-        if (is_null($Area)){
+        if (is_null( $Area )) {
             $Area = $AreaRegistry->getArea( '_internal' );
         }
         /**
@@ -181,15 +199,33 @@ class ModuleProperties
 
     }
 
-    public function export($keepSettings = false)
+    /**
+     * Export relevant properies as indexstoreable array
+     * @param bool $keepSettings whether to export settings as well
+     * @return array
+     * @since 0.1.0
+     */
+    public function export( $keepSettings = false )
     {
-        $vars = get_object_vars($this);
+        $vars = get_object_vars( $this );
         $vars['area'] = $this->area->id;
+        $vars['parentObject'] = null;
         // settings are not persistent
-        if(!$keepSettings){
-            unset($vars['settings']);
+        if (!$keepSettings) {
+            unset( $vars['settings'] );
         }
 
         return $vars;
+    }
+
+    /**
+     * Store properties to index
+     * @return mixed
+     * @since 0.2.0
+     */
+    public function sync()
+    {
+        $Storage = new ModuleStorage( $this->parentObjectId );
+        return $Storage->addToIndex( $this->mid, $this->export() );
     }
 }

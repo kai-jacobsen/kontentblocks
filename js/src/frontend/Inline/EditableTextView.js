@@ -111,7 +111,7 @@ var EditableText = Backbone.View.extend({
                 data: {
                   action: 'applyContentFilter',
                   content: content,
-                  postId: ed.module.toJSON().post_id,
+                  postId: ed.module.toJSON().parentObjectId,
                   _ajax_nonce: Config.getNonce('read')
                 },
                 type: 'POST',
