@@ -379,7 +379,6 @@ class AreaRegistry
         // loop through areas and find all which are attached to this post type and/or page template
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($this->areas as $area) {
-
             if (empty( $area->context )) {
                 $area->context = 'side';
             }
@@ -395,6 +394,10 @@ class AreaRegistry
                 if (in_array( $postType, $area->postTypes )) {
                     $areas[$area->id] = $area;
                 }
+            }
+
+            if (empty( $area->pageTemplates ) && empty( $area->postTypes )) {
+                $areas[$area->id] = $area;
             }
         }
         $sareas = self::orderBy( $areas, 'order' );
@@ -436,7 +439,7 @@ class AreaRegistry
     {
         $area = $this->getArea( $id );
 
-        if (is_object($area)){
+        if (is_object( $area )) {
             return $area->dynamic;
         }
 

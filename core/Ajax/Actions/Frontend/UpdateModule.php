@@ -35,6 +35,7 @@ class UpdateModule implements AjaxActionInterface
 
         // flags
 
+
         $Environment = Utilities::getEnvironment( $postdata->postId );
         $newData = wp_unslash($postdata->data[$postdata->module['mid']]);
         $Workshop = new ModuleWorkshop( $Environment, $postdata->module );

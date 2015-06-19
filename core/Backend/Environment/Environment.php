@@ -75,6 +75,7 @@ class Environment implements JsonSerializable
      */
     public function __construct( $storageId, \WP_Post $postObj )
     {
+
         $this->postObj = $postObj;
         $this->storageId = $storageId;
 

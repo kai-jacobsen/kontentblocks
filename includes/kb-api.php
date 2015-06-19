@@ -51,14 +51,16 @@ function registerAreaTemplate( $args )
  * @param int $id
  * @param array $additionalArgs
  */
-function renderSingleArea( $area, $id = null, $additionalArgs )
+function renderSingleArea( $area, $id = null, $additionalArgs = array() )
 {
     global $post;
     $postId = ( is_null( $id ) && !is_null( $post ) ) ? $post->ID : $id;
 
+
     if (is_null( $postId )) {
         return;
     }
+
 
     /** @var \Kontentblocks\Areas\AreaRegistry $Registry */
     $Registry = Kontentblocks::getService( 'registry.areas' );

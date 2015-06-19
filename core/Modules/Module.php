@@ -216,7 +216,7 @@ abstract class Module
      */
     public function setModuleData( $data = array() )
     {
-        $this->Model = new ModuleModel( $data );
+        $this->Model = new ModuleModel( $data, $this );
     }
 
     /*
@@ -332,6 +332,7 @@ abstract class Module
             ),
             'area' => $this->Properties->area->id,
             'post_id' => $this->Properties->post_id,
+            'parentObjectId' => $this->Properties->parentObjectId,
             'areaContext' => $this->Properties->areaContext,
             'viewfile' => $this->getViewfile(),
             'class' => get_class( $this ),
@@ -385,11 +386,7 @@ abstract class Module
         if (!$this->Properties || !$this->Model || !$this->Model->hasData()) {
             return false;
         }
-
-        $Storage = $this->Environment->getStorage();
-        $dupdate = $Storage->saveModule( $this->getId(), $this->Model->export() );
-        $pupdate = $this->Properties->sync();
-        return $dupdate || $pupdate;
+        return $this->Model->sync() || $this->Properties->sync();
     }
 
 
