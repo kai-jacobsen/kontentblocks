@@ -192,9 +192,13 @@ class ModuleWorkshop
             unset( $oldattrs['instance_id'] );
             unset( $oldattrs['mid'] );
         }
+
         $attrs = $this->handleLegacyattrs( wp_parse_args( $attrs, $oldattrs ) );
         $this->newId = $mid = ( isset( $attrs['mid'] ) ) ? $attrs['mid'] : $this->createModuleId();
         $attrs['mid'] = $attrs['instance_id'] = $mid;
+
+        $attrs = wp_parse_args( $attrs, $this->getDefaults() );
+
 
         if (empty( $attrs['post_id'] )) {
             $attrs['post_id'] = $this->Environment->getId();
@@ -210,7 +214,6 @@ class ModuleWorkshop
             $attrs['parentObjectId']
         ) : null;
 
-        $attrs = wp_parse_args( $attrs, $this->getDefaults() );
         return $this->clean( $attrs );
     }
 
@@ -283,8 +286,8 @@ class ModuleWorkshop
             ),
             // environmental
             'post_id' => null,
-            'area' => 'undefined',
-            'areaContext' => 'undefined',
+            'area' => '_internal',
+            'areaContext' => 'normal',
             'state' => array(
                 'draft' => true,
                 'active' => true

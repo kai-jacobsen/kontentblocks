@@ -79,14 +79,14 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
 
         $data = array(
             'inputvalue' => 'my perky id',
-            'checkmode' => 'templates'
+            'checkmode' => 'gmodules'
         );
 
         $Request = new ValueStorage( $data );
         $Response = GetSanitizedId::run( $Request );
 
         $this->assertTrue( $Response->getStatus() );
-        $this->assertEquals( 'kb_tpl_my_perky_id', $Response->getData()['id'] );
+        $this->assertEquals( 'kb_gm_my_perky_id', $Response->getData()['id'] );
 
     }
 
