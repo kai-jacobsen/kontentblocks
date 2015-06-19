@@ -111,7 +111,7 @@ abstract class Module
 
         if (!is_null( $this->ViewLoader )) {
             // render view select field
-            $concat .= $this->ViewLoader->render($this->Properties);
+            $concat .= $this->ViewLoader->render( $this->Properties );
         }
 
         // render fields if set
@@ -371,6 +371,25 @@ abstract class Module
             'concat' => true
         );
 
+    }
+
+    /**
+     * Save properties and data to the Storage
+     * This returns the result of the Storage update call and maybe false
+     * if the data on the server didn't change
+     * @return bool
+     * @since 0.2.0
+     */
+    public function sync()
+    {
+        if (!$this->Properties || !$this->Model || !$this->Model->hasData()) {
+            return false;
+        }
+
+        $Storage = $this->Environment->getStorage();
+        $dupdate = $Storage->saveModule( $this->getId(), $this->Model->export() );
+        $pupdate = $this->Properties->sync();
+        return $dupdate || $pupdate;
     }
 
 
