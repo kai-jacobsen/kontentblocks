@@ -74,6 +74,9 @@ class GetSanitizedIdTest extends \WP_UnitTestCase
         $this->assertFalse( $Response->getStatus() );
     }
 
+    /**
+     *
+     */
     public function testRunWithTemplates()
     {
 
