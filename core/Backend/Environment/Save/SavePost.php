@@ -50,6 +50,7 @@ class SavePost
             return false;
         }
 
+
         // create backup
         $this->createBackup();
 
@@ -205,6 +206,7 @@ class SavePost
             }
             // if this is a preview, save temporary data for previews
             if (!is_null( $savedData )) {
+
                 if ($this->Postdata->get( 'wp-preview' ) && $this->Postdata->get( 'wp-preview' ) === 'dopreview') {
                     $this->Environment->getDataProvider()->update( '_preview_' . $module->getId(), $savedData );
                 } // save real data

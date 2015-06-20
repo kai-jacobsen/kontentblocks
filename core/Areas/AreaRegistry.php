@@ -396,9 +396,6 @@ class AreaRegistry
                 }
             }
 
-            if (empty( $area->pageTemplates ) && empty( $area->postTypes )) {
-                $areas[$area->id] = $area;
-            }
         }
         $sareas = self::orderBy( $areas, 'order' );
         return $sareas;

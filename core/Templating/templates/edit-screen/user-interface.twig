@@ -5,6 +5,7 @@
     {{ nonces.save | raw }}
     {{ nonces.ajax | raw }}
     <input type='hidden' name='blog_id' value='{{ blogId }}'>
+    <input type="hidden" name="kb_preview" value="kb_preview">
 
     {% if hasAreas == false %}
         {{ noAreas | raw }}

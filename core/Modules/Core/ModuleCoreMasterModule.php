@@ -85,6 +85,10 @@ class ModuleCoreMasterModule extends Module
     public static function validateModule( Module $Module )
     {
 
+        if (!$Module->Properties->globalModule) {
+            return $Module;
+        }
+
         $parentId = $Module->Properties->parentObjectId;
 
         if (empty( $parentId )) {
@@ -103,7 +107,7 @@ class ModuleCoreMasterModule extends Module
             }
 
         }
-        if (is_null( $parentId )) {
+        if (is_null( $parentId ) || !$Module->Properties->parentObject) {
             $Module->Properties->state['draft'] = true;
             $Module->Properties->state['active'] = false;
             $Module->Properties->state['valid'] = false;
@@ -173,6 +177,11 @@ class ModuleCoreMasterModule extends Module
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
         if ($module['globalModule'] && isset( $module['parentObjectId'] )) {
+
+            if (is_null( $parentObj = get_post( $module['parentObjectId'] ) )) {
+                return $module;
+            }
+
             $parentObjectId = $module['parentObjectId']; // post id of the template
             $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
             $duplicate = ( !empty( $icl ) );
@@ -186,7 +195,7 @@ class ModuleCoreMasterModule extends Module
             }
             // original template module definition
             $index = get_post_meta( $parentObjectId, 'kb_kontentblocks', true );
-            $gmodule = $index[$module['parentObject']->post_name];
+            $gmodule = $index[$parentObj->post_name];
             // actual module definition
             $originalDefiniton = $ModuleRegistry->get( $gmodule['class'] );
 
@@ -215,6 +224,10 @@ class ModuleCoreMasterModule extends Module
      */
     public static function setupModuleData( $data, $Properties )
     {
+        if (is_null( $Properties->parentObject )) {
+            return $data;
+        }
+
         if (filter_var(
                 $Properties->globalModule,
                 FILTER_VALIDATE_BOOLEAN

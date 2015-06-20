@@ -37,6 +37,8 @@ Class EditScreen
             add_action( 'edit_form_after_editor', array( $this, 'renderUserInterface' ), 10 );
             // register save callback
             add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+            add_filter('_wp_post_revision_fields', array($this, 'revisionFields'));
+
             // expose data to the document
             add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
         }
@@ -48,6 +50,7 @@ Class EditScreen
      */
     public function renderUserInterface( $post )
     {
+
         echo $this->userInterface( $post );
         _K::info( 'user interfaced rendered for a post type' );
     }
@@ -105,10 +108,10 @@ Class EditScreen
     function save( $post_id )
     {
 
+
         if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
             $post_id = get_the_ID();
         }
-
         $Environment = Utilities::getEnvironment( $post_id );
         $Environment->save();
     }
@@ -149,5 +152,11 @@ Class EditScreen
         }
         return '';
     }
+
+    public function revisionFields($fields){
+        $fields["kb_preview"] = "kb_preview";
+        return $fields;
+    }
+
 
 }

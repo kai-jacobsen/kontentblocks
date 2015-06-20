@@ -208,11 +208,12 @@ class ModuleWorkshop
             $attrs['parentObjectId'] = $attrs['post_id'];
         }
 
-        $attrs['parentObject'] = ( isset( $attrs['parentObject'] ) && is_numeric(
+        $attrs['parentObject'] = ( isset( $attrs['parentObjectId'] ) && is_numeric(
                 $attrs['parentObjectId']
             ) && $attrs['globalModule'] ) ? get_post(
             $attrs['parentObjectId']
         ) : null;
+
 
         return $this->clean( $attrs );
     }

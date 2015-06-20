@@ -197,14 +197,14 @@ class ModuleStorage implements \Countable
         $meta = $this->DataProvider->getAll();
         foreach (array_keys( $this->index ) as $id) {
             $collection['_' . $id] = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
-            $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : '';
+            $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : null;
         }
         return $collection;
 
     }
 
     /**
-     * Get module data by instance_id if available
+     * Get module data by mid if available
      * Make sure that the given id is prefixed for hidden keys
      *
      * @param string $mid
@@ -215,9 +215,16 @@ class ModuleStorage implements \Countable
     {
         $mid = $this->underscorePrefix( $mid );
 
+
         if (is_preview()) {
-            $mid = '_preview' . $mid;
+            $pmid = '_preview' . $mid;
+            if (isset( $this->modules[$pmid] )) {
+                return $this->modules[$pmid];
+            } elseif (isset( $this->modules[$mid] )) {
+                return $this->modules[$mid];
+            }
         }
+
         if (isset( $this->modules[$mid] )) {
             return $this->modules[$mid];
         }

@@ -226,6 +226,7 @@ class ModuleProperties
     public function sync()
     {
         $Storage = new ModuleStorage( $this->parentObjectId );
+        apply_filters( 'kb.modify.module.save', $this->Module );
         return $Storage->addToIndex( $this->mid, $this->export() );
     }
 }

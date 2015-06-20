@@ -116,7 +116,6 @@ class GlobalModulesMenu
         // infamous hidden editor hack
         Utilities::hiddenEditor();
         $Environment = Utilities::getEnvironment( $post->ID );
-
         $Module = $Environment->getModuleById( $gmodule['mid'] );
         $Module->Properties->areaContext = $context;
 

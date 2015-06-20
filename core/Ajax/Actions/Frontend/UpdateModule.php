@@ -37,12 +37,13 @@ class UpdateModule implements AjaxActionInterface
 
 
         $Environment = Utilities::getEnvironment( $postdata->postId );
-        $newData = wp_unslash($postdata->data[$postdata->module['mid']]);
+        $newData = wp_unslash( $postdata->data[$postdata->module['mid']] );
         $Workshop = new ModuleWorkshop( $Environment, $postdata->module );
         $Module = $Workshop->getModule();
 
         // master module will change instance id to correct template id
         apply_filters( 'kb.modify.module.save', $Module );
+
 
         // gather data
         $old = $Environment->getStorage()->getModuleData( $Module->getId() );
@@ -50,7 +51,7 @@ class UpdateModule implements AjaxActionInterface
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         if ($postdata->update) {
-            $Environment->getStorage()->saveModule( $Module->getId(), $mergedData  );
+            $Environment->getStorage()->saveModule( $Module->getId(), $mergedData );
         }
         $Module->setModuleData( $mergedData );
         do_action( 'kb.module.save', $Module, $mergedData );
