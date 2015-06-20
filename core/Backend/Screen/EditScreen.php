@@ -153,6 +153,13 @@ Class EditScreen
         return '';
     }
 
+    /**
+     * By adding a unknown field WordPress internals will never come to the conclusion
+     * a revision equals the original
+     * @param $fields
+     * @return mixed
+     * @since 0.2.0
+     */
     public function revisionFields($fields){
         $fields["kb_preview"] = "kb_preview";
         return $fields;
