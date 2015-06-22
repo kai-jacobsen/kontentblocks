@@ -83,6 +83,8 @@ class ModuleProperties
      */
     public $parentObject;
 
+    public $globalModule;
+
 
     public function __construct( $properties )
     {
@@ -228,5 +230,9 @@ class ModuleProperties
         $Storage = new ModuleStorage( $this->parentObjectId );
         apply_filters( 'kb.modify.module.save', $this->Module );
         return $Storage->addToIndex( $this->mid, $this->export() );
+    }
+
+    public function __set($k, $v){
+        d($k, $v);
     }
 }
