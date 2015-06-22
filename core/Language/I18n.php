@@ -83,7 +83,6 @@ class I18n
         $result = NULL;
 
         foreach ($path as $pk) {
-
             $result = self::_getSubpackage( $result, $pk );
         }
         return $result;

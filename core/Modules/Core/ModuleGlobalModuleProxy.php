@@ -8,9 +8,10 @@ use Kontentblocks\Modules\Module;
 use Kontentblocks\Templating\CoreView;
 
 /**
- * Class ModuleCoreMasterModule
+ * Class ModuleGlobalModuleProxy
+ * @since 0.1.0
  */
-class ModuleCoreMasterModule extends Module
+class ModuleGlobalModuleProxy extends Module
 {
 
     public static $defaults = array(
@@ -252,7 +253,7 @@ class ModuleCoreMasterModule extends Module
     public static function manipulateModuleArgs( $moduleArgs )
     {
         if ($moduleArgs['globalModule']) {
-            $moduleArgs['class'] = 'ModuleCoreMasterModule';
+            $moduleArgs['class'] = 'ModuleGlobalModuleProxy';
         }
         return $moduleArgs;
     }

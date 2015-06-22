@@ -168,17 +168,23 @@
 .global-module--attached {
   padding: 24px; }
   /* line 4, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
+  .global-module--attached h3 {
+    padding: 0 !important; }
+  /* line 8, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
+  .global-module--attached h3 + p {
+    margin-top: 0; }
+  /* line 12, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
   .global-module--attached table {
     table-layout: fixed;
     width: 50%; }
-  /* line 9, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
+  /* line 17, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
   .global-module--attached td, .global-module--attached th {
     border-bottom: 1px solid #F5F5F5; }
-  /* line 13, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
+  /* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
   .global-module--attached thead th {
     text-align: left;
     padding: 12px; }
-  /* line 18, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
+  /* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_dynamic-menus/_gmodules.scss */
   .global-module--attached tbody td {
     padding: 12px; }
 

@@ -7,6 +7,7 @@ use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
@@ -128,7 +129,8 @@ class GlobalModulesMenu
             'nonce' => wp_create_nonce( 'update-gmodule' ),
             'module' => $Module,
             'attachedTo' => $this->prepareAttachedTo(),
-            'contexts' => ScreenManager::getDefaultContextLayout()
+            'contexts' => ScreenManager::getDefaultContextLayout(),
+            'i18n' => I18n::getPackages('Common', 'Menus')
         );
 
 
