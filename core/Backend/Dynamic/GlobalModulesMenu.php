@@ -115,6 +115,8 @@ class GlobalModulesMenu
         $context = ( isset( $_GET['area-context'] ) ) ? $_GET['area-context'] : 'normal';
         // infamous hidden editor hack
         Utilities::hiddenEditor();
+
+        // need to create a ew module here in order to override areaContext
         $Environment = Utilities::getEnvironment( $post->ID );
         $gmodule['areaContext'] = $context;
         $Workshop = new ModuleWorkshop( $Environment, $gmodule );
