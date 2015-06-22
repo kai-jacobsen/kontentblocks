@@ -2,7 +2,7 @@
     <h3>Module</h3>
     <div class="inside kb-module" id="{{ module.mid }}">
         <div class="kb-area-context-select">
-            <label for="area-context-select">Area Context</label>
+            <label for="area-context-select">Simulate Area Context</label>
             <select name="area-context" onchange="KB.Menus.reloadContext(this)" id="area-context-select">
                 {% for context in contexts %}
                     <option {% if module.Properties.areaContext == context.id %} selected="selected" {% endif %} value="{{ context.id }}">{{ context.title }}</option>

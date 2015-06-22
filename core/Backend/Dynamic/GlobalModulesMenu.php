@@ -113,7 +113,6 @@ class GlobalModulesMenu
         // or have different fields configuration
         // TODO Explanation text for non-developers on page
         $context = ( isset( $_GET['area-context'] ) ) ? $_GET['area-context'] : 'normal';
-
         // infamous hidden editor hack
         Utilities::hiddenEditor();
         $Environment = Utilities::getEnvironment( $post->ID );

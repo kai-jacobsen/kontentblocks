@@ -301,10 +301,12 @@ abstract class Field implements Exportable
      * Set fields visibility
      *
      * @param $bool
+     * @return bool
      */
     public function setDisplay( $bool )
     {
         $this->setArgs( array( 'display' => filter_var( $bool, FILTER_VALIDATE_BOOLEAN ) ) );
+        return $bool;
     }
 
     /**

@@ -58,7 +58,7 @@ class ModuleContext implements \JsonSerializable
     public function get( $prop )
     {
         if (property_exists( $this, $prop )) {
-            return $prop;
+            return $this->$prop;
         }
         return null;
     }

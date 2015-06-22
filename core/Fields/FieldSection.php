@@ -94,12 +94,10 @@ class FieldSection extends AbstractFieldSection
         }
 
         if (!isset( $areaContext ) || $areaContext === false || ( $Field->getCondition( 'areaContext' ) === false )) {
-            $Field->setDisplay( true );
-            return;
+            return $Field->setDisplay( true );
         } else if (!in_array( $areaContext, $Field->getCondition( 'areaContext' ) )) {
-            $Field->setDisplay( false );
+            return $Field->setDisplay( false );
 
-            return;
         }
 
         $this->_decreaseVisibleFields();
