@@ -89,3 +89,14 @@
 #kontentblocks-core-ui a:focus{
   box-shadow: none !important;
 }
+
+.kb-button-small{
+  font-size: 12px;
+  padding: 3px 10px;
+  color: #fff;
+  background-color: $lightblue;
+
+  &:hover{
+    background-color: $orange;
+  }
+}
