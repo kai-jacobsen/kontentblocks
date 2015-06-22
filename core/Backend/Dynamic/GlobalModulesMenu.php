@@ -117,9 +117,9 @@ class GlobalModulesMenu
         // infamous hidden editor hack
         Utilities::hiddenEditor();
         $Environment = Utilities::getEnvironment( $post->ID );
-        $Module = $Environment->getModuleById( $gmodule['mid'] );
-        $Module->Properties->areaContext = $context;
-
+        $gmodule['areaContext'] = $context;
+        $Workshop = new ModuleWorkshop( $Environment, $gmodule );
+        $Module = $Workshop->getModule();
 
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig

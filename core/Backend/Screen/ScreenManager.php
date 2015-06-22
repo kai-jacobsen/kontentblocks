@@ -165,7 +165,7 @@ class ScreenManager
         $defaults = array(
             'top' => array(
                 'id' => 'top',
-                'title' => __( 'Page header', 'kontentblocks' ),
+                'title' => __( 'Header', 'kontentblocks' ),
                 'description' => apply_filters( 'kb_context_description_top', '' )
             ),
             'normal' => array(
@@ -175,7 +175,7 @@ class ScreenManager
             ),
             'side' => array(
                 'id' => 'side',
-                'title' => __( 'Page Sidebar', 'kontentblocks' ),
+                'title' => __( 'Sidebar', 'kontentblocks' ),
                 'description' => apply_filters( 'kb_context_description_side', '' )
             ),
             'bottom' => array(

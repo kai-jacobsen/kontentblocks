@@ -4,8 +4,6 @@ namespace Kontentblocks\Modules;
 
 
 use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
 
@@ -138,7 +136,8 @@ class ModuleWorkshop
                 $this->getPropertiesObject(),
                 $this->Environment
             );
-            return $this->Module = $Factory->getModule();
+            $this->Module = $Factory->getModule();
+            return $this->Module;
         }
         return false;
     }
