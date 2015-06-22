@@ -122,7 +122,7 @@ class GlobalModulesMenu
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig
         $templateData = array(
-            'nonce' => wp_create_nonce( 'update-template' ),
+            'nonce' => wp_create_nonce( 'update-gmodule' ),
             'instance' => $Module,
             'attachedTo' => $this->prepareAttachedTo()
         );
@@ -189,15 +189,20 @@ class GlobalModulesMenu
             return false;
         }
 
+        $Value = new ValueStorage( $_POST );
+
         $Environment = Utilities::getEnvironment( $postId );
         $Module = $Environment->getModuleById( $postObj->post_name );
         // no template yet, create an new one
         if (!$Module) {
             $this->createGlobalModule( $postId, $postObj, $Environment );
         } else {
+            if (!wp_verify_nonce( $Value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'update-gmodule' )) {
+                wp_die( 'Nonce verification failed' );
+            }
             // update existing
             $old = $Module->Model->getOriginalData();
-            $data = $_POST[$Module->getId()];
+            $data = $Value->getFiltered( $Module->getId(), FILTER_SANITIZE_STRING );
             $new = $Module->save( $data, $old );
             $toSave = Utilities::arrayMergeRecursive( $new, $old );
             // save viewfile if present
@@ -206,8 +211,13 @@ class GlobalModulesMenu
             $Environment->getStorage()->reset();
             $Environment->getStorage()->addToIndex( $Module->getId(), $Module->Properties->export() );
             // return to original post if the edit request came from outside
-            if (isset( $_POST['kb_return_to_post'] )) {
-                $url = get_edit_post_link( $_POST['kb_return_to_post'] );
+            $redirect = $redirect = $Value->getFiltered(
+                'kb_return_to_post',
+                FILTER_SANITIZE_URL,
+                FILTER_NULL_ON_FAILURE
+            );
+            if ($redirect) {
+                $url = get_edit_post_link( esc_url( $redirect ) );
                 wp_redirect( html_entity_decode( $url ) );
                 exit;
             }
@@ -226,12 +236,16 @@ class GlobalModulesMenu
     public function createGlobalModule( $postId, \WP_Post $Post, Environment $Environment )
     {
 
-        // no template data send
-        if (empty( $_POST['new-gmodule'] )) {
+        $Value = new ValueStorage( $_POST );
+
+        $gmodule = $Value->get( 'new-gmodule' );
+        if (empty( $gmodule )) {
             return;
         }
 
-        $Value = new ValueStorage( $_POST );
+        if (!wp_verify_nonce( $Value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'new-gmodule' )) {
+            wp_die( 'Verification failed.' );
+        }
 
         // set defaults
         $defaults = array(
@@ -483,8 +497,6 @@ class GlobalModulesMenu
      */
     public function getTemplateables()
     {
-
-
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
 
@@ -497,9 +509,11 @@ class GlobalModulesMenu
                 return false;
             }
         );
-
     }
 
+    /**
+     * @since 0.1.0
+     */
     public function registerPseudoArea()
     {
         \Kontentblocks\registerArea(
@@ -511,6 +525,10 @@ class GlobalModulesMenu
         );
     }
 
+    /**
+     * @return array
+     * @since 0.2.0
+     */
     private function prepareAttachedTo()
     {
         $posts = [ ];
