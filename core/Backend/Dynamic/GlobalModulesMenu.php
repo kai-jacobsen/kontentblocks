@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Dynamic;
 
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
@@ -119,12 +120,14 @@ class GlobalModulesMenu
         $Module = $Environment->getModuleById( $gmodule['mid'] );
         $Module->Properties->areaContext = $context;
 
+
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig
         $templateData = array(
             'nonce' => wp_create_nonce( 'update-gmodule' ),
-            'instance' => $Module,
-            'attachedTo' => $this->prepareAttachedTo()
+            'module' => $Module,
+            'attachedTo' => $this->prepareAttachedTo(),
+            'contexts' => ScreenManager::getDefaultContextLayout()
         );
 
 
@@ -148,6 +151,7 @@ class GlobalModulesMenu
     {
 
         $screen = get_current_screen();
+
         if ($screen->post_type !== 'kb-gmd') {
             return;
         }
@@ -213,11 +217,11 @@ class GlobalModulesMenu
             // return to original post if the edit request came from outside
             $redirect = $redirect = $Value->getFiltered(
                 'kb_return_to_post',
-                FILTER_SANITIZE_URL,
+                FILTER_SANITIZE_NUMBER_INT,
                 FILTER_NULL_ON_FAILURE
             );
             if ($redirect) {
-                $url = get_edit_post_link( esc_url( $redirect ) );
+                $url = get_edit_post_link( $redirect );
                 wp_redirect( html_entity_decode( $url ) );
                 exit;
             }

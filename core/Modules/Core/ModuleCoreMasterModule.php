@@ -141,7 +141,7 @@ class ModuleCoreMasterModule extends Module
 
         $templateData = array(
             'valid' => $this->Properties->state['valid'],
-            'editUrl' => html_entity_decode( get_edit_post_link( $masterId ) . '&amp;return=' . get_the_ID() ),
+            'editUrl' => esc_url( get_edit_post_link( $masterId ) . '&return=' . $this->Context->postId . '&area-context=' . $this->Context->areaContext ),
             'translated' => $translated,
             'duplicate' => $duplicate,
             'module' => $this,

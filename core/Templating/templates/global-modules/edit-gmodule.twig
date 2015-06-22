@@ -1,9 +1,17 @@
 <div id="kontentblocks-core-ui" class="postbox">
     <h3>Module</h3>
+    <div class="inside kb-module" id="{{ module.mid }}">
+        <div class="kb-area-context-select">
+            <label for="area-context-select">Area Context</label>
+            <select name="area-context" onchange="KB.Menus.reloadContext(this)" id="area-context-select">
+                {% for context in contexts %}
+                    <option {% if module.Properties.areaContext == context.id %} selected="selected" {% endif %} value="{{ context.id }}">{{ context.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <div class="inside kb-module" id="{{ instance.mid }}">
         <div class="kb-module__controls-inner">
-            {{ instance.form() }}
+            {{ module.form() }}
         </div>
     </div>
     <div class="global-module--attached">

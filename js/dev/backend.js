@@ -150,6 +150,10 @@
             },
             enableSendButton: function() {
                 this.$sendButton.attr("disabled", false).val("Create");
+            },
+            reloadContext: function(el) {
+                var val = el.value;
+                window.location.href = window.location + "&area-context=" + val;
             }
         };
     }, {
