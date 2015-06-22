@@ -14,7 +14,6 @@ module.exports =
 
     var sned = _.extend({
       supplemental: data.supplemental || {},
-      //count: parseInt(KB.Environment.moduleCount, 10),
       nonce: jQuery('#_kontentblocks_ajax_nonce').val(),
       post_id: pid,
       kbajax: true

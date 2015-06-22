@@ -362,7 +362,7 @@ module.exports = Backbone.View.extend({
       this.$el.css('top', '32px');
     }
 
-    if (KB.Sidebar.visible){
+    if (KB.Sidebar.visible) {
       var sw = KB.Sidebar.$el.width();
       this.$el.css('left', sw + 'px');
       this.$el.css('height', winH + 'px');
@@ -384,100 +384,84 @@ module.exports = Backbone.View.extend({
    * @param showNotice show update notice or don't
    */
   serialize: function (mode, showNotice) {
-    var that = this,
+    var that = this, mdata,
       save = mode || false,
       notice = (showNotice !== false),
       height;
 
+    mdata = this.formdataForId(this.model.get('mid'));
+    this.model.set('moduleData', mdata);
     this.LoadingAnimation.show(0.5);
-
     tinymce.triggerSave();
-    jQuery.ajax({
-      url: ajaxurl,
-      data: {
-        action: 'updateModule',
-        data: that.$form.serializeJSON(),
-        //data: that.$form.serialize().replace(/\'/g, '%27'),
-        module: that.model.toJSON(),
-        editmode: (save) ? 'update' : 'preview',
-        _ajax_nonce: Config.getNonce('update')
-      },
-      type: 'POST',
-      dataType: 'json',
-      success: function (res) {
-        var $controls;
-        $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
-        if ($controls.length > 0) {
-          $controls.detach();
-        }
-        // remove attached inline editors from module
-        //jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
-        //  tinymce.remove('#' + el.id);
-        //});
-        // cache module container height
-        height = that.ModuleView.$el.height();
-        that.ModuleView.model.trigger('modal.serialize.before');
 
-
-        // change the container class if viewfile changed
-        if (that.updateViewClassTo !== false) {
-          that.updateContainerClass(that.updateViewClassTo);
-        }
-
-        // replace module html with new html
-        that.ModuleView.$el.html(res.data.html);
-        that.ModuleView.model.set('moduleData', res.data.newModuleData);
-        if (save) {
-          that.model.trigger('saved');
-          KB.Events.trigger('modal.saved');
-        }
-        jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.ModuleView);
-        that.ModuleView.delegateEvents();
-        that.ModuleView.trigger('kb:frontend::viewUpdated');
-        KB.Events.trigger('KB::ajax-update');
-
-        KB.trigger('kb:frontendModalUpdated');
-        // (re)attach inline editors and handle module controls
-        // delay action to be safe
-        // @TODO seperate
-        setTimeout(function () {
-          jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
-            KB.IEdit.Text(el);
-          });
-          that.ModuleView.render();
-          that.ModuleView.setControlsPosition();
-          that.ModuleView.model.trigger('modal.serialize');
-
-        }, 400);
-
-        //
-        if (save) {
-          if (notice) {
-            Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
-          }
-          that.$el.removeClass('isDirty');
-          that.ModuleView.getClean();
-          that.trigger('kb:frontend-save');
-        } else {
-          if (notice) {
-            Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
-          }
-          that.$el.addClass('isDirty');
-
-        }
-
-        if ($controls.length > 0) {
-          that.ModuleView.$el.append($controls);
-        }
-
-        that.ModuleView.trigger('kb.view.module.HTMLChanged');
-
-        that.LoadingAnimation.hide();
-      },
-      error: function () {
-        _K.error('serialize | FrontendModal | Ajax error');
-      }
+    this.model.sync(save,this).done(function(res, b, c){
+      that.moduleUpdated(res, b, c, save, notice);
     });
+  },
+  // serialize success callback
+  moduleUpdated: function(res, b, c, save, notice){
+    var $controls, that = this, height;
+    $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
+    if ($controls.length > 0) {
+      $controls.detach();
+    }
+    // cache module container height
+    height = that.ModuleView.$el.height();
+    that.ModuleView.model.trigger('modal.serialize.before');
+
+    // change the container class if viewfile changed
+    if (that.updateViewClassTo !== false) {
+      that.updateContainerClass(that.updateViewClassTo);
+    }
+
+    // replace module html with new html
+    that.ModuleView.$el.html(res.data.html);
+    that.ModuleView.model.set('moduleData', res.data.newModuleData);
+    if (save) {
+      that.model.trigger('saved');
+      KB.Events.trigger('modal.saved');
+    }
+    jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.ModuleView);
+    that.ModuleView.delegateEvents();
+    that.ModuleView.trigger('kb:frontend::viewUpdated');
+    KB.Events.trigger('KB::ajax-update');
+
+    KB.trigger('kb:frontendModalUpdated');
+    // (re)attach inline editors and handle module controls
+    // delay action to be safe
+    // @TODO seperate
+    setTimeout(function () {
+      jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
+        KB.IEdit.Text(el);
+      });
+      that.ModuleView.render();
+      that.ModuleView.setControlsPosition();
+      that.ModuleView.model.trigger('modal.serialize');
+    }, 400);
+
+    //
+    if (save) {
+      if (notice) {
+        Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, 'success');
+      }
+      that.$el.removeClass('isDirty');
+      that.ModuleView.getClean();
+      that.trigger('kb:frontend-save');
+    } else {
+      if (notice) {
+        Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
+      }
+      that.$el.addClass('isDirty');
+
+    }
+
+    if ($controls.length > 0) {
+      that.ModuleView.$el.append($controls);
+    }
+
+    that.ModuleView.trigger('kb.view.module.HTMLChanged');
+
+    that.LoadingAnimation.hide();
   },
   /**
    * Callback handler when the viewfile select field triggers change
@@ -577,5 +561,18 @@ module.exports = Backbone.View.extend({
         that.$draft.hide(150);
       }
     }, this);
+  },
+  formdataForId: function (mid) {
+    var formdata;
+    if (!mid) {
+      return null;
+    }
+    formdata = this.$form.serializeJSON();
+
+    if (formdata[mid]) {
+      return formdata[mid];
+    }
+
+    return null;
   }
 });

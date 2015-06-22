@@ -34,16 +34,13 @@ class UpdateModule implements AjaxActionInterface
         setup_postdata( $post );
 
         // flags
-
-
         $Environment = Utilities::getEnvironment( $postdata->postId );
-        $newData = wp_unslash( $postdata->data[$postdata->module['mid']] );
+        $newData = wp_unslash( $postdata->data );
         $Workshop = new ModuleWorkshop( $Environment, $postdata->module );
         $Module = $Workshop->getModule();
 
         // master module will change instance id to correct template id
         apply_filters( 'kb.modify.module.save', $Module );
-
 
         // gather data
         $old = $Environment->getStorage()->getModuleData( $Module->getId() );

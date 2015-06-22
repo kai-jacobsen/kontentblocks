@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-18 */
+/*! Kontentblocks DevVersion 2015-06-22 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -760,7 +760,6 @@
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("color", BaseView.extend({
             initialize: function() {
-                console.log("test");
                 this.render();
             },
             events: {

@@ -82,7 +82,6 @@ module.exports = Backbone.Model.extend({
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       this.get('ModuleModel').set('moduleData', cdata, {silent: true});
-      console.log(this);
     }
   },
   remove: function () {

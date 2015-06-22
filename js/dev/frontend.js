@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-18 */
+/*! Kontentblocks DevVersion 2015-06-22 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -831,7 +831,6 @@
                     this.get("ModuleModel").set("moduleData", cdata, {
                         silent: true
                     });
-                    console.log(this);
                 }
             },
             remove: function() {
@@ -1300,6 +1299,9 @@
         });
     }, {} ],
     19: [ function(require, module, exports) {
+        var Config = require("common/Config");
+        var Notice = require("common/Notice");
+        var Logger = require("common/Logger");
         module.exports = Backbone.Model.extend({
             idAttribute: "mid",
             initialize: function() {
@@ -1314,9 +1316,35 @@
             },
             dispose: function() {
                 this.stopListening();
+            },
+            sync: function(save, context) {
+                var that = this;
+                return jQuery.ajax({
+                    url: ajaxurl,
+                    data: {
+                        action: "updateModule",
+                        data: that.toJSON().moduleData,
+                        module: that.toJSON(),
+                        editmode: save ? "update" : "preview",
+                        _ajax_nonce: Config.getNonce("update")
+                    },
+                    context: context ? context : that,
+                    type: "POST",
+                    dataType: "json",
+                    success: function(res) {
+                        that.set("moduleData", res.data.newModuleData);
+                    },
+                    error: function() {
+                        Logger.Debug.error("serialize | FrontendModal | Ajax error");
+                    }
+                });
             }
         });
-    }, {} ],
+    }, {
+        "common/Config": 3,
+        "common/Logger": 4,
+        "common/Notice": 5
+    } ],
     20: [ function(require, module, exports) {
         var ModuleBrowser = require("shared/ModuleBrowser/ModuleBrowserController");
         var TinyMCE = require("common/TinyMCE");
@@ -1820,73 +1848,63 @@
                 });
             },
             serialize: function(mode, showNotice) {
-                var that = this, save = mode || false, notice = showNotice !== false, height;
+                var that = this, mdata, save = mode || false, notice = showNotice !== false, height;
+                mdata = this.formdataForId(this.model.get("mid"));
+                this.model.set("moduleData", mdata);
                 this.LoadingAnimation.show(.5);
                 tinymce.triggerSave();
-                jQuery.ajax({
-                    url: ajaxurl,
-                    data: {
-                        action: "updateModule",
-                        data: that.$form.serializeJSON(),
-                        module: that.model.toJSON(),
-                        editmode: save ? "update" : "preview",
-                        _ajax_nonce: Config.getNonce("update")
-                    },
-                    type: "POST",
-                    dataType: "json",
-                    success: function(res) {
-                        var $controls;
-                        $controls = jQuery(".kb-module-controls", that.ModuleView.$el);
-                        if ($controls.length > 0) {
-                            $controls.detach();
-                        }
-                        height = that.ModuleView.$el.height();
-                        that.ModuleView.model.trigger("modal.serialize.before");
-                        if (that.updateViewClassTo !== false) {
-                            that.updateContainerClass(that.updateViewClassTo);
-                        }
-                        that.ModuleView.$el.html(res.data.html);
-                        that.ModuleView.model.set("moduleData", res.data.newModuleData);
-                        if (save) {
-                            that.model.trigger("saved");
-                            KB.Events.trigger("modal.saved");
-                        }
-                        jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.ModuleView);
-                        that.ModuleView.delegateEvents();
-                        that.ModuleView.trigger("kb:frontend::viewUpdated");
-                        KB.Events.trigger("KB::ajax-update");
-                        KB.trigger("kb:frontendModalUpdated");
-                        setTimeout(function() {
-                            jQuery(".editable", that.ModuleView.$el).each(function(i, el) {
-                                KB.IEdit.Text(el);
-                            });
-                            that.ModuleView.render();
-                            that.ModuleView.setControlsPosition();
-                            that.ModuleView.model.trigger("modal.serialize");
-                        }, 400);
-                        if (save) {
-                            if (notice) {
-                                Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
-                            }
-                            that.$el.removeClass("isDirty");
-                            that.ModuleView.getClean();
-                            that.trigger("kb:frontend-save");
-                        } else {
-                            if (notice) {
-                                Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
-                            }
-                            that.$el.addClass("isDirty");
-                        }
-                        if ($controls.length > 0) {
-                            that.ModuleView.$el.append($controls);
-                        }
-                        that.ModuleView.trigger("kb.view.module.HTMLChanged");
-                        that.LoadingAnimation.hide();
-                    },
-                    error: function() {
-                        _K.error("serialize | FrontendModal | Ajax error");
-                    }
+                this.model.sync(save, this).done(function(res, b, c) {
+                    that.moduleUpdated(res, b, c, save, notice);
                 });
+            },
+            moduleUpdated: function(res, b, c, save, notice) {
+                var $controls, that = this, height;
+                $controls = jQuery(".kb-module-controls", that.ModuleView.$el);
+                if ($controls.length > 0) {
+                    $controls.detach();
+                }
+                height = that.ModuleView.$el.height();
+                that.ModuleView.model.trigger("modal.serialize.before");
+                if (that.updateViewClassTo !== false) {
+                    that.updateContainerClass(that.updateViewClassTo);
+                }
+                that.ModuleView.$el.html(res.data.html);
+                that.ModuleView.model.set("moduleData", res.data.newModuleData);
+                if (save) {
+                    that.model.trigger("saved");
+                    KB.Events.trigger("modal.saved");
+                }
+                jQuery(document).trigger("kb:module-update-" + that.model.get("settings").id, that.ModuleView);
+                that.ModuleView.delegateEvents();
+                that.ModuleView.trigger("kb:frontend::viewUpdated");
+                KB.Events.trigger("KB::ajax-update");
+                KB.trigger("kb:frontendModalUpdated");
+                setTimeout(function() {
+                    jQuery(".editable", that.ModuleView.$el).each(function(i, el) {
+                        KB.IEdit.Text(el);
+                    });
+                    that.ModuleView.render();
+                    that.ModuleView.setControlsPosition();
+                    that.ModuleView.model.trigger("modal.serialize");
+                }, 400);
+                if (save) {
+                    if (notice) {
+                        Notice.notice(KB.i18n.jsFrontend.frontendModal.noticeDataSaved, "success");
+                    }
+                    that.$el.removeClass("isDirty");
+                    that.ModuleView.getClean();
+                    that.trigger("kb:frontend-save");
+                } else {
+                    if (notice) {
+                        Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, "success");
+                    }
+                    that.$el.addClass("isDirty");
+                }
+                if ($controls.length > 0) {
+                    that.ModuleView.$el.append($controls);
+                }
+                that.ModuleView.trigger("kb.view.module.HTMLChanged");
+                that.LoadingAnimation.hide();
             },
             viewfileChange: function(e) {
                 this.updateViewClassTo = {
@@ -1949,6 +1967,17 @@
                         that.$draft.hide(150);
                     }
                 }, this);
+            },
+            formdataForId: function(mid) {
+                var formdata;
+                if (!mid) {
+                    return null;
+                }
+                formdata = this.$form.serializeJSON();
+                if (formdata[mid]) {
+                    return formdata[mid];
+                }
+                return null;
             }
         });
     }, {
