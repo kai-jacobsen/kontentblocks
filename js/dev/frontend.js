@@ -3287,7 +3287,11 @@
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.options = options || {};
-                this.options.browser.on("browser:close", this.close, this);
+                this.Browser = options.browser;
+                this.Browser.on("browser:close", this.close, this);
+            },
+            events: {
+                "click .kb-js-create-module": "createModule"
             },
             update: function() {
                 var that = this;
@@ -3312,7 +3316,10 @@
                     }));
                 }
             },
-            close: function() {}
+            close: function() {},
+            createModule: function() {
+                this.Browser.createModule(this.model);
+            }
         });
     }, {
         "common/Templates": 7,
@@ -3537,7 +3544,7 @@
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
                 var stack1;
-                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.settings : stack1) != null ? stack1.publicName : stack1, depth0)) + "</h3>";
+                return "<h3>" + this.escapeExpression(this.lambda((stack1 = (stack1 = depth0 != null ? depth0.module : depth0) != null ? stack1.settings : stack1) != null ? stack1.publicName : stack1, depth0)) + ' <div class="kb-button-small kb-js-create-module">Add module</div>\n</h3>\n';
             },
             useData: true
         });

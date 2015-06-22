@@ -72,6 +72,6 @@ class ModuleContext implements \JsonSerializable
      */
     function jsonSerialize()
     {
-        return get_object_vars($this);
+        return get_object_vars( $this );
     }
 }
