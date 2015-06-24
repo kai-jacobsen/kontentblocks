@@ -218,16 +218,13 @@ abstract class AbstractFieldSection implements Exportable
             if (isset( $data[$field->getKey()] )) {
                 $collect[$field->getKey()] = $field->_save( $data[$field->getKey()], $old );
             } else {
-
                 if (is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' ) || $field->getSetting( 'forceSave' )) {
                     // calls save on field if key is not present
                     $collect[$field->getKey()] = $field->_save( null, $old );
                 }
             }
         }
-
         return $collect;
-
     }
 
     /*

@@ -142,14 +142,18 @@ class ModuleGlobalModuleProxy extends Module
 
         $templateData = array(
             'valid' => $this->Properties->state['valid'],
-            'editUrl' => esc_url( get_edit_post_link( $masterId ) . '&return=' . $this->Context->postId . '&area-context=' . $this->Context->areaContext ),
+            'editUrl' => esc_url(
+                get_edit_post_link(
+                    $masterId
+                ) . '&return=' . $this->Context->postId . '&area-context=' . $this->Context->areaContext
+            ),
             'translated' => $translated,
             'duplicate' => $duplicate,
             'module' => $this,
             'i18n' => I18n::getInstance()->getPackage( 'Modules.master' )
         );
 
-        $tpl = ( isset( $this->Properties->state['valid'] ) && $this->Properties->state['valid'] ) ? 'master-module-valid.twig' : 'master-module-invalid.twig';
+        $tpl = ( isset( $this->Properties->state['valid'] ) && $this->Properties->state['valid'] ) ? 'modules/gmodule-proxy-valid.twig' : 'modules/gmodule-proxy-invalid.twig';
 
         $Tpl = new CoreView( $tpl, $templateData );
         return $Tpl->render();

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-22 */
+/*! Kontentblocks DevVersion 2015-06-23 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -2182,12 +2182,12 @@
                 var that = this;
                 var moduleData = {};
                 var refresh = false;
-                moduleData[that.model.get("mid")] = that.model.get("moduleData");
+                console.log(that.model);
                 jQuery.ajax({
                     url: ajaxurl,
                     data: {
                         action: "updateModule",
-                        data: moduleData,
+                        data: that.model.get("moduleData"),
                         module: that.model.toJSON(),
                         editmode: "update",
                         refresh: refresh,

@@ -209,7 +209,7 @@ class GlobalModulesMenu
             }
             // update existing
             $old = $Module->Model->getOriginalData();
-            $data = $Value->getFiltered( $Module->getId(), FILTER_SANITIZE_STRING );
+            $data = $Value->get( $Module->getId() );
             $new = $Module->save( $data, $old );
             $toSave = Utilities::arrayMergeRecursive( $new, $old );
             // save viewfile if present

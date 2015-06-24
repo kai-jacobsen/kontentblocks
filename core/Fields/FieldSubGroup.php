@@ -114,7 +114,6 @@ class FieldSubGroup implements Exportable
         $collect = array();
         /** @var Field $field */
         foreach ($this->fields as $field) {
-
             $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
 
             if (isset( $data[$field->getKey()] )) {
@@ -127,7 +126,6 @@ class FieldSubGroup implements Exportable
             }
 
         }
-
         return $collect;
     }
 
@@ -247,10 +245,10 @@ class FieldSubGroup implements Exportable
 
     }
 
-    public function export(&$collection)
+    public function export( &$collection )
     {
-        foreach ($this->fields as $Field){
-            $Field->export($collection);
+        foreach ($this->fields as $Field) {
+            $Field->export( $collection );
         }
     }
 }

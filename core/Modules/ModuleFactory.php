@@ -44,7 +44,7 @@ class ModuleFactory
         }
         $this->Environment = $Environment;
         $this->ModuleProperties = $Properties;
-        if ($data === null) {
+        if (is_null( $data )) {
             $this->data = apply_filters(
                 'kb.module.factory.data',
                 $Environment->getModuleData( $Properties->mid ),
@@ -64,10 +64,7 @@ class ModuleFactory
 
         $this->handleOverrides( $this->ModuleProperties );
 
-        $module = apply_filters( 'kb_modify_block', $this->ModuleProperties );
-        $module = apply_filters( "kb_modify_block_{$this->ModuleProperties->settings['id']}", $this->ModuleProperties );
-
-        $module = apply_filters( 'kb.modify.module.parameters', $this->ModuleProperties );
+        $module = apply_filters( 'kb.modify.module.properties', $this->ModuleProperties );
         // new instance
         /** @var \Kontentblocks\Modules\Module $instance */
         $instance = new $this->ModuleProperties->class( $module, $this->data, $this->Environment );

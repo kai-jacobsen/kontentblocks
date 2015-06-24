@@ -18,12 +18,12 @@ module.exports = ModuleMenuItem.extend({
     var that = this;
     var moduleData = {};
     var refresh = false;
-    moduleData[that.model.get('mid')] = that.model.get('moduleData');
+    console.log(that.model);
     jQuery.ajax({
       url: ajaxurl,
       data: {
         action: 'updateModule',
-        data: moduleData,
+        data: that.model.get('moduleData'),
         module: that.model.toJSON(),
         editmode: 'update',
         refresh: refresh,
