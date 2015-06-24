@@ -3,6 +3,15 @@
 namespace Kontentblocks\Ajax;
 
 
+/**
+ * Class AbstractAjaxResponse
+ * @package Kontentblocks\Ajax
+ *
+ * Blueprint of ajax responses
+ * Mimics the structure of the return value from wp_send_json:
+ * [success: $bool, data: [], message: $string ]
+ * This is the expected format from all Kontentblocks internal javascript
+ */
 abstract class AbstractAjaxResponse implements \JsonSerializable
 {
 
@@ -26,16 +35,28 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
         }
     }
 
+    /**
+     * Getter message property
+     * @return string
+     */
     public function getMessage()
     {
         return $this->message;
     }
 
+    /**
+     * Getter data property
+     * @return array
+     */
     public function getData()
     {
         return $this->data;
     }
 
+    /**
+     * Wrapper to json output
+     * @return void
+     */
     public function sendJson()
     {
         wp_send_json( $this );

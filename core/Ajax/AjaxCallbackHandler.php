@@ -2,16 +2,30 @@
 
 namespace Kontentblocks\Ajax;
 
-
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\tests\core\Ajax\AjaxErrorResponseTest;
 
+/**
+ * Class AjaxCallbackHandler
+ * @package Kontentblocks\Ajax
+ *
+ * internal ajax action mapper
+ * maps actions to corresponding classe with fqn
+ */
 class AjaxCallbackHandler
 {
 
+    /**
+     * registered actions
+     * @var array
+     */
     protected $actions = array();
 
-    protected $deleted = array();
+    /**
+     * removed actions
+     * @var array
+     */
+    protected $removed = array();
 
     /**
      * Construct
@@ -33,6 +47,10 @@ class AjaxCallbackHandler
         return $this;
     }
 
+    /**
+     * @param $action
+     * @return bool
+     */
     public function actionExists( $action )
     {
         return isset( $this->actions[$action] );
@@ -65,10 +83,10 @@ class AjaxCallbackHandler
                 'getModuleForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\GetModuleForm', 'run' ),
                 'updateModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateModule', 'run' ),
                 'fieldGetImage' => array( 'Kontentblocks\Ajax\Actions\Frontend\FieldGetImage', 'run' ),
-                'getOptionPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\GetOptionPanelForm', 'run'),
-                'getStaticPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\GetStaticPanelForm', 'run'),
-                'saveOptionPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\SaveOptionPanelForm', 'run'),
-                'saveStaticPanelForm' => array('Kontentblocks\Ajax\Actions\Frontend\SaveStaticPanelForm', 'run')
+                'getOptionPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\GetOptionPanelForm', 'run' ),
+                'getStaticPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\GetStaticPanelForm', 'run' ),
+                'saveOptionPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveOptionPanelForm', 'run' ),
+                'saveStaticPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveStaticPanelForm', 'run' )
 
             )
         );
@@ -86,7 +104,7 @@ class AjaxCallbackHandler
     }
 
     /**
-     *
+     * setup core hooks
      */
     public function setupHooks()
     {
@@ -95,7 +113,7 @@ class AjaxCallbackHandler
                 'wp_ajax_' . $action,
                 function () use ( $callback ) {
                     if ($this->verify( $callback )) {
-                          call_user_func( $callback, new ValueStorage( $_POST ) );
+                        call_user_func( $callback, new ValueStorage( $_POST ) );
                     }
                 }
             );

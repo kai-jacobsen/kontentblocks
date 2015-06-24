@@ -20,12 +20,12 @@
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveParameterList">
         <properties>
-            <property name="minimum" value="3"/>
+            <property name="minimum" value="4"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessivePublicCount">
         <properties>
-            <property name="minimum" value="10"/>
+            <property name="minimum" value="15"/>
         </properties>
     </rule>
     <rule ref="rulesets/controversial.xml/Superglobals"/>
