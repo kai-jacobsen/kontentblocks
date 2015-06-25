@@ -26,6 +26,7 @@ var Ui = {
     // init general ui components
     this.initTabs();
     this.initSortable();
+    this.initSortableAreas();
     this.initToggleBoxes();
     this.flexContext();
     this.flushLocalStorage();
@@ -355,6 +356,12 @@ var Ui = {
         });
         $('#' + activeBlock).toggleClass('kb-open', 1000);
       }
+    });
+  },
+  initSortableAreas: function () {
+    jQuery('.kb-context__inner').sortable({
+      items: '.kb-area__wrap'
+
     });
   },
   metaBoxReorder: function (e, o, settings, action) {

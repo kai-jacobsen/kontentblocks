@@ -1374,6 +1374,7 @@
                 var $body = $("body");
                 this.initTabs();
                 this.initSortable();
+                this.initSortableAreas();
                 this.initToggleBoxes();
                 this.flexContext();
                 this.flushLocalStorage();
@@ -1605,6 +1606,11 @@
                         });
                         $("#" + activeBlock).toggleClass("kb-open", 1e3);
                     }
+                });
+            },
+            initSortableAreas: function() {
+                jQuery(".kb-context__inner").sortable({
+                    items: ".kb-area__wrap"
                 });
             },
             metaBoxReorder: function(e, o, settings, action) {

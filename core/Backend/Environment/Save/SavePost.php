@@ -63,7 +63,7 @@ class SavePost
         Utilities::remoteConcatGet( $this->postid );
 
         $this->saveAreaSettings();
-
+        $this->saveAreaContextMap();
         // finally update the index
         $this->Environment->getStorage()->saveIndex( $this->index );
     }
@@ -228,6 +228,7 @@ class SavePost
     private function saveAreaSettings()
     {
         $postareas = filter_input( INPUT_POST, 'areas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
         // save area settings which are specific to this post (ID-wise)
         if (!empty( $postareas )) {
             $collection = $this->Environment->getDataProvider()->get( 'kb_area_settings' );
@@ -238,6 +239,14 @@ class SavePost
                 }
             }
             $this->Environment->getDataProvider()->update( 'kb_area_settings', $collection );
+        }
+    }
+
+    private function saveAreaContextMap()
+    {
+        $contexts = filter_input( INPUT_POST, 'kbcontext', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        if (!empty( $contexts )) {
+            $this->Environment->getDataProvider()->update( 'kb.contexts', $contexts );
         }
     }
 }

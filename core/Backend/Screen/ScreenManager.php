@@ -58,6 +58,8 @@ class ScreenManager
         // setup raw areas
         $this->areas = $areas;
         // set this environment
+
+
         $this->Environment = $Environment;
         //setup region layout
         $this->contextLayout = self::getDefaultContextLayout();
@@ -65,7 +67,7 @@ class ScreenManager
         $this->contexts = $this->areasSortedByContext( $this->areas );
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
-        $this->hasSidebar = (!empty( $this->contexts['side'] ) && !empty($this->contexts['normal']));
+        $this->hasSidebar = ( !empty( $this->contexts['side'] ) && !empty( $this->contexts['normal'] ) );
     }
 
 
@@ -98,17 +100,33 @@ class ScreenManager
     public function areasSortedByContext()
     {
         $areas = array();
+        $contextsOrder = $this->Environment->getDataProvider()->get( 'kb.contexts' );
+
 
         if (!$this->areas) {
             return array();
         }
 
         foreach ($this->areas as $area) {
-            if (!$area->dynamic) {
+//            if (!$area->dynamic) {
                 $areas[$area->context][$area->id] = $area;
-            }
+//            }
         }
 
+
+        if (is_array( $contextsOrder ) && !empty( $contextsOrder )) {
+            foreach ($contextsOrder as $context => $areaIds) {
+                if (is_array($areaIds)){
+                    foreach (array_reverse(array_keys($areaIds)) as $areaId) {
+                        if (isset($areas[$context][$areaId])){
+                            $tmp = $areas[$context][$areaId];
+                            unset($areas[$context][$areaId]);
+                            $areas[$context] = array($areaId => $tmp) + $areas[$context];
+                        }
+                    }
+                }
+            }
+        }
         return $areas;
     }
 

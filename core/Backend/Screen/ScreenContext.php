@@ -4,8 +4,10 @@ namespace Kontentblocks\Backend\Screen;
 
 use Exception;
 use Kontentblocks\Areas\AreaBackendHTML;
+use Kontentblocks\Areas\DynamicAreaBackendHTML;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ScreenContext
@@ -124,11 +126,15 @@ class ScreenContext
     {
         foreach ($this->areas as $args) {
             // exclude dynamic areas
-            if ($args->dynamic) {
-                continue;
-            }
+//            if ($args->dynamic) {
+//                continue;
+//            }
             // Setup new Area
-            $area = new AreaBackendHTML( $args, $this->Environment, $this->id );
+            if ($args->dynamic) {
+                $area = new DynamicAreaBackendHTML( $args, $this->Environment, $this->id );
+            } else {
+                $area = new AreaBackendHTML( $args, $this->Environment, $this->id );
+            }
             // do area header markup
             $area->header();
             // render modules for the area

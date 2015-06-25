@@ -278,3 +278,20 @@
   }
 }
 
+
+
+.kb-dynamic-area-proxy{
+
+  &.kb-area-status-inactive{
+    border-left: 3px solid $red;
+  }
+
+  &.kb-area-status-active{
+    border-left: 3px solid $green;
+  }
+
+  .kb-dynamic-area-proxy--inner{
+    padding: 0 $fullpadding;
+  }
+
+}
