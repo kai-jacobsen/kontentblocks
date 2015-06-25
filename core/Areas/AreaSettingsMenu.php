@@ -89,6 +89,7 @@ class AreaSettingsMenu
     {
         $areaTemplates = $this->_getAssignedTemplates();
         // Markup and fields markup
+        echo "<div class='kb-area-actions'></div>";
         if (!empty( $areaTemplates )) {
             $data = $this->Environment->getAreaSettings( $this->id );
 

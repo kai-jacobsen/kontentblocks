@@ -103,6 +103,11 @@ class AreaProperties
     public $sortable;
 
     /**
+     * @var AreaSettingsModel
+     */
+    public $settings;
+
+    /**
      * Construct and setup properties
      * @param $properties
      */
@@ -118,6 +123,7 @@ class AreaProperties
                 $this->$k = $v;
             }
         }
+
     }
 
 
@@ -184,7 +190,8 @@ class AreaProperties
             'context' => 'normal', // location on the edit screen
             'concat' => false,
             'sortable' => false,
-            'internal' => false
+            'internal' => false,
+            'settings' => null
         );
     }
 

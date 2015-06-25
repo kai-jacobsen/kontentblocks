@@ -1,10 +1,10 @@
-<div class='kb-area__head klearfix  {{ area.get('context') }} {{ headerClass }}'>
+<div class='kb-area__head klearfix kb-area-status-{{ active }}  {{ area.get('context') }} {{ headerClass }}'>
     <div class='kb-area__title-text'>
-        <span class='title'>{{area.get('name')}}</span>
+        <span class='title'>{{ area.get('name') }}</span>
         {#<span class='description'>{{area.get('description')}}</span>#}
         <input type='hidden' name='areas[]' value='{{ area.get('id') }}'>
         <input type="hidden" name="kbcontext[{{ area.get('context') }}][{{ area.get('id') }}]">
-        {{ area.get('settingsMenu').render }}
+        {{ settingsMenu.render() }}
     </div>
     <div class='kb-ajax-status-dark'></div>
 </div>

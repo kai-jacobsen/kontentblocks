@@ -4452,6 +4452,29 @@ h5.kb_properties_title {
       float: left;
       margin-left: 8px; }
 
+/* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-settings.scss */
+.kb-area-actions {
+  position: absolute;
+  right: 24px;
+  top: 0; }
+  /* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-settings.scss */
+  .kb-area-actions ul {
+    list-style: none; }
+  /* line 57, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-settings.scss */
+  .kb-area-actions li {
+    display: inline-block;
+    color: #9e9e9e;
+    cursor: pointer; }
+    /* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-settings.scss */
+    .kb-area-actions li:hover {
+      color: #212121; }
+  /* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-settings.scss */
+  .kb-area-actions .kb-area-status-action {
+    color: #009688; }
+    /* line 68, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-settings.scss */
+    .kb-area-actions .kb-area-status-action.kb-area-status-inactive {
+      color: #F44336; }
+
 /* --------------------------
 // Fields
 -----------------------------*/

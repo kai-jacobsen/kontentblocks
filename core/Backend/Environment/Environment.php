@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Environment;
 
 use JsonSerializable;
+use Kontentblocks\Areas\AreaSettingsModel;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Environment\Save\SavePost;
@@ -66,12 +67,18 @@ class Environment implements JsonSerializable
      */
     protected $areas;
 
+    /**
+     * @var array
+     */
+    protected $areasByContext;
+
 
     /**
      * Class constructor
      *
      * @param $storageId
      * @param \WP_Post $postObj
+     * @since 0.1.0
      */
     public function __construct( $storageId, \WP_Post $postObj )
     {
@@ -86,19 +93,26 @@ class Environment implements JsonSerializable
         $this->postType = $this->getPostType();
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
-        $this->areas = $this->findAreas();
+        $this->areas = $this->setupAreas();
+        $this->areaByContext = $this->areasToContext();
+
     }
 
     /**
      * Return ID for the current storage entity
      * (most likely equals post id)
      * @return int
+     * @since 0.1.0
      */
     public function getId()
     {
         return $this->storageId;
     }
 
+    /**
+     * @return int|\WP_Post
+     * @since 0.1.0
+     */
     public function getPostObject()
     {
         return $this->postObj;
@@ -108,6 +122,7 @@ class Environment implements JsonSerializable
      * get arbitrary property
      * @param string $param
      * @return mixed
+     * @since 0.1.0
      */
     public function get( $param )
     {
@@ -121,6 +136,7 @@ class Environment implements JsonSerializable
     /**
      * returns the PostMetaData instance
      * @return DataProviderController
+     * @since 0.1.0
      */
     public function getDataProvider()
     {
@@ -131,6 +147,7 @@ class Environment implements JsonSerializable
     /**
      * Return this Storage Object
      * @return ModuleStorage
+     * @since 0.1.0
      */
     public function getStorage()
     {
@@ -140,6 +157,7 @@ class Environment implements JsonSerializable
     /**
      * Returns all modules set to this post
      * @return array
+     * @since 0.1.0
      */
     public function getAllModules()
     {
@@ -149,6 +167,7 @@ class Environment implements JsonSerializable
     /**
      * @param $mid
      * @return \Kontentblocks\Modules\Module|null
+     * @since 0.1.0
      */
     public function getModuleById( $mid )
     {
@@ -160,6 +179,7 @@ class Environment implements JsonSerializable
      *
      * @param string $areaid
      * @return mixed
+     * @since 0.1.0
      */
     public function getModulesForArea( $areaid )
     {
@@ -174,6 +194,7 @@ class Environment implements JsonSerializable
     /**
      * Sorts module definitions to areas
      * @return array
+     * @since 0.1.0
      */
     public function getSortedModules()
     {
@@ -190,6 +211,7 @@ class Environment implements JsonSerializable
     /**
      * prepares modules attached to this post
      * @return array
+     * @since 0.1.0
      */
     private function setupModules()
     {
@@ -199,6 +221,7 @@ class Environment implements JsonSerializable
     /**
      * returns all areas which are available in this environment
      * @return array
+     * @since 0.1.0
      */
     public function findAreas()
     {
@@ -211,8 +234,8 @@ class Environment implements JsonSerializable
      * Get Area Definition
      *
      * @param string $area
-     *
      * @return mixed
+     * @since 0.1.0
      */
     public function getAreaDefinition( $area )
     {
@@ -228,10 +251,27 @@ class Environment implements JsonSerializable
     /**
      * Get all post-specific areas
      * @return array
+     * @since 0.1.0
      */
     public function getAreas()
     {
         return $this->areas;
+    }
+
+
+    /**
+     *
+     * @param $context
+     * @return array
+     * @since 0.3.0
+     */
+    public function getAreasForContext( $context )
+    {
+        if (isset( $this->areasByContext[$context] ) && is_array( $this->areasByContext[$context] )) {
+            return $this->areasByContext[$context];
+        }
+
+        return array();
     }
 
     /**
@@ -329,6 +369,7 @@ class Environment implements JsonSerializable
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
+     * @since 0.1.0
      */
     function jsonSerialize()
     {
@@ -340,8 +381,38 @@ class Environment implements JsonSerializable
         );
     }
 
+    /**
+     * @since 0.1.0
+     */
     public function toJSON()
     {
         echo "<script> var KB = KB || {}; KB.Environment =" . json_encode( $this ) . "</script>";
+    }
+
+    /**
+     * @since 0.3.0
+     */
+    private function areasToContext()
+    {
+        if (is_array( $this->areas ) && !empty( $this->areas )) {
+            foreach ($this->areas as $id => $area) {
+                $this->areasByContext[$area->context][$id] = $area;
+            }
+        }
+    }
+
+    /**
+     * Augment areas with Settings instance
+     * @since 0.3.0
+     */
+    private function setupAreas()
+    {
+        $areas = $this->findAreas();
+        /** @var \Kontentblocks\Areas\AreaProperties $area */
+        foreach ($areas as $area) {
+            $area->set( 'settings', new AreaSettingsModel( $this ) );
+        }
+        return $areas;
+
     }
 }

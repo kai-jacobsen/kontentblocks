@@ -16,8 +16,8 @@
 
 }
 
-.kb-area__wrap:hover{
-  .js-area-settings-opener{
+.kb-area__wrap:hover {
+  .js-area-settings-opener {
     opacity: 1;
   }
 }
@@ -44,3 +44,30 @@
     }
   }
 }
+
+.kb-area-actions {
+  position: absolute;
+  right: $fullpadding;
+  top: 0;
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    display: inline-block;
+    color: $grey-500;
+    cursor: pointer;
+    &:hover {
+      color: $grey-900;
+    }
+  }
+
+  .kb-area-status-action {
+    color: $green;
+    &.kb-area-status-inactive {
+      color: $red;
+    }
+  }
+}
+

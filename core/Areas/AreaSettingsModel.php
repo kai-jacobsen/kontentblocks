@@ -3,6 +3,7 @@
 namespace Kontentblocks\Areas;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
+use Kontentblocks\Backend\Environment\Environment;
 
 
 /**
@@ -34,14 +35,13 @@ class AreaSettingsModel implements \JsonSerializable
 
     /**
      * Construct
-     * @param $postId
-     *
+     * @param Environment $Environment
      */
-    public function __construct( $postId )
+    public function __construct( Environment $Environment )
     {
 
-        $this->postId = $postId;
-        $this->DataProvider = new DataProviderController( $postId );
+        $this->postId = $Environment->getId();
+        $this->DataProvider = $Environment->getDataProvider();
 
         $this->setupSettings();
     }
@@ -52,15 +52,51 @@ class AreaSettingsModel implements \JsonSerializable
      */
     private function setupSettings()
     {
-
         $meta = $this->DataProvider->get( $this->key );
 
         if (!is_array( $meta )) {
             $meta = array();
         }
 
-        $this->settings = $meta;
+        $this->settings = wp_parse_args( $meta, self::getDefaults() );
         return $this;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @since 0.3.0
+     */
+    public function set( $key, $value )
+    {
+        if (in_array( $key, array_keys( self::getDefaults() ) )) {
+            $this->settings[$key] = $value;
+        }
+    }
+
+    /**
+     * @param $key
+     * @return mixed null on failure
+     * @since 0.3.0
+     */
+    public function get( $key )
+    {
+        if (isset( $this->settings[$key] )) {
+            return $this->settings[$key];
+        }
+        return null;
+    }
+
+    /**
+     * @return array
+     * @since 0.3.0
+     */
+    private static function getDefaults()
+    {
+        return array(
+            'active' => true,
+            'layout' => 'default'
+        );
     }
 
     /**
@@ -83,7 +119,7 @@ class AreaSettingsModel implements \JsonSerializable
     /**
      * Get layout
      * @param $area
-     * @return bool
+     * @return mixed
      */
     public function getLayout( $area )
     {

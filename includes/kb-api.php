@@ -50,6 +50,7 @@ function registerAreaTemplate( $args )
  * @param string $area
  * @param int $id
  * @param array $additionalArgs
+ * @return string|void
  */
 function renderSingleArea( $area, $id = null, $additionalArgs = array() )
 {
@@ -80,7 +81,6 @@ function renderSingleArea( $area, $id = null, $additionalArgs = array() )
     $AreaRender->render( true );
 }
 
-
 /**
  * Render attached side(bar) areas
  * @param int $id
@@ -97,6 +97,38 @@ function renderSideAreas( $id, $additionalArgs )
             renderSingleArea( $area, $post_id, $additionalArgs );
         }
     }
+}
+
+
+function renderContext( $context, $id, $additionalArgs = array() )
+{
+    global $post;
+    $post_id = ( null === $id ) ? $post->ID : $id;
+
+    $Environment = Utilities::getEnvironment( $post_id );
+    $areas = $Environment->getAreasForContext( $context );
+    $contextsOrder = $Environment->getDataProvider()->get( 'kb.contexts' );
+
+    if (is_array( $contextsOrder ) && !empty( $contextsOrder )) {
+        foreach ($contextsOrder as $context => $areaIds) {
+            if (is_array( $areaIds )) {
+                foreach (array_reverse( array_keys( $areaIds ) ) as $areaId) {
+                    if (isset( $areas[$areaId] )) {
+                        $tmp = $areas[$areaId];
+                        unset( $areas[$areaId] );
+                        $areas[$areaId] = $tmp;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!empty( $areas )) {
+        foreach (array_keys($areas) as $area) {
+            renderSingleArea( $area, $post_id, $additionalArgs );
+        }
+    }
+
 }
 
 

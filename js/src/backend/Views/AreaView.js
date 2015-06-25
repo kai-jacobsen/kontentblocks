@@ -2,6 +2,8 @@
 var tplAreaItemPlaceholer = require('templates/backend/area-item-placeholder.hbs');
 var tplAreaAddModule = require('templates/backend/area-add-module.hbs');
 var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
+var AreaControls = require('backend/Views/AreaControls/AreaControlsView');
+var StatusControl = require('backend/Views/AreaControls/controls/StatusControl');
 module.exports = Backbone.View.extend({
   initialize: function () {
     this.attachedModuleViews = {};
@@ -14,6 +16,12 @@ module.exports = Backbone.View.extend({
 
     this.listenTo(this, 'module:attached', this.ui);
     this.listenTo(this, 'module:dettached', this.ui);
+
+    this.AreaControls = new AreaControls({
+      el: this.$el,
+      parent: this
+    });
+    this.setupDefaultMenuItems();
 
     this.render();
   },
@@ -73,6 +81,9 @@ module.exports = Backbone.View.extend({
   },
   renderPlaceholder: function () {
     this.modulesList.before(this.$placeholder);
+  },
+  setupDefaultMenuItems: function(){
+    this.AreaControls.addItem(new StatusControl({model: this.model, parent: this}));
   }
 
 });

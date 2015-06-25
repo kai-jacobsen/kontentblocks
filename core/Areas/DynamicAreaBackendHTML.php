@@ -26,14 +26,13 @@ class DynamicAreaBackendHTML extends AreaBackendHTML
     public function render()
     {
 
-        $activeSidebars = $this->Environment->getDataProvider()->get('active_sidebar_areas');
-
+        $activeSidebars = $this->Environment->getDataProvider()->get( 'active_sidebar_areas' );
 
 
         $View = new CoreView(
             'edit-screen/dynamic-area-body.twig', array(
                 'area' => $this->Area,
-                'active' => (in_array($this->Area->id, $activeSidebars)) ? 'active' : 'inactive'
+                'active' => $this->Area->settings->get( 'active' ) ? 'active' : 'inactive'
             )
         );
         $View->render( true );

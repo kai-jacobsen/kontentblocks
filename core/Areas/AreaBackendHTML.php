@@ -56,6 +56,7 @@ class AreaBackendHTML
      */
     protected $cats;
 
+
     /**
      * Class Constructor
      *
@@ -108,7 +109,13 @@ class AreaBackendHTML
         echo "<div id='{$this->Area->id}-container' class='kb-area__wrap klearfix cf'>";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
-        $Tpl = new CoreView( 'Area-Header.twig', array( 'area' => $this->Area, 'headerClass' => $headerClass ) );
+        $Tpl = new CoreView( 'edit-screen/area-header.twig',
+            array(
+                'area' => $this->Area,
+                'headerClass' => $headerClass,
+                'settingsMenu' => $this->settingsMenu,
+                'active' => $this->Area->settings->get('active') ? 'active' : 'inactive'
+            ) );
         $Tpl->render( true );
 
     }
@@ -124,7 +131,6 @@ class AreaBackendHTML
         if (!empty( $this->attachedModules )) {
             /** @var \Kontentblocks\Modules\Module $Module */
             foreach ($this->attachedModules as $Module) {
-
                 $Module = apply_filters( 'kb.module.before.factory', $Module );
                 echo $Module->renderForm();
                 Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
