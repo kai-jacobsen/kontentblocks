@@ -19,7 +19,7 @@ class ModuleGlobalModuleProxy extends Module
         'id' => 'core-master-module',
         'description' => 'Handles reference to master templates',
         'globallyAvailable' => false,
-        'asGlobalModule' => false,
+        'globalModule' => false,
         'master' => true,
         'hidden' => true,
         'category' => 'core'

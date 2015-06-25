@@ -71,7 +71,7 @@ abstract class Module
         $this->setModuleData( $data );
 //        $this->setEnvVarsFromEnvironment( $Environment );
 
-        if (filter_var( $this->Properties->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
+        if (filter_var( $this->Properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
 
@@ -274,7 +274,7 @@ abstract class Module
             class_alias( 'Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
         }
 
-        if ($this->Properties->getSetting( 'useViewLoader' ) && is_null( $this->View )) {
+        if ($this->Properties->getSetting( 'views' ) && is_null( $this->View )) {
             $tpl = $this->getViewfile();
             $ModuleView = new ModuleView( $this );
             $full = $this->ViewLoader->getTemplateByName( $tpl );
@@ -302,7 +302,7 @@ abstract class Module
      */
     public function getViewfile()
     {
-        if (!filter_var( $this->Properties->getSetting( 'useViewLoader' ), FILTER_VALIDATE_BOOLEAN )) {
+        if (!filter_var( $this->Properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
             return '';
         }
         // a viewfile was already set
@@ -364,11 +364,9 @@ abstract class Module
             'connect' => 'any',
             'hidden' => false,
             'predefined' => false,
-            'inGlobalSidebars' => false,
-            'inGlobalAreas' => false,
-            'asGlobalModule' => true,
+            'globalModule' => true,
             'category' => 'standard',
-            'useViewLoader' => false,
+            'views' => false,
             'concat' => true
         );
 

@@ -16,7 +16,7 @@ class ModuleText extends Module
         'description' => 'Demo Editor',
         'globallyAvailable' => true,
         'asTemplate' => true,
-        'useViewLoader' => true,
+        'views' => true,
         'connect' => array( 'normal', 'side' ),
         'id' => 'wysiwyg',
         'controls' => array(

@@ -130,7 +130,7 @@ class GlobalModulesMenu
             'module' => $Module,
             'attachedTo' => $this->prepareAttachedTo(),
             'contexts' => ScreenManager::getDefaultContextLayout(),
-            'i18n' => I18n::getPackages('Common', 'Menus')
+            'i18n' => I18n::getPackages( 'Common', 'Menus' )
         );
 
 
@@ -477,7 +477,7 @@ class GlobalModulesMenu
         $type = ( isset( $postData['type'] ) ) ? $postData['type'] : '';
         $modules =
 
-        $modules = $this->getTemplateables();
+        $modules = $this->getGloballyAllowed();
 
         $collection = array();
 
@@ -502,7 +502,7 @@ class GlobalModulesMenu
      * @since 0.1.0
      * @return array
      */
-    public function getTemplateables()
+    public function getGloballyAllowed()
     {
         /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
         $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
@@ -510,7 +510,7 @@ class GlobalModulesMenu
         return array_filter(
             $ModuleRegistry->getAll(),
             function ( $module ) {
-                if (isset( $module['settings']['asGlobalModule'] ) && $module['settings']['asGlobalModule'] == true) {
+                if (isset( $module['settings']['globalModule'] ) && $module['settings']['globalModule'] == true) {
                     return true;
                 }
                 return false;

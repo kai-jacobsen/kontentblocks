@@ -34,7 +34,7 @@ module.exports = Backbone.Collection.extend({
       return false;
     }
 
-    return !(!m.get('settings').globallyAvailable && this.area.model.get('dynamic'));
+    return !(!m.get('settings').global && this.area.model.get('dynamic'));
 
   },
   prepareCategories: function () {

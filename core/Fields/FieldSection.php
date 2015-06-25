@@ -61,7 +61,7 @@ class FieldSection extends AbstractFieldSection
         $areaContext = $this->Module->Context->get( 'areaContext' );
         $postType = $this->Module->Context->get( 'postType' );
         $pageTemplate = $this->Module->Context->get( 'pageTemplate' );
-        if ($this->Module->Properties->getSetting( 'useViewLoader' )) {
+        if ($this->Module->Properties->getSetting( 'views' )) {
             $moduleTemplate = $this->Module->getViewfile();
             if ($Field->getCondition( 'viewfile' ) && !in_array(
                     $moduleTemplate,

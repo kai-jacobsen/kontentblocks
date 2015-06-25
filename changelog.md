@@ -4,6 +4,7 @@
 * **Backwards compatibility broken:** Module Templates refactored to Global Modules
 	* renamed post type identifier
 * Added translation
+* fixed preview
 * several minor improvements and fixes
 
 
