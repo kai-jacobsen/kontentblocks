@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-23 */
+/*! Kontentblocks DevVersion 2015-06-25 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -3262,7 +3262,7 @@
                 if (m.get("settings").disabled) {
                     return false;
                 }
-                return !(!m.get("settings").globallyAvailable && this.area.model.get("dynamic"));
+                return !(!m.get("settings").global && this.area.model.get("dynamic"));
             },
             prepareCategories: function() {
                 var cats = {};
