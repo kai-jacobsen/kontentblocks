@@ -10,6 +10,7 @@ KB.currentArea = {};
 
 var ViewsCollection = require('shared/ViewsCollection');
 var FieldsConfigsCollection = require('fields/FieldsConfigsCollection');
+var AreasCollection = require('backend/Collections/AreasCollection');
 var Payload = require('common/Payload');
 var UI = require('common/UI');
 var ModuleView = require('backend/Views/ModuleView');
@@ -44,7 +45,7 @@ KB.Modules = new Backbone.Collection([], {
  *  All Areas are collected in this Backbone Collection
  *  Get by 'mid'
  */
-KB.Areas = new Backbone.Collection([], {
+KB.Areas = new AreasCollection([], {
   model: AreaModel
 });
 

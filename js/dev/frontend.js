@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-25 */
+/*! Kontentblocks DevVersion 2015-06-26 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -448,6 +448,7 @@
                 this.initToggleBoxes();
                 this.flexContext();
                 this.flushLocalStorage();
+                this.initTipsy();
                 $body.on("mousedown", ".kb_field", function(e) {
                     activeField = this;
                 });
@@ -681,6 +682,15 @@
             initSortableAreas: function() {
                 jQuery(".kb-context__inner").sortable({
                     items: ".kb-area__wrap"
+                });
+            },
+            initTipsy: function() {
+                jQuery("[data-tipsy]").tipsy({
+                    title: function() {
+                        return this.getAttribute("data-tipsy");
+                    },
+                    gravity: $.fn.tipsy.autoNS,
+                    live: true
                 });
             },
             metaBoxReorder: function(e, o, settings, action) {
@@ -1489,14 +1499,14 @@
             },
             initialize: function() {
                 this.attachedModuleViews = {};
-                this.settings = this.model.get("settings");
+                this.renderSettings = this.model.get("renderSettings");
                 this.listenToOnce(KB.Events, "KB.frontend.init", this.setupUi);
                 this.listenTo(this, "kb.module.deleted", this.removeModule);
                 this.model.View = this;
             },
             setupUi: function() {
                 this.Layout = new AreaLayout({
-                    model: new Backbone.Model(this.settings),
+                    model: new Backbone.Model(this.renderSettings),
                     AreaView: this
                 });
                 if (this.model.get("sortable")) {

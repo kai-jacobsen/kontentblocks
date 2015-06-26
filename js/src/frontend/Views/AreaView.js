@@ -11,8 +11,7 @@ module.exports = Backbone.View.extend({
   },
   initialize: function () {
     this.attachedModuleViews = {};
-    //shorthand area settings from model
-    this.settings = this.model.get('settings');
+    this.renderSettings = this.model.get('renderSettings');
     this.listenToOnce(KB.Events, 'KB.frontend.init', this.setupUi);
     this.listenTo(this, 'kb.module.deleted', this.removeModule);
     this.model.View = this;
@@ -20,7 +19,7 @@ module.exports = Backbone.View.extend({
   },
   setupUi: function () {
     this.Layout = new AreaLayout({
-      model: new Backbone.Model(this.settings),
+      model: new Backbone.Model(this.renderSettings),
       AreaView: this
     });
 

@@ -7,6 +7,7 @@ use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class SaveAreaLayout
@@ -27,16 +28,17 @@ class SaveAreaLayout implements AjaxActionInterface
         $area = $Request->get( 'area' );
         $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
         $layout = $Request->getFiltered( 'layout', FILTER_SANITIZE_STRING );
-        $settings = new AreaSettingsModel( $postId );
-        if ($settings->getLayout( $area['id'] ) === $layout) {
+        $Environment = Utilities::getEnvironment($postId);
+        $Area = $Environment->getAreaDefinition($area);
+        if ($Area->settings->getLayout( $area['id'] ) === $layout) {
             new AjaxErrorResponse(
                 'Layout has not changed', array(
-                    'present' => $settings->getLayout( $area['id'] ),
+                    'present' => $Area->settings->getLayout( ),
                     'future' => $layout
                 )
             );
         }
-        $update = $settings->setLayout( $area['id'], $layout )->save();
+        $update = $Area->settings->setLayout($layout )->save();
         new AjaxSuccessResponse(
             'Layout saved', array(
                 'update' => $update,

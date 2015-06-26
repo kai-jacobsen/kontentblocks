@@ -6,7 +6,11 @@ var Ajax = require('common/Ajax');
 module.exports = BaseView.extend({
   initialize: function (options) {
     this.options = options || {};
+    this.parent = options.parent;
     this.listenTo(this.model, 'change:settings', this.render);
+  },
+  attributes: {
+      "data-tipsy" : 'Switch area visibility on/off'
   },
   className: 'dashicons dashicons-visibility kb-area-status-action',
   events: {
@@ -14,18 +18,28 @@ module.exports = BaseView.extend({
   },
   render: function () {
     var settings = this.model.get('settings');
-    this.$el.removeClass('kb-area-status-inactive');
+    this.parent.$el.removeClass('kb-area-status-inactive');
     if (!settings.active) {
-      this.$el.addClass('kb-area-status-inactive');
+      this.parent.$el.addClass('kb-area-status-inactive');
     }
   },
   changeStatus: function () {
-    alert('click');
+    Ajax.send({
+      action: 'syncAreaSettings',
+      _ajax_nonce: Config.getNonce('update'),
+      areaId: this.model.get('id'),
+      settings: this.model.get('settings')
+    }, this.success, this);
   },
   isValid: function () {
     return true;
   },
-  success: function () {
-
+  success: function (res) {
+    if (res.success) {
+      this.model.set('settings', res.data);
+      Notice.notice('Area status updated', 'success');
+    } else {
+      Notice.notice(res.message, 'error');
+    }
   }
 });

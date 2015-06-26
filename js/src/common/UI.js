@@ -30,6 +30,7 @@ var Ui = {
     this.initToggleBoxes();
     this.flexContext();
     this.flushLocalStorage();
+    this.initTipsy();
 
     // set the global activeField variable dynamically
     // legacy
@@ -363,6 +364,17 @@ var Ui = {
       items: '.kb-area__wrap'
 
     });
+  },
+  initTipsy: function () {
+    jQuery('[data-tipsy]').tipsy(
+      {
+        title: function () {
+          return this.getAttribute('data-tipsy');
+        },
+        gravity: $.fn.tipsy.autoNS,
+        live: true
+      }
+    );
   },
   metaBoxReorder: function (e, o, settings, action) {
     if (settings.data) {

@@ -108,7 +108,7 @@ class ScreenManager
         }
 
         foreach ($this->areas as $area) {
-//            if (!$area->dynamic) {
+//            if (!$area->dynamic || ( $area->dynamic && $area->settings->isAttached() )) {
                 $areas[$area->context][$area->id] = $area;
 //            }
         }
@@ -116,12 +116,12 @@ class ScreenManager
 
         if (is_array( $contextsOrder ) && !empty( $contextsOrder )) {
             foreach ($contextsOrder as $context => $areaIds) {
-                if (is_array($areaIds)){
-                    foreach (array_reverse(array_keys($areaIds)) as $areaId) {
-                        if (isset($areas[$context][$areaId])){
+                if (is_array( $areaIds )) {
+                    foreach (array_reverse( array_keys( $areaIds ) ) as $areaId) {
+                        if (isset( $areas[$context][$areaId] )) {
                             $tmp = $areas[$context][$areaId];
-                            unset($areas[$context][$areaId]);
-                            $areas[$context] = array($areaId => $tmp) + $areas[$context];
+                            unset( $areas[$context][$areaId] );
+                            $areas[$context] = array( $areaId => $tmp ) + $areas[$context];
                         }
                     }
                 }

@@ -410,7 +410,7 @@ class Environment implements JsonSerializable
         $areas = $this->findAreas();
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($areas as $area) {
-            $area->set( 'settings', new AreaSettingsModel( $this ) );
+            $area->set( 'settings', new AreaSettingsModel( $area, $this ) );
         }
         return $areas;
 

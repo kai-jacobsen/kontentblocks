@@ -86,7 +86,8 @@ class AjaxCallbackHandler
                 'getOptionPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\GetOptionPanelForm', 'run' ),
                 'getStaticPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\GetStaticPanelForm', 'run' ),
                 'saveOptionPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveOptionPanelForm', 'run' ),
-                'saveStaticPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveStaticPanelForm', 'run' )
+                'saveStaticPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveStaticPanelForm', 'run' ),
+                'syncAreaSettings' => array( 'Kontentblocks\Ajax\Actions\SyncAreaSettings', 'run' )
 
             )
         );

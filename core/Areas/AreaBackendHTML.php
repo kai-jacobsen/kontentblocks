@@ -106,15 +106,15 @@ class AreaBackendHTML
      */
     public function header()
     {
-        echo "<div id='{$this->Area->id}-container' class='kb-area__wrap klearfix cf'>";
+        $active = $this->Area->settings->get('active') ? 'active' : 'inactive';
+        echo "<div id='{$this->Area->id}-container' class='kb-area__wrap klearfix cf kb-area-status-{$active}' >";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
         $Tpl = new CoreView( 'edit-screen/area-header.twig',
             array(
                 'area' => $this->Area,
                 'headerClass' => $headerClass,
-                'settingsMenu' => $this->settingsMenu,
-                'active' => $this->Area->settings->get('active') ? 'active' : 'inactive'
+                'settingsMenu' => $this->settingsMenu
             ) );
         $Tpl->render( true );
 
@@ -126,6 +126,7 @@ class AreaBackendHTML
      */
     public function render()
     {
+        echo "<div class='kb-area--body'>";
         // list items for this area, block limit gets stored here
         echo "<ul style='' data-context='{$this->context}' id='{$this->Area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty( $this->attachedModules )) {
@@ -142,6 +143,7 @@ class AreaBackendHTML
         echo $this->menuLink();
         // block limit tag, if applicable
         $this->getModuleLimitTag();
+        echo "</div>";
     }
 
 

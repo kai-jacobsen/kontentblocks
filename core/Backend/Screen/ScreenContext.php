@@ -77,6 +77,10 @@ class ScreenContext
         $this->Environment = $Environment;
         $this->areas = $areas;
         $this->editScreenHasSidebar = $sidebars;
+
+        if (!empty( $areas )) {
+            $this->toJSON();
+        }
     }
 
 
@@ -125,10 +129,16 @@ class ScreenContext
     public function renderAreas()
     {
         foreach ($this->areas as $args) {
+
+            if (is_user_logged_in()) {
+                Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $args );
+            }
+
             // exclude dynamic areas
-//            if ($args->dynamic) {
-//                continue;
-//            }
+            if ($args->dynamic && !$args->settings->isAttached()) {
+                continue;
+            }
+
             // Setup new Area
             if ($args->dynamic) {
                 $area = new DynamicAreaBackendHTML( $args, $this->Environment, $this->id );
@@ -142,9 +152,7 @@ class ScreenContext
             //render area footer
             $area->footer();
 
-            if (is_user_logged_in()) {
-                Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $args );
-            }
+
         }
     }
 
@@ -158,6 +166,16 @@ class ScreenContext
         // hook to add custom stuff after areas
         do_action( "context_box_{$this->id}", $this->id, $this->Environment );
         echo "</div>";
+
+    }
+
+    private function toJSON()
+    {
+        $json = array(
+            'id' => $this->id,
+            'title' => $this->title
+        );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerContext( $json );
 
     }
 

@@ -35,14 +35,14 @@ class AreaSettingsModel implements \JsonSerializable
 
     /**
      * Construct
+     * @param AreaProperties $Area
      * @param Environment $Environment
      */
-    public function __construct( Environment $Environment )
+    public function __construct( AreaProperties $Area, Environment $Environment )
     {
-
         $this->postId = $Environment->getId();
         $this->DataProvider = $Environment->getDataProvider();
-
+        $this->Area = $Area;
         $this->setupSettings();
     }
 
@@ -53,12 +53,13 @@ class AreaSettingsModel implements \JsonSerializable
     private function setupSettings()
     {
         $meta = $this->DataProvider->get( $this->key );
-
         if (!is_array( $meta )) {
             $meta = array();
         }
-
-        $this->settings = wp_parse_args( $meta, self::getDefaults() );
+        $areaSettings = ( isset( $meta[$this->Area->id] ) && is_array(
+                $meta[$this->Area->id]
+            ) ) ? $meta[$this->Area->id] : array();
+        $this->settings = wp_parse_args( $areaSettings, self::getDefaults() );
         return $this;
     }
 
@@ -95,36 +96,46 @@ class AreaSettingsModel implements \JsonSerializable
     {
         return array(
             'active' => true,
-            'layout' => 'default'
+            'layout' => 'default',
+            'attached' => false
         );
+    }
+
+    public function isAttached()
+    {
+        return $this->get('attached');
     }
 
     /**
      * Set Layout
-     * @param $area
      * @param $value
      * @return $this
      */
-    public function setLayout( $area, $value )
+    public function setLayout( $value )
     {
 
-        if (!isset( $this->settings[$area] )) {
-            $this->settings[$area] = array( 'layout' => $value );
+        if (!isset( $this->settings['layout'] )) {
+            $this->settings['layout'] = $value;
         }
 
-        $this->settings[$area]['layout'] = $value;
+        $this->settings['layout'] = $value;
         return $this;
+    }
+
+
+    public function isActive()
+    {
+        return $this->get( 'active' );
     }
 
     /**
      * Get layout
-     * @param $area
      * @return mixed
      */
-    public function getLayout( $area )
+    public function getLayout()
     {
-        if (isset( $this->settings[$area] )) {
-            return $this->settings[$area]['layout'];
+        if (isset( $this->settings['layout'] )) {
+            return $this->settings['layout'];
         } else {
             return false;
         }
@@ -136,7 +147,14 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function save()
     {
-        return $this->DataProvider->update( $this->key, $this->settings );
+        $this->DataProvider->reset();
+        $meta = $this->DataProvider->get( $this->key );
+
+        if (!is_array( $meta )) {
+            $meta = array();
+        }
+        $meta[$this->Area->id] = $this->settings;
+        return $this->DataProvider->update( $this->key, $meta );
     }
 
     /**

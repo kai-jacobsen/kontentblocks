@@ -16,10 +16,15 @@
 
 }
 
+.kb-area--body{
+  overflow: hidden;
+}
+
 .kb-area__wrap:hover {
   .js-area-settings-opener {
     opacity: 1;
   }
+
 }
 
 .kb-area-settings-wrapper {
@@ -48,10 +53,11 @@
 .kb-area-actions {
   position: absolute;
   right: $fullpadding;
-  top: 0;
+  top: 8px;
 
   ul {
     list-style: none;
+    margin: 0;
   }
 
   li {
@@ -62,12 +68,17 @@
       color: $grey-900;
     }
   }
+}
 
-  .kb-area-status-action {
-    color: $green;
-    &.kb-area-status-inactive {
-      color: $red;
+.kb-area__wrap{
+
+  border-left: 3px solid $green;
+
+  &.kb-area-status-inactive {
+    opacity: 0.9;
+    border-left: 3px solid $red;
+    .kb-area--body{
+      display: none;
     }
   }
 }
-

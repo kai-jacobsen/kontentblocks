@@ -47,8 +47,8 @@ class AfterAreaChange implements AjaxActionInterface
         $html = $Module->form();
 //
         $return = array(
-            'html' => stripslashes_deep( $html ),
-            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
+            'html' =>  $html ,
+            'json' =>  Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
         );
 
         return new AjaxSuccessResponse( 'Area changed', $return );

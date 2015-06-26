@@ -18,6 +18,7 @@ class JSONTransport
     protected $panels = array();
     protected $fieldData = array();
     protected $Fields = array();
+    protected $Contexts = array();
 
 
     /**
@@ -31,7 +32,7 @@ class JSONTransport
      */
     public function __construct()
     {
-        if (is_user_logged_in() && current_user_can('edit_kontentblocks')) {
+        if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {
             add_action( 'wp_print_footer_scripts', array( $this, 'printJSON' ), 9 );
             add_action( 'admin_footer', array( $this, 'printJSON' ), 9 );
         }
@@ -183,6 +184,15 @@ class JSONTransport
     }
 
     /**
+     * @param $context
+     * @since 0.3.0
+     */
+    public function registerContext( $context )
+    {
+        $this->Contexts[$context['id']] = $context;
+    }
+
+    /**
      * Register panel definition
      *
      * @param array $panel
@@ -209,6 +219,7 @@ class JSONTransport
         $this->data['fieldData'] = $this->fieldData;
         $this->data['Fields'] = $this->Fields;
         $this->data['Panels'] = $this->panels;
+        $this->data['Contexts'] = $this->Contexts;
 
         $json = json_encode( $this->data );
 

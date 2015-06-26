@@ -20,7 +20,13 @@ class AreaHtmlNode
      * @var string
      * @since 0.1.0
      */
-    protected $id;
+    protected $areaId;
+
+    /**
+     * @var \Kontentblocks\Areas\AreaProperties
+     */
+    public $Area;
+
 
     /**
      * placeholder format string for area wrapper before markup
@@ -49,7 +55,7 @@ class AreaHtmlNode
      * @var array
      * @since 0.1.0
      */
-    protected $settings;
+    protected $renderSettings;
 
     /**
      * Indicator of the existence of an area_template
@@ -80,23 +86,24 @@ class AreaHtmlNode
      * Class Constructor
      *
      * @param AreaRenderer $AreaRenderer
-     * @param Environment $Environment
      * @param $additionalArgs array comes from the render function call
      * @since 0.1.0
      */
-    public function __construct( AreaRenderer $AreaRenderer, Environment $Environment, $additionalArgs )
+    public function __construct( AreaRenderer $AreaRenderer, $additionalArgs )
     {
-        $this->Environment = $Environment;
-        $this->attr = $Environment->getAreaDefinition( $AreaRenderer->areaId );
-        $this->id = $this->attr->id;
-        $this->settings = $this->setupSettings(
+        $this->Environment = $AreaRenderer->Environment;
+        $this->Area = $AreaRenderer->Area;
+        $this->areaId = $this->Area->id;
+
+        $this->renderSettings = $this->setupSettings(
             $additionalArgs,
-            $Environment->getAreaSettings( $AreaRenderer->areaId )
+            $this->Environment->getAreaSettings( $AreaRenderer->areaId )
         );
+
         $this->Layout = $this->setupLayout();
         $this->toJSON();
-    }
 
+    }
 
     /**
      * create the wrappers opening markup
@@ -107,8 +114,8 @@ class AreaHtmlNode
     {
         return sprintf(
             '<%1$s id="%2$s" class="%3$s">',
-            $this->settings['element'],
-            $this->id,
+            $this->renderSettings['element'],
+            $this->areaId,
             $this->getWrapperClasses()
         );
     }
@@ -120,7 +127,7 @@ class AreaHtmlNode
      */
     public function closeArea()
     {
-        return sprintf( "</%s>", $this->settings['element'] );
+        return sprintf( "</%s>", $this->renderSettings['element'] );
     }
 
     /**
@@ -131,8 +138,8 @@ class AreaHtmlNode
     public function getWrapperClasses()
     {
         $classes = array(
-            $this->settings['wrapperClass'],
-            $this->id,
+            $this->renderSettings['wrapperClass'],
+            $this->areaId,
             $this->getLayoutId(),
             $this->getContext(),
             $this->getSubcontext(),
@@ -170,8 +177,8 @@ class AreaHtmlNode
      */
     public function getSetting( $setting )
     {
-        if (isset( $this->settings[$setting] )) {
-            return $this->settings[$setting];
+        if (isset( $this->renderSettings[$setting] )) {
+            return $this->renderSettings[$setting];
         }
     }
 
@@ -186,19 +193,19 @@ class AreaHtmlNode
         /** @var \Kontentblocks\Areas\AreaRegistry $registry */
         $Registry = Kontentblocks::getService( 'registry.areas' );
 
-        $sLayout = $this->settings['layout'];
+        $sLayout = $this->renderSettings['layout'];
 
         if ($sLayout !== 'default' && !empty( $sLayout )) {
             $this->hasLayout = true;
-            return new AreaLayoutIterator( $this->settings['layout'] );
+            return new AreaLayoutIterator( $this->renderSettings['layout'] );
         }
 
-        if ($this->attr->defaultLayout !== 'default' && empty( $sLayout )) {
+        if ($this->Area->defaultLayout !== 'default' && empty( $sLayout )) {
             if ($Registry->templateExists( $this->defaultLayout )) {
-                $this->settings['layout'] = $this->attr->defaultLayout;
+                $this->renderSettings['layout'] = $this->Area->defaultLayout;
                 $this->hasLayout = true;
 
-                return new AreaLayoutIterator( $this->attr->defaultLayout );
+                return new AreaLayoutIterator( $this->Area->defaultLayout );
             }
         }
 
@@ -291,12 +298,12 @@ class AreaHtmlNode
     public function getPublicAttributes()
     {
         return array(
-            'context' => $this->settings['context'],
-            'subcontext' => $this->settings['subcontext'],
-            'areaTemplate' => $this->settings['layout'],
-            'action' => $this->settings['action'],
-            'areaId' => $this->id,
-            'moduleElement' => $this->settings['moduleElement']
+            'context' => $this->renderSettings['context'],
+            'subcontext' => $this->renderSettings['subcontext'],
+            'areaTemplate' => $this->renderSettings['layout'],
+            'action' => $this->renderSettings['action'],
+            'areaId' => $this->areaId,
+            'moduleElement' => $this->renderSettings['moduleElement']
         );
 
     }
@@ -361,10 +368,10 @@ class AreaHtmlNode
 
     public function toJSON()
     {
-        $this->attr->settings = $this->settings;
-        $this->attr->envVars = $this->Environment;
-        $this->attr->layout = $this->settings['layout'];
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->attr );
+        $this->Area->renderSettings = $this->renderSettings;
+        $this->Area->envVars = $this->Environment;
+        $this->Area->layout = $this->renderSettings['layout'];
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->Area );
     }
 
 }

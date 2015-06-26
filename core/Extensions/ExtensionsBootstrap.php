@@ -48,5 +48,5 @@ if (current_theme_supports( 'kontentblocks:layouts' )) {
     );
 }
 
-new SidebarSelector();
+//new SidebarSelector();
 include_once 'OSAdminBar.php';

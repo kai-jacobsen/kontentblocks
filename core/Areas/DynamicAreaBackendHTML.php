@@ -26,8 +26,7 @@ class DynamicAreaBackendHTML extends AreaBackendHTML
     public function render()
     {
 
-        $activeSidebars = $this->Environment->getDataProvider()->get( 'active_sidebar_areas' );
-
+        echo "<div class='kb-area--body'>";
 
         $View = new CoreView(
             'edit-screen/dynamic-area-body.twig', array(
@@ -36,6 +35,7 @@ class DynamicAreaBackendHTML extends AreaBackendHTML
             )
         );
         $View->render( true );
+        echo "</div>";
     }
 
 }

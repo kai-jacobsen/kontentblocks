@@ -25,12 +25,20 @@ class AreaRenderer
      */
     protected $AreaHtmlNode;
 
+    /**
+     * @var string
+     */
     public $areaId;
+
+    /**
+     * @var \Kontentblocks\Areas\AreaProperties
+     */
+    public $Area;
 
     /**
      * @var \Kontentblocks\Backend\Environment\Environment
      */
-    protected $Environment;
+    public $Environment;
 
     /**
      * @var ModuleIterator
@@ -54,6 +62,9 @@ class AreaRenderer
      */
     private $repeating;
 
+    /**
+     * @var
+     */
     private $ModuleRenderer;
 
     /**
@@ -68,14 +79,17 @@ class AreaRenderer
 
         $this->areaId = $areaId;
         $this->Environment = $Environment;
+
+        $this->Area = $Environment->getAreaDefinition( $areaId );
         $modules = $this->Environment->getModulesforArea( $areaId );
+
         $this->modules = new ModuleIterator( $modules, $this->Environment );
         // setup AreaHtmlNode
         $this->AreaHtmlNode = new AreaHtmlNode(
             $this,
-            $Environment,
             $additionalArgs
         );
+
     }
 
     /**
@@ -199,6 +213,10 @@ class AreaRenderer
     public function _validate()
     {
         if (!isset( $this->AreaHtmlNode )) {
+            return false;
+        }
+
+        if (!$this->Area->settings->isActive()){
             return false;
         }
 
