@@ -157,12 +157,10 @@
             },
             confirm: function(title, msg, yes, no, scope) {
                 var t = title || "Title";
-                window.alertify.confirm(t, msg, function(e) {
-                    if (e) {
-                        yes.call(scope);
-                    } else {
-                        no.call(scope);
-                    }
+                window.alertify.confirm(t, msg, function() {
+                    yes.call(scope);
+                }, function() {
+                    no.call(scope);
                 });
             }
         };
