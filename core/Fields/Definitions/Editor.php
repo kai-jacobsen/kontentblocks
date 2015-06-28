@@ -44,7 +44,7 @@ Class Editor extends Field
         if (is_array( $val )) {
             $val = '';
         }
-        return stripslashes_deep( $val );
+        return $val;
     }
 
     /**

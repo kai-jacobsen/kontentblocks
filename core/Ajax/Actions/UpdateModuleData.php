@@ -33,7 +33,7 @@ class UpdateModuleData implements AjaxActionInterface
         global $post;
 
         $moduleArgs = Utilities::validateBoolRecursive( $Request->get( 'module' ) );
-        $data = $Request->get( 'data' );
+        $data = wp_unslash($Request->get( 'data' ));
         $postId = $Request->getFiltered( 'post_id', FILTER_VALIDATE_INT );
 
         // setup global post
@@ -47,7 +47,7 @@ class UpdateModuleData implements AjaxActionInterface
         $old = $Module->Model->export();
         $new = $Module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
-        $Environment->getStorage()->saveModule( $Module->getId(), $mergedData );
+        $Environment->getStorage()->saveModule( $Module->getId(), wp_slash($mergedData) );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $Module );
         $Module->Model->set( $mergedData );
         $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
