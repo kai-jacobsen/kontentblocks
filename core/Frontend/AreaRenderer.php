@@ -82,7 +82,6 @@ class AreaRenderer
 
         $this->Area = $Environment->getAreaDefinition( $areaId );
         $modules = $this->Environment->getModulesforArea( $areaId );
-
         $this->modules = new ModuleIterator( $modules, $this->Environment );
         // setup AreaHtmlNode
         $this->AreaHtmlNode = new AreaHtmlNode(
@@ -212,6 +211,7 @@ class AreaRenderer
 
     public function _validate()
     {
+
         if (!isset( $this->AreaHtmlNode )) {
             return false;
         }
@@ -220,9 +220,10 @@ class AreaRenderer
             return false;
         }
 
-        if (!$this->Area->settings->isAttached()){
+        if ($this->Area->dynamic && !$this->Area->settings->isAttached()){
             return false;
         }
+
 
         return true;
     }

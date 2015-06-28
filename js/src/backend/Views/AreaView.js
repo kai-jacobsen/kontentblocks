@@ -8,6 +8,8 @@ var DetachControl = require('backend/Views/AreaControls/controls/DetachControl')
 var MoveControl = require('backend/Views/AreaControls/controls/MoveControl');
 module.exports = Backbone.View.extend({
   initialize: function () {
+
+
     this.attachedModuleViews = {};
     this.controlsContainer = jQuery('.add-modules', this.$el);
     this.settingsContainer = jQuery('.kb-area-settings-wrapper', this.$el);
@@ -23,6 +25,7 @@ module.exports = Backbone.View.extend({
       el: this.$el,
       parent: this
     });
+
     this.setupDefaultMenuItems();
     this.render();
   },

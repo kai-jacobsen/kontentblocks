@@ -38,7 +38,8 @@ class GetModuleForm implements AjaxActionInterface
         $html = $Module->form();
         $return = array(
             'html' => $html,
-            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
+//            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
+            'json' =>  Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
         );
         new AjaxSuccessResponse( 'serving module form', $return );
     }

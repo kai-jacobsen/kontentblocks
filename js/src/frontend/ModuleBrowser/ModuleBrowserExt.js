@@ -2,6 +2,7 @@
  * Override module browser success method
  */
 var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
+var ModuleModel = require('frontend/Models/ModuleModel');
 var TinyMCE = require('common/TinyMCE');
 module.exports = ModuleBrowser.extend({
   success : function (res) {
@@ -12,7 +13,7 @@ module.exports = ModuleBrowser.extend({
     } else {
       this.options.area.$el.append(res.data.html).removeClass('kb-area__empty');
     }
-    model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
+    model = KB.Modules.add(new ModuleModel(res.data.module));
 
     //this.options.area.addModuleView(model.view);
 

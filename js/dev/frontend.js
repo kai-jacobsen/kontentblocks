@@ -173,12 +173,10 @@
             },
             confirm: function(title, msg, yes, no, scope) {
                 var t = title || "Title";
-                window.alertify.confirm(t, msg, function(e) {
-                    if (e) {
-                        yes.call(scope);
-                    } else {
-                        no.call(scope);
-                    }
+                window.alertify.confirm(t, msg, function() {
+                    yes.call(scope);
+                }, function() {
+                    no.call(scope);
                 });
             }
         };
@@ -1364,6 +1362,7 @@
     } ],
     20: [ function(require, module, exports) {
         var ModuleBrowser = require("shared/ModuleBrowser/ModuleBrowserController");
+        var ModuleModel = require("frontend/Models/ModuleModel");
         var TinyMCE = require("common/TinyMCE");
         module.exports = ModuleBrowser.extend({
             success: function(res) {
@@ -1374,7 +1373,7 @@
                 } else {
                     this.options.area.$el.append(res.data.html).removeClass("kb-area__empty");
                 }
-                model = KB.Modules.add(new KB.Backbone.ModuleModel(res.data.module));
+                model = KB.Modules.add(new ModuleModel(res.data.module));
                 this.parseAdditionalJSON(res.data.json);
                 TinyMCE.addEditor(model.View.$el);
                 KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
@@ -1390,6 +1389,7 @@
         });
     }, {
         "common/TinyMCE": 8,
+        "frontend/Models/ModuleModel": 19,
         "shared/ModuleBrowser/ModuleBrowserController": 42
     } ],
     21: [ function(require, module, exports) {
@@ -2104,13 +2104,16 @@
                 click: "confirmRemoval"
             },
             confirmRemoval: function() {
-                Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
+                Notice.confirm("Remove", KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
             },
             removeModule: function() {
+                var that = this;
+                console.log(this);
                 Ajax.send({
                     action: "removeModules",
                     _ajax_nonce: Config.getNonce("delete"),
-                    module: this.model.get("instance_id")
+                    module: that.model.get("mid"),
+                    postId: that.model.get("post_id")
                 }, this.afterRemoval, this);
             },
             afterRemoval: function() {
@@ -3279,7 +3282,7 @@
                 if (m.get("settings").disabled) {
                     return false;
                 }
-                return !(!m.get("settings").global && this.area.model.get("dynamic"));
+                return !(!m.get("settings").globalModule && this.area.model.get("dynamic"));
             },
             prepareCategories: function() {
                 var cats = {};

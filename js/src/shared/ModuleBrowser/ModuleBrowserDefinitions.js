@@ -16,7 +16,6 @@ module.exports = Backbone.Collection.extend({
   sortToCategories: function () {
     var that = this;
     _.each(this.models, function (model) {
-
       if (!that.validateVisibility(model)) {
         return;
       }
@@ -34,7 +33,7 @@ module.exports = Backbone.Collection.extend({
       return false;
     }
 
-    return !(!m.get('settings').global && this.area.model.get('dynamic'));
+    return !(!m.get('settings').globalModule && this.area.model.get('dynamic'));
 
   },
   prepareCategories: function () {

@@ -227,19 +227,20 @@ class SavePost
      */
     private function saveAreaSettings()
     {
-        $postareas = filter_input( INPUT_POST, 'areas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-
-        // save area settings which are specific to this post (ID-wise)
-        if (!empty( $postareas )) {
-            $collection = $this->Environment->getDataProvider()->get( 'kb_area_settings' );
-            foreach ($postareas as $areaId) {
-                $areaid = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
-                if (!empty( $areaid )) {
-                    $collection[$areaId] = $areaid;
-                }
-            }
-            $this->Environment->getDataProvider()->update( 'kb_area_settings', $collection );
-        }
+//        $postareas = filter_input( INPUT_POST, 'areas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+//
+//        // save area settings which are specific to this post (ID-wise)
+//        if (!empty( $postareas )) {
+//            $collection = $this->Environment->getDataProvider()->get( 'kb_area_settings' );
+//
+//            foreach ($postareas as $areaId) {
+//                $areaid = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
+//                if (!empty( $areaid )) {
+//                    $collection[$areaId] = $areaid;
+//                }
+//            }
+//            $this->Environment->getDataProvider()->update( 'kb_area_settings', $collection );
+//        }
     }
 
     private function saveAreaContextMap()

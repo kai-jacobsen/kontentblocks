@@ -131,7 +131,6 @@ class ScreenContext
     public function renderAreas()
     {
         foreach ($this->areas as $Area) {
-
             if (is_user_logged_in()) {
                 Kontentblocks::getService( 'utility.jsontransport' )->registerArea(
                     $this->augmentAreaforBackend( $Area )

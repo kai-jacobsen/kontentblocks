@@ -235,7 +235,6 @@ module.exports = Backbone.View.extend({
         fullDefs.push(module);
       }
     });
-
     return fullDefs;
   }
 });

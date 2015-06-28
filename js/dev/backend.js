@@ -77,7 +77,9 @@
             }
             function addViews() {
                 _.each(Payload.getPayload("Areas"), function(area) {
-                    KB.ObjectProxy.add(KB.Areas.add(area));
+                    if (area.id !== "_internal") {
+                        KB.ObjectProxy.add(KB.Areas.add(area));
+                    }
                 });
                 _.each(Payload.getPayload("Modules"), function(module) {
                     KB.ObjectProxy.add(KB.Modules.add(module));
@@ -1503,12 +1505,10 @@
             },
             confirm: function(title, msg, yes, no, scope) {
                 var t = title || "Title";
-                window.alertify.confirm(t, msg, function(e) {
-                    if (e) {
-                        yes.call(scope);
-                    } else {
-                        no.call(scope);
-                    }
+                window.alertify.confirm(t, msg, function() {
+                    yes.call(scope);
+                }, function() {
+                    no.call(scope);
                 });
             }
         };
@@ -2463,7 +2463,7 @@
                 if (m.get("settings").disabled) {
                     return false;
                 }
-                return !(!m.get("settings").global && this.area.model.get("dynamic"));
+                return !(!m.get("settings").globalModule && this.area.model.get("dynamic"));
             },
             prepareCategories: function() {
                 var cats = {};

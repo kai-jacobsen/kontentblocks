@@ -106,8 +106,11 @@ KB.App = (function () {
     // iterate over raw areas
 
     _.each(Payload.getPayload('Areas'), function (area) {
-      // create new area model
-      KB.ObjectProxy.add(KB.Areas.add(area));
+
+      if (area.id !== '_internal'){
+        // create new area model
+        KB.ObjectProxy.add(KB.Areas.add(area));
+      }
     });
 
     // create models from already attached modules

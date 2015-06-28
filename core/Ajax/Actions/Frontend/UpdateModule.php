@@ -35,6 +35,7 @@ class UpdateModule implements AjaxActionInterface
 
         // flags
         $Environment = Utilities::getEnvironment( $postdata->postId );
+        // strip slashes from incoming data
         $newData = wp_unslash( $postdata->data );
         $Workshop = new ModuleWorkshop( $Environment, $postdata->module );
         $Module = $Workshop->getModule();
@@ -47,8 +48,9 @@ class UpdateModule implements AjaxActionInterface
         $new = $Module->save( $newData, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
+        // save slashed data, *_post_meta will add remove slashes again...
         if ($postdata->update) {
-            $Environment->getStorage()->saveModule( $Module->getId(), $mergedData );
+            $Environment->getStorage()->saveModule( $Module->getId(), wp_slash($mergedData) );
         }
         $Module->setModuleData( $mergedData );
         do_action( 'kb.module.save', $Module, $mergedData );

@@ -40,7 +40,7 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function __construct( AreaProperties $Area, Environment $Environment )
     {
-        $this->postId = $Environment->getId();
+        $this->postId = $Environment->getPostObject()->ID;
         $this->DataProvider = $Environment->getDataProvider();
         $this->Area = $Area;
         $this->setupSettings();
@@ -59,6 +59,7 @@ class AreaSettingsModel implements \JsonSerializable
         $areaSettings = ( isset( $meta[$this->Area->id] ) && is_array(
                 $meta[$this->Area->id]
             ) ) ? $meta[$this->Area->id] : array();
+        $this->meta = $areaSettings;
         $this->settings = wp_parse_args( $areaSettings, $this->getDefaults() );
         return $this;
     }

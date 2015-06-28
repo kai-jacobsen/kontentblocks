@@ -17,13 +17,16 @@ module.exports = ModuleMenuItem.extend({
     'click': 'confirmRemoval'
   },
   confirmRemoval: function () {
-    Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
+    Notice.confirm('Remove', KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
   },
   removeModule: function () {
+    var that = this;
+    console.log(this);
     Ajax.send({
       action: 'removeModules',
       _ajax_nonce: Config.getNonce('delete'),
-      module: this.model.get('instance_id')
+      module: that.model.get('mid'),
+      postId: that.model.get('post_id')
     }, this.afterRemoval, this);
   },
   afterRemoval: function () {
