@@ -18,7 +18,6 @@ module.exports = ModuleMenuItem.extend({
     var that = this;
     var moduleData = {};
     var refresh = false;
-    console.log(that.model);
     jQuery.ajax({
       url: ajaxurl,
       data: {

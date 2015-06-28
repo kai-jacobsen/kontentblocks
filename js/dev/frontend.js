@@ -2108,7 +2108,6 @@
             },
             removeModule: function() {
                 var that = this;
-                console.log(this);
                 Ajax.send({
                     action: "removeModules",
                     _ajax_nonce: Config.getNonce("delete"),
@@ -2202,7 +2201,6 @@
                 var that = this;
                 var moduleData = {};
                 var refresh = false;
-                console.log(that.model);
                 jQuery.ajax({
                     url: ajaxurl,
                     data: {

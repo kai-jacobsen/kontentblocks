@@ -21,7 +21,6 @@ module.exports = ModuleMenuItem.extend({
   },
   removeModule: function () {
     var that = this;
-    console.log(this);
     Ajax.send({
       action: 'removeModules',
       _ajax_nonce: Config.getNonce('delete'),
