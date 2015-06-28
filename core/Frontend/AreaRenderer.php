@@ -220,6 +220,10 @@ class AreaRenderer
             return false;
         }
 
+        if (!$this->Area->settings->isAttached()){
+            return false;
+        }
+
         return true;
     }
 

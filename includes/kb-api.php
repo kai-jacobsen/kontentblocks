@@ -77,6 +77,8 @@ function renderSingleArea( $area, $id = null, $additionalArgs = array() )
         return '';
     }
 
+
+
     $AreaRender = new AreaRenderer( $Environment, $area, $additionalArgs );
     $AreaRender->render( true );
 }
@@ -112,7 +114,7 @@ function renderContext( $context, $id, $additionalArgs = array() )
     if (is_array( $contextsOrder ) && !empty( $contextsOrder )) {
         foreach ($contextsOrder as $context => $areaIds) {
             if (is_array( $areaIds )) {
-                foreach (array_reverse( array_keys( $areaIds ) ) as $areaId) {
+                foreach (array_keys( $areaIds ) as $areaId) {
                     if (isset( $areas[$areaId] )) {
                         $tmp = $areas[$areaId];
                         unset( $areas[$areaId] );
@@ -124,7 +126,7 @@ function renderContext( $context, $id, $additionalArgs = array() )
     }
 
     if (!empty( $areas )) {
-        foreach (array_keys($areas) as $area) {
+        foreach (array_keys( $areas ) as $area) {
             renderSingleArea( $area, $post_id, $additionalArgs );
         }
     }
