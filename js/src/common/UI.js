@@ -361,8 +361,8 @@ var Ui = {
   },
   initSortableAreas: function () {
     jQuery('.kb-context__inner').sortable({
-      items: '.kb-area__wrap'
-
+      items: '.kb-area__wrap',
+      handle: '.kb-area-move-handle'
     });
   },
   initTipsy: function () {

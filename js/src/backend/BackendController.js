@@ -18,7 +18,8 @@ var ModuleModel = require('backend/Models/ModuleModel');
 var AreaView = require('backend/Views/AreaView');
 var AreaModel = require('backend/Models/AreaModel');
 var PanelModel = require('backend/Models/PanelModel');
-
+var ContextView = require('backend/Views/ContextView');
+var ContextModel = require('backend/Models/ContextModel');
 // ---------------
 // Collections
 // ---------------
@@ -31,7 +32,8 @@ KB.Views = {
   Modules: new ViewsCollection(),
   Areas: new ViewsCollection(),
   Context: new ViewsCollection(),
-  Panels: new ViewsCollection()
+  Panels: new ViewsCollection(),
+  Contexts: new ViewsCollection()
 };
 /*
  * All Modules are collected here
@@ -53,6 +55,10 @@ KB.Panels = new Backbone.Collection([], {
   model: PanelModel
 });
 
+KB.Contexts = new Backbone.Collection([], {
+  model: ContextModel
+});
+
 KB.ObjectProxy = new Backbone.Collection();
 
 /*
@@ -70,7 +76,7 @@ KB.App = (function () {
     KB.Modules.on('add', createModuleViews);
     KB.Areas.on('add', createAreaViews);
     KB.Modules.on('remove', removeModule);
-
+    KB.Contexts.on('add', createContextViews);
     // Create views
     addViews();
     /*
@@ -110,8 +116,12 @@ KB.App = (function () {
       KB.ObjectProxy.add(KB.Modules.add(module));
     });
 
-    _.each(Payload.getPayload('Panels'), function (panel) {
-      KB.ObjectProxy.add(KB.Panels.add(panel));
+    //_.each(Payload.getPayload('Panels'), function (panel) {
+    //  KB.ObjectProxy.add(KB.Panels.add(panel));
+    //});
+
+    _.each(Payload.getPayload('Contexts'), function (context) {
+      KB.ObjectProxy.add(KB.Contexts.add(context));
     });
   }
 
@@ -145,6 +155,13 @@ KB.App = (function () {
       model: area,
       el: '#' + area.get('id') + '-container'
     }));
+  }
+
+  function createContextViews(context){
+    KB.Views.Contexts.add(context.get('id'), new ContextView({
+      model: context,
+      el: '#context_' + context.get('id')
+    }))
   }
 
 

@@ -1,5 +1,7 @@
 <div class="kb-dynamic-area-proxy">
     <div class="kb-dynamic-area-proxy--inner">
-        <p>This is a global area</p>
+        <h4>{{ area.name }} <span>Global Area</span></h4>
+        <p>Contains modules: {{ modulesCount }}</p>
+        <a target="_blank" href="{{ editUrl|esc_url }}" class="kb-button-small">View/Edit</a>
     </div>
 </div>

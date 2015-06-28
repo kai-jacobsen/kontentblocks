@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-26 */
+/*! Kontentblocks DevVersion 2015-06-28 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -681,7 +681,8 @@
             },
             initSortableAreas: function() {
                 jQuery(".kb-context__inner").sortable({
-                    items: ".kb-area__wrap"
+                    items: ".kb-area__wrap",
+                    handle: ".kb-area-move-handle"
                 });
             },
             initTipsy: function() {

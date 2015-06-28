@@ -4,8 +4,10 @@ namespace Kontentblocks\Backend\Screen;
 
 use Exception;
 use Kontentblocks\Areas\AreaBackendHTML;
+use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Areas\DynamicAreaBackendHTML;
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -128,29 +130,32 @@ class ScreenContext
      */
     public function renderAreas()
     {
-        foreach ($this->areas as $args) {
+        foreach ($this->areas as $Area) {
 
             if (is_user_logged_in()) {
-                Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $args );
+                Kontentblocks::getService( 'utility.jsontransport' )->registerArea(
+                    $this->augmentAreaforBackend( $Area )
+                );
             }
 
             // exclude dynamic areas
-            if ($args->dynamic && !$args->settings->isAttached()) {
+            if ($Area->dynamic && !$Area->settings->isAttached()) {
                 continue;
             }
 
+
             // Setup new Area
-            if ($args->dynamic) {
-                $area = new DynamicAreaBackendHTML( $args, $this->Environment, $this->id );
+            if ($Area->dynamic) {
+                $AreaHTML = new DynamicAreaBackendHTML( $Area, $this->Environment, $this->id );
             } else {
-                $area = new AreaBackendHTML( $args, $this->Environment, $this->id );
+                $AreaHTML = new AreaBackendHTML( $Area, $this->Environment, $this->id );
             }
             // do area header markup
-            $area->header();
+            $AreaHTML->header();
             // render modules for the area
-            $area->render();
+            $AreaHTML->render();
             //render area footer
-            $area->footer();
+            $AreaHTML->footer();
 
 
         }
@@ -177,6 +182,27 @@ class ScreenContext
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerContext( $json );
 
+    }
+
+    /**
+     * @param AreaProperties $Area
+     * @since 0.3.0
+     * @return AreaProperties
+     */
+    private function augmentAreaforBackend( AreaProperties $Area )
+    {
+
+        if ($Area->dynamic) {
+            $Storage = new ModuleStorage( $Area->parent_id );
+            $Area->set(
+                'meta',
+                array(
+                    'modules' => count( $Storage->getIndex() ),
+                    'editLink' => html_entity_decode( get_edit_post_link( $Area->parent_id ) )
+                )
+            );
+        }
+        return $Area;
     }
 
 

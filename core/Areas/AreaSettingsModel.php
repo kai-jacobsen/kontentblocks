@@ -59,7 +59,7 @@ class AreaSettingsModel implements \JsonSerializable
         $areaSettings = ( isset( $meta[$this->Area->id] ) && is_array(
                 $meta[$this->Area->id]
             ) ) ? $meta[$this->Area->id] : array();
-        $this->settings = wp_parse_args( $areaSettings, self::getDefaults() );
+        $this->settings = wp_parse_args( $areaSettings, $this->getDefaults() );
         return $this;
     }
 
@@ -70,8 +70,15 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function set( $key, $value )
     {
-        if (in_array( $key, array_keys( self::getDefaults() ) )) {
+        if (in_array( $key, array_keys( $this->getDefaults() ) )) {
             $this->settings[$key] = $value;
+        }
+    }
+
+    public function import( $settings )
+    {
+        foreach ($settings as $k => $v){
+            $this->set($k, $v);
         }
     }
 
@@ -92,18 +99,18 @@ class AreaSettingsModel implements \JsonSerializable
      * @return array
      * @since 0.3.0
      */
-    private static function getDefaults()
+    private function getDefaults()
     {
         return array(
             'active' => true,
             'layout' => 'default',
-            'attached' => false
+            'attached' => ( $this->Area->dynamic ) ? false : true
         );
     }
 
     public function isAttached()
     {
-        return $this->get('attached');
+        return $this->get( 'attached' );
     }
 
     /**

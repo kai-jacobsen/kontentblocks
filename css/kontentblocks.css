@@ -1,18 +1,18 @@
 @import url(assets/genericons/genericons.css);
 /* Colors */
-/* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 35, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .hide {
   display: none; }
 
 /*------------------------------------*\
     base extends
 \*------------------------------------*/
-/* line 42, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-box-shadow, .alertify-notifier .ajs-message, #module-browser {
   -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12); }
 
-/* line 46, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+/* line 47, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-box-border, #module-browser {
   border: 1px solid #212121; }
 
@@ -137,10 +137,15 @@
   font-size: 12px;
   padding: 3px 10px;
   color: #fff;
-  background-color: #03A9F4; }
-  /* line 99, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_common.scss */
+  background-color: #03A9F4;
+  text-decoration: none;
+  -webkit-transition: background .3s ease-out;
+  transition: background .3s ease-out; }
+  /* line 101, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_common/_common.scss */
   .kb-button-small:hover {
-    background-color: #FF9800; }
+    text-decoration: none;
+    color: #fff;
+    background-color: #05ceff; }
 
 /*------------------------------------*\
     Dynamic Backend Menus
@@ -4294,9 +4299,21 @@ h5.kb_properties_title {
   padding: 10px 10px 10px 10px;
   margin-bottom: 0px;
   border-bottom: 1px solid #eee;
-  background: #fff; }
+  background: #fff;
+  overflow: hidden;
+  position: relative; }
+  /* line 13, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+  .kb-context__header .kb-button-small {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    cursor: pointer;
+    font-size: 11px;
+    height: 100%;
+    line-height: 35px;
+    padding: 0 10px; }
 
-/* line 16, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+/* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
 #poststuff .kb-context__header h2, #poststuff .kb-context__container h2 {
   font-style: normal;
   margin: 0;
@@ -4306,11 +4323,96 @@ h5.kb_properties_title {
   font-size: 14px;
   line-height: 100%; }
 
-/* line 27, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+/* line 37, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
 .kb-context__header p.description {
   color: #aaa;
   font-size: 12px;
   display: none; }
+
+/* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+.kb-global-areas-backdrop {
+  background-color: rgba(255, 255, 255, 0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9995; }
+
+/* line 55, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+.kb-global-areas-browser-wrap {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 750px;
+  min-height: 300px;
+  z-index: 9998;
+  background-color: #fff;
+  border: 1px solid #9e9e9e;
+  padding: 12px 24px 24px; }
+  /* line 67, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+  .kb-global-areas-browser-wrap ul {
+    margin: 0;
+    padding: 0; }
+    /* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+    .kb-global-areas-browser-wrap ul li {
+      padding: 4px;
+      border-bottom: 1px solid #9e9e9e;
+      cursor: pointer;
+      -webkit-transition: background .1s ease-out;
+      transition: background .1s ease-out;
+      position: relative; }
+      /* line 78, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+      .kb-global-areas-browser-wrap ul li .kb-button-small {
+        position: absolute;
+        right: 0;
+        top: 0; }
+      /* line 86, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+      .kb-global-areas-browser-wrap ul li:hover h4, .kb-global-areas-browser-wrap ul li:hover p, .kb-global-areas-browser-wrap ul li:hover span, .kb-global-areas-browser-wrap ul li:hover .dashicons {
+        color: #000; }
+      /* line 90, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+      .kb-global-areas-browser-wrap ul li:hover .dashicons {
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
+        top: 10px; }
+      /* line 96, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+      .kb-global-areas-browser-wrap ul li h4 {
+        margin-bottom: 0;
+        margin-top: 0; }
+        /* line 99, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+        .kb-global-areas-browser-wrap ul li h4 span {
+          font-weight: 100; }
+      /* line 104, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+      .kb-global-areas-browser-wrap ul li h4 + p {
+        margin-top: 0;
+        margin-bottom: 4px; }
+      /* line 109, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+      .kb-global-areas-browser-wrap ul li .dashicons {
+        position: relative;
+        top: 12px;
+        -webkit-transition: all .3s ease-out;
+        transition: all .3s ease-out; }
+      /* line 115, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+      .kb-global-areas-browser-wrap ul li .kb-global-area-item {
+        display: inline-block;
+        margin-left: 12px; }
+  /* line 122, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+  .kb-global-areas-browser-wrap .kb-context-browser--header {
+    position: relative; }
+    /* line 125, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_contexts.scss */
+    .kb-global-areas-browser-wrap .kb-context-browser--header .close-browser {
+      position: absolute;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+      font-size: 12px;
+      color: #212121; }
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
 .kb-area__head {
@@ -4527,15 +4629,30 @@ h5.kb_properties_title {
   .kb-area__item-placeholder:hover {
     color: #333; }
 
-/* line 285, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
-.kb-dynamic-area-proxy.kb-area-status-inactive {
-  border-left: 3px solid #F44336; }
-/* line 289, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
-.kb-dynamic-area-proxy.kb-area-status-active {
-  border-left: 3px solid #009688; }
-/* line 293, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+/* line 284, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
 .kb-dynamic-area-proxy .kb-dynamic-area-proxy--inner {
-  padding: 0 24px; }
+  padding: 12px 24px;
+  position: relative; }
+  /* line 287, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+  .kb-dynamic-area-proxy .kb-dynamic-area-proxy--inner h4 {
+    margin: 0; }
+  /* line 291, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+  .kb-dynamic-area-proxy .kb-dynamic-area-proxy--inner h4 + p {
+    margin: 0; }
+  /* line 295, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+  .kb-dynamic-area-proxy .kb-dynamic-area-proxy--inner h4 span {
+    font-weight: 100;
+    font-size: 85%; }
+  /* line 300, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+  .kb-dynamic-area-proxy .kb-dynamic-area-proxy--inner .kb-button-small {
+    position: absolute;
+    right: 24px;
+    top: 12px; }
+
+/* line 310, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_areas/_area-styles.scss */
+.kb-area-move-handle {
+  cursor: move;
+  font-size: 23px; }
 
 /*------------------------------------*\
     ..for the area settings toggle

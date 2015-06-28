@@ -3,7 +3,7 @@ module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   initialize: function () {
     //this.listenToOnce(this, 'change:envVars', this.subscribeToArea);
-    this.listenTo(this, 'change:envVars', this.areaChanged);
+    this.listenTo(this, 'change:area', this.areaChanged);
     this.subscribeToArea();
   },
   destroy: function () {
@@ -12,12 +12,12 @@ module.exports = Backbone.Model.extend({
   },
   setArea: function (area) {
     this.setEnvVar('area', area.get('id'));
+    this.setEnvVar('areaContext', area.get('context'));
+    this.set('areaContext', area.get('context'));
     this.set('area', area.get('id'));
-    this.setEnvVar('areaContext', area.get('areaContext'));
-    this.set('areaContext', area.get('areaContext'));
     this.Area = area;
     this.subscribeToArea(area);
-    this.areaChanged();
+    //this.areaChanged();
   },
   areaChanged: function () {
     // @see backend::views:ModuleView.js

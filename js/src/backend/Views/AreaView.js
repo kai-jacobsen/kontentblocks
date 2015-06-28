@@ -4,6 +4,8 @@ var tplAreaAddModule = require('templates/backend/area-add-module.hbs');
 var ModuleBrowser = require('shared/ModuleBrowser/ModuleBrowserController');
 var AreaControls = require('backend/Views/AreaControls/AreaControlsView');
 var StatusControl = require('backend/Views/AreaControls/controls/StatusControl');
+var DetachControl = require('backend/Views/AreaControls/controls/DetachControl');
+var MoveControl = require('backend/Views/AreaControls/controls/MoveControl');
 module.exports = Backbone.View.extend({
   initialize: function () {
     this.attachedModuleViews = {};
@@ -22,7 +24,6 @@ module.exports = Backbone.View.extend({
       parent: this
     });
     this.setupDefaultMenuItems();
-
     this.render();
   },
   events: {
@@ -33,6 +34,10 @@ module.exports = Backbone.View.extend({
   render: function () {
     this.addControls();
     this.ui();
+  },
+  resetElement: function(){
+      this.setElement('#' + this.model.get('id') + '-container');
+      this.initialize();
   },
   addControls: function () {
     this.controlsContainer.append(tplAreaAddModule({i18n: KB.i18n}));
@@ -84,6 +89,8 @@ module.exports = Backbone.View.extend({
   },
   setupDefaultMenuItems: function(){
     this.AreaControls.addItem(new StatusControl({model: this.model, parent: this}));
+    this.AreaControls.addItem(new DetachControl({model: this.model, parent: this}));
+    this.AreaControls.addItem(new MoveControl({model: this.model, parent: this}));
   }
 
 });

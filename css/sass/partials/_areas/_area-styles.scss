@@ -281,17 +281,33 @@
 
 
 .kb-dynamic-area-proxy{
-
-  &.kb-area-status-inactive{
-    border-left: 3px solid $red;
-  }
-
-  &.kb-area-status-active{
-    border-left: 3px solid $green;
-  }
-
   .kb-dynamic-area-proxy--inner{
-    padding: 0 $fullpadding;
+    padding: $halfpadding $fullpadding;
+    position: relative;
+    h4{
+      margin: 0;
+    }
+
+    h4 + p{
+      margin: 0;
+    }
+
+    h4 span {
+      font-weight: 100;
+      font-size: 85%;
+    }
+
+    .kb-button-small{
+      position: absolute;
+      right: $fullpadding;
+      top: $halfpadding;
+    }
+
   }
 
+}
+
+.kb-area-move-handle{
+  cursor: move;
+  font-size: 23px;
 }

@@ -95,8 +95,13 @@
   padding: 3px 10px;
   color: #fff;
   background-color: $lightblue;
+  text-decoration: none;
+  transition: background .3s ease-out;
 
   &:hover{
-    background-color: $orange;
+    text-decoration: none;
+    color: #fff;
+    background-color: $lighterblue;
+
   }
 }

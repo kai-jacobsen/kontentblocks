@@ -7,10 +7,20 @@
   margin-bottom: 0px;
   border-bottom: 1px solid #eee;
   background: #fff;
+  overflow: hidden;
+  position: relative;
 
-  &.orange {
-    // border-left: 3px solid $orange;
+  .kb-button-small {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    cursor: pointer;
+    font-size: 11px;
+    height: 100%;
+    line-height: 35px;
+    padding: 0 10px;
   }
+
 }
 
 #poststuff .kb-context__header h2, #poststuff .kb-context__container h2 {
@@ -21,11 +31,105 @@
   font-weight: bold;
   font-size: 14px;
   line-height: 100%;
-//  text-shadow: 0px 1px 1px #fff;
+  //  text-shadow: 0px 1px 1px #fff;
 }
 
 .kb-context__header p.description {
   color: #aaa;
   font-size: 12px;
   display: none;
+}
+
+.kb-global-areas-backdrop {
+  background-color: rgba(255, 255, 255, 0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9995;
+}
+
+.kb-global-areas-browser-wrap {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 750px;
+  min-height: 300px;
+  z-index: 9998;
+  background-color: #fff;
+  border: 1px solid $grey-500;
+  padding: $halfpadding $fullpadding $fullpadding;
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding: 4px;
+      border-bottom: 1px solid $grey-500;
+      cursor: pointer;
+      transition: background .1s ease-out;
+      position: relative;
+
+      .kb-button-small {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+
+      &:hover {
+
+        h4, p, span, .dashicons {
+          color: #000;
+        }
+
+        .dashicons {
+          transform: rotate(180deg);
+          top: 10px;
+        }
+      }
+
+      h4 {
+        margin-bottom: 0;
+        margin-top: 0;
+        span {
+          font-weight: 100;
+        }
+      }
+
+      h4 + p {
+        margin-top: 0;
+        margin-bottom: 4px;
+      }
+
+      .dashicons {
+        position: relative;
+        top: 12px;
+        transition: all .3s ease-out;
+      }
+
+      .kb-global-area-item {
+        display: inline-block;
+        margin-left: 12px;
+      }
+    }
+  }
+
+  .kb-context-browser--header {
+    position: relative;
+
+    .close-browser {
+      position: absolute;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+      font-size: 12px;
+      color: $grey-900;
+    }
+  }
+
 }

@@ -87,8 +87,8 @@ class AjaxCallbackHandler
                 'getStaticPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\GetStaticPanelForm', 'run' ),
                 'saveOptionPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveOptionPanelForm', 'run' ),
                 'saveStaticPanelForm' => array( 'Kontentblocks\Ajax\Actions\Frontend\SaveStaticPanelForm', 'run' ),
-                'syncAreaSettings' => array( 'Kontentblocks\Ajax\Actions\SyncAreaSettings', 'run' )
-
+                'syncAreaSettings' => array( 'Kontentblocks\Ajax\Actions\SyncAreaSettings', 'run' ),
+                'getGlobalAreaHTML' => array( 'Kontentblocks\Ajax\Actions\GetGlobalAreaHTML', 'run' )
             )
         );
     }

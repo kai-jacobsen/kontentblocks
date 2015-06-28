@@ -6,18 +6,19 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
+use Kontentblocks\Areas\DynamicAreaBackendHTML;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class SyncAreaSettings
+ * Class GetGlobalAreaHTML
  * Runs when area status change
  * @author Kai Jacobsen
  * @package Kontentblocks\Ajax
  */
-class SyncAreaSettings implements AjaxActionInterface
+class GetGlobalAreaHTML implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
@@ -35,8 +36,21 @@ class SyncAreaSettings implements AjaxActionInterface
         $AreaSettings->import( Utilities::validateBoolRecursive( $settings ) );
         $update = $AreaSettings->save();
 
+        if ($AreaSettings->isAttached()) {
+
+            $HTML = new DynamicAreaBackendHTML( $Area, $Environment, $Area->context );
+            ob_start();
+            $HTML->build();
+            $html = ob_get_clean();
+        }
+
         if ($update) {
-            new AjaxSuccessResponse( 'Area Settings updated', $AreaSettings );
+            new AjaxSuccessResponse(
+                'Area Settings updated', array(
+                    'settings' => $AreaSettings,
+                    'html' => $html
+                )
+            );
         } else {
             new AjaxErrorResponse( 'Area Settings not updated', $AreaSettings );
         }

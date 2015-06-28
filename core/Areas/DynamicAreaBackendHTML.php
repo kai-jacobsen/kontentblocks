@@ -2,10 +2,8 @@
 
 namespace Kontentblocks\Areas;
 
-use Kontentblocks\Kontentblocks;
+use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Templating\CoreView;
-use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Utils\Utilities;
 
 /**
  * Area
@@ -28,9 +26,12 @@ class DynamicAreaBackendHTML extends AreaBackendHTML
 
         echo "<div class='kb-area--body'>";
 
+        $Storage = new ModuleStorage($this->Area->parent_id);
         $View = new CoreView(
             'edit-screen/dynamic-area-body.twig', array(
                 'area' => $this->Area,
+                'modulesCount' => count($Storage),
+                'editUrl' => html_entity_decode(get_edit_post_link($this->Area->parent_id)),
                 'active' => $this->Area->settings->get( 'active' ) ? 'active' : 'inactive'
             )
         );

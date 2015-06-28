@@ -9,23 +9,16 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
   },
   attributes: {
-    "data-tipsy": 'Switch area visibility on/off'
+    "data-tipsy": 'Detach area from this post'
   },
-  className: 'dashicons dashicons-visibility kb-area-status-action',
+  className: 'dashicons dashicons-no-alt',
   events: {
-    'click': 'changeStatus'
+    'click': 'detach'
   },
-  render: function () {
-    var settings = this.model.get('settings');
-    this.parent.$el.removeClass('kb-area-status-inactive');
-    if (!settings.active) {
-      this.parent.$el.addClass('kb-area-status-inactive');
-    }
-  },
-  changeStatus: function () {
+  detach: function () {
 
-    var settings = this.model.get('settings');
-    settings.active = !settings.active;
+    var settings = _.clone(this.model.get('settings'));
+    settings.attached = !settings.attached;
 
     Ajax.send({
       action: 'syncAreaSettings',
@@ -35,13 +28,14 @@ module.exports = BaseView.extend({
     }, this.success, this);
   },
   isValid: function () {
-    return true;
+    return this.model.get('dynamic');
   },
   success: function (res) {
     if (res.success) {
       this.model.set('settings', res.data);
-      this.render();
       Notice.notice('Area status updated', 'success');
+      jQuery('.tipsy').remove();
+      this.parent.$el.remove();
     } else {
       Notice.notice(res.message, 'error');
     }
