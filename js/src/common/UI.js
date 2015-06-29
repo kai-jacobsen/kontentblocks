@@ -362,7 +362,29 @@ var Ui = {
   initSortableAreas: function () {
     jQuery('.kb-context__inner').sortable({
       items: '.kb-area__wrap',
-      handle: '.kb-area-move-handle'
+      handle: '.kb-area-move-handle',
+      start: function (e, ui) {
+        TinyMCE.removeEditors();
+      },
+      stop: function (e, ui) {
+        var serData = jQuery('#post').serializeJSON();
+        var data = serData.kbcontext;
+
+        if (data) {
+          Ajax.send({
+            action: 'updateContextAreaOrder',
+            _ajax_nonce: Config.getNonce('update'),
+            data: data
+          }, function (res) {
+            if (res.success) {
+              Notice.notice(res.message, 'success');
+            } else {
+              Notice.notice(res.message, 'error');
+            }
+            TinyMCE.restoreEditors();
+          }, this);
+        }
+      }
     });
   },
   initTipsy: function () {
