@@ -103,6 +103,8 @@ class AreaProperties
     public $sortable;
 
     /**
+     * Lazy loaded on Environment instantiation
+     * based on the current postId
      * @var AreaSettingsModel
      */
     public $settings;

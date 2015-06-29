@@ -16,7 +16,6 @@ use Kontentblocks\Utils\Utilities;
  * Handles the connection Module > Area
  * @since 0.1.0
  * @package Kontentblocks/Areas
- * @author Kai Jacobsen
  */
 class AreaRegistry
 {

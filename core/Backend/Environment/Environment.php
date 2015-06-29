@@ -43,7 +43,7 @@ class Environment implements JsonSerializable
     protected $storageId;
 
     /**
-     * @var int
+     * @var \WP_Post
      */
     protected $postObj;
 
@@ -110,7 +110,7 @@ class Environment implements JsonSerializable
     }
 
     /**
-     * @return int|\WP_Post
+     * @return \WP_Post
      * @since 0.1.0
      */
     public function getPostObject()
@@ -410,9 +410,7 @@ class Environment implements JsonSerializable
         $areas = $this->findAreas();
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($areas as $area) {
-            if (!isset($area->settings)){
-                $area->set( 'settings', new AreaSettingsModel( $area, $this ) );
-            }
+            $area->set( 'settings', new AreaSettingsModel( $area, $this->postObj->ID ) );
         }
         return $areas;
 

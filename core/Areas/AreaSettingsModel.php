@@ -35,19 +35,25 @@ class AreaSettingsModel implements \JsonSerializable
 
     /**
      * Construct
+     *
+     * In case of dynamic areas the $Environment $postObj will relate to the current post
+     * while StorageId relates to the dynamic area post
+     * It's like "we are on post x but get the data from post y"
+     *
      * @param AreaProperties $Area
-     * @param Environment $Environment
+     * @param $postId
      */
-    public function __construct( AreaProperties $Area, Environment $Environment )
+    public function __construct( AreaProperties $Area, $postId )
     {
-        $this->postId = $Environment->getPostObject()->ID;
-        $this->DataProvider = $Environment->getDataProvider();
+        $this->postId = $postId;
+        $this->DataProvider = new DataProviderController( $postId );
         $this->Area = $Area;
         $this->setupSettings();
     }
 
     /**
      * Load post meta
+     * Settings are bound to single posts
      * @return $this
      */
     private function setupSettings()
@@ -78,8 +84,8 @@ class AreaSettingsModel implements \JsonSerializable
 
     public function import( $settings )
     {
-        foreach ($settings as $k => $v){
-            $this->set($k, $v);
+        foreach ($settings as $k => $v) {
+            $this->set( $k, $v );
         }
     }
 
@@ -109,6 +115,9 @@ class AreaSettingsModel implements \JsonSerializable
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function isAttached()
     {
         return $this->get( 'attached' );
@@ -131,6 +140,9 @@ class AreaSettingsModel implements \JsonSerializable
     }
 
 
+    /**
+     * @return mixed
+     */
     public function isActive()
     {
         return $this->get( 'active' );
@@ -163,6 +175,11 @@ class AreaSettingsModel implements \JsonSerializable
         }
         $meta[$this->Area->id] = $this->settings;
         return $this->DataProvider->update( $this->key, $meta );
+    }
+
+    public function getPostId()
+    {
+        return $this->postId;
     }
 
     /**
