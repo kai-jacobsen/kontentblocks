@@ -16,6 +16,7 @@ var Config = require('common/Config');
 var Ajax = require('common/Ajax');
 var TinyMCE = require('common/TinyMCE');
 var Notice = require('common/Notice');
+var ContextRowGrid = require('backend/Views/ContextRowGrid');
 var Ui = {
   // sorting indication
   isSorting: false,
@@ -65,51 +66,12 @@ var Ui = {
   },
 
   flexContext: function () {
-    var side = $('.area-side');
-    var normal = $('.area-normal');
-    var stage = $('#kontentblocks-core-ui');
-    var that = this;
-
-    jQuery('body').on('mouseover', '.kb_module--body', function () {
-      var $con = $(this).closest('.kb-context-container');
-      $con.addClass('active-context').removeClass('non-active-context');
-
-      if ($con.hasClass('area-top') || $con.hasClass('area-bottom')) {
-        return false;
-      }
-
-      $('.kb-context-container').not($con).addClass('non-active-context').removeClass('active-context');
+    jQuery('.kb-context-row').each(function(index, el){
+      var $el = jQuery(el);
+      $el.data('KB.ContextRow', new ContextRowGrid({
+        el: el
+      }));
     });
-
-    side.on('click', '.kb-toggle', function () {
-      if (that.isSorting) {
-        return false;
-      }
-      side.addClass('active-context').removeClass('non-active-context');
-      normal.addClass('non-active-context');
-    });
-
-    side.on('mouseenter', '.kb-open .kb-module__controls-inner', function () {
-      if (side.hasClass('non-active-context')) {
-        side.addClass('active-context').removeClass('non-active-context');
-        normal.addClass('non-active-context').removeClass('active-context');
-      }
-    });
-
-    normal.on('mouseenter', '.kb-open .kb-module__controls-inner', function () {
-      if (normal.hasClass('non-active-context')) {
-        normal.addClass('active-context').removeClass('non-active-context');
-        side.addClass('non-active-context').removeClass('active-context');
-      }
-    });
-
-    normal.on('click', '.kb-toggle', function () {
-      if (that.isSorting) {
-        return false;
-      }
-      side.delay(700).removeClass('active-context').addClass('non-active-context');
-      normal.delay(700).removeClass('non-active-context').addClass('active-context');
-    })
   },
   repaint: function ($el) {
     this.initTabs();
@@ -346,7 +308,6 @@ var Ui = {
     moduleModel.setArea(newArea);
   },
   toggleModule: function () {
-
     $('body').on('click', '.kb-toggle', function () {
       if (KB.isLocked() && !KB.userCan('lock_kontentblocks')) {
         Notice.notice(kontentblocks.l18n.gen_no_permission, 'alert');
@@ -419,5 +380,4 @@ var Ui = {
     }
   }
 };
-Ui.init();
 module.exports = Ui;

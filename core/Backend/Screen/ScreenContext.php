@@ -93,6 +93,7 @@ class ScreenContext
      */
     public function render()
     {
+
         if (!empty( $this->areas )) {
             // print outer wrapper markup
             $this->openContext();
@@ -115,7 +116,7 @@ class ScreenContext
     {
         $side = $this->editScreenHasSidebar ? 'has-sidebar' : 'no-sidebar';
 
-        echo "<div id='context_{$this->id}' class='area-{$this->id} kb-context-container {$side}'>
+        echo "<div id='context_{$this->id}' data-kbcontext='{$this->id}' class='area-{$this->id} kb-context-container {$side}'>
                     <div class='kb-context__inner'>
                     <div class='kb-context__header'>
                         <h2>{$this->title}</h2>
@@ -204,5 +205,8 @@ class ScreenContext
         return $Area;
     }
 
+    public function hasAreas(){
+        return !empty($this->areas);
+    }
 
 }

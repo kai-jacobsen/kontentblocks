@@ -1,4 +1,6 @@
 //@import "compass/css3";
+
+@import "partials/_common/_grid";
 @import "partials/_base";
 @import "partials/_common/utilities";
 
@@ -532,17 +534,17 @@ textarea.quicktags {
 
 /* Responsive Admin Layout */
 @media screen and (max-width: 1399px) {
-  .area-normal.has-sidebar {
-    float: left;
-    min-width: 0;
-    width: 100%;
-  }
-
-  .area-side {
-    min-width: 0;
-    float: left;
-    width: 100%;
-  }
+//  .area-normal.has-sidebar {
+//    float: left;
+//    min-width: 0;
+//    width: 100%;
+//  }
+//
+//  .area-side {
+//    min-width: 0;
+//    float: left;
+//    width: 100%;
+//  }
   //    .area-side .kb-open {
   //        width: auto;
   //        margin-left: 0;
@@ -552,40 +554,40 @@ textarea.quicktags {
 }
 
 @media screen and (min-width: 1400px) {
-  .area-normal.has-sidebar {
-    float: left;
-    min-width: 0;
-    width: 65%;
+//  .area-normal.has-sidebar {
+//    float: left;
+//    min-width: 0;
+//    width: 65%;
+//
+//    &.non-active-context {
+//      width: 33%;
+//
+//      .kb-sub-name {
+//        display: none;
+//      }
+//
+//    }
+//  }
 
-    &.non-active-context {
-      width: 33%;
-
-      .kb-sub-name {
-        display: none;
-      }
-
-    }
-  }
-
-  .area-side {
-    min-width: 0;
-    float: right;
-    width: 33%;
-
-    &.active-context {
-      width: 65%;
-    }
-
-    &.no-sidebar{
-      width: 100%;
-      float: none;
-
-      &.active-context{
-        width: 100%;
-      }
-    }
-
-  }
+//  .area-side {
+//    min-width: 0;
+//    float: right;
+//    width: 33%;
+//
+//    &.active-context {
+//      width: 65%;
+//    }
+//
+//    &.no-sidebar{
+//      width: 100%;
+//      float: none;
+//
+//      &.active-context{
+//        width: 100%;
+//      }
+//    }
+//
+//  }
   //    .area-side .kb-open {
   //        width: 750px;
   //        margin-left: 0;

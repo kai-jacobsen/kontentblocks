@@ -136,15 +136,19 @@ module.exports = function (grunt) {
         livereload: true
       },
       backend: {
-        files: ['js/src/backend/**/*.js', 'js/src/shared/**/*.js','js/src/common/**/*.js', 'js/**/*.hbs'],
+        files: ['js/src/backend/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsbackend']
       },
       frontend: {
-        files: ['js/src/frontend/**/*.js', 'js/src/shared/**/*.js','js/src/common/**/*.js', 'js/**/*.hbs'],
+        files: ['js/src/frontend/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsfrontend']
       },
+      common:{
+        files: ['js/src/common/**/*.js'],
+        tasks: ['jsbackend']
+      },
       refields: {
-        files: ['js/src/fields/**/*.js', 'js/src/shared/**/*.js','js/src/common/**/*.js', 'js/**/*.hbs'],
+        files: ['js/src/fields/**/*.js', 'js/src/shared/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsrefields', 'jsbackend', 'jsfrontend']
       },
       plugins: {

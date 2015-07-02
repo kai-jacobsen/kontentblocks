@@ -81,9 +81,10 @@ Class EditScreen
             $hasAreas = false;
         }
 
+        $ScreenManager = new ScreenManager( $areas, $Environment );
         $View = new CoreView(
             '/edit-screen/user-interface.twig', array(
-                'ScreenManager' => new ScreenManager( $areas, $Environment ),
+                'ScreenManager' => $ScreenManager,
                 'hasAreas' => $hasAreas,
                 'noAreas' => $this->handleEmptyAreas(),
                 'blogId' => get_current_blog_id(),

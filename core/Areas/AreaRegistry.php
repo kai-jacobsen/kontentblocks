@@ -3,6 +3,7 @@
 namespace Kontentblocks\Areas;
 
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Screen\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\_K;
@@ -326,7 +327,7 @@ class AreaRegistry
         } else if (!empty( $setting ) and is_array( $setting )) {
             foreach ($setting as $id) {
                 // check for context
-                if (in_array( $id, array( 'top', 'normal', 'side', 'bottom' ) )) {
+                if (in_array( $id, array_keys(ScreenManager::getDefaultContextLayout()) )) {
                     foreach ($this->getAreasByContext( $id ) as $connection) {
                         $args['settings']['connect'] = array( $connection->id );
                         $this->connect( $classname, $args );

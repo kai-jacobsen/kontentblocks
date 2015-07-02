@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-06-29 */
+/*! Kontentblocks DevVersion 2015-07-02 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -24,6 +24,69 @@
     return s;
 })({
     1: [ function(require, module, exports) {
+        var tplContextBar = require("templates/backend/context-bar.hbs");
+        module.exports = Backbone.View.extend({
+            initialize: function() {
+                this.views = this.getContextsViews();
+                this.layoutBackup = this.createLayoutBackup();
+                this.length = _.toArray(this.views).length;
+                this.render();
+            },
+            events: {
+                dblclick: "resetLayout"
+            },
+            render: function() {
+                this.$el.prepend(tplContextBar({}));
+                this.$list = this.$(".kb-context-bar--actions");
+            },
+            getContextsViews: function() {
+                var coll = {};
+                var that = this;
+                var $wraps = this.$(".kb-context-container");
+                _.each($wraps, function(el, index) {
+                    var context = el.dataset.kbcontext;
+                    var Model = KB.Contexts.get(context);
+                    coll[Model.View.cid] = Model.View;
+                    Model.View.rowIndex = index;
+                    that.listenTo(Model.View, "context.activated", that.evalLayout);
+                });
+                return coll;
+            },
+            createLayoutBackup: function() {
+                var coll = {};
+                _.each(this.views, function(con, i) {
+                    coll[i] = con.$el.attr("class");
+                });
+                return coll;
+            },
+            resetLayout: function() {
+                var that = this;
+                _.each(this.views, function(con) {
+                    con.$el.attr("class", that.layoutBackup[con.cid]);
+                    con.$el.parent().width("");
+                });
+            },
+            evalLayout: function(View) {
+                var index = View.rowIndex;
+                var that = this;
+                var w = this.$el.width() - this.length * 20;
+                console.log(w * .1 + w * .1 + w * .8);
+                console.log(w);
+                _.each(this.views, function(con) {
+                    if (con.cid === View.cid) {
+                        con.$el.parent().width(Math.floor(w * .8));
+                        con.$el.parent().removeClass("kb-context-downsized");
+                    } else {
+                        con.$el.parent().width(Math.floor(w * .1));
+                        con.$el.parent().addClass("kb-context-downsized");
+                    }
+                });
+            }
+        });
+    }, {
+        "templates/backend/context-bar.hbs": 27
+    } ],
+    2: [ function(require, module, exports) {
         var Notice = require("common/Notice");
         module.exports = {
             send: function(data, callback, scope, options) {
@@ -65,9 +128,9 @@
             }
         };
     }, {
-        "common/Notice": 4
+        "common/Notice": 5
     } ],
-    2: [ function(require, module, exports) {
+    3: [ function(require, module, exports) {
         var Config = function($) {
             var config = KB.appData.config;
             return {
@@ -105,7 +168,7 @@
         }(jQuery);
         module.exports = Config;
     }, {} ],
-    3: [ function(require, module, exports) {
+    4: [ function(require, module, exports) {
         var Config = require("common/Config");
         if (Function.prototype.bind && window.console && typeof console.log == "object") {
             [ "log", "info", "warn", "error", "assert", "dir", "clear", "profile", "profileEnd" ].forEach(function(method) {
@@ -146,9 +209,9 @@
             User: _KS
         };
     }, {
-        "common/Config": 2
+        "common/Config": 3
     } ],
-    4: [ function(require, module, exports) {
+    5: [ function(require, module, exports) {
         "use strict";
         module.exports = {
             notice: function(msg, type, delay) {
@@ -165,7 +228,7 @@
             }
         };
     }, {} ],
-    5: [ function(require, module, exports) {
+    6: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var Templates = function() {
@@ -232,10 +295,10 @@
         }();
         module.exports = Templates;
     }, {
-        "common/Config": 2,
-        "common/Utilities": 8
+        "common/Config": 3,
+        "common/Utilities": 9
     } ],
-    6: [ function(require, module, exports) {
+    7: [ function(require, module, exports) {
         var Ajax = require("common/Ajax");
         var Logger = require("common/Logger");
         var Config = require("common/Config");
@@ -350,16 +413,17 @@
             }
         };
     }, {
-        "common/Ajax": 1,
-        "common/Config": 2,
-        "common/Logger": 3
+        "common/Ajax": 2,
+        "common/Config": 3,
+        "common/Logger": 4
     } ],
-    7: [ function(require, module, exports) {
+    8: [ function(require, module, exports) {
         var $ = jQuery;
         var Config = require("common/Config");
         var Ajax = require("common/Ajax");
         var TinyMCE = require("common/TinyMCE");
         var Notice = require("common/Notice");
+        var ContextRowGrid = require("backend/Views/ContextRowGrid");
         var Ui = {
             isSorting: false,
             init: function() {
@@ -372,6 +436,7 @@
                 this.flexContext();
                 this.flushLocalStorage();
                 this.initTipsy();
+                console.trace();
                 $body.on("mousedown", ".kb_field", function(e) {
                     activeField = this;
                 });
@@ -392,43 +457,11 @@
                 });
             },
             flexContext: function() {
-                var side = $(".area-side");
-                var normal = $(".area-normal");
-                var stage = $("#kontentblocks-core-ui");
-                var that = this;
-                jQuery("body").on("mouseover", ".kb_module--body", function() {
-                    var $con = $(this).closest(".kb-context-container");
-                    $con.addClass("active-context").removeClass("non-active-context");
-                    if ($con.hasClass("area-top") || $con.hasClass("area-bottom")) {
-                        return false;
-                    }
-                    $(".kb-context-container").not($con).addClass("non-active-context").removeClass("active-context");
-                });
-                side.on("click", ".kb-toggle", function() {
-                    if (that.isSorting) {
-                        return false;
-                    }
-                    side.addClass("active-context").removeClass("non-active-context");
-                    normal.addClass("non-active-context");
-                });
-                side.on("mouseenter", ".kb-open .kb-module__controls-inner", function() {
-                    if (side.hasClass("non-active-context")) {
-                        side.addClass("active-context").removeClass("non-active-context");
-                        normal.addClass("non-active-context").removeClass("active-context");
-                    }
-                });
-                normal.on("mouseenter", ".kb-open .kb-module__controls-inner", function() {
-                    if (normal.hasClass("non-active-context")) {
-                        normal.addClass("active-context").removeClass("non-active-context");
-                        side.addClass("non-active-context").removeClass("active-context");
-                    }
-                });
-                normal.on("click", ".kb-toggle", function() {
-                    if (that.isSorting) {
-                        return false;
-                    }
-                    side.delay(700).removeClass("active-context").addClass("non-active-context");
-                    normal.delay(700).removeClass("non-active-context").addClass("active-context");
+                jQuery(".kb-context-row").each(function(index, el) {
+                    var $el = jQuery(el);
+                    $el.data("KB.ContextRow", new ContextRowGrid({
+                        el: el
+                    }));
                 });
             },
             repaint: function($el) {
@@ -657,15 +690,15 @@
                 }
             }
         };
-        Ui.init();
         module.exports = Ui;
     }, {
-        "common/Ajax": 1,
-        "common/Config": 2,
-        "common/Notice": 4,
-        "common/TinyMCE": 6
+        "backend/Views/ContextRowGrid": 1,
+        "common/Ajax": 2,
+        "common/Config": 3,
+        "common/Notice": 5,
+        "common/TinyMCE": 7
     } ],
-    8: [ function(require, module, exports) {
+    9: [ function(require, module, exports) {
         var Utilities = function($) {
             return {
                 stex: {
@@ -716,14 +749,14 @@
         }(jQuery);
         module.exports = Utilities;
     }, {} ],
-    9: [ function(require, module, exports) {
+    10: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             rerender: function() {
                 this.render();
             }
         });
     }, {} ],
-    10: [ function(require, module, exports) {
+    11: [ function(require, module, exports) {
         var Fields = {};
         _.extend(Fields, Backbone.Events);
         _.extend(Fields, {
@@ -769,7 +802,7 @@
         Fields.addEvent();
         module.exports = Fields;
     }, {} ],
-    11: [ function(require, module, exports) {
+    12: [ function(require, module, exports) {
         KB.Fields = require("./Fields");
         require("./controls/color.js");
         require("./controls/date.js");
@@ -781,18 +814,18 @@
         require("./controls/link.js");
         require("./controls/textarea.js");
     }, {
-        "./Fields": 10,
-        "./controls/color.js": 12,
-        "./controls/date.js": 13,
-        "./controls/datetime.js": 14,
-        "./controls/file.js": 15,
-        "./controls/flexfields.js": 16,
-        "./controls/gallery.js": 20,
-        "./controls/image.js": 23,
-        "./controls/link.js": 24,
-        "./controls/textarea.js": 25
+        "./Fields": 11,
+        "./controls/color.js": 13,
+        "./controls/date.js": 14,
+        "./controls/datetime.js": 15,
+        "./controls/file.js": 16,
+        "./controls/flexfields.js": 17,
+        "./controls/gallery.js": 21,
+        "./controls/image.js": 24,
+        "./controls/link.js": 25,
+        "./controls/textarea.js": 26
     } ],
-    12: [ function(require, module, exports) {
+    13: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("color", BaseView.extend({
             initialize: function() {
@@ -818,9 +851,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9
+        "../FieldBaseView": 10
     } ],
-    13: [ function(require, module, exports) {
+    14: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("date", BaseView.extend({
             initialize: function() {
@@ -844,9 +877,9 @@
             derender: function() {}
         }));
     }, {
-        "../FieldBaseView": 9
+        "../FieldBaseView": 10
     } ],
-    14: [ function(require, module, exports) {
+    15: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("datetime", BaseView.extend({
             initialize: function() {
@@ -875,9 +908,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9
+        "../FieldBaseView": 10
     } ],
-    15: [ function(require, module, exports) {
+    16: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("file", BaseView.extend({
             initialize: function() {
@@ -946,9 +979,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9
+        "../FieldBaseView": 10
     } ],
-    16: [ function(require, module, exports) {
+    17: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         var FlexfieldController = require("fields/controls/flexfields/FlexfieldsController");
         KB.Fields.registerObject("flexfields", BaseView.extend({
@@ -979,10 +1012,10 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9,
-        "fields/controls/flexfields/FlexfieldsController": 17
+        "../FieldBaseView": 10,
+        "fields/controls/flexfields/FlexfieldsController": 18
     } ],
-    17: [ function(require, module, exports) {
+    18: [ function(require, module, exports) {
         var ToggleBoxRenderer = require("fields/controls/flexfields/ToggleBoxRenderer");
         var SectionBoxRenderer = require("fields/controls/flexfields/SectionBoxRenderer");
         var TinyMCE = require("common/TinyMCE");
@@ -1090,13 +1123,13 @@
             }
         });
     }, {
-        "common/Logger": 3,
-        "common/TinyMCE": 6,
-        "common/UI": 7,
-        "fields/controls/flexfields/SectionBoxRenderer": 18,
-        "fields/controls/flexfields/ToggleBoxRenderer": 19
+        "common/Logger": 4,
+        "common/TinyMCE": 7,
+        "common/UI": 8,
+        "fields/controls/flexfields/SectionBoxRenderer": 19,
+        "fields/controls/flexfields/ToggleBoxRenderer": 20
     } ],
-    18: [ function(require, module, exports) {
+    19: [ function(require, module, exports) {
         var ToggleBoxRenderer = require("fields/controls/flexfields/ToggleBoxRenderer");
         var tplSingleSectionBox = require("templates/fields/FlexibleFields/single-section-box.hbs");
         module.exports = ToggleBoxRenderer.extend({
@@ -1131,10 +1164,10 @@
             }
         });
     }, {
-        "fields/controls/flexfields/ToggleBoxRenderer": 19,
-        "templates/fields/FlexibleFields/single-section-box.hbs": 26
+        "fields/controls/flexfields/ToggleBoxRenderer": 20,
+        "templates/fields/FlexibleFields/single-section-box.hbs": 28
     } ],
-    19: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
         var Notice = require("common/Notice");
         var tplSingleToggleBox = require("templates/fields/FlexibleFields/single-toggle-box.hbs");
         module.exports = Backbone.View.extend({
@@ -1232,10 +1265,10 @@
             }
         });
     }, {
-        "common/Notice": 4,
-        "templates/fields/FlexibleFields/single-toggle-box.hbs": 27
+        "common/Notice": 5,
+        "templates/fields/FlexibleFields/single-toggle-box.hbs": 29
     } ],
-    20: [ function(require, module, exports) {
+    21: [ function(require, module, exports) {
         var BaseView = require("fields/FieldBaseView");
         var GalleryController = require("./gallery/GalleryController");
         KB.Fields.registerObject("gallery", BaseView.extend({
@@ -1265,10 +1298,10 @@
             }
         }));
     }, {
-        "./gallery/GalleryController": 21,
-        "fields/FieldBaseView": 9
+        "./gallery/GalleryController": 22,
+        "fields/FieldBaseView": 10
     } ],
-    21: [ function(require, module, exports) {
+    22: [ function(require, module, exports) {
         var Logger = require("common/Logger");
         var ImageView = require("./ImageView");
         module.exports = Backbone.View.extend({
@@ -1379,10 +1412,10 @@
             }
         });
     }, {
-        "./ImageView": 22,
-        "common/Logger": 3
+        "./ImageView": 23,
+        "common/Logger": 4
     } ],
-    22: [ function(require, module, exports) {
+    23: [ function(require, module, exports) {
         var TinyMCE = require("common/TinyMCE");
         var UI = require("common/UI");
         var Templates = require("common/Templates");
@@ -1480,11 +1513,11 @@
             }
         });
     }, {
-        "common/Templates": 5,
-        "common/TinyMCE": 6,
-        "common/UI": 7
+        "common/Templates": 6,
+        "common/TinyMCE": 7,
+        "common/UI": 8
     } ],
-    23: [ function(require, module, exports) {
+    24: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         var Utilities = require("common/Utilities");
         var Config = require("common/Config");
@@ -1611,11 +1644,11 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9,
-        "common/Config": 2,
-        "common/Utilities": 8
+        "../FieldBaseView": 10,
+        "common/Config": 3,
+        "common/Utilities": 9
     } ],
-    24: [ function(require, module, exports) {
+    25: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("link", BaseView.extend({
             initialize: function() {
@@ -1659,9 +1692,9 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9
+        "../FieldBaseView": 10
     } ],
-    25: [ function(require, module, exports) {
+    26: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("textarea", BaseView.extend({
             initialize: function() {
@@ -1680,9 +1713,21 @@
             }
         }));
     }, {
-        "../FieldBaseView": 9
+        "../FieldBaseView": 10
     } ],
-    26: [ function(require, module, exports) {
+    27: [ function(require, module, exports) {
+        var HandlebarsCompiler = require("hbsfy/runtime");
+        module.exports = HandlebarsCompiler.template({
+            compiler: [ 6, ">= 2.0.0-beta.1" ],
+            main: function(depth0, helpers, partials, data) {
+                return '<div class="kb-context-bar grid__col grid__col--12-of-12">\n    <ul class="kb-context-bar--actions">\n\n    </ul>\n</div>';
+            },
+            useData: true
+        });
+    }, {
+        "hbsfy/runtime": 38
+    } ],
+    28: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -1708,9 +1753,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 36
+        "hbsfy/runtime": 38
     } ],
-    27: [ function(require, module, exports) {
+    29: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -1736,9 +1781,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 36
+        "hbsfy/runtime": 38
     } ],
-    28: [ function(require, module, exports) {
+    30: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -1778,14 +1823,14 @@
         exports["default"] = inst;
         module.exports = exports["default"];
     }, {
-        "./handlebars/base": 29,
-        "./handlebars/exception": 30,
-        "./handlebars/no-conflict": 31,
-        "./handlebars/runtime": 32,
-        "./handlebars/safe-string": 33,
-        "./handlebars/utils": 34
+        "./handlebars/base": 31,
+        "./handlebars/exception": 32,
+        "./handlebars/no-conflict": 33,
+        "./handlebars/runtime": 34,
+        "./handlebars/safe-string": 35,
+        "./handlebars/utils": 36
     } ],
-    29: [ function(require, module, exports) {
+    31: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -2009,10 +2054,10 @@
             return frame;
         }
     }, {
-        "./exception": 30,
-        "./utils": 34
+        "./exception": 32,
+        "./utils": 36
     } ],
-    30: [ function(require, module, exports) {
+    32: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         var errorProps = [ "description", "fileName", "lineNumber", "message", "name", "number", "stack" ];
@@ -2039,7 +2084,7 @@
         exports["default"] = Exception;
         module.exports = exports["default"];
     }, {} ],
-    31: [ function(require, module, exports) {
+    33: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports["default"] = function(Handlebars) {
@@ -2052,7 +2097,7 @@
         };
         module.exports = exports["default"];
     }, {} ],
-    32: [ function(require, module, exports) {
+    34: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -2239,11 +2284,11 @@
             return data;
         }
     }, {
-        "./base": 29,
-        "./exception": 30,
-        "./utils": 34
+        "./base": 31,
+        "./exception": 32,
+        "./utils": 36
     } ],
-    33: [ function(require, module, exports) {
+    35: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         function SafeString(string) {
@@ -2255,7 +2300,7 @@
         exports["default"] = SafeString;
         module.exports = exports["default"];
     }, {} ],
-    34: [ function(require, module, exports) {
+    36: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports.extend = extend;
@@ -2343,14 +2388,14 @@
             return (contextPath ? contextPath + "." : "") + id;
         }
     }, {} ],
-    35: [ function(require, module, exports) {
+    37: [ function(require, module, exports) {
         module.exports = require("./dist/cjs/handlebars.runtime")["default"];
     }, {
-        "./dist/cjs/handlebars.runtime": 28
+        "./dist/cjs/handlebars.runtime": 30
     } ],
-    36: [ function(require, module, exports) {
+    38: [ function(require, module, exports) {
         module.exports = require("handlebars/runtime")["default"];
     }, {
-        "handlebars/runtime": 35
+        "handlebars/runtime": 37
     } ]
-}, {}, [ 11 ]);
+}, {}, [ 12 ]);

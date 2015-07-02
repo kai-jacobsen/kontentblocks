@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\Screen;
 
 use Exception;
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Templating\CoreView;
 
 class ScreenManager
 {
@@ -80,14 +81,19 @@ class ScreenManager
 
         foreach ($this->contextLayout as $args) {
             // delegate the actual output to ScreenContext
-            $context = new ScreenContext(
+            $this->ContextRenderer[$args['id']] = $context = new ScreenContext(
                 $args,
                 $this->getContextAreas( $args['id'] ),
                 $this->Environment,
                 $this->hasSidebar()
             );
-            $context->render();
+//            $context->render();
         }
+
+        $View = new CoreView('edit-screen/default-ui.twig',array(
+            'contexts' => $this->ContextRenderer
+        ));
+        $View->render(true);
 
     }
 
@@ -109,7 +115,7 @@ class ScreenManager
 
         foreach ($this->areas as $area) {
 //            if (!$area->dynamic || ( $area->dynamic && $area->settings->isAttached() )) {
-                $areas[$area->context][$area->id] = $area;
+            $areas[$area->context][$area->id] = $area;
 //            }
         }
 
@@ -195,6 +201,11 @@ class ScreenManager
                 'id' => 'side',
                 'title' => __( 'Sidebar', 'kontentblocks' ),
                 'description' => apply_filters( 'kb_context_description_side', '' )
+            ),
+            'side2' => array(
+                'id' => 'side2',
+                'title' => __( 'Sidebar 2', 'kontentblocks' ),
+                'description' => apply_filters( 'kb_context_description_side2', '' )
             ),
             'bottom' => array(
                 'id' => 'bottom',

@@ -1,7 +1,6 @@
 var tplFullscreenInner = require('templates/backend/fullscreen-inner.hbs');
 var TinyMCE = require('common/TinyMCE');
 module.exports = Backbone.View.extend({
-
   className: 'kb-fullscreen--holder',
   initialize: function () {
     this.$parent = this.model.View.$el;
@@ -31,7 +30,10 @@ module.exports = Backbone.View.extend({
     this.$body.detach().appendTo(this.$parent);
     this.$backdrop.remove();
     this.$fswrap.remove();
-    TinyMCE.restoreEditors();
+    this.$el.detach();
+    setTimeout(function(){
+      TinyMCE.restoreEditors();
+    }, 250);
 
   }
 });
