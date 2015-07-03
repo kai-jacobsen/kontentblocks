@@ -54,8 +54,8 @@ $DE-col-groups: (2, 3, 4, 5, 6, 8, 12) !default;
 $DE-gutter-width: 20px !default;
 
 // Breakpoints
-$DE-breakpoint-medium: 700px !default;
-$DE-breakpoint-small: 480px !default;
+$DE-breakpoint-medium: 1500px !default;
+$DE-breakpoint-small: 768px !default;
 
 .#{$DE-grid-namespace} {
   list-style: none;

@@ -11,9 +11,9 @@ module.exports = Backbone.View.extend({
     this.cols = _.toArray(this.columns).length;
     this.render();
 
-    //jQuery(window).resize(function () {
-    //  that.renderLayout();
-    //})
+    jQuery(window).resize(function () {
+      that.resetLayout();
+    })
   },
   setupColumns: function () {
     var that = this;
@@ -28,14 +28,14 @@ module.exports = Backbone.View.extend({
     });
   },
   render: function () {
-    if (this.cols > 2) {
+    //if (this.cols > 2) {
       var $bar = jQuery(tplContextBar({}));
       this.$el.before($bar);
       this.BarView = new ContextUiView({
         el: $bar
       });
       this.setupMenuItems();
-    }
+    //}
   },
   setupMenuItems: function () {
     var that = this;
@@ -65,6 +65,10 @@ module.exports = Backbone.View.extend({
     var that = this;
     var w = this.$el.width() - ((this.cols) * 20);
     var pro = this.findProportion(this.cols);
+
+    if ( w < 1100){
+      return false;
+    }
 
     _.each(this.columns, function (con) {
       if (con.cid === View.cid) {

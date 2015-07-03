@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-02 */
+/*! Kontentblocks DevVersion 2015-07-03 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -645,6 +645,9 @@
                 this.layoutBackup = this.createLayoutBackup();
                 this.cols = _.toArray(this.columns).length;
                 this.render();
+                jQuery(window).resize(function() {
+                    that.resetLayout();
+                });
             },
             setupColumns: function() {
                 var that = this;
@@ -659,14 +662,12 @@
                 });
             },
             render: function() {
-                if (this.cols > 2) {
-                    var $bar = jQuery(tplContextBar({}));
-                    this.$el.before($bar);
-                    this.BarView = new ContextUiView({
-                        el: $bar
-                    });
-                    this.setupMenuItems();
-                }
+                var $bar = jQuery(tplContextBar({}));
+                this.$el.before($bar);
+                this.BarView = new ContextUiView({
+                    el: $bar
+                });
+                this.setupMenuItems();
             },
             setupMenuItems: function() {
                 var that = this;
@@ -703,6 +704,9 @@
                 var that = this;
                 var w = this.$el.width() - this.cols * 20;
                 var pro = this.findProportion(this.cols);
+                if (w < 1100) {
+                    return false;
+                }
                 _.each(this.columns, function(con) {
                     if (con.cid === View.cid) {
                         con.$el.width(Math.floor(w * pro.large));
@@ -959,7 +963,8 @@
                 TinyMCE.removeEditors();
                 this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo("body");
                 this.$fswrap = jQuery(tplFullscreenInner()).appendTo(this.$el);
-                this.$fswrap.width(jQuery(window).width() * .8);
+                this.$el.width(jQuery(window).width() * .8);
+                jQuery("#wpwrap").addClass("module-browser-open");
                 this.$body.detach().appendTo(this.$fswrap.find(".kb-fullscreen--inner")).show().addClass("kb-module--fullscreen");
                 jQuery(window).resize(function() {
                     that.$fswrap.width(jQuery(window).width() * .8);
@@ -969,6 +974,7 @@
             },
             close: function() {
                 TinyMCE.removeEditors();
+                jQuery("#wpwrap").removeClass("module-browser-open");
                 this.$body.detach().appendTo(this.$parent);
                 this.$backdrop.remove();
                 this.$fswrap.remove();
@@ -3053,7 +3059,7 @@
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
-                return '<div class="kb-fullscreen--holder">\n    <ul class="kb-fullscreen--controls">\n       <li class="kb-fullscreen-js-close"><span class="dashicons dashicons-no-alt"></span></li>\n    </ul>\n    <div class="kb-fullscreen--inner">\n\n    </div>\n</div>';
+                return '<div class="kb-fullscreen--holder-wrap">\n    <ul class="kb-fullscreen--controls">\n       <li class="kb-fullscreen-js-close"><span class="dashicons dashicons-no-alt"></span></li>\n    </ul>\n    <div class="kb-fullscreen--inner">\n\n    </div>\n</div>';
             },
             useData: true
         });

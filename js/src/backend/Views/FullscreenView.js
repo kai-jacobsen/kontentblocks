@@ -16,7 +16,8 @@ module.exports = Backbone.View.extend({
     TinyMCE.removeEditors();
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
     this.$fswrap = jQuery(tplFullscreenInner()).appendTo(this.$el);
-    this.$fswrap.width(jQuery(window).width() * 0.8);
+    this.$el.width(jQuery(window).width() * 0.8);
+    jQuery('#wpwrap').addClass('module-browser-open');
     this.$body.detach().appendTo(this.$fswrap.find('.kb-fullscreen--inner')).show().addClass('kb-module--fullscreen');
     jQuery(window).resize(function () {
       that.$fswrap.width(jQuery(window).width() * 0.8);
@@ -27,6 +28,7 @@ module.exports = Backbone.View.extend({
   },
   close: function () {
     TinyMCE.removeEditors();
+    jQuery('#wpwrap').removeClass('module-browser-open');
     this.$body.detach().appendTo(this.$parent);
     this.$backdrop.remove();
     this.$fswrap.remove();
@@ -34,6 +36,5 @@ module.exports = Backbone.View.extend({
     setTimeout(function(){
       TinyMCE.restoreEditors();
     }, 250);
-
   }
 });
