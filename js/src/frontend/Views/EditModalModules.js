@@ -287,7 +287,6 @@ module.exports = Backbone.View.extend({
         Ui.initToggleBoxes();
         TinyMCE.addEditor(that.$form);
         // -----------------------------------------------
-
         Logger.User.info('Frontend modal done.');
 
         that.$title.text(that.model.get('settings').name);

@@ -36,7 +36,7 @@ var EditableText = Backbone.View.extend({
       fixed_toolbar_container: '#kb-toolbar',
       schema: 'html5',
       inline: true,
-      plugins: 'textcolor, wplink',
+      plugins: 'textcolor',
       statusbar: false,
       preview_styles: false,
 

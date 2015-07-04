@@ -29,6 +29,7 @@ module.exports = Backbone.View.extend({
     if (view.el) { // make sure the area is present in the DOM
       this.Areas.add(view.model);
     }
+
   },
   attachModuleView: function (view) {
     var AreaView = this.AreaViews[view.model.get('area')];

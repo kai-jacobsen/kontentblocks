@@ -653,13 +653,13 @@
                         id: id
                     };
                     var qts = jQuery("#qt_" + id + "_toolbar");
-                    if (!qts.length) {
-                        new QTags(qtsettings);
+                    if (qts.length > 0) {
+                        window.quicktags(qtsettings);
                     }
                 });
                 setTimeout(function() {
                     jQuery(".wp-editor-wrap", $el).removeClass("html-active").addClass("tmce-active");
-                    QTags._buttonsInit();
+                    window.QTags._buttonsInit();
                 }, 1500);
             },
             remoteGetEditor: function($el, name, id, content, post_id, media, watch) {
@@ -1324,7 +1324,7 @@
                     fixed_toolbar_container: "#kb-toolbar",
                     schema: "html5",
                     inline: true,
-                    plugins: "textcolor, wplink",
+                    plugins: "textcolor",
                     statusbar: false,
                     preview_styles: false,
                     setup: function(ed) {
@@ -2664,6 +2664,7 @@
                 });
                 this.CategoryFilter = new CategoryFilter();
                 this.setView(this.states["AreaList"]);
+                this.$el.resizable();
             },
             events: {
                 "click .kb-js-sidebar-nav-back": "rootView",

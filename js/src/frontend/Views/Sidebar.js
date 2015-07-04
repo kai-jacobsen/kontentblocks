@@ -34,6 +34,7 @@ module.exports = Backbone.View.extend({
     //});
     //this.setView(this.RootView);
     this.setView(this.states['AreaList']); // init Areas list view
+    this.$el.resizable();
   },
   events: {
     'click .kb-js-sidebar-nav-back': 'rootView', // back to level 0

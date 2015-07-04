@@ -58,13 +58,10 @@ module.exports =
     // find all editors and init
     jQuery('.wp-editor-area', $el).each(function () {
       var id = this.id;
-
-
       var prev = tinyMCE.get(id);
       if (prev) {
         tinyMCE.execCommand('mceRemoveEditor', null, id);
       }
-
 
       var settings = _.clone(tinyMCEPreInit.mceInit.ghosteditor);
       // add new editor id to settings
@@ -85,7 +82,6 @@ module.exports =
             ed.module = KB.Views.Modules.get($module.attr('id'));
           }
           ed.module.$el.trigger('tinymce.change');
-
         });
       };
       tinymce.init(settings);
@@ -102,15 +98,13 @@ module.exports =
         'id': id
       };
       var qts = jQuery('#qt_' + id + '_toolbar');
-
-      if (!qts.length) {
-        new QTags(qtsettings);
+      if (qts.length > 0) {
+        window.quicktags(qtsettings);
       }
     });
-
     setTimeout(function () {
       jQuery('.wp-editor-wrap', $el).removeClass('html-active').addClass('tmce-active');
-      QTags._buttonsInit();
+      window.QTags._buttonsInit();
     }, 1500);
 
   },

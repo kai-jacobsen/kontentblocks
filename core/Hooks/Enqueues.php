@@ -44,13 +44,14 @@ class Enqueues
     {
         $folder = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? 'dev' : 'dist';
         $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-        $dependecies = array(
+        $dependencies = array(
             'jquery',
             'jquery-ui-core',
             'jquery-ui-tabs',
             'jquery-ui-sortable',
             'jquery-ui-mouse',
             'jquery-ui-draggable',
+            'jquery-ui-resizable',
             'jquery-ui-droppable',
             'backbone',
             'underscore',
@@ -62,7 +63,7 @@ class Enqueues
         wp_register_script(
             'kb-plugins',
             KB_PLUGIN_URL . 'js/' . $folder . '/plugins' . $suffix . '.js',
-            $dependecies,
+            $dependencies,
             null,
             true
         );
