@@ -90,8 +90,6 @@ module.exports =
         tinyMCEPreInit.mceInit[id] = settings;
       }
 
-      // doesn't wok without, but don't really know what this does
-
       var qtsettings = {
         'buttons': '',
         'disabled_buttons': '',
