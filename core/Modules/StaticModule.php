@@ -20,9 +20,9 @@ abstract class StaticModule extends Module
         $new = $this->saveFields($data, $old);
         foreach ($new as $k => $v) {
             if (empty($v)) {
-                delete_post_meta($this->getEnvVar('postId'), $this->instance_id . '_' . $k);
+                delete_post_meta($this->getEnvVar('postId'), $this->mid . '_' . $k);
             } else {
-                update_post_meta($this->getEnvVar('postId'), $this->instance_id . '_' . $k, $v);
+                update_post_meta($this->getEnvVar('postId'), $this->mid . '_' . $k, $v);
             }
         }
 

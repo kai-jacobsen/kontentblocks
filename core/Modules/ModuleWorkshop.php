@@ -188,13 +188,12 @@ class ModuleWorkshop
     private function setupModuleattrs( $attrs, $oldattrs )
     {
         if ($oldattrs) {
-            unset( $oldattrs['instance_id'] );
             unset( $oldattrs['mid'] );
         }
 
         $attrs = $this->handleLegacyattrs( wp_parse_args( $attrs, $oldattrs ) );
         $this->newId = $mid = ( isset( $attrs['mid'] ) ) ? $attrs['mid'] : $this->createModuleId();
-        $attrs['mid'] = $attrs['instance_id'] = $mid;
+        $attrs['mid']  = $mid;
 
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
 
@@ -273,7 +272,6 @@ class ModuleWorkshop
     {
         return array(
             // id
-            'instance_id' => '',
             'mid' => '',
             // gmodule
             'globalModule' => false,

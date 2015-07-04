@@ -16,7 +16,7 @@ module.exports = BaseView.extend({
 
     Ajax.send({
       action: 'changeModuleStatus',
-      module: this.model.get('instance_id'),
+      module: this.model.get('mid'),
       _ajax_nonce: Config.getNonce('update')
     }, this.success, this);
 

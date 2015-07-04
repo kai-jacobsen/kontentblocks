@@ -227,7 +227,7 @@ KB.App = function () {
    */
   function removeModule(ModuleModel) {
     ModuleModel.dispose();
-    KB.Views.Modules.remove(ModuleModel.get('instance_id'));
+    KB.Views.Modules.remove(ModuleModel.get('mid'));
   }
 
 

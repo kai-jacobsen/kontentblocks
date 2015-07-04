@@ -261,7 +261,7 @@ module.exports = Backbone.View.extend({
         // clear fields on ModuleView
         that.ModuleView.clearFields();
         // set id to module id
-        that.$inner.attr('id', that.model.get('instance_id'));
+        that.$inner.attr('id', that.model.get('mid'));
         // append the html to the inner form container
         that.$inner.append(res.data.html);
 

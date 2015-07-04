@@ -5,7 +5,7 @@ module.exports = BaseView.extend({
   initialize: function (options) {
     this.options = options || {};
     this.parent = options.parent;
-    if (store.get(this.parent.model.get('instance_id') + '_open')) {
+    if (store.get(this.parent.model.get('mid') + '_open')) {
       this.toggleBody();
       this.parent.model.set('open', true);
     }

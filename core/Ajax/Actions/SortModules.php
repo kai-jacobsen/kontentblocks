@@ -42,8 +42,8 @@ class SortModules implements AjaxActionInterface
                     if ($id === $k) {
                         unset( $old[$k] );
                     }
-                    if ($module['area'] === $area && $module['instance_id'] === $k):
-                        $new[$module['instance_id']] = $module;
+                    if ($module['area'] === $area && $module['mid'] === $k):
+                        $new[$module['mid']] = $module;
                     endif;
                 }
             }

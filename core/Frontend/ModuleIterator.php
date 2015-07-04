@@ -30,7 +30,7 @@ class ModuleIterator implements \Iterator, \Countable
     protected $modules;
 
     /**
-     * The instance_id for the current position of the iterator
+     * The mid for the current position of the iterator
      *
      * @var string
      * @since 0.1.0

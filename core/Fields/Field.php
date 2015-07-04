@@ -99,7 +99,7 @@ abstract class Field implements Exportable
 
     /**
      * @remove exchange with fieldId
-     * @var string module instance_id
+     * @var string module mid
      */
     public $parentModuleId;
 

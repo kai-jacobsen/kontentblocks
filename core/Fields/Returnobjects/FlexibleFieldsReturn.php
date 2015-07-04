@@ -166,7 +166,7 @@ class FlexibleFieldsReturn
             case ( 'textarea' ):
                 return new EditableElement(
                     $keydata, array(
-                        'instance_id' => $this->moduleId,
+                        'mid' => $this->moduleId,
                         'key' => $key,
                         'arrayKey' => $this->key,
                         'index' => $index,
@@ -179,7 +179,7 @@ class FlexibleFieldsReturn
             case ( 'link' ):
                 return new EditableLink(
                     $keydata, array(
-                        'instance_id' => $this->moduleId,
+                        'mid' => $this->moduleId,
                         'key' => $key,
                         'arrayKey' => $this->key,
                         'index' => $index,
@@ -190,7 +190,7 @@ class FlexibleFieldsReturn
             case ( 'image' ):
                 return new EditableImage(
                     $keydata, array(
-                        'instance_id' => $this->moduleId,
+                        'mid' => $this->moduleId,
                         'key' => $key,
                         'arrayKey' => $this->key,
                         'index' => $index,

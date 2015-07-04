@@ -198,7 +198,7 @@ class ModulePanel extends AbstractPanel
         $moduleArgs = array();
 
         $defaults = array(
-            'instance_id' => $this->baseId,
+            'mid' => $this->baseId,
             'areaContext' => 'static',
             'post_id' => get_the_ID(),
             'area' => 'static',

@@ -106,7 +106,7 @@ class ModuleStorage implements \Countable
      * Adds an module to the index and automatically saves
      * the module definition
      *
-     * @param string $id module instance_id
+     * @param string $id module mid
      * @param array $args module attributes array
      *
      * @return mixed boolean
@@ -300,7 +300,7 @@ class ModuleStorage implements \Countable
     }
 
     /**
-     * Returns an array with the instance_id as key
+     * Returns an array with the mid as key
      * @return array
      */
     public function cleanIndex()
@@ -313,7 +313,7 @@ class ModuleStorage implements \Countable
 
         foreach ($this->index as $def) {
             if (isset( $def['class'] )) {
-                $cleaned[$def['instance_id']] = $def;
+                $cleaned[$def['mid']] = $def;
             } else {
                 // TODO remove from index;
             }

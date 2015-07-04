@@ -175,7 +175,7 @@ KB.App = (function () {
    * @returns void
    */
   function removeModule(model) {
-    KB.Views.Modules.remove(model.get('instance_id'));
+    KB.Views.Modules.remove(model.get('mid'));
   }
 
   // revealing module pattern

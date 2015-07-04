@@ -298,7 +298,7 @@ var Ui = {
     return Ajax.send({
       action: 'changeArea',
       _ajax_nonce: Config.getNonce('update'),
-      mid: module.get('instance_id'),
+      mid: module.get('mid'),
       area_id: targetArea.get('id'),
       context: targetArea.get('context')
     });

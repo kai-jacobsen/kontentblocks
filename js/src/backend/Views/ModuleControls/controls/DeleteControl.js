@@ -14,7 +14,7 @@ module.exports = BaseView.extend({
     'click': 'deleteModule'
   },
   deleteModule: function () {
-    Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+    Notice.confirm('',KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
   },
   isValid: function () {
     if (!this.model.get('predefined') && !this.model.get('disabled') &&
@@ -28,7 +28,7 @@ module.exports = BaseView.extend({
     Ajax.send({
       action: 'removeModules',
       _ajax_nonce: Config.getNonce('delete'),
-      module: this.model.get('instance_id')
+      module: this.model.get('mid')
     }, this.success, this);
   },
   no: function () {

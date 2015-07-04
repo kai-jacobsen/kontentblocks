@@ -323,7 +323,6 @@ abstract class Module
             'envVars' => $this->Context,
             'settings' => $this->Properties->settings,
             'state' => $this->Properties->state,
-            'instance_id' => $this->getId(),
             'mid' => $this->getId(),
             'moduleData' => apply_filters(
                 'kb.module.modify.data',

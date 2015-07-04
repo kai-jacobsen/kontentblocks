@@ -35,7 +35,7 @@ class Gallery
                     'key' => $this->field->getKey() . '.images',
                     'arrayKey' => $this->field->getArg( 'arrayKey' ),
                     'index' => $k,
-                    'instance_id' => $this->field->getFieldId(),
+                    'mid' => $this->field->getFieldId(),
                     'type' => 'image'
                 );
 

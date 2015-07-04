@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-03 */
+/*! Kontentblocks DevVersion 2015-07-04 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -108,7 +108,7 @@
                 }));
             }
             function removeModule(model) {
-                KB.Views.Modules.remove(model.get("instance_id"));
+                KB.Views.Modules.remove(model.get("mid"));
             }
             return {
                 init: init
@@ -1047,7 +1047,7 @@
                 click: "deleteModule"
             },
             deleteModule: function() {
-                Notice.confirm(KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+                Notice.confirm("", KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
             },
             isValid: function() {
                 if (!this.model.get("predefined") && !this.model.get("disabled") && Checks.userCan("delete_kontentblocks")) {
@@ -1060,7 +1060,7 @@
                 Ajax.send({
                     action: "removeModules",
                     _ajax_nonce: Config.getNonce("delete"),
-                    module: this.model.get("instance_id")
+                    module: this.model.get("mid")
                 }, this.success, this);
             },
             no: function() {
@@ -1221,7 +1221,7 @@
             changeStatus: function() {
                 Ajax.send({
                     action: "changeModuleStatus",
-                    module: this.model.get("instance_id"),
+                    module: this.model.get("mid"),
                     _ajax_nonce: Config.getNonce("update")
                 }, this.success, this);
             },
@@ -1394,7 +1394,7 @@
             initialize: function(options) {
                 this.options = options || {};
                 this.parent = options.parent;
-                if (store.get(this.parent.model.get("instance_id") + "_open")) {
+                if (store.get(this.parent.model.get("mid") + "_open")) {
                     this.toggleBody();
                     this.parent.model.set("open", true);
                 }
@@ -1475,7 +1475,7 @@
                 this.$body = jQuery(".kb-module__body", this.$el);
                 this.$inner = jQuery(".kb-module__controls-inner", this.$el);
                 this.attachedFields = {};
-                this.instanceId = this.model.get("instance_id");
+                this.instanceId = this.model.get("mid");
                 this.ModuleMenu = new ModuleControlsView({
                     el: this.$el,
                     parent: this
@@ -1568,7 +1568,7 @@
             serialize: function() {
                 var formData, moduleData;
                 formData = jQuery("#post").serializeJSON();
-                moduleData = formData[this.model.get("instance_id")];
+                moduleData = formData[this.model.get("mid")];
                 delete moduleData.areaContext;
                 delete moduleData.moduleName;
                 this.trigger("kb::module.data.updated");
@@ -2225,7 +2225,7 @@
                 return Ajax.send({
                     action: "changeArea",
                     _ajax_nonce: Config.getNonce("update"),
-                    mid: module.get("instance_id"),
+                    mid: module.get("mid"),
                     area_id: targetArea.get("id"),
                     context: targetArea.get("context")
                 });

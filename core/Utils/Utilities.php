@@ -224,7 +224,7 @@ class Utilities
         if (!empty( $index )) {
             foreach ($index as $module) {
                 $module = maybe_unserialize( $module );
-                $count = strrchr( $module['instance_id'], "_" );
+                $count = strrchr( $module['mid'], "_" );
                 $id = str_replace( '_', '', $count );
                 $collect[] = $id;
             }

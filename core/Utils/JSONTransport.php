@@ -87,7 +87,7 @@ class JSONTransport
     /**
      * Register data of a field
      *
-     * @param string $modid should be the module instance_id
+     * @param string $modid should be the module mid
      * @param string $type field type
      * @param mixed $data
      * @param string $key key of field

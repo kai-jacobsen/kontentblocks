@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
     this.$body = jQuery('.kb-module__body', this.$el);
     this.$inner = jQuery('.kb-module__controls-inner', this.$el);
     this.attachedFields = {};
-    this.instanceId = this.model.get('instance_id');
+    this.instanceId = this.model.get('mid');
     // create new module actions menu
     this.ModuleMenu = new ModuleControlsView({
       el: this.$el,
@@ -127,7 +127,7 @@ module.exports = Backbone.View.extend({
   serialize: function () {
     var formData, moduleData;
     formData = jQuery('#post').serializeJSON();
-    moduleData = formData[this.model.get('instance_id')];
+    moduleData = formData[this.model.get('mid')];
     // remove supplemental data
     // @TODO check if this can be rafcatored to a subarray
     delete moduleData.areaContext;

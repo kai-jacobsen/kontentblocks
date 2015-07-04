@@ -176,7 +176,6 @@ class LayoutConfigurations
             foreach ($layout as $bucket) {
                 $unique = uniqid();
                 $bucket['state']['draft'] = 'true';
-                $bucket['instance_id'] = null;
                 $bucket['mid'] = null;
                 $collection[$unique] = $bucket;
             };
@@ -251,7 +250,6 @@ class LayoutConfigurations
 
         foreach ($index['configuration'] as $args) {
             $new_id = 'module_' . $post_id . '_' . $i;
-            $args['instance_id'] = $new_id;
             $args['mid'] = $new_id;
             $Storage->saveModule( $new_id );
             $collection[$new_id] = $args;

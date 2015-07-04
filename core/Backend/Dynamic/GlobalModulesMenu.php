@@ -84,7 +84,6 @@ class GlobalModulesMenu
         $Storage = new ModuleStorage( $post->ID );
         // on this screen we always deal with only
         // one module
-        // instance_id equals post_name
         $template = $Storage->getModuleDefinition( $post->post_name );
         // no template yet, create new
         if (empty( $template )) {

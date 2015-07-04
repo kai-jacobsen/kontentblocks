@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-03 */
+/*! Kontentblocks DevVersion 2015-07-04 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -33,6 +33,50 @@
         });
     }, {} ],
     2: [ function(require, module, exports) {
+        module.exports = Backbone.View.extend({
+            initialize: function(options) {
+                this.Controller = options.Controller;
+                this.ContextsViews = this.setupContextsViews();
+                this.isVisible = true;
+                this.listenTo(this.Controller, "columns.rendered", this.columnActivated);
+                this.listenTo(this.Controller, "columns.reset", this.reset);
+            },
+            setupContextsViews: function() {
+                var coll = {};
+                var that = this;
+                var $wraps = this.$(".kb-context-container");
+                _.each($wraps, function(el, index) {
+                    var context = el.dataset.kbcontext;
+                    var Model = KB.Contexts.get(context);
+                    coll[Model.View.cid] = Model.View;
+                    Model.View.isVisible = true;
+                    Model.View.ColumnView = that;
+                    that.listenTo(Model.View, "context.activated", that.activateColumn);
+                });
+                return coll;
+            },
+            activateColumn: function() {
+                this.trigger("column.activate", this);
+            },
+            columnActivated: function(View) {
+                if (View.cid !== this.cid) {
+                    _.each(this.ContextsViews, function(con) {
+                        con.renderProxy();
+                    });
+                } else {
+                    _.each(this.ContextsViews, function(con) {
+                        con.removeProxy();
+                    });
+                }
+            },
+            reset: function() {
+                _.each(this.ContextsViews, function(con) {
+                    con.removeProxy();
+                });
+            }
+        });
+    }, {} ],
+    3: [ function(require, module, exports) {
         var tplContextBar = require("templates/backend/context-bar.hbs");
         var ContextUiView = require("backend/Views/ContextUi/ContextUiView");
         var ContextColumnView = require("backend/Views/ContextUi/ContextColumnView");
@@ -57,7 +101,7 @@
                         el: el,
                         Controller: that
                     });
-                    that.listenTo(View, "activate.column", that.evalLayout);
+                    that.listenTo(View, "column.activate", that.evalLayout);
                     return View;
                 });
             },
@@ -99,6 +143,7 @@
                     con.$el.attr("class", that.layoutBackup[con.cid]);
                     con.$el.width("");
                 });
+                this.trigger("columns.reset");
             },
             evalLayout: function(View) {
                 var that = this;
@@ -114,6 +159,7 @@
                         con.$el.width(Math.floor(w * pro.small));
                     }
                 });
+                this.trigger("columns.rendered", View);
             },
             renderLayout: function() {
                 var visible = _.filter(this.columns, function(con) {
@@ -151,38 +197,12 @@
             }
         });
     }, {
-        "backend/Views/ContextUi/ContextColumnView": 3,
+        "backend/Views/ContextUi/ContextColumnView": 2,
         "backend/Views/ContextUi/ContextUiView": 4,
         "backend/Views/ContextUi/controls/ColumnControl": 5,
         "backend/Views/ContextUi/controls/ResetControl": 6,
         "templates/backend/context-bar.hbs": 57
     } ],
-    3: [ function(require, module, exports) {
-        module.exports = Backbone.View.extend({
-            initialize: function(options) {
-                this.Controller = options.Controller;
-                this.ContextsViews = this.setupContextsViews();
-                this.isVisible = true;
-            },
-            setupContextsViews: function() {
-                var coll = {};
-                var that = this;
-                var $wraps = this.$(".kb-context-container");
-                _.each($wraps, function(el, index) {
-                    var context = el.dataset.kbcontext;
-                    var Model = KB.Contexts.get(context);
-                    coll[Model.View.cid] = Model.View;
-                    Model.View.isVisible = true;
-                    Model.View.ColumnView = that;
-                    that.listenTo(Model.View, "context.activated", that.activateColumn);
-                });
-                return coll;
-            },
-            activateColumn: function() {
-                this.trigger("activate.column", this);
-            }
-        });
-    }, {} ],
     4: [ function(require, module, exports) {
         var ControlsView = require("backend/Views/ModuleControls/ControlsView");
         module.exports = ControlsView.extend({
@@ -680,7 +700,7 @@
         var Ajax = require("common/Ajax");
         var TinyMCE = require("common/TinyMCE");
         var Notice = require("common/Notice");
-        var ContextRowGrid = require("backend/Views/ContextRowGrid");
+        var ContextRowGrid = require("backend/Views/ContextUi/ContextRowGrid");
         var Ui = {
             isSorting: false,
             init: function() {
@@ -870,7 +890,7 @@
                 return Ajax.send({
                     action: "changeArea",
                     _ajax_nonce: Config.getNonce("update"),
-                    mid: module.get("instance_id"),
+                    mid: module.get("mid"),
                     area_id: targetArea.get("id"),
                     context: targetArea.get("context")
                 });
@@ -948,7 +968,7 @@
         };
         module.exports = Ui;
     }, {
-        "backend/Views/ContextRowGrid": 2,
+        "backend/Views/ContextUi/ContextRowGrid": 3,
         "common/Ajax": 8,
         "common/Config": 10,
         "common/Notice": 12,
@@ -1230,7 +1250,7 @@
             }
             function removeModule(ModuleModel) {
                 ModuleModel.dispose();
-                KB.Views.Modules.remove(ModuleModel.get("instance_id"));
+                KB.Views.Modules.remove(ModuleModel.get("mid"));
             }
             return {
                 init: init,
@@ -2033,7 +2053,7 @@
                     success: function(res) {
                         that.$inner.empty();
                         that.ModuleView.clearFields();
-                        that.$inner.attr("id", that.model.get("instance_id"));
+                        that.$inner.attr("id", that.model.get("mid"));
                         that.$inner.append(res.data.html);
                         if (that.model.get("state").draft) {
                             that.$draft.show(150);

@@ -60,12 +60,6 @@ class ModuleProperties
      */
     public $overrides;
 
-    /**
-     * unique module id
-     * @deprecated
-     * @var string
-     */
-    public $instance_id;
 
     /**
      * unique module id
@@ -153,7 +147,6 @@ class ModuleProperties
 
     public function setId( $mid )
     {
-        $this->instance_id = $mid;
         $this->mid = $mid;
     }
 
