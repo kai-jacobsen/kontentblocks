@@ -34,7 +34,12 @@ module.exports = Backbone.View.extend({
     //});
     //this.setView(this.RootView);
     this.setView(this.states['AreaList']); // init Areas list view
-    this.$el.resizable();
+    this.$el.addClass('ui-widget-content');
+    this.$el.resizable({
+      maxWidth: 600,
+      minWidth:340,
+      handles: 'e'
+    });
   },
   events: {
     'click .kb-js-sidebar-nav-back': 'rootView', // back to level 0

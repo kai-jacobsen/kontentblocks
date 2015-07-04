@@ -2664,7 +2664,12 @@
                 });
                 this.CategoryFilter = new CategoryFilter();
                 this.setView(this.states["AreaList"]);
-                this.$el.resizable();
+                this.$el.addClass("ui-widget-content");
+                this.$el.resizable({
+                    maxWidth: 600,
+                    minWidth: 340,
+                    handles: "e"
+                });
             },
             events: {
                 "click .kb-js-sidebar-nav-back": "rootView",
