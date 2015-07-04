@@ -633,6 +633,50 @@
         "templates/backend/cb-global-area-item.hbs": 60
     } ],
     16: [ function(require, module, exports) {
+        module.exports = Backbone.View.extend({
+            initialize: function(options) {
+                this.Controller = options.Controller;
+                this.ContextsViews = this.setupContextsViews();
+                this.isVisible = true;
+                this.listenTo(this.Controller, "columns.rendered", this.columnActivated);
+                this.listenTo(this.Controller, "columns.reset", this.reset);
+            },
+            setupContextsViews: function() {
+                var coll = {};
+                var that = this;
+                var $wraps = this.$(".kb-context-container");
+                _.each($wraps, function(el, index) {
+                    var context = el.dataset.kbcontext;
+                    var Model = KB.Contexts.get(context);
+                    coll[Model.View.cid] = Model.View;
+                    Model.View.isVisible = true;
+                    Model.View.ColumnView = that;
+                    that.listenTo(Model.View, "context.activated", that.activateColumn);
+                });
+                return coll;
+            },
+            activateColumn: function() {
+                this.trigger("column.activate", this);
+            },
+            columnActivated: function(View) {
+                if (View.cid !== this.cid) {
+                    _.each(this.ContextsViews, function(con) {
+                        con.renderProxy();
+                    });
+                } else {
+                    _.each(this.ContextsViews, function(con) {
+                        con.removeProxy();
+                    });
+                }
+            },
+            reset: function() {
+                _.each(this.ContextsViews, function(con) {
+                    con.removeProxy();
+                });
+            }
+        });
+    }, {} ],
+    17: [ function(require, module, exports) {
         var tplContextBar = require("templates/backend/context-bar.hbs");
         var ContextUiView = require("backend/Views/ContextUi/ContextUiView");
         var ContextColumnView = require("backend/Views/ContextUi/ContextColumnView");
@@ -657,7 +701,7 @@
                         el: el,
                         Controller: that
                     });
-                    that.listenTo(View, "activate.column", that.evalLayout);
+                    that.listenTo(View, "column.activate", that.evalLayout);
                     return View;
                 });
             },
@@ -699,6 +743,7 @@
                     con.$el.attr("class", that.layoutBackup[con.cid]);
                     con.$el.width("");
                 });
+                this.trigger("columns.reset");
             },
             evalLayout: function(View) {
                 var that = this;
@@ -714,6 +759,7 @@
                         con.$el.width(Math.floor(w * pro.small));
                     }
                 });
+                this.trigger("columns.rendered", View);
             },
             renderLayout: function() {
                 var visible = _.filter(this.columns, function(con) {
@@ -751,38 +797,12 @@
             }
         });
     }, {
-        "backend/Views/ContextUi/ContextColumnView": 17,
+        "backend/Views/ContextUi/ContextColumnView": 16,
         "backend/Views/ContextUi/ContextUiView": 18,
         "backend/Views/ContextUi/controls/ColumnControl": 19,
         "backend/Views/ContextUi/controls/ResetControl": 20,
         "templates/backend/context-bar.hbs": 61
     } ],
-    17: [ function(require, module, exports) {
-        module.exports = Backbone.View.extend({
-            initialize: function(options) {
-                this.Controller = options.Controller;
-                this.ContextsViews = this.setupContextsViews();
-                this.isVisible = true;
-            },
-            setupContextsViews: function() {
-                var coll = {};
-                var that = this;
-                var $wraps = this.$(".kb-context-container");
-                _.each($wraps, function(el, index) {
-                    var context = el.dataset.kbcontext;
-                    var Model = KB.Contexts.get(context);
-                    coll[Model.View.cid] = Model.View;
-                    Model.View.isVisible = true;
-                    Model.View.ColumnView = that;
-                    that.listenTo(Model.View, "context.activated", that.activateColumn);
-                });
-                return coll;
-            },
-            activateColumn: function() {
-                this.trigger("activate.column", this);
-            }
-        });
-    }, {} ],
     18: [ function(require, module, exports) {
         var ControlsView = require("backend/Views/ModuleControls/ControlsView");
         module.exports = ControlsView.extend({
@@ -935,9 +955,11 @@
                 this.Browser.open();
             },
             renderProxy: function() {
+                this.$el.addClass("kb-context-downsized");
                 this.$inner.append(this.$overlay);
             },
             removeProxy: function() {
+                this.$el.removeClass("kb-context-downsized");
                 this.$overlay.detach();
             }
         });
@@ -2013,7 +2035,7 @@
         var Ajax = require("common/Ajax");
         var TinyMCE = require("common/TinyMCE");
         var Notice = require("common/Notice");
-        var ContextRowGrid = require("backend/Views/ContextRowGrid");
+        var ContextRowGrid = require("backend/Views/ContextUi/ContextRowGrid");
         var Ui = {
             isSorting: false,
             init: function() {
@@ -2281,7 +2303,7 @@
         };
         module.exports = Ui;
     }, {
-        "backend/Views/ContextRowGrid": 16,
+        "backend/Views/ContextUi/ContextRowGrid": 17,
         "common/Ajax": 37,
         "common/Config": 39,
         "common/Notice": 41,

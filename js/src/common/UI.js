@@ -16,7 +16,7 @@ var Config = require('common/Config');
 var Ajax = require('common/Ajax');
 var TinyMCE = require('common/TinyMCE');
 var Notice = require('common/Notice');
-var ContextRowGrid = require('backend/Views/ContextRowGrid');
+var ContextRowGrid = require('backend/Views/ContextUi/ContextRowGrid');
 var Ui = {
   // sorting indication
   isSorting: false,

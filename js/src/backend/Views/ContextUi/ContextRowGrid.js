@@ -23,7 +23,7 @@ module.exports = Backbone.View.extend({
         el: el,
         Controller: that
       });
-      that.listenTo(View, 'activate.column', that.evalLayout);
+      that.listenTo(View, 'column.activate', that.evalLayout);
       return View;
     });
   },
@@ -60,6 +60,8 @@ module.exports = Backbone.View.extend({
       con.$el.attr('class', that.layoutBackup[con.cid]);
       con.$el.width('');
     });
+    this.trigger('columns.reset');
+
   },
   evalLayout: function (View) {
     var that = this;
@@ -79,7 +81,8 @@ module.exports = Backbone.View.extend({
         //con.$el.addClass('kb-context-downsized');
         //  con.renderProxy();
       }
-    })
+    });
+    this.trigger('columns.rendered', View);
   },
   renderLayout: function () {
     var visible = _.filter(this.columns, function (con) {

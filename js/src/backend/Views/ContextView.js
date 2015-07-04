@@ -88,9 +88,11 @@ module.exports = Backbone.View.extend({
     this.Browser.open();
   },
   renderProxy: function(){
+    this.$el.addClass('kb-context-downsized');
     this.$inner.append(this.$overlay);
   },
   removeProxy: function(){
+    this.$el.removeClass('kb-context-downsized');
     this.$overlay.detach();
   }
 

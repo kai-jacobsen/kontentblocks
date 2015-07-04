@@ -3,6 +3,8 @@ module.exports = Backbone.View.extend({
     this.Controller = options.Controller;
     this.ContextsViews = this.setupContextsViews();
     this.isVisible = true;
+    this.listenTo(this.Controller, 'columns.rendered', this.columnActivated);
+    this.listenTo(this.Controller, 'columns.reset', this.reset);
   },
   setupContextsViews: function () {
     var coll = {};
@@ -19,8 +21,24 @@ module.exports = Backbone.View.extend({
     });
     return coll;
   },
-  activateColumn: function(){
-    this.trigger('activate.column', this);
+  activateColumn: function () {
+    this.trigger('column.activate', this);
+  },
+  columnActivated: function(View){
+    if (View.cid !== this.cid){
+      _.each(this.ContextsViews, function(con){
+        con.renderProxy();
+      });
+    } else {
+      _.each(this.ContextsViews, function(con){
+        con.removeProxy();
+      });
+    }
+  },
+  reset: function(){
+    _.each(this.ContextsViews, function(con){
+      con.removeProxy();
+    });
   }
 
 
