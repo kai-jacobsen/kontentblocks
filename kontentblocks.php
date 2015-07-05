@@ -225,7 +225,7 @@ Class Kontentblocks
         define( 'KONTENTLOCK', false );
 
         // Composer autoloader, depends on composer setup
-        if (file_exists( dirname( __FILE__ )  . '/vendor/autoload.php')) {
+        if (file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' )) {
             require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         }
         // Kontentblocks autloader
@@ -248,7 +248,7 @@ Class Kontentblocks
 
     public static function onActivation()
     {
-        if (file_exists( dirname( __FILE__ ) . '/vendor/autoload.php')) {
+        if (file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' )) {
             require_once dirname( __FILE__ ) . '/vendor/autoload.php';
         }
 
@@ -304,7 +304,7 @@ Class Kontentblocks
 
             $ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
             $Logger = new Logger( 'kontentblocks' );
-            if (Kontentblocks::DEBUG && is_user_logged_in() && apply_filters('kb.use.logger.console', false) ) {
+            if (Kontentblocks::DEBUG && is_user_logged_in() && apply_filters( 'kb.use.logger.console', false )) {
                 if (!$ajax) {
                     $Logger->pushHandler( new BrowserConsoleHandler() );
                     $Logger->addInfo(
