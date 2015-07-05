@@ -32,14 +32,21 @@ class GetModuleForm implements AjaxActionInterface
 
         $Environment = Utilities::getEnvironment( $module['post_id'] );
         $Module = $Environment->getModuleById( $module['mid'] );
-        $Module->setModuleData( wp_unslash($Request->getFiltered( 'moduleData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) ));
-        $Module->Properties->viewfile = filter_var($module['viewfile'], FILTER_SANITIZE_STRING);
+        $Module->Properties->viewfile = filter_var( $module['viewfile'], FILTER_SANITIZE_STRING );
         $Module = apply_filters( 'kb.module.before.factory', $Module );
+        $Module->setupFields();
+
+        $currentData = wp_unslash( $Request->getFiltered( 'moduleData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+        $oldData = $Module->Model->export();
+
+        $merged = Utilities::arrayMergeRecursive( $currentData, $oldData );
+
+        $Module->setModuleData( $merged );
         $html = $Module->form();
         $return = array(
             'html' => $html,
 //            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
-            'json' =>  Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
+            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
         );
         new AjaxSuccessResponse( 'serving module form', $return );
     }

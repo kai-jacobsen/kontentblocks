@@ -166,7 +166,7 @@ class Environment implements JsonSerializable
 
     /**
      * @param $mid
-     * @return \Kontentblocks\Modules\Module|null
+     * @return \Kontentblocks\Modules\Module
      * @since 0.1.0
      */
     public function getModuleById( $mid )

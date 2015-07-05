@@ -75,12 +75,7 @@ abstract class Module
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
 
-        // magically setup fields
-        if (method_exists( $this, 'fields' )) {
-            $this->Fields = new ModuleFieldController( $this );
-            // setup Fields
-            $this->fields();
-        }
+        $this->setupFields();
 
     }
 
@@ -89,6 +84,16 @@ abstract class Module
      * Primary module methods
      * ------------------------------------
      */
+
+    public function setupFields()
+    {
+        // magically setup fields
+        if (method_exists( $this, 'fields' )) {
+            $this->Fields = new ModuleFieldController( $this );
+            // setup Fields
+            $this->fields();
+        }
+    }
 
     /**
      * Creates a complete list item for the area

@@ -223,6 +223,7 @@ class Enqueues
 
         self::appConfig();
         if (is_user_logged_in() && !is_admin()) {
+            wp_enqueue_media();
 
             wp_enqueue_script( 'kb-frontend' );
             wp_enqueue_script( 'kb-onsite-editing' );

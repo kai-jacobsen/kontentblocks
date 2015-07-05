@@ -1299,6 +1299,9 @@
                 this.maybeSetPlaceholder();
                 this.listenToOnce(this.model.get("ModuleModel"), "remove", this.deactivate);
                 this.render();
+                this.$("a").on("click", function(e) {
+                    e.preventDefault();
+                });
             },
             render: function() {
                 if (this.el.id) {
@@ -1945,14 +1948,6 @@
                     el: this.$form
                 });
                 this.FieldModels = new ModalFieldCollection();
-                this.$el.css("position", "fixed").draggable({
-                    handle: "h2",
-                    containment: "window",
-                    stop: function(eve, ui) {
-                        KB.OSConfig.wrapPosition = ui.position;
-                        that.recalibrate(ui.position);
-                    }
-                });
                 this.listenTo(KB.Events, "modal.recalibrate", this.recalibrate);
                 this.listenTo(KB.Events, "modal.preview", this.preview);
                 jQuery(window).on("resize", function() {
@@ -1976,14 +1971,15 @@
                 "change .kb-template-select": "viewfileChange"
             },
             openView: function(ModuleView, force) {
-                this.setupWindow();
                 if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
                     return this;
                 }
+                this.setupWindow();
                 this.ModuleView = ModuleView;
                 this.model = ModuleView.model;
                 this.attach();
                 this.render();
+                this.recalibrate();
                 return this;
             },
             attach: function() {
@@ -2018,7 +2014,28 @@
                 that.$el.detach();
             },
             setupWindow: function() {
-                this.$el.appendTo("body").show();
+                var that = this;
+                if (KB.Sidebar.visible) {
+                    this.$el.appendTo(KB.Sidebar.$el);
+                    this.mode = "sidebar";
+                    this.listenToOnce(KB.Sidebar, "sidebar.close", function() {
+                        this.mode = "body";
+                        this.destroy();
+                    });
+                    KB.Sidebar.clearTimer();
+                } else {
+                    this.mode = "body";
+                    this.$el.appendTo("body").show();
+                }
+                if (this.mode === "body") {
+                    this.$el.css("position", "fixed").draggable({
+                        handle: "h2",
+                        containment: "window",
+                        stop: function(eve, ui) {
+                            that.recalibrate(ui.position);
+                        }
+                    });
+                }
             },
             frontendViewUpdated: function() {
                 this.$el.removeClass("isDirty");
@@ -2106,10 +2123,11 @@
                 if (position.top < 32) {
                     this.$el.css("top", "32px");
                 }
-                if (KB.Sidebar.visible) {
-                    var sw = KB.Sidebar.$el.width();
-                    this.$el.css("left", sw + "px");
-                    this.$el.css("height", winH + "px");
+                if (this.mode === "sidebar") {
+                    var settings = this.model.get("settings");
+                    var cWidth = settings.controls && settings.controls.width || 600;
+                    KB.Sidebar.$el.width(cWidth);
+                    this.$el.addClass("kb-modal-sidebar");
                 }
             },
             initScrollbars: function(height) {
@@ -2121,10 +2139,10 @@
             },
             serialize: function(mode, showNotice) {
                 var that = this, mdata, save = mode || false, notice = showNotice !== false, height;
+                tinymce.triggerSave();
                 mdata = this.formdataForId(this.model.get("mid"));
                 this.model.set("moduleData", mdata);
                 this.LoadingAnimation.show(.5);
-                tinymce.triggerSave();
                 this.model.sync(save, this).done(function(res, b, c) {
                     that.moduleUpdated(res, b, c, save, notice);
                 });
@@ -2211,8 +2229,12 @@
             },
             applyControlsSettings: function($el) {
                 var settings = this.model.get("settings");
-                if (settings.controls && settings.controls.width) {
+                var cWidth = settings.controls && settings.controls.width;
+                if (cWidth) {
                     $el.css("width", settings.controls.width + "px");
+                }
+                if (this.mode === "sidebar" && cWidth) {
+                    KB.Sidebar.$el.width(cWidth);
                 }
                 if (settings.controls && settings.controls.fullscreen) {
                     $el.width("100%").height("100%").addClass("fullscreen");
@@ -2653,6 +2675,7 @@
         module.exports = Backbone.View.extend({
             currentView: null,
             viewStack: [],
+            timer: 0,
             initialize: function() {
                 this.render();
                 this.states = {};
@@ -2666,14 +2689,29 @@
                 this.setView(this.states["AreaList"]);
                 this.$el.addClass("ui-widget-content");
                 this.$el.resizable({
-                    maxWidth: 600,
+                    maxWidth: 900,
                     minWidth: 340,
                     handles: "e"
                 });
             },
             events: {
                 "click .kb-js-sidebar-nav-back": "rootView",
-                "click [data-kb-action]": "actionHandler"
+                "click [data-kb-action]": "actionHandler",
+                mouseleave: "detectActivity",
+                mouseenter: "clearTimer"
+            },
+            detectActivity: function() {
+                var that = this;
+                this.timer = setTimeout(function() {
+                    that.$el.addClass("kb-opaque");
+                }, 15e3);
+            },
+            clearTimer: function() {
+                var that = this;
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                    that.$el.removeClass("kb-opaque");
+                }
             },
             render: function() {
                 this.$el = jQuery('<div class="kb-sidebar-wrap" style="display: none;"></div>').appendTo("body");
@@ -2686,6 +2724,7 @@
                 var ls = Utilities.stex.get("kb-sidebar-visible");
                 if (ls) {
                     this.toggleSidebar();
+                    this.detectActivity();
                 }
             },
             bindHandlers: function() {
@@ -2748,6 +2787,7 @@
                 this.$el.fadeToggle();
                 jQuery("body").toggleClass("kb-sidebar-visible");
                 Utilities.stex.set("kb-sidebar-visible", this.visible, 1e3 * 60 * 60);
+                this.visible ? this.trigger("sidebar.open") : this.trigger("sidebar.close");
             },
             actionHandler: function(event) {
                 var action = jQuery(event.currentTarget).data("kb-action");

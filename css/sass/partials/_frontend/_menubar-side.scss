@@ -13,6 +13,13 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   box-shadow: 0px 1px 8px #333;
   font-family: 'Open Sans';
   z-index: 2000;
+  transition: all .3s ease-out;
+  opacity: 1;
+
+  &.kb-opaque{
+    opacity: .3;
+  }
+
 }
 
 

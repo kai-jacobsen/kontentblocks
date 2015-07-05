@@ -10,6 +10,10 @@ var EditableText = Backbone.View.extend({
     this.maybeSetPlaceholder();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
     this.render();
+    this.$('a').on('click', function(e){
+      e.preventDefault();
+    });
+
   },
   render: function () {
     if (this.el.id) {

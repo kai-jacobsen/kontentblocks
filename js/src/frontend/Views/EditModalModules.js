@@ -43,16 +43,6 @@ module.exports = Backbone.View.extend({
 
     this.FieldModels = new ModalFieldCollection();
 
-    // init draggable container and store position in config var
-    this.$el.css('position', 'fixed').draggable({
-      handle: 'h2',
-      containment: 'window',
-      stop: function (eve, ui) {
-        KB.OSConfig.wrapPosition = ui.position;
-        // fit modal to window in size and position
-        that.recalibrate(ui.position);
-      }
-    });
 
     // use this event to refresh the modal on demand
     this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
@@ -105,19 +95,20 @@ module.exports = Backbone.View.extend({
    */
   openView: function (ModuleView, force) {
 
-    this.setupWindow();
     //force = (_.isUndefined(force)) ? false : true;
 
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
       return this;
     }
+    this.setupWindow();
+
     //
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
 
     this.attach();
     this.render();
-
+    this.recalibrate();
     return this;
   },
 
@@ -186,7 +177,34 @@ module.exports = Backbone.View.extend({
    * Append element and restore position
    */
   setupWindow: function () {
-    this.$el.appendTo('body').show();
+    var that = this;
+
+    if (KB.Sidebar.visible) {
+      this.$el.appendTo(KB.Sidebar.$el);
+      this.mode = 'sidebar';
+      this.listenToOnce(KB.Sidebar, 'sidebar.close', function () {
+        this.mode = 'body';
+        this.destroy();
+      });
+      KB.Sidebar.clearTimer();
+    } else {
+      this.mode = 'body';
+      this.$el.appendTo('body').show();
+    }
+
+
+    // init draggable container and store position in config var
+    if (this.mode === 'body') {
+      this.$el.css('position', 'fixed').draggable({
+        handle: 'h2',
+        containment: 'window',
+        stop: function (eve, ui) {
+          //KB.OSConfig.wrapPosition = ui.position;
+          // fit modal to window in size and position
+          that.recalibrate(ui.position);
+        }
+      });
+    }
 
     //if (KB.OSConfig.wrapPosition) {
     //  this.$el.css({
@@ -229,7 +247,6 @@ module.exports = Backbone.View.extend({
   render: function (reload) {
     var that = this,
       json;
-
 
     Logger.User.info('Frontend modal retrieves data from the server');
     json = this.model.toJSON();
@@ -361,10 +378,17 @@ module.exports = Backbone.View.extend({
       this.$el.css('top', '32px');
     }
 
-    if (KB.Sidebar.visible) {
-      var sw = KB.Sidebar.$el.width();
-      this.$el.css('left', sw + 'px');
-      this.$el.css('height', winH + 'px');
+    //if (KB.Sidebar.visible) {
+    //  var sw = KB.Sidebar.$el.width();
+    //  this.$el.css('left', sw + 'px');
+    //  this.$el.css('height', winH + 'px');
+    //}
+
+    if (this.mode === 'sidebar') {
+      var settings = this.model.get('settings');
+      var cWidth = (settings.controls && settings.controls.width) || 600;
+      KB.Sidebar.$el.width(cWidth);
+      this.$el.addClass('kb-modal-sidebar');
     }
 
   },
@@ -388,17 +412,17 @@ module.exports = Backbone.View.extend({
       notice = (showNotice !== false),
       height;
 
+    tinymce.triggerSave();
     mdata = this.formdataForId(this.model.get('mid'));
     this.model.set('moduleData', mdata);
     this.LoadingAnimation.show(0.5);
-    tinymce.triggerSave();
 
-    this.model.sync(save,this).done(function(res, b, c){
+    this.model.sync(save, this).done(function (res, b, c) {
       that.moduleUpdated(res, b, c, save, notice);
     });
   },
   // serialize success callback
-  moduleUpdated: function(res, b, c, save, notice){
+  moduleUpdated: function (res, b, c, save, notice) {
     var $controls, that = this, height;
     $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
     if ($controls.length > 0) {
@@ -520,8 +544,13 @@ module.exports = Backbone.View.extend({
    */
   applyControlsSettings: function ($el) {
     var settings = this.model.get('settings');
-    if (settings.controls && settings.controls.width) {
+    var cWidth = settings.controls && settings.controls.width;
+    if (cWidth) {
       $el.css('width', settings.controls.width + 'px');
+    }
+
+    if (this.mode === 'sidebar' && cWidth){
+      KB.Sidebar.$el.width(cWidth);
     }
 
     if (settings.controls && settings.controls.fullscreen) {

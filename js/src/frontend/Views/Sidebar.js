@@ -9,6 +9,7 @@ var tplSidebarNav = require('templates/frontend/sidebar/sidebar-nav.hbs');
 module.exports = Backbone.View.extend({
   currentView: null,
   viewStack: [],
+  timer: 0,
   initialize: function () {
     this.render();
     this.states = {};
@@ -36,14 +37,29 @@ module.exports = Backbone.View.extend({
     this.setView(this.states['AreaList']); // init Areas list view
     this.$el.addClass('ui-widget-content');
     this.$el.resizable({
-      maxWidth: 600,
-      minWidth:340,
+      maxWidth: 900,
+      minWidth: 340,
       handles: 'e'
     });
   },
   events: {
     'click .kb-js-sidebar-nav-back': 'rootView', // back to level 0
-    'click [data-kb-action]': 'actionHandler' // event proxy
+    'click [data-kb-action]': 'actionHandler', // event proxy
+    'mouseleave' : 'detectActivity',
+    'mouseenter' : 'clearTimer'
+  },
+  detectActivity: function(){
+      var that = this;
+      this.timer = setTimeout(function(){
+        that.$el.addClass('kb-opaque');
+      }, 15000);
+  },
+  clearTimer: function(){
+    var that = this;
+    if (this.timer){
+      clearTimeout(this.timer);
+      that.$el.removeClass('kb-opaque');
+    }
   },
   render: function () {
     this.$el = jQuery('<div class="kb-sidebar-wrap" style="display: none;"></div>').appendTo('body');
@@ -57,6 +73,7 @@ module.exports = Backbone.View.extend({
     var ls = Utilities.stex.get('kb-sidebar-visible');
     if (ls) {
       this.toggleSidebar();
+      this.detectActivity();
     }
   },
   bindHandlers: function () {
@@ -120,6 +137,7 @@ module.exports = Backbone.View.extend({
     this.$el.fadeToggle();
     jQuery('body').toggleClass('kb-sidebar-visible');
     Utilities.stex.set('kb-sidebar-visible', this.visible, 1000 * 60 * 60);
+    (this.visible) ? this.trigger('sidebar.open') : this.trigger('sidebar.close');
   },
   actionHandler: function (event) {
     var action = jQuery(event.currentTarget).data('kb-action');
