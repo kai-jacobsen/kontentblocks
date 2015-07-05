@@ -1,6 +1,7 @@
 //KB.Backbone.Inline.EditableText
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
+var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
 var EditableText = Backbone.View.extend({
   initialize: function () {
     this.placeHolderSet = false;
@@ -13,7 +14,6 @@ var EditableText = Backbone.View.extend({
     this.$('a').on('click', function(e){
       e.preventDefault();
     });
-
   },
   render: function () {
     if (this.el.id) {

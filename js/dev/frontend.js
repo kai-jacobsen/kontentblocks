@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-04 */
+/*! Kontentblocks DevVersion 2015-07-05 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1290,6 +1290,7 @@
     22: [ function(require, module, exports) {
         var Utilities = require("common/Utilities");
         var Config = require("common/Config");
+        var ModuleMenuItem = require("frontend/Views/ModuleControls/modulecontrols/ControlsBaseView");
         var EditableText = Backbone.View.extend({
             initialize: function() {
                 this.placeHolderSet = false;
@@ -1446,7 +1447,8 @@
         module.exports = EditableText;
     }, {
         "common/Config": 10,
-        "common/Utilities": 17
+        "common/Utilities": 17,
+        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 33
     } ],
     23: [ function(require, module, exports) {
         var Utilities = require("common/Utilities");
@@ -2343,7 +2345,7 @@
             addItem: function(view) {
                 if (view.isValid && view.isValid() === true) {
                     var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
-                    var $menuItem = $liItem.append(view.el);
+                    var $menuItem = $liItem.append(view.render());
                     this.$menuList.append($menuItem);
                     return view;
                 }
@@ -2361,6 +2363,9 @@
             tagName: "a",
             isValid: function() {
                 return true;
+            },
+            render: function() {
+                return this.el;
             }
         });
     }, {} ],

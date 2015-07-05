@@ -60,7 +60,7 @@ module.exports = Backbone.View.extend({
     // see /ModuleMenuItems/ files for action items
     if (view.isValid && view.isValid() === true) {
       var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
-      var $menuItem = $liItem.append(view.el);
+      var $menuItem = $liItem.append(view.render());
       this.$menuList.append($menuItem);
       return view;
     }
