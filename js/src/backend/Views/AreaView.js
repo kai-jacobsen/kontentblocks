@@ -19,7 +19,7 @@ module.exports = Backbone.View.extend({
     this.model.View = this;
 
     this.listenTo(this, 'module:attached', this.ui);
-    this.listenTo(this, 'module:dettached', this.ui);
+    this.listenTo(this, 'module:detached', this.ui);
 
     this.AreaControls = new AreaControls({
       el: this.$el,
@@ -72,11 +72,11 @@ module.exports = Backbone.View.extend({
   removeModule: function (ModuleModel) {
     var id;
     id = ModuleModel.cid;
-    if (this.attachedModuleViews[cid]) {
-      delete this.attachedModuleViews[cid]; // remove property
+    if (this.attachedModuleViews[id]) {
+      delete this.attachedModuleViews[id]; // remove property
       this.stopListening(ModuleModel, 'change:area', this.removeModule); // remove listener
     }
-    this.trigger('module:dettached', ModuleModel);
+    this.trigger('module:detached', ModuleModel);
   },
   ui: function () {
     var size;
