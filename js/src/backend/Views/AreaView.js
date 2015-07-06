@@ -65,15 +65,15 @@ module.exports = Backbone.View.extend({
     KB.currentArea = this.model;
   },
   attachModuleView: function (ModuleModel) {
-    this.attachedModuleViews[ModuleModel.id] = ModuleModel.View; // add module
+    this.attachedModuleViews[ModuleModel.cid] = ModuleModel.View; // add module
     this.listenTo(ModuleModel, 'change:area', this.removeModule); // add listener
     this.trigger('module:attached', ModuleModel);
   },
   removeModule: function (ModuleModel) {
     var id;
-    id = ModuleModel.id;
-    if (this.attachedModuleViews[id]) {
-      delete this.attachedModuleViews[id]; // remove property
+    id = ModuleModel.cid;
+    if (this.attachedModuleViews[cid]) {
+      delete this.attachedModuleViews[cid]; // remove property
       this.stopListening(ModuleModel, 'change:area', this.removeModule); // remove listener
     }
     this.trigger('module:dettached', ModuleModel);

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-04 */
+/*! Kontentblocks DevVersion 2015-07-06 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -470,15 +470,15 @@
                 KB.currentArea = this.model;
             },
             attachModuleView: function(ModuleModel) {
-                this.attachedModuleViews[ModuleModel.id] = ModuleModel.View;
+                this.attachedModuleViews[ModuleModel.cid] = ModuleModel.View;
                 this.listenTo(ModuleModel, "change:area", this.removeModule);
                 this.trigger("module:attached", ModuleModel);
             },
             removeModule: function(ModuleModel) {
                 var id;
-                id = ModuleModel.id;
-                if (this.attachedModuleViews[id]) {
-                    delete this.attachedModuleViews[id];
+                id = ModuleModel.cid;
+                if (this.attachedModuleViews[cid]) {
+                    delete this.attachedModuleViews[cid];
                     this.stopListening(ModuleModel, "change:area", this.removeModule);
                 }
                 this.trigger("module:dettached", ModuleModel);

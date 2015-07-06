@@ -1,7 +1,11 @@
 {
   "name": "Kontentblocks",
   "author": "Kai Jacobsen",
-  "version": "0.0.1",
+  "version": "0.3.0",
+  "repository" :
+  { "type" : "git"
+    , "url" : "https://github.com/kai-jacobsen/kontentblocks"
+  },
   "devDependencies": {
     "browserify": "^10.2.3",
     "grunt": "~0.4.1",
@@ -18,5 +22,8 @@
     "handlebars": "^3.0.3",
     "hbsfy": "^2.2.1",
     "jshint-log-reporter": "^1.0.8"
+  },
+  "dependencies": {
+    "time-grunt": "^1.2.1"
   }
 }
