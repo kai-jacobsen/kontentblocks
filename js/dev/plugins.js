@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-06 */
+/*! Kontentblocks DevVersion 2015-07-08 */
 !function(a) {
     "use strict";
     function b(a, b) {
@@ -6547,8 +6547,8 @@ Date.patterns = {
             get(this);
         });
         if (options.trigger != "manual") {
-            var binder = options.live ? "live" : "bind", eventIn = options.trigger == "hover" ? "mouseenter" : "focus", eventOut = options.trigger == "hover" ? "mouseleave" : "blur";
-            this[binder](eventIn, enter)[binder](eventOut, leave);
+            var eventIn = options.trigger == "hover" ? "mouseenter" : "focus", eventOut = options.trigger == "hover" ? "mouseleave" : "blur";
+            if (options.live) $(document).on(eventIn, this.selector, enter).on(eventOut, this.selector, leave); else this.bind(eventIn, enter).bind(eventOut, leave);
         }
         return this;
     };

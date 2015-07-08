@@ -5,6 +5,14 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    concurrent: {
+      target: {
+        tasks: ['jsbackend', 'jsfrontend'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
     uglify: {
       backend: {
         options: {
@@ -65,11 +73,6 @@ module.exports = function (grunt) {
         dest: 'js/tmp/plugins.concat.js',
         nonull: true
       },
-      //fieldsAPI: {
-      //  src: ['js/src/fieldsAPI/kb.fapi.collection.js', 'js/src/fieldsAPI/Fields/_Field.js', 'js/src/fieldsAPI/Fields/**/*.js'],
-      //  dest: 'js/tmp/fieldsAPI.concat.js',
-      //  nonull: true
-      //},
       mediaExt: {
         src: ['js/src/wpMediaExt/**/*.js'],
         dest: 'js/tmp/wpMediaExt.concat.js',
@@ -135,7 +138,8 @@ module.exports = function (grunt) {
     },
     watch: {
       options: {
-        livereload: true
+        livereload: true,
+        spawn: false
       },
       backend: {
         files: ['js/src/backend/**/*.js', 'js/**/*.hbs'],
@@ -147,18 +151,18 @@ module.exports = function (grunt) {
       },
       common:{
         files: ['js/src/common/**/*.js'],
-        tasks: ['jsbackend']
+        tasks: ['cc']
       },
       refields: {
         files: ['js/src/fields/**/*.js', 'js/src/shared/**/*.js', 'js/**/*.hbs'],
-        tasks: ['jsrefields', 'jsbackend', 'jsfrontend']
+        tasks: ['jsrefields', 'cc']
       },
       plugins: {
         files: ['js/src/plugins/**/*.js'],
         tasks: ['jsplugins']
       },
       fieldsApi: {
-        files: ['js/src/fieldsAPI/**/*.js', 'js/**/*.hbs', 'js/src/common/**/*.js'],
+        files: ['js/src/fieldsAPI/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsfieldsAPI']
       },
       sass: {
@@ -183,10 +187,8 @@ module.exports = function (grunt) {
     },
     clean: ["js/tmp"],
     jshint: {
-      src: ['js/src/frontend/**/*.js', 'js/src/backend/**/*.js'],
+      src: ['js/dev/**/*.js'],
       options: {
-        reporter: require('jshint-log-reporter'),
-        reporterOutput: '_jshint.log',
         force: true,
         unused: true,
         browser: true,
@@ -215,12 +217,7 @@ module.exports = function (grunt) {
       createDevId: {
         command: './build/devhash.sh > build/hash.php'
       },
-      report: {
-        command: './build/report.sh',
-        options: {
-          message: 'Report sent to codeclimate'
-        }
-      }
+
     }
   });
 
@@ -236,10 +233,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-concurrent');
 
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'browserify', 'uglify:dist', 'uglify:dev', 'sass:dist', 'autoprefixer', 'clean', 'jshint', 'bash', 'exec:removeHash', 'exec:createId']);
+  grunt.registerTask('default', ['concat', 'browserify', 'uglify:dist', 'uglify:dev', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
 
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
 
@@ -250,5 +248,7 @@ module.exports = function (grunt) {
   grunt.registerTask('jsplugins', ['uglify:dev', 'clean', 'jshint', 'bash']);
   grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI','uglify:dev', 'clean', 'jshint', 'bash']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
+
+  grunt.registerTask('cc', ['concurrent']);
 
 };

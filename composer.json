@@ -22,7 +22,8 @@
     }
   },
   "type": "wordpress-plugin",
-  "require": {
+  "r
+  equire": {
     "php": ">=5.4",
     "twig/twig": "1.*",
     "pimple/pimple": "~3.0",
