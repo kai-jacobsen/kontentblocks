@@ -84,6 +84,9 @@
                 _.each(Payload.getPayload("Modules"), function(module) {
                     KB.ObjectProxy.add(KB.Modules.add(module));
                 });
+                _.each(Payload.getPayload("Panels"), function(panel) {
+                    KB.ObjectProxy.add(KB.Panels.add(panel));
+                });
                 _.each(Payload.getPayload("Contexts"), function(context) {
                     KB.ObjectProxy.add(KB.Contexts.add(context));
                 });
