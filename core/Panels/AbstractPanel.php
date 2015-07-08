@@ -70,9 +70,15 @@ abstract class AbstractPanel
         // mumbo jumbo
         $this->setupArgs( $this->args );
 
-        add_action('add_meta_boxes', function(){
-            $this->setupHooks();
-        });
+        add_action(
+            'add_meta_boxes',
+            function () {
+                $this->setupHooks();
+            }
+        );
+
+        add_action( "save_post", array( $this, 'save' ), 10, 1 );
+
 
     }
 
@@ -136,7 +142,6 @@ abstract class AbstractPanel
             } else {
                 add_action( $this->hook, array( $this, 'form' ) );
             }
-//            add_action( "save_post", array( $this, 'save' ), 10, 1 );
         }
     }
 
@@ -149,9 +154,12 @@ abstract class AbstractPanel
     {
 
         if (!post_type_supports( $postObj->post_type, 'editor' )) {
-            add_action('admin_footer', function(){
-               Utilities::hiddenEditor();
-            });
+            add_action(
+                'admin_footer',
+                function () {
+                    Utilities::hiddenEditor();
+                }
+            );
         }
 
         $defaults = array(
