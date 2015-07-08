@@ -93,10 +93,13 @@ abstract class StaticPanel extends AbstractPanel
 
 
 
-
-    public function renderFields()
+    public function renderFields($postId = null)
     {
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData( $this->postId ), $this );
+        if ( is_null($postId)){
+            $postId = get_the_ID();
+        }
+
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData( $postId ), $this );
         return $this->fields( $this->FieldController )->renderFields();
     }
 
