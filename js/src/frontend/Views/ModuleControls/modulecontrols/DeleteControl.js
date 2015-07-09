@@ -13,6 +13,9 @@ module.exports = ModuleMenuItem.extend({
     this.$el.append('<span class="dashicons dashicons-trash"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsDelete + '</span>');
   },
   className: 'kb-module-inline-delete kb-nbt kb-nbb kb-js-inline-delete',
+  attributes: {
+    'data-tipsy' : 'delete module and content'
+  },
   events: {
     'click': 'confirmRemoval'
   },

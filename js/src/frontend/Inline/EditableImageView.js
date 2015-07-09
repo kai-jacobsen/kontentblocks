@@ -1,27 +1,39 @@
 //KB.Backbone.Inline.EditableImage
 var Config = require('common/Config');
 var Utilities = require('common/Utilities');
+var ModuleControl = require('frontend/Inline/controls/EditImage');
+
 var EditableImage = Backbone.View.extend({
   initialize: function () {
     this.mode = this.model.get('mode');
     this.defaultState = this.model.get('state') || 'replace-image';
+    this.parentView = this.model.get('ModuleModel').View;
+    this.renderControl();
+
   },
-  events: {
-    'click': 'openFrame'
-  },
-  render: function(){
+  //events: {
+  //  'click': 'openFrame'
+  //},
+  render: function () {
     this.$el.addClass('kb-inline-imageedit-attached');
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
     this.$el.css('min-height', '200px');
   },
-  rerender: function(){
+  rerender: function () {
     this.render();
   },
-  derender: function(){
-      if (this.frame){
-        this.frame.dispose();
-        this.frame = null;
-      }
+  derender: function () {
+    if (this.frame) {
+      this.frame.dispose();
+      this.frame = null;
+    }
+  },
+  renderControl: function () {
+    var C = this.parentView.Controls;
+    this.EditControl = C.addItem(new ModuleControl({
+      model: this.model,
+      parent: this
+    }));
   },
   openFrame: function () {
     var that = this;
@@ -47,8 +59,8 @@ var EditableImage = Backbone.View.extend({
         that.attachment.set('attachment_id', attachment.get('id'));
         // create a frame, bind 'update' callback and open in one step
         that.frame = wp.media({
-          frame: 'image', // alias for the ImageDetails frame
-          state: that.defaultState, // default state, makes sense
+          frame: 'select', // alias for the ImageDetails frame
+          state: 'library', // default state, makes sense
           metadata: attachment.toJSON(), // the important bit, thats where the initial informations come from
           imageEditView: that
         }).on('update', function (attachmentObj) { // bind callback to 'update'
@@ -58,8 +70,8 @@ var EditableImage = Backbone.View.extend({
         }).on('replace', function () {
           that.replace(that.frame.image.attachment);
         }).on('select', function () {
-          alert('select');
-          //that.select();
+          var attachment = this.get('library').get('selection').first();
+          that.replace(attachment);
         }).open();
       });
 
@@ -76,7 +88,7 @@ var EditableImage = Backbone.View.extend({
   update: function (attachmentObj) {
     this.attachment.set(attachmentObj);
     this.attachment.sync('update', this.attachment);
-    if(this.$caption.length > 0){
+    if (this.$caption.length > 0) {
       this.$caption.html(this.attachment.get('caption'));
     }
   },

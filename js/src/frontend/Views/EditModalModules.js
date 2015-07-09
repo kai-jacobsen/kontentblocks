@@ -153,8 +153,8 @@ module.exports = Backbone.View.extend({
   detach: function () {
     // reset listeners and ModuleView
     this.FieldModels.reset();
-    this.stopListening(this.ModuleView);
-    this.stopListening(this.model);
+    //this.stopListening(this.ModuleView);
+    this.stopListening();
     delete this.ModuleView;
     KB.Events.trigger('modal.close', this);
   },

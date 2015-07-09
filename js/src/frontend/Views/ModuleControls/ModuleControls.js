@@ -36,8 +36,6 @@ module.exports = Backbone.View.extend({
       model: this.ModuleView.model,
       parent: this.ModuleView
     }));
-
-
   },
 
   renderControls: function () {
