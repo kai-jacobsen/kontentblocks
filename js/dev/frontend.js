@@ -1585,9 +1585,6 @@
                 this.$el.append('<span class="dashicons dashicons-format-image"></span>');
             },
             className: "os-edit-block kb-module-edit",
-            attributes: {
-                "data-tipsy": "change image"
-            },
             events: {
                 click: "openFrame"
             },
@@ -2539,9 +2536,6 @@
                 this.$el.append('<span class="dashicons dashicons-trash"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsDelete + "</span>");
             },
             className: "kb-module-inline-delete kb-nbt kb-nbb kb-js-inline-delete",
-            attributes: {
-                "data-tipsy": "delete module and content"
-            },
             events: {
                 click: "confirmRemoval"
             },
@@ -2586,9 +2580,6 @@
                 this.$el.append('<span class="dashicons dashicons-edit"></span>');
             },
             className: "os-edit-block kb-module-edit",
-            attributes: {
-                "data-tipsy": "open module edit form"
-            },
             events: {
                 click: "openForm"
             },
@@ -2616,9 +2607,6 @@
                 this.$el.append('<span class="genericon genericon-draggable"></span><span class="os-action"></span>');
             },
             className: "kb-module-inline-move kb-nbt kb-nbb",
-            attributes: {
-                "data-tipsy": "move module inside area"
-            },
             isValid: function() {
                 if (!this.Parent.model.Area) {
                     return false;
@@ -2642,9 +2630,6 @@
                 this.$el.append('<span class="dashicons dashicons-update"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsUpdate + "</span>");
             },
             className: "kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update",
-            attributes: {
-                "data-tipsy": "save module data"
-            },
             events: {
                 click: "update"
             },

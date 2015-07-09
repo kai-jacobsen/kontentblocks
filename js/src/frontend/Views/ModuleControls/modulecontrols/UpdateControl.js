@@ -11,9 +11,6 @@ module.exports = ModuleMenuItem.extend({
     this.$el.append('<span class="dashicons dashicons-update"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsUpdate + '</span>');
   },
   className: 'kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update',
-  attributes: {
-    'data-tipsy' : 'save module data'
-  },
   events: {
     'click': 'update'
   },

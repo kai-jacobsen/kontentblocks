@@ -7,9 +7,6 @@ module.exports = ModuleMenuItem.extend({
     this.$el.append('<span class="dashicons dashicons-format-image"></span>');
   },
   className: 'os-edit-block kb-module-edit',
-  attributes: {
-    'data-tipsy' : 'change image'
-  },
   events: {
     'click' : 'openFrame'
   },

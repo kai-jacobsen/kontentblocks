@@ -8,9 +8,6 @@ module.exports = ModuleMenuItem.extend({
     this.$el.append('<span class="genericon genericon-draggable"></span><span class="os-action"></span>');
   },
   className: 'kb-module-inline-move kb-nbt kb-nbb',
-  attributes: {
-    'data-tipsy' : 'move module inside area'
-  },
   isValid: function () {
     if (!this.Parent.model.Area){
       return false;

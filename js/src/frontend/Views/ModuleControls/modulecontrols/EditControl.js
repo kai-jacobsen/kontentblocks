@@ -8,9 +8,6 @@ module.exports = ModuleMenuItem.extend({
     this.$el.append('<span class="dashicons dashicons-edit"></span>');
   },
   className: 'os-edit-block kb-module-edit',
-  attributes: {
-    'data-tipsy' : 'open module edit form'
-  },
   events: {
     'click': 'openForm'
   },
