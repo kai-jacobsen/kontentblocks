@@ -8,7 +8,7 @@ var EditableImage = Backbone.View.extend({
     this.mode = this.model.get('mode');
     this.defaultState = this.model.get('state') || 'replace-image';
     this.parentView = this.model.get('ModuleModel').View;
-    this.renderControl();
+    this.render();
   },
   events: {
     'mouseenter': 'showControl'
