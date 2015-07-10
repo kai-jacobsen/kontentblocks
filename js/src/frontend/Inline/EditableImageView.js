@@ -9,31 +9,38 @@ var EditableImage = Backbone.View.extend({
     this.defaultState = this.model.get('state') || 'replace-image';
     this.parentView = this.model.get('ModuleModel').View;
     this.renderControl();
-
   },
-  //events: {
-  //  'click': 'openFrame'
-  //},
+  events: {
+    'mouseenter': 'showControl'
+    //'mouseleave': 'hideControl'
+  },
   render: function () {
+    this.delegateEvents();
     this.$el.addClass('kb-inline-imageedit-attached');
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
-    this.$el.css('min-height', '200px');
+    this.renderControl();
   },
   rerender: function () {
     this.render();
   },
   derender: function () {
+    this.EditControl.remove();
     if (this.frame) {
       this.frame.dispose();
       this.frame = null;
     }
   },
   renderControl: function () {
-    var C = this.parentView.Controls;
-    this.EditControl = C.addItem(new ModuleControl({
+    this.EditControl = new ModuleControl({
       model: this.model,
       parent: this
-    }));
+    });
+  },
+  showControl: function () {
+    this.EditControl.show();
+  },
+  hideControl: function (e) {
+    this.EditControl.hide();
   },
   openFrame: function () {
     var that = this;

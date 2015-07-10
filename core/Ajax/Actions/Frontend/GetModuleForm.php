@@ -28,6 +28,11 @@ class GetModuleForm implements AjaxActionInterface
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
+
+        if (!defined( 'KB_MODULE_FORM' )) {
+            define( 'KB_MODULE_FORM', true );
+        }
+
         $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
         $Environment = Utilities::getEnvironment( $module['post_id'] );

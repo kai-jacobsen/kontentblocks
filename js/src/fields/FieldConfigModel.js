@@ -29,12 +29,14 @@ module.exports = Backbone.Model.extend({
         model: this
       });
     }
+    console.log(this.FieldView);
   },
   getElement: function () {
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]')[0]; // root DOM element by data attribute
   },
   getType: function () {
     var type = this.get('type'); // link, image, etc
+
     if (this.ModuleModel) {
       if (this.ModuleModel.type === 'panel' && type === 'EditableImage') {
         return false;
@@ -88,7 +90,7 @@ module.exports = Backbone.Model.extend({
     this.stopListening();
     KB.FieldConfigs.remove(this);
   },
-  rebind: function () {11
+  rebind: function () {
     if (this.FieldView) {
       this.FieldView.setElement(this.getElement()); // markup might have changed, reset the root element
       this.FieldView.rerender(); // call rerender on the field

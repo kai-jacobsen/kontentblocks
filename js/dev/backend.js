@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-08 */
+/*! Kontentblocks DevVersion 2015-07-10 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -2394,6 +2394,7 @@
                         model: this
                     });
                 }
+                console.log(this.FieldView);
             },
             getElement: function() {
                 return jQuery('*[data-kbfuid="' + this.get("uid") + '"]')[0];
@@ -2446,7 +2447,6 @@
                 KB.FieldConfigs.remove(this);
             },
             rebind: function() {
-                11;
                 if (this.FieldView) {
                     this.FieldView.setElement(this.getElement());
                     this.FieldView.rerender();

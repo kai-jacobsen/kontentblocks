@@ -4,8 +4,6 @@
   position: relative;
 }
 
-
-
 .controls-wrap {
   list-style: none !important;
   margin: 0 !important;
@@ -27,14 +25,27 @@
 
   }
 
-
 }
 
 .module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
   opacity: 1;
 }
 
-.isDirty  .os-edit-wrapper  {
+.kb-inline-control{
+  position: absolute;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.module:hover, .module-merged:hover {
+
+  .kb-inline-control {
+    opacity: 1;
+  }
+
+}
+
+.isDirty .os-edit-wrapper {
   .kb-module-dirty-state {
     display: block !important;
   }
@@ -48,8 +59,8 @@
   position: absolute;
   width: 42px;
   opacity: 0;
-  transition:all .3s linear;
-//  @include border-radius(3px);
+  transition: all .3s linear;
+  //  @include border-radius(3px);
 
   z-index: 1990;
 
@@ -82,7 +93,7 @@
     color: #fff;
     border: none !important;
     text-decoration: none !important;
-    transition:all .3s ease-in-out;
+    transition: all .3s ease-in-out;
     cursor: pointer;
     //    background-color: rgba(255,255,255,.8);
     opacity: .5;
@@ -158,14 +169,14 @@ body.onsite-editing {
 
 }
 
-#onsite-form{
-//  @include transition(height .3s linear);
+#onsite-form {
+  //  @include transition(height .3s linear);
 }
 
-.kb-modal__draft-notice{
+.kb-modal__draft-notice {
   padding: 4px !important;
-  color: #333!important;
-  font-size: 11px!important;
+  color: #333 !important;
+  font-size: 11px !important;
   background-color: orange;
 }
 
@@ -200,9 +211,9 @@ body.onsite-editing {
     margin: 0;
     font-family: 'Open Sans';
     font-size: 15px;
-//    border: 1px solid #f9f9f9;
-//    border-top: 1px solid #333;
-//    border-left: 1px solid #aaa;
+    //    border: 1px solid #f9f9f9;
+    //    border-top: 1px solid #333;
+    //    border-left: 1px solid #aaa;
     border-bottom: none;
     cursor: move;
   }
@@ -233,9 +244,9 @@ body.onsite-editing {
   .control-wrap {
     background: #fff;
     padding: 10px;
-//    border: 1px solid #f9f9f9;
-//    border-bottom: 1px solid #aaa;
-//    border-right: 1px solid #aaa;
+    //    border: 1px solid #f9f9f9;
+    //    border-bottom: 1px solid #aaa;
+    //    border-right: 1px solid #aaa;
 
     label {
       font-family: 'Open Sans', sans-serif;
@@ -279,7 +290,7 @@ body.onsite-editing {
 
 // experiments
 #onsite-modal * {
-  box-sizing:border-box;
+  box-sizing: border-box;
 }
 
 //#onsite-modal .kb-field *, #onsite-modal .kb-template-selector--wrapper * {
@@ -297,8 +308,8 @@ body.onsite-editing {
   position: fixed;
   top: 32px;
   right: 0px;
-//  bottom: 30px;
-//  @include box-shadow(1px 1px 8px #333);
+  //  bottom: 30px;
+  //  @include box-shadow(1px 1px 8px #333);
   border: 1px solid #555;
   overflow: auto;
   opacity: 1;
@@ -335,7 +346,7 @@ body.onsite-editing {
     font-size: 18px;
     cursor: pointer;
     font-weight: 100;
-  transition:all .3s ease-in-out;
+    transition: all .3s ease-in-out;
 
     &:hover {
       color: #283c43;
@@ -354,7 +365,6 @@ body.onsite-editing {
     text-decoration: none;
     border-right: 1px solid #ccc;
 
-
     .dashicons {
       font-size: 11px;
       text-decoration: none;
@@ -367,8 +377,8 @@ body.onsite-editing {
 
   .kb-button-primary {
     color: #fff;
-//    background-color: $lightblue;
-    transition:all .3s ease-in-out;
+    //    background-color: $lightblue;
+    transition: all .3s ease-in-out;
     cursor: pointer;
 
     &:hover {
@@ -379,8 +389,8 @@ body.onsite-editing {
 
   .kb-button-secondary {
     color: #fff;
-//    background-color: $orange;
-    transition:all .3s ease-in-out;
+    //    background-color: $orange;
+    transition: all .3s ease-in-out;
     cursor: pointer;
 
     &:hover {
@@ -536,21 +546,21 @@ body.onsite-editing {
   box-sizing: content-box;
 }
 
-body.kontentblocks-ready .mce-floatpanel{
-  .mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout{
+body.kontentblocks-ready .mce-floatpanel {
+  .mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout {
     width: auto !important;
   }
 
-  .mce-stack-layout-item, .mce-container-body{
+  .mce-stack-layout-item, .mce-container-body {
     display: inline-block !important;
   }
 
-  .mce-tooltip{
+  .mce-tooltip {
     font-family: 'Open-Sans', sans-serif !important;
   }
 
-  .mce-widget.mce-btn{
-    button:hover{
+  .mce-widget.mce-btn {
+    button:hover {
       background-color: #ffffff !important;
     }
   }

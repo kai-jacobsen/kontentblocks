@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-09 */
+/*! Kontentblocks DevVersion 2015-07-10 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1056,6 +1056,7 @@
                         model: this
                     });
                 }
+                console.log(this.FieldView);
             },
             getElement: function() {
                 return jQuery('*[data-kbfuid="' + this.get("uid") + '"]')[0];
@@ -1108,7 +1109,6 @@
                 KB.FieldConfigs.remove(this);
             },
             rebind: function() {
-                11;
                 if (this.FieldView) {
                     this.FieldView.setElement(this.getElement());
                     this.FieldView.rerender();
@@ -1298,26 +1298,36 @@
                 this.parentView = this.model.get("ModuleModel").View;
                 this.renderControl();
             },
+            events: {
+                mouseenter: "showControl"
+            },
             render: function() {
+                this.delegateEvents();
                 this.$el.addClass("kb-inline-imageedit-attached");
                 this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
-                this.$el.css("min-height", "200px");
+                this.renderControl();
             },
             rerender: function() {
                 this.render();
             },
             derender: function() {
+                this.EditControl.remove();
                 if (this.frame) {
                     this.frame.dispose();
                     this.frame = null;
                 }
             },
             renderControl: function() {
-                var C = this.parentView.Controls;
-                this.EditControl = C.addItem(new ModuleControl({
+                this.EditControl = new ModuleControl({
                     model: this.model,
                     parent: this
-                }));
+                });
+            },
+            showControl: function() {
+                this.EditControl.show();
+            },
+            hideControl: function(e) {
+                this.EditControl.hide();
             },
             openFrame: function() {
                 var that = this;
@@ -1576,15 +1586,17 @@
         "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 35
     } ],
     24: [ function(require, module, exports) {
-        var ModuleMenuItem = require("frontend/Views/ModuleControls/modulecontrols/ControlsBaseView");
         var Check = require("common/Checks");
-        module.exports = ModuleMenuItem.extend({
+        module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.options = options || {};
                 this.Parent = options.parent;
                 this.$el.append('<span class="dashicons dashicons-format-image"></span>');
+                if (this.isValid()) {
+                    this.render();
+                }
             },
-            className: "os-edit-block kb-module-edit",
+            className: "kb-inline-control",
             events: {
                 click: "openFrame"
             },
@@ -1592,15 +1604,26 @@
                 this.Parent.openFrame();
             },
             render: function() {
-                return this.$el;
+                this.Parent.parentView.$el.append(this.$el);
+                this.$el.hide();
+            },
+            show: function() {
+                this.$el.show();
+                var off = this.Parent.$el.offset();
+                var w = this.Parent.$el.width();
+                off.left = off.left + w - 40;
+                off.top = off.top + 20;
+                this.$el.offset(off);
+            },
+            hide: function() {
+                this.$el.hide();
             },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
             }
         });
     }, {
-        "common/Checks": 9,
-        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 35
+        "common/Checks": 9
     } ],
     25: [ function(require, module, exports) {
         var Utilities = require("common/Utilities");
