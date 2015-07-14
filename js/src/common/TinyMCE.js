@@ -95,10 +95,10 @@ module.exports =
         'disabled_buttons': '',
         'id': id
       };
-      var qts = jQuery('#qt_' + id + '_toolbar');
-      if (qts.length > 0) {
+      //var qts = jQuery('#qt_' + id + '_toolbar');
+      //if (qts.length > 0) {
         window.quicktags(qtsettings);
-      }
+      //}
     });
     setTimeout(function () {
       jQuery('.wp-editor-wrap', $el).removeClass('html-active').addClass('tmce-active');

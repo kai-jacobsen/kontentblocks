@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-10 */
+/*! Kontentblocks DevVersion 2015-07-14 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1990,10 +1990,7 @@
                         disabled_buttons: "",
                         id: id
                     };
-                    var qts = jQuery("#qt_" + id + "_toolbar");
-                    if (qts.length > 0) {
-                        window.quicktags(qtsettings);
-                    }
+                    window.quicktags(qtsettings);
                 });
                 setTimeout(function() {
                     jQuery(".wp-editor-wrap", $el).removeClass("html-active").addClass("tmce-active");
