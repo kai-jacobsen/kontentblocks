@@ -1,12 +1,14 @@
 //KB.Backbone.Inline.EditableText
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
-var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
+var ModuleControl = require('frontend/Inline/controls/EditText');
+
 var EditableText = Backbone.View.extend({
   initialize: function () {
     this.placeHolderSet = false;
     this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
     this.settings = this.model.get('tinymce');
+    this.parentView = this.model.get('ModuleModel').View;
     this.setupDefaults();
     this.maybeSetPlaceholder();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
@@ -19,15 +21,27 @@ var EditableText = Backbone.View.extend({
     if (this.el.id) {
       this.id = this.el.id;
     }
+    this.renderControl();
   },
   derender: function () {
+    this.EditControl.remove();
     this.deactivate();
   },
   rerender: function () {
     this.render();
   },
+  renderControl: function(){
+    this.EditControl = new ModuleControl({
+      model: this.model,
+      parent: this
+    });
+  },
   events: {
-    'click': 'activate'
+    //'click': 'activate',
+    'mouseenter' : 'showControl'
+  },
+  showControl: function () {
+    this.EditControl.show();
   },
   setupDefaults: function () {
     var that = this;
@@ -127,6 +141,7 @@ var EditableText = Backbone.View.extend({
                   if (window.twttr){
                     window.twttr.widgets.load();
                   }
+
                 },
 
                 error: function () {
@@ -142,7 +157,6 @@ var EditableText = Backbone.View.extend({
             ed.setContent(ed.previousContent);
           }
           that.maybeSetPlaceholder();
-
         });
       }
     };
