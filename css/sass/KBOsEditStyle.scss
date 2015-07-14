@@ -26,6 +26,7 @@
 
 }
 
+
 .module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
   opacity: 1;
 }
@@ -545,7 +546,7 @@ body.onsite-editing {
   box-sizing: content-box;
 }
 
-body.kontentblocks-ready .mce-floatpanel {
+body.kontentblocks-ready .mce-floatpanel.mce-tinymce-inline {
   .mce-toolbar-grp.mce-container, .mce-container-body.mce-stack-layout {
     width: auto !important;
   }
@@ -565,3 +566,6 @@ body.kontentblocks-ready .mce-floatpanel {
   }
 }
 
+body.kontentblocks-ready .mce-container.mce-panel.mce-floatpanel.mce-menu.mce-menu-align{
+  position: fixed !important;
+}

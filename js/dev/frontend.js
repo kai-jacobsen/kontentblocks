@@ -633,6 +633,7 @@
                     settings.setup = function(ed) {
                         ed.on("init", function() {
                             KB.Events.trigger("KB::tinymce.new-editor", ed);
+                            console.log(ed);
                         });
                         ed.on("change", function() {
                             var $module, moduleView;
