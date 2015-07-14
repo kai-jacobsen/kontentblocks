@@ -2568,11 +2568,11 @@
                     i18n: KB.i18n.jsFrontend
                 }));
                 this.$el = jQuery(".kb-module-controls", this.ModuleView.$el);
-                this.$menuList = jQuery('<ul class="controls-wrap"></ul>').appendTo(this.$el);
+                this.$menuList = jQuery('<div class="controls-wrap"></div>').appendTo(this.$el);
             },
             addItem: function(view) {
                 if (view.isValid && view.isValid() === true) {
-                    var $liItem = jQuery("<li></li>").appendTo(this.$menuList);
+                    var $liItem = jQuery('<div class="controls-wrap-item"></div>').appendTo(this.$menuList);
                     var $menuItem = $liItem.append(view.render());
                     this.$menuList.append($menuItem);
                     return view;
