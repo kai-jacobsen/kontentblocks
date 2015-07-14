@@ -3,6 +3,14 @@
     context
 \*------------------------------------*/
 
+#wp-link .screen-reader-text{
+  text-indent: -9999px;
+}
+
+#wp-link p.howto a{
+  font-size: 12px !important;
+}
+
 #wp-link-wrap {
   display: none;
   background-color: #fff;
@@ -224,6 +232,7 @@
   cursor: pointer;
   position: relative;
   font-size: 12px !important;
+  display: block;
 }
 
 #wp-link li:hover {
