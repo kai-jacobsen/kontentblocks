@@ -25,9 +25,11 @@ module.exports = Backbone.View.extend({
     var off = this.Parent.$el.offset();
     var w = this.Parent.$el.width();
     var h = this.Parent.$el.height();
-
-    off.left = off.left - 25;
+    off.left = off.left + w - 40;
     off.top = off.top + 3;
+    if (h > 30){
+      off.top = off.top + 20;
+    }
     this.$el.offset(off);
   },
   hide: function () {
