@@ -198,9 +198,9 @@ class ModuleWorkshop
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
 
 
-        if (empty( $attrs['post_id'] )) {
+//        if (empty( $attrs['post_id'] )) {
             $attrs['post_id'] = $this->Environment->getId();
-        }
+//        }
 
         if (is_null( $attrs['parentObjectId'] ) || $attrs['parentObjectId'] === 0) {
             $attrs['parentObjectId'] = $attrs['post_id'];

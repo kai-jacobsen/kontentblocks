@@ -13,7 +13,6 @@ module.exports = Backbone.View.extend({
     'click': 'focusEditor'
   },
   focusEditor: function (e) {
-    console.log('click');
     this.Parent.activate(e);
   },
   render: function () {

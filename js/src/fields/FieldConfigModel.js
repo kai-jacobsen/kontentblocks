@@ -29,7 +29,6 @@ module.exports = Backbone.Model.extend({
         model: this
       });
     }
-    console.log(this.FieldView);
   },
   getElement: function () {
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]')[0]; // root DOM element by data attribute
