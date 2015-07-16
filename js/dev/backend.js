@@ -2437,6 +2437,7 @@
                     this.get("ModuleModel").set("moduleData", cdata, {
                         silent: true
                     });
+                    this.get("ModuleModel").View.getDirty();
                 }
             },
             remove: function() {

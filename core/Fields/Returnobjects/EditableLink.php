@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
+use Kontentblocks\Kontentblocks;
+
 
 /**
  * Class EditableLink
@@ -46,10 +48,29 @@ class EditableLink extends AbstractEditableFieldReturn
 
     }
 
+    public function handleLoggedInUsers()
+    {
+        parent::handleLoggedInUsers();
+        $this->toJSON();
+    }
 
     protected function prepare()
     {
         $this->target = '';
         $this->href = ( isset( $this->value['link'] ) ) ? $this->value['link'] : '';
+    }
+
+    public function toJSON()
+    {
+        $json = array(
+            'editableSubType' => $this->getEditableClass(),
+            'type' => 'EditableLink',
+            'kpath' => $this->createPath(),
+            'tooltip' => $this->helptext
+        );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
+            $this->uniqueId,
+            $this->field->augmentArgs( $json )
+        );
     }
 }

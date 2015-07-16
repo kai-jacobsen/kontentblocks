@@ -1851,6 +1851,7 @@
         var BaseView = require("../FieldBaseView");
         KB.Fields.registerObject("link", BaseView.extend({
             initialize: function() {
+                window._kbLink = this;
                 this.render();
             },
             events: {
@@ -1858,36 +1859,40 @@
             },
             render: function() {
                 this.$input = this.$(".kb-js-link-input");
+                this.$text = this.$(".kb-field--link-linktext");
             },
             derender: function() {},
             openModal: function() {
                 wpActiveEditor = this.$input.attr("id");
                 jQuery("#wp-link-wrap").addClass("kb-customized");
-                kb_restore_htmlUpdate = wpLink.htmlUpdate;
-                kb_restore_isMce = wpLink.isMCE;
+                window.kb_restore_htmlUpdate = wpLink.htmlUpdate;
+                window.kb_restore_isMce = wpLink.isMCE;
                 wpLink.isMCE = this.isMCE;
                 wpLink.htmlUpdate = this.htmlUpdate;
                 wpLink.open();
+                jQuery("#wp-link-text").val(this.$text.val());
+                jQuery("#wp-link-url").val(this.$input.val());
             },
             htmlUpdate: function() {
                 var attrs, html, start, end, cursor, href, title, textarea = wpLink.textarea, result;
                 if (!textarea) return;
                 attrs = wpLink.getAttrs();
+                title = jQuery("#wp-link-text").val();
                 if (!attrs.href || attrs.href == "http://") return;
                 href = attrs.href;
-                title = attrs.title;
                 jQuery(textarea).empty();
                 textarea.value = href;
+                window._kbLink.$text.val(title);
                 wpLink.close();
-                this.close();
+                window._kbLink.close();
                 textarea.focus();
             },
             isMCE: function() {
                 return false;
             },
             close: function() {
-                wpLink.isMCE = kb_restore_isMce;
-                wpLink.htmlUpdate = kb_restore_htmlUpdate;
+                wpLink.isMCE = window.kb_restore_isMce;
+                wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
             }
         }));
     }, {

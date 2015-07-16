@@ -1358,6 +1358,10 @@ img.kb-inline-imageedit-attached:hover {
 .button.button-primary {
   text-transform: none !important; }
 
+/* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+.editable-element-active {
+  outline: 1px solid #05ceff; }
+
 /* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_modal.scss */
 #onsite-modal.kb-modal-sidebar {
   position: absolute;
