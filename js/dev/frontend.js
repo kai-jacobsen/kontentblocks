@@ -1427,6 +1427,7 @@
         var EditableLink = Backbone.View.extend({
             initialize: function() {
                 this.parentView = this.model.get("ModuleModel").View;
+                this.setupDefaults();
                 this.render();
             },
             events: {
@@ -1497,6 +1498,18 @@
                 wpLink.isMCE = window.kb_restore_isMce;
                 wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
                 this.EditControl.show();
+            },
+            setupDefaults: function() {
+                var val = this.model.get("value");
+                if (!val || val === "") {
+                    val = {};
+                }
+                var sval = _.defaults(val, {
+                    link: "",
+                    linktext: ""
+                });
+                this.model.set("value", sval);
+                console.log(sval);
             }
         });
         KB.Fields.registerObject("EditableLink", EditableLink);
@@ -1581,6 +1594,7 @@
                                 that.$el.html("");
                                 that.placeHolderSet = false;
                             }
+                            window.wpActiveEditor = that.el.id;
                             var con = Utilities.getIndex(ed.module.get("moduleData"), ed.kpath);
                             ed.previousContent = ed.getContent();
                             if (ed.kfilter) {
@@ -1606,7 +1620,7 @@
                                 jQuery("#kb-toolbar").hide();
                             }
                         });
-                        ed.on("blur", function() {
+                        ed.on("blur", function(e, b) {
                             var content, moduleData, path;
                             ed.module.View.$el.removeClass("inline-edit-active");
                             jQuery("#kb-toolbar").hide();

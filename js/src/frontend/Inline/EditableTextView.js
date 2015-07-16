@@ -79,6 +79,7 @@ var EditableText = Backbone.View.extend({
             that.$el.html('');
             that.placeHolderSet = false;
           }
+          window.wpActiveEditor = that.el.id;
           var con = Utilities.getIndex(ed.module.get('moduleData'), ed.kpath);
           ed.previousContent = ed.getContent();
           if (ed.kfilter) {
@@ -109,7 +110,7 @@ var EditableText = Backbone.View.extend({
           }
         });
 
-        ed.on('blur', function () {
+        ed.on('blur', function (e, b) {
           var content, moduleData, path;
           ed.module.View.$el.removeClass('inline-edit-active');
           jQuery('#kb-toolbar').hide();

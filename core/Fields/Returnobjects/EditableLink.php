@@ -36,7 +36,7 @@ class EditableLink extends AbstractEditableFieldReturn
             return sprintf(
                 $format,
                 'a',
-                $this->value['linktext'],
+                $this->getValue('linktext'),
                 $this->_renderAttributes(),
                 $this->uniqueId,
                 $this->href

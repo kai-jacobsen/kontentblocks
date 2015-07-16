@@ -6,6 +6,7 @@ var ModuleControl = require('frontend/Inline/controls/EditLink');
 var EditableLink = Backbone.View.extend({
   initialize: function () {
     this.parentView = this.model.get('ModuleModel').View;
+    this.setupDefaults();
     this.render();
   },
   events: {
@@ -80,10 +81,10 @@ var EditableLink = Backbone.View.extend({
     href = attrs.href;
 
     this.$el.attr('href', href);
-    this .$el.text(title);
+    this.$el.text(title);
 
     var data = {
-      link : href,
+      link: href,
       linktext: title
     };
 
@@ -96,11 +97,25 @@ var EditableLink = Backbone.View.extend({
     wpLink.close();
     this.close();
   },
-  close: function(){
+  close: function () {
     // restore the original functions to wpLink
     wpLink.isMCE = window.kb_restore_isMce;
     wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
     this.EditControl.show();
+  },
+  setupDefaults: function () {
+    var val = this.model.get('value');
+    if (!val || val === '') {
+      val = {};
+    }
+    var sval = _.defaults(val, {
+      link: '',
+      linktext: ''
+    });
+
+    this.model.set('value', sval);
+    console.log(sval);
+
   }
 });
 
