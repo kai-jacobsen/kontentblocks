@@ -1,6 +1,31 @@
 #Changelog
 
-####0.2.5
+####0.3.7
++ editableLink is back and link field type has improved
++ lot of TinyMCE related styling fixes on the frontend
++ improved frontend compat for wplink dialog
+
+####0.3.6
++ modules post_id property is now set upon module creation
+this prevents wrong module <-> post association when post meta is duplicated
+
+####0.3.5
++ improved control for inline image edit
+
+####0.3.4
++ Fixed panel intantiation
+
+####0.3.3
++ initializing of panel fields fixed (backend)
+
+####0.3.2
++ bugfix: saving of panels
+
+####0.3.1
++ gruntfile tasks optimized
++ removed $.live from tipsy (deprecated)
+
+####0.3.0
 + added jQuery.tipsy
 + disabled sidebar selector in favor of 'inline' global areas, gets removed in future version
 + sortable areas (backend)
