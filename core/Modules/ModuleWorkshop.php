@@ -198,6 +198,7 @@ class ModuleWorkshop
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
 
 
+        // @TODO don't store post_id in the first place
 //        if (empty( $attrs['post_id'] )) {
             $attrs['post_id'] = $this->Environment->getId();
 //        }
