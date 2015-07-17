@@ -91,7 +91,6 @@ var EditableLink = Backbone.View.extend({
     //var kpath = this.model.get('kpath');
     this.model.set('value', data);
 
-
     //restore the original function
     // close dialog and put the cursor inside the textarea
     wpLink.close();
@@ -114,7 +113,6 @@ var EditableLink = Backbone.View.extend({
     });
 
     this.model.set('value', sval);
-    console.log(sval);
 
   }
 });

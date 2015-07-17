@@ -39,10 +39,7 @@ module.exports = Backbone.View.extend({
   isValid: function () {
     return Check.userCan('edit_kontentblocks');
   },
-  mouseenter: function () {
-    this.Parent.$el.addClass('editable-element-active');
-  },
-  mouseleave: function () {
-    this.Parent.$el.removeClass('editable-element-active');
+  mouseenter: function(){
+
   }
 });

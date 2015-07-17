@@ -13,7 +13,7 @@ var EditableText = Backbone.View.extend({
     this.maybeSetPlaceholder();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
     this.render();
-    this.$('a').on('click', function(e){
+    this.$('a').on('click', function (e) {
       e.preventDefault();
     });
   },
@@ -30,7 +30,7 @@ var EditableText = Backbone.View.extend({
   rerender: function () {
     this.render();
   },
-  renderControl: function(){
+  renderControl: function () {
     this.EditControl = new ModuleControl({
       model: this.model,
       parent: this
@@ -38,7 +38,7 @@ var EditableText = Backbone.View.extend({
   },
   events: {
     //'click': 'activate',
-    'mouseenter' : 'showControl'
+    'mouseenter': 'showControl'
   },
   showControl: function () {
     this.EditControl.show();
@@ -59,6 +59,8 @@ var EditableText = Backbone.View.extend({
       preview_styles: false,
 
       setup: function (ed) {
+
+
         ed.on('init', function () {
           that.editor = ed;
           ed.module = that.model.get('ModuleModel');
@@ -66,11 +68,13 @@ var EditableText = Backbone.View.extend({
           ed.kpath = that.model.get('kpath');
           ed.module.View.$el.addClass('inline-editor-attached');
           KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
-          ed.fire('focus');
           ed.focus();
         });
 
         ed.on('click', function (e) {
+
+          that.getSelection(ed);
+
           e.stopPropagation();
         });
 
@@ -110,7 +114,7 @@ var EditableText = Backbone.View.extend({
           }
         });
 
-        ed.on('blur', function (e, b) {
+        ed.on('blur', function (e) {
           var content, moduleData, path;
           ed.module.View.$el.removeClass('inline-edit-active');
           jQuery('#kb-toolbar').hide();
@@ -139,10 +143,9 @@ var EditableText = Backbone.View.extend({
                   ed.setContent(res.data.content);
                   ed.module.set('moduleData', moduleData);
                   //ed.module.trigger('kb.frontend.module.inlineUpdate');
-                  if (window.twttr){
+                  if (window.twttr) {
                     window.twttr.widgets.load();
                   }
-
                 },
 
                 error: function () {
@@ -158,6 +161,10 @@ var EditableText = Backbone.View.extend({
             ed.setContent(ed.previousContent);
           }
           that.maybeSetPlaceholder();
+
+          setTimeout(function(){
+            that.deactivate();
+          }, 500);
         });
       }
     };
@@ -172,7 +179,9 @@ var EditableText = Backbone.View.extend({
     }
   },
   deactivate: function () {
-    tinyMCE.execCommand('mceRemoveEditor', false, this.id);
+    if (this.editor){
+      this.editor.destroy();
+    }
     this.editor = null;
   },
   maybeSetPlaceholder: function () {
@@ -189,6 +198,9 @@ var EditableText = Backbone.View.extend({
       .replace(/&nbsp;/g, '')
       .replace(/<br>/g, '')
       .replace(/<p><\/p>/g, '');
+  },
+  getSelection: function (editor) {
+    //console.log(editor.selection.getContent());
   }
 });
 

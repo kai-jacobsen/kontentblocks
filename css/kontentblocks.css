@@ -1333,18 +1333,17 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
 
 /* line 37, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
 .kb-front-sortable-placeholder {
-  background-color: #f9f9f9 !important;
+  background-color: #03A9F4 !important;
   width: 100%;
-  max-height: 50px !important;
   visibility: visible;
   margin: 10px 0;
   padding: 0; }
 
-/* line 46, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+/* line 45, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
 .kb-menubar-area-active {
   outline: 1px dotted #ccc; }
 
-/* line 50, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+/* line 49, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
 .kb-editable-text-placeholder {
   background-color: #fcfcfc;
   padding: 8px;
@@ -1353,15 +1352,15 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   display: inline-block;
   width: 100%; }
 
-/* line 61, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+/* line 60, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
 img.kb-inline-imageedit-attached:hover {
   cursor: pointer; }
 
-/* line 67, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+/* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
 .button.button-primary {
   text-transform: none !important; }
 
-/* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
+/* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_common.scss */
 .editable-element-active {
   outline: 1px solid #05ceff; }
 

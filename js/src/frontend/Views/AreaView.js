@@ -7,7 +7,7 @@ var Ajax = require('common/Ajax');
 module.exports = Backbone.View.extend({
   isSorting: false,
   events: {
-    'dblclick': 'openModuleBrowser'
+    //'dblclick': 'openModuleBrowser'
   },
   initialize: function () {
     this.attachedModuleViews = {};
@@ -138,8 +138,8 @@ module.exports = Backbone.View.extend({
           },
           ////axis: "y",
           delay: 150,
-          //forceHelperSize: true,
-          //forcePlaceholderSize: true,
+          forceHelperSize: true,
+          forcePlaceholderSize: true,
           placeholder: "kb-front-sortable-placeholder",
           start: function () {
             that.isSorting = true;

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-16 */
+/*! Kontentblocks DevVersion 2015-07-17 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1509,7 +1509,6 @@
                     linktext: ""
                 });
                 this.model.set("value", sval);
-                console.log(sval);
             }
         });
         KB.Fields.registerObject("EditableLink", EditableLink);
@@ -1583,10 +1582,10 @@
                             ed.kpath = that.model.get("kpath");
                             ed.module.View.$el.addClass("inline-editor-attached");
                             KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
-                            ed.fire("focus");
                             ed.focus();
                         });
                         ed.on("click", function(e) {
+                            that.getSelection(ed);
                             e.stopPropagation();
                         });
                         ed.on("focus", function() {
@@ -1620,7 +1619,7 @@
                                 jQuery("#kb-toolbar").hide();
                             }
                         });
-                        ed.on("blur", function(e, b) {
+                        ed.on("blur", function(e) {
                             var content, moduleData, path;
                             ed.module.View.$el.removeClass("inline-edit-active");
                             jQuery("#kb-toolbar").hide();
@@ -1660,6 +1659,9 @@
                                 ed.setContent(ed.previousContent);
                             }
                             that.maybeSetPlaceholder();
+                            setTimeout(function() {
+                                that.deactivate();
+                            }, 500);
                         });
                     }
                 };
@@ -1674,7 +1676,9 @@
                 }
             },
             deactivate: function() {
-                tinyMCE.execCommand("mceRemoveEditor", false, this.id);
+                if (this.editor) {
+                    this.editor.destroy();
+                }
                 this.editor = null;
             },
             maybeSetPlaceholder: function() {
@@ -1687,7 +1691,8 @@
             },
             cleanString: function(string) {
                 return string.replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
-            }
+            },
+            getSelection: function(editor) {}
         });
         module.exports = EditableText;
     }, {
@@ -1825,12 +1830,7 @@
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
             },
-            mouseenter: function() {
-                this.Parent.$el.addClass("editable-element-active");
-            },
-            mouseleave: function() {
-                this.Parent.$el.removeClass("editable-element-active");
-            }
+            mouseenter: function() {}
         });
     }, {
         "common/Checks": 9
@@ -2037,9 +2037,7 @@
         var Ajax = require("common/Ajax");
         module.exports = Backbone.View.extend({
             isSorting: false,
-            events: {
-                dblclick: "openModuleBrowser"
-            },
+            events: {},
             initialize: function() {
                 this.attachedModuleViews = {};
                 this.renderSettings = this.model.get("renderSettings");
@@ -2146,6 +2144,8 @@
                             left: 5
                         },
                         delay: 150,
+                        forceHelperSize: true,
+                        forcePlaceholderSize: true,
                         placeholder: "kb-front-sortable-placeholder",
                         start: function() {
                             that.isSorting = true;

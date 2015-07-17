@@ -150,7 +150,7 @@ class EditableElement extends AbstractEditableFieldReturn
         }
 
         if (in_array( $this->el, $text )) {
-            $this->tinymce['toolbar'] = "formatselect | bold italic | alignleft aligncenter alignright alignjustify";
+            $this->tinymce['toolbar'] = "bold italic | alignleft aligncenter alignright alignjustify";
             return 'editable';
         }
 
