@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-14 */
+/*! Kontentblocks DevVersion 2015-07-17 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -223,6 +223,7 @@
                     settings.setup = function(ed) {
                         ed.on("init", function() {
                             KB.Events.trigger("KB::tinymce.new-editor", ed);
+                            console.log(ed);
                         });
                         ed.on("change", function() {
                             var $module, moduleView;
