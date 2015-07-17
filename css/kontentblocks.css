@@ -343,7 +343,7 @@
     base extends
 \*------------------------------------*/
 /* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
-.base-box-shadow, #onsite-modal, .kb-fullscreen--holder, .alertify-notifier .ajs-message, #module-browser {
+.base-box-shadow, .kontentblocks-ready .mce-tinymce-inline.mce-container.mce-panel.mce-floatpanel, #onsite-modal, .kb-fullscreen--holder, .alertify-notifier .ajs-message, #module-browser {
   -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 10px 0 rgba(0, 0, 0, 0.12); }
 
@@ -543,62 +543,66 @@
   /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-btn button {
     color: #fff !important; }
-  /* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 23, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar #wp-fullscreen-buttons .mce-btn:hover, #kb-toolbar .mce-toolbar .mce-btn-group .mce-btn:hover, #kb-toolbar #wp-fullscreen-buttons .mce-btn:focus, #kb-toolbar .mce-toolbar .mce-btn-group .mce-btn:focus, #kb-toolbar .qt-fullscreen:hover, #kb-toolbar .qt-fullscreen:focus, #kb-toolbar button {
     background: transparent;
     -webkit-box-shadow: none;
     box-shadow: none;
     border: none; }
-  /* line 27, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 29, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-toolbar .mce-btn-group .mce-btn.mce-active {
     background: #333 !important;
     border-color: #444; }
-  /* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 34, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-ico {
     color: #fff; }
-  /* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 38, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-toolbar-grp {
     background-color: #333;
     min-width: 650px; }
-  /* line 41, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 43, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-i-kbcancleinline {
     font-family: 'dashicons'; }
-    /* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+    /* line 46, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
     #kb-toolbar .mce-i-kbcancleinline:before {
       content: "\f335";
       font-family: 'dashicons';
       width: 15px;
       height: 15px;
       font-size: 22px; }
-  /* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 55, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-menubtn {
     background: #222;
     border: transparent; }
-  /* line 58, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 60, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-menubtn span {
     color: #fff; }
-  /* line 62, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 64, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #kb-toolbar .mce-panel {
     background: #222;
     color: #f2f2f2; }
-    /* line 66, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+    /* line 68, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
     #kb-toolbar .mce-panel .mce-menu-item {
       background: #222; }
 
 /*------------------------------------*\
     TinyMCE hard styles
 \*------------------------------------*/
-/* line 78, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 80, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .wp-editor-wrap * {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box; }
-/* line 81, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+/* line 83, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
 #onsite-form .mce-widget {
   text-transform: none !important; }
-  /* line 83, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+  /* line 85, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
   #onsite-form .mce-widget button:hover {
     background: transparent !important; }
+
+/* line 92, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_toolbar.scss */
+.kontentblocks-ready div.mce-toolbar-grp {
+  background: #fff !important; }
 
 /* line 2, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_menubar.scss */
 .kb-menubar-container * {

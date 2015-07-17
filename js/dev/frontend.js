@@ -1568,7 +1568,7 @@
                     skin: false,
                     menubar: false,
                     add_unload_trigger: false,
-                    fixed_toolbar_container: "#kb-toolbar",
+                    fixed_toolbar_container: null,
                     schema: "html5",
                     inline: true,
                     plugins: "textcolor",
@@ -1583,9 +1583,17 @@
                             ed.module.View.$el.addClass("inline-editor-attached");
                             KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
                             ed.focus();
+                            jQuery(".mce-panel.mce-floatpanel").hide();
+                            jQuery(window).on("scroll resize", function() {
+                                jQuery(".mce-panel.mce-floatpanel").hide();
+                            });
+                        });
+                        ed.on("NodeChange", function(e) {
+                            console.log("nodechanged");
+                            that.getSelection(ed, e);
                         });
                         ed.on("click", function(e) {
-                            that.getSelection(ed);
+                            that.getSelection(ed, e);
                             e.stopPropagation();
                         });
                         ed.on("focus", function() {
@@ -1605,7 +1613,6 @@
                                 ed.setContent("");
                             }
                         });
-                        ed.on("change", function() {});
                         ed.addButton("kbcancleinline", {
                             title: "Stop inline Edit",
                             onClick: function() {
@@ -1692,8 +1699,68 @@
             cleanString: function(string) {
                 return string.replace(/\s/g, "").replace(/&nbsp;/g, "").replace(/<br>/g, "").replace(/<p><\/p>/g, "");
             },
-            getSelection: function(editor) {}
+            getSelection: function(editor, event) {
+                var sel = editor.selection.getContent();
+                if (sel === "") {
+                    jQuery(".mce-panel.mce-floatpanel").hide();
+                } else {
+                    jQuery(".mce-panel.mce-floatpanel").show();
+                    var mpos = markSelection();
+                    var w = jQuery(".mce-panel.mce-floatpanel").width();
+                    jQuery(".mce-panel.mce-floatpanel").offset({
+                        top: mpos.top - 40,
+                        left: mpos.left - w
+                    });
+                }
+            }
         });
+        var markSelection = function() {
+            var markerTextChar = "\ufeff";
+            var markerTextCharEntity = "&#xfeff;";
+            var markerEl, markerId = "sel_" + new Date().getTime() + "_" + Math.random().toString().substr(2);
+            var selectionEl;
+            return function() {
+                var sel, range;
+                if (document.selection && document.selection.createRange) {
+                    range = document.selection.createRange().duplicate();
+                    range.collapse(false);
+                    range.pasteHTML('<span id="' + markerId + '" style="position: relative;">' + markerTextCharEntity + "</span>");
+                    markerEl = document.getElementById(markerId);
+                } else if (window.getSelection) {
+                    sel = window.getSelection();
+                    if (sel.getRangeAt) {
+                        range = sel.getRangeAt(0).cloneRange();
+                    } else {
+                        range.setStart(sel.anchorNode, sel.anchorOffset);
+                        range.setEnd(sel.focusNode, sel.focusOffset);
+                        if (range.collapsed !== sel.isCollapsed) {
+                            range.setStart(sel.focusNode, sel.focusOffset);
+                            range.setEnd(sel.anchorNode, sel.anchorOffset);
+                        }
+                    }
+                    range.collapse(false);
+                    markerEl = document.createElement("span");
+                    markerEl.id = markerId;
+                    var $markerEl = jQuery(markerEl);
+                    $markerEl.prepend(document.createTextNode(markerTextChar));
+                    range.insertNode(markerEl);
+                }
+                if (markerEl) {
+                    var obj = markerEl;
+                    var left = 0, top = 0;
+                    do {
+                        left += obj.offsetLeft;
+                        top += obj.offsetTop;
+                    } while (obj = obj.offsetParent);
+                    markerEl.parentNode.removeChild(markerEl);
+                    $markerEl.remove();
+                    return {
+                        left: left,
+                        top: top
+                    };
+                }
+            };
+        }();
         module.exports = EditableText;
     }, {
         "common/Config": 10,

@@ -51,7 +51,8 @@ var EditableText = Backbone.View.extend({
       skin: false,
       menubar: false,
       add_unload_trigger: false,
-      fixed_toolbar_container: '#kb-toolbar',
+      fixed_toolbar_container: null,
+      //fixed_toolbar_container: '#kb-toolbar',
       schema: 'html5',
       inline: true,
       plugins: 'textcolor',
@@ -59,8 +60,6 @@ var EditableText = Backbone.View.extend({
       preview_styles: false,
 
       setup: function (ed) {
-
-
         ed.on('init', function () {
           that.editor = ed;
           ed.module = that.model.get('ModuleModel');
@@ -69,12 +68,22 @@ var EditableText = Backbone.View.extend({
           ed.module.View.$el.addClass('inline-editor-attached');
           KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
           ed.focus();
+          jQuery('.mce-panel.mce-floatpanel').hide();
+
+          jQuery(window).on('scroll resize',function(){
+            jQuery('.mce-panel.mce-floatpanel').hide();
+          });
+
+        });
+
+        ed.on('NodeChange', function(e){
+          console.log('nodechanged');
+          that.getSelection(ed, e);
+
         });
 
         ed.on('click', function (e) {
-
-          that.getSelection(ed);
-
+          that.getSelection(ed, e);
           e.stopPropagation();
         });
 
@@ -94,10 +103,6 @@ var EditableText = Backbone.View.extend({
           if (that.placeHolderSet) {
             ed.setContent('');
           }
-        });
-
-        ed.on('change', function () {
-
         });
 
         ed.addButton('kbcancleinline', {
@@ -199,9 +204,107 @@ var EditableText = Backbone.View.extend({
       .replace(/<br>/g, '')
       .replace(/<p><\/p>/g, '');
   },
-  getSelection: function (editor) {
+  getSelection: function (editor, event) {
     //console.log(editor.selection.getContent());
+    var sel = editor.selection.getContent();
+    if (sel === ''){
+
+      jQuery('.mce-panel.mce-floatpanel').hide();
+    } else {
+      jQuery('.mce-panel.mce-floatpanel').show();
+      var mpos = markSelection();
+      var w = jQuery('.mce-panel.mce-floatpanel').width();
+      jQuery('.mce-panel.mce-floatpanel').offset({top:mpos.top-40, left:mpos.left-w})
+
+    }
+
   }
 });
+
+var markSelection = (function() {
+  var markerTextChar = "\ufeff";
+  var markerTextCharEntity = "&#xfeff;";
+
+  var markerEl, markerId = "sel_" + new Date().getTime() + "_" + Math.random().toString().substr(2);
+
+  var selectionEl;
+
+  return function() {
+    var sel, range;
+
+    if (document.selection && document.selection.createRange) {
+      // Clone the TextRange and collapse
+      range = document.selection.createRange().duplicate();
+      range.collapse(false);
+
+      // Create the marker element containing a single invisible character by creating literal HTML and insert it
+      range.pasteHTML('<span id="' + markerId + '" style="position: relative;">' + markerTextCharEntity + '</span>');
+      markerEl = document.getElementById(markerId);
+    } else if (window.getSelection) {
+      sel = window.getSelection();
+
+      if (sel.getRangeAt) {
+        range = sel.getRangeAt(0).cloneRange();
+      } else {
+        // Older WebKit doesn't have getRangeAt
+        range.setStart(sel.anchorNode, sel.anchorOffset);
+        range.setEnd(sel.focusNode, sel.focusOffset);
+
+        // Handle the case when the selection was selected backwards (from the end to the start in the
+        // document)
+        if (range.collapsed !== sel.isCollapsed) {
+          range.setStart(sel.focusNode, sel.focusOffset);
+          range.setEnd(sel.anchorNode, sel.anchorOffset);
+        }
+      }
+
+      range.collapse(false);
+
+      // Create the marker element containing a single invisible character using DOM methods and insert it
+      markerEl = document.createElement("span");
+      markerEl.id = markerId;
+      var $markerEl = jQuery(markerEl);
+      $markerEl.prepend( document.createTextNode(markerTextChar) );
+      range.insertNode(markerEl);
+    }
+
+    if (markerEl) {
+      // Lazily create element to be placed next to the selection
+      //if (!selectionEl) {
+      //  selectionEl = document.createElement("div");
+      //  selectionEl.style.border = "solid darkblue 1px";
+      //  selectionEl.style.backgroundColor = "lightgoldenrodyellow";
+      //  selectionEl.innerHTML = "&lt;- selection";
+      //  selectionEl.style.position = "absolute";
+      //
+      //  document.body.appendChild(selectionEl);
+      //}
+
+      // Find markerEl position http://www.quirksmode.org/js/findpos.html
+      var obj = markerEl;
+      var left = 0, top = 0;
+      do {
+        left += obj.offsetLeft;
+        top += obj.offsetTop;
+      } while (obj = obj.offsetParent);
+
+
+      markerEl.parentNode.removeChild(markerEl);
+      $markerEl.remove();
+
+
+      return {
+        left: left,
+        top: top
+      };
+      // Move the button into place.
+      // Substitute your jQuery stuff in here
+      //selectionEl.style.left = left + "px";
+      //selectionEl.style.top = top + "px";
+
+    }
+  };
+})();
+
 
 module.exports = EditableText;

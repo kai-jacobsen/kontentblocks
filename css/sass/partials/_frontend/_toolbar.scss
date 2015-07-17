@@ -4,6 +4,8 @@
     color: #fff !important;
   }
 
+
+
   position: fixed;
   top: 0px;
   width: 100%;
@@ -83,5 +85,15 @@
     button:hover{
       background: transparent !important;
     }
+  }
+}
+
+.kontentblocks-ready{
+  div.mce-toolbar-grp{
+    background: #fff !important;
+  }
+
+  .mce-tinymce-inline.mce-container.mce-panel.mce-floatpanel{
+    @extend .base-box-shadow;
   }
 }
