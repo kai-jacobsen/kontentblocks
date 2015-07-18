@@ -21,6 +21,7 @@ module.exports = Backbone.View.extend({
     }
     // attach this view to the model
     this.model.View = this;
+    this.model.trigger('module.model.view.attached', this);
 
     // observe model changes
     this.listenTo(this.model, 'change', this.modelChange);

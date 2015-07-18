@@ -14,6 +14,7 @@ module.exports = Backbone.Model.extend({
     }
   },
   bindHandlers: function () {
+
     this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
     this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes

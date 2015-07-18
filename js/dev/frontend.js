@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-17 */
+/*! Kontentblocks DevVersion 2015-07-18 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1224,7 +1224,7 @@
                     KB.ObjectProxy.add(KB.Areas.add(area));
                 });
                 _.each(Payload.getPayload("Modules"), function(module) {
-                    KB.Modules.add(module);
+                    KB.ObjectProxy.add(KB.Modules.add(module));
                 });
                 KB.trigger("kb:moduleControlsAdded");
                 KB.Events.trigger("KB.frontend.init");
@@ -1571,7 +1571,7 @@
                     fixed_toolbar_container: null,
                     schema: "html5",
                     inline: true,
-                    plugins: "textcolor",
+                    plugins: "textcolor, wptextpattern",
                     statusbar: false,
                     preview_styles: false,
                     setup: function(ed) {
@@ -1588,8 +1588,7 @@
                                 jQuery(".mce-panel.mce-floatpanel").hide();
                             });
                         });
-                        ed.on("NodeChange", function(e) {
-                            console.log("nodechanged");
+                        ed.on("selectionchange", function(e) {
                             that.getSelection(ed, e);
                         });
                         ed.on("click", function(e) {
@@ -2885,6 +2884,7 @@
                     return;
                 }
                 this.model.View = this;
+                this.model.trigger("module.model.view.attached", this);
                 this.listenTo(this.model, "change", this.modelChange);
                 this.$el.data("ModuleView", this);
                 this.render();
@@ -3451,7 +3451,7 @@
             success: function(res, payload) {
                 var that = this, model;
                 payload.ui.helper.replaceWith(res.data.html);
-                model = KB.Modules.add(new ModuleModel(res.data.module));
+                model = KB.ObjectProxy.add(KB.Modules.add(res.data.module));
                 model.Area.View.Layout.applyClasses();
                 AreaView.prototype.resort(this.model.get("area"));
                 setTimeout(function() {

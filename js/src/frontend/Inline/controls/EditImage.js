@@ -20,6 +20,9 @@ module.exports = Backbone.View.extend({
     this.$el.hide();
   },
   show: function () {
+
+
+
     this.$el.show();
     var off = this.Parent.$el.offset();
     var w = this.Parent.$el.width();

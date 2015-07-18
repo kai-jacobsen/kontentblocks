@@ -55,7 +55,7 @@ var EditableText = Backbone.View.extend({
       //fixed_toolbar_container: '#kb-toolbar',
       schema: 'html5',
       inline: true,
-      plugins: 'textcolor',
+      plugins: 'textcolor, wptextpattern',
       statusbar: false,
       preview_styles: false,
 
@@ -76,10 +76,8 @@ var EditableText = Backbone.View.extend({
 
         });
 
-        ed.on('NodeChange', function(e){
-          console.log('nodechanged');
+        ed.on('selectionchange', function(e){
           that.getSelection(ed, e);
-
         });
 
         ed.on('click', function (e) {

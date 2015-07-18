@@ -163,7 +163,7 @@ KB.App = function () {
 
     // create models from already attached modules
     _.each(Payload.getPayload('Modules'), function (module) {
-      KB.Modules.add(module);
+      KB.ObjectProxy.add(KB.Modules.add(module));
     });
 
     // create models from already attached modules
