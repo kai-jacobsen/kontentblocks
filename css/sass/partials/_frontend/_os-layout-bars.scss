@@ -1,6 +1,6 @@
 $icon-size: 20px;
 
-.kb-os-layout-bars {
+.kontentblocks-ready .module {
 
   // wrap
   .controls-wrap {
@@ -8,34 +8,55 @@ $icon-size: 20px;
     height: 24px;
     position: absolute;
     border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0;
+
     //    @include border-radius(0);
   }
 
-  .os-edit-wrapper {
+  span.kb-module__draft-notice {
+    font-size: 11px !important;
+    display: block;
+    width: 100%;
+    background-color: red !important;
+
+  }
+
+  .controls-wrap-item {
+    display: inline-block;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .kb-module-controls {
     width: 100%;
     height: 24px;
-    //    border-bottom: 1px solid #ccc !important;
-    //    background-color: #fcfcfc;
     background-color: transparent;
+    position: absolute;
+    opacity: 0;
+    transition: all .3s linear;
 
-  }
+    z-index: 1990;
 
-  .os-edit-wrapper a {
-    text-shadow: 1px 1px 1px #fff !important;
-    margin-right: 1px;
-    background-color: #fcfcfc;
-    //    @include border-radius(3px);
-    color: #333 !important;
-  }
+    a {
+      text-shadow: 1px 1px 1px #fff !important;
+      margin-right: 1px;
+      background-color: #fcfcfc;
+      //    @include border-radius(3px);
+      color: #333 !important;
+    }
 
-  .os-edit-wrapper a span {
-    font-size: $icon-size !important;
-    line-height: $icon-size !important;
-  }
+    a span {
+      font-size: $icon-size !important;
+      line-height: $icon-size !important;
+    }
 
-  .os-edit-wrapper .dashicons {
-    width: $icon-size;
-    height: $icon-size;
+    .dashicons {
+      width: $icon-size;
+      height: $icon-size;
+    }
+
   }
 
   .kb-module-inline-move {
@@ -46,6 +67,9 @@ $icon-size: 20px;
   .kb-module-inline-delete {
     cursor: not-allowed;
   }
+
+
+
 }
 
 .kb-module-nav__vertical {
@@ -54,4 +78,22 @@ $icon-size: 20px;
     margin-bottom: 1px !important;
     width: auto;
   }
+}
+
+.kb-inline-control {
+  position: absolute;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.module:hover .kb-module-controls, .module-merged:hover .kb-module-controls {
+  opacity: 1;
+}
+
+.module:hover, .module-merged:hover {
+
+  .kb-inline-control {
+    opacity: 1;
+  }
+
 }

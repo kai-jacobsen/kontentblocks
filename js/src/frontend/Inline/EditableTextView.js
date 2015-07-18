@@ -64,12 +64,10 @@ var EditableText = Backbone.View.extend({
           that.editor = ed;
           ed.module = that.model.get('ModuleModel');
           ed.kfilter = (that.model.get('filter') && that.model.get('filter') === 'content') ? true : false;
-          ed.kpath = that.model.get('kpath');
-          ed.module.View.$el.addClass('inline-editor-attached');
           KB.Events.trigger('KB::tinymce.new-inline-editor', ed);
           ed.focus();
-          jQuery('.mce-panel.mce-floatpanel').hide();
 
+          jQuery('.mce-panel.mce-floatpanel').hide();
           jQuery(window).on('scroll resize',function(){
             jQuery('.mce-panel.mce-floatpanel').hide();
           });
@@ -80,57 +78,56 @@ var EditableText = Backbone.View.extend({
           that.getSelection(ed, e);
         });
 
-        ed.on('click', function (e) {
-          that.getSelection(ed, e);
-          e.stopPropagation();
-        });
 
         ed.on('focus', function () {
-          if (that.placeHolderSet) {
-            that.$el.html('');
-            that.placeHolderSet = false;
-          }
+
+          var con;
+
           window.wpActiveEditor = that.el.id;
-          var con = Utilities.getIndex(ed.module.get('moduleData'), ed.kpath);
+          con = Utilities.getIndex(ed.module.get('moduleData'), that.model.get('kpath'));
           ed.previousContent = ed.getContent();
           if (ed.kfilter) {
             ed.setContent(switchEditors.wpautop(con));
           }
-          jQuery('#kb-toolbar').show();
-          ed.module.View.$el.addClass('inline-edit-active');
+          that.$el.addClass('kb-inline-text--active');
           if (that.placeHolderSet) {
             ed.setContent('');
           }
         });
 
-        ed.addButton('kbcancleinline', {
-          title: 'Stop inline Edit',
-          onClick: function () {
-            if (tinymce.activeEditor.isDirty()) {
-              tinymce.activeEditor.module.View.getDirty();
-            }
-            tinymce.activeEditor.fire('blur');
-            tinymce.activeEditor = null;
-            tinymce.focusedEditor = null;
-            document.activeElement.blur();
-            jQuery('#kb-toolbar').hide();
-          }
-        });
+        //ed.addButton('kbcancleinline', {
+        //  title: 'Stop inline Edit',
+        //  onClick: function () {
+        //    if (tinymce.activeEditor.isDirty()) {
+        //      tinymce.activeEditor.module.View.getDirty();
+        //    }
+        //    tinymce.activeEditor.fire('blur');
+        //    tinymce.activeEditor = null;
+        //    tinymce.focusedEditor = null;
+        //    document.activeElement.blur();
+        //    jQuery('#kb-toolbar').hide();
+        //  }
+        //});
 
         ed.on('blur', function (e) {
           var content, moduleData, path;
-          ed.module.View.$el.removeClass('inline-edit-active');
-          jQuery('#kb-toolbar').hide();
+          that.$el.removeClass('kb-inline-text--active');
+
           content = ed.getContent();
+
+          // apply filter
           if (ed.kfilter) {
             content = switchEditors._wp_Nop(ed.getContent());
           }
+
+          // get a copy of module data
           moduleData = _.clone(ed.module.get('moduleData'));
-          path = ed.kpath;
+          path = that.model.get('kpath');
           Utilities.setIndex(moduleData, path, content);
           // && ed.kfilter set
           if (ed.isDirty()) {
             ed.placeholder = false;
+
             if (ed.kfilter) {
               jQuery.ajax({
                 url: ajaxurl,
@@ -163,10 +160,10 @@ var EditableText = Backbone.View.extend({
           } else {
             ed.setContent(ed.previousContent);
           }
-          that.maybeSetPlaceholder();
 
           setTimeout(function(){
             that.deactivate();
+            that.maybeSetPlaceholder();
           }, 500);
         });
       }
@@ -190,6 +187,7 @@ var EditableText = Backbone.View.extend({
   maybeSetPlaceholder: function () {
     var string = (this.editor) ? this.editor.getContent() : this.$el.html();
     var content = this.cleanString(string);
+    console.log(content );
     if (_.isEmpty(content)) {
       this.$el.html(this.placeholder);
       this.placeHolderSet = true;

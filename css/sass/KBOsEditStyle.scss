@@ -4,48 +4,8 @@
   position: relative;
 }
 
-.controls-wrap {
-  margin: 0 !important;
-  padding: 0 !important;
-  font-size: 0;
 
-  .controls-wrap-item {
-    display: inline-block;
-    padding: 0 !important;
-    margin: 0 !important;
-
-    span.kb-module__draft-notice {
-      font-size: 11px !important;
-      display: block;
-      width: 100%;
-      background-color: red !important;
-
-    }
-
-  }
-
-}
-
-
-.module:hover .os-edit-wrapper, .module-merged:hover .os-edit-wrapper {
-  opacity: 1;
-}
-
-.kb-inline-control{
-  position: absolute;
-  cursor: pointer;
-  opacity: 0;
-}
-
-.module:hover, .module-merged:hover {
-
-  .kb-inline-control {
-    opacity: 1;
-  }
-
-}
-
-.isDirty .os-edit-wrapper {
+.isDirty .kb-module-controls {
   .kb-module-dirty-state {
     display: block !important;
   }
@@ -55,14 +15,7 @@
   }
 }
 
-.os-edit-wrapper {
-  position: absolute;
-  width: 42px;
-  opacity: 0;
-  transition: all .3s linear;
-  //  @include border-radius(3px);
-
-  z-index: 1990;
+.kb-module-controls {
 
   span.os-action {
     font-size: 11px !important;
@@ -95,16 +48,8 @@
     text-decoration: none !important;
     transition: all .3s ease-in-out;
     cursor: pointer;
-    //    background-color: rgba(255,255,255,.8);
     opacity: .5;
 
-    &.kb-nbb {
-      //      border-bottom: none !important;
-    }
-
-    &.kb-nbt {
-      //      border-top: none !important;
-    }
 
     &.kb-module-dirty-state {
       background-color: red;
@@ -137,7 +82,7 @@ body.onsite-editing {
     min-height: 30px;
   }
 
-  .os-edit-container > .os-edit-wrapper {
+  .os-edit-container > .kb-module-controls {
     display: block;
     opacity: .4;
   }

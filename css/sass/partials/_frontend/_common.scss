@@ -70,3 +70,7 @@ img.kb-inline-imageedit-attached {
 .editable-element-active{
   outline: 1px solid $lighterblue;
 }
+
+.kb-inline-text--active *{
+  background-color: #fff599;
+}

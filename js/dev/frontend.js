@@ -1579,8 +1579,6 @@
                             that.editor = ed;
                             ed.module = that.model.get("ModuleModel");
                             ed.kfilter = that.model.get("filter") && that.model.get("filter") === "content" ? true : false;
-                            ed.kpath = that.model.get("kpath");
-                            ed.module.View.$el.addClass("inline-editor-attached");
                             KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
                             ed.focus();
                             jQuery(".mce-panel.mce-floatpanel").hide();
@@ -1591,50 +1589,28 @@
                         ed.on("selectionchange", function(e) {
                             that.getSelection(ed, e);
                         });
-                        ed.on("click", function(e) {
-                            that.getSelection(ed, e);
-                            e.stopPropagation();
-                        });
                         ed.on("focus", function() {
-                            if (that.placeHolderSet) {
-                                that.$el.html("");
-                                that.placeHolderSet = false;
-                            }
+                            var con;
                             window.wpActiveEditor = that.el.id;
-                            var con = Utilities.getIndex(ed.module.get("moduleData"), ed.kpath);
+                            con = Utilities.getIndex(ed.module.get("moduleData"), that.model.get("kpath"));
                             ed.previousContent = ed.getContent();
                             if (ed.kfilter) {
                                 ed.setContent(switchEditors.wpautop(con));
                             }
-                            jQuery("#kb-toolbar").show();
-                            ed.module.View.$el.addClass("inline-edit-active");
+                            that.$el.addClass("kb-inline-text--active");
                             if (that.placeHolderSet) {
                                 ed.setContent("");
                             }
                         });
-                        ed.addButton("kbcancleinline", {
-                            title: "Stop inline Edit",
-                            onClick: function() {
-                                if (tinymce.activeEditor.isDirty()) {
-                                    tinymce.activeEditor.module.View.getDirty();
-                                }
-                                tinymce.activeEditor.fire("blur");
-                                tinymce.activeEditor = null;
-                                tinymce.focusedEditor = null;
-                                document.activeElement.blur();
-                                jQuery("#kb-toolbar").hide();
-                            }
-                        });
                         ed.on("blur", function(e) {
                             var content, moduleData, path;
-                            ed.module.View.$el.removeClass("inline-edit-active");
-                            jQuery("#kb-toolbar").hide();
+                            that.$el.removeClass("kb-inline-text--active");
                             content = ed.getContent();
                             if (ed.kfilter) {
                                 content = switchEditors._wp_Nop(ed.getContent());
                             }
                             moduleData = _.clone(ed.module.get("moduleData"));
-                            path = ed.kpath;
+                            path = that.model.get("kpath");
                             Utilities.setIndex(moduleData, path, content);
                             if (ed.isDirty()) {
                                 ed.placeholder = false;
@@ -1664,9 +1640,9 @@
                             } else {
                                 ed.setContent(ed.previousContent);
                             }
-                            that.maybeSetPlaceholder();
                             setTimeout(function() {
                                 that.deactivate();
+                                that.maybeSetPlaceholder();
                             }, 500);
                         });
                     }
@@ -1690,6 +1666,7 @@
             maybeSetPlaceholder: function() {
                 var string = this.editor ? this.editor.getContent() : this.$el.html();
                 var content = this.cleanString(string);
+                console.log(content);
                 if (_.isEmpty(content)) {
                     this.$el.html(this.placeholder);
                     this.placeHolderSet = true;
@@ -2820,7 +2797,7 @@
             initialize: function(options) {
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="dashicons dashicons-update"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsUpdate + "</span>");
+                this.$el.append('<span class="dashicons dashicons-update"></span>');
             },
             className: "kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update",
             events: {
@@ -4334,7 +4311,7 @@
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
                 var stack1;
-                return "<div class='kb-module-controls os-edit-wrapper os-controls " + ((stack1 = helpers["if"].call(depth0, (stack1 = depth0 != null ? depth0.model : depth0) != null ? stack1.inDynamic : stack1, {
+                return "<div class='kb-module-controls os-controls " + ((stack1 = helpers["if"].call(depth0, (stack1 = depth0 != null ? depth0.model : depth0) != null ? stack1.inDynamic : stack1, {
                     name: "if",
                     hash: {},
                     fn: this.program(1, data, 0),

@@ -14,9 +14,6 @@ var KBOnSiteEditing;
 
             $body.addClass('kb-os-layout-bars');
 
-            $body.on('click', 'a.os-edit-block', function () {
-                container = $(this).closest('.os-edit-container');
-            });
 
             // Heartbeat send data
             $(document).on('heartbeat-send', function (e, data) {
@@ -40,13 +37,12 @@ var KBOnSiteEditing;
             this._active = !this._active;
             $(caller).parent('li').toggleClass('os-edit-off');
             $('body').toggleClass('onsite-editing');
-            $('.kooltip').powerTip('show');
-
-            if (this._active) {
-                KB.App.init();
-            } else {
-                KB.App.shutdown();
-            }
+            //
+            //if (this._active) {
+            //    KB.App.init();
+            //} else {
+            //    KB.App.shutdown();
+            //}
 
         },
         refresh: function (result) {

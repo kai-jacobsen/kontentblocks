@@ -152,29 +152,29 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   }
 }
 
-.kb-in-sidebar-active {
+body.onsite-editing .kb-in-sidebar-active {
   position: relative;
 
   &:before{
     content: '';
     position: absolute;
-    background-color: $lightblue;
+    background-color: $ultralightblue;
     outline: 1px solid #333;
     opacity: .5;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    height: 104%;
-    width: 104%;
-    margin-left: -2%;
-    margin-top: -2%;
+    height: 100%;
+    width: 100%;
+    margin-left: -0%;
+    margin-top: -0%;
   }
 
-  &:hover:before {
-    outline: none;
-    background-color: transparent;
-  }
+  //&:hover:before {
+  //  outline: none;
+  //  background-color: transparent;
+  //}
 }
 
 .kb-sidebar-area-details__header {
