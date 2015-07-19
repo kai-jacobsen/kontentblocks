@@ -56,7 +56,7 @@ module.exports = Backbone.View.extend({
   },
   render: function () {
     this.$el.append(tplModuleViewItem({view: this.model.toJSON()}));
-    this.$el.appendTo(this.$parent);
+    //this.$el.appendTo(this.$parent);
   },
   dispose: function(){
     this.stopListening();

@@ -87,7 +87,6 @@ module.exports = Backbone.View.extend({
     var that = this, model;
     payload.ui.helper.replaceWith(res.data.html);
     model = KB.ObjectProxy.add(KB.Modules.add(res.data.module));
-    // @TODO important stopped here
     model.Area.View.Layout.applyClasses();
     AreaView.prototype.resort(this.model.get('area'));
     setTimeout(function () {

@@ -27,6 +27,8 @@ module.exports = Backbone.View.extend({
   bindHandlers: function () {
     var that = this;
     this.listenTo(this.Modules, 'add', this.renderModuleItem);
+    this.listenTo(this.model, 'area.resorted', this.resortViews);
+
     this.$toggleHandle.on('click', function () {
       that.controller.setActiveList(that);
     });
@@ -46,10 +48,11 @@ module.exports = Backbone.View.extend({
 
   },
   renderModuleItem: function (model) {
-    this.ModuleViews[model.id] = new ModuleListItem({
+    this.ModuleViews[model.id] = View = new ModuleListItem({
       $parent: this.$el,
       model: model
     });
+    View.$el.appendTo(this.$el);
   },
   /**
    *
@@ -75,5 +78,20 @@ module.exports = Backbone.View.extend({
     if (this.Modules.models.length === 0 && this.model.View.$el.is(":visible")) {
       this.$el.append(tplEmptyArea({}));
     }
+  },
+  moduleOrder: function () {
+    var $domEl = this.model.View.$el;
+    var modules = jQuery("[id^=module]", $domEl);
+    return _.pluck(modules, 'id');
+  },
+  resortViews: function(){
+    var that = this;
+    var order = this.moduleOrder().reverse();
+    _.each(order, function(id){
+      var v = that.ModuleViews[id];
+      v.$el.detach();
+      v.$el.prependTo(that.$el);
+    });
+
   }
 });

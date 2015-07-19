@@ -191,6 +191,7 @@ module.exports = Backbone.View.extend({
       _ajax_nonce: Config.getNonce('update')
     }, function () {
       Notice.notice('Order was updated successfully', 'success');
+      area.trigger('area.resorted');
     }, null);
   }
 

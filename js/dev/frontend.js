@@ -2278,6 +2278,7 @@
                     _ajax_nonce: Config.getNonce("update")
                 }, function() {
                     Notice.notice("Order was updated successfully", "success");
+                    area.trigger("area.resorted");
                 }, null);
             }
         });
@@ -3572,6 +3573,7 @@
             bindHandlers: function() {
                 var that = this;
                 this.listenTo(this.Modules, "add", this.renderModuleItem);
+                this.listenTo(this.model, "area.resorted", this.resortViews);
                 this.$toggleHandle.on("click", function() {
                     that.controller.setActiveList(that);
                 });
@@ -3589,10 +3591,11 @@
                 this.model.View.$el.removeClass("kb-in-sidebar-active");
             },
             renderModuleItem: function(model) {
-                this.ModuleViews[model.id] = new ModuleListItem({
+                this.ModuleViews[model.id] = View = new ModuleListItem({
                     $parent: this.$el,
                     model: model
                 });
+                View.$el.appendTo(this.$el);
             },
             attachModuleView: function(moduleView) {
                 this.Modules.add(moduleView.model);
@@ -3608,6 +3611,20 @@
                 if (this.Modules.models.length === 0 && this.model.View.$el.is(":visible")) {
                     this.$el.append(tplEmptyArea({}));
                 }
+            },
+            moduleOrder: function() {
+                var $domEl = this.model.View.$el;
+                var modules = jQuery("[id^=module]", $domEl);
+                return _.pluck(modules, "id");
+            },
+            resortViews: function() {
+                var that = this;
+                var order = this.moduleOrder().reverse();
+                _.each(order, function(id) {
+                    var v = that.ModuleViews[id];
+                    v.$el.detach();
+                    v.$el.prependTo(that.$el);
+                });
             }
         });
     }, {
@@ -3748,7 +3765,6 @@
                 this.$el.append(tplModuleViewItem({
                     view: this.model.toJSON()
                 }));
-                this.$el.appendTo(this.$parent);
             },
             dispose: function() {
                 this.stopListening();
