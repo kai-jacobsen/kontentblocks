@@ -31,7 +31,6 @@ module.exports = ModuleMenuItem.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-
         if (refresh) {
           that.$el.html(res.html);
         }
@@ -40,6 +39,7 @@ module.exports = ModuleMenuItem.extend({
         that.Parent.render();
         that.Parent.trigger('kb.frontend.module.inline.saved');
         that.model.trigger('saved');
+        that.model.trigger('module.model.updated', that.model);
         // @TODO events:replace
         KB.Events.trigger('KB::ajax-update');
         Notice.notice('Module saved successfully', 'success');

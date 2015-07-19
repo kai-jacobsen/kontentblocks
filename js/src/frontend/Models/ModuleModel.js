@@ -6,9 +6,6 @@ module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   initialize: function () {
     this.subscribeToArea();
-    this.listenTo(this, 'change', function(){
-      console.log(this.cid);
-    });
   },
   subscribeToArea: function (AreaModel) {
     if (!AreaModel) {
@@ -36,6 +33,7 @@ module.exports = Backbone.Model.extend({
       dataType: 'json',
       success: function (res) {
         that.set('moduleData', res.data.newModuleData);
+        that.trigger('module.model.updated', that);
       },
       error: function () {
         Logger.Debug.error('serialize | FrontendModal | Ajax error');

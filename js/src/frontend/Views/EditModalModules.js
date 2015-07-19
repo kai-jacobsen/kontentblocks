@@ -442,6 +442,7 @@ module.exports = Backbone.View.extend({
     that.ModuleView.model.set('moduleData', res.data.newModuleData);
     if (save) {
       that.model.trigger('saved');
+      that.model.trigger('module.model.updated', that.model);
       KB.Events.trigger('modal.saved');
     }
     jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.ModuleView);

@@ -28,6 +28,7 @@ var ModuleModel = require('frontend/Models/ModuleModel');
 var AreaModel = require('frontend/Models/AreaModel');
 var Ui = require('common/UI');
 var Logger = require('common/Logger');
+var ChangeObserver = require('frontend/Views/ChangeObserver');
 
 
 // ---------------
@@ -96,6 +97,8 @@ KB.App = function () {
 
     // init the edit modal
     KB.EditModalModules = new EditModalModules({});
+
+    KB.ChangeObserver = new ChangeObserver();
 
     // Register events on collections
     KB.Modules.on('add', createModuleViews);
