@@ -4,6 +4,7 @@ var Checks = require('common/Checks');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
+var TinyMCE = require('common/TinyMCE');
 
 module.exports = BaseView.extend({
   className: 'kb-delete block-menu-icon',
@@ -36,6 +37,7 @@ module.exports = BaseView.extend({
   },
   success: function (res) {
     if (res.success){
+      TinyMCE.removeEditors(this.model.View.$el);
       KB.Modules.remove(this.model);
       wp.heartbeat.interval('fast', 2);
       this.model.destroy();

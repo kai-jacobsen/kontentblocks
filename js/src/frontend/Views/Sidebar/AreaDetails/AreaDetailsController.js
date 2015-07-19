@@ -7,12 +7,12 @@ var Ajax = require('common/Ajax');
 
 var tplAreaDetailsHeader = require('templates/frontend/sidebar/area-details-header.hbs');
 
+//noinspection JSUnusedGlobalSymbols
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__module-list',
   initialize: function (options) {
     this.currentLayout = this.model.get('layout');
-    ;
     this.controller = options.controller;
     this.sidebarController = options.sidebarController;
     this.categories = this.sidebarController.CategoryFilter.filter(this.model);
@@ -70,7 +70,6 @@ module.exports = Backbone.View.extend({
     }, this.updateSuccess, this);
   },
   updateSuccess: function (res) {
-
     if (res.success) {
       Notice.notice(res.message, 'success');
       this.currentLayout = res.data.layout;
@@ -78,8 +77,6 @@ module.exports = Backbone.View.extend({
       this.handleLayoutChange();
     } else {
       Notice.notice(res.message, 'error');
-
     }
-
   }
 });

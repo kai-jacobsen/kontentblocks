@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-18 */
+/*! Kontentblocks DevVersion 2015-07-19 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -633,7 +633,6 @@
                     settings.setup = function(ed) {
                         ed.on("init", function() {
                             KB.Events.trigger("KB::tinymce.new-editor", ed);
-                            console.log(ed);
                         });
                         ed.on("change", function() {
                             var $module, moduleView;
@@ -1191,8 +1190,6 @@
                 if (!KB.appData.config.initFrontend) {
                     return;
                 }
-                var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo("body");
-                $toolbar.hide();
                 if (KB.appData.config.useModuleNav) {
                     KB.Sidebar = new SidebarView();
                 }
@@ -1213,8 +1210,6 @@
                 jQuery(".editable").each(function(i, el) {
                     tinymce.remove("#" + el.id);
                 });
-                jQuery("body").off("click", ".editable-image");
-                jQuery("body").off("click", ".editable-link");
             }
             function addViews() {
                 if (KB.appData.config.preview) {
@@ -1263,6 +1258,9 @@
                 jQuery("body").addClass("kontentblocks-ready");
             }
             KB.Events.trigger("KB::ready");
+            jQuery(window).on("scroll resize", function() {
+                KB.Events.trigger("window.change");
+            });
             setUserSetting("editor", "tinymce");
             jQuery("body").on("click", ".kb-fx-button", function(e) {
                 jQuery(this).addClass("kb-fx-button--click");
@@ -1582,21 +1580,24 @@
                             KB.Events.trigger("KB::tinymce.new-inline-editor", ed);
                             ed.focus();
                             jQuery(".mce-panel.mce-floatpanel").hide();
-                            jQuery(window).on("scroll resize", function() {
+                            jQuery(window).on("scroll.kbmce resize.kbmce", function() {
                                 jQuery(".mce-panel.mce-floatpanel").hide();
                             });
                         });
-                        ed.on("selectionchange", function(e) {
+                        ed.on("selectionchange mouseup", function(e) {
                             that.getSelection(ed, e);
+                        });
+                        ed.on("NodeChange", function(e) {
+                            KB.Events.trigger("window.change");
                         });
                         ed.on("focus", function() {
                             var con;
                             window.wpActiveEditor = that.el.id;
                             con = Utilities.getIndex(ed.module.get("moduleData"), that.model.get("kpath"));
-                            ed.previousContent = ed.getContent();
                             if (ed.kfilter) {
                                 ed.setContent(switchEditors.wpautop(con));
                             }
+                            ed.previousContent = ed.getContent();
                             that.$el.addClass("kb-inline-text--active");
                             if (that.placeHolderSet) {
                                 ed.setContent("");
@@ -1628,9 +1629,6 @@
                                         success: function(res) {
                                             ed.setContent(res.data.content);
                                             ed.module.set("moduleData", moduleData);
-                                            if (window.twttr) {
-                                                window.twttr.widgets.load();
-                                            }
                                         },
                                         error: function() {}
                                     });
@@ -1641,6 +1639,10 @@
                                 ed.setContent(ed.previousContent);
                             }
                             setTimeout(function() {
+                                if (window.twttr) {
+                                    window.twttr.widgets.load();
+                                }
+                                jQuery(window).off("scroll.kbmce resize.kbmce");
                                 that.deactivate();
                                 that.maybeSetPlaceholder();
                             }, 500);
@@ -1666,7 +1668,6 @@
             maybeSetPlaceholder: function() {
                 var string = this.editor ? this.editor.getContent() : this.$el.html();
                 var content = this.cleanString(string);
-                console.log(content);
                 if (_.isEmpty(content)) {
                     this.$el.html(this.placeholder);
                     this.placeHolderSet = true;
@@ -1677,16 +1678,17 @@
             },
             getSelection: function(editor, event) {
                 var sel = editor.selection.getContent();
+                var $toolbar = jQuery(".mce-panel.mce-floatpanel");
                 if (sel === "") {
-                    jQuery(".mce-panel.mce-floatpanel").hide();
+                    $toolbar.hide();
                 } else {
-                    jQuery(".mce-panel.mce-floatpanel").show();
                     var mpos = markSelection();
-                    var w = jQuery(".mce-panel.mce-floatpanel").width();
-                    jQuery(".mce-panel.mce-floatpanel").offset({
-                        top: mpos.top - 40,
-                        left: mpos.left - w
+                    var w = $toolbar.width();
+                    $toolbar.css({
+                        top: mpos.top - 40 + "px",
+                        left: mpos.left - w + "px"
                     });
+                    $toolbar.show();
                 }
             }
         });
@@ -1747,12 +1749,14 @@
         var Check = require("common/Checks");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
+                this.visible = false;
                 this.options = options || {};
                 this.Parent = options.parent;
                 this.$el.append('<span class="dashicons dashicons-format-image"></span>');
                 if (this.isValid()) {
                     this.render();
                 }
+                this.listenTo(KB.Events, "window.change", this.reposition);
             },
             className: "kb-inline-control",
             events: {
@@ -1767,14 +1771,24 @@
             },
             show: function() {
                 this.$el.show();
+                this.setPosition();
+                this.visible = true;
+            },
+            hide: function() {
+                this.$el.hide();
+                this.visible = false;
+            },
+            reposition: function() {
+                if (this.visible) {
+                    this.setPosition();
+                }
+            },
+            setPosition: function() {
                 var off = this.Parent.$el.offset();
                 var w = this.Parent.$el.width();
                 off.left = off.left + w - 40;
                 off.top = off.top + 20;
                 this.$el.offset(off);
-            },
-            hide: function() {
-                this.$el.hide();
             },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
@@ -1787,12 +1801,14 @@
         var Check = require("common/Checks");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
+                this.visible = false;
                 this.options = options || {};
                 this.Parent = options.parent;
                 this.$el.append('<span class="dashicons dashicons-admin-links"></span>');
                 if (this.isValid()) {
                     this.render();
                 }
+                this.listenTo(KB.Events, "window.change", this.reposition);
             },
             className: "kb-inline-control",
             events: {
@@ -1809,14 +1825,24 @@
             },
             show: function() {
                 this.$el.show();
+                this.setPosition();
+                this.visible = true;
+            },
+            hide: function() {
+                this.$el.hide();
+                this.visible = false;
+            },
+            reposition: function() {
+                if (this.visible) {
+                    this.setPosition();
+                }
+            },
+            setPosition: function() {
                 var off = this.Parent.$el.offset();
                 var w = this.Parent.$el.innerWidth();
                 off.left = off.left + w;
                 off.top = off.top + 20;
                 this.$el.offset(off);
-            },
-            hide: function() {
-                this.$el.hide();
             },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
@@ -1835,12 +1861,14 @@
         var Check = require("common/Checks");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
+                this.visible = false;
                 this.options = options || {};
                 this.Parent = options.parent;
                 this.$el.append('<span class="dashicons dashicons-edit"></span>');
                 if (this.isValid()) {
                     this.render();
                 }
+                this.listenTo(KB.Events, "window.change", this.reposition);
             },
             className: "kb-inline-control",
             events: {
@@ -1857,6 +1885,19 @@
             },
             show: function() {
                 this.$el.show();
+                this.setPosition();
+                this.visible = true;
+            },
+            hide: function() {
+                this.$el.hide();
+                this.visible = false;
+            },
+            reposition: function() {
+                if (this.visible) {
+                    this.setPosition();
+                }
+            },
+            setPosition: function() {
                 var off = this.Parent.$el.offset();
                 var w = this.Parent.$el.width();
                 var h = this.Parent.$el.height();
@@ -1866,9 +1907,6 @@
                     off.top = off.top + 20;
                 }
                 this.$el.offset(off);
-            },
-            hide: function() {
-                this.$el.hide();
             },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
@@ -1906,6 +1944,9 @@
             idAttribute: "mid",
             initialize: function() {
                 this.subscribeToArea();
+                this.listenTo(this, "change", function() {
+                    console.log(this.cid);
+                });
             },
             subscribeToArea: function(AreaModel) {
                 if (!AreaModel) {
@@ -2862,7 +2903,8 @@
                 }
                 this.model.View = this;
                 this.model.trigger("module.model.view.attached", this);
-                this.listenTo(this.model, "change", this.modelChange);
+                this.listenTo(this.model, "change", this.getDirty);
+                console.log(this.model.cid);
                 this.$el.data("ModuleView", this);
                 this.render();
                 this.setControlsPosition();
@@ -3844,9 +3886,11 @@
                 model = KB.ObjectProxy.add(KB.Modules.add(data.module));
                 this.options.area.attachModuleView(model);
                 this.parseAdditionalJSON(data.json);
-                TinyMCE.addEditor(model.View.$el);
-                KB.Fields.trigger("newModule", model.View);
                 model.View.$el.addClass("kb-open");
+                setTimeout(function() {
+                    KB.Fields.trigger("newModule", model.View);
+                    TinyMCE.addEditor(model.View.$el);
+                }, 150);
             },
             parseAdditionalJSON: function(json) {
                 if (!KB.payload.Fields) {

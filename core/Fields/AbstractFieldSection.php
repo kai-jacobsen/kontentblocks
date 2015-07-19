@@ -148,7 +148,6 @@ abstract class AbstractFieldSection implements Exportable
      * Sets essential properties
      * Calls render() on each field
      *
-     * @param string $moduleId
      * @param array $data | stored data for the field
      * TODO: Change moduleId zo baseId for consistency
      * TODO: Check if possible / Refactor to set properties earlier

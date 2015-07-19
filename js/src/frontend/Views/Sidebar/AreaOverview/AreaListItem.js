@@ -7,7 +7,7 @@ module.exports = Backbone.View.extend({
   className: 'kb-sidebar-areaview__modules-list',
   ModuleViews: {},
   initialize: function (options) {
-    this.Modules = new Backbone.Collection;
+    this.Modules = new Backbone.Collection();
     this.$parent = options.$el; // skelton as inserted by controller
     this.controller = options.controller;
     this.sidebarController = options.sidebarController;

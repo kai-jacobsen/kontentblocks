@@ -40,6 +40,7 @@ module.exports =
     // get settings from native WP Editor
     // Editor may not be initialized and is not accessible through
     // the tinymce api, thats why we take the settings from preInit
+
     if (!$el) {
       Logger.Debug.error('No scope element ($el) provided');
       return false;
@@ -74,7 +75,6 @@ module.exports =
       settings.setup = function (ed) {
         ed.on('init', function () {
           KB.Events.trigger('KB::tinymce.new-editor', ed);
-          console.log(ed);
         });
         ed.on('change', function () {
           var $module, moduleView;

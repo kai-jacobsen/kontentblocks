@@ -89,12 +89,6 @@ KB.App = function () {
       return;
     }
 
-
-
-    // create toolbar container for tinymce inline editors
-    var $toolbar = jQuery('<div id="kb-toolbar"></div>').appendTo('body');
-    $toolbar.hide();
-
     // create Sidebar singleton
     if (KB.appData.config.useModuleNav) {
       KB.Sidebar = new SidebarView();
@@ -132,8 +126,6 @@ KB.App = function () {
       tinymce.remove('#' + el.id);
     });
 
-    jQuery('body').off('click', '.editable-image');
-    jQuery('body').off('click', '.editable-link');
   }
 
   /**
@@ -251,6 +243,10 @@ jQuery(document).ready(function () {
 
   // general ready event
   KB.Events.trigger('KB::ready');
+
+  jQuery(window).on('scroll resize', function () {
+    KB.Events.trigger('window.change');
+  });
   // force user cookie to tinymce
   // wp native js function
   setUserSetting('editor', 'tinymce');

@@ -85,6 +85,15 @@ abstract class Module
      * ------------------------------------
      */
 
+    /**
+     * Setup Module Data
+     * @param array $data
+     */
+    public function setModuleData( $data = array() )
+    {
+        $this->Model = new ModuleModel( $data, $this );
+    }
+
     public function setupFields()
     {
         // magically setup fields
@@ -93,6 +102,33 @@ abstract class Module
             // setup Fields
             $this->fields();
         }
+    }
+
+    /**
+     * Module default settings array
+     * @since 0.1.0
+     * @return array
+     */
+    public static function getDefaultSettings()
+    {
+
+        return array(
+            'disabled' => false,
+            'publicName' => 'Module Name Missing',
+            'name' => '',
+            'wrap' => true,
+            'wrapperClasses' => '',
+            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
+            'description' => '',
+            'connect' => 'any',
+            'hidden' => false,
+            'predefined' => false,
+            'globalModule' => true,
+            'category' => 'standard',
+            'views' => false,
+            'concat' => true
+        );
+
     }
 
     /**
@@ -105,7 +141,6 @@ abstract class Module
     }
 
     /**
-     * options()
      * Method for the backend display
      * gets called by ui display callback
      * @since 0.1.0
@@ -118,7 +153,6 @@ abstract class Module
             // render view select field
             $concat .= $this->ViewLoader->render( $this->Properties );
         }
-
         // render fields if set
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
             $concat .= $this->Fields->renderFields();
@@ -130,7 +164,7 @@ abstract class Module
     }
 
     /**
-     * No fields an options method override fallback
+     * No fields or form method override / fallback
      * @since 0.1.0
      */
     private function renderEmptyForm()
@@ -139,6 +173,11 @@ abstract class Module
         return $tpl->render();
     }
 
+    /*
+     * ------------------------------------
+     * public getter
+     * ------------------------------------
+     */
 
     /**
      * Wrapper to actual render method.
@@ -155,105 +194,10 @@ abstract class Module
 
     }
 
-
-    /**
-     * save()
-     * Method to save whatever form fields are in the options() method
-     * Gets called by the meta box save callback
-     *
-     * @param array $data actual $_POST data for this module
-     * @param array $old previous data or empty
-     * @return array
-     */
-    public function save( $data, $old )
-    {
-        if (isset( $this->Fields )) {
-            return $this->Fields->save( $data, $old );
-        }
-        return $data;
-    }
-
-    /*
-     * ------------------------------------
-     * public getter
-     * ------------------------------------
-     */
-
-    /**
-     * get Model Object
-     * @return ModuleModel
-     */
-    public function getModel()
-    {
-        return $this->Model;
-    }
-
-    public function getId()
-    {
-        return $this->Properties->mid;
-    }
-
-    /**
-     * Get public module name
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function getModuleName()
-    {
-        if (is_array( $this->Properties->overrides ) && array_key_exists( 'name', $this->Properties->overrides )) {
-            return $this->Properties->overrides['name'];
-        } else {
-            return $this->Properties->settings['name'];
-        }
-
-    }
-
-
-    /*
-     * ------------------------------------
-     * public setter
-     * ------------------------------------
-     */
-
-    /**
-     * Setup Module Data
-     * @param array $data
-     */
-    public function setModuleData( $data = array() )
-    {
-        $this->Model = new ModuleModel( $data, $this );
-    }
-
-    /*
-     * ------------------------------------
-     * Helper
-     * ------------------------------------
-     */
-
-
-    /**
-     * Check if conditions are met to render the module on the frontend
-     * @return bool
-     */
-    public function verify()
-    {
-        if ($this->Properties->getSetting( 'disabled' ) || $this->Properties->getSetting( 'hidden' )) {
-            return false;
-        }
-        if (!$this->Properties->state['active']) {
-            return false;
-        }
-
-        if (!is_user_logged_in() && $this->Properties->state['draft']) {
-            return false;
-        }
-        return true;
-    }
-
-
     /**
      * Pass the raw module data to the fields, where the data
      * may be modified, depends on field configuration
+     * frontend / output only
      */
     private function setupFieldData()
     {
@@ -265,7 +209,6 @@ abstract class Module
                 $this->Model[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
             }
         }
-
     }
 
     /**
@@ -299,6 +242,12 @@ abstract class Module
     }
 
 
+    /*
+     * ------------------------------------
+     * public setter
+     * ------------------------------------
+     */
+
     /**
      * Gets the assigned viewfile (.twig) filename
      * Property is empty upon module creation, in that case we find the file to use
@@ -320,6 +269,72 @@ abstract class Module
             return $this->Properties->viewfile = $this->ViewLoader->findDefaultTemplate();
         }
 
+    }
+
+    /*
+     * ------------------------------------
+     * Helper
+     * ------------------------------------
+     */
+
+    /**
+     * save()
+     * Method to save whatever form fields are in the options() method
+     * Gets called by the meta box save callback
+     *
+     * @param array $data actual $_POST data for this module
+     * @param array $old previous data or empty
+     * @return array
+     */
+    public function save( $data, $old )
+    {
+        if (isset( $this->Fields )) {
+            return $this->Fields->save( $data, $old );
+        }
+        return $data;
+    }
+
+    /**
+     * get Model Object
+     * @return ModuleModel
+     */
+    public function getModel()
+    {
+        return $this->Model;
+    }
+
+    /**
+     * Get public module name
+     * @return mixed
+     * @since 0.1.0
+     */
+    public function getModuleName()
+    {
+        if (is_array( $this->Properties->overrides ) && array_key_exists( 'name', $this->Properties->overrides )) {
+            return $this->Properties->overrides['name'];
+        } else {
+            return $this->Properties->settings['name'];
+        }
+
+    }
+
+    /**
+     * Check if conditions are met to render the module on the frontend
+     * @return bool
+     */
+    public function verify()
+    {
+        if ($this->Properties->getSetting( 'disabled' ) || $this->Properties->getSetting( 'hidden' )) {
+            return false;
+        }
+        if (!$this->Properties->state['active']) {
+            return false;
+        }
+
+        if (!is_user_logged_in() && $this->Properties->state['draft']) {
+            return false;
+        }
+        return true;
     }
 
     final public function toJSON()
@@ -348,32 +363,9 @@ abstract class Module
 
     }
 
-
-    /**
-     * Module default settings array
-     * @since 0.1.0
-     * @return array
-     */
-    public static function getDefaultSettings()
+    public function getId()
     {
-
-        return array(
-            'disabled' => false,
-            'publicName' => 'Module Name Missing',
-            'name' => '',
-            'wrap' => true,
-            'wrapperClasses' => '',
-            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
-            'description' => '',
-            'connect' => 'any',
-            'hidden' => false,
-            'predefined' => false,
-            'globalModule' => true,
-            'category' => 'standard',
-            'views' => false,
-            'concat' => true
-        );
-
+        return $this->Properties->mid;
     }
 
     /**

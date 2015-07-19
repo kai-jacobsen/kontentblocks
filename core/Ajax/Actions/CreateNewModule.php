@@ -97,7 +97,6 @@ class CreateNewModule implements AjaxActionInterface
             $this->overrideModuleClassEventually();
         }
 
-
         // handle override from global modules
         $this->gmoduleOverride();
 
@@ -138,16 +137,13 @@ class CreateNewModule implements AjaxActionInterface
     private function render()
     {
 
-        ob_start();
-
         $Module = apply_filters( 'kb.module.before.factory', $this->newModule );
         if ($this->frontend) {
             $SingleRenderer = new SingleModuleRenderer( $Module );
-            echo $SingleRenderer->render();
+            $html = $SingleRenderer->render();
         } else {
-            echo $Module->renderForm();
+            $html = $Module->renderForm();
         }
-        $html = ob_get_clean();
         $response = array
         (
             'id' => $this->newModule->getId(),

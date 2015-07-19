@@ -209,9 +209,12 @@ module.exports = Backbone.View.extend({
     model = KB.ObjectProxy.add(KB.Modules.add(data.module));
     this.options.area.attachModuleView(model);
     this.parseAdditionalJSON(data.json);
-    TinyMCE.addEditor(model.View.$el);
-    KB.Fields.trigger('newModule', model.View);
     model.View.$el.addClass('kb-open');
+
+    setTimeout(function () {
+      KB.Fields.trigger('newModule', model.View);
+      TinyMCE.addEditor(model.View.$el);
+    }, 150);
 
     // repaint
     // add module to collection

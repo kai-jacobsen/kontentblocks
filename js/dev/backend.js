@@ -1041,6 +1041,7 @@
         var Notice = require("common/Notice");
         var Ajax = require("common/Ajax");
         var Config = require("common/Config");
+        var TinyMCE = require("common/TinyMCE");
         module.exports = BaseView.extend({
             className: "kb-delete block-menu-icon",
             initialize: function() {
@@ -1071,6 +1072,7 @@
             },
             success: function(res) {
                 if (res.success) {
+                    TinyMCE.removeEditors(this.model.View.$el);
                     KB.Modules.remove(this.model);
                     wp.heartbeat.interval("fast", 2);
                     this.model.destroy();
@@ -1084,7 +1086,8 @@
         "common/Ajax": 37,
         "common/Checks": 38,
         "common/Config": 39,
-        "common/Notice": 41
+        "common/Notice": 41,
+        "common/TinyMCE": 44
     } ],
     25: [ function(require, module, exports) {
         var BaseView = require("backend/Views/BaseControlView");
@@ -1971,7 +1974,6 @@
                     settings.setup = function(ed) {
                         ed.on("init", function() {
                             KB.Events.trigger("KB::tinymce.new-editor", ed);
-                            console.log(ed);
                         });
                         ed.on("change", function() {
                             var $module, moduleView;
@@ -2655,9 +2657,11 @@
                 model = KB.ObjectProxy.add(KB.Modules.add(data.module));
                 this.options.area.attachModuleView(model);
                 this.parseAdditionalJSON(data.json);
-                TinyMCE.addEditor(model.View.$el);
-                KB.Fields.trigger("newModule", model.View);
                 model.View.$el.addClass("kb-open");
+                setTimeout(function() {
+                    KB.Fields.trigger("newModule", model.View);
+                    TinyMCE.addEditor(model.View.$el);
+                }, 150);
             },
             parseAdditionalJSON: function(json) {
                 if (!KB.payload.Fields) {

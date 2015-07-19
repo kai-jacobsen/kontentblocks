@@ -68,27 +68,30 @@ var EditableText = Backbone.View.extend({
           ed.focus();
 
           jQuery('.mce-panel.mce-floatpanel').hide();
-          jQuery(window).on('scroll resize',function(){
+          jQuery(window).on('scroll.kbmce resize.kbmce', function () {
             jQuery('.mce-panel.mce-floatpanel').hide();
           });
 
         });
 
-        ed.on('selectionchange', function(e){
+        ed.on('selectionchange mouseup', function (e) {
           that.getSelection(ed, e);
+        });
+
+        ed.on('NodeChange', function (e) {
+          KB.Events.trigger('window.change');
         });
 
 
         ed.on('focus', function () {
-
           var con;
-
           window.wpActiveEditor = that.el.id;
           con = Utilities.getIndex(ed.module.get('moduleData'), that.model.get('kpath'));
-          ed.previousContent = ed.getContent();
           if (ed.kfilter) {
             ed.setContent(switchEditors.wpautop(con));
           }
+          ed.previousContent = ed.getContent();
+
           that.$el.addClass('kb-inline-text--active');
           if (that.placeHolderSet) {
             ed.setContent('');
@@ -143,25 +146,24 @@ var EditableText = Backbone.View.extend({
                   ed.setContent(res.data.content);
                   ed.module.set('moduleData', moduleData);
                   //ed.module.trigger('kb.frontend.module.inlineUpdate');
-                  if (window.twttr) {
-                    window.twttr.widgets.load();
-                  }
+
                 },
 
                 error: function () {
-//                                ed.module.trigger('change');
-//                                ed.module.set('moduleData', moduleData);
                 }
               });
             } else {
               ed.module.set('moduleData', moduleData);
-              //ed.module.trigger('kb.frontend.module.inlineUpdate');
             }
           } else {
             ed.setContent(ed.previousContent);
           }
 
-          setTimeout(function(){
+          setTimeout(function () {
+            if (window.twttr) {
+              window.twttr.widgets.load();
+            }
+            jQuery(window).off('scroll.kbmce resize.kbmce');
             that.deactivate();
             that.maybeSetPlaceholder();
           }, 500);
@@ -179,7 +181,7 @@ var EditableText = Backbone.View.extend({
     }
   },
   deactivate: function () {
-    if (this.editor){
+    if (this.editor) {
       this.editor.destroy();
     }
     this.editor = null;
@@ -187,7 +189,6 @@ var EditableText = Backbone.View.extend({
   maybeSetPlaceholder: function () {
     var string = (this.editor) ? this.editor.getContent() : this.$el.html();
     var content = this.cleanString(string);
-    console.log(content );
     if (_.isEmpty(content)) {
       this.$el.html(this.placeholder);
       this.placeHolderSet = true;
@@ -201,23 +202,20 @@ var EditableText = Backbone.View.extend({
       .replace(/<p><\/p>/g, '');
   },
   getSelection: function (editor, event) {
-    //console.log(editor.selection.getContent());
     var sel = editor.selection.getContent();
-    if (sel === ''){
-
-      jQuery('.mce-panel.mce-floatpanel').hide();
+    var $toolbar = jQuery('.mce-panel.mce-floatpanel');
+    if (sel === '') {
+      $toolbar.hide();
     } else {
-      jQuery('.mce-panel.mce-floatpanel').show();
       var mpos = markSelection();
-      var w = jQuery('.mce-panel.mce-floatpanel').width();
-      jQuery('.mce-panel.mce-floatpanel').offset({top:mpos.top-40, left:mpos.left-w})
-
+      var w = $toolbar.width();
+      $toolbar.css({top: mpos.top - 40 + 'px', left: mpos.left - w + 'px'});
+      $toolbar.show();
     }
-
   }
 });
 
-var markSelection = (function() {
+var markSelection = (function () {
   var markerTextChar = "\ufeff";
   var markerTextCharEntity = "&#xfeff;";
 
@@ -225,9 +223,8 @@ var markSelection = (function() {
 
   var selectionEl;
 
-  return function() {
+  return function () {
     var sel, range;
-
     if (document.selection && document.selection.createRange) {
       // Clone the TextRange and collapse
       range = document.selection.createRange().duplicate();
@@ -260,22 +257,11 @@ var markSelection = (function() {
       markerEl = document.createElement("span");
       markerEl.id = markerId;
       var $markerEl = jQuery(markerEl);
-      $markerEl.prepend( document.createTextNode(markerTextChar) );
+      $markerEl.prepend(document.createTextNode(markerTextChar));
       range.insertNode(markerEl);
     }
 
     if (markerEl) {
-      // Lazily create element to be placed next to the selection
-      //if (!selectionEl) {
-      //  selectionEl = document.createElement("div");
-      //  selectionEl.style.border = "solid darkblue 1px";
-      //  selectionEl.style.backgroundColor = "lightgoldenrodyellow";
-      //  selectionEl.innerHTML = "&lt;- selection";
-      //  selectionEl.style.position = "absolute";
-      //
-      //  document.body.appendChild(selectionEl);
-      //}
-
       // Find markerEl position http://www.quirksmode.org/js/findpos.html
       var obj = markerEl;
       var left = 0, top = 0;
@@ -293,11 +279,6 @@ var markSelection = (function() {
         left: left,
         top: top
       };
-      // Move the button into place.
-      // Substitute your jQuery stuff in here
-      //selectionEl.style.left = left + "px";
-      //selectionEl.style.top = top + "px";
-
     }
   };
 })();
