@@ -86,70 +86,6 @@ class ModuleProperties
         $this->setupProperties( $properties );
     }
 
-
-    private function setupProperties( $properties )
-    {
-        foreach ($properties as $k => $v) {
-            if (method_exists( $this, 'set' . ucfirst( $k ) )) {
-                $this->$k = $this->{'set' . ucfirst( $k )}( $v );
-            } else {
-                $this->$k = $v;
-            }
-        }
-    }
-
-
-    public function set( $prop, $value )
-    {
-        $this->setupProperties( array( $prop => $value ) );
-        return $this;
-    }
-
-    /*
-     * ------------------------------------
-     * Public getter
-     * ------------------------------------
-     */
-
-    /**
-     * Get a single module setting
-     * @param $var string setting key
-     * @return mixed|null
-     */
-    public function getSetting( $var )
-    {
-        if (isset( $this->settings[$var] )) {
-            return $this->settings[$var];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Get a single module setting
-     * @param $var string setting key
-     * @return mixed|null
-     */
-    public function getState( $var )
-    {
-        if (isset( $this->state[$var] )) {
-            return $this->state[$var];
-        } else {
-            return null;
-        }
-    }
-
-    /*
-     * ------------------------------------
-     * Public setter
-     * ------------------------------------
-     */
-
-    public function setId( $mid )
-    {
-        $this->mid = $mid;
-    }
-
     /**
      * Add missing args from defaults
      * @param $properties
@@ -165,8 +101,106 @@ class ModuleProperties
         );
     }
 
+    private function setupProperties( $properties )
+    {
+        foreach ($properties as $k => $v) {
+            if (method_exists( $this, 'set' . ucfirst( $k ) )) {
+                $this->$k = $this->{'set' . ucfirst( $k )}( $v );
+            } else {
+                $this->$k = $v;
+            }
+        }
+    }
+
+    /*
+     * ------------------------------------
+     * Public getter
+     * ------------------------------------
+     */
+
+    public function set( $prop, $value )
+    {
+        $this->setupProperties( array( $prop => $value ) );
+        return $this;
+    }
+
+    /**
+     * Get a single module setting
+     * @param $var string setting key
+     * @return mixed|null
+     */
+    public function getSetting( $var )
+    {
+        if (isset( $this->settings[$var] )) {
+            return $this->settings[$var];
+        } else {
+            return null;
+        }
+    }
+
+    /*
+     * ------------------------------------
+     * Public setter
+     * ------------------------------------
+     */
+
+    /**
+     * Get a single module setting
+     * @param $var string setting key
+     * @return mixed|null
+     */
+    public function getState( $var )
+    {
+        if (isset( $this->state[$var] )) {
+            return $this->state[$var];
+        } else {
+            return null;
+        }
+    }
+
+    public function setId( $mid )
+    {
+        $this->mid = $mid;
+    }
+
 
     // MAGIC SETTERS
+
+    /**
+     * Store properties to index
+     * @return mixed
+     * @since 0.2.0
+     */
+    public function sync()
+    {
+        $Storage = new ModuleStorage( $this->parentObjectId );
+        apply_filters( 'kb.modify.module.save', $this->Module );
+        return $Storage->addToIndex( $this->mid, $this->export() );
+    }
+
+    /**
+     * Export relevant properies as indexstoreable array
+     * @param bool $keepSettings whether to export settings as well
+     * @return array
+     * @since 0.1.0
+     */
+    public function export( $keepSettings = false )
+    {
+        $vars = get_object_vars( $this );
+        $vars['area'] = $this->area->id;
+        $vars['parentObject'] = null;
+        // settings are not persistent
+        if (!$keepSettings) {
+            unset( $vars['settings'] );
+        }
+
+        return $vars;
+    }
+
+    public function __set( $k, $v )
+    {
+        d( $k, $v );
+    }
 
     /**
      * Magic setter
@@ -192,40 +226,5 @@ class ModuleProperties
         }
         return $Area;
 
-    }
-
-    /**
-     * Export relevant properies as indexstoreable array
-     * @param bool $keepSettings whether to export settings as well
-     * @return array
-     * @since 0.1.0
-     */
-    public function export( $keepSettings = false )
-    {
-        $vars = get_object_vars( $this );
-        $vars['area'] = $this->area->id;
-        $vars['parentObject'] = null;
-        // settings are not persistent
-        if (!$keepSettings) {
-            unset( $vars['settings'] );
-        }
-
-        return $vars;
-    }
-
-    /**
-     * Store properties to index
-     * @return mixed
-     * @since 0.2.0
-     */
-    public function sync()
-    {
-        $Storage = new ModuleStorage( $this->parentObjectId );
-        apply_filters( 'kb.modify.module.save', $this->Module );
-        return $Storage->addToIndex( $this->mid, $this->export() );
-    }
-
-    public function __set($k, $v){
-        d($k, $v);
     }
 }

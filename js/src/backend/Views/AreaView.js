@@ -21,6 +21,7 @@ module.exports = Backbone.View.extend({
     this.listenTo(this, 'module:attached', this.ui);
     this.listenTo(this, 'module:detached', this.ui);
 
+
     this.AreaControls = new AreaControls({
       el: this.$el,
       parent: this

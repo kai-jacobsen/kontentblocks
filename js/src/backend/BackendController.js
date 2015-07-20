@@ -18,6 +18,7 @@ var ModuleModel = require('backend/Models/ModuleModel');
 var AreaView = require('backend/Views/AreaView');
 var AreaModel = require('backend/Models/AreaModel');
 var PanelModel = require('backend/Models/PanelModel');
+var PanelView = require('backend/Views/PanelView');
 var ContextView = require('backend/Views/ContextView');
 var ContextModel = require('backend/Models/ContextModel');
 // ---------------
@@ -75,6 +76,7 @@ KB.App = (function () {
     // Register basic events
     KB.Modules.on('add', createModuleViews);
     KB.Areas.on('add', createAreaViews);
+    KB.Panels.on('add', createPanelViews);
     KB.Modules.on('remove', removeModule);
     KB.Contexts.on('add', createContextViews);
     // Create views
@@ -106,10 +108,12 @@ KB.App = (function () {
     // iterate over raw areas
 
     _.each(Payload.getPayload('Areas'), function (area) {
-
       if (area.id !== '_internal'){
-        // create new area model
-        KB.ObjectProxy.add(KB.Areas.add(area));
+        if (!_.isNull(area.settings)){
+          // create new area model
+          KB.ObjectProxy.add(KB.Areas.add(area));
+        }
+
       }
     });
 
@@ -157,6 +161,13 @@ KB.App = (function () {
     KB.Views.Areas.add(area.get('id'), new AreaView({
       model: area,
       el: '#' + area.get('id') + '-container'
+    }));
+  }
+
+  function createPanelViews(panel) {
+    KB.Views.Areas.add(panel.get('id'), new PanelView({
+      model: panel,
+      el: '#' + panel.get('id') + '-container'
     }));
   }
 

@@ -1,5 +1,5 @@
 var Logger = require('common/Logger');
-KB.Backbone.Backend.PanelView = Backbone.View.extend({
+module.exports = Backbone.View.extend({
 
   initialize: function(){
     this.model.View = this;
