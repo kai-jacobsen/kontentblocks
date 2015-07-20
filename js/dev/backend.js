@@ -1647,10 +1647,10 @@
                 this.model.View = this;
             },
             getDirty: function() {
-                Logger.info("Panel data dirty");
+                Logger.Debug("Panel data dirty");
             },
             getClean: function() {
-                Logger.info("Panel data clean");
+                Logger.Debug("Panel data clean");
             }
         });
     }, {
