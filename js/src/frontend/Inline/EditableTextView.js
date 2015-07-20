@@ -146,7 +146,14 @@ var EditableText = Backbone.View.extend({
                   ed.setContent(res.data.content);
                   ed.module.set('moduleData', moduleData);
                   //ed.module.trigger('kb.frontend.module.inlineUpdate');
-
+                  setTimeout(function () {
+                    if (window.twttr) {
+                      window.twttr.widgets.load();
+                    }
+                    jQuery(window).off('scroll.kbmce resize.kbmce');
+                    that.deactivate();
+                    that.maybeSetPlaceholder();
+                  }, 500);
                 },
 
                 error: function () {
@@ -158,15 +165,6 @@ var EditableText = Backbone.View.extend({
           } else {
             ed.setContent(ed.previousContent);
           }
-
-          setTimeout(function () {
-            if (window.twttr) {
-              window.twttr.widgets.load();
-            }
-            jQuery(window).off('scroll.kbmce resize.kbmce');
-            that.deactivate();
-            that.maybeSetPlaceholder();
-          }, 500);
         });
       }
     };

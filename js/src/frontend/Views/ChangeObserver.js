@@ -32,17 +32,16 @@ module.exports = Backbone.View.extend({
   saveAll: function () {
     _.each(this.models.models, function (model) {
       model.sync(true);
-    })
+    });
+    Notice.notice('all saved', 'success');
+
   },
   handleState: function () {
-
     var l = this.models.models.length;
-
     if ( l > 0){
       this.$el.addClass('show');
     } else {
       this.$el.removeClass('show');
-      Notice.notice('all saved', 'success');
     }
 
 

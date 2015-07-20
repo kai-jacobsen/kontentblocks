@@ -1632,6 +1632,14 @@
                                         success: function(res) {
                                             ed.setContent(res.data.content);
                                             ed.module.set("moduleData", moduleData);
+                                            setTimeout(function() {
+                                                if (window.twttr) {
+                                                    window.twttr.widgets.load();
+                                                }
+                                                jQuery(window).off("scroll.kbmce resize.kbmce");
+                                                that.deactivate();
+                                                that.maybeSetPlaceholder();
+                                            }, 500);
                                         },
                                         error: function() {}
                                     });
@@ -1641,14 +1649,6 @@
                             } else {
                                 ed.setContent(ed.previousContent);
                             }
-                            setTimeout(function() {
-                                if (window.twttr) {
-                                    window.twttr.widgets.load();
-                                }
-                                jQuery(window).off("scroll.kbmce resize.kbmce");
-                                that.deactivate();
-                                that.maybeSetPlaceholder();
-                            }, 500);
                         });
                     }
                 };
@@ -2327,6 +2327,7 @@
                 _.each(this.models.models, function(model) {
                     model.sync(true);
                 });
+                Notice.notice("all saved", "success");
             },
             handleState: function() {
                 var l = this.models.models.length;
@@ -2334,7 +2335,6 @@
                     this.$el.addClass("show");
                 } else {
                     this.$el.removeClass("show");
-                    Notice.notice("all saved", "success");
                 }
             }
         });
