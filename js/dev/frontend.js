@@ -1880,7 +1880,9 @@
                 mouseleave: "mouseleave"
             },
             focusEditor: function(e) {
-                this.Parent.activate(e);
+                if (_.isNull(this.Parent.editor)) {
+                    this.Parent.activate(e);
+                }
             },
             render: function() {
                 this.Parent.parentView.$el.append(this.$el);
