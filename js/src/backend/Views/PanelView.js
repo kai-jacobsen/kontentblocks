@@ -5,10 +5,10 @@ module.exports = Backbone.View.extend({
     this.model.View = this;
   },
   getDirty: function(){
-    Logger.Debug('Panel data dirty');
+    Logger.Debug.info('Panel data dirty');
   },
   getClean: function(){
-    Logger.Debug('Panel data clean');
+    Logger.Debug.info('Panel data clean');
   }
 
 });
