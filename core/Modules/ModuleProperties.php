@@ -4,6 +4,7 @@ namespace Kontentblocks\Modules;
 
 
 use AdamBrett\ShellWrapper\Command\Value;
+use Kontentblocks\Areas\AreaSettingsModel;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -217,6 +218,11 @@ class ModuleProperties
         if (is_null( $Area )) {
             $Area = $AreaRegistry->getArea( '_internal' );
         }
+
+        if (is_null($Area->settings)){
+            $Area->set('settings', new AreaSettingsModel($Area, $this->post_id));
+        }
+
         /**
          * toJSON
          * make certain area properties accessible by js frontend-only

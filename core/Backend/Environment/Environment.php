@@ -106,7 +106,7 @@ class Environment implements JsonSerializable
      */
     public function getId()
     {
-        return $this->storageId;
+        return absint($this->storageId);
     }
 
     /**

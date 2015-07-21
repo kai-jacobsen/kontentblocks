@@ -18,7 +18,8 @@ module.exports = Backbone.View.extend({
     'mouseleave': 'mouseleave'
   },
   focusEditor: function (e) {
-    if (!_.isNull(this.Parent.editor)){
+    console.log(this.Parent.editor);
+    if (!this.Parent.editor){
       this.Parent.activate(e);
     }
   },

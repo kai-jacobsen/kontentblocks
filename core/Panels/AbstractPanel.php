@@ -78,8 +78,6 @@ abstract class AbstractPanel
         );
 
         add_action( "save_post", array( $this, 'save' ), 10, 1 );
-
-
     }
 
     /**
@@ -90,37 +88,25 @@ abstract class AbstractPanel
     abstract protected function parseDefaults( $args );
 
     /**
-     * Save form
-     * @param $postId
-     * @return mixed
+     * Auto setup args to class properties
+     * and look for optional method for each arg
+     * @param $args
      */
-    abstract public function save( $postId );
-
-    /**
-     * Render backend form
-     * @param $postObj
-     * @return mixed
-     */
-    abstract public function form( $postObj );
-
-    /**
-     * Prepare and return data for user usage
-     * @param null $postId
-     * @return mixed
-     */
-    abstract public function getData( $postId = null );
-
-    /**
-     * Get specific key value from data
-     * Setup data, if not already done
-     * @param null $key
-     * @param null $default
-     * @return mixed
-     */
-    abstract public function getKey( $key = null, $default = null );
+    public function setupArgs( $args )
+    {
+        foreach ($args as $k => $v) {
+            if (method_exists( $this, "set" . strtoupper( $k ) )) {
+                $method = "set" . strtoupper( $k );
+                $this->$method( $v );
+            } else {
+                $this->$k = $v;
+            }
+        }
+    }
 
     /**
      * Setup wordpress hooks
+     * Either the panel sits in a meta box or has its own container
      */
     public function setupHooks()
     {
@@ -145,6 +131,40 @@ abstract class AbstractPanel
         }
     }
 
+    /**
+     * Save form
+     * @param $postId
+     * @return mixed
+     */
+    abstract public function save( $postId );
+
+    /**
+     * Render backend form
+     * @param $postObj
+     * @return mixed
+     */
+    abstract public function form( $postObj );
+
+    /**
+     * Prepare and return data for user usage
+     * @param null $postId
+     * @return mixed
+     */
+    abstract public function getData( $postId = null );
+
+    public function setData( $data )
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * Get specific key value from data
+     * Setup data, if not already done
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     */
+    abstract public function getKey( $key = null, $default = null );
 
     /**
      * add meta box action callback
@@ -183,22 +203,9 @@ abstract class AbstractPanel
         }
     }
 
-
-    /**
-     * Auto setup args to class properties
-     * and look for optional method for each arg
-     * @param $args
-     */
-    public function setupArgs( $args )
+    public function getBaseId()
     {
-        foreach ($args as $k => $v) {
-            if (method_exists( $this, "set" . strtoupper( $k ) )) {
-                $method = "set" . strtoupper( $k );
-                $this->$method( $v );
-            } else {
-                $this->$k = $v;
-            }
-        }
+        return $this->baseId;
     }
 
     /**
@@ -216,16 +223,6 @@ abstract class AbstractPanel
 
         $this->data = get_post_meta( $id, $this->baseId, true );
         return $this->data;
-    }
-
-    public function setData( $data )
-    {
-        $this->data = $data;
-    }
-
-    public function getBaseId()
-    {
-        return $this->baseId;
     }
 
 } 

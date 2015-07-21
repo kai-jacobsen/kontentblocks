@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-20 */
+/*! Kontentblocks DevVersion 2015-07-21 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1637,8 +1637,8 @@
                                                     window.twttr.widgets.load();
                                                 }
                                                 jQuery(window).off("scroll.kbmce resize.kbmce");
+                                                ed.off("nodeChange ResizeEditor ResizeWindow");
                                                 that.deactivate();
-                                                that.maybeSetPlaceholder();
                                             }, 500);
                                         },
                                         error: function() {}
@@ -1664,9 +1664,11 @@
             },
             deactivate: function() {
                 if (this.editor) {
-                    this.editor.destroy();
+                    var ed = this.editor;
+                    this.editor = null;
+                    tinyMCE.execCommand("mceRemoveEditor", true, ed.id);
+                    KB.Events.trigger("kb.repaint");
                 }
-                this.editor = null;
             },
             maybeSetPlaceholder: function() {
                 var string = this.editor ? this.editor.getContent() : this.$el.html();
@@ -1880,7 +1882,8 @@
                 mouseleave: "mouseleave"
             },
             focusEditor: function(e) {
-                if (!_.isNull(this.Parent.editor)) {
+                console.log(this.Parent.editor);
+                if (!this.Parent.editor) {
                     this.Parent.activate(e);
                 }
             },

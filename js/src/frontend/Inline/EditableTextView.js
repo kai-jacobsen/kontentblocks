@@ -151,8 +151,10 @@ var EditableText = Backbone.View.extend({
                       window.twttr.widgets.load();
                     }
                     jQuery(window).off('scroll.kbmce resize.kbmce');
+                    //that.maybeSetPlaceholder();
+                    ed.off('nodeChange ResizeEditor ResizeWindow');
                     that.deactivate();
-                    that.maybeSetPlaceholder();
+
                   }, 500);
                 },
 
@@ -172,6 +174,7 @@ var EditableText = Backbone.View.extend({
   },
   activate: function (e) {
     e.stopPropagation();
+
     if (!this.editor) {
       tinymce.init(_.defaults(this.defaults, {
         selector: '#' + this.id
@@ -180,9 +183,11 @@ var EditableText = Backbone.View.extend({
   },
   deactivate: function () {
     if (this.editor) {
-      this.editor.destroy();
+      var ed = this.editor;
+      this.editor = null;
+      tinyMCE.execCommand('mceRemoveEditor', true, ed.id);
+      KB.Events.trigger('kb.repaint');
     }
-    this.editor = null;
   },
   maybeSetPlaceholder: function () {
     var string = (this.editor) ? this.editor.getContent() : this.$el.html();
