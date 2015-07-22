@@ -6,6 +6,6 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this, 'change:moduleData', this.change);
   },
   change: function(){
-    //console.log('change', this);
+    console.log('change', this);
   }
 });

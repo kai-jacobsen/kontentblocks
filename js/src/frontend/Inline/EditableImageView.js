@@ -99,12 +99,13 @@ var EditableImage = Backbone.View.extend({
       this.$caption.html(this.attachment.get('caption'));
     }
   },
-  handleAttachment: function (attachment) {
+  handleAttachment: function (attachment, suppress) {
     var that = this;
     var id = attachment.get('id');
     var value = this.prepareValue(attachment);
     var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
     var path = this.model.get('kpath');
+    this.model.attachment = attachment;
     Utilities.setIndex(moduleData, path, value);
     this.model.get('ModuleModel').set('moduleData', moduleData);
     //this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
@@ -133,6 +134,9 @@ var EditableImage = Backbone.View.extend({
           that.$el.css('backgroundImage', "url('" + res.data.src + "')");
         }
         that.delegateEvents();
+        if (!suppress){
+          that.model.trigger('external.change', that.model);
+        }
       },
       error: function () {
 
@@ -145,8 +149,10 @@ var EditableImage = Backbone.View.extend({
       title: attachment.get('title'),
       caption: attachment.get('caption')
     };
+  },
+  synchronize: function (model) {
+    this.handleAttachment(model.attachment, true);
   }
-
 });
 
 

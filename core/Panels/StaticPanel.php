@@ -131,7 +131,7 @@ abstract class StaticPanel extends AbstractPanel
             'moduleData' => $this->data,
             'area' => '_internal',
             'type' => 'static',
-            'args' => $this->args,
+            'settings' => $this->args,
             'postId' => get_the_ID(),
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );

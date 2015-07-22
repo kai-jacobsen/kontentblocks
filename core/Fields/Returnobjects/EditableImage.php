@@ -346,7 +346,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     public function toJSON()
     {
         $json = array(
-
             'width' => $this->width,
             'height' => $this->height,
             'crop' => $this->crop,
@@ -356,10 +355,12 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             'kpath' => $this->createPath(),
             'tooltip' => $this->helptext,
             'mode' => ( $this->background ) ? 'background' : 'simple',
-            'state' => $this->field->getArg( 'state', 'image-details' )
+            'state' => $this->field->getArg( 'state', 'image-details' ),
+            'uid' => $this->createUniqueId(),
+            'linkedFields' => &$this->linkedFields
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
-            $this->uniqueId,
+            $this->createUniqueId(),
             $this->field->augmentArgs( $json )
         );
 

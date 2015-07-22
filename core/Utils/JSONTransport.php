@@ -118,7 +118,6 @@ class JSONTransport
      */
     public function registerFieldArgs( $key, $data )
     {
-
         if (is_null( $key )) {
             $this->Fields = $data;
         } else {

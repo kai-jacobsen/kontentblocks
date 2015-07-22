@@ -37,36 +37,34 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @var mixed
      */
     public $index;
-
+    /**
+     * @var string
+     */
+    public $helptext = 'Click to edit content';
     /**
      * Set of css classes to add to the el
      * @var array
      * @since 0.1.0
      */
     protected $classes = array();
-
     /**
      * Additional attribures
      * @var array
      * @since 0.1.0
      */
     protected $attributes = array();
-
     /**
      * @var bool
      */
     protected $inlineEdit = true;
-
     /**
      * @var string
      */
     protected $uniqueId;
 
-    /**
-     * @var string
-     */
-    public $helptext = 'Click to edit content';
+    protected $callCount = 0;
 
+    protected $linkedFields = array();
 
     /**
      * @param $value
@@ -82,159 +80,10 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     }
 
     /**
-     * Add a (css) class to the stack of classes
-     *
-     * @param string $class
-     *
-     * @return $this
-     * @since 0.1.0
-     */
-    public function addClass( $class )
-    {
-        if (is_array( $class )) {
-            $this->classes = array_merge( $this->classes, $class );
-        } else {
-            $this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
-        }
-
-        return $this;
-
-    }
-
-    /**
-     * Add an attribute to the stack of attributes
-     *
-     * @param string $attr
-     * @param string $value
-     *
-     * @return $this
-     * @since 0.1.0
-     */
-    public function addAttr( $attr, $value = '' )
-    {
-        if (is_array( $attr )) {
-            $this->attributes = array_merge( $this->attributes, $attr );
-        } else {
-            if ($value !== false) {
-                $this->attributes[$attr] = $value;
-            }
-        }
-
-        return $this;
-
-    }
-
-    /**
-     * Helper to remove spaces
-     *
-     * @param $string
-     *
-     * @return string|void
-     * @since 0.1.0
-     */
-    private function _cleanSpaces( $string )
-    {
-        return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
-
-    }
-
-    /**
-     * Getter for value
-     *
-     * @param null $arraykey
-     *
-     * @return array
-     */
-    public function getValue( $arraykey = null )
-    {
-        if (is_array( $this->value ) && !is_null( $arraykey )) {
-            if (isset( $this->value[$arraykey] )) {
-                return $this->value[$arraykey];
-            }
-        }
-
-        return $this->value;
-
-    }
-
-    abstract function getEditableClass();
-
-    abstract function html();
-
-
-    /**
-     * Add some classes and attributes dynmaically if inline support is active
-     * and the user is logged in
-     */
-    public function handleLoggedInUsers()
-    {
-
-        if (is_user_logged_in() && $this->inlineEdit && current_user_can( 'edit_kontentblocks' )) {
-//            $editableClass = $this->getEditableClass();
-//            $this->addClass( $editableClass );
-            $this->addAttr( 'data-kbfuid', $this->uniqueId );
-//            $this->addAttr( 'data-module', $this->moduleId );
-//            $this->addAttr( 'data-uid', $this->uniqueId );
-//            $this->addAttr( 'data-kpath', $this->createKPath() );
-//            $this->addAttr( 'data-kb-help', $this->helptext );
-        }
-    }
-
-    public function createPath()
-    {
-        $path = '';
-
-        if (!empty( $this->arrayKey )) {
-            $path .= $this->arrayKey . '.';
-        }
-
-        if (!empty( $this->index )) {
-            $path .= $this->index . '.';
-        }
-
-        $path .= $this->key;
-
-        return $path;
-
-    }
-
-
-    /**
-     * Set inline edit support on or off
-     *
-     * @param $bool
-     *
-     * @return $this
-     */
-    public
-    function inlineEdit(
-        $bool
-    )
-    {
-        $in = filter_var( $bool, FILTER_VALIDATE_BOOLEAN );
-        $this->inlineEdit = $in;
-
-        return $this;
-    }
-
-    public
-    function setValue(
-        $value
-    )
-    {
-
-        $this->value = $value;
-    }
-
-    /**
      * @param $field
      */
-    private
-    function setupFromField(
-        $field
-    )
+    private function setupFromField( $field )
     {
-
         if (is_array( $field )) {
 
             /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
@@ -262,30 +111,165 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
     }
 
-//    protected
-//    function createUniqueId()
-//    {
-//
-//        $uid = '';
-//        $uid .= 'kb_';
-//        $uid .= $this->field->getFieldId();
-//        $uid .= $this->field->getKey();
-//        if ($this->field->getArg( 'index' )) {
-//            $uid .= $this->field->getArg( 'index' );
-//        }
-//
-//        return $uid;
-//
-//    }
+    /**
+     * Getter for value
+     *
+     * @param null $arraykey
+     *
+     * @return array
+     */
+    public function getValue( $arraykey = null )
+    {
+        if (is_array( $this->value ) && !is_null( $arraykey )) {
+            if (isset( $this->value[$arraykey] )) {
+                return $this->value[$arraykey];
+            }
+        }
 
+        return $this->value;
+
+    }
+
+    public
+    function setValue(
+        $value
+    )
+    {
+
+        $this->value = $value;
+    }
+
+    protected
+
+    abstract function prepare();
+
+    /**
+     * Add a (css) class to the stack of classes
+     *
+     * @param string $class
+     *
+     * @return $this
+     * @since 0.1.0
+     */
+    public function addClass( $class )
+    {
+        if (is_array( $class )) {
+            $this->classes = array_merge( $this->classes, $class );
+        } else {
+            $this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * Helper to remove spaces
+     *
+     * @param $string
+     *
+     * @return string|void
+     * @since 0.1.0
+     */
+    private function _cleanSpaces( $string )
+    {
+        return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
+
+    }
+
+    abstract function getEditableClass();
+
+    abstract function html();
+
+    /**
+     * Add some classes and attributes dynmaically if inline support is active
+     * and the user is logged in
+     */
+    public function handleLoggedInUsers()
+    {
+        $this->increaseCallCount();
+        if (is_user_logged_in() && $this->inlineEdit && current_user_can( 'edit_kontentblocks' )) {
+            $this->addAttr( 'data-kbfuid', $this->createUniqueId() );
+        }
+    }
+
+    private function increaseCallCount()
+    {
+
+        $this->callCount ++;
+        $this->linkedFields[$this->createUniqueId()] = null;
+    }
+
+    /**
+     * Add an attribute to the stack of attributes
+     *
+     * @param string $attr
+     * @param string $value
+     *
+     * @return $this
+     * @since 0.1.0
+     */
+    public function addAttr( $attr, $value = '' )
+    {
+        if (is_array( $attr )) {
+            $this->attributes = array_merge( $this->attributes, $attr );
+        } else {
+            if ($value !== false) {
+                $this->attributes[$attr] = $value;
+            }
+        }
+
+        return $this;
+
+    }
+
+    protected function createUniqueId()
+    {
+        $base = $this->uniqueId . (string) $this->callCount;
+        $uid = 'kbf-' . hash( 'crc32', $base );
+        return $uid;
+
+    }
+
+    public function createPath()
+    {
+        $path = '';
+
+        if (!empty( $this->arrayKey )) {
+            $path .= $this->arrayKey . '.';
+        }
+
+        if (!empty( $this->index )) {
+            $path .= $this->index . '.';
+        }
+
+        $path .= $this->key;
+
+        return $path;
+
+    }
+
+    /**
+     * Set inline edit support on or off
+     *
+     * @param $bool
+     *
+     * @return $this
+     */
+    public function inlineEdit( $bool )
+    {
+        $in = filter_var( $bool, FILTER_VALIDATE_BOOLEAN );
+        $this->inlineEdit = $in;
+
+        return $this;
+    }
 
     /**
      * Render classes and extra attributes
      * @return string
      * @since 0.1.0
      */
-    protected
-    function _renderAttributes()
+    protected function _renderAttributes()
     {
         $return = "class='{$this->_classList()}' ";
         $return .= $this->_attributesList();
@@ -299,15 +283,13 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @return string
      * @since 0.1.0
      */
-    protected
-    function _classList()
+    protected function _classList()
     {
         return trim( implode( ' ', $this->classes ) );
 
     }
 
-    protected
-    function _attributesList()
+    protected function _attributesList()
     {
         $returnstr = '';
         foreach ($this->attributes as $attr => $value) {
@@ -317,10 +299,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
         return trim( $returnstr );
 
     }
-
-    protected
-
-    abstract function prepare();
 
 
 }

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-20 */
+/*! Kontentblocks DevVersion 2015-07-22 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -2397,12 +2397,19 @@
         module.exports = Backbone.Model.extend({
             idAttribute: "uid",
             initialize: function() {
+                this.cleanUp();
                 var module = this.get("fieldId");
                 if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) {
                     this.set("ModuleModel", this.ModuleModel);
                     this.setData();
                     this.bindHandlers();
                     this.setupType();
+                }
+            },
+            cleanUp: function() {
+                var links = this.get("linkedFields");
+                if (links.hasOwnProperty(this.get("uid"))) {
+                    delete links[this.get("uid")];
                 }
             },
             bindHandlers: function() {
@@ -2427,14 +2434,6 @@
             },
             getType: function() {
                 var type = this.get("type");
-                if (this.ModuleModel) {
-                    if (this.ModuleModel.type === "panel" && type === "EditableImage") {
-                        return false;
-                    }
-                    if (this.ModuleModel.type === "panel" && type === "EditableText") {
-                        return false;
-                    }
-                }
                 if (!Checks.userCan("edit_kontentblocks")) {
                     return false;
                 }
@@ -2469,6 +2468,9 @@
                     this.get("ModuleModel").View.getDirty();
                 }
             },
+            externalUpdate: function(model) {
+                this.FieldView.synchronize(model);
+            },
             remove: function() {
                 this.stopListening();
                 KB.FieldConfigs.remove(this);
@@ -2496,6 +2498,7 @@
             initialize: function() {
                 this._byModule = {};
                 this.listenTo(this, "add", this.addToModules);
+                this.listenTo(this, "add", this.bindLinkedFields);
             },
             model: FieldConfigModel,
             addToModules: function(model) {
@@ -2512,6 +2515,16 @@
                     return this._byModule[id];
                 }
                 return {};
+            },
+            bindLinkedFields: function(model) {
+                _.each(this.models, function(m) {
+                    var links = m.get("linkedFields");
+                    var uid = model.get("uid");
+                    if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
+                        links[uid] = model;
+                        model.listenTo(m, "external.change", model.externalUpdate);
+                    }
+                });
             }
         });
     }, {

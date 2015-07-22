@@ -25,7 +25,12 @@ var SidebarView = require('frontend/Views/Sidebar');
 var FieldConfigsCollection = require('fields/FieldsConfigsCollection');
 var Payload = require('common/Payload');
 var ModuleModel = require('frontend/Models/ModuleModel');
+var ModuleView = require('./Views/ModuleView');
+
 var AreaModel = require('frontend/Models/AreaModel');
+var PanelModel = require('frontend/Models/PanelModel');
+var PanelView = require('./Views/PanelView');
+
 var Ui = require('common/UI');
 var Logger = require('common/Logger');
 var ChangeObserver = require('frontend/Views/ChangeObserver');
@@ -43,8 +48,8 @@ var ChangeObserver = require('frontend/Views/ChangeObserver');
 KB.Views = {
   Modules: new ViewsCollection(),
   Areas: new ViewsCollection(),
-  Context: new ViewsCollection()
-  //Panels: new KB.ViewsCollection()
+  Context: new ViewsCollection(),
+  Panels: new ViewsCollection()
 };
 
 
@@ -70,9 +75,9 @@ KB.Areas = new Backbone.Collection([], {
  */
 KB.ObjectProxy = new Backbone.Collection();
 
-//KB.Panels = new Backbone.Collection([], {
-//  model: KB.Backbone.PanelModel
-//});
+KB.Panels = new Backbone.Collection([], {
+  model: PanelModel
+});
 
 /*
  * Init function
@@ -104,7 +109,7 @@ KB.App = function () {
     KB.Modules.on('add', createModuleViews);
     KB.Areas.on('add', createAreaViews);
     KB.Modules.on('remove', removeModule);
-    //KB.Panels.on('add', createPanelViews);
+    KB.Panels.on('add', createPanelViews);
     // Create views
     addViews();
 
@@ -161,10 +166,10 @@ KB.App = function () {
       KB.ObjectProxy.add(KB.Modules.add(module));
     });
 
-    // create models from already attached modules
-    //_.each(Payload.getPayload('Panels'), function (panel) {
-    //  KB.Panels.add(panel);
-    //});
+     //create models from already attached modules
+    _.each(Payload.getPayload('Panels'), function (panel) {
+      KB.ObjectProxy.add(KB.Panels.add(panel));
+    });
 
     // @TODO events:refactor
     KB.trigger('kb:moduleControlsAdded');
@@ -182,22 +187,21 @@ KB.App = function () {
    */
   function createModuleViews(ModuleModel) {
     var Module;
-    KB.ObjectProxy.add(ModuleModel);
+    //KB.ObjectProxy.add(ModuleModel);
     // create view
-    var ModuleView = require('./Views/ModuleView');
-    Module = KB.Views.Modules.add(ModuleModel.get('mid'), new ModuleView({
+    Module = KB.Views.Modules.add(ModuleModel.get('settings').uid, new ModuleView({
       model: ModuleModel,
       el: '#' + ModuleModel.get('mid')
     }));
-    //ModuleView.$el.data('ModuleView', ModuleView);
     Ui.initTabs();
   }
 
-  //function createPanelViews(PanelModel) {
-  //  KB.ObjectProxy.add(PanelModel);
-  //  // no related frontend view
-  //  // leave this out for now
-  //}
+  function createPanelViews(PanelModel) {
+    var Panel = KB.Views.Modules.add(PanelModel.get('mid'), new PanelView({
+      model: PanelModel,
+      el: 'body'
+    }));
+  }
 
 
   /**
