@@ -57,8 +57,8 @@ class PostPanelRepository
         $Registry = Kontentblocks::getService( 'registry.panels' );
 
         foreach ($Registry->getAll() as $id => $panel) {
-            $postTypes = $panel['postTypes'];
-            $pageTemplates = $panel['pageTemplates'];
+            $postTypes = !empty($panel['postTypes']) ? $panel['postTypes'] : [];
+            $pageTemplates = !empty($panel['pageTemplates']) ? $panel['pageTemplates'] : [];
 
             if (is_array( $pageTemplates ) && !empty( $pageTemplates )) {
                 if (!in_array( $Environment->getPageTemplate(), $pageTemplates )) {
