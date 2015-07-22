@@ -78,7 +78,6 @@ function renderSingleArea( $area, $id = null, $additionalArgs = array() )
     }
 
 
-
     $AreaRender = new AreaRenderer( $Environment, $area, $additionalArgs );
     $AreaRender->render( true );
 }
@@ -167,6 +166,30 @@ function getPanel( $id = null, $post_id = null )
             'Kontentblocks',
             'Panel with requested id does not exist.',
             array( 'request' => $id, 'line' => __LINE__, 'file' => __FILE__ )
+        );
+    }
+}
+
+function getPostPanel( $panelId = null, $postId = null )
+{
+
+    if (is_null( $postId )) {
+        $postId = get_the_ID();
+    }
+
+    $Environment = Utilities::getEnvironment( $postId );
+
+    /** @var \Kontentblocks\Panels\PanelRegistry $Registry */
+    $Registry = Kontentblocks::getService( 'registry.panels' );
+    $Panel = $Environment->getPanelObject($panelId);
+    /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
+    if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
+        return $Panel;
+    } else {
+        return new \WP_Error(
+            'Kontentblocks',
+            'Panel with requested id does not exist.',
+            array( 'request' => $panelId, 'line' => __LINE__, 'file' => __FILE__ )
         );
     }
 }

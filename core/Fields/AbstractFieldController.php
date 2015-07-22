@@ -36,12 +36,11 @@ abstract class AbstractFieldController
 
     /**
      * Prepare fields for frontend output
-     *
-     * @param array $instanceData
+     * @return $this
      *
      * @since 0.1.0
      */
-    public function setup( $instanceData )
+    public function setup()
     {
 
         if (empty( $this->fieldsById )) {
@@ -49,27 +48,11 @@ abstract class AbstractFieldController
         }
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
-            $data = ( isset( $instanceData[$field->getKey()] ) ) ? $instanceData[$field->getKey()] : '';
+            $data = ( isset( $this->data[$field->getKey()] ) ) ? $this->data[$field->getKey()] : '';
             $field->setValue( $data );
         }
 
-    }
-
-
-    /**
-     * Helper method to check whether an section already
-     * exists in group
-     *
-     * @param string $id
-     *
-     * @return object
-     * @since 0.1.0
-     */
-    public function idExists( $id )
-    {
-        // TODO Test for right inheritance / abstract class
-        return ( isset( $this->Structure[$id] ) );
-
+        return $this;
     }
 
     /**
@@ -85,6 +68,22 @@ abstract class AbstractFieldController
             $collect = $collect + $def->getFields();
         }
         return $collect;
+
+    }
+
+    /**
+     * Helper method to check whether an section already
+     * exists in group
+     *
+     * @param string $id
+     *
+     * @return object
+     * @since 0.1.0
+     */
+    public function idExists( $id )
+    {
+        // TODO Test for right inheritance / abstract class
+        return ( isset( $this->Structure[$id] ) );
 
     }
 
@@ -141,13 +140,13 @@ abstract class AbstractFieldController
 
     abstract public function renderFields();
 
-    abstract public function addGroup( $id, $args = array() );
+    abstract public function addGroup( $groupId, $args = array() );
 
     public function export()
     {
         $collection = array();
-        foreach ($this->Structure as $Section){
-            $Section->export($collection);
+        foreach ($this->Structure as $Section) {
+            $Section->export( $collection );
         }
         return $collection;
     }

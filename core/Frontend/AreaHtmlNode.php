@@ -237,6 +237,7 @@ class AreaHtmlNode
             'moduleElement' => null
         );
 
+
         if ($settings) {
             $defaults = wp_parse_args( $settings, $defaults );
         }

@@ -45,23 +45,23 @@ class ModuleFieldController extends AbstractFieldController
     /**
      * Creates a new section if there is not already one with the same id
      * or returns the section if exists
-     * @param string $id
+     * @param string $groupId
      * @param array $args
      * @param Kontentblocks\Modules\Module
      * @return object
      * @since 0.1.0
      */
-    public function addGroup( $id, $args = array() )
+    public function addGroup( $groupId, $args = array() )
     {
-        if (!$this->idExists( $id )) {
-            $this->Structure[$id] = new FieldSection(
-                $id,
+        if (!$this->idExists( $groupId )) {
+            $this->Structure[$groupId] = new FieldSection(
+                $groupId,
                 $args,
                 $this->Module,
                 $this->Module->getId()
             );
         }
-        return $this->Structure[$id];
+        return $this->Structure[$groupId];
 
     }
 

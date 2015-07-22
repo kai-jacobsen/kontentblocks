@@ -2,6 +2,9 @@
 
 namespace Kontentblocks\Panels;
 
+use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Utils\Utilities;
+
 /**
  * Class PanelRegistry
  * @package Kontentblocks\Panels
@@ -11,30 +14,34 @@ class PanelRegistry
 
     public static $instance;
 
+
     /**
      * Panels collection
      * @var array
      */
     public $panels = array();
 
+    public $Objects = array();
 
 
     /**
      * Add a Panel
      *
-     * @param $id string
+     * @param $panelId string
      * @param $args array
      *
      * @throws \Exception
      */
-    public function add( $id, $args )
+    public function add( $panelId, $args )
     {
-        if (!isset( $this->panels[$id] )) {
+
+        if (!isset( $this->panels[$panelId] )) {
             $Reflect = new \ReflectionClass( $args['class'] );
             if ($Reflect->getParentClass()->name === 'Kontentblocks\Modules\StaticModule') {
-                $this->panels[$id] = new ModulePanel( $args );
+                $this->panels[$panelId] = new ModulePanel( $args );
             } else {
-                $this->panels[$id] = new $args['class']( $args );
+//                $this->panels[$id] = new $args['class']( $args );
+                $this->panels[$panelId] = $args;
             }
         } else {
             throw new \Exception(
@@ -43,15 +50,40 @@ class PanelRegistry
         }
     }
 
+//    public function create( $panelId, Environment $Environment )
+//    {
+//        if ($this->panelExists( $panelId )) {
+//            $panel = $this->get( $panelId );
+//            return new $panel['class']( $panel, $Environment );
+//        }
+//    }
+
     /**
-     * @param $id
+     * @param $panelId
+     * @return bool
+     */
+    public function panelExists( $panelId )
+    {
+        return array_key_exists( $panelId, $this->panels );
+    }
+
+    /**
+     * @param $panelId
      * @return mixed
      */
-    public function get( $id )
+    public function get( $panelId )
     {
-        if (isset( $this->panels[$id] )) {
-            return $this->panels[$id];
+        if (isset( $this->panels[$panelId] )) {
+            return $this->panels[$panelId];
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->panels;
     }
 
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Kontentblocks\Panels;
 
+use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -19,8 +21,14 @@ abstract class StaticPanel extends AbstractPanel
     public $FieldController;
 
 
-
+    /**
+     * @var int
+     */
     public $postId;
+
+
+    public $data;
+
 
     /**
      * Flag indicates if data should be stored as single key => value pairs
@@ -29,13 +37,162 @@ abstract class StaticPanel extends AbstractPanel
      */
     protected $saveAsSingle = false;
 
+    /**
+     * unique identifier
+     * @var string
+     */
+    protected $uid;
 
-    public function __construct( $args )
+
+    public function __construct( $args, Environment $Environment )
     {
 
         parent::__construct( $args );
-        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+        $this->Environment = $Environment;
+        $this->data = $Environment->getDataProvider()->get( $this->baseId );
+        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->fields( $this->FieldController );
+    }
 
+    /**
+     * Fields to render, must be provided by child class
+     * @param PanelFieldController $FieldManager
+     * @return mixed
+     */
+    abstract public function fields( PanelFieldController $FieldManager );
+
+    /**
+     * Setup hooks
+     */
+    public function prepare()
+    {
+        $postType = $this->Environment->getPostType();
+        if (is_array( $this->metaBox ) || $this->metaBox) {
+            add_action( "add_meta_boxes_{$postType}", array( $this, 'metaBox' ), 10, 1 );
+        } else {
+            add_action( $this->hook, array( $this, 'form' ) );
+        }
+
+        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+        add_action( "save_post", array( $this, 'save' ), 10, 1 );
+    }
+
+    /**
+     * Render fields
+     * @param $postObj
+     * @return mixed|void
+     */
+    public function form( $postObj )
+    {
+
+        if (!post_type_supports( $postObj->post_type, 'editor' )) {
+            Utilities::hiddenEditor();
+        }
+
+        $this->beforeForm();
+        echo $this->renderFields();
+        $this->afterForm();
+        $this->toJSON();
+
+    }
+
+    /**
+     * Markup before inner form
+     */
+    private function beforeForm()
+    {
+        $class = ( is_array( $this->metaBox ) ) ? 'kb-postbox' : '';
+        $elementId = 'kbp-' . $this->getBaseId();
+
+
+        echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class}'>
+                <div class='kb-custom-wrapper'>
+                <div class='inside'>";
+    }
+
+    public function renderFields()
+    {
+        return $this->fields( $this->FieldController )->renderFields();
+    }
+
+    /**
+     * Markup after
+     */
+    private function afterForm()
+    {
+        echo "</div></div></div>";
+    }
+
+    public function toJSON()
+    {
+        $args = array(
+            'baseId' => $this->getBaseId(),
+            'mid' => $this->getBaseId(),
+            'moduleData' => $this->data,
+            'area' => '_internal',
+            'type' => 'static',
+            'args' => $this->args,
+            'postId' => get_the_ID(),
+        );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
+    }
+
+
+    /**
+     * @param $postId
+     * @return mixed|void
+     */
+    public function save( $postId )
+    {
+
+        if (empty( $_POST[$this->baseId] )) {
+            return;
+        }
+
+        $old = $this->setupData( $postId );
+        $postData = new ValueStorage( $_POST );
+        $new = $this->fields( $this->FieldController )->save( $postData->get( $this->baseId ), $old );
+        $DataProvider = $this->Environment->getDataProvider();
+        $DataProvider->update( $this->baseId, $new );
+
+        if ($this->saveAsSingle) {
+            foreach ($new as $k => $v) {
+                if (empty( $v )) {
+                    $DataProvider->delete( $this->baseId . '_' . $k );
+                } else {
+                    $DataProvider->update( $this->baseId . '_' . $k, $v );
+                }
+            }
+        }
+    }
+
+    /**
+     * Get specific key value from data
+     * Setup data, if not already done
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     */
+    public function getKey( $key = null, $default = null )
+    {
+        if (isset( $data[$key] )) {
+            return $data[$key];
+        }
+
+        return $default;
+    }
+
+    /**
+     * After setup, get the setup object
+     * @return array
+     */
+    public function getData()
+    {
+        $data = $this->FieldController->setup()->prepareDataAndGet();
+        if (!is_array( $data )) {
+            return array();
+        }
+        return $data;
     }
 
     /**
@@ -55,170 +212,5 @@ abstract class StaticPanel extends AbstractPanel
         );
 
         return wp_parse_args( $args, $defaults );
-    }
-
-    /**
-     * Fields to render, must be provided by child class
-     * @param PanelFieldController $FieldManager
-     * @return mixed
-     */
-    abstract public function fields( PanelFieldController $FieldManager );
-
-
-    /**
-     * Render fields
-     * @param $postObj
-     * @return mixed|void
-     */
-    public function form( $postObj )
-    {
-
-        if (!in_array( $postObj->post_type, $this->postTypes )) {
-            return;
-        }
-
-        if (!post_type_supports( $postObj->post_type, 'editor' )) {
-            Utilities::hiddenEditor();
-        }
-
-        $this->setupData( $postObj->ID );
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-
-        $this->beforeForm();
-        echo $this->renderFields();
-        $this->afterForm();
-        $this->toJSON();
-
-    }
-
-
-
-    public function renderFields($postId = null)
-    {
-        if ( is_null($postId)){
-            $postId = get_the_ID();
-        }
-
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData( $postId ), $this );
-        return $this->fields( $this->FieldController )->renderFields();
-    }
-
-    /**
-     * @param $postId
-     * @return mixed|void
-     */
-    public function save( $postId )
-    {
-
-        if (empty( $_POST[$this->baseId] )) {
-            return;
-        }
-
-        $old = $this->setupData( $postId );
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-
-        $new = $this->fields( $this->FieldController )->save( $_POST[$this->baseId], $old );
-        update_post_meta( $postId, $this->baseId, $new );
-
-        if ($this->saveAsSingle) {
-            foreach ($new as $k => $v) {
-                if (empty( $v )) {
-                    delete_post_meta( $postId, $this->baseId . '_' . $k );
-                } else {
-                    update_post_meta( $postId, $this->baseId . '_' . $k, $v );
-                }
-            }
-        }
-    }
-
-    /**
-     * Markup before inner form
-     */
-    private function beforeForm()
-    {
-        $class = ( is_array( $this->metaBox ) ) ? 'kb-postbox' : '';
-
-        echo "<div class='postbox {$class}'>
-                <div class='kb-custom-wrapper'>
-                <div class='inside'>";
-    }
-
-    /**
-     * Markup after
-     */
-    private function afterForm()
-    {
-        echo "</div></div></div>";
-    }
-
-
-    /**
-     * Manually set up fielddata
-     * Makes it possible to get the Panel from the registry, and use it as data container
-     * @TODO __Revise__
-     *
-     * @param $postId
-     *
-     * @return $this
-     */
-    public function setup( $postId )
-    {
-        $this->postId = $postId;
-        $this->setupData( $postId );
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-        $this->fields( $this->FieldController )->setup( $this->data );
-        return $this;
-
-    }
-
-    /**
-     * After setup, get the setup object
-     * @return array
-     */
-    public function getData( $postId = null )
-    {
-        if (!$this->FieldController) {
-            $this->setup( $postId );
-        }
-
-        $data = $this->FieldController->prepareDataAndGet();
-
-        if (!is_array( $data )) {
-            return array();
-        }
-        return $data;
-    }
-
-
-    /**
-     * Get specific key value from data
-     * Setup data, if not already done
-     * @param null $key
-     * @param null $default
-     * @return mixed
-     */
-    public function getKey( $key = null, $default = null )
-    {
-        $data = $this->getData();
-
-        if (isset( $data[$key] )) {
-            return $data[$key];
-        }
-
-        return $default;
-    }
-
-    public function toJSON()
-    {
-        $args = array(
-            'baseId' => $this->getBaseId(),
-            'mid' => $this->getBaseId(),
-            'moduleData' => $this->getData(),
-            'area' => '_internal',
-            'type' => 'static',
-            'args' => $this->args,
-            'postId' => get_the_ID(),
-        );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }
 }

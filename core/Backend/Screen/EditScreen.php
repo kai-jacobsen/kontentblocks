@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Backend\Screen;
 
+use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Helper;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\_K;
@@ -25,6 +26,11 @@ Class EditScreen
      */
     protected $hooks;
 
+    /**
+     * @var Environment
+     */
+    protected $Environment;
+
 
     /**
      * Add the main metabox
@@ -34,10 +40,10 @@ Class EditScreen
         global $pagenow;
         if (in_array( $pagenow, $this->setupHooks() )) {
             // add UI
-            add_action( 'edit_form_after_editor', array( $this, 'renderUserInterface' ), 10 );
+            add_action( 'add_meta_boxes', array( $this, 'renderUserInterface' ), 10, 2 );
             // register save callback
-            add_action( 'save_post', array( $this, 'save' ), 10, 2 );
-            add_filter('_wp_post_revision_fields', array($this, 'revisionFields'));
+            add_action( 'save_post', array( $this, 'save' ), 5, 2 );
+            add_filter( '_wp_post_revision_fields', array( $this, 'revisionFields' ) );
 
             // expose data to the document
             add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
@@ -45,14 +51,32 @@ Class EditScreen
     }
 
     /**
+     * Setup default whitelist of allowed wp backend page hooks
+     * @since 0.1.0
+     * @return array
+     * @filter kb_page_hooks modify allowed page hooks
+     */
+    private function setupHooks()
+    {
+        return apply_filters( 'kb.setup.hooks', array( 'post.php', 'post-new.php' ) );
+
+    }
+
+    /**
      * Callback for 'edit_form_after_editor'
      * @param $post
      */
-    public function renderUserInterface( $post )
+    public function renderUserInterface( $post_type, $post )
     {
+        $this->Environment = Utilities::getEnvironment( $post->ID );
+        add_action(
+            'edit_form_after_editor',
+            function () use ( $post ) {
+                echo $this->userInterface( $post );
+                _K::info( 'user interfaced rendered for a post type' );
+            }
+        );
 
-        echo $this->userInterface( $post );
-        _K::info( 'user interfaced rendered for a post type' );
     }
 
     /**
@@ -66,22 +90,21 @@ Class EditScreen
      */
     public function userInterface( $post )
     {
-        $Environment = Utilities::getEnvironment( $post->ID );
         // bail if post type doesn't support kontentblocks
-        if (!post_type_supports( $Environment->get( 'postType' ), 'kontentblocks' )) {
+        if (!post_type_supports( $this->Environment->get( 'postType' ), 'kontentblocks' )) {
             return null;
         }
-        if (!post_type_supports( $Environment->get( 'postType' ), 'editor' )) {
+        if (!post_type_supports( $this->Environment->get( 'postType' ), 'editor' )) {
             Utilities::hiddenEditor();
         }
 
         $hasAreas = true;
-        $areas = $Environment->get( 'areas' );
+        $areas = $this->Environment->get( 'areas' );
         if (!$areas || empty( $areas )) {
             $hasAreas = false;
         }
 
-        $ScreenManager = new ScreenManager( $areas, $Environment );
+        $ScreenManager = new ScreenManager( $areas, $this->Environment );
         $View = new CoreView(
             '/edit-screen/user-interface.twig', array(
                 'ScreenManager' => $ScreenManager,
@@ -98,6 +121,19 @@ Class EditScreen
 
         return $View->render( false );
 
+    }
+
+    # ------------------------------------------------
+    # Helper methods
+    #-------------------------------------------------
+
+    private function handleEmptyAreas()
+    {
+        if (current_user_can( 'manage_kontentblocks' )) {
+            $tpl = new CoreView( 'no-areas.twig' );
+            return $tpl->render( false );
+        }
+        return '';
     }
 
     /**
@@ -117,11 +153,6 @@ Class EditScreen
         $Environment->save();
     }
 
-    # ------------------------------------------------
-    # Helper methods
-    #-------------------------------------------------
-
-
     /**
      * toJSON
      * Make certain properties available throughout the frontend
@@ -134,34 +165,14 @@ Class EditScreen
     }
 
     /**
-     * Setup default whitelist of allowed wp backend page hooks
-     * @since 0.1.0
-     * @return array
-     * @filter kb_page_hooks modify allowed page hooks
-     */
-    private function setupHooks()
-    {
-        return apply_filters( 'kb.setup.hooks', array( 'post.php', 'post-new.php' ) );
-
-    }
-
-    private function handleEmptyAreas()
-    {
-        if (current_user_can( 'manage_kontentblocks' )) {
-            $tpl = new CoreView( 'no-areas.twig' );
-            return $tpl->render( false );
-        }
-        return '';
-    }
-
-    /**
      * By adding a unknown field WordPress internals will never come to the conclusion
      * a revision equals the original
      * @param $fields
      * @return mixed
      * @since 0.2.0
      */
-    public function revisionFields($fields){
+    public function revisionFields( $fields )
+    {
         $fields["kb_preview"] = "kb_preview";
         return $fields;
     }

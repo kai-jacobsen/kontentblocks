@@ -70,14 +70,14 @@ abstract class AbstractPanel
         // mumbo jumbo
         $this->setupArgs( $this->args );
 
-        add_action(
-            'add_meta_boxes',
-            function () {
-                $this->setupHooks();
-            }
-        );
+//        add_action(
+//            'add_meta_boxes',
+//            function () {
+//                $this->setupHooks();
+//            }
+//        );
 
-        add_action( "save_post", array( $this, 'save' ), 10, 1 );
+//        add_action( "save_post", array( $this, 'save' ), 10, 1 );
     }
 
     /**
@@ -150,7 +150,7 @@ abstract class AbstractPanel
      * @param null $postId
      * @return mixed
      */
-    abstract public function getData( $postId = null );
+    abstract public function getData( );
 
     public function setData( $data )
     {

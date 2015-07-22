@@ -12,25 +12,22 @@ class PanelFieldController extends AbstractFieldController
 {
 
     /**
+     * Array of Field groups
+     * @var array
+     */
+    public $Structure = array();
+    public $preparedFields = array();
+    /**
      * Unique ID from module
      * Used to prefix form fields
      * @var string
      */
     protected $baseId;
-
     /**
      *
      * @var object
      */
     protected $Panel;
-
-    /**
-     * Array of Field groups
-     * @var array
-     */
-    public $Structure = array();
-
-    public $preparedFields = array();
 
     /**
      * Constructor
@@ -51,18 +48,18 @@ class PanelFieldController extends AbstractFieldController
      * Creates a new section if there is not an exisiting one
      * or returns the section
      *
-     * @param string $id
+     * @param string $groupId
      * @param array $args
      *
      * @return object groupobject
      */
-    public function addGroup( $id, $args = array() )
+    public function addGroup( $groupId, $args = array() )
     {
-        if (!$this->idExists( $id )) {
-            $this->Structure[$id] = new PanelFieldSection( $id, $args, $this->Panel );
+        if (!$this->idExists( $groupId )) {
+            $this->Structure[$groupId] = new PanelFieldSection( $groupId, $args, $this->Panel );
         }
 
-        return $this->Structure[$id];
+        return $this->Structure[$groupId];
 
     }
 
@@ -93,7 +90,7 @@ class PanelFieldController extends AbstractFieldController
      * called by Kontentblocks\Modules\Module::options()
      * if not overridden by extending class
      * @see Kontentblocks\Modules\Module::form
-     * @return void
+     * @return string
      */
     public function renderFields()
     {
@@ -125,7 +122,6 @@ class PanelFieldController extends AbstractFieldController
      */
     public function prepareDataAndGet()
     {
-
         if (!empty( $this->fieldsById )) {
             if (empty( $this->preparedFields )) {
                 /** @var \Kontentblocks\Fields\Field $Field */

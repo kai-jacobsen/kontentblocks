@@ -9,6 +9,7 @@ use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRepository;
+use Kontentblocks\Panels\PostPanelRepository;
 use Kontentblocks\Utils\Utilities;
 
 
@@ -23,19 +24,30 @@ class Environment implements JsonSerializable
 {
 
     /**
+     * generic low-level data handler
      * @var \Kontentblocks\Backend\DataProvider\DataProviderController
      */
     protected $DataProvider;
 
     /**
+     * Module specific storage handler
      * @var \Kontentblocks\Backend\Storage\ModuleStorage
      */
     protected $Storage;
 
     /**
+     * Access object to all env related modules
      * @var ModuleRepository
      */
     protected $ModuleRepository;
+
+
+    /**
+     * Access object to all env related panels
+     * @var ModuleRepository
+     */
+    protected $PostPanelRepository;
+
 
     /**
      * @var int
@@ -70,6 +82,11 @@ class Environment implements JsonSerializable
     /**
      * @var array
      */
+    protected $panels;
+
+    /**
+     * @var array
+     */
     protected $areasByContext;
 
 
@@ -88,14 +105,121 @@ class Environment implements JsonSerializable
 
         $this->Storage = new ModuleStorage( $storageId );
         $this->ModuleRepository = new ModuleRepository( $this );
+        $this->PostPanelRepository = new PostPanelRepository( $this );
 
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
         $this->areas = $this->setupAreas();
-        $this->areaByContext = $this->areasToContext();
+        $this->areasToContext();
+        $this->panels = $this->PostPanelRepository->getPanelObjects();
 
+    }
+
+    /**
+     * returns the page template if available
+     * returns 'default' if not. in order to normalize the object property
+     * If post type does not support page templates, it's still
+     * 'default' on the module
+     * @return string
+     * @since 0.1.0
+     */
+    public function getPageTemplate()
+    {
+        // value is handled by wordpress, so stick to post meta api
+        $tpl = get_post_meta( $this->postObj->ID, '_wp_page_template', true );
+
+        if ($tpl !== '') {
+            return $tpl;
+        }
+
+        return 'default';
+
+    }
+
+    /**
+     * Get Post Type
+     * @since 0.1.0
+     */
+    public function getPostType()
+    {
+        return $this->postObj->post_type;
+    }
+
+    /**
+     * prepares modules attached to this post
+     * @return array
+     * @since 0.1.0
+     */
+    private function setupModules()
+    {
+        return $this->ModuleRepository->getModules();
+    }
+
+    /**
+     * Sorts module definitions to areas
+     * @return array
+     * @since 0.1.0
+     */
+    public function getSortedModules()
+    {
+        $sorted = array();
+        if (is_array( $this->modules )) {
+            /** @var \Kontentblocks\Modules\Module $module */
+            foreach ($this->modules as $module) {
+                $sorted[$module->Properties->area->id][$module->getId()] = $module;
+            }
+            return $sorted;
+        }
+    }
+
+    /**
+     * Augment areas with Settings instance
+     * Settings are environment related so this must happen late
+     * @since 0.3.0
+     */
+    private function setupAreas()
+    {
+        $areas = $this->findAreas();
+        /** @var \Kontentblocks\Areas\AreaProperties $area */
+        foreach ($areas as $area) {
+            $area->set( 'settings', new AreaSettingsModel( $area, $this->postObj->ID ) );
+        }
+        return $areas;
+
+    }
+
+    /**
+     * returns all areas which are available in this environment
+     * @return array
+     * @since 0.1.0
+     */
+    public function findAreas()
+    {
+        /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
+        $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
+        return $AreaRegistry->filterForPost( $this );
+    }
+
+    /**
+     * @since 0.3.0
+     */
+    private function areasToContext()
+    {
+        if (is_array( $this->areas ) && !empty( $this->areas )) {
+            foreach ($this->areas as $id => $area) {
+                $this->areasByContext[$area->context][$id] = $area;
+            }
+        }
+    }
+
+    public function getPanelObject( $id )
+    {
+        if (isset($this->panels[$id])){
+            return $this->panels[$id];
+        }
+        return null;
     }
 
     /**
@@ -106,7 +230,7 @@ class Environment implements JsonSerializable
      */
     public function getId()
     {
-        return absint($this->storageId);
+        return absint( $this->storageId );
     }
 
     /**
@@ -134,24 +258,13 @@ class Environment implements JsonSerializable
     }
 
     /**
-     * returns the PostMetaData instance
+     * returns the DataProvider instance
      * @return DataProviderController
      * @since 0.1.0
      */
     public function getDataProvider()
     {
         return $this->Storage->getDataProvider();
-    }
-
-
-    /**
-     * Return this Storage Object
-     * @return ModuleStorage
-     * @since 0.1.0
-     */
-    public function getStorage()
-    {
-        return $this->Storage;
     }
 
     /**
@@ -192,45 +305,6 @@ class Environment implements JsonSerializable
     }
 
     /**
-     * Sorts module definitions to areas
-     * @return array
-     * @since 0.1.0
-     */
-    public function getSortedModules()
-    {
-        $sorted = array();
-        if (is_array( $this->modules )) {
-            /** @var \Kontentblocks\Modules\Module $module */
-            foreach ($this->modules as $module) {
-                $sorted[$module->Properties->area->id][$module->getId()] = $module;
-            }
-            return $sorted;
-        }
-    }
-
-    /**
-     * prepares modules attached to this post
-     * @return array
-     * @since 0.1.0
-     */
-    private function setupModules()
-    {
-        return $this->ModuleRepository->getModules();
-    }
-
-    /**
-     * returns all areas which are available in this environment
-     * @return array
-     * @since 0.1.0
-     */
-    public function findAreas()
-    {
-        /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
-        $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
-        return $AreaRegistry->filterForPost( $this );
-    }
-
-    /**
      * Get Area Definition
      *
      * @param string $area
@@ -247,7 +321,6 @@ class Environment implements JsonSerializable
 
     }
 
-
     /**
      * Get all post-specific areas
      * @return array
@@ -257,7 +330,6 @@ class Environment implements JsonSerializable
     {
         return $this->areas;
     }
-
 
     /**
      *
@@ -311,7 +383,6 @@ class Environment implements JsonSerializable
 
     }
 
-
     /**
      * Save callback handler
      * @return void
@@ -321,46 +392,6 @@ class Environment implements JsonSerializable
     {
         $SaveHandler = new SavePost( $this );
         $SaveHandler->save();
-    }
-
-    /**
-     * returns the page template if available
-     * returns 'default' if not. in order to normalize the module property
-     * If post type does not support page templates, it's still
-     * 'default' on the module
-     * @return string
-     * @since 0.1.0
-     */
-    public function getPageTemplate()
-    {
-        $tpl = get_post_meta( $this->postObj->ID, '_wp_page_template', true );
-
-        if ($tpl !== '') {
-            return $tpl;
-        }
-
-        return 'default';
-
-    }
-
-    /**
-     * Get Post Type by postid
-     * @since 0.1.0
-     */
-    public function getPostType()
-    {
-        get_post_type();
-        return $this->postObj->post_type;
-    }
-
-
-    /**
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function getModuleCount()
-    {
-        return Utilities::getHighestId( $this->getStorage()->getIndex() );
     }
 
     /**
@@ -376,9 +407,28 @@ class Environment implements JsonSerializable
         return array(
             'postId' => absint( $this->storageId ),
             'pageTemplate' => $this->getPageTemplate(),
-            'postType' => $this->getPostType(),
-            'moduleCount' => $this->getModuleCount()
+            'postType' => $this->getPostType()
+//            'moduleCount' => $this->getModuleCount()
         );
+    }
+//
+//    /**
+//     * @return mixed
+//     * @since 0.1.0
+//     */
+//    public function getModuleCount()
+//    {
+//        return Utilities::getHighestId( $this->getStorage()->getIndex() );
+//    }
+
+    /**
+     * Return this Storage Object
+     * @return ModuleStorage
+     * @since 0.1.0
+     */
+    public function getStorage()
+    {
+        return $this->Storage;
     }
 
     /**
@@ -387,32 +437,5 @@ class Environment implements JsonSerializable
     public function toJSON()
     {
         echo "<script> var KB = KB || {}; KB.Environment =" . json_encode( $this ) . "</script>";
-    }
-
-    /**
-     * @since 0.3.0
-     */
-    private function areasToContext()
-    {
-        if (is_array( $this->areas ) && !empty( $this->areas )) {
-            foreach ($this->areas as $id => $area) {
-                $this->areasByContext[$area->context][$id] = $area;
-            }
-        }
-    }
-
-    /**
-     * Augment areas with Settings instance
-     * @since 0.3.0
-     */
-    private function setupAreas()
-    {
-        $areas = $this->findAreas();
-        /** @var \Kontentblocks\Areas\AreaProperties $area */
-        foreach ($areas as $area) {
-            $area->set( 'settings', new AreaSettingsModel( $area, $this->postObj->ID ) );
-        }
-        return $areas;
-
     }
 }

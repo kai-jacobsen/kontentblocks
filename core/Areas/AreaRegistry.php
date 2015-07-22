@@ -68,7 +68,6 @@ class AreaRegistry
         // to make sure external areas are properly setup
         add_action( 'kb.areas.dynamic.setup', array( $this, 'init' ) );
         add_action( 'wp_footer', array( $this, 'setupJSON' ), 8 );
-
         $this->addMockArea();
     }
 
