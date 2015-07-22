@@ -99,13 +99,7 @@ class PanelFieldController extends AbstractFieldController
     }
 
 
-    /**
-     * @param array $data
-     */
-    public function setData( $data )
-    {
-        $this->data = $data;
-    }
+
 
     /**
      * internal

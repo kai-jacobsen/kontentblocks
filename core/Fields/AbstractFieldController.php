@@ -142,6 +142,15 @@ abstract class AbstractFieldController
 
     abstract public function addGroup( $groupId, $args = array() );
 
+    /**
+     * @param array $data
+     */
+    public function setData( $data )
+    {
+        $this->data = $data;
+        return $this;
+    }
+
     public function export()
     {
         $collection = array();

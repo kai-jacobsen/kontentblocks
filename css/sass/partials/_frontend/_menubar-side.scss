@@ -16,12 +16,16 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   transition: all .3s ease-out;
   opacity: 1;
 
-  &.kb-opaque{
+  &.kb-opaque {
     opacity: .3;
   }
 
-}
+  #onsite-modal.kb-modal-sidebar {
+    top: 29px;
+    border-top: 0;
+  }
 
+}
 
 .ui-resizable-e {
   cursor: e-resize;
@@ -31,8 +35,6 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   height: 100%;
   position: absolute;
 }
-
-
 
 .kb-sidebar__nav-controls {
   background-color: #444;
@@ -54,7 +56,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   font-size: 13px;
   background-color: #f2f2f2;
   border-bottom: 1px solid #ccc;
-  transition:all .4s ease-out;
+  transition: all .4s ease-out;
   position: relative;
 
   &.kb-sidebar-areaview--inactive {
@@ -146,7 +148,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
 
   }
 
-  .dashicons{
+  .dashicons {
     font-size: 16px;
     width: 16px;
   }
@@ -155,7 +157,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
 body.onsite-editing .kb-in-sidebar-active {
   position: relative;
 
-  &:before{
+  &:before {
     content: '';
     position: absolute;
     background-color: $ultralightblue;
@@ -226,7 +228,7 @@ body.onsite-editing .kb-in-sidebar-active {
   }
 }
 
-.kb-sidebar-action--close{
+.kb-sidebar-action--close {
   display: block;
   position: absolute;
   width: 20px;
@@ -282,7 +284,7 @@ body.onsite-editing .kb-in-sidebar-active {
   }
 }
 
-.kb-sidebar__item{
+.kb-sidebar__item {
   padding: 10px;
   font-size: 13px !important;
   background-color: #fcfcfc;
@@ -290,8 +292,8 @@ body.onsite-editing .kb-in-sidebar-active {
   cursor: pointer;
 }
 
-.kb-sidebar__item--root{
-  .dashicons{
+.kb-sidebar__item--root {
+  .dashicons {
     position: absolute;
     right: 8px;
   }
@@ -336,7 +338,6 @@ body.onsite-editing .kb-in-sidebar-active {
   }
 }
 
-
 /*------------------------------------*\
     Drag & Drop Helper
 \*------------------------------------*/
@@ -348,13 +349,11 @@ body.onsite-editing .kb-in-sidebar-active {
   border: 1px dotted #333;
 }
 
-
-
 /*------------------------------------*\
     Panel Details / Overlay
 \*------------------------------------*/
 
-.kb-sidebar-extension{
+.kb-sidebar-extension {
   width: 450px;
   background-color: #fff;
   height: 100%;
@@ -363,7 +362,6 @@ body.onsite-editing .kb-in-sidebar-active {
   box-shadow: 0px 1px 8px #333;
   font-family: 'Open Sans';
 }
-
 
 /*------------------------------------*\
     Toggle Icon

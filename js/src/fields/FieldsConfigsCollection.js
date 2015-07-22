@@ -24,7 +24,7 @@ module.exports = Backbone.Collection.extend({
   },
   bindLinkedFields: function (model) {
     _.each(this.models, function (m) {
-      var links = m.get('linkedFields');
+      var links = m.get('linkedFields') || {};
       var uid = model.get('uid');
       if (links.hasOwnProperty(uid) && _.isNull(links[uid])){
         links[uid] = model;

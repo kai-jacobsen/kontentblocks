@@ -288,6 +288,20 @@ module.exports = Backbone.View.extend({
           that.$draft.hide();
         }
 
+        var tinymce = window.tinymce;
+        var $$ = tinymce.$;
+        $$( document ).on( 'click', function( event ) {
+          var id, mode,
+            target = $$( event.target );
+
+          if ( target.hasClass( 'wp-switch-editor' ) ) {
+            id = target.attr( 'data-wp-editor-id' );
+            mode = target.hasClass( 'switch-tmce' ) ? 'tmce' : 'html';
+            console.log(mode);
+            window.switchEditors.go( id, mode );
+          }
+        });
+
         // @TODO Move
         // ----------------------------------------------
         // (Re)Init UI widgets

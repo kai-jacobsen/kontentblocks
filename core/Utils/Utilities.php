@@ -139,7 +139,7 @@ class Utilities
 
         if (!$kbHiddenEditorCalled) {
             echo "<div style='display: none;'>";
-            wp_editor( '', 'ghosteditor' );
+            self::editor('ghost','','ghost',false);
             echo '</div>';
         }
 

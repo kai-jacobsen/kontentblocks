@@ -165,10 +165,11 @@ class EditableElement extends AbstractEditableFieldReturn
             'tinymce' => wp_parse_args( $this->field->getArg( 'tinymce', array() ), $this->tinymce ),
             'kpath' => $this->createPath(),
             'tooltip' => $this->helptext,
-            'filter' => ( $this->field->getArg( 'the_content', false ) ) ? 'content' : null
+            'filter' => ( $this->field->getArg( 'the_content', false ) ) ? 'content' : null,
+            'uid' => $this->createUniqueId()
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
-            $this->uniqueId,
+            $this->createUniqueId(),
             $this->field->augmentArgs( $json )
         );
     }

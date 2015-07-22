@@ -189,7 +189,7 @@ KB.App = function () {
     var Module;
     //KB.ObjectProxy.add(ModuleModel);
     // create view
-    Module = KB.Views.Modules.add(ModuleModel.get('settings').uid, new ModuleView({
+    Module = KB.Views.Modules.add(ModuleModel.get('mid'), new ModuleView({
       model: ModuleModel,
       el: '#' + ModuleModel.get('mid')
     }));
@@ -197,7 +197,7 @@ KB.App = function () {
   }
 
   function createPanelViews(PanelModel) {
-    var Panel = KB.Views.Modules.add(PanelModel.get('mid'), new PanelView({
+    var Panel = KB.Views.Panels.add(PanelModel.get('settings').uid, new PanelView({
       model: PanelModel,
       el: 'body'
     }));

@@ -74,7 +74,6 @@ abstract class Module
         if (filter_var( $this->Properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
-
         $this->setupFields();
 
     }
@@ -202,7 +201,7 @@ abstract class Module
     private function setupFieldData()
     {
         if ($this->Model->hasData()) {
-            $this->Fields->setup( $this->Model );
+            $this->Fields->setData($this->Model)->setup();
             foreach ($this->Model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->Fields->getFieldByKey( $key );

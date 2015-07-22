@@ -1039,7 +1039,7 @@
                 }
             },
             cleanUp: function() {
-                var links = this.get("linkedFields");
+                var links = this.get("linkedFields") || {};
                 if (links.hasOwnProperty(this.get("uid"))) {
                     delete links[this.get("uid")];
                 }
@@ -1150,7 +1150,7 @@
             },
             bindLinkedFields: function(model) {
                 _.each(this.models, function(m) {
-                    var links = m.get("linkedFields");
+                    var links = m.get("linkedFields") || {};
                     var uid = model.get("uid");
                     if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
                         links[uid] = model;
@@ -1252,14 +1252,14 @@
             }
             function createModuleViews(ModuleModel) {
                 var Module;
-                Module = KB.Views.Modules.add(ModuleModel.get("settings").uid, new ModuleView({
+                Module = KB.Views.Modules.add(ModuleModel.get("mid"), new ModuleView({
                     model: ModuleModel,
                     el: "#" + ModuleModel.get("mid")
                 }));
                 Ui.initTabs();
             }
             function createPanelViews(PanelModel) {
-                var Panel = KB.Views.Modules.add(PanelModel.get("mid"), new PanelView({
+                var Panel = KB.Views.Panels.add(PanelModel.get("settings").uid, new PanelView({
                     model: PanelModel,
                     el: "body"
                 }));
@@ -2553,6 +2553,17 @@
                         } else {
                             that.$draft.hide();
                         }
+                        var tinymce = window.tinymce;
+                        var $$ = tinymce.$;
+                        $$(document).on("click", function(event) {
+                            var id, mode, target = $$(event.target);
+                            if (target.hasClass("wp-switch-editor")) {
+                                id = target.attr("data-wp-editor-id");
+                                mode = target.hasClass("switch-tmce") ? "tmce" : "html";
+                                console.log(mode);
+                                window.switchEditors.go(id, mode);
+                            }
+                        });
                         if (res.data.json) {
                             KB.payload = _.extend(KB.payload, res.data.json);
                             if (res.data.json.Fields) {

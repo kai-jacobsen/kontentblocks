@@ -2407,7 +2407,7 @@
                 }
             },
             cleanUp: function() {
-                var links = this.get("linkedFields");
+                var links = this.get("linkedFields") || {};
                 if (links.hasOwnProperty(this.get("uid"))) {
                     delete links[this.get("uid")];
                 }
@@ -2518,7 +2518,7 @@
             },
             bindLinkedFields: function(model) {
                 _.each(this.models, function(m) {
-                    var links = m.get("linkedFields");
+                    var links = m.get("linkedFields") || {};
                     var uid = model.get("uid");
                     if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
                         links[uid] = model;

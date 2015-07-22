@@ -15,7 +15,7 @@ module.exports = Backbone.Model.extend({
     }
   },
   cleanUp: function () {
-    var links = this.get('linkedFields');
+    var links = this.get('linkedFields') || {};
     if (links.hasOwnProperty(this.get('uid'))) {
       delete links[this.get('uid')];
     }

@@ -42,7 +42,7 @@ class EditableLink extends AbstractEditableFieldReturn
                 $this->href
             );
         } else {
-            return sprintf( $format, $this->el, $filtered, $this->_renderAttributes() );
+            return sprintf( $format, $this->el, $this->getValue('linktext'), $this->_renderAttributes() );
 
         }
 
@@ -66,10 +66,10 @@ class EditableLink extends AbstractEditableFieldReturn
             'editableSubType' => $this->getEditableClass(),
             'type' => 'EditableLink',
             'kpath' => $this->createPath(),
-            'tooltip' => $this->helptext
+            'uid' => $this->createUniqueId()
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
-            $this->uniqueId,
+            $this->createUniqueId(),
             $this->field->augmentArgs( $json )
         );
     }
