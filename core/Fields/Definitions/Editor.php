@@ -44,7 +44,7 @@ Class Editor extends Field
         if (is_array( $val )) {
             $val = '';
         }
-        return $val;
+        return apply_filters('the_content',$val);
     }
 
     /**
