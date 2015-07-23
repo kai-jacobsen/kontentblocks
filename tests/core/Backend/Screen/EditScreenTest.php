@@ -56,8 +56,8 @@ class EditScreenTest extends \WP_UnitTestCase
     {
         $post = $this->factory->post->create_and_get();
         add_post_type_support( 'post', 'kontentblocks' );
-        $out = $this->EditScreen->renderUserInterface( $post->post_type, $post );
-        $out = $this->EditScreen->userInterface(  $post );
+        $this->EditScreen->renderUserInterface( $post->post_type, $post );
+        $out = $this->EditScreen->userInterface( $post );
         $this->assertContains( "id='kontentblocks-core-ui'", $out );
         $this->assertContains( "</div> <!--end ks -->", $out );
         $this->assertContains( "id='demo-content'", $out );

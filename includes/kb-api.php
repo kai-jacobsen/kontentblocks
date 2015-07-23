@@ -155,19 +155,7 @@ function hasModules( $area, $id )
 
 function getPanel( $id = null, $post_id = null )
 {
-    /** @var \Kontentblocks\Panels\PanelRegistry $Registry */
-    $Registry = Kontentblocks::getService( 'registry.panels' );
-    /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
-    $Panel = $Registry->get( $id );
-    if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
-        return $Panel->setup( $post_id );
-    } else {
-        return new \WP_Error(
-            'Kontentblocks',
-            'Panel with requested id does not exist.',
-            array( 'request' => $id, 'line' => __LINE__, 'file' => __FILE__ )
-        );
-    }
+    return getPostPanel($id, $post_id);
 }
 
 function getPostPanel( $panelId = null, $postId = null )
