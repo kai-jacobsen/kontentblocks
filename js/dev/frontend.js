@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-22 */
+/*! Kontentblocks DevVersion 2015-07-23 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1570,9 +1570,6 @@
                 this.maybeSetPlaceholder();
                 this.listenToOnce(this.model.get("ModuleModel"), "remove", this.deactivate);
                 this.render();
-                this.$("a").on("click", function(e) {
-                    e.preventDefault();
-                });
             },
             render: function() {
                 if (this.el.id) {
