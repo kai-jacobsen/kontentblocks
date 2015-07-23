@@ -44,11 +44,11 @@ class EditScreenTest extends \WP_UnitTestCase
 
     public function testHooksSetup()
     {
-        $addInterface = has_action( 'edit_form_after_editor', array( $this->EditScreen, 'renderUserInterface' ) );
+        $addInterface = has_action( 'add_meta_boxes', array( $this->EditScreen, 'renderUserInterface' ) );
         $save = has_action( 'save_post', array( $this->EditScreen, 'save' ) );
         $footer = has_action( 'admin_footer', array( $this->EditScreen, 'toJSON' ) );
         $this->assertEquals( 10, $addInterface );
-        $this->assertEquals( 10, $save );
+        $this->assertEquals( 5, $save );
         $this->assertEquals( 1, $footer );
     }
 

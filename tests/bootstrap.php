@@ -4,7 +4,7 @@ use Kontentblocks\Kontentblocks;
 
 $_tests_dir = getenv( 'WP_DEVELOP_DIR' );
 if (!$_tests_dir) {
-    $_tests_dir = '/tmp/wordpress/wordpress-tests-lib';
+    $_tests_dir = '/home/kaiser/Development/wordpress/wordpress-tests-lib';
 }
 
 define('TESTS_DIR', dirname(__FILE__));

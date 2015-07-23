@@ -30,7 +30,7 @@ abstract class AbstractPanel
      * Form data
      * @var array
      */
-    protected $data = null;
+    public $data = null;
 
     /**
      * Position / Hook to use

@@ -43,7 +43,7 @@ abstract class OptionsPanel extends AbstractPanel
      * Form data
      * @var array
      */
-    protected $data = null;
+    public $data = null;
 
     /**
      * Class constructor
