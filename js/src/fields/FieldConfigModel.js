@@ -108,7 +108,7 @@ module.exports = Backbone.Model.extend({
   rebind: function () {
     if (this.FieldView) {
       this.FieldView.setElement(this.getElement()); // markup might have changed, reset the root element
-      this.FieldView.rerender(); // call rerender on the field
+      _.defer(_.bind(this.FieldView.rerender,this.FieldView)); // call rerender on the field
     }
   },
   unbind: function () {

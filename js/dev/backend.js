@@ -2483,7 +2483,7 @@
             rebind: function() {
                 if (this.FieldView) {
                     this.FieldView.setElement(this.getElement());
-                    this.FieldView.rerender();
+                    _.defer(_.bind(this.FieldView.rerender, this.FieldView));
                 }
             },
             unbind: function() {
@@ -2530,6 +2530,16 @@
                         model.listenTo(m, "external.change", model.externalUpdate);
                     }
                 });
+            },
+            updateModels: function(data) {
+                if (data) {
+                    _.each(data, function(field) {
+                        var model = this.get(field.uid);
+                        if (model) {
+                            model.trigger("field.model.settings", field);
+                        }
+                    }, this);
+                }
             }
         });
     }, {

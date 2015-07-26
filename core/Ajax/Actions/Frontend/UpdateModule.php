@@ -5,6 +5,7 @@ namespace Kontentblocks\Ajax\Actions\Frontend;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
@@ -57,7 +58,8 @@ class UpdateModule implements AjaxActionInterface
 
         $return = array(
             'html' => $Module->module(),
-            'newModuleData' => $mergedData
+            'newModuleData' => $mergedData,
+            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
         );
 
         do_action( 'kb.save.frontend.module', $Module, $postdata->update );

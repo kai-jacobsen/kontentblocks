@@ -26,10 +26,20 @@ module.exports = Backbone.Collection.extend({
     _.each(this.models, function (m) {
       var links = m.get('linkedFields') || {};
       var uid = model.get('uid');
-      if (links.hasOwnProperty(uid) && _.isNull(links[uid])){
+      if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
         links[uid] = model;
         model.listenTo(m, 'external.change', model.externalUpdate);
       }
     })
+  },
+  updateModels: function (data) {
+    if (data) {
+      _.each(data, function (field) {
+        var model = this.get(field.uid);
+        if (model){
+          model.trigger('field.model.settings', field);
+        }
+      }, this);
+    }
   }
 });

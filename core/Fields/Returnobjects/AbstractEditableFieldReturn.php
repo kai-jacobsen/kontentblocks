@@ -194,12 +194,11 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     }
 
     public function reuse(){
-        return $this->instance();
+        $this->instance();
     }
 
     public function instance(){
         $this->increaseCallCount();
-        return $this;
     }
 
     private function increaseCallCount()

@@ -134,9 +134,12 @@ var EditableText = Backbone.View.extend({
               that.model.syncContent = ed.getContent();
               that.model.trigger('external.change', that.model);
               that.model.trigger('field.model.dirty');
+              KB.Events.trigger('content.change');
+
             }
           } else {
             ed.setContent(ed.previousContent);
+
           }
         });
       }
@@ -162,6 +165,8 @@ var EditableText = Backbone.View.extend({
 
         that.model.trigger('field.model.dirty');
         that.model.trigger('external.change', that.model);
+        KB.Events.trigger('content.change');
+
         //ed.module.trigger('kb.frontend.module.inlineUpdate');
         setTimeout(function () {
           if (window.twttr) {

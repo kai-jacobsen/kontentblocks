@@ -1114,7 +1114,7 @@
             rebind: function() {
                 if (this.FieldView) {
                     this.FieldView.setElement(this.getElement());
-                    this.FieldView.rerender();
+                    _.defer(_.bind(this.FieldView.rerender, this.FieldView));
                 }
             },
             unbind: function() {
@@ -1161,6 +1161,16 @@
                         model.listenTo(m, "external.change", model.externalUpdate);
                     }
                 });
+            },
+            updateModels: function(data) {
+                if (data) {
+                    _.each(data, function(field) {
+                        var model = this.get(field.uid);
+                        if (model) {
+                            model.trigger("field.model.settings", field);
+                        }
+                    }, this);
+                }
             }
         });
     }, {
@@ -1219,6 +1229,7 @@
                 if (KB.appData.config.useModuleNav) {
                     KB.Sidebar = new SidebarView();
                 }
+                window.Tether = Tether;
                 require("./InlineSetup");
                 require("./GlobalEvents");
                 KB.EditModalModules = new EditModalModules({});
@@ -1282,7 +1293,6 @@
                 Logger.User.info("Frontend welcomes you");
                 jQuery("body").addClass("kontentblocks-ready");
             }
-            window.Tether = Tether;
             jQuery(window).on("scroll resize", function() {
                 KB.Events.trigger("window.change");
             });
@@ -1321,6 +1331,10 @@
                 Logger.Debug.info("tinymce.triggerSave called");
             }
         });
+        var reposition = _.debounce(window.Tether.position, 125);
+        KB.Events.on("content.change", function() {
+            reposition();
+        });
     }, {
         "common/Logger": 11
     } ],
@@ -1335,13 +1349,7 @@
                 this.mode = this.model.get("mode");
                 this.defaultState = this.model.get("state") || "replace-image";
                 this.parentView = this.model.get("ModuleModel").View;
-                this.render();
-            },
-            render: function() {
-                this.delegateEvents();
-                this.$el.addClass("kb-inline-imageedit-attached");
-                this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
-                this.$title = jQuery("*[data-" + this.model.get("uid") + "-title]");
+                this.listenTo(this.model, "field.model.settings", this.setMode);
                 this.Toolbar = new Toolbar({
                     FieldView: this,
                     model: this.model,
@@ -1353,15 +1361,29 @@
                         parent: this
                     }) ]
                 });
+                this.render();
+            },
+            setMode: function(settings) {
+                this.model.set("mode", settings.mode);
+                this.mode = settings.mode;
+                console.log("mode set", settings.mode);
+            },
+            render: function() {
+                this.delegateEvents();
+                this.$el.addClass("kb-inline-imageedit-attached");
+                this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
+                this.$title = jQuery("*[data-" + this.model.get("uid") + "-title]");
             },
             rerender: function() {
                 this.render();
+                this.trigger("field.view.rerender", this);
             },
             derender: function() {
                 if (this.frame) {
                     this.frame.dispose();
                     this.frame = null;
                 }
+                this.trigger("field.view.derender", this);
             },
             openFrame: function() {
                 var that = this;
@@ -1448,6 +1470,7 @@
                         if (that.$title.length > 0) {
                             that.$title.html(attachment.get("title"));
                         }
+                        KB.Events.trigger("content.change");
                     },
                     error: function() {}
                 });
@@ -1476,42 +1499,38 @@
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var ModuleControl = require("frontend/Inline/controls/EditLink");
+        var UpdateControl = require("frontend/Inline/controls/InlineUpdate");
+        var Toolbar = require("frontend/Inline/InlineToolbar");
         var EditableLink = Backbone.View.extend({
             initialize: function() {
                 this.parentView = this.model.get("ModuleModel").View;
                 this.setupDefaults();
+                this.Toolbar = new Toolbar({
+                    FieldView: this,
+                    model: this.model,
+                    controls: [ new ModuleControl({
+                        model: this.model,
+                        parent: this
+                    }), new UpdateControl({
+                        model: this.model,
+                        parent: this
+                    }) ],
+                    tether: {
+                        offset: "0 -20px"
+                    }
+                });
                 this.render();
-            },
-            events: {
-                mouseenter: "showControl"
             },
             render: function() {
                 this.delegateEvents();
-                this.$el.addClass("kb-inline-imageedit-attached");
                 this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
-                this.renderControl();
             },
             rerender: function() {
                 this.render();
+                this.trigger("field.view.rerender", this);
             },
             derender: function() {
-                this.EditControl.remove();
-                if (this.frame) {
-                    this.frame.dispose();
-                    this.frame = null;
-                }
-            },
-            renderControl: function() {
-                this.EditControl = new ModuleControl({
-                    model: this.model,
-                    parent: this
-                });
-            },
-            showControl: function() {
-                this.EditControl.show();
-            },
-            hideControl: function(e) {
-                this.EditControl.hide();
+                this.trigger("field.view.derender", this);
             },
             openDialog: function() {
                 var that = this;
@@ -1543,13 +1562,15 @@
                     linktext: title
                 };
                 this.model.set("value", data);
+                this.model.trigger("field.model.dirty");
+                this.model.trigger("external.change", this.model);
                 wpLink.close();
                 this.close();
             },
             close: function() {
                 wpLink.isMCE = window.kb_restore_isMce;
                 wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
-                this.EditControl.show();
+                KB.Events.trigger("content.change");
             },
             setupDefaults: function() {
                 var val = this.model.get("value");
@@ -1561,6 +1582,12 @@
                     linktext: ""
                 });
                 this.model.set("value", sval);
+            },
+            synchronize: function(model) {
+                this.$el.attr("href", model.get("value").link);
+                this.$el.html(model.get("value").linktext);
+                this.model.trigger("field.model.dirty");
+                KB.Events.trigger("content.change");
             }
         });
         KB.Fields.registerObject("EditableLink", EditableLink);
@@ -1568,7 +1595,9 @@
     }, {
         "common/Config": 10,
         "common/Utilities": 17,
-        "frontend/Inline/controls/EditLink": 28
+        "frontend/Inline/InlineToolbar": 26,
+        "frontend/Inline/controls/EditLink": 28,
+        "frontend/Inline/controls/InlineUpdate": 30
     } ],
     25: [ function(require, module, exports) {
         var Utilities = require("common/Utilities");
@@ -1674,6 +1703,7 @@
                                     that.model.syncContent = ed.getContent();
                                     that.model.trigger("external.change", that.model);
                                     that.model.trigger("field.model.dirty");
+                                    KB.Events.trigger("content.change");
                                 }
                             } else {
                                 ed.setContent(ed.previousContent);
@@ -1701,6 +1731,7 @@
                         that.model.syncContent = ed.getContent();
                         that.model.trigger("field.model.dirty");
                         that.model.trigger("external.change", that.model);
+                        KB.Events.trigger("content.change");
                         setTimeout(function() {
                             if (window.twttr) {
                                 window.twttr.widgets.load();
@@ -1832,6 +1863,7 @@
                 };
             },
             initialize: function(options) {
+                this.options = options;
                 this.FieldView = options.FieldView;
                 this.controls = options.controls || [];
                 this.listenTo(this.model, "field.model.dirty", this.getDirty);
@@ -1850,12 +1882,14 @@
                 this.createPosition();
             },
             createPosition: function() {
-                this.Tether = new Tether({
+                var tether = this.options.tether || {};
+                var settings = {
                     element: this.$el,
                     target: this.FieldView.$el,
                     attachment: "center right",
                     targetAttachment: "center right"
-                });
+                };
+                this.Tether = new Tether(_.defaults(settings, tether));
             },
             getDirty: function() {
                 this.$el.addClass("isDirty");
@@ -1866,10 +1900,21 @@
             derender: function() {
                 if (this.Tether) {
                     this.Tether.destroy();
+                    delete this.Tether;
                 }
             },
             rerender: function() {
                 this.createPosition();
+            },
+            getTetherDefaults: function() {
+                var att = this.el;
+                var target = this.FieldView.el;
+                return _.defaults(tether, {
+                    element: att,
+                    target: target,
+                    attachment: "center right",
+                    targetAttachment: "center right"
+                });
             }
         });
     }, {
@@ -1920,13 +1965,11 @@
                 this.visible = false;
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="dashicons dashicons-admin-links"></span>');
                 if (this.isValid()) {
                     this.render();
                 }
-                this.listenTo(KB.Events, "window.change", this.reposition);
             },
-            className: "kb-inline-control",
+            className: "kb-inline-control kb-inline--edit-link",
             events: {
                 click: "openDialog",
                 mouseenter: "mouseenter",
@@ -1935,39 +1978,21 @@
             openDialog: function() {
                 this.Parent.openDialog();
             },
-            render: function() {
-                this.Parent.parentView.$el.append(this.$el);
-                this.$el.hide();
-            },
-            show: function() {
-                this.$el.show();
-                this.setPosition();
-                this.visible = true;
-            },
-            hide: function() {
-                this.$el.hide();
-                this.visible = false;
-            },
-            reposition: function() {
-                if (this.visible) {
-                    this.setPosition();
-                }
-            },
-            setPosition: function() {
-                var off = this.Parent.$el.offset();
-                var w = this.Parent.$el.innerWidth();
-                off.left = off.left + w;
-                off.top = off.top + 20;
-                this.$el.offset(off);
-            },
+            render: function() {},
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
             },
             mouseenter: function() {
-                this.Parent.$el.addClass("editable-element-active");
+                this.Parent.$el.addClass("kb-field--outline");
+                _.each(this.model.get("linkedFields"), function(linkedModel) {
+                    linkedModel.FieldView.$el.addClass("kb-field--outline-link");
+                });
             },
             mouseleave: function() {
-                this.Parent.$el.removeClass("editable-element-active");
+                this.Parent.$el.removeClass("kb-field--outline");
+                _.each(this.model.get("linkedFields"), function(linkedModel) {
+                    linkedModel.FieldView.$el.removeClass("kb-field--outline-link");
+                });
             }
         });
     }, {
@@ -2673,7 +2698,6 @@
                             if (target.hasClass("wp-switch-editor")) {
                                 id = target.attr("data-wp-editor-id");
                                 mode = target.hasClass("switch-tmce") ? "tmce" : "html";
-                                console.log(mode);
                                 window.switchEditors.go(id, mode);
                             }
                         });
@@ -2752,6 +2776,9 @@
                 $controls = jQuery(".kb-module-controls", that.ModuleView.$el);
                 if ($controls.length > 0) {
                     $controls.detach();
+                }
+                if (res.data.json && res.data.json.Fields) {
+                    KB.FieldConfigs.updateModels(res.data.json.Fields);
                 }
                 height = that.ModuleView.$el.height();
                 that.ModuleView.model.trigger("modal.serialize.before");

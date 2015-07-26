@@ -52,7 +52,9 @@ class EditableLink extends AbstractEditableFieldReturn
             'editableSubType' => $this->getEditableClass(),
             'type' => 'EditableLink',
             'kpath' => $this->createPath(),
-            'uid' => $this->createUniqueId()
+            'uid' => $this->createUniqueId(),
+            'linkedFields' => &$this->linkedFields
+
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
             $this->createUniqueId(),

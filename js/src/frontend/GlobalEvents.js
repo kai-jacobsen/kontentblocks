@@ -5,3 +5,8 @@ KB.Events.on('module.before.sync panel.before.sync', function(Model){
     Logger.Debug.info('tinymce.triggerSave called');
   }
 });
+
+var reposition = _.debounce(window.Tether.position, 125);
+KB.Events.on('content.change', function(){
+  reposition();
+});

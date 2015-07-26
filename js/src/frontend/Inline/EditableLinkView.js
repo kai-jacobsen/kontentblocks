@@ -2,44 +2,41 @@
 var Config = require('common/Config');
 var Utilities = require('common/Utilities');
 var ModuleControl = require('frontend/Inline/controls/EditLink');
-
+var UpdateControl = require('frontend/Inline/controls/InlineUpdate');
+var Toolbar = require('frontend/Inline/InlineToolbar');
 var EditableLink = Backbone.View.extend({
   initialize: function () {
     this.parentView = this.model.get('ModuleModel').View;
     this.setupDefaults();
+    this.Toolbar = new Toolbar({
+      FieldView: this,
+      model: this.model,
+      controls: [
+        new ModuleControl({
+          model: this.model,
+          parent: this
+        }),
+        new UpdateControl({
+          model: this.model,
+          parent: this
+        })
+      ],
+      tether: {
+        offset: '0 -20px'
+      }
+    });
     this.render();
-  },
-  events: {
-    'mouseenter': 'showControl'
-    //'mouseleave': 'hideControl'
   },
   render: function () {
     this.delegateEvents();
-    this.$el.addClass('kb-inline-imageedit-attached');
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
-    this.renderControl();
   },
   rerender: function () {
     this.render();
+    this.trigger('field.view.rerender', this);
   },
   derender: function () {
-    this.EditControl.remove();
-    if (this.frame) {
-      this.frame.dispose();
-      this.frame = null;
-    }
-  },
-  renderControl: function () {
-    this.EditControl = new ModuleControl({
-      model: this.model,
-      parent: this
-    });
-  },
-  showControl: function () {
-    this.EditControl.show();
-  },
-  hideControl: function (e) {
-    this.EditControl.hide();
+    this.trigger('field.view.derender', this);
   },
   openDialog: function () {
     var that = this;
@@ -90,6 +87,8 @@ var EditableLink = Backbone.View.extend({
 
     //var kpath = this.model.get('kpath');
     this.model.set('value', data);
+    this.model.trigger('field.model.dirty');
+    this.model.trigger('external.change', this.model);
 
     //restore the original function
     // close dialog and put the cursor inside the textarea
@@ -100,7 +99,7 @@ var EditableLink = Backbone.View.extend({
     // restore the original functions to wpLink
     wpLink.isMCE = window.kb_restore_isMce;
     wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
-    this.EditControl.show();
+    KB.Events.trigger('content.change');
   },
   setupDefaults: function () {
     var val = this.model.get('value');
@@ -113,6 +112,12 @@ var EditableLink = Backbone.View.extend({
     });
 
     this.model.set('value', sval);
+  },
+  synchronize: function (model) {
+    this.$el.attr('href', model.get('value').link);
+    this.$el.html(model.get('value').linktext);
+    this.model.trigger('field.model.dirty');
+    KB.Events.trigger('content.change');
 
   }
 });

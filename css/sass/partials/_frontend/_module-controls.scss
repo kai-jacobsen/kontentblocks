@@ -159,6 +159,18 @@
   }
 }
 
+.kb-inline--edit-link {
+  left: 32px;
+  z-index: 2004;
+  opacity: 1;
+
+  &:before {
+    content: "\f103";
+    font-family: dashicons;
+    cursor: pointer;
+  }
+}
+
 .kb-inline--update {
   left: 0;
   z-index: 2003;
@@ -172,7 +184,7 @@
 
 .isDirty {
 
-  .kb-inline--edit-text, .kb-inline--edit-image {
+  .kb-inline--edit-text, .kb-inline--edit-image, .kb-inline--edit-link {
     left: 0;
     z-index: 2004;
     opacity: 1;

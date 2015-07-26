@@ -10,8 +10,10 @@ module.exports = Backbone.View.extend({
     };
   },
   initialize: function (options) {
+    this.options = options;
     this.FieldView = options.FieldView;
     this.controls = options.controls || [];
+
     this.listenTo(this.model, 'field.model.dirty', this.getDirty);
     this.listenTo(this.model, 'field.model.clean', this.getClean);
     this.listenTo(this.FieldView, 'field.view.derender', this.derender);
@@ -28,26 +30,41 @@ module.exports = Backbone.View.extend({
     this.createPosition();
   },
   createPosition: function () {
-    this.Tether = new Tether({
+    var tether = this.options.tether || {};
+    var settings = {
       element: this.$el,
       target: this.FieldView.$el,
       attachment: 'center right',
       targetAttachment: 'center right'
-    });
+    };
+    this.Tether = new Tether(
+      _.defaults(settings, tether)
+    );
   },
-  getDirty: function(){
+  getDirty: function () {
     this.$el.addClass('isDirty');
   },
-  getClean: function(){
+  getClean: function () {
     this.$el.removeClass('isDirty');
   },
-  derender: function(){
-    if (this.Tether){
+  derender: function () {
+    if (this.Tether) {
       this.Tether.destroy();
+      delete this.Tether;
     }
   },
-  rerender: function(){
+  rerender: function () {
     this.createPosition();
+  },
+  getTetherDefaults: function () {
+    var att = this.el;
+    var target = this.FieldView.el;
+    return _.defaults(tether, {
+      element: att,
+      target: target,
+      attachment: 'center right',
+      targetAttachment: 'center right'
+    });
   }
 
 });

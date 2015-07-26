@@ -95,6 +95,12 @@ KB.App = function () {
     if (KB.appData.config.useModuleNav) {
       KB.Sidebar = new SidebarView();
     }
+
+
+    // make Tether globally available
+    window.Tether = Tether;
+
+
     require('./InlineSetup');
     require('./GlobalEvents');
 
@@ -255,9 +261,6 @@ jQuery(document).ready(function () {
     Logger.User.info('Frontend welcomes you');
     jQuery('body').addClass('kontentblocks-ready');
   }
-
-  // make Tether globally available
-  window.Tether = Tether;
 
   jQuery(window).on('scroll resize', function () {
     KB.Events.trigger('window.change');

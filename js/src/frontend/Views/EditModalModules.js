@@ -297,7 +297,6 @@ module.exports = Backbone.View.extend({
           if ( target.hasClass( 'wp-switch-editor' ) ) {
             id = target.attr( 'data-wp-editor-id' );
             mode = target.hasClass( 'switch-tmce' ) ? 'tmce' : 'html';
-            console.log(mode);
             window.switchEditors.go( id, mode );
           }
         });
@@ -442,6 +441,12 @@ module.exports = Backbone.View.extend({
     if ($controls.length > 0) {
       $controls.detach();
     }
+
+    if (res.data.json && res.data.json.Fields){
+      KB.FieldConfigs.updateModels(res.data.json.Fields);
+    }
+
+
     // cache module container height
     height = that.ModuleView.$el.height();
     that.ModuleView.model.trigger('modal.serialize.before');

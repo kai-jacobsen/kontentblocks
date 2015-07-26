@@ -10,14 +10,7 @@ var EditableImage = Backbone.View.extend({
     this.mode = this.model.get('mode');
     this.defaultState = this.model.get('state') || 'replace-image';
     this.parentView = this.model.get('ModuleModel').View;
-    this.render();
-  },
-  render: function () {
-    this.delegateEvents();
-    this.$el.addClass('kb-inline-imageedit-attached');
-    this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
-    this.$title = jQuery('*[data-' + this.model.get('uid') + '-title]');
-    //this.renderControl();
+    this.listenTo(this.model, 'field.model.settings', this.setMode);
     this.Toolbar = new Toolbar({
       FieldView: this,
       model: this.model,
@@ -32,15 +25,32 @@ var EditableImage = Backbone.View.extend({
         })
       ]
     });
+    this.render();
+  },
+  setMode: function(settings){
+    this.model.set('mode', settings.mode);
+    this.mode = settings.mode;
+    console.log('mode set', settings.mode);
+  },
+  render: function () {
+    this.delegateEvents();
+    this.$el.addClass('kb-inline-imageedit-attached');
+    this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
+    this.$title = jQuery('*[data-' + this.model.get('uid') + '-title]');
+
   },
   rerender: function () {
     this.render();
+    this.trigger('field.view.rerender', this);
+
   },
   derender: function () {
     if (this.frame) {
       this.frame.dispose();
       this.frame = null;
     }
+    this.trigger('field.view.derender', this);
+
   },
   openFrame: function () {
     var that = this;
@@ -137,7 +147,9 @@ var EditableImage = Backbone.View.extend({
           that.$el.attr('src', res.data.src);
         } else if (that.mode === 'background') {
           that.$el.css('backgroundImage', "url('" + res.data.src + "')");
+
         }
+
         that.delegateEvents();
         if (!suppress) {
           that.model.trigger('external.change', that.model);
@@ -149,6 +161,7 @@ var EditableImage = Backbone.View.extend({
         if (that.$title.length > 0){
           that.$title.html(attachment.get('title'));
         }
+        KB.Events.trigger('content.change');
 
       },
       error: function () {

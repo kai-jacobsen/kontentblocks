@@ -1448,21 +1448,32 @@ body.onsite-editing .kb-area__empty {
     cursor: pointer; }
 
 /* line 162, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
+.kb-inline--edit-link {
+  left: 32px;
+  z-index: 2004;
+  opacity: 1; }
+  /* line 167, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
+  .kb-inline--edit-link:before {
+    content: "\f103";
+    font-family: dashicons;
+    cursor: pointer; }
+
+/* line 174, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
 .kb-inline--update {
   left: 0;
   z-index: 2003; }
-  /* line 166, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
+  /* line 178, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
   .kb-inline--update:before {
     content: "\f463";
     font-family: dashicons;
     cursor: pointer; }
 
-/* line 175, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
-.isDirty .kb-inline--edit-text, .isDirty .kb-inline--edit-image {
+/* line 187, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
+.isDirty .kb-inline--edit-text, .isDirty .kb-inline--edit-image, .isDirty .kb-inline--edit-link {
   left: 0;
   z-index: 2004;
   opacity: 1; }
-/* line 181, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
+/* line 193, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
 .isDirty .kb-inline--update {
   left: 32px;
   opacity: 1;
@@ -1471,7 +1482,7 @@ body.onsite-editing .kb-area__empty {
 /*------------------------------------*\
     Inline Toolbar
 \*------------------------------------*/
-/* line 191, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
+/* line 203, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_frontend/_module-controls.scss */
 .kb-inline-toolbar {
   width: 60px;
   height: 40px; }
