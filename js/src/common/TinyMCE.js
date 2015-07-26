@@ -63,7 +63,6 @@ module.exports =
       if (prev) {
         tinyMCE.execCommand('mceRemoveEditor', null, id);
       }
-
       var settings = _.clone(tinyMCEPreInit.mceInit.ghosteditor);
       // add new editor id to settings
       settings.elements = id;

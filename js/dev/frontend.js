@@ -1155,6 +1155,7 @@
                 return {};
             },
             bindLinkedFields: function(model) {
+                this.resetLinkedFields();
                 _.each(this.models, function(m) {
                     var links = m.get("linkedFields") || {};
                     var uid = model.get("uid");
@@ -1162,6 +1163,11 @@
                         links[uid] = model;
                         model.listenTo(m, "external.change", model.externalUpdate);
                     }
+                });
+            },
+            resetLinkedFields: function() {
+                _.each(this.models, function(model) {
+                    model.set("linkedFields", {});
                 });
             },
             updateModels: function(data) {
@@ -2686,7 +2692,7 @@
                 Logger.User.info("Frontend modal retrieves data from the server");
                 json = this.model.toJSON();
                 this.applyControlsSettings(this.$el);
-                this.updateViewClassTo = false;
+                console.log("set to false");
                 jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -2799,6 +2805,7 @@
                 if (res.data.json && res.data.json.Fields) {
                     KB.FieldConfigs.updateModels(res.data.json.Fields);
                 }
+                console.log(that.updateViewClassTo, "b4");
                 height = that.ModuleView.$el.height();
                 that.ModuleView.model.trigger("modal.serialize.before");
                 if (that.updateViewClassTo !== false) {
@@ -2848,6 +2855,7 @@
                     current: this.ModuleView.model.get("viewfile"),
                     target: e.currentTarget.value
                 };
+                console.log(this.updateViewClassTo, "filled");
                 this.model.set("viewfile", e.currentTarget.value);
             },
             updateContainerClass: function(viewfile) {
@@ -2856,6 +2864,7 @@
                 }
                 this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));
                 this.ModuleView.$el.addClass(this._classifyView(viewfile.target));
+                console.log("set to false");
                 this.updateViewClassTo = false;
             },
             delayInput: function() {

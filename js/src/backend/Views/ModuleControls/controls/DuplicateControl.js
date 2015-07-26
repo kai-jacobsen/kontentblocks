@@ -43,7 +43,7 @@ module.exports = BaseView.extend({
     // update the reference counter, used as base number
     // for new modules
     Notice.notice('Module Duplicated', 'success');
-    Ui.repaint('#' + res.data.module.mid);
+    UI.repaint('#' + res.data.module.mid);
     KB.Fields.trigger('update');
   },
   parseAdditionalJSON: function (json) {

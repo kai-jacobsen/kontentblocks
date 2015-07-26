@@ -1141,7 +1141,7 @@
                 var ModuleModel = KB.Modules.add(res.data.module);
                 this.model.Area.View.attachModuleView(ModuleModel);
                 Notice.notice("Module Duplicated", "success");
-                Ui.repaint("#" + res.data.module.mid);
+                UI.repaint("#" + res.data.module.mid);
                 KB.Fields.trigger("update");
             },
             parseAdditionalJSON: function(json) {
@@ -2524,6 +2524,7 @@
                 return {};
             },
             bindLinkedFields: function(model) {
+                this.resetLinkedFields();
                 _.each(this.models, function(m) {
                     var links = m.get("linkedFields") || {};
                     var uid = model.get("uid");
@@ -2531,6 +2532,11 @@
                         links[uid] = model;
                         model.listenTo(m, "external.change", model.externalUpdate);
                     }
+                });
+            },
+            resetLinkedFields: function() {
+                _.each(this.models, function(model) {
+                    model.set("linkedFields", {});
                 });
             },
             updateModels: function(data) {

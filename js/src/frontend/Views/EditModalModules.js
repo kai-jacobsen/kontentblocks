@@ -253,7 +253,9 @@ module.exports = Backbone.View.extend({
 
     // apply settings for the modal from the active module, if any
     this.applyControlsSettings(this.$el);
-    this.updateViewClassTo = false;
+    console.log('set to false');
+
+    //this.updateViewClassTo = false;
 
     // get the form
     jQuery.ajax({
@@ -446,11 +448,12 @@ module.exports = Backbone.View.extend({
       KB.FieldConfigs.updateModels(res.data.json.Fields);
     }
 
+    console.log(that.updateViewClassTo, 'b4');
+
 
     // cache module container height
     height = that.ModuleView.$el.height();
     that.ModuleView.model.trigger('modal.serialize.before');
-
     // change the container class if viewfile changed
     if (that.updateViewClassTo !== false) {
       that.updateContainerClass(that.updateViewClassTo);
@@ -516,6 +519,7 @@ module.exports = Backbone.View.extend({
       current: this.ModuleView.model.get('viewfile'),
       target: e.currentTarget.value
     };
+    console.log(this.updateViewClassTo, 'filled');
     this.model.set('viewfile', e.currentTarget.value);
   },
   /**
@@ -531,6 +535,7 @@ module.exports = Backbone.View.extend({
 
     this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));
     this.ModuleView.$el.addClass(this._classifyView(viewfile.target));
+    console.log('set to false');
     this.updateViewClassTo = false;
   },
   /**
