@@ -15,6 +15,10 @@
 .base-box-border {
   border: 1px solid #212121; }
 
+/* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
+.base-transition-timing {
+  transition-timing-function: cubic-bezier(0.555, 0.205, 0.13, 1.38); }
+
 /* line 3, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
 .os-edit-container {
   position: relative; }
@@ -47,7 +51,7 @@
   text-decoration: none !important;
   transition: all .3s ease-in-out;
   cursor: pointer;
-  opacity: .5; }
+  opacity: 1; }
   /* line 45, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/KBOsEditStyle.scss */
   .kb-module-controls a.kb-module-dirty-state {
     background-color: red;

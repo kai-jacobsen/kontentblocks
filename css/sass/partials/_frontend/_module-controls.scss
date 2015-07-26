@@ -1,0 +1,194 @@
+.kb-module-controls {
+  //text-align: center;
+  width: auto;
+  height: 30px;
+  background-color: transparent;
+  position: absolute;
+  opacity: 1;
+  transition: all .3s linear;
+  z-index: 1990;
+  line-height: 30px;
+
+  .kb-controls-wrap {
+    line-height: 30px;
+    position: relative;
+  }
+  /*------------------------------------*\
+      single item
+  \*------------------------------------*/
+
+  .kb-module-control {
+    width: 30px;
+    height: 30px;
+    background-color: $grey-900;
+    border-radius: 100%;
+    border: 1px solid #fff;
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+    line-height: 28px;
+    color: #fff;
+    @extend .base-box-shadow;
+    top: 0;
+    opacity: 0;
+    transition: left .3s, opacity .6s;
+    @extend .base-transition-timiing;
+  }
+
+  .kb-module-control--edit {
+    left: 0;
+    z-index: 2004;
+    opacity: 1;
+
+    &:before {
+      content: "\f464";
+      font-family: dashicons;
+      cursor: pointer;
+    }
+  }
+
+  .kb-module-control--update {
+    left: 0;
+    z-index: 2003;
+
+    &:before {
+      content: "\f463";
+      font-family: dashicons;
+      cursor: pointer;
+    }
+  }
+
+  .kb-module-control--delete {
+    left: 0;
+    z-index: 2002;
+    &:before {
+      content: "\f182";
+      font-family: dashicons;
+      cursor: pointer;
+    }
+  }
+
+  .kb-module-control--move {
+    left: 0;
+    z-index: 2001;
+    &:before {
+      content: "\f156";
+      font-family: dashicons;
+      cursor: move;
+    }
+  }
+
+  /*------------------------------------*\
+      controls hover
+  \*------------------------------------*/
+
+  &:hover {
+    .kb-module-control--update {
+      left: 32px;
+      opacity: 1;
+    }
+    .kb-module-control--delete {
+      left: 64px;
+      opacity: 1;
+
+    }
+    .kb-module-control--move {
+      left: 96px;
+      opacity: 1;
+
+    }
+  }
+}
+
+/*------------------------------------*\
+    special states
+\*------------------------------------*/
+
+.isDirty {
+  .kb-module-control--update {
+    left: 32px;
+    opacity: 1;
+    background-color: $red;
+  }
+}
+
+/*------------------------------------*\
+    Inline controls
+\*------------------------------------*/
+
+.kb-inline-control {
+  width: 30px;
+  height: 30px;
+  background-color: $blue;
+  border-radius: 100%;
+  border: 1px solid #fff;
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+  line-height: 28px;
+  color: #fff;
+  @extend .base-box-shadow;
+  top: 0;
+  opacity: 0;
+  transition: left .3s, opacity .6s;
+  @extend .base-transition-timiing;
+
+}
+
+.kb-inline--edit-text {
+  left: 32px;
+  z-index: 2004;
+  opacity: 1;
+
+  &:before {
+    content: "\f464";
+    font-family: dashicons;
+    cursor: pointer;
+  }
+}
+
+.kb-inline--edit-image {
+  left: 32px;
+  z-index: 2004;
+  opacity: 1;
+
+  &:before {
+    content: "\f128";
+    font-family: dashicons;
+    cursor: pointer;
+  }
+}
+
+.kb-inline--update {
+  left: 0;
+  z-index: 2003;
+
+  &:before {
+    content: "\f463";
+    font-family: dashicons;
+    cursor: pointer;
+  }
+}
+
+.isDirty {
+
+  .kb-inline--edit-text, .kb-inline--edit-image {
+    left: 0;
+    z-index: 2004;
+    opacity: 1;
+  }
+
+  .kb-inline--update {
+    left: 32px;
+    opacity: 1;
+    background-color: $red;
+  }
+}
+
+/*------------------------------------*\
+    Inline Toolbar
+\*------------------------------------*/
+.kb-inline-toolbar {
+  width: 60px;
+  height: 40px;
+}

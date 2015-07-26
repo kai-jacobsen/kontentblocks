@@ -6,17 +6,6 @@ _.extend(KB.Events, Backbone.Events);
 KB.currentModule = {};
 KB.currentArea = {};
 
-/*
- Notepad:
-
- create Area model from payload
- create module models from payload
-
- add models to generic collection
- add triggers view creation
-
-
- */
 
 // requires
 var ViewsCollection = require('shared/ViewsCollection');
@@ -34,12 +23,11 @@ var PanelView = require('./Views/PanelView');
 var Ui = require('common/UI');
 var Logger = require('common/Logger');
 var ChangeObserver = require('frontend/Views/ChangeObserver');
+var Tether = require('tether');
 
-
-// ---------------
-// Collections
-// ---------------
-
+/*
+ Preperations
+ */
 
 /*
  * Views, not a Backbone collection
@@ -54,7 +42,7 @@ KB.Views = {
 
 
 /*
- * All Modules are collected here
+ * Modules model collection
  * Get by 'mid'
  */
 KB.Modules = new Backbone.Collection([], {
@@ -62,22 +50,26 @@ KB.Modules = new Backbone.Collection([], {
 });
 
 /*
- *  All Areas are collected in this Backbone Collection
- *  Get by 'id'
+ * Area models collection
+ * Get by 'id'
  */
 KB.Areas = new Backbone.Collection([], {
   model: AreaModel
 });
 
 /*
- * All objects are collected in one collection, regardless of type
- * tis provides an central access point to objects
+ * Panel models collection
+ * Get by 'id'
  */
-KB.ObjectProxy = new Backbone.Collection();
-
 KB.Panels = new Backbone.Collection([], {
   model: PanelModel
 });
+
+/*
+ * Models proxy
+ * this provides an central access point to objects
+ */
+KB.ObjectProxy = new Backbone.Collection();
 
 /*
  * Init function
@@ -90,6 +82,10 @@ KB.Panels = new Backbone.Collection([], {
  */
 KB.App = function () {
 
+  /*
+   Frontend bootstrap
+   called on jquery.ready
+   */
   function init() {
     if (!KB.appData.config.initFrontend) {
       return;
@@ -99,25 +95,27 @@ KB.App = function () {
     if (KB.appData.config.useModuleNav) {
       KB.Sidebar = new SidebarView();
     }
+    require('./InlineSetup');
+    require('./GlobalEvents');
 
     // init the edit modal
     KB.EditModalModules = new EditModalModules({});
 
+    // change observer handles model data changes UI
     KB.ChangeObserver = new ChangeObserver();
 
     // Register events on collections
     KB.Modules.on('add', createModuleViews);
-    KB.Areas.on('add', createAreaViews);
     KB.Modules.on('remove', removeModule);
+    KB.Areas.on('add', createAreaViews);
     KB.Panels.on('add', createPanelViews);
+
     // Create views
     addViews();
-
 
     /*
      * payload.Fields collection
      */
-    require('./InlineSetup');
     KB.FieldConfigs = new FieldConfigsCollection();
     KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
     // get the UI on track
@@ -125,16 +123,16 @@ KB.App = function () {
 
   }
 
-  function shutdown() {
-    _.each(KB.Modules.toArray(), function (item) {
-      KB.Modules.remove(item);
-    });
-
-    jQuery('.editable').each(function (i, el) {
-      tinymce.remove('#' + el.id);
-    });
-
-  }
+  //function shutdown() {
+  //  _.each(KB.Modules.toArray(), function (item) {
+  //    KB.Modules.remove(item);
+  //  });
+  //
+  //  jQuery('.editable').each(function (i, el) {
+  //    tinymce.remove('#' + el.id);
+  //  });
+  //
+  //}
 
   /**
    * Iterate through raw areas as they were
@@ -158,44 +156,52 @@ KB.App = function () {
     // iterate over raw areas
     _.each(Payload.getPayload('Areas'), function (area) {
       // create new area model
+      // automatically creates corresponding view
       KB.ObjectProxy.add(KB.Areas.add(area));
     });
 
     // create models from already attached modules
+    // automatically creates corresponding view
+
+
     _.each(Payload.getPayload('Modules'), function (module) {
       KB.ObjectProxy.add(KB.Modules.add(module));
     });
 
-     //create models from already attached modules
+    //create models from already attached modules
+    // automatically creates corresponding view
+
     _.each(Payload.getPayload('Panels'), function (panel) {
       KB.ObjectProxy.add(KB.Panels.add(panel));
     });
 
-    // @TODO events:refactor
-    KB.trigger('kb:moduleControlsAdded');
-
     // new event
-    KB.Events.trigger('KB.frontend.init');
+    KB.Events.trigger('frontend.init');
   }
 
 
   /**
    * Create views for modules and add them
    * to the custom collection
+   * runs as callback for 'add' event on collection
    * @param ModuleModel Backbone Model
    * @returns void
    */
   function createModuleViews(ModuleModel) {
-    var Module;
-    //KB.ObjectProxy.add(ModuleModel);
-    // create view
-    Module = KB.Views.Modules.add(ModuleModel.get('mid'), new ModuleView({
+    KB.Views.Modules.add(ModuleModel.get('mid'), new ModuleView({
       model: ModuleModel,
       el: '#' + ModuleModel.get('mid')
     }));
     Ui.initTabs();
   }
 
+  /**
+   * Create views for panels and add them
+   * to the custom collection
+   * runs as callback for 'add' event on collection
+   * @param PanelModel Backbone Model
+   * @returns void
+   */
   function createPanelViews(PanelModel) {
     var Panel = KB.Views.Panels.add(PanelModel.get('settings').uid, new PanelView({
       model: PanelModel,
@@ -205,7 +211,9 @@ KB.App = function () {
 
 
   /**
-   *
+   * Create views for areas and add them
+   * to the custom collection
+   * runs as callback for 'add' event on collection
    * @param AreaModel Backbone Model
    * @returns void
    */
@@ -221,6 +229,7 @@ KB.App = function () {
   /**
    * Removes a view from the collection.
    * The collection will destroy corresponding views
+   * callback for 'remove' on collection
    * @param ModuleModel Backbone Model
    * @returns void
    */
@@ -229,11 +238,8 @@ KB.App = function () {
     KB.Views.Modules.remove(ModuleModel.get('mid'));
   }
 
-
-  // revealing module pattern
   return {
-    init: init,
-    shutdown: shutdown
+    init: init
   };
 
 }(jQuery);
@@ -241,23 +247,27 @@ KB.App = function () {
 // get started
 KB.App.init();
 
+
 jQuery(document).ready(function () {
+
   if (KB.appData && KB.appData.config.frontend) {
     KB.Views.Modules.readyOnFront();
     Logger.User.info('Frontend welcomes you');
     jQuery('body').addClass('kontentblocks-ready');
   }
 
-  // general ready event
-  KB.Events.trigger('KB::ready');
+  // make Tether globally available
+  window.Tether = Tether;
 
   jQuery(window).on('scroll resize', function () {
     KB.Events.trigger('window.change');
   });
+
   // force user cookie to tinymce
   // wp native js function
   setUserSetting('editor', 'tinymce');
 
+  // @TODO remove
   jQuery('body').on('click', '.kb-fx-button', function (e) {
     jQuery(this).addClass('kb-fx-button--click');
     jQuery(e.currentTarget).one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function () {

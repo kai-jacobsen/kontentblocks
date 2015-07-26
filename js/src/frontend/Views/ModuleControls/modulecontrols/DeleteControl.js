@@ -10,9 +10,8 @@ module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
-    this.$el.append('<span class="dashicons dashicons-trash"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsDelete + '</span>');
   },
-  className: 'kb-module-inline-delete kb-nbt kb-nbb kb-js-inline-delete',
+  className: 'kb-module-control kb-module-control--delete',
   events: {
     'click': 'confirmRemoval'
   },

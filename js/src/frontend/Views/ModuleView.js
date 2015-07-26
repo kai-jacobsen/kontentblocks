@@ -41,8 +41,6 @@ module.exports = Backbone.View.extend({
   events: {
     "click .kb-module__placeholder": "openOptions",
     "click .kb-module__dropzone": "setDropZone",
-    //"click .kb-js-inline-update": "updateModule",
-    "click .kb-js-inline-delete": "confirmDelete",
     "click .editable": "reloadModal",
     "mouseenter.first": "setActive",
     "mouseenter.second": "setControlsPosition"
@@ -90,7 +88,8 @@ module.exports = Backbone.View.extend({
 
     mSettings = this.model.get('settings');
 
-    $controls = jQuery('.os-controls', this.$el);
+    $controls = this.$('.kb-module-controls');
+
     pos = this.$el.offset();
     height = this.$el.height();
 
@@ -116,6 +115,14 @@ module.exports = Backbone.View.extend({
 
     if (pos.top < 20) {
       elpostop = 10;
+    }
+
+    if (elpostop == 0){
+      elpostop = 20;
+    }
+
+    if (elposleft == 0){
+      elposleft = 20;
     }
 
     $controls.css({'top': elpostop + 'px', 'left': elposleft});
@@ -175,9 +182,11 @@ module.exports = Backbone.View.extend({
   },
   getDirty: function () {
     this.$el.addClass('isDirty');
+    this.trigger('view.became.dirty', this);
   },
   getClean: function () {
     this.$el.removeClass('isDirty');
+    this.trigger('view.became.clean', this);
   },
   modelChange: function () {
     this.getDirty();

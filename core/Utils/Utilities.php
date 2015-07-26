@@ -139,7 +139,7 @@ class Utilities
 
         if (!$kbHiddenEditorCalled) {
             echo "<div style='display: none;'>";
-            self::editor('ghost','','ghost',false);
+            self::editor('ghost','','ghost',true);
             echo '</div>';
         }
 

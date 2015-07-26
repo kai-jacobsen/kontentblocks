@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-23 */
+/*! Kontentblocks DevVersion 2015-07-26 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -201,7 +201,7 @@
         "backend/Views/ContextUi/ContextUiView": 4,
         "backend/Views/ContextUi/controls/ColumnControl": 5,
         "backend/Views/ContextUi/controls/ResetControl": 6,
-        "templates/backend/context-bar.hbs": 64
+        "templates/backend/context-bar.hbs": 67
     } ],
     4: [ function(require, module, exports) {
         var ControlsView = require("backend/Views/ModuleControls/ControlsView");
@@ -286,7 +286,7 @@
             }
         });
     }, {
-        "templates/backend/module-menu.hbs": 65
+        "templates/backend/module-menu.hbs": 68
     } ],
     8: [ function(require, module, exports) {
         var Notice = require("common/Notice");
@@ -1047,6 +1047,7 @@
             bindHandlers: function() {
                 this.listenToOnce(this.ModuleModel, "remove", this.remove);
                 this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
+                this.listenTo(this.ModuleModel, "module.model.updated", this.getClean);
                 this.listenTo(this, "change:value", this.upstreamData);
                 this.listenTo(this.ModuleModel, "modal.serialize.before", this.unbind);
                 this.listenTo(this.ModuleModel, "modal.serialize", this.rebind);
@@ -1075,6 +1076,9 @@
                 } else {
                     return false;
                 }
+            },
+            getClean: function() {
+                this.trigger("field.model.clean");
             },
             setData: function(Model) {
                 var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
@@ -1190,6 +1194,7 @@
         var Ui = require("common/UI");
         var Logger = require("common/Logger");
         var ChangeObserver = require("frontend/Views/ChangeObserver");
+        var Tether = require("tether");
         KB.Views = {
             Modules: new ViewsCollection(),
             Areas: new ViewsCollection(),
@@ -1202,10 +1207,10 @@
         KB.Areas = new Backbone.Collection([], {
             model: AreaModel
         });
-        KB.ObjectProxy = new Backbone.Collection();
         KB.Panels = new Backbone.Collection([], {
             model: PanelModel
         });
+        KB.ObjectProxy = new Backbone.Collection();
         KB.App = function() {
             function init() {
                 if (!KB.appData.config.initFrontend) {
@@ -1214,25 +1219,18 @@
                 if (KB.appData.config.useModuleNav) {
                     KB.Sidebar = new SidebarView();
                 }
+                require("./InlineSetup");
+                require("./GlobalEvents");
                 KB.EditModalModules = new EditModalModules({});
                 KB.ChangeObserver = new ChangeObserver();
                 KB.Modules.on("add", createModuleViews);
-                KB.Areas.on("add", createAreaViews);
                 KB.Modules.on("remove", removeModule);
+                KB.Areas.on("add", createAreaViews);
                 KB.Panels.on("add", createPanelViews);
                 addViews();
-                require("./InlineSetup");
                 KB.FieldConfigs = new FieldConfigsCollection();
                 KB.FieldConfigs.add(_.toArray(Payload.getPayload("Fields")));
                 Ui.init();
-            }
-            function shutdown() {
-                _.each(KB.Modules.toArray(), function(item) {
-                    KB.Modules.remove(item);
-                });
-                jQuery(".editable").each(function(i, el) {
-                    tinymce.remove("#" + el.id);
-                });
             }
             function addViews() {
                 if (KB.appData.config.preview) {
@@ -1247,12 +1245,10 @@
                 _.each(Payload.getPayload("Panels"), function(panel) {
                     KB.ObjectProxy.add(KB.Panels.add(panel));
                 });
-                KB.trigger("kb:moduleControlsAdded");
-                KB.Events.trigger("KB.frontend.init");
+                KB.Events.trigger("frontend.init");
             }
             function createModuleViews(ModuleModel) {
-                var Module;
-                Module = KB.Views.Modules.add(ModuleModel.get("mid"), new ModuleView({
+                KB.Views.Modules.add(ModuleModel.get("mid"), new ModuleView({
                     model: ModuleModel,
                     el: "#" + ModuleModel.get("mid")
                 }));
@@ -1276,8 +1272,7 @@
                 KB.Views.Modules.remove(ModuleModel.get("mid"));
             }
             return {
-                init: init,
-                shutdown: shutdown
+                init: init
             };
         }(jQuery);
         KB.App.init();
@@ -1287,7 +1282,7 @@
                 Logger.User.info("Frontend welcomes you");
                 jQuery("body").addClass("kontentblocks-ready");
             }
-            KB.Events.trigger("KB::ready");
+            window.Tether = Tether;
             jQuery(window).on("scroll resize", function() {
                 KB.Events.trigger("window.change");
             });
@@ -1300,26 +1295,41 @@
             });
         });
     }, {
-        "./InlineSetup": 28,
-        "./Views/AreaView": 34,
-        "./Views/ModuleView": 44,
-        "./Views/PanelView": 45,
+        "./GlobalEvents": 22,
+        "./InlineSetup": 31,
+        "./Views/AreaView": 37,
+        "./Views/ModuleView": 47,
+        "./Views/PanelView": 48,
         "common/Logger": 11,
         "common/Payload": 13,
         "common/UI": 16,
         "fields/FieldsConfigsCollection": 19,
-        "frontend/Models/AreaModel": 29,
-        "frontend/Models/ModuleModel": 30,
-        "frontend/Models/PanelModel": 31,
-        "frontend/Views/ChangeObserver": 35,
-        "frontend/Views/EditModalModules": 36,
-        "frontend/Views/Sidebar": 46,
-        "shared/ViewsCollection": 63
+        "frontend/Models/AreaModel": 32,
+        "frontend/Models/ModuleModel": 33,
+        "frontend/Models/PanelModel": 34,
+        "frontend/Views/ChangeObserver": 38,
+        "frontend/Views/EditModalModules": 39,
+        "frontend/Views/Sidebar": 49,
+        "shared/ViewsCollection": 66,
+        tether: 98
     } ],
     22: [ function(require, module, exports) {
+        var Logger = require("common/Logger");
+        KB.Events.on("module.before.sync panel.before.sync", function(Model) {
+            if (window.tinymce) {
+                window.tinymce.triggerSave();
+                Logger.Debug.info("tinymce.triggerSave called");
+            }
+        });
+    }, {
+        "common/Logger": 11
+    } ],
+    23: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var ModuleControl = require("frontend/Inline/controls/EditImage");
+        var UpdateControl = require("frontend/Inline/controls/InlineUpdate");
+        var Toolbar = require("frontend/Inline/InlineToolbar");
         var EditableImage = Backbone.View.extend({
             initialize: function() {
                 this.mode = this.model.get("mode");
@@ -1327,41 +1337,36 @@
                 this.parentView = this.model.get("ModuleModel").View;
                 this.render();
             },
-            events: {
-                mouseenter: "showControl"
-            },
             render: function() {
                 this.delegateEvents();
                 this.$el.addClass("kb-inline-imageedit-attached");
                 this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
-                this.renderControl();
+                this.$title = jQuery("*[data-" + this.model.get("uid") + "-title]");
+                this.Toolbar = new Toolbar({
+                    FieldView: this,
+                    model: this.model,
+                    controls: [ new ModuleControl({
+                        model: this.model,
+                        parent: this
+                    }), new UpdateControl({
+                        model: this.model,
+                        parent: this
+                    }) ]
+                });
             },
             rerender: function() {
                 this.render();
             },
             derender: function() {
-                this.EditControl.remove();
                 if (this.frame) {
                     this.frame.dispose();
                     this.frame = null;
                 }
             },
-            renderControl: function() {
-                this.EditControl = new ModuleControl({
-                    model: this.model,
-                    parent: this
-                });
-            },
-            showControl: function() {
-                this.EditControl.show();
-            },
-            hideControl: function(e) {
-                this.EditControl.hide();
-            },
             openFrame: function() {
                 var that = this;
                 if (this.frame) {
-                    return this.frame.open();
+                    this.frame.dispose();
                 }
                 var queryargs = {
                     post__in: [ this.model.get("value").id ]
@@ -1387,7 +1392,7 @@
                 });
             },
             ready: function() {
-                jQuery(".media-modal").addClass("smaller no-sidebar");
+                jQuery(".media-modal").addClass("smaller kb-image-frame");
             },
             replace: function(attachment) {
                 this.attachment = attachment;
@@ -1410,6 +1415,7 @@
                 Utilities.setIndex(moduleData, path, value);
                 this.model.get("ModuleModel").set("moduleData", moduleData);
                 KB.Events.trigger("modal.refresh");
+                that.model.trigger("field.model.dirty");
                 var args = {
                     width: that.model.get("width"),
                     height: that.model.get("height"),
@@ -1436,6 +1442,12 @@
                         if (!suppress) {
                             that.model.trigger("external.change", that.model);
                         }
+                        if (that.$caption.length > 0) {
+                            that.$caption.html(attachment.get("caption"));
+                        }
+                        if (that.$title.length > 0) {
+                            that.$title.html(attachment.get("title"));
+                        }
                     },
                     error: function() {}
                 });
@@ -1456,9 +1468,11 @@
     }, {
         "common/Config": 10,
         "common/Utilities": 17,
-        "frontend/Inline/controls/EditImage": 25
+        "frontend/Inline/InlineToolbar": 26,
+        "frontend/Inline/controls/EditImage": 27,
+        "frontend/Inline/controls/InlineUpdate": 30
     } ],
-    23: [ function(require, module, exports) {
+    24: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Utilities = require("common/Utilities");
         var ModuleControl = require("frontend/Inline/controls/EditLink");
@@ -1554,12 +1568,14 @@
     }, {
         "common/Config": 10,
         "common/Utilities": 17,
-        "frontend/Inline/controls/EditLink": 26
+        "frontend/Inline/controls/EditLink": 28
     } ],
-    24: [ function(require, module, exports) {
+    25: [ function(require, module, exports) {
         var Utilities = require("common/Utilities");
         var Config = require("common/Config");
         var ModuleControl = require("frontend/Inline/controls/EditText");
+        var UpdateControl = require("frontend/Inline/controls/InlineUpdate");
+        var Toolbar = require("frontend/Inline/InlineToolbar");
         var EditableText = Backbone.View.extend({
             initialize: function() {
                 this.placeHolderSet = false;
@@ -1569,32 +1585,31 @@
                 this.setupDefaults();
                 this.maybeSetPlaceholder();
                 this.listenToOnce(this.model.get("ModuleModel"), "remove", this.deactivate);
+                this.Toolbar = new Toolbar({
+                    FieldView: this,
+                    model: this.model,
+                    controls: [ new ModuleControl({
+                        model: this.model,
+                        parent: this
+                    }), new UpdateControl({
+                        model: this.model,
+                        parent: this
+                    }) ]
+                });
                 this.render();
             },
             render: function() {
                 if (this.el.id) {
                     this.id = this.el.id;
                 }
-                this.renderControl();
             },
             derender: function() {
-                this.EditControl.remove();
                 this.deactivate();
+                this.trigger("field.view.derender", this);
             },
             rerender: function() {
                 this.render();
-            },
-            renderControl: function() {
-                this.EditControl = new ModuleControl({
-                    model: this.model,
-                    parent: this
-                });
-            },
-            events: {
-                mouseenter: "showControl"
-            },
-            showControl: function() {
-                this.EditControl.show();
+                this.trigger("field.view.rerender", this);
             },
             setupDefaults: function() {
                 var that = this;
@@ -1653,32 +1668,12 @@
                             if (ed.isDirty()) {
                                 ed.placeholder = false;
                                 if (ed.kfilter) {
-                                    jQuery.ajax({
-                                        url: ajaxurl,
-                                        data: {
-                                            action: "applyContentFilter",
-                                            content: content,
-                                            postId: ed.module.toJSON().parentObjectId,
-                                            _ajax_nonce: Config.getNonce("read")
-                                        },
-                                        type: "POST",
-                                        dataType: "json",
-                                        success: function(res) {
-                                            ed.setContent(res.data.content);
-                                            ed.module.set("moduleData", moduleData);
-                                            setTimeout(function() {
-                                                if (window.twttr) {
-                                                    window.twttr.widgets.load();
-                                                }
-                                                jQuery(window).off("scroll.kbmce resize.kbmce");
-                                                ed.off("nodeChange ResizeEditor ResizeWindow");
-                                                that.deactivate();
-                                            }, 500);
-                                        },
-                                        error: function() {}
-                                    });
+                                    that.retrieveFilteredContent(ed, content, moduleData);
                                 } else {
                                     ed.module.set("moduleData", moduleData);
+                                    that.model.syncContent = ed.getContent();
+                                    that.model.trigger("external.change", that.model);
+                                    that.model.trigger("field.model.dirty");
                                 }
                             } else {
                                 ed.setContent(ed.previousContent);
@@ -1687,6 +1682,36 @@
                     }
                 };
                 this.defaults = _.extend(defaults, this.settings);
+            },
+            retrieveFilteredContent: function(ed, content, moduleData) {
+                var that = this;
+                jQuery.ajax({
+                    url: ajaxurl,
+                    data: {
+                        action: "applyContentFilter",
+                        content: content,
+                        postId: ed.module.toJSON().parentObjectId,
+                        _ajax_nonce: Config.getNonce("read")
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(res) {
+                        ed.setContent(res.data.content);
+                        ed.module.set("moduleData", moduleData);
+                        that.model.syncContent = ed.getContent();
+                        that.model.trigger("field.model.dirty");
+                        that.model.trigger("external.change", that.model);
+                        setTimeout(function() {
+                            if (window.twttr) {
+                                window.twttr.widgets.load();
+                            }
+                            jQuery(window).off("scroll.kbmce resize.kbmce");
+                            ed.off("nodeChange ResizeEditor ResizeWindow");
+                            that.deactivate();
+                        }, 500);
+                    },
+                    error: function() {}
+                });
             },
             activate: function(e) {
                 e.stopPropagation();
@@ -1729,6 +1754,14 @@
                     });
                     $toolbar.show();
                 }
+            },
+            synchronize: function(model) {
+                if (this.editor) {
+                    this.editor.setContent(model.syncContent);
+                } else {
+                    this.$el.html(model.syncContent);
+                }
+                this.model.trigger("field.model.dirty");
             }
         });
         var markSelection = function() {
@@ -1782,61 +1815,105 @@
     }, {
         "common/Config": 10,
         "common/Utilities": 17,
-        "frontend/Inline/controls/EditText": 27
+        "frontend/Inline/InlineToolbar": 26,
+        "frontend/Inline/controls/EditText": 29,
+        "frontend/Inline/controls/InlineUpdate": 30
     } ],
-    25: [ function(require, module, exports) {
+    26: [ function(require, module, exports) {
+        var Tether = require("tether");
+        module.exports = Backbone.View.extend({
+            tagName: "div",
+            className: "kb-inline-toolbar",
+            attributes: function() {
+                return {
+                    "data-kbelrel": this.model.get("baseId"),
+                    hidefocus: "1",
+                    tabindex: "-1"
+                };
+            },
+            initialize: function(options) {
+                this.FieldView = options.FieldView;
+                this.controls = options.controls || [];
+                this.listenTo(this.model, "field.model.dirty", this.getDirty);
+                this.listenTo(this.model, "field.model.clean", this.getClean);
+                this.listenTo(this.FieldView, "field.view.derender", this.derender);
+                this.listenTo(this.FieldView, "field.view.rerender", this.rerender);
+                this.create();
+            },
+            create: function() {
+                var that = this;
+                _.each(this.controls, function(control) {
+                    control.$el.appendTo(that.$el);
+                    control.Toolbar = that;
+                });
+                this.$el.appendTo("body");
+                this.createPosition();
+            },
+            createPosition: function() {
+                this.Tether = new Tether({
+                    element: this.$el,
+                    target: this.FieldView.$el,
+                    attachment: "center right",
+                    targetAttachment: "center right"
+                });
+            },
+            getDirty: function() {
+                this.$el.addClass("isDirty");
+            },
+            getClean: function() {
+                this.$el.removeClass("isDirty");
+            },
+            derender: function() {
+                if (this.Tether) {
+                    this.Tether.destroy();
+                }
+            },
+            rerender: function() {
+                this.createPosition();
+            }
+        });
+    }, {
+        tether: 98
+    } ],
+    27: [ function(require, module, exports) {
         var Check = require("common/Checks");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.visible = false;
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="dashicons dashicons-format-image"></span>');
-                if (this.isValid()) {
-                    this.render();
-                }
                 this.listenTo(KB.Events, "window.change", this.reposition);
             },
-            className: "kb-inline-control",
+            className: "kb-inline-control kb-inline--edit-image",
             events: {
-                click: "openFrame"
+                click: "openFrame",
+                mouseenter: "mouseenter",
+                mouseleave: "mouseleave"
             },
             openFrame: function() {
                 this.Parent.openFrame();
             },
-            render: function() {
-                this.Parent.parentView.$el.append(this.$el);
-                this.$el.hide();
-            },
-            show: function() {
-                this.$el.show();
-                this.setPosition();
-                this.visible = true;
-            },
-            hide: function() {
-                this.$el.hide();
-                this.visible = false;
-            },
-            reposition: function() {
-                if (this.visible) {
-                    this.setPosition();
-                }
-            },
-            setPosition: function() {
-                var off = this.Parent.$el.offset();
-                var w = this.Parent.$el.width();
-                off.left = off.left + w - 40;
-                off.top = off.top + 20;
-                this.$el.offset(off);
-            },
+            render: function() {},
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
+            },
+            mouseenter: function() {
+                this.Parent.$el.addClass("kb-field--outline");
+                _.each(this.model.get("linkedFields"), function(linkedModel) {
+                    linkedModel.FieldView.$el.addClass("kb-field--outline-link");
+                });
+            },
+            mouseleave: function() {
+                this.Parent.$el.removeClass("kb-field--outline");
+                _.each(this.model.get("linkedFields"), function(linkedModel) {
+                    linkedModel.FieldView.$el.removeClass("kb-field--outline-link");
+                });
             }
         });
     }, {
         "common/Checks": 9
     } ],
-    26: [ function(require, module, exports) {
+    28: [ function(require, module, exports) {
         var Check = require("common/Checks");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
@@ -1896,59 +1973,71 @@
     }, {
         "common/Checks": 9
     } ],
-    27: [ function(require, module, exports) {
+    29: [ function(require, module, exports) {
         var Check = require("common/Checks");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.visible = false;
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="dashicons dashicons-edit"></span>');
-                if (this.isValid()) {
-                    this.render();
-                }
-                this.listenTo(KB.Events, "window.change", this.reposition);
             },
-            className: "kb-inline-control",
+            className: "kb-inline-control kb-inline--edit-text",
             events: {
                 click: "focusEditor",
                 mouseenter: "mouseenter",
                 mouseleave: "mouseleave"
             },
             focusEditor: function(e) {
-                console.log(this.Parent.editor);
                 if (!this.Parent.editor) {
                     this.Parent.activate(e);
                 }
             },
-            render: function() {
-                this.Parent.parentView.$el.append(this.$el);
-                this.$el.hide();
+            render: function() {},
+            isValid: function() {
+                return Check.userCan("edit_kontentblocks");
             },
-            show: function() {
-                this.$el.show();
-                this.setPosition();
-                this.visible = true;
+            mouseenter: function() {
+                this.Parent.$el.addClass("kb-field--outline");
+                _.each(this.model.get("linkedFields"), function(linkedModel) {
+                    linkedModel.FieldView.$el.addClass("kb-field--outline-link");
+                });
             },
-            hide: function() {
-                this.$el.hide();
+            mouseleave: function() {
+                this.Parent.$el.removeClass("kb-field--outline");
+                _.each(this.model.get("linkedFields"), function(linkedModel) {
+                    linkedModel.FieldView.$el.removeClass("kb-field--outline-link");
+                });
+            }
+        });
+    }, {
+        "common/Checks": 9
+    } ],
+    30: [ function(require, module, exports) {
+        var Check = require("common/Checks");
+        module.exports = Backbone.View.extend({
+            initialize: function(options) {
                 this.visible = false;
-            },
-            reposition: function() {
-                if (this.visible) {
-                    this.setPosition();
+                this.options = options || {};
+                this.Parent = options.parent;
+                if (this.isValid()) {
+                    this.render();
                 }
             },
-            setPosition: function() {
-                var off = this.Parent.$el.offset();
-                var w = this.Parent.$el.width();
-                var h = this.Parent.$el.height();
-                off.left = off.left + w - 40;
-                off.top = off.top + 3;
-                if (h > 30) {
-                    off.top = off.top + 20;
+            className: "kb-inline-control kb-inline--update",
+            events: {
+                click: "syncModel",
+                mouseenter: "mouseenter",
+                mouseleave: "mouseleave"
+            },
+            focusEditor: function(e) {
+                if (!this.Parent.editor) {
+                    this.Parent.activate(e);
                 }
-                this.$el.offset(off);
+            },
+            render: function() {},
+            syncModel: function() {
+                this.model.get("ModuleModel").sync(true);
+                this.Toolbar.getClean();
             },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
@@ -1958,7 +2047,7 @@
     }, {
         "common/Checks": 9
     } ],
-    28: [ function(require, module, exports) {
+    31: [ function(require, module, exports) {
         var EditableText = require("frontend/Inline/EditableTextView");
         var EditableLink = require("frontend/Inline/EditableLinkView");
         var EditableImage = require("frontend/Inline/EditableImageView");
@@ -1966,11 +2055,11 @@
         KB.Fields.registerObject("EditableImage", EditableImage);
         KB.Fields.registerObject("EditableLink", EditableLink);
     }, {
-        "frontend/Inline/EditableImageView": 22,
-        "frontend/Inline/EditableLinkView": 23,
-        "frontend/Inline/EditableTextView": 24
+        "frontend/Inline/EditableImageView": 23,
+        "frontend/Inline/EditableLinkView": 24,
+        "frontend/Inline/EditableTextView": 25
     } ],
-    29: [ function(require, module, exports) {
+    32: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             defaults: {
                 id: "generic"
@@ -1978,7 +2067,7 @@
             idAttribute: "id"
         });
     }, {} ],
-    30: [ function(require, module, exports) {
+    33: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Notice = require("common/Notice");
         var Logger = require("common/Logger");
@@ -1999,6 +2088,7 @@
             },
             sync: function(save, context) {
                 var that = this;
+                KB.Events.trigger("module.before.sync", this);
                 return jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -2026,7 +2116,7 @@
         "common/Logger": 11,
         "common/Notice": 12
     } ],
-    31: [ function(require, module, exports) {
+    34: [ function(require, module, exports) {
         var Config = require("common/Config");
         var Logger = require("common/Logger");
         module.exports = Backbone.Model.extend({
@@ -2035,8 +2125,8 @@
                 this.type = "panel";
             },
             sync: function(save, context) {
-                console.log(this);
                 var that = this;
+                KB.Events.trigger("panel.before.sync");
                 return jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -2054,7 +2144,7 @@
                         that.trigger("module.model.updated", that);
                     },
                     error: function() {
-                        Logger.Debug.error("serialize | FrontendModal | Ajax error");
+                        Logger.Debug.error("sync | FrontendModal | Ajax error");
                     }
                 });
             }
@@ -2063,7 +2153,7 @@
         "common/Config": 10,
         "common/Logger": 11
     } ],
-    32: [ function(require, module, exports) {
+    35: [ function(require, module, exports) {
         var ModuleBrowser = require("shared/ModuleBrowser/ModuleBrowserController");
         var ModuleModel = require("frontend/Models/ModuleModel");
         var TinyMCE = require("common/TinyMCE");
@@ -2092,10 +2182,10 @@
         });
     }, {
         "common/TinyMCE": 15,
-        "frontend/Models/ModuleModel": 30,
-        "shared/ModuleBrowser/ModuleBrowserController": 56
+        "frontend/Models/ModuleModel": 33,
+        "shared/ModuleBrowser/ModuleBrowserController": 59
     } ],
-    33: [ function(require, module, exports) {
+    36: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         module.exports = Backbone.View.extend({
             hasLayout: false,
@@ -2190,7 +2280,7 @@
     }, {
         "common/Payload": 13
     } ],
-    34: [ function(require, module, exports) {
+    37: [ function(require, module, exports) {
         var AreaLayout = require("frontend/Views/AreaLayout");
         var ModuleBrowser = require("frontend/ModuleBrowser/ModuleBrowserExt");
         var Config = require("common/Config");
@@ -2202,7 +2292,7 @@
             initialize: function() {
                 this.attachedModuleViews = {};
                 this.renderSettings = this.model.get("renderSettings");
-                this.listenToOnce(KB.Events, "KB.frontend.init", this.setupUi);
+                this.listenToOnce(KB.Events, "frontend.init", this.setupUi);
                 this.listenTo(this, "kb.module.deleted", this.removeModule);
                 this.model.View = this;
             },
@@ -2242,7 +2332,7 @@
                 var that = this;
                 if (this.Layout.hasLayout) {
                     this.$el.sortable({
-                        handle: ".kb-module-inline-move",
+                        handle: ".kb-module-control--move",
                         items: ".kb-wrap",
                         helper: "clone",
                         opacity: .5,
@@ -2297,7 +2387,7 @@
                     });
                 } else {
                     this.$el.sortable({
-                        handle: ".kb-module-inline-move",
+                        handle: ".kb-module-control--move",
                         items: ".module",
                         helper: "clone",
                         cursorAt: {
@@ -2362,10 +2452,10 @@
         "common/Ajax": 8,
         "common/Config": 10,
         "common/Notice": 12,
-        "frontend/ModuleBrowser/ModuleBrowserExt": 32,
-        "frontend/Views/AreaLayout": 33
+        "frontend/ModuleBrowser/ModuleBrowserExt": 35,
+        "frontend/Views/AreaLayout": 36
     } ],
-    35: [ function(require, module, exports) {
+    38: [ function(require, module, exports) {
         var Notice = require("common/Notice");
         var tplChangeObserver = require("templates/frontend/change-observer.hbs");
         module.exports = Backbone.View.extend({
@@ -2417,9 +2507,9 @@
         });
     }, {
         "common/Notice": 12,
-        "templates/frontend/change-observer.hbs": 73
+        "templates/frontend/change-observer.hbs": 76
     } ],
-    36: [ function(require, module, exports) {
+    39: [ function(require, module, exports) {
         var Logger = require("common/Logger");
         var ModalFieldCollection = require("frontend/Collections/ModalFieldCollection");
         var LoadingAnimation = require("frontend/Views/LoadingAnimation");
@@ -2793,10 +2883,10 @@
         "common/TinyMCE": 15,
         "common/UI": 16,
         "frontend/Collections/ModalFieldCollection": 20,
-        "frontend/Views/LoadingAnimation": 37,
-        "templates/frontend/module-edit-form.hbs": 75
+        "frontend/Views/LoadingAnimation": 40,
+        "templates/frontend/module-edit-form.hbs": 78
     } ],
-    37: [ function(require, module, exports) {
+    40: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             $overlay: jQuery('<div class="kb-loading-overlay" style="display: none;"><span class="kb-loading-loader"><span class="kb-loading-loader-inner"></span></span></div>'),
             initialize: function() {
@@ -2814,7 +2904,7 @@
             }
         });
     }, {} ],
-    38: [ function(require, module, exports) {
+    41: [ function(require, module, exports) {
         var ModuleEdit = require("./modulecontrols/EditControl");
         var ModuleUpdate = require("./modulecontrols/UpdateControl");
         var ModuleDelete = require("./modulecontrols/DeleteControl");
@@ -2849,27 +2939,25 @@
                     i18n: KB.i18n.jsFrontend
                 }));
                 this.$el = jQuery(".kb-module-controls", this.ModuleView.$el);
-                this.$menuList = jQuery('<div class="controls-wrap"></div>').appendTo(this.$el);
+                this.$menuList = this.$(".kb-controls-wrap");
             },
             addItem: function(view) {
                 if (view.isValid && view.isValid() === true) {
-                    var $liItem = jQuery('<div class="controls-wrap-item"></div>').appendTo(this.$menuList);
-                    var $menuItem = $liItem.append(view.render());
-                    this.$menuList.append($menuItem);
+                    this.$menuList.append(view.render());
                     return view;
                 }
             }
         });
     }, {
-        "./modulecontrols/DeleteControl": 40,
-        "./modulecontrols/EditControl": 41,
-        "./modulecontrols/MoveControl": 42,
-        "./modulecontrols/UpdateControl": 43,
-        "templates/frontend/module-controls.hbs": 74
+        "./modulecontrols/DeleteControl": 43,
+        "./modulecontrols/EditControl": 44,
+        "./modulecontrols/MoveControl": 45,
+        "./modulecontrols/UpdateControl": 46,
+        "templates/frontend/module-controls.hbs": 77
     } ],
-    39: [ function(require, module, exports) {
+    42: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
-            tagName: "a",
+            tagName: "div",
             isValid: function() {
                 return true;
             },
@@ -2878,7 +2966,7 @@
             }
         });
     }, {} ],
-    40: [ function(require, module, exports) {
+    43: [ function(require, module, exports) {
         var ModuleMenuItem = require("frontend/Views/ModuleControls/modulecontrols/ControlsBaseView");
         var Check = require("common/Checks");
         var Config = require("common/Config");
@@ -2888,9 +2976,8 @@
             initialize: function(options) {
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="dashicons dashicons-trash"></span><span class="os-action">' + KB.i18n.jsFrontend.moduleControls.controlsDelete + "</span>");
             },
-            className: "kb-module-inline-delete kb-nbt kb-nbb kb-js-inline-delete",
+            className: "kb-module-control kb-module-control--delete",
             events: {
                 click: "confirmRemoval"
             },
@@ -2923,18 +3010,17 @@
         "common/Checks": 9,
         "common/Config": 10,
         "common/Notice": 12,
-        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 39
+        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 42
     } ],
-    41: [ function(require, module, exports) {
+    44: [ function(require, module, exports) {
         var ModuleMenuItem = require("frontend/Views/ModuleControls/modulecontrols/ControlsBaseView");
         var Check = require("common/Checks");
         module.exports = ModuleMenuItem.extend({
             initialize: function(options) {
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="dashicons dashicons-edit"></span>');
             },
-            className: "os-edit-block kb-module-edit",
+            className: "kb-module-control kb-module-control--edit",
             events: {
                 click: "openForm"
             },
@@ -2950,18 +3036,17 @@
         });
     }, {
         "common/Checks": 9,
-        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 39
+        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 42
     } ],
-    42: [ function(require, module, exports) {
+    45: [ function(require, module, exports) {
         var ModuleMenuItem = require("frontend/Views/ModuleControls/modulecontrols/ControlsBaseView");
         var Check = require("common/Checks");
         module.exports = ModuleMenuItem.extend({
             initialize: function(options) {
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="genericon genericon-draggable"></span><span class="os-action"></span>');
             },
-            className: "kb-module-inline-move kb-nbt kb-nbb",
+            className: "kb-module-control kb-module-control--move",
             isValid: function() {
                 if (!this.Parent.model.Area) {
                     return false;
@@ -2971,9 +3056,9 @@
         });
     }, {
         "common/Checks": 9,
-        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 39
+        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 42
     } ],
-    43: [ function(require, module, exports) {
+    46: [ function(require, module, exports) {
         var ModuleMenuItem = require("frontend/Views/ModuleControls/modulecontrols/ControlsBaseView");
         var Check = require("common/Checks");
         var Config = require("common/Config");
@@ -2982,9 +3067,8 @@
             initialize: function(options) {
                 this.options = options || {};
                 this.Parent = options.parent;
-                this.$el.append('<span class="dashicons dashicons-update"></span>');
             },
-            className: "kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update",
+            className: "kb-module-control kb-module-control--update",
             events: {
                 click: "update"
             },
@@ -3031,9 +3115,9 @@
         "common/Checks": 9,
         "common/Config": 10,
         "common/Notice": 12,
-        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 39
+        "frontend/Views/ModuleControls/modulecontrols/ControlsBaseView": 42
     } ],
-    44: [ function(require, module, exports) {
+    47: [ function(require, module, exports) {
         var ModuleControlsView = require("frontend/Views/ModuleControls/ModuleControls");
         var Check = require("common/Checks");
         var tplModulePlaceholder = require("templates/frontend/module-placeholder.hbs");
@@ -3060,7 +3144,6 @@
             events: {
                 "click .kb-module__placeholder": "openOptions",
                 "click .kb-module__dropzone": "setDropZone",
-                "click .kb-js-inline-delete": "confirmDelete",
                 "click .editable": "reloadModal",
                 "mouseenter.first": "setActive",
                 "mouseenter.second": "setControlsPosition"
@@ -3090,7 +3173,7 @@
                 elpostop = 0;
                 elposleft = 0;
                 mSettings = this.model.get("settings");
-                $controls = jQuery(".os-controls", this.$el);
+                $controls = this.$(".kb-module-controls");
                 pos = this.$el.offset();
                 height = this.$el.height();
                 if (mSettings.controls && mSettings.controls.toolbar) {
@@ -3107,6 +3190,12 @@
                 }
                 if (pos.top < 20) {
                     elpostop = 10;
+                }
+                if (elpostop == 0) {
+                    elpostop = 20;
+                }
+                if (elposleft == 0) {
+                    elposleft = 20;
                 }
                 $controls.css({
                     top: elpostop + "px",
@@ -3164,9 +3253,11 @@
             },
             getDirty: function() {
                 this.$el.addClass("isDirty");
+                this.trigger("view.became.dirty", this);
             },
             getClean: function() {
                 this.$el.removeClass("isDirty");
+                this.trigger("view.became.clean", this);
             },
             modelChange: function() {
                 this.getDirty();
@@ -3180,10 +3271,10 @@
         });
     }, {
         "common/Checks": 9,
-        "frontend/Views/ModuleControls/ModuleControls": 38,
-        "templates/frontend/module-placeholder.hbs": 76
+        "frontend/Views/ModuleControls/ModuleControls": 41,
+        "templates/frontend/module-placeholder.hbs": 79
     } ],
-    45: [ function(require, module, exports) {
+    48: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             initialize: function() {
                 this.model.View = this;
@@ -3192,7 +3283,7 @@
             getClean: function() {}
         });
     }, {} ],
-    46: [ function(require, module, exports) {
+    49: [ function(require, module, exports) {
         var AreaOverview = require("frontend/Views/Sidebar/AreaOverview/AreaOverviewController");
         var CategoryFilter = require("frontend/Views/Sidebar/AreaDetails/CategoryFilter");
         var SidebarHeader = require("frontend/Views/Sidebar/SidebarHeader");
@@ -3324,12 +3415,12 @@
         });
     }, {
         "common/Utilities": 17,
-        "frontend/Views/Sidebar/AreaDetails/CategoryFilter": 50,
-        "frontend/Views/Sidebar/AreaOverview/AreaOverviewController": 53,
-        "frontend/Views/Sidebar/SidebarHeader": 55,
-        "templates/frontend/sidebar/sidebar-nav.hbs": 85
+        "frontend/Views/Sidebar/AreaDetails/CategoryFilter": 53,
+        "frontend/Views/Sidebar/AreaOverview/AreaOverviewController": 56,
+        "frontend/Views/Sidebar/SidebarHeader": 58,
+        "templates/frontend/sidebar/sidebar-nav.hbs": 88
     } ],
-    47: [ function(require, module, exports) {
+    50: [ function(require, module, exports) {
         var CategoryController = require("frontend/Views/Sidebar/AreaDetails/CategoryController");
         var AreaSettings = require("frontend/Views/Sidebar/AreaDetails/AreaSettingsController");
         var Config = require("common/Config");
@@ -3412,11 +3503,11 @@
         "common/Ajax": 8,
         "common/Config": 10,
         "common/Notice": 12,
-        "frontend/Views/Sidebar/AreaDetails/AreaSettingsController": 48,
-        "frontend/Views/Sidebar/AreaDetails/CategoryController": 49,
-        "templates/frontend/sidebar/area-details-header.hbs": 77
+        "frontend/Views/Sidebar/AreaDetails/AreaSettingsController": 51,
+        "frontend/Views/Sidebar/AreaDetails/CategoryController": 52,
+        "templates/frontend/sidebar/area-details-header.hbs": 80
     } ],
-    48: [ function(require, module, exports) {
+    51: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         var tplAreaLayoutItem = require("templates/frontend/area-layout-item.hbs");
         module.exports = Backbone.View.extend({
@@ -3472,9 +3563,9 @@
         });
     }, {
         "common/Payload": 13,
-        "templates/frontend/area-layout-item.hbs": 72
+        "templates/frontend/area-layout-item.hbs": 75
     } ],
-    49: [ function(require, module, exports) {
+    52: [ function(require, module, exports) {
         var ModuleDragItem = require("frontend/Views/Sidebar/AreaDetails/ModuleDragItem");
         var tplCategoryList = require("templates/frontend/sidebar/category-list.hbs");
         module.exports = Backbone.View.extend({
@@ -3502,10 +3593,10 @@
             }
         });
     }, {
-        "frontend/Views/Sidebar/AreaDetails/ModuleDragItem": 51,
-        "templates/frontend/sidebar/category-list.hbs": 78
+        "frontend/Views/Sidebar/AreaDetails/ModuleDragItem": 54,
+        "templates/frontend/sidebar/category-list.hbs": 81
     } ],
-    50: [ function(require, module, exports) {
+    53: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         module.exports = Backbone.View.extend({
             categories: Payload.getPayload("ModuleCategories"),
@@ -3550,7 +3641,7 @@
     }, {
         "common/Payload": 13
     } ],
-    51: [ function(require, module, exports) {
+    54: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         var Notice = require("common/Notice");
         var Config = require("common/Config");
@@ -3638,11 +3729,11 @@
         "common/Config": 10,
         "common/Notice": 12,
         "common/Payload": 13,
-        "frontend/Models/ModuleModel": 30,
-        "frontend/Views/AreaView": 34,
-        "templates/frontend/sidebar/category-module-item.hbs": 79
+        "frontend/Models/ModuleModel": 33,
+        "frontend/Views/AreaView": 37,
+        "templates/frontend/sidebar/category-module-item.hbs": 82
     } ],
-    52: [ function(require, module, exports) {
+    55: [ function(require, module, exports) {
         var ModuleListItem = require("frontend/Views/Sidebar/AreaOverview/ModuleListItem");
         var AreaDetailsController = require("frontend/Views/Sidebar/AreaDetails/AreaDetailsController");
         var tplEmptyArea = require("templates/frontend/sidebar/empty-area.hbs");
@@ -3677,7 +3768,7 @@
                 this.$parent.on("click", ".kb-js-sidebar-add-module", function() {
                     that.sidebarController.setView(that.ModuleList);
                 });
-                this.listenToOnce(KB.Events, "KB.frontend.init", this.afterInit);
+                this.listenToOnce(KB.Events, "frontend.init", this.afterInit);
             },
             activate: function() {
                 this.$parent.removeClass("kb-sidebar-areaview--inactive");
@@ -3725,11 +3816,11 @@
             }
         });
     }, {
-        "frontend/Views/Sidebar/AreaDetails/AreaDetailsController": 47,
-        "frontend/Views/Sidebar/AreaOverview/ModuleListItem": 54,
-        "templates/frontend/sidebar/empty-area.hbs": 80
+        "frontend/Views/Sidebar/AreaDetails/AreaDetailsController": 50,
+        "frontend/Views/Sidebar/AreaOverview/ModuleListItem": 57,
+        "templates/frontend/sidebar/empty-area.hbs": 83
     } ],
-    53: [ function(require, module, exports) {
+    56: [ function(require, module, exports) {
         var AreaListItem = require("frontend/Views/Sidebar/AreaOverview/AreaListItem");
         var tplSidebarAreaView = require("templates/frontend/sidebar/sidebar-area-view.hbs");
         var tplRootItem = require("templates/frontend/sidebar/root-item.hbs");
@@ -3801,11 +3892,11 @@
             }
         });
     }, {
-        "frontend/Views/Sidebar/AreaOverview/AreaListItem": 52,
-        "templates/frontend/sidebar/root-item.hbs": 82,
-        "templates/frontend/sidebar/sidebar-area-view.hbs": 83
+        "frontend/Views/Sidebar/AreaOverview/AreaListItem": 55,
+        "templates/frontend/sidebar/root-item.hbs": 85,
+        "templates/frontend/sidebar/sidebar-area-view.hbs": 86
     } ],
-    54: [ function(require, module, exports) {
+    57: [ function(require, module, exports) {
         var tplModuleViewItem = require("templates/frontend/sidebar/module-view-item.hbs");
         module.exports = Backbone.View.extend({
             tagName: "li",
@@ -3871,9 +3962,9 @@
             }
         });
     }, {
-        "templates/frontend/sidebar/module-view-item.hbs": 81
+        "templates/frontend/sidebar/module-view-item.hbs": 84
     } ],
-    55: [ function(require, module, exports) {
+    58: [ function(require, module, exports) {
         var tplSidebarHeader = require("templates/frontend/sidebar/sidebar-header.hbs");
         module.exports = Backbone.View.extend({
             tagName: "div",
@@ -3886,9 +3977,9 @@
             }
         });
     }, {
-        "templates/frontend/sidebar/sidebar-header.hbs": 84
+        "templates/frontend/sidebar/sidebar-header.hbs": 87
     } ],
-    56: [ function(require, module, exports) {
+    59: [ function(require, module, exports) {
         var ModuleDefinitions = require("shared/ModuleBrowser/ModuleBrowserDefinitions");
         var ModuleDefModel = require("shared/ModuleBrowser/ModuleDefinitionModel");
         var ModuleBrowserDescription = require("shared/ModuleBrowser/ModuleBrowserDescriptions");
@@ -4086,14 +4177,14 @@
         "common/Notice": 12,
         "common/Payload": 13,
         "common/TinyMCE": 15,
-        "shared/ModuleBrowser/ModuleBrowserDefinitions": 57,
-        "shared/ModuleBrowser/ModuleBrowserDescriptions": 58,
-        "shared/ModuleBrowser/ModuleBrowserList": 59,
-        "shared/ModuleBrowser/ModuleBrowserNavigation": 61,
-        "shared/ModuleBrowser/ModuleDefinitionModel": 62,
-        "templates/backend/modulebrowser/module-browser.hbs": 66
+        "shared/ModuleBrowser/ModuleBrowserDefinitions": 60,
+        "shared/ModuleBrowser/ModuleBrowserDescriptions": 61,
+        "shared/ModuleBrowser/ModuleBrowserList": 62,
+        "shared/ModuleBrowser/ModuleBrowserNavigation": 64,
+        "shared/ModuleBrowser/ModuleDefinitionModel": 65,
+        "templates/backend/modulebrowser/module-browser.hbs": 69
     } ],
-    57: [ function(require, module, exports) {
+    60: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         module.exports = Backbone.Collection.extend({
             initialize: function(models, options) {
@@ -4141,7 +4232,7 @@
     }, {
         "common/Payload": 13
     } ],
-    58: [ function(require, module, exports) {
+    61: [ function(require, module, exports) {
         var Templates = require("common/Templates");
         var tplModuleTemplateDescription = require("templates/backend/modulebrowser/module-template-description.hbs");
         var tplModuleDescription = require("templates/backend/modulebrowser/module-description.hbs");
@@ -4185,11 +4276,11 @@
         });
     }, {
         "common/Templates": 14,
-        "templates/backend/modulebrowser/module-description.hbs": 67,
-        "templates/backend/modulebrowser/module-template-description.hbs": 69,
-        "templates/backend/modulebrowser/poster.hbs": 71
+        "templates/backend/modulebrowser/module-description.hbs": 70,
+        "templates/backend/modulebrowser/module-template-description.hbs": 72,
+        "templates/backend/modulebrowser/poster.hbs": 74
     } ],
-    59: [ function(require, module, exports) {
+    62: [ function(require, module, exports) {
         var ListItem = require("shared/ModuleBrowser/ModuleBrowserListItem");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
@@ -4220,9 +4311,9 @@
             }
         });
     }, {
-        "shared/ModuleBrowser/ModuleBrowserListItem": 60
+        "shared/ModuleBrowser/ModuleBrowserListItem": 63
     } ],
-    60: [ function(require, module, exports) {
+    63: [ function(require, module, exports) {
         var tplTemplateListItem = require("templates/backend/modulebrowser/module-template-list-item.hbs");
         var tplListItem = require("templates/backend/modulebrowser/module-list-item.hbs");
         module.exports = Backbone.View.extend({
@@ -4271,10 +4362,10 @@
             }
         });
     }, {
-        "templates/backend/modulebrowser/module-list-item.hbs": 68,
-        "templates/backend/modulebrowser/module-template-list-item.hbs": 70
+        "templates/backend/modulebrowser/module-list-item.hbs": 71,
+        "templates/backend/modulebrowser/module-template-list-item.hbs": 73
     } ],
-    61: [ function(require, module, exports) {
+    64: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             item: Backbone.View.extend({
                 initialize: function(options) {
@@ -4320,7 +4411,7 @@
             }
         });
     }, {} ],
-    62: [ function(require, module, exports) {
+    65: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             initialize: function() {
                 var that = this;
@@ -4334,7 +4425,7 @@
             }
         });
     }, {} ],
-    63: [ function(require, module, exports) {
+    66: [ function(require, module, exports) {
         KB.ViewsCollection = function() {
             this.views = {};
             this.lastViewAdded = null;
@@ -4382,7 +4473,7 @@
         _.extend(KB.ViewsCollection.prototype, Backbone.Events);
         module.exports = KB.ViewsCollection;
     }, {} ],
-    64: [ function(require, module, exports) {
+    67: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4392,9 +4483,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    65: [ function(require, module, exports) {
+    68: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4404,9 +4495,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    66: [ function(require, module, exports) {
+    69: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4422,9 +4513,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    67: [ function(require, module, exports) {
+    70: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4435,9 +4526,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    68: [ function(require, module, exports) {
+    71: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4448,9 +4539,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    69: [ function(require, module, exports) {
+    72: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4461,9 +4552,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    70: [ function(require, module, exports) {
+    73: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4474,9 +4565,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    71: [ function(require, module, exports) {
+    74: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4487,9 +4578,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    72: [ function(require, module, exports) {
+    75: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             "1": function(depth0, helpers, partials, data) {
@@ -4510,9 +4601,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    73: [ function(require, module, exports) {
+    76: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4522,21 +4613,21 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    74: [ function(require, module, exports) {
+    77: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             "1": function(depth0, helpers, partials, data) {
-                return " dynamic-module ";
+                return " kb-dynamic-module ";
             },
             "3": function(depth0, helpers, partials, data) {
-                return " master-module ";
+                return " global-module ";
             },
             compiler: [ 6, ">= 2.0.0-beta.1" ],
             main: function(depth0, helpers, partials, data) {
                 var stack1;
-                return "<div class='kb-module-controls os-controls " + ((stack1 = helpers["if"].call(depth0, (stack1 = depth0 != null ? depth0.model : depth0) != null ? stack1.inDynamic : stack1, {
+                return "<div class='kb-module-controls " + ((stack1 = helpers["if"].call(depth0, (stack1 = depth0 != null ? depth0.model : depth0) != null ? stack1.inDynamic : stack1, {
                     name: "if",
                     hash: {},
                     fn: this.program(1, data, 0),
@@ -4548,14 +4639,14 @@
                     fn: this.program(3, data, 0),
                     inverse: this.noop,
                     data: data
-                })) != null ? stack1 : "") + "'>\n\n</div>";
+                })) != null ? stack1 : "") + '\'>\n    <div class="kb-controls-wrap"></div>\n</div>';
             },
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    75: [ function(require, module, exports) {
+    78: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4566,9 +4657,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    76: [ function(require, module, exports) {
+    79: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4579,9 +4670,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    77: [ function(require, module, exports) {
+    80: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4597,9 +4688,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    78: [ function(require, module, exports) {
+    81: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4615,9 +4706,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    79: [ function(require, module, exports) {
+    82: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4628,9 +4719,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    80: [ function(require, module, exports) {
+    83: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4640,9 +4731,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    81: [ function(require, module, exports) {
+    84: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4653,9 +4744,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    82: [ function(require, module, exports) {
+    85: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4676,9 +4767,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    83: [ function(require, module, exports) {
+    86: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4694,9 +4785,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    84: [ function(require, module, exports) {
+    87: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4706,9 +4797,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    85: [ function(require, module, exports) {
+    88: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -4718,9 +4809,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 94
+        "hbsfy/runtime": 97
     } ],
-    86: [ function(require, module, exports) {
+    89: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -4760,14 +4851,14 @@
         exports["default"] = inst;
         module.exports = exports["default"];
     }, {
-        "./handlebars/base": 87,
-        "./handlebars/exception": 88,
-        "./handlebars/no-conflict": 89,
-        "./handlebars/runtime": 90,
-        "./handlebars/safe-string": 91,
-        "./handlebars/utils": 92
+        "./handlebars/base": 90,
+        "./handlebars/exception": 91,
+        "./handlebars/no-conflict": 92,
+        "./handlebars/runtime": 93,
+        "./handlebars/safe-string": 94,
+        "./handlebars/utils": 95
     } ],
-    87: [ function(require, module, exports) {
+    90: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -4991,10 +5082,10 @@
             return frame;
         }
     }, {
-        "./exception": 88,
-        "./utils": 92
+        "./exception": 91,
+        "./utils": 95
     } ],
-    88: [ function(require, module, exports) {
+    91: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         var errorProps = [ "description", "fileName", "lineNumber", "message", "name", "number", "stack" ];
@@ -5021,7 +5112,7 @@
         exports["default"] = Exception;
         module.exports = exports["default"];
     }, {} ],
-    89: [ function(require, module, exports) {
+    92: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports["default"] = function(Handlebars) {
@@ -5034,7 +5125,7 @@
         };
         module.exports = exports["default"];
     }, {} ],
-    90: [ function(require, module, exports) {
+    93: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -5221,11 +5312,11 @@
             return data;
         }
     }, {
-        "./base": 87,
-        "./exception": 88,
-        "./utils": 92
+        "./base": 90,
+        "./exception": 91,
+        "./utils": 95
     } ],
-    91: [ function(require, module, exports) {
+    94: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         function SafeString(string) {
@@ -5237,7 +5328,7 @@
         exports["default"] = SafeString;
         module.exports = exports["default"];
     }, {} ],
-    92: [ function(require, module, exports) {
+    95: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports.extend = extend;
@@ -5325,14 +5416,1539 @@
             return (contextPath ? contextPath + "." : "") + id;
         }
     }, {} ],
-    93: [ function(require, module, exports) {
+    96: [ function(require, module, exports) {
         module.exports = require("./dist/cjs/handlebars.runtime")["default"];
     }, {
-        "./dist/cjs/handlebars.runtime": 86
+        "./dist/cjs/handlebars.runtime": 89
     } ],
-    94: [ function(require, module, exports) {
+    97: [ function(require, module, exports) {
         module.exports = require("handlebars/runtime")["default"];
     }, {
-        "handlebars/runtime": 93
-    } ]
+        "handlebars/runtime": 96
+    } ],
+    98: [ function(require, module, exports) {
+        (function(root, factory) {
+            if (typeof define === "function" && define.amd) {
+                define(factory);
+            } else if (typeof exports === "object") {
+                module.exports = factory(require, exports, module);
+            } else {
+                root.Tether = factory();
+            }
+        })(this, function(require, exports, module) {
+            "use strict";
+            var _createClass = function() {
+                function defineProperties(target, props) {
+                    for (var i = 0; i < props.length; i++) {
+                        var descriptor = props[i];
+                        descriptor.enumerable = descriptor.enumerable || false;
+                        descriptor.configurable = true;
+                        if ("value" in descriptor) descriptor.writable = true;
+                        Object.defineProperty(target, descriptor.key, descriptor);
+                    }
+                }
+                return function(Constructor, protoProps, staticProps) {
+                    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+                    if (staticProps) defineProperties(Constructor, staticProps);
+                    return Constructor;
+                };
+            }();
+            function _classCallCheck(instance, Constructor) {
+                if (!(instance instanceof Constructor)) {
+                    throw new TypeError("Cannot call a class as a function");
+                }
+            }
+            var TetherBase = undefined;
+            if (typeof TetherBase === "undefined") {
+                TetherBase = {
+                    modules: []
+                };
+            }
+            function getScrollParent(el) {
+                var _getComputedStyle = getComputedStyle(el);
+                var position = _getComputedStyle.position;
+                if (position === "fixed") {
+                    return el;
+                }
+                var parent = el;
+                while (parent = parent.parentNode) {
+                    var style = undefined;
+                    try {
+                        style = getComputedStyle(parent);
+                    } catch (err) {}
+                    if (typeof style === "undefined" || style === null) {
+                        return parent;
+                    }
+                    var overflow = style.overflow;
+                    var overflowX = style.overflowX;
+                    var overflowY = style.overflowY;
+                    if (/(auto|scroll)/.test(overflow + overflowY + overflowX)) {
+                        if (position !== "absolute" || [ "relative", "absolute", "fixed" ].indexOf(style.position) >= 0) {
+                            return parent;
+                        }
+                    }
+                }
+                return document.body;
+            }
+            var uniqueId = function() {
+                var id = 0;
+                return function() {
+                    return ++id;
+                };
+            }();
+            var zeroPosCache = {};
+            var getOrigin = function getOrigin(doc) {
+                var node = doc._tetherZeroElement;
+                if (typeof node === "undefined") {
+                    node = doc.createElement("div");
+                    node.setAttribute("data-tether-id", uniqueId());
+                    extend(node.style, {
+                        top: 0,
+                        left: 0,
+                        position: "absolute"
+                    });
+                    doc.body.appendChild(node);
+                    doc._tetherZeroElement = node;
+                }
+                var id = node.getAttribute("data-tether-id");
+                if (typeof zeroPosCache[id] === "undefined") {
+                    zeroPosCache[id] = {};
+                    var rect = node.getBoundingClientRect();
+                    for (var k in rect) {
+                        zeroPosCache[id][k] = rect[k];
+                    }
+                    defer(function() {
+                        delete zeroPosCache[id];
+                    });
+                }
+                return zeroPosCache[id];
+            };
+            function getBounds(el) {
+                var doc = undefined;
+                if (el === document) {
+                    doc = document;
+                    el = document.documentElement;
+                } else {
+                    doc = el.ownerDocument;
+                }
+                var docEl = doc.documentElement;
+                var box = {};
+                var rect = el.getBoundingClientRect();
+                for (var k in rect) {
+                    box[k] = rect[k];
+                }
+                var origin = getOrigin(doc);
+                box.top -= origin.top;
+                box.left -= origin.left;
+                if (typeof box.width === "undefined") {
+                    box.width = document.body.scrollWidth - box.left - box.right;
+                }
+                if (typeof box.height === "undefined") {
+                    box.height = document.body.scrollHeight - box.top - box.bottom;
+                }
+                box.top = box.top - docEl.clientTop;
+                box.left = box.left - docEl.clientLeft;
+                box.right = doc.body.clientWidth - box.width - box.left;
+                box.bottom = doc.body.clientHeight - box.height - box.top;
+                return box;
+            }
+            function getOffsetParent(el) {
+                return el.offsetParent || document.documentElement;
+            }
+            function getScrollBarSize() {
+                var inner = document.createElement("div");
+                inner.style.width = "100%";
+                inner.style.height = "200px";
+                var outer = document.createElement("div");
+                extend(outer.style, {
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    pointerEvents: "none",
+                    visibility: "hidden",
+                    width: "200px",
+                    height: "150px",
+                    overflow: "hidden"
+                });
+                outer.appendChild(inner);
+                document.body.appendChild(outer);
+                var widthContained = inner.offsetWidth;
+                outer.style.overflow = "scroll";
+                var widthScroll = inner.offsetWidth;
+                if (widthContained === widthScroll) {
+                    widthScroll = outer.clientWidth;
+                }
+                document.body.removeChild(outer);
+                var width = widthContained - widthScroll;
+                return {
+                    width: width,
+                    height: width
+                };
+            }
+            function extend() {
+                var out = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+                var args = [];
+                Array.prototype.push.apply(args, arguments);
+                args.slice(1).forEach(function(obj) {
+                    if (obj) {
+                        for (var key in obj) {
+                            if ({}.hasOwnProperty.call(obj, key)) {
+                                out[key] = obj[key];
+                            }
+                        }
+                    }
+                });
+                return out;
+            }
+            function removeClass(el, name) {
+                if (typeof el.classList !== "undefined") {
+                    name.split(" ").forEach(function(cls) {
+                        if (cls.trim()) {
+                            el.classList.remove(cls);
+                        }
+                    });
+                } else {
+                    var regex = new RegExp("(^| )" + name.split(" ").join("|") + "( |$)", "gi");
+                    var className = getClassName(el).replace(regex, " ");
+                    setClassName(el, className);
+                }
+            }
+            function addClass(el, name) {
+                if (typeof el.classList !== "undefined") {
+                    name.split(" ").forEach(function(cls) {
+                        if (cls.trim()) {
+                            el.classList.add(cls);
+                        }
+                    });
+                } else {
+                    removeClass(el, name);
+                    var cls = getClassName(el) + (" " + name);
+                    setClassName(el, cls);
+                }
+            }
+            function hasClass(el, name) {
+                if (typeof el.classList !== "undefined") {
+                    return el.classList.contains(name);
+                }
+                var className = getClassName(el);
+                return new RegExp("(^| )" + name + "( |$)", "gi").test(className);
+            }
+            function getClassName(el) {
+                if (el.className instanceof SVGAnimatedString) {
+                    return el.className.baseVal;
+                }
+                return el.className;
+            }
+            function setClassName(el, className) {
+                el.setAttribute("class", className);
+            }
+            function updateClasses(el, add, all) {
+                all.forEach(function(cls) {
+                    if (add.indexOf(cls) === -1 && hasClass(el, cls)) {
+                        removeClass(el, cls);
+                    }
+                });
+                add.forEach(function(cls) {
+                    if (!hasClass(el, cls)) {
+                        addClass(el, cls);
+                    }
+                });
+            }
+            var deferred = [];
+            var defer = function defer(fn) {
+                deferred.push(fn);
+            };
+            var flush = function flush() {
+                var fn = undefined;
+                while (fn = deferred.pop()) {
+                    fn();
+                }
+            };
+            var Evented = function() {
+                function Evented() {
+                    _classCallCheck(this, Evented);
+                }
+                _createClass(Evented, [ {
+                    key: "on",
+                    value: function on(event, handler, ctx) {
+                        var once = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+                        if (typeof this.bindings === "undefined") {
+                            this.bindings = {};
+                        }
+                        if (typeof this.bindings[event] === "undefined") {
+                            this.bindings[event] = [];
+                        }
+                        this.bindings[event].push({
+                            handler: handler,
+                            ctx: ctx,
+                            once: once
+                        });
+                    }
+                }, {
+                    key: "once",
+                    value: function once(event, handler, ctx) {
+                        this.on(event, handler, ctx, true);
+                    }
+                }, {
+                    key: "off",
+                    value: function off(event, handler) {
+                        if (typeof this.bindings !== "undefined" && typeof this.bindings[event] !== "undefined") {
+                            return;
+                        }
+                        if (typeof handler === "undefined") {
+                            delete this.bindings[event];
+                        } else {
+                            var i = 0;
+                            while (i < this.bindings[event].length) {
+                                if (this.bindings[event][i].handler === handler) {
+                                    this.bindings[event].splice(i, 1);
+                                } else {
+                                    ++i;
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    key: "trigger",
+                    value: function trigger(event) {
+                        if (typeof this.bindings !== "undefined" && this.bindings[event]) {
+                            var i = 0;
+                            while (i < this.bindings[event].length) {
+                                var _bindings$event$i = this.bindings[event][i];
+                                var handler = _bindings$event$i.handler;
+                                var ctx = _bindings$event$i.ctx;
+                                var once = _bindings$event$i.once;
+                                var context = ctx;
+                                if (typeof context === "undefined") {
+                                    context = this;
+                                }
+                                for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                                    args[_key - 1] = arguments[_key];
+                                }
+                                handler.apply(context, args);
+                                if (once) {
+                                    this.bindings[event].splice(i, 1);
+                                } else {
+                                    ++i;
+                                }
+                            }
+                        }
+                    }
+                } ]);
+                return Evented;
+            }();
+            TetherBase.Utils = {
+                getScrollParent: getScrollParent,
+                getBounds: getBounds,
+                getOffsetParent: getOffsetParent,
+                extend: extend,
+                addClass: addClass,
+                removeClass: removeClass,
+                hasClass: hasClass,
+                updateClasses: updateClasses,
+                defer: defer,
+                flush: flush,
+                uniqueId: uniqueId,
+                Evented: Evented,
+                getScrollBarSize: getScrollBarSize
+            };
+            "use strict";
+            var _slicedToArray = function() {
+                function sliceIterator(arr, i) {
+                    var _arr = [];
+                    var _n = true;
+                    var _d = false;
+                    var _e = undefined;
+                    try {
+                        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                            _arr.push(_s.value);
+                            if (i && _arr.length === i) break;
+                        }
+                    } catch (err) {
+                        _d = true;
+                        _e = err;
+                    } finally {
+                        try {
+                            if (!_n && _i["return"]) _i["return"]();
+                        } finally {
+                            if (_d) throw _e;
+                        }
+                    }
+                    return _arr;
+                }
+                return function(arr, i) {
+                    if (Array.isArray(arr)) {
+                        return arr;
+                    } else if (Symbol.iterator in Object(arr)) {
+                        return sliceIterator(arr, i);
+                    } else {
+                        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+                    }
+                };
+            }();
+            var _createClass = function() {
+                function defineProperties(target, props) {
+                    for (var i = 0; i < props.length; i++) {
+                        var descriptor = props[i];
+                        descriptor.enumerable = descriptor.enumerable || false;
+                        descriptor.configurable = true;
+                        if ("value" in descriptor) descriptor.writable = true;
+                        Object.defineProperty(target, descriptor.key, descriptor);
+                    }
+                }
+                return function(Constructor, protoProps, staticProps) {
+                    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+                    if (staticProps) defineProperties(Constructor, staticProps);
+                    return Constructor;
+                };
+            }();
+            function _classCallCheck(instance, Constructor) {
+                if (!(instance instanceof Constructor)) {
+                    throw new TypeError("Cannot call a class as a function");
+                }
+            }
+            if (typeof TetherBase === "undefined") {
+                throw new Error("You must include the utils.js file before tether.js");
+            }
+            var _TetherBase$Utils = TetherBase.Utils;
+            var getScrollParent = _TetherBase$Utils.getScrollParent;
+            var getBounds = _TetherBase$Utils.getBounds;
+            var getOffsetParent = _TetherBase$Utils.getOffsetParent;
+            var extend = _TetherBase$Utils.extend;
+            var addClass = _TetherBase$Utils.addClass;
+            var removeClass = _TetherBase$Utils.removeClass;
+            var updateClasses = _TetherBase$Utils.updateClasses;
+            var defer = _TetherBase$Utils.defer;
+            var flush = _TetherBase$Utils.flush;
+            var getScrollBarSize = _TetherBase$Utils.getScrollBarSize;
+            function within(a, b) {
+                var diff = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
+                return a + diff >= b && b >= a - diff;
+            }
+            var transformKey = function() {
+                var el = document.createElement("div");
+                var transforms = [ "transform", "webkitTransform", "OTransform", "MozTransform", "msTransform" ];
+                for (var i = 0; i < transforms.length; ++i) {
+                    var key = transforms[i];
+                    if (el.style[key] !== undefined) {
+                        return key;
+                    }
+                }
+            }();
+            var tethers = [];
+            var position = function position() {
+                tethers.forEach(function(tether) {
+                    tether.position(false);
+                });
+                flush();
+            };
+            function now() {
+                if (typeof performance !== "undefined" && typeof performance.now !== "undefined") {
+                    return performance.now();
+                }
+                return +new Date();
+            }
+            (function() {
+                var lastCall = null;
+                var lastDuration = null;
+                var pendingTimeout = null;
+                var tick = function tick() {
+                    if (typeof lastDuration !== "undefined" && lastDuration > 16) {
+                        lastDuration = Math.min(lastDuration - 16, 250);
+                        pendingTimeout = setTimeout(tick, 250);
+                        return;
+                    }
+                    if (typeof lastCall !== "undefined" && now() - lastCall < 10) {
+                        return;
+                    }
+                    if (typeof pendingTimeout !== "undefined") {
+                        clearTimeout(pendingTimeout);
+                        pendingTimeout = null;
+                    }
+                    lastCall = now();
+                    position();
+                    lastDuration = now() - lastCall;
+                };
+                [ "resize", "scroll", "touchmove" ].forEach(function(event) {
+                    window.addEventListener(event, tick);
+                });
+            })();
+            var MIRROR_LR = {
+                center: "center",
+                left: "right",
+                right: "left"
+            };
+            var MIRROR_TB = {
+                middle: "middle",
+                top: "bottom",
+                bottom: "top"
+            };
+            var OFFSET_MAP = {
+                top: 0,
+                left: 0,
+                middle: "50%",
+                center: "50%",
+                bottom: "100%",
+                right: "100%"
+            };
+            var autoToFixedAttachment = function autoToFixedAttachment(attachment, relativeToAttachment) {
+                var left = attachment.left;
+                var top = attachment.top;
+                if (left === "auto") {
+                    left = MIRROR_LR[relativeToAttachment.left];
+                }
+                if (top === "auto") {
+                    top = MIRROR_TB[relativeToAttachment.top];
+                }
+                return {
+                    left: left,
+                    top: top
+                };
+            };
+            var attachmentToOffset = function attachmentToOffset(attachment) {
+                var left = attachment.left;
+                var top = attachment.top;
+                if (typeof OFFSET_MAP[attachment.left] !== "undefined") {
+                    left = OFFSET_MAP[attachment.left];
+                }
+                if (typeof OFFSET_MAP[attachment.top] !== "undefined") {
+                    top = OFFSET_MAP[attachment.top];
+                }
+                return {
+                    left: left,
+                    top: top
+                };
+            };
+            function addOffset() {
+                var out = {
+                    top: 0,
+                    left: 0
+                };
+                for (var _len = arguments.length, offsets = Array(_len), _key = 0; _key < _len; _key++) {
+                    offsets[_key] = arguments[_key];
+                }
+                offsets.forEach(function(_ref) {
+                    var top = _ref.top;
+                    var left = _ref.left;
+                    if (typeof top === "string") {
+                        top = parseFloat(top, 10);
+                    }
+                    if (typeof left === "string") {
+                        left = parseFloat(left, 10);
+                    }
+                    out.top += top;
+                    out.left += left;
+                });
+                return out;
+            }
+            function offsetToPx(offset, size) {
+                if (typeof offset.left === "string" && offset.left.indexOf("%") !== -1) {
+                    offset.left = parseFloat(offset.left, 10) / 100 * size.width;
+                }
+                if (typeof offset.top === "string" && offset.top.indexOf("%") !== -1) {
+                    offset.top = parseFloat(offset.top, 10) / 100 * size.height;
+                }
+                return offset;
+            }
+            var parseOffset = function parseOffset(value) {
+                var _value$split = value.split(" ");
+                var _value$split2 = _slicedToArray(_value$split, 2);
+                var top = _value$split2[0];
+                var left = _value$split2[1];
+                return {
+                    top: top,
+                    left: left
+                };
+            };
+            var parseAttachment = parseOffset;
+            var TetherClass = function() {
+                function TetherClass(options) {
+                    var _this = this;
+                    _classCallCheck(this, TetherClass);
+                    this.position = this.position.bind(this);
+                    tethers.push(this);
+                    this.history = [];
+                    this.setOptions(options, false);
+                    TetherBase.modules.forEach(function(module) {
+                        if (typeof module.initialize !== "undefined") {
+                            module.initialize.call(_this);
+                        }
+                    });
+                    this.position();
+                }
+                _createClass(TetherClass, [ {
+                    key: "getClass",
+                    value: function getClass() {
+                        var key = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+                        var classes = this.options.classes;
+                        if (typeof classes !== "undefined" && classes[key]) {
+                            return this.options.classes[key];
+                        } else if (this.options.classPrefix) {
+                            return this.options.classPrefix + "-" + key;
+                        } else {
+                            return key;
+                        }
+                    }
+                }, {
+                    key: "setOptions",
+                    value: function setOptions(options) {
+                        var _this2 = this;
+                        var pos = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+                        var defaults = {
+                            offset: "0 0",
+                            targetOffset: "0 0",
+                            targetAttachment: "auto auto",
+                            classPrefix: "tether"
+                        };
+                        this.options = extend(defaults, options);
+                        var _options = this.options;
+                        var element = _options.element;
+                        var target = _options.target;
+                        var targetModifier = _options.targetModifier;
+                        this.element = element;
+                        this.target = target;
+                        this.targetModifier = targetModifier;
+                        if (this.target === "viewport") {
+                            this.target = document.body;
+                            this.targetModifier = "visible";
+                        } else if (this.target === "scroll-handle") {
+                            this.target = document.body;
+                            this.targetModifier = "scroll-handle";
+                        }
+                        [ "element", "target" ].forEach(function(key) {
+                            if (typeof _this2[key] === "undefined") {
+                                throw new Error("Tether Error: Both element and target must be defined");
+                            }
+                            if (typeof _this2[key].jquery !== "undefined") {
+                                _this2[key] = _this2[key][0];
+                            } else if (typeof _this2[key] === "string") {
+                                _this2[key] = document.querySelector(_this2[key]);
+                            }
+                        });
+                        addClass(this.element, this.getClass("element"));
+                        if (!(this.options.addTargetClasses === false)) {
+                            addClass(this.target, this.getClass("target"));
+                        }
+                        if (!this.options.attachment) {
+                            throw new Error("Tether Error: You must provide an attachment");
+                        }
+                        this.targetAttachment = parseAttachment(this.options.targetAttachment);
+                        this.attachment = parseAttachment(this.options.attachment);
+                        this.offset = parseOffset(this.options.offset);
+                        this.targetOffset = parseOffset(this.options.targetOffset);
+                        if (typeof this.scrollParent !== "undefined") {
+                            this.disable();
+                        }
+                        if (this.targetModifier === "scroll-handle") {
+                            this.scrollParent = this.target;
+                        } else {
+                            this.scrollParent = getScrollParent(this.target);
+                        }
+                        if (!(this.options.enabled === false)) {
+                            this.enable(pos);
+                        }
+                    }
+                }, {
+                    key: "getTargetBounds",
+                    value: function getTargetBounds() {
+                        if (typeof this.targetModifier !== "undefined") {
+                            if (this.targetModifier === "visible") {
+                                if (this.target === document.body) {
+                                    return {
+                                        top: pageYOffset,
+                                        left: pageXOffset,
+                                        height: innerHeight,
+                                        width: innerWidth
+                                    };
+                                } else {
+                                    var bounds = getBounds(this.target);
+                                    var out = {
+                                        height: bounds.height,
+                                        width: bounds.width,
+                                        top: bounds.top,
+                                        left: bounds.left
+                                    };
+                                    out.height = Math.min(out.height, bounds.height - (pageYOffset - bounds.top));
+                                    out.height = Math.min(out.height, bounds.height - (bounds.top + bounds.height - (pageYOffset + innerHeight)));
+                                    out.height = Math.min(innerHeight, out.height);
+                                    out.height -= 2;
+                                    out.width = Math.min(out.width, bounds.width - (pageXOffset - bounds.left));
+                                    out.width = Math.min(out.width, bounds.width - (bounds.left + bounds.width - (pageXOffset + innerWidth)));
+                                    out.width = Math.min(innerWidth, out.width);
+                                    out.width -= 2;
+                                    if (out.top < pageYOffset) {
+                                        out.top = pageYOffset;
+                                    }
+                                    if (out.left < pageXOffset) {
+                                        out.left = pageXOffset;
+                                    }
+                                    return out;
+                                }
+                            } else if (this.targetModifier === "scroll-handle") {
+                                var bounds = undefined;
+                                var target = this.target;
+                                if (target === document.body) {
+                                    target = document.documentElement;
+                                    bounds = {
+                                        left: pageXOffset,
+                                        top: pageYOffset,
+                                        height: innerHeight,
+                                        width: innerWidth
+                                    };
+                                } else {
+                                    bounds = getBounds(target);
+                                }
+                                var style = getComputedStyle(target);
+                                var hasBottomScroll = target.scrollWidth > target.clientWidth || [ style.overflow, style.overflowX ].indexOf("scroll") >= 0 || this.target !== document.body;
+                                var scrollBottom = 0;
+                                if (hasBottomScroll) {
+                                    scrollBottom = 15;
+                                }
+                                var height = bounds.height - parseFloat(style.borderTopWidth) - parseFloat(style.borderBottomWidth) - scrollBottom;
+                                var out = {
+                                    width: 15,
+                                    height: height * .975 * (height / target.scrollHeight),
+                                    left: bounds.left + bounds.width - parseFloat(style.borderLeftWidth) - 15
+                                };
+                                var fitAdj = 0;
+                                if (height < 408 && this.target === document.body) {
+                                    fitAdj = -11e-5 * Math.pow(height, 2) - .00727 * height + 22.58;
+                                }
+                                if (this.target !== document.body) {
+                                    out.height = Math.max(out.height, 24);
+                                }
+                                var scrollPercentage = this.target.scrollTop / (target.scrollHeight - height);
+                                out.top = scrollPercentage * (height - out.height - fitAdj) + bounds.top + parseFloat(style.borderTopWidth);
+                                if (this.target === document.body) {
+                                    out.height = Math.max(out.height, 24);
+                                }
+                                return out;
+                            }
+                        } else {
+                            return getBounds(this.target);
+                        }
+                    }
+                }, {
+                    key: "clearCache",
+                    value: function clearCache() {
+                        this._cache = {};
+                    }
+                }, {
+                    key: "cache",
+                    value: function cache(k, getter) {
+                        if (typeof this._cache === "undefined") {
+                            this._cache = {};
+                        }
+                        if (typeof this._cache[k] === "undefined") {
+                            this._cache[k] = getter.call(this);
+                        }
+                        return this._cache[k];
+                    }
+                }, {
+                    key: "enable",
+                    value: function enable() {
+                        var pos = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+                        if (!(this.options.addTargetClasses === false)) {
+                            addClass(this.target, this.getClass("enabled"));
+                        }
+                        addClass(this.element, this.getClass("enabled"));
+                        this.enabled = true;
+                        if (this.scrollParent !== document) {
+                            this.scrollParent.addEventListener("scroll", this.position);
+                        }
+                        if (pos) {
+                            this.position();
+                        }
+                    }
+                }, {
+                    key: "disable",
+                    value: function disable() {
+                        removeClass(this.target, this.getClass("enabled"));
+                        removeClass(this.element, this.getClass("enabled"));
+                        this.enabled = false;
+                        if (typeof this.scrollParent !== "undefined") {
+                            this.scrollParent.removeEventListener("scroll", this.position);
+                        }
+                    }
+                }, {
+                    key: "destroy",
+                    value: function destroy() {
+                        var _this3 = this;
+                        this.disable();
+                        tethers.forEach(function(tether, i) {
+                            if (tether === _this3) {
+                                tethers.splice(i, 1);
+                                return;
+                            }
+                        });
+                    }
+                }, {
+                    key: "updateAttachClasses",
+                    value: function updateAttachClasses(elementAttach, targetAttach) {
+                        var _this4 = this;
+                        elementAttach = elementAttach || this.attachment;
+                        targetAttach = targetAttach || this.targetAttachment;
+                        var sides = [ "left", "top", "bottom", "right", "middle", "center" ];
+                        if (typeof this._addAttachClasses !== "undefined" && this._addAttachClasses.length) {
+                            this._addAttachClasses.splice(0, this._addAttachClasses.length);
+                        }
+                        if (typeof this._addAttachClasses === "undefined") {
+                            this._addAttachClasses = [];
+                        }
+                        var add = this._addAttachClasses;
+                        if (elementAttach.top) {
+                            add.push(this.getClass("element-attached") + "-" + elementAttach.top);
+                        }
+                        if (elementAttach.left) {
+                            add.push(this.getClass("element-attached") + "-" + elementAttach.left);
+                        }
+                        if (targetAttach.top) {
+                            add.push(this.getClass("target-attached") + "-" + targetAttach.top);
+                        }
+                        if (targetAttach.left) {
+                            add.push(this.getClass("target-attached") + "-" + targetAttach.left);
+                        }
+                        var all = [];
+                        sides.forEach(function(side) {
+                            all.push(_this4.getClass("element-attached") + "-" + side);
+                            all.push(_this4.getClass("target-attached") + "-" + side);
+                        });
+                        defer(function() {
+                            if (!(typeof _this4._addAttachClasses !== "undefined")) {
+                                return;
+                            }
+                            updateClasses(_this4.element, _this4._addAttachClasses, all);
+                            if (!(_this4.options.addTargetClasses === false)) {
+                                updateClasses(_this4.target, _this4._addAttachClasses, all);
+                            }
+                            delete _this4._addAttachClasses;
+                        });
+                    }
+                }, {
+                    key: "position",
+                    value: function position() {
+                        var _this5 = this;
+                        var flushChanges = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+                        if (!this.enabled) {
+                            return;
+                        }
+                        this.clearCache();
+                        var targetAttachment = autoToFixedAttachment(this.targetAttachment, this.attachment);
+                        this.updateAttachClasses(this.attachment, targetAttachment);
+                        var elementPos = this.cache("element-bounds", function() {
+                            return getBounds(_this5.element);
+                        });
+                        var width = elementPos.width;
+                        var height = elementPos.height;
+                        if (width === 0 && height === 0 && typeof this.lastSize !== "undefined") {
+                            var _lastSize = this.lastSize;
+                            width = _lastSize.width;
+                            height = _lastSize.height;
+                        } else {
+                            this.lastSize = {
+                                width: width,
+                                height: height
+                            };
+                        }
+                        var targetPos = this.cache("target-bounds", function() {
+                            return _this5.getTargetBounds();
+                        });
+                        var targetSize = targetPos;
+                        var offset = offsetToPx(attachmentToOffset(this.attachment), {
+                            width: width,
+                            height: height
+                        });
+                        var targetOffset = offsetToPx(attachmentToOffset(targetAttachment), targetSize);
+                        var manualOffset = offsetToPx(this.offset, {
+                            width: width,
+                            height: height
+                        });
+                        var manualTargetOffset = offsetToPx(this.targetOffset, targetSize);
+                        offset = addOffset(offset, manualOffset);
+                        targetOffset = addOffset(targetOffset, manualTargetOffset);
+                        var left = targetPos.left + targetOffset.left - offset.left;
+                        var top = targetPos.top + targetOffset.top - offset.top;
+                        for (var i = 0; i < TetherBase.modules.length; ++i) {
+                            var _module2 = TetherBase.modules[i];
+                            var ret = _module2.position.call(this, {
+                                left: left,
+                                top: top,
+                                targetAttachment: targetAttachment,
+                                targetPos: targetPos,
+                                elementPos: elementPos,
+                                offset: offset,
+                                targetOffset: targetOffset,
+                                manualOffset: manualOffset,
+                                manualTargetOffset: manualTargetOffset,
+                                scrollbarSize: scrollbarSize,
+                                attachment: this.attachment
+                            });
+                            if (ret === false) {
+                                return false;
+                            } else if (typeof ret === "undefined" || typeof ret !== "object") {
+                                continue;
+                            } else {
+                                top = ret.top;
+                                left = ret.left;
+                            }
+                        }
+                        var next = {
+                            page: {
+                                top: top,
+                                left: left
+                            },
+                            viewport: {
+                                top: top - pageYOffset,
+                                bottom: pageYOffset - top - height + innerHeight,
+                                left: left - pageXOffset,
+                                right: pageXOffset - left - width + innerWidth
+                            }
+                        };
+                        var scrollbarSize = undefined;
+                        if (document.body.scrollWidth > window.innerWidth) {
+                            scrollbarSize = this.cache("scrollbar-size", getScrollBarSize);
+                            next.viewport.bottom -= scrollbarSize.height;
+                        }
+                        if (document.body.scrollHeight > window.innerHeight) {
+                            scrollbarSize = this.cache("scrollbar-size", getScrollBarSize);
+                            next.viewport.right -= scrollbarSize.width;
+                        }
+                        if ([ "", "static" ].indexOf(document.body.style.position) === -1 || [ "", "static" ].indexOf(document.body.parentElement.style.position) === -1) {
+                            next.page.bottom = document.body.scrollHeight - top - height;
+                            next.page.right = document.body.scrollWidth - left - width;
+                        }
+                        if (typeof this.options.optimizations !== "undefined" && this.options.optimizations.moveElement !== false && !(typeof this.targetModifier !== "undefined")) {
+                            (function() {
+                                var offsetParent = _this5.cache("target-offsetparent", function() {
+                                    return getOffsetParent(_this5.target);
+                                });
+                                var offsetPosition = _this5.cache("target-offsetparent-bounds", function() {
+                                    return getBounds(offsetParent);
+                                });
+                                var offsetParentStyle = getComputedStyle(offsetParent);
+                                var offsetParentSize = offsetPosition;
+                                var offsetBorder = {};
+                                [ "Top", "Left", "Bottom", "Right" ].forEach(function(side) {
+                                    offsetBorder[side.toLowerCase()] = parseFloat(offsetParentStyle["border" + side + "Width"]);
+                                });
+                                offsetPosition.right = document.body.scrollWidth - offsetPosition.left - offsetParentSize.width + offsetBorder.right;
+                                offsetPosition.bottom = document.body.scrollHeight - offsetPosition.top - offsetParentSize.height + offsetBorder.bottom;
+                                if (next.page.top >= offsetPosition.top + offsetBorder.top && next.page.bottom >= offsetPosition.bottom) {
+                                    if (next.page.left >= offsetPosition.left + offsetBorder.left && next.page.right >= offsetPosition.right) {
+                                        var scrollTop = offsetParent.scrollTop;
+                                        var scrollLeft = offsetParent.scrollLeft;
+                                        next.offset = {
+                                            top: next.page.top - offsetPosition.top + scrollTop - offsetBorder.top,
+                                            left: next.page.left - offsetPosition.left + scrollLeft - offsetBorder.left
+                                        };
+                                    }
+                                }
+                            })();
+                        }
+                        this.move(next);
+                        this.history.unshift(next);
+                        if (this.history.length > 3) {
+                            this.history.pop();
+                        }
+                        if (flushChanges) {
+                            flush();
+                        }
+                        return true;
+                    }
+                }, {
+                    key: "move",
+                    value: function move(pos) {
+                        var _this6 = this;
+                        if (!(typeof this.element.parentNode !== "undefined")) {
+                            return;
+                        }
+                        var same = {};
+                        for (var type in pos) {
+                            same[type] = {};
+                            for (var key in pos[type]) {
+                                var found = false;
+                                for (var i = 0; i < this.history.length; ++i) {
+                                    var point = this.history[i];
+                                    if (typeof point[type] !== "undefined" && !within(point[type][key], pos[type][key])) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    same[type][key] = true;
+                                }
+                            }
+                        }
+                        var css = {
+                            top: "",
+                            left: "",
+                            right: "",
+                            bottom: ""
+                        };
+                        var transcribe = function transcribe(_same, _pos) {
+                            var hasOptimizations = typeof _this6.options.optimizations !== "undefined";
+                            var gpu = hasOptimizations ? _this6.options.optimizations.gpu : null;
+                            if (gpu !== false) {
+                                var yPos = undefined, xPos = undefined;
+                                if (_same.top) {
+                                    css.top = 0;
+                                    yPos = _pos.top;
+                                } else {
+                                    css.bottom = 0;
+                                    yPos = -_pos.bottom;
+                                }
+                                if (_same.left) {
+                                    css.left = 0;
+                                    xPos = _pos.left;
+                                } else {
+                                    css.right = 0;
+                                    xPos = -_pos.right;
+                                }
+                                css[transformKey] = "translateX(" + Math.round(xPos) + "px) translateY(" + Math.round(yPos) + "px)";
+                                if (transformKey !== "msTransform") {
+                                    css[transformKey] += " translateZ(0)";
+                                }
+                            } else {
+                                if (_same.top) {
+                                    css.top = _pos.top + "px";
+                                } else {
+                                    css.bottom = _pos.bottom + "px";
+                                }
+                                if (_same.left) {
+                                    css.left = _pos.left + "px";
+                                } else {
+                                    css.right = _pos.right + "px";
+                                }
+                            }
+                        };
+                        var moved = false;
+                        if ((same.page.top || same.page.bottom) && (same.page.left || same.page.right)) {
+                            css.position = "absolute";
+                            transcribe(same.page, pos.page);
+                        } else if ((same.viewport.top || same.viewport.bottom) && (same.viewport.left || same.viewport.right)) {
+                            css.position = "fixed";
+                            transcribe(same.viewport, pos.viewport);
+                        } else if (typeof same.offset !== "undefined" && same.offset.top && same.offset.left) {
+                            (function() {
+                                css.position = "absolute";
+                                var offsetParent = _this6.cache("target-offsetparent", function() {
+                                    return getOffsetParent(_this6.target);
+                                });
+                                if (getOffsetParent(_this6.element) !== offsetParent) {
+                                    defer(function() {
+                                        _this6.element.parentNode.removeChild(_this6.element);
+                                        offsetParent.appendChild(_this6.element);
+                                    });
+                                }
+                                transcribe(same.offset, pos.offset);
+                                moved = true;
+                            })();
+                        } else {
+                            css.position = "absolute";
+                            transcribe({
+                                top: true,
+                                left: true
+                            }, pos.page);
+                        }
+                        if (!moved) {
+                            var offsetParentIsBody = true;
+                            var currentNode = this.element.parentNode;
+                            while (currentNode && currentNode.tagName !== "BODY") {
+                                if (getComputedStyle(currentNode).position !== "static") {
+                                    offsetParentIsBody = false;
+                                    break;
+                                }
+                                currentNode = currentNode.parentNode;
+                            }
+                            if (!offsetParentIsBody) {
+                                this.element.parentNode.removeChild(this.element);
+                                document.body.appendChild(this.element);
+                            }
+                        }
+                        var writeCSS = {};
+                        var write = false;
+                        for (var key in css) {
+                            var val = css[key];
+                            var elVal = this.element.style[key];
+                            if (elVal !== "" && val !== "" && [ "top", "left", "bottom", "right" ].indexOf(key) >= 0) {
+                                elVal = parseFloat(elVal);
+                                val = parseFloat(val);
+                            }
+                            if (elVal !== val) {
+                                write = true;
+                                writeCSS[key] = val;
+                            }
+                        }
+                        if (write) {
+                            defer(function() {
+                                extend(_this6.element.style, writeCSS);
+                            });
+                        }
+                    }
+                } ]);
+                return TetherClass;
+            }();
+            TetherClass.modules = [];
+            TetherBase.position = position;
+            var Tether = extend(TetherClass, TetherBase);
+            "use strict";
+            var _slicedToArray = function() {
+                function sliceIterator(arr, i) {
+                    var _arr = [];
+                    var _n = true;
+                    var _d = false;
+                    var _e = undefined;
+                    try {
+                        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                            _arr.push(_s.value);
+                            if (i && _arr.length === i) break;
+                        }
+                    } catch (err) {
+                        _d = true;
+                        _e = err;
+                    } finally {
+                        try {
+                            if (!_n && _i["return"]) _i["return"]();
+                        } finally {
+                            if (_d) throw _e;
+                        }
+                    }
+                    return _arr;
+                }
+                return function(arr, i) {
+                    if (Array.isArray(arr)) {
+                        return arr;
+                    } else if (Symbol.iterator in Object(arr)) {
+                        return sliceIterator(arr, i);
+                    } else {
+                        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+                    }
+                };
+            }();
+            var _TetherBase$Utils = TetherBase.Utils;
+            var getBounds = _TetherBase$Utils.getBounds;
+            var extend = _TetherBase$Utils.extend;
+            var updateClasses = _TetherBase$Utils.updateClasses;
+            var defer = _TetherBase$Utils.defer;
+            var BOUNDS_FORMAT = [ "left", "top", "right", "bottom" ];
+            function getBoundingRect(tether, to) {
+                if (to === "scrollParent") {
+                    to = tether.scrollParent;
+                } else if (to === "window") {
+                    to = [ pageXOffset, pageYOffset, innerWidth + pageXOffset, innerHeight + pageYOffset ];
+                }
+                if (to === document) {
+                    to = to.documentElement;
+                }
+                if (typeof to.nodeType !== "undefined") {
+                    (function() {
+                        var size = getBounds(to);
+                        var pos = size;
+                        var style = getComputedStyle(to);
+                        to = [ pos.left, pos.top, size.width + pos.left, size.height + pos.top ];
+                        BOUNDS_FORMAT.forEach(function(side, i) {
+                            side = side[0].toUpperCase() + side.substr(1);
+                            if (side === "Top" || side === "Left") {
+                                to[i] += parseFloat(style["border" + side + "Width"]);
+                            } else {
+                                to[i] -= parseFloat(style["border" + side + "Width"]);
+                            }
+                        });
+                    })();
+                }
+                return to;
+            }
+            TetherBase.modules.push({
+                position: function position(_ref) {
+                    var _this = this;
+                    var top = _ref.top;
+                    var left = _ref.left;
+                    var targetAttachment = _ref.targetAttachment;
+                    if (!this.options.constraints) {
+                        return true;
+                    }
+                    var _cache = this.cache("element-bounds", function() {
+                        return getBounds(_this.element);
+                    });
+                    var height = _cache.height;
+                    var width = _cache.width;
+                    if (width === 0 && height === 0 && typeof this.lastSize !== "undefined") {
+                        var _lastSize = this.lastSize;
+                        width = _lastSize.width;
+                        height = _lastSize.height;
+                    }
+                    var targetSize = this.cache("target-bounds", function() {
+                        return _this.getTargetBounds();
+                    });
+                    var targetHeight = targetSize.height;
+                    var targetWidth = targetSize.width;
+                    var allClasses = [ this.getClass("pinned"), this.getClass("out-of-bounds") ];
+                    this.options.constraints.forEach(function(constraint) {
+                        var outOfBoundsClass = constraint.outOfBoundsClass;
+                        var pinnedClass = constraint.pinnedClass;
+                        if (outOfBoundsClass) {
+                            allClasses.push(outOfBoundsClass);
+                        }
+                        if (pinnedClass) {
+                            allClasses.push(pinnedClass);
+                        }
+                    });
+                    allClasses.forEach(function(cls) {
+                        [ "left", "top", "right", "bottom" ].forEach(function(side) {
+                            allClasses.push(cls + "-" + side);
+                        });
+                    });
+                    var addClasses = [];
+                    var tAttachment = extend({}, targetAttachment);
+                    var eAttachment = extend({}, this.attachment);
+                    this.options.constraints.forEach(function(constraint) {
+                        var to = constraint.to;
+                        var attachment = constraint.attachment;
+                        var pin = constraint.pin;
+                        if (typeof attachment === "undefined") {
+                            attachment = "";
+                        }
+                        var changeAttachX = undefined, changeAttachY = undefined;
+                        if (attachment.indexOf(" ") >= 0) {
+                            var _attachment$split = attachment.split(" ");
+                            var _attachment$split2 = _slicedToArray(_attachment$split, 2);
+                            changeAttachY = _attachment$split2[0];
+                            changeAttachX = _attachment$split2[1];
+                        } else {
+                            changeAttachX = changeAttachY = attachment;
+                        }
+                        var bounds = getBoundingRect(_this, to);
+                        if (changeAttachY === "target" || changeAttachY === "both") {
+                            if (top < bounds[1] && tAttachment.top === "top") {
+                                top += targetHeight;
+                                tAttachment.top = "bottom";
+                            }
+                            if (top + height > bounds[3] && tAttachment.top === "bottom") {
+                                top -= targetHeight;
+                                tAttachment.top = "top";
+                            }
+                        }
+                        if (changeAttachY === "together") {
+                            if (top < bounds[1] && tAttachment.top === "top") {
+                                if (eAttachment.top === "bottom") {
+                                    top += targetHeight;
+                                    tAttachment.top = "bottom";
+                                    top += height;
+                                    eAttachment.top = "top";
+                                } else if (eAttachment.top === "top") {
+                                    top += targetHeight;
+                                    tAttachment.top = "bottom";
+                                    top -= height;
+                                    eAttachment.top = "bottom";
+                                }
+                            }
+                            if (top + height > bounds[3] && tAttachment.top === "bottom") {
+                                if (eAttachment.top === "top") {
+                                    top -= targetHeight;
+                                    tAttachment.top = "top";
+                                    top -= height;
+                                    eAttachment.top = "bottom";
+                                } else if (eAttachment.top === "bottom") {
+                                    top -= targetHeight;
+                                    tAttachment.top = "top";
+                                    top += height;
+                                    eAttachment.top = "top";
+                                }
+                            }
+                            if (tAttachment.top === "middle") {
+                                if (top + height > bounds[3] && eAttachment.top === "top") {
+                                    top -= height;
+                                    eAttachment.top = "bottom";
+                                } else if (top < bounds[1] && eAttachment.top === "bottom") {
+                                    top += height;
+                                    eAttachment.top = "top";
+                                }
+                            }
+                        }
+                        if (changeAttachX === "target" || changeAttachX === "both") {
+                            if (left < bounds[0] && tAttachment.left === "left") {
+                                left += targetWidth;
+                                tAttachment.left = "right";
+                            }
+                            if (left + width > bounds[2] && tAttachment.left === "right") {
+                                left -= targetWidth;
+                                tAttachment.left = "left";
+                            }
+                        }
+                        if (changeAttachX === "together") {
+                            if (left < bounds[0] && tAttachment.left === "left") {
+                                if (eAttachment.left === "right") {
+                                    left += targetWidth;
+                                    tAttachment.left = "right";
+                                    left += width;
+                                    eAttachment.left = "left";
+                                } else if (eAttachment.left === "left") {
+                                    left += targetWidth;
+                                    tAttachment.left = "right";
+                                    left -= width;
+                                    eAttachment.left = "right";
+                                }
+                            } else if (left + width > bounds[2] && tAttachment.left === "right") {
+                                if (eAttachment.left === "left") {
+                                    left -= targetWidth;
+                                    tAttachment.left = "left";
+                                    left -= width;
+                                    eAttachment.left = "right";
+                                } else if (eAttachment.left === "right") {
+                                    left -= targetWidth;
+                                    tAttachment.left = "left";
+                                    left += width;
+                                    eAttachment.left = "left";
+                                }
+                            } else if (tAttachment.left === "center") {
+                                if (left + width > bounds[2] && eAttachment.left === "left") {
+                                    left -= width;
+                                    eAttachment.left = "right";
+                                } else if (left < bounds[0] && eAttachment.left === "right") {
+                                    left += width;
+                                    eAttachment.left = "left";
+                                }
+                            }
+                        }
+                        if (changeAttachY === "element" || changeAttachY === "both") {
+                            if (top < bounds[1] && eAttachment.top === "bottom") {
+                                top += height;
+                                eAttachment.top = "top";
+                            }
+                            if (top + height > bounds[3] && eAttachment.top === "top") {
+                                top -= height;
+                                eAttachment.top = "bottom";
+                            }
+                        }
+                        if (changeAttachX === "element" || changeAttachX === "both") {
+                            if (left < bounds[0] && eAttachment.left === "right") {
+                                left += width;
+                                eAttachment.left = "left";
+                            }
+                            if (left + width > bounds[2] && eAttachment.left === "left") {
+                                left -= width;
+                                eAttachment.left = "right";
+                            }
+                        }
+                        if (typeof pin === "string") {
+                            pin = pin.split(",").map(function(p) {
+                                return p.trim();
+                            });
+                        } else if (pin === true) {
+                            pin = [ "top", "left", "right", "bottom" ];
+                        }
+                        pin = pin || [];
+                        var pinned = [];
+                        var oob = [];
+                        if (top < bounds[1]) {
+                            if (pin.indexOf("top") >= 0) {
+                                top = bounds[1];
+                                pinned.push("top");
+                            } else {
+                                oob.push("top");
+                            }
+                        }
+                        if (top + height > bounds[3]) {
+                            if (pin.indexOf("bottom") >= 0) {
+                                top = bounds[3] - height;
+                                pinned.push("bottom");
+                            } else {
+                                oob.push("bottom");
+                            }
+                        }
+                        if (left < bounds[0]) {
+                            if (pin.indexOf("left") >= 0) {
+                                left = bounds[0];
+                                pinned.push("left");
+                            } else {
+                                oob.push("left");
+                            }
+                        }
+                        if (left + width > bounds[2]) {
+                            if (pin.indexOf("right") >= 0) {
+                                left = bounds[2] - width;
+                                pinned.push("right");
+                            } else {
+                                oob.push("right");
+                            }
+                        }
+                        if (pinned.length) {
+                            (function() {
+                                var pinnedClass = undefined;
+                                if (typeof _this.options.pinnedClass !== "undefined") {
+                                    pinnedClass = _this.options.pinnedClass;
+                                } else {
+                                    pinnedClass = _this.getClass("pinned");
+                                }
+                                addClasses.push(pinnedClass);
+                                pinned.forEach(function(side) {
+                                    addClasses.push(pinnedClass + "-" + side);
+                                });
+                            })();
+                        }
+                        if (oob.length) {
+                            (function() {
+                                var oobClass = undefined;
+                                if (typeof _this.options.outOfBoundsClass !== "undefined") {
+                                    oobClass = _this.options.outOfBoundsClass;
+                                } else {
+                                    oobClass = _this.getClass("out-of-bounds");
+                                }
+                                addClasses.push(oobClass);
+                                oob.forEach(function(side) {
+                                    addClasses.push(oobClass + "-" + side);
+                                });
+                            })();
+                        }
+                        if (pinned.indexOf("left") >= 0 || pinned.indexOf("right") >= 0) {
+                            eAttachment.left = tAttachment.left = false;
+                        }
+                        if (pinned.indexOf("top") >= 0 || pinned.indexOf("bottom") >= 0) {
+                            eAttachment.top = tAttachment.top = false;
+                        }
+                        if (tAttachment.top !== targetAttachment.top || tAttachment.left !== targetAttachment.left || eAttachment.top !== _this.attachment.top || eAttachment.left !== _this.attachment.left) {
+                            _this.updateAttachClasses(eAttachment, tAttachment);
+                        }
+                    });
+                    defer(function() {
+                        if (!(_this.options.addTargetClasses === false)) {
+                            updateClasses(_this.target, addClasses, allClasses);
+                        }
+                        updateClasses(_this.element, addClasses, allClasses);
+                    });
+                    return {
+                        top: top,
+                        left: left
+                    };
+                }
+            });
+            "use strict";
+            var _TetherBase$Utils = TetherBase.Utils;
+            var getBounds = _TetherBase$Utils.getBounds;
+            var updateClasses = _TetherBase$Utils.updateClasses;
+            var defer = _TetherBase$Utils.defer;
+            TetherBase.modules.push({
+                position: function position(_ref) {
+                    var _this = this;
+                    var top = _ref.top;
+                    var left = _ref.left;
+                    var _cache = this.cache("element-bounds", function() {
+                        return getBounds(_this.element);
+                    });
+                    var height = _cache.height;
+                    var width = _cache.width;
+                    var targetPos = this.getTargetBounds();
+                    var bottom = top + height;
+                    var right = left + width;
+                    var abutted = [];
+                    if (top <= targetPos.bottom && bottom >= targetPos.top) {
+                        [ "left", "right" ].forEach(function(side) {
+                            var targetPosSide = targetPos[side];
+                            if (targetPosSide === left || targetPosSide === right) {
+                                abutted.push(side);
+                            }
+                        });
+                    }
+                    if (left <= targetPos.right && right >= targetPos.left) {
+                        [ "top", "bottom" ].forEach(function(side) {
+                            var targetPosSide = targetPos[side];
+                            if (targetPosSide === top || targetPosSide === bottom) {
+                                abutted.push(side);
+                            }
+                        });
+                    }
+                    var allClasses = [];
+                    var addClasses = [];
+                    var sides = [ "left", "top", "right", "bottom" ];
+                    allClasses.push(this.getClass("abutted"));
+                    sides.forEach(function(side) {
+                        allClasses.push(_this.getClass("abutted") + "-" + side);
+                    });
+                    if (abutted.length) {
+                        addClasses.push(this.getClass("abutted"));
+                    }
+                    abutted.forEach(function(side) {
+                        addClasses.push(_this.getClass("abutted") + "-" + side);
+                    });
+                    defer(function() {
+                        if (!(_this.options.addTargetClasses === false)) {
+                            updateClasses(_this.target, addClasses, allClasses);
+                        }
+                        updateClasses(_this.element, addClasses, allClasses);
+                    });
+                    return true;
+                }
+            });
+            "use strict";
+            var _slicedToArray = function() {
+                function sliceIterator(arr, i) {
+                    var _arr = [];
+                    var _n = true;
+                    var _d = false;
+                    var _e = undefined;
+                    try {
+                        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                            _arr.push(_s.value);
+                            if (i && _arr.length === i) break;
+                        }
+                    } catch (err) {
+                        _d = true;
+                        _e = err;
+                    } finally {
+                        try {
+                            if (!_n && _i["return"]) _i["return"]();
+                        } finally {
+                            if (_d) throw _e;
+                        }
+                    }
+                    return _arr;
+                }
+                return function(arr, i) {
+                    if (Array.isArray(arr)) {
+                        return arr;
+                    } else if (Symbol.iterator in Object(arr)) {
+                        return sliceIterator(arr, i);
+                    } else {
+                        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+                    }
+                };
+            }();
+            TetherBase.modules.push({
+                position: function position(_ref) {
+                    var top = _ref.top;
+                    var left = _ref.left;
+                    if (!this.options.shift) {
+                        return;
+                    }
+                    var shift = this.options.shift;
+                    if (typeof this.options.shift === "function") {
+                        shift = this.options.shift.call(this, {
+                            top: top,
+                            left: left
+                        });
+                    }
+                    var shiftTop = undefined, shiftLeft = undefined;
+                    if (typeof shift === "string") {
+                        shift = shift.split(" ");
+                        shift[1] = shift[1] || shift[0];
+                        var _shift = _slicedToArray(shift, 2);
+                        shiftTop = _shift[0];
+                        shiftLeft = _shift[1];
+                        shiftTop = parseFloat(shiftTop, 10);
+                        shiftLeft = parseFloat(shiftLeft, 10);
+                    } else {
+                        shiftTop = shift.top;
+                        shiftLeft = shift.left;
+                    }
+                    top += shiftTop;
+                    left += shiftLeft;
+                    return {
+                        top: top,
+                        left: left
+                    };
+                }
+            });
+            return Tether;
+        });
+    }, {} ]
 }, {}, [ 21 ]);

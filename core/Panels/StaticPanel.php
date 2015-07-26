@@ -133,6 +133,7 @@ abstract class StaticPanel extends AbstractPanel
             'type' => 'static',
             'settings' => $this->args,
             'postId' => get_the_ID(),
+            'parentObjectId' => get_the_ID(),
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }

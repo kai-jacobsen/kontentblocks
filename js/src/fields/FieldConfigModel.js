@@ -23,6 +23,7 @@ module.exports = Backbone.Model.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
+    this.listenTo(this.ModuleModel, 'module.model.updated', this.getClean); // set state to clean
     this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes
     this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind); // before the frontend modal reloads the parent obj
     this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind); // frontend modal reloaded parent obj, reattach handlers
@@ -66,6 +67,9 @@ module.exports = Backbone.Model.extend({
       return false;
     }
   },
+  getClean: function(){
+      this.trigger('field.model.clean');
+  },
   setData: function (Model) {
     var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
     ModuleModel = Model || this.get('ModuleModel');
@@ -94,7 +98,7 @@ module.exports = Backbone.Model.extend({
       this.get('ModuleModel').View.getDirty();
     }
   },
-  externalUpdate: function(model){
+  externalUpdate: function (model) {
     this.FieldView.synchronize(model);
   },
   remove: function () {

@@ -77,6 +77,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
         $this->setupFromField( $field );
         $this->uniqueId = $field->createUID();
         $this->prepare();
+        $this->instance();
     }
 
     /**
@@ -187,10 +188,18 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      */
     public function handleLoggedInUsers()
     {
-        $this->increaseCallCount();
         if (is_user_logged_in() && $this->inlineEdit && current_user_can( 'edit_kontentblocks' )) {
             $this->addAttr( 'data-kbfuid', $this->createUniqueId() );
         }
+    }
+
+    public function reuse(){
+        return $this->instance();
+    }
+
+    public function instance(){
+        $this->increaseCallCount();
+        return $this;
     }
 
     private function increaseCallCount()

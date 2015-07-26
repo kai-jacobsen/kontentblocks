@@ -7,8 +7,8 @@ module.exports = Backbone.Model.extend({
     this.type = 'panel';
   },
   sync: function (save, context) {
-    console.log(this);
     var that = this;
+    KB.Events.trigger('panel.before.sync');
     return jQuery.ajax({
       url: ajaxurl,
       data: {
@@ -26,7 +26,7 @@ module.exports = Backbone.Model.extend({
         that.trigger('module.model.updated', that);
       },
       error: function () {
-        Logger.Debug.error('serialize | FrontendModal | Ajax error');
+        Logger.Debug.error('sync | FrontendModal | Ajax error');
       }
     });
   }

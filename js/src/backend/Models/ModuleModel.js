@@ -2,7 +2,7 @@
 module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   initialize: function () {
-    //this.listenToOnce(this, 'change:envVars', this.subscribeToArea);
+    this.type = 'module';
     this.listenTo(this, 'change:area', this.areaChanged);
     this.subscribeToArea();
   },

@@ -5,9 +5,8 @@ module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
-    this.$el.append('<span class="genericon genericon-draggable"></span><span class="os-action"></span>');
   },
-  className: 'kb-module-inline-move kb-nbt kb-nbb',
+  className: 'kb-module-control kb-module-control--move',
   isValid: function () {
     if (!this.Parent.model.Area){
       return false;

@@ -36,7 +36,7 @@ module.exports = Backbone.View.extend({
       that.sidebarController.setView(that.ModuleList);
     });
 
-    this.listenToOnce(KB.Events, 'KB.frontend.init', this.afterInit);
+    this.listenToOnce(KB.Events, 'frontend.init', this.afterInit);
   },
   activate: function () {
     this.$parent.removeClass('kb-sidebar-areaview--inactive');

@@ -2,7 +2,8 @@
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
 var ModuleControl = require('frontend/Inline/controls/EditText');
-
+var UpdateControl = require('frontend/Inline/controls/InlineUpdate');
+var Toolbar = require('frontend/Inline/InlineToolbar');
 var EditableText = Backbone.View.extend({
   initialize: function () {
     this.placeHolderSet = false;
@@ -12,33 +13,35 @@ var EditableText = Backbone.View.extend({
     this.setupDefaults();
     this.maybeSetPlaceholder();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
+    this.Toolbar = new Toolbar({
+      FieldView: this,
+      model: this.model,
+      controls: [
+        new ModuleControl({
+          model: this.model,
+          parent: this
+        }),
+        new UpdateControl({
+          model: this.model,
+          parent: this
+        })
+      ]
+    });
     this.render();
   },
   render: function () {
     if (this.el.id) {
       this.id = this.el.id;
     }
-    this.renderControl();
   },
   derender: function () {
-    this.EditControl.remove();
     this.deactivate();
+    this.trigger('field.view.derender', this);
   },
   rerender: function () {
     this.render();
-  },
-  renderControl: function () {
-    this.EditControl = new ModuleControl({
-      model: this.model,
-      parent: this
-    });
-  },
-  events: {
-    //'click': 'activate',
-    'mouseenter': 'showControl'
-  },
-  showControl: function () {
-    this.EditControl.show();
+    this.trigger('field.view.rerender', this);
+
   },
   setupDefaults: function () {
     var that = this;
@@ -79,7 +82,6 @@ var EditableText = Backbone.View.extend({
           KB.Events.trigger('window.change');
         });
 
-
         ed.on('focus', function () {
           var con;
           window.wpActiveEditor = that.el.id;
@@ -108,11 +110,9 @@ var EditableText = Backbone.View.extend({
         //    jQuery('#kb-toolbar').hide();
         //  }
         //});
-
         ed.on('blur', function (e) {
           var content, moduleData, path;
           that.$el.removeClass('kb-inline-text--active');
-
           content = ed.getContent();
 
           // apply filter
@@ -127,39 +127,13 @@ var EditableText = Backbone.View.extend({
           // && ed.kfilter set
           if (ed.isDirty()) {
             ed.placeholder = false;
-
             if (ed.kfilter) {
-              jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                  action: 'applyContentFilter',
-                  content: content,
-                  postId: ed.module.toJSON().parentObjectId,
-                  _ajax_nonce: Config.getNonce('read')
-                },
-                type: 'POST',
-                dataType: 'json',
-                success: function (res) {
-                  ed.setContent(res.data.content);
-                  ed.module.set('moduleData', moduleData);
-                  //ed.module.trigger('kb.frontend.module.inlineUpdate');
-                  setTimeout(function () {
-                    if (window.twttr) {
-                      window.twttr.widgets.load();
-                    }
-                    jQuery(window).off('scroll.kbmce resize.kbmce');
-                    //that.maybeSetPlaceholder();
-                    ed.off('nodeChange ResizeEditor ResizeWindow');
-                    that.deactivate();
-
-                  }, 500);
-                },
-
-                error: function () {
-                }
-              });
+              that.retrieveFilteredContent(ed, content, moduleData);
             } else {
               ed.module.set('moduleData', moduleData);
+              that.model.syncContent = ed.getContent();
+              that.model.trigger('external.change', that.model);
+              that.model.trigger('field.model.dirty');
             }
           } else {
             ed.setContent(ed.previousContent);
@@ -169,9 +143,44 @@ var EditableText = Backbone.View.extend({
     };
     this.defaults = _.extend(defaults, this.settings);
   },
-  activate: function (e) {
-    e.stopPropagation();
+  retrieveFilteredContent: function (ed, content, moduleData) {
+    var that = this;
+    jQuery.ajax({
+      url: ajaxurl,
+      data: {
+        action: 'applyContentFilter',
+        content: content,
+        postId: ed.module.toJSON().parentObjectId,
+        _ajax_nonce: Config.getNonce('read')
+      },
+      type: 'POST',
+      dataType: 'json',
+      success: function (res) {
+        ed.setContent(res.data.content);
+        ed.module.set('moduleData', moduleData);
+        that.model.syncContent = ed.getContent();
 
+        that.model.trigger('field.model.dirty');
+        that.model.trigger('external.change', that.model);
+        //ed.module.trigger('kb.frontend.module.inlineUpdate');
+        setTimeout(function () {
+          if (window.twttr) {
+            window.twttr.widgets.load();
+          }
+          jQuery(window).off('scroll.kbmce resize.kbmce');
+          //that.maybeSetPlaceholder();
+          ed.off('nodeChange ResizeEditor ResizeWindow');
+          that.deactivate();
+
+        }, 500);
+      },
+      error: function () {
+      }
+    });
+  },
+  activate: function (e) {
+
+    e.stopPropagation();
     if (!this.editor) {
       tinymce.init(_.defaults(this.defaults, {
         selector: '#' + this.id
@@ -183,7 +192,7 @@ var EditableText = Backbone.View.extend({
       var ed = this.editor;
       this.editor = null;
       tinyMCE.execCommand('mceRemoveEditor', true, ed.id);
-      KB.Events.trigger('kb.repaint');
+      KB.Events.trigger('kb.repaint'); // @TODO figure this out
     }
   },
   maybeSetPlaceholder: function () {
@@ -212,6 +221,15 @@ var EditableText = Backbone.View.extend({
       $toolbar.css({top: mpos.top - 40 + 'px', left: mpos.left - w + 'px'});
       $toolbar.show();
     }
+  },
+  synchronize: function (model) {
+    if (this.editor){
+      this.editor.setContent(model.syncContent);
+    } else {
+      this.$el.html(model.syncContent);
+    }
+    this.model.trigger('field.model.dirty');
+
   }
 });
 

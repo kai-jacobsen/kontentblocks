@@ -1,0 +1,10 @@
+.kb-field--outline{
+  outline: 2px dotted $blue;
+  outline-offset: -1px;
+}
+
+.kb-field--outline-link{
+  outline: 2px dashed $orange;
+  outline-offset: -1px;
+  opacity: .5;
+}

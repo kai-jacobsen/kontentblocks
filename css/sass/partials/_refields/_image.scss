@@ -14,8 +14,8 @@
     min-width: 150px;
     min-height: 150px;
     padding: 10px;
-    float: left;
     margin-right: 15px;
+    display: inline-block;
   }
 
   .kb-js-image-meta-wrapper {
@@ -32,9 +32,27 @@
     }
   }
 
+  .kb-field-image-meta{
+    display: inline-block;
+    vertical-align: top;
+
+    textarea{
+      width: 100%;
+    }
+
+  }
+
   .kb-field-image--footer{
     clear: both;
     margin-top: 10px;
     padding: 8px 0;
   }
+}
+
+.kb-image-frame{
+
+  .attachment-display-settings, [data-setting="alt"],[data-setting="description"]{
+    display: none !important;
+  }
+
 }

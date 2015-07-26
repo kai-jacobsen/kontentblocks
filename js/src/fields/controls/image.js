@@ -15,6 +15,8 @@ KB.Fields.registerObject('image', BaseView.extend({
     this.$reset = this.$('.kb-js-reset-image');
     this.$container = this.$('.kb-field-image-container');
     this.$saveId = this.$('.kb-js-image-id');
+    this.$description = this.$('.kb-js-image-description');
+    this.$title = this.$('.kb-js-image-title');
   },
   editImage: function () {
     this.openFrame(true);
@@ -67,18 +69,25 @@ KB.Fields.registerObject('image', BaseView.extend({
 
         }).on('update', function (attachmentObj) { // bind callback to 'update'
           that.update(attachmentObj);
-        }).on('ready', function () {
-          that.ready();
-        }).on('replace', function () {
-          that.replace(that.frame.image.attachment);
-        }).on('select', function (what) {
-          var attachment = this.get('library').get('selection').first();
-          that.replace(attachment);
-        }).open();
+        })
+          .on('close', function (att) {
+            if (that.frame.image && that.frame.image.attachment) {
+              that.$description.val(that.frame.image.attachment.get('caption'));
+              that.$title.val(that.frame.image.attachment.get('title'));
+            }
+          })
+          .on('ready', function () {
+            that.ready();
+          }).on('replace', function () {
+            that.replace(that.frame.image.attachment);
+          }).on('select', function (what) {
+            var attachment = this.get('library').get('selection').first();
+            that.replace(attachment);
+          }).open();
       });
   },
   ready: function () {
-    jQuery('.media-modal').addClass('smaller');
+    jQuery('.media-modal').addClass('smaller kb-image-frame');
   },
   replace: function (attachment) {
     this.attachment = attachment;
@@ -129,6 +138,8 @@ KB.Fields.registerObject('image', BaseView.extend({
       });
     }
     this.$saveId.val(attachment.get('id'));
+    this.$description.val(attachment.get('caption'));
+    this.$title.val(attachment.get('title'));
     //KB.Events.trigger('modal.preview');
     this.model.get('ModuleModel').trigger('data.updated');
   },
@@ -143,6 +154,7 @@ KB.Fields.registerObject('image', BaseView.extend({
   resetImage: function () {
     this.$container.html('');
     this.$saveId.val('');
-    this.model.set('value', {id: null});
+    this.model.set('value', {id: null, caption: ''});
+    this.$description.val('');
   }
 }));

@@ -8,9 +8,8 @@ module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
-    this.$el.append('<span class="dashicons dashicons-update"></span>');
   },
-  className: 'kb-module-inline-update kb-nbt kb-nbb kb-js-inline-update',
+  className: 'kb-module-control kb-module-control--update',
   events: {
     'click': 'update'
   },

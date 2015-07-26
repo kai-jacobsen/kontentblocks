@@ -5,9 +5,8 @@ module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
     this.Parent = options.parent;
-    this.$el.append('<span class="dashicons dashicons-edit"></span>');
   },
-  className: 'os-edit-block kb-module-edit',
+  className: 'kb-module-control kb-module-control--edit',
   events: {
     'click': 'openForm'
   },

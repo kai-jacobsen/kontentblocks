@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-22 */
+/*! Kontentblocks DevVersion 2015-07-26 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -235,6 +235,7 @@
         module.exports = Backbone.Model.extend({
             idAttribute: "mid",
             initialize: function() {
+                this.type = "module";
                 this.listenTo(this, "change:area", this.areaChanged);
                 this.subscribeToArea();
             },
@@ -2415,6 +2416,7 @@
             bindHandlers: function() {
                 this.listenToOnce(this.ModuleModel, "remove", this.remove);
                 this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
+                this.listenTo(this.ModuleModel, "module.model.updated", this.getClean);
                 this.listenTo(this, "change:value", this.upstreamData);
                 this.listenTo(this.ModuleModel, "modal.serialize.before", this.unbind);
                 this.listenTo(this.ModuleModel, "modal.serialize", this.rebind);
@@ -2443,6 +2445,9 @@
                 } else {
                     return false;
                 }
+            },
+            getClean: function() {
+                this.trigger("field.model.clean");
             },
             setData: function(Model) {
                 var ModuleModel, fieldData, typeData, obj, addData = {}, mData;

@@ -2,6 +2,8 @@
 var Config = require('common/Config');
 var Utilities = require('common/Utilities');
 var ModuleControl = require('frontend/Inline/controls/EditImage');
+var UpdateControl = require('frontend/Inline/controls/InlineUpdate');
+var Toolbar = require('frontend/Inline/InlineToolbar');
 
 var EditableImage = Backbone.View.extend({
   initialize: function () {
@@ -10,42 +12,40 @@ var EditableImage = Backbone.View.extend({
     this.parentView = this.model.get('ModuleModel').View;
     this.render();
   },
-  events: {
-    'mouseenter': 'showControl'
-    //'mouseleave': 'hideControl'
-  },
   render: function () {
     this.delegateEvents();
     this.$el.addClass('kb-inline-imageedit-attached');
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
-    this.renderControl();
+    this.$title = jQuery('*[data-' + this.model.get('uid') + '-title]');
+    //this.renderControl();
+    this.Toolbar = new Toolbar({
+      FieldView: this,
+      model: this.model,
+      controls: [
+        new ModuleControl({
+          model: this.model,
+          parent: this
+        }),
+        new UpdateControl({
+          model: this.model,
+          parent: this
+        })
+      ]
+    });
   },
   rerender: function () {
     this.render();
   },
   derender: function () {
-    this.EditControl.remove();
     if (this.frame) {
       this.frame.dispose();
       this.frame = null;
     }
   },
-  renderControl: function () {
-    this.EditControl = new ModuleControl({
-      model: this.model,
-      parent: this
-    });
-  },
-  showControl: function () {
-    this.EditControl.show();
-  },
-  hideControl: function (e) {
-    this.EditControl.hide();
-  },
   openFrame: function () {
     var that = this;
     if (this.frame) {
-      return this.frame.open();
+      this.frame.dispose();
     }
 
     // we only want to query "our" image attachment
@@ -54,7 +54,6 @@ var EditableImage = Backbone.View.extend({
     wp.media.query(queryargs) // set the query
       .more() // execute the query, this will return an deferred object
       .done(function () { // attach callback, executes after the ajax call succeeded
-
         // inside the callback 'this' refers to the result collection
         // there should be only one model, assign it to a var
         var attachment = that.attachment = this.first();
@@ -84,21 +83,25 @@ var EditableImage = Backbone.View.extend({
 
     //this.frame.state('library').on('select', this.select);
     //return this.frame.open();
-  },
+  }
+  ,
   ready: function () {
-    jQuery('.media-modal').addClass('smaller no-sidebar');
-  },
+    jQuery('.media-modal').addClass('smaller kb-image-frame');
+  }
+  ,
   replace: function (attachment) {
     this.attachment = attachment;
     this.handleAttachment(attachment);
-  },
+  }
+  ,
   update: function (attachmentObj) {
     this.attachment.set(attachmentObj);
     this.attachment.sync('update', this.attachment);
     if (this.$caption.length > 0) {
       this.$caption.html(this.attachment.get('caption'));
     }
-  },
+  }
+  ,
   handleAttachment: function (attachment, suppress) {
     var that = this;
     var id = attachment.get('id');
@@ -110,6 +113,8 @@ var EditableImage = Backbone.View.extend({
     this.model.get('ModuleModel').set('moduleData', moduleData);
     //this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
     KB.Events.trigger('modal.refresh');
+    that.model.trigger('field.model.dirty');
+
     var args = {
       width: that.model.get('width'),
       height: that.model.get('height'),
@@ -134,22 +139,32 @@ var EditableImage = Backbone.View.extend({
           that.$el.css('backgroundImage', "url('" + res.data.src + "')");
         }
         that.delegateEvents();
-        if (!suppress){
+        if (!suppress) {
           that.model.trigger('external.change', that.model);
         }
+
+        if (that.$caption.length > 0){
+          that.$caption.html(attachment.get('caption'));
+        }
+        if (that.$title.length > 0){
+          that.$title.html(attachment.get('title'));
+        }
+
       },
       error: function () {
 
       }
     });
-  },
+  }
+  ,
   prepareValue: function (attachment) {
     return {
       id: attachment.get('id'),
       title: attachment.get('title'),
       caption: attachment.get('caption')
     };
-  },
+  }
+  ,
   synchronize: function (model) {
     this.handleAttachment(model.attachment, true);
   }

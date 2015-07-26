@@ -15,10 +15,11 @@ module.exports = Backbone.Model.extend({
     this.Area = AreaModel;
   },
   dispose: function () {
-    this.stopListening()
+    this.stopListening();
   },
   sync: function (save, context) {
     var that = this;
+    KB.Events.trigger('module.before.sync', this);
     return jQuery.ajax({
       url: ajaxurl,
       data: {

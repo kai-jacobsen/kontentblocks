@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-22 */
+/*! Kontentblocks DevVersion 2015-07-26 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1733,6 +1733,8 @@
                 this.$reset = this.$(".kb-js-reset-image");
                 this.$container = this.$(".kb-field-image-container");
                 this.$saveId = this.$(".kb-js-image-id");
+                this.$description = this.$(".kb-js-image-description");
+                this.$title = this.$(".kb-js-image-title");
             },
             editImage: function() {
                 this.openFrame(true);
@@ -1767,6 +1769,11 @@
                         }
                     }).on("update", function(attachmentObj) {
                         that.update(attachmentObj);
+                    }).on("close", function(att) {
+                        if (that.frame.image && that.frame.image.attachment) {
+                            that.$description.val(that.frame.image.attachment.get("caption"));
+                            that.$title.val(that.frame.image.attachment.get("title"));
+                        }
                     }).on("ready", function() {
                         that.ready();
                     }).on("replace", function() {
@@ -1778,7 +1785,7 @@
                 });
             },
             ready: function() {
-                jQuery(".media-modal").addClass("smaller");
+                jQuery(".media-modal").addClass("smaller kb-image-frame");
             },
             replace: function(attachment) {
                 this.attachment = attachment;
@@ -1823,6 +1830,8 @@
                     });
                 }
                 this.$saveId.val(attachment.get("id"));
+                this.$description.val(attachment.get("caption"));
+                this.$title.val(attachment.get("title"));
                 this.model.get("ModuleModel").trigger("data.updated");
             },
             prepareValue: function(attachment) {
@@ -1837,8 +1846,10 @@
                 this.$container.html("");
                 this.$saveId.val("");
                 this.model.set("value", {
-                    id: null
+                    id: null,
+                    caption: ""
                 });
+                this.$description.val("");
             }
         }));
     }, {

@@ -2,10 +2,10 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     this.model.View = this;
   },
-  getDirty: function(){
-    
+  getDirty: function () {
+
   },
-  getClean: function(){
-    
+  getClean: function () {
+
   }
 });

@@ -4,10 +4,13 @@ module.exports = Backbone.View.extend({
     this.visible = false;
     this.options = options || {};
     this.Parent = options.parent;
+    if (this.isValid()) {
+      this.render();
+    }
   },
-  className: 'kb-inline-control kb-inline--edit-text',
+  className: 'kb-inline-control kb-inline--update',
   events: {
-    'click': 'focusEditor',
+    'click': 'syncModel',
     'mouseenter': 'mouseenter',
     'mouseleave': 'mouseleave'
   },
@@ -20,19 +23,14 @@ module.exports = Backbone.View.extend({
     //this.Parent.parentView.$el.append(this.$el);
     //this.$el.hide();
   },
+  syncModel: function(){
+    this.model.get('ModuleModel').sync(true);
+    this.Toolbar.getClean();
+  },
   isValid: function () {
     return Check.userCan('edit_kontentblocks');
   },
   mouseenter: function () {
-    this.Parent.$el.addClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.addClass('kb-field--outline-link');
-    })
-  },
-  mouseleave: function(){
-    this.Parent.$el.removeClass('kb-field--outline');
-    _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.removeClass('kb-field--outline-link');
-    })
+
   }
 });

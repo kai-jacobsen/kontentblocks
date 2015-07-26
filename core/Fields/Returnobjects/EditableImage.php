@@ -26,53 +26,45 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      * @var int
      */
     public $height = 150;
-
+    /**
+     * @var string
+     */
+    public $helptext = 'Click to chose a different image';
     /**
      * ImageResize upscale flag
      * @var bool
      */
     protected $upscale = false;
-
     /**
      * Source url after source was setup
      * @var null
      */
     protected $src = null;
-
     /**
      * Classes to add to the html element
      * @var array
      */
     protected $classes = array();
-
     /**
      * Attributes to add to the html element
      * @var array
      */
     protected $attributes = array();
-
     /**
      * Unique ID
      * @var
      */
     protected $uid;
-
     /**
      * Flag image output as background inline style
      * @var bool
      */
     protected $background = false;
-
     /**
      * ImageResize crop flag
      * @var bool
      */
     protected $crop = true;
-
-    /**
-     * @var string
-     */
-    public $helptext = 'Click to chose a different image';
 
     /**
      *
@@ -93,6 +85,20 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
         }
 
         return $this;
+
+    }
+
+    /**
+     * Ignore
+     * @TODO Remove
+     *
+     * @param $string
+     *
+     * @return string|void
+     */
+    protected function _cleanSpaces( $string )
+    {
+        return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
 
     }
 
@@ -152,145 +158,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     }
 
     /**
-     * Returns just the source url without any further html added
-     * @return string URL of image
-     */
-    public function src( $builtin = null )
-    {
-        $this->prepareSrc( $builtin );
-        $this->toJSON();
-
-        return $this->src;
-
-
-    }
-
-    /**
-     * Returns a complete background-image inline style attribute
-     * with all necessary attributes added to enable inline edit
-     * @return string
-     */
-    public function background()
-    {
-
-
-        $this->background = true;
-        $this->handleLoggedInUsers();
-        $this->prepareSrc( null );
-        $this->toJSON();
-
-        $format = ' %2$s style="background-image: url(\'%1$s\');"';
-
-        return sprintf( $format, $this->src, $this->_renderAttributes() );
-    }
-
-    /**
-     * Ignore
-     * @TODO Remove
-     *
-     * @param $string
-     *
-     * @return string|void
-     */
-    protected function _cleanSpaces( $string )
-    {
-        return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
-
-    }
-
-    /**
-     * Returns list of classes and all attributes
-     * @return string
-     */
-    protected function _renderAttributes()
-    {
-        $return = "class='{$this->_classList()}' ";
-        $return .= $this->_attributesList();
-
-        return trim( $return );
-
-    }
-
-    /**
-     * Returns added classes as space-seperated string
-     * @return string
-     */
-    protected function _classList()
-    {
-        return trim( implode( ' ', $this->classes ) );
-
-    }
-
-    /**
-     * Set size of the image.
-     * Must be called before any output method
-     *
-     * @param int $w
-     * @param int $h
-     *
-     * @return $this
-     */
-    public function size( $w = 150, $h = 150 )
-    {
-        $this->width = $w;
-        $this->height = $h;
-
-        return $this;
-    }
-
-    public function nsize( $size )
-    {
-        if (!is_null( $this->attachment )) {
-            if (isset( $this->attachment['sizes'] ) && !empty( $this->attachment['sizes'][$size] )) {
-                $def = $this->attachment['sizes'][$size];
-                return $this->size($def['width'], $def['height']);
-            }
-        }
-        return $this->size();
-    }
-
-    /**
-     * Set flag for image resizer upscale parameter
-     * @return $this
-     */
-    public function upscale()
-    {
-        $this->upscale = true;
-
-        return $this;
-    }
-
-    /**
-     * Set flag for image resizer upscale parameter
-     *
-     * @param $crop
-     *
-     * @return $this
-     */
-    public function crop( $crop )
-    {
-        $this->crop = $crop;
-
-        return $this;
-    }
-
-    /**
-     * Convertes added attributes to usable string
-     * @return string
-     */
-    protected function _attributesList()
-    {
-        $returnstr = '';
-        foreach ($this->attributes as $attr => $value) {
-            $esc = esc_attr( $value );
-            $returnstr .= "{$attr}='{$esc}' ";
-        }
-
-        return trim( $returnstr );
-
-    }
-
-    /**
      * Resize the image to the given size
      * @return array|bool|string
      */
@@ -320,24 +187,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
 
         }
         return false;
-    }
-
-    /**
-     * Different classes for Headlines and the rest
-     * @return string
-     */
-    public function getEditableClass()
-    {
-
-        if (is_a( $this->field, '\Kontentblocks\Fields\Definitions\Gallery' )) {
-            if ($this->inlineEdit) {
-                return 'editable-gallery-image';
-            }
-        } elseif ($this->background) {
-            return 'editable-bg-image';
-        } else {
-            return 'editable-image';
-        }
     }
 
     /**
@@ -373,6 +222,173 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
         );
     }
 
+    /**
+     * Returns list of classes and all attributes
+     * @return string
+     */
+    protected function _renderAttributes()
+    {
+        $return = "class='{$this->_classList()}' ";
+        $return .= $this->_attributesList();
+
+        return trim( $return );
+
+    }
+
+    /**
+     * Returns added classes as space-seperated string
+     * @return string
+     */
+    protected function _classList()
+    {
+        return trim( implode( ' ', $this->classes ) );
+
+    }
+
+    /**
+     * Convertes added attributes to usable string
+     * @return string
+     */
+    protected function _attributesList()
+    {
+        $returnstr = '';
+        foreach ($this->attributes as $attr => $value) {
+            $esc = esc_attr( $value );
+            $returnstr .= "{$attr}='{$esc}' ";
+        }
+
+        return trim( $returnstr );
+
+    }
+
+    /**
+     * Returns just the source url without any further html added
+     * @return string URL of image
+     */
+    public function src( $builtin = null )
+    {
+        $this->prepareSrc( $builtin );
+        $this->toJSON();
+
+        return $this->src;
+
+
+    }
+
+    /**
+     * Returns a complete background-image inline style attribute
+     * with all necessary attributes added to enable inline edit
+     * @return string
+     */
+    public function background()
+    {
+
+
+        $this->background = true;
+        $this->handleLoggedInUsers();
+        $this->prepareSrc( null );
+        $this->toJSON();
+
+        $format = ' %2$s style="background-image: url(\'%1$s\');"';
+
+        return sprintf( $format, $this->src, $this->_renderAttributes() );
+    }
+
+    public function nsize( $size )
+    {
+        if (!is_null( $this->attachment )) {
+            if (isset( $this->attachment['sizes'] ) && !empty( $this->attachment['sizes'][$size] )) {
+                $def = $this->attachment['sizes'][$size];
+                return $this->size( $def['width'], $def['height'] );
+            }
+        }
+        return $this->size();
+    }
+
+    /**
+     * Set size of the image.
+     * Must be called before any output method
+     *
+     * @param int $w
+     * @param int $h
+     *
+     * @return $this
+     */
+    public function size( $w = 150, $h = 150 )
+    {
+        $this->width = $w;
+        $this->height = $h;
+
+        return $this;
+    }
+
+    /**
+     * Set flag for image resizer upscale parameter
+     * @return $this
+     */
+    public function upscale()
+    {
+        $this->upscale = true;
+
+        return $this;
+    }
+
+    /**
+     * Set flag for image resizer upscale parameter
+     *
+     * @param $crop
+     *
+     * @return $this
+     */
+    public function crop( $crop )
+    {
+        $this->crop = $crop;
+
+        return $this;
+    }
+
+    /**
+     * Different classes for Headlines and the rest
+     * @return string
+     */
+    public function getEditableClass()
+    {
+
+        if (is_a( $this->field, '\Kontentblocks\Fields\Definitions\Gallery' )) {
+            if ($this->inlineEdit) {
+                return 'editable-gallery-image';
+            }
+        } elseif ($this->background) {
+            return 'editable-bg-image';
+        } else {
+            return 'editable-image';
+        }
+    }
+
+    public function title()
+    {
+        return $this->getValue( 'title', '' );
+    }
+
+    public function getTitleField()
+    {
+        if (is_user_logged_in()){
+            return "data-{$this->createUniqueId()}-title=''";
+        }
+    }
+
+
+    public function caption()
+    {
+        return $this->getValue( 'caption', '' );
+    }
+
+    public function getCaptionField()
+    {
+        if (is_user_logged_in()){
+            return "data-{$this->createUniqueId()}-caption=''";
+        }
+    }
 
     public function prepare()
     {

@@ -49,7 +49,7 @@ module.exports = Backbone.View.extend({
     this.$el = jQuery('.kb-module-controls', this.ModuleView.$el);
 
     //append ul tag, holder for single action items
-    this.$menuList = jQuery('<div class="controls-wrap"></div>').appendTo(this.$el);
+    this.$menuList = this.$('.kb-controls-wrap');
   },
   addItem: function (view) {
     // actually happens in ModuleView.js
@@ -57,9 +57,9 @@ module.exports = Backbone.View.extend({
     // if isValid render the menu item view
     // see /ModuleMenuItems/ files for action items
     if (view.isValid && view.isValid() === true) {
-      var $liItem = jQuery('<div class="controls-wrap-item"></div>').appendTo(this.$menuList);
-      var $menuItem = $liItem.append(view.render());
-      this.$menuList.append($menuItem);
+      //var $liItem = jQuery('<div class="kb-controls-wrap-item"></div>').appendTo(this.$menuList);
+      this.$menuList.append(view.render());
+      //this.$menuList.append($menuItem);
       return view;
     }
   }

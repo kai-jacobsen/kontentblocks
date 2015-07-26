@@ -100,14 +100,14 @@ class EditableElement extends AbstractEditableFieldReturn
 
         if (is_user_logged_in()) {
             if (!$this->hasLink) {
-                return sprintf( $format, $this->el, $filtered, $this->_renderAttributes(), $this->uniqueId );
+                return sprintf( $format, $this->el, $filtered, $this->_renderAttributes(), $this->createUniqueId() );
             } else if ($this->hasLink) {
                 return sprintf(
                     $formatWithLink,
                     $this->el,
                     $filtered,
                     $this->_renderAttributes(),
-                    $this->uniqueId,
+                    $this->createUniqueId(),
                     $this->target
                 );
             }
@@ -166,7 +166,9 @@ class EditableElement extends AbstractEditableFieldReturn
             'kpath' => $this->createPath(),
             'tooltip' => $this->helptext,
             'filter' => ( $this->field->getArg( 'the_content', false ) ) ? 'content' : null,
-            'uid' => $this->createUniqueId()
+            'uid' => $this->createUniqueId(),
+            'linkedFields' => &$this->linkedFields
+
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
             $this->createUniqueId(),

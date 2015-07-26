@@ -1,6 +1,6 @@
 //KB.Backbone.Frontend.ModuleMenuItemView
 module.exports = Backbone.View.extend({
-  tagName: 'a',
+  tagName: 'div',
   isValid: function () {
     return true;
   },

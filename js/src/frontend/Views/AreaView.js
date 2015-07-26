@@ -12,7 +12,7 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     this.attachedModuleViews = {};
     this.renderSettings = this.model.get('renderSettings');
-    this.listenToOnce(KB.Events, 'KB.frontend.init', this.setupUi);
+    this.listenToOnce(KB.Events, 'frontend.init', this.setupUi);
     this.listenTo(this, 'kb.module.deleted', this.removeModule);
     this.model.View = this;
 
@@ -60,7 +60,7 @@ module.exports = Backbone.View.extend({
     if (this.Layout.hasLayout) {
       this.$el.sortable(
         {
-          handle: ".kb-module-inline-move",
+          handle: ".kb-module-control--move",
           items: ".kb-wrap",
           helper: "clone",
           opacity: 0.5,
@@ -74,7 +74,6 @@ module.exports = Backbone.View.extend({
             if (ui.helper.hasClass('ui-draggable-dragging')) {
               ui.helper.addClass('kb-wrap');
             }
-
             ui.placeholder.attr('class', ui.helper.attr('class'));
             ui.placeholder.addClass('kb-front-sortable-placeholder');
             ui.placeholder.append("<div class='module kb-dummy'></div>");
@@ -121,7 +120,7 @@ module.exports = Backbone.View.extend({
     } else {
       this.$el.sortable(
         {
-          handle: ".kb-module-inline-move",
+          handle: ".kb-module-control--move",
           items: ".module",
           helper: "clone",
           //helper: function(){

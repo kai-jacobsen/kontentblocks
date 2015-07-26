@@ -22,7 +22,8 @@
     "grunt-sass": "~0.18.0",
     "handlebars": "^3.0.3",
     "hbsfy": "^2.2.1",
-    "jshint-log-reporter": "^1.0.8"
+    "jshint-log-reporter": "^1.0.8",
+    "tether": "^1.1.0"
   },
   "dependencies": {
     "time-grunt": "^1.2.1"
