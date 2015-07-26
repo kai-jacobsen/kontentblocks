@@ -1112,7 +1112,9 @@
                 KB.FieldConfigs.remove(this);
             },
             rebind: function() {
-                if (this.FieldView) {
+                if (_.isUndefined(this.getElement())) {
+                    _.defer(_.bind(this.FieldView.gone, this.FieldView));
+                } else if (this.FieldView) {
                     this.FieldView.setElement(this.getElement());
                     _.defer(_.bind(this.FieldView.rerender, this.FieldView));
                 }
@@ -1170,6 +1172,7 @@
                             model.trigger("field.model.settings", field);
                         }
                     }, this);
+                    this.add(_.toArray(data));
                 }
             }
         });
@@ -1331,7 +1334,7 @@
                 Logger.Debug.info("tinymce.triggerSave called");
             }
         });
-        var reposition = _.debounce(window.Tether.position, 125);
+        var reposition = _.debounce(window.Tether.position, 25);
         KB.Events.on("content.change", function() {
             reposition();
         });
@@ -1522,6 +1525,7 @@
                 this.render();
             },
             render: function() {
+                this.Toolbar.show();
                 this.delegateEvents();
                 this.$caption = jQuery("*[data-" + this.model.get("uid") + "-caption]");
             },
@@ -1531,6 +1535,10 @@
             },
             derender: function() {
                 this.trigger("field.view.derender", this);
+            },
+            gone: function() {
+                this.trigger("field.view.gone", this);
+                this.Toolbar.hide();
             },
             openDialog: function() {
                 var that = this;
@@ -1866,10 +1874,12 @@
                 this.options = options;
                 this.FieldView = options.FieldView;
                 this.controls = options.controls || [];
+                this.hidden = false;
                 this.listenTo(this.model, "field.model.dirty", this.getDirty);
                 this.listenTo(this.model, "field.model.clean", this.getClean);
                 this.listenTo(this.FieldView, "field.view.derender", this.derender);
                 this.listenTo(this.FieldView, "field.view.rerender", this.rerender);
+                this.listenTo(this.FieldView, "field.view.gone", this.derender);
                 this.create();
             },
             create: function() {
@@ -1880,6 +1890,15 @@
                 });
                 this.$el.appendTo("body");
                 this.createPosition();
+            },
+            hide: function() {
+                this.$el.hide();
+                this.hidden = true;
+            },
+            show: function() {
+                if (this.hidden) {
+                    this.$el.show();
+                }
             },
             createPosition: function() {
                 var tether = this.options.tether || {};

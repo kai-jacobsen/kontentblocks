@@ -13,11 +13,12 @@ module.exports = Backbone.View.extend({
     this.options = options;
     this.FieldView = options.FieldView;
     this.controls = options.controls || [];
-
+    this.hidden = false;
     this.listenTo(this.model, 'field.model.dirty', this.getDirty);
     this.listenTo(this.model, 'field.model.clean', this.getClean);
     this.listenTo(this.FieldView, 'field.view.derender', this.derender);
     this.listenTo(this.FieldView, 'field.view.rerender', this.rerender);
+    this.listenTo(this.FieldView, 'field.view.gone', this.derender);
     this.create();
   },
   create: function () {
@@ -28,6 +29,15 @@ module.exports = Backbone.View.extend({
     });
     this.$el.appendTo('body');
     this.createPosition();
+  },
+  hide: function(){
+    this.$el.hide();
+    this.hidden = true;
+  },
+  show: function(){
+    if (this.hidden){
+      this.$el.show();
+    }
   },
   createPosition: function () {
     var tether = this.options.tether || {};

@@ -6,7 +6,7 @@ KB.Events.on('module.before.sync panel.before.sync', function(Model){
   }
 });
 
-var reposition = _.debounce(window.Tether.position, 125);
+var reposition = _.debounce(window.Tether.position, 25);
 KB.Events.on('content.change', function(){
   reposition();
 });

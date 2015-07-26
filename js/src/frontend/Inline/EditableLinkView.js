@@ -28,6 +28,7 @@ var EditableLink = Backbone.View.extend({
     this.render();
   },
   render: function () {
+    this.Toolbar.show();
     this.delegateEvents();
     this.$caption = jQuery('*[data-' + this.model.get('uid') + '-caption]');
   },
@@ -37,6 +38,10 @@ var EditableLink = Backbone.View.extend({
   },
   derender: function () {
     this.trigger('field.view.derender', this);
+  },
+  gone: function(){
+    this.trigger('field.view.gone', this);
+    this.Toolbar.hide();
   },
   openDialog: function () {
     var that = this;

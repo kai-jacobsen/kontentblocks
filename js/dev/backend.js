@@ -2481,7 +2481,9 @@
                 KB.FieldConfigs.remove(this);
             },
             rebind: function() {
-                if (this.FieldView) {
+                if (_.isUndefined(this.getElement())) {
+                    _.defer(_.bind(this.FieldView.gone, this.FieldView));
+                } else if (this.FieldView) {
                     this.FieldView.setElement(this.getElement());
                     _.defer(_.bind(this.FieldView.rerender, this.FieldView));
                 }
@@ -2539,6 +2541,7 @@
                             model.trigger("field.model.settings", field);
                         }
                     }, this);
+                    this.add(_.toArray(data));
                 }
             }
         });

@@ -36,10 +36,11 @@ module.exports = Backbone.Collection.extend({
     if (data) {
       _.each(data, function (field) {
         var model = this.get(field.uid);
-        if (model){
+        if (model) {
           model.trigger('field.model.settings', field);
         }
       }, this);
+      this.add(_.toArray(data));
     }
   }
 });
