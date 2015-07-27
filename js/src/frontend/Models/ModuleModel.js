@@ -6,6 +6,7 @@ module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   initialize: function () {
     this.subscribeToArea();
+    this.type = 'module';
   },
   subscribeToArea: function (AreaModel) {
     if (!AreaModel) {

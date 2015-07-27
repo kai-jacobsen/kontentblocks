@@ -90,7 +90,8 @@ class AjaxCallbackHandler
                 'syncAreaSettings' => array( 'Kontentblocks\Ajax\Actions\SyncAreaSettings', 'run' ),
                 'getGlobalAreaHTML' => array( 'Kontentblocks\Ajax\Actions\GetGlobalAreaHTML', 'run' ),
                 'updateContextAreaOrder' => array( 'Kontentblocks\Ajax\Actions\UpdateContextAreaOrder', 'run' ),
-                'updatePostPanel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdatePostPanel', 'run' )
+                'updatePostPanel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdatePostPanel', 'run' ),
+                'updateFieldModel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run' )
 
             )
         );

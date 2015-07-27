@@ -21,7 +21,12 @@ module.exports = Backbone.View.extend({
     //this.$el.hide();
   },
   syncFieldModel: function (context) {
-    this.model.sync();
+    var dfr = this.model.sync(this);
+    dfr.done(function(res){
+     if(res.success){
+       this.model.getClean();
+     }
+    })
   },
   syncModuleModel: function(){
     this.model.get('ModuleModel').sync(true);

@@ -1026,6 +1026,8 @@
         var Checks = require("common/Checks");
         var Utilities = require("common/Utilities");
         var Payload = require("common/Payload");
+        var Config = require("common/Config");
+        var Logger = require("common/Logger");
         module.exports = Backbone.Model.extend({
             idAttribute: "uid",
             initialize: function() {
@@ -1131,15 +1133,21 @@
                     this.FieldView.derender();
                 }
             },
-            sync: function() {
+            sync: function(context) {
                 var that = this;
                 KB.Events.trigger("field.before.sync", this.model);
+                var clone = _.clone(that.toJSON());
+                var type = clone.ModuleModel.type;
+                var module = clone.ModuleModel.toJSON();
+                delete clone["ModuleModel"];
                 return jQuery.ajax({
                     url: ajaxurl,
                     data: {
-                        action: "updateField",
+                        action: "updateFieldModel",
                         data: that.get("value"),
-                        field: that.model.toJSON(),
+                        field: clone,
+                        module: module,
+                        type: type,
                         _ajax_nonce: Config.getNonce("update")
                     },
                     context: context ? context : that,
@@ -1157,6 +1165,8 @@
         });
     }, {
         "common/Checks": 9,
+        "common/Config": 10,
+        "common/Logger": 11,
         "common/Payload": 13,
         "common/Utilities": 17
     } ],
@@ -2116,7 +2126,12 @@
             },
             render: function() {},
             syncFieldModel: function(context) {
-                this.model.sync();
+                var dfr = this.model.sync(this);
+                dfr.done(function(res) {
+                    if (res.success) {
+                        this.model.getClean();
+                    }
+                });
             },
             syncModuleModel: function() {
                 this.model.get("ModuleModel").sync(true);
@@ -2160,6 +2175,7 @@
             idAttribute: "mid",
             initialize: function() {
                 this.subscribeToArea();
+                this.type = "module";
             },
             subscribeToArea: function(AreaModel) {
                 if (!AreaModel) {

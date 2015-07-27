@@ -22,9 +22,10 @@ class UpdateModule implements AjaxActionInterface
 
     /**
      * @param ValueStorageInterface $Request
+     * @param bool $send
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $Request, $send = true )
     {
         global $post;
 
@@ -64,7 +65,7 @@ class UpdateModule implements AjaxActionInterface
 
         do_action( 'kb.save.frontend.module', $Module, $postdata->update );
         Utilities::remoteConcatGet( $Module->Properties->post_id );
-        return new AjaxSuccessResponse( 'Module updated', $return );
+        return new AjaxSuccessResponse( 'Module updated', $return, $send );
     }
 
     /**

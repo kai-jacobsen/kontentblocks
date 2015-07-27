@@ -2395,6 +2395,8 @@
         var Checks = require("common/Checks");
         var Utilities = require("common/Utilities");
         var Payload = require("common/Payload");
+        var Config = require("common/Config");
+        var Logger = require("common/Logger");
         module.exports = Backbone.Model.extend({
             idAttribute: "uid",
             initialize: function() {
@@ -2500,15 +2502,21 @@
                     this.FieldView.derender();
                 }
             },
-            sync: function() {
+            sync: function(context) {
                 var that = this;
                 KB.Events.trigger("field.before.sync", this.model);
+                var clone = _.clone(that.toJSON());
+                var type = clone.ModuleModel.type;
+                var module = clone.ModuleModel.toJSON();
+                delete clone["ModuleModel"];
                 return jQuery.ajax({
                     url: ajaxurl,
                     data: {
-                        action: "updateField",
+                        action: "updateFieldModel",
                         data: that.get("value"),
-                        field: that.model.toJSON(),
+                        field: clone,
+                        module: module,
+                        type: type,
                         _ajax_nonce: Config.getNonce("update")
                     },
                     context: context ? context : that,
@@ -2526,6 +2534,8 @@
         });
     }, {
         "common/Checks": 39,
+        "common/Config": 40,
+        "common/Logger": 41,
         "common/Payload": 43,
         "common/Utilities": 47
     } ],
