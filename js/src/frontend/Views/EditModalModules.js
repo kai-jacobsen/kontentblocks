@@ -528,7 +528,7 @@ module.exports = Backbone.View.extend({
   updateContainerClass: function (viewfile) {
 
     if (!viewfile || !viewfile.current || !viewfile.target) {
-      _K.error('updateContainerClass | frontendModal | parameter exception');
+      return false;
     }
 
     this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));

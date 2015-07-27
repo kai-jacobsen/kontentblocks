@@ -242,6 +242,7 @@ KB.App = function () {
   function removeModule(ModuleModel) {
     ModuleModel.dispose();
     KB.Views.Modules.remove(ModuleModel.get('mid'));
+    KB.Events.trigger('content.change');
   }
 
   return {
@@ -260,6 +261,8 @@ jQuery(document).ready(function () {
     KB.Views.Modules.readyOnFront();
     Logger.User.info('Frontend welcomes you');
     jQuery('body').addClass('kontentblocks-ready');
+    KB.Events.trigger('content.change');
+
   }
 
   jQuery(window).on('scroll resize', function () {

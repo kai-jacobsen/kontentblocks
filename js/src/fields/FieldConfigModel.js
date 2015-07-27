@@ -127,5 +127,31 @@ module.exports = Backbone.Model.extend({
     if (this.FieldView && this.FieldView.derender) {
       this.FieldView.derender(); // call derender
     }
+  },
+  sync: function(){
+    var that = this;
+    KB.Events.trigger('field.before.sync', this.model);
+
+
+
+    return jQuery.ajax({
+      url: ajaxurl,
+      data: {
+        action: 'updateField',
+        data: that.get('value'),
+        field: that.model.toJSON(),
+        _ajax_nonce: Config.getNonce('update')
+      },
+      context: (context) ? context : that,
+      type: 'POST',
+      dataType: 'json',
+      success: function (res) {
+        console.log(res);
+        that.trigger('field.model.updated', that);
+      },
+      error: function () {
+        Logger.Debug.error('serialize | FrontendModal | Ajax error');
+      }
+    });
   }
 });

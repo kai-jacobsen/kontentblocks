@@ -86,15 +86,16 @@ var EditableText = Backbone.View.extend({
           var con;
           window.wpActiveEditor = that.el.id;
           con = Utilities.getIndex(ed.module.get('moduleData'), that.model.get('kpath'));
+          console.log(con);
           if (ed.kfilter) {
             ed.setContent(switchEditors.wpautop(con));
           }
           ed.previousContent = ed.getContent();
 
           that.$el.addClass('kb-inline-text--active');
-          if (that.placeHolderSet) {
-            ed.setContent('');
-          }
+            //if (that.placeHolderSet) {
+          //  ed.setContent('');
+          //}
         });
 
         //ed.addButton('kbcancleinline', {

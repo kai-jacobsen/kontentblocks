@@ -1,4 +1,6 @@
 var Check = require('common/Checks');
+var Config = require('common/Config');
+var Logger = require('common/Logger');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.visible = false;
@@ -10,20 +12,18 @@ module.exports = Backbone.View.extend({
   },
   className: 'kb-inline-control kb-inline--update',
   events: {
-    'click': 'syncModel',
+    'click': 'syncFieldModel',
     'mouseenter': 'mouseenter',
     'mouseleave': 'mouseleave'
-  },
-  focusEditor: function (e) {
-    if (!this.Parent.editor){
-      this.Parent.activate(e);
-    }
   },
   render: function () {
     //this.Parent.parentView.$el.append(this.$el);
     //this.$el.hide();
   },
-  syncModel: function(){
+  syncFieldModel: function (context) {
+    this.model.sync();
+  },
+  syncModuleModel: function(){
     this.model.get('ModuleModel').sync(true);
     this.Toolbar.getClean();
   },

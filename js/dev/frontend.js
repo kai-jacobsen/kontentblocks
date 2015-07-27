@@ -1130,6 +1130,29 @@
                 if (this.FieldView && this.FieldView.derender) {
                     this.FieldView.derender();
                 }
+            },
+            sync: function() {
+                var that = this;
+                KB.Events.trigger("field.before.sync", this.model);
+                return jQuery.ajax({
+                    url: ajaxurl,
+                    data: {
+                        action: "updateField",
+                        data: that.get("value"),
+                        field: that.model.toJSON(),
+                        _ajax_nonce: Config.getNonce("update")
+                    },
+                    context: context ? context : that,
+                    type: "POST",
+                    dataType: "json",
+                    success: function(res) {
+                        console.log(res);
+                        that.trigger("field.model.updated", that);
+                    },
+                    error: function() {
+                        Logger.Debug.error("serialize | FrontendModal | Ajax error");
+                    }
+                });
             }
         });
     }, {
@@ -1300,6 +1323,7 @@
             function removeModule(ModuleModel) {
                 ModuleModel.dispose();
                 KB.Views.Modules.remove(ModuleModel.get("mid"));
+                KB.Events.trigger("content.change");
             }
             return {
                 init: init
@@ -1311,6 +1335,7 @@
                 KB.Views.Modules.readyOnFront();
                 Logger.User.info("Frontend welcomes you");
                 jQuery("body").addClass("kontentblocks-ready");
+                KB.Events.trigger("content.change");
             }
             jQuery(window).on("scroll resize", function() {
                 KB.Events.trigger("window.change");
@@ -1699,14 +1724,12 @@
                             var con;
                             window.wpActiveEditor = that.el.id;
                             con = Utilities.getIndex(ed.module.get("moduleData"), that.model.get("kpath"));
+                            console.log(con);
                             if (ed.kfilter) {
                                 ed.setContent(switchEditors.wpautop(con));
                             }
                             ed.previousContent = ed.getContent();
                             that.$el.addClass("kb-inline-text--active");
-                            if (that.placeHolderSet) {
-                                ed.setContent("");
-                            }
                         });
                         ed.on("blur", function(e) {
                             var content, moduleData, path;
@@ -2025,7 +2048,6 @@
             },
             mouseleave: function() {
                 this.Parent.$el.removeClass("kb-field--outline");
-                console.log(this.model.get("linkedFields"));
                 _.each(this.model.get("linkedFields"), function(linkedModel) {
                     linkedModel.FieldView.$el.removeClass("kb-field--outline-link");
                 });
@@ -2075,6 +2097,8 @@
     } ],
     30: [ function(require, module, exports) {
         var Check = require("common/Checks");
+        var Config = require("common/Config");
+        var Logger = require("common/Logger");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.visible = false;
@@ -2086,17 +2110,15 @@
             },
             className: "kb-inline-control kb-inline--update",
             events: {
-                click: "syncModel",
+                click: "syncFieldModel",
                 mouseenter: "mouseenter",
                 mouseleave: "mouseleave"
             },
-            focusEditor: function(e) {
-                if (!this.Parent.editor) {
-                    this.Parent.activate(e);
-                }
-            },
             render: function() {},
-            syncModel: function() {
+            syncFieldModel: function(context) {
+                this.model.sync();
+            },
+            syncModuleModel: function() {
                 this.model.get("ModuleModel").sync(true);
                 this.Toolbar.getClean();
             },
@@ -2106,7 +2128,9 @@
             mouseenter: function() {}
         });
     }, {
-        "common/Checks": 9
+        "common/Checks": 9,
+        "common/Config": 10,
+        "common/Logger": 11
     } ],
     31: [ function(require, module, exports) {
         var EditableText = require("frontend/Inline/EditableTextView");
@@ -2869,7 +2893,7 @@
             },
             updateContainerClass: function(viewfile) {
                 if (!viewfile || !viewfile.current || !viewfile.target) {
-                    _K.error("updateContainerClass | frontendModal | parameter exception");
+                    return false;
                 }
                 this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));
                 this.ModuleView.$el.addClass(this._classifyView(viewfile.target));

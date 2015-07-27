@@ -6,7 +6,7 @@ var KBOnSiteEditing;
         _active: false,
         init: function () {
             var that = this;
-            $body = $('body');
+            var $body = $('body');
 
             $('#wpadminbar').on('click', 'li.os-edit a', function (e) {
                 e.preventDefault();
@@ -50,7 +50,7 @@ var KBOnSiteEditing;
             $(container).fadeTo(350, 0, function () {
                 $(this).empty().append(result.output);
                 $(this).fadeTo(350, 1);
-                KBOnSiteEditing.shutdown(result.callback);
+                //KBOnSiteEditing.shutdown(result.callback);
             })
 
 
@@ -77,7 +77,6 @@ var KBOnSiteEditing;
 jQuery(document).ready(function ($) {
 
     KBOnSiteEditing.init();
-
 });
 
 
