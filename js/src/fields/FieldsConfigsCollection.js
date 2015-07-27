@@ -23,7 +23,6 @@ module.exports = Backbone.Collection.extend({
     return {};
   },
   bindLinkedFields: function (model) {
-    this.resetLinkedFields();
     _.each(this.models, function (m) {
       var links = m.get('linkedFields') || {};
       var uid = model.get('uid');
@@ -31,12 +30,17 @@ module.exports = Backbone.Collection.extend({
         links[uid] = model;
         model.listenTo(m, 'external.change', model.externalUpdate);
       }
-    })
-  },
-  resetLinkedFields:function(){
-    _.each(this.models, function(model){
-      model.set('linkedFields', {});
-    })
+    });
+
+    var newLinks = model.get('linkedFields');
+
+    if (newLinks) {
+      _.each(newLinks, function (newLink, i) {
+        if (this.get(i)){
+          newLinks[i] = this.get(i);
+        }
+      }, this);
+    }
   },
   updateModels: function (data) {
     if (data) {
@@ -44,9 +48,10 @@ module.exports = Backbone.Collection.extend({
         var model = this.get(field.uid);
         if (model) {
           model.trigger('field.model.settings', field);
+        } else {
+          this.add(field);
         }
       }, this);
-      this.add(_.toArray(data));
     }
   }
 });

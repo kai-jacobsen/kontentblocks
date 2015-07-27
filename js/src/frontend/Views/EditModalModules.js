@@ -253,7 +253,6 @@ module.exports = Backbone.View.extend({
 
     // apply settings for the modal from the active module, if any
     this.applyControlsSettings(this.$el);
-    console.log('set to false');
 
     //this.updateViewClassTo = false;
 
@@ -448,7 +447,6 @@ module.exports = Backbone.View.extend({
       KB.FieldConfigs.updateModels(res.data.json.Fields);
     }
 
-    console.log(that.updateViewClassTo, 'b4');
 
 
     // cache module container height

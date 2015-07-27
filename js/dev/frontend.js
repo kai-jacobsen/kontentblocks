@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-26 */
+/*! Kontentblocks DevVersion 2015-07-27 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1045,6 +1045,7 @@
                 }
             },
             bindHandlers: function() {
+                this.listenTo(this, "field.model.settings", this.updateLinkedFields);
                 this.listenToOnce(this.ModuleModel, "remove", this.remove);
                 this.listenTo(this.ModuleModel, "change:moduleData", this.setData);
                 this.listenTo(this.ModuleModel, "module.model.updated", this.getClean);
@@ -1060,6 +1061,12 @@
                         el: this.getElement(),
                         model: this
                     });
+                }
+            },
+            updateLinkedFields: function(fieldSettings) {
+                if (fieldSettings.linkedFields) {
+                    this.set("linkedFields", fieldSettings.linkedFields);
+                    this.cleanUp();
                 }
             },
             getElement: function() {
@@ -1155,7 +1162,6 @@
                 return {};
             },
             bindLinkedFields: function(model) {
-                this.resetLinkedFields();
                 _.each(this.models, function(m) {
                     var links = m.get("linkedFields") || {};
                     var uid = model.get("uid");
@@ -1164,11 +1170,14 @@
                         model.listenTo(m, "external.change", model.externalUpdate);
                     }
                 });
-            },
-            resetLinkedFields: function() {
-                _.each(this.models, function(model) {
-                    model.set("linkedFields", {});
-                });
+                var newLinks = model.get("linkedFields");
+                if (newLinks) {
+                    _.each(newLinks, function(newLink, i) {
+                        if (this.get(i)) {
+                            newLinks[i] = this.get(i);
+                        }
+                    }, this);
+                }
             },
             updateModels: function(data) {
                 if (data) {
@@ -1176,9 +1185,10 @@
                         var model = this.get(field.uid);
                         if (model) {
                             model.trigger("field.model.settings", field);
+                        } else {
+                            this.add(field);
                         }
                     }, this);
-                    this.add(_.toArray(data));
                 }
             }
         });
@@ -2015,6 +2025,7 @@
             },
             mouseleave: function() {
                 this.Parent.$el.removeClass("kb-field--outline");
+                console.log(this.model.get("linkedFields"));
                 _.each(this.model.get("linkedFields"), function(linkedModel) {
                     linkedModel.FieldView.$el.removeClass("kb-field--outline-link");
                 });
@@ -2692,7 +2703,6 @@
                 Logger.User.info("Frontend modal retrieves data from the server");
                 json = this.model.toJSON();
                 this.applyControlsSettings(this.$el);
-                console.log("set to false");
                 jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -2805,7 +2815,6 @@
                 if (res.data.json && res.data.json.Fields) {
                     KB.FieldConfigs.updateModels(res.data.json.Fields);
                 }
-                console.log(that.updateViewClassTo, "b4");
                 height = that.ModuleView.$el.height();
                 that.ModuleView.model.trigger("modal.serialize.before");
                 if (that.updateViewClassTo !== false) {

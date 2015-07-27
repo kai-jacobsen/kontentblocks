@@ -30,6 +30,7 @@ module.exports = Backbone.View.extend({
   },
   mouseleave: function(){
     this.Parent.$el.removeClass('kb-field--outline');
+    console.log(this.model.get('linkedFields'));
     _.each(this.model.get('linkedFields'), function(linkedModel){
       linkedModel.FieldView.$el.removeClass('kb-field--outline-link');
     })

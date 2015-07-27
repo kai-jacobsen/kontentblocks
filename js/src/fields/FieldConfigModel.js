@@ -21,6 +21,7 @@ module.exports = Backbone.Model.extend({
     }
   },
   bindHandlers: function () {
+    this.listenTo(this, 'field.model.settings', this.updateLinkedFields);
     this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
     this.listenTo(this.ModuleModel, 'module.model.updated', this.getClean); // set state to clean
@@ -36,6 +37,12 @@ module.exports = Backbone.Model.extend({
         el: this.getElement(), // get the root DOM element for this field
         model: this
       });
+    }
+  },
+  updateLinkedFields: function (fieldSettings) {
+    if (fieldSettings.linkedFields){
+      this.set('linkedFields', fieldSettings.linkedFields);
+      this.cleanUp();
     }
   },
   getElement: function () {
@@ -67,8 +74,8 @@ module.exports = Backbone.Model.extend({
       return false;
     }
   },
-  getClean: function(){
-      this.trigger('field.model.clean');
+  getClean: function () {
+    this.trigger('field.model.clean');
   },
   setData: function (Model) {
     var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
@@ -107,13 +114,13 @@ module.exports = Backbone.Model.extend({
   },
   rebind: function () {
 
-    if (_.isUndefined(this.getElement())){
-      _.defer(_.bind(this.FieldView.gone,this.FieldView)); // call rerender on the field
+    if (_.isUndefined(this.getElement())) {
+      _.defer(_.bind(this.FieldView.gone, this.FieldView)); // call rerender on the field
 
     }
     else if (this.FieldView) {
       this.FieldView.setElement(this.getElement()); // markup might have changed, reset the root element
-      _.defer(_.bind(this.FieldView.rerender,this.FieldView)); // call rerender on the field
+      _.defer(_.bind(this.FieldView.rerender, this.FieldView)); // call rerender on the field
     }
   },
   unbind: function () {
