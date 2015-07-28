@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-27 */
+/*! Kontentblocks DevVersion 2015-07-28 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1038,6 +1038,7 @@
                     this.setData();
                     this.bindHandlers();
                     this.setupType();
+                    this.ModuleModel.attachField(this);
                 }
             },
             cleanUp: function() {
@@ -1087,7 +1088,7 @@
                 }
             },
             getClean: function() {
-                this.trigger("field.model.clean");
+                this.trigger("field.model.clean", this);
             },
             setData: function(Model) {
                 var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
@@ -1104,13 +1105,14 @@
                 this.set("value", _.extend(mData, addData));
             },
             upstreamData: function() {
-                if (this.get("ModuleModel")) {
+                var ModuleModel;
+                if (ModuleModel = this.get("ModuleModel")) {
                     var cdata = _.clone(this.get("ModuleModel").get("moduleData"));
                     Utilities.setIndex(cdata, this.get("kpath"), this.get("value"));
-                    this.get("ModuleModel").set("moduleData", cdata, {
-                        silent: true
+                    ModuleModel.set("moduleData", cdata, {
+                        silent: false
                     });
-                    this.get("ModuleModel").View.getDirty();
+                    ModuleModel.View.getDirty();
                 }
             },
             externalUpdate: function(model) {
@@ -1136,10 +1138,11 @@
             sync: function(context) {
                 var that = this;
                 KB.Events.trigger("field.before.sync", this.model);
-                var clone = _.clone(that.toJSON());
+                var clone = that.toJSON();
                 var type = clone.ModuleModel.type;
                 var module = clone.ModuleModel.toJSON();
                 delete clone["ModuleModel"];
+                delete clone["linkedFields"];
                 return jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -1154,7 +1157,6 @@
                     type: "POST",
                     dataType: "json",
                     success: function(res) {
-                        console.log(res);
                         that.trigger("field.model.updated", that);
                     },
                     error: function() {
@@ -1175,11 +1177,13 @@
         module.exports = Backbone.Collection.extend({
             initialize: function() {
                 this._byModule = {};
+                this._linkedFields = [];
                 this.listenTo(this, "add", this.addToModules);
                 this.listenTo(this, "add", this.bindLinkedFields);
             },
             model: FieldConfigModel,
             addToModules: function(model) {
+                console.log("add");
                 if (model.ModuleModel) {
                     var cid = model.ModuleModel.id;
                     if (!this._byModule[cid]) {
@@ -1195,22 +1199,17 @@
                 return {};
             },
             bindLinkedFields: function(model) {
-                _.each(this.models, function(m) {
-                    var links = m.get("linkedFields") || {};
-                    var uid = model.get("uid");
-                    if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
-                        links[uid] = model;
-                        model.listenTo(m, "external.change", model.externalUpdate);
-                    }
-                });
-                var newLinks = model.get("linkedFields");
-                if (newLinks) {
-                    _.each(newLinks, function(newLink, i) {
-                        if (this.get(i)) {
-                            newLinks[i] = this.get(i);
+                var lf = model.get("linkedFields");
+                _.each(lf, function(val, fid) {
+                    if (_.isNull(val)) {
+                        var xModel = this.get(fid);
+                        if (xModel) {
+                            lf[fid] = xModel;
+                            model.listenTo(xModel, "external.change", model.externalUpdate);
+                            this.bindLinkedFields(xModel);
                         }
-                    }, this);
-                }
+                    }
+                }, this);
             },
             updateModels: function(data) {
                 if (data) {
@@ -1420,7 +1419,6 @@
             setMode: function(settings) {
                 this.model.set("mode", settings.mode);
                 this.mode = settings.mode;
-                console.log("mode set", settings.mode);
             },
             render: function() {
                 this.delegateEvents();
@@ -1484,14 +1482,13 @@
             handleAttachment: function(attachment, suppress) {
                 var that = this;
                 var id = attachment.get("id");
+                console.log(suppress);
+                console.trace();
                 var value = this.prepareValue(attachment);
-                var moduleData = _.clone(this.model.get("ModuleModel").get("moduleData"));
-                var path = this.model.get("kpath");
                 this.model.attachment = attachment;
-                Utilities.setIndex(moduleData, path, value);
-                this.model.get("ModuleModel").set("moduleData", moduleData);
+                this.model.set("value", value);
                 KB.Events.trigger("modal.refresh");
-                that.model.trigger("field.model.dirty");
+                that.model.trigger("field.model.dirty", that.model);
                 var args = {
                     width: that.model.get("width"),
                     height: that.model.get("height"),
@@ -1537,6 +1534,7 @@
                 };
             },
             synchronize: function(model) {
+                console.trace();
                 this.handleAttachment(model.attachment, true);
             }
         });
@@ -1621,7 +1619,7 @@
                     linktext: title
                 };
                 this.model.set("value", data);
-                this.model.trigger("field.model.dirty");
+                this.model.trigger("field.model.dirty", this.model);
                 this.model.trigger("external.change", this.model);
                 wpLink.close();
                 this.close();
@@ -1645,7 +1643,7 @@
             synchronize: function(model) {
                 this.$el.attr("href", model.get("value").link);
                 this.$el.html(model.get("value").linktext);
-                this.model.trigger("field.model.dirty");
+                this.model.trigger("field.model.dirty", this.model);
                 KB.Events.trigger("content.change");
             }
         });
@@ -1734,7 +1732,6 @@
                             var con;
                             window.wpActiveEditor = that.el.id;
                             con = Utilities.getIndex(ed.module.get("moduleData"), that.model.get("kpath"));
-                            console.log(con);
                             if (ed.kfilter) {
                                 ed.setContent(switchEditors.wpautop(con));
                             }
@@ -1748,18 +1745,15 @@
                             if (ed.kfilter) {
                                 content = switchEditors._wp_Nop(ed.getContent());
                             }
-                            moduleData = _.clone(ed.module.get("moduleData"));
-                            path = that.model.get("kpath");
-                            Utilities.setIndex(moduleData, path, content);
                             if (ed.isDirty()) {
                                 ed.placeholder = false;
                                 if (ed.kfilter) {
-                                    that.retrieveFilteredContent(ed, content, moduleData);
+                                    that.retrieveFilteredContent(ed, content);
                                 } else {
-                                    ed.module.set("moduleData", moduleData);
+                                    that.model.set("value", content);
                                     that.model.syncContent = ed.getContent();
                                     that.model.trigger("external.change", that.model);
-                                    that.model.trigger("field.model.dirty");
+                                    that.model.trigger("field.model.dirty", that.model);
                                     KB.Events.trigger("content.change");
                                 }
                             } else {
@@ -1770,7 +1764,7 @@
                 };
                 this.defaults = _.extend(defaults, this.settings);
             },
-            retrieveFilteredContent: function(ed, content, moduleData) {
+            retrieveFilteredContent: function(ed, content) {
                 var that = this;
                 jQuery.ajax({
                     url: ajaxurl,
@@ -1784,9 +1778,9 @@
                     dataType: "json",
                     success: function(res) {
                         ed.setContent(res.data.content);
-                        ed.module.set("moduleData", moduleData);
+                        that.model.set("value", content);
                         that.model.syncContent = ed.getContent();
-                        that.model.trigger("field.model.dirty");
+                        that.model.trigger("field.model.dirty", that.model);
                         that.model.trigger("external.change", that.model);
                         KB.Events.trigger("content.change");
                         setTimeout(function() {
@@ -1849,7 +1843,7 @@
                 } else {
                     this.$el.html(model.syncContent);
                 }
-                this.model.trigger("field.model.dirty");
+                this.model.trigger("field.model.dirty", this.model);
             }
         });
         var markSelection = function() {
@@ -1934,8 +1928,10 @@
             create: function() {
                 var that = this;
                 _.each(this.controls, function(control) {
-                    control.$el.appendTo(that.$el);
-                    control.Toolbar = that;
+                    if (control.isValid()) {
+                        control.render().appendTo(that.$el);
+                        control.Toolbar = that;
+                    }
                 });
                 this.$el.appendTo("body");
                 this.createPosition();
@@ -2006,7 +2002,9 @@
             openFrame: function() {
                 this.Parent.openFrame();
             },
-            render: function() {},
+            render: function() {
+                return this.$el;
+            },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
             },
@@ -2046,7 +2044,9 @@
             openDialog: function() {
                 this.Parent.openDialog();
             },
-            render: function() {},
+            render: function() {
+                return this.$el;
+            },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
             },
@@ -2085,7 +2085,9 @@
                     this.Parent.activate(e);
                 }
             },
-            render: function() {},
+            render: function() {
+                return this.$el;
+            },
             isValid: function() {
                 return Check.userCan("edit_kontentblocks");
             },
@@ -2114,9 +2116,6 @@
                 this.visible = false;
                 this.options = options || {};
                 this.Parent = options.parent;
-                if (this.isValid()) {
-                    this.render();
-                }
             },
             className: "kb-inline-control kb-inline--update",
             events: {
@@ -2124,12 +2123,19 @@
                 mouseenter: "mouseenter",
                 mouseleave: "mouseleave"
             },
-            render: function() {},
+            render: function() {
+                return this.$el;
+            },
             syncFieldModel: function(context) {
                 var dfr = this.model.sync(this);
                 dfr.done(function(res) {
                     if (res.success) {
                         this.model.getClean();
+                        _.each(this.model.get("linkedFields"), function(model, i) {
+                            if (!_.isNull(model)) {
+                                model.getClean();
+                            }
+                        });
                     }
                 });
             },
@@ -2173,6 +2179,8 @@
         var Logger = require("common/Logger");
         module.exports = Backbone.Model.extend({
             idAttribute: "mid",
+            attachedFields: {},
+            changedFields: {},
             initialize: function() {
                 this.subscribeToArea();
                 this.type = "module";
@@ -2186,6 +2194,31 @@
             },
             dispose: function() {
                 this.stopListening();
+            },
+            attachField: function(FieldModel) {
+                this.attachedFields[FieldModel.id] = FieldModel;
+                this.listenTo(FieldModel, "field.model.dirty", this.addChangedField);
+                this.listenTo(FieldModel, "field.model.clean", this.removeChangedField);
+                this.listenTo(FieldModel, "remove", this.removeAttachedField);
+            },
+            removeAttachedField: function(FieldModel) {
+                if (this.attachedFields[FieldModel.id]) {
+                    delete this.attachedFields[FieldModel.id];
+                }
+                if (this.changedFields[FieldModel.id]) {
+                    delete this.changedFields[FieldModel.id];
+                }
+            },
+            addChangedField: function(FieldModel) {
+                this.changedFields[FieldModel.id] = FieldModel;
+            },
+            removeChangedField: function(FieldModel) {
+                if (this.changedFields[FieldModel.id]) {
+                    delete this.changedFields[FieldModel.id];
+                }
+                if (_.isEmpty(this.changedFields)) {
+                    this.View.getClean();
+                }
             },
             sync: function(save, context) {
                 var that = this;
@@ -2210,6 +2243,12 @@
                         Logger.Debug.error("serialize | FrontendModal | Ajax error");
                     }
                 });
+            },
+            getModuleView: function() {
+                if (this.View) {
+                    return this.View;
+                }
+                return false;
             }
         });
     }, {
@@ -2222,8 +2261,35 @@
         var Logger = require("common/Logger");
         module.exports = Backbone.Model.extend({
             idAttribute: "baseId",
+            attachedFields: {},
+            changedFields: {},
             initialize: function() {
                 this.type = "panel";
+            },
+            attachField: function(FieldModel) {
+                this.attachedFields[FieldModel.id] = FieldModel;
+                this.listenTo(FieldModel, "field.model.dirty", this.addChangedField);
+                this.listenTo(FieldModel, "field.model.clean", this.removeChangedField);
+                this.listenTo(FieldModel, "remove", this.removeAttachedField);
+            },
+            removeAttachedField: function(FieldModel) {
+                if (this.attachedFields[FieldModel.id]) {
+                    delete this.attachedFields[FieldModel.id];
+                }
+                if (this.changedFields[FieldModel.id]) {
+                    delete this.changedFields[FieldModel.id];
+                }
+            },
+            addChangedField: function(FieldModel) {
+                this.changedFields[FieldModel.id] = FieldModel;
+            },
+            removeChangedField: function(FieldModel) {
+                if (this.changedFields[FieldModel.id]) {
+                    delete this.changedFields[FieldModel.id];
+                }
+                if (_.isEmpty(this.changedFields)) {
+                    this.trigger("module.model.updated");
+                }
             },
             sync: function(save, context) {
                 var that = this;
@@ -3505,7 +3571,7 @@
             },
             toggleSidebar: function() {
                 this.visible = !this.visible;
-                this.$el.fadeToggle();
+                this.$el.toggle(0);
                 jQuery("body").toggleClass("kb-sidebar-visible");
                 Utilities.stex.set("kb-sidebar-visible", this.visible, 1e3 * 60 * 60);
                 this.visible ? this.trigger("sidebar.open") : this.trigger("sidebar.close");

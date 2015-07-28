@@ -62,7 +62,7 @@ class UpdateFieldModel implements AjaxActionInterface
     private static function setupPostData( ValueStorageInterface $Request )
     {
         $stdClass = new \stdClass();
-        $stdClass->data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->data = $Request->get( 'data' );
         $stdClass->field = $Request->getFiltered( 'field', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $stdClass->module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $stdClass->type = $Request->getFiltered( 'type', FILTER_SANITIZE_STRING );
@@ -82,6 +82,7 @@ class UpdateFieldModel implements AjaxActionInterface
         } else {
             $data[$field['fieldkey']] = $postdata->data;
         }
+
 
         return $data;
     }

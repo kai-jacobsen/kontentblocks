@@ -30,7 +30,6 @@ var EditableImage = Backbone.View.extend({
   setMode: function(settings){
     this.model.set('mode', settings.mode);
     this.mode = settings.mode;
-    console.log('mode set', settings.mode);
   },
   render: function () {
     this.delegateEvents();
@@ -115,15 +114,19 @@ var EditableImage = Backbone.View.extend({
   handleAttachment: function (attachment, suppress) {
     var that = this;
     var id = attachment.get('id');
+    console.log(suppress);
+    console.trace();
+
     var value = this.prepareValue(attachment);
-    var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
-    var path = this.model.get('kpath');
+    //var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
+    //var path = this.model.get('kpath');
     this.model.attachment = attachment;
-    Utilities.setIndex(moduleData, path, value);
-    this.model.get('ModuleModel').set('moduleData', moduleData);
+    //Utilities.setIndex(moduleData, path, value);
+    //this.model.get('ModuleModel').set('moduleData', moduleData);
     //this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
+    this.model.set('value', value);
     KB.Events.trigger('modal.refresh');
-    that.model.trigger('field.model.dirty');
+    that.model.trigger('field.model.dirty', that.model);
 
     var args = {
       width: that.model.get('width'),
@@ -149,7 +152,6 @@ var EditableImage = Backbone.View.extend({
           that.$el.css('backgroundImage', "url('" + res.data.src + "')");
 
         }
-
         that.delegateEvents();
         if (!suppress) {
           that.model.trigger('external.change', that.model);
@@ -179,6 +181,7 @@ var EditableImage = Backbone.View.extend({
   }
   ,
   synchronize: function (model) {
+    console.trace();
     this.handleAttachment(model.attachment, true);
   }
 });

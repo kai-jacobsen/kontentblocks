@@ -134,7 +134,7 @@ module.exports = Backbone.View.extend({
   },
   toggleSidebar: function () {
     this.visible = !this.visible;
-    this.$el.fadeToggle();
+    this.$el.toggle(0);
     jQuery('body').toggleClass('kb-sidebar-visible');
     Utilities.stex.set('kb-sidebar-visible', this.visible, 1000 * 60 * 60);
     (this.visible) ? this.trigger('sidebar.open') : this.trigger('sidebar.close');

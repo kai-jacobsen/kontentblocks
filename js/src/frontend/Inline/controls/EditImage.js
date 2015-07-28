@@ -5,7 +5,6 @@ module.exports = Backbone.View.extend({
     this.options = options || {};
     this.Parent = options.parent;
     this.listenTo(KB.Events, 'window.change', this.reposition);
-
   },
   className: 'kb-inline-control kb-inline--edit-image',
   events: {
@@ -17,6 +16,7 @@ module.exports = Backbone.View.extend({
     this.Parent.openFrame();
   },
   render: function () {
+    return this.$el;
   },
   isValid: function () {
     return Check.userCan('edit_kontentblocks');

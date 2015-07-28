@@ -11,7 +11,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   top: 0;
   //  border-right: 1px solid #f2f2f2;
   box-shadow: 0px 1px 8px #333;
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif !important;
   z-index: 2000;
   transition: all .3s ease-out;
   opacity: 1;
@@ -180,7 +180,7 @@ body.onsite-editing .kb-in-sidebar-active {
 }
 
 .kb-sidebar-area-details__header {
-  background-color: #3b5963;
+  background-color: $grey-900;
   font-size: 16px;
   color: #fff;
   font-weight: 900;
@@ -244,7 +244,8 @@ body.onsite-editing .kb-in-sidebar-active {
 .kb-sidebar__subheader {
   font-size: 14px;
   padding: 4px 8px;
-  background-color: darken(#3b5963, 10%);
+  //background-color: darken(#3b5963, 10%);
+  background-color: $grey-900;
   color: #fff;
 }
 
@@ -329,7 +330,7 @@ body.onsite-editing .kb-in-sidebar-active {
         display: block;
         position: absolute;
         left: 5px;
-        top: 2px;
+        top: 10px;
         color: #999;
         font-size: 25px;
         font-family: 'genericons';
@@ -371,21 +372,20 @@ body.onsite-editing .kb-in-sidebar-active {
   position: fixed;
   width: 40px;
   height: 40px;
-  background-color: #3b5963;
-  left: 0;
-  bottom: 0;
-  border-top-right-radius: 30px;
+  line-height: 40px;
+  background-color: $grey-900;
+  left: 10px;
+  bottom: 10px;
+  border-radius: 30px;
   box-shadow: 1px 1px 3px #333;
   z-index: 2999;
+  text-align: center;
 
   &::before {
     content: '\f445';
-    position: absolute;
     color: #fff;
     font-family: 'genericons' !important;
     font-size: 20px;
-    top: 8px;
-    left: 7px;
     font-weight: 100;
     cursor: pointer;
   }

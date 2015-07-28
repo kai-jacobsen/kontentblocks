@@ -21,25 +21,21 @@ class AreaRenderer
 {
 
     /**
-     * @var AreaHtmlNode
-     */
-    protected $AreaHtmlNode;
-
-    /**
      * @var string
      */
     public $areaId;
-
     /**
      * @var \Kontentblocks\Areas\AreaProperties
      */
     public $Area;
-
     /**
      * @var \Kontentblocks\Backend\Environment\Environment
      */
     public $Environment;
-
+    /**
+     * @var AreaHtmlNode
+     */
+    protected $AreaHtmlNode;
     /**
      * @var ModuleIterator
      */
@@ -115,6 +111,7 @@ class AreaRenderer
 
             $this->ModuleRenderer = new SingleModuleRenderer( $Module, $this->AreaHtmlNode->getPublicAttributes() );
 
+
             if (!is_a( $Module, '\Kontentblocks\Modules\Module' ) || !$Module->verify()) {
                 continue;
             }
@@ -148,6 +145,25 @@ class AreaRenderer
         }
     }
 
+    public function _validate()
+    {
+
+        if (!isset( $this->AreaHtmlNode )) {
+            return false;
+        }
+
+        if (!$this->Area->settings->isActive()) {
+            return false;
+        }
+
+        if ($this->Area->dynamic && !$this->Area->settings->isAttached()) {
+            return false;
+        }
+
+
+        return true;
+    }
+
     /**
      *
      * @param $classes
@@ -172,22 +188,6 @@ class AreaRenderer
 
     }
 
-    /**
-     * @param $_after
-     * @param $Module
-     * @return string
-     */
-    public function afterModule( $_after, Module $Module )
-    {
-        $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
-        if (!empty( $layout )) {
-            return "</div>" . sprintf( "%s", $this->ModuleRenderer->afterModule() );
-        } else {
-            return $this->ModuleRenderer->afterModule();
-
-        }
-    }
-
     public function _beforeModule( Module $Module )
     {
         $moduleClasses = $this->modules->getCurrentModuleClasses();
@@ -199,33 +199,6 @@ class AreaRenderer
         }
 
         return $mergedClasses;
-    }
-
-    public function _afterModule( Module $Module )
-    {
-        $this->previousModule = $Module->Properties->getSetting( 'id' );
-        $this->position ++;
-        $this->AreaHtmlNode->nextLayout();
-        return true;
-    }
-
-    public function _validate()
-    {
-
-        if (!isset( $this->AreaHtmlNode )) {
-            return false;
-        }
-
-        if (!$this->Area->settings->isActive()){
-            return false;
-        }
-
-        if ($this->Area->dynamic && !$this->Area->settings->isAttached()){
-            return false;
-        }
-
-
-        return true;
     }
 
     public function getAdditionalClasses( Module $Module )
@@ -270,6 +243,30 @@ class AreaRenderer
 
         return $classes;
 
+    }
+
+    /**
+     * @param $_after
+     * @param $Module
+     * @return string
+     */
+    public function afterModule( $_after, Module $Module )
+    {
+        $layout = $this->AreaHtmlNode->getCurrentLayoutClasses();
+        if (!empty( $layout )) {
+            return "</div>" . sprintf( "%s", $this->ModuleRenderer->afterModule() );
+        } else {
+            return $this->ModuleRenderer->afterModule();
+
+        }
+    }
+
+    public function _afterModule( Module $Module )
+    {
+        $this->previousModule = $Module->Properties->getSetting( 'id' );
+        $this->position ++;
+        $this->AreaHtmlNode->nextLayout();
+        return true;
     }
 
 }

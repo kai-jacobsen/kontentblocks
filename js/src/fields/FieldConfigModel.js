@@ -14,6 +14,7 @@ module.exports = Backbone.Model.extend({
       this.setData(); // get data from the parent object and assign to this
       this.bindHandlers(); // attach listeners
       this.setupType(); // create the field view
+      this.ModuleModel.attachField(this);
     }
   },
   cleanUp: function () {
@@ -52,18 +53,6 @@ module.exports = Backbone.Model.extend({
   },
   getType: function () {
     var type = this.get('type'); // link, image, etc
-
-    //if (this.ModuleModel) {
-    //  if (this.ModuleModel.type === 'panel' && type === 'EditableImage') {
-    //    return false;
-    //  }
-    //
-    //  if (this.ModuleModel.type === 'panel' && type === 'EditableText') {
-    //    return false;
-    //  }
-    //}
-
-
     if (!Checks.userCan('edit_kontentblocks')) {
       return false;
     }
@@ -77,7 +66,7 @@ module.exports = Backbone.Model.extend({
     }
   },
   getClean: function () {
-    this.trigger('field.model.clean');
+    this.trigger('field.model.clean', this);
   },
   setData: function (Model) {
     var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
@@ -100,11 +89,12 @@ module.exports = Backbone.Model.extend({
   // demo implementation in textarea.js
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {
-    if (this.get('ModuleModel')) {
+    var ModuleModel;
+    if (ModuleModel = this.get('ModuleModel')) {
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
-      this.get('ModuleModel').set('moduleData', cdata, {silent: true});
-      this.get('ModuleModel').View.getDirty();
+      ModuleModel.set('moduleData', cdata, {silent: false});
+      ModuleModel.View.getDirty();
     }
   },
   externalUpdate: function (model) {
@@ -134,11 +124,12 @@ module.exports = Backbone.Model.extend({
     var that = this;
     KB.Events.trigger('field.before.sync', this.model);
 
-    var clone = _.clone(that.toJSON());
+    var clone = that.toJSON();
     var type = clone.ModuleModel.type;
     var module = clone.ModuleModel.toJSON();
 
     delete clone['ModuleModel'];
+    delete clone['linkedFields'];
 
     return jQuery.ajax({
       url: ajaxurl,
@@ -154,7 +145,6 @@ module.exports = Backbone.Model.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        console.log(res);
         that.trigger('field.model.updated', that);
       },
       error: function () {

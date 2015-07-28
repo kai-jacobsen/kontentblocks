@@ -39,7 +39,7 @@ var EditableLink = Backbone.View.extend({
   derender: function () {
     this.trigger('field.view.derender', this);
   },
-  gone: function(){
+  gone: function () {
     this.trigger('field.view.gone', this);
     this.Toolbar.hide();
   },
@@ -92,7 +92,7 @@ var EditableLink = Backbone.View.extend({
 
     //var kpath = this.model.get('kpath');
     this.model.set('value', data);
-    this.model.trigger('field.model.dirty');
+    this.model.trigger('field.model.dirty', this.model);
     this.model.trigger('external.change', this.model);
 
     //restore the original function
@@ -121,7 +121,7 @@ var EditableLink = Backbone.View.extend({
   synchronize: function (model) {
     this.$el.attr('href', model.get('value').link);
     this.$el.html(model.get('value').linktext);
-    this.model.trigger('field.model.dirty');
+    this.model.trigger('field.model.dirty', this.model);
     KB.Events.trigger('content.change');
 
   }

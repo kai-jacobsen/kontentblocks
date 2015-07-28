@@ -77,7 +77,7 @@ class UpdateModule implements AjaxActionInterface
         $stdClass = new \stdClass();
         $stdClass->data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $stdClass->module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->postId = filter_var( $stdClass->module['post_id'], FILTER_VALIDATE_INT );
+        $stdClass->postId = filter_var( $stdClass->module['parentObjectId'], FILTER_VALIDATE_INT );
         $stdClass->editmode = $Request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );
         $stdClass->update = ( isset( $stdClass->editmode ) && $stdClass->editmode === 'update' ) ? true : false;
         return $stdClass;

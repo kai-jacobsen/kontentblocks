@@ -233,6 +233,7 @@ class ModuleGlobalModuleProxy extends Module
             return $data;
         }
 
+
         if (filter_var(
                 $Properties->globalModule,
                 FILTER_VALIDATE_BOOLEAN

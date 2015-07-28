@@ -35,7 +35,7 @@ class GetModuleForm implements AjaxActionInterface
 
         $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-        $Environment = Utilities::getEnvironment( $module['post_id'] );
+        $Environment = Utilities::getEnvironment( $module['parentObjectId'] );
         $Module = $Environment->getModuleById( $module['mid'] );
         $Module->Properties->viewfile = filter_var( $module['viewfile'], FILTER_SANITIZE_STRING );
         $Module = apply_filters( 'kb.module.before.factory', $Module );

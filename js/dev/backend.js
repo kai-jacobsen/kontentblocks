@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-27 */
+/*! Kontentblocks DevVersion 2015-07-28 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -2407,6 +2407,7 @@
                     this.setData();
                     this.bindHandlers();
                     this.setupType();
+                    this.ModuleModel.attachField(this);
                 }
             },
             cleanUp: function() {
@@ -2456,7 +2457,7 @@
                 }
             },
             getClean: function() {
-                this.trigger("field.model.clean");
+                this.trigger("field.model.clean", this);
             },
             setData: function(Model) {
                 var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
@@ -2473,13 +2474,14 @@
                 this.set("value", _.extend(mData, addData));
             },
             upstreamData: function() {
-                if (this.get("ModuleModel")) {
+                var ModuleModel;
+                if (ModuleModel = this.get("ModuleModel")) {
                     var cdata = _.clone(this.get("ModuleModel").get("moduleData"));
                     Utilities.setIndex(cdata, this.get("kpath"), this.get("value"));
-                    this.get("ModuleModel").set("moduleData", cdata, {
-                        silent: true
+                    ModuleModel.set("moduleData", cdata, {
+                        silent: false
                     });
-                    this.get("ModuleModel").View.getDirty();
+                    ModuleModel.View.getDirty();
                 }
             },
             externalUpdate: function(model) {
@@ -2505,10 +2507,11 @@
             sync: function(context) {
                 var that = this;
                 KB.Events.trigger("field.before.sync", this.model);
-                var clone = _.clone(that.toJSON());
+                var clone = that.toJSON();
                 var type = clone.ModuleModel.type;
                 var module = clone.ModuleModel.toJSON();
                 delete clone["ModuleModel"];
+                delete clone["linkedFields"];
                 return jQuery.ajax({
                     url: ajaxurl,
                     data: {
@@ -2523,7 +2526,6 @@
                     type: "POST",
                     dataType: "json",
                     success: function(res) {
-                        console.log(res);
                         that.trigger("field.model.updated", that);
                     },
                     error: function() {
@@ -2544,11 +2546,13 @@
         module.exports = Backbone.Collection.extend({
             initialize: function() {
                 this._byModule = {};
+                this._linkedFields = [];
                 this.listenTo(this, "add", this.addToModules);
                 this.listenTo(this, "add", this.bindLinkedFields);
             },
             model: FieldConfigModel,
             addToModules: function(model) {
+                console.log("add");
                 if (model.ModuleModel) {
                     var cid = model.ModuleModel.id;
                     if (!this._byModule[cid]) {
@@ -2564,22 +2568,17 @@
                 return {};
             },
             bindLinkedFields: function(model) {
-                _.each(this.models, function(m) {
-                    var links = m.get("linkedFields") || {};
-                    var uid = model.get("uid");
-                    if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
-                        links[uid] = model;
-                        model.listenTo(m, "external.change", model.externalUpdate);
-                    }
-                });
-                var newLinks = model.get("linkedFields");
-                if (newLinks) {
-                    _.each(newLinks, function(newLink, i) {
-                        if (this.get(i)) {
-                            newLinks[i] = this.get(i);
+                var lf = model.get("linkedFields");
+                _.each(lf, function(val, fid) {
+                    if (_.isNull(val)) {
+                        var xModel = this.get(fid);
+                        if (xModel) {
+                            lf[fid] = xModel;
+                            model.listenTo(xModel, "external.change", model.externalUpdate);
+                            this.bindLinkedFields(xModel);
                         }
-                    }, this);
-                }
+                    }
+                }, this);
             },
             updateModels: function(data) {
                 if (data) {

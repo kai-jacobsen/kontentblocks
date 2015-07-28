@@ -6,9 +6,6 @@ module.exports = Backbone.View.extend({
     this.visible = false;
     this.options = options || {};
     this.Parent = options.parent;
-    if (this.isValid()) {
-      this.render();
-    }
   },
   className: 'kb-inline-control kb-inline--update',
   events: {
@@ -17,18 +14,22 @@ module.exports = Backbone.View.extend({
     'mouseleave': 'mouseleave'
   },
   render: function () {
-    //this.Parent.parentView.$el.append(this.$el);
-    //this.$el.hide();
+      return this.$el;
   },
   syncFieldModel: function (context) {
     var dfr = this.model.sync(this);
-    dfr.done(function(res){
-     if(res.success){
-       this.model.getClean();
-     }
+    dfr.done(function (res) {
+      if (res.success) {
+        this.model.getClean();
+        _.each(this.model.get('linkedFields'), function (model, i) {
+          if (!_.isNull(model)) {
+            model.getClean();
+          }
+        });
+      }
     })
   },
-  syncModuleModel: function(){
+  syncModuleModel: function () {
     this.model.get('ModuleModel').sync(true);
     this.Toolbar.getClean();
   },

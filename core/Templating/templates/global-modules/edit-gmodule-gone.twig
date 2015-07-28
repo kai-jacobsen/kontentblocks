@@ -1,0 +1,33 @@
+<div id="kontentblocks-core-ui" class="postbox">
+    <h3>{{ i18n.editGmodulesTitle }}</h3>
+    <div class="inside kb-module" id="{{ module.mid }}">
+        <h2>The requested Module does not exist in the current theme/module paths</h2>
+        <p>This is not a problem, but you can't use the module until the corresponding files are back in place.</p>
+    </div>
+    <div class="global-module--attached">
+        <h3>{{ i18n.editGmodulesAttached }}</h3>
+        <p>{{ i18n.editGmoduleAttachedDescription }}</p>
+        <table>
+            <thead>
+            <tr>
+                <th width="10%">ID</th>
+                <th width="80%">{{ i18n.title }}</th>
+                <th width="10%">{{ i18n.action }}</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for post in attachedTo %}
+
+                <tr>
+                    <td>{{ post.ID }}</td>
+                    <td>{{ post.post_title }}</td>
+                    <td><a target="krosstab" href="{{ get_edit_post_link(post.ID) }}">{{ i18n.view }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" name="_nonce" value="{{ nonce }}">
+</div>
+

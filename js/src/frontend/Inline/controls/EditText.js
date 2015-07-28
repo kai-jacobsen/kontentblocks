@@ -17,8 +17,7 @@ module.exports = Backbone.View.extend({
     }
   },
   render: function () {
-    //this.Parent.parentView.$el.append(this.$el);
-    //this.$el.hide();
+    return this.$el;
   },
   isValid: function () {
     return Check.userCan('edit_kontentblocks');

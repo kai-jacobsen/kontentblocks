@@ -24,8 +24,10 @@ module.exports = Backbone.View.extend({
   create: function () {
     var that = this;
     _.each(this.controls, function (control) {
-      control.$el.appendTo(that.$el);
-      control.Toolbar = that;
+      if (control.isValid()){
+        control.render().appendTo(that.$el);
+        control.Toolbar = that;
+      }
     });
     this.$el.appendTo('body');
     this.createPosition();

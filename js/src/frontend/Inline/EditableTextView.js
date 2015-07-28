@@ -86,7 +86,6 @@ var EditableText = Backbone.View.extend({
           var con;
           window.wpActiveEditor = that.el.id;
           con = Utilities.getIndex(ed.module.get('moduleData'), that.model.get('kpath'));
-          console.log(con);
           if (ed.kfilter) {
             ed.setContent(switchEditors.wpautop(con));
           }
@@ -122,19 +121,22 @@ var EditableText = Backbone.View.extend({
           }
 
           // get a copy of module data
-          moduleData = _.clone(ed.module.get('moduleData'));
-          path = that.model.get('kpath');
-          Utilities.setIndex(moduleData, path, content);
+          //moduleData = _.clone(ed.module.get('moduleData'));
+          //path = that.model.get('kpath');
+          //Utilities.setIndex(moduleData, path, content);
+
+
           // && ed.kfilter set
           if (ed.isDirty()) {
             ed.placeholder = false;
             if (ed.kfilter) {
-              that.retrieveFilteredContent(ed, content, moduleData);
+              that.retrieveFilteredContent(ed, content);
             } else {
-              ed.module.set('moduleData', moduleData);
+              //ed.module.set('moduleData', moduleData);
+              that.model.set('value', content);
               that.model.syncContent = ed.getContent();
               that.model.trigger('external.change', that.model);
-              that.model.trigger('field.model.dirty');
+              that.model.trigger('field.model.dirty', that.model);
               KB.Events.trigger('content.change');
 
             }
@@ -147,7 +149,7 @@ var EditableText = Backbone.View.extend({
     };
     this.defaults = _.extend(defaults, this.settings);
   },
-  retrieveFilteredContent: function (ed, content, moduleData) {
+  retrieveFilteredContent: function (ed, content) {
     var that = this;
     jQuery.ajax({
       url: ajaxurl,
@@ -161,10 +163,10 @@ var EditableText = Backbone.View.extend({
       dataType: 'json',
       success: function (res) {
         ed.setContent(res.data.content);
-        ed.module.set('moduleData', moduleData);
+        that.model.set('value', content);
         that.model.syncContent = ed.getContent();
 
-        that.model.trigger('field.model.dirty');
+        that.model.trigger('field.model.dirty',that.model);
         that.model.trigger('external.change', that.model);
         KB.Events.trigger('content.change');
 
@@ -234,7 +236,7 @@ var EditableText = Backbone.View.extend({
     } else {
       this.$el.html(model.syncContent);
     }
-    this.model.trigger('field.model.dirty');
+    this.model.trigger('field.model.dirty',this.model);
 
   }
 });

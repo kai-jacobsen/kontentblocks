@@ -122,6 +122,15 @@ class GlobalModulesMenu
         $Workshop = new ModuleWorkshop( $Environment, $gmodule );
         $Module = $Workshop->getModule();
 
+        if ($Module === false){
+            $FormNew = new CoreView( 'global-modules/edit-gmodule-gone.twig', array(
+                'i18n' => I18n::getPackages( 'Common', 'Menus' ),
+            'attachedTo' => $this->prepareAttachedTo()
+
+            ) );
+            return $FormNew->render( true );
+        }
+
         Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
         // Data for twig
         $templateData = array(

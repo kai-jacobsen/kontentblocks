@@ -18,6 +18,7 @@ module.exports = Backbone.View.extend({
     this.Parent.openDialog();
   },
   render: function () {
+    return this.$el;
   },
   isValid: function () {
     return Check.userCan('edit_kontentblocks');
