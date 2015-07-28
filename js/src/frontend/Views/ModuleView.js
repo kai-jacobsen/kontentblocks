@@ -26,6 +26,7 @@ module.exports = Backbone.View.extend({
     // observe model changes
     this.listenTo(this.model, 'change', this.getDirty);
     this.listenTo(this.model, 'module.model.updated', this.getClean);
+    this.listenTo(this.model, 'module.model.clean', this.getClean);
     // assign this view to the jQuery DOM Node
     this.$el.data('ModuleView', this);
 

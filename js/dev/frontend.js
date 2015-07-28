@@ -2217,7 +2217,7 @@
                     delete this.changedFields[FieldModel.id];
                 }
                 if (_.isEmpty(this.changedFields)) {
-                    this.View.getClean();
+                    this.trigger("module.model.clean", this);
                 }
             },
             sync: function(save, context) {
@@ -2643,6 +2643,7 @@
             attachHandler: function(model) {
                 this.listenTo(model, "change:moduleData", this.add);
                 this.listenTo(model, "module.model.updated", this.remove);
+                this.listenTo(model, "module.model.clean", this.remove);
             },
             add: function(model) {
                 this.models.add(model);
@@ -3304,6 +3305,7 @@
                 this.model.trigger("module.model.view.attached", this);
                 this.listenTo(this.model, "change", this.getDirty);
                 this.listenTo(this.model, "module.model.updated", this.getClean);
+                this.listenTo(this.model, "module.model.clean", this.getClean);
                 this.$el.data("ModuleView", this);
                 this.render();
                 this.setControlsPosition();
@@ -4087,6 +4089,7 @@
             bindHandlers: function() {
                 this.listenTo(this.model, "change", this.getDirty);
                 this.listenTo(this.model, "module.model.updated", this.getClean);
+                this.listenTo(this.model, "module.model.clean", this.getClean);
             },
             getDirty: function() {
                 this.$el.addClass("kb-module-dirty");

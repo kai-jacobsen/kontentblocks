@@ -21,6 +21,7 @@ module.exports = Backbone.View.extend({
   bindHandlers: function () {
     this.listenTo(this.model, 'change', this.getDirty);
     this.listenTo(this.model, 'module.model.updated', this.getClean);
+    this.listenTo(this.model, 'module.model.clean', this.getClean);
   },
   getDirty: function () {
     this.$el.addClass('kb-module-dirty');

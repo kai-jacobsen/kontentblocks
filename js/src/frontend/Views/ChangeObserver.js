@@ -18,6 +18,7 @@ module.exports = Backbone.View.extend({
   attachHandler: function (model) {
     this.listenTo(model, 'change:moduleData', this.add);
     this.listenTo(model, 'module.model.updated', this.remove);
+    this.listenTo(model, 'module.model.clean', this.remove);
   },
   add: function (model) {
     this.models.add(model);
@@ -34,7 +35,7 @@ module.exports = Backbone.View.extend({
     _.each(this.models.models, function (model) {
       model.sync(true);
     });
-    Notice.notice('all saved', 'success');
+    Notice.notice('Data is safe.', 'success');
 
   },
   handleState: function () {

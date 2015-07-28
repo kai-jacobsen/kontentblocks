@@ -44,6 +44,20 @@ add_action( 'area', 'kb_render_area', 10, 3 );
 
 
 /**
+ * Render a single context
+ * @param null $area
+ * @param null $id
+ * @param null $additionalArgs
+ */
+function kb_render_context( $context = null, $id = null, $additionalArgs = null )
+{
+    \Kontentblocks\renderContext( $context, $id, $additionalArgs );
+}
+
+add_action( 'context', 'kb_render_context', 10, 3 );
+
+
+/**
  * Render attached sidebar areas wrapper
  * @param null $id
  * @param array $additionalArgs
