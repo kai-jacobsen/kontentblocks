@@ -26,16 +26,16 @@ class DynamicAreaBackendHTML extends AreaBackendHTML
 
         echo "<div class='kb-area--body'>";
 
-        $Storage = new ModuleStorage($this->Area->parent_id);
-        $View = new CoreView(
+        $storage = new ModuleStorage($this->area->parent_id);
+        $view = new CoreView(
             'edit-screen/dynamic-area-body.twig', array(
-                'area' => $this->Area,
-                'modulesCount' => count($Storage),
-                'editUrl' => html_entity_decode(get_edit_post_link($this->Area->parent_id)),
-                'active' => $this->Area->settings->get( 'active' ) ? 'active' : 'inactive'
+                'area' => $this->area,
+                'modulesCount' => count($storage),
+                'editUrl' => html_entity_decode(get_edit_post_link($this->area->parent_id)),
+                'active' => $this->area->settings->get( 'active' ) ? 'active' : 'inactive'
             )
         );
-        $View->render( true );
+        $view->render( true );
         echo "</div>";
     }
 

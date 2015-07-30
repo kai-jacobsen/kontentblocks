@@ -29,7 +29,7 @@ Class EditScreen
     /**
      * @var Environment
      */
-    protected $Environment;
+    protected $environment;
 
 
     /**
@@ -68,7 +68,7 @@ Class EditScreen
      */
     public function renderUserInterface( $post_type, $post )
     {
-        $this->Environment = Utilities::getEnvironment( $post->ID );
+        $this->environment = Utilities::getEnvironment( $post->ID );
         add_action(
             'edit_form_after_editor',
             function () use ( $post ) {
@@ -91,23 +91,23 @@ Class EditScreen
     public function userInterface( $post )
     {
         // bail if post type doesn't support kontentblocks
-        if (!post_type_supports( $this->Environment->get( 'postType' ), 'kontentblocks' )) {
+        if (!post_type_supports( $this->environment->get( 'postType' ), 'kontentblocks' )) {
             return null;
         }
-        if (!post_type_supports( $this->Environment->get( 'postType' ), 'editor' )) {
+        if (!post_type_supports( $this->environment->get( 'postType' ), 'editor' )) {
             Utilities::hiddenEditor();
         }
 
         $hasAreas = true;
-        $areas = $this->Environment->get( 'areas' );
+        $areas = $this->environment->get( 'areas' );
         if (!$areas || empty( $areas )) {
             $hasAreas = false;
         }
 
-        $ScreenManager = new ScreenManager( $areas, $this->Environment );
-        $View = new CoreView(
+        $screenManager = new ScreenManager( $areas, $this->environment );
+        $view = new CoreView(
             '/edit-screen/user-interface.twig', array(
-                'ScreenManager' => $ScreenManager,
+                'ScreenManager' => $screenManager,
                 'hasAreas' => $hasAreas,
                 'noAreas' => $this->handleEmptyAreas(),
                 'blogId' => get_current_blog_id(),
@@ -119,7 +119,7 @@ Class EditScreen
             )
         );
 
-        return $View->render( false );
+        return $view->render( false );
 
     }
 
@@ -149,8 +149,8 @@ Class EditScreen
         if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
             $post_id = get_the_ID();
         }
-        $Environment = Utilities::getEnvironment( $post_id );
-        $Environment->save();
+        $environment = Utilities::getEnvironment( $post_id );
+        $environment->save();
     }
 
     /**

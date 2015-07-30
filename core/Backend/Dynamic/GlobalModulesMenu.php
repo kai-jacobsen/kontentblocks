@@ -81,15 +81,15 @@ class GlobalModulesMenu
 
         wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename' );
         wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce' );
-        $Storage = new ModuleStorage( $post->ID );
+        $storage = new ModuleStorage( $post->ID );
         // on this screen we always deal with only
         // one module
-        $template = $Storage->getModuleDefinition( $post->post_name );
+        $template = $storage->getModuleDefinition( $post->post_name );
         // no template yet, create new
         if (empty( $template )) {
             $this->createForm();
         } else {
-            $this->globalModule( $template, $Storage->getDataProvider() );
+            $this->globalModule( $template, $storage->getDataProvider() );
         }
 
     }
@@ -100,7 +100,7 @@ class GlobalModulesMenu
      *
      * @param $gmodule
      * @since 0.1.0
-     * @retutn void
+     * @return void
      */
     protected function globalModule( $gmodule )
     {
@@ -117,25 +117,25 @@ class GlobalModulesMenu
         Utilities::hiddenEditor();
 
         // need to create a ew module here in order to override areaContext
-        $Environment = Utilities::getEnvironment( $post->ID );
+        $environment = Utilities::getEnvironment( $post->ID );
         $gmodule['areaContext'] = $context;
-        $Workshop = new ModuleWorkshop( $Environment, $gmodule );
-        $Module = $Workshop->getModule();
+        $workshop = new ModuleWorkshop( $environment, $gmodule );
+        $module = $workshop->getModule();
 
-        if ($Module === false){
-            $FormNew = new CoreView( 'global-modules/edit-gmodule-gone.twig', array(
+        if ($module === false){
+            $formNew = new CoreView( 'global-modules/edit-gmodule-gone.twig', array(
                 'i18n' => I18n::getPackages( 'Common', 'Menus' ),
             'attachedTo' => $this->prepareAttachedTo()
 
             ) );
-            return $FormNew->render( true );
+            return $formNew->render( true );
         }
 
-        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $module->toJSON() );
         // Data for twig
         $templateData = array(
             'nonce' => wp_create_nonce( 'update-gmodule' ),
-            'module' => $Module,
+            'module' => $module,
             'attachedTo' => $this->prepareAttachedTo(),
             'contexts' => ScreenManager::getDefaultContextLayout(),
             'i18n' => I18n::getPackages( 'Common', 'Menus' )
@@ -146,8 +146,8 @@ class GlobalModulesMenu
             echo "<input type='hidden' name='kb_return_to_post' value='{$_GET['return']}' >";
         }
         // To keep html out of php files as much as possible twig is used
-        $FormNew = new CoreView( 'global-modules/edit-gmodule.twig', $templateData );
-        $FormNew->render( true );
+        $formNew = new CoreView( 'global-modules/edit-gmodule.twig', $templateData );
+        $formNew->render( true );
 
 
     }
@@ -184,8 +184,8 @@ class GlobalModulesMenu
 
         // To keep html out of php files as much as possible twig is used
         // Good thing about twig is it handles unset vars gracefully
-        $FormNew = new CoreView( 'global-modules/add-new.twig', $templateData );
-        $FormNew->render( true );
+        $formNew = new CoreView( 'global-modules/add-new.twig', $templateData );
+        $formNew->render( true );
 
     }
 
@@ -197,36 +197,36 @@ class GlobalModulesMenu
      * @since 0.1.0
      * @return bool|void
      */
-    public function save( $postId, $postObj )
+    public function save( $postId, \WP_POST $postObj )
     {
         // auth request
         if (!$this->auth( $postId )) {
             return false;
         }
 
-        $Value = new ValueStorage( $_POST );
+        $value = new ValueStorage( $_POST );
 
-        $Environment = Utilities::getEnvironment( $postId );
-        $Module = $Environment->getModuleById( $postObj->post_name );
+        $environment = Utilities::getEnvironment( $postId );
+        $module = $environment->getModuleById( $postObj->post_name );
         // no template yet, create an new one
-        if (!$Module) {
-            $this->createGlobalModule( $postId, $postObj, $Environment );
+        if (!$module) {
+            $this->createGlobalModule( $postId, $postObj, $environment );
         } else {
-            if (!wp_verify_nonce( $Value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'update-gmodule' )) {
+            if (!wp_verify_nonce( $value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'update-gmodule' )) {
                 wp_die( 'Nonce verification failed' );
             }
             // update existing
-            $old = $Module->Model->getOriginalData();
-            $data = $Value->get( $Module->getId() );
-            $new = $Module->save( $data, $old );
+            $old = $module->Model->getOriginalData();
+            $data = $value->get( $module->getId() );
+            $new = $module->save( $data, $old );
             $toSave = Utilities::arrayMergeRecursive( $new, $old );
             // save viewfile if present
-            $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-            $Environment->getStorage()->saveModule( $Module->getId(), $toSave );
-            $Environment->getStorage()->reset();
-            $Environment->getStorage()->addToIndex( $Module->getId(), $Module->Properties->export() );
+            $module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+            $environment->getStorage()->saveModule( $module->getId(), $toSave );
+            $environment->getStorage()->reset();
+            $environment->getStorage()->addToIndex( $module->getId(), $module->Properties->export() );
             // return to original post if the edit request came from outside
-            $redirect = $redirect = $Value->getFiltered(
+            $redirect = $redirect = $value->getFiltered(
                 'kb_return_to_post',
                 FILTER_SANITIZE_NUMBER_INT,
                 FILTER_NULL_ON_FAILURE
@@ -244,21 +244,21 @@ class GlobalModulesMenu
      * Create a new template from form data
      *
      * @param $postId
-     * @param Environment $Environment
+     * @param Environment $environment
      * @internal param ModuleStorage $Storage
      * @since 0.1.0
      */
-    public function createGlobalModule( $postId, \WP_Post $Post, Environment $Environment )
+    public function createGlobalModule( $postId, \WP_Post $post, Environment $environment )
     {
 
-        $Value = new ValueStorage( $_POST );
+        $value = new ValueStorage( $_POST );
 
-        $gmodule = $Value->get( 'new-gmodule' );
+        $gmodule = $value->get( 'new-gmodule' );
         if (empty( $gmodule )) {
             return;
         }
 
-        if (!wp_verify_nonce( $Value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'new-gmodule' )) {
+        if (!wp_verify_nonce( $value->getFiltered( '_nonce', FILTER_SANITIZE_STRING ), 'new-gmodule' )) {
             wp_die( 'Verification failed.' );
         }
 
@@ -271,24 +271,24 @@ class GlobalModulesMenu
             'type' => null, // module class
         );
         // parse $_POST data
-        $data = wp_parse_args( $Value->get( 'new-gmodule' ), $defaults );
+        $data = wp_parse_args( $value->get( 'new-gmodule' ), $defaults );
 
         // 2 good reasons to stop
         if (is_null(
-            $Value->getFiltered( 'name', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) ||
-            is_null( $Value->getFiltered( 'type', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) )
+            $value->getFiltered( 'name', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) ||
+            is_null( $value->getFiltered( 'type', FILTER_SANITIZE_STRING, FILTER_NULL_ON_FAILURE ) )
         )) {
             wp_die( 'Missing arguments' );
         }
 
         $workshop = new ModuleWorkshop(
-            $Environment, array(
+            $environment, array(
                 'globalModule' => true,
                 'parentObjectId' => $postId,
                 'area' => 'global-module',
                 'areaContext' => 'normal',
                 'class' => $data['type'],
-                'mid' => $Post->post_name
+                'mid' => $post->post_name
             )
         );
 
@@ -297,7 +297,7 @@ class GlobalModulesMenu
         do_action( 'kb.create:module', $definition );
 
         // add to post meta kb_kontentblocks
-        $Environment->getStorage()->addToIndex( $Post->post_name, $definition );
+        $environment->getStorage()->addToIndex( $post->post_name, $definition );
     }
 
 

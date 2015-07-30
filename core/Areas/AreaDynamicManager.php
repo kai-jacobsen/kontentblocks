@@ -87,8 +87,8 @@ class AreaDynamicManager
             $id = wp_insert_post( $post );
 
             if ($id) {
-                $Storage = new PostMetaDataProvider( $id );
-                $Storage->add( '_area', get_object_vars($area) );
+                $storage = new PostMetaDataProvider( $id );
+                $storage->add( '_area', get_object_vars($area) );
                 // custom meta data which is specific to wp database structure/queries
                 // not exactly area related data
                 update_post_meta( $id, '_kb_added_by_code', '1' );

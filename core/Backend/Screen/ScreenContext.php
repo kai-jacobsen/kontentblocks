@@ -62,12 +62,12 @@ class ScreenContext
      * Class constructor
      * @param $args
      * @param $areas
-     * @param Environment $Environment
+     * @param Environment $environment
      * @param bool $sidebars
      * @throws Exception
      * @since 0.1.0
      */
-    public function __construct( $args, $areas, Environment $Environment, $sidebars = false )
+    public function __construct( $args, $areas, Environment $environment, $sidebars = false )
     {
         if (empty( $args )) {
             throw new Exception( 'No Arguments specified for single Context' );
@@ -76,7 +76,7 @@ class ScreenContext
         $this->id = $args['id'];
         $this->title = $args['title'];
         $this->description = $args['description'];
-        $this->Environment = $Environment;
+        $this->environment = $environment;
         $this->areas = $areas;
         $this->editScreenHasSidebar = $sidebars;
 
@@ -103,7 +103,7 @@ class ScreenContext
             $this->closeContext();
         } else {
             // call the hook anyway
-            do_action( "context_box_{$this->id}", $this->id, $this->Environment );
+            do_action( "context_box_{$this->id}", $this->id, $this->environment );
         }
 
     }
@@ -131,31 +131,31 @@ class ScreenContext
      */
     public function renderAreas()
     {
-        foreach ($this->areas as $Area) {
+        foreach ($this->areas as $area) {
             if (is_user_logged_in()) {
                 Kontentblocks::getService( 'utility.jsontransport' )->registerArea(
-                    $this->augmentAreaforBackend( $Area )
+                    $this->augmentAreaforBackend( $area )
                 );
             }
 
             // exclude dynamic areas
-            if ($Area->dynamic && !$Area->settings->isAttached()) {
+            if ($area->dynamic && !$area->settings->isAttached()) {
                 continue;
             }
 
 
             // Setup new Area
-            if ($Area->dynamic) {
-                $AreaHTML = new DynamicAreaBackendHTML( $Area, $this->Environment, $this->id );
+            if ($area->dynamic) {
+                $areaHTML = new DynamicAreaBackendHTML( $area, $this->environment, $this->id );
             } else {
-                $AreaHTML = new AreaBackendHTML( $Area, $this->Environment, $this->id );
+                $areaHTML = new AreaBackendHTML( $area, $this->environment, $this->id );
             }
             // do area header markup
-            $AreaHTML->header();
+            $areaHTML->header();
             // render modules for the area
-            $AreaHTML->render();
+            $areaHTML->render();
             //render area footer
-            $AreaHTML->footer();
+            $areaHTML->footer();
 
 
         }
@@ -169,7 +169,7 @@ class ScreenContext
     {
         echo "</div>"; // end inner
         // hook to add custom stuff after areas
-        do_action( "context_box_{$this->id}", $this->id, $this->Environment );
+        do_action( "context_box_{$this->id}", $this->id, $this->environment );
         echo "</div>";
 
     }
@@ -185,24 +185,24 @@ class ScreenContext
     }
 
     /**
-     * @param AreaProperties $Area
+     * @param AreaProperties $area
      * @since 0.3.0
      * @return AreaProperties
      */
-    private function augmentAreaforBackend( AreaProperties $Area )
+    private function augmentAreaforBackend( AreaProperties $area )
     {
 
-        if ($Area->dynamic) {
-            $Storage = new ModuleStorage( $Area->parent_id );
-            $Area->set(
+        if ($area->dynamic) {
+            $storage = new ModuleStorage( $area->parent_id );
+            $area->set(
                 'meta',
                 array(
-                    'modules' => count( $Storage->getIndex() ),
-                    'editLink' => html_entity_decode( get_edit_post_link( $Area->parent_id ) )
+                    'modules' => count( $storage->getIndex() ),
+                    'editLink' => html_entity_decode( get_edit_post_link( $area->parent_id ) )
                 )
             );
         }
-        return $Area;
+        return $area;
     }
 
     public function hasAreas(){

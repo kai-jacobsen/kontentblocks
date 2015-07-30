@@ -22,7 +22,7 @@ class ScreenManager
      * @var \Kontentblocks\Backend\Environment\Environment
      * @since 0.1.0
      */
-    protected $Environment;
+    protected $environment;
 
     /**
      * Definition of possible sections for the edit screen
@@ -51,17 +51,17 @@ class ScreenManager
      * Class Constructor
      *
      * @param $areas
-     * @param Environment $Environment
+     * @param Environment $environment
      *
      */
-    public function __construct( $areas, Environment $Environment )
+    public function __construct( $areas, Environment $environment )
     {
         // setup raw areas
         $this->areas = $areas;
         // set this environment
 
 
-        $this->Environment = $Environment;
+        $this->environment = $environment;
         //setup region layout
         $this->contextLayout = self::getDefaultContextLayout();
         // setup filtered areas
@@ -81,17 +81,17 @@ class ScreenManager
 
         foreach ($this->contextLayout as $args) {
             // delegate the actual output to ScreenContext
-            $this->ContextRenderer[$args['id']] = $context = new ScreenContext(
+            $this->contextRenderer[$args['id']] = $context = new ScreenContext(
                 $args,
                 $this->getContextAreas( $args['id'] ),
-                $this->Environment,
+                $this->environment,
                 $this->hasSidebar()
             );
 //            $context->render();
         }
 
         $View = new CoreView('edit-screen/default-ui.twig',array(
-            'contexts' => $this->ContextRenderer
+            'contexts' => $this->contextRenderer
         ));
         $View->render(true);
 
@@ -106,7 +106,7 @@ class ScreenManager
     public function areasSortedByContext()
     {
         $areas = array();
-        $contextsOrder = $this->Environment->getDataProvider()->get( 'kb.contexts' );
+        $contextsOrder = $this->environment->getDataProvider()->get( 'kb.contexts' );
 
 
         if (!$this->areas) {
@@ -173,7 +173,7 @@ class ScreenManager
      */
     public function getEnvironment()
     {
-        return $this->Environment;
+        return $this->environment;
     }
 
 

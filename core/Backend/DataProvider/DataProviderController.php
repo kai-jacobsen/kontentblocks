@@ -14,30 +14,30 @@ class DataProviderController implements DataProviderInterface
      * Actual primary Data Provider
      * @var \Kontentblocks\Backend\DataProvider\DataProviderInterface
      */
-    protected $DataProvider;
+    protected $dataProvider;
 
     /**
      * Listeners
      * @var array
      */
-    protected $Listeners = array();
+    protected $listeners = array();
 
     /**
      * @param int $storageId
      */
     public function __construct( $storageId )
     {
-        $this->DataProvider = apply_filters(
+        $this->dataProvider = apply_filters(
             'kb::data.primary.provider',
             $storageId
         );
 
         // Fallback to wordpress postmeta
-        if (!is_object( $this->DataProvider )) {
-            $this->DataProvider = new PostMetaDataProvider( $storageId );
+        if (!is_object( $this->dataProvider )) {
+            $this->dataProvider = new PostMetaDataProvider( $storageId );
         }
 
-        $this->Listeners = apply_filters( 'kb::data.listeners', $this->Listeners, $storageId );
+        $this->listeners = apply_filters( 'kb::data.listeners', $this->listeners, $storageId );
 
     }
 
@@ -48,12 +48,12 @@ class DataProviderController implements DataProviderInterface
      */
     public function get( $key )
     {
-        return $this->DataProvider->get( $key );
+        return $this->dataProvider->get( $key );
     }
 
     public function getAll()
     {
-        return $this->DataProvider->getAll();
+        return $this->dataProvider->getAll();
     }
 
     /**
@@ -64,10 +64,10 @@ class DataProviderController implements DataProviderInterface
      */
     public function update( $key, $value )
     {
-        foreach ($this->Listeners as $Listener) {
+        foreach ($this->listeners as $Listener) {
             $Listener->update( $key, $value );
         }
-        return $this->DataProvider->update( $key, $value );
+        return $this->dataProvider->update( $key, $value );
     }
 
     /**
@@ -77,10 +77,10 @@ class DataProviderController implements DataProviderInterface
      */
     public function add( $key, $value )
     {
-        foreach ($this->Listeners as $Listener) {
+        foreach ($this->listeners as $Listener) {
             $Listener->add( $key, $value );
         }
-        return $this->DataProvider->add( $key, $value );
+        return $this->dataProvider->add( $key, $value );
     }
 
     /**
@@ -89,18 +89,18 @@ class DataProviderController implements DataProviderInterface
      */
     public function delete( $key )
     {
-        foreach ($this->Listeners as $Listener) {
+        foreach ($this->listeners as $Listener) {
             $Listener->delete( $key );
         }
-        return $this->DataProvider->delete( $key );
+        return $this->dataProvider->delete( $key );
     }
 
     public function reset()
     {
-        foreach ($this->Listeners as $Listener) {
+        foreach ($this->listeners as $Listener) {
             $Listener->reset();
         }
-        return $this->DataProvider->reset();
+        return $this->dataProvider->reset();
     }
 
 

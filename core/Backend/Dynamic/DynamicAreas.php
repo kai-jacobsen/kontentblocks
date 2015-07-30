@@ -23,7 +23,7 @@ class DynamicAreas
     /**
      * @var \Kontentblocks\Backend\Storage\ModuleStorage
      */
-    protected $Storage;
+    protected $storage;
 
 
     /**
@@ -92,8 +92,8 @@ class DynamicAreas
             return;
         }
 
-        $this->Storage = new ModuleStorage( get_the_ID() );
-        $area = $this->Storage->getDataProvider()->get( '_area' );
+        $this->storage = new ModuleStorage( get_the_ID() );
+        $area = $this->storage->getDataProvider()->get( '_area' );
         $payload = filter_input( INPUT_POST, 'area', FILTER_DEFAULT );
         $data = ( isset( $payload ) ) ? $payload : $area;
 
@@ -122,8 +122,8 @@ class DynamicAreas
             return;
         }
 
-        $Environment = Utilities::getEnvironment( $postId );
-        $Environment->save();
+        $environment = Utilities::getEnvironment( $postId );
+        $environment->save();
 
         $this->saveArea( $postId );
     }
@@ -137,7 +137,7 @@ class DynamicAreas
      */
     protected function saveArea( $postId )
     {
-        $this->Storage = new ModuleStorage( $postId );
+        $this->storage = new ModuleStorage( $postId );
 
         $defaults = array(
             'name' => null,
@@ -163,7 +163,7 @@ class DynamicAreas
         );
 
         $full = wp_parse_args( $data, AreaProperties::getDefaults( false ) );
-        $this->Storage->getDataProvider()->update( '_area', $full );
+        $this->storage->getDataProvider()->update( '_area', $full );
 //        $this->Storage->getDataProvider()->update( '_area_context', $full['context'] );
 
     }
@@ -408,12 +408,12 @@ class DynamicAreas
      */
     private function renderArea( $area )
     {
-        $Environment = Utilities::getEnvironment( get_the_ID() );
+        $environment = Utilities::getEnvironment( get_the_ID() );
         $blogId = get_current_blog_id();
 
-        /** @var \Kontentblocks\Areas\AreaRegistry $Registry */
-        $Registry = Kontentblocks::getService( 'registry.areas' );
-        $areaDef = $Registry->getArea( $area['id'] );
+        /** @var \Kontentblocks\Areas\AreaRegistry $registry */
+        $registry = Kontentblocks::getService( 'registry.areas' );
+        $areaDef = $registry->getArea( $area['id'] );
 
         Kontentblocks::getService('utility.jsontransport')->registerArea($areaDef);
 
@@ -424,11 +424,11 @@ class DynamicAreas
         // The infamous hidden editor hack
         Utilities::hiddenEditor();
 
-        echo Utilities::getBaseIdField( $Environment->getStorage()->getIndex() );
+        echo Utilities::getBaseIdField( $environment->getStorage()->getIndex() );
         echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
 
-        $Area = new AreaBackendHTML( $areaDef, $Environment );
-        $Area->build();
+        $areaHTML = new AreaBackendHTML( $areaDef, $environment );
+        $areaHTML->build();
 
         print "</div></div>";
 
@@ -446,8 +446,8 @@ class DynamicAreas
     public function rowActions( $actions, $post )
     {
         if ($post->post_type === 'kb-dyar') {
-            $Storage = new ModuleStorage($post->ID);
-            $meta = $Storage->getDataProvider()->get('_area');
+            $storage = new ModuleStorage($post->ID);
+            $meta = $storage->getDataProvider()->get('_area');
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $actions['trash'] = "<span class='kb-js-predefined-area'>Area is predefined</span>";
             }
@@ -472,8 +472,8 @@ class DynamicAreas
         $screen = get_current_screen();
         if (isset( $screen->post_type ) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
 
-            $Storage = new ModuleStorage($post_id);
-            $meta = $Storage->getDataProvider()->get('_area');
+            $storage = new ModuleStorage($post_id);
+            $meta = $storage->getDataProvider()->get('_area');
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $classes[] = ' kb-is-dynamic-area';
             }

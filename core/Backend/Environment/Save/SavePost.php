@@ -14,19 +14,19 @@ use Kontentblocks\Utils\Utilities;
 class SavePost
 {
 
-    protected $Environment;
+    protected $environment;
     protected $index = null;
 
     /**
      * @var ValueStorage
      */
-    private $Postdata;
+    private $postdata;
 
-    public function __construct( Environment $Environment )
+    public function __construct( Environment $environment )
     {
-        $this->Environment = $Environment;
-        $this->postid = $Environment->getId();
-        $this->Postdata = new ValueStorage( $_POST );
+        $this->environment = $environment;
+        $this->postid = $environment->getId();
+        $this->postdata = new ValueStorage( $_POST );
     }
 
 
@@ -42,8 +42,8 @@ class SavePost
             return false;
         }
 
-        $this->index = $this->Environment->getStorage()->getIndex();
-        $areas = $this->Environment->getAreas();
+        $this->index = $this->environment->getStorage()->getIndex();
+        $areas = $this->environment->getAreas();
 
         // Bail out if no areas are set
         if (empty( $areas )) {
@@ -65,7 +65,7 @@ class SavePost
         $this->saveAreaSettings();
         $this->saveAreaContextMap();
         // finally update the index
-        $this->Environment->getStorage()->saveIndex( $this->index );
+        $this->environment->getStorage()->saveIndex( $this->index );
     }
 
     /**
@@ -91,24 +91,24 @@ class SavePost
      */
     private function auth()
     {
-        $all = $this->Postdata->export();
+        $all = $this->postdata->export();
         // verify if this is an auto save routine.
         // If it is our form has not been submitted, so we dont want to do anything
         if (empty( $all )) {
             return false;
         }
 
-        if (is_null( $this->Postdata->getFiltered( 'blog_id', FILTER_VALIDATE_INT ) )) {
+        if (is_null( $this->postdata->getFiltered( 'blog_id', FILTER_VALIDATE_INT ) )) {
             return false;
         } else {
-            $blogIdSubmit = $this->Postdata->getFiltered( 'blog_id', FILTER_SANITIZE_NUMBER_INT );
+            $blogIdSubmit = $this->postdata->getFiltered( 'blog_id', FILTER_SANITIZE_NUMBER_INT );
             $blogIdCurrent = get_current_blog_id();
             if ((int) $blogIdSubmit !== (int) $blogIdCurrent) {
                 return false;
             }
         }
 
-        if (is_null( $this->Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ) )) {
+        if (is_null( $this->postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ) )) {
             return false;
         }
 
@@ -119,7 +119,7 @@ class SavePost
         // verify this came from the our screen and with proper authorization,
         // because save_post can be triggered at other times
         if (!wp_verify_nonce(
-            $this->Postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ),
+            $this->postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ),
             'kontentblocks_save_post'
         )
         ) {
@@ -135,11 +135,11 @@ class SavePost
             return false;
         }
 
-        if (get_post_type( $this->postid ) == 'revision' && !is_null( $this->Postdata->get( 'wp-preview' ) )) {
+        if (get_post_type( $this->postid ) == 'revision' && !is_null( $this->postdata->get( 'wp-preview' ) )) {
             return false;
         }
 
-        if ($this->Environment->getPostType() == 'revision') {
+        if ($this->environment->getPostType() == 'revision') {
             return false;
         }
 
@@ -155,8 +155,8 @@ class SavePost
     {
         // Backup data, not for Previews
         if (!isset( $_POST['wp-preview'] )) {
-            $BackupManager = new BackupDataStorage( $this->Environment->getStorage() );
-            $BackupManager->backup( 'Before regular update' );
+            $backupManager = new BackupDataStorage( $this->environment->getStorage() );
+            $backupManager->backup( 'Before regular update' );
         }
     }
 
@@ -169,7 +169,7 @@ class SavePost
     {
 
         /** @var $modules array */
-        $modules = $this->Environment->getModulesforArea( $area->id );
+        $modules = $this->environment->getModulesforArea( $area->id );
         $savedData = null;
 
         if (empty( $modules )) {
@@ -182,9 +182,9 @@ class SavePost
 
             // new data from $_POST
             //TODO: filter incoming data
-            $data = $this->Postdata->get( $module->getId() );
+            $data = $this->postdata->get( $module->getId() );
             /** @var $old array */
-            $old = $this->Environment->getStorage()->getModuleData( $module->getId() );
+            $old = $this->environment->getStorage()->getModuleData( $module->getId() );
             $module->setModuleData( $old );
             // check for draft and set to false
             // special block specific data
@@ -207,12 +207,12 @@ class SavePost
             // if this is a preview, save temporary data for previews
             if (!is_null( $savedData )) {
 
-                if ($this->Postdata->get( 'wp-preview' ) && $this->Postdata->get( 'wp-preview' ) === 'dopreview') {
-                    $this->Environment->getDataProvider()->update( '_preview_' . $module->getId(), $savedData );
+                if ($this->postdata->get( 'wp-preview' ) && $this->postdata->get( 'wp-preview' ) === 'dopreview') {
+                    $this->environment->getDataProvider()->update( '_preview_' . $module->getId(), $savedData );
                 } // save real data
                 else {
-                    $this->Environment->getStorage()->saveModule( $module->getId(), $savedData );
-                    $this->Environment->getDataProvider()->delete( '_preview_' . $module->getId() );
+                    $this->environment->getStorage()->saveModule( $module->getId(), $savedData );
+                    $this->environment->getDataProvider()->delete( '_preview_' . $module->getId() );
 
                 }
                 do_action( 'kb.module.save', $module, $savedData );
@@ -247,7 +247,7 @@ class SavePost
     {
         $contexts = filter_input( INPUT_POST, 'kbcontext', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         if (!empty( $contexts )) {
-            $this->Environment->getDataProvider()->update( 'kb.contexts', $contexts );
+            $this->environment->getDataProvider()->update( 'kb.contexts', $contexts );
         }
     }
 }

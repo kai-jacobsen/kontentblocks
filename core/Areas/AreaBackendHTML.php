@@ -21,7 +21,7 @@ class AreaBackendHTML
     /**
      * @var AreaProperties
      */
-    public $Area;
+    public $area;
 
     /**
      * Location on the edit screen
@@ -35,7 +35,7 @@ class AreaBackendHTML
      *
      * @var \Kontentblocks\Backend\Environment\Environment
      */
-    protected $Environment;
+    protected $environment;
 
 
     /**
@@ -60,29 +60,29 @@ class AreaBackendHTML
     /**
      * Class Constructor
      *
-     * @param AreaProperties $Area
-     * @param \Kontentblocks\Backend\Environment\Environment $Environment
+     * @param AreaProperties $area
+     * @param \Kontentblocks\Backend\Environment\Environment $environment
      * @param string $context
      *
      * @throws \Exception
      */
-    function __construct( AreaProperties $Area, Environment $Environment, $context = 'normal' )
+    function __construct( AreaProperties $area, Environment $environment, $context = 'normal' )
     {
 
         // context in regards of position on the edit screen
         $this->context = $context;
 
-        $this->Area = $Area;
+        $this->area = $area;
 
         // environment
-        $this->Environment = $Environment;
+        $this->environment = $environment;
 
         // batch setting of properties
         //actual stored modules for this area
-        $this->attachedModules = $this->Environment->getModulesForArea( $Area->id );
+        $this->attachedModules = $this->environment->getModulesForArea( $area->id );
 
         // custom settins for this area
-        $this->settingsMenu = new AreaSettingsMenu( $this->Area, $this->Environment );
+        $this->settingsMenu = new AreaSettingsMenu( $this->area, $this->environment );
 
         $this->cats = Utilities::setupCats();
     }
@@ -106,17 +106,17 @@ class AreaBackendHTML
      */
     public function header()
     {
-        $active = $this->Area->settings->get('active') ? 'active' : 'inactive';
-        echo "<div id='{$this->Area->id}-container' class='kb-area__wrap klearfix cf kb-area-status-{$active}' >";
+        $active = $this->area->settings->get('active') ? 'active' : 'inactive';
+        echo "<div id='{$this->area->id}-container' class='kb-area__wrap klearfix cf kb-area-status-{$active}' >";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
-        $Tpl = new CoreView( 'edit-screen/area-header.twig',
+        $tpl = new CoreView( 'edit-screen/area-header.twig',
             array(
-                'area' => $this->Area,
+                'area' => $this->area,
                 'headerClass' => $headerClass,
                 'settingsMenu' => $this->settingsMenu
             ) );
-        $Tpl->render( true );
+        $tpl->render( true );
 
     }
 
@@ -128,13 +128,13 @@ class AreaBackendHTML
     {
         echo "<div class='kb-area--body'>";
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' id='{$this->Area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
+        echo "<ul style='' data-context='{$this->context}' id='{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty( $this->attachedModules )) {
-            /** @var \Kontentblocks\Modules\Module $Module */
-            foreach ($this->attachedModules as $Module) {
-                $Module = apply_filters( 'kb.module.before.factory', $Module );
-                echo $Module->renderForm();
-                Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
+            /** @var \Kontentblocks\Modules\Module $module */
+            foreach ($this->attachedModules as $module) {
+                $module = apply_filters( 'kb.module.before.factory', $module );
+                echo $module->renderForm();
+                Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $module->toJSON() );
             }
         }
         echo "</ul>";
@@ -173,7 +173,7 @@ class AreaBackendHTML
     private function getModuleLimitTag()
     {
         // prepare string
-        $limit = ( $this->Area->limit == '0' ) ? null : absint( $this->Area->limit );
+        $limit = ( $this->area->limit == '0' ) ? null : absint( $this->area->limit );
 
         if (null !== $limit) {
             echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
@@ -189,7 +189,7 @@ class AreaBackendHTML
     private function menuLink()
     {
         if (current_user_can( 'create_kontentblocks' )) {
-            if (!empty( $this->Area->assignedModules )) {
+            if (!empty( $this->area->assignedModules )) {
                 $out = " <div class='add-modules cantsort'></div>";
                 return $out;
             }

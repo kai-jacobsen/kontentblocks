@@ -31,7 +31,7 @@ class AreaSettingsModel implements \JsonSerializable
     /**
      * @var DataProviderController
      */
-    private $DataProvider;
+    private $dataProvider;
 
     /**
      * Construct
@@ -40,14 +40,14 @@ class AreaSettingsModel implements \JsonSerializable
      * while StorageId relates to the dynamic area post
      * It's like "we are on post x but get the data from post y"
      *
-     * @param AreaProperties $Area
+     * @param AreaProperties $area
      * @param $postId
      */
-    public function __construct( AreaProperties $Area, $postId )
+    public function __construct( AreaProperties $area, $postId )
     {
         $this->postId = $postId;
-        $this->DataProvider = new DataProviderController( $postId );
-        $this->Area = $Area;
+        $this->dataProvider = new DataProviderController( $postId );
+        $this->area = $area;
         $this->setupSettings();
     }
 
@@ -58,13 +58,13 @@ class AreaSettingsModel implements \JsonSerializable
      */
     private function setupSettings()
     {
-        $meta = $this->DataProvider->get( $this->key );
+        $meta = $this->dataProvider->get( $this->key );
         if (!is_array( $meta )) {
             $meta = array();
         }
-        $areaSettings = ( isset( $meta[$this->Area->id] ) && is_array(
-                $meta[$this->Area->id]
-            ) ) ? $meta[$this->Area->id] : array();
+        $areaSettings = ( isset( $meta[$this->area->id] ) && is_array(
+                $meta[$this->area->id]
+            ) ) ? $meta[$this->area->id] : array();
         $this->meta = $areaSettings;
         $this->settings = wp_parse_args( $areaSettings, $this->getDefaults() );
         return $this;
@@ -111,7 +111,7 @@ class AreaSettingsModel implements \JsonSerializable
         return array(
             'active' => true,
             'layout' => 'default',
-            'attached' => ( $this->Area->dynamic ) ? false : true
+            'attached' => ( $this->area->dynamic ) ? false : true
         );
     }
 
@@ -167,14 +167,14 @@ class AreaSettingsModel implements \JsonSerializable
      */
     public function save()
     {
-        $this->DataProvider->reset();
-        $meta = $this->DataProvider->get( $this->key );
+        $this->dataProvider->reset();
+        $meta = $this->dataProvider->get( $this->key );
 
         if (!is_array( $meta )) {
             $meta = array();
         }
-        $meta[$this->Area->id] = $this->settings;
-        return $this->DataProvider->update( $this->key, $meta );
+        $meta[$this->area->id] = $this->settings;
+        return $this->dataProvider->update( $this->key, $meta );
     }
 
     public function getPostId()

@@ -27,26 +27,26 @@ class Environment implements JsonSerializable
      * generic low-level data handler
      * @var \Kontentblocks\Backend\DataProvider\DataProviderController
      */
-    protected $DataProvider;
+    protected $dataProvider;
 
     /**
      * Module specific storage handler
      * @var \Kontentblocks\Backend\Storage\ModuleStorage
      */
-    protected $Storage;
+    protected $storage;
 
     /**
      * Access object to all env related modules
      * @var ModuleRepository
      */
-    protected $ModuleRepository;
+    protected $moduleRepository;
 
 
     /**
      * Access object to all env related panels
      * @var ModuleRepository
      */
-    protected $PostPanelRepository;
+    protected $postPanelRepository;
 
 
     /**
@@ -103,9 +103,9 @@ class Environment implements JsonSerializable
         $this->postObj = $postObj;
         $this->storageId = $storageId;
 
-        $this->Storage = new ModuleStorage( $storageId );
-        $this->ModuleRepository = new ModuleRepository( $this );
-        $this->PostPanelRepository = new PostPanelRepository( $this );
+        $this->storage = new ModuleStorage( $storageId );
+        $this->moduleRepository = new ModuleRepository( $this );
+        $this->postPanelRepository = new PostPanelRepository( $this );
 
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
@@ -113,7 +113,7 @@ class Environment implements JsonSerializable
         $this->modulesByArea = $this->getSortedModules();
         $this->areas = $this->setupAreas();
         $this->areasToContext();
-        $this->panels = $this->PostPanelRepository->getPanelObjects();
+        $this->panels = $this->postPanelRepository->getPanelObjects();
 
     }
 
@@ -154,7 +154,7 @@ class Environment implements JsonSerializable
      */
     private function setupModules()
     {
-        return $this->ModuleRepository->getModules();
+        return $this->moduleRepository->getModules();
     }
 
     /**
@@ -197,9 +197,9 @@ class Environment implements JsonSerializable
      */
     public function findAreas()
     {
-        /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
-        $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
-        return $AreaRegistry->filterForPost( $this );
+        /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
+        $areaRegistry = Kontentblocks::getService( 'registry.areas' );
+        return $areaRegistry->filterForPost( $this );
     }
 
     /**
@@ -264,7 +264,7 @@ class Environment implements JsonSerializable
      */
     public function getDataProvider()
     {
-        return $this->Storage->getDataProvider();
+        return $this->storage->getDataProvider();
     }
 
     /**
@@ -284,7 +284,7 @@ class Environment implements JsonSerializable
      */
     public function getModuleById( $mid )
     {
-        return $this->ModuleRepository->getModuleObject( $mid );
+        return $this->moduleRepository->getModuleObject( $mid );
     }
 
     /**
@@ -355,7 +355,7 @@ class Environment implements JsonSerializable
      */
     public function getAreaSettings( $id )
     {
-        $settings = $this->Storage->getDataProvider()->get( 'kb_area_settings' );
+        $settings = $this->storage->getDataProvider()->get( 'kb_area_settings' );
         if (!empty( $settings[$id] )) {
             return $settings[$id];
         }
@@ -374,8 +374,8 @@ class Environment implements JsonSerializable
     public function getModuleData( $id )
     {
 
-        $this->Storage->reset();
-        $data = $this->Storage->getModuleData( $id );
+        $this->storage->reset();
+        $data = $this->storage->getModuleData( $id );
         if ($data !== null) {
             return $data;
         } else {
@@ -391,8 +391,8 @@ class Environment implements JsonSerializable
      */
     public function save()
     {
-        $SaveHandler = new SavePost( $this );
-        $SaveHandler->save();
+        $saveHandler = new SavePost( $this );
+        $saveHandler->save();
     }
 
     /**
@@ -429,7 +429,7 @@ class Environment implements JsonSerializable
      */
     public function getStorage()
     {
-        return $this->Storage;
+        return $this->storage;
     }
 
     /**

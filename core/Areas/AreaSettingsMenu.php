@@ -60,22 +60,22 @@ class AreaSettingsMenu
      * @var \Kontentblocks\Backend\Environment\Environment
      * @since 0.1.0
      */
-    protected $Environment;
+    protected $environment;
 
 
     /**
      * Class Constuctor
-     * @param AreaProperties $Area
-     * @param \Kontentblocks\Backend\Environment\Environment $Environment
+     * @param AreaProperties $area
+     * @param \Kontentblocks\Backend\Environment\Environment $environment
      * @since 0.1.0
      */
-    public function __construct( AreaProperties $Area, Environment $Environment )
+    public function __construct( AreaProperties $area, Environment $environment )
     {
         $this->defaults = $this->getDefaults();
-        $this->id = $Area->id;
-        $this->areaTemplates = $Area->layouts;
-        $this->defaultLayout = $Area->defaultLayout;
-        $this->Environment = $Environment;
+        $this->id = $area->id;
+        $this->areaTemplates = $area->layouts;
+        $this->defaultLayout = $area->defaultLayout;
+        $this->environment = $environment;
 
     }
 
@@ -91,7 +91,7 @@ class AreaSettingsMenu
         // Markup and fields markup
         echo "<div class='kb-area-actions'></div>";
         if (!empty( $areaTemplates )) {
-            $data = $this->Environment->getAreaSettings( $this->id );
+            $data = $this->environment->getAreaSettings( $this->id );
 
             echo "
             <a class='js-area-settings-opener' href='javascript:;'>l</a>    

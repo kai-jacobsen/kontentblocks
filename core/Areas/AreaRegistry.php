@@ -52,7 +52,7 @@ class AreaRegistry
     /**
      * @var AreaDynamicManager
      */
-    protected $AreaDynamicManager;
+    protected $areaDynamicManager;
 
 
     protected $reserved = array();
@@ -62,7 +62,7 @@ class AreaRegistry
      */
     public function __construct()
     {
-        $this->AreaDynamicManager = new AreaDynamicManager();
+        $this->areaDynamicManager = new AreaDynamicManager();
 
         // action is triggerd by AreaDynamicManager setup
         // to make sure external areas are properly setup
@@ -91,8 +91,8 @@ class AreaRegistry
 
         if (!empty( $areas )) {
             foreach ($areas as $areapost) {
-                $Storage = new ModuleStorage( $areapost->ID );
-                $area = $Storage->getDataProvider()->get( '_area' );
+                $storage = new ModuleStorage( $areapost->ID );
+                $area = $storage->getDataProvider()->get( '_area' );
                 $area['parent_id'] = $areapost->ID;
                 $dynamicAreas[] = $area;
             }
@@ -126,14 +126,14 @@ class AreaRegistry
             $args['id'] = sanitize_title( $args['id'] );
         }
 
-        $Area = new AreaProperties( $args );
+        $area = new AreaProperties( $args );
         // merge defaults with provided args
-        if ($Area->dynamic === true && $manual) {
-            $this->AreaDynamicManager->add( $Area );
+        if ($area->dynamic === true && $manual) {
+            $this->areaDynamicManager->add( $area );
         }
 
-        $this->areas[$Area->id] = $Area;
-        $this->preFilterAreas( $this->areas[$Area->id] );
+        $this->areas[$area->id] = $area;
+        $this->preFilterAreas( $this->areas[$area->id] );
     }
 
     /**
@@ -319,9 +319,9 @@ class AreaRegistry
         $setting = $args['settings']['connect'];
 
         if (!empty( $setting ) && $setting === 'any') {
-            /** @var \Kontentblocks\Areas\AreaProperties $Area */
-            foreach ($this->areas as $Area) {
-                $Area->connect( $classname );
+            /** @var \Kontentblocks\Areas\AreaProperties $area */
+            foreach ($this->areas as $area) {
+                $area->connect( $classname );
             }
         } else if (!empty( $setting ) and is_array( $setting )) {
             foreach ($setting as $id) {
@@ -341,8 +341,8 @@ class AreaRegistry
                         continue;
                     }
                     /** @var \Kontentblocks\Areas\AreaProperties $Area */
-                    $Area = $this->areas[$id];
-                    $Area->connect( $classname );
+                    $area = $this->areas[$id];
+                    $area->connect( $classname );
                 }
             }
         }
@@ -354,15 +354,15 @@ class AreaRegistry
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
      *
-     * @param \Kontentblocks\Backend\Environment\Environment $Environment
+     * @param \Kontentblocks\Backend\Environment\Environment $environment
      *
      * @return boolean
      */
-    public function filterForPost( Environment $Environment )
+    public function filterForPost( Environment $environment )
     {
 
-        $pageTemplate = $Environment->getPageTemplate();
-        $postType = $Environment->getPostType();
+        $pageTemplate = $environment->getPageTemplate();
+        $postType = $environment->getPostType();
         $areas = array();
 
         // bail out if this is a redirect template
