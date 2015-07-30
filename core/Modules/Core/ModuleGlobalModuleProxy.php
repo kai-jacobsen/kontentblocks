@@ -14,11 +14,10 @@ use Kontentblocks\Templating\CoreView;
 class ModuleGlobalModuleProxy extends Module
 {
 
-    public static $defaults = array(
+    public static $settings = array(
         'publicName' => 'Master Module',
         'id' => 'core-master-module',
         'description' => 'Handles reference to master templates',
-        'globallyAvailable' => false,
         'globalModule' => false,
         'master' => true,
         'hidden' => true,
@@ -57,7 +56,7 @@ class ModuleGlobalModuleProxy extends Module
             if (!is_array( $meta )) {
                 $meta = array();
             }
-            $meta[$Module->getId()] = $Module->Properties->post_id;
+            $meta[$Module->getId()] = $Module->Properties->postId;
             update_post_meta( $parentId, '_kb_attached_to', $meta );
         }
     }
@@ -119,59 +118,6 @@ class ModuleGlobalModuleProxy extends Module
     }
 
     /**
-     * Module Form
-     * @return bool|void
-     */
-    public function form()
-    {
-
-        $masterId = $this->Properties->parentObjectId;
-        $translated = false;
-        $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
-        $duplicate = !empty( $icl );
-
-        if (I18n::getInstance()->wpmlActive() && !$duplicate) {
-            $iclId = icl_object_id( $masterId, 'kb-gmd' );
-            $translated = ( $iclId !== $masterId );
-
-            if ($translated) {
-                $masterId = $iclId;
-            }
-
-        }
-
-        $templateData = array(
-            'valid' => $this->Properties->state['valid'],
-            'editUrl' => esc_url(
-                get_edit_post_link(
-                    $masterId
-                ) . '&return=' . $this->Context->postId . '&area-context=' . $this->Context->areaContext
-            ),
-            'translated' => $translated,
-            'duplicate' => $duplicate,
-            'module' => $this,
-            'i18n' => I18n::getInstance()->getPackage( 'Modules.master' )
-        );
-
-        $tpl = ( isset( $this->Properties->state['valid'] ) && $this->Properties->state['valid'] ) ? 'modules/gmodule-proxy-valid.twig' : 'modules/gmodule-proxy-invalid.twig';
-
-        $Tpl = new CoreView( $tpl, $templateData );
-        return $Tpl->render();
-
-    }
-
-
-    /**
-     * Output is mapped back to the original module class which was set
-     * when the master template was created
-     */
-    public function render()
-    {
-
-    }
-
-
-    /**
      * Prepare moduleArgs for frontend output
      * @param $module
      * @return array
@@ -216,6 +162,7 @@ class ModuleGlobalModuleProxy extends Module
             $final = \Kontentblocks\Utils\Utilities::arrayMergeRecursive( $glued, $module );
             $final['parentObjectId'] = $parentObjectId;
             $final['post_id'] = $parentObjectId;
+            $final['postId'] = $parentObjectId;
             return $final;
         }
 
@@ -278,13 +225,64 @@ class ModuleGlobalModuleProxy extends Module
     }
 
     /**
+     * Module Form
+     * @return bool|void
+     */
+    public function form()
+    {
+
+        $masterId = $this->Properties->parentObjectId;
+        $translated = false;
+        $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
+        $duplicate = !empty( $icl );
+
+        if (I18n::getInstance()->wpmlActive() && !$duplicate) {
+            $iclId = icl_object_id( $masterId, 'kb-gmd' );
+            $translated = ( $iclId !== $masterId );
+
+            if ($translated) {
+                $masterId = $iclId;
+            }
+
+        }
+
+        $templateData = array(
+            'valid' => $this->Properties->state['valid'],
+            'editUrl' => esc_url(
+                get_edit_post_link(
+                    $masterId
+                ) . '&return=' . $this->Context->postId . '&area-context=' . $this->Context->areaContext
+            ),
+            'translated' => $translated,
+            'duplicate' => $duplicate,
+            'module' => $this,
+            'i18n' => I18n::getInstance()->getPackage( 'Modules.master' )
+        );
+
+        $tpl = ( isset( $this->Properties->state['valid'] ) && $this->Properties->state['valid'] ) ? 'modules/gmodule-proxy-valid.twig' : 'modules/gmodule-proxy-invalid.twig';
+
+        $Tpl = new CoreView( $tpl, $templateData );
+        return $Tpl->render();
+
+    }
+
+    /**
+     * Output is mapped back to the original module class which was set
+     * when the master template was created
+     */
+    public function render()
+    {
+
+    }
+
+    /**
      * @param array $data actual $_POST data for this module
-     * @param array $old previous data or empty
+     * @param array $prevData previous data or empty
      * @return array
      */
-    public function save( $data, $old )
+    public function save( $data, $prevData )
     {
-        return $old;
+        return $prevData;
     }
 
 }

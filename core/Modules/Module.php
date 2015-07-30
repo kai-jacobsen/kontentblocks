@@ -113,7 +113,7 @@ abstract class Module
 
         return array(
             'disabled' => false,
-            'publicName' => 'Module Name Missing',
+            'publicName' => '',
             'name' => '',
             'wrap' => true,
             'wrapperClasses' => '',
@@ -121,7 +121,6 @@ abstract class Module
             'description' => '',
             'connect' => 'any',
             'hidden' => false,
-            'predefined' => false,
             'globalModule' => true,
             'category' => 'standard',
             'views' => false,
@@ -139,6 +138,7 @@ abstract class Module
         return $Node->build();
     }
 
+
     /**
      * Method for the backend display
      * gets called by ui display callback
@@ -150,7 +150,7 @@ abstract class Module
 
         if (!is_null( $this->ViewLoader )) {
             // render view select field
-            $concat .= $this->ViewLoader->render( $this->Properties );
+            $concat .= $this->ViewLoader->render();
         }
         // render fields if set
         if (isset( $this->Fields ) && is_object( $this->Fields )) {
@@ -201,11 +201,11 @@ abstract class Module
     private function setupFieldData()
     {
         if ($this->Model->hasData()) {
-            $this->Fields->setData($this->Model)->setup();
+            $this->Fields->setData( $this->Model )->setup();
             foreach ($this->Model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->Fields->getFieldByKey( $key );
-                $this->Model[$key] = ( $field !== null ) ? $field->getUserValue() : $v;
+                $this->Model[$key] = ( !is_null( $field ) ) ? $field->getUserValue() : $v;
             }
         }
     }
@@ -240,13 +240,6 @@ abstract class Module
         return null;
     }
 
-
-    /*
-     * ------------------------------------
-     * public setter
-     * ------------------------------------
-     */
-
     /**
      * Gets the assigned viewfile (.twig) filename
      * Property is empty upon module creation, in that case we find the file to use
@@ -270,6 +263,15 @@ abstract class Module
 
     }
 
+
+    /*
+     * ------------------------------------
+     * public setter
+     * ------------------------------------
+     */
+
+    abstract public function render();
+
     /*
      * ------------------------------------
      * Helper
@@ -282,13 +284,13 @@ abstract class Module
      * Gets called by the meta box save callback
      *
      * @param array $data actual $_POST data for this module
-     * @param array $old previous data or empty
+     * @param array $prevData previous data or empty
      * @return array
      */
-    public function save( $data, $old )
+    public function save( $data, $prevData )
     {
         if (isset( $this->Fields )) {
-            return $this->Fields->save( $data, $old );
+            return $this->Fields->save( $data, $prevData );
         }
         return $data;
     }
@@ -321,7 +323,7 @@ abstract class Module
      * Check if conditions are met to render the module on the frontend
      * @return bool
      */
-    public function verify()
+    public function verifyRender()
     {
         if ($this->Properties->getSetting( 'disabled' ) || $this->Properties->getSetting( 'hidden' )) {
             return false;
@@ -349,7 +351,8 @@ abstract class Module
                 $this
             ),
             'area' => $this->Properties->area->id,
-            'post_id' => $this->Properties->post_id,
+            'post_id' => $this->Properties->postId,
+            'postId' => $this->Properties->postId,
             'parentObjectId' => $this->Properties->parentObjectId,
             'areaContext' => $this->Properties->areaContext,
             'viewfile' => $this->getViewfile(),

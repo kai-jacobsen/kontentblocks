@@ -28,10 +28,10 @@ class AfterAreaChange implements AjaxActionInterface
 
     /**
      * Get going
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
 
         if (!current_user_can( 'edit_kontentblocks' )) {
@@ -39,16 +39,16 @@ class AfterAreaChange implements AjaxActionInterface
         }
 
 
-        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-        $Workshop = new ModuleWorkshop( Utilities::getEnvironment( $postId ), $module );
-        $Module = $Workshop->getModule();
-        $html = $Module->form();
+        $workshop = new ModuleWorkshop( Utilities::getEnvironment( $postId ), $moduleDef );
+        $module = $workshop->getModule();
+        $html = $module->form();
 //
         $return = array(
-            'html' =>  $html ,
-            'json' =>  Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
+            'html' => $html,
+            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
         );
 
         return new AjaxSuccessResponse( 'Area changed', $return );

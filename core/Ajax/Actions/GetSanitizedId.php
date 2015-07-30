@@ -21,15 +21,19 @@ class GetSanitizedId implements AjaxActionInterface
 
     static $nonce = 'kb-read';
 
-    public static function run( ValueStorageInterface $Request )
+    /**
+     * @param ValueStorageInterface $request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
+     */
+    public static function run( ValueStorageInterface $request )
     {
         // verify action
         if (!current_user_can( 'edit_kontentblocks' )) {
             return new AjaxErrorResponse( 'insufficient permissions' );
         }
 
-        $value = $Request->getFiltered( 'inputvalue', FILTER_SANITIZE_STRING );
-        $checkmode = $Request->getFiltered( 'checkmode', FILTER_SANITIZE_STRING );
+        $value = $request->getFiltered( 'inputvalue', FILTER_SANITIZE_STRING );
+        $checkmode = $request->getFiltered( 'checkmode', FILTER_SANITIZE_STRING );
         $check = false;
 
         switch ($checkmode) {

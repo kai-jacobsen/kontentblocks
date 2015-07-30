@@ -20,57 +20,57 @@ class UpdatePostPanel implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         global $post;
 
-        $postdata = self::setupPostData( $Request );
+        $postdata = self::setupPostData( $request );
 
         // setup global post
         $post = get_post( $postdata->postId );
         setup_postdata( $post );
 
         // flags
-        $Environment = Utilities::getEnvironment( $postdata->postId );
+        $environment = Utilities::getEnvironment( $postdata->postId );
         // strip slashes from incoming data
         $newData = wp_unslash( $postdata->data );
 
-        $Panel = \Kontentblocks\getPostPanel( $postdata->panel['mid'], $postdata->postId );
+        $panel = \Kontentblocks\getPostPanel( $postdata->panel['mid'], $postdata->postId );
 
         // gather data
-        $old = $Panel->data;
-        $new = $Panel->fields( $Panel->FieldController )->save( $newData, $old );
+        $old = $panel->data;
+        $new = $panel->fields( $panel->FieldController )->save( $newData, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         // save slashed data, *_post_meta will add remove slashes again...
         if ($postdata->update) {
-            $Environment->getDataProvider()->update( $postdata->panel['mid'], wp_slash( $mergedData ) );
+            $environment->getDataProvider()->update( $postdata->panel['mid'], wp_slash( $mergedData ) );
         }
-        do_action( 'kb.panel.save', $Panel, $mergedData );
+        do_action( 'kb.panel.save', $panel, $mergedData );
 
         $return = array(
             'html' => '',
             'newModuleData' => $mergedData
         );
 
-        do_action( 'kb.save.frontend.panel', $Panel, $postdata->update );
+        do_action( 'kb.save.frontend.panel', $panel, $postdata->update );
         return new AjaxSuccessResponse( 'Panel updated', $return );
     }
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return \stdClass
      */
-    private static function setupPostData( ValueStorageInterface $Request )
+    private static function setupPostData( ValueStorageInterface $request )
     {
         $stdClass = new \stdClass();
-        $stdClass->data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->panel = $Request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->panel = $request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $stdClass->postId = filter_var( $stdClass->panel['postId'], FILTER_VALIDATE_INT );
-        $stdClass->editmode = $Request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );
+        $stdClass->editmode = $request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );
         $stdClass->update = ( isset( $stdClass->editmode ) && $stdClass->editmode === 'update' ) ? true : false;
         return $stdClass;
     }

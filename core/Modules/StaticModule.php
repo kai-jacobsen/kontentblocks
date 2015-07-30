@@ -14,10 +14,10 @@ abstract class StaticModule extends Module
      * Method to save whatever form fields are in the options() method
      * Gets called by the meta box save callback
      */
-    public function save($data, $old)
+    public function save($data, $prevData)
     {
 
-        $new = $this->saveFields($data, $old);
+        $new = $this->saveFields($data, $prevData);
         foreach ($new as $k => $v) {
             if (empty($v)) {
                 delete_post_meta($this->getEnvVar('postId'), $this->mid . '_' . $k);

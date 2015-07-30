@@ -29,7 +29,7 @@ class DuplicateModule implements AjaxActionInterface
     /**
      * @var Environment
      */
-    private static $Environment;
+    private static $environment;
 
     /**
      * ID of original module
@@ -46,18 +46,18 @@ class DuplicateModule implements AjaxActionInterface
     /**
      *
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
 
         if (!current_user_can( 'create_kontentblocks' )) {
             return new AjaxErrorResponse( 'insufficient permissions' );
         }
 
-        self::$postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        self::$instanceId = $Request->getFiltered( 'module', FILTER_SANITIZE_STRING );
-        self::$class = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
+        self::$postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        self::$instanceId = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
+        self::$class = $request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
-        self::$Environment = Utilities::getEnvironment( self::$postId );
+        self::$environment = Utilities::getEnvironment( self::$postId );
         return self::duplicate();
     }
 
@@ -72,11 +72,11 @@ class DuplicateModule implements AjaxActionInterface
         setup_postdata( $post );
 
         // get & setup original
-        $stored = self::$Environment->getStorage()->getModuleDefinition(
+        $stored = self::$environment->getStorage()->getModuleDefinition(
             self::$instanceId
         );
-        $Workshop = new ModuleWorkshop(
-            self::$Environment, array(
+        $workshop = new ModuleWorkshop(
+            self::$environment, array(
             'state' => array(
                 'draft' => true,
                 'active' => true
@@ -87,43 +87,43 @@ class DuplicateModule implements AjaxActionInterface
         ), $stored //  inherit from original
         );
 
-        $update = self::$Environment->getStorage()->addToIndex(
-            $Workshop->getNewId(),
-            $Workshop->getDefinitionArray()
+        $update = self::$environment->getStorage()->addToIndex(
+            $workshop->getNewId(),
+            $workshop->getDefinitionArray()
         );
         if ($update !== true) {
             return new AjaxErrorResponse(
                 'Duplication failed due to update error', array(
                     'update' => $update,
-                    'modDef' => $Workshop->getDefinitionArray()
+                    'modDef' => $workshop->getDefinitionArray()
                 )
             );
         } else {
-            return self::doDuplication( $Workshop );
+            return self::doDuplication( $workshop );
         }
     }
 
     /**
      * Actual duplication
-     * @param $ModuleWorkshop
+     * @param $moduleWorkshop
      * @return AjaxSuccessResponse
      */
-    private static function doDuplication( ModuleWorkshop $ModuleWorkshop )
+    private static function doDuplication( ModuleWorkshop $moduleWorkshop )
     {
-        $originalData = self::$Environment->getStorage()->getModuleData( self::$instanceId );
-        self::$Environment->getStorage()->saveModule( $ModuleWorkshop->getPropertiesObject()->mid, $originalData );
+        $originalData = self::$environment->getStorage()->getModuleData( self::$instanceId );
+        self::$environment->getStorage()->saveModule( $moduleWorkshop->getPropertiesObject()->mid, $originalData );
 
-        self::$Environment->getStorage()->reset();
+        self::$environment->getStorage()->reset();
 
-        $Module = $ModuleWorkshop->getModule();
+        $module = $moduleWorkshop->getModule();
 
-        apply_filters( 'kb.module.before.factory', $Module );
-        $html = $Module->renderForm();
+        apply_filters( 'kb.module.before.factory', $module );
+        $html = $module->renderForm();
         $response = array
         (
-            'id' => $ModuleWorkshop->getPropertiesObject()->mid,
-            'module' => $ModuleWorkshop->getPropertiesObject(),
-            'name' => $Module->Properties->getSetting( 'publicName' ),
+            'id' => $moduleWorkshop->getPropertiesObject()->mid,
+            'module' => $moduleWorkshop->getPropertiesObject(),
+            'name' => $module->Properties->getSetting( 'publicName' ),
             'html' => $html,
             'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
 

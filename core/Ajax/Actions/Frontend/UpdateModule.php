@@ -21,64 +21,64 @@ class UpdateModule implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @param bool $send
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request, $send = true )
+    public static function run( ValueStorageInterface $request, $send = true )
     {
         global $post;
 
-        $postdata = self::setupPostData( $Request );
+        $postdata = self::setupPostData( $request );
 
         // setup global post
         $post = get_post( $postdata->postId );
         setup_postdata( $post );
 
         // flags
-        $Environment = Utilities::getEnvironment( $postdata->postId );
+        $environment = Utilities::getEnvironment( $postdata->postId );
         // strip slashes from incoming data
         $newData = wp_unslash( $postdata->data );
-        $Workshop = new ModuleWorkshop( $Environment, $postdata->module );
-        $Module = $Workshop->getModule();
+        $workshop = new ModuleWorkshop( $environment, $postdata->module );
+        $module = $workshop->getModule();
 
         // master module will change instance id to correct template id
-        apply_filters( 'kb.modify.module.save', $Module );
+        apply_filters( 'kb.modify.module.save', $module );
 
         // gather data
-        $old = $Environment->getStorage()->getModuleData( $Module->getId() );
-        $new = $Module->save( $newData, $old );
+        $old = $environment->getStorage()->getModuleData( $module->getId() );
+        $new = $module->save( $newData, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         // save slashed data, *_post_meta will add remove slashes again...
         if ($postdata->update) {
-            $Environment->getStorage()->saveModule( $Module->getId(), wp_slash($mergedData) );
+            $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
         }
-        $Module->setModuleData( $mergedData );
-        do_action( 'kb.module.save', $Module, $mergedData );
+        $module->setModuleData( $mergedData );
+        do_action( 'kb.module.save', $module, $mergedData );
 
         $return = array(
-            'html' => $Module->module(),
+            'html' => $module->module(),
             'newModuleData' => $mergedData,
             'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
         );
 
-        do_action( 'kb.save.frontend.module', $Module, $postdata->update );
-        Utilities::remoteConcatGet( $Module->Properties->post_id );
+        do_action( 'kb.save.frontend.module', $module, $postdata->update );
+        Utilities::remoteConcatGet( $module->Properties->postId );
         return new AjaxSuccessResponse( 'Module updated', $return, $send );
     }
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return \stdClass
      */
-    private static function setupPostData( ValueStorageInterface $Request )
+    private static function setupPostData( ValueStorageInterface $request )
     {
         $stdClass = new \stdClass();
-        $stdClass->data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->module = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $stdClass->postId = filter_var( $stdClass->module['parentObjectId'], FILTER_VALIDATE_INT );
-        $stdClass->editmode = $Request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );
+        $stdClass->editmode = $request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );
         $stdClass->update = ( isset( $stdClass->editmode ) && $stdClass->editmode === 'update' ) ? true : false;
         return $stdClass;
     }

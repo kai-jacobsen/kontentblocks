@@ -19,19 +19,23 @@ class RemoteGetEditor implements AjaxActionInterface
 
     static $nonce = 'kb-read';
 
-    public static function run( ValueStorageInterface $Request )
+    /**
+     * @param ValueStorageInterface $request
+     * @return AjaxSuccessResponse
+     */
+    public static function run( ValueStorageInterface $request )
     {
 
-        $args = $Request->getFiltered( 'args' );
+        $args = $request->getFiltered( 'args' );
         $settings = array();
-        $settings['textarea_name'] = $Request->getFiltered( 'editorName', FILTER_SANITIZE_STRING );
+        $settings['textarea_name'] = $request->getFiltered( 'editorName', FILTER_SANITIZE_STRING );
         $media = filter_var( $args['media_buttons'], FILTER_VALIDATE_BOOLEAN );
         $settings['media_buttons'] = $media;
         ob_start();
         Utilities::editor(
-            $Request->getFiltered( 'editorId', FILTER_SANITIZE_STRING ),
-            $Request->getFiltered( 'editorContent', FILTER_SANITIZE_STRING ),
-            $Request->getFiltered( 'editorName', FILTER_SANITIZE_STRING ),
+            $request->getFiltered( 'editorId', FILTER_SANITIZE_STRING ),
+            $request->getFiltered( 'editorContent', FILTER_SANITIZE_STRING ),
+            $request->getFiltered( 'editorName', FILTER_SANITIZE_STRING ),
             $media,
             $settings
         );

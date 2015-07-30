@@ -112,7 +112,7 @@ class AreaRenderer
             $this->ModuleRenderer = new SingleModuleRenderer( $Module, $this->AreaHtmlNode->getPublicAttributes() );
 
 
-            if (!is_a( $Module, '\Kontentblocks\Modules\Module' ) || !$Module->verify()) {
+            if (!is_a( $Module, '\Kontentblocks\Modules\Module' ) || !$Module->verifyRender()) {
                 continue;
             }
             $moduleOutput = $Module->module();

@@ -28,6 +28,7 @@ module.exports = Backbone.Model.extend({
   },
   removeAttachedField: function(FieldModel){
       if (this.attachedFields[FieldModel.id]){
+        this.stopListening(FieldModel);
         delete this.attachedFields[FieldModel.id];
       }
     if (this.changedFields[FieldModel.id]){

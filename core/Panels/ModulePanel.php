@@ -201,6 +201,7 @@ class ModulePanel extends AbstractPanel
             'mid' => $this->baseId,
             'areaContext' => 'static',
             'post_id' => get_the_ID(),
+            'postId' => get_the_ID(),
             'area' => 'static',
             'class' => $module
         );

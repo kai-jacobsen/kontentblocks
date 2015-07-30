@@ -1,6 +1,7 @@
 //KB.Backbone.ModuleModel
 module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
+  attachedFields: {},
   initialize: function () {
     this.type = 'module';
     this.listenTo(this, 'change:area', this.areaChanged);
@@ -9,6 +10,15 @@ module.exports = Backbone.Model.extend({
   destroy: function () {
     this.unsubscribeFromArea();
     this.stopListening(); // remove all listeners
+  },
+  attachField: function (FieldModel) {
+    this.attachedFields[FieldModel.id] = FieldModel;
+    this.listenTo(FieldModel, 'remove', this.removeAttachedField);
+  },
+  removeAttachedField: function(FieldModel){
+    if (this.attachedFields[FieldModel.id]){
+      delete this.attachedFields[FieldModel.id];
+    }
   },
   setArea: function (area) {
     this.setEnvVar('area', area.get('id'));

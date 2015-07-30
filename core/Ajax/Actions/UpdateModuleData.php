@@ -24,40 +24,40 @@ class UpdateModuleData implements AjaxActionInterface
     /**
      * Sends new module data as json formatted object
      *
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @since 0.1.0
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         global $post;
 
-        $moduleArgs = Utilities::validateBoolRecursive( $Request->get( 'module' ) );
-        $data = wp_unslash($Request->get( 'data' ));
-        $postId = $Request->getFiltered( 'post_id', FILTER_VALIDATE_INT );
+        $moduleArgs = Utilities::validateBoolRecursive( $request->get( 'module' ) );
+        $data = wp_unslash($request->get( 'data' ));
+        $postId = $request->getFiltered( 'postId', FILTER_VALIDATE_INT );
 
         // setup global post
         $post = get_post( $postId );
         setup_postdata( $post );
 
-        $Environment = Utilities::getEnvironment( $postId );
-        $Module = $Environment->getModuleById( filter_var( $moduleArgs['mid'], FILTER_SANITIZE_STRING ) );
+        $environment = Utilities::getEnvironment( $postId );
+        $module = $environment->getModuleById( filter_var( $moduleArgs['mid'], FILTER_SANITIZE_STRING ) );
 
         // gather data
-        $old = $Module->Model->export();
-        $new = $Module->save( $data, $old );
+        $old = $module->Model->export();
+        $new = $module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
-        $Environment->getStorage()->saveModule( $Module->getId(), wp_slash($mergedData) );
-        $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $Module );
-        $Module->Model->set( $mergedData );
-        $Module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+        $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
+        $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $module );
+        $module->Model->set( $mergedData );
+        $module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
-        $Environment->getStorage()->reset();
-        $Environment->getStorage()->addToIndex( $Module->getId(), $Module->Properties->export() );
+        $environment->getStorage()->reset();
+        $environment->getStorage()->addToIndex( $module->getId(), $module->Properties->export() );
         $return = array(
             'newModuleData' => $mergedData
         );
-        do_action( 'kb.module.save', $Module, $mergedData );
+        do_action( 'kb.module.save', $module, $mergedData );
         Utilities::remoteConcatGet( $postId );
 
         return new AjaxSuccessResponse( 'Module data updated.', $return );

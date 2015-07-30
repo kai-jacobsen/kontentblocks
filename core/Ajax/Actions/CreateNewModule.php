@@ -26,7 +26,7 @@ class CreateNewModule implements AjaxActionInterface
     protected $parentObject;
 
 
-    protected $Environment;
+    protected $environment;
 
     /**
      * ID of the origin post
@@ -63,21 +63,21 @@ class CreateNewModule implements AjaxActionInterface
 
     /**
      * Required by AjaxCallbackHandler
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return CreateNewModule
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
-        $Instance = new CreateNewModule();
-        return $Instance->create( $Request );
+        $instance = new CreateNewModule();
+        return $instance->create( $request );
     }
 
     /**
      * Get things going
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return AjaxSuccessResponse
      */
-    public function create( ValueStorageInterface $Request )
+    public function create( ValueStorageInterface $request )
     {
         if (!defined( 'KB_GENERATE' )) {
             define( 'KB_GENERATE', true );
@@ -87,10 +87,10 @@ class CreateNewModule implements AjaxActionInterface
         // The Program
         // ------------------------------------
         // Setup Data from $_POST
-        $this->setupRequestData( $Request );
+        $this->setupRequestData( $request );
 
         // Setup Data Handler
-        $this->Environment = Utilities::getEnvironment( $this->postId );
+        $this->environment = Utilities::getEnvironment( $this->postId );
 
         // override class if master
         if (!$this->frontend) {
@@ -100,8 +100,8 @@ class CreateNewModule implements AjaxActionInterface
         // handle override from global modules
         $this->gmoduleOverride();
 
-        $Workshop = new ModuleWorkshop( $this->Environment, $this->moduleArgs );
-        $this->newModule = $Workshop->createAndGet();
+        $workshop = new ModuleWorkshop( $this->environment, $this->moduleArgs );
+        $this->newModule = $workshop->createAndGet();
 
         return $this->render();
 
@@ -137,12 +137,12 @@ class CreateNewModule implements AjaxActionInterface
     private function render()
     {
 
-        $Module = apply_filters( 'kb.module.before.factory', $this->newModule );
+        $module = apply_filters( 'kb.module.before.factory', $this->newModule );
         if ($this->frontend) {
-            $SingleRenderer = new SingleModuleRenderer( $Module );
-            $html = $SingleRenderer->render();
+            $singleRenderer = new SingleModuleRenderer( $module );
+            $html = $singleRenderer->render();
         } else {
-            $html = $Module->renderForm();
+            $html = $module->renderForm();
         }
         $response = array
         (
@@ -159,34 +159,34 @@ class CreateNewModule implements AjaxActionInterface
 
     /**
      * Data send from js module definition object
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      */
-    private function setupRequestData( ValueStorageInterface $Request )
+    private function setupRequestData( ValueStorageInterface $request )
     {
         global $post;
 
-        $this->postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $this->frontend = $Request->getFiltered( 'frontend', FILTER_VALIDATE_BOOLEAN );
+        $this->postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $this->frontend = $request->getFiltered( 'frontend', FILTER_VALIDATE_BOOLEAN );
 
         $post = get_post( $this->postId );
         setup_postdata( $post );
 
-        $this->moduleArgs['class'] = $Request->getFiltered( 'class', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['class'] = $request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
 //
 //        if ($Request->getFiltered( 'globalModule', FILTER_VALIDATE_BOOLEAN )) {
 //        }
-        $this->moduleArgs['post_id'] = absint( $this->postId );
-        $this->moduleArgs['area'] = $Request->getFiltered( 'area', FILTER_SANITIZE_STRING );
-        $this->moduleArgs['areaContext'] = $Request->getFiltered( 'areaContext', FILTER_SANITIZE_STRING );
-        $this->moduleArgs['parentObjectId'] = absint( $Request->get( 'parentObjectId' ) );
+        $this->moduleArgs['postId'] = absint( $this->postId );
+        $this->moduleArgs['area'] = $request->getFiltered( 'area', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['areaContext'] = $request->getFiltered( 'areaContext', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['parentObjectId'] = absint( $request->get( 'parentObjectId' ) );
 
-        $this->moduleArgs['globalModule'] = $this->globalModule = $Request->getFiltered(
+        $this->moduleArgs['globalModule'] = $this->globalModule = $request->getFiltered(
             'globalModule',
             FILTER_VALIDATE_BOOLEAN
         );
 
-        $this->parentObject = $Request->get( 'parentObject' );
+        $this->parentObject = $request->get( 'parentObject' );
     }
 
 }

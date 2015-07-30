@@ -21,24 +21,27 @@ class SyncAreaSettings implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
-    public static function run( ValueStorageInterface $Request )
+    /**
+     * @param ValueStorageInterface $request
+     */
+    public static function run( ValueStorageInterface $request )
     {
 
-        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $areaId = $Request->getFiltered( 'areaId', FILTER_SANITIZE_STRING );
-        $settings = $Request->get( 'settings' );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $areaId = $request->getFiltered( 'areaId', FILTER_SANITIZE_STRING );
+        $settings = $request->get( 'settings' );
 
-        $Environment = Utilities::getEnvironment( $postId );
-        $Area = $Environment->getAreaDefinition( $areaId );
+        $environment = Utilities::getEnvironment( $postId );
+        $Area = $environment->getAreaDefinition( $areaId );
 
-        $AreaSettings = new AreaSettingsModel( $Area, $postId );
-        $AreaSettings->import( Utilities::validateBoolRecursive( $settings ) );
-        $update = $AreaSettings->save();
+        $areaSettings = new AreaSettingsModel( $Area, $postId );
+        $areaSettings->import( Utilities::validateBoolRecursive( $settings ) );
+        $update = $areaSettings->save();
 
         if ($update) {
-            new AjaxSuccessResponse( 'Area Settings updated', $AreaSettings );
+            new AjaxSuccessResponse( 'Area Settings updated', $areaSettings );
         } else {
-            new AjaxErrorResponse( 'Area Settings not updated', $AreaSettings );
+            new AjaxErrorResponse( 'Area Settings not updated', $areaSettings );
         }
 
     }

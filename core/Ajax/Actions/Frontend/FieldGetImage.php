@@ -18,16 +18,16 @@ class FieldGetImage implements AjaxActionInterface
     static $nonce = 'kb-read';
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
-        $args = $Request->get( 'args' );
+        $args = $request->get( 'args' );
         $width = ( !isset( $args['width'] ) ) ? 150 : $args['width'];
         $height = ( !isset( $args['height'] ) ) ? null : $args['height'];
         $upscale = filter_var( $args['upscale'], FILTER_VALIDATE_BOOLEAN );
-        $attachmentid = $Request->getFiltered( 'id', FILTER_SANITIZE_NUMBER_INT );
+        $attachmentid = $request->getFiltered( 'id', FILTER_SANITIZE_NUMBER_INT );
 
 
         return new AjaxSuccessResponse(

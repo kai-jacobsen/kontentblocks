@@ -20,22 +20,22 @@ class SaveStaticPanelForm implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
-        $panel = $Request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $panId = filter_var( $panel['baseId'], FILTER_SANITIZE_STRING );
-        $postId = filter_var($panel['postId'], FILTER_SANITIZE_NUMBER_INT);
+        $panelDef = $request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $panId = filter_var( $panelDef['baseId'], FILTER_SANITIZE_STRING );
+        $postId = filter_var($panelDef['postId'], FILTER_SANITIZE_NUMBER_INT);
         $panelData = wp_unslash( $data[$panId] );
 
-        $Panel = \Kontentblocks\getPanel( $panId, $postId );
-        $old = $Panel->getData();
-        $new = $Panel->fields( $Panel->FieldController )->save( $panelData, $old );
+        $panel = \Kontentblocks\getPanel( $panId, $postId );
+        $old = $panel->getData();
+        $new = $panel->fields( $panel->FieldController )->save( $panelData, $old );
 
         $merged = Utilities::arrayMergeRecursive( $new, $old );
         update_post_meta( $postId, $panId, $merged );

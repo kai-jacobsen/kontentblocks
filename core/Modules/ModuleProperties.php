@@ -16,7 +16,7 @@ use Kontentblocks\Utils\Utilities;
 class ModuleProperties
 {
     /**
-     * Settings array as defined in each Modules
+     * Settings array as defined in each Module
      * @var array
      */
     public $settings;
@@ -53,6 +53,11 @@ class ModuleProperties
      * current post id | post context of modules
      * @var int
      */
+    public $postId;
+
+    /**
+     * @var int deprecated
+     */
     public $post_id;
 
     /**
@@ -69,7 +74,7 @@ class ModuleProperties
     public $mid;
 
     /**
-     * @var ID of module attached to
+     * @var int of module attached to
      */
     public $parentObjectId;
 
@@ -78,9 +83,15 @@ class ModuleProperties
      */
     public $parentObject;
 
+
+    /**
+     * @var bool is globalModule
+     */
     public $globalModule;
 
-
+    /**
+     * @param array $properties
+     */
     public function __construct( $properties )
     {
         $properties = $this->parseInSettings( $properties );
@@ -123,6 +134,15 @@ class ModuleProperties
     {
         $this->setupProperties( array( $prop => $value ) );
         return $this;
+    }
+
+    public function get( $key )
+    {
+        if (property_exists( $this, $key )) {
+            return $this->$key;
+        }
+
+        return null;
     }
 
     /**
@@ -180,7 +200,7 @@ class ModuleProperties
     }
 
     /**
-     * Export relevant properies as indexstoreable array
+     * Export relevant properies as index storeable array
      * @param bool $keepSettings whether to export settings as well
      * @return array
      * @since 0.1.0
@@ -200,7 +220,7 @@ class ModuleProperties
 
     public function __set( $k, $v )
     {
-        d( $k, $v );
+//        d( $k, $v );
     }
 
     /**
@@ -219,8 +239,8 @@ class ModuleProperties
             $Area = $AreaRegistry->getArea( '_internal' );
         }
 
-        if (is_null($Area->settings)){
-            $Area->set('settings', new AreaSettingsModel($Area, $this->post_id));
+        if (is_null( $Area->settings )) {
+            $Area->set( 'settings', new AreaSettingsModel( $Area, $this->postId ) );
         }
 
         /**

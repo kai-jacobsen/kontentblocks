@@ -23,14 +23,13 @@ class UpdateFieldModel implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
-        global $post;
 
-        $postdata = self::setupPostData( $Request );
+        $postdata = self::setupPostData( $request );
 
         switch ($postdata->type) {
             case 'module':
@@ -56,19 +55,23 @@ class UpdateFieldModel implements AjaxActionInterface
     }
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return \stdClass
      */
-    private static function setupPostData( ValueStorageInterface $Request )
+    private static function setupPostData( ValueStorageInterface $request )
     {
         $stdClass = new \stdClass();
-        $stdClass->data = $Request->get( 'data' );
-        $stdClass->field = $Request->getFiltered( 'field', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $stdClass->type = $Request->getFiltered( 'type', FILTER_SANITIZE_STRING );
+        $stdClass->data = $request->get( 'data' );
+        $stdClass->field = $request->getFiltered( 'field', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->module = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->type = $request->getFiltered( 'type', FILTER_SANITIZE_STRING );
         return $stdClass;
     }
 
+    /**
+     * @param $postdata
+     * @return array
+     */
     private static function prepareModuleData( $postdata )
     {
 

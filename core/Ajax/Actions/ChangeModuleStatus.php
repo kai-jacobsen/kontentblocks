@@ -18,14 +18,14 @@ class ChangeModuleStatus implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
 
-        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $mid = $Request->getFiltered( 'module', FILTER_SANITIZE_STRING );
-        $Storage = new ModuleStorage( $postId );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $mid = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
+        $storage = new ModuleStorage( $postId );
 
-        $moduleDefinition = $Storage->getModuleDefinition( $mid );
+        $moduleDefinition = $storage->getModuleDefinition( $mid );
         if ($moduleDefinition) {
 
             // dont ask
@@ -35,7 +35,7 @@ class ChangeModuleStatus implements AjaxActionInterface
                 $moduleDefinition['state']['active'] = false;
             }
 
-            $update = $Storage->addToIndex( $mid, $moduleDefinition );
+            $update = $storage->addToIndex( $mid, $moduleDefinition );
             return new AjaxSuccessResponse(
                 'Status changed', array(
                     'update' => $update

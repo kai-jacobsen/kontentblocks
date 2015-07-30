@@ -22,27 +22,27 @@ class SaveOptionPanelForm implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
-        $panel = $Request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $data = $Request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $id = $panel['baseId'];
-        $panelData = wp_unslash($data[$id]);
+        $panelDef = $request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $baseId = $panelDef['baseId'];
+        $panelData = wp_unslash($data[$baseId]);
 
-        $Panel = \Kontentblocks\getPanel($id);
-        $old = $Panel->getData();
-        $new = $Panel->fields($Panel->FieldController)->save($panelData, $old);
+        $panel = \Kontentblocks\getPanel($baseId);
+        $old = $panel->getData();
+        $new = $panel->fields($panel->FieldController)->save($panelData, $old);
 
         $merged = Utilities::arrayMergeRecursive( $new, $old );
-        $Panel->DataProvider->set($merged)->save();
+        $panel->DataProvider->set($merged)->save();
 
         $return = array(
-            'newData' => $Panel->DataProvider->export()
+            'newData' => $panel->DataProvider->export()
         );
         new AjaxSuccessResponse( 'options data saved', $return );
     }

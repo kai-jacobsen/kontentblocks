@@ -19,24 +19,28 @@ class RemoveModules implements AjaxActionInterface
 {
     static $nonce = 'kb-delete';
 
-    public static function run( ValueStorageInterface $Request )
+    /**
+     * @param ValueStorageInterface $request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
+     */
+    public static function run( ValueStorageInterface $request )
     {
 
         if (!current_user_can( 'edit_kontentblocks' )) {
             return new AjaxErrorResponse( 'insufficient permissions' );
         }
 
-        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $mid = $Request->getFiltered( 'module', FILTER_SANITIZE_STRING );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $mid = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
 
-        $Environment = Utilities::getEnvironment( $postId );
-        $Module = $Environment->getModuleById( $mid );
-        $Storage = $Environment->getStorage();
-        $BackupManager = new BackupDataStorage( $Storage );
-        $BackupManager->backup( "Before Module: {$mid} was deleted" );
-        $update = $Storage->removeFromIndex( $mid );
+        $environment = Utilities::getEnvironment( $postId );
+        $module = $environment->getModuleById( $mid );
+        $storage = $environment->getStorage();
+        $backupManager = new BackupDataStorage( $storage );
+        $backupManager->backup( "Before Module: {$mid} was deleted" );
+        $update = $storage->removeFromIndex( $mid );
         if ($update) {
-            do_action( 'kb.module.delete', $Module );
+            do_action( 'kb.module.delete', $module );
             return new AjaxSuccessResponse(
                 'Module successfully removed', array(
                     'update' => $update

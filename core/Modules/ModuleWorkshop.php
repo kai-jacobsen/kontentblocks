@@ -198,9 +198,9 @@ class ModuleWorkshop
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
 
 
-        // @TODO don't store post_id in the first place
 //        if (empty( $attrs['post_id'] )) {
             $attrs['post_id'] = $this->Environment->getId();
+            $attrs['postId'] = $this->Environment->getId();
 //        }
 
         if (is_null( $attrs['parentObjectId'] ) || $attrs['parentObjectId'] === 0) {
@@ -285,6 +285,7 @@ class ModuleWorkshop
             ),
             // environmental
             'post_id' => null,
+            'postId' => null,
             'area' => '_internal',
             'areaContext' => 'normal',
             'state' => array(

@@ -21,21 +21,21 @@ class GetOptionPanelForm implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
-        $panel = $Request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $id = $panel['baseId'];
+        $panelDef = $request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $baseId = $panelDef['baseId'];
 
-        $Panel = \Kontentblocks\getPanel( $id );
-        $pdata = (!empty($panel['moduleData'])) ? wp_unslash($panel['moduleData']) : [];
-        $Panel->setData( $pdata );
+        $panel = \Kontentblocks\getPanel( $baseId );
+        $pdata = (!empty($panelDef['moduleData'])) ? wp_unslash($panelDef['moduleData']) : [];
+        $panel->setData( $pdata );
         $return = array(
-            'html' => $Panel->renderFields(),
+            'html' => $panel->renderFields(),
             'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
         );
         new AjaxSuccessResponse( 'serving module form', $return );

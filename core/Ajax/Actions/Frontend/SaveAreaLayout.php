@@ -21,15 +21,15 @@ class SaveAreaLayout implements AjaxActionInterface
     static $nonce = 'kb-update';
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
-        $area = $Request->get( 'area' );
-        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $layout = $Request->getFiltered( 'layout', FILTER_SANITIZE_STRING );
-        $Environment = Utilities::getEnvironment($postId);
-        $Area = $Environment->getAreaDefinition($area);
+        $area = $request->get( 'area' );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $layout = $request->getFiltered( 'layout', FILTER_SANITIZE_STRING );
+        $environment = Utilities::getEnvironment($postId);
+        $Area = $environment->getAreaDefinition($area);
         if ($Area->settings->getLayout( $area['id'] ) === $layout) {
             new AjaxErrorResponse(
                 'Layout has not changed', array(

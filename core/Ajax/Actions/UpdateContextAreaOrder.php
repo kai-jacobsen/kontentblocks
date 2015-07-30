@@ -21,15 +21,18 @@ class UpdateContextAreaOrder implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
-    public static function run( ValueStorageInterface $Request )
+    /**
+     * @param ValueStorageInterface $request
+     */
+    public static function run( ValueStorageInterface $request )
     {
 
-        $postId = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $data = $Request->get( 'data' );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $data = $request->get( 'data' );
 
-        $Environment = Utilities::getEnvironment( $postId );
-        $DataProvider = $Environment->getDataProvider();
-        $update = $DataProvider->update('kb.contexts', $data);
+        $environment = Utilities::getEnvironment( $postId );
+        $dataProvider = $environment->getDataProvider();
+        $update = $dataProvider->update('kb.contexts', $data);
 
         if ($update) {
             new AjaxSuccessResponse( 'Area order updated', $data );

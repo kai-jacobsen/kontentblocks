@@ -24,7 +24,7 @@ module.exports = ModuleMenuItem.extend({
       action: 'removeModules',
       _ajax_nonce: Config.getNonce('delete'),
       module: that.model.get('mid'),
-      postId: that.model.get('post_id')
+      postId: that.model.get('postId')
     }, this.afterRemoval, this);
   },
   afterRemoval: function () {

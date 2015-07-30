@@ -106,8 +106,8 @@ module.exports =
     }, 1500);
 
   },
-  remoteGetEditor: function ($el, name, id, content, post_id, media, watch) {
-    var pid = post_id || KB.appData.config.post.ID;
+  remoteGetEditor: function ($el, name, id, content, postId, media, watch) {
+    var pid = postId || KB.appData.config.post.ID;
     var id = id || $el.attr('id');
     if (!media) {
       var media = false;
@@ -119,6 +119,7 @@ module.exports =
       editorId: id + '_ed',
       editorName: name,
       post_id: pid,
+      postId: pid,
       editorContent: editorContent,
       _ajax_nonce: Config.getNonce('read'),
       args: {

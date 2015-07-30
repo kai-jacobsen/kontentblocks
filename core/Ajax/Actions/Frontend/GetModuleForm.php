@@ -21,9 +21,9 @@ class GetModuleForm implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
@@ -33,21 +33,21 @@ class GetModuleForm implements AjaxActionInterface
             define( 'KB_MODULE_FORM', true );
         }
 
-        $module = $Request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-        $Environment = Utilities::getEnvironment( $module['parentObjectId'] );
-        $Module = $Environment->getModuleById( $module['mid'] );
-        $Module->Properties->viewfile = filter_var( $module['viewfile'], FILTER_SANITIZE_STRING );
-        $Module = apply_filters( 'kb.module.before.factory', $Module );
-        $Module->setupFields();
+        $environment = Utilities::getEnvironment( $moduleDef['parentObjectId'] );
+        $module = $environment->getModuleById( $moduleDef['mid'] );
+        $module->Properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );
+        $module = apply_filters( 'kb.module.before.factory', $module );
+        $module->setupFields();
 
-        $currentData = wp_unslash( $Request->getFiltered( 'moduleData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-        $oldData = $Module->Model->export();
+        $currentData = wp_unslash( $request->getFiltered( 'moduleData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+        $oldData = $module->Model->export();
 
         $merged = Utilities::arrayMergeRecursive( $currentData, $oldData );
 
-        $Module->setModuleData( $merged );
-        $html = $Module->form();
+        $module->setModuleData( $merged );
+        $html = $module->form();
         $return = array(
             'html' => $html,
 //            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )

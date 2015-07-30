@@ -17,24 +17,24 @@ class UndraftModule implements AjaxActionInterface
 {
     static $nonce = 'kb-update';
 
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
 
-        $mid = $Request->getFiltered( 'mid', FILTER_SANITIZE_STRING );
-        $post_id = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $mid = $request->getFiltered( 'mid', FILTER_SANITIZE_STRING );
+        $post_id = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
 
         if (empty( $mid ) || !is_int( absint( $post_id ) )) {
-            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $mid, 'post_id' => $post_id ) );
+            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $mid, 'postId' => $post_id ) );
         }
 
-        $Storage = new ModuleStorage( $post_id, null );
-        $module = $Storage->getModuleDefinition( $mid );
+        $storage = new ModuleStorage( $post_id, null );
+        $module = $storage->getModuleDefinition( $mid );
 
         if (array_key_exists( 'state', $module )) {
             $module['state']['draft'] = false;
         }
 
-        $Storage->addToIndex( $mid, $module );
+        $storage->addToIndex( $mid, $module );
 
         return new AjaxSuccessResponse( 'Module published', array( 'module' => $module ) );
     }

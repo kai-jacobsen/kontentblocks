@@ -1,7 +1,6 @@
 <?php
 
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Templating\ModuleView;
 
 
 /**
@@ -10,11 +9,11 @@ use Kontentblocks\Templating\ModuleView;
 class ModuleText extends Module
 {
 
-    public static $defaults = array(
+    public static $settings = array(
         'publicName' => 'WYSIWYG',
         'name' => 'TinyMCE instance',
         'description' => 'Demo Editor',
-        'globallyAvailable' => true,
+        'globalModule' => true,
         'asTemplate' => true,
         'views' => true,
         'connect' => array( 'normal', 'side' ),

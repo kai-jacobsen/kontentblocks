@@ -22,25 +22,25 @@ class ChangeArea implements AjaxActionInterface
     static $nonce = 'kb-update';
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return AjaxErrorResponse|AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         if (!current_user_can( 'edit_kontentblocks' )) {
             return new AjaxErrorResponse( 'insufficient permissions' );
         }
 
-        $postID = $Request->getFiltered( 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $newArea = $Request->getFiltered( 'area_id', FILTER_SANITIZE_STRING );
-        $newAreaContext = $Request->getFiltered( 'context', FILTER_SANITIZE_STRING );
-        $instanceId = $Request->getFiltered( 'mid', FILTER_SANITIZE_STRING );
-        $Storage = new ModuleStorage( $postID );
+        $postID = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $newArea = $request->getFiltered( 'area_id', FILTER_SANITIZE_STRING );
+        $newAreaContext = $request->getFiltered( 'context', FILTER_SANITIZE_STRING );
+        $instanceId = $request->getFiltered( 'mid', FILTER_SANITIZE_STRING );
+        $storage = new ModuleStorage( $postID );
 
-        $moduleDefinition = $Storage->getModuleDefinition( $instanceId );
+        $moduleDefinition = $storage->getModuleDefinition( $instanceId );
         $moduleDefinition['area'] = $newArea;
         $moduleDefinition['areaContext'] = $newAreaContext;
-        $update = $Storage->addToIndex( $instanceId, $moduleDefinition );
+        $update = $storage->addToIndex( $instanceId, $moduleDefinition );
 
         if ($update) {
             return new AjaxSuccessResponse( 'Area changed', array( 'update' => $update ) );

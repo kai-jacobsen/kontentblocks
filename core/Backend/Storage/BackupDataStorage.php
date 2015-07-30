@@ -44,12 +44,12 @@ class BackupDataStorage
 
     /**
      * Remove backups for deleted posts
-     * @param $post_id
+     * @param $postId
      */
-    public static function deletePostCallback( $post_id )
+    public static function deletePostCallback( $postId )
     {
         global $wpdb;
-        $wpdb->delete( $wpdb->prefix . "kb_backups", array( 'post_id' => $post_id ) );
+        $wpdb->delete( $wpdb->prefix . "kb_backups", array( 'post_id' => $postId ) );
     }
 
     /**

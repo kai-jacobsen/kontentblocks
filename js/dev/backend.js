@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-28 */
+/*! Kontentblocks DevVersion 2015-07-30 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -234,6 +234,7 @@
     6: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             idAttribute: "mid",
+            attachedFields: {},
             initialize: function() {
                 this.type = "module";
                 this.listenTo(this, "change:area", this.areaChanged);
@@ -242,6 +243,15 @@
             destroy: function() {
                 this.unsubscribeFromArea();
                 this.stopListening();
+            },
+            attachField: function(FieldModel) {
+                this.attachedFields[FieldModel.id] = FieldModel;
+                this.listenTo(FieldModel, "remove", this.removeAttachedField);
+            },
+            removeAttachedField: function(FieldModel) {
+                if (this.attachedFields[FieldModel.id]) {
+                    delete this.attachedFields[FieldModel.id];
+                }
             },
             setArea: function(area) {
                 this.setEnvVar("area", area.get("id"));
@@ -1672,6 +1682,7 @@
                     supplemental: data.supplemental || {},
                     nonce: jQuery("#_kontentblocks_ajax_nonce").val(),
                     post_id: pid,
+                    postId: pid,
                     kbajax: true
                 }, data);
                 jQuery("#publish").attr("disabled", "disabled");
@@ -2028,8 +2039,8 @@
                     window.QTags._buttonsInit();
                 }, 1500);
             },
-            remoteGetEditor: function($el, name, id, content, post_id, media, watch) {
-                var pid = post_id || KB.appData.config.post.ID;
+            remoteGetEditor: function($el, name, id, content, postId, media, watch) {
+                var pid = postId || KB.appData.config.post.ID;
                 var id = id || $el.attr("id");
                 if (!media) {
                     var media = false;
@@ -2040,6 +2051,7 @@
                     editorId: id + "_ed",
                     editorName: name,
                     post_id: pid,
+                    postId: pid,
                     editorContent: editorContent,
                     _ajax_nonce: Config.getNonce("read"),
                     args: {

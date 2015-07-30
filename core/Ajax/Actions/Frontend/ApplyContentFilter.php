@@ -18,14 +18,14 @@ class ApplyContentFilter implements AjaxActionInterface
     static $nonce = 'kb-read';
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      * @return AjaxSuccessResponse
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         global $post;
-        $content = wp_unslash( $Request->get( 'content' ) );
-        $postId = $Request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
+        $content = wp_unslash( $request->get( 'content' ) );
+        $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
         $post = get_post( $postId );
         setup_postdata( $post );
         $html = apply_filters( 'the_content', $content );

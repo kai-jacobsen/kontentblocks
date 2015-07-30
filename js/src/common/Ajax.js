@@ -16,6 +16,7 @@ module.exports =
       supplemental: data.supplemental || {},
       nonce: jQuery('#_kontentblocks_ajax_nonce').val(),
       post_id: pid,
+      postId: pid,
       kbajax: true
     }, data);
 

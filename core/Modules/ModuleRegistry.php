@@ -50,11 +50,11 @@ class ModuleRegistry
         include_once $file;
         // extract class name from file
         $classname = str_replace( '.php', '', basename( $file ) );
-        if (!isset( $this->modules[$classname] ) && property_exists( $classname, 'defaults' )) {
+        if (!isset( $this->modules[$classname] ) && property_exists( $classname, 'settings' )) {
             // Defaults from the specific Module
             // contains id, name, public name etc..
             $moduleArgs = array();
-            $args = wp_parse_args( $classname::$defaults, Module::getDefaultSettings() );
+            $args = wp_parse_args( $classname::$settings, Module::getDefaultSettings() );
             $args['class'] = $classname;
             $args['path'] = trailingslashit( dirname( $file ) );
             $args['uri'] = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );

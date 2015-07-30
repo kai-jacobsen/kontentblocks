@@ -21,22 +21,22 @@ class GetStaticPanelForm implements AjaxActionInterface
 
 
     /**
-     * @param ValueStorageInterface $Request
+     * @param ValueStorageInterface $request
      */
-    public static function run( ValueStorageInterface $Request )
+    public static function run( ValueStorageInterface $request )
     {
         if (!defined( 'KB_ONSITE_ACTIVE' )) {
             define( 'KB_ONSITE_ACTIVE', true );
         }
-        $panel = $Request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $panId = filter_var( $panel['baseId'], FILTER_SANITIZE_STRING );
-        $postId = filter_var( $panel['postId'], FILTER_SANITIZE_NUMBER_INT );
+        $panelDef = $request->getFiltered( 'panel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $panId = filter_var( $panelDef['baseId'], FILTER_SANITIZE_STRING );
+        $postId = filter_var( $panelDef['postId'], FILTER_SANITIZE_NUMBER_INT );
 
-        $Panel = \Kontentblocks\getPanel( $panId, $postId );
-        $pdata = ( !empty( $panel['moduleData'] ) ) ? wp_unslash( $panel['moduleData'] ) : [ ];
-        $Panel->setData( $pdata );
+        $panel = \Kontentblocks\getPanel( $panId, $postId );
+        $pdata = ( !empty( $panelDef['moduleData'] ) ) ? wp_unslash( $panelDef['moduleData'] ) : [ ];
+        $panel->setData( $pdata );
         $return = array(
-            'html' => $Panel->renderFields(),
+            'html' => $panel->renderFields(),
             'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
         );
         new AjaxSuccessResponse( 'serving module form', $return );

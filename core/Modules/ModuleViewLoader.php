@@ -189,7 +189,7 @@ class ModuleViewLoader
         if (empty( $viewfile )) {
             return;
         }
-        $postId = $module->Properties->post_id;
+        $postId = $module->Properties->postId;
         /** @var \Kontentblocks\Backend\Storage\ModuleStorage $Storage */
         $Storage = new ModuleStorage( $postId );
         $index = $Storage->getModuleDefinition( $module->getId() );
