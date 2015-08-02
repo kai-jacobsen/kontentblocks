@@ -119,52 +119,9 @@ class AreaProperties
         $properties = wp_parse_args( $properties, self::getDefaults() );
 
         foreach ($properties as $k => $v) {
-            if (method_exists( $this, 'set' . ucfirst( $k ) )) {
-                $this->{'set' . ucfirst( $k )}( $v );
-            } else {
-                $this->$k = $v;
-            }
+            $this->$k = $v;
         }
 
-    }
-
-
-    /**
-     * Get property
-     * @param string $prop
-     * @return mixed|null
-     */
-    public function get( $prop )
-    {
-        if (property_exists( $this, $prop )) {
-            return $this->$prop;
-        }
-
-        return null;
-    }
-
-    /**
-     * Set property
-     * @param string $prop
-     * @param mixed $value
-     */
-    public function set( $prop, $value )
-    {
-        $this->$prop = $value;
-    }
-
-
-    /**
-     * Add module classname to assigned modules array
-     * @param string $module
-     * @return $this
-     */
-    public function connect( $module )
-    {
-        if (!isset( $this->assignedModules[$module] )) {
-            $this->assignedModules[] = $module;
-        }
-        return $this;
     }
 
     /**
@@ -195,6 +152,43 @@ class AreaProperties
             'internal' => false,
             'settings' => null
         );
+    }
+
+    /**
+     * Get property
+     * @param string $prop
+     * @return mixed|null
+     */
+    public function get( $prop )
+    {
+        if (property_exists( $this, $prop )) {
+            return $this->$prop;
+        }
+
+        return null;
+    }
+
+    /**
+     * Set property
+     * @param string $prop
+     * @param mixed $value
+     */
+    public function set( $prop, $value )
+    {
+        $this->$prop = $value;
+    }
+
+    /**
+     * Add module classname to assigned modules array
+     * @param string $module
+     * @return $this
+     */
+    public function connect( $module )
+    {
+        if (!isset( $this->assignedModules[$module] )) {
+            $this->assignedModules[] = $module;
+        }
+        return $this;
     }
 
     public function __toString()

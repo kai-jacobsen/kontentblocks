@@ -23,31 +23,6 @@ class FieldRegistry
      * @var array
      */
     protected $fields;
-    protected $services;
-
-
-
-    /**
-     * @param Container $services
-     */
-    public function __construct( Container $services )
-    {
-        $this->services = $services;
-    }
-
-    /**
-     * Register field
-     * @param string $id
-     * @param object $class
-     * @return $this
-     * @since 0.1.0
-     */
-    public function registerField( $id, $class )
-    {
-        $this->fields[$id] = $class;
-        return $this;
-
-    }
 
     /**
      * Field add method
@@ -82,6 +57,20 @@ class FieldRegistry
             }
         }
         return $this;
+    }
+
+    /**
+     * Register field
+     * @param string $id
+     * @param object $class
+     * @return $this
+     * @since 0.1.0
+     */
+    public function registerField( $id, $class )
+    {
+        $this->fields[$id] = $class;
+        return $this;
+
     }
 
     /**
