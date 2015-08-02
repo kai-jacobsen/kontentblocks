@@ -115,7 +115,7 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
     public function jsonSerialize()
     {
         $vars = get_object_vars( $this );
-        unset( $vars['Module'] );
+        unset( $vars['module'] );
         unset( $vars['_locked'] );
         unset( $vars['_initialized'] );
         unset( $vars['_originalData'] );

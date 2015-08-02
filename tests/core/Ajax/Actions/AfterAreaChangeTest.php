@@ -56,7 +56,7 @@ class AfterAreaChangeTest extends \WP_UnitTestCase
         );
 
         $data = array(
-            'post_id' => $post->ID,
+            'postId' => $post->ID,
             'module' => $workshop->getDefinitionArray()
         );
 

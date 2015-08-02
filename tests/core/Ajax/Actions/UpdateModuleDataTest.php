@@ -29,12 +29,11 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
             99
         );
         \Kontentblocks\Hooks\Capabilities::setup();
+        \Kontentblocks\registerArea(array(
+            'id' => 'dump',
+            'postTypes' => array('post')
+        ));
 
-        \Kontentblocks\registerArea(
-            array(
-                'id' => 'dump'
-            )
-        );
     }
 
     public function setUp()
@@ -65,7 +64,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
         $workshop->create();
 
         $data = array(
-            'post_id' => $post->ID,
+            'postId' => $post->ID,
             'module' => $workshop->getDefinitionArray(),
             'data' => array(
                 'demotest' => 'Manipulated string'

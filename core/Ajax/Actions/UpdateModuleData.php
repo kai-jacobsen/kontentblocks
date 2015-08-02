@@ -47,6 +47,7 @@ class UpdateModuleData implements AjaxActionInterface
         $old = $module->model->export();
         $new = $module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
+
         $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $module );
         $module->model->set( $mergedData );

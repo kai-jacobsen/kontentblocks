@@ -52,7 +52,7 @@ class UndraftModuleTest extends \WP_UnitTestCase
         $module = $workshop->getDefinitionArray();
 
         $data = array(
-            'post_id' => $post->ID,
+            'postId' => $post->ID,
             'mid' => $module['mid']
         );
 

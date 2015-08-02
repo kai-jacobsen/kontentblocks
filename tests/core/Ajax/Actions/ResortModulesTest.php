@@ -39,7 +39,7 @@ class ResortModulesTest extends \WP_UnitTestCase
                 'demo-content' => "module_52_2[]=2&module_52_3[]=3",
                 'side-content' => ""
             ),
-            'post_id' => '1'
+            'postId' => '1'
         );
 
         $res = \Kontentblocks\Ajax\Actions\SortModules::run( new ValueStorage( $data ) );

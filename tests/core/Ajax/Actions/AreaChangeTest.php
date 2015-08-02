@@ -56,7 +56,7 @@ class AreaChangeTest extends \WP_UnitTestCase
         $module = $workshop->getDefinitionArray();
 
         $data = array(
-            'post_id' => $post->ID,
+            'postId' => $post->ID,
             'area_id' => 'dump',
             'areaContext' => 'dump',
             'mid' => $module['mid']

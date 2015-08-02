@@ -33,6 +33,11 @@ class RemoveModulesTest extends \WP_UnitTestCase
         $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
         wp_set_current_user( $this->userId );
 
+        \Kontentblocks\registerArea(array(
+            'id' => 'dump',
+            'postTypes' => array('post')
+        ));
+
     }
 
 
@@ -42,7 +47,8 @@ class RemoveModulesTest extends \WP_UnitTestCase
 
         $workshop = new ModuleWorkshop(
             new Environment( $post->ID, $post ), array(
-                'class' => 'ModuleText'
+                'class' => 'ModuleText',
+                'area' => 'dump'
             )
         );
 
@@ -50,7 +56,7 @@ class RemoveModulesTest extends \WP_UnitTestCase
         $module = $workshop->getDefinitionArray();
 
         $data = array(
-            'post_id' => $post->ID,
+            'postId' => $post->ID,
             'module' => $module['mid']
         );
 

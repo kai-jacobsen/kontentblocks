@@ -28,6 +28,8 @@ abstract class AbstractAjaxResponse implements \JsonSerializable
     {
         $this->message = $message;
         $this->data = $data;
+        $send = !filter_var(getenv('SILENT'), FILTER_VALIDATE_BOOLEAN);
+
         if ($send) {
             $this->sendJson();
         } else {
