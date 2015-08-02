@@ -77,11 +77,11 @@ class BackupInspect
     public function restoreBackup( $post_id, $id )
     {
 
-        $Storage = new ModuleStorage( $post_id );
+        $storage = new ModuleStorage( $post_id );
 
-        $BackupManager = new BackupDataStorage( $Storage );
-        $BackupManager->backup( 'before backup restore' );
-        $BackupManager->restoreBackup( $id );
+        $backupManager = new BackupDataStorage( $storage );
+        $backupManager->backup( 'before backup restore' );
+        $backupManager->restoreBackup( $id );
 
     }
 
@@ -94,9 +94,9 @@ class BackupInspect
 
         $postId = $_REQUEST['post_id'];
 
-        $Storage = new ModuleStorage( $postId );
-        $BackupManager = new BackupDataStorage( $Storage );
-        $backups = $BackupManager->queryBackup( $postId );
+        $storage = new ModuleStorage( $postId );
+        $backupManager = new BackupDataStorage( $storage );
+        $backups = $backupManager->queryBackup( $postId );
 
         $return = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();
         $this->backupData = $return;
@@ -116,13 +116,13 @@ class BackupInspect
     {
         if (isset( $data['kbBackupWatcher'] ) && $data['kbBackupWatcher'] != null) {
 
-            $Storage = new ModuleStorage( $data['post_id'] );
+            $storage = new ModuleStorage( $data['post_id'] );
 
             if ($data['kbBackupWatcher'] == get_post_meta( $data['post_id'], 'kb_last_backup', true )) {
                 $response['kbHasNewBackups'] = false;
             } else {
-                $BackupManager = new BackupDataStorage( $Storage );
-                $backups = $BackupManager->queryBackup( $data['post_id'] );
+                $backupManager = new BackupDataStorage( $storage );
+                $backups = $backupManager->queryBackup( $data['post_id'] );
                 $response['hmm'] = get_post_meta( $data['post_id'], 'kb_last_backup', true );
                 $response['kbHasNewBackups'] = ( !empty( $backups ) ) ? unserialize(
                     base64_decode( $backups->value )

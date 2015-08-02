@@ -50,10 +50,10 @@ class SidebarSelector
      * TODO:: resort global sidebars and post sidebars to own arrays
      */
 
-    function metaBox( $context, Environment $Environment )
+    function metaBox( $context, Environment $environment )
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
-        $pdc     = $Environment;
+        $pdc     = $environment;
 
         if (!$pdc->getAreas()){
             return false;

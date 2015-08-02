@@ -317,7 +317,6 @@ class AreaRegistry
     public function connect( $classname, $args )
     {
         $setting = $args['settings']['connect'];
-
         if (!empty( $setting ) && $setting === 'any') {
             /** @var \Kontentblocks\Areas\AreaProperties $area */
             foreach ($this->areas as $area) {
@@ -331,16 +330,25 @@ class AreaRegistry
                         $args['settings']['connect'] = array( $connection->id );
                         $this->connect( $classname, $args );
                     }
+                    // check for page template
                 } else if (is_string( $id ) && ( strpos( $id, '.php' ) !== false || $id === 'default' )) {
                     foreach ($this->getAreasByPageTemplate( $id ) as $tplcon) {
                         $args['settings']['connect'] = array( $tplcon->id );
                         $this->connect( $classname, $args );
                     }
+                }
+                else if ($id === 'global'){
+                    foreach ($this->getGlobalAreas() as $connection) {
+                        $connection->connect($classname);
+                    }
                 } else {
+                    // its not a coontext, not a page template, must be an area id
+                    // area id not existent
                     if (empty( $this->areas[$id] )) {
                         continue;
                     }
-                    /** @var \Kontentblocks\Areas\AreaProperties $Area */
+                    //area id exists, connect
+                    /** @var \Kontentblocks\Areas\AreaProperties $area */
                     $area = $this->areas[$id];
                     $area->connect( $classname );
                 }
@@ -368,6 +376,10 @@ class AreaRegistry
         // bail out if this is a redirect template
         if (false !== strpos( $pageTemplate, 'redirect' )) {
             return false;
+        }
+
+        if ($postType === 'kb-gmd'){
+            return array('global-module' => $this->getArea('global-module'));
         }
 
         if ($postType === 'kb-dyar') {

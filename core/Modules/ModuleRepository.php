@@ -13,13 +13,13 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 class ModuleRepository
 {
 
-    protected $Environment;
+    protected $environment;
 
-    protected $Modules = array();
+    protected $modules = array();
 
-    public function __construct( Environment $Environment )
+    public function __construct( Environment $environment )
     {
-        $this->Environment = $Environment;
+        $this->environment = $environment;
         $this->setupModulesFromStorageIndex();
     }
 
@@ -29,15 +29,19 @@ class ModuleRepository
      */
     private function setupModulesFromStorageIndex()
     {
-        $index = $this->Environment->getStorage()->getIndex();
+        $index = $this->environment->getStorage()->getIndex();
+        $areas = $this->environment->findAreas();
         if (is_array( $index )) {
             foreach ($index as $module) {
-                if (!is_admin()) {
-                    $module = apply_filters( 'kb.before.frontend.setup', $module );
-                }
-                $Workshop = new ModuleWorkshop( $this->Environment, $module );
-                if ($Workshop->isValid()) {
-                    $this->Modules[$Workshop->getNewId()] = $Workshop->getModule();
+                if (in_array($module['area'], array_keys($areas))){
+                    if (!is_admin()) {
+                        $module = apply_filters( 'kb.before.frontend.setup', $module );
+
+                    }
+                    $workshop = new ModuleWorkshop( $this->environment, $module );
+                    if ($workshop->isValid()) {
+                        $this->modules[$workshop->getNewId()] = $workshop->getModule();
+                    }
                 }
             }
         }
@@ -49,7 +53,7 @@ class ModuleRepository
      */
     public function getModules()
     {
-        return $this->Modules;
+        return $this->modules;
     }
 
     /**
@@ -59,8 +63,8 @@ class ModuleRepository
      */
     public function getModuleObject( $mid )
     {
-        if (isset( $this->Modules[$mid] )) {
-            return $this->Modules[$mid];
+        if (isset( $this->modules[$mid] )) {
+            return $this->modules[$mid];
         }
         return null;
     }

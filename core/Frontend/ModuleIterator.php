@@ -52,20 +52,20 @@ class ModuleIterator implements \Iterator, \Countable
      * @var \Kontentblocks\Backend\Environment\Environment
      * @since 0.1.0
      */
-    protected $Environment;
+    protected $environment;
 
     /**
      * Class constructor
      *
      * @param $modules
-     * @param $Environment
+     * @param $environment
      *
      * @since 0.1.0
      */
-    public function __construct( $modules, $Environment )
+    public function __construct( $modules, $environment )
     {
         $this->modules = $this->setupModules( $modules );
-        $this->Environment = $Environment;
+        $this->environment = $environment;
     }
 
     /**
@@ -149,7 +149,7 @@ class ModuleIterator implements \Iterator, \Countable
      */
     public function getCurrentModuleClasses()
     {
-        $settings = $this->currentModuleObject->Properties->settings;
+        $settings = $this->currentModuleObject->properties->settings;
         if (is_array( $settings['wrapperClasses'] )) {
             return $settings['wrapperClasses'];
         } else {

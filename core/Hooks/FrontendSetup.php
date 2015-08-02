@@ -30,8 +30,8 @@ class FrontendSetup
     {
         $this->postId = get_the_ID();
         if ($this->postId){
-            $Environment = Utilities::getEnvironment($this->postId);
-            $Environment->toJSON();
+            $environment = Utilities::getEnvironment($this->postId);
+            $environment->toJSON();
         }
 
     }

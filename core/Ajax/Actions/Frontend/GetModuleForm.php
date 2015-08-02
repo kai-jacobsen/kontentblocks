@@ -37,12 +37,12 @@ class GetModuleForm implements AjaxActionInterface
 
         $environment = Utilities::getEnvironment( $moduleDef['parentObjectId'] );
         $module = $environment->getModuleById( $moduleDef['mid'] );
-        $module->Properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );
+        $module->properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );
         $module = apply_filters( 'kb.module.before.factory', $module );
         $module->setupFields();
 
         $currentData = wp_unslash( $request->getFiltered( 'moduleData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
-        $oldData = $module->Model->export();
+        $oldData = $module->model->export();
 
         $merged = Utilities::arrayMergeRecursive( $currentData, $oldData );
 

@@ -105,9 +105,9 @@ Class CheckboxSet extends Field
     }
 
     /**
-     * @param FieldFormController $Form
+     * @param FieldFormController $form
      */
-    public function renderHidden( FieldFormController $Form )
+    public function renderHidden( FieldFormController $form )
     {
         $value = $this->getValue();
         $options = $this->getArg( 'options', array() );
@@ -116,7 +116,7 @@ Class CheckboxSet extends Field
             if (!$this->validateItem($item)) {
                 continue;
             }
-            echo "<input type='hidden' name='{$Form->getFieldName($item['key'])}' value='{$value[$item['key']]}' >";
+            echo "<input type='hidden' name='{$form->getFieldName($item['key'])}' value='{$value[$item['key']]}' >";
         }
 
     }

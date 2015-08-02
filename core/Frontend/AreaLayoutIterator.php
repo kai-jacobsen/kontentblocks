@@ -82,7 +82,7 @@ class AreaLayoutIterator implements \Iterator
     {
         // setup the area template
         // area templates are part of the area Registry
-        $this->_setup( Kontentblocks::getService( 'registry.areas' )->getTemplate( $id ) );
+        $this->setup( Kontentblocks::getService( 'registry.areas' )->getTemplate( $id ) );
 
     }
 
@@ -176,7 +176,7 @@ class AreaLayoutIterator implements \Iterator
      * @throws Exception
      * @since 0.1.0
      */
-    private function _setup( $args )
+    private function setup( $args )
     {
         if (!$args) {
             throw new \Exception( 'No area template definition given' );

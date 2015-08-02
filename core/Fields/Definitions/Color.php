@@ -22,6 +22,10 @@ Class Color extends Field
         return false;
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     */
     public function prepareTemplateData( $data )
     {
         $error = false;

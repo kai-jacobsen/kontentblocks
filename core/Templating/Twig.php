@@ -29,18 +29,18 @@ class Twig
             $paths[] = apply_filters( 'kb_twig_def_path', get_stylesheet_directory() . '/module-templates/' );
         }
         $paths = apply_filters( 'kb.templating.paths', $paths );
-        $Loader = new \Twig_Loader_Filesystem( $paths );
-        return $Loader;
+        $loader = new \Twig_Loader_Filesystem( $paths );
+        return $loader;
 
     }
 
     /**
      *
-     * @param Container $Services
+     * @param Container $services
      * @param bool $public
      * @return \Twig_Environment
      */
-    public static function setupEnvironment( Container $Services, $public = true )
+    public static function setupEnvironment( Container $services, $public = true )
     {
 
         $args = array(
@@ -54,20 +54,20 @@ class Twig
             $args['autoescape'] = false;
         }
 
-        $Environment = new \Twig_Environment(
-            $Services['templating.twig.loader'],
+        $environment = new \Twig_Environment(
+            $services['templating.twig.loader'],
             $args
         );
 
-        $Environment->addExtension( new \Twig_Extension_Debug() );
-        $Environment->enableDebug();
+        $environment->addExtension( new \Twig_Extension_Debug() );
+        $environment->enableDebug();
 
-        $Environment->registerUndefinedFunctionCallback( array( __CLASS__, 'undefinedFunctions' ) );
-        $Environment->registerUndefinedFilterCallback( array( __CLASS__, 'undefinedFilters' ) );
+        $environment->registerUndefinedFunctionCallback( array( __CLASS__, 'undefinedFunctions' ) );
+        $environment->registerUndefinedFilterCallback( array( __CLASS__, 'undefinedFilters' ) );
 
-        self::addCustomFunctions( $Environment );
+        self::addCustomFunctions( $environment );
 
-        return $Environment;
+        return $environment;
     }
 
     /**
@@ -111,9 +111,9 @@ class Twig
     }
 
     /**
-     * @param \Twig_Environment $Environment
+     * @param \Twig_Environment $environment
      */
-    private static function addCustomFunctions( \Twig_Environment $Environment )
+    private static function addCustomFunctions( \Twig_Environment $environment )
     {
         $getImage = new Twig_SimpleFunction(
             'getImage',
@@ -121,7 +121,7 @@ class Twig
                 return ImageResize::getInstance()->process( $id, $width, $height, $crop, $single, $upscale );
             }
         );
-        $Environment->addFunction( $getImage );
+        $environment->addFunction( $getImage );
     }
 
     /**

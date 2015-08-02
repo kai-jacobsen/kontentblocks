@@ -5,6 +5,7 @@ use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Modules\Module;
+use Kontentblocks\Modules\ModuleProperties;
 use Kontentblocks\Templating\CoreView;
 
 /**
@@ -48,27 +49,27 @@ class ModuleGlobalModuleProxy extends Module
         add_action( 'kb.module.delete', array( __CLASS__, 'deleteModule' ) );
     }
 
-    public static function addNewModule( Module $Module )
+    public static function addNewModule( Module $module )
     {
-        if ($Module->Properties->globalModule && $Module->Properties->parentObject) {
-            $parentId = $Module->Properties->parentObjectId;
+        if ($module->properties->globalModule && $module->properties->parentObject) {
+            $parentId = $module->properties->parentObjectId;
             $meta = get_post_meta( $parentId, '_kb_attached_to', true );
             if (!is_array( $meta )) {
                 $meta = array();
             }
-            $meta[$Module->getId()] = $Module->Properties->postId;
+            $meta[$module->getId()] = $module->properties->postId;
             update_post_meta( $parentId, '_kb_attached_to', $meta );
         }
     }
 
-    public static function deleteModule( Module $Module )
+    public static function deleteModule( Module $module )
     {
-        if ($Module->Properties->globalModule && $Module->Properties->parentObject) {
-            $parentId = $Module->Properties->parentObjectId;
+        if ($module->properties->globalModule && $module->properties->parentObject) {
+            $parentId = $module->properties->parentObjectId;
             $meta = get_post_meta( $parentId, '_kb_attached_to', true );
             if (is_array( $meta ) && !empty( $meta )) {
-                if (isset( $meta[$Module->getId()] )) {
-                    unset( $meta[$Module->getId()] );
+                if (isset( $meta[$module->getId()] )) {
+                    unset( $meta[$module->getId()] );
                 }
             }
             update_post_meta( $parentId, '_kb_attached_to', $meta );
@@ -79,20 +80,20 @@ class ModuleGlobalModuleProxy extends Module
      * Only for this Core Module
      * Verifies that the original template still exists
      *
-     * @param $Module
+     * @param $module
      * @return mixed
      */
-    public static function validateModule( Module $Module )
+    public static function validateModule( Module $module )
     {
 
-        if (!$Module->Properties->globalModule) {
-            return $Module;
+        if (!$module->properties->globalModule) {
+            return $module;
         }
 
-        $parentId = $Module->Properties->parentObjectId;
+        $parentId = $module->properties->parentObjectId;
 
         if (empty( $parentId )) {
-            return $Module;
+            return $module;
         }
 
         $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
@@ -107,14 +108,14 @@ class ModuleGlobalModuleProxy extends Module
             }
 
         }
-        if (is_null( $parentId ) || !$Module->Properties->parentObject) {
-            $Module->Properties->state['draft'] = true;
-            $Module->Properties->state['active'] = false;
-            $Module->Properties->state['valid'] = false;
+        if (is_null( $parentId ) || !$module->properties->parentObject) {
+            $module->properties->state['draft'] = true;
+            $module->properties->state['active'] = false;
+            $module->properties->state['valid'] = false;
         } else {
-            $Module->Properties->state['valid'] = ( get_post_status( $parentId ) === 'trash' ) ? false : true;
+            $module->properties->state['valid'] = ( get_post_status( $parentId ) === 'trash' ) ? false : true;
         }
-        return $Module;
+        return $module;
     }
 
     /**
@@ -125,8 +126,8 @@ class ModuleGlobalModuleProxy extends Module
     public static function setupModule( $module )
     {
 
-        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
-        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
+        /** @var \Kontentblocks\Modules\ModuleRegistry $moduleRegistry */
+        $moduleRegistry = Kontentblocks::getService( 'registry.modules' );
         if ($module['globalModule'] && isset( $module['parentObjectId'] )) {
 
             if (is_null( $parentObj = get_post( $module['parentObjectId'] ) )) {
@@ -148,7 +149,7 @@ class ModuleGlobalModuleProxy extends Module
             $index = get_post_meta( $parentObjectId, 'kb_kontentblocks', true );
             $gmodule = $index[$parentObj->post_name];
             // actual module definition
-            $originalDefiniton = $ModuleRegistry->get( $gmodule['class'] );
+            $originalDefiniton = $moduleRegistry->get( $gmodule['class'] );
 
             // $module is actually the Master_Module, we need to override everything to the actual module
             $glued = wp_parse_args( $gmodule, $originalDefiniton );
@@ -158,6 +159,10 @@ class ModuleGlobalModuleProxy extends Module
             unset( $glued['state'] );
             unset( $glued['areaContext'] );
             unset( $glued['area'] );
+
+            $glued['oMid'] = $glued['mid'];
+            unset( $glued['mid']);
+
             // finally
             $final = \Kontentblocks\Utils\Utilities::arrayMergeRecursive( $glued, $module );
             $final['parentObjectId'] = $parentObjectId;
@@ -171,23 +176,23 @@ class ModuleGlobalModuleProxy extends Module
 
     /**
      * @param $data
-     * @param $Properties
+     * @param $properties
      * @return mixed
      */
-    public static function setupModuleData( $data, $Properties )
+    public static function setupModuleData( $data, $properties )
     {
-        if (is_null( $Properties->parentObject )) {
+        if (is_null( $properties->parentObject )) {
             return $data;
         }
 
 
         if (filter_var(
-                $Properties->globalModule,
+                $properties->globalModule,
                 FILTER_VALIDATE_BOOLEAN
-            ) && !empty( $Properties->parentObjectId )
+            ) && !empty( $properties->parentObjectId )
         ) {
-            $masterId = $Properties->parentObjectId;
-            $tplId = $Properties->parentObject->post_name;
+            $masterId = $properties->parentObjectId;
+            $tplId = $properties->parentObject->post_name;
             $Storage = new ModuleStorage( $masterId );
             $data = $Storage->getModuleData( $tplId );
             return $data;
@@ -212,16 +217,17 @@ class ModuleGlobalModuleProxy extends Module
 
     /**
      * When creating the instance, the mid must be set to the orginal master id
-     * @param Module $Module
+     * @param Module $moduleProperties
      * @return mixed
      */
-    public static function setTemplateId( Module $Module )
+    public static function setTemplateId( ModuleProperties $moduleProperties )
     {
-        if (isset( $Module->Properties->globalModule ) && $Module->Properties->globalModule) {
-            if (isset( $Module->Properties->parentObject )) {
-                $Module->Properties->setId( $Module->Properties->parentObject->post_name );
+        if (isset( $moduleProperties->globalModule ) && $moduleProperties->globalModule) {
+            if (isset( $moduleProperties->parentObject )) {
+                $moduleProperties->setId( $moduleProperties->parentObject->post_name );
             }
         }
+
     }
 
     /**
@@ -231,7 +237,7 @@ class ModuleGlobalModuleProxy extends Module
     public function form()
     {
 
-        $masterId = $this->Properties->parentObjectId;
+        $masterId = $this->properties->parentObjectId;
         $translated = false;
         $icl = get_post_meta( get_the_ID(), '_icl_lang_duplicate_of', true );
         $duplicate = !empty( $icl );
@@ -247,11 +253,11 @@ class ModuleGlobalModuleProxy extends Module
         }
 
         $templateData = array(
-            'valid' => $this->Properties->state['valid'],
+            'valid' => $this->properties->state['valid'],
             'editUrl' => esc_url(
                 get_edit_post_link(
                     $masterId
-                ) . '&return=' . $this->Context->postId . '&area-context=' . $this->Context->areaContext
+                ) . '&return=' . $this->context->postId . '&area-context=' . $this->context->areaContext
             ),
             'translated' => $translated,
             'duplicate' => $duplicate,
@@ -259,10 +265,10 @@ class ModuleGlobalModuleProxy extends Module
             'i18n' => I18n::getInstance()->getPackage( 'Modules.master' )
         );
 
-        $tpl = ( isset( $this->Properties->state['valid'] ) && $this->Properties->state['valid'] ) ? 'modules/gmodule-proxy-valid.twig' : 'modules/gmodule-proxy-invalid.twig';
+        $tplFile = ( isset( $this->properties->state['valid'] ) && $this->properties->state['valid'] ) ? 'modules/gmodule-proxy-valid.twig' : 'modules/gmodule-proxy-invalid.twig';
 
-        $Tpl = new CoreView( $tpl, $templateData );
-        return $Tpl->render();
+        $tpl = new CoreView( $tplFile, $templateData );
+        return $tpl->render();
 
     }
 

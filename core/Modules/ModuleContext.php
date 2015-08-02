@@ -28,11 +28,11 @@ class ModuleContext implements \JsonSerializable
 
     public $areaTemplate;
 
-    public function __construct( Environment $Environment, Module $Module )
+    public function __construct( Environment $environment, Module $module )
     {
-        $this->set( $Environment->jsonSerialize() );
-        $this->areaContext = &$Module->Properties->areaContext;
-        $this->areaId = &$Module->Properties->area->id;
+        $this->set( $environment->jsonSerialize() );
+        $this->areaContext = &$module->properties->areaContext;
+        $this->areaId = &$module->properties->area->id;
     }
 
     /**

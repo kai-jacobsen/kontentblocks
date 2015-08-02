@@ -45,7 +45,7 @@ class FieldSubGroup implements Exportable
      * @var Module
      * @since 0.1.0
      */
-    public $Module;
+    public $module;
 
     /**
      * Class constructor
@@ -93,11 +93,11 @@ class FieldSubGroup implements Exportable
     }
 
     /**
-     * @param Module $Module
+     * @param Module $module
      */
-    public function setModule( $Module )
+    public function setModule( $module )
     {
-        $this->Module = $Module;
+        $this->module = $module;
     }
 
     /**

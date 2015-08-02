@@ -23,16 +23,16 @@ class FieldRegistry
      * @var array
      */
     protected $fields;
-    protected $Services;
+    protected $services;
 
 
 
     /**
-     * @param Container $Services
+     * @param Container $services
      */
-    public function __construct( Container $Services )
+    public function __construct( Container $services )
     {
-        $this->Services = $Services;
+        $this->services = $services;
     }
 
     /**

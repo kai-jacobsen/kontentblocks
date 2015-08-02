@@ -59,14 +59,14 @@ Class CheckboxGroup extends Field
     }
 
     /**
-     * @param FieldFormController $Form
+     * @param FieldFormController $form
      */
-    public function renderHidden( FieldFormController $Form )
+    public function renderHidden( FieldFormController $form )
     {
         $value = $this->getValue();
         if (is_array( $value ) && !empty( $value )) {
             foreach ($value as $item) {
-                echo "<input type='hidden' name='{$Form->getFieldName( true )}' value='{$item}' >";
+                echo "<input type='hidden' name='{$form->getFieldName( true )}' value='{$item}' >";
             }
         }
     }

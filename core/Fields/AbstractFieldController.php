@@ -14,7 +14,7 @@ abstract class AbstractFieldController
      * @var array
      * @since 0.1.0
      */
-    public $Structure;
+    public $structure;
 
 
     /**
@@ -23,7 +23,7 @@ abstract class AbstractFieldController
      * @var object
      * @since 0.1.0
      */
-    protected $Render;
+    protected $renderer;
 
 
     /**
@@ -64,7 +64,7 @@ abstract class AbstractFieldController
     public function collectAllFields()
     {
         $collect = array();
-        foreach ($this->Structure as $def) {
+        foreach ($this->structure as $def) {
             $collect = $collect + $def->getFields();
         }
         return $collect;
@@ -83,7 +83,7 @@ abstract class AbstractFieldController
     public function idExists( $id )
     {
         // TODO Test for right inheritance / abstract class
-        return ( isset( $this->Structure[$id] ) );
+        return ( isset( $this->structure[$id] ) );
 
     }
 
@@ -129,7 +129,7 @@ abstract class AbstractFieldController
     public function save( $data, $oldData )
     {
         $collection = array();
-        foreach ($this->Structure as $definition) {
+        foreach ($this->structure as $definition) {
             $return = ( $definition->save( $data, $oldData ) );
             $collection = $collection + $return;
         }
@@ -144,6 +144,7 @@ abstract class AbstractFieldController
 
     /**
      * @param array $data
+     * @return $this
      */
     public function setData( $data )
     {
@@ -154,7 +155,7 @@ abstract class AbstractFieldController
     public function export()
     {
         $collection = array();
-        foreach ($this->Structure as $Section) {
+        foreach ($this->structure as $Section) {
             $Section->export( $collection );
         }
         return $collection;

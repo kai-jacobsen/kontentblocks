@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-30 */
+/*! Kontentblocks DevVersion 2015-08-02 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -2624,6 +2624,7 @@
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.options = options || {};
+                console.log(this);
                 this.isOpen = false;
                 this.area = this.options.area;
                 this.viewMode = this.getViewMode();
@@ -2978,6 +2979,7 @@
             },
             handlePlusClick: function() {
                 if (this.Browser.viewMode === "list") {
+                    this.handleClick();
                     return false;
                 } else {
                     this.createModule();

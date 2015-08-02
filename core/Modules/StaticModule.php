@@ -26,7 +26,7 @@ abstract class StaticModule extends Module
             }
         }
 
-        if (isset($this->Fields)) {
+        if (isset($this->fields)) {
             return $new;
         }
         return $data;

@@ -42,7 +42,7 @@ class FieldSection extends AbstractFieldSection
 
         $this->id = $id;
         $this->args = $this->prepareArgs( $args );
-        $this->Module = $module;
+        $this->module = $module;
         $this->baseId = $baseid;
     }
 
@@ -50,54 +50,54 @@ class FieldSection extends AbstractFieldSection
      * Set visibility of field based on environment vars given by the module
      * By following a hierachie: PostType -> PageTemplate -> AreaContext
      *
-     * @param \Kontentblocks\Fields\Field $Field
+     * @param \Kontentblocks\Fields\Field $field
      *
      * @return void
      */
-    public function markVisibility( Field $Field )
+    public function markVisibility( Field $field )
     {
 
-        $Field->setDisplay( true );
-        $areaContext = $this->Module->Context->get( 'areaContext' );
-        $postType = $this->Module->Context->get( 'postType' );
-        $pageTemplate = $this->Module->Context->get( 'pageTemplate' );
-        if ($this->Module->Properties->getSetting( 'views' )) {
-            $moduleTemplate = $this->Module->getViewfile();
-            if ($Field->getCondition( 'viewfile' ) && !in_array(
+        $field->setDisplay( true );
+        $areaContext = $this->module->context->get( 'areaContext' );
+        $postType = $this->module->context->get( 'postType' );
+        $pageTemplate = $this->module->context->get( 'pageTemplate' );
+        if ($this->module->properties->getSetting( 'views' )) {
+            $moduleTemplate = $this->module->getViewfile();
+            if ($field->getCondition( 'viewfile' ) && !in_array(
                     $moduleTemplate,
-                    (array) $Field->getCondition( 'viewfile' )
+                    (array) $field->getCondition( 'viewfile' )
                 )
             ) {
-                $Field->setDisplay( false );
+                $field->setDisplay( false );
                 $this->_decreaseVisibleFields();
 
                 return;
             }
         }
 
-        if ($Field->getCondition( 'postType' ) && !in_array( $postType, (array) $Field->getCondition( 'postType' ) )) {
-            $Field->setDisplay( false );
+        if ($field->getCondition( 'postType' ) && !in_array( $postType, (array) $field->getCondition( 'postType' ) )) {
+            $field->setDisplay( false );
             $this->_decreaseVisibleFields();
 
             return;
         }
 
-        if ($Field->getCondition( 'pageTemplate' ) && !in_array(
+        if ($field->getCondition( 'pageTemplate' ) && !in_array(
                 $pageTemplate,
-                (array) $Field->getCondition( 'pageTemplate' )
+                (array) $field->getCondition( 'pageTemplate' )
             )
         ) {
-            $Field->setDisplay( false );
+            $field->setDisplay( false );
             $this->_decreaseVisibleFields();
 
             return;
         }
 
-        if (!isset( $areaContext ) || $areaContext === false || ( $Field->getCondition( 'areaContext' ) === false )) {
-            $Field->setDisplay( true );
+        if (!isset( $areaContext ) || $areaContext === false || ( $field->getCondition( 'areaContext' ) === false )) {
+            $field->setDisplay( true );
             return;
-        } else if (!in_array( $areaContext, $Field->getCondition( 'areaContext' ) )) {
-            $Field->setDisplay( false );
+        } else if (!in_array( $areaContext, $field->getCondition( 'areaContext' ) )) {
+            $field->setDisplay( false );
             return;
         }
 

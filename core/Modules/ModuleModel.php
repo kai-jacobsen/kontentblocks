@@ -31,15 +31,16 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      * parent Moduel
      * @var Module
      */
-    private $Module;
+    private $module;
 
     /**
      * @param array $data
+     * @param Module $module
      * @since 0.1.0
      */
-    public function __construct( $data = array(), Module $Module )
+    public function __construct( $data = array(), Module $module )
     {
-        $this->Module = $Module;
+        $this->module = $module;
         $this->_originalData = $data;
         $this->set( $data );
         $this->_initialized = true;
@@ -236,9 +237,9 @@ class ModuleModel implements \JsonSerializable, \ArrayAccess
      */
     public function sync()
     {
-        $Storage = $this->Module->Environment->getStorage();
-        $result = $Storage->saveModule( $this->Module->getId(), $this->export() );
-        $Storage->reset();
+        $storage = $this->module->environment->getStorage();
+        $result = $storage->saveModule( $this->module->getId(), $this->export() );
+        $storage->reset();
         return $result;
     }
 }

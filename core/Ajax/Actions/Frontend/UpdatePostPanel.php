@@ -42,7 +42,7 @@ class UpdatePostPanel implements AjaxActionInterface
 
         // gather data
         $old = $panel->data;
-        $new = $panel->fields( $panel->FieldController )->save( $newData, $old );
+        $new = $panel->fields( $panel->fieldController )->save( $newData, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
         // save slashed data, *_post_meta will add remove slashes again...

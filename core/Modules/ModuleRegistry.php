@@ -22,16 +22,16 @@ class ModuleRegistry
     /**
      * @var Container
      */
-    private $Services;
+    private $services;
 
     /**
      * Constructor
      * Gets instantiated by pimple once
-     * @param Container $Services
+     * @param Container $services
      */
-    public function __construct( Container $Services )
+    public function __construct( Container $services )
     {
-        $this->Services = $Services;
+        $this->services = $services;
         add_action( 'admin_footer', array( $this, 'setupJSON' ), 8 );
 
         if (is_user_logged_in()) {
@@ -71,9 +71,9 @@ class ModuleRegistry
             $this->modules[$classname] = $moduleArgs;
 
             // Handle connection to regions
-            /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
-            $AreaRegistry = $this->Services['registry.areas'];
-            $AreaRegistry->connect( $classname, $moduleArgs );
+            /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
+            $areaRegistry = $this->services['registry.areas'];
+            $areaRegistry->connect( $classname, $moduleArgs );
 
             // call static init method, if present
             if (method_exists( $classname, 'init' )) {

@@ -42,8 +42,8 @@ Class Gallery extends Field
             }
             $forJSON = $data;
         }
-        $Bridge = Kontentblocks::getService( 'utility.jsontransport' );
-        $Bridge->registerFieldData(
+        $jsonTransport = Kontentblocks::getService( 'utility.jsontransport' );
+        $jsonTransport->registerFieldData(
             $this->getFieldId(),
             $this->type,
             $forJSON,

@@ -23,23 +23,24 @@ use Reframe\Kontentblocks\Kontentblocks;
  */
 class ModuleFieldController extends AbstractFieldController
 {
+    public $module;
 
     /**
      * @var \Kontentblocks\Fields\FieldRendererTabs
      */
     protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
 
-    public $Structure;
+    public $structure;
 
     /**
      * Constructor
      * @param \Kontentblocks\Modules\Module
      * @since 0.1.0
      */
-    public function __construct( Module $Module )
+    public function __construct( Module $module )
     {
-        $this->baseId = $Module->getId();
-        $this->Module = $Module;
+        $this->baseId = $module->getId();
+        $this->module = $module;
     }
 
     /**
@@ -54,14 +55,14 @@ class ModuleFieldController extends AbstractFieldController
     public function addGroup( $groupId, $args = array() )
     {
         if (!$this->idExists( $groupId )) {
-            $this->Structure[$groupId] = new FieldSection(
+            $this->structure[$groupId] = new FieldSection(
                 $groupId,
                 $args,
-                $this->Module,
-                $this->Module->getId()
+                $this->module,
+                $this->module->getId()
             );
         }
-        return $this->Structure[$groupId];
+        return $this->structure[$groupId];
 
     }
 
@@ -78,8 +79,8 @@ class ModuleFieldController extends AbstractFieldController
      */
     public function renderFields()
     {
-        $Renderer = new $this->renderEngineClass( $this->baseId, $this->Structure );
-        return $Renderer->render( $this->Module->getModel()->getOriginalData() );
+        $Renderer = new $this->renderEngineClass( $this->baseId, $this->structure );
+        return $Renderer->render( $this->module->getModel()->getOriginalData() );
     }
 
 

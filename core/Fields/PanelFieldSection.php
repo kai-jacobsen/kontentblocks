@@ -15,17 +15,17 @@ class PanelFieldSection extends AbstractFieldSection
      * @param string $id
      * @param $args
      * @param $envVars
-     * @param \Kontentblocks\Panels\AbstractPanel $Panel
+     * @param \Kontentblocks\Panels\AbstractPanel $panel
      *
      * @TODO // revise envVars
      * @return \Kontentblocks\Fields\PanelFieldSection
      */
-    public function __construct( $id, $args, $Panel )
+    public function __construct( $id, $args, $panel )
     {
         $this->id = $id;
         $this->args = $this->prepareArgs( $args );
-        $this->Module = $Panel;
-        $this->baseId = $Panel->getBaseId();
+        $this->module = $panel;
+        $this->baseId = $panel->getBaseId();
     }
 
 
@@ -33,13 +33,13 @@ class PanelFieldSection extends AbstractFieldSection
      * Set visibility of field based on environment vars given by the Panel
      * Panels have no envVars yet so all fields are visible
      *
-     * @param Field $Field
+     * @param Field $field
      *
      * @return mixed
      */
-    public function markVisibility( Field $Field )
+    public function markVisibility( Field $field )
     {
-        $Field->setDisplay( true );
+        $field->setDisplay( true );
     }
 
 }

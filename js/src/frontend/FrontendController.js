@@ -13,6 +13,7 @@ var EditModalModules = require('frontend/Views/EditModalModules');
 var SidebarView = require('frontend/Views/Sidebar');
 var FieldConfigsCollection = require('fields/FieldsConfigsCollection');
 var Payload = require('common/Payload');
+var ModuleCollection = require('frontend/Collections/ModuleCollection');
 var ModuleModel = require('frontend/Models/ModuleModel');
 var ModuleView = require('./Views/ModuleView');
 
@@ -45,7 +46,7 @@ KB.Views = {
  * Modules model collection
  * Get by 'mid'
  */
-KB.Modules = new Backbone.Collection([], {
+KB.Modules = new ModuleCollection([], {
   model: ModuleModel
 });
 

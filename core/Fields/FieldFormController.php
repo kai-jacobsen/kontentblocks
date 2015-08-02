@@ -16,17 +16,14 @@ class FieldFormController
     /**
      * @var \Kontentblocks\Fields\Field
      */
-    private $Field;
+    private $field;
 
     /**
-     * @param Field $Field
+     * @param Field $field
      */
-    public function __construct( Field $Field )
+    public function __construct( Field $field )
     {
-        $this->Field = $Field;
-
-
-
+        $this->field = $field;
     }
 
 
@@ -38,7 +35,7 @@ class FieldFormController
     public function getInputFieldId( $rnd = false )
     {
         $number = ( $rnd ) ? '_' . uniqid() : '';
-        $idAttr = sanitize_title( $this->Field->getFieldId() . '_' . $this->Field->getKey() . $number );
+        $idAttr = sanitize_title( $this->field->getFieldId() . '_' . $this->field->getKey() . $number );
         return esc_attr( $idAttr );
     }
 
@@ -55,7 +52,7 @@ class FieldFormController
      */
     public function getFieldName( $array = null, $akey = null, $multiple = null )
     {
-        $base = $this->Field->getBaseId() . '[' . $this->Field->getKey() . ']';
+        $base = $this->field->getBaseId() . '[' . $this->field->getKey() . ']';
         $array = $this->evaluateFieldNameParam( $array );
         $akey = $this->evaluateFieldNameParam( $akey );
         $multiple = $this->evaluateFieldNameParam( $multiple );
@@ -87,7 +84,7 @@ class FieldFormController
      */
     public function getPlaceholder()
     {
-        return esc_attr( $this->Field->getArg( 'placeholder', '' ) );
+        return esc_attr( $this->field->getArg( 'placeholder', '' ) );
 
     }
 
@@ -98,13 +95,13 @@ class FieldFormController
      */
     public function getDescription()
     {
-        $View = new FieldView(
+        $view = new FieldView(
             '_partials/description.twig', array(
-                'Field' => $this->Field,
+                'Field' => $this->field,
                 'Form' => $this
             )
         );
-        return $View->render();
+        return $view->render();
 
     }
 
@@ -115,13 +112,13 @@ class FieldFormController
      */
     public function getLabel()
     {
-        $View = new FieldView(
+        $view = new FieldView(
             '_partials/label.twig', array(
-                'Field' => $this->Field,
+                'Field' => $this->field,
                 'Form' => $this
             )
         );
-        return $View->render();
+        return $view->render();
     }
 
 
@@ -131,13 +128,13 @@ class FieldFormController
      */
     public function header()
     {
-        $View = new FieldView(
+        $view = new FieldView(
             '_partials/header.twig', array(
-                'Field' => $this->Field,
+                'Field' => $this->field,
                 'Form' => $this
             )
         );
-        return $View->render();
+        return $view->render();
     }
 
     /**
@@ -148,42 +145,42 @@ class FieldFormController
     public function body()
     {
         $out = '';
-        $value = $this->Field->getValue();
+        $value = $this->field->getValue();
 
         /*
          * optional method to render something before the field
          */
-        if (method_exists( $this->Field, 'preForm' )) {
-            $out .= $this->Field->preForm();
+        if (method_exists( $this->field, 'preForm' )) {
+            $out .= $this->field->preForm();
         }
 
         // optional call to simplify enqueueing
-        if (method_exists( $this->Field, 'enqueue' )) {
-            $this->Field->enqueue();
+        if (method_exists( $this->field, 'enqueue' )) {
+            $this->field->enqueue();
         }
 
         // custom method on field instance level wins over class method
-        if ($this->Field->getCallback( 'input' )) {
-            $this->Field->value = call_user_func( $this->Field->getCallback( 'input' ), $value );
+        if ($this->field->getCallback( 'input' )) {
+            $this->field->value = call_user_func( $this->field->getCallback( 'input' ), $value );
         } // custom method on field class level
         else {
-            $this->Field->value = $this->Field->prepareFormValue( $value );
+            $this->field->value = $this->field->prepareFormValue( $value );
         }
 
         // When viewing from the frontend, an optional method can be used for the output
-        if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->Field, 'frontsideForm' )) {
-            $out .= $this->Field->frontsideForm( $this );
+        if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->field, 'frontsideForm' )) {
+            $out .= $this->field->frontsideForm( $this );
         } else {
-            $out .= $this->Field->form( $this );
+            $out .= $this->field->form( $this );
         }
 
         // some fields (colorpicker etc) might have some individual settings
-        $this->Field->toJson();
+        $this->field->toJson();
         /*
          * optional call after the body
          */
-        if (method_exists( $this->Field, 'postForm' )) {
-            $out .=$this->Field->postForm();
+        if (method_exists( $this->field, 'postForm' )) {
+            $out .=$this->field->postForm();
         }
 
         return $out;
@@ -195,13 +192,13 @@ class FieldFormController
      */
     public function footer()
     {
-        $View = new FieldView(
+        $view = new FieldView(
             '_partials/footer.twig', array(
-                'Field' => $this->Field,
+                'Field' => $this->field,
                 'Form' => $this
             )
         );
-        return $View->render();
+        return $view->render();
 
     }
 
@@ -214,9 +211,9 @@ class FieldFormController
         // A Field might not be present, i.e. if it's not set to
         // the current context
         // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
-        if (!$this->Field->getDisplay()) {
-            if ($this->Field->getSetting( 'renderHidden' ) && method_exists( $this->Field, 'renderHidden' )) {
-                return $this->Field->renderHidden( $this );
+        if (!$this->field->getDisplay()) {
+            if ($this->field->getSetting( 'renderHidden' ) && method_exists( $this->field, 'renderHidden' )) {
+                return $this->field->renderHidden( $this );
             }
             // Full markup
         } else {

@@ -20,7 +20,7 @@ class ModuleWorkshop
     /**
      * @var Environment
      */
-    private $Environment;
+    private $environment;
 
     /**
      * @var array
@@ -40,7 +40,7 @@ class ModuleWorkshop
     /**
      * @var \Kontentblocks\Modules\Module
      */
-    private $Module;
+    private $module;
 
     /**
      * @var bool
@@ -54,12 +54,12 @@ class ModuleWorkshop
 
     /**
      * Setup module attrs and class properties
-     * @param Environment $Environment
+     * @param Environment $environment
      * @param array $attrs
      */
-    public function __construct( Environment $Environment, $attrs = array(), $oldattrs = array() )
+    public function __construct( Environment $environment, $attrs = array(), $oldattrs = array() )
     {
-        $this->Environment = $Environment;
+        $this->environment = $environment;
         $this->moduleattrs = $this->setupModuleattrs( $attrs, $oldattrs );
         $this->valid = $this->validate();
     }
@@ -97,11 +97,11 @@ class ModuleWorkshop
     public function create()
     {
         if (is_array( $this->getDefinitionArray() ) && !$this->isLocked()) {
-            $update = $this->Environment->getStorage()->addToIndex( $this->createModuleId(), $this->moduleattrs );
+            $update = $this->environment->getStorage()->addToIndex( $this->createModuleId(), $this->moduleattrs );
             if (!is_null( $this->newData )) {
-                $this->Environment->getStorage()->saveModule( $this->getNewId(), $this->newData );
+                $this->environment->getStorage()->saveModule( $this->getNewId(), $this->newData );
             } else {
-                $this->Environment->getStorage()->saveModule( $this->getNewId(), $this->prepareFromModule() );
+                $this->environment->getStorage()->saveModule( $this->getNewId(), $this->prepareFromModule() );
             }
 
             if ($update) {
@@ -132,12 +132,12 @@ class ModuleWorkshop
     public function getModule()
     {
         if ($this->isValid()) {
-            $Factory = new ModuleFactory(
+            $factory = new ModuleFactory(
                 $this->getPropertiesObject(),
-                $this->Environment
+                $this->environment
             );
-            $this->Module = $Factory->getModule();
-            return $this->Module;
+            $this->module = $factory->getModule();
+            return $this->module;
         }
         return false;
     }
@@ -199,8 +199,8 @@ class ModuleWorkshop
 
 
 //        if (empty( $attrs['post_id'] )) {
-            $attrs['post_id'] = $this->Environment->getId();
-            $attrs['postId'] = $this->Environment->getId();
+            $attrs['post_id'] = $this->environment->getId();
+            $attrs['postId'] = $this->environment->getId();
 //        }
 
         if (is_null( $attrs['parentObjectId'] ) || $attrs['parentObjectId'] === 0) {
@@ -224,9 +224,9 @@ class ModuleWorkshop
     private function createModuleId()
     {
         $prefix = apply_filters( 'kb.module.key.prefix', 'module_' );
-        $this->Environment->getStorage()->reset();
-        $count = Utilities::getHighestId( $this->Environment->getStorage()->getIndex() ) + 1;
-        return $prefix . $this->Environment->getId() . '_' . $count;
+        $this->environment->getStorage()->reset();
+        $count = Utilities::getHighestId( $this->environment->getStorage()->getIndex() ) + 1;
+        return $prefix . $this->environment->getId() . '_' . $count;
     }
 
     /**
@@ -314,14 +314,15 @@ class ModuleWorkshop
 
     private function prepareFromModule()
     {
-        $fModule = new $this->moduleattrs['class']( $this->getPropertiesObject(), null, $this->Environment );
-        if (!$fModule->Fields && !method_exists( $this->Module, 'defaultData' )) {
+        /** @var \Kontentblocks\Modules\Module $fModule */
+        $fModule = new $this->moduleattrs['class']( $this->getPropertiesObject(), null, $this->environment );
+        if (!$fModule->fields && !method_exists( $this->module, 'defaultData' )) {
             return '';
         }
 
-        if ($fModule->Fields) {
+        if ($fModule->fields) {
             $data = array();
-            $config = $fModule->Fields->export();
+            $config = $fModule->fields->export();
             foreach (array_values( $config ) as $attrs) {
                 if ($attrs['arrayKey']) {
                     $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];

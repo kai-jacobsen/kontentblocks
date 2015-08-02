@@ -25,7 +25,7 @@ class ModuleText extends Module
 
     public function render()
     {
-        return $this->View->render();
+        return $this->view->render();
     }
 
 
@@ -59,7 +59,7 @@ class ModuleText extends Module
      */
     public function fields()
     {
-        $this->Fields->addGroup( 'editor', array( 'label' => 'Editor' ) )
+        $this->fields->addGroup( 'editor', array( 'label' => 'Editor' ) )
                      ->addField(
                          'editor', // field type
                          'demotest', // field key

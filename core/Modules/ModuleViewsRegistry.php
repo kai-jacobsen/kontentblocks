@@ -17,19 +17,19 @@ class ModuleViewsRegistry
 
     /**
      * Get a Module specific View Filesystem instance
-     * @param Module $Module
+     * @param Module $module
      * @return ModuleViewFilesystem
      */
-    public function getViewFileSystem( Module $Module )
+    public function getViewFileSystem( Module $module )
     {
-        $classname = get_class( $Module );
+        $classname = get_class( $module );
 //        if (isset( $this->views[$classname] )) {
 //            return $this->views[$classname];
 //        }
 
-        $FileSystem = new ModuleViewFilesystem( $Module );
-        $this->views[$classname] = $FileSystem;
-        return $FileSystem;
+        $fileSystem = new ModuleViewFilesystem( $module );
+        $this->views[$classname] = $fileSystem;
+        return $fileSystem;
 
     }
 
@@ -45,9 +45,9 @@ class ModuleViewsRegistry
 //        if (isset( $this->loaders[$hash] )) {
 //            return $this->loaders[$hash];
 //        }
-        $ViewLoader = new ModuleViewLoader( $Module );
+        $viewLoader = new ModuleViewLoader( $Module );
 //        $this->loaders[$hash] = $ViewLoader;
-        return $ViewLoader;
+        return $viewLoader;
 
     }
 } 

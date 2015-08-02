@@ -17,7 +17,7 @@ class JSONTransport
     protected $areas = array();
     protected $panels = array();
     protected $fieldData = array();
-    protected $Fields = array();
+    protected $fields = array();
     protected $Contexts = array();
 
 
@@ -119,9 +119,9 @@ class JSONTransport
     public function registerFieldArgs( $key, $data )
     {
         if (is_null( $key )) {
-            $this->Fields = $data;
+            $this->fields = $data;
         } else {
-            $this->Fields[$key] = $data;
+            $this->fields[$key] = $data;
         }
 
         return $this;
@@ -216,7 +216,7 @@ class JSONTransport
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;
         $this->data['fieldData'] = $this->fieldData;
-        $this->data['Fields'] = $this->Fields;
+        $this->data['Fields'] = $this->fields;
         $this->data['Panels'] = $this->panels;
         $this->data['Contexts'] = $this->Contexts;
 
@@ -251,7 +251,7 @@ class JSONTransport
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;
         $this->data['fieldData'] = $this->fieldData;
-        $this->data['Fields'] = $this->Fields;
+        $this->data['Fields'] = $this->fields;
         $this->data['Panels'] = $this->panels;
 
         return $this->data;

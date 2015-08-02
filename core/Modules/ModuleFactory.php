@@ -18,7 +18,7 @@ class ModuleFactory
     /**
      * @var ModuleProperties
      */
-    protected $ModuleProperties;
+    protected $moduleProperties;
 
     /**
      * @var array|mixed|void
@@ -28,30 +28,30 @@ class ModuleFactory
     /**
      * @var ModuleStorage
      */
-    protected $Environment;
+    protected $environment;
 
     /**
-     * @param ModuleProperties $Properties
-     * @param Environment $Environment
+     * @param ModuleProperties $properties
+     * @param Environment $environment
      * @param null $data
      * @throws \Exception
      */
-    public function __construct( ModuleProperties $Properties, Environment $Environment, $data = null )
+    public function __construct( ModuleProperties $properties, Environment $environment, $data = null )
     {
 
-        if (empty( $Properties->class ) || !class_exists( $Properties->class )) {
+        if (empty( $properties->class ) || !class_exists( $properties->class )) {
             throw new \BadMethodCallException( 'Invalid Module passed to Factory' );
         }
-        $this->Environment = $Environment;
-        $this->ModuleProperties = $Properties;
+        $this->environment = $environment;
+        $this->moduleProperties = $properties;
         if (is_null( $data )) {
             $this->data = apply_filters(
                 'kb.module.factory.data',
-                $Environment->getModuleData( $Properties->mid ),
-                $Properties
+                $environment->getModuleData( $properties->mid ),
+                $properties
             );
         } else {
-            $this->data = apply_filters( 'kb.module.factory.data', $data, $Properties );
+            $this->data = apply_filters( 'kb.module.factory.data', $data, $properties );
         }
     }
 
@@ -62,12 +62,12 @@ class ModuleFactory
     public function getModule()
     {
 
-        $this->handleOverrides( $this->ModuleProperties );
+        $this->handleOverrides( $this->moduleProperties );
 
-        $module = apply_filters( 'kb.modify.module.properties', $this->ModuleProperties );
+        $module = apply_filters( 'kb.modify.module.properties', $this->moduleProperties );
         // new instance
         /** @var \Kontentblocks\Modules\Module $instance */
-        $instance = new $this->ModuleProperties->class( $module, $this->data, $this->Environment );
+        $instance = new $this->moduleProperties->class( $module, $this->data, $this->environment );
         return $instance;
 
     }
@@ -75,14 +75,14 @@ class ModuleFactory
 
     /**
      * Instance specific data
-     * @param ModuleProperties $Properties passed by reference
+     * @param ModuleProperties $properties passed by reference
      * @return mixed
      */
-    private function handleOverrides( ModuleProperties $Properties )
+    private function handleOverrides( ModuleProperties $properties )
     {
-        if (isset( $Properties->overrides )) {
-            if (!empty( $Properties->overrides['name'] )) {
-                $Properties->settings['name'] = $Properties->overrides['name'];
+        if (isset( $properties->overrides )) {
+            if (!empty( $properties->overrides['name'] )) {
+                $properties->settings['name'] = $properties->overrides['name'];
             }
         }
     }

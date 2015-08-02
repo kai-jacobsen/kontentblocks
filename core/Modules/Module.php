@@ -20,59 +20,59 @@ abstract class Module
      * Module Properties Object
      * @var ModuleProperties
      */
-    public $Properties;
+    public $properties;
 
     /**
      * View Loader if setting is enabled
      * @var ModuleViewLoader;
      */
-    public $ViewLoader;
+    public $viewLoader;
 
     /**
      * @var \Kontentblocks\Backend\Environment\Environment
      */
-    public $Environment;
+    public $environment;
 
     /**
      * If ViewLoader is set, View will be auto-setup
      * @var \Kontentblocks\Templating\ModuleView
      */
-    public $View;
+    public $view;
 
     /**
      * Field controller if fields are used
      * @var ModuleFieldController
      */
-    public $Fields;
+    public $fields;
 
     /**
      * Module data object
      * @var ModuleModel
      */
-    public $Model;
+    public $model;
 
     /**
      * @var ModuleContext
      */
-    public $Context;
+    public $context;
 
 
     /**
-     * @param ModuleProperties $Properties
+     * @param ModuleProperties $properties
      * @param array $data
-     * @param Environment $Environment
+     * @param Environment $environment
      */
-    public function __construct( ModuleProperties $Properties, $data = array(), Environment $Environment )
+    public function __construct( ModuleProperties $properties, $data = array(), Environment $environment )
     {
-        $this->Properties = $Properties;
-        $this->Environment = $Environment;
-        $this->Context = new ModuleContext( $Environment, $this );
+        $this->properties = $properties;
+        $this->environment = $environment;
+        $this->context = new ModuleContext( $environment, $this );
 
         $this->setModuleData( $data );
 //        $this->setEnvVarsFromEnvironment( $Environment );
 
-        if (filter_var( $this->Properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
-            $this->ViewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
+        if (filter_var( $this->properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
+            $this->viewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
         $this->setupFields();
 
@@ -90,14 +90,14 @@ abstract class Module
      */
     public function setModuleData( $data = array() )
     {
-        $this->Model = new ModuleModel( $data, $this );
+        $this->model = new ModuleModel( $data, $this );
     }
 
     public function setupFields()
     {
         // magically setup fields
         if (method_exists( $this, 'fields' )) {
-            $this->Fields = new ModuleFieldController( $this );
+            $this->fields = new ModuleFieldController( $this );
             // setup Fields
             $this->fields();
         }
@@ -134,8 +134,8 @@ abstract class Module
      */
     public function renderForm()
     {
-        $Node = new ModuleHTMLNode( $this );
-        return $Node->build();
+        $node = new ModuleHTMLNode( $this );
+        return $node->build();
     }
 
 
@@ -148,13 +148,13 @@ abstract class Module
     {
         $concat = '';
 
-        if (!is_null( $this->ViewLoader )) {
+        if (!is_null( $this->viewLoader )) {
             // render view select field
-            $concat .= $this->ViewLoader->render();
+            $concat .= $this->viewLoader->render();
         }
         // render fields if set
-        if (isset( $this->Fields ) && is_object( $this->Fields )) {
-            $concat .= $this->Fields->renderFields();
+        if (isset( $this->fields ) && is_object( $this->fields )) {
+            $concat .= $this->fields->renderFields();
         } else {
             $concat .= $this->renderEmptyForm();
         }
@@ -185,10 +185,10 @@ abstract class Module
      */
     final public function module()
     {
-        if (isset( $this->Fields )) {
+        if (isset( $this->fields )) {
             $this->setupFieldData();
         }
-        $this->View = $this->getView();
+        $this->view = $this->getView();
         return $this->render();
 
     }
@@ -200,12 +200,12 @@ abstract class Module
      */
     private function setupFieldData()
     {
-        if ($this->Model->hasData()) {
-            $this->Fields->setData( $this->Model )->setup();
-            foreach ($this->Model as $key => $v) {
+        if ($this->model->hasData()) {
+            $this->fields->setData( $this->model )->setup();
+            foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
-                $field = $this->Fields->getFieldByKey( $key );
-                $this->Model[$key] = ( !is_null( $field ) ) ? $field->getUserValue() : $v;
+                $field = $this->fields->getFieldByKey( $key );
+                $this->model[$key] = ( !is_null( $field ) ) ? $field->getUserValue() : $v;
             }
         }
     }
@@ -221,20 +221,20 @@ abstract class Module
             class_alias( 'Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
         }
 
-        if ($this->Properties->getSetting( 'views' ) && is_null( $this->View )) {
+        if ($this->properties->getSetting( 'views' ) && is_null( $this->view )) {
             $tpl = $this->getViewfile();
-            $ModuleView = new ModuleView( $this );
-            $full = $this->ViewLoader->getTemplateByName( $tpl );
+            $moduleView = new ModuleView( $this );
+            $full = $this->viewLoader->getTemplateByName( $tpl );
             if (isset( $full['fragment'] )) {
-                $ModuleView->setTplFile( $full['fragment'] );
-                $ModuleView->setPath( $full['basedir'] );
+                $moduleView->setTplFile( $full['fragment'] );
+                $moduleView->setPath( $full['basedir'] );
             }
 
-            $this->View = $ModuleView;
-            return $this->View;
+            $this->view = $moduleView;
+            return $this->view;
 
-        } else if ($this->View) {
-            return $this->View;
+        } else if ($this->view) {
+            return $this->view;
         }
 
         return null;
@@ -248,17 +248,17 @@ abstract class Module
      */
     public function getViewfile()
     {
-        if (!filter_var( $this->Properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
+        if (!filter_var( $this->properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
             return '';
         }
         // a viewfile was already set
-        if (!empty( $this->Properties->viewfile ) && $this->ViewLoader->isValidTemplate(
-                $this->Properties->viewfile
+        if (!empty( $this->properties->viewfile ) && $this->viewLoader->isValidTemplate(
+                $this->properties->viewfile
             )
         ) {
-            return $this->Properties->viewfile;
+            return $this->properties->viewfile;
         } else {
-            return $this->Properties->viewfile = $this->ViewLoader->findDefaultTemplate();
+            return $this->properties->viewfile = $this->viewLoader->findDefaultTemplate();
         }
 
     }
@@ -289,8 +289,8 @@ abstract class Module
      */
     public function save( $data, $prevData )
     {
-        if (isset( $this->Fields )) {
-            return $this->Fields->save( $data, $prevData );
+        if (isset( $this->fields )) {
+            return $this->fields->save( $data, $prevData );
         }
         return $data;
     }
@@ -301,7 +301,7 @@ abstract class Module
      */
     public function getModel()
     {
-        return $this->Model;
+        return $this->model;
     }
 
     /**
@@ -311,10 +311,10 @@ abstract class Module
      */
     public function getModuleName()
     {
-        if (is_array( $this->Properties->overrides ) && array_key_exists( 'name', $this->Properties->overrides )) {
-            return $this->Properties->overrides['name'];
+        if (is_array( $this->properties->overrides ) && array_key_exists( 'name', $this->properties->overrides )) {
+            return $this->properties->overrides['name'];
         } else {
-            return $this->Properties->settings['name'];
+            return $this->properties->settings['name'];
         }
 
     }
@@ -325,14 +325,14 @@ abstract class Module
      */
     public function verifyRender()
     {
-        if ($this->Properties->getSetting( 'disabled' ) || $this->Properties->getSetting( 'hidden' )) {
+        if ($this->properties->getSetting( 'disabled' ) || $this->properties->getSetting( 'hidden' )) {
             return false;
         }
-        if (!$this->Properties->state['active']) {
+        if (!$this->properties->state['active']) {
             return false;
         }
 
-        if (!is_user_logged_in() && $this->Properties->state['draft']) {
+        if (!is_user_logged_in() && $this->properties->state['draft']) {
             return false;
         }
         return true;
@@ -341,33 +341,34 @@ abstract class Module
     final public function toJSON()
     {
         $toJSON = array(
-            'envVars' => $this->Context,
-            'settings' => $this->Properties->settings,
-            'state' => $this->Properties->state,
+            'envVars' => $this->context,
+            'settings' => $this->properties->settings,
+            'state' => $this->properties->state,
             'mid' => $this->getId(),
             'moduleData' => apply_filters(
                 'kb.module.modify.data',
-                $this->Model->getOriginalData(),
+                $this->model->getOriginalData(),
                 $this
             ),
-            'area' => $this->Properties->area->id,
-            'post_id' => $this->Properties->postId,
-            'postId' => $this->Properties->postId,
-            'parentObjectId' => $this->Properties->parentObjectId,
-            'areaContext' => $this->Properties->areaContext,
+            'area' => $this->properties->area->id,
+            'post_id' => $this->properties->postId,
+            'postId' => $this->properties->postId,
+            'parentObjectId' => $this->properties->parentObjectId,
+            'areaContext' => $this->properties->areaContext,
             'viewfile' => $this->getViewfile(),
+            'globalModule' => $this->properties->globalModule,
             'class' => get_class( $this ),
-            'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->Properties->area->id ),
-            'uri' => $this->Properties->getSetting( 'uri' )
+            'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->properties->area->id ),
+            'uri' => $this->properties->getSetting( 'uri' )
         );
-        $toJSON = wp_parse_args( $toJSON, $this->Properties );
+        $toJSON = wp_parse_args( $toJSON, $this->properties );
         return $toJSON;
 
     }
 
     public function getId()
     {
-        return $this->Properties->mid;
+        return $this->properties->mid;
     }
 
     /**
@@ -379,10 +380,10 @@ abstract class Module
      */
     public function sync()
     {
-        if (!$this->Properties || !$this->Model || !$this->Model->hasData()) {
+        if (!$this->properties || !$this->model || !$this->model->hasData()) {
             return false;
         }
-        return $this->Model->sync() || $this->Properties->sync();
+        return $this->model->sync() || $this->properties->sync();
     }
 
 

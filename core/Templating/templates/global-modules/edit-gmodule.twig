@@ -5,7 +5,7 @@
             <label for="area-context-select">{{ i18n.editGmodulesLabel }}</label>
             <select name="area-context" onchange="KB.Menus.reloadContext(this)" id="area-context-select">
                 {% for context in contexts %}
-                    <option {% if module.Properties.areaContext == context.id %} selected="selected" {% endif %} value="{{ context.id }}">{{ context.title }}</option>
+                    <option {% if module.properties.areaContext == context.id %} selected="selected" {% endif %} value="{{ context.id }}">{{ context.title }}</option>
                 {% endfor %}
             </select>
         </div>

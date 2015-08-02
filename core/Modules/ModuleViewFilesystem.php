@@ -27,10 +27,10 @@ class ModuleViewFilesystem
     }
 
     /**
-     * @param Module $Module
+     * @param Module $module
      * @return array
      */
-    private function setupViews( Module $Module )
+    private function setupViews( Module $module )
     {
 
         $childTemplates = array();
@@ -40,7 +40,7 @@ class ModuleViewFilesystem
                 glob(
                     trailingslashit(
                         get_stylesheet_directory()
-                    ) . 'module-templates/' . $Module->Properties->getSetting(
+                    ) . 'module-templates/' . $module->properties->getSetting(
                         'id'
                     ) . '/*.twig'
                 ),
@@ -50,15 +50,15 @@ class ModuleViewFilesystem
 
         $parentTemplates = $this->cleanPath(
             glob(
-                trailingslashit( get_template_directory() ) . 'module-templates/' . $Module->Properties->getSetting(
+                trailingslashit( get_template_directory() ) . 'module-templates/' . $module->properties->getSetting(
                     'id'
                 ) . '/*.twig'
             ),
             get_template_directory() . '/module-templates/'
         );
         $moduleTemplates = $this->cleanPath(
-            glob( trailingslashit( $Module->Properties->getSetting( 'path' ) ) . '*.twig' ),
-            trailingslashit( $Module->Properties->getSetting( 'path' ) )
+            glob( trailingslashit( $module->properties->getSetting( 'path' ) ) . '*.twig' ),
+            trailingslashit( $module->properties->getSetting( 'path' ) )
         );
 
         $merged = array_merge( $childTemplates, $parentTemplates, $moduleTemplates );

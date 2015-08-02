@@ -35,8 +35,8 @@ class Utilities
                 return self::$environments[$storageId];
             } else {
                 $realId = ( is_null( $actualPostId ) ) ? $storageId : $actualPostId;
-                $Post = get_post( $realId );
-                return self::$environments[$storageId] = new Environment( $storageId, $Post );
+                $postObj = get_post( $realId );
+                return self::$environments[$storageId] = new Environment( $storageId, $postObj );
             }
         }
     }
@@ -86,6 +86,10 @@ class Utilities
          */
         if (version_compare( $wp_version, '4.0', '>=' )) {
             $plugins[] = 'wpautoresize';
+        }
+        if (version_compare( $wp_version, '4.2', '>=' )) {
+            $plugins[] = 'wptextpattern';
+            $plugins[] = 'wpemoji';
         }
 
         $settings = array(

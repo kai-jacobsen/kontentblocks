@@ -25,7 +25,7 @@ class AreaHtmlNode
     /**
      * @var \Kontentblocks\Areas\AreaProperties
      */
-    public $Area;
+    public $area;
 
 
     /**
@@ -47,7 +47,7 @@ class AreaHtmlNode
      * @var bool|AreaLayoutIterator
      * @since 0.1.0
      */
-    public $Layout;
+    public $layout;
 
     /**
      * specific area settings as set and saved on the edit screen
@@ -85,22 +85,22 @@ class AreaHtmlNode
     /**
      * Class Constructor
      *
-     * @param AreaRenderer $AreaRenderer
+     * @param AreaRenderer $areaRenderer
      * @param $additionalArgs array comes from the render function call
      * @since 0.1.0
      */
-    public function __construct( AreaRenderer $AreaRenderer, $additionalArgs )
+    public function __construct( AreaRenderer $areaRenderer, $additionalArgs )
     {
-        $this->Environment = $AreaRenderer->Environment;
-        $this->Area = $AreaRenderer->Area;
-        $this->areaId = $this->Area->id;
+        $this->environment = $areaRenderer->environment;
+        $this->area = $areaRenderer->area;
+        $this->areaId = $this->area->id;
 
         $this->renderSettings = $this->setupSettings(
             $additionalArgs,
-            $this->Environment->getAreaSettings( $AreaRenderer->areaId )
+            $this->environment->getAreaSettings( $areaRenderer->areaId )
         );
 
-        $this->Layout = $this->setupLayout();
+        $this->layout = $this->setupLayout();
         $this->toJSON();
 
     }
@@ -191,7 +191,7 @@ class AreaHtmlNode
     private function setupLayout()
     {
         /** @var \Kontentblocks\Areas\AreaRegistry $registry */
-        $Registry = Kontentblocks::getService( 'registry.areas' );
+        $registry = Kontentblocks::getService( 'registry.areas' );
 
         $sLayout = $this->renderSettings['layout'];
 
@@ -200,12 +200,12 @@ class AreaHtmlNode
             return new AreaLayoutIterator( $this->renderSettings['layout'] );
         }
 
-        if ($this->Area->defaultLayout !== 'default' && empty( $sLayout )) {
-            if ($Registry->templateExists( $this->defaultLayout )) {
-                $this->renderSettings['layout'] = $this->Area->defaultLayout;
+        if ($this->area->defaultLayout !== 'default' && empty( $sLayout )) {
+            if ($registry->templateExists( $this->defaultLayout )) {
+                $this->renderSettings['layout'] = $this->area->defaultLayout;
                 $this->hasLayout = true;
 
-                return new AreaLayoutIterator( $this->Area->defaultLayout );
+                return new AreaLayoutIterator( $this->area->defaultLayout );
             }
         }
 
@@ -256,7 +256,7 @@ class AreaHtmlNode
     public function getLayoutId()
     {
         if ($this->hasLayout) {
-            return implode( ' ', $this->Layout->getLayoutClass() );
+            return implode( ' ', $this->layout->getLayoutClass() );
         } else {
             return null;
         }
@@ -270,7 +270,7 @@ class AreaHtmlNode
     public function getCurrentLayoutClasses()
     {
         if ($this->hasLayout) {
-            $classes = $this->Layout->getCurrentLayoutClasses();
+            $classes = $this->layout->getCurrentLayoutClasses();
             if (is_array( $classes )) {
                 return $classes;
             } else {
@@ -288,7 +288,7 @@ class AreaHtmlNode
     public function nextLayout()
     {
         if ($this->hasLayout) {
-            $this->Layout->next();
+            $this->layout->next();
         }
 
     }
@@ -318,13 +318,13 @@ class AreaHtmlNode
     {
         if ($this->hasLayout) {
             $format = '<%1$s class="%2$s kb-outer-wrap">';
-            if ($this->Layout->hasWrap() && $this->position === 0) {
-                $wrap = $this->Layout->getWrap();
+            if ($this->layout->hasWrap() && $this->position === 0) {
+                $wrap = $this->layout->getWrap();
                 return sprintf( $format, $wrap['tag'], $wrap['class'] );
             }
 
-            if ($this->Layout->hasWrap() && $this->Layout->hasCycled( false )) {
-                $wrap = $this->Layout->getWrap();
+            if ($this->layout->hasWrap() && $this->layout->hasCycled( false )) {
+                $wrap = $this->layout->getWrap();
                 return sprintf( $format, $wrap['tag'], $wrap['class'] );
             }
         }
@@ -345,14 +345,14 @@ class AreaHtmlNode
         }
 
         if ($this->hasLayout) {
-            if ($this->Layout->hasWrap() && $this->done) {
-                $wrap = $this->Layout->getWrap();
+            if ($this->layout->hasWrap() && $this->done) {
+                $wrap = $this->layout->getWrap();
                 $format = '</%1$s>';
                 return sprintf( $format, $wrap['tag'] );
             }
 
-            if ($this->Layout->hasWrap() && $this->Layout->hasCycled()) {
-                $wrap = $this->Layout->getWrap();
+            if ($this->layout->hasWrap() && $this->layout->hasCycled()) {
+                $wrap = $this->layout->getWrap();
                 $format = '</%1$s>';
                 return sprintf( $format, $wrap['tag'] );
             }
@@ -369,10 +369,10 @@ class AreaHtmlNode
 
     public function toJSON()
     {
-        $this->Area->renderSettings = $this->renderSettings;
-        $this->Area->envVars = $this->Environment;
-        $this->Area->layout = $this->renderSettings['layout'];
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->Area );
+        $this->area->renderSettings = $this->renderSettings;
+        $this->area->envVars = $this->environment;
+        $this->area->layout = $this->renderSettings['layout'];
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->area );
     }
 
 }

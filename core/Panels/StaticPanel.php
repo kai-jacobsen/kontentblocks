@@ -18,7 +18,7 @@ abstract class StaticPanel extends AbstractPanel
      * Custom Field Manager Instance
      * @var PanelFieldController
      */
-    public $FieldController;
+    public $fieldController;
 
 
     /**
@@ -44,14 +44,14 @@ abstract class StaticPanel extends AbstractPanel
     protected $uid;
 
 
-    public function __construct( $args, Environment $Environment )
+    public function __construct( $args, Environment $environment )
     {
 
         parent::__construct( $args );
-        $this->Environment = $Environment;
-        $this->data = $Environment->getDataProvider()->get( $this->baseId );
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-        $this->fields( $this->FieldController );
+        $this->environment = $environment;
+        $this->data = $environment->getDataProvider()->get( $this->baseId );
+        $this->fieldController = new PanelFieldController( $this->baseId, $this->data, $this );
+        $this->fields( $this->fieldController );
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class StaticPanel extends AbstractPanel
      */
     public function prepare()
     {
-        $postType = $this->Environment->getPostType();
+        $postType = $this->environment->getPostType();
         if (is_array( $this->metaBox ) || $this->metaBox) {
             add_action( "add_meta_boxes_{$postType}", array( $this, 'metaBox' ), 10, 1 );
         } else {
@@ -112,7 +112,7 @@ abstract class StaticPanel extends AbstractPanel
 
     public function renderFields()
     {
-        return $this->fields( $this->FieldController )->renderFields();
+        return $this->fields( $this->fieldController )->renderFields();
     }
 
     /**
@@ -152,16 +152,16 @@ abstract class StaticPanel extends AbstractPanel
 
         $old = $this->setupData( $postId );
         $postData = new ValueStorage( $_POST );
-        $new = $this->fields( $this->FieldController )->save( $postData->get( $this->baseId ), $old );
-        $DataProvider = $this->Environment->getDataProvider();
-        $DataProvider->update( $this->baseId, $new );
+        $new = $this->fields( $this->fieldController )->save( $postData->get( $this->baseId ), $old );
+        $dataProvider = $this->environment->getDataProvider();
+        $dataProvider->update( $this->baseId, $new );
 
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {
                 if (empty( $v )) {
-                    $DataProvider->delete( $this->baseId . '_' . $k );
+                    $dataProvider->delete( $this->baseId . '_' . $k );
                 } else {
-                    $DataProvider->update( $this->baseId . '_' . $k, $v );
+                    $dataProvider->update( $this->baseId . '_' . $k, $v );
                 }
             }
         }
@@ -189,7 +189,7 @@ abstract class StaticPanel extends AbstractPanel
      */
     public function getData()
     {
-        $data = $this->FieldController->setup()->prepareDataAndGet();
+        $data = $this->fieldController->setup()->prepareDataAndGet();
         if (!is_array( $data )) {
             return array();
         }

@@ -13,13 +13,13 @@ class DateTimeReturn implements InterfaceFieldReturn
 
     protected $value;
 
-    public $Field;
+    public $field;
     /**
      * @var \DateTime
      */
     public $DateTime;
 
-    public function __construct( $value, $Field )
+    public function __construct( $value, $field )
     {
 
         if (!isset( $value['unix'] )) {
@@ -28,7 +28,7 @@ class DateTimeReturn implements InterfaceFieldReturn
         }
 
         $this->value = $value;
-        $this->Field = $Field;
+        $this->field = $field;
         $this->DateTime = new \DateTime( '@' . $value['unix'] );
 
     }

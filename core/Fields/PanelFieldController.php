@@ -15,7 +15,7 @@ class PanelFieldController extends AbstractFieldController
      * Array of Field groups
      * @var array
      */
-    public $Structure = array();
+    public $structure = array();
     public $preparedFields = array();
     /**
      * Unique ID from module
@@ -27,21 +27,21 @@ class PanelFieldController extends AbstractFieldController
      *
      * @var object
      */
-    protected $Panel;
+    protected $panel;
 
     /**
      * Constructor
      *
      * @param $id
      * @param array $data
-     * @param $Panel
+     * @param $panel
      */
-    public function __construct( $id, $data = array(), $Panel )
+    public function __construct( $id, $data = array(), $panel )
     {
         //TODO Check module consistency
         $this->baseId = $id;
         $this->data = $data;
-        $this->Panel = $Panel;
+        $this->panel = $panel;
     }
 
     /**
@@ -56,10 +56,10 @@ class PanelFieldController extends AbstractFieldController
     public function addGroup( $groupId, $args = array() )
     {
         if (!$this->idExists( $groupId )) {
-            $this->Structure[$groupId] = new PanelFieldSection( $groupId, $args, $this->Panel );
+            $this->structure[$groupId] = new PanelFieldSection( $groupId, $args, $this->panel );
         }
 
-        return $this->Structure[$groupId];
+        return $this->structure[$groupId];
 
     }
 
@@ -75,7 +75,7 @@ class PanelFieldController extends AbstractFieldController
     public function save( $data, $oldData )
     {
         $collection = array();
-        foreach ($this->Structure as $definition) {
+        foreach ($this->structure as $definition) {
             $return = ( $definition->save( $data, $oldData ) );
             $collection = $collection + $return;
         }
@@ -94,7 +94,7 @@ class PanelFieldController extends AbstractFieldController
      */
     public function renderFields()
     {
-        $Renderer = new FieldRendererTabs( $this->baseId, $this->Structure );
+        $Renderer = new FieldRendererTabs( $this->baseId, $this->structure );
         return $Renderer->render( $this->data );
     }
 

@@ -43,13 +43,12 @@ class UpdateModule implements AjaxActionInterface
         $module = $workshop->getModule();
 
         // master module will change instance id to correct template id
-        apply_filters( 'kb.modify.module.save', $module );
+        apply_filters( 'kb.modify.module.save', $module->properties );
 
         // gather data
         $old = $environment->getStorage()->getModuleData( $module->getId() );
         $new = $module->save( $newData, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
-
         // save slashed data, *_post_meta will add remove slashes again...
         if ($postdata->update) {
             $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
@@ -64,7 +63,7 @@ class UpdateModule implements AjaxActionInterface
         );
 
         do_action( 'kb.save.frontend.module', $module, $postdata->update );
-        Utilities::remoteConcatGet( $module->Properties->postId );
+        Utilities::remoteConcatGet( $module->properties->postId );
         return new AjaxSuccessResponse( 'Module updated', $return, $send );
     }
 

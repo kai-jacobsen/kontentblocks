@@ -32,7 +32,6 @@ module.exports = Backbone.Collection.extend({
     if (m.get('settings').disabled) {
       return false;
     }
-
     return !(!m.get('settings').globalModule && this.area.model.get('dynamic'));
 
   },

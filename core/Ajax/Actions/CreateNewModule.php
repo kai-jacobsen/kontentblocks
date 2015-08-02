@@ -148,7 +148,7 @@ class CreateNewModule implements AjaxActionInterface
         (
             'id' => $this->newModule->getId(),
             'module' => $this->newModule->toJSON(),
-            'name' => $this->newModule->Properties->getSetting( 'publicName' ),
+            'name' => $this->newModule->properties->getSetting( 'publicName' ),
             'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
             'html' => $html
         );

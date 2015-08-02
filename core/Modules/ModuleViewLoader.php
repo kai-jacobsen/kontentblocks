@@ -17,7 +17,7 @@ class ModuleViewLoader
      *
      * @var \Kontentblocks\Modules\ModuleViewFilesystem
      */
-    protected $ViewFilesystem;
+    protected $viewFilesystem;
 
     /**
      * found views
@@ -35,19 +35,19 @@ class ModuleViewLoader
      * The Module
      * @var Module
      */
-    private $Module;
+    private $module;
 
     /**
      * Class constructor
      *
-     * @param Module $Module
+     * @param Module $module
      */
-    public function __construct( Module $Module )
+    public function __construct( Module $module )
     {
-        $this->ViewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $Module );
-        $this->Module = $Module;
+        $this->viewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $module );
+        $this->module = $module;
 
-        $this->views = $this->ViewFilesystem->getTemplatesforContext( $Module->Properties->areaContext );
+        $this->views = $this->viewFilesystem->getTemplatesforContext( $module->properties->areaContext );
         if (count( $this->views ) > 1) {
             $this->hasViews = true;
         }
@@ -67,7 +67,7 @@ class ModuleViewLoader
         if ($this->hasViews()){
             $tpl = new CoreView(
                 'view-selector.twig',
-                array( 'templates' => $this->prepareTemplates(), 'module' => $this->Module->Properties )
+                array( 'templates' => $this->prepareTemplates(), 'module' => $this->module->properties )
             );
             return $tpl->render();
         } else {
@@ -75,9 +75,9 @@ class ModuleViewLoader
             if (is_null( $tpl )) {
                 return "<p class='notice kb-field'>No View available</p>";
             } else {
-                $this->Module->Properties->viewfile = $tpl['filteredfile'];
+                $this->module->properties->viewfile = $tpl['filteredfile'];
 
-                return "<input type='hidden' name='{$this->Module->Properties->mid}[viewfile]' value='{$tpl['filteredfile']}' >";
+                return "<input type='hidden' name='{$this->module->properties->mid}[viewfile]' value='{$tpl['filteredfile']}' >";
             }
         }
     }
@@ -105,7 +105,7 @@ class ModuleViewLoader
     {
         $prepared = array();
 
-        $selected = $this->Module->Properties->viewfile;
+        $selected = $this->module->properties->viewfile;
         if (empty( $selected ) || !$this->isValidTemplate( $selected )) {
             $selected = $this->findDefaultTemplate();
         }
@@ -130,8 +130,8 @@ class ModuleViewLoader
     public function findDefaultTemplate()
     {
         $keys = array_values( $this->views );
-        if (method_exists( $this->Module, 'defaultView' )) {
-            $setByModule = $this->Module->defaultView();
+        if (method_exists( $this->module, 'defaultView' )) {
+            $setByModule = $this->module->defaultView();
 
             if (!empty( $setByModule ) && $this->isValidTemplate( $setByModule )) {
                 return $setByModule;
@@ -181,20 +181,21 @@ class ModuleViewLoader
      * Callback handler, when the viewfile gets changed on the frontend
      *
      * @param $module
+     * @return null
      */
     public function frontendSave( Module $module )
     {
 
         $viewfile = $module->getViewfile();
         if (empty( $viewfile )) {
-            return;
+            return null;
         }
-        $postId = $module->Properties->postId;
-        /** @var \Kontentblocks\Backend\Storage\ModuleStorage $Storage */
-        $Storage = new ModuleStorage( $postId );
-        $index = $Storage->getModuleDefinition( $module->getId() );
+        $postId = $module->properties->postId;
+        /** @var \Kontentblocks\Backend\Storage\ModuleStorage $storage */
+        $storage = new ModuleStorage( $postId );
+        $index = $storage->getModuleDefinition( $module->getId() );
         $index['viewfile'] = $viewfile;
-        $Storage->addToIndex( $module->getId(), $index );
+        $storage->addToIndex( $module->getId(), $index );
     }
 
     /**

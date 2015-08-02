@@ -20,23 +20,23 @@ class SingleModuleRenderer
     public $classes;
 
     /**
-     * @param Module $Module
+     * @param Module $module
      */
-    public function __construct( Module $Module, $args = array() )
+    public function __construct( Module $module, $args = array() )
     {
-        $this->Module = $Module;
+        $this->module = $module;
         $this->addArgs = $this->setupArgs( $args );
         $this->classes = $this->setupClasses();
-        $this->Module->Context->set( $this->addArgs );
+        $this->module->context->set( $this->addArgs );
         // @TODO other properties?
         if (isset( $this->addArgs['areaContext'] )) {
-            $this->Module->Context->areaContext = $this->addArgs['areaContext'];
-            $this->Module->Properties->areaContext = $this->addArgs['areaContext'];
+            $this->module->context->areaContext = $this->addArgs['areaContext'];
+            $this->module->properties->areaContext = $this->addArgs['areaContext'];
 
         }
 
-        if ($Module->verifyRender()) {
-            Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $Module->toJSON() );
+        if ($module->verifyRender()) {
+            Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $module->toJSON() );
         }
 
 
@@ -44,13 +44,13 @@ class SingleModuleRenderer
 
     public function render()
     {
-        if (!$this->Module->verifyRender()) {
+        if (!$this->module->verifyRender()) {
             return false;
         }
 
         $out = '';
         $out .= $this->beforeModule();
-        $out .= $this->Module->module();
+        $out .= $this->module->module();
         $out .= $this->afterModule();
         return $out;
     }
@@ -59,7 +59,7 @@ class SingleModuleRenderer
     {
         return sprintf(
             '<%3$s id="%1$s" class="%2$s">',
-            $this->Module->getId(),
+            $this->module->getId(),
             $this->getModuleClasses(),
             $this->addArgs['element']
         );
@@ -75,7 +75,7 @@ class SingleModuleRenderer
         $defaults = array(
             'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
-            'element' => ( isset( $args['moduleElement'] ) ) ? $args['moduleElement'] : $this->Module->Properties->getSetting(
+            'element' => ( isset( $args['moduleElement'] ) ) ? $args['moduleElement'] : $this->module->properties->getSetting(
                 'element'
             ),
             'action' => null,
@@ -98,7 +98,7 @@ class SingleModuleRenderer
      */
     public function getModule()
     {
-        return $this->Module;
+        return $this->module;
     }
 
     /**
@@ -111,8 +111,8 @@ class SingleModuleRenderer
                 'os-edit-container',
                 'module',
                 'single-module',
-                $this->Module->Properties->getSetting( 'id' ),
-                'view-' . str_replace( '.twig', '', $this->Module->Properties->viewfile )
+                $this->module->properties->getSetting( 'id' ),
+                'view-' . str_replace( '.twig', '', $this->module->properties->viewfile )
 
             );
     }

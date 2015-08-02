@@ -49,11 +49,11 @@ class SlotRenderer
         }
 
 
-        /** @var $Environment \Kontentblocks\Backend\Environment\Environment */
-        $Environment = Utilities::getEnvironment( $postId );
-        $modules = $Environment->getModulesForArea( $area );
+        /** @var $environment \Kontentblocks\Backend\Environment\Environment */
+        $environment = Utilities::getEnvironment( $postId );
+        $modules = $environment->getModulesForArea( $area );
 
-        $this->Iterator = new ModuleIterator( $modules, $Environment );
+        $this->iterator = new ModuleIterator( $modules, $environment );
     }
 
     /**
@@ -75,7 +75,7 @@ class SlotRenderer
     {
         $this->position = $pos;
 
-        $module = $this->Iterator->setPosition( $pos );
+        $module = $this->iterator->setPosition( $pos );
         if (!is_null( $module )) {
             printf(
                 '<%3$s id="%1$s" class="%2$s">',

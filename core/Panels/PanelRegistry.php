@@ -21,7 +21,7 @@ class PanelRegistry
      */
     public $panels = array();
 
-    public $Objects = array();
+    public $objects = array();
 
 
     /**
@@ -36,8 +36,8 @@ class PanelRegistry
     {
 
         if (!isset( $this->panels[$panelId] )) {
-            $Reflect = new \ReflectionClass( $args['class'] );
-            if ($Reflect->getParentClass()->name === 'Kontentblocks\Modules\StaticModule') {
+            $reflect = new \ReflectionClass( $args['class'] );
+            if ($reflect->getParentClass()->name === 'Kontentblocks\Modules\StaticModule') {
                 $this->panels[$panelId] = new ModulePanel( $args );
             } else {
 //                $this->panels[$id] = new $args['class']( $args );

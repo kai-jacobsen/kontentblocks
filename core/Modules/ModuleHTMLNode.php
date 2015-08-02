@@ -19,15 +19,15 @@ class ModuleHTMLNode
      * Parent Module instance
      * @var \Kontentblocks\Modules\Module
      */
-    protected $Module;
+    protected $module;
 
     /**
      * Constructor
-     * @param Module $Module
+     * @param Module $module
      */
-    public function __construct( Module $Module )
+    public function __construct( Module $module )
     {
-        $this->Module = $Module;
+        $this->module = $module;
     }
 
     /**
@@ -52,26 +52,26 @@ class ModuleHTMLNode
 
 
         // if disabled don't output, just show disabled message
-        if ($this->Module->Properties->getSetting( 'disabled' )) {
+        if ($this->module->properties->getSetting( 'disabled' )) {
             $concat .= "<p class='notice'>Dieses Modul ist deaktiviert und kann nicht bearbeitet werden.</p>";
         } else {
-            $concat .= $this->Module->form();
+            $concat .= $this->module->form();
         }
 
         // strings not appended because $concat is expected as return
         $concat = apply_filters(
-            "kb.module.footer-{$this->Module->Properties->getSetting( 'id' )}",
+            "kb.module.footer-{$this->module->properties->getSetting( 'id' )}",
             $concat,
-            $this->Module
+            $this->module
         );
-        $concat = apply_filters( 'kb.module.footer', $concat, $this->Module );
+        $concat = apply_filters( 'kb.module.footer', $concat, $this->module );
 
         $concat .= $this->closeModuleBody();
 
         $concat .= $this->closeListItem();
 
-        if (method_exists( $this->Module, 'adminEnqueue' )) {
-            $this->Module->adminEnqueue();
+        if (method_exists( $this->module, 'adminEnqueue' )) {
+            $this->module->adminEnqueue();
         }
 
         return $concat;
@@ -85,25 +85,25 @@ class ModuleHTMLNode
     private function openListItem()
     {
         // extract the block id number
-        $count = strrchr( $this->Module->getId(), "_" );
+        $count = strrchr( $this->module->getId(), "_" );
 
         // classname
-        $classname = get_class( $this->Module );
+        $classname = get_class( $this->module );
 
         // additional classes to set for the item
-        $disabledclass = ( $this->Module->Properties->getSetting( 'disabled' ) ) ? 'disabled' : null;
-        $uidisabled = ( $this->Module->Properties->getSetting( 'disabled' ) ) ? 'ui-state-disabled' : null;
+        $disabledclass = ( $this->module->properties->getSetting( 'disabled' ) ) ? 'disabled' : null;
+        $uidisabled = ( $this->module->properties->getSetting( 'disabled' ) ) ? 'ui-state-disabled' : null;
 
         //$predefined = (isset($this->settings['predefined']) and $this->settings['predefined'] == '1') ? $this->settings['predefined'] : null;
         $unsortable = ( ( isset( $this->unsortable ) and $this->unsortable ) == '1' ) ? 'cantsort' : null;
 
         // Block List Item
-        return "<li id='{$this->Module->getId()}' rel='{$this->Module->getId(
-        )}{$count}' data-moduleclass='{$classname}' class='{$this->Module->Properties->getSetting(
+        return "<li id='{$this->module->getId()}' rel='{$this->module->getId(
+        )}{$count}' data-moduleclass='{$classname}' class='{$this->module->properties->getSetting(
             'id'
         )} kb-module__wrapper kb-module {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
-		<input type='hidden' name='{$this->Module->getId(
-        )}[areaContext]' value='{$this->Module->Properties->areaContext}' />
+		<input type='hidden' name='{$this->module->getId(
+        )}[areaContext]' value='{$this->module->properties->areaContext}' />
 		";
 
     }
@@ -164,12 +164,12 @@ class ModuleHTMLNode
         $html = '';
 
         //open header
-        $html .= "<div rel='{$this->Module->getId()}' class='kb-module__header klearfix edit kb-title'>";
+        $html .= "<div rel='{$this->module->getId()}' class='kb-module__header klearfix edit kb-title'>";
         $html .= "<div class='ui-wrap'></div>";
         // name
-        $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->Module->getId(
+        $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->module->getId(
             )}[moduleName]' value='" . esc_attr(
-                $this->Module->Properties->getSetting( 'name' )
+                $this->module->properties->getSetting( 'name' )
             ) . "' /></div>";
         $html .= "</div>";
         // Open the drop down menu
@@ -188,7 +188,7 @@ class ModuleHTMLNode
      */
     public function getStatusClass()
     {
-        if ($this->Module->Properties->state['active']) {
+        if ($this->module->properties->state['active']) {
             return 'activated';
         } else {
             return 'deactivated';

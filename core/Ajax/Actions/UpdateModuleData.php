@@ -44,16 +44,16 @@ class UpdateModuleData implements AjaxActionInterface
         $module = $environment->getModuleById( filter_var( $moduleArgs['mid'], FILTER_SANITIZE_STRING ) );
 
         // gather data
-        $old = $module->Model->export();
+        $old = $module->model->export();
         $new = $module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
         $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $module );
-        $module->Model->set( $mergedData );
-        $module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+        $module->model->set( $mergedData );
+        $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
         $environment->getStorage()->reset();
-        $environment->getStorage()->addToIndex( $module->getId(), $module->Properties->export() );
+        $environment->getStorage()->addToIndex( $module->getId(), $module->properties->export() );
         $return = array(
             'newModuleData' => $mergedData
         );

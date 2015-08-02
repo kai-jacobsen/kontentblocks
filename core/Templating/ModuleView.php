@@ -16,7 +16,7 @@ class ModuleView implements \JsonSerializable
     /**
      * @var object  Module Instance
      */
-    protected $Module;
+    protected $module;
 
     /**
      * @var array   merged from module data and additional injected data
@@ -51,10 +51,10 @@ class ModuleView implements \JsonSerializable
             throw new \Exception( 'Module is not set' );
         }
 
-        $this->Module = $module;
+        $this->module = $module;
 
         // merge module data and additional injected data
-        $this->data = $this->_setupData( $module->Model->export(), $addData );
+        $this->data = $this->_setupData( $module->model->export(), $addData );
 
         // if no tpl is given, set a default
         // @TODO Kinda useless, things should break in that case
@@ -116,11 +116,11 @@ class ModuleView implements \JsonSerializable
             $data = array();
         }
 
-        if (is_object( $this->Module->getModel() )) {
-            $data['Model'] = $this->Module->getModel();
+        if (is_object( $this->module->getModel() )) {
+            $data['Model'] = $this->module->getModel();
         }
 
-        $data['module'] = $this->Module->toJSON();
+        $data['module'] = $this->module->toJSON();
 
         // make sure there is a key value pair, if not
         // make 'data' the default key
@@ -150,7 +150,7 @@ class ModuleView implements \JsonSerializable
             return false;
         }
 
-        $this->Module->Model->set($data);
+        $this->module->model->set($data);
         $this->data = wp_parse_args( $data, $this->data );
 
         return true;

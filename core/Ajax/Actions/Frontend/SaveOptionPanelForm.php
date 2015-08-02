@@ -36,13 +36,13 @@ class SaveOptionPanelForm implements AjaxActionInterface
 
         $panel = \Kontentblocks\getPanel($baseId);
         $old = $panel->getData();
-        $new = $panel->fields($panel->FieldController)->save($panelData, $old);
+        $new = $panel->fields($panel->fieldController)->save($panelData, $old);
 
         $merged = Utilities::arrayMergeRecursive( $new, $old );
-        $panel->DataProvider->set($merged)->save();
+        $panel->dataProvider->set($merged)->save();
 
         $return = array(
-            'newData' => $panel->DataProvider->export()
+            'newData' => $panel->dataProvider->export()
         );
         new AjaxSuccessResponse( 'options data saved', $return );
     }

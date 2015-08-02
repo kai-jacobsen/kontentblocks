@@ -6,9 +6,14 @@ module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   attachedFields: {},
   changedFields: {},
+  linkedModules: {},
   initialize: function () {
     this.subscribeToArea();
     this.type = 'module';
+
+    if (this.get('globalModule')) {
+      this.linkModules();
+    }
   },
   subscribeToArea: function (AreaModel) {
     if (!AreaModel) {
@@ -26,12 +31,12 @@ module.exports = Backbone.Model.extend({
     this.listenTo(FieldModel, 'field.model.clean', this.removeChangedField);
     this.listenTo(FieldModel, 'remove', this.removeAttachedField);
   },
-  removeAttachedField: function(FieldModel){
-      if (this.attachedFields[FieldModel.id]){
-        this.stopListening(FieldModel);
-        delete this.attachedFields[FieldModel.id];
-      }
-    if (this.changedFields[FieldModel.id]){
+  removeAttachedField: function (FieldModel) {
+    if (this.attachedFields[FieldModel.id]) {
+      this.stopListening(FieldModel);
+      delete this.attachedFields[FieldModel.id];
+    }
+    if (this.changedFields[FieldModel.id]) {
       delete this.changedFields[FieldModel.id];
     }
   },
@@ -43,7 +48,7 @@ module.exports = Backbone.Model.extend({
       delete this.changedFields[FieldModel.id];
     }
 
-    if (_.isEmpty(this.changedFields)){
+    if (_.isEmpty(this.changedFields)) {
       this.trigger('module.model.clean', this);
     }
   },
@@ -64,19 +69,29 @@ module.exports = Backbone.Model.extend({
       dataType: 'json',
       success: function (res) {
         that.set('moduleData', res.data.newModuleData);
-        that.trigger('module.model.updated', that);
+        if (save) {
+           that.trigger('module.model.updated', that);
+        }
       },
       error: function () {
         Logger.Debug.error('serialize | FrontendModal | Ajax error');
       }
     });
   },
-  getModuleView: function(){
-    if (this.View){
+  getModuleView: function () {
+    if (this.View) {
       return this.View;
     }
 
     return false;
+  },
+  linkModules: function () {
+    //var equals = KB.Modules.filterByAttr('parentObjectId', this.get('parentObjectId'));
+    //_.each(equals, function (ModuleModel) {
+    //  ModuleModel.linkedModules[this.cid] = this;
+    //  this.linkedModules[ModuleModel.cid] = ModuleModel;
+    //}, this);
+    console.log('lingage');
   }
 
 });

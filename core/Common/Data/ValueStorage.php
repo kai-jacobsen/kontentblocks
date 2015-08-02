@@ -35,6 +35,10 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
         return null;
     }
 
+    /**
+     * @param $key
+     * @return null|mixed
+     */
     public function get( $key )
     {
         if (isset( $this->value[$key] )) {
@@ -44,12 +48,21 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
         return null;
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
     public function set( $key, $value )
     {
         $this->value[$key] = $value;
         return $this;
     }
 
+    /**
+     * @param $var
+     * @return $this
+     */
     public function import( $var )
     {
         if (is_object( $var )) {
@@ -66,12 +79,19 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
 
     }
 
+    /**
+     * @param $key
+     * @return $this
+     */
     public function delete( $key )
     {
         unset( $this->value[$key] );
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function export()
     {
         return $this->value;

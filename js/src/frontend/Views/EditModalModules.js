@@ -448,9 +448,8 @@ module.exports = Backbone.View.extend({
     }
 
 
-
     // cache module container height
-    height = that.ModuleView.$el.height();
+    //height = that.ModuleView.$el.height();
     that.ModuleView.model.trigger('modal.serialize.before');
     // change the container class if viewfile changed
     if (that.updateViewClassTo !== false) {
@@ -475,9 +474,9 @@ module.exports = Backbone.View.extend({
     // delay action to be safe
     // @TODO seperate
     setTimeout(function () {
-      jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
-        KB.IEdit.Text(el);
-      });
+      //jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
+      //  KB.IEdit.Text(el);
+      //});
       that.ModuleView.render();
       that.ModuleView.setControlsPosition();
       that.ModuleView.model.trigger('modal.serialize');
@@ -496,7 +495,6 @@ module.exports = Backbone.View.extend({
         Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
       }
       that.$el.addClass('isDirty');
-
     }
 
     if ($controls.length > 0) {

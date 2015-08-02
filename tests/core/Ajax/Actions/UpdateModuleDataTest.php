@@ -78,7 +78,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
         $Environment = new Environment( $post->ID, $post );
         $module = $Environment->getModuleById( $workshop->getNewId() );
 
-        $this->assertEquals( $data['data']['demotest'], $module->Model->get( 'demotest' ) );
+        $this->assertEquals( $data['data']['demotest'], $module->model->get( 'demotest' ) );
     }
 
 

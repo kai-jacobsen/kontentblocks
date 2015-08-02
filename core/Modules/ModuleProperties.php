@@ -106,10 +106,10 @@ class ModuleProperties
      */
     private function parseInSettings( $properties )
     {
-        /** @var \Kontentblocks\Modules\ModuleRegistry $ModuleRegistry */
-        $ModuleRegistry = Kontentblocks::getService( 'registry.modules' );
+        /** @var \Kontentblocks\Modules\ModuleRegistry $moduleRegistry */
+        $moduleRegistry = Kontentblocks::getService( 'registry.modules' );
         return Utilities::validateBoolRecursive(
-            wp_parse_args( $properties, $ModuleRegistry->get( $properties['class'] ) )
+            wp_parse_args( $properties, $moduleRegistry->get( $properties['class'] ) )
         );
     }
 
@@ -194,9 +194,9 @@ class ModuleProperties
      */
     public function sync()
     {
-        $Storage = new ModuleStorage( $this->parentObjectId );
-        apply_filters( 'kb.modify.module.save', $this->Module );
-        return $Storage->addToIndex( $this->mid, $this->export() );
+        $storage = new ModuleStorage( $this->parentObjectId );
+        apply_filters( 'kb.modify.module.save', $this );
+        return $storage->addToIndex( $this->mid, $this->export() );
     }
 
     /**
@@ -231,16 +231,16 @@ class ModuleProperties
      */
     private function setArea( $var )
     {
-        /** @var \Kontentblocks\Areas\AreaRegistry $AreaRegistry */
-        $AreaRegistry = Kontentblocks::getService( 'registry.areas' );
-        $Area = $AreaRegistry->getArea( $var );
+        /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
+        $areaRegistry = Kontentblocks::getService( 'registry.areas' );
+        $area = $areaRegistry->getArea( $var );
 
-        if (is_null( $Area )) {
-            $Area = $AreaRegistry->getArea( '_internal' );
+        if (is_null( $area )) {
+            $area = $areaRegistry->getArea( '_internal' );
         }
 
-        if (is_null( $Area->settings )) {
-            $Area->set( 'settings', new AreaSettingsModel( $Area, $this->postId ) );
+        if (is_null( $area->settings )) {
+            $area->set( 'settings', new AreaSettingsModel( $area, $this->postId ) );
         }
 
         /**
@@ -248,9 +248,9 @@ class ModuleProperties
          * make certain area properties accessible by js frontend-only
          */
         if (is_user_logged_in()) {
-            Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $Area );
+            Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $area );
         }
-        return $Area;
+        return $area;
 
     }
 }

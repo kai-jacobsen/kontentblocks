@@ -23,13 +23,13 @@ abstract class AbstractFieldSection implements Exportable
      * Array of registered fields for this section
      * @var array
      */
-    protected $Fields;
+    protected $fields;
 
     /**
      * Can be a module or a panel
      * @var object
      */
-    protected $Module;
+    protected $module;
 
     /**
      * Preset defaults
@@ -100,21 +100,21 @@ abstract class AbstractFieldSection implements Exportable
                 $this->priorityCount += 5;
             }
 
-            /** @var \Kontentblocks\Fields\FieldRegistry $Registry */
-            $Registry = Kontentblocks::getService( 'registry.fields' );
-            $Field = $Registry->getField( $type, $this->baseId, $subkey, $key );
-            if (!$Field) {
+            /** @var \Kontentblocks\Fields\FieldRegistry $registry */
+            $registry = Kontentblocks::getService( 'registry.fields' );
+            $field = $registry->getField( $type, $this->baseId, $subkey, $key );
+            if (!$field) {
                 throw new Exception( "Field of type: $type does not exist" );
             } else {
-                $Field->setArgs( $args );
+                $field->setArgs( $args );
                 // conditional check of field visibility
-                $this->markVisibility( $Field );
+                $this->markVisibility( $field );
 
                 // Fields with same arrayKey gets grouped into own collection
                 if (isset( $args['arrayKey'] )) {
-                    $this->addArrayField( $Field, $key, $args );
+                    $this->addArrayField( $field, $key, $args );
                 } else {
-                    $this->Fields[$key] = $Field;
+                    $this->fields[$key] = $field;
                 }
                 $this->_increaseVisibleFields();
                 $this->orderFields();
@@ -135,11 +135,11 @@ abstract class AbstractFieldSection implements Exportable
     public function addArrayField( $field, $key, $args )
     {
         if (!$this->fieldExists( $args['arrayKey'] )) {
-            $FieldArray = $this->Fields[$args['arrayKey']] = new FieldSubGroup( $args['arrayKey'] );
+            $fieldArray = $this->fields[$args['arrayKey']] = new FieldSubGroup( $args['arrayKey'] );
         } else {
-            $FieldArray = $this->Fields[$args['arrayKey']];
+            $fieldArray = $this->fields[$args['arrayKey']];
         }
-        $FieldArray->addField( $key, $field );
+        $fieldArray->addField( $key, $field );
 
     }
 
@@ -154,12 +154,12 @@ abstract class AbstractFieldSection implements Exportable
      */
     public function render( $data )
     {
-        if (empty( $this->Fields )) {
+        if (empty( $this->fields )) {
             return;
         }
 
         /** @var \Kontentblocks\Fields\Field $field */
-        foreach ($this->Fields as $field) {
+        foreach ($this->fields as $field) {
             // TODO: Keep an eye on it
 
 
@@ -207,12 +207,12 @@ abstract class AbstractFieldSection implements Exportable
     {
         $collect = array();
 
-        if (!is_array( $this->Fields )) {
+        if (!is_array( $this->fields )) {
             return $oldData;
         }
 
         /** @var \Kontentblocks\Fields\Field $field */
-        foreach ($this->Fields as $field) {
+        foreach ($this->fields as $field) {
             $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
             if (isset( $data[$field->getKey()] )) {
                 $collect[$field->getKey()] = $field->_save( $data[$field->getKey()], $old );
@@ -238,7 +238,7 @@ abstract class AbstractFieldSection implements Exportable
      */
     public function getFields()
     {
-        return $this->Fields;
+        return $this->fields;
 
     }
 
@@ -278,7 +278,7 @@ abstract class AbstractFieldSection implements Exportable
      */
     public function fieldExists( $key )
     {
-        return isset( $this->Fields[$key] );
+        return isset( $this->fields[$key] );
     }
 
     public function prepareArgs( $args )
@@ -319,13 +319,13 @@ abstract class AbstractFieldSection implements Exportable
     private function orderFields()
     {
         $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
-        uasort( $this->Fields, create_function( '$a,$b', $code ) );
+        uasort( $this->fields, create_function( '$a,$b', $code ) );
 
     }
 
     public function export( &$collection )
     {
-        foreach ($this->Fields as $Field) {
+        foreach ($this->fields as $Field) {
             $Field->export( $collection );
         }
 

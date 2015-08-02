@@ -76,11 +76,11 @@ class SavePost
      */
     protected function moduleOverrides( $module, $data )
     {
-        $module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-        $module->Properties->overrides['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module->Properties->getSetting(
+        $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+        $module->properties->overrides['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module->Properties->getSetting(
             'name'
         );
-        $module->Properties->state['draft'] = false;
+        $module->properties->state['draft'] = false;
         return $module;
     }
 
@@ -190,7 +190,7 @@ class SavePost
             // special block specific data
             $module = $this->moduleOverrides( $module, $data );
             // create updated index
-            $this->index[$module->getId()] = $module->Properties->export();
+            $this->index[$module->getId()] = $module->properties->export();
             // call save method on block
             // ignore the existence
 

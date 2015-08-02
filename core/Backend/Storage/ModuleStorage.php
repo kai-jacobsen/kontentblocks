@@ -28,7 +28,7 @@ class ModuleStorage implements \Countable
      * Data Handler
      * @var \Kontentblocks\Backend\DataProvider\DataProviderController
      */
-    protected $DataProvider;
+    protected $dataProvider;
 
     /**
      * modules to handle
@@ -44,17 +44,17 @@ class ModuleStorage implements \Countable
      * @param \Kontentblocks\Backend\DataProvider\DataProviderController
      * @throws \Exception
      */
-    public function __construct( $postId, DataProviderController $DataProvider = null )
+    public function __construct( $postId, DataProviderController $dataProvider = null )
     {
         if (!isset( $postId ) || $postId === 0) {
             throw new \Exception( 'a valid post id must be provided' );
         }
         $this->storageId = $postId;
         // Late init data handler if not provided
-        if (is_null( $DataProvider )) {
-            $this->DataProvider = new DataProviderController( $postId );
+        if (is_null( $dataProvider )) {
+            $this->dataProvider = new DataProviderController( $postId );
         } else {
-            $this->DataProvider = $DataProvider;
+            $this->dataProvider = $dataProvider;
         }
         $this->setup();
 
@@ -87,7 +87,7 @@ class ModuleStorage implements \Countable
      */
     public function getDataProvider()
     {
-        return $this->DataProvider;
+        return $this->dataProvider;
     }
 
 
@@ -98,7 +98,7 @@ class ModuleStorage implements \Countable
      */
     public function saveIndex( $index )
     {
-        return $this->DataProvider->update( 'kb_kontentblocks', $index );
+        return $this->dataProvider->update( 'kb_kontentblocks', $index );
 
     }
 
@@ -133,7 +133,7 @@ class ModuleStorage implements \Countable
         if (isset( $this->index[$mid] )) {
             unset( $this->index[$mid] );
             if ($this->saveIndex( $this->index ) !== false) {
-                return $this->DataProvider->delete( '_' . $mid );
+                return $this->dataProvider->delete( '_' . $mid );
             }
         }
 
@@ -174,7 +174,7 @@ class ModuleStorage implements \Countable
      */
     private function setup()
     {
-        $this->index = $this->DataProvider->get( 'kb_kontentblocks' );
+        $this->index = $this->dataProvider->get( 'kb_kontentblocks' );
 
         if (empty( $this->index )) {
             return false;
@@ -194,7 +194,7 @@ class ModuleStorage implements \Countable
     private function setupModuleData()
     {
         $collection = array();
-        $meta = $this->DataProvider->getAll();
+        $meta = $this->dataProvider->getAll();
         foreach (array_keys( $this->index ) as $id) {
             $collection['_' . $id] = ( !empty( $meta['_' . $id] ) ) ? $meta['_' . $id] : '';
             $collection['_preview_' . $id] = ( !empty( $meta['_preview_' . $id] ) ) ? $meta['_preview_' . $id] : null;
@@ -242,7 +242,7 @@ class ModuleStorage implements \Countable
      */
     public function saveModule( $id, $data = '' )
     {
-        return $this->DataProvider->update( '_' . $id, $data );
+        return $this->dataProvider->update( '_' . $id, $data );
     }
 
     /**
@@ -267,7 +267,7 @@ class ModuleStorage implements \Countable
      */
     public function _updateIndex()
     {
-        return $this->DataProvider->update( 'kb_kontentblocks', $this->index );
+        return $this->dataProvider->update( 'kb_kontentblocks', $this->index );
     }
 
     /**
@@ -343,10 +343,10 @@ class ModuleStorage implements \Countable
     public function deleteAll()
     {
         foreach ($this->getIndex() as $k => $module) {
-            $this->DataProvider->delete( '_' . $k );
+            $this->dataProvider->delete( '_' . $k );
         }
 
-        return $this->DataProvider->delete( 'kb_kontentblocks' );
+        return $this->dataProvider->delete( 'kb_kontentblocks' );
     }
 
     /**
@@ -365,19 +365,19 @@ class ModuleStorage implements \Countable
         // delete old data
         if (!empty( $modules )) {
             foreach ($modules as $k => $value) {
-                $this->DataProvider->delete( $k );
+                $this->dataProvider->delete( $k );
 
             }
         }
-        $this->DataProvider->delete( 'kb_kontentblocks' );
+        $this->dataProvider->delete( 'kb_kontentblocks' );
 
         //set new old data from backup;
-        $this->DataProvider->update( 'kb_kontentblocks', $index );
+        $this->dataProvider->update( 'kb_kontentblocks', $index );
 
 
         if (!empty( $modules )) {
             foreach ($modules as $k => $value) {
-                $this->DataProvider->update( $k, $value );
+                $this->dataProvider->update( $k, $value );
             }
         }
     }

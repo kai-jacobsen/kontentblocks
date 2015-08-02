@@ -74,11 +74,11 @@ Class Checkbox extends Field
     }
 
     /**
-     * @param FieldFormController $Form
+     * @param FieldFormController $form
      */
-    public function renderHidden( FieldFormController $Form )
+    public function renderHidden( FieldFormController $form )
     {
-        echo "<input type='hidden' name='{$Form->getFieldName()}' value='{$this->getValue()}' >";
+        echo "<input type='hidden' name='{$form->getFieldName()}' value='{$this->getValue()}' >";
     }
 
 }

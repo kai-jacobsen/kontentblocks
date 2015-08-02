@@ -15,7 +15,7 @@ class FlexibleFieldsReturn
     /**
      * @var \Kontentblocks\Fields\Definitions\FlexibleFields
      */
-    protected $Field;
+    protected $field;
 
     /**
      * @var string id of parent module
@@ -42,16 +42,16 @@ class FlexibleFieldsReturn
      * Class Constructor
      * @since 0.1.0
      *
-     * @param FlexibleFields $Field
+     * @param FlexibleFields $field
      */
-    public function __construct( $value, FlexibleFields $Field )
+    public function __construct( $value, FlexibleFields $field )
     {
-        $this->Field = $Field;
+        $this->field = $field;
 
-        $this->key = $Field->getKey();
-        $this->fieldData = $Field->getValue();
-        $this->moduleId = $Field->getFieldId();
-        $this->config = $Field->getArg( 'config' );
+        $this->key = $field->getKey();
+        $this->fieldData = $field->getValue();
+        $this->moduleId = $field->getFieldId();
+        $this->config = $field->getArg( 'config' );
     }
 
     /**

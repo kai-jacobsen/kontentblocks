@@ -31,13 +31,13 @@ abstract class OptionsPanel extends AbstractPanel
 
     protected $menuUri;
 
-    public $DataProvider;
+    public $dataProvider;
 
     /**
      * Custom Field Manager Instance for Panels
      * @var PanelFieldController
      */
-    public $FieldController;
+    public $fieldController;
 
     /**
      * Form data
@@ -156,10 +156,10 @@ abstract class OptionsPanel extends AbstractPanel
     public function save( $postId = null )
     {
         $old = $this->setupData();
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-        $new = $this->fields( $this->FieldController )->save( $_POST[$this->baseId], $old );
+        $this->fieldController = new PanelFieldController( $this->baseId, $this->data, $this );
+        $new = $this->fields( $this->fieldController )->save( $_POST[$this->baseId], $old );
         $merged = Utilities::arrayMergeRecursive( $new, $old );
-        $this->DataProvider->set( $merged )->save();
+        $this->dataProvider->set( $merged )->save();
         $location = add_query_arg( array( 'message' => '1' ) );
         wp_redirect( $location );
         exit;
@@ -177,8 +177,8 @@ abstract class OptionsPanel extends AbstractPanel
     public function setupData( $postId = null )
     {
         if (is_null( $this->data )) {
-            $this->DataProvider = new SerOptionsDataProvider( $this->baseId );
-            $this->data = $this->DataProvider->export();
+            $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
+            $this->data = $this->dataProvider->export();
         }
         return $this->data;
     }
@@ -205,8 +205,8 @@ abstract class OptionsPanel extends AbstractPanel
 
     public function renderFields()
     {
-        $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
-        return $this->fields( $this->FieldController )->renderFields();
+        $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
+        return $this->fields( $this->fieldController )->renderFields();
     }
 
     /**
@@ -258,11 +258,11 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function getData( $postid = null )
     {
-        if (is_null( $this->FieldController )) {
-            $this->FieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
-            $this->fields( $this->FieldController )->setup( $this->setupData() );
+        if (is_null( $this->fieldController )) {
+            $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
+            $this->fields( $this->fieldController )->setup( $this->setupData() );
         }
-        return $this->FieldController->prepareDataAndGet();
+        return $this->fieldController->prepareDataAndGet();
     }
 
 

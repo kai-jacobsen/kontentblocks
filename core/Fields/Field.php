@@ -406,15 +406,15 @@ abstract class Field implements Exportable
      * Any markup should be returned
      * Can be overridden by the individual field class
      * @since 0.1.0
-     * @param FieldFormController $Form
+     * @param FieldFormController $formController
      * @return bool
      */
-    public function form( FieldFormController $Form )
+    public function form( FieldFormController $formController )
     {
         $type = $this->type;
         $tpl = $this->getArg( 'template', 'default' );
         $data = array(
-            'Form' => $Form,
+            'Form' => $formController,
             'Field' => $this,
             'value' => $this->getValue(),
             'i18n' => I18n::getPackages( 'Refields.common', "Refields.{$type}" )
@@ -449,8 +449,8 @@ abstract class Field implements Exportable
 
         $this->uniqueId = $this->createUID();
         // handles the form output
-        $Form = new FieldFormController( $this );
-        $out = $Form->build();
+        $formController = new FieldFormController( $this );
+        $out = $formController->build();
 
         if ($echo) {
             echo $out;

@@ -221,15 +221,15 @@ class LayoutConfigurations
      */
     private function resetPostMeta( $configuration, $postId, $config )
     {
-        $Storage = new ModuleStorage( $postId );
-        $BackupManager = new BackupDataStorage( $Storage );
+        $storage = new ModuleStorage( $postId );
+        $backupManager = new BackupDataStorage( $storage );
         $configurations = get_option( 'kb_layout_configurations' );
 
         if (isset( $configurations[$config][$configuration] )) {
-            $BackupManager->backup( 'Before loading configuration:' . $configuration );
-            $Storage->deleteAll();
+            $backupManager->backup( 'Before loading configuration:' . $configuration );
+            $storage->deleteAll();
             $prepare = $this->prepareFromConfiguration( $configurations[$config][$configuration], $postId );
-            return $Storage->saveIndex( $prepare ); // returns bool
+            return $storage->saveIndex( $prepare ); // returns bool
         }
         return false;
 

@@ -33,7 +33,7 @@ class ModulePanel extends AbstractPanel
      * Module Instance
      * @var \Kontentblocks\Modules\StaticModule
      */
-    protected $Module;
+    protected $module;
 
     /**
      * Post Types
@@ -103,9 +103,9 @@ class ModulePanel extends AbstractPanel
     public function render()
     {
         $this->setupData( get_the_ID() );
-        $this->Module = $this->setupModule( $this->moduleClass );
-        $Render = new SingleModuleRenderer( $this->Module );
-        $Render->render();
+        $this->module = $this->setupModule( $this->moduleClass );
+        $renderer = new SingleModuleRenderer( $this->module );
+        $renderer->render();
 
     }
 
@@ -142,11 +142,11 @@ class ModulePanel extends AbstractPanel
         }
 
         $this->setupData( $postObj->ID );
-        $this->Module = $this->setupModule( $this->moduleClass );
+        $this->module = $this->setupModule( $this->moduleClass );
 
         $this->beforeForm();
 //        $this->Module->options( $this->data );
-        $this->Module->form();
+        $this->module->form();
         $this->afterForm();
     }
 
@@ -160,9 +160,9 @@ class ModulePanel extends AbstractPanel
         if (empty( $_POST[$this->baseId] )) {
             return;
         }
-        $this->Module = $this->setupModule( $this->moduleClass );
+        $this->module = $this->setupModule( $this->moduleClass );
         $old = $this->setupData( $postId );
-        $new = $this->Module->save( $_POST[$this->baseId], $old );
+        $new = $this->module->save( $_POST[$this->baseId], $old );
         update_post_meta( $postId, '_' . $this->baseId, $new );
 
         if ($this->saveAsSingle) {
@@ -212,10 +212,10 @@ class ModulePanel extends AbstractPanel
         $moduleArgs['settings']['id'] = $this->baseId . '_static';
         $moduleArgs['settings']['class'] = $module;
         $moduleArgs = wp_parse_args( $defaults, $moduleArgs );
-        $Environment = Utilities::getEnvironment( get_the_ID() );
+        $environment = Utilities::getEnvironment( get_the_ID() );
 
-        $Factory = new ModuleFactory( $module, $moduleArgs, $Environment, $this->data );
-        return $Factory->getModule();
+        $factory = new ModuleFactory( $module, $moduleArgs, $environment, $this->data );
+        return $factory->getModule();
 
     }
 

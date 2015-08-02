@@ -34,6 +34,7 @@ module.exports = Backbone.View.extend({
   },
   handlePlusClick: function () {
     if (this.Browser.viewMode === 'list') {
+      this.handleClick();
       return false;
     } else {
       this.createModule();

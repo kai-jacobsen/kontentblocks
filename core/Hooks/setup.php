@@ -31,11 +31,11 @@ add_action( 'init', __NAMESPACE__ . '\remove_editor_support', 12 );
 
 
 /**
- * @param $post_id
+ * @param $postId
  */
-function deleteBackup( $post_id )
+function deleteBackup( $postId )
 {
-    BackupDataStorage::deletePostCallback( $post_id );
+    BackupDataStorage::deletePostCallback( $postId );
 }
 
 add_action( 'delete_post', __NAMESPACE__ . '\deleteBackup' );

@@ -35,7 +35,7 @@ class SaveStaticPanelForm implements AjaxActionInterface
 
         $panel = \Kontentblocks\getPanel( $panId, $postId );
         $old = $panel->getData();
-        $new = $panel->fields( $panel->FieldController )->save( $panelData, $old );
+        $new = $panel->fields( $panel->fieldController )->save( $panelData, $old );
 
         $merged = Utilities::arrayMergeRecursive( $new, $old );
         update_post_meta( $postId, $panId, $merged );

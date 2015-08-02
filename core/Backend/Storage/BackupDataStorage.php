@@ -16,7 +16,7 @@ class BackupDataStorage
     /**
      * Instance of an Storage Object
      */
-    protected $Storage;
+    protected $storage;
 
     /**
      * Result from db query
@@ -34,12 +34,12 @@ class BackupDataStorage
     /**
      * Class Constructor
      * An Storageobject must be given
-     * @param ModuleStorage $Storage
+     * @param ModuleStorage $storage
      * @throws \BadFunctionCallException
      */
-    public function __construct( ModuleStorage $Storage )
+    public function __construct( ModuleStorage $storage )
     {
-        $this->Storage = $Storage;
+        $this->storage = $storage;
     }
 
     /**
@@ -59,7 +59,7 @@ class BackupDataStorage
      */
     public function backup( $logmsg = '' )
     {
-        $this->backupData = $this->Storage->backup();
+        $this->backupData = $this->storage->backup();
         $this->msg = $logmsg;
         $this->save();
     }
@@ -158,7 +158,7 @@ class BackupDataStorage
         );
 
         //set reference
-        update_post_meta( $this->Storage->getStorageId(), 'kb_last_backup', $now );
+        update_post_meta( $this->storage->getStorageId(), 'kb_last_backup', $now );
         wp_cache_delete( 'kb_backups_' . $data['post_id'], 'kontentblocks' );
         return $wpdb->insert( $wpdb->prefix . "kb_backups", $data );
     }
@@ -192,7 +192,7 @@ class BackupDataStorage
             'value' => base64_encode( serialize( $existingData ) )
         );
 //        $this->Storage->getDataProvider()->update('kb_last_backup', $now);
-        update_post_meta( $this->Storage->getStorageId(), 'kb_last_backup', $now );
+        update_post_meta( $this->storage->getStorageId(), 'kb_last_backup', $now );
 
         wp_cache_delete( 'kb_backups_' . $this->backupData['id'], 'kontentblocks' );
 
@@ -205,7 +205,7 @@ class BackupDataStorage
      */
     public function restoreBackup( $id )
     {
-        $this->Storage->restoreBackup( $this->getBucket( $id ) );
+        $this->storage->restoreBackup( $this->getBucket( $id ) );
 
     }
 

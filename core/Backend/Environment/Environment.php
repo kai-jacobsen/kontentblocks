@@ -104,17 +104,16 @@ class Environment implements JsonSerializable
         $this->storageId = $storageId;
 
         $this->storage = new ModuleStorage( $storageId );
-        $this->moduleRepository = new ModuleRepository( $this );
-        $this->postPanelRepository = new PostPanelRepository( $this );
 
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
-        $this->modules = $this->setupModules();
-        $this->modulesByArea = $this->getSortedModules();
         $this->areas = $this->setupAreas();
         $this->areasToContext();
+        $this->moduleRepository = new ModuleRepository( $this );
+        $this->modules = $this->setupModules();
+        $this->modulesByArea = $this->getSortedModules();
+        $this->postPanelRepository = new PostPanelRepository( $this );
         $this->panels = $this->postPanelRepository->getPanelObjects();
-
     }
 
     /**
@@ -168,7 +167,7 @@ class Environment implements JsonSerializable
         if (is_array( $this->modules )) {
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->modules as $module) {
-                $sorted[$module->Properties->area->id][$module->getId()] = $module;
+                $sorted[$module->properties->area->id][$module->getId()] = $module;
             }
             return $sorted;
         }

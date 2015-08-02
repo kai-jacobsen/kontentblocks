@@ -21,9 +21,9 @@ Class AreaSelect extends Field
 
     public function prepareTemplateData( $data )
     {
-        /** @var \Kontentblocks\Areas\AreaRegistry $Registry */
-        $Registry = Kontentblocks::getService( 'registry.areas' );
-        $data['areas'] = $Registry->getGlobalAreas();
+        /** @var \Kontentblocks\Areas\AreaRegistry $registry */
+        $registry = Kontentblocks::getService( 'registry.areas' );
+        $data['areas'] = $registry->getGlobalAreas();
 
         return $data;
     }

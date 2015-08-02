@@ -193,9 +193,9 @@ class GlobalModulesMenu
      * Save handler, either creates a new module or just updates an exisiting
      *
      * @param int $postId
-     * @param array $postObj
-     * @since 0.1.0
+     * @param \WP_POST $postObj
      * @return bool|void
+     * @since 0.1.0
      */
     public function save( $postId, \WP_POST $postObj )
     {
@@ -205,7 +205,6 @@ class GlobalModulesMenu
         }
 
         $value = new ValueStorage( $_POST );
-
         $environment = Utilities::getEnvironment( $postId );
         $module = $environment->getModuleById( $postObj->post_name );
         // no template yet, create an new one
@@ -216,15 +215,15 @@ class GlobalModulesMenu
                 wp_die( 'Nonce verification failed' );
             }
             // update existing
-            $old = $module->Model->getOriginalData();
+            $old = $module->model->getOriginalData();
             $data = $value->get( $module->getId() );
             $new = $module->save( $data, $old );
             $toSave = Utilities::arrayMergeRecursive( $new, $old );
             // save viewfile if present
-            $module->Properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+            $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
             $environment->getStorage()->saveModule( $module->getId(), $toSave );
             $environment->getStorage()->reset();
-            $environment->getStorage()->addToIndex( $module->getId(), $module->Properties->export() );
+            $environment->getStorage()->addToIndex( $module->getId(), $module->properties->export() );
             // return to original post if the edit request came from outside
             $redirect = $redirect = $value->getFiltered(
                 'kb_return_to_post',

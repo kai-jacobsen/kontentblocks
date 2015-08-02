@@ -69,14 +69,14 @@ class FieldRendererTabs implements InterfaceFieldRenderer
             return;
         }
 
-        $View = new CoreView(
+        $view = new CoreView(
             'renderer/tabs.twig', array(
                 'structure' => $this->structure,
                 'data' => $data
             )
         );
 
-        return $View->render();
+        return $view->render();
     }
 
     /**

@@ -16,7 +16,7 @@ class GlobalModules
     public static $instance;
     protected $gmodules = array();
 
-    protected $API;
+    protected $api;
 
     /**
      * Singleton
@@ -82,8 +82,8 @@ class GlobalModules
         }
         foreach ($data as $postObj) {
 
-            $Storage = new ModuleStorage( $postObj->ID );
-            $index = $Storage->getIndex();
+            $storage = new ModuleStorage( $postObj->ID );
+            $index = $storage->getIndex();
 
             $def = $index[$postObj->post_name];
             $def['parentObject'] = $postObj;

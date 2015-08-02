@@ -98,7 +98,7 @@ class ModuleWorkshopTest extends \WP_UnitTestCase
 
         $Module = $Workshop->createAndGet();
         $this->assertInstanceOf( '\Kontentblocks\Modules\Module', $Module );
-        $this->assertEquals( 'Lorem Ipsum', $Module->Model->get( 'content' ) );
+        $this->assertEquals( 'Lorem Ipsum', $Module->model->get( 'content' ) );
     }
 
 
