@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-07-20 */
+/*! Kontentblocks DevVersion 2015-08-02 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -38,6 +38,7 @@
                     supplemental: data.supplemental || {},
                     nonce: jQuery("#_kontentblocks_ajax_nonce").val(),
                     post_id: pid,
+                    postId: pid,
                     kbajax: true
                 }, data);
                 jQuery("#publish").attr("disabled", "disabled");
