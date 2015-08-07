@@ -19,6 +19,7 @@ use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\GlobalModulesMenu;
 use Kontentblocks\Backend\Screen\EditScreen;
+use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Hooks\Enqueues;
 use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Modules\ModuleRegistry;
@@ -48,20 +49,9 @@ Class Kontentblocks
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;
     const DEBUG_LOG = false;
-
-    public $Services;
-
     static $instance;
     static $AjaxHandler;
-
-    public static function getInstance()
-    {
-        static $instance = null;
-        if (null === $instance) {
-            $instance = new static();
-        }
-        return $instance;
-    }
+    public $Services;
 
     /**
      *
@@ -82,135 +72,6 @@ Class Kontentblocks
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
     }
 
-    public function setup()
-    {
-        require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
-        Capabilities::setup();
-
-        if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
-            add_theme_support( 'kontentblocks' );
-            include_once( get_template_directory() . '/kontentblocks.php' );
-            _K::info( 'kontentblocks.php loaded from main theme' );
-
-        }
-
-        if (is_child_theme() && file_exists( get_stylesheet_directory() . '/kontentblocks.php' )) {
-            add_theme_support( 'kontentblocks' );
-            include_once( get_stylesheet_directory() . '/kontentblocks.php' );
-            _K::info( 'kontentblocks.php loaded from childtheme' );
-        }
-
-
-        if (current_theme_supports( 'kontentblocks' )) {
-            // Enqueues of front and backend scripts and styles is handled here
-            // earliest hook: init
-            Enqueues::setup();
-            $this->i18n();
-            $this->loadExtensions();
-            $this->loadFields();
-            $this->initInterface();
-
-            // enabled for 'page' by default
-            add_post_type_support( 'page', 'kontentblocks' );
-            remove_post_type_support( 'page', 'revisions' );
-        }
-
-    }
-
-
-    /**
-     *
-     */
-    public function initInterface()
-    {
-        /*
-         * ----------------
-         * Admin menus & custom post types
-         * ----------------
-         */
-        // global areas post type and menu page management
-        new DynamicAreas();
-        // global templates post type and menu management
-        new GlobalModulesMenu();
-        /*
-         * Main post edit screen handler
-         * Post type must support 'kontentblocks"
-         */
-        new EditScreen();
-
-    }
-
-    public function i18n()
-    {
-        load_plugin_textdomain( 'Kontentblocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-        Language\I18n::getInstance();
-
-    }
-
-
-    /**
-     * Load Module Files
-     * Simply auto-includes all .php files inside the templates folder
-     *
-     * uses filter: kb_template_paths to register / modify path array from the outside
-     */
-    public function loadModules()
-    {
-
-        /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
-        $Registry = $this->Services['registry.modules'];
-        // add core modules path
-        $paths = array( KB_TEMPLATE_PATH );
-        $paths = apply_filters( 'kb.module.paths', $paths );
-        $paths = array_unique( $paths );
-        foreach ($paths as $path) {
-            $dirs = glob( $path . '[mM]odule*', GLOB_ONLYDIR );
-            if (!empty( $dirs )) {
-                foreach ($dirs as $subdir) {
-                    $files = glob( $subdir . '/[mM]odule*.php' );
-                    foreach ($files as $template) {
-                        if (strpos( basename( $template ), '__' ) === false) {
-                            $Registry->add( $template );
-                        }
-                    }
-                }
-            }
-            $files = glob( $path . '*.php' );
-            foreach ($files as $template) {
-                if (strpos( basename( $template ), '__' ) === false) {
-                    $Registry->add( $template );
-                }
-            }
-        }
-        _K::info( 'Modules loaded' );
-
-        do_action( 'kb.init' );
-        _K::info( 'kb.init action fired. We\'re good to go.' );
-
-    }
-
-    /**
-     * Load Extensions
-     * @since 1.0.0
-     */
-    public function loadExtensions()
-    {
-        include_once 'core/Extensions/ExtensionsBootstrap.php';
-    }
-
-    /**
-     *  Load Field Definitions
-     */
-    public function loadFields()
-    {
-        foreach (glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file) {
-            $this->Services['registry.fields']->add( $file );
-        }
-
-        _K::info( 'Fields loaded' );
-    }
-
-
     /**
      * Define constants and require additional files
      */
@@ -218,11 +79,13 @@ Class Kontentblocks
     {
         define( 'KB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'KB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-        define( 'KB_TEMPLATE_URL', plugin_dir_url( __FILE__ ) . 'core/Modules/Core/' );
-        define( 'KB_TEMPLATE_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/Core/' );
+        define( 'KB_COREMODULES_URL', plugin_dir_url( __FILE__ ) . 'core/Modules/Core/' );
+        define( 'KB_COREMODULES_PATH', plugin_dir_path( __FILE__ ) . 'core/Modules/Core/' );
         define( 'KB_REFIELD_JS', plugin_dir_url( __FILE__ ) . 'core/Fields/Definitions/js/' );
+        define( 'KB_TEMPLATES_PATH', plugin_dir_path( __FILE__ ) . 'core/Templating/templates/' );
         // still there for historical reasons
         define( 'KONTENTLOCK', false );
+
 
         // Composer autoloader, depends on composer setup
         if (file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' )) {
@@ -246,41 +109,6 @@ Class Kontentblocks
 
     }
 
-    public static function onActivation()
-    {
-        if (file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' )) {
-            require_once dirname( __FILE__ ) . '/vendor/autoload.php';
-        }
-
-        if (!is_dir( get_template_directory() . '/module-templates' )) {
-            mkdir( get_template_directory() . '/module-templates', 0775, true );
-        }
-
-        if (is_child_theme()) {
-            if (!is_dir( get_stylesheet_directory() . '/module-templates' )) {
-                mkdir( get_stylesheet_directory() . '/module-templates', 0775, true );
-            }
-        }
-
-
-        Capabilities::setup();
-
-
-    }
-
-    public static function onDeactivation()
-    {
-        delete_transient( 'kb_last_backup' );
-        delete_option( 'kb_dbVersion' );
-    }
-
-    public static function onUnistall()
-    {
-        global $wpdb;
-        $table = $wpdb->prefix . "kb_backups";
-        $wpdb->query( "DROP TABLE IF EXISTS $table" );
-    }
-
     private function setupTemplating()
     {
         // pimpled
@@ -295,6 +123,30 @@ Class Kontentblocks
         $this->Services['templating.twig.fields'] = function ( $container ) {
             return Twig::setupEnvironment( $container, false );
         };
+    }
+
+    private function setupRegistries()
+    {
+        $this->Services['registry.modules'] = function ( $Services ) {
+            return new ModuleRegistry( $Services );
+        };
+        $this->Services['registry.areas'] = function ( $Services ) {
+            return new AreaRegistry( $Services );
+        };
+        $this->Services['registry.moduleViews'] = function ( $Services ) {
+            return new ModuleViewsRegistry( $Services );
+        };
+        $this->Services['registry.fields'] = function ( $Services ) {
+            return new FieldRegistry( $Services );
+        };
+        $this->Services['registry.panels'] = function ( $Services ) {
+            return new PanelRegistry( $Services );
+        };
+        $this->Services['registry.screenLayouts'] = function ( $Services ) {
+            return new EditScreenLayoutsRegistry( $Services );
+        };
+
+
     }
 
     private function setupUtilities()
@@ -335,24 +187,39 @@ Class Kontentblocks
         self::$AjaxHandler = $this->Services['utility.ajaxhandler'];
     }
 
-    private function setupRegistries()
+    public static function onActivation()
     {
-        $this->Services['registry.modules'] = function ( $Services ) {
-            return new ModuleRegistry( $Services );
-        };
-        $this->Services['registry.areas'] = function ( $Services ) {
-            return new AreaRegistry( $Services );
-        };
-        $this->Services['registry.moduleViews'] = function ( $Services ) {
-            return new ModuleViewsRegistry( $Services );
-        };
-        $this->Services['registry.fields'] = function ( $Services ) {
-            return new FieldRegistry( $Services );
-        };
-        $this->Services['registry.panels'] = function ( $Services ) {
-            return new PanelRegistry( $Services );
-        };
+        if (file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' )) {
+            require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+        }
 
+        if (!is_dir( get_template_directory() . '/module-templates' )) {
+            mkdir( get_template_directory() . '/module-templates', 0775, true );
+        }
+
+        if (is_child_theme()) {
+            if (!is_dir( get_stylesheet_directory() . '/module-templates' )) {
+                mkdir( get_stylesheet_directory() . '/module-templates', 0775, true );
+            }
+        }
+
+
+        Capabilities::setup();
+
+
+    }
+
+    public static function onDeactivation()
+    {
+        delete_transient( 'kb_last_backup' );
+        delete_option( 'kb_dbVersion' );
+    }
+
+    public static function onUnistall()
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . "kb_backups";
+        $wpdb->query( "DROP TABLE IF EXISTS $table" );
     }
 
     public static function getService( $service )
@@ -360,9 +227,165 @@ Class Kontentblocks
         return Kontentblocks::getInstance()->Services[$service];
     }
 
+    public static function getInstance()
+    {
+        static $instance = null;
+        if (null === $instance) {
+            $instance = new static();
+        }
+        return $instance;
+    }
+
     public static function addService( $service, $callable )
     {
         Kontentblocks::getInstance()->Services[$service] = $callable;
+    }
+
+    public function setup()
+    {
+        require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
+        Capabilities::setup();
+
+        if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
+            add_theme_support( 'kontentblocks' );
+            include_once( get_template_directory() . '/kontentblocks.php' );
+            _K::info( 'kontentblocks.php loaded from main theme' );
+
+        }
+
+        if (is_child_theme() && file_exists( get_stylesheet_directory() . '/kontentblocks.php' )) {
+            add_theme_support( 'kontentblocks' );
+            include_once( get_stylesheet_directory() . '/kontentblocks.php' );
+            _K::info( 'kontentblocks.php loaded from childtheme' );
+        }
+
+
+        if (current_theme_supports( 'kontentblocks' )) {
+            // Enqueues of front and backend scripts and styles is handled here
+            // earliest hook: init
+            Enqueues::setup();
+            $this->i18n();
+            $this->loadExtensions();
+            $this->loadFields();
+            $this->initInterface();
+
+            // enabled for 'page' by default
+            add_post_type_support( 'page', 'kontentblocks' );
+            remove_post_type_support( 'page', 'revisions' );
+        }
+
+    }
+
+    public function i18n()
+    {
+        load_plugin_textdomain( 'Kontentblocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+        Language\I18n::getInstance();
+
+    }
+
+    /**
+     * Load Extensions
+     * @since 1.0.0
+     */
+    public function loadExtensions()
+    {
+        include_once 'core/Extensions/ExtensionsBootstrap.php';
+    }
+
+    /**
+     *  Load Field Definitions
+     */
+    public function loadFields()
+    {
+        foreach (glob( KB_PLUGIN_PATH . 'core/Fields/Definitions/*.php' ) as $file) {
+            $this->Services['registry.fields']->add( $file );
+        }
+
+        _K::info( 'Fields loaded' );
+    }
+
+    /**
+     *
+     */
+    public function initInterface()
+    {
+        /*
+         * ----------------
+         * Admin menus & custom post types
+         * ----------------
+         */
+        // global areas post type and menu page management
+        new DynamicAreas();
+        // global templates post type and menu management
+        new GlobalModulesMenu();
+        /*
+         * Main post edit screen handler
+         * Post type must support 'kontentblocks"
+         */
+        new EditScreen();
+
+    }
+
+    /**
+     * Load Module Files
+     * Simply auto-includes all .php files inside the templates folder
+     *
+     * uses filter: kb_template_paths to register / modify path array from the outside
+     */
+    public function loadModules()
+    {
+
+        /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
+        $Registry = $this->Services['registry.modules'];
+        // add core modules path
+        $paths = array( KB_COREMODULES_PATH );
+        $paths = apply_filters( 'kb.module.paths', $paths );
+        $paths = array_unique( $paths );
+        foreach ($paths as $path) {
+            $dirs = glob( $path . '[mM]odule*', GLOB_ONLYDIR );
+            if (!empty( $dirs )) {
+                foreach ($dirs as $subdir) {
+                    $files = glob( $subdir . '/[mM]odule*.php' );
+                    foreach ($files as $template) {
+                        if (strpos( basename( $template ), '__' ) === false) {
+                            $Registry->add( $template );
+                        }
+                    }
+                }
+            }
+            $files = glob( $path . '*.php' );
+            foreach ($files as $template) {
+                if (strpos( basename( $template ), '__' ) === false) {
+                    $Registry->add( $template );
+                }
+            }
+        }
+        _K::info( 'Modules loaded' );
+
+        do_action( 'kb.init' );
+        _K::info( 'kb.init action fired. We\'re good to go.' );
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluginPath()
+    {
+        return trailingslashit( KB_PLUGIN_PATH );
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluginUrl()
+    {
+        return trailingslashit( KB_PLUGIN_URL );
+    }
+
+    public function getTemplatesPath(){
+        return trailingslashit( KB_TEMPLATES_PATH );
+
     }
 }
 

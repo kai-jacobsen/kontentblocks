@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-03 */
+/*! Kontentblocks DevVersion 2015-08-07 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -366,6 +366,9 @@
                 },
                 getHash: function() {
                     return config.env.hash;
+                },
+                getLayoutMode: function() {
+                    return config.layoutMode || "default-boxes";
                 }
             };
         }(jQuery);
@@ -718,18 +721,24 @@
                 function numberOfModulesInArea(id) {
                     return $("#" + id + " li.kb-module").length;
                 }
+                var appendTo = "parent";
+                if (Config.getLayoutMode() === "default-tabs") {
+                    appendTo = "#kb-contexts-tabs";
+                }
                 $(".kb-module-ui__sortable", $context).sortable({
                     placeholder: "ui-state-highlight",
                     ghost: true,
                     connectWith: ".kb-module-ui__sortable--connect",
+                    helper: "clone",
                     handle: ".kb-move",
                     cancel: "li.disabled, li.cantsort",
                     tolerance: "pointer",
                     delay: 150,
                     revert: 350,
+                    appendTo: appendTo,
                     start: function(event, ui) {
                         that.isSorting = true;
-                        $("#kontentblocks-core-ui").addClass("kb-is-sorting");
+                        $("body").addClass("kb-is-sorting");
                         currentModule = KB.Modules.get(ui.item.attr("id"));
                         areaOver = KB.currentArea;
                         $(KB).trigger("kb:sortable::start");
@@ -740,7 +749,7 @@
                     },
                     stop: function(event, ui) {
                         that.isSorting = false;
-                        $("#kontentblocks-core-ui").removeClass("kb-is-sorting");
+                        $("body").removeClass("kb-is-sorting");
                         TinyMCE.restoreEditors();
                         $(document).trigger("kb_sortable_stop", [ event, ui ]);
                         if (currentModule.get("open")) {
@@ -788,7 +797,7 @@
                             });
                         }
                     }
-                });
+                }).disableSelection();
             },
             flushLocalStorage: function() {
                 var hash = Config.get("env").hash;

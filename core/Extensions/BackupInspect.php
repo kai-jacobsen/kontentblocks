@@ -123,7 +123,7 @@ class BackupInspect
             } else {
                 $backupManager = new BackupDataStorage( $storage );
                 $backups = $backupManager->queryBackup( $data['post_id'] );
-                $response['hmm'] = get_post_meta( $data['post_id'], 'kb_last_backup', true );
+                $response['hmm'] = update_post_meta( $data['post_id'], 'kb_last_backup', $data['kbBackupWatcher'] );
                 $response['kbHasNewBackups'] = ( !empty( $backups ) ) ? unserialize(
                     base64_decode( $backups->value )
                 ) : array();

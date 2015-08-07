@@ -216,8 +216,7 @@ module.exports = function (grunt) {
       },
       createDevId: {
         command: './build/devhash.sh > build/hash.php'
-      },
-
+      }
     }
   });
 

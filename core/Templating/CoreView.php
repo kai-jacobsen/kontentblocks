@@ -41,9 +41,15 @@ class CoreView
     public function __construct( $tpl = null, $data = array() )
     {
 
+        if (strpos(WP_CONTENT_DIR, $tpl) !== false){
+            Twig::setPath(dirname($tpl));
+            $tpl = basename($tpl);
+        }
+
         $this->data = $data;
         $this->tplFile = $tpl;
         $this->path = KB_PLUGIN_PATH . 'core/Templating/templates/';
+
 
         /** @var \Kontentblocks\Templating\Twig $engine */
         $this->engine = Kontentblocks::getService( 'templating.twig.fields' );
@@ -60,10 +66,10 @@ class CoreView
      */
     public function render( $echo = false )
     {
-        if (!is_file( trailingslashit( $this->path ) . $this->tplFile )) {
-            echo "<script>console.log('template {$this->tplFile} missing');</script>";
-            return false;
-        }
+//        if (!is_file( trailingslashit( $this->path ) . $this->tplFile )) {
+//            echo "<script>console.log('template {$this->tplFile} missing');</script>";
+//            return false;
+//        }
 
         if ($echo) {
             $this->engine->display( $this->tplFile, $this->data );

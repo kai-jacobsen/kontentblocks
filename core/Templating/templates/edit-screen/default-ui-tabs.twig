@@ -1,0 +1,14 @@
+<div id="kb-contexts-tabs" class="kb-tabs">
+    <ul>
+        {% for context in contexts %}
+            {% if context.hasAreas %}
+                <li><a href="#tab-{{ context.id }}">{{ context.title }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% for context in contexts %}
+        {% if context.hasAreas %}
+            <div id="tab-{{ context.id }}">{{ context.render() }}</div>
+        {% endif %}
+    {% endfor %}
+</div>
