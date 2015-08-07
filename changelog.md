@@ -1,6 +1,19 @@
 #Changelog
 
-####0.3.7
+####0.4.0
++ frontend: editable inline fields with shared data source are linked and views are synchronized upon data change
++ frontend: style improvements
++ link field was updated to inherit inputs from dialog
++ image field caption was updated to leverage actual attachment caption
++ backend: edit screen layouts are filterable
++ introduced alternative edit screen layout: tabbed contexts
++ WordPress 4.3 related fixes
++ bugs fixed
++ new bugs 
++ few new tests
++ under the hood stuff
+
+####0.3.8
 + frontend: module changes are observed globally and can be saved in batch mode
 + frontend sidebar: lists are resorted properly when modules order changed or new module was added
 
