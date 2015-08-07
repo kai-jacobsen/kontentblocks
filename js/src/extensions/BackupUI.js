@@ -11,10 +11,9 @@ module.exports =  {
       this.listEl = jQuery('<ul></ul>').appendTo(this.el);
       if (this.listEl.length > 0) {
         this.update();
-
       }
 
-      // Heartbeat send data
+      // Heartbeat send data1
       jQuery(document).on('heartbeat-send', function (e, data) {
         data.kbBackupWatcher = that.lastItem;
         data.post_id = KB.Environment.postId || 0;

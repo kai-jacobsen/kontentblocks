@@ -155,23 +155,33 @@ var Ui = {
       return $('#' + id + ' li.kb-module').length;
     }
 
+
+    var appendTo = 'parent';
+    if (Config.getLayoutMode() === 'default-tabs'){
+      appendTo = '#kb-contexts-tabs';
+    }
+
+
     // handles sorting of the blocks.
     $('.kb-module-ui__sortable', $context).sortable({
       //settings
       placeholder: "ui-state-highlight",
       ghost: true,
       connectWith: ".kb-module-ui__sortable--connect",
+      helper: 'clone',
       handle: '.kb-move',
       cancel: 'li.disabled, li.cantsort',
       tolerance: 'pointer',
       delay: 150,
       revert: 350,
+      appendTo: appendTo,
       // start event
       start: function (event, ui) {
 
+
         // set current model
         that.isSorting = true;
-        $('#kontentblocks-core-ui').addClass('kb-is-sorting');
+        $('body').addClass('kb-is-sorting');
         currentModule = KB.Modules.get(ui.item.attr('id'));
         areaOver = KB.currentArea;
         $(KB).trigger('kb:sortable::start');
@@ -189,7 +199,7 @@ var Ui = {
       },
       stop: function (event, ui) {
         that.isSorting = false;
-        $('#kontentblocks-core-ui').removeClass('kb-is-sorting');
+        $('body').removeClass('kb-is-sorting');
 
         // restore TinyMCE editors
         TinyMCE.restoreEditors();
@@ -259,7 +269,7 @@ var Ui = {
             });
         }
       }
-    });
+    }).disableSelection();
   },
   flushLocalStorage: function () {
     var hash = Config.get('env').hash;

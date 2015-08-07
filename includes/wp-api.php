@@ -79,3 +79,11 @@ function has_modules( $area_id, $post_id = null )
 {
     \Kontentblocks\hasModules( $area_id, $post_id );
 }
+
+/**
+ * @return Kontentblocks static
+ */
+function Kontentblocks()
+{
+    return Kontentblocks::getInstance();
+}

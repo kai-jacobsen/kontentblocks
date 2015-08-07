@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-02 */
+/*! Kontentblocks DevVersion 2015-08-07 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -101,6 +101,9 @@
                 },
                 getHash: function() {
                     return config.env.hash;
+                },
+                getLayoutMode: function() {
+                    return config.layoutMode || "default-boxes";
                 }
             };
         }(jQuery);

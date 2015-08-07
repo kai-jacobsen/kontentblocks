@@ -3,9 +3,11 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
+use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Frontend\AreaRenderer;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -155,7 +157,7 @@ function hasModules( $area, $id )
 
 function getPanel( $id = null, $post_id = null )
 {
-    return getPostPanel($id, $post_id);
+    return getPostPanel( $id, $post_id );
 }
 
 function getPostPanel( $panelId = null, $postId = null )
@@ -167,9 +169,7 @@ function getPostPanel( $panelId = null, $postId = null )
 
     $Environment = Utilities::getEnvironment( $postId );
 
-    /** @var \Kontentblocks\Panels\PanelRegistry $Registry */
-    $Registry = Kontentblocks::getService( 'registry.panels' );
-    $Panel = $Environment->getPanelObject($panelId);
+    $Panel = $Environment->getPanelObject( $panelId );
     /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
     if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
         return $Panel;
@@ -180,4 +180,20 @@ function getPostPanel( $panelId = null, $postId = null )
             array( 'request' => $panelId, 'line' => __LINE__, 'file' => __FILE__ )
         );
     }
+}
+
+/**
+ * @return EditScreenLayoutsRegistry
+ */
+function EditScreenLayoutsRegistry()
+{
+    return Kontentblocks()->getService('registry.screenLayouts');
+}
+
+/**
+ * @return JSONTransport
+ */
+function JSONTransport()
+{
+    return Kontentblocks()->getService('utility.jsontransport');
 }

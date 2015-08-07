@@ -13,6 +13,7 @@ var FieldsConfigsCollection = require('fields/FieldsConfigsCollection');
 var AreasCollection = require('backend/Collections/AreasCollection');
 var Payload = require('common/Payload');
 var UI = require('common/UI');
+var Config = require('common/Config');
 var ModuleView = require('backend/Views/ModuleView');
 var ModuleModel = require('backend/Models/ModuleModel');
 var AreaView = require('backend/Views/AreaView');
@@ -21,6 +22,7 @@ var PanelModel = require('backend/Models/PanelModel');
 var PanelView = require('backend/Views/PanelView');
 var ContextView = require('backend/Views/ContextView');
 var ContextModel = require('backend/Models/ContextModel');
+var TabbedEditScreen = require('backend/Views/Ui/TabbedEditScreen');
 // ---------------
 // Collections
 // ---------------
@@ -88,8 +90,12 @@ KB.App = (function () {
     KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
     KB.Menus = require('backend/Menus');
     // get the UI on track
-    var UI = require('common/UI');
     UI.init();
+
+    if (Config.getLayoutMode() === 'default-tabs'){
+      new TabbedEditScreen();
+    }
+
   }
 
   /**

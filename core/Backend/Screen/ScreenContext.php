@@ -24,21 +24,21 @@ class ScreenContext
      * @var string
      * @since 0.1.0
      */
-    protected $id;
+    public $id;
 
     /**
      * Label for this context as printed in the context header
      * @var string
      * @since 0.1.0
      */
-    protected $title;
+    public $title;
 
     /**
      * Short description of the context
      * @var string
      * @since 0.1.0
      */
-    protected $description;
+    public $description;
 
     /**
      * Array of area definitions

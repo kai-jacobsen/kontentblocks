@@ -44,6 +44,9 @@ var Config = (function ($) {
     },
     getHash: function () {
       return config.env.hash;
+    },
+    getLayoutMode: function(){
+      return config.layoutMode || 'default-boxes';
     }
 
 

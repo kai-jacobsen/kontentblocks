@@ -4,10 +4,27 @@ namespace Kontentblocks\Backend\Screen;
 
 use Exception;
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Screen\Layouts\EditScreenLayout;
+use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 
+/**
+ * Class ScreenManager
+ * @package Kontentblocks\Backend\Screen
+ */
 class ScreenManager
 {
+
+    /**
+     * Collection of single context renderer
+     * @var array
+     */
+    public $contextRenderer;
+
+    /**
+     * @var EditScreenLayout
+     */
+    public $selectedLayout;
 
     /**
      * Raw areas are all areas which are available in the current environment
@@ -48,6 +65,11 @@ class ScreenManager
     protected $hasSidebar;
 
     /**
+     * @var array
+     */
+    protected $screenLayouts;
+
+    /**
      * Class Constructor
      *
      * @param $areas
@@ -59,123 +81,18 @@ class ScreenManager
         // setup raw areas
         $this->areas = $areas;
         // set this environment
-
-
         $this->environment = $environment;
         //setup region layout
         $this->contextLayout = self::getDefaultContextLayout();
         // setup filtered areas
-        $this->contexts = $this->areasSortedByContext( $this->areas );
+        $this->contexts = $this->areasSortedByContext();
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
         $this->hasSidebar = ( !empty( $this->contexts['side'] ) && !empty( $this->contexts['normal'] ) );
-    }
 
-
-    /**
-     * Instantiate a context object for each context and render
-     * @since 0.1.0
-     */
-    public function render()
-    {
-
-        foreach ($this->contextLayout as $args) {
-            // delegate the actual output to ScreenContext
-            $this->contextRenderer[$args['id']] = $context = new ScreenContext(
-                $args,
-                $this->getContextAreas( $args['id'] ),
-                $this->environment,
-                $this->hasSidebar()
-            );
-//            $context->render();
-        }
-
-        $View = new CoreView('edit-screen/default-ui.twig',array(
-            'contexts' => $this->contextRenderer
-        ));
-        $View->render(true);
+        $this->setupLayout();
 
     }
-
-    /**
-     * Sort raw Area definitions to array
-     * @throws Exception
-     * @return array
-     * @since 0.1.0
-     */
-    public function areasSortedByContext()
-    {
-        $areas = array();
-        $contextsOrder = $this->environment->getDataProvider()->get( 'kb.contexts' );
-
-
-        if (!$this->areas) {
-            return array();
-        }
-
-        foreach ($this->areas as $area) {
-//            if (!$area->dynamic || ( $area->dynamic && $area->settings->isAttached() )) {
-            $areas[$area->context][$area->id] = $area;
-//            }
-        }
-
-
-        if (is_array( $contextsOrder ) && !empty( $contextsOrder )) {
-            foreach ($contextsOrder as $context => $areaIds) {
-                if (is_array( $areaIds )) {
-                    foreach (array_reverse( array_keys( $areaIds ) ) as $areaId) {
-                        if (isset( $areas[$context][$areaId] )) {
-                            $tmp = $areas[$context][$areaId];
-                            unset( $areas[$context][$areaId] );
-                            $areas[$context] = array( $areaId => $tmp ) + $areas[$context];
-                        }
-                    }
-                }
-            }
-        }
-        return $areas;
-    }
-
-
-    /**
-     * Getter to retrieve areas by context id
-     *
-     * @param $contextId
-     *
-     * @return array
-     * @since 0.1.0
-     */
-    public function getContextAreas( $contextId )
-    {
-        if (isset( $this->contexts[$contextId] )) {
-            return $this->contexts[$contextId];
-        } else {
-            return array();
-        }
-
-    }
-
-    /**
-     * Getter for all areas
-     * @return array
-     * @since 0.1.0
-     */
-    public function getAreas()
-    {
-        return $this->areas;
-
-    }
-
-    /**
-     * Getter for Environment instance
-     * @return Environment
-     * @since 0.1.0
-     */
-    public function getEnvironment()
-    {
-        return $this->environment;
-    }
-
 
     /**
      * Default Context Layout
@@ -219,6 +136,95 @@ class ScreenManager
 
     }
 
+    /**
+     * Sort raw Area definitions to array
+     * @throws Exception
+     * @return array
+     * @since 0.1.0
+     */
+    public function areasSortedByContext()
+    {
+        $areas = array();
+        $contextsOrder = $this->environment->getDataProvider()->get( 'kb.contexts' );
+
+
+        if (!$this->areas) {
+            return array();
+        }
+
+        foreach ($this->areas as $area) {
+//            if (!$area->dynamic || ( $area->dynamic && $area->settings->isAttached() )) {
+            $areas[$area->context][$area->id] = $area;
+//            }
+        }
+
+
+        if (is_array( $contextsOrder ) && !empty( $contextsOrder )) {
+            foreach ($contextsOrder as $context => $areaIds) {
+                if (is_array( $areaIds )) {
+                    foreach (array_reverse( array_keys( $areaIds ) ) as $areaId) {
+                        if (isset( $areas[$context][$areaId] )) {
+                            $tmp = $areas[$context][$areaId];
+                            unset( $areas[$context][$areaId] );
+                            $areas[$context] = array( $areaId => $tmp ) + $areas[$context];
+                        }
+                    }
+                }
+            }
+        }
+        return $areas;
+    }
+
+    private function setupLayout()
+    {
+        $screenLayouts = \Kontentblocks\EditScreenLayoutsRegistry()->layouts;
+        $lyt = apply_filters('kb.screenLayout', 'default-boxes', $this->environment, $screenLayouts);
+        $this->selectedLayout = ( isset( $screenLayouts[$lyt] ) ) ? $screenLayouts[$lyt] : $screenLayouts['default-boxes'];
+        \Kontentblocks\JSONTransport()->registerPublicData('config', 'layoutMode', $lyt);
+
+    }
+
+    /**
+     * Instantiate a context object for each context and render
+     * @since 0.1.0
+     */
+    public function render()
+    {
+        foreach ($this->contextLayout as $args) {
+            // delegate the actual output to ScreenContext
+            $this->contextRenderer[$args['id']] = new ScreenContext(
+                $args,
+                $this->getContextAreas( $args['id'] ),
+                $this->environment,
+                $this->hasSidebar()
+            );
+        }
+
+        $this->selectedLayout->addData(array(
+            'contexts' => $this->contextRenderer
+        ));
+
+        $this->selectedLayout->render( true );
+
+    }
+
+    /**
+     * Getter to retrieve areas by context id
+     *
+     * @param $contextId
+     *
+     * @return array
+     * @since 0.1.0
+     */
+    public function getContextAreas( $contextId )
+    {
+        if (isset( $this->contexts[$contextId] )) {
+            return $this->contexts[$contextId];
+        } else {
+            return array();
+        }
+
+    }
 
     /**
      * Get sidebar indicator flag
@@ -228,6 +234,27 @@ class ScreenManager
     public function hasSidebar()
     {
         return $this->hasSidebar;
+    }
+
+    /**
+     * Getter for all areas
+     * @return array
+     * @since 0.1.0
+     */
+    public function getAreas()
+    {
+        return $this->areas;
+
+    }
+
+    /**
+     * Getter for Environment instance
+     * @return Environment
+     * @since 0.1.0
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
     }
 
 }

@@ -100,6 +100,15 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
 
 
     /**
+     * @param $key
+     * @return bool
+     */
+    public function exists($key){
+        return array_key_exists($key, $this->value);
+    }
+
+
+    /**
      * (PHP 5 &gt;= 5.4.0)<br/>
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php

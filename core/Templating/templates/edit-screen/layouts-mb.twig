@@ -1,0 +1,8 @@
+<div class="kb-edit-layouts">
+    <select name="kb_edit_layout">
+        {% for layout in layouts %}
+            <option {% if selectedLayout.layoutId == layout.layoutId %} selected="selected" {% endif %}
+                    value="{{ layout.layoutId }}">{{ layout.name }}</option>
+        {% endfor %}
+    </select>
+</div>

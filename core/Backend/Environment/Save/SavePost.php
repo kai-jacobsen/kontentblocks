@@ -64,6 +64,7 @@ class SavePost
 
         $this->saveAreaSettings();
         $this->saveAreaContextMap();
+        $this->saveEditLayouts();
         // finally update the index
         $this->environment->getStorage()->saveIndex( $this->index );
     }
@@ -176,9 +177,12 @@ class SavePost
             return false;
         }
 
-
         /** @var \Kontentblocks\Modules\Module $module */
         foreach ($modules as $module) {
+
+            if (!$this->postdata->exists($module->getId())){
+                continue;
+            }
 
             // new data from $_POST
             //TODO: filter incoming data
@@ -250,4 +254,15 @@ class SavePost
             $this->environment->getDataProvider()->update( 'kb.contexts', $contexts );
         }
     }
+
+    private function saveEditLayouts()
+    {
+        $layout = filter_input(INPUT_POST, 'kb_edit_layout', FILTER_SANITIZE_STRING);
+        if (!empty($layout)){
+            $this->environment->getDataProvider()->update('_kb.editScreen.layout', $layout);
+        }
+
+    }
+
+
 }
