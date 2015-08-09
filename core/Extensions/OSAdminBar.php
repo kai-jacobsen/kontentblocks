@@ -1,18 +1,18 @@
 <?php
 
 if ( is_user_logged_in() && !(is_admin()) && current_user_can( 'manage_kontentblocks') ) {
-    add_action( 'admin_bar_menu', 'toolbar_os_control', 999 );
+    add_action( 'admin_bar_menu', 'toolbar_edit_control', 999 );
 }
 
-function toolbar_os_control( $wp_admin_bar ) {
+function toolbar_edit_control( $wp_admin_bar ) {
 
     $i18n = \Kontentblocks\Language\I18n::getPackage('Extensions.adminBar');
 
     $args = array(
-    'id' => 'os-support',
+    'id' => 'kb-edit-switch',
     'title' => $i18n['showEditable'],
 	'href'	=> '#',
-    'meta' => array('class' => 'os-edit os-edit-off', 'onclick' => 'KBOnSiteEditing.control(this);')
+    'meta' => array('class' => 'kb-edit-switch', 'onclick' => 'KB.App.adminBar.control(this);')
   );
 
   $wp_admin_bar->add_node($args);

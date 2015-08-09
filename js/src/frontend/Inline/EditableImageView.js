@@ -11,6 +11,9 @@ var EditableImage = Backbone.View.extend({
     this.defaultState = this.model.get('state') || 'replace-image';
     this.parentView = this.model.get('ModuleModel').View;
     this.listenTo(this.model, 'field.model.settings', this.setMode);
+    this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
+    this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
+
     this.Toolbar = new Toolbar({
       FieldView: this,
       model: this.model,
@@ -26,6 +29,31 @@ var EditableImage = Backbone.View.extend({
       ]
     });
     this.render();
+  },
+  showPlaceholder: function(){
+    if (this.hasData()){
+      return false;
+    }
+
+    var url = 'https://unsplash.it/g/' + this.model.get('width') + '/' + this.model.get('height') + '?random';
+    if (this.mode === 'simple') {
+      this.$el.attr('src', 'https://unsplash.it/300/200');
+    } else if (this.mode === 'background') {
+      this.$el.css('backgroundImage', "url('"+ url +"')");
+    }
+  },
+  removePlaceholder: function(){
+    if (this.hasData()){
+      return false;
+    }
+    if (this.mode === 'simple') {
+      this.$el.attr('src', '');
+    } else if (this.mode === 'background') {
+      this.$el.css('backgroundImage', "url('')");
+    }
+  },
+  hasData: function(){
+    return !_.isEmpty(this.model.get('value').id);
   },
   setMode: function(settings){
     this.model.set('mode', settings.mode);
@@ -114,8 +142,6 @@ var EditableImage = Backbone.View.extend({
   handleAttachment: function (attachment, suppress) {
     var that = this;
     var id = attachment.get('id');
-    console.log(suppress);
-    console.trace();
 
     var value = this.prepareValue(attachment);
     //var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
@@ -150,7 +176,6 @@ var EditableImage = Backbone.View.extend({
           that.$el.attr('src', res.data.src);
         } else if (that.mode === 'background') {
           that.$el.css('backgroundImage', "url('" + res.data.src + "')");
-
         }
         that.delegateEvents();
         if (!suppress) {
@@ -181,7 +206,6 @@ var EditableImage = Backbone.View.extend({
   }
   ,
   synchronize: function (model) {
-    console.trace();
     this.handleAttachment(model.attachment, true);
   }
 });

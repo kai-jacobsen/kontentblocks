@@ -1,0 +1,20 @@
+.kb-edit-on {
+  background-color: $grey-900 !important;
+  a {
+    color: $blue !important;
+
+  }
+}
+
+body.kb-editcontrols-show {
+  .kb-area__empty{
+    outline: 1px dashed $blue;
+    display: block !important;
+  }
+
+  .kb-area__empty-placeholder{
+    padding: 45px;
+    text-align: center;
+    cursor: pointer;
+  }
+}

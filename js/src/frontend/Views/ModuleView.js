@@ -22,7 +22,6 @@ module.exports = Backbone.View.extend({
     // attach this view to the model
     this.model.View = this;
     this.model.trigger('module.model.view.attached', this);
-
     // observe model changes
     this.listenTo(this.model, 'change', this.getDirty);
     this.listenTo(this.model, 'module.model.updated', this.getClean);
@@ -34,7 +33,7 @@ module.exports = Backbone.View.extend({
     this.render();
 
     this.setControlsPosition();
-
+    KB.Events.on('reposition', this.setControlsPosition, this);
     this.Controls = new ModuleControlsView({
       ModuleView: this
     });
@@ -71,9 +70,6 @@ module.exports = Backbone.View.extend({
       return;
     }
 
-    if (jQuery('.os-controls', this.$el).length > 0) {
-      return;
-    }
 
     //this.$el.append(KB.Templates.render('frontend/module-controls', {
     //    model: this.model.toJSON(),

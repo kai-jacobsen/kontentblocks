@@ -5,6 +5,7 @@
   background-color: transparent;
   position: absolute;
   opacity: 1;
+  display: none;
   transition: all .3s linear;
   z-index: 1990;
   line-height: 30px;
@@ -203,4 +204,15 @@
 .kb-inline-toolbar {
   width: 60px;
   height: 40px;
+  display: none;
+}
+
+/*------------------------------------*\
+    Admin Bar Control
+\*------------------------------------*/
+
+body.kb-editcontrols-show{
+  .kb-module-controls, .kb-inline-toolbar{
+    display: block;
+  }
 }

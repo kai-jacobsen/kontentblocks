@@ -3,6 +3,11 @@
  * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.
  * Copyright 2015 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com) 
  * Licensed under MIT <http://opensource.org/licenses/mit-license.php>*/
+
+.alertify *{
+  font-family: 'Open Sans', sans-serif !important;
+}
+
 .alertify .ajs-dimmer {
   position: fixed;
   z-index: 1981;
@@ -35,6 +40,7 @@
   padding: 24px 24px 0 24px;
   outline: 0;
   background-color: #fff;
+  @extend .base-box-shadow;
 }
 
 .alertify .ajs-dialog.ajs-capture:before {
@@ -58,8 +64,8 @@
 
 .alertify .ajs-commands {
   position: absolute;
-  right: 4px;
-  margin: -14px 24px 0 0;
+  right: 12px;
+  top: 8px;
   z-index: 2;
 }
 
@@ -67,8 +73,8 @@
   display: none;
   width: 10px;
   height: 10px;
-  margin-left: 10px;
-  padding: 10px;
+  margin: 0 !important;
+  padding: 0 !important;
   border: 0;
   background-color: transparent;
   background-repeat: no-repeat;
@@ -87,12 +93,14 @@
 .alertify .ajs-header {
   margin: -24px;
   margin-bottom: 0;
-  padding: 16px 24px;
-  background-color: #fff;
+  padding: 8px $fullpadding;
+  font-size: 14px;
+  color: #fff;
+  background-color: $grey-900;
 }
 
 .alertify .ajs-body {
-  min-height: 56px;
+  min-height: 130px;
 }
 
 .alertify .ajs-body .ajs-content {
@@ -111,6 +119,25 @@
   text-align: right;
 }
 
+.ajs-buttons{
+  button{
+    font-size: 14px !important;
+    padding: 6px !important;
+    background-color: #fff !important;
+    color: $lightwhite !important;
+  }
+
+  button.ajs-button.ajs-ok{
+    background-color: $green !important;
+    color: #fff !important;
+  }
+  button.ajs-button.ajs-cancel{
+    background-color: $orange !important;
+    color: #fff !important;
+
+  }
+}
+
 .alertify .ajs-footer .ajs-buttons.ajs-primary .ajs-button {
   margin: 4px;
 }
@@ -127,7 +154,7 @@
 
 .alertify .ajs-footer .ajs-buttons .ajs-button {
   min-width: 88px;
-  min-height: 35px;
+  min-height: 25px;
 }
 
 .alertify .ajs-handle {
@@ -214,7 +241,7 @@
   left: 0;
   right: 0;
   margin: 0;
-  padding: 16px 24px;
+  padding: 8px 24px !important;
 }
 
 .alertify.ajs-resizable .ajs-body,

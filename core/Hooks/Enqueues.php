@@ -126,14 +126,6 @@ class Enqueues
         }
 
 
-        // Onsite
-        wp_register_script(
-            'kb-onsite-editing',
-            KB_PLUGIN_URL . 'js/KBOnSiteEditing.js',
-            array( 'kb-frontend' ),
-            null,
-            true
-        );
 
 
         // WP iris // no dev version available in core
@@ -268,7 +260,8 @@ class Enqueues
             'version' => Kontentblocks::VERSION,
             'isMobile' => Kontentblocks::getService( 'utility.mobileDetect' )->isMobile(),
             'useModuleNav' => apply_filters( 'kb:config.module-nav', true ),
-            'initFrontend' => apply_filters('kb.config.initFrontend', true)
+            'initFrontend' => apply_filters('kb.config.initFrontend', true),
+            'editAlwaysOn' => apply_filters('kb.config.editAlwaysOn', false)
         );
 
         if (is_preview()) {

@@ -17,14 +17,24 @@ var Utilities = function ($) {
       }
     },
     setIndex: function (obj, is, value) {
-      if (typeof is == 'string')
+
+      if (!_.isObject(obj)){
+        obj = {};
+      }
+
+      if (typeof is == 'string'){
         return this.setIndex(obj, is.split('.'), value);
-      else if (is.length == 1 && value !== undefined)
+      }
+      else if (is.length == 1 && value !== undefined){
         return obj[is[0]] = value;
-      else if (is.length == 0)
+      }
+      else if (is.length == 0){
         return obj;
-      else
+      }
+      else{
+        console.log('here');
         return this.setIndex(obj[is[0]], is.slice(1), value);
+      }
     },
     getIndex: function (obj, s) {
       s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties

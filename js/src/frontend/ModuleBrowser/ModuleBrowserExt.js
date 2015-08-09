@@ -13,12 +13,9 @@ module.exports = ModuleBrowser.extend({
     } else {
       this.options.area.$el.append(res.data.html).removeClass('kb-area__empty');
     }
-    model = KB.Modules.add(new ModuleModel(res.data.module));
-
-    //this.options.area.addModuleView(model.view);
+    KB.ObjectProxy.add(model = KB.Modules.add(res.data.module));
 
     this.parseAdditionalJSON(res.data.json);
-    TinyMCE.addEditor(model.View.$el);
     KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
     this.options.area.trigger('kb.module.created');
     setTimeout(function () {

@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
   Description: Content modularization framework
-  Version: 0.1.0
+  Version: 0.4.0
   Author: Kai Jacobsen
   Author URI: http://kontentblocks.de
   Text Domain: Kontentblocks
@@ -44,7 +44,7 @@ use Reframe\Autoloader;
 Class Kontentblocks
 {
 
-    const VERSION = '0.1.1';
+    const VERSION = '0.4.0';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;

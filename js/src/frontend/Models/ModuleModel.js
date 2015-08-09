@@ -91,7 +91,6 @@ module.exports = Backbone.Model.extend({
     //  ModuleModel.linkedModules[this.cid] = this;
     //  this.linkedModules[ModuleModel.cid] = ModuleModel;
     //}, this);
-    console.log('lingage');
   }
 
 });

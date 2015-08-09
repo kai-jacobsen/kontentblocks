@@ -31,7 +31,7 @@ class SaveStaticPanelForm implements AjaxActionInterface
         $data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $panId = filter_var( $panelDef['baseId'], FILTER_SANITIZE_STRING );
         $postId = filter_var($panelDef['postId'], FILTER_SANITIZE_NUMBER_INT);
-        $panelData = wp_unslash( $data[$panId] );
+        $panelData = wp_unslash( $data );
 
         $panel = \Kontentblocks\getPanel( $panId, $postId );
         $old = $panel->getData();

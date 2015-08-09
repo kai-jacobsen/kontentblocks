@@ -49,6 +49,11 @@ class UpdateFieldModel implements AjaxActionInterface
                 }
                 break;
             case 'panel':
+                $Storage = new ValueStorage(array(
+                    'data' => self::prepareModuleData($postdata),
+                    'panel' => $postdata->module
+                ));
+                $response = SaveStaticPanelForm::run($Storage);
                 break;
         }
 

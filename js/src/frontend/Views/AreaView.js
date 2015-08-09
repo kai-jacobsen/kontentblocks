@@ -4,18 +4,29 @@ var ModuleBrowser = require('frontend/ModuleBrowser/ModuleBrowserExt');
 var Config = require('common/Config');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
+var tplPlaceholder = require('templates/frontend/area-empty-placeholder.hbs');
 module.exports = Backbone.View.extend({
   isSorting: false,
   events: {
-    //'dblclick': 'openModuleBrowser'
+    'click .kb-area__empty-placeholder': 'openModuleBrowser'
   },
   initialize: function () {
     this.attachedModuleViews = {};
     this.renderSettings = this.model.get('renderSettings');
+    this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
+    this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
     this.listenToOnce(KB.Events, 'frontend.init', this.setupUi);
     this.listenTo(this, 'kb.module.deleted', this.removeModule);
     this.model.View = this;
 
+  },
+  showPlaceholder: function () {
+    if (_.size(this.attachedModuleViews) === 0) {
+      this.$el.append(tplPlaceholder());
+    }
+  },
+  removePlaceholder: function () {
+    this.$('.kb-area__empty-placeholder').remove();
   },
   setupUi: function () {
     this.Layout = new AreaLayout({
@@ -26,8 +37,6 @@ module.exports = Backbone.View.extend({
     // Sortable
     if (this.model.get('sortable')) {
       this.setupSortables();
-    } else {
-
     }
   },
   openModuleBrowser: function () {
@@ -44,9 +53,11 @@ module.exports = Backbone.View.extend({
     this.listenTo(moduleModel, 'change:area', this.removeModule); // add listener
 
     if (this.getNumberOfModules() > 0) {
+      this.removePlaceholder();
       this.$el.removeClass('kb-area__empty');
     }
     this.trigger('kb.module.created', moduleModel);
+    moduleModel.trigger('module.created');
   },
 
   getNumberOfModules: function () {
@@ -173,8 +184,9 @@ module.exports = Backbone.View.extend({
     if (this.attachedModuleViews[id]) {
       delete this.attachedModuleViews[id];
     }
-    if (this.getNumberOfModules() < 0) {
+    if (this.getNumberOfModules() < 1) {
       this.$el.addClass('kb-area__empty');
+      this.showPlaceholder();
     }
   },
   resort: function (area) {

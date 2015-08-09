@@ -6,13 +6,14 @@ var UpdateControl = require('frontend/Inline/controls/InlineUpdate');
 var Toolbar = require('frontend/Inline/InlineToolbar');
 var EditableText = Backbone.View.extend({
   initialize: function () {
-    this.placeHolderSet = false;
-    this.placeholder = "<span class='kb-editable-text-placeholder'>Start typing here</span>";
     this.settings = this.model.get('tinymce');
     this.parentView = this.model.get('ModuleModel').View;
     this.setupDefaults();
-    this.maybeSetPlaceholder();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
+    this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder());
+    this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
+    this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
+
     this.Toolbar = new Toolbar({
       FieldView: this,
       model: this.model,
@@ -28,6 +29,19 @@ var EditableText = Backbone.View.extend({
       ]
     });
     this.render();
+  },
+  showPlaceholder: function(){
+    this.preValue = this.model.get('value');
+    var $isEmpty = _.isEmpty(this.cleanString(this.model.get('value')));
+    if ($isEmpty){
+      this.$el.html('<p>Start writing here</p>');
+    }
+  },
+  removePlaceholder: function(){
+    var $isEmpty = _.isEmpty(this.cleanString(this.model.get('value')));
+    if ($isEmpty){
+      this.$el.html(this.preValue);
+    }
   },
   render: function () {
     if (this.el.id) {
@@ -92,9 +106,6 @@ var EditableText = Backbone.View.extend({
           ed.previousContent = ed.getContent();
 
           that.$el.addClass('kb-inline-text--active');
-            //if (that.placeHolderSet) {
-          //  ed.setContent('');
-          //}
         });
 
         //ed.addButton('kbcancleinline', {
@@ -111,7 +122,7 @@ var EditableText = Backbone.View.extend({
         //  }
         //});
         ed.on('blur', function (e) {
-          var content, moduleData, path;
+          var content;
           that.$el.removeClass('kb-inline-text--active');
           content = ed.getContent();
 
@@ -128,7 +139,6 @@ var EditableText = Backbone.View.extend({
 
           // && ed.kfilter set
           if (ed.isDirty()) {
-            ed.placeholder = false;
             if (ed.kfilter) {
               that.retrieveFilteredContent(ed, content);
             } else {
@@ -176,10 +186,8 @@ var EditableText = Backbone.View.extend({
             window.twttr.widgets.load();
           }
           jQuery(window).off('scroll.kbmce resize.kbmce');
-          //that.maybeSetPlaceholder();
           ed.off('nodeChange ResizeEditor ResizeWindow');
           that.deactivate();
-
         }, 500);
       },
       error: function () {
@@ -203,19 +211,11 @@ var EditableText = Backbone.View.extend({
       KB.Events.trigger('kb.repaint'); // @TODO figure this out
     }
   },
-  maybeSetPlaceholder: function () {
-    var string = (this.editor) ? this.editor.getContent() : this.$el.html();
-    var content = this.cleanString(string);
-    if (_.isEmpty(content)) {
-      this.$el.html(this.placeholder);
-      this.placeHolderSet = true;
-    }
-  },
   cleanString: function (string) {
-    // placeholder
     return string.replace(/\s/g, '')
       .replace(/&nbsp;/g, '')
       .replace(/<br>/g, '')
+      .replace(/<[^\/>][^>]*><\/[^>]+>/g, '')
       .replace(/<p><\/p>/g, '');
   },
   getSelection: function (editor, event) {

@@ -9,7 +9,6 @@ module.exports = Backbone.Collection.extend({
   },
   model: FieldConfigModel,
   addToModules: function (model) {
-    console.log('add');
     if (model.ModuleModel) {
       var cid = model.ModuleModel.id;
       if (!this._byModule[cid]) {

@@ -14,6 +14,7 @@ var SidebarView = require('frontend/Views/Sidebar');
 var FieldConfigsCollection = require('fields/FieldsConfigsCollection');
 var Payload = require('common/Payload');
 var ModuleCollection = require('frontend/Collections/ModuleCollection');
+var ObjectProxy = require('frontend/Collections/ObjectProxyCollection');
 var ModuleModel = require('frontend/Models/ModuleModel');
 var ModuleView = require('./Views/ModuleView');
 
@@ -25,6 +26,7 @@ var Ui = require('common/UI');
 var Logger = require('common/Logger');
 var ChangeObserver = require('frontend/Views/ChangeObserver');
 var Tether = require('tether');
+var AdminBar = require('frontend/AdminBar');
 
 /*
  Preperations
@@ -70,7 +72,7 @@ KB.Panels = new Backbone.Collection([], {
  * Models proxy
  * this provides an central access point to objects
  */
-KB.ObjectProxy = new Backbone.Collection();
+KB.ObjectProxy = new ObjectProxy([]);
 
 /*
  * Init function
@@ -258,10 +260,12 @@ KB.App.init();
 
 jQuery(document).ready(function () {
 
+  var $body = jQuery('body');
+
   if (KB.appData && KB.appData.config.frontend) {
     KB.Views.Modules.readyOnFront();
     Logger.User.info('Frontend welcomes you');
-    jQuery('body').addClass('kontentblocks-ready');
+    $body.addClass('kontentblocks-ready');
     KB.Events.trigger('content.change');
 
   }
@@ -275,11 +279,14 @@ jQuery(document).ready(function () {
   setUserSetting('editor', 'tinymce');
 
   // @TODO remove
-  jQuery('body').on('click', '.kb-fx-button', function (e) {
+  $body.on('click', '.kb-fx-button', function (e) {
     jQuery(this).addClass('kb-fx-button--click');
     jQuery(e.currentTarget).one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function () {
       e.currentTarget.classList.remove('kb-fx-button--click');
     });
   });
+
+  KB.App.adminBar = AdminBar;
+  KB.App.adminBar.init();
 
 });

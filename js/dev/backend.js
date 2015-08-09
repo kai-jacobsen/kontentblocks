@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-07 */
+/*! Kontentblocks DevVersion 2015-08-08 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -2419,7 +2419,19 @@
                     }
                 },
                 setIndex: function(obj, is, value) {
-                    if (typeof is == "string") return this.setIndex(obj, is.split("."), value); else if (is.length == 1 && value !== undefined) return obj[is[0]] = value; else if (is.length == 0) return obj; else return this.setIndex(obj[is[0]], is.slice(1), value);
+                    if (!_.isObject(obj)) {
+                        obj = {};
+                    }
+                    if (typeof is == "string") {
+                        return this.setIndex(obj, is.split("."), value);
+                    } else if (is.length == 1 && value !== undefined) {
+                        return obj[is[0]] = value;
+                    } else if (is.length == 0) {
+                        return obj;
+                    } else {
+                        console.log("here");
+                        return this.setIndex(obj[is[0]], is.slice(1), value);
+                    }
                 },
                 getIndex: function(obj, s) {
                     s = s.replace(/\[(\w+)\]/g, ".$1");
@@ -2532,6 +2544,7 @@
             upstreamData: function() {
                 var ModuleModel;
                 if (ModuleModel = this.get("ModuleModel")) {
+                    console.log(ModuleModel);
                     var cdata = _.clone(this.get("ModuleModel").get("moduleData"));
                     Utilities.setIndex(cdata, this.get("kpath"), this.get("value"));
                     ModuleModel.set("moduleData", cdata, {
@@ -2608,7 +2621,6 @@
             },
             model: FieldConfigModel,
             addToModules: function(model) {
-                console.log("add");
                 if (model.ModuleModel) {
                     var cid = model.ModuleModel.id;
                     if (!this._byModule[cid]) {
@@ -2668,7 +2680,6 @@
         module.exports = Backbone.View.extend({
             initialize: function(options) {
                 this.options = options || {};
-                console.log(this);
                 this.isOpen = false;
                 this.area = this.options.area;
                 this.viewMode = this.getViewMode();

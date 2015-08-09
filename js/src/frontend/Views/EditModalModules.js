@@ -515,7 +515,6 @@ module.exports = Backbone.View.extend({
       current: this.ModuleView.model.get('viewfile'),
       target: e.currentTarget.value
     };
-    console.log(this.updateViewClassTo, 'filled');
     this.model.set('viewfile', e.currentTarget.value);
   },
   /**
@@ -531,7 +530,6 @@ module.exports = Backbone.View.extend({
 
     this.ModuleView.$el.removeClass(this._classifyView(viewfile.current));
     this.ModuleView.$el.addClass(this._classifyView(viewfile.target));
-    console.log('set to false');
     this.updateViewClassTo = false;
   },
   /**

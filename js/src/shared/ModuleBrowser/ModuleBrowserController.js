@@ -17,7 +17,6 @@ var tplModuleBrowser = require('templates/backend/modulebrowser/module-browser.h
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.options = options || {};
-    console.log(this);
     this.isOpen = false;
     this.area = this.options.area;
     this.viewMode = this.getViewMode();
