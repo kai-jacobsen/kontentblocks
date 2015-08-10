@@ -60,6 +60,11 @@ class CreateNewModule implements AjaxActionInterface
      */
     private $frontend = false;
 
+    /**
+     * @var ValueStorageInterface
+     */
+    private $request;
+
 
     /**
      * Required by AjaxCallbackHandler
@@ -83,6 +88,8 @@ class CreateNewModule implements AjaxActionInterface
             define( 'KB_GENERATE', true );
         }
 
+        $this->request = $request;
+
         // ------------------------------------
         // The Program
         // ------------------------------------
@@ -104,56 +111,6 @@ class CreateNewModule implements AjaxActionInterface
         $this->newModule = $workshop->createAndGet();
 
         return $this->render();
-
-    }
-
-    /**
-     * Internale core master module will rewrite the classname to itself
-     * if master = true
-     *
-     */
-    private function overrideModuleClassEventually()
-    {
-        // Override Class / type if this originates from a master template
-        // will set the origin class to internal core module
-        $this->moduleArgs = apply_filters( 'kb.intercept.creation.args', $this->moduleArgs );
-    }
-
-
-    /**
-     * Set the module name to the name of the template
-     */
-    private function gmoduleOverride()
-    {
-        if ($this->moduleArgs['globalModule']) {
-            $this->moduleArgs['overrides']['name'] = $this->parentObject['post_title'];
-        }
-    }
-
-
-    /**
-     * Output result
-     */
-    private function render()
-    {
-
-        $module = apply_filters( 'kb.module.before.factory', $this->newModule );
-        if ($this->frontend) {
-            $singleRenderer = new SingleModuleRenderer( $module );
-            $html = $singleRenderer->render();
-        } else {
-            $html = $module->renderForm();
-        }
-        $response = array
-        (
-            'id' => $this->newModule->getId(),
-            'module' => $this->newModule->toJSON(),
-            'name' => $this->newModule->properties->getSetting( 'publicName' ),
-            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
-            'html' => $html
-        );
-
-        return new AjaxSuccessResponse( 'Module created', $response );
 
     }
 
@@ -187,6 +144,60 @@ class CreateNewModule implements AjaxActionInterface
         );
 
         $this->parentObject = $request->get( 'parentObject' );
+    }
+
+    /**
+     * Internale core master module will rewrite the classname to itself
+     * if master = true
+     *
+     */
+    private function overrideModuleClassEventually()
+    {
+        // Override Class / type if this originates from a master template
+        // will set the origin class to internal core module
+        $this->moduleArgs = apply_filters( 'kb.intercept.creation.args', $this->moduleArgs );
+    }
+
+    /**
+     * Set the module name to the name of the template
+     */
+    private function gmoduleOverride()
+    {
+        if ($this->moduleArgs['globalModule']) {
+            $this->moduleArgs['overrides']['name'] = $this->parentObject['post_title'];
+        }
+    }
+
+    /**
+     * Output result
+     */
+    private function render()
+    {
+
+        $addArgs = $this->request->get( 'renderSettings' );
+
+        if (is_null( $addArgs )) {
+            $addArgs = [ ];
+        }
+
+        $module = apply_filters( 'kb.module.before.factory', $this->newModule );
+        if ($this->frontend) {
+            $singleRenderer = new SingleModuleRenderer( $module, $addArgs );
+            $html = $singleRenderer->render();
+        } else {
+            $html = $module->renderForm();
+        }
+        $response = array
+        (
+            'id' => $this->newModule->getId(),
+            'module' => $this->newModule->toJSON(),
+            'name' => $this->newModule->properties->getSetting( 'publicName' ),
+            'json' => Kontentblocks::getService( 'utility.jsontransport' )->getJSON(),
+            'html' => $html
+        );
+
+        return new AjaxSuccessResponse( 'Module created', $response );
+
     }
 
 }

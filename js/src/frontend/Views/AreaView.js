@@ -57,7 +57,6 @@ module.exports = Backbone.View.extend({
       this.$el.removeClass('kb-area__empty');
     }
     this.trigger('kb.module.created', moduleModel);
-    moduleModel.trigger('module.created');
   },
 
   getNumberOfModules: function () {
@@ -134,24 +133,15 @@ module.exports = Backbone.View.extend({
           handle: ".kb-module-control--move",
           items: ".module",
           helper: "clone",
-          //helper: function(){
-          //  //return jQuery('.kb-sidebar-drop-helper');
-          //},
-          //out:function(e, ui){
-          //    ui.helper[0].detach();
-          //},
-          //appendTo: document.body,
-          //opacity: 0.5,
           cursorAt: {
             top: 5,
             left: 5
           },
-          ////axis: "y",
           delay: 150,
           forceHelperSize: true,
           forcePlaceholderSize: true,
           placeholder: "kb-front-sortable-placeholder",
-          start: function () {
+          start: function (e, ui) {
             that.isSorting = true;
           },
           receive: function (e, ui) {
@@ -165,6 +155,7 @@ module.exports = Backbone.View.extend({
             if (that.isSorting) {
               that.isSorting = false;
               that.resort(that.model)
+              KB.Events.trigger('content.change');
             }
           },
           change: function () {
@@ -205,5 +196,6 @@ module.exports = Backbone.View.extend({
       area.trigger('area.resorted');
     }, null);
   }
+
 
 });

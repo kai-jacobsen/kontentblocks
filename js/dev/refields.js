@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-08 */
+/*! Kontentblocks DevVersion 2015-08-09 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -930,7 +930,19 @@
                     }
                 },
                 setIndex: function(obj, is, value) {
-                    if (typeof is == "string") return this.setIndex(obj, is.split("."), value); else if (is.length == 1 && value !== undefined) return obj[is[0]] = value; else if (is.length == 0) return obj; else return this.setIndex(obj[is[0]], is.slice(1), value);
+                    if (!_.isObject(obj)) {
+                        obj = {};
+                    }
+                    if (typeof is == "string") {
+                        return this.setIndex(obj, is.split("."), value);
+                    } else if (is.length == 1 && value !== undefined) {
+                        return obj[is[0]] = value;
+                    } else if (is.length == 0) {
+                        return obj;
+                    } else {
+                        console.log("here");
+                        return this.setIndex(obj[is[0]], is.slice(1), value);
+                    }
                 },
                 getIndex: function(obj, s) {
                     s = s.replace(/\[(\w+)\]/g, ".$1");

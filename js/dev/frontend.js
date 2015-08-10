@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-09 */
+/*! Kontentblocks DevVersion 2015-08-10 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1281,6 +1281,9 @@
                 } else {
                     KB.Events.trigger("editcontrols.hide");
                 }
+            },
+            isActive: function() {
+                return this._active;
             }
         };
     }, {
@@ -1494,6 +1497,8 @@
                 this.defaultState = this.model.get("state") || "replace-image";
                 this.parentView = this.model.get("ModuleModel").View;
                 this.listenTo(this.model, "field.model.settings", this.setMode);
+                this.listenToOnce(this.model.get("ModuleModel"), "module.create", this.showPlaceholder);
+                console.log("bound");
                 this.listenTo(KB.Events, "editcontrols.show", this.showPlaceholder);
                 this.listenTo(KB.Events, "editcontrols.hide", this.removePlaceholder);
                 this.Toolbar = new Toolbar({
@@ -1513,9 +1518,12 @@
                 if (this.hasData()) {
                     return false;
                 }
+                this.$el.one("load", function() {
+                    KB.Events.trigger("content.change reposition");
+                });
                 var url = "https://unsplash.it/g/" + this.model.get("width") + "/" + this.model.get("height") + "?random";
                 if (this.mode === "simple") {
-                    this.$el.attr("src", "https://unsplash.it/300/200");
+                    this.$el.attr("src", url);
                 } else if (this.mode === "background") {
                     this.$el.css("backgroundImage", "url('" + url + "')");
                 }
@@ -1782,7 +1790,7 @@
                 this.parentView = this.model.get("ModuleModel").View;
                 this.setupDefaults();
                 this.listenToOnce(this.model.get("ModuleModel"), "remove", this.deactivate);
-                this.listenToOnce(this.model.get("ModuleModel"), "module.create", this.showPlaceholder());
+                this.listenToOnce(this.model.get("ModuleModel"), "module.create", this.showPlaceholder);
                 this.listenTo(KB.Events, "editcontrols.show", this.showPlaceholder);
                 this.listenTo(KB.Events, "editcontrols.hide", this.removePlaceholder);
                 this.Toolbar = new Toolbar({
@@ -1922,6 +1930,9 @@
                 });
             },
             activate: function(e) {
+                if (KB.EditModalModules) {
+                    KB.EditModalModules.destroy();
+                }
                 e.stopPropagation();
                 if (!this.editor) {
                     tinymce.init(_.defaults(this.defaults, {
@@ -2463,6 +2474,8 @@
                 this.parseAdditionalJSON(res.data.json);
                 KB.Fields.trigger("newModule", KB.Views.Modules.lastViewAdded);
                 this.options.area.trigger("kb.module.created");
+                KB.Events.trigger("content.change reposition");
+                model.trigger("module.created");
                 setTimeout(function() {
                     model.View.openOptions();
                 }, 300);
@@ -2627,7 +2640,6 @@
                     this.$el.removeClass("kb-area__empty");
                 }
                 this.trigger("kb.module.created", moduleModel);
-                moduleModel.trigger("module.created");
             },
             getNumberOfModules: function() {
                 return _.size(this.attachedModuleViews);
@@ -2705,7 +2717,7 @@
                         forceHelperSize: true,
                         forcePlaceholderSize: true,
                         placeholder: "kb-front-sortable-placeholder",
-                        start: function() {
+                        start: function(e, ui) {
                             that.isSorting = true;
                         },
                         receive: function(e, ui) {
@@ -2717,6 +2729,7 @@
                             if (that.isSorting) {
                                 that.isSorting = false;
                                 that.resort(that.model);
+                                KB.Events.trigger("content.change");
                             }
                         },
                         change: function() {
@@ -3964,8 +3977,9 @@
                 this.controller = options.controller;
                 this.listController = options.listController;
                 this.$el.append(tplCategoryModuleItem(this.model.toJSON()));
-                this.$dropHelper = jQuery("<div class='kb-sidebar-drop-helper ui-sortable-helper'></div>");
                 this.model.set("area", this.listController.model);
+                var moduleEl = this.model.get("area").get("renderSettings").moduleElement || "div";
+                this.$dropHelper = jQuery("<" + moduleEl + " class='kb-sidebar-drop-helper ui-sortable-helper'></" + moduleEl + ">");
                 this.$el.draggable({
                     appendTo: that.listController.model.View.$el.selector,
                     revert: "invalid",
@@ -3979,6 +3993,8 @@
                     },
                     helper: function() {
                         that.listController.model.View.$el.css("overflow", "hidden");
+                        var size = that.findHelperSize(this.model.get("area").View);
+                        that.$dropHelper.width(size.width).height(size.height);
                         return that.$dropHelper;
                     },
                     drag: function() {
@@ -4007,6 +4023,7 @@
                     globalModule: module.get("globalModule"),
                     parentObject: module.get("parentObject"),
                     areaContext: Area.get("context"),
+                    renderSettings: Area.get("renderSettings"),
                     area: Area.get("id"),
                     _ajax_nonce: Config.getNonce("create"),
                     frontend: KB.appData.config.frontend
@@ -4021,12 +4038,30 @@
             success: function(res, payload) {
                 var that = this, model;
                 payload.ui.helper.replaceWith(res.data.html);
-                model = KB.ObjectProxy.add(KB.Modules.add(res.data.module));
+                model = KB.Modules.add(res.data.module);
+                KB.ObjectProxy.add(model);
                 model.Area.View.Layout.applyClasses();
                 AreaView.prototype.resort(this.model.get("area"));
-                setTimeout(function() {
+                that.model.get("area").trigger("kb.module.created");
+                _.defer(function() {
                     Payload.parseAdditionalJSON(res.data.json);
-                }, 250);
+                    KB.Events.trigger("content.change reposition");
+                    if (KB.App.adminBar.isActive()) {
+                        model.trigger("module.create");
+                    }
+                });
+            },
+            findHelperSize: function(scope) {
+                var widths = [];
+                var heights = [];
+                _.each(scope.attachedModuleViews, function(ModuleView) {
+                    widths.push(ModuleView.View.$el.width());
+                    heights.push(ModuleView.View.$el.height());
+                });
+                return {
+                    width: Math.max.apply(Math, widths) - 10,
+                    height: Math.max.apply(Math, heights) - 10
+                };
             }
         });
     }, {

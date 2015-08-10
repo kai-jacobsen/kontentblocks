@@ -18,6 +18,9 @@ module.exports = ModuleBrowser.extend({
     this.parseAdditionalJSON(res.data.json);
     KB.Fields.trigger('newModule', KB.Views.Modules.lastViewAdded);
     this.options.area.trigger('kb.module.created');
+    KB.Events.trigger('content.change reposition');
+    model.trigger('module.created');
+
     setTimeout(function () {
       model.View.openOptions();
     }, 300);

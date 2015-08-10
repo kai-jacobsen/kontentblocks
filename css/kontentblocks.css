@@ -2678,7 +2678,7 @@ h5.kb_properties_title {
 /* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
 .alertify .ajs-dimmer {
   position: fixed;
-  z-index: 1981;
+  z-index: 1991;
   top: 0;
   right: 0;
   bottom: 0;
@@ -2697,7 +2697,7 @@ h5.kb_properties_title {
   bottom: 0;
   padding: 0;
   overflow-y: auto;
-  z-index: 1981; }
+  z-index: 1992; }
 
 /* line 35, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_vendor/_alertify.scss */
 .alertify .ajs-dialog {

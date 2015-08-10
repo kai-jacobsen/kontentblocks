@@ -32,5 +32,8 @@ module.exports = {
     } else{
       KB.Events.trigger('editcontrols.hide');
     }
+  },
+  isActive: function(){
+    return this._active;
   }
 };

@@ -18,9 +18,12 @@ module.exports = Backbone.View.extend({
     // ModuleListController
     this.listController = options.listController;
     this.$el.append(tplCategoryModuleItem(this.model.toJSON()));
-    this.$dropHelper = jQuery("<div class='kb-sidebar-drop-helper ui-sortable-helper'></div>");
     // set Area model
     this.model.set('area', this.listController.model);
+
+    var moduleEl = (this.model.get('area').get('renderSettings')).moduleElement || 'div';
+    this.$dropHelper = jQuery("<" + moduleEl + " class='kb-sidebar-drop-helper ui-sortable-helper'></" + moduleEl + ">");
+
     this.$el.draggable({
       appendTo: that.listController.model.View.$el.selector,
       revert: 'invalid',
@@ -36,6 +39,8 @@ module.exports = Backbone.View.extend({
       },
       helper: function () {
         that.listController.model.View.$el.css('overflow', 'hidden');
+        var size = that.findHelperSize(this.model.get('area').View);
+        that.$dropHelper.width(size.width).height(size.height);
         return that.$dropHelper;
       },
       drag: function () {
@@ -72,6 +77,7 @@ module.exports = Backbone.View.extend({
       globalModule: module.get('globalModule'),
       parentObject: module.get('parentObject'),
       areaContext: Area.get('context'),
+      renderSettings: Area.get('renderSettings'),
       area: Area.get('id'),
       _ajax_nonce: Config.getNonce('create'),
       frontend: KB.appData.config.frontend
@@ -86,11 +92,33 @@ module.exports = Backbone.View.extend({
   success: function (res, payload) {
     var that = this, model;
     payload.ui.helper.replaceWith(res.data.html);
-    model = KB.ObjectProxy.add(KB.Modules.add(res.data.module));
+    model = KB.Modules.add(res.data.module);
+    KB.ObjectProxy.add(model);
     model.Area.View.Layout.applyClasses();
     AreaView.prototype.resort(this.model.get('area'));
-    setTimeout(function () {
+    that.model.get('area').trigger('kb.module.created');
+
+    // callbacks on next tick
+    _.defer(function () {
       Payload.parseAdditionalJSON(res.data.json);
-    }, 250);
+      KB.Events.trigger('content.change reposition');
+      if (KB.App.adminBar.isActive()){
+        model.trigger('module.create');
+      }
+    });
+
+  },
+  findHelperSize: function (scope) {
+    var widths = [];
+    var heights = [];
+    _.each(scope.attachedModuleViews, function (ModuleView) {
+      widths.push(ModuleView.View.$el.width());
+      heights.push(ModuleView.View.$el.height());
+
+    });
+    return {
+      width: Math.max.apply(Math, widths) - 10,
+      height: Math.max.apply(Math, heights) - 10
+    }
   }
 });

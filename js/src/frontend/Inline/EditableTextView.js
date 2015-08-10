@@ -10,7 +10,7 @@ var EditableText = Backbone.View.extend({
     this.parentView = this.model.get('ModuleModel').View;
     this.setupDefaults();
     this.listenToOnce(this.model.get('ModuleModel'), 'remove', this.deactivate);
-    this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder());
+    this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
 
@@ -195,6 +195,10 @@ var EditableText = Backbone.View.extend({
     });
   },
   activate: function (e) {
+
+    if (KB.EditModalModules){
+      KB.EditModalModules.destroy();
+    }
 
     e.stopPropagation();
     if (!this.editor) {

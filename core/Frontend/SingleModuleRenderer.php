@@ -61,13 +61,13 @@ class SingleModuleRenderer
             '<%3$s id="%1$s" class="%2$s">',
             $this->module->getId(),
             $this->getModuleClasses(),
-            $this->addArgs['element']
+            $this->addArgs['moduleElement']
         );
     }
 
     public function afterModule()
     {
-        return sprintf( '</%s>', $this->addArgs['element'] );
+        return sprintf( '</%s>', $this->addArgs['moduleElement'] );
     }
 
     private function setupArgs( $args )
@@ -75,14 +75,15 @@ class SingleModuleRenderer
         $defaults = array(
             'context' => Utilities::getTemplateFile(),
             'subcontext' => 'content',
-            'element' => ( isset( $args['moduleElement'] ) ) ? $args['moduleElement'] : $this->module->properties->getSetting(
+            'moduleElement' => ( isset( $args['moduleElement'] ) ) ? $args['moduleElement'] : $this->module->properties->getSetting(
                 'element'
             ),
             'action' => null,
             'area_template' => 'default'
         );
 
-        return wp_parse_args( $args, $defaults );
+
+        return Utilities::arrayMergeRecursive($defaults, $args);
     }
 
     /**

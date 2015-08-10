@@ -11,6 +11,8 @@ var EditableImage = Backbone.View.extend({
     this.defaultState = this.model.get('state') || 'replace-image';
     this.parentView = this.model.get('ModuleModel').View;
     this.listenTo(this.model, 'field.model.settings', this.setMode);
+    this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder);
+    console.log('bound');
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
 
@@ -34,13 +36,18 @@ var EditableImage = Backbone.View.extend({
     if (this.hasData()){
       return false;
     }
-
+    this.$el.one('load', function(){
+      KB.Events.trigger('content.change reposition');
+    });
     var url = 'https://unsplash.it/g/' + this.model.get('width') + '/' + this.model.get('height') + '?random';
     if (this.mode === 'simple') {
-      this.$el.attr('src', 'https://unsplash.it/300/200');
+      this.$el.attr('src', url);
     } else if (this.mode === 'background') {
       this.$el.css('backgroundImage', "url('"+ url +"')");
     }
+
+
+
   },
   removePlaceholder: function(){
     if (this.hasData()){
