@@ -94,6 +94,7 @@ class AreaRegistry
                 $storage = new ModuleStorage( $areapost->ID );
                 $area = $storage->getDataProvider()->get( '_area' );
                 $area['parent_id'] = $areapost->ID;
+                $area['parentObjectId'] = $areapost->ID;
                 $dynamicAreas[] = $area;
             }
         }

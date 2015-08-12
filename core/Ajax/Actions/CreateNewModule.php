@@ -5,8 +5,10 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
+use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Frontend\RenderSettings;
 use Kontentblocks\Frontend\SingleModuleRenderer;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -21,6 +23,11 @@ class CreateNewModule implements AjaxActionInterface
 {
 
     public static $nonce = 'kb-create';
+
+    /**
+     * @var AreaProperties
+     */
+    public $area;
 
     // equals either current pos object or the post object of the global module
     protected $parentObject;
@@ -90,14 +97,13 @@ class CreateNewModule implements AjaxActionInterface
 
         $this->request = $request;
 
-        // ------------------------------------
-        // The Program
-        // ------------------------------------
         // Setup Data from $_POST
         $this->setupRequestData( $request );
 
         // Setup Data Handler
         $this->environment = Utilities::getEnvironment( $this->postId );
+
+        $this->area = $this->environment->getAreaDefinition( $this->moduleArgs['area'] );
 
         // override class if master
         if (!$this->frontend) {
@@ -180,9 +186,11 @@ class CreateNewModule implements AjaxActionInterface
             $addArgs = [ ];
         }
 
+        $renderSettings = new RenderSettings( $addArgs, $this->area );
+
         $module = apply_filters( 'kb.module.before.factory', $this->newModule );
         if ($this->frontend) {
-            $singleRenderer = new SingleModuleRenderer( $module, $addArgs );
+            $singleRenderer = new SingleModuleRenderer( $module, $renderSettings );
             $html = $singleRenderer->render();
         } else {
             $html = $module->renderForm();

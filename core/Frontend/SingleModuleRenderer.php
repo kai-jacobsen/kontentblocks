@@ -15,91 +15,47 @@ use Kontentblocks\Utils\Utilities;
 class SingleModuleRenderer
 {
 
-    public $addArgs;
+    public $renderSettings;
 
     public $classes;
 
     /**
      * @param Module $module
+     * @param RenderSettings $renderSettings
      */
-    public function __construct( Module $module, $args = array() )
+    public function __construct( Module $module, RenderSettings $renderSettings )
     {
         $this->module = $module;
-        $this->addArgs = $this->setupArgs( $args );
+        $this->renderSettings = $this->setupRenderSettings( $renderSettings );
         $this->classes = $this->setupClasses();
-        $this->module->context->set( $this->addArgs );
+        $this->module->context->set( $this->renderSettings );
         // @TODO other properties?
-        if (isset( $this->addArgs['areaContext'] )) {
-            $this->module->context->areaContext = $this->addArgs['areaContext'];
-            $this->module->properties->areaContext = $this->addArgs['areaContext'];
+        if (isset( $this->renderSettings['areaContext'] )) {
+            $this->module->context->areaContext = $this->renderSettings['areaContext'];
+            $this->module->properties->areaContext = $this->renderSettings['areaContext'];
 
         }
 
         if ($module->verifyRender()) {
             Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $module->toJSON() );
         }
-
-
     }
 
-    public function render()
+    private function setupRenderSettings( RenderSettings $renderSettings )
     {
-        if (!$this->module->verifyRender()) {
-            return false;
-        }
-
-        $out = '';
-        $out .= $this->beforeModule();
-        $out .= $this->module->module();
-        $out .= $this->afterModule();
-        return $out;
-    }
-
-    public function beforeModule()
-    {
-        return sprintf(
-            '<%3$s id="%1$s" class="%2$s">',
-            $this->module->getId(),
-            $this->getModuleClasses(),
-            $this->addArgs['moduleElement']
-        );
-    }
-
-    public function afterModule()
-    {
-        return sprintf( '</%s>', $this->addArgs['moduleElement'] );
-    }
-
-    private function setupArgs( $args )
-    {
-        $defaults = array(
-            'context' => Utilities::getTemplateFile(),
-            'subcontext' => 'content',
-            'moduleElement' => ( isset( $args['moduleElement'] ) ) ? $args['moduleElement'] : $this->module->properties->getSetting(
-                'element'
-            ),
-            'action' => null,
-            'area_template' => 'default'
+        $renderSettings->import(
+            array(
+                'context' => Utilities::getTemplateFile(),
+                'subcontext' => 'content',
+                'moduleElement' => ( isset( $renderSettings['moduleElement'] ) ) ? $renderSettings['moduleElement'] : $this->module->properties->getSetting(
+                    'element'
+                ),
+                'action' => null,
+                'area_template' => 'default'
+            )
         );
 
-
-        return Utilities::arrayMergeRecursive($defaults, $args);
-    }
-
-    /**
-     * @return string
-     */
-    private function getModuleClasses()
-    {
-        return implode( ' ', array_unique( $this->classes ) );
-    }
-
-    /**
-     * @return Module
-     */
-    public function getModule()
-    {
-        return $this->module;
+        return $renderSettings;
     }
 
     /**
@@ -116,6 +72,59 @@ class SingleModuleRenderer
                 'view-' . str_replace( '.twig', '', $this->module->properties->viewfile )
 
             );
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function render()
+    {
+        if (!$this->module->verifyRender()) {
+            return false;
+        }
+
+        $out = '';
+        $out .= $this->beforeModule();
+        $out .= $this->module->module();
+        $out .= $this->afterModule();
+        return $out;
+    }
+
+    /**
+     * @return string
+     */
+    public function beforeModule()
+    {
+        return sprintf(
+            '<%3$s id="%1$s" class="%2$s">',
+            $this->module->getId(),
+            $this->getModuleClasses(),
+            $this->renderSettings['moduleElement']
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private function getModuleClasses()
+    {
+        return implode( ' ', array_unique( $this->classes ) );
+    }
+
+    /**
+     * @return string
+     */
+    public function afterModule()
+    {
+        return sprintf( '</%s>', $this->renderSettings['moduleElement'] );
+    }
+
+    /**
+     * @return Module
+     */
+    public function getModule()
+    {
+        return $this->module;
     }
 
     /**

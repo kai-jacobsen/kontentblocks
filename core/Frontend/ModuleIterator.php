@@ -108,24 +108,22 @@ class ModuleIterator implements \Iterator, \Countable
     /**
      * Advance to next item in array
      *
-     * @return void
      * @since 0.1.0
      */
     public function next()
     {
-        next( $this->modules );
+       return next( $this->modules );
 
     }
 
     /**
      * Reset iterator pointer
      *
-     * @return void
      * @since 0.1.0
      */
     public function rewind()
     {
-        reset( $this->modules );
+       return reset( $this->modules );
 
     }
 

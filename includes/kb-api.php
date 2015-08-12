@@ -6,6 +6,7 @@ use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Frontend\AreaRenderer;
+use Kontentblocks\Frontend\RenderSettings;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
@@ -49,39 +50,46 @@ function registerAreaTemplate( $args )
 
 /**
  * Render a single area by id
- * @param string $area
- * @param int $id
+ * @param string $areaId
+ * @param int $pid
  * @param array $additionalArgs
  * @return string|void
  */
-function renderSingleArea( $area, $id = null, $additionalArgs = array() )
+function renderSingleArea( $areaId, $pid = null, $additionalArgs = array() )
 {
     global $post;
-    $postId = ( is_null( $id ) && !is_null( $post ) ) ? $post->ID : $id;
+    $postId = ( is_null( $pid ) && !is_null( $post ) ) ? $post->ID : $pid;
 
 
     if (is_null( $postId )) {
-        return;
+        return null;
     }
 
 
-    /** @var \Kontentblocks\Areas\AreaRegistry $Registry */
-    $Registry = Kontentblocks::getService( 'registry.areas' );
-    if ($Registry->isDynamic( $area )) {
-        $areaDef = $Registry->getArea( $area );
-        $Environment = Utilities::getEnvironment( $areaDef->parent_id, $postId );
+    /** @var \Kontentblocks\Areas\AreaRegistry $registry */
+    $registry = Kontentblocks::getService( 'registry.areas' );
+    if ($registry->isDynamic( $areaId )) {
+        $areaDef = $registry->getArea( $areaId );
+        $environment = Utilities::getEnvironment( $areaDef->parent_id, $postId );
     } else {
-        $Environment = Utilities::getEnvironment( $postId );
-
+        $environment = Utilities::getEnvironment( $postId );
     }
 
-    if (!$Environment->getAreaDefinition( $area )) {
+    $area = $environment->getAreaDefinition( $areaId );
+
+
+    if (!$area) {
         return '';
     }
 
+    $renderSettings = new RenderSettings( $additionalArgs, $area );
+    if (is_a($renderSettings->view, '\Kontentblocks\Frontend\AreaFileRenderer', true)){
+        $renderer = new $renderSettings->view($environment, $renderSettings);
+    } else {
+        $renderer = new AreaRenderer( $environment, $renderSettings );
+    }
 
-    $AreaRender = new AreaRenderer( $Environment, $area, $additionalArgs );
-    $AreaRender->render( true );
+    $renderer->render( true );
 }
 
 /**
@@ -128,6 +136,13 @@ function renderContext( $context, $id, $additionalArgs = array() )
 
     if (!empty( $areas )) {
         foreach (array_keys( $areas ) as $area) {
+            $args = [ ];
+            if (array_key_exists( $area, $additionalArgs )) {
+                $args = Utilities::arrayMergeRecursive( $additionalArgs[$area], $additionalArgs );
+            } else {
+                $args = $additionalArgs;
+            }
+
             renderSingleArea( $area, $post_id, $additionalArgs );
         }
     }
@@ -187,7 +202,7 @@ function getPostPanel( $panelId = null, $postId = null )
  */
 function EditScreenLayoutsRegistry()
 {
-    return Kontentblocks()->getService('registry.screenLayouts');
+    return Kontentblocks()->getService( 'registry.screenLayouts' );
 }
 
 /**
@@ -195,5 +210,5 @@ function EditScreenLayoutsRegistry()
  */
 function JSONTransport()
 {
-    return Kontentblocks()->getService('utility.jsontransport');
+    return Kontentblocks()->getService( 'utility.jsontransport' );
 }

@@ -193,4 +193,8 @@ class AreaSettingsModel implements \JsonSerializable
     {
         return $this->settings;
     }
+
+    public function export(){
+        return $this->jsonSerialize();
+    }
 }

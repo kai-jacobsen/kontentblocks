@@ -16,39 +16,33 @@ class AreaHtmlNode
 {
 
     /**
-     * Area literal id
-     * @var string
-     * @since 0.1.0
-     */
-    protected $areaId;
-
-    /**
      * @var \Kontentblocks\Areas\AreaProperties
      */
     public $area;
-
-
-    /**
-     * placeholder format string for area wrapper before markup
-     * @var string
-     * @since 0.1.0
-     */
-    protected $beforeArea;
-
-    /**
-     * placeholder format string for area wrapper after markup
-     * @var string
-     * @since 0.1.0
-     */
-    protected $afterArea;
-
     /**
      * layout iterator if layout is not default
      * @var bool|AreaLayoutIterator
      * @since 0.1.0
      */
     public $layout;
-
+    /**
+     * Area literal id
+     * @var string
+     * @since 0.1.0
+     */
+    protected $areaId;
+    /**
+     * placeholder format string for area wrapper before markup
+     * @var string
+     * @since 0.1.0
+     */
+    protected $beforeArea;
+    /**
+     * placeholder format string for area wrapper after markup
+     * @var string
+     * @since 0.1.0
+     */
+    protected $afterArea;
     /**
      * specific area settings as set and saved on the edit screen
      * basically the area_template by now
@@ -85,101 +79,19 @@ class AreaHtmlNode
     /**
      * Class Constructor
      *
-     * @param AreaRenderer $areaRenderer
-     * @param $additionalArgs array comes from the render function call
+     * @param Environment $environment
+     * @param RenderSettings $renderSettings array comes from the render function call
      * @since 0.1.0
      */
-    public function __construct( AreaRenderer $areaRenderer, $additionalArgs )
+    public function __construct( Environment $environment, RenderSettings $renderSettings )
     {
-        $this->environment = $areaRenderer->environment;
-        $this->area = $areaRenderer->area;
+        $this->environment = $environment;
+        $this->area = $renderSettings->area;
         $this->areaId = $this->area->id;
-
-        $this->renderSettings = $this->setupSettings(
-            $additionalArgs,
-            $this->environment->getAreaSettings( $areaRenderer->areaId )
-        );
-
+        $this->renderSettings = $renderSettings;
         $this->layout = $this->setupLayout();
         $this->toJSON();
 
-    }
-
-    /**
-     * create the wrappers opening markup
-     * @return string
-     * @since 0.1.0
-     */
-    public function openArea()
-    {
-        return sprintf(
-            '<%1$s id="%2$s" class="%3$s">',
-            $this->renderSettings['element'],
-            $this->areaId,
-            $this->getWrapperClasses()
-        );
-    }
-
-    /**
-     * create the wrapper closing markup
-     * @return string
-     * @since 0.1.0
-     */
-    public function closeArea()
-    {
-        return sprintf( "</%s>", $this->renderSettings['element'] );
-    }
-
-    /**
-     * Some css classes to add to the wrapper
-     * @return string
-     * @since 0.1.0
-     */
-    public function getWrapperClasses()
-    {
-        $classes = array(
-            $this->renderSettings['wrapperClass'],
-            $this->areaId,
-            $this->getLayoutId(),
-            $this->getContext(),
-            $this->getSubcontext(),
-        );
-        return implode( ' ', $classes );
-    }
-
-    /**
-     * get 'context'
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function getContext()
-    {
-        return $this->getSetting( 'context' );
-
-    }
-
-    /**
-     * get 'subcontext'
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function getSubcontext()
-    {
-        return $this->getSetting( 'subcontext' );
-
-    }
-
-    /**
-     * generic getter method to get settings
-     * @param $setting
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function getSetting( $setting )
-    {
-        if (isset( $this->renderSettings[$setting] )) {
-            return $this->renderSettings[$setting];
-        }
     }
 
     /**
@@ -213,40 +125,45 @@ class AreaHtmlNode
 
     }
 
-    /**
-     * Settings can be passed to the render function call
-     * make sure that at least defaults are set
-     * @TODO investigate context/subcontext default
-     * @param $args
-     * @param null $settings
-     * @return array
-     * @since 0.1.0
-     */
-    private function setupSettings( $args, $settings = null )
+    public function toJSON()
     {
-        // @TODO move to better context
-        $defaults = array(
-            'context' => Utilities::getTemplateFile(),
-            'subcontext' => 'content',
-            'wrapperClass' => 'area',
-            'useWrapper' => true,
-            'element' => apply_filters( 'kb.area.settings.element', 'div' ),
-            'mergeRepeating' => false,
-            'action' => null,
-            'layout' => 'default',
-            'moduleElement' => null
-        );
-
-
-        if ($settings) {
-            $defaults = wp_parse_args( $settings, $defaults );
-        }
-
-        return wp_parse_args( $args, $defaults );
-
-
+        $this->area->renderSettings = $this->renderSettings->export();
+        $this->area->envVars = $this->environment;
+        $this->area->layout = $this->renderSettings['layout'];
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->area );
     }
 
+    /**
+     * create the wrappers opening markup
+     * @return string
+     * @since 0.1.0
+     */
+    public function openArea()
+    {
+        return sprintf(
+            '<%1$s id="%2$s" class="%3$s">',
+            $this->renderSettings['element'],
+            $this->areaId,
+            $this->getWrapperClasses()
+        );
+    }
+
+    /**
+     * Some css classes to add to the wrapper
+     * @return string
+     * @since 0.1.0
+     */
+    public function getWrapperClasses()
+    {
+        $classes = array(
+            $this->renderSettings['wrapperClass'],
+            $this->areaId,
+            $this->getLayoutId(),
+            $this->getContext(),
+            $this->getSubcontext(),
+        );
+        return implode( ' ', $classes );
+    }
 
     /**
      * Gets additional css classes specified by the area template
@@ -261,6 +178,51 @@ class AreaHtmlNode
             return null;
         }
 
+    }
+
+    /**
+     * get 'context'
+     * @return mixed
+     * @since 0.1.0
+     */
+    public function getContext()
+    {
+        return $this->getSetting( 'context' );
+
+    }
+
+    /**
+     * generic getter method to get settings
+     * @param $setting
+     * @return mixed
+     * @since 0.1.0
+     */
+    public function getSetting( $setting )
+    {
+        if (isset( $this->renderSettings[$setting] )) {
+            return $this->renderSettings[$setting];
+        }
+    }
+
+    /**
+     * get 'subcontext'
+     * @return mixed
+     * @since 0.1.0
+     */
+    public function getSubcontext()
+    {
+        return $this->getSetting( 'subcontext' );
+
+    }
+
+    /**
+     * create the wrapper closing markup
+     * @return string
+     * @since 0.1.0
+     */
+    public function closeArea()
+    {
+        return sprintf( "</%s>", $this->renderSettings['element'] );
     }
 
     /**
@@ -304,7 +266,8 @@ class AreaHtmlNode
             'areaTemplate' => $this->renderSettings['layout'],
             'action' => $this->renderSettings['action'],
             'areaId' => $this->areaId,
-            'moduleElement' => $this->renderSettings['moduleElement']
+            'moduleElement' => $this->renderSettings['moduleElement'],
+            'view' => $this->renderSettings['view']
         );
 
     }
@@ -337,7 +300,6 @@ class AreaHtmlNode
      */
     public function closeLayoutWrapper()
     {
-
         $this->position ++;
 
         if ($this->position === $this->moduleCount) {
@@ -358,21 +320,15 @@ class AreaHtmlNode
             }
         }
 
-
         return '';
     }
 
+    /**
+     * @param int $count
+     */
     public function setModuleCount( $count = 0 )
     {
         $this->moduleCount = $count;
-    }
-
-    public function toJSON()
-    {
-        $this->area->renderSettings = $this->renderSettings;
-        $this->area->envVars = $this->environment;
-        $this->area->layout = $this->renderSettings['layout'];
-        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->area );
     }
 
 }

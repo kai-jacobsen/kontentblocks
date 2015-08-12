@@ -3,6 +3,8 @@
 namespace Kontentblocks\Frontend;
 
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Modules\ModuleHTMLNode;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * internal working name: SlotMachine
@@ -32,28 +34,99 @@ class SlotRenderer
 {
 
     /**
-     * internal pointer, starts with 1
+     * internal pointer
      * @var int
      */
     protected $position = 1;
 
     /**
-     * Class Constructor
-     * @param $area
-     * @param $postId
+     * @var array
      */
-    public function __construct( $area, $postId )
+    protected $addArgs;
+
+
+    public $done = array();
+
+    /**
+     * Class Constructor
+     * @param ModuleIterator $iterator
+     * @param array $addArgs
+     */
+    public function __construct( ModuleIterator $iterator, $addArgs = [] )
     {
-        if (!isset( $area ) || !isset( $postId )) {
-            return;
+        $this->addArgs = $addArgs;
+        $this->iterator = $iterator;
+    }
+
+    /**
+     * @return $this
+     */
+    public function prev()
+    {
+        $this->position --;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function forward()
+    {
+        $count = count( $this->iterator );
+        $this->position = ( $count > 0 ) ? $count - 1 : 0;
+        return $this;
+
+    }
+
+    /**
+     * @return $this
+     */
+    public function rewind()
+    {
+        $this->position = 0;
+        return $this;
+
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function module()
+    {
+        $res = $this->slot();
+        $this->next();
+        return $res;
+    }
+
+    /**
+     * Actual method to handle the stuff
+     * @param $pos
+     * @since 0.1.0
+     * @return bool|string
+     */
+    public function slot( $pos = null )
+    {
+        if (is_null( $pos )) {
+            $pos = $this->position;
         }
 
 
-        /** @var $environment \Kontentblocks\Backend\Environment\Environment */
-        $environment = Utilities::getEnvironment( $postId );
-        $modules = $environment->getModulesForArea( $area );
+        $module = $this->iterator->setPosition( $pos );
 
-        $this->iterator = new ModuleIterator( $modules, $environment );
+        if (in_array($module->getId(), $this->done)){
+            return null;
+        }
+
+
+        if (is_a( $module, '\Kontentblocks\Modules\Module' )) {
+            $renderer = new SingleModuleRenderer( $module, $this->addArgs );
+            $module->toJSON();
+            array_push($this->done, $module->getId());
+            if ($out = $renderer->render()) {
+                return $out;
+            }
+        }
+
     }
 
     /**
@@ -62,34 +135,16 @@ class SlotRenderer
      */
     public function next()
     {
-        $this->slot( $this->position + 1 );
+        $this->position ++;
+        return $this;
+
     }
 
-    /**
-     * Actual method to handle the stuff
-     * @param $pos
-     * @since 0.1.0
-     * @TODO complete printf
-     */
-    public function slot( $pos )
+    public function hasModule()
     {
-        $this->position = $pos;
-
-        $module = $this->iterator->setPosition( $pos );
-        if (!is_null( $module )) {
-            printf(
-                '<%3$s id="%1$s" class="%2$s">',
-                $module->getId(),
-                'os-edit-container',
-                $module->getSetting( 'element' )
-            );
-
-            echo $module->module();
-            echo sprintf( "</%s>", $module->getSetting( 'element' ) );
-
-            $module->toJSON();
-
-        }
-
+        return ($this->iterator->next() !== false) ? true : false;
     }
+
+
 }
+

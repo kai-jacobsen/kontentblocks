@@ -32,6 +32,12 @@ class AreaRenderer
      * @var \Kontentblocks\Backend\Environment\Environment
      */
     public $environment;
+
+    /**
+     * Array of additional render settings
+     * @var array
+     */
+    public $renderSettings;
     /**
      * @var AreaHtmlNode
      */
@@ -67,24 +73,16 @@ class AreaRenderer
      * Class constructor
      *
      * @param Environment $environment
-     * @param $areaId string area id
-     * @param $additionalArgs array
+     * @param RenderSettings $renderSettings
      */
-    public function __construct( Environment $environment, $areaId, $additionalArgs )
+    public function __construct( Environment $environment, RenderSettings $renderSettings )
     {
-
-        $this->areaId = $areaId;
+        $this->renderSettings = $renderSettings;
+        $this->area = $renderSettings->area;
+        $this->areaId = $this->area->id;
         $this->environment = $environment;
-
-        $this->area = $environment->getAreaDefinition( $areaId );
-        $modules = $this->environment->getModulesforArea( $areaId );
+        $modules = $this->environment->getModulesforArea( $this->areaId );
         $this->modules = new ModuleIterator( $modules, $this->environment );
-        // setup AreaHtmlNode
-        $this->areaHtmlNode = new AreaHtmlNode(
-            $this,
-            $additionalArgs
-        );
-
     }
 
     /**
@@ -94,9 +92,15 @@ class AreaRenderer
      */
     public function render( $echo )
     {
+
         if (!$this->validate()) {
             return false;
         }
+
+        $this->areaHtmlNode = new AreaHtmlNode(
+            $this->environment,
+            $this->renderSettings
+        );
 
         $this->areaHtmlNode->setModuleCount( count( $this->modules ) );
         $output = '';
@@ -109,7 +113,7 @@ class AreaRenderer
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
 
-            $this->moduleRenderer = new SingleModuleRenderer( $module, $this->areaHtmlNode->getPublicAttributes() );
+            $this->moduleRenderer = new SingleModuleRenderer( $module, $this->renderSettings );
 
 
             if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verifyRender()) {
@@ -145,12 +149,12 @@ class AreaRenderer
         }
     }
 
+    /**
+     *
+     * @return bool
+     */
     public function validate()
     {
-
-        if (!isset( $this->areaHtmlNode )) {
-            return false;
-        }
 
         if (!$this->area->settings->isActive()) {
             return false;
@@ -159,7 +163,6 @@ class AreaRenderer
         if ($this->area->dynamic && !$this->area->settings->isAttached()) {
             return false;
         }
-
 
         return true;
     }

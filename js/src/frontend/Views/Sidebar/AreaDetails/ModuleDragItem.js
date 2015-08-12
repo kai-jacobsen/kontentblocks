@@ -39,7 +39,7 @@ module.exports = Backbone.View.extend({
       },
       helper: function () {
         that.listController.model.View.$el.css('overflow', 'hidden');
-        var size = that.findHelperSize(this.model.get('area').View);
+        var size = that.findHelperSize(that.model.get('area').View);
         that.$dropHelper.width(size.width).height(size.height);
         return that.$dropHelper;
       },

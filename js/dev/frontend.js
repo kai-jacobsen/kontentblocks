@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-10 */
+/*! Kontentblocks DevVersion 2015-08-12 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -3993,7 +3993,7 @@
                     },
                     helper: function() {
                         that.listController.model.View.$el.css("overflow", "hidden");
-                        var size = that.findHelperSize(this.model.get("area").View);
+                        var size = that.findHelperSize(that.model.get("area").View);
                         that.$dropHelper.width(size.width).height(size.height);
                         return that.$dropHelper;
                     },
