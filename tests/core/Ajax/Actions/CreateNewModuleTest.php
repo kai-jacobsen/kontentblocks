@@ -29,7 +29,8 @@ class CreateNewModuleTest extends \WP_UnitTestCase
 
         \Kontentblocks\registerArea(
             array(
-                'id' => 'dump'
+                'id' => 'dump',
+                'postTypes' => array('post')
             )
         );
 

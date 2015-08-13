@@ -1,5 +1,11 @@
 #Changelog
 
+####0.4.1
++ Frontend: Module controls are invisible by default and can be turned on by admin bar switch
++ revived SlotRenderer and refactored Area rendering
++ Frontend area rendering can be controlled by custom twig template
++ Backend: multiple modules can be selected for batch removal
+
 ####0.4.0
 + frontend: editable inline fields with shared data source are linked and views are synchronized upon data change
 + frontend: style improvements
