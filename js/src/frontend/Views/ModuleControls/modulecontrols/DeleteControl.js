@@ -5,7 +5,6 @@ var Config = require('common/Config');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
 
-
 module.exports = ModuleMenuItem.extend({
   initialize: function (options) {
     this.options = options || {};
@@ -16,6 +15,8 @@ module.exports = ModuleMenuItem.extend({
     'click': 'confirmRemoval'
   },
   confirmRemoval: function () {
+
+
     Notice.confirm('Remove', KB.i18n.EditScreen.notices.confirmDeleteMsg, this.removeModule, this.cancelRemoval, this);
   },
   removeModule: function () {

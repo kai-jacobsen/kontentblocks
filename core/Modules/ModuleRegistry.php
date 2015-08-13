@@ -82,22 +82,42 @@ class ModuleRegistry
         }
     }
 
-    /**
-     *
-     * @param $classname
-     *
-     * @return null
-     */
-    public function get( $classname )
+    private function setupFilePaths( $args, $classname )
     {
-        if (isset( $this->modules[$classname] )) {
-            return $this->modules[$classname];
-        } else {
-            return null;
-            //return new \Exception( 'Cannot get module from collection' );
+        // setup helpfile
+        $locale = get_locale();
+        if (file_exists( trailingslashit( $args['path'] ) . $classname . '_' . $locale . '.hbs' )) {
+            $args['helpfile'] = content_url(
+                                    str_replace(
+                                        WP_CONTENT_DIR,
+                                        '',
+                                        $args['path']
+                                    )
+                                ) . $classname . '_' . $locale . '.hbs';
         }
-    }
 
+        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.jpg' )) {
+            $args['poster'] = content_url(
+                                  str_replace(
+                                      WP_CONTENT_DIR,
+                                      '',
+                                      $args['path']
+                                  )
+                              ) . $classname . '.jpg';
+        }
+
+        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.png' )) {
+            $args['poster'] = content_url(
+                                  str_replace(
+                                      WP_CONTENT_DIR,
+                                      '',
+                                      $args['path']
+                                  )
+                              ) . $classname . '.png';
+        }
+
+        return $args;
+    }
 
     /**
      * Getter for all modules
@@ -128,6 +148,22 @@ class ModuleRegistry
             $clone = wp_parse_args( $moduleArgs, $this->get( $moduleClass ) );
             $clone['settings']['category'] = 'gmodule';
             Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleDefinitions', $id, $clone );
+        }
+    }
+
+    /**
+     *
+     * @param $classname
+     *
+     * @return null
+     */
+    public function get( $classname )
+    {
+        if (isset( $this->modules[$classname] )) {
+            return $this->modules[$classname];
+        } else {
+            return null;
+            //return new \Exception( 'Cannot get module from collection' );
         }
     }
 
@@ -183,42 +219,5 @@ class ModuleRegistry
         }
 
         return $merged;
-    }
-
-    private function setupFilePaths( $args, $classname )
-    {
-        // setup helpfile
-        $locale = get_locale();
-        if (file_exists( trailingslashit( $args['path'] ) . $classname . '_' . $locale . '.hbs' )) {
-            $args['helpfile'] = content_url(
-                                    str_replace(
-                                        WP_CONTENT_DIR,
-                                        '',
-                                        $args['path']
-                                    )
-                                ) . $classname . '_' . $locale . '.hbs';
-        }
-
-        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.jpg' )) {
-            $args['poster'] = content_url(
-                                  str_replace(
-                                      WP_CONTENT_DIR,
-                                      '',
-                                      $args['path']
-                                  )
-                              ) . $classname . '.jpg';
-        }
-
-        if (file_exists( trailingslashit( $args['path'] ) . $classname . '.png' )) {
-            $args['poster'] = content_url(
-                                  str_replace(
-                                      WP_CONTENT_DIR,
-                                      '',
-                                      $args['path']
-                                  )
-                              ) . $classname . '.png';
-        }
-
-        return $args;
     }
 }

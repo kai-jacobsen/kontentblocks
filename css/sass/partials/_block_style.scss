@@ -284,7 +284,10 @@ h5.kb_properties_title {
         &.kb-delete:before {
           /*background: url('assets/delete.png') no-repeat;*/
           content: '\f117';
+        }
 
+        &.kb-delete.kb-batch-marked:before{
+          color: $red;
         }
 
         &.module-status:before {

@@ -89,6 +89,7 @@ KB.App = (function () {
     KB.FieldConfigs = new FieldsConfigsCollection();
     KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
     KB.Menus = require('backend/Menus');
+    KB.Window = require('common/Window').init();
     // get the UI on track
     UI.init();
 

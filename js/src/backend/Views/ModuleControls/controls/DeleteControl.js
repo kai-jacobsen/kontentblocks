@@ -5,8 +5,10 @@ var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var TinyMCE = require('common/TinyMCE');
-
+var Window = require('common/Window');
+var BatchDeleteController = require('shared/BatchDelete/BatchDeleteController');
 module.exports = BaseView.extend({
+  marked: false,
   className: 'kb-delete block-menu-icon',
   initialize: function () {
     _.bindAll(this, "yes", "no");
@@ -15,7 +17,26 @@ module.exports = BaseView.extend({
     'click': 'deleteModule'
   },
   deleteModule: function () {
-    Notice.confirm('',KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+    if (Window.ctrlPressed()) {
+      if (!this.marked){
+        BatchDeleteController.add(this);
+        this.mark();
+      } else {
+        BatchDeleteController.remove(this);
+        this.unmark();
+      }
+    } else {
+      Notice.confirm('', KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+    }
+
+  },
+  mark: function(){
+    this.$el.addClass('kb-batch-marked');
+    this.marked = true;
+  },
+  unmark: function(){
+    this.$el.removeClass('kb-batch-marked');
+    this.marked = false;
   },
   isValid: function () {
     if (!this.model.get('predefined') && !this.model.get('disabled') &&
@@ -36,12 +57,12 @@ module.exports = BaseView.extend({
     return false;
   },
   success: function (res) {
-    if (res.success){
+    if (res.success) {
       TinyMCE.removeEditors(this.model.View.$el);
       KB.Modules.remove(this.model);
       wp.heartbeat.interval('fast', 2);
       this.model.destroy();
-    } else{
+    } else {
       Notice.notice('Error while removing a module', 'error');
     }
 

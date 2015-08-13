@@ -1,0 +1,28 @@
+.kb-batch-delete-wrap{
+  position: fixed;
+  top: -150px;
+  right: 20px;
+  width: 300px;
+  background-color: #fff;
+  z-index: 1500;
+  padding: $fullpadding;
+  @extend .base-box-shadow;
+  @extend .base-box-border;
+  transition: top .3s ease-out;
+  &.visible{
+    top: 50px;
+  }
+
+  .kb-button{
+    display: inline-block;
+    background-color: $blue;
+    padding: 6px $halfpadding;
+    color: $lightwhite;
+    cursor: pointer;
+
+    &:hover{
+      background-color: $lightblue;
+    }
+  }
+
+}
