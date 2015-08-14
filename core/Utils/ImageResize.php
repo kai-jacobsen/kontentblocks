@@ -123,7 +123,13 @@ namespace Kontentblocks\Utils {
 
                     if ( ! $dims || ( true == $crop && false == $upscale && ( $dst_w < $width || $dst_h < $height ) ) ) {
                         // Can't resize, so return false saying that the action to do could not be processed as planned.
-                        return false;
+                        if (is_numeric($attachment)){
+                            $wpsrc = wp_get_attachment_image_src($attachment, 'full');
+                            $src = $wpsrc[0];
+                        } else {
+                            $src = $attachment;
+                        }
+                        return $src;
                     }
                     // Else check if cache exists.
                     elseif ( file_exists( $destfilename ) && getimagesize( $destfilename ) ) {
