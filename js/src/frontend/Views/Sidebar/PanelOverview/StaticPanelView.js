@@ -1,4 +1,6 @@
-KB.Backbone.StaticPanelView = Backbone.View.extend({
+var tplPanelListItem = require('templates/frontend/sidebar/panel-list-item.hbs');
+var StaticPanelFormView = require('frontend/Views/Sidebar/PanelDetails/StaticPanelFormView');
+module.exports = Backbone.View.extend({
 
   tagName: 'div',
   className: 'kb-sidebar__panel-item',
@@ -12,11 +14,11 @@ KB.Backbone.StaticPanelView = Backbone.View.extend({
     'click' : 'setupFormView'
   },
   render: function () {
-    this.$el.append(KB.Templates.render('frontend/sidebar/panel-list-item', { name: this.model.get('args').name} ));
+    this.$el.append(tplPanelListItem({ name: this.model.get('settings').baseId} ));
     return this.$parent.append(this.$el);
   },
   setupFormView: function(){
-    this.FormView = new KB.Backbone.Sidebar.StaticPanelFormView({
+    this.FormView = new StaticPanelFormView({
       model: this.model,
       controller: this.Controller,
       parentView: this

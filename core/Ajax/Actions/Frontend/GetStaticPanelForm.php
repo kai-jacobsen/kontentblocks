@@ -32,12 +32,12 @@ class GetStaticPanelForm implements AjaxActionInterface
         $panId = filter_var( $panelDef['baseId'], FILTER_SANITIZE_STRING );
         $postId = filter_var( $panelDef['postId'], FILTER_SANITIZE_NUMBER_INT );
 
-        $panel = \Kontentblocks\getPanel( $panId, $postId );
+        $panel = \Kontentblocks\getPostPanel( $panId, $postId );
         $pdata = ( !empty( $panelDef['moduleData'] ) ) ? wp_unslash( $panelDef['moduleData'] ) : [ ];
         $panel->setData( $pdata );
         $return = array(
             'html' => $panel->renderFields(),
-            'json' => stripslashes_deep( Kontentblocks::getService( 'utility.jsontransport' )->getJSON() )
+            'json' =>  Kontentblocks::getService( 'utility.jsontransport' )->getJSON()
         );
         new AjaxSuccessResponse( 'serving module form', $return );
     }

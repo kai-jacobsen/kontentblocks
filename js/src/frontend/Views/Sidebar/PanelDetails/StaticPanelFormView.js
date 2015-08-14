@@ -1,14 +1,17 @@
 //KB.Backbone.Sidebar.StaticPanelFormView
 var Config = require('common/Config');
-
+var Payload = require('common/Payload');
+var Ui = require('common/UI');
+var tplPanelFormView = require('templates/frontend/sidebar/option-panel-details.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__option-panel-wrap',
   initialize: function(options){
     this.Controller = options.controller;
     this.parentView = options.parentView;
-    this.$el.append(KB.Templates.render('frontend/sidebar/option-panel-details', {name: this.model.get('args').name}));
+    this.$el.append(tplPanelFormView({name: this.model.get('settings').baseId}));
     this.$form = this.$('.kb-sidebar__form-container');
+
   },
   events:{
     'click .kb-sidebar-action--update' : 'save',
@@ -53,9 +56,9 @@ module.exports = Backbone.View.extend({
       success: function (res) {
         that.model.trigger('modal.serialize.before');
         that.$form.html(res.data.html);
-        KB.Payload.parseAdditionalJSON(res.data.json);
+        Payload.parseAdditionalJSON(res.data.json);
         that.model.trigger('modal.serialize');
-        KB.Ui.initTabs(that.$el);
+        Ui.initTabs(that.$el);
       },
       error: function () {
       }

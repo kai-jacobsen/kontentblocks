@@ -1,4 +1,4 @@
-KB.Backbone.Sidebar.RootView = Backbone.View.extend({
+module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.Controller = options.controller
   },
