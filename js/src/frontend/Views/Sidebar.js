@@ -5,7 +5,7 @@ var SidebarHeader = require('frontend/Views/Sidebar/SidebarHeader');
 var Utilities = require('common/Utilities');
 var PanelOverviewController = require('frontend/Views/Sidebar/PanelOverview/PanelOverviewController');
 var tplSidebarNav = require('templates/frontend/sidebar/sidebar-nav.hbs');
-var RootView = require('frontend/Views/Sidebar/RootView');
+//var RootView = require('frontend/Views/Sidebar/RootView');
 module.exports = Backbone.View.extend({
   currentView: null,
   viewStack: [],
@@ -27,14 +27,12 @@ module.exports = Backbone.View.extend({
 
     // utility
     this.CategoryFilter = new CategoryFilter();
-    //this.setView(this.AreaList);
-    //this.setView(this.PanelList);
 
-    this.RootView = new RootView({
-      controller: this
-    });
+    //this.RootView = new RootView({
+    //  controller: this
+    //});
     //this.setView(this.RootView);
-    this.setView(this.states['PanelList']); // init Areas list view
+    this.setView(this.states['AreaList']); // init Areas list view
     this.$el.addClass('ui-widget-content');
     this.$el.resizable({
       maxWidth: 900,
@@ -45,18 +43,18 @@ module.exports = Backbone.View.extend({
   events: {
     'click .kb-js-sidebar-nav-back': 'rootView', // back to level 0
     'click [data-kb-action]': 'actionHandler', // event proxy
-    'mouseleave' : 'detectActivity',
-    'mouseenter' : 'clearTimer'
+    'mouseleave': 'detectActivity',
+    'mouseenter': 'clearTimer'
   },
-  detectActivity: function(){
-      var that = this;
-      this.timer = setTimeout(function(){
-        that.$el.addClass('kb-opaque');
-      }, 15000);
-  },
-  clearTimer: function(){
+  detectActivity: function () {
     var that = this;
-    if (this.timer){
+    this.timer = setTimeout(function () {
+      that.$el.addClass('kb-opaque');
+    }, 15000);
+  },
+  clearTimer: function () {
+    var that = this;
+    if (this.timer) {
       clearTimeout(this.timer);
       that.$el.removeClass('kb-opaque');
     }

@@ -34,7 +34,6 @@ class PanelRegistry
      */
     public function add( $panelId, $args )
     {
-
         if (!isset( $this->panels[$panelId] )) {
             $reflect = new \ReflectionClass( $args['class'] );
             if ($reflect->getParentClass()->name === 'Kontentblocks\Modules\StaticModule') {

@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-15 */
+/*! Kontentblocks DevVersion 2015-08-16 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -201,7 +201,7 @@
         "backend/Views/ContextUi/ContextUiView": 4,
         "backend/Views/ContextUi/controls/ColumnControl": 5,
         "backend/Views/ContextUi/controls/ResetControl": 6,
-        "templates/backend/context-bar.hbs": 75
+        "templates/backend/context-bar.hbs": 74
     } ],
     4: [ function(require, module, exports) {
         var ControlsView = require("backend/Views/ModuleControls/ControlsView");
@@ -286,7 +286,7 @@
             }
         });
     }, {
-        "templates/backend/module-menu.hbs": 76
+        "templates/backend/module-menu.hbs": 75
     } ],
     8: [ function(require, module, exports) {
         var Notice = require("common/Notice");
@@ -1344,6 +1344,7 @@
         var ChangeObserver = require("frontend/Views/ChangeObserver");
         var Tether = require("tether");
         var AdminBar = require("frontend/AdminBar");
+        var Checks = require("common/Checks");
         KB.Views = {
             Modules: new ViewsCollection(),
             Areas: new ViewsCollection(),
@@ -1365,7 +1366,7 @@
                 if (!KB.appData.config.initFrontend) {
                     return;
                 }
-                if (KB.appData.config.useModuleNav) {
+                if (KB.appData.config.useModuleNav && Checks.userCan("edit_kontentblocks")) {
                     KB.Sidebar = new SidebarView();
                 }
                 window.Tether = Tether;
@@ -1454,6 +1455,7 @@
         "./Views/AreaView": 40,
         "./Views/ModuleView": 50,
         "./Views/PanelView": 51,
+        "common/Checks": 9,
         "common/Logger": 11,
         "common/Payload": 13,
         "common/UI": 16,
@@ -1467,8 +1469,8 @@
         "frontend/Views/ChangeObserver": 41,
         "frontend/Views/EditModalModules": 42,
         "frontend/Views/Sidebar": 52,
-        "shared/ViewsCollection": 74,
-        tether: 109
+        "shared/ViewsCollection": 73,
+        tether: 108
     } ],
     25: [ function(require, module, exports) {
         var Logger = require("common/Logger");
@@ -2111,7 +2113,7 @@
             }
         });
     }, {
-        tether: 109
+        tether: 108
     } ],
     30: [ function(require, module, exports) {
         var Check = require("common/Checks");
@@ -2488,7 +2490,7 @@
     }, {
         "common/TinyMCE": 15,
         "frontend/Models/ModuleModel": 36,
-        "shared/ModuleBrowser/ModuleBrowserController": 67
+        "shared/ModuleBrowser/ModuleBrowserController": 66
     } ],
     39: [ function(require, module, exports) {
         var Payload = require("common/Payload");
@@ -2775,7 +2777,7 @@
         "common/Notice": 12,
         "frontend/ModuleBrowser/ModuleBrowserExt": 38,
         "frontend/Views/AreaLayout": 39,
-        "templates/frontend/area-empty-placeholder.hbs": 83
+        "templates/frontend/area-empty-placeholder.hbs": 82
     } ],
     41: [ function(require, module, exports) {
         var Notice = require("common/Notice");
@@ -2830,7 +2832,7 @@
         });
     }, {
         "common/Notice": 12,
-        "templates/frontend/change-observer.hbs": 85
+        "templates/frontend/change-observer.hbs": 84
     } ],
     42: [ function(require, module, exports) {
         var Logger = require("common/Logger");
@@ -3204,7 +3206,7 @@
         "common/UI": 16,
         "frontend/Collections/ModalFieldCollection": 21,
         "frontend/Views/LoadingAnimation": 43,
-        "templates/frontend/module-edit-form.hbs": 87
+        "templates/frontend/module-edit-form.hbs": 86
     } ],
     43: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
@@ -3273,7 +3275,7 @@
         "./modulecontrols/EditControl": 47,
         "./modulecontrols/MoveControl": 48,
         "./modulecontrols/UpdateControl": 49,
-        "templates/frontend/module-controls.hbs": 86
+        "templates/frontend/module-controls.hbs": 85
     } ],
     45: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
@@ -3591,7 +3593,7 @@
     }, {
         "common/Checks": 9,
         "frontend/Views/ModuleControls/ModuleControls": 44,
-        "templates/frontend/module-placeholder.hbs": 88
+        "templates/frontend/module-placeholder.hbs": 87
     } ],
     51: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
@@ -3609,7 +3611,6 @@
         var Utilities = require("common/Utilities");
         var PanelOverviewController = require("frontend/Views/Sidebar/PanelOverview/PanelOverviewController");
         var tplSidebarNav = require("templates/frontend/sidebar/sidebar-nav.hbs");
-        var RootView = require("frontend/Views/Sidebar/RootView");
         module.exports = Backbone.View.extend({
             currentView: null,
             viewStack: [],
@@ -3627,10 +3628,7 @@
                     controller: this
                 });
                 this.CategoryFilter = new CategoryFilter();
-                this.RootView = new RootView({
-                    controller: this
-                });
-                this.setView(this.states["PanelList"]);
+                this.setView(this.states["AreaList"]);
                 this.$el.addClass("ui-widget-content");
                 this.$el.resizable({
                     maxWidth: 900,
@@ -3745,9 +3743,8 @@
         "frontend/Views/Sidebar/AreaDetails/CategoryFilter": 56,
         "frontend/Views/Sidebar/AreaOverview/AreaOverviewController": 59,
         "frontend/Views/Sidebar/PanelOverview/PanelOverviewController": 63,
-        "frontend/Views/Sidebar/RootView": 65,
-        "frontend/Views/Sidebar/SidebarHeader": 66,
-        "templates/frontend/sidebar/sidebar-nav.hbs": 99
+        "frontend/Views/Sidebar/SidebarHeader": 65,
+        "templates/frontend/sidebar/sidebar-nav.hbs": 98
     } ],
     53: [ function(require, module, exports) {
         var CategoryController = require("frontend/Views/Sidebar/AreaDetails/CategoryController");
@@ -3834,7 +3831,7 @@
         "common/Notice": 12,
         "frontend/Views/Sidebar/AreaDetails/AreaSettingsController": 54,
         "frontend/Views/Sidebar/AreaDetails/CategoryController": 55,
-        "templates/frontend/sidebar/area-details-header.hbs": 89
+        "templates/frontend/sidebar/area-details-header.hbs": 88
     } ],
     54: [ function(require, module, exports) {
         var Payload = require("common/Payload");
@@ -3892,7 +3889,7 @@
         });
     }, {
         "common/Payload": 13,
-        "templates/frontend/area-layout-item.hbs": 84
+        "templates/frontend/area-layout-item.hbs": 83
     } ],
     55: [ function(require, module, exports) {
         var ModuleDragItem = require("frontend/Views/Sidebar/AreaDetails/ModuleDragItem");
@@ -3923,7 +3920,7 @@
         });
     }, {
         "frontend/Views/Sidebar/AreaDetails/ModuleDragItem": 57,
-        "templates/frontend/sidebar/category-list.hbs": 90
+        "templates/frontend/sidebar/category-list.hbs": 89
     } ],
     56: [ function(require, module, exports) {
         var Payload = require("common/Payload");
@@ -4082,7 +4079,7 @@
         "common/Payload": 13,
         "frontend/Models/ModuleModel": 36,
         "frontend/Views/AreaView": 40,
-        "templates/frontend/sidebar/category-module-item.hbs": 91
+        "templates/frontend/sidebar/category-module-item.hbs": 90
     } ],
     58: [ function(require, module, exports) {
         var ModuleListItem = require("frontend/Views/Sidebar/AreaOverview/ModuleListItem");
@@ -4169,7 +4166,7 @@
     }, {
         "frontend/Views/Sidebar/AreaDetails/AreaDetailsController": 53,
         "frontend/Views/Sidebar/AreaOverview/ModuleListItem": 60,
-        "templates/frontend/sidebar/empty-area.hbs": 92
+        "templates/frontend/sidebar/empty-area.hbs": 91
     } ],
     59: [ function(require, module, exports) {
         var AreaListItem = require("frontend/Views/Sidebar/AreaOverview/AreaListItem");
@@ -4244,8 +4241,8 @@
         });
     }, {
         "frontend/Views/Sidebar/AreaOverview/AreaListItem": 58,
-        "templates/frontend/sidebar/root-item.hbs": 96,
-        "templates/frontend/sidebar/sidebar-area-view.hbs": 97
+        "templates/frontend/sidebar/root-item.hbs": 95,
+        "templates/frontend/sidebar/sidebar-area-view.hbs": 96
     } ],
     60: [ function(require, module, exports) {
         var tplModuleViewItem = require("templates/frontend/sidebar/module-view-item.hbs");
@@ -4314,7 +4311,7 @@
             }
         });
     }, {
-        "templates/frontend/sidebar/module-view-item.hbs": 93
+        "templates/frontend/sidebar/module-view-item.hbs": 92
     } ],
     61: [ function(require, module, exports) {
         var Config = require("common/Config");
@@ -4386,7 +4383,7 @@
         "common/Config": 10,
         "common/Payload": 13,
         "common/UI": 16,
-        "templates/frontend/sidebar/option-panel-details.hbs": 94
+        "templates/frontend/sidebar/option-panel-details.hbs": 93
     } ],
     62: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
@@ -4473,7 +4470,7 @@
     }, {
         "frontend/Views/Sidebar/PanelOverview/OptionPanelView": 62,
         "frontend/Views/Sidebar/PanelOverview/StaticPanelView": 64,
-        "templates/frontend/sidebar/root-item.hbs": 96
+        "templates/frontend/sidebar/root-item.hbs": 95
     } ],
     64: [ function(require, module, exports) {
         var tplPanelListItem = require("templates/frontend/sidebar/panel-list-item.hbs");
@@ -4509,21 +4506,9 @@
         });
     }, {
         "frontend/Views/Sidebar/PanelDetails/StaticPanelFormView": 61,
-        "templates/frontend/sidebar/panel-list-item.hbs": 95
+        "templates/frontend/sidebar/panel-list-item.hbs": 94
     } ],
     65: [ function(require, module, exports) {
-        module.exports = Backbone.View.extend({
-            initialize: function(options) {
-                this.Controller = options.controller;
-            },
-            render: function() {
-                _.each(this.Controller.states, function(state) {
-                    state.renderRootItem();
-                });
-            }
-        });
-    }, {} ],
-    66: [ function(require, module, exports) {
         var tplSidebarHeader = require("templates/frontend/sidebar/sidebar-header.hbs");
         module.exports = Backbone.View.extend({
             tagName: "div",
@@ -4536,9 +4521,9 @@
             }
         });
     }, {
-        "templates/frontend/sidebar/sidebar-header.hbs": 98
+        "templates/frontend/sidebar/sidebar-header.hbs": 97
     } ],
-    67: [ function(require, module, exports) {
+    66: [ function(require, module, exports) {
         var ModuleDefinitions = require("shared/ModuleBrowser/ModuleBrowserDefinitions");
         var ModuleDefModel = require("shared/ModuleBrowser/ModuleDefinitionModel");
         var ModuleBrowserDescription = require("shared/ModuleBrowser/ModuleBrowserDescriptions");
@@ -4736,14 +4721,14 @@
         "common/Notice": 12,
         "common/Payload": 13,
         "common/TinyMCE": 15,
-        "shared/ModuleBrowser/ModuleBrowserDefinitions": 68,
-        "shared/ModuleBrowser/ModuleBrowserDescriptions": 69,
-        "shared/ModuleBrowser/ModuleBrowserList": 70,
-        "shared/ModuleBrowser/ModuleBrowserNavigation": 72,
-        "shared/ModuleBrowser/ModuleDefinitionModel": 73,
-        "templates/backend/modulebrowser/module-browser.hbs": 77
+        "shared/ModuleBrowser/ModuleBrowserDefinitions": 67,
+        "shared/ModuleBrowser/ModuleBrowserDescriptions": 68,
+        "shared/ModuleBrowser/ModuleBrowserList": 69,
+        "shared/ModuleBrowser/ModuleBrowserNavigation": 71,
+        "shared/ModuleBrowser/ModuleDefinitionModel": 72,
+        "templates/backend/modulebrowser/module-browser.hbs": 76
     } ],
-    68: [ function(require, module, exports) {
+    67: [ function(require, module, exports) {
         var Payload = require("common/Payload");
         module.exports = Backbone.Collection.extend({
             initialize: function(models, options) {
@@ -4791,7 +4776,7 @@
     }, {
         "common/Payload": 13
     } ],
-    69: [ function(require, module, exports) {
+    68: [ function(require, module, exports) {
         var Templates = require("common/Templates");
         var tplModuleTemplateDescription = require("templates/backend/modulebrowser/module-template-description.hbs");
         var tplModuleDescription = require("templates/backend/modulebrowser/module-description.hbs");
@@ -4835,11 +4820,11 @@
         });
     }, {
         "common/Templates": 14,
-        "templates/backend/modulebrowser/module-description.hbs": 78,
-        "templates/backend/modulebrowser/module-template-description.hbs": 80,
-        "templates/backend/modulebrowser/poster.hbs": 82
+        "templates/backend/modulebrowser/module-description.hbs": 77,
+        "templates/backend/modulebrowser/module-template-description.hbs": 79,
+        "templates/backend/modulebrowser/poster.hbs": 81
     } ],
-    70: [ function(require, module, exports) {
+    69: [ function(require, module, exports) {
         var ListItem = require("shared/ModuleBrowser/ModuleBrowserListItem");
         module.exports = Backbone.View.extend({
             initialize: function(options) {
@@ -4870,9 +4855,9 @@
             }
         });
     }, {
-        "shared/ModuleBrowser/ModuleBrowserListItem": 71
+        "shared/ModuleBrowser/ModuleBrowserListItem": 70
     } ],
-    71: [ function(require, module, exports) {
+    70: [ function(require, module, exports) {
         var tplTemplateListItem = require("templates/backend/modulebrowser/module-template-list-item.hbs");
         var tplListItem = require("templates/backend/modulebrowser/module-list-item.hbs");
         module.exports = Backbone.View.extend({
@@ -4922,10 +4907,10 @@
             }
         });
     }, {
-        "templates/backend/modulebrowser/module-list-item.hbs": 79,
-        "templates/backend/modulebrowser/module-template-list-item.hbs": 81
+        "templates/backend/modulebrowser/module-list-item.hbs": 78,
+        "templates/backend/modulebrowser/module-template-list-item.hbs": 80
     } ],
-    72: [ function(require, module, exports) {
+    71: [ function(require, module, exports) {
         module.exports = Backbone.View.extend({
             item: Backbone.View.extend({
                 initialize: function(options) {
@@ -4971,7 +4956,7 @@
             }
         });
     }, {} ],
-    73: [ function(require, module, exports) {
+    72: [ function(require, module, exports) {
         module.exports = Backbone.Model.extend({
             initialize: function() {
                 var that = this;
@@ -4985,7 +4970,7 @@
             }
         });
     }, {} ],
-    74: [ function(require, module, exports) {
+    73: [ function(require, module, exports) {
         KB.ViewsCollection = function() {
             this.views = {};
             this.lastViewAdded = null;
@@ -5033,7 +5018,7 @@
         _.extend(KB.ViewsCollection.prototype, Backbone.Events);
         module.exports = KB.ViewsCollection;
     }, {} ],
-    75: [ function(require, module, exports) {
+    74: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5043,9 +5028,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    76: [ function(require, module, exports) {
+    75: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5055,9 +5040,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    77: [ function(require, module, exports) {
+    76: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5073,9 +5058,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    78: [ function(require, module, exports) {
+    77: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5086,9 +5071,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    79: [ function(require, module, exports) {
+    78: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5099,9 +5084,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    80: [ function(require, module, exports) {
+    79: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5112,9 +5097,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    81: [ function(require, module, exports) {
+    80: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5125,9 +5110,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    82: [ function(require, module, exports) {
+    81: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5138,9 +5123,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    83: [ function(require, module, exports) {
+    82: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5150,9 +5135,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    84: [ function(require, module, exports) {
+    83: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             "1": function(depth0, helpers, partials, data) {
@@ -5173,9 +5158,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    85: [ function(require, module, exports) {
+    84: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5185,9 +5170,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    86: [ function(require, module, exports) {
+    85: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             "1": function(depth0, helpers, partials, data) {
@@ -5216,9 +5201,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    87: [ function(require, module, exports) {
+    86: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5229,9 +5214,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    88: [ function(require, module, exports) {
+    87: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5242,9 +5227,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    89: [ function(require, module, exports) {
+    88: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5260,9 +5245,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    90: [ function(require, module, exports) {
+    89: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5278,9 +5263,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    91: [ function(require, module, exports) {
+    90: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5291,9 +5276,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    92: [ function(require, module, exports) {
+    91: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5303,9 +5288,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    93: [ function(require, module, exports) {
+    92: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5316,9 +5301,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    94: [ function(require, module, exports) {
+    93: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5334,9 +5319,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    95: [ function(require, module, exports) {
+    94: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5352,9 +5337,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    96: [ function(require, module, exports) {
+    95: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5375,9 +5360,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    97: [ function(require, module, exports) {
+    96: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5393,9 +5378,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    98: [ function(require, module, exports) {
+    97: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5405,9 +5390,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    99: [ function(require, module, exports) {
+    98: [ function(require, module, exports) {
         var HandlebarsCompiler = require("hbsfy/runtime");
         module.exports = HandlebarsCompiler.template({
             compiler: [ 6, ">= 2.0.0-beta.1" ],
@@ -5417,9 +5402,9 @@
             useData: true
         });
     }, {
-        "hbsfy/runtime": 108
+        "hbsfy/runtime": 107
     } ],
-    100: [ function(require, module, exports) {
+    99: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -5459,14 +5444,14 @@
         exports["default"] = inst;
         module.exports = exports["default"];
     }, {
-        "./handlebars/base": 101,
-        "./handlebars/exception": 102,
-        "./handlebars/no-conflict": 103,
-        "./handlebars/runtime": 104,
-        "./handlebars/safe-string": 105,
-        "./handlebars/utils": 106
+        "./handlebars/base": 100,
+        "./handlebars/exception": 101,
+        "./handlebars/no-conflict": 102,
+        "./handlebars/runtime": 103,
+        "./handlebars/safe-string": 104,
+        "./handlebars/utils": 105
     } ],
-    101: [ function(require, module, exports) {
+    100: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -5690,10 +5675,10 @@
             return frame;
         }
     }, {
-        "./exception": 102,
-        "./utils": 106
+        "./exception": 101,
+        "./utils": 105
     } ],
-    102: [ function(require, module, exports) {
+    101: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         var errorProps = [ "description", "fileName", "lineNumber", "message", "name", "number", "stack" ];
@@ -5720,7 +5705,7 @@
         exports["default"] = Exception;
         module.exports = exports["default"];
     }, {} ],
-    103: [ function(require, module, exports) {
+    102: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports["default"] = function(Handlebars) {
@@ -5733,7 +5718,7 @@
         };
         module.exports = exports["default"];
     }, {} ],
-    104: [ function(require, module, exports) {
+    103: [ function(require, module, exports) {
         "use strict";
         var _interopRequireWildcard = function(obj) {
             return obj && obj.__esModule ? obj : {
@@ -5920,11 +5905,11 @@
             return data;
         }
     }, {
-        "./base": 101,
-        "./exception": 102,
-        "./utils": 106
+        "./base": 100,
+        "./exception": 101,
+        "./utils": 105
     } ],
-    105: [ function(require, module, exports) {
+    104: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         function SafeString(string) {
@@ -5936,7 +5921,7 @@
         exports["default"] = SafeString;
         module.exports = exports["default"];
     }, {} ],
-    106: [ function(require, module, exports) {
+    105: [ function(require, module, exports) {
         "use strict";
         exports.__esModule = true;
         exports.extend = extend;
@@ -6024,17 +6009,17 @@
             return (contextPath ? contextPath + "." : "") + id;
         }
     }, {} ],
-    107: [ function(require, module, exports) {
+    106: [ function(require, module, exports) {
         module.exports = require("./dist/cjs/handlebars.runtime")["default"];
     }, {
-        "./dist/cjs/handlebars.runtime": 100
+        "./dist/cjs/handlebars.runtime": 99
     } ],
-    108: [ function(require, module, exports) {
+    107: [ function(require, module, exports) {
         module.exports = require("handlebars/runtime")["default"];
     }, {
-        "handlebars/runtime": 107
+        "handlebars/runtime": 106
     } ],
-    109: [ function(require, module, exports) {
+    108: [ function(require, module, exports) {
         (function(root, factory) {
             if (typeof define === "function" && define.amd) {
                 define(factory);
