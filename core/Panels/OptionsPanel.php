@@ -44,11 +44,29 @@ abstract class OptionsPanel extends AbstractPanel
     protected $menuUri;
 
 
-    public function __construct($args){
-        parent::__construct($args);
+    public function __construct( $args )
+    {
+        parent::__construct( $args );
 
         $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
 
+    }
+
+    /**
+     * Setup panel related meta data
+     *
+     * @internal param $postId
+     *
+     * @param null $postId
+     * @return mixed
+     */
+    public function setupData( $postId = null )
+    {
+        if (is_null( $this->data )) {
+            $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
+            $this->data = $this->dataProvider->export();
+        }
+        return $this->data;
     }
 
     /**
@@ -158,23 +176,6 @@ abstract class OptionsPanel extends AbstractPanel
             'args' => $this->args
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
-    }
-
-    /**
-     * Setup panel related meta data
-     *
-     * @internal param $postId
-     *
-     * @param null $postId
-     * @return mixed
-     */
-    public function setupData( $postId = null )
-    {
-        if (is_null( $this->data )) {
-            $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
-            $this->data = $this->dataProvider->export();
-        }
-        return $this->data;
     }
 
     /**
@@ -319,13 +320,21 @@ abstract class OptionsPanel extends AbstractPanel
         }
     }
 
-    public function setupCustomizer(\WP_Customize_Manager $wpCustomize)
+    /**
+     * @param \WP_Customize_Manager $wpCustomize
+     */
+    public function setupCustomizer( \WP_Customize_Manager $wpCustomize )
     {
-        $this->fields($this->fieldController);
-        new CustomizerIntegration($this->fieldController, $wpCustomize, $this);
+        $this->fieldController->setup();
+        $this->fields( $this->fieldController );
+        new CustomizerIntegration( $this->fieldController, $wpCustomize, $this );
     }
 
-    public function getName(){
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
         return $this->menu['name'];
     }
 

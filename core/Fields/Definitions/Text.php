@@ -44,16 +44,5 @@ Class Text extends Field
 
     }
 
-    public function addCustomizerControl( \WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
-    {
-        $customizeManager->add_control(
-            $integration->getSettingName( $this ),
-            array(
-                'label' => $this->getArg( 'label' ),
-                'section' => $this->section->getID(),
-                'type' => $this->type
-            )
-        );
-    }
 
 }

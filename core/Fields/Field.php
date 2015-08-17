@@ -659,9 +659,17 @@ abstract class Field implements Exportable
 
     /**
      * @param \WP_Customize_Manager $customizeManager
+     * @param CustomizerIntegration $integration
      * @return null
      */
     public function addCustomizerControl(\WP_Customize_Manager $customizeManager, CustomizerIntegration $integration){
-        return null;
+        $customizeManager->add_control(
+            $integration->getSettingName( $this ),
+            array(
+                'label' => $this->getArg( 'label' ),
+                'section' => $this->section->getID(),
+                'type' => $this->type
+            )
+        );
     }
 }

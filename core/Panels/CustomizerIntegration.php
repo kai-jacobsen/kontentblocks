@@ -45,7 +45,6 @@ class CustomizerIntegration
 
         $this->fieldController = $fieldController;
         $this->fields = $fieldController->collectAllFields();
-        $fieldController->setup();
         $this->customizeManager = $wpCustomize;
         $this->panel = $panel;
         $this->addPanel();
