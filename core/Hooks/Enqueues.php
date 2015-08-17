@@ -27,6 +27,7 @@ class Enqueues
         // enqueue styles and scripts where needed
         add_action( 'admin_print_styles-post.php', array( __CLASS__, 'adminEnqueue' ), 30 );
         add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'adminEnqueue' ), 30 );
+        add_action( 'customize_controls_enqueue_scripts', array( __CLASS__, 'customizerEnqueue' ) );
 
         add_action( 'kb.do.enqueue.admin.files', array( __CLASS__, 'adminEnqueue' ) );
 
@@ -61,6 +62,16 @@ class Enqueues
             'editor',
             'quicktags',
         );
+
+        // Plugins
+        wp_register_script(
+            'kb-customizer',
+            KB_PLUGIN_URL . 'js/' . $folder . '/customizer' . $suffix . '.js',
+            $dependencies,
+            null,
+            true
+        );
+
         // Plugins
         wp_register_script(
             'kb-plugins',
@@ -155,6 +166,10 @@ class Enqueues
             true
         );
         self::customScripts();
+    }
+
+    public static function customizerEnqueue(){
+        wp_enqueue_script('kb-customizer');
     }
 
     private static function customScripts()

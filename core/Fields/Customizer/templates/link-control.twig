@@ -1,0 +1,9 @@
+<label>
+    {% if control.label %}
+    <span class="customize-control-title">{{ control.label|esc_html }}</span>
+    {% endif %}
+    {% if control.description %}
+    <span class="description customize-control-description"><?php echo $this->description; ?></span>
+    {% endif %}
+    <input data-kb-link-url type="{{ control.type|esc_attr }}" {{ control.input_attrs() }} value="{{ control.value|esc_attr }}" {{ control.link() }} />
+</label>

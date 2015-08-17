@@ -20,15 +20,14 @@ class FieldView
         $this->data = $data;
         $this->I18n = I18n::getInstance();
         $this->tplFile = ( $tpl !== false ) ? $tpl : null;
-        $this->path = KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/';
+        $this->setPath(KB_PLUGIN_PATH . 'core/Fields/Definitions/templates/');
+        $this->setPath(KB_PLUGIN_PATH . 'core/Fields/Customizer/templates/');
         $this->engine = Kontentblocks::getService( 'templating.twig.fields' );
 
     }
 
     public function render( $echo = false )
     {
-        $this->setPath( $this->path );
-
         if ($echo) {
             $this->engine->display( $this->tplFile, $this->data );
         } else {
@@ -40,12 +39,6 @@ class FieldView
     public function setPath( $path )
     {
         Twig::setPath( $path );
-
-    }
-
-    public function __destruct()
-    {
-//        Twig::resetPath();
 
     }
 

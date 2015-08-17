@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-16 */
+/*! Kontentblocks DevVersion 2015-08-17 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {

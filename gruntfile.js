@@ -41,7 +41,8 @@ module.exports = function (grunt) {
           'js/dist/extensions.min.js': ['<%= browserify.extensions.dest %>'],
           'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
           'js/dist/fieldsAPI.min.js': ['<%= browserify.fieldsAPI.dest %>'],
-          'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>']
+          'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>'],
+          'js/dist/customizer.min.js': ['<%= browserify.customizer.dest %>']
 
         }
       },
@@ -60,7 +61,9 @@ module.exports = function (grunt) {
           'js/dev/extensions.js': ['<%= browserify.extensions.dest %>'],
           'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
           'js/dev/fieldsAPI.js': ['<%= browserify.fieldsAPI.dest %>'],
-          'js/dev/mediaExt.js': ['<%= concat.mediaExt.dest %>']
+          'js/dev/mediaExt.js': ['<%= concat.mediaExt.dest %>'],
+          'js/dev/customizer.js': ['<%= browserify.customizer.dest %>']
+
         }
       }
     },
@@ -107,6 +110,10 @@ module.exports = function (grunt) {
       extensions: {
         src: 'js/src/extensions/ExtensionsController.js',
         dest: 'js/tmp/extensions.concat.js'
+      },
+      customizer: {
+        src: 'js/src/customizer/CustomizerController.js',
+        dest: 'js/tmp/customizer.concat.js'
       }
     },
     sass: {
