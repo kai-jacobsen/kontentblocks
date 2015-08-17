@@ -2,11 +2,14 @@
 
 namespace Kontentblocks\Fields\Definitions;
 
+use Kontentblocks\Fields\Customizer\Settings\ImageSetting;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldFormController;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Panels\CustomizerIntegration;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\AttachmentHandler;
+use WP_Customize_Media_Control;
 
 /**
  * Single image insert/upload.
@@ -29,6 +32,7 @@ Class Image extends Field
     }
 
 
+
     /**
      * @param $val
      *
@@ -48,6 +52,14 @@ Class Image extends Field
 
     }
 
+    /**
+     * Fields saving method
+     *
+     * @param mixed $new
+     * @param mixed $old
+     * @return mixed
+     *
+     */
     public function save( $new, $old )
     {
         if (is_null( $new )) {
@@ -67,6 +79,38 @@ Class Image extends Field
             );
         }
         return $new;
+    }
+
+    /**
+     * @param \WP_Customize_Manager $customizeManager
+     * @return null
+     */
+    public function addCustomizerControl( \WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
+    {
+        $customizeManager->add_control(
+            new WP_Customize_Media_Control(
+                $customizeManager, $integration->getSettingName( $this ),
+                array(
+                    'label' => $this->getArg( 'label' ),
+                    'section' => $this->section->getID(),
+                    'type' => $this->type
+                )
+            )
+        );
+    }
+
+    /**
+     * @param \WP_Customize_Manager $customizeManager
+     * @param CustomizerIntegration $integration
+     */
+    public function addCustomizerSetting(\WP_Customize_Manager $customizeManager, CustomizerIntegration $integration){
+         $customizeManager->add_setting(
+             new ImageSetting($customizeManager, $integration->getSettingName($this), array(
+                 'default' => $this->getArg( 'std' ),
+                 'type' => 'option',
+                 'field' => $this
+             ))
+         );
     }
 
 }

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Panels;
 
 
+use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -12,6 +13,15 @@ use Kontentblocks\Utils\Utilities;
 abstract class AbstractPanel
 {
 
+    /**
+     * Custom Field Manager Instance
+     * @var PanelFieldController
+     */
+    public $fieldController;
+
+    /**
+     * @var array
+     */
     protected $args;
 
     /**
@@ -21,35 +31,16 @@ abstract class AbstractPanel
     protected $baseId;
 
     /**
-     * Render in MetaBox
-     * @var bool
-     */
-    protected $metaBox;
-
-    /**
      * Form data
      * @var array
      */
     public $data = null;
 
+
     /**
-     * Position / Hook to use
      * @var string
      */
-    protected $hook;
-
-    /**
-     * Post Types
-     * @var array
-     */
-    protected $postTypes = array();
-
-
-    /**
-     * PageTemplates
-     * @var array
-     */
-    protected $pageTemplates = array();
+    private $type;
 
 
     /**
@@ -70,15 +61,13 @@ abstract class AbstractPanel
         // mumbo jumbo
         $this->setupArgs( $this->args );
 
-//        add_action(
-//            'add_meta_boxes',
-//            function () {
-//                $this->setupHooks();
-//            }
-//        );
-
-//        add_action( "save_post", array( $this, 'save' ), 10, 1 );
     }
+
+    public static function run($args){
+        // do nothing
+    }
+
+    abstract public function init();
 
     /**
      * Make sure some meaningful defaults are set
@@ -104,32 +93,7 @@ abstract class AbstractPanel
         }
     }
 
-    /**
-     * Setup wordpress hooks
-     * Either the panel sits in a meta box or has its own container
-     */
-    public function setupHooks()
-    {
-        foreach ($this->postTypes as $pt) {
-            // check for page templates resp. for the a _wp_page_template meta key
-            if (!empty( $this->pageTemplates )) {
-                $tpl = get_post_meta( get_the_ID(), '_wp_page_template', true );
-                if (!$tpl) {
-                    $tpl = 'default';
-                }
-                if (empty( $tpl ) || !in_array( $tpl, $this->pageTemplates )) {
-                    continue;
-                }
-            }
 
-            // either add the form as meta box or to custom hook
-            if (is_array( $this->metaBox ) || $this->metaBox) {
-                add_action( "add_meta_boxes_{$pt}", array( $this, 'metaBox' ), 10, 1 );
-            } else {
-                add_action( $this->hook, array( $this, 'form' ) );
-            }
-        }
-    }
 
     /**
      * Save form
@@ -150,7 +114,7 @@ abstract class AbstractPanel
      * @param null $postId
      * @return mixed
      */
-    abstract public function getData( );
+    abstract public function getData();
 
     public function setData( $data )
     {
@@ -223,6 +187,10 @@ abstract class AbstractPanel
 
         $this->data = get_post_meta( $id, $this->baseId, true );
         return $this->data;
+    }
+
+    protected function getType(){
+        return $this->type;
     }
 
 } 

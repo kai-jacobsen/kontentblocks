@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldFormController;
+use Kontentblocks\Panels\CustomizerIntegration;
 
 /**
  * Simple text input field
@@ -41,6 +42,18 @@ Class Text extends Field
     {
         return esc_html( $val );
 
+    }
+
+    public function addCustomizerControl( \WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
+    {
+        $customizeManager->add_control(
+            $integration->getSettingName( $this ),
+            array(
+                'label' => $this->getArg( 'label' ),
+                'section' => $this->section->getID(),
+                'type' => $this->type
+            )
+        );
     }
 
 }

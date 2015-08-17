@@ -39,7 +39,7 @@ class PostPanelRepository
             $panel['uid'] = hash( 'crc32', serialize( $panel ) );
             $panel['postId'] = $environment->getId();
             $this->panels[$id] = $instance = new $panel['class']( $panel, $environment );
-            $instance->prepare();
+            $instance->init();
         }
     }
 

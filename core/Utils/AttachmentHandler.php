@@ -73,7 +73,14 @@ class AttachmentHandler
         } else {
             return $default;
         }
+    }
 
+    public function getCaption(){
+        return $this->file['caption'];
+    }
+
+    public function getTitle(){
+        return $this->file['title'];
     }
 
 }

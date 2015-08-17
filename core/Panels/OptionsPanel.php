@@ -2,7 +2,6 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Ajax\Actions\DuplicateModule;
 use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
@@ -20,59 +19,59 @@ abstract class OptionsPanel extends AbstractPanel
 {
 
     /**
-     * Key / base id
-     * @var string
+     * @var SerOptionsDataProvider
      */
-    protected $baseId;
-
-    protected $args;
-
-    protected $menu;
-
-    protected $menuUri;
-
     public $dataProvider;
 
     /**
-     * Custom Field Manager Instance for Panels
-     * @var PanelFieldController
+     * @var bool
      */
-    public $fieldController;
+    public $frontend;
 
     /**
-     * Form data
+     * @var bool
+     */
+    public $customizer;
+
+    /**
      * @var array
      */
-    public $data = null;
+    protected $menu;
 
     /**
-     * Class constructor
-     *
-     * @param array $args
-     *
-     * @throws \Exception
+     * @var string
      */
-    public function __construct( $args )
-    {
-        $this->args = $this->parseDefaults( $args );
+    protected $menuUri;
 
-        if (is_null( $args['baseId'] )) {
-            throw new \Exception( 'MUST provide a base id' );
-        }
-        $this->setupArgs( $args );
 
-        add_action( 'admin_init', array( $this, 'observeSaveRequest' ) );
-        add_action( 'admin_menu', array( $this, 'setupMenu' ) );
-        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+    public function __construct($args){
+        parent::__construct($args);
+
+        $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
 
     }
 
+    /**
+     * @param $args
+     */
+    public static function run( $args )
+    {
+        $instance = new $args['class']( $args );
+        $instance->init();
+    }
+
+    /**
+     * Make sure some meaningful defaults are set
+     * @param $args
+     * @return mixed
+     */
     public function parseDefaults( $args )
     {
         $defaults = array(
             'baseId' => null,
             'menu' => false,
-            'frontend' => false
+            'frontend' => false,
+            'customizer' => false
         );
 
         return wp_parse_args( $args, $defaults );
@@ -93,6 +92,18 @@ abstract class OptionsPanel extends AbstractPanel
                 $this->$k = $v;
             }
         }
+    }
+
+    public function init()
+    {
+        add_action( 'admin_init', array( $this, 'observeSaveRequest' ) );
+        add_action( 'admin_menu', array( $this, 'setupMenu' ) );
+        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+
+        if ($this->customizer) {
+            add_action( 'customize_register', array( $this, 'setupCustomizer' ) );
+        }
+
     }
 
     public function setupMenu()
@@ -132,9 +143,43 @@ abstract class OptionsPanel extends AbstractPanel
 
                 break;
         }
+
+        $this->toJSON();
     }
 
+    public function toJSON()
+    {
+        $args = array(
+            'baseId' => $this->getBaseId(),
+            'mid' => $this->getBaseId(),
+            'moduleData' => $this->data,
+            'area' => '_internal',
+            'type' => 'option',
+            'args' => $this->args
+        );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
+    }
 
+    /**
+     * Setup panel related meta data
+     *
+     * @internal param $postId
+     *
+     * @param null $postId
+     * @return mixed
+     */
+    public function setupData( $postId = null )
+    {
+        if (is_null( $this->data )) {
+            $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
+            $this->data = $this->dataProvider->export();
+        }
+        return $this->data;
+    }
+
+    /**
+     * Lookout for save action in $_POST
+     */
     public function observeSaveRequest()
     {
 
@@ -156,31 +201,12 @@ abstract class OptionsPanel extends AbstractPanel
     public function save( $postId = null )
     {
         $old = $this->setupData();
-        $this->fieldController = new PanelFieldController( $this->baseId, $this->data, $this );
         $new = $this->fields( $this->fieldController )->save( $_POST[$this->baseId], $old );
         $merged = Utilities::arrayMergeRecursive( $new, $old );
         $this->dataProvider->set( $merged )->save();
         $location = add_query_arg( array( 'message' => '1' ) );
         wp_redirect( $location );
         exit;
-    }
-
-
-    /**
-     * Setup panel related meta data
-     *
-     * @internal param $postId
-     *
-     * @param null $postId
-     * @return mixed
-     */
-    public function setupData( $postId = null )
-    {
-        if (is_null( $this->data )) {
-            $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
-            $this->data = $this->dataProvider->export();
-        }
-        return $this->data;
     }
 
     abstract public function fields( PanelFieldController $fieldManager );
@@ -203,12 +229,6 @@ abstract class OptionsPanel extends AbstractPanel
 
     }
 
-    public function renderFields()
-    {
-        $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
-        return $this->fields( $this->fieldController )->renderFields();
-    }
-
     /**
      * Markup before inner form
      */
@@ -222,6 +242,12 @@ abstract class OptionsPanel extends AbstractPanel
                 <div class='kb-custom-wrapper'>
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
         return $out;
+    }
+
+    public function renderFields()
+    {
+        $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
+        return $this->fields( $this->fieldController )->renderFields();
     }
 
     /**
@@ -246,25 +272,9 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function setup()
     {
-//        $this->toJSON();
         return $this;
 
     }
-
-    /**
-     * After setup, get the setup object
-     * @return array
-     * @TODO __Revise__
-     */
-    public function getData( $postid = null )
-    {
-        if (is_null( $this->fieldController )) {
-            $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
-            $this->fields( $this->fieldController )->setup( $this->setupData() );
-        }
-        return $this->fieldController->prepareDataAndGet();
-    }
-
 
     /**
      * Get specific key value from data
@@ -284,6 +294,24 @@ abstract class OptionsPanel extends AbstractPanel
         return $default;
     }
 
+    /**
+     * After setup, get the setup object
+     * @return array
+     * @TODO __Revise__
+     */
+    public function getData()
+    {
+        if (is_null( $this->fieldController )) {
+            $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
+            $this->fields( $this->fieldController )->setup( $this->setupData() );
+        }
+        return $this->fieldController->prepareDataAndGet();
+    }
+
+    /**
+     * Return the menu link
+     * @return string
+     */
     public function getMenuLink()
     {
         if (current_user_can( 'edit_kontentblocks' )) {
@@ -291,17 +319,14 @@ abstract class OptionsPanel extends AbstractPanel
         }
     }
 
-    public function toJSON()
+    public function setupCustomizer(\WP_Customize_Manager $wpCustomize)
     {
-        $args = array(
-            'baseId' => $this->getBaseId(),
-            'mid' => $this->getBaseId(),
-            'moduleData' => $this->setupData(),
-            'area' => '_internal',
-            'type' => 'option',
-            'args' => $this->args
-        );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
+        $this->fields($this->fieldController);
+        new CustomizerIntegration($this->fieldController, $wpCustomize, $this);
+    }
+
+    public function getName(){
+        return $this->menu['name'];
     }
 
 }

@@ -6,6 +6,7 @@ namespace Kontentblocks\Fields;
 use Kontentblocks\Common\Exportable;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Panels\CustomizerIntegration;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Fields\Returnobjects;
 
@@ -82,6 +83,11 @@ abstract class Field implements Exportable
 
 
     protected $userValue;
+
+    /**
+     * @var AbstractFieldSection
+     */
+    public $section;
 
 
     /**
@@ -424,6 +430,7 @@ abstract class Field implements Exportable
          * Field may alter the injected data array
          */
         if (method_exists( $this, 'prepareTemplateData' )) {
+
             $data = $this->prepareTemplateData( $data );
         }
 
@@ -630,7 +637,8 @@ abstract class Field implements Exportable
             'nKey' => $notated,
             'type' => $this->type,
             'std' => $this->getArg( 'std', '' ),
-            'args' => $this->cleanedArgs()
+            'args' => $this->cleanedArgs(),
+            'section' => $this->section->id
         );
     }
 
@@ -647,5 +655,13 @@ abstract class Field implements Exportable
         }
         $path .= $this->getKey();
         return $path;
+    }
+
+    /**
+     * @param \WP_Customize_Manager $customizeManager
+     * @return null
+     */
+    public function addCustomizerControl(\WP_Customize_Manager $customizeManager, CustomizerIntegration $integration){
+        return null;
     }
 }
