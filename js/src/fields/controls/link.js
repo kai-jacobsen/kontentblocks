@@ -8,7 +8,6 @@ module.exports = BaseView.extend({
     'click .kb-js-add-link' : 'openModal'
   },
   render: function(){
-    console.log(this.$);
     this.$input = this.$('[data-kbf-link-url]');
     this.$text = this.$('[data-kbf-link-linktext]');
   },
@@ -18,7 +17,6 @@ module.exports = BaseView.extend({
   openModal: function(){
     wpActiveEditor = this.$input.attr('id');
     jQuery('#wp-link-wrap').addClass('kb-customized');
-
 
     // store the original function
     window.kb_restore_htmlUpdate = wpLink.htmlUpdate;
@@ -51,6 +49,7 @@ module.exports = BaseView.extend({
     //Append the Url to the textarea
     textarea.value = href;
 
+    this.trigger('update', title, href);
 
     window._kbLink.$text.val(title);
     //restore the original function

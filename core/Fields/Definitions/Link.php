@@ -57,7 +57,10 @@ Class Link extends Field
                     'label' => $this->getArg( 'label' ),
                     'description' => $this->getArg( 'description' ),
                     'section' => $this->section->getID(),
-                    'type' => 'kbLink'
+                    'type' => 'kbLink',
+                    'input_attrs' => array(
+                        'id' => $this->createUID()
+                    )
                 )
             )
         );

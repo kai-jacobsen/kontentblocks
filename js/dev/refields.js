@@ -1892,7 +1892,6 @@
                 "click .kb-js-add-link": "openModal"
             },
             render: function() {
-                console.log(this.$);
                 this.$input = this.$("[data-kbf-link-url]");
                 this.$text = this.$("[data-kbf-link-linktext]");
             },
