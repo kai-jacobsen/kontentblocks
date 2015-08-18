@@ -49,7 +49,7 @@ module.exports = BaseView.extend({
     //Append the Url to the textarea
     textarea.value = href;
 
-    this.trigger('update', title, href);
+    window._kbLink.trigger('update', title, href);
 
     window._kbLink.$text.val(title);
     //restore the original function
