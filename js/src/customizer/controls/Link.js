@@ -15,13 +15,23 @@ module.exports = wp.customize.Control.extend({
       control.setting.set(value);
     });
 
-    control.LinkField.$text.on('keyup', _.throttle(function(){
-        var value = {
-          linktext: this.value,
-          href: control.LinkField.$input.val()
-        };
-      console.log(value);
-    }, 150) );
+    var updateLinktext = _.debounce(function(){
+      var value = {
+        linktext: this.value,
+        href: control.LinkField.$input.val()
+      };
+      control.setting.set(value);
+    }, 400);
+    control.LinkField.$text.on('keyup', updateLinktext );
+
+    var updateUrl = _.debounce(function(){
+      var value = {
+        href: this.value,
+        linktext: control.LinkField.$text.val()
+      };
+      control.setting.set(value);
+    }, 400);
+    control.LinkField.$input.on('keyup', updateUrl );
 
     control.setting.bind(function (value) {
       console.log('bound', value);
