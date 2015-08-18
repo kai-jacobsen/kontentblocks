@@ -1916,7 +1916,7 @@
                 href = attrs.href;
                 jQuery(textarea).empty();
                 textarea.value = href;
-                this.trigger("update", title, href);
+                window._kbLink.trigger("update", title, href);
                 window._kbLink.$text.val(title);
                 wpLink.close();
                 window._kbLink.close();
