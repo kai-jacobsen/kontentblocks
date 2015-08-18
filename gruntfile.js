@@ -172,6 +172,10 @@ module.exports = function (grunt) {
         files: ['js/src/fieldsAPI/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsfieldsAPI']
       },
+      customizer: {
+        files: ['js/src/customizer/**/*.js'],
+        tasks: ['jsCustomizer']
+      },
       sass: {
         options: {
           livereload: false
@@ -247,12 +251,13 @@ module.exports = function (grunt) {
 
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
 
-  grunt.registerTask('jsfrontend', ['browserify:frontend', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsbackend', ['browserify:backend', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsextensions', ['browserify:extensions', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsrefields', ['browserify:refields', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsplugins', ['uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI','uglify:dev', 'clean', 'bash']);
+  grunt.registerTask('jsfrontend', ['browserify:frontend', 'uglify:dev', 'clean']);
+  grunt.registerTask('jsbackend', ['browserify:backend', 'uglify:dev', 'clean']);
+  grunt.registerTask('jsextensions', ['browserify:extensions', 'uglify:dev', 'clean']);
+  grunt.registerTask('jsrefields', ['browserify:refields', 'uglify:dev', 'clean']);
+  grunt.registerTask('jsplugins', ['uglify:dev', 'clean']);
+  grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI','uglify:dev', 'clean']);
+  grunt.registerTask('jsCustomizer', ['browserify:customizer','uglify:dev', 'clean']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
   grunt.registerTask('cc', ['concurrent']);

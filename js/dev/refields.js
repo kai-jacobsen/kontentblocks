@@ -1,4 +1,4 @@
-/*! Kontentblocks DevVersion 2015-08-17 */
+/*! Kontentblocks DevVersion 2015-08-18 */
 (function e(t, n, r) {
     function s(o, u) {
         if (!n[o]) {
@@ -1024,7 +1024,8 @@
         module.exports = Fields;
     }, {} ],
     18: [ function(require, module, exports) {
-        KB.Fields = require("./Fields");
+        var Fields = require("./Fields");
+        window.KB.Fields = Field;
         require("./controls/color.js");
         require("./controls/date.js");
         require("./controls/datetime.js");
@@ -1032,7 +1033,7 @@
         require("./controls/flexfields.js");
         require("./controls/gallery.js");
         require("./controls/image.js");
-        require("./controls/link.js");
+        Fields.registerObject("link", require("./controls/link.js"));
         require("./controls/textarea.js");
     }, {
         "./Fields": 17,
@@ -1882,7 +1883,7 @@
     } ],
     31: [ function(require, module, exports) {
         var BaseView = require("../FieldBaseView");
-        KB.Fields.registerObject("link", BaseView.extend({
+        module.exports = BaseView.extend({
             initialize: function() {
                 window._kbLink = this;
                 this.render();
@@ -1891,8 +1892,9 @@
                 "click .kb-js-add-link": "openModal"
             },
             render: function() {
-                this.$input = this.$(".kb-js-link-input");
-                this.$text = this.$(".kb-field--link-linktext");
+                console.log(this.$);
+                this.$input = this.$("[data-kbf-link-url]");
+                this.$text = this.$("[data-kbf-link-linktext]");
             },
             derender: function() {},
             openModal: function() {
@@ -1927,7 +1929,7 @@
                 wpLink.isMCE = window.kb_restore_isMce;
                 wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
             }
-        }));
+        });
     }, {
         "../FieldBaseView": 16
     } ],

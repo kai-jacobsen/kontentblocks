@@ -1,5 +1,5 @@
 var BaseView = require('../FieldBaseView');
-KB.Fields.registerObject('link', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function(){
     window._kbLink = this;
     this.render();
@@ -8,9 +8,9 @@ KB.Fields.registerObject('link', BaseView.extend({
     'click .kb-js-add-link' : 'openModal'
   },
   render: function(){
-    this.$input = this.$('.kb-js-link-input');
-    this.$text = this.$('.kb-field--link-linktext');
-
+    console.log(this.$);
+    this.$input = this.$('[data-kbf-link-url]');
+    this.$text = this.$('[data-kbf-link-linktext]');
   },
   derender: function(){
 
@@ -67,4 +67,4 @@ KB.Fields.registerObject('link', BaseView.extend({
       wpLink.isMCE = window.kb_restore_isMce;
       wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
   }
-}));
+});

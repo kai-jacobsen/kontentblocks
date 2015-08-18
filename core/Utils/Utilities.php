@@ -75,8 +75,7 @@ class Utilities
                     'wpgallery',
                     'wplink',
                     'wpdialogs',
-                    'wpview',
-                    'wpfullscreen'
+                    'wpview'
                 )
             )
         );
@@ -86,6 +85,9 @@ class Utilities
          */
         if (version_compare( $wp_version, '4.0', '>=' )) {
             $plugins[] = 'wpautoresize';
+        }
+        if (version_compare( $wp_version, '4.0', '<=' )) {
+            $plugins[] = 'wpfullscreen';
         }
         if (version_compare( $wp_version, '4.2', '>=' )) {
             $plugins[] = 'wptextpattern';

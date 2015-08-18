@@ -1,4 +1,5 @@
-KB.Fields = require('./Fields');
+var Fields = require('./Fields');
+window.KB.Fields = Field;
 
 // load controls by require
 require('./controls/color.js');
@@ -8,5 +9,5 @@ require('./controls/file.js');
 require('./controls/flexfields.js');
 require('./controls/gallery.js');
 require('./controls/image.js');
-require('./controls/link.js');
+Fields.registerObject('link', require('./controls/link.js'));
 require('./controls/textarea.js');

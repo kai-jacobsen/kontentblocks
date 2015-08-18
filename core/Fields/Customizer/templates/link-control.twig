@@ -5,5 +5,7 @@
     {% if control.description %}
     <span class="description customize-control-description"><?php echo $this->description; ?></span>
     {% endif %}
-    <input data-kb-link-url type="{{ control.type|esc_attr }}" {{ control.input_attrs() }} value="{{ control.value|esc_attr }}" {{ control.link() }} />
+    <input data-kbf-link-url type="text" {{ control.input_attrs() }} value="{{ control.value|esc_attr }}" {{ control.link() }} />
+    <input data-kbf-link-linktext type="text" {{ control.input_attrs() }} value="{{ control.value|esc_attr }}" {{ control.link() }} />
+    <a class='button kb-js-add-link'>add</a>
 </label>
