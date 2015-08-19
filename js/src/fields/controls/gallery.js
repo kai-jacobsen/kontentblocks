@@ -1,6 +1,6 @@
 var BaseView = require('fields/FieldBaseView');
 var GalleryController = require('./gallery/GalleryController');
-KB.Fields.registerObject('gallery', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function () {
     this.render();
   },
@@ -25,7 +25,7 @@ KB.Fields.registerObject('gallery', BaseView.extend({
     this.GalleryController.setElement(this.$stage.get(0));
     return this.GalleryController.render();
   }
-}));
+});
 
 ///**
 // * Bootstrap everything

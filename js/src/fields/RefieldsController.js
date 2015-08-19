@@ -1,13 +1,12 @@
 var Fields = require('./Fields');
-window.KB.Fields = Field;
-
-// load controls by require
-require('./controls/color.js');
-require('./controls/date.js');
-require('./controls/datetime.js');
-require('./controls/file.js');
-require('./controls/flexfields.js');
-require('./controls/gallery.js');
-require('./controls/image.js');
-Fields.registerObject('link', require('./controls/link.js'));
-require('./controls/textarea.js');
+window.KB.Fields = Fields;
+Fields.registerObject('color', require('./controls/color'));
+Fields.registerObject('date', require('./controls/date'));
+Fields.registerObject('datetime', require('./controls/datetime'));
+Fields.registerObject('file', require('./controls/file'));
+Fields.registerObject('flexfields', require('./controls/flexfields'));
+Fields.registerObject('gallery', require('./controls/gallery'));
+Fields.registerObject('image', require('./controls/image'));
+Fields.registerObject('link', require('./controls/link'));
+Fields.registerObject('textarea', require('./controls/textarea'));
+Fields.registerObject('otimes', require('./controls/otimes'));

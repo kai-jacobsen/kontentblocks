@@ -1,5 +1,5 @@
 var BaseView = require('../FieldBaseView');
-KB.Fields.registerObject('file', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function () {
     this.render();
   },
@@ -65,4 +65,4 @@ KB.Fields.registerObject('file', BaseView.extend({
     this.$container.hide(450);
     this.$resetIn.hide();
   }
-}));
+});

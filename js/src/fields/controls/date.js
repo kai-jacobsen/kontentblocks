@@ -1,5 +1,5 @@
 var BaseView = require('../FieldBaseView');
-KB.Fields.registerObject('date', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function () {
     var that = this;
     this.defaults = {
@@ -22,4 +22,4 @@ KB.Fields.registerObject('date', BaseView.extend({
   derender: function () {
 
   }
-}));
+});
