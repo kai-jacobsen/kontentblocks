@@ -1,5 +1,12 @@
 #Changelog
 
+####0.4.2
++ Introduced customizer field integration for options panels and some field types
++ Field type opening times improved
++ decoupled js field modules
++ new api functions
++ gruntfile clean up
+
 ####0.4.1
 + Frontend: Module controls are invisible by default and can be turned on by admin bar switch
 + revived SlotRenderer and refactored Area rendering
