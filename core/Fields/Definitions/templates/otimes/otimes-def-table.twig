@@ -1,27 +1,22 @@
-<table>
+<table class="kb-otimes">
     <tbody>
     {% for day in value %}
-
         <tr>
-            <td class="ot-day">{{ day.day.short }}</td>
-            <td class="ot-times">
+            <td class="kb-otmes--day">{{ day.day.short }}</td>
+            <td class="kb-otimes--times">
                 {{ day.0.open }}
                 {% if day.0.close %}
                     - {{ day.0.close }}
                 {% endif %}
-
                 {% if day.split %}
                     <br>
                     {{ day.1.open }}
-
                     {% if day.1.close %}
                         - {{ day.1.close }}
                     {% endif %}
                 {% endif %}
             </td>
         </tr>
-
-
     {% endfor %}
     </tbody>
 </table>

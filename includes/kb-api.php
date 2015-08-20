@@ -197,6 +197,24 @@ function getPostPanel( $panelId = null, $postId = null )
     }
 }
 
+function getOptionsPanel($panelId){
+
+    /** @var \Kontentblocks\Panels\PanelRegistry $registry */
+    $registry = Kontentblocks()->getService('registry.panels');
+    $panel = $registry->get($panelId);
+
+    if (!empty($panel) && class_exists($panel['class'])){
+        if (array_key_exists($panelId, $registry->objects)){
+            return $registry->objects[$panelId];
+        }
+        $registry->objects[$panelId] = new $panel['class']($panel);
+        return $registry->objects[$panelId];
+
+    }
+
+
+}
+
 /**
  * @return EditScreenLayoutsRegistry
  */

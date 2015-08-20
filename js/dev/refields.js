@@ -2205,9 +2205,8 @@ module.exports = BaseView.extend({
     this.$('.kb-ot-timepicker').datetimepicker({
       datepicker: false,
       format: 'H:i',
-      validateOnBlur: true,
-      step: 30,
-      mask:'29:59'
+      validateOnBlur: false,
+      step: 30
     });
   },
   derender: function(){

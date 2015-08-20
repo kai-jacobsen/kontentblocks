@@ -1,12 +1,12 @@
 {{ Form.getLabel() }}
 <div id='{{ Form.getInputFieldId() }}' data-fieldkey='{{ Field.getKey() }}'
      data-arraykey='{{ Field.getArg('arrayKey') }}' data-module='{{ Field.getFieldId() }}'
-     class='opening-times--stage'></div>
+     class='opening-times--stage '></div>
 {{ Form.getDescription() }}
 
 <div class="otimes-field--stage">
     <span class="js-oday-activate-split">Aufteilen</span>
-    <table class="otimes-table">
+    <table class="otimes-table {% if value.hasSplit %} split {% endif %}">
         <tbody>
         <tr>
             <td class="oday">{{ i18n.mon.short }}</td>

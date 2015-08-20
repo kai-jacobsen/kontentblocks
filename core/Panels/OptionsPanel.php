@@ -49,7 +49,6 @@ abstract class OptionsPanel extends AbstractPanel
         parent::__construct( $args );
 
         $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
-
     }
 
     /**
@@ -173,7 +172,7 @@ abstract class OptionsPanel extends AbstractPanel
             'moduleData' => $this->data,
             'area' => '_internal',
             'type' => 'option',
-            'args' => $this->args
+            'settings' => $this->args
         );
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }
@@ -302,10 +301,7 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function getData()
     {
-        if (is_null( $this->fieldController )) {
-            $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
-            $this->fields( $this->fieldController )->setup( $this->setupData() );
-        }
+        $this->fields( $this->fieldController )->setup( $this->setupData() );
         return $this->fieldController->prepareDataAndGet();
     }
 
