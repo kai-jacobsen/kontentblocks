@@ -32,7 +32,6 @@ var Utilities = function ($) {
         return obj;
       }
       else{
-        console.log('here');
         return this.setIndex(obj[is[0]], is.slice(1), value);
       }
     },

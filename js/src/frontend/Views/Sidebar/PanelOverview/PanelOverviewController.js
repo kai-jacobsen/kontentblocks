@@ -44,7 +44,6 @@ module.exports = Backbone.View.extend({
         controller: this
       })
     }
-    console.log(this);
   },
   renderRootItem: function () {
     return this.sidebarController.$container.append(tplRootItem('frontend/sidebar/root-item', {

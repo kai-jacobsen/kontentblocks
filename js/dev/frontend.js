@@ -1169,7 +1169,6 @@ var Utilities = function ($) {
         return obj;
       }
       else{
-        console.log('here');
         return this.setIndex(obj[is[0]], is.slice(1), value);
       }
     },
@@ -1304,7 +1303,6 @@ module.exports = Backbone.Model.extend({
   upstreamData: function () {
     var ModuleModel;
     if (ModuleModel = this.get('ModuleModel')) {
-      console.log(ModuleModel);
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       ModuleModel.set('moduleData', cdata, {silent: false});
@@ -1838,7 +1836,6 @@ var EditableImage = Backbone.View.extend({
     this.parentView = this.model.get('ModuleModel').View;
     this.listenTo(this.model, 'field.model.settings', this.setMode);
     this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder);
-    console.log('bound');
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
 
@@ -5372,7 +5369,6 @@ module.exports = Backbone.View.extend({
         controller: this
       })
     }
-    console.log(this);
   },
   renderRootItem: function () {
     return this.sidebarController.$container.append(tplRootItem('frontend/sidebar/root-item', {

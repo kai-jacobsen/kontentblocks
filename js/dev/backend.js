@@ -2616,7 +2616,6 @@ var Utilities = function ($) {
         return obj;
       }
       else{
-        console.log('here');
         return this.setIndex(obj[is[0]], is.slice(1), value);
       }
     },
@@ -2772,7 +2771,6 @@ module.exports = Backbone.Model.extend({
   upstreamData: function () {
     var ModuleModel;
     if (ModuleModel = this.get('ModuleModel')) {
-      console.log(ModuleModel);
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       ModuleModel.set('moduleData', cdata, {silent: false});
@@ -2931,7 +2929,6 @@ var BatchDeleteController = Backbone.View.extend({
   render: function () {
     this.$el.append(tplBatchDelete());
     jQuery('body').append(this.$el);
-    console.log('r');
   },
   add: function (control) {
     this.collection[control.model.id] = control;
@@ -2972,7 +2969,6 @@ var BatchDeleteController = Backbone.View.extend({
     if (res.data.modules) {
       _.each(res.data.modules, function (value, key) {
         if (value) {
-          console.log(this);
           var control = this.collection[key];
           TinyMCE.removeEditors(control.model.View.$el);
           KB.Modules.remove(control.model);

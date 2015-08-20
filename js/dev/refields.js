@@ -1080,7 +1080,6 @@ var Utilities = function ($) {
         return obj;
       }
       else{
-        console.log('here');
         return this.setIndex(obj[is[0]], is.slice(1), value);
       }
     },
@@ -2198,7 +2197,6 @@ module.exports = BaseView.extend({
     'click .js-oday-activate-split' : 'split'
   },
   initialize: function () {
-    console.log('this');
     this.render();
   },
   render:function(){
