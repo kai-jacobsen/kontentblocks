@@ -6,7 +6,7 @@ namespace Kontentblocks\Fields;
 use Kontentblocks\Common\Exportable;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
-use Kontentblocks\Panels\CustomizerIntegration;
+use Kontentblocks\Customizer\CustomizerIntegration;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Fields\Returnobjects;
 

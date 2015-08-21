@@ -3,8 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormController;
-use Kontentblocks\Panels\CustomizerIntegration;
+use Kontentblocks\Customizer\CustomizerIntegration;
 
 /**
  * Simple text input field

@@ -3,12 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormController;
-use Kontentblocks\Kontentblocks;
-use Kontentblocks\Language\I18n;
-use Kontentblocks\Panels\CustomizerIntegration;
-use Kontentblocks\Templating\FieldView;
-use Kontentblocks\Utils\JSONTransport;
+use Kontentblocks\Customizer\CustomizerIntegration;
 use WP_Customize_Manager;
 
 /**

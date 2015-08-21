@@ -111,7 +111,6 @@ abstract class AbstractPanel
 
     /**
      * Prepare and return data for user usage
-     * @param null $postId
      * @return mixed
      */
     abstract public function getData();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Panels;
+namespace Kontentblocks\Customizer;
 
 
 use Kontentblocks\Fields\AbstractFieldController;
@@ -8,7 +8,7 @@ use Kontentblocks\Fields\Field;
 
 /**
  * Class CustomizerIntegration
- * @package Kontentblocks\Panels
+ * @package Kontentblocks\Customizer
  */
 class CustomizerIntegration
 {

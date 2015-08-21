@@ -217,6 +217,43 @@ abstract class PostPanel extends AbstractPanel
     }
 
     /**
+     * add meta box action callback
+     * @param $postObj
+     */
+    public function metaBox( $postObj )
+    {
+
+        if (!post_type_supports( $postObj->post_type, 'editor' )) {
+            add_action(
+                'admin_footer',
+                function () {
+                    Utilities::hiddenEditor();
+                }
+            );
+        }
+
+        $defaults = array(
+            'title' => 'No Title provided',
+            'context' => 'advanced',
+            'priority' => 'high',
+            'saveAsSingle' => false
+        );
+
+        $mb = wp_parse_args( $this->metaBox, $defaults );
+
+        if ($this->metaBox) {
+            add_meta_box(
+                $this->baseId,
+                $mb['title'],
+                array( $this, 'form' ),
+                $postObj->post_type,
+                $mb['context'],
+                $mb['priority']
+            );
+        }
+    }
+
+    /**
      * Extend arg with defaults
      * @param $args
      * @return array

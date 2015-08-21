@@ -4,9 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Customizer\Controls\LinkControl;
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormController;
-use Kontentblocks\Language\I18n;
-use Kontentblocks\Panels\CustomizerIntegration;
+use Kontentblocks\Customizer\CustomizerIntegration;
 
 /**
  * WordPress Link dialog based input field
