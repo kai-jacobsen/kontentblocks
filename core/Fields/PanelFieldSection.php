@@ -14,11 +14,8 @@ class PanelFieldSection extends AbstractFieldSection
      *
      * @param string $id
      * @param $args
-     * @param $envVars
      * @param \Kontentblocks\Panels\AbstractPanel $panel
      *
-     * @TODO // revise envVars
-     * @return \Kontentblocks\Fields\PanelFieldSection
      */
     public function __construct( $id, $args, $panel )
     {

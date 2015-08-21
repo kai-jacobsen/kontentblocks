@@ -41,7 +41,8 @@ module.exports = function (grunt) {
           'js/dist/extensions.min.js': ['<%= browserify.extensions.dest %>'],
           'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
           'js/dist/fieldsAPI.min.js': ['<%= browserify.fieldsAPI.dest %>'],
-          'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>']
+          'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>'],
+          'js/dist/customizer.min.js': ['<%= browserify.customizer.dest %>']
 
         }
       },
@@ -54,13 +55,9 @@ module.exports = function (grunt) {
           drop_console: false
         },
         files: {
-          'js/dev/frontend.js': ['<%= browserify.frontend.dest %>'],
-          'js/dev/backend.js': ['<%= browserify.backend.dest %>'],
-          'js/dev/refields.js': ['<%= browserify.refields.dest %>'],
-          'js/dev/extensions.js': ['<%= browserify.extensions.dest %>'],
           'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
-          'js/dev/fieldsAPI.js': ['<%= browserify.fieldsAPI.dest %>'],
-          'js/dev/mediaExt.js': ['<%= concat.mediaExt.dest %>']
+          'js/dev/mediaExt.js': ['<%= concat.mediaExt.dest %>'],
+
         }
       }
     },
@@ -90,23 +87,27 @@ module.exports = function (grunt) {
       },
       frontend: {
         src: 'js/src/frontend/FrontendController.js',
-        dest: 'js/tmp/frontend.concat.js'
+        dest: 'js/dev/frontend.js'
       },
       fieldsAPI: {
         src: 'js/src/fieldsAPI/FieldsAPIController.js',
-        dest: 'js/tmp/fieldsAPI.concat.js'
+        dest: 'js/dev/fieldsAPI.js'
       },
       backend: {
         src: 'js/src/backend/BackendController.js',
-        dest: 'js/tmp/backend.concat.js'
+        dest: 'js/dev/backend.js'
       },
       refields: {
         src: 'js/src/fields/RefieldsController.js',
-        dest: 'js/tmp/refields.concat.js'
+        dest: 'js/dev/refields.js'
       },
       extensions: {
         src: 'js/src/extensions/ExtensionsController.js',
-        dest: 'js/tmp/extensions.concat.js'
+        dest: 'js/dev/extensions.js'
+      },
+      customizer: {
+        src: 'js/src/customizer/CustomizerController.js',
+        dest: 'js/dev/customizer.js'
       }
     },
     sass: {
@@ -164,6 +165,10 @@ module.exports = function (grunt) {
       fieldsApi: {
         files: ['js/src/fieldsAPI/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsfieldsAPI']
+      },
+      customizer: {
+        files: ['js/src/customizer/**/*.js'],
+        tasks: ['jsCustomizer']
       },
       sass: {
         options: {
@@ -236,16 +241,15 @@ module.exports = function (grunt) {
 
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'browserify', 'uglify:dist', 'uglify:dev', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
-
+  grunt.registerTask('default', ['concat', 'browserify', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
-
-  grunt.registerTask('jsfrontend', ['browserify:frontend', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsbackend', ['browserify:backend', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsextensions', ['browserify:extensions', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsrefields', ['browserify:refields', 'uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsplugins', ['uglify:dev', 'clean', 'bash']);
-  grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI','uglify:dev', 'clean', 'bash']);
+  grunt.registerTask('jsfrontend', ['browserify:frontend']);
+  grunt.registerTask('jsbackend', ['browserify:backend']);
+  grunt.registerTask('jsextensions', ['browserify:extensions']);
+  grunt.registerTask('jsrefields', ['browserify:refields']);
+  grunt.registerTask('jsplugins', ['concat','uglify:dev', 'clean']);
+  grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI']);
+  grunt.registerTask('jsCustomizer', ['browserify:customizer']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
   grunt.registerTask('cc', ['concurrent']);

@@ -2,9 +2,11 @@
 
 namespace Kontentblocks\Fields\Definitions;
 
+use Kontentblocks\Fields\Customizer\Controls\LinkControl;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldFormController;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Panels\CustomizerIntegration;
 
 /**
  * WordPress Link dialog based input field
@@ -41,6 +43,27 @@ Class Link extends Field
         $data['linktitle'] = esc_html( $data['linktitle'] );
 
         return $data;
+    }
+
+    /**
+     * @param \WP_Customize_Manager $customizeManager
+     * @return null
+     */
+    public function addCustomizerControl( \WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
+    {
+        $customizeManager->add_control(
+            new LinkControl($customizeManager, $integration->getSettingName( $this ),
+                array(
+                    'label' => $this->getArg( 'label' ),
+                    'description' => $this->getArg( 'description' ),
+                    'section' => $this->section->getID(),
+                    'type' => 'kbLink',
+                    'input_attrs' => array(
+                        'id' => $this->createUID()
+                    )
+                )
+            )
+        );
     }
 
 }

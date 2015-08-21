@@ -1,4 +1,5 @@
-KB.Backbone.OptionPanelView = Backbone.View.extend({
+
+module.exports= Backbone.View.extend({
 
   tagName: 'div',
   className: 'kb-sidebar__panel-item',

@@ -11,14 +11,8 @@ use Kontentblocks\Utils\Utilities;
  * Class StaticPanel
  * @package Kontentblocks\Panels
  */
-abstract class StaticPanel extends AbstractPanel
+abstract class PostPanel extends AbstractPanel
 {
-
-    /**
-     * Custom Field Manager Instance
-     * @var PanelFieldController
-     */
-    public $fieldController;
 
 
     /**
@@ -27,8 +21,29 @@ abstract class StaticPanel extends AbstractPanel
     public $postId;
 
 
-    public $data;
+    /**
+     * Render in MetaBox
+     * @var bool
+     */
+    protected $metaBox;
 
+    /**
+     * Position / Hook to use
+     * @var string
+     */
+    protected $hook;
+
+    /**
+     * Post Types
+     * @var array
+     */
+    protected $postTypes = array();
+
+    /**
+     * PageTemplates
+     * @var array
+     */
+    protected $pageTemplates = array();
 
     /**
      * Flag indicates if data should be stored as single key => value pairs
@@ -44,15 +59,20 @@ abstract class StaticPanel extends AbstractPanel
     protected $uid;
 
 
+    /**
+     * @param array $args
+     * @param Environment $environment
+     * @throws \Exception
+     */
     public function __construct( $args, Environment $environment )
     {
-
         parent::__construct( $args );
         $this->environment = $environment;
         $this->data = $environment->getDataProvider()->get( $this->baseId );
         $this->fieldController = new PanelFieldController( $this->baseId, $this->data, $this );
         $this->fields( $this->fieldController );
     }
+
 
     /**
      * Fields to render, must be provided by child class
@@ -64,7 +84,7 @@ abstract class StaticPanel extends AbstractPanel
     /**
      * Setup hooks
      */
-    public function prepare()
+    public function init()
     {
         $postType = $this->environment->getPostType();
         if (is_array( $this->metaBox ) || $this->metaBox) {

@@ -6,8 +6,10 @@ use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldFormController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Panels\CustomizerIntegration;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\JSONTransport;
+use WP_Customize_Manager;
 
 /**
  * Opening Times
@@ -25,6 +27,25 @@ Class OpeningTimes extends Field
     );
 
 
+    public function prepareTemplateData( $data )
+    {
+        $value = $data['value'];
+        $hasSplit = false;
+        if (is_array($value)){
+            $splitValues = array_map(function($item){
+                return $item[1];
+            }, $value);
+            array_walk_recursive($splitValues, function($v) use (&$hasSplit){
+                 if (!empty($v)){
+                     $hasSplit = true;
+                 }
+            });
+        }
+
+        $data['value']['hasSplit'] = $hasSplit;
+        return $data;
+    }
+
     /**
      * To make sure that the saving routine doesn't preserve unset
      * items from the old data (which is its purpose)
@@ -39,6 +60,20 @@ Class OpeningTimes extends Field
     public function save( $new, $old )
     {
 
+        // clean up invalid values
+
+        if (is_array( $new )) {
+            array_walk_recursive(
+                $new,
+                function ( &$val ) {
+                    if ($val === '__:__') {
+                        $val = '';
+
+                    }
+                }
+            );
+        }
+
         return $new;
     }
 
@@ -50,26 +85,28 @@ Class OpeningTimes extends Field
      */
     public function prepareFormValue( $value )
     {
+        return $this->cleanData($value);
+    }
 
-//        $forJSON = array();
-//        // make sure it's an simple indexed array to preserve order
-//        if (is_array( $value )) {
-//            $forJSON = array_values( $value );
-//        }
-//        // run data through fields output method to retrieve optional filtered data
-//        if (!empty( $forJSON )) {
-//            foreach ($value as &$item) {
-//                if (isset( $item['_mapping'] )) {
-//                    foreach ($item['_mapping'] as $key => $type) {
-//                        /** @var \Kontentblocks\Fields\Field $fieldInstance */
-//                        $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField( $type );
-//                        $item[$key] = $fieldInstance->prepareFormValue( $item[$key] );
-//                    }
-//                }
-//            }
-//        }
+    /**
+     * @param $value
+     * @return array
+     */
+    public function cleanData($value)
+    {
+        $whitelist = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
+        $valid = [];
+        foreach ($whitelist as $day){
+            if (isset($value[$day])){
+                $valid[$day] = $this->value[$day];
+            }
+        }
+        return $valid;
+    }
 
-        return $value;
+    public function addCustomizerControl( WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
+    {
+        // silence
     }
 
 }

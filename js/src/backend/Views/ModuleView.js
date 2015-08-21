@@ -169,5 +169,11 @@ module.exports = Backbone.View.extend({
   },
   dispose: function () {
 
+  },
+  getDirty: function(){
+
+  },
+  getClean: function(){
+
   }
 });

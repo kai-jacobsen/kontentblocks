@@ -20,9 +20,7 @@ module.exports = BaseView.extend({
     'click': 'saveData'
   },
   saveData: function () {
-
     tinyMCE.triggerSave();
-
     Ajax.send({
       action: 'updateModuleData',
       module: this.model.toJSON(),

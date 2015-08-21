@@ -1,5 +1,5 @@
 var BaseView = require('../FieldBaseView');
-KB.Fields.registerObject('textarea', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function () {
     this.render();
   },
@@ -14,7 +14,6 @@ KB.Fields.registerObject('textarea', BaseView.extend({
 
   },
   update: function (val) {
-    // will trigger an change event on the FieldConfigModel and update the module models moduleData accordingly
     this.model.set('value', val);
   }
-}));
+});

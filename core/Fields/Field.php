@@ -6,6 +6,7 @@ namespace Kontentblocks\Fields;
 use Kontentblocks\Common\Exportable;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
+use Kontentblocks\Panels\CustomizerIntegration;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Fields\Returnobjects;
 
@@ -23,55 +24,56 @@ abstract class Field implements Exportable
 {
 
     /**
-     * Base id/key for the field
-     * may get modified if a subkey is present
-     * @var string
-     * @since 0.1.0
-     */
-    protected $baseId;
-
-    /**
-     * Unique 'named' field id
-     * will and should equal the original baseId, without subkey applied
-     * @var string
-     */
-    protected $fieldId;
-
-    /**
      * Unique id generated on run time
      * prim. used on frontend to map data around
      * @var string
      */
     public $uniqueId;
-
-
-    /**
-     * @var array additional arguments
-     * @since 0.1.0
-     */
-    protected $args;
-
     /**
      * Actual data for field
      * @var mixed
      * @since 0.1.0
      */
     public $value;
-
+    /**
+     * @var AbstractFieldSection
+     */
+    public $section;
+    /**
+     * @remove exchange with fieldId
+     * @var string module mid
+     */
+    public $parentModuleId;
+    /**
+     * Base id/key for the field
+     * may get modified if a subkey is present
+     * @var string
+     * @since 0.1.0
+     */
+    protected $baseId;
+    /**
+     * Unique 'named' field id
+     * will and should equal the original baseId, without subkey applied
+     * @var string
+     */
+    protected $fieldId;
+    /**
+     * @var array additional arguments
+     * @since 0.1.0
+     */
+    protected $args;
     /**
      * key
      * @var string
      * @since 0.1.0
      */
     protected $key;
-
     /**
      * Current field type
      * @var string
      * @since 0.1.0
      */
     protected $type;
-
     /**
      * Path to field definition
      * @var string
@@ -79,11 +81,11 @@ abstract class Field implements Exportable
      * @since 0.1.0
      */
     protected $path;
-
-
     protected $userValue;
-
-
+    /**
+     * @var \Kontentblocks\Modules\Module
+     */
+    protected $module;
     /**
      * Return Object
      * @var \Kontentblocks\Fields\InterfaceFieldReturn
@@ -91,18 +93,6 @@ abstract class Field implements Exportable
      *
      */
     private $returnObj;
-
-    /**
-     * @var \Kontentblocks\Modules\Module
-     */
-    protected $module;
-
-    /**
-     * @remove exchange with fieldId
-     * @var string module mid
-     */
-    public $parentModuleId;
-
 
     /**
      * Constructor
@@ -130,143 +120,11 @@ abstract class Field implements Exportable
      */
 
     /**
-     * get storage key
-     * @return string
-     * @since 0.1.0
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * Field parameters array
-     * @param array $args
-     * @since 0.1.0
-     * @return bool
-     */
-    public function setArgs( $args )
-    {
-        if (is_array( $args ) && !empty( $args )) {
-            $this->args = wp_parse_args( $args, $this->args );
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * base prefix for the field
-     * generally based upon the parent module instance id
-     * like: module_x_n['$key']
-     * optional as array
-     *
-     * @param $id
-     * @param string $subkey
-     *
-     * @since 0.1.0
-     */
-    public function setBaseId( $id, $subkey = null )
-    {
-        if (!$subkey) {
-            $this->baseId = $id;
-        } else {
-            $this->baseId = $id . '[' . $subkey . ']';
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getBaseId()
-    {
-        return $this->baseId;
-    }
-
-
-    /**
      * @return string
      */
     public function getFieldId()
     {
         return $this->fieldId;
-    }
-
-    /**
-     * Set field data
-     * Data from _POST[{baseid}[$this->key]]
-     * Runs each time when data is set to the field
-     * Frontend/Backend
-     *
-     * @param mixed $data
-     *
-     * @since 0.1.0
-     */
-    public function setValue( $data )
-    {
-        if (method_exists( $this, 'inputFilter' )) {
-            $this->value = $this->inputFilter( $data );
-        } else {
-            $this->value = $data;
-        }
-    }
-
-    /**
-     * Get a setting var from (late bound) static settings array
-     *
-     * @param $key
-     *
-     * @return bool|mixed
-     */
-    public function getSetting( $key )
-    {
-        if (isset( static::$settings[$key] )) {
-            return static::$settings[$key];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Wrapper method to get a single arg from the args array
-     *
-     * @param string $arg argument to retrieve
-     * @param mixed $default return value if arg is not set
-     *
-     * @return mixed arg value
-     */
-    public function getArg( $arg, $default = false )
-    {
-        if (isset( $this->args[$arg] )) {
-            return $this->args[$arg];
-        } else {
-            return $default;
-        }
-
-    }
-
-    /**
-     * Get callback from callbacks arg
-     * @param $type
-     *
-     * @return null
-     */
-    public function getCallback( $type )
-    {
-        $allowed = array( 'before.render', 'output', 'input', 'get', 'save' );
-
-        if (!in_array( $type, $allowed )) {
-            return null;
-        }
-
-        $callbacks = $this->getArg( 'callbacks' );
-
-        if ($callbacks) {
-            if (isset( $callbacks[$type] ) && is_callable( $callbacks[$type] )) {
-                return $callbacks[$type];
-            }
-        }
-        return null;
     }
 
     /**
@@ -285,6 +143,24 @@ abstract class Field implements Exportable
             }
         }
         return false;
+    }
+
+    /**
+     * Wrapper method to get a single arg from the args array
+     *
+     * @param string $arg argument to retrieve
+     * @param mixed $default return value if arg is not set
+     *
+     * @return mixed arg value
+     */
+    public function getArg( $arg, $default = false )
+    {
+        if (isset( $this->args[$arg] )) {
+            return $this->args[$arg];
+        } else {
+            return $default;
+        }
+
     }
 
     /**
@@ -307,6 +183,22 @@ abstract class Field implements Exportable
     {
         $this->setArgs( array( 'display' => filter_var( $bool, FILTER_VALIDATE_BOOLEAN ) ) );
         return $bool;
+    }
+
+    /**
+     * Field parameters array
+     * @param array $args
+     * @since 0.1.0
+     * @return bool
+     */
+    public function setArgs( $args )
+    {
+        if (is_array( $args ) && !empty( $args )) {
+            $this->args = wp_parse_args( $args, $this->args );
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -337,7 +229,6 @@ abstract class Field implements Exportable
 
             // first try with FQN
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
-
             if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
                 $this->returnObj = new $classpath( $value, $this );
             }
@@ -389,6 +280,30 @@ abstract class Field implements Exportable
     }
 
     /**
+     * Get callback from callbacks arg
+     * @param $type
+     *
+     * @return null
+     */
+    public function getCallback( $type )
+    {
+        $allowed = array( 'before.render', 'output', 'input', 'get', 'save' );
+
+        if (!in_array( $type, $allowed )) {
+            return null;
+        }
+
+        $callbacks = $this->getArg( 'callbacks' );
+
+        if ($callbacks) {
+            if (isset( $callbacks[$type] ) && is_callable( $callbacks[$type] )) {
+                return $callbacks[$type];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Default output, whenever data is requested for the user facing side
      *
      * @param $val
@@ -400,6 +315,89 @@ abstract class Field implements Exportable
         return $val;
     }
 
+    /**
+     * Getter for field data
+     * Will call filter() if available
+     * @TODO this method is used on several occasions
+     *
+     * @param string $arrKey
+     * @param string $return
+     * @return mixed|null returns null if data does not exist
+     */
+    public function getValue( $arrKey = null, $return = '' )
+    {
+        $data = $this->value;
+
+        if ($this->getCallback( 'get' )) {
+            $data = call_user_func( $this->getCallback( 'get' ), $this->value );
+        }
+
+        if (is_null( $arrKey ) && !is_null( $data )) {
+            return $data;
+        }
+
+        if (!is_null( $arrKey ) && is_array( $data ) && isset( $data[$arrKey] )) {
+            return $data[$arrKey];
+        }
+
+        return $this->getArg( 'std', $return );
+    }
+
+    /**
+     * Set field data
+     * Data from _POST[{baseid}[$this->key]]
+     * Runs each time when data is set to the field
+     * Frontend/Backend
+     *
+     * @param mixed $data
+     *
+     * @since 0.1.0
+     */
+    public function setValue( $data )
+    {
+        if (method_exists( $this, 'inputFilter' )) {
+            $this->value = $this->inputFilter( $data );
+        } else {
+            $this->value = $data;
+        }
+    }
+
+    /**
+     * For backwards compat reasons
+     * @param $classname
+     * @return string
+     */
+    private function aliasReturnObjectClass( $classname )
+    {
+        switch ($classname) {
+
+            case 'Element':
+                return 'EditableElement';
+                break;
+
+            case 'Image':
+                return 'EditableImage';
+                break;
+        }
+
+        return $classname;
+    }
+
+    /**
+     * Get a setting var from (late bound) static settings array
+     *
+     * @param $key
+     *
+     * @return bool|mixed
+     */
+    public function getSetting( $key )
+    {
+        if (isset( static::$settings[$key] )) {
+            return static::$settings[$key];
+        } else {
+            return null;
+        }
+    }
 
     /**
      * The actual output method for the field markup
@@ -459,6 +457,22 @@ abstract class Field implements Exportable
         return $out;
     }
 
+    public function createUID()
+    {
+
+        $state = 'frontend';
+
+        if (defined( 'KB_MODULE_FORM' ) && KB_MODULE_FORM) {
+            $state = 'from';
+        }
+
+        if (is_null( $this->uniqueId )) {
+            $base = $this->baseId . $this->key . $state;
+            $this->uniqueId = 'kb-' . hash( 'crc32', $base );
+        }
+        return $this->uniqueId;
+    }
+
     /**
      * Before the value arrives the fields form
      * Each field must implement this method
@@ -482,35 +496,87 @@ abstract class Field implements Exportable
         );
     }
 
-
     /**
-     * Getter for field data
-     * Will call filter() if available
-     * @TODO this method is used on several occasions
-     *
-     * @param string $arrKey
-     * @param string $return
-     * @return mixed|null returns null if data does not exist
+     * Prepare Args for JSON
+     * @TODO hacky
      */
-    public function getValue( $arrKey = null, $return = '' )
+    private function cleanedArgs()
     {
-        $data = $this->value;
-
-        if ($this->getCallback( 'get' )) {
-            $data = call_user_func( $this->getCallback( 'get' ), $this->value );
+        if (method_exists( $this, 'argsToJson' )) {
+            return $this->argsToJson();
+        } else {
+            $args = $this->args;
+            unset( $args['callbacks'] );
+            return $args;
         }
-
-        if (is_null( $arrKey ) && !is_null( $data )) {
-            return $data;
-        }
-
-        if (!is_null( $arrKey ) && is_array( $data ) && isset( $data[$arrKey] )) {
-            return $data[$arrKey];
-        }
-
-        return $this->getArg( 'std', $return );
     }
 
+    public function augmentArgs( $args )
+    {
+        $def = array();
+        $def['uid'] = $this->createUID();
+        $def['type'] = $this->type;
+        $def['baseId'] = $this->getBaseId();
+        $def['fieldId'] = $this->fieldId;
+        $def['fieldkey'] = $this->getKey();
+        $def['arrayKey'] = $this->getArg( 'arrayKey', null );
+        $def['kpath'] = $this->createKPath();
+
+        return wp_parse_args( $args, $def );
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseId()
+    {
+        return $this->baseId;
+    }
+
+    /**
+     * base prefix for the field
+     * generally based upon the parent module instance id
+     * like: module_x_n['$key']
+     * optional as array
+     *
+     * @param $id
+     * @param string $subkey
+     *
+     * @since 0.1.0
+     */
+    public function setBaseId( $id, $subkey = null )
+    {
+        if (!$subkey) {
+            $this->baseId = $id;
+        } else {
+            $this->baseId = $id . '[' . $subkey . ']';
+        }
+    }
+
+    /**
+     * get storage key
+     * @return string
+     * @since 0.1.0
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * create the key for the value in dot notation
+     * used by js code to lookup data from moduleData
+     * @return string
+     */
+    private function createKPath()
+    {
+        $path = '';
+        if ($this->getArg( 'arrayKey', false )) {
+            $path .= $this->getArg( 'arrayKey' ) . '.';
+        }
+        $path .= $this->getKey();
+        return $path;
+    }
 
     /**
      * Wrapper to the actual save method
@@ -549,72 +615,6 @@ abstract class Field implements Exportable
 
     }
 
-    /**
-     * Prepare Args for JSON
-     * @TODO hacky
-     */
-    private function cleanedArgs()
-    {
-        if (method_exists( $this, 'argsToJson' )) {
-            return $this->argsToJson();
-        } else {
-            $args = $this->args;
-            unset( $args['callbacks'] );
-            return $args;
-        }
-    }
-
-    /**
-     * For backwards compat reasons
-     * @param $classname
-     * @return string
-     */
-    private function aliasReturnObjectClass( $classname )
-    {
-        switch ($classname) {
-
-            case 'Element':
-                return 'EditableElement';
-                break;
-
-            case 'Image':
-                return 'EditableImage';
-                break;
-        }
-
-        return $classname;
-    }
-
-    public function createUID()
-    {
-
-        $state = 'frontend';
-
-        if (defined( 'KB_MODULE_FORM' ) && KB_MODULE_FORM) {
-            $state = 'from';
-        }
-
-        if (is_null( $this->uniqueId )) {
-            $base = $this->baseId . $this->key . $state;
-            $this->uniqueId = 'kb-' . hash( 'crc32', $base );
-        }
-        return $this->uniqueId;
-    }
-
-    public function augmentArgs( $args )
-    {
-        $def = array();
-        $def['uid'] = $this->createUID();
-        $def['type'] = $this->type;
-        $def['baseId'] = $this->getBaseId();
-        $def['fieldId'] = $this->fieldId;
-        $def['fieldkey'] = $this->getKey();
-        $def['arrayKey'] = $this->getArg( 'arrayKey', null );
-        $def['kpath'] = $this->createKPath();
-
-        return wp_parse_args( $args, $def );
-    }
-
     public function export( &$collection )
     {
         $concatKey = ( $this->getArg( 'arrayKey' ) ) ? $this->getArg( 'arrayKey' ) . '.' . $this->getKey(
@@ -630,22 +630,25 @@ abstract class Field implements Exportable
             'nKey' => $notated,
             'type' => $this->type,
             'std' => $this->getArg( 'std', '' ),
-            'args' => $this->cleanedArgs()
+            'args' => $this->cleanedArgs(),
+            'section' => $this->section->id
         );
     }
 
     /**
-     * create the key for the value in dot notation
-     * used by js code to lookup data from moduleData
-     * @return string
+     * @param \WP_Customize_Manager $customizeManager
+     * @param CustomizerIntegration $integration
+     * @return null
      */
-    private function createKPath()
+    public function addCustomizerControl( \WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
     {
-        $path = '';
-        if ($this->getArg( 'arrayKey', false )) {
-            $path .= $this->getArg( 'arrayKey' ) . '.';
-        }
-        $path .= $this->getKey();
-        return $path;
+        $customizeManager->add_control(
+            $integration->getSettingName( $this ),
+            array(
+                'label' => $this->getArg( 'label' ),
+                'section' => $this->section->getID(),
+                'type' => $this->type
+            )
+        );
     }
 }

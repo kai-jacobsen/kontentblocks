@@ -74,7 +74,7 @@ abstract class AbstractFieldSection implements Exportable
      * @throws \Exception
      * @return self Fluid layout
      */
-    public function addField( $type, $key, $args )
+    public function addField( $type, $key, $args = array() )
     {
         $subkey = null;
 
@@ -107,6 +107,7 @@ abstract class AbstractFieldSection implements Exportable
                 throw new Exception( "Field of type: $type does not exist" );
             } else {
                 $field->setArgs( $args );
+                $field->section = $this;
                 // conditional check of field visibility
                 $this->markVisibility( $field );
 
@@ -328,6 +329,7 @@ abstract class AbstractFieldSection implements Exportable
         foreach ($this->fields as $Field) {
             $Field->export( $collection );
         }
-
     }
+
+
 } 

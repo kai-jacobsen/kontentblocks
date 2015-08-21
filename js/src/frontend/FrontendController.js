@@ -27,6 +27,7 @@ var Logger = require('common/Logger');
 var ChangeObserver = require('frontend/Views/ChangeObserver');
 var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
+var Checks = require('common/Checks');
 
 /*
  Preperations
@@ -95,7 +96,7 @@ KB.App = function () {
     }
 
     // create Sidebar singleton
-    if (KB.appData.config.useModuleNav) {
+    if (KB.appData.config.useModuleNav && Checks.userCan('edit_kontentblocks')) {
       KB.Sidebar = new SidebarView();
     }
 

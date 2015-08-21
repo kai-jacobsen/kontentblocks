@@ -51,14 +51,14 @@ function registerAreaTemplate( $args )
 /**
  * Render a single area by id
  * @param string $areaId
- * @param int $pid
+ * @param int $post_id
  * @param array $additionalArgs
  * @return string|void
  */
-function renderSingleArea( $areaId, $pid = null, $additionalArgs = array() )
+function renderSingleArea( $areaId, $post_id = null, $additionalArgs = array() )
 {
     global $post;
-    $postId = ( is_null( $pid ) && !is_null( $post ) ) ? $post->ID : $pid;
+    $postId = ( is_null( $post_id ) && !is_null( $post ) ) ? $post->ID : $post_id;
 
 
     if (is_null( $postId )) {
@@ -111,12 +111,12 @@ function renderSideAreas( $id, $additionalArgs )
 }
 
 
-function renderContext( $context, $id, $additionalArgs = array() )
+function renderContext( $context, $post_id, $additionalArgs = array() )
 {
     global $post;
-    $post_id = ( null === $id ) ? $post->ID : $id;
+    $postId = ( null === $post_id ) ? $post->ID : $post_id;
 
-    $Environment = Utilities::getEnvironment( $post_id );
+    $Environment = Utilities::getEnvironment( $postId );
     $areas = $Environment->getAreasForContext( $context );
     $contextsOrder = $Environment->getDataProvider()->get( 'kb.contexts' );
 
@@ -143,7 +143,7 @@ function renderContext( $context, $id, $additionalArgs = array() )
                 $args = $additionalArgs;
             }
 
-            renderSingleArea( $area, $post_id, $additionalArgs );
+            renderSingleArea( $area, $postId, $additionalArgs );
         }
     }
 
@@ -195,6 +195,24 @@ function getPostPanel( $panelId = null, $postId = null )
             array( 'request' => $panelId, 'line' => __LINE__, 'file' => __FILE__ )
         );
     }
+}
+
+function getOptionsPanel($panelId){
+
+    /** @var \Kontentblocks\Panels\PanelRegistry $registry */
+    $registry = Kontentblocks()->getService('registry.panels');
+    $panel = $registry->get($panelId);
+
+    if (!empty($panel) && class_exists($panel['class'])){
+        if (array_key_exists($panelId, $registry->objects)){
+            return $registry->objects[$panelId];
+        }
+        $registry->objects[$panelId] = new $panel['class']($panel);
+        return $registry->objects[$panelId];
+
+    }
+
+
 }
 
 /**

@@ -1,5 +1,5 @@
 var BaseView = require('../FieldBaseView');
-KB.Fields.registerObject('link', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function(){
     window._kbLink = this;
     this.render();
@@ -8,9 +8,8 @@ KB.Fields.registerObject('link', BaseView.extend({
     'click .kb-js-add-link' : 'openModal'
   },
   render: function(){
-    this.$input = this.$('.kb-js-link-input');
-    this.$text = this.$('.kb-field--link-linktext');
-
+    this.$input = this.$('[data-kbf-link-url]');
+    this.$text = this.$('[data-kbf-link-linktext]');
   },
   derender: function(){
 
@@ -18,7 +17,6 @@ KB.Fields.registerObject('link', BaseView.extend({
   openModal: function(){
     wpActiveEditor = this.$input.attr('id');
     jQuery('#wp-link-wrap').addClass('kb-customized');
-
 
     // store the original function
     window.kb_restore_htmlUpdate = wpLink.htmlUpdate;
@@ -51,6 +49,7 @@ KB.Fields.registerObject('link', BaseView.extend({
     //Append the Url to the textarea
     textarea.value = href;
 
+    window._kbLink.trigger('update', title, href);
 
     window._kbLink.$text.val(title);
     //restore the original function
@@ -67,4 +66,4 @@ KB.Fields.registerObject('link', BaseView.extend({
       wpLink.isMCE = window.kb_restore_isMce;
       wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
   }
-}));
+});

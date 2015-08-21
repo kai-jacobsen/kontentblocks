@@ -1,6 +1,8 @@
 <?php
 namespace Kontentblocks\Modules;
 
+use Kontentblocks\Backend\Screen\ScreenManager;
+
 
 /**
  * Class ModuleViewFilesystem
@@ -198,7 +200,7 @@ class ModuleViewFilesystem
     private function extractContext( $file )
     {
 
-        $valid = array( 'top', 'normal', 'side', 'bottom' );
+        $valid = array_keys(ScreenManager::getDefaultContextLayout());
         $parts = explode( '-', $file['filteredfile'] );
         $subs = explode( '#', $parts[0] );
 

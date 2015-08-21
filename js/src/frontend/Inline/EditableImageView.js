@@ -12,7 +12,6 @@ var EditableImage = Backbone.View.extend({
     this.parentView = this.model.get('ModuleModel').View;
     this.listenTo(this.model, 'field.model.settings', this.setMode);
     this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder);
-    console.log('bound');
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
 

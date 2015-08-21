@@ -1,4 +1,5 @@
-KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
+var Config = require('common/Config');
+module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-sidebar__option-panel-wrap',
   initialize: function(options){
@@ -6,6 +7,7 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
     this.parentView = options.parentView;
     this.$el.append(KB.Templates.render('frontend/sidebar/option-panel-details', {name:this.model.get('args').menu.name}));
     this.$form = this.$('.kb-sidebar__form-container');
+
   },
   events:{
     'click .kb-sidebar-action--update' : 'save',
@@ -23,7 +25,7 @@ KB.Backbone.Sidebar.OptionsPanelFormView = Backbone.View.extend({
         action: 'saveOptionPanelForm',
         data: that.$form.serializeJSON(),
         panel: that.model.toJSON(),
-        _ajax_nonce: KB.Config.getNonce('update')
+        _ajax_nonce: Config.getNonce('update')
       },
       type: 'POST',
       dataType: 'json',

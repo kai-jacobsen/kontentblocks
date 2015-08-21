@@ -1,5 +1,5 @@
 var BaseView = require('../FieldBaseView');
-KB.Fields.registerObject('color', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function () {
     this.render();
   },
@@ -21,4 +21,4 @@ KB.Fields.registerObject('color', BaseView.extend({
       KB.Events.trigger('modal.recalibrate')
     }, 150);
   }
-}));
+});

@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldFormController;
+use Kontentblocks\Panels\CustomizerIntegration;
 
 /**
  * Simple text input field
@@ -42,5 +43,6 @@ Class Text extends Field
         return esc_html( $val );
 
     }
+
 
 }

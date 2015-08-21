@@ -1,7 +1,7 @@
 var BaseView = require('../FieldBaseView');
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
-KB.Fields.registerObject('image', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function () {
     this.defaultState = 'replace-image';
     this.defaultFrame = 'image';
@@ -157,4 +157,4 @@ KB.Fields.registerObject('image', BaseView.extend({
     this.model.set('value', {id: null, caption: ''});
     this.$description.val('');
   }
-}));
+});

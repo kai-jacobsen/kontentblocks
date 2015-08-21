@@ -32,12 +32,21 @@
     }
   }
 
+  .kb-field-image-title{
+    margin-bottom: $halfpadding;
+
+    label{
+      display: block;
+    }
+  }
+
   .kb-field-image-meta{
     display: inline-block;
     vertical-align: top;
 
     textarea{
       width: 100%;
+      background-color: #fff !important;
     }
 
   }

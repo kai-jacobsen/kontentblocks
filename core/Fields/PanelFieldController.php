@@ -42,6 +42,7 @@ class PanelFieldController extends AbstractFieldController
         $this->baseId = $id;
         $this->data = $data;
         $this->panel = $panel;
+
     }
 
     /**

@@ -63,7 +63,10 @@ module.exports =
       if (prev) {
         tinyMCE.execCommand('mceRemoveEditor', null, id);
       }
-      var settings = _.clone(tinyMCEPreInit.mceInit.ghosteditor);
+
+      var ghostId = (tinyMCEPreInit && tinyMCEPreInit.mceInit && tinyMCEPreInit.mceInit.ghosteditor) ? 'ghosteditor' : 'content';
+
+      var settings = _.clone(tinyMCEPreInit.mceInit[ghostId]);
       // add new editor id to settings
       settings.elements = id;
       settings.selector = '#' + id;
@@ -84,6 +87,7 @@ module.exports =
           ed.module.$el.trigger('tinymce.change');
         });
       };
+      console.log(settings);
       tinymce.init(settings);
 
       if (!tinyMCEPreInit.mceInit[id]) {

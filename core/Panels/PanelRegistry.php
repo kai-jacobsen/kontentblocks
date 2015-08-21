@@ -30,22 +30,20 @@ class PanelRegistry
      * @param $panelId string
      * @param $args array
      *
-     * @throws \Exception
+     * @return bool|\WP_Error
      */
     public function add( $panelId, $args )
     {
-
         if (!isset( $this->panels[$panelId] )) {
-            $reflect = new \ReflectionClass( $args['class'] );
-            if ($reflect->getParentClass()->name === 'Kontentblocks\Modules\StaticModule') {
-                $this->panels[$panelId] = new ModulePanel( $args );
-            } else {
-//                $this->panels[$id] = new $args['class']( $args );
-                $this->panels[$panelId] = $args;
-            }
+            $this->panels[$panelId] = $args;
+            /** @var \Kontentblocks\Panels\AbstractPanel $args */
+            $args['class']::run($args);
+            return true;
         } else {
-            throw new \Exception(
-                'Error while adding panel to registry. Either a Panel with the same ID exist or the class does not exist'
+            return new \WP_Error(
+                'kontentblocks',
+                'Panel with same id already registered.',
+                array( 'panelId' => $panelId, 'args' => $args )
             );
         }
     }

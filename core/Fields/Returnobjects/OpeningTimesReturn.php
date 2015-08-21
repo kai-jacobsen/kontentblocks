@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
-use Kontentblocks\Fields\InterfaceFieldReturn;
+use Kontentblocks\Fields\Definitions\DateTime;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
 
@@ -41,7 +41,6 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
         if ($this->validate()) {
             $this->prepared = $this->prepareData();
         }
-
     }
 
     /**
@@ -50,19 +49,16 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
      */
     public function tableView()
     {
-        if (!$this->validate()) {
-            return '';
-        }
-
-
         $tpl = new FieldView(
-            'otimes-def-table.twig', array(
+            'otimes/otimes-def-table.twig', array(
                 'field' => $this,
                 'value' => $this->getDays()
             )
         );
-        return $tpl->render();
+        return $tpl->render(true);
     }
+
+
 
 
     /**
@@ -108,15 +104,18 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
      */
     private function validate()
     {
+
         if (!is_array( $this->getValue() )) {
             return false;
         }
 
-        $keys = array_keys( $this->value );
+        $valid = $this->field->cleanData($this->value);
+
+        $keys = array_keys( $valid );
         if (!is_array( $keys ) || count( $keys ) !== 7) {
             return false;
         }
-
+        $this->value = $valid;
         return true;
     }
 
@@ -130,6 +129,35 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
 
     }
 
+    public function getToday()
+    {
+        $day = date( 'N', time() );
+        return array_values( $this->prepared )[absint( $day ) - 1];
+    }
+
+    public function nowOpen()
+    {
+        $day = $this->getToday();
+        $now = current_time('timestamp', 0);
+        $date = date('d-m-Y ', $now);
+        $open = false;
+        if ($day['valid']) {
+            $open = ( $now > strtotime( $date.$day[0]['open'] ) && $now < strtotime( $date.$day[0]['close'] ) );
+            if ($day['split'] && !$open) {
+                $open = ( $now > strtotime( $date.$day[1]['open'] ) && $now < strtotime( $date.$day[1]['close'] ) );
+            }
+        }
+        return $open;
+
+    }
+
+    public function getDay($day){
+        if (isset($this->value[$day])){
+            return $this->value[$day];
+        }
+        return false;
+    }
+
     /**
      * Extend original data
      * @return array
@@ -137,15 +165,17 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
     private function mapDays()
     {
 
-        $i18n = I18n::getPackages( 'Refields.openingTimes' );
-        return array_map(
-            function ( $v, $day ) use ( $i18n ) {
+        $i18n = I18n::getPackages( 'Refields.otimes' );
+        $value = $this->getValue();
+        $now = current_time('d-m-Y ');
+        array_walk( $value,
+            function ( &$v, $day ) use ( $i18n, $now ) {
 
                 $d = $i18n[$day];
                 $v['day']['short'] = $d['short'];
                 $v['day']['long'] = $d['long'];
-
                 $t2 = $v[1];
+
 
                 if (!empty( $t2['open'] ) || !empty( $t2['close'] )) {
                     $v['split'] = true;
@@ -153,11 +183,29 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
                     $v['split'] = false;
                 }
 
-                return $v;
-            },
-            $this->getValue(),
-            array_keys( $this->getValue() )
+                // test if all fields have a value
+                if (!empty($v[0]['open']) && !empty($v[0]['close']) && !$v['split']){
+                    $v['valid'] = true;
+                } else {
+                    $v['valid'] = false;
+                }
+
+                if ($v['split']){
+                    if (!empty($v[1]['open']) && !empty($v[1]['close'])){
+                        $v['valid'] = true;
+                    } else {
+                        $v['valid'] = false;
+                    }
+                }
+
+                $v['am'] = $v[0];
+                $v['pm'] = $v[1];
+
+
+            }
+
         );
+        return $value;
     }
 
 

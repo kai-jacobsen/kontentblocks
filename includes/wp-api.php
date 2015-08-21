@@ -30,29 +30,30 @@ function kb_register_area_template( $args )
 /**
  * Render a single area wrapper
  * @param null $area
- * @param null $id
+ * @param null $post_id
  * @param null $additionalArgs
  */
-function kb_render_area( $area = null, $id = null, $additionalArgs = null )
+function kb_render_area( $area = null, $post_id = null, $additionalArgs = null )
 {
-    \Kontentblocks\renderSingleArea( $area, $id, $additionalArgs );
+    \Kontentblocks\renderSingleArea( $area, $post_id, $additionalArgs );
 }
 
+add_action( 'kb_area', 'kb_render_area', 10, 3 );
 add_action( 'area', 'kb_render_area', 10, 3 );
 
 
 /**
  * Render a single context
- * @param null $area
- * @param null $id
- * @param null $additionalArgs
+ * @param null $context
+ * @param null $post_id
+ * @param array|null $additionalArgs
  */
-function kb_render_context( $context = null, $id = null, $additionalArgs = null )
+function kb_render_context( $context = null, $post_id = null, $additionalArgs = array() )
 {
-    \Kontentblocks\renderContext( $context, $id, $additionalArgs );
+    \Kontentblocks\renderContext( $context, $post_id, $additionalArgs );
 }
 
-add_action( 'context', 'kb_render_context', 10, 3 );
+add_action( 'kb_context', 'kb_render_context', 10, 3 );
 
 
 /**

@@ -16,7 +16,6 @@ var BatchDeleteController = Backbone.View.extend({
   render: function () {
     this.$el.append(tplBatchDelete());
     jQuery('body').append(this.$el);
-    console.log('r');
   },
   add: function (control) {
     this.collection[control.model.id] = control;
@@ -57,7 +56,6 @@ var BatchDeleteController = Backbone.View.extend({
     if (res.data.modules) {
       _.each(res.data.modules, function (value, key) {
         if (value) {
-          console.log(this);
           var control = this.collection[key];
           TinyMCE.removeEditors(control.model.View.$el);
           KB.Modules.remove(control.model);

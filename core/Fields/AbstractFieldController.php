@@ -42,7 +42,6 @@ abstract class AbstractFieldController
      */
     public function setup()
     {
-
         if (empty( $this->fieldsById )) {
             $this->fieldsById = $this->collectAllFields();
         }
@@ -51,7 +50,6 @@ abstract class AbstractFieldController
             $data = ( isset( $this->data[$field->getKey()] ) ) ? $this->data[$field->getKey()] : '';
             $field->setValue( $data );
         }
-
         return $this;
     }
 

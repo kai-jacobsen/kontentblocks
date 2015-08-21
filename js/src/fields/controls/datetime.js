@@ -1,5 +1,5 @@
 var BaseView = require('../FieldBaseView');
-KB.Fields.registerObject('datetime', BaseView.extend({
+module.exports = BaseView.extend({
   initialize: function () {
     var that = this;
     this.defaults = {
@@ -24,4 +24,4 @@ KB.Fields.registerObject('datetime', BaseView.extend({
   derender: function () {
     this.$('.kb-datetimepicker').datetimepicker('destroy');
   }
-}));
+});

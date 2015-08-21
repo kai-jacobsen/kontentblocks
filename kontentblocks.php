@@ -269,7 +269,6 @@ Class Kontentblocks
             $this->loadFields();
             $this->initInterface();
 
-            // enabled for 'page' by default
             add_post_type_support( 'page', 'kontentblocks' );
             remove_post_type_support( 'page', 'revisions' );
         }

@@ -4,6 +4,8 @@ namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Fields\FieldFormController;
+use Kontentblocks\Panels\CustomizerIntegration;
+use WP_Customize_Media_Control;
 
 /**
  * Single checkbox renders to boolean true or false
@@ -80,5 +82,7 @@ Class Checkbox extends Field
     {
         echo "<input type='hidden' name='{$form->getFieldName()}' value='{$this->getValue()}' >";
     }
+
+
 
 }
