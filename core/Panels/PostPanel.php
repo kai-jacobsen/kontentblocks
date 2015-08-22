@@ -3,6 +3,7 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Common\Data\ValueStorage;
+use Kontentblocks\Common\Traits\TraitSetupArgs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -13,17 +14,24 @@ use Kontentblocks\Utils\Utilities;
  */
 abstract class PostPanel extends AbstractPanel
 {
-
+    /**
+     * helper method setupArgs
+     */
+    use TraitSetupArgs;
 
     /**
      * @var int
      */
     public $postId;
 
+    /**
+     * @var mixed
+     */
+    public $model;
 
     /**
-     * Render in MetaBox
-     * @var bool
+     * meta box args
+     * @var array|null
      */
     protected $metaBox;
 
@@ -66,20 +74,37 @@ abstract class PostPanel extends AbstractPanel
      */
     public function __construct( $args, Environment $environment )
     {
-        parent::__construct( $args );
+        $this->args = $this->parseDefaults( $args );
+        $this->setupArgs( $this->args );
         $this->environment = $environment;
-        $this->data = $environment->getDataProvider()->get( $this->baseId );
-        $this->fieldController = new PanelFieldController( $this->baseId, $this->data, $this );
-        $this->fields( $this->fieldController );
+        $this->model = new PostPanelModel( $environment->getDataProvider()->get( $this->baseId ), $this );
+        $this->fields = new PanelFieldController( $this->baseId, $this->model->export(), $this );
+        $this->fields();
     }
 
+    /**
+     * Extend arg with defaults
+     * @param $args
+     * @return array
+     */
+    protected function parseDefaults( $args )
+    {
+        $defaults = array(
+            'baseId' => null,
+            'metaBox' => false,
+            'hook' => 'edit_form_after_title',
+            'postTypes' => array(),
+            'frontend' => true,
+            'pageTemplates' => array( 'default' )
+        );
+
+        return wp_parse_args( $args, $defaults );
+    }
 
     /**
      * Fields to render, must be provided by child class
-     * @param PanelFieldController $FieldManager
-     * @return mixed
      */
-    abstract public function fields( PanelFieldController $FieldManager );
+    abstract public function fields();
 
     /**
      * Setup hooks
@@ -87,14 +112,14 @@ abstract class PostPanel extends AbstractPanel
     public function init()
     {
         $postType = $this->environment->getPostType();
-        if (is_array( $this->metaBox ) || $this->metaBox) {
+        if (is_array( $this->metaBox )) {
             add_action( "add_meta_boxes_{$postType}", array( $this, 'metaBox' ), 10, 1 );
         } else {
             add_action( $this->hook, array( $this, 'form' ) );
         }
 
         add_action( 'wp_footer', array( $this, 'toJSON' ) );
-        add_action( "save_post", array( $this, 'save' ), 10, 1 );
+        add_action( "save_post", array( $this, 'saveCallback' ), 10, 1 );
     }
 
     /**
@@ -104,7 +129,6 @@ abstract class PostPanel extends AbstractPanel
      */
     public function form( $postObj )
     {
-
         if (!post_type_supports( $postObj->post_type, 'editor' )) {
             Utilities::hiddenEditor();
         }
@@ -130,9 +154,12 @@ abstract class PostPanel extends AbstractPanel
                 <div class='inside'>";
     }
 
+    /**
+     * @return string
+     */
     public function renderFields()
     {
-        return $this->fields( $this->fieldController )->renderFields();
+        return $this->fields->renderFields();
     }
 
     /**
@@ -148,7 +175,7 @@ abstract class PostPanel extends AbstractPanel
         $args = array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
-            'moduleData' => $this->data,
+            'moduleData' => $this->model->getOriginalData(),
             'area' => '_internal',
             'type' => 'static',
             'settings' => $this->args,
@@ -158,21 +185,29 @@ abstract class PostPanel extends AbstractPanel
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }
 
+    /**
+     * Callback handler
+     * @param $postId
+     */
+    public function saveCallback( $postId )
+    {
+        $data = $_POST[$this->baseId];
+        if (empty( $data )) {
+            return;
+        }
+        $this->save( new ValueStorage( $_POST ), $postId );
+    }
 
     /**
+     * @param ValueStorage $postData
      * @param $postId
      * @return mixed|void
      */
-    public function save( $postId )
+    public function save( ValueStorage $postData, $postId )
     {
 
-        if (empty( $_POST[$this->baseId] )) {
-            return;
-        }
-
-        $old = $this->setupData( $postId );
-        $postData = new ValueStorage( $_POST );
-        $new = $this->fields( $this->fieldController )->save( $postData->get( $this->baseId ), $old );
+        $old = $this->model->export();
+        $new = $this->fields->save( $postData->get( $this->baseId ), $old );
         $dataProvider = $this->environment->getDataProvider();
         $dataProvider->update( $this->baseId, $new );
 
@@ -204,16 +239,34 @@ abstract class PostPanel extends AbstractPanel
     }
 
     /**
-     * After setup, get the setup object
      * @return array
      */
     public function getData()
     {
-        $data = $this->fieldController->setup()->prepareDataAndGet();
-        if (!is_array( $data )) {
-            return array();
+        return $this->model->getOriginalData();
+    }
+
+    /**
+     * @return PanelModel|mixed
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    public function setupFieldData()
+    {
+        $this->fields->setData( $this->model )->setup();
+        foreach ($this->model as $key => $v) {
+            /** @var \Kontentblocks\Fields\Field $field */
+            $field = $this->fields->getFieldByKey( $key );
+            $this->model[$key] = ( !is_null( $field ) ) ? $field->getUserValue() : $v;
         }
-        return $data;
+        return $this->model;
     }
 
     /**
@@ -239,36 +292,17 @@ abstract class PostPanel extends AbstractPanel
             'saveAsSingle' => false
         );
 
-        $mb = wp_parse_args( $this->metaBox, $defaults );
+        $mbDef = wp_parse_args( $this->metaBox, $defaults );
 
         if ($this->metaBox) {
             add_meta_box(
                 $this->baseId,
-                $mb['title'],
+                $mbDef['title'],
                 array( $this, 'form' ),
                 $postObj->post_type,
-                $mb['context'],
-                $mb['priority']
+                $mbDef['context'],
+                $mbDef['priority']
             );
         }
-    }
-
-    /**
-     * Extend arg with defaults
-     * @param $args
-     * @return array
-     */
-    protected function parseDefaults( $args )
-    {
-        $defaults = array(
-            'baseId' => null,
-            'metaBox' => false,
-            'hook' => 'edit_form_after_title',
-            'postTypes' => array(),
-            'frontend' => true,
-            'pageTemplates' => array( 'default' )
-        );
-
-        return wp_parse_args( $args, $defaults );
     }
 }

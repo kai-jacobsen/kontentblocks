@@ -33,9 +33,9 @@ class SaveStaticPanelForm implements AjaxActionInterface
         $postId = filter_var($panelDef['postId'], FILTER_SANITIZE_NUMBER_INT);
         $panelData = wp_unslash( $data );
 
-        $panel = \Kontentblocks\getPanel( $panId, $postId );
-        $old = $panel->getData();
-        $new = $panel->fields( $panel->fieldController )->save( $panelData, $old );
+        $panel = \Kontentblocks\getPostPanel( $panId, $postId );
+        $old = $panel->model->export();
+        $new = $panel->fields->save( $panelData, $old );
 
         $merged = Utilities::arrayMergeRecursive( $new, $old );
         update_post_meta( $postId, $panId, $merged );

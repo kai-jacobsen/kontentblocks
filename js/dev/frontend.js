@@ -1872,9 +1872,6 @@ var EditableImage = Backbone.View.extend({
     } else if (this.mode === 'background') {
       this.$el.css('backgroundImage', "url('"+ url +"')");
     }
-
-
-
   },
   removePlaceholder: function(){
     if (this.hasData()){
@@ -1987,7 +1984,6 @@ var EditableImage = Backbone.View.extend({
     this.model.set('value', value);
     KB.Events.trigger('modal.refresh');
     that.model.trigger('field.model.dirty', that.model);
-
     var args = {
       width: that.model.get('width'),
       height: that.model.get('height'),
@@ -2844,6 +2840,7 @@ module.exports = Backbone.Model.extend({
     }
 
     if (_.isEmpty(this.changedFields)) {
+      console.log('triggered');
       this.trigger('module.model.clean', this);
     }
   },
@@ -2919,13 +2916,12 @@ module.exports = Backbone.Model.extend({
   },
   removeChangedField: function (FieldModel) {
     if (this.changedFields[FieldModel.id]) {
+      this.stopListening(FieldModel);
       delete this.changedFields[FieldModel.id];
     }
-
     if (_.isEmpty(this.changedFields)){
-      this.trigger('module.model.updated');
+      this.trigger('module.model.updated', this);
     }
-
   },
   sync: function (save, context) {
     var that = this;

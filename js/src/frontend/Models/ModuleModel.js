@@ -49,6 +49,7 @@ module.exports = Backbone.Model.extend({
     }
 
     if (_.isEmpty(this.changedFields)) {
+      console.log('triggered');
       this.trigger('module.model.clean', this);
     }
   },

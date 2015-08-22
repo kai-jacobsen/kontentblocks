@@ -27,13 +27,12 @@ module.exports = Backbone.Model.extend({
   },
   removeChangedField: function (FieldModel) {
     if (this.changedFields[FieldModel.id]) {
+      this.stopListening(FieldModel);
       delete this.changedFields[FieldModel.id];
     }
-
     if (_.isEmpty(this.changedFields)){
-      this.trigger('module.model.updated');
+      this.trigger('module.model.updated', this);
     }
-
   },
   sync: function (save, context) {
     var that = this;

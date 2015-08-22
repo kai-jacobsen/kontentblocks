@@ -17,6 +17,9 @@ abstract class AbstractFieldController
     public $structure;
 
 
+    public $data;
+
+
     /**
      * Object to handle the section layout
      * e.g. defaults to tabs
@@ -138,7 +141,18 @@ abstract class AbstractFieldController
 
     abstract public function renderFields();
 
-    abstract public function addGroup( $groupId, $args = array() );
+    /**
+     * @param $sectionId
+     * @param array $args
+     * @return object
+     * @deprecated
+     */
+    public function addGroup( $sectionId, $args = array() )
+    {
+        return $this->addSection( $sectionId, $args = array() );
+    }
+
+    abstract public function addSection( $sectionId, $args = array() );
 
     /**
      * @param array $data
@@ -150,11 +164,14 @@ abstract class AbstractFieldController
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function export()
     {
         $collection = array();
-        foreach ($this->structure as $Section) {
-            $Section->export( $collection );
+        foreach ($this->structure as $section) {
+            $section->export( $collection );
         }
         return $collection;
     }

@@ -44,9 +44,6 @@ var EditableImage = Backbone.View.extend({
     } else if (this.mode === 'background') {
       this.$el.css('backgroundImage', "url('"+ url +"')");
     }
-
-
-
   },
   removePlaceholder: function(){
     if (this.hasData()){
@@ -159,7 +156,6 @@ var EditableImage = Backbone.View.extend({
     this.model.set('value', value);
     KB.Events.trigger('modal.refresh');
     that.model.trigger('field.model.dirty', that.model);
-
     var args = {
       width: that.model.get('width'),
       height: that.model.get('height'),

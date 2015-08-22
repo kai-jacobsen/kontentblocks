@@ -84,4 +84,5 @@ class PanelRegistry
         return $this->panels;
     }
 
+
 }

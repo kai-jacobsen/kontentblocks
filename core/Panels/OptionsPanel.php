@@ -3,6 +3,7 @@ namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
+use Kontentblocks\Common\Traits\TraitSetupArgs;
 use Kontentblocks\Customizer\CustomizerIntegration;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
@@ -18,6 +19,7 @@ use Kontentblocks\Utils\Utilities;
  */
 abstract class OptionsPanel extends AbstractPanel
 {
+    use TraitSetupArgs;
 
     /**
      * @var SerOptionsDataProvider
@@ -45,29 +47,24 @@ abstract class OptionsPanel extends AbstractPanel
     protected $menuUri;
 
 
+    /**
+     * Class constructor
+     *
+     * @param array $args
+     *
+     * @throws \Exception
+     */
     public function __construct( $args )
     {
-        parent::__construct( $args );
 
-        $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
+        $this->args = $this->parseDefaults( $args );
+        $this->setupArgs( $this->args );
+        $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
+        $this->model = new OptionsPanelModel($this->dataProvider->export(), $this);
+        $this->fields = new PanelFieldController( $this->baseId, $this->model->export(), $this );
+        $this->fields();
     }
 
-    /**
-     * Setup panel related meta data
-     *
-     * @internal param $postId
-     *
-     * @param null $postId
-     * @return mixed
-     */
-    public function setupData( $postId = null )
-    {
-        if (is_null( $this->data )) {
-            $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
-            $this->data = $this->dataProvider->export();
-        }
-        return $this->data;
-    }
 
     /**
      * @param $args
@@ -122,6 +119,8 @@ abstract class OptionsPanel extends AbstractPanel
             add_action( 'customize_register', array( $this, 'setupCustomizer' ) );
         }
 
+
+
     }
 
     public function setupMenu()
@@ -170,7 +169,7 @@ abstract class OptionsPanel extends AbstractPanel
         $args = array(
             'baseId' => $this->getBaseId(),
             'mid' => $this->getBaseId(),
-            'moduleData' => $this->data,
+            'moduleData' => $this->model->getOriginalData(),
             'area' => '_internal',
             'type' => 'option',
             'settings' => $this->args
@@ -196,13 +195,12 @@ abstract class OptionsPanel extends AbstractPanel
 
     /**
      * Post Id not needed in this context
-     * @param null $postId
      * @return mixed|void
      */
-    public function save( $postId = null )
+    public function save()
     {
-        $old = $this->setupData();
-        $new = $this->fields( $this->fieldController )->save( $_POST[$this->baseId], $old );
+        $old = $this->model->export();
+        $new = $this->fields->save( $_POST[$this->baseId], $old );
         $merged = Utilities::arrayMergeRecursive( $new, $old );
         $this->dataProvider->set( $merged )->save();
         $location = add_query_arg( array( 'message' => '1' ) );
@@ -210,9 +208,12 @@ abstract class OptionsPanel extends AbstractPanel
         exit;
     }
 
-    abstract public function fields( PanelFieldController $fieldManager );
+    abstract public function fields();
 
-    public function form( $postobj = null )
+    /**
+     * @return bool
+     */
+    public function form()
     {
         // @TODO what? deprecate, replace
         do_action( 'kb.do.enqueue.admin.files' );
@@ -245,10 +246,12 @@ abstract class OptionsPanel extends AbstractPanel
         return $out;
     }
 
+    /**
+     * @return string
+     */
     public function renderFields()
     {
-        $this->fieldController = new PanelFieldController( $this->baseId, $this->setupData(), $this );
-        return $this->fields( $this->fieldController )->renderFields();
+        return $this->fields->renderFields();
     }
 
     /**
@@ -267,14 +270,18 @@ abstract class OptionsPanel extends AbstractPanel
     }
 
     /**
-     * Manually set up fielddata
-     * Makes it possible to get the Panel from the registry, and use it as data container
-     * @return OptionsPanel
+     * @return mixed
+     * @throws \Exception
      */
-    public function setup()
+    public function setupFieldData()
     {
-        return $this;
-
+        $this->fields->setData( $this->model )->setup();
+        foreach ($this->model as $key => $v) {
+            /** @var \Kontentblocks\Fields\Field $field */
+            $field = $this->fields->getFieldByKey( $key );
+            $this->model[$key] = ( !is_null( $field ) ) ? $field->getUserValue() : $v;
+        }
+        return $this->model;
     }
 
     /**
@@ -296,14 +303,11 @@ abstract class OptionsPanel extends AbstractPanel
     }
 
     /**
-     * After setup, get the setup object
      * @return array
-     * @TODO __Revise__
      */
     public function getData()
     {
-        $this->fields( $this->fieldController )->setup( $this->setupData() );
-        return $this->fieldController->prepareDataAndGet();
+        return $this->model->export();
     }
 
     /**
@@ -322,9 +326,9 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function setupCustomizer( \WP_Customize_Manager $wpCustomize )
     {
-        $this->fieldController->setup();
-        $this->fields( $this->fieldController );
-        new CustomizerIntegration( $this->fieldController, $wpCustomize, $this );
+        $this->fields->setup();
+        $this->fields( $this->fields );
+        new CustomizerIntegration( $this->fields, $wpCustomize, $this );
     }
 
     /**

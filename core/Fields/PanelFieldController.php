@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Panels\AbstractPanel;
+
 
 /**
  * FieldManagerPanels
@@ -16,7 +18,7 @@ class PanelFieldController extends AbstractFieldController
      * @var array
      */
     public $structure = array();
-    public $preparedFields = array();
+
     /**
      * Unique ID from module
      * Used to prefix form fields
@@ -25,43 +27,42 @@ class PanelFieldController extends AbstractFieldController
     protected $baseId;
     /**
      *
-     * @var object
+     * @var AbstractPanel
      */
     protected $panel;
 
     /**
      * Constructor
      *
-     * @param $id
+     * @param $baseId
      * @param array $data
      * @param $panel
      */
-    public function __construct( $id, $data = array(), $panel )
+    public function __construct( $baseId, $data = array(), AbstractPanel $panel )
     {
-        //TODO Check module consistency
-        $this->baseId = $id;
+        $this->baseId = $baseId;
         $this->data = $data;
         $this->panel = $panel;
 
     }
 
+
+
     /**
      * Creates a new section if there is not an exisiting one
      * or returns the section
      *
-     * @param string $groupId
+     * @param string $sectionId
      * @param array $args
      *
      * @return object groupobject
      */
-    public function addGroup( $groupId, $args = array() )
+    public function addSection( $sectionId, $args = array() )
     {
-        if (!$this->idExists( $groupId )) {
-            $this->structure[$groupId] = new PanelFieldSection( $groupId, $args, $this->panel );
+        if (!$this->idExists( $sectionId )) {
+            $this->structure[$sectionId] = new PanelFieldSection( $sectionId, $args, $this->panel );
         }
-
-        return $this->structure[$groupId];
-
+        return $this->structure[$sectionId];
     }
 
     /**
@@ -76,8 +77,9 @@ class PanelFieldController extends AbstractFieldController
     public function save( $data, $oldData )
     {
         $collection = array();
-        foreach ($this->structure as $definition) {
-            $return = ( $definition->save( $data, $oldData ) );
+        /** @var \Kontentblocks\Fields\AbstractFieldSection $section */
+        foreach ($this->structure as $section) {
+            $return = ( $section->save( $data, $oldData ) );
             $collection = $collection + $return;
         }
         return $collection;
@@ -95,11 +97,9 @@ class PanelFieldController extends AbstractFieldController
      */
     public function renderFields()
     {
-        $Renderer = new FieldRendererTabs( $this->baseId, $this->structure );
-        return $Renderer->render( $this->data );
+        $renderer = new FieldRendererTabs( $this->baseId, $this->structure );
+        return $renderer->render( $this->data );
     }
-
-
 
 
     /**
@@ -111,21 +111,4 @@ class PanelFieldController extends AbstractFieldController
         return false;
     }
 
-    /**
-     * Returns the fields prepared data in one flat array
-     * @return array
-     */
-    public function prepareDataAndGet()
-    {
-        if (!empty( $this->fieldsById )) {
-            if (empty( $this->preparedFields )) {
-                /** @var \Kontentblocks\Fields\Field $Field */
-                foreach ($this->fieldsById as $Field) {
-                    $this->preparedFields[$Field->getKey()] = $Field->getUserValue();
-                }
-            }
-            return $this->preparedFields;
-        }
-        return $this->data;
-    }
 }
