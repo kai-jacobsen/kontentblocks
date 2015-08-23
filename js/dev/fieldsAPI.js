@@ -261,7 +261,6 @@ module.exports =
           ed.module.$el.trigger('tinymce.change');
         });
       };
-      console.log(settings);
       tinymce.init(settings);
 
       if (!tinyMCEPreInit.mceInit[id]) {
