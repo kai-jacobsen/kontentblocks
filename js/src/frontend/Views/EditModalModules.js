@@ -105,11 +105,21 @@ module.exports = Backbone.View.extend({
     //
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
-
+    this.realmid = this.setupModuleId();
     this.attach();
     this.render();
     this.recalibrate();
     return this;
+  },
+
+  setupModuleId: function(){
+
+    var parentObject = this.model.get('parentObject');
+    if (this.model.get('globalModule') && parentObject){
+      return parentObject.post_name;
+    }
+    return this.model.get('mid');
+
   },
 
   /**
@@ -427,7 +437,7 @@ module.exports = Backbone.View.extend({
       height;
 
     tinymce.triggerSave();
-    mdata = this.formdataForId(this.model.get('mid'));
+    mdata = this.formdataForId(this.realmid);
     this.model.set('moduleData', mdata);
     this.LoadingAnimation.show(0.5);
 
@@ -615,7 +625,6 @@ module.exports = Backbone.View.extend({
       return null;
     }
     formdata = this.$form.serializeJSON();
-
     if (formdata[mid]) {
       return formdata[mid];
     }

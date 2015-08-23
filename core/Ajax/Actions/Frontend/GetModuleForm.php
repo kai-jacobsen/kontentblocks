@@ -34,7 +34,7 @@ class GetModuleForm implements AjaxActionInterface
         }
 
         $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-
+        $moduleDef = apply_filters('kb.modify.module.before.frontend.form', $moduleDef);
         $environment = Utilities::getEnvironment( $moduleDef['parentObjectId'] );
         $module = $environment->getModuleById( $moduleDef['mid'] );
         $module->properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );

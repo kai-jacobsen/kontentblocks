@@ -74,7 +74,7 @@ class UpdateModule implements AjaxActionInterface
     private static function setupPostData( ValueStorageInterface $request )
     {
         $stdClass = new \stdClass();
-        $stdClass->data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $stdClass->data = $request->get( 'data');
         $stdClass->module = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $stdClass->postId = filter_var( $stdClass->module['parentObjectId'], FILTER_VALIDATE_INT );
         $stdClass->editmode = $request->getFiltered( 'editmode', FILTER_SANITIZE_STRING );

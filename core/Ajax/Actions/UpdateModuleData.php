@@ -60,7 +60,6 @@ class UpdateModuleData implements AjaxActionInterface
         );
         do_action( 'kb.module.save', $module, $mergedData );
         Utilities::remoteConcatGet( $postId );
-
         return new AjaxSuccessResponse( 'Module data updated.', $return );
     }
 

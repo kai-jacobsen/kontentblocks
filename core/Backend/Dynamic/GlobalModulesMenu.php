@@ -545,14 +545,15 @@ class GlobalModulesMenu
      */
     private function prepareAttachedTo()
     {
+        global $wpdb;
         $posts = [ ];
         $meta = get_post_meta( get_the_ID(), '_kb_attached_to', true );
         if (!is_array( $meta )) {
             return $posts;
         }
-        $unique = array_values( $meta );
+        $unique = implode(',', array_values( $meta ));
         if (!empty( $unique )) {
-            $posts = get_posts( array( 'include' => $unique, 'post_type' => 'any' ) );
+            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE ID IN ('$unique') ");
         }
         return $posts;
     }

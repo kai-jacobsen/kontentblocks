@@ -14,6 +14,9 @@ module.exports = BaseView.extend({
   className: 'genericon genericon-draggable kb-area-move-handle',
 
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === 'kb-dyar'){
+      return false;
+    }
     return true;
   }
 });

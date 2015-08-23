@@ -691,7 +691,6 @@ module.exports =
           ed.module.$el.trigger('tinymce.change');
         });
       };
-      console.log(settings);
       tinymce.init(settings);
 
       if (!tinyMCEPreInit.mceInit[id]) {
@@ -2840,13 +2839,13 @@ module.exports = Backbone.Model.extend({
     }
 
     if (_.isEmpty(this.changedFields)) {
-      console.log('triggered');
       this.trigger('module.model.clean', this);
     }
   },
   sync: function (save, context) {
     var that = this;
     KB.Events.trigger('module.before.sync', this);
+    console.log('helloooooooooooooo', this);
     return jQuery.ajax({
       url: ajaxurl,
       data: {
@@ -3513,11 +3512,21 @@ module.exports = Backbone.View.extend({
     //
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
-
+    this.realmid = this.setupModuleId();
     this.attach();
     this.render();
     this.recalibrate();
     return this;
+  },
+
+  setupModuleId: function(){
+
+    var parentObject = this.model.get('parentObject');
+    if (this.model.get('globalModule') && parentObject){
+      return parentObject.post_name;
+    }
+    return this.model.get('mid');
+
   },
 
   /**
@@ -3835,7 +3844,7 @@ module.exports = Backbone.View.extend({
       height;
 
     tinymce.triggerSave();
-    mdata = this.formdataForId(this.model.get('mid'));
+    mdata = this.formdataForId(this.realmid);
     this.model.set('moduleData', mdata);
     this.LoadingAnimation.show(0.5);
 
@@ -4023,7 +4032,6 @@ module.exports = Backbone.View.extend({
       return null;
     }
     formdata = this.$form.serializeJSON();
-
     if (formdata[mid]) {
       return formdata[mid];
     }

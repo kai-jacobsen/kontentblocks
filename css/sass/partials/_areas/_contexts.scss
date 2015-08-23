@@ -92,7 +92,7 @@
 
         .dashicons {
           transform: rotate(180deg);
-          top: 10px;
+          top: 0px;
         }
       }
 
@@ -111,8 +111,13 @@
 
       .dashicons {
         position: relative;
-        top: 12px;
+        top: 0px;
         transition: all .3s ease-out;
+        background-color: $lightblue;
+        color: #fff;
+        border-radius: 20px;
+        @extend .base-box-shadow;
+        padding: 12px;
       }
 
       .kb-global-area-item {

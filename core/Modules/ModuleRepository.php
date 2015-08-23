@@ -36,7 +36,6 @@ class ModuleRepository
                 if (in_array($module['area'], array_keys($areas))){
                     if (!is_admin()) {
                         $module = apply_filters( 'kb.before.frontend.setup', $module );
-
                     }
                     $workshop = new ModuleWorkshop( $this->environment, $module );
                     if ($workshop->isValid()) {
@@ -45,6 +44,7 @@ class ModuleRepository
                 }
             }
         }
+        $this->setupAliases();
         return $this;
     }
 
@@ -67,5 +67,14 @@ class ModuleRepository
             return $this->modules[$mid];
         }
         return null;
+    }
+
+    private function setupAliases()
+    {
+        if ($this->environment->getPostObject()->post_type === 'kb-gmd'){
+
+
+
+        }
     }
 }

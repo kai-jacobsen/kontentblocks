@@ -28,6 +28,11 @@ module.exports = BaseView.extend({
     }, this.success, this);
   },
   isValid: function () {
+
+    if (KB.Environment && KB.Environment.postType === 'kb-dyar'){
+      return false;
+    }
+
     return this.model.get('dynamic');
   },
   success: function (res) {

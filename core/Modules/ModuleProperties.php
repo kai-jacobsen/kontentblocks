@@ -79,7 +79,7 @@ class ModuleProperties
     public $parentObjectId;
 
     /**
-     * @var Post object of module attached to
+     * @var \WP_Post object of module attached to
      */
     public $parentObject;
 

@@ -1,7 +1,8 @@
 <?php
+
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
-use Kontentblocks\Ajax\Actions\RemoveModules;
+use Kontentblocks\Ajax\Actions\ChangeArea;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
@@ -9,11 +10,12 @@ use Kontentblocks\Modules\ModuleWorkshop;
 
 
 /**
- * Class RemoveModulesTest
+ * Class ChangeAreaTest
  * @package Kontentblocks\tests\core\Ajax\Actions
  */
-class RemoveModulesTest extends \WP_UnitTestCase
+class ChangeAreaTest extends \WP_UnitTestCase
 {
+    protected $userId;
 
     public static function setUpBeforeClass()
     {
@@ -23,7 +25,12 @@ class RemoveModulesTest extends \WP_UnitTestCase
             array( __CLASS__, 'dump' ),
             99
         );
+
         \Kontentblocks\Hooks\Capabilities::setup();
+
+    \Kontentblocks\registerArea(array(
+        'id' => 'dump'
+    ));
 
     }
 
@@ -33,13 +40,7 @@ class RemoveModulesTest extends \WP_UnitTestCase
         $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
         wp_set_current_user( $this->userId );
 
-        \Kontentblocks\registerArea(array(
-            'id' => 'dump',
-            'postTypes' => array('post')
-        ));
-
     }
-
 
     public function testRun()
     {
@@ -47,8 +48,7 @@ class RemoveModulesTest extends \WP_UnitTestCase
 
         $workshop = new ModuleWorkshop(
             new Environment( $post->ID, $post ), array(
-                'class' => 'ModuleText',
-                'area' => 'dump'
+                'class' => 'ModuleText'
             )
         );
 
@@ -57,18 +57,17 @@ class RemoveModulesTest extends \WP_UnitTestCase
 
         $data = array(
             'postId' => $post->ID,
-            'module' => $module['mid']
+            'area_id' => 'dump',
+            'areaContext' => 'dump',
+            'mid' => $module['mid']
         );
 
-        $Response = RemoveModules::run( new ValueStorage( $data ) );
+        $Request = new ValueStorage( $data );
+        $Response = ChangeArea::run( $Request );
         $this->assertTrue( $Response->getStatus() );
-
-        $Storage = new ModuleStorage($post->ID);
-        $mdef = $Storage->getModuleDefinition($module['mid']);
-        $this->assertFalse($mdef);
-
-
-
+        $Storage = new ModuleStorage( $post->ID );
+        $def = $Storage->getModuleDefinition( $module['mid'] );
+        $this->assertEquals( $def['area'], $data['area_id'] );
     }
 
 
@@ -77,12 +76,10 @@ class RemoveModulesTest extends \WP_UnitTestCase
         return '__return_null';
     }
 
-
     public function tearDown()
     {
         parent::tearDown();
         wp_set_current_user( 0 );
-
     }
 
 

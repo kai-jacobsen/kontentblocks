@@ -21,6 +21,7 @@ class SaveStaticPanelForm implements AjaxActionInterface
 
     /**
      * @param ValueStorageInterface $request
+     * @return AjaxSuccessResponse
      */
     public static function run( ValueStorageInterface $request )
     {
@@ -42,6 +43,6 @@ class SaveStaticPanelForm implements AjaxActionInterface
         $return = array(
             'newData' => $merged
         );
-        new AjaxSuccessResponse( 'options data saved', $return );
+        return new AjaxSuccessResponse( 'options data saved', $return );
     }
 }

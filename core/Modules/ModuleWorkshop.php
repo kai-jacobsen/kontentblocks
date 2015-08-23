@@ -194,7 +194,6 @@ class ModuleWorkshop
         $attrs = $this->handleLegacyattrs( wp_parse_args( $attrs, $oldattrs ) );
         $this->newId = $mid = ( isset( $attrs['mid'] ) ) ? $attrs['mid'] : $this->createModuleId();
         $attrs['mid']  = $mid;
-
         $attrs = wp_parse_args( $attrs, $this->getDefaults() );
 
 
@@ -207,11 +206,10 @@ class ModuleWorkshop
             $attrs['parentObjectId'] = $attrs['post_id'];
         }
 
-        $attrs['parentObject'] = ( isset( $attrs['parentObjectId'] ) && is_numeric(
-                $attrs['parentObjectId']
-            ) && $attrs['globalModule'] ) ? get_post(
+        $attrs['parentObject'] = (is_numeric($attrs['parentObjectId']) && $attrs['globalModule'] ) ? get_post(
             $attrs['parentObjectId']
         ) : null;
+
 
 
         return $this->clean( $attrs );
@@ -274,6 +272,7 @@ class ModuleWorkshop
         return array(
             // id
             'mid' => '',
+            'oMid' => '',
             // gmodule
             'globalModule' => false,
             'parentObjectId' => null,

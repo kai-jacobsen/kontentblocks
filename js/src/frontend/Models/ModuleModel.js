@@ -49,13 +49,13 @@ module.exports = Backbone.Model.extend({
     }
 
     if (_.isEmpty(this.changedFields)) {
-      console.log('triggered');
       this.trigger('module.model.clean', this);
     }
   },
   sync: function (save, context) {
     var that = this;
     KB.Events.trigger('module.before.sync', this);
+    console.log('helloooooooooooooo', this);
     return jQuery.ajax({
       url: ajaxurl,
       data: {

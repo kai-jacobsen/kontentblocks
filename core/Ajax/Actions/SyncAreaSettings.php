@@ -23,6 +23,7 @@ class SyncAreaSettings implements AjaxActionInterface
 
     /**
      * @param ValueStorageInterface $request
+     * @return AjaxErrorResponse|AjaxSuccessResponse
      */
     public static function run( ValueStorageInterface $request )
     {
@@ -39,9 +40,9 @@ class SyncAreaSettings implements AjaxActionInterface
         $update = $areaSettings->save();
 
         if ($update) {
-            new AjaxSuccessResponse( 'Area Settings updated', $areaSettings );
+            return new AjaxSuccessResponse( 'Area Settings updated', $areaSettings );
         } else {
-            new AjaxErrorResponse( 'Area Settings not updated', $areaSettings );
+            return new AjaxErrorResponse( 'Area Settings not updated', $areaSettings );
         }
 
     }

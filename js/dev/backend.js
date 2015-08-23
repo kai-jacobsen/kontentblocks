@@ -419,6 +419,11 @@ module.exports = BaseView.extend({
     }, this.success, this);
   },
   isValid: function () {
+
+    if (KB.Environment && KB.Environment.postType === 'kb-dyar'){
+      return false;
+    }
+
     return this.model.get('dynamic');
   },
   success: function (res) {
@@ -449,6 +454,9 @@ module.exports = BaseView.extend({
   className: 'genericon genericon-draggable kb-area-move-handle',
 
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === 'kb-dyar'){
+      return false;
+    }
     return true;
   }
 });
@@ -490,6 +498,9 @@ module.exports = BaseView.extend({
     }, this.success, this);
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === 'kb-dyar'){
+      return false;
+    }
     return true;
   },
   success: function (res) {
@@ -2142,7 +2153,6 @@ module.exports =
           ed.module.$el.trigger('tinymce.change');
         });
       };
-      console.log(settings);
       tinymce.init(settings);
 
       if (!tinyMCEPreInit.mceInit[id]) {

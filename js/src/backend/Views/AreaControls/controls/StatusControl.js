@@ -35,6 +35,9 @@ module.exports = BaseView.extend({
     }, this.success, this);
   },
   isValid: function () {
+    if (KB.Environment && KB.Environment.postType === 'kb-dyar'){
+      return false;
+    }
     return true;
   },
   success: function (res) {

@@ -37,7 +37,7 @@ class ModuleGlobalModuleProxy extends Module
         // runs when the frontend modal updates form data and changes the mid to the original
         // template id
         add_filter( 'kb.modify.module.save', array( __CLASS__, 'setTemplateId' ) );
-
+        add_filter('kb.modify.module.before.frontend.form', array(__CLASS__, 'filterModuleId'));
         // runs on module setup of the module iterator. change module parameter before
         // frontend output here
         add_filter( 'kb.before.frontend.setup', array( __CLASS__, 'setupModule' ) );
@@ -51,7 +51,8 @@ class ModuleGlobalModuleProxy extends Module
 
     public static function addNewModule( Module $module )
     {
-        if ($module->properties->globalModule && $module->properties->parentObject) {
+
+        if ($module->properties->globalModule) {
             $parentId = $module->properties->parentObjectId;
             $meta = get_post_meta( $parentId, '_kb_attached_to', true );
             if (!is_array( $meta )) {
@@ -64,7 +65,7 @@ class ModuleGlobalModuleProxy extends Module
 
     public static function deleteModule( Module $module )
     {
-        if ($module->properties->globalModule && $module->properties->parentObject) {
+        if ($module->properties->globalModule) {
             $parentId = $module->properties->parentObjectId;
             $meta = get_post_meta( $parentId, '_kb_attached_to', true );
             if (is_array( $meta ) && !empty( $meta )) {
@@ -162,7 +163,6 @@ class ModuleGlobalModuleProxy extends Module
 
             $glued['oMid'] = $glued['mid'];
             unset( $glued['mid']);
-
             // finally
             $final = \Kontentblocks\Utils\Utilities::arrayMergeRecursive( $glued, $module );
             $final['parentObjectId'] = $parentObjectId;
@@ -228,6 +228,17 @@ class ModuleGlobalModuleProxy extends Module
             }
         }
 
+    }
+
+
+    public static function filterModuleId($moduleDef){
+        if (filter_var($moduleDef['globalModule'], FILTER_VALIDATE_BOOLEAN)){
+            $post = get_post(filter_var($moduleDef['parentObjectId'], FILTER_SANITIZE_NUMBER_INT));
+            if (is_a($post, '\WP_Post')){
+                $moduleDef['mid'] = $post->post_title;
+            }
+        }
+        return $moduleDef;
     }
 
     /**

@@ -354,6 +354,7 @@ abstract class Module
             'post_id' => $this->properties->postId,
             'postId' => $this->properties->postId,
             'parentObjectId' => $this->properties->parentObjectId,
+            'parentObject' => $this->properties->parentObject,
             'areaContext' => $this->properties->areaContext,
             'viewfile' => $this->getViewfile(),
             'globalModule' => $this->properties->globalModule,
