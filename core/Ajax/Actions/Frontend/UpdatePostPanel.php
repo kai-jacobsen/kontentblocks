@@ -64,7 +64,7 @@ class UpdatePostPanel implements AjaxActionInterface
      * @param ValueStorageInterface $request
      * @return \stdClass
      */
-    private static function setupPostData( ValueStorageInterface $request )
+    public static function setupPostData( ValueStorageInterface $request )
     {
         $stdClass = new \stdClass();
         $stdClass->data = $request->getFiltered( 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );

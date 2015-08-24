@@ -86,13 +86,8 @@
 
       &:hover {
 
-        h4, p, span, .dashicons {
+        h4, p, span {
           color: #000;
-        }
-
-        .dashicons {
-          transform: rotate(180deg);
-          top: 0px;
         }
       }
 
@@ -111,13 +106,13 @@
 
       .dashicons {
         position: relative;
-        top: 0px;
+        top: -2px;
         transition: all .3s ease-out;
         background-color: $lightblue;
         color: #fff;
         border-radius: 20px;
         @extend .base-box-shadow;
-        padding: 12px;
+        padding: 3px;
       }
 
       .kb-global-area-item {
