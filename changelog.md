@@ -1,5 +1,11 @@
 #Changelog
 
+####0.5.0
++ refactored panels (backwards imcompatible)
++ fixed lookup of original module id for global modules during front-end edit
++ fixed global modules usage list (global areas were ignored)
++ removed area controls from global areas
+
 ####0.4.2
 + Introduced customizer field integration for options panels and some field types
 + Field type opening times improved

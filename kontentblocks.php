@@ -44,7 +44,7 @@ use Reframe\Autoloader;
 Class Kontentblocks
 {
 
-    const VERSION = '0.4.0';
+    const VERSION = '0.5.0';
     const DEVMODE = true;
     const TABLEVERSION = '1.0.13';
     const DEBUG = true;
