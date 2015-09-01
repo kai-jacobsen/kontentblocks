@@ -37,6 +37,7 @@ var EditableLink = Backbone.View.extend({
     this.trigger('field.view.rerender', this);
   },
   derender: function () {
+    this.$el.off();
     this.trigger('field.view.derender', this);
   },
   gone: function () {

@@ -44,7 +44,6 @@ class ModuleRepository
                 }
             }
         }
-        $this->setupAliases();
         return $this;
     }
 
@@ -69,12 +68,4 @@ class ModuleRepository
         return null;
     }
 
-    private function setupAliases()
-    {
-        if ($this->environment->getPostObject()->post_type === 'kb-gmd'){
-
-
-
-        }
-    }
 }

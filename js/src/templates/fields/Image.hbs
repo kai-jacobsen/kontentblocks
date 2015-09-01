@@ -1,4 +1,4 @@
-<div class="kb_field kb-field kb-field--image kb-fieldapi-field">
+<div class="kb_field kb-field kb-field-image-container kb-fieldapi-field">
     <label class="heading">{{ model.label }}</label>
 
     <div class='kb-field-image-wrapper'>
@@ -29,7 +29,7 @@
             <a class="button kb-js-reset-image">{{{ i18n.reset }}}</a>
         </div>
         <input class='kb-js-image-id' type='hidden'
-               name='{{ model.fieldName model.baseId model.index model.primeKey }}[id]'
+               name='{{ fieldName model.baseId model.index model.primeKey }}[id]'
                value='{{{ model.value.id }}}'>
     </div>
     <p class="description">{{ model.description }}</p>

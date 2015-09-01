@@ -314,43 +314,51 @@ class AreaRegistry
      *
      * @param string $classname
      * @param array $args module args
+     * @return bool
      */
     public function connect( $classname, $args )
     {
         $setting = $args['settings']['connect'];
-        if (!empty( $setting ) && $setting === 'any') {
+
+        if (empty($setting)){
+            return false;
+        }
+
+        if ($setting === 'any') {
             /** @var \Kontentblocks\Areas\AreaProperties $area */
             foreach ($this->areas as $area) {
                 $area->connect( $classname );
             }
-        } else if (!empty( $setting ) and is_array( $setting )) {
-            foreach ($setting as $id) {
+        } else if (is_array( $setting )) {
+            foreach ($setting as $target) {
                 // check for context
-                if (in_array( $id, array_keys(ScreenManager::getDefaultContextLayout()) )) {
-                    foreach ($this->getAreasByContext( $id ) as $connection) {
+                if (in_array( $target, array_keys(ScreenManager::getDefaultContextLayout()) )) {
+                    foreach ($this->getAreasByContext( $target ) as $connection) {
                         $args['settings']['connect'] = array( $connection->id );
                         $this->connect( $classname, $args );
                     }
                     // check for page template
-                } else if (is_string( $id ) && ( strpos( $id, '.php' ) !== false || $id === 'default' )) {
-                    foreach ($this->getAreasByPageTemplate( $id ) as $tplcon) {
+                } else if (is_string( $target ) && ( strpos( $target, '.php' ) !== false || $target === 'default' )) {
+                    foreach ($this->getAreasByPageTemplate( $target ) as $tplcon) {
                         $args['settings']['connect'] = array( $tplcon->id );
                         $this->connect( $classname, $args );
                     }
                 }
-                else if ($id === 'global'){
+
+                else if ($target === 'global'){
                     foreach ($this->getGlobalAreas() as $connection) {
                         $connection->connect($classname);
                     }
+
                 } else {
-                    // its not a coontext, not a page template, must be an area id
+                    // its not a context, not a page template
                     // area id not existent
-                    if (empty( $this->areas[$id] )) {
+                    if (empty( $this->areas[$target] )) {
                         continue;
                     }
                     //area id exists, connect
                     /** @var \Kontentblocks\Areas\AreaProperties $area */
-                    $area = $this->areas[$id];
+                    $area = $this->areas[$target];
                     $area->connect( $classname );
                 }
             }
@@ -395,11 +403,11 @@ class AreaRegistry
                 $area->context = 'side';
             }
             if (( !empty( $area->pageTemplates ) ) && ( !empty( $area->postTypes ) )) {
-                if (in_array( $pageTemplate, $area->pageTemplates ) && in_array( $postType, $area->postTypes )) {
+                if (Utilities::strposa($pageTemplate, $area->pageTemplates) && in_array( $postType, $area->postTypes )) {
                     $areas[$area->id] = $area;
                 }
             } elseif (!empty( $area->pageTemplates )) {
-                if (in_array( $pageTemplate, $area->pageTemplates )) {
+                if (Utilities::strposa($pageTemplate, $area->pageTemplates)) {
                     $areas[$area->id] = $area;
                 }
             } elseif (!empty( $area->postTypes )) {

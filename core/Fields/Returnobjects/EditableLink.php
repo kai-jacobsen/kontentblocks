@@ -21,7 +21,6 @@ class EditableLink extends AbstractEditableFieldReturn
 
     function html()
     {
-        $this->addAttr( 'data-powertip', 'Hold Strg/Cmd Key and click to open link dialog' );
         $this->handleLoggedInUsers();
         $format = '<%1$s href="%4$s" %3$s>%2$s</%1$s>';
 
@@ -72,4 +71,13 @@ class EditableLink extends AbstractEditableFieldReturn
         $this->target = '';
         $this->href = ( isset( $this->value['link'] ) ) ? $this->value['link'] : '';
     }
+
+    public function hasLink(){
+        return !empty($this->value['link']);
+    }
+
+    public function linktext(){
+        return $this->value['linktext'];
+    }
+
 }

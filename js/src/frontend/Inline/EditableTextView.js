@@ -47,10 +47,17 @@ var EditableText = Backbone.View.extend({
     if (this.el.id) {
       this.id = this.el.id;
     }
+    this.Toolbar.show();
+
   },
   derender: function () {
     this.deactivate();
     this.trigger('field.view.derender', this);
+    this.$el.off();
+  },
+  gone: function () {
+    this.trigger('field.view.gone', this);
+    this.Toolbar.hide();
   },
   rerender: function () {
     this.render();
@@ -199,7 +206,6 @@ var EditableText = Backbone.View.extend({
     if (KB.EditModalModules){
       KB.EditModalModules.destroy();
     }
-
     e.stopPropagation();
     if (!this.editor) {
       tinymce.init(_.defaults(this.defaults, {

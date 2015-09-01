@@ -61,7 +61,6 @@ module.exports = Backbone.View.extend({
     var that = this, data;
     _.each(tab.fields, function (field) { // field is just a reference object and does nothing on it's own
       field.model.set('index', that.model.get('_tab').uid); // field models: merged parent field and individual ff field
-
       fieldInstance = KB.FieldsAPI.get(field); // get a view for the field
       data = that.model.get('value'); // if not new item a standard backbone model
       if (!_.isUndefined(data)) {
@@ -72,14 +71,18 @@ module.exports = Backbone.View.extend({
 
       $con.append(fieldInstance.render(that.uid));
       $con.append('<input type="hidden" name="' + fieldInstance.model.get('baseId') + '[' + fieldInstance.model.get('index') + '][_mapping][' + fieldInstance.model.get('primeKey') + ']" value="' + fieldInstance.model.get('type') + '" >');
-      fieldInstance.$container = $con;
-      if (fieldInstance.postRender) {
-        fieldInstance.postRender.call(fieldInstance);
-      }
 
-      if (that.Controller.parentView) {
-        that.addInstanceToCollection(fieldInstance);
-      }
+      _.defer(function () {
+        fieldInstance.$container = $con;
+        if (fieldInstance.postRender) {
+          fieldInstance.postRender.call(fieldInstance);
+        }
+        if (that.Controller.parentView) {
+          that.addInstanceToCollection(fieldInstance);
+        }
+      });
+
+
     });
   },
   addInstanceToCollection: function (Instance) {

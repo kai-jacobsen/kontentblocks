@@ -266,7 +266,7 @@ class Utilities
 
 
     /**
-     * Wrapper to wp get_page_remplates
+     * Wrapper to wp get_page_templates
      * Internal use only
      * @return array
      */
@@ -421,15 +421,22 @@ class Utilities
             'standard' => __( 'Standard', 'kontentblocks' ),
         );
 
-        $cats = apply_filters( 'kb_menu_cats', $cats );
+        $cats = apply_filters( 'kb.module.cats', $cats );
         $cats['media'] = __( 'Media', 'kontentblocks' );
         $cats['special'] = __( 'Spezial', 'kontentblocks' );
-
         $cats['core'] = __( 'System', 'kontentblocks' );
         $cats['gmodule'] = __( 'Global Modules', 'kontentblocks' );
 
         Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleCategories', null, $cats );
         return $cats;
+    }
+
+    public static function strposa($haystack, $needle, $offset=0) {
+        if(!is_array($needle)) $needle = array($needle);
+        foreach($needle as $query) {
+            if(strpos($haystack, $query, $offset) !== false) return true; // stop on first true result
+        }
+        return false;
     }
 
 

@@ -214,5 +214,6 @@
 body.kb-editcontrols-show{
   .kb-module-controls, .kb-inline-toolbar{
     display: block;
+    z-index: 1111;
   }
 }

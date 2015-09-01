@@ -57,7 +57,7 @@ module.exports = function (grunt) {
         files: {
           'js/dev/plugins.js': ['<%= concat.plugins.dest %>'],
           'js/dev/mediaExt.js': ['<%= concat.mediaExt.dest %>'],
-
+          'js/dev/client.js' : 'js/src/client/CallbackController.js'
         }
       }
     },
@@ -149,6 +149,10 @@ module.exports = function (grunt) {
       frontend: {
         files: ['js/src/frontend/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsfrontend']
+      },
+      client: {
+        files: ['js/src/client/**/*.js'],
+        tasks: ['jsclient']
       },
       common:{
         files: ['js/src/common/**/*.js'],
@@ -244,6 +248,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['concat', 'browserify', 'uglify:dist', 'sass:dist', 'autoprefixer', 'clean', 'bash', 'exec:removeHash', 'exec:createId']);
   grunt.registerTask('cssdev', ['sass:dev', 'autoprefixer']);
   grunt.registerTask('jsfrontend', ['browserify:frontend']);
+  grunt.registerTask('jsclient', ['uglify:dev']);
   grunt.registerTask('jsbackend', ['browserify:backend']);
   grunt.registerTask('jsextensions', ['browserify:extensions']);
   grunt.registerTask('jsrefields', ['browserify:refields']);

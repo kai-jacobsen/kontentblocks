@@ -34,6 +34,7 @@ module.exports = Backbone.View.extend({
     this.render();
   }
 });
+
 },{}],4:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({

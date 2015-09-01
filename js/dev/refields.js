@@ -1128,8 +1128,13 @@ module.exports = Utilities;
 module.exports = Backbone.View.extend({
   rerender: function(){
     this.render();
+  },
+  gone: function () {
+    this.trigger('field.view.gone', this);
+    this.derender();
   }
 });
+
 },{}],17:[function(require,module,exports){
 var Fields = {};
 // include Backbone events handler
@@ -1514,7 +1519,6 @@ module.exports = Backbone.View.extend({
 var ToggleBoxRenderer =  require('fields/controls/flexfields/ToggleBoxRenderer');
 var tplSingleSectionBox = require('templates/fields/FlexibleFields/single-section-box.hbs');
 module.exports = ToggleBoxRenderer.extend({
-
   render: function () {
     var inputName = this.createInputName(this.model.get('_tab').uid);
     var item = this.model.toJSON(); // tab information and value hold by this.model
@@ -1612,7 +1616,6 @@ module.exports = Backbone.View.extend({
     var that = this, data;
     _.each(tab.fields, function (field) { // field is just a reference object and does nothing on it's own
       field.model.set('index', that.model.get('_tab').uid); // field models: merged parent field and individual ff field
-
       fieldInstance = KB.FieldsAPI.get(field); // get a view for the field
       data = that.model.get('value'); // if not new item a standard backbone model
       if (!_.isUndefined(data)) {
@@ -1623,14 +1626,18 @@ module.exports = Backbone.View.extend({
 
       $con.append(fieldInstance.render(that.uid));
       $con.append('<input type="hidden" name="' + fieldInstance.model.get('baseId') + '[' + fieldInstance.model.get('index') + '][_mapping][' + fieldInstance.model.get('primeKey') + ']" value="' + fieldInstance.model.get('type') + '" >');
-      fieldInstance.$container = $con;
-      if (fieldInstance.postRender) {
-        fieldInstance.postRender.call(fieldInstance);
-      }
 
-      if (that.Controller.parentView) {
-        that.addInstanceToCollection(fieldInstance);
-      }
+      _.defer(function () {
+        fieldInstance.$container = $con;
+        if (fieldInstance.postRender) {
+          fieldInstance.postRender.call(fieldInstance);
+        }
+        if (that.Controller.parentView) {
+          that.addInstanceToCollection(fieldInstance);
+        }
+      });
+
+
     });
   },
   addInstanceToCollection: function (Instance) {

@@ -1323,7 +1323,6 @@ module.exports = Backbone.Model.extend({
 
     if (_.isUndefined(this.getElement())) {
       _.defer(_.bind(this.FieldView.gone, this.FieldView)); // call rerender on the field
-
     }
     else if (this.FieldView) {
       this.FieldView.setElement(this.getElement()); // markup might have changed, reset the root element
@@ -1546,6 +1545,7 @@ var ChangeObserver = require('frontend/Views/ChangeObserver');
 var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
+
 
 /*
  Preperations
@@ -1883,7 +1883,7 @@ var EditableImage = Backbone.View.extend({
     }
   },
   hasData: function(){
-    return !_.isEmpty(this.model.get('value').id);
+    return _.isNumber(parseInt(this.model.get('value').id,10));
   },
   setMode: function(settings){
     this.model.set('mode', settings.mode);
@@ -1899,15 +1899,18 @@ var EditableImage = Backbone.View.extend({
   rerender: function () {
     this.render();
     this.trigger('field.view.rerender', this);
-
+  },
+  gone: function () {
+    this.trigger('field.view.gone', this);
+    this.Toolbar.hide();
   },
   derender: function () {
     if (this.frame) {
       this.frame.dispose();
       this.frame = null;
     }
+    this.$el.off();
     this.trigger('field.view.derender', this);
-
   },
   openFrame: function () {
     var that = this;
@@ -2118,6 +2121,7 @@ var EditableLink = Backbone.View.extend({
     this.trigger('field.view.rerender', this);
   },
   derender: function () {
+    this.$el.off();
     this.trigger('field.view.derender', this);
   },
   gone: function () {
@@ -2260,10 +2264,17 @@ var EditableText = Backbone.View.extend({
     if (this.el.id) {
       this.id = this.el.id;
     }
+    this.Toolbar.show();
+
   },
   derender: function () {
     this.deactivate();
     this.trigger('field.view.derender', this);
+    this.$el.off();
+  },
+  gone: function () {
+    this.trigger('field.view.gone', this);
+    this.Toolbar.hide();
   },
   rerender: function () {
     this.render();
@@ -2412,7 +2423,6 @@ var EditableText = Backbone.View.extend({
     if (KB.EditModalModules){
       KB.EditModalModules.destroy();
     }
-
     e.stopPropagation();
     if (!this.editor) {
       tinymce.init(_.defaults(this.defaults, {
@@ -3881,7 +3891,8 @@ module.exports = Backbone.View.extend({
       that.model.trigger('module.model.updated', that.model);
       KB.Events.trigger('modal.saved');
     }
-    jQuery(document).trigger('kb:module-update-' + that.model.get('settings').id, that.ModuleView);
+    jQuery(document).trigger('kb.module-update', that.model.get('settings').id, that.ModuleView);
+    jQuery(document).trigger('kb.refresh');
     that.ModuleView.delegateEvents();
     that.ModuleView.trigger('kb:frontend::viewUpdated');
     KB.Events.trigger('KB::ajax-update');

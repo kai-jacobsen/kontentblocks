@@ -314,6 +314,254 @@ module.exports =
   }
 };
 },{"common/Ajax":1,"common/Config":2,"common/Logger":3}],6:[function(require,module,exports){
+var Utilities = function ($) {
+  return {
+    // store with expiration
+    stex: {
+      set: function (key, val, exp) {
+        store.set(key, {val: val, exp: exp, time: new Date().getTime()})
+      },
+      get: function (key) {
+        var info = store.get(key)
+        if (!info) {
+          return null
+        }
+        if (new Date().getTime() - info.time > info.exp) {
+          return null
+        }
+        return info.val
+      }
+    },
+    setIndex: function (obj, is, value) {
+
+      if (!_.isObject(obj)){
+        obj = {};
+      }
+
+      if (typeof is == 'string'){
+        return this.setIndex(obj, is.split('.'), value);
+      }
+      else if (is.length == 1 && value !== undefined){
+        return obj[is[0]] = value;
+      }
+      else if (is.length == 0){
+        return obj;
+      }
+      else{
+        return this.setIndex(obj[is[0]], is.slice(1), value);
+      }
+    },
+    getIndex: function (obj, s) {
+      s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+      s = s.replace(/^\./, '');           // strip a leading dot
+      var a = s.split('.');
+      while (a.length) {
+        var n = a.shift();
+        if (_.isObject(obj) && n in obj) {
+          obj = obj[n];
+        } else {
+          return {};
+        }
+      }
+      return obj;
+    },
+    // deprecated in favor of kpath
+    //cleanArray: function (actual) {
+    //  var newArray = new Array();
+    //  for (var i = 0; i < actual.length; i++) {
+    //
+    //    if (!_.isUndefined(actual[i]) && !_.isEmpty(actual[i])) {
+    //      newArray.push(actual[i]);
+    //    }
+    //  }
+    //  return newArray;
+    //},
+    sleep: function (milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+          break;
+        }
+      }
+    }
+  }
+
+}(jQuery);
+module.exports = Utilities;
+},{}],7:[function(require,module,exports){
+//KB.Fields.BaseView
+module.exports = Backbone.View.extend({
+  rerender: function(){
+    this.render();
+  },
+  gone: function () {
+    this.trigger('field.view.gone', this);
+    this.derender();
+  }
+});
+
+},{}],8:[function(require,module,exports){
+var BaseView = require('../FieldBaseView');
+var Utilities = require('common/Utilities');
+var Config = require('common/Config');
+module.exports = BaseView.extend({
+  initialize: function () {
+    this.defaultState = 'replace-image';
+    this.defaultFrame = 'image';
+    this.render();
+  },
+  events: {
+    'click .kb-js-add-image': 'openFrame',
+    'click .kb-js-reset-image': 'resetImage'
+  },
+  render: function () {
+    this.$reset = this.$('.kb-js-reset-image');
+    this.$container = this.$('.kb-field-image-container');
+    this.$saveId = this.$('.kb-js-image-id');
+    this.$description = this.$('.kb-js-image-description');
+    this.$title = this.$('.kb-js-image-title');
+  },
+  editImage: function () {
+    this.openFrame(true);
+  },
+  openFrame: function (editmode) {
+    var that = this, metadata;
+    if (this.frame) {
+      this.frame.dispose();
+    }
+
+    // we only want to query "our" image attachment
+    // value of post__in must be an array
+
+    var queryargs = {};
+
+    if (this.model.get('value').id !== '') {
+      queryargs.post__in = [this.model.get('value').id];
+    }
+
+    wp.media.query(queryargs) // set the query
+      .more() // execute the query, this will return an deferred object
+      .done(function () { // attach callback, executes after the ajax call succeeded
+        // inside the callback 'this' refers to the result collection
+        // there should be only one model, assign it to a var
+        var attachment = this.first();
+        that.attachment = attachment;
+        // this is a bit odd: if you want to access the 'sizes' in the modal
+        // and if you need access to the image editor / replace image function
+
+        // attachment_id must be set.
+        // see media-models.js, Line ~370 / PostImage
+        if (attachment) {
+          attachment.set('attachment_id', attachment.get('id'));
+          metadata = that.attachment.toJSON();
+        } else {
+          metadata = {};
+          that.defaultFrame = 'select';
+          that.defaultState = 'library';
+        }
+
+        // create a frame, bind 'update' callback and open in one step
+        that.frame = wp.media({
+          frame: that.defaultFrame, // alias for the ImageDetails frame
+          state: that.defaultState, // default state, makes sense
+          metadata: metadata, // the important bit, thats where the initial informations come from
+          imageEditView: that,
+          library: {
+            type: 'image'
+          }
+
+        }).on('update', function (attachmentObj) { // bind callback to 'update'
+          that.update(attachmentObj);
+        })
+          .on('close', function (att) {
+            if (that.frame.image && that.frame.image.attachment) {
+              that.$description.val(that.frame.image.attachment.get('caption'));
+              that.$title.val(that.frame.image.attachment.get('title'));
+            }
+          })
+          .on('ready', function () {
+            that.ready();
+          }).on('replace', function () {
+            that.replace(that.frame.image.attachment);
+          }).on('select', function (what) {
+            var attachment = this.get('library').get('selection').first();
+            that.replace(attachment);
+          }).open();
+      });
+  },
+  ready: function () {
+    jQuery('.media-modal').addClass('smaller kb-image-frame');
+  },
+  replace: function (attachment) {
+    this.attachment = attachment;
+    this.handleAttachment(attachment);
+  },
+  update: function (attachmentObj) {
+    this.attachment.set(attachmentObj);
+    this.attachment.sync('update', this.attachment);
+    //if(this.$caption.length > 0){
+    //  this.$caption.html(this.attachment.get('caption'));
+    //}
+  },
+  handleAttachment: function (attachment) {
+    var that = this;
+    var id = attachment.get('id');
+    var value = this.prepareValue(attachment);
+    var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
+    var path = this.model.get('kpath');
+    Utilities.setIndex(moduleData, path, value);
+    this.model.get('ModuleModel').set('moduleData', moduleData);
+    var args = {
+      width: that.model.get('width') || null,
+      height: that.model.get('height') || null,
+      crop: that.model.get('crop') || true,
+      upscale: that.model.get('upscale') || false
+    };
+
+    if (!args.width || !args.height) {
+      var src = (attachment.get('sizes').thumbnail) ? attachment.get('sizes').thumbnail.url : attachment.get('sizes').full.url;
+      this.$container.html('<img src="' + src + '" >');
+    } else {
+      jQuery.ajax({
+        url: ajaxurl,
+        data: {
+          action: 'fieldGetImage',
+          args: args,
+          id: id,
+          _ajax_nonce: Config.getNonce('read')
+        },
+        type: 'POST',
+        dataType: 'json',
+        success: function (res) {
+          that.$container.html('<img src="' + res.data.src + '" >');
+        },
+        error: function () {
+
+        }
+      });
+    }
+    this.$saveId.val(attachment.get('id'));
+    this.$description.val(attachment.get('caption'));
+    this.$title.val(attachment.get('title'));
+    //KB.Events.trigger('modal.preview');
+    this.model.get('ModuleModel').trigger('data.updated');
+  },
+  prepareValue: function (attachment) {
+    return {
+      id: attachment.get('id'),
+      title: attachment.get('title'),
+      caption: attachment.get('caption'),
+      alt: attachment.get('alt')
+    };
+  },
+  resetImage: function () {
+    this.$container.html('');
+    this.$saveId.val('');
+    this.model.set('value', {id: null, caption: ''});
+    this.$description.val('');
+  }
+});
+},{"../FieldBaseView":7,"common/Config":2,"common/Utilities":6}],9:[function(require,module,exports){
 module.exports = Backbone.View.extend({
   initialize: function () {
     this.defaults = this.defaults || {};
@@ -358,7 +606,7 @@ module.exports = Backbone.View.extend({
     this.setValue(this.defaults.std);
   }
 });
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var TinyMCE = require('common/TinyMCE');
 var BaseView = require('fieldsAPI/Fields/BaseView');
 module.exports = BaseView.extend({
@@ -395,7 +643,8 @@ module.exports = BaseView.extend({
     TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), 5, false);
   }
 });
-},{"common/TinyMCE":5,"fieldsAPI/Fields/BaseView":6,"templates/fields/Editor.hbs":15}],8:[function(require,module,exports){
+},{"common/TinyMCE":5,"fieldsAPI/Fields/BaseView":9,"templates/fields/Editor.hbs":18}],11:[function(require,module,exports){
+var Field = require('fields/controls/image');
 var BaseView = require('fieldsAPI/Fields/BaseView');
 module.exports = BaseView.extend({
   $currentWrapper: null,
@@ -406,19 +655,18 @@ module.exports = BaseView.extend({
   initialize: function (config) {
     var that = this;
     // call parent 'initialize' method to set the object up
-    KB.FieldsAPI.Field.prototype.initialize.call(this, config);
-
-    this.config.$parent.on('click', '.flexible-fields--js-add-image', function () {
-
-      that.$currentWrapper = jQuery(this).closest('.field-api-image');
-      that.$currentFrame = jQuery('.field-api-image--frame', that.$currentWrapper);
-      that.$IdInput = jQuery('.field-api-image--image-id', that.$currentWrapper);
-
-      new KB.Utils.MediaWorkflow({
-        title: 'Hello',
-        select: _.bind(that.handleAttachment, that)
-      });
-    });
+    BaseView.prototype.initialize.call(this, config);
+    //this.config.$parent.on('click', '.flexible-fields--js-add-image', function () {
+    //
+    //  that.$currentWrapper = jQuery(this).closest('.field-api-image');
+    //  that.$currentFrame = jQuery('.field-api-image--frame', that.$currentWrapper);
+    //  that.$IdInput = jQuery('.field-api-image--image-id', that.$currentWrapper);
+    //
+    //  new KB.Utils.MediaWorkflow({
+    //    title: 'Hello',
+    //    select: _.bind(that.handleAttachment, that)
+    //  });
+    //});
   },
   defaults: {
     std: '',
@@ -493,7 +741,7 @@ module.exports = BaseView.extend({
     }
   }
 });
-},{"fieldsAPI/Fields/BaseView":6,"templates/fields/Image.hbs":16}],9:[function(require,module,exports){
+},{"fields/controls/image":8,"fieldsAPI/Fields/BaseView":9,"templates/fields/Image.hbs":19}],12:[function(require,module,exports){
 var BaseView = require('fieldsAPI/Fields/BaseView');
 module.exports = BaseView.extend({
   templatePath: 'fields/Link',
@@ -520,7 +768,7 @@ module.exports = BaseView.extend({
     });
   }
 });
-},{"fieldsAPI/Fields/BaseView":6,"templates/fields/Link.hbs":17}],10:[function(require,module,exports){
+},{"fieldsAPI/Fields/BaseView":9,"templates/fields/Link.hbs":20}],13:[function(require,module,exports){
 var BaseView = require('fieldsAPI/Fields/BaseView');
 module.exports = BaseView.extend({
   templatePath: 'fields/Text',
@@ -544,7 +792,7 @@ module.exports = BaseView.extend({
 
 
 
-},{"fieldsAPI/Fields/BaseView":6,"templates/fields/Text.hbs":18}],11:[function(require,module,exports){
+},{"fieldsAPI/Fields/BaseView":9,"templates/fields/Text.hbs":21}],14:[function(require,module,exports){
 var BaseView = require('fieldsAPI/Fields/BaseView');
 module.exports = BaseView.extend({
   defaults: {
@@ -562,7 +810,7 @@ module.exports = BaseView.extend({
     });
   }
 });
-},{"fieldsAPI/Fields/BaseView":6,"templates/fields/Textarea.hbs":19}],12:[function(require,module,exports){
+},{"fieldsAPI/Fields/BaseView":9,"templates/fields/Textarea.hbs":22}],15:[function(require,module,exports){
 module.exports =
 {
   fields: {},
@@ -574,7 +822,7 @@ module.exports =
     return new this.fields[field.model.get('type')]({model: new Backbone.Model(field.model.toJSON())});
   }
 };
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 require('fieldsAPI/hbsHelpers');
 var Collection = require('fieldsAPI/FieldsAPICollection');
 KB.FieldsAPI = Collection;
@@ -583,7 +831,7 @@ KB.FieldsAPI.register(require('fieldsAPI/Fields/Image'));
 KB.FieldsAPI.register(require('fieldsAPI/Fields/Link'));
 KB.FieldsAPI.register(require('fieldsAPI/Fields/Text'));
 KB.FieldsAPI.register(require('fieldsAPI/Fields/Textarea'));
-},{"fieldsAPI/Fields/Editor":7,"fieldsAPI/Fields/Image":8,"fieldsAPI/Fields/Link":9,"fieldsAPI/Fields/Text":10,"fieldsAPI/Fields/Textarea":11,"fieldsAPI/FieldsAPICollection":12,"fieldsAPI/hbsHelpers":14}],14:[function(require,module,exports){
+},{"fieldsAPI/Fields/Editor":10,"fieldsAPI/Fields/Image":11,"fieldsAPI/Fields/Link":12,"fieldsAPI/Fields/Text":13,"fieldsAPI/Fields/Textarea":14,"fieldsAPI/FieldsAPICollection":15,"fieldsAPI/hbsHelpers":17}],17:[function(require,module,exports){
 var Handlebars = require("hbsfy/runtime");
 Handlebars.registerHelper("debug", function (optionalValue) {
   console.log("Current Context");
@@ -611,7 +859,7 @@ Handlebars.registerHelper('trimString', function(passedString, length) {
 
   return new HandlebarsKB.SafeString(theString)
 });
-},{"hbsfy/runtime":28}],15:[function(require,module,exports){
+},{"hbsfy/runtime":31}],18:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -624,7 +872,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":28}],16:[function(require,module,exports){
+},{"hbsfy/runtime":31}],19:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -640,7 +888,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression, alias3=helpers.helperMissing;
 
-  return "<div class=\"kb_field kb-field kb-field--image kb-fieldapi-field\">\n    <label class=\"heading\">"
+  return "<div class=\"kb_field kb-field kb-field-image-container kb-fieldapi-field\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n\n    <div class='kb-field-image-wrapper'>\n        <div class='kb-js-add-image kb-field-image-container'>\n"
     + ((stack1 = helpers['if'].call(depth0,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.url : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
@@ -663,7 +911,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "        <div class=\"kb-field-image--footer\">\n            <a class=\"button kb-js-reset-image\">"
     + ((stack1 = alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.reset : stack1), depth0)) != null ? stack1 : "")
     + "</a>\n        </div>\n        <input class='kb-js-image-id' type='hidden'\n               name='"
-    + alias2((((stack1 = (depth0 && depth0.model)) && stack1.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"model.fieldName","hash":{},"data":data}))
+    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "[id]'\n               value='"
     + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.id : stack1), depth0)) != null ? stack1 : "")
     + "'>\n    </div>\n    <p class=\"description\">"
@@ -671,7 +919,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "</p>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":28}],17:[function(require,module,exports){
+},{"hbsfy/runtime":31}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -723,7 +971,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "</p>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":28}],18:[function(require,module,exports){
+},{"hbsfy/runtime":31}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -740,7 +988,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":28}],19:[function(require,module,exports){
+},{"hbsfy/runtime":31}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -757,7 +1005,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":28}],20:[function(require,module,exports){
+},{"hbsfy/runtime":31}],23:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -818,7 +1066,7 @@ inst['default'] = inst;
 
 exports['default'] = inst;
 module.exports = exports['default'];
-},{"./handlebars/base":21,"./handlebars/exception":22,"./handlebars/no-conflict":23,"./handlebars/runtime":24,"./handlebars/safe-string":25,"./handlebars/utils":26}],21:[function(require,module,exports){
+},{"./handlebars/base":24,"./handlebars/exception":25,"./handlebars/no-conflict":26,"./handlebars/runtime":27,"./handlebars/safe-string":28,"./handlebars/utils":29}],24:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1092,7 +1340,7 @@ function createFrame(object) {
 }
 
 /* [args, ]options */
-},{"./exception":22,"./utils":26}],22:[function(require,module,exports){
+},{"./exception":25,"./utils":29}],25:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1131,7 +1379,7 @@ Exception.prototype = new Error();
 
 exports['default'] = Exception;
 module.exports = exports['default'];
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1150,7 +1398,7 @@ exports['default'] = function (Handlebars) {
 };
 
 module.exports = exports['default'];
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1383,7 +1631,7 @@ function initData(context, data) {
   }
   return data;
 }
-},{"./base":21,"./exception":22,"./utils":26}],25:[function(require,module,exports){
+},{"./base":24,"./exception":25,"./utils":29}],28:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1398,7 +1646,7 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 
 exports['default'] = SafeString;
 module.exports = exports['default'];
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1513,12 +1761,12 @@ function blockParams(params, ids) {
 function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
 }
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 
-},{"./dist/cjs/handlebars.runtime":20}],28:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":23}],31:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":27}]},{},[13]);
+},{"handlebars/runtime":30}]},{},[16]);

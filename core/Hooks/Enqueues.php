@@ -63,6 +63,15 @@ class Enqueues
             'quicktags',
         );
 
+        // client
+        wp_register_script(
+            'kb-client',
+            KB_PLUGIN_URL . 'js/' . $folder . '/client' . $suffix . '.js',
+            array('jquery', 'underscore'),
+            null,
+            true
+        );
+
         // Plugins
         wp_register_script(
             'kb-customizer',

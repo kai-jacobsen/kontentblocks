@@ -29,6 +29,7 @@ var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
 
+
 /*
  Preperations
  */

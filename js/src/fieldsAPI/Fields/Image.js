@@ -1,3 +1,4 @@
+var Field = require('fields/controls/image');
 var BaseView = require('fieldsAPI/Fields/BaseView');
 module.exports = BaseView.extend({
   $currentWrapper: null,
@@ -8,19 +9,18 @@ module.exports = BaseView.extend({
   initialize: function (config) {
     var that = this;
     // call parent 'initialize' method to set the object up
-    KB.FieldsAPI.Field.prototype.initialize.call(this, config);
-
-    this.config.$parent.on('click', '.flexible-fields--js-add-image', function () {
-
-      that.$currentWrapper = jQuery(this).closest('.field-api-image');
-      that.$currentFrame = jQuery('.field-api-image--frame', that.$currentWrapper);
-      that.$IdInput = jQuery('.field-api-image--image-id', that.$currentWrapper);
-
-      new KB.Utils.MediaWorkflow({
-        title: 'Hello',
-        select: _.bind(that.handleAttachment, that)
-      });
-    });
+    BaseView.prototype.initialize.call(this, config);
+    //this.config.$parent.on('click', '.flexible-fields--js-add-image', function () {
+    //
+    //  that.$currentWrapper = jQuery(this).closest('.field-api-image');
+    //  that.$currentFrame = jQuery('.field-api-image--frame', that.$currentWrapper);
+    //  that.$IdInput = jQuery('.field-api-image--image-id', that.$currentWrapper);
+    //
+    //  new KB.Utils.MediaWorkflow({
+    //    title: 'Hello',
+    //    select: _.bind(that.handleAttachment, that)
+    //  });
+    //});
   },
   defaults: {
     std: '',

@@ -56,7 +56,7 @@ var EditableImage = Backbone.View.extend({
     }
   },
   hasData: function(){
-    return !_.isEmpty(this.model.get('value').id);
+    return _.isNumber(parseInt(this.model.get('value').id,10));
   },
   setMode: function(settings){
     this.model.set('mode', settings.mode);
@@ -72,15 +72,18 @@ var EditableImage = Backbone.View.extend({
   rerender: function () {
     this.render();
     this.trigger('field.view.rerender', this);
-
+  },
+  gone: function () {
+    this.trigger('field.view.gone', this);
+    this.Toolbar.hide();
   },
   derender: function () {
     if (this.frame) {
       this.frame.dispose();
       this.frame = null;
     }
+    this.$el.off();
     this.trigger('field.view.derender', this);
-
   },
   openFrame: function () {
     var that = this;

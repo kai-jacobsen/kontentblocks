@@ -66,6 +66,8 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
     protected $linkedFields = array();
 
+    public $currentUID;
+
     /**
      * @param $value
      * @param $field
@@ -144,6 +146,26 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
     abstract function prepare();
 
+    public function instance()
+    {
+        $this->increaseCallCount();
+    }
+
+    private function increaseCallCount()
+    {
+
+        $this->callCount ++;
+        $this->linkedFields[$this->createUniqueId()] = null;
+    }
+
+    protected function createUniqueId()
+    {
+        $base = $this->uniqueId . (string) $this->callCount;
+        $uid = 'kbf-' . hash( 'crc32', $base );
+        return $this->currentUID = $uid;
+
+    }
+
     /**
      * Add a (css) class to the stack of classes
      *
@@ -193,21 +215,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
         }
     }
 
-    public function reuse(){
-        $this->instance();
-    }
-
-    public function instance(){
-        $this->increaseCallCount();
-    }
-
-    private function increaseCallCount()
-    {
-
-        $this->callCount ++;
-        $this->linkedFields[$this->createUniqueId()] = null;
-    }
-
     /**
      * Add an attribute to the stack of attributes
      *
@@ -231,12 +238,15 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
     }
 
-    protected function createUniqueId()
+    public function getUniqueAttr()
     {
-        $base = $this->uniqueId . (string) $this->callCount;
-        $uid = 'kbf-' . hash( 'crc32', $base );
-        return $uid;
+        $this->toJSON();
+        return "data-kbfuid={$this->currentUID}";
+    }
 
+    public function reuse()
+    {
+        $this->instance();
     }
 
     public function createPath()
