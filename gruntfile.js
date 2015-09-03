@@ -42,7 +42,8 @@ module.exports = function (grunt) {
           'js/dist/plugins.min.js': ['<%= concat.plugins.dest %>'],
           'js/dist/fieldsAPI.min.js': ['<%= browserify.fieldsAPI.dest %>'],
           'js/dist/mediaExt.min.js': ['<%= concat.mediaExt.dest %>'],
-          'js/dist/customizer.min.js': ['<%= browserify.customizer.dest %>']
+          'js/dist/customizer.min.js': ['<%= browserify.customizer.dest %>'],
+          'js/dist/client.min.js' : 'js/dev/client.js'
 
         }
       },
