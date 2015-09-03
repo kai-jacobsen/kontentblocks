@@ -167,7 +167,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backend/Views/ContextUi/ContextColumnView":2,"backend/Views/ContextUi/ContextUiView":4,"backend/Views/ContextUi/controls/ColumnControl":5,"backend/Views/ContextUi/controls/ResetControl":6,"templates/backend/context-bar.hbs":39}],4:[function(require,module,exports){
+},{"backend/Views/ContextUi/ContextColumnView":2,"backend/Views/ContextUi/ContextUiView":4,"backend/Views/ContextUi/controls/ColumnControl":5,"backend/Views/ContextUi/controls/ResetControl":6,"templates/backend/context-bar.hbs":38}],4:[function(require,module,exports){
 var ControlsView = require('backend/Views/ModuleControls/ControlsView');
 module.exports = ControlsView.extend({
   initialize: function () {
@@ -257,7 +257,7 @@ module.exports = Backbone.View.extend({
     }
   }
 });
-},{"templates/backend/module-menu.hbs":40}],8:[function(require,module,exports){
+},{"templates/backend/module-menu.hbs":39}],8:[function(require,module,exports){
 //KB.Ajax
 var Notice = require('common/Notice');
 module.exports =
@@ -520,88 +520,6 @@ module.exports = {
   }
 };
 },{}],14:[function(require,module,exports){
-//KB.Templates
-var Config = require('common/Config');
-var Utilities = require('common/Utilities');
-var Templates = (function () {
-  var templateCache = {};
-  var helpfileCache = {};
-
-  function getTmplCache() {
-    return templateCache;
-  }
-
-  function render(tplName, tplData, done, scope) {
-    var callback, tplString;
-    tplData = tplData || {};
-    scope = scope || this;
-    callback = done || null;
-    if (!templateCache[tplName]) {
-      var tplDir = Config.getRootURL() + 'js/templates';
-      var tplUrl = tplDir + '/' + tplName + '.hbs?' + Config.getHash();
-
-      // if a full url is given, tplUrl will be overwritten
-      var pat = /^https?:\/\//i;
-      if (pat.test(tplName)) {
-        tplUrl = tplName;
-      }
-
-      // read from local storage if available
-      if (Utilities.stex.get(tplUrl)) {
-        tplString = Utilities.stex.get(tplUrl);
-        if (callback) {
-          callback.call(scope)
-        }
-      } else {
-        // load fresh file
-        jQuery.ajax({
-          url: tplUrl,
-          method: 'GET',
-          async: false,
-          success: function (data) {
-            tplString = data;
-            Utilities.stex.set(tplUrl, tplString, 2 * 1000 * 60);
-            if (callback) {
-              callback.call(scope)
-            }
-          }
-        });
-      }
-      templateCache[tplName] = HandlebarsKB.compile(tplString);
-    }
-    return templateCache[tplName](tplData);
-  }
-
-
-  /*
-   * Deprecated
-   */
-  function helpfile(helpfileUrl) {
-    if (!helpfileCache[helpfileUrl]) {
-
-      var helpfileString;
-      jQuery.ajax({
-        url: helpfileUrl,
-        method: 'GET',
-        async: false,
-        dataType: 'html',
-        success: function (data) {
-          helpfileString = data;
-        }
-      });
-
-      helpfileCache[helpfileUrl] = helpfileUrl;
-    }
-    return helpfileCache[helpfileUrl];
-  }
-
-  return {
-    render: render,
-    helpfile: helpfile
-  };
-}());
-module.exports = Templates;
-},{"common/Config":10,"common/Utilities":17}],15:[function(require,module,exports){
 //KB.TinyMCE
 var Ajax = require('common/Ajax');
 var Logger = require('common/Logger');
@@ -743,7 +661,7 @@ module.exports =
 
   }
 };
-},{"common/Ajax":8,"common/Config":10,"common/Logger":11}],16:[function(require,module,exports){
+},{"common/Ajax":8,"common/Config":10,"common/Logger":11}],15:[function(require,module,exports){
 /**
  *
  * These is a collection of helper functions to handle
@@ -1137,7 +1055,7 @@ var Ui = {
   }
 };
 module.exports = Ui;
-},{"backend/Views/ContextUi/ContextRowGrid":3,"common/Ajax":8,"common/Config":10,"common/Notice":12,"common/TinyMCE":15}],17:[function(require,module,exports){
+},{"backend/Views/ContextUi/ContextRowGrid":3,"common/Ajax":8,"common/Config":10,"common/Notice":12,"common/TinyMCE":14}],16:[function(require,module,exports){
 var Utilities = function ($) {
   return {
     // store with expiration
@@ -1212,7 +1130,7 @@ var Utilities = function ($) {
 
 }(jQuery);
 module.exports = Utilities;
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 //KB.Fields.BaseView
 module.exports = Backbone.View.extend({
   rerender: function(){
@@ -1224,7 +1142,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 //KB.Backbone.Common.FieldConfigModel
 var Checks = require('common/Checks');
 var Utilities = require('common/Utilities');
@@ -1383,7 +1301,7 @@ module.exports = Backbone.Model.extend({
 
   }
 });
-},{"common/Checks":9,"common/Config":10,"common/Logger":11,"common/Payload":13,"common/Utilities":17}],20:[function(require,module,exports){
+},{"common/Checks":9,"common/Config":10,"common/Logger":11,"common/Payload":13,"common/Utilities":16}],19:[function(require,module,exports){
 //KB.Backbone.Common.FieldConfigModelModal
 var FieldConfigModel = require('./FieldConfigModel');
 module.exports = FieldConfigModel.extend({
@@ -1403,7 +1321,7 @@ module.exports = FieldConfigModel.extend({
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
   }
 });
-},{"./FieldConfigModel":19}],21:[function(require,module,exports){
+},{"./FieldConfigModel":18}],20:[function(require,module,exports){
 var Fields = {};
 // include Backbone events handler
 _.extend(Fields, Backbone.Events);
@@ -1466,7 +1384,7 @@ _.extend(Fields, {
 });
 Fields.addEvent();
 module.exports = Fields;
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Fields = require('./Fields');
 window.KB.Fields = Fields;
 Fields.registerObject('color', require('./controls/color'));
@@ -1480,7 +1398,7 @@ Fields.registerObject('link', require('./controls/link'));
 Fields.registerObject('textarea', require('./controls/textarea'));
 Fields.registerObject('otimes', require('./controls/otimes'));
 
-},{"./Fields":21,"./controls/color":23,"./controls/date":24,"./controls/datetime":25,"./controls/file":26,"./controls/flexfields":27,"./controls/gallery":32,"./controls/image":35,"./controls/link":36,"./controls/otimes":37,"./controls/textarea":38}],23:[function(require,module,exports){
+},{"./Fields":20,"./controls/color":22,"./controls/date":23,"./controls/datetime":24,"./controls/file":25,"./controls/flexfields":26,"./controls/gallery":31,"./controls/image":34,"./controls/link":35,"./controls/otimes":36,"./controls/textarea":37}],22:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1505,7 +1423,7 @@ module.exports = BaseView.extend({
     }, 150);
   }
 });
-},{"../FieldBaseView":18}],24:[function(require,module,exports){
+},{"../FieldBaseView":17}],23:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1531,7 +1449,7 @@ module.exports = BaseView.extend({
 
   }
 });
-},{"../FieldBaseView":18}],25:[function(require,module,exports){
+},{"../FieldBaseView":17}],24:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1559,7 +1477,7 @@ module.exports = BaseView.extend({
     this.$('.kb-datetimepicker').datetimepicker('destroy');
   }
 });
-},{"../FieldBaseView":18}],26:[function(require,module,exports){
+},{"../FieldBaseView":17}],25:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1629,7 +1547,7 @@ module.exports = BaseView.extend({
   }
 });
 
-},{"../FieldBaseView":18}],27:[function(require,module,exports){
+},{"../FieldBaseView":17}],26:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 var FlexfieldController = require('fields/controls/flexfields/FlexfieldsController');
 module.exports = BaseView.extend({
@@ -1658,12 +1576,12 @@ module.exports = BaseView.extend({
     }
   }
 });
-},{"../FieldBaseView":18,"fields/controls/flexfields/FlexfieldsController":29}],28:[function(require,module,exports){
+},{"../FieldBaseView":17,"fields/controls/flexfields/FlexfieldsController":28}],27:[function(require,module,exports){
 var FlexFieldModelModal = require('fields/FieldConfigModelModal');
 module.exports = Backbone.Collection.extend({
   model: FlexFieldModelModal
 });
-},{"fields/FieldConfigModelModal":20}],29:[function(require,module,exports){
+},{"fields/FieldConfigModelModal":19}],28:[function(require,module,exports){
 /**
  * Main Controller
  */
@@ -1789,7 +1707,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"common/Logger":11,"common/TinyMCE":15,"common/UI":16,"fields/controls/flexfields/FlexFieldsCollection":28,"fields/controls/flexfields/SectionBoxItem":30,"fields/controls/flexfields/ToggleBoxItem":31}],30:[function(require,module,exports){
+},{"common/Logger":11,"common/TinyMCE":14,"common/UI":15,"fields/controls/flexfields/FlexFieldsCollection":27,"fields/controls/flexfields/SectionBoxItem":29,"fields/controls/flexfields/ToggleBoxItem":30}],29:[function(require,module,exports){
 var ToggleBoxItem =  require('fields/controls/flexfields/ToggleBoxItem');
 var tplSingleSectionBox = require('templates/fields/FlexibleFields/single-section-box.hbs');
 module.exports = ToggleBoxItem.extend({
@@ -1826,7 +1744,7 @@ module.exports = ToggleBoxItem.extend({
   }
 
 });
-},{"fields/controls/flexfields/ToggleBoxItem":31,"templates/fields/FlexibleFields/single-section-box.hbs":41}],31:[function(require,module,exports){
+},{"fields/controls/flexfields/ToggleBoxItem":30,"templates/fields/FlexibleFields/single-section-box.hbs":40}],30:[function(require,module,exports){
 //KB.FlexibleFields.ItemView
 var Notice = require('common/Notice');
 var tplSingleToggleBox = require('templates/fields/FlexibleFields/single-toggle-box.hbs');
@@ -1951,7 +1869,7 @@ module.exports = Backbone.View.extend({
     });
   }
 });
-},{"common/Notice":12,"templates/fields/FlexibleFields/single-toggle-box.hbs":42}],32:[function(require,module,exports){
+},{"common/Notice":12,"templates/fields/FlexibleFields/single-toggle-box.hbs":41}],31:[function(require,module,exports){
 var BaseView = require('fields/FieldBaseView');
 var GalleryController = require('./gallery/GalleryController');
 module.exports = BaseView.extend({
@@ -2035,7 +1953,7 @@ module.exports = BaseView.extend({
 
 
 
-},{"./gallery/GalleryController":33,"fields/FieldBaseView":18}],33:[function(require,module,exports){
+},{"./gallery/GalleryController":32,"fields/FieldBaseView":17}],32:[function(require,module,exports){
 /**
  * Main Field Controller
  */
@@ -2151,14 +2069,14 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./ImageView":34,"common/Logger":11}],34:[function(require,module,exports){
+},{"./ImageView":33,"common/Logger":11}],33:[function(require,module,exports){
 /**
  * Single Gallery Image View
  */
 //KB.Gallery.ImageView
 var TinyMCE = require('common/TinyMCE');
 var UI = require('common/UI');
-var Templates = require('common/Templates');
+var tplSingleImage = require('templates/fields/Gallery/single-image.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-gallery--image-wrapper',
@@ -2240,7 +2158,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.uid);
     var item = this.model.toJSON();
-    return this.$el.append(Templates.render('fields/Gallery/single-image', {
+    return this.$el.append(tplSingleImage({
       image: item,
       id: item.id,
       inputName: inputName,
@@ -2260,7 +2178,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"common/Templates":14,"common/TinyMCE":15,"common/UI":16}],35:[function(require,module,exports){
+},{"common/TinyMCE":14,"common/UI":15,"templates/fields/Gallery/single-image.hbs":42}],34:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
@@ -2426,7 +2344,7 @@ module.exports = BaseView.extend({
     this.$description.val('');
   }
 });
-},{"../FieldBaseView":18,"common/Config":10,"common/Utilities":17}],36:[function(require,module,exports){
+},{"../FieldBaseView":17,"common/Config":10,"common/Utilities":16}],35:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function(){
@@ -2496,7 +2414,7 @@ module.exports = BaseView.extend({
       wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
   }
 });
-},{"../FieldBaseView":18}],37:[function(require,module,exports){
+},{"../FieldBaseView":17}],36:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   events: {
@@ -2522,7 +2440,7 @@ module.exports = BaseView.extend({
 });
 
 
-},{"../FieldBaseView":18}],38:[function(require,module,exports){
+},{"../FieldBaseView":17}],37:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -2542,21 +2460,21 @@ module.exports = BaseView.extend({
     this.model.set('value', val);
   }
 });
-},{"../FieldBaseView":18}],39:[function(require,module,exports){
+},{"../FieldBaseView":17}],38:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<div class=\"kb-context-bar grid__col grid__col--12-of-12\">\n    <ul class=\"kb-context-bar--actions\">\n\n    </ul>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":51}],40:[function(require,module,exports){
+},{"hbsfy/runtime":51}],39:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<ul class='module-actions'></ul>";
 },"useData":true});
 
-},{"hbsfy/runtime":51}],41:[function(require,module,exports){
+},{"hbsfy/runtime":51}],40:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -2573,7 +2491,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "[_tab][title] \">\n        </h3>\n    </div>\n    <div class=\"kb-field--tabs kb_fieldtabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":51}],42:[function(require,module,exports){
+},{"hbsfy/runtime":51}],41:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -2588,6 +2506,45 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "\" name=\""
     + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
     + "[_tab][title] \">\n    </h3>\n</div>\n<div class=\"flexible-fields--toggle-box kb-hide\">\n    <div class=\"kb-field--tabs kb_fieldtabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n    </div>\n\n</div>";
+},"useData":true});
+
+},{"hbsfy/runtime":51}],42:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression, alias4=this.lambda;
+
+  return "<div class=\"kb-gallery--header\">\n    <h3>Image Details</h3>\n</div>\n<div class=\"kb-gallery--left-column\">\n    <div class=\"kb-gallery--image-meta\" style=\"display: none;\">\n        <span class=\"genericon genericon-close-alt kb-gallery--js-meta-close\"></span>\n\n        <div class=\"kb_fieldtabs kb-field--tabs\">\n            <ul class=\"kb-gallery--tabs-nav\">\n                <li><a href=\"#tab"
+    + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
+    + "-1\">Details</a></li>\n                <li><a href=\"#tab"
+    + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
+    + "-2\">Beschreibung</a></li>\n            </ul>\n            <div id=\"tab"
+    + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
+    + "-1\">\n                <div class=\"kb-gallery--meta-field kb-field\">\n                    <label class=\"heading\">Titel</label>\n                    <input class=\"large\" type=\"text\" name=\""
+    + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[details][title]\" value=\""
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.details : stack1)) != null ? stack1.title : stack1), depth0))
+    + "\">\n                </div>\n                <div class=\"kb-gallery--meta-field kb-field\">\n                    <label class=\"heading\">Alt</label>\n                    <input class=\"large\" type=\"text\" name=\""
+    + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[details][alt]\" value=\""
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.details : stack1)) != null ? stack1.alt : stack1), depth0))
+    + "\">\n                </div>\n            </div>\n\n            <div id=\"tab"
+    + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
+    + "-2\">\n                <div class=\"kb-js--remote-editor\" data-uid=\""
+    + alias3(((helper = (helper = helpers.uid || (depth0 != null ? depth0.uid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"uid","hash":{},"data":data}) : helper)))
+    + "\">\n                    <textarea name=\""
+    + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[details][description]\">"
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.details : stack1)) != null ? stack1.description : stack1), depth0))
+    + "</textarea>\n                </div>\n\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"kb-gallery--right-column\">\n    <div class=\"kb-gallery--image-holder\">\n        <img src=\""
+    + alias3(alias4(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.file : stack1)) != null ? stack1.sizes : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.url : stack1), depth0))
+    + "\">\n        <span class=\"genericon genericon-edit kb-gallery--js-edit\"></span>\n        <span class=\"genericon genericon-close-alt kb-gallery--js-delete\"></span>\n        <input type=\"hidden\" name=\""
+    + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[id]\" value=\""
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.image : depth0)) != null ? stack1.id : stack1), depth0))
+    + "\">\n        <input type=\"hidden\" class=\"kb-gallery--image-remove\" name=\""
+    + alias3(((helper = (helper = helpers.inputName || (depth0 != null ? depth0.inputName : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"inputName","hash":{},"data":data}) : helper)))
+    + "[remove]\" value=\"\">\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":51}],43:[function(require,module,exports){
@@ -3354,4 +3311,4 @@ module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 },{"./dist/cjs/handlebars.runtime":43}],51:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":50}]},{},[22]);
+},{"handlebars/runtime":50}]},{},[21]);

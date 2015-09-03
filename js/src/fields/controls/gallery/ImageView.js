@@ -4,7 +4,7 @@
 //KB.Gallery.ImageView
 var TinyMCE = require('common/TinyMCE');
 var UI = require('common/UI');
-var Templates = require('common/Templates');
+var tplSingleImage = require('templates/fields/Gallery/single-image.hbs');
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'kb-gallery--image-wrapper',
@@ -86,7 +86,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var inputName = this.createInputName(this.uid);
     var item = this.model.toJSON();
-    return this.$el.append(Templates.render('fields/Gallery/single-image', {
+    return this.$el.append(tplSingleImage({
       image: item,
       id: item.id,
       inputName: inputName,
