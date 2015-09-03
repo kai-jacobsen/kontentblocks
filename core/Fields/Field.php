@@ -109,7 +109,6 @@ abstract class Field implements Exportable
         $this->key = $key;
         $this->fieldId = $baseId;
         $this->setBaseId( $baseId, $subkey );
-
         $this->type = static::$settings['type'];
         //@TODO think about setting default args from extending class
     }
@@ -466,8 +465,10 @@ abstract class Field implements Exportable
             $state = 'from';
         }
 
+
+
         if (is_null( $this->uniqueId )) {
-            $base = $this->baseId . $this->key . $state;
+            $base = $this->baseId . $this->key . $state . $this->getArg('index','');
             $this->uniqueId = 'kb-' . hash( 'crc32', $base );
         }
         return $this->uniqueId;

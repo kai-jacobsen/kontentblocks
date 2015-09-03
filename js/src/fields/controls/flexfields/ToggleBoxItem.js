@@ -6,7 +6,8 @@ module.exports = Backbone.View.extend({
   className: 'kb-flexible-fields--item-wrapper',
   initialize: function (options) {
     this.Controller = options.Controller;
-    this.listenTo(this.Controller, 'dispose', this.dispose);
+    this.listenTo(this.Controller, 'derender', this.derender);
+    this.FieldViews = {};
   },
   events: {
     'click .flexible-fields--js-toggle': 'toggleItem',
@@ -14,6 +15,7 @@ module.exports = Backbone.View.extend({
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
+      console.log('toggle');
       KB.Events.trigger('modal.recalibrate');
     });
   },
@@ -58,37 +60,31 @@ module.exports = Backbone.View.extend({
   },
   renderFields: function (tab, $con) {
     var fieldInstance;
-    var that = this, data;
-    _.each(tab.fields, function (field) { // field is just a reference object and does nothing on it's own
-      field.model.set('index', that.model.get('_tab').uid); // field models: merged parent field and individual ff field
-      fieldInstance = KB.FieldsAPI.get(field); // get a view for the field
-      data = that.model.get('value'); // if not new item a standard backbone model
+    var that = this, data, fieldConfig;
+
+    /**
+     * Create or get the js representation of a field template
+     */
+    _.each(tab.fields, function (fieldTpl) { // field is just a reference object and does nothing on it's own
+      fieldTpl.model.set('index', this.model.get('_tab').uid); // field models: merged parent field and individual ff field
+      fieldInstance = KB.FieldsAPI.get(fieldTpl); // get a view for the field, responsibile for the markup
+      data = this.model.get('value'); // if not new item a standard backbone model
       if (!_.isUndefined(data)) {
-        fieldInstance.setValue(data.get(field.model.get('primeKey')));
+        fieldInstance.setValue(data.get(fieldTpl.model.get('primeKey')));
       } else {
         fieldInstance.setupDefaults();
       }
 
-      $con.append(fieldInstance.render(that.uid));
-      $con.append('<input type="hidden" name="' + fieldInstance.model.get('baseId') + '[' + fieldInstance.model.get('index') + '][_mapping][' + fieldInstance.model.get('primeKey') + ']" value="' + fieldInstance.model.get('type') + '" >');
+      fieldTpl.listenTo(this, 'derender', fieldTpl.destroy);
+      fieldInstance.listenTo(this, 'derender', fieldInstance.derender);
 
-      _.defer(function () {
-        fieldInstance.$container = $con;
-        if (fieldInstance.postRender) {
-          fieldInstance.postRender.call(fieldInstance);
-        }
-        if (that.Controller.parentView) {
-          that.addInstanceToCollection(fieldInstance);
-        }
-      });
+      $con.append(fieldInstance.render(this.uid));
 
+      //$con.append('<input type="hidden" name="' + fieldInstance.model.get('baseId') + '[' + fieldInstance.model.get('index') + '][_mapping][' + fieldInstance.model.get('primeKey') + ']" value="' + fieldInstance.model.get('type') + '" >');
 
-    });
-  },
-  addInstanceToCollection: function (Instance) {
-    setTimeout(function () {
-      KB.FieldConfigs.add(Instance.model.toJSON());
-    }, 150);
+      this.setupFieldInstance(fieldInstance, $con);
+
+    }, this);
   },
   createInputName: function (uid) {
     return this.createBaseId() + '[' + this.Controller.model.get('fieldkey') + ']' + '[' + uid + ']';
@@ -100,8 +96,31 @@ module.exports = Backbone.View.extend({
       return this.Controller.model.get('fieldId');
     }
   },
-  dispose: function () {
+  derender: function () {
     this.stopListening();
     this.remove();
+  },
+  setupFieldInstance: function(fieldInstance, $con){
+    var that = this;
+    _.defer(function () {
+    fieldInstance.setElement($con);
+    if (fieldInstance.postRender) {
+      fieldInstance.postRender.call(fieldInstance);
+    }
+    // add field to controller fields collection
+    if (that.Controller.parentView) {
+      _.defer(function () {
+      var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
+      if (_.isUndefined(existing)) {
+        var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
+        console.log(model);
+      } else {
+        existing.rebind();
+      }
+
+
+      });
+    }
+    });
   }
 });

@@ -4,9 +4,6 @@ module.exports = BaseView.extend({
   template: require('templates/fields/Text.hbs'),
   type: 'text',
   defaults: {
-    std: '',
-    label: 'Field label',
-    description: 'A description',
     value: '',
     key: null
   },

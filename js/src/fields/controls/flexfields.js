@@ -2,28 +2,28 @@ var BaseView = require('../FieldBaseView');
 var FlexfieldController = require('fields/controls/flexfields/FlexfieldsController');
 module.exports = BaseView.extend({
   initialize: function () {
+    this.createController();
     this.render();
   },
   render: function () {
     this.$stage = this.$('.flexible-fields--stage');
-    this.createController();
+    this.FlexFieldsController.setElement(this.$stage.get(0)); // root element equals stage element
+    this.FlexFieldsController.render();
   },
   derender: function () {
-    this.FlexFieldsController.dispose();
+    this.FlexFieldsController.derender();
   },
   rerender: function () {
-    this.derender();
+    console.log('flexfield: rerender called');
     this.render();
   },
   createController: function () {
     if (!this.FlexFieldsController) {
       return this.FlexFieldsController = new FlexfieldController({
-        el: this.$stage.get(0),
+        el: this.$('.flexible-fields--stage'),
         model: this.model,
         parentView: this
       })
     }
-    this.FlexFieldsController.setElement(this.$stage.get(0)); // root element equals stage element
-    return this.FlexFieldsController.render(); // init
   }
 });

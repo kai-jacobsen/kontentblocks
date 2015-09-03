@@ -2,11 +2,12 @@
  * Main Controller
  */
 //KB.FlexibleFields.Controller
-var ToggleBoxRenderer = require('fields/controls/flexfields/ToggleBoxRenderer');
-var SectionBoxRenderer = require('fields/controls/flexfields/SectionBoxRenderer');
+var ToggleBoxItem = require('fields/controls/flexfields/ToggleBoxItem');
+var SectionBoxItem = require('fields/controls/flexfields/SectionBoxItem');
 var TinyMCE = require('common/TinyMCE');
 var UI = require('common/UI');
 var Logger = require('common/Logger');
+var FlexFieldsCollection = require('fields/controls/flexfields/FlexFieldsCollection');
 
 module.exports = Backbone.View.extend({
   initialize: function (options) {
@@ -15,9 +16,10 @@ module.exports = Backbone.View.extend({
     this.parentView = options.parentView;
     this.Tabs = this.setupConfig();
     this.subviews = [];
-    this.Renderer = (this.model.get('renderer') == 'sections') ? SectionBoxRenderer : ToggleBoxRenderer;
-    this.setupElements(); // skeleton DOM elements
-    this.initialSetup(); // get payload items and rendere exisiting items
+    this.Renderer = (this.model.get('renderer') == 'sections') ? SectionBoxItem : ToggleBoxItem;
+    this.Fields = new FlexFieldsCollection();
+    jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
+    jQuery('<a class="button button-primary kb-flexible-fields--js-add-item">Add Item</a>').appendTo(this.$el);
     Logger.Debug.log('Fields: Flexfields instance created and initialized'); // tell the developer that I'm here
 
   },
@@ -29,11 +31,9 @@ module.exports = Backbone.View.extend({
     data = this.model.get('value'); // model equals FieldConfigModel, value equals parent obj data for this field key
     if (!_.isEmpty(data)) {
       _.each(data, function (dataobj, index) {
-
-        if (!dataobj){
+        if (!dataobj) {
           return;
         }
-
         var Item = new that.Renderer({ // new fieldset
           Controller: that,
           model: new Backbone.Model({
@@ -66,6 +66,11 @@ module.exports = Backbone.View.extend({
     this.setupElements();
     this.initialSetup();
   },
+  derender: function () {
+    this.trigger('derender'); // subviews mights listen
+    this.subviews = [];
+
+  },
   setupConfig: function () {
     var that = this;
     // config is an array of tab information with an fields subarray
@@ -74,6 +79,7 @@ module.exports = Backbone.View.extend({
         return;
       }
       tab.fields = that.setupFields(tab.fields); // create reference object for each field
+      Logger.Debug.log('Fields: Flexfields configs setup', tab.fields); // tell the developer that I'm here
     });
     return this.model.get('config'); //  ?
   },
@@ -97,8 +103,8 @@ module.exports = Backbone.View.extend({
     return sfields;
   },
   setupElements: function () {
-    this.$list = jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
-    this.$addButton = jQuery('<a class="button button-primary kb-flexible-fields--js-add-item">Add Item</a>').appendTo(this.$el);
+    this.$list = this.$('.flexible-fields--item-list');
+    this.$addButton = this.$('.kb-flexible-fields--js-add-item');
   },
   addItem: function () {
     var Item = new this.Renderer({
@@ -114,9 +120,5 @@ module.exports = Backbone.View.extend({
     this.$list.append(Item.render());
     UI.initTabs();
     KB.Events.trigger('modal.recalibrate');
-  },
-  dispose: function () {
-    this.trigger('dispose'); // subviews mights listen
-    this.subviews = [];
   }
 });

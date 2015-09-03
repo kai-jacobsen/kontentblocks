@@ -55,7 +55,6 @@ module.exports = Backbone.Model.extend({
   sync: function (save, context) {
     var that = this;
     KB.Events.trigger('module.before.sync', this);
-    console.log('helloooooooooooooo', this);
     return jQuery.ajax({
       url: ajaxurl,
       data: {

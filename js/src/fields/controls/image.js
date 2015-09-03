@@ -21,6 +21,11 @@ module.exports = BaseView.extend({
   editImage: function () {
     this.openFrame(true);
   },
+  derender: function(){
+    if (this.frame) {
+      this.frame.dispose();
+    }
+  },
   openFrame: function (editmode) {
     var that = this, metadata;
     if (this.frame) {

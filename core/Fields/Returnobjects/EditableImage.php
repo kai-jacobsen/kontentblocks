@@ -199,6 +199,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             'height' => $this->height,
             'crop' => $this->crop,
             'upscale' => $this->upscale,
+            'index' => $this->field->getArg('index', null),
             'id' => $this->getValue( 'id' ),
             'type' => 'EditableImage',
             'kpath' => $this->createPath(),

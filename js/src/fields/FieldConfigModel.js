@@ -17,6 +17,9 @@ module.exports = Backbone.Model.extend({
       this.ModuleModel.attachField(this);
     }
   },
+  /*
+    remove self from linked fields
+   */
   cleanUp: function () {
     var links = this.get('linkedFields') || {};
     if (links.hasOwnProperty(this.get('uid'))) {
@@ -40,6 +43,7 @@ module.exports = Backbone.Model.extend({
         el: this.getElement(), // get the root DOM element for this field
         model: this
       });
+      console.log(this.FieldView);
     }
   },
   updateLinkedFields: function (fieldSettings) {
@@ -85,11 +89,10 @@ module.exports = Backbone.Model.extend({
     mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
     this.set('value', _.extend(mData, addData)); // set merged data to this.value
   },
-  // this is an option and is currently not used for something critical
-  // demo implementation in textarea.js
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {
     var ModuleModel;
+    console.log(this.get('kpath'), this.get('value'));
     if (ModuleModel = this.get('ModuleModel')) {
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
@@ -105,14 +108,16 @@ module.exports = Backbone.Model.extend({
     KB.FieldConfigs.remove(this);
   },
   rebind: function () {
-
-    if (_.isUndefined(this.getElement())) {
-      _.defer(_.bind(this.FieldView.gone, this.FieldView)); // call rerender on the field
-    }
-    else if (this.FieldView) {
-      this.FieldView.setElement(this.getElement()); // markup might have changed, reset the root element
-      _.defer(_.bind(this.FieldView.rerender, this.FieldView)); // call rerender on the field
-    }
+    var that = this;
+    _.defer(function(){
+      if (_.isUndefined(that.getElement())) {
+        _.defer(_.bind(that.FieldView.gone, that.FieldView)); // call rerender on the field
+      }
+      else if (that.FieldView) {
+        that.FieldView.setElement(that.getElement()); // markup might have changed, reset the root element
+        _.defer(_.bind(that.FieldView.rerender, that.FieldView)); // call rerender on the field
+      }
+    },true);
   },
   unbind: function () {
     if (this.FieldView && this.FieldView.derender) {

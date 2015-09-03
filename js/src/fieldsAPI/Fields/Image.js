@@ -1,5 +1,7 @@
-var Field = require('fields/controls/image');
+//var Field = require('fields/controls/image');
 var BaseView = require('fieldsAPI/Fields/BaseView');
+var Utilities = require('common/Utilities');
+var Config = require('common/Config');
 module.exports = BaseView.extend({
   $currentWrapper: null,
   $currentFrame: null,
@@ -7,25 +9,9 @@ module.exports = BaseView.extend({
   template: require('templates/fields/Image.hbs'),
   type: 'image',
   initialize: function (config) {
-    var that = this;
-    // call parent 'initialize' method to set the object up
     BaseView.prototype.initialize.call(this, config);
-    //this.config.$parent.on('click', '.flexible-fields--js-add-image', function () {
-    //
-    //  that.$currentWrapper = jQuery(this).closest('.field-api-image');
-    //  that.$currentFrame = jQuery('.field-api-image--frame', that.$currentWrapper);
-    //  that.$IdInput = jQuery('.field-api-image--image-id', that.$currentWrapper);
-    //
-    //  new KB.Utils.MediaWorkflow({
-    //    title: 'Hello',
-    //    select: _.bind(that.handleAttachment, that)
-    //  });
-    //});
   },
   defaults: {
-    std: '',
-    label: 'Image',
-    description: 'Awesome image',
     value: {
       url: '',
       id: '',
@@ -36,8 +22,7 @@ module.exports = BaseView.extend({
   },
   render: function (index) {
     return this.template({
-      config: this.config,
-      baseId: this.baseId,
+      kbfuid: this.kbfuid(),
       index: index,
       model: this.model.toJSON(),
       i18n: _.extend(KB.i18n.Refields.image, KB.i18n.Refields.common)
@@ -58,10 +43,9 @@ module.exports = BaseView.extend({
     }
 
     this.model.set('value', value);
-
-    if (KB.Util.stex.get('img' + value.id + 'x' + args.width + 'x' + args.height)) {
+    if (Utilities.stex.get('img' + value.id + 'x' + args.width + 'x' + args.height)) {
       attrs = that.model.get('value');
-      attrs.url = KB.Util.stex.get('img' + value.id + 'x' + args.width + 'x' + args.height);
+      attrs.url = Utilities.stex.get('img' + value.id + 'x' + args.width + 'x' + args.height);
     } else {
       jQuery.ajax({
         url: ajaxurl,
@@ -69,13 +53,13 @@ module.exports = BaseView.extend({
           action: "fieldGetImage",
           args: args,
           id: value.id,
-          _ajax_nonce: KB.Config.getNonce('read')
+          _ajax_nonce: Config.getNonce('read')
         },
         type: "POST",
         dataType: "json",
         async: false,
         success: function (res) {
-          KB.Util.stex.set('img' + value.id + 'x' + args.width + 'x' + args.height, res.data.src, 60 * 1000 * 60);
+          Utilities.stex.set('img' + value.id + 'x' + args.width + 'x' + args.height, res.data.src, 60 * 1000 * 60);
           var attrs = that.model.get('value');
           attrs.url = res.data.src;
         },
@@ -83,15 +67,6 @@ module.exports = BaseView.extend({
           _K.error('Unable to get image');
         }
       });
-    }
-
-
-  },
-  handleAttachment: function (media) {
-    var att = media.get('selection').first();
-    if (att.get('sizes').thumbnail) {
-      this.$currentFrame.empty().append('<img src="' + att.get('sizes').thumbnail.url + '" >');
-      this.$IdInput.val(att.get('id'));
     }
   }
 });

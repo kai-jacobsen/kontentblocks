@@ -82,16 +82,7 @@ class UpdateFieldModel implements AjaxActionInterface
 
         $data = array();
         $field = $postdata->field;
-
-        if (!empty($field['arrayKey'])){
-            $data[$field['arrayKey']] = array(
-                $field['fieldkey'] => $postdata->data
-            );
-        } else {
-            $data[$field['fieldkey']] = $postdata->data;
-        }
-
-
+        Utilities::assignArrayByPath($data, $field['kpath'], $postdata->data);
         return $data;
     }
 

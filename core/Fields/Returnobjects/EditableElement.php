@@ -170,6 +170,7 @@ class EditableElement extends AbstractEditableFieldReturn
             'linkedFields' => &$this->linkedFields
 
         );
+
         Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
             $this->createUniqueId(),
             $this->field->augmentArgs( $json )

@@ -252,7 +252,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     public function createPath()
     {
         $path = '';
-
         if (!empty( $this->arrayKey )) {
             $path .= $this->arrayKey . '.';
         }
@@ -260,9 +259,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
         if (!empty( $this->index )) {
             $path .= $this->index . '.';
         }
-
         $path .= $this->key;
-
         return $path;
 
     }

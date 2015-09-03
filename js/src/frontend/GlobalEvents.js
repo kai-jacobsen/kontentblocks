@@ -10,3 +10,7 @@ var reposition = _.debounce(window.Tether.position, 25);
 KB.Events.on('content.change', function(){
   reposition();
 });
+
+jQuery('body').on('webkitTransitionEnd moztransitionend transitionend oTransitionEnd', function () {
+  KB.Events.trigger('content.change');
+});

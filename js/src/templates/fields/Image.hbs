@@ -1,6 +1,5 @@
-<div class="kb_field kb-field kb-field-image-container kb-fieldapi-field">
+<div data-kbfuid="{{ kbfuid }}"  class="kb_field kb-field kb-field--image kb-field-image-container kb-fieldapi-field">
     <label class="heading">{{ model.label }}</label>
-
     <div class='kb-field-image-wrapper'>
         <div class='kb-js-add-image kb-field-image-container'>
             {{#if model.value.url }}
@@ -15,10 +14,10 @@
         <div class="kb-js-image-meta-wrapper">
             <label>{{{ i18n.title }}}</label>
             <input class='kb-js-image-title kb-observe' type="text"
-                   name='{{fieldName model.baseId model.index model.preimeKey }}[title]'
+                   name='{{fieldName model.baseId model.index model.primeKey }}[title]'
                    value='{{{ model.value.title }}}'>
             <label>{{{ i18n.caption }}}</label>
-            <input class='kb-js-image-caption kb-observe' type="text"
+            <input class='kb-js-image-description kb-observe' type="text"
                    name='{{ fieldName model.baseId model.index model.primeKey }}[caption]'
                    value='{{{ model.value.caption }}}'>
         </div>

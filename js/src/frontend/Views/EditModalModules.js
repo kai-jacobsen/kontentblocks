@@ -43,7 +43,6 @@ module.exports = Backbone.View.extend({
 
     this.FieldModels = new ModalFieldCollection();
 
-
     // use this event to refresh the modal on demand
     this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
 
@@ -319,7 +318,6 @@ module.exports = Backbone.View.extend({
         if (res.data.json) {
           KB.payload = _.extend(KB.payload, res.data.json);
           //var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
-
           if (res.data.json.Fields) {
             that.FieldModels.add(_.toArray(res.data.json.Fields));
           }

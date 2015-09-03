@@ -35,6 +35,5 @@ jQuery(window).on('kb.refresh', function (event) {
 });
 
 jQuery(window).on('kb.module-update', function (event, id, View) {
-  console.log(id);
   window.KBF.fireNamedCallback(id, View);
 });

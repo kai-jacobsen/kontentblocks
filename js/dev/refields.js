@@ -167,7 +167,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backend/Views/ContextUi/ContextColumnView":2,"backend/Views/ContextUi/ContextUiView":4,"backend/Views/ContextUi/controls/ColumnControl":5,"backend/Views/ContextUi/controls/ResetControl":6,"templates/backend/context-bar.hbs":34}],4:[function(require,module,exports){
+},{"backend/Views/ContextUi/ContextColumnView":2,"backend/Views/ContextUi/ContextUiView":4,"backend/Views/ContextUi/controls/ColumnControl":5,"backend/Views/ContextUi/controls/ResetControl":6,"templates/backend/context-bar.hbs":39}],4:[function(require,module,exports){
 var ControlsView = require('backend/Views/ModuleControls/ControlsView');
 module.exports = ControlsView.extend({
   initialize: function () {
@@ -257,7 +257,7 @@ module.exports = Backbone.View.extend({
     }
   }
 });
-},{"templates/backend/module-menu.hbs":35}],8:[function(require,module,exports){
+},{"templates/backend/module-menu.hbs":40}],8:[function(require,module,exports){
 //KB.Ajax
 var Notice = require('common/Notice');
 module.exports =
@@ -306,7 +306,23 @@ module.exports =
     });
   }
 };
-},{"common/Notice":11}],9:[function(require,module,exports){
+},{"common/Notice":12}],9:[function(require,module,exports){
+var Config = require('common/Config');
+module.exports = {
+  blockLimit: function (areamodel) {
+    var limit = areamodel.get('limit');
+    // todo potentially wrong, yeah it's wrong
+    var children = jQuery('#' + areamodel.get('id') + ' li.kb-module').length;
+    return !(limit !== 0 && children === limit);
+
+
+  },
+  userCan: function (cap) {
+    var check = jQuery.inArray(cap, Config.get('caps'));
+    return check !== -1;
+  }
+}
+},{"common/Config":10}],10:[function(require,module,exports){
 var Config = (function ($) {
   var config = KB.appData.config;
   return {
@@ -362,7 +378,7 @@ var Config = (function ($) {
   }
 })(jQuery);
 module.exports = Config;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var Config = require('common/Config');
 if (Function.prototype.bind && window.console && typeof console.log == "object") {
   [
@@ -411,7 +427,7 @@ module.exports = {
   Debug: _K,
   User: _KS
 };
-},{"common/Config":9}],11:[function(require,module,exports){
+},{"common/Config":10}],12:[function(require,module,exports){
 'use strict';
 //KB.Notice
 module.exports =
@@ -430,7 +446,80 @@ module.exports =
   }
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
+//KB.Payload
+module.exports = {
+  getFieldData: function (type, moduleId, key, arrayKey) {
+    var typeData;
+    if (this._typeExists(type)) {
+      typeData = KB.payload.fieldData[type];
+      // no data for module id
+      if (!typeData[moduleId]) {
+        return [];
+      }
+
+      // arrayKey given
+      if (!_.isEmpty(arrayKey)) {
+
+        // arrayKey not present in module data
+        if (!typeData[moduleId][arrayKey]) {
+          return [];
+        }
+
+        // arrayKey present but key is not
+        if (!typeData[moduleId][arrayKey][key]) {
+          return [];
+        }
+
+        // both keys are present
+        return typeData[moduleId][arrayKey][key];
+      }
+
+      // only key given, but not present
+      if (!typeData[moduleId][key]) {
+        return []
+      }
+      // key given and present
+      return typeData[moduleId][key];
+    }
+    return [];
+  },
+  _typeExists: function (type) {
+    return !_.isUndefined(KB.payload.fieldData[type]);
+  },
+  getFieldArgs: function (id, key) {
+    if (KB.payload.Fields && KB.payload.Fields[id]) {
+      if (key && KB.payload.Fields[id][key]) {
+        return KB.payload.Fields[id][key];
+      } else {
+        return KB.payload.Fields[id];
+      }
+    } else {
+      return null;
+    }
+  },
+  parseAdditionalJSON: function (json) {
+    var ret;
+
+    ret = {
+      Fields: []
+    };
+
+    if (json && json.Fields) {
+      ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
+    }
+    return ret;
+  },
+  getPayload: function (key) {
+    if (KB && KB.payload) {
+      if (KB.payload[key]) {
+        return KB.payload[key];
+      }
+    }
+    return {};
+  }
+};
+},{}],14:[function(require,module,exports){
 //KB.Templates
 var Config = require('common/Config');
 var Utilities = require('common/Utilities');
@@ -512,7 +601,7 @@ var Templates = (function () {
   };
 }());
 module.exports = Templates;
-},{"common/Config":9,"common/Utilities":15}],13:[function(require,module,exports){
+},{"common/Config":10,"common/Utilities":17}],15:[function(require,module,exports){
 //KB.TinyMCE
 var Ajax = require('common/Ajax');
 var Logger = require('common/Logger');
@@ -654,7 +743,7 @@ module.exports =
 
   }
 };
-},{"common/Ajax":8,"common/Config":9,"common/Logger":10}],14:[function(require,module,exports){
+},{"common/Ajax":8,"common/Config":10,"common/Logger":11}],16:[function(require,module,exports){
 /**
  *
  * These is a collection of helper functions to handle
@@ -1048,7 +1137,7 @@ var Ui = {
   }
 };
 module.exports = Ui;
-},{"backend/Views/ContextUi/ContextRowGrid":3,"common/Ajax":8,"common/Config":9,"common/Notice":11,"common/TinyMCE":13}],15:[function(require,module,exports){
+},{"backend/Views/ContextUi/ContextRowGrid":3,"common/Ajax":8,"common/Config":10,"common/Notice":12,"common/TinyMCE":15}],17:[function(require,module,exports){
 var Utilities = function ($) {
   return {
     // store with expiration
@@ -1123,19 +1212,201 @@ var Utilities = function ($) {
 
 }(jQuery);
 module.exports = Utilities;
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 //KB.Fields.BaseView
 module.exports = Backbone.View.extend({
   rerender: function(){
     this.render();
   },
   gone: function () {
+    console.log(this  );
     this.trigger('field.view.gone', this);
     this.derender();
   }
 });
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
+//KB.Backbone.Common.FieldConfigModel
+var Checks = require('common/Checks');
+var Utilities = require('common/Utilities');
+var Payload = require('common/Payload');
+var Config = require('common/Config');
+var Logger = require('common/Logger');
+module.exports = Backbone.Model.extend({
+  idAttribute: "uid",
+  initialize: function () {
+    this.cleanUp();
+    var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
+    if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
+      this.set('ModuleModel', this.ModuleModel); // assign the parent object model
+      this.setData(); // get data from the parent object and assign to this
+      this.bindHandlers(); // attach listeners
+      this.setupType(); // create the field view
+      this.ModuleModel.attachField(this);
+    }
+  },
+  /*
+    remove self from linked fields
+   */
+  cleanUp: function () {
+    var links = this.get('linkedFields') || {};
+    if (links.hasOwnProperty(this.get('uid'))) {
+      delete links[this.get('uid')];
+    }
+  },
+  bindHandlers: function () {
+    this.listenTo(this, 'field.model.settings', this.updateLinkedFields);
+    this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
+    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
+    this.listenTo(this.ModuleModel, 'module.model.updated', this.getClean); // set state to clean
+    this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes
+    this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind); // before the frontend modal reloads the parent obj
+    this.listenTo(this.ModuleModel, 'modal.serialize', this.rebind); // frontend modal reloaded parent obj, reattach handlers
+    this.listenTo(this.ModuleModel, 'change:area', this.unbind); // parent obj was dragged to new area, detach handlers
+    this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
+  },
+  setupType: function () {
+    if (obj = this.getType()) { // obj equals specific field view
+      this.FieldView = new obj({ // create new field view if it does not exist
+        el: this.getElement(), // get the root DOM element for this field
+        model: this
+      });
+      console.log(this.FieldView);
+    }
+  },
+  updateLinkedFields: function (fieldSettings) {
+    if (fieldSettings.linkedFields){
+      this.set('linkedFields', fieldSettings.linkedFields);
+      this.cleanUp();
+    }
+  },
+  getElement: function () {
+    return jQuery('*[data-kbfuid="' + this.get('uid') + '"]')[0]; // root DOM element by data attribute
+  },
+  getType: function () {
+    var type = this.get('type'); // link, image, etc
+    if (!Checks.userCan('edit_kontentblocks')) {
+      return false;
+    }
+
+    // get the view object from KB.Fields collection
+    var obj = KB.Fields.get(type);
+    if (obj && obj.prototype.hasOwnProperty('initialize')) {
+      return obj;
+    } else {
+      return false;
+    }
+  },
+  getClean: function () {
+    this.trigger('field.model.clean', this);
+  },
+  setData: function (Model) {
+    var ModuleModel, fieldData, typeData, obj, addData = {}, mData;
+    ModuleModel = Model || this.get('ModuleModel');
+    fieldData = Payload.getPayload('fieldData');
+
+    // special field data may come from the server
+    if (fieldData[this.get('type')]) {
+      typeData = fieldData[this.get('type')];
+      if (typeData[this.get('fieldId')]) {
+        obj = typeData[this.get('fieldId')];
+        addData = Utilities.getIndex(obj, this.get('kpath'));
+      }
+    }
+    // the parent obj data
+    mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
+    this.set('value', _.extend(mData, addData)); // set merged data to this.value
+  },
+  // since this data is only the data of a specific field we can upstream this data to the whole module data
+  upstreamData: function () {
+    var ModuleModel;
+    console.log(this.get('kpath'), this.get('value'));
+    if (ModuleModel = this.get('ModuleModel')) {
+      var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
+      Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
+      ModuleModel.set('moduleData', cdata, {silent: false});
+      ModuleModel.View.getDirty();
+    }
+  },
+  externalUpdate: function (model) {
+    this.FieldView.synchronize(model);
+  },
+  remove: function () {
+    this.stopListening();
+    KB.FieldConfigs.remove(this);
+  },
+  rebind: function () {
+    var that = this;
+    _.defer(function(){
+      if (_.isUndefined(that.getElement())) {
+        _.defer(_.bind(that.FieldView.gone, that.FieldView)); // call rerender on the field
+      }
+      else if (that.FieldView) {
+        that.FieldView.setElement(that.getElement()); // markup might have changed, reset the root element
+        _.defer(_.bind(that.FieldView.rerender, that.FieldView)); // call rerender on the field
+      }
+    },true);
+  },
+  unbind: function () {
+    if (this.FieldView && this.FieldView.derender) {
+      this.FieldView.derender(); // call derender
+    }
+  },
+  sync: function(context){
+    var that = this;
+    KB.Events.trigger('field.before.sync', this.model);
+
+    var clone = that.toJSON();
+    var type = clone.ModuleModel.type;
+    var module = clone.ModuleModel.toJSON();
+
+    delete clone['ModuleModel'];
+    delete clone['linkedFields'];
+
+    return jQuery.ajax({
+      url: ajaxurl,
+      data: {
+        action: 'updateFieldModel',
+        data: that.get('value'),
+        field: clone,
+        module: module,
+        type: type,
+        _ajax_nonce: Config.getNonce('update')
+      },
+      context: (context) ? context : that,
+      type: 'POST',
+      dataType: 'json',
+      success: function (res) {
+        that.trigger('field.model.updated', that);
+      },
+      error: function () {
+        Logger.Debug.error('serialize | FrontendModal | Ajax error');
+      }
+    });
+
+  }
+});
+},{"common/Checks":9,"common/Config":10,"common/Logger":11,"common/Payload":13,"common/Utilities":17}],20:[function(require,module,exports){
+//KB.Backbone.Common.FieldConfigModelModal
+var FieldConfigModel = require('./FieldConfigModel');
+module.exports = FieldConfigModel.extend({
+  bindHandlers: function () {
+    this.listenToOnce(this.ModuleModel, 'remove', this.remove);
+    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
+    this.listenTo(KB.Events, 'modal.reload', this.rebind);
+    this.listenTo(KB.Events, 'modal.close', this.remove);
+  },
+  rebind: function () {
+    if (this.FieldView) {
+      this.FieldView.setElement(this.getElement());
+      this.FieldView.rerender();
+    }
+  },
+  getElement: function () {
+    return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
+  }
+});
+},{"./FieldConfigModel":19}],21:[function(require,module,exports){
 var Fields = {};
 // include Backbone events handler
 _.extend(Fields, Backbone.Events);
@@ -1198,7 +1469,7 @@ _.extend(Fields, {
 });
 Fields.addEvent();
 module.exports = Fields;
-},{}],18:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var Fields = require('./Fields');
 window.KB.Fields = Fields;
 Fields.registerObject('color', require('./controls/color'));
@@ -1212,7 +1483,7 @@ Fields.registerObject('link', require('./controls/link'));
 Fields.registerObject('textarea', require('./controls/textarea'));
 Fields.registerObject('otimes', require('./controls/otimes'));
 
-},{"./Fields":17,"./controls/color":19,"./controls/date":20,"./controls/datetime":21,"./controls/file":22,"./controls/flexfields":23,"./controls/gallery":27,"./controls/image":30,"./controls/link":31,"./controls/otimes":32,"./controls/textarea":33}],19:[function(require,module,exports){
+},{"./Fields":21,"./controls/color":23,"./controls/date":24,"./controls/datetime":25,"./controls/file":26,"./controls/flexfields":27,"./controls/gallery":32,"./controls/image":35,"./controls/link":36,"./controls/otimes":37,"./controls/textarea":38}],23:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1237,7 +1508,7 @@ module.exports = BaseView.extend({
     }, 150);
   }
 });
-},{"../FieldBaseView":16}],20:[function(require,module,exports){
+},{"../FieldBaseView":18}],24:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1263,7 +1534,7 @@ module.exports = BaseView.extend({
 
   }
 });
-},{"../FieldBaseView":16}],21:[function(require,module,exports){
+},{"../FieldBaseView":18}],25:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1291,7 +1562,7 @@ module.exports = BaseView.extend({
     this.$('.kb-datetimepicker').datetimepicker('destroy');
   }
 });
-},{"../FieldBaseView":16}],22:[function(require,module,exports){
+},{"../FieldBaseView":18}],26:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1361,46 +1632,52 @@ module.exports = BaseView.extend({
   }
 });
 
-},{"../FieldBaseView":16}],23:[function(require,module,exports){
+},{"../FieldBaseView":18}],27:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 var FlexfieldController = require('fields/controls/flexfields/FlexfieldsController');
 module.exports = BaseView.extend({
   initialize: function () {
+    this.createController();
     this.render();
   },
   render: function () {
     this.$stage = this.$('.flexible-fields--stage');
-    this.createController();
+    this.FlexFieldsController.setElement(this.$stage.get(0)); // root element equals stage element
+    this.FlexFieldsController.render();
   },
   derender: function () {
-    this.FlexFieldsController.dispose();
+    this.FlexFieldsController.derender();
   },
   rerender: function () {
-    this.derender();
+    console.log('flexfield: rerender called');
     this.render();
   },
   createController: function () {
     if (!this.FlexFieldsController) {
       return this.FlexFieldsController = new FlexfieldController({
-        el: this.$stage.get(0),
+        el: this.$('.flexible-fields--stage'),
         model: this.model,
         parentView: this
       })
     }
-    this.FlexFieldsController.setElement(this.$stage.get(0)); // root element equals stage element
-    return this.FlexFieldsController.render(); // init
   }
 });
-},{"../FieldBaseView":16,"fields/controls/flexfields/FlexfieldsController":24}],24:[function(require,module,exports){
+},{"../FieldBaseView":18,"fields/controls/flexfields/FlexfieldsController":29}],28:[function(require,module,exports){
+var FlexFieldModelModal = require('fields/FieldConfigModelModal');
+module.exports = Backbone.Collection.extend({
+  model: FlexFieldModelModal
+});
+},{"fields/FieldConfigModelModal":20}],29:[function(require,module,exports){
 /**
  * Main Controller
  */
 //KB.FlexibleFields.Controller
-var ToggleBoxRenderer = require('fields/controls/flexfields/ToggleBoxRenderer');
-var SectionBoxRenderer = require('fields/controls/flexfields/SectionBoxRenderer');
+var ToggleBoxItem = require('fields/controls/flexfields/ToggleBoxItem');
+var SectionBoxItem = require('fields/controls/flexfields/SectionBoxItem');
 var TinyMCE = require('common/TinyMCE');
 var UI = require('common/UI');
 var Logger = require('common/Logger');
+var FlexFieldsCollection = require('fields/controls/flexfields/FlexFieldsCollection');
 
 module.exports = Backbone.View.extend({
   initialize: function (options) {
@@ -1409,9 +1686,10 @@ module.exports = Backbone.View.extend({
     this.parentView = options.parentView;
     this.Tabs = this.setupConfig();
     this.subviews = [];
-    this.Renderer = (this.model.get('renderer') == 'sections') ? SectionBoxRenderer : ToggleBoxRenderer;
-    this.setupElements(); // skeleton DOM elements
-    this.initialSetup(); // get payload items and rendere exisiting items
+    this.Renderer = (this.model.get('renderer') == 'sections') ? SectionBoxItem : ToggleBoxItem;
+    this.Fields = new FlexFieldsCollection();
+    jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
+    jQuery('<a class="button button-primary kb-flexible-fields--js-add-item">Add Item</a>').appendTo(this.$el);
     Logger.Debug.log('Fields: Flexfields instance created and initialized'); // tell the developer that I'm here
 
   },
@@ -1423,11 +1701,9 @@ module.exports = Backbone.View.extend({
     data = this.model.get('value'); // model equals FieldConfigModel, value equals parent obj data for this field key
     if (!_.isEmpty(data)) {
       _.each(data, function (dataobj, index) {
-
-        if (!dataobj){
+        if (!dataobj) {
           return;
         }
-
         var Item = new that.Renderer({ // new fieldset
           Controller: that,
           model: new Backbone.Model({
@@ -1460,6 +1736,11 @@ module.exports = Backbone.View.extend({
     this.setupElements();
     this.initialSetup();
   },
+  derender: function () {
+    this.trigger('derender'); // subviews mights listen
+    this.subviews = [];
+
+  },
   setupConfig: function () {
     var that = this;
     // config is an array of tab information with an fields subarray
@@ -1468,6 +1749,7 @@ module.exports = Backbone.View.extend({
         return;
       }
       tab.fields = that.setupFields(tab.fields); // create reference object for each field
+      Logger.Debug.log('Fields: Flexfields configs setup', tab.fields); // tell the developer that I'm here
     });
     return this.model.get('config'); //  ?
   },
@@ -1491,8 +1773,8 @@ module.exports = Backbone.View.extend({
     return sfields;
   },
   setupElements: function () {
-    this.$list = jQuery('<ul class="flexible-fields--item-list"></ul>').appendTo(this.$el);
-    this.$addButton = jQuery('<a class="button button-primary kb-flexible-fields--js-add-item">Add Item</a>').appendTo(this.$el);
+    this.$list = this.$('.flexible-fields--item-list');
+    this.$addButton = this.$('.kb-flexible-fields--js-add-item');
   },
   addItem: function () {
     var Item = new this.Renderer({
@@ -1508,17 +1790,13 @@ module.exports = Backbone.View.extend({
     this.$list.append(Item.render());
     UI.initTabs();
     KB.Events.trigger('modal.recalibrate');
-  },
-  dispose: function () {
-    this.trigger('dispose'); // subviews mights listen
-    this.subviews = [];
   }
 });
 
-},{"common/Logger":10,"common/TinyMCE":13,"common/UI":14,"fields/controls/flexfields/SectionBoxRenderer":25,"fields/controls/flexfields/ToggleBoxRenderer":26}],25:[function(require,module,exports){
-var ToggleBoxRenderer =  require('fields/controls/flexfields/ToggleBoxRenderer');
+},{"common/Logger":11,"common/TinyMCE":15,"common/UI":16,"fields/controls/flexfields/FlexFieldsCollection":28,"fields/controls/flexfields/SectionBoxItem":30,"fields/controls/flexfields/ToggleBoxItem":31}],30:[function(require,module,exports){
+var ToggleBoxItem =  require('fields/controls/flexfields/ToggleBoxItem');
 var tplSingleSectionBox = require('templates/fields/FlexibleFields/single-section-box.hbs');
-module.exports = ToggleBoxRenderer.extend({
+module.exports = ToggleBoxItem.extend({
   render: function () {
     var inputName = this.createInputName(this.model.get('_tab').uid);
     var item = this.model.toJSON(); // tab information and value hold by this.model
@@ -1552,7 +1830,7 @@ module.exports = ToggleBoxRenderer.extend({
   }
 
 });
-},{"fields/controls/flexfields/ToggleBoxRenderer":26,"templates/fields/FlexibleFields/single-section-box.hbs":36}],26:[function(require,module,exports){
+},{"fields/controls/flexfields/ToggleBoxItem":31,"templates/fields/FlexibleFields/single-section-box.hbs":41}],31:[function(require,module,exports){
 //KB.FlexibleFields.ItemView
 var Notice = require('common/Notice');
 var tplSingleToggleBox = require('templates/fields/FlexibleFields/single-toggle-box.hbs');
@@ -1561,7 +1839,8 @@ module.exports = Backbone.View.extend({
   className: 'kb-flexible-fields--item-wrapper',
   initialize: function (options) {
     this.Controller = options.Controller;
-    this.listenTo(this.Controller, 'dispose', this.dispose);
+    this.listenTo(this.Controller, 'derender', this.derender);
+    this.FieldViews = {};
   },
   events: {
     'click .flexible-fields--js-toggle': 'toggleItem',
@@ -1569,6 +1848,7 @@ module.exports = Backbone.View.extend({
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
+      console.log('toggle');
       KB.Events.trigger('modal.recalibrate');
     });
   },
@@ -1613,37 +1893,31 @@ module.exports = Backbone.View.extend({
   },
   renderFields: function (tab, $con) {
     var fieldInstance;
-    var that = this, data;
-    _.each(tab.fields, function (field) { // field is just a reference object and does nothing on it's own
-      field.model.set('index', that.model.get('_tab').uid); // field models: merged parent field and individual ff field
-      fieldInstance = KB.FieldsAPI.get(field); // get a view for the field
-      data = that.model.get('value'); // if not new item a standard backbone model
+    var that = this, data, fieldConfig;
+
+    /**
+     * Create or get the js representation of a field template
+     */
+    _.each(tab.fields, function (fieldTpl) { // field is just a reference object and does nothing on it's own
+      fieldTpl.model.set('index', this.model.get('_tab').uid); // field models: merged parent field and individual ff field
+      fieldInstance = KB.FieldsAPI.get(fieldTpl); // get a view for the field, responsibile for the markup
+      data = this.model.get('value'); // if not new item a standard backbone model
       if (!_.isUndefined(data)) {
-        fieldInstance.setValue(data.get(field.model.get('primeKey')));
+        fieldInstance.setValue(data.get(fieldTpl.model.get('primeKey')));
       } else {
         fieldInstance.setupDefaults();
       }
 
-      $con.append(fieldInstance.render(that.uid));
-      $con.append('<input type="hidden" name="' + fieldInstance.model.get('baseId') + '[' + fieldInstance.model.get('index') + '][_mapping][' + fieldInstance.model.get('primeKey') + ']" value="' + fieldInstance.model.get('type') + '" >');
+      fieldTpl.listenTo(this, 'derender', fieldTpl.destroy);
+      fieldInstance.listenTo(this, 'derender', fieldInstance.derender);
 
-      _.defer(function () {
-        fieldInstance.$container = $con;
-        if (fieldInstance.postRender) {
-          fieldInstance.postRender.call(fieldInstance);
-        }
-        if (that.Controller.parentView) {
-          that.addInstanceToCollection(fieldInstance);
-        }
-      });
+      $con.append(fieldInstance.render(this.uid));
 
+      //$con.append('<input type="hidden" name="' + fieldInstance.model.get('baseId') + '[' + fieldInstance.model.get('index') + '][_mapping][' + fieldInstance.model.get('primeKey') + ']" value="' + fieldInstance.model.get('type') + '" >');
 
-    });
-  },
-  addInstanceToCollection: function (Instance) {
-    setTimeout(function () {
-      KB.FieldConfigs.add(Instance.model.toJSON());
-    }, 150);
+      this.setupFieldInstance(fieldInstance, $con);
+
+    }, this);
   },
   createInputName: function (uid) {
     return this.createBaseId() + '[' + this.Controller.model.get('fieldkey') + ']' + '[' + uid + ']';
@@ -1655,12 +1929,35 @@ module.exports = Backbone.View.extend({
       return this.Controller.model.get('fieldId');
     }
   },
-  dispose: function () {
+  derender: function () {
     this.stopListening();
     this.remove();
+  },
+  setupFieldInstance: function(fieldInstance, $con){
+    var that = this;
+    _.defer(function () {
+    fieldInstance.setElement($con);
+    if (fieldInstance.postRender) {
+      fieldInstance.postRender.call(fieldInstance);
+    }
+    // add field to controller fields collection
+    if (that.Controller.parentView) {
+      _.defer(function () {
+      var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
+      if (_.isUndefined(existing)) {
+        var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
+        console.log(model);
+      } else {
+        existing.rebind();
+      }
+
+
+      });
+    }
+    });
   }
 });
-},{"common/Notice":11,"templates/fields/FlexibleFields/single-toggle-box.hbs":37}],27:[function(require,module,exports){
+},{"common/Notice":12,"templates/fields/FlexibleFields/single-toggle-box.hbs":42}],32:[function(require,module,exports){
 var BaseView = require('fields/FieldBaseView');
 var GalleryController = require('./gallery/GalleryController');
 module.exports = BaseView.extend({
@@ -1744,7 +2041,7 @@ module.exports = BaseView.extend({
 
 
 
-},{"./gallery/GalleryController":28,"fields/FieldBaseView":16}],28:[function(require,module,exports){
+},{"./gallery/GalleryController":33,"fields/FieldBaseView":18}],33:[function(require,module,exports){
 /**
  * Main Field Controller
  */
@@ -1860,7 +2157,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./ImageView":29,"common/Logger":10}],29:[function(require,module,exports){
+},{"./ImageView":34,"common/Logger":11}],34:[function(require,module,exports){
 /**
  * Single Gallery Image View
  */
@@ -1969,7 +2266,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"common/Templates":12,"common/TinyMCE":13,"common/UI":14}],30:[function(require,module,exports){
+},{"common/Templates":14,"common/TinyMCE":15,"common/UI":16}],35:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
@@ -1992,6 +2289,11 @@ module.exports = BaseView.extend({
   },
   editImage: function () {
     this.openFrame(true);
+  },
+  derender: function(){
+    if (this.frame) {
+      this.frame.dispose();
+    }
   },
   openFrame: function (editmode) {
     var that = this, metadata;
@@ -2130,7 +2432,7 @@ module.exports = BaseView.extend({
     this.$description.val('');
   }
 });
-},{"../FieldBaseView":16,"common/Config":9,"common/Utilities":15}],31:[function(require,module,exports){
+},{"../FieldBaseView":18,"common/Config":10,"common/Utilities":17}],36:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function(){
@@ -2200,7 +2502,7 @@ module.exports = BaseView.extend({
       wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
   }
 });
-},{"../FieldBaseView":16}],32:[function(require,module,exports){
+},{"../FieldBaseView":18}],37:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   events: {
@@ -2226,7 +2528,7 @@ module.exports = BaseView.extend({
 });
 
 
-},{"../FieldBaseView":16}],33:[function(require,module,exports){
+},{"../FieldBaseView":18}],38:[function(require,module,exports){
 var BaseView = require('../FieldBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -2246,21 +2548,21 @@ module.exports = BaseView.extend({
     this.model.set('value', val);
   }
 });
-},{"../FieldBaseView":16}],34:[function(require,module,exports){
+},{"../FieldBaseView":18}],39:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<div class=\"kb-context-bar grid__col grid__col--12-of-12\">\n    <ul class=\"kb-context-bar--actions\">\n\n    </ul>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":46}],35:[function(require,module,exports){
+},{"hbsfy/runtime":51}],40:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<ul class='module-actions'></ul>";
 },"useData":true});
 
-},{"hbsfy/runtime":46}],36:[function(require,module,exports){
+},{"hbsfy/runtime":51}],41:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -2277,7 +2579,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "[_tab][title] \">\n        </h3>\n    </div>\n    <div class=\"kb-field--tabs kb_fieldtabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":46}],37:[function(require,module,exports){
+},{"hbsfy/runtime":51}],42:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -2294,7 +2596,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "[_tab][title] \">\n    </h3>\n</div>\n<div class=\"flexible-fields--toggle-box kb-hide\">\n    <div class=\"kb-field--tabs kb_fieldtabs\">\n        <ul class=\"flexible-field--tab-nav\">\n\n        </ul>\n    </div>\n\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":46}],38:[function(require,module,exports){
+},{"hbsfy/runtime":51}],43:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -2355,7 +2657,7 @@ inst['default'] = inst;
 
 exports['default'] = inst;
 module.exports = exports['default'];
-},{"./handlebars/base":39,"./handlebars/exception":40,"./handlebars/no-conflict":41,"./handlebars/runtime":42,"./handlebars/safe-string":43,"./handlebars/utils":44}],39:[function(require,module,exports){
+},{"./handlebars/base":44,"./handlebars/exception":45,"./handlebars/no-conflict":46,"./handlebars/runtime":47,"./handlebars/safe-string":48,"./handlebars/utils":49}],44:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -2629,7 +2931,7 @@ function createFrame(object) {
 }
 
 /* [args, ]options */
-},{"./exception":40,"./utils":44}],40:[function(require,module,exports){
+},{"./exception":45,"./utils":49}],45:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2668,7 +2970,7 @@ Exception.prototype = new Error();
 
 exports['default'] = Exception;
 module.exports = exports['default'];
-},{}],41:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2687,7 +2989,7 @@ exports['default'] = function (Handlebars) {
 };
 
 module.exports = exports['default'];
-},{}],42:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -2920,7 +3222,7 @@ function initData(context, data) {
   }
   return data;
 }
-},{"./base":39,"./exception":40,"./utils":44}],43:[function(require,module,exports){
+},{"./base":44,"./exception":45,"./utils":49}],48:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2935,7 +3237,7 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 
 exports['default'] = SafeString;
 module.exports = exports['default'];
-},{}],44:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3050,12 +3352,12 @@ function blockParams(params, ids) {
 function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
 }
-},{}],45:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 
-},{"./dist/cjs/handlebars.runtime":38}],46:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":43}],51:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":45}]},{},[18]);
+},{"handlebars/runtime":50}]},{},[22]);

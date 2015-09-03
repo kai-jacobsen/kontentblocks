@@ -35,7 +35,7 @@ var EditableImage = Backbone.View.extend({
     if (this.hasData()){
       return false;
     }
-    this.$el.one('load', function(){
+    this.$el.on('load', function(){
       KB.Events.trigger('content.change reposition');
     });
     var url = 'https://unsplash.it/g/' + this.model.get('width') + '/' + this.model.get('height') + '?random';
@@ -150,12 +150,7 @@ var EditableImage = Backbone.View.extend({
     var id = attachment.get('id');
 
     var value = this.prepareValue(attachment);
-    //var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
-    //var path = this.model.get('kpath');
     this.model.attachment = attachment;
-    //Utilities.setIndex(moduleData, path, value);
-    //this.model.get('ModuleModel').set('moduleData', moduleData);
-    //this.model.get('ModuleModel').trigger('kb.frontend.module.inlineUpdate');
     this.model.set('value', value);
     KB.Events.trigger('modal.refresh');
     that.model.trigger('field.model.dirty', that.model);

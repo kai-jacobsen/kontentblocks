@@ -13,7 +13,6 @@ var EditableText = Backbone.View.extend({
     this.listenToOnce(this.model.get('ModuleModel'), 'module.create', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
-
     this.Toolbar = new Toolbar({
       FieldView: this,
       model: this.model,
@@ -149,7 +148,6 @@ var EditableText = Backbone.View.extend({
             if (ed.kfilter) {
               that.retrieveFilteredContent(ed, content);
             } else {
-              //ed.module.set('moduleData', moduleData);
               that.model.set('value', content);
               that.model.syncContent = ed.getContent();
               that.model.trigger('external.change', that.model);
@@ -159,7 +157,6 @@ var EditableText = Backbone.View.extend({
             }
           } else {
             ed.setContent(ed.previousContent);
-
           }
         });
       }
@@ -202,7 +199,6 @@ var EditableText = Backbone.View.extend({
     });
   },
   activate: function (e) {
-
     if (KB.EditModalModules){
       KB.EditModalModules.destroy();
     }

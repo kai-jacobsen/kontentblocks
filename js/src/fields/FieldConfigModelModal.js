@@ -1,10 +1,6 @@
 //KB.Backbone.Common.FieldConfigModelModal
 var FieldConfigModel = require('./FieldConfigModel');
 module.exports = FieldConfigModel.extend({
-  initialize: function () {
-    FieldConfigModel.prototype.initialize.call(this, arguments);
-
-  },
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
@@ -18,6 +14,6 @@ module.exports = FieldConfigModel.extend({
     }
   },
   getElement: function () {
-    return jQuery('*[data-kbfuid="' + this.get('uid') + '"]', KB.EditModalModules.$el)[0];
+    return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
   }
 });

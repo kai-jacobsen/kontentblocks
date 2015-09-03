@@ -37,7 +37,7 @@ Class FlexibleFields extends Field
      */
     public function save( $new, $old )
     {
-
+        $flatFields = $this->flattenFields();
 
         if (is_null( $new )) {
             return $old;
@@ -48,30 +48,33 @@ Class FlexibleFields extends Field
                 if (isset( $def['delete'] )) {
                     $new[$item] = null;
                 }
-
             }
         }
+
         if (is_array( $new )) {
-            foreach ($new as &$field) {
-                if (is_null( $field )) {
+            foreach ($new as $ukey => &$section) {
+                if (is_null( $section )) {
                     continue;
                 }
+                foreach ($section as $fkey => $field) {
 
-                foreach ($field['_mapping'] as $key => $type) {
+                    if (!array_key_exists($fkey,$flatFields)){
+                        continue;
+                    }
+                    $type = $flatFields[$fkey]['type'];
                     /** @var \Kontentblocks\Fields\Field $fieldInstance */
                     $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField(
                         $type,
-                        $field['_uid'],
+                        $ukey,
                         null,
-                        $field[$key]
+                        $section[$fkey]
                     );
-                    $field[$key] = $fieldInstance->save( $field[$key], $old );
-                }
+                    $section[$fkey] = $fieldInstance->save( $section[$fkey], $old );
 
-                if (!isset( $field['_uid'] )) {
-                    $field['_uid'] = uniqid( 'ff' );
+                    if (!isset( $section['_uid'] )) {
+                        $section['_uid'] = $ukey;
+                    }
                 }
-
             }
         }
         return $new;
@@ -110,6 +113,18 @@ Class FlexibleFields extends Field
         }
 
         return $value;
+    }
+
+    private function flattenFields()
+    {
+        $flat = [];
+        $config = $this->getArg('config');
+        foreach ($config as $section) {
+            foreach ($section['fields'] as $key => $args ) {
+                $flat[$key] = $args;
+            }
+        }
+        return $flat;
     }
 
 }

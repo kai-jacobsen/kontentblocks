@@ -47,7 +47,6 @@ class FlexibleFieldsReturn
     public function __construct( $value, FlexibleFields $field )
     {
         $this->field = $field;
-
         $this->key = $field->getKey();
         $this->fieldData = $field->getValue();
         $this->moduleId = $field->getFieldId();
@@ -82,6 +81,7 @@ class FlexibleFieldsReturn
      */
     public function setupItems()
     {
+        $registry = Kontentblocks()->getService('registry.fields');
         $fields = $this->extractFieldsFromConfig();
         $items = array();
         foreach ($this->fieldData as $index => $data) {
@@ -90,9 +90,14 @@ class FlexibleFieldsReturn
 
                 if (empty( $data[$key] )) {
                     $data[$key] = $conf['std'] || '';
-                }
+                };
 
-                $item[$key] = $this->getReturnObj( $conf['type'], $data[$key], $index, $key );
+                /** @var \Kontentblocks\Fields\Field $field */
+                $field = $registry->getField($conf['type'],$this->moduleId, $index, $key );
+                $field->setBaseId($this->moduleId, $this->key);
+                $field->setValue($data[$key]);
+                $field->setArgs(['index' => $index, 'arrayKey' => $this->key]);
+                $item[$key] = $this->getReturnObj( $conf['type'], $data[$key], $field );
             }
             $items[] = $item;
         }
@@ -151,13 +156,12 @@ class FlexibleFieldsReturn
      *
      * @param $type string
      * @param $keydata array
-     * @param $index string
-     * @param $key string
+     * @param $field
+     * @return EditableElement|EditableImage
      *
      * @since 0.1.0
-     * @return EditableElement|EditableImage
      */
-    private function getReturnObj( $type, $keydata, $index, $key )
+    private function getReturnObj( $type, $keydata, $field )
     {
         switch ($type) {
 
@@ -165,37 +169,19 @@ class FlexibleFieldsReturn
             case ( 'editor' ):
             case ( 'textarea' ):
                 return new EditableElement(
-                    $keydata, array(
-                        'mid' => $this->moduleId,
-                        'key' => $key,
-                        'arrayKey' => $this->key,
-                        'index' => $index,
-                        'type' => $type
-                    )
+                    $keydata , $field
                 );
 
                 break;
 
             case ( 'link' ):
                 return new EditableLink(
-                    $keydata, array(
-                        'mid' => $this->moduleId,
-                        'key' => $key,
-                        'arrayKey' => $this->key,
-                        'index' => $index,
-                        'type' => $type
-                    )
+                    $keydata, $field
                 );
 
             case ( 'image' ):
                 return new EditableImage(
-                    $keydata, array(
-                        'mid' => $this->moduleId,
-                        'key' => $key,
-                        'arrayKey' => $this->key,
-                        'index' => $index,
-                        'type' => $type
-                    )
+                    $keydata, $field
                 );
                 break;
         }

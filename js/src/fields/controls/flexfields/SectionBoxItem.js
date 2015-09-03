@@ -1,6 +1,6 @@
-var ToggleBoxRenderer =  require('fields/controls/flexfields/ToggleBoxRenderer');
+var ToggleBoxItem =  require('fields/controls/flexfields/ToggleBoxItem');
 var tplSingleSectionBox = require('templates/fields/FlexibleFields/single-section-box.hbs');
-module.exports = ToggleBoxRenderer.extend({
+module.exports = ToggleBoxItem.extend({
   render: function () {
     var inputName = this.createInputName(this.model.get('_tab').uid);
     var item = this.model.toJSON(); // tab information and value hold by this.model
