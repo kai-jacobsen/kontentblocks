@@ -1258,7 +1258,6 @@ module.exports = Backbone.Model.extend({
         el: this.getElement(), // get the root DOM element for this field
         model: this
       });
-      console.log(this.FieldView);
     }
   },
   updateLinkedFields: function (fieldSettings) {
@@ -1307,7 +1306,6 @@ module.exports = Backbone.Model.extend({
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {
     var ModuleModel;
-    console.log(this.get('kpath'), this.get('value'));
     if (ModuleModel = this.get('ModuleModel')) {
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));

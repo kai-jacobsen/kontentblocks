@@ -15,7 +15,6 @@ module.exports = Backbone.View.extend({
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
-      console.log('toggle');
       KB.Events.trigger('modal.recalibrate');
     });
   },
@@ -113,7 +112,6 @@ module.exports = Backbone.View.extend({
       var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
       if (_.isUndefined(existing)) {
         var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
-        console.log(model);
       } else {
         existing.rebind();
       }

@@ -30,7 +30,7 @@ module.exports = BaseView.extend({
   postRender: function () {
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
     var edId = this.model.get('fieldId') + '_' + this.model.get('fieldKey') + '_editor_' + this.model.get('index');
-    this.$editorWrap = jQuery('.kb-ff-editor-wrapper', this.$container);
+    this.$editorWrap = jQuery('.kb-ff-editor-wrapper', this.$el);
     TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), 5, false);
   }
 });

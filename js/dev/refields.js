@@ -1219,7 +1219,6 @@ module.exports = Backbone.View.extend({
     this.render();
   },
   gone: function () {
-    console.log(this  );
     this.trigger('field.view.gone', this);
     this.derender();
   }
@@ -1271,7 +1270,6 @@ module.exports = Backbone.Model.extend({
         el: this.getElement(), // get the root DOM element for this field
         model: this
       });
-      console.log(this.FieldView);
     }
   },
   updateLinkedFields: function (fieldSettings) {
@@ -1320,7 +1318,6 @@ module.exports = Backbone.Model.extend({
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {
     var ModuleModel;
-    console.log(this.get('kpath'), this.get('value'));
     if (ModuleModel = this.get('ModuleModel')) {
       var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
@@ -1649,7 +1646,6 @@ module.exports = BaseView.extend({
     this.FlexFieldsController.derender();
   },
   rerender: function () {
-    console.log('flexfield: rerender called');
     this.render();
   },
   createController: function () {
@@ -1848,7 +1844,6 @@ module.exports = Backbone.View.extend({
   },
   toggleItem: function () {
     this.$('.flexible-fields--toggle-title').next().slideToggle(250, function () {
-      console.log('toggle');
       KB.Events.trigger('modal.recalibrate');
     });
   },
@@ -1946,7 +1941,6 @@ module.exports = Backbone.View.extend({
       var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
       if (_.isUndefined(existing)) {
         var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
-        console.log(model);
       } else {
         existing.rebind();
       }

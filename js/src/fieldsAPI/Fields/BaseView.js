@@ -38,7 +38,6 @@ module.exports = Backbone.View.extend({
     this.model.set('baseId', this.prepareBaseId());
     this.model.set('uid', this.kbfuid());
     this.model.set('kpath', this.prepareKpath());
-    console.log(this.model);
   },
   kbfuid: function () {
     return this.model.get('fieldId') + this.model.get('index') + this.model.get('type');
