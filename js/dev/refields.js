@@ -1254,7 +1254,7 @@ module.exports = Backbone.Model.extend({
     var that = this;
     _.defer(function(){
       if (_.isUndefined(that.getElement())) {
-        _.defer(_.bind(that.FieldView.gone, that.FieldView)); // call rerender on the field
+        _.defer(_.bind(that.FieldView.gone, that.FieldView));
       }
       else if (that.FieldView) {
         that.FieldView.setElement(that.getElement()); // markup might have changed, reset the root element
@@ -2184,30 +2184,27 @@ var BaseView = require('fields/FieldBaseView');
 var Gallery2Controller = require('./gallery2/Gallery2Controller');
 module.exports = BaseView.extend({
   initialize: function () {
-    this.render();
     this.selection = null;
+    this.render();
   },
   render: function () {
     this.$stage = this.$('.kb-gallery2__stage');
     this.createController();
+    this.$stage.append(this.GalleryController.render());
   },
   derender: function () {
-    this.GalleryController.dispose();
-  },
-  rerender: function () {
-    this.derender();
-    this.render();
+    if (this.GalleryController){
+      this.GalleryController.$el.detach();
+    }
   },
   createController: function () {
-
     if (!this.GalleryController) {
       this.GalleryController = new Gallery2Controller({
         el: this.$stage.get(0),
         model: this.model
       })
     }
-    this.GalleryController.setElement(this.$stage.get(0));
-    return this.GalleryController.render();
+    return this.GalleryController;
 
   }
 });
@@ -2221,26 +2218,33 @@ module.exports = Backbone.View.extend({
   initialize: function (params) {
     this._frame = null; // media modal instance
     this.subviews = {}; // image items
-    this.listenTo(KB.Events, 'modal.saved', this.frontendSave);
     this.ids = [];
     Logger.Debug.log('Fields: Gallery instance created and initialized');
+    this.renderElements();
+    this.initialSetup();
 
   },
   render: function () {
+    this.trigger('render');
     this.setupElements();
-    this.initialSetup();
+    this.delegateEvents();
+    return this.$el;
   },
   events: {
     'click .kb-gallery2--js-add-images': 'addImages'
   },
-  setupElements: function () {
+  derender: function(){
 
+  },
+  renderElements: function () {
     // Add list element dynamically
-    this.$list = jQuery('<div class="kb-gallery2--item-list"></div>').appendTo(this.$el);
-    this.$list.sortable({revert: true, delay: 300, stop: _.bind(this.resortSelection, this)});
+    jQuery('<div class="kb-gallery2--item-list"></div>').appendTo(this.$el);
     // add button dynamically
-    this.$addButton = jQuery('<a class="button button-primary kb-gallery2--js-add-images">' + KB.i18n.Refields.image.addButton + '</a>').appendTo(this.$el);
-
+    jQuery('<a class="button button-primary kb-gallery2--js-add-images">' + KB.i18n.Refields.image.addButton + '</a>').appendTo(this.$el);
+  },
+  setupElements: function(){
+    this.$list = this.$('.kb-gallery2--item-list');
+    this.$list.sortable({revert: true, delay: 300, stop: _.bind(this.resortSelection, this)});
   },
   addImages: function () {
     this.openModal();
@@ -2379,12 +2383,6 @@ module.exports = Backbone.View.extend({
   className: 'kb-gallery--image-wrapper',
   initialize: function (options) {
     this.Controller = options.Controller;
-  },
-  events: {
-    'click' : 'openFrame'
-  },
-  openFrame: function(){
-      this.Controller.openModal();
   },
   remove: function () {
     this.$el.remove();

@@ -5,12 +5,6 @@ module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.Controller = options.Controller;
   },
-  events: {
-    'click' : 'openFrame'
-  },
-  openFrame: function(){
-      this.Controller.openModal();
-  },
   remove: function () {
     this.$el.remove();
     delete this.$el;

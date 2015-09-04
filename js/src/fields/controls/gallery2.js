@@ -2,30 +2,27 @@ var BaseView = require('fields/FieldBaseView');
 var Gallery2Controller = require('./gallery2/Gallery2Controller');
 module.exports = BaseView.extend({
   initialize: function () {
-    this.render();
     this.selection = null;
+    this.render();
   },
   render: function () {
     this.$stage = this.$('.kb-gallery2__stage');
     this.createController();
+    this.$stage.append(this.GalleryController.render());
   },
   derender: function () {
-    this.GalleryController.dispose();
-  },
-  rerender: function () {
-    this.derender();
-    this.render();
+    if (this.GalleryController){
+      this.GalleryController.$el.detach();
+    }
   },
   createController: function () {
-
     if (!this.GalleryController) {
       this.GalleryController = new Gallery2Controller({
         el: this.$stage.get(0),
         model: this.model
       })
     }
-    this.GalleryController.setElement(this.$stage.get(0));
-    return this.GalleryController.render();
+    return this.GalleryController;
 
   }
 });

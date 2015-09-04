@@ -117,6 +117,7 @@ module.exports = Backbone.View.extend({
     }
     if (response.data.json.Fields) {
       KB.payload.Fields = _.extend(Payload.getPayload('Fields'), response.data.json.Fields);
+      KB.FieldConfigs.add(_.toArray(KB.payload.Fields));
     }
     // re-init UI listeners
     UI.repaint(this.$el);

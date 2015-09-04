@@ -7,26 +7,33 @@ module.exports = Backbone.View.extend({
   initialize: function (params) {
     this._frame = null; // media modal instance
     this.subviews = {}; // image items
-    this.listenTo(KB.Events, 'modal.saved', this.frontendSave);
     this.ids = [];
     Logger.Debug.log('Fields: Gallery instance created and initialized');
+    this.renderElements();
+    this.initialSetup();
 
   },
   render: function () {
+    this.trigger('render');
     this.setupElements();
-    this.initialSetup();
+    this.delegateEvents();
+    return this.$el;
   },
   events: {
     'click .kb-gallery2--js-add-images': 'addImages'
   },
-  setupElements: function () {
+  derender: function(){
 
+  },
+  renderElements: function () {
     // Add list element dynamically
-    this.$list = jQuery('<div class="kb-gallery2--item-list"></div>').appendTo(this.$el);
-    this.$list.sortable({revert: true, delay: 300, stop: _.bind(this.resortSelection, this)});
+    jQuery('<div class="kb-gallery2--item-list"></div>').appendTo(this.$el);
     // add button dynamically
-    this.$addButton = jQuery('<a class="button button-primary kb-gallery2--js-add-images">' + KB.i18n.Refields.image.addButton + '</a>').appendTo(this.$el);
-
+    jQuery('<a class="button button-primary kb-gallery2--js-add-images">' + KB.i18n.Refields.image.addButton + '</a>').appendTo(this.$el);
+  },
+  setupElements: function(){
+    this.$list = this.$('.kb-gallery2--item-list');
+    this.$list.sortable({revert: true, delay: 300, stop: _.bind(this.resortSelection, this)});
   },
   addImages: function () {
     this.openModal();
