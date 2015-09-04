@@ -6,6 +6,7 @@
   l10n = media.view.l10n = typeof _wpMediaViewsL10n === 'undefined' ? {} : _wpMediaViewsL10n;
 
 
+
   media.view.KBGallery = media.view.MediaFrame.Select.extend({
     initialize: function () {
 

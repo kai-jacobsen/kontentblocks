@@ -6,6 +6,7 @@ Fields.registerObject('datetime', require('./controls/datetime'));
 Fields.registerObject('file', require('./controls/file'));
 Fields.registerObject('flexfields', require('./controls/flexfields'));
 Fields.registerObject('gallery', require('./controls/gallery'));
+Fields.registerObject('gallery2', require('./controls/gallery2'));
 Fields.registerObject('image', require('./controls/image'));
 Fields.registerObject('link', require('./controls/link'));
 Fields.registerObject('textarea', require('./controls/textarea'));

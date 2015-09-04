@@ -2125,7 +2125,7 @@ module.exports =
     // find all editors and init
     jQuery('.wp-editor-area', $el).each(function () {
       var id = this.id;
-      var prev = tinyMCE.get(id);
+      var prev = window.tinyMCE.get(id);
       if (prev) {
         tinyMCE.execCommand('mceRemoveEditor', null, id);
       }

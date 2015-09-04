@@ -122,7 +122,7 @@ class Enqueues
         wp_register_script(
             'kb-refields',
             KB_PLUGIN_URL . 'js/' . $folder . '/refields' . $suffix . '.js',
-            array( 'kb-fields-api' ),
+            array( 'kb-fields-api', 'kb-media-ext' ),
             null,
             true
         );
