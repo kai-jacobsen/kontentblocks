@@ -9,7 +9,7 @@ KB.currentArea = {};
 // requires
 
 var ViewsCollection = require('shared/ViewsCollection');
-var FieldsConfigsCollection = require('fields/FieldsConfigsCollection');
+var FieldControlsCollection = require('fields/FieldControlsCollection');
 var AreasCollection = require('backend/Collections/AreasCollection');
 var Payload = require('common/Payload');
 var UI = require('common/UI');
@@ -86,8 +86,8 @@ KB.App = (function () {
     /*
      * payload.Fields collection
      */
-    KB.FieldConfigs = new FieldsConfigsCollection();
-    KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
+    KB.FieldControls = new FieldControlsCollection();
+    KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
     KB.Menus = require('backend/Menus');
     KB.Window = require('common/Window').init();
     // get the UI on track

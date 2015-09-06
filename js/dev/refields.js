@@ -506,7 +506,7 @@ module.exports = {
     };
 
     if (json && json.Fields) {
-      ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
+      ret.Fields = KB.FieldControls.add(_.toArray(json.Fields));
     }
     return ret;
   },
@@ -1023,15 +1023,11 @@ var Ui = {
     });
   },
   initTipsy: function () {
-    jQuery('[data-tipsy]').tipsy(
-      {
-        title: function () {
-          return this.getAttribute('data-tipsy');
-        },
-        gravity: $.fn.tipsy.autoNS,
-        live: true
+    jQuery('[data-kbtooltip!=""]').qtip({ // Grab all elements with a non-blank data-tooltip attr.
+      content: {
+        attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content
       }
-    );
+    })
   },
   metaBoxReorder: function (e, o, settings, action) {
     if (settings.data) {
@@ -1143,7 +1139,6 @@ module.exports = Backbone.View.extend({
 });
 
 },{}],18:[function(require,module,exports){
-//KB.Backbone.Common.FieldConfigModel
 var Checks = require('common/Checks');
 var Utilities = require('common/Utilities');
 var Payload = require('common/Payload');
@@ -1152,7 +1147,7 @@ var Logger = require('common/Logger');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
-    this.cleanUp();
+    this.cleanUp(); //remove self from linked fields
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
       this.set('ModuleModel', this.ModuleModel); // assign the parent object model
@@ -1163,7 +1158,7 @@ module.exports = Backbone.Model.extend({
     }
   },
   /*
-    remove self from linked fields
+   remove self from linked fields
    */
   cleanUp: function () {
     var links = this.get('linkedFields') || {};
@@ -1183,15 +1178,16 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
   },
   setupType: function () {
-    if (obj = this.getType()) { // obj equals specific field view
-      this.FieldView = new obj({ // create new field view if it does not exist
+    var view;
+    if (view = this.getType()) { // obj equals specific field view
+      this.FieldControlView = new view({ // create new field view
         el: this.getElement(), // get the root DOM element for this field
         model: this
       });
     }
   },
   updateLinkedFields: function (fieldSettings) {
-    if (fieldSettings.linkedFields){
+    if (fieldSettings.linkedFields) {
       this.set('linkedFields', fieldSettings.linkedFields);
       this.cleanUp();
     }
@@ -1206,9 +1202,9 @@ module.exports = Backbone.Model.extend({
     }
 
     // get the view object from KB.Fields collection
-    var obj = KB.Fields.get(type);
-    if (obj && obj.prototype.hasOwnProperty('initialize')) {
-      return obj;
+    var control = KB.Fields.get(type);
+    if (control && control.prototype.hasOwnProperty('initialize')) {
+      return control;
     } else {
       return false;
     }
@@ -1243,31 +1239,35 @@ module.exports = Backbone.Model.extend({
       ModuleModel.View.getDirty();
     }
   },
+  /**
+   * A linked field was updated
+   * @param model
+   */
   externalUpdate: function (model) {
-    this.FieldView.synchronize(model);
+    this.FieldControlView.synchronize(model);
   },
   remove: function () {
     this.stopListening();
-    KB.FieldConfigs.remove(this);
+    KB.FieldControls.remove(this);
   },
   rebind: function () {
     var that = this;
-    _.defer(function(){
+    _.defer(function () {
       if (_.isUndefined(that.getElement())) {
-        _.defer(_.bind(that.FieldView.gone, that.FieldView));
+        _.defer(_.bind(that.FieldControlView.gone, that.FieldControlView));
       }
-      else if (that.FieldView) {
-        that.FieldView.setElement(that.getElement()); // markup might have changed, reset the root element
-        _.defer(_.bind(that.FieldView.rerender, that.FieldView)); // call rerender on the field
+      else if (that.FieldControlView) {
+        that.FieldControlView.setElement(that.getElement()); // markup might have changed, reset the root element
+        _.defer(_.bind(that.FieldControlView.rerender, that.FieldControlView)); // call rerender on the field
       }
-    },true);
+    }, true);
   },
   unbind: function () {
-    if (this.FieldView && this.FieldView.derender) {
-      this.FieldView.derender(); // call derender
+    if (this.FieldControlView && this.FieldControlView.derender) {
+      this.FieldControlView.derender(); // call derender
     }
   },
-  sync: function(context){
+  sync: function (context) {
     var that = this;
     KB.Events.trigger('field.before.sync', this.model);
 
@@ -1302,9 +1302,9 @@ module.exports = Backbone.Model.extend({
   }
 });
 },{"common/Checks":9,"common/Config":10,"common/Logger":11,"common/Payload":13,"common/Utilities":16}],19:[function(require,module,exports){
-//KB.Backbone.Common.FieldConfigModelModal
-var FieldConfigModel = require('./FieldConfigModel');
-module.exports = FieldConfigModel.extend({
+//KB.Backbone.Common.FieldControlModelModal
+var FieldControlModel = require('./FieldControlModel');
+module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
@@ -1312,17 +1312,22 @@ module.exports = FieldConfigModel.extend({
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
   rebind: function () {
-    if (this.FieldView) {
-      this.FieldView.setElement(this.getElement());
-      this.FieldView.rerender();
+    if (this.FieldControlView) {
+      this.FieldControlView.setElement(this.getElement());
+      this.FieldControlView.rerender();
     }
   },
   getElement: function () {
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
   }
 });
-},{"./FieldConfigModel":18}],20:[function(require,module,exports){
+},{"./FieldControlModel":18}],20:[function(require,module,exports){
+/**
+ * Registry for field controls
+ * @type {{}}
+ */
 var Fields = {};
+var Logger = require('common/Logger');
 // include Backbone events handler
 _.extend(Fields, Backbone.Events);
 // include custom functions
@@ -1330,45 +1335,13 @@ _.extend(Fields, {
   fields: {}, // 'collection' of fields
   /**
    * Register a fieldtype
-   * @param id string Name of field
+   * @param id string name of field
    * @param object field object
    */
-  addEvent: function () {
-    this.listenTo(KB, 'kb:ready', this.init);
-    this.listenTo(this, 'newModule', this.newModule);
-  },
-  register: function (id, object) {
-    _.extend(object, Backbone.Events);
-    this.fields[id] = object;
-  },
   registerObject: function (id, object) {
     _.extend(object, Backbone.Events);
     this.fields[id] = object;
   },
-  init: function () {
-    var that = this;
-    _.each(this.fields, function (object) {
-      // call init method if available
-      if (object.hasOwnProperty('init')) {
-        object.init.call(object);
-      }
-      // call field objects init method on 'update' event
-      // fails gracefully if there is no update method
-      object.listenTo(that, 'update', object.update);
-      object.listenTo(that, 'frontUpdate', object.frontUpdate);
-    });
-  },
-  newModule: function (ModuleView) {
-    var that = this;
-    // call field objects init method on 'update' event
-    // fails gracefully if there is no update method
-    ModuleView.listenTo(this, 'update', ModuleView.update);
-    ModuleView.listenTo(this, 'frontUpdate', ModuleView.frontUpdate);
-    setTimeout(function () {
-      that.trigger('update');
-    }, 750);
-  },
-
   /**
    * Get method
    * @param id string fieldtype
@@ -1382,9 +1355,8 @@ _.extend(Fields, {
     }
   }
 });
-Fields.addEvent();
 module.exports = Fields;
-},{}],21:[function(require,module,exports){
+},{"common/Logger":11}],21:[function(require,module,exports){
 var Fields = require('./Fields');
 window.KB.Fields = Fields;
 Fields.registerObject('color', require('./controls/color'));
@@ -1400,7 +1372,7 @@ Fields.registerObject('textarea', require('./controls/textarea'));
 Fields.registerObject('otimes', require('./controls/otimes'));
 
 },{"./Fields":20,"./controls/color":22,"./controls/date":23,"./controls/datetime":24,"./controls/file":25,"./controls/flexfields":26,"./controls/gallery":31,"./controls/gallery2":34,"./controls/image":37,"./controls/link":38,"./controls/otimes":39,"./controls/textarea":40}],22:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
     this.render();
@@ -1424,8 +1396,8 @@ module.exports = BaseView.extend({
     }, 150);
   }
 });
-},{"../FieldBaseView":17}],23:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+},{"../FieldControlBaseView":17}],23:[function(require,module,exports){
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
     var that = this;
@@ -1450,8 +1422,8 @@ module.exports = BaseView.extend({
 
   }
 });
-},{"../FieldBaseView":17}],24:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+},{"../FieldControlBaseView":17}],24:[function(require,module,exports){
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
     var that = this;
@@ -1478,8 +1450,8 @@ module.exports = BaseView.extend({
     this.$('.kb-datetimepicker').datetimepicker('destroy');
   }
 });
-},{"../FieldBaseView":17}],25:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+},{"../FieldControlBaseView":17}],25:[function(require,module,exports){
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
     this.render();
@@ -1548,8 +1520,8 @@ module.exports = BaseView.extend({
   }
 });
 
-},{"../FieldBaseView":17}],26:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+},{"../FieldControlBaseView":17}],26:[function(require,module,exports){
+var BaseView = require('../FieldControlBaseView');
 var FlexfieldController = require('fields/controls/flexfields/FlexfieldsController');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1577,12 +1549,12 @@ module.exports = BaseView.extend({
     }
   }
 });
-},{"../FieldBaseView":17,"fields/controls/flexfields/FlexfieldsController":28}],27:[function(require,module,exports){
-var FlexFieldModelModal = require('fields/FieldConfigModelModal');
+},{"../FieldControlBaseView":17,"fields/controls/flexfields/FlexfieldsController":28}],27:[function(require,module,exports){
+var FlexFieldModelModal = require('fields/FieldControlModelModal');
 module.exports = Backbone.Collection.extend({
   model: FlexFieldModelModal
 });
-},{"fields/FieldConfigModelModal":19}],28:[function(require,module,exports){
+},{"fields/FieldControlModelModal":19}],28:[function(require,module,exports){
 /**
  * Main Controller
  */
@@ -1613,7 +1585,7 @@ module.exports = Backbone.View.extend({
   },
   initialSetup: function () {
     var data, that = this;
-    data = this.model.get('value'); // model equals FieldConfigModel, value equals parent obj data for this field key
+    data = this.model.get('value'); // model equals FieldControlModel, value equals parent obj data for this field key
     if (!_.isEmpty(data)) {
       _.each(data, function (dataobj, index) {
         if (!dataobj) {
@@ -1871,7 +1843,7 @@ module.exports = Backbone.View.extend({
   }
 });
 },{"common/Notice":12,"templates/fields/FlexibleFields/single-toggle-box.hbs":44}],31:[function(require,module,exports){
-var BaseView = require('fields/FieldBaseView');
+var BaseView = require('fields/FieldControlBaseView');
 var GalleryController = require('./gallery/GalleryController');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -1954,7 +1926,7 @@ module.exports = BaseView.extend({
 
 
 
-},{"./gallery/GalleryController":32,"fields/FieldBaseView":17}],32:[function(require,module,exports){
+},{"./gallery/GalleryController":32,"fields/FieldControlBaseView":17}],32:[function(require,module,exports){
 /**
  * Main Field Controller
  */
@@ -2180,7 +2152,7 @@ module.exports = Backbone.View.extend({
 });
 
 },{"common/TinyMCE":14,"common/UI":15,"templates/fields/Gallery/single-image.hbs":45}],34:[function(require,module,exports){
-var BaseView = require('fields/FieldBaseView');
+var BaseView = require('fields/FieldControlBaseView');
 var Gallery2Controller = require('./gallery2/Gallery2Controller');
 module.exports = BaseView.extend({
   initialize: function () {
@@ -2208,7 +2180,7 @@ module.exports = BaseView.extend({
 
   }
 });
-},{"./gallery2/Gallery2Controller":35,"fields/FieldBaseView":17}],35:[function(require,module,exports){
+},{"./gallery2/Gallery2Controller":35,"fields/FieldControlBaseView":17}],35:[function(require,module,exports){
 /**
  * Main Field Controller
  */
@@ -2412,7 +2384,7 @@ module.exports = Backbone.View.extend({
 });
 
 },{"templates/fields/Gallery2/single-image.hbs":46}],37:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+var BaseView = require('../FieldControlBaseView');
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
 module.exports = BaseView.extend({
@@ -2577,8 +2549,8 @@ module.exports = BaseView.extend({
     this.$description.val('');
   }
 });
-},{"../FieldBaseView":17,"common/Config":10,"common/Utilities":16}],38:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+},{"../FieldControlBaseView":17,"common/Config":10,"common/Utilities":16}],38:[function(require,module,exports){
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function(){
     window._kbLink = this;
@@ -2647,8 +2619,8 @@ module.exports = BaseView.extend({
       wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
   }
 });
-},{"../FieldBaseView":17}],39:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+},{"../FieldControlBaseView":17}],39:[function(require,module,exports){
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   events: {
     'click .js-oday-activate-split' : 'split'
@@ -2673,8 +2645,8 @@ module.exports = BaseView.extend({
 });
 
 
-},{"../FieldBaseView":17}],40:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+},{"../FieldControlBaseView":17}],40:[function(require,module,exports){
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {
     this.render();
@@ -2693,7 +2665,7 @@ module.exports = BaseView.extend({
     this.model.set('value', val);
   }
 });
-},{"../FieldBaseView":17}],41:[function(require,module,exports){
+},{"../FieldControlBaseView":17}],41:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {

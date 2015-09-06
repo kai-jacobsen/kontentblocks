@@ -452,7 +452,7 @@ module.exports = Backbone.View.extend({
     }
 
     if (res.data.json && res.data.json.Fields){
-      KB.FieldConfigs.updateModels(res.data.json.Fields);
+      KB.FieldControls.updateModels(res.data.json.Fields);
     }
 
 

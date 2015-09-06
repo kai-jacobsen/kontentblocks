@@ -14,7 +14,7 @@ module.exports = BaseView.extend({
     key: null
   },
   //initialize:function(){
-    //var fc = KB.FieldConfigs.add(this.model.toJSON());
+    //var fc = KB.FieldControls.add(this.model.toJSON());
     //BaseView.prototype.initialize.call(this, arguments);
   //},
   render: function () {

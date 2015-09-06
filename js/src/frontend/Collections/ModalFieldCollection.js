@@ -1,4 +1,4 @@
-var FieldConfigModelModal = require('fields/FieldConfigModelModal');
+var FieldControlModelModal = require('fields/FieldControlModelModal');
 module.exports = Backbone.Collection.extend({
-  model: FieldConfigModelModal
+  model: FieldControlModelModal
 });

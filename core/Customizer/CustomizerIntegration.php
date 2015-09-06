@@ -40,7 +40,6 @@ class CustomizerIntegration
         OptionsPanel $panel
     )
     {
-
         add_action( 'customize_update_kb_option_panel', array($this, 'save'), 10, 2 );
 
         $this->fieldController = $fieldController;

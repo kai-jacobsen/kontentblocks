@@ -26,13 +26,13 @@ module.exports = Backbone.View.extend({
   mouseenter: function () {
     this.Parent.$el.addClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.addClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.addClass('kb-field--outline-link');
     })
   },
   mouseleave: function(){
     this.Parent.$el.removeClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.removeClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.removeClass('kb-field--outline-link');
     })
   }
 });

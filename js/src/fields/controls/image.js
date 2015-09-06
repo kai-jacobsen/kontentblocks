@@ -1,4 +1,4 @@
-var BaseView = require('../FieldBaseView');
+var BaseView = require('../FieldControlBaseView');
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
 module.exports = BaseView.extend({

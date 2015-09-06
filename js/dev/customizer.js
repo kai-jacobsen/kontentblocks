@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend({
 });
 
 },{}],4:[function(require,module,exports){
-var BaseView = require('../FieldBaseView');
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function(){
     window._kbLink = this;
@@ -109,4 +109,4 @@ module.exports = BaseView.extend({
       wpLink.htmlUpdate = window.kb_restore_htmlUpdate;
   }
 });
-},{"../FieldBaseView":3}]},{},[1]);
+},{"../FieldControlBaseView":3}]},{},[1]);

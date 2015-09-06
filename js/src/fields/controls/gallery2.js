@@ -1,4 +1,4 @@
-var BaseView = require('fields/FieldBaseView');
+var BaseView = require('fields/FieldControlBaseView');
 var Gallery2Controller = require('./gallery2/Gallery2Controller');
 module.exports = BaseView.extend({
   initialize: function () {

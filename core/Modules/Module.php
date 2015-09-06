@@ -74,6 +74,7 @@ abstract class Module
         if (filter_var( $this->properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->viewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
+
         $this->setupFields();
 
     }

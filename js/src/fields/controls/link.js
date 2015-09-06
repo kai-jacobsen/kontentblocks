@@ -1,4 +1,4 @@
-var BaseView = require('../FieldBaseView');
+var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function(){
     window._kbLink = this;

@@ -1,4 +1,4 @@
-KB.Fields.register('Fonticonpicker', (function ($) {
+KB.Fields.registerObject('Fonticonpicker', (function ($) {
   return {
     init: function () {
       $('.kb-fonticonpicker').fontIconPicker({

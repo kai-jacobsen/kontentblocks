@@ -6,10 +6,15 @@ var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var UI = require('common/UI');
 var Payload = require('common/Payload');
+var I18n = require('common/I18n');
+
 module.exports = BaseView.extend({
   className: 'kb-duplicate block-menu-icon',
   events: {
     'click': 'duplicateModule'
+  },
+  attributes: {
+    "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.duplicate')
   },
   duplicateModule: function () {
     Ajax.send({

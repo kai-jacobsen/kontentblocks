@@ -359,15 +359,25 @@ var Ui = {
     });
   },
   initTipsy: function () {
-    jQuery('[data-tipsy]').tipsy(
-      {
-        title: function () {
-          return this.getAttribute('data-tipsy');
+
+    jQuery('body').on('mouseenter', '[data-kbtooltip]', function(e){
+      jQuery(this).qtip({
+        content: {
+          attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content
         },
-        gravity: $.fn.tipsy.autoNS,
-        live: true
-      }
-    );
+        style: 'qtip-dark qtip-shadow',
+        show: {
+
+          event: e.type, // Show on mouse over by default
+          effect: true, // Use default 90ms fade effect
+          delay: 180, // 90ms delay before showing
+          solo: true, // Do not hide others when showing
+          ready: true // Do not show immediately
+        }
+      });
+    });
+
+
   },
   metaBoxReorder: function (e, o, settings, action) {
     if (settings.data) {

@@ -11,14 +11,14 @@ module.exports = Backbone.View.extend({
   },
   initialize: function (options) {
     this.options = options;
-    this.FieldView = options.FieldView;
+    this.FieldControlView = options.FieldControlView;
     this.controls = options.controls || [];
     this.hidden = false;
     this.listenTo(this.model, 'field.model.dirty', this.getDirty);
     this.listenTo(this.model, 'field.model.clean', this.getClean);
-    this.listenTo(this.FieldView, 'field.view.derender', this.derender);
-    this.listenTo(this.FieldView, 'field.view.rerender', this.rerender);
-    this.listenTo(this.FieldView, 'field.view.gone', this.derender);
+    this.listenTo(this.FieldControlView, 'field.view.derender', this.derender);
+    this.listenTo(this.FieldControlView, 'field.view.rerender', this.rerender);
+    this.listenTo(this.FieldControlView, 'field.view.gone', this.derender);
     this.create();
   },
   create: function () {
@@ -45,7 +45,7 @@ module.exports = Backbone.View.extend({
     var tether = this.options.tether || {};
     var settings = {
       element: this.$el,
-      target: this.FieldView.$el,
+      target: this.FieldControlView.$el,
       attachment: 'center right',
       targetAttachment: 'center right'
     };
@@ -70,7 +70,7 @@ module.exports = Backbone.View.extend({
   },
   getTetherDefaults: function () {
     var att = this.el;
-    var target = this.FieldView.el;
+    var target = this.FieldControlView.el;
     return _.defaults(tether, {
       element: att,
       target: target,

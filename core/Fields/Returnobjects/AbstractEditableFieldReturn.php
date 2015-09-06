@@ -74,7 +74,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      */
     public function __construct( $value, $field )
     {
-//        $this->Registry = Kontentblocks::getService( 'registry.fields' );
         $this->setValue( $value );
         $this->setupFromField( $field );
         $this->uniqueId = $field->createUID();
@@ -87,21 +86,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      */
     private function setupFromField( $field )
     {
-        if (is_array( $field )) {
-
-            /** @var \Kontentblocks\Fields\FieldRegistry $registry */
-            $registry = Kontentblocks::getService( 'registry.fields' );
-            $dummy = $registry->getField( $field['type'], $field['mid'], $field['arrayKey'], $field['key'] );
-            $dummy->setArgs(
-                array(
-                    'arrayKey' => $field['arrayKey'],
-                    'index' => ( $field['index'] ) ? $field['index'] : null
-                )
-            );
-            $dummy->setValue( $this->getValue() );
-            $field = $this->field = $dummy;
-
-        }
 
         if (is_object( $field )) {
             $this->moduleId = $field->getFieldId();
@@ -110,7 +94,6 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
             $this->index = $field->getArg( 'index' );
             $this->field = $field;
         }
-        // @TODO Input Validation and error handling
 
     }
 

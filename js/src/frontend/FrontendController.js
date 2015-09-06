@@ -11,7 +11,7 @@ KB.currentArea = {};
 var ViewsCollection = require('shared/ViewsCollection');
 var EditModalModules = require('frontend/Views/EditModalModules');
 var SidebarView = require('frontend/Views/Sidebar');
-var FieldConfigsCollection = require('fields/FieldsConfigsCollection');
+var FieldConfigsCollection = require('fields/FieldControlsCollection');
 var Payload = require('common/Payload');
 var ModuleCollection = require('frontend/Collections/ModuleCollection');
 var ObjectProxy = require('frontend/Collections/ObjectProxyCollection');
@@ -127,8 +127,8 @@ KB.App = function () {
     /*
      * payload.Fields collection
      */
-    KB.FieldConfigs = new FieldConfigsCollection();
-    KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
+    KB.FieldControls = new FieldConfigsCollection();
+    KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
     // get the UI on track
     Ui.init();
 

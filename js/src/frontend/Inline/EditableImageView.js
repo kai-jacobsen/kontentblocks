@@ -16,7 +16,7 @@ var EditableImage = Backbone.View.extend({
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
 
     this.Toolbar = new Toolbar({
-      FieldView: this,
+      FieldControlView: this,
       model: this.model,
       controls: [
         new ModuleControl({

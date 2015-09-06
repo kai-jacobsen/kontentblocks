@@ -14,7 +14,7 @@ var EditableText = Backbone.View.extend({
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
     this.Toolbar = new Toolbar({
-      FieldView: this,
+      FieldControlView: this,
       model: this.model,
       controls: [
         new ModuleControl({

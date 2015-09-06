@@ -506,7 +506,7 @@ module.exports = {
     };
 
     if (json && json.Fields) {
-      ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
+      ret.Fields = KB.FieldControls.add(_.toArray(json.Fields));
     }
     return ret;
   },
@@ -1105,15 +1105,25 @@ var Ui = {
     });
   },
   initTipsy: function () {
-    jQuery('[data-tipsy]').tipsy(
-      {
-        title: function () {
-          return this.getAttribute('data-tipsy');
+
+    jQuery('body').on('mouseenter', '[data-kbtooltip]', function(e){
+      jQuery(this).qtip({
+        content: {
+          attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content
         },
-        gravity: $.fn.tipsy.autoNS,
-        live: true
-      }
-    );
+        style: 'qtip-dark qtip-shadow',
+        show: {
+
+          event: e.type, // Show on mouse over by default
+          effect: true, // Use default 90ms fade effect
+          delay: 180, // 90ms delay before showing
+          solo: true, // Do not hide others when showing
+          ready: true // Do not show immediately
+        }
+      });
+    });
+
+
   },
   metaBoxReorder: function (e, o, settings, action) {
     if (settings.data) {
@@ -1213,7 +1223,6 @@ var Utilities = function ($) {
 }(jQuery);
 module.exports = Utilities;
 },{}],18:[function(require,module,exports){
-//KB.Backbone.Common.FieldConfigModel
 var Checks = require('common/Checks');
 var Utilities = require('common/Utilities');
 var Payload = require('common/Payload');
@@ -1222,7 +1231,7 @@ var Logger = require('common/Logger');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
-    this.cleanUp();
+    this.cleanUp(); //remove self from linked fields
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
       this.set('ModuleModel', this.ModuleModel); // assign the parent object model
@@ -1233,7 +1242,7 @@ module.exports = Backbone.Model.extend({
     }
   },
   /*
-    remove self from linked fields
+   remove self from linked fields
    */
   cleanUp: function () {
     var links = this.get('linkedFields') || {};
@@ -1253,15 +1262,16 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
   },
   setupType: function () {
-    if (obj = this.getType()) { // obj equals specific field view
-      this.FieldView = new obj({ // create new field view if it does not exist
+    var view;
+    if (view = this.getType()) { // obj equals specific field view
+      this.FieldControlView = new view({ // create new field view
         el: this.getElement(), // get the root DOM element for this field
         model: this
       });
     }
   },
   updateLinkedFields: function (fieldSettings) {
-    if (fieldSettings.linkedFields){
+    if (fieldSettings.linkedFields) {
       this.set('linkedFields', fieldSettings.linkedFields);
       this.cleanUp();
     }
@@ -1276,9 +1286,9 @@ module.exports = Backbone.Model.extend({
     }
 
     // get the view object from KB.Fields collection
-    var obj = KB.Fields.get(type);
-    if (obj && obj.prototype.hasOwnProperty('initialize')) {
-      return obj;
+    var control = KB.Fields.get(type);
+    if (control && control.prototype.hasOwnProperty('initialize')) {
+      return control;
     } else {
       return false;
     }
@@ -1313,31 +1323,35 @@ module.exports = Backbone.Model.extend({
       ModuleModel.View.getDirty();
     }
   },
+  /**
+   * A linked field was updated
+   * @param model
+   */
   externalUpdate: function (model) {
-    this.FieldView.synchronize(model);
+    this.FieldControlView.synchronize(model);
   },
   remove: function () {
     this.stopListening();
-    KB.FieldConfigs.remove(this);
+    KB.FieldControls.remove(this);
   },
   rebind: function () {
     var that = this;
-    _.defer(function(){
+    _.defer(function () {
       if (_.isUndefined(that.getElement())) {
-        _.defer(_.bind(that.FieldView.gone, that.FieldView));
+        _.defer(_.bind(that.FieldControlView.gone, that.FieldControlView));
       }
-      else if (that.FieldView) {
-        that.FieldView.setElement(that.getElement()); // markup might have changed, reset the root element
-        _.defer(_.bind(that.FieldView.rerender, that.FieldView)); // call rerender on the field
+      else if (that.FieldControlView) {
+        that.FieldControlView.setElement(that.getElement()); // markup might have changed, reset the root element
+        _.defer(_.bind(that.FieldControlView.rerender, that.FieldControlView)); // call rerender on the field
       }
-    },true);
+    }, true);
   },
   unbind: function () {
-    if (this.FieldView && this.FieldView.derender) {
-      this.FieldView.derender(); // call derender
+    if (this.FieldControlView && this.FieldControlView.derender) {
+      this.FieldControlView.derender(); // call derender
     }
   },
-  sync: function(context){
+  sync: function (context) {
     var that = this;
     KB.Events.trigger('field.before.sync', this.model);
 
@@ -1372,9 +1386,9 @@ module.exports = Backbone.Model.extend({
   }
 });
 },{"common/Checks":9,"common/Config":10,"common/Logger":11,"common/Payload":13,"common/Utilities":17}],19:[function(require,module,exports){
-//KB.Backbone.Common.FieldConfigModelModal
-var FieldConfigModel = require('./FieldConfigModel');
-module.exports = FieldConfigModel.extend({
+//KB.Backbone.Common.FieldControlModelModal
+var FieldControlModel = require('./FieldControlModel');
+module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
@@ -1382,18 +1396,18 @@ module.exports = FieldConfigModel.extend({
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
   rebind: function () {
-    if (this.FieldView) {
-      this.FieldView.setElement(this.getElement());
-      this.FieldView.rerender();
+    if (this.FieldControlView) {
+      this.FieldControlView.setElement(this.getElement());
+      this.FieldControlView.rerender();
     }
   },
   getElement: function () {
     return jQuery('*[data-kbfuid="' + this.get('uid') + '"]');
   }
 });
-},{"./FieldConfigModel":18}],20:[function(require,module,exports){
+},{"./FieldControlModel":18}],20:[function(require,module,exports){
 //KB.Backbone.Common.FieldConfigsCollection
-var FieldConfigModel = require('./FieldConfigModel');
+var FieldControlModel = require('./FieldControlModel');
 module.exports = Backbone.Collection.extend({
   initialize: function () {
     this._byModule = {};
@@ -1401,7 +1415,7 @@ module.exports = Backbone.Collection.extend({
     this.listenTo(this, 'add', this.addToModules);
     this.listenTo(this, 'add', this.bindLinkedFields);
   },
-  model: FieldConfigModel,
+  model: FieldControlModel,
   addToModules: function (model) {
     if (model.ModuleModel) {
       var cid = model.ModuleModel.id;
@@ -1418,9 +1432,7 @@ module.exports = Backbone.Collection.extend({
     return {};
   },
   bindLinkedFields: function(model){
-
     var lf = model.get('linkedFields');
-
     _.each(lf, function(val, fid){
       if (_.isNull(val)){
         var xModel = this.get(fid);
@@ -1433,27 +1445,6 @@ module.exports = Backbone.Collection.extend({
     },this);
 
   },
-  //bindLinkedFields: function (model) {
-  //  _.each(this.models, function (m) {
-  //    var links = m.get('linkedFields') || {};
-  //    var uid = model.get('uid');
-  //    if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
-  //      links[uid] = model;
-  //      model.listenTo(m, 'external.change', model.externalUpdate);
-  //    }
-  //  });
-  //
-  //  var newLinks = model.get('linkedFields');
-  //
-  //  if (newLinks) {
-  //    _.each(newLinks, function (newLink, i) {
-  //      if ( this.get(i)){
-  //        var m2 = this.get(i);
-  //        newLinks[i] = m2;
-  //      }
-  //    }, this);
-  //  }
-  //},
   updateModels: function (data) {
     if (data) {
       _.each(data, function (field) {
@@ -1467,7 +1458,7 @@ module.exports = Backbone.Collection.extend({
     }
   }
 });
-},{"./FieldConfigModel":18}],21:[function(require,module,exports){
+},{"./FieldControlModel":18}],21:[function(require,module,exports){
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
 module.exports = {
@@ -1509,11 +1500,11 @@ module.exports = {
 };
 
 },{"common/Config":10,"common/Utilities":17}],22:[function(require,module,exports){
-var FieldConfigModelModal = require('fields/FieldConfigModelModal');
+var FieldControlModelModal = require('fields/FieldControlModelModal');
 module.exports = Backbone.Collection.extend({
-  model: FieldConfigModelModal
+  model: FieldControlModelModal
 });
-},{"fields/FieldConfigModelModal":19}],23:[function(require,module,exports){
+},{"fields/FieldControlModelModal":19}],23:[function(require,module,exports){
 module.exports = Backbone.Collection.extend({
 
   filterByAttr: function(attr, value){
@@ -1551,7 +1542,7 @@ KB.currentArea = {};
 var ViewsCollection = require('shared/ViewsCollection');
 var EditModalModules = require('frontend/Views/EditModalModules');
 var SidebarView = require('frontend/Views/Sidebar');
-var FieldConfigsCollection = require('fields/FieldsConfigsCollection');
+var FieldConfigsCollection = require('fields/FieldControlsCollection');
 var Payload = require('common/Payload');
 var ModuleCollection = require('frontend/Collections/ModuleCollection');
 var ObjectProxy = require('frontend/Collections/ObjectProxyCollection');
@@ -1667,8 +1658,8 @@ KB.App = function () {
     /*
      * payload.Fields collection
      */
-    KB.FieldConfigs = new FieldConfigsCollection();
-    KB.FieldConfigs.add(_.toArray(Payload.getPayload('Fields')));
+    KB.FieldControls = new FieldConfigsCollection();
+    KB.FieldControls.add(_.toArray(Payload.getPayload('Fields')));
     // get the UI on track
     Ui.init();
 
@@ -1833,7 +1824,7 @@ jQuery(document).ready(function () {
 
 });
 
-},{"./GlobalEvents":26,"./InlineSetup":35,"./Views/AreaView":41,"./Views/ModuleView":51,"./Views/PanelView":52,"common/Checks":9,"common/Logger":11,"common/Payload":13,"common/UI":16,"fields/FieldsConfigsCollection":20,"frontend/AdminBar":21,"frontend/Collections/ModuleCollection":23,"frontend/Collections/ObjectProxyCollection":24,"frontend/Models/AreaModel":36,"frontend/Models/ModuleModel":37,"frontend/Models/PanelModel":38,"frontend/Views/ChangeObserver":42,"frontend/Views/EditModalModules":43,"frontend/Views/Sidebar":53,"shared/ViewsCollection":74,"tether":109}],26:[function(require,module,exports){
+},{"./GlobalEvents":26,"./InlineSetup":35,"./Views/AreaView":41,"./Views/ModuleView":51,"./Views/PanelView":52,"common/Checks":9,"common/Logger":11,"common/Payload":13,"common/UI":16,"fields/FieldControlsCollection":20,"frontend/AdminBar":21,"frontend/Collections/ModuleCollection":23,"frontend/Collections/ObjectProxyCollection":24,"frontend/Models/AreaModel":36,"frontend/Models/ModuleModel":37,"frontend/Models/PanelModel":38,"frontend/Views/ChangeObserver":42,"frontend/Views/EditModalModules":43,"frontend/Views/Sidebar":53,"shared/ViewsCollection":74,"tether":109}],26:[function(require,module,exports){
 var Logger = require('common/Logger');
 KB.Events.on('module.before.sync panel.before.sync', function(Model){
   if (window.tinymce){
@@ -1869,7 +1860,7 @@ var EditableImage = Backbone.View.extend({
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
 
     this.Toolbar = new Toolbar({
-      FieldView: this,
+      FieldControlView: this,
       model: this.model,
       controls: [
         new ModuleControl({
@@ -2114,7 +2105,7 @@ var EditableLink = Backbone.View.extend({
     this.parentView = this.model.get('ModuleModel').View;
     this.setupDefaults();
     this.Toolbar = new Toolbar({
-      FieldView: this,
+      FieldControlView: this,
       model: this.model,
       controls: [
         new ModuleControl({
@@ -2252,7 +2243,7 @@ var EditableText = Backbone.View.extend({
     this.listenTo(KB.Events, 'editcontrols.show', this.showPlaceholder);
     this.listenTo(KB.Events, 'editcontrols.hide', this.removePlaceholder);
     this.Toolbar = new Toolbar({
-      FieldView: this,
+      FieldControlView: this,
       model: this.model,
       controls: [
         new ModuleControl({
@@ -2569,14 +2560,14 @@ module.exports = Backbone.View.extend({
   },
   initialize: function (options) {
     this.options = options;
-    this.FieldView = options.FieldView;
+    this.FieldControlView = options.FieldControlView;
     this.controls = options.controls || [];
     this.hidden = false;
     this.listenTo(this.model, 'field.model.dirty', this.getDirty);
     this.listenTo(this.model, 'field.model.clean', this.getClean);
-    this.listenTo(this.FieldView, 'field.view.derender', this.derender);
-    this.listenTo(this.FieldView, 'field.view.rerender', this.rerender);
-    this.listenTo(this.FieldView, 'field.view.gone', this.derender);
+    this.listenTo(this.FieldControlView, 'field.view.derender', this.derender);
+    this.listenTo(this.FieldControlView, 'field.view.rerender', this.rerender);
+    this.listenTo(this.FieldControlView, 'field.view.gone', this.derender);
     this.create();
   },
   create: function () {
@@ -2603,7 +2594,7 @@ module.exports = Backbone.View.extend({
     var tether = this.options.tether || {};
     var settings = {
       element: this.$el,
-      target: this.FieldView.$el,
+      target: this.FieldControlView.$el,
       attachment: 'center right',
       targetAttachment: 'center right'
     };
@@ -2628,7 +2619,7 @@ module.exports = Backbone.View.extend({
   },
   getTetherDefaults: function () {
     var att = this.el;
-    var target = this.FieldView.el;
+    var target = this.FieldControlView.el;
     return _.defaults(tether, {
       element: att,
       target: target,
@@ -2665,13 +2656,13 @@ module.exports = Backbone.View.extend({
   mouseenter: function () {
     this.Parent.$el.addClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.addClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.addClass('kb-field--outline-link');
     })
   },
   mouseleave: function(){
     this.Parent.$el.removeClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.removeClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.removeClass('kb-field--outline-link');
     })
   }
 });
@@ -2704,13 +2695,13 @@ module.exports = Backbone.View.extend({
   mouseenter: function () {
     this.Parent.$el.addClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.addClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.addClass('kb-field--outline-link');
     })
   },
   mouseleave: function(){
     this.Parent.$el.removeClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.removeClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.removeClass('kb-field--outline-link');
     })
   }
 });
@@ -2742,13 +2733,13 @@ module.exports = Backbone.View.extend({
   mouseenter: function () {
     this.Parent.$el.addClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.addClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.addClass('kb-field--outline-link');
     })
   },
   mouseleave: function(){
     this.Parent.$el.removeClass('kb-field--outline');
     _.each(this.model.get('linkedFields'), function(linkedModel){
-      linkedModel.FieldView.$el.removeClass('kb-field--outline-link');
+      linkedModel.FieldControlView.$el.removeClass('kb-field--outline-link');
     })
   }
 });
@@ -3885,7 +3876,7 @@ module.exports = Backbone.View.extend({
     }
 
     if (res.data.json && res.data.json.Fields){
-      KB.FieldConfigs.updateModels(res.data.json.Fields);
+      KB.FieldControls.updateModels(res.data.json.Fields);
     }
 
 

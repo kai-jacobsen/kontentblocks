@@ -6,14 +6,16 @@ var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 var UI = require('common/UI');
 var Payload = require('common/Payload');
-module.exports = BaseView.extend({
+var I18n = require('common/I18n');
+ module.exports = BaseView.extend({
   initialize: function (options) {
     this.options = options || {};
     this.parentView = options.parent;
-
     this.listenTo(this.parentView, 'kb::module.input.changed', this.getDirty);
     this.listenTo(this.parentView, 'kb::module.data.updated', this.getClean);
-
+  },
+  attributes: {
+    "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.save')
   },
   className: 'kb-save block-menu-icon',
   events: {

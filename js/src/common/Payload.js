@@ -57,7 +57,7 @@ module.exports = {
     };
 
     if (json && json.Fields) {
-      ret.Fields = KB.FieldConfigs.add(_.toArray(json.Fields));
+      ret.Fields = KB.FieldControls.add(_.toArray(json.Fields));
     }
     return ret;
   },

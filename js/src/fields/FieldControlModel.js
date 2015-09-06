@@ -1,4 +1,3 @@
-//KB.Backbone.Common.FieldConfigModel
 var Checks = require('common/Checks');
 var Utilities = require('common/Utilities');
 var Payload = require('common/Payload');
@@ -7,7 +6,7 @@ var Logger = require('common/Logger');
 module.exports = Backbone.Model.extend({
   idAttribute: "uid",
   initialize: function () {
-    this.cleanUp();
+    this.cleanUp(); //remove self from linked fields
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)
     if (module && (this.ModuleModel = KB.ObjectProxy.get(module)) && this.getType()) { // if object exists and this field type is valid
       this.set('ModuleModel', this.ModuleModel); // assign the parent object model
@@ -18,7 +17,7 @@ module.exports = Backbone.Model.extend({
     }
   },
   /*
-    remove self from linked fields
+   remove self from linked fields
    */
   cleanUp: function () {
     var links = this.get('linkedFields') || {};
@@ -38,15 +37,16 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this.ModuleModel, 'after.change.area', this.rebind); // parent obj was dragged to new area, reattach handlers
   },
   setupType: function () {
-    if (obj = this.getType()) { // obj equals specific field view
-      this.FieldView = new obj({ // create new field view if it does not exist
+    var view;
+    if (view = this.getType()) { // obj equals specific field view
+      this.FieldControlView = new view({ // create new field view
         el: this.getElement(), // get the root DOM element for this field
         model: this
       });
     }
   },
   updateLinkedFields: function (fieldSettings) {
-    if (fieldSettings.linkedFields){
+    if (fieldSettings.linkedFields) {
       this.set('linkedFields', fieldSettings.linkedFields);
       this.cleanUp();
     }
@@ -61,9 +61,9 @@ module.exports = Backbone.Model.extend({
     }
 
     // get the view object from KB.Fields collection
-    var obj = KB.Fields.get(type);
-    if (obj && obj.prototype.hasOwnProperty('initialize')) {
-      return obj;
+    var control = KB.Fields.get(type);
+    if (control && control.prototype.hasOwnProperty('initialize')) {
+      return control;
     } else {
       return false;
     }
@@ -98,31 +98,35 @@ module.exports = Backbone.Model.extend({
       ModuleModel.View.getDirty();
     }
   },
+  /**
+   * A linked field was updated
+   * @param model
+   */
   externalUpdate: function (model) {
-    this.FieldView.synchronize(model);
+    this.FieldControlView.synchronize(model);
   },
   remove: function () {
     this.stopListening();
-    KB.FieldConfigs.remove(this);
+    KB.FieldControls.remove(this);
   },
   rebind: function () {
     var that = this;
-    _.defer(function(){
+    _.defer(function () {
       if (_.isUndefined(that.getElement())) {
-        _.defer(_.bind(that.FieldView.gone, that.FieldView));
+        _.defer(_.bind(that.FieldControlView.gone, that.FieldControlView));
       }
-      else if (that.FieldView) {
-        that.FieldView.setElement(that.getElement()); // markup might have changed, reset the root element
-        _.defer(_.bind(that.FieldView.rerender, that.FieldView)); // call rerender on the field
+      else if (that.FieldControlView) {
+        that.FieldControlView.setElement(that.getElement()); // markup might have changed, reset the root element
+        _.defer(_.bind(that.FieldControlView.rerender, that.FieldControlView)); // call rerender on the field
       }
-    },true);
+    }, true);
   },
   unbind: function () {
-    if (this.FieldView && this.FieldView.derender) {
-      this.FieldView.derender(); // call derender
+    if (this.FieldControlView && this.FieldControlView.derender) {
+      this.FieldControlView.derender(); // call derender
     }
   },
-  sync: function(context){
+  sync: function (context) {
     var that = this;
     KB.Events.trigger('field.before.sync', this.model);
 

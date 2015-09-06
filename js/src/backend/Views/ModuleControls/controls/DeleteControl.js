@@ -7,9 +7,14 @@ var Config = require('common/Config');
 var TinyMCE = require('common/TinyMCE');
 var Window = require('common/Window');
 var BatchDeleteController = require('shared/BatchDelete/BatchDeleteController');
+var I18n = require('common/I18n');
+
 module.exports = BaseView.extend({
   marked: false,
   className: 'kb-delete block-menu-icon',
+  attributes: {
+    "data-kbtooltip": I18n.getString('Modules.controls.be.tooltips.delete')
+  },
   initialize: function () {
     _.bindAll(this, "yes", "no");
   },
@@ -39,12 +44,8 @@ module.exports = BaseView.extend({
     this.marked = false;
   },
   isValid: function () {
-    if (!this.model.get('predefined') && !this.model.get('disabled') &&
-      Checks.userCan('delete_kontentblocks')) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!(!this.model.get('predefined') && !this.model.get('disabled') &&
+    Checks.userCan('delete_kontentblocks'));
   },
   yes: function () {
     Ajax.send({

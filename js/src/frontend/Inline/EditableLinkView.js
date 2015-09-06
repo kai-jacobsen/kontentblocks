@@ -9,7 +9,7 @@ var EditableLink = Backbone.View.extend({
     this.parentView = this.model.get('ModuleModel').View;
     this.setupDefaults();
     this.Toolbar = new Toolbar({
-      FieldView: this,
+      FieldControlView: this,
       model: this.model,
       controls: [
         new ModuleControl({

@@ -5,6 +5,9 @@ module.exports = BaseView.extend({
   initialize: function (options) {
     this.options = options || {};
   },
+  attributes: {
+    "data-kbtooltip": 'move to sort'
+  },
   className: 'ui-move kb-move block-menu-icon',
   isValid: function () {
     if (!this.model.get('settings').disabled &&

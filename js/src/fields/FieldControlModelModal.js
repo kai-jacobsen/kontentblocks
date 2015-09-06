@@ -1,6 +1,6 @@
-//KB.Backbone.Common.FieldConfigModelModal
-var FieldConfigModel = require('./FieldConfigModel');
-module.exports = FieldConfigModel.extend({
+//KB.Backbone.Common.FieldControlModelModal
+var FieldControlModel = require('./FieldControlModel');
+module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
     this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
@@ -8,9 +8,9 @@ module.exports = FieldConfigModel.extend({
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
   rebind: function () {
-    if (this.FieldView) {
-      this.FieldView.setElement(this.getElement());
-      this.FieldView.rerender();
+    if (this.FieldControlView) {
+      this.FieldControlView.setElement(this.getElement());
+      this.FieldControlView.rerender();
     }
   },
   getElement: function () {

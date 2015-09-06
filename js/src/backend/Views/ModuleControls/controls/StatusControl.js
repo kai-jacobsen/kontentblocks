@@ -4,6 +4,7 @@ var Checks = require('common/Checks');
 var Config = require('common/Config');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
+var I18n = require('common/I18n');
 module.exports = BaseView.extend({
   initialize: function (options) {
     this.options = options || {};
@@ -12,8 +13,18 @@ module.exports = BaseView.extend({
   events: {
     'click': 'changeStatus'
   },
+  attributes: function () {
+    if (this.model.get('state').active) {
+      return {
+        'data-kbtooltip': I18n.getString('Modules.controls.be.tooltips.status.off')
+      }
+    } else {
+      return {
+        'data-kbtooltip': I18n.getString('Modules.controls.be.tooltips.status.on')
+      }
+    }
+  },
   changeStatus: function () {
-
     Ajax.send({
       action: 'changeModuleStatus',
       module: this.model.get('mid'),
@@ -30,6 +41,16 @@ module.exports = BaseView.extend({
     }
   },
   success: function () {
+    var state = this.model.get('state');
+
+    state.active = !state.active;
+    this.model.set('state', state);
+    if (state.active) {
+      this.$el.attr('data-kbtooltip', I18n.getString('Modules.controls.be.tooltips.status.off'));
+    } else {
+      this.$el.attr('data-kbtooltip', I18n.getString('Modules.controls.be.tooltips.status.on'));
+    }
+
     this.options.parent.$head.toggleClass('module-inactive');
     this.options.parent.$el.toggleClass('activated deactivated');
     Notice.notice('Status changed', 'success');

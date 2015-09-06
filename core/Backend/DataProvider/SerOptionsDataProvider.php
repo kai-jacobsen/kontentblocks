@@ -122,4 +122,9 @@ class SerOptionsDataProvider implements DataProviderInterface
         update_option( $this->storageId, $this->data );
         return $this;
     }
+
+    public function getAll()
+    {
+       return $this->data;
+    }
 }

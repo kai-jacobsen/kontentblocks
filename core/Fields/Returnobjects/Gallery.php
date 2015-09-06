@@ -2,6 +2,11 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
+
+/**
+ * Class Gallery
+ * @package Kontentblocks\Fields\Returnobjects
+ */
 class Gallery
 {
 
@@ -11,11 +16,13 @@ class Gallery
 
     public $images = array();
 
-    public function __construct( $value, $Field )
+    /**
+     * @param $value
+     * @param $field
+     */
+    public function __construct( $value, $field )
     {
-
-
-        $this->field = $Field;
+        $this->field = $field;
         $this->value = $value;
 
         if (isset( $value['images'] ) && is_array( $value['images'] )) {
@@ -28,23 +35,20 @@ class Gallery
      */
     private function setupMediaElements()
     {
-        foreach ($this->value['images'] as $k => $element) {
-            if (isset( $element['id'] ) && !empty( $element['id'] )) {
-//				array_push($this->images, new Utilities\ImageObject( $element['file'] ));
+        foreach ($this->value['images'] as $k => $attId) {
+            if (is_numeric( $attId )) {
                 $field = array(
                     'key' => $this->field->getKey() . '.images',
                     'arrayKey' => $this->field->getArg( 'arrayKey' ),
                     'index' => $k,
-                    'mid' => $this->field->getFieldId(),
+                    'baseId' => $this->field->getFieldId(),
                     'type' => 'image'
                 );
 
-                $Obj = new Image( $element, $field );
-                // inlineEdit is potentially possible for the image itself
-                // but associated data will not change accordingly
-                // this feature (js files) was removed
-                $Obj->inlineEdit( false );
-                array_push( $this->images, $Obj );
+
+                $editableReturn = new EditableImage( $attId, $field );
+                $editableReturn->inlineEdit( false );
+                array_push( $this->images, $editableReturn );
             }
         }
 

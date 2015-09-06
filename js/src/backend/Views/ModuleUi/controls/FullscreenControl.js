@@ -8,6 +8,9 @@ module.exports = BaseView.extend({
     this.$parent = this.model.View.$el;
     this.$body = jQuery('.kb-module__body', this.$parent);
   },
+  attributes: {
+    "data-kbtooltip": 'turn fullscreen mode on'
+  },
   events: {
       'click' : 'openFullscreen'
   },

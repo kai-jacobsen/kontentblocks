@@ -1,4 +1,4 @@
-var BaseView = require('../FieldBaseView');
+var BaseView = require('../FieldControlBaseView');
 var FlexfieldController = require('fields/controls/flexfields/FlexfieldsController');
 module.exports = BaseView.extend({
   initialize: function () {

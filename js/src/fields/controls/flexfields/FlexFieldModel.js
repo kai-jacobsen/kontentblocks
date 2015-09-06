@@ -1,5 +1,5 @@
-var FieldConfigModel = require('fields/FieldConfigModelModal');
-module.exports = FieldConfigModel.extend({
+var FieldControlModel = require('fields/FieldControlModelModal');
+module.exports = FieldControlModel.extend({
   initialize: function(){
     this.cleanUp();
     var module = this.get('fieldId'); // fieldId equals baseId equals the parent object id (Panel or Module)

@@ -1,5 +1,5 @@
 //KB.Backbone.Common.FieldConfigsCollection
-var FieldConfigModel = require('./FieldConfigModel');
+var FieldControlModel = require('./FieldControlModel');
 module.exports = Backbone.Collection.extend({
   initialize: function () {
     this._byModule = {};
@@ -7,7 +7,7 @@ module.exports = Backbone.Collection.extend({
     this.listenTo(this, 'add', this.addToModules);
     this.listenTo(this, 'add', this.bindLinkedFields);
   },
-  model: FieldConfigModel,
+  model: FieldControlModel,
   addToModules: function (model) {
     if (model.ModuleModel) {
       var cid = model.ModuleModel.id;
@@ -24,9 +24,7 @@ module.exports = Backbone.Collection.extend({
     return {};
   },
   bindLinkedFields: function(model){
-
     var lf = model.get('linkedFields');
-
     _.each(lf, function(val, fid){
       if (_.isNull(val)){
         var xModel = this.get(fid);
@@ -39,27 +37,6 @@ module.exports = Backbone.Collection.extend({
     },this);
 
   },
-  //bindLinkedFields: function (model) {
-  //  _.each(this.models, function (m) {
-  //    var links = m.get('linkedFields') || {};
-  //    var uid = model.get('uid');
-  //    if (links.hasOwnProperty(uid) && _.isNull(links[uid])) {
-  //      links[uid] = model;
-  //      model.listenTo(m, 'external.change', model.externalUpdate);
-  //    }
-  //  });
-  //
-  //  var newLinks = model.get('linkedFields');
-  //
-  //  if (newLinks) {
-  //    _.each(newLinks, function (newLink, i) {
-  //      if ( this.get(i)){
-  //        var m2 = this.get(i);
-  //        newLinks[i] = m2;
-  //      }
-  //    }, this);
-  //  }
-  //},
   updateModels: function (data) {
     if (data) {
       _.each(data, function (field) {

@@ -12,6 +12,8 @@ interface DataProviderInterface
 
     public function get( $key );
 
+    public function getAll();
+
     public function update( $key, $value );
 
     public function add( $key, $value );

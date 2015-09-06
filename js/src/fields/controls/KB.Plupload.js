@@ -1,4 +1,4 @@
-KB.Fields.register('Plupload', (function ($) {
+KB.Fields.registerObject('Plupload', (function ($) {
   return {
   init: function (modalView) {
     if (!wp || !wp.media) {

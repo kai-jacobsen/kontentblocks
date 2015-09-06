@@ -24,13 +24,11 @@ use Reframe\Kontentblocks\Kontentblocks;
 class ModuleFieldController extends AbstractFieldController
 {
     public $module;
-
+    public $structure;
     /**
      * @var \Kontentblocks\Fields\FieldRendererTabs
      */
     protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
-
-    public $structure;
 
     /**
      * Constructor

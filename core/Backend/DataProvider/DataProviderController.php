@@ -64,8 +64,8 @@ class DataProviderController implements DataProviderInterface
      */
     public function update( $key, $value )
     {
-        foreach ($this->listeners as $Listener) {
-            $Listener->update( $key, $value );
+        foreach ($this->listeners as $listener) {
+            $listener->update( $key, $value );
         }
         return $this->dataProvider->update( $key, $value );
     }
@@ -77,8 +77,8 @@ class DataProviderController implements DataProviderInterface
      */
     public function add( $key, $value )
     {
-        foreach ($this->listeners as $Listener) {
-            $Listener->add( $key, $value );
+        foreach ($this->listeners as $listener) {
+            $listener->add( $key, $value );
         }
         return $this->dataProvider->add( $key, $value );
     }
@@ -89,16 +89,16 @@ class DataProviderController implements DataProviderInterface
      */
     public function delete( $key )
     {
-        foreach ($this->listeners as $Listener) {
-            $Listener->delete( $key );
+        foreach ($this->listeners as $listener) {
+            $listener->delete( $key );
         }
         return $this->dataProvider->delete( $key );
     }
 
     public function reset()
     {
-        foreach ($this->listeners as $Listener) {
-            $Listener->reset();
+        foreach ($this->listeners as $listener) {
+            $listener->reset();
         }
         return $this->dataProvider->reset();
     }
