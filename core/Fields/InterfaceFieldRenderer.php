@@ -11,16 +11,9 @@ interface InterfaceFieldRenderer
 {
 
     /**
-     * Set field groups to the machine
-     * @param $structure
-     * @return mixed
-     */
-    public function setStructure( $structure );
-
-    /**
      * Render structure
      * @return mixed
      */
-    public function render( $data );
+    public function render( );
 
 }

@@ -12,16 +12,16 @@ class PanelFieldSection extends AbstractFieldSection
     /**
      * Constructor
      *
-     * @param string $id
+     * @param string $sectionId
      * @param $args
      * @param \Kontentblocks\Panels\AbstractPanel $panel
      *
      */
-    public function __construct( $id, $args, $panel )
+    public function __construct( $sectionId, $args, $panel )
     {
-        $this->id = $id;
+        $this->sectionId = $sectionId;
         $this->args = $this->prepareArgs( $args );
-        $this->module = $panel;
+        $this->entity = $panel;
         $this->baseId = $panel->getBaseId();
     }
 

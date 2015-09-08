@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Modules\Module;
 
 /**
@@ -18,32 +19,29 @@ use Kontentblocks\Modules\Module;
  * @package Fields
  * @since 0.1.0
  */
-class FieldSection extends AbstractFieldSection
+class ModuleFieldSection extends AbstractFieldSection
 {
 
     /**
      * Section id
      * @var string
      */
-    public $id;
+    public $sectionId;
 
 
     /**
      * Constructor
      *
-     * @param string $id
+     * @param string $sectionId
      * @param $args
      * @param Module $module
-     *
-     * @return \Kontentblocks\Fields\FieldSection
      */
-    public function __construct( $id, $args, $module, $baseid )
+    public function __construct( $sectionId, $args, Module $module )
     {
-
-        $this->id = $id;
+        $this->sectionId = $sectionId;
         $this->args = $this->prepareArgs( $args );
-        $this->module = $module;
-        $this->baseId = $baseid;
+        $this->entity = $module;
+        $this->baseId = $module->getId();
     }
 
     /**
@@ -56,13 +54,12 @@ class FieldSection extends AbstractFieldSection
      */
     public function markVisibility( Field $field )
     {
-
         $field->setDisplay( true );
-        $areaContext = $this->module->context->get( 'areaContext' );
-        $postType = $this->module->context->get( 'postType' );
-        $pageTemplate = $this->module->context->get( 'pageTemplate' );
-        if ($this->module->properties->getSetting( 'views' )) {
-            $moduleTemplate = $this->module->getViewfile();
+        $areaContext = $this->entity->context->get( 'areaContext' );
+        $postType = $this->entity->context->get( 'postType' );
+        $pageTemplate = $this->entity->context->get( 'pageTemplate' );
+        if ($this->entity->properties->getSetting( 'views' )) {
+            $moduleTemplate = $this->entity->getViewfile();
             if ($field->getCondition( 'viewfile' ) && !in_array(
                     $moduleTemplate,
                     (array) $field->getCondition( 'viewfile' )

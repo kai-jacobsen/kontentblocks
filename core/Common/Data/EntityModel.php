@@ -7,11 +7,15 @@ use JsonSerializable;
 
 
 /**
- * Class AbstractModel
+ * Class EntityModel
  * @package Kontentblocks\Common\Data
  */
-abstract class AbstractModel implements JsonSerializable, ArrayAccess
+abstract class EntityModel implements JsonSerializable, ArrayAccess
 {
+    /**
+     * @var string|int|bool
+     */
+    public $singleValue;
 
     /**
      * @var bool
@@ -29,11 +33,13 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
     /**
      * @param $data
      * @since 0.1.0
+     * @return $this
      */
     public function set( $data )
     {
-        if (!is_array( $data )) {
-            return;
+        if (!is_array( $data ) && !is_null($data)) {
+            $this->singleValue = $data;
+            return $this;
         }
 
         foreach ($data as $key => $v) {

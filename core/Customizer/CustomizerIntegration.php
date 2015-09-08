@@ -66,7 +66,7 @@ class CustomizerIntegration
 
     private function addSections()
     {
-        foreach ($this->fieldController->structure as $name => $section) {
+        foreach ($this->fieldController->sections as $name => $section) {
             $this->customizeManager->add_section(
                 $name,
                 array(

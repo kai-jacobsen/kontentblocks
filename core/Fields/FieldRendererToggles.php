@@ -76,17 +76,17 @@ class FieldRendererToggles implements InterfaceFieldRenderer
     }
 
     /**
-     * @var $section \Kontentblocks\Fields\FieldSection
+     * @var $section \Kontentblocks\Fields\ModuleFieldSection
      */
     public function renderTogglebox()
     {
         if ($this->length > 1) {
             $this->_before();
-            /** @var \Kontentblocks\Fields\FieldSection $section */
+            /** @var \Kontentblocks\Fields\ModuleFieldSection $section */
             foreach ($this->structure as $section) {
                 if ($section->getNumberOfVisibleFields() > 0) {
                     echo "<div class='kb-togglebox-header'><h3>{$section->getLabel()}</h3></div>";
-                    echo "<div class='kb-togglebox-box' id='toggle-{$section->getID()}'>";
+                    echo "<div class='kb-togglebox-box' id='toggle-{$section->getSectionId()}'>";
                     $section->render( $this->data );
                     echo "</div>";
                 }

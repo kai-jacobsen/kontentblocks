@@ -3,13 +3,13 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Common\Data\AbstractModel;
+use Kontentblocks\Common\Data\EntityModel;
 
 /**
  * Class PanelModel
  * @package Kontentblocks\Panels
  */
-abstract class PanelModel extends AbstractModel
+abstract class PanelModel extends EntityModel
 {
 
     private $panel;

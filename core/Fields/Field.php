@@ -45,6 +45,10 @@ abstract class Field implements Exportable
      */
     public $parentModuleId;
     /**
+     * @var FieldModel
+     */
+    public $model;
+    /**
      * Base id/key for the field
      * may get modified if a subkey is present
      * @var string
@@ -81,6 +85,9 @@ abstract class Field implements Exportable
      * @since 0.1.0
      */
     protected $path;
+    /**
+     * @var mixed
+     */
     protected $userValue;
     /**
      * @var \Kontentblocks\Modules\Module
@@ -325,8 +332,7 @@ abstract class Field implements Exportable
      */
     public function getValue( $arrKey = null, $return = '' )
     {
-        $data = $this->value;
-
+        $data = $this->model->export();
         if ($this->getCallback( 'get' )) {
             $data = call_user_func( $this->getCallback( 'get' ), $this->value );
         }
@@ -355,9 +361,12 @@ abstract class Field implements Exportable
     public function setValue( $data )
     {
         if (method_exists( $this, 'inputFilter' )) {
-            $this->value = $this->inputFilter( $data );
+            $data = $this->inputFilter( $data );
+        }
+        if (is_null( $this->model )) {
+            $this->model = new FieldModel( $data, $this );
         } else {
-            $this->value = $data;
+            $this->model->set( $data );
         }
     }
 
@@ -443,7 +452,6 @@ abstract class Field implements Exportable
      */
     public function build( $echo = true )
     {
-
         $this->uniqueId = $this->createUID();
         // handles the form output
         $formController = new FieldFormController( $this );
@@ -466,9 +474,8 @@ abstract class Field implements Exportable
         }
 
 
-
         if (is_null( $this->uniqueId )) {
-            $base = $this->baseId . $this->key . $state . $this->getArg('index','');
+            $base = $this->baseId . $this->key . $state . $this->getArg( 'index', '' );
             $this->uniqueId = 'kb-' . hash( 'crc32', $base );
         }
         return $this->uniqueId;
@@ -632,7 +639,7 @@ abstract class Field implements Exportable
             'type' => $this->type,
             'std' => $this->getArg( 'std', '' ),
             'args' => $this->cleanedArgs(),
-            'section' => $this->section->id
+            'section' => $this->section->sectionId
         );
     }
 
@@ -647,7 +654,7 @@ abstract class Field implements Exportable
             $integration->getSettingName( $this ),
             array(
                 'label' => $this->getArg( 'label' ),
-                'section' => $this->section->getID(),
+                'section' => $this->section->getSectionId(),
                 'type' => $this->type
             )
         );

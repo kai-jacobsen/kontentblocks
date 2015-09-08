@@ -4,12 +4,13 @@ namespace Kontentblocks\Panels;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Common\Traits\TraitSetupArgs;
+use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class StaticPanel
+ * Class PostPanel
  * @package Kontentblocks\Panels
  */
 abstract class PostPanel extends AbstractPanel
@@ -78,7 +79,7 @@ abstract class PostPanel extends AbstractPanel
         $this->setupArgs( $this->args );
         $this->environment = $environment;
         $this->model = new PostPanelModel( $environment->getDataProvider()->get( $this->baseId ), $this );
-        $this->fields = new PanelFieldController( $this->baseId, $this->model->export(), $this );
+        $this->fields = new PanelFieldController( $this );
         $this->fields();
     }
 
@@ -159,9 +160,9 @@ abstract class PostPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        return $this->fields->renderFields();
+        $renderer = new FieldRendererTabs( $this->fields );
+        return $renderer->render();
     }
-
     /**
      * Markup after
      */
@@ -260,7 +261,7 @@ abstract class PostPanel extends AbstractPanel
      */
     public function setupFieldData()
     {
-        $this->fields->setData( $this->model )->setup();
+        $this->fields->setModel( $this->model )->setup();
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey( $key );

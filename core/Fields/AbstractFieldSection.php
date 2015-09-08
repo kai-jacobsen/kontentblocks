@@ -4,6 +4,7 @@ namespace Kontentblocks\Fields;
 
 use Exception;
 use Kontentblocks\Common\Exportable;
+use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Kontentblocks;
 
 /**
@@ -14,24 +15,6 @@ abstract class AbstractFieldSection implements Exportable
 {
 
     /**
-     * Unique identifier
-     * @var string id unique identifier
-     */
-    public $id;
-
-    /**
-     * Array of registered fields for this section
-     * @var array
-     */
-    protected $fields;
-
-    /**
-     * Can be a module or a panel
-     * @var object
-     */
-    protected $module;
-
-    /**
      * Preset defaults
      * @var array
      */
@@ -39,30 +22,41 @@ abstract class AbstractFieldSection implements Exportable
         'label' => 'Fieldgroup',
         'title' => 'Fieldgrouptitle'
     );
-
+    /**
+     * Unique identifier
+     * @var string id unique identifier
+     */
+    public $sectionId;
     /**
      * Baseid, as passed to fields
      * @var string
      */
     public $baseId;
-
-    private $priorityCount = 10;
-
+    /**
+     * Array of registered fields for this section
+     * @var array
+     */
+    protected $fields;
+    /**
+     * Can be a module or a panel
+     * @var EntityInterface
+     */
+    protected $entity;
     /**
      * Counter for actual fields to render
      * @var int
      */
     protected $numberOfVisibleFields = 0;
-
     /**
      * Counter for total number of added fields in this section
      * @var int
      */
     protected $numberOfFields = 0;
-
-
-    abstract public function markVisibility( Field $Field );
-
+    /**
+     * ordering index
+     * @var int
+     */
+    private $priorityCount = 10;
 
     /**
      * Add a field definition to the group field collection
@@ -108,6 +102,19 @@ abstract class AbstractFieldSection implements Exportable
             } else {
                 $field->setArgs( $args );
                 $field->section = $this;
+
+                $data = $this->getEntityModel();
+                if (!is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' )) {
+                    if (isset( $data[$field->getKey()] )) {
+                        $fielddata = ( is_object( $data ) && !is_null( $data[$field->getKey()] ) ) ? $data[$field->getKey(
+                        )] : $this->getFieldStd( $field );
+                    } else {
+                        $fielddata = $this->getFieldStd( $field );
+                    }
+                } else {
+                    $fielddata = ( isset( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : array();
+                }
+                $field->setValue( $fielddata );
                 // conditional check of field visibility
                 $this->markVisibility( $field );
 
@@ -119,12 +126,28 @@ abstract class AbstractFieldSection implements Exportable
                 }
                 $this->_increaseVisibleFields();
                 $this->orderFields();
+
+
+
             }
         }
         return $this;
 
     }
 
+    /**
+     * Test if a key already exists
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function fieldExists( $key )
+    {
+        return isset( $this->fields[$key] );
+    }
+
+    abstract public function markVisibility( Field $Field );
 
     /**
      * Handle special array notation
@@ -145,43 +168,50 @@ abstract class AbstractFieldSection implements Exportable
     }
 
     /**
+     * Increase number of visible fields property
+     */
+    protected function _increaseVisibleFields()
+    {
+        $this->numberOfVisibleFields ++;
+        $this->numberOfFields ++;
+
+    }
+
+    private function orderFields()
+    {
+        $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
+        uasort( $this->fields, create_function( '$a,$b', $code ) );
+
+    }
+
+    /*
+ * -----------------------------------------------
+ * Getter
+ * -----------------------------------------------
+ */
+
+    /**
      * Wrapper method
      * Sets essential properties
      * Calls render() on each field
      *
-     * @param array $data | stored data for the field
-     * TODO: Change moduleId zo baseId for consistency
      * TODO: Check if possible / Refactor to set properties earlier
      */
-    public function render( $data )
+    public function render()
     {
         if (empty( $this->fields )) {
             return;
         }
-
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fields as $field) {
-            // TODO: Keep an eye on it
-
-
-            if (!is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' )) {
-                if (isset( $data[$field->getKey()] )) {
-                    $fielddata = ( is_array( $data ) && !is_null( $data[$field->getKey()] ) ) ? $data[$field->getKey(
-                    )] : $this->getFieldStd( $field );
-                } else {
-                    $fielddata = $this->getFieldStd( $field );
-                }
-            } else {
-                $fielddata = ( isset( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : array();
-            }
-            $field->setValue( $fielddata );
-
-            // Build field form
             $field->build();
         }
-
     }
 
+    public function getEntityModel()
+    {
+        return $this->entity->getModel();
+    }
 
     /**
      * Get field default value
@@ -195,6 +225,13 @@ abstract class AbstractFieldSection implements Exportable
         return $field->getArg( 'std', '' );
 
     }
+
+
+    /*
+     * -----------------------------------------------
+     * Helper methods
+     * -----------------------------------------------
+     */
 
     /**
      * Calls save on fields and collects the results in one array
@@ -227,12 +264,6 @@ abstract class AbstractFieldSection implements Exportable
         return $collect;
     }
 
-    /*
- * -----------------------------------------------
- * Getter
- * -----------------------------------------------
- */
-
     /**
      * Getter to retrieve all registered fields
      * @return array
@@ -257,53 +288,15 @@ abstract class AbstractFieldSection implements Exportable
      * ID getter
      * @return string
      */
-    public function getID()
+    public function getSectionId()
     {
-        return $this->id;
+        return $this->sectionId;
 
-    }
-
-
-    /*
-     * -----------------------------------------------
-     * Helper methods
-     * -----------------------------------------------
-     */
-
-    /**
-     * Test if a key already exists
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function fieldExists( $key )
-    {
-        return isset( $this->fields[$key] );
     }
 
     public function prepareArgs( $args )
     {
         return wp_parse_args( $args, self::$defaults );
-
-    }
-
-    /**
-     * Increase number of visible fields property
-     */
-    protected function _increaseVisibleFields()
-    {
-        $this->numberOfVisibleFields ++;
-        $this->numberOfFields ++;
-
-    }
-
-    /**
-     * Descrease number of visible fields property
-     */
-    protected function _decreaseVisibleFields()
-    {
-        $this->numberOfVisibleFields --;
 
     }
 
@@ -317,18 +310,25 @@ abstract class AbstractFieldSection implements Exportable
 
     }
 
-    private function orderFields()
-    {
-        $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
-        uasort( $this->fields, create_function( '$a,$b', $code ) );
-
-    }
-
     public function export( &$collection )
     {
         foreach ($this->fields as $Field) {
             $Field->export( $collection );
         }
+    }
+
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * Descrease number of visible fields property
+     */
+    protected function _decreaseVisibleFields()
+    {
+        $this->numberOfVisibleFields --;
+
     }
 
 

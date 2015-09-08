@@ -4,6 +4,7 @@ namespace Kontentblocks\Modules;
 
 
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Fields\ModuleFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -13,7 +14,7 @@ use Kontentblocks\Templating\ModuleView;
  * Class Module
  * @package Kontentblocks\Modules
  */
-abstract class Module
+abstract class Module implements EntityInterface
 {
 
     /**
@@ -55,6 +56,12 @@ abstract class Module
      * @var ModuleContext
      */
     public $context;
+
+    /**
+     * @var \Kontentblocks\Fields\FieldRendererTabs
+     */
+    protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
+
 
 
     /**
@@ -125,7 +132,8 @@ abstract class Module
             'globalModule' => true,
             'category' => 'standard',
             'views' => false,
-            'concat' => true
+            'concat' => true,
+            'fieldRenderer' => 'Kontentblocks\Fields\FieldRendererTabs'
         );
 
     }
@@ -155,7 +163,9 @@ abstract class Module
         }
         // render fields if set
         if (isset( $this->fields ) && is_object( $this->fields )) {
-            $concat .= $this->fields->renderFields();
+            $rendererClass = $this->properties->getSetting('fieldRenderer');
+            $renderer = new $rendererClass($this->fields);
+            $concat .= $renderer->render();
         } else {
             $concat .= $this->renderEmptyForm();
         }
@@ -202,7 +212,7 @@ abstract class Module
     private function setupFieldData()
     {
         if ($this->model->hasData()) {
-            $this->fields->setData( $this->model )->setup();
+            $this->fields->setModel( $this->model )->setup();
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey( $key );

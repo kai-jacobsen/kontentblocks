@@ -5,6 +5,7 @@ namespace Kontentblocks\Panels;
 use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
 use Kontentblocks\Common\Traits\TraitSetupArgs;
 use Kontentblocks\Customizer\CustomizerIntegration;
+use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -251,7 +252,8 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        return $this->fields->renderFields();
+        $renderer = new FieldRendererTabs( $this->fields );
+        return $renderer->render();
     }
 
     /**
@@ -275,7 +277,7 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function setupFieldData()
     {
-        $this->fields->setData( $this->model )->setup();
+        $this->fields->setModel( $this->model )->setup();
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey( $key );

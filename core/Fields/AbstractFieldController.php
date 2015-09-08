@@ -1,6 +1,9 @@
 <?php
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Common\Data\EntityModel;
+use Kontentblocks\Common\Interfaces\EntityInterface;
+
 /**
  * Class AbstractFieldController
  * @package Kontentblocks\Fields
@@ -14,10 +17,12 @@ abstract class AbstractFieldController
      * @var array
      * @since 0.1.0
      */
-    public $structure;
+    public $sections;
 
-
-    public $data;
+    /**
+     * @var EntityModel
+     */
+    public $model;
 
 
     /**
@@ -27,7 +32,6 @@ abstract class AbstractFieldController
      * @since 0.1.0
      */
     protected $renderer;
-
 
     /**
      * registered fields in one flat array
@@ -50,14 +54,14 @@ abstract class AbstractFieldController
         }
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
-            $data = ( isset( $this->data[$field->getKey()] ) ) ? $this->data[$field->getKey()] : '';
+            $data = ( isset( $this->model[$field->getKey()] ) ) ? $this->model[$field->getKey()] : '';
             $field->setValue( $data );
         }
         return $this;
     }
 
     /**
-     * Extract single fields from Structure object
+     * Extract single fields from sections
      * and stores them in one single flat array
      * @return array
      * @since 0.1.0
@@ -65,7 +69,7 @@ abstract class AbstractFieldController
     public function collectAllFields()
     {
         $collect = array();
-        foreach ($this->structure as $def) {
+        foreach ($this->sections as $def) {
             $collect = $collect + $def->getFields();
         }
         return $collect;
@@ -76,15 +80,15 @@ abstract class AbstractFieldController
      * Helper method to check whether an section already
      * exists in group
      *
-     * @param string $id
+     * @param string $sectionId
      *
      * @return object
      * @since 0.1.0
      */
-    public function idExists( $id )
+    public function idExists( $sectionId )
     {
         // TODO Test for right inheritance / abstract class
-        return ( isset( $this->structure[$id] ) );
+        return ( isset( $this->sections[$sectionId] ) );
 
     }
 
@@ -95,6 +99,7 @@ abstract class AbstractFieldController
      *
      * @param string $key
      *
+     * @param null $fromArray
      * @return mixed
      * @since 0.1.0
      */
@@ -130,7 +135,7 @@ abstract class AbstractFieldController
     public function save( $data, $oldData )
     {
         $collection = array();
-        foreach ($this->structure as $definition) {
+        foreach ($this->sections as $definition) {
             $return = ( $definition->save( $data, $oldData ) );
             $collection = $collection + $return;
         }
@@ -139,7 +144,6 @@ abstract class AbstractFieldController
 
     }
 
-    abstract public function renderFields();
 
     /**
      * @param $sectionId
@@ -155,12 +159,12 @@ abstract class AbstractFieldController
     abstract public function addSection( $sectionId, $args = array() );
 
     /**
-     * @param array $data
+     * @param array $model
      * @return $this
      */
-    public function setData( $data )
+    public function setModel( $model )
     {
-        $this->data = $data;
+        $this->model = $model;
         return $this;
     }
 
@@ -170,9 +174,14 @@ abstract class AbstractFieldController
     public function export()
     {
         $collection = array();
-        foreach ($this->structure as $section) {
+        foreach ($this->sections as $section) {
             $section->export( $collection );
         }
         return $collection;
     }
+
+    /**
+     * @return EntityInterface
+     */
+    public abstract function getEntity();
 }

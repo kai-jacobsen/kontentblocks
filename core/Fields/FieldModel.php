@@ -1,48 +1,33 @@
 <?php
 
-namespace Kontentblocks\Modules;
+namespace Kontentblocks\Fields;
+
 
 use Kontentblocks\Common\Data\EntityModel;
 
-
 /**
- * Class ModuleModel
- * Module Data Container
- *
- * @package Kontentblocks\Modules
+ * Class FieldModel
+ * @package Kontentblocks\Fields
  */
-class ModuleModel extends EntityModel
+class FieldModel extends EntityModel
 {
-
     /**
-     * parent Module
-     * @var Module
+     * @var Field
      */
-    private $module;
+    protected $field;
 
     /**
      * @param array $data
-     * @param Module $module
-     * @since 0.1.0
+     * @param Field $field
      */
-    public function __construct( $data = array(), Module $module )
+    public function __construct( $data = [ ], Field $field )
     {
-        $this->module = $module;
+        $this->field = $field;
         $this->_originalData = $data;
+
         $this->set( $data );
         $this->_initialized = true;
-    }
 
-    /**
-     * @return bool
-     * @ince 0.2.0
-     */
-    public function sync()
-    {
-        $storage = $this->module->environment->getStorage();
-        $result = $storage->saveModule( $this->module->getId(), $this->export() );
-        $storage->reset();
-        return $result;
     }
 
     /**
@@ -67,10 +52,19 @@ class ModuleModel extends EntityModel
     public function jsonSerialize()
     {
         $vars = get_object_vars( $this );
-        unset( $vars['module'] );
+        unset( $vars['field'] );
         unset( $vars['_locked'] );
         unset( $vars['_initialized'] );
         unset( $vars['_originalData'] );
+
+        if (!is_null($this->singleValue)){
+            return $this->singleValue;
+        }
         return $vars;
+    }
+
+    public function sync()
+    {
+        // TODO: Implement sync() method.
     }
 }

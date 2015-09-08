@@ -22,7 +22,7 @@ class FieldRendererTabs implements InterfaceFieldRenderer
      * Array of sections to render
      * @var array
      */
-    protected $structure;
+    protected $sections;
 
     /**
      * Unique identifier inherited by module
@@ -37,42 +37,34 @@ class FieldRendererTabs implements InterfaceFieldRenderer
      */
     protected $data;
 
+    /**
+     * @var AbstractFieldController
+     */
+    protected $fieldController;
 
-    public function __construct( $baseId, $structure = null )
-    {
-        $this->baseId = $baseId;
-
-        if (!is_null( $structure )) {
-            $this->setStructure( $structure );
-        }
-
-    }
 
     /**
-     * @param $structure
-     * @return mixed|void
+     * @param AbstractFieldController $fieldController
      */
-    public function setStructure( $structure )
+    public function __construct( AbstractFieldController $fieldController )
     {
-        $this->structure = $structure;
-        return $this;
+        $this->baseId = $fieldController->getEntity()->getId();
+        $this->fieldController = $fieldController;
+        $this->sections = $fieldController->sections;
     }
 
     /**
      * Wrapper to output methods
-     * @param $data
      * @return mixed|void
      */
-    public function render( $data )
+    public function render( )
     {
-        if (!is_array( $this->structure )) {
-            return;
+        if (!is_array( $this->sections )) {
+            return null;
         }
-
         $view = new CoreView(
             'renderer/tabs.twig', array(
-                'structure' => $this->structure,
-                'data' => $data
+                'structure' => $this->sections
             )
         );
 
@@ -89,10 +81,11 @@ class FieldRendererTabs implements InterfaceFieldRenderer
         echo "<ul>";
 
 
-        foreach ($this->structure as $section) {
+        /** @var AbstractFieldSection $section */
+        foreach ($this->sections as $section) {
 
             if ($section->getNumberOfVisibleFields() > 0) {
-                echo "<li><a href='#tab-{$section->getID()}'>{$section->getLabel()}</a></li>";
+                echo "<li><a href='#tab-{$section->getSectionId()}'>{$section->getLabel()}</a></li>";
             }
         }
         echo '</ul>';
@@ -104,13 +97,14 @@ class FieldRendererTabs implements InterfaceFieldRenderer
      */
     public function tabContainers()
     {
-        foreach ($this->structure as $section) {
+        /** @var AbstractFieldSection $section */
+        foreach ($this->sections as $section) {
             if ($section->getNumberOfVisibleFields() > 0) {
-                echo "<div id='tab-{$section->getID()}'>";
-                $section->render( $this->data );
+                echo "<div id='tab-{$section->getSectionId()}'>";
+                $section->render();
                 echo "</div>";
             } else {
-                $section->render( $this->data );
+                $section->render();
             }
         }
         echo "</div>";

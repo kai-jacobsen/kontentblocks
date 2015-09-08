@@ -5,6 +5,7 @@ namespace Kontentblocks\Utils;
 use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
+use XHProfRuns_Default;
 
 
 /**
@@ -360,11 +361,10 @@ class Utilities
     public static function disableXhprf( $app = 'Kontentblocks' )
     {
         if (function_exists( 'xhprof_disable' )) {
-
             if (filter_input( INPUT_GET, 'xhprof', FILTER_SANITIZE_STRING )) {
                 $XHProfData = xhprof_disable();
 
-                $XHProfRuns = new \XHProfRuns_Default();
+                $XHProfRuns = new XHProfRuns_Default();
                 $XHProfRuns->save_run( $XHProfData, $app );
             }
         }

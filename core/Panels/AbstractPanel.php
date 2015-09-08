@@ -3,15 +3,14 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Common\Data\ValueStorage;
+use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Fields\PanelFieldController;
-use Kontentblocks\Utils\Utilities;
 
 /**
  * Class AbstractPanel
  * @package Kontentblocks\Panels
  */
-abstract class AbstractPanel
+abstract class AbstractPanel implements EntityInterface
 {
 
     /**
@@ -19,26 +18,23 @@ abstract class AbstractPanel
      * @var PanelFieldController
      */
     public $fields;
-
+    /**
+     * Form data
+     * @var array
+     */
+    public $data = null;
     /**
      * @var array
      */
     protected $args;
-
     /**
      * Key / base id
      * @var string
      */
     protected $baseId;
 
-    /**
-     * Form data
-     * @var array
-     */
-    public $data = null;
-
-
-    public static function run($args){
+    public static function run( $args )
+    {
         // do nothing
     }
 
@@ -69,8 +65,17 @@ abstract class AbstractPanel
         return $this->baseId;
     }
 
+    public function getModel()
+    {
+        return $this->model;
+    }
 
-    protected function getType(){
+    public function getId(){
+        return $this->baseId;
+    }
+
+    protected function getType()
+    {
         return $this->type;
     }
 

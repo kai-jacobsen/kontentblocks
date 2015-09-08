@@ -2,21 +2,19 @@
     <ul>
         {# navigation #}
         {% for section in structure %}
-
             {% if (section.getNumberOfVisibleFields() > 0) %}
                 <li><a href='#tab-{{ section.getId() }}'>{{ section.getLabel() }}</a></li>
             {% endif %}
         {% endfor %}
     </ul>
-
         {# container #}
         {% for section in structure %}
             {% if (section.getNumberOfVisibleFields() > 0) %}
                 <div id='tab-{{ section.getId() }}'>
-                    {{ section.render( data ) }}
+                    {{ section.render( ) }}
                 </div>
             {% else %}
-                {{ section.render(data) }}
+                {{ section.render() }}
             {% endif %}
         {% endfor %}
 </div>

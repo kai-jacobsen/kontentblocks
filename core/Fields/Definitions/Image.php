@@ -89,7 +89,7 @@ Class Image extends Field
                 $customizeManager, $integration->getSettingName( $this ),
                 array(
                     'label' => $this->getArg( 'label' ),
-                    'section' => $this->section->getID(),
+                    'section' => $this->section->getSectionId(),
                     'type' => $this->type
                 )
             )
