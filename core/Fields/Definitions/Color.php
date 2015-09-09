@@ -31,7 +31,7 @@ Class Color extends Field
         $error = false;
         if (is_null( $this->getValue(null,null) )) {
             $error = "<p>Please use either hashed a 3 or 6 digit string. Default value is used.<br></p>";
-            $this->setValue( $this->getArg( 'std', '#ffffff' ) );
+            $this->setData( $this->getArg( 'std', '#ffffff' ) );
         }
         $data['error'] = $error;
         return $data;

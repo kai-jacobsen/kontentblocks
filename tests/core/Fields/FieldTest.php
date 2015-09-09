@@ -23,7 +23,7 @@ class FieldTest extends \WP_UnitTestCase
 
         $Registry = Kontentblocks::getService( 'registry.fields' );
         $this->TestField = $Registry->getField( 'text', 'dummyid', 'dummysubkey', 'okey' );
-        $this->TestField->setValue( 'Testvalue' );
+        $this->TestField->setData( 'Testvalue' );
         $this->TestField->setArgs(
             array(
                 'label' => 'Testlabel',
@@ -49,7 +49,7 @@ class FieldTest extends \WP_UnitTestCase
     public function testGetUserValue()
     {
         // output callback calls strtoupper
-        $this->assertEquals( $this->TestField->getUserValue(), 'TESTVALUE' );
+        $this->assertEquals( $this->TestField->getFrontendValue(), 'Testvalue' );
 
     }
 
@@ -57,9 +57,9 @@ class FieldTest extends \WP_UnitTestCase
     {
         // output callback calls strtoupper
         $this->TestField->setArgs( array( 'returnObj' => 'EditableElement' ) );
-        $this->assertEquals( $this->TestField->getUserValue(), 'TESTVALUE' );
+        $this->assertEquals( $this->TestField->getFrontendValue(), 'Testvalue' );
         $this->assertEquals(
-            is_a( $this->TestField->getUserValue(), '\Kontentblocks\Fields\Returnobjects\EditableElement' ),
+            is_a( $this->TestField->getFrontendValue(), '\Kontentblocks\Fields\Returnobjects\EditableElement' ),
             true
         );
     }
@@ -68,7 +68,7 @@ class FieldTest extends \WP_UnitTestCase
     {
         $this->TestField->setArgs( array( 'returnObj' => 'InvalidObject' ) );
         $this->setExpectedException( 'Exception' );
-        $this->TestField->getUserValue();
+        $this->TestField->getFrontendValue();
     }
 
     /**

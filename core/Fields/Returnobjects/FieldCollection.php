@@ -2,6 +2,8 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
+use Kontentblocks\Fields\Field;
+
 /**
  * @todo: finish
  */
@@ -28,7 +30,7 @@ class FieldCollection implements \ArrayAccess
 
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            $value = $field->getUserValue();
+            $value = $field->getFrontendValue();
             $fieldkey = $field->getKey();
             $this->$fieldkey = $value;
             $collect[$field->getKey()] = $value;

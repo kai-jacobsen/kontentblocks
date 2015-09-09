@@ -95,7 +95,7 @@ class FlexibleFieldsReturn
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $registry->getField($conf['type'],$this->moduleId, $index, $key );
                 $field->setBaseId($this->moduleId, $this->key);
-                $field->setValue($data[$key]);
+                $field->setData($data[$key]);
                 $field->setArgs(['index' => $index, 'arrayKey' => $this->key]);
                 $item[$key] = $this->getReturnObj( $conf['type'], $data[$key], $field );
             }

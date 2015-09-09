@@ -1023,11 +1023,25 @@ var Ui = {
     });
   },
   initTipsy: function () {
-    jQuery('[data-kbtooltip!=""]').qtip({ // Grab all elements with a non-blank data-tooltip attr.
-      content: {
-        attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content
-      }
-    })
+
+    jQuery('body').on('mouseenter', '[data-kbtooltip]', function(e){
+      jQuery(this).qtip({
+        content: {
+          attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content
+        },
+        style: 'qtip-dark qtip-shadow',
+        show: {
+
+          event: e.type, // Show on mouse over by default
+          effect: true, // Use default 90ms fade effect
+          delay: 180, // 90ms delay before showing
+          solo: true, // Do not hide others when showing
+          ready: true // Do not show immediately
+        }
+      });
+    });
+
+
   },
   metaBoxReorder: function (e, o, settings, action) {
     if (settings.data) {
@@ -2545,8 +2559,9 @@ module.exports = BaseView.extend({
   resetImage: function () {
     this.$container.html('');
     this.$saveId.val('');
-    this.model.set('value', {id: null, caption: ''});
+    this.model.set('value', {id: null, caption: '', title: ''});
     this.$description.val('');
+    this.$title.val('');
   }
 });
 },{"../FieldControlBaseView":17,"common/Config":10,"common/Utilities":16}],38:[function(require,module,exports){

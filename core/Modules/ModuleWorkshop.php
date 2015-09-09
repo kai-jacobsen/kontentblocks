@@ -270,6 +270,7 @@ class ModuleWorkshop
         return $this->newId;
     }
 
+
     private function prepareFromModule()
     {
         /** @var \Kontentblocks\Modules\Module $fModule */

@@ -160,16 +160,16 @@ class FieldFormController
         }
 
         // custom method on field instance level wins over class method
-        if ($this->field->getCallback( 'input' )) {
-            $this->field->value = call_user_func( $this->field->getCallback( 'input' ), $value );
+        if ($this->field->getCallback( 'form.value' )) {
+            $this->field->model->set(call_user_func( $this->field->getCallback( 'form.value' ), $value ));
         } // custom method on field class level
         else {
-            $this->field->value = $this->field->prepareFormValue( $value );
+            $this->field->model->set($this->field->prepareFormValue( $value ));
         }
 
         // When viewing from the frontend, an optional method can be used for the output
-        if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->field, 'frontsideForm' )) {
-            $out .= $this->field->frontsideForm( $this );
+        if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->field, 'frontendForm' )) {
+            $out .= $this->field->frontendForm( $this );
         } else {
             $out .= $this->field->form( $this );
         }

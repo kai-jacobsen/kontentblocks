@@ -159,7 +159,8 @@ module.exports = BaseView.extend({
   resetImage: function () {
     this.$container.html('');
     this.$saveId.val('');
-    this.model.set('value', {id: null, caption: ''});
+    this.model.set('value', {id: null, caption: '', title: ''});
     this.$description.val('');
+    this.$title.val('');
   }
 });

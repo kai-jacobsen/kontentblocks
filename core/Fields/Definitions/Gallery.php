@@ -28,7 +28,7 @@ Class Gallery extends Field
      * @param $data
      * @return mixed
      */
-    public function inputFilter( $data )
+    public function setValue( $data )
     {
         $forJSON = null;
         if (!empty( $data['images'] ) && is_array( $data['images'] )) {

@@ -63,7 +63,6 @@ abstract class Module implements EntityInterface
     protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
 
 
-
     /**
      * @param ModuleProperties $properties
      * @param array $data
@@ -74,14 +73,13 @@ abstract class Module implements EntityInterface
         $this->properties = $properties;
         $this->environment = $environment;
         $this->context = new ModuleContext( $environment, $this );
-
         $this->setModuleData( $data );
-//        $this->setEnvVarsFromEnvironment( $Environment );
-
         if (filter_var( $this->properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->viewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
-
+        /**
+         * Setup FieldController, Sections and fields if used
+         */
         $this->setupFields();
 
     }
@@ -98,7 +96,11 @@ abstract class Module implements EntityInterface
      */
     public function setModuleData( $data = array() )
     {
-        $this->model = new ModuleModel( $data, $this );
+        if (is_null( $this->model )) {
+            $this->model = new ModuleModel( $data, $this );
+        } else {
+            $this->model->set( $data );
+        }
     }
 
     public function setupFields()
@@ -111,32 +113,6 @@ abstract class Module implements EntityInterface
         }
     }
 
-    /**
-     * Module default settings array
-     * @since 0.1.0
-     * @return array
-     */
-    public static function getDefaultSettings()
-    {
-
-        return array(
-            'disabled' => false,
-            'publicName' => '',
-            'name' => '',
-            'wrap' => true,
-            'wrapperClasses' => '',
-            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
-            'description' => '',
-            'connect' => 'any',
-            'hidden' => false,
-            'globalModule' => true,
-            'category' => 'standard',
-            'views' => false,
-            'concat' => true,
-            'fieldRenderer' => 'Kontentblocks\Fields\FieldRendererTabs'
-        );
-
-    }
 
     /**
      * Creates a complete list item for the area
@@ -163,8 +139,8 @@ abstract class Module implements EntityInterface
         }
         // render fields if set
         if (isset( $this->fields ) && is_object( $this->fields )) {
-            $rendererClass = $this->properties->getSetting('fieldRenderer');
-            $renderer = new $rendererClass($this->fields);
+            $rendererClass = $this->properties->getSetting( 'fieldRenderer' );
+            $renderer = new $rendererClass( $this->fields );
             $concat .= $renderer->render();
         } else {
             $concat .= $this->renderEmptyForm();
@@ -197,7 +173,7 @@ abstract class Module implements EntityInterface
     final public function module()
     {
         if (isset( $this->fields )) {
-            $this->setupFieldData();
+            $this->setupFrontendData();
         }
         $this->view = $this->getView();
         return $this->render();
@@ -209,14 +185,13 @@ abstract class Module implements EntityInterface
      * may be modified, depends on field configuration
      * frontend / output only
      */
-    private function setupFieldData()
+    private function setupFrontendData()
     {
         if ($this->model->hasData()) {
-            $this->fields->setModel( $this->model )->setup();
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey( $key );
-                $this->model[$key] = ( !is_null( $field ) ) ? $field->getUserValue() : $v;
+                $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue() : $v;
             }
         }
     }
@@ -301,7 +276,7 @@ abstract class Module implements EntityInterface
     public function save( $data, $prevData )
     {
         if (isset( $this->fields )) {
-            return $this->fields->save( $data, $prevData );
+            $data =  $this->fields->save( $data, $prevData );
         }
         return $data;
     }
@@ -349,6 +324,9 @@ abstract class Module implements EntityInterface
         return true;
     }
 
+    /**
+     * @return array
+     */
     final public function toJSON()
     {
         $toJSON = array(
@@ -378,6 +356,9 @@ abstract class Module implements EntityInterface
 
     }
 
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->properties->mid;
@@ -396,6 +377,33 @@ abstract class Module implements EntityInterface
             return false;
         }
         return $this->model->sync() || $this->properties->sync();
+    }
+
+    /**
+     * Module default settings array
+     * @since 0.1.0
+     * @return array
+     */
+    public static function getDefaultSettings()
+    {
+
+        return array(
+            'disabled' => false,
+            'publicName' => '',
+            'name' => '',
+            'wrap' => true,
+            'wrapperClasses' => '',
+            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
+            'description' => '',
+            'connect' => 'any',
+            'hidden' => false,
+            'globalModule' => true,
+            'category' => 'standard',
+            'views' => false,
+            'concat' => true,
+            'fieldRenderer' => 'Kontentblocks\Fields\FieldRendererTabs'
+        );
+
     }
 
 

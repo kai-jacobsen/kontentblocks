@@ -55,7 +55,7 @@ abstract class AbstractFieldController
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
             $data = ( isset( $this->model[$field->getKey()] ) ) ? $this->model[$field->getKey()] : '';
-            $field->setValue( $data );
+            $field->setData( $data );
         }
         return $this;
     }
@@ -135,8 +135,9 @@ abstract class AbstractFieldController
     public function save( $data, $oldData )
     {
         $collection = array();
-        foreach ($this->sections as $definition) {
-            $return = ( $definition->save( $data, $oldData ) );
+        /** @var AbstractFieldSection $section */
+        foreach ($this->sections as $section) {
+            $return = ( $section->save( $data, $oldData ) );
             $collection = $collection + $return;
         }
 

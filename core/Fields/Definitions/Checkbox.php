@@ -70,7 +70,7 @@ Class Checkbox extends Field
      * @param $val
      * @return mixed
      */
-    public function prepareOutputValue( $val )
+    public function prepareFrontendValue( $val )
     {
         return filter_var( $val, FILTER_VALIDATE_BOOLEAN );
     }

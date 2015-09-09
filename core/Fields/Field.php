@@ -39,11 +39,8 @@ abstract class Field implements Exportable
      * @var AbstractFieldSection
      */
     public $section;
-    /**
-     * @remove exchange with fieldId
-     * @var string module mid
-     */
-    public $parentModuleId;
+
+
     /**
      * @var FieldModel
      */
@@ -78,21 +75,13 @@ abstract class Field implements Exportable
      * @since 0.1.0
      */
     protected $type;
-    /**
-     * Path to field definition
-     * @var string
-     * @TODO really?
-     * @since 0.1.0
-     */
-    protected $path;
+
     /**
      * @var mixed
      */
     protected $userValue;
-    /**
-     * @var \Kontentblocks\Modules\Module
-     */
-    protected $module;
+
+
     /**
      * Return Object
      * @var \Kontentblocks\Fields\InterfaceFieldReturn
@@ -109,10 +98,6 @@ abstract class Field implements Exportable
      */
     public function __construct( $baseId, $subkey = null, $key )
     {
-
-//        if (!isset( $key, $baseId )) {
-//            throw new \BadMethodCallException( 'Missing arguments for new Field' );
-//        }
         $this->key = $key;
         $this->fieldId = $baseId;
         $this->setBaseId( $baseId, $subkey );
@@ -143,7 +128,6 @@ abstract class Field implements Exportable
     {
         $conditions = $this->getArg( 'conditions' );
         if ($conditions) {
-//            if (isset($conditions[$type]) && is_string($conditions[$type])){
             if (isset( $conditions[$type] )) {
                 return $conditions[$type];
             }
@@ -210,24 +194,24 @@ abstract class Field implements Exportable
     /**
      * Get a special object for the field type if field has one set
      * getValue will look for the 'get' callback on the field
-     * prepareOutput will look for the 'output' callback on the field
+     * prepareFrontend will look for the 'output' callback on the field
      *
      * getValue runs in different contexts (front and backend), it should be used
      * to modify, sanitize, etc.. the data which is expected from the field
      *
-     * prepareOutput runs when data is setup for the frontend output of a module
+     * prepareFrontend runs when data is setup for the frontend output of a module
      * @TODO Kind of Registry for Return Objects
      * @TODO Overall logic is fuxxed up
      * @since 0.1.0
      * @return object
      * @throws \Exception
      */
-    public function getUserValue()
+    public function getFrontendValue()
     {
         if (!is_null( $this->userValue )) {
             return $this->userValue;
         }
-        $value = $this->prepareOutput( $this->getValue() );
+        $value = $this->prepareFrontend( $this->getValue() );
         if ($this->getArg( 'returnObj' )) {
             $classname = $this->getArg( 'returnObj' );
             // backwards compat
@@ -266,7 +250,7 @@ abstract class Field implements Exportable
 
     /**
      * Prepare output
-     * Runs when data is requested by getUserValue
+     * Runs when data is requested by getFrontendValue
      * which is the recommended method to get frontend data
      * an optional returnObj
      *
@@ -274,14 +258,14 @@ abstract class Field implements Exportable
      *
      * @return mixed
      */
-    private function prepareOutput( $value )
+    private function prepareFrontend( $value )
     {
         // custom method on field instance level wins over class method
-        if ($this->getCallback( 'output' )) {
-            return call_user_func( $this->getCallback( 'output' ), $value );
+        if ($this->getCallback( 'frontend.value' )) {
+            return call_user_func( $this->getCallback( 'frontend.value' ), $value );
         } // custom method on field class level
         else {
-            return $this->prepareOutputValue( $value );
+            return $this->prepareFrontendValue( $value );
         }
     }
 
@@ -293,7 +277,7 @@ abstract class Field implements Exportable
      */
     public function getCallback( $type )
     {
-        $allowed = array( 'before.render', 'output', 'input', 'get', 'save' );
+        $allowed = array( 'template.data', 'frontend.value', 'form.value', 'get.value', 'save.value' );
 
         if (!in_array( $type, $allowed )) {
             return null;
@@ -316,7 +300,7 @@ abstract class Field implements Exportable
      *
      * @return mixed
      */
-    public function prepareOutputValue( $val )
+    public function prepareFrontendValue( $val )
     {
         return $val;
     }
@@ -333,8 +317,8 @@ abstract class Field implements Exportable
     public function getValue( $arrKey = null, $return = '' )
     {
         $data = $this->model->export();
-        if ($this->getCallback( 'get' )) {
-            $data = call_user_func( $this->getCallback( 'get' ), $this->value );
+        if ($this->getCallback( 'get.value' )) {
+            $data = call_user_func( $this->getCallback( 'get.value' ), $data );
         }
 
         if (is_null( $arrKey ) && !is_null( $data )) {
@@ -357,17 +341,11 @@ abstract class Field implements Exportable
      * @param mixed $data
      *
      * @since 0.1.0
+     * @return mixed
      */
     public function setValue( $data )
     {
-        if (method_exists( $this, 'inputFilter' )) {
-            $data = $this->inputFilter( $data );
-        }
-        if (is_null( $this->model )) {
-            $this->model = new FieldModel( $data, $this );
-        } else {
-            $this->model->set( $data );
-        }
+        return $data;
     }
 
     /**
@@ -407,6 +385,17 @@ abstract class Field implements Exportable
         }
     }
 
+    public function setData( $data )
+    {
+        $data = $this->setValue( $data );
+
+        if (is_null( $this->model )) {
+            $this->model = new FieldModel( $data, $this );
+        } else {
+            $this->model->set( $data );
+        }
+    }
+
     /**
      * The actual output method for the field markup
      * Any markup should be returned
@@ -429,18 +418,26 @@ abstract class Field implements Exportable
         /**
          * Field may alter the injected data array
          */
-        if (method_exists( $this, 'prepareTemplateData' )) {
-            $data = $this->prepareTemplateData( $data );
-        }
+        $data = $this->prepareTemplateData( $data );
 
-        if ($this->getCallback( 'before.render' )) {
-            $data = call_user_func( $this->getCallback( 'before.render' ), $data );
+        if ($this->getCallback( 'template.data' )) {
+            $data = call_user_func( $this->getCallback( 'template.data' ), $data );
         }
 
         $View = new FieldView(
             $type . '/' . $tpl . '.twig', $data
         );
         return $View->render( false );
+    }
+
+    /**
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareTemplateData( $data )
+    {
+        return $data;
     }
 
     /**
@@ -472,7 +469,6 @@ abstract class Field implements Exportable
         if (defined( 'KB_MODULE_FORM' ) && KB_MODULE_FORM) {
             $state = 'from';
         }
-
 
         if (is_null( $this->uniqueId )) {
             $base = $this->baseId . $this->key . $state . $this->getArg( 'index', '' );
@@ -597,8 +593,8 @@ abstract class Field implements Exportable
     public function _save( $keydata, $oldKeyData = null )
     {
         $data = $this->save( $keydata, $oldKeyData );
-        if ($this->getCallback( 'save' )) {
-            $data = call_user_func( $this->getCallback( 'save' ), $keydata, $oldKeyData, $data );
+        if ($this->getCallback( 'save.value' )) {
+            $data = call_user_func( $this->getCallback( 'save.value' ), $keydata, $oldKeyData, $data );
         }
 
         return $data;

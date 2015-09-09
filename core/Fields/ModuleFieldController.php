@@ -68,4 +68,10 @@ class ModuleFieldController extends AbstractFieldController
     {
         return $this->module;
     }
+
+    public function getEntityModel()
+    {
+        return $this->module->getModel();
+
+    }
 }

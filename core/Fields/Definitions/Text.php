@@ -26,7 +26,7 @@ Class Text extends Field
      *
      * @return string
      */
-    public function prepareOutputValue( $val )
+    public function prepareFrontendValue( $val )
     {
         return wp_kses_post( $val );
     }

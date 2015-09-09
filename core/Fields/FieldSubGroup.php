@@ -88,7 +88,7 @@ class FieldSubGroup implements Exportable
                 'std',
                 ''
             );
-            $field->setValue( $fielddata );
+            $field->setData( $fielddata );
         }
     }
 
@@ -145,7 +145,7 @@ class FieldSubGroup implements Exportable
      * @return object Returnobjects\FieldCollection
      * @since 0.1.0
      */
-    public function getUserValue()
+    public function getFrontendValue()
     {
         $this->returnObj = new FieldCollection( $this->fields );
         return $this->returnObj;
@@ -177,12 +177,12 @@ class FieldSubGroup implements Exportable
      * @param array $data
      * @since 0.1.0
      */
-    public function setValue( $data )
+    public function setData( $data )
     {
         /** @var Field $field */
         foreach ($this->fields as $field) {
             $fielddata = ( !empty( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : $field->getArg( 'std', '' );
-            $field->setValue( $fielddata );
+            $field->setData( $fielddata );
         }
     }
 

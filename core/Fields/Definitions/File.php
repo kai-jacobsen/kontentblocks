@@ -35,7 +35,7 @@ Class File extends Field
      * @param $value
      * @return array
      */
-    public function inputFilter( $value )
+    public function setValue( $value )
     {
         if (isset( $value['id'] ) && is_numeric( absint( $value['id'] ) )) {
             return wp_prepare_attachment_for_js( $value['id'] );

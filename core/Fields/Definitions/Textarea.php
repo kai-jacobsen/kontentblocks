@@ -37,7 +37,7 @@ Class Textarea extends Field
      *
      * @return mixed
      */
-    public function prepareOutputValue( $val )
+    public function prepareFrontendValue( $val )
     {
         if (!$this->getArg( 'safe', false )) {
             return wp_kses_post( $val );

@@ -103,30 +103,32 @@ abstract class AbstractFieldSection implements Exportable
                 $field->setArgs( $args );
                 $field->section = $this;
 
-                $data = $this->getEntityModel();
-                if (!is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' )) {
-                    if (isset( $data[$field->getKey()] )) {
-                        $fielddata = ( is_object( $data ) && !is_null( $data[$field->getKey()] ) ) ? $data[$field->getKey(
-                        )] : $this->getFieldStd( $field );
-                    } else {
-                        $fielddata = $this->getFieldStd( $field );
-                    }
-                } else {
-                    $fielddata = ( isset( $data[$field->getKey()] ) ) ? $data[$field->getKey()] : array();
-                }
-                $field->setValue( $fielddata );
                 // conditional check of field visibility
                 $this->markVisibility( $field );
 
                 // Fields with same arrayKey gets grouped into own collection
                 if (isset( $args['arrayKey'] )) {
-                    $this->addArrayField( $field, $key, $args );
+                    $newField = $this->addArrayField( $field, $key, $args );
                 } else {
-                    $this->fields[$key] = $field;
+                     $this->fields[$key] = $newField = $field;
                 }
+
+
+                $data = $this->getEntityModel();
+                if (!is_a( $newField, '\Kontentblocks\Fields\FieldSubGroup' )) {
+                    if (isset( $data[$newField->getKey()] )) {
+                        $fielddata = ( is_object( $data ) && !is_null( $data[$newField->getKey()] ) ) ? $data[$newField->getKey(
+                        )] : $this->getFieldStd( $newField );
+                    } else {
+                        $fielddata = $this->getFieldStd( $newField );
+                    }
+                } else {
+                    $fielddata = ( isset( $data[$newField->getKey()] ) ) ? $data[$newField->getKey()] : array();
+                }
+                $newField->setData( $fielddata );
+
                 $this->_increaseVisibleFields();
                 $this->orderFields();
-
 
 
             }
@@ -164,7 +166,7 @@ abstract class AbstractFieldSection implements Exportable
             $fieldArray = $this->fields[$args['arrayKey']];
         }
         $fieldArray->addField( $key, $field );
-
+        return $fieldArray;
     }
 
     /**
@@ -214,26 +216,6 @@ abstract class AbstractFieldSection implements Exportable
     }
 
     /**
-     * Get field default value
-     *
-     * @param $field
-     *
-     * @return mixed defaults to empty string
-     */
-    private function getFieldStd( $field )
-    {
-        return $field->getArg( 'std', '' );
-
-    }
-
-
-    /*
-     * -----------------------------------------------
-     * Helper methods
-     * -----------------------------------------------
-     */
-
-    /**
      * Calls save on fields and collects the results in one array
      *
      * @param array $data new data
@@ -248,7 +230,6 @@ abstract class AbstractFieldSection implements Exportable
         if (!is_array( $this->fields )) {
             return $oldData;
         }
-
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fields as $field) {
             $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
@@ -263,6 +244,13 @@ abstract class AbstractFieldSection implements Exportable
         }
         return $collect;
     }
+
+
+    /*
+     * -----------------------------------------------
+     * Helper methods
+     * -----------------------------------------------
+     */
 
     /**
      * Getter to retrieve all registered fields
@@ -328,6 +316,19 @@ abstract class AbstractFieldSection implements Exportable
     protected function _decreaseVisibleFields()
     {
         $this->numberOfVisibleFields --;
+
+    }
+
+    /**
+     * Get field default value
+     *
+     * @param $field
+     *
+     * @return mixed defaults to empty string
+     */
+    private function getFieldStd( $field )
+    {
+        return $field->getArg( 'std', '' );
 
     }
 

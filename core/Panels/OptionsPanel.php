@@ -281,7 +281,7 @@ abstract class OptionsPanel extends AbstractPanel
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey( $key );
-            $this->model[$key] = ( !is_null( $field ) ) ? $field->getUserValue() : $v;
+            $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue() : $v;
         }
         return $this->model;
     }

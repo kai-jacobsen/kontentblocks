@@ -42,11 +42,12 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
             return $this;
         }
 
-        foreach ($data as $key => $v) {
-            $this->$key = $v;
+        if (is_array($data)){
+            foreach ($data as $key => $v) {
+                $this->$key = $v;
+            }
+            wp_parse_args( $this->_originalData, $data );
         }
-
-        wp_parse_args( $this->_originalData, $data );
     }
 
     /**

@@ -18,10 +18,9 @@ class ContentHelper
                 'post_status' => null,
                 'post_parent' => null, // any parent
             ));
-
             if (empty($images)){
                 return 0;
             }
-
+            return $images[0]->ID;
         }
 }

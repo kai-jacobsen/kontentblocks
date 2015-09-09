@@ -51,15 +51,16 @@ class FieldModel extends EntityModel
      */
     public function jsonSerialize()
     {
+        if (!is_null($this->singleValue)){
+            return $this->singleValue;
+        }
+
         $vars = get_object_vars( $this );
         unset( $vars['field'] );
         unset( $vars['_locked'] );
         unset( $vars['_initialized'] );
         unset( $vars['_originalData'] );
-
-        if (!is_null($this->singleValue)){
-            return $this->singleValue;
-        }
+        unset($vars['singleValue']);
         return $vars;
     }
 

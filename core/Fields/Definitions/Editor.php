@@ -53,7 +53,7 @@ Class Editor extends Field
      *
      * @return mixed|void
      */
-    public function prepareOutputValue( $val )
+    public function prepareFrontendValue( $val )
     {
         return $val;
 //        return apply_filters('the_content', $val);

@@ -123,7 +123,7 @@ Class Plupload extends Field
      *
      * @return string
      */
-    public function prepareOutputValue( $val )
+    public function prepareFrontendValue( $val )
     {
         return $val;
     }

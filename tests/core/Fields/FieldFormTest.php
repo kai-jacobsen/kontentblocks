@@ -16,7 +16,7 @@ class FieldFormTest extends \WP_UnitTestCase
     {
         $Registry = Kontentblocks::getService( 'registry.fields' );
         $this->TestField = $Registry->getField( 'text', 'dummyid', 'dummysubkey', 'okey' );
-        $this->TestField->setValue( 'Testvalue' );
+        $this->TestField->setData( 'Testvalue' );
         $this->TestField->setArgs(
             array(
                 'label' => 'Testlabel',
