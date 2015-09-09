@@ -1955,7 +1955,10 @@ var EditableImage = Backbone.View.extend({
           frame: 'select', // alias for the ImageDetails frame
           state: 'library', // default state, makes sense
           metadata: attachment.toJSON(), // the important bit, thats where the initial informations come from
-          imageEditView: that
+          imageEditView: that,
+          library: {
+            type: 'image'
+          }
         }).on('update', function (attachmentObj) { // bind callback to 'update'
           that.update(attachmentObj);
         }).on('ready', function () {

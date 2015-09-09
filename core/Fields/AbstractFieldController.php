@@ -47,14 +47,16 @@ abstract class AbstractFieldController
      *
      * @since 0.1.0
      */
-    public function setup()
+    public function updateData()
     {
         if (empty( $this->fieldsById )) {
             $this->fieldsById = $this->collectAllFields();
         }
+
+        $model = $this->getEntityModel();
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
-            $data = ( isset( $this->model[$field->getKey()] ) ) ? $this->model[$field->getKey()] : '';
+            $data = ( isset( $model[$field->getKey()] ) ) ? $model[$field->getKey()] : '';
             $field->setData( $data );
         }
         return $this;
@@ -185,4 +187,6 @@ abstract class AbstractFieldController
      * @return EntityInterface
      */
     public abstract function getEntity();
+
+    public abstract function getEntityModel();
 }

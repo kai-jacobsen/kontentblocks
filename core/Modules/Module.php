@@ -73,7 +73,7 @@ abstract class Module implements EntityInterface
         $this->properties = $properties;
         $this->environment = $environment;
         $this->context = new ModuleContext( $environment, $this );
-        $this->setModuleData( $data );
+        $this->model = new ModuleModel( $data, $this );
         if (filter_var( $this->properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
             $this->viewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
         }
@@ -94,13 +94,14 @@ abstract class Module implements EntityInterface
      * Setup Module Data
      * @param array $data
      */
-    public function setModuleData( $data = array() )
+    public function updateModuleData( $data = array() )
     {
-        if (is_null( $this->model )) {
-            $this->model = new ModuleModel( $data, $this );
-        } else {
+
             $this->model->set( $data );
-        }
+
+            if ($this->fields){
+                $this->fields->updateData();
+            }
     }
 
     public function setupFields()
@@ -405,6 +406,4 @@ abstract class Module implements EntityInterface
         );
 
     }
-
-
 }

@@ -96,11 +96,10 @@ abstract class AbstractFieldSection implements Exportable
 
             /** @var \Kontentblocks\Fields\FieldRegistry $registry */
             $registry = Kontentblocks::getService( 'registry.fields' );
-            $field = $registry->getField( $type, $this->baseId, $subkey, $key );
+            $field = $registry->getField( $type, $this->baseId, $subkey, $key, $args );
             if (!$field) {
                 throw new Exception( "Field of type: $type does not exist" );
             } else {
-                $field->setArgs( $args );
                 $field->section = $this;
 
                 // conditional check of field visibility
@@ -126,7 +125,6 @@ abstract class AbstractFieldSection implements Exportable
                     $fielddata = ( isset( $data[$newField->getKey()] ) ) ? $data[$newField->getKey()] : array();
                 }
                 $newField->setData( $fielddata );
-
                 $this->_increaseVisibleFields();
                 $this->orderFields();
 

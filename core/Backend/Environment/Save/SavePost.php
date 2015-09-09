@@ -189,7 +189,7 @@ class SavePost
             $data = $this->postdata->get( $module->getId() );
             /** @var $old array */
             $old = $this->environment->getStorage()->getModuleData( $module->getId() );
-            $module->setModuleData( $old );
+            $module->updateModuleData( $old );
             // check for draft and set to false
             // special block specific data
             $module = $this->moduleOverrides( $module, $data );

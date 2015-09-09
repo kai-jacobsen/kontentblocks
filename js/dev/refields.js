@@ -2468,6 +2468,7 @@ module.exports = BaseView.extend({
           state: that.defaultState, // default state, makes sense
           metadata: metadata, // the important bit, thats where the initial informations come from
           imageEditView: that,
+          type: 'image',
           library: {
             type: 'image'
           }

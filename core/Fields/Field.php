@@ -95,14 +95,15 @@ abstract class Field implements Exportable
      * @param string $baseId
      * @param null|string $subkey
      * @param string $key unique storage key
+     * @param $args
      */
-    public function __construct( $baseId, $subkey = null, $key )
+    public function __construct( $baseId, $subkey = null, $key, $args )
     {
         $this->key = $key;
         $this->fieldId = $baseId;
         $this->setBaseId( $baseId, $subkey );
         $this->type = static::$settings['type'];
-        //@TODO think about setting default args from extending class
+        $this->setArgs($args);
     }
 
     /* ---------------------------------------------
@@ -394,6 +395,8 @@ abstract class Field implements Exportable
         } else {
             $this->model->set( $data );
         }
+
+        $this->value = $this->model->export();
     }
 
     /**
@@ -578,6 +581,11 @@ abstract class Field implements Exportable
         if ($this->getArg( 'arrayKey', false )) {
             $path .= $this->getArg( 'arrayKey' ) . '.';
         }
+
+        if ($this->getArg( 'index', false )) {
+            $path .= $this->getArg( 'index' ) . '.';
+        }
+
         $path .= $this->getKey();
         return $path;
     }

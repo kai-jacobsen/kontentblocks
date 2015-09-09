@@ -56,8 +56,8 @@ Class FlexibleFields extends Field
                 if (is_null( $section )) {
                     continue;
                 }
+                /** @var Field $field */
                 foreach ($section as $fkey => $field) {
-
                     if (!array_key_exists($fkey,$flatFields)){
                         continue;
                     }

@@ -53,7 +53,7 @@ class UpdateModule implements AjaxActionInterface
         if ($postdata->update) {
             $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
         }
-        $module->setModuleData( $mergedData );
+        $module->updateModuleData( $mergedData );
         do_action( 'kb.module.save', $module, $mergedData );
 
         $return = array(

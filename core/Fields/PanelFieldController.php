@@ -102,4 +102,9 @@ class PanelFieldController extends AbstractFieldController
     {
         return $this->panel;
     }
+
+    public function getEntityModel()
+    {
+        $this->panel->getModel();
+    }
 }

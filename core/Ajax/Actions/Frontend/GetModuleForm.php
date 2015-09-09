@@ -36,6 +36,7 @@ class GetModuleForm implements AjaxActionInterface
         $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $moduleDef = apply_filters('kb.modify.module.before.frontend.form', $moduleDef);
         $environment = Utilities::getEnvironment( $moduleDef['parentObjectId'] );
+        /** @var \Kontentblocks\Modules\Module $module */
         $module = $environment->getModuleById( $moduleDef['mid'] );
         $module->properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );
         $module = apply_filters( 'kb.module.before.factory', $module );
@@ -46,7 +47,7 @@ class GetModuleForm implements AjaxActionInterface
 
         $merged = Utilities::arrayMergeRecursive( $currentData, $oldData );
 
-        $module->setModuleData( $merged );
+        $module->updateModuleData( $merged );
         $html = $module->form();
         $return = array(
             'html' => $html,

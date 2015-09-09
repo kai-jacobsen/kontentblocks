@@ -62,7 +62,7 @@ abstract class OptionsPanel extends AbstractPanel
         $this->setupArgs( $this->args );
         $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
         $this->model = new OptionsPanelModel($this->dataProvider->export(), $this);
-        $this->fields = new PanelFieldController( $this->baseId, $this->model->export(), $this );
+        $this->fields = new PanelFieldController( $this );
         $this->fields();
     }
 
@@ -328,7 +328,7 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function setupCustomizer( \WP_Customize_Manager $wpCustomize )
     {
-        $this->fields->setup();
+        $this->fields->updataData();
         $this->fields( $this->fields );
         new CustomizerIntegration( $this->fields, $wpCustomize, $this );
     }
