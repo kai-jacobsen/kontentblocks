@@ -29,8 +29,8 @@ class FieldTest extends \WP_UnitTestCase
                 'label' => 'Testlabel',
                 'description' => 'Testdescription',
                 'callbacks' => array(
-                    'output' => array( $this, 'outputCallback' ),
-                    'input' => array( $this, 'invalid' )
+                    'frontend.value' => array( $this, 'outputCallback' ),
+                    'form.value' => array( $this, 'invalid' )
                 ),
                 'conditions' => array(
                     'viewfile' => array( 'test.tpl' )
@@ -49,7 +49,7 @@ class FieldTest extends \WP_UnitTestCase
     public function testGetUserValue()
     {
         // output callback calls strtoupper
-        $this->assertEquals( $this->TestField->getFrontendValue(), 'Testvalue' );
+        $this->assertEquals( $this->TestField->getFrontendValue(), 'TESTVALUE' );
 
     }
 
@@ -57,7 +57,7 @@ class FieldTest extends \WP_UnitTestCase
     {
         // output callback calls strtoupper
         $this->TestField->setArgs( array( 'returnObj' => 'EditableElement' ) );
-        $this->assertEquals( $this->TestField->getFrontendValue(), 'Testvalue' );
+        $this->assertEquals( $this->TestField->getFrontendValue(), 'TESTVALUE' );
         $this->assertEquals(
             is_a( $this->TestField->getFrontendValue(), '\Kontentblocks\Fields\Returnobjects\EditableElement' ),
             true
@@ -115,7 +115,7 @@ class FieldTest extends \WP_UnitTestCase
 
     public function testValidCallback()
     {
-        $this->assertEquals( is_callable( $this->TestField->getCallback( 'output' ) ), true );
+        $this->assertEquals( is_callable( $this->TestField->getCallback( 'frontend.value' ) ), true );
     }
 
 
@@ -134,7 +134,7 @@ class FieldTest extends \WP_UnitTestCase
 
     public function testInvalidCallback()
     {
-        $this->assertEquals( $this->TestField->getCallback( 'input' ), null );
+        $this->assertEquals( $this->TestField->getCallback( 'form.value' ), null );
         $this->assertEquals( $this->TestField->getCallback( 'invalidType' ), null );
     }
 
