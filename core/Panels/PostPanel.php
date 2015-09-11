@@ -192,7 +192,7 @@ abstract class PostPanel extends AbstractPanel
      */
     public function saveCallback( $postId )
     {
-        $data = $_POST[$this->baseId];
+        $data = isset($_POST[$this->baseId]) ? $_POST[$this->baseId] : null;
         if (empty( $data )) {
             return;
         }
@@ -259,13 +259,12 @@ abstract class PostPanel extends AbstractPanel
      * @return mixed
      * @throws \Exception
      */
-    public function setupFieldData()
+    public function setupFrontendData()
     {
-        $this->fields->setModel( $this->model )->setup();
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey( $key );
-            $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue() : $v;
+            $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue($this->postId) : $v;
         }
         return $this->model;
     }

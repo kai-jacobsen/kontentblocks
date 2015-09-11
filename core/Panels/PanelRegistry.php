@@ -35,7 +35,17 @@ class PanelRegistry
     public function add( $panelId, $args )
     {
         if (!isset( $this->panels[$panelId] )) {
+
+            $reflection = new \ReflectionClass($args['class']);
+            $name = $reflection->getParentClass()->name;
+
+            if ($name == 'Kontentblocks\Panels\OptionsPanel'){
+                $args['type'] = 'options';
+            } else {
+                $args['type'] = 'post';
+            }
             $this->panels[$panelId] = $args;
+
             /** @var \Kontentblocks\Panels\AbstractPanel $args */
             $args['class']::run($args);
             return true;
@@ -47,14 +57,6 @@ class PanelRegistry
             );
         }
     }
-
-//    public function create( $panelId, Environment $Environment )
-//    {
-//        if ($this->panelExists( $panelId )) {
-//            $panel = $this->get( $panelId );
-//            return new $panel['class']( $panel, $Environment );
-//        }
-//    }
 
     /**
      * @param $panelId

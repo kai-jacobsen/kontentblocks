@@ -5,6 +5,7 @@ namespace Kontentblocks\Customizer;
 
 use Kontentblocks\Fields\AbstractFieldController;
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Panels\OptionsPanel;
 
 /**
  * Class CustomizerIntegration

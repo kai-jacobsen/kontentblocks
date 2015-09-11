@@ -60,9 +60,6 @@ class AreaPropertiesTest extends \WP_UnitTestCase
         $this->assertEquals($this->area->get('id'), $this->area);
     }
 
-
-
-
     public function tearDown()
     {
         parent::tearDown();

@@ -204,10 +204,11 @@ abstract class Field implements Exportable
      * @TODO Kind of Registry for Return Objects
      * @TODO Overall logic is fuxxed up
      * @since 0.1.0
+     * @param null $salt
      * @return object
      * @throws \Exception
      */
-    public function getFrontendValue()
+    public function getFrontendValue($salt = null)
     {
         if (!is_null( $this->userValue )) {
             return $this->userValue;
@@ -221,12 +222,12 @@ abstract class Field implements Exportable
             // first try with FQN
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
             if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
-                $this->returnObj = new $classpath( $value, $this );
+                $this->returnObj = new $classpath( $value, $this, $salt );
             }
 
             // second try
             if (class_exists( $classname )) {
-                $this->returnObj = new $classname( $value, $this );
+                $this->returnObj = new $classname( $value, $this, $salt );
             }
 
             if (is_null( $this->returnObj )) {
@@ -238,7 +239,7 @@ abstract class Field implements Exportable
 
         } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj' ) !== false) {
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
-            $this->returnObj = new $classpath( $value, $this );
+            $this->returnObj = new $classpath( $value, $this, $salt );
             $this->userValue = $this->returnObj;
             return $this->userValue;
         } else {

@@ -13,9 +13,7 @@ use Kontentblocks\Kontentblocks;
  */
 class PostPanelRepository
 {
-
     protected $environment;
-
     protected $panels = array();
 
     /**
@@ -38,8 +36,10 @@ class PostPanelRepository
         foreach ($filtered as $id => $panel) {
             $panel['uid'] = hash( 'crc32', serialize( $panel ) );
             $panel['postId'] = $environment->getId();
-            $this->panels[$id] = $instance = new $panel['class']( $panel, $environment );
-            $instance->init();
+            if (!isset($this->panels[$id])){
+                $this->panels[$id] = $instance = new $panel['class']( $panel, $environment );
+                $instance->init();
+            }
         }
     }
 
@@ -57,6 +57,9 @@ class PostPanelRepository
         $registry = Kontentblocks::getService( 'registry.panels' );
 
         foreach ($registry->getAll() as $id => $panel) {
+            if ($panel['type'] == 'options'){
+                continue;
+            }
             $postTypes = !empty($panel['postTypes']) ? $panel['postTypes'] : [];
             $pageTemplates = !empty($panel['pageTemplates']) ? $panel['pageTemplates'] : [];
 

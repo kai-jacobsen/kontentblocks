@@ -93,22 +93,7 @@ abstract class OptionsPanel extends AbstractPanel
         return wp_parse_args( $args, $defaults );
     }
 
-    /**
-     * Auto setup args to class properties
-     * and look for optional method for each arg
-     * @param $args
-     */
-    public function setupArgs( $args )
-    {
-        foreach ($args as $k => $v) {
-            if (method_exists( $this, "set" . strtoupper( $k ) )) {
-                $method = "set" . strtoupper( $k );
-                $this->$method( $v );
-            } else {
-                $this->$k = $v;
-            }
-        }
-    }
+
 
     public function init()
     {
@@ -275,9 +260,8 @@ abstract class OptionsPanel extends AbstractPanel
      * @return mixed
      * @throws \Exception
      */
-    public function setupFieldData()
+    public function setupFrontendData()
     {
-        $this->fields->setModel( $this->model )->setup();
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey( $key );
@@ -328,8 +312,6 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function setupCustomizer( \WP_Customize_Manager $wpCustomize )
     {
-        $this->fields->updataData();
-        $this->fields( $this->fields );
         new CustomizerIntegration( $this->fields, $wpCustomize, $this );
     }
 

@@ -46,7 +46,7 @@ class Environment implements JsonSerializable
      * Access object to all env related panels
      * @var ModuleRepository
      */
-    protected $postPanelRepository;
+    protected $panelRepository;
 
 
     /**
@@ -112,8 +112,8 @@ class Environment implements JsonSerializable
         $this->moduleRepository = new ModuleRepository( $this );
         $this->modules = $this->setupModules();
         $this->modulesByArea = $this->getSortedModules();
-        $this->postPanelRepository = new PostPanelRepository( $this );
-        $this->panels = $this->postPanelRepository->getPanelObjects();
+        $this->panelRepository = new PostPanelRepository( $this );
+        $this->panels = $this->panelRepository->getPanelObjects();
     }
 
     /**

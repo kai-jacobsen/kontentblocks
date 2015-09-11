@@ -192,7 +192,7 @@ abstract class Module implements EntityInterface
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey( $key );
-                $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue() : $v;
+                $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue($this->properties->postId) : $v;
             }
         }
     }

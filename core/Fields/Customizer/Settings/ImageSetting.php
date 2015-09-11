@@ -22,6 +22,26 @@ class ImageSetting extends \WP_Customize_Setting
         $this->field = $args['field'];
     }
 
+
+    public function preview(){
+        $value = $this->post_value();
+
+        if ($value) {
+            $post_id = attachment_url_to_postid( $value );
+            if ($post_id) {
+                $attachment = wp_prepare_attachment_for_js($post_id);
+                $value = array();
+                $value['id'] = $post_id;
+                $value['caption'] = $attachment['caption'];
+                $value['title'] = $attachment['title'];
+            }
+        }
+
+        $this->manager->set_post_value($this->id, $value);
+
+        parent::preview();
+    }
+
     /**
      * Overwrites the `update()` method so we can save some extra data.
      * @author http://justintadlock.com/archives/2015/05/06/customizer-how-to-save-image-media-data
@@ -30,10 +50,8 @@ class ImageSetting extends \WP_Customize_Setting
      */
     protected function update( $value )
     {
-
         if ($value) {
             $post_id = attachment_url_to_postid( $value );
-
             if ($post_id) {
                 $attachment = wp_prepare_attachment_for_js($post_id);
                 $value = array();

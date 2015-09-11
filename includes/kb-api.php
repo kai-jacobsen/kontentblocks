@@ -83,8 +83,8 @@ function renderSingleArea( $areaId, $post_id = null, $additionalArgs = array() )
     }
 
     $renderSettings = new RenderSettings( $additionalArgs, $area );
-    if (is_a($renderSettings->view, '\Kontentblocks\Frontend\AreaFileRenderer', true)){
-        $renderer = new $renderSettings->view($environment, $renderSettings);
+    if (is_a( $renderSettings->view, '\Kontentblocks\Frontend\AreaFileRenderer', true )) {
+        $renderer = new $renderSettings->view( $environment, $renderSettings );
     } else {
         $renderer = new AreaRenderer( $environment, $renderSettings );
     }
@@ -163,13 +163,18 @@ function hasModules( $area, $id )
         return false;
     }
 
-    $E = Utilities::getEnvironment( $id );
-    $areas = $E->getModulesForArea( $area );
+    $Environment = Utilities::getEnvironment( $id );
+    $areas = $Environment->getModulesForArea( $area );
 
     return !empty( $areas );
 }
 
 
+/**
+ * @param null $id
+ * @param null $post_id
+ * @return Panels\OptionsPanel|null|\WP_Error
+ */
 function getPanel( $id = null, $post_id = null )
 {
     return getPostPanel( $id, $post_id );
@@ -184,7 +189,7 @@ function getPostPanel( $panelId = null, $postId = null )
     $Environment = Utilities::getEnvironment( $postId );
 
     $Panel = $Environment->getPanelObject( $panelId );
-    /** @var \Kontentblocks\Panels\OptionsPanel $Panel */
+    /** @var \Kontentblocks\Panels\PostPanel $Panel */
     if (is_a( $Panel, "\\Kontentblocks\\Panels\\AbstractPanel" )) {
         return $Panel;
     } else {
@@ -197,19 +202,39 @@ function getPostPanel( $panelId = null, $postId = null )
 }
 
 /**
+ * @param null $panelId
+ * @param null $postId
+ * @return mixed
+ */
+function getPostPanelModel( $panelId = null, $postId = null )
+{
+    $panel = getPostPanel($panelId, $postId);
+    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')){
+        return $panel->setupFrontendData();
+    }
+}
+
+
+/**
  * @param $panelId
  * @return mixed
  */
-function getOptionsPanel($panelId){
-
+function getOptionsPanel( $panelId )
+{
     /** @var \Kontentblocks\Panels\PanelRegistry $registry */
-    $registry = Kontentblocks()->getService('registry.panels');
-    $panel = $registry->get($panelId);
-    if (!empty($panel) && class_exists($panel['class'])){
-        return new $panel['class']($panel);
+    $registry = Kontentblocks()->getService( 'registry.panels' );
+    $panel = $registry->get( $panelId );
+    if (!empty( $panel ) && class_exists( $panel['class'] )) {
+        return new $panel['class']( $panel );
     }
+}
 
-
+function getOptionsPanelModel( $panelId )
+{
+    $panel = getOptionsPanel( $panelId );
+    if (is_a( $panel, '\Kontentblocks\Panels\OptionsPanel' )) {
+        return $panel->setupFrontendData();
+    }
 }
 
 /**

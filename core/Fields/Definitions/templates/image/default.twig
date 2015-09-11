@@ -7,8 +7,7 @@
             <img src='{{ image.getSize('thumbnail') }}'>
         {% endif %}
     </div>
-    <div class="kb-field-image-meta">
-
+    <div class="kb-field-image-meta {% if Field.getArg('hideMeta') %} kb-hide {% endif %}">
         <div class="kb-field-image-title">
             <label>{{ i18n.title }}</label>
             <input class='kb-js-image-title kb-observe' type="text"
@@ -20,7 +19,6 @@
         <textarea readonly class='kb-js-image-description kb-observe' type="text"
                   name='{{ Form.getFieldName( 'caption') }}'>{{ value.caption }}</textarea>
         </div>
-
     </div>
     <input class='kb-js-image-id' type='hidden' name='{{ Form.getFieldName('id') }}' value='{{ value.id }}'>
     {#<input class='kb-js-image-alt' type='hidden' name='{{ Form.getFieldName( 'details', 'id' ) }}'#}

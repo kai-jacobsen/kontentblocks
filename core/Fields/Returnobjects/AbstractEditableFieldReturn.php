@@ -41,6 +41,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @var string
      */
     public $helptext = 'Click to edit content';
+    public $salt;
     /**
      * Set of css classes to add to the el
      * @var array
@@ -71,9 +72,11 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     /**
      * @param $value
      * @param $field
+     * @param $salt
      */
-    public function __construct( $value, $field )
+    public function __construct( $value, $field, $salt = null )
     {
+        $this->salt = (!is_null($salt)) ? $salt : '';
         $this->setValue( $value );
         $this->setupFromField( $field );
         $this->uniqueId = $field->createUID();
@@ -143,7 +146,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
     protected function createUniqueId()
     {
-        $base = $this->uniqueId . (string) $this->callCount;
+        $base = $this->uniqueId . (string) $this->callCount . $this->salt;
         $uid = 'kbf-' . hash( 'crc32', $base );
         return $this->currentUID = $uid;
 

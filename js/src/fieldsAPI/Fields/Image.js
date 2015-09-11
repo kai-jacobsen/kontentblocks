@@ -41,7 +41,6 @@ module.exports = BaseView.extend({
     if (!value.id) {
       return;
     }
-
     this.model.set('value', value);
     if (Utilities.stex.get('img' + value.id + 'x' + args.width + 'x' + args.height)) {
       attrs = that.model.get('value');
