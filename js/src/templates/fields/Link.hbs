@@ -1,21 +1,19 @@
 <div data-kbfuid="{{ model.uid }}" class="kb-field kb-js-field kb-field--link field-api-link">
     <label class="heading">{{ model.label }}</label>
-    <input class="kb-js-link-input"
+    <input class="kb-js-link-input" data-kbf-link-url
            id="{{ model.index }}_link_input"
            type="text"
            name="{{ fieldName model.baseId model.index model.primeKey }}[link]"
            value="{{ model.value.link }}">
     <a class='button kb-js-add-link'>Add Link</a>
-    {{#if model.linktext }}
         <div class='kb-field--link-meta'><label for='{{ model.index }}-linktext'>{{ i18n.linktext }}</label><br>
             <input
-                    type='text'
+                    type='text' data-kbf-link-linktext
                     name="{{ fieldName model.baseId model.index model.primeKey }}[linktext]"
                     class='kb-field--link-linktext'
                     id='{{ model.index }}-linktext'
                     value='{{ model.value.linktext }}'>
         </div>
-    {{/if}}
     {{#if model.linktitle }}
         <div class='kb-field--link-meta'><label for='{{ model.index }}-linktitle'>{{ i18n.linktitle }}</label><br>
             <input
