@@ -43,7 +43,6 @@ module.exports = Backbone.View.extend({
 var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function(){
-    window._kbLink = this;
     this.render();
   },
   events:{
@@ -57,6 +56,7 @@ module.exports = BaseView.extend({
 
   },
   openModal: function(){
+    window._kbLink = this;
     wpActiveEditor = this.$input.attr('id');
     jQuery('#wp-link-wrap').addClass('kb-customized');
 
@@ -92,7 +92,7 @@ module.exports = BaseView.extend({
     textarea.value = href;
 
     window._kbLink.trigger('update', title, href);
-
+    console.log(window._kbLink);
     window._kbLink.$text.val(title);
     //restore the original function
     // close dialog and put the cursor inside the textarea
