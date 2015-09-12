@@ -36,20 +36,22 @@ module.exports = BaseView.extend({
   },
   success: function (res) {
     var m;
+    var that = this;
     if (!res.success) {
       Notice.notice('Request Error', 'error');
       return false;
     }
-    this.parseAdditionalJSON(res.data.json);
     this.model.Area.View.modulesList.append(res.data.html);
-    var ModuleModel = KB.Modules.add(res.data.module);
+    var ModuleModel = KB.ObjectProxy.add(KB.Modules.add(res.data.module));
     //var ModuleView = KB.Views.Modules.get(res.data.id);
     this.model.Area.View.attachModuleView(ModuleModel);
     // update the reference counter, used as base number
     // for new modules
     Notice.notice('Module Duplicated', 'success');
-    UI.repaint('#' + res.data.module.mid);
-    KB.Fields.trigger('update');
+    _.defer(function(){
+      that.parseAdditionalJSON(res.data.json);
+      UI.repaint('#' + res.data.module.mid);
+    })
   },
   parseAdditionalJSON: function (json) {
     // create the object if it doesn't exist already
