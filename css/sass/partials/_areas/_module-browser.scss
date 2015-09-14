@@ -220,6 +220,22 @@
   }
 }
 
+.modules-list-item.clipboard-list-item{
+  padding-left: 0 !important;
+
+  h4{
+    padding-left: 0 !important;
+  }
+  p{
+    padding-left: 0 !important;
+  }
+
+  .kb-clipboard-action{
+    @extend .kb-button-small;
+    display: inline-block;
+  }
+}
+
 .kb-module-browser--backdrop{
   position: fixed;
   top: 0;

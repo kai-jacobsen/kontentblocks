@@ -28,32 +28,37 @@ class HandleClipboard implements AjaxActionInterface
      */
     public static function run( ValueStorageInterface $request )
     {
-        $data = $request->get('data');
-        $target = filter_var($data['targetPid'], FILTER_SANITIZE_NUMBER_INT);
-        $source = filter_var($data['sourcePid'], FILTER_SANITIZE_NUMBER_INT);
-        $mode = filter_var($data['mode'], FILTER_SANITIZE_STRING);
-        $mid = filter_var($data['mid'], FILTER_SANITIZE_STRING);
+        $delete = false;
+        $data = $request->get( 'data' );
+        $target = filter_var( $data['targetPid'], FILTER_SANITIZE_NUMBER_INT );
+        $source = filter_var( $data['sourcePid'], FILTER_SANITIZE_NUMBER_INT );
+        $mode = filter_var( $data['mode'], FILTER_SANITIZE_STRING );
+        $mid = filter_var( $data['mid'], FILTER_SANITIZE_STRING );
 
-        $sourceEnv = Utilities::getEnvironment($source);
-        $targetEnv = Utilities::getEnvironment($target);
+        $sourceEnv = Utilities::getEnvironment( $source );
+        $targetEnv = Utilities::getEnvironment( $target );
 
-        $sourceModule = $sourceEnv->getStorage()->getModuleDefinition($mid);
-        $workshop = new ModuleWorkshop($targetEnv, [
+        $sourceModule = $sourceEnv->getStorage()->getModuleDefinition( $mid );
+        $workshop = new ModuleWorkshop(
+            $targetEnv, [
             'postId' => $targetEnv->getId(),
             'parentObjectId' => $targetEnv->getId()
-        ], $sourceModule);
+        ], $sourceModule
+        );
         $update = $targetEnv->getStorage()->addToIndex(
             $workshop->getNewId(),
             $workshop->getDefinitionArray()
         );
 
-        if ($update){
+        if ($update) {
             $originalData = $sourceEnv->getStorage()->getModuleData( $mid );
             $targetEnv->getStorage()->saveModule( $workshop->getPropertiesObject()->mid, $originalData );
-
             $targetEnv->getStorage()->reset();
-
             $module = $workshop->getModule();
+
+            if ($mode === 'move') {
+                $delete = $sourceEnv->getStorage()->removeFromIndex( $mid );
+            }
 
             apply_filters( 'kb.module.before.factory', $module );
             $html = $module->renderForm();
@@ -64,17 +69,13 @@ class HandleClipboard implements AjaxActionInterface
                 'name' => $module->properties->getSetting( 'publicName' ),
                 'html' => $html,
                 'json' => Kontentblocks()->getService( 'utility.jsontransport' )->getJSON(),
+                'delete' => $delete
 
             );
             return new AjaxSuccessResponse( 'Module successfully copied from clipboard', $response );
-
+        } else {
+            return new AjaxErrorResponse( 'Clipboard action failed' );
         }
-
-
-
-
-
-
     }
 
 

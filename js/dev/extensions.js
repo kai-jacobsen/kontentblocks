@@ -384,13 +384,9 @@ module.exports = {
 
   init: function(){
     var $el = jQuery('#kontentblocks-clipboard');
-
-    if ($el.length == 1){
       return new ClipboardController({
         el : $el.find('.inside')
       })
-    }
-
   }
 
 };
@@ -963,7 +959,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.postObject : stack1)) != null ? stack1.ID : stack1), depth0))
     + "<br>\n    <em>Post Title:</em>"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.postObject : stack1)) != null ? stack1.post_title : stack1), depth0))
-    + "<br>\n</p>\n<div class=\"kb-js-duplicate-clipboard\">duplicate</div>\n<div class=\"kb-js-move-clipboard\">move</div>";
+    + "<br>\n</p>\n<div class=\"kb-js-duplicate-clipboard kb-clipboard-action\">duplicate</div>\n<div class=\"kb-js-move-clipboard kb-clipboard-action\">move</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":33}],23:[function(require,module,exports){
