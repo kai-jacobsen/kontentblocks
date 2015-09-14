@@ -203,11 +203,14 @@ KB.App = (function () {
 
 }(jQuery));
 
-// get started
-KB.App.init();
 
 
 jQuery(document).ready(function () {
+
+
+// get started
+  KB.App.init();
+
   if (KB.appData && !KB.appData.config.frontend) {
     KB.Views.Modules.ready();
   }

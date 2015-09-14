@@ -68,9 +68,8 @@ module.exports = Backbone.View.extend({
       parent: this
     });
 
-
     // set view on model for later reference
-    this.model.View = this;
+    this.model.connectView(this);
     // Setup View
     this.setupDefaultMenuItems();
     this.setupDefaultUiItems();
@@ -90,12 +89,14 @@ module.exports = Backbone.View.extend({
     this.ModuleMenu.addItem(new DuplicateControl({model: this.model, parent: this}));
     this.ModuleMenu.addItem(new DeleteControl({model: this.model, parent: this}));
     this.ModuleMenu.addItem(new StatusControl({model: this.model, parent: this}));
+    this.trigger('module.view.setup.menu', this.ModuleMenu, this.model, this);
   },
   setupDefaultUiItems: function () {
     this.ModuleUi.addItem(new MoveControl({model: this.model, parent: this}));
     this.ModuleUi.addItem(new ToggleControl({model: this.model, parent: this}));
     this.ModuleUi.addItem(new FullscreenControl({model: this.model, parent: this}));
     this.ModuleUi.addItem(new DisabledControl({model: this.model, parent: this}));
+    this.trigger('module.view.setup.ui', this.ModuleUi, this.model, this);
   },
   setupDefaultStatusItems: function(){
     this.ModuleStatusBar.addItem(new DraftStatus({model:this.model, parent:this}));

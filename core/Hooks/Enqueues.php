@@ -100,14 +100,7 @@ class Enqueues
 //            true
 //        );
 
-        // Extensions
-        wp_register_script(
-            'kb-extensions',
-            KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
-            array(),
-            null,
-            true
-        );
+
 
         // FieldsAPI
         wp_register_script(
@@ -132,7 +125,7 @@ class Enqueues
             wp_register_script(
                 'kb-backend',
                 KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
-                array( 'kb-plugins', 'kb-refields', 'kb-extensions' ),
+                array( 'kb-plugins', 'kb-refields' ),
                 null,
                 true
             );
@@ -146,6 +139,15 @@ class Enqueues
                 true
             );
         }
+
+        // Extensions
+        wp_register_script(
+            'kb-extensions',
+            KB_PLUGIN_URL . 'js/' . $folder . '/extensions' . $suffix . '.js',
+            array(),
+            null,
+            true
+        );
 
 
         // WP iris // no dev version available in core
@@ -211,6 +213,7 @@ class Enqueues
             wp_enqueue_script( 'kb-refields' );
             wp_enqueue_script( 'heartbeat' );
             wp_enqueue_script( 'kb-media-ext' );
+            wp_enqueue_script( 'kb-extensions' );
 
             // add Kontentblocks l18n strings
 //            $localize = self::localize();

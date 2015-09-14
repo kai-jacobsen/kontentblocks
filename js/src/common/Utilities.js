@@ -16,6 +16,14 @@ var Utilities = function ($) {
         return info.val
       }
     },
+    store: {
+      set: function(key,val){
+          store.set(key,val);
+        },
+      get: function(key){
+          return store.get(key);
+      }
+    },
     setIndex: function (obj, is, value) {
 
       if (!_.isObject(obj)){
@@ -49,6 +57,16 @@ var Utilities = function ($) {
       }
       return obj;
     },
+    hashString : function(str) {
+    var hash = 0, i, chr, len;
+    if (str == 0) return hash;
+    for (i = 0, len = str.length; i < len; i++) {
+      chr   = str.charCodeAt(i);
+      hash  = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  },
     // deprecated in favor of kpath
     //cleanArray: function (actual) {
     //  var newArray = new Array();

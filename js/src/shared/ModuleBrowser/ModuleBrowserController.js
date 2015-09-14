@@ -31,11 +31,12 @@ module.exports = Backbone.View.extend({
     this.$backdrop = jQuery('<div class="kb-module-browser--backdrop"></div>');
 
     // render the list sub view
-    this.subviews.ModulesList = new ModuleBrowserList({
-      el: jQuery('.modules-list', this.$el),
-      browser: this
-    });
+    //this.subviews.ModulesList = new ModuleBrowserList({
+    //  el: jQuery('.modules-list', this.$el),
+    //  browser: this
+    //});
 
+    this.$list = jQuery('.modules-list', this.$el);
     // render description sub view
     this.subviews.ModuleDescription = new ModuleBrowserDescription({
       el: jQuery('.module-description', this.$el),
@@ -50,8 +51,6 @@ module.exports = Backbone.View.extend({
 
     // bind to navigation views custom change event
     this.listenTo(this.subviews.Navigation, 'browser:change', this.update);
-    //this.listenTo(this.subviews.ModulesList, 'createModule', this.createModule);
-//        this.subviews.Navigation.bind('browser:change', _.bind(this.update, this));
 
     this.bindHandlers();
 
@@ -153,10 +152,11 @@ module.exports = Backbone.View.extend({
     this.isOpen = false;
   },
   // update list view upon navigation
-  update: function (model) {
-    var id = model.get('id');
+  update: function (cat) {
+    var id = cat.model.get('id');
     var modules = this.modulesDefinitions.getModules(id);
-    this.subviews.ModulesList.setModules(modules).update();
+    //this.subviews.ModulesList.setModules(modules).update();
+    cat.renderList();
 //        this.listenTo(this.subviews.ModulesList, 'loadDetails', this.loadDetails);
 
   },
@@ -238,6 +238,7 @@ module.exports = Backbone.View.extend({
         fullDefs.push(module);
       }
     });
+    KB.Events.trigger('module.browser.setup.defs', this, fullDefs);
     return fullDefs;
   }
 });

@@ -92,6 +92,8 @@ class AjaxCallbackHandler
                 'getGlobalAreaHTML' => array( 'Kontentblocks\Ajax\Actions\GetGlobalAreaHTML', 'run' ),
                 'updateContextAreaOrder' => array( 'Kontentblocks\Ajax\Actions\UpdateContextAreaOrder', 'run' ),
                 'updatePostPanel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdatePostPanel', 'run' ),
+                'getPostObjects' => array( 'Kontentblocks\Ajax\Actions\GetPostObjects', 'run' ),
+                'handleClipboard' => array( 'Kontentblocks\Ajax\Actions\HandleClipboard', 'run' ),
                 'updateFieldModel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run' )
 
             )

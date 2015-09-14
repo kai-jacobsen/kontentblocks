@@ -12,6 +12,6 @@ module.exports = FieldControlModel.extend({
     }
   },
   bindHandlers: function(){
-    console.log('where some handlers wuld do their work');
+    //console.log('where some handlers wuld do their work');
   }
 });

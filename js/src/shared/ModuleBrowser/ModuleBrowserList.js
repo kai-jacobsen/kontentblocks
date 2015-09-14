@@ -3,6 +3,7 @@ var ListItem = require('shared/ModuleBrowser/ModuleBrowserListItem');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     this.options = options || {};
+    this.cat = options.cat;
   },
   modules: {},
   subviews: {},
@@ -17,13 +18,12 @@ module.exports = Backbone.View.extend({
     // flag the first
     var first = false;
     this.$el.empty();
-    _.each(this.modules, function (module) {
+    _.each(this.cat.model.get('modules'), function (module) {
       that.subviews[module.cid] = new ListItem({
         model: module,
         parent: that,
         browser: that.options.browser
       });
-
 
       if (first === false) {
         that.options.browser.loadDetails(module);
@@ -31,5 +31,7 @@ module.exports = Backbone.View.extend({
       }
       that.$el.append(that.subviews[module.cid].render(that.$el));
     });
+  },
+  render: function(){
   }
 });

@@ -1,4 +1,3 @@
-//KB.Backbone.ModulesDefinitionsCollection
 var Payload = require('common/Payload');
 module.exports = Backbone.Collection.extend({
 
@@ -13,13 +12,15 @@ module.exports = Backbone.Collection.extend({
   getModules: function (id) {
     return this.categories[id].modules;
   },
+  getCategories: function () {
+    return this.categories;
+  },
   sortToCategories: function () {
     var that = this;
     _.each(this.models, function (model) {
       if (!that.validateVisibility(model)) {
         return;
       }
-
       var cat = (_.isUndefined(model.get('settings').category)) ? 'standard' : model.get('settings').category;
       that.categories[cat].modules.push(model);
     });
@@ -37,13 +38,15 @@ module.exports = Backbone.Collection.extend({
   },
   prepareCategories: function () {
     var cats = {};
-    _.each(Payload.getPayload('ModuleCategories'), function (item, key) {
+    var pCats = Payload.getPayload('ModuleCategories');
+    _.each(pCats, function (item, key) {
       cats[key] = {
         id: key,
         name: item,
         modules: []
       };
     });
+    KB.Events.trigger('module.browser.setup.cats', cats);
     return cats;
   }
 });

@@ -62,7 +62,7 @@ var BatchDeleteController = Backbone.View.extend({
           wp.heartbeat.interval('fast', 2);
           control.model.destroy();
         }
-      },this)
+      }, this)
     }
   },
   show: function () {
