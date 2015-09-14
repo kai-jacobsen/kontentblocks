@@ -294,6 +294,10 @@ h5.kb_properties_title {
           /*background: url('assets/power.png') no-repeat;*/
           content: '\f177';
         }
+        &.module-clipboard:before {
+          /*background: url('assets/power.png') no-repeat;*/
+          content: "\f481";
+        }
 
         &.kb-duplicate:before {
           /*background: url('assets/duplicate.png') no-repeat;*/
@@ -307,6 +311,10 @@ h5.kb_properties_title {
 
         &.kb-save.is-dirty:before{
           color: red;
+        }
+
+        &.module-clipboard.kb-in-clipboard:before{
+          color: orange;
         }
 
       }

@@ -92,7 +92,6 @@ module.exports = BaseView.extend({
     textarea.value = href;
 
     window._kbLink.trigger('update', title, href);
-    console.log(window._kbLink);
     window._kbLink.$text.val(title);
     //restore the original function
     // close dialog and put the cursor inside the textarea

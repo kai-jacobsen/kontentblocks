@@ -147,6 +147,10 @@ module.exports = function (grunt) {
         files: ['js/src/backend/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsbackend']
       },
+      extensions: {
+        files: ['js/src/extensions/**/*.js', 'js/**/*.hbs'],
+        tasks: ['jsextensions']
+      },
       frontend: {
         files: ['js/src/frontend/**/*.js', 'js/**/*.hbs'],
         tasks: ['jsfrontend']

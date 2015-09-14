@@ -20,6 +20,10 @@ module.exports = Backbone.Model.extend({
       delete this.attachedFields[FieldModel.id];
     }
   },
+  connectView: function(ModuleView){
+    this.View = ModuleView;
+    this.trigger('module.model.view.connected', ModuleView);
+  },
   setArea: function (area) {
     this.setEnvVar('area', area.get('id'));
     this.setEnvVar('areaContext', area.get('context'));

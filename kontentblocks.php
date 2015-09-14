@@ -246,6 +246,8 @@ Class Kontentblocks
         require_once dirname( __FILE__ ) . '/core/Hooks/setup.php';
         Capabilities::setup();
 
+        add_theme_support('kontentblocks:clipboard');
+
         if (file_exists( get_template_directory() . '/kontentblocks.php' )) {
             add_theme_support( 'kontentblocks' );
             include_once( get_template_directory() . '/kontentblocks.php' );
