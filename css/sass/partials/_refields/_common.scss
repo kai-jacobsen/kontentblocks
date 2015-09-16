@@ -30,14 +30,15 @@
     text-align: left;
     height: 30px;
     line-height: 22px;
-    border: none;
-    border-bottom: 1px solid #dadada;
+    //border: none;
+    //border-bottom: 1px solid #dadada;
     font-size: 14px;
-    background: transparent !important;
+    //background: transparent !important;
     box-shadow: none !important;
     width: 60%;
     min-width: 150px !important;
-    padding: 0 10px 0 0 !important;
+    max-width: 450px !important;
+    //padding: 0 10px 0 0 !important;
     transition: width .2s ease-out;
     margin: 0;
 
@@ -46,7 +47,7 @@
     }
 
     &:focus {
-      border-bottom: 1px solid $lightblue;
+      //border-bottom: 1px solid $lightblue;
     }
   }
 

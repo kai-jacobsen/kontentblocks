@@ -35,6 +35,12 @@
   .kb-field-image-title{
     margin-bottom: $halfpadding;
 
+    input{
+      border: none !important;
+      background-color: transparent !important;
+
+    }
+
     label{
       display: block;
     }
@@ -46,7 +52,8 @@
 
     textarea{
       width: 100%;
-      background-color: #fff !important;
+      background-color: transparent !important;
+      border: none !important;
     }
 
   }

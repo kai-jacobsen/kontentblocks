@@ -70,7 +70,6 @@ class FlexibleFieldsReturn
         if (!is_array( $items )) {
             return array();
         }
-
         return $items;
     }
 
@@ -85,6 +84,11 @@ class FlexibleFieldsReturn
         $fields = $this->extractFieldsFromConfig();
         $items = array();
         foreach ($this->fieldData as $index => $data) {
+
+            if (empty($data)){
+                continue;
+            }
+
             $item = array();
             foreach ($fields as $key => $conf) {
 
