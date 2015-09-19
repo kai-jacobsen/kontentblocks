@@ -449,7 +449,7 @@ module.exports = Backbone.View.extend({
     this.model.set('kpath', this.prepareKpath());
   },
   kbfuid: function () {
-    return this.model.get('fieldId') + this.model.get('primeKey') + this.model.get('type');
+    return this.model.get('index') + this.model.get('fieldId') + this.model.get('primeKey') + this.model.get('type');
   },
   setupDefaults: function () {
     this.setValue(this.defaults.value);
