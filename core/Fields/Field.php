@@ -475,7 +475,7 @@ abstract class Field implements Exportable
         }
 
         if (is_null( $this->uniqueId )) {
-            $base = $this->baseId . $this->key . $state . $this->getArg( 'index', '' );
+            $base = $this->baseId . $this->key . $state . $this->getArg( 'index', '' ) . $this->getArg('arrayKey', '');
             $this->uniqueId = 'kb-' . hash( 'crc32', $base );
         }
         return $this->uniqueId;
