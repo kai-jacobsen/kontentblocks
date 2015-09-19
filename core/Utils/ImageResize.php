@@ -68,6 +68,7 @@ namespace Kontentblocks\Utils {
                 } else {
                     $url = $attachment;
                 }
+
                 // Caipt'n, ready to hook.
                 if ( true === $upscale ) add_filter( 'image_resize_dimensions', array($this, 'upscale'), 10, 6 );
                 // Define upload path & dir.
@@ -86,6 +87,7 @@ namespace Kontentblocks\Utils {
                 elseif(!strncmp($url,$http_prefix,strlen($http_prefix))){ //if url begins with http:// make $upload_url begin with http:// as well
                     $upload_url = str_replace($https_prefix,$http_prefix,$upload_url);
                 }
+
 
 
                 // Check if $img_url is local.

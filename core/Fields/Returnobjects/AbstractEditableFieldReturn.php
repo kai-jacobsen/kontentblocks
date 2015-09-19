@@ -61,7 +61,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     /**
      * @var string
      */
-    protected $uniqueId;
+    public $uniqueId;
 
     protected $callCount = 0;
 

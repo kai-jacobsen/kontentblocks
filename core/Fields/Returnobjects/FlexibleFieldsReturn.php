@@ -66,7 +66,6 @@ class FlexibleFieldsReturn
         };
 
         $items = $this->setupItems();
-
         if (!is_array( $items )) {
             return array();
         }
@@ -102,6 +101,8 @@ class FlexibleFieldsReturn
                 $field->setData($data[$key]);
                 $field->setArgs(['index' => $index, 'arrayKey' => $this->key]);
                 $item[$key] = $this->getReturnObj( $conf['type'], $data[$key], $field );
+                $item['conf'] = $conf;
+                $item['index'] = $index;
             }
             $items[] = $item;
         }

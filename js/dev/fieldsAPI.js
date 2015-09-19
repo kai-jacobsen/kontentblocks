@@ -524,6 +524,12 @@ module.exports = BaseView.extend({
     });
   },
   setValue: function (value) {
+
+    if (!value){
+      value = this.defaults.value;
+    }
+
+
     var attrs;
     var that = this;
     var args = {
@@ -532,6 +538,7 @@ module.exports = BaseView.extend({
       upscale: false,
       crop: true
     };
+
 
     if (!value.id) {
       return;
