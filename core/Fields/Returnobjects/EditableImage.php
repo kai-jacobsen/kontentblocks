@@ -214,13 +214,16 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             $this->field->augmentArgs( $json )
         );
 
-        wp_enqueue_script(
-            'image-edit',
-            "/wp-admin/js/image-edit.min.js",
-            array( 'jquery', 'json2', 'imgareaselect' ),
-            false,
-            1
-        );
+        if (is_user_logged_in() && user_can('edit_kontentblocks')){
+            wp_enqueue_script(
+                'image-edit',
+                "/wp-admin/js/image-edit.min.js",
+                array( 'jquery', 'json2', 'imgareaselect' ),
+                false,
+                1
+            );
+        }
+
     }
 
     /**
