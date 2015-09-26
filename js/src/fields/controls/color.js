@@ -14,7 +14,7 @@ module.exports = BaseView.extend({
     jQuery('body').off('click.wpcolorpicker', this.update);
   },
   update: function () {
-    KB.Events.trigger('modal.preview');
+    //KB.Events.trigger('modal.preview');
   },
   recalibrate: function () {
     _.delay(function () {

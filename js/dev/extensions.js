@@ -608,7 +608,6 @@ module.exports = ModuleBrowserList.extend({
         parent: that,
         browser: that.options.browser
       });
-
       if (first === false) {
         that.options.browser.loadDetails(module);
         first = !first;
@@ -616,13 +615,16 @@ module.exports = ModuleBrowserList.extend({
       that.$el.append(that.subviews[module.cid].render(that.$el));
     });
   },
+  /**
+   * get related post object information from the server
+   * in order to display information about the origin
+   */
   augmentModels: function(){
     var that = this;
     var modules = this.cat.model.get('modules');
     var postIds = _.map(modules, function(model){
       return model.get('postId');
     });
-
     var xhr = Ajax.send({
       postIds: postIds,
       action: 'getPostObjects',
