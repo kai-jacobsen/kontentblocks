@@ -87,6 +87,10 @@ class ModuleWorkshop
         $attrs['postId'] = $this->environment->getId();
 //        }
 
+        if (!$attrs['globalModule']){
+            $attrs['parentObjectId'] = $this->environment->getId();
+        }
+
         if (is_null( $attrs['parentObjectId'] ) || $attrs['parentObjectId'] === 0) {
             $attrs['parentObjectId'] = $attrs['post_id'];
         }
