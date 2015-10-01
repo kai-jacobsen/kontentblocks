@@ -2,7 +2,6 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Kontentblocks;
 use XHProfRuns_Default;
@@ -40,6 +39,7 @@ class Utilities
                 return self::$environments[$storageId] = new Environment( $storageId, $postObj );
             }
         }
+        return null;
     }
 
 
@@ -299,8 +299,7 @@ class Utilities
     public static function getTemplateFile()
     {
         global $template;
-
-        if (!empty( $template )) {
+        if (!empty( $template ) && is_string($template)) {
             return str_replace( '.php', '', basename( $template ) );
         } else {
             return 'generic';
@@ -393,6 +392,10 @@ class Utilities
         }
     }
 
+    /**
+     * @param $array
+     * @return mixed
+     */
     public static function validateBoolRecursive( $array )
     {
         foreach ($array as $k => $v) {
@@ -431,6 +434,12 @@ class Utilities
         return $cats;
     }
 
+    /**
+     * @param $haystack
+     * @param $needle
+     * @param int $offset
+     * @return bool
+     */
     public static function strposa($haystack, $needle, $offset=0) {
         if(!is_array($needle)) $needle = array($needle);
         foreach($needle as $query) {
@@ -439,6 +448,11 @@ class Utilities
         return false;
     }
 
+    /**
+     * @param $arr
+     * @param $path
+     * @param $value
+     */
     public static function assignArrayByPath(&$arr, $path, $value) {
         $keys = explode('.', $path);
 
