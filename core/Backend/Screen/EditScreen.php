@@ -80,7 +80,7 @@ Class EditScreen
     }
 
     /**
-     * User Interface
+     * User  Interface
      * Prepares the outer html
      * Adds some generic but important meta informations in hidden fields
      * calls renderScreen
