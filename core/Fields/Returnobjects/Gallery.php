@@ -2,6 +2,9 @@
 
 namespace Kontentblocks\Fields\Returnobjects;
 
+use Kontentblocks\Fields\Field;
+use Kontentblocks\Kontentblocks;
+
 
 /**
  * Class Gallery
@@ -20,11 +23,10 @@ class Gallery
      * @param $value
      * @param $field
      */
-    public function __construct( $value, $field )
+    public function __construct( $value, Field $field )
     {
         $this->field = $field;
         $this->value = $value;
-
         if (isset( $value['images'] ) && is_array( $value['images'] )) {
             $this->setupMediaElements();
         }
@@ -37,7 +39,7 @@ class Gallery
     {
         foreach ($this->value['images'] as $k => $attId) {
             if (is_numeric( $attId )) {
-                $field = array(
+                $fielddef = array(
                     'key' => $this->field->getKey() . '.images',
                     'arrayKey' => $this->field->getArg( 'arrayKey' ),
                     'index' => $k,
@@ -45,12 +47,19 @@ class Gallery
                     'type' => 'image'
                 );
 
+                $registry = Kontentblocks()->getService('registry.fields');
+                /** @var Field $field */
+                $field = $registry->getField($fielddef['type'],$this->field->getFieldId(), $k, $this->field->getKey() . '.images' );
+                $field->setBaseId($this->field->getFieldId(), $this->field->getKey() . '.images');
+                $field->setData(array('id' => $attId));
+                $field->setArgs(['index' => $k, 'arrayKey' => $this->field->getKey() . '.images']);
 
                 $editableReturn = new EditableImage( $attId, $field );
                 $editableReturn->inlineEdit( false );
                 array_push( $this->images, $editableReturn );
             }
         }
+
 
     }
 
