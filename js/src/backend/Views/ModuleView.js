@@ -12,6 +12,7 @@ var FullscreenControl = require('backend/Views/ModuleUi/controls/FullscreenContr
 var DisabledControl = require('backend/Views/ModuleUi/controls/DisabledControl');
 var DraftStatus = require('backend/Views/ModuleStatusBar/status/DraftStatus');
 var OriginalNameStatus = require('backend/Views/ModuleStatusBar/status/OriginalNameStatus');
+var SettingsStatus = require('backend/Views/ModuleStatusBar/status/SettingsStatus');
 
 
 var Checks = require('common/Checks');
@@ -101,6 +102,7 @@ module.exports = Backbone.View.extend({
   setupDefaultStatusItems: function(){
     this.ModuleStatusBar.addItem(new DraftStatus({model:this.model, parent:this}));
     this.ModuleStatusBar.addItem(new OriginalNameStatus({model:this.model, parent:this}));
+    this.ModuleStatusBar.addItem(new SettingsStatus({model:this.model, parent:this}));
   },
   // get called when a module was dragged to a different area / area context
   updateModuleForm: function () {

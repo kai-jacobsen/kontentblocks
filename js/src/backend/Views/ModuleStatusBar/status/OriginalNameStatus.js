@@ -2,9 +2,6 @@
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
   className: 'kb-status-draft',
-  events: {
-    'click': 'deleteModule'
-  },
   isValid: function () {
     return true;
   },

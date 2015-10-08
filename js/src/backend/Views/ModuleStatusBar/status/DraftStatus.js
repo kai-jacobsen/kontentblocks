@@ -1,11 +1,8 @@
-//KB.Backbone.Backend.ModuleDelete
+
 var BaseView = require('backend/Views/BaseControlView');
 var tplDraftStatus = require('templates/backend/status/draft.hbs');
 module.exports = BaseView.extend({
   className: 'kb-status-draft',
-  events: {
-    'click': 'deleteModule'
-  },
   isValid: function () {
     return true;
   },
