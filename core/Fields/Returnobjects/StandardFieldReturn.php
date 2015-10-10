@@ -12,17 +12,15 @@ use Kontentblocks\Fields\Field;
 class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSerializable
 {
 
-    private $idKey;
-
     /**
      * @var mixed
      */
     public $value;
-
     /**
      * @var Field
      */
     protected $field;
+    private $idKey;
 
     /**
      * @param $value
@@ -30,10 +28,14 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      */
     public function __construct( $value, Field $field )
     {
-        $this->value = $value;
+        $this->value = $this->prepareValue( $value );
         $this->field = $field;
     }
 
+    private function prepareValue( $value )
+    {
+        return $value;
+    }
 
     /**
      * Whether a offset exists
@@ -94,7 +96,7 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      */
     public function offsetUnset( $offset )
     {
-        unset($this->value[$offset]);
+        unset( $this->value[$offset] );
     }
 
     /**
@@ -125,13 +127,17 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
     /**
      * @return string
      */
-    public function __toString(){
-        if (is_array($this->value)){
-            if (!is_null($this->idKey) && array_key_exists($this->idKey, $this->value) && is_string($this->value[$this->idKey])){
+    public function __toString()
+    {
+        if (is_array( $this->value )) {
+            if (!is_null( $this->idKey ) && array_key_exists( $this->idKey, $this->value ) && is_string(
+                    $this->value[$this->idKey]
+                )
+            ) {
                 return $this->value[$this->idKey];
             }
 
-            $value = array_values($this->value);
+            $value = array_values( $this->value );
             return $value[0];
         }
         return $this->value;
