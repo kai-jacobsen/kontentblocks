@@ -224,7 +224,6 @@ abstract class Field implements Exportable
             if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
                 $this->returnObj = new $classpath( $value, $this, $salt );
             }
-
             // second try
             if (class_exists( $classname )) {
                 $this->returnObj = new $classname( $value, $this, $salt );
@@ -243,7 +242,7 @@ abstract class Field implements Exportable
             $this->userValue = $this->returnObj;
             return $this->userValue;
         } else {
-			$this->returnObj = new Returnobjects\StandardFieldReturn($value, $this);
+			$this->returnObj = new Returnobjects\StandardFieldReturn($value, $this, $salt);
             $this->userValue = $this->returnObj;
             return $this->userValue;
         }

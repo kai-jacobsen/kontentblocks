@@ -10,7 +10,7 @@ use Kontentblocks\Templating\FieldView;
  * Class OpeningTimesReturn
  * @package Kontentblocks\Fields\Returnobjects
  */
-class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
+class OpeningTimesReturn extends StandardFieldReturn
 {
     /**
      * @var array Original field data
@@ -70,21 +70,10 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
         return $this->prepared;
     }
 
-    /**
-     * Returns the original field data
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
 
 
-    public function handleLoggedInUsers()
-    {
-        // TODO: Implement handleLoggedInUsers() method.
-    }
+
+
 
     /**
      * (PHP 5 &gt;= 5.4.0)<br/>
@@ -207,6 +196,4 @@ class OpeningTimesReturn implements InterfaceFieldReturn, \JsonSerializable
         );
         return $value;
     }
-
-
 }

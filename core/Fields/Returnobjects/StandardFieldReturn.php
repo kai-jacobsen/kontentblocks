@@ -25,8 +25,9 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
     /**
      * @param $value
      * @param Field $field
+     * @param $salt
      */
-    public function __construct( $value, Field $field )
+    public function __construct( $value, Field $field, $salt )
     {
         $this->value = $this->prepareValue( $value );
         $this->field = $field;
