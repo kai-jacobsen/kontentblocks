@@ -407,7 +407,6 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
   },
   attributes: {
-    "data-tipsy": 'Detach area from this post'
   },
   className: 'dashicons dashicons-no-alt',
   events: {
@@ -437,7 +436,6 @@ module.exports = BaseView.extend({
     if (res.success) {
       this.model.set('settings', res.data);
       Notice.notice('Area status updated', 'success');
-      jQuery('.tipsy').remove();
       this.parent.$el.remove();
     } else {
       Notice.notice(res.message, 'error');
@@ -456,7 +454,6 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
   },
   attributes: {
-    "data-tipsy": 'Move area inside context'
   },
   className: 'genericon genericon-draggable kb-area-move-handle',
 
@@ -479,7 +476,6 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
   },
   attributes: {
-    "data-tipsy": 'Switch area visibility on/off'
   },
   className: 'dashicons dashicons-visibility kb-area-status-action',
   events: {
@@ -3705,7 +3701,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div data-tipsy=\"open context browser\" class=\"kb-button-small kb-js-add-global-area\">add from global areas</div>";
+    return "<div class=\"kb-button-small kb-js-add-global-area\">add from global areas</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":90}],71:[function(require,module,exports){

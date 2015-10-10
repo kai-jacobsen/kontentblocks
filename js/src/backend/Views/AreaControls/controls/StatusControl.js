@@ -9,7 +9,6 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
   },
   attributes: {
-    "data-tipsy": 'Switch area visibility on/off'
   },
   className: 'dashicons dashicons-visibility kb-area-status-action',
   events: {

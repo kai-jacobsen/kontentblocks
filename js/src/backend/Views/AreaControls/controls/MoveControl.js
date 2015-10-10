@@ -9,7 +9,6 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
   },
   attributes: {
-    "data-tipsy": 'Move area inside context'
   },
   className: 'genericon genericon-draggable kb-area-move-handle',
 

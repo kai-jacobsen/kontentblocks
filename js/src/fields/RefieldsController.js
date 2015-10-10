@@ -1,7 +1,6 @@
 var Fields = require('./Fields');
 window.KB.Fields = Fields;
 Fields.registerObject('color', require('./controls/color'));
-Fields.registerObject('date', require('./controls/date'));
 Fields.registerObject('datetime', require('./controls/datetime'));
 Fields.registerObject('file', require('./controls/file'));
 Fields.registerObject('flexfields', require('./controls/flexfields'));

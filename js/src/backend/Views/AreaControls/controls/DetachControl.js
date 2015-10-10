@@ -9,7 +9,6 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
   },
   attributes: {
-    "data-tipsy": 'Detach area from this post'
   },
   className: 'dashicons dashicons-no-alt',
   events: {
@@ -39,7 +38,6 @@ module.exports = BaseView.extend({
     if (res.success) {
       this.model.set('settings', res.data);
       Notice.notice('Area status updated', 'success');
-      jQuery('.tipsy').remove();
       this.parent.$el.remove();
     } else {
       Notice.notice(res.message, 'error');
