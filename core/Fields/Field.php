@@ -243,9 +243,9 @@ abstract class Field implements Exportable
             $this->userValue = $this->returnObj;
             return $this->userValue;
         } else {
-//			$this->returnObj = new Returnobjects\DefaultFieldReturn( $this->value );
-//			return $this->returnObj;
-            return $this->userValue = $value;
+			$this->returnObj = new Returnobjects\StandardFieldReturn($value, $this);
+            $this->userValue = $this->returnObj;
+            return $this->userValue;
         }
 
     }
