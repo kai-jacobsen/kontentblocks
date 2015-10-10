@@ -1,5 +1,12 @@
 #Changelog
 
+####0.5.1
++ removed legacy fields and scripts
++ all field are represented by a standard field return object in userland
++ introduced EntityModel object, foor modules, panels and fields
++ improved and fixed gallery2 field type, based on native gallery workflow
++ frontend editing improvements
+
 ####0.5.0
 + refactored panels (backwards imcompatible)
 + fixed lookup of original module id for global modules during front-end edit
