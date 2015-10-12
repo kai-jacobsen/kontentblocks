@@ -3,11 +3,12 @@
   Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
   Description: Content modularization framework
-  Version: 0.5.0
+  Version: 0.5.1
   Author: Kai Jacobsen
   Author URI: http://kontentblocks.de
   Text Domain: Kontentblocks
   Domain Path: /languages
+  GitHub Plugin URI: kai-jacobsen/kontentblocks
   License: GPL3
  */
 
