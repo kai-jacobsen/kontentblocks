@@ -3,7 +3,7 @@
   Plugin Name: Kontentblocks
   Plugin URI: http://kontentblocks.de
   Description: Content modularization framework
-  Version: 0.5.1
+  Version: 0.5.0
   Author: Kai Jacobsen
   Author URI: http://kontentblocks.de
   Text Domain: Kontentblocks
