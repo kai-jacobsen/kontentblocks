@@ -25,7 +25,7 @@ class GetPostObjects implements AjaxActionInterface
      */
     public static function run( ValueStorageInterface $request )
     {
-        $posts = [ ];
+        $posts = array();
         $ids = array_unique( $request->get( 'postIds' ) );
         if (!empty( $ids )) {
             $args = array(

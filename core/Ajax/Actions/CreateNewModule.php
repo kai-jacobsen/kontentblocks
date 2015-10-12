@@ -182,7 +182,7 @@ class CreateNewModule implements AjaxActionInterface
         $addArgs = $this->request->get( 'renderSettings' );
 
         if (is_null( $addArgs )) {
-            $addArgs = [ ];
+            $addArgs = array();
         }
 
         $renderSettings = new RenderSettings( $addArgs, $this->area );

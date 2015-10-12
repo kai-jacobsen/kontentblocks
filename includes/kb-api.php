@@ -136,7 +136,7 @@ function renderContext( $context, $post_id, $additionalArgs = array() )
 
     if (!empty( $areas )) {
         foreach (array_keys( $areas ) as $area) {
-            $args = [ ];
+            $args = array();
             if (array_key_exists( $area, $additionalArgs )) {
                 $args = Utilities::arrayMergeRecursive( $additionalArgs[$area], $additionalArgs );
             } else {

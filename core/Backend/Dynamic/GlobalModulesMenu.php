@@ -546,7 +546,7 @@ class GlobalModulesMenu
     private function prepareAttachedTo()
     {
         global $wpdb;
-        $posts = [ ];
+        $posts = array();
         $meta = get_post_meta( get_the_ID(), '_kb_attached_to', true );
         if (!is_array( $meta )) {
             return $posts;

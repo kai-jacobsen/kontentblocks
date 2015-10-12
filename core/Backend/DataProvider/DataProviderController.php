@@ -51,6 +51,9 @@ class DataProviderController implements DataProviderInterface
         return $this->dataProvider->get( $key );
     }
 
+    /**
+     * @return array
+     */
     public function getAll()
     {
         return $this->dataProvider->getAll();

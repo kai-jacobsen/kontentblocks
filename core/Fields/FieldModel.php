@@ -20,7 +20,7 @@ class FieldModel extends EntityModel
      * @param array $data
      * @param Field $field
      */
-    public function __construct( $data = [ ], Field $field )
+    public function __construct( $data = array(), Field $field )
     {
         $this->field = $field;
         $this->_originalData = $data;

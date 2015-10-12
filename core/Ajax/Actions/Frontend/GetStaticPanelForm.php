@@ -33,7 +33,7 @@ class GetStaticPanelForm implements AjaxActionInterface
         $postId = filter_var( $panelDef['postId'], FILTER_SANITIZE_NUMBER_INT );
 
         $panel = \Kontentblocks\getPostPanel( $panId, $postId );
-        $pdata = ( !empty( $panelDef['moduleData'] ) ) ? wp_unslash( $panelDef['moduleData'] ) : [ ];
+        $pdata = ( !empty( $panelDef['moduleData'] ) ) ? wp_unslash( $panelDef['moduleData'] ) : array();
         $panel->setData( $pdata );
         $return = array(
             'html' => $panel->renderFields(),

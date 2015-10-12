@@ -58,7 +58,7 @@ class RenderSettings implements \ArrayAccess, \JsonSerializable
      * @param array $args
      * @param AreaProperties $area
      */
-    public function __construct( $args = [ ], AreaProperties $area )
+    public function __construct( $args = array(), AreaProperties $area )
     {
         $this->area = $area;
         $this->setupProperties( $args );

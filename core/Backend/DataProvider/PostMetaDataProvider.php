@@ -2,8 +2,6 @@
 
 namespace Kontentblocks\Backend\DataProvider;
 
-use Kontentblocks\Kontentblocks;
-
 /**
  * Class PostMetaDataProvider
  * Wrapper to WordPress native post meta functions

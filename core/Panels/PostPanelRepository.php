@@ -51,7 +51,7 @@ class PostPanelRepository
      */
     private function filterPanelsForPost( Environment $environment )
     {
-        $red = [ ];
+        $red = array();
 
         /** @var \Kontentblocks\Panels\PanelRegistry $registry */
         $registry = Kontentblocks::getService( 'registry.panels' );

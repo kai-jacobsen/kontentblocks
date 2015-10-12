@@ -39,7 +39,7 @@ class BatchRemoveModules implements AjaxActionInterface
         $backupManager = new BackupDataStorage( $storage );
         $backupManager->backup( "Before batch removal of modules" );
 
-        $responseMap = [ ];
+        $responseMap = array();
 
         foreach ($mids as $mid) {
             $module = $environment->getModuleById( $mid );

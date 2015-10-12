@@ -20,7 +20,6 @@ use Kontentblocks\Utils\Utilities;
  */
 abstract class OptionsPanel extends AbstractPanel
 {
-    use TraitSetupArgs;
 
     /**
      * @var SerOptionsDataProvider
@@ -321,6 +320,23 @@ abstract class OptionsPanel extends AbstractPanel
     public function getName()
     {
         return $this->menu['name'];
+    }
+
+    /**
+     * Auto setup args to class properties
+     * and look for optional method for each arg
+     * @param $args
+     */
+    public function setupArgs( $args )
+    {
+        foreach ($args as $k => $v) {
+            if (method_exists( $this, "set" . strtoupper( $k ) )) {
+                $method = "set" . strtoupper( $k );
+                $this->$method( $v );
+            } else {
+                $this->$k = $v;
+            }
+        }
     }
 
 }
