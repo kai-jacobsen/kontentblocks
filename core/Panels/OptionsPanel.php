@@ -3,7 +3,6 @@ namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
-use Kontentblocks\Common\Traits\TraitSetupArgs;
 use Kontentblocks\Customizer\CustomizerIntegration;
 use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
