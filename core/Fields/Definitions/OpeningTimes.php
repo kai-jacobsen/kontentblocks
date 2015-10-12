@@ -90,7 +90,7 @@ Class OpeningTimes extends Field
     public function cleanData($value)
     {
         $whitelist = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
-        $valid = [];
+        $valid = array();
         foreach ($whitelist as $day){
             if (isset($value[$day])){
                 $valid[$day] = $this->value[$day];

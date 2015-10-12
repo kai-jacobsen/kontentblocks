@@ -52,7 +52,7 @@ class SlotRenderer
      * @param ModuleIterator $iterator
      * @param array $addArgs
      */
-    public function __construct( ModuleIterator $iterator, $addArgs = [] )
+    public function __construct( ModuleIterator $iterator, $addArgs = array() )
     {
         $this->addArgs = $addArgs;
         $this->iterator = $iterator;

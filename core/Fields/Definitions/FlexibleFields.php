@@ -117,7 +117,7 @@ Class FlexibleFields extends Field
 
     private function flattenFields()
     {
-        $flat = [];
+        $flat = array();
         $config = $this->getArg('config');
         foreach ($config as $section) {
             foreach ($section['fields'] as $key => $args ) {
