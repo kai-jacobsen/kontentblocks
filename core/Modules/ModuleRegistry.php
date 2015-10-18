@@ -56,9 +56,19 @@ class ModuleRegistry
             $moduleArgs = array();
             $args = wp_parse_args( $classname::$settings, Module::getDefaultSettings() );
             $args['class'] = $classname;
+            $args['hash'] = md5( $classname );
             $args['path'] = trailingslashit( dirname( $file ) );
             $args['uri'] = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
             $args['helpfile'] = false;
+
+            if (!empty( $args['id'] ) && empty( $args['slug'] )) {
+                $args['slug'] = $args['id'];
+            }
+
+            if (empty( $args['slug'] )) {
+                $args['slug'] = sanitize_title( $args['class'] );
+            }
+
 
             if (is_admin()) {
                 $args = $this->setupFilePaths( $args, $classname );

@@ -207,7 +207,7 @@ class AreaRenderer
     public function getAdditionalClasses( Module $module )
     {
         $classes = array();
-        $classes[] = $module->properties->getSetting( 'id' );
+        $classes[] = $module->properties->getSetting( 'slug' );
         $viewfile = $module->getViewfile();
 
         if (!empty( $viewfile )) {
@@ -230,7 +230,7 @@ class AreaRenderer
             }
         }
 
-        if ($this->previousModule === $module->properties->getSetting( 'id' )) {
+        if ($this->previousModule === $module->properties->getSetting( 'hash' )) {
             $classes[] = 'repeater';
             $this->repeating = true;
         } else {
@@ -266,7 +266,7 @@ class AreaRenderer
 
     public function _afterModule( Module $module )
     {
-        $this->previousModule = $module->properties->getSetting( 'id' );
+        $this->previousModule = $module->properties->getSetting( 'hash' );
         $this->position ++;
         $this->areaHtmlNode->nextLayout();
         return true;

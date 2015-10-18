@@ -60,7 +60,7 @@ class ModuleHTMLNode
 
         // strings not appended because $concat is expected as return
         $concat = apply_filters(
-            "kb.module.footer-{$this->module->properties->getSetting( 'id' )}",
+            "kb.module.footer-{$this->module->properties->getSetting( 'class' )}",
             $concat,
             $this->module
         );
@@ -88,8 +88,7 @@ class ModuleHTMLNode
         $count = strrchr( $this->module->getId(), "_" );
 
         // classname
-        $classname = get_class( $this->module );
-
+        $hash = $this->module->properties->getSetting('hash');
         // additional classes to set for the item
         $disabledclass = ( $this->module->properties->getSetting( 'disabled' ) ) ? 'disabled' : null;
         $uidisabled = ( $this->module->properties->getSetting( 'disabled' ) ) ? 'ui-state-disabled' : null;
@@ -99,8 +98,8 @@ class ModuleHTMLNode
 
         // Block List Item
         return "<li id='{$this->module->getId()}' rel='{$this->module->getId(
-        )}{$count}' data-moduleclass='{$classname}' class='{$this->module->properties->getSetting(
-            'id'
+        )}{$count}' data-modulehash='{$hash}' class='kbui-{$this->module->properties->getSetting(
+            'slug'
         )} kb-module__wrapper kb-module {$this->getStatusClass()} {$disabledclass} {$uidisabled} {$unsortable}'>
 		<input type='hidden' name='{$this->module->getId(
         )}[areaContext]' value='{$this->module->properties->areaContext}' />

@@ -68,7 +68,7 @@ class SingleModuleRenderer
                 'os-edit-container',
                 'module',
                 'single-module',
-                $this->module->properties->getSetting( 'id' ),
+                $this->module->properties->getSetting( 'slug' ),
                 'view-' . str_replace( '.twig', '', $this->module->properties->viewfile )
 
             );

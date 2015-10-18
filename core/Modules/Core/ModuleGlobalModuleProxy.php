@@ -17,7 +17,7 @@ class ModuleGlobalModuleProxy extends Module
 
     public static $settings = array(
         'publicName' => 'Master Module',
-        'id' => 'core-master-module',
+        'slug' => 'core-master-module',
         'description' => 'Handles reference to master templates',
         'globalModule' => false,
         'master' => true,

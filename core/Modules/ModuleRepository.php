@@ -21,6 +21,7 @@ class ModuleRepository
     {
         $this->environment = $environment;
         $this->setupModulesFromStorageIndex();
+        d($this);
     }
 
     /**
