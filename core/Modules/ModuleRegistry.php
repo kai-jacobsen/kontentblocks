@@ -19,6 +19,8 @@ class ModuleRegistry
      */
     public $modules = array();
 
+    public $reflections = array();
+
     /**
      * @var Container
      */
