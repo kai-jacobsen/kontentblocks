@@ -168,7 +168,7 @@ class ModuleHTMLNode
         $html .= "<div class='ui-wrap'></div>";
         // name
         $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->module->getId(
-            )}[moduleName]' value='" . esc_attr(
+            )}[overrides][name]' value='" . esc_attr(
                 $this->module->properties->getSetting( 'name' )
             ) . "' /></div>";
         $html .= "</div>";

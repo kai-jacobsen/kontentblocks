@@ -330,12 +330,12 @@ module.exports = Backbone.Model.extend({
     this.attachedFields[FieldModel.id] = FieldModel;
     this.listenTo(FieldModel, 'remove', this.removeAttachedField);
   },
-  removeAttachedField: function(FieldModel){
-    if (this.attachedFields[FieldModel.id]){
+  removeAttachedField: function (FieldModel) {
+    if (this.attachedFields[FieldModel.id]) {
       delete this.attachedFields[FieldModel.id];
     }
   },
-  connectView: function(ModuleView){
+  connectView: function (ModuleView) {
     this.View = ModuleView;
     this.trigger('module.model.view.connected', ModuleView);
   },
@@ -356,7 +356,7 @@ module.exports = Backbone.Model.extend({
     if (!AreaModel) {
       AreaModel = KB.Areas.get(this.get('area'));
     }
-    if (AreaModel){
+    if (AreaModel) {
       AreaModel.View.attachModuleView(this);
       this.Area = AreaModel;
     }
@@ -368,6 +368,9 @@ module.exports = Backbone.Model.extend({
     var ev = _.clone(this.get('envVars'));
     ev[attr] = value;
     this.set('envVars', ev);
+  },
+  setOverride: function (key, val) {
+    this.get('overrides')[key] = val;
   }
 });
 },{}],7:[function(require,module,exports){
@@ -1413,7 +1416,7 @@ module.exports = BaseView.extend({
     return true;
   },
   render: function () {
-    this.$el.append('<span class="kb-module--status-label">Module Name</span>' + this.model.get('settings').publicName);
+    this.$el.append('<span class="kb-module--status-label">Original Module Name</span>' + this.model.get('settings').publicName);
   }
 
 });
@@ -1437,6 +1440,7 @@ module.exports = Backbone.View.extend({
     if (!this.rendered) {
       this.$el.appendTo('body').removeClass('kb-hide');
       this.rendered = true;
+      this.bindHandlers();
     } else {
       this.$el.detach();
       this.$el.appendTo('body');
@@ -1458,6 +1462,15 @@ module.exports = Backbone.View.extend({
     delete this.model;
     delete this.moduleView;
     this.remove();
+  },
+  bindHandlers: function(){
+    var that = this;
+    this.$nameInput = this.$('[data-kbms-name]');
+    this.$nameInput.on('keyup', function(){
+      var val = jQuery(this).val();
+      that.moduleView.$('.kb-module-name').val(val);
+      that.moduleView.model.setOverride('name', val);
+    });
   }
 });
 },{"templates/backend/status/settings/modal-inner.hbs":84}],32:[function(require,module,exports){
@@ -3820,7 +3833,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<h4>"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.publicName : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
     + "</h4>\n<p class=\"description\">"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.description : stack1), depth0))
     + "</p>";
@@ -3894,11 +3907,15 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
-  return "<div class=\"kb-status-settings-header\">\n    <span class=\"kb-modal-title\">Individual Module Settings</span>\n    <div class=\"kb-modal-close dashicons dashicons-no-alt\"></div>\n</div>\n<div class=\"kb-status-settings-inner\">\n\n    <input type=\"text\" name=\""
+  return "<div class=\"kb-status-settings-header\">\n    <span class=\"kb-modal-title\">Individual Module Settings</span>\n\n    <div class=\"kb-modal-close dashicons dashicons-no-alt\"></div>\n</div>\n<div class=\"kb-status-settings-inner\">\n    <div class=\"kbms-field-wrap\">\n        <label>Name\n            <input type=\"text\" data-kbms-name name=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
     + "[overrides][name]\" value=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.publicName : stack1), depth0))
-    + "\">\n\n</div>";
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
+    + "\">\n        </label>\n    </div>\n    <div class=\"kbms-field-wrap\">\n        <label>Visible for logged-in users only\n            <input type=\"checkbox\" data-kbms-name name=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
+    + "[overrides][name]\" value=\""
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
+    + "\">\n        </label>\n    </div>\n\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":94}],85:[function(require,module,exports){

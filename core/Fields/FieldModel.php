@@ -12,6 +12,11 @@ use Kontentblocks\Common\Data\EntityModel;
 class FieldModel extends EntityModel
 {
     /**
+     * @var string|int|bool
+     */
+    public $singleValue;
+
+    /**
      * @var Field
      */
     protected $field;
@@ -51,7 +56,7 @@ class FieldModel extends EntityModel
      */
     public function jsonSerialize()
     {
-        if (!is_null($this->singleValue)){
+        if (!is_null( $this->singleValue )) {
             return $this->singleValue;
         }
 
@@ -60,7 +65,7 @@ class FieldModel extends EntityModel
         unset( $vars['_locked'] );
         unset( $vars['_initialized'] );
         unset( $vars['_originalData'] );
-        unset($vars['singleValue']);
+        unset( $vars['singleValue'] );
         return $vars;
     }
 

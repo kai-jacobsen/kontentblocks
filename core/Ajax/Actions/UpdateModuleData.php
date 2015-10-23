@@ -43,10 +43,14 @@ class UpdateModuleData implements AjaxActionInterface
         $environment = Utilities::getEnvironment( $postId );
         $module = $environment->getModuleById( filter_var( $moduleArgs['mid'], FILTER_SANITIZE_STRING ) );
 
+        $overrides = $moduleArgs['overrides'];
+        $module->properties->parseOverrides($overrides);
+
         // gather data
         $old = $module->model->export();
         $new = $module->save( $data, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
+
 
         $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $module );

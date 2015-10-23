@@ -5,6 +5,7 @@ namespace Kontentblocks\Backend\Environment\Save;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Common\Data\ValueStorage;
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -75,12 +76,10 @@ class SavePost
      *
      * @return mixed
      */
-    protected function moduleOverrides( $module, $data )
+    protected function moduleOverrides( Module $module, $data )
     {
         $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-        $module->properties->overrides['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module->Properties->getSetting(
-            'name'
-        );
+        $module->properties->overrides = ( !empty( $data['overrides'] ) ) ? $data['overrides'] : array();
         $module->properties->state['draft'] = false;
         return $module;
     }

@@ -17,6 +17,7 @@ module.exports = Backbone.View.extend({
     if (!this.rendered) {
       this.$el.appendTo('body').removeClass('kb-hide');
       this.rendered = true;
+      this.bindHandlers();
     } else {
       this.$el.detach();
       this.$el.appendTo('body');
@@ -38,5 +39,14 @@ module.exports = Backbone.View.extend({
     delete this.model;
     delete this.moduleView;
     this.remove();
+  },
+  bindHandlers: function(){
+    var that = this;
+    this.$nameInput = this.$('[data-kbms-name]');
+    this.$nameInput.on('keyup', function(){
+      var val = jQuery(this).val();
+      that.moduleView.$('.kb-module-name').val(val);
+      that.moduleView.model.setOverride('name', val);
+    });
   }
 });

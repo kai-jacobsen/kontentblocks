@@ -64,7 +64,7 @@ class ModuleProperties
      * settings overrides
      * @var array
      */
-    public $overrides;
+    public $overrides = array();
 
 
     /**
@@ -94,6 +94,7 @@ class ModuleProperties
      */
     public function __construct( $properties )
     {
+
         $properties = $this->parseInSettings( $properties );
         $this->setupProperties( $properties );
     }
@@ -120,6 +121,28 @@ class ModuleProperties
                 $this->$k = $this->{'set' . ucfirst( $k )}( $v );
             } else {
                 $this->$k = $v;
+            }
+        }
+
+        if (is_array( $properties['overrides'] )) {
+            $this->parseOverrides( $properties['overrides'] );
+        }
+
+    }
+
+    public function parseOverrides( $overrides )
+    {
+        $whitelist = array( 'name', 'loggedinonly' );
+
+        foreach ($overrides as $key => $value) {
+            if (!is_null( $value ) && in_array( $key, $whitelist )) {
+                switch($key){
+                    case 'name':
+                        $this->settings[$key] = filter_var($value, FILTER_SANITIZE_STRING);
+                        break;
+                    case 'loggedinonly':
+                        break;
+                }
             }
         }
     }
@@ -218,10 +241,10 @@ class ModuleProperties
         return $vars;
     }
 
-    public function __set( $k, $v )
-    {
-//        d( $k, $v );
-    }
+//    public function __set( $k, $v )
+//    {
+////        d( $k, $v );
+//    }
 
     /**
      * Magic setter

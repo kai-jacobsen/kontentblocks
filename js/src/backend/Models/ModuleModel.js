@@ -15,12 +15,12 @@ module.exports = Backbone.Model.extend({
     this.attachedFields[FieldModel.id] = FieldModel;
     this.listenTo(FieldModel, 'remove', this.removeAttachedField);
   },
-  removeAttachedField: function(FieldModel){
-    if (this.attachedFields[FieldModel.id]){
+  removeAttachedField: function (FieldModel) {
+    if (this.attachedFields[FieldModel.id]) {
       delete this.attachedFields[FieldModel.id];
     }
   },
-  connectView: function(ModuleView){
+  connectView: function (ModuleView) {
     this.View = ModuleView;
     this.trigger('module.model.view.connected', ModuleView);
   },
@@ -41,7 +41,7 @@ module.exports = Backbone.Model.extend({
     if (!AreaModel) {
       AreaModel = KB.Areas.get(this.get('area'));
     }
-    if (AreaModel){
+    if (AreaModel) {
       AreaModel.View.attachModuleView(this);
       this.Area = AreaModel;
     }
@@ -53,5 +53,8 @@ module.exports = Backbone.Model.extend({
     var ev = _.clone(this.get('envVars'));
     ev[attr] = value;
     this.set('envVars', ev);
+  },
+  setOverride: function (key, val) {
+    this.get('overrides')[key] = val;
   }
 });

@@ -12,10 +12,7 @@ use JsonSerializable;
  */
 abstract class EntityModel implements JsonSerializable, ArrayAccess
 {
-    /**
-     * @var string|int|bool
-     */
-    public $singleValue;
+
 
     /**
      * @var bool

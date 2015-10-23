@@ -59,6 +59,7 @@ class ModuleRegistry
             $args['path'] = trailingslashit( dirname( $file ) );
             $args['uri'] = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
             $args['helpfile'] = false;
+            $args['publicName'] = (empty($args['publicName'])) ? $args['name'] : $args['publicName'];
 
             if (is_admin()) {
                 $args = $this->setupFilePaths( $args, $classname );

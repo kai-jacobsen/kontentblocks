@@ -347,6 +347,7 @@ abstract class Module implements EntityInterface
             'parentObject' => $this->properties->parentObject,
             'areaContext' => $this->properties->areaContext,
             'viewfile' => $this->getViewfile(),
+            'overrides' => $this->properties->overrides,
             'globalModule' => $this->properties->globalModule,
             'class' => get_class( $this ),
             'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->properties->area->id ),

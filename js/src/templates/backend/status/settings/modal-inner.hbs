@@ -1,9 +1,18 @@
 <div class="kb-status-settings-header">
     <span class="kb-modal-title">Individual Module Settings</span>
+
     <div class="kb-modal-close dashicons dashicons-no-alt"></div>
 </div>
 <div class="kb-status-settings-inner">
-
-    <input type="text" name="{{ model.mid }}[overrides][name]" value="{{ model.publicName }}">
+    <div class="kbms-field-wrap">
+        <label>Name
+            <input type="text" data-kbms-name name="{{ model.mid }}[overrides][name]" value="{{ model.settings.name }}">
+        </label>
+    </div>
+    <div class="kbms-field-wrap">
+        <label>Visible for logged-in users only
+            <input type="checkbox" data-kbms-name name="{{ model.mid }}[overrides][name]" value="{{ model.settings.name }}">
+        </label>
+    </div>
 
 </div>
