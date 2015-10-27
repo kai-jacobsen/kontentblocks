@@ -6,7 +6,7 @@ module.exports = BaseView.extend({
     return true;
   },
   render: function () {
-    this.$el.append('<span class="kb-module--status-label">Original Module Name</span>' + this.model.get('settings').publicName);
+    this.$el.append('<span class="kb-module--status-label">Original Module Name<br></span>' + this.model.get('settings').publicName);
   }
 
 });

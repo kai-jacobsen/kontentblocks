@@ -90,20 +90,6 @@ abstract class Module implements EntityInterface
      * ------------------------------------
      */
 
-    /**
-     * Setup Module Data
-     * @param array $data
-     */
-    public function updateModuleData( $data = array() )
-    {
-
-            $this->model->set( $data );
-
-            if ($this->fields){
-                $this->fields->updateData();
-            }
-    }
-
     public function setupFields()
     {
         // magically setup fields
@@ -114,6 +100,45 @@ abstract class Module implements EntityInterface
         }
     }
 
+    /**
+     * Module default settings array
+     * @since 0.1.0
+     * @return array
+     */
+    public static function getDefaultSettings()
+    {
+
+        return array(
+            'disabled' => false,
+            'publicName' => '',
+            'name' => '',
+            'wrap' => true,
+            'wrapperClasses' => '',
+            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
+            'description' => '',
+            'connect' => 'any',
+            'hidden' => false,
+            'globalModule' => true,
+            'category' => 'standard',
+            'views' => false,
+            'concat' => true,
+            'fieldRenderer' => 'Kontentblocks\Fields\FieldRendererTabs'
+        );
+
+    }
+
+    /**
+     * Setup Module Data
+     * @param array $data
+     */
+    public function updateModuleData( $data = array() )
+    {
+
+        $this->model->set( $data );
+        if ($this->fields) {
+            $this->fields->updateData();
+        }
+    }
 
     /**
      * Creates a complete list item for the area
@@ -123,7 +148,6 @@ abstract class Module implements EntityInterface
         $node = new ModuleHTMLNode( $this );
         return $node->build();
     }
-
 
     /**
      * Method for the backend display
@@ -150,6 +174,12 @@ abstract class Module implements EntityInterface
         return $concat;
     }
 
+    /*
+     * ------------------------------------
+     * public getter
+     * ------------------------------------
+     */
+
     /**
      * No fields or form method override / fallback
      * @since 0.1.0
@@ -159,12 +189,6 @@ abstract class Module implements EntityInterface
         $tpl = new CoreView( 'no-module-options.twig' );
         return $tpl->render();
     }
-
-    /*
-     * ------------------------------------
-     * public getter
-     * ------------------------------------
-     */
 
     /**
      * Wrapper to actual render method.
@@ -192,7 +216,9 @@ abstract class Module implements EntityInterface
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $this->fields->getFieldByKey( $key );
-                $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue($this->properties->postId) : $v;
+                $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue(
+                    $this->properties->postId
+                ) : $v;
             }
         }
     }
@@ -227,6 +253,13 @@ abstract class Module implements EntityInterface
         return null;
     }
 
+
+    /*
+     * ------------------------------------
+     * public setter
+     * ------------------------------------
+     */
+
     /**
      * Gets the assigned viewfile (.twig) filename
      * Property is empty upon module creation, in that case we find the file to use
@@ -250,20 +283,13 @@ abstract class Module implements EntityInterface
 
     }
 
-
-    /*
-     * ------------------------------------
-     * public setter
-     * ------------------------------------
-     */
-
-    abstract public function render();
-
     /*
      * ------------------------------------
      * Helper
      * ------------------------------------
      */
+
+    abstract public function render();
 
     /**
      * save()
@@ -277,7 +303,7 @@ abstract class Module implements EntityInterface
     public function save( $data, $prevData )
     {
         if (isset( $this->fields )) {
-            $data =  $this->fields->save( $data, $prevData );
+            $data = $this->fields->save( $data, $prevData );
         }
         return $data;
     }
@@ -312,17 +338,7 @@ abstract class Module implements EntityInterface
      */
     public function verifyRender()
     {
-        if ($this->properties->getSetting( 'disabled' ) || $this->properties->getSetting( 'hidden' )) {
-            return false;
-        }
-        if (!$this->properties->state['active']) {
-            return false;
-        }
-
-        if (!is_user_logged_in() && $this->properties->state['draft']) {
-            return false;
-        }
-        return true;
+        return $this->properties->getGuard()->verify();
     }
 
     /**
@@ -340,6 +356,7 @@ abstract class Module implements EntityInterface
                 $this->model->getOriginalData(),
                 $this
             ),
+            'guard' => $this->properties->getGuard(),
             'area' => $this->properties->area->id,
             'post_id' => $this->properties->postId,
             'postId' => $this->properties->postId,
@@ -379,32 +396,5 @@ abstract class Module implements EntityInterface
             return false;
         }
         return $this->model->sync() || $this->properties->sync();
-    }
-
-    /**
-     * Module default settings array
-     * @since 0.1.0
-     * @return array
-     */
-    public static function getDefaultSettings()
-    {
-
-        return array(
-            'disabled' => false,
-            'publicName' => '',
-            'name' => '',
-            'wrap' => true,
-            'wrapperClasses' => '',
-            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
-            'description' => '',
-            'connect' => 'any',
-            'hidden' => false,
-            'globalModule' => true,
-            'category' => 'standard',
-            'views' => false,
-            'concat' => true,
-            'fieldRenderer' => 'Kontentblocks\Fields\FieldRendererTabs'
-        );
-
     }
 }

@@ -2899,7 +2899,7 @@ module.exports = Backbone.Model.extend({
       success: function (res) {
         that.set('moduleData', res.data.newModuleData);
         if (save) {
-           that.trigger('module.model.updated', that);
+          that.trigger('module.model.updated', that);
         }
       },
       error: function () {
@@ -4054,7 +4054,7 @@ module.exports = Backbone.View.extend({
     // get the form
     Ajax.send({
       action: 'undraftModule',
-      mid: json.mid,
+      module: json,
       postId: this.model.get('parentObjectId'),
       _ajax_nonce: Config.getNonce('update')
     }, function (res) {

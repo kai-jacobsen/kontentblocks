@@ -32,7 +32,6 @@ module.exports = Backbone.View.extend({
     this.$el.appendTo(this.moduleView.$el);
     this.$el.addClass('kb-hide');
     jQuery('#wpwrap').removeClass('module-browser-open');
-
     return this;
   },
   dispose: function () {
@@ -40,13 +39,33 @@ module.exports = Backbone.View.extend({
     delete this.moduleView;
     this.remove();
   },
-  bindHandlers: function(){
+  bindHandlers: function () {
     var that = this;
-    this.$nameInput = this.$('[data-kbms-name]');
-    this.$nameInput.on('keyup', function(){
-      var val = jQuery(this).val();
-      that.moduleView.$('.kb-module-name').val(val);
-      that.moduleView.model.setOverride('name', val);
+
+    that.$inputs = that.$('input');
+    that.$inputs.on('change', function () {
+      var $el = jQuery(this);
+      var key = $el.data('kbms-key');
+      var val = $el.val();
+      var type = $el.attr('type');
+
+      switch (type) {
+        case 'checkbox':
+          that.moduleView.model.get('overrides')[key] = $el.is(':checked');
+          break;
+        default:
+          that.moduleView.model.get('overrides')[key] = val;
+          break;
+      }
+
+      switch (key) {
+        case 'name':
+          that.moduleView.$('.kb-module-name').val(val);
+          break;
+      }
+      that.moduleView.trigger('kb::module.input.changed');
+      that.model.trigger('override:' + key);
     });
+
   }
 });

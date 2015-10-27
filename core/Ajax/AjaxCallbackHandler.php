@@ -71,7 +71,7 @@ class AjaxCallbackHandler
                 'afterAreaChange' => array( '\Kontentblocks\Ajax\Actions\AfterAreaChange', 'run' ),
                 'getRemoteEditor' => array( 'Kontentblocks\Ajax\Actions\RemoteGetEditor', 'run' ),
                 'changeArea' => array( 'Kontentblocks\Ajax\Actions\ChangeArea', 'run' ),
-                'undraftModule' => array( 'Kontentblocks\Ajax\Actions\Frontend\UndraftModule', 'run' ),
+                'undraftModule' => array( 'Kontentblocks\Ajax\Actions\UndraftModule', 'run' ),
                 'applyContentFilter' => array( 'Kontentblocks\Ajax\Actions\Frontend\ApplyContentFilter', 'run' ),
                 'removeModules' => array( 'Kontentblocks\Ajax\Actions\RemoveModules', 'run' ),
                 'batchRemoveModules' => array( 'Kontentblocks\Ajax\Actions\BatchRemoveModules', 'run' ),

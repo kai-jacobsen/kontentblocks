@@ -53,8 +53,5 @@ module.exports = Backbone.Model.extend({
     var ev = _.clone(this.get('envVars'));
     ev[attr] = value;
     this.set('envVars', ev);
-  },
-  setOverride: function (key, val) {
-    this.get('overrides')[key] = val;
   }
 });

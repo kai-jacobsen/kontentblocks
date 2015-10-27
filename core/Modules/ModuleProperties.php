@@ -11,6 +11,7 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ModuleProperties
+ * @property  getGuard
  * @package Kontentblocks\Modules
  */
 class ModuleProperties
@@ -66,7 +67,6 @@ class ModuleProperties
      */
     public $overrides = array();
 
-
     /**
      * unique module id
      * @var string
@@ -83,11 +83,15 @@ class ModuleProperties
      */
     public $parentObject;
 
-
     /**
      * @var bool is globalModule
      */
     public $globalModule;
+
+    /**
+     * @var ModuleGuard;
+     */
+    private $guard;
 
     /**
      * @param array $properties
@@ -97,6 +101,7 @@ class ModuleProperties
 
         $properties = $this->parseInSettings( $properties );
         $this->setupProperties( $properties );
+
     }
 
     /**
@@ -124,6 +129,8 @@ class ModuleProperties
             }
         }
 
+        $this->guard = new ModuleGuard( $this );
+
         if (is_array( $properties['overrides'] )) {
             $this->parseOverrides( $properties['overrides'] );
         }
@@ -136,13 +143,15 @@ class ModuleProperties
 
         foreach ($overrides as $key => $value) {
             if (!is_null( $value ) && in_array( $key, $whitelist )) {
-                switch($key){
+                switch ($key) {
                     case 'name':
-                        $this->settings[$key] = filter_var($value, FILTER_SANITIZE_STRING);
+                        $this->settings[$key] = $value = filter_var( $value, FILTER_SANITIZE_STRING );
                         break;
                     case 'loggedinonly':
+                        $this->guard->setLoggedInOnly( $value = filter_var( $value, FILTER_VALIDATE_BOOLEAN ) );
                         break;
                 }
+                $this->overrides[$key] = $value;
             }
         }
     }
@@ -208,8 +217,6 @@ class ModuleProperties
     }
 
 
-    // MAGIC SETTERS
-
     /**
      * Store properties to index
      * @return mixed
@@ -233,12 +240,19 @@ class ModuleProperties
         $vars = get_object_vars( $this );
         $vars['area'] = $this->area->id;
         $vars['parentObject'] = null;
+
+
         // settings are not persistent
         if (!$keepSettings) {
             unset( $vars['settings'] );
         }
 
         return $vars;
+    }
+
+    public function getGuard()
+    {
+        return $this->guard;
     }
 
 //    public function __set( $k, $v )

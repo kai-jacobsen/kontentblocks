@@ -609,7 +609,7 @@ module.exports = Backbone.View.extend({
     // get the form
     Ajax.send({
       action: 'undraftModule',
-      mid: json.mid,
+      module: json,
       postId: this.model.get('parentObjectId'),
       _ajax_nonce: Config.getNonce('update')
     }, function (res) {

@@ -115,7 +115,6 @@ class AreaRenderer
 
             $this->moduleRenderer = new SingleModuleRenderer( $module, $this->renderSettings );
 
-
             if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verifyRender()) {
                 continue;
             }

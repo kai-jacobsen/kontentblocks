@@ -13,6 +13,7 @@ var DisabledControl = require('backend/Views/ModuleUi/controls/DisabledControl')
 var DraftStatus = require('backend/Views/ModuleStatusBar/status/DraftStatus');
 var OriginalNameStatus = require('backend/Views/ModuleStatusBar/status/OriginalNameStatus');
 var SettingsStatus = require('backend/Views/ModuleStatusBar/status/SettingsStatus');
+var LoggedInStatus = require('backend/Views/ModuleStatusBar/status/LoggedInStatus');
 
 
 var Checks = require('common/Checks');
@@ -99,10 +100,11 @@ module.exports = Backbone.View.extend({
     this.ModuleUi.addItem(new DisabledControl({model: this.model, parent: this}));
     this.trigger('module.view.setup.ui', this.ModuleUi, this.model, this);
   },
-  setupDefaultStatusItems: function(){
-    this.ModuleStatusBar.addItem(new DraftStatus({model:this.model, parent:this}));
-    this.ModuleStatusBar.addItem(new OriginalNameStatus({model:this.model, parent:this}));
-    this.ModuleStatusBar.addItem(new SettingsStatus({model:this.model, parent:this}));
+  setupDefaultStatusItems: function () {
+    this.ModuleStatusBar.addItem(new SettingsStatus({model: this.model, parent: this}));
+    this.ModuleStatusBar.addItem(new DraftStatus({model: this.model, parent: this}));
+    this.ModuleStatusBar.addItem(new OriginalNameStatus({model: this.model, parent: this}));
+    this.ModuleStatusBar.addItem(new LoggedInStatus({model: this.model, parent: this}));
   },
   // get called when a module was dragged to a different area / area context
   updateModuleForm: function () {
@@ -174,10 +176,10 @@ module.exports = Backbone.View.extend({
   dispose: function () {
 
   },
-  getDirty: function(){
+  getDirty: function () {
 
   },
-  getClean: function(){
+  getClean: function () {
 
   }
 });

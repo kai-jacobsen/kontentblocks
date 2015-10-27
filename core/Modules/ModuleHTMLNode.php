@@ -45,10 +45,12 @@ class ModuleHTMLNode
         $concat .= $this->header();
 
 
+
         // inner block open
         $concat .= $this->openModuleBody();
 
         $concat .= $this->statusBar();
+
 
 
         // if disabled don't output, just show disabled message
