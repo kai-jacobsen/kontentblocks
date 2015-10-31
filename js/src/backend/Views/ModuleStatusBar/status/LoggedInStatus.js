@@ -7,7 +7,6 @@ module.exports = BaseView.extend({
   initialize: function(options){
     this.moduleView = options.parent;
     this.listenTo(this.model, 'override:loggedinonly', this.rerender);
-
   },
   isValid: function () {
     return true;
