@@ -1,9 +1,9 @@
 <?php
 
-namespace Kontentblocks\tests\core\Ajax\Actions\Frontend;
+namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\ChangeArea;
-use Kontentblocks\Ajax\Actions\Frontend\UndraftModule;
+use Kontentblocks\Ajax\Actions\UndraftModule;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
@@ -53,7 +53,8 @@ class UndraftModuleTest extends \WP_UnitTestCase
 
         $data = array(
             'postId' => $post->ID,
-            'mid' => $module['mid']
+            'mid' => $module['mid'],
+            'module' => $module
         );
 
         $Request = new ValueStorage( $data );

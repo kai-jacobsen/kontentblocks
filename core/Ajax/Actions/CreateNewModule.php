@@ -32,7 +32,9 @@ class CreateNewModule implements AjaxActionInterface
     // equals either current pos object or the post object of the global module
     protected $parentObject;
 
-
+    /**
+     * @var
+     */
     protected $environment;
 
     /**

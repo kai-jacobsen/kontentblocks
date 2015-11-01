@@ -62,7 +62,6 @@ class ModuleFactory
     public function getModule()
     {
 
-        $this->handleOverrides( $this->moduleProperties );
 
         $module = apply_filters( 'kb.modify.module.properties', $this->moduleProperties );
         // new instance
@@ -73,17 +72,5 @@ class ModuleFactory
     }
 
 
-    /**
-     * Instance specific data
-     * @param ModuleProperties $properties passed by reference
-     * @return mixed
-     */
-    private function handleOverrides( ModuleProperties $properties )
-    {
-        if (isset( $properties->overrides )) {
-            if (!empty( $properties->overrides['name'] )) {
-                $properties->settings['name'] = $properties->overrides['name'];
-            }
-        }
-    }
+
 }

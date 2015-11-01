@@ -20,7 +20,8 @@
             'description' => __( 'Description:', 'Kontentblocks' )
         ),
         'notices' => array(
-            'draft' => __( 'Module will be published after updating the current post', 'Kontentblocks' ),
+            'draft' => __( 'Draft (not visible)', 'Kontentblocks' ),
+            'published' => __('Published', 'Kontentblocks'),
             'draft_short' => __( 'draft', 'Kontentblocks' ),
             'public_short' => __( 'Public', 'Kontentblocks' )
         ),

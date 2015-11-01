@@ -11,6 +11,7 @@ use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ModuleProperties
+ * @property  getGuard
  * @package Kontentblocks\Modules
  */
 class ModuleProperties
@@ -64,8 +65,7 @@ class ModuleProperties
      * settings overrides
      * @var array
      */
-    public $overrides;
-
+    public $overrides = array();
 
     /**
      * unique module id
@@ -83,19 +83,25 @@ class ModuleProperties
      */
     public $parentObject;
 
-
     /**
      * @var bool is globalModule
      */
     public $globalModule;
 
     /**
+     * @var ModuleGuard;
+     */
+    private $guard;
+
+    /**
      * @param array $properties
      */
     public function __construct( $properties )
     {
+
         $properties = $this->parseInSettings( $properties );
         $this->setupProperties( $properties );
+
     }
 
     /**
@@ -120,6 +126,32 @@ class ModuleProperties
                 $this->$k = $this->{'set' . ucfirst( $k )}( $v );
             } else {
                 $this->$k = $v;
+            }
+        }
+
+        $this->guard = new ModuleGuard( $this );
+
+        if (is_array( $properties['overrides'] )) {
+            $this->parseOverrides( $properties['overrides'] );
+        }
+
+    }
+
+    public function parseOverrides( $overrides )
+    {
+        $whitelist = array( 'name', 'loggedinonly' );
+
+        foreach ($overrides as $key => $value) {
+            if (!is_null( $value ) && in_array( $key, $whitelist )) {
+                switch ($key) {
+                    case 'name':
+                        $this->settings[$key] = $value = filter_var( $value, FILTER_SANITIZE_STRING );
+                        break;
+                    case 'loggedinonly':
+                        $this->guard->setLoggedInOnly( $value = filter_var( $value, FILTER_VALIDATE_BOOLEAN ) );
+                        break;
+                }
+                $this->overrides[$key] = $value;
             }
         }
     }
@@ -185,8 +217,6 @@ class ModuleProperties
     }
 
 
-    // MAGIC SETTERS
-
     /**
      * Store properties to index
      * @return mixed
@@ -210,6 +240,8 @@ class ModuleProperties
         $vars = get_object_vars( $this );
         $vars['area'] = $this->area->id;
         $vars['parentObject'] = null;
+
+
         // settings are not persistent
         if (!$keepSettings) {
             unset( $vars['settings'] );
@@ -218,10 +250,15 @@ class ModuleProperties
         return $vars;
     }
 
-    public function __set( $k, $v )
+    public function getGuard()
     {
-//        d( $k, $v );
+        return $this->guard;
     }
+
+//    public function __set( $k, $v )
+//    {
+////        d( $k, $v );
+//    }
 
     /**
      * Magic setter

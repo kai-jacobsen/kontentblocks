@@ -1,0 +1,72 @@
+/*------------------------------------*\
+    Status Bar
+\*------------------------------------*/
+
+.kb-module--status-bar {
+  background-color: #f9f9f9;
+
+  .kb-module--status-label{
+    color: $grey-500;
+    font-style: italic;
+    font-size: 10px;
+  }
+
+  .kb-module--status-draft {
+    color: #fff;
+    background-color: $orange;
+  }
+}
+
+
+.kb-module--status-bar-list {
+  li {
+    display: inline-block;
+    padding: 5px;
+    border-right: 1px solid $grey-300;
+    margin-bottom: 0 !important;
+    text-align: center;
+    font-size: 11px;
+  }
+}
+
+.kb-status-settings-modal {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  background-color: #f9f9f9;
+  @extend .base-box-border;
+  @extend .base-box-shadow;
+  top: 50%;
+  left: 50%;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+}
+
+.kb-status-settings-header {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 $fullpadding;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+
+  span {
+    font-weight: 600;
+  }
+
+  .kb-modal-close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+  }
+
+}
+
+.kb-status-settings-inner {
+  background-color: #f9f9f9;
+}
+
+.kbms-field-wrap{
+  padding: $halfpadding $fullpadding;
+}

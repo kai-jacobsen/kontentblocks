@@ -274,7 +274,7 @@ var Utilities = function ($) {
       hash  = ((hash << 5) - hash) + chr;
       hash |= 0; // Convert to 32bit integer
     }
-    return hash;
+    return Math.abs(hash);
   },
     // deprecated in favor of kpath
     //cleanArray: function (actual) {
@@ -699,39 +699,39 @@ var ClipboardBrowserListRenderer = require('extensions/clipboard/ClipboardBrowse
 module.exports = Backbone.View.extend({
   initialize: function () {
     var that = this;
-    this.listenTo(KB.Modules, 'add', function(model){
+    this.listenTo(KB.Modules, 'add', function (model) {
       that.listenTo(model, 'module.model.view.connected', that.bindHandler);
     });
-    this.listenTo(KB.Events, 'module.browser.setup.cats', this.augmentBrowserCats);
-    this.listenTo(KB.Events, 'module.browser.setup.defs', this.augmentAssignedModules);
+    this.listenTo(KB.Events, 'module.browser.setup.cats', this.augmentBrowserCats); //hook into module browser tabs
+    this.listenTo(KB.Events, 'module.browser.setup.defs', this.augmentAssignedModules); // hook into available module definitions
     this.items = new ClipboardCollection([], {
       model: ClipboardModel
     });
     this.items.fetch();
   },
-  bindHandler: function(ModuleView){
+  bindHandler: function (ModuleView) {
     this.listenTo(ModuleView, 'module.view.setup.menu', this.addControl);
     this.listenTo(ModuleView.model, 'remove', this.handleModuleRemove);
   },
-  addControl: function(ControlManager, model, view){
+  addControl: function (ControlManager, model, view) {
     ControlManager.addItem(new ClipboardControl({model: model, parent: this}));
   },
-  add: function(object){
+  add: function (object) {
     this.items.add(object);
   },
-  remove: function(hash){
+  remove: function (hash) {
     this.items.remove(hash);
   },
-  entryExists: function(hash){
+  entryExists: function (hash) {
     return !_.isUndefined(this.items.get(hash));
   },
-  handleModuleRemove: function(model){
-    if (model.clipboardHash){
+  handleModuleRemove: function (model) {
+    if (model.clipboardHash) {
       this.remove(model.clipboardHash);
     }
   },
-  augmentBrowserCats: function(cats){
-    if (!cats.clipboard){
+  augmentBrowserCats: function (cats) {
+    if (!cats.clipboard) {
       cats['clipboard'] = {
         id: 'clipboard',
         name: 'Clipboard',
@@ -741,20 +741,19 @@ module.exports = Backbone.View.extend({
     }
     return cats;
   },
-  augmentAssignedModules: function(browser, defs){
+  augmentAssignedModules: function (browser, defs) {
     var areaId = browser.area.model.get('id');
     var models = this.items.where({'area': areaId});
     var currentPid = KB.Environment.postId;
-    _.each(models, function(model){
+    _.each(models, function (model) {
       var json = model.toJSON();
       json.settings.category = 'clipboard';
-      if (json.postId != currentPid){
+      if (json.postId != currentPid) {
         defs.push(json);
       }
-    },this);
+    }, this);
     return defs;
   }
-
 });
 },{"extensions/clipboard/ClipboardBrowserListRenderer":14,"extensions/clipboard/ClipboardCollection":15,"extensions/clipboard/ClipboardModel":18,"extensions/clipboard/controls/ClipboardControl":19}],17:[function(require,module,exports){
 var ListItem = require('shared/ModuleBrowser/ModuleBrowserListItem');
@@ -802,9 +801,7 @@ module.exports = ListItem.extend({
 });
 },{"common/Ajax":2,"common/Config":4,"shared/ModuleBrowser/ModuleBrowserListItem":21,"templates/backend/clipboard/module-list-item.hbs":22}],18:[function(require,module,exports){
 module.exports = Backbone.Model.extend({
-  idAttribute: 'hash',
-  initialize: function () {
-  }
+  idAttribute: 'hash'
 });
 },{}],19:[function(require,module,exports){
 //KB.Backbone.Backend.ModuleStatus
@@ -823,6 +820,7 @@ module.exports = BaseView.extend({
     this.hash = Utilities.hashString(pid.toString() + this.model.get('mid'));
     this.model.clipboardHash = this.hash;
     this.statusClass();
+    console.log(this.hash);
   },
   className: 'module-clipboard block-menu-icon',
   events: {
@@ -971,7 +969,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<h4>"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.publicName : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
     + "</h4>\n<p class=\"description\">"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.description : stack1), depth0))
     + "</p>";

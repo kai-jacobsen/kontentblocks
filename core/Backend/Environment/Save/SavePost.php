@@ -5,6 +5,7 @@ namespace Kontentblocks\Backend\Environment\Save;
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Common\Data\ValueStorage;
+use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -62,29 +63,11 @@ class SavePost
 
         Utilities::remoteConcatGet( $this->postid );
 
-        $this->saveAreaSettings();
         $this->saveAreaContextMap();
         $this->saveEditLayouts();
         // finally update the index
         $this->environment->getStorage()->saveIndex( $this->index );
     }
-
-    /**
-     * @param $module
-     * @param $data
-     *
-     * @return mixed
-     */
-    protected function moduleOverrides( $module, $data )
-    {
-        $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
-        $module->properties->overrides['name'] = ( !empty( $data['moduleName'] ) ) ? $data['moduleName'] : $module->Properties->getSetting(
-            'name'
-        );
-        $module->properties->state['draft'] = false;
-        return $module;
-    }
-
 
     /**
      * Various checks
@@ -148,7 +131,6 @@ class SavePost
         return true;
     }
 
-
     /**
      * Make a backup of old data
      */
@@ -180,7 +162,7 @@ class SavePost
         /** @var \Kontentblocks\Modules\Module $module */
         foreach ($modules as $module) {
 
-            if (!$this->postdata->exists($module->getId())){
+            if (!$this->postdata->exists( $module->getId() )) {
                 continue;
             }
 
@@ -193,6 +175,10 @@ class SavePost
             // check for draft and set to false
             // special block specific data
             $module = $this->moduleOverrides( $module, $data );
+
+            $module->properties->post_id = $this->postid;
+            $module->properties->postId = $this->postid;
+
             // create updated index
             $this->index[$module->getId()] = $module->properties->export();
             // call save method on block
@@ -227,25 +213,19 @@ class SavePost
     }
 
     /**
+     * @param $module
+     * @param $data
      *
+     * @return mixed
      */
-    private function saveAreaSettings()
+    protected function moduleOverrides( Module $module, $data )
     {
-//        $postareas = filter_input( INPUT_POST, 'areas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-//
-//        // save area settings which are specific to this post (ID-wise)
-//        if (!empty( $postareas )) {
-//            $collection = $this->Environment->getDataProvider()->get( 'kb_area_settings' );
-//
-//            foreach ($postareas as $areaId) {
-//                $areaid = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_STRING );
-//                if (!empty( $areaid )) {
-//                    $collection[$areaId] = $areaid;
-//                }
-//            }
-//            $this->Environment->getDataProvider()->update( 'kb_area_settings', $collection );
-//        }
+        $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
+        $module->properties->overrides = ( !empty( $data['overrides'] ) ) ? $data['overrides'] : array();
+        $module->properties->state['draft'] = false;
+        return $module;
     }
+
 
     private function saveAreaContextMap()
     {
@@ -257,9 +237,9 @@ class SavePost
 
     private function saveEditLayouts()
     {
-        $layout = filter_input(INPUT_POST, 'kb_edit_layout', FILTER_SANITIZE_STRING);
-        if (!empty($layout)){
-            $this->environment->getDataProvider()->update('_kb.editScreen.layout', $layout);
+        $layout = filter_input( INPUT_POST, 'kb_edit_layout', FILTER_SANITIZE_STRING );
+        if (!empty( $layout )) {
+            $this->environment->getDataProvider()->update( '_kb.editScreen.layout', $layout );
         }
 
     }

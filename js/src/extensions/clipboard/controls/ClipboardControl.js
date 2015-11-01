@@ -14,6 +14,7 @@ module.exports = BaseView.extend({
     this.hash = Utilities.hashString(pid.toString() + this.model.get('mid'));
     this.model.clipboardHash = this.hash;
     this.statusClass();
+    console.log(this.hash);
   },
   className: 'module-clipboard block-menu-icon',
   events: {

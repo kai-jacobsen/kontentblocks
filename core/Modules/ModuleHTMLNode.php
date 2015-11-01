@@ -45,10 +45,12 @@ class ModuleHTMLNode
         $concat .= $this->header();
 
 
+
         // inner block open
         $concat .= $this->openModuleBody();
 
         $concat .= $this->statusBar();
+
 
 
         // if disabled don't output, just show disabled message
@@ -167,7 +169,7 @@ class ModuleHTMLNode
         $html .= "<div class='ui-wrap'></div>";
         // name
         $html .= "<div class='kb-name'><input class='block-title kb-module-name' type='text' name='{$this->module->getId(
-            )}[moduleName]' value='" . esc_attr(
+            )}[overrides][name]' value='" . esc_attr(
                 $this->module->properties->getSetting( 'name' )
             ) . "' /></div>";
         $html .= "</div>";

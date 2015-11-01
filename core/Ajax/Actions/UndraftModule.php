@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Ajax\Actions\Frontend;
+namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
@@ -11,7 +11,7 @@ use Kontentblocks\Common\Data\ValueStorageInterface;
 /**
  * Class UndraftModule
  * @author Kai Jacobsen
- * @package Kontentblocks\Ajax\Frontend
+ * @package Kontentblocks\Ajax\
  */
 class UndraftModule implements AjaxActionInterface
 {
@@ -20,21 +20,23 @@ class UndraftModule implements AjaxActionInterface
     public static function run( ValueStorageInterface $request )
     {
 
-        $mid = $request->getFiltered( 'mid', FILTER_SANITIZE_STRING );
+        $module = $request->get( 'module' );
         $post_id = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
 
-        if (empty( $mid ) || !is_int( absint( $post_id ) )) {
-            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $mid, 'postId' => $post_id ) );
+        $state = filter_var( $module['state']['draft'], FILTER_VALIDATE_BOOLEAN );
+
+        if (!is_int( absint( $post_id ) )) {
+            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $module, 'postId' => $post_id ) );
         }
 
         $storage = new ModuleStorage( $post_id, null );
-        $module = $storage->getModuleDefinition( $mid );
+        $module = $storage->getModuleDefinition( $module['mid'] );
 
         if (array_key_exists( 'state', $module )) {
-            $module['state']['draft'] = false;
+            $module['state']['draft'] = !$module['state']['draft'];
         }
 
-        $storage->addToIndex( $mid, $module );
+        $storage->addToIndex( $module['mid'], $module );
 
         return new AjaxSuccessResponse( 'Module published', array( 'module' => $module ) );
     }

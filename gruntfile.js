@@ -144,16 +144,20 @@ module.exports = function (grunt) {
         spawn: false
       },
       backend: {
-        files: ['js/src/backend/**/*.js', 'js/**/*.hbs'],
+        files: ['js/src/backend/**/*.js'],
         tasks: ['jsbackend']
       },
       extensions: {
-        files: ['js/src/extensions/**/*.js', 'js/**/*.hbs'],
+        files: ['js/src/extensions/**/*.js'],
         tasks: ['jsextensions']
       },
       frontend: {
-        files: ['js/src/frontend/**/*.js', 'js/**/*.hbs'],
+        files: ['js/src/frontend/**/*.js'],
         tasks: ['jsfrontend']
+      },
+      templates: {
+        files: ['js/**/*.hbs'],
+        tasks: ['jshbs']
       },
       client: {
         files: ['js/src/client/**/*.js'],
@@ -260,6 +264,7 @@ module.exports = function (grunt) {
   grunt.registerTask('jsplugins', ['concat','uglify:dev', 'clean']);
   grunt.registerTask('jsfieldsAPI', ['browserify:fieldsAPI']);
   grunt.registerTask('jsCustomizer', ['browserify:customizer']);
+  grunt.registerTask('jshbs', ['jsfrontend', 'jsbackend', 'jsrefields']);
   grunt.registerTask('bash', ['exec:removeHash', 'exec:createDevId']);
 
   grunt.registerTask('cc', ['concurrent']);

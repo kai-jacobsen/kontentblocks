@@ -1215,7 +1215,7 @@ var Utilities = function ($) {
       hash  = ((hash << 5) - hash) + chr;
       hash |= 0; // Convert to 32bit integer
     }
-    return hash;
+    return Math.abs(hash);
   },
     // deprecated in favor of kpath
     //cleanArray: function (actual) {
@@ -2899,7 +2899,7 @@ module.exports = Backbone.Model.extend({
       success: function (res) {
         that.set('moduleData', res.data.newModuleData);
         if (save) {
-           that.trigger('module.model.updated', that);
+          that.trigger('module.model.updated', that);
         }
       },
       error: function () {
@@ -4054,7 +4054,7 @@ module.exports = Backbone.View.extend({
     // get the form
     Ajax.send({
       action: 'undraftModule',
-      mid: json.mid,
+      module: json,
       postId: this.model.get('parentObjectId'),
       _ajax_nonce: Config.getNonce('update')
     }, function (res) {
@@ -6073,7 +6073,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"dashicons dashicons-plus kb-js-create-module\"></div>\n<h4>"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.publicName : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
     + "</h4>\n<p class=\"description\">"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.description : stack1), depth0))
     + "</p>";

@@ -3,7 +3,6 @@
 \*------------------------------------*/
 
 .kb-module__body {
-  padding: 0 $fullpadding $fullpadding;
   //  overflow: hidden;
   background: #fff;
   margin-left: 1px;
@@ -43,7 +42,7 @@
 
 .kb-name .block-title {
   border: none;
-  border-bottom: 1px solid $grey-500;
+  border-bottom: 1px solid $grey-300;
   margin-left: 10px;
 
   &:hover {
@@ -138,21 +137,3 @@
   }
 }
 
-/*------------------------------------*\
-    Status Bar
-\*------------------------------------*/
-
-.kb-module--status-bar {
-  padding: $halfpadding 0;
-
-  .kb-module--status-label{
-    margin-right: $halfpadding;
-    color: $grey-500;
-    font-style: italic;
-  }
-
-  .kb-module--status-draft {
-    color: #fff;
-    background-color: $orange;
-  }
-}

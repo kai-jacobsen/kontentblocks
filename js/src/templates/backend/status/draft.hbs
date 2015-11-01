@@ -1,3 +1,5 @@
 {{#if draft }}
-    <span class="kbu-color-red"><span class="dashicons dashicons-flag"></span> {{ i18n.draft }}</span>
+    <div data-kbtooltip="Update the post to publish the module"><span class="kbu-color-red kb-module--status-label">Status</span><br><span>{{ i18n.draft }}</span></div>
+{{ else }}
+   <div data-kbtooltip="Click to draft this module"><span class="kbu-color-green kb-module--status-label">Status</span><br><span>{{ i18n.published }}</span></div>
 {{/if}}

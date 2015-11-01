@@ -15,6 +15,8 @@ class AttachmentHandler
      */
     public function __construct( $id )
     {
+
+
         if (!is_numeric( $id )) {
             return null;
         }

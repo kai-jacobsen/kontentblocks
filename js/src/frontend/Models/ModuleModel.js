@@ -70,7 +70,7 @@ module.exports = Backbone.Model.extend({
       success: function (res) {
         that.set('moduleData', res.data.newModuleData);
         if (save) {
-           that.trigger('module.model.updated', that);
+          that.trigger('module.model.updated', that);
         }
       },
       error: function () {
