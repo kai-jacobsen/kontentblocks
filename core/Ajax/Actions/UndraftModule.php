@@ -26,7 +26,7 @@ class UndraftModule implements AjaxActionInterface
         $state = filter_var( $module['state']['draft'], FILTER_VALIDATE_BOOLEAN );
 
         if (!is_int( absint( $post_id ) )) {
-            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $mid, 'postId' => $post_id ) );
+            return new AjaxErrorResponse( 'Invalid parameters', array( 'mid' => $module, 'postId' => $post_id ) );
         }
 
         $storage = new ModuleStorage( $post_id, null );
