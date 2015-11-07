@@ -27,6 +27,7 @@ use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Modules\ModuleViewsRegistry;
 use Kontentblocks\Panels\PanelRegistry;
+use Kontentblocks\RestAPI\RestAPI;
 use Kontentblocks\Templating\Twig;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\JSONTransport;
@@ -124,6 +125,8 @@ Class Kontentblocks
         $this->Services['templating.twig.fields'] = function ( $container ) {
             return Twig::setupEnvironment( $container, false );
         };
+
+        RestAPI::run();
     }
 
     private function setupRegistries()
@@ -185,7 +188,10 @@ Class Kontentblocks
         $this->Services['utility.ajaxhandler'] = function ( $container ) {
             return new AjaxCallbackHandler();
         };
+
         self::$AjaxHandler = $this->Services['utility.ajaxhandler'];
+
+
     }
 
     public static function onActivation()

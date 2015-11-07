@@ -50,11 +50,10 @@ class UpdateModule implements AjaxActionInterface
         $new = $module->save( $newData, $old );
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
         // save slashed data, *_post_meta will add remove slashes again...
-        if ($postdata->update) {
-            $environment->getStorage()->saveModule( $module->getId(), wp_slash($mergedData) );
-        }
         $module->updateModuleData( $mergedData );
-        do_action( 'kb.module.save', $module, $mergedData );
+        if ($postdata->update) {
+            $module->model->sync(true);
+        }
 
         $return = array(
             'html' => $module->module(),

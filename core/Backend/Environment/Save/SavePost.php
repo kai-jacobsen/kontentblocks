@@ -201,11 +201,12 @@ class SavePost
                     $this->environment->getDataProvider()->update( '_preview_' . $module->getId(), $savedData );
                 } // save real data
                 else {
-                    $this->environment->getStorage()->saveModule( $module->getId(), $savedData );
                     $this->environment->getDataProvider()->delete( '_preview_' . $module->getId() );
 
                 }
-                do_action( 'kb.module.save', $module, $savedData );
+                $module->updateModuleData($savedData);
+                $module->getModel()->sync();
+
             }
         }
 

@@ -638,12 +638,13 @@ abstract class Field implements Exportable
         $collection[$notated] = array(
             'key' => $this->getKey(),
             'arrayKey' => $this->getArg( 'arrayKey' ),
-            'cKey' => $concatKey,
-            'nKey' => $notated,
+            'arrayPath' => $concatKey,
+            'kpath' => $notated,
             'type' => $this->type,
             'std' => $this->getArg( 'std', '' ),
             'args' => $this->cleanedArgs(),
-            'section' => $this->section->sectionId
+            'section' => $this->section->sectionId,
+            'data' => $this->getFrontendValue()
         );
     }
 

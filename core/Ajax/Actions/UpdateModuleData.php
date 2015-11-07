@@ -53,17 +53,19 @@ class UpdateModuleData implements AjaxActionInterface
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
 
 
-        $environment->getStorage()->saveModule( $module->getId(), wp_slash( $mergedData ) );
+//        $environment->getStorage()->saveModule( $module->getId(), wp_slash( $mergedData ) );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $module );
-        $module->model->set( $mergedData );
+        $module->updateModuleData($mergedData);
+        $module->model->sync(true);
         $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
         $environment->getStorage()->reset();
         $environment->getStorage()->addToIndex( $module->getId(), $module->properties->export() );
+
         $return = array(
             'newModuleData' => $mergedData
         );
-        do_action( 'kb.module.save', $module, $mergedData );
+
         Utilities::remoteConcatGet( $postId );
         return new AjaxSuccessResponse( 'Module data updated.', $return );
     }

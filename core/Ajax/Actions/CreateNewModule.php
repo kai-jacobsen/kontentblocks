@@ -3,10 +3,8 @@
 namespace Kontentblocks\Ajax\Actions;
 
 use Kontentblocks\Ajax\AjaxActionInterface;
-use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaProperties;
-use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Frontend\RenderSettings;
 use Kontentblocks\Frontend\SingleModuleRenderer;

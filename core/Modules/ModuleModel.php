@@ -34,14 +34,22 @@ class ModuleModel extends EntityModel
     }
 
     /**
+     * @param bool $slash
      * @return bool
      * @ince 0.2.0
      */
-    public function sync()
+    public function sync( $slash = false )
     {
         $storage = $this->module->environment->getStorage();
-        $result = $storage->saveModule( $this->module->getId(), $this->export() );
+
+        if ($slash) {
+            $data = wp_slash( $this->export() );
+        } else {
+            $data = $this->export();
+        }
+        $result = $storage->saveModule( $this->module->getId(), $data );
         $storage->reset();
+        do_action( 'kb.module.save', $this->module, $this->export(), $this->module->environment->getId() );
         return $result;
     }
 
