@@ -49,7 +49,7 @@ class ModuleModel extends EntityModel
         }
         $result = $storage->saveModule( $this->module->getId(), $data );
         $storage->reset();
-        do_action( 'kb.module.save', $this->module, $this->export(), $this->module->environment->getId() );
+        do_action( 'kb.module.save', $this->module, $data, $this->module->environment->getId() );
         return $result;
     }
 

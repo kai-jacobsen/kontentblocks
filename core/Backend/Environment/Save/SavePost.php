@@ -165,7 +165,6 @@ class SavePost
             if (!$this->postdata->exists( $module->getId() )) {
                 continue;
             }
-
             // new data from $_POST
             //TODO: filter incoming data
             $data = $this->postdata->get( $module->getId() );
@@ -204,8 +203,8 @@ class SavePost
                     $this->environment->getDataProvider()->delete( '_preview_' . $module->getId() );
 
                 }
-                $module->updateModuleData($savedData);
-                $module->getModel()->sync();
+                $module->updateModuleData(wp_unslash($savedData));
+                $module->getModel()->sync(true);
 
             }
         }

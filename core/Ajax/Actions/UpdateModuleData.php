@@ -33,7 +33,7 @@ class UpdateModuleData implements AjaxActionInterface
         global $post;
 
         $moduleArgs = Utilities::validateBoolRecursive( $request->get( 'module' ) );
-        $data = wp_unslash( $request->get( 'data' ) );
+        $data = wp_unslash( $request->get( 'data' ) ); // remove slashes from ajax
         $postId = $request->getFiltered( 'postId', FILTER_VALIDATE_INT );
 
         // setup global post
