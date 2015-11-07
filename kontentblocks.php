@@ -27,7 +27,6 @@ use Kontentblocks\Modules\ModuleRegistry;
 use Kontentblocks\Fields\FieldRegistry;
 use Kontentblocks\Modules\ModuleViewsRegistry;
 use Kontentblocks\Panels\PanelRegistry;
-use Kontentblocks\RestAPI\RestAPI;
 use Kontentblocks\Templating\Twig;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\JSONTransport;
@@ -126,7 +125,6 @@ Class Kontentblocks
             return Twig::setupEnvironment( $container, false );
         };
 
-        RestAPI::run();
     }
 
     private function setupRegistries()
