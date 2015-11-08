@@ -57,7 +57,7 @@ class ChangeModuleStatusTest extends \WP_UnitTestCase
             'module' => $module['mid']
         );
 
-        $Request = new ValueStorage( $data );
+        $Request = new ValueStorage( wp_slash($data) );
         $Response = ChangeModuleStatus::run( $Request );
         $this->assertTrue( $Response->getStatus() );
         $Storage = new ModuleStorage( $post->ID );

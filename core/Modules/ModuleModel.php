@@ -34,17 +34,18 @@ class ModuleModel extends EntityModel
     }
 
     /**
+     * @param bool $addslashes
      * @return bool
      * @ince 0.2.0
      */
-    public function sync()
+    public function sync($addslashes = false)
     {
         $storage = $this->module->environment->getStorage();
-
         $data = $this->export();
-        $result = $storage->saveModule( $this->module->getId(), $data );
-        $storage->reset();
         do_action( 'kb.module.save', $this->module, $data, $this->module->environment->getId() );
+
+        $result = $storage->saveModule( $this->module->getId(), $data, $addslashes );
+        $storage->reset();
         return $result;
     }
 

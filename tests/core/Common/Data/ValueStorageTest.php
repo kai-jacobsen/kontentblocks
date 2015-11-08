@@ -34,11 +34,12 @@ class ValueStorageTest extends \WP_UnitTestCase
         $Storage = new ValueStorage( $data );
 
         $this->assertEquals( $Storage->get( 'testkey' ), '<scri<script>pt>asdf1234</script>' );
-        $this->assertNull( $Storage->get( 'unset' ) );
+        $this->assertNull( $Storage->get( 'unset', null ) );
     }
 
     public function testSet()
     {
+        wp_unslash('das');
         $Storage = new ValueStorage();
         $Storage->set( 'hello', 'World!' );
         $this->assertEquals( 'World!', $Storage->get( 'hello' ) );
@@ -49,7 +50,7 @@ class ValueStorageTest extends \WP_UnitTestCase
         $Storage = new ValueStorage();
         $Storage->set( 'hello', 'World!' );
         $Storage->delete( 'hello' );
-        $this->assertEquals( null, $Storage->get( 'hello' ) );
+        $this->assertEquals( null, $Storage->get( 'hello', null ) );
     }
 
     public function testExport()

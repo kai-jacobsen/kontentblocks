@@ -28,7 +28,7 @@ class UpdateContextAreaOrder implements AjaxActionInterface
     public static function run( ValueStorageInterface $request )
     {
         $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-        $data = wp_unslash($request->get( 'data' ));
+        $data = $request->get( 'data' );
 
         if (!is_array( $data )) {
             return self::sendError( $data );

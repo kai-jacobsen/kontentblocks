@@ -52,7 +52,7 @@ class UpdateModule implements AjaxActionInterface
         // save slashed data, *_post_meta will add remove slashes again...
         $module->updateModuleData( $mergedData );
         if ($postdata->update) {
-            $module->model->sync();
+            $module->model->sync(true);
         }
 
         $return = array(

@@ -56,7 +56,7 @@ class UpdateModuleData implements AjaxActionInterface
 //        $environment->getStorage()->saveModule( $module->getId(), wp_slash( $mergedData ) );
         $mergedData = apply_filters( 'kb.module.modify.data', $mergedData, $module );
         $module->updateModuleData($mergedData);
-        $module->model->sync();
+        $module->model->sync(true);
         $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
 
         $environment->getStorage()->reset();

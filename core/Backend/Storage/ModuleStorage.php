@@ -98,7 +98,7 @@ class ModuleStorage implements \Countable
      */
     public function saveIndex( $index )
     {
-        return $this->dataProvider->update( 'kb_kontentblocks', $index );
+        return $this->dataProvider->update( 'kb_kontentblocks', $index, false );
 
     }
 
@@ -238,10 +238,14 @@ class ModuleStorage implements \Countable
      * @param $id string $id
      * @param array|string $data array $data
      *
+     * @param bool $addslashes
      * @return bool
      */
-    public function saveModule( $id, $data = '' )
+    public function saveModule( $id, $data = '', $addslashes = false )
     {
+        if ($addslashes){
+            $data = wp_slash($data);
+        }
         return $this->dataProvider->update( '_' . $id, $data );
     }
 
