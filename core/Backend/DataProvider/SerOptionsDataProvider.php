@@ -127,4 +127,9 @@ class SerOptionsDataProvider implements DataProviderInterface
     {
        return $this->data;
     }
+
+    public function addSlashes()
+    {
+        return false;
+    }
 }

@@ -164,5 +164,9 @@ class PostMetaDataProvider implements DataProviderInterface
         return $this->postId;
     }
 
+    public function addSlashes()
+    {
+        return true;
+    }
 }
 

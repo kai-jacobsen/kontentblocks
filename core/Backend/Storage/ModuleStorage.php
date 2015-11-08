@@ -243,7 +243,7 @@ class ModuleStorage implements \Countable
      */
     public function saveModule( $id, $data = '', $addslashes = false )
     {
-        if ($addslashes){
+        if ($addslashes && $this->dataProvider->addSlashes()){
             $data = wp_slash($data);
         }
         return $this->dataProvider->update( '_' . $id, $data );

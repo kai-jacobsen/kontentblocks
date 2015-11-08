@@ -22,4 +22,6 @@ interface DataProviderInterface
 
     public function reset();
 
+    public function addSlashes();
+
 } 
