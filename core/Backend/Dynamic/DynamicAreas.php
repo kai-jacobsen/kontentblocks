@@ -110,6 +110,123 @@ class DynamicAreas
     }
 
     /**
+     * Display method
+     *
+     * @param $area
+     * @since 0.1.0
+     * @return void
+     */
+    private function renderArea( $area )
+    {
+        $environment = Utilities::getEnvironment( get_the_ID() );
+        $blogId = get_current_blog_id();
+
+        /** @var \Kontentblocks\Areas\AreaRegistry $registry */
+        $registry = Kontentblocks::getService( 'registry.areas' );
+        $areaDef = $registry->getArea( $area['id'] );
+
+        Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $areaDef );
+
+        print "<div class='postbox dynamic-area-wrap'>";
+        print "<div id='kontentblocks-core-ui'>";
+        print "<h3><span class='dashicons dashicons-list-view'></span>{$areaDef->name}  <span class='area-description'>{$areaDef->description}</span> </h3>";
+
+        // The infamous hidden editor hack
+        Utilities::hiddenEditor();
+
+        echo Utilities::getBaseIdField( $environment->getStorage()->getIndex() );
+        echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
+
+        $areaHTML = new AreaBackendHTML( $areaDef, $environment );
+        $areaHTML->build();
+
+        print "</div></div>";
+
+    }
+
+    /**
+     * 'Create Area' form, handled by twig template
+     *
+     * @param $data
+     * @since 0.1.0
+     * @return void
+     */
+    private function settingsForm( $data )
+    {
+
+        $templateData = array(
+            'editMode' => ( !empty( $data ) ),
+            'basename' => 'area',
+            'renderContextSelect' => true,
+            'contexts' => ScreenManager::getDefaultContextLayout(),
+            'postTypes' => $this->preparedPostTypes( $data ),
+            'pageTemplates' => $this->preparedPageTemplates( $data ),
+            'description' => ( !empty( $data['description'] ) ) ?
+                $data['description'] :
+                '',
+            'areaContext' => $data['context'],
+            'name' => $data['name'],
+            'id' => $data['id'],
+            'sortable' => true,
+            'manual' => ( isset( $data['manual'] ) ) ? $data['manual'] : false
+        );
+
+        $Form = new CoreView( 'new-area-form.twig', $templateData );
+        $Form->render( true );
+    }
+
+    /**
+     * Helper Method: marks checked post types for the create form
+     * @param array $data
+     *
+     * @since 0.1.0
+     * @return array
+     */
+    private function preparedPostTypes( $data )
+    {
+        $collect = array();
+        $postData = ( isset( $data['postTypes'] ) ) ? ( $data['postTypes'] ) : array();
+        $postTypes = Utilities::getPostTypes();
+
+        foreach ($postTypes as $pt) {
+            if (in_array( $pt['value'], $postData )) {
+                $pt['checked'] = "checked='checked'";
+            } else {
+                $pt['checked'] = '';
+            }
+            $collect[] = $pt;
+        }
+
+        return $collect;
+    }
+
+    /**
+     * Helper method: marks checked page templates
+     *
+     * @param array $data
+     *
+     * @since 0.1.0
+     * @return array
+     */
+    private function preparedPageTemplates( $data )
+    {
+        $collect = array();
+        $postData = ( isset( $data['pageTemplates'] ) ) ? ( $data['pageTemplates'] ) : array();
+        $pageTemplates = Utilities::getPageTemplates();
+
+        foreach ($pageTemplates as $pt) {
+            if (in_array( $pt['value'], $postData )) {
+                $pt['checked'] = "checked='checked'";
+            } else {
+                $pt['checked'] = '';
+            }
+            $collect[] = $pt;
+        }
+
+        return $collect;
+    }
+
+    /**
      * Save
      *
      * @param $postId
@@ -126,6 +243,51 @@ class DynamicAreas
         $environment->save();
 
         $this->saveArea( $postId );
+    }
+
+    /**
+     * Various checks to verify save action
+     * @param int $postId
+     * @since 0.1.0
+     * @return bool
+     */
+    private function auth( $postId )
+    {
+        // verify if this is an auto save routine.
+        // If it is our form has not been submitted, so we dont want to do anything
+        if (empty( $_POST )) {
+            return false;
+        }
+
+        // no area data send
+        if (empty( $_POST['area'] )) {
+            return false;
+        }
+
+        if (defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) {
+            return false;
+        }
+
+        // verify this came from our screen and with proper authorization,
+        // because save_post can be triggered at other times
+        if (!wp_verify_nonce( $_POST['kb_noncename'], 'kontentblocks_save_post' )) {
+            return false;
+        }
+
+        // Check permissions
+        if (!current_user_can( 'edit_post', $postId )) {
+            return false;
+        }
+
+        if (!current_user_can( 'edit_kontentblocks' )) {
+            return false;
+        }
+
+        if (get_post_type( $postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
+            return false;
+        }
+        // checks passed
+        return true;
     }
 
     /**
@@ -147,7 +309,7 @@ class DynamicAreas
             'pageTemplates' => array()
         );
 
-        $newArea = wp_parse_args( $_POST['area'], $defaults );
+        $newArea = wp_parse_args( wp_unslash( $_POST['area'] ), $defaults );
 
         $data = array(
             'name' => filter_var( $newArea['name'], FILTER_SANITIZE_STRING ),
@@ -273,168 +435,6 @@ class DynamicAreas
     }
 
     /**
-     * Various checks to verify save action
-     * @param int $postId
-     * @since 0.1.0
-     * @return bool
-     */
-    private function auth( $postId )
-    {
-        // verify if this is an auto save routine.
-        // If it is our form has not been submitted, so we dont want to do anything
-        if (empty( $_POST )) {
-            return false;
-        }
-
-        // no area data send
-        if (empty( $_POST['area'] )) {
-            return false;
-        }
-
-        if (defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) {
-            return false;
-        }
-
-        // verify this came from our screen and with proper authorization,
-        // because save_post can be triggered at other times
-        if (!wp_verify_nonce( $_POST['kb_noncename'], 'kontentblocks_save_post' )) {
-            return false;
-        }
-
-        // Check permissions
-        if (!current_user_can( 'edit_post', $postId )) {
-            return false;
-        }
-
-        if (!current_user_can( 'edit_kontentblocks' )) {
-            return false;
-        }
-
-        if (get_post_type( $postId ) == 'revision' && !isset( $_POST['wp-preview'] )) {
-            return false;
-        }
-        // checks passed
-        return true;
-    }
-
-    /**
-     * Helper Method: marks checked post types for the create form
-     * @param array $data
-     *
-     * @since 0.1.0
-     * @return array
-     */
-    private function preparedPostTypes( $data )
-    {
-        $collect = array();
-        $postData = ( isset( $data['postTypes'] ) ) ? ( $data['postTypes'] ) : array();
-        $postTypes = Utilities::getPostTypes();
-
-        foreach ($postTypes as $pt) {
-            if (in_array( $pt['value'], $postData )) {
-                $pt['checked'] = "checked='checked'";
-            } else {
-                $pt['checked'] = '';
-            }
-            $collect[] = $pt;
-        }
-
-        return $collect;
-    }
-
-    /**
-     * Helper method: marks checked page templates
-     *
-     * @param array $data
-     *
-     * @since 0.1.0
-     * @return array
-     */
-    private function preparedPageTemplates( $data )
-    {
-        $collect = array();
-        $postData = ( isset( $data['pageTemplates'] ) ) ? ( $data['pageTemplates'] ) : array();
-        $pageTemplates = Utilities::getPageTemplates();
-
-        foreach ($pageTemplates as $pt) {
-            if (in_array( $pt['value'], $postData )) {
-                $pt['checked'] = "checked='checked'";
-            } else {
-                $pt['checked'] = '';
-            }
-            $collect[] = $pt;
-        }
-
-        return $collect;
-    }
-
-    /**
-     * 'Create Area' form, handled by twig template
-     *
-     * @param $data
-     * @since 0.1.0
-     * @return void
-     */
-    private function settingsForm( $data )
-    {
-
-        $templateData = array(
-            'editMode' => ( !empty( $data ) ),
-            'basename' => 'area',
-            'renderContextSelect' => true,
-            'contexts' => ScreenManager::getDefaultContextLayout(),
-            'postTypes' => $this->preparedPostTypes( $data ),
-            'pageTemplates' => $this->preparedPageTemplates( $data ),
-            'description' => ( !empty( $data['description'] ) ) ?
-                $data['description'] :
-                '',
-            'areaContext' => $data['context'],
-            'name' => $data['name'],
-            'id' => $data['id'],
-            'sortable' => true,
-            'manual' => ( isset( $data['manual'] ) ) ? $data['manual'] : false
-        );
-
-        $Form = new CoreView( 'new-area-form.twig', $templateData );
-        $Form->render( true );
-    }
-
-    /**
-     * Display method
-     *
-     * @param $area
-     * @since 0.1.0
-     * @return void
-     */
-    private function renderArea( $area )
-    {
-        $environment = Utilities::getEnvironment( get_the_ID() );
-        $blogId = get_current_blog_id();
-
-        /** @var \Kontentblocks\Areas\AreaRegistry $registry */
-        $registry = Kontentblocks::getService( 'registry.areas' );
-        $areaDef = $registry->getArea( $area['id'] );
-
-        Kontentblocks::getService('utility.jsontransport')->registerArea($areaDef);
-
-        print "<div class='postbox dynamic-area-wrap'>";
-        print "<div id='kontentblocks-core-ui'>";
-        print "<h3><span class='dashicons dashicons-list-view'></span>{$areaDef->name}  <span class='area-description'>{$areaDef->description}</span> </h3>";
-
-        // The infamous hidden editor hack
-        Utilities::hiddenEditor();
-
-        echo Utilities::getBaseIdField( $environment->getStorage()->getIndex() );
-        echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
-
-        $areaHTML = new AreaBackendHTML( $areaDef, $environment );
-        $areaHTML->build();
-
-        print "</div></div>";
-
-    }
-
-    /**
      * Add informational bit to actions for predefined areas
      *
      * @param array $actions
@@ -446,8 +446,8 @@ class DynamicAreas
     public function rowActions( $actions, $post )
     {
         if ($post->post_type === 'kb-dyar') {
-            $storage = new ModuleStorage($post->ID);
-            $meta = $storage->getDataProvider()->get('_area');
+            $storage = new ModuleStorage( $post->ID );
+            $meta = $storage->getDataProvider()->get( '_area' );
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $actions['trash'] = "<span class='kb-js-predefined-area'>Area is predefined</span>";
             }
@@ -472,8 +472,8 @@ class DynamicAreas
         $screen = get_current_screen();
         if (isset( $screen->post_type ) && $screen->post_type === 'kb-dyar' && $screen->base === 'edit') {
 
-            $storage = new ModuleStorage($post_id);
-            $meta = $storage->getDataProvider()->get('_area');
+            $storage = new ModuleStorage( $post_id );
+            $meta = $storage->getDataProvider()->get( '_area' );
             if ($meta['dynamic'] === true && $meta['manual'] === true) {
                 $classes[] = ' kb-is-dynamic-area';
             }

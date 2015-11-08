@@ -47,7 +47,8 @@ class UpdatePostPanel implements AjaxActionInterface
 
         // save slashed data, *_post_meta will add remove slashes again...
         if ($postdata->update) {
-            $environment->getDataProvider()->update( $postdata->panel['mid'], wp_slash( $mergedData ) );
+            // wp_slash called by update method of postMetaDataProvider
+            $environment->getDataProvider()->update( $postdata->panel['mid'],  $mergedData  );
         }
         do_action( 'kb.panel.save', $panel, $mergedData );
 

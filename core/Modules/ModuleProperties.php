@@ -240,6 +240,7 @@ class ModuleProperties
         $vars = get_object_vars( $this );
         $vars['area'] = $this->area->id;
         $vars['parentObject'] = null;
+        $vars['guard'] = $this->guard->export();
 
 
         // settings are not persistent

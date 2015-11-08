@@ -72,6 +72,7 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function update( $key, $value )
     {
+        $value = wp_slash($value);
         return update_post_meta( $this->postId, $key, $value );
     }
 

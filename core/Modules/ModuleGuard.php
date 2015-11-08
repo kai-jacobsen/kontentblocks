@@ -69,7 +69,9 @@ class ModuleGuard
      */
     public function export()
     {
-        return get_object_vars( $this );
+        $vars = get_object_vars( $this );
+        unset($vars['properties']);
+        return $vars;
     }
 
 

@@ -37,15 +37,16 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
 
     /**
      * @param $key
-     * @return null|mixed
+     * @param array $default
+     * @return mixed|null
      */
-    public function get( $key )
+    public function get( $key, $default = array() )
     {
         if (isset( $this->value[$key] )) {
             return $this->value[$key];
         }
 
-        return null;
+        return $default;
     }
 
     /**

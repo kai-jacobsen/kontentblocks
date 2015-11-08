@@ -174,6 +174,7 @@ class AreaSettingsModel implements \JsonSerializable
             $meta = array();
         }
         $meta[$this->area->id] = $this->settings;
+        //we've got unslashed data from post meta, update will add wp_slash before adding to post meta
         return $this->dataProvider->update( $this->key, $meta );
     }
 

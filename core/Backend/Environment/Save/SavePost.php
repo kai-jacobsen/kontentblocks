@@ -167,7 +167,7 @@ class SavePost
             }
             // new data from $_POST
             //TODO: filter incoming data
-            $data = $this->postdata->get( $module->getId() );
+            $data = wp_unslash($this->postdata->get( $module->getId() ));
             /** @var $old array */
             $old = $this->environment->getStorage()->getModuleData( $module->getId() );
             $module->updateModuleData( $old );
@@ -203,8 +203,8 @@ class SavePost
                     $this->environment->getDataProvider()->delete( '_preview_' . $module->getId() );
 
                 }
-                $module->updateModuleData(wp_unslash($savedData));
-                $module->getModel()->sync(true);
+                $module->updateModuleData($savedData);
+                $module->getModel()->sync();
 
             }
         }
