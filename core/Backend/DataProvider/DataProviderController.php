@@ -109,6 +109,6 @@ class DataProviderController implements DataProviderInterface
 
     public function addSlashes()
     {
-        return false;
+        return $this->dataProvider->addSlashes();
     }
 }

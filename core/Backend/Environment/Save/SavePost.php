@@ -205,7 +205,6 @@ class SavePost
                 }
                 $module->updateModuleData($savedData);
                 $module->getModel()->sync(true);
-
             }
         }
 

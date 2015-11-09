@@ -67,12 +67,11 @@ class PostMetaDataProvider implements DataProviderInterface
      * @param $key
      * @param $value
      *
-     * @param bool $slash
      * @since 0.1.0
+     * @return mixed
      */
     public function update( $key, $value )
     {
-
         return update_post_meta( $this->postId, $key, $value );
     }
 
