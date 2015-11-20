@@ -7,7 +7,7 @@
   bottom: 0;
   width: 100%;
   height: 100%;
-  z-index: 9995;
+  z-index: 297;
 }
 
 .kb-fullscreen--holder {
@@ -17,12 +17,20 @@
   left: 50%;
   transform: translate(-50%);
   min-height: 600px;
-  z-index: 9996;
+  z-index: 298;
   padding: $fullpadding;
   background-color: #fff;
   @extend .base-box-shadow;
   @extend .base-box-border;
 }
+
+body.kontentblocks-ready .kb-fullscreen--holder{
+  z-index: 9999;
+}
+
+//body.kontentblocks-ready .kb-fullscreen--holder * {
+//  box-sizing: content-box;
+//}
 
 .kb-fullscreen--inner {
   height: 100%;

@@ -12,6 +12,10 @@
   @extend .base-box-border;
 }
 
+body.kontentblocks-ready #module-browser{
+  z-index: 9998;
+}
+
 .module-browser-wrapper * {
   box-sizing: border-box;
   position: relative;

@@ -6,6 +6,7 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -37,7 +38,8 @@ class GetModuleForm implements AjaxActionInterface
         $moduleDef = apply_filters('kb.modify.module.before.frontend.form', $moduleDef);
         $environment = Utilities::getEnvironment( $moduleDef['parentObjectId'] );
         /** @var \Kontentblocks\Modules\Module $module */
-        $module = $environment->getModuleById( $moduleDef['mid'] );
+        $workshop = new ModuleWorkshop($environment, $environment->getStorage()->getModuleDefinition($moduleDef['mid']));
+        $module = $workshop->getModule();
         $module->properties->viewfile = filter_var( $moduleDef['viewfile'], FILTER_SANITIZE_STRING );
         $module = apply_filters( 'kb.module.before.factory', $module );
         $module->setupFields();

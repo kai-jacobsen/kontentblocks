@@ -16,7 +16,6 @@ Class Link extends Field
 
     // Defaults
     public static $settings = array(
-        'returnObj' => false,
         'type' => 'link'
     );
 

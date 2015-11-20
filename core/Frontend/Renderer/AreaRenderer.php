@@ -1,10 +1,15 @@
 <?php
 
-namespace Kontentblocks\Frontend;
+namespace Kontentblocks\Frontend\Renderer;
 
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
+use Kontentblocks\Common\Interfaces\RendererInterface;
+use Kontentblocks\Frontend\AreaNode;
+use Kontentblocks\Frontend\ModuleIterator;
+use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Modules\Module;
 
 /**
@@ -17,7 +22,7 @@ use Kontentblocks\Modules\Module;
  *                  $Render->render($echo);
  * @package Kontentblocks\Render
  */
-class AreaRenderer
+class AreaRenderer implements RendererInterface
 {
 
     /**
@@ -39,7 +44,7 @@ class AreaRenderer
      */
     public $renderSettings;
     /**
-     * @var AreaHtmlNode
+     * @var AreaNode
      */
     protected $areaHtmlNode;
     /**
@@ -73,9 +78,9 @@ class AreaRenderer
      * Class constructor
      *
      * @param Environment $environment
-     * @param RenderSettings $renderSettings
+     * @param AreaRenderSettings $renderSettings
      */
-    public function __construct( Environment $environment, RenderSettings $renderSettings )
+    public function __construct( Environment $environment, AreaRenderSettings $renderSettings )
     {
         $this->renderSettings = $renderSettings;
         $this->area = $renderSettings->area;
@@ -97,7 +102,7 @@ class AreaRenderer
             return false;
         }
 
-        $this->areaHtmlNode = new AreaHtmlNode(
+        $this->areaHtmlNode = new AreaNode(
             $this->environment,
             $this->renderSettings
         );
@@ -112,8 +117,10 @@ class AreaRenderer
          */
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
-
-            $this->moduleRenderer = new SingleModuleRenderer( $module, $this->renderSettings );
+            $moduleRenderSettings = new ModuleRenderSettings(
+                array( 'moduleElement' => $this->renderSettings->moduleElement ), $module->properties
+            );
+            $this->moduleRenderer = new SingleModuleRenderer( $module, $moduleRenderSettings );
 
             if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verifyRender()) {
                 continue;
@@ -270,5 +277,6 @@ class AreaRenderer
         $this->areaHtmlNode->nextLayout();
         return true;
     }
+
 
 }

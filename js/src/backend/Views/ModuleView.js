@@ -42,7 +42,8 @@ module.exports = Backbone.View.extend({
     this.trigger('kb::module.input.changed', this);
   },
   viewfileChange: function (e) {
-    this.model.set('viewfile', e.currentTarget.value);
+    var $select = jQuery(e.currentTarget);
+    this.model.set('viewfile', $select.val());
     this.clearFields();
     this.updateModuleForm();
     this.trigger('KB::backend.module.viewfile.changed');
@@ -69,6 +70,7 @@ module.exports = Backbone.View.extend({
       el: this.$el,
       parent: this
     });
+
 
     // set view on model for later reference
     this.model.connectView(this);
@@ -138,8 +140,6 @@ module.exports = Backbone.View.extend({
     // @TODO check if this can be rafcatored to a subarray
     delete moduleData.areaContext;
     //delete moduleData.viewfile;
-    delete moduleData.moduleName;
-
     this.trigger('kb::module.data.updated');
     return moduleData;
   },

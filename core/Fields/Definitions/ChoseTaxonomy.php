@@ -15,7 +15,6 @@ Class ChoseTaxonomy extends Field
 
     public static $settings = array(
         'type' => 'chosetaxonomy',
-
     );
 
 

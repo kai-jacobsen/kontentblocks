@@ -12,7 +12,7 @@ use Kontentblocks\Language\I18n;
  * inside the area container
  * @package Kontentblocks\Modules
  */
-class ModuleHTMLNode
+class ModuleNode
 {
 
     /**

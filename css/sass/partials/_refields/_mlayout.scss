@@ -1,0 +1,46 @@
+.kbml-grid{
+  height: 100%;
+}
+.kbml-slot{
+  min-height: 100px;
+  background-color: #f2f2f2;
+  border: 1px dashed #ccc;
+  margin-bottom: 20px;
+  padding: $halfpadding;
+  position: relative;
+}
+
+.kbsm--name{
+  font-weight: 100;
+  font-size: 12px;
+}
+
+.kbsm-actions{
+  position: absolute;
+  right: 12px;
+  top: 12px;
+
+  > div{
+    display: inline-block;
+  }
+
+  .kbsm-action{
+    cursor: pointer;
+
+    span.dashicons{
+      font-size: 15px;
+      width: 15px;
+      height: 15px;
+      color: $grey-500;
+
+      &:hover{
+        color: $grey-900;
+      }
+    }
+  }
+}
+
+.kbsm-empty{
+  text-align: center;
+  padding: $halfpadding;
+}

@@ -15,8 +15,7 @@ Class Callback extends Field
 
     // Defaults
     public static $settings = array(
-        'type' => 'callback',
-        'returnObj' => false
+        'type' => 'callback'
     );
 
 

@@ -68,6 +68,7 @@ class ModuleWorkshop
     /**
      * Parse provided attributes with defaults
      * @param $attrs
+     * @param $oldattrs
      * @return array
      */
     private function setupModuleattrs( $attrs, $oldattrs )
@@ -158,7 +159,8 @@ class ModuleWorkshop
                 'draft' => true,
                 'active' => true
             ),
-            'viewfile' => ''
+            'viewfile' => '',
+            'submodule' => false
         );
     }
 

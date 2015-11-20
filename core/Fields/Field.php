@@ -45,6 +45,13 @@ abstract class Field implements Exportable
      * @var FieldModel
      */
     public $model;
+    public $objectId = 0;
+    /**
+     * Current field type
+     * @var string
+     * @since 0.1.0
+     */
+    public $type;
     /**
      * Base id/key for the field
      * may get modified if a subkey is present
@@ -69,13 +76,6 @@ abstract class Field implements Exportable
      * @since 0.1.0
      */
     protected $key;
-    /**
-     * Current field type
-     * @var string
-     * @since 0.1.0
-     */
-    protected $type;
-
     /**
      * @var mixed
      */
@@ -103,13 +103,29 @@ abstract class Field implements Exportable
         $this->fieldId = $baseId;
         $this->setBaseId( $baseId, $subkey );
         $this->type = static::$settings['type'];
-        $this->setArgs($args);
+        $this->setArgs( $args );
     }
 
     /* ---------------------------------------------
      * Common Methods
      * ---------------------------------------------
      */
+
+    /**
+     * Field parameters array
+     * @param array $args
+     * @since 0.1.0
+     * @return bool
+     */
+    public function setArgs( $args )
+    {
+        if (is_array( $args ) && !empty( $args )) {
+            $this->args = wp_parse_args( $args, $this->args );
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * @return string
@@ -176,216 +192,6 @@ abstract class Field implements Exportable
         return $bool;
     }
 
-    /**
-     * Field parameters array
-     * @param array $args
-     * @since 0.1.0
-     * @return bool
-     */
-    public function setArgs( $args )
-    {
-        if (is_array( $args ) && !empty( $args )) {
-            $this->args = wp_parse_args( $args, $this->args );
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get a special object for the field type if field has one set
-     * getValue will look for the 'get' callback on the field
-     * prepareFrontend will look for the 'output' callback on the field
-     *
-     * getValue runs in different contexts (front and backend), it should be used
-     * to modify, sanitize, etc.. the data which is expected from the field
-     *
-     * prepareFrontend runs when data is setup for the frontend output of a module
-     * @TODO Kind of Registry for Return Objects
-     * @TODO Overall logic is fuxxed up
-     * @since 0.1.0
-     * @param null $salt
-     * @return object
-     * @throws \Exception
-     */
-    public function getFrontendValue($salt = null)
-    {
-        if (!is_null( $this->userValue )) {
-            return $this->userValue;
-        }
-        $value = $this->prepareFrontend( $this->getValue() );
-        if ($this->getArg( 'returnObj' )) {
-            $classname = $this->getArg( 'returnObj' );
-            // backwards compat
-            $classname = $this->aliasReturnObjectClass( $classname );
-
-            // first try with FQN
-            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
-            if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
-                $this->returnObj = new $classpath( $value, $this, $salt );
-            }
-            // second try
-            if (class_exists( $classname )) {
-                $this->returnObj = new $classname( $value, $this, $salt );
-            }
-
-            if (is_null( $this->returnObj )) {
-                throw new \Exception( 'requested Return Object does not exist' );
-            }
-
-            $this->userValue = $this->returnObj;
-            return $this->userValue;
-
-        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj' ) !== false) {
-            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
-            $this->returnObj = new $classpath( $value, $this, $salt );
-            $this->userValue = $this->returnObj;
-            return $this->userValue;
-        } else {
-			$this->returnObj = new Returnobjects\StandardFieldReturn($value, $this, $salt);
-            $this->userValue = $this->returnObj;
-            return $this->userValue;
-        }
-
-    }
-
-    /**
-     * Prepare output
-     * Runs when data is requested by getFrontendValue
-     * which is the recommended method to get frontend data
-     * an optional returnObj
-     *
-     * @param $value
-     *
-     * @return mixed
-     */
-    private function prepareFrontend( $value )
-    {
-        // custom method on field instance level wins over class method
-        if ($this->getCallback( 'frontend.value' )) {
-            return call_user_func( $this->getCallback( 'frontend.value' ), $value );
-        } // custom method on field class level
-        else {
-            return $this->prepareFrontendValue( $value );
-        }
-    }
-
-    /**
-     * Get callback from callbacks arg
-     * @param $type
-     *
-     * @return null
-     */
-    public function getCallback( $type )
-    {
-        $allowed = array( 'template.data', 'frontend.value', 'form.value', 'get.value', 'save.value' );
-
-        if (!in_array( $type, $allowed )) {
-            return null;
-        }
-
-        $callbacks = $this->getArg( 'callbacks' );
-
-        if ($callbacks) {
-            if (isset( $callbacks[$type] ) && is_callable( $callbacks[$type] )) {
-                return $callbacks[$type];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Default output, whenever data is requested for the user facing side
-     *
-     * @param $val
-     *
-     * @return mixed
-     */
-    public function prepareFrontendValue( $val )
-    {
-        return $val;
-    }
-
-    /**
-     * Getter for field data
-     * Will call filter() if available
-     * @TODO this method is used on several occasions
-     *
-     * @param string $arrKey
-     * @param string $return
-     * @return mixed|null returns null if data does not exist
-     */
-    public function getValue( $arrKey = null, $return = '' )
-    {
-        $data = $this->model->export();
-        if ($this->getCallback( 'get.value' )) {
-            $data = call_user_func( $this->getCallback( 'get.value' ), $data );
-        }
-
-        if (is_null( $arrKey ) && !is_null( $data )) {
-            return $data;
-        }
-
-        if (!is_null( $arrKey ) && is_array( $data ) && isset( $data[$arrKey] )) {
-            return $data[$arrKey];
-        }
-
-        return $this->getArg( 'std', $return );
-    }
-
-    /**
-     * Set field data
-     * Data from _POST[{baseid}[$this->key]]
-     * Runs each time when data is set to the field
-     * Frontend/Backend
-     *
-     * @param mixed $data
-     *
-     * @since 0.1.0
-     * @return mixed
-     */
-    public function setValue( $data )
-    {
-        return $data;
-    }
-
-    /**
-     * For backwards compat reasons
-     * @param $classname
-     * @return string
-     */
-    private function aliasReturnObjectClass( $classname )
-    {
-        switch ($classname) {
-
-            case 'Element':
-                return 'EditableElement';
-                break;
-
-            case 'Image':
-                return 'EditableImage';
-                break;
-        }
-
-        return $classname;
-    }
-
-    /**
-     * Get a setting var from (late bound) static settings array
-     *
-     * @param $key
-     *
-     * @return bool|mixed
-     */
-    public function getSetting( $key )
-    {
-        if (isset( static::$settings[$key] )) {
-            return static::$settings[$key];
-        } else {
-            return null;
-        }
-    }
-
     public function setData( $data )
     {
         $data = $this->setValue( $data );
@@ -434,6 +240,73 @@ abstract class Field implements Exportable
     }
 
     /**
+     * Getter for field data
+     * Will call filter() if available
+     * @TODO this method is used on several occasions
+     *
+     * @param string $arrKey
+     * @param string $return
+     * @return mixed|null returns null if data does not exist
+     */
+    public function getValue( $arrKey = null, $return = '' )
+    {
+        $data = $this->model->export();
+        if ($this->getCallback( 'get.value' )) {
+            $data = call_user_func( $this->getCallback( 'get.value' ), $data );
+        }
+
+        if (is_null( $arrKey ) && !is_null( $data )) {
+            return $data;
+        }
+
+        if (!is_null( $arrKey ) && is_array( $data ) && isset( $data[$arrKey] )) {
+            return $data[$arrKey];
+        }
+
+        return $this->getArg( 'std', $return );
+    }
+
+    /**
+     * Set field data
+     * Data from _POST[{baseid}[$this->key]]
+     * Runs each time when data is set to the field
+     * Frontend/Backend
+     *
+     * @param mixed $data
+     *
+     * @since 0.1.0
+     * @return mixed
+     */
+    public function setValue( $data )
+    {
+        return $data;
+    }
+
+    /**
+     * Get callback from callbacks arg
+     * @param $type
+     *
+     * @return null
+     */
+    public function getCallback( $type )
+    {
+        $allowed = array( 'template.data', 'frontend.value', 'form.value', 'get.value', 'save.value' );
+
+        if (!in_array( $type, $allowed )) {
+            return null;
+        }
+
+        $callbacks = $this->getArg( 'callbacks' );
+
+        if ($callbacks) {
+            if (isset( $callbacks[$type] ) && is_callable( $callbacks[$type] )) {
+                return $callbacks[$type];
+            }
+        }
+        return null;
+    }
+
+    /**
      *
      * @param array $data
      * @return array
@@ -474,7 +347,10 @@ abstract class Field implements Exportable
         }
 
         if (is_null( $this->uniqueId )) {
-            $base = $this->baseId . $this->key . $state . $this->getArg( 'index', '' ) . $this->getArg('arrayKey', '');
+            $base = $this->baseId . $this->key . $state . $this->getArg( 'index', '' ) . $this->getArg(
+                    'arrayKey',
+                    ''
+                );
             $this->uniqueId = 'kb-' . hash( 'crc32', $base );
         }
         return $this->uniqueId;
@@ -646,6 +522,132 @@ abstract class Field implements Exportable
             'section' => $this->section->sectionId,
             'data' => $this->getFrontendValue()
         );
+    }
+
+    /**
+     * Get a special object for the field type if field has one set
+     * getValue will look for the 'get' callback on the field
+     * prepareFrontend will look for the 'output' callback on the field
+     *
+     * getValue runs in different contexts (front and backend), it should be used
+     * to modify, sanitize, etc.. the data which is expected from the field
+     *
+     * prepareFrontend runs when data is setup for the frontend output of a module
+     * @TODO Kind of Registry for Return Objects
+     * @TODO Overall logic is fuxxed up
+     * @since 0.1.0
+     * @param null $salt
+     * @return object
+     * @throws \Exception
+     */
+    public function getFrontendValue( $salt = null )
+    {
+        if (!is_null( $this->userValue )) {
+            return $this->userValue;
+        }
+        $value = $this->prepareFrontend( $this->getValue() );
+        if ($this->getArg( 'returnObj' )) {
+            $classname = $this->getArg( 'returnObj' );
+            // backwards compat
+            $classname = $this->aliasReturnObjectClass( $classname );
+
+            // first try with FQN
+            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
+            if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
+                $this->returnObj = new $classpath( $value, $this, $salt );
+            }
+            // second try
+            if (class_exists( $classname )) {
+                $this->returnObj = new $classname( $value, $this, $salt );
+            }
+
+            if (is_null( $this->returnObj )) {
+                throw new \Exception( 'requested Return Object does not exist' );
+            }
+
+            $this->userValue = $this->returnObj;
+            return $this->userValue;
+
+        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg('returnObj') !== false) {
+            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
+            $this->returnObj = new $classpath( $value, $this, $salt );
+            $this->userValue = $this->returnObj;
+            return $this->userValue;
+        } else {
+            $this->returnObj = new Returnobjects\StandardFieldReturn( $value, $this, $salt );
+            $this->userValue = $this->returnObj;
+            return $this->userValue;
+        }
+    }
+
+    /**
+     * Prepare output
+     * Runs when data is requested by getFrontendValue
+     * which is the recommended method to get frontend data
+     * an optional returnObj
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    private function prepareFrontend( $value )
+    {
+        // custom method on field instance level wins over class method
+        if ($this->getCallback( 'frontend.value' )) {
+            return call_user_func( $this->getCallback( 'frontend.value' ), $value );
+        } // custom method on field class level
+        else {
+            return $this->prepareFrontendValue( $value );
+        }
+    }
+
+    /**
+     * Default output, whenever data is requested for the user facing side
+     *
+     * @param $val
+     *
+     * @return mixed
+     */
+    public function prepareFrontendValue( $val )
+    {
+        return $val;
+    }
+
+    /**
+     * For backwards compat reasons
+     * @param $classname
+     * @return string
+     */
+    private function aliasReturnObjectClass( $classname )
+    {
+        switch ($classname) {
+
+            case 'Element':
+                return 'EditableElement';
+                break;
+
+            case 'Image':
+                return 'EditableImage';
+                break;
+        }
+
+        return $classname;
+    }
+
+    /**
+     * Get a setting var from (late bound) static settings array
+     *
+     * @param $key
+     *
+     * @return bool|mixed
+     */
+    public function getSetting( $key )
+    {
+        if (isset( static::$settings[$key] )) {
+            return static::$settings[$key];
+        } else {
+            return null;
+        }
     }
 
     /**

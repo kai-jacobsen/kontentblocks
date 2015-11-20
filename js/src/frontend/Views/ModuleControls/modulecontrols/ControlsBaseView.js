@@ -6,5 +6,8 @@ module.exports = Backbone.View.extend({
   },
   render: function(){
     return this.el;
+  },
+  dispose: function(){
+    this.remove();
   }
 });

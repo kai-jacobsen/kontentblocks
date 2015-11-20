@@ -89,8 +89,14 @@ class ModuleProperties
     public $globalModule;
 
     /**
+     * @var bool
+     */
+    public $submodule;
+
+    /**
      * @var ModuleGuard;
      */
+
     private $guard;
 
     /**
@@ -145,7 +151,9 @@ class ModuleProperties
             if (!is_null( $value ) && in_array( $key, $whitelist )) {
                 switch ($key) {
                     case 'name':
-                        $this->settings[$key] = $value = filter_var( $value, FILTER_SANITIZE_STRING );
+                        if (!empty($value)){
+                            $this->settings[$key] = $value = filter_var( $value, FILTER_SANITIZE_STRING );
+                        }
                         break;
                     case 'loggedinonly':
                         $this->guard->setLoggedInOnly( $value = filter_var( $value, FILTER_VALIDATE_BOOLEAN ) );

@@ -16,7 +16,6 @@ Class Text extends Field
 
     // Defaults
     public static $settings = array(
-        'returnObj' => 'Element',
         'type' => 'text'
     );
 

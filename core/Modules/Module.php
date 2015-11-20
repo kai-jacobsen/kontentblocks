@@ -5,6 +5,7 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Environment\Environment;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Fields\ModuleFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -57,11 +58,6 @@ abstract class Module implements EntityInterface
      */
     public $context;
 
-    /**
-     * @var \Kontentblocks\Fields\FieldRendererTabs
-     */
-    protected $renderEngineClass = 'Kontentblocks\Fields\FieldRendererTabs';
-
 
     /**
      * @param ModuleProperties $properties
@@ -81,7 +77,6 @@ abstract class Module implements EntityInterface
          * Setup FieldController, Sections and fields if used
          */
         $this->setupFields();
-
     }
 
     /*
@@ -114,7 +109,7 @@ abstract class Module implements EntityInterface
             'name' => '',
             'wrap' => true,
             'wrapperClasses' => '',
-            'element' => apply_filters( 'kb.module.settings.element', 'div' ),
+            'moduleElement' => apply_filters( 'kb.module.settings.element', 'div' ),
             'description' => '',
             'connect' => 'any',
             'hidden' => false,
@@ -145,7 +140,7 @@ abstract class Module implements EntityInterface
      */
     public function renderForm()
     {
-        $node = new ModuleHTMLNode( $this );
+        $node = new ModuleNode( $this );
         return $node->build();
     }
 
@@ -366,6 +361,7 @@ abstract class Module implements EntityInterface
             'viewfile' => $this->getViewfile(),
             'overrides' => $this->properties->overrides,
             'globalModule' => $this->properties->globalModule,
+            'submodule' => $this->properties->submodule,
             'class' => get_class( $this ),
             'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->properties->area->id ),
             'uri' => $this->properties->getSetting( 'uri' )
@@ -383,6 +379,8 @@ abstract class Module implements EntityInterface
         return $this->properties->mid;
     }
 
+
+
     /**
      * Save properties and data to the Storage
      * This returns the result of the Storage update call and maybe false
@@ -396,5 +394,10 @@ abstract class Module implements EntityInterface
             return false;
         }
         return $this->model->sync() || $this->properties->sync();
+    }
+
+    public function delete()
+    {
+        return $this->environment->getStorage()->removeFromIndex( $this->getId() );
     }
 }

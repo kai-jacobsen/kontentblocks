@@ -6,6 +6,7 @@ var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
 var I18n = require('common/I18n');
 module.exports = BaseView.extend({
+  id: 'status',
   initialize: function (options) {
     this.options = options || {};
   },

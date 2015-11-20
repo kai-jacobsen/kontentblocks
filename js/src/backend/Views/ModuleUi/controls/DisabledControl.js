@@ -1,6 +1,7 @@
 //KB.Backbone.Backend.ModuleStatus
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
+  id: 'disable',
   initialize: function (options) {
     this.options = options || {};
   },

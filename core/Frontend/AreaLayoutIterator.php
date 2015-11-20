@@ -87,25 +87,25 @@ class AreaLayoutIterator implements \Iterator
     }
 
     /**
-     * Reset the internal pointer
+     * Sets up class properties
      *
+     * @param $args
+     * @throws Exception
      * @since 0.1.0
      */
-    public function rewind()
+    private function setup( $args )
     {
-        $this->position = 0;
-    }
+        if (!$args) {
+            throw new \Exception( 'No area template definition given' );
+        }
 
-    /**
-     * this method returns the value at the current
-     * position of the dataset
-     *
-     * @return mixed
-     * @since 0.1.0
-     */
-    public function current()
-    {
-        return $this->layout[$this->position];
+        $this->id = $args['id'];
+        $this->layout = $args['layout'];
+        $this->lastItem = $args['last-item'];
+        $this->cycle = $args['cycle'];
+        $this->templateClass = $args['templateClass'];
+        $this->wrap = $args['wrap'];
+
     }
 
     /**
@@ -118,6 +118,18 @@ class AreaLayoutIterator implements \Iterator
     {
         $current = $this->current();
         return $current['classes'];
+    }
+
+    /**
+     * this method returns the value at the current
+     * position of the dataset
+     *
+     * @return mixed
+     * @since 0.1.0
+     */
+    public function current()
+    {
+        return $this->layout[$this->position];
     }
 
     /**
@@ -159,6 +171,16 @@ class AreaLayoutIterator implements \Iterator
     }
 
     /**
+     * Reset the internal pointer
+     *
+     * @since 0.1.0
+     */
+    public function rewind()
+    {
+        $this->position = 0;
+    }
+
+    /**
      * Test if index exists in array
      *
      * @return bool
@@ -167,28 +189,6 @@ class AreaLayoutIterator implements \Iterator
     public function valid()
     {
         return isset( $this->layout[$this->position] );
-    }
-
-    /**
-     * Sets up class properties
-     *
-     * @param $args
-     * @throws Exception
-     * @since 0.1.0
-     */
-    private function setup( $args )
-    {
-        if (!$args) {
-            throw new \Exception( 'No area template definition given' );
-        }
-
-        $this->id = $args['id'];
-        $this->layout = $args['layout'];
-        $this->lastItem = $args['last-item'];
-        $this->cycle = $args['cycle'];
-        $this->templateClass = $args['templateClass'];
-        $this->wrap = $args['wrap'];
-
     }
 
     /**
@@ -216,9 +216,10 @@ class AreaLayoutIterator implements \Iterator
     }
 
 
-    public function hasCycled($flag = true){
+    public function hasCycled( $flag = true )
+    {
 
-        if ($this->cycled){
+        if ($this->cycled) {
             $this->cycled = $flag;
             return true;
         } else {

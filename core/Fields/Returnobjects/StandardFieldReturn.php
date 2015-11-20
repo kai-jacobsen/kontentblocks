@@ -20,6 +20,10 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
      * @var Field
      */
     protected $field;
+
+    /**
+     * @var
+     */
     private $idKey;
 
     /**
@@ -33,7 +37,7 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
         $this->field = $field;
     }
 
-    private function prepareValue( $value )
+    protected function prepareValue( $value )
     {
         return $value;
     }

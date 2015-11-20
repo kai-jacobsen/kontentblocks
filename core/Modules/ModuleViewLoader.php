@@ -208,4 +208,11 @@ class ModuleViewLoader
             return current( array_slice( $this->views, - 1 ) );
         }
     }
+
+    /**
+     * @return ModuleViewFilesystem
+     */
+    public function getFileSystem(){
+        return $this->viewFilesystem;
+    }
 } 

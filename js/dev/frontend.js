@@ -230,6 +230,7 @@ module.exports = BaseView.extend({
 //KB.Backbone.Backend.ModuleControlsView
 var tplModuleMenu = require('templates/backend/module-menu.hbs');
 module.exports = Backbone.View.extend({
+  id: '',
   $menuWrap: {}, // wrap container jQuery element
   $menuList: {}, // ul item
   initialize: function () {
@@ -242,6 +243,7 @@ module.exports = Backbone.View.extend({
    * @param view view handler for item
    */
   addItem: function (view) {
+    this.controls = this.controls || {};
     // 'backend' to add menu items
     // actually happens in ModuleView.js
     // this functions validates action by calling 'isValid' on menu item view
@@ -251,10 +253,15 @@ module.exports = Backbone.View.extend({
       var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
       var $menuItem = $liItem.append(view.el);
       this.$menuList.append($menuItem);
-
       view.render.call(view);
-
+      this.controls[view.id] = view;
     }
+  },
+  getView: function (id) {
+    if (this.controls[id]) {
+      return this.controls[id];
+    }
+    return false;
   }
 });
 },{"templates/backend/module-menu.hbs":77}],8:[function(require,module,exports){
@@ -688,7 +695,11 @@ module.exports =
             $module = jQuery(ed.editorContainer).closest('.kb-module');
             ed.module = KB.Views.Modules.get($module.attr('id'));
           }
-          ed.module.$el.trigger('tinymce.change');
+
+          if (ed.module){
+            ed.module.$el.trigger('tinymce.change');
+          }
+
         });
       };
       tinymce.init(settings);
@@ -812,7 +823,7 @@ var Ui = {
   },
 
   flexContext: function () {
-    jQuery('.kb-context-row').each(function(index, el){
+    jQuery('.kb-context-row').each(function (index, el) {
       var $el = jQuery(el);
       $el.data('KB.ContextRow', new ContextRowGrid({
         el: el
@@ -820,7 +831,7 @@ var Ui = {
     });
   },
   repaint: function ($el) {
-    this.initTabs();
+    this.initTabs($el);
     this.initToggleBoxes();
     TinyMCE.addEditor($el);
   },
@@ -903,7 +914,7 @@ var Ui = {
 
 
     var appendTo = 'parent';
-    if (Config.getLayoutMode() === 'default-tabs'){
+    if (Config.getLayoutMode() === 'default-tabs') {
       appendTo = '#kb-contexts-tabs';
     }
 
@@ -1106,7 +1117,7 @@ var Ui = {
   },
   initTipsy: function () {
 
-    jQuery('body').on('mouseenter', '[data-kbtooltip]', function(e){
+    jQuery('body').on('mouseenter', '[data-kbtooltip]', function (e) {
       jQuery(this).qtip({
         content: {
           attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content
@@ -3470,44 +3481,22 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     var that = this;
 
+    this.FieldModels = new ModalFieldCollection();
+
     // add form skeleton to modal
-    jQuery(tplModuleEditForm({
+    this.$el.append(tplModuleEditForm({
       model: {},
       i18n: KB.i18n.jsFrontend
-    })).appendTo(this.$el);
+    }));
 
     // cache elements
-    this.$form = jQuery('#onsite-form', this.$el);
-    this.$formContent = jQuery('#onsite-content', this.$el);
-    this.$inner = jQuery('.os-content-inner', this.$formContent);
-    this.$title = jQuery('.controls-title', this.$el);
-    this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
     this.LoadingAnimation = new LoadingAnimation({
       el: this.$form
     });
 
-    this.FieldModels = new ModalFieldCollection();
+    this.setupElements();
+    this.bindHandlers();
 
-    // use this event to refresh the modal on demand
-    this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
-
-    // use this event to tigger preview
-    this.listenTo(KB.Events, 'modal.preview', this.preview);
-
-    // Attach resize event handler
-    jQuery(window).on('resize', function () {
-      that.recalibrate();
-    });
-
-
-    // handle dynamically loaded tinymce instances
-    // TODO find better context
-    this.listenTo(KB.Events, 'KB::tinymce.new-editor', function (ed) {
-      // live setting
-      if (ed.settings && ed.settings.kblive) {
-        that.attachEditorEvents(ed);
-      }
-    });
 
     // attach event listeners on observable input fields
     jQuery(document).on('change', '.kb-observe', function () {
@@ -3517,9 +3506,34 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-  /**
-   * Events
-   */
+  bindHandlers: function () {
+    var that = this;
+    // use this event to refresh the modal on demand
+    this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
+    // use this event to tigger preview
+    this.listenTo(KB.Events, 'modal.preview', this.preview);
+    this.listenTo(KB.Events, 'modal.update', this.update);
+    this.listenTo(KB.Events, 'modal.refresh', this.reload);
+
+    // Attach resize event handler
+    jQuery(window).on('resize', function () {
+      that.recalibrate();
+    });
+
+    this.listenTo(KB.Events, 'KB::tinymce.new-editor', function (ed) {
+      if (ed.settings && ed.settings.kblive) {
+        that.attachEditorEvents(ed);
+      }
+    });
+
+  },
+  setupElements: function () {
+    this.$form = jQuery('#onsite-form', this.$el);
+    this.$formContent = jQuery('#onsite-content', this.$el);
+    this.$inner = jQuery('.os-content-inner', this.$formContent);
+    this.$title = jQuery('.controls-title', this.$el);
+    this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
+  },
   events: {
     'keyup': 'delayInput',
     'click a.close-controls': 'destroy',
@@ -3527,7 +3541,6 @@ module.exports = Backbone.View.extend({
     'click a.kb-preview-form': 'preview',
     'change .kb-template-select': 'viewfileChange'
   },
-
   /**
    * Main method to open the modal
    * If modal is already opened and ModuleView differs from active
@@ -3540,32 +3553,26 @@ module.exports = Backbone.View.extend({
   openView: function (ModuleView, force) {
 
     //force = (_.isUndefined(force)) ? false : true;
-
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
       return this;
     }
-    this.setupWindow();
-
-    //
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
     this.realmid = this.setupModuleId();
+
+    this.setupWindow();
     this.attach();
     this.render();
     this.recalibrate();
-    return this;
   },
 
-  setupModuleId: function(){
-
+  setupModuleId: function () {
     var parentObject = this.model.get('parentObject');
-    if (this.model.get('globalModule') && parentObject){
+    if (this.model.get('globalModule') && parentObject) {
       return parentObject.post_name;
     }
     return this.model.get('mid');
-
   },
-
   /**
    * Attach events to Module View
    */
@@ -3575,7 +3582,6 @@ module.exports = Backbone.View.extend({
 
     //when update gets called from module controls, notify this view
     this.listenTo(this.ModuleView, 'kb.frontend.module.inline.saved', this.frontendViewUpdated);
-    this.listenTo(KB.Events, 'modal.refresh', this.reload);
     /**
      * when the viewfile select changed,
      * reload to account for a different input form
@@ -3586,17 +3592,7 @@ module.exports = Backbone.View.extend({
     });
 
     this.listenTo(this.model, 'data.updated', this.preview);
-
-    ///**
-    // * When save is clicked on the actual DOM View model
-    // * the modal needs to be reloaded in order to stay synced
-    // */
-    //this.listenTo(this.model, 'change:moduleData', function () {
-    //  that.reload();
-    //  that.$el.addClass('isDirty');
-    //});
-
-    this.listenTo(this.ModuleView.model, 'remove', this.destroy);
+    this.listenTo(this.model, 'remove', this.destroy);
   },
   /**
    * reload the modal
@@ -3607,9 +3603,7 @@ module.exports = Backbone.View.extend({
   detach: function () {
     // reset listeners and ModuleView
     this.FieldModels.reset();
-    //this.stopListening(this.ModuleView);
     this.stopListening();
-    delete this.ModuleView;
     KB.Events.trigger('modal.close', this);
   },
 
@@ -3632,7 +3626,6 @@ module.exports = Backbone.View.extend({
    */
   setupWindow: function () {
     var that = this;
-
     if (KB.Sidebar.visible) {
       this.$el.appendTo(KB.Sidebar.$el);
       this.mode = 'sidebar';
@@ -3645,8 +3638,6 @@ module.exports = Backbone.View.extend({
       this.mode = 'body';
       this.$el.appendTo('body').show();
     }
-
-
     // init draggable container and store position in config var
     if (this.mode === 'body') {
       this.$el.css('position', 'fixed').draggable({
@@ -3659,15 +3650,6 @@ module.exports = Backbone.View.extend({
         }
       });
     }
-
-    //if (KB.OSConfig.wrapPosition) {
-    //  this.$el.css({
-    //    top: KB.OSConfig.wrapPosition.top,
-    //    left: KB.OSConfig.wrapPosition.left
-    //  });
-    //}
-
-
   },
 
   /**
@@ -3677,8 +3659,6 @@ module.exports = Backbone.View.extend({
     this.$el.removeClass('isDirty');
     this.reload();
   },
-
-
   /**
    * Calls serialize in preview mode
    * No data gets saved
@@ -3701,7 +3681,6 @@ module.exports = Backbone.View.extend({
   render: function (reload) {
     var that = this,
       json;
-
     Logger.User.info('Frontend modal retrieves data from the server');
     json = this.model.toJSON();
 
@@ -3745,14 +3724,14 @@ module.exports = Backbone.View.extend({
 
         var tinymce = window.tinymce;
         var $$ = tinymce.$;
-        $$( document ).on( 'click', function( event ) {
+        $$(document).on('click', function (event) {
           var id, mode,
-            target = $$( event.target );
+            target = $$(event.target);
 
-          if ( target.hasClass( 'wp-switch-editor' ) ) {
-            id = target.attr( 'data-wp-editor-id' );
-            mode = target.hasClass( 'switch-tmce' ) ? 'tmce' : 'html';
-            window.switchEditors.go( id, mode );
+          if (target.hasClass('wp-switch-editor')) {
+            id = target.attr('data-wp-editor-id');
+            mode = target.hasClass('switch-tmce') ? 'tmce' : 'html';
+            window.switchEditors.go(id, mode);
           }
         });
 
@@ -3764,6 +3743,7 @@ module.exports = Backbone.View.extend({
           KB.payload = _.extend(KB.payload, res.data.json);
           //var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
           if (res.data.json.Fields) {
+            that.FieldModels.reset();
             that.FieldModels.add(_.toArray(res.data.json.Fields));
           }
         }
@@ -3775,7 +3755,6 @@ module.exports = Backbone.View.extend({
 
         that.$title.text(that.model.get('settings').name);
 
-
         if (reload) {
           if (that.FieldModels.length > 0) {
             KB.Events.trigger('modal.reload');
@@ -3783,9 +3762,10 @@ module.exports = Backbone.View.extend({
         }
 
         // delayed fields update
-        setTimeout(function () {
-          KB.Fields.trigger('frontUpdate', that.ModuleView);
-        }, 500);
+        // keep, but isn't used
+        //setTimeout(function () {
+        //  KB.Fields.trigger('frontUpdate', that.ModuleView);
+        //}, 500);
 
         // delayed recalibration
         setTimeout(function () {
@@ -3879,61 +3859,58 @@ module.exports = Backbone.View.extend({
       notice = (showNotice !== false),
       height;
 
-    tinymce.triggerSave();
-    mdata = this.formdataForId(this.realmid);
-    this.model.set('moduleData', mdata);
-    this.LoadingAnimation.show(0.5);
 
+    tinymce.triggerSave();
+    var moddata = this.formdataForId(this.realmid);
+    this.model.set('moduleData', moddata);
+    this.LoadingAnimation.show(0.5);
     this.model.sync(save, this).done(function (res, b, c) {
       that.moduleUpdated(res, b, c, save, notice);
     });
   },
   // serialize success callback
   moduleUpdated: function (res, b, c, save, notice) {
-    var $controls, that = this, height;
-    $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
-    if ($controls.length > 0) {
-      $controls.detach();
-    }
+    var that = this, height;
 
-    if (res.data.json && res.data.json.Fields){
+    if (res.data.json && res.data.json.Fields) {
       KB.FieldControls.updateModels(res.data.json.Fields);
     }
 
-
     // cache module container height
     //height = that.ModuleView.$el.height();
-    that.ModuleView.model.trigger('modal.serialize.before');
+    that.model.trigger('modal.serialize.before');
     // change the container class if viewfile changed
     if (that.updateViewClassTo !== false) {
       that.updateContainerClass(that.updateViewClassTo);
     }
 
+    that.ModuleView.trigger('modal.before.nodeupdate');
     // replace module html with new html
     that.ModuleView.$el.html(res.data.html);
-    that.ModuleView.model.set('moduleData', res.data.newModuleData);
+    that.ModuleView.trigger('modal.after.nodeupdate');
+
+
+    that.model.set('moduleData', res.data.newModuleData);
     if (save) {
-      that.model.trigger('saved');
       that.model.trigger('module.model.updated', that.model);
       KB.Events.trigger('modal.saved');
     }
     jQuery(document).trigger('kb.module-update', that.model.get('settings').id, that.ModuleView);
     jQuery(document).trigger('kb.refresh');
     that.ModuleView.delegateEvents();
-    that.ModuleView.trigger('kb:frontend::viewUpdated');
-    KB.Events.trigger('KB::ajax-update');
+    //that.ModuleView.trigger('kb:frontend::viewUpdated');
+    //KB.Events.trigger('KB::ajax-update');
 
-    KB.trigger('kb:frontendModalUpdated');
+    //KB.trigger('kb:frontendModalUpdated');
     // (re)attach inline editors and handle module controls
     // delay action to be safe
-    // @TODO seperate
     setTimeout(function () {
       //jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
       //  KB.IEdit.Text(el);
       //});
+
       that.ModuleView.render();
-      that.ModuleView.setControlsPosition();
-      that.ModuleView.model.trigger('modal.serialize');
+      that.model.trigger('modal.serialize');
     }, 400);
 
     //
@@ -3943,16 +3920,11 @@ module.exports = Backbone.View.extend({
       }
       that.$el.removeClass('isDirty');
       that.ModuleView.getClean();
-      that.trigger('kb:frontend-save');
     } else {
       if (notice) {
         Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
       }
       that.$el.addClass('isDirty');
-    }
-
-    if ($controls.length > 0) {
-      that.ModuleView.$el.append($controls);
     }
 
     that.ModuleView.trigger('kb.view.module.HTMLChanged');
@@ -4022,7 +3994,7 @@ module.exports = Backbone.View.extend({
       $el.css('width', settings.controls.width + 'px');
     }
 
-    if (this.mode === 'sidebar' && cWidth){
+    if (this.mode === 'sidebar' && cWidth) {
       KB.Sidebar.$el.width(cWidth);
     }
 
@@ -4068,9 +4040,12 @@ module.exports = Backbone.View.extend({
     if (!mid) {
       return null;
     }
-    formdata = this.$form.serializeJSON();
-    if (formdata[mid]) {
-      return formdata[mid];
+    //formdata = this.$form.serializeJSON();
+    var asd = this.$form.serializeJSON();
+
+
+    if (asd[mid]) {
+      return asd[mid];
     }
 
     return null;
@@ -4111,15 +4086,34 @@ var ModuleMove = require('./modulecontrols/MoveControl');
 
 var tplModuleControls = require('templates/frontend/module-controls.hbs');
 module.exports = Backbone.View.extend({
-
-
   ModuleView: null,
   $menuList: null, // ul item
-
   initialize: function (options) {
     // assign parent View
     this.ModuleView = options.ModuleView;
-    this.renderControls();
+  },
+  derender: function(){
+    this.$el.detach();
+  },
+  rerender:function(){
+    var that = this;
+    this.ModuleView.$el.append(this.$el);
+    _.defer(function(){
+      that.reposition();
+    })
+  },
+  render: function () {
+    // append wrapper element
+    this.ModuleView.$el.append(tplModuleControls({
+      model: this.ModuleView.model.toJSON(),
+      i18n: KB.i18n.jsFrontend
+    }));
+
+    // cache the actual controls $el
+    this.$el = jQuery('[data-kb-mcontrols="'+ this.model.get('mid') +'"]', this.ModuleView.$el);
+    console.log(this.$el);
+    //append ul tag, holder for single action items
+    this.$menuList = this.$('.kb-controls-wrap');
 
     this.EditControl = this.addItem(new ModuleEdit({
       model: this.ModuleView.model,
@@ -4137,20 +4131,7 @@ module.exports = Backbone.View.extend({
       model: this.ModuleView.model,
       parent: this.ModuleView
     }));
-  },
 
-  renderControls: function () {
-    // append wrapper element
-    this.ModuleView.$el.append(tplModuleControls({
-      model: this.ModuleView.model.toJSON(),
-      i18n: KB.i18n.jsFrontend
-    }));
-
-    // cache the actual controls $el
-    this.$el = jQuery('.kb-module-controls', this.ModuleView.$el);
-
-    //append ul tag, holder for single action items
-    this.$menuList = this.$('.kb-controls-wrap');
   },
   addItem: function (view) {
     // actually happens in ModuleView.js
@@ -4160,9 +4141,59 @@ module.exports = Backbone.View.extend({
     if (view.isValid && view.isValid() === true) {
       //var $liItem = jQuery('<div class="kb-controls-wrap-item"></div>').appendTo(this.$menuList);
       this.$menuList.append(view.render());
+      view.listenToOnce(this, 'controls.remove', view.remove);
       //this.$menuList.append($menuItem);
       return view;
     }
+  },
+  dispose: function () {
+    this.trigger('controls.remove');
+    this.remove();
+  },
+  reposition: function () {
+    var elpostop, elposleft, mSettings, submodule, pos, height;
+    elpostop = 0;
+    elposleft = 0;
+    mSettings = this.model.get('settings');
+    submodule = this.model.get('submodule');
+    pos = this.ModuleView.$el.offset();
+    height = this.ModuleView.$el.height();
+
+    if (mSettings.controls && mSettings.controls.toolbar) {
+      pos.top = mSettings.controls.toolbar.top;
+      pos.left = mSettings.controls.toolbar.left;
+    }
+
+    // small item with enough space above
+    // position is at top outside of the element (headlines etc)
+    if (this.ModuleView.$el.css('overflow') !== 'hidden' && pos.top > 60 && height < 119) {
+      elpostop = -25;
+    }
+
+    // enough space on the left side
+    // menu will be rendered vertically on the left
+    if (this.ModuleView.$el.css('overflow') !== 'hidden' && pos.left > 100 && height > 120 && this.ModuleView.$el.class) {
+      elpostop = 0;
+      elposleft = -30;
+      this.ModuleView.$el.addClass('kb-module-nav__vertical');
+    }
+
+    if (pos.top < 20) {
+      elpostop = 10;
+    }
+
+    if (elpostop == 0) {
+      elpostop = 20;
+    }
+
+    if (elposleft == 0) {
+      elposleft = 20;
+    }
+
+    if (submodule) {
+      elpostop = elpostop + 50;
+    }
+    this.$el.css({'top': elpostop + 'px', 'left': elposleft});
   }
 
 });
@@ -4175,6 +4206,9 @@ module.exports = Backbone.View.extend({
   },
   render: function(){
     return this.el;
+  },
+  dispose: function(){
+    this.remove();
   }
 });
 },{}],47:[function(require,module,exports){
@@ -4262,7 +4296,7 @@ module.exports = ModuleMenuItem.extend({
     if (!this.Parent.model.Area){
       return false;
     }
-    return Check.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable');
+    return Check.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable') && !this.model.get('submodule');
   }
 });
 },{"common/Checks":9,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":46}],50:[function(require,module,exports){
@@ -4305,10 +4339,7 @@ module.exports = ModuleMenuItem.extend({
         that.model.set('moduleData', res.data.newModuleData);
         that.Parent.render();
         that.Parent.trigger('kb.frontend.module.inline.saved');
-        that.model.trigger('saved');
         that.model.trigger('module.model.updated', that.model);
-        // @TODO events:replace
-        KB.Events.trigger('KB::ajax-update');
         Notice.notice('Module saved successfully', 'success');
         that.Parent.$el.removeClass('isDirty'); // deprecate
       },
@@ -4325,8 +4356,6 @@ module.exports = ModuleMenuItem.extend({
 /**
  * That is what is rendered for each module when the user enters frontside editing mode
  * This will initiate the FrontsideEditView
- * TODO: Don't rely on containers to position the controls and calculate position dynamically
- * @type {*|void|Object}
  */
 //KB.Backbone.ModuleView
 var ModuleControlsView = require('frontend/Views/ModuleControls/ModuleControls');
@@ -4335,42 +4364,39 @@ var Check = require('common/Checks');
 var tplModulePlaceholder = require('templates/frontend/module-placeholder.hbs');
 module.exports = Backbone.View.extend({
   focus: false,
-  $dropZone: jQuery('<div class="kb-module__dropzone"><span class="dashicons dashicons-plus"></span> add </div>'),
   attachedFields: {},
   initialize: function () {
-    var that = this;
+    this.Controls = new ModuleControlsView({
+      ModuleView: this,
+      model: this.model
+    });
+
     // don't init if cap is missing for current user
     if (!Check.userCan('edit_kontentblocks')) {
       return;
     }
     // attach this view to the model
     this.model.View = this;
+
     this.model.trigger('module.model.view.attached', this);
     // observe model changes
-    this.listenTo(this.model, 'change', this.getDirty);
-    this.listenTo(this.model, 'module.model.updated', this.getClean);
-    this.listenTo(this.model, 'module.model.clean', this.getClean);
-    // assign this view to the jQuery DOM Node
-    this.$el.data('ModuleView', this);
 
     // init render
     this.render();
 
-    this.setControlsPosition();
     KB.Events.on('reposition', this.setControlsPosition, this);
-    this.Controls = new ModuleControlsView({
-      ModuleView: this
-    });
+
+  },
+  bindHandlers: function () {
+    this.listenTo(this.model, 'change', this.getDirty);
+    this.listenTo(this.model, 'module.model.updated', this.getClean);
+    this.listenTo(this.model, 'module.model.clean', this.getClean);
   },
   events: {
     "click .kb-module__placeholder": "openOptions",
-    "click .kb-module__dropzone": "setDropZone",
     "click .editable": "reloadModal",
-    "mouseenter.first": "setActive",
-    "mouseenter.second": "setControlsPosition"
-    //"mouseenter.third": "insertDropZone"
-    //"mouseleave": "removeDropZone"
-
+    "mouseenter.first": "setActive"
+    //"mouseenter.second": "setControlsPosition"
   },
   openOptions: function () {
     this.Controls.EditControl.openForm();
@@ -4378,79 +4404,40 @@ module.exports = Backbone.View.extend({
   setActive: function () {
     KB.currentModule = this;
   },
+  rerender: function () {
+    var that = this;
+    this.setElement(jQuery('#' + this.model.get('mid')));
+    _.defer(function(){
+      that.Controls.rerender();
+    });
+  },
+  derender:function(){
+    this.Controls.derender();
+    this.$el.remove();
+  },
   render: function () {
     var settings;
 
     if (this.$el.hasClass('draft') && this.model.get('moduleData') === '') {
       this.renderPlaceholder();
     }
-
     //assign rel attribute to handle sortable serialize
     this.$el.attr('rel', this.model.get('mid') + '_' + _.uniqueId());
-
 
     settings = this.model.get('settings');
     if (settings.controls && settings.controls.hide) {
       return;
     }
+    this.Controls.render();
 
-
-    //this.$el.append(KB.Templates.render('frontend/module-controls', {
-    //    model: this.model.toJSON(),
-    //    i18n: KB.i18n.jsFrontend
-    //}));
-
+    this.setControlsPosition();
 
   },
   setControlsPosition: function () {
-    var elpostop, elposleft, mSettings, $controls, pos, height;
-    elpostop = 0;
-    elposleft = 0;
-
-    mSettings = this.model.get('settings');
-
-    $controls = this.$('.kb-module-controls');
-
-    pos = this.$el.offset();
-    height = this.$el.height();
-
-
-    if (mSettings.controls && mSettings.controls.toolbar) {
-      pos.top = mSettings.controls.toolbar.top;
-      pos.left = mSettings.controls.toolbar.left;
-    }
-
-    // small item with enough space above
-    // position is at top outside of the element (headlines etc)
-    if (this.$el.css('overflow') !== 'hidden' && pos.top > 60 && height < 119) {
-      elpostop = -25;
-    }
-
-    // enough space on the left side
-    // menu will be rendered vertically on the left
-    if (this.$el.css('overflow') !== 'hidden' && pos.left > 100 && height > 120 && this.$el.class) {
-      elpostop = 0;
-      elposleft = -30;
-      $controls.addClass('kb-module-nav__vertical');
-    }
-
-    if (pos.top < 20) {
-      elpostop = 10;
-    }
-
-    if (elpostop == 0){
-      elpostop = 20;
-    }
-
-    if (elposleft == 0){
-      elposleft = 20;
-    }
-
-    $controls.css({'top': elpostop + 'px', 'left': elposleft});
+    this.Controls.reposition();
   },
 
   reloadModal: function (force) {
-
     if (KB.EditModalModules) {
       KB.EditModalModules.reload(this, force);
     }
@@ -4458,20 +4445,6 @@ module.exports = Backbone.View.extend({
     KB.focusedModule = this.model;
     return this;
   },
-  insertDropZone: function () {
-    this.focus = true;
-    this.$el.append(this.$dropZone);
-  },
-  removeDropZone: function () {
-    this.focus = false;
-    this.$el.find('.kb-module__dropzone').remove();
-  },
-  setDropZone: function () {
-    var ModuleBrowser;
-    ModuleBrowser = this.Area.openModuleBrowser();
-    ModuleBrowser.dropZone = this;
-  },
-
   renderPlaceholder: function () {
     this.$el.append(tplModulePlaceholder({
       model: this.model.toJSON()
@@ -4489,7 +4462,6 @@ module.exports = Backbone.View.extend({
     } else {
       return key in this.attachedFields;
     }
-
   },
   getField: function (key, arrayKey) {
     if (!_.isEmpty(arrayKey)) {
@@ -4512,14 +4484,13 @@ module.exports = Backbone.View.extend({
   modelChange: function () {
     this.getDirty();
   },
-  save: function () {
-    // TODO utilize this for saving instead of handling this by the modal view
-  },
   dispose: function () {
+    this.Controls.dispose();
     delete this.model.View;
     this.stopListening();
     this.remove();
   }
+
 });
 },{"common/Checks":9,"frontend/Views/ModuleControls/ModuleControls":45,"templates/frontend/module-placeholder.hbs":89}],52:[function(require,module,exports){
 module.exports = Backbone.View.extend({
@@ -5470,13 +5441,11 @@ module.exports = Backbone.View.extend({
 
 });
 },{"templates/frontend/sidebar/sidebar-header.hbs":99}],67:[function(require,module,exports){
-// TODO Proper cleanup
 //KB.Backbone.ModuleBrowser
 var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDefinitions');
 var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');
 var ModuleBrowserDescription = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
 var ModuleBrowserNavigation = require('shared/ModuleBrowser/ModuleBrowserNavigation');
-var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
 var Checks = require('common/Checks');
 var Notice = require('common/Notice');
 var Payload = require('common/Payload');
@@ -5662,7 +5631,8 @@ module.exports = Backbone.View.extend({
       areaContext: this.options.area.model.get('context'),
       area: this.options.area.model.get('id'),
       _ajax_nonce: Config.getNonce('create'),
-      frontend: KB.appData.config.frontend
+      frontend: KB.appData.config.frontend,
+      submodule: false
     };
 
     if (this.options.area.model.get('parent_id')) {
@@ -5687,6 +5657,8 @@ module.exports = Backbone.View.extend({
       KB.Fields.trigger('newModule', model.View);
       TinyMCE.addEditor(model.View.$el);
     }, 150);
+
+    this.trigger('browser.module.created', {res: res})
 
     // repaint
     // add module to collection
@@ -5714,7 +5686,7 @@ module.exports = Backbone.View.extend({
     return fullDefs;
   }
 });
-},{"common/Ajax":8,"common/Checks":9,"common/Config":10,"common/Notice":12,"common/Payload":13,"common/TinyMCE":15,"shared/ModuleBrowser/ModuleBrowserDefinitions":68,"shared/ModuleBrowser/ModuleBrowserDescriptions":69,"shared/ModuleBrowser/ModuleBrowserList":70,"shared/ModuleBrowser/ModuleBrowserNavigation":72,"shared/ModuleBrowser/ModuleDefinitionModel":74,"templates/backend/modulebrowser/module-browser.hbs":78}],68:[function(require,module,exports){
+},{"common/Ajax":8,"common/Checks":9,"common/Config":10,"common/Notice":12,"common/Payload":13,"common/TinyMCE":15,"shared/ModuleBrowser/ModuleBrowserDefinitions":68,"shared/ModuleBrowser/ModuleBrowserDescriptions":69,"shared/ModuleBrowser/ModuleBrowserNavigation":72,"shared/ModuleBrowser/ModuleDefinitionModel":74,"templates/backend/modulebrowser/module-browser.hbs":78}],68:[function(require,module,exports){
 var Payload = require('common/Payload');
 module.exports = Backbone.Collection.extend({
 
@@ -6159,7 +6131,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "<div class='kb-module-controls "
+  return "<div data-kb-mcontrols=\""
+    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.mid : stack1), depth0))
+    + "\" class='kb-module-controls "
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.inDynamic : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + " "
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.globalModule : stack1),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")

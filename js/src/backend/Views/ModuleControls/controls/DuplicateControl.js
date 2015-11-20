@@ -9,6 +9,7 @@ var Payload = require('common/Payload');
 var I18n = require('common/I18n');
 
 module.exports = BaseView.extend({
+  id: 'duplicate',
   className: 'kb-duplicate block-menu-icon',
   events: {
     'click': 'duplicateModule'
@@ -27,7 +28,7 @@ module.exports = BaseView.extend({
 
   },
   isValid: function () {
-    if (!this.model.get('predefined') && !this.model.get('disabled') &&
+    if (!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
     } else {

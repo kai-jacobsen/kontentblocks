@@ -25,44 +25,22 @@ module.exports = Backbone.View.extend({
   initialize: function () {
     var that = this;
 
+    this.FieldModels = new ModalFieldCollection();
+
     // add form skeleton to modal
-    jQuery(tplModuleEditForm({
+    this.$el.append(tplModuleEditForm({
       model: {},
       i18n: KB.i18n.jsFrontend
-    })).appendTo(this.$el);
+    }));
 
     // cache elements
-    this.$form = jQuery('#onsite-form', this.$el);
-    this.$formContent = jQuery('#onsite-content', this.$el);
-    this.$inner = jQuery('.os-content-inner', this.$formContent);
-    this.$title = jQuery('.controls-title', this.$el);
-    this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
     this.LoadingAnimation = new LoadingAnimation({
       el: this.$form
     });
 
-    this.FieldModels = new ModalFieldCollection();
+    this.setupElements();
+    this.bindHandlers();
 
-    // use this event to refresh the modal on demand
-    this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
-
-    // use this event to tigger preview
-    this.listenTo(KB.Events, 'modal.preview', this.preview);
-
-    // Attach resize event handler
-    jQuery(window).on('resize', function () {
-      that.recalibrate();
-    });
-
-
-    // handle dynamically loaded tinymce instances
-    // TODO find better context
-    this.listenTo(KB.Events, 'KB::tinymce.new-editor', function (ed) {
-      // live setting
-      if (ed.settings && ed.settings.kblive) {
-        that.attachEditorEvents(ed);
-      }
-    });
 
     // attach event listeners on observable input fields
     jQuery(document).on('change', '.kb-observe', function () {
@@ -72,9 +50,34 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-  /**
-   * Events
-   */
+  bindHandlers: function () {
+    var that = this;
+    // use this event to refresh the modal on demand
+    this.listenTo(KB.Events, 'modal.recalibrate', this.recalibrate);
+    // use this event to tigger preview
+    this.listenTo(KB.Events, 'modal.preview', this.preview);
+    this.listenTo(KB.Events, 'modal.update', this.update);
+    this.listenTo(KB.Events, 'modal.refresh', this.reload);
+
+    // Attach resize event handler
+    jQuery(window).on('resize', function () {
+      that.recalibrate();
+    });
+
+    this.listenTo(KB.Events, 'KB::tinymce.new-editor', function (ed) {
+      if (ed.settings && ed.settings.kblive) {
+        that.attachEditorEvents(ed);
+      }
+    });
+
+  },
+  setupElements: function () {
+    this.$form = jQuery('#onsite-form', this.$el);
+    this.$formContent = jQuery('#onsite-content', this.$el);
+    this.$inner = jQuery('.os-content-inner', this.$formContent);
+    this.$title = jQuery('.controls-title', this.$el);
+    this.$draft = jQuery('.kb-modal__draft-notice', this.$el);
+  },
   events: {
     'keyup': 'delayInput',
     'click a.close-controls': 'destroy',
@@ -82,7 +85,6 @@ module.exports = Backbone.View.extend({
     'click a.kb-preview-form': 'preview',
     'change .kb-template-select': 'viewfileChange'
   },
-
   /**
    * Main method to open the modal
    * If modal is already opened and ModuleView differs from active
@@ -95,32 +97,26 @@ module.exports = Backbone.View.extend({
   openView: function (ModuleView, force) {
 
     //force = (_.isUndefined(force)) ? false : true;
-
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
       return this;
     }
-    this.setupWindow();
-
-    //
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
     this.realmid = this.setupModuleId();
+
+    this.setupWindow();
     this.attach();
     this.render();
     this.recalibrate();
-    return this;
   },
 
-  setupModuleId: function(){
-
+  setupModuleId: function () {
     var parentObject = this.model.get('parentObject');
-    if (this.model.get('globalModule') && parentObject){
+    if (this.model.get('globalModule') && parentObject) {
       return parentObject.post_name;
     }
     return this.model.get('mid');
-
   },
-
   /**
    * Attach events to Module View
    */
@@ -130,7 +126,6 @@ module.exports = Backbone.View.extend({
 
     //when update gets called from module controls, notify this view
     this.listenTo(this.ModuleView, 'kb.frontend.module.inline.saved', this.frontendViewUpdated);
-    this.listenTo(KB.Events, 'modal.refresh', this.reload);
     /**
      * when the viewfile select changed,
      * reload to account for a different input form
@@ -141,17 +136,7 @@ module.exports = Backbone.View.extend({
     });
 
     this.listenTo(this.model, 'data.updated', this.preview);
-
-    ///**
-    // * When save is clicked on the actual DOM View model
-    // * the modal needs to be reloaded in order to stay synced
-    // */
-    //this.listenTo(this.model, 'change:moduleData', function () {
-    //  that.reload();
-    //  that.$el.addClass('isDirty');
-    //});
-
-    this.listenTo(this.ModuleView.model, 'remove', this.destroy);
+    this.listenTo(this.model, 'remove', this.destroy);
   },
   /**
    * reload the modal
@@ -162,9 +147,7 @@ module.exports = Backbone.View.extend({
   detach: function () {
     // reset listeners and ModuleView
     this.FieldModels.reset();
-    //this.stopListening(this.ModuleView);
     this.stopListening();
-    delete this.ModuleView;
     KB.Events.trigger('modal.close', this);
   },
 
@@ -187,7 +170,6 @@ module.exports = Backbone.View.extend({
    */
   setupWindow: function () {
     var that = this;
-
     if (KB.Sidebar.visible) {
       this.$el.appendTo(KB.Sidebar.$el);
       this.mode = 'sidebar';
@@ -200,8 +182,6 @@ module.exports = Backbone.View.extend({
       this.mode = 'body';
       this.$el.appendTo('body').show();
     }
-
-
     // init draggable container and store position in config var
     if (this.mode === 'body') {
       this.$el.css('position', 'fixed').draggable({
@@ -214,15 +194,6 @@ module.exports = Backbone.View.extend({
         }
       });
     }
-
-    //if (KB.OSConfig.wrapPosition) {
-    //  this.$el.css({
-    //    top: KB.OSConfig.wrapPosition.top,
-    //    left: KB.OSConfig.wrapPosition.left
-    //  });
-    //}
-
-
   },
 
   /**
@@ -232,8 +203,6 @@ module.exports = Backbone.View.extend({
     this.$el.removeClass('isDirty');
     this.reload();
   },
-
-
   /**
    * Calls serialize in preview mode
    * No data gets saved
@@ -256,7 +225,6 @@ module.exports = Backbone.View.extend({
   render: function (reload) {
     var that = this,
       json;
-
     Logger.User.info('Frontend modal retrieves data from the server');
     json = this.model.toJSON();
 
@@ -300,14 +268,14 @@ module.exports = Backbone.View.extend({
 
         var tinymce = window.tinymce;
         var $$ = tinymce.$;
-        $$( document ).on( 'click', function( event ) {
+        $$(document).on('click', function (event) {
           var id, mode,
-            target = $$( event.target );
+            target = $$(event.target);
 
-          if ( target.hasClass( 'wp-switch-editor' ) ) {
-            id = target.attr( 'data-wp-editor-id' );
-            mode = target.hasClass( 'switch-tmce' ) ? 'tmce' : 'html';
-            window.switchEditors.go( id, mode );
+          if (target.hasClass('wp-switch-editor')) {
+            id = target.attr('data-wp-editor-id');
+            mode = target.hasClass('switch-tmce') ? 'tmce' : 'html';
+            window.switchEditors.go(id, mode);
           }
         });
 
@@ -319,6 +287,7 @@ module.exports = Backbone.View.extend({
           KB.payload = _.extend(KB.payload, res.data.json);
           //var parsed = KB.Payload.parseAdditionalJSON(res.data.json);
           if (res.data.json.Fields) {
+            that.FieldModels.reset();
             that.FieldModels.add(_.toArray(res.data.json.Fields));
           }
         }
@@ -330,7 +299,6 @@ module.exports = Backbone.View.extend({
 
         that.$title.text(that.model.get('settings').name);
 
-
         if (reload) {
           if (that.FieldModels.length > 0) {
             KB.Events.trigger('modal.reload');
@@ -338,9 +306,10 @@ module.exports = Backbone.View.extend({
         }
 
         // delayed fields update
-        setTimeout(function () {
-          KB.Fields.trigger('frontUpdate', that.ModuleView);
-        }, 500);
+        // keep, but isn't used
+        //setTimeout(function () {
+        //  KB.Fields.trigger('frontUpdate', that.ModuleView);
+        //}, 500);
 
         // delayed recalibration
         setTimeout(function () {
@@ -434,61 +403,58 @@ module.exports = Backbone.View.extend({
       notice = (showNotice !== false),
       height;
 
-    tinymce.triggerSave();
-    mdata = this.formdataForId(this.realmid);
-    this.model.set('moduleData', mdata);
-    this.LoadingAnimation.show(0.5);
 
+    tinymce.triggerSave();
+    var moddata = this.formdataForId(this.realmid);
+    this.model.set('moduleData', moddata);
+    this.LoadingAnimation.show(0.5);
     this.model.sync(save, this).done(function (res, b, c) {
       that.moduleUpdated(res, b, c, save, notice);
     });
   },
   // serialize success callback
   moduleUpdated: function (res, b, c, save, notice) {
-    var $controls, that = this, height;
-    $controls = jQuery('.kb-module-controls', that.ModuleView.$el);
-    if ($controls.length > 0) {
-      $controls.detach();
-    }
+    var that = this, height;
 
-    if (res.data.json && res.data.json.Fields){
+    if (res.data.json && res.data.json.Fields) {
       KB.FieldControls.updateModels(res.data.json.Fields);
     }
 
-
     // cache module container height
     //height = that.ModuleView.$el.height();
-    that.ModuleView.model.trigger('modal.serialize.before');
+    that.model.trigger('modal.serialize.before');
     // change the container class if viewfile changed
     if (that.updateViewClassTo !== false) {
       that.updateContainerClass(that.updateViewClassTo);
     }
 
+    that.ModuleView.trigger('modal.before.nodeupdate');
     // replace module html with new html
     that.ModuleView.$el.html(res.data.html);
-    that.ModuleView.model.set('moduleData', res.data.newModuleData);
+    that.ModuleView.trigger('modal.after.nodeupdate');
+
+
+    that.model.set('moduleData', res.data.newModuleData);
     if (save) {
-      that.model.trigger('saved');
       that.model.trigger('module.model.updated', that.model);
       KB.Events.trigger('modal.saved');
     }
     jQuery(document).trigger('kb.module-update', that.model.get('settings').id, that.ModuleView);
     jQuery(document).trigger('kb.refresh');
     that.ModuleView.delegateEvents();
-    that.ModuleView.trigger('kb:frontend::viewUpdated');
-    KB.Events.trigger('KB::ajax-update');
+    //that.ModuleView.trigger('kb:frontend::viewUpdated');
+    //KB.Events.trigger('KB::ajax-update');
 
-    KB.trigger('kb:frontendModalUpdated');
+    //KB.trigger('kb:frontendModalUpdated');
     // (re)attach inline editors and handle module controls
     // delay action to be safe
-    // @TODO seperate
     setTimeout(function () {
       //jQuery('.editable', that.ModuleView.$el).each(function (i, el) {
       //  KB.IEdit.Text(el);
       //});
+
       that.ModuleView.render();
-      that.ModuleView.setControlsPosition();
-      that.ModuleView.model.trigger('modal.serialize');
+      that.model.trigger('modal.serialize');
     }, 400);
 
     //
@@ -498,16 +464,11 @@ module.exports = Backbone.View.extend({
       }
       that.$el.removeClass('isDirty');
       that.ModuleView.getClean();
-      that.trigger('kb:frontend-save');
     } else {
       if (notice) {
         Notice.notice(KB.i18n.jsFrontend.frontendModal.noticePreviewUpdated, 'success');
       }
       that.$el.addClass('isDirty');
-    }
-
-    if ($controls.length > 0) {
-      that.ModuleView.$el.append($controls);
     }
 
     that.ModuleView.trigger('kb.view.module.HTMLChanged');
@@ -577,7 +538,7 @@ module.exports = Backbone.View.extend({
       $el.css('width', settings.controls.width + 'px');
     }
 
-    if (this.mode === 'sidebar' && cWidth){
+    if (this.mode === 'sidebar' && cWidth) {
       KB.Sidebar.$el.width(cWidth);
     }
 
@@ -623,9 +584,12 @@ module.exports = Backbone.View.extend({
     if (!mid) {
       return null;
     }
-    formdata = this.$form.serializeJSON();
-    if (formdata[mid]) {
-      return formdata[mid];
+    //formdata = this.$form.serializeJSON();
+    var asd = this.$form.serializeJSON();
+
+
+    if (asd[mid]) {
+      return asd[mid];
     }
 
     return null;

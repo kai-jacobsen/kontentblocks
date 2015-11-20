@@ -1,9 +1,12 @@
 <?php
 
-namespace Kontentblocks\Frontend;
+namespace Kontentblocks\Frontend\Renderer;
 
 use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Frontend\AreaNode;
+use Kontentblocks\Frontend\ModuleIterator;
+use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Templating\AreaView;
 use Kontentblocks\Templating\Twig;
 
@@ -20,7 +23,7 @@ abstract class AreaFileRenderer
     public $area;
 
     /**
-     * @var RenderSettings
+     * @var AreaRenderSettings
      */
     public $renderSettings;
 
@@ -40,19 +43,19 @@ abstract class AreaFileRenderer
     public $slotRenderer;
 
     /**
-     * @var AreaHtmlNode
+     * @var AreaNode
      */
     public $areaNode;
 
     /**
      * @param Environment $environment
-     * @param RenderSettings $renderSettings
+     * @param AreaRenderSettings $renderSettings
      */
-    public function __construct( Environment $environment, RenderSettings $renderSettings )
+    public function __construct( Environment $environment, AreaRenderSettings $renderSettings )
     {
         $this->renderSettings = $renderSettings;
         $this->area = $renderSettings->area;
-        $this->areaNode = new AreaHtmlNode($environment, $renderSettings);
+        $this->areaNode = new AreaNode($environment, $renderSettings);
         $this->environment = $environment;
         $this->moduleIterator = new ModuleIterator( $environment->getModulesForArea( $this->area->id ), $environment );
         $this->slotRenderer = new SlotRenderer( $this->moduleIterator, $renderSettings );

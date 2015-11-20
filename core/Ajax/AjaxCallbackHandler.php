@@ -94,6 +94,7 @@ class AjaxCallbackHandler
                 'updatePostPanel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdatePostPanel', 'run' ),
                 'getPostObjects' => array( 'Kontentblocks\Ajax\Actions\GetPostObjects', 'run' ),
                 'handleClipboard' => array( 'Kontentblocks\Ajax\Actions\HandleClipboard', 'run' ),
+                'getModuleBackendForm' => array( 'Kontentblocks\Ajax\Actions\GetModuleBackendForm', 'run' ),
                 'updateFieldModel' => array( 'Kontentblocks\Ajax\Actions\Frontend\UpdateFieldModel', 'run' )
 
             )

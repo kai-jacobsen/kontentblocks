@@ -2,12 +2,9 @@
 
 namespace Kontentblocks;
 
-use Kontentblocks\Backend\DataProvider\DataProviderController;
 use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
-use Kontentblocks\Backend\Storage\ModuleStorage;
-use Kontentblocks\Frontend\AreaRenderer;
-use Kontentblocks\Frontend\RenderSettings;
-use Kontentblocks\Kontentblocks;
+use Kontentblocks\Frontend\Renderer\AreaRenderer;
+use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
@@ -82,11 +79,11 @@ function renderSingleArea( $areaId, $post_id = null, $additionalArgs = array() )
         return '';
     }
 
-    $renderSettings = new RenderSettings( $additionalArgs, $area );
-    if (is_a( $renderSettings->view, '\Kontentblocks\Frontend\AreaFileRenderer', true )) {
-        $renderer = new $renderSettings->view( $environment, $renderSettings );
+    $areaRenderSettings = new AreaRenderSettings( $additionalArgs, $area );
+    if (is_a( $areaRenderSettings->view, '\Kontentblocks\Frontend\Renderer\AreaFileRenderer', true )) {
+        $renderer = new $areaRenderSettings->view( $environment, $areaRenderSettings );
     } else {
-        $renderer = new AreaRenderer( $environment, $renderSettings );
+        $renderer = new AreaRenderer( $environment, $areaRenderSettings );
     }
 
     $renderer->render( true );

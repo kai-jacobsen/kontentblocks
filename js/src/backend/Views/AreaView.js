@@ -19,7 +19,6 @@ module.exports = Backbone.View.extend({
     this.model.View = this;
 
     this.listenTo(this, 'module:attached', this.ui);
-    this.listenTo(this, 'module:detached', this.ui);
 
 
     this.AreaControls = new AreaControls({
@@ -39,9 +38,9 @@ module.exports = Backbone.View.extend({
     this.addControls();
     this.ui();
   },
-  resetElement: function(){
-      this.setElement('#' + this.model.get('id') + '-container');
-      this.initialize();
+  resetElement: function () {
+    this.setElement('#' + this.model.get('id') + '-container');
+    this.initialize();
   },
   addControls: function () {
     this.controlsContainer.append(tplAreaAddModule({i18n: KB.i18n}));
@@ -91,7 +90,7 @@ module.exports = Backbone.View.extend({
   renderPlaceholder: function () {
     this.modulesList.before(this.$placeholder);
   },
-  setupDefaultMenuItems: function(){
+  setupDefaultMenuItems: function () {
     this.AreaControls.addItem(new StatusControl({model: this.model, parent: this}));
     this.AreaControls.addItem(new DetachControl({model: this.model, parent: this}));
     this.AreaControls.addItem(new MoveControl({model: this.model, parent: this}));

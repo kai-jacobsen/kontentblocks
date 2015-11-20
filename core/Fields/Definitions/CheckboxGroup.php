@@ -17,7 +17,6 @@ Class CheckboxGroup extends Field
     // Field defaults
     public static $settings = array(
         'renderHidden' => true,
-        'returnObj' => false,
         'forceSave' => true,
         'type' => 'checkboxgroup'
     );

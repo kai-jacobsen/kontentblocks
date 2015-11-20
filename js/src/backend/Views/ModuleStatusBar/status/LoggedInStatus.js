@@ -2,6 +2,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var tplLoggedInStatus = require('templates/backend/status/loggedin.hbs');
 var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
+  id: 'loggedIn',
   controller: null,
   className: 'kb-status-loggedin',
   initialize: function(options){

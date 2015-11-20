@@ -2,6 +2,7 @@
 var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
 module.exports = BaseView.extend({
+  id: 'toggle',
   initialize: function (options) {
     this.options = options || {};
     this.parent = options.parent;
@@ -16,7 +17,7 @@ module.exports = BaseView.extend({
   },
   className: 'ui-toggle kb-toggle block-menu-icon',
   isValid: function () {
-    if (!this.model.get('settings').disabled &&
+    if (!this.model.get('settings').disabled && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
     } else {

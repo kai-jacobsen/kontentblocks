@@ -40,8 +40,7 @@ class CoreView
      */
     public function __construct( $tpl = null, $data = array() )
     {
-
-        if (strpos(WP_CONTENT_DIR, $tpl) !== false){
+        if (strpos( $tpl, WP_CONTENT_DIR) !== false){
             Twig::setPath(dirname($tpl));
             $tpl = basename($tpl);
         }

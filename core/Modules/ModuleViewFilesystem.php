@@ -14,8 +14,9 @@ use Kontentblocks\Backend\Screen\ScreenManager;
 class ModuleViewFilesystem
 {
 
-    protected $views = array();
     public $isChildTheme;
+    protected $views = array();
+    protected $paths = array();
 
     /**
      * @param Module $Module
@@ -38,42 +39,42 @@ class ModuleViewFilesystem
         $childTemplates = array();
 
         if ($this->isChildTheme) {
+            $childPath = trailingslashit(
+                             get_stylesheet_directory()
+                         ) . 'module-templates/' . $module->properties->getSetting( 'slug' );
             $childTemplates = $this->cleanPath(
                 glob(
-                    trailingslashit(
-                        get_stylesheet_directory()
-                    ) . 'module-templates/' . $module->properties->getSetting(
-                        'id'
-                    ) . '/*.twig'
+                    $childPath . '/*.twig'
                 ),
                 get_stylesheet_directory() . '/module-templates/'
             );
+            $this->paths[] = $childPath;
         }
+
+        $parentPath = trailingslashit(
+                          get_template_directory()
+                      ) . 'module-templates/' . $module->properties->getSetting(
+                'slug'
+            );
 
         $parentTemplates = $this->cleanPath(
             glob(
-                trailingslashit( get_template_directory() ) . 'module-templates/' . $module->properties->getSetting(
-                    'id'
-                ) . '/*.twig'
+                $parentPath . '/*.twig'
             ),
             get_template_directory() . '/module-templates/'
         );
+
+        $this->paths[] = $parentPath;
+
+        $modulePath = trailingslashit( $module->properties->getSetting( 'path' ) );
         $moduleTemplates = $this->cleanPath(
-            glob( trailingslashit( $module->properties->getSetting( 'path' ) ) . '*.twig' ),
+            glob( $modulePath . '*.twig' ),
             trailingslashit( $module->properties->getSetting( 'path' ) )
         );
 
+        $this->paths[] = $modulePath;
         $merged = array_merge( $childTemplates, $parentTemplates, $moduleTemplates );
         return $this->prepareFiles( $this->unify( $merged ) );
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getTemplates()
-    {
-        return $this->views;
     }
 
     private function cleanPath( $glob, $string )
@@ -124,25 +125,6 @@ class ModuleViewFilesystem
         // All done!
         return array_slice( array_diff( $dir, $sub ), 0, 1 );
     }
-
-    /**
-     * @param $merged
-     * @return array
-     */
-    private function unify( $merged )
-    {
-        $unified = array();
-        foreach ($merged as $fileitem) {
-
-            if (!isset( $unified[$fileitem['file']] )) {
-                $unified[$fileitem['file']] = $fileitem;
-            }
-        }
-        ksort( $unified, SORT_ASC );
-
-        return $unified;
-    }
-
 
     /**
      * Incoming array is already sorted by name
@@ -200,7 +182,7 @@ class ModuleViewFilesystem
     private function extractContext( $file )
     {
 
-        $valid = array_keys(ScreenManager::getDefaultContextLayout());
+        $valid = array_keys( ScreenManager::getDefaultContextLayout() );
         $parts = explode( '-', $file['filteredfile'] );
         $subs = explode( '#', $parts[0] );
 
@@ -233,6 +215,32 @@ class ModuleViewFilesystem
     }
 
     /**
+     * @param $merged
+     * @return array
+     */
+    private function unify( $merged )
+    {
+        $unified = array();
+        foreach ($merged as $fileitem) {
+
+            if (!isset( $unified[$fileitem['file']] )) {
+                $unified[$fileitem['file']] = $fileitem;
+            }
+        }
+        ksort( $unified, SORT_ASC );
+
+        return $unified;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTemplates()
+    {
+        return $this->views;
+    }
+
+    /**
      * @param $areaContext
      * @return array
      */
@@ -252,6 +260,21 @@ class ModuleViewFilesystem
         }
 
         return $collection;
+
+    }
+
+    /**
+     * @param $filename
+     * @return string
+     */
+    public function findFile($filename){
+        foreach ($this->paths as $path) {
+            $full = trailingslashit($path) . $filename;
+            if (file_exists($full)){
+                return $full;
+            }
+        }
+        return 'peter';
 
     }
 

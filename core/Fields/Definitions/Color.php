@@ -12,8 +12,7 @@ Class Color extends Field
 {
 
     public static $settings = array(
-        'type' => 'color',
-        'returnObj' => false
+        'type' => 'color'
     );
 
 

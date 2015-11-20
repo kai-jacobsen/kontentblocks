@@ -1,18 +1,19 @@
 <?php
 
-namespace Kontentblocks\Frontend;
+namespace Kontentblocks\Frontend\Renderer;
 
 
+use Kontentblocks\Common\Interfaces\RendererInterface;
+use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\Module;
-use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
 /**
  * Class SingleModuleRenderer
  * @package Kontentblocks\Frontend
  */
-class SingleModuleRenderer
+class SingleModuleRenderer implements RendererInterface
 {
 
     public $renderSettings;
@@ -21,14 +22,15 @@ class SingleModuleRenderer
 
     /**
      * @param Module $module
-     * @param RenderSettings $renderSettings
+     * @param ModuleRenderSettings $renderSettings
      */
-    public function __construct( Module $module, RenderSettings $renderSettings )
+    public function __construct( Module $module, ModuleRenderSettings $renderSettings )
     {
         $this->module = $module;
         $this->renderSettings = $this->setupRenderSettings( $renderSettings );
         $this->classes = $this->setupClasses();
         $this->module->context->set( $this->renderSettings );
+
         // @TODO other properties?
         if (isset( $this->renderSettings['areaContext'] )) {
             $this->module->context->areaContext = $this->renderSettings['areaContext'];
@@ -41,14 +43,18 @@ class SingleModuleRenderer
         }
     }
 
-    private function setupRenderSettings( RenderSettings $renderSettings )
+    /**
+     * @param ModuleRenderSettings $renderSettings
+     * @return ModuleRenderSettings
+     */
+    private function setupRenderSettings( ModuleRenderSettings $renderSettings )
     {
         $renderSettings->import(
             array(
                 'context' => Utilities::getTemplateFile(),
                 'subcontext' => 'content',
                 'moduleElement' => ( isset( $renderSettings['moduleElement'] ) ) ? $renderSettings['moduleElement'] : $this->module->properties->getSetting(
-                    'element'
+                    'moduleElement'
                 ),
                 'action' => null,
                 'area_template' => 'default'
@@ -75,9 +81,10 @@ class SingleModuleRenderer
     }
 
     /**
+     * @param bool $echo
      * @return bool|string
      */
-    public function render()
+    public function render( $echo = false )
     {
         if (!$this->module->verifyRender()) {
             return false;
@@ -87,6 +94,11 @@ class SingleModuleRenderer
         $out .= $this->beforeModule();
         $out .= $this->module->module();
         $out .= $this->afterModule();
+
+
+        if ($echo) {
+            echo $out;
+        }
         return $out;
     }
 

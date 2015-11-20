@@ -11,6 +11,6 @@ module.exports = ModuleMenuItem.extend({
     if (!this.Parent.model.Area){
       return false;
     }
-    return Check.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable');
+    return Check.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable') && !this.model.get('submodule');
   }
 });

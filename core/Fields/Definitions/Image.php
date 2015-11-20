@@ -17,8 +17,7 @@ Class Image extends Field
 {
 
     public static $settings = array(
-        'type' => 'image',
-        'returnObj' => 'EditableImage'
+        'type' => 'image'
     );
 
 

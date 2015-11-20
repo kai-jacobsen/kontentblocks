@@ -1,7 +1,10 @@
 <?php
 
-namespace Kontentblocks\Areas;
+namespace Kontentblocks\Backend\Renderer;
 
+use Kontentblocks\Areas\AreaProperties;
+use Kontentblocks\Areas\AreaSettingsMenu;
+use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Backend\Environment\Environment;
@@ -15,7 +18,7 @@ use Kontentblocks\Utils\Utilities;
  * @author Kai Jacobsen
  * @since 0.1.0
  */
-class AreaBackendHTML
+class AreaBackendRenderer implements RendererInterface
 {
 
     /**
@@ -68,7 +71,6 @@ class AreaBackendHTML
      */
     function __construct( AreaProperties $area, Environment $environment, $context = 'normal' )
     {
-
         // context in regards of position on the edit screen
         $this->context = $context;
 
@@ -85,7 +87,9 @@ class AreaBackendHTML
         $this->settingsMenu = new AreaSettingsMenu( $this->area, $this->environment );
 
         $this->cats = Utilities::setupCats();
+
     }
+
 
     /**
      * Wrapper to build the area markup
@@ -106,16 +110,18 @@ class AreaBackendHTML
      */
     public function header()
     {
-        $active = $this->area->settings->get('active') ? 'active' : 'inactive';
+        $active = $this->area->settings->get( 'active' ) ? 'active' : 'inactive';
         echo "<div id='{$this->area->id}-container' class='kb-area__wrap klearfix cf kb-area-status-{$active}' >";
         $headerClass = ( $this->context == 'side' or $this->context == 'normal' ) ? 'minimized reduced' : null;
 
-        $tpl = new CoreView( 'edit-screen/area-header.twig',
+        $tpl = new CoreView(
+            'edit-screen/area-header.twig',
             array(
                 'area' => $this->area,
                 'headerClass' => $headerClass,
                 'settingsMenu' => $this->settingsMenu
-            ) );
+            )
+        );
         $tpl->render( true );
 
     }
@@ -123,64 +129,35 @@ class AreaBackendHTML
     /**
      * Render all attached modules for this area
      * backend only
+     * @param bool $echo
+     * @return string
      */
-    public function render()
+    public function render( $echo = true )
     {
-        echo "<div class='kb-area--body'>";
+        $out = "<div class='kb-area--body'>";
         // list items for this area, block limit gets stored here
-        echo "<ul style='' data-context='{$this->context}' id='{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
+        $out .= "<ul style='' data-context='{$this->context}' id='{$this->area->id}' class='kb-module-ui__sortable--connect kb-module-ui__sortable kb-area__list-item kb-area'>";
         if (!empty( $this->attachedModules )) {
             /** @var \Kontentblocks\Modules\Module $module */
             foreach ($this->attachedModules as $module) {
                 $module = apply_filters( 'kb.module.before.factory', $module );
-                echo $module->renderForm();
+                $out .= $module->renderForm();
                 Kontentblocks::getService( 'utility.jsontransport' )->registerModule( $module->toJSON() );
             }
         }
-        echo "</ul>";
+        $out .= "</ul>";
 
-        // @TODO move to js
-        echo $this->menuLink();
+        $out .= $this->menuLink();
         // block limit tag, if applicable
-        $this->getModuleLimitTag();
-        echo "</div>";
-    }
+        $out .= $this->getModuleLimitTag();
+        $out .= "</div>";
 
-
-    /**
-     * Area Footer markup
-     */
-    public function footer()
-    {
-        echo "</div><!-- close area wrap -->";
-    }
-
-
-
-    /*
-     * ################################################
-     * Helper Methods beyond this point
-     * ################################################
-     */
-
-
-    /**
-     * Get Markup for block limit indicator
-     * 0 indicates unlimited and is the default setting
-     * @since 0.1.0
-     */
-
-    private function getModuleLimitTag()
-    {
-        // prepare string
-        $limit = ( $this->area->limit == '0' ) ? null : absint( $this->area->limit );
-
-        if (null !== $limit) {
-            echo "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
+        if ($echo) {
+            echo $out;
         }
 
+        return $out;
     }
-
 
     /**
      *
@@ -197,5 +174,29 @@ class AreaBackendHTML
         }
     }
 
+    /**
+     * Get Markup for block limit indicator
+     * 0 indicates unlimited and is the default setting
+     * @since 0.1.0
+     */
 
+    private function getModuleLimitTag()
+    {
+        // prepare string
+        $limit = ( $this->area->limit == '0' ) ? null : absint( $this->area->limit );
+
+        if (null !== $limit) {
+            return "<span class='block_limit'>Mögliche Anzahl Module: {$limit}</span>";
+        }
+        return '';
+
+    }
+
+    /**
+     * Area Footer markup
+     */
+    public function footer()
+    {
+        echo "</div><!-- close area wrap -->";
+    }
 }

@@ -4,7 +4,6 @@ namespace Kontentblocks\Modules;
 
 
 use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Storage\ModuleStorage;
 
 /**
  * Class ModuleRepository
@@ -16,6 +15,7 @@ class ModuleRepository
     protected $environment;
 
     protected $modules = array();
+
 
     public function __construct( Environment $environment )
     {
@@ -33,13 +33,16 @@ class ModuleRepository
         $areas = $this->environment->findAreas();
         if (is_array( $index )) {
             foreach ($index as $module) {
-                if (in_array($module['area'], array_keys($areas))){
+                if (in_array( $module['area'], array_keys( $areas ) )) {
                     if (!is_admin()) {
                         $module = apply_filters( 'kb.before.frontend.setup', $module );
                     }
                     $workshop = new ModuleWorkshop( $this->environment, $module );
                     if ($workshop->isValid()) {
-                        $this->modules[$workshop->getNewId()] = $workshop->getModule();
+                        $module = $workshop->getModule();
+                        if (!$module->properties->submodule) {
+                            $this->modules[$workshop->getNewId()] = $module;
+                        }
                     }
                 }
             }

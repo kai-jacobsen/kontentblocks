@@ -1,10 +1,8 @@
-// TODO Proper cleanup
 //KB.Backbone.ModuleBrowser
 var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDefinitions');
 var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');
 var ModuleBrowserDescription = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
 var ModuleBrowserNavigation = require('shared/ModuleBrowser/ModuleBrowserNavigation');
-var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
 var Checks = require('common/Checks');
 var Notice = require('common/Notice');
 var Payload = require('common/Payload');
@@ -190,7 +188,8 @@ module.exports = Backbone.View.extend({
       areaContext: this.options.area.model.get('context'),
       area: this.options.area.model.get('id'),
       _ajax_nonce: Config.getNonce('create'),
-      frontend: KB.appData.config.frontend
+      frontend: KB.appData.config.frontend,
+      submodule: false
     };
 
     if (this.options.area.model.get('parent_id')) {
@@ -215,6 +214,8 @@ module.exports = Backbone.View.extend({
       KB.Fields.trigger('newModule', model.View);
       TinyMCE.addEditor(model.View.$el);
     }, 150);
+
+    this.trigger('browser.module.created', {res: res})
 
     // repaint
     // add module to collection

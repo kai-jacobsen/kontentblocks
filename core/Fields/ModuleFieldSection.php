@@ -42,6 +42,7 @@ class ModuleFieldSection extends AbstractFieldSection
         $this->args = $this->prepareArgs( $args );
         $this->entity = $module;
         $this->baseId = $module->getId();
+        $this->objectId = $module->properties->parentObjectId;
     }
 
     /**

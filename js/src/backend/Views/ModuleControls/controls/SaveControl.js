@@ -7,7 +7,8 @@ var Config = require('common/Config');
 var UI = require('common/UI');
 var Payload = require('common/Payload');
 var I18n = require('common/I18n');
- module.exports = BaseView.extend({
+module.exports = BaseView.extend({
+  id: 'save',
   initialize: function (options) {
     this.options = options || {};
     this.parentView = options.parent;
@@ -23,13 +24,7 @@ var I18n = require('common/I18n');
   },
   saveData: function () {
     tinyMCE.triggerSave();
-    Ajax.send({
-      action: 'updateModuleData',
-      module: this.model.toJSON(),
-      data: this.parentView.serialize(),
-      _ajax_nonce: Config.getNonce('update')
-    }, this.success, this);
-
+    this.model.save();
   },
   getDirty: function () {
     this.$el.addClass('is-dirty');
@@ -45,13 +40,5 @@ var I18n = require('common/I18n');
     return !this.model.get('disabled') &&
       Checks.userCan('edit_kontentblocks');
 
-  },
-  success: function (res) {
-
-    if (!res || !res.data.newModuleData) {
-      _K.error('Failed to save module data.');
-    }
-    this.parentView.model.set('moduleData', res.data.newModuleData);
-    Notice.notice('Data saved', 'success');
   }
 });

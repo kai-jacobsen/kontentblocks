@@ -36,6 +36,9 @@ abstract class AbstractFieldSection implements Exportable
      * Array of registered fields for this section
      * @var array
      */
+
+    public $objectId = 0;
+
     protected $fields;
     /**
      * Can be a module or a panel
@@ -101,7 +104,7 @@ abstract class AbstractFieldSection implements Exportable
                 throw new Exception( "Field of type: $type does not exist" );
             } else {
                 $field->section = $this;
-
+                $field->objectId = $this->objectId;
                 // conditional check of field visibility
                 $this->markVisibility( $field );
 

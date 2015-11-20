@@ -2,9 +2,8 @@
 
 namespace Kontentblocks\Templating;
 
-use Kontentblocks\Frontend\AreaRenderer;
-use Kontentblocks\Frontend\AreaFileRenderer;
-use Kontentblocks\Frontend\SlotRenderer;
+use Kontentblocks\Common\Interfaces\RendererInterface;
+use Kontentblocks\Frontend\Renderer\AreaFileRenderer;
 use Kontentblocks\Kontentblocks;
 use Twig_Environment;
 
@@ -13,7 +12,7 @@ use Twig_Environment;
  * Class AreaView
  * @package Kontentblocks\Templating
  */
-class AreaView
+class AreaView implements RendererInterface
 {
     /**
      * @var array
@@ -23,7 +22,7 @@ class AreaView
     /**
      * @var AreaFileRenderer
      */
-    protected $AreaFileRenderer;
+    protected $areaFileRenderer;
 
 
     /**
@@ -35,13 +34,13 @@ class AreaView
     /**
      * Class Constructor
      *
-     * @param AreaFileRenderer $AreaFileRenderer
+     * @param AreaFileRenderer $areaFileRenderer
      * @param array $data
      */
-    public function __construct( AreaFileRenderer $AreaFileRenderer, $data = array() )
+    public function __construct( AreaFileRenderer $areaFileRenderer, $data = array() )
     {
         $this->data = $data;
-        $this->AreaFileRenderer = $AreaFileRenderer;
+        $this->areaFileRenderer = $areaFileRenderer;
         $this->engine = Kontentblocks::getService( 'templating.twig.public' );
 
         $this->extendTwigEnvironment();
@@ -49,10 +48,14 @@ class AreaView
 
     }
 
+    /**
+     * @param bool|false $echo
+     * @return null|string
+     */
     public function render( $echo = false )
     {
-        $templateFile = $this->AreaFileRenderer->getTemplateFile();
-        $path = $this->AreaFileRenderer->getTemplatePath();
+        $templateFile = $this->areaFileRenderer->getTemplateFile();
+        $path = $this->areaFileRenderer->getTemplatePath();
         if (is_array( $path )) {
             foreach ($path as $dir) {
                 $this->setPath( $dir );
@@ -86,32 +89,32 @@ class AreaView
     private function extendTwigEnvironment()
     {
         $this->engine->addFunction(new \Twig_SimpleFunction('openArea', function(){
-            echo $this->AreaFileRenderer->areaNode->openArea();
+            echo $this->areaFileRenderer->areaNode->openArea();
         }));
 
         $this->engine->addFunction(new \Twig_SimpleFunction('closeArea', function(){
-            echo $this->AreaFileRenderer->areaNode->closeArea();
+            echo $this->areaFileRenderer->areaNode->closeArea();
         }));
 
         // wrapper to SlotRenderer->module()
         $this->engine->addFunction(new \Twig_SimpleFunction('module', function(){
-            echo $this->AreaFileRenderer->slotRenderer->module();
+            echo $this->areaFileRenderer->slotRenderer->module();
         }));
 
         $this->engine->addFunction(new \Twig_SimpleFunction('position', function($position){
-            echo $this->AreaFileRenderer->slotRenderer->slot($position);
+            echo $this->areaFileRenderer->slotRenderer->slot($position);
         }));
 
         $this->engine->addFunction(new \Twig_SimpleFunction('modulesCount', function(){
-            return $this->AreaFileRenderer->moduleIterator->count();
+            return $this->areaFileRenderer->moduleIterator->count();
         }));
 
         $this->engine->addFunction(new \Twig_SimpleFunction('modulesLeft', function(){
-            return (($this->AreaFileRenderer->moduleIterator->count() - count($this->AreaFileRenderer->slotRenderer->done)) > 0);
+            return (($this->areaFileRenderer->moduleIterator->count() - count($this->areaFileRenderer->slotRenderer->done)) > 0);
         }));
 
         $this->engine->addFunction(new \Twig_SimpleFunction('numberLeft', function(){
-            return $this->AreaFileRenderer->moduleIterator->count() - count($this->AreaFileRenderer->slotRenderer->done);
+            return $this->areaFileRenderer->moduleIterator->count() - count($this->areaFileRenderer->slotRenderer->done);
         }));
 
 

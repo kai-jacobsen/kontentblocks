@@ -3,13 +3,12 @@
 namespace Kontentblocks\Backend\Screen;
 
 use Exception;
-use Kontentblocks\Areas\AreaBackendHTML;
 use Kontentblocks\Areas\AreaProperties;
-use Kontentblocks\Areas\DynamicAreaBackendHTML;
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Renderer\AreaBackendRenderer;
+use Kontentblocks\Backend\Renderer\DynamicAreaBackendRenderer;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ScreenContext
@@ -85,6 +84,15 @@ class ScreenContext
         }
     }
 
+    private function toJSON()
+    {
+        $json = array(
+            'id' => $this->id,
+            'title' => $this->title
+        );
+        Kontentblocks::getService( 'utility.jsontransport' )->registerContext( $json );
+
+    }
 
     /**
      * Wrapper to render the context to screen
@@ -143,12 +151,11 @@ class ScreenContext
                 continue;
             }
 
-
             // Setup new Area
             if ($area->dynamic) {
-                $areaHTML = new DynamicAreaBackendHTML( $area, $this->environment, $this->id );
+                $areaHTML = new DynamicAreaBackendRenderer( $area, $this->environment, $this->id );
             } else {
-                $areaHTML = new AreaBackendHTML( $area, $this->environment, $this->id );
+                $areaHTML = new AreaBackendRenderer( $area, $this->environment, $this->id );
             }
             // do area header markup
             $areaHTML->header();
@@ -156,32 +163,7 @@ class ScreenContext
             $areaHTML->render();
             //render area footer
             $areaHTML->footer();
-
-
         }
-    }
-
-    /**
-     * Close container and call hook
-     * @since 0.1.0
-     */
-    public function closeContext()
-    {
-        echo "</div>"; // end inner
-        // hook to add custom stuff after areas
-        do_action( "context_box_{$this->id}", $this->id, $this->environment );
-        echo "</div>";
-
-    }
-
-    private function toJSON()
-    {
-        $json = array(
-            'id' => $this->id,
-            'title' => $this->title
-        );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerContext( $json );
-
     }
 
     /**
@@ -205,8 +187,22 @@ class ScreenContext
         return $area;
     }
 
-    public function hasAreas(){
-        return !empty($this->areas);
+    /**
+     * Close container and call hook
+     * @since 0.1.0
+     */
+    public function closeContext()
+    {
+        echo "</div>"; // end inner
+        // hook to add custom stuff after areas
+        do_action( "context_box_{$this->id}", $this->id, $this->environment );
+        echo "</div>";
+
+    }
+
+    public function hasAreas()
+    {
+        return !empty( $this->areas );
     }
 
 }

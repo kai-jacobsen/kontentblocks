@@ -3,6 +3,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var FullscreenView = require('backend/Views/FullscreenView');
 var Checks = require('common/Checks');
 module.exports = BaseView.extend({
+  id: 'fullscreen',
   initialize: function (options) {
     this.options = options || {};
     this.$parent = this.model.View.$el;
@@ -12,7 +13,7 @@ module.exports = BaseView.extend({
     "data-kbtooltip": 'turn fullscreen mode on'
   },
   events: {
-      'click' : 'openFullscreen'
+    'click': 'openFullscreen'
   },
   className: 'ui-fullscreen kb-fullscreen block-menu-icon',
   isValid: function () {
@@ -23,12 +24,20 @@ module.exports = BaseView.extend({
       return false;
     }
   },
-  openFullscreen: function(){
+  openFullscreen: function () {
     var that = this;
     if (!this.FullscreenView) {
       this.FullscreenView = new FullscreenView({
         model: this.model
       }).open();
     }
+  },
+  getFullscreenView: function () {
+    if (!this.FullscreenView) {
+      this.FullscreenView = new FullscreenView({
+        model: this.model
+      });
+    }
+    return this.FullscreenView;
   }
 });

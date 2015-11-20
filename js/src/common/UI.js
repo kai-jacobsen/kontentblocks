@@ -66,7 +66,7 @@ var Ui = {
   },
 
   flexContext: function () {
-    jQuery('.kb-context-row').each(function(index, el){
+    jQuery('.kb-context-row').each(function (index, el) {
       var $el = jQuery(el);
       $el.data('KB.ContextRow', new ContextRowGrid({
         el: el
@@ -74,7 +74,7 @@ var Ui = {
     });
   },
   repaint: function ($el) {
-    this.initTabs();
+    this.initTabs($el);
     this.initToggleBoxes();
     TinyMCE.addEditor($el);
   },
@@ -157,7 +157,7 @@ var Ui = {
 
 
     var appendTo = 'parent';
-    if (Config.getLayoutMode() === 'default-tabs'){
+    if (Config.getLayoutMode() === 'default-tabs') {
       appendTo = '#kb-contexts-tabs';
     }
 
@@ -360,7 +360,7 @@ var Ui = {
   },
   initTipsy: function () {
 
-    jQuery('body').on('mouseenter', '[data-kbtooltip]', function(e){
+    jQuery('body').on('mouseenter', '[data-kbtooltip]', function (e) {
       jQuery(this).qtip({
         content: {
           attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content

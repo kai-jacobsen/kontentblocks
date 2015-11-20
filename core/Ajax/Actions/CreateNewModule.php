@@ -6,8 +6,9 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Frontend\RenderSettings;
-use Kontentblocks\Frontend\SingleModuleRenderer;
+use Kontentblocks\Frontend\ModuleRenderSettings;
+use Kontentblocks\Frontend\Renderer\SingleModuleRenderer;
+use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
@@ -65,7 +66,12 @@ class CreateNewModule implements AjaxActionInterface
      * Context indicator
      * @var bool
      */
-    private $frontend = false;
+    private $isFrontend = false;
+
+    /**
+     * @var bool
+     */
+    private $isSubmodule = false;
 
     /**
      * @var ValueStorageInterface
@@ -105,7 +111,7 @@ class CreateNewModule implements AjaxActionInterface
         $this->area = $this->environment->getAreaDefinition( $this->moduleArgs['area'] );
 
         // override class if master
-        if (!$this->frontend) {
+        if (!$this->isFrontend) {
             $this->overrideModuleClassEventually();
         }
 
@@ -128,7 +134,8 @@ class CreateNewModule implements AjaxActionInterface
         global $post;
 
         $this->postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-        $this->frontend = $request->getFiltered( 'frontend', FILTER_VALIDATE_BOOLEAN );
+        $this->isFrontend = $request->getFiltered( 'frontend', FILTER_VALIDATE_BOOLEAN );
+        $this->isSubmodule = $request->getFiltered( 'submodule', FILTER_VALIDATE_BOOLEAN );
 
         $post = get_post( $this->postId );
         setup_postdata( $post );
@@ -140,6 +147,7 @@ class CreateNewModule implements AjaxActionInterface
 //        }
         $this->moduleArgs['postId'] = absint( $this->postId );
         $this->moduleArgs['area'] = $request->getFiltered( 'area', FILTER_SANITIZE_STRING );
+        $this->moduleArgs['submodule'] = $this->isSubmodule;
         $this->moduleArgs['areaContext'] = $request->getFiltered( 'areaContext', FILTER_SANITIZE_STRING );
         $this->moduleArgs['parentObjectId'] = absint( $request->get( 'parentObjectId' ) );
 
@@ -185,11 +193,12 @@ class CreateNewModule implements AjaxActionInterface
             $addArgs = array();
         }
 
-        $renderSettings = new RenderSettings( $addArgs, $this->area );
+        $renderSettings = new AreaRenderSettings( $addArgs, $this->area );
 
         $module = apply_filters( 'kb.module.before.factory', $this->newModule );
-        if ($this->frontend) {
-            $singleRenderer = new SingleModuleRenderer( $module, $renderSettings );
+        if ($this->isFrontend) {
+            $moduleRenderSettings = new ModuleRenderSettings( array( 'moduleElement' ), $module->properties );
+            $singleRenderer = new SingleModuleRenderer( $module, $moduleRenderSettings );
             $html = $singleRenderer->render();
         } else {
             $html = $module->renderForm();

@@ -5,6 +5,7 @@ namespace Kontentblocks\Ajax\Actions;
 use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -41,7 +42,8 @@ class UpdateModuleData implements AjaxActionInterface
         setup_postdata( $post );
 
         $environment = Utilities::getEnvironment( $postId );
-        $module = $environment->getModuleById( filter_var( $moduleArgs['mid'], FILTER_SANITIZE_STRING ) );
+        $workshop = new ModuleWorkshop($environment, $moduleArgs);
+        $module = $workshop->getModule();
 
         $overrides = $moduleArgs['overrides'];
         $module->properties->parseOverrides( $overrides );

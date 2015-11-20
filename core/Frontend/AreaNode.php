@@ -12,7 +12,7 @@ use Kontentblocks\Utils\Utilities;
  * Class AreaHtmlNode
  * @package Kontentblocks\Frontend
  */
-class AreaHtmlNode
+class AreaNode
 {
 
     /**
@@ -80,10 +80,10 @@ class AreaHtmlNode
      * Class Constructor
      *
      * @param Environment $environment
-     * @param RenderSettings $renderSettings array comes from the render function call
+     * @param AreaRenderSettings $renderSettings array comes from the render function call
      * @since 0.1.0
      */
-    public function __construct( Environment $environment, RenderSettings $renderSettings )
+    public function __construct( Environment $environment, AreaRenderSettings $renderSettings )
     {
         $this->environment = $environment;
         $this->area = $renderSettings->area;

@@ -2,9 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\JSONTransport;
 use Pimple\Container;
 
 /**

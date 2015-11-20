@@ -1,4 +1,6 @@
-//KB.Backbone.ModuleModel
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+var Config = require('common/Config');
 module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   attachedFields: {},
@@ -53,5 +55,20 @@ module.exports = Backbone.Model.extend({
     var ev = _.clone(this.get('envVars'));
     ev[attr] = value;
     this.set('envVars', ev);
+  },
+  sync: function(){
+    Ajax.send({
+      action: 'updateModuleData',
+      module: this.toJSON(),
+      data: this.View.serialize(),
+      _ajax_nonce: Config.getNonce('update')
+    }, this.success, this);
+  },
+  success: function (res) {
+    if (!res || !res.data.newModuleData) {
+      _K.error('Failed to save module data.');
+    }
+    this.set('moduleData', res.data.newModuleData);
+    Notice.notice('Data saved', 'success');
   }
 });

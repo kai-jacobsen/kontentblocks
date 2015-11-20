@@ -813,6 +813,7 @@ var Ajax = require('common/Ajax');
 var I18n = require('common/I18n');
 var Utilities = require('common/Utilities');
 module.exports = BaseView.extend({
+  id: 'clipboard',
   initialize: function (options) {
     this.options = options || {};
     this.ClipboardController = options.parent;
@@ -820,7 +821,6 @@ module.exports = BaseView.extend({
     this.hash = Utilities.hashString(pid.toString() + this.model.get('mid'));
     this.model.clipboardHash = this.hash;
     this.statusClass();
-    console.log(this.hash);
   },
   className: 'module-clipboard block-menu-icon',
   events: {
@@ -839,7 +839,7 @@ module.exports = BaseView.extend({
   },
   isValid: function () {
     if (!this.model.get('disabled') &&
-      Checks.userCan('deactivate_kontentblocks') && (this.model.get('globalModule') !== true)) {
+      Checks.userCan('deactivate_kontentblocks') && (this.model.get('globalModule') !== true) && !this.model.get('submodule')) {
       return true;
     } else {
       return false;

@@ -258,7 +258,11 @@ module.exports =
             $module = jQuery(ed.editorContainer).closest('.kb-module');
             ed.module = KB.Views.Modules.get($module.attr('id'));
           }
-          ed.module.$el.trigger('tinymce.change');
+
+          if (ed.module){
+            ed.module.$el.trigger('tinymce.change');
+          }
+
         });
       };
       tinymce.init(settings);

@@ -39,6 +39,7 @@ class ModuleFieldController extends AbstractFieldController
     {
         $this->baseId = $module->getId();
         $this->module = $module;
+
     }
 
     /**

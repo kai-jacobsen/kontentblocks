@@ -3,6 +3,7 @@ var tplDraftStatus = require('templates/backend/status/draft.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 module.exports = BaseView.extend({
+  id: 'draft',
   className: 'kb-status-draft',
   events: {
     'click': 'toggleDraft'

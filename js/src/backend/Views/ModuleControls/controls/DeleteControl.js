@@ -10,6 +10,7 @@ var BatchDeleteController = require('shared/BatchDelete/BatchDeleteController');
 var I18n = require('common/I18n');
 
 module.exports = BaseView.extend({
+  id: 'delete',
   marked: false,
   className: 'kb-delete block-menu-icon',
   attributes: {
@@ -44,7 +45,7 @@ module.exports = BaseView.extend({
     this.marked = false;
   },
   isValid: function () {
-    return !!(!this.model.get('predefined') && !this.model.get('disabled') &&
+    return !!(!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
     Checks.userCan('delete_kontentblocks'));
   },
   yes: function () {

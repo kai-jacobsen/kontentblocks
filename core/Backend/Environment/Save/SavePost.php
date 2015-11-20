@@ -159,6 +159,13 @@ class SavePost
             return false;
         }
 
+        $this->saveModules( $modules );
+
+        return true;
+    }
+
+    public function saveModules( $modules )
+    {
         /** @var \Kontentblocks\Modules\Module $module */
         foreach ($modules as $module) {
 
@@ -167,7 +174,7 @@ class SavePost
             }
             // new data from $_POST
             //TODO: filter incoming data
-            $data = wp_unslash($this->postdata->get( $module->getId() ));
+            $data = wp_unslash( $this->postdata->get( $module->getId() ) );
             /** @var $old array */
             $old = $this->environment->getStorage()->getModuleData( $module->getId() );
             $module->updateModuleData( $old );
@@ -203,12 +210,10 @@ class SavePost
                     $this->environment->getDataProvider()->delete( '_preview_' . $module->getId() );
 
                 }
-                $module->updateModuleData($savedData);
-                $module->getModel()->sync(true);
+                $module->updateModuleData( $savedData );
+                $module->getModel()->sync( true );
             }
         }
-
-        return true;
     }
 
     /**

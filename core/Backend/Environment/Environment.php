@@ -299,7 +299,7 @@ class Environment implements JsonSerializable
         if (!empty( $byArea[$areaid] )) {
             return $byArea[$areaid];
         } else {
-            return false;
+            return array();
         }
     }
 

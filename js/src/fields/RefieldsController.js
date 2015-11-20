@@ -10,3 +10,4 @@ Fields.registerObject('image', require('./controls/image'));
 Fields.registerObject('link', require('./controls/link'));
 Fields.registerObject('textarea', require('./controls/textarea'));
 Fields.registerObject('otimes', require('./controls/otimes'));
+Fields.registerObject('mlayout', require('./controls/mlayout'));

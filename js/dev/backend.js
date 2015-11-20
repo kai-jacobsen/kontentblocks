@@ -313,7 +313,9 @@ module.exports = Backbone.Model.extend({
   idAttribute: 'id'
 });
 },{}],6:[function(require,module,exports){
-//KB.Backbone.ModuleModel
+var Notice = require('common/Notice');
+var Ajax = require('common/Ajax');
+var Config = require('common/Config');
 module.exports = Backbone.Model.extend({
   idAttribute: 'mid',
   attachedFields: {},
@@ -368,9 +370,24 @@ module.exports = Backbone.Model.extend({
     var ev = _.clone(this.get('envVars'));
     ev[attr] = value;
     this.set('envVars', ev);
+  },
+  sync: function(){
+    Ajax.send({
+      action: 'updateModuleData',
+      module: this.toJSON(),
+      data: this.View.serialize(),
+      _ajax_nonce: Config.getNonce('update')
+    }, this.success, this);
+  },
+  success: function (res) {
+    if (!res || !res.data.newModuleData) {
+      _K.error('Failed to save module data.');
+    }
+    this.set('moduleData', res.data.newModuleData);
+    Notice.notice('Data saved', 'success');
   }
 });
-},{}],7:[function(require,module,exports){
+},{"common/Ajax":42,"common/Config":44,"common/Notice":47}],7:[function(require,module,exports){
 //KB.Backbone.PanelModel
 module.exports = Backbone.Model.extend({
   idAttribute: 'baseId',
@@ -538,7 +555,6 @@ module.exports = Backbone.View.extend({
     this.model.View = this;
 
     this.listenTo(this, 'module:attached', this.ui);
-    this.listenTo(this, 'module:detached', this.ui);
 
 
     this.AreaControls = new AreaControls({
@@ -558,9 +574,9 @@ module.exports = Backbone.View.extend({
     this.addControls();
     this.ui();
   },
-  resetElement: function(){
-      this.setElement('#' + this.model.get('id') + '-container');
-      this.initialize();
+  resetElement: function () {
+    this.setElement('#' + this.model.get('id') + '-container');
+    this.initialize();
   },
   addControls: function () {
     this.controlsContainer.append(tplAreaAddModule({i18n: KB.i18n}));
@@ -610,7 +626,7 @@ module.exports = Backbone.View.extend({
   renderPlaceholder: function () {
     this.modulesList.before(this.$placeholder);
   },
-  setupDefaultMenuItems: function(){
+  setupDefaultMenuItems: function () {
     this.AreaControls.addItem(new StatusControl({model: this.model, parent: this}));
     this.AreaControls.addItem(new DetachControl({model: this.model, parent: this}));
     this.AreaControls.addItem(new MoveControl({model: this.model, parent: this}));
@@ -1039,6 +1055,7 @@ module.exports = Backbone.View.extend({
 },{"backend/Views/ContextBrowser":14,"templates/backend/context-header.hbs":73}],22:[function(require,module,exports){
 var tplFullscreenInner = require('templates/backend/fullscreen-inner.hbs');
 var TinyMCE = require('common/TinyMCE');
+var UI = require('common/UI');
 module.exports = Backbone.View.extend({
   className: 'kb-fullscreen--holder',
   initialize: function () {
@@ -1048,21 +1065,34 @@ module.exports = Backbone.View.extend({
 
   },
   events: {
-    'click .kb-fullscreen-js-close': 'close'
+    'click .kb-fullscreen-js-close': 'close',
+    'change .kb-template-select': 'viewfileChange'
+  },
+  viewfileChange: function (e) {
+    var that = this;
+    this.model.View.viewfileChange(e);
+    this.listenToOnce(this.model.View, 'kb:backend::viewUpdated', function () {
+      UI.repaint(that.$body);
+    });
   },
   open: function () {
     var that = this;
+    var st = jQuery(window).scrollTop();
     TinyMCE.removeEditors();
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
     this.$fswrap = jQuery(tplFullscreenInner()).appendTo(this.$el);
-    this.$el.width(jQuery(window).width() * 0.8);
+    this.$el.width(jQuery(window).width() * 0.7);
     jQuery('#wpwrap').addClass('module-browser-open');
     this.$body.detach().appendTo(this.$fswrap.find('.kb-fullscreen--inner')).show().addClass('kb-module--fullscreen');
     jQuery(window).resize(function () {
-      that.$fswrap.width(jQuery(window).width() * 0.8);
+      that.$fswrap.width(jQuery(window).width() * 0.7);
     });
     this.$el.appendTo('body');
     TinyMCE.restoreEditors();
+    this.trigger('open');
+    var offset = this.$el.offset();
+
+    this.$el.css('top', offset.top + st + 'px');
 
   },
   close: function () {
@@ -1072,12 +1102,13 @@ module.exports = Backbone.View.extend({
     this.$backdrop.remove();
     this.$fswrap.remove();
     this.$el.detach();
-    setTimeout(function(){
+    setTimeout(function () {
       TinyMCE.restoreEditors();
     }, 250);
+    this.trigger('close');
   }
 });
-},{"common/TinyMCE":50,"templates/backend/fullscreen-inner.hbs":74}],23:[function(require,module,exports){
+},{"common/TinyMCE":50,"common/UI":51,"templates/backend/fullscreen-inner.hbs":74}],23:[function(require,module,exports){
 /**
  * Creates the individual module-actions menu
  * like: duplicate, delete, status
@@ -1085,6 +1116,7 @@ module.exports = Backbone.View.extend({
 //KB.Backbone.Backend.ModuleControlsView
 var tplModuleMenu = require('templates/backend/module-menu.hbs');
 module.exports = Backbone.View.extend({
+  id: '',
   $menuWrap: {}, // wrap container jQuery element
   $menuList: {}, // ul item
   initialize: function () {
@@ -1097,6 +1129,7 @@ module.exports = Backbone.View.extend({
    * @param view view handler for item
    */
   addItem: function (view) {
+    this.controls = this.controls || {};
     // 'backend' to add menu items
     // actually happens in ModuleView.js
     // this functions validates action by calling 'isValid' on menu item view
@@ -1106,10 +1139,15 @@ module.exports = Backbone.View.extend({
       var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
       var $menuItem = $liItem.append(view.el);
       this.$menuList.append($menuItem);
-
       view.render.call(view);
-
+      this.controls[view.id] = view;
     }
+  },
+  getView: function (id) {
+    if (this.controls[id]) {
+      return this.controls[id];
+    }
+    return false;
   }
 });
 },{"templates/backend/module-menu.hbs":75}],24:[function(require,module,exports){
@@ -1125,6 +1163,7 @@ var BatchDeleteController = require('shared/BatchDelete/BatchDeleteController');
 var I18n = require('common/I18n');
 
 module.exports = BaseView.extend({
+  id: 'delete',
   marked: false,
   className: 'kb-delete block-menu-icon',
   attributes: {
@@ -1159,7 +1198,7 @@ module.exports = BaseView.extend({
     this.marked = false;
   },
   isValid: function () {
-    return !!(!this.model.get('predefined') && !this.model.get('disabled') &&
+    return !!(!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
     Checks.userCan('delete_kontentblocks'));
   },
   yes: function () {
@@ -1196,6 +1235,7 @@ var Payload = require('common/Payload');
 var I18n = require('common/I18n');
 
 module.exports = BaseView.extend({
+  id: 'duplicate',
   className: 'kb-duplicate block-menu-icon',
   events: {
     'click': 'duplicateModule'
@@ -1214,7 +1254,7 @@ module.exports = BaseView.extend({
 
   },
   isValid: function () {
-    if (!this.model.get('predefined') && !this.model.get('disabled') &&
+    if (!this.model.get('predefined') && !this.model.get('disabled') && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
     } else {
@@ -1265,7 +1305,8 @@ var Config = require('common/Config');
 var UI = require('common/UI');
 var Payload = require('common/Payload');
 var I18n = require('common/I18n');
- module.exports = BaseView.extend({
+module.exports = BaseView.extend({
+  id: 'save',
   initialize: function (options) {
     this.options = options || {};
     this.parentView = options.parent;
@@ -1281,13 +1322,7 @@ var I18n = require('common/I18n');
   },
   saveData: function () {
     tinyMCE.triggerSave();
-    Ajax.send({
-      action: 'updateModuleData',
-      module: this.model.toJSON(),
-      data: this.parentView.serialize(),
-      _ajax_nonce: Config.getNonce('update')
-    }, this.success, this);
-
+    this.model.save();
   },
   getDirty: function () {
     this.$el.addClass('is-dirty');
@@ -1303,14 +1338,6 @@ var I18n = require('common/I18n');
     return !this.model.get('disabled') &&
       Checks.userCan('edit_kontentblocks');
 
-  },
-  success: function (res) {
-
-    if (!res || !res.data.newModuleData) {
-      _K.error('Failed to save module data.');
-    }
-    this.parentView.model.set('moduleData', res.data.newModuleData);
-    Notice.notice('Data saved', 'success');
   }
 });
 },{"backend/Views/BaseControlView":13,"common/Ajax":42,"common/Checks":43,"common/Config":44,"common/I18n":45,"common/Notice":47,"common/Payload":48,"common/UI":51}],27:[function(require,module,exports){
@@ -1322,6 +1349,7 @@ var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
 var I18n = require('common/I18n');
 module.exports = BaseView.extend({
+  id: 'status',
   initialize: function (options) {
     this.options = options || {};
   },
@@ -1392,6 +1420,7 @@ var tplDraftStatus = require('templates/backend/status/draft.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
 module.exports = BaseView.extend({
+  id: 'draft',
   className: 'kb-status-draft',
   events: {
     'click': 'toggleDraft'
@@ -1421,6 +1450,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var tplLoggedInStatus = require('templates/backend/status/loggedin.hbs');
 var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
+  id: 'loggedIn',
   controller: null,
   className: 'kb-status-loggedin',
   initialize: function(options){
@@ -1443,6 +1473,7 @@ module.exports = BaseView.extend({
 //KB.Backbone.Backend.ModuleDelete
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
+  id: 'name',
   className: 'kb-status-draft',
   isValid: function () {
     return true;
@@ -1529,6 +1560,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var tplSettingsStatus = require('templates/backend/status/settings.hbs');
 var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
 module.exports = BaseView.extend({
+  id: 'settings',
   controller: null,
   className: 'kb-status-settings',
   events: {
@@ -1559,6 +1591,7 @@ var ControlsView = require('backend/Views/ModuleControls/ControlsView');
 var tplUiMenu = require('templates/backend/ui-menu.hbs');
 module.exports = ControlsView.extend({
   initialize: function () {
+
     this.$menuWrap = jQuery('.ui-wrap', this.$el); //set outer element
     this.$menuWrap.append(tplUiMenu({})); // render template
     this.$menuList = jQuery('.ui-actions', this.$menuWrap);
@@ -1568,6 +1601,7 @@ module.exports = ControlsView.extend({
 //KB.Backbone.Backend.ModuleStatus
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
+  id: 'disable',
   initialize: function (options) {
     this.options = options || {};
   },
@@ -1586,6 +1620,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var FullscreenView = require('backend/Views/FullscreenView');
 var Checks = require('common/Checks');
 module.exports = BaseView.extend({
+  id: 'fullscreen',
   initialize: function (options) {
     this.options = options || {};
     this.$parent = this.model.View.$el;
@@ -1595,7 +1630,7 @@ module.exports = BaseView.extend({
     "data-kbtooltip": 'turn fullscreen mode on'
   },
   events: {
-      'click' : 'openFullscreen'
+    'click': 'openFullscreen'
   },
   className: 'ui-fullscreen kb-fullscreen block-menu-icon',
   isValid: function () {
@@ -1606,13 +1641,21 @@ module.exports = BaseView.extend({
       return false;
     }
   },
-  openFullscreen: function(){
+  openFullscreen: function () {
     var that = this;
     if (!this.FullscreenView) {
       this.FullscreenView = new FullscreenView({
         model: this.model
       }).open();
     }
+  },
+  getFullscreenView: function () {
+    if (!this.FullscreenView) {
+      this.FullscreenView = new FullscreenView({
+        model: this.model
+      });
+    }
+    return this.FullscreenView;
   }
 });
 },{"backend/Views/BaseControlView":13,"backend/Views/FullscreenView":22,"common/Checks":43}],37:[function(require,module,exports){
@@ -1620,6 +1663,7 @@ module.exports = BaseView.extend({
 var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
 module.exports = BaseView.extend({
+  id: 'move',
   initialize: function (options) {
     this.options = options || {};
   },
@@ -1629,7 +1673,7 @@ module.exports = BaseView.extend({
   className: 'ui-move kb-move block-menu-icon',
   isValid: function () {
     if (!this.model.get('settings').disabled &&
-      Checks.userCan('edit_kontentblocks')) {
+      Checks.userCan('edit_kontentblocks') && !this.model.get('submodule')) {
       return true;
     } else {
       return false;
@@ -1641,6 +1685,7 @@ module.exports = BaseView.extend({
 var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
 module.exports = BaseView.extend({
+  id: 'toggle',
   initialize: function (options) {
     this.options = options || {};
     this.parent = options.parent;
@@ -1655,7 +1700,7 @@ module.exports = BaseView.extend({
   },
   className: 'ui-toggle kb-toggle block-menu-icon',
   isValid: function () {
-    if (!this.model.get('settings').disabled &&
+    if (!this.model.get('settings').disabled && !this.model.get('submodule') &&
       Checks.userCan('edit_kontentblocks')) {
       return true;
     } else {
@@ -1723,7 +1768,8 @@ module.exports = Backbone.View.extend({
     this.trigger('kb::module.input.changed', this);
   },
   viewfileChange: function (e) {
-    this.model.set('viewfile', e.currentTarget.value);
+    var $select = jQuery(e.currentTarget);
+    this.model.set('viewfile', $select.val());
     this.clearFields();
     this.updateModuleForm();
     this.trigger('KB::backend.module.viewfile.changed');
@@ -1750,6 +1796,7 @@ module.exports = Backbone.View.extend({
       el: this.$el,
       parent: this
     });
+
 
     // set view on model for later reference
     this.model.connectView(this);
@@ -1819,8 +1866,6 @@ module.exports = Backbone.View.extend({
     // @TODO check if this can be rafcatored to a subarray
     delete moduleData.areaContext;
     //delete moduleData.viewfile;
-    delete moduleData.moduleName;
-
     this.trigger('kb::module.data.updated');
     return moduleData;
   },
@@ -2341,7 +2386,11 @@ module.exports =
             $module = jQuery(ed.editorContainer).closest('.kb-module');
             ed.module = KB.Views.Modules.get($module.attr('id'));
           }
-          ed.module.$el.trigger('tinymce.change');
+
+          if (ed.module){
+            ed.module.$el.trigger('tinymce.change');
+          }
+
         });
       };
       tinymce.init(settings);
@@ -2465,7 +2514,7 @@ var Ui = {
   },
 
   flexContext: function () {
-    jQuery('.kb-context-row').each(function(index, el){
+    jQuery('.kb-context-row').each(function (index, el) {
       var $el = jQuery(el);
       $el.data('KB.ContextRow', new ContextRowGrid({
         el: el
@@ -2473,7 +2522,7 @@ var Ui = {
     });
   },
   repaint: function ($el) {
-    this.initTabs();
+    this.initTabs($el);
     this.initToggleBoxes();
     TinyMCE.addEditor($el);
   },
@@ -2556,7 +2605,7 @@ var Ui = {
 
 
     var appendTo = 'parent';
-    if (Config.getLayoutMode() === 'default-tabs'){
+    if (Config.getLayoutMode() === 'default-tabs') {
       appendTo = '#kb-contexts-tabs';
     }
 
@@ -2759,7 +2808,7 @@ var Ui = {
   },
   initTipsy: function () {
 
-    jQuery('body').on('mouseenter', '[data-kbtooltip]', function(e){
+    jQuery('body').on('mouseenter', '[data-kbtooltip]', function (e) {
       jQuery(this).qtip({
         content: {
           attr: 'data-kbtooltip' // Tell qTip2 to look inside this attr for its content
@@ -3209,13 +3258,11 @@ var BatchDeleteController = Backbone.View.extend({
 
 module.exports = new BatchDeleteController();
 },{"common/Ajax":42,"common/Config":44,"common/TinyMCE":50,"templates/backend/batch-delete.hbs":69}],57:[function(require,module,exports){
-// TODO Proper cleanup
 //KB.Backbone.ModuleBrowser
 var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDefinitions');
 var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');
 var ModuleBrowserDescription = require('shared/ModuleBrowser/ModuleBrowserDescriptions');
 var ModuleBrowserNavigation = require('shared/ModuleBrowser/ModuleBrowserNavigation');
-var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
 var Checks = require('common/Checks');
 var Notice = require('common/Notice');
 var Payload = require('common/Payload');
@@ -3401,7 +3448,8 @@ module.exports = Backbone.View.extend({
       areaContext: this.options.area.model.get('context'),
       area: this.options.area.model.get('id'),
       _ajax_nonce: Config.getNonce('create'),
-      frontend: KB.appData.config.frontend
+      frontend: KB.appData.config.frontend,
+      submodule: false
     };
 
     if (this.options.area.model.get('parent_id')) {
@@ -3426,6 +3474,8 @@ module.exports = Backbone.View.extend({
       KB.Fields.trigger('newModule', model.View);
       TinyMCE.addEditor(model.View.$el);
     }, 150);
+
+    this.trigger('browser.module.created', {res: res})
 
     // repaint
     // add module to collection
@@ -3453,7 +3503,7 @@ module.exports = Backbone.View.extend({
     return fullDefs;
   }
 });
-},{"common/Ajax":42,"common/Checks":43,"common/Config":44,"common/Notice":47,"common/Payload":48,"common/TinyMCE":50,"shared/ModuleBrowser/ModuleBrowserDefinitions":58,"shared/ModuleBrowser/ModuleBrowserDescriptions":59,"shared/ModuleBrowser/ModuleBrowserList":60,"shared/ModuleBrowser/ModuleBrowserNavigation":62,"shared/ModuleBrowser/ModuleDefinitionModel":64,"templates/backend/modulebrowser/module-browser.hbs":76}],58:[function(require,module,exports){
+},{"common/Ajax":42,"common/Checks":43,"common/Config":44,"common/Notice":47,"common/Payload":48,"common/TinyMCE":50,"shared/ModuleBrowser/ModuleBrowserDefinitions":58,"shared/ModuleBrowser/ModuleBrowserDescriptions":59,"shared/ModuleBrowser/ModuleBrowserNavigation":62,"shared/ModuleBrowser/ModuleDefinitionModel":64,"templates/backend/modulebrowser/module-browser.hbs":76}],58:[function(require,module,exports){
 var Payload = require('common/Payload');
 module.exports = Backbone.Collection.extend({
 
@@ -3847,7 +3897,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class=\"kb-fullscreen--holder-wrap\">\n    <ul class=\"kb-fullscreen--controls\">\n       <li class=\"kb-fullscreen-js-close\"><span class=\"dashicons dashicons-no-alt\"></span></li>\n    </ul>\n    <div class=\"kb-fullscreen--inner\">\n\n    </div>\n</div>";
+    return "<div class=\"kb-fullscreen--holder-wrap\">\n    <div class=\"kb-fullscreen--controls\">\n       <div class=\"kb-fullscreen-js-close\"><span class=\"dashicons dashicons-no-alt\"></span></div>\n    </div>\n    <div class=\"kb-fullscreen--inner\">\n\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":96}],75:[function(require,module,exports){

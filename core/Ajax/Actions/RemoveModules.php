@@ -8,6 +8,7 @@ use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -34,7 +35,8 @@ class RemoveModules implements AjaxActionInterface
         $mid = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
 
         $environment = Utilities::getEnvironment( $postId );
-        $module = $environment->getModuleById( $mid );
+        $workshop = new ModuleWorkshop($environment, $environment->getStorage()->getModuleDefinition($mid));
+        $module = $workshop->getModule();
         $storage = $environment->getStorage();
         $backupManager = new BackupDataStorage( $storage );
         $backupManager->backup( "Before Module: {$mid} was deleted" );

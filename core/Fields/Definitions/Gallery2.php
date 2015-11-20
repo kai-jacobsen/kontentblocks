@@ -16,8 +16,7 @@ Class Gallery2 extends Field
 
     // Defaults
     public static $settings = array(
-        'type' => 'gallery2',
-        'returnObj' => 'Gallery'
+        'type' => 'gallery2'
     );
 
 

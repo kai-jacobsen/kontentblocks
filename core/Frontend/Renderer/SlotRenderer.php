@@ -1,9 +1,11 @@
 <?php
 
-namespace Kontentblocks\Frontend;
+namespace Kontentblocks\Frontend\Renderer;
 
 use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Modules\ModuleHTMLNode;
+use Kontentblocks\Frontend\ModuleIterator;
+use Kontentblocks\Frontend\ModuleRenderSettings;
+use Kontentblocks\Modules\ModuleNode;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -33,19 +35,16 @@ use Kontentblocks\Utils\Utilities;
 class SlotRenderer
 {
 
+    public $done = array();
     /**
      * internal pointer
      * @var int
      */
     protected $position = 1;
-
     /**
      * @var array
      */
     protected $addArgs;
-
-
-    public $done = array();
 
     /**
      * Class Constructor
@@ -113,20 +112,20 @@ class SlotRenderer
 
         $module = $this->iterator->setPosition( $pos );
 
-        if (in_array($module->getId(), $this->done)){
+        if (in_array( $module->getId(), $this->done )) {
             return null;
         }
 
 
         if (is_a( $module, '\Kontentblocks\Modules\Module' )) {
-            $renderer = new SingleModuleRenderer( $module, $this->addArgs );
+            $moduleRenderSettings = new ModuleRenderSettings( array(), $module->properties );
+            $renderer = new SingleModuleRenderer( $module, $moduleRenderSettings );
             $module->toJSON();
-            array_push($this->done, $module->getId());
+            array_push( $this->done, $module->getId() );
             if ($out = $renderer->render()) {
                 return $out;
             }
         }
-
     }
 
     /**
@@ -142,7 +141,7 @@ class SlotRenderer
 
     public function hasModule()
     {
-        return ($this->iterator->next() !== false) ? true : false;
+        return ( $this->iterator->next() !== false ) ? true : false;
     }
 
 

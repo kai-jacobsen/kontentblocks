@@ -5,6 +5,7 @@
 //KB.Backbone.Backend.ModuleControlsView
 var tplModuleMenu = require('templates/backend/module-menu.hbs');
 module.exports = Backbone.View.extend({
+  id: '',
   $menuWrap: {}, // wrap container jQuery element
   $menuList: {}, // ul item
   initialize: function () {
@@ -17,6 +18,7 @@ module.exports = Backbone.View.extend({
    * @param view view handler for item
    */
   addItem: function (view) {
+    this.controls = this.controls || {};
     // 'backend' to add menu items
     // actually happens in ModuleView.js
     // this functions validates action by calling 'isValid' on menu item view
@@ -26,9 +28,14 @@ module.exports = Backbone.View.extend({
       var $liItem = jQuery('<li></li>').appendTo(this.$menuList);
       var $menuItem = $liItem.append(view.el);
       this.$menuList.append($menuItem);
-
       view.render.call(view);
-
+      this.controls[view.id] = view;
     }
+  },
+  getView: function (id) {
+    if (this.controls[id]) {
+      return this.controls[id];
+    }
+    return false;
   }
 });
