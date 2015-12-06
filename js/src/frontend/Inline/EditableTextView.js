@@ -71,6 +71,7 @@ var EditableText = Backbone.View.extend({
       skin: false,
       menubar: false,
       add_unload_trigger: false,
+      entity_encoding: "raw",
       fixed_toolbar_container: null,
       //fixed_toolbar_container: '#kb-toolbar',
       schema: 'html5',
@@ -131,6 +132,7 @@ var EditableText = Backbone.View.extend({
           var content;
           that.$el.removeClass('kb-inline-text--active');
           content = ed.getContent();
+          console.log(content);
 
           // apply filter
           if (ed.kfilter) {

@@ -2372,6 +2372,7 @@ var EditableText = Backbone.View.extend({
       skin: false,
       menubar: false,
       add_unload_trigger: false,
+      entity_encoding: "raw",
       fixed_toolbar_container: null,
       //fixed_toolbar_container: '#kb-toolbar',
       schema: 'html5',
@@ -2432,6 +2433,7 @@ var EditableText = Backbone.View.extend({
           var content;
           that.$el.removeClass('kb-inline-text--active');
           content = ed.getContent();
+          console.log(content);
 
           // apply filter
           if (ed.kfilter) {
@@ -3590,7 +3592,6 @@ module.exports = Backbone.View.extend({
     // use this event to tigger preview
     this.listenTo(KB.Events, 'modal.preview', this.preview);
     this.listenTo(KB.Events, 'modal.update', this.update);
-    this.listenTo(KB.Events, 'modal.refresh', this.reload);
 
     // Attach resize event handler
     jQuery(window).on('resize', function () {
@@ -3636,6 +3637,8 @@ module.exports = Backbone.View.extend({
     if (keepinhistory){
       this.history.prepend(this.ModuleView);
     }
+
+    this.listenTo(KB.Events, 'modal.refresh', this.reload);
 
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
@@ -3693,6 +3696,8 @@ module.exports = Backbone.View.extend({
    */
   destroy: function () {
     var that = this;
+    this.stopListening(KB.Events, 'modal.refresh', this.reload);
+
     that.detach();
     that.history.reset();
     jQuery('.wp-editor-area', this.$el).each(function (i, item) {

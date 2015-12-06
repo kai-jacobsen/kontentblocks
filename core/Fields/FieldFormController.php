@@ -146,7 +146,6 @@ class FieldFormController
     {
         $out = '';
         $value = $this->field->getValue();
-
         /*
          * optional method to render something before the field
          */
