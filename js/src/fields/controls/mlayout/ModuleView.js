@@ -9,7 +9,8 @@ var UI = require('common/UI');
 module.exports = Backbone.View.extend({
   events: {
     'click .kbms-action--open': 'openForm',
-    'click .kbms-action--delete': 'removeModule'
+    'click .kbms-action--delete': 'removeModule',
+    'click .kbms-action--update': 'saveModule'
   },
   tagName: 'div',
   className: 'kb-submodule',
@@ -17,10 +18,15 @@ module.exports = Backbone.View.extend({
     this.formLoaded = false;
     this.slotView = options.slotView;
     this.controller = options.slotView.controller;
+    this.ModuleModel = options.ModuleModel;
+    this.parentModel = options.parentModel;
+  },
+  draft: function () {
+
   },
   render: function () {
     var that = this;
-    this.$el.append(tplModuleView({module: this.model.toJSON()}));
+    this.$el.append(tplModuleView({module: this.ModuleModel.toJSON()}));
     this.slotView.$el.prepend(this.$el);
     _.defer(function () {
       that.setupElements();
@@ -43,24 +49,23 @@ module.exports = Backbone.View.extend({
       data = {
         action: 'getModuleBackendForm',
         _ajax_nonce: Config.getNonce('read'),
-        module: this.model.toJSON()
+        module: this.ModuleModel.toJSON()
       };
       Ajax.send(data, this.success, this);
     }
   },
   handleFrontend: function () {
     var model = KB.Modules.get(this.model.get('mid'));
-    KB.EditModalModules.openView(model.View);
+    KB.EditModalModules.openView(model.View, false, true);
   },
   success: function (res) {
     this.$inner.hide().append(res.data.html);
-    var model = KB.ObjectProxy.add(KB.Modules.add(this.model.toJSON()));
+    var model = KB.ObjectProxy.add(KB.Modules.add(this.ModuleModel.toJSON()));
     _.defer(function () {
       Payload.parseAdditionalJSON(res.data.json);
     });
     this.formLoaded = true;
     TinyMCE.addEditor(this.$el);
-
     this.ModuleModel = model;
     this.open();
   },
@@ -72,25 +77,32 @@ module.exports = Backbone.View.extend({
       this.fsControl.open();
     }
 
-    this.listenToOnce(this.fsControl, 'close', this.saveModule);
+    this.listenToOnce(this.fsControl, 'close', this.getDirty);
     UI.repaint(this.fsControl.$el);
   },
   saveModule: function () {
-
-    if (KB.EditModalModules) {
-      tinyMCE.triggerSave();
-      var $form = KB.EditModalModules.$form;
-      var formdata = $form.serializeJSON();
-      var moddata = formdata[this.ModuleModel.get('mid')];
-      if (moddata) {
-        //delete moddata.viewfile;
-        //delete moddata.overrides;
-        //delete moddata.areaContext;
-        this.ModuleModel.set('moduleData', moddata);
-        this.ModuleModel.sync(true);
-      }
-    }
+    //if (KB.EditModalModules) {
+    //  tinyMCE.triggerSave();
+    //  var $form = KB.EditModalModules.$form;
+    //  var formdata = $form.serializeJSON();
+    //  var moddata = formdata[this.ModuleModel.get('mid')];
+    //  if (moddata) {
+    //    //delete moddata.viewfile;
+    //    //delete moddata.overrides;
+    //    //delete moddata.areaContext;
+    //    this.ModuleModel.set('moduleData', moddata);
+    //    this.ModuleModel.sync(true);
+    //  }
+    //}
     this.ModuleModel.sync();
+    this.getClean();
+  },
+
+  getDirty: function () {
+    this.$el.addClass('is-dirty');
+  },
+  getClean: function () {
+    this.$el.removeClass('is-dirty');
   },
   removeModule: function (e) {
     this.slotView.removeModuleView(e);

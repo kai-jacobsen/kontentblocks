@@ -17,6 +17,7 @@ class SavePost
 
     protected $environment;
     protected $index = null;
+    protected $savedModules = array();
 
     /**
      * @var ValueStorage
@@ -28,12 +29,13 @@ class SavePost
         $this->environment = $environment;
         $this->postid = $environment->getId();
         $this->postdata = new ValueStorage( $_POST );
+        $this->index = $this->environment->getStorage()->getIndex();
+
     }
 
 
     /**
      * Save method for post related modules
-     * @todo split this in chunks
      * @return false    if auth fails or areas are empty
      */
     public function save()
@@ -43,7 +45,6 @@ class SavePost
             return false;
         }
 
-        $this->index = $this->environment->getStorage()->getIndex();
         $areas = $this->environment->getAreas();
 
         // Bail out if no areas are set
@@ -61,12 +62,12 @@ class SavePost
             }
         }
 
-        Utilities::remoteConcatGet( $this->postid );
+        $this->concat();
 
         $this->saveAreaContextMap();
         $this->saveEditLayouts();
         // finally update the index
-        $this->environment->getStorage()->saveIndex( $this->index );
+        $this->saveIndex();
     }
 
     /**
@@ -168,10 +169,10 @@ class SavePost
     {
         /** @var \Kontentblocks\Modules\Module $module */
         foreach ($modules as $module) {
-
             if (!$this->postdata->exists( $module->getId() )) {
                 continue;
             }
+
             // new data from $_POST
             //TODO: filter incoming data
             $data = wp_unslash( $this->postdata->get( $module->getId() ) );
@@ -181,12 +182,12 @@ class SavePost
             // check for draft and set to false
             // special block specific data
             $module = $this->moduleOverrides( $module, $data );
-
             $module->properties->post_id = $this->postid;
             $module->properties->postId = $this->postid;
 
             // create updated index
             $this->index[$module->getId()] = $module->properties->export();
+            $this->savedModules[$module->getId()] = $module->properties->export();
             // call save method on block
             // ignore the existence
 
@@ -227,9 +228,14 @@ class SavePost
         $module->properties->viewfile = ( !empty( $data['viewfile'] ) ) ? $data['viewfile'] : '';
         $module->properties->overrides = ( !empty( $data['overrides'] ) ) ? $data['overrides'] : array();
         $module->properties->state['draft'] = false;
+
         return $module;
     }
 
+    public function concat()
+    {
+        Utilities::remoteConcatGet( $this->postid );
+    }
 
     private function saveAreaContextMap()
     {
@@ -246,6 +252,22 @@ class SavePost
             $this->environment->getDataProvider()->update( '_kb.editScreen.layout', $layout );
         }
 
+    }
+
+    public function saveIndex()
+    {
+
+        $this->environment->getStorage()->saveIndex( $this->index );
+    }
+
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    public function getSavedModules()
+    {
+        return $this->savedModules;
     }
 
 

@@ -29,6 +29,7 @@ use Kontentblocks\Modules\ModuleViewsRegistry;
 use Kontentblocks\Panels\PanelRegistry;
 use Kontentblocks\Templating\Twig;
 use Kontentblocks\Utils\_K;
+use Kontentblocks\Utils\CommonTwig\SimpleTwig;
 use Kontentblocks\Utils\JSONTransport;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\NullHandler;
@@ -123,6 +124,10 @@ Class Kontentblocks
 
         $this->Services['templating.twig.fields'] = function ( $container ) {
             return Twig::setupEnvironment( $container, false );
+        };
+
+        $this->Services['templating.twig.common'] = function ( $container ) {
+            return SimpleTwig::init();
         };
 
     }

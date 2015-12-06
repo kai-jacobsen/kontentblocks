@@ -5,6 +5,7 @@ namespace Kontentblocks;
 use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
 
@@ -150,17 +151,17 @@ function renderContext( $context, $post_id, $additionalArgs = array() )
 /**
  * Test if an area has modules attached
  * @param string $area
- * @param int $id
+ * @param int $postId
  * @return mixed
  */
-function hasModules( $area, $id )
+function hasModules( $area, $postId )
 {
     global $post;
-    if ($post === null && $id === null) {
+    if ($post === null && $postId === null) {
         return false;
     }
 
-    $Environment = Utilities::getEnvironment( $id );
+    $Environment = Utilities::getEnvironment( $postId );
     $areas = $Environment->getModulesForArea( $area );
 
     return !empty( $areas );
@@ -205,10 +206,22 @@ function getPostPanel( $panelId = null, $postId = null )
  */
 function getPostPanelModel( $panelId = null, $postId = null )
 {
-    $panel = getPostPanel($panelId, $postId);
-    if (is_a($panel, '\Kontentblocks\Panels\PostPanel')){
+    $panel = getPostPanel( $panelId, $postId );
+    if (is_a( $panel, '\Kontentblocks\Panels\PostPanel' )) {
         return $panel->setupFrontendData();
     }
+    return null;
+}
+
+function getPostPanelView( $tpl = null, $panelId = null, $postId = null )
+{
+    $model = getPostPanelModel( $panelId, $postId );
+    if (!is_null( $model )) {
+
+        return new SimpleView( $tpl, $model->export() );
+
+    }
+
 }
 
 

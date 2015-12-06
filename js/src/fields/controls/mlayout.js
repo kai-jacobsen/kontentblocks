@@ -6,7 +6,6 @@ module.exports = BaseView.extend({
     this.render();
   },
   render: function () {
-    console.log('render');
     this.$stage = this.$('.kb-field--mlayout-stage');
     this.MLayoutController.setElement(this.$stage.get(0)); // root element equals stage element
     this.MLayoutController.render();

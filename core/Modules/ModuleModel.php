@@ -38,7 +38,7 @@ class ModuleModel extends EntityModel
      * @return bool
      * @ince 0.2.0
      */
-    public function sync($addslashes = false)
+    public function sync( $addslashes = false )
     {
         $storage = $this->module->environment->getStorage();
         $data = $this->export();

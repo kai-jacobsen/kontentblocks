@@ -13,16 +13,24 @@ module.exports = Backbone.View.extend({
     this.controller = options.controller;
     this.slotId = options.slotId;
     this.ModuleView = null;
+    this.ModuleModel = null;
     this.setup();
     this.render();
-
     this.listenTo(this.model, 'change', this.updateInput);
   },
+  setModule: function (module) {
+    if (!_.isNull(module)){
+      this.ModuleModel = new Backbone.Model(module);
+    }
+  },
   updateInput: function () {
-    if (this.model.get('submodule')) {
+
+    if (this.ModuleModel && this.ModuleModel.get('submodule')) {
       this.ModuleView = new ModuleView({
         slotView: this,
-        model: this.model
+        model: this.model,
+        ModuleModel: this.ModuleModel,
+        parentModel: this.controller.model.ModuleModel
       });
       this.ModuleView.render();
       this.$('.kbsm-empty').remove();
@@ -58,10 +66,14 @@ module.exports = Backbone.View.extend({
     // include dispose function
   },
   moduleCreated: function (data) {
+    var that = this;
     var res = data.res;
     var module = res.data.module;
-    this.model.set(module);
-    this.trigger('module.created');
+    this.setModule(module);
+    this.model.set('mid', module.mid);
+    _.defer(function(){
+      that.trigger('module.created');
+    });
   },
   removeModuleView: function (event) {
     event.stopPropagation();
@@ -72,8 +84,8 @@ module.exports = Backbone.View.extend({
       module: this.model.get('mid')
     }, this.removeSuccess, this);
   },
-  removeSuccess: function(res){
-    if (res.success){
+  removeSuccess: function (res) {
+    if (res.success) {
       //console.log(this.controller.model);
       //this.controller.model.ModuleModel.View.ModuleMenu.getView('save').saveData();
       this.ModuleView.stopListening();
@@ -81,7 +93,9 @@ module.exports = Backbone.View.extend({
       this.ModuleView.model = null;
       this.ModuleView = null;
       this.model.clear();
+      this.ModuleModel = null;
       this.updateInput();
+      this.trigger('module.removed');
     }
   }
 });

@@ -65,7 +65,6 @@ class MLayout extends Field
     {
         $repository = new MLayoutRepository( $this );
         $repository->saveModules();
-
         if (isset( $keydata['slots'] ) && is_array( $keydata['slots'] )) {
             return array( 'slots' => $keydata['slots'] );
         }
@@ -101,7 +100,6 @@ class MLayout extends Field
     public function prepareTemplateData( $data )
     {
         $repository = new MLayoutRepository( $this );
-
         $file = $this->getArg( 'layoutFile' );
         if ($file) {
             $data['layoutView'] = new CoreView( $file );

@@ -1,7 +1,8 @@
-.kbml-grid{
+.kbml-grid {
   height: 100%;
 }
-.kbml-slot{
+
+.kbml-slot {
   min-height: 100px;
   background-color: #f2f2f2;
   border: 1px dashed #ccc;
@@ -10,37 +11,48 @@
   position: relative;
 }
 
-.kbsm--name{
+.kbsm--name {
   font-weight: 100;
   font-size: 12px;
 }
 
-.kbsm-actions{
+.kbsm-actions {
   position: absolute;
   right: 12px;
   top: 12px;
 
-  > div{
+  > div {
     display: inline-block;
   }
 
-  .kbsm-action{
+  .kbsm-action {
     cursor: pointer;
 
-    span.dashicons{
+    span.dashicons {
       font-size: 15px;
       width: 15px;
       height: 15px;
       color: $grey-500;
 
-      &:hover{
+      &:hover {
         color: $grey-900;
       }
     }
   }
 }
 
-.kbsm-empty{
+.kbsm-empty {
   text-align: center;
   padding: $halfpadding;
+}
+
+
+.kb-submodule{
+
+  &.is-dirty{
+    .kbms-action--update .dashicons{
+      color: red;
+    }
+  }
+
 }

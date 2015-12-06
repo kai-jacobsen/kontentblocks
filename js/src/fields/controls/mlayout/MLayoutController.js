@@ -45,6 +45,7 @@ module.exports = Backbone.View.extend({
     _.each(this.$slots, function (el) {
       var $el = jQuery(el);
       var slotId = $el.data('kbml-slot');
+      var fullId = this.createSlotId(slotId);
       var view = new SlotView({
         el: $el,
         model: new Backbone.Model({}),
@@ -52,28 +53,34 @@ module.exports = Backbone.View.extend({
         slotId: this.createSlotId(slotId)
       });
       this.slots[this.createSlotId(slotId)] = view;
-      view.model.set(this.getSlotData(this.createSlotId(slotId)));
+      view.setModule(this.getSlotModule(fullId));
+      view.model.set(this.getSlotData(fullId));
       this.listenTo(view, 'module.created', this.updateParent);
+      this.listenTo(view, 'module.removed', this.updateParent);
     }, this)
   },
   createSlotId: function (slotId) {
     return 'slot-' + slotId;
   },
-  getSlotData: function (slotId) {
+  getSlotModule: function (slotId) {
     var value = this.model.get('value');
     var module = value[slotId];
+    if (module) {
+      return module;
+    }
+    return null;
+  },
+  getSlotData: function (slotId) {
+    var value = this.model.get('value');
 
     if (!_.isObject(value)) {
       value = {};
     }
 
-    if (!_.isObject(value) || !value.slots) {
+    if (!value.slots) {
       value['slots'] = new Object();
     }
 
-    if (module) {
-      value.slots[slotId] = module;
-    }
 
     if (value.slots[slotId]) {
       return value.slots[slotId];
@@ -81,7 +88,7 @@ module.exports = Backbone.View.extend({
     return {mid: ''};
   },
   updateParent: function () {
-    this.model.sync();
+    this.model.ModuleModel.sync();
   }
 
 });

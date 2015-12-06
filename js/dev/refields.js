@@ -2784,7 +2784,6 @@ module.exports = BaseView.extend({
     this.render();
   },
   render: function () {
-    console.log('render');
     this.$stage = this.$('.kb-field--mlayout-stage');
     this.MLayoutController.setElement(this.$stage.get(0)); // root element equals stage element
     this.MLayoutController.render();
@@ -2856,6 +2855,7 @@ module.exports = Backbone.View.extend({
     _.each(this.$slots, function (el) {
       var $el = jQuery(el);
       var slotId = $el.data('kbml-slot');
+      var fullId = this.createSlotId(slotId);
       var view = new SlotView({
         el: $el,
         model: new Backbone.Model({}),
@@ -2863,28 +2863,34 @@ module.exports = Backbone.View.extend({
         slotId: this.createSlotId(slotId)
       });
       this.slots[this.createSlotId(slotId)] = view;
-      view.model.set(this.getSlotData(this.createSlotId(slotId)));
+      view.setModule(this.getSlotModule(fullId));
+      view.model.set(this.getSlotData(fullId));
       this.listenTo(view, 'module.created', this.updateParent);
+      this.listenTo(view, 'module.removed', this.updateParent);
     }, this)
   },
   createSlotId: function (slotId) {
     return 'slot-' + slotId;
   },
-  getSlotData: function (slotId) {
+  getSlotModule: function (slotId) {
     var value = this.model.get('value');
     var module = value[slotId];
+    if (module) {
+      return module;
+    }
+    return null;
+  },
+  getSlotData: function (slotId) {
+    var value = this.model.get('value');
 
     if (!_.isObject(value)) {
       value = {};
     }
 
-    if (!_.isObject(value) || !value.slots) {
+    if (!value.slots) {
       value['slots'] = new Object();
     }
 
-    if (module) {
-      value.slots[slotId] = module;
-    }
 
     if (value.slots[slotId]) {
       return value.slots[slotId];
@@ -2892,7 +2898,7 @@ module.exports = Backbone.View.extend({
     return {mid: ''};
   },
   updateParent: function () {
-    this.model.sync();
+    this.model.ModuleModel.sync();
   }
 
 });
@@ -2951,7 +2957,8 @@ var UI = require('common/UI');
 module.exports = Backbone.View.extend({
   events: {
     'click .kbms-action--open': 'openForm',
-    'click .kbms-action--delete': 'removeModule'
+    'click .kbms-action--delete': 'removeModule',
+    'click .kbms-action--update': 'saveModule'
   },
   tagName: 'div',
   className: 'kb-submodule',
@@ -2959,10 +2966,15 @@ module.exports = Backbone.View.extend({
     this.formLoaded = false;
     this.slotView = options.slotView;
     this.controller = options.slotView.controller;
+    this.ModuleModel = options.ModuleModel;
+    this.parentModel = options.parentModel;
+  },
+  draft: function () {
+
   },
   render: function () {
     var that = this;
-    this.$el.append(tplModuleView({module: this.model.toJSON()}));
+    this.$el.append(tplModuleView({module: this.ModuleModel.toJSON()}));
     this.slotView.$el.prepend(this.$el);
     _.defer(function () {
       that.setupElements();
@@ -2985,24 +2997,23 @@ module.exports = Backbone.View.extend({
       data = {
         action: 'getModuleBackendForm',
         _ajax_nonce: Config.getNonce('read'),
-        module: this.model.toJSON()
+        module: this.ModuleModel.toJSON()
       };
       Ajax.send(data, this.success, this);
     }
   },
   handleFrontend: function () {
     var model = KB.Modules.get(this.model.get('mid'));
-    KB.EditModalModules.openView(model.View);
+    KB.EditModalModules.openView(model.View, false, true);
   },
   success: function (res) {
     this.$inner.hide().append(res.data.html);
-    var model = KB.ObjectProxy.add(KB.Modules.add(this.model.toJSON()));
+    var model = KB.ObjectProxy.add(KB.Modules.add(this.ModuleModel.toJSON()));
     _.defer(function () {
       Payload.parseAdditionalJSON(res.data.json);
     });
     this.formLoaded = true;
     TinyMCE.addEditor(this.$el);
-
     this.ModuleModel = model;
     this.open();
   },
@@ -3014,25 +3025,32 @@ module.exports = Backbone.View.extend({
       this.fsControl.open();
     }
 
-    this.listenToOnce(this.fsControl, 'close', this.saveModule);
+    this.listenToOnce(this.fsControl, 'close', this.getDirty);
     UI.repaint(this.fsControl.$el);
   },
   saveModule: function () {
-
-    if (KB.EditModalModules) {
-      tinyMCE.triggerSave();
-      var $form = KB.EditModalModules.$form;
-      var formdata = $form.serializeJSON();
-      var moddata = formdata[this.ModuleModel.get('mid')];
-      if (moddata) {
-        //delete moddata.viewfile;
-        //delete moddata.overrides;
-        //delete moddata.areaContext;
-        this.ModuleModel.set('moduleData', moddata);
-        this.ModuleModel.sync(true);
-      }
-    }
+    //if (KB.EditModalModules) {
+    //  tinyMCE.triggerSave();
+    //  var $form = KB.EditModalModules.$form;
+    //  var formdata = $form.serializeJSON();
+    //  var moddata = formdata[this.ModuleModel.get('mid')];
+    //  if (moddata) {
+    //    //delete moddata.viewfile;
+    //    //delete moddata.overrides;
+    //    //delete moddata.areaContext;
+    //    this.ModuleModel.set('moduleData', moddata);
+    //    this.ModuleModel.sync(true);
+    //  }
+    //}
     this.ModuleModel.sync();
+    this.getClean();
+  },
+
+  getDirty: function () {
+    this.$el.addClass('is-dirty');
+  },
+  getClean: function () {
+    this.$el.removeClass('is-dirty');
   },
   removeModule: function (e) {
     this.slotView.removeModuleView(e);
@@ -3055,16 +3073,24 @@ module.exports = Backbone.View.extend({
     this.controller = options.controller;
     this.slotId = options.slotId;
     this.ModuleView = null;
+    this.ModuleModel = null;
     this.setup();
     this.render();
-
     this.listenTo(this.model, 'change', this.updateInput);
   },
+  setModule: function (module) {
+    if (!_.isNull(module)){
+      this.ModuleModel = new Backbone.Model(module);
+    }
+  },
   updateInput: function () {
-    if (this.model.get('submodule')) {
+
+    if (this.ModuleModel && this.ModuleModel.get('submodule')) {
       this.ModuleView = new ModuleView({
         slotView: this,
-        model: this.model
+        model: this.model,
+        ModuleModel: this.ModuleModel,
+        parentModel: this.controller.model.ModuleModel
       });
       this.ModuleView.render();
       this.$('.kbsm-empty').remove();
@@ -3100,10 +3126,14 @@ module.exports = Backbone.View.extend({
     // include dispose function
   },
   moduleCreated: function (data) {
+    var that = this;
     var res = data.res;
     var module = res.data.module;
-    this.model.set(module);
-    this.trigger('module.created');
+    this.setModule(module);
+    this.model.set('mid', module.mid);
+    _.defer(function(){
+      that.trigger('module.created');
+    });
   },
   removeModuleView: function (event) {
     event.stopPropagation();
@@ -3114,8 +3144,8 @@ module.exports = Backbone.View.extend({
       module: this.model.get('mid')
     }, this.removeSuccess, this);
   },
-  removeSuccess: function(res){
-    if (res.success){
+  removeSuccess: function (res) {
+    if (res.success) {
       //console.log(this.controller.model);
       //this.controller.model.ModuleModel.View.ModuleMenu.getView('save').saveData();
       this.ModuleView.stopListening();
@@ -3123,7 +3153,9 @@ module.exports = Backbone.View.extend({
       this.ModuleView.model = null;
       this.ModuleView = null;
       this.model.clear();
+      this.ModuleModel = null;
       this.updateInput();
+      this.trigger('module.removed');
     }
   }
 });
@@ -3142,7 +3174,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 
   return "<div class=\"kbsm-details\">\n    <div class=\"kbsm--name\">"
     + this.escapeExpression(this.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.module : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
-    + "</div>\n</div>\n<div class=\"kbsm-actions\">\n    <div class=\"kbsm-action kbms-action--open\" data-kbtooltip=\"open form\"><span\n            class=\"dashicons dashicons-admin-generic\"></span></div>\n    <div class=\"kbsm-action kbms-action--delete\" data-kbtooltip=\"delete\"><span class=\"dashicons dashicons-welcome-comments\"></span></div>\n    <div class=\"kbsm-action kbms-action--update\" data-kbtooltip=\"update\"><span class=\"dashicons dashicons-update\"></span></div>\n</div>\n<div class=\"kbsm-inner\">\n\n</div>";
+    + "</div>\n</div>\n<div class=\"kbsm-actions\">\n    <div class=\"kbsm-action kbms-action--open\" data-kbtooltip=\"open form\"><span\n            class=\"dashicons dashicons-admin-generic\"></span></div>\n    <div class=\"kbsm-action kbms-action--delete\" data-kbtooltip=\"delete\"><span\n            class=\"dashicons dashicons-welcome-comments\"></span></div>\n    <div class=\"kbsm-action kbms-action--update\" data-kbtooltip=\"update\"><span\n            class=\"dashicons dashicons-update\"></span></div>\n</div>\n<div class=\"kbsm-inner\">\n\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":78}],47:[function(require,module,exports){

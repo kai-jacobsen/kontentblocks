@@ -6,8 +6,8 @@ var Ui = require('common/UI');
 var TinyMCE = require('common/TinyMCE');
 var Notice = require('common/Notice');
 var Ajax = require('common/Ajax');
-
 var tplModuleEditForm = require('templates/frontend/module-edit-form.hbs');
+var History = require('frontend/Views/EditModalHistory');
 /**
  * This is the modal which wraps the modules input form
  * and loads when the user clicks on "edit" while in frontend editing mode
@@ -19,19 +19,19 @@ module.exports = Backbone.View.extend({
   tagName: 'div',
   id: 'onsite-modal',
   timerId: null,
+  viewStack: {},
   /**
    * Init method
    */
   initialize: function () {
     var that = this;
-
     this.FieldModels = new ModalFieldCollection();
-
     // add form skeleton to modal
     this.$el.append(tplModuleEditForm({
       model: {},
       i18n: KB.i18n.jsFrontend
     }));
+    this.history = new History({modal: this});
 
     // cache elements
     this.LoadingAnimation = new LoadingAnimation({
@@ -94,12 +94,16 @@ module.exports = Backbone.View.extend({
    * @param force
    * @returns {KB.Backbone.EditModalModules}
    */
-  openView: function (ModuleView, force) {
-
+  openView: function (ModuleView, force, keepinhistory) {
     //force = (_.isUndefined(force)) ? false : true;
     if (this.ModuleView && this.ModuleView.cid === ModuleView.cid) {
       return this;
     }
+
+    if (keepinhistory){
+      this.history.prepend(this.ModuleView);
+    }
+
     this.ModuleView = ModuleView;
     this.model = ModuleView.model;
     this.realmid = this.setupModuleId();
@@ -157,6 +161,7 @@ module.exports = Backbone.View.extend({
   destroy: function () {
     var that = this;
     that.detach();
+    that.history.reset();
     jQuery('.wp-editor-area', this.$el).each(function (i, item) {
       tinymce.remove('#' + item.id);
     });

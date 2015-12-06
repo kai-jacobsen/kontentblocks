@@ -190,6 +190,7 @@ class ModuleStorage implements \Countable
      */
     public function saveIndex( $index )
     {
+        $index = apply_filters('kb.index.update', $index);
         return $this->dataProvider->update( 'kb_kontentblocks', $index, false );
 
     }

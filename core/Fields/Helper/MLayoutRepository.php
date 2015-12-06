@@ -15,8 +15,9 @@ class MLayoutRepository
 {
 
     protected $modules;
-    private $field;
     protected $environment;
+    private $field;
+
 
     /**
      * @param MLayout $field
@@ -54,8 +55,8 @@ class MLayoutRepository
                 $collection[$key] = $module;
                 $json[$key] = $module->toJSON();
 
-                if (!is_admin()){
-                    $jsonTransport->registerModule($module->toJSON());
+                if (!is_admin()) {
+                    $jsonTransport->registerModule( $module->toJSON() );
                 }
             }
         }
@@ -69,8 +70,14 @@ class MLayoutRepository
         );
 
 
-
         return $collection;
+    }
+
+    public function saveModules()
+    {
+        $this->saveHandler = new SavePost( $this->environment );
+        $this->saveHandler->saveModules( $this->getModules() );
+        add_filter( 'kb.index.update', array( $this, 'updateIndex' ) );
     }
 
     /**
@@ -81,8 +88,8 @@ class MLayoutRepository
         return $this->modules;
     }
 
-    public function saveModules(){
-        $saveHandler = new SavePost($this->environment);
-        $saveHandler->saveModules($this->getModules());
+    public function updateIndex( $index )
+    {
+        return $index;
     }
 }
