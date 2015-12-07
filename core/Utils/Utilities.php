@@ -144,6 +144,7 @@ class Utilities
     {
         global $kbHiddenEditorCalled;
 
+
         if (!$kbHiddenEditorCalled) {
             echo "<div style='display: none;'>";
             self::editor('ghost','','ghost',true);

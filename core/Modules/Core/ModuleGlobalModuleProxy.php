@@ -235,7 +235,7 @@ class ModuleGlobalModuleProxy extends Module
         if (filter_var($moduleDef['globalModule'], FILTER_VALIDATE_BOOLEAN)){
             $post = get_post(filter_var($moduleDef['parentObjectId'], FILTER_SANITIZE_NUMBER_INT));
             if (is_a($post, '\WP_Post')){
-                $moduleDef['mid'] = $post->post_title;
+                $moduleDef['mid'] = $post->post_name;
             }
         }
         return $moduleDef;

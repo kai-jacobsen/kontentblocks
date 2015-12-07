@@ -18,7 +18,7 @@ class FrontendSetup
      */
     public function __construct()
     {
-        if (is_user_logged_in() && current_user_can('edit_kontentblocks')) {
+        if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {
             add_action( 'wp_footer', array( $this, 'setup' ) );
         }
     }
@@ -29,8 +29,8 @@ class FrontendSetup
     public function setup()
     {
         $this->postId = get_the_ID();
-        if ($this->postId){
-            $environment = Utilities::getEnvironment($this->postId);
+        if ($this->postId) {
+            $environment = Utilities::getEnvironment( $this->postId );
             $environment->toJSON();
         }
 
