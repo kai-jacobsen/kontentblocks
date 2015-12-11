@@ -196,7 +196,7 @@ KB.App = function () {
    * to the custom collection
    * runs as callback for 'add' event on collection
    * @param ModuleModel Backbone Model
-   * @returns void
+   * @returnes void
    */
   function createModuleViews(ModuleModel) {
     KB.Views.Modules.add(ModuleModel.get('mid'), new ModuleView({

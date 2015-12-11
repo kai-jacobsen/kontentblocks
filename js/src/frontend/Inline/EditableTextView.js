@@ -132,7 +132,6 @@ var EditableText = Backbone.View.extend({
           var content;
           that.$el.removeClass('kb-inline-text--active');
           content = ed.getContent();
-          console.log(content);
 
           // apply filter
           if (ed.kfilter) {

@@ -57,6 +57,7 @@ class ConcatContent {
 			return false;
 		}
 
+
 		$this->content .= "\n" . $string;
 	}
 

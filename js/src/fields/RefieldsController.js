@@ -9,5 +9,7 @@ Fields.registerObject('gallery2', require('./controls/gallery2'));
 Fields.registerObject('image', require('./controls/image'));
 Fields.registerObject('link', require('./controls/link'));
 Fields.registerObject('textarea', require('./controls/textarea'));
+Fields.registerObject('text', require('./controls/text'));
+Fields.registerObject('editor', require('./controls/editor'));
 Fields.registerObject('otimes', require('./controls/otimes'));
 Fields.registerObject('mlayout', require('./controls/mlayout'));

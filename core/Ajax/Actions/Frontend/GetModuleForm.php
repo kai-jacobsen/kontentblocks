@@ -35,7 +35,6 @@ class GetModuleForm implements AjaxActionInterface
         }
         $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $moduleDef = apply_filters('kb.modify.module.before.frontend.form', $moduleDef);
-        wp_send_json($moduleDef);
         $environment = Utilities::getEnvironment( $moduleDef['parentObjectId'] );
         /** @var \Kontentblocks\Modules\Module $module */
         $workshop = new ModuleWorkshop($environment, $environment->getStorage()->getModuleDefinition($moduleDef['mid']));

@@ -1796,7 +1796,7 @@ KB.App = function () {
    * to the custom collection
    * runs as callback for 'add' event on collection
    * @param ModuleModel Backbone Model
-   * @returns void
+   * @returnes void
    */
   function createModuleViews(ModuleModel) {
     KB.Views.Modules.add(ModuleModel.get('mid'), new ModuleView({
@@ -2433,7 +2433,6 @@ var EditableText = Backbone.View.extend({
           var content;
           that.$el.removeClass('kb-inline-text--active');
           content = ed.getContent();
-          console.log(content);
 
           // apply filter
           if (ed.kfilter) {
@@ -4198,7 +4197,6 @@ module.exports = Backbone.View.extend({
 
     // cache the actual controls $el
     this.$el = jQuery('[data-kb-mcontrols="'+ this.model.get('mid') +'"]', this.ModuleView.$el);
-    console.log(this.$el);
     //append ul tag, holder for single action items
     this.$menuList = this.$('.kb-controls-wrap');
 

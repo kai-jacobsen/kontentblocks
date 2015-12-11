@@ -35,7 +35,6 @@ module.exports = Backbone.View.extend({
 
     // cache the actual controls $el
     this.$el = jQuery('[data-kb-mcontrols="'+ this.model.get('mid') +'"]', this.ModuleView.$el);
-    console.log(this.$el);
     //append ul tag, holder for single action items
     this.$menuList = this.$('.kb-controls-wrap');
 
