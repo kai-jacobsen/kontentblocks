@@ -42,10 +42,7 @@ class AreaRenderSettings extends AbstractRenderSettings
      */
     public $layout = null;
 
-    /**
-     * @var null
-     */
-    public $moduleElement = null;
+
     /**
      * @var null
      */
@@ -79,7 +76,6 @@ class AreaRenderSettings extends AbstractRenderSettings
             'mergeRepeating' => false,
             'action' => null,
             'layout' => 'default',
-            'moduleElement' => null,
             'view' => null
         );
 

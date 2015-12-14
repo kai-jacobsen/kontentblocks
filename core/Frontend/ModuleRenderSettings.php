@@ -13,20 +13,13 @@ use Kontentblocks\Utils\Utilities;
 class ModuleRenderSettings extends AbstractRenderSettings
 {
 
-    public $moduleElement = 'div';
-
-    /**
-     * @var ModuleProperties
-     */
-    private $moduleProperties;
+    public $element = 'div';
 
     /**
      * @param array $args
-     * @param ModuleProperties $moduleProperties
      */
-    public function __construct( $args = array(), ModuleProperties $moduleProperties )
+    public function __construct( $args = array() )
     {
-        $this->moduleProperties = $moduleProperties;
         $this->setupProperties( $args );
     }
 
@@ -36,10 +29,10 @@ class ModuleRenderSettings extends AbstractRenderSettings
     protected function setupProperties( $args )
     {
         $defaults = array(
-            'moduleElement' => null
+            'element' => 'div'
         );
 
-        $defaults = Utilities::arrayMergeRecursive( $this->moduleProperties->export(), $defaults );
+        $defaults = Utilities::arrayMergeRecursive( $args, $defaults );
 
         $parsed = wp_parse_args( $args, $defaults );
 
@@ -53,7 +46,6 @@ class ModuleRenderSettings extends AbstractRenderSettings
     public function export()
     {
         $props = get_object_vars( $this );
-        unset( $props['moduleProperties'] );
         return $props;
     }
 

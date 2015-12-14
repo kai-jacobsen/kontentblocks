@@ -47,7 +47,6 @@ module.exports = Backbone.Model.extend({
     if (this.changedFields[FieldModel.id]) {
       delete this.changedFields[FieldModel.id];
     }
-
     if (_.isEmpty(this.changedFields)) {
       this.trigger('module.model.clean', this);
     }

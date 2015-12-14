@@ -2929,7 +2929,6 @@ module.exports = Backbone.Model.extend({
     if (this.changedFields[FieldModel.id]) {
       delete this.changedFields[FieldModel.id];
     }
-
     if (_.isEmpty(this.changedFields)) {
       this.trigger('module.model.clean', this);
     }
@@ -4467,6 +4466,8 @@ module.exports = Backbone.View.extend({
     this.model.trigger('module.model.view.attached', this);
     // observe model changes
 
+    this.bindHandlers();
+
     // init render
     this.render();
 
@@ -4566,6 +4567,7 @@ module.exports = Backbone.View.extend({
   getClean: function () {
     this.$el.removeClass('isDirty');
     this.trigger('view.became.clean', this);
+    console.log('view clean');
   },
   modelChange: function () {
     this.getDirty();

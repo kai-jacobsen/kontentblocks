@@ -22,12 +22,6 @@ class ModuleContext implements \JsonSerializable
 
     public $areaContext;
 
-    public $context;
-
-    public $subcontext;
-
-    public $areaTemplate;
-
     public function __construct( Environment $environment, Module $module )
     {
         $this->set( $environment->jsonSerialize() );

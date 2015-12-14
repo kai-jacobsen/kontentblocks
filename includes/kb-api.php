@@ -3,6 +3,7 @@
 namespace Kontentblocks;
 
 use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
@@ -50,10 +51,11 @@ function registerAreaTemplate( $args )
  * Render a single area by id
  * @param string $areaId
  * @param int $post_id
- * @param array $additionalArgs
+ * @param array $areaSettings
+ * @param array $moduleSettings
  * @return string|void
  */
-function renderSingleArea( $areaId, $post_id = null, $additionalArgs = array() )
+function renderSingleArea( $areaId, $post_id = null, $areaSettings = array(), $moduleSettings = array() )
 {
     global $post;
     $postId = ( is_null( $post_id ) && !is_null( $post ) ) ? $post->ID : $post_id;
@@ -80,11 +82,12 @@ function renderSingleArea( $areaId, $post_id = null, $additionalArgs = array() )
         return '';
     }
 
-    $areaRenderSettings = new AreaRenderSettings( $additionalArgs, $area );
+    $areaRenderSettings = new AreaRenderSettings( $areaSettings, $area );
+    $moduleRenderSettings = new ModuleRenderSettings( $moduleSettings );
     if (is_a( $areaRenderSettings->view, '\Kontentblocks\Frontend\Renderer\AreaFileRenderer', true )) {
-        $renderer = new $areaRenderSettings->view( $environment, $areaRenderSettings );
+        $renderer = new $areaRenderSettings->view( $environment, $areaRenderSettings, $moduleRenderSettings );
     } else {
-        $renderer = new AreaRenderer( $environment, $areaRenderSettings );
+        $renderer = new AreaRenderer( $environment, $areaRenderSettings, $moduleRenderSettings );
     }
 
     $renderer->render( true );
@@ -93,9 +96,10 @@ function renderSingleArea( $areaId, $post_id = null, $additionalArgs = array() )
 /**
  * Render attached side(bar) areas
  * @param int $id
- * @param array $additionalArgs
+ * @param array $areaSettings
+ * @param array $moduleSettings
  */
-function renderSideAreas( $id, $additionalArgs )
+function renderSideAreas( $id, $areaSettings = array(), $moduleSettings = array() )
 {
     global $post;
 
@@ -103,13 +107,19 @@ function renderSideAreas( $id, $additionalArgs )
     $areas = get_post_meta( $post_id, 'active_sidebar_areas', true );
     if (!empty( $areas )) {
         foreach ($areas as $area) {
-            renderSingleArea( $area, $post_id, $additionalArgs );
+            renderSingleArea( $area, $post_id, $areaSettings, $moduleSettings );
         }
     }
 }
 
 
-function renderContext( $context, $post_id, $additionalArgs = array() )
+/**
+ * @param $context
+ * @param $post_id
+ * @param array $areaSettings
+ * @param array $moduleSettings
+ */
+function renderContext( $context, $post_id, $areaSettings = array(), $moduleSettings = array() )
 {
     global $post;
     $postId = ( null === $post_id ) ? $post->ID : $post_id;
@@ -134,14 +144,19 @@ function renderContext( $context, $post_id, $additionalArgs = array() )
 
     if (!empty( $areas )) {
         foreach (array_keys( $areas ) as $area) {
-            $args = array();
-            if (array_key_exists( $area, $additionalArgs )) {
-                $args = Utilities::arrayMergeRecursive( $additionalArgs[$area], $additionalArgs );
+            if (array_key_exists( $area, $areaSettings )) {
+                $args = Utilities::arrayMergeRecursive( $areaSettings[$area], $areaSettings );
             } else {
-                $args = $additionalArgs;
+                $args = $areaSettings;
             }
 
-            renderSingleArea( $area, $postId, $additionalArgs );
+            if (array_key_exists( $area, $moduleSettings )) {
+                $margs = Utilities::arrayMergeRecursive( $moduleSettings[$area], $moduleSettings );
+            } else {
+                $margs = $areaSettings;
+            }
+
+            renderSingleArea( $area, $postId, $args, $margs );
         }
     }
 

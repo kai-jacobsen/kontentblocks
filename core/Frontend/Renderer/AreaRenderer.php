@@ -42,7 +42,7 @@ class AreaRenderer implements RendererInterface
      * Array of additional render settings
      * @var array
      */
-    public $renderSettings;
+    public $areaSettings;
     /**
      * @var AreaNode
      */
@@ -78,12 +78,18 @@ class AreaRenderer implements RendererInterface
      * Class constructor
      *
      * @param Environment $environment
-     * @param AreaRenderSettings $renderSettings
+     * @param AreaRenderSettings $areaSettings
+     * @param ModuleRenderSettings $moduleSettings
      */
-    public function __construct( Environment $environment, AreaRenderSettings $renderSettings )
+    public function __construct(
+        Environment $environment,
+        AreaRenderSettings $areaSettings,
+        ModuleRenderSettings $moduleSettings
+    )
     {
-        $this->renderSettings = $renderSettings;
-        $this->area = $renderSettings->area;
+        $this->areaSettings = $areaSettings;
+        $this->moduleSettings = $moduleSettings;
+        $this->area = $areaSettings->area;
         $this->areaId = $this->area->id;
         $this->environment = $environment;
         $modules = $this->environment->getModulesforArea( $this->areaId );
@@ -104,7 +110,7 @@ class AreaRenderer implements RendererInterface
 
         $this->areaHtmlNode = new AreaNode(
             $this->environment,
-            $this->renderSettings
+            $this->areaSettings
         );
 
         $this->areaHtmlNode->setModuleCount( count( $this->modules ) );
@@ -117,20 +123,21 @@ class AreaRenderer implements RendererInterface
          */
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
-            $moduleRenderSettings = new ModuleRenderSettings(
-                array( 'moduleElement' => $this->renderSettings->moduleElement ), $module->properties
-            );
-            $this->moduleRenderer = new SingleModuleRenderer( $module, $moduleRenderSettings );
+
+            $this->moduleRenderer = new SingleModuleRenderer( $module, $this->moduleSettings );
 
             if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verifyRender()) {
                 continue;
             }
+
+
             $moduleOutput = $module->module();
             $output .= $this->areaHtmlNode->openLayoutWrapper();
-            $output .= $this->beforeModule( $this->_beforeModule( $module ), $module );
+            $output .= $this->beforeModule( $module );
             $output .= $moduleOutput;
-            $output .= $this->afterModule( $this->_afterModule( $module ), $module );
+            $output .= $this->afterModule( $module );
             $output .= $this->areaHtmlNode->closeLayoutWrapper();
+
 
 
             if (current_theme_supports( 'kb.area.concat' ) && filter_input(
@@ -175,16 +182,14 @@ class AreaRenderer implements RendererInterface
     }
 
     /**
-     *
-     * @param $classes
      * @param Module $module
      * @return string
      */
-    public function beforeModule( $classes, Module $module )
+    public function beforeModule( Module $module )
     {
 
+        $this->_beforeModule( $module );
         $layout = $this->areaHtmlNode->getCurrentLayoutClasses();
-
 
         if (!empty( $layout )) {
             return sprintf(
@@ -208,18 +213,13 @@ class AreaRenderer implements RendererInterface
             $module->preRender();
         }
 
-        return $mergedClasses;
+        $this->moduleRenderer->addClasses( $mergedClasses );
     }
 
     public function getAdditionalClasses( Module $module )
     {
         $classes = array();
-        $classes[] = $module->properties->getSetting( 'slug' );
-        $viewfile = $module->getViewfile();
 
-        if (!empty( $viewfile )) {
-            $classes[] = 'view-' . str_replace( '.twig', '', $viewfile );
-        }
 
         if ($this->position === 1) {
             $classes[] = 'first-module';
@@ -250,33 +250,34 @@ class AreaRenderer implements RendererInterface
         } else {
             $classes[] = 'module';
         }
-
         return $classes;
 
     }
 
     /**
-     * @param $_after
      * @param $module
      * @return string
      */
-    public function afterModule( $_after, Module $module )
+    public function afterModule( Module $module )
     {
+
+        $this->_afterModule( $module );
         $layout = $this->areaHtmlNode->getCurrentLayoutClasses();
         if (!empty( $layout )) {
             return "</div>" . sprintf( "%s", $this->moduleRenderer->afterModule() );
         } else {
             return $this->moduleRenderer->afterModule();
-
         }
     }
 
+    /**
+     * @param Module $module
+     */
     public function _afterModule( Module $module )
     {
         $this->previousModule = $module->properties->getSetting( 'hash' );
         $this->position ++;
         $this->areaHtmlNode->nextLayout();
-        return true;
     }
 
 

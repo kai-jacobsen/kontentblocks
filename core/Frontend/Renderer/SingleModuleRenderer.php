@@ -52,8 +52,8 @@ class SingleModuleRenderer implements RendererInterface
             array(
                 'context' => Utilities::getTemplateFile(),
                 'subcontext' => 'content',
-                'moduleElement' => ( isset( $renderSettings['moduleElement'] ) ) ? $renderSettings['moduleElement'] : $this->module->properties->getSetting(
-                    'moduleElement'
+                'element' => ( isset( $renderSettings['element'] ) ) ? $renderSettings['element'] : $this->module->properties->getSetting(
+                    'element'
                 ),
                 'action' => null,
                 'area_template' => 'default'
@@ -75,8 +75,8 @@ class SingleModuleRenderer implements RendererInterface
                 'single-module',
                 $this->module->properties->getSetting( 'slug' ),
                 'view-' . str_replace( '.twig', '', $this->module->properties->viewfile )
-
             );
+
     }
 
     /**
@@ -110,7 +110,7 @@ class SingleModuleRenderer implements RendererInterface
             '<%3$s id="%1$s" class="%2$s">',
             $this->module->getId(),
             $this->getModuleClasses(),
-            $this->renderSettings['moduleElement']
+            $this->renderSettings['element']
         );
     }
 
@@ -127,7 +127,7 @@ class SingleModuleRenderer implements RendererInterface
      */
     public function afterModule()
     {
-        return sprintf( '</%s>', $this->renderSettings['moduleElement'] );
+        return sprintf( '</%s>', $this->renderSettings['element'] );
     }
 
     /**
@@ -143,6 +143,7 @@ class SingleModuleRenderer implements RendererInterface
      */
     public function addClasses( $classes )
     {
+
         $this->classes = array_merge( $this->classes, $classes );
         return $this;
     }

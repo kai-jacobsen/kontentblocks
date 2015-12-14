@@ -17,4 +17,10 @@ body.kb-editcontrols-show {
     text-align: center;
     cursor: pointer;
   }
+
+  .module, .single-module, .module-merged{
+    &:hover{
+      outline: 1px dashed $blue;
+    }
+  }
 }
