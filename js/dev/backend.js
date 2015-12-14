@@ -1691,9 +1691,10 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
     if (store.get(this.parent.model.get('mid') + '_open')) {
       this.toggleBody();
-      this.parent.model.set('open', true);
+      this.parent.open = true;
+    } else {
+      this.parent.open = false;
     }
-
   },
   events: {
     'click': 'toggleBody'
@@ -1719,8 +1720,9 @@ module.exports = BaseView.extend({
     }
   },
   setOpenStatus: function () {
-    this.parent.model.set('open', !this.model.get('open'));
-    store.set(this.parent.model.get('mid') + '_open', this.parent.model.get('open'));
+    this.parent.open =  !this.parent.open;
+    store.set(this.parent.model.get('mid') + '_open', this.parent.open);
+    this.parent.trigger('kb.module.view.open', this.parent.open);
   }
 });
 },{"backend/Views/BaseControlView":13,"common/Checks":43}],39:[function(require,module,exports){
@@ -2342,6 +2344,7 @@ module.exports =
     // get settings from native WP Editor
     // Editor may not be initialized and is not accessible through
     // the tinymce api, thats why we take the settings from preInit
+
 
     if (!$el) {
       Logger.Debug.error('No scope element ($el) provided');

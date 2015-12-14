@@ -29,13 +29,12 @@ class SingleModuleRenderer implements RendererInterface
         $this->module = $module;
         $this->renderSettings = $this->setupRenderSettings( $renderSettings );
         $this->classes = $this->setupClasses();
-        $this->module->context->set( $this->renderSettings );
+        $this->module->context->set( $this->renderSettings->export() );
 
         // @TODO other properties?
         if (isset( $this->renderSettings['areaContext'] )) {
             $this->module->context->areaContext = $this->renderSettings['areaContext'];
             $this->module->properties->areaContext = $this->renderSettings['areaContext'];
-
         }
 
         if ($module->verifyRender()) {

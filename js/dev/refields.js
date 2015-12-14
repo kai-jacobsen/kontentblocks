@@ -708,6 +708,7 @@ module.exports =
     // Editor may not be initialized and is not accessible through
     // the tinymce api, thats why we take the settings from preInit
 
+
     if (!$el) {
       Logger.Debug.error('No scope element ($el) provided');
       return false;
@@ -1609,6 +1610,7 @@ module.exports = BaseView.extend({
 });
 },{"../FieldControlBaseView":19}],26:[function(require,module,exports){
 var BaseView = require('../FieldControlBaseView');
+var TinyMCE = require('common/TinyMCE');
 module.exports = BaseView.extend({
   initialize: function () {
     this.render();
@@ -1616,25 +1618,25 @@ module.exports = BaseView.extend({
   render: function () {
     var that = this;
     this.$textarea = this.$('textarea');
-    this.editor = tinyMCE.get(this.$textarea.attr('id'));
-    tinymce.on('AddEditor', function(event){
+    tinymce.on('AddEditor', function (event) {
       var editor = event.editor;
-      if (editor && editor.id === that.$textarea.attr('id')){
+      if (editor && editor.id === that.$textarea.attr('id') && !that.editor) {
         that.editor = editor;
-        editor.on('change', function(){
+        editor.on('change', function () {
           that.update(editor.getContent());
         });
       }
     });
   },
   derender: function () {
-
+    this.stopListening();
+    this.editor = null;
   },
   update: function (val) {
     this.model.set('value', val);
   }
 });
-},{"../FieldControlBaseView":19}],27:[function(require,module,exports){
+},{"../FieldControlBaseView":19,"common/TinyMCE":16}],27:[function(require,module,exports){
 var BaseView = require('../FieldControlBaseView');
 module.exports = BaseView.extend({
   initialize: function () {

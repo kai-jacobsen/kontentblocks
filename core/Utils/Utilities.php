@@ -42,6 +42,24 @@ class Utilities
         return null;
     }
 
+    /**
+     * a hidden editor instance to make sure that wp related tinymce
+     * js environment and files are correctly setup
+     */
+    public static function hiddenEditor()
+    {
+        global $kbHiddenEditorCalled;
+
+
+        if (!$kbHiddenEditorCalled) {
+            echo "<div style='display: none;'>";
+            self::editor( 'ghost', '', 'ghost', true,array('tinymce' => array('wp_skip_init' => false)) );
+            echo '</div>';
+        }
+
+        // make sure to no call this twice
+        $kbHiddenEditorCalled = true;
+    }
 
     /**
      * @param string $id editors unique id
@@ -56,7 +74,7 @@ class Utilities
 
         // introduced in 4.3
         // necessary for wp_editor which expects $wp_styles to be setup ( state: 4.3alpha )
-        if (function_exists('wp_styles')){
+        if (function_exists( 'wp_styles' )) {
             wp_styles();
         }
 
@@ -121,11 +139,12 @@ class Utilities
                 'menubar' => false,
                 'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
                 'plugins' => implode( ',', $plugins ),
-                'wp_autoresize_on' => true
-
+                'wp_autoresize_on' => true,
+                'wp_skip_init' => false
             ),
             // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
             'quicktags' => true
+
         );
 
         if (!empty( $args )) {
@@ -135,26 +154,6 @@ class Utilities
         wp_editor( $data, $id . 'editor', $settings );
 
     }
-
-    /**
-     * a hidden editor instance to make sure that wp related tinymce
-     * js environment and files are correctly setup
-     */
-    public static function hiddenEditor()
-    {
-        global $kbHiddenEditorCalled;
-
-
-        if (!$kbHiddenEditorCalled) {
-            echo "<div style='display: none;'>";
-            self::editor('ghost','','ghost',true);
-            echo '</div>';
-        }
-
-        // make sure to no call this twice
-        $kbHiddenEditorCalled = true;
-    }
-
 
     /**
      * Recursivly merge associative arrays
@@ -300,7 +299,7 @@ class Utilities
     public static function getTemplateFile()
     {
         global $template;
-        if (!empty( $template ) && is_string($template)) {
+        if (!empty( $template ) && is_string( $template )) {
             return str_replace( '.php', '', basename( $template ) );
         } else {
             return 'generic';
@@ -441,10 +440,15 @@ class Utilities
      * @param int $offset
      * @return bool
      */
-    public static function strposa($haystack, $needle, $offset=0) {
-        if(!is_array($needle)) $needle = array($needle);
-        foreach($needle as $query) {
-            if(strpos($haystack, $query, $offset) !== false) return true; // stop on first true result
+    public static function strposa( $haystack, $needle, $offset = 0 )
+    {
+        if (!is_array( $needle )) {
+            $needle = array( $needle );
+        }
+        foreach ($needle as $query) {
+            if (strpos( $haystack, $query, $offset ) !== false) {
+                return true;
+            } // stop on first true result
         }
         return false;
     }
@@ -454,10 +458,11 @@ class Utilities
      * @param $path
      * @param $value
      */
-    public static function assignArrayByPath(&$arr, $path, $value) {
-        $keys = explode('.', $path);
+    public static function assignArrayByPath( &$arr, $path, $value )
+    {
+        $keys = explode( '.', $path );
 
-        while ($key = array_shift($keys)) {
+        while ($key = array_shift( $keys )) {
             $arr = &$arr[$key];
         }
 

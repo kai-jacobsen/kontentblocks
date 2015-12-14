@@ -8,9 +8,10 @@ module.exports = BaseView.extend({
     this.parent = options.parent;
     if (store.get(this.parent.model.get('mid') + '_open')) {
       this.toggleBody();
-      this.parent.model.set('open', true);
+      this.parent.open = true;
+    } else {
+      this.parent.open = false;
     }
-
   },
   events: {
     'click': 'toggleBody'
@@ -36,7 +37,8 @@ module.exports = BaseView.extend({
     }
   },
   setOpenStatus: function () {
-    this.parent.model.set('open', !this.model.get('open'));
-    store.set(this.parent.model.get('mid') + '_open', this.parent.model.get('open'));
+    this.parent.open =  !this.parent.open;
+    store.set(this.parent.model.get('mid') + '_open', this.parent.open);
+    this.parent.trigger('kb.module.view.open', this.parent.open);
   }
 });
