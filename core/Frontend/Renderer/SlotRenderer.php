@@ -3,6 +3,7 @@
 namespace Kontentblocks\Frontend\Renderer;
 
 use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Frontend\ModuleIterator;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Modules\ModuleNode;
@@ -49,11 +50,17 @@ class SlotRenderer
     /**
      * Class Constructor
      * @param ModuleIterator $iterator
-     * @param array $addArgs
+     * @param AreaRenderSettings $areaSettings
+     * @param ModuleRenderSettings $moduleSettings
      */
-    public function __construct( ModuleIterator $iterator, $addArgs = array() )
+    public function __construct(
+        ModuleIterator $iterator,
+        AreaRenderSettings $areaSettings,
+        ModuleRenderSettings $moduleSettings
+    )
     {
-        $this->addArgs = $addArgs;
+        $this->areaSettings = $areaSettings;
+        $this->moduleSettings = $moduleSettings;
         $this->iterator = $iterator;
     }
 
@@ -118,8 +125,7 @@ class SlotRenderer
 
 
         if (is_a( $module, '\Kontentblocks\Modules\Module' )) {
-            $moduleRenderSettings = new ModuleRenderSettings( array(), $module->properties );
-            $renderer = new SingleModuleRenderer( $module, $moduleRenderSettings );
+            $renderer = new SingleModuleRenderer( $module, $this->moduleSettings );
             $module->toJSON();
             array_push( $this->done, $module->getId() );
             if ($out = $renderer->render()) {
