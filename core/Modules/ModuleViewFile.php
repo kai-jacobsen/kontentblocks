@@ -69,4 +69,8 @@ class ModuleViewFile
         }
     }
 
+    public function __toString(){
+        return $this->filename;
+    }
+
 }

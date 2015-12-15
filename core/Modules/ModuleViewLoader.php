@@ -137,7 +137,7 @@ class ModuleViewLoader
             }
         } elseif (isset( $keys[0] )) {
             $first = $keys[0];
-            return $first;
+            return $first->filename;
         } else {
             return null;
         }
