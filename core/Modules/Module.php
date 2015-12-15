@@ -380,7 +380,6 @@ abstract class Module implements EntityInterface
     }
 
 
-
     /**
      * Save properties and data to the Storage
      * This returns the result of the Storage update call and maybe false
