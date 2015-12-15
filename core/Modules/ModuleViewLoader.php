@@ -46,8 +46,7 @@ class ModuleViewLoader
     {
         $this->viewFilesystem = Kontentblocks::getService( 'registry.moduleViews' )->getViewFileSystem( $module );
         $this->module = $module;
-
-        $this->views = $this->viewFilesystem->getTemplatesforContext( $module->properties->areaContext );
+        $this->views = $this->viewFilesystem->getTemplatesforContext( $module->context->areaContext, $module->context->postType );
         if (count( $this->views ) > 1) {
             $this->hasViews = true;
         }
@@ -75,9 +74,9 @@ class ModuleViewLoader
             if (is_null( $tpl )) {
                 return "<p class='notice kb-field'>No View available</p>";
             } else {
-                $this->module->properties->viewfile = $tpl['filteredfile'];
+                $this->module->properties->viewfile = $tpl->filename;
 
-                return "<input type='hidden' name='{$this->module->properties->mid}[viewfile]' value='{$tpl['filteredfile']}' >";
+                return "<input type='hidden' name='{$this->module->properties->mid}[viewfile]' value='{$tpl->filename}' >";
             }
         }
     }
@@ -112,9 +111,10 @@ class ModuleViewLoader
 
 
         foreach ($this->views as $item) {
-            $item['selected'] = ( $item['fragment'] === $selected ) ? "selected='selected'" : '';
+            $item->selected = ( $item->filename === $selected ) ? "selected='selected'" : '';
             $prepared[] = $item;
         }
+
 
         return $prepared;
     }
@@ -132,13 +132,12 @@ class ModuleViewLoader
         $keys = array_values( $this->views );
         if (method_exists( $this->module, 'defaultView' )) {
             $setByModule = $this->module->defaultView();
-
             if (!empty( $setByModule ) && $this->isValidTemplate( $setByModule )) {
                 return $setByModule;
             }
         } elseif (isset( $keys[0] )) {
             $first = $keys[0];
-            return $first['file'];
+            return $first;
         } else {
             return null;
         }
@@ -155,7 +154,7 @@ class ModuleViewLoader
     {
 
         foreach ($this->views as $view) {
-            if ($setByModule === $view['file']) {
+            if ($setByModule === $view->filename) {
                 return true;
             }
         }

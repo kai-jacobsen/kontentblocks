@@ -80,7 +80,6 @@ class ModuleView implements \JsonSerializable
 
     public function setPath( $path )
     {
-
         if (!empty( $path ) && is_dir( $path )) {
             Twig::setPath( $path );
         }

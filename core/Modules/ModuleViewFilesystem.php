@@ -1,7 +1,9 @@
 <?php
 namespace Kontentblocks\Modules;
 
+use DirectoryIterator;
 use Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Utils\Utilities;
 
 
 /**
@@ -19,14 +21,18 @@ class ModuleViewFilesystem
     protected $paths = array();
 
     /**
+     * @var Module
+     */
+    private $module;
+
+    /**
      * @param Module $Module
      */
     public function __construct( Module $Module )
     {
-
+        $this->module = $Module;
         $this->isChildTheme = is_child_theme();
         $this->views = $this->setupViews( $Module );
-
     }
 
     /**
@@ -36,200 +42,57 @@ class ModuleViewFilesystem
     private function setupViews( Module $module )
     {
 
-        $childTemplates = array();
 
         if ($this->isChildTheme) {
             $childPath = trailingslashit(
                              get_stylesheet_directory()
-                         ) . 'module-templates/' . $module->properties->getSetting( 'slug' );
-            $childTemplates = $this->cleanPath(
-                glob(
-                    $childPath . '/*.twig'
-                ),
-                get_stylesheet_directory() . '/module-templates/'
-            );
-            $this->paths[] = $childPath;
+                         ) . 'module-templates' . DIRECTORY_SEPARATOR . $module->properties->getSetting(
+                    'slug'
+                ) . DIRECTORY_SEPARATOR;
+            if (is_dir( $childPath )) {
+                $this->paths[] = $childPath;
+            }
         }
 
         $parentPath = trailingslashit(
                           get_template_directory()
-                      ) . 'module-templates/' . $module->properties->getSetting(
+                      ) . 'module-templates' . DIRECTORY_SEPARATOR . $module->properties->getSetting(
                 'slug'
-            );
+            ) . DIRECTORY_SEPARATOR;
 
-        $parentTemplates = $this->cleanPath(
-            glob(
-                $parentPath . '/*.twig'
-            ),
-            get_template_directory() . '/module-templates/'
-        );
-
-        $this->paths[] = $parentPath;
+        if (is_dir( $parentPath )) {
+            $this->paths[] = $parentPath;
+        }
 
         $modulePath = trailingslashit( $module->properties->getSetting( 'path' ) );
-        $moduleTemplates = $this->cleanPath(
-            glob( $modulePath . '*.twig' ),
-            trailingslashit( $module->properties->getSetting( 'path' ) )
-        );
 
         $this->paths[] = $modulePath;
-        $merged = array_merge( $childTemplates, $parentTemplates, $moduleTemplates );
-        return $this->prepareFiles( $this->unify( $merged ) );
-    }
 
-    private function cleanPath( $glob, $string )
-    {
-
-        $paths = array();
-        foreach ($glob as $file) {
-            $viewItem['basedir'] = $string;
-            $viewItem['file'] = basename( $file );
-            $viewItem['subdir'] = ltrim( implode( '/', $this->getSubDir( $file, $string ) ), '/' );
-            $viewItem['fragment'] = ltrim(
-                implode( '/', $this->getSubDir( $file, $string ) ) . '/' . basename( $file ),
-                '/'
-            );
-            $paths[] = $viewItem;
+        /**
+         * iterate over all paths and convert file structure to md array
+         */
+        $files = array();
+        foreach (array_reverse( $this->paths ) as $path) {
+            $tmp = $this->fillArrayWithFileNodes( $path, $path );
+            $files = Utilities::arrayMergeRecursive( $tmp, $files );
         }
-
-        return $paths;
+        return $files;
     }
 
-    /**
-     * @param $dir
-     * @param $sub
-     * @return array
-     */
-    public function getSubDir( $dir, $sub )
+    public function fillArrayWithFileNodes( $dir, $root )
     {
-        /*
-        This is the ONLY WAY we have to make SURE that the
-        last segment of $dir is a file and not a directory.
-        */
-        if (is_file( $dir )) {
-            $dir = dirname( $dir );
-        }
-
-        // Is it necessary to convert to the fully expanded path?
-        $dir = realpath( $dir );
-        $sub = realpath( $sub );
-
-        // Do we need to worry about Windows?
-        $dir = str_replace( '\\', '/', $dir );
-        $sub = str_replace( '\\', '/', $sub );
-
-        // Here we filter leading, trailing and consecutive slashes.
-        $dir = array_filter( explode( '/', $dir ) );
-        $sub = array_filter( explode( '/', $sub ) );
-
-        // All done!
-        return array_slice( array_diff( $dir, $sub ), 0, 1 );
-    }
-
-    /**
-     * Incoming array is already sorted by name
-     * Prepare Templates for select
-     * Removes ordering numbers, filters for context and generates file nicename
-     *
-     * ex#1: 05-normal#side-hello-world.twig
-     *
-     */
-    private function prepareFiles( $files )
-    {
-
-        $prepared = array();
-        foreach ($files as $file) {
-            // Remove ordering numbers from filename
-            $file = $this->stripOrderingNumbers( $file );
-            $file = $this->extractContext( $file );
-            $file = $this->createFileNicename( $file );
-            $prepared[] = $file;
-        }
-
-        return $prepared;
-    }
-
-    /**
-     * Removes optional ordering numbers from filename
-     * Ordering numbers MUST be the first segment of the filename, else
-     * they are part of the filename
-     *
-     * @param $file
-     *
-     * @return mixed
-     */
-    private function stripOrderingNumbers( $file )
-    {
-
-        $parts = explode( '-', $file['file'] );
-        if (is_numeric( $parts[0] )) {
-            $file['order'] = absint( $parts[0] );
-            unset( $parts[0] );
-        } else {
-            $file['order'] = 0;
-        }
-        $file['filteredfile'] = implode( '-', $parts );
-
-        return $file;
-    }
-
-    /**
-     * The optional context is expected to come before the actual filename
-     * if sorting number is used it's the second segment, else the first
-     * @param $file
-     * @return mixed
-     */
-    private function extractContext( $file )
-    {
-
-        $valid = array_keys( ScreenManager::getDefaultContextLayout() );
-        $parts = explode( '-', $file['filteredfile'] );
-        $subs = explode( '#', $parts[0] );
-
-        $shared = array_intersect( $valid, $subs );
-        if (!empty( $shared )) {
-            $file['context'] = array_values( $shared );
-            unset( $parts[0] );
-        } else {
-            $file['context'] = $valid;
-        }
-
-        $file['filteredfile'] = implode( '-', $parts );
-
-        return $file;
-    }
-
-    /**
-     *
-     * @param $file
-     * @return mixed
-     */
-    private function createFileNicename( $file )
-    {
-
-        $parts = explode( '-', $file['filteredfile'] );
-        $file['nicename'] = preg_replace( "/\\.[^.\\s]{3,4}$/", "", ucwords( implode( ' ', $parts ) ) );
-
-        return $file;
-
-    }
-
-    /**
-     * @param $merged
-     * @return array
-     */
-    private function unify( $merged )
-    {
-        $unified = array();
-        foreach ($merged as $fileitem) {
-
-            if (!isset( $unified[$fileitem['file']] )) {
-                $unified[$fileitem['file']] = $fileitem;
+        $data = array();
+        $dir = new DirectoryIterator( $dir );
+        foreach ($dir as $node) {
+            if ($node->isDir() && !$node->isDot()) {
+                $data[$node->getFilename()] = $this->fillArrayWithFileNodes( $node->getPathname(), $root );
+            } else if ($node->isFile()) {
+                if ($node->getExtension() == 'twig') {
+                    $data[$node->getFilename()] = new ModuleViewFile( $node, $root );
+                }
             }
         }
-        ksort( $unified, SORT_ASC );
-
-        return $unified;
+        return $data;
     }
 
     /**
@@ -242,23 +105,28 @@ class ModuleViewFilesystem
 
     /**
      * @param $areaContext
+     * @param $postType
      * @return array
      */
-    public function getTemplatesforContext( $areaContext )
+    public function getTemplatesforContext( $areaContext, $postType )
     {
+
         $collection = array();
-        $filtered = array_filter(
-            $this->views,
-            function ( $elem ) use ( $areaContext ) {
-                return in_array( $areaContext, $elem['context'] );
-            }
-        );
 
+        $collection += $this->getSingles($this->views);
 
-        foreach ($filtered as $tpl) {
-            $collection[$tpl['file']] = $tpl;
+        if (array_key_exists($areaContext, $this->views)){
+            $collection = array_merge($collection, $this->getSingles($this->views[$areaContext]));
         }
 
+        if (array_key_exists($postType, $this->views)){
+            $ptvs = $this->views[$postType];
+            $collection = array_merge($collection, $this->getSingles($ptvs));
+
+            if (array_key_exists($areaContext, $ptvs)){
+                $collection = array_merge($collection, $ptvs[$areaContext]);
+            }
+        }
         return $collection;
 
     }
@@ -267,16 +135,33 @@ class ModuleViewFilesystem
      * @param $filename
      * @return string
      */
-    public function findFile($filename){
+    public function findFile( $filename )
+    {
         foreach ($this->paths as $path) {
-            $full = trailingslashit($path) . $filename;
-            if (file_exists($full)){
+            $full = trailingslashit( $path ) . $filename;
+            if (file_exists( $full )) {
                 return $full;
             }
         }
         return 'peter';
 
     }
+
+    private function getSingles( $files )
+    {
+
+        if (!is_array( $files )) {
+            return $files;
+        }
+
+        return array_filter(
+            $files,
+            function ( $file ) {
+                return ( !is_array( $file ) );
+            }
+        );
+    }
+
 
 
 }

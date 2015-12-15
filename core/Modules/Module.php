@@ -233,9 +233,9 @@ abstract class Module implements EntityInterface
             $tpl = $this->getViewfile();
             $moduleView = new ModuleView( $this );
             $full = $this->viewLoader->getTemplateByName( $tpl );
-            if (isset( $full['fragment'] )) {
-                $moduleView->setTplFile( $full['fragment'] );
-                $moduleView->setPath( $full['basedir'] );
+            if (isset( $full->filename )) {
+                $moduleView->setTplFile( $full->filename );
+                $moduleView->setPath( $full->path );
             }
 
             $this->view = $moduleView;
