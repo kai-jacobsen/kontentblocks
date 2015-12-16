@@ -533,8 +533,6 @@ abstract class Field implements Exportable
      * to modify, sanitize, etc.. the data which is expected from the field
      *
      * prepareFrontend runs when data is setup for the frontend output of a module
-     * @TODO Kind of Registry for Return Objects
-     * @TODO Overall logic is fuxxed up
      * @since 0.1.0
      * @param null $salt
      * @return object
@@ -568,7 +566,7 @@ abstract class Field implements Exportable
             $this->userValue = $this->returnObj;
             return $this->userValue;
 
-        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg('returnObj') !== false) {
+        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg('returnObj', null) !== false) {
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
             $this->returnObj = new $classpath( $value, $this, $salt );
             $this->userValue = $this->returnObj;

@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields\Returnobjects;
 
 use JsonSerializable;
+use Kontentblocks\Fields\Field;
 use Kontentblocks\Kontentblocks;
 
 
@@ -10,7 +11,7 @@ use Kontentblocks\Kontentblocks;
  * Class AbstractEditableFieldReturn
  * @package Kontentblocks\Fields\Returnobjects
  */
-abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
+abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn, InterfaceEditableFieldReturn
 {
 
     /**
@@ -22,6 +23,11 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @var string
      */
     public $moduleId;
+
+    /**
+     * @var Field
+     */
+    public $field;
 
     /**
      * @var string
@@ -41,7 +47,14 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @var string
      */
     public $helptext = 'Click to edit content';
+
     public $salt;
+    /**
+     * @var string
+     */
+    public $uniqueId;
+
+    public $currentUID;
     /**
      * Set of css classes to add to the el
      * @var array
@@ -58,16 +71,16 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      * @var bool
      */
     protected $inlineEdit = true;
-    /**
-     * @var string
-     */
-    public $uniqueId;
 
+    /*
+     *
+     */
     protected $callCount = 0;
 
+    /**
+     * @var array
+     */
     protected $linkedFields = array();
-
-    public $currentUID;
 
     /**
      * @param $value
@@ -76,7 +89,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
      */
     public function __construct( $value, $field, $salt = null )
     {
-        $this->salt = (!is_null($salt)) ? $salt : '';
+        $this->salt = ( !is_null( $salt ) ) ? $salt : '';
         $this->setValue( $value );
         $this->setupFromField( $field );
         $this->uniqueId = $field->createUID();
@@ -100,37 +113,7 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
 
     }
 
-    /**
-     * Getter for value
-     *
-     * @param null $arraykey
-     *
-     * @return array
-     */
-    public function getValue( $arraykey = null )
-    {
-        if (is_array( $this->value ) && !is_null( $arraykey )) {
-            if (isset( $this->value[$arraykey] )) {
-                return $this->value[$arraykey];
-            }
-        }
-
-        return $this->value;
-
-    }
-
-    public
-    function setValue(
-        $value
-    )
-    {
-
-        $this->value = $value;
-    }
-
-    protected
-
-    abstract function prepare();
+    protected abstract function prepare();
 
     public function instance()
     {
@@ -150,6 +133,30 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
         $uid = 'kbf-' . hash( 'crc32', $base );
         return $this->currentUID = $uid;
 
+    }
+
+    /**
+     * Getter for value
+     *
+     * @param null $arraykey
+     *
+     * @return array
+     */
+    public function getValue( $arraykey = null )
+    {
+        if (is_array( $this->value ) && !is_null( $arraykey )) {
+            if (isset( $this->value[$arraykey] )) {
+                return $this->value[$arraykey];
+            }
+        }
+
+        return $this->value;
+
+    }
+
+    public function setValue( $value )
+    {
+        $this->value = $value;
     }
 
     /**
@@ -184,6 +191,24 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     {
         return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
 
+    }
+
+    /**
+     * Remove a (css) class from the output of html() and background()
+     * chainable
+     *
+     * @param string $class
+     *
+     * @return $this
+     */
+    public function removeClass( $class )
+    {
+        $key = array_search( $class, $this->classes );
+        if ($key) {
+            unset( $this->classes[$key] );
+        }
+
+        return $this;
     }
 
     abstract function getEditableClass();
@@ -294,7 +319,8 @@ abstract class AbstractEditableFieldReturn implements InterfaceFieldReturn
     {
         $returnstr = '';
         foreach ($this->attributes as $attr => $value) {
-            $returnstr .= "{$attr}='{$value}' ";
+            $esc = esc_attr( $value );
+            $returnstr .= "{$attr}='{$esc}' ";
         }
 
         return trim( $returnstr );

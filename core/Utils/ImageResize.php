@@ -70,7 +70,6 @@ namespace Kontentblocks\Utils {
                 }
 
 
-
                 // Caipt'n, ready to hook.
                 if ( true === $upscale ) add_filter( 'image_resize_dimensions', array($this, 'upscale'), 10, 6 );
                 // Define upload path & dir.
@@ -104,7 +103,6 @@ namespace Kontentblocks\Utils {
                 if ( ! file_exists( $img_path ) or ! getimagesize( $img_path ) ) return false;
 
 
-
                 // Get image info.
                 $info = pathinfo( $img_path );
                 $ext = $info['extension'];
@@ -121,7 +119,13 @@ namespace Kontentblocks\Utils {
                     $dst_h = $orig_h;
                 } else {
                     // Use this to check if cropped image already exists, so we can return that instead.
+
                     $suffix = "{$dst_w}x{$dst_h}";
+
+                    if (is_array($crop)){
+                        $suffix .="x{$crop[0]}x{$crop[1]}";
+                    }
+
                     $dst_rel_path = str_replace( '.' . $ext, '', $rel_path );
                     $destfilename = "{$upload_dir}{$dst_rel_path}-{$suffix}.{$ext}";
 
@@ -146,7 +150,6 @@ namespace Kontentblocks\Utils {
                         $editor = wp_get_image_editor( $img_path );
 
                         if ( is_wp_error( $editor ) || is_wp_error( $editor->resize( $width, $height, $crop ) ) ){
-
                             return false;
                         }
 

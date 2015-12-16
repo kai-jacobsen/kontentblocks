@@ -6,5 +6,4 @@ interface InterfaceFieldReturn
 {
     public function getValue();
 
-    public function handleLoggedInUsers();
 }

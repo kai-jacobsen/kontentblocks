@@ -112,10 +112,10 @@ class StandardFieldReturn implements InterfaceFieldReturn, \ArrayAccess, \JsonSe
         return $this->value;
     }
 
-    public function handleLoggedInUsers()
-    {
-
-    }
+//    public function handleLoggedInUsers()
+//    {
+//
+//    }
 
     /**
      * Specify data which should be serialized to JSON

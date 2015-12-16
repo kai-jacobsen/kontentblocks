@@ -17,7 +17,8 @@ Class Image extends Field
 {
 
     public static $settings = array(
-        'type' => 'image'
+        'type' => 'image',
+        'returnObj' => 'Image'
     );
 
 

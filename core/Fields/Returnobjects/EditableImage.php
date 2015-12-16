@@ -15,41 +15,23 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
 {
     public $attachment;
 
-    /**
-     * Width
-     * @var int
-     */
-    public $width = 150;
 
-    /**
-     * Height
-     * @var int
-     */
-    public $height = 150;
     /**
      * @var string
      */
     public $helptext = 'Click to chose a different image';
+
+    /**
+     * @var Image
+     */
+    public $image;
     /**
      * ImageResize upscale flag
      * @var bool
      */
-    protected $upscale = false;
-    /**
-     * Source url after source was setup
-     * @var null
-     */
+
     protected $src = null;
-    /**
-     * Classes to add to the html element
-     * @var array
-     */
-    protected $classes = array();
-    /**
-     * Attributes to add to the html element
-     * @var array
-     */
-    protected $attributes = array();
+
     /**
      * Unique ID
      * @var
@@ -60,84 +42,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      * @var bool
      */
     protected $background = false;
-    /**
-     * ImageResize crop flag
-     * @var bool
-     */
-    protected $crop = true;
 
-    /**
-     *
-     * Add an (css) class to the output of html() and background()
-     * chainable
-     *
-     * @param $class string
-     *
-     * @return $this
-     */
-    public function addClass( $class )
-    {
-        if (is_array( $class )) {
-            $this->classes = array_merge( $this->classes, $class );
-        } else {
-            $this->classes = array_merge( explode( ' ', $this->_cleanSpaces( $class ) ), $this->classes );
-
-        }
-
-        return $this;
-
-    }
-
-    /**
-     * Ignore
-     * @TODO Remove
-     *
-     * @param $string
-     *
-     * @return string|void
-     */
-    protected function _cleanSpaces( $string )
-    {
-        return esc_attr( preg_replace( '/\s{2,}/', ' ', $string ) );
-
-    }
-
-    /**
-     * Remove a (css) class from the output of html() and background()
-     * chainable
-     *
-     * @param string $class
-     *
-     * @return $this
-     */
-    public function removeClass( $class )
-    {
-        $key = array_search( $class, $this->classes );
-        if ($key) {
-            unset( $this->classes[$key] );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add an attribute to the output of html() and background()
-     *
-     * @param string $attr
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function addAttr( $attr, $value = '' )
-    {
-        if (is_array( $attr )) {
-            $this->attributes = array_merge( $this->attributes, $attr );
-        } else {
-            $this->attributes[$attr] = $value;
-        }
-
-        return $this;
-    }
 
     /**
      * Returns an img tag with all added classes and attributes
@@ -153,7 +58,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
         $format = '<%1$s %3$s src="%2$s" >';
         $this->toJSON();
 
-        return sprintf( $format, 'img', $this->src, $this->_renderAttributes() );
+        return sprintf( $format, 'img', $this->image->getSrc(), $this->_renderAttributes() );
 
     }
 
@@ -163,29 +68,13 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     protected function prepareSrc( $builtin )
     {
-        if (is_null( $builtin )) {
-            if ($this->getValue( 'id' )) {
-                return $this->src = ImageResize::getInstance()->process(
-                    $this->getValue( 'id' ),
-                    $this->width, // width
-                    $this->height, // height
-                    $this->crop, // crop
-                    true, // return single
-                    $this->upscale
-                );
-            }
+
+        if (!is_null( $builtin )) {
+            $this->image->nsize( $builtin );
         }
 
-        if ($this->getValue( 'id' )) {
-            $src = wp_get_attachment_image_src( $this->getValue( 'id' ), $builtin, false );
+        $this->image->getSrc();
 
-            if ($src !== false) {
-                $this->width = $src[1];
-                $this->height = $src[2];
-                return $this->src = $src[0];
-            }
-
-        }
         return false;
     }
 
@@ -195,11 +84,11 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     public function toJSON()
     {
         $json = array(
-            'width' => $this->width,
-            'height' => $this->height,
-            'crop' => $this->crop,
-            'upscale' => $this->upscale,
-            'index' => $this->field->getArg('index', null),
+            'width' => $this->image->size[0],
+            'height' => $this->image->size[1],
+            'crop' => $this->image->crop,
+            'upscale' => $this->image->upscale,
+            'index' => $this->field->getArg( 'index', null ),
             'id' => $this->getValue( 'id' ),
             'type' => 'EditableImage',
             'kpath' => $this->createPath(),
@@ -214,7 +103,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             $this->field->augmentArgs( $json )
         );
 
-        if (is_user_logged_in() && current_user_can('edit_kontentblocks')){
+        if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {
             wp_enqueue_script(
                 'image-edit',
                 "/wp-admin/js/image-edit.min.js",
@@ -226,44 +115,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
 
     }
 
-    /**
-     * Returns list of classes and all attributes
-     * @return string
-     */
-    protected function _renderAttributes()
-    {
-        $return = "class='{$this->_classList()}' ";
-        $return .= $this->_attributesList();
-
-        return trim( $return );
-
-    }
-
-    /**
-     * Returns added classes as space-seperated string
-     * @return string
-     */
-    protected function _classList()
-    {
-        return trim( implode( ' ', $this->classes ) );
-
-    }
-
-    /**
-     * Convertes added attributes to usable string
-     * @return string
-     */
-    protected function _attributesList()
-    {
-        $returnstr = '';
-        foreach ($this->attributes as $attr => $value) {
-            $esc = esc_attr( $value );
-            $returnstr .= "{$attr}='{$esc}' ";
-        }
-
-        return trim( $returnstr );
-
-    }
 
     /**
      * Returns just the source url without any further html added
@@ -273,10 +124,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     {
         $this->prepareSrc( $builtin );
         $this->toJSON();
-
-        return $this->src;
-
-
+        return $this->image->getSrc();
     }
 
     /**
@@ -286,8 +134,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function background()
     {
-
-
         $this->background = true;
         $this->handleLoggedInUsers();
         $this->prepareSrc( null );
@@ -295,45 +141,42 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
 
         $format = ' %2$s style="background-image: url(\'%1$s\');"';
 
-        return sprintf( $format, $this->src, $this->_renderAttributes() );
+        return sprintf( $format, $this->image->getSrc(), $this->_renderAttributes() );
     }
 
+    /**
+     * @param $size
+     * @return $this
+     */
     public function nsize( $size )
     {
-        if (!is_null( $this->attachment )) {
-            if (isset( $this->attachment['sizes'] ) && !empty( $this->attachment['sizes'][$size] )) {
-                $def = $this->attachment['sizes'][$size];
-                return $this->size( $def['width'], $def['height'] );
-            }
-        }
-        return $this->size();
+        $this->image->nsize( $size );
+        return $this;
     }
 
     /**
      * Set size of the image.
      * Must be called before any output method
      *
-     * @param int $w
-     * @param int $h
+     * @param int $width
+     * @param int $height
      *
      * @return $this
      */
-    public function size( $w = 150, $h = 150 )
+    public function size( $width = 150, $height = 150 )
     {
-        $this->width = $w;
-        $this->height = $h;
-
+        $this->image->size( $width, $height );
         return $this;
     }
 
     /**
      * Set flag for image resizer upscale parameter
+     * @param bool $bool
      * @return $this
      */
-    public function upscale()
+    public function upscale( $bool = true )
     {
-        $this->upscale = true;
-
+        $this->image->upscale( $bool );
         return $this;
     }
 
@@ -344,10 +187,9 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      *
      * @return $this
      */
-    public function crop( $crop )
+    public function crop( $crop = true )
     {
-        $this->crop = $crop;
-
+        $this->image->crop( $crop );
         return $this;
     }
 
@@ -357,7 +199,6 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function getEditableClass()
     {
-
         if (is_a( $this->field, '\Kontentblocks\Fields\Definitions\Gallery' )) {
             if ($this->inlineEdit) {
                 return 'editable-gallery-image';
@@ -369,63 +210,59 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
         }
     }
 
+    /**
+     * @return string
+     */
     public function title()
     {
-        return $this->getValue( 'title', '' );
+        return $this->image->getTitle();
     }
 
+    /**
+     * @return string
+     */
     public function getTitleField()
     {
-        if (is_user_logged_in()){
+        if (is_user_logged_in()) {
             return "data-{$this->createUniqueId()}-title=''";
         }
     }
 
 
+    /**
+     * @return string
+     */
     public function caption()
     {
-        return $this->getValue( 'caption', '' );
+        return $this->image->getCaption();
     }
 
+    /**
+     * @return string
+     */
     public function getCaptionField()
     {
-        if (is_user_logged_in()){
+        if (is_user_logged_in()) {
             return "data-{$this->createUniqueId()}-caption=''";
         }
     }
 
+    /**
+     * @return $this
+     */
     public function prepare()
     {
-        $id = $this->getValue( 'id' );
-        if (!empty( $id )) {
-            $this->attachment = wp_prepare_attachment_for_js( $id );
-        }
+        $this->image = new Image( $this->value, $this->field, $this->salt );
         return $this;
     }
 
+    /**
+     * @param $attr
+     * @return string
+     */
     public function getMetaLink( $attr )
     {
         return 'data-' . $this->uniqueId . '-' . $attr;
-    }
-
-    /**
-     * Gets data from the image meta array
-     * to be used with internal image fields
-     * @TODO compatibility to all image attachments
-     *
-     * @param $key
-     *
-     * @return null
-     */
-    public function detail( $key )
-    {
-        $details = $this->getValue( 'details' );
-        if (array_key_exists( $key, $details )) {
-
-            return wp_kses_post( $details[$key] );
-        }
-
-        return null;
     }
 
     /**
