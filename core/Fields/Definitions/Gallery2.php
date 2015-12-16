@@ -16,7 +16,8 @@ Class Gallery2 extends Field
 
     // Defaults
     public static $settings = array(
-        'type' => 'gallery2'
+        'type' => 'gallery2',
+        'returnObj' => 'Gallery'
     );
 
 
@@ -54,17 +55,17 @@ Class Gallery2 extends Field
             return $old;
         }
 
-        if (!isset($data['images']) || !is_array($data['images'])){
+        if (!isset( $data['images'] ) || !is_array( $data['images'] )) {
             return $old;
         }
 
-        $data['images'] = array_map(function($imageId){
-            return absint($imageId);
-        }, $data['images']);
-
-
+        $data['images'] = array_map(
+            function ( $imageId ) {
+                return absint( $imageId );
+            },
+            $data['images']
+        );
         return $data;
-
     }
 
     /**

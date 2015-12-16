@@ -13,11 +13,9 @@ use Kontentblocks\Kontentblocks;
 class Gallery
 {
 
-    protected $field;
-
-    protected $value;
-
     public $images = array();
+    protected $field;
+    protected $value;
 
     /**
      * @param $value
@@ -47,20 +45,34 @@ class Gallery
                     'type' => 'image'
                 );
 
-                $registry = Kontentblocks()->getService('registry.fields');
+                $registry = Kontentblocks()->getService( 'registry.fields' );
                 /** @var Field $field */
-                $field = $registry->getField($fielddef['type'],$this->field->getFieldId(), $k, $this->field->getKey() . '.images' );
-                $field->setBaseId($this->field->getFieldId(), $this->field->getKey() . '.images');
-                $field->setData(array('id' => $attId));
-                $field->setArgs(['index' => $k, 'arrayKey' => $this->field->getKey() . '.images']);
+                $field = $registry->getField(
+                    $fielddef['type'],
+                    $this->field->getFieldId(),
+                    $k,
+                    $this->field->getKey() . '.images'
+                );
+                $field->setBaseId( $this->field->getFieldId(), $this->field->getKey() . '.images' );
+                $field->setData( array( 'id' => $attId ) );
+                $field->setArgs( [ 'index' => $k, 'arrayKey' => $this->field->getKey() . '.images' ] );
 
-                $editableReturn = new EditableImage( $attId, $field );
-                $editableReturn->inlineEdit( false );
-                array_push( $this->images, $editableReturn );
+                if ($field->getArg( 'editable', false )) {
+                    $return = new EditableImage( $attId, $field );
+                } else {
+                    $return = new Image( $attId, $field, null );
+                }
+                array_push( $this->images, $return );
             }
         }
+    }
 
-
+    /**
+     * @return array
+     */
+    public function getImages()
+    {
+        return $this->images;
     }
 
 
