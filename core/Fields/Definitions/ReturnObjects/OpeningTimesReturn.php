@@ -1,8 +1,7 @@
 <?php
 
-namespace Kontentblocks\Fields\Returnobjects;
+namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
-use Kontentblocks\Fields\Definitions\DateTime;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
 

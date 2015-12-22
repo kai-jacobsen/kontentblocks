@@ -51,6 +51,7 @@ class UpdateModule implements AjaxActionInterface
         $mergedData = Utilities::arrayMergeRecursive( $new, $old );
         // save slashed data, *_post_meta will add remove slashes again...
         $module->updateModuleData( $mergedData );
+
         if ($postdata->update) {
             $module->model->sync(true);
         }

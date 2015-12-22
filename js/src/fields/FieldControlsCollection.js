@@ -3,6 +3,7 @@ var FieldControlModel = require('./FieldControlModel');
 module.exports = Backbone.Collection.extend({
   initialize: function () {
     this._byModule = {};
+    this._byArea = {};
     this._linkedFields = [];
     this.listenTo(this, 'add', this.addToModules);
     this.listenTo(this, 'add', this.bindLinkedFields);
@@ -14,7 +15,16 @@ module.exports = Backbone.Collection.extend({
       if (!this._byModule[cid]) {
         this._byModule[cid] = {};
       }
+
+      if (model.ModuleModel.Area){
+        var areaid = model.ModuleModel.Area.id;
+        if (!this._byArea[areaid]){
+          this._byArea[areaid] = {};
+        }
+      }
+      this._byArea[areaid][model.id] = model;
       this._byModule[cid][model.id] = model;
+      console.log(this);
     }
   },
   getFieldsforModule: function (id) {

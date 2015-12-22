@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Common\Exportable;
-use Kontentblocks\Fields\Returnobjects\FieldCollection;
+use Kontentblocks\Fields\Definitions\ReturnObjects\FieldCollection;
 use Kontentblocks\Modules\Module;
 
 /**

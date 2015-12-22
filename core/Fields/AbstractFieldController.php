@@ -54,6 +54,7 @@ abstract class AbstractFieldController
         }
 
         $model = $this->getEntityModel();
+
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
             $data = ( array_key_exists( $field->getKey(),$model ) ) ? $model[$field->getKey()] : '';

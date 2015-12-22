@@ -21,7 +21,7 @@ module.exports = BaseView.extend({
   editImage: function () {
     this.openFrame(true);
   },
-  derender: function(){
+  derender: function () {
     if (this.frame) {
       this.frame.dispose();
     }
@@ -163,5 +163,14 @@ module.exports = BaseView.extend({
     this.model.set('value', {id: null, caption: '', title: ''});
     this.$description.val('');
     this.$title.val('');
+  },
+  toString: function () {
+    if (this.attachment){
+      console.log(this);
+      var size = (this.attachment.get('sizes').thumbnail) ? this.attachment.get('sizes').thumbnail : this.attachment.get('sizes').full;
+      return "<img src='" + size.url +"'>";
+    }
+    return '';
+
   }
 });

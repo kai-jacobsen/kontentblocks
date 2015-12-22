@@ -22,10 +22,12 @@ module.exports = Backbone.View.extend({
   },
   add: function (model) {
     this.models.add(model);
+    this.trigger('change');
     this.handleState();
   },
   remove: function (model) {
     this.models.remove(model, {silent:true});
+    this.trigger('change');
     this.handleState();
   },
   getModels: function () {
@@ -36,7 +38,7 @@ module.exports = Backbone.View.extend({
       model.sync(true);
     });
     Notice.notice('Data is safe.', 'success');
-
+    this.trigger('change');
   },
   handleState: function () {
     var l = this.models.models.length;
@@ -45,8 +47,6 @@ module.exports = Backbone.View.extend({
     } else {
       this.$el.removeClass('show');
     }
-
-
   }
 
 

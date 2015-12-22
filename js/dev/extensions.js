@@ -56,7 +56,7 @@ module.exports =
     });
   }
 };
-},{"common/Notice":7}],3:[function(require,module,exports){
+},{"common/Notice":8}],3:[function(require,module,exports){
 var Config = require('common/Config');
 module.exports = {
   blockLimit: function (areamodel) {
@@ -138,7 +138,45 @@ module.exports = {
     return Utilities.getIndex(KB.i18n, path);
   }
 };
-},{"common/Utilities":8}],6:[function(require,module,exports){
+},{"common/Utilities":9}],6:[function(require,module,exports){
+module.exports = {
+  fields: [],
+  strings: [],
+  getFields: function(){
+    this.fields = [];
+    this.strings = [];
+    var $fields = jQuery('[data-kbfuid]');
+    _.each($fields, function(el){
+      var id = jQuery(el).data('kbfuid');
+      var field = KB.FieldControls.get(id);
+      if (field){
+        this.fields.push(field);
+      }
+    }, this);
+  },
+  getStrings: function(){
+    this.getFields();
+    _.each(this.fields, function(field){
+      this.strings.push(field.FieldControlView.toString());
+    }, this);
+  },
+  concatStrings:function(){
+    this.getStrings();
+    var res = '';
+    _.each(this.strings, function(string){
+      res = res + string + '\n';
+    });
+
+    if (tinyMCE.get('content')){
+      tinyMCE.get('content').setContent(res);
+    }
+
+    return res;
+
+  }
+
+};
+},{}],7:[function(require,module,exports){
 var Config = require('common/Config');
 if (Function.prototype.bind && window.console && typeof console.log == "object") {
   [
@@ -187,7 +225,7 @@ module.exports = {
   Debug: _K,
   User: _KS
 };
-},{"common/Config":4}],7:[function(require,module,exports){
+},{"common/Config":4}],8:[function(require,module,exports){
 'use strict';
 //KB.Notice
 module.exports =
@@ -206,7 +244,7 @@ module.exports =
   }
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var Utilities = function ($) {
   return {
     // store with expiration
@@ -234,7 +272,6 @@ var Utilities = function ($) {
       }
     },
     setIndex: function (obj, is, value) {
-
       if (!_.isObject(obj)){
         obj = {};
       }
@@ -299,7 +336,7 @@ var Utilities = function ($) {
 
 }(jQuery);
 module.exports = Utilities;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var Ajax = require('common/Ajax');
 var Notice = require('common/Notice');
 var Config = require('common/Config');
@@ -378,7 +415,7 @@ var BackupUi = Backbone.View.extend({
 module.exports = new BackupUi({
   el: '#kb-backup-inspect .inside'
 });
-},{"common/Ajax":2,"common/Config":4,"common/Notice":7}],10:[function(require,module,exports){
+},{"common/Ajax":2,"common/Config":4,"common/Notice":8}],11:[function(require,module,exports){
 var ClipboardController = require('extensions/clipboard/ClipboardController');
 module.exports = {
 
@@ -390,22 +427,23 @@ module.exports = {
   }
 
 };
-},{"extensions/clipboard/ClipboardController":16}],11:[function(require,module,exports){
+},{"extensions/clipboard/ClipboardController":18}],12:[function(require,module,exports){
 var ExtensionsModel = require('extensions/ExtensionsModel');
 window.KB.Extensions = new ExtensionsModel();
 
-},{"extensions/ExtensionsModel":12}],12:[function(require,module,exports){
+},{"extensions/ExtensionsModel":13}],13:[function(require,module,exports){
 module.exports = Backbone.Model.extend({
 
   initialize: function () {
     var LayoutConfigurations = require('extensions/LayoutConfigurations').init();
     this.set('backup-ui', require('extensions/BackupUI'));
     this.set('clipboard', require('extensions/Clipboard').init());
+    this.set('yoast', require('extensions/YoastSeo'));
 
   }
 
 });
-},{"extensions/BackupUI":9,"extensions/Clipboard":10,"extensions/LayoutConfigurations":13}],13:[function(require,module,exports){
+},{"extensions/BackupUI":10,"extensions/Clipboard":11,"extensions/LayoutConfigurations":14,"extensions/YoastSeo":15}],14:[function(require,module,exports){
 var Logger = require('common/Logger');
 var Ajax = require('common/Ajax');
 var Notice = require('common/Notice');
@@ -580,7 +618,43 @@ var LayoutConfigurations =
 
 };
 module.exports = LayoutConfigurations;
-},{"common/Ajax":2,"common/Config":4,"common/Logger":6,"common/Notice":7}],14:[function(require,module,exports){
+},{"common/Ajax":2,"common/Config":4,"common/Logger":7,"common/Notice":8}],15:[function(require,module,exports){
+var Index = require('common/Index');
+KBFieldContent = function () {
+  var that = this;
+  YoastSEO.app.registerPlugin('kbfieldcontent', {status: 'ready'});
+
+  /**
+   * @param modification    {string}    The name of the filter
+   * @param callable        {function}  The callable
+   * @param pluginName      {string}    The plugin that is registering the modification.
+   * @param priority        {number}    (optional) Used to specify the order in which the callables
+   *                                    associated with a particular filter are called. Lower numbers
+   *                                    correspond with earlier execution.
+   */
+  YoastSEO.app.registerModification('content', this.contentModification, 'kbfieldcontent', 5);
+  if (KB.ChangeObserver) {
+    KB.ChangeObserver.on('change', function () {
+      YoastSEO.app.refresh();
+    });
+  }
+
+};
+
+/**
+ * @param data The data to modify
+ */
+KBFieldContent.prototype.contentModification = function (data) {
+  return data + Index.concatStrings();
+};
+
+jQuery(document).ready(function () {
+  if (window.YoastSEO) {
+    new KBFieldContent();
+  }
+});
+
+},{"common/Index":6}],16:[function(require,module,exports){
 var ModuleBrowserList = require('shared/ModuleBrowser/ModuleBrowserList');
 var ListItem = require('extensions/clipboard/ClipboardListItem');
 var Ajax = require('common/Ajax');
@@ -643,7 +717,7 @@ module.exports = ModuleBrowserList.extend({
 
   }
 });
-},{"common/Ajax":2,"common/Config":4,"extensions/clipboard/ClipboardListItem":17,"shared/ModuleBrowser/ModuleBrowserList":20}],15:[function(require,module,exports){
+},{"common/Ajax":2,"common/Config":4,"extensions/clipboard/ClipboardListItem":19,"shared/ModuleBrowser/ModuleBrowserList":22}],17:[function(require,module,exports){
 var Utilities = require('common/Utilities');
 module.exports = Backbone.Collection.extend({
   initialize: function () {
@@ -691,7 +765,7 @@ module.exports = Backbone.Collection.extend({
     Utilities.store.set('kb-clipboard', value);
   }
 });
-},{"common/Utilities":8}],16:[function(require,module,exports){
+},{"common/Utilities":9}],18:[function(require,module,exports){
 var ClipboardModel = require('extensions/clipboard/ClipboardModel');
 var ClipboardControl = require('extensions/clipboard/controls/ClipboardControl');
 var ClipboardCollection = require('extensions/clipboard/ClipboardCollection');
@@ -755,7 +829,7 @@ module.exports = Backbone.View.extend({
     return defs;
   }
 });
-},{"extensions/clipboard/ClipboardBrowserListRenderer":14,"extensions/clipboard/ClipboardCollection":15,"extensions/clipboard/ClipboardModel":18,"extensions/clipboard/controls/ClipboardControl":19}],17:[function(require,module,exports){
+},{"extensions/clipboard/ClipboardBrowserListRenderer":16,"extensions/clipboard/ClipboardCollection":17,"extensions/clipboard/ClipboardModel":20,"extensions/clipboard/controls/ClipboardControl":21}],19:[function(require,module,exports){
 var ListItem = require('shared/ModuleBrowser/ModuleBrowserListItem');
 var tplListItem = require('templates/backend/clipboard/module-list-item.hbs');
 var Ajax = require('common/Ajax');
@@ -799,11 +873,11 @@ module.exports = ListItem.extend({
 
   }
 });
-},{"common/Ajax":2,"common/Config":4,"shared/ModuleBrowser/ModuleBrowserListItem":21,"templates/backend/clipboard/module-list-item.hbs":22}],18:[function(require,module,exports){
+},{"common/Ajax":2,"common/Config":4,"shared/ModuleBrowser/ModuleBrowserListItem":23,"templates/backend/clipboard/module-list-item.hbs":24}],20:[function(require,module,exports){
 module.exports = Backbone.Model.extend({
   idAttribute: 'hash'
 });
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 //KB.Backbone.Backend.ModuleStatus
 var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
@@ -858,7 +932,7 @@ module.exports = BaseView.extend({
     }
   }
 });
-},{"backend/Views/BaseControlView":1,"common/Ajax":2,"common/Checks":3,"common/Config":4,"common/I18n":5,"common/Notice":7,"common/Utilities":8}],20:[function(require,module,exports){
+},{"backend/Views/BaseControlView":1,"common/Ajax":2,"common/Checks":3,"common/Config":4,"common/I18n":5,"common/Notice":8,"common/Utilities":9}],22:[function(require,module,exports){
 //KB.Backbone.ModuleBrowserModulesList
 var ListItem = require('shared/ModuleBrowser/ModuleBrowserListItem');
 module.exports = Backbone.View.extend({
@@ -896,7 +970,7 @@ module.exports = Backbone.View.extend({
   render: function(){
   }
 });
-},{"shared/ModuleBrowser/ModuleBrowserListItem":21}],21:[function(require,module,exports){
+},{"shared/ModuleBrowser/ModuleBrowserListItem":23}],23:[function(require,module,exports){
 //KB.Backbone.ModuleBrowserListItem
 var tplTemplateListItem = require('templates/backend/modulebrowser/module-template-list-item.hbs');
 var tplListItem = require('templates/backend/modulebrowser/module-list-item.hbs');
@@ -947,7 +1021,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"templates/backend/modulebrowser/module-list-item.hbs":23,"templates/backend/modulebrowser/module-template-list-item.hbs":24}],22:[function(require,module,exports){
+},{"templates/backend/modulebrowser/module-list-item.hbs":25,"templates/backend/modulebrowser/module-template-list-item.hbs":26}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -962,7 +1036,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "<br>\n</p>\n<div class=\"kb-js-duplicate-clipboard kb-clipboard-action\">duplicate</div>\n<div class=\"kb-js-move-clipboard kb-clipboard-action\">move</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":33}],23:[function(require,module,exports){
+},{"hbsfy/runtime":35}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -975,7 +1049,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</p>";
 },"useData":true});
 
-},{"hbsfy/runtime":33}],24:[function(require,module,exports){
+},{"hbsfy/runtime":35}],26:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -986,7 +1060,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</h4>";
 },"useData":true});
 
-},{"hbsfy/runtime":33}],25:[function(require,module,exports){
+},{"hbsfy/runtime":35}],27:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1047,7 +1121,7 @@ inst['default'] = inst;
 
 exports['default'] = inst;
 module.exports = exports['default'];
-},{"./handlebars/base":26,"./handlebars/exception":27,"./handlebars/no-conflict":28,"./handlebars/runtime":29,"./handlebars/safe-string":30,"./handlebars/utils":31}],26:[function(require,module,exports){
+},{"./handlebars/base":28,"./handlebars/exception":29,"./handlebars/no-conflict":30,"./handlebars/runtime":31,"./handlebars/safe-string":32,"./handlebars/utils":33}],28:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1321,7 +1395,7 @@ function createFrame(object) {
 }
 
 /* [args, ]options */
-},{"./exception":27,"./utils":31}],27:[function(require,module,exports){
+},{"./exception":29,"./utils":33}],29:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1360,7 +1434,7 @@ Exception.prototype = new Error();
 
 exports['default'] = Exception;
 module.exports = exports['default'];
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1379,7 +1453,7 @@ exports['default'] = function (Handlebars) {
 };
 
 module.exports = exports['default'];
-},{}],29:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -1612,7 +1686,7 @@ function initData(context, data) {
   }
   return data;
 }
-},{"./base":26,"./exception":27,"./utils":31}],30:[function(require,module,exports){
+},{"./base":28,"./exception":29,"./utils":33}],32:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1627,7 +1701,7 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 
 exports['default'] = SafeString;
 module.exports = exports['default'];
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1742,12 +1816,12 @@ function blockParams(params, ids) {
 function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
 }
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 
-},{"./dist/cjs/handlebars.runtime":25}],33:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":27}],35:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":32}]},{},[11]);
+},{"handlebars/runtime":34}]},{},[12]);

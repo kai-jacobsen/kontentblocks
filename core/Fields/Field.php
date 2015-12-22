@@ -4,6 +4,7 @@
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Common\Exportable;
+use Kontentblocks\Fields\Definitions\ReturnObjects\StandardFieldReturn;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Customizer\CustomizerIntegration;
@@ -194,6 +195,7 @@ abstract class Field implements Exportable
 
     public function setData( $data )
     {
+
         $data = $this->setValue( $data );
 
         if (is_null( $this->model )) {
@@ -550,9 +552,13 @@ abstract class Field implements Exportable
             $classname = $this->aliasReturnObjectClass( $classname );
 
             // first try with FQN
-            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
-            if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
+            $classpath = 'Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $classname;
+            if (class_exists( 'Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $classname, true )) {
                 $this->returnObj = new $classpath( $value, $this, $salt );
+            }
+            $classpath2 = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
+            if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
+                $this->returnObj = new $classpath2( $value, $this, $salt );
             }
             // second try
             if (class_exists( $classname )) {
@@ -566,13 +572,13 @@ abstract class Field implements Exportable
             $this->userValue = $this->returnObj;
             return $this->userValue;
 
-        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg('returnObj', null) !== false) {
+        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj', null ) !== false) {
             $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
             $this->returnObj = new $classpath( $value, $this, $salt );
             $this->userValue = $this->returnObj;
             return $this->userValue;
         } else {
-            $this->returnObj = new Returnobjects\StandardFieldReturn( $value, $this, $salt );
+            $this->returnObj = new StandardFieldReturn( $value, $this, $salt );
             $this->userValue = $this->returnObj;
             return $this->userValue;
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields\Returnobjects;
+namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONTransport;
@@ -32,11 +32,6 @@ class EditableElement extends AbstractEditableFieldReturn
      * @since 0.1.0
      */
     protected $attributes = array();
-
-    /**
-     * @var \Kontentblocks\Fields\Field
-     */
-    protected $field;
 
 
     /**

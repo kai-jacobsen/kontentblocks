@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields\Returnobjects;
+namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Kontentblocks;

@@ -1,9 +1,8 @@
 <?php
 
-namespace Kontentblocks\Fields\Returnobjects;
+namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 use Kontentblocks\Kontentblocks;
-use Kontentblocks\Utils\ImageResize;
 
 /**
  * Class EditableImage

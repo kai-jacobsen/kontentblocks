@@ -23,5 +23,11 @@ module.exports = BaseView.extend({
   },
   update: function (val) {
     this.model.set('value', val);
+  },
+  toString: function(){
+    if (this.editor){
+      return this.editor.getContent();
+    }
+    return '';
   }
 });

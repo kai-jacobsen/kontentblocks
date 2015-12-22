@@ -1,10 +1,14 @@
 <?php
 
-namespace Kontentblocks\Fields\Returnobjects;
+namespace Kontentblocks\Fields\Definitions\ReturnObjects;
 
 
 use Kontentblocks\Utils\ImageResize;
 
+/**
+ * Class Image
+ * @package Kontentblocks\Fields\Definitions\Returnobjects
+ */
 class Image extends StandardFieldReturn
 {
 
@@ -174,6 +178,10 @@ class Image extends StandardFieldReturn
      */
     protected function prepareValue( $value )
     {
+
+        if (!is_array($value)){
+            return $value;
+        }
 
         if (array_key_exists( 'id', $value )) {
             $this->attId = $value['id'];

@@ -1243,7 +1243,6 @@ var Utilities = function ($) {
       }
     },
     setIndex: function (obj, is, value) {
-
       if (!_.isObject(obj)){
         obj = {};
       }
@@ -1317,6 +1316,9 @@ module.exports = Backbone.View.extend({
   gone: function () {
     this.trigger('field.view.gone', this);
     this.derender();
+  },
+  toString: function(){
+    return '';
   }
 });
 
@@ -1419,6 +1421,8 @@ module.exports = Backbone.Model.extend({
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       ModuleModel.set('moduleData', cdata, {silent: false});
       ModuleModel.View.getDirty();
+      console.log(ModuleModel);
+
     }
   },
   /**
@@ -1480,7 +1484,6 @@ module.exports = Backbone.Model.extend({
         Logger.Debug.error('serialize | FrontendModal | Ajax error');
       }
     });
-
   }
 });
 },{"common/Checks":10,"common/Config":11,"common/Logger":12,"common/Payload":14,"common/Utilities":18}],21:[function(require,module,exports){
@@ -1634,6 +1637,12 @@ module.exports = BaseView.extend({
   },
   update: function (val) {
     this.model.set('value', val);
+  },
+  toString: function(){
+    if (this.editor){
+      return this.editor.getContent();
+    }
+    return '';
   }
 });
 },{"../FieldControlBaseView":19,"common/TinyMCE":16}],27:[function(require,module,exports){
@@ -2593,7 +2602,7 @@ module.exports = BaseView.extend({
   editImage: function () {
     this.openFrame(true);
   },
-  derender: function(){
+  derender: function () {
     if (this.frame) {
       this.frame.dispose();
     }
@@ -2735,6 +2744,15 @@ module.exports = BaseView.extend({
     this.model.set('value', {id: null, caption: '', title: ''});
     this.$description.val('');
     this.$title.val('');
+  },
+  toString: function () {
+    if (this.attachment){
+      console.log(this);
+      var size = (this.attachment.get('sizes').thumbnail) ? this.attachment.get('sizes').thumbnail : this.attachment.get('sizes').full;
+      return "<img src='" + size.url +"'>";
+    }
+    return '';
+
   }
 });
 },{"../FieldControlBaseView":19,"common/Config":11,"common/Utilities":18}],40:[function(require,module,exports){
@@ -3252,6 +3270,9 @@ module.exports = BaseView.extend({
   },
   update: function (val) {
     this.model.set('value', val);
+  },
+  toString: function(){
+    return this.$input.val();
   }
 });
 },{"../FieldControlBaseView":19}],50:[function(require,module,exports){
@@ -3272,6 +3293,9 @@ module.exports = BaseView.extend({
   },
   update: function (val) {
     this.model.set('value', val);
+  },
+  toString: function(){
+    return this.$textarea.val();
   }
 });
 },{"../FieldControlBaseView":19}],51:[function(require,module,exports){

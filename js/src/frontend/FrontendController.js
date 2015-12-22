@@ -24,7 +24,7 @@ var PanelView = require('./Views/PanelView');
 
 var Ui = require('common/UI');
 var Logger = require('common/Logger');
-var ChangeObserver = require('frontend/Views/ChangeObserver');
+var ChangeObserver = require('shared/ChangeObserver');
 var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');

@@ -15,5 +15,8 @@ module.exports = BaseView.extend({
   },
   update: function (val) {
     this.model.set('value', val);
+  },
+  toString: function(){
+    return this.$textarea.val();
   }
 });

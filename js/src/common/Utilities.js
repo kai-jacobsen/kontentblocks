@@ -25,7 +25,6 @@ var Utilities = function ($) {
       }
     },
     setIndex: function (obj, is, value) {
-
       if (!_.isObject(obj)){
         obj = {};
       }

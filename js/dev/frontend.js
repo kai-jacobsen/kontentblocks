@@ -1227,7 +1227,6 @@ var Utilities = function ($) {
       }
     },
     setIndex: function (obj, is, value) {
-
       if (!_.isObject(obj)){
         obj = {};
       }
@@ -1391,6 +1390,8 @@ module.exports = Backbone.Model.extend({
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       ModuleModel.set('moduleData', cdata, {silent: false});
       ModuleModel.View.getDirty();
+      console.log(ModuleModel);
+
     }
   },
   /**
@@ -1452,7 +1453,6 @@ module.exports = Backbone.Model.extend({
         Logger.Debug.error('serialize | FrontendModal | Ajax error');
       }
     });
-
   }
 });
 },{"common/Checks":9,"common/Config":10,"common/Logger":11,"common/Payload":13,"common/Utilities":18}],20:[function(require,module,exports){
@@ -1481,6 +1481,7 @@ var FieldControlModel = require('./FieldControlModel');
 module.exports = Backbone.Collection.extend({
   initialize: function () {
     this._byModule = {};
+    this._byArea = {};
     this._linkedFields = [];
     this.listenTo(this, 'add', this.addToModules);
     this.listenTo(this, 'add', this.bindLinkedFields);
@@ -1492,7 +1493,16 @@ module.exports = Backbone.Collection.extend({
       if (!this._byModule[cid]) {
         this._byModule[cid] = {};
       }
+
+      if (model.ModuleModel.Area){
+        var areaid = model.ModuleModel.Area.id;
+        if (!this._byArea[areaid]){
+          this._byArea[areaid] = {};
+        }
+      }
+      this._byArea[areaid][model.id] = model;
       this._byModule[cid][model.id] = model;
+      console.log(this);
     }
   },
   getFieldsforModule: function (id) {
@@ -1625,7 +1635,7 @@ var PanelView = require('./Views/PanelView');
 
 var Ui = require('common/UI');
 var Logger = require('common/Logger');
-var ChangeObserver = require('frontend/Views/ChangeObserver');
+var ChangeObserver = require('shared/ChangeObserver');
 var Tether = require('tether');
 var AdminBar = require('frontend/AdminBar');
 var Checks = require('common/Checks');
@@ -1894,7 +1904,7 @@ jQuery(document).ready(function () {
 
 });
 
-},{"./GlobalEvents":27,"./InlineSetup":36,"./Views/AreaView":42,"./Views/ModuleView":53,"./Views/PanelView":54,"common/Checks":9,"common/Logger":11,"common/Payload":13,"common/UI":17,"fields/FieldControlsCollection":21,"frontend/AdminBar":22,"frontend/Collections/ModuleCollection":24,"frontend/Collections/ObjectProxyCollection":25,"frontend/Models/AreaModel":37,"frontend/Models/ModuleModel":38,"frontend/Models/PanelModel":39,"frontend/Views/ChangeObserver":43,"frontend/Views/EditModalModules":45,"frontend/Views/Sidebar":55,"shared/ViewsCollection":77,"tether":112}],27:[function(require,module,exports){
+},{"./GlobalEvents":27,"./InlineSetup":36,"./Views/AreaView":42,"./Views/ModuleView":52,"./Views/PanelView":53,"common/Checks":9,"common/Logger":11,"common/Payload":13,"common/UI":17,"fields/FieldControlsCollection":21,"frontend/AdminBar":22,"frontend/Collections/ModuleCollection":24,"frontend/Collections/ObjectProxyCollection":25,"frontend/Models/AreaModel":37,"frontend/Models/ModuleModel":38,"frontend/Models/PanelModel":39,"frontend/Views/EditModalModules":44,"frontend/Views/Sidebar":54,"shared/ChangeObserver":68,"shared/ViewsCollection":77,"tether":112}],27:[function(require,module,exports){
 var Logger = require('common/Logger');
 KB.Events.on('module.before.sync panel.before.sync', function(Model){
   if (window.tinymce){
@@ -3441,60 +3451,6 @@ module.exports = Backbone.View.extend({
 
 });
 },{"common/Ajax":8,"common/Config":10,"common/Notice":12,"frontend/ModuleBrowser/ModuleBrowserExt":40,"frontend/Views/AreaLayout":41,"templates/frontend/area-empty-placeholder.hbs":86}],43:[function(require,module,exports){
-var Notice = require('common/Notice');
-var tplChangeObserver = require('templates/frontend/change-observer.hbs');
-module.exports = Backbone.View.extend({
-  models: new Backbone.Collection(),
-  className: 'kb-change-observer',
-  initialize: function () {
-    this.listenTo(KB.Modules, 'add', this.attachHandler);
-    this.listenTo(KB.Panels, 'add', this.attachHandler);
-    this.render();
-  },
-  events:{
-      'click .kb-button' : 'saveAll'
-  },
-  render: function () {
-    this.$el.append(tplChangeObserver({}));
-    this.$el.appendTo('body');
-  },
-  attachHandler: function (model) {
-    this.listenTo(model, 'change:moduleData', this.add);
-    this.listenTo(model, 'module.model.updated', this.remove);
-    this.listenTo(model, 'module.model.clean', this.remove);
-  },
-  add: function (model) {
-    this.models.add(model);
-    this.handleState();
-  },
-  remove: function (model) {
-    this.models.remove(model, {silent:true});
-    this.handleState();
-  },
-  getModels: function () {
-    return this.models;
-  },
-  saveAll: function () {
-    _.each(this.models.models, function (model) {
-      model.sync(true);
-    });
-    Notice.notice('Data is safe.', 'success');
-
-  },
-  handleState: function () {
-    var l = this.models.models.length;
-    if ( l > 0){
-      this.$el.addClass('show');
-    } else {
-      this.$el.removeClass('show');
-    }
-
-
-  }
-
-
-});
-},{"common/Notice":12,"templates/frontend/change-observer.hbs":88}],44:[function(require,module,exports){
 var Stack = require('common/Stack');
 module.exports = Backbone.View.extend({
   events: {
@@ -3531,7 +3487,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"common/Stack":14}],45:[function(require,module,exports){
+},{"common/Stack":14}],44:[function(require,module,exports){
 var Logger = require('common/Logger');
 var ModalFieldCollection = require('frontend/Collections/ModalFieldCollection');
 var LoadingAnimation = require('frontend/Views/LoadingAnimation');
@@ -4137,7 +4093,7 @@ module.exports = Backbone.View.extend({
     return null;
   }
 });
-},{"common/Ajax":8,"common/Config":10,"common/Logger":11,"common/Notice":12,"common/TinyMCE":16,"common/UI":17,"frontend/Collections/ModalFieldCollection":23,"frontend/Views/EditModalHistory":44,"frontend/Views/LoadingAnimation":46,"templates/frontend/module-edit-form.hbs":90}],46:[function(require,module,exports){
+},{"common/Ajax":8,"common/Config":10,"common/Logger":11,"common/Notice":12,"common/TinyMCE":16,"common/UI":17,"frontend/Collections/ModalFieldCollection":23,"frontend/Views/EditModalHistory":43,"frontend/Views/LoadingAnimation":45,"templates/frontend/module-edit-form.hbs":90}],45:[function(require,module,exports){
 //KB.Backbone.Shared.LoadingAnimation
 module.exports = Backbone.View.extend({
 
@@ -4159,7 +4115,7 @@ module.exports = Backbone.View.extend({
     this.$overlay.fadeOut(350);
   }
 });
-},{}],47:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /**
  * Creates the individual module-actions controls
  * like: sortable, delete, update
@@ -4282,7 +4238,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"./modulecontrols/DeleteControl":49,"./modulecontrols/EditControl":50,"./modulecontrols/MoveControl":51,"./modulecontrols/UpdateControl":52,"templates/frontend/module-controls.hbs":89}],48:[function(require,module,exports){
+},{"./modulecontrols/DeleteControl":48,"./modulecontrols/EditControl":49,"./modulecontrols/MoveControl":50,"./modulecontrols/UpdateControl":51,"templates/frontend/module-controls.hbs":89}],47:[function(require,module,exports){
 //KB.Backbone.Frontend.ModuleMenuItemView
 module.exports = Backbone.View.extend({
   tagName: 'div',
@@ -4296,7 +4252,7 @@ module.exports = Backbone.View.extend({
     this.remove();
   }
 });
-},{}],49:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 //KB.Backbone.Frontend.ModuleDelete
 var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
 var Check = require('common/Checks');
@@ -4342,7 +4298,7 @@ module.exports = ModuleMenuItem.extend({
     return Check.userCan('delete_kontentblocks');
   }
 });
-},{"common/Ajax":8,"common/Checks":9,"common/Config":10,"common/Notice":12,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":48}],50:[function(require,module,exports){
+},{"common/Ajax":8,"common/Checks":9,"common/Config":10,"common/Notice":12,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":47}],49:[function(require,module,exports){
 //KB.Backbone.Frontend.ModuleEdit
 var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
 var Check = require('common/Checks');
@@ -4367,7 +4323,7 @@ module.exports = ModuleMenuItem.extend({
 
   }
 });
-},{"common/Checks":9,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":48}],51:[function(require,module,exports){
+},{"common/Checks":9,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":47}],50:[function(require,module,exports){
 //KB.Backbone.Frontend.ModuleMove
 var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
 var Check = require('common/Checks');
@@ -4384,7 +4340,7 @@ module.exports = ModuleMenuItem.extend({
     return Check.userCan('edit_kontentblocks') && this.Parent.model.Area.get('sortable') && !this.model.get('submodule');
   }
 });
-},{"common/Checks":9,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":48}],52:[function(require,module,exports){
+},{"common/Checks":9,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":47}],51:[function(require,module,exports){
 //KB.Backbone.Frontend.ModuleUpdate
 var ModuleMenuItem = require('frontend/Views/ModuleControls/modulecontrols/ControlsBaseView');
 var Check = require('common/Checks');
@@ -4437,7 +4393,7 @@ module.exports = ModuleMenuItem.extend({
     return Check.userCan('edit_kontentblocks');
   }
 });
-},{"common/Checks":9,"common/Config":10,"common/Notice":12,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":48}],53:[function(require,module,exports){
+},{"common/Checks":9,"common/Config":10,"common/Notice":12,"frontend/Views/ModuleControls/modulecontrols/ControlsBaseView":47}],52:[function(require,module,exports){
 /**
  * That is what is rendered for each module when the user enters frontside editing mode
  * This will initiate the FrontsideEditView
@@ -4580,7 +4536,7 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"common/Checks":9,"frontend/Views/ModuleControls/ModuleControls":47,"templates/frontend/module-placeholder.hbs":91}],54:[function(require,module,exports){
+},{"common/Checks":9,"frontend/Views/ModuleControls/ModuleControls":46,"templates/frontend/module-placeholder.hbs":91}],53:[function(require,module,exports){
 module.exports = Backbone.View.extend({
   initialize: function () {
     this.model.View = this;
@@ -4592,7 +4548,7 @@ module.exports = Backbone.View.extend({
 
   }
 });
-},{}],55:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 // KB.Backbone.SidebarView
 var AreaOverview = require('frontend/Views/Sidebar/AreaOverview/AreaOverviewController');
 var CategoryFilter = require('frontend/Views/Sidebar/AreaDetails/CategoryFilter');
@@ -4739,7 +4695,7 @@ module.exports = Backbone.View.extend({
     }
   }
 });
-},{"common/Utilities":18,"frontend/Views/Sidebar/AreaDetails/CategoryFilter":59,"frontend/Views/Sidebar/AreaOverview/AreaOverviewController":62,"frontend/Views/Sidebar/PanelOverview/PanelOverviewController":66,"frontend/Views/Sidebar/SidebarHeader":68,"templates/frontend/sidebar/sidebar-nav.hbs":102}],56:[function(require,module,exports){
+},{"common/Utilities":18,"frontend/Views/Sidebar/AreaDetails/CategoryFilter":58,"frontend/Views/Sidebar/AreaOverview/AreaOverviewController":61,"frontend/Views/Sidebar/PanelOverview/PanelOverviewController":65,"frontend/Views/Sidebar/SidebarHeader":67,"templates/frontend/sidebar/sidebar-nav.hbs":102}],55:[function(require,module,exports){
 //KB.Backbone.Sidebar.AreaDetails.AreaDetailsController
 var CategoryController = require('frontend/Views/Sidebar/AreaDetails/CategoryController');
 var AreaSettings = require('frontend/Views/Sidebar/AreaDetails/AreaSettingsController');
@@ -4822,7 +4778,7 @@ module.exports = Backbone.View.extend({
     }
   }
 });
-},{"common/Ajax":8,"common/Config":10,"common/Notice":12,"frontend/Views/Sidebar/AreaDetails/AreaSettingsController":57,"frontend/Views/Sidebar/AreaDetails/CategoryController":58,"templates/frontend/sidebar/area-details-header.hbs":92}],57:[function(require,module,exports){
+},{"common/Ajax":8,"common/Config":10,"common/Notice":12,"frontend/Views/Sidebar/AreaDetails/AreaSettingsController":56,"frontend/Views/Sidebar/AreaDetails/CategoryController":57,"templates/frontend/sidebar/area-details-header.hbs":92}],56:[function(require,module,exports){
 //KB.Backbone.Sidebar.AreaDetails.AreaSettings
 var Payload = require('common/Payload');
 var tplAreaLayoutItem = require('templates/frontend/area-layout-item.hbs');
@@ -4879,7 +4835,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"common/Payload":13,"templates/frontend/area-layout-item.hbs":87}],58:[function(require,module,exports){
+},{"common/Payload":13,"templates/frontend/area-layout-item.hbs":87}],57:[function(require,module,exports){
 //KB.Backbone.Sidebar.AreaDetails.CategoryController
 var ModuleDragItem = require('frontend/Views/Sidebar/AreaDetails/ModuleDragItem');
 
@@ -4909,7 +4865,7 @@ module.exports = Backbone.View.extend({
     })
   }
 });
-},{"frontend/Views/Sidebar/AreaDetails/ModuleDragItem":60,"templates/frontend/sidebar/category-list.hbs":93}],59:[function(require,module,exports){
+},{"frontend/Views/Sidebar/AreaDetails/ModuleDragItem":59,"templates/frontend/sidebar/category-list.hbs":93}],58:[function(require,module,exports){
 //KB.Backbone.Sidebar.CategoryFilter
 var Payload = require('common/Payload');
 module.exports = Backbone.View.extend({
@@ -4952,7 +4908,7 @@ module.exports = Backbone.View.extend({
     return sorted;
   }
 });
-},{"common/Payload":13}],60:[function(require,module,exports){
+},{"common/Payload":13}],59:[function(require,module,exports){
 //KB.Backbone.Sidebar.AreaDetails.ModuleDragItem
 var Payload = require('common/Payload');
 var Notice = require('common/Notice');
@@ -5077,7 +5033,7 @@ module.exports = Backbone.View.extend({
     }
   }
 });
-},{"common/Ajax":8,"common/Checks":9,"common/Config":10,"common/Notice":12,"common/Payload":13,"frontend/Models/ModuleModel":38,"frontend/Views/AreaView":42,"templates/frontend/sidebar/category-module-item.hbs":94}],61:[function(require,module,exports){
+},{"common/Ajax":8,"common/Checks":9,"common/Config":10,"common/Notice":12,"common/Payload":13,"frontend/Models/ModuleModel":38,"frontend/Views/AreaView":42,"templates/frontend/sidebar/category-module-item.hbs":94}],60:[function(require,module,exports){
 //KB.Backbone.Sidebar.AreaOverview.AreaListItem
 var ModuleListItem = require('frontend/Views/Sidebar/AreaOverview/ModuleListItem');
 var AreaDetailsController = require('frontend/Views/Sidebar/AreaDetails/AreaDetailsController');
@@ -5175,7 +5131,7 @@ module.exports = Backbone.View.extend({
 
   }
 });
-},{"frontend/Views/Sidebar/AreaDetails/AreaDetailsController":56,"frontend/Views/Sidebar/AreaOverview/ModuleListItem":63,"templates/frontend/sidebar/empty-area.hbs":95}],62:[function(require,module,exports){
+},{"frontend/Views/Sidebar/AreaDetails/AreaDetailsController":55,"frontend/Views/Sidebar/AreaOverview/ModuleListItem":62,"templates/frontend/sidebar/empty-area.hbs":95}],61:[function(require,module,exports){
 //KB.Backbone.Sidebar.AreaOverview.AreaOverviewController
 var AreaListItem = require('frontend/Views/Sidebar/AreaOverview/AreaListItem');
 var tplSidebarAreaView = require('templates/frontend/sidebar/sidebar-area-view.hbs');
@@ -5252,7 +5208,7 @@ module.exports = Backbone.View.extend({
     }))
   }
 });
-},{"frontend/Views/Sidebar/AreaOverview/AreaListItem":61,"templates/frontend/sidebar/root-item.hbs":99,"templates/frontend/sidebar/sidebar-area-view.hbs":100}],63:[function(require,module,exports){
+},{"frontend/Views/Sidebar/AreaOverview/AreaListItem":60,"templates/frontend/sidebar/root-item.hbs":99,"templates/frontend/sidebar/sidebar-area-view.hbs":100}],62:[function(require,module,exports){
 //KB.Backbone.Sidebar.AreaOverview.ModuleListItem
 var tplModuleViewItem = require('templates/frontend/sidebar/module-view-item.hbs');
 module.exports = Backbone.View.extend({
@@ -5322,7 +5278,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"templates/frontend/sidebar/module-view-item.hbs":96}],64:[function(require,module,exports){
+},{"templates/frontend/sidebar/module-view-item.hbs":96}],63:[function(require,module,exports){
 //KB.Backbone.Sidebar.StaticPanelFormView
 var Config = require('common/Config');
 var Payload = require('common/Payload');
@@ -5394,7 +5350,7 @@ module.exports = Backbone.View.extend({
     this.parentView.closeDetails();
   }
 });
-},{"common/Config":10,"common/Payload":13,"common/UI":17,"templates/frontend/sidebar/option-panel-details.hbs":97}],65:[function(require,module,exports){
+},{"common/Config":10,"common/Payload":13,"common/UI":17,"templates/frontend/sidebar/option-panel-details.hbs":97}],64:[function(require,module,exports){
 
 module.exports= Backbone.View.extend({
 
@@ -5426,7 +5382,7 @@ module.exports= Backbone.View.extend({
   }
 });
 
-},{}],66:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 var StaticPanelView = require('frontend/Views/Sidebar/PanelOverview/StaticPanelView');
 var OptionPanelView = require('frontend/Views/Sidebar/PanelOverview/OptionPanelView');
 var tplRootItem = require('templates/frontend/sidebar/root-item.hbs');
@@ -5481,7 +5437,7 @@ module.exports = Backbone.View.extend({
     }))
   }
 });
-},{"frontend/Views/Sidebar/PanelOverview/OptionPanelView":65,"frontend/Views/Sidebar/PanelOverview/StaticPanelView":67,"templates/frontend/sidebar/root-item.hbs":99}],67:[function(require,module,exports){
+},{"frontend/Views/Sidebar/PanelOverview/OptionPanelView":64,"frontend/Views/Sidebar/PanelOverview/StaticPanelView":66,"templates/frontend/sidebar/root-item.hbs":99}],66:[function(require,module,exports){
 var tplPanelListItem = require('templates/frontend/sidebar/panel-list-item.hbs');
 var StaticPanelFormView = require('frontend/Views/Sidebar/PanelDetails/StaticPanelFormView');
 module.exports = Backbone.View.extend({
@@ -5514,7 +5470,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"frontend/Views/Sidebar/PanelDetails/StaticPanelFormView":64,"templates/frontend/sidebar/panel-list-item.hbs":98}],68:[function(require,module,exports){
+},{"frontend/Views/Sidebar/PanelDetails/StaticPanelFormView":63,"templates/frontend/sidebar/panel-list-item.hbs":98}],67:[function(require,module,exports){
 //KB.Backbone.Sidebar.Header
 var tplSidebarHeader = require('templates/frontend/sidebar/sidebar-header.hbs');
 module.exports = Backbone.View.extend({
@@ -5528,7 +5484,61 @@ module.exports = Backbone.View.extend({
   }
 
 });
-},{"templates/frontend/sidebar/sidebar-header.hbs":101}],69:[function(require,module,exports){
+},{"templates/frontend/sidebar/sidebar-header.hbs":101}],68:[function(require,module,exports){
+var Notice = require('common/Notice');
+var tplChangeObserver = require('templates/frontend/change-observer.hbs');
+module.exports = Backbone.View.extend({
+  models: new Backbone.Collection(),
+  className: 'kb-change-observer',
+  initialize: function () {
+    this.listenTo(KB.Modules, 'add', this.attachHandler);
+    this.listenTo(KB.Panels, 'add', this.attachHandler);
+    this.render();
+  },
+  events:{
+      'click .kb-button' : 'saveAll'
+  },
+  render: function () {
+    this.$el.append(tplChangeObserver({}));
+    this.$el.appendTo('body');
+  },
+  attachHandler: function (model) {
+    this.listenTo(model, 'change:moduleData', this.add);
+    this.listenTo(model, 'module.model.updated', this.remove);
+    this.listenTo(model, 'module.model.clean', this.remove);
+  },
+  add: function (model) {
+    this.models.add(model);
+    this.trigger('change');
+    this.handleState();
+  },
+  remove: function (model) {
+    this.models.remove(model, {silent:true});
+    this.trigger('change');
+    this.handleState();
+  },
+  getModels: function () {
+    return this.models;
+  },
+  saveAll: function () {
+    _.each(this.models.models, function (model) {
+      model.sync(true);
+    });
+    Notice.notice('Data is safe.', 'success');
+    this.trigger('change');
+  },
+  handleState: function () {
+    var l = this.models.models.length;
+    if ( l > 0){
+      this.$el.addClass('show');
+    } else {
+      this.$el.removeClass('show');
+    }
+  }
+
+
+});
+},{"common/Notice":12,"templates/frontend/change-observer.hbs":88}],69:[function(require,module,exports){
 //KB.Backbone.ModuleBrowser
 var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDefinitions');
 var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');

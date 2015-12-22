@@ -12,6 +12,7 @@ var ViewsCollection = require('shared/ViewsCollection');
 var FieldControlsCollection = require('fields/FieldControlsCollection');
 var AreasCollection = require('backend/Collections/AreasCollection');
 var Payload = require('common/Payload');
+var Index = require('common/Index');
 var UI = require('common/UI');
 var Config = require('common/Config');
 var ModuleView = require('backend/Views/ModuleView');
@@ -23,6 +24,8 @@ var PanelView = require('backend/Views/PanelView');
 var ContextView = require('backend/Views/ContextView');
 var ContextModel = require('backend/Models/ContextModel');
 var TabbedEditScreen = require('backend/Views/Ui/TabbedEditScreen');
+var ChangeObserver = require('shared/ChangeObserver');
+
 // ---------------
 // Collections
 // ---------------
@@ -64,6 +67,9 @@ KB.Contexts = new Backbone.Collection([], {
 
 KB.ObjectProxy = new Backbone.Collection();
 
+KB.ChangeObserver = new ChangeObserver();
+
+
 /*
  * Init function
  * Register event listeners
@@ -96,6 +102,8 @@ KB.App = (function () {
     if (Config.getLayoutMode() === 'default-tabs'){
       new TabbedEditScreen();
     }
+
+    KB.Index = Index;
 
   }
 
