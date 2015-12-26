@@ -7,5 +7,8 @@ module.exports =
   },
   get: function (field) {
     return new this.fields[field.model.get('type')]({model: new Backbone.Model(field.model.toJSON())});
+  },
+  getRefByType: function(type, data){
+    return new this.fields[type]({model: new Backbone.Model(data)});
   }
 };

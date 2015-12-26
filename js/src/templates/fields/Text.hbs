@@ -1,5 +1,5 @@
-<div class="kb-field kb-js-field field-api-text">
-    <label class="heading">{{ model.label }}</label>
+<div class="kb-field kb-js-field field-api-text kb-field--text">
+    <label class="heading">{{ model.args.label }}</label>
     <input type="text" name="{{ fieldName model.baseId model.index model.primeKey }}" value="{{ model.value }}" >
-    <p class="description">{{ model.description }}</p>
+    <p class="description">{{ model.args.description }}</p>
 </div>

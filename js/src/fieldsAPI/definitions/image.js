@@ -1,5 +1,5 @@
 //var Field = require('fields/controls/image');
-var BaseView = require('fieldsAPI/Fields/BaseView');
+var BaseView = require('fieldsAPI/definitions/baseView');
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
 module.exports = BaseView.extend({
@@ -10,15 +10,6 @@ module.exports = BaseView.extend({
   type: 'image',
   initialize: function (config) {
     BaseView.prototype.initialize.call(this, config);
-  },
-  defaults: {
-    value: {
-      url: '',
-      id: '',
-      caption: '',
-      title: ''
-    },
-    key: null
   },
   render: function (index) {
     return this.template({

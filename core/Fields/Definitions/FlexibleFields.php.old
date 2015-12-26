@@ -2,13 +2,15 @@
 
 namespace Kontentblocks\Fields\Definitions;
 
-use Kontentblocks\Fields\Definitions\FlexFields\FlexFieldsManager;
 use Kontentblocks\Fields\Field;
+use Kontentblocks\Fields\FieldFormController;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\JSONTransport;
 
 /**
  * Flexible Fields
  * Additional args are:
+ * TODO: document configuration
  *
  */
 Class FlexibleFields extends Field
@@ -34,7 +36,6 @@ Class FlexibleFields extends Field
      */
     public function save( $new, $old )
     {
-
         $flatFields = $this->flattenFields();
 
         if (is_null( $new )) {
@@ -43,7 +44,7 @@ Class FlexibleFields extends Field
 
         if (is_array( $new )) {
             foreach ($new as $item => $def) {
-                if (isset( $def['_meta']['delete'] )) {
+                if (isset( $def['delete'] )) {
                     $new[$item] = null;
                 }
             }
@@ -54,10 +55,9 @@ Class FlexibleFields extends Field
                 if (is_null( $section )) {
                     continue;
                 }
-
                 /** @var Field $field */
                 foreach ($section as $fkey => $field) {
-                    if (!array_key_exists( $fkey, $flatFields )) {
+                    if (!array_key_exists($fkey,$flatFields)){
                         continue;
                     }
                     $type = $flatFields[$fkey]['type'];
@@ -69,25 +69,14 @@ Class FlexibleFields extends Field
                         $section[$fkey]
                     );
                     $section[$fkey] = $fieldInstance->save( $section[$fkey], $old );
-                    if (!isset( $section['_meta']['uid'] )) {
-                        $section['_meta']['uid'] = $ukey;
+
+                    if (!isset( $section['_uid'] )) {
+                        $section['_uid'] = $ukey;
                     }
                 }
             }
         }
         return $new;
-    }
-
-    private function flattenFields()
-    {
-        $flat = array();
-        $sections = $this->getArg( 'fields' );
-        foreach ($sections as $section) {
-            foreach ($section['fields'] as $key => $args) {
-                $flat[$args['key']] = $args;
-            }
-        }
-        return $flat;
     }
 
     /**
@@ -99,19 +88,42 @@ Class FlexibleFields extends Field
     public function prepareFormValue( $value )
     {
 
-    }
-
-    public function prepare()
-    {
-
-        if (is_callable( $this->getArg( 'fields', null ) )) {
-            $manager = new FlexFieldsManager( $this );
-            $manager = call_user_func( $this->getArg( 'fields' ), $manager );
-            return $this->setArgs( array( 'fields' => $manager->export() ) );
-
+        $forJSON = array();
+        // make sure it's an simple indexed array to preserve order
+        if (is_array( $value )) {
+            $forJSON = array_values( $value );
         }
-        return $this->setArgs( array( 'fields' => false ) );
+        // run data through fields output method to retrieve optional filtered data
+        if (!empty( $forJSON )) {
+            foreach ($value as &$item) {
+                if (isset( $item['_mapping'] )) {
+                    foreach ($item['_mapping'] as $key => $type) {
+                        /** @var \Kontentblocks\Fields\Field $fieldInstance */
+                        $fieldInstance = Kontentblocks::getService( 'registry.fields' )->getField(
+                            $type,
+                            $this->getFieldId(),
+                            null,
+                            $item[$key]
+                        );
+                        $item[$key] = $fieldInstance->prepareFormValue( $item[$key] );
+                    }
+                }
+            }
+        }
+
+        return $value;
     }
 
+    private function flattenFields()
+    {
+        $flat = array();
+        $config = $this->getArg('config');
+        foreach ($config as $section) {
+            foreach ($section['fields'] as $key => $args ) {
+                $flat[$key] = $args;
+            }
+        }
+        return $flat;
+    }
 
 }

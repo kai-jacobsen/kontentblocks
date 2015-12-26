@@ -18,6 +18,11 @@ module.exports = Backbone.View.extend({
       return this.model.get('fieldId') + '[' + this.model.get('fieldkey') + ']';
     }
   },
+  extendModel: function () {
+    this.model.set('baseId', this.prepareBaseId());
+    this.model.set('uid', this.kbfuid());
+    this.model.set('kpath', this.prepareKpath());
+  },
   prepareKpath: function () {
     var concat = [];
     if (this.model.get('arrayKey')) {
@@ -34,15 +39,7 @@ module.exports = Backbone.View.extend({
 
     return concat.join('.');
   },
-  extendModel: function () {
-    this.model.set('baseId', this.prepareBaseId());
-    this.model.set('uid', this.kbfuid());
-    this.model.set('kpath', this.prepareKpath());
-  },
   kbfuid: function () {
     return this.model.get('index') + this.model.get('fieldId') + this.model.get('primeKey') + this.model.get('type');
-  },
-  setupDefaults: function () {
-    this.setValue(this.defaults.value);
   }
 });

@@ -24,7 +24,6 @@ module.exports = Backbone.Collection.extend({
       }
       this._byArea[areaid][model.id] = model;
       this._byModule[cid][model.id] = model;
-      console.log(this);
     }
   },
   getFieldsforModule: function (id) {

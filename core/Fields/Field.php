@@ -105,12 +105,17 @@ abstract class Field implements Exportable
         $this->setBaseId( $baseId, $subkey );
         $this->type = static::$settings['type'];
         $this->setArgs( $args );
+        $this->prepare();
     }
 
     /* ---------------------------------------------
      * Common Methods
      * ---------------------------------------------
      */
+
+    public function prepare(){
+        // nothing to do if not overridden
+    }
 
     /**
      * Field parameters array

@@ -215,6 +215,7 @@ module.exports =
     // Editor may not be initialized and is not accessible through
     // the tinymce api, thats why we take the settings from preInit
 
+
     if (!$el) {
       Logger.Debug.error('No scope element ($el) provided');
       return false;
@@ -228,7 +229,6 @@ module.exports =
     var edHeight = height || 350;
     var live = (_.isUndefined(watch)) ? true : false;
     // if no $el, we assume it's in the last added module
-
 
     // find all editors and init
     jQuery('.wp-editor-area', $el).each(function () {
@@ -259,7 +259,7 @@ module.exports =
             ed.module = KB.Views.Modules.get($module.attr('id'));
           }
 
-          if (ed.module){
+          if (ed.module) {
             ed.module.$el.trigger('tinymce.change');
           }
 
@@ -278,7 +278,7 @@ module.exports =
       };
       //var qts = jQuery('#qt_' + id + '_toolbar');
       //if (qts.length > 0) {
-        window.quicktags(qtsettings);
+      window.quicktags(qtsettings);
       //}
     });
     setTimeout(function () {
@@ -294,7 +294,6 @@ module.exports =
       var media = false;
     }
     var editorContent = content || '';
-
     return Ajax.send({
       action: 'getRemoteEditor',
       editorId: id + '_ed',
@@ -309,7 +308,7 @@ module.exports =
     }, function (response) {
       if (response.success) {
         $el.empty().append(response.data.html);
-        this.addEditor($el, null, 150, watch);
+        this.addEditor($el, null, 250, watch);
       } else {
         Logger.Debug.info('Editor markup could not be retrieved from the server');
       }
@@ -345,7 +344,6 @@ var Utilities = function ($) {
       }
     },
     setIndex: function (obj, is, value) {
-
       if (!_.isObject(obj)){
         obj = {};
       }
@@ -411,6 +409,32 @@ var Utilities = function ($) {
 }(jQuery);
 module.exports = Utilities;
 },{}],7:[function(require,module,exports){
+module.exports =
+{
+  fields: {},
+  register: function (obj) {
+    var id = obj.prototype.type;
+    this.fields[id] = obj;
+  },
+  get: function (field) {
+    return new this.fields[field.model.get('type')]({model: new Backbone.Model(field.model.toJSON())});
+  },
+  getRefByType: function(type, data){
+    return new this.fields[type]({model: new Backbone.Model(data)});
+  }
+};
+},{}],8:[function(require,module,exports){
+require('fieldsAPI/hbsHelpers');
+var Collection = require('fieldsAPI/FieldsAPICollection');
+KB.FieldsAPI = Collection;
+KB.FieldsAPI.register(require('fieldsAPI/definitions/editor'));
+KB.FieldsAPI.register(require('fieldsAPI/definitions/image'));
+KB.FieldsAPI.register(require('fieldsAPI/definitions/link'));
+KB.FieldsAPI.register(require('fieldsAPI/definitions/text'));
+KB.FieldsAPI.register(require('fieldsAPI/definitions/textarea'));
+
+
+},{"fieldsAPI/FieldsAPICollection":7,"fieldsAPI/definitions/editor":10,"fieldsAPI/definitions/image":11,"fieldsAPI/definitions/link":12,"fieldsAPI/definitions/text":13,"fieldsAPI/definitions/textarea":14,"fieldsAPI/hbsHelpers":15}],9:[function(require,module,exports){
 module.exports = Backbone.View.extend({
   initialize: function () {
     this.defaults = this.defaults || {};
@@ -431,6 +455,11 @@ module.exports = Backbone.View.extend({
       return this.model.get('fieldId') + '[' + this.model.get('fieldkey') + ']';
     }
   },
+  extendModel: function () {
+    this.model.set('baseId', this.prepareBaseId());
+    this.model.set('uid', this.kbfuid());
+    this.model.set('kpath', this.prepareKpath());
+  },
   prepareKpath: function () {
     var concat = [];
     if (this.model.get('arrayKey')) {
@@ -447,33 +476,18 @@ module.exports = Backbone.View.extend({
 
     return concat.join('.');
   },
-  extendModel: function () {
-    this.model.set('baseId', this.prepareBaseId());
-    this.model.set('uid', this.kbfuid());
-    this.model.set('kpath', this.prepareKpath());
-  },
   kbfuid: function () {
     return this.model.get('index') + this.model.get('fieldId') + this.model.get('primeKey') + this.model.get('type');
-  },
-  setupDefaults: function () {
-    this.setValue(this.defaults.value);
   }
 });
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var TinyMCE = require('common/TinyMCE');
-var BaseView = require('fieldsAPI/Fields/BaseView');
+var BaseView = require('fieldsAPI/definitions/baseView');
 module.exports = BaseView.extend({
   $editorWrap: null,
   templatePath: 'fields/Editor',
   template: require('templates/fields/Editor.hbs'),
   type: 'editor',
-  defaults: {
-    std: 'some textvalue',
-    label: 'Field label',
-    description: 'A description',
-    value: '',
-    key: null
-  },
   initialize: function (config) {
     BaseView.prototype.initialize.call(this, config);
   },
@@ -491,14 +505,14 @@ module.exports = BaseView.extend({
   },
   postRender: function () {
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
-    var edId = this.model.get('fieldId') + '_' + this.model.get('fieldKey') + '_editor_' + this.model.get('index');
+    var edId = this.model.get('fieldId') + '_' + this.model.get('fieldkey') + '_editor_' + this.model.get('index');
     this.$editorWrap = jQuery('.kb-ff-editor-wrapper', this.$el);
-    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), 5, false);
+    TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, false);
   }
 });
-},{"common/TinyMCE":5,"fieldsAPI/Fields/BaseView":7,"templates/fields/Editor.hbs":16}],9:[function(require,module,exports){
+},{"common/TinyMCE":5,"fieldsAPI/definitions/baseView":9,"templates/fields/Editor.hbs":16}],11:[function(require,module,exports){
 //var Field = require('fields/controls/image');
-var BaseView = require('fieldsAPI/Fields/BaseView');
+var BaseView = require('fieldsAPI/definitions/baseView');
 var Utilities = require('common/Utilities');
 var Config = require('common/Config');
 module.exports = BaseView.extend({
@@ -509,15 +523,6 @@ module.exports = BaseView.extend({
   type: 'image',
   initialize: function (config) {
     BaseView.prototype.initialize.call(this, config);
-  },
-  defaults: {
-    value: {
-      url: '',
-      id: '',
-      caption: '',
-      title: ''
-    },
-    key: null
   },
   render: function (index) {
     return this.template({
@@ -575,22 +580,12 @@ module.exports = BaseView.extend({
     }
   }
 });
-},{"common/Config":2,"common/Utilities":6,"fieldsAPI/Fields/BaseView":7,"templates/fields/Image.hbs":17}],10:[function(require,module,exports){
-var BaseView = require('fieldsAPI/Fields/BaseView');
+},{"common/Config":2,"common/Utilities":6,"fieldsAPI/definitions/baseView":9,"templates/fields/Image.hbs":17}],12:[function(require,module,exports){
+var BaseView = require('fieldsAPI/definitions/baseView');
 module.exports = BaseView.extend({
   templatePath: 'fields/Link',
   template: require('templates/fields/Link.hbs'),
   type: 'link',
-  defaults: {
-    std: {
-      link: '',
-      linktext: '',
-      linktitle: ''
-    },
-    label: 'Link',
-    description: '',
-    key: null
-  },
   //initialize:function(){
     //var fc = KB.FieldControls.add(this.model.toJSON());
     //BaseView.prototype.initialize.call(this, arguments);
@@ -602,16 +597,12 @@ module.exports = BaseView.extend({
     });
   }
 });
-},{"fieldsAPI/Fields/BaseView":7,"templates/fields/Link.hbs":18}],11:[function(require,module,exports){
-var BaseView = require('fieldsAPI/Fields/BaseView');
+},{"fieldsAPI/definitions/baseView":9,"templates/fields/Link.hbs":18}],13:[function(require,module,exports){
+var BaseView = require('fieldsAPI/definitions/baseView');
 module.exports = BaseView.extend({
   templatePath: 'fields/Text',
   template: require('templates/fields/Text.hbs'),
   type: 'text',
-  defaults: {
-    value: '',
-    key: null
-  },
   render: function () {
     return this.template({
       model: this.model.toJSON()
@@ -623,15 +614,9 @@ module.exports = BaseView.extend({
 
 
 
-},{"fieldsAPI/Fields/BaseView":7,"templates/fields/Text.hbs":19}],12:[function(require,module,exports){
-var BaseView = require('fieldsAPI/Fields/BaseView');
+},{"fieldsAPI/definitions/baseView":9,"templates/fields/Text.hbs":19}],14:[function(require,module,exports){
+var BaseView = require('fieldsAPI/definitions/baseView');
 module.exports = BaseView.extend({
-  defaults: {
-    std: 'some textvalue',
-    label: 'Field label',
-    description: 'A description',
-    key: null
-  },
   type: 'textarea',
   templatePath: 'fields/Textarea',
   template: require('templates/fields/Textarea.hbs'),
@@ -641,28 +626,7 @@ module.exports = BaseView.extend({
     });
   }
 });
-},{"fieldsAPI/Fields/BaseView":7,"templates/fields/Textarea.hbs":20}],13:[function(require,module,exports){
-module.exports =
-{
-  fields: {},
-  register: function (obj) {
-    var id = obj.prototype.type;
-    this.fields[id] = obj;
-  },
-  get: function (field) {
-    return new this.fields[field.model.get('type')]({model: new Backbone.Model(field.model.toJSON())});
-  }
-};
-},{}],14:[function(require,module,exports){
-require('fieldsAPI/hbsHelpers');
-var Collection = require('fieldsAPI/FieldsAPICollection');
-KB.FieldsAPI = Collection;
-KB.FieldsAPI.register(require('fieldsAPI/Fields/Editor'));
-KB.FieldsAPI.register(require('fieldsAPI/Fields/Image'));
-KB.FieldsAPI.register(require('fieldsAPI/Fields/Link'));
-KB.FieldsAPI.register(require('fieldsAPI/Fields/Text'));
-KB.FieldsAPI.register(require('fieldsAPI/Fields/Textarea'));
-},{"fieldsAPI/Fields/Editor":8,"fieldsAPI/Fields/Image":9,"fieldsAPI/Fields/Link":10,"fieldsAPI/Fields/Text":11,"fieldsAPI/Fields/Textarea":12,"fieldsAPI/FieldsAPICollection":13,"fieldsAPI/hbsHelpers":15}],15:[function(require,module,exports){
+},{"fieldsAPI/definitions/baseView":9,"templates/fields/Textarea.hbs":20}],15:[function(require,module,exports){
 var Handlebars = require("hbsfy/runtime");
 Handlebars.registerHelper("debug", function (optionalValue) {
   console.log("Current Context");
@@ -772,9 +736,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression, alias3=helpers.helperMissing;
 
-  return "<div data-kbfuid=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.uid : stack1), depth0))
-    + "\" class=\"kb-field kb-js-field kb-field--link field-api-link\">\n    <label class=\"heading\">"
+  return "<div class=\"kb-field kb-js-field kb-field--link field-api-link\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <input class=\"kb-js-link-input\" data-kbf-link-url\n           id=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
@@ -782,17 +744,17 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "[link]\"\n           value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.link : stack1), depth0))
-    + "\">\n    <a class='button kb-js-add-link'>Add Link</a>\n        <div class='kb-field--link-meta'><label for='"
+    + "\">\n    <a class='button kb-js-add-link'>Add Link</a>\n\n    <div class='kb-field--link-meta'><label for='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
     + "-linktext'>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.linktext : stack1), depth0))
-    + "</label><br>\n            <input\n                    type='text' data-kbf-link-linktext\n                    name=\""
+    + "</label><br>\n        <input\n                type='text' data-kbf-link-linktext\n                name=\""
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
-    + "[linktext]\"\n                    class='kb-field--link-linktext'\n                    id='"
+    + "[linktext]\"\n                class='kb-field--link-linktext'\n                id='"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
-    + "-linktext'\n                    value='"
+    + "-linktext'\n                value='"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.linktext : stack1), depth0))
-    + "'>\n        </div>\n"
+    + "'>\n    </div>\n"
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.linktitle : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
@@ -805,14 +767,14 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
-  return "<div class=\"kb-field kb-js-field field-api-text\">\n    <label class=\"heading\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
+  return "<div class=\"kb-field kb-js-field field-api-text kb-field--text\">\n    <label class=\"heading\">"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <input type=\"text\" name=\""
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "\" >\n    <p class=\"description\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
 },"useData":true});
 
@@ -823,13 +785,13 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-textarea\">\n    <label class=\"heading\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <textarea name=\""
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "</textarea>\n    <p class=\"description\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
 },"useData":true});
 
@@ -1597,4 +1559,4 @@ module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 },{"./dist/cjs/handlebars.runtime":21}],29:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":28}]},{},[14]);
+},{"handlebars/runtime":28}]},{},[8]);

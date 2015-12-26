@@ -707,7 +707,6 @@ module.exports =
     var live = (_.isUndefined(watch)) ? true : false;
     // if no $el, we assume it's in the last added module
 
-
     // find all editors and init
     jQuery('.wp-editor-area', $el).each(function () {
       var id = this.id;
@@ -737,7 +736,7 @@ module.exports =
             ed.module = KB.Views.Modules.get($module.attr('id'));
           }
 
-          if (ed.module){
+          if (ed.module) {
             ed.module.$el.trigger('tinymce.change');
           }
 
@@ -756,7 +755,7 @@ module.exports =
       };
       //var qts = jQuery('#qt_' + id + '_toolbar');
       //if (qts.length > 0) {
-        window.quicktags(qtsettings);
+      window.quicktags(qtsettings);
       //}
     });
     setTimeout(function () {
@@ -772,7 +771,6 @@ module.exports =
       var media = false;
     }
     var editorContent = content || '';
-
     return Ajax.send({
       action: 'getRemoteEditor',
       editorId: id + '_ed',
@@ -787,7 +785,7 @@ module.exports =
     }, function (response) {
       if (response.success) {
         $el.empty().append(response.data.html);
-        this.addEditor($el, null, 150, watch);
+        this.addEditor($el, null, 250, watch);
       } else {
         Logger.Debug.info('Editor markup could not be retrieved from the server');
       }
@@ -1502,7 +1500,6 @@ module.exports = Backbone.Collection.extend({
       }
       this._byArea[areaid][model.id] = model;
       this._byModule[cid][model.id] = model;
-      console.log(this);
     }
   },
   getFieldsforModule: function (id) {

@@ -16,7 +16,9 @@ module.exports = {
   getStrings: function(){
     this.getFields();
     _.each(this.fields, function(field){
-      this.strings.push(field.FieldControlView.toString());
+      if (field.FieldControlView){
+        this.strings.push(field.FieldControlView.toString());
+      }
     }, this);
   },
   concatStrings:function(){

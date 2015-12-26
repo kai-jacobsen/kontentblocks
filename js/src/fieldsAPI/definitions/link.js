@@ -1,18 +1,8 @@
-var BaseView = require('fieldsAPI/Fields/BaseView');
+var BaseView = require('fieldsAPI/definitions/baseView');
 module.exports = BaseView.extend({
   templatePath: 'fields/Link',
   template: require('templates/fields/Link.hbs'),
   type: 'link',
-  defaults: {
-    std: {
-      link: '',
-      linktext: '',
-      linktitle: ''
-    },
-    label: 'Link',
-    description: '',
-    key: null
-  },
   //initialize:function(){
     //var fc = KB.FieldControls.add(this.model.toJSON());
     //BaseView.prototype.initialize.call(this, arguments);

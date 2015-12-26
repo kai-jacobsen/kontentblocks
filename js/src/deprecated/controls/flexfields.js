@@ -6,12 +6,9 @@ module.exports = BaseView.extend({
     this.render();
   },
   render: function () {
-    var that = this;
     this.$stage = this.$('.flexible-fields--stage');
     this.FlexFieldsController.setElement(this.$stage.get(0)); // root element equals stage element
-    _.defer(function(){
-      that.FlexFieldsController.render();
-    });
+    this.FlexFieldsController.render();
   },
   derender: function () {
     this.FlexFieldsController.derender();
@@ -22,7 +19,7 @@ module.exports = BaseView.extend({
   createController: function () {
     if (!this.FlexFieldsController) {
       return this.FlexFieldsController = new FlexfieldController({
-        el: this.$('.flexible-fields2--stage'),
+        el: this.$('.flexible-fields--stage'),
         model: this.model,
         parentView: this
       })
