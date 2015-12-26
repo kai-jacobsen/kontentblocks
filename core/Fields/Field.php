@@ -578,7 +578,7 @@ abstract class Field implements Exportable
             return $this->userValue;
 
         } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj', null ) !== false) {
-            $classpath = 'Kontentblocks\\Fields\\Returnobjects\\' . $this->getSetting( 'returnObj' );
+            $classpath = 'Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $this->getSetting( 'returnObj' );
             $this->returnObj = new $classpath( $value, $this, $salt );
             $this->userValue = $this->returnObj;
             return $this->userValue;

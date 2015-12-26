@@ -12,31 +12,30 @@ use Kontentblocks\Fields\Definitions\FlexibleFields;
 class FlexibleFieldsReturn
 {
 
+    public $items = array();
     /**
      * @var \Kontentblocks\Fields\Definitions\FlexibleFields
      */
     protected $field;
-
     /**
      * @var string id of parent module
      */
-    protected $moduleId;
-
+    protected $entityId;
     /**
      * @var string
      */
     protected $key;
-
     /**
      * @var array data of this field from moduleData
      */
     protected $fieldData;
-
     /**
      * Flexible Field config array
      * @var array
      */
-    protected $config;
+    protected $sections;
+
+    public $salt;
 
     /**
      * Class Constructor
@@ -44,14 +43,77 @@ class FlexibleFieldsReturn
      *
      * @param FlexibleFields $field
      */
-    public function __construct( $value, FlexibleFields $field )
+    public function __construct( $value, FlexibleFields $field, $salt )
     {
         $this->field = $field;
         $this->key = $field->getKey();
         $this->fieldData = $field->getValue();
-        $this->moduleId = $field->getFieldId();
-        $this->config = $field->getArg( 'config' );
+        $this->entityId = $field->getFieldId();
+        $this->sections = $field->getArg( 'fields' );
+        $this->items = $this->setupItems();
+        $this->salt = $salt;
     }
+
+    /**
+     * Iterate through fields and set up
+     * @since 0.1.0
+     * @return array
+     */
+    public function setupItems()
+    {
+        if (!empty($this->items)){
+            return $this->items;
+        }
+
+        $registry = Kontentblocks()->getService( 'registry.fields' );
+        $fields = $this->extractFieldsFromConfig();
+        $items = array();
+        foreach ($this->fieldData as $index => $data) {
+
+            if (empty( $data )) {
+                continue;
+            }
+
+            $item = array();
+            foreach ($fields as $key => $conf) {
+                if (empty( $data[$key] )) {
+                    $data[$key] = $conf['std'] || '';
+                };
+
+
+                /** @var \Kontentblocks\Fields\Field $field */
+                $field = $registry->getField( $conf['type'], $this->entityId, $index, $key );
+                $field->setBaseId( $this->entityId, $this->key );
+                $field->setData( $data[$key] );
+                $field->setArgs( array( 'index' => $index, 'arrayKey' => $this->key ) );
+                $field->setArgs( $conf );
+                $item[$key] = $field->getFrontendValue($this->salt);
+
+            }
+            $items[] = $item;
+        }
+        d($items);
+        return $items;
+    }
+
+    /**
+     * Collect all fields to one array
+     * @return array
+     */
+    private function extractFieldsFromConfig()
+    {
+        $collect = array();
+        foreach (array_values( $this->sections ) as $section) {
+            if (!empty( $section['fields'] )) {
+                foreach ($section['fields'] as $field) {
+                    $collect[$field['key']] = $field;
+                }
+
+            }
+        }
+        return $collect;
+    }
+
 
     /**
      * Get prepared saved items
@@ -73,44 +135,6 @@ class FlexibleFieldsReturn
     }
 
     /**
-     * Iterate through fields and set up
-     * @since 0.1.0
-     * @return array
-     */
-    public function setupItems()
-    {
-        $registry = Kontentblocks()->getService('registry.fields');
-        $fields = $this->extractFieldsFromConfig();
-        $items = array();
-        foreach ($this->fieldData as $index => $data) {
-
-            if (empty($data)){
-                continue;
-            }
-
-            $item = array();
-            foreach ($fields as $key => $conf) {
-
-                if (empty( $data[$key] )) {
-                    $data[$key] = $conf['std'] || '';
-                };
-
-                /** @var \Kontentblocks\Fields\Field $field */
-                $field = $registry->getField($conf['type'],$this->moduleId, $index, $key );
-                $field->setBaseId($this->moduleId, $this->key);
-                $field->setData($data[$key]);
-                $field->setArgs(['index' => $index, 'arrayKey' => $this->key]);
-                $item[$key] = $this->getReturnObj( $conf['type'], $data[$key], $field );
-                $item['conf'] = $conf;
-                $item['index'] = $index;
-            }
-            $items[] = $item;
-        }
-
-        return $items;
-    }
-
-    /**
      * Validate if all necessary props are set
      * @since 0.1.0
      * @return bool
@@ -122,7 +146,7 @@ class FlexibleFieldsReturn
             return false;
         }
 
-        if (!isset( $this->moduleId )) {
+        if (!isset( $this->entityId )) {
             return false;
         }
 
@@ -130,66 +154,11 @@ class FlexibleFieldsReturn
             return false;
         }
 
-        if (!isset( $this->config )) {
+        if (!isset( $this->sections )) {
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Collect all fields to one array
-     * @return array
-     */
-    private function extractFieldsFromConfig()
-    {
-        $collect = array();
-        foreach ($this->config as $key => $tab) {
-            if (!empty( $tab['fields'] )) {
-                $collect += $tab['fields'];
-            }
-        }
-
-        return $collect;
-    }
-
-    /**
-     * Sets up the correct ReturnObject for each field
-     * before frontend rendering
-     * @TODO Should not be the responsibility of the AbstractEditableFieldReturn Class to create proper Fields
-     * @TODO see AbstractEditableFieldSetup
-     *
-     * @param $type string
-     * @param $keydata array
-     * @param $field
-     * @return EditableElement|EditableImage
-     *
-     * @since 0.1.0
-     */
-    private function getReturnObj( $type, $keydata, $field )
-    {
-        switch ($type) {
-
-            case ( 'text' ):
-            case ( 'editor' ):
-            case ( 'textarea' ):
-                return new EditableElement(
-                    $keydata , $field
-                );
-
-                break;
-
-            case ( 'link' ):
-                return new EditableLink(
-                    $keydata, $field
-                );
-
-            case ( 'image' ):
-                return new EditableImage(
-                    $keydata, $field
-                );
-                break;
-        }
     }
 
 
