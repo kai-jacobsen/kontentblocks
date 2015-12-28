@@ -29,7 +29,18 @@
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   position: relative;
   font-weight: 100;
+}
 
+li.kb-module-draft{
+  .kb-module__header{
+      border-left: 3px solid $orange;
+  }
+
+  .kb-status-draft{
+    color: $orange;
+    font-weight: bold;
+    cursor: pointer;
+  }
 }
 
 .kb-module.kb_inactive .kb-module__header, .kb-module.deactivated .kb-module__header {

@@ -1388,7 +1388,6 @@ module.exports = Backbone.Model.extend({
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       ModuleModel.set('moduleData', cdata, {silent: false});
       ModuleModel.View.getDirty();
-      console.log(ModuleModel);
 
     }
   },

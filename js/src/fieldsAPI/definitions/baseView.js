@@ -37,6 +37,10 @@ module.exports = Backbone.View.extend({
       concat.push(this.model.get('index'));
     }
 
+    if (this.model.get('primeKey')) {
+      concat.push(this.model.get('primeKey'));
+    }
+
     return concat.join('.');
   },
   kbfuid: function () {

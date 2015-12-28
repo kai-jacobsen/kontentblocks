@@ -392,6 +392,7 @@ module.exports = Backbone.Model.extend({
       _K.error('Failed to save module data.');
     }
     this.set('moduleData', res.data.newModuleData);
+    this.trigger('module.model.updated', this);
     Notice.notice('Data saved', 'success');
   }
 });
@@ -1394,7 +1395,6 @@ module.exports = BaseView.extend({
   },
   success: function () {
     var state = this.model.get('state');
-
     state.active = !state.active;
     this.model.set('state', state);
     if (state.active) {
@@ -1437,7 +1437,16 @@ module.exports = BaseView.extend({
     return true;
   },
   render: function () {
+    var draft = this.model.get('state').draft;
+    var $parent = this.model.View.$el;
     this.$el.append(tplDraftStatus({draft: this.model.get('state').draft, i18n: KB.i18n.Modules.notices}));
+    if (draft){
+      console.log(this.model.View);
+      $parent.addClass('kb-module-draft');
+    } else {
+      $parent.removeClass('kb-module-draft');
+
+    }
   },
   toggleDraft: function () {
     var that = this;
@@ -1482,7 +1491,7 @@ module.exports = BaseView.extend({
 var BaseView = require('backend/Views/BaseControlView');
 module.exports = BaseView.extend({
   id: 'name',
-  className: 'kb-status-draft',
+  className: 'kb-status-name  ',
   isValid: function () {
     return true;
   },
@@ -2116,10 +2125,6 @@ module.exports = {
     _.each(this.strings, function(string){
       res = res + string + '\n';
     });
-
-    if (tinyMCE.get('content')){
-      tinyMCE.get('content').setContent(res);
-    }
 
     return res;
 
@@ -3110,7 +3115,6 @@ module.exports = Backbone.Model.extend({
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
       ModuleModel.set('moduleData', cdata, {silent: false});
       ModuleModel.View.getDirty();
-      console.log(ModuleModel);
 
     }
   },

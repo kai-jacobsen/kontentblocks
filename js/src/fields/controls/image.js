@@ -165,10 +165,9 @@ module.exports = BaseView.extend({
     this.$title.val('');
   },
   toString: function () {
-    if (this.attachment){
-      console.log(this);
+    if (this.attachment) {
       var size = (this.attachment.get('sizes').thumbnail) ? this.attachment.get('sizes').thumbnail : this.attachment.get('sizes').full;
-      return "<img src='" + size.url +"'>";
+      return "<img src='" + size.url + "'>";
     }
     return '';
 

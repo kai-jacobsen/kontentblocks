@@ -169,10 +169,6 @@ module.exports = {
       res = res + string + '\n';
     });
 
-    if (tinyMCE.get('content')){
-      tinyMCE.get('content').setContent(res);
-    }
-
     return res;
 
   }

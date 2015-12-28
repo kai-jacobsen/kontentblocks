@@ -474,6 +474,10 @@ module.exports = Backbone.View.extend({
       concat.push(this.model.get('index'));
     }
 
+    if (this.model.get('primeKey')) {
+      concat.push(this.model.get('primeKey'));
+    }
+
     return concat.join('.');
   },
   kbfuid: function () {
@@ -521,62 +525,29 @@ module.exports = BaseView.extend({
   templatePath: 'fields/Image',
   template: require('templates/fields/Image.hbs'),
   type: 'image',
-  initialize: function (config) {
-    BaseView.prototype.initialize.call(this, config);
-  },
   render: function (index) {
     return this.template({
-      kbfuid: this.kbfuid(),
-      index: index,
       model: this.model.toJSON(),
       i18n: _.extend(KB.i18n.Refields.image, KB.i18n.Refields.common)
     });
   },
-  setValue: function (value) {
-
-    if (!value){
-      value = this.defaults.value;
-    }
-
-
-    var attrs;
+  postRender: function () {
+    var value = this.model.get('value');
+    var queryargs = {};
     var that = this;
-    var args = {
-      width: 150,
-      height: 150,
-      upscale: false,
-      crop: true
-    };
-
-
-    if (!value.id) {
-      return;
-    }
-    this.model.set('value', value);
-    if (Utilities.stex.get('img' + value.id + 'x' + args.width + 'x' + args.height)) {
-      attrs = that.model.get('value');
-      attrs.url = Utilities.stex.get('img' + value.id + 'x' + args.width + 'x' + args.height);
-    } else {
-      jQuery.ajax({
-        url: ajaxurl,
-        data: {
-          action: "fieldGetImage",
-          args: args,
-          id: value.id,
-          _ajax_nonce: Config.getNonce('read')
-        },
-        type: "POST",
-        dataType: "json",
-        async: false,
-        success: function (res) {
-          Utilities.stex.set('img' + value.id + 'x' + args.width + 'x' + args.height, res.data.src, 60 * 1000 * 60);
-          var attrs = that.model.get('value');
-          attrs.url = res.data.src;
-        },
-        error: function () {
-          _K.error('Unable to get image');
-        }
-      });
+    if (this.model.get('value').id !== '') {
+      queryargs.post__in = [this.model.get('value').id];
+      wp.media.query(queryargs) // set the query
+        .more() // execute the query, this will return an deferred object
+        .done(function () { // attach callback, executes after the ajax call succeeded
+          var attachment = this.first();
+          if (attachment) {
+            attachment.set('attachment_id', attachment.get('id'));
+            if (that.fieldModel && that.fieldModel.FieldControlView) {
+              that.fieldModel.FieldControlView.handleAttachment(attachment);
+            }
+          }
+        });
     }
   }
 });
@@ -586,10 +557,6 @@ module.exports = BaseView.extend({
   templatePath: 'fields/Link',
   template: require('templates/fields/Link.hbs'),
   type: 'link',
-  //initialize:function(){
-    //var fc = KB.FieldControls.add(this.model.toJSON());
-    //BaseView.prototype.initialize.call(this, arguments);
-  //},
   render: function () {
     return this.template({
       i18n: _.extend(KB.i18n.Refields.link, KB.i18n.Refields.common),
@@ -677,43 +644,31 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + ((stack1 = this.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.url : stack1), depth0)) != null ? stack1 : "")
     + "\">\n";
 },"3":function(depth0,helpers,partials,data) {
-    return "        <div style=\"display: none;\">\n";
-},"5":function(depth0,helpers,partials,data) {
-    return "        </div>>\n";
+    return " kb-hide ";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper, alias1=helpers.helperMissing, alias2=this.escapeExpression, alias3=this.lambda;
+    var stack1, alias1=this.lambda, alias2=this.escapeExpression, alias3=helpers.helperMissing;
 
-  return "<div data-kbfuid=\""
-    + alias2(((helper = (helper = helpers.kbfuid || (depth0 != null ? depth0.kbfuid : depth0)) != null ? helper : alias1),(typeof helper === "function" ? helper.call(depth0,{"name":"kbfuid","hash":{},"data":data}) : helper)))
-    + "\"  class=\"kb_field kb-field kb-field--image kb-field-image-container kb-fieldapi-field\">\n    <label class=\"heading\">"
-    + alias2(alias3(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
-    + "</label>\n    <div class='kb-field-image-wrapper'>\n        <div class='kb-js-add-image kb-field-image-container'>\n"
+  return "<div class=\"kb_field kb-field kb-field--image kb-fieldapi-field\">\n    <div class='kb-field-image-wrapper' data-kbfield=\"image\">\n        <div class='kb-js-add-image kb-field-image-container'>\n"
     + ((stack1 = helpers['if'].call(depth0,((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.url : stack1),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + "        </div>\n\n"
+    + "        </div>\n        <div class=\"kb-field-image-meta "
     + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.hideMeta : stack1),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + "\n        <div class=\"kb-js-image-meta-wrapper\">\n            <label>"
-    + ((stack1 = alias3(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.title : stack1), depth0)) != null ? stack1 : "")
-    + "</label>\n            <input class='kb-js-image-title kb-observe' type=\"text\"\n                   name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias1).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
-    + "[title]'\n                   value='"
-    + ((stack1 = alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.title : stack1), depth0)) != null ? stack1 : "")
-    + "'>\n            <label>"
-    + ((stack1 = alias3(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.caption : stack1), depth0)) != null ? stack1 : "")
-    + "</label>\n            <input class='kb-js-image-description kb-observe' type=\"text\"\n                   name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias1).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
-    + "[caption]'\n                   value='"
-    + ((stack1 = alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.caption : stack1), depth0)) != null ? stack1 : "")
-    + "'>\n        </div>\n"
-    + ((stack1 = helpers['if'].call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.hideMeta : stack1),{"name":"if","hash":{},"fn":this.program(5, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + "        <div class=\"kb-field-image--footer\">\n            <a class=\"button kb-js-reset-image\">"
-    + ((stack1 = alias3(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.reset : stack1), depth0)) != null ? stack1 : "")
-    + "</a>\n        </div>\n        <input class='kb-js-image-id' type='hidden'\n               name='"
-    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias1).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + " \">\n            <div class=\"kb-field-image-title\">\n                <label>"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.title : stack1), depth0))
+    + "</label>\n                <input class='kb-js-image-title kb-observe' readonly type=\"text\"\n                       name='"
+    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + "[title]'\n                       value='"
+    + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.title : stack1), depth0)) != null ? stack1 : "")
+    + "'>\n            </div>\n            <div class=\"kb-field-image-description\">\n                <label>"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.description : stack1), depth0))
+    + "</label>\n        <textarea readonly class='kb-js-image-description kb-observe'\n                  name='"
+    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
+    + "[caption]'>\n            "
+    + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.caption : stack1), depth0)) != null ? stack1 : "")
+    + "\n        </textarea>\n            </div>\n        </div>\n        <input class='kb-js-image-id' type='hidden'\n               name='"
+    + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "[id]'\n               value='"
-    + ((stack1 = alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.id : stack1), depth0)) != null ? stack1 : "")
-    + "'>\n    </div>\n    <p class=\"description\">"
-    + alias2(alias3(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</p>\n\n</div>";
+    + ((stack1 = alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1)) != null ? stack1.id : stack1), depth0)) != null ? stack1 : "")
+    + "'>\n    </div>\n    <div class=\"kb-field-image--footer\">\n        <a class=\"button kb-js-reset-image\">Reset</a>\n    </div>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":29}],18:[function(require,module,exports){
@@ -768,13 +723,13 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-text kb-field--text\">\n    <label class=\"heading\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.label : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <input type=\"text\" name=\""
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "\" >\n    <p class=\"description\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.description : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
 },"useData":true});
 
@@ -785,13 +740,13 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
   return "<div class=\"kb-field kb-js-field field-api-textarea\">\n    <label class=\"heading\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.label : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
     + "</label>\n    <textarea name=\""
     + alias2((helpers.fieldName || (depth0 && depth0.fieldName) || helpers.helperMissing).call(depth0,((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.baseId : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1),((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.primeKey : stack1),{"name":"fieldName","hash":{},"data":data}))
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.value : stack1), depth0))
     + "</textarea>\n    <p class=\"description\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.args : stack1)) != null ? stack1.description : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
 },"useData":true});
 

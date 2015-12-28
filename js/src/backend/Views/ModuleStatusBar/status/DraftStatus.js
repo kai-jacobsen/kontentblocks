@@ -12,7 +12,16 @@ module.exports = BaseView.extend({
     return true;
   },
   render: function () {
+    var draft = this.model.get('state').draft;
+    var $parent = this.model.View.$el;
     this.$el.append(tplDraftStatus({draft: this.model.get('state').draft, i18n: KB.i18n.Modules.notices}));
+    if (draft){
+      console.log(this.model.View);
+      $parent.addClass('kb-module-draft');
+    } else {
+      $parent.removeClass('kb-module-draft');
+
+    }
   },
   toggleDraft: function () {
     var that = this;

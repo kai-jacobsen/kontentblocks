@@ -38,7 +38,7 @@
     input{
       border: none !important;
       background-color: transparent !important;
-
+      box-shadow: none !important;
     }
 
     label{
@@ -54,6 +54,8 @@
       width: 100%;
       background-color: transparent !important;
       border: none !important;
+      box-shadow: none !important;
+      resize: none;
     }
 
   }

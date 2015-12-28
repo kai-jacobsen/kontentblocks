@@ -50,7 +50,6 @@ module.exports = Backbone.View.extend({
         section: section,
         index: index
       }));
-      console.log(section);
       var $tabsContainment = jQuery('.kb-field--tabs', $skeleton);
       // append a yet empty content container for the tab
       var $con = jQuery(tabCon({uid: that.model.get('itemId'), index: index})).appendTo($tabsContainment);
@@ -69,12 +68,8 @@ module.exports = Backbone.View.extend({
     _.each(section.fields, function (fieldTpl) { // field is just a reference object and does nothing on it's own
 
       var wrap = Handlebars.compile("<div class='kb-field-wrapper kb-js-field-identifier' data-kbfuid='{{ kbfuid }}' id='{{ kbfuid }}'></div>");
-
       fieldInstance = fieldTpl.view; // get a view for the field, responsibile for the markup
       data = this.model.get('value'); // if not new item a standard backbone model
-      if (!_.isUndefined(data)) {
-        fieldInstance.setValue(data.get(fieldInstance.model.get('primeKey')));
-      }
       fieldInstance.listenTo(this, 'derender', fieldInstance.derender);
       var $wrap = jQuery(wrap({kbfuid: fieldInstance.model.get('uid')}));
       $wrap.append(fieldInstance.render());
@@ -109,6 +104,7 @@ module.exports = Backbone.View.extend({
           var existing = that.Controller.Fields.findWhere({uid: fieldInstance.model.get('uid')});
           if (_.isUndefined(existing)) {
             var model = that.Controller.Fields.add(fieldInstance.model.toJSON());
+            fieldInstance.fieldModel = model;
           } else {
             existing.rebind();
           }

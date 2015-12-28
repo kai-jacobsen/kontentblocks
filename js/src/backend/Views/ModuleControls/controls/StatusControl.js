@@ -43,7 +43,6 @@ module.exports = BaseView.extend({
   },
   success: function () {
     var state = this.model.get('state');
-
     state.active = !state.active;
     this.model.set('state', state);
     if (state.active) {
