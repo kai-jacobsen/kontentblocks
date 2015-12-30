@@ -22,6 +22,21 @@ Class FlexibleFields extends Field
 
     );
 
+    public function setValue( $data )
+    {
+        if (is_array( $data ) && !empty( $data )) {
+            foreach ($data as $key => $value) {
+                if (!is_array( $value ) || !isset( $value['_meta'] )) {
+                    unset( $data[$key] );
+                }
+            }
+        } else {
+            return array();
+        }
+
+        return $data;
+    }
+
 
     /**
      * To make sure that the saving routine doesn't preserve unset
@@ -36,7 +51,6 @@ Class FlexibleFields extends Field
      */
     public function save( $new, $old )
     {
-
         $flatFields = $this->flattenFields();
 
         if (is_null( $new )) {
@@ -44,6 +58,7 @@ Class FlexibleFields extends Field
         }
 
         if (is_array( $new )) {
+
             foreach ($new as $item => $def) {
                 if (isset( $def['_meta']['delete'] )) {
                     $new[$item] = null;
@@ -80,6 +95,7 @@ Class FlexibleFields extends Field
         return $new;
     }
 
+
     private function flattenFields()
     {
         $flat = array();
@@ -100,12 +116,11 @@ Class FlexibleFields extends Field
      */
     public function prepareFormValue( $value )
     {
-
+        return $value;
     }
 
     public function prepare()
     {
-
         if (is_callable( $this->getArg( 'fields', null ) )) {
             $manager = new FlexFieldsManager( $this );
             $manager = call_user_func( $this->getArg( 'fields' ), $manager );
@@ -114,6 +129,4 @@ Class FlexibleFields extends Field
         }
         return $this->setArgs( array( 'fields' => false ) );
     }
-
-
 }

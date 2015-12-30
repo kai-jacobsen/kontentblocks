@@ -1496,8 +1496,8 @@ module.exports = Backbone.Collection.extend({
         if (!this._byArea[areaid]){
           this._byArea[areaid] = {};
         }
+        this._byArea[areaid][model.id] = model;
       }
-      this._byArea[areaid][model.id] = model;
       this._byModule[cid][model.id] = model;
     }
   },
@@ -3585,7 +3585,7 @@ module.exports = Backbone.View.extend({
       return this;
     }
 
-    if (keepinhistory){
+    if (keepinhistory) {
       this.history.prepend(this.ModuleView);
     }
 
@@ -3648,15 +3648,20 @@ module.exports = Backbone.View.extend({
   destroy: function () {
     var that = this;
     this.stopListening(KB.Events, 'modal.refresh', this.reload);
-
     that.detach();
     that.history.reset();
     jQuery('.wp-editor-area', this.$el).each(function (i, item) {
       tinymce.remove('#' + item.id);
     });
+    that.ModuleView = null;
     that.unbind();
     that.initialized = false;
     that.$el.detach();
+
+    if (KB.Sidebar.visible) {
+      KB.Sidebar.$el.css('width', "");
+    }
+
   },
 
   /**
@@ -3669,6 +3674,7 @@ module.exports = Backbone.View.extend({
       this.mode = 'sidebar';
       this.listenToOnce(KB.Sidebar, 'sidebar.close', function () {
         this.mode = 'body';
+        this.$el.removeClass('kb-modal-sidebar');
         this.destroy();
       });
       KB.Sidebar.clearTimer();
@@ -3874,6 +3880,8 @@ module.exports = Backbone.View.extend({
       var cWidth = (settings.controls && settings.controls.width) || 600;
       KB.Sidebar.$el.width(cWidth);
       this.$el.addClass('kb-modal-sidebar');
+      this.$el.width(cWidth);
+
     }
 
   },
@@ -3892,6 +3900,7 @@ module.exports = Backbone.View.extend({
    * @param showNotice show update notice or don't
    */
   serialize: function (mode, showNotice) {
+
     var that = this, mdata,
       save = mode || false,
       notice = (showNotice !== false),
@@ -3900,6 +3909,7 @@ module.exports = Backbone.View.extend({
 
     tinymce.triggerSave();
     var moddata = this.formdataForId(this.realmid);
+
     this.model.set('moduleData', moddata);
     this.LoadingAnimation.show(0.5);
     this.model.sync(save, this).done(function (res, b, c) {
@@ -3909,7 +3919,6 @@ module.exports = Backbone.View.extend({
   // serialize success callback
   moduleUpdated: function (res, b, c, save, notice) {
     var that = this, height;
-
     if (res.data.json && res.data.json.Fields) {
       KB.FieldControls.updateModels(res.data.json.Fields);
     }

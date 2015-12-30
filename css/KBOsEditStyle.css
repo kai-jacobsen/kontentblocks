@@ -13,7 +13,7 @@
 
 /* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-box-border {
-  border: 1px solid #212121; }
+  border: 1px solid #23282d; }
 
 /* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_base.scss */
 .base-transition-timing {
@@ -217,7 +217,7 @@ body.onsite-editing #onsite-modal {
     height: 31px;
     line-height: 30px;
     cursor: move;
-    background: #212121;
+    background: #23282d;
     color: #fff;
     font-weight: 100;
     box-sizing: border-box;

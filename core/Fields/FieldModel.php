@@ -66,6 +66,7 @@ class FieldModel extends EntityModel
         unset( $vars['_initialized'] );
         unset( $vars['_originalData'] );
         unset( $vars['singleValue'] );
+
         return $vars;
     }
 

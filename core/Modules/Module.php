@@ -126,10 +126,15 @@ abstract class Module implements EntityInterface
      * Setup Module Data
      * @param array $data
      */
-    public function updateModuleData( $data = array() )
+    public function updateModuleData( $data = array(), $hard = false )
     {
 
+        if ($hard){
+            $this->model = new ModuleModel($data, $this);
+        }
+
         $this->model->set( $data );
+
         if ($this->fields) {
             $this->fields->updateData();
         }
@@ -195,7 +200,9 @@ abstract class Module implements EntityInterface
         if (isset( $this->fields )) {
             $this->setupFrontendData();
         }
+
         $this->view = $this->getView();
+
         return $this->render();
 
     }
@@ -207,6 +214,7 @@ abstract class Module implements EntityInterface
      */
     private function setupFrontendData()
     {
+
         if ($this->model->hasData()) {
             foreach ($this->model as $key => $v) {
                 /** @var \Kontentblocks\Fields\Field $field */
@@ -216,6 +224,7 @@ abstract class Module implements EntityInterface
                 ) : $v;
             }
         }
+
     }
 
     /**

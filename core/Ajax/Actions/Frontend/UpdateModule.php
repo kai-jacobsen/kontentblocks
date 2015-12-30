@@ -55,7 +55,6 @@ class UpdateModule implements AjaxActionInterface
         if ($postdata->update) {
             $module->model->sync(true);
         }
-
         $return = array(
             'html' => $module->module(),
             'newModuleData' => $mergedData,

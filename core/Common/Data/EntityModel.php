@@ -34,16 +34,19 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      */
     public function set( $data )
     {
-        if (!is_array( $data ) && !is_null($data)) {
+        if (!is_array( $data ) && !is_null( $data )) {
             $this->singleValue = $data;
             return $this;
         }
 
-        if (is_array($data)){
+        if (is_array( $data )) {
             foreach ($data as $key => $v) {
+                if (is_null($v)){
+                    unset($this->$key);
+                }
                 $this->$key = $v;
             }
-            wp_parse_args( $this->_originalData, $data );
+            $this->_originalData = $data;
         }
     }
 

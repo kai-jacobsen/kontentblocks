@@ -16,7 +16,8 @@ class FlexibleFieldsReturn
     /**
      * @var \Kontentblocks\Fields\Definitions\FlexibleFields
      */
-    protected $field;
+    public $field;
+    public $salt;
     /**
      * @var string id of parent module
      */
@@ -35,19 +36,20 @@ class FlexibleFieldsReturn
      */
     protected $sections;
 
-    public $salt;
-
     /**
      * Class Constructor
      * @since 0.1.0
      *
+     * @param $value
      * @param FlexibleFields $field
+     * @param $salt
      */
     public function __construct( $value, FlexibleFields $field, $salt )
     {
+
         $this->field = $field;
         $this->key = $field->getKey();
-        $this->fieldData = $field->getValue();
+        $this->fieldData = $value;
         $this->entityId = $field->getFieldId();
         $this->sections = $field->getArg( 'fields' );
         $this->items = $this->setupItems();
@@ -61,8 +63,12 @@ class FlexibleFieldsReturn
      */
     public function setupItems()
     {
-        if (!empty($this->items)){
+        if (!empty( $this->items )) {
             return $this->items;
+        }
+
+        if (!is_array( $this->fieldData )) {
+            return array();
         }
 
         $registry = Kontentblocks()->getService( 'registry.fields' );
@@ -76,10 +82,6 @@ class FlexibleFieldsReturn
 
             $item = array();
             foreach ($fields as $key => $conf) {
-                if (empty( $data[$key] )) {
-                    $data[$key] = $conf['std'] || '';
-                };
-
 
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $registry->getField( $conf['type'], $this->entityId, $index, $key );
@@ -87,12 +89,17 @@ class FlexibleFieldsReturn
                 $field->setData( $data[$key] );
                 $field->setArgs( array( 'index' => $index, 'arrayKey' => $this->key ) );
                 $field->setArgs( $conf );
-                $item[$key] = $field->getFrontendValue($this->salt);
+                $item[$key] = $field->getFrontendValue( $this->salt );
 
             }
-            $items[] = $item;
+            $items[$index] = $item;
         }
-        d($items);
+
+        $original = $this->field->model->getOriginalData();
+        if (is_array( $original )) {
+            $items = array_replace( $original, array_intersect_key( $items, $original ) );
+        }
+
         return $items;
     }
 

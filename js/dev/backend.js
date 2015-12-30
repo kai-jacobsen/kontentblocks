@@ -3203,8 +3203,8 @@ module.exports = Backbone.Collection.extend({
         if (!this._byArea[areaid]){
           this._byArea[areaid] = {};
         }
+        this._byArea[areaid][model.id] = model;
       }
-      this._byArea[areaid][model.id] = model;
       this._byModule[cid][model.id] = model;
     }
   },

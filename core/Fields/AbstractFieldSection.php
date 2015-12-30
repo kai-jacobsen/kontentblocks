@@ -127,6 +127,7 @@ abstract class AbstractFieldSection implements Exportable
                 } else {
                     $fielddata = ( isset( $data[$newField->getKey()] ) ) ? $data[$newField->getKey()] : array();
                 }
+
                 $newField->setData( $fielddata );
                 $this->_increaseVisibleFields();
                 $this->orderFields();

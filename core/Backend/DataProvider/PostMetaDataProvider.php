@@ -148,6 +148,7 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
+        clean_post_cache($this->getPostId());
         $this->_getPostCustom();
 
         return $this;

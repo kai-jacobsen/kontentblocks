@@ -200,7 +200,6 @@ abstract class Field implements Exportable
 
     public function setData( $data )
     {
-
         $data = $this->setValue( $data );
 
         if (is_null( $this->model )) {
@@ -208,8 +207,8 @@ abstract class Field implements Exportable
         } else {
             $this->model->set( $data );
         }
-
         $this->value = $this->model->export();
+
     }
 
     /**
@@ -258,6 +257,7 @@ abstract class Field implements Exportable
     public function getValue( $arrKey = null, $return = '' )
     {
         $data = $this->model->export();
+
         if ($this->getCallback( 'get.value' )) {
             $data = call_user_func( $this->getCallback( 'get.value' ), $data );
         }
@@ -269,6 +269,7 @@ abstract class Field implements Exportable
         if (!is_null( $arrKey ) && is_array( $data ) && isset( $data[$arrKey] )) {
             return $data[$arrKey];
         }
+
 
         return $this->getArg( 'std', $return );
     }
@@ -547,9 +548,12 @@ abstract class Field implements Exportable
      */
     public function getFrontendValue( $salt = null )
     {
+
         if (!is_null( $this->userValue )) {
             return $this->userValue;
         }
+
+
         $value = $this->prepareFrontend( $this->getValue() );
         if ($this->getArg( 'returnObj' )) {
             $classname = $this->getArg( 'returnObj' );

@@ -34,7 +34,7 @@ class RemoteGetEditor implements AjaxActionInterface
         ob_start();
         Utilities::editor(
             $request->getFiltered( 'editorId', FILTER_SANITIZE_STRING ),
-            $request->getFiltered( 'editorContent', FILTER_SANITIZE_STRING ),
+            $request->getFiltered( 'editorContent', FILTER_UNSAFE_RAW ),
             $request->getFiltered( 'editorName', FILTER_SANITIZE_STRING ),
             $media,
             $settings

@@ -232,7 +232,6 @@ function getPostPanelView( $tpl = null, $panelId = null, $postId = null )
 {
     $model = getPostPanelModel( $panelId, $postId );
     if (!is_null( $model )) {
-
         return new SimpleView( $tpl, $model->export() );
 
     }

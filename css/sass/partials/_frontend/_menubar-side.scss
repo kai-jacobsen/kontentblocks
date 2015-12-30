@@ -2,6 +2,15 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   top: 32px;
 }
 
+.kb-sidebar-wrap * {
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: normal;
+
+  .dashicons{
+    font-family: 'dashicons';
+  }
+}
+
 .kb-sidebar-wrap {
   height: 100vh;
   width: 340px;
@@ -17,12 +26,22 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   opacity: 1;
 
   &.kb-opaque {
-    opacity: .3;
+    opacity: .7;
   }
 
   #onsite-modal.kb-modal-sidebar {
-    top: 29px;
+    top: 29px !important;
     border-top: 0;
+    border: none !important;
+    overflow: hidden;
+
+    .kb-nano{
+      height: 100% !important;
+    }
+
+    .kb-nano-content{
+      padding-bottom: 100px;
+    }
   }
 
 }
@@ -66,7 +85,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
   .kb-sidebar__add-module {
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 8px;
     cursor: pointer;
     opacity: 0.5;
     transition: opacity .3s ease-out;
@@ -136,7 +155,7 @@ body.admin-bar .kb-sidebar-wrap, body.admin-bar .kb-sidebar-extension {
 .kb-sidebar-item__actions {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 7px;
 
   .kb-sidebar__module-update {
     opacity: 0.1;
@@ -242,7 +261,7 @@ body.onsite-editing .kb-in-sidebar-active {
 }
 
 .kb-sidebar__subheader {
-  font-size: 14px;
+  font-size: 13px;
   padding: 4px 8px;
   //background-color: darken(#3b5963, 10%);
   background-color: $grey-900;
@@ -257,7 +276,7 @@ body.onsite-editing .kb-in-sidebar-active {
     padding: 0 !important;
 
     li {
-      font-size: 14px;
+      font-size: 13px;
       border-bottom: 1px solid #ccc;
       background-color: #fcfcfc;
       padding: 5px 8px 5px 35px;
@@ -318,7 +337,7 @@ body.onsite-editing .kb-in-sidebar-active {
     margin: 0;
 
     li.kb-sidebar-module {
-      font-size: 14px;
+      font-size: 13px;
       background-color: #fcfcfc;
       border-bottom: 1px solid #ccc;
       position: relative;
