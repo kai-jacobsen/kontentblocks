@@ -95,7 +95,7 @@ class FlexibleFieldsReturn
             $items[$index] = $item;
         }
 
-        $original = $this->field->model->getOriginalData();
+        $original = $this->field->getValue();
         if (is_array( $original )) {
             $items = array_replace( $original, array_intersect_key( $items, $original ) );
         }

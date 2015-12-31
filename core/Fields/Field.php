@@ -202,12 +202,13 @@ abstract class Field implements Exportable
     {
         $data = $this->setValue( $data );
 
-        if (is_null( $this->model )) {
-            $this->model = new FieldModel( $data, $this );
-        } else {
-            $this->model->set( $data );
-        }
-        $this->value = $this->model->export();
+//        if (is_null( $this->model )) {
+//            $this->model = new FieldModel( $data, $this );
+//        } else {
+//            $this->model->set( $data );
+//        }
+//        $this->value = $this->model->export();
+        $this->value = $data;
 
     }
 
@@ -256,7 +257,7 @@ abstract class Field implements Exportable
      */
     public function getValue( $arrKey = null, $return = '' )
     {
-        $data = $this->model->export();
+        $data = $this->value;
 
         if ($this->getCallback( 'get.value' )) {
             $data = call_user_func( $this->getCallback( 'get.value' ), $data );

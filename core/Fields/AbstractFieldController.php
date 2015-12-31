@@ -162,15 +162,6 @@ abstract class AbstractFieldController
 
     abstract public function addSection( $sectionId, $args = array() );
 
-    /**
-     * @param array $model
-     * @return $this
-     */
-    public function setModel( $model )
-    {
-        $this->model = $model;
-        return $this;
-    }
 
     /**
      * @return array

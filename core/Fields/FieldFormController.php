@@ -160,10 +160,10 @@ class FieldFormController
 
         // custom method on field instance level wins over class method
         if ($this->field->getCallback( 'form.value' )) {
-            $this->field->model->set(call_user_func( $this->field->getCallback( 'form.value' ), $value ));
+            $this->field->setValue(call_user_func( $this->field->getCallback( 'form.value' ), $value ));
         } // custom method on field class level
         else {
-            $this->field->model->set($this->field->prepareFormValue( $value ));
+            $this->field->setValue($this->field->prepareFormValue( $value ));
         }
 
         // When viewing from the frontend, an optional method can be used for the output
