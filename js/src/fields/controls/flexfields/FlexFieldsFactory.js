@@ -8,6 +8,8 @@ module.exports = Backbone.View.extend({
   factorNewItem: function (data, uid, title) {
     var itemId = uid || _.uniqueId('ff2');
     title = title || prompt("Enter a title : ", itemId);
+
+
     var sections = _.clone(this.sections);
     _.each(sections, function (section) {
       _.each(section.fields, function (field) {

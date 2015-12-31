@@ -1,10 +1,10 @@
-<input type="hidden" name="{{ inputName }}[_uid]" value="{{ uid }}">
+<input type="hidden" name="{{ inputName }}[_meta][uid]" value="{{ uid }}">
 <div class="flexible-fields--section-box">
     <div class="flexible-fields--section-title">
         <h3>
             <span class="genericon genericon-draggable flexible-fields--js-drag-handle"></span>
             <span class="dashicons dashicons-trash flexible-fields--js-trash"></span>
-            <input type="text" value="{{ item._tab.title }}" name="{{ inputName }}[_tab][title] ">
+            <input type="text" value="{{ item.title }}" name="{{ inputName }}[_meta][title] ">
         </h3>
     </div>
     <div class="kb-field--tabs kb_fieldtabs">

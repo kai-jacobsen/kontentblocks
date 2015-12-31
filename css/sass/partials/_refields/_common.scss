@@ -8,6 +8,7 @@
 }
 
 .kb-field {
+
   label.heading {
     display: block;
     margin-bottom: 12px;
@@ -20,7 +21,7 @@
     color: #333333;
   }
 
-  background-color: #fff;
+  //background-color: #fff;
   padding: 10px 10px 0px 12px;
   text-align: left !important;
 
@@ -72,8 +73,39 @@
 
 }
 
+body .kb-field-wrapper{
+  border-left: 1px solid transparent;
+
+  &:hover{
+    border-left: 2px solid #ccc;
+
+  }
+
+  .kb-field-wrapper:hover{
+    border-left: none;
+
+  }
+
+}
+
 .kb-field-wrapper {
   padding: $halfpadding 0;
+  border-bottom: 1px dotted #eaeaea;
+  position: relative;
+
+  .kb-field-type-label{
+    font-size: 9px !important;
+    color: #666;
+    text-transform: capitalize;
+    padding: 1px 4px;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  &:hover{
+    background-color: #fafafa;
+  }
 
   &.field-has-description {
 

@@ -78,6 +78,7 @@ module.exports = Backbone.View.extend({
   },
   addItem: function () {
     var item = this.factory.factorNewItem();
+
     var view = new this.Renderer({
       controller: this,
       model: new Backbone.Model(item)

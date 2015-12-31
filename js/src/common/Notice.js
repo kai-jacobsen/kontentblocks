@@ -13,5 +13,13 @@ module.exports =
     }, function () {
       no.call(scope);
     });
+  },
+  prompt: function (title, msg, value, yes, no, scope) {
+    var t = title || 'Title';
+    window.alertify.prompt(t, msg, value, function () {
+      yes.call(scope);
+    }, function () {
+      no.call(scope);
+    });
   }
 };

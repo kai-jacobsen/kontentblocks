@@ -168,6 +168,14 @@ module.exports =
     }, function () {
       no.call(scope);
     });
+  },
+  prompt: function (title, msg, value, yes, no, scope) {
+    var t = title || 'Title';
+    window.alertify.prompt(t, msg, value, function () {
+      yes.call(scope);
+    }, function () {
+      no.call(scope);
+    });
   }
 };
 
@@ -535,7 +543,7 @@ module.exports = BaseView.extend({
     var value = this.model.get('value');
     var queryargs = {};
     var that = this;
-    if (this.model.get('value').id !== '') {
+    if (!_.isEmpty(this.model.get('value').id )) {
       queryargs.post__in = [this.model.get('value').id];
       wp.media.query(queryargs) // set the query
         .more() // execute the query, this will return an deferred object

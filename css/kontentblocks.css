@@ -5242,10 +5242,9 @@ body.kontentblocks-ready .kb-fullscreen--holder {
 
 /* line 10, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field {
-  background-color: #fff;
   padding: 10px 10px 0px 12px;
   text-align: left !important; }
-  /* line 11, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  /* line 12, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field label.heading {
     display: block;
     margin-bottom: 12px;
@@ -5256,7 +5255,7 @@ body.kontentblocks-ready .kb-fullscreen--holder {
     font-weight: 900;
     font-size: 14px;
     color: #333333; }
-  /* line 28, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  /* line 29, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field input[type=text] {
     display: inline-block;
     text-align: left;
@@ -5271,10 +5270,10 @@ body.kontentblocks-ready .kb-fullscreen--holder {
     -webkit-transition: width .2s ease-out;
     transition: width .2s ease-out;
     margin: 0; }
-    /* line 45, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+    /* line 46, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
     .kb-field input[type=text].large {
       width: 90%; }
-  /* line 55, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  /* line 56, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field select {
     min-width: 200px;
     max-width: 50%;
@@ -5282,28 +5281,52 @@ body.kontentblocks-ready .kb-fullscreen--holder {
     padding: 0px 4px !important;
     line-height: 30px;
     margin: 0 !important; }
-  /* line 64, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  /* line 65, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field input[type=checkbox] {
     margin-right: 3px;
     line-height: 150%; }
-  /* line 69, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  /* line 70, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field select {
     min-width: 200px; }
 
-/* line 75, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+/* line 76, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+body .kb-field-wrapper {
+  border-left: 1px solid transparent; }
+  /* line 79, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  body .kb-field-wrapper:hover {
+    border-left: 2px solid #ccc; }
+  /* line 84, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  body .kb-field-wrapper .kb-field-wrapper:hover {
+    border-left: none; }
+
+/* line 91, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field-wrapper {
-  padding: 12px 0; }
-  /* line 80, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  padding: 12px 0;
+  border-bottom: 1px dotted #eaeaea;
+  position: relative; }
+  /* line 96, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  .kb-field-wrapper .kb-field-type-label {
+    font-size: 9px !important;
+    color: #666;
+    text-transform: capitalize;
+    padding: 1px 4px;
+    position: absolute;
+    top: 0;
+    right: 0; }
+  /* line 106, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  .kb-field-wrapper:hover {
+    background-color: #fafafa; }
+  /* line 112, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field-wrapper.field-has-description label.heading {
     margin-bottom: 0; }
-  /* line 84, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+  /* line 116, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
   .kb-field-wrapper.field-has-description p.description {
     font-size: 12px;
     margin-bottom: 12px;
     font-style: normal;
     display: block; }
 
-/* line 93, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+/* line 125, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field--reset {
   margin: 0;
   font-size: 12px; }
@@ -5585,8 +5608,9 @@ button.Zebra_DatePicker_Icon_Inside {
   /* line 49, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
   .kb-field--image .kb-field-image-meta {
     display: inline-block;
-    vertical-align: top; }
-    /* line 53, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
+    vertical-align: top;
+    padding: 8px; }
+    /* line 54, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
     .kb-field--image .kb-field-image-meta textarea {
       width: 100%;
       background-color: transparent !important;
@@ -5594,13 +5618,13 @@ button.Zebra_DatePicker_Icon_Inside {
       -webkit-box-shadow: none !important;
       box-shadow: none !important;
       resize: none; }
-  /* line 63, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
+  /* line 64, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
   .kb-field--image .kb-field-image--footer {
     clear: both;
     margin-top: 10px;
     padding: 8px 0; }
 
-/* line 72, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
+/* line 73, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_image.scss */
 .kb-image-frame .attachment-display-settings, .kb-image-frame [data-setting="alt"], .kb-image-frame [data-setting="description"] {
   display: none !important; }
 
@@ -5678,16 +5702,20 @@ button.Zebra_DatePicker_Icon_Inside {
     padding: 0; }
 
 /* line 1, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+.flexible-fields--header {
+  padding: 10px 0; }
+
+/* line 5, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--toggle-title {
   background-color: #fafafa;
   border: 1px solid #ccc;
   position: relative; }
-  /* line 6, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+  /* line 10, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
   .flexible-fields--toggle-title h3 {
     padding: 3px !important;
     margin: 0 !important;
     font-size: 16px !important; }
-  /* line 12, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+  /* line 16, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
   .flexible-fields--toggle-title input[type="text"] {
     font-size: 13px !important;
     padding-left: 15px;
@@ -5696,16 +5724,16 @@ button.Zebra_DatePicker_Icon_Inside {
     border-bottom: 1px solid transparent;
     display: inline-block;
     margin: 0 !important; }
-    /* line 21, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+    /* line 25, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
     .flexible-fields--toggle-title input[type="text"]:hover {
       border-color: #ccc;
       background-color: #fafafa; }
-    /* line 26, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+    /* line 30, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
     .flexible-fields--toggle-title input[type="text"]:focus {
       background-color: #fff !important;
       -webkit-box-shadow: none;
       box-shadow: none; }
-  /* line 32, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+  /* line 36, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
   .flexible-fields--toggle-title .flexible-fields--js-toggle {
     font-size: 18px !important;
     position: relative;
@@ -5713,13 +5741,13 @@ button.Zebra_DatePicker_Icon_Inside {
     left: 3px;
     cursor: pointer;
     color: #999; }
-    /* line 40, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+    /* line 44, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
     .flexible-fields--toggle-title .flexible-fields--js-toggle:hover {
       color: #333; }
-  /* line 45, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+  /* line 49, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
   .flexible-fields--toggle-title .flexible-fields--js-drag-handle {
     cursor: move; }
-    /* line 48, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+    /* line 52, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
     .flexible-fields--toggle-title .flexible-fields--js-drag-handle:before {
       top: 3px;
       position: relative;
@@ -5727,7 +5755,7 @@ button.Zebra_DatePicker_Icon_Inside {
       left: -3px;
       color: #666;
       text-shadow: 1px 1px 1px #FFF; }
-  /* line 59, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+  /* line 63, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
   .flexible-fields--toggle-title .flexible-fields--js-trash {
     position: absolute;
     right: 15px;
@@ -5735,22 +5763,22 @@ button.Zebra_DatePicker_Icon_Inside {
     top: 11px;
     color: #999;
     cursor: pointer; }
-    /* line 67, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+    /* line 71, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
     .flexible-fields--toggle-title .flexible-fields--js-trash:hover {
       color: #333; }
 
-/* line 73, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 77, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .flexible-fields--section-box {
   border: 1px solid #cecece;
   padding: 12px; }
 
-/* line 81, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+/* line 85, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
 .os-content-inner .flexible-fields--item-list {
   list-style: none;
   margin: 0;
   padding: 0;
   margin-bottom: 20px; }
-  /* line 87, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
+  /* line 91, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_flexible-fields.scss */
   .os-content-inner .flexible-fields--item-list li {
     margin-bottom: 10px; }
 

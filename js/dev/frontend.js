@@ -450,6 +450,14 @@ module.exports =
     }, function () {
       no.call(scope);
     });
+  },
+  prompt: function (title, msg, value, yes, no, scope) {
+    var t = title || 'Title';
+    window.alertify.prompt(t, msg, value, function () {
+      yes.call(scope);
+    }, function () {
+      no.call(scope);
+    });
   }
 };
 
@@ -3565,9 +3573,9 @@ module.exports = Backbone.View.extend({
   },
   events: {
     'keyup': 'delayInput',
-    'click a.close-controls': 'destroy',
-    'click a.kb-save-form': 'update',
-    'click a.kb-preview-form': 'preview',
+    'click .close-controls': 'destroy',
+    'click .kb-save-form': 'update',
+    'click .kb-preview-form': 'preview',
     'change .kb-template-select': 'viewfileChange'
   },
   /**
@@ -6251,13 +6259,13 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 
   return "<h2 class=\"controls-title\">Module: <span> "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.settings : stack1)) != null ? stack1.name : stack1), depth0))
-    + "</span></h2>\n<div class=\"kb-modal__draft-notice\" style=\"display: none;\">Draft Message</div>\n<a class=\"dashicons dashicons-no close-controls kb-button\"></a>\n<div class=\"kb-controls--buttons-wrap\">\n    <a class=\"kb-modal-history-back kb-button kb-button-secondary\">&laquo; previous module</a>\n    <a class=\"kb-save-form kb-button kb-button-primary\" title=\""
+    + "</span></h2>\n<div class=\"kb-modal__draft-notice\" style=\"display: none;\">Draft Message</div>\n<div class=\"dashicons dashicons-no close-controls kb-button\"></div>\n<div class=\"kb-controls--buttons-wrap\">\n    <div class=\"kb-modal-history-back kb-button kb-button-secondary\">&laquo; previous module</div>\n    <div class=\"kb-save-form kb-button kb-button-primary\" title=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.frontendModal : stack1)) != null ? stack1.modalSave : stack1), depth0))
     + "\">\n        <div class=\"dashicons dashicons-update\"></div>"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.frontendModal : stack1)) != null ? stack1.modalSave : stack1), depth0))
-    + "<span\n            class=\"kb-dirty-notice\">*</span></a>\n    <a class=\"kb-preview-form kb-button kb-button-secondary\">"
+    + "<span\n            class=\"kb-dirty-notice\">*</span></div>\n    <div class=\"kb-preview-form kb-button kb-button-secondary\">"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.frontendModal : stack1)) != null ? stack1.modalPreview : stack1), depth0))
-    + "</a>\n\n</div>\n<form id=\"onsite-form\" class=\"wp-core-ui wp-admin kb-nano\">\n    <div class=\"kb-nano-content\" id=\"onsite-content\">\n\n        <div class=\"os-content-inner kb-module\">\n\n        </div>\n    </div>\n</form>";
+    + "</div>\n\n</div>\n<form id=\"onsite-form\" class=\"wp-core-ui wp-admin kb-nano\">\n    <div class=\"kb-nano-content\" id=\"onsite-content\">\n\n        <div class=\"os-content-inner kb-module\">\n\n        </div>\n    </div>\n</form>";
 },"useData":true});
 
 },{"hbsfy/runtime":111}],91:[function(require,module,exports){

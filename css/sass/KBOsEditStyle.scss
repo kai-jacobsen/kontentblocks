@@ -225,8 +225,19 @@ body.onsite-editing {
 }
 
 // experiments
+#onsite-modal  {
+  h2,a,p,h3,h4{
+    font-family: 'Open Sans', sans-serif !important;
+  }
+
+  .kb-module{
+    padding: 0;
+  }
+}
+
 #onsite-modal * {
   box-sizing: border-box;
+
 }
 
 //#onsite-modal .kb-field *, #onsite-modal .kb-template-selector--wrapper * {
@@ -236,6 +247,8 @@ body.onsite-editing {
 #onsite-modal a:hover {
   text-decoration: none;
 }
+
+
 
 #onsite-modal {
   font-family: 'Open Sans', sans-serif;
@@ -270,11 +283,12 @@ body.onsite-editing {
     border-bottom: 1px solid #aaa;
   }
 
+
   .os-controls-meta {
     background-color: #333;
   }
 
-  a.close-controls {
+  .close-controls {
     position: absolute;
     top: 5px;
     right: 3px;
@@ -289,7 +303,7 @@ body.onsite-editing {
     }
   }
 
-  a.kb-save-form {
+  .kb-save-form {
     position: relative;
     height: 30px;
     font-size: 11px !important;
@@ -341,7 +355,7 @@ body.onsite-editing {
     right: 25px;
   }
 
-  a.kb-preview-form, .kb-modal-history-back {
+  .kb-preview-form, .kb-modal-history-back {
     height: 30px;
     font-size: 11px !important;
     padding: 0 12px;

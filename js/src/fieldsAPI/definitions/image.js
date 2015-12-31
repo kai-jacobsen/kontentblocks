@@ -18,7 +18,7 @@ module.exports = BaseView.extend({
     var value = this.model.get('value');
     var queryargs = {};
     var that = this;
-    if (this.model.get('value').id !== '') {
+    if (!_.isEmpty(this.model.get('value').id )) {
       queryargs.post__in = [this.model.get('value').id];
       wp.media.query(queryargs) // set the query
         .more() // execute the query, this will return an deferred object

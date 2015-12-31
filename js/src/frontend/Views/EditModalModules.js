@@ -79,9 +79,9 @@ module.exports = Backbone.View.extend({
   },
   events: {
     'keyup': 'delayInput',
-    'click a.close-controls': 'destroy',
-    'click a.kb-save-form': 'update',
-    'click a.kb-preview-form': 'preview',
+    'click .close-controls': 'destroy',
+    'click .kb-save-form': 'update',
+    'click .kb-preview-form': 'preview',
     'change .kb-template-select': 'viewfileChange'
   },
   /**
