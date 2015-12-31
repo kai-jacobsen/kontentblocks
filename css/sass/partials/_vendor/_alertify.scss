@@ -95,8 +95,9 @@
   margin-bottom: 0;
   padding: 8px $fullpadding;
   font-size: 14px;
-  color: #fff;
-  background-color: $grey-900;
+  color: #333;
+  background-color: $lightwhite;
+  border-bottom: 1px solid #ccc;
 }
 
 .alertify .ajs-body {
@@ -108,11 +109,12 @@
 }
 
 .alertify .ajs-footer {
-  padding: 4px;
+  padding: 0px;
   margin-left: -24px;
   margin-right: -24px;
   min-height: 43px;
-  background-color: #fff;
+  background-color: $lightwhite;
+  border-top: 1px solid #ccc;
 }
 
 .alertify .ajs-footer .ajs-buttons.ajs-primary {
@@ -125,15 +127,18 @@
     padding: 6px !important;
     background-color: #fff !important;
     color: $lightwhite !important;
+    cursor: pointer;
   }
 
   button.ajs-button.ajs-ok{
-    background-color: $green !important;
+    background-color: $lightblue !important;
     color: #fff !important;
+    border: none !important;
   }
   button.ajs-button.ajs-cancel{
-    background-color: $orange !important;
+    background-color: $red !important;
     color: #fff !important;
+    border: none !important;
 
   }
 }

@@ -32,7 +32,7 @@ module.exports = BaseView.extend({
         this.unmark();
       }
     } else {
-      Notice.confirm('', KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
+      Notice.confirm('Delete Module?', KB.i18n.EditScreen.notices.confirmDeleteMsg, this.yes, this.no, this);
     }
 
   },
