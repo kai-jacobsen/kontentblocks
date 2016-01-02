@@ -97,10 +97,8 @@ class BackupInspect
         $storage = new ModuleStorage( $postId );
         $backupManager = new BackupDataStorage( $storage );
         $backups = $backupManager->queryBackup( $postId );
-
         $return = ( !empty( $backups ) ) ? unserialize( base64_decode( $backups->value ) ) : array();
         $this->backupData = $return;
-
         wp_send_json( $return );
     }
 

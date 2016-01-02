@@ -1359,7 +1359,7 @@ module.exports = Backbone.Model.extend({
   bindHandlers: function () {
     this.listenTo(this, 'field.model.settings', this.updateLinkedFields);
     this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
+    this.listenTo(this.ModuleModel, 'change:entityData', this.setData); // reassign data when parent obj data changes
     this.listenTo(this.ModuleModel, 'module.model.updated', this.getClean); // set state to clean
     this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes
     this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind); // before the frontend modal reloads the parent obj
@@ -1416,16 +1416,16 @@ module.exports = Backbone.Model.extend({
       }
     }
     // the parent obj data
-    mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
+    mData = Utilities.getIndex(ModuleModel.get('entityData'), this.get('kpath'));
     this.set('value', _.extend(mData, addData)); // set merged data to this.value
   },
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {
     var ModuleModel;
     if (ModuleModel = this.get('ModuleModel')) {
-      var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
+      var cdata = _.clone(this.get('ModuleModel').get('entityData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
-      ModuleModel.set('moduleData', cdata, {silent: false});
+      ModuleModel.set('entityData', cdata, {silent: false});
       ModuleModel.View.getDirty();
 
     }
@@ -1497,7 +1497,7 @@ var FieldControlModel = require('./FieldControlModel');
 module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
+    this.listenTo(this.ModuleModel, 'change:entityData', this.setData);
     this.listenTo(KB.Events, 'modal.reload', this.rebind);
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
@@ -2695,10 +2695,10 @@ module.exports = BaseView.extend({
     var that = this;
     var id = attachment.get('id');
     var value = this.prepareValue(attachment);
-    var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
+    var entityData = _.clone(this.model.get('ModuleModel').get('entityData'));
     var path = this.model.get('kpath');
-    Utilities.setIndex(moduleData, path, value);
-    this.model.get('ModuleModel').set('moduleData', moduleData);
+    Utilities.setIndex(entityData, path, value);
+    this.model.get('ModuleModel').set('entityData', entityData);
     var args = {
       width: that.model.get('width') || null,
       height: that.model.get('height') || null,
@@ -3090,7 +3090,7 @@ module.exports = Backbone.View.extend({
     //    //delete moddata.viewfile;
     //    //delete moddata.overrides;
     //    //delete moddata.areaContext;
-    //    this.ModuleModel.set('moduleData', moddata);
+    //    this.ModuleModel.set('entityData', moddata);
     //    this.ModuleModel.sync(true);
     //  }
     //}

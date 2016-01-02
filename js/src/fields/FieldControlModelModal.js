@@ -3,7 +3,7 @@ var FieldControlModel = require('./FieldControlModel');
 module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
+    this.listenTo(this.ModuleModel, 'change:entityData', this.setData);
     this.listenTo(KB.Events, 'modal.reload', this.rebind);
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },

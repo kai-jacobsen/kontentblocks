@@ -457,7 +457,7 @@ abstract class Field implements Exportable
 
     /**
      * create the key for the value in dot notation
-     * used by js code to lookup data from moduleData
+     * used by js code to lookup data from entityData
      * @return string
      */
     private function createKPath()

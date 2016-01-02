@@ -253,7 +253,7 @@ module.exports = Backbone.View.extend({
       data: {
         action: 'getModuleForm',
         module: json,
-        moduleData: json.moduleData,
+        entityData: json.entityData,
         //overloadData: overloadData,
         _ajax_nonce: Config.getNonce('read')
       },
@@ -424,7 +424,7 @@ module.exports = Backbone.View.extend({
     tinymce.triggerSave();
     var moddata = this.formdataForId(this.realmid);
 
-    this.model.set('moduleData', moddata);
+    this.model.set('entityData', moddata);
     this.LoadingAnimation.show(0.5);
     this.model.sync(save, this).done(function (res, b, c) {
       that.moduleUpdated(res, b, c, save, notice);
@@ -451,7 +451,7 @@ module.exports = Backbone.View.extend({
     that.ModuleView.trigger('modal.after.nodeupdate');
 
 
-    that.model.set('moduleData', res.data.newModuleData);
+    that.model.set('entityData', res.data.newModuleData);
     if (save) {
       that.model.trigger('module.model.updated', that.model);
       KB.Events.trigger('modal.saved');

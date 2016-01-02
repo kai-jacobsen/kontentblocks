@@ -133,15 +133,15 @@ module.exports = Backbone.View.extend({
     this.model.trigger('after.change.area');
   },
   serialize: function () {
-    var formData, moduleData;
+    var formData, entityData;
     formData = jQuery('#post').serializeJSON();
-    moduleData = formData[this.model.get('mid')];
+    entityData = formData[this.model.get('mid')];
     // remove supplemental data
     // @TODO check if this can be rafcatored to a subarray
-    delete moduleData.areaContext;
-    //delete moduleData.viewfile;
+    delete entityData.areaContext;
+    //delete entityData.viewfile;
     this.trigger('kb::module.data.updated');
-    return moduleData;
+    return entityData;
   },
   // deprecated
   // -------------------------------------

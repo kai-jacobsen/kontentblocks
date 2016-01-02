@@ -1328,7 +1328,7 @@ module.exports = Backbone.Model.extend({
   bindHandlers: function () {
     this.listenTo(this, 'field.model.settings', this.updateLinkedFields);
     this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
+    this.listenTo(this.ModuleModel, 'change:entityData', this.setData); // reassign data when parent obj data changes
     this.listenTo(this.ModuleModel, 'module.model.updated', this.getClean); // set state to clean
     this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes
     this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind); // before the frontend modal reloads the parent obj
@@ -1385,16 +1385,16 @@ module.exports = Backbone.Model.extend({
       }
     }
     // the parent obj data
-    mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
+    mData = Utilities.getIndex(ModuleModel.get('entityData'), this.get('kpath'));
     this.set('value', _.extend(mData, addData)); // set merged data to this.value
   },
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {
     var ModuleModel;
     if (ModuleModel = this.get('ModuleModel')) {
-      var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
+      var cdata = _.clone(this.get('ModuleModel').get('entityData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
-      ModuleModel.set('moduleData', cdata, {silent: false});
+      ModuleModel.set('entityData', cdata, {silent: false});
       ModuleModel.View.getDirty();
 
     }
@@ -1466,7 +1466,7 @@ var FieldControlModel = require('./FieldControlModel');
 module.exports = FieldControlModel.extend({
   bindHandlers: function () {
     this.listenToOnce(this.ModuleModel, 'remove', this.remove);
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData);
+    this.listenTo(this.ModuleModel, 'change:entityData', this.setData);
     this.listenTo(KB.Events, 'modal.reload', this.rebind);
     this.listenTo(KB.Events, 'modal.close', this.remove);
   },
@@ -2422,7 +2422,7 @@ var EditableText = Backbone.View.extend({
         ed.on('focus', function () {
           var con;
           window.wpActiveEditor = that.el.id;
-          con = Utilities.getIndex(ed.module.get('moduleData'), that.model.get('kpath'));
+          con = Utilities.getIndex(ed.module.get('entityData'), that.model.get('kpath'));
           if (ed.kfilter) {
             ed.setContent(switchEditors.wpautop(con));
           }
@@ -2455,9 +2455,9 @@ var EditableText = Backbone.View.extend({
           }
 
           // get a copy of module data
-          //moduleData = _.clone(ed.module.get('moduleData'));
+          //entityData = _.clone(ed.module.get('entityData'));
           //path = that.model.get('kpath');
-          //Utilities.setIndex(moduleData, path, content);
+          //Utilities.setIndex(entityData, path, content);
 
 
           // && ed.kfilter set
@@ -2954,7 +2954,7 @@ module.exports = Backbone.Model.extend({
       url: ajaxurl,
       data: {
         action: 'updateModule',
-        data: that.toJSON().moduleData,
+        data: that.toJSON().entityData,
         module: that.toJSON(),
         editmode: (save) ? 'update' : 'preview',
         _ajax_nonce: Config.getNonce('update')
@@ -2963,7 +2963,7 @@ module.exports = Backbone.Model.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        that.set('moduleData', res.data.newModuleData);
+        that.set('entityData', res.data.newModuleData);
         if (save) {
           that.trigger('module.model.updated', that);
         }
@@ -3033,7 +3033,7 @@ module.exports = Backbone.Model.extend({
       url: ajaxurl,
       data: {
         action: 'updatePostPanel',
-        data: that.toJSON().moduleData,
+        data: that.toJSON().entityData,
         panel: that.toJSON(),
         editmode: (save) ? 'update' : 'preview',
         _ajax_nonce: Config.getNonce('update')
@@ -3042,7 +3042,7 @@ module.exports = Backbone.Model.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        that.set('moduleData', res.data.newModuleData);
+        that.set('entityData', res.data.newModuleData);
         that.trigger('module.model.updated', that);
       },
       error: function () {
@@ -3747,7 +3747,7 @@ module.exports = Backbone.View.extend({
       data: {
         action: 'getModuleForm',
         module: json,
-        moduleData: json.moduleData,
+        entityData: json.entityData,
         //overloadData: overloadData,
         _ajax_nonce: Config.getNonce('read')
       },
@@ -3918,7 +3918,7 @@ module.exports = Backbone.View.extend({
     tinymce.triggerSave();
     var moddata = this.formdataForId(this.realmid);
 
-    this.model.set('moduleData', moddata);
+    this.model.set('entityData', moddata);
     this.LoadingAnimation.show(0.5);
     this.model.sync(save, this).done(function (res, b, c) {
       that.moduleUpdated(res, b, c, save, notice);
@@ -3945,7 +3945,7 @@ module.exports = Backbone.View.extend({
     that.ModuleView.trigger('modal.after.nodeupdate');
 
 
-    that.model.set('moduleData', res.data.newModuleData);
+    that.model.set('entityData', res.data.newModuleData);
     if (save) {
       that.model.trigger('module.model.updated', that.model);
       KB.Events.trigger('modal.saved');
@@ -4371,13 +4371,12 @@ module.exports = ModuleMenuItem.extend({
   },
   update: function () {
     var that = this;
-    var moduleData = {};
     var refresh = false;
     jQuery.ajax({
       url: ajaxurl,
       data: {
         action: 'updateModule',
-        data: that.model.get('moduleData'),
+        data: that.model.get('entityData'),
         module: that.model.toJSON(),
         editmode: 'update',
         refresh: refresh,
@@ -4390,7 +4389,7 @@ module.exports = ModuleMenuItem.extend({
           that.$el.html(res.html);
         }
         tinymce.triggerSave();
-        that.model.set('moduleData', res.data.newModuleData);
+        that.model.set('entityData', res.data.newModuleData);
         that.Parent.render();
         that.Parent.trigger('kb.frontend.module.inline.saved');
         that.model.trigger('module.model.updated', that.model);
@@ -4474,7 +4473,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var settings;
 
-    if (this.$el.hasClass('draft') && this.model.get('moduleData') === '') {
+    if (this.$el.hasClass('draft') && this.model.get('entityData') === '') {
       this.renderPlaceholder();
     }
     //assign rel attribute to handle sortable serialize
@@ -5516,7 +5515,7 @@ module.exports = Backbone.View.extend({
     this.$el.appendTo('body');
   },
   attachHandler: function (model) {
-    this.listenTo(model, 'change:moduleData', this.add);
+    this.listenTo(model, 'change:entityData', this.add);
     this.listenTo(model, 'module.model.updated', this.remove);
     this.listenTo(model, 'module.model.clean', this.remove);
   },

@@ -239,6 +239,14 @@ module.exports =
     }, function () {
       no.call(scope);
     });
+  },
+  prompt: function (title, msg, value, yes, no, scope) {
+    var t = title || 'Title';
+    window.alertify.prompt(t, msg, value, function () {
+      yes.call(scope);
+    }, function () {
+      no.call(scope);
+    });
   }
 };
 
@@ -391,7 +399,7 @@ var BackupUi = Backbone.View.extend({
                         <span class='js-restore'>Restore</span>\n\
                         <p class='description'><b>Comment:</b> <%= item.msg %></p>\n\
                     </details>\n\
-                </li>", {data: {time: new moment.unix(key).format('HH:mm:ss / DD.MMM')}, item: item, key: key}))
+                </li>", {data: {time: new Date(key*1000).toGMTString() }, item: item, key: key}))
     });
     // no notice on first run
     if (!this.firstRun) {

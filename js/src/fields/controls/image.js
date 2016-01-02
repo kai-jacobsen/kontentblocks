@@ -110,10 +110,10 @@ module.exports = BaseView.extend({
     var that = this;
     var id = attachment.get('id');
     var value = this.prepareValue(attachment);
-    var moduleData = _.clone(this.model.get('ModuleModel').get('moduleData'));
+    var entityData = _.clone(this.model.get('ModuleModel').get('entityData'));
     var path = this.model.get('kpath');
-    Utilities.setIndex(moduleData, path, value);
-    this.model.get('ModuleModel').set('moduleData', moduleData);
+    Utilities.setIndex(entityData, path, value);
+    this.model.get('ModuleModel').set('entityData', entityData);
     var args = {
       width: that.model.get('width') || null,
       height: that.model.get('height') || null,

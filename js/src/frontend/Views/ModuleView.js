@@ -65,7 +65,7 @@ module.exports = Backbone.View.extend({
   render: function () {
     var settings;
 
-    if (this.$el.hasClass('draft') && this.model.get('moduleData') === '') {
+    if (this.$el.hasClass('draft') && this.model.get('entityData') === '') {
       this.renderPlaceholder();
     }
     //assign rel attribute to handle sortable serialize

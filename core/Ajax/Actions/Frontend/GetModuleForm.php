@@ -43,7 +43,7 @@ class GetModuleForm implements AjaxActionInterface
         $module = apply_filters( 'kb.module.before.factory', $module );
         $module->setupFields();
 
-        $currentData = wp_unslash( $request->getFiltered( 'moduleData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
+        $currentData = wp_unslash( $request->getFiltered( 'entityData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ) );
         $oldData = $module->model->export();
 
         $merged = Utilities::arrayMergeRecursive( $currentData, $oldData );

@@ -355,7 +355,7 @@ abstract class Module implements EntityInterface
             'settings' => $this->properties->settings,
             'state' => $this->properties->state,
             'mid' => $this->getId(),
-            'moduleData' => apply_filters(
+            'entityData' => apply_filters(
                 'kb.module.modify.data',
                 $this->model->getOriginalData(),
                 $this

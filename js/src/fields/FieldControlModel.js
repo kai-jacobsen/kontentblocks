@@ -28,7 +28,7 @@ module.exports = Backbone.Model.extend({
   bindHandlers: function () {
     this.listenTo(this, 'field.model.settings', this.updateLinkedFields);
     this.listenToOnce(this.ModuleModel, 'remove', this.remove); // delete this from collection when parent obj leaves
-    this.listenTo(this.ModuleModel, 'change:moduleData', this.setData); // reassign data when parent obj data changes
+    this.listenTo(this.ModuleModel, 'change:entityData', this.setData); // reassign data when parent obj data changes
     this.listenTo(this.ModuleModel, 'module.model.updated', this.getClean); // set state to clean
     this.listenTo(this, 'change:value', this.upstreamData); // assign new data to parent obj when this data changes
     this.listenTo(this.ModuleModel, 'modal.serialize.before', this.unbind); // before the frontend modal reloads the parent obj
@@ -85,16 +85,16 @@ module.exports = Backbone.Model.extend({
       }
     }
     // the parent obj data
-    mData = Utilities.getIndex(ModuleModel.get('moduleData'), this.get('kpath'));
+    mData = Utilities.getIndex(ModuleModel.get('entityData'), this.get('kpath'));
     this.set('value', _.extend(mData, addData)); // set merged data to this.value
   },
   // since this data is only the data of a specific field we can upstream this data to the whole module data
   upstreamData: function () {
     var ModuleModel;
     if (ModuleModel = this.get('ModuleModel')) {
-      var cdata = _.clone(this.get('ModuleModel').get('moduleData'));
+      var cdata = _.clone(this.get('ModuleModel').get('entityData'));
       Utilities.setIndex(cdata, this.get('kpath'), this.get('value'));
-      ModuleModel.set('moduleData', cdata, {silent: false});
+      ModuleModel.set('entityData', cdata, {silent: false});
       ModuleModel.View.getDirty();
 
     }

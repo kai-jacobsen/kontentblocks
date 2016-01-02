@@ -15,13 +15,12 @@ module.exports = ModuleMenuItem.extend({
   },
   update: function () {
     var that = this;
-    var moduleData = {};
     var refresh = false;
     jQuery.ajax({
       url: ajaxurl,
       data: {
         action: 'updateModule',
-        data: that.model.get('moduleData'),
+        data: that.model.get('entityData'),
         module: that.model.toJSON(),
         editmode: 'update',
         refresh: refresh,
@@ -34,7 +33,7 @@ module.exports = ModuleMenuItem.extend({
           that.$el.html(res.html);
         }
         tinymce.triggerSave();
-        that.model.set('moduleData', res.data.newModuleData);
+        that.model.set('entityData', res.data.newModuleData);
         that.Parent.render();
         that.Parent.trigger('kb.frontend.module.inline.saved');
         that.model.trigger('module.model.updated', that.model);

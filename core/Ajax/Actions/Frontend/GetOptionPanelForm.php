@@ -32,7 +32,7 @@ class GetOptionPanelForm implements AjaxActionInterface
         $baseId = $panelDef['baseId'];
 
         $panel = \Kontentblocks\getPanel( $baseId );
-        $pdata = (!empty($panelDef['moduleData'])) ? wp_unslash($panelDef['moduleData']) : [];
+        $pdata = (!empty($panelDef['entityData'])) ? wp_unslash($panelDef['entityData']) : [];
         $panel->setData( $pdata );
         $return = array(
             'html' => $panel->renderFields(),

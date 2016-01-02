@@ -16,7 +16,7 @@ module.exports = Backbone.View.extend({
     this.$el.appendTo('body');
   },
   attachHandler: function (model) {
-    this.listenTo(model, 'change:moduleData', this.add);
+    this.listenTo(model, 'change:entityData', this.add);
     this.listenTo(model, 'module.model.updated', this.remove);
     this.listenTo(model, 'module.model.clean', this.remove);
   },

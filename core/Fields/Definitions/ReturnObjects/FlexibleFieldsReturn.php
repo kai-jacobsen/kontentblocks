@@ -27,7 +27,7 @@ class FlexibleFieldsReturn
      */
     protected $key;
     /**
-     * @var array data of this field from moduleData
+     * @var array data of this field from entityData
      */
     protected $fieldData;
     /**

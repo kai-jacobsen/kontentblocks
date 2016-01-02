@@ -41,7 +41,7 @@ module.exports = Backbone.Model.extend({
       url: ajaxurl,
       data: {
         action: 'updatePostPanel',
-        data: that.toJSON().moduleData,
+        data: that.toJSON().entityData,
         panel: that.toJSON(),
         editmode: (save) ? 'update' : 'preview',
         _ajax_nonce: Config.getNonce('update')
@@ -50,7 +50,7 @@ module.exports = Backbone.Model.extend({
       type: 'POST',
       dataType: 'json',
       success: function (res) {
-        that.set('moduleData', res.data.newModuleData);
+        that.set('entityData', res.data.newModuleData);
         that.trigger('module.model.updated', that);
       },
       error: function () {

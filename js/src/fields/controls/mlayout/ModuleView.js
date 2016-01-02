@@ -90,7 +90,7 @@ module.exports = Backbone.View.extend({
     //    //delete moddata.viewfile;
     //    //delete moddata.overrides;
     //    //delete moddata.areaContext;
-    //    this.ModuleModel.set('moduleData', moddata);
+    //    this.ModuleModel.set('entityData', moddata);
     //    this.ModuleModel.sync(true);
     //  }
     //}

@@ -106,7 +106,7 @@ var EditableText = Backbone.View.extend({
         ed.on('focus', function () {
           var con;
           window.wpActiveEditor = that.el.id;
-          con = Utilities.getIndex(ed.module.get('moduleData'), that.model.get('kpath'));
+          con = Utilities.getIndex(ed.module.get('entityData'), that.model.get('kpath'));
           if (ed.kfilter) {
             ed.setContent(switchEditors.wpautop(con));
           }
@@ -139,9 +139,9 @@ var EditableText = Backbone.View.extend({
           }
 
           // get a copy of module data
-          //moduleData = _.clone(ed.module.get('moduleData'));
+          //entityData = _.clone(ed.module.get('entityData'));
           //path = that.model.get('kpath');
-          //Utilities.setIndex(moduleData, path, content);
+          //Utilities.setIndex(entityData, path, content);
 
 
           // && ed.kfilter set
