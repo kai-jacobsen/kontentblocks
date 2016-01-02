@@ -101,12 +101,16 @@ class BackupDataStorage
      * @param $backupid string post id or global area id
      * @return mixed
      */
-    public function queryBackup( $backupid )
+    public function queryBackup( $backupid = null )
     {
         global $wpdb;
 
         if (!current_user_can( 'edit_posts' )) {
             return false;
+        }
+
+        if (is_null($backupid)){
+            $backupid = $this->storage->getStorageId();
         }
 
         $prefix = $wpdb->prefix;
@@ -122,6 +126,17 @@ class BackupDataStorage
         }
 
 
+    }
+
+    public function getBackups(){
+        try{
+            $string = base64_decode($this->queryBackup( )->value);
+            if (is_string($string)){
+                return unserialize($string);
+            }
+        } catch(\Exception $e) {
+            return array();
+        }
     }
 
     /**
