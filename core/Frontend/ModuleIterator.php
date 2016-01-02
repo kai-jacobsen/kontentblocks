@@ -49,7 +49,7 @@ class ModuleIterator implements \Iterator, \Countable
     /**
      * Environment object
      *
-     * @var \Kontentblocks\Backend\Environment\Environment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      * @since 0.1.0
      */
     protected $environment;

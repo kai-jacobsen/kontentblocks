@@ -32,7 +32,7 @@ class GetModuleBackendForm implements AjaxActionInterface
         }
 
         $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $environment = Utilities::getEnvironment( $moduleDef['parentObjectId'] );
+        $environment = Utilities::getPostEnvironment( $moduleDef['parentObjectId'] );
         $workshop = new ModuleWorkshop($environment, $moduleDef);
         /** @var \Kontentblocks\Modules\Module $module */
         $module = $workshop->getModule();

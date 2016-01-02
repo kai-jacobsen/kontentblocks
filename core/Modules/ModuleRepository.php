@@ -3,7 +3,7 @@
 namespace Kontentblocks\Modules;
 
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 
 /**
  * Class ModuleRepository
@@ -18,7 +18,7 @@ class ModuleRepository
     public $modulesByArea;
 
     /**
-     * @var Environment
+     * @var PostEnvironment
      */
     protected $environment;
 
@@ -29,7 +29,7 @@ class ModuleRepository
 
 
 
-    public function __construct( Environment $environment )
+    public function __construct( PostEnvironment $environment )
     {
         $this->environment = $environment;
         $this->setupModulesFromStorageIndex();

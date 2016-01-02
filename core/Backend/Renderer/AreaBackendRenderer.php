@@ -7,7 +7,7 @@ use Kontentblocks\Areas\AreaSettingsMenu;
 use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -36,7 +36,7 @@ class AreaBackendRenderer implements RendererInterface
     /**
      * Environment
      *
-     * @var \Kontentblocks\Backend\Environment\Environment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      */
     protected $environment;
 
@@ -64,12 +64,12 @@ class AreaBackendRenderer implements RendererInterface
      * Class Constructor
      *
      * @param AreaProperties $area
-     * @param \Kontentblocks\Backend\Environment\Environment $environment
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
      * @param string $context
      *
      * @throws \Exception
      */
-    function __construct( AreaProperties $area, Environment $environment, $context = 'normal' )
+    function __construct( AreaProperties $area, PostEnvironment $environment, $context = 'normal' )
     {
         // context in regards of position on the edit screen
         $this->context = $context;

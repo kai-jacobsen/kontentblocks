@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Backend\Dynamic;
 
-use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;
@@ -117,7 +117,7 @@ class GlobalModulesMenu
         Utilities::hiddenEditor();
 
         // need to create a ew module here in order to override areaContext
-        $environment = Utilities::getEnvironment( $post->ID );
+        $environment = Utilities::getPostEnvironment( $post->ID );
         $gmodule['areaContext'] = $context;
         $workshop = new ModuleWorkshop( $environment, $gmodule );
         $module = $workshop->getModule();
@@ -205,7 +205,7 @@ class GlobalModulesMenu
         }
 
         $value = new ValueStorage( $_POST );
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
         $module = $environment->getModuleById( $postObj->post_name );
         // no template yet, create an new one
         if (!$module) {
@@ -243,11 +243,11 @@ class GlobalModulesMenu
      * Create a new template from form data
      *
      * @param $postId
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @internal param ModuleStorage $Storage
      * @since 0.1.0
      */
-    public function createGlobalModule( $postId, \WP_Post $post, Environment $environment )
+    public function createGlobalModule( $postId, \WP_Post $post, PostEnvironment $environment )
     {
 
         $value = new ValueStorage( $_POST );

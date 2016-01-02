@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\Areas;
 
-use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\_K;
@@ -371,11 +371,11 @@ class AreaRegistry
      * all necessary informations for the filter
      * Areas can be limited to post types and/or page templates
      *
-     * @param \Kontentblocks\Backend\Environment\Environment $environment
+     * @param \Kontentblocks\Backend\Environment\PostEnvironment $environment
      *
      * @return boolean
      */
-    public function filterForPost( Environment $environment )
+    public function filterForPost( PostEnvironment $environment )
     {
 
         $pageTemplate = $environment->getPageTemplate();

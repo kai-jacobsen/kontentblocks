@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Frontend;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\AreaLayoutIterator;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\JSONTransport;
@@ -79,11 +79,11 @@ class AreaNode
     /**
      * Class Constructor
      *
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @param AreaRenderSettings $renderSettings array comes from the render function call
      * @since 0.1.0
      */
-    public function __construct( Environment $environment, AreaRenderSettings $renderSettings )
+    public function __construct( PostEnvironment $environment, AreaRenderSettings $renderSettings )
     {
         $this->environment = $environment;
         $this->area = $renderSettings->area;

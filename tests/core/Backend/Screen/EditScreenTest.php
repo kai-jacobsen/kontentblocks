@@ -2,8 +2,8 @@
 
 namespace Kontentblocks\tests\core\Backend\Screen;
 
-use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Screen\EditScreen;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\EditScreens\PostEditScreen;
 use Kontentblocks\Modules\ModuleWorkshop;
 
 
@@ -21,7 +21,7 @@ class EditScreenTest extends \WP_UnitTestCase
         global $pagenow;
         $pagenow = 'post.php';
         parent::setUp();
-        $this->EditScreen = new EditScreen();
+        $this->EditScreen = new PostEditScreen();
 
         \Kontentblocks\registerArea(
             array(

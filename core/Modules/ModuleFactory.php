@@ -3,7 +3,7 @@
 namespace Kontentblocks\Modules;
 
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -32,11 +32,11 @@ class ModuleFactory
 
     /**
      * @param ModuleProperties $properties
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @param null $data
      * @throws \Exception
      */
-    public function __construct( ModuleProperties $properties, Environment $environment, $data = null )
+    public function __construct( ModuleProperties $properties, PostEnvironment $environment, $data = null )
     {
 
         if (empty( $properties->class ) || !class_exists( $properties->class )) {

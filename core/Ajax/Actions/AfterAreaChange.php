@@ -42,7 +42,7 @@ class AfterAreaChange implements AjaxActionInterface
         $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
         $moduleDef = $request->getFiltered( 'module', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-        $workshop = new ModuleWorkshop( Utilities::getEnvironment( $postId ), $moduleDef );
+        $workshop = new ModuleWorkshop( Utilities::getPostEnvironment( $postId ), $moduleDef );
         $module = $workshop->getModule();
         $html = $module->form();
 //

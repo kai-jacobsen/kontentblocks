@@ -3,7 +3,7 @@
 namespace Kontentblocks\tests\core\Ajax\Actions;
 
 use Kontentblocks\Ajax\Actions\ChangeArea;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -47,7 +47,7 @@ class ChangeAreaTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new Environment( $post->ID, $post ), array(
+            new PostEnvironment( $post->ID, $post ), array(
                 'class' => 'ModuleText'
             )
         );

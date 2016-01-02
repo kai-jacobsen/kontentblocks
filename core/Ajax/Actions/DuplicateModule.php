@@ -6,7 +6,7 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Common\Data\ValueStorageInterface;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleWorkshop;
 use Kontentblocks\Utils\Utilities;
@@ -27,7 +27,7 @@ class DuplicateModule implements AjaxActionInterface
     private static $postId;
 
     /**
-     * @var Environment
+     * @var PostEnvironment
      */
     private static $environment;
 
@@ -57,7 +57,7 @@ class DuplicateModule implements AjaxActionInterface
         self::$instanceId = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
         self::$class = $request->getFiltered( 'class', FILTER_SANITIZE_STRING );
 
-        self::$environment = Utilities::getEnvironment( self::$postId );
+        self::$environment = Utilities::getPostEnvironment( self::$postId );
         return self::duplicate();
     }
 

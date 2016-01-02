@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Extensions;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Language\I18n;
 
@@ -50,7 +50,7 @@ class SidebarSelector
      * TODO:: resort global sidebars and post sidebars to own arrays
      */
 
-    function metaBox( $context, Environment $environment )
+    function metaBox( $context, PostEnvironment $environment )
     {
         $post_id = filter_input( INPUT_GET, "post", FILTER_VALIDATE_INT );
         $pdc     = $environment;

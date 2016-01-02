@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Modules;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 
 
 /**
@@ -22,7 +22,7 @@ class ModuleContext implements \JsonSerializable
 
     public $areaContext;
 
-    public function __construct( Environment $environment, Module $module )
+    public function __construct( PostEnvironment $environment, Module $module )
     {
         $this->set( $environment->jsonSerialize() );
         $this->areaContext = &$module->properties->areaContext;

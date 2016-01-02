@@ -1,8 +1,8 @@
 <?php
 
-namespace Kontentblocks\Backend\Screen;
+namespace Kontentblocks\Backend\EditScreens;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Helper;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\_K;
@@ -17,7 +17,7 @@ use Kontentblocks\Utils\Utilities;
  * @subpackage Post
  * @since 0.1.0
  */
-Class EditScreen
+Class PostEditScreen
 {
 
     /**
@@ -27,7 +27,7 @@ Class EditScreen
     protected $hooks;
 
     /**
-     * @var Environment
+     * @var PostEnvironment
      */
     protected $environment;
 
@@ -68,7 +68,7 @@ Class EditScreen
      */
     public function renderUserInterface( $post_type, $post )
     {
-        $this->environment = Utilities::getEnvironment( $post->ID );
+        $this->environment = Utilities::getPostEnvironment( $post->ID );
         add_action(
             'edit_form_after_editor',
             function () use ( $post ) {
@@ -149,7 +149,7 @@ Class EditScreen
         if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
             $post_id = get_the_ID();
         }
-        $environment = Utilities::getEnvironment( $post_id );
+        $environment = Utilities::getPostEnvironment( $post_id );
         $environment->save();
     }
 
@@ -161,7 +161,7 @@ Class EditScreen
      */
     public function toJSON()
     {
-        Utilities::getEnvironment( get_the_ID() )->toJSON();
+        Utilities::getPostEnvironment( get_the_ID() )->toJSON();
     }
 
     /**

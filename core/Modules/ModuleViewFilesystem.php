@@ -2,7 +2,7 @@
 namespace Kontentblocks\Modules;
 
 use DirectoryIterator;
-use Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Utils\Utilities;
 
 

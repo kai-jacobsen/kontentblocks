@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Panels;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\Utilities;
 
 /**
@@ -56,6 +56,7 @@ class PanelRegistry
      */
     public function add( $panelId, $args )
     {
+
         if (!isset( $this->panels[$panelId] )) {
 
             $reflection = new \ReflectionClass( $args['class'] );
@@ -63,6 +64,8 @@ class PanelRegistry
 
             if ($name == 'Kontentblocks\Panels\OptionsPanel') {
                 $args['type'] = 'options';
+            } else if ($name == 'Kontentblocks\Panels\TermPanel') {
+                $args['type'] = 'term';
             } else {
                 $args['type'] = 'post';
             }

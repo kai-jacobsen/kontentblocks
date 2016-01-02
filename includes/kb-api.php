@@ -2,7 +2,7 @@
 
 namespace Kontentblocks;
 
-use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
@@ -70,9 +70,9 @@ function renderSingleArea( $areaId, $post_id = null, $areaSettings = array(), $m
     $registry = Kontentblocks::getService( 'registry.areas' );
     if ($registry->isDynamic( $areaId )) {
         $areaDef = $registry->getArea( $areaId );
-        $environment = Utilities::getEnvironment( $areaDef->parent_id, $postId );
+        $environment = Utilities::getPostEnvironment( $areaDef->parent_id, $postId );
     } else {
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
     }
 
     $area = $environment->getAreaDefinition( $areaId );
@@ -124,7 +124,7 @@ function renderContext( $context, $post_id, $areaSettings = array(), $moduleSett
     global $post;
     $postId = ( null === $post_id ) ? $post->ID : $post_id;
 
-    $Environment = Utilities::getEnvironment( $postId );
+    $Environment = Utilities::getPostEnvironment( $postId );
     $areas = $Environment->getAreasForContext( $context );
     $contextsOrder = $Environment->getDataProvider()->get( 'kb.contexts' );
 
@@ -176,7 +176,7 @@ function hasModules( $area, $postId )
         return false;
     }
 
-    $Environment = Utilities::getEnvironment( $postId );
+    $Environment = Utilities::getPostEnvironment( $postId );
     $areas = $Environment->getModulesForArea( $area );
 
     return !empty( $areas );
@@ -199,7 +199,7 @@ function getPostPanel( $panelId = null, $postId = null )
     if (is_null( $postId )) {
         $postId = get_the_ID();
     }
-    $Environment = Utilities::getEnvironment( $postId );
+    $Environment = Utilities::getPostEnvironment( $postId );
 
     $Panel = $Environment->getPanelObject( $panelId );
     /** @var \Kontentblocks\Panels\PostPanel $Panel */

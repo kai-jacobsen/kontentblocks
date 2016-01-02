@@ -34,7 +34,7 @@ class UpdatePostPanel implements AjaxActionInterface
         setup_postdata( $post );
 
         // flags
-        $environment = Utilities::getEnvironment( $postdata->postId );
+        $environment = Utilities::getPostEnvironment( $postdata->postId );
         // strip slashes from incoming data
         $newData = wp_unslash( $postdata->data );
 

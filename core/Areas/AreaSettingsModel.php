@@ -3,7 +3,7 @@
 namespace Kontentblocks\Areas;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 
 
 /**

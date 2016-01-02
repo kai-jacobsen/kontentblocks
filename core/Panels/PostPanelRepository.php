@@ -3,7 +3,7 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 
@@ -17,9 +17,9 @@ class PostPanelRepository
     protected $panels = array();
 
     /**
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      */
-    public function __construct( Environment $environment )
+    public function __construct( PostEnvironment $environment )
     {
         $this->environment = $environment;
         $this->setupPanelsforPost();
@@ -46,10 +46,10 @@ class PostPanelRepository
     /**
      *
      * @since 0.3.8
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @return array
      */
-    private function filterPanelsForPost( Environment $environment )
+    private function filterPanelsForPost( PostEnvironment $environment )
     {
         $red = array();
 

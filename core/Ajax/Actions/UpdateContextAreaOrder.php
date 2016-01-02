@@ -6,7 +6,7 @@ use Kontentblocks\Ajax\AjaxActionInterface;
 use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Areas\AreaSettingsModel;
-use Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
 use Kontentblocks\Kontentblocks;
@@ -50,7 +50,7 @@ class UpdateContextAreaOrder implements AjaxActionInterface
             }
         }
 
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
         $dataProvider = $environment->getDataProvider();
         $update = $dataProvider->update( 'kb.contexts', $data );
 

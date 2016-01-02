@@ -34,7 +34,7 @@ class RemoveModules implements AjaxActionInterface
         $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
         $mid = $request->getFiltered( 'module', FILTER_SANITIZE_STRING );
 
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
         $workshop = new ModuleWorkshop($environment, $environment->getStorage()->getModuleDefinition($mid));
         $module = $workshop->getModule();
         $storage = $environment->getStorage();

@@ -19,8 +19,9 @@ use Kontentblocks\Ajax\AjaxCallbackHandler;
 use Kontentblocks\Areas\AreaRegistry;
 use Kontentblocks\Backend\Dynamic\DynamicAreas;
 use Kontentblocks\Backend\Dynamic\GlobalModulesMenu;
-use Kontentblocks\Backend\Screen\EditScreen;
-use Kontentblocks\Backend\Screen\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Backend\EditScreens\PostEditScreen;
+use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
+use Kontentblocks\Backend\EditScreens\TaxonomyEditScreen;
 use Kontentblocks\Hooks\Enqueues;
 use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Modules\ModuleRegistry;
@@ -336,8 +337,8 @@ Class Kontentblocks
          * Main post edit screen handler
          * Post type must support 'kontentblocks"
          */
-        new EditScreen();
-
+        new PostEditScreen();
+        new TaxonomyEditScreen();
     }
 
     /**
@@ -376,6 +377,7 @@ Class Kontentblocks
         }
         _K::info( 'Modules loaded' );
 
+        do_action( 'kb.modules.loaded' );
         do_action( 'kb.init' );
         _K::info( 'kb.init action fired. We\'re good to go.' );
 
@@ -386,7 +388,6 @@ Class Kontentblocks
      */
     public function loadPanels()
     {
-
         /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
         $Registry = $this->Services['registry.panels'];
         // add core modules path
@@ -411,10 +412,9 @@ Class Kontentblocks
                 }
             }
         }
-        _K::info( 'Modules loaded' );
+        _K::info( 'Panels loaded' );
 
-        do_action( 'kb.init' );
-        _K::info( 'kb.init action fired. We\'re good to go.' );
+        do_action( 'kb.panels.loaded' );
 
     }
 

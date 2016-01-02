@@ -107,7 +107,7 @@ class CreateNewModule implements AjaxActionInterface
         $this->setupRequestData( $request );
 
         // Setup Data Handler
-        $this->environment = Utilities::getEnvironment( $this->postId );
+        $this->environment = Utilities::getPostEnvironment( $this->postId );
         $this->area = $this->environment->getAreaDefinition( $this->moduleArgs['area'] );
 
         // override class if master

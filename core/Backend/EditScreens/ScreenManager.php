@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks\Backend\Screen;
+namespace Kontentblocks\Backend\EditScreens;
 
 use Exception;
-use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Screen\Layouts\EditScreenLayout;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayout;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
 
@@ -36,7 +36,7 @@ class ScreenManager
 
     /**
      * Environment Instance
-     * @var \Kontentblocks\Backend\Environment\Environment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      * @since 0.1.0
      */
     protected $environment;
@@ -73,10 +73,10 @@ class ScreenManager
      * Class Constructor
      *
      * @param $areas
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      *
      */
-    public function __construct( $areas, Environment $environment )
+    public function __construct( $areas, PostEnvironment $environment )
     {
         // setup raw areas
         $this->areas = $areas;
@@ -249,7 +249,7 @@ class ScreenManager
 
     /**
      * Getter for Environment instance
-     * @return Environment
+     * @return PostEnvironment
      * @since 0.1.0
      */
     public function getEnvironment()

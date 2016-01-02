@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Frontend\Renderer;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Common\Interfaces\RendererInterface;
@@ -34,7 +34,7 @@ class AreaRenderer implements RendererInterface
      */
     public $area;
     /**
-     * @var \Kontentblocks\Backend\Environment\Environment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      */
     public $environment;
 
@@ -77,12 +77,12 @@ class AreaRenderer implements RendererInterface
     /**
      * Class constructor
      *
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @param AreaRenderSettings $areaSettings
      * @param ModuleRenderSettings $moduleSettings
      */
     public function __construct(
-        Environment $environment,
+        PostEnvironment $environment,
         AreaRenderSettings $areaSettings,
         ModuleRenderSettings $moduleSettings
     )

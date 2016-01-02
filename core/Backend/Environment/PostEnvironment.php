@@ -10,7 +10,6 @@ use Kontentblocks\Backend\Environment\Save\SavePost;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Modules\ModuleRepository;
 use Kontentblocks\Panels\PostPanelRepository;
-use Kontentblocks\Utils\Utilities;
 
 
 /**
@@ -20,7 +19,7 @@ use Kontentblocks\Utils\Utilities;
  * @subpackage Post
  * @since 0.1.0
  */
-class Environment implements JsonSerializable
+class PostEnvironment implements JsonSerializable
 {
 
     /**

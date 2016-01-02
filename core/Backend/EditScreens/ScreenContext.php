@@ -1,10 +1,10 @@
 <?php
 
-namespace Kontentblocks\Backend\Screen;
+namespace Kontentblocks\Backend\EditScreens;
 
 use Exception;
 use Kontentblocks\Areas\AreaProperties;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Renderer\AreaBackendRenderer;
 use Kontentblocks\Backend\Renderer\DynamicAreaBackendRenderer;
 use Kontentblocks\Backend\Storage\ModuleStorage;
@@ -61,12 +61,12 @@ class ScreenContext
      * Class constructor
      * @param $args
      * @param $areas
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @param bool $sidebars
      * @throws Exception
      * @since 0.1.0
      */
-    public function __construct( $args, $areas, Environment $environment, $sidebars = false )
+    public function __construct( $args, $areas, PostEnvironment $environment, $sidebars = false )
     {
         if (empty( $args )) {
             throw new Exception( 'No Arguments specified for single Context' );

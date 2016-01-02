@@ -1,7 +1,7 @@
 <?php
 namespace Kontentblocks\Panels;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Common\Traits\TraitSetupArgs;
 use Kontentblocks\Fields\FieldRendererTabs;
@@ -66,10 +66,10 @@ abstract class PostPanel extends AbstractPanel
 
     /**
      * @param array $args
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @throws \Exception
      */
-    public function __construct( $args, Environment $environment )
+    public function __construct( $args, PostEnvironment $environment )
     {
         $this->args = $this->parseDefaults( $args );
         $this->setupArgs( $this->args );

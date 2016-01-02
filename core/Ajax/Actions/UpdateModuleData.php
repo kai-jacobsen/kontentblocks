@@ -41,7 +41,7 @@ class UpdateModuleData implements AjaxActionInterface
         $post = get_post( $postId );
         setup_postdata( $post );
 
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
         $workshop = new ModuleWorkshop($environment, $moduleArgs);
         $module = $workshop->getModule();
 

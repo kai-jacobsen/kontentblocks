@@ -97,14 +97,11 @@ abstract class OptionsPanel extends AbstractPanel
     {
         add_action( 'admin_init', array( $this, 'observeSaveRequest' ) );
         add_action( 'admin_menu', array( $this, 'setupMenu' ) );
-        add_action( 'wp_footer', array( $this, 'toJSON' ) );
+//        add_action( 'wp_footer', array( $this, 'toJSON' ) );
 
         if ($this->customizer) {
             add_action( 'customize_register', array( $this, 'setupCustomizer' ) );
         }
-
-
-
     }
 
     public function setupMenu()
@@ -145,7 +142,6 @@ abstract class OptionsPanel extends AbstractPanel
                 break;
         }
 
-        $this->toJSON();
     }
 
     public function toJSON()
@@ -207,6 +203,7 @@ abstract class OptionsPanel extends AbstractPanel
         }
 
         Utilities::hiddenEditor();
+        $this->toJSON();
 
 
         echo $this->beforeForm();

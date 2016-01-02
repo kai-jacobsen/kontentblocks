@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Backend\Environment\Save;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\BackupDataStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\Module;
@@ -24,7 +24,7 @@ class SavePost
      */
     private $postdata;
 
-    public function __construct( Environment $environment )
+    public function __construct( PostEnvironment $environment )
     {
         $this->environment = $environment;
         $this->postid = $environment->getId();

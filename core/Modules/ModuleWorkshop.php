@@ -3,7 +3,7 @@
 namespace Kontentblocks\Modules;
 
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
 
@@ -18,7 +18,7 @@ use Kontentblocks\Utils\Utilities;
 class ModuleWorkshop
 {
     /**
-     * @var Environment
+     * @var PostEnvironment
      */
     private $environment;
 
@@ -54,11 +54,11 @@ class ModuleWorkshop
 
     /**
      * Setup module attrs and class properties
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @param array $attrs
      * @param array $oldattrs
      */
-    public function __construct( Environment $environment, array $attrs = array(), array $oldattrs = array() )
+    public function __construct( PostEnvironment $environment, array $attrs = array(), array $oldattrs = array() )
     {
         $this->environment = $environment;
         $this->moduleattrs = $this->setupModuleattrs( $attrs, $oldattrs );

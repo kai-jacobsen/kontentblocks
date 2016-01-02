@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Frontend\Renderer;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\AreaRenderSettings;
 use Kontentblocks\Frontend\ModuleIterator;
 use Kontentblocks\Frontend\ModuleRenderSettings;

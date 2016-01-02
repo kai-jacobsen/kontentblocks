@@ -4,7 +4,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 use Kontentblocks\Ajax\Actions\DuplicateModule;
 use Kontentblocks\Ajax\Actions\RemoveModules;
 use Kontentblocks\Ajax\Actions\UpdateModuleData;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Modules\ModuleWorkshop;
@@ -49,7 +49,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
         $post = $this->factory->post->create_and_get();
 
         $workshop = new ModuleWorkshop(
-            new Environment( $post->ID, $post ), array(
+            new PostEnvironment( $post->ID, $post ), array(
                 'class' => 'ModuleText',
                 'area' => 'dump'
             )
@@ -74,7 +74,7 @@ class UpdateModuleDataTest extends \WP_UnitTestCase
         $Response = UpdateModuleData::run( new ValueStorage( $data ) );
         $this->assertTrue( $Response->getStatus() );
 
-        $Environment = new Environment( $post->ID, $post );
+        $Environment = new PostEnvironment( $post->ID, $post );
         $module = $Environment->getModuleById( $workshop->getNewId() );
 
         $this->assertEquals( $data['data']['demotest'], $module->model->get( 'demotest' ) );

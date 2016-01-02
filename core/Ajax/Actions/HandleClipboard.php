@@ -35,8 +35,8 @@ class HandleClipboard implements AjaxActionInterface
         $mode = filter_var( $data['mode'], FILTER_SANITIZE_STRING );
         $mid = filter_var( $data['mid'], FILTER_SANITIZE_STRING );
 
-        $sourceEnv = Utilities::getEnvironment( $source );
-        $targetEnv = Utilities::getEnvironment( $target );
+        $sourceEnv = Utilities::getPostEnvironment( $source );
+        $targetEnv = Utilities::getPostEnvironment( $target );
 
         $sourceModule = $sourceEnv->getStorage()->getModuleDefinition( $mid );
         $workshop = new ModuleWorkshop(

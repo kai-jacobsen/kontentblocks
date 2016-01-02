@@ -3,7 +3,7 @@
 namespace Kontentblocks\Modules;
 
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Fields\ModuleFieldController;
@@ -31,7 +31,7 @@ abstract class Module implements EntityInterface
     public $viewLoader;
 
     /**
-     * @var \Kontentblocks\Backend\Environment\Environment
+     * @var \Kontentblocks\Backend\Environment\PostEnvironment
      */
     public $environment;
 
@@ -62,9 +62,9 @@ abstract class Module implements EntityInterface
     /**
      * @param ModuleProperties $properties
      * @param array $data
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      */
-    public function __construct( ModuleProperties $properties, $data = array(), Environment $environment )
+    public function __construct( ModuleProperties $properties, $data = array(), PostEnvironment $environment )
     {
         $this->properties = $properties;
         $this->environment = $environment;

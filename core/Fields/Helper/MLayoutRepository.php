@@ -25,7 +25,7 @@ class MLayoutRepository
     public function __construct( MLayout $field )
     {
         $this->field = $field;
-        $this->environment = Utilities::getEnvironment( $this->field->objectId );
+        $this->environment = Utilities::getPostEnvironment( $this->field->objectId );
         $this->modules = $this->setupModules();
     }
 

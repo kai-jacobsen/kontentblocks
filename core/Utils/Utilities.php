@@ -2,7 +2,8 @@
 
 namespace Kontentblocks\Utils;
 
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Kontentblocks;
 use XHProfRuns_Default;
 
@@ -14,7 +15,19 @@ use XHProfRuns_Default;
 class Utilities
 {
 
-    protected static $environments = array();
+    protected static $postEnvironments = array();
+    protected static $termEnvironments = array();
+
+    /**
+     * @param null $storageId
+     * @param null $actualPostId
+     * @deprecated use getPostEnvironment instead
+     * @return PostEnvironment
+     */
+    public static function getEnvironment( $storageId = null, $actualPostId = null )
+    {
+        return self::getPostEnvironment( $storageId, $actualPostId );
+    }
 
     /**
      * Get environment
@@ -25,21 +38,34 @@ class Utilities
      *
      * @param mixed $storageId
      * @param null $actualPostId
-     * @return Environment
+     * @return PostEnvironment
      * @since 0.1.0
      */
-    public static function getEnvironment( $storageId = null, $actualPostId = null )
+    public static function getPostEnvironment( $storageId = null, $actualPostId = null )
     {
         if ($storageId && is_numeric( $storageId ) && $storageId !== - 1) {
-            if (isset( self::$environments[$storageId] )) {
-                return self::$environments[$storageId];
+            if (isset( self::$postEnvironments[$storageId] )) {
+                return self::$postEnvironments[$storageId];
             } else {
                 $realId = ( is_null( $actualPostId ) ) ? $storageId : $actualPostId;
                 $postObj = get_post( $realId );
-                return self::$environments[$storageId] = new Environment( $storageId, $postObj );
+                return self::$postEnvironments[$storageId] = new PostEnvironment( $storageId, $postObj );
             }
         }
         return null;
+    }
+
+    public static function getTermEnvironment( $termId, $taxonomy = null )
+    {
+        if ($termId && is_numeric( $termId ) && $termId !== - 1) {
+            if (isset( self::$termEnvironments[$termId] )) {
+                return self::$termEnvironments[$termId];
+            } else {
+                $termObj = get_term($termId, $taxonomy);
+                return self::$termEnvironments[$termId] = new TermEnvironment($termId, $termObj);
+            }
+        }
+
     }
 
     /**
@@ -53,7 +79,7 @@ class Utilities
 
         if (!$kbHiddenEditorCalled) {
             echo "<div style='display: none;'>";
-            self::editor( 'ghost', '', 'ghost', true,array('tinymce' => array('wp_skip_init' => false)) );
+            self::editor( 'ghost', '', 'ghost', true, array( 'tinymce' => array( 'wp_skip_init' => false ) ) );
             echo '</div>';
         }
 
@@ -341,7 +367,7 @@ class Utilities
     /**
      * Internal debugging shortcut helper for Xhprof
      */
-    public static function  enableXhprof()
+    public static function enableXhprof()
     {
         if (function_exists( 'xhprof_enable' )) {
 

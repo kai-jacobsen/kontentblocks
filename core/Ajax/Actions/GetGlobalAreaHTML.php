@@ -32,7 +32,7 @@ class GetGlobalAreaHTML implements AjaxActionInterface
         $areaId = $request->getFiltered( 'areaId', FILTER_SANITIZE_STRING );
         $settings = $request->get( 'settings' );
 
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
         $area = $environment->getAreaDefinition( $areaId );
 
         $areaSettings = new AreaSettingsModel( $area, $postId );

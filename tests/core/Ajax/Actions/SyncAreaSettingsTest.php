@@ -4,7 +4,7 @@ namespace Kontentblocks\tests\core\Ajax\Actions;
 use Kontentblocks\Ajax\Actions\RemoveModules;
 use Kontentblocks\Ajax\Actions\SyncAreaSettings;
 use Kontentblocks\Areas\AreaSettingsModel;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorage;
 use Kontentblocks\Kontentblocks;

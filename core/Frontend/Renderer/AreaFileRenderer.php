@@ -3,7 +3,7 @@
 namespace Kontentblocks\Frontend\Renderer;
 
 use Kontentblocks\Areas\AreaProperties;
-use Kontentblocks\Backend\Environment\Environment;
+use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Frontend\AreaNode;
 use Kontentblocks\Frontend\ModuleIterator;
 use Kontentblocks\Frontend\AreaRenderSettings;
@@ -34,7 +34,7 @@ abstract class AreaFileRenderer
     public $moduleSettings;
 
     /**
-     * @var Environment
+     * @var PostEnvironment
      */
     public $environment;
 
@@ -54,11 +54,11 @@ abstract class AreaFileRenderer
     public $areaNode;
 
     /**
-     * @param Environment $environment
+     * @param PostEnvironment $environment
      * @param AreaRenderSettings $areaSettings
      * @param ModuleRenderSettings $moduleSettings
      */
-    public function __construct( Environment $environment, AreaRenderSettings $areaSettings, ModuleRenderSettings $moduleSettings )
+    public function __construct( PostEnvironment $environment, AreaRenderSettings $areaSettings, ModuleRenderSettings $moduleSettings )
     {
         $this->areaSettings = $areaSettings;
         $this->moduleSettings = $moduleSettings;

@@ -31,7 +31,7 @@ class BatchRemoveModules implements AjaxActionInterface
         }
 
         $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
         $storage = $environment->getStorage();
         $mids = $request->getFiltered( 'modules', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 

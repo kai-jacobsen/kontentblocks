@@ -28,7 +28,7 @@ class SaveAreaLayout implements AjaxActionInterface
         $area = $request->get( 'area' );
         $postId = $request->getFiltered( 'postId', FILTER_SANITIZE_NUMBER_INT );
         $layout = $request->getFiltered( 'layout', FILTER_SANITIZE_STRING );
-        $environment = Utilities::getEnvironment($postId);
+        $environment = Utilities::getPostEnvironment($postId);
         $Area = $environment->getAreaDefinition($area);
         if ($Area->settings->getLayout( $area['id'] ) === $layout) {
             new AjaxErrorResponse(

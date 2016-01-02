@@ -5,8 +5,8 @@ namespace Kontentblocks\Backend\Dynamic;
 use Kontentblocks\Areas\AreaProperties;
 use Kontentblocks\Areas\AreaBackendHTML;
 use Kontentblocks\Areas\AreaRegistry;
-use Kontentblocks\Backend\Environment\Environment;
-use Kontentblocks\Backend\Screen\ScreenManager;
+use Kontentblocks\Backend\Environment\PostEnvironment;
+use Kontentblocks\Backend\EditScreens\ScreenManager;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -118,7 +118,7 @@ class DynamicAreas
      */
     private function renderArea( $area )
     {
-        $environment = Utilities::getEnvironment( get_the_ID() );
+        $environment = Utilities::getPostEnvironment( get_the_ID() );
         $blogId = get_current_blog_id();
 
         /** @var \Kontentblocks\Areas\AreaRegistry $registry */
@@ -239,7 +239,7 @@ class DynamicAreas
             return;
         }
 
-        $environment = Utilities::getEnvironment( $postId );
+        $environment = Utilities::getPostEnvironment( $postId );
         $environment->save();
 
         $this->saveArea( $postId );

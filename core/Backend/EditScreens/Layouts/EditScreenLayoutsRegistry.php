@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Backend\Screen\Layouts;
+namespace Kontentblocks\Backend\EditScreens\Layouts;
 
 use Kontentblocks\Templating\Twig;
 
