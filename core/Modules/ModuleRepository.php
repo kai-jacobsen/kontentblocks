@@ -12,15 +12,29 @@ use Kontentblocks\Backend\Environment\Environment;
 class ModuleRepository
 {
 
+    /**
+     * @var array
+     */
+    public $modulesByArea;
+
+    /**
+     * @var Environment
+     */
     protected $environment;
 
+    /**
+     * @var array
+     */
     protected $modules = array();
+
 
 
     public function __construct( Environment $environment )
     {
         $this->environment = $environment;
         $this->setupModulesFromStorageIndex();
+        $this->modulesByArea = $this->sortedByArea();
+
     }
 
     /**
@@ -69,6 +83,23 @@ class ModuleRepository
             return $this->modules[$mid];
         }
         return null;
+    }
+
+    /**
+     * Sorts module definitions to areas
+     * @return array
+     * @since 0.1.0
+     */
+    public function sortedByArea()
+    {
+        $sorted = array();
+        if (is_array( $this->modules )) {
+            /** @var \Kontentblocks\Modules\Module $module */
+            foreach ($this->modules as $module) {
+                $sorted[$module->properties->area->id][$module->getId()] = $module;
+            }
+            return $sorted;
+        }
     }
 
 }

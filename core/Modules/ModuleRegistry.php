@@ -17,8 +17,6 @@ class ModuleRegistry
      */
     public $modules = array();
 
-    public $reflections = array();
-
     /**
      * @var Container
      */
@@ -60,7 +58,7 @@ class ModuleRegistry
             $args['path'] = trailingslashit( dirname( $file ) );
             $args['uri'] = content_url( str_replace( WP_CONTENT_DIR, '', $args['path'] ) );
             $args['helpfile'] = false;
-            $args['publicName'] = (empty($args['publicName'])) ? $args['name'] : $args['publicName'];
+            $args['publicName'] = ( empty( $args['publicName'] ) ) ? $args['name'] : $args['publicName'];
 
             if (!empty( $args['id'] ) && empty( $args['slug'] )) {
                 $args['slug'] = $args['id'];

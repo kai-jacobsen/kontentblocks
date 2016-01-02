@@ -111,7 +111,6 @@ class Environment implements JsonSerializable
         $this->areasToContext();
         $this->moduleRepository = new ModuleRepository( $this );
         $this->modules = $this->setupModules();
-        $this->modulesByArea = $this->getSortedModules();
         $this->panelRepository = new PostPanelRepository( $this );
         $this->panels = $this->panelRepository->getPanelObjects();
     }
@@ -144,33 +143,6 @@ class Environment implements JsonSerializable
     public function getPostType()
     {
         return $this->postObj->post_type;
-    }
-
-    /**
-     * prepares modules attached to this post
-     * @return array
-     * @since 0.1.0
-     */
-    private function setupModules()
-    {
-        return $this->moduleRepository->getModules();
-    }
-
-    /**
-     * Sorts module definitions to areas
-     * @return array
-     * @since 0.1.0
-     */
-    public function getSortedModules()
-    {
-        $sorted = array();
-        if (is_array( $this->modules )) {
-            /** @var \Kontentblocks\Modules\Module $module */
-            foreach ($this->modules as $module) {
-                $sorted[$module->properties->area->id][$module->getId()] = $module;
-            }
-            return $sorted;
-        }
     }
 
     /**
@@ -213,9 +185,19 @@ class Environment implements JsonSerializable
         }
     }
 
+    /**
+     * prepares modules attached to this post
+     * @return array
+     * @since 0.1.0
+     */
+    private function setupModules()
+    {
+        return $this->moduleRepository->getModules();
+    }
+
     public function getPanelObject( $id )
     {
-        if (isset($this->panels[$id])){
+        if (isset( $this->panels[$id] )) {
             return $this->panels[$id];
         }
         return null;
@@ -295,7 +277,7 @@ class Environment implements JsonSerializable
      */
     public function getModulesForArea( $areaid )
     {
-        $byArea = $this->getSortedModules();
+        $byArea = $this->moduleRepository->sortedByArea();
         if (!empty( $byArea[$areaid] )) {
             return $byArea[$areaid];
         } else {

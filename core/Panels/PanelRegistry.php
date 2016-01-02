@@ -23,6 +23,28 @@ class PanelRegistry
 
     public $objects = array();
 
+    /**
+     * @param $file
+     */
+    public function addByFile( $file )
+    {
+        include_once $file;
+        $classname = str_replace( '.php', '', basename( $file ) );
+        if (property_exists( $classname, 'settings' )) {
+            $args = $classname::$settings;
+            if (empty( $args['id'] )) {
+                $args['id'] = sanitize_key( $classname );
+            }
+            $args['class'] = $classname;
+            $args['baseId'] = $args['id'];
+
+            if (!isset( $this->panels[$args['baseId']] )) {
+                $this->add( $args['baseId'], $args );
+            }
+        }
+
+
+    }
 
     /**
      * Add a Panel
@@ -36,10 +58,10 @@ class PanelRegistry
     {
         if (!isset( $this->panels[$panelId] )) {
 
-            $reflection = new \ReflectionClass($args['class']);
+            $reflection = new \ReflectionClass( $args['class'] );
             $name = $reflection->getParentClass()->name;
 
-            if ($name == 'Kontentblocks\Panels\OptionsPanel'){
+            if ($name == 'Kontentblocks\Panels\OptionsPanel') {
                 $args['type'] = 'options';
             } else {
                 $args['type'] = 'post';
@@ -47,7 +69,7 @@ class PanelRegistry
             $this->panels[$panelId] = $args;
 
             /** @var \Kontentblocks\Panels\AbstractPanel $args */
-            $args['class']::run($args);
+            $args['class']::run( $args );
             return true;
         } else {
             return new \WP_Error(

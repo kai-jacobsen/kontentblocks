@@ -60,20 +60,32 @@ abstract class AbstractPanel implements EntityInterface
      */
     abstract public function getKey( $key = null, $default = null );
 
+    /**
+     * @return string
+     */
     public function getBaseId()
     {
         return $this->baseId;
     }
 
+    /**
+     * @return mixed
+     */
     public function getModel()
     {
         return $this->model;
     }
 
+    /**
+     * @return string
+     */
     public function getId(){
         return $this->baseId;
     }
 
+    /**
+     * @return mixed
+     */
     protected function getType()
     {
         return $this->type;

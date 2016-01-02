@@ -71,6 +71,7 @@ Class Kontentblocks
         // load modules automatically, after areas were setup,
         // dynamic areas are on init/initInterface hook
         add_action( 'kb.areas.setup', array( $this, 'loadModules' ), 9 );
+        add_action( 'kb.areas.setup', array( $this, 'loadPanels' ), 10 );
         add_action( 'after_setup_theme', array( $this, 'setup' ), 11 );
     }
 
@@ -137,6 +138,8 @@ Class Kontentblocks
         $this->Services['registry.modules'] = function ( $Services ) {
             return new ModuleRegistry( $Services );
         };
+
+
         $this->Services['registry.areas'] = function ( $Services ) {
             return new AreaRegistry( $Services );
         };
@@ -368,6 +371,43 @@ Class Kontentblocks
             foreach ($files as $template) {
                 if (strpos( basename( $template ), '__' ) === false) {
                     $Registry->add( $template );
+                }
+            }
+        }
+        _K::info( 'Modules loaded' );
+
+        do_action( 'kb.init' );
+        _K::info( 'kb.init action fired. We\'re good to go.' );
+
+    }
+
+    /**
+     * Load Panel Files
+     */
+    public function loadPanels()
+    {
+
+        /** @var \Kontentblocks\Modules\ModuleRegistry $Registry */
+        $Registry = $this->Services['registry.panels'];
+        // add core modules path
+        $paths = apply_filters( 'kb.panel.paths', array() );
+        $paths = array_unique( $paths );
+        foreach ($paths as $path) {
+            $dirs = glob( $path . '[pP]anel*', GLOB_ONLYDIR );
+            if (!empty( $dirs )) {
+                foreach ($dirs as $subdir) {
+                    $files = glob( $subdir . '/[pP]anel*.php' );
+                    foreach ($files as $template) {
+                        if (strpos( basename( $template ), '__' ) === false) {
+                            $Registry->add( $template );
+                        }
+                    }
+                }
+            }
+            $files = glob( $path . '*.php' );
+            foreach ($files as $template) {
+                if (strpos( basename( $template ), '__' ) === false) {
+                    $Registry->addByFile( $template );
                 }
             }
         }
