@@ -3,7 +3,6 @@
 namespace Kontentblocks\Frontend\Renderer;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
-use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\Save\ConcatContent;
 use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Frontend\AreaNode;
