@@ -388,19 +388,10 @@ class PostEnvironment implements JsonSerializable
         return array(
             'postId' => absint( $this->storageId ),
             'pageTemplate' => $this->getPageTemplate(),
-            'postType' => $this->getPostType()
-//            'moduleCount' => $this->getModuleCount()
+            'postType' => $this->getPostType(),
+            'entityType' => 'post'
         );
     }
-//
-//    /**
-//     * @return mixed
-//     * @since 0.1.0
-//     */
-//    public function getModuleCount()
-//    {
-//        return Utilities::getHighestId( $this->getStorage()->getIndex() );
-//    }
 
     /**
      * Return this Storage Object

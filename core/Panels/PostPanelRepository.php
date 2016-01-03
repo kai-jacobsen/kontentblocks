@@ -57,7 +57,7 @@ class PostPanelRepository
         $registry = Kontentblocks::getService( 'registry.panels' );
 
         foreach ($registry->getAll() as $id => $panel) {
-            if ($panel['type'] == 'options'){
+            if ($panel['type'] !== 'post'){
                 continue;
             }
             $postTypes = !empty($panel['postTypes']) ? $panel['postTypes'] : [];

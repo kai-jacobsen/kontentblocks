@@ -2,9 +2,8 @@
 namespace Kontentblocks\Panels;
 
 
-use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
-use Kontentblocks\Customizer\CustomizerIntegration;
+use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
@@ -19,24 +18,36 @@ abstract class TermPanel extends AbstractPanel
 {
 
     /**
-     * @var SerOptionsDataProvider
+     * @var TermMetaDataProvider
      */
     public $dataProvider;
+
+    /**
+     * @var TermPanelModel
+     */
+    public $model;
+
+    /**
+     * @var \WP_Term
+     */
+    public $term;
 
 
     /**
      * Class constructor
      *
      * @param array $args
-     *
-     * @throws \Exception
+     * @param $environment
      */
-    public function __construct( $args, $environment )
+    public function __construct( $args, TermEnvironment $environment )
     {
+        $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults( $args );
         $this->setupArgs( $this->args );
+        $this->term = $environment->termObj;
         $this->fields = new PanelFieldController( $this );
-        $this->model = new OptionsPanelModel( $environment->getDataProvider()->get( $args['baseId'] ), $this );
+        $this->model = new TermPanelModel( $environment->getDataProvider()->get( $args['baseId'] ), $this );
+        $this->data = $this->model->export();
         $this->fields();
     }
 
@@ -48,7 +59,8 @@ abstract class TermPanel extends AbstractPanel
     public function parseDefaults( $args )
     {
         $defaults = array(
-            'taxonomy' => 'category'
+            'taxonomy' => 'category',
+            'beforeForm' => true
         );
 
         return wp_parse_args( $args, $defaults );
@@ -73,26 +85,16 @@ abstract class TermPanel extends AbstractPanel
 
     abstract public function fields();
 
-    /**
-     * @param $args
-     */
-    public static function run( $args )
-    {
-//        $instance = new $args['class']( $args );
-//        $instance->init();
-    }
-
     public function init()
     {
         add_action( "edited_{$this->args['taxonomy']}", array( $this, 'save' ) );
-        add_action( "{$this->args['taxonomy']}_edit_form_fields", array( $this, 'form' ) );
+        if ($this->args['beforeForm']) {
+            add_action( "{$this->args['taxonomy']}_edit_form_fields", array( $this, 'form' ) );
+        } else {
+            add_action( "{$this->args['taxonomy']}_edit_form", array( $this, 'form' ) );
+
+        }
         add_action( 'admin_footer', array( $this, 'toJSON' ), 5 );
-    }
-
-    public function setupMenu()
-    {
-
-        $this->toJSON();
     }
 
     public function toJSON()
@@ -110,6 +112,7 @@ abstract class TermPanel extends AbstractPanel
 
     /**
      * Post Id not needed in this context
+     * @param $termId
      * @return mixed|void
      */
     public function save( $termId )
@@ -122,6 +125,7 @@ abstract class TermPanel extends AbstractPanel
     }
 
     /**
+     * @param $termId
      * @return bool
      */
     public function form( $termId )
@@ -148,11 +152,17 @@ abstract class TermPanel extends AbstractPanel
     private function beforeForm()
     {
         $out = '';
-        $out .= "<div class='wrap'>";
         $out .= "<div class='postbox kb-taxpanel'>
                 <div class='kb-custom-wrapper'>
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
         return $out;
+    }
+
+    /**
+     * @return \WP_Term
+     */
+    public function getTerm(){
+        return $this->term;
     }
 
     /**
@@ -170,7 +180,7 @@ abstract class TermPanel extends AbstractPanel
     private function afterForm()
     {
         $out = '';
-        $out .= "</div></div></div>";
+        $out .= "</div></div>";
         $out .= "</div>";
 
         return $out;
@@ -214,14 +224,6 @@ abstract class TermPanel extends AbstractPanel
     public function getData()
     {
         return $this->model->export();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->menu['name'];
     }
 
 }

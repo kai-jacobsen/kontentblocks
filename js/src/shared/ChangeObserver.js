@@ -5,7 +5,7 @@ module.exports = Backbone.View.extend({
   className: 'kb-change-observer',
   initialize: function () {
     this.listenTo(KB.Modules, 'add', this.attachHandler);
-    this.listenTo(KB.Panels, 'add', this.attachHandler);
+    //this.listenTo(KB.Panels, 'add', this.attachHandler);
     this.render();
   },
   events:{

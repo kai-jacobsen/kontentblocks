@@ -12,7 +12,8 @@ use Kontentblocks\Common\Data\EntityModel;
 abstract class PanelModel extends EntityModel
 {
 
-    private $panel;
+    public $_originalData;
+    private $_panel;
 
     /**
      * @param array $data
@@ -21,7 +22,7 @@ abstract class PanelModel extends EntityModel
      */
     public function __construct( $data = array(), AbstractPanel $panel )
     {
-        $this->panel = $panel;
+        $this->_panel = $panel;
         $this->_originalData = $data;
         $this->set( $data );
         $this->_initialized = true;
@@ -37,6 +38,12 @@ abstract class PanelModel extends EntityModel
 
     }
 
+    /**
+     * @return AbstractPanel
+     */
+    protected function getPanel(){
+        return $this->_panel;
+    }
 
     /**
      * (PHP 5 &gt;= 5.4.0)<br/>
@@ -50,7 +57,7 @@ abstract class PanelModel extends EntityModel
     public function jsonSerialize()
     {
         $vars = get_object_vars( $this );
-        unset( $vars['panel'] );
+        unset( $vars['_panel'] );
         unset( $vars['_locked'] );
         unset( $vars['_initialized'] );
         unset( $vars['_originalData'] );

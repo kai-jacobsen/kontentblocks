@@ -21,23 +21,22 @@ class TaxonomyEditScreen
         global $pagenow;
         if (isset( $_REQUEST['taxonomy'] )) {
             $this->taxonomy = filter_var( $_REQUEST['taxonomy'], FILTER_SANITIZE_STRING );
-
             if (in_array( $pagenow, array( 'edit-tags.php' ) ) && !empty( $this->taxonomy )) {
                 add_action( "{$this->taxonomy}_pre_edit_form", array( $this, 'preparePanels' ), 10, 2 );
-                add_action( "edit_$this->taxonomy", array( $this, 'savePanels' ), 10, 2 );
+                add_action( "edit_$this->taxonomy", array( $this, 'preparePanels' ), 10, 2 );
             }
         }
     }
 
+
+    /**
+     * @param $term
+     * @param $taxonomy
+     */
     public function preparePanels( $term, $taxonomy )
     {
-        $environment = Utilities::getTermEnvironment( $term->term_id, $this->taxonomy );
+        $term = get_term( $term );
+        Utilities::getTermEnvironment( $term->term_id, $this->taxonomy );
     }
-
-    public function savePanels( $term )
-    {
-        $environment = Utilities::getTermEnvironment( $term, $this->taxonomy );
-    }
-
 
 }

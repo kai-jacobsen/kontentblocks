@@ -48,4 +48,12 @@ class TermPanelRepository
         return $this->panels;
     }
 
+    public function getPanelObject( $panelid )
+    {
+        if (array_key_exists($panelid, $this->panels)){
+            return $this->panels[$panelid];
+        }
+        return null;
+    }
+
 }

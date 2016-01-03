@@ -215,6 +215,37 @@ function getPostPanel( $panelId = null, $postId = null )
 }
 
 /**
+ * @param $panelId
+ * @param $termId
+ * @param null $taxonomy
+ * @return null|\WP_Error
+ */
+function getTermPanel( $panelId, $termId, $taxonomy = null )
+{
+    $environment = Utilities::getTermEnvironment( $termId, $taxonomy );
+    $panel = $environment->getTermPanel( $panelId );
+    if (is_a( $panel, "\\Kontentblocks\\Panels\\TermPanel" )) {
+        return $panel;
+    } else {
+        return new \WP_Error( 'Kontentblocks', 'Panel does not exist', array( 'request' => $panelId ) );
+    }
+}
+
+/**
+ * @param $panelId
+ * @param $termId
+ * @param null $taxonomy
+ * @return mixed
+ */
+function getTermPanelModel( $panelId, $termId, $taxonomy = null )
+{
+    $panel = getTermPanel( $panelId, $termId, $taxonomy );
+    if (!is_wp_error( $panel )) {
+        return $panel->setupFrontendData();
+    }
+}
+
+/**
  * @param null $panelId
  * @param null $postId
  * @return mixed
