@@ -59,7 +59,7 @@ class FieldTest extends \WP_UnitTestCase
         $this->TestField->setArgs( array( 'returnObj' => 'EditableElement' ) );
         $this->assertEquals( $this->TestField->getFrontendValue(), 'TESTVALUE' );
         $this->assertEquals(
-            is_a( $this->TestField->getFrontendValue(), '\Kontentblocks\Fields\Returnobjects\EditableElement' ),
+            is_a( $this->TestField->getFrontendValue(), '\Kontentblocks\Fields\Definitions\ReturnObjects\EditableElement' ),
             true
         );
     }
