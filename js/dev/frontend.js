@@ -5533,6 +5533,7 @@ module.exports = Backbone.View.extend({
     return this.models;
   },
   saveAll: function () {
+    tinyMCE.triggerSave();
     _.each(this.models.models, function (model) {
       model.sync(true);
     });

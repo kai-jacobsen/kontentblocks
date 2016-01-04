@@ -1331,7 +1331,7 @@ module.exports = BaseView.extend({
   },
   saveData: function () {
     tinyMCE.triggerSave();
-    this.model.save();
+    this.model.sync();
   },
   getDirty: function () {
     this.$el.addClass('is-dirty');
@@ -3364,6 +3364,7 @@ module.exports = Backbone.View.extend({
     return this.models;
   },
   saveAll: function () {
+    tinyMCE.triggerSave();
     _.each(this.models.models, function (model) {
       model.sync(true);
     });

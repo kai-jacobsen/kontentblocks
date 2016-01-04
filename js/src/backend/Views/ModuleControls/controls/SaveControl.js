@@ -24,7 +24,7 @@ module.exports = BaseView.extend({
   },
   saveData: function () {
     tinyMCE.triggerSave();
-    this.model.save();
+    this.model.sync();
   },
   getDirty: function () {
     this.$el.addClass('is-dirty');
