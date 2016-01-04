@@ -71,7 +71,17 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
         }
 
         if (!empty( $this->$offset )) {
-            return $this->$offset;
+            $value = $this->$offset;
+
+            if (is_object($value)){
+                $value = $value->value;
+            }
+
+            if (empty($value)){
+                return $default;
+            }
+
+            return $value;
         }
 
         return $default;
