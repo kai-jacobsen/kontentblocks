@@ -516,9 +516,10 @@ module.exports = BaseView.extend({
     });
   },
   postRender: function () {
+    console.log(this.model);
     var name = this.model.get('baseId') + '[' + this.model.get('index') + ']' + '[' + this.model.get('primeKey') + ']';
-    var edId = this.model.get('fieldId') + '_' + this.model.get('fieldkey') + '_editor_' + this.model.get('index');
-    this.$editorWrap = jQuery('.kb-ff-editor-wrapper', this.$el);
+    var edId = this.model.get('fieldId') + '_' + this.model.get('key') + '_editor_' + this.model.get('index');
+    this.$editorWrap = jQuery('.kb-ff-editor-wrapper-' + this.model.get('index') + '-' + this.model.get('key'), this.$el);
     TinyMCE.remoteGetEditor(this.$editorWrap, name, edId, this.model.get('value'), null, false);
   }
 });
@@ -637,7 +638,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 
   return "<div class=\"kb-field kb-js-field field-api-editor\">\n    <label class=\"heading\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.label : stack1), depth0))
-    + "</label>\n    <div class=\"kb-ff-editor-wrapper\">\n    </div>\n    <p class=\"description\">"
+    + "</label>\n    <div class=\"kb-ff-editor-wrapper-"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.index : stack1), depth0))
+    + "-"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.key : stack1), depth0))
+    + "\">\n    </div>\n    <p class=\"description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n</div>";
 },"useData":true});

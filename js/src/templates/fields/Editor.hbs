@@ -1,6 +1,6 @@
 <div class="kb-field kb-js-field field-api-editor">
     <label class="heading">{{ model.label }}</label>
-    <div class="kb-ff-editor-wrapper">
+    <div class="kb-ff-editor-wrapper-{{ model.index }}-{{model.key}}">
         {{! editor markup gets retrieved from the server and is inserted dynamically }}
     </div>
     <p class="description">{{ model.description }}</p>
