@@ -19,11 +19,17 @@
         'common' => array(
             'description' => __( 'Description:', 'Kontentblocks' )
         ),
-        'notices' => array(
+        'tooltips' => array(
             'draft' => __( 'Draft (not visible)', 'Kontentblocks' ),
             'published' => __('Published', 'Kontentblocks'),
             'draft_short' => __( 'draft', 'Kontentblocks' ),
-            'public_short' => __( 'Public', 'Kontentblocks' )
+            'public_short' => __( 'Public', 'Kontentblocks' ),
+            'tooltipUndraft' => __('Update the post to publish the module', 'Kontentblocks'),
+            'tooltipDraft' => __('Click to draft this module', 'Kontentblocks'),
+            'tooltipRemoveFromClipboard' => __('Remove from clipboard', 'Kontentblocks'),
+            'tooltipAddToClipboard' => __('Add to clipboard', 'Kontentblocks'),
+            'dragToSort' => __('Drag to (re)sort', 'Kontentblocks'),
+            'toggleFullscreen' => __('Toggle Fullscreen', 'Kontentblocks')
         ),
         'controls' => array(
             'be' => array(
@@ -37,6 +43,15 @@
                     )
                 )
             )
+        ),
+        'global' => array(
+            'headline' => __('Create a new global module', 'Kontentblocks'),
+            'intro' => __('Please chose the module type and provide an unique name.', 'Kontentblocks'),
+            'boxTitle' => __('New global module', 'Kontentblocks'),
+            'moduleName' => __('Module name', 'Kontentblocks'),
+            'moduleType' => __('Chose the module type', 'Kontentblocks'),
+            'menuTitle' => __('Global Modules', 'Kontentblocks'),
+
         )
 
     )

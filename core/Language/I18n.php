@@ -27,14 +27,6 @@ class I18n
      */
     static $instance;
 
-    public static function getInstance()
-    {
-        if (null === self::$instance) {
-            self::$instance = new self;
-        }
-        return self::$instance;
-    }
-
     /**
      * Constructor
      * Add action and load packages from subfolder
@@ -63,6 +55,14 @@ class I18n
 
     }
 
+    public static function getInstance()
+    {
+        if (null === self::$instance) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+
     /**
      * Each language package must register itself with this method
      * @param $context string I18n-namespace
@@ -76,6 +76,17 @@ class I18n
 
     }
 
+    public static function getPackages()
+    {
+        $return = array();
+        if (func_num_args() > 0) {
+            foreach (func_get_args() as $arg) {
+                $return += self::getPackage( $arg );
+            }
+        }
+        return $return;
+
+    }
 
     public static function getPackage( $context )
     {
@@ -86,18 +97,6 @@ class I18n
             $result = self::_getSubpackage( $result, $pk );
         }
         return $result;
-
-    }
-
-    public static function getPackages()
-    {
-        $return = array();
-        if (func_num_args() > 0) {
-            foreach (func_get_args() as $arg) {
-                $return += self::getPackage( $arg );
-            }
-        }
-        return $return;
 
     }
 
@@ -151,16 +150,6 @@ class I18n
         return $locale[0];
     }
 
-    public static function getDefaultLanguageCode()
-    {
-        global $sitepress;
-        if (self::wpmlActive()) {
-            return $sitepress->get_default_language();
-        } else {
-            return self::get2CharLocale();
-        }
-    }
-
     public static function getActiveLanguages()
     {
         global $sitepress;
@@ -171,5 +160,15 @@ class I18n
 
         return self::getDefaultLanguageCode();
 
+    }
+
+    public static function getDefaultLanguageCode()
+    {
+        global $sitepress;
+        if (self::wpmlActive()) {
+            return $sitepress->get_default_language();
+        } else {
+            return self::get2CharLocale();
+        }
     }
 }

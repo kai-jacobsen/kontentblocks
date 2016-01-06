@@ -1,5 +1,7 @@
 var Notice = require('common/Notice');
 var tplChangeObserver = require('templates/frontend/change-observer.hbs');
+var I18n = require('common/I18n');
+var Config = require('common/Config');
 module.exports = Backbone.View.extend({
   models: new Backbone.Collection(),
   className: 'kb-change-observer',
@@ -8,11 +10,13 @@ module.exports = Backbone.View.extend({
     //this.listenTo(KB.Panels, 'add', this.attachHandler);
     this.render();
   },
-  events:{
-      'click .kb-button' : 'saveAll'
+  events: {
+    'click .kb-button': 'saveAll'
   },
   render: function () {
-    this.$el.append(tplChangeObserver({}));
+    this.$el.append(tplChangeObserver({
+      strings: I18n.getString('UI.changeObserver')
+    }));
     this.$el.appendTo('body');
   },
   attachHandler: function (model) {
@@ -26,7 +30,7 @@ module.exports = Backbone.View.extend({
     this.handleState();
   },
   remove: function (model) {
-    this.models.remove(model, {silent:true});
+    this.models.remove(model, {silent: true});
     this.trigger('change');
     this.handleState();
   },
@@ -38,12 +42,14 @@ module.exports = Backbone.View.extend({
     _.each(this.models.models, function (model) {
       model.sync(true);
     });
-    Notice.notice('Data is safe.', 'success');
+    if (!Config.isAdmin()) {
+      Notice.notice('Data is safe.', 'success');
+    }
     this.trigger('change');
   },
   handleState: function () {
     var l = this.models.models.length;
-    if ( l > 0){
+    if (l > 0) {
       this.$el.addClass('show');
     } else {
       this.$el.removeClass('show');

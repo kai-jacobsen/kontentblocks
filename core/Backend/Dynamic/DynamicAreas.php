@@ -3,12 +3,11 @@
 namespace Kontentblocks\Backend\Dynamic;
 
 use Kontentblocks\Areas\AreaProperties;
-use Kontentblocks\Areas\AreaBackendHTML;
-use Kontentblocks\Areas\AreaRegistry;
-use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\EditScreens\ScreenManager;
+use Kontentblocks\Backend\Renderer\AreaBackendRenderer;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\Utilities;
 
@@ -137,7 +136,7 @@ class DynamicAreas
         echo Utilities::getBaseIdField( $environment->getStorage()->getIndex() );
         echo "<input type='hidden' name='blog_id' value='{$blogId}' >";
 
-        $areaHTML = new AreaBackendHTML( $areaDef, $environment );
+        $areaHTML = new AreaBackendRenderer( $areaDef, $environment );
         $areaHTML->build();
 
         print "</div></div>";
@@ -155,6 +154,7 @@ class DynamicAreas
     {
 
         $templateData = array(
+            'strings' => I18n::getPackages('Areas', 'Common'),
             'editMode' => ( !empty( $data ) ),
             'basename' => 'area',
             'renderContextSelect' => true,

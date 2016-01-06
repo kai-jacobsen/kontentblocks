@@ -10,6 +10,7 @@ var UI = require('common/UI');
 var Logger = require('common/Logger');
 var FlexFieldsCollection = require('fields/controls/flexfields/FlexFieldsCollection');
 var tplSkeleton = require('templates/fields/FlexibleFields/skeleton.hbs');
+var I18n = require('common/I18n');
 module.exports = Backbone.View.extend({
   initialize: function (options) {
     // setup the flexfield configuration as set in the parent object
@@ -63,7 +64,9 @@ module.exports = Backbone.View.extend({
     this._initialized = true; // flag init state
   },
   render: function () {
-    this.$el.append(tplSkeleton({}));
+    this.$el.append(tplSkeleton({
+      i18n: I18n.getString('Refields.flexfields')
+    }));
     this.setupElements();
     this.initialSetup();
 

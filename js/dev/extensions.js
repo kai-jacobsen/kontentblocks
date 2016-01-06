@@ -108,6 +108,9 @@ var Config = (function ($) {
         return null;
       }
     },
+    isAdmin: function(){
+      return !config.frontend;
+    },
     inDevMode: function () {
       return config.env.dev;
     },
@@ -928,12 +931,13 @@ module.exports = BaseView.extend({
   success: function () {
   },
   statusClass: function () {
+    var strings = I18n.getString('Modules.tooltips');
     if (this.ClipboardController.entryExists(this.hash)) {
       this.$el.addClass('kb-in-clipboard');
-      this.$el.attr('data-kbtooltip', 'Huhuh');
+      this.$el.attr('data-kbtooltip', strings.tooltipRemoveFromClipboard);
     } else {
       this.$el.removeClass('kb-in-clipboard');
-      this.$el.attr('data-kbtooltip', 'Hihihi');
+      this.$el.attr('data-kbtooltip', strings.tooltipAddToClipboard);
 
     }
   }

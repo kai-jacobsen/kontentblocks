@@ -33,6 +33,9 @@ var Config = (function ($) {
         return null;
       }
     },
+    isAdmin: function(){
+      return !config.frontend;
+    },
     inDevMode: function () {
       return config.env.dev;
     },

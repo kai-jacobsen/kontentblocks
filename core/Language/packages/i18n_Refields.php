@@ -40,6 +40,9 @@
             'emptyTaxonomySelect' => __( 'Please chose', 'Kontentblocks' ),
             'invalidTaxonomyField' => __( 'Please use either name,id or slug as field', 'Kontentblocks' )
         ),
+        'flexfields' => array(
+          'addNewItem' => __('Add new element', 'Kontentblocks')
+        ),
         // Field::otimes
         'otimes' => array(
             'and' => __( 'and', 'Kontentblocks' ),

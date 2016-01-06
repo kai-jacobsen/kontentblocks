@@ -46,6 +46,7 @@ class GlobalModulesMenu
      */
     public function addAdminMenu()
     {
+        $i18n = I18n::getPackage('Modules');
         if (!Utilities::adminMenuExists( 'Kontentblocks' )) {
             add_menu_page(
                 'kontentblocks',
@@ -59,8 +60,8 @@ class GlobalModulesMenu
 
         add_submenu_page(
             '/edit.php?post_type=kb-dyar',
-            'Global Modules',
-            'Global Modules',
+            $i18n['global']['menuTitle'],
+            $i18n['global']['menuTitle'],
             'manage_kontentblocks',
             '/edit.php?post_type=kb-gmd',
             false
@@ -138,7 +139,7 @@ class GlobalModulesMenu
             'module' => $module,
             'attachedTo' => $this->prepareAttachedTo(),
             'contexts' => ScreenManager::getDefaultContextLayout(),
-            'i18n' => I18n::getPackages( 'Common', 'Menus' )
+            'strings' => I18n::getPackages( 'Common', 'Menus' )
         );
 
 
@@ -179,7 +180,8 @@ class GlobalModulesMenu
         $templateData = array(
             'modules' => $this->prepareModulesforSelectbox( $postData ),
             'nonce' => wp_create_nonce( 'new-gmodule' ),
-            'data' => $postData
+            'data' => $postData,
+            'strings' => I18n::getPackages('Common', 'Modules')
         );
 
         // To keep html out of php files as much as possible twig is used

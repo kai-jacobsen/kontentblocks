@@ -1427,6 +1427,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var tplDraftStatus = require('templates/backend/status/draft.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
+var I18n = require('common/I18n');
 module.exports = BaseView.extend({
   id: 'draft',
   className: 'kb-status-draft',
@@ -1439,9 +1440,8 @@ module.exports = BaseView.extend({
   render: function () {
     var draft = this.model.get('state').draft;
     var $parent = this.model.View.$el;
-    this.$el.append(tplDraftStatus({draft: this.model.get('state').draft, i18n: KB.i18n.Modules.notices}));
+    this.$el.append(tplDraftStatus({draft: this.model.get('state').draft, strings: I18n.getString('Modules.tooltips')}));
     if (draft){
-      console.log(this.model.View);
       $parent.addClass('kb-module-draft');
     } else {
       $parent.removeClass('kb-module-draft');
@@ -1462,7 +1462,7 @@ module.exports = BaseView.extend({
   }
 
 });
-},{"backend/Views/BaseControlView":13,"common/Ajax":42,"common/Config":44,"templates/backend/status/draft.hbs":85}],30:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Ajax":42,"common/Config":44,"common/I18n":45,"templates/backend/status/draft.hbs":85}],30:[function(require,module,exports){
 var BaseView = require('backend/Views/BaseControlView');
 var tplLoggedInStatus = require('templates/backend/status/loggedin.hbs');
 var SettingsController = require('backend/Views/ModuleStatusBar/status/Settings/SettingsStatusController');
@@ -1636,6 +1636,8 @@ module.exports = BaseView.extend({
 var BaseView = require('backend/Views/BaseControlView');
 var FullscreenView = require('backend/Views/FullscreenView');
 var Checks = require('common/Checks');
+var I18n = require('common/I18n');
+
 module.exports = BaseView.extend({
   id: 'fullscreen',
   initialize: function (options) {
@@ -1644,7 +1646,7 @@ module.exports = BaseView.extend({
     this.$body = jQuery('.kb-module__body', this.$parent);
   },
   attributes: {
-    "data-kbtooltip": 'turn fullscreen mode on'
+    "data-kbtooltip": I18n.getString('Modules.tooltips.toggleFullscreen')
   },
   events: {
     'click': 'openFullscreen'
@@ -1675,17 +1677,18 @@ module.exports = BaseView.extend({
     return this.FullscreenView;
   }
 });
-},{"backend/Views/BaseControlView":13,"backend/Views/FullscreenView":22,"common/Checks":43}],37:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"backend/Views/FullscreenView":22,"common/Checks":43,"common/I18n":45}],37:[function(require,module,exports){
 //KB.Backbone.Backend.ModuleStatus
 var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
+var I18n = require('common/I18n');
 module.exports = BaseView.extend({
   id: 'move',
   initialize: function (options) {
     this.options = options || {};
   },
   attributes: {
-    "data-kbtooltip": 'move to sort'
+    "data-kbtooltip": I18n.getString('Modules.tooltips.dragToSort')
   },
   className: 'ui-move kb-move block-menu-icon',
   isValid: function () {
@@ -1697,7 +1700,7 @@ module.exports = BaseView.extend({
     }
   }
 });
-},{"backend/Views/BaseControlView":13,"common/Checks":43}],38:[function(require,module,exports){
+},{"backend/Views/BaseControlView":13,"common/Checks":43,"common/I18n":45}],38:[function(require,module,exports){
 //KB.Backbone.Backend.ModuleStatus
 var BaseView = require('backend/Views/BaseControlView');
 var Checks = require('common/Checks');
@@ -2064,6 +2067,9 @@ var Config = (function ($) {
         console.error('Invalid nonce requested in kb.cm.Config.js');
         return null;
       }
+    },
+    isAdmin: function(){
+      return !config.frontend;
     },
     inDevMode: function () {
       return config.env.dev;
@@ -3330,6 +3336,8 @@ module.exports = new BatchDeleteController();
 },{"common/Ajax":42,"common/Config":44,"common/TinyMCE":51,"templates/backend/batch-delete.hbs":71}],58:[function(require,module,exports){
 var Notice = require('common/Notice');
 var tplChangeObserver = require('templates/frontend/change-observer.hbs');
+var I18n = require('common/I18n');
+var Config = require('common/Config');
 module.exports = Backbone.View.extend({
   models: new Backbone.Collection(),
   className: 'kb-change-observer',
@@ -3338,11 +3346,13 @@ module.exports = Backbone.View.extend({
     //this.listenTo(KB.Panels, 'add', this.attachHandler);
     this.render();
   },
-  events:{
-      'click .kb-button' : 'saveAll'
+  events: {
+    'click .kb-button': 'saveAll'
   },
   render: function () {
-    this.$el.append(tplChangeObserver({}));
+    this.$el.append(tplChangeObserver({
+      strings: I18n.getString('UI.changeObserver')
+    }));
     this.$el.appendTo('body');
   },
   attachHandler: function (model) {
@@ -3356,7 +3366,7 @@ module.exports = Backbone.View.extend({
     this.handleState();
   },
   remove: function (model) {
-    this.models.remove(model, {silent:true});
+    this.models.remove(model, {silent: true});
     this.trigger('change');
     this.handleState();
   },
@@ -3368,12 +3378,14 @@ module.exports = Backbone.View.extend({
     _.each(this.models.models, function (model) {
       model.sync(true);
     });
-    Notice.notice('Data is safe.', 'success');
+    if (!Config.isAdmin()) {
+      Notice.notice('Data is safe.', 'success');
+    }
     this.trigger('change');
   },
   handleState: function () {
     var l = this.models.models.length;
-    if ( l > 0){
+    if (l > 0) {
       this.$el.addClass('show');
     } else {
       this.$el.removeClass('show');
@@ -3382,7 +3394,7 @@ module.exports = Backbone.View.extend({
 
 
 });
-},{"common/Notice":48,"templates/frontend/change-observer.hbs":90}],59:[function(require,module,exports){
+},{"common/Config":44,"common/I18n":45,"common/Notice":48,"templates/frontend/change-observer.hbs":90}],59:[function(require,module,exports){
 //KB.Backbone.ModuleBrowser
 var ModuleDefinitions = require('shared/ModuleBrowser/ModuleBrowserDefinitions');
 var ModuleDefModel = require('shared/ModuleBrowser/ModuleDefinitionModel');
@@ -4111,16 +4123,20 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
-  return "    <div data-kbtooltip=\"Update the post to publish the module\"><span class=\"kbu-color-red kb-module--status-label\">Status</span><br><span>"
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.draft : stack1), depth0))
+  return "    <div data-kbtooltip=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.tooltipUndraft : stack1), depth0))
+    + "\"><span class=\"kbu-color-red kb-module--status-label\">Status</span><br><span>"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.draft : stack1), depth0))
     + "</span></div>\n";
 },"3":function(depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
 
-  return "   <div data-kbtooltip=\"Click to draft this module\"><span class=\"kbu-color-green kb-module--status-label\">Status</span><br><span>"
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.i18n : depth0)) != null ? stack1.published : stack1), depth0))
+  return "   <div data-kbtooltip=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.tooltipDraft : stack1), depth0))
+    + "\"><span class=\"kbu-color-green kb-module--status-label\">Status</span><br><span>"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.published : stack1), depth0))
     + "</span></div>\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
@@ -4178,7 +4194,11 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<p>You have unsaved changes. <span class=\"kb-button\">Save now.</span></p>";
+    var stack1;
+
+  return "<div>"
+    + ((stack1 = this.lambda(((stack1 = (depth0 != null ? depth0.strings : depth0)) != null ? stack1.feedback : stack1), depth0)) != null ? stack1 : "")
+    + "</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":99}],91:[function(require,module,exports){

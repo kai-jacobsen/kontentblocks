@@ -2,6 +2,8 @@
 var BaseView = require('backend/Views/BaseControlView');
 var FullscreenView = require('backend/Views/FullscreenView');
 var Checks = require('common/Checks');
+var I18n = require('common/I18n');
+
 module.exports = BaseView.extend({
   id: 'fullscreen',
   initialize: function (options) {
@@ -10,7 +12,7 @@ module.exports = BaseView.extend({
     this.$body = jQuery('.kb-module__body', this.$parent);
   },
   attributes: {
-    "data-kbtooltip": 'turn fullscreen mode on'
+    "data-kbtooltip": I18n.getString('Modules.tooltips.toggleFullscreen')
   },
   events: {
     'click': 'openFullscreen'

@@ -1,11 +1,12 @@
 body.wp-admin .kb-change-observer{
   left: auto;
   right: 0;
+  padding: 8px 20px;
+  width: auto;
 }
 
 .kb-change-observer{
   width: 400px;
-  height: 40px;
   position: fixed;
   bottom: -80px;
   left: 0%;
@@ -15,6 +16,7 @@ body.wp-admin .kb-change-observer{
   @extend .base-box-shadow;
   visibility: hidden;
   transition: all .5s ease-in;
+  border: 1px solid #ccc;
 
   &.show{
     visibility: visible;

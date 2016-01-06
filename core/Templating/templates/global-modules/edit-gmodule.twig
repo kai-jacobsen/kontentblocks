@@ -1,8 +1,8 @@
 <div id="kontentblocks-core-ui" class="postbox">
-    <h3>{{ i18n.editGmodulesTitle }}</h3>
+    <h3>{{ strings.editGmodulesTitle }}</h3>
     <div class="inside kb-module" id="{{ module.mid }}">
         <div class="kb-area-context-select">
-            <label for="area-context-select">{{ i18n.editGmodulesLabel }}</label>
+            <label for="area-context-select">{{ strings.editGmodulesLabel }}</label>
             <select name="area-context" onchange="KB.Menus.reloadContext(this)" id="area-context-select">
                 {% for context in contexts %}
                     <option {% if module.properties.areaContext == context.id %} selected="selected" {% endif %} value="{{ context.id }}">{{ context.title }}</option>
@@ -15,14 +15,14 @@
         </div>
     </div>
     <div class="global-module--attached">
-        <h3>{{ i18n.editGmodulesAttached }}</h3>
-        <p>{{ i18n.editGmoduleAttachedDescription }}</p>
+        <h3>{{ strings.editGmodulesAttached }}</h3>
+        <p>{{ strings.editGmoduleAttachedDescription }}</p>
         <table>
             <thead>
             <tr>
                 <th width="10%">ID</th>
-                <th width="80%">{{ i18n.title }}</th>
-                <th width="10%">{{ i18n.action }}</th>
+                <th width="80%">{{ strings.title }}</th>
+                <th width="10%">{{ strings.action }}</th>
             </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
                 <tr>
                     <td>{{ post.ID }}</td>
                     <td>{{ post.post_title }}</td>
-                    <td><a target="krosstab" href="{{ get_edit_post_link(post.ID) }}">{{ i18n.view }}</a></td>
+                    <td><a target="krosstab" href="{{ get_edit_post_link(post.ID) }}">{{ strings.view }}</a></td>
                 </tr>
             {% endfor %}
             </tbody>

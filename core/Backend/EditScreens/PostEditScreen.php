@@ -4,6 +4,7 @@ namespace Kontentblocks\Backend\EditScreens;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Helper;
+use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\CoreView;
 use Kontentblocks\Utils\_K;
 use Kontentblocks\Utils\Utilities;
@@ -130,7 +131,7 @@ Class PostEditScreen
     private function handleEmptyAreas()
     {
         if (current_user_can( 'manage_kontentblocks' )) {
-            $tpl = new CoreView( 'no-areas.twig' );
+            $tpl = new CoreView( 'no-areas.twig', array('strings' => I18n::getPackage('Areas')) );
             return $tpl->render( false );
         }
         return '';

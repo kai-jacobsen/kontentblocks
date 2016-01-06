@@ -1,17 +1,16 @@
 <div class="postbox">
-    <h3>Template Settings</h3>
+    <h3>{{ strings.global.boxTitle }}</h3>
 
     <div class="inside">
         <div class="templates-add-new-form-wrapper">
-            <h3>Create a new Template</h3>
+            <h3>{{ strings.global.headline }}</h3>
 
-            <p class="description">Please chose the Module Type and provide an name for the template to identify it
-                later</p>
+            <p class="description">{{ strings.global.intro }}</p>
 
             <div class="kb-menu-field-section">
 
                 <div class="kb-menu-field kb-menu-field-with-spinner">
-                    <label>Module Name </label>
+                    <label>{{ strings.global.moduleName }}</label>
                     <input class="kb-change-observe"
                            type="text"
                            name="new-gmodule[name]"
@@ -23,7 +22,7 @@
             <div class="kb-menu-field-section">
                 <div class="kb-menu-field-section_description">
                     <p class="description">
-                        Chose the module type:
+                        {{ strings.global.moduleType }}
                     </p>
                 </div>
                 <div class="kb-menu-field-section_inputs">

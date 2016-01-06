@@ -1,16 +1,15 @@
 <div class="postbox {% if editMode %} closed {% endif %}">
-    <div class="handlediv" title="Zum Umschalten klicken"><br></div>
-    <h3 class="hndle">Edit Settings</h3>
+    <div class="handlediv"><br></div>
+    <h3 class="hndle">{{ strings.global.editSettings }}</h3>
     <div class="inside">
-
         <div class="kb-area-settings__inner">
             <form method="post" action="">
                 <input type="hidden" name="{{ basename }}[manual]" value="{{ manual }}" >
                 <div class="kb-menu-field-section area-inputs">
 
                     <div class="kb-menu-field kb-menu-field-with-spinner">
-                        <label>Name</label>
-                        <input {% if editMode %} readonly {% endif %} placeholder="unique name"
+                        <label>{{ strings.name }}</label>
+                        <input {% if editMode %} readonly {% endif %} placeholder="{{ strings.global.uniqueName }}"
                                                                       class="regular kb-change-observe"
                                                                       onchange="KB.Menus.createSanitizedId(this, 'areas')"
                                                                       type="text"
@@ -20,25 +19,23 @@
                     </div>
                     <div class="kb-menu-field">
                         <label>ID</label>
-                        <input readonly placeholder="filled by system" class="kb-js-area-id" type="text"
+                        <input readonly placeholder="{{ strings.global.setBySystem }}" class="kb-js-area-id" type="text"
                                name="{{ basename }}[id]"
                                value="{{ id }}">
 
                     </div>
                     <div class="kb-menu-field">
-                        <label>Description</label>
-                        <textarea placeholder="Add a short description"
-                                  name="{{ basename }}[description]">{{ description }}</textarea>
+                        <label>{{ strings.description }}</label>
+                        <textarea name="{{ basename }}[description]" placeholder="{{ strings.global.areaDescription }}"></textarea>
                     </div>
 
                 </div>
                 {% if renderContextSelect == true %}
                     <h3>Context</h3>
-
                     <div class="kb-menu-field-section">
                         <div class="kb-menu-field-section_description">
                             <p class="description">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                {{ strings.global.contextDesc }}
                             </p>
                         </div>
                         <div class="kb-menu-field-section_inputs">
@@ -65,7 +62,7 @@
                 <div class="kb-menu-field-section">
                     <div class="kb-menu-field-section_description">
                         <p class="description">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            {{ strings.global.postTypeDesc }}
                         </p>
                     </div>
                     <div class="kb-menu-field-section_inputs">
@@ -81,12 +78,12 @@
                 </div>
 
 
-                <h3>Page Templates</h3>
+                <h3>{{ strings.pageTemplates }}</h3>
 
                 <div class="kb-menu-field-section">
                     <div class="kb-menu-field-section_description">
                         <p class="description">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            {{ strings.global.pageTemplateDesc }}
                         </p>
                     </div>
                     <div class="kb-menu-field-section_inputs">

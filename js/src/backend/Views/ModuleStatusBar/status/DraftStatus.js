@@ -2,6 +2,7 @@ var BaseView = require('backend/Views/BaseControlView');
 var tplDraftStatus = require('templates/backend/status/draft.hbs');
 var Ajax = require('common/Ajax');
 var Config = require('common/Config');
+var I18n = require('common/I18n');
 module.exports = BaseView.extend({
   id: 'draft',
   className: 'kb-status-draft',
@@ -14,9 +15,8 @@ module.exports = BaseView.extend({
   render: function () {
     var draft = this.model.get('state').draft;
     var $parent = this.model.View.$el;
-    this.$el.append(tplDraftStatus({draft: this.model.get('state').draft, i18n: KB.i18n.Modules.notices}));
+    this.$el.append(tplDraftStatus({draft: this.model.get('state').draft, strings: I18n.getString('Modules.tooltips')}));
     if (draft){
-      console.log(this.model.View);
       $parent.addClass('kb-module-draft');
     } else {
       $parent.removeClass('kb-module-draft');
