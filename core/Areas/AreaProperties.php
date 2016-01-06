@@ -196,4 +196,12 @@ class AreaProperties
         return $this->id;
     }
 
+    public function export(){
+        $vars = get_object_vars($this);
+        if (is_object($vars['settings'])){
+            $vars['settings'] = $vars['settings']->export();
+        }
+        return $vars;
+    }
+
 }

@@ -167,11 +167,9 @@ class AreaRenderer implements RendererInterface
      */
     public function validate()
     {
-
         if (!$this->area->settings->isActive()) {
             return false;
         }
-
         if ($this->area->dynamic && !$this->area->settings->isAttached()) {
             return false;
         }

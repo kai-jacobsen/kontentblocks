@@ -72,6 +72,76 @@ class AreaRegistry
     }
 
     /**
+     * Even if an area is not an actual requirement for the
+     * consitency of a module, most frontend related code expects
+     * at least an area model for internal control purposes.
+     * If a module is not attached to a valid area, it's internally added
+     * to a dummy area, which is created here.
+     * This dummy area is ignored from any UI and does not exist publicly.
+     */
+    private function addMockArea()
+    {
+        $this->addArea(
+            array(
+                'id' => '_internal',
+                'internal' => true,
+                'context' => 'normal'
+            )
+        );
+    }
+
+    /**
+     * Adds an area to the registry
+     * Merges default params with provided params
+     * $Manual indicates if the area has been registered by code (true) or
+     * was added through the admin interface (false)
+     *
+     * @param array $args
+     * @param bool $manual
+     *
+     * @return void
+     * @since 0.1.0
+     */
+    public function addArea( $args, $manual = true )
+    {
+        if (!empty( $args['id'] )) {
+            $args['id'] = sanitize_title( $args['id'] );
+        }
+        if (isset( $args['dynamic'] ) && $args['dynamic']) {
+            $args['context'] = 'dynamic';
+        }
+
+        $area = new AreaProperties( $args );
+        // merge defaults with provided args
+        if ($area->dynamic === true && $manual) {
+            $this->areaDynamicManager->add( $area );
+        }
+
+        $this->areas[$area->id] = $area;
+        $this->preFilterAreas( $this->areas[$area->id] );
+    }
+
+    /**
+     * Sort areas to common used collections
+     *
+     * @param $area
+     *
+     * @since 0.1.0
+     */
+    public function preFilterAreas( $area )
+    {
+        if ($area->dynamic === true
+        ) {
+            if ($area->context === 'side') {
+                $this->globalSidebars[$area->id] = $area;
+            }
+
+            $this->globalAreas[$area->id] = $area;
+
+        }
+    }
+
+    /**
      * Init Function
      * Gets areas which were added by the user through the admin interface
      * Adds those areas to the directory
@@ -110,89 +180,6 @@ class AreaRegistry
     }
 
     /**
-     * Adds an area to the registry
-     * Merges default params with provided params
-     * $Manual indicates if the area has been registered by code (true) or
-     * was added through the admin interface (false)
-     *
-     * @param array $args
-     * @param bool $manual
-     *
-     * @return void
-     * @since 0.1.0
-     */
-    public function addArea( $args, $manual = true )
-    {
-        if (!empty( $args['id'] )) {
-            $args['id'] = sanitize_title( $args['id'] );
-        }
-
-        $area = new AreaProperties( $args );
-        // merge defaults with provided args
-        if ($area->dynamic === true && $manual) {
-            $this->areaDynamicManager->add( $area );
-        }
-
-        $this->areas[$area->id] = $area;
-        $this->preFilterAreas( $this->areas[$area->id] );
-    }
-
-    /**
-     * Returns an area from the registry by id
-     *
-     * @param string $id
-     *
-     * @return mixed null if area is not set | area array args if area is set
-     * @since 0.1.0
-     */
-    public function getArea( $id )
-    {
-        if (isset( $this->areas[$id] )) {
-            array_push( $this->reserved, $id );
-            return $this->areas[$id];
-        } else {
-            return null;
-        }
-
-    }
-
-    /**
-     * Retrieve all areas in given context
-     *
-     * @param string $context
-     *
-     * @return array
-     * @since 0.1.0
-     */
-    public function getAreasByContext( $context )
-    {
-        return array_filter(
-            $this->areas,
-            function ( $area ) use ( $context ) {
-                return ( $area->context === $context );
-            }
-        );
-    }
-
-
-    /**
-     * Get area which were assigned to a page template
-     *
-     * @param $tpl
-     *
-     * @return array
-     */
-    public function getAreasByPageTemplate( $tpl )
-    {
-        return array_filter(
-            $this->areas,
-            function ( $area ) use ( $tpl ) {
-                return ( in_array( $tpl, $area->pageTemplates ) );
-            }
-        );
-    }
-
-    /**
      * Getter for global sidebars
      * @return array
      * @since 0.1.0
@@ -201,38 +188,6 @@ class AreaRegistry
     {
         return $this->globalSidebars;
     }
-
-    /**
-     * getter for global areas
-     * @return array
-     * @since 0.1.0
-     */
-    public function getGlobalAreas()
-    {
-        return $this->globalAreas;
-    }
-
-
-    /**
-     * Sort areas to common used collections
-     *
-     * @param $area
-     *
-     * @since 0.1.0
-     */
-    public function preFilterAreas( $area )
-    {
-        if ($area->dynamic === true
-        ) {
-            if ($area->context === 'side') {
-                $this->globalSidebars[$area->id] = $area;
-            }
-
-            $this->globalAreas[$area->id] = $area;
-
-        }
-    }
-
 
     /**
      * Returns all registered area templates
@@ -287,7 +242,6 @@ class AreaRegistry
 
     }
 
-
     /**
      * Check if a template exists by id
      * @param $id
@@ -320,7 +274,7 @@ class AreaRegistry
     {
         $setting = $args['settings']['connect'];
 
-        if (empty($setting)){
+        if (empty( $setting )) {
             return false;
         }
 
@@ -332,7 +286,7 @@ class AreaRegistry
         } else if (is_array( $setting )) {
             foreach ($setting as $target) {
                 // check for context
-                if (in_array( $target, array_keys(ScreenManager::getDefaultContextLayout()) )) {
+                if (in_array( $target, array_keys( ScreenManager::getDefaultContextLayout() ) )) {
                     foreach ($this->getAreasByContext( $target ) as $connection) {
                         $args['settings']['connect'] = array( $connection->id );
                         $this->connect( $classname, $args );
@@ -343,11 +297,9 @@ class AreaRegistry
                         $args['settings']['connect'] = array( $tplcon->id );
                         $this->connect( $classname, $args );
                     }
-                }
-
-                else if ($target === 'global'){
+                } else if ($target === 'global') {
                     foreach ($this->getGlobalAreas() as $connection) {
-                        $connection->connect($classname);
+                        $connection->connect( $classname );
                     }
 
                 } else {
@@ -366,6 +318,51 @@ class AreaRegistry
     }
 
     /**
+     * Retrieve all areas in given context
+     *
+     * @param string $context
+     *
+     * @return array
+     * @since 0.1.0
+     */
+    public function getAreasByContext( $context )
+    {
+        return array_filter(
+            $this->areas,
+            function ( $area ) use ( $context ) {
+                return ( $area->context === $context );
+            }
+        );
+    }
+
+    /**
+     * Get area which were assigned to a page template
+     *
+     * @param $tpl
+     *
+     * @return array
+     */
+    public function getAreasByPageTemplate( $tpl )
+    {
+        return array_filter(
+            $this->areas,
+            function ( $area ) use ( $tpl ) {
+                return ( in_array( $tpl, $area->pageTemplates ) );
+            }
+        );
+    }
+
+    /**
+     * getter for global areas
+     * @return array
+     * @since 0.1.0
+     */
+    public function getGlobalAreas()
+    {
+        return $this->globalAreas;
+    }
+
+    /**
      * Filters registered areas by post settings
      * This needs an instance of the Environment Class to provide
      * all necessary informations for the filter
@@ -381,20 +378,17 @@ class AreaRegistry
         $pageTemplate = $environment->getPageTemplate();
         $postType = $environment->getPostType();
         $areas = array();
-
         // bail out if this is a redirect template
         if (false !== strpos( $pageTemplate, 'redirect' )) {
             return false;
         }
 
-        if ($postType === 'kb-gmd'){
-            return array('global-module' => $this->getArea('global-module'));
+        if ($postType === 'kb-gmd') {
+            return array( 'global-module' => $this->getArea( 'global-module' ) );
         }
-
         if ($postType === 'kb-dyar') {
             return $this->getGlobalAreas();
         }
-
 
         // loop through areas and find all which are attached to this post type and/or page template
         /** @var \Kontentblocks\Areas\AreaProperties $area */
@@ -403,11 +397,15 @@ class AreaRegistry
                 $area->context = 'side';
             }
             if (( !empty( $area->pageTemplates ) ) && ( !empty( $area->postTypes ) )) {
-                if (Utilities::strposa($pageTemplate, $area->pageTemplates) && in_array( $postType, $area->postTypes )) {
+                if (Utilities::strposa( $pageTemplate, $area->pageTemplates ) && in_array(
+                        $postType,
+                        $area->postTypes
+                    )
+                ) {
                     $areas[$area->id] = $area;
                 }
             } elseif (!empty( $area->pageTemplates )) {
-                if (Utilities::strposa($pageTemplate, $area->pageTemplates)) {
+                if (Utilities::strposa( $pageTemplate, $area->pageTemplates )) {
                     $areas[$area->id] = $area;
                 }
             } elseif (!empty( $area->postTypes )) {
@@ -419,6 +417,25 @@ class AreaRegistry
         }
         $sareas = self::orderBy( $areas, 'order' );
         return $sareas;
+
+    }
+
+    /**
+     * Returns an area from the registry by id
+     *
+     * @param string $id
+     *
+     * @return mixed null if area is not set | area array args if area is set
+     * @since 0.1.0
+     */
+    public function getArea( $id )
+    {
+        if (isset( $this->areas[$id] )) {
+            array_push( $this->reserved, $id );
+            return $this->areas[$id];
+        } else {
+            return null;
+        }
 
     }
 
@@ -475,25 +492,6 @@ class AreaRegistry
         Kontentblocks::getService( 'utility.jsontransport' )->registerArea( $this->getArea( '_internal' ) );
 
 
-    }
-
-    /**
-     * Even if an area is not an actual requirement for the
-     * consitency of a module, most frontend related code expects
-     * at least an area model for internal control purposes.
-     * If a module is not attached to a valid area, it's internally added
-     * to a dummy area, which is created here.
-     * This dummy area is ignored from any UI and does not exist publicly.
-     */
-    private function addMockArea()
-    {
-        $this->addArea(
-            array(
-                'id' => '_internal',
-                'internal' => true,
-                'context' => 'normal'
-            )
-        );
     }
 
 }

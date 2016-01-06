@@ -125,7 +125,7 @@ class PostEnvironment implements JsonSerializable
     public function getPageTemplate()
     {
         // value is handled by wordpress, so stick to post meta api
-        $tpl = get_post_meta( $this->postObj->ID, '_wp_page_template', true );
+        $tpl = get_post_meta( $this->storageId, '_wp_page_template', true );
 
         if ($tpl !== '') {
             return $tpl;
@@ -141,7 +141,7 @@ class PostEnvironment implements JsonSerializable
      */
     public function getPostType()
     {
-        return $this->postObj->post_type;
+        return get_post_type($this->storageId);
     }
 
     /**
