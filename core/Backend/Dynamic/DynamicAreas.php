@@ -152,13 +152,21 @@ class DynamicAreas
      */
     private function settingsForm( $data )
     {
-
         $templateData = array(
-            'strings' => I18n::getPackages('Areas', 'Common'),
+            'strings' => I18n::getPackages( 'Areas', 'Common' ),
             'editMode' => ( !empty( $data ) ),
             'basename' => 'area',
             'renderContextSelect' => true,
-            'contexts' => ScreenManager::getDefaultContextLayout(),
+            'contexts' => wp_parse_args(
+                ScreenManager::getDefaultContextLayout(),
+                array(
+                    'dynamic' => array(
+                        'id' => 'dynamic',
+                        'title' => __( 'Dynamic', 'Kontentblocks' ),
+                        'description' => ''
+                    )
+                )
+            ),
             'postTypes' => $this->preparedPostTypes( $data ),
             'pageTemplates' => $this->preparedPageTemplates( $data ),
             'description' => ( !empty( $data['description'] ) ) ?

@@ -53,6 +53,9 @@ function registerAreaTemplate( $args )
  * @param int $post_id
  * @param array $areaSettings
  * @param array $moduleSettings
+ *
+ * @filter kb.get.area.dynamic.id
+ *
  * @return string|void
  */
 function renderSingleArea( $areaId, $post_id = null, $areaSettings = array(), $moduleSettings = array() )
@@ -70,7 +73,8 @@ function renderSingleArea( $areaId, $post_id = null, $areaSettings = array(), $m
     $registry = Kontentblocks::getService( 'registry.areas' );
     if ($registry->isDynamic( $areaId )) {
         $areaDef = $registry->getArea( $areaId );
-        $environment = Utilities::getPostEnvironment( $areaDef->parent_id, $postId );
+        $parentObjectId = apply_filters('kb.get.area.dynamic.id', $areaDef->parentObjectId);
+        $environment = Utilities::getPostEnvironment( $parentObjectId, $postId );
     } else {
         $environment = Utilities::getPostEnvironment( $postId );
     }

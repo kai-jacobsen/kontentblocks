@@ -155,7 +155,7 @@ class AreaRegistry
             array(
                 'post_type' => 'kb-dyar',
                 'posts_per_page' => - 1,
-                'suppress_filters' => false
+                'suppress_filters' => false // let multilanguage plugins set the right context
             )
         );
 
@@ -163,7 +163,7 @@ class AreaRegistry
             foreach ($areas as $areapost) {
                 $storage = new ModuleStorage( $areapost->ID );
                 $area = $storage->getDataProvider()->get( '_area' );
-                $area['parent_id'] = $areapost->ID;
+                $area['parent_id'] = $areapost->ID; //deprecated old key
                 $area['parentObjectId'] = $areapost->ID;
                 $dynamicAreas[] = $area;
             }

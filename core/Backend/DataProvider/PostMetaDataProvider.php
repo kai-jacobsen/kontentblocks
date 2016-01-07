@@ -61,6 +61,7 @@ class PostMetaDataProvider implements DataProviderInterface
         $this->update( $key, $value );
     }
 
+
     /**
      * Simple wrapper to update_post_meta
      *

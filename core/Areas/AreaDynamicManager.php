@@ -92,7 +92,7 @@ class AreaDynamicManager
                 $storage->add( '_area', $area->export() );
                 // custom meta data which is specific to wp database structure/queries
                 // not exactly area related data
-                update_post_meta( $id, '_kb_added_by_code', '1' );
+                $storage->update('_kb_added_by_code', '1');
             }
 
             $trans = get_transient( 'kb_dynamic_areas' );
@@ -102,7 +102,7 @@ class AreaDynamicManager
             }
 
             $trans[] = $area->id;
-            set_transient( 'kb_dynamic_areas', $trans, 60 * 60 );
+            set_transient( 'kb_dynamic_areas', $trans, 60 * 15 );
         }
 
     }
@@ -141,7 +141,6 @@ class AreaDynamicManager
      */
     public function setupDiff()
     {
-        delete_transient('kb_dynamic_areas');
         $trans = get_transient( 'kb_dynamic_areas' );
         if (!$trans) {
             $areas = get_posts(
