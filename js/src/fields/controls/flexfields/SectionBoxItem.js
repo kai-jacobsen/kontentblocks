@@ -12,25 +12,5 @@ module.exports = ToggleBoxItem.extend({
     this.renderTabs($skeleton); // insert the tabs markup
     return $skeleton;
   }
-  //renderTabs: function ($skeleton) {
-  //  var that = this;
-  //  // markup strings @todo move to hbs
-  //  var tabNavEl = HandlebarsKB.compile("<li><a href='#tab-{{ uid }}-{{ index }}'>{{ tab.label }}</a></li>");
-  //  var tabCon = HandlebarsKB.compile("<div id='tab-{{ uid }}-{{ index }}'></div>");
-  //  // nav
-  //  _.each(this.Controller.Tabs, function (tab, index) { // remember: a tab holds the fields referece objects
-  //    jQuery('.flexible-field--tab-nav', $skeleton).append(tabNavEl({ // append a nav element for each tab
-  //      uid: that.model.get('_tab').uid,
-  //      tab: tab,
-  //      index: index
-  //    }));
-  //    var $tabsContainment = jQuery('.kb-field--tabs', $skeleton);
-  //    // append a yet empty content container for the tab
-  //    var $con = jQuery(tabCon({uid: that.model.get('_tab').uid, index: index})).appendTo($tabsContainment);
-  //
-  //    // append fields to the container
-  //    that.renderFields(tab, $con);
-  //  });
-  //}
 
 });

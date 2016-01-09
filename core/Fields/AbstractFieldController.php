@@ -24,6 +24,11 @@ abstract class AbstractFieldController
      */
     public $model;
 
+    /**
+     * @var InterfaceFieldRenderer
+     */
+    public $renderEngine;
+
 
     /**
      * Object to handle the section layout
@@ -173,6 +178,27 @@ abstract class AbstractFieldController
             $section->export( $collection );
         }
         return $collection;
+    }
+
+    /**
+     * @return InterfaceFieldRenderer
+     */
+    public function getRenderer()
+    {
+        if (is_null($this->renderEngine)){
+            $this->renderEngine = new $this->renderer( $this );
+        }
+        return $this->renderEngine;
+    }
+
+    /**
+     * @param string $classname
+     */
+    public function setRenderer( $classname )
+    {
+        if (is_string( $classname ) && is_a( $classname, '\Kontentblocks\Fields\InterfaceFieldRenderer', true )) {
+            $this->renderer = $classname;
+        }
     }
 
     /**

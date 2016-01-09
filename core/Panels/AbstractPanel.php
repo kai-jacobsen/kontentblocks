@@ -33,6 +33,7 @@ abstract class AbstractPanel implements EntityInterface
      */
     protected $baseId;
 
+
     public static function run( $args )
     {
         // do nothing

@@ -30,9 +30,17 @@ class PanelFieldController extends AbstractFieldController
      *
      * @var AbstractPanel
      */
+
+
     protected $panel;
 
     /**
+     * Default field renderer
+     * @var InterfaceFieldRenderer
+     */
+    protected $renderer = 'Kontentblocks\Fields\FieldRendererTabs';
+
+     /**
      * Constructor
      *
      * @param $panel
@@ -42,7 +50,6 @@ class PanelFieldController extends AbstractFieldController
         $this->baseId = $panel->getId();
         $this->panel = $panel;
     }
-
 
 
     /**
@@ -84,8 +91,6 @@ class PanelFieldController extends AbstractFieldController
     }
 
 
-
-
     /**
      * internal
      * @return bool
@@ -107,4 +112,6 @@ class PanelFieldController extends AbstractFieldController
     {
         $this->panel->getModel();
     }
+
+
 }

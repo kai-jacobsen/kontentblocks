@@ -1,6 +1,7 @@
 //KB.Templates
 var Config = require('common/Config');
 var Utilities = require('common/Utilities');
+var Handlebars = require('hbsfy/runtime');
 var Templates = (function () {
   var templateCache = {};
   var helpfileCache = {};
@@ -45,7 +46,7 @@ var Templates = (function () {
           }
         });
       }
-      templateCache[tplName] = HandlebarsKB.compile(tplString);
+      templateCache[tplName] = Handlebars.compile(tplString);
     }
     return templateCache[tplName](tplData);
   }

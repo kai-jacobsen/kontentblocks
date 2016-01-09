@@ -265,12 +265,20 @@ abstract class AbstractFieldSection implements Exportable
     }
 
     /**
-     * TODO: Sanity?
      * @return type
      */
     public function getLabel()
     {
         return $this->args['label'];
+
+    }
+
+    /**
+     * @return type
+     */
+    public function getTitle()
+    {
+        return $this->args['title'];
 
     }
 

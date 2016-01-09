@@ -16,4 +16,6 @@ interface InterfaceFieldRenderer
      */
     public function render( );
 
+    public function getIdString();
+
 }

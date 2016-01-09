@@ -3,7 +3,6 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Data\ValueStorage;
-use Kontentblocks\Common\Traits\TraitSetupArgs;
 use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
@@ -22,41 +21,45 @@ abstract class PostPanel extends AbstractPanel
     public $postId;
 
     /**
-     * @var mixed
+     * @var PostPanelModel
      */
     public $model;
 
+    /**
+     * @var PostEnvironment
+     */
+
+    public $environment;
+    /**
+     * @var PanelFieldController
+     */
+    public $fields;
     /**
      * meta box args
      * @var array|null
      */
     protected $metaBox;
-
     /**
      * Position / Hook to use
      * @var string
      */
     protected $hook;
-
     /**
      * Post Types
      * @var array
      */
     protected $postTypes = array();
-
     /**
      * PageTemplates
      * @var array
      */
     protected $pageTemplates = array();
-
     /**
      * Flag indicates if data should be stored as single key => value pairs
      * in the meta table
      * @var bool
      */
     protected $saveAsSingle = false;
-
     /**
      * unique identifier
      * @var string
@@ -96,6 +99,23 @@ abstract class PostPanel extends AbstractPanel
         );
 
         return wp_parse_args( $args, $defaults );
+    }
+
+    /**
+     * Auto setup args to class properties
+     * and look for optional method for each arg
+     * @param $args
+     */
+    public function setupArgs( $args )
+    {
+        foreach ($args as $k => $v) {
+            if (method_exists( $this, "set" . strtoupper( $k ) )) {
+                $method = "set" . strtoupper( $k );
+                $this->$method( $v );
+            } else {
+                $this->$k = $v;
+            }
+        }
     }
 
     /**
@@ -145,8 +165,7 @@ abstract class PostPanel extends AbstractPanel
         $class = ( is_array( $this->metaBox ) ) ? 'kb-postbox' : '';
         $elementId = 'kbp-' . $this->getBaseId();
 
-
-        echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class}'>
+        echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class} {$this->fields->getRenderer()->getIdString()}'>
                 <div class='kb-custom-wrapper'>
                 <div class='inside'>";
     }
@@ -156,9 +175,10 @@ abstract class PostPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        $renderer = new FieldRendererTabs( $this->fields );
+        $renderer = $this->fields->getRenderer();
         return $renderer->render();
     }
+
     /**
      * Markup after
      */
@@ -182,13 +202,14 @@ abstract class PostPanel extends AbstractPanel
         Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
     }
 
+
     /**
      * Callback handler
      * @param $postId
      */
     public function saveCallback( $postId )
     {
-        $data = isset($_POST[$this->baseId]) ? $_POST[$this->baseId] : null;
+        $data = isset( $_POST[$this->baseId] ) ? $_POST[$this->baseId] : null;
         if (empty( $data )) {
             return;
         }
@@ -260,7 +281,7 @@ abstract class PostPanel extends AbstractPanel
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
             $field = $this->fields->getFieldByKey( $key );
-            $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue($this->postId) : $v;
+            $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue( $this->postId ) : $v;
         }
         return $this->model;
     }
@@ -302,20 +323,5 @@ abstract class PostPanel extends AbstractPanel
         }
     }
 
-    /**
-     * Auto setup args to class properties
-     * and look for optional method for each arg
-     * @param $args
-     */
-    public function setupArgs( $args )
-    {
-        foreach ($args as $k => $v) {
-            if (method_exists( $this, "set" . strtoupper( $k ) )) {
-                $method = "set" . strtoupper( $k );
-                $this->$method( $v );
-            } else {
-                $this->$k = $v;
-            }
-        }
-    }
+
 }

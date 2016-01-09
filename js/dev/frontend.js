@@ -591,6 +591,7 @@ module.exports = Stack;
 //KB.Templates
 var Config = require('common/Config');
 var Utilities = require('common/Utilities');
+var Handlebars = require('hbsfy/runtime');
 var Templates = (function () {
   var templateCache = {};
   var helpfileCache = {};
@@ -635,7 +636,7 @@ var Templates = (function () {
           }
         });
       }
-      templateCache[tplName] = HandlebarsKB.compile(tplString);
+      templateCache[tplName] = Handlebars.compile(tplString);
     }
     return templateCache[tplName](tplData);
   }
@@ -669,7 +670,7 @@ var Templates = (function () {
   };
 }());
 module.exports = Templates;
-},{"common/Config":10,"common/Utilities":19}],17:[function(require,module,exports){
+},{"common/Config":10,"common/Utilities":19,"hbsfy/runtime":112}],17:[function(require,module,exports){
 //KB.TinyMCE
 var Ajax = require('common/Ajax');
 var Logger = require('common/Logger');

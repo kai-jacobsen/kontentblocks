@@ -23,5 +23,5 @@ Handlebars.registerHelper('trimString', function(passedString, length) {
     theString = theString + '…';
   }
 
-  return new HandlebarsKB.SafeString(theString)
+  return new Handlebars.SafeString(theString)
 });

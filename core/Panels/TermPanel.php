@@ -152,7 +152,7 @@ abstract class TermPanel extends AbstractPanel
     private function beforeForm()
     {
         $out = '';
-        $out .= "<div class='postbox kb-taxpanel'>
+        $out .= "<div class='postbox kb-taxpanel {$this->fields->getRenderer()->getIdString()}'>
                 <div class='kb-custom-wrapper'>
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
         return $out;
@@ -170,7 +170,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        $renderer = new FieldRendererTabs( $this->fields );
+        $renderer = $this->fields->getRenderer();
         return $renderer->render();
     }
 

@@ -1,0 +1,12 @@
+<div class='kbf-fieldrenderer-sections kbf-field-sections'>
+    {% for section in structure %}
+        {% if (section.getNumberOfVisibleFields() > 0) %}
+            <div class="kb-context__header">
+                <h2>{{ section.getTitle() }}</h2>
+            </div>
+            <div id='section-{{ section.getSectionId() }}' class="kbf-section-wrap">
+                {{ section.render( ) }}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
