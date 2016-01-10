@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields;
+namespace Kontentblocks\Fields\Renderer;
 
 
 /**

@@ -1,7 +1,8 @@
 <?php
 
-namespace Kontentblocks\Fields;
+namespace Kontentblocks\Fields\Renderer;
 
+use Kontentblocks\Fields\AbstractFieldController;
 use Kontentblocks\Templating\CoreView;
 
 /**
@@ -10,14 +11,9 @@ use Kontentblocks\Templating\CoreView;
  * @package Fields
  * @since 0.1.0
  */
-class FieldRendererWP implements InterfaceFieldRenderer
+class FieldRendererWP extends AbstractFieldRenderer
 {
 
-    /**
-     * Array of sections to render
-     * @var array
-     */
-    protected $sections;
 
     /**
      * Unique identifier inherited by module
@@ -40,27 +36,17 @@ class FieldRendererWP implements InterfaceFieldRenderer
 
 
     /**
-     * @param AbstractFieldController $fieldController
-     */
-    public function __construct( AbstractFieldController $fieldController )
-    {
-        $this->baseId = $fieldController->getEntity()->getId();
-        $this->fieldController = $fieldController;
-        $this->sections = $fieldController->sections;
-    }
-
-    /**
      * Wrapper to output methods
      * @return mixed|void
      */
     public function render( )
     {
-        if (!is_array( $this->sections )) {
+        if (!is_array( $this->renderSections )) {
             return null;
         }
         $view = new CoreView(
             'renderer/wp.twig', array(
-                'structure' => $this->sections
+                'structure' => $this->renderSections
             )
         );
 

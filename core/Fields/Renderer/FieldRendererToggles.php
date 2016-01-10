@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields;
+namespace Kontentblocks\Fields\Renderer;
 
 /**
  * Alternate way to organize fields
@@ -26,7 +26,7 @@ class FieldRendererToggles extends AbstractFieldRenderer
      */
     public function render( )
     {
-        if (!is_array( $this->sections )) {
+        if (!is_array( $this->renderSections )) {
             return;
         }
         $this->renderTogglebox();

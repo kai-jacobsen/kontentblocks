@@ -3,7 +3,6 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Data\ValueStorage;
-use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;

@@ -1,9 +1,5 @@
-<table class="form-table">
-    {% for section in structure %}
-        {% if (section.getNumberOfVisibleFields() > 0) %}
-            <div id='section-{{ section.getSectionId() }}' class="kbf-section-wrap">
-                {{ section.render( ) }}
-            </div>
-        {% endif %}
-    {% endfor %}
-</table>
+{% for section in structure %}
+    {% if (section.section.getNumberOfVisibleFields() > 0) %}
+        {{ section.renderFields( ) }}
+    {% endif %}
+{% endfor %}

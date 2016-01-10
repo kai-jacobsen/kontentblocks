@@ -3,6 +3,8 @@ namespace Kontentblocks\Fields;
 
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use Kontentblocks\Fields\Renderer\AbstractFieldRenderer;
+use Kontentblocks\Fields\Renderer\InterfaceFieldRenderer;
 
 /**
  * Class AbstractFieldController
@@ -61,7 +63,7 @@ abstract class AbstractFieldController
         $model = $this->getEntityModel();
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
-            $data = ( array_key_exists( $field->getKey(),$model ) ) ? $model[$field->getKey()] : '';
+            $data = ( array_key_exists( $field->getKey(), $model ) ) ? $model[$field->getKey()] : '';
 
             $field->setData( $data );
         }
@@ -83,6 +85,8 @@ abstract class AbstractFieldController
         return $collect;
 
     }
+
+    public abstract function getEntityModel();
 
     /**
      * Helper method to check whether an section already
@@ -130,7 +134,6 @@ abstract class AbstractFieldController
 
     }
 
-
     /**
      * Calls save on each group
      *
@@ -153,7 +156,6 @@ abstract class AbstractFieldController
 
     }
 
-
     /**
      * @param $sectionId
      * @param array $args
@@ -166,7 +168,6 @@ abstract class AbstractFieldController
     }
 
     abstract public function addSection( $sectionId, $args = array() );
-
 
     /**
      * @return array
@@ -181,11 +182,11 @@ abstract class AbstractFieldController
     }
 
     /**
-     * @return InterfaceFieldRenderer
+     * @return AbstractFieldRenderer
      */
     public function getRenderer()
     {
-        if (is_null($this->renderEngine)){
+        if (is_null( $this->renderEngine )) {
             $this->renderEngine = new $this->renderer( $this );
         }
         return $this->renderEngine;
@@ -196,7 +197,12 @@ abstract class AbstractFieldController
      */
     public function setRenderer( $classname )
     {
-        if (is_string( $classname ) && is_a( $classname, '\Kontentblocks\Fields\InterfaceFieldRenderer', true )) {
+        if (is_string( $classname ) && is_a(
+                $classname,
+                '\Kontentblocks\Fields\Renderer\InterfaceFieldRenderer',
+                true
+            )
+        ) {
             $this->renderer = $classname;
         }
     }
@@ -205,6 +211,4 @@ abstract class AbstractFieldController
      * @return EntityInterface
      */
     public abstract function getEntity();
-
-    public abstract function getEntityModel();
 }

@@ -113,10 +113,6 @@ abstract class Field implements Exportable
      * ---------------------------------------------
      */
 
-    public function prepare(){
-        // nothing to do if not overridden
-    }
-
     /**
      * Field parameters array
      * @param array $args
@@ -131,6 +127,11 @@ abstract class Field implements Exportable
         }
 
         return false;
+    }
+
+    public function prepare()
+    {
+        // nothing to do if not overridden
     }
 
     /**
@@ -326,26 +327,18 @@ abstract class Field implements Exportable
     }
 
     /**
-     * Build the whole field, including surrounding wrapper
+     * Just before form output
      * and optional 'hooks"
      * @since 0.1.0
-     * @param bool $echo
-     * @return string $out
      */
-    public function build( $echo = true )
+    public function build()
     {
         $this->uniqueId = $this->createUID();
-        // handles the form output
-        $formController = new FieldFormController( $this );
-        $out = $formController->build();
-
-        if ($echo) {
-            echo $out;
-        }
-
-        return $out;
     }
 
+    /**
+     * @return string
+     */
     public function createUID()
     {
 

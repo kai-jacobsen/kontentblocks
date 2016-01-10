@@ -5279,7 +5279,19 @@ body .kb-field-wrapper {
     font-style: normal;
     display: block; }
 
-/* line 125, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+/* line 127, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+.kb-field-wrapper.field-renderer-wp:hover {
+  background-color: transparent;
+  border-left: none; }
+/* line 134, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+.kb-field-wrapper.field-renderer-wp .kb-field .kb-field--label-heading {
+  display: none; }
+/* line 138, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
+.kb-field-wrapper.field-renderer-wp .kb-field input[type='text'] {
+  width: 100%;
+  max-width: 100% !important; }
+
+/* line 146, /var/www/Restrap/wp-content/plugins/kontentblocks/css/sass/partials/_refields/_common.scss */
 .kb-field--reset {
   margin: 0;
   font-size: 12px; }

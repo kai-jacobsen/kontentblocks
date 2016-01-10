@@ -13,10 +13,13 @@ use Kontentblocks\Templating\FieldView;
 class FieldFormController
 {
 
+    public $skin = 'default';
+
     /**
      * @var \Kontentblocks\Fields\Field
      */
     private $field;
+
 
     /**
      * @param Field $field
@@ -24,6 +27,7 @@ class FieldFormController
     public function __construct( Field $field )
     {
         $this->field = $field;
+
     }
 
 
@@ -96,7 +100,7 @@ class FieldFormController
     public function getDescription()
     {
         $view = new FieldView(
-            '_partials/description.twig', array(
+            "_partials/{$this->skin}/description.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
@@ -113,7 +117,7 @@ class FieldFormController
     public function getLabel()
     {
         $view = new FieldView(
-            '_partials/label.twig', array(
+            "_partials/{$this->skin}/label.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
@@ -129,7 +133,7 @@ class FieldFormController
     public function header()
     {
         $view = new FieldView(
-            '_partials/header.twig', array(
+            "_partials/{$this->skin}/header.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
@@ -192,7 +196,7 @@ class FieldFormController
     public function footer()
     {
         $view = new FieldView(
-            '_partials/footer.twig', array(
+            "_partials/{$this->skin}/footer.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
@@ -206,6 +210,7 @@ class FieldFormController
      */
     public function build()
     {
+        $this->field->build();
         $out = '';
         // A Field might not be present, i.e. if it's not set to
         // the current context

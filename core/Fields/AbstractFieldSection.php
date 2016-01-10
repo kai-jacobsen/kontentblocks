@@ -112,15 +112,16 @@ abstract class AbstractFieldSection implements Exportable
                 if (isset( $args['arrayKey'] )) {
                     $newField = $this->addArrayField( $field, $key, $args );
                 } else {
-                     $this->fields[$key] = $newField = $field;
+                    $this->fields[$key] = $newField = $field;
                 }
 
 
                 $data = $this->getEntityModel();
                 if (!is_a( $newField, '\Kontentblocks\Fields\FieldSubGroup' )) {
                     if (isset( $data[$newField->getKey()] )) {
-                        $fielddata = ( is_object( $data ) && !is_null( $data[$newField->getKey()] ) ) ? $data[$newField->getKey(
-                        )] : $this->getFieldStd( $newField );
+                        $fielddata = ( is_object( $data ) && !is_null(
+                                $data[$newField->getKey()]
+                            ) ) ? $data[$newField->getKey()] : $this->getFieldStd( $newField );
                     } else {
                         $fielddata = $this->getFieldStd( $newField );
                     }
@@ -171,6 +172,30 @@ abstract class AbstractFieldSection implements Exportable
         return $fieldArray;
     }
 
+    public function getEntityModel()
+    {
+        return $this->entity->getModel();
+    }
+
+    /**
+     * Get field default value
+     *
+     * @param $field
+     *
+     * @return mixed defaults to empty string
+     */
+    private function getFieldStd( $field )
+    {
+        return $field->getArg( 'std', '' );
+
+    }
+
+    /*
+ * -----------------------------------------------
+ * Getter
+ * -----------------------------------------------
+ */
+
     /**
      * Increase number of visible fields property
      */
@@ -188,12 +213,6 @@ abstract class AbstractFieldSection implements Exportable
 
     }
 
-    /*
- * -----------------------------------------------
- * Getter
- * -----------------------------------------------
- */
-
     /**
      * Wrapper method
      * Sets essential properties
@@ -206,16 +225,21 @@ abstract class AbstractFieldSection implements Exportable
         if (empty( $this->fields )) {
             return;
         }
+
+        $flatten = $this->flattenFields();
+
         /** @var \Kontentblocks\Fields\Field $field */
-        foreach ($this->fields as $field) {
+        foreach ($flatten as $field) {
             $field->build();
         }
     }
 
-    public function getEntityModel()
-    {
-        return $this->entity->getModel();
-    }
+
+    /*
+     * -----------------------------------------------
+     * Helper methods
+     * -----------------------------------------------
+     */
 
     /**
      * Calls save on fields and collects the results in one array
@@ -246,13 +270,6 @@ abstract class AbstractFieldSection implements Exportable
         }
         return $collect;
     }
-
-
-    /*
-     * -----------------------------------------------
-     * Helper methods
-     * -----------------------------------------------
-     */
 
     /**
      * Getter to retrieve all registered fields
@@ -329,17 +346,20 @@ abstract class AbstractFieldSection implements Exportable
 
     }
 
-    /**
-     * Get field default value
-     *
-     * @param $field
-     *
-     * @return mixed defaults to empty string
-     */
-    private function getFieldStd( $field )
+    public function flattenFields()
     {
-        return $field->getArg( 'std', '' );
+        $flatten = array();
 
+        foreach ($this->fields as $field) {
+            if (is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' )) {
+                foreach ($field->getFields() as $field) {
+                    $flatten[] = $field;
+                }
+            } else {
+                $flatten[] = $field;
+            }
+        }
+        return $flatten;
     }
 
 

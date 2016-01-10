@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields;
+namespace Kontentblocks\Fields\Renderer;
 
 use Kontentblocks\Templating\CoreView;
 
@@ -27,18 +27,19 @@ class FieldRendererTabs extends AbstractFieldRenderer
 
 
 
+
     /**
      * Wrapper to output methods
      * @return mixed|void
      */
     public function render( )
     {
-        if (!is_array( $this->sections )) {
+        if (!is_array( $this->renderSections )) {
             return null;
         }
         $view = new CoreView(
             'renderer/tabs.twig', array(
-                'structure' => $this->sections,
+                'structure' => $this->renderSections,
             )
         );
 

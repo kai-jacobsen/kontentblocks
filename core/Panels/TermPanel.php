@@ -4,7 +4,6 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Backend\Environment\TermEnvironment;
-use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -32,6 +31,11 @@ abstract class TermPanel extends AbstractPanel
      */
     public $term;
 
+    /**
+     * @var
+     */
+    private $renderer;
+
 
     /**
      * Class constructor
@@ -49,6 +53,7 @@ abstract class TermPanel extends AbstractPanel
         $this->model = new TermPanelModel( $environment->getDataProvider()->get( $args['baseId'] ), $this );
         $this->data = $this->model->export();
         $this->fields();
+
     }
 
     /**
@@ -60,7 +65,7 @@ abstract class TermPanel extends AbstractPanel
     {
         $defaults = array(
             'taxonomy' => 'category',
-            'beforeForm' => true
+            'insideTable' => true
         );
 
         return wp_parse_args( $args, $defaults );
@@ -88,7 +93,7 @@ abstract class TermPanel extends AbstractPanel
     public function init()
     {
         add_action( "edited_{$this->args['taxonomy']}", array( $this, 'save' ) );
-        if ($this->args['beforeForm']) {
+        if ($this->args['insideTable']) {
             add_action( "{$this->args['taxonomy']}_edit_form_fields", array( $this, 'form' ) );
         } else {
             add_action( "{$this->args['taxonomy']}_edit_form", array( $this, 'form' ) );
@@ -139,11 +144,25 @@ abstract class TermPanel extends AbstractPanel
             return false;
         }
         Utilities::hiddenEditor();
+        if ($this->args['insideTable']) {
+            $this->fields->setRenderer( '\Kontentblocks\Fields\Renderer\FieldRendererWP' );
+        }
 
-        echo $this->beforeForm();
+        $this->renderer = $this->fields->getRenderer();
+
+        if ($this->args['insideTable']) {
+            $this->renderer->setFieldFormRenderClass( '\Kontentblocks\Fields\FieldFormControllerWP' );
+        }ordp
+
+        if (!$this->args['insideTable']) {
+            echo $this->beforeForm();
+        }
+
         echo $this->renderFields();
-        echo $this->afterForm();
 
+        if (!$this->args['insideTable']) {
+            echo $this->afterForm();
+        }
     }
 
     /**
@@ -151,18 +170,12 @@ abstract class TermPanel extends AbstractPanel
      */
     private function beforeForm()
     {
+        d(xdebug_get_function_stack());
         $out = '';
-        $out .= "<div class='postbox kb-taxpanel {$this->fields->getRenderer()->getIdString()}'>
+        $out .= "<div class='postbox kb-taxpanel {$this->renderer->getIdString()}'>
                 <div class='kb-custom-wrapper'>
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
         return $out;
-    }
-
-    /**
-     * @return \WP_Term
-     */
-    public function getTerm(){
-        return $this->term;
     }
 
     /**
@@ -170,8 +183,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        $renderer = $this->fields->getRenderer();
-        return $renderer->render();
+        return $this->renderer->render();
     }
 
     /**
@@ -184,6 +196,14 @@ abstract class TermPanel extends AbstractPanel
         $out .= "</div>";
 
         return $out;
+    }
+
+    /**
+     * @return \WP_Term
+     */
+    public function getTerm()
+    {
+        return $this->term;
     }
 
     /**

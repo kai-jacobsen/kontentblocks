@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields;
 
 use Kontentblocks\Common\Interfaces\EntityInterface;
+use Kontentblocks\Fields\Renderer\InterfaceFieldRenderer;
 use Kontentblocks\Panels\AbstractPanel;
 
 
@@ -38,7 +39,7 @@ class PanelFieldController extends AbstractFieldController
      * Default field renderer
      * @var InterfaceFieldRenderer
      */
-    protected $renderer = 'Kontentblocks\Fields\FieldRendererTabs';
+    protected $renderer = 'Kontentblocks\Fields\Renderer\FieldRendererTabs';
 
      /**
      * Constructor
