@@ -350,6 +350,10 @@ abstract class AbstractFieldSection implements Exportable
     {
         $flatten = array();
 
+        if (empty($this->fields)){
+            return $flatten;
+        }
+
         foreach ($this->fields as $field) {
             if (is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' )) {
                 foreach ($field->getFields() as $field) {
