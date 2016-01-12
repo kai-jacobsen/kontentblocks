@@ -177,6 +177,8 @@ class Utilities
             $settings = Utilities::arrayMergeRecursive($args, $settings);
         }
 
+        $settings = apply_filters('kb.tinymce.global.settings', $settings);
+
         wp_editor($data, $id . 'editor', $settings);
 
     }
