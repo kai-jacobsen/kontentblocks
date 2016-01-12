@@ -31,7 +31,7 @@ class FieldRendererSections extends AbstractFieldRenderer
         }
         $view = new CoreView(
             'renderer/sections.twig', array(
-                'structure' => $this->render()
+                'structure' => $this->renderSections
             )
         );
 

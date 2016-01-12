@@ -60,7 +60,7 @@ class PanelFieldController extends AbstractFieldController
      * @param string $sectionId
      * @param array $args
      *
-     * @return object groupobject
+     * @return AbstractFieldSection
      */
     public function addSection( $sectionId, $args = array() )
     {
@@ -99,6 +99,7 @@ class PanelFieldController extends AbstractFieldController
     public function isPublic()
     {
         return false;
+
     }
 
     /**
@@ -111,7 +112,7 @@ class PanelFieldController extends AbstractFieldController
 
     public function getEntityModel()
     {
-        $this->panel->getModel();
+        return $this->panel->getModel();
     }
 
 

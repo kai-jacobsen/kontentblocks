@@ -11,12 +11,12 @@ use Kontentblocks\Customizer\CustomizerIntegration;
  * type - specific html5 input type e.g. number, email... .
  *
  */
-Class Text extends Field
+Class MultiText extends Field
 {
 
     // Defaults
     public static $settings = array(
-        'type' => 'text'
+        'type' => 'multitext'
     );
 
     /**
@@ -25,9 +25,9 @@ Class Text extends Field
      *
      * @return string
      */
-    public function prepareFrontendValue( $val )
+    public function prepareFrontendValue($val)
     {
-        return wp_kses_post( $val );
+        return $val;
     }
 
 
@@ -36,9 +36,9 @@ Class Text extends Field
      *
      * @return mixed
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
-        return esc_html( $val );
+        return $val;
     }
 
 

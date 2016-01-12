@@ -6,6 +6,7 @@ use Exception;
 use Kontentblocks\Common\Exportable;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Kontentblocks;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class AbstractFieldSection
@@ -20,7 +21,8 @@ abstract class AbstractFieldSection implements Exportable
      */
     public static $defaults = array(
         'label' => 'Fieldgroup',
-        'title' => 'Fieldgrouptitle'
+        'title' => 'Fieldgrouptitle',
+        'attributes' => array('class' => 'kbf-section-wrap')
     );
     /**
      * Unique identifier
@@ -311,7 +313,7 @@ abstract class AbstractFieldSection implements Exportable
 
     public function prepareArgs( $args )
     {
-        return wp_parse_args( $args, self::$defaults );
+        return Utilities::arrayMergeRecursive($args, self::$defaults);
 
     }
 

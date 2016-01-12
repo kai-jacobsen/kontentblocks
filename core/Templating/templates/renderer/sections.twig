@@ -1,12 +1,18 @@
 <div class='kbf-fieldrenderer-sections kbf-field-sections'>
-    {% for section in structure %}
-        {% if (section.getNumberOfVisibleFields() > 0) %}
-            <div class="kb-context__header">
-                <h2>{{ section.getTitle() }}</h2>
-            </div>
-            <div id='section-{{ section.getSectionId() }}' class="kbf-section-wrap">
-                {{ section.render( ) }}
-            </div>
-        {% endif %}
+    {% for renderSection in structure %}
+    {% if (renderSection.section.getNumberOfVisibleFields() > 0) %}
+
+    <div id='section-{{ renderSection.section.getSectionId() }}'
+         class="kbf-section-wrap"
+    {% for key,value in renderSection.section.args.attributes %}
+        {{ key }}="{{ value }}"
+    {% endfor %}
+    >
+    <div class="kb-context__header">
+        <h2>{{ renderSection.section.getTitle() }}</h2>
+    </div>
+    {{ renderSection.renderFields() }}
+</div>
+{% endif %}
     {% endfor %}
 </div>

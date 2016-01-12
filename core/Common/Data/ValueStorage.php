@@ -16,7 +16,7 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
     /**
      * @param array $data
      */
-    public function __construct( $data = array() )
+    public function __construct($data = array())
     {
         $this->value = $data;
     }
@@ -27,50 +27,25 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
      * @param null $options
      * @return mixed|null
      */
-    public function getFiltered( $key, $filter = FILTER_DEFAULT, $options = null )
+    public function getFiltered($key, $filter = FILTER_DEFAULT, $options = null)
     {
-        if (isset( $this->value[$key] )) {
-            return filter_var( $this->value[$key], $filter, $options );
+        if (isset($this->value[$key])) {
+            return filter_var($this->value[$key], $filter, $options);
         }
         return null;
-    }
-
-    /**
-     * @param $key
-     * @param array $default
-     * @return mixed|null
-     */
-    public function get( $key, $default = array() )
-    {
-        if (isset( $this->value[$key] )) {
-            return $this->value[$key];
-        }
-
-        return $default;
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     * @return $this
-     */
-    public function set( $key, $value )
-    {
-        $this->value[$key] = $value;
-        return $this;
     }
 
     /**
      * @param $var
      * @return $this
      */
-    public function import( $var )
+    public function import($var)
     {
-        if (is_object( $var )) {
-            $var = get_object_vars( $var );
+        if (is_object($var)) {
+            $var = get_object_vars($var);
         }
 
-        if (is_array( $var )) {
+        if (is_array($var)) {
             foreach ($var as $k => $v) {
                 $this->value[$k] = $v;
             }
@@ -84,9 +59,9 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
      * @param $key
      * @return $this
      */
-    public function delete( $key )
+    public function delete($key)
     {
-        unset( $this->value[$key] );
+        unset($this->value[$key]);
         return $this;
     }
 
@@ -99,15 +74,14 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
 
     }
 
-
     /**
      * @param $key
      * @return bool
      */
-    public function exists($key){
+    public function exists($key)
+    {
         return array_key_exists($key, $this->value);
     }
-
 
     /**
      * (PHP 5 &gt;= 5.4.0)<br/>
@@ -120,4 +94,46 @@ class ValueStorage implements ValueStorageInterface, \JsonSerializable
     {
         return $this->value;
     }
+
+    /**
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     * @since 5.0.0
+     */
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * @param $key
+     * @param array $default
+     * @return mixed|null
+     */
+    public function get($key, $default = array())
+    {
+        if (isset($this->value[$key])) {
+            return $this->value[$key];
+        }
+
+        return $default;
+    }
+
+
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function set($key, $value)
+    {
+        $this->value[$key] = $value;
+        return $this;
+    }
+
+
 }

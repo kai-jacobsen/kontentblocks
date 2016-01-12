@@ -96,21 +96,20 @@ class PostEnvironment implements JsonSerializable
      * @param \WP_Post $postObj
      * @since 0.1.0
      */
-    public function __construct( $storageId, \WP_Post $postObj )
+    public function __construct($storageId, \WP_Post $postObj)
     {
 
         $this->postObj = $postObj;
         $this->storageId = $storageId;
 
-        $this->storage = new ModuleStorage( $storageId );
-
+        $this->storage = new ModuleStorage($storageId);
         $this->pageTemplate = $this->getPageTemplate();
         $this->postType = $this->getPostType();
         $this->areas = $this->setupAreas();
         $this->areasToContext();
-        $this->moduleRepository = new ModuleRepository( $this );
+        $this->moduleRepository = new ModuleRepository($this);
         $this->modules = $this->setupModules();
-        $this->panelRepository = new PostPanelRepository( $this );
+        $this->panelRepository = new PostPanelRepository($this);
         $this->panels = $this->panelRepository->getPanelObjects();
     }
 
@@ -125,7 +124,7 @@ class PostEnvironment implements JsonSerializable
     public function getPageTemplate()
     {
         // value is handled by wordpress, so stick to post meta api
-        $tpl = get_post_meta( $this->storageId, '_wp_page_template', true );
+        $tpl = get_post_meta($this->storageId, '_wp_page_template', true);
 
         if ($tpl !== '') {
             return $tpl;
@@ -154,7 +153,7 @@ class PostEnvironment implements JsonSerializable
         $areas = $this->findAreas();
         /** @var \Kontentblocks\Areas\AreaProperties $area */
         foreach ($areas as $area) {
-            $area->set( 'settings', new AreaSettingsModel( $area, $this->postObj->ID ) );
+            $area->set('settings', new AreaSettingsModel($area, $this->postObj->ID));
         }
         return $areas;
 
@@ -168,8 +167,8 @@ class PostEnvironment implements JsonSerializable
     public function findAreas()
     {
         /** @var \Kontentblocks\Areas\AreaRegistry $areaRegistry */
-        $areaRegistry = Kontentblocks::getService( 'registry.areas' );
-        return $areaRegistry->filterForPost( $this );
+        $areaRegistry = Kontentblocks::getService('registry.areas');
+        return $areaRegistry->filterForPost($this);
     }
 
     /**
@@ -177,7 +176,7 @@ class PostEnvironment implements JsonSerializable
      */
     private function areasToContext()
     {
-        if (is_array( $this->areas ) && !empty( $this->areas )) {
+        if (is_array($this->areas) && !empty($this->areas)) {
             foreach ($this->areas as $id => $area) {
                 $this->areasByContext[$area->context][$id] = $area;
             }
@@ -194,9 +193,9 @@ class PostEnvironment implements JsonSerializable
         return $this->moduleRepository->getModules();
     }
 
-    public function getPanelObject( $id )
+    public function getPanelObject($id)
     {
-        if (isset( $this->panels[$id] )) {
+        if (isset($this->panels[$id])) {
             return $this->panels[$id];
         }
         return null;
@@ -210,7 +209,7 @@ class PostEnvironment implements JsonSerializable
      */
     public function getId()
     {
-        return absint( $this->storageId );
+        return absint($this->storageId);
     }
 
     /**
@@ -228,9 +227,9 @@ class PostEnvironment implements JsonSerializable
      * @return mixed
      * @since 0.1.0
      */
-    public function get( $param )
+    public function get($param)
     {
-        if (isset( $this->$param )) {
+        if (isset($this->$param)) {
             return $this->$param;
         } else {
             return false;
@@ -262,9 +261,9 @@ class PostEnvironment implements JsonSerializable
      * @return \Kontentblocks\Modules\Module
      * @since 0.1.0
      */
-    public function getModuleById( $mid )
+    public function getModuleById($mid)
     {
-        return $this->moduleRepository->getModuleObject( $mid );
+        return $this->moduleRepository->getModuleObject($mid);
     }
 
     /**
@@ -274,10 +273,10 @@ class PostEnvironment implements JsonSerializable
      * @return mixed
      * @since 0.1.0
      */
-    public function getModulesForArea( $areaid )
+    public function getModulesForArea($areaid)
     {
         $byArea = $this->moduleRepository->sortedByArea();
-        if (!empty( $byArea[$areaid] )) {
+        if (!empty($byArea[$areaid])) {
             return $byArea[$areaid];
         } else {
             return array();
@@ -291,9 +290,9 @@ class PostEnvironment implements JsonSerializable
      * @return mixed
      * @since 0.1.0
      */
-    public function getAreaDefinition( $area )
+    public function getAreaDefinition($area)
     {
-        if (isset( $this->areas[$area] )) {
+        if (isset($this->areas[$area])) {
             return $this->areas[$area];
         } else {
             return false;
@@ -317,9 +316,9 @@ class PostEnvironment implements JsonSerializable
      * @return array
      * @since 0.3.0
      */
-    public function getAreasForContext( $context )
+    public function getAreasForContext($context)
     {
-        if (isset( $this->areasByContext[$context] ) && is_array( $this->areasByContext[$context] )) {
+        if (isset($this->areasByContext[$context]) && is_array($this->areasByContext[$context])) {
             return $this->areasByContext[$context];
         }
 
@@ -333,10 +332,10 @@ class PostEnvironment implements JsonSerializable
      *
      * @return mixed
      */
-    public function getAreaSettings( $id )
+    public function getAreaSettings($id)
     {
-        $settings = $this->storage->getDataProvider()->get( 'kb_area_settings' );
-        if (!empty( $settings[$id] )) {
+        $settings = $this->storage->getDataProvider()->get('kb_area_settings');
+        if (!empty($settings[$id])) {
             return $settings[$id];
         }
         return false;
@@ -351,11 +350,11 @@ class PostEnvironment implements JsonSerializable
      * @return string
      * @since 0.1.0
      */
-    public function getModuleData( $id )
+    public function getModuleData($id)
     {
 
         $this->storage->reset();
-        $data = $this->storage->getModuleData( $id );
+        $data = $this->storage->getModuleData($id);
         if ($data !== null) {
             return $data;
         } else {
@@ -371,8 +370,8 @@ class PostEnvironment implements JsonSerializable
      */
     public function save()
     {
-        $saveHandler = new SavePost( $this );
-        $saveHandler->save();
+            $saveHandler = new SavePost($this);
+            $saveHandler->save();
     }
 
     /**
@@ -386,7 +385,7 @@ class PostEnvironment implements JsonSerializable
     function jsonSerialize()
     {
         return array(
-            'postId' => absint( $this->storageId ),
+            'postId' => absint($this->storageId),
             'pageTemplate' => $this->getPageTemplate(),
             'postType' => $this->getPostType(),
             'entityType' => 'post'
@@ -408,6 +407,6 @@ class PostEnvironment implements JsonSerializable
      */
     public function toJSON()
     {
-        echo "<script> var KB = KB || {}; KB.Environment =" . json_encode( $this ) . "</script>";
+        echo "<script> var KB = KB || {}; KB.Environment =" . json_encode($this) . "</script>";
     }
 }

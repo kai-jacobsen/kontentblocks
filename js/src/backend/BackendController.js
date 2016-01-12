@@ -99,7 +99,7 @@ KB.App = (function () {
     // get the UI on track
     UI.init();
 
-    if (Config.getLayoutMode() === 'default-tabs'){
+    if (Config.getLayoutMode() === 'default-tabs') {
       new TabbedEditScreen();
     }
 
@@ -123,8 +123,8 @@ KB.App = (function () {
     // iterate over raw areas
 
     _.each(Payload.getPayload('Areas'), function (area) {
-      if (area.id !== '_internal'){
-        if (!_.isNull(area.settings)){
+      if (area.id !== '_internal') {
+        if (!_.isNull(area.settings)) {
           // create new area model
           KB.ObjectProxy.add(KB.Areas.add(area));
         }
@@ -180,13 +180,13 @@ KB.App = (function () {
   }
 
   function createPanelViews(panel) {
-    KB.Views.Areas.add(panel.get('id'), new PanelView({
+    KB.Views.Areas.add(panel.get('baseId'), new PanelView({
       model: panel,
-      el: '#' + panel.get('id') + '-container'
+      el: '#kbp-' + panel.get('baseId') + '-container'
     }));
   }
 
-  function createContextViews(context){
+  function createContextViews(context) {
     KB.Views.Contexts.add(context.get('id'), new ContextView({
       model: context,
       el: '#context_' + context.get('id')
@@ -210,7 +210,6 @@ KB.App = (function () {
   };
 
 }(jQuery));
-
 
 
 jQuery(document).ready(function () {

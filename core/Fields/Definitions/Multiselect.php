@@ -21,13 +21,13 @@ Class Multiselect extends Field
      *
      * @return mixed
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
         return $val;
     }
 
-    public function save($new, $old){
-
+    public function save($new, $old)
+    {
         return $new;
     }
 

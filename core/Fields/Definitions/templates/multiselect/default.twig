@@ -23,13 +23,14 @@
     </select>
 
 {% else %}
-    <select data-kftype="multiselect" id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
-        {#{% if (Field.getArg('empty', true)) %}#}
-        {#<option value='' name=''>Bitte wählen</option>#}
-        {#{% endif %}#}
+    <select  {% if Field.getArg('settings').single != true %} multiple="multiple" {% endif %}
+            data-kftype="multiselect" id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName(true) }}'>
+        {% if (Field.getArg('empty', true)) %}
+        <option value='' name=''>Bitte wählen</option>
+        {% endif %}
 
         {% for o in Field.getArg('options') %}
-            <option {% if (Field.getValue == o.value) %} selected="selected" {% endif %}
+            <option {% if o.value in (Field.getValue()) %} selected="selected" {% endif %}
                     {% if (o.disabled) %} disabled="disabled" {% endif %}
                     value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
         {% endfor %}
