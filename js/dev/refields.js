@@ -1620,7 +1620,7 @@ module.exports = BaseView.extend({
         that.$sqlIn.val(current.dateFormat('Y-m-d H:i:s'));
       }
     };
-    this.setting = this.model.get('settings') || {};
+    this.settings = this.model.get('settings') || {};
     this.render();
   },
   render: function () {
