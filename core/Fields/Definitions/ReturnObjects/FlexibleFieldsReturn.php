@@ -83,6 +83,10 @@ class FlexibleFieldsReturn
             $item = array();
             foreach ($fields as $key => $conf) {
 
+
+                if (!isset($data[$key])){
+                    continue;
+                }
                 /** @var \Kontentblocks\Fields\Field $field */
                 $field = $registry->getField( $conf['type'], $this->entityId, $index, $key );
                 $field->setBaseId( $this->entityId, $this->key );
