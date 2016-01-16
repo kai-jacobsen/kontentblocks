@@ -39,14 +39,14 @@ abstract class TermPanel extends AbstractPanel
      * @param array $args
      * @param $environment
      */
-    public function __construct( $args, TermEnvironment $environment )
+    public function __construct($args, TermEnvironment $environment)
     {
         $this->dataProvider = $environment->getDataProvider();
-        $this->args = $this->parseDefaults( $args );
-        $this->setupArgs( $this->args );
+        $this->args = $this->parseDefaults($args);
+        $this->setupArgs($this->args);
         $this->term = $environment->termObj;
-        $this->fields = new PanelFieldController( $this );
-        $this->model = new TermPanelModel( $environment->getDataProvider()->get( $args['baseId'] ), $this );
+        $this->fields = new PanelFieldController($this);
+        $this->model = new TermPanelModel($environment->getDataProvider()->get($args['baseId']), $this);
         $this->data = $this->model->export();
         $this->fields();
     }
@@ -56,14 +56,14 @@ abstract class TermPanel extends AbstractPanel
      * @param $args
      * @return mixed
      */
-    public function parseDefaults( $args )
+    public function parseDefaults($args)
     {
         $defaults = array(
             'taxonomy' => 'category',
             'beforeForm' => true
         );
 
-        return wp_parse_args( $args, $defaults );
+        return wp_parse_args($args, $defaults);
     }
 
     /**
@@ -71,12 +71,12 @@ abstract class TermPanel extends AbstractPanel
      * and look for optional method for each arg
      * @param $args
      */
-    public function setupArgs( $args )
+    public function setupArgs($args)
     {
         foreach ($args as $k => $v) {
-            if (method_exists( $this, "set" . strtoupper( $k ) )) {
-                $method = "set" . strtoupper( $k );
-                $this->$method( $v );
+            if (method_exists($this, "set" . strtoupper($k))) {
+                $method = "set" . strtoupper($k);
+                $this->$method($v);
             } else {
                 $this->$k = $v;
             }
@@ -87,14 +87,14 @@ abstract class TermPanel extends AbstractPanel
 
     public function init()
     {
-        add_action( "edited_{$this->args['taxonomy']}", array( $this, 'save' ) );
+        add_action("edited_{$this->args['taxonomy']}", array($this, 'save'));
         if ($this->args['beforeForm']) {
-            add_action( "{$this->args['taxonomy']}_edit_form_fields", array( $this, 'form' ) );
+            add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
         } else {
-            add_action( "{$this->args['taxonomy']}_edit_form", array( $this, 'form' ) );
+            add_action("{$this->args['taxonomy']}_edit_form", array($this, 'form'));
 
         }
-        add_action( 'admin_footer', array( $this, 'toJSON' ), 5 );
+        add_action('admin_footer', array($this, 'toJSON'), 5);
     }
 
     public function toJSON()
@@ -107,7 +107,7 @@ abstract class TermPanel extends AbstractPanel
             'type' => 'term',
             'settings' => $this->args
         );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerPanel( $args );
+        Kontentblocks::getService('utility.jsontransport')->registerPanel($args);
     }
 
     /**
@@ -115,27 +115,27 @@ abstract class TermPanel extends AbstractPanel
      * @param $termId
      * @return mixed|void
      */
-    public function save( $termId )
+    public function save($termId)
     {
-        $this->dataProvider = new TermMetaDataProvider( $termId );
+        $this->dataProvider = new TermMetaDataProvider($termId);
         $old = $this->model->export();
-        $new = $this->fields->save( $_POST[$this->baseId], $old );
-        $merged = Utilities::arrayMergeRecursive( $new, $old );
-        $this->dataProvider->update( $this->baseId, $merged );
+        $new = $this->fields->save($_POST[$this->baseId], $old);
+        $merged = Utilities::arrayMergeRecursive($new, $old);
+        $this->dataProvider->update($this->baseId, $merged);
     }
 
     /**
      * @param $termId
      * @return bool
      */
-    public function form( $termId )
+    public function form($termId)
     {
-        $this->dataProvider = new TermMetaDataProvider( $termId );
+        $this->dataProvider = new TermMetaDataProvider($termId);
 
         // @TODO what? deprecate, replace
-        do_action( 'kb.do.enqueue.admin.files' );
+        do_action('kb.do.enqueue.admin.files');
 
-        if (!current_user_can( 'edit_kontentblocks' )) {
+        if (!current_user_can('edit_kontentblocks')) {
             return false;
         }
         Utilities::hiddenEditor();
@@ -159,18 +159,11 @@ abstract class TermPanel extends AbstractPanel
     }
 
     /**
-     * @return \WP_Term
-     */
-    public function getTerm(){
-        return $this->term;
-    }
-
-    /**
      * @return string
      */
     public function renderFields()
     {
-        $renderer = new FieldRendererTabs( $this->fields );
+        $renderer = new FieldRendererTabs($this->fields);
         return $renderer->render();
     }
 
@@ -187,6 +180,14 @@ abstract class TermPanel extends AbstractPanel
     }
 
     /**
+     * @return \WP_Term
+     */
+    public function getTerm()
+    {
+        return $this->term;
+    }
+
+    /**
      * @return mixed
      * @throws \Exception
      */
@@ -194,8 +195,8 @@ abstract class TermPanel extends AbstractPanel
     {
         foreach ($this->model as $key => $v) {
             /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey( $key );
-            $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue() : $v;
+            $field = $this->fields->getFieldByKey($key);
+            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
         }
         return $this->model;
     }
@@ -207,11 +208,11 @@ abstract class TermPanel extends AbstractPanel
      * @param null $default
      * @return mixed
      */
-    public function getKey( $key = null, $default = null )
+    public function getKey($key = null, $default = null)
     {
         $data = $this->getData();
 
-        if (isset( $data[$key] )) {
+        if (isset($data[$key])) {
             return $data[$key];
         }
 
