@@ -192,11 +192,10 @@ abstract class PostPanel extends AbstractPanel
     public function prepareModel($reset = false)
     {
 
-        if ($reset){
+        if ($reset) {
             $this->environment->getDataProvider()->reset();
             $this->model->set($this->environment->getDataProvider()->get($this->baseId));
         }
-
         $model = $this->model->export();
         if ($this->fields) {
             $data = array();

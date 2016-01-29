@@ -166,7 +166,8 @@ class Utilities
                 'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
                 'plugins' => implode(',', $plugins),
                 'wp_autoresize_on' => true,
-                'wp_skip_init' => false
+                'wp_skip_init' => false,
+
             ),
             // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
             'quicktags' => true
