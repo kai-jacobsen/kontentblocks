@@ -22,22 +22,21 @@ class Enqueues
     public static function setup()
     {
 
-        add_action( 'init', array( __CLASS__, 'registerScripts' ) );
+        add_action('init', array(__CLASS__, 'registerScripts'));
 
         // enqueue styles and scripts where needed
-        add_action( 'admin_print_styles-post.php', array( __CLASS__, 'adminEnqueue' ), 30 );
-        add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'adminEnqueue' ), 30 );
-        add_action( 'customize_controls_enqueue_scripts', array( __CLASS__, 'customizerEnqueue' ) );
+        add_action('admin_print_styles-post.php', array(__CLASS__, 'adminEnqueue'), 30);
+        add_action('admin_print_styles-post-new.php', array(__CLASS__, 'adminEnqueue'), 30);
+        add_action('customize_controls_enqueue_scripts', array(__CLASS__, 'customizerEnqueue'));
 
-        add_action( 'kb.do.enqueue.admin.files', array( __CLASS__, 'adminEnqueue' ) );
+        add_action('kb.do.enqueue.admin.files', array(__CLASS__, 'adminEnqueue'));
 
         // Frontend Enqueueing
-        $filter = apply_filters( 'kb.config.initFrontend', true );
-        if (!is_admin() && current_user_can( 'edit_kontentblocks' ) && is_user_logged_in(
-            ) && $filter && !is_customize_preview()
+        $filter = apply_filters('kb.config.initFrontend', true);
+        if (!is_admin() && current_user_can('edit_kontentblocks') && is_user_logged_in() && $filter && !is_customize_preview()
         ) {
-            add_action( 'wp_enqueue_scripts', array( __CLASS__, 'coreStylesEnqueue' ), 9 );
-            add_action( 'wp_footer', array( __CLASS__, 'UserEnqueue' ), 9 );
+            add_action('wp_enqueue_scripts', array(__CLASS__, 'coreStylesEnqueue'), 9);
+            add_action('wp_footer', array(__CLASS__, 'UserEnqueue'), 9);
 
         }
     }
@@ -45,8 +44,8 @@ class Enqueues
 
     public static function registerScripts()
     {
-        $folder = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? 'dev' : 'dist';
-        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+        $folder = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? 'dev' : 'dist';
+        $suffix = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
         $dependencies = array(
             'jquery',
             'jquery-ui-core',
@@ -101,7 +100,6 @@ class Enqueues
 //        );
 
 
-
         // FieldsAPI
         wp_register_script(
             'kb-fields-api',
@@ -115,30 +113,27 @@ class Enqueues
         wp_register_script(
             'kb-refields',
             KB_PLUGIN_URL . 'js/' . $folder . '/refields' . $suffix . '.js',
-            array( 'kb-fields-api', 'kb-media-ext' ),
+            array('kb-fields-api', 'kb-media-ext'),
             null,
             true
         );
 
-        if (is_admin()) {
-            // Backend 'controller'
-            wp_register_script(
-                'kb-backend',
-                KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
-                array( 'kb-plugins', 'kb-refields' ),
-                null,
-                true
-            );
-        } else {
-            // frontend controller
-            wp_register_script(
-                'kb-frontend',
-                KB_PLUGIN_URL . 'js/' . $folder . '/frontend' . $suffix . '.js',
-                array( 'kb-plugins', 'kb-refields' ),
-                null,
-                true
-            );
-        }
+        // Backend 'controller'
+        wp_register_script(
+            'kb-backend',
+            KB_PLUGIN_URL . 'js/' . $folder . '/backend' . $suffix . '.js',
+            array('kb-plugins', 'kb-refields'),
+            null,
+            true
+        );
+        // frontend controller
+        wp_register_script(
+            'kb-frontend',
+            KB_PLUGIN_URL . 'js/' . $folder . '/frontend' . $suffix . '.js',
+            array('kb-plugins', 'kb-refields'),
+            null,
+            true
+        );
 
         // Extensions
         wp_register_script(
@@ -153,8 +148,8 @@ class Enqueues
         // WP iris // no dev version available in core
         wp_register_script(
             'wp-iris',
-            admin_url( 'js/iris.min.js' ),
-            array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ),
+            admin_url('js/iris.min.js'),
+            array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'),
             false,
             true
         );
@@ -162,8 +157,8 @@ class Enqueues
         // WP color picker
         wp_register_script(
             'wp-color-picker',
-            admin_url( 'js/color-picker' . $suffix . '.js' ),
-            array( 'wp-iris' ),
+            admin_url('js/color-picker' . $suffix . '.js'),
+            array('wp-iris'),
             false,
             true
         );
@@ -172,24 +167,25 @@ class Enqueues
         wp_register_script(
             'kb-media-ext',
             KB_PLUGIN_URL . '/js/' . $folder . '/mediaExt' . $suffix . '.js',
-            array( 'media-views' ),
+            array('media-views'),
             false,
             true
         );
         self::customScripts();
     }
 
-    public static function customizerEnqueue(){
-        wp_enqueue_script('kb-customizer');
-    }
-
     private static function customScripts()
     {
-        $all = array_merge( self::$adminScripts, self::$userScripts );
+        $all = array_merge(self::$adminScripts, self::$userScripts);
         foreach ($all as $args) {
 
-            wp_register_script( $args['handle'], $args['src'], $args['deps'], $args['version'], $args['footer'] );
+            wp_register_script($args['handle'], $args['src'], $args['deps'], $args['version'], $args['footer']);
         }
+    }
+
+    public static function customizerEnqueue()
+    {
+        wp_enqueue_script('kb-customizer');
     }
 
     /**
@@ -206,14 +202,14 @@ class Enqueues
         if (is_admin()) {
 
             // Main Stylesheet
-            wp_enqueue_style( 'kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css' );
+            wp_enqueue_style('kontentblocks-base', KB_PLUGIN_URL . 'css/kontentblocks.css');
             self::enqueueStyles();
 
-            wp_enqueue_script( 'kb-backend' );
-            wp_enqueue_script( 'kb-refields' );
-            wp_enqueue_script( 'heartbeat' );
-            wp_enqueue_script( 'kb-media-ext' );
-            wp_enqueue_script( 'kb-extensions' );
+            wp_enqueue_script('kb-backend');
+            wp_enqueue_script('kb-refields');
+            wp_enqueue_script('heartbeat');
+            wp_enqueue_script('kb-media-ext');
+            wp_enqueue_script('kb-extensions');
 
             // add Kontentblocks l18n strings
 //            $localize = self::localize();
@@ -221,16 +217,16 @@ class Enqueues
 
         }
 
-        wp_enqueue_style( 'wp-color-picker' );
-        wp_enqueue_script( 'wp-color-picker' );
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
 
         if ($is_IE) {
-            wp_enqueue_script( 'respond', KB_PLUGIN_URL . 'js/respond.min.js', null, true, true );
-            wp_enqueue_style( 'ie8css', KB_PLUGIN_URL . 'css/ie8css.css' );
+            wp_enqueue_script('respond', KB_PLUGIN_URL . 'js/respond.min.js', null, true, true);
+            wp_enqueue_style('ie8css', KB_PLUGIN_URL . 'css/ie8css.css');
         }
 
         self::enqueueAdminScripts();
-        do_action( 'kb.enqueue.admin.files' );
+        do_action('kb.enqueue.admin.files');
 
     }
 
@@ -239,31 +235,31 @@ class Enqueues
     public static function appConfig()
     {
         global $post;
-        $screen = ( function_exists( 'get_current_screen' ) ) ? get_current_screen() : null;
+        $screen = (function_exists('get_current_screen')) ? get_current_screen() : null;
         $data = array(
             'frontend' => !is_admin(),
             'preview' => is_preview(),
             'loggedIn' => is_user_logged_in(),
             'user' => (is_admin()) ? wp_get_current_user() : false,
-            'ajax_url' => ( is_user_logged_in() ) ? admin_url( 'admin-ajax.php' ) : null,
-            'url' => ( is_user_logged_in() ) ? KB_PLUGIN_URL : '',
-            'post' => ( $post && is_user_logged_in() ) ? $post : array(),
+            'ajax_url' => (is_user_logged_in()) ? admin_url('admin-ajax.php') : null,
+            'url' => (is_user_logged_in()) ? KB_PLUGIN_URL : '',
+            'post' => ($post && is_user_logged_in()) ? $post : array(),
             'screen' => $screen,
             'dev' => Kontentblocks::DEVMODE,
             'version' => Kontentblocks::VERSION,
-            'isMobile' => Kontentblocks::getService( 'utility.mobileDetect' )->isMobile(),
-            'useModuleNav' => apply_filters( 'kb:config.module-nav', true ),
-            'initFrontend' => apply_filters( 'kb.config.initFrontend', true ),
-            'editAlwaysOn' => apply_filters( 'kb.config.editAlwaysOn', false )
+            'isMobile' => Kontentblocks::getService('utility.mobileDetect')->isMobile(),
+            'useModuleNav' => apply_filters('kb:config.module-nav', true),
+            'initFrontend' => apply_filters('kb.config.initFrontend', true),
+            'editAlwaysOn' => apply_filters('kb.config.editAlwaysOn', false)
         );
 
         if (is_preview()) {
             $data['loggedIn'] = false;
         }
 
-        $data = array_merge( $data, self::localize() );
+        $data = array_merge($data, self::localize());
 
-        Kontentblocks::getService( 'utility.jsontransport' )->registerPublicData( 'config', null, $data );
+        Kontentblocks::getService('utility.jsontransport')->registerPublicData('config', null, $data);
     }
 
     /**
@@ -278,16 +274,16 @@ class Enqueues
         $roles = $current_user->roles;
 
         // get caps from options
-        $option = get_site_option( 'kb.capabilities' );
+        $option = get_site_option('kb.capabilities');
 
         // if, for some reason, caps not set, fallback to defaults
-        $setup_caps = ( !empty( $option ) ) ? $option : Capabilities::defaultCapabilities();
+        $setup_caps = (!empty($option)) ? $option : Capabilities::defaultCapabilities();
 
         // prepare cap collection for current user
         $caps = array();
-        if (is_array( $roles )) {
+        if (is_array($roles)) {
             foreach ($roles as $role) {
-                if (!empty( $setup_caps[$role] )) {
+                if (!empty($setup_caps[$role])) {
                     foreach ($setup_caps[$role] as $cap) {
                         $caps[] = $cap;
                     }
@@ -295,9 +291,9 @@ class Enqueues
             }
         }
 
-        $hash = uniqid( 'kb', true );
+        $hash = uniqid('kb', true);
 
-        if (function_exists( 'getGitHash' )) {
+        if (function_exists('getGitHash')) {
             $hash = getGitHash();
         }
         // Setup the global js object base
@@ -311,19 +307,19 @@ class Enqueues
                 'hash' => $hash,
             ),
             'nonces' => array(
-                'update' => wp_create_nonce( 'kb-update' ),
-                'create' => wp_create_nonce( 'kb-create' ),
-                'delete' => wp_create_nonce( 'kb-delete' ),
-                'read' => wp_create_nonce( 'kb-read' ),
+                'update' => wp_create_nonce('kb-update'),
+                'create' => wp_create_nonce('kb-create'),
+                'delete' => wp_create_nonce('kb-delete'),
+                'read' => wp_create_nonce('kb-read'),
             )
         );
     }
 
     public static function enqueueStyles()
     {
-        if (!empty( self::$styles )) {
+        if (!empty(self::$styles)) {
             foreach (self::$styles as $style) {
-                wp_enqueue_style( $style['handle'], $style['src'] );
+                wp_enqueue_style($style['handle'], $style['src']);
             }
         }
 
@@ -332,16 +328,16 @@ class Enqueues
     private static function enqueueAdminScripts()
     {
         foreach (self::$adminScripts as $script) {
-            wp_enqueue_script( $script['handle'] );
+            wp_enqueue_script($script['handle']);
         }
     }
 
     public static function coreStylesEnqueue()
     {
-        if (is_user_logged_in() && !is_admin() && current_user_can( 'edit_kontentblocks' )) {
-            wp_enqueue_style( 'wp-color-picker' );
-            wp_enqueue_style( 'kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css' );
-            wp_enqueue_style( 'kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css' );
+        if (is_user_logged_in() && !is_admin() && current_user_can('edit_kontentblocks')) {
+            wp_enqueue_style('wp-color-picker');
+            wp_enqueue_style('kb-base-styles', KB_PLUGIN_URL . '/css/kontentblocks.css');
+            wp_enqueue_style('kb-onsite-styles', KB_PLUGIN_URL . '/css/KBOsEditStyle.css');
             self::enqueueStyles();
         }
     }
@@ -349,29 +345,33 @@ class Enqueues
     public static function userEnqueue()
     {
 
+        if (!apply_filters('kb.enqueue.frontend.scripts', true)){
+            return false;
+        }
+
         self::appConfig();
         if (is_user_logged_in() && !is_admin()) {
             wp_enqueue_media();
 
-            wp_enqueue_script( 'kb-frontend' );
-            wp_enqueue_script( 'kb-onsite-editing' );
-            wp_enqueue_script( 'kb-refields' );
-            wp_enqueue_script( 'heartbeat' );
+            wp_enqueue_script('kb-frontend');
+            wp_enqueue_script('kb-onsite-editing');
+            wp_enqueue_script('kb-refields');
+            wp_enqueue_script('heartbeat');
 
 
 //            wp_localize_script( 'kb-common', 'kontentblocks', self::localize() );
 
-            wp_enqueue_script( 'wp-iris' );
-            wp_enqueue_script( 'wp-color-picker' );
+            wp_enqueue_script('wp-iris');
+            wp_enqueue_script('wp-color-picker');
             $colorpicker_l10n = array(
-                'clear' => __( 'Clear' ),
-                'defaultString' => __( 'Default' ),
-                'pick' => __( 'Select Color' )
+                'clear' => __('Clear'),
+                'defaultString' => __('Default'),
+                'pick' => __('Select Color')
             );
-            wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
+            wp_localize_script('wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n);
 
             Utilities::hiddenEditor();
-            wp_enqueue_script( 'kb-media-ext' );
+            wp_enqueue_script('kb-media-ext');
 
         }
         self::enqueueUserScripts();
@@ -382,11 +382,11 @@ class Enqueues
     private static function enqueueUserScripts()
     {
         foreach (self::$userScripts as $script) {
-            wp_enqueue_script( $script['handle'] );
+            wp_enqueue_script($script['handle']);
         }
     }
 
-    public static function addScript( $args, $where = 'both' )
+    public static function addScript($args, $where = 'both')
     {
         $defaults = array(
             'handle' => null,
@@ -396,9 +396,9 @@ class Enqueues
             'footer' => true
         );
 
-        $def = wp_parse_args( $args, $defaults );
+        $def = wp_parse_args($args, $defaults);
 
-        if (is_null( $def['handle'] ) || is_null( $def['src'] )) {
+        if (is_null($def['handle']) || is_null($def['src'])) {
             return false;
         }
         switch ($where) {

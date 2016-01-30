@@ -56,16 +56,16 @@ abstract class AbstractFieldController
      */
     public function updateData()
     {
-        if (empty( $this->fieldsById )) {
+        if (empty($this->fieldsById)) {
             $this->fieldsById = $this->collectAllFields();
         }
 
         $model = $this->getEntityModel();
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
-            $data = ( array_key_exists( $field->getKey(), $model ) ) ? $model[$field->getKey()] : '';
+            $data = (array_key_exists($field->getKey(), $model)) ? $model[$field->getKey()] : '';
 
-            $field->setData( $data );
+            $field->setData($data);
         }
         return $this;
     }
@@ -97,10 +97,10 @@ abstract class AbstractFieldController
      * @return object
      * @since 0.1.0
      */
-    public function idExists( $sectionId )
+    public function idExists($sectionId)
     {
         // TODO Test for right inheritance / abstract class
-        return ( isset( $this->sections[$sectionId] ) );
+        return (isset($this->sections[$sectionId]));
 
     }
 
@@ -115,18 +115,18 @@ abstract class AbstractFieldController
      * @return mixed
      * @since 0.1.0
      */
-    public function getFieldByKey( $key, $fromArray = null )
+    public function getFieldByKey($key, $fromArray = null)
     {
-        if (empty( $this->fieldsById )) {
+        if (empty($this->fieldsById)) {
             $this->fieldsById = $this->collectAllFields();
         }
 
-        if (isset( $fromArray ) && $this->fieldsById[$fromArray]) {
-            return $this->fieldsById[$fromArray]->getFieldByKey( $key );
+        if (isset($fromArray) && $this->fieldsById[$fromArray]) {
+            return $this->fieldsById[$fromArray]->getFieldByKey($key);
         }
 
 
-        if (isset( $this->fieldsById[$key] )) {
+        if (isset($this->fieldsById[$key])) {
             return $this->fieldsById[$key];
         } else {
             false;
@@ -143,12 +143,12 @@ abstract class AbstractFieldController
      * @return array
      * @since 0.1.0
      */
-    public function save( $data, $oldData )
+    public function save($data, $oldData)
     {
         $collection = array();
         /** @var AbstractFieldSection $section */
         foreach ($this->sections as $section) {
-            $return = ( $section->save( $data, $oldData ) );
+            $return = ($section->save($data, $oldData));
             $collection = $collection + $return;
         }
 
@@ -162,12 +162,12 @@ abstract class AbstractFieldController
      * @return object
      * @deprecated
      */
-    public function addGroup( $sectionId, $args = array() )
+    public function addGroup($sectionId, $args = array())
     {
-        return $this->addSection( $sectionId, $args = array() );
+        return $this->addSection($sectionId, $args = array());
     }
 
-    abstract public function addSection( $sectionId, $args = array() );
+    abstract public function addSection($sectionId, $args = array());
 
     /**
      * @return array
@@ -176,7 +176,7 @@ abstract class AbstractFieldController
     {
         $collection = array();
         foreach ($this->sections as $section) {
-            $section->export( $collection );
+            $section->export($collection);
         }
         return $collection;
     }
@@ -186,8 +186,13 @@ abstract class AbstractFieldController
      */
     public function getRenderer()
     {
-        if (is_null( $this->renderEngine )) {
-            $this->renderEngine = new $this->renderer( $this );
+
+        if (is_null($this->renderer)) {
+            $this->renderer = '\Kontentblocks\Fields\Renderer\FieldRendererTabs';
+        }
+
+        if (is_null($this->renderEngine)) {
+            $this->renderEngine = new $this->renderer($this);
         }
         return $this->renderEngine;
     }
@@ -195,9 +200,9 @@ abstract class AbstractFieldController
     /**
      * @param string $classname
      */
-    public function setRenderer( $classname )
+    public function setRenderer($classname)
     {
-        if (is_string( $classname ) && is_a(
+        if (is_string($classname) && is_a(
                 $classname,
                 '\Kontentblocks\Fields\Renderer\InterfaceFieldRenderer',
                 true

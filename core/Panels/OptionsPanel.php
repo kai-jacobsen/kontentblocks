@@ -55,7 +55,6 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function __construct( $args )
     {
-
         $this->args = $this->parseDefaults( $args );
         $this->setupArgs( $this->args );
         $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
@@ -232,7 +231,7 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        $renderer = new FieldRendererTabs( $this->fields );
+        $renderer = $this->fields->getRenderer();
         return $renderer->render();
     }
 
