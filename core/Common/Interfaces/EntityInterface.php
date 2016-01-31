@@ -12,4 +12,6 @@ interface EntityInterface
     public function getModel();
 
     public function getId();
+
+    public function getProperties();
 }

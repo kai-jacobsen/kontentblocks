@@ -3,6 +3,7 @@
 namespace Kontentblocks\Fields;
 
 use Exception;
+use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Exportable;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Kontentblocks;
@@ -24,6 +25,12 @@ abstract class AbstractFieldSection implements Exportable
         'title' => 'Fieldgrouptitle',
         'attributes' => array('class' => 'kbf-section-wrap')
     );
+
+    /**
+     * @var array
+     */
+    public $args;
+
     /**
      * Unique identifier
      * @var string id unique identifier
@@ -31,42 +38,79 @@ abstract class AbstractFieldSection implements Exportable
     public $sectionId;
 
     /**
-     * Baseid, as passed to fields
      * @var string
      */
     public $baseId;
+
+    /**
+     * @var AbstractFieldController
+     */
+    public $controller;
+
+    /**
+     * @var int
+     */
+    public $objectId = 0;
+
+    /**
+     * @var EntityInterface
+     */
+    public $entity;
+
+
     /**
      * Array of registered fields for this section
      * @var array
      */
-
-    public $objectId = 0;
-
     protected $fields;
-
-    /**
-     * Can be a module or a panel
-     * @var EntityInterface
-     */
-    protected $entity;
 
     /**
      * Counter for actual fields to render
      * @var int
      */
-
     protected $numberOfVisibleFields = 0;
+
     /**
      * Counter for total number of added fields in this section
      * @var int
      */
 
     protected $numberOfFields = 0;
+
     /**
      * ordering index
      * @var int
      */
     private $priorityCount = 10;
+
+
+    /**
+     * Constructor
+     *
+     * @param string $sectionId
+     * @param $args
+     * @param AbstractFieldController $controller
+     */
+    public function __construct($sectionId, $args, AbstractFieldController $controller)
+    {
+        $this->sectionId = $sectionId;
+        $this->args = $this->prepareArgs($args);
+        $this->controller = $controller;
+        $this->baseId = $controller->getId();
+        $this->objectId = $controller->objectId;
+        //shorthand
+        $this->entity = $controller->getEntity();
+    }
+
+    /**
+     * @param $args
+     * @return array
+     */
+    public function prepareArgs($args)
+    {
+        return Utilities::arrayMergeRecursive($args, self::$defaults);
+
+    }
 
     /**
      * Add a field definition to the group field collection
@@ -136,7 +180,7 @@ abstract class AbstractFieldSection implements Exportable
                 }
 
                 $newField->setData($fielddata);
-                $this->_increaseVisibleFields();
+                $this->increaseVisibleFields();
                 $this->orderFields();
 
 
@@ -158,18 +202,24 @@ abstract class AbstractFieldSection implements Exportable
         return isset($this->fields[$key]);
     }
 
-    abstract public function markVisibility(Field $Field);
+    /**
+     * @param Field $field
+     * @return mixed
+     */
+    abstract public function markVisibility(Field $field);
 
     /**
      * Handle special array notation
      *
-     * @param object $field
+     * @param Field $field
      * @param string $key
      * @param array $args
+     * @return FieldSubGroup
      */
     public function addArrayField($field, $key, $args)
     {
         if (!$this->fieldExists($args['arrayKey'])) {
+            /** @var FieldSubGroup $fieldArray */
             $fieldArray = $this->fields[$args['arrayKey']] = new FieldSubGroup($args['arrayKey']);
         } else {
             $fieldArray = $this->fields[$args['arrayKey']];
@@ -178,6 +228,9 @@ abstract class AbstractFieldSection implements Exportable
         return $fieldArray;
     }
 
+    /**
+     * @return EntityModel
+     */
     public function getEntityModel()
     {
         return $this->entity->getModel();
@@ -190,22 +243,16 @@ abstract class AbstractFieldSection implements Exportable
      *
      * @return mixed defaults to empty string
      */
-    private function getFieldStd($field)
+    private function getFieldStd(Field $field)
     {
         return $field->getArg('std', '');
 
     }
 
-    /*
- * -----------------------------------------------
- * Getter
- * -----------------------------------------------
- */
-
     /**
      * Increase number of visible fields property
      */
-    protected function _increaseVisibleFields()
+    protected function increaseVisibleFields()
     {
         $this->numberOfVisibleFields++;
         $this->numberOfFields++;
@@ -223,8 +270,6 @@ abstract class AbstractFieldSection implements Exportable
      * Wrapper method
      * Sets essential properties
      * Calls render() on each field
-     *
-     * TODO: Check if possible / Refactor to set properties earlier
      */
     public function render()
     {
@@ -240,13 +285,9 @@ abstract class AbstractFieldSection implements Exportable
         }
     }
 
-
-    /*
-     * -----------------------------------------------
-     * Helper methods
-     * -----------------------------------------------
+    /**
+     * @return array
      */
-
     public function flattenFields()
     {
         $flatten = array();
@@ -257,8 +298,10 @@ abstract class AbstractFieldSection implements Exportable
 
         foreach ($this->fields as $field) {
             if (is_a($field, '\Kontentblocks\Fields\FieldSubGroup')) {
-                foreach ($field->getFields() as $field) {
-                    $flatten[] = $field;
+                /** @var FieldSubGroup $field */
+                /** @var Field $subfield */
+                foreach ($field->getFields() as $subfield) {
+                    $flatten[] = $subfield;
                 }
             } else {
                 $flatten[] = $field;
@@ -308,21 +351,19 @@ abstract class AbstractFieldSection implements Exportable
     }
 
     /**
-     * @return type
+     * @return string
      */
     public function getLabel()
     {
         return $this->args['label'];
-
     }
 
     /**
-     * @return type
+     * @return string
      */
     public function getTitle()
     {
         return $this->args['title'];
-
     }
 
     /**
@@ -332,12 +373,6 @@ abstract class AbstractFieldSection implements Exportable
     public function getSectionId()
     {
         return $this->sectionId;
-
-    }
-
-    public function prepareArgs($args)
-    {
-        return Utilities::arrayMergeRecursive($args, self::$defaults);
 
     }
 
@@ -351,6 +386,9 @@ abstract class AbstractFieldSection implements Exportable
 
     }
 
+    /**
+     * @param $collection
+     */
     public function export(&$collection)
     {
         foreach ($this->fields as $Field) {
@@ -358,6 +396,9 @@ abstract class AbstractFieldSection implements Exportable
         }
     }
 
+    /**
+     * @return EntityInterface
+     */
     public function getEntity()
     {
         return $this->entity;
@@ -366,7 +407,7 @@ abstract class AbstractFieldSection implements Exportable
     /**
      * Descrease number of visible fields property
      */
-    protected function _decreaseVisibleFields()
+    protected function decreaseVisibleFields()
     {
         $this->numberOfVisibleFields--;
 

@@ -27,18 +27,32 @@ abstract class AbstractFieldController
     public $model;
 
     /**
+     * @var EntityInterface
+     */
+    public $entity;
+
+    /**
      * @var InterfaceFieldRenderer
      */
     public $renderEngine;
 
+    /**
+     * Baseid, as passed to fields
+     * @var string
+     */
+    public $baseId;
 
     /**
-     * Object to handle the section layout
-     * e.g. defaults to tabs
-     * @var object
-     * @since 0.1.0
+     * @var int
      */
-    protected $renderer;
+
+    public $objectId = 0;
+
+    /**
+     * Default field renderer
+     * @var InterfaceFieldRenderer
+     */
+    protected $renderer = 'Kontentblocks\Fields\Renderer\FieldRendererTabs';
 
     /**
      * registered fields in one flat array
@@ -47,6 +61,36 @@ abstract class AbstractFieldController
      */
     protected $fieldsById;
 
+    /**
+     * AbstractFieldController constructor.
+     * @param $baseid
+     * @param EntityInterface $entity
+     * @param int $objectId
+     */
+    public function __construct($baseid, EntityInterface $entity, $objectId = 0)
+    {
+        $this->baseId = $baseid;
+        $this->entity = $entity;
+        $this->model = $entity->getModel();
+        $this->objectId = $objectId;
+    }
+
+
+    /**
+     * @return EntityInterface
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->baseId;
+    }
 
     /**
      * Prepare fields for frontend output
@@ -60,11 +104,10 @@ abstract class AbstractFieldController
             $this->fieldsById = $this->collectAllFields();
         }
 
-        $model = $this->getEntityModel();
+        $model = $this->getModel()->export();
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fieldsById as $field) {
             $data = (array_key_exists($field->getKey(), $model)) ? $model[$field->getKey()] : '';
-
             $field->setData($data);
         }
         return $this;
@@ -79,14 +122,22 @@ abstract class AbstractFieldController
     public function collectAllFields()
     {
         $collect = array();
+        /** @var AbstractFieldSection $def */
         foreach ($this->sections as $def) {
             $collect = $collect + $def->getFields();
         }
+
         return $collect;
 
     }
 
-    public abstract function getEntityModel();
+    /**
+     * @return EntityModel
+     */
+    public function getModel()
+    {
+        return $this->entity->getModel();
+    }
 
     /**
      * Helper method to check whether an section already
@@ -99,9 +150,7 @@ abstract class AbstractFieldController
      */
     public function idExists($sectionId)
     {
-        // TODO Test for right inheritance / abstract class
         return (isset($this->sections[$sectionId]));
-
     }
 
     /**
@@ -125,7 +174,6 @@ abstract class AbstractFieldController
             return $this->fieldsById[$fromArray]->getFieldByKey($key);
         }
 
-
         if (isset($this->fieldsById[$key])) {
             return $this->fieldsById[$key];
         } else {
@@ -136,6 +184,7 @@ abstract class AbstractFieldController
 
     /**
      * Calls save on each group
+     * propagates the save event to sections
      *
      * @param $data
      * @param $oldData
@@ -151,7 +200,6 @@ abstract class AbstractFieldController
             $return = ($section->save($data, $oldData));
             $collection = $collection + $return;
         }
-
         return $collection;
 
     }
@@ -212,8 +260,4 @@ abstract class AbstractFieldController
         }
     }
 
-    /**
-     * @return EntityInterface
-     */
-    public abstract function getEntity();
 }

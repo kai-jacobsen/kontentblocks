@@ -77,7 +77,7 @@ abstract class PostPanel extends AbstractPanel
         $this->setupArgs($this->args);
         $this->environment = $environment;
         $this->model = new PostPanelModel($this->environment->getDataProvider()->get($this->baseId), $this);
-        $this->fields = new PanelFieldController($this);
+        $this->fields = new PanelFieldController();
         $this->fields();
     }
 

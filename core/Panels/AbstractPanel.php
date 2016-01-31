@@ -3,6 +3,7 @@
 namespace Kontentblocks\Panels;
 
 
+use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Fields\PanelFieldController;
 
@@ -23,10 +24,23 @@ abstract class AbstractPanel implements EntityInterface
      * @var array
      */
     public $data = null;
+
+    /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var EntityModel
+     */
+    public $model;
+
     /**
      * @var array
      */
+
     protected $args;
+
     /**
      * Key / base id
      * @var string
@@ -34,12 +48,14 @@ abstract class AbstractPanel implements EntityInterface
     protected $baseId;
 
 
+    /**
+     * @param $args
+     */
     public static function run($args)
     {
         // do nothing
     }
 
-    abstract public function form();
 
     abstract public function init();
 
@@ -88,6 +104,14 @@ abstract class AbstractPanel implements EntityInterface
     public function getId()
     {
         return $this->baseId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->args;
     }
 
     /**
