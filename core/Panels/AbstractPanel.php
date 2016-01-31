@@ -34,10 +34,12 @@ abstract class AbstractPanel implements EntityInterface
     protected $baseId;
 
 
-    public static function run( $args )
+    public static function run($args)
     {
         // do nothing
     }
+
+    abstract public function form();
 
     abstract public function init();
 
@@ -47,7 +49,10 @@ abstract class AbstractPanel implements EntityInterface
      */
     abstract public function getData();
 
-    public function setData( $data )
+    /**
+     * @param $data
+     */
+    public function setData($data)
     {
         $this->data = $data;
     }
@@ -59,7 +64,7 @@ abstract class AbstractPanel implements EntityInterface
      * @param null $default
      * @return mixed
      */
-    abstract public function getKey( $key = null, $default = null );
+    abstract public function getKey($key = null, $default = null);
 
     /**
      * @return string
@@ -80,7 +85,8 @@ abstract class AbstractPanel implements EntityInterface
     /**
      * @return string
      */
-    public function getId(){
+    public function getId()
+    {
         return $this->baseId;
     }
 

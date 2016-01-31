@@ -65,10 +65,6 @@ class CoreView
      */
     public function render( $echo = false )
     {
-//        if (!is_file( trailingslashit( $this->path ) . $this->tplFile )) {
-//            echo "<script>console.log('template {$this->tplFile} missing');</script>";
-//            return false;
-//        }
 
         if ($echo) {
             $this->engine->display( $this->tplFile, $this->data );

@@ -29,6 +29,7 @@ abstract class AbstractFieldSection implements Exportable
      * @var string id unique identifier
      */
     public $sectionId;
+
     /**
      * Baseid, as passed to fields
      * @var string
@@ -42,20 +43,24 @@ abstract class AbstractFieldSection implements Exportable
     public $objectId = 0;
 
     protected $fields;
+
     /**
      * Can be a module or a panel
      * @var EntityInterface
      */
     protected $entity;
+
     /**
      * Counter for actual fields to render
      * @var int
      */
+
     protected $numberOfVisibleFields = 0;
     /**
      * Counter for total number of added fields in this section
      * @var int
      */
+
     protected $numberOfFields = 0;
     /**
      * ordering index
@@ -73,18 +78,18 @@ abstract class AbstractFieldSection implements Exportable
      * @throws \Exception
      * @return self Fluid layout
      */
-    public function addField( $type, $key, $args = array() )
+    public function addField($type, $key, $args = array())
     {
         $subkey = null;
 
-        if (!$this->fieldExists( $key )) {
+        if (!$this->fieldExists($key)) {
 
             //check for special key syntax
-            if (preg_match( "/^(.*?)::/i", $key, $out )) {
-                if (is_array( $out ) && count( $out ) == 2) {
-                    $key = str_replace( $out[0], '', $key );
+            if (preg_match("/^(.*?)::/i", $key, $out)) {
+                if (is_array($out) && count($out) == 2) {
+                    $key = str_replace($out[0], '', $key);
 
-                    if (isset( $args['arrayKey'] ) && $args['arrayKey'] !== $out[1]) {
+                    if (isset($args['arrayKey']) && $args['arrayKey'] !== $out[1]) {
                         throw new Exception(
                             'ArrayKey mismatch. Field key has :: syntax and arrayKey arg is set, but differs'
                         );
@@ -94,44 +99,43 @@ abstract class AbstractFieldSection implements Exportable
             }
 
 
-            if (!isset( $args['priority'] )) {
+            if (!isset($args['priority'])) {
                 $args['priority'] = $this->priorityCount;
                 $this->priorityCount += 5;
             }
 
             /** @var \Kontentblocks\Fields\FieldRegistry $registry */
-            $registry = Kontentblocks::getService( 'registry.fields' );
-            $field = $registry->getField( $type, $this->baseId, $subkey, $key, $args );
+            $registry = Kontentblocks::getService('registry.fields');
+            $field = $registry->getField($type, $this->baseId, $subkey, $key, $args);
             if (!$field) {
-                throw new Exception( "Field of type: $type does not exist" );
+                throw new Exception("Field of type: $type does not exist");
             } else {
                 $field->section = $this;
                 $field->objectId = $this->objectId;
                 // conditional check of field visibility
-                $this->markVisibility( $field );
+                $this->markVisibility($field);
 
                 // Fields with same arrayKey gets grouped into own collection
-                if (isset( $args['arrayKey'] )) {
-                    $newField = $this->addArrayField( $field, $key, $args );
+                if (isset($args['arrayKey'])) {
+                    $newField = $this->addArrayField($field, $key, $args);
                 } else {
                     $this->fields[$key] = $newField = $field;
                 }
 
-
                 $data = $this->getEntityModel();
-                if (!is_a( $newField, '\Kontentblocks\Fields\FieldSubGroup' )) {
-                    if (isset( $data[$newField->getKey()] )) {
-                        $fielddata = ( is_object( $data ) && !is_null(
+                if (!is_a($newField, '\Kontentblocks\Fields\FieldSubGroup')) {
+                    if (isset($data[$newField->getKey()])) {
+                        $fielddata = (is_object($data) && !is_null(
                                 $data[$newField->getKey()]
-                            ) ) ? $data[$newField->getKey()] : $this->getFieldStd( $newField );
+                            )) ? $data[$newField->getKey()] : $this->getFieldStd($newField);
                     } else {
-                        $fielddata = $this->getFieldStd( $newField );
+                        $fielddata = $this->getFieldStd($newField);
                     }
                 } else {
-                    $fielddata = ( isset( $data[$newField->getKey()] ) ) ? $data[$newField->getKey()] : array();
+                    $fielddata = (isset($data[$newField->getKey()])) ? $data[$newField->getKey()] : array();
                 }
 
-                $newField->setData( $fielddata );
+                $newField->setData($fielddata);
                 $this->_increaseVisibleFields();
                 $this->orderFields();
 
@@ -149,12 +153,12 @@ abstract class AbstractFieldSection implements Exportable
      *
      * @return bool
      */
-    public function fieldExists( $key )
+    public function fieldExists($key)
     {
-        return isset( $this->fields[$key] );
+        return isset($this->fields[$key]);
     }
 
-    abstract public function markVisibility( Field $Field );
+    abstract public function markVisibility(Field $Field);
 
     /**
      * Handle special array notation
@@ -163,14 +167,14 @@ abstract class AbstractFieldSection implements Exportable
      * @param string $key
      * @param array $args
      */
-    public function addArrayField( $field, $key, $args )
+    public function addArrayField($field, $key, $args)
     {
-        if (!$this->fieldExists( $args['arrayKey'] )) {
-            $fieldArray = $this->fields[$args['arrayKey']] = new FieldSubGroup( $args['arrayKey'] );
+        if (!$this->fieldExists($args['arrayKey'])) {
+            $fieldArray = $this->fields[$args['arrayKey']] = new FieldSubGroup($args['arrayKey']);
         } else {
             $fieldArray = $this->fields[$args['arrayKey']];
         }
-        $fieldArray->addField( $key, $field );
+        $fieldArray->addField($key, $field);
         return $fieldArray;
     }
 
@@ -186,9 +190,9 @@ abstract class AbstractFieldSection implements Exportable
      *
      * @return mixed defaults to empty string
      */
-    private function getFieldStd( $field )
+    private function getFieldStd($field)
     {
-        return $field->getArg( 'std', '' );
+        return $field->getArg('std', '');
 
     }
 
@@ -203,15 +207,15 @@ abstract class AbstractFieldSection implements Exportable
      */
     protected function _increaseVisibleFields()
     {
-        $this->numberOfVisibleFields ++;
-        $this->numberOfFields ++;
+        $this->numberOfVisibleFields++;
+        $this->numberOfFields++;
 
     }
 
     private function orderFields()
     {
         $code = "return strnatcmp(\$a->getArg('priority'), \$b->getArg('priority'));";
-        uasort( $this->fields, create_function( '$a,$b', $code ) );
+        uasort($this->fields, create_function('$a,$b', $code));
 
     }
 
@@ -224,7 +228,7 @@ abstract class AbstractFieldSection implements Exportable
      */
     public function render()
     {
-        if (empty( $this->fields )) {
+        if (empty($this->fields)) {
             return;
         }
 
@@ -243,6 +247,26 @@ abstract class AbstractFieldSection implements Exportable
      * -----------------------------------------------
      */
 
+    public function flattenFields()
+    {
+        $flatten = array();
+
+        if (empty($this->fields)) {
+            return $flatten;
+        }
+
+        foreach ($this->fields as $field) {
+            if (is_a($field, '\Kontentblocks\Fields\FieldSubGroup')) {
+                foreach ($field->getFields() as $field) {
+                    $flatten[] = $field;
+                }
+            } else {
+                $flatten[] = $field;
+            }
+        }
+        return $flatten;
+    }
+
     /**
      * Calls save on fields and collects the results in one array
      *
@@ -251,22 +275,22 @@ abstract class AbstractFieldSection implements Exportable
      *
      * @return array
      */
-    public function save( $data, $oldData )
+    public function save($data, $oldData)
     {
         $collect = array();
 
-        if (!is_array( $this->fields )) {
+        if (!is_array($this->fields)) {
             return $oldData;
         }
         /** @var \Kontentblocks\Fields\Field $field */
         foreach ($this->fields as $field) {
-            $old = ( isset( $oldData[$field->getKey()] ) ) ? $oldData[$field->getKey()] : null;
-            if (isset( $data[$field->getKey()] )) {
-                $collect[$field->getKey()] = $field->_save( $data[$field->getKey()], $old );
+            $old = (isset($oldData[$field->getKey()])) ? $oldData[$field->getKey()] : null;
+            if (isset($data[$field->getKey()])) {
+                $collect[$field->getKey()] = $field->_save($data[$field->getKey()], $old);
             } else {
-                if (is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' ) || $field->getSetting( 'forceSave' )) {
+                if (is_a($field, '\Kontentblocks\Fields\FieldSubGroup') || $field->getSetting('forceSave')) {
                     // calls save on field if key is not present
-                    $collect[$field->getKey()] = $field->_save( null, $old );
+                    $collect[$field->getKey()] = $field->_save(null, $old);
                 }
             }
         }
@@ -311,7 +335,7 @@ abstract class AbstractFieldSection implements Exportable
 
     }
 
-    public function prepareArgs( $args )
+    public function prepareArgs($args)
     {
         return Utilities::arrayMergeRecursive($args, self::$defaults);
 
@@ -327,10 +351,10 @@ abstract class AbstractFieldSection implements Exportable
 
     }
 
-    public function export( &$collection )
+    public function export(&$collection)
     {
         foreach ($this->fields as $Field) {
-            $Field->export( $collection );
+            $Field->export($collection);
         }
     }
 
@@ -344,28 +368,8 @@ abstract class AbstractFieldSection implements Exportable
      */
     protected function _decreaseVisibleFields()
     {
-        $this->numberOfVisibleFields --;
+        $this->numberOfVisibleFields--;
 
-    }
-
-    public function flattenFields()
-    {
-        $flatten = array();
-
-        if (empty($this->fields)){
-            return $flatten;
-        }
-
-        foreach ($this->fields as $field) {
-            if (is_a( $field, '\Kontentblocks\Fields\FieldSubGroup' )) {
-                foreach ($field->getFields() as $field) {
-                    $flatten[] = $field;
-                }
-            } else {
-                $flatten[] = $field;
-            }
-        }
-        return $flatten;
     }
 
 

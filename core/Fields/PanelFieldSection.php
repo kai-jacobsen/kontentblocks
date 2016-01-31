@@ -23,6 +23,7 @@ class PanelFieldSection extends AbstractFieldSection
         $this->args = $this->prepareArgs( $args );
         $this->entity = $panel;
         $this->baseId = $panel->getBaseId();
+
     }
 
 
