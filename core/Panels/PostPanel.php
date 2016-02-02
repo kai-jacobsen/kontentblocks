@@ -3,7 +3,8 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Data\ValueStorage;
-use Kontentblocks\Fields\PanelFieldController;
+use Kontentblocks\Fields\FormInterface;
+use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
@@ -11,7 +12,7 @@ use Kontentblocks\Utils\Utilities;
  * Class PostPanel
  * @package Kontentblocks\Panels
  */
-abstract class PostPanel extends AbstractPanel
+abstract class PostPanel extends AbstractPanel implements FormInterface
 {
 
     /**
@@ -20,19 +21,16 @@ abstract class PostPanel extends AbstractPanel
     public $postId;
 
     /**
-     * @var PostPanelModel
-     */
-    public $model;
-
-    /**
      * @var PostEnvironment
      */
 
     public $environment;
+
     /**
-     * @var PanelFieldController
+     * @var \Kontentblocks\Fields\StandardFieldController
      */
     public $fields;
+
     /**
      * meta box args
      * @var array|null
@@ -76,8 +74,8 @@ abstract class PostPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->environment = $environment;
-        $this->model = new PostPanelModel($this->environment->getDataProvider()->get($this->baseId), $this);
-        $this->fields = new PanelFieldController();
+        $this->model = new PanelModel($this->environment->getDataProvider()->get($this->baseId));
+        $this->fields = new StandardFieldController($this->baseId, $this);
         $this->fields();
     }
 
@@ -133,7 +131,7 @@ abstract class PostPanel extends AbstractPanel
         if (is_array($this->metaBox)) {
             add_action("add_meta_boxes_{$postType}", array($this, 'metaBox'), $this->args['priority'], 1);
         } else {
-            add_action($this->hook, array($this, 'form'), $this->args['priority']);
+            add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
         }
         add_action('wp_footer', array($this, 'toJSON'));
         add_action("save_post", array($this, 'saveCallback'), 10, 1);
@@ -144,34 +142,29 @@ abstract class PostPanel extends AbstractPanel
      * @param $postObj
      * @return mixed|void
      */
-    public function form($postObj)
+    public function prepForm($postObj)
     {
         if (!post_type_supports($postObj->post_type, 'editor')) {
             Utilities::hiddenEditor();
         }
+        $this->form();
+    }
 
-        $this->preRender();
-
+    public function form()
+    {
         $this->beforeForm();
         echo $this->renderFields();
         $this->afterForm();
         $this->toJSON();
-
-    }
-
-    public function preRender()
-    {
-
     }
 
     /**
      * Markup before inner form
      */
-    private function beforeForm()
+    public function beforeForm()
     {
         $class = (is_array($this->metaBox)) ? 'kb-postbox' : '';
         $elementId = 'kbp-' . $this->getBaseId() . '-container';
-
         echo "<div id='{$elementId}' data-kbpuid='{$this->uid}' class='postbox {$class} {$this->fields->getRenderer()->getIdString()}'>
                 <div class='kb-custom-wrapper'>
                 <div class='inside'>";
@@ -189,9 +182,12 @@ abstract class PostPanel extends AbstractPanel
         return $renderer->render();
     }
 
+    /**
+     * @param bool $reset
+     * @return \Kontentblocks\Common\Data\EntityModel
+     */
     public function prepareModel($reset = false)
     {
-
         if ($reset) {
             $this->environment->getDataProvider()->reset();
             $this->model->set($this->environment->getDataProvider()->get($this->baseId));
@@ -201,8 +197,6 @@ abstract class PostPanel extends AbstractPanel
             $data = array();
             $config = $this->fields->export();
             foreach (array_values($config) as $attrs) {
-
-
                 if ($attrs['arrayKey']) {
                     $data[$attrs['arrayKey']][$attrs['key']] = $attrs['std'];
                 } else {
@@ -212,14 +206,13 @@ abstract class PostPanel extends AbstractPanel
             $new = wp_parse_args($model, $data);
             $this->model->set($new);
         }
-
         return $this->model;
     }
 
     /**
      * Markup after
      */
-    private function afterForm()
+    public function afterForm()
     {
         echo "</div></div></div>";
     }
@@ -251,7 +244,6 @@ abstract class PostPanel extends AbstractPanel
             return;
         }
         $this->save(new ValueStorage($_POST), $postId);
-
     }
 
     /**

@@ -10,9 +10,8 @@ use Kontentblocks\Fields\Renderer\InterfaceFieldRenderer;
  * Class AbstractFieldController
  * @package Kontentblocks\Fields
  */
-abstract class AbstractFieldController
+class StandardFieldController
 {
-
 
     /**
      * Collection of added Sections / Fields ...
@@ -42,11 +41,6 @@ abstract class AbstractFieldController
      */
     public $baseId;
 
-    /**
-     * @var int
-     */
-
-    public $objectId = 0;
 
     /**
      * Default field renderer
@@ -65,14 +59,12 @@ abstract class AbstractFieldController
      * AbstractFieldController constructor.
      * @param $baseid
      * @param EntityInterface $entity
-     * @param int $objectId
      */
-    public function __construct($baseid, EntityInterface $entity, $objectId = 0)
+    public function __construct($baseid, EntityInterface $entity)
     {
         $this->baseId = $baseid;
         $this->entity = $entity;
         $this->model = $entity->getModel();
-        $this->objectId = $objectId;
     }
 
 
@@ -122,11 +114,12 @@ abstract class AbstractFieldController
     public function collectAllFields()
     {
         $collect = array();
-        /** @var AbstractFieldSection $def */
+        /** @var StandardFieldSection $def */
         foreach ($this->sections as $def) {
-            $collect = $collect + $def->getFields();
+            if (!is_null($def->getFields())) {
+                $collect = $collect + $def->getFields();
+            }
         }
-
         return $collect;
 
     }
@@ -137,20 +130,6 @@ abstract class AbstractFieldController
     public function getModel()
     {
         return $this->entity->getModel();
-    }
-
-    /**
-     * Helper method to check whether an section already
-     * exists in group
-     *
-     * @param string $sectionId
-     *
-     * @return object
-     * @since 0.1.0
-     */
-    public function idExists($sectionId)
-    {
-        return (isset($this->sections[$sectionId]));
     }
 
     /**
@@ -195,7 +174,7 @@ abstract class AbstractFieldController
     public function save($data, $oldData)
     {
         $collection = array();
-        /** @var AbstractFieldSection $section */
+        /** @var StandardFieldSection $section */
         foreach ($this->sections as $section) {
             $return = ($section->save($data, $oldData));
             $collection = $collection + $return;
@@ -215,7 +194,36 @@ abstract class AbstractFieldController
         return $this->addSection($sectionId, $args = array());
     }
 
-    abstract public function addSection($sectionId, $args = array());
+    /**
+     * Creates a new section if there is not an exisiting one
+     * or returns the section
+     *
+     * @param string $sectionId
+     * @param array $args
+     *
+     * @return StandardFieldSection
+     */
+    public function addSection($sectionId, $args = array())
+    {
+        if (!$this->idExists($sectionId)) {
+            $this->sections[$sectionId] = new StandardFieldSection($sectionId, $args, $this);
+        }
+        return $this->sections[$sectionId];
+    }
+
+    /**
+     * Helper method to check whether an section already
+     * exists in group
+     *
+     * @param string $sectionId
+     *
+     * @return object
+     * @since 0.1.0
+     */
+    public function idExists($sectionId)
+    {
+        return (isset($this->sections[$sectionId]));
+    }
 
     /**
      * @return array

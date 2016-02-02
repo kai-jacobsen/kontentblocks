@@ -27,7 +27,7 @@ class SerOptionsDataProvider implements DataProviderInterface
     public function __construct( $storageId )
     {
         $this->storageId = $storageId;
-        $this->data = get_option( $storageId, [] );
+        $this->data = get_option( $storageId, array());
     }
 
     /**
@@ -123,11 +123,17 @@ class SerOptionsDataProvider implements DataProviderInterface
         return $this;
     }
 
+    /**
+     * @return array|mixed|void
+     */
     public function getAll()
     {
        return $this->data;
     }
 
+    /**
+     * @return bool
+     */
     public function addSlashes()
     {
         return false;

@@ -35,14 +35,68 @@ class PostMetaDataProvider implements DataProviderInterface
      * @throws \Exception
      * @since 0.1.0
      */
-    public function __construct( $storageId )
+    public function __construct($storageId)
     {
-        if (!isset( $storageId ) || $storageId === 0) {
-            throw new \Exception( 'a valid post id must be provided' );
+        if (!isset($storageId) || $storageId === 0) {
+            throw new \Exception('a valid post id must be provided');
         }
+
+        add_action('updated_post_meta', function ($metaId, $objectId, $metaKey, $metaValue) {
+            if ($objectId === $this->postId) {
+                $this->reset();
+            }
+        }, 10, 4);
 
         $this->postId = $storageId;
         $this->reset();
+
+    }
+
+    /**
+     * Makes sure the object stays in line with actual meta data
+     * Should be called after any meta data modification
+     * @return self
+     * @since 0.1.0
+     */
+    public function reset()
+    {
+        clean_post_cache($this->getPostId());
+        $this->getPostCustom();
+
+        return $this;
+    }
+
+    /**
+     * Getter for objects post id
+     * @return int
+     * @since 0.1.0
+     */
+    public function getPostId()
+    {
+        return $this->postId;
+    }
+
+    /**
+     * Gets all post meta for current post.
+     * Setup the Object.
+     * @todo account for multiple keys
+     * @return self
+     * @since 0.1.0
+     */
+    private function getPostCustom()
+    {
+        $meta = get_post_custom($this->postId);
+
+        if (!empty($meta) && is_array($meta)) {
+            $this->meta = array_map(
+                function ($entry) {
+                    return maybe_unserialize($entry[0]);
+                }, $meta);
+        } else {
+            $this->meta = array();
+        }
+
+        return $this;
 
     }
 
@@ -56,11 +110,10 @@ class PostMetaDataProvider implements DataProviderInterface
      *
      * @since 0.1.0
      */
-    public function add( $key, $value )
+    public function add($key, $value)
     {
-        $this->update( $key, $value );
+        $this->update($key, $value);
     }
-
 
     /**
      * Simple wrapper to update_post_meta
@@ -71,9 +124,9 @@ class PostMetaDataProvider implements DataProviderInterface
      * @since 0.1.0
      * @return mixed
      */
-    public function update( $key, $value )
+    public function update($key, $value)
     {
-        return update_post_meta( $this->postId, $key, $value );
+        return update_post_meta($this->postId, $key, $value);
     }
 
     /**
@@ -84,9 +137,9 @@ class PostMetaDataProvider implements DataProviderInterface
      * @return mixed|null
      * @since 0.1.0
      */
-    public function get( $key )
+    public function get($key)
     {
-        if (!empty( $this->meta[$key] )) {
+        if (!empty($this->meta[$key])) {
             return $this->meta[$key];
         } else {
             return null;
@@ -101,9 +154,9 @@ class PostMetaDataProvider implements DataProviderInterface
      * @return bool
      * @since 0.1.0
      */
-    public function delete( $key )
+    public function delete($key)
     {
-        return delete_post_meta( $this->postId, $key );
+        return delete_post_meta($this->postId, $key);
     }
 
     /**
@@ -114,55 +167,6 @@ class PostMetaDataProvider implements DataProviderInterface
     public function getAll()
     {
         return $this->meta;
-    }
-
-
-    /**
-     * Gets all post meta for current post.
-     * Setup the Object.
-     * @todo account for multiple keys
-     * @return self
-     * @since 0.1.0
-     */
-    private function _getPostCustom()
-    {
-        $meta = get_post_custom( $this->postId );
-
-        if (!empty( $meta ) && is_array($meta)) {
-            $this->meta = array_map(
-                function ( $a ) {
-                    return maybe_unserialize( $a[0] );
-                }, $meta);
-        } else {
-            $this->meta = array();
-        }
-
-        return $this;
-
-    }
-
-    /**
-     * Makes sure the object stays in line with actual meta data
-     * Should be called after any meta data modification
-     * @return self
-     * @since 0.1.0
-     */
-    public function reset()
-    {
-        clean_post_cache($this->getPostId());
-        $this->_getPostCustom();
-
-        return $this;
-    }
-
-    /**
-     * Getter for objects post id
-     * @return int
-     * @since 0.1.0
-     */
-    public function getPostId()
-    {
-        return $this->postId;
     }
 
     public function addSlashes()

@@ -2,7 +2,8 @@
 
 namespace Kontentblocks\Fields\Renderer;
 
-use Kontentblocks\Fields\AbstractFieldController;
+use Kontentblocks\Fields\StandardFieldController;
+use Kontentblocks\Fields\StandardFieldSection;
 
 
 /**
@@ -19,6 +20,10 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
      * @var array
      */
     public $renderSections;
+
+    /**
+     * @var
+     */
     public $fieldFormRenderer;
     /**
      * Unique identifier inherited by module
@@ -26,14 +31,14 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
      */
     protected $baseId;
     /**
-     * @var AbstractFieldController
+     * @var StandardFieldController
      */
     protected $fieldController;
 
     /**
-     * @param AbstractFieldController $fieldController
+     * @param StandardFieldController $fieldController
      */
-    public function __construct( AbstractFieldController $fieldController )
+    public function __construct(StandardFieldController $fieldController)
     {
         $this->baseId = $fieldController->getEntity()->getId();
         $this->fieldController = $fieldController;
@@ -47,15 +52,15 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
     {
         $arr = array();
         $sections = $this->fieldController->sections;
+        /** @var StandardFieldSection $section */
         foreach ($sections as $section) {
             $fields = array_map(
-                function ( $field ) {
-                    return $this->getFormController( $field );
+                function ($field) {
+                    return $this->getFormController($field);
                 },
                 $section->flattenFields()
             );
-
-            $arr[] = new RenderSection( $section, $fields );
+            $arr[] = new RenderSection($section, $fields);
         }
         return $arr;
     }
@@ -64,10 +69,10 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
      * @param $field
      * @return mixed
      */
-    public function getFormController( $field )
+    public function getFormController($field)
     {
-        if (is_null( $this->fieldFormRenderer )) {
-            return new $this->fieldFormRenderClass( $field );
+        if (is_null($this->fieldFormRenderer)) {
+            return new $this->fieldFormRenderClass($field);
         }
     }
 
@@ -82,9 +87,9 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
     /**
      * @param $string
      */
-    public function setFieldFormRenderClass( $string )
+    public function setFieldFormRenderClass($string)
     {
-        if (is_a( $string, '\Kontentblocks\Fields\FieldFormController', true )) {
+        if (is_a($string, '\Kontentblocks\Fields\FieldFormController', true)) {
             $this->fieldFormRenderClass = $string;
             $this->fieldFormRenderer = null;
             $this->renderSections = $this->prepare();

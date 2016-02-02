@@ -1,7 +1,6 @@
 {% if error %}
     <p class="kb-warning">{{ error }}</p>
 {% else %}
-    {{ Form.getLabel() }}
     <select id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
         {% if Field.getArg('empty', true) %}
             <option value='' name=''>{{ i18n.emptyTaxonomySelect }}</option>
@@ -12,5 +11,4 @@
                     value='{{ attribute(term, taxfield) }}'>{{ term.name }}</option>
         {% endfor %}
     </select>
-    {{ Form.getDescription() }}
 {% endif %}

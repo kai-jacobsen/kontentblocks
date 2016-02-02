@@ -3,10 +3,10 @@
 namespace Kontentblocks\Backend\DataProvider;
 
 /**
- * Class TermMetaDataProvider
+ * Class UserMetaDataProvider
  * @package Kontentblocks\Backend\DataProvider
  */
-class TermMetaDataProvider implements DataProviderInterface
+class UserMetaDataProvider implements DataProviderInterface
 {
 
     /**
@@ -14,7 +14,7 @@ class TermMetaDataProvider implements DataProviderInterface
      * @var int
      * @since 0.1.0
      */
-    protected $termId;
+    protected $userId;
 
     /**
      * 'cached' meta data
@@ -26,17 +26,18 @@ class TermMetaDataProvider implements DataProviderInterface
     /**
      * Class constructor
      *
-     * @param $termId
+     * @param $userId
      *
      * @throws \Exception
      * @since 0.1.0
      */
-    public function __construct( $termId )
+    public function __construct($userId)
     {
-        if (!isset( $termId ) || $termId === 0) {
-            throw new \Exception( 'a valid term id must be provided' );
+        if (!isset($userId) || $userId === 0) {
+            throw new \Exception('a valid post id must be provided');
         }
-        $this->termId = $termId;
+
+        $this->userId = $userId;
         $this->reset();
 
     }
@@ -49,8 +50,8 @@ class TermMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        clean_term_cache( $this->getTermId() );
-        $this->getTermCustom();
+        clean_user_cache($this->getUserId());
+        $this->getUserCustom();
 
         return $this;
     }
@@ -60,9 +61,9 @@ class TermMetaDataProvider implements DataProviderInterface
      * @return int
      * @since 0.1.0
      */
-    public function getTermId()
+    public function getUserId()
     {
-        return $this->termId;
+        return $this->userId;
     }
 
     /**
@@ -72,13 +73,13 @@ class TermMetaDataProvider implements DataProviderInterface
      * @return self
      * @since 0.1.0
      */
-    private function getTermCustom()
+    private function getUserCustom()
     {
-        $meta = get_term_meta( $this->termId );
-        if (!empty( $meta ) && is_array( $meta )) {
+        $meta = get_term_meta($this->userId);
+        if (!empty($meta) && is_array($meta)) {
             $this->meta = array_map(
-                function ( $a ) {
-                    return maybe_unserialize( $a[0] );
+                function ($a) {
+                    return maybe_unserialize($a[0]);
                 },
                 $meta
             );
@@ -100,9 +101,9 @@ class TermMetaDataProvider implements DataProviderInterface
      *
      * @since 0.1.0
      */
-    public function add( $key, $value )
+    public function add($key, $value)
     {
-        $this->update( $key, $value );
+        $this->update($key, $value);
     }
 
     /**
@@ -114,9 +115,9 @@ class TermMetaDataProvider implements DataProviderInterface
      * @since 0.1.0
      * @return mixed
      */
-    public function update( $key, $value )
+    public function update($key, $value)
     {
-        return update_term_meta( $this->termId, $key, $value );
+        return update_user_meta($this->userId, $key, $value);
     }
 
     /**
@@ -127,9 +128,9 @@ class TermMetaDataProvider implements DataProviderInterface
      * @return mixed|null
      * @since 0.1.0
      */
-    public function get( $key )
+    public function get($key)
     {
-        if (!empty( $this->meta[$key] )) {
+        if (!empty($this->meta[$key])) {
             return $this->meta[$key];
         } else {
             return null;
@@ -144,9 +145,9 @@ class TermMetaDataProvider implements DataProviderInterface
      * @return bool
      * @since 0.1.0
      */
-    public function delete( $key )
+    public function delete($key)
     {
-        return delete_term_meta( $this->termId, $key );
+        return delete_user_meta($this->userId, $key);
     }
 
     /**

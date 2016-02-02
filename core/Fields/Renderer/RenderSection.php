@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Renderer;
 
 
-use Kontentblocks\Fields\AbstractFieldSection;
+use Kontentblocks\Fields\StandardFieldSection;
 
 /**
  * Class RenderSection
@@ -13,7 +13,7 @@ class RenderSection
 {
 
     /**
-     * @var AbstractFieldSection
+     * @var StandardFieldSection
      */
     public $section;
 
@@ -24,10 +24,10 @@ class RenderSection
 
     /**
      * RenderSection constructor.
-     * @param AbstractFieldSection $section
+     * @param StandardFieldSection $section
      * @param array $fields
      */
-    public function __construct( AbstractFieldSection $section, $fields = array() )
+    public function __construct( StandardFieldSection $section, $fields = array() )
     {
         $this->section = $section;
         $this->fields = $fields;

@@ -1,4 +1,3 @@
-{{ Form.getLabel() }}
 <label for='{{ Form.getInputFieldId('link') }}'>{{ i18n.linklabel }}</label><br>
 <input type='text' data-kbf-link-url class='kb-js-link-input regular' id='{{ Form.getInputFieldId() }}'
        name='{{ Form.getFieldName('link') }}' placeholder='{{ Form.getPlaceholder() }}'
@@ -18,4 +17,3 @@
                value='{{ Field.getValue('linktitle') }}' name='{{ Form.getFieldName('linktitle') }}'>
     </div>
 {% endif %}
-{{ Form.getDescription() }}

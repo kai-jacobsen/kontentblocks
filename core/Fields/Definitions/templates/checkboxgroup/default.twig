@@ -1,4 +1,3 @@
-{{ Form.getLabel() }}
 
 {% for o in Field.getArg('options', __return_empty_array() ) %}
     {% if (o.value and o.label) %}
@@ -13,5 +12,3 @@
         <p>invalid item</p>
     {% endif %}
 {% endfor %}
-
-{{ Form.getDescription() }}

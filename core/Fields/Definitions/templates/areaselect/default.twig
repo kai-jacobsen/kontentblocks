@@ -1,5 +1,3 @@
-{{ Form.getLabel() }}
-
 <select id='{{ Form.getInputFieldId }}' name='{{ Form.getFieldName() }}'>
 
     {% if Field.getArg('empty', true) %}
@@ -13,4 +11,3 @@
     {% endif %}
 
 </select>
-{{ Form.getDescription() }}

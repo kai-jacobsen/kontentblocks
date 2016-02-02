@@ -14,11 +14,7 @@ use Kontentblocks\Fields\PanelFieldController;
 abstract class AbstractPanel implements EntityInterface
 {
 
-    /**
-     * Custom Field Manager Instance
-     * @var PanelFieldController
-     */
-    public $fields;
+
     /**
      * Form data
      * @var array
@@ -35,12 +31,12 @@ abstract class AbstractPanel implements EntityInterface
      */
     public $model;
 
+
     /**
      * @var array
      */
 
     protected $args;
-
     /**
      * Key / base id
      * @var string
@@ -90,13 +86,6 @@ abstract class AbstractPanel implements EntityInterface
         return $this->baseId;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
 
     /**
      * @return string
@@ -106,12 +95,14 @@ abstract class AbstractPanel implements EntityInterface
         return $this->baseId;
     }
 
-    /**
-     * @return array
-     */
     public function getProperties()
     {
-        return $this->args;
+        // TODO: Implement getProperties() method.
+    }
+
+    public function getModel()
+    {
+        return $this->model;
     }
 
     /**
@@ -122,4 +113,4 @@ abstract class AbstractPanel implements EntityInterface
         return $this->type;
     }
 
-} 
+}

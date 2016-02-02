@@ -1,5 +1,3 @@
-{{ Form.getLabel() }}
-{{ Form.getDescription() }}
 <textarea id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'
           placeholder='{{ Form.getPlaceholder() }}'
         {% for attr, value in Field.getArg('attributes', []) %}

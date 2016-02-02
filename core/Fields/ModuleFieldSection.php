@@ -19,7 +19,7 @@ use Kontentblocks\Modules\Module;
  * @package Fields
  * @since 0.1.0
  */
-class ModuleFieldSection extends AbstractFieldSection
+class ModuleFieldSection extends StandardFieldSection
 {
 
 

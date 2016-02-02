@@ -1,5 +1,3 @@
-{{ Form.getLabel() }}
-
 {% if (Field.getArg('options')) %}
 
 {% else %}
@@ -16,5 +14,3 @@
                 value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
     {% endfor %}
 </select>
-
-{{ Form.getDescription() }}

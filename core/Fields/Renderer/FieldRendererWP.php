@@ -2,7 +2,7 @@
 
 namespace Kontentblocks\Fields\Renderer;
 
-use Kontentblocks\Fields\AbstractFieldController;
+use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Templating\CoreView;
 
 /**
@@ -29,7 +29,7 @@ class FieldRendererWP extends AbstractFieldRenderer
     protected $data;
 
     /**
-     * @var AbstractFieldController
+     * @var StandardFieldController
      */
     protected $fieldController;
 

@@ -1,4 +1,3 @@
-{{ Form.getLabel() }}
 <input type='text' id='{{ Form.getFieldInputId() }}' name='{{ Form.getFieldName('human') }}'
        value='{{ Field.getValue('human', "") }}' class='kb-datetimepicker'>
 <input type='hidden' name='{{ Form.getFieldName('unix') }}' value='{{ Field.getValue('unix', "") }}'
@@ -15,5 +14,3 @@
 </span>
 
 {% endif %}
-
-{{ Form.getDescription() }}

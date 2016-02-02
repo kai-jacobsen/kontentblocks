@@ -1,5 +1,3 @@
-{{ Form.getLabel() }}
-
 {% for o in Field.getArg('options') %}
 
     {% if (o.key and o.label and o.value) %}
@@ -16,5 +14,3 @@
 
 
 {% endfor %}
-
-{{ Form.getDescription() }}

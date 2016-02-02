@@ -20,11 +20,15 @@ class FieldFormController
      */
     private $field;
 
+    private $descriptionDone = false;
+
+    private $labelDone = false;
+
 
     /**
      * @param Field $field
      */
-    public function __construct( Field $field )
+    public function __construct(Field $field)
     {
         $this->field = $field;
 
@@ -36,11 +40,11 @@ class FieldFormController
      * @param bool $rnd
      * @return string|void
      */
-    public function getInputFieldId( $rnd = false )
+    public function getInputFieldId($rnd = false)
     {
-        $number = ( $rnd ) ? '_' . uniqid() : '';
-        $idAttr = sanitize_title( $this->field->getFieldId() . '_' . $this->field->getKey() . $number );
-        return esc_attr( $idAttr );
+        $number = ($rnd) ? '_' . uniqid() : '';
+        $idAttr = sanitize_title($this->field->getFieldId() . '_' . $this->field->getKey() . $number);
+        return esc_attr($idAttr);
     }
 
     /**
@@ -54,14 +58,14 @@ class FieldFormController
      *
      * @return string
      */
-    public function getFieldName( $array = null, $akey = null, $multiple = null )
+    public function getFieldName($array = null, $akey = null, $multiple = null)
     {
         $base = $this->field->getBaseId() . '[' . $this->field->getKey() . ']';
-        $array = $this->evaluateFieldNameParam( $array );
-        $akey = $this->evaluateFieldNameParam( $akey );
-        $multiple = $this->evaluateFieldNameParam( $multiple );
+        $array = $this->evaluateFieldNameParam($array);
+        $akey = $this->evaluateFieldNameParam($akey);
+        $multiple = $this->evaluateFieldNameParam($multiple);
 
-        return esc_attr( $base . $array . $akey . $multiple );
+        return esc_attr($base . $array . $akey . $multiple);
     }
 
 
@@ -69,13 +73,13 @@ class FieldFormController
      * @param mixed $param
      * @return string
      */
-    private function evaluateFieldNameParam( $param )
+    private function evaluateFieldNameParam($param)
     {
-        if (is_bool( $param ) && $param === true) {
+        if (is_bool($param) && $param === true) {
             return '[]';
         }
 
-        if (is_string( $param )) {
+        if (is_string($param)) {
             return "[$param]";
         }
 
@@ -88,7 +92,7 @@ class FieldFormController
      */
     public function getPlaceholder()
     {
-        return esc_attr( $this->field->getArg( 'placeholder', '' ) );
+        return esc_attr($this->field->getArg('placeholder', ''));
 
     }
 
@@ -99,14 +103,18 @@ class FieldFormController
      */
     public function getDescription()
     {
+        if ($this->descriptionDone) {
+            return null;
+        }
+
         $view = new FieldView(
             "_partials/{$this->skin}/description.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
         );
+        $this->descriptionDone = true;
         return $view->render();
-
     }
 
 
@@ -116,15 +124,42 @@ class FieldFormController
      */
     public function getLabel()
     {
+        if ($this->labelDone){
+            return null;
+        }
+
         $view = new FieldView(
             "_partials/{$this->skin}/label.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
         );
+        $this->labelDone = true;
         return $view->render();
     }
 
+    /**
+     * Render form segments or hidden
+     */
+    public function build()
+    {
+        $this->field->build();
+        $out = '';
+        // A Field might not be present, i.e. if it's not set to
+        // the current context
+        // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
+        if (!$this->field->getDisplay()) {
+            if ($this->field->getSetting('renderHidden') && method_exists($this->field, 'renderHidden')) {
+                return $this->field->renderHidden($this);
+            }
+            // Full markup
+        } else {
+            $out .= $this->header();
+            $out .= $this->body();
+            $out .= $this->footer();
+        }
+        return $out;
+    }
 
     /**
      * Header wrap markup
@@ -153,28 +188,28 @@ class FieldFormController
         /*
          * optional method to render something before the field
          */
-        if (method_exists( $this->field, 'preForm' )) {
+        if (method_exists($this->field, 'preForm')) {
             $out .= $this->field->preForm();
         }
 
         // optional call to simplify enqueueing
-        if (method_exists( $this->field, 'enqueue' )) {
+        if (method_exists($this->field, 'enqueue')) {
             $this->field->enqueue();
         }
 
         // custom method on field instance level wins over class method
-        if ($this->field->getCallback( 'form.value' )) {
-            $this->field->setValue(call_user_func( $this->field->getCallback( 'form.value' ), $value ));
+        if ($this->field->getCallback('form.value')) {
+            $this->field->setValue(call_user_func($this->field->getCallback('form.value'), $value));
         } // custom method on field class level
         else {
-            $this->field->setValue($this->field->prepareFormValue( $value ));
+            $this->field->setValue($this->field->prepareFormValue($value));
         }
 
         // When viewing from the frontend, an optional method can be used for the output
-        if (defined( 'KB_ONSITE_ACTIVE' ) && KB_ONSITE_ACTIVE && method_exists( $this->field, 'frontendForm' )) {
-            $out .= $this->field->frontendForm( $this );
+        if (defined('KB_ONSITE_ACTIVE') && KB_ONSITE_ACTIVE && method_exists($this->field, 'frontendForm')) {
+            $out .= $this->field->frontendForm($this);
         } else {
-            $out .= $this->field->form( $this );
+            $out .= $this->field->form($this);
         }
 
         // some fields (colorpicker etc) might have some individual settings
@@ -182,8 +217,8 @@ class FieldFormController
         /*
          * optional call after the body
          */
-        if (method_exists( $this->field, 'postForm' )) {
-            $out .=$this->field->postForm();
+        if (method_exists($this->field, 'postForm')) {
+            $out .= $this->field->postForm();
         }
 
         return $out;
@@ -203,29 +238,6 @@ class FieldFormController
         );
         return $view->render();
 
-    }
-
-    /**
-     * Render form segments or hidden
-     */
-    public function build()
-    {
-        $this->field->build();
-        $out = '';
-        // A Field might not be present, i.e. if it's not set to
-        // the current context
-        // Checkboxes are an actual use case, checked boxes will render hidden to preserve the value during save
-        if (!$this->field->getDisplay()) {
-            if ($this->field->getSetting( 'renderHidden' ) && method_exists( $this->field, 'renderHidden' )) {
-                return $this->field->renderHidden( $this );
-            }
-            // Full markup
-        } else {
-            $out .= $this->header();
-            $out .= $this->body();
-            $out .= $this->footer();
-        }
-        return $out;
     }
 
 }

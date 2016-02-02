@@ -24,7 +24,7 @@ use Reframe\Kontentblocks\Kontentblocks;
  * @see Kontentblocks\Modules\Module::__cosntruct()
  * @param \Kontentblocks\Modules\Module
  */
-class ModuleFieldController extends AbstractFieldController
+class ModuleFieldController extends StandardFieldController
 {
 
     /**

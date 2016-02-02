@@ -10,10 +10,10 @@ use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class AbstractFieldSection
+ * Class StandardFieldSection
  * @package Kontentblocks\Fields
  */
-abstract class AbstractFieldSection implements Exportable
+class StandardFieldSection implements Exportable
 {
 
     /**
@@ -43,14 +43,9 @@ abstract class AbstractFieldSection implements Exportable
     public $baseId;
 
     /**
-     * @var AbstractFieldController
+     * @var StandardFieldController
      */
     public $controller;
-
-    /**
-     * @var int
-     */
-    public $objectId = 0;
 
     /**
      * @var EntityInterface
@@ -89,15 +84,14 @@ abstract class AbstractFieldSection implements Exportable
      *
      * @param string $sectionId
      * @param $args
-     * @param AbstractFieldController $controller
+     * @param StandardFieldController $controller
      */
-    public function __construct($sectionId, $args, AbstractFieldController $controller)
+    public function __construct($sectionId, $args, StandardFieldController $controller)
     {
         $this->sectionId = $sectionId;
         $this->args = $this->prepareArgs($args);
         $this->controller = $controller;
         $this->baseId = $controller->getId();
-        $this->objectId = $controller->objectId;
         //shorthand
         $this->entity = $controller->getEntity();
     }
@@ -120,19 +114,17 @@ abstract class AbstractFieldSection implements Exportable
      * @param array $args | additional parameters, may differ by field type
      *
      * @throws \Exception
-     * @return self Fluid layout
+     * @return StandardFieldSection Fluid layout
      */
     public function addField($type, $key, $args = array())
     {
         $subkey = null;
 
         if (!$this->fieldExists($key)) {
-
             //check for special key syntax
             if (preg_match("/^(.*?)::/i", $key, $out)) {
                 if (is_array($out) && count($out) == 2) {
                     $key = str_replace($out[0], '', $key);
-
                     if (isset($args['arrayKey']) && $args['arrayKey'] !== $out[1]) {
                         throw new Exception(
                             'ArrayKey mismatch. Field key has :: syntax and arrayKey arg is set, but differs'
@@ -151,11 +143,11 @@ abstract class AbstractFieldSection implements Exportable
             /** @var \Kontentblocks\Fields\FieldRegistry $registry */
             $registry = Kontentblocks::getService('registry.fields');
             $field = $registry->getField($type, $this->baseId, $subkey, $key, $args);
+            $field->setController($this->controller);
             if (!$field) {
                 throw new Exception("Field of type: $type does not exist");
             } else {
                 $field->section = $this;
-                $field->objectId = $this->objectId;
                 // conditional check of field visibility
                 $this->markVisibility($field);
 
@@ -178,16 +170,12 @@ abstract class AbstractFieldSection implements Exportable
                 } else {
                     $fielddata = (isset($data[$newField->getKey()])) ? $data[$newField->getKey()] : array();
                 }
-
                 $newField->setData($fielddata);
                 $this->increaseVisibleFields();
                 $this->orderFields();
-
-
             }
         }
         return $this;
-
     }
 
     /**
@@ -203,10 +191,17 @@ abstract class AbstractFieldSection implements Exportable
     }
 
     /**
+     * Set visibility of field based on environment vars given by the Panel
+     * Panels have no envVars yet so all fields are visible
+     *
      * @param Field $field
+     *
      * @return mixed
      */
-    abstract public function markVisibility(Field $field);
+    public function markVisibility(Field $field)
+    {
+        $field->setDisplay(true);
+    }
 
     /**
      * Handle special array notation
@@ -391,8 +386,11 @@ abstract class AbstractFieldSection implements Exportable
      */
     public function export(&$collection)
     {
-        foreach ($this->fields as $Field) {
-            $Field->export($collection);
+        if (empty($this->fields) || is_null($this->fields)) {
+            return array();
+        }
+        foreach ($this->fields as $field) {
+            $field->export($collection);
         }
     }
 
