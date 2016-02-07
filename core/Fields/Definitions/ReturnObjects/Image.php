@@ -20,7 +20,7 @@ class Image extends StandardFieldReturn
 
     public $caption = '';
 
-    public $size = array( 150, 150 );
+    public $size = array(150, 150);
 
     public $crop = true;
 
@@ -70,13 +70,13 @@ class Image extends StandardFieldReturn
      */
     public function getSrc()
     {
-        if (is_null( $this->src )) {
+        if (is_null($this->src)) {
             $this->resize();
         }
         return $this->src;
     }
 
-    public function resize( $args = array() )
+    public function resize($args = array())
     {
         $defaults = array(
             'width' => $this->size[0],
@@ -85,28 +85,41 @@ class Image extends StandardFieldReturn
             'upscale' => $this->upscale
         );
 
-        $resizeargs = wp_parse_args( $args, $defaults );
-        $this->src = ImageResize::getInstance()->process(
+        $resizeargs = wp_parse_args($args, $defaults);
+        $processed = ImageResize::getInstance()->process(
             $this->attId,
             $resizeargs['width'],
             $resizeargs['height'],
             $resizeargs['crop'],
-            true,
+            false,
             $resizeargs['upscale']
         );
 
+        if (is_array($processed) && count($processed) === 3) {
+            $this->src = $processed[0];
+            $this->setSize($processed[1], $processed[2]);
+        }
+        return $this;
+    }
+
+    /**
+     * @return $this|bool
+     */
+    public function setSize($width, $height)
+    {
+        $this->size = array($width, $height);
         return $this;
 
     }
 
-    public function html( $withsizes = false )
+    public function html($withsizes = false)
     {
-        return $this->imageTag( $withsizes );
+        return $this->imageTag($withsizes);
     }
 
-    public function imageTag( $withsizes = false )
+    public function imageTag($withsizes = false)
     {
-        if (is_null( $this->src )) {
+        if (is_null($this->src)) {
             $this->resize();
         }
 
@@ -119,43 +132,33 @@ class Image extends StandardFieldReturn
                 $this->size[1]
             );
         }
-        return sprintf( '<img src="%s" title="%s" >', $this->src, $this->title );
+        return sprintf('<img src="%s" title="%s" >', $this->src, $this->title);
     }
 
     /**
      * @param $string
      * @return $this
      */
-    public function nsize( $string )
+    public function nsize($string)
     {
-        if (isset( $this->attachment['sizes'][$string] )) {
+        if (isset($this->attachment['sizes'][$string])) {
             $size = $this->attachment['sizes'][$string];
-            $this->setSize( $size['width'], $size['height'] );
+            $this->setSize($size['width'], $size['height']);
         }
         return $this;
 
     }
 
-    /**
-     * @return $this|bool
-     */
-    public function setSize( $width, $height )
+    public function size($width, $height)
     {
-        $this->size = array( $width, $height );
-        return $this;
-
-    }
-
-    public function size( $width, $height )
-    {
-        return $this->setSize( $width, $height );
+        return $this->setSize($width, $height);
     }
 
     /**
      * @param $bool
      * @return $this
      */
-    public function upscale( $bool = false )
+    public function upscale($bool = false)
     {
         $this->upscale = $bool;
         return $this;
@@ -166,7 +169,7 @@ class Image extends StandardFieldReturn
      * @param $crop
      * @return $this
      */
-    public function crop( $crop = false )
+    public function crop($crop = false)
     {
         $this->crop = $crop;
         return $this;
@@ -176,26 +179,26 @@ class Image extends StandardFieldReturn
      * @param $value
      * @return mixed
      */
-    protected function prepareValue( $value )
+    protected function prepareValue($value)
     {
 
-        if (!is_array($value)){
+        if (!is_array($value)) {
             return $value;
         }
 
-        if (array_key_exists( 'id', $value )) {
+        if (array_key_exists('id', $value)) {
             $this->attId = $value['id'];
-            $att = wp_prepare_attachment_for_js( $value['id'] );
-            if (is_array( $att )) {
+            $att = wp_prepare_attachment_for_js($value['id']);
+            if (is_array($att)) {
                 $this->attachment = $att;
                 $this->valid;
             }
 
-            if (array_key_exists( 'caption', $value )) {
+            if (array_key_exists('caption', $value)) {
                 $this->caption = $value['caption'];
             }
 
-            if (array_key_exists( 'title', $value )) {
+            if (array_key_exists('title', $value)) {
                 $this->title = $value['title'];
             }
 

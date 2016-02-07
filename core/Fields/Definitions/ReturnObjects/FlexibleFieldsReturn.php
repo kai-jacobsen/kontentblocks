@@ -100,7 +100,6 @@ class FlexibleFieldsReturn
         if (is_array($original)) {
             $items = array_replace($original, array_intersect_key($items, $original));
         }
-
         return $items;
     }
 
@@ -116,6 +115,7 @@ class FlexibleFieldsReturn
 
         $collect = array();
         foreach (array_values($this->sections) as $section) {
+
             if (!empty($section['fields'])) {
                 foreach ($section['fields'] as $field) {
                     $collect[$field['key']] = $field;

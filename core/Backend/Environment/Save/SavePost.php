@@ -212,6 +212,10 @@ class SavePost
                 $module->getModel()->sync( true );
             }
         }
+
+        $backupManager = new BackupDataStorage( $this->environment->getStorage() );
+        $backupManager->backup( "Post updated" );
+
     }
 
     /**

@@ -47,17 +47,26 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      * Returns an img tag with all added classes and attributes
      * Output depends on user login status / capabilities
      *
+     * @param bool $withsizes
      * @return string
      */
-    public function html()
+    public function html($withsizes = false)
     {
         // adds necessary attributes to enable inline edit
         $this->handleLoggedInUsers();
-        $this->prepareSrc( null );
-        $format = '<%1$s %3$s src="%2$s" >';
-        $this->toJSON();
+        $this->prepareSrc(null);
 
-        return sprintf( $format, 'img', $this->image->getSrc(), $this->_renderAttributes() );
+
+        $this->toJSON();
+        if (!$withsizes) {
+            $format = '<%1$s %3$s src="%2$s" >';
+            return sprintf($format, 'img', $this->image->getSrc(), $this->_renderAttributes());
+
+        } else {
+            $format = '<%1$s %3$s src="%2$s" width="%4$s" height="%5$s" >';
+            return sprintf($format, 'img', $this->image->getSrc(), $this->_renderAttributes(), $this->image->size[0],
+                $this->image->size[1]);
+        }
 
     }
 
@@ -65,11 +74,11 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      * Resize the image to the given size
      * @return array|bool|string
      */
-    protected function prepareSrc( $builtin )
+    protected function prepareSrc($builtin)
     {
 
-        if (!is_null( $builtin )) {
-            $this->image->nsize( $builtin );
+        if (!is_null($builtin)) {
+            $this->image->nsize($builtin);
         }
 
         $this->image->getSrc();
@@ -87,26 +96,26 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
             'height' => $this->image->size[1],
             'crop' => $this->image->crop,
             'upscale' => $this->image->upscale,
-            'index' => $this->field->getArg( 'index', null ),
-            'id' => $this->getValue( 'id' ),
+            'index' => $this->field->getArg('index', null),
+            'id' => $this->getValue('id'),
             'type' => 'EditableImage',
             'kpath' => $this->createPath(),
             'tooltip' => $this->helptext,
-            'mode' => ( $this->background ) ? 'background' : 'simple',
-            'state' => $this->field->getArg( 'state', 'image-details' ),
+            'mode' => ($this->background) ? 'background' : 'simple',
+            'state' => $this->field->getArg('state', 'image-details'),
             'uid' => $this->createUniqueId(),
             'linkedFields' => &$this->linkedFields
         );
-        Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
+        Kontentblocks::getService('utility.jsontransport')->registerFieldArgs(
             $this->createUniqueId(),
-            $this->field->augmentArgs( $json )
+            $this->field->augmentArgs($json)
         );
 
-        if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {
+        if (is_user_logged_in() && current_user_can('edit_kontentblocks')) {
             wp_enqueue_script(
                 'image-edit',
                 "/wp-admin/js/image-edit.min.js",
-                array( 'jquery', 'json2', 'imgareaselect' ),
+                array('jquery', 'json2', 'imgareaselect'),
                 false,
                 1
             );
@@ -119,9 +128,9 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      * Returns just the source url without any further html added
      * @return string URL of image
      */
-    public function src( $builtin = null )
+    public function src($builtin = null)
     {
-        $this->prepareSrc( $builtin );
+        $this->prepareSrc($builtin);
         $this->toJSON();
         return $this->image->getSrc();
     }
@@ -135,21 +144,21 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     {
         $this->background = true;
         $this->handleLoggedInUsers();
-        $this->prepareSrc( null );
+        $this->prepareSrc(null);
         $this->toJSON();
 
         $format = ' %2$s style="background-image: url(\'%1$s\');"';
 
-        return sprintf( $format, $this->image->getSrc(), $this->_renderAttributes() );
+        return sprintf($format, $this->image->getSrc(), $this->_renderAttributes());
     }
 
     /**
      * @param $size
      * @return $this
      */
-    public function nsize( $size )
+    public function nsize($size)
     {
-        $this->image->nsize( $size );
+        $this->image->nsize($size);
         return $this;
     }
 
@@ -162,9 +171,9 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      *
      * @return $this
      */
-    public function size( $width = 150, $height = 150 )
+    public function size($width = 150, $height = 150)
     {
-        $this->image->size( $width, $height );
+        $this->image->size($width, $height);
         return $this;
     }
 
@@ -173,9 +182,9 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      * @param bool $bool
      * @return $this
      */
-    public function upscale( $bool = true )
+    public function upscale($bool = true)
     {
-        $this->image->upscale( $bool );
+        $this->image->upscale($bool);
         return $this;
     }
 
@@ -186,9 +195,9 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      *
      * @return $this
      */
-    public function crop( $crop = true )
+    public function crop($crop = true)
     {
-        $this->image->crop( $crop );
+        $this->image->crop($crop);
         return $this;
     }
 
@@ -198,7 +207,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function getEditableClass()
     {
-        if (is_a( $this->field, '\Kontentblocks\Fields\Definitions\Gallery' )) {
+        if (is_a($this->field, '\Kontentblocks\Fields\Definitions\Gallery')) {
             if ($this->inlineEdit) {
                 return 'editable-gallery-image';
             }
@@ -251,7 +260,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      */
     public function prepare()
     {
-        $this->image = new Image( $this->value, $this->field, $this->salt );
+        $this->image = new Image($this->value, $this->field, $this->salt);
         return $this;
     }
 
@@ -259,7 +268,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
      * @param $attr
      * @return string
      */
-    public function getMetaLink( $attr )
+    public function getMetaLink($attr)
     {
         return 'data-' . $this->uniqueId . '-' . $attr;
     }
@@ -274,7 +283,7 @@ class EditableImage extends AbstractEditableFieldReturn implements \JsonSerializ
     function jsonSerialize()
     {
         return array(
-            'id' => wp_prepare_attachment_for_js( absint( $this->getValue( 'id' ) ) )
+            'id' => wp_prepare_attachment_for_js(absint($this->getValue('id')))
         );
     }
 }
