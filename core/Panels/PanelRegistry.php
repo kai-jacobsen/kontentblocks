@@ -26,20 +26,20 @@ class PanelRegistry
     /**
      * @param $file
      */
-    public function addByFile( $file )
+    public function addByFile($file)
     {
         include_once $file;
-        $classname = str_replace( '.php', '', basename( $file ) );
-        if (property_exists( $classname, 'settings' )) {
+        $classname = str_replace('.php', '', basename($file));
+        if (property_exists($classname, 'settings')) {
             $args = $classname::$settings;
-            if (empty( $args['id'] )) {
-                $args['id'] = sanitize_key( $classname );
+            if (empty($args['id'])) {
+                $args['id'] = sanitize_key($classname);
             }
             $args['class'] = $classname;
             $args['baseId'] = $args['id'];
 
-            if (!isset( $this->panels[$args['baseId']] )) {
-                $this->add( $args['baseId'], $args );
+            if (!isset($this->panels[$args['baseId']])) {
+                $this->add($args['baseId'], $args);
             }
         }
 
@@ -54,31 +54,33 @@ class PanelRegistry
      *
      * @return bool|\WP_Error
      */
-    public function add( $panelId, $args )
+    public function add($panelId, $args)
     {
 
-        if (!isset( $this->panels[$panelId] )) {
+        if (!isset($this->panels[$panelId])) {
 
-            $reflection = new \ReflectionClass( $args['class'] );
+            $reflection = new \ReflectionClass($args['class']);
             $name = $reflection->getParentClass()->name;
 
             if ($name == 'Kontentblocks\Panels\OptionsPanel') {
                 $args['type'] = 'options';
             } else if ($name == 'Kontentblocks\Panels\TermPanel') {
                 $args['type'] = 'term';
+            } else if ($name == 'Kontentblocks\Panels\UserPanel') {
+                $args['type'] = 'user';
             } else {
                 $args['type'] = 'post';
             }
             $this->panels[$panelId] = $args;
 
             /** @var \Kontentblocks\Panels\AbstractPanel $args */
-            $args['class']::run( $args );
+            $args['class']::run($args);
             return true;
         } else {
             return new \WP_Error(
                 'kontentblocks',
                 'Panel with same id already registered.',
-                array( 'panelId' => $panelId, 'args' => $args )
+                array('panelId' => $panelId, 'args' => $args)
             );
         }
     }
@@ -87,18 +89,18 @@ class PanelRegistry
      * @param $panelId
      * @return bool
      */
-    public function panelExists( $panelId )
+    public function panelExists($panelId)
     {
-        return array_key_exists( $panelId, $this->panels );
+        return array_key_exists($panelId, $this->panels);
     }
 
     /**
      * @param $panelId
      * @return mixed
      */
-    public function get( $panelId )
+    public function get($panelId)
     {
-        if (isset( $this->panels[$panelId] )) {
+        if (isset($this->panels[$panelId])) {
             return $this->panels[$panelId];
         }
     }

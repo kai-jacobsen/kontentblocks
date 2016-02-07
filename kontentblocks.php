@@ -22,6 +22,7 @@ use Kontentblocks\Backend\Dynamic\GlobalModulesMenu;
 use Kontentblocks\Backend\EditScreens\PostEditScreen;
 use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Backend\EditScreens\TaxonomyEditScreen;
+use Kontentblocks\Backend\EditScreens\UserEditScreen;
 use Kontentblocks\Hooks\Enqueues;
 use Kontentblocks\Hooks\Capabilities;
 use Kontentblocks\Modules\ModuleRegistry;
@@ -339,8 +340,8 @@ Class Kontentblocks
          */
         new PostEditScreen();
         new TaxonomyEditScreen();
+        new UserEditScreen();
     }
-
     /**
      * Load Module Files
      * Simply auto-includes all .php files inside the templates folder

@@ -4,6 +4,7 @@ namespace Kontentblocks\Utils;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
+use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Kontentblocks;
 use XHProfRuns_Default;
 
@@ -17,6 +18,7 @@ class Utilities
 
     protected static $postEnvironments = array();
     protected static $termEnvironments = array();
+    protected static $userEnvironments = array();
 
     /**
      * @param null $storageId
@@ -55,6 +57,11 @@ class Utilities
         return null;
     }
 
+    /**
+     * @param $termId
+     * @param null $taxonomy
+     * @return TermEnvironment
+     */
     public static function getTermEnvironment($termId, $taxonomy = null)
     {
         if ($termId && is_numeric($termId) && $termId !== -1) {
@@ -66,6 +73,22 @@ class Utilities
             }
         }
 
+    }
+
+    /**
+     * @param $userId
+     * @param \WP_User $user
+     * @return UserEnvironment
+     */
+    public static function getUserEnvironment($userId, \WP_User $user)
+    {
+        if ($userId && is_numeric($userId) && $userId !== 0) {
+            if (isset(self::$userEnvironments[$userId])) {
+                return self::$userEnvironments[$userId];
+            } else {
+                return self::$userEnvironments[$userId] = new UserEnvironment($userId, $user);
+            }
+        }
     }
 
     /**

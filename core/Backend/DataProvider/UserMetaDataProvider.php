@@ -36,10 +36,8 @@ class UserMetaDataProvider implements DataProviderInterface
         if (!isset($userId) || $userId === 0) {
             throw new \Exception('a valid post id must be provided');
         }
-
         $this->userId = $userId;
         $this->reset();
-
     }
 
     /**
@@ -75,7 +73,7 @@ class UserMetaDataProvider implements DataProviderInterface
      */
     private function getUserCustom()
     {
-        $meta = get_term_meta($this->userId);
+        $meta = get_user_meta($this->userId);
         if (!empty($meta) && is_array($meta)) {
             $this->meta = array_map(
                 function ($a) {
