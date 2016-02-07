@@ -47,6 +47,7 @@ abstract class Field implements Exportable
      * @since 0.1.0
      */
     public $type;
+    public $controller;
     /**
      * Base id/key for the field
      * may get modified if a subkey is present
@@ -75,9 +76,6 @@ abstract class Field implements Exportable
      * @var mixed
      */
     protected $userValue;
-
-    public $controller;
-
     /**
      * Return Object
      * @var \Kontentblocks\Fields\InterfaceFieldReturn
@@ -102,15 +100,6 @@ abstract class Field implements Exportable
         $this->prepare();
     }
 
-    public function setController(StandardFieldController $controller){
-        $this->controller = $controller;
-    }
-
-    /* ---------------------------------------------
-     * Common Methods
-     * ---------------------------------------------
-     */
-
     /**
      * Field parameters array
      * @param array $args
@@ -127,9 +116,19 @@ abstract class Field implements Exportable
         return false;
     }
 
+    /* ---------------------------------------------
+     * Common Methods
+     * ---------------------------------------------
+     */
+
     public function prepare()
     {
         // nothing to do if not overridden
+    }
+
+    public function setController(StandardFieldController $controller)
+    {
+        $this->controller = $controller;
     }
 
     /**
@@ -535,7 +534,6 @@ abstract class Field implements Exportable
         if (!is_null($this->userValue)) {
             return $this->userValue;
         }
-
 
         $value = $this->prepareFrontend($this->getValue());
         if ($this->getArg('returnObj')) {
