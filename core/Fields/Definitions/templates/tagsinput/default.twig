@@ -1,3 +1,6 @@
-<div class="kb-tags-input">
-    {{ form| raw }}
-</div>
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <div class="kb-tags-input">
+        {{ form| raw }}
+    </div>
+{% endblock %}

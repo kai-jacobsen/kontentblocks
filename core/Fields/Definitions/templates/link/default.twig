@@ -1,19 +1,22 @@
-<label for='{{ Form.getInputFieldId('link') }}'>{{ i18n.linklabel }}</label><br>
-<input type='text' data-kbf-link-url class='kb-js-link-input regular' id='{{ Form.getInputFieldId() }}'
-       name='{{ Form.getFieldName('link') }}' placeholder='{{ Form.getPlaceholder() }}'
-       value='{{ Field.getValue('link') }}'/>
-<a class='button kb-js-add-link'>{{ i18n.addLink }}</a>
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <label for='{{ Form.getInputFieldId('link') }}'>{{ i18n.linklabel }}</label><br>
+    <input type='text' data-kbf-link-url class='kb-js-link-input regular' id='{{ Form.getInputFieldId() }}'
+           name='{{ Form.getFieldName('link') }}' placeholder='{{ Form.getPlaceholder() }}'
+           value='{{ Field.getValue('link') }}'/>
+    <a class='button kb-js-add-link'>{{ i18n.addLink }}</a>
 
-<div class='kb-field--link-meta'><label for='{{ Form.getInputFieldId('linktext') }}'>{{ i18n.linktext }}</label><br>
-    <input type='text' data-kbf-link-linktext class='kb-field--link-linktext'
-           id='{{ Form.getInputFieldId('linktext') }}'
-           value='{{ Field.getValue('linktext') }}' name='{{ Form.getFieldName('linktext') }}'>
-</div>
-
-{% if Field.getArg('linktitle') %}
-    <div class='kb-field--link-meta'><label
-                for='{{ Form.getInputFieldId('linktitle') }}'>{{ i18n.linktitle }}</label><br>";
-        <input type='text' class='kb-field--link-linktitle' id='{{ Form.getInputFieldId('linktitle') }}'
-               value='{{ Field.getValue('linktitle') }}' name='{{ Form.getFieldName('linktitle') }}'>
+    <div class='kb-field--link-meta'><label for='{{ Form.getInputFieldId('linktext') }}'>{{ i18n.linktext }}</label><br>
+        <input type='text' data-kbf-link-linktext class='kb-field--link-linktext'
+               id='{{ Form.getInputFieldId('linktext') }}'
+               value='{{ Field.getValue('linktext') }}' name='{{ Form.getFieldName('linktext') }}'>
     </div>
-{% endif %}
+
+    {% if Field.getArg('linktitle') %}
+        <div class='kb-field--link-meta'><label
+                    for='{{ Form.getInputFieldId('linktitle') }}'>{{ i18n.linktitle }}</label><br>";
+            <input type='text' class='kb-field--link-linktitle' id='{{ Form.getInputFieldId('linktitle') }}'
+                   value='{{ Field.getValue('linktitle') }}' name='{{ Form.getFieldName('linktitle') }}'>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,36 +1,39 @@
-{% if (Field.getArg('options')) %}
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    {% if (Field.getArg('options')) %}
 
-{% else %}
-    <p>No options</p>
-{% endif %}
+    {% else %}
+        <p>No options</p>
+    {% endif %}
 
-{% if Field.getArg('optgroups', false) %}
-    <select
-            {% if Field.getArg('settings').single != true %} multiple="multiple" {% endif %}
-            data-kftype="multiselect" id='{{ Form.getInputFieldId() }}'
-            name='{{ Form.getFieldName(true) }}'>
-        {% for o in Field.getArg('options') %}
-            <optgroup label="{{ o.label }}" {% if (o.disabled) %} disabled="disabled" {% endif %}>
-                {% for item in o.items %}
-                    <option {% if (item.value in Field.getValue()) %} selected="selected" {% endif %}
-                            {% if (item.disabled) %} disabled="disabled" {% endif %}
-                            value='{{ item.value|escape('html_attr') }}'>{{ item.name }}</option>
-                {% endfor %}
-            </optgroup>
-        {% endfor %}
-    </select>
+    {% if Field.getArg('optgroups', false) %}
+        <select
+                {% if Field.getArg('settings').single != true %} multiple="multiple" {% endif %}
+                data-kftype="multiselect" id='{{ Form.getInputFieldId() }}'
+                name='{{ Form.getFieldName(true) }}'>
+            {% for o in Field.getArg('options') %}
+                <optgroup label="{{ o.label }}" {% if (o.disabled) %} disabled="disabled" {% endif %}>
+                    {% for item in o.items %}
+                        <option {% if (item.value in Field.getValue()) %} selected="selected" {% endif %}
+                                {% if (item.disabled) %} disabled="disabled" {% endif %}
+                                value='{{ item.value|escape('html_attr') }}'>{{ item.name }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
 
-{% else %}
-    <select  {% if Field.getArg('settings').single != true %} multiple="multiple" {% endif %}
-            data-kftype="multiselect" id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName(true) }}'>
-        {% if (Field.getArg('empty', true)) %}
-        <option value='' name=''>Bitte wählen</option>
-        {% endif %}
+    {% else %}
+        <select {% if Field.getArg('settings').single != true %} multiple="multiple" {% endif %}
+                data-kftype="multiselect" id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName(true) }}'>
+            {% if (Field.getArg('empty', true)) %}
+                <option value='' name=''>Bitte wählen</option>
+            {% endif %}
 
-        {% for o in Field.getArg('options') %}
-            <option {% if o.value in (Field.getValue()) %} selected="selected" {% endif %}
-                    {% if (o.disabled) %} disabled="disabled" {% endif %}
-                    value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
-        {% endfor %}
-    </select>
-{% endif %}
+            {% for o in Field.getArg('options') %}
+                <option {% if o.value in (Field.getValue()) %} selected="selected" {% endif %}
+                        {% if (o.disabled) %} disabled="disabled" {% endif %}
+                        value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+{% endblock %}

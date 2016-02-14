@@ -14,8 +14,6 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
 {
 
 
-    public $fieldFormRenderClass = '\Kontentblocks\Fields\FieldFormController';
-
     /**
      * @var array
      */
@@ -71,9 +69,9 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
      */
     public function getFormController($field)
     {
-        if (is_null($this->fieldFormRenderer)) {
-            return new $this->fieldFormRenderClass($field);
-        }
+//        if (is_null($this->fieldController->fieldFormRenderer)) {
+            return new $this->fieldController->fieldFormRenderer($field);
+//        }
     }
 
     /**
@@ -83,18 +81,5 @@ abstract class AbstractFieldRenderer implements InterfaceFieldRenderer
     abstract public function render();
 
     abstract public function getIdString();
-
-    /**
-     * @param $string
-     */
-    public function setFieldFormRenderClass($string)
-    {
-        if (is_a($string, '\Kontentblocks\Fields\FieldFormController', true)) {
-            $this->fieldFormRenderClass = $string;
-            $this->fieldFormRenderer = null;
-            $this->renderSections = $this->prepare();
-        }
-    }
-
 
 }

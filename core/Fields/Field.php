@@ -208,10 +208,10 @@ abstract class Field implements Exportable
      * Any markup should be returned
      * Can be overridden by the individual field class
      * @since 0.1.0
-     * @param FieldFormController $formController
+     * @param FieldFormRenderer $formController
      * @return bool
      */
-    public function form(FieldFormController $formController)
+    public function form(FieldFormRenderer $formController)
     {
         $type = $this->type;
         $tpl = $this->getArg('template', 'default');
@@ -231,10 +231,10 @@ abstract class Field implements Exportable
             $data = call_user_func($this->getCallback('template.data'), $data);
         }
 
-        $View = new FieldView(
+        $view = new FieldView(
             $type . '/' . $tpl . '.twig', $data
         );
-        return $View->render(false);
+        return $view->render(false);
     }
 
     /**

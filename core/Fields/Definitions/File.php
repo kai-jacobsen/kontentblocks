@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormController;
+use Kontentblocks\Fields\FieldFormRenderer;
 use Kontentblocks\Language\I18n;
 use Kontentblocks\Templating\FieldView;
 use Kontentblocks\Utils\AttachmentHandler;

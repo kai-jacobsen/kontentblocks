@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormController;
+use Kontentblocks\Fields\FieldFormRenderer;
 
 /**
  * Prebuild select field to chose one entry from a given set of options

@@ -2562,7 +2562,7 @@ var Ui = {
     });
 
     // set the current field id as reference
-    $body.on('mouseenter', '.kb-js-field-identifier', function () {
+    $body.on('mouseenter', '[data-kbfield]', function () {
       KB.currentFieldId = this.id;
     });
 

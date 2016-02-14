@@ -1,14 +1,16 @@
-
-{% for o in Field.getArg('options', __return_empty_array() ) %}
-    {% if (o.value and o.label) %}
-        <div class='kb-checkboxgroup-item'>
-            <label>
-                <input type='checkbox' id='{{ Form.getInputFieldId(true) }}' name='{{ Form.getFieldName(true) }}'
-                       value='{{ o.value }}'
-                        {% if o.value in value %} checked="checked" {% endif %} />{{ o.label }}
-            </label>
-        </div>
-    {% else %}
-        <p>invalid item</p>
-    {% endif %}
-{% endfor %}
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    {% for o in Field.getArg('options', __return_empty_array() ) %}
+        {% if (o.value and o.label) %}
+            <div class='kb-checkboxgroup-item'>
+                <label>
+                    <input type='checkbox' id='{{ Form.getInputFieldId(true) }}' name='{{ Form.getFieldName(true) }}'
+                           value='{{ o.value }}'
+                            {% if o.value in value %} checked="checked" {% endif %} />{{ o.label }}
+                </label>
+            </div>
+        {% else %}
+            <p>invalid item</p>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

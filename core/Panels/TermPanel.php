@@ -31,12 +31,14 @@ abstract class TermPanel extends AbstractPanel
      * @var \WP_Term
      */
     public $term;
-
+    /**
+     * @var StandardFieldController
+     */
+    public $fields;
     /**
      * @var
      */
     private $renderer;
-
 
     /**
      * Class constructor
@@ -149,11 +151,13 @@ abstract class TermPanel extends AbstractPanel
             $this->fields->setRenderer('\Kontentblocks\Fields\Renderer\FieldRendererWP');
         }
 
-        $this->renderer = $this->fields->getRenderer();
 
         if ($this->args['insideTable']) {
-            $this->renderer->setFieldFormRenderClass('\Kontentblocks\Fields\FieldFormControllerWP');
+            $this->fields->setFieldFormRenderer('\Kontentblocks\Fields\FieldFormRendererWP');
         }
+
+        $this->renderer = $this->fields->getRenderer();
+
 
         if (!$this->args['insideTable']) {
             echo $this->beforeForm();

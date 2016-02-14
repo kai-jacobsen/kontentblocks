@@ -10,20 +10,33 @@ use Kontentblocks\Templating\FieldView;
  * Class FieldForm
  * @package Kontentblocks\Fields
  */
-class FieldFormController
+class FieldFormRenderer
 {
 
     public $skin = 'default';
 
     /**
+     * @var bool
+     */
+    public $descriptionDone = false;
+
+    /**
+     * @var bool
+     */
+    public $labelDone = false;
+
+    /**
+     * @var array
+     */
+    public $fieldWrapAttributes = array();
+
+
+    public $layout = 'base';
+
+    /**
      * @var \Kontentblocks\Fields\Field
      */
-    private $field;
-
-    private $descriptionDone = false;
-
-    private $labelDone = false;
-
+    protected $field;
 
     /**
      * @param Field $field
@@ -31,7 +44,17 @@ class FieldFormController
     public function __construct(Field $field)
     {
         $this->field = $field;
+        $this->fieldWrapAttributes = $this->setupAttributes();
+    }
 
+    /**
+     * @return array
+     */
+    protected function setupAttributes()
+    {
+        return array(
+            'class' => "kb_field kb-field kb-field--{$this->field->type} kb-field--reset klearfix"
+        );
     }
 
 
@@ -108,7 +131,7 @@ class FieldFormController
         }
 
         $view = new FieldView(
-            "_partials/{$this->skin}/description.twig", array(
+            "_layouts/{$this->skin}/description.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
@@ -124,12 +147,12 @@ class FieldFormController
      */
     public function getLabel()
     {
-        if ($this->labelDone){
+        if ($this->labelDone) {
             return null;
         }
 
         $view = new FieldView(
-            "_partials/{$this->skin}/label.twig", array(
+            "_layouts/{$this->skin}/label.twig", array(
                 'Field' => $this->field,
                 'Form' => $this
             )
@@ -154,26 +177,9 @@ class FieldFormController
             }
             // Full markup
         } else {
-            $out .= $this->header();
             $out .= $this->body();
-            $out .= $this->footer();
         }
         return $out;
-    }
-
-    /**
-     * Header wrap markup
-     * @since 0.1.0
-     */
-    public function header()
-    {
-        $view = new FieldView(
-            "_partials/{$this->skin}/header.twig", array(
-                'Field' => $this->field,
-                'Form' => $this
-            )
-        );
-        return $view->render();
     }
 
     /**
@@ -225,19 +231,12 @@ class FieldFormController
     }
 
     /**
-     * Footer, close wrapper
-     * @since 0.1.0
+     * @return string
      */
-    public function footer()
+    public function getLayout()
     {
-        $view = new FieldView(
-            "_partials/{$this->skin}/footer.twig", array(
-                'Field' => $this->field,
-                'Form' => $this
-            )
-        );
-        return $view->render();
-
+        return "_layouts/{$this->skin}/{$this->layout}.twig";
     }
+
 
 }

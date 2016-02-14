@@ -49,6 +49,11 @@ class StandardFieldController
     protected $renderer = 'Kontentblocks\Fields\Renderer\FieldRendererTabs';
 
     /**
+     * @var string
+     */
+    public $fieldFormRenderer = '\Kontentblocks\Fields\FieldFormRenderer';
+
+    /**
      * registered fields in one flat array
      * @var array
      * @since 0.1.0
@@ -265,6 +270,16 @@ class StandardFieldController
             )
         ) {
             $this->renderer = $classname;
+        }
+    }
+
+    /**
+     * @param $string
+     */
+    public function setFieldFormRenderer($string)
+    {
+        if (is_a($string, '\Kontentblocks\Fields\FieldFormRenderer', true)) {
+            $this->fieldFormRenderer = $string;
         }
     }
 

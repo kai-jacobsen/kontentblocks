@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormController;
+use Kontentblocks\Fields\FieldFormRenderer;
 use Kontentblocks\Panels\CustomizerIntegration;
 use WP_Customize_Media_Control;
 
@@ -75,9 +75,9 @@ Class Checkbox extends Field
     }
 
     /**
-     * @param FieldFormController $form
+     * @param FieldFormRenderer $form
      */
-    public function renderHidden( FieldFormController $form )
+    public function renderHidden( FieldFormRenderer $form )
     {
         echo "<input type='hidden' name='{$form->getFieldName()}' value='{$this->getValue()}' >";
     }
