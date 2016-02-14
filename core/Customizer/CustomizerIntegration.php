@@ -3,7 +3,7 @@
 namespace Kontentblocks\Customizer;
 
 
-use Kontentblocks\Fields\AbstractFieldController;
+use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Fields\Field;
 use Kontentblocks\Panels\OptionsPanel;
 
@@ -22,7 +22,7 @@ class CustomizerIntegration
      */
     public $fields;
     /**
-     * @var AbstractFieldController
+     * @var StandardFieldController
      */
     protected $fieldController;
     /**
@@ -31,12 +31,12 @@ class CustomizerIntegration
     protected $panel;
 
     /**
-     * @param AbstractFieldController $fieldController
+     * @param StandardFieldController $fieldController
      * @param \WP_Customize_Manager $wpCustomize
      * @param OptionsPanel $panel
      */
     public function __construct(
-        AbstractFieldController $fieldController,
+        StandardFieldController $fieldController,
         \WP_Customize_Manager $wpCustomize,
         OptionsPanel $panel
     )

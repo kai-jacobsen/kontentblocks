@@ -13,7 +13,6 @@ use JsonSerializable;
 abstract class EntityModel implements JsonSerializable, ArrayAccess
 {
 
-
     /**
      * @var bool
      */

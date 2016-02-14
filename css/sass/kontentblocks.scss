@@ -58,7 +58,8 @@
 -----------------------------*/
 
 @import "partials/_block_style";
-@import "partials/_refields/_render-toggles";
+@import "partials/_refields/_renderer-toggles";
+@import "partials/_refields/_renderer-sections";
 
 @import "partials/_modules/module-styles";
 @import "partials/_modules/master-module";
@@ -69,11 +70,11 @@
 // Plugins (external/vendor)
 -----------------------------*/
 
-@import "partials/_vendor/_rangeslider";
 @import "partials/_vendor/_nano";
 @import "partials/_vendor/_jquery.qtip";
 @import "partials/_vendor/_alertify";
 @import "partials/_vendor/_jq.datetimepicker";
+@import "partials/_vendor/_multiselect";
 //@import "partials/_vendor/_jq.iconpicker";
 
 
@@ -100,6 +101,7 @@
 @import "partials/_refields/image";
 @import "partials/_refields/tabs";
 @import "partials/_refields/link";
+@import "partials/_refields/multitext";
 @import "partials/_refields/_customForm";
 @import "partials/_refields/_flexible-fields";
 @import "partials/_refields/_gallery";

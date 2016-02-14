@@ -1,3 +1,4 @@
-{{ Form.getLabel() }}
-{{ Form.getDescription() }}
-{{ editorHTML }}
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    {{ editorHTML }}
+{% endblock %}

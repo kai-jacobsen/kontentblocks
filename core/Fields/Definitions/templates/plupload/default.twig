@@ -1,3 +1,5 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
 <div id="{{ Field.uniqueId }}-plupload__container"
      data-fieldkey="{{ Field.getKey() }}"
      data-arraykey='{{ Field.getArg('arrayKey') }}'
@@ -13,3 +15,4 @@
         </div>
     </div>
 </div>
+{% endblock %}

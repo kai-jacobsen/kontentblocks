@@ -1,7 +1,7 @@
-{{ Form.getLabel() }}
-{{ Form.getDescription() }}
-
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
 <div id='{{ Form.getInputFieldId() }}' data-fieldkey='{{ Field.getKey() }}'
      data-arraykey='{{ Field.getArg('arrayKey') }}' data-module='{{ Field.getFieldId() }}'
      class='kb-gallery2__stage'>
 </div>
+{% endblock %}

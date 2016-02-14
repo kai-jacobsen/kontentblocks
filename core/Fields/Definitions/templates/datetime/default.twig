@@ -1,19 +1,19 @@
-{{ Form.getLabel() }}
-<input type='text' id='{{ Form.getFieldInputId() }}' name='{{ Form.getFieldName('human') }}'
-       value='{{ Field.getValue('human', "") }}' class='kb-datetimepicker'>
-<input type='hidden' name='{{ Form.getFieldName('unix') }}' value='{{ Field.getValue('unix', "") }}'
-       class='kb-datetimepicker--js-unix'>
-<input type='hidden' name='{{ Form.getFieldName('sql') }}' value='{{ Field.getValue('sql', "") }}'
-       class='kb-datetimepicker--js-sql'>
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <input type='text' id='{{ Form.getFieldInputId() }}' name='{{ Form.getFieldName('human') }}'
+           value='{{ Field.getValue('human', "") }}' class='kb-datetimepicker'>
+    <input type='hidden' name='{{ Form.getFieldName('unix') }}' value='{{ Field.getValue('unix', "") }}'
+           class='kb-datetimepicker--js-unix'>
+    <input type='hidden' name='{{ Form.getFieldName('sql') }}' value='{{ Field.getValue('sql', "") }}'
+           class='kb-datetimepicker--js-sql'>
 
 
-{% if Field.getValue('unix', "") %}
+    {% if Field.getValue('unix', "") %}
 
-    <br>
-    <span
-            style='font-size: 10px; color:#ccc; padding:0 8px;'>Unix timestamp: {{ Field.getValue('unix', "") }}
+        <br>
+        <span
+                style='font-size: 10px; color:#ccc; padding:0 8px;'>Unix timestamp: {{ Field.getValue('unix', "") }}
 </span>
 
-{% endif %}
-
-{{ Form.getDescription() }}
+    {% endif %}
+{% endblock %}

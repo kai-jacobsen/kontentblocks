@@ -23,21 +23,21 @@ class DataProviderController implements DataProviderInterface
     protected $listeners = array();
 
     /**
-     * @param int $storageId
+     * @param int $userId
      */
-    public function __construct( $storageId )
+    public function __construct( $userId )
     {
         $this->dataProvider = apply_filters(
             'kb::data.primary.provider',
-            $storageId
+            $userId
         );
 
         // Fallback to wordpress postmeta
         if (!is_object( $this->dataProvider )) {
-            $this->dataProvider = new PostMetaDataProvider( $storageId );
+            $this->dataProvider = new PostMetaDataProvider( $userId );
         }
 
-        $this->listeners = apply_filters( 'kb::data.listeners', $this->listeners, $storageId );
+        $this->listeners = apply_filters( 'kb::data.listeners', $this->listeners, $userId );
 
     }
 

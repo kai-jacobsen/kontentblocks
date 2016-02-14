@@ -39,15 +39,15 @@ Class PostEditScreen
     function __construct()
     {
         global $pagenow;
-        if (in_array( $pagenow, $this->setupHooks() )) {
+        if (in_array($pagenow, $this->setupHooks())) {
             // add UI
-            add_action( 'add_meta_boxes', array( $this, 'renderUserInterface' ), 10, 2 );
+            add_action('add_meta_boxes', array($this, 'renderUserInterface'), 10, 2);
             // register save callback
-            add_action( 'save_post', array( $this, 'save' ), 5, 2 );
-            add_filter( '_wp_post_revision_fields', array( $this, 'revisionFields' ) );
+            add_action('save_post', array($this, 'save'), 5, 2);
+            add_filter('_wp_post_revision_fields', array($this, 'revisionFields'));
 
             // expose data to the document
-            add_action( 'admin_footer', array( $this, 'toJSON' ), 1 );
+            add_action('admin_footer', array($this, 'toJSON'), 1);
         }
     }
 
@@ -59,7 +59,7 @@ Class PostEditScreen
      */
     private function setupHooks()
     {
-        return apply_filters( 'kb.setup.hooks', array( 'post.php', 'post-new.php' ) );
+        return apply_filters('kb.setup.hooks', array('post.php', 'post-new.php'));
 
     }
 
@@ -67,14 +67,14 @@ Class PostEditScreen
      * Callback for 'edit_form_after_editor'
      * @param $post
      */
-    public function renderUserInterface( $post_type, $post )
+    public function renderUserInterface($post_type, $post)
     {
-        $this->environment = Utilities::getPostEnvironment( $post->ID );
+        $this->environment = Utilities::getPostEnvironment($post->ID);
         add_action(
             'edit_form_after_editor',
-            function () use ( $post ) {
-                echo $this->userInterface( $post );
-                _K::info( 'user interfaced rendered for a post type' );
+            function () use ($post) {
+                echo $this->userInterface($post);
+                _K::info('user interfaced rendered for a post type');
             }
         );
 
@@ -89,24 +89,24 @@ Class PostEditScreen
      * @param $post
      * @return null
      */
-    public function userInterface( $post )
+    public function userInterface($post)
     {
         // bail if post type doesn't support kontentblocks
-        if (!post_type_supports( $this->environment->get( 'postType' ), 'kontentblocks' )) {
+        if (!post_type_supports($this->environment->get('postType'), 'kontentblocks')) {
             return null;
         }
-        if (!post_type_supports( $this->environment->get( 'postType' ), 'editor' )) {
+        if (!post_type_supports($this->environment->get('postType'), 'editor')) {
             Utilities::hiddenEditor();
         }
 
         $hasAreas = true;
-        $areas = $this->environment->get( 'areas' );
-        if (!$areas || empty( $areas )) {
+        $areas = $this->environment->get('areas');
+        if (!$areas || empty($areas)) {
             $hasAreas = false;
         }
 
 
-        $screenManager = new ScreenManager( $areas, $this->environment );
+        $screenManager = new ScreenManager($areas, $this->environment);
         $view = new CoreView(
             '/edit-screen/user-interface.twig', array(
                 'ScreenManager' => $screenManager,
@@ -114,13 +114,13 @@ Class PostEditScreen
                 'noAreas' => $this->handleEmptyAreas(),
                 'blogId' => get_current_blog_id(),
                 'nonces' => array(
-                    'save' => wp_nonce_field( 'kontentblocks_save_post', 'kb_noncename', true, false ),
-                    'ajax' => wp_nonce_field( 'kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce', true, false )
+                    'save' => wp_nonce_field('kontentblocks_save_post', 'kb_noncename', true, false),
+                    'ajax' => wp_nonce_field('kontentblocks_ajax_magic', '_kontentblocks_ajax_nonce', true, false)
                 )
             )
         );
 
-        return $view->render( false );
+        return $view->render(false);
 
     }
 
@@ -130,9 +130,9 @@ Class PostEditScreen
 
     private function handleEmptyAreas()
     {
-        if (current_user_can( 'manage_kontentblocks' )) {
-            $tpl = new CoreView( 'no-areas.twig', array('strings' => I18n::getPackage('Areas')) );
-            return $tpl->render( false );
+        if (current_user_can('manage_kontentblocks')) {
+            $tpl = new CoreView('no-areas.twig', array('strings' => I18n::getPackage('Areas')));
+            return $tpl->render(false);
         }
         return '';
     }
@@ -143,15 +143,17 @@ Class PostEditScreen
      * @param int $post_id The current post id
      * @since 0.1.0
      */
-    function save( $post_id )
+    function save($post_id)
     {
-
-
-        if (isset( $_POST['wp-preview'] ) && $_POST['wp-preview'] === 'dopreview') {
+        if (isset($_POST['wp-preview']) && $_POST['wp-preview'] === 'dopreview') {
             $post_id = get_the_ID();
         }
-        $environment = Utilities::getPostEnvironment( $post_id );
-        $environment->save();
+
+        if (post_type_supports(get_post_type($post_id),'kontentblocks')){
+            $environment = Utilities::getPostEnvironment($post_id);
+            $environment->save();
+        }
+
     }
 
     /**
@@ -162,7 +164,7 @@ Class PostEditScreen
      */
     public function toJSON()
     {
-        Utilities::getPostEnvironment( get_the_ID() )->toJSON();
+        Utilities::getPostEnvironment(get_the_ID())->toJSON();
     }
 
     /**
@@ -172,7 +174,7 @@ Class PostEditScreen
      * @return mixed
      * @since 0.2.0
      */
-    public function revisionFields( $fields )
+    public function revisionFields($fields)
     {
         $fields["kb_preview"] = "kb_preview";
         return $fields;

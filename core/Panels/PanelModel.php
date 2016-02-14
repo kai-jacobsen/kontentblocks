@@ -9,22 +9,20 @@ use Kontentblocks\Common\Data\EntityModel;
  * Class PanelModel
  * @package Kontentblocks\Panels
  */
-abstract class PanelModel extends EntityModel
+class PanelModel extends EntityModel
 {
 
     public $_originalData;
-    private $_panel;
 
     /**
      * @param array $data
      * @param AbstractPanel $panel
      * @since 0.1.0
      */
-    public function __construct( $data = array(), AbstractPanel $panel )
+    public function __construct($data = array())
     {
-        $this->_panel = $panel;
         $this->_originalData = $data;
-        $this->set( $data );
+        $this->set($data);
         $this->_initialized = true;
     }
 
@@ -39,13 +37,6 @@ abstract class PanelModel extends EntityModel
     }
 
     /**
-     * @return AbstractPanel
-     */
-    protected function getPanel(){
-        return $this->_panel;
-    }
-
-    /**
      * (PHP 5 &gt;= 5.4.0)<br/>
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
@@ -56,13 +47,16 @@ abstract class PanelModel extends EntityModel
      */
     public function jsonSerialize()
     {
-        $vars = get_object_vars( $this );
-        unset( $vars['_panel'] );
-        unset( $vars['_locked'] );
-        unset( $vars['_initialized'] );
-        unset( $vars['_originalData'] );
+        $vars = get_object_vars($this);
+        unset($vars['_locked']);
+        unset($vars['_initialized']);
+        unset($vars['_originalData']);
         return $vars;
     }
 
 
+    public function sync()
+    {
+        // TODO: Implement sync() method.
+    }
 }

@@ -39,7 +39,6 @@ Class Text extends Field
     public function prepareFormValue( $val )
     {
         return esc_html( $val );
-
     }
 
 

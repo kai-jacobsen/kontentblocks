@@ -122,6 +122,27 @@ body .kb-field-wrapper{
   }
 }
 
+.kb-field-wrapper.field-renderer-wp{
+
+  &:hover{
+    background-color: transparent;
+    border-left: none;
+  }
+
+  .kb-field{
+
+    .kb-field--label-heading{
+      display: none;
+    }
+
+    input[type='text']{
+      width: 100%;
+      max-width: 100% !important;
+    }
+  }
+
+}
+
 .kb-field--reset {
   margin: 0;
   font-size: 12px;

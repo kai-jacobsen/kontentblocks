@@ -1,20 +1,19 @@
-{{ Form.getLabel() }}
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    {% if (Field.getArg('options')) %}
 
-{% if (Field.getArg('options')) %}
-
-{% else %}
-    <p>Please set options to show</p>
-{% endif %}
-
-<select id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
-    {% if (Field.getArg('empty', true)) %}
-        <option value='' name=''>Bitte wählen</option>
+    {% else %}
+        <p>Please set options to show</p>
     {% endif %}
 
-    {% for o in Field.getArg('options') %}
-        <option {% if (Field.getValue == o.value) %} selected="selected" {% endif %}
-                value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
-    {% endfor %}
-</select>
+    <select id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'>
+        {% if (Field.getArg('empty', true)) %}
+            <option value='' name=''>Bitte wählen</option>
+        {% endif %}
 
-{{ Form.getDescription() }}
+        {% for o in Field.getArg('options') %}
+            <option {% if (Field.getValue == o.value) %} selected="selected" {% endif %}
+                    value='{{ o.value|escape('html_attr') }}'>{{ o.name }}</option>
+        {% endfor %}
+    </select>
+{% endblock %}

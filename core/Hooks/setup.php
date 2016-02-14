@@ -21,7 +21,7 @@ function remove_editor_support()
         }
 
         // visible for posts by default
-        if (apply_filters( 'kb_remove_editor_post', false )) {
+        if (apply_filters( 'kb.remove.editor.post', false )) {
             remove_post_type_support( 'post', 'editor' );
         }
     }

@@ -2,6 +2,10 @@
 
 namespace Kontentblocks\Backend\DataProvider;
 
+/**
+ * Class TermMetaDataProvider
+ * @package Kontentblocks\Backend\DataProvider
+ */
 class TermMetaDataProvider implements DataProviderInterface
 {
 
@@ -22,18 +26,17 @@ class TermMetaDataProvider implements DataProviderInterface
     /**
      * Class constructor
      *
-     * @param $storageId
+     * @param $termId
      *
      * @throws \Exception
      * @since 0.1.0
      */
-    public function __construct( $storageId )
+    public function __construct( $termId )
     {
-        if (!isset( $storageId ) || $storageId === 0) {
-            throw new \Exception( 'a valid post id must be provided' );
+        if (!isset( $termId ) || $termId === 0) {
+            throw new \Exception( 'a valid term id must be provided' );
         }
-
-        $this->termId = $storageId;
+        $this->termId = $termId;
         $this->reset();
 
     }
@@ -46,8 +49,8 @@ class TermMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        clean_post_cache( $this->getTermId() );
-        $this->_getTermCustom();
+        clean_term_cache( $this->getTermId() );
+        $this->getTermCustom();
 
         return $this;
     }
@@ -69,7 +72,7 @@ class TermMetaDataProvider implements DataProviderInterface
      * @return self
      * @since 0.1.0
      */
-    private function _getTermCustom()
+    private function getTermCustom()
     {
         $meta = get_term_meta( $this->termId );
         if (!empty( $meta ) && is_array( $meta )) {

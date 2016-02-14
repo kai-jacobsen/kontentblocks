@@ -1,0 +1,20 @@
+<tr class="form-field kb-field-wrapper field-renderer-wp  {% if Field.getArg('description') %} field-has-description {% endif %}"
+    data-kbfuid="{{ Field.uniqueId|escape('html_attr') }}"
+    data-kbfield="{{ Field.type }}"
+    id='{{ Field.uniqueId|escape('html_attr') }}'>
+    <th scope="row">{{ Form.getLabel() }}</th>
+    <td>
+        {% if (Field.getArg('title')) %}
+            <div class="kb-field-header">
+                <h4>{{ Field.getArg('title')|escape }}</h4>
+            </div>
+        {% endif %}
+        <div {% for attr,value in Form.fieldWrapAttributes %} {{ attr }}='{{ value|esc_attr }}' {% endfor %} >
+
+        {% block fieldmarkup %}
+            {#goes here#}
+        {% endblock %}
+
+        </div>
+    </td>
+</tr>

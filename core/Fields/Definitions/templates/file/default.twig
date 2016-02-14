@@ -1,29 +1,30 @@
-<div class='kb-field-file-wrapper {{ isEmpty }}'>
-    {{ Form.getLabel() }}
-    {{ Form.getDescription() }}
-    <table>
-        <tbody>
-        <tr>
-            <td>ID:</td>
-            <td><span class="kb-file-id">{{ file.getAttr('id') }}</span></td>
-        </tr>
-        <tr>
-            <td>{{ i18n.title }}</td>
-            <td><span class="kb-file-title">{{ file.getAttr('title') }}</span></td>
-        </tr>
-        <tr>
-            <td>{{ i18n.filename }}</td>
-            <td><span class="kb-file-filename">{{ file.getAttr('filename') }}</span></td>
-        </tr>
-        <tr>
-            <td>{{ i18n.editLink }}</td>
-            <td><a class="kb-file-editLink" href="{{ file.getAttr('editLink') }}">edit</a></td>
-        </tr>
-        </tbody>
-    </table>
-    <input type="hidden" class="kb-file-attachment-id" value="{{ file.getAttr('id') }}"
-           name="{{ Form.getFieldName('id') }}">
-</div>
-<a class="button primary kb-js-add-file">{{ i18n.selectFile }}</a>
-<a class="kb-js-reset-file {{ isEmpty }}">{{ i18n.remove }}</a>
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <div class='kb-field-file-wrapper {{ isEmpty }}'>
+        <table>
+            <tbody>
+            <tr>
+                <td>ID:</td>
+                <td><span class="kb-file-id">{{ file.getAttr('id') }}</span></td>
+            </tr>
+            <tr>
+                <td>{{ i18n.title }}</td>
+                <td><span class="kb-file-title">{{ file.getAttr('title') }}</span></td>
+            </tr>
+            <tr>
+                <td>{{ i18n.filename }}</td>
+                <td><span class="kb-file-filename">{{ file.getAttr('filename') }}</span></td>
+            </tr>
+            <tr>
+                <td>{{ i18n.editLink }}</td>
+                <td><a class="kb-file-editLink" href="{{ file.getAttr('editLink') }}">edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" class="kb-file-attachment-id" value="{{ file.getAttr('id') }}"
+               name="{{ Form.getFieldName('id') }}">
+    </div>
+    <a class="button primary kb-js-add-file">{{ i18n.selectFile }}</a>
+    <a class="kb-js-reset-file {{ isEmpty }}">{{ i18n.remove }}</a>
 
+{% endblock %}

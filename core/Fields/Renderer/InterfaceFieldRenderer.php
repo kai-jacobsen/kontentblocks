@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields;
+namespace Kontentblocks\Fields\Renderer;
 
 
 /**
@@ -15,5 +15,7 @@ interface InterfaceFieldRenderer
      * @return mixed
      */
     public function render( );
+
+    public function getIdString();
 
 }

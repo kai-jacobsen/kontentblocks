@@ -630,7 +630,7 @@ Handlebars.registerHelper('trimString', function(passedString, length) {
     theString = theString + '…';
   }
 
-  return new HandlebarsKB.SafeString(theString)
+  return new Handlebars.SafeString(theString)
 });
 },{"hbsfy/runtime":29}],16:[function(require,module,exports){
 // hbsfy compiled Handlebars template

@@ -37,22 +37,17 @@ abstract class Field implements Exportable
      */
     public $value;
     /**
-     * @var AbstractFieldSection
+     * @var StandardFieldSection
      */
     public $section;
 
-
-    /**
-     * @var FieldModel
-     */
-    public $model;
-    public $objectId = 0;
     /**
      * Current field type
      * @var string
      * @since 0.1.0
      */
     public $type;
+    public $controller;
     /**
      * Base id/key for the field
      * may get modified if a subkey is present
@@ -81,12 +76,9 @@ abstract class Field implements Exportable
      * @var mixed
      */
     protected $userValue;
-
-
     /**
      * Return Object
      * @var \Kontentblocks\Fields\InterfaceFieldReturn
-     * @TODO Concept is WIP
      *
      */
     private $returnObj;
@@ -98,23 +90,14 @@ abstract class Field implements Exportable
      * @param string $key unique storage key
      * @param $args
      */
-    public function __construct( $baseId, $subkey = null, $key, $args )
+    public function __construct($baseId, $subkey = null, $key, $args)
     {
         $this->key = $key;
         $this->fieldId = $baseId;
-        $this->setBaseId( $baseId, $subkey );
+        $this->setBaseId($baseId, $subkey);
         $this->type = static::$settings['type'];
-        $this->setArgs( $args );
+        $this->setArgs($args);
         $this->prepare();
-    }
-
-    /* ---------------------------------------------
-     * Common Methods
-     * ---------------------------------------------
-     */
-
-    public function prepare(){
-        // nothing to do if not overridden
     }
 
     /**
@@ -123,14 +106,29 @@ abstract class Field implements Exportable
      * @since 0.1.0
      * @return bool
      */
-    public function setArgs( $args )
+    public function setArgs($args)
     {
-        if (is_array( $args ) && !empty( $args )) {
-            $this->args = wp_parse_args( $args, $this->args );
+        if (is_array($args) && !empty($args)) {
+            $this->args = wp_parse_args($args, $this->args);
             return true;
         }
 
         return false;
+    }
+
+    /* ---------------------------------------------
+     * Common Methods
+     * ---------------------------------------------
+     */
+
+    public function prepare()
+    {
+        // nothing to do if not overridden
+    }
+
+    public function setController(StandardFieldController $controller)
+    {
+        $this->controller = $controller;
     }
 
     /**
@@ -147,11 +145,11 @@ abstract class Field implements Exportable
      *
      * @return null
      */
-    public function getCondition( $type )
+    public function getCondition($type)
     {
-        $conditions = $this->getArg( 'conditions' );
+        $conditions = $this->getArg('conditions');
         if ($conditions) {
-            if (isset( $conditions[$type] )) {
+            if (isset($conditions[$type])) {
                 return $conditions[$type];
             }
         }
@@ -166,9 +164,9 @@ abstract class Field implements Exportable
      *
      * @return mixed arg value
      */
-    public function getArg( $arg, $default = false )
+    public function getArg($arg, $default = false)
     {
-        if (isset( $this->args[$arg] )) {
+        if (isset($this->args[$arg])) {
             return $this->args[$arg];
         } else {
             return $default;
@@ -182,7 +180,7 @@ abstract class Field implements Exportable
      */
     public function getDisplay()
     {
-        return filter_var( $this->getArg( 'display', true ), FILTER_VALIDATE_BOOLEAN );
+        return filter_var($this->getArg('display', true), FILTER_VALIDATE_BOOLEAN);
 
     }
 
@@ -192,22 +190,15 @@ abstract class Field implements Exportable
      * @param $bool
      * @return bool
      */
-    public function setDisplay( $bool )
+    public function setDisplay($bool)
     {
-        $this->setArgs( array( 'display' => filter_var( $bool, FILTER_VALIDATE_BOOLEAN ) ) );
+        $this->setArgs(array('display' => filter_var($bool, FILTER_VALIDATE_BOOLEAN)));
         return $bool;
     }
 
-    public function setData( $data )
+    public function setData($data)
     {
-        $data = $this->setValue( $data );
-
-//        if (is_null( $this->model )) {
-//            $this->model = new FieldModel( $data, $this );
-//        } else {
-//            $this->model->set( $data );
-//        }
-//        $this->value = $this->model->export();
+        $data = $this->setValue($data);
         $this->value = $data;
 
     }
@@ -217,33 +208,33 @@ abstract class Field implements Exportable
      * Any markup should be returned
      * Can be overridden by the individual field class
      * @since 0.1.0
-     * @param FieldFormController $formController
+     * @param FieldFormRenderer $formController
      * @return bool
      */
-    public function form( FieldFormController $formController )
+    public function form(FieldFormRenderer $formController)
     {
         $type = $this->type;
-        $tpl = $this->getArg( 'template', 'default' );
+        $tpl = $this->getArg('template', 'default');
         $data = array(
             'Form' => $formController,
             'Field' => $this,
             'value' => $this->getValue(),
-            'i18n' => I18n::getPackages( 'Refields.common', "Refields.{$type}" )
+            'i18n' => I18n::getPackages('Refields.common', "Refields.{$type}")
         );
 
         /**
          * Field may alter the injected data array
          */
-        $data = $this->prepareTemplateData( $data );
+        $data = $this->prepareTemplateData($data);
 
-        if ($this->getCallback( 'template.data' )) {
-            $data = call_user_func( $this->getCallback( 'template.data' ), $data );
+        if ($this->getCallback('template.data')) {
+            $data = call_user_func($this->getCallback('template.data'), $data);
         }
 
-        $View = new FieldView(
+        $view = new FieldView(
             $type . '/' . $tpl . '.twig', $data
         );
-        return $View->render( false );
+        return $view->render(false);
     }
 
     /**
@@ -255,24 +246,24 @@ abstract class Field implements Exportable
      * @param string $return
      * @return mixed|null returns null if data does not exist
      */
-    public function getValue( $arrKey = null, $return = '' )
+    public function getValue($arrKey = null, $return = '')
     {
         $data = $this->value;
 
-        if ($this->getCallback( 'get.value' )) {
-            $data = call_user_func( $this->getCallback( 'get.value' ), $data );
+        if ($this->getCallback('get.value')) {
+            $data = call_user_func($this->getCallback('get.value'), $data);
         }
 
-        if (is_null( $arrKey ) && !is_null( $data )) {
+        if (is_null($arrKey) && !is_null($data)) {
             return $data;
         }
 
-        if (!is_null( $arrKey ) && is_array( $data ) && isset( $data[$arrKey] )) {
+        if (!is_null($arrKey) && is_array($data) && isset($data[$arrKey])) {
             return $data[$arrKey];
         }
 
 
-        return $this->getArg( 'std', $return );
+        return $this->getArg('std', $return);
     }
 
     /**
@@ -286,7 +277,7 @@ abstract class Field implements Exportable
      * @since 0.1.0
      * @return mixed
      */
-    public function setValue( $data )
+    public function setValue($data)
     {
         return $data;
     }
@@ -297,18 +288,18 @@ abstract class Field implements Exportable
      *
      * @return null
      */
-    public function getCallback( $type )
+    public function getCallback($type)
     {
-        $allowed = array( 'template.data', 'frontend.value', 'form.value', 'get.value', 'save.value' );
+        $allowed = array('template.data', 'frontend.value', 'form.value', 'get.value', 'save.value');
 
-        if (!in_array( $type, $allowed )) {
+        if (!in_array($type, $allowed)) {
             return null;
         }
 
-        $callbacks = $this->getArg( 'callbacks' );
+        $callbacks = $this->getArg('callbacks');
 
         if ($callbacks) {
-            if (isset( $callbacks[$type] ) && is_callable( $callbacks[$type] )) {
+            if (isset($callbacks[$type]) && is_callable($callbacks[$type])) {
                 return $callbacks[$type];
             }
         }
@@ -320,47 +311,39 @@ abstract class Field implements Exportable
      * @param array $data
      * @return array
      */
-    protected function prepareTemplateData( $data )
+    protected function prepareTemplateData($data)
     {
         return $data;
     }
 
     /**
-     * Build the whole field, including surrounding wrapper
+     * Just before form output
      * and optional 'hooks"
      * @since 0.1.0
-     * @param bool $echo
-     * @return string $out
      */
-    public function build( $echo = true )
+    public function build()
     {
         $this->uniqueId = $this->createUID();
-        // handles the form output
-        $formController = new FieldFormController( $this );
-        $out = $formController->build();
-
-        if ($echo) {
-            echo $out;
-        }
-
-        return $out;
     }
 
+    /**
+     * @return string
+     */
     public function createUID()
     {
 
         $state = 'frontend';
 
-        if (defined( 'KB_MODULE_FORM' ) && KB_MODULE_FORM) {
+        if (defined('KB_MODULE_FORM') && KB_MODULE_FORM) {
             $state = 'from';
         }
 
-        if (is_null( $this->uniqueId )) {
-            $base = $this->baseId . $this->key . $state . $this->getArg( 'index', '' ) . $this->getArg(
+        if (is_null($this->uniqueId)) {
+            $base = $this->baseId . $this->key . $state . $this->getArg('index', '') . $this->getArg(
                     'arrayKey',
                     ''
                 );
-            $this->uniqueId = 'kb-' . hash( 'crc32', $base );
+            $this->uniqueId = 'kb-' . hash('crc32', $base);
         }
         return $this->uniqueId;
     }
@@ -373,7 +356,7 @@ abstract class Field implements Exportable
      *
      * @return mixed
      */
-    abstract public function prepareFormValue( $val );
+    abstract public function prepareFormValue($val);
 
     /**
      * JSON Encode custom settings for the field
@@ -382,9 +365,9 @@ abstract class Field implements Exportable
     public function toJson()
     {
         $args = $this->cleanedArgs();
-        Kontentblocks::getService( 'utility.jsontransport' )->registerFieldArgs(
+        Kontentblocks::getService('utility.jsontransport')->registerFieldArgs(
             $this->uniqueId,
-            $this->augmentArgs( $args )
+            $this->augmentArgs($args)
         );
     }
 
@@ -394,16 +377,16 @@ abstract class Field implements Exportable
      */
     private function cleanedArgs()
     {
-        if (method_exists( $this, 'argsToJson' )) {
+        if (method_exists($this, 'argsToJson')) {
             return $this->argsToJson();
         } else {
             $args = $this->args;
-            unset( $args['callbacks'] );
+            unset($args['callbacks']);
             return $args;
         }
     }
 
-    public function augmentArgs( $args )
+    public function augmentArgs($args)
     {
         $def = array();
         $def['uid'] = $this->createUID();
@@ -411,10 +394,10 @@ abstract class Field implements Exportable
         $def['baseId'] = $this->getBaseId();
         $def['fieldId'] = $this->fieldId;
         $def['fieldkey'] = $this->getKey();
-        $def['arrayKey'] = $this->getArg( 'arrayKey', null );
+        $def['arrayKey'] = $this->getArg('arrayKey', null);
         $def['kpath'] = $this->createKPath();
 
-        return wp_parse_args( $args, $def );
+        return wp_parse_args($args, $def);
     }
 
     /**
@@ -436,7 +419,7 @@ abstract class Field implements Exportable
      *
      * @since 0.1.0
      */
-    public function setBaseId( $id, $subkey = null )
+    public function setBaseId($id, $subkey = null)
     {
         if (!$subkey) {
             $this->baseId = $id;
@@ -463,12 +446,12 @@ abstract class Field implements Exportable
     private function createKPath()
     {
         $path = '';
-        if ($this->getArg( 'arrayKey', false )) {
-            $path .= $this->getArg( 'arrayKey' ) . '.';
+        if ($this->getArg('arrayKey', false)) {
+            $path .= $this->getArg('arrayKey') . '.';
         }
 
-        if ($this->getArg( 'index', false )) {
-            $path .= $this->getArg( 'index' ) . '.';
+        if ($this->getArg('index', false)) {
+            $path .= $this->getArg('index') . '.';
         }
 
         $path .= $this->getKey();
@@ -483,11 +466,11 @@ abstract class Field implements Exportable
      *
      * @return mixed
      */
-    public function _save( $keydata, $oldKeyData = null )
+    public function _save($keydata, $oldKeyData = null)
     {
-        $data = $this->save( $keydata, $oldKeyData );
-        if ($this->getCallback( 'save.value' )) {
-            $data = call_user_func( $this->getCallback( 'save.value' ), $keydata, $oldKeyData, $data );
+        $data = $this->save($keydata, $oldKeyData);
+        if ($this->getCallback('save.value')) {
+            $data = call_user_func($this->getCallback('save.value'), $keydata, $oldKeyData, $data);
         }
 
         return $data;
@@ -502,9 +485,9 @@ abstract class Field implements Exportable
      *
      * @return mixed
      */
-    public function save( $keydata, $oldKeyData )
+    public function save($keydata, $oldKeyData)
     {
-        if (is_null( $keydata )) {
+        if (is_null($keydata)) {
             return null;
         } else {
             return $keydata;
@@ -512,21 +495,19 @@ abstract class Field implements Exportable
 
     }
 
-    public function export( &$collection )
+    public function export(&$collection)
     {
-        $concatKey = ( $this->getArg( 'arrayKey' ) ) ? $this->getArg( 'arrayKey' ) . '.' . $this->getKey(
-            ) : $this->getKey();
+        $concatKey = ($this->getArg('arrayKey')) ? $this->getArg('arrayKey') . '.' . $this->getKey() : $this->getKey();
 
-        $notated = ( $this->getArg( 'arrayKey' ) ) ? '[' . $this->getArg( 'arrayKey' ) . '][' . $this->getKey(
-            ) . ']' : $this->getKey();
+        $notated = ($this->getArg('arrayKey')) ? '[' . $this->getArg('arrayKey') . '][' . $this->getKey() . ']' : $this->getKey();
 
         $collection[$notated] = array(
             'key' => $this->getKey(),
-            'arrayKey' => $this->getArg( 'arrayKey' ),
+            'arrayKey' => $this->getArg('arrayKey'),
             'arrayPath' => $concatKey,
             'kpath' => $notated,
             'type' => $this->type,
-            'std' => $this->getArg( 'std', '' ),
+            'std' => $this->getArg('std', ''),
             'args' => $this->cleanedArgs(),
             'section' => $this->section->sectionId,
             'data' => $this->getFrontendValue()
@@ -547,48 +528,47 @@ abstract class Field implements Exportable
      * @return object
      * @throws \Exception
      */
-    public function getFrontendValue( $salt = null )
+    public function getFrontendValue($salt = null)
     {
 
-        if (!is_null( $this->userValue )) {
+        if (!is_null($this->userValue)) {
             return $this->userValue;
         }
 
-
-        $value = $this->prepareFrontend( $this->getValue() );
-        if ($this->getArg( 'returnObj' )) {
-            $classname = $this->getArg( 'returnObj' );
+        $value = $this->prepareFrontend($this->getValue());
+        if ($this->getArg('returnObj')) {
+            $classname = $this->getArg('returnObj');
             // backwards compat
-            $classname = $this->aliasReturnObjectClass( $classname );
+            $classname = $this->aliasReturnObjectClass($classname);
 
             // first try with FQN
             $classpath = 'Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $classname;
-            if (class_exists( 'Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $classname, true )) {
-                $this->returnObj = new $classpath( $value, $this, $salt );
+            if (class_exists('Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $classname, true)) {
+                $this->returnObj = new $classpath($value, $this, $salt);
             }
             $classpath2 = 'Kontentblocks\\Fields\\Returnobjects\\' . $classname;
-            if (class_exists( 'Kontentblocks\\Fields\\Returnobjects\\' . $classname, true )) {
-                $this->returnObj = new $classpath2( $value, $this, $salt );
+            if (class_exists('Kontentblocks\\Fields\\Returnobjects\\' . $classname, true)) {
+                $this->returnObj = new $classpath2($value, $this, $salt);
             }
             // second try
-            if (class_exists( $classname )) {
-                $this->returnObj = new $classname( $value, $this, $salt );
+            if (class_exists($classname)) {
+                $this->returnObj = new $classname($value, $this, $salt);
             }
 
-            if (is_null( $this->returnObj )) {
-                throw new \Exception( 'requested Return Object does not exist' );
+            if (is_null($this->returnObj)) {
+                throw new \Exception('requested Return Object does not exist');
             }
 
             $this->userValue = $this->returnObj;
             return $this->userValue;
 
-        } elseif ($this->getSetting( 'returnObj' ) && $this->getArg( 'returnObj', null ) !== false) {
-            $classpath = 'Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $this->getSetting( 'returnObj' );
-            $this->returnObj = new $classpath( $value, $this, $salt );
+        } elseif ($this->getSetting('returnObj') && $this->getArg('returnObj', null) !== false) {
+            $classpath = 'Kontentblocks\\Fields\\Definitions\\ReturnObjects\\' . $this->getSetting('returnObj');
+            $this->returnObj = new $classpath($value, $this, $salt);
             $this->userValue = $this->returnObj;
             return $this->userValue;
         } else {
-            $this->returnObj = new StandardFieldReturn( $value, $this, $salt );
+            $this->returnObj = new StandardFieldReturn($value, $this, $salt);
             $this->userValue = $this->returnObj;
             return $this->userValue;
         }
@@ -604,14 +584,14 @@ abstract class Field implements Exportable
      *
      * @return mixed
      */
-    private function prepareFrontend( $value )
+    private function prepareFrontend($value)
     {
         // custom method on field instance level wins over class method
-        if ($this->getCallback( 'frontend.value' )) {
-            return call_user_func( $this->getCallback( 'frontend.value' ), $value );
+        if ($this->getCallback('frontend.value')) {
+            return call_user_func($this->getCallback('frontend.value'), $value);
         } // custom method on field class level
         else {
-            return $this->prepareFrontendValue( $value );
+            return $this->prepareFrontendValue($value);
         }
     }
 
@@ -622,7 +602,7 @@ abstract class Field implements Exportable
      *
      * @return mixed
      */
-    public function prepareFrontendValue( $val )
+    public function prepareFrontendValue($val)
     {
         return $val;
     }
@@ -632,7 +612,7 @@ abstract class Field implements Exportable
      * @param $classname
      * @return string
      */
-    private function aliasReturnObjectClass( $classname )
+    private function aliasReturnObjectClass($classname)
     {
         switch ($classname) {
 
@@ -655,9 +635,9 @@ abstract class Field implements Exportable
      *
      * @return bool|mixed
      */
-    public function getSetting( $key )
+    public function getSetting($key)
     {
-        if (isset( static::$settings[$key] )) {
+        if (isset(static::$settings[$key])) {
             return static::$settings[$key];
         } else {
             return null;
@@ -669,12 +649,12 @@ abstract class Field implements Exportable
      * @param CustomizerIntegration $integration
      * @return null
      */
-    public function addCustomizerControl( \WP_Customize_Manager $customizeManager, CustomizerIntegration $integration )
+    public function addCustomizerControl(\WP_Customize_Manager $customizeManager, CustomizerIntegration $integration)
     {
         $customizeManager->add_control(
-            $integration->getSettingName( $this ),
+            $integration->getSettingName($this),
             array(
-                'label' => $this->getArg( 'label' ),
+                'label' => $this->getArg('label'),
                 'section' => $this->section->getSectionId(),
                 'type' => $this->type
             )

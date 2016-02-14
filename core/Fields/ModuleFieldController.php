@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Fields;
 
+use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Modules\Module;
 use Kontentblocks\Utils\Utilities;
@@ -23,24 +24,8 @@ use Reframe\Kontentblocks\Kontentblocks;
  * @see Kontentblocks\Modules\Module::__cosntruct()
  * @param \Kontentblocks\Modules\Module
  */
-class ModuleFieldController extends AbstractFieldController
+class ModuleFieldController extends StandardFieldController
 {
-    public $module;
-
-
-    public $sections;
-
-    /**
-     * Constructor
-     * @param Module $module
-     * @since 0.1.0
-     */
-    public function __construct( Module $module )
-    {
-        $this->baseId = $module->getId();
-        $this->module = $module;
-
-    }
 
     /**
      * Creates a new section if there is not already one with the same id
@@ -51,28 +36,17 @@ class ModuleFieldController extends AbstractFieldController
      * @return object
      * @since 0.1.0
      */
-    public function addSection( $sectionId, $args = array() )
+    public function addSection($sectionId, $args = array())
     {
-        if (!$this->idExists( $sectionId )) {
+        if (!$this->idExists($sectionId)) {
             $this->sections[$sectionId] = new ModuleFieldSection(
                 $sectionId,
                 $args,
-                $this->module
+                $this
             );
         }
         return $this->sections[$sectionId];
 
     }
 
-
-    public function getEntity()
-    {
-        return $this->module;
-    }
-
-    public function getEntityModel()
-    {
-        return $this->module->getModel();
-
-    }
 }

@@ -4,7 +4,7 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\DataProvider\SerOptionsDataProvider;
 use Kontentblocks\Customizer\CustomizerIntegration;
-use Kontentblocks\Fields\FieldRendererTabs;
+use Kontentblocks\Fields\Renderer\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
@@ -55,7 +55,6 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function __construct( $args )
     {
-
         $this->args = $this->parseDefaults( $args );
         $this->setupArgs( $this->args );
         $this->dataProvider = new SerOptionsDataProvider( $this->baseId );
@@ -232,7 +231,7 @@ abstract class OptionsPanel extends AbstractPanel
      */
     public function renderFields()
     {
-        $renderer = new FieldRendererTabs( $this->fields );
+        $renderer = $this->fields->getRenderer();
         return $renderer->render();
     }
 

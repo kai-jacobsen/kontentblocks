@@ -1,5 +1,6 @@
-{{ Form.getLabel() }}
-<input class='kb-color-picker' type='text' name='{{ Form.getFieldName() }}' id='{{ Form.getInputFieldId() }}'
-       value='{{ Field.getValue() }}' size='7'/>
-{{ error }}
-{{ Form.getDescription() }}
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <input class='kb-color-picker' type='text' name='{{ Form.getFieldName() }}' id='{{ Form.getInputFieldId() }}'
+           value='{{ Field.getValue() }}' size='7'/>
+    {{ error }}
+{% endblock %}

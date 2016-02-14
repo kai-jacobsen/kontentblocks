@@ -213,6 +213,10 @@ class FieldSubGroup implements Exportable
 
     }
 
+    public function getFields(){
+        return $this->fields;
+    }
+
     /**
      * Pass getValue calls to single fields and collect results
      * @return array

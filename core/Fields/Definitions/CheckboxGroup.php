@@ -3,7 +3,7 @@
 namespace Kontentblocks\Fields\Definitions;
 
 use Kontentblocks\Fields\Field;
-use Kontentblocks\Fields\FieldFormController;
+use Kontentblocks\Fields\FieldFormRenderer;
 
 /**
  * Checkbox Group
@@ -58,9 +58,9 @@ Class CheckboxGroup extends Field
     }
 
     /**
-     * @param FieldFormController $form
+     * @param FieldFormRenderer $form
      */
-    public function renderHidden( FieldFormController $form )
+    public function renderHidden( FieldFormRenderer $form )
     {
         $value = $this->getValue();
         if (is_array( $value ) && !empty( $value )) {

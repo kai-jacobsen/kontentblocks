@@ -30,7 +30,6 @@ class SavePost
         $this->postid = $environment->getId();
         $this->postdata = new ValueStorage( $_POST );
         $this->index = $this->environment->getStorage()->getIndex();
-
     }
 
 
@@ -44,7 +43,6 @@ class SavePost
         if ($this->auth() === false) {
             return false;
         }
-
         $areas = $this->environment->getAreas();
 
         // Bail out if no areas are set
@@ -92,7 +90,6 @@ class SavePost
                 return false;
             }
         }
-
         if (is_null( $this->postdata->getFiltered( 'kb_noncename', FILTER_SANITIZE_STRING ) )) {
             return false;
         }
@@ -215,6 +212,10 @@ class SavePost
                 $module->getModel()->sync( true );
             }
         }
+
+        $backupManager = new BackupDataStorage( $this->environment->getStorage() );
+        $backupManager->backup( "Post updated" );
+
     }
 
     /**

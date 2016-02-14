@@ -32,12 +32,12 @@ class JSONTransport
      */
     public function __construct()
     {
-        if (is_user_logged_in() && current_user_can( 'edit_kontentblocks' )) {
-            add_action( 'wp_print_footer_scripts', array( $this, 'printJSON' ), 9 );
-            add_action( 'admin_footer', array( $this, 'printJSON' ), 9 );
+        if (is_user_logged_in() && current_user_can('edit_kontentblocks')) {
+            add_action('wp_print_footer_scripts', array($this, 'printJSON'), 9);
+            add_action('admin_footer', array($this, 'printJSON'), 9);
         }
-        add_action( 'wp_print_footer_scripts', array( $this, 'printPublicJSON' ), 9 );
-        add_action( 'admin_footer', array( $this, 'printPublicJSON' ), 9 );
+        add_action('wp_print_footer_scripts', array($this, 'printPublicJSON'), 9);
+        add_action('admin_footer', array($this, 'printPublicJSON'), 9);
 
     }
 
@@ -51,10 +51,10 @@ class JSONTransport
      * @since 0.1.0
      * @return object self
      */
-    public function registerData( $group, $key, $data )
+    public function registerData($group, $key, $data)
     {
 
-        if (is_null( $key )) {
+        if (is_null($key)) {
             $this->data[$group] = $data;
         } else {
             $this->data[$group][$key] = $data;
@@ -73,9 +73,9 @@ class JSONTransport
      * @since 0.1.0
      * @return object $this
      */
-    public function registerPublicData( $group, $key, $data )
+    public function registerPublicData($group, $key, $data)
     {
-        if (is_null( $key )) {
+        if (is_null($key)) {
             $this->publicData[$group] = $data;
         } else {
             $this->publicData[$group][$key] = $data;
@@ -96,10 +96,10 @@ class JSONTransport
      * @since 0.1.0
      * @return object $this
      */
-    public function registerFieldData( $modid, $type, $data, $key, $arrayKey )
+    public function registerFieldData($modid, $type, $data, $key, $arrayKey)
     {
 
-        if (!empty( $arrayKey )) {
+        if (!empty($arrayKey)) {
             $this->fieldData[$type][$modid][$arrayKey][$key] = $data;
         } else {
             $this->fieldData[$type][$modid][$key] = $data;
@@ -116,9 +116,9 @@ class JSONTransport
      * @param array $data args
      * @return $this
      */
-    public function registerFieldArgs( $key, $data )
+    public function registerFieldArgs($key, $data)
     {
-        if (is_null( $key )) {
+        if (is_null($key)) {
             $this->fields = $data;
         } else {
             $this->fields[$key] = $data;
@@ -136,7 +136,7 @@ class JSONTransport
      * @since 0.1.0
      * @return object $this
      */
-    public function registerModule( $module )
+    public function registerModule($module)
     {
         $this->modules[$module['mid']] = $module;
 
@@ -150,14 +150,14 @@ class JSONTransport
      * @since 0.1.0
      * @return false|void
      */
-    public function registerModules( $modules )
+    public function registerModules($modules)
     {
-        if (!is_array( $modules )) {
+        if (!is_array($modules)) {
             return false;
         }
 
         foreach ($modules as $module) {
-            $this->registerModule( $module );
+            $this->registerModule($module);
         }
     }
 
@@ -169,16 +169,16 @@ class JSONTransport
      * @since 0.1.0
      * @return object $this
      */
-    public function registerArea( $area )
+    public function registerArea($area)
     {
         $this->areas[$area->id] = $area;
         return $this;
     }
 
-    public function registerAreas( $areas )
+    public function registerAreas($areas)
     {
         foreach ($areas as $area) {
-            $this->registerArea( $area );
+            $this->registerArea($area);
         }
     }
 
@@ -186,7 +186,7 @@ class JSONTransport
      * @param $context
      * @since 0.3.0
      */
-    public function registerContext( $context )
+    public function registerContext($context)
     {
         $this->Contexts[$context['id']] = $context;
     }
@@ -199,8 +199,12 @@ class JSONTransport
      * @since 0.1.0
      * @return object $this
      */
-    public function registerPanel( $panel )
+    public function registerPanel($panel)
     {
+        if (isset($this->panels[$panel['baseId']])) {
+            $panel = Utilities::arrayMergeRecursive($panel, $this->panels[$panel['baseId']]);
+        }
+
         $this->panels[$panel['baseId']] = $panel;
         return $this;
     }
@@ -220,7 +224,7 @@ class JSONTransport
         $this->data['Panels'] = $this->panels;
         $this->data['Contexts'] = $this->Contexts;
 
-        $json = json_encode( $this->data );
+        $json = json_encode($this->data);
 
         print "<script>var KB = KB || {}; KB.payload = {}; KB.payload =  {$json};</script>";
     }
@@ -233,7 +237,7 @@ class JSONTransport
      */
     public function printPublicJSON()
     {
-        $json = json_encode( $this->publicData );
+        $json = json_encode($this->publicData);
         print "<script>var KB = KB || {}; KB.appData = {}; KB.appData =  {$json}; KB.on = function(){};</script>";
     }
 

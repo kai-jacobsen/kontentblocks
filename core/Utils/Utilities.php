@@ -4,6 +4,7 @@ namespace Kontentblocks\Utils;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
+use Kontentblocks\Backend\Environment\UserEnvironment;
 use Kontentblocks\Kontentblocks;
 use XHProfRuns_Default;
 
@@ -17,6 +18,7 @@ class Utilities
 
     protected static $postEnvironments = array();
     protected static $termEnvironments = array();
+    protected static $userEnvironments = array();
 
     /**
      * @param null $storageId
@@ -24,9 +26,9 @@ class Utilities
      * @deprecated use getPostEnvironment instead
      * @return PostEnvironment
      */
-    public static function getEnvironment( $storageId = null, $actualPostId = null )
+    public static function getEnvironment($storageId = null, $actualPostId = null)
     {
-        return self::getPostEnvironment( $storageId, $actualPostId );
+        return self::getPostEnvironment($storageId, $actualPostId);
     }
 
     /**
@@ -41,24 +43,29 @@ class Utilities
      * @return PostEnvironment
      * @since 0.1.0
      */
-    public static function getPostEnvironment( $storageId = null, $actualPostId = null )
+    public static function getPostEnvironment($storageId = null, $actualPostId = null)
     {
-        if ($storageId && is_numeric( $storageId ) && $storageId !== - 1) {
-            if (isset( self::$postEnvironments[$storageId] )) {
+        if ($storageId && is_numeric($storageId) && $storageId !== -1) {
+            if (isset(self::$postEnvironments[$storageId])) {
                 return self::$postEnvironments[$storageId];
             } else {
-                $realId = ( is_null( $actualPostId ) ) ? $storageId : $actualPostId;
-                $postObj = get_post( $realId );
-                return self::$postEnvironments[$storageId] = new PostEnvironment( $storageId, $postObj );
+                $realId = (is_null($actualPostId)) ? $storageId : $actualPostId;
+                $postObj = get_post($realId);
+                return self::$postEnvironments[$storageId] = new PostEnvironment($storageId, $postObj);
             }
         }
         return null;
     }
 
-    public static function getTermEnvironment( $termId, $taxonomy = null )
+    /**
+     * @param $termId
+     * @param null $taxonomy
+     * @return TermEnvironment
+     */
+    public static function getTermEnvironment($termId, $taxonomy = null)
     {
-        if ($termId && is_numeric( $termId ) && $termId !== - 1) {
-            if (isset( self::$termEnvironments[$termId] )) {
+        if ($termId && is_numeric($termId) && $termId !== -1) {
+            if (isset(self::$termEnvironments[$termId])) {
                 return self::$termEnvironments[$termId];
             } else {
                 $termObj = get_term($termId, $taxonomy);
@@ -66,6 +73,22 @@ class Utilities
             }
         }
 
+    }
+
+    /**
+     * @param $userId
+     * @param \WP_User $user
+     * @return UserEnvironment
+     */
+    public static function getUserEnvironment($userId, \WP_User $user)
+    {
+        if ($userId && is_numeric($userId) && $userId !== 0) {
+            if (isset(self::$userEnvironments[$userId])) {
+                return self::$userEnvironments[$userId];
+            } else {
+                return self::$userEnvironments[$userId] = new UserEnvironment($userId, $user);
+            }
+        }
     }
 
     /**
@@ -79,7 +102,7 @@ class Utilities
 
         if (!$kbHiddenEditorCalled) {
             echo "<div style='display: none;'>";
-            self::editor( 'ghost', '', 'ghost', true, array( 'tinymce' => array( 'wp_skip_init' => false ) ) );
+            self::editor('ghost', '', 'ghost', true, array('tinymce' => array('wp_skip_init' => false)));
             echo '</div>';
         }
 
@@ -94,13 +117,13 @@ class Utilities
      * @param bool $media | whether to render media buttons or not
      * @param array $args | additional args
      */
-    static public function editor( $id, $data, $name = null, $media = false, $args = array() )
+    static public function editor($id, $data, $name = null, $media = false, $args = array())
     {
         global $wp_version;
 
         // introduced in 4.3
         // necessary for wp_editor which expects $wp_styles to be setup ( state: 4.3alpha )
-        if (function_exists( 'wp_styles' )) {
+        if (function_exists('wp_styles')) {
             wp_styles();
         }
 
@@ -128,13 +151,13 @@ class Utilities
         /*
          * autoresize behaviour is new from version 4
          */
-        if (version_compare( $wp_version, '4.0', '>=' )) {
+        if (version_compare($wp_version, '4.0', '>=')) {
             $plugins[] = 'wpautoresize';
         }
-        if (version_compare( $wp_version, '4.0', '<=' )) {
+        if (version_compare($wp_version, '4.0', '<=')) {
             $plugins[] = 'wpfullscreen';
         }
-        if (version_compare( $wp_version, '4.2', '>=' )) {
+        if (version_compare($wp_version, '4.2', '>=')) {
             $plugins[] = 'wptextpattern';
             $plugins[] = 'wpemoji';
         }
@@ -164,20 +187,23 @@ class Utilities
                 'paste_remove_styles' => true,
                 'menubar' => false,
                 'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
-                'plugins' => implode( ',', $plugins ),
+                'plugins' => implode(',', $plugins),
                 'wp_autoresize_on' => true,
-                'wp_skip_init' => false
+                'wp_skip_init' => false,
+
             ),
             // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
             'quicktags' => true
 
         );
 
-        if (!empty( $args )) {
-            $settings = Utilities::arrayMergeRecursive( $args, $settings );
+        if (!empty($args)) {
+            $settings = Utilities::arrayMergeRecursive($args, $settings);
         }
 
-        wp_editor( $data, $id . 'editor', $settings );
+        $settings = apply_filters('kb.tinymce.global.settings', $settings);
+
+        wp_editor($data, $id . 'editor', $settings);
 
     }
 
@@ -190,33 +216,33 @@ class Utilities
      * @param array $old
      * @return array
      */
-    public static function arrayMergeRecursive( $new, $old )
+    public static function arrayMergeRecursive($new, $old)
     {
         $merged = $new;
-        if (!is_array( $merged )) {
+        if (!is_array($merged)) {
             return $old;
         }
 
-        if (is_array( $old )) {
+        if (is_array($old)) {
             foreach ($old as $key => $val) {
 
-                if (is_array( $old[$key] )) {
-                    if (array_key_exists( $key, $merged ) && isset( $merged[$key] ) && $merged[$key] !== NULL) {
+                if (is_array($old[$key])) {
+                    if (array_key_exists($key, $merged) && isset($merged[$key]) && $merged[$key] !== null) {
                         // key exists and is not null, dig further into the array until actual values are reached
-                        $merged[$key] = self::arrayMergeRecursive( $merged[$key], $old[$key] );
-                    } elseif (array_key_exists( $key, $merged ) && $merged[$key] === NULL) {
+                        $merged[$key] = self::arrayMergeRecursive($merged[$key], $old[$key]);
+                    } elseif (array_key_exists($key, $merged) && $merged[$key] === null) {
                         // explicit set the new value to NULL
-                        unset( $merged[$key] );
+                        unset($merged[$key]);
                     } else {
                         // preserve the old value
-                        $merged[$key] = self::arrayMergeRecursive( $old[$key], $old[$key] );
+                        $merged[$key] = self::arrayMergeRecursive($old[$key], $old[$key]);
                     }
                 } else {
-                    if (array_key_exists( $key, $merged ) && $merged[$key] === NULL) {
+                    if (array_key_exists($key, $merged) && $merged[$key] === null) {
                         // key was set to null on purpose, and gets removed finally
-                        unset( $merged[$key] );
+                        unset($merged[$key]);
 
-                    } elseif (!isset( $merged[$key] )) {
+                    } elseif (!isset($merged[$key])) {
                         // there is something missing in current(new) data, add it
                         $merged[$key] = $val;
                     }
@@ -233,11 +259,11 @@ class Utilities
      *
      * @return string
      */
-    public static function getBaseIdField( $index )
+    public static function getBaseIdField($index)
     {
         // prepare base id for new blocks
-        if (!empty( $index )) {
-            $base_id = self::getHighestId( $index );
+        if (!empty($index)) {
+            $base_id = self::getHighestId($index);
         } else {
             $base_id = 0;
         }
@@ -251,21 +277,21 @@ class Utilities
      *
      * @return mixed
      */
-    public static function getHighestId( $index )
+    public static function getHighestId($index)
     {
         $collect = '';
-        if (!empty( $index )) {
+        if (!empty($index)) {
             foreach ($index as $module) {
-                $module = maybe_unserialize( $module );
-                $count = strrchr( $module['mid'], "_" );
-                $id = str_replace( '_', '', $count );
+                $module = maybe_unserialize($module);
+                $count = strrchr($module['mid'], "_");
+                $id = str_replace('_', '', $count);
                 $collect[] = $id;
             }
         }
-        if (empty( $collect )) {
-            return absint( 1 );
+        if (empty($collect)) {
+            return absint(1);
         } else {
-            return absint( max( $collect ) );
+            return absint(max($collect));
         }
 
     }
@@ -277,7 +303,7 @@ class Utilities
      */
     public static function getPostTypes()
     {
-        $postTypes = get_post_types( array( 'public' => true ), 'objects', 'and' );
+        $postTypes = get_post_types(array('public' => true), 'objects', 'and');
         $collection = array();
 
         foreach ($postTypes as $pt) {
@@ -325,8 +351,8 @@ class Utilities
     public static function getTemplateFile()
     {
         global $template;
-        if (!empty( $template ) && is_string( $template )) {
-            return str_replace( '.php', '', basename( $template ) );
+        if (!empty($template) && is_string($template)) {
+            return str_replace('.php', '', basename($template));
         } else {
             return 'generic';
         }
@@ -340,11 +366,11 @@ class Utilities
      * @param string $id menu identifier
      * @return bool
      */
-    public static function adminMenuExists( $id )
+    public static function adminMenuExists($id)
     {
         global $menu;
         foreach ($menu as $item) {
-            if (strtolower( $item[0] ) == strtolower( $id )) {
+            if (strtolower($item[0]) == strtolower($id)) {
                 return true;
             }
         }
@@ -356,10 +382,10 @@ class Utilities
      * @param array $array
      * @return bool
      */
-    public static function isAssocArray( $array )
+    public static function isAssocArray($array)
     {
-        $array = array_keys( $array );
-        return ( $array !== array_keys( $array ) );
+        $array = array_keys($array);
+        return ($array !== array_keys($array));
 
     }
 
@@ -369,12 +395,12 @@ class Utilities
      */
     public static function enableXhprof()
     {
-        if (function_exists( 'xhprof_enable' )) {
+        if (function_exists('xhprof_enable')) {
 
-            if (filter_input( INPUT_GET, 'xhprof', FILTER_SANITIZE_STRING )) {
+            if (filter_input(INPUT_GET, 'xhprof', FILTER_SANITIZE_STRING)) {
                 include '/usr/share/php/xhprof_lib/utils/xhprof_lib.php';
                 include '/usr/share/php/xhprof_lib/utils/xhprof_runs.php';
-                xhprof_enable( XHPROF_FLAGS_NO_BUILTINS + XHPROF_FLAGS_MEMORY );
+                xhprof_enable(XHPROF_FLAGS_NO_BUILTINS + XHPROF_FLAGS_MEMORY);
             }
         }
     }
@@ -383,14 +409,14 @@ class Utilities
      * Internal debugging shortcut helper for Xhprof
      * @param string $app Xhprof group id
      */
-    public static function disableXhprf( $app = 'Kontentblocks' )
+    public static function disableXhprf($app = 'Kontentblocks')
     {
-        if (function_exists( 'xhprof_disable' )) {
-            if (filter_input( INPUT_GET, 'xhprof', FILTER_SANITIZE_STRING )) {
+        if (function_exists('xhprof_disable')) {
+            if (filter_input(INPUT_GET, 'xhprof', FILTER_SANITIZE_STRING)) {
                 $XHProfData = xhprof_disable();
 
                 $XHProfRuns = new XHProfRuns_Default();
-                $XHProfRuns->save_run( $XHProfData, $app );
+                $XHProfRuns->save_run($XHProfData, $app);
             }
         }
 
@@ -401,20 +427,20 @@ class Utilities
      * @param null $postId
      * @return null|void
      */
-    public static function remoteConcatGet( $postId = null )
+    public static function remoteConcatGet($postId = null)
     {
-        if (apply_filters( 'kb.remote.concat.get', false )) {
+        if (apply_filters('kb.remote.concat.get', false)) {
             return null;
         }
 
-        if (is_null( $postId )) {
+        if (is_null($postId)) {
             return;
         }
 
-        $url = add_query_arg( 'concat', 'true', get_permalink( $postId ) );
+        $url = add_query_arg('concat', 'true', get_permalink($postId));
 
         if ($url !== false) {
-            wp_remote_get( $url, array( 'timeout' => 2 ) );
+            wp_remote_get($url, array('timeout' => 2));
         }
     }
 
@@ -422,16 +448,16 @@ class Utilities
      * @param $array
      * @return mixed
      */
-    public static function validateBoolRecursive( $array )
+    public static function validateBoolRecursive($array)
     {
         foreach ($array as $k => $v) {
 
-            if (is_array( $v )) {
-                $array[$k] = self::validateBoolRecursive( $v );
+            if (is_array($v)) {
+                $array[$k] = self::validateBoolRecursive($v);
             }
 
             if ($v === 'true' || $v === 'false') {
-                $array[$k] = filter_var( $v, FILTER_VALIDATE_BOOLEAN );
+                $array[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
             }
         }
         return $array;
@@ -447,16 +473,16 @@ class Utilities
     {
         // defaults
         $cats = array(
-            'standard' => __( 'Standard', 'kontentblocks' ),
+            'standard' => __('Standard', 'kontentblocks'),
         );
 
-        $cats = apply_filters( 'kb.module.cats', $cats );
-        $cats['media'] = __( 'Media', 'kontentblocks' );
-        $cats['special'] = __( 'Spezial', 'kontentblocks' );
-        $cats['core'] = __( 'System', 'kontentblocks' );
-        $cats['gmodule'] = __( 'Global Modules', 'kontentblocks' );
+        $cats = apply_filters('kb.module.cats', $cats);
+        $cats['media'] = __('Media', 'kontentblocks');
+        $cats['special'] = __('Spezial', 'kontentblocks');
+        $cats['core'] = __('System', 'kontentblocks');
+        $cats['gmodule'] = __('Global Modules', 'kontentblocks');
 
-        Kontentblocks::getService( 'utility.jsontransport' )->registerData( 'ModuleCategories', null, $cats );
+        Kontentblocks::getService('utility.jsontransport')->registerData('ModuleCategories', null, $cats);
         return $cats;
     }
 
@@ -466,13 +492,13 @@ class Utilities
      * @param int $offset
      * @return bool
      */
-    public static function strposa( $haystack, $needle, $offset = 0 )
+    public static function strposa($haystack, $needle, $offset = 0)
     {
-        if (!is_array( $needle )) {
-            $needle = array( $needle );
+        if (!is_array($needle)) {
+            $needle = array($needle);
         }
         foreach ($needle as $query) {
-            if (strpos( $haystack, $query, $offset ) !== false) {
+            if (strpos($haystack, $query, $offset) !== false) {
                 return true;
             } // stop on first true result
         }
@@ -484,11 +510,11 @@ class Utilities
      * @param $path
      * @param $value
      */
-    public static function assignArrayByPath( &$arr, $path, $value )
+    public static function assignArrayByPath(&$arr, $path, $value)
     {
-        $keys = explode( '.', $path );
+        $keys = explode('.', $path);
 
-        while ($key = array_shift( $keys )) {
+        while ($key = array_shift($keys)) {
             $arr = &$arr[$key];
         }
 

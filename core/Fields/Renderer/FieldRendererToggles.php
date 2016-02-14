@@ -1,6 +1,6 @@
 <?php
 
-namespace Kontentblocks\Fields;
+namespace Kontentblocks\Fields\Renderer;
 
 /**
  * Alternate way to organize fields
@@ -10,27 +10,8 @@ namespace Kontentblocks\Fields;
  * @package Fields
  * @since 0.1.0
  */
-class FieldRendererToggles implements InterfaceFieldRenderer
+class FieldRendererToggles extends AbstractFieldRenderer
 {
-
-    /**
-     * Array of sections to render
-     * @var array
-     */
-    protected $structure;
-
-    /**
-     * Unique identifier inherited by module
-     * @var string
-     */
-    protected $baseId;
-
-    /**
-     * Instance data from module
-     * Gets passed through to section handler
-     * @var array
-     */
-    protected $data;
 
     /**
      * Length of sections array
@@ -38,40 +19,17 @@ class FieldRendererToggles implements InterfaceFieldRenderer
      */
     protected $length;
 
-
-    public function __construct( $baseId, $structure = null )
-    {
-        $this->baseId = $baseId;
-
-        if (!is_null( $structure )) {
-            $this->setStructure( $structure );
-        }
-
-    }
-
     /**
      * Wrapper to render method
      * @param $data
      * @return mixed|void
      */
-    public function render( $data )
+    public function render( )
     {
-        if (!is_array( $this->structure )) {
+        if (!is_array( $this->renderSections )) {
             return;
         }
-        $this->data = $data;
         $this->renderTogglebox();
-
-    }
-
-    /**
-     * @param $structure
-     * @return mixed|void
-     */
-    public function setStructure( $structure )
-    {
-        $this->structure = $structure;
-        $this->length = count( $this->structure );
 
     }
 
@@ -83,7 +41,7 @@ class FieldRendererToggles implements InterfaceFieldRenderer
         if ($this->length > 1) {
             $this->_before();
             /** @var \Kontentblocks\Fields\ModuleFieldSection $section */
-            foreach ($this->structure as $section) {
+            foreach ($this->sections as $section) {
                 if ($section->getNumberOfVisibleFields() > 0) {
                     echo "<div class='kb-togglebox-header'><h3>{$section->getLabel()}</h3></div>";
                     echo "<div class='kb-togglebox-box' id='toggle-{$section->getSectionId()}'>";
@@ -91,9 +49,9 @@ class FieldRendererToggles implements InterfaceFieldRenderer
                     echo "</div>";
                 }
             }
-            $this->_before();
+            $this->_after();
         } else {
-            foreach ($this->structure as $section) {
+            foreach ($this->sections as $section) {
                 $section->render( $this->data );
             }
         }
@@ -106,10 +64,15 @@ class FieldRendererToggles implements InterfaceFieldRenderer
 
     }
 
+    public function getIdString()
+    {
+        return "fields-renderer-toggles";
+
+    }
+
     private function _after()
     {
         echo "</div>";
 
     }
-
 }

@@ -1,0 +1,5 @@
+{% for section in structure %}
+    {% if (section.section.getNumberOfVisibleFields() > 0) %}
+        {{ section.renderFields( ) }}
+    {% endif %}
+{% endfor %}

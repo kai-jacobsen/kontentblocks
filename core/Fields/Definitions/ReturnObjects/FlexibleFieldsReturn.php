@@ -44,14 +44,14 @@ class FlexibleFieldsReturn
      * @param FlexibleFields $field
      * @param $salt
      */
-    public function __construct( $value, FlexibleFields $field, $salt )
+    public function __construct($value, FlexibleFields $field, $salt)
     {
 
         $this->field = $field;
         $this->key = $field->getKey();
         $this->fieldData = $value;
         $this->entityId = $field->getFieldId();
-        $this->sections = $field->getArg( 'fields' );
+        $this->sections = $field->getArg('fields');
         $this->items = $this->setupItems();
         $this->salt = $salt;
     }
@@ -63,20 +63,20 @@ class FlexibleFieldsReturn
      */
     public function setupItems()
     {
-        if (!empty( $this->items )) {
+        if (!empty($this->items)) {
             return $this->items;
         }
 
-        if (!is_array( $this->fieldData )) {
+        if (!is_array($this->fieldData)) {
             return array();
         }
 
-        $registry = Kontentblocks()->getService( 'registry.fields' );
+        $registry = Kontentblocks()->getService('registry.fields');
         $fields = $this->extractFieldsFromConfig();
         $items = array();
         foreach ($this->fieldData as $index => $data) {
 
-            if (empty( $data )) {
+            if (empty($data)) {
                 continue;
             }
 
@@ -88,22 +88,21 @@ class FlexibleFieldsReturn
                     continue;
                 }
                 /** @var \Kontentblocks\Fields\Field $field */
-                $field = $registry->getField( $conf['type'], $this->entityId, $index, $key );
-                $field->setBaseId( $this->entityId, $this->key );
-                $field->setData( $data[$key] );
-                $field->setArgs( array( 'index' => $index, 'arrayKey' => $this->key ) );
-                $field->setArgs( $conf );
-                $item[$key] = $field->getFrontendValue( $this->salt );
+                $field = $registry->getField($conf['type'], $this->entityId, $index, $key);
+                $field->setBaseId($this->entityId, $this->key);
+                $field->setData($data[$key]);
+                $field->setArgs(array('index' => $index, 'arrayKey' => $this->key));
+                $field->setArgs($conf);
+                $item[$key] = $field->getFrontendValue($this->salt);
 
             }
             $items[$index] = $item;
         }
 
         $original = $this->field->getValue();
-        if (is_array( $original )) {
-            $items = array_replace( $original, array_intersect_key( $items, $original ) );
+        if (is_array($original)) {
+            $items = array_replace($original, array_intersect_key($items, $original));
         }
-
         return $items;
     }
 
@@ -113,6 +112,10 @@ class FlexibleFieldsReturn
      */
     private function extractFieldsFromConfig()
     {
+        if (!is_array($this->sections)) {
+            return array();
+        }
+
         $collect = array();
         foreach (array_values( $this->sections ) as $section) {
             if (!empty( $section['fields'] )) {
@@ -139,7 +142,7 @@ class FlexibleFieldsReturn
         };
 
         $items = $this->setupItems();
-        if (!is_array( $items )) {
+        if (!is_array($items)) {
             return array();
         }
         return $items;
@@ -153,19 +156,19 @@ class FlexibleFieldsReturn
     private function validate()
     {
 
-        if (empty( $this->fieldData )) {
+        if (empty($this->fieldData)) {
             return false;
         }
 
-        if (!isset( $this->entityId )) {
+        if (!isset($this->entityId)) {
             return false;
         }
 
-        if (!isset( $this->key )) {
+        if (!isset($this->key)) {
             return false;
         }
 
-        if (!isset( $this->sections )) {
+        if (!isset($this->sections)) {
             return false;
         }
 

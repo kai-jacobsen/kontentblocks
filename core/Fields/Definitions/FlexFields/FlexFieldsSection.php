@@ -40,6 +40,7 @@ class FlexFieldsSection implements \JsonSerializable
      * @param $type
      * @param $key
      * @param $args
+     * @return $this
      */
     public function addField( $type, $key, $args )
     {
@@ -48,6 +49,7 @@ class FlexFieldsSection implements \JsonSerializable
             $args['type'] = $type;
             $this->fields[$key] = $args;
         }
+        return $this;
     }
 
     public function jsonSerialize()

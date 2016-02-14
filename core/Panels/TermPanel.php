@@ -4,13 +4,13 @@ namespace Kontentblocks\Panels;
 
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Backend\Environment\TermEnvironment;
-use Kontentblocks\Fields\FieldRendererTabs;
 use Kontentblocks\Fields\PanelFieldController;
+use Kontentblocks\Fields\StandardFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Utils\Utilities;
 
 /**
- * Class TaxonomyPanle
+ * Class TaxonomyPanel
  *
  * @package Kontentblocks\Panels
  */
@@ -23,7 +23,7 @@ abstract class TermPanel extends AbstractPanel
     public $dataProvider;
 
     /**
-     * @var TermPanelModel
+     * @var PanelModel
      */
     public $model;
 
@@ -31,7 +31,14 @@ abstract class TermPanel extends AbstractPanel
      * @var \WP_Term
      */
     public $term;
-
+    /**
+     * @var StandardFieldController
+     */
+    public $fields;
+    /**
+     * @var
+     */
+    private $renderer;
 
     /**
      * Class constructor
@@ -45,10 +52,16 @@ abstract class TermPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->term = $environment->termObj;
+<<<<<<< HEAD
         $this->fields = new PanelFieldController($this);
         $this->model = new TermPanelModel($environment->getDataProvider()->get($args['baseId']), $this);
+=======
+        $this->fields = new StandardFieldController($args['baseId'], $this);
+        $this->model = new PanelModel($environment->getDataProvider()->get($args['baseId']), $this);
+>>>>>>> development
         $this->data = $this->model->export();
         $this->fields();
+
     }
 
     /**
@@ -60,7 +73,7 @@ abstract class TermPanel extends AbstractPanel
     {
         $defaults = array(
             'taxonomy' => 'category',
-            'beforeForm' => true
+            'insideTable' => true
         );
 
         return wp_parse_args($args, $defaults);
@@ -88,7 +101,11 @@ abstract class TermPanel extends AbstractPanel
     public function init()
     {
         add_action("edited_{$this->args['taxonomy']}", array($this, 'save'));
+<<<<<<< HEAD
         if ($this->args['beforeForm']) {
+=======
+        if ($this->args['insideTable']) {
+>>>>>>> development
             add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
         } else {
             add_action("{$this->args['taxonomy']}_edit_form", array($this, 'form'));
@@ -130,7 +147,11 @@ abstract class TermPanel extends AbstractPanel
      */
     public function form($termId)
     {
+<<<<<<< HEAD
         $this->dataProvider = new TermMetaDataProvider($termId);
+=======
+        $this->dataProvider = new TermMetaDataProvider($termId->term_id);
+>>>>>>> development
 
         // @TODO what? deprecate, replace
         do_action('kb.do.enqueue.admin.files');
@@ -139,11 +160,27 @@ abstract class TermPanel extends AbstractPanel
             return false;
         }
         Utilities::hiddenEditor();
+        if ($this->args['insideTable']) {
+            $this->fields->setRenderer('\Kontentblocks\Fields\Renderer\FieldRendererWP');
+        }
 
-        echo $this->beforeForm();
+
+        if ($this->args['insideTable']) {
+            $this->fields->setFieldFormRenderer('\Kontentblocks\Fields\FieldFormRendererWP');
+        }
+
+        $this->renderer = $this->fields->getRenderer();
+
+
+        if (!$this->args['insideTable']) {
+            echo $this->beforeForm();
+        }
+
         echo $this->renderFields();
-        echo $this->afterForm();
 
+        if (!$this->args['insideTable']) {
+            echo $this->afterForm();
+        }
     }
 
     /**
@@ -152,7 +189,7 @@ abstract class TermPanel extends AbstractPanel
     private function beforeForm()
     {
         $out = '';
-        $out .= "<div class='postbox kb-taxpanel'>
+        $out .= "<div class='postbox kb-taxpanel {$this->renderer->getIdString()}'>
                 <div class='kb-custom-wrapper'>
                 <div class='handlediv' title='Zum Umschalten klicken'></div><div class='inside'>";
         return $out;
@@ -163,8 +200,12 @@ abstract class TermPanel extends AbstractPanel
      */
     public function renderFields()
     {
+<<<<<<< HEAD
         $renderer = new FieldRendererTabs($this->fields);
         return $renderer->render();
+=======
+        return $this->renderer->render();
+>>>>>>> development
     }
 
     /**

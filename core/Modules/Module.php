@@ -5,7 +5,6 @@ namespace Kontentblocks\Modules;
 
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Common\Interfaces\EntityInterface;
-use Kontentblocks\Common\Interfaces\RendererInterface;
 use Kontentblocks\Fields\ModuleFieldController;
 use Kontentblocks\Kontentblocks;
 use Kontentblocks\Templating\CoreView;
@@ -64,14 +63,14 @@ abstract class Module implements EntityInterface
      * @param array $data
      * @param PostEnvironment $environment
      */
-    public function __construct( ModuleProperties $properties, $data = array(), PostEnvironment $environment )
+    public function __construct(ModuleProperties $properties, $data = array(), PostEnvironment $environment)
     {
         $this->properties = $properties;
         $this->environment = $environment;
-        $this->context = new ModuleContext( $environment, $this );
-        $this->model = new ModuleModel( $data, $this );
-        if (filter_var( $this->properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
-            $this->viewLoader = Kontentblocks::getService( 'registry.moduleViews' )->getViewLoader( $this );
+        $this->context = new ModuleContext($environment, $this);
+        $this->model = new ModuleModel($data, $this);
+        if (filter_var($this->properties->getSetting('views'), FILTER_VALIDATE_BOOLEAN)) {
+            $this->viewLoader = Kontentblocks::getService('registry.moduleViews')->getViewLoader($this);
         }
         /**
          * Setup FieldController, Sections and fields if used
@@ -88,11 +87,20 @@ abstract class Module implements EntityInterface
     public function setupFields()
     {
         // magically setup fields
-        if (method_exists( $this, 'fields' )) {
-            $this->fields = new ModuleFieldController( $this );
+        if (method_exists($this, 'fields')) {
+            $this->fields = new ModuleFieldController($this->getId(), $this,
+                $this->properties->parentObjectId);
             // setup Fields
             $this->fields();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->properties->mid;
     }
 
     /**
@@ -109,7 +117,7 @@ abstract class Module implements EntityInterface
             'name' => '',
             'wrap' => true,
             'wrapperClasses' => '',
-            'moduleElement' => apply_filters( 'kb.module.settings.element', 'div' ),
+            'moduleElement' => apply_filters('kb.module.settings.element', 'div'),
             'description' => '',
             'connect' => 'any',
             'hidden' => false,
@@ -117,199 +125,9 @@ abstract class Module implements EntityInterface
             'category' => 'standard',
             'views' => false,
             'concat' => true,
-            'fieldRenderer' => 'Kontentblocks\Fields\FieldRendererTabs'
+            'fieldRenderer' => 'Kontentblocks\Fields\Renderer\FieldRendererTabs'
         );
 
-    }
-
-    /**
-     * Setup Module Data
-     * @param array $data
-     */
-    public function updateModuleData( $data = array(), $hard = false )
-    {
-
-        if ($hard){
-            $this->model = new ModuleModel($data, $this);
-        }
-
-        $this->model->set( $data );
-
-        if ($this->fields) {
-            $this->fields->updateData();
-        }
-    }
-
-    /**
-     * Creates a complete list item for the area
-     */
-    public function renderForm()
-    {
-        $node = new ModuleNode( $this );
-        return $node->build();
-    }
-
-    /**
-     * Method for the backend display
-     * gets called by ui display callback
-     * @since 0.1.0
-     */
-    public function form()
-    {
-        $concat = '';
-
-        if (!is_null( $this->viewLoader )) {
-            // render view select field
-            $concat .= $this->viewLoader->render();
-        }
-        // render fields if set
-        if (isset( $this->fields ) && is_object( $this->fields )) {
-            $rendererClass = $this->properties->getSetting( 'fieldRenderer' );
-            $renderer = new $rendererClass( $this->fields );
-            $concat .= $renderer->render();
-        } else {
-            $concat .= $this->renderEmptyForm();
-        }
-
-        return $concat;
-    }
-
-    /*
-     * ------------------------------------
-     * public getter
-     * ------------------------------------
-     */
-
-    /**
-     * No fields or form method override / fallback
-     * @since 0.1.0
-     */
-    private function renderEmptyForm()
-    {
-        $tpl = new CoreView( 'no-module-options.twig' );
-        return $tpl->render();
-    }
-
-    /**
-     * Wrapper to actual render method.
-     *
-     * @return mixed
-     */
-    final public function module()
-    {
-        if (isset( $this->fields )) {
-            $this->setupFrontendData();
-        }
-
-        $this->view = $this->getView();
-
-        return $this->render();
-
-    }
-
-    /**
-     * Pass the raw module data to the fields, where the data
-     * may be modified, depends on field configuration
-     * frontend / output only
-     */
-    private function setupFrontendData()
-    {
-
-        if ($this->model->hasData()) {
-            foreach ($this->model as $key => $v) {
-                /** @var \Kontentblocks\Fields\Field $field */
-                $field = $this->fields->getFieldByKey( $key );
-                $this->model[$key] = ( !is_null( $field ) ) ? $field->getFrontendValue(
-                    $this->properties->postId
-                ) : $v;
-            }
-        }
-
-    }
-
-    /**
-     * Setup a prepared Twig template instance if viewLoader is used
-     * @return ModuleView|null
-     * @since 0.1.0
-     */
-    private function getView()
-    {
-        if (!class_exists( 'Kontentblocks\Templating\ModuleTemplate' )) {
-            class_alias( 'Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate' );
-        }
-
-        if ($this->properties->getSetting( 'views' ) && is_null( $this->view )) {
-            $tpl = $this->getViewfile();
-            $moduleView = new ModuleView( $this );
-            $full = $this->viewLoader->getTemplateByName( $tpl );
-            if (isset( $full->filename )) {
-                $moduleView->setTplFile( $full->filename );
-                $moduleView->setPath( $full->path );
-            }
-
-            $this->view = $moduleView;
-            return $this->view;
-
-        } else if ($this->view) {
-            return $this->view;
-        }
-
-        return null;
-    }
-
-
-    /*
-     * ------------------------------------
-     * public setter
-     * ------------------------------------
-     */
-
-    /**
-     * Gets the assigned viewfile (.twig) filename
-     * Property is empty upon module creation, in that case we find the file to use
-     * through the ModuleLoader class
-     * @return string
-     */
-    public function getViewfile()
-    {
-        if (!filter_var( $this->properties->getSetting( 'views' ), FILTER_VALIDATE_BOOLEAN )) {
-            return '';
-        }
-        // a viewfile was already set
-        if (!empty( $this->properties->viewfile ) && $this->viewLoader->isValidTemplate(
-                $this->properties->viewfile
-            )
-        ) {
-            return $this->properties->viewfile;
-        } else {
-            return $this->properties->viewfile = $this->viewLoader->findDefaultTemplate();
-        }
-
-    }
-
-    /*
-     * ------------------------------------
-     * Helper
-     * ------------------------------------
-     */
-
-    abstract public function render();
-
-    /**
-     * save()
-     * Method to save whatever form fields are in the options() method
-     * Gets called by the meta box save callback
-     *
-     * @param array $data actual $_POST data for this module
-     * @param array $prevData previous data or empty
-     * @return array
-     */
-    public function save( $data, $prevData )
-    {
-        if (isset( $this->fields )) {
-            $data = $this->fields->save( $data, $prevData );
-        }
-        return $data;
     }
 
     /**
@@ -322,13 +140,203 @@ abstract class Module implements EntityInterface
     }
 
     /**
+     * Setup Module Data
+     * @param array $data
+     */
+    public function updateModuleData($data = array(), $hard = false)
+    {
+
+        if ($hard) {
+            $this->model = new ModuleModel($data, $this);
+        }
+
+        $this->model->set($data);
+
+        if ($this->fields) {
+            $this->fields->updateData();
+        }
+    }
+
+    /*
+     * ------------------------------------
+     * public getter
+     * ------------------------------------
+     */
+
+    /**
+     * Creates a complete list item for the area
+     */
+    public function renderForm()
+    {
+        $node = new ModuleNode($this);
+        return $node->build();
+    }
+
+    /**
+     * Method for the backend display
+     * gets called by ui display callback
+     * @since 0.1.0
+     */
+    public function form()
+    {
+        $concat = '';
+
+        if (!is_null($this->viewLoader)) {
+            // render view select field
+            $concat .= $this->viewLoader->render();
+        }
+        // render fields if set
+        if (isset($this->fields) && is_object($this->fields)) {
+            $rendererClass = $this->properties->getSetting('fieldRenderer');
+            $renderer = new $rendererClass($this->fields);
+            $concat .= $renderer->render();
+        } else {
+            $concat .= $this->renderEmptyForm();
+        }
+
+        return $concat;
+    }
+
+    /**
+     * No fields or form method override / fallback
+     * @since 0.1.0
+     */
+    private function renderEmptyForm()
+    {
+        $tpl = new CoreView('no-module-options.twig');
+        return $tpl->render();
+    }
+
+    /**
+     * Wrapper to actual render method.
+     *
+     * @return mixed
+     */
+    final public function module()
+    {
+        if (isset($this->fields)) {
+            $this->setupFrontendData();
+        }
+
+        $this->view = $this->getView();
+
+        return $this->render();
+
+    }
+
+
+    /*
+     * ------------------------------------
+     * public setter
+     * ------------------------------------
+     */
+
+    /**
+     * Pass the raw module data to the fields, where the data
+     * may be modified, depends on field configuration
+     * frontend / output only
+     */
+    private function setupFrontendData()
+    {
+
+        if ($this->model->hasData()) {
+            foreach ($this->model as $key => $v) {
+                /** @var \Kontentblocks\Fields\Field $field */
+                $field = $this->fields->getFieldByKey($key);
+                $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue(
+                    $this->properties->postId
+                ) : $v;
+            }
+        }
+
+    }
+
+    /*
+     * ------------------------------------
+     * Helper
+     * ------------------------------------
+     */
+
+    /**
+     * Setup a prepared Twig template instance if viewLoader is used
+     * @return ModuleView|null
+     * @since 0.1.0
+     */
+    private function getView()
+    {
+        if (!class_exists('Kontentblocks\Templating\ModuleTemplate')) {
+            class_alias('Kontentblocks\Templating\ModuleView', 'Kontentblocks\Templating\ModuleTemplate');
+        }
+
+        if ($this->properties->getSetting('views') && is_null($this->view)) {
+            $tpl = $this->getViewfile();
+            $moduleView = new ModuleView($this);
+            $full = $this->viewLoader->getTemplateByName($tpl);
+            if (isset($full->filename)) {
+                $moduleView->setTplFile($full->filename);
+                $moduleView->setPath($full->path);
+            }
+
+            $this->view = $moduleView;
+            return $this->view;
+
+        } else if ($this->view) {
+            return $this->view;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the assigned viewfile (.twig) filename
+     * Property is empty upon module creation, in that case we find the file to use
+     * through the ModuleLoader class
+     * @return string
+     */
+    public function getViewfile()
+    {
+        if (!filter_var($this->properties->getSetting('views'), FILTER_VALIDATE_BOOLEAN)) {
+            return '';
+        }
+        // a viewfile was already set
+        if (!empty($this->properties->viewfile) && $this->viewLoader->isValidTemplate(
+                $this->properties->viewfile
+            )
+        ) {
+            return $this->properties->viewfile;
+        } else {
+            return $this->properties->viewfile = $this->viewLoader->findDefaultTemplate();
+        }
+
+    }
+
+    abstract public function render();
+
+    /**
+     * save()
+     * Method to save whatever form fields are in the options() method
+     * Gets called by the meta box save callback
+     *
+     * @param array $data actual $_POST data for this module
+     * @param array $prevData previous data or empty
+     * @return array
+     */
+    public function save($data, $prevData)
+    {
+        if (isset($this->fields)) {
+            $data = $this->fields->save($data, $prevData);
+        }
+        return $data;
+    }
+
+    /**
      * Get public module name
      * @return mixed
      * @since 0.1.0
      */
     public function getModuleName()
     {
-        if (is_array( $this->properties->overrides ) && array_key_exists( 'name', $this->properties->overrides )) {
+        if (is_array($this->properties->overrides) && array_key_exists('name', $this->properties->overrides)) {
             return $this->properties->overrides['name'];
         } else {
             return $this->properties->settings['name'];
@@ -371,23 +379,14 @@ abstract class Module implements EntityInterface
             'overrides' => $this->properties->overrides,
             'globalModule' => $this->properties->globalModule,
             'submodule' => $this->properties->submodule,
-            'class' => get_class( $this ),
-            'inDynamic' => Kontentblocks::getService( 'registry.areas' )->isDynamic( $this->properties->area->id ),
-            'uri' => $this->properties->getSetting( 'uri' )
+            'class' => get_class($this),
+            'inDynamic' => Kontentblocks::getService('registry.areas')->isDynamic($this->properties->area->id),
+            'uri' => $this->properties->getSetting('uri')
         );
-        $toJSON = wp_parse_args( $toJSON, $this->properties );
+        $toJSON = wp_parse_args($toJSON, $this->properties);
         return $toJSON;
 
     }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->properties->mid;
-    }
-
 
     /**
      * Save properties and data to the Storage
@@ -406,6 +405,14 @@ abstract class Module implements EntityInterface
 
     public function delete()
     {
-        return $this->environment->getStorage()->removeFromIndex( $this->getId() );
+        return $this->environment->getStorage()->removeFromIndex($this->getId());
+    }
+
+    /**
+     * @return ModuleProperties
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 }

@@ -1,4 +1,6 @@
-{{ Form.getLabel() }}
-{{ Form.getDescription() }}
-<input class='kb-fonticonpicker' id='{{ Form.getInputFieldId() }}' name='{{ Form.getFieldName() }}'
-       placeholder='{{ Form.getPlaceholder() }}' value='{{ Form.getValue() }}'/>
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    <input class='kb-fonticonpicker' id='{{ Form.getInputFieldId() }}'
+           name='{{ Form.getFieldName() }}'
+           placeholder='{{ Form.getPlaceholder() }}' value='{{ Form.getValue() }}'/>
+{% endblock %}

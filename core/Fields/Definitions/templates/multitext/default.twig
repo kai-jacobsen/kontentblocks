@@ -1,0 +1,16 @@
+{% extends Form.getLayout() %}
+{% block fieldmarkup %}
+    {% for input in 1..Field.getArg('number', 1) %}
+        <div class="kbf-multitext-wrap">
+            <input type="{{ Field.getArg('type', 'text') }}"
+            {% for attr, value in Field.getArg('attributes', []) %}
+                {{ attr }}="{{ value|esc_attr }}"
+            {% endfor %}
+            id='{{ Form.getInputFieldId(true) }}'
+            name='{{ Form.getFieldName(true) }}'
+            placeholder='{{ Form.getPlaceholder() }}'
+            value='{{ Field.getValue(loop.index0) }}'/>
+        </div>
+    {% endfor %}
+{% endblock %}
+
