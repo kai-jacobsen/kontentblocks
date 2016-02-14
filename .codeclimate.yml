@@ -31,3 +31,4 @@ exclude_paths:
 - js/dev/
 - js/dist/
 - js/src/plugins
+- js/src/deprecated
