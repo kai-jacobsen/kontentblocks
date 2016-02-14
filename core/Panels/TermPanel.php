@@ -52,13 +52,8 @@ abstract class TermPanel extends AbstractPanel
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
         $this->term = $environment->termObj;
-<<<<<<< HEAD
         $this->fields = new PanelFieldController($this);
         $this->model = new TermPanelModel($environment->getDataProvider()->get($args['baseId']), $this);
-=======
-        $this->fields = new StandardFieldController($args['baseId'], $this);
-        $this->model = new PanelModel($environment->getDataProvider()->get($args['baseId']), $this);
->>>>>>> development
         $this->data = $this->model->export();
         $this->fields();
 
@@ -101,11 +96,7 @@ abstract class TermPanel extends AbstractPanel
     public function init()
     {
         add_action("edited_{$this->args['taxonomy']}", array($this, 'save'));
-<<<<<<< HEAD
-        if ($this->args['beforeForm']) {
-=======
         if ($this->args['insideTable']) {
->>>>>>> development
             add_action("{$this->args['taxonomy']}_edit_form_fields", array($this, 'form'));
         } else {
             add_action("{$this->args['taxonomy']}_edit_form", array($this, 'form'));
@@ -147,11 +138,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function form($termId)
     {
-<<<<<<< HEAD
-        $this->dataProvider = new TermMetaDataProvider($termId);
-=======
         $this->dataProvider = new TermMetaDataProvider($termId->term_id);
->>>>>>> development
 
         // @TODO what? deprecate, replace
         do_action('kb.do.enqueue.admin.files');
@@ -200,12 +187,7 @@ abstract class TermPanel extends AbstractPanel
      */
     public function renderFields()
     {
-<<<<<<< HEAD
-        $renderer = new FieldRendererTabs($this->fields);
-        return $renderer->render();
-=======
         return $this->renderer->render();
->>>>>>> development
     }
 
     /**
