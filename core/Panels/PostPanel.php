@@ -71,10 +71,11 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function __construct($args, PostEnvironment $environment)
     {
+        $this->environment = $environment;
+        $this->dataProvider = $environment->getDataProvider();
         $this->args = $this->parseDefaults($args);
         $this->setupArgs($this->args);
-        $this->environment = $environment;
-        $this->model = new PanelModel($this->environment->getDataProvider()->get($this->baseId));
+        $this->model = new PanelModel($this->dataProvider->get($this->baseId), $this);
         $this->fields = new StandardFieldController($this->baseId, $this);
         $this->fields();
     }
@@ -255,9 +256,9 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
     {
         $old = $this->model->export();
         $new = $this->fields->save($postData->get($this->baseId), $old);
-        $dataProvider = $this->environment->getDataProvider();
-        $dataProvider->update($this->baseId, $new);
-        $this->model->set($new);
+        $merged = Utilities::arrayMergeRecursive($new, $old);
+        $dataProvider = $this->dataProvider;
+        $this->model->set($merged)->sync();
         if ($this->saveAsSingle) {
             foreach ($new as $k => $v) {
                 if (empty($v)) {

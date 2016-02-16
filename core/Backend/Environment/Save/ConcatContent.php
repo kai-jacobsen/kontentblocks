@@ -68,7 +68,6 @@ class ConcatContent {
 	public function save( $postId ) {
 		remove_action( 'save_post', array( $this, 'save' ), 999 );
         global $post;
-
 		$post = array(
 			'ID'           => $post->ID,
 			'post_content' => $this->content

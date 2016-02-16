@@ -11,10 +11,8 @@ use Kontentblocks\Kontentblocks;
  * Class PanelRepository
  * @package Kontentblocks\Panels
  */
-class PostPanelRepository
+class PostPanelRepository extends StandardPanelRepository
 {
-    protected $environment;
-    protected $panels = array();
 
     /**
      * @param PostEnvironment $environment
@@ -82,24 +80,4 @@ class PostPanelRepository
         return $red;
     }
 
-    /**
-     * @return array
-     */
-    public function getPanelObjects()
-    {
-        return $this->panels;
-    }
-
-    /**
-     * Get PropertiesObject from collection by id
-     * @param $panelId
-     * @return Panel|null
-     */
-    public function getPanelObject($panelId)
-    {
-        if (isset($this->panels[$panelId])) {
-            return $this->panels[$panelId];
-        }
-        return null;
-    }
 }

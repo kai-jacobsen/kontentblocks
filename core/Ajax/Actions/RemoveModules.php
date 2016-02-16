@@ -43,6 +43,8 @@ class RemoveModules implements AjaxActionInterface
         $update = $storage->removeFromIndex( $mid );
         if ($update) {
             do_action( 'kb.module.delete', $module );
+            Utilities::remoteConcatGet( $postId );
+
             return new AjaxSuccessResponse(
                 'Module successfully removed', array(
                     'update' => $update

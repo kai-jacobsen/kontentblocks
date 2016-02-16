@@ -129,7 +129,7 @@ abstract class TermPanel extends AbstractPanel
         $old = $this->model->export();
         $new = $this->fields->save($_POST[$this->baseId], $old);
         $merged = Utilities::arrayMergeRecursive($new, $old);
-        $this->dataProvider->update($this->baseId, $merged);
+        $this->model->set($merged)->sync();
     }
 
     /**

@@ -33,14 +33,14 @@ class TermEnvironment implements \JsonSerializable
      * @param $termId
      * @param \WP_Term $termObj
      */
-    public function __construct( $termId, \WP_Term $termObj )
+    public function __construct($termId, \WP_Term $termObj)
     {
 
         $this->termId = $termId;
         $this->termObj = $termObj;
-        $this->dataProvider = new TermMetaDataProvider( $termId );
-        $this->termPanels = new TermPanelRepository( $this );
-        add_action( 'admin_footer', array( $this, 'toJSON' ) );
+        $this->dataProvider = new TermMetaDataProvider($termId);
+        $this->termPanels = new TermPanelRepository($this);
+        add_action('admin_footer', array($this, 'toJSON'));
     }
 
     /**
@@ -56,7 +56,7 @@ class TermEnvironment implements \JsonSerializable
      */
     public function toJSON()
     {
-        echo "<script> var KB = KB || {}; KB.Environment =" . json_encode( $this ) . "</script>";
+        echo "<script> var KB = KB || {}; KB.Environment =" . json_encode($this) . "</script>";
     }
 
     /**
@@ -75,7 +75,8 @@ class TermEnvironment implements \JsonSerializable
         );
     }
 
-    public function getTermPanel($panelid){
+    public function getTermPanel($panelid)
+    {
         return $this->termPanels->getPanelObject($panelid);
     }
 }

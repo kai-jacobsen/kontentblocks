@@ -31,22 +31,23 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      * @since 0.1.0
      * @return $this
      */
-    public function set( $data )
+    public function set($data)
     {
-        if (!is_array( $data ) && !is_null( $data )) {
+        if (!is_array($data) && !is_null($data)) {
             $this->singleValue = $data;
             return $this;
         }
 
-        if (is_array( $data )) {
+        if (is_array($data)) {
             foreach ($data as $key => $v) {
-                if (is_null($v)){
+                if (is_null($v)) {
                     unset($this->$key);
                 }
                 $this->$key = $v;
             }
             $this->_originalData = $data;
         }
+        return $this;
     }
 
     /**
@@ -56,12 +57,12 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      * @return string
      * @since 0.1.0
      */
-    public function get( $offset, $default = '', $group = null )
+    public function get($offset, $default = '', $group = null)
     {
 
-        if (!is_null( $group )) {
-            if (property_exists( $this, $group )) {
-                if (!empty( $this->$group[$offset] )) {
+        if (!is_null($group)) {
+            if (property_exists($this, $group)) {
+                if (!empty($this->$group[$offset])) {
                     return $this->$group[$offset];
                 } else {
                     return $default;
@@ -69,14 +70,14 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
             }
         }
 
-        if (!empty( $this->$offset )) {
+        if (!empty($this->$offset)) {
             $value = $this->$offset;
 
-            if (is_object($value)){
+            if (is_object($value)) {
                 $value = $value->value;
             }
 
-            if (empty($value)){
+            if (empty($value)) {
                 return $default;
             }
 
@@ -109,9 +110,9 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      * <p>
      * The return value will be casted to boolean if non-boolean was returned.
      */
-    public function offsetExists( $offset )
+    public function offsetExists($offset)
     {
-        return property_exists( $this, $offset );
+        return property_exists($this, $offset);
     }
 
     /**
@@ -123,7 +124,7 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      * </p>
      * @return mixed Can return all value types.
      */
-    public function offsetGet( $offset )
+    public function offsetGet($offset)
     {
         return $this->$offset;
     }
@@ -140,12 +141,12 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      * </p>
      * @return void
      */
-    public function offsetSet( $offset, $value )
+    public function offsetSet($offset, $value)
     {
         if (!$this->_locked) {
             $this->$offset = $value;
         } else {
-            trigger_error( 'Module Model is locked', E_USER_WARNING );
+            trigger_error('Module Model is locked', E_USER_WARNING);
         }
     }
 
@@ -158,12 +159,12 @@ abstract class EntityModel implements JsonSerializable, ArrayAccess
      * </p>
      * @return void
      */
-    public function offsetUnset( $offset )
+    public function offsetUnset($offset)
     {
         if (!$this->_locked) {
-            unset( $this->$offset );
+            unset($this->$offset);
         } else {
-            trigger_error( ' Module Model is locked', E_USER_WARNING );
+            trigger_error(' Module Model is locked', E_USER_WARNING);
         }
     }
 

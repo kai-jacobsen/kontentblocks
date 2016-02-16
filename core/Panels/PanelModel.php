@@ -4,6 +4,7 @@ namespace Kontentblocks\Panels;
 
 
 use Kontentblocks\Common\Data\EntityModel;
+use Kontentblocks\Common\Interfaces\EntityInterface;
 
 /**
  * Class PanelModel
@@ -15,17 +16,31 @@ class PanelModel extends EntityModel
     public $_originalData;
 
     /**
+     * @var EntityInterface
+     */
+    private $entity;
+
+    /**
      * @param array $data
-     * @param AbstractPanel $panel
+     * @param AbstractPanel $entity
      * @since 0.1.0
      */
-    public function __construct($data = array())
+    public function __construct($data = array(), AbstractPanel $entity)
     {
         $this->_originalData = $data;
         $this->set($data);
         $this->_initialized = true;
+        $this->entity = $entity;
     }
 
+    /**
+     * @return mixed
+     */
+    public function sync()
+    {
+        $provider = $this->entity->getDataProvider();
+        return $provider->update($this->entity->getId(), $this->export());
+    }
 
     /**
      * @return mixed
@@ -51,12 +66,7 @@ class PanelModel extends EntityModel
         unset($vars['_locked']);
         unset($vars['_initialized']);
         unset($vars['_originalData']);
+        unset($vars['entity']);
         return $vars;
-    }
-
-
-    public function sync()
-    {
-        // TODO: Implement sync() method.
     }
 }

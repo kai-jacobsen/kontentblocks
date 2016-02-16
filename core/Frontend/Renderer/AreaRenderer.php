@@ -103,6 +103,8 @@ class AreaRenderer implements RendererInterface
     public function render( $echo )
     {
 
+        $concater = ConcatContent::getInstance();
+
         if (!$this->validate()) {
             return false;
         }
@@ -122,7 +124,6 @@ class AreaRenderer implements RendererInterface
          */
         // Iterate over modules (ModuleIterator)
         foreach ($this->modules as $module) {
-
             $this->moduleRenderer = new SingleModuleRenderer( $module, $this->moduleSettings );
 
             if (!is_a( $module, '\Kontentblocks\Modules\Module' ) || !$module->verifyRender()) {
@@ -145,7 +146,7 @@ class AreaRenderer implements RendererInterface
                 )
             ) {
                 if ($module->properties->getSetting( 'concat' )) {
-                    ConcatContent::getInstance()->addString( wp_kses_post( $moduleOutput ) );
+                    $concater->addString( wp_kses_post( $moduleOutput ) );
                 }
             }
         }

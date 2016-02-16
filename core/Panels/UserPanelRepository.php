@@ -9,9 +9,8 @@ use Kontentblocks\Kontentblocks;
  * Class UserPanelRepository
  * @package Kontentblocks\Panels
  */
-class UserPanelRepository
+class UserPanelRepository extends StandardPanelRepository
 {
-    public $panels;
 
     /**
      * UserPanelRepository constructor.
@@ -46,23 +45,6 @@ class UserPanelRepository
         return array_filter($registry->panels, function ($panel) {
             return $panel['type'] === 'user';
         });
-    }
-
-    public function getPanels()
-    {
-        return $this->panels;
-    }
-
-    /**
-     * @param $panelid
-     * @return null
-     */
-    public function getPanelObject($panelid)
-    {
-        if (array_key_exists($panelid, $this->panels)) {
-            return $this->panels[$panelid];
-        }
-        return null;
     }
 
 }

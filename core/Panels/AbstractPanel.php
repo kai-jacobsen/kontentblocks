@@ -3,6 +3,7 @@
 namespace Kontentblocks\Panels;
 
 
+use Kontentblocks\Backend\DataProvider\DataProviderInterface;
 use Kontentblocks\Common\Data\EntityModel;
 use Kontentblocks\Common\Interfaces\EntityInterface;
 use Kontentblocks\Fields\PanelFieldController;
@@ -14,6 +15,10 @@ use Kontentblocks\Fields\PanelFieldController;
 abstract class AbstractPanel implements EntityInterface
 {
 
+    /**
+     * @var DataProviderInterface
+     */
+    protected $dataProvider;
 
     /**
      * Form data
@@ -100,17 +105,44 @@ abstract class AbstractPanel implements EntityInterface
         // TODO: Implement getProperties() method.
     }
 
+    /**
+     * @return PanelModel
+     */
     public function getModel()
     {
         return $this->model;
     }
 
     /**
-     * @return mixed
+     * Auto setup args to class properties
+     * and look for optional method for each arg
+     * @param $args
+     */
+    public function setupArgs($args)
+    {
+        foreach ($args as $k => $v) {
+            if (method_exists($this, "set" . strtoupper($k))) {
+                $method = "set" . strtoupper($k);
+                $this->$method($v);
+            } else {
+                $this->$k = $v;
+            }
+        }
+    }
+
+    /**
+     * @return string
      */
     protected function getType()
     {
         return $this->type;
     }
 
+    /**
+     * @return DataProviderInterface
+     */
+    public function getDataProvider()
+    {
+        return $this->dataProvider;
+    }
 }

@@ -190,7 +190,7 @@ function hasModules($area, $postId)
 /**
  * @param null $id
  * @param null $post_id
- * @return Panels\OptionsPanel|null|\WP_Error
+ * @return Panels\OptionPanel|null|\WP_Error
  */
 function getPanel($id = null, $post_id = null)
 {
@@ -296,7 +296,7 @@ function getOptionsPanel($panelId)
 function getOptionsPanelModel($panelId)
 {
     $panel = getOptionsPanel($panelId);
-    if (is_a($panel, '\Kontentblocks\Panels\OptionsPanel')) {
+    if (is_a($panel, '\Kontentblocks\Panels\OptionPanel')) {
         return $panel->setupFrontendData();
     }
 }

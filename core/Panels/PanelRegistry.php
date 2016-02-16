@@ -62,8 +62,8 @@ class PanelRegistry
             $reflection = new \ReflectionClass($args['class']);
             $name = $reflection->getParentClass()->name;
 
-            if ($name == 'Kontentblocks\Panels\OptionsPanel') {
-                $args['type'] = 'options';
+            if ($name == 'Kontentblocks\Panels\OptionPanel') {
+                $args['type'] = 'option';
             } else if ($name == 'Kontentblocks\Panels\TermPanel') {
                 $args['type'] = 'term';
             } else if ($name == 'Kontentblocks\Panels\UserPanel') {

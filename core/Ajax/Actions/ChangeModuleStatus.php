@@ -7,6 +7,7 @@ use Kontentblocks\Ajax\AjaxErrorResponse;
 use Kontentblocks\Ajax\AjaxSuccessResponse;
 use Kontentblocks\Backend\Storage\ModuleStorage;
 use Kontentblocks\Common\Data\ValueStorageInterface;
+use Kontentblocks\Utils\Utilities;
 
 /**
  * Class ChangeModuleStatus
@@ -36,6 +37,8 @@ class ChangeModuleStatus implements AjaxActionInterface
             }
 
             $update = $storage->addToIndex( $mid, $moduleDefinition );
+            Utilities::remoteConcatGet( $postId );
+
             return new AjaxSuccessResponse(
                 'Status changed', array(
                     'update' => $update
