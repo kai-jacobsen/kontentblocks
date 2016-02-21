@@ -52,7 +52,7 @@ class UpdateContextAreaOrder implements AjaxActionInterface
 
         $environment = Utilities::getPostEnvironment( $postId );
         $dataProvider = $environment->getDataProvider();
-        $update = $dataProvider->update( 'kb.contexts', $data );
+        $update = $dataProvider->update( 'kbcontexts', $data );
 
         if ($update) {
             return new AjaxSuccessResponse( 'Area order updated', $data );

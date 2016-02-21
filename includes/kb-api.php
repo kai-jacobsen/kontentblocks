@@ -131,7 +131,7 @@ function renderContext($context, $post_id, $areaSettings = array(), $moduleSetti
 
     $Environment = Utilities::getPostEnvironment($postId);
     $areas = $Environment->getAreasForContext($context);
-    $contextsOrder = $Environment->getDataProvider()->get('kb.contexts');
+    $contextsOrder = $Environment->getDataProvider()->get('kbcontexts');
 
     if (is_array($contextsOrder) && !empty($contextsOrder)) {
         foreach ($contextsOrder as $context => $areaIds) {
