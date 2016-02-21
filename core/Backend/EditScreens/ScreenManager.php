@@ -145,7 +145,7 @@ class ScreenManager
     public function areasSortedByContext()
     {
         $areas = array();
-        $contextsOrder = $this->environment->getDataProvider()->get( 'kbcontexts' );
+        $contextsOrder = $this->environment->getDataProvider()->get( '_kbcontexts' );
 
 
         if (!$this->areas) {

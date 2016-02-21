@@ -242,7 +242,7 @@ class SavePost
     {
         $contexts = filter_input( INPUT_POST, 'kbcontext', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         if (!empty( $contexts )) {
-            $this->environment->getDataProvider()->update( 'kbcontexts', $contexts );
+            $this->environment->getDataProvider()->update( '_kbcontexts', $contexts );
         }
     }
 
