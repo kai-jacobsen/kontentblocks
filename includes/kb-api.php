@@ -6,6 +6,7 @@ use Kontentblocks\Backend\EditScreens\Layouts\EditScreenLayoutsRegistry;
 use Kontentblocks\Frontend\ModuleRenderSettings;
 use Kontentblocks\Frontend\Renderer\AreaRenderer;
 use Kontentblocks\Frontend\AreaRenderSettings;
+use Kontentblocks\Panels\TermPanel;
 use Kontentblocks\Utils\CommonTwig\SimpleView;
 use Kontentblocks\Utils\JSONTransport;
 use Kontentblocks\Utils\Utilities;
@@ -227,7 +228,7 @@ function getPostPanel($panelId = null, $postId = null)
  * @param $panelId
  * @param $termId
  * @param null $taxonomy
- * @return null|\WP_Error
+ * @return TermPanel|\WP_Error
  */
 function getTermPanel($panelId, $termId, $taxonomy = null)
 {

@@ -32,6 +32,7 @@ class JSONTransport
      */
     public function __construct()
     {
+
         if (is_user_logged_in() && current_user_can('edit_kontentblocks')) {
             add_action('wp_print_footer_scripts', array($this, 'printJSON'), 9);
             add_action('admin_footer', array($this, 'printJSON'), 9);
@@ -127,22 +128,6 @@ class JSONTransport
         return $this;
     }
 
-
-    /**
-     * Register module definition
-     *
-     * @param array $module module definition array
-     *
-     * @since 0.1.0
-     * @return object $this
-     */
-    public function registerModule($module)
-    {
-        $this->modules[$module['mid']] = $module;
-
-        return $this;
-    }
-
     /**
      * Wrapper to register multiple modules at once
      * @param array $modules array of module definitions
@@ -162,6 +147,28 @@ class JSONTransport
     }
 
     /**
+     * Register module definition
+     *
+     * @param array $module module definition array
+     *
+     * @since 0.1.0
+     * @return object $this
+     */
+    public function registerModule($module)
+    {
+        $this->modules[$module['mid']] = $module;
+
+        return $this;
+    }
+
+    public function registerAreas($areas)
+    {
+        foreach ($areas as $area) {
+            $this->registerArea($area);
+        }
+    }
+
+    /**
      * Register area definition
      *
      * @param array $area
@@ -173,13 +180,6 @@ class JSONTransport
     {
         $this->areas[$area->id] = $area;
         return $this;
-    }
-
-    public function registerAreas($areas)
-    {
-        foreach ($areas as $area) {
-            $this->registerArea($area);
-        }
     }
 
     /**
@@ -217,6 +217,11 @@ class JSONTransport
      */
     public function printJSON()
     {
+        $filter = apply_filters('kb.config.initFrontend', true);
+        if (!is_admin() && !$filter) {
+            return;
+        }
+
         $this->data['Modules'] = $this->modules;
         $this->data['Areas'] = $this->areas;
         $this->data['fieldData'] = $this->fieldData;

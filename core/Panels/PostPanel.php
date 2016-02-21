@@ -128,12 +128,15 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function init()
     {
-        $postType = $this->environment->getPostType();
-        if (is_array($this->metaBox)) {
-            add_action("add_meta_boxes_{$postType}", array($this, 'metaBox'), $this->args['priority'], 1);
-        } else {
-            add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
+        if (is_admin()) {
+            $postType = $this->environment->getPostType();
+            if (is_array($this->metaBox)) {
+                add_action("add_meta_boxes_{$postType}", array($this, 'metaBox'), $this->args['priority'], 1);
+            } else {
+                add_action($this->hook, array($this, 'prepForm'), $this->args['priority']);
+            }
         }
+
         add_action('wp_footer', array($this, 'toJSON'));
         add_action("save_post", array($this, 'saveCallback'), 10, 1);
     }
@@ -299,20 +302,6 @@ abstract class PostPanel extends AbstractPanel implements FormInterface
      */
     public function getModel()
     {
-        return $this->model;
-    }
-
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function setupFrontendData()
-    {
-        foreach ($this->model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey($key);
-            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue($this->postId) : $v;
-        }
         return $this->model;
     }
 

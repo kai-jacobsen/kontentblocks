@@ -22,7 +22,6 @@ module.exports = Backbone.View.extend({
   },
   open: function () {
     var that = this;
-    var st = jQuery(window).scrollTop();
     TinyMCE.removeEditors();
     this.$backdrop = jQuery('<div class="kb-fullscreen-backdrop"></div>').appendTo('body');
     this.$fswrap = jQuery(tplFullscreenInner()).appendTo(this.$el);
@@ -35,10 +34,12 @@ module.exports = Backbone.View.extend({
     this.$el.appendTo('body');
     TinyMCE.restoreEditors();
     this.trigger('open');
-    var offset = this.$el.offset();
-
-    this.$el.css('top', offset.top + st + 'px');
-
+    this.reposition();
+    jQuery(window).on('scroll', jQuery.proxy(this.reposition, this));
+  },
+  reposition: function(){
+    var st = jQuery(window).scrollTop();
+    this.$el.css('top',  st + 30 + 'px');
   },
   close: function () {
     TinyMCE.removeEditors();
@@ -47,6 +48,8 @@ module.exports = Backbone.View.extend({
     this.$backdrop.remove();
     this.$fswrap.remove();
     this.$el.detach();
+    jQuery(window).off('scroll', jQuery.proxy(this.reposition, this));
+
     setTimeout(function () {
       TinyMCE.restoreEditors();
     }, 250);

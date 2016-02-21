@@ -125,6 +125,7 @@ class StandardFieldController
                 $collect = $collect + $def->getFields();
             }
         }
+        $this->fieldsById = $collect;
         return $collect;
 
     }
@@ -151,7 +152,7 @@ class StandardFieldController
     public function getFieldByKey($key, $fromArray = null)
     {
         if (empty($this->fieldsById)) {
-            $this->fieldsById = $this->collectAllFields();
+           $this->collectAllFields();
         }
 
         if (isset($fromArray) && $this->fieldsById[$fromArray]) {

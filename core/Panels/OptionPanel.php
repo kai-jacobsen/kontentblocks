@@ -269,20 +269,6 @@ abstract class OptionPanel extends AbstractPanel
     }
 
     /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function setupFrontendData()
-    {
-        foreach ($this->model as $key => $v) {
-            /** @var \Kontentblocks\Fields\Field $field */
-            $field = $this->fields->getFieldByKey($key);
-            $this->model[$key] = (!is_null($field)) ? $field->getFrontendValue() : $v;
-        }
-        return $this->model;
-    }
-
-    /**
      * Get specific key value from data
      * Setup data, if not already done
      * @param null $key
