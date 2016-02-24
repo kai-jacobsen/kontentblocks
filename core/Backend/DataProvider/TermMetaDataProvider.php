@@ -49,7 +49,7 @@ class TermMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        clean_term_cache( $this->getTermId() );
+//        clean_term_cache( $this->getTermId() );
         $this->getTermCustom();
 
         return $this;

@@ -41,8 +41,9 @@ class ConcatContent {
 	 * @action save_post
 	 */
 	public function __construct() {
-
-		add_action( 'wp_footer', array( $this, 'save' ), 999 );
+		if (filter_input(INPUT_GET, 'concat')){
+			add_action( 'wp_footer', array( $this, 'save' ), 999 );
+		}
 	}
 
 	/**

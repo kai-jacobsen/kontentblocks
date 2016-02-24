@@ -48,6 +48,7 @@ class PostMetaDataProvider implements DataProviderInterface
         }, 10, 4);
 
         $this->postId = $storageId;
+
         $this->reset();
 
     }
@@ -60,7 +61,7 @@ class PostMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-        clean_post_cache($this->getPostId());
+//        clean_post_cache($this->getPostId());
         $this->getPostCustom();
 
         return $this;

@@ -120,6 +120,13 @@ class StandardFieldSection implements Exportable
     {
         $subkey = null;
 
+
+        if (isset($args['adminOnly']) && ($args['adminOnly'] === true) ){
+            if (!is_admin()){
+                return $this;
+            }
+        }
+
         if (!$this->fieldExists($key)) {
             //check for special key syntax
             if (preg_match("/^(.*?)::/i", $key, $out)) {
