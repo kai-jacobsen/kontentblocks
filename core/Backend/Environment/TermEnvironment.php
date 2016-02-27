@@ -3,6 +3,7 @@
 namespace Kontentblocks\Backend\Environment;
 
 
+use Kontentblocks\Backend\DataProvider\DataProviderService;
 use Kontentblocks\Backend\DataProvider\TermMetaDataProvider;
 use Kontentblocks\Panels\TermPanelRepository;
 
@@ -35,12 +36,12 @@ class TermEnvironment implements \JsonSerializable
      */
     public function __construct($termId, \WP_Term $termObj)
     {
-
         $this->termId = $termId;
         $this->termObj = $termObj;
-        $this->dataProvider = new TermMetaDataProvider($termId);
+        $this->dataProvider = DataProviderService::getTermProvider($termId);
         $this->termPanels = new TermPanelRepository($this);
         add_action('admin_footer', array($this, 'toJSON'));
+
     }
 
     /**

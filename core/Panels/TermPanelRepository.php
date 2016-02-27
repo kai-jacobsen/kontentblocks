@@ -20,7 +20,6 @@ class TermPanelRepository extends StandardPanelRepository
     {
         $this->environment = $environment;
         $this->setupPanelsForTerm();
-
     }
 
     private function setupPanelsForTerm()

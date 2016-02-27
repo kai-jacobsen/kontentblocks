@@ -3,6 +3,8 @@
 
 namespace Kontentblocks\Backend\Storage;
 
+use Kontentblocks\Utils\Utilities;
+
 /**
  * Class BackupDataStorage
  * @package Kontentblocks
@@ -115,13 +117,13 @@ class BackupDataStorage
 
         $prefix = $wpdb->prefix;
 
-        $cache = wp_cache_get( 'kb_backups_' . $backupid, 'kontentblocks' );
+        $cache = wp_cache_get( 'kb_backups_' . $backupid, Utilities::getCacheGroup() );
         if ($cache !== false) {
             return $cache;
         } else {
             $sql = "SELECT * FROM {$prefix}kb_backups WHERE post_id = '{$backupid}'";
             $result = $wpdb->get_row( $sql );
-            wp_cache_set( 'kb_backups_' . $backupid, $result, 'kontentblocks' );
+            wp_cache_set( 'kb_backups_' . $backupid, $result, Utilities::getCacheGroup() );
             return $result;
         }
 
@@ -174,7 +176,7 @@ class BackupDataStorage
 
         //set reference
         update_post_meta( $this->storage->getStorageId(), 'kb_last_backup', $now );
-        wp_cache_delete( 'kb_backups_' . $data['post_id'], 'kontentblocks' );
+        wp_cache_delete( 'kb_backups_' . $data['post_id'], Utilities::getCacheGroup() );
         return $wpdb->insert( $wpdb->prefix . "kb_backups", $data );
     }
 

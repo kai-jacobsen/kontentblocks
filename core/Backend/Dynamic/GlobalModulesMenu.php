@@ -116,13 +116,11 @@ class GlobalModulesMenu
         $context = ( isset( $_GET['area-context'] ) ) ? $_GET['area-context'] : 'normal';
         // infamous hidden editor hack
         Utilities::hiddenEditor();
-
         // need to create a ew module here in order to override areaContext
         $environment = Utilities::getPostEnvironment( $post->ID );
         $gmodule['areaContext'] = $context;
         $workshop = new ModuleWorkshop( $environment, $gmodule );
         $module = $workshop->getModule();
-
         if ($module === false){
             $formNew = new CoreView( 'global-modules/edit-gmodule-gone.twig', array(
                 'i18n' => I18n::getPackages( 'Common', 'Menus' ),
@@ -206,6 +204,8 @@ class GlobalModulesMenu
             return false;
         }
 
+
+
         $value = new ValueStorage( $_POST );
         $environment = Utilities::getPostEnvironment( $postId );
         $module = $environment->getModuleById( $postObj->post_name );
@@ -226,6 +226,7 @@ class GlobalModulesMenu
             $environment->getStorage()->saveModule( $module->getId(), $toSave );
             $environment->getStorage()->reset();
             $environment->getStorage()->addToIndex( $module->getId(), $module->properties->export() );
+
             // return to original post if the edit request came from outside
             $redirect = $redirect = $value->getFiltered(
                 'kb_return_to_post',

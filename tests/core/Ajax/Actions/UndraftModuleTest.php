@@ -15,7 +15,7 @@ use Kontentblocks\Modules\ModuleWorkshop;
  */
 class UndraftModuleTest extends \WP_UnitTestCase
 {
-    protected $userId;
+    protected $postId;
 
     public static function setUpBeforeClass()
     {
@@ -33,8 +33,8 @@ class UndraftModuleTest extends \WP_UnitTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->userId = $this->factory->user->create( array( 'role' => 'administrator' ) );
-        wp_set_current_user( $this->userId );
+        $this->postId = $this->factory->user->create( array( 'role' => 'administrator' ) );
+        wp_set_current_user( $this->postId );
 
     }
 

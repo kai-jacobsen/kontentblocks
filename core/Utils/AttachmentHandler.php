@@ -13,19 +13,19 @@ class AttachmentHandler
     /**
      * @param $id
      */
-    public function __construct( $id )
+    public function __construct($id)
     {
 
 
-        if (!is_numeric( $id )) {
+        if (!is_numeric($id)) {
             return null;
         }
 
-        if ($cache = wp_cache_get( 'attachmentHandler_' . $id, 'kontentblocks' )) {
+        if ($cache = wp_cache_get('attachmentHandler_' . $id, Utilities::getCacheGroup())) {
             return $this->file = $cache;
         } else {
-            $this->file = wp_prepare_attachment_for_js( absint( $id ) );
-            wp_cache_set( 'attachmentHandler' . $id, 'kontentblocks', 60 * 60 * 24 );
+            $this->file = wp_prepare_attachment_for_js(absint($id));
+            wp_cache_set('attachmentHandler' . $id, Utilities::getCacheGroup(), 60 * 60 * 24);
         }
     }
 
@@ -36,15 +36,15 @@ class AttachmentHandler
      *
      * @return array|null|string
      */
-    public function getSize( $size = 'thumbnail', $crop = true, $upscale = true )
+    public function getSize($size = 'thumbnail', $crop = true, $upscale = true)
     {
-        if (!isset( $this->file['sizes'] ) && !is_array( $size )) {
+        if (!isset($this->file['sizes']) && !is_array($size)) {
             return null;
         }
 
-        if (is_array( $size )) {
+        if (is_array($size)) {
             return ImageResize::getInstance()->process(
-                $this->getAttr( 'id' ),
+                $this->getAttr('id'),
                 $size[0],
                 $size[1],
                 $upscale,
@@ -53,7 +53,7 @@ class AttachmentHandler
             );
         }
 
-        if (isset( $this->file['sizes'][$size] )) {
+        if (isset($this->file['sizes'][$size])) {
             return $this->file['sizes'][$size]['url'];
         } else {
             return $this->file['sizes']['full']['url'];
@@ -68,20 +68,22 @@ class AttachmentHandler
      *
      * @return bool
      */
-    public function getAttr( $attr, $default = false )
+    public function getAttr($attr, $default = false)
     {
-        if (isset( $this->file[$attr] )) {
+        if (isset($this->file[$attr])) {
             return $this->file[$attr];
         } else {
             return $default;
         }
     }
 
-    public function getCaption(){
+    public function getCaption()
+    {
         return $this->file['caption'];
     }
 
-    public function getTitle(){
+    public function getTitle()
+    {
         return $this->file['title'];
     }
 

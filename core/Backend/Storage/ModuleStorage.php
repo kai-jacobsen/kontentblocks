@@ -2,6 +2,7 @@
 namespace Kontentblocks\Backend\Storage;
 
 use Kontentblocks\Backend\DataProvider\DataProviderController;
+use Kontentblocks\Backend\DataProvider\DataProviderService;
 
 /**
  * Class ModuleStorage
@@ -52,7 +53,7 @@ class ModuleStorage implements \Countable
         $this->storageId = $postId;
         // Late init data handler if not provided
         if (is_null( $dataProvider )) {
-            $this->dataProvider = new DataProviderController( $postId );
+            $this->dataProvider = DataProviderService::getPostProvider($postId);
         } else {
             $this->dataProvider = $dataProvider;
         }

@@ -31,10 +31,10 @@ class TermMetaDataProvider implements DataProviderInterface
      * @throws \Exception
      * @since 0.1.0
      */
-    public function __construct( $termId )
+    public function __construct($termId)
     {
-        if (!isset( $termId ) || $termId === 0) {
-            throw new \Exception( 'a valid term id must be provided' );
+        if (!isset($termId) || $termId === 0) {
+            throw new \Exception('a valid term id must be provided');
         }
         $this->termId = $termId;
         $this->reset();
@@ -49,10 +49,34 @@ class TermMetaDataProvider implements DataProviderInterface
      */
     public function reset()
     {
-//        clean_term_cache( $this->getTermId() );
         $this->getTermCustom();
 
         return $this;
+    }
+
+    /**
+     * Gets all post meta for current post.
+     * Setup the Object.
+     * @todo account for multiple keys
+     * @return self
+     * @since 0.1.0
+     */
+    private function getTermCustom()
+    {
+        $meta = get_term_meta($this->termId);
+        if (!empty($meta) && is_array($meta)) {
+            $this->meta = array_map(
+                function ($a) {
+                    return maybe_unserialize($a[0]);
+                },
+                $meta
+            );
+        } else {
+            $this->meta = array();
+        }
+
+        return $this;
+
     }
 
     /**
@@ -66,31 +90,6 @@ class TermMetaDataProvider implements DataProviderInterface
     }
 
     /**
-     * Gets all post meta for current post.
-     * Setup the Object.
-     * @todo account for multiple keys
-     * @return self
-     * @since 0.1.0
-     */
-    private function getTermCustom()
-    {
-        $meta = get_term_meta( $this->termId );
-        if (!empty( $meta ) && is_array( $meta )) {
-            $this->meta = array_map(
-                function ( $a ) {
-                    return maybe_unserialize( $a[0] );
-                },
-                $meta
-            );
-        } else {
-            $this->meta = array();
-        }
-
-        return $this;
-
-    }
-
-    /**
      * Updates existing keys or creates new ones
      * Wrapper to ::update() since the plugin does not make use of multiple
      * equal keys (yet)
@@ -100,9 +99,9 @@ class TermMetaDataProvider implements DataProviderInterface
      *
      * @since 0.1.0
      */
-    public function add( $key, $value )
+    public function add($key, $value)
     {
-        $this->update( $key, $value );
+        $this->update($key, $value);
     }
 
     /**
@@ -114,9 +113,10 @@ class TermMetaDataProvider implements DataProviderInterface
      * @since 0.1.0
      * @return mixed
      */
-    public function update( $key, $value )
+    public function update($key, $value)
     {
-        return update_term_meta( $this->termId, $key, $value );
+        $this->meta[$key] = $value;
+        return update_term_meta($this->termId, $key, $value);
     }
 
     /**
@@ -127,9 +127,9 @@ class TermMetaDataProvider implements DataProviderInterface
      * @return mixed|null
      * @since 0.1.0
      */
-    public function get( $key )
+    public function get($key)
     {
-        if (!empty( $this->meta[$key] )) {
+        if (!empty($this->meta[$key])) {
             return $this->meta[$key];
         } else {
             return null;
@@ -144,9 +144,10 @@ class TermMetaDataProvider implements DataProviderInterface
      * @return bool
      * @since 0.1.0
      */
-    public function delete( $key )
+    public function delete($key)
     {
-        return delete_term_meta( $this->termId, $key );
+        unset($this->meta[$key]);
+        return delete_term_meta($this->termId, $key);
     }
 
     /**

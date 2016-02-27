@@ -76,7 +76,7 @@ class ScreenManager
      * @param PostEnvironment $environment
      *
      */
-    public function __construct( $areas, PostEnvironment $environment )
+    public function __construct($areas, PostEnvironment $environment)
     {
         // setup raw areas
         $this->areas = $areas;
@@ -88,7 +88,7 @@ class ScreenManager
         $this->contexts = $this->areasSortedByContext();
         // test if final context layout includes an sidebar
         // e.g. if an non-dynamic area is assigned to 'side'
-        $this->hasSidebar = ( !empty( $this->contexts['side'] ) && !empty( $this->contexts['normal'] ) );
+        $this->hasSidebar = (!empty($this->contexts['side']) && !empty($this->contexts['normal']));
 
         $this->setupLayout();
 
@@ -106,33 +106,33 @@ class ScreenManager
         $defaults = array(
             'top' => array(
                 'id' => 'top',
-                'title' => __( 'Header', 'kontentblocks' ),
-                'description' => apply_filters( 'kb_context_description_top', '' )
+                'title' => __('Header', 'kontentblocks'),
+                'description' => apply_filters('kb_context_description_top', '')
             ),
             'normal' => array(
                 'id' => 'normal',
-                'title' => __( 'Content', 'kontentblocks' ),
-                'description' => apply_filters( 'kb_context_description_content', '' )
+                'title' => __('Content', 'kontentblocks'),
+                'description' => apply_filters('kb_context_description_content', '')
             ),
             'side' => array(
                 'id' => 'side',
-                'title' => __( 'Sidebar', 'kontentblocks' ),
-                'description' => apply_filters( 'kb_context_description_side', '' )
+                'title' => __('Sidebar', 'kontentblocks'),
+                'description' => apply_filters('kb_context_description_side', '')
             ),
             'side2' => array(
                 'id' => 'side2',
-                'title' => __( 'Sidebar 2', 'kontentblocks' ),
-                'description' => apply_filters( 'kb_context_description_side2', '' )
+                'title' => __('Sidebar 2', 'kontentblocks'),
+                'description' => apply_filters('kb_context_description_side2', '')
             ),
             'bottom' => array(
                 'id' => 'bottom',
-                'title' => __( 'Footer', 'kontentblocks' ),
-                'description' => apply_filters( 'kb_context_description_bottom', '' )
+                'title' => __('Footer', 'kontentblocks'),
+                'description' => apply_filters('kb_context_description_bottom', '')
             )
         );
 
         // plugins may change this
-        return apply_filters( 'kb_default_context_layout', $defaults );
+        return apply_filters('kb_default_context_layout', $defaults);
 
     }
 
@@ -145,33 +145,33 @@ class ScreenManager
     public function areasSortedByContext()
     {
         $areas = array();
-        $contextsOrder = $this->environment->getDataProvider()->get( '_kbcontexts' );
-
+        $contextsOrder = $this->environment->getDataProvider()->get('_kbcontexts');
 
         if (!$this->areas) {
             return array();
         }
 
+        // @TODO 157 159 was commented out
         foreach ($this->areas as $area) {
-//            if (!$area->dynamic || ( $area->dynamic && $area->settings->isAttached() )) {
-            $areas[$area->context][$area->id] = $area;
+//            if (!$area->dynamic || ($area->dynamic && $area->settings->isAttached())) {
+                $areas[$area->context][$area->id] = $area;
 //            }
         }
 
-
-        if (is_array( $contextsOrder ) && !empty( $contextsOrder )) {
+        if (is_array($contextsOrder) && !empty($contextsOrder)) {
             foreach ($contextsOrder as $context => $areaIds) {
-                if (is_array( $areaIds )) {
-                    foreach (array_reverse( array_keys( $areaIds ) ) as $areaId) {
-                        if (isset( $areas[$context][$areaId] )) {
+                if (is_array($areaIds)) {
+                    foreach (array_reverse(array_keys($areaIds)) as $areaId) {
+                        if (isset($areas[$context][$areaId])) {
                             $tmp = $areas[$context][$areaId];
-                            unset( $areas[$context][$areaId] );
-                            $areas[$context] = array( $areaId => $tmp ) + $areas[$context];
+                            unset($areas[$context][$areaId]);
+                            $areas[$context] = array($areaId => $tmp) + $areas[$context];
                         }
                     }
                 }
             }
         }
+
         return $areas;
     }
 
@@ -179,7 +179,7 @@ class ScreenManager
     {
         $screenLayouts = \Kontentblocks\EditScreenLayoutsRegistry()->layouts;
         $lyt = apply_filters('kb.screenLayout', 'default-boxes', $this->environment, $screenLayouts);
-        $this->selectedLayout = ( isset( $screenLayouts[$lyt] ) ) ? $screenLayouts[$lyt] : $screenLayouts['default-boxes'];
+        $this->selectedLayout = (isset($screenLayouts[$lyt])) ? $screenLayouts[$lyt] : $screenLayouts['default-boxes'];
         \Kontentblocks\JSONTransport()->registerPublicData('config', 'layoutMode', $lyt);
 
     }
@@ -194,7 +194,7 @@ class ScreenManager
             // delegate the actual output to ScreenContext
             $this->contextRenderer[$args['id']] = new ScreenContext(
                 $args,
-                $this->getContextAreas( $args['id'] ),
+                $this->getContextAreas($args['id']),
                 $this->environment,
                 $this->hasSidebar()
             );
@@ -204,7 +204,7 @@ class ScreenManager
             'contexts' => $this->contextRenderer
         ));
 
-        $this->selectedLayout->render( true );
+        $this->selectedLayout->render(true);
 
     }
 
@@ -216,9 +216,9 @@ class ScreenManager
      * @return array
      * @since 0.1.0
      */
-    public function getContextAreas( $contextId )
+    public function getContextAreas($contextId)
     {
-        if (isset( $this->contexts[$contextId] )) {
+        if (isset($this->contexts[$contextId])) {
             return $this->contexts[$contextId];
         } else {
             return array();

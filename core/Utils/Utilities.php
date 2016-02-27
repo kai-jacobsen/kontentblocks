@@ -2,6 +2,7 @@
 
 namespace Kontentblocks\Utils;
 
+use Detection\MobileDetect;
 use Kontentblocks\Backend\Environment\PostEnvironment;
 use Kontentblocks\Backend\Environment\TermEnvironment;
 use Kontentblocks\Backend\Environment\UserEnvironment;
@@ -530,4 +531,15 @@ class Utilities
         $arr = $value;
     }
 
+
+    public static function getCacheGroup()
+    {
+        $parts = array();
+        $parts[] = 'kontentblocks';
+        if (defined('ICL_LANGUAGE_CODE')) {
+            $parts[] = ICL_LANGUAGE_CODE;
+        }
+
+        return implode('_', $parts);
+    }
 }

@@ -45,7 +45,7 @@ class AreaDynamicManager
     public function __construct()
     {
         // Test for differences
-        add_action( 'init', array( $this, 'synchronize' ), 9 );
+        add_action( 'init', array( $this, 'synchronize' ), 11 );
         // Add notice if differences were detected
         add_action( 'admin_notices', array( $this, 'dirtyMessage' ) );
     }
@@ -142,6 +142,7 @@ class AreaDynamicManager
     public function setupDiff()
     {
         $trans = get_transient( 'kb_dynamic_areas' );
+
         if (!$trans) {
             $areas = get_posts(
                 array(
