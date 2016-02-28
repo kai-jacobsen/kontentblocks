@@ -15,4 +15,6 @@ interface EntityInterface
 
     public function getProperties();
 
+    public function getType();
+
 }

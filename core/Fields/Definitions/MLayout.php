@@ -30,16 +30,16 @@ class MLayout extends Field
      * @param string $key unique storage key
      * @param $args
      */
-    public function __construct( $baseId, $subkey = null, $key, $args )
+    public function __construct($baseId, $subkey = null, $key, $args)
     {
-        parent::__construct( $baseId, $subkey, $key, $args );
-        add_action( 'kb.module.delete', array( $this, 'deleteCallback' ) );
+        parent::__construct($baseId, $subkey, $key, $args);
+        add_action('kb.module.delete', array($this, 'deleteCallback'));
     }
 
-    public function deleteCallback( Module $module )
+    public function deleteCallback(Module $module)
     {
         if ($this->baseId === $module->getId()) {
-            $repository = new MLayoutRepository( $this );
+            $repository = new MLayoutRepository($this);
             foreach ($repository->getModules() as $module) {
                 $module->delete();
             }
@@ -61,12 +61,12 @@ class MLayout extends Field
      *
      * @return mixed
      */
-    public function save( $keydata, $oldKeyData )
+    public function save($keydata, $oldKeyData)
     {
-        $repository = new MLayoutRepository( $this );
+        $repository = new MLayoutRepository($this);
         $repository->saveModules();
-        if (isset( $keydata['slots'] ) && is_array( $keydata['slots'] )) {
-            return array( 'slots' => $keydata['slots'] );
+        if (isset($keydata['slots']) && is_array($keydata['slots'])) {
+            return array('slots' => $keydata['slots']);
         }
 
         return $keydata;
@@ -83,9 +83,9 @@ class MLayout extends Field
      * @since 0.1.0
      * @return mixed
      */
-    public function setValue( $data )
+    public function setValue($data)
     {
-        if (!isset( $data['slots'] )) {
+        if (!isset($data['slots'])) {
             $data['slots'] = array();
         }
 
@@ -97,12 +97,12 @@ class MLayout extends Field
      * @param array $data
      * @return array
      */
-    public function prepareTemplateData( $data )
+    public function prepareTemplateData($data)
     {
-        $repository = new MLayoutRepository( $this );
-        $file = $this->getArg( 'layoutFile' );
+        $repository = new MLayoutRepository($this);
+        $file = $this->getArg('layoutFile');
         if ($file) {
-            $data['layoutView'] = new CoreView( $file );
+            $data['layoutView'] = new CoreView($file);
         }
         return $data;
     }
@@ -115,7 +115,7 @@ class MLayout extends Field
      *
      * @return mixed
      */
-    public function prepareFormValue( $val )
+    public function prepareFormValue($val)
     {
         return $val;
     }

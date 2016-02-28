@@ -47,6 +47,10 @@ abstract class Field implements Exportable
      * @since 0.1.0
      */
     public $type;
+
+    /**
+     * @var StandardFieldController
+     */
     public $controller;
     /**
      * Base id/key for the field
